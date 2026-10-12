@@ -120,6 +120,8 @@ export const DSL = {
   copyOpponentVoidCards: authored(38, "event", 1, events(event(p.createCopyInHand(fromVoid({}, { player: "opponent", count: 2, upTo: true }))))),
   /** "Add a copy of each event in your void to your hand." */
   copyVoidEvents: authored(39, "event", 1, events(event(p.createCopyInHand(everyIn("void", { cardType: "event" }))))),
+  /** One optional paid owned-void character play during resolution, followed by a normal effect. */
+  immediateVoidCharacter: authored(0x56820 - 200, "event", 0, events(event(p.sequence(p.playImmediately("void", { costAtMost: 2 }), p.gainPoints(1))))),
   /** "Add a copy of the top card of your deck to your hand, if it is a character." */
   copyTopCharacter: authored(40, "event", 1, events(event(p.createCopyInHand(topOfDeck(1, { cardType: "character" }))))),
   /** "▸Dissolved: Add a copy of another warrior in your void to your hand": a void target chosen as the trigger resolves. */

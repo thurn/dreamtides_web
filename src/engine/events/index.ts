@@ -155,7 +155,9 @@ export const EVENT_DEFINITIONS = {
   dissolved,
   dreamwellDrawn,
   effectEnded,
-  effectStarted,
+  get effectStarted() {
+    return effectStarted;
+  },
   energyChanged,
   enteredVoid,
   eroded,

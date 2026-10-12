@@ -747,6 +747,24 @@ card's copiable cost.
   Reclaim, which makes it reclaimed. Playing it by Reclaim uses up no
   permission. Offering is a way to play a card from your hand only.
 
+**Immediately play:** An effect that says to immediately play a character from
+your void offers one play as that instruction resolves, even outside a normal
+play window or while another item is resolving. Only matching characters in the
+void you own are covered, with a cost criterion reading their copiable cost.
+You may decline. The character must pass play restrictions, reserved battlefield
+capacity and payable costs. You choose its normal costs or available Reclaim;
+X, cost changes and additional costs apply normally. Offering applies from hand.
+This instruction creates no lasting permission and uses no other permission's
+allowance.
+
+The chosen character is played onto the stack, its costs are paid and its played
+triggers fire. The enclosing effect finishes, and queued triggers resolve,
+before the opponent of the player who made this new play receives priority to
+respond with an Interrupt. The character enters play only when its own stack
+item resolves, exhausted unless awakened. With no legal play, nothing is played
+or paid. Copies are not played and follow the ordinary resolved-item priority
+rule.
+
 **Paying to end an effect:** An effect that lasts "until the opponent pays N●"
 lets that opponent — the controller of the affected character — pay N● to end
 the effect immediately. This is a special action, available whenever that

@@ -72,6 +72,7 @@ import {
   payToPrimitive,
   phasePrimitive,
   playFromZonePrimitive,
+  playImmediatelyPrimitive,
   playRestrictionPrimitive,
   preventPrimitive,
   putInDeckPrimitive,
@@ -272,6 +273,9 @@ const DEFINITIONS = {
   },
   get phase() {
     return phasePrimitive;
+  },
+  get playImmediately() {
+    return playImmediatelyPrimitive;
   },
   get playFromZone() {
     return playFromZonePrimitive;

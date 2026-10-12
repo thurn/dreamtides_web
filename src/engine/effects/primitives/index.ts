@@ -53,6 +53,7 @@ export * from "./move";
 export * from "./optional";
 export * from "./phase";
 export * from "./play-from-zone";
+export * from "./play-immediately";
 export * from "./play-restriction";
 export * from "./prevent";
 export * from "./put-in-deck";

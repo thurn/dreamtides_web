@@ -43,7 +43,7 @@ import type { BattleState } from "../state/types";
 import { Context, type Narrowed, type PromptGuard } from "./context";
 import { EmptyPrompt, Feasible, Infeasible, ReplayDivergence } from "./errors";
 import { stepDefinition, type Step } from "./kinds";
-import type { AnswerSource, RecordedAnswer } from "./types";
+import type { AnswerSource, RecordedAnswer, StepContext } from "./types";
 
 /** What a feasibility search found. */
 export interface SearchOutcome {
@@ -59,6 +59,18 @@ interface ChoicePoint {
   readonly index: number;
   readonly fingerprint: PromptFingerprint;
   readonly untried: Iterator<Answer>;
+}
+
+/** A transient planning routine; it reaches commitPoint before any payment. */
+interface CommitPlan {
+  readonly canceller: Side | null;
+  readonly deferDeckTopReveals: boolean;
+  run(ctx: StepContext): void;
+}
+
+function stepPlan(start: BattleState, step: Step): CommitPlan {
+  const definition = stepDefinition(step.kind);
+  return { canceller: definition.canceller(start, step), deferDeckTopReveals: step.kind === "play" || step.kind === "activate", run: (ctx) => definition.run(ctx, step) };
 }
 
 /**
@@ -82,17 +94,16 @@ class PathSearch {
 
   constructor(
     private readonly start: BattleState,
-    private readonly step: Step,
+    private readonly plan: CommitPlan,
     private readonly catalog: EngineCatalog,
     prefix: readonly RecordedAnswer[],
   ) {
-    this.canceller = stepDefinition(step.kind).canceller(start, step);
+    this.canceller = plan.canceller;
     this.replay = prefix;
   }
 
   /** Runs the step once, along the first path not yet tried. */
   run(): void {
-    const definition = stepDefinition(this.step.kind);
     const points = this.points;
     const source: AnswerSource = {
       answer(prompt) {
@@ -106,12 +117,12 @@ class PathSearch {
     const ctx: Context = new Context(cloneState(this.start), this.catalog, source, {
       prefix: this.replay,
       dryRun: true,
-      deferDeckTopReveals: this.step.kind === "play" || this.step.kind === "activate",
+      deferDeckTopReveals: this.plan.deferDeckTopReveals,
       canceller: this.canceller,
     });
     try {
-      definition.run(ctx, this.step);
-      throw new Error(`A ${this.step.kind} step finished a dry run without reaching its commit point`);
+      this.plan.run(ctx);
+      throw new Error("A planning routine finished a dry run without reaching its commit point");
     } catch (error) {
       if (error instanceof Feasible) {
         this.outcome = "feasible";
@@ -150,7 +161,7 @@ export function searchCommitPoint(
   prefix: readonly RecordedAnswer[],
   runs: number = start.config.feasibilitySearchRuns,
 ): SearchOutcome {
-  const search = new PathSearch(start, step, catalog, prefix);
+  const search = new PathSearch(start, stepPlan(start, step), catalog, prefix);
   for (let run = 0; run < runs && search.outcome === "open"; run++) search.run();
   return { feasible: search.outcome === "feasible", exhausted: search.outcome === "open" };
 }
@@ -214,8 +225,22 @@ export function stepSearch(start: BattleState, step: Step, catalog: EngineCatalo
   const key = searchedStep(step);
   const cached = memo?.get(start)?.get(key);
   if (cached !== undefined) return cached;
+  const result = searchPlan(start, stepPlan(start, step), catalog);
+  if (memo !== undefined) {
+    let byStep = memo.get(start);
+    if (byStep === undefined) {
+      byStep = new Map();
+      memo.set(start, byStep);
+    }
+    byStep.set(key, result);
+  }
+  return result;
+}
+
+/** Computes one planning routine's root witness and shared remaining budget. */
+function searchPlan(start: BattleState, plan: CommitPlan, catalog: EngineCatalog): StepSearch {
   const budget = start.config.feasibilitySearchRuns;
-  const search = new PathSearch(start, step, catalog, []);
+  const search = new PathSearch(start, plan, catalog, []);
   let runs = 0;
   while (runs < budget && search.outcome === "open") {
     search.run();
@@ -227,14 +252,6 @@ export function stepSearch(start: BattleState, step: Step, catalog: EngineCatalo
     nodes: new Map(),
     dryRuns: runs,
   };
-  if (memo !== undefined) {
-    let byStep = memo.get(start);
-    if (byStep === undefined) {
-      byStep = new Map();
-      memo.set(start, byStep);
-    }
-    byStep.set(key, result);
-  }
   return result;
 }
 
@@ -262,7 +279,7 @@ interface Candidate {
  */
 function decide(
   start: BattleState,
-  step: Step,
+  plan: CommitPlan,
   catalog: EngineCatalog,
   search: StepSearch,
   raw: Prompt,
@@ -298,7 +315,7 @@ function decide(
       truncated = true;
       break;
     }
-    const candidate: Candidate = { order, answer, search: new PathSearch(start, step, catalog, [...prefix, { fingerprint, value: answer }]) };
+    const candidate: Candidate = { order, answer, search: new PathSearch(start, plan, catalog, [...prefix, { fingerprint, value: answer }]) };
     if (!settle(candidate)) open.push(candidate);
   }
   if (!passedWitness) throw new Error("A witness's answer is not a legal answer of the prompt it answered");
@@ -325,6 +342,16 @@ function decide(
  */
 export function feasibilityGuard(start: BattleState, step: Step, catalog: EngineCatalog, memo?: SearchMemo): PromptGuard {
   const search = stepSearch(start, step, catalog, memo);
+  return guardForPlan(start, stepPlan(start, step), catalog, search);
+}
+
+/** Searches and guards one transient selection-and-play planning routine. No state or step shape is added. */
+export function planFeasibility(start: BattleState, catalog: EngineCatalog, run: (ctx: StepContext) => void): PromptGuard {
+  const plan: CommitPlan = { canceller: null, deferDeckTopReveals: false, run };
+  return guardForPlan(start, plan, catalog, searchPlan(start, plan, catalog));
+}
+
+function guardForPlan(start: BattleState, plan: CommitPlan, catalog: EngineCatalog, search: StepSearch): PromptGuard {
   return {
     narrow(prompt: Prompt, prefix: readonly RecordedAnswer[], allAnswersPayable?: true): Narrowed {
       const key = answeredPath(prefix);
@@ -339,7 +366,7 @@ export function feasibilityGuard(start: BattleState, step: Step, catalog: Engine
       const standing = standingAfter(search, prefix);
       const node: GuardNode = allAnswersPayable === true
         ? { raw: prompt, fingerprint: promptFingerprint(prompt), narrowed: { prompt, unproven: 0, truncated: false }, remaining: standing.remaining, witnesses: "all" }
-        : decide(start, step, catalog, search, prompt, prefix, standing);
+        : decide(start, plan, catalog, search, prompt, prefix, standing);
       search.nodes.set(key, node);
       return node.narrowed;
     },

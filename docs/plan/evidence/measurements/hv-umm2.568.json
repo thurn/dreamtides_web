@@ -1,0 +1,1742 @@
+{
+  "bead": "hv-umm2.568",
+  "base": "d148f81dc34a1c101752c44d3f319f23df8d2061",
+  "rawEvidenceRoot": "/tmp/codex-01a130c8-immediate",
+  "status": "Combined-base local acceptance complete; parent fresh replacement temporary Sol core review and native delivery pending.",
+  "scope": {
+    "api": "Optional controller-only playImmediately(void, character filter); normal cost or available Reclaim; real stack/play/triggers; copiable cost selection bound; no future permission.",
+    "ruleDecision": "RD-hv-umm2.568-1",
+    "productionContentAuthored": false,
+    "engineSharedBodies": [
+      "play.ts",
+      "timing.ts",
+      "feasibility.ts",
+      "resolve-top.ts"
+    ],
+    "registryRepair": "Only EVENT_DEFINITIONS.effectStarted uses lazy getter for existing binding, admitted before write; no event schema change.",
+    "schemaBodyChanges": false,
+    "ordinaryStepMemoAndCache": "Existing Step adapter and memo behavior retained; new callback feasibility composes local selection, planning and commit.",
+    "observeEvent": "Explicitly delegates optional Context observer method. Current planning path has no reader, so no actual failing runtime or artificial contract test is claimed."
+  },
+  "dispatch": {
+    "actual": "2026-10-12T17:53:22.683Z",
+    "callId": "call_c81310ddffc24684a5e2f9927ad062e3",
+    "modelStart": null,
+    "sourcePacket": "dispatch568-and-correction212.json"
+  },
+  "sourceManifest": {
+    "timestamp": "2026-10-12T18:53:56.099394+00:00",
+    "base": "d148f81dc34a1c101752c44d3f319f23df8d2061",
+    "files": {
+      "docs/plan/evidence/card-issues/fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5--hv-umm2.568.md": "fcbc99d86de055ade1295f95905827f75e5ef8d00693b7bcc4605be14a41915b",
+      "docs/plan/evidence/pre-existing/hv-umm2.568.md": "2acf0134f53910dab95c0d3d054b2659c2f4f274fe7b4f8a3e83570b9f328b58",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.568-1.md": "364adea22270b39f4c80d589ca282599308c790d5aa635e2c9e96e6986c8391b",
+      "docs/rules.md": "b92149e77bd3abb654904258970e15091f12f63a23f157d928e0de65f12db8ce",
+      "src/engine/effects/primitives/contracts/play-immediately.contracts.ts": "ce0786ef9b6ec35b15f10ae28f092ee1ef4c17128e769f2cb3e10d037482eee5",
+      "src/engine/effects/primitives/index.ts": "d6697442cc8a75a8a0c581022b1d5c95779892462e3ce12b26cfc0e5b1ecd1f2",
+      "src/engine/effects/primitives/play-immediately.ts": "080683cac5a8c09bd1301b106250944bec8a01c23373c88da864d65c16bc17a0",
+      "src/engine/effects/registry.ts": "e7fb4b6249001cd4198f33fa3fd01dec651dbb4980817d79226e41e0ad6e145a",
+      "src/engine/events/index.ts": "a5453c41bcde0705b7be7c8de9a88532a6f592fc14e8e9a969f84ee927b61134",
+      "src/engine/rules/immediate-play.ts": "15557bafdfd945f86899e5594e5bb3714a9a20dc04a4f8b04d2843fe1e792d3b",
+      "src/engine/rules/timing.ts": "75ff15be8c099fda8ae42dae149940f95b9290fae69da429a3872f48fe3910c9",
+      "src/engine/steps/feasibility.ts": "2ea9e222c64a538d77668c8c03bbef531affe29b3a95b28c5ce3f63d0557e05f",
+      "src/engine/steps/kinds/play.ts": "8bc0a14623e49a5c8164b7aace6365e74e478013e50339d7deb2f2d84e801ed9",
+      "src/engine/steps/kinds/resolve-top.ts": "9f34884f0060b754821d44079b8a1cb90ea2db709b40fd052614daf528bc89e7",
+      "src/engine/testing/dsl-cards.ts": "021003bf8e308dae15dbad11d4a60ee141b2d500eb64608184e0410f65fcc870",
+      "src/engine/testing/prompt-lab.ts": "930dce7f855cae7c8a94188bf28d94a6f6f80eabe1af97c68ec630eccbcff049"
+    }
+  },
+  "sourceManifestSHA256": "7e45a148588eac6e272b2bfb3a472363e331eb21428ad853e328780e5c101195",
+  "baselineNegative": {
+    "start": "2026-10-12T18:08:06.705039+00:00",
+    "end": "2026-10-12T18:08:08.200392+00:00",
+    "wallS": 1.4952481250074925,
+    "exit": 1,
+    "pid": 5952,
+    "pg": 5952,
+    "command": [
+      "node_modules/.bin/tsx",
+      "/tmp/codex-01a130c8-immediate/negative.ts"
+    ]
+  },
+  "mutations": {
+    "mutation-permission": {
+      "receipt": {
+        "start": "2026-10-12T18:22:47.029448+00:00",
+        "end": "2026-10-12T18:22:51.495560+00:00",
+        "wallS": 4.465965042007156,
+        "exit": 1,
+        "pid": 32881,
+        "pg": 32881,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "plays one owned physical copy|offers an actual Interrupt"
+        ]
+      },
+      "restoration": {
+        "path": "src/engine/effects/primitives/play-immediately.ts",
+        "originalSHA256": "080683cac5a8c09bd1301b106250944bec8a01c23373c88da864d65c16bc17a0",
+        "restoredSHA256": "080683cac5a8c09bd1301b106250944bec8a01c23373c88da864d65c16bc17a0",
+        "actualExit": 1,
+        "restoreTime": "2026-10-12T18:22:51.499536+00:00"
+      },
+      "scope": "Expected failing observable contract; target restored byte-identical before passing checks."
+    },
+    "mutation-priority": {
+      "receipt": {
+        "start": "2026-10-12T18:22:51.528309+00:00",
+        "end": "2026-10-12T18:22:55.618432+00:00",
+        "wallS": 4.08997966600873,
+        "exit": 1,
+        "pid": 33078,
+        "pg": 33078,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "plays one owned physical copy|offers an actual Interrupt"
+        ]
+      },
+      "restoration": {
+        "path": "src/engine/steps/kinds/resolve-top.ts",
+        "originalSHA256": "9f34884f0060b754821d44079b8a1cb90ea2db709b40fd052614daf528bc89e7",
+        "restoredSHA256": "9f34884f0060b754821d44079b8a1cb90ea2db709b40fd052614daf528bc89e7",
+        "actualExit": 1,
+        "restoreTime": "2026-10-12T18:22:55.622442+00:00"
+      },
+      "scope": "Expected failing observable contract; target restored byte-identical before passing checks."
+    }
+  },
+  "corePaths": {
+    "failure": {
+      "module": "src/engine/effects/primitives/contracts/play-immediately.contracts.ts",
+      "test": "rolls back a later failure's immediate payment, movement, turn log and queued triggers"
+    },
+    "interrupt": {
+      "module": "src/engine/effects/primitives/contracts/play-immediately.contracts.ts",
+      "test": "offers an actual Interrupt against the immediate %s play and retains payment after Prevent"
+    },
+    "reload": {
+      "module": "src/engine/effects/primitives/contracts/play-immediately.contracts.ts",
+      "test": "cold reload reproduces bounded choice proofs, budget events and one payment"
+    },
+    "partialApplication": {
+      "module": "src/engine/effects/primitives/contracts/play-immediately.contracts.ts",
+      "test": "cold-replays suspended complex payment, bounces stale/concurrent answers, and charges once"
+    },
+    "staleConcurrent": {
+      "module": "src/engine/effects/primitives/contracts/play-immediately.contracts.ts",
+      "test": "cold-replays suspended complex payment, bounces stale/concurrent answers, and charges once"
+    }
+  },
+  "checks": {
+    "negative": {
+      "start": "2026-10-12T18:08:06.705039+00:00",
+      "end": "2026-10-12T18:08:08.200392+00:00",
+      "wallS": 1.4952481250074925,
+      "exit": 1,
+      "pid": 5952,
+      "pg": 5952,
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/codex-01a130c8-immediate/negative.ts"
+      ]
+    },
+    "mutation-permission": {
+      "start": "2026-10-12T18:22:47.029448+00:00",
+      "end": "2026-10-12T18:22:51.495560+00:00",
+      "wallS": 4.465965042007156,
+      "exit": 1,
+      "pid": 32881,
+      "pg": 32881,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "plays one owned physical copy|offers an actual Interrupt"
+      ]
+    },
+    "mutation-priority": {
+      "start": "2026-10-12T18:22:51.528309+00:00",
+      "end": "2026-10-12T18:22:55.618432+00:00",
+      "wallS": 4.08997966600873,
+      "exit": 1,
+      "pid": 33078,
+      "pg": 33078,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "plays one owned physical copy|offers an actual Interrupt"
+      ]
+    },
+    "final-source-focused": {
+      "start": "2026-10-12T18:44:35.171553+00:00",
+      "end": "2026-10-12T18:44:45.518160+00:00",
+      "wallS": 10.34648633300094,
+      "exit": 0,
+      "pid": 53804,
+      "pg": 53804,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/costs-search.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/rules/stack.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/testing/tooling.test.ts",
+        "src/runtime/qa-scenes-battle.test.ts"
+      ]
+    },
+    "source-final-review": {
+      "start": "2026-10-12T18:45:44.294332+00:00",
+      "end": "2026-10-12T18:46:36.411427+00:00",
+      "wallS": 52.116697292003664,
+      "exit": 0,
+      "pid": 9324,
+      "pg": 9324,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    "source-final-knip": {
+      "start": "2026-10-12T18:46:46.328496+00:00",
+      "end": "2026-10-12T18:46:50.395067+00:00",
+      "wallS": 4.066199417007738,
+      "exit": 0,
+      "pid": 14313,
+      "pg": 14313,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ]
+    },
+    "source-final-full": {
+      "start": "2026-10-12T18:47:46.762773+00:00",
+      "end": "2026-10-12T18:49:55.480823+00:00",
+      "wallS": 128.71731350000482,
+      "exit": 0,
+      "pid": 46703,
+      "pg": 46703,
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ]
+    },
+    "source-final-weighted": {
+      "start": "2026-10-12T18:50:52.792931+00:00",
+      "end": "2026-10-12T18:53:25.553922+00:00",
+      "wallS": 152.76016558300762,
+      "exit": 0,
+      "pid": 80871,
+      "pg": 80871,
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node_modules/.bin/tsx",
+        "/tmp/codex-01a130c8-immediate/weighted568.ts"
+      ]
+    },
+    "source-final-browser": {
+      "start": "2026-10-12T18:54:12.440879+00:00",
+      "end": "2026-10-12T18:54:48.903198+00:00",
+      "wallS": 36.4620306249999,
+      "exit": 0,
+      "pid": 44483,
+      "pg": 44483,
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.568/immediate-play.mjs",
+        "--bead",
+        "hv-umm2.568",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ]
+    },
+    "evidence-schema": {
+      "start": "2026-10-12T19:03:15.464854+00:00",
+      "end": "2026-10-12T19:03:15.611672+00:00",
+      "wallS": 0.1466694589908002,
+      "exit": 0,
+      "pid": 29908,
+      "pg": 29908,
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ]
+    }
+  },
+  "checkCounts": {
+    "focused": {
+      "files": 7,
+      "tests": 2164
+    },
+    "review": {
+      "files": 268,
+      "tests": 4792
+    },
+    "full": {
+      "files": 351,
+      "tests": 5810,
+      "workers": 2,
+      "heavyLock": true,
+      "contentGateCases": 13
+    }
+  },
+  "weighted": {
+    "target": "5e5e5e5e-0000-4000-8000-000000056821",
+    "sourceFixture": "5e5e5e5e-0000-4000-8000-000000056820",
+    "games": 300,
+    "included": 1171,
+    "exercised": 658,
+    "failures": 0,
+    "steps": 150445,
+    "prompts": 3005,
+    "interactive": 30,
+    "actualImmediatePlays": 6,
+    "immediateWitnesses": [
+      {
+        "ordinal": 80,
+        "source": "i6",
+        "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+        "physical": "i25",
+        "card": {
+          "kind": "card",
+          "cardId": "5e5e5e5e-0000-4000-8000-000000000e48"
+        },
+        "side": "player",
+        "energyBefore": 0,
+        "energyAfter": 0,
+        "step": {
+          "kind": "resolveTop"
+        }
+      },
+      {
+        "ordinal": 100,
+        "source": "i12",
+        "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+        "physical": "i30",
+        "card": {
+          "kind": "card",
+          "cardId": "5e5e5e5e-0000-4000-8000-000000000e41"
+        },
+        "side": "player",
+        "energyBefore": 2,
+        "energyAfter": 1,
+        "step": {
+          "kind": "resolveTop"
+        }
+      },
+      {
+        "ordinal": 160,
+        "source": "i31",
+        "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+        "physical": "i60",
+        "card": {
+          "kind": "card",
+          "cardId": "5e5e5e5e-0000-4000-8000-000000000e48"
+        },
+        "side": "enemy",
+        "energyBefore": 11,
+        "energyAfter": 8,
+        "step": {
+          "kind": "resolveTop"
+        }
+      },
+      {
+        "ordinal": 180,
+        "source": "i1",
+        "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+        "physical": "i28",
+        "card": {
+          "kind": "card",
+          "cardId": "5e5e5e5e-0000-4000-8000-00000000027a"
+        },
+        "side": "player",
+        "energyBefore": 1,
+        "energyAfter": 0,
+        "step": {
+          "kind": "resolveTop"
+        }
+      },
+      {
+        "ordinal": 220,
+        "source": "i1",
+        "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+        "physical": "i7",
+        "card": {
+          "kind": "card",
+          "cardId": "5e5e5e5e-0000-4000-8000-000000051502"
+        },
+        "side": "player",
+        "energyBefore": 3,
+        "energyAfter": 3,
+        "step": {
+          "kind": "resolveTop"
+        }
+      },
+      {
+        "ordinal": 290,
+        "source": "i31",
+        "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+        "physical": "i42",
+        "card": {
+          "kind": "card",
+          "cardId": "5e5e5e5e-0000-4000-8000-000000000e47"
+        },
+        "side": "enemy",
+        "energyBefore": 2,
+        "energyAfter": 1,
+        "step": {
+          "kind": "resolveTop"
+        }
+      }
+    ],
+    "wallS": 151.856,
+    "cpu": {
+      "user": 161484627,
+      "system": 1621877
+    }
+  },
+  "weightedReceiptFile": "fuzz568-receipt.json",
+  "weightedScope": "300 deterministic games include synthetic clone UUID preserving pool uniqueness; 1171 inclusions/658 source exercises; 30 interactive replays separately observed six real immediate child cardPlayed events across both controllers. Wrapper wall time includes lock/startup; inner wallS is 151.856.",
+  "nativeQa": {
+    "report": "invocations/run-3eJbSb/immediate-play.result.json",
+    "root": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.568",
+    "ok": true,
+    "caps": [],
+    "cells": [
+      {
+        "viewport": "desktop",
+        "side": "player",
+        "source": {
+          "physical": "i1",
+          "uuid": "5e5e5e5e-0000-4000-8000-000000056820"
+        },
+        "selected": {
+          "physical": "i9",
+          "uuid": "5e5e5e5e-0000-4000-8000-000000000002"
+        },
+        "paid": 1,
+        "energy": 2,
+        "score": 1,
+        "selectionProvenance": "live player UI",
+        "geometry": {
+          "x": 452,
+          "y": 275.25,
+          "width": 240,
+          "height": 336,
+          "hit": true,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "reload": true,
+        "canonicalPlayed": [
+          {
+            "seq": 2,
+            "index": 2,
+            "kind": "cardPlayed",
+            "instance": "i9",
+            "cards": {
+              "i9": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "canonicalMaterialized": [
+          {
+            "seq": 2,
+            "index": 6,
+            "kind": "materialized",
+            "instance": "i9",
+            "cards": {
+              "i9": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "humanInterrupt": null,
+        "logProof": {
+          "rowsAtObservation": 26,
+          "acceptedAnswerValues": [
+            [
+              "i9"
+            ]
+          ],
+          "appliedAnswerOutcomes": [
+            "applied"
+          ],
+          "humanInterruptAction": null,
+          "setupOpening": true,
+          "setupEnemyChoice": false
+        }
+      },
+      {
+        "viewport": "desktop",
+        "side": "enemy",
+        "source": {
+          "physical": "i8",
+          "uuid": "5e5e5e5e-0000-4000-8000-000000056820"
+        },
+        "selected": {
+          "physical": "i16",
+          "uuid": "5e5e5e5e-0000-4000-8000-000000000002"
+        },
+        "paid": 1,
+        "energy": 2,
+        "score": 1,
+        "selectionProvenance": "native LOAD_STATE script",
+        "geometry": {
+          "x": 1120.5,
+          "y": 597,
+          "width": 120,
+          "height": 42,
+          "hit": true,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "reload": true,
+        "canonicalPlayed": [
+          {
+            "seq": 1,
+            "index": 4,
+            "kind": "cardPlayed",
+            "instance": "i16",
+            "cards": {
+              "i16": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "canonicalMaterialized": [
+          {
+            "seq": 2,
+            "index": 5,
+            "kind": "materialized",
+            "instance": "i16",
+            "cards": {
+              "i16": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "humanInterrupt": {
+          "physical": "i1",
+          "uuid": "5e5e5e5e-0000-4000-8000-00000000000e"
+        },
+        "logProof": {
+          "rowsAtObservation": 29,
+          "acceptedAnswerValues": [],
+          "appliedAnswerOutcomes": [],
+          "humanInterruptAction": {
+            "kind": "play",
+            "card": "i1",
+            "from": "hand"
+          },
+          "setupOpening": false,
+          "setupEnemyChoice": true
+        }
+      },
+      {
+        "viewport": "mobile",
+        "side": "player",
+        "source": {
+          "physical": "i1",
+          "uuid": "5e5e5e5e-0000-4000-8000-000000056820"
+        },
+        "selected": {
+          "physical": "i9",
+          "uuid": "5e5e5e5e-0000-4000-8000-000000000002"
+        },
+        "paid": 1,
+        "energy": 2,
+        "score": 1,
+        "selectionProvenance": "live player UI",
+        "geometry": {
+          "x": 197,
+          "y": 82.5,
+          "width": 176,
+          "height": 246.390625,
+          "hit": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        "reload": true,
+        "canonicalPlayed": [
+          {
+            "seq": 2,
+            "index": 2,
+            "kind": "cardPlayed",
+            "instance": "i9",
+            "cards": {
+              "i9": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "canonicalMaterialized": [
+          {
+            "seq": 2,
+            "index": 6,
+            "kind": "materialized",
+            "instance": "i9",
+            "cards": {
+              "i9": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "humanInterrupt": null,
+        "logProof": {
+          "rowsAtObservation": 26,
+          "acceptedAnswerValues": [
+            [
+              "i9"
+            ]
+          ],
+          "appliedAnswerOutcomes": [
+            "applied"
+          ],
+          "humanInterruptAction": null,
+          "setupOpening": true,
+          "setupEnemyChoice": false
+        }
+      },
+      {
+        "viewport": "mobile",
+        "side": "enemy",
+        "source": {
+          "physical": "i8",
+          "uuid": "5e5e5e5e-0000-4000-8000-000000056820"
+        },
+        "selected": {
+          "physical": "i16",
+          "uuid": "5e5e5e5e-0000-4000-8000-000000000002"
+        },
+        "paid": 1,
+        "energy": 2,
+        "score": 1,
+        "selectionProvenance": "native LOAD_STATE script",
+        "geometry": {
+          "x": 262,
+          "y": 522.828125,
+          "width": 120,
+          "height": 42,
+          "hit": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        "reload": true,
+        "canonicalPlayed": [
+          {
+            "seq": 1,
+            "index": 4,
+            "kind": "cardPlayed",
+            "instance": "i16",
+            "cards": {
+              "i16": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "canonicalMaterialized": [
+          {
+            "seq": 2,
+            "index": 5,
+            "kind": "materialized",
+            "instance": "i16",
+            "cards": {
+              "i16": "5e5e5e5e-0000-4000-8000-000000000002"
+            }
+          }
+        ],
+        "humanInterrupt": {
+          "physical": "i1",
+          "uuid": "5e5e5e5e-0000-4000-8000-00000000000e"
+        },
+        "logProof": {
+          "rowsAtObservation": 29,
+          "acceptedAnswerValues": [],
+          "appliedAnswerOutcomes": [],
+          "humanInterruptAction": {
+            "kind": "play",
+            "card": "i1",
+            "from": "hand"
+          },
+          "setupOpening": false,
+          "setupEnemyChoice": true
+        }
+      }
+    ],
+    "wallMs": {
+      "browserLeaseWait": 9,
+      "serve": 1973,
+      "scenario": 33680,
+      "total": 35725
+    },
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.568/invocations/run-3eJbSb/immediate-play-desktop.jsonl",
+        "gameId": "e5b3iw",
+        "selectedBy": "url",
+        "rows": 32,
+        "reason": null
+      },
+      {
+        "viewport": "mobile",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.568/invocations/run-3eJbSb/immediate-play-mobile.jsonl",
+        "gameId": "fcevcr",
+        "selectedBy": "url",
+        "rows": 32,
+        "reason": null
+      }
+    ],
+    "selectionProvenance": "Player selection and enemy human Interrupt are actual UI actions. Enemy selection/payment are deterministic native LOAD_STATE script actions; no enemy live UI/AI choice is claimed.",
+    "screens": [
+      {
+        "filename": "immediate-choice-desktop.png",
+        "dimensions": [
+          2880,
+          1800
+        ],
+        "observations": "Optional0/1 selection and all3 candidates/Skip/Submit controls are legible and within viewport; two same-UUID physical copies display as distinct candidates."
+      },
+      {
+        "filename": "immediate-materialized-desktop.png",
+        "dimensions": [
+          2880,
+          1800
+        ],
+        "observations": "Exhausted character is in back slot; visible HUD2/3energy and1/25score match native probe after1energy payment. Board and NextPhase controls fit."
+      },
+      {
+        "filename": "immediate-materialized-mobile.png",
+        "dimensions": [
+          780,
+          1688
+        ],
+        "observations": "Back-slot character, exhaustion indicator,2/3energy HUD andNextPhase controls legible andwithin390x844viewport."
+      }
+    ],
+    "visualReview": "Helper inspected all three original 2x images; parent independent visual pass parent-visual.json."
+  },
+  "runtimeSettlement": {
+    "observedAt": "2026-10-12T19:03:41.340536+00:00",
+    "sourceChanged": [],
+    "historical212OtherFieldsIdentical": true,
+    "original212Hashes": {
+      "original212-friction.json": "c55aab6dcac5d889e568e4e2345daf04a3735c270ba78f45c715418f551b3094",
+      "original212-measurements.json": "f6cf2b63da4b685cf0e701a982621816da753cb2a169fca1097c905d292ff5f6"
+    },
+    "records": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+        "exists": false,
+        "belongsToThisBead": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+        "exists": false,
+        "belongsToThisBead": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "exists": false,
+        "belongsToThisBead": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "exists": false,
+        "belongsToThisBead": false
+      }
+    ],
+    "processes": "  PID  PPID  PGID COMMAND\n",
+    "port5174": "",
+    "oldOwnProcessGroups": "  PID  PPID  PGID COMMAND\n"
+  },
+  "retainedFailures": {
+    "typecheck": {
+      "start": "2026-10-12T18:10:38.615552+00:00",
+      "end": "2026-10-12T18:10:53.499858+00:00",
+      "wallS": 14.88403820899839,
+      "exit": 2,
+      "pid": 61378,
+      "pg": 61378,
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ]
+    },
+    "typecheck-fixed": {
+      "start": "2026-10-12T18:11:12.036343+00:00",
+      "end": "2026-10-12T18:11:17.700822+00:00",
+      "wallS": 5.664303500001552,
+      "exit": 2,
+      "pid": 64989,
+      "pg": 64989,
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ]
+    },
+    "focused-immediate": {
+      "start": "2026-10-12T18:17:41.058395+00:00",
+      "end": "2026-10-12T18:17:46.066548+00:00",
+      "wallS": 5.007968624995556,
+      "exit": 1,
+      "pid": 93155,
+      "pg": 93155,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "playImmediately"
+      ]
+    },
+    "focused-fixed": {
+      "start": "2026-10-12T18:18:22.059409+00:00",
+      "end": "2026-10-12T18:18:27.841713+00:00",
+      "wallS": 5.7821265410020715,
+      "exit": 1,
+      "pid": 23409,
+      "pg": 23409,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "playImmediately"
+      ]
+    },
+    "focused-budget": {
+      "start": "2026-10-12T18:21:23.975073+00:00",
+      "end": "2026-10-12T18:21:28.146809+00:00",
+      "wallS": 4.171592041995609,
+      "exit": 1,
+      "pid": 30772,
+      "pg": 30772,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "playImmediately"
+      ]
+    },
+    "lab-fix-focused": {
+      "start": "2026-10-12T18:25:07.651511+00:00",
+      "end": "2026-10-12T18:25:12.004544+00:00",
+      "wallS": 4.352901917009149,
+      "exit": 1,
+      "pid": 88312,
+      "pg": 88312,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling.test.ts",
+        "src/runtime/qa-scenes.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
+      ]
+    },
+    "review": {
+      "start": "2026-10-12T18:23:31.279208+00:00",
+      "end": "2026-10-12T18:24:18.158138+00:00",
+      "wallS": 46.878341124989674,
+      "exit": 2,
+      "pid": 33815,
+      "pg": 33815,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    "review-fixed": {
+      "start": "2026-10-12T18:26:11.047579+00:00",
+      "end": "2026-10-12T18:27:04.566998+00:00",
+      "wallS": 53.51875575000304,
+      "exit": 1,
+      "pid": 93785,
+      "pg": 93785,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    "browser": {
+      "start": "2026-10-12T18:37:33.750057+00:00",
+      "end": "2026-10-12T18:38:19.987945+00:00",
+      "wallS": 46.237525042000925,
+      "exit": 1,
+      "pid": 68076,
+      "pg": 68076,
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.568/immediate-play.mjs",
+        "--bead",
+        "hv-umm2.568",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ]
+    },
+    "browser-corrected": {
+      "start": "2026-10-12T18:40:38.613638+00:00",
+      "end": "2026-10-12T18:42:13.703640+00:00",
+      "wallS": 95.08941504100221,
+      "exit": 1,
+      "pid": 35937,
+      "pg": 35937,
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.568/immediate-play.mjs",
+        "--bead",
+        "hv-umm2.568",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ]
+    },
+    "review-final": {
+      "start": "2026-10-12T18:28:25.364883+00:00",
+      "end": "2026-10-12T18:29:23.856903+00:00",
+      "wallS": 58.49195729100029,
+      "exit": 0,
+      "pid": 54645,
+      "pg": 54645,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    "knip-final": {
+      "start": "2026-10-12T18:31:28.308412+00:00",
+      "end": "2026-10-12T18:31:31.983597+00:00",
+      "wallS": 3.6750241669942625,
+      "exit": 0,
+      "pid": 51248,
+      "pg": 51248,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ]
+    },
+    "full": {
+      "start": "2026-10-12T18:32:27.276923+00:00",
+      "end": "2026-10-12T18:34:07.066755+00:00",
+      "wallS": 99.78926095800125,
+      "exit": 0,
+      "pid": 58905,
+      "pg": 58905,
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ]
+    },
+    "weighted": {
+      "start": "2026-10-12T18:34:13.390371+00:00",
+      "end": "2026-10-12T18:36:38.346392+00:00",
+      "wallS": 144.95523179099837,
+      "exit": 0,
+      "pid": 12178,
+      "pg": 12178,
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node_modules/.bin/tsx",
+        "/tmp/codex-01a130c8-immediate/weighted568.ts"
+      ]
+    }
+  },
+  "retainedFirstSource": {
+    "freeze": "qa-source-freeze.json",
+    "summary": {
+      "timestamp": "2026-10-12T18:50:09.494249+00:00",
+      "weightedFirstSummary": "/tmp/codex-01a130c8-immediate/weighted-first-summary.json",
+      "sha256": "533d1ed51442c851b215d34f51e94b6352a86b7e769febaffd4882452be96558",
+      "originalBrowserPredicates": [
+        {
+          "invocation": "run-Aiy9z0",
+          "predicate": "answers.length === 1 && opened.length >= 1",
+          "actual": "setup opening was not a live engine.promptOpened journal row; actual accepted [i9] engine.promptAnswered retained"
+        },
+        {
+          "invocation": "run-fL5VhG",
+          "predicate": "initialVoid.find(id => current.instances[id]?.zone === stack)",
+          "actual": "enemy policy legitimately answered [] and ended Day; source UUID and empty answer present in native log"
+        }
+      ]
+    },
+    "finalSourceContinuity": false,
+    "explanation": "First full/weighted/QA preceded explicit observeEvent delegation and deterministic enemy script. Final-source full/weighted/review/Knip/native QA were rerun; originals retained."
+  },
+  "failureDisposition": {
+    "typechecks": "Constructor name/generic guarded answer typing corrected in admitted helper.",
+    "focused": "Native singleton target auto-answer, cost ordering and narrowing observations corrected; bounded payment uses actual selected native total.",
+    "review": "Real evaluation SCC repaired through exactly admitted lazy event getter; fixture typing and LOAD_STATE replay boundaries corrected.",
+    "browser": "Retained two actual failed observer predicates; final positive enemy setup uses native script with honest provenance."
+  },
+  "frictionCommandLowerBound": {
+    "minutes": 9.808307366649872,
+    "labels": [
+      "typecheck",
+      "typecheck-fixed",
+      "focused-immediate",
+      "focused-fixed",
+      "focused-budget",
+      "lab-fix-focused",
+      "review",
+      "review-fixed",
+      "browser",
+      "browser-corrected",
+      "review-final",
+      "knip-final",
+      "full",
+      "weighted"
+    ],
+    "scope": "Sum of listed command wallS only; includes failed attempts and superseded passing validations. No editing duration or exclusive elapsed interval inferred."
+  },
+  "testDeltaScope": "One new 214-line plain contract file; aggregate entrypoint unchanged; no jsdom tests.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "repair-review test-related start2026-10-12T19:14:32.506Z actual vm.loadavg one-minute sample; original sample retained in originalFriction and source-final-review log."
+      },
+      "implementWindow": {
+        "measuredFor": "Actual post-claim helper dispatch through observed precommit evidence cutoff; includes research, coordination, waits and validation. Normal Git dates and separate successful actual commit-process receipt are recorded in terminal handoff, including cutoff tail; model start unknown."
+      }
+    }
+  },
+  "historical212Correction": {
+    "exactPaths": [
+      "docs/plan/evidence/friction/hv-umm2.212.json",
+      "docs/plan/evidence/measurements/hv-umm2.212.json"
+    ],
+    "originalHashes": {
+      "original212-friction.json": "c55aab6dcac5d889e568e4e2345daf04a3735c270ba78f45c715418f551b3094",
+      "original212-measurements.json": "f6cf2b63da4b685cf0e701a982621816da753cb2a169fca1097c905d292ff5f6"
+    },
+    "allOtherFieldsPreserved": true,
+    "packet": "dispatch568-and-correction212.json",
+    "correctedWindow": {
+      "start": "2026-10-12T17:10:02.491Z",
+      "end": "2026-10-12T17:30:03.645343+00:00"
+    },
+    "correctedMin": 20.01923905,
+    "originalProvenance": "Old20.25/claimproxy17:09:30/chosenGitcutoff17:29:45 and original hashes retained in reportedOriginal; original source/checks/QA immutable."
+  },
+  "precommitEvidenceCutoff": "2026-10-12T19:04:19.458960+00:00",
+  "commitReceiptPolicy": "Actual successful commit process start/end, normal Git timestamps and cutoff tail retained externally in terminal-handoff.json; no forced Git dates.",
+  "originalAcceptanceSource": "1cc5823f6b7aa5bef37f9eddecaf6bfaf1a041d9",
+  "originalAcceptanceScope": "Existing sourceManifest/checks/checkCounts/weighted/nativeQa/runtimeSettlement fields describe original source1cc5823f on original base d148f81d. Original full5810, weighted and native proof remain tied to that source. Integration repair evidence is separate below.",
+  "integrationRepair": {
+    "root": "/tmp/codex-01a130c8-immediate/integration-repair-1",
+    "originalSource": "1cc5823f6b7aa5bef37f9eddecaf6bfaf1a041d9",
+    "originalBase": "d148f81dc34a1c101752c44d3f319f23df8d2061",
+    "base": "95214a57f3bf2e97c6baa9585baf151e5f1b62ca",
+    "updatedCheckpoint": "423bd79f130f45a45f2b91da444bbf2b07e08a56",
+    "candidateId": "01a13183-ae9c-73a3-ab91-5f88de2686e8",
+    "candidateDisposition": "Terminal merge conflict in two shared additive fixture paths before CI/certification; no promotion authority.",
+    "recovery": "Parent alone performed native update after justiciar preserved all21path source and temporarily parked two additive paths. Temporary checkpoints438d4c49178d631e361f587bca97d4d59467cf09 and423bd79f130f45a45f2b91da444bbf2b07e08a56 were never submitted/authorized. Restored own fragments preserve all peer bytes and original values/scripts/copy; only placement differs.",
+    "exactRepairPaths": [
+      "src/engine/testing/dsl-cards.ts",
+      "src/engine/testing/prompt-lab.ts"
+    ],
+    "placementProof": {
+      "observedAt": "2026-10-12T19:13:12.793926+00:00",
+      "newBase": "95214a57f3bf2e97c6baa9585baf151e5f1b62ca",
+      "reason": "Place own additive declarations away from common leading insertion sites; same fixture values/native scripts/copy unchanged. Preserve all landed peer bytes by removal-equality check.",
+      "checks": [
+        {
+          "path": "src/engine/testing/dsl-cards.ts",
+          "ownedFragmentsPreserved": true,
+          "peerBytesPreserved": true,
+          "combinedSHA256": "a093ca247a8d8fcdc3d85f7192ba423154498f9c36c2df08d22fb97f0364aceb"
+        },
+        {
+          "path": "src/engine/testing/prompt-lab.ts",
+          "ownedFragmentsPreserved": true,
+          "peerBytesPreserved": true,
+          "combinedSHA256": "fd335d643bac8d3efb29e366034dd86fd0bb5b86c443ae5cf6e0382ba8bf71a5"
+        }
+      ]
+    },
+    "followupDispatch": {
+      "ownJournal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T08-42-56-01a130c8-03b8-7dd1-b849-2f7c98a2b18e.jsonl",
+      "actualFollowup": {
+        "timestamp": "2026-10-12T19:13:54.432Z",
+        "callId": "call_98749f1da61c45c3b27115836c5e9020",
+        "target": "immediate_effect_play568"
+      },
+      "originalActualDispatch": "2026-10-12T17:53:22.683Z",
+      "modelStartUnknown": true
+    },
+    "originalFriction": {
+      "bead": "hv-umm2.568",
+      "phase": 5,
+      "implementMin": 70.946266,
+      "implementWindow": {
+        "start": "2026-10-12T17:53:22.683Z",
+        "end": "2026-10-12T19:04:19.458960+00:00"
+      },
+      "localValidationS": {
+        "focused": 10.346486,
+        "review": 52.116697,
+        "knip": 4.066199,
+        "full": 128.717314,
+        "fuzz": 152.760166,
+        "browser": 36.462031
+      },
+      "hostLoad": 15.13427734375,
+      "testDelta": {
+        "files": 1,
+        "lines": 214,
+        "jsdomFiles": 0
+      },
+      "friction": [
+        {
+          "tag": "local-edit-correction",
+          "minutes": 9.808307366649872,
+          "note": "Measured command-time lower bound of failed fixture/type/import-cycle/browser observers and superseded passing validation. Exact receipts and attribution in measurements; excludes editing, research, coordination and idle gaps."
+        }
+      ]
+    },
+    "firstCommit": {
+      "source": "1cc5823f6b7aa5bef37f9eddecaf6bfaf1a041d9",
+      "actualDispatch": "2026-10-12T17:53:22.683Z",
+      "precommitEvidenceCutoff": "2026-10-12T19:04:19.458960+00:00",
+      "actualCommitReceipt": {
+        "start": "2026-10-12T19:04:19.850744+00:00",
+        "end": "2026-10-12T19:04:19.881517+00:00",
+        "wallS": 0.03067837499838788,
+        "exit": 0,
+        "pid": 54820,
+        "pg": 54820,
+        "command": [
+          "git",
+          "commit",
+          "-F",
+          "/tmp/codex-01a130c8-immediate/commit-message.txt"
+        ]
+      },
+      "cutoffTailS": 0.422557,
+      "actualDispatchToCommitMin": 70.95330861666666,
+      "normalGitDates": [
+        "2026-10-12T12:04:19-07:00",
+        "2026-10-12T12:04:19-07:00"
+      ]
+    },
+    "priorCoreReview": {
+      "source": "1cc5823f6b7aa5bef37f9eddecaf6bfaf1a041d9",
+      "model": "gpt-5.6-sol",
+      "routing": "Temporary human routing; parent fresh read-only Codex CLI",
+      "exit": 0,
+      "wallS": 81.584,
+      "findings": 0,
+      "replacementReviewRequired": true,
+      "receiptAuthority": "Parent own review receipt; not rerun or reattributed by helper."
+    },
+    "checks": {
+      "repair-focused": {
+        "start": "2026-10-12T19:14:20.992493+00:00",
+        "end": "2026-10-12T19:14:28.719756+00:00",
+        "wallS": 7.727055916999234,
+        "exit": 0,
+        "pid": 35043,
+        "pg": 35043,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/rules/costs-search.test.ts",
+          "src/engine/rules/costs-play-x.test.ts",
+          "src/engine/rules/stack.test.ts",
+          "src/engine/rules/copies.test.ts",
+          "src/engine/testing/tooling.test.ts",
+          "src/runtime/qa-scenes-battle.test.ts"
+        ]
+      },
+      "repair-review": {
+        "start": "2026-10-12T19:14:31.597156+00:00",
+        "end": "2026-10-12T19:15:24.805848+00:00",
+        "wallS": 53.20767491699371,
+        "exit": 0,
+        "pid": 35819,
+        "pg": 35819,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ]
+      },
+      "repair-knip": {
+        "start": "2026-10-12T19:15:29.405610+00:00",
+        "end": "2026-10-12T19:15:32.198228+00:00",
+        "wallS": 2.792479750001803,
+        "exit": 0,
+        "pid": 49162,
+        "pg": 49162,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ]
+      },
+      "repair-weighted": {
+        "start": "2026-10-12T19:15:42.610454+00:00",
+        "end": "2026-10-12T19:18:06.023814+00:00",
+        "wallS": 143.4107593749941,
+        "exit": 0,
+        "pid": 74674,
+        "pg": 74674,
+        "command": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "node_modules/.bin/tsx",
+          "/tmp/codex-01a130c8-immediate/integration-repair-1/weighted568.ts"
+        ]
+      },
+      "repair-browser": {
+        "start": "2026-10-12T19:18:44.740051+00:00",
+        "end": "2026-10-12T19:20:01.605609+00:00",
+        "wallS": 76.86406937500578,
+        "exit": 0,
+        "pid": 91449,
+        "pg": 91449,
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.568/immediate-play.mjs",
+          "--bead",
+          "hv-umm2.568",
+          "--port",
+          "5174",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "600"
+        ]
+      },
+      "repair-evidence-schema": {
+        "start": "2026-10-12T19:21:40.637739+00:00",
+        "end": "2026-10-12T19:21:40.744454+00:00",
+        "wallS": 0.10662054200656712,
+        "exit": 0,
+        "pid": 74277,
+        "pg": 74277,
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ]
+      }
+    },
+    "counts": {
+      "focusedFiles": 7,
+      "focusedTests": 2239,
+      "reviewFiles": 268,
+      "reviewTests": 4882
+    },
+    "fullScope": "Architecture delta unchanged; no extra full run for additive fixture placement. Original full5810 stays original-source proof; candidate/release owns current configured certification.",
+    "weighted": {
+      "target": "5e5e5e5e-0000-4000-8000-000000056821",
+      "sourceFixture": "5e5e5e5e-0000-4000-8000-000000056820",
+      "games": 300,
+      "included": 1171,
+      "exercised": 661,
+      "failures": 0,
+      "steps": 150593,
+      "prompts": 3056,
+      "interactive": 30,
+      "actualImmediatePlays": 10,
+      "immediateWitnesses": [
+        {
+          "ordinal": 0,
+          "source": "i23",
+          "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+          "physical": "i7",
+          "card": {
+            "kind": "card",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000e40"
+          },
+          "side": "player",
+          "energyBefore": 5,
+          "energyAfter": 5,
+          "step": {
+            "kind": "resolveTop"
+          }
+        },
+        {
+          "ordinal": 50,
+          "source": "i1",
+          "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+          "physical": "i4",
+          "card": {
+            "kind": "card",
+            "cardId": "5e5e5e5e-0000-4000-8000-00000000025a"
+          },
+          "side": "player",
+          "energyBefore": 9,
+          "energyAfter": 8,
+          "step": {
+            "kind": "resolveTop"
+          }
+        },
+        {
+          "ordinal": 80,
+          "source": "i6",
+          "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+          "physical": "i25",
+          "card": {
+            "kind": "card",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000e48"
+          },
+          "side": "player",
+          "energyBefore": 3,
+          "energyAfter": 0,
+          "step": {
+            "kind": "resolveTop"
+          }
+        },
+        {
+          "ordinal": 80,
+          "source": "i8",
+          "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+          "physical": "i17",
+          "card": {
+            "kind": "card",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000e40"
+          },
+          "side": "player",
+          "energyBefore": 4,
+          "energyAfter": 4,
+          "step": {
+            "kind": "resolveTop"
+          }
+        },
+        {
+          "ordinal": 90,
+          "source": "i40",
+          "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+          "physical": "i44",
+          "card": {
+            "kind": "card",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000003"
+          },
+          "side": "enemy",
+          "energyBefore": 1,
+          "energyAfter": 0,
+          "step": {
+            "kind": "resolveTop"
+          }
+        },
+        {
+          "ordinal": 100,
+          "source": "i12",
+          "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+          "physical": "i30",
+          "card": {
+            "kind": "card",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000e41"
+          },
+          "side": "player",
+          "energyBefore": 2,
+          "energyAfter": 1,
+          "step": {
+            "kind": "resolveTop"
+          }
+        },
+        {
+          "ordinal": 160,
+          "source": "i1",
+          "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+          "physical": "i29",
+          "card": {
+            "kind": "card",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000279"
+          },
+          "side": "player",
+          "energyBefore": 4,
+          "energyAfter": 4,
+          "step": {
+            "kind": "resolveTop"
+          }
+        },
+        {
+          "ordinal": 200,
+          "source": "i36",
+          "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+          "physical": "i35",
+          "card": {
+            "kind": "card",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000259"
+          },
+          "side": "enemy",
+          "energyBefore": 1,
+          "energyAfter": 0,
+          "step": {
+            "kind": "resolveTop"
+          }
+        },
+        {
+          "ordinal": 230,
+          "source": "i52",
+          "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+          "physical": "i55",
+          "card": {
+            "kind": "card",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000e47"
+          },
+          "side": "enemy",
+          "energyBefore": 5,
+          "energyAfter": 3,
+          "step": {
+            "kind": "resolveTop"
+          }
+        },
+        {
+          "ordinal": 250,
+          "source": "i31",
+          "sourceUUID": "5e5e5e5e-0000-4000-8000-000000056821",
+          "physical": "i38",
+          "card": {
+            "kind": "card",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000139"
+          },
+          "side": "enemy",
+          "energyBefore": 5,
+          "energyAfter": 5,
+          "step": {
+            "kind": "resolveTop"
+          }
+        }
+      ],
+      "wallS": 142.475,
+      "cpu": {
+        "user": 152469897,
+        "system": 1358912
+      }
+    },
+    "sourceManifest": {
+      "timestamp": "2026-10-12T19:18:32.509143+00:00",
+      "base": "95214a57f3bf2e97c6baa9585baf151e5f1b62ca",
+      "checkpoint": "423bd79f130f45a45f2b91da444bbf2b07e08a56",
+      "originalSource": "1cc5823f6b7aa5bef37f9eddecaf6bfaf1a041d9",
+      "files": {
+        "docs/plan/evidence/card-issues/fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5--hv-umm2.568.md": "fcbc99d86de055ade1295f95905827f75e5ef8d00693b7bcc4605be14a41915b",
+        "docs/plan/evidence/pre-existing/hv-umm2.568.md": "2acf0134f53910dab95c0d3d054b2659c2f4f274fe7b4f8a3e83570b9f328b58",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.568-1.md": "364adea22270b39f4c80d589ca282599308c790d5aa635e2c9e96e6986c8391b",
+        "docs/rules.md": "9be94e1cb3f76a122b9ac90b784ab4506f8dbf444d43fe5efe6e300872693737",
+        "src/engine/effects/primitives/contracts/play-immediately.contracts.ts": "ce0786ef9b6ec35b15f10ae28f092ee1ef4c17128e769f2cb3e10d037482eee5",
+        "src/engine/effects/primitives/index.ts": "8439a4005b6e7dd5ed7571e2e82b50708ffba830a4bc8a01ffb6b253899d6f37",
+        "src/engine/effects/primitives/play-immediately.ts": "080683cac5a8c09bd1301b106250944bec8a01c23373c88da864d65c16bc17a0",
+        "src/engine/effects/registry.ts": "fe48629bdddb3d64a254f9adcf59821ed2cc9877a663d0f0e26a0686168f4f71",
+        "src/engine/events/index.ts": "a5453c41bcde0705b7be7c8de9a88532a6f592fc14e8e9a969f84ee927b61134",
+        "src/engine/rules/immediate-play.ts": "15557bafdfd945f86899e5594e5bb3714a9a20dc04a4f8b04d2843fe1e792d3b",
+        "src/engine/rules/timing.ts": "75ff15be8c099fda8ae42dae149940f95b9290fae69da429a3872f48fe3910c9",
+        "src/engine/steps/feasibility.ts": "2ea9e222c64a538d77668c8c03bbef531affe29b3a95b28c5ce3f63d0557e05f",
+        "src/engine/steps/kinds/play.ts": "8bc0a14623e49a5c8164b7aace6365e74e478013e50339d7deb2f2d84e801ed9",
+        "src/engine/steps/kinds/resolve-top.ts": "9f34884f0060b754821d44079b8a1cb90ea2db709b40fd052614daf528bc89e7",
+        "src/engine/testing/dsl-cards.ts": "a093ca247a8d8fcdc3d85f7192ba423154498f9c36c2df08d22fb97f0364aceb",
+        "src/engine/testing/prompt-lab.ts": "fd335d643bac8d3efb29e366034dd86fd0bb5b86c443ae5cf6e0382ba8bf71a5"
+      }
+    },
+    "sourceManifestSHA256": "2261385995ae0468cec22998ad1a61c4cdef0167bead3368fdc71f9f4eb1f184",
+    "native": {
+      "report": "invocations/run-Dtpj2G/immediate-play.result.json",
+      "root": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.568",
+      "ok": true,
+      "caps": [],
+      "port": 5274,
+      "slot": 1,
+      "runnerPid": 91449,
+      "serverPid": 91805,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 2294,
+        "scenario": 73355,
+        "total": 75726
+      },
+      "cells": [
+        {
+          "viewport": "desktop",
+          "side": "player",
+          "source": {
+            "physical": "i1",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000056820"
+          },
+          "selected": {
+            "physical": "i9",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000002"
+          },
+          "paid": 1,
+          "energy": 2,
+          "score": 1,
+          "selectionProvenance": "live player UI",
+          "reload": true,
+          "geometry": {
+            "x": 452,
+            "y": 275.25,
+            "width": 240,
+            "height": 336,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "humanInterruptPhysical": null,
+          "logRowsAtObservation": 26
+        },
+        {
+          "viewport": "desktop",
+          "side": "enemy",
+          "source": {
+            "physical": "i8",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000056820"
+          },
+          "selected": {
+            "physical": "i16",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000002"
+          },
+          "paid": 1,
+          "energy": 2,
+          "score": 1,
+          "selectionProvenance": "native LOAD_STATE script",
+          "reload": true,
+          "geometry": {
+            "x": 1120.5,
+            "y": 597,
+            "width": 120,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "humanInterruptPhysical": "i1",
+          "logRowsAtObservation": 29
+        },
+        {
+          "viewport": "mobile",
+          "side": "player",
+          "source": {
+            "physical": "i1",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000056820"
+          },
+          "selected": {
+            "physical": "i9",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000002"
+          },
+          "paid": 1,
+          "energy": 2,
+          "score": 1,
+          "selectionProvenance": "live player UI",
+          "reload": true,
+          "geometry": {
+            "x": 197,
+            "y": 82.5,
+            "width": 176,
+            "height": 246.390625,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "humanInterruptPhysical": null,
+          "logRowsAtObservation": 26
+        },
+        {
+          "viewport": "mobile",
+          "side": "enemy",
+          "source": {
+            "physical": "i8",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000056820"
+          },
+          "selected": {
+            "physical": "i16",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000002"
+          },
+          "paid": 1,
+          "energy": 2,
+          "score": 1,
+          "selectionProvenance": "native LOAD_STATE script",
+          "reload": true,
+          "geometry": {
+            "x": 262,
+            "y": 522.828125,
+            "width": 120,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "humanInterruptPhysical": "i1",
+          "logRowsAtObservation": 29
+        }
+      ],
+      "screens": [
+        {
+          "filename": "immediate-choice-desktop.png",
+          "dimensions": [
+            2880,
+            1800
+          ]
+        },
+        {
+          "filename": "immediate-materialized-desktop.png",
+          "dimensions": [
+            2880,
+            1800
+          ]
+        },
+        {
+          "filename": "immediate-materialized-mobile.png",
+          "dimensions": [
+            780,
+            1688
+          ]
+        }
+      ],
+      "visual": "Helper inspected all three original2x images: optional0/1 selection, distinct physical duplicates, Skip/Submit controls, exhaustedbackcharacter/HUD2/3energy1/25score, mobilecontrols legible without clipping.",
+      "provenance": "Player selection and human Interrupt are actual UI actions. Enemy selection/payment are native LOAD_STATE script; no live enemy UI/AI selection claimed. Full actual UUID/physical event and intent journal records are in report."
+    },
+    "resourceSettlement": {
+      "observedAt": "2026-10-12T19:20:20.030464+00:00",
+      "sourceChanged": [],
+      "ownProcesses": "  PID  PPID  PGID COMMAND\n",
+      "port5274": "",
+      "records": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "exists": false,
+          "belongsToThisBead": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "exists": false,
+          "belongsToThisBead": false
+        }
+      ]
+    },
+    "historical212": "Two corrected evidence files are byte-identical to reviewed original1cc source; no integration edits to historical212.",
+    "originalMetadata": {
+      "status": "Local acceptance complete; parent cold temporary Sol core review and native delivery pending.",
+      "schemaNormalization": {
+        "fields": {
+          "hostLoad": {
+            "measuredFor": "source-final-review test-related start 2026-10-12T18:45:45.597Z actual vm.loadavg one-minute sample"
+          },
+          "implementWindow": {
+            "measuredFor": "Actual post-claim helper dispatch through observed precommit evidence cutoff; includes research, coordination, waits and validation. Normal Git dates and separate successful actual commit-process receipt are recorded in terminal handoff, including cutoff tail; model start unknown."
+          }
+        }
+      },
+      "precommitEvidenceCutoff": "2026-10-12T19:04:19.458960+00:00",
+      "commitReceiptPolicy": "Actual successful commit process start/end, normal Git timestamps and cutoff tail retained externally in terminal-handoff.json; no forced Git dates."
+    },
+    "parentVisual": {
+      "observedAt": "2026-10-12T19:20:56.557599+00:00",
+      "reviewer": "root parent",
+      "invocation": "run-Dtpj2G",
+      "result": "pass",
+      "files": [
+        {
+          "filename": "immediate-choice-desktop.png",
+          "dimensions": [
+            2880,
+            1800
+          ],
+          "observations": "Optional0/1 selection and all3 candidates/Skip/Submit controls are legible and within viewport; two same-UUID physical copies display as distinct candidates."
+        },
+        {
+          "filename": "immediate-materialized-desktop.png",
+          "dimensions": [
+            2880,
+            1800
+          ],
+          "observations": "Exhausted character is in back slot; visible HUD2/3energy and1/25score match native probe after1energy payment. Board and NextPhase controls fit."
+        },
+        {
+          "filename": "immediate-materialized-mobile.png",
+          "dimensions": [
+            780,
+            1688
+          ],
+          "observations": "Back-slot character, exhaustion indicator,2/3energy HUD andNextPhase controls legible andwithin390x844viewport."
+        }
+      ],
+      "limits": "Synthetic lab has blank fixture art by design; this is changed-workflow visual QA, not a renderer redesign review. Liveplayer selection and scriptednativeenemy selection provenance remain distinct.",
+      "scope": "Repaired combined-base final native QA"
+    },
+    "finalPrecommitCutoff": "2026-10-12T19:23:04.587426+00:00",
+    "windowScope": "Entire original dispatch through final amend practical cutoff, includes integration recovery; supplement followup does not reset start. Actual normal-dated amend process and tail retained in integration-repair-1/terminal-handoff.json."
+  }
+}

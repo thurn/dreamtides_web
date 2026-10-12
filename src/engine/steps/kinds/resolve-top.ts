@@ -1,3 +1,4 @@
+import { playedThisTurn } from "../../rules/turn-log";
 import { instanceCard } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
 import { resolveEffect } from "../../effects/interpreter";
@@ -82,11 +83,15 @@ export const resolveTop: StepDefinition<ResolveTopStep> = {
     if (item === undefined) {
       throw new Error("resolveTop with an empty stack");
     }
+    const played = playedThisTurn(state, "player") + playedThisTurn(state, "enemy");
     if (item.kind === "card") {
       resolveCard(ctx, item);
     } else {
       resolveAbility(ctx, item);
     }
-    state.priority = state.stack.length > 0 ? item.controller : null;
+    // A play made during this resolution offers its opponent a response after the effect and trigger queue finish.
+    // Copies do not count as plays and keep the ordinary resolved-item priority rule.
+    const playedDuringResolution = playedThisTurn(state, "player") + playedThisTurn(state, "enemy") > played;
+    if (!playedDuringResolution || state.stack.length === 0) state.priority = state.stack.length > 0 ? item.controller : null;
   },
 };

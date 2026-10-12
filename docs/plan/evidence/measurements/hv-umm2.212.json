@@ -495,7 +495,7 @@
         "measuredFor": "review test-related start 2026-10-12T17:14:46.066Z actual vm.loadavg one-minute sample"
       },
       "implementWindow": {
-        "measuredFor": "native claim17:09:30Z conservative dispatch proxy includes parent preparation; exact helper dispatch timestamp unavailable; end is helper commit"
+        "measuredFor": "Originating session exact own dispatch2026-10-12T17:10:02.491Z through original successful commit-process completion2026-10-12T17:30:03.645343+00:00; original reported proxy/cutoff preserved in timingCorrection212. Model start remains unknown."
       }
     }
   },
@@ -506,5 +506,39 @@
     "energyAdded": 1,
     "abilities": null,
     "nativeObservation": "extra UUID draw and catalog energy refill observed; no queued/resolved child bonus is claimed for this pending definition. Lily source trigger is queued/resolved. Synthetic authored next-well and nested-chain contracts prove bonus FIFO behavior."
+  },
+  "timingCorrection212": {
+    "correctedBy": "hv-umm2.568",
+    "source": "6f69731270e14733a3b0ec301a82b619c608228b",
+    "sourceJournal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T08-42-56-01a130c8-03b8-7dd1-b849-2f7c98a2b18e.jsonl",
+    "dispatchCallId": "call_fdfaedce8fbb4faa84b38c4efc6cb165",
+    "actualDispatch": "2026-10-12T17:10:02.491Z",
+    "actualCommitReceipt": {
+      "start": "2026-10-12T17:30:03.613890+00:00",
+      "end": "2026-10-12T17:30:03.645343+00:00",
+      "wallS": 0.03134529199451208,
+      "exit": 0
+    },
+    "correctedWindow": {
+      "start": "2026-10-12T17:10:02.491Z",
+      "end": "2026-10-12T17:30:03.645343+00:00"
+    },
+    "correctedElapsedMin": 20.01923905,
+    "reportedOriginal": {
+      "implementWindow": {
+        "start": "2026-10-12T17:09:30Z",
+        "end": "2026-10-12T17:29:45Z"
+      },
+      "implementMin": 20.25,
+      "selectedGitTimestampAndEvidenceCutoff": "2026-10-12T17:29:45Z",
+      "normalization": {
+        "measuredFor": "native claim17:09:30Z conservative dispatch proxy includes parent preparation; exact helper dispatch timestamp unavailable; end is helper commit"
+      },
+      "originalHashes": {
+        "docs/plan/evidence/friction/hv-umm2.212.json": "c55aab6dcac5d889e568e4e2345daf04a3735c270ba78f45c715418f551b3094",
+        "docs/plan/evidence/measurements/hv-umm2.212.json": "f6cf2b63da4b685cf0e701a982621816da753cb2a169fca1097c905d292ff5f6"
+      }
+    },
+    "scope": "Timing correction only. Prior validation/QA/source fields and original Git metadata are preserved; original frozen files are retained in this bead raw evidence and Git history."
   }
 }

@@ -216,3 +216,17 @@ export function canPlay(
     eventAbilities(definition, instance.variant).some((ability) => effectEntersPlay(ability.effect));
   return !entersPlay || freeBackSlotsAfterStack(state, catalog, side) > 0;
 }
+
+/** The instruction itself supplies a normal-cost void route; an existing Reclaim remains optional. */
+export function immediatePlayRoutes(state: BattleState, catalog: EngineCatalog, id: InstanceId): PlayRoute[] {
+  return ["permission", ...playRoutes(state, catalog, id, "void").filter((route) => route === "reclaim")];
+}
+
+/** Immediate character play obeys ownership, restrictions, costs and reserved capacity, while the effect supplies timing. */
+export function canPlayImmediately(state: BattleState, catalog: EngineCatalog, side: Side, id: InstanceId): boolean {
+  const instance = instanceOf(state, id);
+  return instance.zone === "void" && instance.owner === side && instance.controller === side &&
+    characteristicsOf(state, catalog, id).cardType === "character" && !playRestricted(state, catalog, side, id) &&
+    immediatePlayRoutes(state, catalog, id).some((route) => routePayable(state, catalog, side, id, route)) &&
+    freeBackSlotsAfterStack(state, catalog, side) > 0;
+}

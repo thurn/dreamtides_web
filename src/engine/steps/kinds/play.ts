@@ -2,18 +2,19 @@ import { instanceCard, printedCardId } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
 import { choosePlayTime, purposeOf } from "../../effects/interpreter";
 import { playPermission } from "../../continuous/permissions";
-import { chooseX, payCosts, planCosts } from "../../rules/costs";
+import { chooseX, payCosts, planCosts, type CostPlan } from "../../rules/costs";
 import { xCost } from "../../dsl/energy";
 import { endFloating } from "../../rules/floating";
 import { instanceOrigin } from "../../rules/activation";
 import { canPlay, playRoutes, routeCosts, routeCostModifier, routePayable, type PlayRoute, type PlayZone } from "../../rules/timing";
 import { recordPlayed } from "../../rules/turn-log";
 import { instanceOf, moveToStack } from "../../rules/zones";
+import type { CostModifier } from "../../continuous/costs";
 import type { ChooseModePrompt, PromptRole } from "../../prompts/types";
 import type { InstanceId, Slot } from "../../state/ids";
 import type { EffectChoices } from "../../state/types";
 import { opponent } from "../../state/ids";
-import type { StepDefinition } from "../types";
+import type { StepContext, StepDefinition } from "../types";
 
 /**
  * Plays a card from the hand of the side holding it, or from its owner's
@@ -35,66 +36,91 @@ export interface PlayStep {
   readonly slot?: Slot;
 }
 
+/** A prepared play, before payment or stack movement. */
+export interface PreparedPlay {
+  readonly route: PlayRoute;
+  readonly plan: CostPlan;
+  readonly choices: readonly EffectChoices[];
+  readonly modifier: CostModifier;
+}
+
+/** Shared ordinary play-time route, X, mode, target and additional-cost planning. */
+export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonly PlayRoute[], from: PlayZone): PreparedPlay {
+  const { state, catalog } = ctx;
+  const instance = instanceOf(state, card);
+  const side = instance.controller;
+  const definition = instanceCard(catalog, instance);
+  const origin = instanceOrigin(instance);
+  const purpose = (ability: number, role: PromptRole) => purposeOf(card, origin, ability, role);
+  let route: PlayRoute = routes[0] ?? "hand";
+  if (routes.length > 1) {
+    const mode = ctx.choose<ChooseModePrompt>({
+      kind: "chooseMode",
+      side,
+      purpose: purpose(0, from === "void" ? "voidRoute" : "playRoute"),
+      options: routes.map((option, index) => ({
+        mode: index,
+        legal: routePayable(state, catalog, side, card, option),
+      })),
+    });
+    route = routes[mode] ?? route;
+  }
+  const costs = routeCosts(state, catalog, card, route);
+  const modifier = routeCostModifier(state, catalog, side, card, route);
+  let x: number | null;
+  let choices: readonly EffectChoices[];
+  if (definition.synthetic?.play !== undefined) {
+    const chosen = definition.synthetic.play(ctx, card);
+    x = chosen.x ?? null;
+    choices = [{ modes: chosen.modes ?? [], targets: chosen.targets ?? [] }];
+  } else {
+    // Offering plays the card for 0●: if its cost includes X, X is 0.
+    x = route === "offering" ? (xCost(definition.costs) === null ? null : 0) : chooseX(ctx, side, costs, purpose(0, "chooseX"), modifier);
+    choices = choosePlayTime(ctx, eventAbilities(definition, instance.variant), side, card, purpose, x ?? 0);
+  }
+  const targets = choices.flatMap((choice) => choice.targets.flat());
+  const costAbility = Math.max(0, definition.abilities(instance.variant).findIndex((ability) => ability.kind === "additionalCost"));
+  const plan = planCosts(ctx, side, card, costs, x, (role) => purpose(costAbility, role), [card, ...targets], modifier, { endsPlayTime: true, selectorX: x ?? 0 });
+  return { route, plan, choices, modifier };
+}
+
+/** Pays a prepared play and publishes its ordinary played-card transition. */
+export function commitCardPlay(ctx: StepContext, card: InstanceId, prepared: PreparedPlay, options: {
+  readonly slot?: Slot;
+  readonly permission?: ReturnType<typeof playPermission>;
+} = {}): void {
+  const { state, catalog } = ctx;
+  const instance = instanceOf(state, card);
+  const side = instance.controller;
+  const definition = instanceCard(catalog, instance);
+  const cardId = printedCardId(instance.printing);
+  const { route, plan, modifier } = prepared;
+  payCosts(ctx, side, card, plan);
+  endFloating(ctx, (effect) => modifier.consumes.includes(effect.id) || effect.id === options.permission?.consumes);
+  if (options.permission?.oncePerTurn !== undefined) state.oncePerTurn.push(options.permission.oncePerTurn);
+  moveToStack(ctx, card, side, { choices: prepared.choices, x: plan.x, optionalPaid: plan.optionalPaid, ...(options.slot === undefined ? {} : { slot: options.slot }) });
+  if (route === "reclaim") instance.status.reclaimed = true;
+  instance.status.playedViaReclaim = route === "reclaim";
+  if (route === "offering") instance.status.offering = true;
+  recordPlayed(state, catalog, side, card);
+  ctx.emit({ kind: "cardPlayed", side, instance: card });
+  if (definition.status === "pending" && cardId !== null) {
+    ctx.emit({ kind: "pendingAbility", side, cardId, instance: card, reason: "played" });
+  }
+  state.priority = opponent(side);
+}
+
 export const play: StepDefinition<PlayStep> = {
   kind: "play",
   canceller: (state, step) => state.instances[step.card]?.controller ?? null,
   hasCommitPoint: true,
   run(ctx, step) {
     const { state, catalog } = ctx;
-    const instance = instanceOf(state, step.card);
-    // A card in hand is played by the side holding it, which may not be its owner.
-    const side = instance.controller;
-    if (!canPlay(state, catalog, side, step.card, step.from)) {
-      throw new Error(`Card ${step.card} cannot be played now`);
-    }
-    const definition = instanceCard(catalog, instance);
-    const cardId = printedCardId(instance.printing);
-    const origin = instanceOrigin(instance);
-    const purpose = (ability: number, role: PromptRole) => purposeOf(step.card, origin, ability, role);
-    const routes = playRoutes(state, catalog, step.card, step.from);
-    let route: PlayRoute = routes[0] ?? "hand";
-    if (routes.length > 1) {
-      const mode = ctx.choose<ChooseModePrompt>({
-        kind: "chooseMode",
-        side,
-        purpose: purpose(0, step.from === "void" ? "voidRoute" : "playRoute"),
-        options: routes.map((option, index) => ({
-          mode: index,
-          legal: routePayable(state, catalog, side, step.card, option),
-        })),
-      });
-      route = routes[mode] ?? route;
-    }
-    const costs = routeCosts(state, catalog, step.card, route);
-    const modifier = routeCostModifier(state, catalog, side, step.card, route);
-    const permission = route === "permission" ? playPermission(state, catalog, step.card, side) : null;
-    let x: number | null;
-    let choices: readonly EffectChoices[];
-    if (definition.synthetic?.play !== undefined) {
-      const chosen = definition.synthetic.play(ctx, step.card);
-      x = chosen.x ?? null;
-      choices = [{ modes: chosen.modes ?? [], targets: chosen.targets ?? [] }];
-    } else {
-      // Offering plays the card for 0●: if its cost includes X, X is 0.
-      x = route === "offering" ? (xCost(definition.costs) === null ? null : 0) : chooseX(ctx, side, costs, purpose(0, "chooseX"), modifier);
-      choices = choosePlayTime(ctx, eventAbilities(definition, instance.variant), side, step.card, purpose, x ?? 0);
-    }
-    const targets = choices.flatMap((choice) => choice.targets.flat());
-    const costAbility = Math.max(0, definition.abilities(instance.variant).findIndex((ability) => ability.kind === "additionalCost"));
-    const plan = planCosts(ctx, side, step.card, costs, x, (role) => purpose(costAbility, role), [step.card, ...targets], modifier, { endsPlayTime: true, selectorX: x ?? 0 });
+    const side = instanceOf(state, step.card).controller;
+    if (!canPlay(state, catalog, side, step.card, step.from)) throw new Error(`Card ${step.card} cannot be played now`);
+    const prepared = planCardPlay(ctx, step.card, playRoutes(state, catalog, step.card, step.from), step.from);
+    const permission = prepared.route === "permission" ? playPermission(state, catalog, step.card, side) : null;
     ctx.commitPoint();
-    payCosts(ctx, side, step.card, plan);
-    endFloating(ctx, (effect) => modifier.consumes.includes(effect.id) || effect.id === permission?.consumes);
-    if (permission?.oncePerTurn !== undefined) state.oncePerTurn.push(permission.oncePerTurn);
-    moveToStack(ctx, step.card, side, { choices, x: plan.x, optionalPaid: plan.optionalPaid, ...(step.slot === undefined ? {} : { slot: step.slot }) });
-    if (route === "reclaim") instance.status.reclaimed = true;
-    instance.status.playedViaReclaim = route === "reclaim";
-    if (route === "offering") instance.status.offering = true;
-    recordPlayed(state, catalog, side, step.card);
-    ctx.emit({ kind: "cardPlayed", side, instance: step.card });
-    if (definition.status === "pending" && cardId !== null) {
-      ctx.emit({ kind: "pendingAbility", side, cardId, instance: step.card, reason: "played" });
-    }
-    state.priority = opponent(side);
+    commitCardPlay(ctx, step.card, prepared, { permission, ...(step.slot === undefined ? {} : { slot: step.slot }) });
   },
 };

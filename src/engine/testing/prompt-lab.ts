@@ -385,6 +385,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
     name: "Lab Divination",
     text: "As you play this, look at the top 2 cards of your deck: put one into your hand and the other on the top or bottom of your deck.",
   },
+  [DSL.immediateVoidCharacter.id]: { name: "Lab Immediate Return", text: "You may immediately play a ≤2● cost character from your void. Gain 1⍟." },
 };
 
 /** Instance ids of the placed cards, per side and zone, in setup order. */
@@ -1339,6 +1340,19 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
         },
       },
     ],
+  },
+  {
+    name: "immediate-play", description: "An optional owned-void play pays normal costs during the resolving effect",
+    setup: { active: "player", phase: "day", player: { hand: [DSL.immediateVoidCharacter.id], void: [vanillas[0], vanillas[0], vanillas[1], vanillas[2]], energy: 3, deck: deck(6) },
+      enemy: { deck: deck(6) } },
+    script: [playHand(0)], presents: [target((ids) => at(ids.player.void, 1))],
+  },
+  {
+    name: "immediate-play-enemy", description: "Respond to the opponent's played effect and its paid immediate character play",
+    setup: { active: "enemy", phase: "day", player: { hand: [SYNTHETIC.interruptEvent.id], energy: 1, deck: deck(6) },
+      enemy: { hand: [DSL.immediateVoidCharacter.id], void: [vanillas[0], vanillas[0], vanillas[1]], energy: 3, deck: deck(6) } },
+    script: [play("enemy", (ids) => at(ids.enemy.hand, 0)), { side: "player", action: () => ({ kind: "pass" }) },
+      { side: "enemy", answer: (ids) => [at(ids.enemy.void, 1)] }], presents: [playHand(0)],
   },
 ];
 
