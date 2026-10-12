@@ -1,3 +1,5 @@
+import { additionalCost, choiceCost, discardCost, enemyCharacter, event, pointsCost, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 494,
   art: { x: -0.622, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    additionalCost(choiceCost([discardCost()], [pointsCost(5)])),
+    event(p.dissolve(target(enemyCharacter()))),
+  ],
+  verifiedText: "pmnze0w8ed",
 });
