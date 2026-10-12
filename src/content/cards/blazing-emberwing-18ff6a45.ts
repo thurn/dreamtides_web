@@ -1,3 +1,5 @@
+import { activated, characterYouControl, count, exhaustSelf } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +19,6 @@ export default card({
   artOwned: false,
   cardNumber: 265,
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([exhaustSelf()], p.gainEnergy(count(characterYouControl())))],
+  verifiedText: "25nj8x3kb55",
 });

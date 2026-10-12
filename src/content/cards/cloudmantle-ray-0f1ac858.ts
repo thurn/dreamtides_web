@@ -1,3 +1,6 @@
+import { characterYouControl, count } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 417,
   art: { x: 0.741, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(onDawn(), p.gainEnergy(count(characterYouControl({ costAtMost: variant.amplified ? 3 : 2 }))))],
+  verifiedText: "1usa46iiv7m",
 });

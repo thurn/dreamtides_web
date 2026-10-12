@@ -1,3 +1,6 @@
+import { activated, energy, exhaustSelf } from "../../engine/dsl/builders";
+import { triggered, whenDiscard } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 462,
   art: { x: -0.086, y: 1, scale: 1.1 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated([energy(2), exhaustSelf()], p.sequence(p.draw(1), p.discard(1))),
+    triggered(whenDiscard(), p.gainPoints(1)),
+  ],
+  verifiedText: "a15v38miu7",
 });
