@@ -1,0 +1,224 @@
+{
+  "bead": "hv-roz5",
+  "phase": 5,
+  "scope": {
+    "production": "Existing interpreter evaluate forwards explicit resolving X including0, otherwise existing sourceX reader. No signature, API, DSL, cost, activation, trigger, layer, schema, UI or content change.",
+    "trackedPaths": [
+      "src/engine/effects/interpreter.ts",
+      "src/engine/effects/primitives/contracts/stored-source-x-values.contracts.ts",
+      "docs/plan/evidence/friction/hv-roz5.json",
+      "docs/plan/evidence/measurements/hv-roz5.json",
+      "docs/plan/evidence/pre-existing/hv-roz5.md"
+    ],
+    "fallout": "none; existing32symbol-importer inventory parent retains; all callers read-only",
+    "rules": "docs/rules.md Costs, Requirements, and X / A character\u2019s X settles behavior; no rules ambiguity decision required"
+  },
+  "contracts": {
+    "count": 32,
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "actualWorkflows": [
+      "play source for energyX3 then fixedenergy1 activation: gain3 and dissolve spark2, retain spark5",
+      "materialized trigger from actual playX3: gain3 with same selector bound",
+      "energy/count-discard/captured-abandon activation X0 or2 overrides live stored3; stack serialization replay hashes agree",
+      "normal played energyXevent0/2 preserved",
+      "unplayed source fixed activation and public materialization trigger read0",
+      "same resolving sequence reads3 live, then0 after dissolve or return/rematerialize; dissolved trigger reads0",
+      "actual Interrupt response activation reads3",
+      "public fold reload target prompts, foreign/illegal/stale/concurrent answer rejection, cancel without payment, answer once and replay hash parity",
+      "synthetic error after stack-source numeric read rolls back score/public scoring events and preserves committed paid2energy/stack"
+    ],
+    "limits": "Injected synthetic.resolve hook manually supplies x:null to existing resolveEffect to exercise sourceX stack fallback and atomic rollback; ordinary authored card resolution already passes item.x. No new transition, persistence or schema path; no private saved-answer mutation. Browser evidence exercises served synthetic engine rather than product UI/store; no visual or production bundle claim."
+  },
+  "attempts": [
+    {
+      "check": "focused-initial",
+      "result": "21pass5fail",
+      "vitestDurationS": 2.62,
+      "corrections": "Variable-discard count is selected through cards without numeric prompt; error fixture needs legal enemy response to avoid immediate automatic resolve."
+    },
+    {
+      "check": "focused-corrected",
+      "result": "26pass",
+      "vitestDurationS": 2.12
+    },
+    {
+      "check": "raw-typecheck-before-materialization",
+      "result": "failed",
+      "wallS": null,
+      "limits": "wall time not separately measured",
+      "corrections": "Prepared disposable tokens using npm run prepare-workspace; fixture costs type widened to existing Cost (supports energyX), unused event import became used by normal-play contracts. No tracked generated outputs."
+    },
+    {
+      "check": "focused-expanded",
+      "result": "32pass",
+      "vitestDurationS": 1.99
+    },
+    {
+      "check": "counterfactual",
+      "result": "12fail20pass",
+      "wallS": 2.5809026670031017,
+      "exactMutation": "Only evaluate ValueScope.x reverted to env.x temporarily; import retained. finally restored exact original bytes.",
+      "failures": "fixed activation, live trigger, departure/reentry, Interrupt both sides; fixed activation replay; injected stack fallback all observed0 rather than3. Explicit bindings and absent sources passed.",
+      "restoredSHA256": "dffbcf2f037383926a24ee83892769c4438b10aae8b06914988842fb0575124e",
+      "exactRestoration": true
+    },
+    {
+      "check": "focused-final-before-QA",
+      "result": "32pass",
+      "wallS": 2.2503979579996667
+    },
+    {
+      "check": "browser-first",
+      "result": "failed final wrapper qa.assert unavailable; all8 internal parity cases had passed",
+      "wallS": 5.3990072080050595,
+      "receipt": "invocations/run-brCRme/source-scenario.result.json",
+      "caps": []
+    },
+    {
+      "check": "browser-final",
+      "result": "passed8rows",
+      "wallS": 4.053274583995517,
+      "receipt": "invocations/run-AIHKLK/source-scenario.result.json",
+      "caps": []
+    },
+    {
+      "check": "affected",
+      "result": "3files1780tests passed",
+      "wallS": 6.0006047089991625,
+      "command": "npm test -- src/engine/effects/primitives/contracts.test.ts src/engine/dsl/values.test.ts src/engine/dsl/selectors.test.ts src/engine/rules/costs-play-x.test.ts src/engine/triggers/triggers.test.ts",
+      "actualScope": [
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/triggers/triggers.test.ts"
+      ],
+      "limits": "Two dsl filters referenced nonexistent files and selected no tests; they count as no coverage and appear in no test entrypoint. Related-review covers actual dependency closure."
+    },
+    {
+      "check": "review-first",
+      "result": "lintfailed; both typechecks, importcycles and268files4376tests passed",
+      "wallS": 42.542498415998125,
+      "correction": "Replace nested Vitest objectContaining(any) property assignment with toMatchObject on target prompt; assertion meaning unchanged."
+    },
+    {
+      "check": "knip",
+      "result": "passed",
+      "wallS": 2.723245750006754
+    },
+    {
+      "check": "review-final",
+      "result": "passed:both typechecks,lint,importcycles,schema,268files4376tests",
+      "wallS": 62.09066950000124
+    }
+  ],
+  "browser": {
+    "bead": "hv-roz5",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/stored-source-x-sol",
+    "runner": "scripts/qa/run-scenario.mjs",
+    "proposedPort": 5174,
+    "provider": "http://localhost:8931/mcp",
+    "scenario": "source-scenario.mjs",
+    "status": "settled",
+    "startedAt": "2026-10-12T14:54:30.075932+00:00",
+    "cleanup": "existing runner owns isolated MCP context, provider lease, server process group; settle all before validation or commit",
+    "actualPort": 5274,
+    "slot": 1,
+    "portReason": "requested5174 outside admitted slot1 range; runner selected strict5274",
+    "attempts": [
+      {
+        "invocation": "run-brCRme",
+        "serverProcessGroup": 80104,
+        "exit": 1,
+        "wallS": 5.3990072080050595,
+        "reason": "final wrapper qa.assert unavailable; internal8cases passed"
+      },
+      {
+        "invocation": "run-AIHKLK",
+        "serverProcessGroup": 80865,
+        "exit": 0,
+        "wallS": 4.053274583995517,
+        "caps": []
+      }
+    ],
+    "ownedGroupMembers": [],
+    "listenerExit": 1,
+    "listenerOutput": "",
+    "cleanupConfirmedAt": "2026-10-12T14:55:58.831314+00:00",
+    "runnerReceipt": "both context-close and owner cleanup completed, terminal report port free; no screenshots or local game store writes"
+  },
+  "hostLoadSamples": [
+    {
+      "check": "review-first",
+      "at": "2026-10-12T14:55:58.833717Z",
+      "load1m": 3.83,
+      "source": "sysctl -n vm.loadavg"
+    },
+    {
+      "check": "review-final",
+      "at": "2026-10-12T14:57:55.719052Z",
+      "load1m": 18.12,
+      "source": "sysctl -n vm.loadavg"
+    }
+  ],
+  "validationOrder": "prepare and final focused completed; browser runner attempts sequential, own groups80104/80865 and listener5274 settled; affected/review/Knip after final cleanup. Final test assertion lint repair after browser, no runtime logic changed. Final review and evidence schema before commit.",
+  "finalChecks": {
+    "focused": {
+      "passed": true,
+      "cases": 32,
+      "wallS": 2.2503979579996667,
+      "command": "npx vitest run src/engine/effects/primitives/contracts.test.ts -t 'stored source X values'",
+      "limit": "Last assertion lint repair covered by final review; no runtime behavior change."
+    },
+    "affected": {
+      "passed": true,
+      "actualFiles": 3,
+      "cases": 1780,
+      "wallS": 6.0006047089991625
+    },
+    "review": {
+      "passed": true,
+      "actualFiles": 268,
+      "cases": 4376,
+      "wallS": 62.09066950000124,
+      "command": "npm run review",
+      "hostLoad1m": 18.12
+    },
+    "knip": {
+      "passed": true,
+      "wallS": 2.723245750006754,
+      "command": "npm run knip",
+      "scope": "Same production/import/export graph; assertion matcher shape changed afterward."
+    },
+    "browser": {
+      "passed": true,
+      "rows": 8,
+      "caps": [],
+      "wallS": 4.053274583995517,
+      "receipt": "invocations/run-AIHKLK/source-scenario.result.json",
+      "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-roz5/source-scenario.mjs --bead hv-roz5 --port 5174 --timeout 240"
+    },
+    "cleanup": {
+      "ownedGroupsAbsent": [
+        80104,
+        80865
+      ],
+      "port5274Free": true,
+      "ownerRecordAbsent": true,
+      "serverRecordAbsent": true
+    },
+    "sourceSHA256": "dffbcf2f037383926a24ee83892769c4438b10aae8b06914988842fb0575124e",
+    "schema": {
+      "passed": true,
+      "wallS": 0.11512866599514382,
+      "command": "node scripts/friction-triggers.mjs --validate-records",
+      "scope": "All585records including own final record; final stamp is revalidated immediately before commit"
+    }
+  },
+  "fullFuzzApplicability": "Existing reader argument only. No infrastructure, repository config, cross-cutting architecture, step-runner or fuzzer change; proportionate focused/affected/related review plus browser parity. No local review:full or fuzz.",
+  "preExistingEvidence": "docs/plan/evidence/pre-existing/hv-roz5.md",
+  "independentReview": "Parent owns required fresh read-only gpt-5.6-sol core review with temporary user-authorized same-family routing; not yet completed at implementer freeze.",
+  "commitWindowEnd": "2026-10-12T14:59:59Z",
+  "commitWindowProvenance": "Exact Git committer timestamp set from current UTC immediately before schema, stage and commit in the same final freeze command."
+}

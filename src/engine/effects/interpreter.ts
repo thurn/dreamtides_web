@@ -9,6 +9,7 @@ import {
   matchingCharacters,
   matchingStackItems,
   resolvePlayer,
+  sourceX,
   zoneCount,
   type SourceSparkReader,
 } from "../dsl/selectors";
@@ -560,7 +561,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
   return evaluateValue(ctx.state, value, {
     controller: env.controller,
     source: env.source,
-    x: env.x,
+    x: env.x ?? sourceX(ctx.state, env.source),
     scored: env.scored,
     count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env)).length,
     countCards: (count) => zoneCount(ctx.state, ctx.catalog, count, env.controller),

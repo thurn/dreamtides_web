@@ -1,0 +1,23 @@
+{
+  "bead": "hv-roz5",
+  "phase": 5,
+  "implementMin": 13.454433333333332,
+  "implementWindow": {
+    "start": "2026-10-12T14:46:31.734Z",
+    "end": "2026-10-12T14:59:59Z"
+  },
+  "localValidationS": {
+    "focused": 2.2503979579996667,
+    "affected": 6.0006047089991625,
+    "review": 62.09066950000124,
+    "knip": 2.723245750006754,
+    "browser": 4.053274583995517
+  },
+  "hostLoad": 18.12,
+  "testDelta": {
+    "files": 1,
+    "lines": 239,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
