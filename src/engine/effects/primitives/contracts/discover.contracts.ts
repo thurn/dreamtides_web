@@ -1,17 +1,20 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
+import { activated, anyCharacter, energy, event, target } from "../../../dsl/builders";
 import { createEngine } from "../../../engine";
 import { eventSeenBy } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { EngineLogRecord } from "../../../log";
+import { aiDecision, runPolicy } from "../../../policy/decide";
+import { boardInit, entries, ITERATIONS_ONLY } from "../../../policy/policy.fixtures";
 import type { ChooseCardsPrompt } from "../../../prompts/types";
 import { instanceOrigin } from "../../../rules/activation";
 import { instanceOf } from "../../../rules/zones";
 import { deserializeState, serializeState, stateHash } from "../../../state/hash";
 import { type CardId, type InstanceId } from "../../../state/ids";
-import type { BattleState } from "../../../state/types";
+import type { BattleState, CardInstance } from "../../../state/types";
 import { IllegalAnswer } from "../../../steps/errors";
-import { ScriptedSource } from "../../../steps/sources";
+import { NO_PROMPTS, ScriptedSource } from "../../../steps/sources";
 import type { AnswerSource } from "../../../steps/types";
 import { boardState, cardIdOf, type BoardSetup } from "../../../testing/board";
 import { DSL, DSL_CARDS } from "../../../testing/dsl-cards";
@@ -20,6 +23,8 @@ import { syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { promptView, view } from "../../../view/view";
 import { resolveEffect } from "../../interpreter";
 import { discover } from "../discover";
+import { dissolve } from "../dissolve";
+import { loseAllAbilities } from "../lose-all-abilities";
 import { engine, v, deck, knowing, PickingSource } from "./cards-support";
 
 /** Discovers a character, then throws: a step that fails after its Discover's answer was accepted. */
@@ -228,5 +233,65 @@ describe("discover across suspension", () => {
     if (replayed.kind !== "applied") throw new Error("expected the replayed answer to apply");
     expect(stateHash(replayed.slice.committed)).toBe(stateHash(after));
     expect(deserializeState(serializeState(after))).toEqual(after);
+  });
+});
+
+describe("a free Discover cost chosen after its source changed", () => {
+  /** A character: "1●: Discover a character with the cost you choose." */
+  const seeker: EngineCardDefinition = {
+    ...v.vanilla1, id: syntheticId(0x5380), status: "authored",
+    abilities: () => [activated([energy(1)], discover({ cardType: "character" }, { chooseCost: true }))],
+  };
+  /** A 0● Interrupt: "A character loses all abilities." */
+  const hush: EngineCardDefinition = {
+    ...v.event0, id: syntheticId(0x5381), speed: "interrupt", status: "authored",
+    abilities: () => [event(loseAllAbilities(target(anyCharacter())))],
+  };
+  /** A 0● Interrupt: "Dissolve a character." */
+  const snuff: EngineCardDefinition = {
+    ...v.event0, id: syntheticId(0x5382), speed: "interrupt", status: "authored",
+    abilities: () => [event(dissolve(target(anyCharacter())))],
+  };
+  /** A 5● event: the deck's costliest card, which a character Discover cannot find. */
+  const costlyEvent: EngineCardDefinition = { ...v.event1, id: syntheticId(0x5383), costs: [energy(5)] };
+  const changing = createEngine(testCatalog([seeker, hush, snuff, costlyEvent]));
+  const changingFold = createFoldAdapter(changing, { checkEventPrefix: true });
+  const enemyDeck = [v.vanilla2.id, v.vanilla3.id, costlyEvent.id];
+
+  it.each([
+    ["loses all its abilities", hush, (instance: CardInstance) => instance.status.lostAbilities !== undefined],
+    ["leaves play", snuff, (instance: CardInstance) => instance.zone === "void"],
+  ] as const)("is answered by Greedy with a cost that finds a card when the source %s before the choice", (_, response, changed) => {
+    const { state, ids } = boardState(changing.catalog, {
+      active: "enemy", phase: "day",
+      enemy: { back: [seeker.id], energy: 1, deck: enemyDeck },
+      player: { hand: [response.id], deck },
+    });
+    const source = ids.enemy.back[0]!;
+    const activatedState = changing.apply(state, "enemy", { kind: "activate", source, ability: 0 }, NO_PROMPTS).state;
+    let slice: BattleSlice = { committed: activatedState, inFlight: null, publishedEvents: 0, attempt: 0 };
+    // The player responds: its target is the only character, so the engine answers it.
+    let intent: Parameters<typeof changingFold.reduce>[1] = { kind: "battleAction", side: "player", action: playFromHand(ids, "player").action };
+    for (let guard = 0; ; guard++) {
+      const outcome = changingFold.reduce(slice, intent);
+      if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("the response or a pass failed");
+      slice = outcome.slice;
+      if (changingFold.pending(slice) !== null) break;
+      const decision = changing.decision(slice.committed);
+      if (decision === null || guard > 10) throw new Error("the Discover never asked for its cost");
+      intent = { kind: "battleAction", side: decision.side, action: { kind: "pass" } };
+    }
+    const pending = changingFold.pending(slice)!;
+    expect(pending.prompt).toMatchObject({ kind: "chooseNumber", side: "enemy", purpose: { source, role: "discoverCost" } });
+    expect(changed(pending.display.instances[source])).toBe(true);
+    const init = { ...boardInit, decks: { player: entries([response.id, ...deck]), enemy: entries([seeker.id, ...enemyDeck]) } };
+    const decision = aiDecision({ engine: changing, init, slice, pending, side: "enemy", policy: "greedy", budgets: ITERATIONS_ONLY });
+    if (decision?.kind !== "prompt") throw new Error("expected the enemy's cost choice");
+    const { choice } = runPolicy(changing, decision.request);
+    // The vanilla 3● character is the costliest card the Discover can find.
+    expect(choice).toEqual({ kind: "answer", value: 3 });
+    const answered = changingFold.reduce(slice, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value: 3 });
+    if (answered.kind !== "applied" || answered.error !== null) throw new Error("answer failed");
+    expect(answered.slice.committed.sides.enemy.hand).toEqual([ids.enemy.deck[1]]);
   });
 });

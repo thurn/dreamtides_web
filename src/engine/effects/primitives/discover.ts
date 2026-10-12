@@ -1,6 +1,6 @@
 import type { EngineCatalog } from "../../catalog";
 import { characteristics, copiableCostOf, filterSubjectOf, matchesFilter } from "../../continuous/characteristics";
-import type { CardFilter, ValueExpr } from "../../dsl/types";
+import type { Ability, CardFilter, ValueExpr } from "../../dsl/types";
 import type { ChooseCardsPrompt, ChooseNumberPrompt, PromptPurpose } from "../../prompts/types";
 import { instanceOrigin, originAbilities } from "../../rules/activation";
 import { shuffleDeck } from "../../rules/shuffle";
@@ -123,16 +123,39 @@ function isFreeCostDiscover(node: EffectNode): node is DiscoverNode & { readonly
 }
 
 /**
+ * The ability a prompt's purpose names, as the policy reconstructs it: the
+ * resolving ability's captured origin is not in the state, so it reads the
+ * captured card (`purpose.cardId`) for a printed ability, which holds however
+ * the source has changed since the ability was committed, and the source's
+ * gained abilities, as if none were lost (lost positions keep their
+ * indexes), for a gained one. A figment's or an emblem's reads its live
+ * abilities. `undefined` for a gained ability whose group has ended or whose
+ * source no longer exists.
+ */
+function askingAbility(state: BattleState, catalog: EngineCatalog, purpose: PromptPurpose): Ability | undefined {
+  const instance = typeof purpose.source === "string" ? state.instances[purpose.source] : undefined;
+  if (instance === undefined || purpose.ability === null) return undefined;
+  if (purpose.cardId !== null) {
+    const printed = catalog.card(purpose.cardId).abilities(instance.variant);
+    if (purpose.ability < printed.length) return printed[purpose.ability];
+  }
+  const live = instanceOrigin(instance);
+  if (purpose.cardId === null || live.kind !== "card") return originAbilities(catalog, live)[purpose.ability];
+  const { lost: _lost, ...unlost } = live;
+  return originAbilities(catalog, unlost)[purpose.ability];
+}
+
+/**
  * The costs a free Discover cost choice (role `discoverCost`) finds a card
  * at in `state`: the copiable cost of each card in the chooser's deck that
- * matches the filter of a free-cost Discover in the asking ability, read as
- * `discoverOptions` reads it. It reads the deck `state` holds, so a policy
- * calls it only on a state sampled from its own view (D22). Empty when the
- * asking ability cannot be found.
+ * matches the filter of a free-cost Discover in the asking ability
+ * (`askingAbility`), read as `discoverOptions` reads it. It reads the deck
+ * `state` holds, so a policy calls it only on a state sampled from its own
+ * view (D22). Empty when the asking ability cannot be found, which only
+ * costs the policy its informed choice.
  */
 export function discoverableCosts(state: BattleState, catalog: EngineCatalog, side: Side, purpose: PromptPurpose): ReadonlySet<number> {
-  const instance = typeof purpose.source === "string" ? state.instances[purpose.source] : undefined;
-  const ability = instance === undefined || purpose.ability === null ? undefined : originAbilities(catalog, instanceOrigin(instance))[purpose.ability];
+  const ability = askingAbility(state, catalog, purpose);
   const filters = ability !== undefined && "effect" in ability && ability.effect !== undefined
     ? everyNode(ability.effect).filter(isFreeCostDiscover).map((node) => node.filter)
     : [];
