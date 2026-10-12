@@ -13,8 +13,9 @@ import {
 } from "../catalog";
 import { parseCardId } from "../../types/card-identity";
 import { parseDreamwellCardId } from "../../types/identifiers";
-import { all, anyCharacter, energy, event as eventAbility, keyword, target } from "../dsl/builders";
+import { activated, all, anyCharacter, discardCost, energy, event as eventAbility, keyword, target } from "../dsl/builders";
 import { dissolve } from "../effects/primitives/dissolve";
+import { erode } from "../effects/primitives/erode";
 import { materializeFigmentCopy } from "../effects/primitives/materialize-figment-copy";
 import { sequence } from "../effects/primitives/sequence";
 import type { CardId } from "../state/ids";
@@ -56,6 +57,14 @@ function event(index: number, cost: number, speed: EngineCardDefinition["speed"]
 
 /** Synthetic definitions by role. */
 export const SYNTHETIC = {
+  erodeOne: {
+    ...event(18, 0, "standard"), status: "authored",
+    abilities: () => [eventAbility(erode(1))],
+  },
+  discardOne: {
+    ...character(19, 0, 0), status: "authored",
+    abilities: () => [activated([discardCost()], sequence())],
+  },
   survivorVictim: character(15, 1, 1, { subtype: "Survivor" }),
   dissolveVictim: {
     ...event(16, 0, "standard"), status: "authored",

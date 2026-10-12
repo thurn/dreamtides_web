@@ -1,3 +1,6 @@
+import { thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenDiscardSelf } from "../../engine/dsl/triggers";
+import { materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 465,
   art: { x: -0.096, y: 0.6, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(whenDiscardSelf(), materialize(thisCardIn("void"), { awakened: variant.amplified }), { zone: "void" })],
+  verifiedText: "werh6j70ii",
 });

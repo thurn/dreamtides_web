@@ -1,3 +1,7 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, triggeringCard, whenMaterialize } from "../../engine/dsl/triggers";
+import { thisCharacterSpark } from "../../engine/dsl/values";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,6 @@ export default card({
   cardNumber: 42,
   art: { x: -0.319, y: 0.028, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenMaterialize(characterYouControl({ figment: false })), gainSpark(triggeringCard(), thisCharacterSpark()))],
+  verifiedText: "t678xho6hg",
 });

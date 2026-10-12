@@ -1,3 +1,5 @@
+import { all, characterYouControl, keyword, staticAbility } from "../../engine/dsl/builders";
+import { grant } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +19,6 @@ export default card({
   artOwned: false,
   cardNumber: 165,
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("offering"), staticAbility(grant(all(characterYouControl()), "awakened"))],
+  verifiedText: "1u7pb3x60m",
 });

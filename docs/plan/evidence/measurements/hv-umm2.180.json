@@ -1,0 +1,216 @@
+{
+  "bead": "hv-umm2.180",
+  "base": "26b12691f491514bd692809f464d100ff53cb3c4",
+  "implementStartProvenance": "First timestamp captured by implementer after parent dispatch: 2026-10-12T14:15:12Z. Parent supplied approximate14:14Z but directed using observed timestamp. Research, coordination, verification and waits stay inside the measured window.",
+  "entities": [
+    "89c0d03c-2199-415a-bc66-89e451034328",
+    "7ecc1da1-dc39-4596-9a1d-262a261ffeea",
+    "e4e8d3b9-3463-4b92-8fbe-35064f72402d",
+    "7ad10754-690c-45fa-abe6-28944da6eef6",
+    "06a4709d-fbef-4ea2-aa5e-caa2beac80ab"
+  ],
+  "scope": {
+    "newPrimitives": 0,
+    "engineBehaviorChanged": false,
+    "nonTestAddedDeleted": 44,
+    "additiveSyntheticFixtures": [
+      "erodeOne:18",
+      "discardOne:19"
+    ],
+    "scenarioModule": "cards-68",
+    "scenarioCases": 10,
+    "scenarioLines": 96,
+    "testFilesAdded": 0,
+    "syntheticFixtureNetLines": 9,
+    "testDeltaPolicy": "No .test file added;96 plain scenario lines counted as test lines. Additive synthetic fixture data is9 net lines, reported separately."
+  },
+  "rules": {
+    "newDecisions": [],
+    "newCardIssues": [],
+    "existingDecisions": [
+      "RD-hv-7x4l.46-1",
+      "RD-hv-7x4l.34-1",
+      "RD-hv-7x4l.8-3",
+      "RD-hv-umm2.87-1",
+      "RD-hv-umm2.93-2"
+    ]
+  },
+  "focused": {
+    "artifact": "scenarios-contracts.log",
+    "casesPassed": 1833,
+    "scenarioCasesPassed": 134,
+    "primitiveContractCasesPassed": 1699,
+    "testSeconds": 4.9,
+    "wrapperSeconds": 6.1,
+    "initialFixtureFailure": "Four Explorer scenarios supplied unused answers for a forced one-card discard; those answers were deleted. Parent identified mutable companion cards; two synthetic fixtures replace those companions.",
+    "readinessMutation": "Read-only in-memory opponent-only awakened static grant rejects front-rank advance; authored grant permits it. Artifact readiness-mutation.log."
+  },
+  "fuzz": {
+    "artifact": "fuzz.log",
+    "games": 300,
+    "steps": 147723,
+    "wallS": 128.1,
+    "cpuS": 140.2,
+    "prompts": 3504,
+    "interactiveReruns": 313,
+    "failures": 0,
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "included": [
+      612,
+      624,
+      612,
+      614,
+      614
+    ],
+    "exercised": [
+      193,
+      232,
+      261,
+      297,
+      228
+    ],
+    "timingScope": "Fuzzer summary wall and CPU exclude external lockf acquisition; shell lock wait was not separately measured."
+  },
+  "preflight": {
+    "artifact": "preflight.log",
+    "pass": 44,
+    "skip": 56,
+    "fail": 0,
+    "engineMs": 33.434166000000005
+  },
+  "d21": {
+    "firstBytes": [
+      32,
+      80,
+      31,
+      106,
+      27
+    ],
+    "sampled": [],
+    "newPromptKinds": [],
+    "newStatuses": [],
+    "newVisualEffects": [],
+    "judgedRequired": 0,
+    "judgedPerformed": 0,
+    "rationale": "All five UUID samples are false. Offering choices, Reclaim badge/routes, spark changes and Awakened already have implemented UI forms."
+  },
+  "assetOverlap": {
+    "start": "2026-10-12T14:19:56Z",
+    "end": "2026-10-12T14:20:02Z",
+    "cause": "Focused test wrapper prepared hermetic assets while sweep was active; preparation was restored at completion. Parent accepted successful semantic cells with empty caps for this nonvisual batch. No mandatory visual judgment relies on overlapped art. All attempt reports retained.",
+    "disposition": "No blanket repeat; repeat actual failed cells or an affected required visual judgment only."
+  },
+  "runtime": {
+    "serverPid": 68280,
+    "port": 5274,
+    "browserSlot": 1,
+    "ownedBy": "card-sweep runner",
+    "cleanup": "Runner closed browser context/client and process group68280; port5274free. Independent process-group and listener check found none.",
+    "verificationAt": "2026-10-12T14:25:47Z",
+    "remaining": []
+  },
+  "artifactsRoot": "Primary gitignored artifacts/qa/hv-umm2.180; image references use filenames only.",
+  "commands": {
+    "review": {
+      "start": "2026-10-12T14:23:20.166Z",
+      "wallS": 44.668,
+      "hostLoad": 4.66259765625,
+      "filesPassed": 268,
+      "testsPassed": 4320,
+      "requiredPhases": [
+        "typecheck",
+        "typecheck-node",
+        "import-cycles",
+        "lint",
+        "test-related",
+        "friction-records"
+      ],
+      "exit": 0
+    },
+    "knip": {
+      "start": "2026-10-12T14:24:19.838Z",
+      "wallS": 2.567,
+      "hostLoad": 4.71728515625,
+      "exit": 0
+    },
+    "contentCoverage": {
+      "start": "2026-10-12T14:24:30.243Z",
+      "wallS": 2.477,
+      "hostLoad": 4.21240234375,
+      "testsPassed": 13,
+      "exit": 0
+    },
+    "focused": {
+      "start": "2026-10-12T14:19:56.283Z",
+      "wallS": 6.112,
+      "hostLoad": 5.1083984375
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "review",
+      "start": "2026-10-12T14:23:20.166Z",
+      "oneMinute": 4.66259765625
+    },
+    {
+      "command": "knip",
+      "start": "2026-10-12T14:24:19.838Z",
+      "oneMinute": 4.71728515625
+    },
+    {
+      "command": "contentCoverage",
+      "start": "2026-10-12T14:24:30.243Z",
+      "oneMinute": 4.21240234375
+    },
+    {
+      "command": "focused",
+      "start": "2026-10-12T14:19:56.283Z",
+      "oneMinute": 5.1083984375
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "required review prepare start"
+      }
+    }
+  },
+  "sweep": {
+    "event": "cardSweepSummary",
+    "invocation": "invocations/sweep-KcNMYT",
+    "evidenceDir": "invocations/sweep-KcNMYT",
+    "counts": {
+      "pass": 44,
+      "skip": 56
+    },
+    "attemptCounts": {
+      "pass": 44,
+      "skip": 56
+    },
+    "hostLoad": 6.568359375,
+    "sessions": 1,
+    "leaseYields": 0,
+    "wallMs": {
+      "browserLeaseWait": 7,
+      "serve": 1975,
+      "scenario": 289631.454,
+      "cleanup": 548.7218749999884,
+      "execution": 292220.55237499997,
+      "total": 292227.55237499997
+    },
+    "rawReports": 44,
+    "capsErrors": 0,
+    "reportErrors": 0,
+    "captureCount": 44,
+    "captureDimensions": [
+      1440,
+      900
+    ]
+  },
+  "commitBoundary": "2026-10-12T14:26:23Z",
+  "implementWindow": {
+    "start": "2026-10-12T14:15:12Z",
+    "end": "2026-10-12T14:26:23Z"
+  },
+  "implementMin": 11.183333333333334
+}

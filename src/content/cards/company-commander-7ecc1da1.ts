@@ -1,3 +1,6 @@
+import { self } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 343,
   art: { x: -0.045, y: 0.64, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(whenYouPlay({ subtype: "Warrior" }), gainSpark(self(), variant.amplified ? 2 : 1))],
+  verifiedText: "1b749lwhdfd",
 });

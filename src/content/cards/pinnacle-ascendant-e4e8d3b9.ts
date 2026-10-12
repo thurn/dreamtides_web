@@ -1,3 +1,6 @@
+import { all, characterYouControl, energy, staticAbility, thisCardIn } from "../../engine/dsl/builders";
+import { either, triggered, whenDiscardSelf, whenErodeSelf } from "../../engine/dsl/triggers";
+import { grant, grantReclaim } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 166,
   art: { x: -0.042, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    staticAbility(grant(all(characterYouControl()), "awakened")),
+    triggered(either(whenDiscardSelf(), whenErodeSelf()), grantReclaim(thisCardIn("void"), { costs: [energy(0)] }), { zone: "void" }),
+  ],
+  verifiedText: "1pddeflpp6q",
 });
