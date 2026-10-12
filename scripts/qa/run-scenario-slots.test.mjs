@@ -156,7 +156,7 @@ async function open(root, label, port = null) {
 function connectClients(result = { content: [{ type: "text", text: "### Result\n{}" }] }) {
   return vi.spyOn(runtime, "connectPlaywrightMcp").mockImplementation((options) => Promise.resolve({
     sessionId: `synthetic-${options?.name ?? "client"}`, url: "http://localhost:8931/mcp", protocolVersion: "2025-11-25",
-    call: vi.fn().mockResolvedValue(result),
+    call: vi.fn().mockResolvedValue(result), disconnect: vi.fn().mockResolvedValue(undefined),
     close: options?.name?.includes("failing") === true ? vi.fn().mockRejectedValue(new Error("synthetic close failure")) : vi.fn().mockResolvedValue(undefined),
   }));
 }
@@ -244,9 +244,9 @@ export async function stopProcessTree(child) {
   if (child === null || child.exitCode !== null || child.signalCode !== null) return;
   const ended = once(child, "close"); child.kill("SIGTERM"); await ended;
 }
-export async function connectPlaywrightMcp() {
-  return { call: async () => ({ content: [] }), close: async () => { throw new Error("synthetic uncertain provider close"); } };
-}
+export const connectPlaywrightMcp = async () => ({ sessionId: "synthetic-signal-session", url: "http://localhost:8931/mcp", protocolVersion: "2025-11-25",
+  call: async () => ({ content: [] }), disconnect: async () => {}, close: async () => { throw new Error("synthetic uncertain provider close"); },
+});
 `);
   let source = absoluteImports(readFileSync(original, "utf8"), original);
   source = fixtureReplace(source, `from ${JSON.stringify(leaseOriginal.href)}`,

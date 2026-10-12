@@ -1,0 +1,604 @@
+{
+  "bead": "hv-umm2.535",
+  "implementationWindow": {
+    "startUtc": "2026-10-12T12:01:08.033208+00:00",
+    "startKind": "parent post-spawn proxy; actual helper/model start unknown",
+    "endUtc": "2026-10-12T12:58:46.098563+00:00",
+    "endKind": "parent-approved amendment metadata proxy; actual Git execution separately receipted",
+    "elapsedProxyMinutes": 57.63442258333334,
+    "actualHelperStartKnown": false
+  },
+  "actualGitReceipt": "/tmp/dreamtides-qa-owner-hardening-535/helper-receipts/repair-commit.json",
+  "schemaNormalization": {
+    "implementMin": "parent post-spawn proxy elapsed; actual helper/model start unknown; actual Git execution separately receipted",
+    "hostLoad": "final successful review command start"
+  },
+  "scope": "QA session identity admission and atomic owner publication; no port-policy, provider-service, product UI or rules change",
+  "install": {
+    "command": "npm install",
+    "exit": 0,
+    "scope": "tool reported installation complete in2s; actual PID/PG/start/end were not observed; no audit fix run"
+  },
+  "validationReceipts": {
+    "heavy-acquired": {"event": "heavy kernel lease acquired, observed after wrapper startup", "observedUtc": "2026-10-12T12:23:48.445677+00:00", "pid": 18769, "pgid": 18768, "hostLoad": [6.763671875, 10.7041015625, 11.15966796875]},
+    "lint-repair": {"command": ["npx", "eslint", "scripts/qa/run-scenario-ownership.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 92217, "pgid": 92217, "startUtc": "2026-10-12T12:21:37.850618+00:00", "hostLoadStart": [12.81005859375, 12.72119140625, 11.830078125], "exit": 0, "endUtc": "2026-10-12T12:21:39.601950+00:00", "elapsedS": 1.751222124999913, "hostLoadEnd": [12.81005859375, 12.72119140625, 11.830078125]},
+    "knip": {"command": ["npm", "run", "knip"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 18110, "pgid": 18110, "startUtc": "2026-10-12T12:23:21.675159+00:00", "hostLoadStart": [8.8115234375, 11.39501953125, 11.41015625], "exit": 0, "endUtc": "2026-10-12T12:23:24.696718+00:00", "elapsedS": 3.021433291003632, "hostLoadEnd": [8.8115234375, 11.39501953125, 11.41015625]},
+    "heavy-released": {"event": "full command settled; kernel lease released after wrapper exits", "observedUtc": "2026-10-12T12:25:09.105343+00:00", "exit": 0},
+    "review-initial": {"command": ["npm", "run", "review"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 15398, "pgid": 15398, "startUtc": "2026-10-12T12:18:56.229447+00:00", "hostLoadStart": [7.8447265625, 10.49658203125, 10.93505859375], "exit": 2, "endUtc": "2026-10-12T12:19:24.024771+00:00", "elapsedS": 27.794983416999457, "hostLoadEnd": [8.068359375, 10.31591796875, 10.85546875]},
+    "focused-initial": {"command": ["npm", "test", "--", "scripts/qa/browser-owner-record.test.mjs", "scripts/qa/browser-lease.test.mjs", "scripts/qa/browser-lease-slots.test.mjs", "scripts/qa/run-scenario-slots.test.mjs", "scripts/qa/run-scenario-ownership.test.mjs", "scripts/qa/provider-ownership.test.mjs", "scripts/qa/server-ownership.test.mjs", "scripts/qa/browser-lease-order.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 30521, "pgid": 30521, "startUtc": "2026-10-12T12:15:52.972327+00:00", "hostLoadStart": [11.40283203125, 9.4619140625, 10.564453125], "exit": 1, "endUtc": "2026-10-12T12:16:14.075730+00:00", "elapsedS": 21.10311979099788, "hostLoadEnd": [11.91552734375, 9.73193359375, 10.63671875]},
+    "focused-final": {"command": ["npm", "test", "--", "scripts/qa/browser-owner-record.test.mjs", "scripts/qa/browser-lease.test.mjs", "scripts/qa/browser-lease-slots.test.mjs", "scripts/qa/run-scenario-slots.test.mjs", "scripts/qa/run-scenario-ownership.test.mjs", "scripts/qa/provider-ownership.test.mjs", "scripts/qa/server-ownership.test.mjs", "scripts/qa/browser-lease-order.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 91210, "pgid": 91210, "startUtc": "2026-10-12T12:17:55.338268+00:00", "hostLoadStart": [12.8408203125, 11.5830078125, 11.31640625], "exit": 0, "endUtc": "2026-10-12T12:18:16.914889+00:00", "elapsedS": 21.576242750001256, "hostLoadEnd": [11.7705078125, 11.4375, 11.271484375]},
+    "full": {"command": ["npm", "run", "review:full"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 18771, "pgid": 18771, "startUtc": "2026-10-12T12:23:48.465290+00:00", "hostLoadStart": [6.763671875, 10.7041015625, 11.15966796875], "exit": 0, "endUtc": "2026-10-12T12:25:09.102013+00:00", "elapsedS": 80.6358938340054, "hostLoadEnd": [6.76318359375, 9.84130859375, 10.79150390625]},
+    "native-smoke": {"command": ["node", "/tmp/dreamtides-qa-owner-hardening-535/helper-receipts/native-smoke.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 40758, "pgid": 40758, "startUtc": "2026-10-12T12:25:49.689721+00:00", "hostLoadStart": [4.5537109375, 8.88720703125, 10.3974609375], "exit": 0, "endUtc": "2026-10-12T12:25:53.285353+00:00", "elapsedS": 3.595502333002514, "hostLoadEnd": [4.82958984375, 8.8720703125, 10.38330078125]},
+    "baseline-write": {"command": ["node_modules/.bin/vitest", "run", "--config", "/tmp/dreamtides-qa-owner-hardening-535/helper-receipts/witness.config.mjs", "--testNamePattern", "preserves prior complete owner"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 34832, "pgid": 34832, "startUtc": "2026-10-12T12:07:23.835755+00:00", "hostLoadStart": [17.23779296875, 13.7158203125, 12.13232421875], "exit": 1, "endUtc": "2026-10-12T12:07:24.968646+00:00", "elapsedS": 1.132545749998826, "hostLoadEnd": [16.658203125, 13.65380859375, 12.11962890625]},
+    "heavy-lock": {"command": ["env", "JOURNEY_TEST_WORKERS=2", "lockf", "-k", "/Users/dthurn/dreamtides_web/artifacts/heavy.lock", "python3", "/tmp/dreamtides-qa-owner-hardening-535/helper-receipts/heavy.py"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 18768, "pgid": 18768, "startUtc": "2026-10-12T12:23:48.423098+00:00", "hostLoadStart": [6.763671875, 10.7041015625, 11.15966796875], "exit": 0, "endUtc": "2026-10-12T12:25:09.108630+00:00", "elapsedS": 80.68470841700037, "hostLoadEnd": [6.76318359375, 9.84130859375, 10.79150390625]},
+    "review-pass": {"command": ["npm", "run", "review"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 96109, "pgid": 96109, "startUtc": "2026-10-12T12:22:38.057843+00:00", "hostLoadStart": [8.74462890625, 11.53515625, 11.443359375], "exit": 0, "endUtc": "2026-10-12T12:23:05.794500+00:00", "elapsedS": 27.736128999997163, "hostLoadEnd": [10.75048828125, 11.87939453125, 11.578125]},
+    "baseline-metadata": {"command": ["node_modules/.bin/vitest", "run", "--config", "/tmp/dreamtides-qa-owner-hardening-535/helper-receipts/witness.config.mjs", "--testNamePattern", "535 negative witness"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 31268, "pgid": 31268, "startUtc": "2026-10-12T12:06:38.060202+00:00", "hostLoadStart": [15.45849609375, 12.73291015625, 11.71142578125], "exit": 1, "endUtc": "2026-10-12T12:06:39.680275+00:00", "elapsedS": 1.6199696250041598, "hostLoadEnd": [15.45849609375, 12.73291015625, 11.71142578125]},
+    "focused-fault-repair": {"command": ["npm", "test", "--", "scripts/qa/browser-owner-record.test.mjs", "scripts/qa/run-scenario-ownership.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 68475, "pgid": 68475, "startUtc": "2026-10-12T12:16:48.955035+00:00", "hostLoadStart": [18.5078125, 11.650390625, 11.29931640625], "exit": 1, "endUtc": "2026-10-12T12:17:00.658150+00:00", "elapsedS": 11.702924290999363, "hostLoadEnd": [19.28369140625, 12.15625, 11.48583984375]},
+    "review-final": {"command": ["npm", "run", "review"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 37199, "pgid": 37199, "startUtc": "2026-10-12T12:19:54.013062+00:00", "hostLoadStart": [16.80615234375, 12.13671875, 11.4912109375], "exit": 1, "endUtc": "2026-10-12T12:20:21.971860+00:00", "elapsedS": 27.95846999999776, "hostLoadEnd": [17.30322265625, 12.607421875, 11.677734375]},
+    "final-schema": {"command": ["node", "scripts/friction-triggers.mjs", "--validate-records"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 44003, "pgid": 44003, "startUtc": "2026-10-12T12:29:20.019652+00:00", "hostLoadStart": [3.10888671875, 6.17529296875, 8.9091796875], "exit": 0, "endUtc": "2026-10-12T12:29:20.108710+00:00", "elapsedS": 0.08896254200226394, "hostLoadEnd": [3.10888671875, 6.17529296875, 8.9091796875]},
+    "repair-focused": {"command": ["npm", "test", "--", "scripts/qa/browser-owner-record.test.mjs", "scripts/qa/browser-lease.test.mjs", "scripts/qa/browser-lease-slots.test.mjs", "scripts/qa/run-scenario-slots.test.mjs", "scripts/qa/run-scenario-ownership.test.mjs", "scripts/qa/provider-ownership.test.mjs", "scripts/qa/server-ownership.test.mjs", "scripts/qa/browser-lease-order.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 10473, "pgid": 10473, "startUtc": "2026-10-12T12:47:08.772372+00:00", "hostLoadStart": [5.18212890625, 9.4482421875, 9.77294921875], "exit": 0, "endUtc": "2026-10-12T12:47:33.478976+00:00", "elapsedS": 24.706241875006526, "hostLoadEnd": [7.59521484375, 9.74560546875, 9.8740234375]},
+    "repair-review": {"command": ["npm", "run", "review"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 36338, "pgid": 36338, "startUtc": "2026-10-12T12:48:10.248925+00:00", "hostLoadStart": [20.4931640625, 12.67578125, 10.93310546875], "exit": 0, "endUtc": "2026-10-12T12:48:44.990150+00:00", "elapsedS": 34.740633624998736, "hostLoadEnd": [22.078125, 13.96630859375, 11.47412109375]},
+    "repair-knip": {"command": ["npm", "run", "knip"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 95664, "pgid": 95664, "startUtc": "2026-10-12T12:49:57.914380+00:00", "hostLoadStart": [14.06591796875, 13.59130859375, 11.56005859375], "exit": 0, "endUtc": "2026-10-12T12:50:00.667209+00:00", "elapsedS": 2.752722334000282, "hostLoadEnd": [14.06591796875, 13.59130859375, 11.56005859375]},
+    "repair-heavy-lock": {"command": ["env", "JOURNEY_TEST_WORKERS=2", "lockf", "-k", "/Users/dthurn/dreamtides_web/artifacts/heavy.lock", "python3", "/tmp/dreamtides-qa-owner-hardening-535/helper-receipts/repair-heavy.py"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 99380, "pgid": 99380, "startUtc": "2026-10-12T12:50:50.340338+00:00", "hostLoadStart": [10.025390625, 12.4970703125, 11.26513671875], "exit": 0, "endUtc": "2026-10-12T12:52:53.436461+00:00", "elapsedS": 123.09622637500433, "hostLoadEnd": [19.76171875, 15.36376953125, 12.58056640625]},
+    "repair-heavy-acquired": {"event": "heavy kernel lease acquired, observed after wrapper startup", "observedUtc": "2026-10-12T12:50:50.364672+00:00", "pid": 99382, "pgid": 99380, "hostLoad": [10.025390625, 12.4970703125, 11.26513671875]},
+    "repair-full": {"command": ["npm", "run", "review:full"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 99390, "pgid": 99390, "startUtc": "2026-10-12T12:50:50.387815+00:00", "hostLoadStart": [10.025390625, 12.4970703125, 11.26513671875], "exit": 0, "endUtc": "2026-10-12T12:52:53.424774+00:00", "elapsedS": 123.03707425000175, "hostLoadEnd": [19.76171875, 15.36376953125, 12.58056640625]},
+    "repair-heavy-released": {"event": "full command settled; kernel lease released after wrapper exits", "observedUtc": "2026-10-12T12:52:53.430201+00:00", "exit": 0},
+    "repair-native": {"command": ["node", "/tmp/dreamtides-qa-owner-hardening-535/helper-receipts/repair-native-smoke.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 64536, "pgid": 64536, "startUtc": "2026-10-12T12:53:16.194099+00:00", "hostLoadStart": [27.17236328125, 17.28076171875, 13.3291015625], "exit": 0, "endUtc": "2026-10-12T12:53:22.244455+00:00", "elapsedS": 6.050171582995972, "hostLoadEnd": [26.59765625, 17.32568359375, 13.3681640625]},
+    "repair-schema": {"command": ["node", "scripts/friction-triggers.mjs", "--validate-records"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening", "pid": 5359, "pgid": 5359, "startUtc": "2026-10-12T12:55:36.148900+00:00", "hostLoadStart": [16.06787109375, 17.26318359375, 13.99072265625], "exit": 0, "endUtc": "2026-10-12T12:55:36.222775+00:00", "elapsedS": 0.07375479199981783, "hostLoadEnd": [16.06787109375, 17.26318359375, 13.99072265625]}
+  },
+  "heavyLeaseObservation": {
+    "scope": "outer start to acquired observation includes wrapper startup and any lease contention; not an isolated wait measurement",
+    "observedOuterToAcquiredS": 0.022579
+  },
+  "negativeWitnesses": [
+    {
+      "command": "baseline-metadata",
+      "expectedFailure": true,
+      "publicOutcome": {
+        "startupAccepted": true,
+        "scenarioCalls": 0,
+        "browserCloseCalls": 1,
+        "ownerStillExists": false
+      },
+      "boundary": "unchanged production openQaSession, private real files/kernel/contained children, synthetic missing metadata, no real provider"
+    },
+    {
+      "command": "baseline-write",
+      "expectedFailure": true,
+      "publicOutcome": {
+        "startupRejected": true,
+        "parseable": false,
+        "priorExact": false,
+        "retainedBytes": 8
+      },
+      "boundary": "unchanged production runner; one controlled partial owner-file rewrite; private fixture fully cleaned"
+    }
+  ],
+  "failedAttempts": [
+    {
+      "receipt": "focused-initial",
+      "cause": "ESM fs namespace is not configurable; two fault-fixture setup failures, other118cases passed",
+      "repair": "local Vitest node:fs export adapter preserves real filesystem functions"
+    },
+    {
+      "receipt": "focused-fault-repair",
+      "cause": "rename fault initially selected the owned-server publication before MCP connection; one fault-fixture failure",
+      "repair": "fault targets only owner publication and the public metadata image"
+    },
+    {
+      "receipt": "review-initial",
+      "cause": "four lint errors and two Node unused-import type errors; all146relatedcases passed",
+      "repair": "delete unused fixture/runner imports and narrow JSON observations through unknown"
+    },
+    {
+      "receipt": "review-final",
+      "cause": "two unsafe JSON lint errors persisted for Record assertion; all146relatedcases passed",
+      "repair": "explicit unknown narrowing; focused lint repair and final review passed"
+    },
+    {
+      "receipt": "repair-stage-failure.json",
+      "cause": "staging manifest assertion compared amendment delta against current initial commit (13 changed paths) with complete bead scope against original assigned base (17 paths)",
+      "repair": "compare staged prospective amendment against original assigned base; all code hashes/checks unaffected; no commit or native candidate action occurred"
+    }
+  ],
+  "contracts": {
+    "admission": "Initial owner is startup-unconfirmed. One shared parseProviderIdentity validator governs runner/reconciler identity shape. Supported identity is atomically flushed before active admission; invalid/unpublished identity uses local disconnect only and a retained metadata-unverified/startup-unconfirmed record without completion receipt. Retirement receipt/state authority is unchanged.",
+    "publication": "complete staged file fsync precedes exclusive initial link or guarded replacement rename; producer advances actual owned Buffer bytes immediately on publication; parent-directory fsync and final Buffer verification precede success; the held cooperative native lock is the serialization boundary, not a filesystem CAS/security claim",
+    "failures": "prepublication write/fsync/link/rename failures leave previous exact parseable record or no initial record; postpublication directory-sync failure retains complete visible current bytes; replacement during final flush remains protected and refuses success",
+    "clear": "Public BrowserOwnerClearError reports verify/unlink/directory-sync separately from provider state. Clear errors never republish. Failed unlink preserves the truthful prior startup or completed receipt; successful unlink followed by flush failure reports deletion durability unconfirmed with the record absent. Original cleanup and retention errors are aggregated and diagnostics always report the owned path.",
+    "completion": "successful browser_close response plus all tracked RPC settlements with uncertainCall false permits the completion receipt; receipt file and directory flush precede SDK transport close; uncertain calls/close and changed records remain protected",
+    "lease": "Partial retained-slot diagnostics assert actual protected provider/server record paths; record bytes remain unchanged and all-retained errors preserve their exact paths.",
+    "fixture": "Each owning test directly declares real hoisted process/net mocks and per-test state, selecting Vitest isolated project before production imports. Pure factories contain actual children; actual PG is captured before synthetic server identity adaptation and observed groups/terminal close are asserted. An already-exited child may have an unknown PG; its close still must settle."
+  },
+  "testDelta": {
+    "files": 2,
+    "lines": 179,
+    "jsdomFiles": 0
+  },
+  "testFixtureDelta": {
+    "files": 2,
+    "lines": 188,
+    "netTestAndFixtureLines": 367,
+    "scope": "coherent shared resource fixture and pure OS factories; actual mock declarations reside in test owners"
+  },
+  "moduleLines": {
+    "scripts/qa/browser-lease-slots.test.mjs": 291,
+    "scripts/qa/browser-lease.mjs": 391,
+    "scripts/qa/browser-lease.test.mjs": 223,
+    "scripts/qa/run-scenario-slots.test.mjs": 500,
+    "scripts/qa/run-scenario.mjs": 798,
+    "scripts/screenshot-runtime.mjs": 272,
+    "scripts/qa/browser-owner-record.mjs": 77,
+    "scripts/qa/browser-owner-record.test.mjs": 149,
+    "scripts/qa/qa-session-fixture.mjs": 113,
+    "scripts/qa/run-scenario-ownership.test.mjs": 303,
+    "scripts/qa/provider-identity.mjs": 12,
+    "scripts/qa/provider-ownership.mjs": 111,
+    "scripts/qa/qa-session-mocks.mjs": 75
+  },
+  "fullScope": {
+    "files": 349,
+    "cases": 5088,
+    "workers": 2
+  },
+  "nativeSmoke": {
+    "owner": {
+      "token": "5c537123-fa59-46aa-9fbd-a73d4e3329fc",
+      "pid": 64536,
+      "bead": "hv-umm2.535",
+      "label": "owner-durability-repair-smoke",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening",
+      "slot": 1,
+      "port": 5274,
+      "startedAt": "2026-10-12T12:53:18.440Z",
+      "providerState": "active",
+      "mcpSessionId": "f43f9329-bccc-487e-ba11-fc7f11e63017",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25"
+    },
+    "recordedSessionConfirmedByToolsList": true,
+    "qa": {
+      "result": {
+        "caps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        }
+      },
+      "error": null,
+      "log": [],
+      "captures": [],
+      "caps": [],
+      "traces": []
+    },
+    "serverPid": 64590,
+    "slotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+    "port": 5274,
+    "wallMs": {
+      "browserLeaseWait": 9,
+      "serve": 2003
+    },
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.535/invocations/run-wAhKNU",
+    "completionReceipt": {
+      "token": "5c537123-fa59-46aa-9fbd-a73d4e3329fc",
+      "pid": 64536,
+      "bead": "hv-umm2.535",
+      "label": "owner-durability-repair-smoke",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening",
+      "slot": 1,
+      "port": 5274,
+      "startedAt": "2026-10-12T12:53:18.440Z",
+      "providerState": "execution-completed",
+      "mcpSessionId": "f43f9329-bccc-487e-ba11-fc7f11e63017",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25",
+      "mcpExecutionCompleted": true
+    },
+    "flushes": [
+      {
+        "stage": "complete-file-fsynced",
+        "at": "2026-10-12T12:53:21.620Z"
+      },
+      {
+        "stage": "published-directory-fsynced",
+        "at": "2026-10-12T12:53:21.624Z"
+      }
+    ],
+    "cleanup": {
+      "providerClosed": true,
+      "ownerRecordAbsent": true,
+      "serverRecordAbsent": true,
+      "serverPidAbsent": true,
+      "portFree": true,
+      "kernelLockReleased": true
+    }
+  },
+  "preNativeCleanup": {
+    "observedUtc": "2026-10-12T12:53:11.188957+00:00",
+    "ownedReceiptGroups": [
+      10473,
+      15398,
+      18110,
+      18768,
+      18771,
+      30521,
+      31268,
+      34832,
+      36338,
+      37199,
+      40758,
+      40784,
+      44003,
+      46551,
+      47364,
+      68475,
+      91210,
+      92217,
+      95664,
+      96109,
+      99380,
+      99390
+    ],
+    "remainingGroupMembers": [],
+    "sourceFreezeChanged": []
+  },
+  "runtimeCleanup": {
+    "observedUtc": "2026-10-12T12:55:07.176656+00:00",
+    "ownedReceiptGroups": [
+      10473,
+      15398,
+      18110,
+      18768,
+      18771,
+      30521,
+      31268,
+      34832,
+      36338,
+      37199,
+      40758,
+      40784,
+      44003,
+      46551,
+      47364,
+      64536,
+      64590,
+      68475,
+      91210,
+      92217,
+      95664,
+      96109,
+      99380,
+      99390
+    ],
+    "remainingGroupMembers": [],
+    "sourceFreezeChanged": []
+  },
+  "sourceFreeze": {
+    "observedUtc": "2026-10-12T12:50:44.937639+00:00",
+    "sha256": {
+      "scripts/qa/browser-lease-slots.test.mjs": "7f8ae66fbb0f51729d1e5f9ede1fc21273960651848d4095e2e78c29e4a8a0fd",
+      "scripts/qa/browser-lease.mjs": "42053560896a6f3a614a9c9a9d019293b5b83f1de2650083d88c9f497a7cbf03",
+      "scripts/qa/browser-lease.test.mjs": "cb8334218c73b5929a2bc8c115baf00c2d92f8fcdd2b2c1c15b1cd18bfce1bcb",
+      "scripts/qa/run-scenario-slots.test.mjs": "797dc838d1a1e717afceaf92dca804edceebb16ae773e0324e71c7565a4c2720",
+      "scripts/qa/run-scenario.mjs": "1e0ff073fdad0e3a13ddb8725b44f8a0245a6d7503060151144739884f741944",
+      "scripts/screenshot-runtime.mjs": "a025a43fd31932584a3e42152c5a474e599d8b66b8a8e0af37ab30929d9beb39",
+      "scripts/qa/browser-owner-record.mjs": "c3f706ca6469f26d3e0bfa09faab6713bb368b7bbd191c698b6bf24584236c30",
+      "scripts/qa/browser-owner-record.test.mjs": "b02d47d6d767f5d7fecf56b2d1b6f8de6c738c71ee1612224874b385713f46df",
+      "scripts/qa/qa-session-fixture.mjs": "338d8fc17c72ded874d606879edeead3f7e260e3a0fb48384b2adb42fcfefc1b",
+      "scripts/qa/run-scenario-ownership.test.mjs": "475e79d96592db15e56b6e65650d20579aa1d67eda1f53e1706b2f87d569241e",
+      "README.md": "267c03dd98dcf67d8ecffce6d990e1f310475df87e54db6946a44c5743687c81",
+      "scripts/qa/provider-identity.mjs": "e93e7b1608af202363a7c4deaa6eab173ced4a0abf9da7a4484ce5903c65d52e",
+      "scripts/qa/provider-ownership.mjs": "d25d666043d8797814bd5f66333934065188f27a8ab774e3e49b82597c5b7d33",
+      "scripts/qa/qa-session-mocks.mjs": "4e9faba35e02d401acff2bcc57b4a82c5fa8574caf9097cca631588d2319b66d"
+    }
+  },
+  "remaining": "parent-owned fresh exact cold core review and candidate delivery",
+  "testAccounting": {
+    "note": "actual additions/deletions are against original assigned base, including both new tests and both coherent shared fixtures; consumer-level clear/persistence and partial-retained diagnostics contracts added",
+    "addedTestLines": 483,
+    "deletedTestLines": 304,
+    "sharedFixtureAddedLines": 188
+  },
+  "rawSourceChanges": [
+    {
+      "added": 20,
+      "deleted": 2,
+      "path": "README.md"
+    },
+    {
+      "added": 6,
+      "deleted": 2,
+      "path": "scripts/qa/browser-lease-slots.test.mjs"
+    },
+    {
+      "added": 1,
+      "deleted": 3,
+      "path": "scripts/qa/browser-lease.mjs"
+    },
+    {
+      "added": 21,
+      "deleted": 298,
+      "path": "scripts/qa/browser-lease.test.mjs"
+    },
+    {
+      "added": 77,
+      "deleted": 0,
+      "path": "scripts/qa/browser-owner-record.mjs"
+    },
+    {
+      "added": 149,
+      "deleted": 0,
+      "path": "scripts/qa/browser-owner-record.test.mjs"
+    },
+    {
+      "added": 12,
+      "deleted": 0,
+      "path": "scripts/qa/provider-identity.mjs"
+    },
+    {
+      "added": 5,
+      "deleted": 10,
+      "path": "scripts/qa/provider-ownership.mjs"
+    },
+    {
+      "added": 113,
+      "deleted": 0,
+      "path": "scripts/qa/qa-session-fixture.mjs"
+    },
+    {
+      "added": 75,
+      "deleted": 0,
+      "path": "scripts/qa/qa-session-mocks.mjs"
+    },
+    {
+      "added": 303,
+      "deleted": 0,
+      "path": "scripts/qa/run-scenario-ownership.test.mjs"
+    },
+    {
+      "added": 4,
+      "deleted": 4,
+      "path": "scripts/qa/run-scenario-slots.test.mjs"
+    },
+    {
+      "added": 41,
+      "deleted": 27,
+      "path": "scripts/qa/run-scenario.mjs"
+    },
+    {
+      "added": 10,
+      "deleted": 1,
+      "path": "scripts/screenshot-runtime.mjs"
+    }
+  ],
+  "stagingImplementationWindow": {
+    "startUtc": "2026-10-12T12:01:08.033208+00:00",
+    "startKind": "parent post-spawn proxy; actual helper/model start unknown",
+    "endUtc": "2026-10-12T12:28:51.831939+00:00",
+    "endKind": "own evidence-staging observation; final parent-approved precommit metadata proxy pending",
+    "elapsedProxyMinutes": 27.729978850000002,
+    "actualHelperStartKnown": false
+  },
+  "parentClockAck": "/tmp/dreamtides-qa-owner-hardening-535/parent-repair-clock-ack.json",
+  "initialCandidate": {
+    "sourceOID": "9ea5a63aa2e24e709fd6a04bbad5bcefd03e0817",
+    "tree": "9d597c6904067b42e2c8769d2e22c86aaceabb22",
+    "approvedImplementationWindow": {
+      "startUtc": "2026-10-12T12:01:08.033208+00:00",
+      "startKind": "parent post-spawn proxy; actual helper/model start unknown",
+      "endUtc": "2026-10-12T12:30:58.048430+00:00",
+      "endKind": "parent-approved precommit metadata proxy; actual Git execution separately receipted",
+      "elapsedProxyMinutes": 29.833587033333334,
+      "actualHelperStartKnown": false
+    },
+    "frictionRecord": {
+      "bead": "hv-umm2.535",
+      "phase": 5,
+      "implementMin": 29.833587033333334,
+      "localValidationS": {
+        "focused": 21.576242750001256,
+        "review": 27.736128999997163,
+        "knip": 3.021433291003632,
+        "full": 80.6358938340054,
+        "browser": 3.595502333002514
+      },
+      "hostLoad": 8.74462890625,
+      "testDelta": {
+        "files": 2,
+        "lines": 76,
+        "jsdomFiles": 0
+      },
+      "friction": []
+    },
+    "actualGitReceipt": {
+      "command": [
+        "env",
+        "GIT_AUTHOR_DATE=2026-10-12T12:30:58.048430+00:00",
+        "GIT_COMMITTER_DATE=2026-10-12T12:30:58.048430+00:00",
+        "git",
+        "commit",
+        "-F",
+        "/tmp/dreamtides-qa-owner-hardening-535/helper-receipts/commit-message.txt"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening",
+      "pid": 47364,
+      "pgid": 47364,
+      "startUtc": "2026-10-12T12:32:25.132073+00:00",
+      "hostLoadStart": [
+        5.78515625,
+        5.158203125,
+        7.89208984375
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T12:32:25.158443+00:00",
+      "elapsedS": 0.026272416005667765,
+      "hostLoadEnd": [
+        5.78515625,
+        5.158203125,
+        7.89208984375
+      ]
+    },
+    "sourceFreeze": {
+      "observedUtc": "2026-10-12T12:23:13.884530+00:00",
+      "sha256": {
+        "scripts/qa/browser-lease-slots.test.mjs": "8aa4291b985d7148ee8c214e7fca01971afe37d9904b16cc810661ff479cee5b",
+        "scripts/qa/browser-lease.mjs": "42053560896a6f3a614a9c9a9d019293b5b83f1de2650083d88c9f497a7cbf03",
+        "scripts/qa/browser-lease.test.mjs": "896364c64b429bb40f5501bbba13bd6b5f4490499b1ebd589377119a3a1c2e84",
+        "scripts/qa/run-scenario-slots.test.mjs": "797dc838d1a1e717afceaf92dca804edceebb16ae773e0324e71c7565a4c2720",
+        "scripts/qa/run-scenario.mjs": "b8ce85d95872702b4ecd7a2159bb820eb495a69afd4c713cc3b774ec544feb6b",
+        "scripts/screenshot-runtime.mjs": "a025a43fd31932584a3e42152c5a474e599d8b66b8a8e0af37ab30929d9beb39",
+        "scripts/qa/browser-owner-record.mjs": "b0396fd8c7b51842d3fffa562bc8e1c3c51c8e5ce908afc4e23f41ad56eae5ed",
+        "scripts/qa/browser-owner-record.test.mjs": "bf7e5a1cfcfe4cf2963a2f0a3720019f173c36923fb85c5b0a67e70e7cf3e999",
+        "scripts/qa/qa-session-fixture.mjs": "060f4818ecbe20c2d5ddaf97fc42dfc1cf0030731e6008e1dfdc2ed3d89d7c6f",
+        "scripts/qa/run-scenario-ownership.test.mjs": "f81dc1a1698c60071681544bf62d9f366c49fb7feb06f04a568a377a03fde896"
+      }
+    },
+    "nativeSmoke": {
+      "owner": {
+        "token": "d5e95959-c74f-48d3-9d99-c055d2421a92",
+        "pid": 40758,
+        "bead": "hv-umm2.535",
+        "label": "owner-durability-smoke",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-12T12:25:51.166Z",
+        "providerState": "active",
+        "mcpSessionId": "e9cf99df-e289-4df6-a5f9-245e001a2f2a",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "recordedSessionConfirmedByToolsList": true,
+      "qa": {
+        "result": {
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        "error": null,
+        "log": [],
+        "captures": [],
+        "caps": [],
+        "traces": []
+      },
+      "serverPid": 40784,
+      "slotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+      "port": 5274,
+      "wallMs": {
+        "browserLeaseWait": 4,
+        "serve": 1355
+      },
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.535/invocations/run-8dy6Ck",
+      "completionReceipt": {
+        "token": "d5e95959-c74f-48d3-9d99-c055d2421a92",
+        "pid": 40758,
+        "bead": "hv-umm2.535",
+        "label": "owner-durability-smoke",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-535-owner-hardening",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-12T12:25:51.166Z",
+        "providerState": "execution-completed",
+        "mcpSessionId": "e9cf99df-e289-4df6-a5f9-245e001a2f2a",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25",
+        "mcpExecutionCompleted": true
+      },
+      "flushes": [
+        {
+          "stage": "complete-file-fsynced",
+          "at": "2026-10-12T12:25:52.778Z"
+        },
+        {
+          "stage": "published-directory-fsynced",
+          "at": "2026-10-12T12:25:52.782Z"
+        }
+      ],
+      "cleanup": {
+        "providerClosed": true,
+        "ownerRecordAbsent": true,
+        "serverRecordAbsent": true,
+        "serverPidAbsent": true,
+        "portFree": true,
+        "kernelLockReleased": true
+      }
+    },
+    "runtimeCleanup": {
+      "observedUtc": "2026-10-12T12:30:02.183512+00:00",
+      "ownedReceiptGroups": [
+        15398,
+        18110,
+        18768,
+        18771,
+        30521,
+        31268,
+        34832,
+        37199,
+        40758,
+        40784,
+        44003,
+        68475,
+        91210,
+        92217,
+        96109
+      ],
+      "remainingGroupMembers": [],
+      "sourceFreezeChanged": []
+    },
+    "validationScope": "initial passing local checks preceded the failed native candidate; retained as history, not replacement certification",
+    "parentClockAck": "/tmp/dreamtides-qa-owner-hardening-535/parent-clock-ack.json"
+  },
+  "ciRepair": {
+    "initialCandidateID": "01a1301a-4ce5-7993-b5fe-a2ad4d5fde5d",
+    "initialState": "failed",
+    "promotionAuthorized": false,
+    "testedOID": "bc47d2325d8be71434ad615a0d881ded9231bc42",
+    "testedBaseOID": "42207781b2ac89efa72e1a8dea8ed344b399358e",
+    "attribution": "candidate-introduced",
+    "failureKind": "infrastructure",
+    "gateExit": 143,
+    "gateElapsedS": 12.063,
+    "dependenciesElapsedS": 5.208,
+    "escapedDescendant": 53258,
+    "cause": "test-root module-mock scanner classified browser-lease test as shared; imported fixture registered mocks after production imports, permitting native detached spawn",
+    "repair": "real owning-test hoisted mock declarations, one pure OS factory and explicit actual-group/close contracts; no Vitest or Tollgate configuration/production containment weakening",
+    "provenance": {
+      "/tmp/dreamtides-qa-owner-hardening-535/candidate-diagnose.json": "437b72b438c1549893c5e1732a17db1bc134b5ffd65df209e5a2fc9b4531d693",
+      "/tmp/dreamtides-qa-owner-hardening-535/failed-gate.log": "5b333635cc88fabb9bf89fbc567472d7ae25fd45cdaaabaee783fe7aa4ca196a",
+      "/tmp/dreamtides-qa-owner-hardening-535/preapprove-status.json": "cc9c0925fea876ccc0a8bc9cdf1eb10c2f4d7b400ded57f6abdc06546348b72a"
+    },
+    "originalReview": {
+      "path": "/tmp/dreamtides-qa-owner-hardening-535/review.md",
+      "sha256": "efd44c457e49ab4a2fe2796269c97ea056d147e38ac8a43ca95c6ab185455eaa",
+      "disposition": "all five parent-confirmed findings addressed in this same unlanded worktree; fresh replacement review parent-owned"
+    }
+  },
+  "frictionWindow": {
+    "tag": "local-edit-correction",
+    "startUtc": "2026-10-12T12:37:12.901948+00:00",
+    "startKind": "parent native CI-repair observation; defect/repair investigation began earlier at unknown exact time",
+    "scopeAdmissionUtc": "2026-10-12T12:40:32.996442+00:00",
+    "endUtc": "2026-10-12T12:48:10.248925+00:00",
+    "endKind": "actual replacement review start after bounded source/fixture repairs",
+    "minutesLowerBound": 10.955782950000001,
+    "scope": "elapsed coordination and implementation lower bound; not active CPU, test execution or browser/heavy lease wait"
+  },
+  "repairClassification": {
+    "owningTestRealMocks": {
+      "scripts/qa/browser-lease.test.mjs": true,
+      "scripts/qa/run-scenario-ownership.test.mjs": true
+    },
+    "resourceFixtureRegistersModuleMocks": false,
+    "factoryRegistersModuleMocks": false
+  },
+  "repairStagingImplementationWindow": {
+    "startUtc": "2026-10-12T12:01:08.033208+00:00",
+    "startKind": "parent post-spawn proxy; actual helper/model start unknown",
+    "endUtc": "2026-10-12T12:55:07.176656+00:00",
+    "endKind": "replacement evidence-staging observation; final parent-approved amendment clock pending",
+    "elapsedProxyMinutes": 53.98572413333333,
+    "actualHelperStartKnown": false
+  }
+}

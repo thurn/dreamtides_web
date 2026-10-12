@@ -1,164 +1,28 @@
 // @vitest-environment node
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { execFileSync } from "node:child_process";
 import { once } from "node:events";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { acquireBrowserLease as acquireNativeBrowserLease, browserLeasePath, browserOwnerPath, browserSlotPath } from "./browser-lease.mjs";
-import { leaseFixtures, lockHeld } from "./browser-lease-fixture.mjs";
-import { openQaSession as openNativeQaSession } from "./run-scenario.mjs";
+import { browserSlotPath } from "./browser-lease.mjs";
+import { lockHeld } from "./browser-lease-fixture.mjs";
+import { createQaSessionFixture } from "./qa-session-fixture.mjs";
 import * as runtime from "../screenshot-runtime.mjs";
-// Fixture subprocesses stay inside Tollgate's session. The actual native
-// utility and pipe protocol run unchanged; only fixture process ownership is
-// translated from isolated groups to direct children of this test worker.
 const fixtureIo = vi.hoisted(() => ({
   gitCwd: /** @type {string | null} */ (null),
   children: /** @type {import("node:child_process").ChildProcess[]} */ ([]),
   ready: /** @type {Promise<void>} */ (Promise.resolve()),
+  groups: /** @type {Array<{ pid: number, group: number | null, closed: boolean }>} */ ([]),
 }));
 vi.mock("node:child_process", async (importOriginal) => {
-  const actual = /** @type {typeof import("node:child_process")} */ (await importOriginal());
-  return {
-    ...actual,
-    spawn: vi.fn((/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").SpawnOptions} */ options) => {
-      const server = args[0]?.endsWith("/server-launcher.mjs") === true;
-      const stdio = /** @type {import("node:child_process").SpawnOptions["stdio"]} */ (server && Array.isArray(options.stdio) ? [...options.stdio, "ipc"] : options.stdio);
-      const child = actual.spawn(command, args, { ...options, stdio, detached: false });
-      if (server) fixtureIo.ready = new Promise((done, reject) => {
-        const failed = () => { child.removeListener("message", ready); reject(new Error("synthetic server exited before ready")); };
-        const ready = () => { child.removeListener("close", failed); child.removeListener("error", failed); child.removeListener("exit", failed); done(); };
-        child.once("message", ready);
-        child.once("close", failed);
-        child.once("error", failed);
-        child.once("exit", failed);
-      });
-      if (server) void fixtureIo.ready.catch(() => {});
-      fixtureIo.children.push(child);
-      return child;
-    }),
-    execFileSync: vi.fn((/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").ExecFileSyncOptionsWithStringEncoding} */ options) => {
-      const cwd = command === "git" && args.includes("--git-common-dir") ? fixtureIo.gitCwd : null;
-      const result = actual.execFileSync(command, args, cwd === null ? options : { ...options, cwd });
-      // The contained fixture models a separate group identity at this OS
-      // boundary; cleanup signals its ordinary child directly, never our PG.
-      if (command === "ps") return result.split("\n").map((line) => line.replace(/^(\s*)(\d+)\s+\d+/u,
-        (whole, pad, pid) => fixtureIo.children.some((child) => child.pid === Number(pid)) ? `${pad}${pid} ${pid}` : whole)).join("\n");
-      return result;
-    }),
-  };
+  const { childProcessMocks } = await import("./qa-session-mocks.mjs");
+  return childProcessMocks(/** @type {typeof import("node:child_process")} */ (await importOriginal()), fixtureIo);
 });
-// Socket availability and HTTP readiness are boundaries of the server runner,
-// independent of the lease/ownership contract. Native lockf pipes remain real.
 vi.mock("node:net", async (importOriginal) => {
-  const actual = /** @type {typeof import("node:net")} */ (await importOriginal());
-  const { EventEmitter } = await import("node:events");
-  return {
-    ...actual,
-    createConnection: vi.fn(() => {
-      const socket = Object.assign(new EventEmitter(), { destroy() {} });
-      queueMicrotask(() => socket.emit("error", new Error("synthetic unused port")));
-      return socket;
-    }),
-    createServer: vi.fn(() => {
-      const server = new EventEmitter();
-      return Object.assign(server, {
-        /** @param {unknown} _options @param {() => void} ready */
-        listen(_options, ready) { queueMicrotask(ready); return server; },
-        /** @param {() => void} closed */
-        close(closed) { queueMicrotask(closed); },
-      });
-    }),
-  };
+  const { networkMocks } = await import("./qa-session-mocks.mjs");
+  return networkMocks(/** @type {typeof import("node:net")} */ (await importOriginal()));
 });
-const temporaryDirectories = /** @type {string[]} */ ([]);
-const ownedLeases = /** @type {Awaited<ReturnType<typeof acquireNativeBrowserLease>>[]} */ ([]);
-const ownedSessions = /** @type {Awaited<ReturnType<typeof openNativeQaSession>>[]} */ ([]);
-/** @param {Parameters<typeof openNativeQaSession>[0]} options */
-async function openQaSession(options) {
-  const session = await openNativeQaSession(options);
-  ownedSessions.push(session);
-  return session;
-}
-const realKill = process.kill.bind(process);
-beforeEach(() => {
-  vi.stubGlobal("fetch", vi.fn(async () => { await fixtureIo.ready; return { status: 200 }; }));
-  vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
-    const owned = fixtureIo.children.find((child) => child.pid === -pid);
-    if (pid < 0 && owned !== undefined) {
-      owned.stdin?.end();
-      return realKill(-pid, signal);
-    }
-    return realKill(pid, signal);
-  });
-  vi.spyOn(runtime, "listenerOwnedBy").mockReturnValue(true);
-  vi.spyOn(runtime, "stopProcessTree").mockImplementation(async (child) => {
-    if (child === null || child.exitCode !== null || child.signalCode !== null) return;
-    if (!fixtureIo.children.includes(child)) throw new Error("foreign fixture process");
-    const exited = once(child, "close");
-    child.kill("SIGTERM");
-    await exited;
-  });
-});
-/** @param {string} path @param {Parameters<typeof acquireNativeBrowserLease>[1]} [options] */
-async function acquireBrowserLease(path, options) {
-  const lease = await acquireNativeBrowserLease(path, options);
-  ownedLeases.push(lease);
-  return lease;
-}
-afterEach(async () => {
-  await Promise.all(ownedSessions.splice(0).map((session) => session.close().catch(() => {})));
-  await Promise.all(ownedLeases.splice(0).map((lease) => lease.release()));
-  for (const child of fixtureIo.children.splice(0)) {
-    if (child.exitCode !== null || child.signalCode !== null) continue;
-    const exited = once(child, "close");
-    child.stdin?.end();
-    child.kill("SIGKILL");
-    await exited;
-  }
-  await fixtures.cleanup();
-  fixtureIo.gitCwd = null;
-  fixtureIo.ready = Promise.resolve();
-  vi.useRealTimers();
-  vi.restoreAllMocks();
-  vi.unstubAllGlobals();
-  for (const path of temporaryDirectories.splice(0)) rmSync(path, { recursive: true, force: true });
-});
-
-function notification() {
-  let resolve = () => {};
-  const promise = /** @type {Promise<void>} */ (new Promise((done) => { resolve = () => done(); }));
-  return { promise, resolve };
-}
-
-function leaseFixture() {
-  const root = realpathSync(mkdtempSync(join(tmpdir(), "dreamtides-browser-lease-")));
-  temporaryDirectories.push(root);
-  return { root, path: browserLeasePath(root) };
-}
-
-function sessionFixture() {
-  const { root: directory } = leaseFixture();
-  const root = join(directory, "primary");
-  mkdirSync(join(root, "scripts"), { recursive: true });
-  // A real child owns liveness until session cleanup, without a host TCP bind.
-  writeFileSync(join(root, "scripts", "dev.mjs"), 'setInterval(() => {}, 60_000); process.send("ready");');
-  const git = (/** @type {string[]} */ args) => execFileSync("git", ["-C", root, ...args], { encoding: "utf8", stdio: "pipe" });
-  execFileSync("git", ["init", "-q", root], { encoding: "utf8" });
-  git(["add", "scripts/dev.mjs"]);
-  git(["-c", "core.hooksPath=/dev/null", "-c", "commit.gpgSign=false", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "synthetic session process"]);
-  const worktree = join(directory, "linked-checkout");
-  git(["worktree", "add", "--detach", "--quiet", worktree, "HEAD"]);
-  fixtureIo.gitCwd = root;
-  return { root, worktree, path: browserLeasePath(root) };
-}
-
-const fixtures = leaseFixtures();
-/** @param {string} path @param {number} slot */
-const ownerOf = (path, slot) => browserOwnerPath(browserSlotPath(path, slot));
-/** Holds every browser slot, so the next waiter queues. @param {string} path */
-const holdEverySlot = (path) => Promise.all([acquireBrowserLease(path), acquireBrowserLease(path)]);
+const { fixtures, notification, leaseFixture, sessionFixture, acquireBrowserLease, openQaSession, ownerOf, holdEverySlot } = createQaSessionFixture(fixtureIo);
 
 describe("repository browser lease", () => {
   it("serializes native processes through cleanup and composes with another lock", async () => {
@@ -186,7 +50,7 @@ describe("repository browser lease", () => {
     const port = address.port;
     try {
       const { root, worktree, path } = sessionFixture();
-      vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call: vi.fn(), close: vi.fn().mockResolvedValue(undefined) });
+      vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: "synthetic-session", url: "http://localhost:8931/mcp", protocolVersion: "2025-11-25", disconnect: vi.fn().mockResolvedValue(undefined), call: vi.fn(), close: vi.fn().mockResolvedValue(undefined) });
       const primary = await openQaSession({ bead: "synthetic-lease", label: "primary", port, prod: false, minify: false, cwd: root });
       expect(fixtureIo.children.map((child) => child.pid)).toContain(primary.serverPid);
       expect(primary.captureDir).toContain(join(root, "artifacts", "qa", "synthetic-lease", "invocations", "run-"));
@@ -232,8 +96,10 @@ describe("repository browser lease", () => {
     const exited = once(holder.child, "exit");
     holder.child.kill("SIGKILL");
     await exited;
+    const diagnostic = vi.spyOn(console, "error").mockImplementation(() => {});
     const recovered = await acquireBrowserLease(path);
-    expect(recovered.quarantined).toEqual([ownerOf(path, crashed)]);
+    expect(diagnostic.mock.calls.flat().join("\n")).toContain(ownerOf(path, crashed));
+    expect(existsSync(ownerOf(path, crashed))).toBe(true);
     await recovered.release();
     writeFileSync(recovered.ownerPath, "synthetic retained record");
     await expect(openQaSession({ bead: "synthetic-lease", label: "after-crash", port: null, prod: false, minify: false, cwd: root })).rejects.toThrow(/requires reconciliation/);
@@ -276,7 +142,7 @@ describe("repository browser lease", () => {
       closeStarted.resolve();
       return /** @type {Promise<void>} */ (new Promise((_done, reject) => { finishClose = () => reject(new Error("synthetic close failure")); }));
     });
-    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call: vi.fn(), close: browserClose });
+    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: "synthetic-session", url: "http://localhost:8931/mcp", protocolVersion: "2025-11-25", disconnect: vi.fn().mockResolvedValue(undefined), call: vi.fn(), close: browserClose });
     const beforeInt = process.listenerCount("SIGINT");
     const session = await openQaSession({ bead: "synthetic-lease", label: "close", port: null, prod: false, minify: false, cwd: root });
     try {
@@ -293,8 +159,10 @@ describe("repository browser lease", () => {
       expect(process.listenerCount("SIGINT")).toBe(beforeInt);
       expect(readFileSync(session.ownerPath, "utf8")).toContain('"providerState":"close-unconfirmed"');
       expect(lockHeld(browserSlotPath(path, session.slot))).toBe(false);
+      const diagnostic = vi.spyOn(console, "error").mockImplementation(() => {});
       const passed = await acquireBrowserLease(path);
-      expect(passed.quarantined).toEqual([session.ownerPath]);
+      expect(diagnostic.mock.calls.flat().join("\n")).toContain(session.ownerPath);
+      expect(existsSync(session.ownerPath)).toBe(true);
       await passed.release();
       // This synthetic provider is now explicitly reconciled by the fixture.
       rmSync(session.ownerPath);
@@ -327,7 +195,7 @@ describe("repository browser lease", () => {
       // A lone session takes the highest slot.
       expect(existsSync(ownerOf(path, 1))).toBe(true);
       expect(lockHeld(browserSlotPath(path, 1))).toBe(true);
-      finishConnection({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call: vi.fn(), close: browserClose });
+      finishConnection({ sessionId: "synthetic-session", url: "http://localhost:8931/mcp", protocolVersion: "2025-11-25", disconnect: vi.fn().mockResolvedValue(undefined), call: vi.fn(), close: browserClose });
       await rejected;
       await exited.promise;
       expect(exit).toHaveBeenCalledWith(143);
@@ -337,7 +205,7 @@ describe("repository browser lease", () => {
       const next = await acquireBrowserLease(path);
       await next.release();
     } finally {
-      finishConnection({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call: vi.fn(), close: browserClose });
+      finishConnection({ sessionId: "synthetic-session", url: "http://localhost:8931/mcp", protocolVersion: "2025-11-25", disconnect: vi.fn().mockResolvedValue(undefined), call: vi.fn(), close: browserClose });
       const session = await opening.catch(() => null);
       await session?.close();
     }
@@ -351,150 +219,5 @@ describe("repository browser lease", () => {
     await lease.release();
     expect(process.listenerCount("SIGTERM")).toBe(beforeTerm);
     expect([0, 1].some((slot) => existsSync(ownerOf(path, slot)))).toBe(false);
-  });
-});
-describe("MCP browser ownership confirmation", () => {
-  it.each(["isError", "rejection"])("quarantines browser_close %s without a completion receipt while closing the SDK transport", async (kind) => {
-    const { root } = sessionFixture();
-    vi.spyOn(Client.prototype, "connect").mockResolvedValue(undefined);
-    const call = vi.spyOn(Client.prototype, "callTool").mockResolvedValue({ isError: true, content: [{ type: "text", text: "synthetic semantic close failure" }] });
-    if (kind === "rejection") call.mockRejectedValue(new Error("synthetic semantic close failure"));
-    const sdkClose = vi.spyOn(Client.prototype, "close").mockResolvedValue(undefined);
-    const session = await openQaSession({ bead: "synthetic-lease", label: "semantic-error", port: null, prod: false, minify: false, cwd: root });
-    await expect(session.close()).rejects.toThrow(/synthetic semantic close failure/);
-    expect(call).toHaveBeenCalledWith({ name: "browser_close", arguments: {} });
-    expect(sdkClose).toHaveBeenCalledOnce();
-    expect(existsSync(session.ownerPath)).toBe(true);
-    expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).not.toHaveProperty("mcpExecutionCompleted");
-  });
-  it.each([false, true])("closes before draining active RPC, preserving transport uncertainty=%s", async (transportRejects) => {
-    const { root, path } = sessionFixture();
-    let finishCall = /** @type {() => void} */ (() => {});
-    const rpc = /** @type {Promise<runtime.McpToolResult>} */ (new Promise((done, reject) => {
-      finishCall = () => transportRejects ? reject(new Error("synthetic transport rejection")) : done({ content: [{ type: "text", text: '### Result\n{}' }] });
-    }));
-    const closeStarted = notification();
-    const browserClose = vi.fn(async (/** @type {Parameters<Awaited<ReturnType<typeof runtime.connectPlaywrightMcp>>["close"]>[0]} */ before) => {
-      closeStarted.resolve(); await before?.(true);
-    });
-    const call = vi.fn(() => rpc);
-    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call, close: browserClose });
-    const session = await openQaSession({ bead: "synthetic-lease", label: "active-call", port: null, prod: false, minify: false, cwd: root });
-    const running = session.run("async () => null", {}, 1);
-    const result = transportRejects ? expect(running).rejects.toThrow(/synthetic transport rejection/) : expect(running).resolves.toEqual({});
-    const closing = session.close();
-    const closed = transportRejects ? expect(closing).rejects.toThrow(/provider completion is unconfirmed/) : expect(closing).resolves.toBeUndefined();
-    try {
-      await closeStarted.promise;
-      expect(browserClose).toHaveBeenCalledOnce();
-      // Browser close happened, but the outstanding RPC still owns the slot.
-      expect(lockHeld(browserSlotPath(path, session.slot))).toBe(true);
-      expect(existsSync(session.ownerPath)).toBe(true);
-      expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).not.toHaveProperty("mcpExecutionCompleted");
-      finishCall();
-      await result;
-      await closed;
-      expect(existsSync(session.ownerPath)).toBe(transportRejects);
-      if (transportRejects) {
-        expect(readFileSync(session.ownerPath, "utf8")).toContain('"providerState":"call-unconfirmed"');
-        expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).not.toHaveProperty("mcpExecutionCompleted");
-      }
-    } finally {
-      finishCall();
-      await running.catch(() => {});
-      await closing.catch(() => {});
-    }
-  });
-  it("stops a session after an uncertain RPC without issuing subsequent verdict calls", async () => {
-    const { root } = sessionFixture();
-    const call = vi.fn().mockRejectedValue(new Error("synthetic uncertain RPC"));
-    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call, close: vi.fn().mockResolvedValue(undefined) });
-    const session = await openQaSession({ bead: "synthetic-lease", label: "uncertain", port: null, prod: false, minify: false, cwd: root });
-    await expect(session.run("async () => null", {}, 1)).rejects.toThrow(/synthetic uncertain RPC/);
-    expect(session.closed()).toBe(true);
-    await expect(session.run("async () => null", {}, 1)).rejects.toThrow(/requires provider reconciliation/);
-    expect(call).toHaveBeenCalledOnce();
-    await expect(session.close()).rejects.toThrow(/provider completion is unconfirmed/);
-    expect(existsSync(session.ownerPath)).toBe(true);
-  });
-  it("treats a structured semantic RPC rejection as a settled provider response", async () => {
-    const { root } = sessionFixture();
-    vi.spyOn(Client.prototype, "connect").mockResolvedValue(undefined);
-    const call = vi.spyOn(Client.prototype, "callTool")
-      .mockResolvedValueOnce({ isError: true, content: [{ type: "text", text: "synthetic semantic run rejection" }] })
-      .mockResolvedValueOnce({ content: [{ type: "text", text: "### Result\n{}" }] })
-      .mockResolvedValueOnce({ content: [] });
-    const sdkClose = vi.spyOn(Client.prototype, "close").mockResolvedValue(undefined);
-    const session = await openQaSession({ bead: "synthetic-lease", label: "semantic-run", port: null, prod: false, minify: false, cwd: root });
-    await expect(session.run("async () => null", {}, 1)).rejects.toBeInstanceOf(runtime.McpToolResponseError);
-    expect(session.closed()).toBe(false);
-    await expect(session.run("async () => null", {}, 1)).resolves.toEqual({});
-    expect(call).toHaveBeenCalledTimes(2);
-    await session.close();
-    expect(sdkClose).toHaveBeenCalledOnce();
-    expect(existsSync(session.ownerPath)).toBe(false);
-  });
-  it("drains semantic RPC settlement between browser close and SDK transport teardown", async () => {
-    const { root } = sessionFixture();
-    const events = /** @type {string[]} */ ([]);
-    const closeStarted = notification();
-    let finishCall = /** @type {() => void} */ (() => {});
-    const rpc = /** @type {ReturnType<Client["callTool"]>} */ (new Promise((done) => {
-      finishCall = () => {
-        events.push("rpc-settled");
-        done({ isError: true, content: [{ type: "text", text: "synthetic interrupted provider" }] });
-      };
-    }));
-    vi.spyOn(Client.prototype, "connect").mockResolvedValue(undefined);
-    vi.spyOn(Client.prototype, "callTool").mockImplementation((request) => {
-      if (request.name === "browser_run_code_unsafe") return rpc;
-      events.push("browser-closed");
-      closeStarted.resolve();
-      return Promise.resolve({ content: [] });
-    });
-    const sdkClose = vi.spyOn(Client.prototype, "close").mockImplementation(() => {
-      events.push("transport-closed");
-      expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).toMatchObject({ mcpExecutionCompleted: true, providerState: "execution-completed" });
-      return Promise.resolve();
-    });
-    const session = await openQaSession({ bead: "synthetic-lease", label: "transport-order", port: null, prod: false, minify: false, cwd: root });
-    const running = session.run("async () => null", {}, 1);
-    const result = expect(running).rejects.toBeInstanceOf(runtime.McpToolResponseError);
-    const closing = session.close();
-    try {
-      await closeStarted.promise;
-      expect(events).toEqual(["browser-closed"]);
-      expect(sdkClose).not.toHaveBeenCalled();
-      finishCall();
-      await result;
-      await closing;
-      expect(events).toEqual(["browser-closed", "rpc-settled", "transport-closed"]);
-      expect(existsSync(session.ownerPath)).toBe(false);
-    } finally {
-      finishCall();
-      await running.catch(() => {});
-      await closing;
-    }
-  });
-  it("retains a durable completed receipt after SDK transport-close failure", async () => {
-    const { root, path } = sessionFixture();
-    vi.spyOn(Client.prototype, "connect").mockResolvedValue(undefined);
-    vi.spyOn(Client.prototype, "callTool").mockResolvedValue({ content: [] });
-    vi.spyOn(Client.prototype, "close").mockRejectedValue(new Error("synthetic transport-close failure"));
-    const session = await openQaSession({ bead: "synthetic-lease", label: "transport-failure", port: null, prod: false, minify: false, cwd: root });
-    await expect(session.close()).rejects.toThrow(/synthetic transport-close failure/);
-    expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).toMatchObject({ mcpExecutionCompleted: true, providerState: "close-unconfirmed" });
-    expect(lockHeld(browserSlotPath(path, session.slot))).toBe(false);
-  });
-  it("preserves a replacement ownership record after confirmed provider completion", async () => {
-    const { root } = sessionFixture();
-    const browserClose = vi.fn().mockResolvedValue(undefined);
-    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call: vi.fn(), close: browserClose });
-    const session = await openQaSession({ bead: "synthetic-lease", label: "replacement", port: null, prod: false, minify: false, cwd: root });
-    const replacement = JSON.stringify({ token: "different-synthetic-owner" });
-    writeFileSync(session.ownerPath, replacement);
-    await expect(session.close()).rejects.toThrow(/owner record changed/);
-    expect(browserClose).toHaveBeenCalledOnce();
-    expect(readFileSync(session.ownerPath, "utf8")).toBe(replacement);
   });
 });

@@ -34,7 +34,7 @@
 
 import { createHash, randomUUID } from "node:crypto";
 import { execFileSync, spawn } from "node:child_process";
-import { closeSync, existsSync, mkdirSync, mkdtempSync, openSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "node:fs";
+import { closeSync, existsSync, mkdirSync, mkdtempSync, openSync, rmSync, writeFileSync } from "node:fs";
 import { createConnection, createServer } from "node:net";
 import { loadavg, tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
@@ -43,6 +43,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { createBattleDriver, createQa } from "./prelude.mjs";
 import { acquireBrowserLease, browserLeasePath, tryBrowserLock } from "./browser-lease.mjs";
 import { spawnOwnedServer } from "./server-ownership.mjs";
+import { BrowserOwnerClearError, BrowserOwnerRecord } from "./browser-owner-record.mjs";
+import { parseProviderIdentity } from "./provider-identity.mjs";
 import { QA_PORTS_PER_SLOT } from "./browser-qa-capacity.mjs";
 import {
   connectPlaywrightMcp,
@@ -520,21 +522,12 @@ export async function openQaSession(options) {
   let outDir = /** @type {string | null} */ (null);
   const leasePath = browserLeasePath(primaryCheckout);
   let ownerPath = "";
-  let ownRecord = /** @type {string | null} */ (null);
+  let record = /** @type {BrowserOwnerRecord | null} */ (null);
   let owner = /** @type {Record<string, string | number | boolean> | null} */ (null);
   const retainOwner = (/** @type {string} */ providerState) => {
-    if (ownRecord === null || owner === null) return;
-    if (readFileSync(ownerPath, "utf8") !== ownRecord) throw new Error(`browser owner record changed: ${ownerPath}`);
+    if (record === null || owner === null) return;
     owner.providerState = providerState;
-    const record = `${JSON.stringify(owner)}\n`;
-    writeFileSync(ownerPath, record);
-    ownRecord = record;
-  };
-  const clearOwner = () => {
-    if (ownRecord === null) return;
-    if (readFileSync(ownerPath, "utf8") !== ownRecord) throw new Error(`browser owner record changed: ${ownerPath}`);
-    unlinkSync(ownerPath);
-    ownRecord = null;
+    record.publish(owner);
   };
   let evidence = /** @type {Awaited<ReturnType<typeof tryBrowserLock>>} */ (null);
   let starting = /** @type {Awaited<ReturnType<typeof tryBrowserLock>>} */ (null);
@@ -544,6 +537,8 @@ export async function openQaSession(options) {
   let ownedServer = /** @type {Awaited<ReturnType<typeof spawnOwnedServer>> | null} */ (null);
   let server = /** @type {import("node:child_process").ChildProcess | null} */ (null);
   let mcp = /** @type {Awaited<ReturnType<typeof connectPlaywrightMcp>> | null} */ (null);
+  let browserAdmitted = false;
+  let startupUnconfirmed = "startup-unconfirmed";
   /** @type {Record<string, number>} */
   const wallMs = {};
   const activeCalls = /** @type {Set<Promise<void>>} */ (new Set());
@@ -562,6 +557,10 @@ export async function openQaSession(options) {
           // Closing the page interrupts pending unsafe execution. Join its
           // local RPC only afterwards; transport rejection cannot certify
           // whether the remote invocation completed.
+          if (mcp !== null && !browserAdmitted) {
+            await mcp.disconnect();
+            throw new Error("browser identity admission did not complete; no browser tool was sent");
+          }
           if (mcp !== null) await mcp.close(async (browserCloseConfirmed) => {
             await Promise.all(activeCalls);
             if (browserCloseConfirmed && !uncertainCall && owner !== null) {
@@ -578,11 +577,21 @@ export async function openQaSession(options) {
         if (uncertainCall) throw new Error("browser RPC transport rejected; provider completion is unconfirmed");
         // A settled connection failure sent no browser command. Otherwise
         // only a confirmed browser_close permits another cooperating owner.
-        clearOwner();
+        record?.clear();
       } catch (error) {
-        retainOwner(uncertainCall ? (closeUnconfirmed ? "call-and-close-unconfirmed" : "call-unconfirmed") : "close-unconfirmed");
-        say(`browser provider requires reconciliation; owner record retained at ${ownerPath}: ${String(error)}`);
-        throw error;
+        let failure = error;
+        if (!(error instanceof BrowserOwnerClearError)) {
+          try {
+            retainOwner(mcp !== null && !browserAdmitted ? startupUnconfirmed :
+              uncertainCall ? (closeUnconfirmed ? "call-and-close-unconfirmed" : "call-unconfirmed") : "close-unconfirmed");
+          } catch (retentionError) {
+            failure = new AggregateError([error, retentionError], `browser cleanup and ownership persistence failed: ${String(error)}; ${String(retentionError)}`);
+          }
+        }
+        say(error instanceof BrowserOwnerClearError
+          ? `browser owner clear ${error.phase} failed at ${ownerPath}; ${error.unlinked ? "record unlinked, deletion durability unconfirmed" : "this cleanup did not unlink"}; no republication: ${String(failure)}`
+          : `browser provider completion or ownership persistence requires reconciliation at ${ownerPath}: ${String(failure)}`);
+        throw failure;
       } finally {
         try {
           try { await stopProcessTree(builder); } finally { await ownedServer?.stop(); }
@@ -673,26 +682,31 @@ export async function openQaSession(options) {
     wallMs.serve = Date.now() - serveStart;
     signal.throwIfAborted();
     say(`server pid ${String(server.pid)} (process group) serving ${baseUrl}`);
-    owner = { token: randomUUID(), pid: process.pid, bead: options.bead, label: options.label, checkout, slot: lease.slot, port, startedAt: new Date().toISOString(), providerState: "active" };
-    const record = `${JSON.stringify(owner)}\n`;
-    writeFileSync(ownerPath, record, { flag: "wx" });
-    ownRecord = record;
+    owner = { token: randomUUID(), pid: process.pid, bead: options.bead, label: options.label, checkout, slot: lease.slot, port, startedAt: new Date().toISOString(), providerState: "startup-unconfirmed" };
+    record = new BrowserOwnerRecord(ownerPath);
+    record.publish(owner);
     mcp = await connectPlaywrightMcp({
       name: `qa-${options.label}-${String(process.pid)}`,
       roots: [...new Set([primaryCheckout, repoRoot, checkout])],
     });
-    if (mcp.sessionId !== undefined && mcp.protocolVersion !== undefined) {
-      owner.mcpSessionId = mcp.sessionId;
-      owner.mcpUrl = mcp.url;
-      owner.mcpProtocolVersion = mcp.protocolVersion;
-      retainOwner("active");
+    const identity = parseProviderIdentity(mcp.sessionId, mcp.url, mcp.protocolVersion);
+    if (identity === null) {
+      startupUnconfirmed = "metadata-unverified";
+      throw new Error("unsupported MCP session metadata; stateful transport identity is required before browser tools");
     }
+    owner.mcpSessionId = identity.sessionId;
+    owner.mcpUrl = identity.url;
+    owner.mcpProtocolVersion = identity.protocolVersion;
+    retainOwner("active");
+    browserAdmitted = true;
     signal.throwIfAborted();
   })();
   try {
     await startup;
   } catch (error) {
-    await close();
+    try { await close(); } catch (cleanupError) {
+      throw new AggregateError([error, cleanupError], `QA startup failed: ${String(error)}; cleanup: ${String(cleanupError)}`);
+    }
     throw error;
   }
   const baseUrl = `http://localhost:${String(port)}`;

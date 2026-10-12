@@ -42,6 +42,7 @@ afterEach(async () => {
   await Promise.all(leases.splice(0).map((lease) => lease.release()));
   await fixtures.cleanup();
   race.path = "";
+  vi.restoreAllMocks();
   for (const child of owned.splice(0)) {
     if (child.exitCode !== null || child.signalCode !== null) continue;
     const exited = once(child, "close");
@@ -76,13 +77,14 @@ function queueSyntheticWaiter(path, slots = 2) {
 describe("browser slot recovery", () => {
   it("skips server-only retained slots and reports their exact reconciliation paths", async () => {
     const path = fixtures.leasePath();
+    const diagnostic = vi.spyOn(console, "error").mockImplementation(() => {});
     const high = browserSlotPath(path, 1);
     // A holder creates the slot directory; no provider ownership is needed.
     const first = await acquire(path); await first.release();
     writeFileSync(serverRecordPath(high), "retained server");
     const next = await acquire(path);
     expect(next.slot).toBe(0);
-    expect(next.quarantined).toEqual([serverRecordPath(high)]);
+    expect(diagnostic.mock.calls.flat().join("\n")).toContain(serverRecordPath(high));
     expect(readFileSync(serverRecordPath(high), "utf8")).toBe("retained server");
   });
 
@@ -100,10 +102,12 @@ describe("browser slot recovery", () => {
 
   it("protects a server record appearing after precheck and before acquired-lock admission", async () => {
     const path = fixtures.leasePath();
+    const diagnostic = vi.spyOn(console, "error").mockImplementation(() => {});
     race.path = browserSlotPath(path, 1);
     const lease = await acquire(path);
     expect(lease.slot).toBe(0);
-    expect(lease.quarantined).toEqual([serverRecordPath(browserSlotPath(path, 1))]);
+    expect(diagnostic.mock.calls.flat().join("\n")).toContain(serverRecordPath(browserSlotPath(path, 1)));
+    expect(readFileSync(serverRecordPath(browserSlotPath(path, 1)), "utf8")).toBe("server appeared during admission");
     expect(lockHeld(browserSlotPath(path, 1))).toBe(false);
   });
 

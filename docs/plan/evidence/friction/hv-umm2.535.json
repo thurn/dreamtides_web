@@ -1,0 +1,25 @@
+{
+  "bead": "hv-umm2.535",
+  "phase": 5,
+  "implementMin": 57.63442258333334,
+  "localValidationS": {
+    "focused": 24.706241875006526,
+    "review": 34.740633624998736,
+    "knip": 2.752722334000282,
+    "full": 123.03707425000175,
+    "browser": 6.050171582995972
+  },
+  "hostLoad": 20.4931640625,
+  "testDelta": {
+    "files": 2,
+    "lines": 179,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 10.955782950000001,
+      "note": "Observed lower-bound CI/core-review repair interval; restores isolated hoisted OS mocks after candidate-introduced containment failure and addresses all accepted review findings. Coordination/implementation elapsed, not active CPU, test time or lease wait; exact provenance in own measurements."
+    }
+  ]
+}

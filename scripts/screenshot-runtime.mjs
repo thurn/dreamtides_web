@@ -43,13 +43,22 @@ export async function connectPlaywrightMcp({
       })),
     }));
   const transport = new StreamableHTTPClientTransport(new URL(url));
-  await client.connect(transport);
+  try {
+    await client.connect(transport);
+  } catch (error) {
+    try { await client.close(); } catch (closeError) {
+      throw new AggregateError([error, closeError], "MCP connection and local transport cleanup failed");
+    }
+    throw error;
+  }
 
   return {
     // Capture the originally negotiated transport identity, before any call.
     sessionId: transport.sessionId,
     url: new URL(url).href,
     protocolVersion: transport.protocolVersion,
+    /** Disconnects only this SDK transport, without sending a browser tool. */
+    async disconnect() { await client.close(); },
     /**
      * @param {string} name
      * @param {Record<string, unknown>} [args]

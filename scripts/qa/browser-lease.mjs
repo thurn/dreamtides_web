@@ -272,8 +272,6 @@ async function retainedRecords(slotPath) {
  * @property {number} slot
  * @property {string} path The slot's kernel lock.
  * @property {string} ownerPath The slot's ownership record.
- * @property {string[]} quarantined Records of slots passed over because they
- *   are retained for reconciliation.
  * @property {() => Promise<void>} release
  */
 
@@ -305,7 +303,7 @@ async function takeSlot(path, slots, signal, reportRetained) {
     if (lock === null) continue;
     // A holder may have retained its record between the check and the lock.
     const records = slotRecords(slotPath);
-    if (records.length === 0) return { slot, path: slotPath, ownerPath, quarantined: retained, release: lock.release };
+    if (records.length === 0) return { slot, path: slotPath, ownerPath, release: lock.release };
     await lock.release();
     reportRetained(records);
     retained.push(...records);

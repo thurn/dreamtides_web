@@ -205,8 +205,20 @@ slot is retained. A live holder's locked slot remains ordinary contention.
 Yield checks use the same usable-slot rules as admission. Reconcile the
 recorded provider execution before clearing that record. Kernel release on
 pipe EOF proves local lock recovery; provider completion requires separate
-confirmation. To reconcile a retained provider record, run
-`node scripts/qa/provider-ownership.mjs <exact-slot-lock-path>`. New records
+confirmation. Before any browser tool, the runner requires a safe stateful
+session ID, canonical HTTP(S) endpoint and negotiated protocol identity. It
+publishes complete owner images atomically, flushes the staged file and parent
+directory, and checks the exact bytes before admitting browser execution.
+The initial record is `startup-unconfirmed` until that admission succeeds.
+Unsupported identity rejects startup with `metadata-unverified`; failed
+identity publication retains `startup-unconfirmed`. Both paths disconnect
+only the local SDK transport and issue no browser tool or completion receipt.
+The shared identity validator also governs reconciliation. A local clear
+failure reports its verification, unlink or directory-flush phase separately
+from provider completion. Failed unlink preserves the current evidence;
+successful unlink followed by a flush error does not recreate the record.
+To reconcile a retained provider record, run
+`node scripts/qa/provider-ownership.mjs <exact-slot-lock-path>`. Admitted records
 carry the exact MCP transport session ID, endpoint and negotiated protocol.
 The runner durably records `mcpExecutionCompleted` after a successful
 `browser_close` response and settled, certain RPCs, before SDK transport close.
@@ -220,6 +232,12 @@ Timed-out calls, uncertain browser close, missing completion receipts, live
 sessions, unknown responses and changed records remain protected: session-map
 absence alone cannot certify asynchronous provider teardown. Waiters print the
 exact reconciliation command once per retained record, with the server first.
+Records without supported transport identity report `unverified`; records
+without a completed execution receipt remain completion-unconfirmed. These
+startup outcomes are not eligible for automated retirement. Unknown provider
+execution requires investigation through the bounded incident workflow before
+record-removal authority can be established; a free kernel lock or absent
+session alone is insufficient evidence.
 The [MCP session protocol](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#session-management)
 and [Playwright transport](https://github.com/microsoft/playwright/blob/main/packages/playwright-core/src/tools/utils/mcp/http.ts)
 define the absence response. The slots are separate from

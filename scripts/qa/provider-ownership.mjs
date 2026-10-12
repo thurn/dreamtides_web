@@ -5,6 +5,7 @@ import { existsSync, readFileSync, renameSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { browserOwnerPath, serverRecordPath, tryBrowserLock } from "./browser-lease.mjs";
 import { processIdentity } from "./server-ownership.mjs";
+import { parseProviderIdentity } from "./provider-identity.mjs";
 
 /** @param {unknown} value */
 function parsedRecord(value) {
@@ -13,16 +14,10 @@ function parsedRecord(value) {
     !("token" in value) || typeof value.token !== "string" ||
     !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u.test(value.token) ||
     !("port" in value) || typeof value.port !== "number" || !Number.isInteger(value.port) || value.port < 5174 || value.port > 65535 ||
-    !("mcpSessionId" in value) || typeof value.mcpSessionId !== "string" || !/^[\x21-\x7e]+$/u.test(value.mcpSessionId) ||
-    !("mcpUrl" in value) || typeof value.mcpUrl !== "string" ||
-    !("mcpProtocolVersion" in value) || typeof value.mcpProtocolVersion !== "string" ||
-    !/^\d{4}-\d{2}-\d{2}$/u.test(value.mcpProtocolVersion)) return null;
-  try {
-    const url = new URL(value.mcpUrl);
-    if (!["http:", "https:"].includes(url.protocol) || url.href !== value.mcpUrl || url.username || url.password || url.hash) return null;
-  } catch { return null; }
-  return { pid: value.pid, port: value.port, sessionId: value.mcpSessionId,
-    url: value.mcpUrl, protocolVersion: value.mcpProtocolVersion,
+    !("mcpSessionId" in value) || !("mcpUrl" in value) || !("mcpProtocolVersion" in value)) return null;
+  const identity = parseProviderIdentity(value.mcpSessionId, value.mcpUrl, value.mcpProtocolVersion);
+  if (identity === null) return null;
+  return { pid: value.pid, port: value.port, ...identity,
     completed: "mcpExecutionCompleted" in value && value.mcpExecutionCompleted === true && "providerState" in value &&
       (value.providerState === "execution-completed" || value.providerState === "close-unconfirmed") };
 }
