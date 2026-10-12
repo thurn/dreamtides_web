@@ -1,0 +1,115 @@
+{
+  "bead": "hv-9ool",
+  "base": "ba0033fe953a9a060891997669a2847418d559f7",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T12:22:18+00:00",
+    "startProvenance": "Actual native claim; conservative ownership-to-final-commit proxy includes setup, scoped audit, coordination and local checks. Exact helper dispatch was not instrumented.",
+    "endUtc": "2026-10-12T12:32:17.932491+00:00",
+    "endProvenance": "Actual final evidence refresh after required review/Knip; final standalone schema and commit tail recorded in native delivery notes."
+  },
+  "readOnlySage": {
+    "helper": "rd_ladder_citations",
+    "observedStartUtc": "2026-10-12T12:23:54Z",
+    "observedEndUtc": "2026-10-12T12:26:11Z",
+    "scope": [
+      "hv-umm2.351",
+      "hv-umm2.63",
+      "hv-myhi"
+    ],
+    "runtime": "None started; no writes/native effects by helper"
+  },
+  "sources": [
+    {
+      "bead": "hv-umm2.63",
+      "originalTag": "base-test-failure",
+      "reportedMinutes": 15,
+      "provenance": "Historical coarse report, not recomputed",
+      "currentContract": "src/engine/testing/tooling.test.ts:121; LAB.shuffleInto index11 and LAB.choosePlayer index0x60",
+      "resolution": "hv-umm2.351 completed, repair source5da790bf ancestor of base"
+    },
+    {
+      "bead": "hv-umm2.351",
+      "originalTag": "coupled-ci-repair-order",
+      "reportedMinutes": 5,
+      "provenance": "Historical coarse report, not recomputed",
+      "currentContract": "src/engine/view/knowledge.ts:607 committed-deck sitsAlike guard; docs/plan/workflow.md CI-fix owned-failure acceptance",
+      "resolution": "hv-umm2.353 completed, repair sourceff9196d79 ancestor; original known failure and dependency ordering honestly retained"
+    },
+    {
+      "bead": "hv-myhi",
+      "originalTag": "cross-bead-semantic-conflict",
+      "reportedMinutes": 0.14,
+      "provenance": "Affected-suite process wall proxy; editing time excluded, not a fifteen-minute semantic conflict",
+      "currentContract": "src/engine/effects/primitives/contracts/abandon.contracts.ts:162 and docs/rules.md X-cost/shared-X sections",
+      "resolution": "myhi completed; tested55db221802 ancestor; two existing rows use actual chosen-X choice/reload and preserve stored source-X"
+    }
+  ],
+  "aliasMap": "docs/plan/evidence/friction-tags.json maps base-test-failure and coupled-ci-repair-order to cross-bead-semantic-conflict; a common label is not common causal evidence",
+  "nativeReceipts": "/tmp/dreamtides-executor-01a12e91/9ool-audit-native.json (351/353/63/myhi completed; broader retrospective537 active peer)",
+  "parentVerification": "Inspected current named contracts/guard/rules/workflow and each repaired-source ancestor; no new shared source/workflow defect confirmed",
+  "result": {
+    "tag": "cross-bead-semantic-conflict",
+    "phase": 5,
+    "reason": "hv-umm2.351 and hv-umm2.63 report the same fixture UUID collision, covered by the current public lab-identity uniqueness contract. The separate committed-deck recovery issue is guarded by completed hv-umm2.353; current staged-validation rules distinguish owned failures during CI fix-forward. hv-myhi corrects the resolving-X reader and its two inconsistent contracts under existing normative X rules. These aliased reports establish distinct resolved causes, with no additional shared defect confirmed by this bounded audit."
+  },
+  "filingPrecision": "Stable trigger key before[] after[9ool]; primary JSONL matches active537 additive append. Dedicated found_by query was performed only after filing and returned[9ool], procedure deviation recorded rather than inventing a prequery.",
+  "parentCoordination": "Retrospective537 remains separate; 512 setup had no source/helper/candidate and was natively removed/released to prioritize audit. myhi exact-source review retry/supplement remains independently tracked, not an audit finding.",
+  "validation": [
+    {
+      "name": "review",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 44812,
+      "startUtc": "2026-10-12T12:30:08.206590+00:00",
+      "endUtc": "2026-10-12T12:30:08.485314+00:00",
+      "wallS": 0.2787494170042919,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/9ool-review.log"
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 45064,
+      "startUtc": "2026-10-12T12:30:23.832122+00:00",
+      "endUtc": "2026-10-12T12:30:27.972704+00:00",
+      "wallS": 4.140576917001454,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/9ool-knip.log"
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Parent initial evidence assembly command group",
+        "raw": "{ 2.59 5.58 8.53 }"
+      }
+    }
+  },
+  "resourceLedger": {
+    "installObserver": 23496,
+    "installTerminalExit": 0,
+    "helperWriters": 0,
+    "servers": [],
+    "browsers": [],
+    "leases": []
+  },
+  "classification": "Documentation and evidence only; no runtime/UI/test-infrastructure change, no full/fuzz/browser/core-review required.",
+  "resultStatus": "Locally validated audit disposition; parent final schema and certified promotion owed"
+}
