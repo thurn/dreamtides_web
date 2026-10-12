@@ -70,11 +70,24 @@ export type CardCountValue =
   | { readonly value: "countCards"; readonly zone: "deck" | "hand"; readonly player: PlayerRef; readonly filter?: never };
 
 /**
- * A number a character selector's cost or ✦ bound compares with: a constant,
- * the source's X, or a count of cards in a zone, read each time the selector
- * is checked.
+ * "This character's ✦": the source character's effective spark while it is
+ * in play, else the effective spark it had immediately before it left play
+ * while its ability was pending, else 0 (rules § Spark → This character's ✦,
+ * RD-hv-umm2.91-2, RD-hv-umm2.460-1). Only a resolving effect, or an ability
+ * choosing its targets, reads it; a static ability or the layer evaluation
+ * cannot.
  */
-export type BoundValue = number | XValue | CardCountValue;
+export interface SourceSparkValue {
+  readonly value: "sourceSpark";
+}
+
+/**
+ * A number a character selector's cost or ✦ bound, or a void target's cost
+ * bound, compares with: a constant, the source's X, a count of cards in a
+ * zone, or the source's ✦, read each time the selector is checked
+ * (RD-hv-umm2.501-1).
+ */
+export type BoundValue = number | XValue | CardCountValue | SourceSparkValue;
 
 /**
  * Which characters in play a selector matches. Cost bounds read the
@@ -201,13 +214,15 @@ export interface ZoneTargetSpec extends ZoneCardsBase {
   /** Excludes the effect's source: "another warrior from your void". */
   readonly another?: boolean;
   /**
-   * "≤X● cost events in your void": only cards whose copiable cost is at
-   * most this, a constant or X. X is the value picked as the card is played,
-   * before its targets (RD-hv-umm2.142-1), and otherwise the source card's X
-   * (`XValue`). Like a character selector's bound, it is read as targets are
-   * offered and again as the effect resolves (RD-hv-umm2.495-1).
+   * "≤X● cost events in your void", "cost less than or equal to this
+   * character's ✦": only cards whose copiable cost is at most this bound. X
+   * is the value picked as the card is played, before its targets
+   * (RD-hv-umm2.142-1), and otherwise the source card's X (`XValue`); the
+   * source's ✦ is read as `SourceSparkValue` says. Like a character
+   * selector's bound, it is read as targets are offered and again as the
+   * effect resolves (RD-hv-umm2.495-1, RD-hv-umm2.501-1).
    */
-  readonly costAtMost?: number | XValue;
+  readonly costAtMost?: BoundValue;
 }
 
 /**
@@ -293,14 +308,8 @@ export type ValueExpr =
   | CardCountValue
   /** The characters supporting the source (C9): 0–2 while it is in the front rank, 0 elsewhere. */
   | { readonly value: "supporting" }
-  /**
-   * "This character's ✦" in a resolving effect: the source character's
-   * effective spark as the effect reads it, while it is in play (rules §
-   * Spark → This character's ✦). No last-known spark is kept, so it reads 0
-   * once the source has left play (RD-hv-umm2.91-2). A static ability cannot
-   * read it.
-   */
-  | { readonly value: "sourceSpark" }
+  /** "This character's ✦" in a resolving effect (`SourceSparkValue`). */
+  | SourceSparkValue
   /** `of` multiplied by `factor`: "+2✦ for each …". */
   | { readonly value: "times"; readonly of: ValueExpr; readonly factor: number }
   /**

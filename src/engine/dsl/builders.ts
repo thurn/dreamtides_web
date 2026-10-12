@@ -274,7 +274,8 @@ export function self(): SelfSpec {
  * "A character from your void": `count` void cards matching `filter`, chosen
  * as targets; "up to N" with `upTo`, "another" with `another`, the
  * opponent's void with `player: "opponent"`, and "≤X● cost" with
- * `costAtMost`, a constant or the source's X (`x()`).
+ * `costAtMost`, a bound such as a constant, the source's X (`x()`), or
+ * "this character's ✦" (`thisCharacterSpark()`).
  */
 export function fromVoid(
   filter: CardFilter = {},

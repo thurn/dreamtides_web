@@ -3,8 +3,8 @@ import { supportersOf } from "../continuous/support";
 import type { AbilitySource, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { resolvePlayer } from "./selectors";
-import type { CardCountValue, CharacterSelector, MovedCardRef, ValueExpr } from "./types";
+import { resolvePlayer, type SourceSparkReader } from "./selectors";
+import type { CardCountValue, CharacterSelector, MovedCardRef, SourceSparkValue, ValueExpr } from "./types";
 
 /**
  * What a value reads besides the state: its controller, its source, X, how to
@@ -22,12 +22,15 @@ export interface ValueScope {
   count(selector: CharacterSelector): number;
   countCards(count: CardCountValue): number;
   movedCosts?(ref: MovedCardRef): readonly number[];
-  /** The source character's effective spark while it is in play, else 0; absent outside a resolving effect. */
-  sourceSpark?(): number;
+  /** "This character's ✦" (`SourceSparkReader`); absent outside a resolving effect. */
+  readonly sourceSpark?: SourceSparkReader;
 }
 
-/** "This character's ✦", read as a resolving effect reads it (rules § Spark → This character's ✦). */
-export function thisCharacterSpark(): ValueExpr {
+/**
+ * "This character's ✦", read as a resolving effect reads it (rules § Spark →
+ * This character's ✦): a value, or a selector's or void target's bound.
+ */
+export function thisCharacterSpark(): SourceSparkValue {
   return { value: "sourceSpark" };
 }
 

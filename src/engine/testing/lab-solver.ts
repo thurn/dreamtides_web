@@ -46,6 +46,19 @@ function sparkOf(card: EngineCardDefinition): number {
   return typeof card.spark === "number" ? card.spark : 0;
 }
 
+/**
+ * Bounds by "this character's ✦" read as the constant `spark`, the played
+ * card's printed spark: a ▸Materialized trigger's source is in play with
+ * it, and an event, which has none, reads 0.
+ */
+function sourceSparkAs<T extends Partial<Record<"sparkAtLeast" | "sparkAtMost" | "costAtLeast" | "costAtMost", BoundValue>>>(bounds: T, spark: number): T {
+  const keys = ["sparkAtLeast", "sparkAtMost", "costAtLeast", "costAtMost"] as const;
+  return keys.reduce((result, key) => {
+    const bound = result[key];
+    return typeof bound === "object" && bound.value === "sourceSpark" ? { ...result, [key]: spark } : result;
+  }, bounds);
+}
+
 /** The X a lab play may choose: an energy X cost's least X up to the lab's energy left after the fixed cost. */
 interface XRange {
   readonly min: number;
@@ -342,7 +355,8 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * play-time target spec gets a matching character in play, or for a void
  * target a matching card in the void, on the side it selects, relative to
  * `side`, whose ✦ and cost admit an X the play can choose (a void target's
- * cost bound by X admitting one, `voidTargetFor`), with as many
+ * cost bound by X admitting one, `voidTargetFor`, and a bound by "this
+ * character's ✦" read as the card's printed spark, `sourceSparkAs`), with as many
  * cards in the counted zone as an upper ✦ or cost bound by a zone count
  * needs (`countNeeds`): matching void cards, or cards in a hand beside the
  * played card, or in a deck beside its 8; a ▸Materialized trigger's void targets get their void cards too,
@@ -386,15 +400,17 @@ export function labBoard(
   const variant = variantOf(entry);
   const abilities = definition.abilities(variant);
   const materialized = abilities.filter(isMaterializedTrigger).map((ability) => ability.effect);
+  const sourceSpark = sparkOf(definition);
   for (const spec of materialized.flatMap(everyTarget)) {
     // A ▸Materialized character target of your own gets a character of yours ahead of the card, so the card is not its only choice.
     if (spec.kind === "target" && spec.selector.controller === "you") {
-      for (let index = 0; index < (spec.count ?? 1); index++) back[side].push(characterFor(engine, spec.selector, pool, xRange));
+      const selector = sourceSparkAs(spec.selector, sourceSpark);
+      for (let index = 0; index < (spec.count ?? 1); index++) back[side].push(characterFor(engine, selector, pool, xRange));
       continue;
     }
     if (spec.kind !== "inZone") continue;
     const voidSide = spec.player === "you" ? side : opponent(side);
-    for (let index = 0; index < spec.count; index++) voids[voidSide].push(voidTargetFor(engine, spec, pool, xRange));
+    for (let index = 0; index < spec.count; index++) voids[voidSide].push(voidTargetFor(engine, sourceSparkAs(spec, sourceSpark), pool, xRange));
   }
   const played = [...abilities.flatMap((ability) => (ability.kind === "event" ? [ability.effect] : [])), ...materialized];
   for (const filter of played.flatMap(opponentHandChoices)) hands[opponent(side)].push(cardFor(engine, filter, pool));
@@ -414,14 +430,15 @@ export function labBoard(
       }
       if (spec.kind === "inZone") {
         const voidSide = spec.player === "you" ? side : opponent(side);
-        for (let index = 0; index < spec.count; index++) voids[voidSide].push(voidTargetFor(engine, spec, pool, xRange));
+        for (let index = 0; index < spec.count; index++) voids[voidSide].push(voidTargetFor(engine, sourceSparkAs(spec, sourceSpark), pool, xRange));
         continue;
       }
       const targetSide = spec.selector.controller === "you" ? side : opponent(side);
+      const selector = sourceSparkAs(spec.selector, sourceSpark);
       for (let index = 0; index < (spec.count ?? 1); index++) {
-        const character = characterFor(engine, spec.selector, pool, xRange);
+        const character = characterFor(engine, selector, pool, xRange);
         back[targetSide].push(character);
-        for (const { count, cards } of countNeeds(engine, spec.selector, character)) {
+        for (const { count, cards } of countNeeds(engine, selector, character)) {
           const countSide = count.player === "you" ? side : opponent(side);
           for (let card = 0; card < cards; card++) {
             zones[count.zone][countSide].push(count.zone === "void" ? cardFor(engine, count.filter, pool) : SYNTHETIC.vanilla1.id);

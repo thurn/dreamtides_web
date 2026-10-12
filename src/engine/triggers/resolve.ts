@@ -24,7 +24,7 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
     conditionHolds(ctx.state, ctx.catalog, body.condition, { controller, source, optionalPaid: [] });
   ctx.emit({ kind: "triggerResolved", source, controller, ability, node, applied });
   if (!applied) return;
-  const choices = chooseOnResolution(ctx, body.effect, controller, source, (role) => purposeOf(source, origin, ability, role));
+  const choices = chooseOnResolution(ctx, body.effect, controller, source, (role) => purposeOf(source, origin, ability, role), lastKnownSourceSpark);
   if (choices === null) return;
   resolveEffect(ctx, body.effect, {
     source,

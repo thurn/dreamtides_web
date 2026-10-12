@@ -60,8 +60,18 @@ export function zoneCount(state: BattleState, catalog: EngineCatalog, count: Car
 }
 
 /**
+ * Reads "this character's ✦" for an ability choosing its targets or
+ * resolving (rules § Spark → This character's ✦): the source's current
+ * effective spark while it is in play, else the spark retained when it left
+ * play, else 0. Where nothing resolves, as in a static ability or the layer
+ * evaluation, there is no reader.
+ */
+export type SourceSparkReader = () => number;
+
+/**
  * A selector bound now: a constant; for X, an explicit play-preparation X,
- * otherwise the source card's X; or a zone count, read through `read`.
+ * otherwise the source card's X; a zone count, read through `read`; or the
+ * source's ✦ through `sourceSpark`, which throws without a reader.
  */
 function boundOf(
   state: BattleState,
@@ -71,10 +81,31 @@ function boundOf(
   controller: Side,
   source: AbilitySource,
   selectorX?: number,
+  sourceSpark?: SourceSparkReader,
 ): number {
   if (typeof bound === "number") return bound;
-  if (bound.value === "x") return selectorX ?? sourceX(state, source);
-  return zoneCountWith(state, catalog, read, bound, controller);
+  switch (bound.value) {
+    case "x":
+      return selectorX ?? sourceX(state, source);
+    case "countCards":
+      return zoneCountWith(state, catalog, read, bound, controller);
+    case "sourceSpark":
+      if (sourceSpark === undefined) throw new Error("A static ability cannot read this character's ✦");
+      return sourceSpark();
+  }
+}
+
+/** `boundOf`, reading effective characteristics: a void target's cost bound. */
+export function boundNow(
+  state: BattleState,
+  catalog: EngineCatalog,
+  bound: BoundValue,
+  controller: Side,
+  source: AbilitySource,
+  selectorX?: number,
+  sourceSpark?: SourceSparkReader,
+): number {
+  return boundOf(state, catalog, (id) => characteristics(state, catalog).of(id), bound, controller, source, selectorX, sourceSpark);
 }
 
 /** Whether a character in play matches the selector, for an effect controlled by `controller`. */
@@ -86,8 +117,9 @@ export function matchesCharacter(
   controller: Side,
   source: AbilitySource,
   selectorX?: number,
+  sourceSpark?: SourceSparkReader,
 ): boolean {
-  return matchesCharacterWith(state, catalog, effective(state, catalog), selector, id, controller, source, selectorX);
+  return matchesCharacterWith(state, catalog, effective(state, catalog), selector, id, controller, source, selectorX, sourceSpark);
 }
 
 /** `matchesCharacter`, reading characteristics through `read`. */
@@ -100,13 +132,14 @@ export function matchesCharacterWith(
   controller: Side,
   source: AbilitySource,
   selectorX?: number,
+  sourceSpark?: SourceSparkReader,
 ): boolean {
   const instance = state.instances[id];
   if (instance?.zone !== "play") return false;
   if (selector.controller === "you" && instance.controller !== controller) return false;
   if (selector.controller === "opponent" && instance.controller === controller) return false;
   if (selector.another === true && id === source) return false;
-  const bound = (value: BoundValue): number => boundOf(state, catalog, read, value, controller, source, selectorX);
+  const bound = (value: BoundValue): number => boundOf(state, catalog, read, value, controller, source, selectorX, sourceSpark);
   if (selector.subtype !== undefined || selector.notSubtype !== undefined || selector.sparkAtMost !== undefined || selector.sparkAtLeast !== undefined) {
     const card = read(id);
     if (selector.subtype !== undefined && !card.allTypes && card.subtype !== selector.subtype) return false;
@@ -143,8 +176,9 @@ export function matchingCharacters(
   controller: Side,
   source: AbilitySource,
   selectorX?: number,
+  sourceSpark?: SourceSparkReader,
 ): InstanceId[] {
-  return matchingCharactersWith(state, catalog, effective(state, catalog), selector, controller, source, selectorX);
+  return matchingCharactersWith(state, catalog, effective(state, catalog), selector, controller, source, selectorX, sourceSpark);
 }
 
 /** `matchingCharacters`, reading characteristics through `read`. */
@@ -156,11 +190,12 @@ export function matchingCharactersWith(
   controller: Side,
   source: AbilitySource,
   selectorX?: number,
+  sourceSpark?: SourceSparkReader,
 ): InstanceId[] {
   const order = [controller, ...SIDES.filter((side) => side !== controller)];
   return order.flatMap((side) =>
     charactersInPlay(state, side).filter((id) =>
-      matchesCharacterWith(state, catalog, read, selector, id, controller, source, selectorX),
+      matchesCharacterWith(state, catalog, read, selector, id, controller, source, selectorX, sourceSpark),
     ),
   );
 }

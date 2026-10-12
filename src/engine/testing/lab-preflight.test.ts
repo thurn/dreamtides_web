@@ -3,7 +3,11 @@ import { describe, expect, it } from "vitest";
 import { createCatalog, type EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
 import type { EngineEvent } from "../events";
-import { abandonCost, additionalCost, energy, energyX, event, everyIn, fromVoid, x } from "../dsl/builders";
+import { abandonCost, additionalCost, enemyCharacter, energy, energyX, event, everyIn, fromVoid, target, x } from "../dsl/builders";
+import { onMaterialized, triggered } from "../dsl/triggers";
+import { thisCharacterSpark } from "../dsl/values";
+import { dissolve } from "../effects/primitives/dissolve";
+import { effectiveSpark } from "../rules/spark";
 import { copiableCostOf } from "../continuous/characteristics";
 import { materialize } from "../effects/primitives/materialize";
 import type { CardCost, ZoneEverySpec } from "../dsl/types";
@@ -166,6 +170,33 @@ describe("node card-lab preflight", () => {
         expect(playAt(state, side, (prompt) => prompt.max).offered).toEqual([staged]);
       }
       expect(hasKeyword(playAt(state, side, () => cost).resolved, staging.catalog, staged, "reclaim")).toBe(true);
+    }
+  });
+
+  it("stages targets bounded by this character's ✦ at the played card's printed spark, 0 for an event", () => {
+    /** "▸Materialized: Choose a ≥2● event in your void with cost ≤ this character's ✦ to gain reclaim 0●", a 3✦ character. */
+    const wanderer: EngineCardDefinition = {
+      ...SYNTHETIC.vanilla3, id: syntheticId(1959), status: "authored",
+      abilities: () => [triggered(onMaterialized(), grantReclaim(fromVoid({ cardType: "event", costAtLeast: 2 }, { costAtMost: thisCharacterSpark() }), { costs: [energy(0)] }))],
+    };
+    /** "Dissolve an enemy with ✦ ≤ this character's ✦", an event, whose own ✦ reads 0. */
+    const sentinel: EngineCardDefinition = {
+      ...SYNTHETIC.event0, id: syntheticId(1960), status: "authored",
+      abilities: () => [event(dissolve(target(enemyCharacter({ sparkAtMost: thisCharacterSpark() }))))],
+    };
+    const costing = (index: number, cost: number): EngineCardDefinition => ({ ...SYNTHETIC.event0, id: syntheticId(index), costs: [energy(cost)] });
+    const pool = [costing(1961, 5), costing(1962, 3)];
+    const staging = createEngine(testCatalog([wanderer, sentinel, ...pool]));
+    for (const side of ["player", "enemy"] as const) {
+      const staged = labBoard(staging, wanderer.id, pool, side).state;
+      expect(staged.sides[side].void.map((id) => copiableCostOf(staged, staging.catalog, id)), side).toEqual([3]);
+      const reclaimed = runCardLabPreflight(staging, request(wanderer, side), pool);
+      expect(reclaimed, side).toMatchObject({ verdict: "pass", resolved: true });
+      expect(reclaimed.events.filter((entry) => entry.kind === "noLegalTarget"), side).toEqual([]);
+      const enemies = labBoard(staging, sentinel.id, pool, side).state;
+      const other = side === "player" ? "enemy" : "player";
+      expect(enemies.sides[other].backRank.flatMap((id) => id === null ? [] : [effectiveSpark(enemies, staging.catalog, id)]), side).toEqual([0]);
+      expect(runCardLabPreflight(staging, request(sentinel, side), pool), side).toMatchObject({ verdict: "pass", resolved: true });
     }
   });
 

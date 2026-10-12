@@ -80,6 +80,7 @@ export function costOptionLabel(costs: readonly PaymentCost[]): string {
 function boundPhrase(bound: BoundValue): string {
   if (typeof bound === "number") return String(bound);
   if (bound.value === "x") return "X";
+  if (bound.value === "sourceSpark") return "this character’s spark";
   const cards = bound.zone === "void" ? permittedCardKind(bound.filter, true) : "cards";
   return `the number of ${cards} in ${bound.player === "you" ? "your" : "your opponent’s"} ${bound.zone}`;
 }

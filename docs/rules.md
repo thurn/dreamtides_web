@@ -576,8 +576,21 @@ This applies when the source ceases to exist and to an ability activated by
 abandoning its source. If the same card is in play again when the value is
 read, its current effective spark applies. A source with no in-play information
 for that ability contributes 0; an emblem is not a character and contributes 0.
-Only resolving effects read this value; a static ability cannot read its own
-spark through this expression.
+Only resolving effects, and abilities choosing their targets, read this value;
+a static ability cannot read its own spark through this expression.
+
+**This character's ✦ as a bound:** A target restriction such as "an enemy with
+✦ less than or equal to this character's ✦" or "an event in your void with
+cost less than or equal to this character's ✦" reads the value the same way,
+each time the restriction is checked (see [Bounds that count](#targeting)). An
+activated ability chooses its targets before its costs are paid, so "Abandon
+this character: Dissolve an enemy with ✦ less than or equal to this
+character's ✦" offers the enemies at or below its spark while it is still in
+play; as the ability resolves, the chosen enemy is checked again against the
+spark the character had immediately before it was abandoned. A triggered
+ability chooses its targets as it resolves: if its source left play after it
+triggered, both the targets offered and the check read the spark immediately
+before that departure.
 
 **Additional spark:** An ability such as "When a character you control gains
 ✦, it gains 1 additional ✦" applies to each gain, and the additional ✦ has
@@ -982,7 +995,9 @@ Changes](#zone-changes)).
 "Dissolve an enemy with ✦ less than or equal to the number of cards in your
 void", reads it each time it is checked: as targets are chosen, and again as
 the effect resolves. A chosen enemy whose ✦ is then above the number, because
-the void lost cards or the enemy gained ✦, is no longer a legal target.
+the void lost cards or the enemy gained ✦, is no longer a legal target. A
+bound by [this character's ✦](#spark) is read the same way, from the spark
+that value names when it is checked.
 
 Each [figment](#figments) is an independent character and is targeted
 individually.
