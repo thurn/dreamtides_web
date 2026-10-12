@@ -1,0 +1,203 @@
+{
+  "bead": "hv-umm2.173",
+  "phase": 5,
+  "base": "d6aa788c79eb3a2bbc4c0207533440e88a6cea1c",
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "startSource": "Parent verified first post-dispatch helper registration in native bead history at 2026-10-12T13:39:10Z; administrative boundary proxy. Actual model-start/dispatch clock was not sampled. First implementer measured clock 13:41:50Z was edit-start after audit/ACK wait.",
+        "endSource": "Implementer UTC clock sampled immediately before commit; finalized after checks."
+      },
+      "hostLoad": {
+        "measuredFor": "Native npm run review prepare step started at 2026-10-12T13:51:30.472Z, load=7.00048828125."
+      },
+      "testDelta": {
+        "method": "Plain scenario module contributes 53 test lines; 0 *.test.* files and 0 jsdom files; 1 plain scenario module with 4 cases."
+      }
+    }
+  },
+  "composition": {
+    "authoredCards": 4,
+    "amplifiedCards": 2,
+    "newPrimitives": [],
+    "newPrompts": [],
+    "newStatuses": [],
+    "newVisuals": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "falloutFiles": [],
+    "canonicalText": "Unchanged in all four modules",
+    "functionalZone": "Self materialization activation works in its owner void; keeps physical instance and played amplified variant. A source may legally banish itself as payment, after which materialization finds nothing; synthetic activated-from-void contract144\u2013162 establishes this, and rules Banish void cards as a cost excludes played cards/targets/earlier payment reservations."
+  },
+  "d20": {
+    "module": "src/content/specs/cards-61.scenarios.ts",
+    "reason": "Functional void zone combines energy/void banish payment with materialization of the same physical card and preserved played variant. Four scenarios use normal hand play, Host abandonment, and void activation, both actors/base and amplified. Other entities compose existing primitives directly.",
+    "scenarioCases": 4,
+    "plainScenarioLines": 53,
+    "newTestFiles": 0,
+    "jsdomFiles": 0
+  },
+  "d21": {
+    "judged": 0,
+    "sampleFirstBytes": {
+      "49641e8e-93a8-46cb-92a9-246b0fd57899": 193,
+      "e7c93c3b-14db-4131-ab50-71d152331777": 172,
+      "fd355778-abea-4513-844c-91bf75929ebe": 233,
+      "1268a899-b209-46bb-bce4-6def1dcd0404": 238
+    },
+    "classification": "Every byte >=26, so no sampled entity. Existing abandonCost, banishCost, chooseInZone/playRoute, gainedSpark, awakened keyword/duration badges, reclaimed status and void activation affordances apply; no new prompt/status/visual introduced. No UI source edits or judged captures required."
+  },
+  "checks": {
+    "install": {
+      "performedBy": "parent before dispatch",
+      "exit": 0
+    },
+    "focused": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/content-gates.test.ts src/content/specs/specs.test.ts",
+      "exit": 0,
+      "files": 2,
+      "tests": 111,
+      "prepareS": 1.8,
+      "testStepS": 3.1,
+      "restoreS": 0.9,
+      "vitestWallS": 2.37
+    },
+    "preflight": {
+      "command": "npm run lab:preflight -- --cards <exact four filed UUIDs> --variants all --as both",
+      "exit": 0,
+      "counts": {
+        "pass": 38,
+        "skip": 42,
+        "pending": 0,
+        "fail": 0
+      },
+      "commandWallS": 0.853,
+      "engineWallMs": 28.240541,
+      "hostLoad1m": 12.92529296875
+    },
+    "fuzz": {
+      "command": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids <exact four filed UUIDs>",
+      "exit": 0,
+      "launchUtc": "2026-10-12T13:44:51.921Z",
+      "processStartUtcSecondResolution": "2026-10-12T13:46:26Z",
+      "finalOutputMtimeUtcSecondResolution": "2026-10-12T13:48:57Z",
+      "engineWallS": 149.6,
+      "cpuS": 162.5,
+      "commandWallApproxS": 246,
+      "heavyLeaseWaitApproxS": 95,
+      "timingMethod": "tsx/engine worker ps lstart and output file last mtime have second resolution; native fuzzer measures its own execution wall/CPU; command estimate includes the heavy lease wait and startup.",
+      "games": 300,
+      "steps": 154544,
+      "prompts": 3867,
+      "interactiveReruns": 374,
+      "failures": 0,
+      "targetCoverage": [
+        {
+          "uuid": "49641e8e-93a8-46cb-92a9-246b0fd57899",
+          "included": 619,
+          "exercised": 279
+        },
+        {
+          "uuid": "e7c93c3b-14db-4131-ab50-71d152331777",
+          "included": 613,
+          "exercised": 280
+        },
+        {
+          "uuid": "fd355778-abea-4513-844c-91bf75929ebe",
+          "included": 614,
+          "exercised": 247
+        },
+        {
+          "uuid": "1268a899-b209-46bb-bce4-6def1dcd0404",
+          "included": 611,
+          "exercised": 273
+        }
+      ]
+    },
+    "sweep": {
+      "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.173 --cards <exact four filed UUIDs> --variants all --as both",
+      "exit": 0,
+      "counts": {
+        "pass": 38,
+        "skip": 42,
+        "pending": 0,
+        "fail": 0
+      },
+      "attemptCounts": {
+        "pass": 38,
+        "skip": 42
+      },
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 9,
+        "serve": 1980,
+        "scenario": 255842.09024899997,
+        "cleanup": 1010.6032920000143,
+        "execution": 258951.580333,
+        "total": 258960.580333
+      },
+      "rawReports": 38,
+      "rawReportErrors": 0,
+      "capsErrors": 0,
+      "screens": [],
+      "captureCount": 0,
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.173/invocations/sweep-1YnlVe/run-q95sU7",
+      "hostLoad1m": 11.5458984375
+    },
+    "review": {
+      "exit": 0,
+      "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+      "wallS": 56.224,
+      "startedUtc": "2026-10-12T13:51:30.241Z",
+      "finalOutputMtimeUtc": "2026-10-12T13:52:26.465033Z",
+      "relatedTests": 3607,
+      "relatedTestFiles": 223,
+      "vitestWallS": 44.94,
+      "testRelatedStepS": 54.2,
+      "typecheckS": 15.6,
+      "typecheckNodeS": 5.6,
+      "lintS": 3.9,
+      "importCyclesS": 1.8,
+      "frictionRecordsS": 0.1
+    },
+    "knip": {
+      "exit": 0,
+      "command": "JOURNEY_TEST_WORKERS=2 npm run knip",
+      "wallS": 3.238,
+      "startedUtc": "2026-10-12T13:52:48.233Z",
+      "finalOutputMtimeUtc": "2026-10-12T13:52:51.470920Z",
+      "knipStepS": 1.8
+    },
+    "timingMethod": "Command starts sampled by functions orchestration; review/Knip completion is final output log mtime. Focused native step durations retained in exec transcript. Numeric evidence updates are checked with friction record schema without repeating unchanged source tests."
+  },
+  "rawReceipts": {
+    "local": "node_modules/.cache/cards61-validation/{fuzz,preflight,sweep}.log",
+    "browser": "invocations/sweep-1YnlVe/run-q95sU7/*.result.json (primary bead capture directory)",
+    "durable": "/tmp/dreamtides-executor-01a1304d/173-validation/{fuzz,preflight,sweep,review,knip}.log copied from worktree node_modules/.cache/cards61-validation after successful checks; survive worktree cache cleanup.",
+    "focused": "Original unified exec session43875 transcript retains focused check stages and 2files/111tests; no separately redirected focused raw file was produced."
+  },
+  "runtime": {
+    "browserSlot": 0,
+    "port": 5174,
+    "serverProcessGroup": 56544,
+    "runnerPid": 56481,
+    "ownerToken": "5cff24a6-9718-42dc-a04f-0984366446e8",
+    "fuzzPids": [
+      54561,
+      90078,
+      90084
+    ],
+    "cleanup": "Native sweep exited0, reports successful cleanup and portfree. At13:50Z none of owned PIDs existed and5174 had no listener. At13:51Z native slot server/owner records contained another peer token, confirming our exact token was released. The runner settles its own browser provider context/transport during cleanup; its provider handle was managed internally and was not separately sampled by this implementer.",
+    "activeOwnedRuntimes": []
+  },
+  "ownCommandErrors": [
+    {
+      "cause": "Initial redirects named missing node_modules/.cache directory",
+      "effect": "Both shell launches failed before npm/lockf started; created local receipt directory and launched successfully. Not a fixture/product failure."
+    }
+  ],
+  "preExistingIssues": [
+    "17 npm install audit vulnerabilities reported by parent before dispatch; own pre-existing record documents limited diagnostic. No gameplay issue found."
+  ]
+}

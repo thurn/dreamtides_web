@@ -1,3 +1,5 @@
+import { abandonCost, activated, self } from "../../engine/dsl/builders";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 470,
   art: { x: 0, y: -0.496, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [activated([abandonCost({ another: true })], gainSpark(self(), variant.amplified ? 2 : 1))],
+  verifiedText: "aoiy6ser83",
 });

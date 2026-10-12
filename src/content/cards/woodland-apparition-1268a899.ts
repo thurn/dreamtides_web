@@ -1,3 +1,5 @@
+import { banishFromVoidCost, energy, reclaim, staticAbility, supported } from "../../engine/dsl/builders";
+import { sparkModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 35,
   isStarter: false,
-  pending: true,
+  abilities: () => [staticAbility(sparkModifier(supported(), 2)), reclaim(energy(3), banishFromVoidCost(3))],
+  verifiedText: "29h09kvm9u5",
 });

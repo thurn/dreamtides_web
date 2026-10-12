@@ -1,3 +1,5 @@
+import { activated, banishFromVoidCost, energy, thisCardIn } from "../../engine/dsl/builders";
+import { materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,8 @@ export default card({
   cardNumber: 492,
   art: { x: 0, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([energy(2), banishFromVoidCost()], materialize(thisCardIn("void"), { awakened: variant.amplified }), { zone: "void" }),
+  ],
+  verifiedText: "25yfue7sbfd",
 });

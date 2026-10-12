@@ -1,3 +1,5 @@
+import { abandonSelfCost, activated, all, characterYouControl, keyword } from "../../engine/dsl/builders";
+import { grant } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 227,
   art: { x: 0, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    keyword("awakened"),
+    activated([abandonSelfCost()], grant(all(characterYouControl()), "awakened", "untilEndOfTurn")),
+  ],
+  verifiedText: "25rcobiytsn",
 });
