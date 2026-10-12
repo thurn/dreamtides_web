@@ -1608,7 +1608,10 @@ figment. "A character you control" includes the character with the ability,
 which triggers on its own dissolve; "another character you control" does not.
 The ability triggers only if it worked where its card was as that character
 left play, so an ability that works in play sees its own card dissolved, and
-one that works from the void does not. It triggers for the player who
+one that works from the void does not. Whether its card's triggered
+abilities were disabled, and whether a "Once per turn" ability had already
+triggered that turn, are read then too, so the character leaving play
+neither stops nor frees the ability. It triggers for the player who
 controlled its card as that character left play, among that player's
 abilities, even when its card is the dissolved character and goes to its
 owner's void. A floating or delayed trigger that existed as the character left
@@ -1645,7 +1648,10 @@ characteristics there. "A character" includes the character with the
 ability, which triggers on its own abandon. The ability triggers only if it
 worked where its card was as that character left play, so an ability that
 works in play sees its own card abandoned, with the abilities its card had
-in play, and one that works from the void does not. It triggers for the
+in play, and one that works from the void does not. Whether its card's
+triggered abilities were disabled, and whether a "Once per turn" ability had
+already triggered that turn, are read then too, so the character leaving
+play neither stops nor frees the ability. It triggers for the
 player who controlled its card as that character left play, among that
 player's abilities, even when its card is the abandoned character and goes
 to its owner's void. A floating or delayed trigger that existed as the

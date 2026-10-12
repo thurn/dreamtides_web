@@ -50,18 +50,39 @@ export interface TriggerListener {
 export type LookbackEventKind = "dissolved" | "abandoned";
 
 /**
+ * What stops a triggered ability from triggering, read at one moment: its
+ * source's triggered abilities are disabled (`disabled`), or the ability is
+ * "Once per turn" and already triggered this turn (`used`).
+ */
+export interface TriggerBlocks {
+  readonly disabled: boolean;
+  readonly used: boolean;
+}
+
+/**
+ * A card or emblem ability armed for a look-back event: its source as it
+ * was as the character left play, and what blocked the ability then, which
+ * decide whether it triggers in place of the state once the character has
+ * gone (rules § Disabled triggers, § Once per turn).
+ */
+export interface ArmedAbility {
+  readonly listener: TriggerListener;
+  readonly blocks: TriggerBlocks;
+}
+
+/**
  * The abilities a character's `leftPlay` armed for one of its look-back
  * events, each as it was then, for that event to fire (triggers/matcher.ts):
  * card and emblem abilities by source and index, with their sources as they
- * were, so a card's ability triggers for the side that controlled it then;
- * and floating and delayed triggers, in creation order, so one whose
- * duration ended as the character left play still triggers. `origin` is
- * where the character's own abilities came from as it left play, abilities
- * it gained included, which its own abilities are read from as the event
- * fires.
+ * were, so a card's ability triggers for the side that controlled it then,
+ * and with what blocked them then; and floating and delayed triggers, in
+ * creation order, so one whose duration ended as the character left play
+ * still triggers. `origin` is where the character's own abilities came from
+ * as it left play, abilities it gained included, which its own abilities
+ * are read from as the event fires.
  */
 export interface ArmedTriggers {
-  readonly abilities: ReadonlyMap<OncePerTurnKey, TriggerListener>;
+  readonly abilities: ReadonlyMap<OncePerTurnKey, ArmedAbility>;
   readonly floating: readonly FloatingEffect[];
   readonly origin: AbilityOrigin | null;
 }

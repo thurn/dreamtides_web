@@ -37,14 +37,14 @@ import type { LeftPlayEvent } from "../events/kinds/left-play";
 import type { MaterializedEvent } from "../events/kinds/materialized";
 import { conditionHolds, everyNode } from "../effects/interpreter";
 import type { EngineEvent, EngineEventKind } from "../events";
-import { instanceOrigin, oncePerTurnKey, originAbilities } from "../rules/activation";
+import { abilityOrigin, instanceOrigin, oncePerTurnKey, originAbilities } from "../rules/activation";
 import { endFloating, floatingTriggers } from "../rules/floating";
 import { materializedThisTurn, recordMaterialized } from "../rules/turn-log";
 import { charactersInPlay, isFigment } from "../rules/zones";
-import type { EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
+import type { AbilitySource, EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { opponent, SIDES, sourceInstance } from "../state/ids";
-import type { BattleState, FloatingEffect, MaterializedCard, QueuedTrigger, SparkGain } from "../state/types";
-import type { ArmedTriggers, LookbackEventKind, StepContext, TriggerListener } from "../steps/types";
+import type { BattleState, FloatingEffect, GainedAbilities, MaterializedCard, QueuedTrigger, SparkGain } from "../state/types";
+import type { ArmedAbility, ArmedTriggers, LookbackEventKind, StepContext, TriggerBlocks, TriggerListener } from "../steps/types";
 import { sidesBlindTo } from "../view/knowledge";
 import { triggerBody } from "./body";
 
@@ -420,10 +420,41 @@ function triggersDisabled(state: BattleState, catalog: EngineCatalog, id: Instan
   );
 }
 
+/** What blocks ability `index` of `source` from triggering now. */
+function triggerBlocks(state: BattleState, catalog: EngineCatalog, source: AbilitySource, index: number): TriggerBlocks {
+  const self = sourceInstance(source);
+  return {
+    disabled: self !== null && triggersDisabled(state, catalog, self),
+    used: state.oncePerTurn.includes(oncePerTurnKey(source, index)),
+  };
+}
+
+function sameGained(a: readonly GainedAbilities[], b: readonly GainedAbilities[]): boolean {
+  return a.length === b.length && a.every((gained, at) => gained.cardId === b[at]?.cardId && gained.variant === b[at]?.variant);
+}
+
+/**
+ * Whether ability `index` of a listener armed for a look-back event is past
+ * its card's own abilities while the abilities the card gained have changed
+ * since it was armed: as a gained ability ends, the once-per-turn records
+ * past the card's own are dropped (rules/floating.ts), so a use recorded now
+ * would limit an ability the card gains later at that index (rules § Gaining
+ * abilities).
+ */
+function gainedRecordsDropped(state: BattleState, catalog: EngineCatalog, listener: Listener, index: number): boolean {
+  const { origin } = listener;
+  if (origin.kind !== "card" || index < catalog.card(origin.cardId).abilities(origin.variant).length) return false;
+  const now = abilityOrigin(state, listener.source);
+  return now?.kind !== "card" || !sameGained(now.gained ?? [], origin.gained ?? []);
+}
+
 /**
  * Queues `ability` (index `index`) of `listener` if nothing stops it: a
  * disabled source, a once-per-turn ability that already triggered this
- * turn, or an intervening "if" that does not hold.
+ * turn, or an intervening "if" that does not hold. An ability armed for a
+ * look-back event reads the first two as they were as its character left
+ * play (`armed`), and records its once-per-turn use unless its card's
+ * records past its own abilities were dropped since.
  */
 function enqueueAbility(
   ctx: StepContext,
@@ -431,15 +462,16 @@ function enqueueAbility(
   ability: TriggeredAbility,
   index: number,
   match: Match,
+  armed: TriggerBlocks | null = null,
 ): void {
   const { state, catalog } = ctx;
-  const self = sourceInstance(listener.source);
-  if (self !== null && triggersDisabled(state, catalog, self)) return;
-  const key = oncePerTurnKey(listener.source, index);
-  if (ability.oncePerTurn === true && state.oncePerTurn.includes(key)) return;
+  const { disabled, used } = armed ?? triggerBlocks(state, catalog, listener.source, index);
+  if (disabled || (ability.oncePerTurn === true && used)) return;
   const scope = { controller: listener.controller, source: listener.source, optionalPaid: [] };
   if (ability.condition !== undefined && !conditionHolds(state, catalog, ability.condition, scope)) return;
-  if (ability.oncePerTurn === true) state.oncePerTurn.push(key);
+  if (ability.oncePerTurn === true && (armed === null || !gainedRecordsDropped(state, catalog, listener, index))) {
+    state.oncePerTurn.push(oncePerTurnKey(listener.source, index));
+  }
   enqueue(ctx, { source: listener.source, controller: listener.controller, origin: listener.origin, ability: index, node: null, ...match });
 }
 
@@ -492,16 +524,16 @@ function matchListener(ctx: StepContext, side: Side, listener: Listener, event: 
   const departed = departing && armed.origin !== null ? { ...listener, origin: armed.origin } : listener;
   originAbilities(ctx.catalog, departed.origin).forEach((ability, index) => {
     if (ability.kind !== "triggered") return;
-    const armedListener = armed.abilities.get(oncePerTurnKey(listener.source, index));
-    const matching = armedListener ?? (
+    const armedAbility = armed.abilities.get(oncePerTurnKey(listener.source, index));
+    const matching = armedAbility?.listener ?? (
       dissolving && hasNamed(ability.trigger, "dissolved")
         ? { ...departed, controller: event.side }
         : listener
     );
     if (matching.controller !== side) return;
     const inZone = matching.emblem || worksInZone(ability.zone, matching.zone);
-    const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, armedListener !== undefined);
-    if (match !== null) enqueueAbility(ctx, matching, ability, index, match);
+    const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, armedAbility !== undefined);
+    if (match !== null) enqueueAbility(ctx, matching, ability, index, match, armedAbility?.blocks ?? null);
   });
 }
 
@@ -587,9 +619,10 @@ function armsFor(state: BattleState, catalog: EngineCatalog, kind: LookbackEvent
  * that works where its card is and matches the character as it is now,
  * still in play: its controller, types, and whether it is a figment. The
  * departing character's own abilities are among them. Each record keeps
- * each armed ability as it is now, its source's controller and the floating
- * trigger itself included, and where the character's own abilities come
- * from as it leaves, and waits on the step's context for its event; a
+ * each armed ability as it is now, its source's controller, what blocks it
+ * now (disabled triggers, a once-per-turn use), and the floating trigger
+ * itself included, and where the character's own abilities come from as it
+ * leaves, and waits on the step's context for its event; a
  * departure that turns out not to announce that event leaves it unused
  * until the character leaves play again.
  */
@@ -602,13 +635,14 @@ function armLookbacks(ctx: StepContext, event: LeftPlayEvent, departing: Departu
   const { state, catalog } = ctx;
   const leaving = state.instances[event.instance];
   const origin = leaving === undefined ? null : instanceOrigin(leaving);
-  const armed = kinds.map((kind) => ({ kind, abilities: new Map<OncePerTurnKey, Listener>(), floating: [] as FloatingEffect[] }));
+  const armed = kinds.map((kind) => ({ kind, abilities: new Map<OncePerTurnKey, ArmedAbility>(), floating: [] as FloatingEffect[] }));
   for (const side of SIDES) {
     for (const listener of listeners(state, side, departing)) {
       originAbilities(catalog, listener.origin).forEach((ability, index) => {
         if (ability.kind !== "triggered" || !(listener.emblem || worksInZone(ability.zone, listener.zone))) return;
         for (const entry of armed) {
-          if (armsFor(state, catalog, entry.kind, ability.trigger, event.instance, listener)) entry.abilities.set(oncePerTurnKey(listener.source, index), listener);
+          if (!armsFor(state, catalog, entry.kind, ability.trigger, event.instance, listener)) continue;
+          entry.abilities.set(oncePerTurnKey(listener.source, index), { listener, blocks: triggerBlocks(state, catalog, listener.source, index) });
         }
       });
     }

@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.534",
+  "base": "0ff2a36fb",
+  "implementationWindow": {
+    "start": "2026-10-12T11:20:00Z",
+    "end": "2026-10-12T11:30:00Z",
+    "scope": "Subagent dispatch (start approximate: the first recorded timestamp, 11:22:11Z, followed about two minutes of reading) through the final precommit; includes research, mutation checks, the fuzz smoke and verification."
+  },
+  "commands": {
+    "review": { "command": ["npm", "run", "review"], "wallS": 47, "start": "2026-10-12T11:27:10Z", "exit": 0, "tests": 4093, "note": "an earlier run at 11:26:09Z (47 s) failed lint on four unnecessary non-null assertions in the new contracts, fixed before this run" },
+    "knip": { "command": ["npm", "run", "knip"], "wallS": 3, "start": "2026-10-12T11:25:44Z", "exit": 0 },
+    "focused": { "command": ["npx", "vitest", "run", "src/engine/effects/primitives/contracts.test.ts", "src/engine/triggers"], "wallS": 6, "exit": 0, "tests": 1624 },
+    "fuzz": {
+      "command": ["lockf", "-k", "/Users/dthurn/dreamtides_web/artifacts/heavy.lock", "npm", "run", "fuzz:engine", "--", "--games", "200"],
+      "wallS": 87, "lockWaitS": 42, "start": "2026-10-12T11:25:15Z", "exit": 0,
+      "summary": "200 games, 99578 steps, 85.5 s fuzz wall, failures 0; ran on the final engine code (only test-file lint fixes followed)"
+    }
+  },
+  "hostLoadSamples": { "fuzzStart": 5.47, "fuzzLockAcquired": 7.39, "knip": 5.93, "firstReview": 6.70, "finalReview": 7.08 },
+  "schemaNormalization": { "fields": { "hostLoad": { "measuredFor": "final npm run review start (1-minute vm.loadavg)" } } },
+  "mutations": [
+    { "change": "pre-bead matcher and ArmedTriggers (blocks read at the look-back event, use always recorded)", "contractsFailed": 6, "contractsTotal": 6 },
+    { "change": "once-per-turn use read at the event, disabled as armed", "contractsFailed": 2, "failed": ["abandon used gained once-per-turn", "dissolve used gained once-per-turn"] },
+    { "change": "disabled read at the event, use as armed", "contractsFailed": 2, "failed": ["abandon suppression", "dissolve suppression"] },
+    { "change": "disabled if disabled as armed or at the event (kills the condition-made-true half)", "contractsFailed": 2, "failed": ["abandon suppression", "dissolve suppression"] },
+    { "change": "always record an armed once-per-turn use", "contractsFailed": 2, "failed": ["abandon unused gained + regain", "dissolve unused gained + regain"] },
+    { "change": "never record an armed once-per-turn use", "contractsFailed": 2, "failed": ["abandon used gained once-per-turn", "dissolve used gained once-per-turn"] }
+  ]
+}

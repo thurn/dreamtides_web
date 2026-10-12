@@ -1,0 +1,3 @@
+# Pre-existing issues found by hv-umm2.534
+
+- A departed card's own named ▸Dissolved ability (`on: "dissolved"`) is not armed: `matchListener` reads it from the departed origin but `enqueueAbility` checks disabled triggers and its once-per-turn record at the `dissolved` event, after the card left play. A character whose triggers are disabled only while it is in play therefore still fires its ▸Dissolved ability, and a gained once-per-turn ▸Dissolved ability is checked and recorded against records dropped as its gains ended. This bead kept that non-armed path unchanged; whether ▸Dissolved should read these as of just before the dissolve (as the look-back abilities now do, RD-hv-umm2.534-1) is a separate rules decision.

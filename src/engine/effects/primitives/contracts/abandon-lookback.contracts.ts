@@ -8,7 +8,7 @@
  */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
-import { abandonCost, activated, all, characterYouControl, energy, event, fromVoid, self, stackItem, staticAbility, target } from "../../../dsl/builders";
+import { abandonCost, activated, all, characterYouControl, energy, event, fromVoid, keyword, self, stackItem, staticAbility, target } from "../../../dsl/builders";
 import { onMaterialized, triggered, whenAbandon, whileSourceInPlay } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
@@ -29,6 +29,7 @@ import { passUntil } from "../../../testing/trigger-harness";
 import { resolveEffect } from "../../interpreter";
 import { abandon } from "../abandon";
 import { banishCards } from "../banish-cards";
+import { disableTriggers } from "../disable-triggers";
 import { draw } from "../draw";
 import { floating } from "../floating-trigger";
 import { gainAbilities } from "../gain-abilities";
@@ -77,6 +78,14 @@ const A = {
   returner: card(12, "event", () => [event(returnToHand(target(characterYouControl())))]),
   /** "▸Materialized: While this character is in play, when you abandon a character, gain 1⍟." */
   floater: card(13, "character", () => [triggered(onMaterialized(), floating(whenAbandon(), gainPoints(1), whileSourceInPlay()))]),
+  /** "Once per turn, when you abandon a character, gain 1⍟." */
+  onceWatcher: card(15, "character", () => [triggered(whenAbandon(), gainPoints(1), { oncePerTurn: true })]),
+  /** "Reclaim. 0●: Banish a character from the opponent's void. This character gains its abilities." */
+  reclaimCollector: card(16, "character", () => [keyword("reclaim"), activated([energy(0)], gainAbilities(banishCards([fromVoid({ cardType: "character" }, { player: "opponent" })])))]),
+  /** "▸Materialized: This character's triggered abilities don't trigger while it is in play. When you abandon a character, gain 1⍟." */
+  hermit: card(17, "character", () => [triggered(onMaterialized(), disableTriggers(self(), whileSourceInPlay())), triggered(whenAbandon(), gainPoints(1))]),
+  /** "Until end of turn, a character you control's triggered abilities don't trigger while you control no characters." */
+  hush: card(18, "event", () => [event(disableTriggers(target(characterYouControl()), "untilEndOfTurn", { cond: "controls", selector: characterYouControl(), atLeast: 0, atMost: 0 }))]),
   /** Abandons the player's first back-rank character as it resolves, then fails. */
   failing: card(14, "event", () => [], {
     synthetic: {
@@ -189,6 +198,60 @@ describe("abandon look-back", () => {
     const lost = act(replayed, "player", play(again));
     expect(lost.events.some((entry) => entry.kind === "abandoned" && entry.instance === collector)).toBe(true);
     expect(queued(lost.events)).toEqual([]);
+  });
+
+  it("does not trigger a gained once-per-turn ability already used this turn again on its own card's abandon", () => {
+    const { state, ids } = setup({ back: [A.collector.id, v.vanilla1.id], hand: [A.cull.id, A.cull.id] }, { void: [A.onceWatcher.id] });
+    const [collector, vanilla] = ids.player.back;
+    const [first, second] = ids.player.hand;
+    const collected = act(state, "player", activate(collector)).state;
+    const used = act(collected, "player", play(first), [[vanilla!]]);
+    expect(queued(used.events)).toEqual([{ source: collector, subject: vanilla }]);
+    const own = act(used.state, "player", play(second));
+    expect(own.events.some((entry) => entry.kind === "abandoned" && entry.instance === collector)).toBe(true);
+    expect(queued(own.events)).toEqual([]);
+    expect(own.state.sides.player.score).toBe(1);
+  });
+
+  it("triggers an unused gained once-per-turn ability on its own card's abandon without limiting one it gains after returning that turn", () => {
+    const { state, ids } = setup({ back: [A.reclaimCollector.id, v.vanilla1.id], hand: [A.cull.id, A.cull.id] }, { void: [A.onceWatcher.id, A.onceWatcher.id] });
+    const [collector, vanilla] = ids.player.back;
+    const [first, second] = ids.player.hand;
+    const [watcher, again] = ids.enemy.void;
+    const collected = act(state, "player", activate(collector, 1), [[watcher]]).state;
+    const own = act(collected, "player", play(first), [[collector!]]);
+    expect(queued(own.events)).toEqual([{ source: collector, subject: collector }]);
+    expect(own.state.sides.player.score).toBe(1);
+    const returned = act(own.state, "player", { kind: "play", card: collector!, from: "void" }).state;
+    const regained = act(returned, "player", activate(collector, 1)).state;
+    expect(regained.instances[collector!]?.status.gainedAbilities).toHaveLength(1);
+    expect(regained.instances[again]?.zone).toBe("banished");
+    const later = act(regained, "player", play(second), [[vanilla!]]);
+    expect(queued(later.events)).toEqual([{ source: collector, subject: vanilla }]);
+    expect(later.state.sides.player.score).toBe(2);
+  });
+
+  it("reads trigger suppression as of just before the character left play", () => {
+    // Disabled only while it is in play: suppressed for another's abandon and for its own.
+    const hermit = setup({ back: [v.vanilla1.id], hand: [A.hermit.id, A.cull.id, A.cull.id] });
+    const [hermitCard, first, second] = hermit.ids.player.hand;
+    const materialized = act(hermit.state, "player", play(hermitCard)).state;
+    const other = act(materialized, "player", play(first), [[hermit.ids.player.back[0]!]]);
+    expect(queued(other.events)).toEqual([]);
+    const own = act(other.state, "player", play(second));
+    expect(own.events.some((entry) => entry.kind === "abandoned" && entry.instance === hermitCard)).toBe(true);
+    expect(queued(own.events)).toEqual([]);
+    expect(own.state.sides.player.score).toBe(0);
+
+    // Disabled only once its side controls no characters, which its own abandon makes true: it still triggers.
+    const hushed = setup({ back: [A.watcher.id], hand: [A.hush.id, A.cull.id] });
+    const watcher = hushed.ids.player.back[0]!;
+    const [hush, cull] = hushed.ids.player.hand;
+    const quiet = act(hushed.state, "player", play(hush));
+    expect(quiet.state.floating.map((effect) => effect.change.kind)).toEqual(["disableTriggers"]);
+    const abandoned = act(quiet.state, "player", play(cull));
+    expect(queued(abandoned.events)).toEqual([{ source: watcher, subject: watcher }]);
+    expect(abandoned.state.sides.player.score).toBe(1);
   });
 
   it("triggers only for the side that abandons, and a stolen character's own ability for the side that controlled it", () => {

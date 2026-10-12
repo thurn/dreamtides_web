@@ -909,6 +909,7 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
 - **Once per turn** is keyed by source key and ability index
   (`OncePerTurnKey`, which covers emblems), and cleared as each turn begins;
   the records of a character's gained abilities are also dropped as they end.
+  A look-back ability reads its record as it was armed (below).
 - **Floating triggers** (`floating`) are "until end of turn, when…".
   **Delayed triggers** (`delayed`) are one-shot "the next time…" floating
   triggers with `once: true`. Both are `floatingTrigger` nodes, and their
@@ -919,7 +920,8 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
 - **`triggerAbility`** enqueues a named trigger outside its occasion
   (`triggerNamed`).
 - **Disabled triggers** (`disableTriggers`, optionally while a condition
-  holds) suppress matching.
+  holds) suppress matching; a look-back ability reads them as it was armed
+  (below).
 - **Additional spark** (C17, rules § Spark → Additional spark): `gainSpark`
   emits `sparkGained` with the gain's amount, its expiry (`never` for a
   permanent gain), and `additional: false`. The `gainsSpark` trigger
@@ -945,7 +947,14 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   ability keeps its listener as armed: it triggers for the side that
   controlled its card as the character left play (RD-hv-umm2.333-1), and an
   armed floating trigger fires even when its duration ended as the
-  character left play. A departure
+  character left play. Each armed card or emblem ability also keeps what
+  blocked it then (`TriggerBlocks`: its source's triggers disabled, a
+  once-per-turn use this turn), which `enqueueAbility` reads in place of
+  the state at the event, so effects that end or conditions that change as
+  the character leaves play neither stop nor free it. A once-per-turn use
+  it triggers is recorded unless the records past its card's own abilities
+  were dropped since it was armed, as the card's gained abilities ended, so
+  the use never limits an ability the card gains later. A departure
   with no `dissolved` (a banish, a return to hand, a figment ceasing to
   exist undissolved) triggers nothing. The armed abilities wait on the
   step's context (`StepContext.armedTriggers`), never in battle state:
