@@ -1,3 +1,5 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import { cardsIn, grantCardKeyword } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +16,6 @@ export default dreamsign({
     "e1620ab4-7e68-4a57-a6eb-d7a3380c4dc5",
   ],
   tags: ["J11", "Tag OK"],
-  pending: true,
+  abilities: () => [staticAbility(grantCardKeyword(cardsIn("void", { cardType: "character", costAtLeast: 3 }), "reclaim"))],
+  verifiedText: "ab0i1vk7qy",
 });

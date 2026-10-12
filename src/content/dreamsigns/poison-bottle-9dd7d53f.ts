@@ -1,3 +1,5 @@
+import { triggered, whenReturn } from "../../engine/dsl/triggers";
+import { gainEnergy } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -9,5 +11,7 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["1864823a-8d44-4bad-8bc0-bf2360eac68a"],
   tags: ["J12", "Tag OK"],
-  pending: true,
+  // "You return" follows the character's controller (RD-hv-umm2.102-1), by any effect or cost.
+  abilities: () => [triggered(whenReturn(), gainEnergy(2))],
+  verifiedText: "1doxbtamh2q",
 });

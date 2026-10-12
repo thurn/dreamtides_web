@@ -1,3 +1,6 @@
+import { randomIn } from "../../engine/dsl/builders";
+import { triggered, untilEndOfTurn, whenYouPlay } from "../../engine/dsl/triggers";
+import { grantReclaim } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,6 @@ export default dreamsign({
     "ab89d262-45d4-438d-8670-79d91f6e944f",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "event" }), grantReclaim(randomIn("void", 1, { cardType: "event" }), { duration: untilEndOfTurn() }))],
+  verifiedText: "c7bojt6oo4",
 });

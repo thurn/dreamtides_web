@@ -1,0 +1,42 @@
+{
+  "bead": "hv-umm2.242",
+  "phase": 5,
+  "implementMin": 52.314366166666666,
+  "implementWindow": {
+    "start": "2026-10-12T22:11:12.152Z",
+    "end": "2026-10-12T23:03:31.013970+00:00"
+  },
+  "localValidationS": {
+    "focused": 10.259259939193726,
+    "populated": 1.0639159679412842,
+    "populated-diagnostic": 0.7483060359954834,
+    "populated-corrected": 0.7950839996337891,
+    "populated-final": 0.8713870048522949,
+    "review": 50.24745011329651,
+    "knip": 3.693284273147583,
+    "fuzz": 204.1806399822235,
+    "preflight": 1.2624540328979492,
+    "schema-before-qa": 0.11874794960021973,
+    "friction-before-qa": 0.21834301948547363,
+    "sweep": 51.46932315826416,
+    "browser": 56.387221813201904,
+    "browser-repaired": 24.79880976676941,
+    "browser-focused": 43.14138388633728,
+    "browser-final": 435.3245339393616,
+    "schema-evidence": 0.15783214569091797,
+    "friction-evidence": 0.22923994064331055
+  },
+  "hostLoad": 18.04345703125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 14.113189866666666,
+      "note": "Two own source-free native-script failures at the void interaction boundary (wrong owner selector, then unverified chooser expectation) were retained. Parent invoked justiciar, read actual presentation and void-browser contracts, and repaired only the ignored QA artifact. Includes diagnosis, coordination wait and focused recovery through observed actual Reclaim. All app source remained unchanged; no failed aggregate was relabeled pass."
+    }
+  ]
+}

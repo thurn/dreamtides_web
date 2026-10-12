@@ -1,3 +1,5 @@
+import { either, triggered, triggeringCard, whenAbandon, whenDiscard } from "../../engine/dsl/triggers";
+import { grantReclaim } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +17,6 @@ export default dreamsign({
     "ee5e7dd2-0c11-4349-94e1-ec1ae35b20af",
   ],
   tags: ["J11", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(either(whenAbandon("you", { cardType: "character" }), whenDiscard("you", { cardType: "character" })), grantReclaim(triggeringCard()), { oncePerTurn: true })],
+  verifiedText: "nmetws9vhy",
 });
