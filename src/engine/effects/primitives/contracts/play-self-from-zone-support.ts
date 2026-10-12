@@ -2,7 +2,7 @@
 import { expect } from "vitest";
 import { printedCardId, type EngineCardDefinition } from "../../../catalog";
 import { createEngine } from "../../../engine";
-import { additionalCost, banishFromVoidCost, energy, reclaim, staticAbility } from "../../../dsl/builders";
+import { additionalCost, banishFromVoidCost, energy, event, reclaim, stackItem, staticAbility } from "../../../dsl/builders";
 import type { ChooseModePrompt } from "../../../prompts/types";
 import type { Action } from "../../../rules/actions";
 import { instanceOf } from "../../../rules/zones";
@@ -14,6 +14,7 @@ import { syntheticId } from "../../../testing/synthetic-cards";
 import { passUntil } from "../../../testing/trigger-harness";
 import { zoneCatalog } from "../../../testing/zone-cards";
 import { playSelfFromZone } from "../play-from-zone";
+import { prevent } from "../prevent";
 import { v } from "./cards-support";
 import { Answering, filler, PERMIT } from "./play-from-zone-support";
 
@@ -52,7 +53,19 @@ export const SELF = {
   }),
 } as const satisfies Record<string, EngineCardDefinition>;
 
-export const engine = createEngine(zoneCatalog([...Object.values(PERMIT), ...Object.values(SELF)]));
+/** ❖❖ "Prevent a card the opponent played." Its prevented card goes to its owner's void. */
+export const PREVENTER: EngineCardDefinition = {
+  id: syntheticId(0x7c4e),
+  cardType: "event",
+  costs: [energy(1)],
+  spark: null,
+  subtype: "",
+  speed: "interrupt",
+  status: "authored",
+  abilities: () => [event(prevent(stackItem({ controller: "opponent" })))],
+};
+
+export const engine = createEngine(zoneCatalog([...Object.values(PERMIT), ...Object.values(SELF), PREVENTER]));
 
 /** Void cards that can pay the banish. */
 export const payers = (count: number) => Array.from({ length: count }, () => v.vanilla1.id);

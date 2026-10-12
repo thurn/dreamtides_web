@@ -12,7 +12,7 @@ import { zoneCatalog } from "../../../testing/zone-cards";
 import { playFromZone } from "../play-from-zone";
 import { v } from "./cards-support";
 import { activate, Answering, filler, fromVoid, PERMIT, zoneOf } from "./play-from-zone-support";
-import { act, BANISH, engine, payers, placed, resolveStack, SELF, voidPlays } from "./play-self-from-zone-support";
+import { act, BANISH, engine, payers, placed, PREVENTER, resolveStack, SELF, voidPlays } from "./play-self-from-zone-support";
 
 describe("playSelfFromZone", () => {
   it("lets its source alone be played from the void it owns, for its normal and additional costs, never banishing itself to pay", () => {
@@ -90,6 +90,23 @@ describe("playSelfFromZone", () => {
     expect(voidPlays(played, "enemy")).toEqual([]);
     expect(voidPlays(played, "player")).toEqual([]);
     expect(zoneOf(resolveStack(played), abomination)).toBe("play");
+  });
+
+  it("goes to the void unreclaimed when an opponent's interrupt prevents it, and is playable from there again", () => {
+    const { state, ids } = placed({ void: [SELF.abomination.id, ...payers(2 * BANISH)], energy: 5 }, { hand: [PREVENTER.id], energy: 5 });
+    const [abomination] = ids.player.void;
+    const played = act(state, "player", fromVoid(abomination)).state;
+    const interrupted = act(played, "enemy", { kind: "play", card: ids.enemy.hand[0], from: "hand" }, new Answering(() => [abomination])).state;
+    const prevented = resolveStack(interrupted);
+    expect(prevented.stack).toEqual([]);
+    expect(zoneOf(prevented, abomination)).toBe("void");
+    expect(prevented.sides.player.banished).toHaveLength(BANISH);
+    expect(prevented.instances[abomination]?.status).toMatchObject({ reclaimed: false, playedViaReclaim: false });
+    expect(voidPlays(prevented)).toEqual([abomination]);
+    const replayed = act(prevented, "player", fromVoid(abomination));
+    expect(replayed.state.sides.player.banished).toHaveLength(2 * BANISH);
+    expect(replayed.state.sides.player.banished).not.toContain(abomination);
+    expect(zoneOf(resolveStack(replayed.state), abomination)).toBe("play");
   });
 
   it("is a lasting permission: a one-play permission covering the card is not used up, and Reclaim stays a second route", () => {
