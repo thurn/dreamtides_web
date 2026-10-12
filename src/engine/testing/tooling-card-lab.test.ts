@@ -15,6 +15,7 @@ import {
   choiceCost,
   countCards,
   enemyCharacter,
+  characterYouControl,
   energy,
   energyX,
   event,
@@ -80,6 +81,60 @@ function dissolvesStagedEnemy(labEngine: Engine, card: EngineCardDefinition, poo
 }
 
 describe("card-lab setup solver", () => {
+  it.each(["player", "enemy"] as const)("stages one satisfiable alternative with common X and that branch’s counts as %s", (side) => {
+    const decoy: EngineCardDefinition = { ...SYNTHETIC.vanilla5, id: syntheticId(0x55620), subtype: "Mage", costs: [energy(1)] };
+    const valid: EngineCardDefinition = { ...SYNTHETIC.vanilla3, id: syntheticId(0x55621), subtype: "Mage", costs: [energy(5)] };
+    const card: EngineCardDefinition = { ...SYNTHETIC.event0, id: syntheticId(0x55622), status: "authored", costs: [energyX(0)],
+      abilities: () => [event(dissolve(target(enemyCharacter({ subtype: "Mage", sparkAtLeast: 3, sparkAtMost: x(), costAtMost: countCards("hand"), anyOf: [
+        { sparkAtMost: 0, costAtMost: countCards("void") }, { costAtLeast: x(), sparkAtMost: countCards("void") },
+      ] }))))] };
+    const labEngine = createEngine(testCatalog([decoy, valid, card]));
+    const { state } = labBoard(labEngine, card.id, [decoy, valid], side);
+    const other = side === "player" ? "enemy" : "player";
+    const staged = state.sides[other].backRank.filter((id): id is InstanceId => id !== null);
+    expect(staged).toHaveLength(1);
+    expect(state.instances[staged[0]].printing).toEqual({ kind: "card", cardId: valid.id });
+    expect(state.sides[side].void).toHaveLength(3);
+    expect(state.sides[side].hand.length).toBeGreaterThanOrEqual(copiableCostOf(state, labEngine.catalog, staged[0]));
+    const action = labEngine.legalActions(state, side).find(a => a.kind === "play");
+    if (action === undefined) throw new Error("Missing staged play");
+    const played = labEngine.apply(state, side, action, { answer(prompt) {
+      if (prompt.kind === "chooseNumber") return 3;
+      if (prompt.kind === "chooseTargets") return [staged[0]];
+      throw new Error(`Unexpected ${prompt.kind}`);
+    } });
+    const resolved = passUntil(labEngine, played.state, next => next.stack.length === 0).state;
+    expect(resolved.instances[staged[0]].zone).toBe("void");
+    expect(invariantViolations(resolved, labEngine.catalog)).toEqual([]);
+  });
+
+  it.each(["player", "enemy"] as const)("normalizes a source-spark bound in a Materialized alternative as %s", (side) => {
+    const highMage: EngineCardDefinition = { ...SYNTHETIC.vanilla5, id: syntheticId(0x55624), subtype: "Mage" };
+    const lowMage: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(0x55625), subtype: "Mage" };
+    const card: EngineCardDefinition = { ...SYNTHETIC.vanilla3, id: syntheticId(0x55623), status: "authored",
+      abilities: () => [triggered(onMaterialized(), dissolve(target(characterYouControl({ subtype: "Mage", anyOf: [
+        { sparkAtLeast: 4, sparkAtMost: { value: "sourceSpark" } }, { sparkAtLeast: 2, sparkAtMost: { value: "sourceSpark" } },
+      ] }))))] };
+    const labEngine = createEngine(testCatalog([card, highMage, lowMage]));
+    const { state } = labBoard(labEngine, card.id, [highMage, lowMage], side);
+    const other = side;
+    const staged = state.sides[other].backRank.filter((id): id is InstanceId => id !== null);
+    expect(staged).toHaveLength(1);
+    expect(effectiveSpark(state, labEngine.catalog, staged[0])).toBeGreaterThanOrEqual(2);
+    expect(effectiveSpark(state, labEngine.catalog, staged[0])).toBeLessThanOrEqual(3);
+    const action = labEngine.legalActions(state, side).find(a => a.kind === "play");
+    if (action === undefined) throw new Error("Missing staged play");
+    const played = labEngine.apply(state, side, action, { answer(prompt) {
+      if (prompt.kind === "chooseTargets") return [staged[0]];
+      throw new Error(`Unexpected ${prompt.kind}`);
+    } });
+    const resolved = passUntil(labEngine, played.state, next => next.stack.length === 0, { answer(prompt) {
+      if (prompt.kind === "chooseTargets") return [staged[0]];
+      throw new Error(`Unexpected ${prompt.kind}`);
+    } }).state;
+    expect(resolved.instances[staged[0]].zone).toBe("void");
+  });
+
   it.each(["player", "enemy"] as const)("returns a Materialized stack opener usable by the real card-lab caller as %s", (side) => {
     const other = side === "player" ? "enemy" : "player";
     for (const controller of ["any", "opponent"] as const) for (const cardType of [undefined, "character", "event"] as const) for (const route of [0, 1]) {

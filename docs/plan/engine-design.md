@@ -1529,6 +1529,15 @@ through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
   and knows again a place a later removal determines (RD-hv-umm2.83-1).
 - `thisCardIn(zone)`: the source while it is in its controller's zone.
 
+Character selectors combine their outer predicates with an optional `anyOf`
+list of nonrecursive leaf predicates. Every outer predicate applies and at
+least one leaf must match; an empty list matches nobody. Leaves share the
+outer controller, read the same effective characteristics and bound bindings,
+and produce one physical candidate per character in the existing board order.
+Static-condition leaves retain public bound restrictions. The lab solver
+chooses one satisfiable leaf together with the outer predicates and a common
+X interval, then stages only those predicates’ count requirements.
+
 Filters read current characteristics and the copiable cost
 (`cardMatchesFilter`; `matchesFilter` in `continuous/characteristics.ts` is
 the one predicate every filter user calls, a played card's turn-log record

@@ -139,34 +139,37 @@ export function matchesCharacterWith(
   if (instance?.zone !== "play") return false;
   if (selector.controller === "you" && instance.controller !== controller) return false;
   if (selector.controller === "opponent" && instance.controller === controller) return false;
-  if (selector.another === true && id === source) return false;
   const bound = (value: BoundValue): number => boundOf(state, catalog, read, value, controller, source, selectorX, sourceSpark);
-  if (selector.subtype !== undefined || selector.notSubtype !== undefined || selector.sparkAtMost !== undefined || selector.sparkAtLeast !== undefined) {
-    const card = read(id);
-    if (selector.subtype !== undefined && !card.allTypes && card.subtype !== selector.subtype) return false;
-    // A character with all character types is of every type, the excluded one included.
-    if (selector.notSubtype !== undefined && (card.allTypes || card.subtype === selector.notSubtype)) return false;
-    // Spark is clamped at 0 for comparisons.
-    const spark = card.spark ?? 0;
-    if (selector.sparkAtMost !== undefined && spark > bound(selector.sparkAtMost)) return false;
-    if (selector.sparkAtLeast !== undefined && spark < bound(selector.sparkAtLeast)) return false;
-  }
-  if (selector.costAtMost !== undefined || selector.costAtLeast !== undefined) {
-    const cost = copiableCostOf(state, catalog, id);
-    if (selector.costAtMost !== undefined && cost > bound(selector.costAtMost)) return false;
-    if (selector.costAtLeast !== undefined && cost < bound(selector.costAtLeast)) return false;
-  }
-  // A figment copy is a figment (rules § Figments → Figment Copies).
-  if (selector.figment !== undefined && (instance.printing.kind !== "card") !== selector.figment) return false;
-  if (selector.exhausted !== undefined && instance.status.exhausted !== selector.exhausted) return false;
-  if (selector.rank !== undefined && slotOf(state, id)?.rank !== selector.rank) return false;
-  // Roles are the pairs the Challenge phase resolves (rules § Challengers, Blockers, and Scoring → Holding a role).
-  if (selector.challenging !== undefined || selector.blocking !== undefined) {
-    const role = challengeRoleOf(state, id);
-    if (selector.challenging !== undefined && (role === "challenger") !== selector.challenging) return false;
-    if (selector.blocking !== undefined && (role === "blocker") !== selector.blocking) return false;
-  }
-  return true;
+  const matchesLeaf = (predicate: Omit<CharacterSelector, "controller" | "anyOf">): boolean => {
+    if (predicate.another === true && id === source) return false;
+    if (predicate.subtype !== undefined || predicate.notSubtype !== undefined || predicate.sparkAtMost !== undefined || predicate.sparkAtLeast !== undefined) {
+      const card = read(id);
+      if (predicate.subtype !== undefined && !card.allTypes && card.subtype !== predicate.subtype) return false;
+      // A character with all character types is of every type, the excluded one included.
+      if (predicate.notSubtype !== undefined && (card.allTypes || card.subtype === predicate.notSubtype)) return false;
+      // Spark is clamped at 0 for comparisons.
+      const spark = card.spark ?? 0;
+      if (predicate.sparkAtMost !== undefined && spark > bound(predicate.sparkAtMost)) return false;
+      if (predicate.sparkAtLeast !== undefined && spark < bound(predicate.sparkAtLeast)) return false;
+    }
+    if (predicate.costAtMost !== undefined || predicate.costAtLeast !== undefined) {
+      const cost = copiableCostOf(state, catalog, id);
+      if (predicate.costAtMost !== undefined && cost > bound(predicate.costAtMost)) return false;
+      if (predicate.costAtLeast !== undefined && cost < bound(predicate.costAtLeast)) return false;
+    }
+    // A figment copy is a figment (rules § Figments → Figment Copies).
+    if (predicate.figment !== undefined && (instance.printing.kind !== "card") !== predicate.figment) return false;
+    if (predicate.exhausted !== undefined && instance.status.exhausted !== predicate.exhausted) return false;
+    if (predicate.rank !== undefined && slotOf(state, id)?.rank !== predicate.rank) return false;
+    // Roles are the pairs the Challenge phase resolves (rules § Challengers, Blockers, and Scoring → Holding a role).
+    if (predicate.challenging !== undefined || predicate.blocking !== undefined) {
+      const role = challengeRoleOf(state, id);
+      if (predicate.challenging !== undefined && (role === "challenger") !== predicate.challenging) return false;
+      if (predicate.blocking !== undefined && (role === "blocker") !== predicate.blocking) return false;
+    }
+    return true;
+  };
+  return matchesLeaf(selector) && (selector.anyOf === undefined || selector.anyOf.some(matchesLeaf));
 }
 
 /** Every matching character in play, in the fixed order: the controller's side first, B0→B9 then F0→F8. */

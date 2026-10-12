@@ -98,6 +98,8 @@ export type BoundValue = number | XValue | CardCountValue | SourceSparkValue;
  */
 export interface CharacterSelector {
   readonly controller: "you" | "opponent" | "any";
+  /** Every outer predicate applies, plus at least one leaf; an empty list matches nobody. */
+  readonly anyOf?: readonly CharacterPredicate[];
   /** Only characters of this type; a character with all character types matches every type. */
   readonly subtype?: CardSubtype;
   /**
@@ -125,6 +127,12 @@ export interface CharacterSelector {
   /** `true` matches only blockers, `false` only other characters, read as the selector is checked. */
   readonly blocking?: boolean;
 }
+
+/** A nonrecursive alternative sharing its enclosing selector’s controller. */
+export type CharacterPredicate = Omit<CharacterSelector, "controller" | "anyOf"> & {
+  readonly controller?: never;
+  readonly anyOf?: never;
+};
 
 /**
  * Which cards on the stack a selector matches. Activated abilities on the
@@ -363,7 +371,8 @@ export type CountedZone = "deck" | "hand" | "void";
 export type StaticBoundValue = Exclude<BoundValue, SourceSparkValue>;
 
 /** A public character selector whose bounds can be read without a resolving effect. */
-export type StaticCharacterSelector = Omit<CharacterSelector, "sparkAtMost" | "sparkAtLeast" | "costAtMost" | "costAtLeast"> & {
+export type StaticCharacterSelector = Omit<CharacterSelector, "sparkAtMost" | "sparkAtLeast" | "costAtMost" | "costAtLeast" | "anyOf"> & {
+  readonly anyOf?: readonly (Omit<StaticCharacterSelector, "controller" | "anyOf"> & { readonly controller?: never; readonly anyOf?: never })[];
   readonly sparkAtMost?: StaticBoundValue;
   readonly sparkAtLeast?: StaticBoundValue;
   readonly costAtMost?: StaticBoundValue;

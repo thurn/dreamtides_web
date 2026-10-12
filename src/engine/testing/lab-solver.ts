@@ -10,7 +10,7 @@ import { mentionsChosenSubtype } from "../effects/primitives/choose-subtype";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
 import { fixedEnergy, xCost } from "../dsl/energy";
-import type { Ability, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, Cost, PlayerRef, StackItemSelector, TriggeredAbility, Variant, ZoneTargetSpec } from "../dsl/types";
+import type { Ability, BoundValue, CardCost, CardCountValue, CardFilter, CharacterPredicate, CharacterSelector, Cost, PlayerRef, StackItemSelector, TriggeredAbility, Variant, ZoneTargetSpec } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -51,12 +51,13 @@ function sparkOf(card: EngineCardDefinition): number {
  * card's spark (`labSourceSpark`): a ▸Materialized trigger's source is in
  * play with it, and an event, which has none, reads 0.
  */
-function sourceSparkAs<T extends Partial<Record<"sparkAtLeast" | "sparkAtMost" | "costAtLeast" | "costAtMost", BoundValue>>>(bounds: T, spark: number): T {
+function sourceSparkAs<T extends Partial<Record<"sparkAtLeast" | "sparkAtMost" | "costAtLeast" | "costAtMost", BoundValue>> & { readonly anyOf?: readonly CharacterPredicate[] }>(bounds: T, spark: number): T {
   const keys = ["sparkAtLeast", "sparkAtMost", "costAtLeast", "costAtMost"] as const;
-  return keys.reduce((result, key) => {
+  const rewritten = keys.reduce((result, key) => {
     const bound = result[key];
     return typeof bound === "object" && bound.value === "sourceSpark" ? { ...result, [key]: spark } : result;
   }, bounds);
+  return bounds.anyOf === undefined ? rewritten : { ...rewritten, anyOf: bounds.anyOf.map(branch => sourceSparkAs(branch, spark)) };
 }
 
 /** The X a lab play may choose: an energy X cost's least X up to the lab's energy left after the fixed cost. */
@@ -100,11 +101,12 @@ type ValueBounds = Pick<CharacterSelector, "sparkAtLeast" | "sparkAtMost" | "cos
  * ✦ and copiable cost. A card whose X is not an energy choice (`range` null)
  * has its X bounds unchecked.
  */
-function admitsX(bounds: ValueBounds, spark: number, cost: number, range: XRange | null): boolean {
+function admitsX(bounds: ValueBounds | readonly ValueBounds[], spark: number, cost: number, range: XRange | null): boolean {
   if (range === null) return true;
   let least = range.min;
   let most = range.max;
-  for (const [value, atLeast, atMost] of [[spark, bounds.sparkAtLeast, bounds.sparkAtMost], [cost, bounds.costAtLeast, bounds.costAtMost]] as const) {
+  const predicates: readonly ValueBounds[] = Array.isArray(bounds) ? bounds : [bounds as ValueBounds];
+  for (const predicate of predicates) for (const [value, atLeast, atMost] of [[spark, predicate.sparkAtLeast, predicate.sparkAtMost], [cost, predicate.costAtLeast, predicate.costAtMost]] as const) {
     if (isXBound(atLeast)) most = Math.min(most, value);
     if (isXBound(atMost)) least = Math.max(least, value);
   }
@@ -122,12 +124,12 @@ interface CountNeed {
  * staged character meets it: as many as the character's ✦ or copiable cost,
  * in the zone the count reads, matching a void count's filter.
  */
-function countNeeds(engine: Engine, selector: CharacterSelector, character: CardId): CountNeed[] {
+function countNeeds(engine: Engine, predicates: readonly Omit<CharacterSelector, "controller" | "anyOf">[], character: CardId): CountNeed[] {
   const card = engine.catalog.card(character);
-  return [
+  return predicates.flatMap(selector => [
     { count: countBound(selector.sparkAtMost), cards: sparkOf(card) },
     { count: countBound(selector.costAtMost), cards: fixedEnergy(card.costs) },
-  ].flatMap(({ count, cards }) => (count === null ? [] : [{ count, cards }]));
+  ].flatMap(({ count, cards }) => (count === null ? [] : [{ count, cards }])));
 }
 
 /**
@@ -151,27 +153,32 @@ function characterFor(
   selector: CharacterSelector,
   pool: readonly EngineCardDefinition[],
   xRange: XRange | null,
-): CardId {
-  const fits = (card: EngineCardDefinition): boolean => {
+): { readonly card: CardId; readonly predicates: readonly Omit<CharacterSelector, "controller" | "anyOf">[] } {
+  const fitting = (card: EngineCardDefinition): readonly Omit<CharacterSelector, "controller" | "anyOf">[] | null => {
     const spark = sparkOf(card);
     const cost = fixedEnergy(card.costs);
-    return (
-      card.cardType === "character" &&
-      // The solver places catalog cards, never figments.
-      selector.figment !== true &&
-      (selector.subtype === undefined || card.subtype === selector.subtype) &&
-      (selector.notSubtype === undefined || card.subtype !== selector.notSubtype) &&
-      meetsBounds(spark, selector.sparkAtLeast, selector.sparkAtMost) &&
-      meetsBounds(cost, selector.costAtLeast, selector.costAtMost) &&
-      admitsX(selector, spark, cost, xRange)
-    );
+    if (card.cardType !== "character") return null;
+    const branches = selector.anyOf === undefined ? [{}] : selector.anyOf;
+    for (const branch of branches) {
+      const predicates = [selector, branch];
+      if (predicates.every(predicate =>
+        // The solver places catalog cards, never figments.
+        predicate.figment !== true &&
+        (predicate.subtype === undefined || card.subtype === predicate.subtype) &&
+        (predicate.notSubtype === undefined || card.subtype !== predicate.notSubtype) &&
+        meetsBounds(spark, predicate.sparkAtLeast, predicate.sparkAtMost) &&
+        meetsBounds(cost, predicate.costAtLeast, predicate.costAtMost)
+      ) && admitsX(predicates, spark, cost, xRange)) return predicates;
+    }
+    return null;
   };
-  const found = firstFitting(pool, fits);
-  if (found === undefined) {
-    throw new Error(`The lab solver has no character for selector ${JSON.stringify(selector)}`);
-  }
+  const found = firstFitting(pool, card => fitting(card) !== null);
+  if (found === undefined) throw new Error(`The lab solver has no character for selector ${JSON.stringify(selector)}`);
+  const predicates = fitting(found);
+  if (predicates === null) throw new Error("The lab solver's selected character must satisfy its predicates");
   engine.catalog.card(found.id);
-  return found.id;
+  return { card: found.id, predicates };
+
 }
 
 /**
@@ -427,7 +434,7 @@ export function labBoard(
     // A ▸Materialized character target of your own gets a character of yours ahead of the card, so the card is not its only choice.
     if (spec.kind === "target" && spec.selector.controller === "you") {
       const selector = sourceSparkAs(spec.selector, sourceSpark);
-      for (let index = 0; index < (spec.count ?? 1); index++) back[side].push(characterFor(engine, selector, pool, xRange));
+      for (let index = 0; index < (spec.count ?? 1); index++) back[side].push(characterFor(engine, selector, pool, xRange).card);
       continue;
     }
     if (spec.kind !== "inZone") continue;
@@ -441,7 +448,7 @@ export function labBoard(
     voids[player === "you" ? side : opponent(side)].push(cardFor(engine, filter, pool));
   }
   for (const { choosers, selector } of played.flatMap(abandonChoices)) {
-    for (const chooser of choosers) back[chooser === "you" ? side : opponent(side)].push(characterFor(engine, selector, pool, xRange));
+    for (const chooser of choosers) back[chooser === "you" ? side : opponent(side)].push(characterFor(engine, selector, pool, xRange).card);
   }
   for (const specs of [...eventTargetSpecs(definition, variant), ...countActivations.map((ability) => ability.kind === "activated" ? everyTarget(ability.effect) : [])]) {
     for (const spec of specs) {
@@ -459,8 +466,8 @@ export function labBoard(
       const selector = sourceSparkAs(spec.selector, sourceSpark);
       for (let index = 0; index < (spec.count ?? 1); index++) {
         const character = characterFor(engine, selector, pool, xRange ?? countRange);
-        back[targetSide].push(character);
-        for (const { count, cards } of countNeeds(engine, selector, character)) {
+        back[targetSide].push(character.card);
+        for (const { count, cards } of countNeeds(engine, character.predicates, character.card)) {
           const countSide = count.player === "you" ? side : opponent(side);
           for (let card = 0; card < cards; card++) {
             zones[count.zone][countSide].push(count.zone === "void" ? cardFor(engine, count.filter, pool) : SYNTHETIC.vanilla1.id);
@@ -478,10 +485,10 @@ export function labBoard(
   for (const selector of characters) {
     const character = characterFor(engine, selector.figment === true ? { ...selector, figment: undefined } : selector, pool, xRange ?? countRange);
     if (selector.figment === true) {
-      figments[side].push({ slot: { rank: "back", index: back[side].length }, printing: { kind: "figmentCopy", cardId: character, spark: null } });
+      figments[side].push({ slot: { rank: "back", index: back[side].length }, printing: { kind: "figmentCopy", cardId: character.card, spark: null } });
       back[side].push(null);
-    } else back[side].push(character);
-    for (const { count, cards } of countNeeds(engine, selector, character)) {
+    } else back[side].push(character.card);
+    for (const { count, cards } of countNeeds(engine, character.predicates, character.card)) {
       const countSide = count.player === "you" ? side : opponent(side);
       for (let index = 0; index < cards; index++) {
         zones[count.zone][countSide].push(count.zone === "void" ? cardFor(engine, count.filter, pool) : SYNTHETIC.vanilla1.id);

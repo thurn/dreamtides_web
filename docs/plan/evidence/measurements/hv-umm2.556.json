@@ -1,0 +1,936 @@
+{
+  "bead": "hv-umm2.556",
+  "base": "2fcdd9a18c64b4bd7e24de502b145cd31956959a",
+  "dispatch": {
+    "timestamp": "2026-10-12T18:09:08.171Z",
+    "call_id": "call_aWwHaJJqIKNvEGPCTiItNvxo",
+    "task_name": "selector_any_of"
+  },
+  "clockScope": "Exact parent spawn tool-call at 2026-10-12T18:09:08.171Z through this final precommit endpoint, refreshed under parent metadata CLOCK/COMMIT ACK. Includes research, failed attempts, waits and verification; actual model start unobserved. Parent retains actual Git commit timestamp and second-precision endpoint delta outside the worktree.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review test-related phase starting load at 2026-10-12T18:27:54.832Z"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "name": "focused-final",
+      "load": "{ 4.77 8.45 11.70 }",
+      "start": "2026-10-12T18:23:30.924100+00:00"
+    },
+    {
+      "name": "mutation-conjunction",
+      "load": "{ 7.28 8.72 11.67 }",
+      "start": "2026-10-12T18:24:07.734969+00:00"
+    },
+    {
+      "name": "mutation-outer-omitted",
+      "load": "{ 7.26 8.69 11.64 }",
+      "start": "2026-10-12T18:24:10.845127+00:00"
+    },
+    {
+      "name": "mutation-empty-all",
+      "load": "{ 7.08 8.63 11.60 }",
+      "start": "2026-10-12T18:24:13.733085+00:00"
+    },
+    {
+      "name": "mutation-x-binding",
+      "load": "{ 7.08 8.63 11.60 }",
+      "start": "2026-10-12T18:24:16.627948+00:00"
+    },
+    {
+      "name": "mutation-source-spark",
+      "load": "{ 7.07 8.60 11.57 }",
+      "start": "2026-10-12T18:24:19.200591+00:00"
+    },
+    {
+      "name": "mutation-count-binding",
+      "load": "{ 7.07 8.60 11.57 }",
+      "start": "2026-10-12T18:24:21.670648+00:00"
+    },
+    {
+      "name": "mutation-earlier-reader",
+      "load": "{ 9.15 9.01 11.70 }",
+      "start": "2026-10-12T18:24:24.325319+00:00"
+    },
+    {
+      "name": "mutation-activation-x",
+      "load": "{ 9.15 9.01 11.70 }",
+      "start": "2026-10-12T18:24:27.425564+00:00"
+    },
+    {
+      "name": "mutation-lab-separate-x",
+      "load": "{ 9.53 9.09 11.71 }",
+      "start": "2026-10-12T18:24:30.307848+00:00"
+    },
+    {
+      "name": "mutation-lab-all-counts",
+      "load": "{ 9.53 9.09 11.71 }",
+      "start": "2026-10-12T18:24:31.877792+00:00"
+    },
+    {
+      "name": "mutation-lab-source-spark",
+      "load": "{ 10.37 9.27 11.76 }",
+      "start": "2026-10-12T18:24:33.337293+00:00"
+    },
+    {
+      "name": "focused-restored",
+      "load": "{ 18.74 11.71 12.55 }",
+      "start": "2026-10-12T18:25:15.350277+00:00"
+    },
+    {
+      "name": "mutation-lab-source-spark-corrected",
+      "load": "{ 21.17 13.24 13.04 }",
+      "start": "2026-10-12T18:26:10.926929+00:00"
+    },
+    {
+      "name": "focused-after-mutations",
+      "load": "{ 21.17 13.24 13.04 }",
+      "start": "2026-10-12T18:26:12.277291+00:00"
+    },
+    {
+      "name": "review",
+      "load": "{ 11.53 12.69 12.89 }",
+      "start": "2026-10-12T18:27:53.162034+00:00"
+    },
+    {
+      "name": "knip",
+      "load": "{ 23.57 15.78 14.02 }",
+      "start": "2026-10-12T18:29:00.059200+00:00"
+    },
+    {
+      "name": "full",
+      "load": "{ 21.45 16.22 14.25 }",
+      "start": "2026-10-12T18:29:37.391202+00:00"
+    },
+    {
+      "name": "copy-final",
+      "load": "{ 34.63 21.46 16.49 }",
+      "start": "2026-10-12T18:31:35.213854+00:00"
+    }
+  ],
+  "commands": [
+    {
+      "name": "focused-final",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/tooling-card-lab.test.ts"
+      ],
+      "start": "2026-10-12T18:23:30.924100+00:00",
+      "end": "2026-10-12T18:23:39.869769+00:00",
+      "wallS": 8.94547233398771,
+      "exit": 0,
+      "load": "{ 4.77 8.45 11.70 }"
+    },
+    {
+      "name": "mutation-conjunction",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "offers disjoint",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:24:07.734969+00:00",
+      "end": "2026-10-12T18:24:10.841849+00:00",
+      "wallS": 3.106691666995175,
+      "exit": 1,
+      "load": "{ 7.28 8.72 11.67 }"
+    },
+    {
+      "name": "mutation-outer-omitted",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "keeps outer",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:24:10.845127+00:00",
+      "end": "2026-10-12T18:24:13.729688+00:00",
+      "wallS": 2.884544790998916,
+      "exit": 1,
+      "load": "{ 7.26 8.69 11.64 }"
+    },
+    {
+      "name": "mutation-empty-all",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "empty alternatives",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:24:13.733085+00:00",
+      "end": "2026-10-12T18:24:16.624506+00:00",
+      "wallS": 2.891402500012191,
+      "exit": 1,
+      "load": "{ 7.08 8.63 11.60 }"
+    },
+    {
+      "name": "mutation-x-binding",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reads branch X",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:24:16.627948+00:00",
+      "end": "2026-10-12T18:24:19.197322+00:00",
+      "wallS": 2.569348290999187,
+      "exit": 1,
+      "load": "{ 7.08 8.63 11.60 }"
+    },
+    {
+      "name": "mutation-source-spark",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retains source spark",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:24:19.200591+00:00",
+      "end": "2026-10-12T18:24:21.667815+00:00",
+      "wallS": 2.4671995420067105,
+      "exit": 1,
+      "load": "{ 7.07 8.60 11.57 }"
+    },
+    {
+      "name": "mutation-count-binding",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "live zone counts",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:24:21.670648+00:00",
+      "end": "2026-10-12T18:24:24.322141+00:00",
+      "wallS": 2.651474041995243,
+      "exit": 1,
+      "load": "{ 7.07 8.60 11.57 }"
+    },
+    {
+      "name": "mutation-earlier-reader",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "earlier layers",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:24:24.325319+00:00",
+      "end": "2026-10-12T18:24:27.422498+00:00",
+      "wallS": 3.09716879100597,
+      "exit": 1,
+      "load": "{ 9.15 9.01 11.70 }"
+    },
+    {
+      "name": "mutation-activation-x",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "prepares mandatory",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:24:27.425564+00:00",
+      "end": "2026-10-12T18:24:30.299425+00:00",
+      "wallS": 2.873865957997623,
+      "exit": 1,
+      "load": "{ 9.15 9.01 11.70 }"
+    },
+    {
+      "name": "mutation-lab-separate-x",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "stages one satisfiable",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:24:30.307848+00:00",
+      "end": "2026-10-12T18:24:31.873913+00:00",
+      "wallS": 1.5660672499943757,
+      "exit": 1,
+      "load": "{ 9.53 9.09 11.71 }"
+    },
+    {
+      "name": "mutation-lab-all-counts",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "stages one satisfiable",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:24:31.877792+00:00",
+      "end": "2026-10-12T18:24:33.333780+00:00",
+      "wallS": 1.4559982920036418,
+      "exit": 1,
+      "load": "{ 9.53 9.09 11.71 }"
+    },
+    {
+      "name": "mutation-lab-source-spark",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "normalizes a source-spark",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:24:33.337293+00:00",
+      "end": "2026-10-12T18:24:34.618491+00:00",
+      "wallS": 1.2812075419933535,
+      "exit": 0,
+      "load": "{ 10.37 9.27 11.76 }"
+    },
+    {
+      "name": "focused-restored",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/tooling-card-lab.test.ts"
+      ],
+      "start": "2026-10-12T18:25:15.350277+00:00",
+      "end": "2026-10-12T18:25:23.258356+00:00",
+      "wallS": 7.907826709008077,
+      "exit": 0,
+      "load": "{ 18.74 11.71 12.55 }"
+    },
+    {
+      "name": "mutation-lab-source-spark-corrected",
+      "args": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "normalizes a source-spark",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:26:10.926929+00:00",
+      "end": "2026-10-12T18:26:12.243875+00:00",
+      "wallS": 1.3167868339951383,
+      "exit": 1,
+      "load": "{ 21.17 13.24 13.04 }"
+    },
+    {
+      "name": "focused-after-mutations",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/tooling-card-lab.test.ts"
+      ],
+      "start": "2026-10-12T18:26:12.277291+00:00",
+      "end": "2026-10-12T18:26:22.852017+00:00",
+      "wallS": 10.574416500006919,
+      "exit": 0,
+      "load": "{ 21.17 13.24 13.04 }"
+    },
+    {
+      "name": "review",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T18:27:53.162034+00:00",
+      "end": "2026-10-12T18:28:53.149605+00:00",
+      "wallS": 59.9900027919939,
+      "exit": 0,
+      "load": "{ 11.53 12.69 12.89 }"
+    },
+    {
+      "name": "knip",
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T18:29:00.059200+00:00",
+      "end": "2026-10-12T18:29:04.216466+00:00",
+      "wallS": 4.157057374992291,
+      "exit": 0,
+      "load": "{ 23.57 15.78 14.02 }"
+    },
+    {
+      "name": "full",
+      "args": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T18:29:37.391202+00:00",
+      "end": "2026-10-12T18:31:24.676234+00:00",
+      "wallS": 107.28439770800469,
+      "exit": 0,
+      "load": "{ 21.45 16.22 14.25 }",
+      "pid": 13393,
+      "pgid": 13375,
+      "terminal": true
+    },
+    {
+      "name": "copy-final",
+      "args": [
+        "npx",
+        "tsx",
+        ".playwright-mcp/556/copy-check.ts"
+      ],
+      "start": "2026-10-12T18:31:35.213854+00:00",
+      "end": "2026-10-12T18:31:35.872230+00:00",
+      "wallS": 0.6582246250036405,
+      "exit": 0,
+      "load": "{ 34.63 21.46 16.49 }",
+      "pid": 52562,
+      "pgid": 52468,
+      "terminal": true
+    }
+  ],
+  "earlierCheckPhaseEvidence": [
+    {
+      "name": "focused-initial",
+      "phases": [
+        "prepare started at 2026-10-12T18:18:23.193Z load=8.45654296875",
+        "prepare finished in 0.9s (exit 0)",
+        "test started at 2026-10-12T18:18:24.069Z load=8.45654296875",
+        "test finished in 7.5s (exit 1)",
+        "restore-local-assets started at 2026-10-12T18:18:31.552Z load=8.33984375",
+        "restore-local-assets finished in 0.8s (exit 0)"
+      ],
+      "scope": "Public contracts runner and card-lab owner; command wall clock uninstrumented, reported phase scopes retained",
+      "testSummary": [
+        "Tests 5 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  5 failed | 2084 passed (2089)"
+      ]
+    },
+    {
+      "name": "focused-second",
+      "phases": [
+        "prepare started at 2026-10-12T18:19:59.844Z load=6.6650390625",
+        "prepare finished in 0.6s (exit 0)",
+        "test started at 2026-10-12T18:20:00.477Z load=6.6650390625",
+        "test finished in 5.2s (exit 1)",
+        "restore-local-assets started at 2026-10-12T18:20:05.697Z load=6.69140625",
+        "restore-local-assets finished in 0.6s (exit 0)"
+      ],
+      "scope": "Public contracts runner and card-lab owner; command wall clock uninstrumented, reported phase scopes retained",
+      "testSummary": [
+        "Tests 2 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  2 failed | 2091 passed (2093)"
+      ]
+    },
+    {
+      "name": "focused-third",
+      "phases": [
+        "prepare started at 2026-10-12T18:21:12.982Z load=6.033203125",
+        "prepare finished in 0.7s (exit 0)",
+        "test started at 2026-10-12T18:21:13.677Z load=5.9501953125",
+        "test finished in 5.9s (exit 1)",
+        "restore-local-assets started at 2026-10-12T18:21:19.554Z load=6.1142578125",
+        "restore-local-assets finished in 0.8s (exit 0)"
+      ],
+      "scope": "Public contracts runner and card-lab owner; command wall clock uninstrumented, reported phase scopes retained",
+      "testSummary": [
+        "Tests 2 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  2 failed | 2091 passed (2093)"
+      ]
+    },
+    {
+      "name": "focused-fourth",
+      "phases": [
+        "prepare started at 2026-10-12T18:22:28.344Z load=5.27880859375",
+        "prepare finished in 1.5s (exit 0)",
+        "test started at 2026-10-12T18:22:29.812Z load=5.27880859375",
+        "test finished in 5.6s (exit 0)",
+        "restore-local-assets started at 2026-10-12T18:22:35.433Z load=5.25634765625",
+        "restore-local-assets finished in 0.8s (exit 0)"
+      ],
+      "scope": "Public contracts runner and card-lab owner; command wall clock uninstrumented, reported phase scopes retained",
+      "testSummary": [
+        "Test Files  2 passed (2)",
+        "Tests  2094 passed (2094)"
+      ]
+    },
+    {
+      "name": "focused-fifth",
+      "phases": [
+        "prepare started at 2026-10-12T18:22:59.128Z load=5.70703125",
+        "prepare finished in 0.9s (exit 0)",
+        "test started at 2026-10-12T18:22:59.979Z load=5.70703125",
+        "test finished in 5.4s (exit 0)",
+        "restore-local-assets started at 2026-10-12T18:23:05.409Z load=5.490234375",
+        "restore-local-assets finished in 0.6s (exit 0)"
+      ],
+      "scope": "Public contracts runner and card-lab owner; command wall clock uninstrumented, reported phase scopes retained",
+      "testSummary": [
+        "Test Files  2 passed (2)",
+        "Tests  2094 passed (2094)"
+      ]
+    }
+  ],
+  "baseline": {
+    "start": "2026-10-12T18:12:16.717555+00:00",
+    "end": "2026-10-12T18:12:18.694125+00:00",
+    "wallS": 1.9764243329991587,
+    "exit": 1,
+    "stdout": "{\"side\":\"player\",\"mode\":\"conjunction\",\"indices\":[2],\"expectedIndices\":[0,1,2],\"friendlyExcluded\":true}\n{\"side\":\"player\",\"mode\":\"anyOf\",\"indices\":[0,1,2,3],\"expectedIndices\":[0,1,2],\"friendlyExcluded\":true}\n{\"side\":\"enemy\",\"mode\":\"conjunction\",\"indices\":[2],\"expectedIndices\":[0,1,2],\"friendlyExcluded\":true}\n{\"side\":\"enemy\",\"mode\":\"anyOf\",\"indices\":[0,1,2,3],\"expectedIndices\":[0,1,2],\"friendlyExcluded\":true}\n{\"negativeAssertionsFailed\":2,\"trackedWrites\":0}\n",
+    "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: public anyOf target contract fails on current baseline\n\n2 !== 0\n\n    at <anonymous> (/Users/dthurn/dreamtides_web/.worktrees/selector-any-of-556-sol/.playwright-mcp/556/negative.ts:36:8)\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:633:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: 2,\n  expected: 0,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.16.0\n"
+  },
+  "baselineScope": "Expected public negative exit1 both controllers: conjunction overlap-only index2; anyOf field ignored offers0/1/2/3 instead of0/1/2. Friendly excluded. Complete tracked-byte snapshot identical before source writes.",
+  "failedPreparation": [
+    "Initial baseline hash script hit tracked symlink directory; corrected lstat-aware hashing.",
+    "Initial public scratch assumed a single forced candidate prompts; default engine auto-answers and resolves it. Second attempt read wrong automatic-result location; corrected observation uses public resulting void. Both failed attempts retained in parent transcript.",
+    "Initial direct TypeScript before prepare failed missing disposable Cumulus tokens. Normal prepare-workspace regenerated ignored tokens/art links.",
+    "Contract compile initially assigned readonly config and read PrintedCard.id; fixed fixture shape. Second compile found wrong instanceOrigin import; fixed owning rules/activation import.",
+    "Initial focused failed5 synthetic-fixture expectations; second and third failed2 materialized lab fixture assumptions. All final focused pass; no product defect inferred from these authoring failures."
+  ],
+  "mutationDisposition": "Eleven selected controls killed. Initial sourceSpark-normalization control survived because an earlier synthetic vanilla matched its second branch; preserved original survivor, strengthened Mage pool fixture, corrected control fails2 selected public tests. Every mutation restored in finally; focused-after-mutations2094pass.",
+  "sourceHashes": {
+    "docs/plan/engine-design.md": "6deba81b40cdf727dcc1afcaebc71a01723193cf531e3f4471551a13c24373ab",
+    "src/engine/dsl/selectors.ts": "af574bbf94174f8e3e7fcb54699eaaa692e5f7e45784f82111b10df67351cc21",
+    "src/engine/dsl/types.ts": "683b0c91138b81566ab0f96f7b4c936c3430ec7b9096b7a56b869b480c9e0e2e",
+    "src/engine/steps/kinds/activate.ts": "a8093ff49a1cc3b5179ad89ce0703f187353d7f040cf1767b3da0793bd67a8df",
+    "src/engine/testing/lab-solver.ts": "710749d01c43bb3ac5268e5cb55de54aa876d130f118fa0addc1ff49c37a8c03",
+    "src/engine/testing/tooling-card-lab.test.ts": "1d4d54f9891bdbffbc6122e6869732cef5d142460c229b5d9b79a48865cce6c0",
+    "src/runtime/battle-cost-messages.ts": "f79cd7646403b4444b1438670a97f87c23e3e24f5fcec0213ebb70a898811dfe",
+    "src/engine/effects/primitives/contracts/selector-any-of.contracts.ts": "a0a687a890a3781a64b661adbba640a64fd19156aec89c1e2083a302157a54a4"
+  },
+  "qaScope": "Synthetic public engine and shared lab proof, no declared anyOf MCP fixture. No native browser, generic fuzz, production card sweep or renderer coverage claimed. Original204 later card sweep retained.",
+  "labLimitations": "Existing ready back-rank catalog-card fixture policy retained; no new role, status, figment or front-rank staging design. Real engine selector contracts cover those predicates.",
+  "reviewRouting": "Parent performs fresh exact-source read-only gpt-5.6-sol CLI core review under temporary user Sol override; no review run by helper.",
+  "runtimeLedger": {
+    "directlyStartedManualServers": [],
+    "directlyStartedBrowserSessions": [],
+    "longRunningProcesses": [],
+    "commandProcesses": "Recorded validation commands awaited to terminal result; no watcher started. review:full exercises synthetic provider/server subprocess lifecycles; full log retains each harness cleanup, final process audit confirms no retained own runtime.",
+    "finalAudit": {
+      "time": "2026-10-12T18:32:29.641254+00:00",
+      "serverPids": [
+        {
+          "pid": 15493,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 15628,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 15862,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 16175,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 16477,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 16782,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 17107,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 17217,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 17423,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 17843,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 18115,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 18731,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 18964,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 19100,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 19465,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 19740,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 20077,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 20684,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 20821,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 20945,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 21435,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 21581,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 22031,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 22519,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 22820,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 23384,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 24400,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 24505,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 25184,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 26051,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 26295,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 26415,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 26737,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 27041,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 27362,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 27965,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 28113,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 28272,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 28625,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 29123,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 29266,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 29652,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 29840,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 29960,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 30524,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 30834,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 30910,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 31186,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 31898,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 33592,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 34277,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 37063,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 37643,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 41305,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 43208,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 45017,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 61766,
+          "status": "absent",
+          "ps": ""
+        },
+        {
+          "pid": 63108,
+          "status": "absent",
+          "ps": ""
+        }
+      ],
+      "ownWorktreeCwdProcessesExcludingAuditAncestors": [],
+      "fullCommandPid": 13393,
+      "manualTaskMcpSessions": [],
+      "scope": "Exact QA harness server identities parsed from own review:full log; no peer process/port/provider touched. Test harness owns teardown."
+    },
+    "execSessions": {
+      "85509": "terminal types-initial",
+      "55703": "terminal prepare+focused-initial",
+      "11669": "terminal types-contracts",
+      "36577": "terminal focused-second",
+      "97439": "terminal focused-third",
+      "46237": "terminal types-second",
+      "51712": "terminal focused-fourth",
+      "96921": "terminal focused-fifth",
+      "90052": "terminal focused-final",
+      "67932": "terminal mutation-sweep",
+      "98776": "terminal focused-restored",
+      "28178": "terminal corrected-control+focused-after-mutations",
+      "79684": "terminal review",
+      "37318": "terminal knip",
+      "3718": "terminal locked-full"
+    }
+  },
+  "testCounting": {
+    "newTestEntrypoints": 0,
+    "newContractModules": 1,
+    "contractLines": 247,
+    "newDiscoveredContractCases": 22,
+    "existingLabAddedLines": 55,
+    "existingLabAddedCases": 4,
+    "plainTestLineDelta": 302,
+    "jsdomFileDelta": 0
+  },
+  "failurePaths": [
+    {
+      "path": "error-mid-step",
+      "test": "rolls back a synthetic mid-resolution error without a partial committed union effect",
+      "file": "src/engine/effects/primitives/contracts/selector-any-of.contracts.ts",
+      "proof": "Actual union dissolve resolves then synthetic throw; no committed target move."
+    },
+    {
+      "path": "reload-or-restart",
+      "test": "reloads targeting, rejects illegal, foreign, stale and concurrent input, then accepts once",
+      "file": "src/engine/effects/primitives/contracts/selector-any-of.contracts.ts",
+      "proof": "JSON saved pending slice replays identically through fresh fold."
+    },
+    {
+      "path": "partial-write",
+      "test": "rolls back a synthetic mid-resolution error without a partial committed union effect",
+      "file": "src/engine/effects/primitives/contracts/selector-any-of.contracts.ts",
+      "proof": "All union targets stay in play, no dissolution published, failed inFlight cleared."
+    },
+    {
+      "path": "invalid-or-stale-input",
+      "test": "reloads targeting, rejects illegal, foreign, stale and concurrent input, then accepts once",
+      "file": "src/engine/effects/primitives/contracts/selector-any-of.contracts.ts",
+      "proof": "Illegal/friendly/duplicate/foreign/stale answers rejected with committed hash preserved; separate real-interrupt and count-recheck cases cover invalidation."
+    },
+    {
+      "path": "concurrent-actors",
+      "test": "reloads targeting, rejects illegal, foreign, stale and concurrent input, then accepts once",
+      "file": "src/engine/effects/primitives/contracts/selector-any-of.contracts.ts",
+      "proof": "During target prompt top-level intent is stepInFlight; foreign actor and duplicate completed answer rejected."
+    }
+  ],
+  "rawRetention": "Parent will retain completed own .playwright-mcp/556 logs/receipts/source manifests at /tmp/hv-umm2.556-validation before source-worktree cleanup; retention is parent-owned and not claimed complete by helper.",
+  "fullScope": {
+    "workers": 2,
+    "request": "2026-10-12T18:29:37.391202+00:00",
+    "actualPrepareStart": "2026-10-12T18:29:37.582Z",
+    "observedRequestToPrepareS": 0.190798,
+    "qualification": "Includes process launch; no heavy-slot capacity wait established.",
+    "files": 351,
+    "tests": 5813,
+    "testPhaseStart": "2026-10-12T18:30:02.393Z",
+    "testPhaseLoad": 19.61572265625,
+    "testPhaseReportedS": 78.1,
+    "bundleReportedS": 3.4,
+    "syntheticHarnessOnly": true
+  },
+  "precommitEndpoint": "2026-10-12T18:33:50.788552+00:00",
+  "metadataCommitProtocol": "Parent inspected exact 13 admitted paths, frozen source hashes, failure paths, all checks and runtime cleanup before CLOCK/COMMIT ACK; endpoint refreshed immediately before final schema/diffcheck/stage/commit."
+}

@@ -85,7 +85,7 @@ function boundPhrase(bound: BoundValue): string {
   return `the number of ${cards} in ${bound.player === "you" ? "your" : "your opponent’s"} ${bound.zone}`;
 }
 
-function characterCostPhrase(count: number | "x", selector: CharacterSelector): string {
+function characterLeafPhrase(count: number | "x", selector: Omit<CharacterSelector, "anyOf">): string {
   const adjectives = [
     selector.another === true ? "other" : "",
     selector.exhausted === undefined ? "" : selector.exhausted ? "exhausted" : "ready",
@@ -104,6 +104,14 @@ function characterCostPhrase(count: number | "x", selector: CharacterSelector): 
     }),
   ].filter(Boolean);
   return [count === "x" ? "X" : String(count), ...adjectives, count === 1 ? "character" : "characters", ...restrictions].join(" ");
+}
+
+function characterCostPhrase(count: number | "x", selector: CharacterSelector): string {
+  const outer = characterLeafPhrase(count, selector);
+  if (selector.anyOf === undefined) return outer;
+  if (selector.anyOf.length === 0) return `${outer} matching no characters`;
+  const alternatives = selector.anyOf.map(branch => characterLeafPhrase(1, { ...branch, controller: "any" }).slice(2));
+  return `${outer} matching at least one of (${alternatives.join(" or ")})`;
 }
 
 function variableMinimum(cost: Extract<PaymentCost, { readonly count: number | "x" }>): string {

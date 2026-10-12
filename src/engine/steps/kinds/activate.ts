@@ -33,7 +33,8 @@ function boundNeedsX(bound: BoundValue | undefined): boolean {
 }
 
 function selectorNeedsX(selector: CharacterSelector): boolean {
-  return [selector.sparkAtLeast, selector.sparkAtMost, selector.costAtLeast, selector.costAtMost].some(boundNeedsX);
+  return [selector.sparkAtLeast, selector.sparkAtMost, selector.costAtLeast, selector.costAtMost].some(boundNeedsX) ||
+    (selector.anyOf?.some(branch => [branch.sparkAtLeast, branch.sparkAtMost, branch.costAtLeast, branch.costAtMost].some(boundNeedsX)) ?? false);
 }
 
 /** Immediate play-time target bounds, including every modal branch, read X before cost planning. */
