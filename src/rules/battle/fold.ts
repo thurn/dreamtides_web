@@ -1310,7 +1310,9 @@ function isQueuedTrigger(value: unknown): boolean {
     !isPlainRecord(value.source) || value.source.kind !== "dreamwell" ||
     !isPlainRecord(value.origin) || value.origin.kind !== "dreamwell" ||
     value.source.id !== value.origin.id || value.source.side !== value.controller ||
-    value.node !== null || value.subject !== null
+    value.node !== null || value.subject !== null ||
+    value.captured !== undefined || value.gain !== undefined || value.scored !== undefined ||
+    value.lastKnownSourceSpark !== undefined || value.subjectHiddenFrom !== undefined
   )) return false;
   return (
     isPlainRecord(value) &&

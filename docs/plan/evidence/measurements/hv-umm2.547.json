@@ -1,0 +1,603 @@
+{
+  "bead": "hv-umm2.547",
+  "base": "26b12691f491514bd692809f464d100ff53cb3c4",
+  "dispatchObservation": {
+    "at": "2026-10-12T14:35:43.998639+00:00",
+    "scope": "Parent post-dispatch observation proxy; actual helper tool dispatch/start not instrumented. Research predates this proxy."
+  },
+  "commands": {
+    "baseline-corrected.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "saved bonus trigger context|ordinary triggered causes|generated Dreamwell-origin"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "start": "2026-10-12T14:39:17.674685+00:00",
+      "end": "2026-10-12T14:39:21.058258+00:00",
+      "exit": 1,
+      "wallSeconds": 3.3834410829949775,
+      "pid": 53861,
+      "pgid": 53861,
+      "load": "{ 3.74 6.77 9.77 }",
+      "groupRemainingAtExit": []
+    },
+    "baseline.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "saved bonus trigger context|ordinary triggered causes|generated Dreamwell-origin"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "start": "2026-10-12T14:39:00.314433+00:00",
+      "end": "2026-10-12T14:39:04.889948+00:00",
+      "exit": 1,
+      "wallSeconds": 4.575386958000308,
+      "pid": 53198,
+      "pgid": 53198,
+      "load": "{ 3.61 6.90 9.87 }",
+      "groupRemainingAtExit": []
+    },
+    "counterfactual-final.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "saved bonus trigger context|ordinary triggered causes|generated Dreamwell-origin"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "start": "2026-10-12T14:42:45.998970+00:00",
+      "end": "2026-10-12T14:42:52.096507+00:00",
+      "exit": 1,
+      "wallSeconds": 6.097195209003985,
+      "pid": 71338,
+      "pgid": 71338,
+      "load": "{ 17.52 11.58 11.09 }",
+      "groupRemainingAtExit": []
+    },
+    "counterfactual.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "saved bonus trigger context|ordinary triggered causes|generated Dreamwell-origin"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "start": "2026-10-12T14:40:10.487834+00:00",
+      "end": "2026-10-12T14:40:14.162040+00:00",
+      "exit": 1,
+      "wallSeconds": 3.6740849589987192,
+      "pid": 78468,
+      "pgid": 78468,
+      "load": "{ 4.72 6.52 9.49 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-final.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "Dreamwell bonus execution"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "start": "2026-10-12T14:43:05.839043+00:00",
+      "end": "2026-10-12T14:43:11.622548+00:00",
+      "exit": 0,
+      "wallSeconds": 5.7831924999991315,
+      "pid": 94943,
+      "pgid": 94943,
+      "load": "{ 15.36 11.48 11.06 }",
+      "groupRemainingAtExit": []
+    },
+    "focused.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "Dreamwell bonus execution"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "start": "2026-10-12T14:39:55.089015+00:00",
+      "end": "2026-10-12T14:39:58.708625+00:00",
+      "exit": 0,
+      "wallSeconds": 3.6194867090016487,
+      "pid": 63174,
+      "pgid": 63174,
+      "load": "{ 4.78 6.62 9.57 }",
+      "groupRemainingAtExit": []
+    },
+    "knip.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "start": "2026-10-12T14:42:22.348268+00:00",
+      "end": "2026-10-12T14:42:26.413392+00:00",
+      "exit": 0,
+      "wallSeconds": 4.064953541004797,
+      "pid": 37682,
+      "pgid": 37682,
+      "load": "{ 18.32 11.13 10.91 }",
+      "groupRemainingAtExit": []
+    },
+    "parent-install.receipt.json": {
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "pid": 98818,
+      "pgid": 98818,
+      "start": "2026-10-12T14:29:54.708333+00:00",
+      "end": "2026-10-12T14:29:57.836622+00:00",
+      "exit": 0,
+      "wallSeconds": 3.1280818749946775
+    },
+    "review-corrected.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "start": "2026-10-12T14:41:47.326746+00:00",
+      "end": "2026-10-12T14:42:16.195079+00:00",
+      "exit": 0,
+      "wallSeconds": 28.8679580839962,
+      "pid": 35239,
+      "pgid": 35239,
+      "load": "{ 13.89 9.60 10.39 }",
+      "groupRemainingAtExit": []
+    },
+    "review.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "start": "2026-10-12T14:41:05.443143+00:00",
+      "end": "2026-10-12T14:41:27.169735+00:00",
+      "exit": 2,
+      "wallSeconds": 21.726300000002084,
+      "pid": 31243,
+      "pgid": 31243,
+      "load": "{ 14.19 8.96 10.21 }",
+      "groupRemainingAtExit": []
+    },
+    "schema.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "start": "2026-10-12T14:44:00.919834+00:00",
+      "end": "2026-10-12T14:44:01.045455+00:00",
+      "exit": 0,
+      "wallSeconds": 0.1254573749974952,
+      "pid": 14488,
+      "pgid": 14488,
+      "load": "{ 12.00 11.25 11.00 }",
+      "groupRemainingAtExit": []
+    },
+    "diff-check.receipt.json": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+      "start": "2026-10-12T14:44:33.641250+00:00",
+      "end": "2026-10-12T14:44:33.665795+00:00",
+      "exit": 0,
+      "wallSeconds": 0.02443879100610502,
+      "pid": 16614,
+      "pgid": 16614,
+      "load": "{ 11.83 11.43 11.08 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "install": {
+    "argv": [
+      "npm",
+      "install"
+    ],
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-547-dreamwell-context",
+    "pid": 98818,
+    "pgid": 98818,
+    "start": "2026-10-12T14:29:54.708333+00:00",
+    "end": "2026-10-12T14:29:57.836622+00:00",
+    "exit": 0,
+    "wallSeconds": 3.1280818749946775
+  },
+  "negativeProof": {
+    "baselineHash": "0c23632ab4a9f19b645234bd0e377092611cc6751eb58528eba3e52fceee5ad4",
+    "guardHash": "4620191c5ea9bdb4531b08d6e5335d19218bcd2682a34b15d612e411dc5247c2",
+    "productionUnchangedDuringBothBaselines": true,
+    "newSelectedCases": 13,
+    "baselineCorrectedFailures": 10,
+    "baselineCorrectedControlsPassed": 3,
+    "counterfactualProductionEqualBaseline": true,
+    "restoredGuardHash": "4620191c5ea9bdb4531b08d6e5335d19218bcd2682a34b15d612e411dc5247c2",
+    "restoredByteExact": true,
+    "finalFixtureCounterfactual": {
+      "receipt": "counterfactual-final.receipt.json",
+      "expectedFailures": 10,
+      "controlsPassed": 3,
+      "guardRestoredByteExact": true,
+      "hash": "4620191c5ea9bdb4531b08d6e5335d19218bcd2682a34b15d612e411dc5247c2"
+    }
+  },
+  "testDelta": {
+    "entrypointFiles": 0,
+    "allTestLines": 59,
+    "jsdomFiles": 0,
+    "plainModuleFilesAdded": 0,
+    "plainModuleFinalLines": 318,
+    "newCases": 13
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "disposition": "No new step or mutation: this synchronous saved-input predicate only returns acceptance. Existing rollback contract rolls back a failed bonus step after a preceding effect while retaining the committed draw."
+    },
+    {
+      "path": "reload or restart mid-operation",
+      "contracts": [
+        "preserves ordinary triggered causes through the public saved-state loader",
+        "preserves generated Dreamwell-origin node contexts for $id",
+        "replays a private multi-effect prompt after reload and publishes the bonus once"
+      ]
+    },
+    {
+      "path": "partial write",
+      "contracts": [
+        "rejects malformed or partially written queued Dreamwell records at the public load boundary",
+        "rejects saved bonus trigger context: %s"
+      ]
+    },
+    {
+      "path": "invalid or stale input",
+      "contracts": [
+        "rejects saved bonus trigger context: %s",
+        "bounces invalid, foreign and stale answers without consuming the bonus"
+      ]
+    },
+    {
+      "path": "concurrent actors",
+      "disposition": "No new shared-state transition, writer, asynchronous work or queue consumption. Existing duplicate-answer/replay contract commits one of concurrent duplicate answers and replays independent replicas identically."
+    }
+  ],
+  "fallout": [],
+  "scope": "Only existing isQueuedTrigger dreamwellBonus exclusions and public saved-input contracts; no exported symbol/signature change, production event or queue mutation. No new schema, interface, runner, interpreter, producer, UI or content logic.",
+  "compatibility": "Four ordinary schema fixtures use synthetic definitions with matching cause kinds and one context per record. Floating and delayed Dreamwell-origin node queues are generated by real advancePhase/resolveTrigger steps; their withMaterialized empty binding and drawn hidden subject round-trip and resolve.",
+  "failedAttempts": [
+    {
+      "name": "baseline",
+      "expected": 10,
+      "fixtureFailure": "Ordinary control omitted required createCatalog Dreamwell array, corrected to []. All raw output retained."
+    },
+    {
+      "name": "baseline-corrected",
+      "expected": 10,
+      "controlsPassed": 3
+    },
+    {
+      "name": "counterfactual",
+      "expected": 10,
+      "controlsPassed": 3,
+      "restoration": "Guarded production bytes restored exactly."
+    },
+    {
+      "name": "review",
+      "exit": 2,
+      "cause": "Fixture used whenDissolved string rather than self-trigger onDissolved and JSON roundtrip typed any. Corrected within test file. Related2357 tests passed; aggregate certification supplied by review-corrected."
+    }
+  ],
+  "validationScope": {
+    "full": "Not applicable: bounded loader branch/contract correction, no infrastructure/configuration/cross-cutting architecture.",
+    "fuzz": "No step-runner/fuzzer recipe modification; release smoke remains Tollgate-owned.",
+    "browser": "No player workflow or presentation change, no server/port/browser/provider started."
+  },
+  "hostLoadSamples": [
+    {
+      "command": "baseline-corrected",
+      "step": "prepare",
+      "at": "2026-10-12T14:39:17.855Z",
+      "oneMinute": 3.74169921875
+    },
+    {
+      "command": "baseline-corrected",
+      "step": "test",
+      "at": "2026-10-12T14:39:18.445Z",
+      "oneMinute": 3.74169921875
+    },
+    {
+      "command": "baseline-corrected",
+      "step": "restore-local-assets",
+      "at": "2026-10-12T14:39:20.519Z",
+      "oneMinute": 3.60205078125
+    },
+    {
+      "command": "baseline",
+      "step": "prepare",
+      "at": "2026-10-12T14:39:00.510Z",
+      "oneMinute": 3.60595703125
+    },
+    {
+      "command": "baseline",
+      "step": "test",
+      "at": "2026-10-12T14:39:01.896Z",
+      "oneMinute": 3.60595703125
+    },
+    {
+      "command": "baseline",
+      "step": "restore-local-assets",
+      "at": "2026-10-12T14:39:04.345Z",
+      "oneMinute": 3.60595703125
+    },
+    {
+      "command": "counterfactual-final",
+      "step": "prepare",
+      "at": "2026-10-12T14:42:46.253Z",
+      "oneMinute": 17.52197265625
+    },
+    {
+      "command": "counterfactual-final",
+      "step": "test",
+      "at": "2026-10-12T14:42:48.000Z",
+      "oneMinute": 17.52197265625
+    },
+    {
+      "command": "counterfactual-final",
+      "step": "restore-local-assets",
+      "at": "2026-10-12T14:42:51.304Z",
+      "oneMinute": 17.15966796875
+    },
+    {
+      "command": "counterfactual",
+      "step": "prepare",
+      "at": "2026-10-12T14:40:10.670Z",
+      "oneMinute": 4.7197265625
+    },
+    {
+      "command": "counterfactual",
+      "step": "test",
+      "at": "2026-10-12T14:40:11.295Z",
+      "oneMinute": 4.7197265625
+    },
+    {
+      "command": "counterfactual",
+      "step": "restore-local-assets",
+      "at": "2026-10-12T14:40:13.583Z",
+      "oneMinute": 4.7197265625
+    },
+    {
+      "command": "focused-final",
+      "step": "prepare",
+      "at": "2026-10-12T14:43:06.103Z",
+      "oneMinute": 15.35693359375
+    },
+    {
+      "command": "focused-final",
+      "step": "test",
+      "at": "2026-10-12T14:43:07.667Z",
+      "oneMinute": 15.35693359375
+    },
+    {
+      "command": "focused-final",
+      "step": "restore-local-assets",
+      "at": "2026-10-12T14:43:10.855Z",
+      "oneMinute": 15.408203125
+    },
+    {
+      "command": "focused",
+      "step": "prepare",
+      "at": "2026-10-12T14:39:55.267Z",
+      "oneMinute": 4.7763671875
+    },
+    {
+      "command": "focused",
+      "step": "test",
+      "at": "2026-10-12T14:39:55.886Z",
+      "oneMinute": 4.7763671875
+    },
+    {
+      "command": "focused",
+      "step": "restore-local-assets",
+      "at": "2026-10-12T14:39:58.109Z",
+      "oneMinute": 4.7763671875
+    },
+    {
+      "command": "knip",
+      "step": "prepare",
+      "at": "2026-10-12T14:42:22.596Z",
+      "oneMinute": 18.31982421875
+    },
+    {
+      "command": "knip",
+      "step": "knip",
+      "at": "2026-10-12T14:42:23.398Z",
+      "oneMinute": 18.31982421875
+    },
+    {
+      "command": "knip",
+      "step": "restore-local-assets",
+      "at": "2026-10-12T14:42:25.725Z",
+      "oneMinute": 19.2548828125
+    },
+    {
+      "command": "review-corrected",
+      "step": "prepare",
+      "at": "2026-10-12T14:41:47.586Z",
+      "oneMinute": 13.8876953125
+    },
+    {
+      "command": "review-corrected",
+      "step": "typecheck",
+      "at": "2026-10-12T14:41:49.010Z",
+      "oneMinute": 13.8876953125
+    },
+    {
+      "command": "review-corrected",
+      "step": "typecheck-node",
+      "at": "2026-10-12T14:41:49.011Z",
+      "oneMinute": 13.8876953125
+    },
+    {
+      "command": "review-corrected",
+      "step": "import-cycles",
+      "at": "2026-10-12T14:41:49.011Z",
+      "oneMinute": 13.8876953125
+    },
+    {
+      "command": "review-corrected",
+      "step": "lint",
+      "at": "2026-10-12T14:41:49.012Z",
+      "oneMinute": 13.8876953125
+    },
+    {
+      "command": "review-corrected",
+      "step": "test-related",
+      "at": "2026-10-12T14:41:49.012Z",
+      "oneMinute": 13.8876953125
+    },
+    {
+      "command": "review-corrected",
+      "step": "friction-records",
+      "at": "2026-10-12T14:41:49.013Z",
+      "oneMinute": 13.8876953125
+    },
+    {
+      "command": "review-corrected",
+      "step": "restore-local-assets",
+      "at": "2026-10-12T14:42:15.286Z",
+      "oneMinute": 17.30322265625
+    },
+    {
+      "command": "review",
+      "step": "prepare",
+      "at": "2026-10-12T14:41:05.633Z",
+      "oneMinute": 14.1923828125
+    },
+    {
+      "command": "review",
+      "step": "typecheck",
+      "at": "2026-10-12T14:41:06.290Z",
+      "oneMinute": 14.1923828125
+    },
+    {
+      "command": "review",
+      "step": "typecheck-node",
+      "at": "2026-10-12T14:41:06.291Z",
+      "oneMinute": 14.1923828125
+    },
+    {
+      "command": "review",
+      "step": "import-cycles",
+      "at": "2026-10-12T14:41:06.292Z",
+      "oneMinute": 14.1923828125
+    },
+    {
+      "command": "review",
+      "step": "lint",
+      "at": "2026-10-12T14:41:06.292Z",
+      "oneMinute": 14.1923828125
+    },
+    {
+      "command": "review",
+      "step": "test-related",
+      "at": "2026-10-12T14:41:06.292Z",
+      "oneMinute": 14.1923828125
+    },
+    {
+      "command": "review",
+      "step": "friction-records",
+      "at": "2026-10-12T14:41:06.293Z",
+      "oneMinute": 14.1923828125
+    },
+    {
+      "command": "review",
+      "step": "restore-local-assets",
+      "at": "2026-10-12T14:41:26.585Z",
+      "oneMinute": 15.39111328125
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-corrected test-related step starting 2026-10-12T14:41:49.012Z"
+      }
+    }
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "rawManifest": {
+    "file": "raw-manifest.json",
+    "sha256": "b2d863583fb05f3d97eb7d33dd382340891127471537284244cfd5c8dfb55d4c",
+    "entries": 46
+  },
+  "resources": {
+    "at": "2026-10-12T14:46:02.236920+00:00",
+    "groups": [
+      53861,
+      53198,
+      71338,
+      78468,
+      94943,
+      63174,
+      37682,
+      98818,
+      35239,
+      31243,
+      14488,
+      16614
+    ],
+    "remaining": [],
+    "longLivedResources": [],
+    "ports": [],
+    "providers": [],
+    "fixtures": "Synthetic in-memory battle fixtures only; no filesystem fixtures or server/browser allocated. Review-owned disposable cache materializations are existing workspace outputs.",
+    "observerScope": "Foreground recorder wrappers completed through exec_command/write_stdin; wrapper PID not separately exposed or instrumented, child process groups directly recorded."
+  },
+  "validationCounts": {
+    "focusedFinal": {
+      "passed": 28,
+      "entrypointFiles": 1,
+      "skippedOtherHubCases": 1684
+    },
+    "reviewCorrected": {
+      "passed": 2357,
+      "files": 68,
+      "exit": 0
+    },
+    "baselineCorrected": {
+      "expectedFailures": 10,
+      "passedControls": 3
+    },
+    "counterfactualFinal": {
+      "expectedFailures": 10,
+      "passedControls": 3
+    }
+  },
+  "precommitEndpoint": "2026-10-12T14:46:02.236920+00:00",
+  "finalization": "Parent precommit ACK received after verification of exact five paths, both source hashes,46 immutable raw artifacts and all observed groups settled. Only evidence timing refreshed before final schema and one commit.",
+  "validationWorkers": 2
+}

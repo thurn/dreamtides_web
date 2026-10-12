@@ -5,7 +5,8 @@ import { parseJourneyBattleFoldState } from "../../../../rules/battle/fold";
 import { parseBattleId, parseDreamwellCardId, parseOpponentId, parsePromptId, parseSiteId } from "../../../../types/identifiers";
 import { createCatalog, type EngineCardDefinition, type EngineDreamwellDefinition } from "../../../catalog";
 import { engineDreamwellFromContent } from "../../../content-catalog";
-import { energy, event, self } from "../../../dsl/builders";
+import { energy, event, everyIn, self } from "../../../dsl/builders";
+import { onDissolved, triggered, whenDraw, whenGainsSpark, whenScores } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
 import { eventSeenBy } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
@@ -21,6 +22,9 @@ import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC_CARDS, SYNTHETIC as v, syntheticId } from "../../../testing/synthetic-cards";
 import { chooseOne } from "../choose-one";
 import { draw } from "../draw";
+import { floating, delayed } from "../floating-trigger";
+import { materialize } from "../materialize";
+import { withMaterialized } from "../with-materialized";
 import { foresee } from "../foresee";
 import { gainEnergy } from "../gain-energy";
 import { gainPoints } from "../gain-points";
@@ -40,7 +44,12 @@ const energyWell = well(4, gainEnergy(2));
 const flowWell = well(5, sequence(draw(1), gainPoints({ value: "handSize", player: "you" })));
 const hook: EngineCardDefinition = { ...v.event0, id: syntheticId(0x541ff), status: "authored", costs: [energy(0)],
   abilities: () => [event(gainPoints(7))], synthetic: { resolve(ctx, item) { drawDreamwell(ctx, item.controller); } } };
-const definitions = [scoredWell, modalWell, forecastWell, badWell, energyWell, flowWell];
+const floatingWell = well(7, withMaterialized(materialize(everyIn("void")), floating(whenDraw(), gainPoints(1))));
+const delayedWell = well(8, withMaterialized(materialize(everyIn("void")), delayed(whenDraw(), gainPoints(1))));
+const contextWatcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x54700), status: "authored",
+  abilities: () => [triggered(whenGainsSpark(), gainPoints(1)), triggered(whenScores(), gainPoints(1)),
+    triggered(whenDraw(), gainPoints(1)), triggered(onDissolved(), gainPoints(1))] };
+const definitions = [floatingWell, delayedWell, scoredWell, modalWell, forecastWell, badWell, energyWell, flowWell];
 const engine = createEngine(createCatalog([...SYNTHETIC_CARDS, hook], definitions));
 const sliceOf = (committed: BattleState): BattleSlice => ({ committed, inFlight: null, publishedEvents: 0, attempt: 0 });
 function applied(outcome: IntentOutcome) {
@@ -233,6 +242,56 @@ describe("Dreamwell bonus execution", () => {
       mutate(state.triggerQueue[0] as unknown as Record<string, unknown>);
       expect(parseJourneyBattleFoldState(saved(state))).toBeNull();
     }
+  });
+
+  it.each([
+    ["captured cards", { captured: ["i0"] }], ["empty captured cards", { captured: [] }],
+    ["spark gain", { gain: { amount: 2, expiry: { at: "never" } } }],
+    ["zero spark gain", { gain: { amount: 0, expiry: { at: "never" } } }],
+    ["scored points", { scored: 5 }], ["zero scored points", { scored: 0 }],
+    ["retained spark", { lastKnownSourceSpark: 3 }], ["zero retained spark", { lastKnownSourceSpark: 0 }],
+    ["hidden subject", { subjectHiddenFrom: ["enemy"] }], ["empty hidden subject", { subjectHiddenFrom: [] }],
+  ])("rejects saved bonus trigger context: %s", (_label, context) => {
+    const original = queued(modalWell).state;
+    const hash = stateHash(original);
+    const state = deserializeState(serializeState(original));
+    Object.assign(state.triggerQueue[0], context);
+    expect(parseJourneyBattleFoldState(saved(state))).toBeNull();
+    expect(stateHash(original)).toBe(hash);
+  });
+
+  it("preserves ordinary triggered causes through the public saved-state loader", () => {
+    const local = createEngine(createCatalog([...SYNTHETIC_CARDS, contextWatcher], []));
+    const board = boardState(local.catalog, { active: "player", phase: "day", player: { back: [contextWatcher.id], deck } });
+    const source = board.ids.player.back[0];
+    if (source === null) throw new Error("missing watcher");
+    const base = { source, controller: "player" as const, origin: { kind: "card" as const, cardId: contextWatcher.id,
+      variant: board.state.instances[source].variant }, node: null };
+    // Each supplied schema fixture carries only its matching trigger's cause.
+    board.state.triggerQueue = [
+      { ...base, ability: 0, subject: source, gain: { amount: 2, expiry: { at: "never" } } },
+      { ...base, ability: 1, subject: source, scored: 5 },
+      { ...base, ability: 2, subject: board.ids.player.deck[0], subjectHiddenFrom: ["enemy"] },
+      { ...base, ability: 3, subject: source, lastKnownSourceSpark: 3 },
+    ];
+    const loaded = parseJourneyBattleFoldState(JSON.parse(JSON.stringify(saved(board.state))) as Record<string, unknown>);
+    expect(loaded).not.toBeNull();
+    expect(loaded?.engine.slice.committed.triggerQueue).toEqual(board.state.triggerQueue);
+  });
+
+  it.each([floatingWell, delayedWell])("preserves generated Dreamwell-origin node contexts for $id", (definition) => {
+    const board = beforeDraw(definition);
+    const drawn = step(board.state, { kind: "advancePhase" });
+    const armed = step(drawn.state, { kind: "resolveTrigger" });
+    const triggered = step(armed.state, { kind: "advancePhase" }).state;
+    expect(triggered.triggerQueue).toHaveLength(1);
+    expect(triggered.triggerQueue[0]).toMatchObject({ source: { kind: "dreamwell", id: definition.id },
+      origin: { kind: "dreamwell", id: definition.id }, captured: [], subjectHiddenFrom: ["enemy"] });
+    expect(triggered.triggerQueue[0].node).not.toBeNull();
+    const loaded = parseJourneyBattleFoldState(JSON.parse(JSON.stringify(saved(triggered))) as Record<string, unknown>);
+    expect(loaded).not.toBeNull();
+    expect(loaded?.engine.slice.committed.triggerQueue).toEqual(triggered.triggerQueue);
+    expect(step(triggered, { kind: "resolveTrigger" }).state.sides.player.score).toBe(1);
   });
 
   it("bounces invalid, foreign and stale answers without consuming the bonus", () => {
