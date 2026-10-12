@@ -1,0 +1,569 @@
+{
+  "bead": "hv-vnue",
+  "base": "26b12691f491514bd692809f464d100ff53cb3c4",
+  "dispatchProvenance": "Parent own rollout spawn_agent(source_spark_reader) tool record, exact timestamp2026-10-12T14:19:05.824Z; includes read-only design and admission wait.",
+  "classification": "Bounded forwarding of existing resolving source-spark callback. No state/event/schema/DSL/runner/configuration changes. Local review:full and staged fuzz smoke do not apply; release stage owns aggregate checks.",
+  "validation": [
+    {
+      "name": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "resolving source spark"
+      ],
+      "pid": 81442,
+      "startUtc": "2026-10-12T14:26:02.753436+00:00",
+      "endUtc": "2026-10-12T14:26:07.543229+00:00",
+      "wallS": 4.789634624998143,
+      "exit": 1,
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "focused-fixed",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "resolving source spark"
+      ],
+      "pid": 82591,
+      "startUtc": "2026-10-12T14:26:47.467202+00:00",
+      "endUtc": "2026-10-12T14:26:52.329710+00:00",
+      "wallS": 4.862191374995746,
+      "exit": 1,
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "resolving source spark"
+      ],
+      "pid": 84758,
+      "startUtc": "2026-10-12T14:27:13.539897+00:00",
+      "endUtc": "2026-10-12T14:27:18.644495+00:00",
+      "wallS": 5.104422666001483,
+      "exit": 0,
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "missing-callback-counterfactual",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "resolving source spark"
+      ],
+      "pid": 8877,
+      "startUtc": "2026-10-12T14:27:34.592721+00:00",
+      "endUtc": "2026-10-12T14:27:38.722346+00:00",
+      "wallS": 4.129475458001252,
+      "exit": 1,
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "affected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/engine/continuous/continuous-zones.test.ts",
+        "src/engine/triggers/triggers.test.ts"
+      ],
+      "pid": 32657,
+      "startUtc": "2026-10-12T14:28:02.172852+00:00",
+      "endUtc": "2026-10-12T14:28:09.982736+00:00",
+      "wallS": 7.809720749995904,
+      "exit": 0,
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 72879,
+      "startUtc": "2026-10-12T14:29:14.953408+00:00",
+      "endUtc": "2026-10-12T14:30:17.394558+00:00",
+      "wallS": 62.44049829199503,
+      "exit": 2,
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 72880,
+      "startUtc": "2026-10-12T14:29:14.953440+00:00",
+      "endUtc": "2026-10-12T14:29:19.432807+00:00",
+      "wallS": 4.479252124998311,
+      "exit": 0,
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 68630,
+      "startUtc": "2026-10-12T14:30:46.515570+00:00",
+      "endUtc": "2026-10-12T14:31:38.062920+00:00",
+      "wallS": 51.546744915998715,
+      "exit": 0,
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "browser",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-vnue/source-spark.mjs",
+        "--bead",
+        "hv-vnue",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "pid": 75485,
+      "startUtc": "2026-10-12T14:32:06.137527+00:00",
+      "endUtc": "2026-10-12T14:32:32.374568+00:00",
+      "wallS": 26.23669212500681,
+      "exit": 1,
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "browser-diagnostic",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/hv-vnue/browser-mirror.mjs"
+      ],
+      "pid": 38040,
+      "startUtc": "2026-10-12T14:33:10.595352+00:00",
+      "endUtc": "2026-10-12T14:33:11.305991+00:00",
+      "wallS": 0.7105290420004167,
+      "exit": 1,
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "browser-diagnostic-fixed",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/hv-vnue/browser-mirror.mjs"
+      ],
+      "pid": 47169,
+      "startUtc": "2026-10-12T14:33:37.535020+00:00",
+      "endUtc": "2026-10-12T14:33:38.384463+00:00",
+      "wallS": 0.8493285000004107,
+      "exit": 0,
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "browser-final",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-vnue/source-spark.mjs",
+        "--bead",
+        "hv-vnue",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "pid": 58635,
+      "startUtc": "2026-10-12T14:33:57.598499+00:00",
+      "endUtc": "2026-10-12T14:34:02.957811+00:00",
+      "wallS": 5.35918966600002,
+      "exit": 0,
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "counterfactual": {
+    "restoredExactBytes": true,
+    "sha256": {
+      "src/engine/effects/interpreter.ts": "188372b6fcc7682cbc41b4aebd019e238549617f3f4a1ece01ca9b35734948c6",
+      "src/engine/effects/primitives/abandon.ts": "88be6f52ee507765968401e896ecfb1cefeafc9f85bff3a7c132c008ee37e75d",
+      "src/engine/effects/primitives/prevent.ts": "cc89a69b0b3941264d2eab0425b95e1be3ab1a184e88f7babd4f004833169017"
+    }
+  },
+  "counterfactualResult": "Combined restoration of three missing callback callers fails19changed-context cases; absent non-resolving reader case passes. No isolated proof of each failure path claimed.",
+  "scope": {
+    "sourceFiles": [
+      "src/engine/effects/interpreter.ts",
+      "src/engine/dsl/conditions.ts",
+      "src/engine/effects/primitives/abandon.ts",
+      "src/engine/effects/primitives/prevent.ts"
+    ],
+    "test": "src/engine/effects/primitives/contracts/resolving-source-spark.contracts.ts",
+    "fallout": [],
+    "entities": []
+  },
+  "failurePaths": {
+    "errorMidStep": {
+      "test": "rolls back a later synthetic error after a source-bound abandon succeeds",
+      "observables": "Source-bound chooseCards candidate0 required before intended later hook error; exact error stage, unchanged committed state and no published events. Missing callback restored causes early opening failure. Hook is synthetic and not valid authored card."
+    },
+    "reloadRestart": {
+      "tests": [
+        "player retained departure spark survives a stack reload",
+        "enemy retained departure spark survives a stack reload",
+        "player reloads source-bound Interrupt choices, rejects stale/foreign/concurrent input and pays once",
+        "enemy reloads source-bound Interrupt choices, rejects stale/foreign/concurrent input and pays once"
+      ],
+      "observables": "State serialization/reload and fresh fold recompute source-bound candidates; final state hash equals direct/inline engine."
+    },
+    "partialWrites": {
+      "tests": [
+        "player reloads source-bound Interrupt choices, rejects stale/foreign/concurrent input and pays once",
+        "enemy reloads source-bound Interrupt choices, rejects stale/foreign/concurrent input and pays once",
+        "rolls back a later synthetic error after a source-bound abandon succeeds"
+      ],
+      "observables": "ChooseCards committed state equals prior confirm; paid activation energy retained; final1abandonment, repeated answer bounces; failed resolution publishes nothing. Engine writes on cloned step state, no new persistence transition."
+    },
+    "invalidStaleInputs": {
+      "tests": [
+        "player reloads source-bound Interrupt choices, rejects stale/foreign/concurrent input and pays once",
+        "enemy reloads source-bound Interrupt choices, rejects stale/foreign/concurrent input and pays once"
+      ],
+      "observables": "Out-of-bound, source, empty and boolean answers rejected; historical prompt and changed attempt rejected."
+    },
+    "concurrentActors": {
+      "tests": [
+        "player reloads source-bound Interrupt choices, rejects stale/foreign/concurrent input and pays once",
+        "enemy reloads source-bound Interrupt choices, rejects stale/foreign/concurrent input and pays once"
+      ],
+      "observables": "Foreign actor rejects notYourPrompt, unrelated battleAction rejects stepInFlight. Fold serialized; no new concurrent mutation transition."
+    },
+    "InterruptCancelPaymentOnce": {
+      "tests": [
+        "player reloads source-bound Interrupt choices, rejects stale/foreign/concurrent input and pays once",
+        "enemy reloads source-bound Interrupt choices, rejects stale/foreign/concurrent input and pays once"
+      ],
+      "observables": "Real energyX Interrupt activation chooses2,target, payer confirmation then source-bound abandonment. Precommit X cancel hash equals initial; resolving confirm cancel notCancellable; final energy3, exactly1published abandonment and duplicate answer rejected."
+    }
+  },
+  "limits": {
+    "static": "Optional callback absent in all existing static/matcher/trigger/victory scopes. Static numeric/bound contracts validated through affected aggregate.",
+    "x": "Existing resolving-X contracts validate chosen/null behavior; new cases contrast source spark with storedX3 and chosen0/2/null activation. No numeric X-value repair.",
+    "browser": "Browser-host real engine/fold parity only on desktop, no UI/presentation changes. Current catalog has five sourceSpark use modules, all existing value/target forms; none reaches changed resolving predicate/condition forms. No product UI/store injection, persisted game or screenshot claim.",
+    "logging": "Existing semantic abandonment/payment events and public fold publication retained; no new log event.",
+    "runtime": "Both owned browser QA servers and runners completed and were stopped; port5274 has no owned listener. Runtime receipts are recorded below."
+  },
+  "hostLoadSamples": [
+    {
+      "load": 17.31,
+      "measuredFor": "pre-review evidence creation"
+    },
+    {
+      "load": 15.7216796875,
+      "measuredFor": "review-final starting sampled from exact review log"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final starting sample"
+      }
+    }
+  },
+  "browser": {
+    "scenario": "source-spark.mjs",
+    "passedEvidence": "invocations/run-3x8Aem/source-spark.result.json",
+    "failedEvidence": "invocations/run-5dzVRV/source-spark.result.json",
+    "passed": true,
+    "caps": [],
+    "nativeControllers": [
+      "player",
+      "enemy"
+    ],
+    "reload": "Actual document navigation then JSON rehydration through fresh public fold, final hash equals inline engine; candidates and invalid input asserted.",
+    "fixtureRepair": "First browser assertion expected resolution while a spare Interrupt kept response open. Scratch exact public engine mirror identified window; scenario now passes opponent before resolution. Failed invocation caps[] and cleanup completed; no product issue.",
+    "captures": [],
+    "gameLogs": "No local game created; isolated engine/fold workflows only."
+  },
+  "runtime": {
+    "commands": [
+      {
+        "name": "focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "resolving source spark"
+        ],
+        "pid": 81442,
+        "startUtc": "2026-10-12T14:26:02.753436+00:00",
+        "endUtc": "2026-10-12T14:26:07.543229+00:00",
+        "wallS": 4.789634624998143,
+        "exit": 1,
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "focused-fixed",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "resolving source spark"
+        ],
+        "pid": 82591,
+        "startUtc": "2026-10-12T14:26:47.467202+00:00",
+        "endUtc": "2026-10-12T14:26:52.329710+00:00",
+        "wallS": 4.862191374995746,
+        "exit": 1,
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "focused-final",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "resolving source spark"
+        ],
+        "pid": 84758,
+        "startUtc": "2026-10-12T14:27:13.539897+00:00",
+        "endUtc": "2026-10-12T14:27:18.644495+00:00",
+        "wallS": 5.104422666001483,
+        "exit": 0,
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "missing-callback-counterfactual",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "resolving source spark"
+        ],
+        "pid": 8877,
+        "startUtc": "2026-10-12T14:27:34.592721+00:00",
+        "endUtc": "2026-10-12T14:27:38.722346+00:00",
+        "wallS": 4.129475458001252,
+        "exit": 1,
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "affected",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/fold/fold-prompts.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/engine/content-gates.test.ts",
+          "src/engine/continuous/continuous-zones.test.ts",
+          "src/engine/triggers/triggers.test.ts"
+        ],
+        "pid": 32657,
+        "startUtc": "2026-10-12T14:28:02.172852+00:00",
+        "endUtc": "2026-10-12T14:28:09.982736+00:00",
+        "wallS": 7.809720749995904,
+        "exit": 0,
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 72879,
+        "startUtc": "2026-10-12T14:29:14.953408+00:00",
+        "endUtc": "2026-10-12T14:30:17.394558+00:00",
+        "wallS": 62.44049829199503,
+        "exit": 2,
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 72880,
+        "startUtc": "2026-10-12T14:29:14.953440+00:00",
+        "endUtc": "2026-10-12T14:29:19.432807+00:00",
+        "wallS": 4.479252124998311,
+        "exit": 0,
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "review-final",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 68630,
+        "startUtc": "2026-10-12T14:30:46.515570+00:00",
+        "endUtc": "2026-10-12T14:31:38.062920+00:00",
+        "wallS": 51.546744915998715,
+        "exit": 0,
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "browser",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-vnue/source-spark.mjs",
+          "--bead",
+          "hv-vnue",
+          "--viewports",
+          "desktop",
+          "--timeout",
+          "180"
+        ],
+        "pid": 75485,
+        "startUtc": "2026-10-12T14:32:06.137527+00:00",
+        "endUtc": "2026-10-12T14:32:32.374568+00:00",
+        "wallS": 26.23669212500681,
+        "exit": 1,
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "browser-diagnostic",
+        "command": [
+          "node_modules/.bin/tsx",
+          "/tmp/hv-vnue/browser-mirror.mjs"
+        ],
+        "pid": 38040,
+        "startUtc": "2026-10-12T14:33:10.595352+00:00",
+        "endUtc": "2026-10-12T14:33:11.305991+00:00",
+        "wallS": 0.7105290420004167,
+        "exit": 1,
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "browser-diagnostic-fixed",
+        "command": [
+          "node_modules/.bin/tsx",
+          "/tmp/hv-vnue/browser-mirror.mjs"
+        ],
+        "pid": 47169,
+        "startUtc": "2026-10-12T14:33:37.535020+00:00",
+        "endUtc": "2026-10-12T14:33:38.384463+00:00",
+        "wallS": 0.8493285000004107,
+        "exit": 0,
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "browser-final",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-vnue/source-spark.mjs",
+          "--bead",
+          "hv-vnue",
+          "--viewports",
+          "desktop",
+          "--timeout",
+          "180"
+        ],
+        "pid": 58635,
+        "startUtc": "2026-10-12T14:33:57.598499+00:00",
+        "endUtc": "2026-10-12T14:34:02.957811+00:00",
+        "wallS": 5.35918966600002,
+        "exit": 0,
+        "terminal": true,
+        "ports": []
+      }
+    ],
+    "servers": [
+      {
+        "processGroup": 75561,
+        "port": 5274,
+        "invocation": "run-5dzVRV",
+        "stopped": true
+      },
+      {
+        "processGroup": 58726,
+        "port": 5274,
+        "invocation": "run-3x8Aem",
+        "stopped": true
+      }
+    ],
+    "providers": "Existing shared Playwright MCP provider remains untouched. Both runners closed owned MCP contexts and automatic slot1 leases.",
+    "independentCleanup": "After both terminal reports, lsof finds no5274listener and ps finds neither75561nor58726; runner reports portfree after verified process-group cleanup.",
+    "ports": [],
+    "liveOwnedJobs": []
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "finalChecks": {
+    "focused": "20passed; counterfactual19failed/1staticpassed; exactbytesrestored",
+    "affected": "6files/1781passed",
+    "review": "268files/4330passed, types/lint/cycles/friction valid",
+    "knip": "pass",
+    "browser": "pass, caps[], native+reload bothcontrollers",
+    "schema": "Passed in final helper handoff; parent reruns the same record validator after evidence-only corrections before amendment."
+  },
+  "measurementWindow": {
+    "startUtc": "2026-10-12T14:19:05.824Z",
+    "endUtc": "2026-10-12T14:40:15.844440+00:00",
+    "endProvenance": "Parent evidence-only correction and one source-commit amendment preparation after helper commit; final Git commit time is authoritative for the short schema/commit tail."
+  },
+  "evidenceCorrection": {
+    "originalHelperCommit": "5de0a6aee38581ef5a8a09da90caf90d747b5520",
+    "atUtc": "2026-10-12T14:40:15.844440+00:00",
+    "scope": "Phase5 classification and completed runtime/schema labels only; production and test bytes unchanged. Window includes parent handoff verification and correction."
+  }
+}

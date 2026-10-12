@@ -2,6 +2,7 @@ import { matchingCharacters, resolvePlayer } from "../../dsl/selectors";
 import type { CharacterSelector, PlayerRef } from "../../dsl/types";
 import type { ChooseCardsPrompt } from "../../prompts/types";
 import { abandonCharacter } from "../../rules/costs";
+import { resolvingSourceSpark } from "../interpreter";
 import { definePrimitive } from "../types";
 
 /** A player chooses one character they control to abandon as the effect resolves; the choice does not target. */
@@ -16,7 +17,7 @@ export const abandonPrimitive = definePrimitive<AbandonNode>({
   resolve(ctx, node, env) {
     const side = resolvePlayer(env.controller, node.chooser);
     const candidates = matchingCharacters(
-      ctx.state, ctx.catalog, { ...node.predicate, controller: "you" }, side, env.source, env.x ?? undefined,
+      ctx.state, ctx.catalog, { ...node.predicate, controller: "you" }, side, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env),
     );
     if (candidates.length === 0) return;
     const [chosen] = ctx.choose<ChooseCardsPrompt>({

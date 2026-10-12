@@ -1,0 +1,31 @@
+{
+  "bead": "hv-vnue",
+  "phase": 5,
+  "implementWindow": {
+    "start": "2026-10-12T14:19:05.824Z",
+    "end": "2026-10-12T14:40:15.844440+00:00"
+  },
+  "implementMin": 21.167007333333334,
+  "localValidationS": {
+    "focused": 4.79,
+    "focused-fixed": 4.862,
+    "focused-final": 5.104,
+    "missing-callback-counterfactual": 4.129,
+    "affected": 7.81,
+    "review": 62.44,
+    "knip": 4.479,
+    "review-final": 51.547,
+    "browser": 26.237,
+    "browser-diagnostic": 0.711,
+    "browser-diagnostic-fixed": 0.849,
+    "browser-final": 5.359
+  },
+  "hostLoad": 15.7216796875,
+  "testDelta": {
+    "files": 1,
+    "lines": 242,
+    "jsdomFiles": 0,
+    "cases": 20
+  },
+  "friction": []
+}

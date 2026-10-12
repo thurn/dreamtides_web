@@ -263,7 +263,7 @@ function sourceSparkReader(ctx: StepContext, source: AbilitySource, retained: nu
 }
 
 /** The source ✦ reader for a resolving effect. */
-function resolvingSourceSpark(ctx: StepContext, env: EffectEnv): SourceSparkReader {
+export function resolvingSourceSpark(ctx: StepContext, env: EffectEnv): SourceSparkReader {
   return sourceSparkReader(ctx, env.source, env.lastKnownSourceSpark);
 }
 
@@ -584,7 +584,7 @@ export function conditionHolds(
 }
 
 export function checkCondition(ctx: StepContext, condition: Condition, env: EffectEnv): boolean {
-  return conditionHolds(ctx.state, ctx.catalog, condition, env);
+  return conditionHolds(ctx.state, ctx.catalog, condition, { ...env, sourceSpark: resolvingSourceSpark(ctx, env) });
 }
 
 /**
