@@ -834,7 +834,10 @@ printed on the card — generally, if choosing 0 would not make sense, it is not
 allowed. For example, a character with X cost and X spark cannot be played for 0
 just to make it immediately dissolve, and an event cannot generally be played for
 no effect merely to increase a card count. A card written with two costs, such as
-"2 X", requires paying 2● first and then X●.
+"2 X", requires paying 2● first and then X●. X is picked before the card's
+targets, so a target bounded by X, as in "Return a character with cost X● to
+hand", is chosen among the characters that match the picked X; that card may
+be played for X = 0 to return a 0● character, such as a figment.
 
 A discard cost may restrict the card's current type or subtype. It chooses only
 cards held in the paying player's hand, excluding the card being played and
