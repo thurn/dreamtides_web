@@ -213,6 +213,23 @@ describe("declared public battle setup", () => {
 });
 
 describe("declared result options", () => {
+  it("rejects every eligible-side slot at initialization and saved-load boundaries", () => {
+    const state = engine.createBattle(init(), NO_PROMPTS).state;
+    for (const victorySides of [Array<Side>(1), [undefined], [null], [["player"]]]) {
+      const input = init();
+      Reflect.set(input, "victorySides", victorySides);
+      const before = JSON.stringify(input);
+      let observations = 0;
+      expect.soft(() => engine.createBattle(input, NO_PROMPTS, () => { observations++; })).toThrow();
+      expect.soft(observations).toBe(0);
+      expect.soft(JSON.stringify(input)).toBe(before);
+      expect.soft(parseJourneyBattleFoldState(saved(input, slice(state)))).toBeNull();
+      const malformed = structuredClone(state);
+      Reflect.set(malformed.config, "victorySides", victorySides);
+      expect.soft(parseJourneyBattleFoldState(saved(init(), slice(malformed)))).toBeNull();
+    }
+  });
+
   it("uses eligible sides as a set and preserves simultaneous-score draw priority", () => {
     const input = init();
     const scored = { ...setup(), sides: { player: { currentEnergy: 0, maxEnergy: 0, score: 20 }, enemy: { currentEnergy: 0, maxEnergy: 0, score: 20 } } };

@@ -114,7 +114,7 @@ function record(value: unknown): value is Record<string, unknown> {
 function validVictorySides(value: unknown): value is readonly Side[] {
   if (!Array.isArray(value)) return false;
   const sides: readonly unknown[] = value;
-  return sides.length > 0 && sides.every((side) => SIDES.some((known) => known === side)) && new Set(sides).size === sides.length;
+  return sides.length > 0 && Array.from(sides).every((side) => SIDES.some((known) => known === side)) && new Set(sides).size === sides.length;
 }
 
 function fields(value: unknown, allowed: readonly string[]): boolean {

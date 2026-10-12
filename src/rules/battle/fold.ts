@@ -747,7 +747,7 @@ function isPositiveIndex(value: unknown): value is number {
 }
 
 function isVictorySides(value: unknown): boolean {
-  return isArrayOf(value, isSide) && value.length > 0 && new Set(value).size === value.length;
+  return isArrayOf(value, isSide) && value.length > 0 && Array.from(value).every(isSide) && new Set(value).size === value.length;
 }
 
 function hasOnlyFields(value: unknown, fields: readonly string[]): value is Record<string, unknown> {

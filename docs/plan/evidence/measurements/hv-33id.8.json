@@ -1,0 +1,200 @@
+{
+  "bead": "hv-33id.8",
+  "base": "128beee605680c2168c688c847c8285f0b6c398a",
+  "originatingSource": "8d699fd4651495906e2ccdb07436e09677cbe68d",
+  "capability": "sparse-victory-sides-validation",
+  "implementation": "Parent session itself; no implementation subagent. Exact native claim timestamp starts the elapsed ownership/setup/implementation/validation interval, not productive CPU or quota time.",
+  "window": {
+    "start": "2026-10-12T20:51:15Z",
+    "end": "2026-10-12T20:57:04.228314+00:00"
+  },
+  "publicWitness": {
+    "prechange": {
+      "exit": 1,
+      "failedCase": "rejects every eligible-side slot at initialization and saved-load boundaries",
+      "observedFailures": [
+        "malformed sparse init accepted",
+        "observer received state",
+        "malformed sparse saved init accepted",
+        "malformed sparse saved config accepted"
+      ]
+    },
+    "corrected": {
+      "selectedCases": 19,
+      "files": 1,
+      "exit": 0
+    },
+    "aggregateReview": {
+      "testFiles": 271,
+      "tests": 5036,
+      "exit": 0
+    },
+    "inputShapes": [
+      "one missing side slot",
+      "undefined side member",
+      "null side member",
+      "nested side array"
+    ],
+    "unchangedControls": "Existing default, single-side, either side and simultaneous-win contracts included in focused and related review. No production-data or UI-copy assertion."
+  },
+  "scope": {
+    "productionFiles": 2,
+    "productionLinesChanged": 4,
+    "appendedPlainContractLines": 17,
+    "newCases": 1,
+    "entrypointDelta": 0,
+    "jsdomDelta": 0,
+    "exportedAPIChange": false,
+    "mechanicalImporterFallout": [],
+    "browserQA": "Not applicable: only malformed initialization/save validation; no runtime presentation or player workflow change.",
+    "fullReview": "Not required for two private guard expressions and an appended synthetic contract; full architecture/API remains the original7 implementation.",
+    "fuzz": "Not required; normal game transitions and production content unchanged."
+  },
+  "failurePaths": {
+    "invalidInit": "Public synthetic case asserts throw, unchanged input and zero observer publication.",
+    "invalidLoad": "Same case rejects malformed init and committed config through public parseJourneyBattleFoldState.",
+    "duplicateWrongSideAndTie": "Existing selected declared-result tests retain rejection and eligibility/tie behavior.",
+    "reload": "Existing declared setup persistence public contracts pass.",
+    "staleConcurrentCancel": "Not applicable to synchronous constructor and pure save guards; intent/prompt semantics unchanged.",
+    "runtimeChildError": "Not applicable; no action/effect execution or error recovery changed."
+  },
+  "checks": {
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-8-sparse-victory-sides",
+      "start": "2026-10-12T20:55:22.308717+00:00",
+      "end": "2026-10-12T20:55:26.655715+00:00",
+      "exit": 0,
+      "wallSeconds": 4.3468690419977065,
+      "pid": 61109,
+      "pgid": 61109,
+      "load": "{ 13.60 11.16 11.41 }",
+      "groupRemainingAtExit": []
+    },
+    "focused": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "declared"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-8-sparse-victory-sides",
+      "start": "2026-10-12T20:53:48.559804+00:00",
+      "end": "2026-10-12T20:53:54.354367+00:00",
+      "exit": 0,
+      "wallSeconds": 5.7943795830069575,
+      "pid": 57850,
+      "pgid": 57850,
+      "load": "{ 9.65 10.77 11.36 }",
+      "groupRemainingAtExit": []
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-8-sparse-victory-sides",
+      "start": "2026-10-12T20:54:22.252202+00:00",
+      "end": "2026-10-12T20:55:16.811847+00:00",
+      "exit": 0,
+      "wallSeconds": 54.55915850000747,
+      "pid": 58503,
+      "pgid": 58503,
+      "load": "{ 7.79 10.22 11.14 }",
+      "groupRemainingAtExit": []
+    },
+    "baseline-contract": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "rejects every eligible-side slot"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-8-sparse-victory-sides",
+      "start": "2026-10-12T20:53:15.161597+00:00",
+      "end": "2026-10-12T20:53:22.322403+00:00",
+      "exit": 1,
+      "wallSeconds": 7.160560625008657,
+      "pid": 56140,
+      "pgid": 56140,
+      "load": "{ 11.72 11.22 11.54 }",
+      "groupRemainingAtExit": []
+    },
+    "triggers": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-8-sparse-victory-sides",
+      "start": "2026-10-12T20:53:32.787757+00:00",
+      "end": "2026-10-12T20:53:32.908478+00:00",
+      "exit": 0,
+      "wallSeconds": 0.1206417500070529,
+      "pid": 57392,
+      "pgid": 57392,
+      "load": "{ 10.73 11.03 11.46 }",
+      "groupRemainingAtExit": []
+    },
+    "install": {
+      "argv": [
+        "npm",
+        "install",
+        "--prefer-offline",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-8-sparse-victory-sides",
+      "start": "2026-10-12T20:52:12.980790+00:00",
+      "end": "2026-10-12T20:52:16.264533+00:00",
+      "exit": 0,
+      "wallSeconds": 3.2836489170003915,
+      "pid": 1621,
+      "pgid": 1621,
+      "load": "{ 7.71 9.93 11.10 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "immutableManifest": {
+    "path": "/tmp/root-sparse8/immutable-manifest.json",
+    "sha256": "2d4d982b7c4a753b427333b20002fba720b4b20afcbae908c7217169f10207bb"
+  },
+  "sourceHashes": [
+    {
+      "path": "src/engine/state/create.ts",
+      "sha256": "b5f6ede8d70c91dc166cdf6a000e91e2e0b3d9f79d3121f7c5f0fd372fa381d3"
+    },
+    {
+      "path": "src/rules/battle/fold.ts",
+      "sha256": "c23ec7e33fa4e5225418e77549a14c43a62e6ed3f3a24dedd5a5c3bd180bdd10"
+    },
+    {
+      "path": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts",
+      "sha256": "6d3ee1e3aff8953bddc28002b6dd142833488e054feedc7075086403116abb9d"
+    }
+  ],
+  "resources": {
+    "knownProcessGroups": [
+      1621,
+      56140,
+      57392,
+      57850,
+      58503,
+      61109
+    ],
+    "remaining": [],
+    "scope": "Observed receipt groups only, no task server/browser/provider; original7 reviewer terminal and snapshot removed.",
+    "foreignActions": "None"
+  },
+  "review": "Parent will launch fresh read-only Codex CLI gpt-5.6-sol at exact committed source after immediate candidate, per temporary human routing; no inherited author context.",
+  "preExistingIssues": [],
+  "provenance": "Original7 surviving raw manifest and lost-version disclosures unchanged. Parent discovery probe original runtime-path/missing catalog-argument failures and corrected public proof remain /tmp/root-init-api; this repair baseline/pass receipts are new immutable files."
+}
