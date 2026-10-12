@@ -1,3 +1,5 @@
+import { activated, exhaustSelf } from "../../engine/dsl/builders";
+import { discard, draw, sequence } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +19,6 @@ export default card({
   artOwned: true,
   cardNumber: 8,
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([exhaustSelf()], sequence(draw(1), discard(1)), { speed: "fast" })],
+  verifiedText: "1yvibth0dwe",
 });

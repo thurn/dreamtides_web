@@ -1,0 +1,837 @@
+{
+  "bead": "hv-umm2.122",
+  "phase": 5,
+  "base": "bf0c8c2b320cdd798225be0cc504b4ffdf1db7f8",
+  "implementationWindow": {
+    "startUtc": "2026-10-11T23:34:51+00:00",
+    "startBasis": "Fresh reclaim acknowledgement; the retained native original started_at belongs to untouched released discovery.",
+    "endUtc": "2026-10-12T00:31:42.764668+00:00",
+    "endBasis": "Final evidence preparation after parent scope, checks, QA and resource ACK, immediately before final friction schema validation, staging and the single commit. Actual commit interval is in the external receipt.",
+    "endIsPrecommitProxy": true,
+    "parentAckPending": false,
+    "parentAck": "Exact nine-file scope, source freeze, checks, six Random judged passes, bounded sweep retries and outside-area Greedy fail ownership accepted."
+  },
+  "scope": {
+    "cardUuids": [
+      "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+      "43628666-2ecd-47a7-b2c0-241cda0de5e8",
+      "770b21e4-ea6a-4910-8fca-2ec5b8813da1",
+      "d1c25546-dcf2-481e-8f00-9afef3adf24b",
+      "8adfa141-6864-4f5f-a9ca-59306eaf5432"
+    ],
+    "cards": 5,
+    "amplifiedDefinitions": 2,
+    "newPrimitives": 0,
+    "scenarioModules": 0,
+    "fallout": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "immutableFields": "All original bytes from card import through isStarter are unchanged. Only new imports, abilities and verifiedText replace pending.",
+    "d21FirstBytes": [
+      218,
+      219,
+      134,
+      12,
+      84
+    ],
+    "sampledUuids": [
+      "d1c25546-dcf2-481e-8f00-9afef3adf24b"
+    ]
+  },
+  "sourceFreeze": {
+    "utc": "2026-10-11T23:42:19.139903+00:00",
+    "base": "bf0c8c2b320cdd798225be0cc504b4ffdf1db7f8",
+    "files": {
+      "src/content/cards/relentless-pursuer-43628666.ts": "716da12b2efb8bcc0495893db5f8aac7bf0f2566ac9515f609efe3e15260b678",
+      "src/content/cards/chronicle-claimer-68978d92.ts": "ae7c972a6fb8d26ab9882c90bba8b391e9090df381bcbb6572faffe724124d09",
+      "src/content/cards/catastrophe-broker-770b21e4.ts": "500d83326843f378442963d1d11547f35790d350c0551d30d20a0bc5edd65303",
+      "src/content/cards/skybreak-ascendant-8adfa141.ts": "7193ea30c0d9580b5f2a81eefd68996a32f891d3bb6b77b63c857fa0318dad35",
+      "src/content/cards/threshold-scout-d1c25546.ts": "806d0aa2700d3bad488ac9104838125da670aa8473d565ef09ccb26fc13f73a8"
+    },
+    "immutableCatalogFields": "All original bytes from card import through isStarter are unchanged. Only new imports, abilities and verifiedText replace pending."
+  },
+  "validation": {
+    "focused": {
+      "tests": 12,
+      "files": 1,
+      "receipt": "focused-final.result.json"
+    },
+    "review": {
+      "tests": 2853,
+      "files": 220,
+      "scope": "Diff-aware lint, both TypeScript projects, import cycles and all 220 related test entrypoints; not a separately invoked review:full.",
+      "receipt": "review.result.json"
+    },
+    "knip": {
+      "scope": "Sequential after review and its restoration completed.",
+      "receipt": "knip.result.json"
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 143883,
+      "prompts": 3738,
+      "interactiveReruns": 377,
+      "failures": 0,
+      "scriptReportedWallS": 71.9,
+      "scriptReportedCpuS": 79.0,
+      "wrapperWallS": 318.8784512909997,
+      "precommand": {
+        "observedUtc": "2026-10-11T23:44:48.097255+00:00",
+        "firstNpmOutputMtimeUtc": "2026-10-11T23:44:11.518301+00:00",
+        "npmProcess": "37242 Sun Oct 11 16:44:11 2026     00:37 npm run fuzz:engine --games 300 --weight-uuids ***,***,***,***,***",
+        "basis": "First npm output and process start bound lock acquisition plus npm startup; neither is a pure lock duration."
+      },
+      "counters": [
+        {
+          "uuid": "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+          "included": 613,
+          "cardPlayed": 237
+        },
+        {
+          "uuid": "43628666-2ecd-47a7-b2c0-241cda0de5e8",
+          "included": 618,
+          "cardPlayed": 220
+        },
+        {
+          "uuid": "770b21e4-ea6a-4910-8fca-2ec5b8813da1",
+          "included": 618,
+          "cardPlayed": 208
+        },
+        {
+          "uuid": "d1c25546-dcf2-481e-8f00-9afef3adf24b",
+          "included": 612,
+          "cardPlayed": 188
+        },
+        {
+          "uuid": "8adfa141-6864-4f5f-a9ca-59306eaf5432",
+          "included": 621,
+          "cardPlayed": 185
+        }
+      ],
+      "counterScope": "Exercise counters count cardPlayed only, not activated abilities, individual clauses or all variants.",
+      "materializesWorkspace": false
+    },
+    "preflight": {
+      "cells": 100,
+      "pass": 46,
+      "skip": 54,
+      "fail": 0,
+      "variants": "All 10 variants, both sides; ineligible variants classified skips.",
+      "wrapperWallS": 0.7125786659998994,
+      "engineReportedElapsedMs": 30.973292000000015
+    },
+    "evidenceSchema": {
+      "records": 426,
+      "historicalUnknownMeasurements": 41,
+      "wallS": 0.08786249999866413,
+      "exitCode": 0,
+      "scope": "All friction records, configuration and ledger are parsed; trigger evaluation is separate."
+    }
+  },
+  "commands": [
+    {
+      "name": "focused-final",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 2928,
+      "pgid": 2928,
+      "startUtc": "2026-10-11T23:39:42.571794+00:00",
+      "endUtc": "2026-10-11T23:39:47.806823+00:00",
+      "loadStart": "{ 18.20 20.92 19.47 }",
+      "wallS": 5.231767874999605,
+      "exitCode": 0
+    },
+    {
+      "name": "focused",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 300,
+      "pgid": 300,
+      "startUtc": "2026-10-11T23:39:25.416789+00:00",
+      "endUtc": "2026-10-11T23:39:26.928786+00:00",
+      "loadStart": "{ 17.50 20.99 19.46 }",
+      "wallS": 1.5089362500002608,
+      "exitCode": 1
+    },
+    {
+      "name": "fuzz",
+      "args": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "68978d92-aa8b-4873-bb0b-6e52f12b0849,43628666-2ecd-47a7-b2c0-241cda0de5e8,770b21e4-ea6a-4910-8fca-2ec5b8813da1,d1c25546-dcf2-481e-8f00-9afef3adf24b,8adfa141-6864-4f5f-a9ca-59306eaf5432"
+      ],
+      "pid": 7310,
+      "pgid": 7310,
+      "startUtc": "2026-10-11T23:40:05.376710+00:00",
+      "endUtc": "2026-10-11T23:45:24.261509+00:00",
+      "loadStart": "{ 26.62 22.79 20.18 }",
+      "wallS": 318.8784512909997,
+      "exitCode": 0
+    },
+    {
+      "name": "knip",
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 13468,
+      "pgid": 13468,
+      "startUtc": "2026-10-11T23:40:58.046745+00:00",
+      "endUtc": "2026-10-11T23:41:00.952039+00:00",
+      "loadStart": "{ 25.13 23.23 20.52 }",
+      "wallS": 2.902039749999858,
+      "exitCode": 0
+    },
+    {
+      "name": "preflight",
+      "args": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "68978d92-aa8b-4873-bb0b-6e52f12b0849,43628666-2ecd-47a7-b2c0-241cda0de5e8,770b21e4-ea6a-4910-8fca-2ec5b8813da1,d1c25546-dcf2-481e-8f00-9afef3adf24b,8adfa141-6864-4f5f-a9ca-59306eaf5432"
+      ],
+      "pid": 14343,
+      "pgid": 14343,
+      "startUtc": "2026-10-11T23:41:08.457847+00:00",
+      "endUtc": "2026-10-11T23:41:09.173255+00:00",
+      "loadStart": "{ 23.91 23.04 20.48 }",
+      "wallS": 0.7125786659998994,
+      "exitCode": 0
+    },
+    {
+      "name": "qa-early-corrected",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "threshold-judged",
+        "--bead",
+        "hv-umm2.122",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "branch=accept"
+      ],
+      "pid": 82411,
+      "pgid": 82411,
+      "startUtc": "2026-10-11T23:51:48.271750+00:00",
+      "endUtc": "2026-10-11T23:52:07.204146+00:00",
+      "loadStart": "{ 8.62 10.74 15.15 }",
+      "wallS": 18.93000491699968,
+      "exitCode": 130
+    },
+    {
+      "name": "qa-early-night",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "threshold-judged",
+        "--bead",
+        "hv-umm2.122",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "branch=accept"
+      ],
+      "pid": 84023,
+      "pgid": 84023,
+      "startUtc": "2026-10-11T23:52:16.142479+00:00",
+      "endUtc": "2026-10-11T23:52:53.301014+00:00",
+      "loadStart": "{ 7.60 10.28 14.84 }",
+      "wallS": 37.15512029199999,
+      "exitCode": 0
+    },
+    {
+      "name": "qa-early-random",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "threshold-judged",
+        "--bead",
+        "hv-umm2.122",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "branch=accept"
+      ],
+      "pid": 64081,
+      "pgid": 64081,
+      "startUtc": "2026-10-11T23:49:00.196059+00:00",
+      "endUtc": "2026-10-11T23:51:21.303444+00:00",
+      "loadStart": "{ 4.72 12.58 16.69 }",
+      "wallS": 141.1027789159989,
+      "exitCode": 1
+    },
+    {
+      "name": "qa-early",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "threshold-judged",
+        "--bead",
+        "hv-umm2.122",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "branch=accept"
+      ],
+      "pid": 42049,
+      "pgid": 42049,
+      "startUtc": "2026-10-11T23:45:51.815156+00:00",
+      "endUtc": "2026-10-11T23:47:35.281101+00:00",
+      "loadStart": "{ 10.40 18.41 19.27 }",
+      "wallS": 103.46176354200088,
+      "exitCode": 1
+    },
+    {
+      "name": "qa-enemy-focused",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "threshold-judged",
+        "--bead",
+        "hv-umm2.122",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "side=enemy"
+      ],
+      "pid": 99081,
+      "pgid": 99081,
+      "startUtc": "2026-10-11T23:57:09.295623+00:00",
+      "endUtc": "2026-10-11T23:58:06.059437+00:00",
+      "loadStart": "{ 4.56 6.75 11.90 }",
+      "wallS": 56.75969124999938,
+      "exitCode": 0
+    },
+    {
+      "name": "qa-log",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "threshold-log",
+        "--bead",
+        "hv-umm2.122",
+        "--viewports",
+        "mobile"
+      ],
+      "pid": 20986,
+      "pgid": 20986,
+      "startUtc": "2026-10-12T00:02:02.325916+00:00",
+      "endUtc": "2026-10-12T00:03:41.207185+00:00",
+      "loadStart": "{ 7.62 7.59 10.80 }",
+      "wallS": 98.87620804200014,
+      "exitCode": 0
+    },
+    {
+      "name": "qa-matrix",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "threshold-matrix",
+        "--bead",
+        "hv-umm2.122",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 86947,
+      "pgid": 86947,
+      "startUtc": "2026-10-11T23:53:59.820148+00:00",
+      "endUtc": "2026-10-11T23:56:03.185194+00:00",
+      "loadStart": "{ 4.99 8.91 13.81 }",
+      "wallS": 123.36128879100033,
+      "exitCode": 1
+    },
+    {
+      "name": "qa-mobile",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "threshold-mobile",
+        "--bead",
+        "hv-umm2.122",
+        "--viewports",
+        "mobile"
+      ],
+      "pid": 9698,
+      "pgid": 9698,
+      "startUtc": "2026-10-11T23:59:10.383344+00:00",
+      "endUtc": "2026-10-12T00:00:44.018619+00:00",
+      "loadStart": "{ 7.17 7.05 11.35 }",
+      "wallS": 93.631946083,
+      "exitCode": 0
+    },
+    {
+      "name": "review",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 3624,
+      "pgid": 3624,
+      "startUtc": "2026-10-11T23:39:49.143069+00:00",
+      "endUtc": "2026-10-11T23:40:42.491796+00:00",
+      "loadStart": "{ 22.51 21.77 19.78 }",
+      "wallS": 53.34492500000033,
+      "exitCode": 0
+    },
+    {
+      "name": "sweep",
+      "args": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.122",
+        "--cards",
+        "68978d92-aa8b-4873-bb0b-6e52f12b0849,43628666-2ecd-47a7-b2c0-241cda0de5e8,770b21e4-ea6a-4910-8fca-2ec5b8813da1,d1c25546-dcf2-481e-8f00-9afef3adf24b,8adfa141-6864-4f5f-a9ca-59306eaf5432"
+      ],
+      "pid": 44318,
+      "pgid": 44318,
+      "startUtc": "2026-10-12T00:04:53.832245+00:00",
+      "endUtc": "2026-10-12T00:26:52.098611+00:00",
+      "loadStart": "{ 25.85 15.71 13.55 }",
+      "wallS": 1318.2496672500001,
+      "exitCode": 0
+    },
+    {
+      "name": "schema",
+      "args": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 24292,
+      "pgid": 24292,
+      "startUtc": "2026-10-12T00:29:02.117716+00:00",
+      "endUtc": "2026-10-12T00:29:02.208540+00:00",
+      "loadStart": "{ 12.66 14.58 13.22 }",
+      "wallS": 0.08786249999866413,
+      "exitCode": 0
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review typecheck, node typecheck, lint, import-cycle and related-test steps share the recorded 22.505859375 starting sample.",
+        "source": "review.stdout actual per-step observations",
+        "steps": [
+          {
+            "step": "prepare",
+            "utc": "2026-10-11T23:39:49.364Z",
+            "load": 22.505859375
+          },
+          {
+            "step": "typecheck",
+            "utc": "2026-10-11T23:39:49.875Z",
+            "load": 22.505859375
+          },
+          {
+            "step": "test-related",
+            "utc": "2026-10-11T23:39:49.877Z",
+            "load": 22.505859375
+          }
+        ]
+      },
+      "implementMin": {
+        "measuredFor": "Fresh reclaim through immediate precommit evidence preparation; includes research, coordination, verification and queues."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "focused-final",
+      "load": "{ 18.20 20.92 19.47 }",
+      "utc": "2026-10-11T23:39:42.571794+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "focused",
+      "load": "{ 17.50 20.99 19.46 }",
+      "utc": "2026-10-11T23:39:25.416789+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "fuzz",
+      "load": "{ 26.62 22.79 20.18 }",
+      "utc": "2026-10-11T23:40:05.376710+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "knip",
+      "load": "{ 25.13 23.23 20.52 }",
+      "utc": "2026-10-11T23:40:58.046745+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "preflight",
+      "load": "{ 23.91 23.04 20.48 }",
+      "utc": "2026-10-11T23:41:08.457847+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "qa-early-corrected",
+      "load": "{ 8.62 10.74 15.15 }",
+      "utc": "2026-10-11T23:51:48.271750+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "qa-early-night",
+      "load": "{ 7.60 10.28 14.84 }",
+      "utc": "2026-10-11T23:52:16.142479+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "qa-early-random",
+      "load": "{ 4.72 12.58 16.69 }",
+      "utc": "2026-10-11T23:49:00.196059+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "qa-early",
+      "load": "{ 10.40 18.41 19.27 }",
+      "utc": "2026-10-11T23:45:51.815156+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "qa-enemy-focused",
+      "load": "{ 4.56 6.75 11.90 }",
+      "utc": "2026-10-11T23:57:09.295623+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "qa-log",
+      "load": "{ 7.62 7.59 10.80 }",
+      "utc": "2026-10-12T00:02:02.325916+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "qa-matrix",
+      "load": "{ 4.99 8.91 13.81 }",
+      "utc": "2026-10-11T23:53:59.820148+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "qa-mobile",
+      "load": "{ 7.17 7.05 11.35 }",
+      "utc": "2026-10-11T23:59:10.383344+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "review",
+      "load": "{ 22.51 21.77 19.78 }",
+      "utc": "2026-10-11T23:39:49.143069+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    },
+    {
+      "command": "sweep",
+      "load": "{ 25.85 15.71 13.55 }",
+      "utc": "2026-10-12T00:04:53.832245+00:00",
+      "scope": "Outer command starting observation; a queued wrapper is not its later execution-load sample."
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "plainScenarioModules": 0,
+    "plainContractModules": 0,
+    "plainTestLines": 0
+  },
+  "qa": {
+    "judgedEntityCount": 1,
+    "randomJudgedWorkflowPasses": 6,
+    "originalGreedyJudgedFail": {
+      "fixBead": "hv-umm2.454",
+      "scope": "Healthy ready Greedy worker repeatedly repositions the defender during Dusk; Random payment proof is distinct from its repair."
+    },
+    "reports": {
+      "threshold-early-failed.result.json": {
+        "sha256": "2404add8baf82106798fcbcf23d18dcf979304f9cef3d238d0fc2f5c41649689",
+        "ok": false,
+        "wallMs": {
+          "browserLeaseWait": 2194,
+          "serve": 1258,
+          "scenario": 94617,
+          "total": 98092
+        }
+      },
+      "threshold-ineffective-policy-wrapper.result.json": {
+        "sha256": "a4db83b46e648bce8101c5243a2f9db3ff8dfa1a3efc0fc89261761392b38cb0",
+        "ok": false,
+        "wallMs": {
+          "browserLeaseWait": 40454,
+          "serve": 1254,
+          "scenario": 94003,
+          "total": 135737
+        }
+      },
+      "threshold-early-pass.result.json": {
+        "sha256": "49ba5ebac2ac41957a769df5db82e05b1d3a3ea79354caa639a68ba0d8c70c97",
+        "ok": true,
+        "wallMs": {
+          "browserLeaseWait": 17991,
+          "serve": 1257,
+          "scenario": 12622,
+          "total": 31897
+        }
+      },
+      "threshold-matrix-failed.result.json": {
+        "sha256": "9b163e0ca8cbb7e263842fa208bc0d298aaa27f5084b7a201cc441227ae6e188",
+        "ok": false,
+        "wallMs": {
+          "browserLeaseWait": 42,
+          "serve": 948,
+          "scenario": 117071,
+          "total": 118084
+        }
+      },
+      "threshold-enemy-focused.result.json": {
+        "sha256": "3d7e09274cb21e1f5c378c79980bf242667a9145f035b7addc72dcdad5d04625",
+        "ok": true,
+        "wallMs": {
+          "browserLeaseWait": 38219,
+          "serve": 1260,
+          "scenario": 11952,
+          "total": 51454
+        }
+      },
+      "threshold-mobile.result.json": {
+        "sha256": "1cab72052689d14138d0cd2bd137c79d7cbdd4fdc963651dc40c1f1ae221ef24",
+        "ok": true,
+        "wallMs": {
+          "browserLeaseWait": 59779,
+          "serve": 950,
+          "scenario": 27646,
+          "total": 88401
+        }
+      },
+      "threshold-log.result.json": {
+        "sha256": "c8103dfe22b1ef0c7ae3730ca8a6fc6abc23ca57d61a1e6c0e4c0955c467acf4",
+        "ok": true,
+        "wallMs": {
+          "browserLeaseWait": 48470,
+          "serve": 1255,
+          "scenario": 43829,
+          "total": 93584
+        }
+      }
+    },
+    "sweep": {
+      "event": "cardSweepSummary",
+      "counts": {
+        "pass": 46,
+        "skip": 54
+      },
+      "attemptCounts": {
+        "pass": 46,
+        "skip": 54,
+        "fail": 2
+      },
+      "hostLoad": 25.845703125,
+      "sessions": 5,
+      "leaseYields": 4,
+      "wallMs": {
+        "browserLeaseWait": 740888,
+        "serve": 5570,
+        "scenario": 565020.1368749999,
+        "cleanup": 1658.9752069999522,
+        "execution": 572322.1052909999,
+        "total": 1313210.1052909999
+      }
+    },
+    "retryPolicy": "Only timeout-only raw failures with error null, caps empty and runnable session receive one fresh retry. Exactly two such cells had attempt 2 pass. All raw rows remain in the ledger.",
+    "normalSweepScope": "Normal card plays and reached prompts; this does not establish every activated or Challenge clause. The sampled Threshold has separate normal Challenge judgment.",
+    "sessionBoundaries": [
+      "[qa] waiting for browser lease /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+      "[qa] server pid 62869 (process group) serving http://localhost:5174",
+      "[qa] yielding the browser lease to queued waiters before card 43628666-2ecd-47a7-b2c0-241cda0de5e8",
+      "[qa] runtime: server process group 62869 on port 5174 stopped; port free",
+      "[qa] waiting for browser lease /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+      "[qa] server pid 87558 (process group) serving http://localhost:5174",
+      "[qa] yielding the browser lease to queued waiters before card 770b21e4-ea6a-4910-8fca-2ec5b8813da1",
+      "[qa] runtime: server process group 87558 on port 5174 stopped; port free",
+      "[qa] waiting for browser lease /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+      "[qa] server pid 6353 (process group) serving http://localhost:5174",
+      "[qa] yielding the browser lease to queued waiters before card d1c25546-dcf2-481e-8f00-9afef3adf24b",
+      "[qa] runtime: server process group 6353 on port 5174 stopped; port free",
+      "[qa] waiting for browser lease /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+      "[qa] server pid 74265 (process group) serving http://localhost:5174",
+      "[qa] yielding the browser lease to queued waiters before card 8adfa141-6864-4f5f-a9ca-59306eaf5432",
+      "[qa] runtime: server process group 74265 on port 5174 stopped; port free",
+      "[qa] waiting for browser lease /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+      "[qa] server pid 93056 (process group) serving http://localhost:5174",
+      "[qa] runtime: server process group 93056 on port 5174 stopped; port free"
+    ],
+    "sessionExactUtcTimes": null,
+    "sessionTimingScope": "Native aggregate lease wait, serve, per-card scenario execution and cleanup are measured. Ordered release/reacquisition boundaries and per-report filesystem timestamps are preserved; exact per-session UTC start/stop times were not recorded.",
+    "captureObservation": "Earlier paid mobile capture was taken during presentation; the separate settled capture shows both thumbnails and passed parent cold review.",
+    "renderedLog": "Threshold triggered ability resolved, one discard and two separate draws. Energy payments appear in the resource display under the current UI contract.",
+    "rawReportManifest": {
+      "file": "sweep-raw-manifest.json",
+      "sha256": "2923cc582cfb8a05bd4b91ad1414f7359a475faf032beca5e5a9e541ec5a2a94",
+      "reports": 48,
+      "allErrorsNull": true,
+      "allCapsEmpty": true
+    },
+    "rawRetryPairs": [
+      {
+        "file": "sweep-2Dk3Eh/sweep-770b21e4-ea6a-4910-8fca-2ec5b8813da1-amplified-enemy-attempt-1.result.json",
+        "sha256": "639aa62c8ed92baf924a395595252c25011588048da3153c6596b5ae332cc7ec",
+        "uuid": "770b21e4-ea6a-4910-8fca-2ec5b8813da1",
+        "variant": "amplified",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": false,
+        "verdict": "fail",
+        "failureKinds": [
+          "timeout"
+        ],
+        "writtenUtc": "2026-10-12T00:16:24.016085+00:00"
+      },
+      {
+        "file": "sweep-2Dk3Eh/sweep-770b21e4-ea6a-4910-8fca-2ec5b8813da1-amplified-enemy-attempt-2.result.json",
+        "sha256": "9838861071da7684a373a1a4149b0d3d8be7c423f4945c83966e57a5d6df4b65",
+        "uuid": "770b21e4-ea6a-4910-8fca-2ec5b8813da1",
+        "variant": "amplified",
+        "side": "enemy",
+        "attempt": 2,
+        "effective": true,
+        "verdict": "pass",
+        "failureKinds": [],
+        "writtenUtc": "2026-10-12T00:16:30.188462+00:00"
+      },
+      {
+        "file": "sweep-2Dk3Eh/sweep-d1c25546-dcf2-481e-8f00-9afef3adf24b-kindled-player-attempt-1.result.json",
+        "sha256": "e0bad138edb5d6c254af2481c1389cf30743b1fbda3b576dbee44f0d018090cb",
+        "uuid": "d1c25546-dcf2-481e-8f00-9afef3adf24b",
+        "variant": "kindled",
+        "side": "player",
+        "attempt": 1,
+        "effective": false,
+        "verdict": "fail",
+        "failureKinds": [
+          "timeout"
+        ],
+        "writtenUtc": "2026-10-12T00:21:14.887225+00:00"
+      },
+      {
+        "file": "sweep-2Dk3Eh/sweep-d1c25546-dcf2-481e-8f00-9afef3adf24b-kindled-player-attempt-2.result.json",
+        "sha256": "d40a95f5538bbaf8ea7ea516af94738aebc7947d0afe4b8173f92b5bc2a39243",
+        "uuid": "d1c25546-dcf2-481e-8f00-9afef3adf24b",
+        "variant": "kindled",
+        "side": "player",
+        "attempt": 2,
+        "effective": true,
+        "verdict": "pass",
+        "failureKinds": [],
+        "writtenUtc": "2026-10-12T00:21:21.898498+00:00"
+      }
+    ],
+    "sessionReportBounds": [
+      {
+        "uuid": "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+        "serverGroup": 62869,
+        "firstReportWrittenUtc": "2026-10-12T00:07:27.045651+00:00",
+        "lastReportWrittenUtc": "2026-10-12T00:08:12.054813+00:00",
+        "scope": "Filesystem write timestamps bound observed serialized reports; they are not exact server start/stop timestamps."
+      },
+      {
+        "uuid": "43628666-2ecd-47a7-b2c0-241cda0de5e8",
+        "serverGroup": 87558,
+        "firstReportWrittenUtc": "2026-10-12T00:11:12.298662+00:00",
+        "lastReportWrittenUtc": "2026-10-12T00:11:56.402567+00:00",
+        "scope": "Filesystem write timestamps bound observed serialized reports; they are not exact server start/stop timestamps."
+      },
+      {
+        "uuid": "770b21e4-ea6a-4910-8fca-2ec5b8813da1",
+        "serverGroup": 6353,
+        "firstReportWrittenUtc": "2026-10-12T00:14:11.875512+00:00",
+        "lastReportWrittenUtc": "2026-10-12T00:16:47.886041+00:00",
+        "scope": "Filesystem write timestamps bound observed serialized reports; they are not exact server start/stop timestamps."
+      },
+      {
+        "uuid": "d1c25546-dcf2-481e-8f00-9afef3adf24b",
+        "serverGroup": 74265,
+        "firstReportWrittenUtc": "2026-10-12T00:20:07.338213+00:00",
+        "lastReportWrittenUtc": "2026-10-12T00:21:52.730014+00:00",
+        "scope": "Filesystem write timestamps bound observed serialized reports; they are not exact server start/stop timestamps."
+      },
+      {
+        "uuid": "8adfa141-6864-4f5f-a9ca-59306eaf5432",
+        "serverGroup": 93056,
+        "firstReportWrittenUtc": "2026-10-12T00:23:49.746146+00:00",
+        "lastReportWrittenUtc": "2026-10-12T00:26:46.579117+00:00",
+        "scope": "Filesystem write timestamps bound observed serialized reports; they are not exact server start/stop timestamps."
+      }
+    ]
+  },
+  "retainedCorrections": [
+    "First focused preparation failed on my wrong triggered import path; corrected focused run and all final checks pass.",
+    "Returned-helper open wrapper did not affect labStage internal closure; initial explicit declared URL now selects Random before loading.",
+    "Queued corrected attempt canceled with SIGINT before acquiring provider, exit 130, to correct the Night boundary.",
+    "Enemy observation originally required a human pass control during enemy Night and missed a genuine paid trigger; focused complete-payment proof combines settled state with actual events/resources/answers.",
+    "Scratch evidence parser first assumed a mobile result wrapper; the runner returns a direct result for a single viewport. Corrected without source changes."
+  ],
+  "resources": {
+    "processGroups": [
+      300,
+      2902,
+      2928,
+      3624,
+      6353,
+      7310,
+      9698,
+      13468,
+      14343,
+      14556,
+      20986,
+      24892,
+      42049,
+      42221,
+      44318,
+      62869,
+      64081,
+      67527,
+      74265,
+      82411,
+      84023,
+      85478,
+      86947,
+      86959,
+      87558,
+      93056,
+      99081,
+      24292
+    ],
+    "allAbsentAtUtc": "2026-10-12T00:29:50.398144+00:00",
+    "freshPsMatches": [],
+    "install": {
+      "toolSession": 90325,
+      "exitCode": 0,
+      "pid": "Not exposed by the tool.",
+      "npmReportedSeconds": 2
+    },
+    "provider": "Every successful or failed runner completed browser/RPC/SDK/server cleanup before returning; canceled queue attempt never acquired provider.",
+    "port": 5174
+  },
+  "receiptRoot": "validation/ under this bead primary ignored QA directory"
+}

@@ -1,0 +1,4 @@
+# Pre-existing issues found during hv-umm2.122
+
+- The healthy Greedy worker repeatedly selects equal-score defender repositions during Dusk. In the retained original normal Challenge fixture, physical defender i12 alternates between back-rank slots while source UUID d1c25546-dcf2-481e-8f00-9afef3adf24b remains in player F0. The worker reports ready with policy greedy, and there is no fallback or error-buffer entry. The original failure and persisted game log are threshold-early-failed.result.json and threshold-early-failed-desktop.jsonl. Canonical repair hv-umm2.454 is serialized after this bead; this bead changes no AI code. Explicit Random-policy payment QA establishes its own bounded workflows.
+- Fresh npm install reports 17 dependency advisories: 9 moderate, 7 high and 1 critical. Dependency updates are outside this content batch.

@@ -1,3 +1,5 @@
+import { onChallenge, triggered } from "../../engine/dsl/triggers";
+import { draw, payTo } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 463,
   art: { x: 0, y: -0.478, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onChallenge(), payTo({ energy: 2, discard: 1 }, draw(2)))],
+  verifiedText: "v7kxdq32k3",
 });

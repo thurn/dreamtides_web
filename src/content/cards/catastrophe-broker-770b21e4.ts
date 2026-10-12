@@ -1,3 +1,5 @@
+import { onChallenge, triggered } from "../../engine/dsl/triggers";
+import { discard, draw, sequence } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 89,
   art: { x: 0, y: 0.15, scale: 1.66 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(onChallenge(), sequence(discard({ value: "handSize", player: "you" }), draw(variant.amplified ? 4 : 3)))],
+  verifiedText: "1eumfjdjeo7",
 });
