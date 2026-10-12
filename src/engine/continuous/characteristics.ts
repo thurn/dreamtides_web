@@ -50,22 +50,29 @@ export function copiableCostOf(state: BattleState, catalog: EngineCatalog, id: I
   return fixedEnergy(instanceCard(catalog, instance).costs);
 }
 
-/** What a card filter compares: a card's type, subtype, and "has all character types", and its copiable cost. */
-export interface FilterSubject extends Pick<Characteristics, "cardType" | "subtype" | "allTypes"> {
+/**
+ * What a card filter compares: a card's type, subtype, and "has all
+ * character types", its copiable cost, and its effective spark in its
+ * current zone (`null` for an event).
+ */
+export interface FilterSubject extends Pick<Characteristics, "cardType" | "subtype" | "allTypes" | "spark"> {
   readonly cost: number;
 }
 
 /**
  * Whether a card matches a card filter: type; subtype, unless the card has
- * all types; and copiable cost within the bounds. A played card's turn-log
- * record matches the same way.
+ * all types; copiable cost within the cost bounds; and effective spark
+ * within the ✦ bounds, which a card with no spark never meets. A played
+ * card's turn-log record matches the same way.
  */
 export function matchesFilter(card: FilterSubject, filter: CardFilter): boolean {
   return (
     (filter.cardType === undefined || card.cardType === filter.cardType) &&
     (filter.subtype === undefined || card.allTypes || card.subtype === filter.subtype) &&
     (filter.costAtMost === undefined || card.cost <= filter.costAtMost) &&
-    (filter.costAtLeast === undefined || card.cost >= filter.costAtLeast)
+    (filter.costAtLeast === undefined || card.cost >= filter.costAtLeast) &&
+    (filter.sparkAtMost === undefined || (card.spark !== null && card.spark <= filter.sparkAtMost)) &&
+    (filter.sparkAtLeast === undefined || (card.spark !== null && card.spark >= filter.sparkAtLeast))
   );
 }
 
@@ -73,9 +80,13 @@ function hasCostBound(filter: CardFilter): boolean {
   return filter.costAtMost !== undefined || filter.costAtLeast !== undefined;
 }
 
-/** Whether a filter matches every card: it names no type, subtype, or cost bound. */
+function hasSparkBound(filter: CardFilter): boolean {
+  return filter.sparkAtMost !== undefined || filter.sparkAtLeast !== undefined;
+}
+
+/** Whether a filter matches every card: it names no type, subtype, cost bound, or ✦ bound. */
 export function matchesEveryCard(filter: CardFilter): boolean {
-  return filter.cardType === undefined && filter.subtype === undefined && !hasCostBound(filter);
+  return filter.cardType === undefined && filter.subtype === undefined && !hasCostBound(filter) && !hasSparkBound(filter);
 }
 
 /**
@@ -85,19 +96,24 @@ export function matchesEveryCard(filter: CardFilter): boolean {
  * matches. A saved record without a cost reads its instance's copiable cost,
  * which never changes, and only for a filter with a cost bound. When that
  * instance has ceased, an unknown historical cost matches no cost bound.
+ * A ✦ bound reads the played instance's current effective spark
+ * (RD-hv-umm2.452-1); a played card that has ceased to exist matches no ✦
+ * bound.
  */
 export function playedMatchesFilter(state: BattleState, catalog: EngineCatalog, played: PlayedCard, filter: CardFilter): boolean {
-  if (hasCostBound(filter) && played.cost === undefined && state.instances[played.instance] === undefined) return false;
+  const exists = state.instances[played.instance] !== undefined;
+  if ((hasCostBound(filter) && played.cost === undefined && !exists) || (hasSparkBound(filter) && !exists)) return false;
   const cost = played.cost ?? (hasCostBound(filter) ? copiableCostOf(state, catalog, played.instance) : 0);
-  return matchesFilter({ cardType: played.cardType, subtype: played.subtype, allTypes: played.allTypes, cost }, filter);
+  const spark = hasSparkBound(filter) ? characteristicsOf(state, catalog, played.instance).spark : null;
+  return matchesFilter({ cardType: played.cardType, subtype: played.subtype, allTypes: played.allTypes, cost, spark }, filter);
 }
 
 /** The filter subject of the card `id`, with the characteristics `card` an evaluation gives it. */
 export function filterSubjectOf(state: BattleState, catalog: EngineCatalog, id: InstanceId, card: Characteristics): FilterSubject {
-  return { cardType: card.cardType, subtype: card.subtype, allTypes: card.allTypes, cost: copiableCostOf(state, catalog, id) };
+  return { cardType: card.cardType, subtype: card.subtype, allTypes: card.allTypes, spark: card.spark, cost: copiableCostOf(state, catalog, id) };
 }
 
-/** Whether a card matches a card filter by its effective type and subtype and its copiable cost. */
+/** Whether a card matches a card filter by its effective type, subtype, and spark and its copiable cost. */
 export function cardMatchesFilter(state: BattleState, catalog: EngineCatalog, id: InstanceId, filter: CardFilter): boolean {
   if (state.instances[id] === undefined) return false;
   return matchesEveryCard(filter) || matchesFilter(filterSubjectOf(state, catalog, id, characteristicsOf(state, catalog, id)), filter);

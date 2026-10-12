@@ -528,6 +528,16 @@ recent one wins (see [Order of continuous effects](#ability-types)).
 than 0 for any rule that reads it. A 1✦ character with −3✦ of changes has 0✦,
 and it needs +3✦ more to reach 1✦.
 
+**Spark outside play:** A card in a hand, a deck, or a void, or on the stack,
+has its printed spark after its variant and deck-entry modifications, with X
+in a printed ✦ counting as 0, plus the spark it gained and any unexpired
+spark with a duration. Spark a character _has_ from a static ability applies
+only in play. A criterion such as "a ≤2✦ character" or "a ≥3✦ card" compares
+that spark wherever the card is, and the effective spark of a character in
+play. An event has no spark and never meets a ✦ criterion. A "when you play"
+criterion with a ✦ bound reads the played card's spark as it is now; a played
+card that has ceased to exist meets none.
+
 **Values fixed as an effect resolves:** When a resolving effect gives
 characters spark, a keyword, a new base spark, or another change for a while,
 as in "Until end of turn, characters you control have +X✦, where X is the
@@ -1189,6 +1199,9 @@ deck. Only you see the cards you look at; your opponent sees that you put a
 card into your hand, but not which. If fewer than 3 cards match, look at
 all of them; if none match, nothing happens and your deck is not shuffled.
 Putting the card into your hand is not a draw.
+
+A ✦ criterion, as in "Discover a ≤2✦ character," compares the card's spark
+in your deck (see [Spark outside play](#spark)).
 
 A cost criterion compares the card's copiable cost (see [Cost
 changes](#costs-requirements-and-x)). “Cost X●” means exactly X●, and

@@ -373,9 +373,11 @@ export type CardCost = EnergyCost | EnergyXCost;
 
 /**
  * Which cards a filter matches, wherever they are: by effective type and
- * subtype, and by copiable cost (rules § Costs, Requirements, and X → Cost
- * changes), which a card keeps in every zone. A filter is plain data, kept
- * as it is written wherever it is stored, so its bounds are constants.
+ * subtype, by copiable cost (rules § Costs, Requirements, and X → Cost
+ * changes), which a card keeps in every zone, and by effective spark in the
+ * card's current zone (rules § Spark → Spark outside play). A filter is
+ * plain data, kept as it is written wherever it is stored, so its bounds are
+ * constants.
  */
 export interface CardFilter {
   readonly cardType?: "character" | "event";
@@ -384,6 +386,10 @@ export interface CardFilter {
   readonly costAtMost?: number;
   /** "Cost ≥4●": copiable cost at least this; with an equal `costAtMost`, "a 2● cost character". */
   readonly costAtLeast?: number;
+  /** "A ≤2✦ character": effective spark at most this; a card with no spark (an event) never matches. */
+  readonly sparkAtMost?: number;
+  /** "A ≥3✦ character": effective spark at least this; a card with no spark (an event) never matches. */
+  readonly sparkAtLeast?: number;
 }
 
 /** One payment, including a discard or banish count determined by X, with no choice between costs. */

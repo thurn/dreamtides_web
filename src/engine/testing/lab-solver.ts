@@ -6,6 +6,7 @@ import { printedCardId, type EngineCardDefinition } from "../catalog";
 import { matchesFilter } from "../continuous/characteristics";
 import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
+import { mentionsChosenSubtype } from "../effects/primitives/choose-subtype";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
 import { fixedEnergy, xCost } from "../dsl/energy";
@@ -146,9 +147,11 @@ function characterFor(
   return found.id;
 }
 
-/** A matching printing for a void target or an opponent hand choice on the lab's neutral setup board. */
+/** A matching printing for a void target, an opponent hand choice, or a discovery on the lab's neutral setup board. */
 function cardFor(engine: Engine, filter: CardFilter, pool: readonly EngineCardDefinition[]): CardId {
-  const found = firstFitting(pool, (card) => matchesFilter({ ...card, allTypes: false, cost: fixedEnergy(card.costs) }, filter));
+  const found = firstFitting(pool, (card) =>
+    matchesFilter({ ...card, allTypes: false, cost: fixedEnergy(card.costs), spark: card.spark === null ? null : sparkOf(card) }, filter),
+  );
   if (found === undefined) throw new Error(`The lab solver has no card for filter ${JSON.stringify(filter)}`);
   engine.catalog.card(found.id);
   return found.id;
@@ -172,6 +175,21 @@ function opponentHandChoices(effect: Effect): CardFilter[] {
     if (chosen.op === "banishCards" && chosen.from === "opponentHand") return [chosen.filter];
     if (chosen.op === "playRestriction" && chosen.restriction.kind === "chosen") return [{}];
     return [];
+  });
+}
+
+/**
+ * The filters of the cards an effect discovers by its filter alone
+ * ("Discover a ≤2✦ character"): each needs one matching card in its
+ * controller's deck. A cost criterion settled as Discover resolves, or a
+ * subtype chosen then, stages nothing.
+ */
+function discoveries(effect: Effect): CardFilter[] {
+  return everyNode(effect).flatMap((node) => {
+    const discovered = node as Effect;
+    if (discovered.op !== "discover" || mentionsChosenSubtype(discovered)) return [];
+    const plain = discovered.costExactly === undefined && discovered.costGreaterThan === undefined && discovered.chooseCost === undefined;
+    return plain ? [discovered.filter] : [];
   });
 }
 
@@ -298,7 +316,8 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * needs (`countNeeds`): matching void cards, or cards in a hand beside the
  * played card, or in a deck beside its 8; a ▸Materialized trigger's void targets get their void cards too,
  * and a choice from the opponent's hand gets a matching card in that hand
- * (`opponentHandChoices`); a character abandoned as the effect resolves gets
+ * (`opponentHandChoices`); a card discovered by its filter alone gets a
+ * matching card in `side`'s deck beside its 8 (`discoveries`); a character abandoned as the effect resolves gets
  * a matching character on each chooser's side (`abandonChoices`); "each …
  * in your void" a materialize takes gets one matching void card
  * (`voidMaterializations`). A void banish additional cost gets matching void cards
@@ -342,6 +361,7 @@ export function labBoard(
   }
   const played = [...abilities.flatMap((ability) => (ability.kind === "event" ? [ability.effect] : [])), ...materialized];
   for (const filter of played.flatMap(opponentHandChoices)) hands[opponent(side)].push(cardFor(engine, filter, pool));
+  for (const filter of played.flatMap(discoveries)) decks[side].push(cardFor(engine, filter, pool));
   for (const { player, filter } of played.flatMap((effect) => voidMaterializations(effect, xRange))) {
     voids[player === "you" ? side : opponent(side)].push(cardFor(engine, filter, pool));
   }
