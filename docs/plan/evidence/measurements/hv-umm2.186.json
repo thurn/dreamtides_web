@@ -1,0 +1,2050 @@
+{
+  "bead": "hv-umm2.186",
+  "baseOid": "60ecedf564e05245d771bab38c79fa6da27c46b6",
+  "dispatch": {
+    "parentPostDispatchProxy": "2026-10-12T15:09:21.125147+00:00",
+    "actualHelperOrModelStart": "unknown",
+    "helper": "/root/movement_interrupt_cards74",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-186-movement-interrupt74",
+    "base": "60ecedf564e05245d771bab38c79fa6da27c46b6",
+    "parentInstallPredatesDispatch": true
+  },
+  "implementationClock": {
+    "start": "2026-10-12T15:09:21.125147+00:00",
+    "provisionalMetadataEnd": "2026-10-12T15:33:22.333878+00:00",
+    "actualHelperOrModelStart": "unknown",
+    "parentApprovedMetadataEnd": "2026-10-12T15:45:10.494598+00:00",
+    "actualGitCommand": "Actual Git command is recorded separately after the metadata freeze.",
+    "reportedImplementMin": 35.82282418333333,
+    "endpointScope": "Parent-approved commit metadata clock; actual Git invocation is measured separately after this metadata freeze."
+  },
+  "installPredatesDispatchProxy": true,
+  "sourceScope": [
+    {
+      "path": "src/content/cards/fallen-one-31501d09.ts",
+      "canonicalPropertiesByteIdentical": true,
+      "sha256": "1c21a415c046f0021da9ece10ec66a80671bdad3da58a0c60398718bc52a7786"
+    },
+    {
+      "path": "src/content/cards/cloud-drifter-8cb543d7.ts",
+      "canonicalPropertiesByteIdentical": true,
+      "sha256": "ce546e244cc42456e807b3863a5ac807c0c86fcf53053e08b1688f9b2a15f509"
+    },
+    {
+      "path": "src/content/cards/break-the-sequence-475fcc5b.ts",
+      "canonicalPropertiesByteIdentical": true,
+      "sha256": "d9aaaaf0a12c0caa12468471cc35b3494a03966255728a5a3903bd1d55e93850"
+    },
+    {
+      "path": "src/content/cards/echoing-denial-128d1878.ts",
+      "canonicalPropertiesByteIdentical": true,
+      "sha256": "5fee94cdff43e30d292183dee2e32bbaf6bc06c2f960d46900e35a9a1c1c9127"
+    }
+  ],
+  "printedClauses": {
+    "31501d09-5dde-44f4-a938-7ca95ad988a0": "Fast discardCost move(self); separate standard energyX minimum 1 gainSpark(self,x,untilEndOfTurn), current Costs/X and RD-hv-7x4l.46-1.",
+    "8cb543d7-e70b-4526-b473-bb17dcaee2a7": "onMaterialized foresee 2/3; Fast energy1 move(self).",
+    "475fcc5b-c82d-4ef7-8020-90a8aeb2df53": "Prevent any actual card stack item, either controller; then mandatory APNAP eachPlayer draw1, or controller draw2 then opponent draw1 amplified.",
+    "128d1878-a505-4766-91a2-e5a29498bc4e": "Existing Offering keyword and Prevent any actual card stack item, either controller; current Offering and RD-hv-7x4l.8-3 govern replacement cost and persistent Ending status."
+  },
+  "D20": {
+    "scenarioModulesAdded": 0,
+    "reason": "Existing primitive/cost/keyword/trigger composition; independent activated abilities, ordinary actual-card stack targeting, and existing sequential draw/Offering contracts. No unusual targeting, functional-zone ability, replacement effect or own-ability coupling."
+  },
+  "D21": {
+    "mandatoryJudgedCount": 0,
+    "sample": [
+      {
+        "uuid": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+        "sha256FirstByte": 77,
+        "sampled": false,
+        "existingPromptRoles": [
+          "chooseCards:discardCost",
+          "chooseNumber:chooseX",
+          "chooseSlot:move"
+        ]
+      },
+      {
+        "uuid": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+        "sha256FirstByte": 66,
+        "sampled": false,
+        "existingPromptRoles": [
+          "arrange:foresee",
+          "chooseSlot:move"
+        ]
+      },
+      {
+        "uuid": "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+        "sha256FirstByte": 127,
+        "sampled": false,
+        "existingPromptRoles": [
+          "chooseTargets:target"
+        ]
+      },
+      {
+        "uuid": "128d1878-a505-4766-91a2-e5a29498bc4e",
+        "sha256FirstByte": 85,
+        "sampled": false,
+        "existingPromptRoles": [
+          "chooseCards:offeringCost",
+          "chooseMode:playRoute",
+          "chooseTargets:target"
+        ]
+      }
+    ],
+    "newPromptKinds": [],
+    "newStatuses": [],
+    "newVisualEffects": [],
+    "supplementalWorkflowCount": 6
+  },
+  "newRulesDecisions": [],
+  "newCardIssues": [],
+  "validationRuns": {
+    "install": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "observerPid": 54513,
+      "observerPgid": 54513,
+      "startUtc": "2026-10-12T15:03:22.116760+00:00",
+      "hostLoadStart": [
+        24.0693359375,
+        19.56103515625,
+        15.43115234375
+      ],
+      "pid": 54517,
+      "pgid": 54517,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:03:25.295293+00:00",
+      "elapsedS": 3.178535250001005
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "observerPid": 90663,
+      "observerPgid": 90663,
+      "startUtc": "2026-10-12T15:13:01.905739+00:00",
+      "hostLoadStart": [
+        6.23193359375,
+        11.3984375,
+        13.8203125
+      ],
+      "sysctlLoadStart": "{ 6.23 11.40 13.82 }",
+      "pid": 90666,
+      "pgid": 90666,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:13:09.881075+00:00",
+      "elapsedS": 7.9721480420048465,
+      "hostLoadEnd": [
+        6.1328125,
+        11.2919921875,
+        13.7685546875
+      ]
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 6097,
+      "observerPgid": 6097,
+      "startUtc": "2026-10-12T15:13:27.303124+00:00",
+      "hostLoadStart": [
+        6.13818359375,
+        10.96337890625,
+        13.5927734375
+      ],
+      "sysctlLoadStart": "{ 6.14 10.96 13.59 }",
+      "pid": 6101,
+      "pgid": 6101,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:14:07.222719+00:00",
+      "elapsedS": 39.91614020799898,
+      "hostLoadEnd": [
+        7.04638671875,
+        10.58935546875,
+        13.33349609375
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "observerPid": 20142,
+      "observerPgid": 20142,
+      "startUtc": "2026-10-12T15:14:04.146208+00:00",
+      "hostLoadStart": [
+        6.78955078125,
+        10.599609375,
+        13.353515625
+      ],
+      "sysctlLoadStart": "{ 6.79 10.60 13.35 }",
+      "pid": 20250,
+      "pgid": 20250,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:14:07.669740+00:00",
+      "elapsedS": 3.520089833000384,
+      "hostLoadEnd": [
+        7.04638671875,
+        10.58935546875,
+        13.33349609375
+      ]
+    },
+    "fuzz-wrapper": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-movement-interrupt-cards74-186/run.py",
+        "fuzz",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "31501d09-5dde-44f4-a938-7ca95ad988a0,8cb543d7-e70b-4526-b473-bb17dcaee2a7,475fcc5b-c82d-4ef7-8020-90a8aeb2df53,128d1878-a505-4766-91a2-e5a29498bc4e"
+      ],
+      "observerPid": 33209,
+      "observerPgid": 33209,
+      "startUtc": "2026-10-12T15:14:27.977848+00:00",
+      "hostLoadStart": [
+        12.34716796875,
+        11.53173828125,
+        13.6044921875
+      ],
+      "sysctlLoadStart": "{ 12.35 11.53 13.60 }",
+      "pid": 33213,
+      "pgid": 33213,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:18:00.528988+00:00",
+      "elapsedS": 212.54486008299864,
+      "hostLoadEnd": [
+        23.4111328125,
+        18.4853515625,
+        16.16748046875
+      ]
+    },
+    "fuzz": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "31501d09-5dde-44f4-a938-7ca95ad988a0,8cb543d7-e70b-4526-b473-bb17dcaee2a7,475fcc5b-c82d-4ef7-8020-90a8aeb2df53,128d1878-a505-4766-91a2-e5a29498bc4e"
+      ],
+      "observerPid": 85540,
+      "observerPgid": 33213,
+      "startUtc": "2026-10-12T15:15:04.903024+00:00",
+      "hostLoadStart": [
+        16.75537109375,
+        12.78076171875,
+        13.9794921875
+      ],
+      "sysctlLoadStart": "{ 16.76 12.78 13.98 }",
+      "pid": 85544,
+      "pgid": 85544,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:18:00.524337+00:00",
+      "elapsedS": 175.61586624999472,
+      "hostLoadEnd": [
+        23.4111328125,
+        18.4853515625,
+        16.16748046875
+      ]
+    },
+    "preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "31501d09-5dde-44f4-a938-7ca95ad988a0,8cb543d7-e70b-4526-b473-bb17dcaee2a7,475fcc5b-c82d-4ef7-8020-90a8aeb2df53,128d1878-a505-4766-91a2-e5a29498bc4e",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "observerPid": 30586,
+      "observerPgid": 30586,
+      "startUtc": "2026-10-12T15:18:17.854136+00:00",
+      "hostLoadStart": [
+        19.14892578125,
+        17.8232421875,
+        15.982421875
+      ],
+      "sysctlLoadStart": "{ 19.15 17.82 15.98 }",
+      "pid": 30593,
+      "pgid": 30593,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:18:19.933432+00:00",
+      "elapsedS": 2.074695499999507,
+      "hostLoadEnd": [
+        19.14892578125,
+        17.8232421875,
+        15.982421875
+      ]
+    },
+    "sweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.186",
+        "--cards",
+        "31501d09-5dde-44f4-a938-7ca95ad988a0,8cb543d7-e70b-4526-b473-bb17dcaee2a7,475fcc5b-c82d-4ef7-8020-90a8aeb2df53,128d1878-a505-4766-91a2-e5a29498bc4e",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "observerPid": 46593,
+      "observerPgid": 46593,
+      "startUtc": "2026-10-12T15:18:40.508481+00:00",
+      "hostLoadStart": [
+        16.48828125,
+        17.31298828125,
+        15.84228515625
+      ],
+      "sysctlLoadStart": "{ 16.49 17.31 15.84 }",
+      "pid": 46769,
+      "pgid": 46769,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:24:06.789959+00:00",
+      "elapsedS": 326.280127207996,
+      "hostLoadEnd": [
+        6.833984375,
+        13.59716796875,
+        14.93505859375
+      ]
+    },
+    "supplemental": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "activation-workflows",
+        "--bead",
+        "hv-umm2.186",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "observerPid": 40816,
+      "observerPgid": 40816,
+      "startUtc": "2026-10-12T15:24:25.418216+00:00",
+      "hostLoadStart": [
+        7.3056640625,
+        13.35791015625,
+        14.82470703125
+      ],
+      "sysctlLoadStart": "{ 7.31 13.36 14.82 }",
+      "pid": 40820,
+      "pgid": 40820,
+      "exit": 1,
+      "endUtc": "2026-10-12T15:25:20.266219+00:00",
+      "elapsedS": 54.84196591700311,
+      "hostLoadEnd": [
+        7.55908203125,
+        12.55224609375,
+        14.44140625
+      ]
+    },
+    "supplemental-corrected": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "activation-workflows",
+        "--bead",
+        "hv-umm2.186",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "observerPid": 70461,
+      "observerPgid": 70461,
+      "startUtc": "2026-10-12T15:26:55.423059+00:00",
+      "hostLoadStart": [
+        16.2861328125,
+        13.341796875,
+        14.49072265625
+      ],
+      "sysctlLoadStart": "{ 16.29 13.34 14.49 }",
+      "pid": 70587,
+      "pgid": 70587,
+      "exit": 1,
+      "endUtc": "2026-10-12T15:28:17.812406+00:00",
+      "elapsedS": 82.38435345800099,
+      "hostLoadEnd": [
+        22.8916015625,
+        16.15185546875,
+        15.45068359375
+      ]
+    },
+    "supplemental-final": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "activation-workflows",
+        "--bead",
+        "hv-umm2.186",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "observerPid": 54195,
+      "observerPgid": 54195,
+      "startUtc": "2026-10-12T15:29:43.523461+00:00",
+      "hostLoadStart": [
+        12.38671875,
+        14.46728515625,
+        14.8740234375
+      ],
+      "sysctlLoadStart": "{ 12.39 14.47 14.87 }",
+      "pid": 54207,
+      "pgid": 54207,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:31:13.784246+00:00",
+      "elapsedS": 90.25629216699599,
+      "hostLoadEnd": [
+        20.9853515625,
+        16.228515625,
+        15.46875
+      ]
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "observerPid": 29104,
+      "observerPgid": 29090,
+      "startUtc": "2026-10-12T15:34:09.324930+00:00",
+      "hostLoadStart": [
+        23.3544921875,
+        18.09619140625,
+        16.275390625
+      ],
+      "sysctlLoadStart": "{ 23.35 18.10 16.28 }",
+      "pid": 29109,
+      "pgid": 29109,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:34:09.440840+00:00",
+      "elapsedS": 0.11131783300515963,
+      "hostLoadEnd": [
+        23.3544921875,
+        18.09619140625,
+        16.275390625
+      ]
+    },
+    "density-captures": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "density-captures",
+        "--bead",
+        "hv-umm2.186",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "observerPid": 98053,
+      "observerPgid": 98053,
+      "startUtc": "2026-10-12T15:40:39.605487+00:00",
+      "hostLoadStart": [
+        4.63134765625,
+        10.009765625,
+        13.15185546875
+      ],
+      "sysctlLoadStart": "{ 4.63 10.01 13.15 }",
+      "pid": 98063,
+      "pgid": 98063,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:41:18.648572+00:00",
+      "elapsedS": 39.03985033399658,
+      "hostLoadEnd": [
+        4.5078125,
+        9.31396484375,
+        12.75244140625
+      ]
+    },
+    "schema-refreshed": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "observerPid": 3863,
+      "observerPgid": 3837,
+      "startUtc": "2026-10-12T15:43:27.184508+00:00",
+      "hostLoadStart": [
+        5.1572265625,
+        7.7080078125,
+        11.6083984375
+      ],
+      "sysctlLoadStart": "{ 5.16 7.71 11.61 }",
+      "pid": 3871,
+      "pgid": 3871,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:43:27.290602+00:00",
+      "elapsedS": 0.1034827920011594,
+      "hostLoadEnd": [
+        5.1572265625,
+        7.7080078125,
+        11.6083984375
+      ]
+    }
+  },
+  "validationNotes": {
+    "focused": "2 node files, 1855 cases: existing contracts and content coverage/verifiedText gates.",
+    "review": "223 related files, 3806 cases; static checks and both typechecks green.",
+    "lightCheckOverlap": "Knip started 3.08 seconds before review wrapper ended; retain exact command clocks, no independent timing comparison claim.",
+    "heavy": "fuzz is the sole explicit heavy command, JOURNEY_TEST_WORKERS=2 under the primary kernel heavy lock. Wrapper start and inner actual start measure separate queue/acquisition.",
+    "fullSuite": "Content-only composition, no infrastructure/config/crosscut changes; full-suite run not required."
+  },
+  "heavyQueueS": 36.925176,
+  "preflight": {
+    "counts": {
+      "pass": 44,
+      "skip": 36,
+      "fail": 0,
+      "pending": 0
+    },
+    "scope": "All ten variants, player and enemy; scripted enemy play, first legal engine prompts, ordinary card-lab fixtures.",
+    "printedClauseObservations": [
+      {
+        "uuid": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+        "side": "player",
+        "variant": "base",
+        "foreseeEvents": [
+          {
+            "kind": "foresaw",
+            "side": "player",
+            "kept": [
+              "i2",
+              "i3"
+            ],
+            "voided": []
+          }
+        ]
+      },
+      {
+        "uuid": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+        "side": "player",
+        "variant": "amplified",
+        "foreseeEvents": [
+          {
+            "kind": "foresaw",
+            "side": "player",
+            "kept": [
+              "i2",
+              "i3",
+              "i4"
+            ],
+            "voided": []
+          }
+        ]
+      },
+      {
+        "uuid": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+        "side": "enemy",
+        "variant": "base",
+        "foreseeEvents": [
+          {
+            "kind": "foresaw",
+            "side": "enemy",
+            "kept": [
+              "i11",
+              "i12"
+            ],
+            "voided": []
+          }
+        ]
+      },
+      {
+        "uuid": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+        "side": "enemy",
+        "variant": "amplified",
+        "foreseeEvents": [
+          {
+            "kind": "foresaw",
+            "side": "enemy",
+            "kept": [
+              "i11",
+              "i12",
+              "i13"
+            ],
+            "voided": []
+          }
+        ]
+      },
+      {
+        "uuid": "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+        "side": "player",
+        "variant": "base",
+        "drawCounts": {
+          "player": 1,
+          "enemy": 1
+        },
+        "prevented": [
+          {
+            "kind": "prevented",
+            "instance": "i10",
+            "side": "enemy",
+            "to": "void",
+            "zoneOf": "enemy"
+          }
+        ]
+      },
+      {
+        "uuid": "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+        "side": "player",
+        "variant": "amplified",
+        "drawCounts": {
+          "player": 2,
+          "enemy": 1
+        },
+        "prevented": [
+          {
+            "kind": "prevented",
+            "instance": "i10",
+            "side": "enemy",
+            "to": "void",
+            "zoneOf": "enemy"
+          }
+        ]
+      },
+      {
+        "uuid": "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+        "side": "enemy",
+        "variant": "base",
+        "drawCounts": {
+          "player": 1,
+          "enemy": 1
+        },
+        "prevented": [
+          {
+            "kind": "prevented",
+            "instance": "i1",
+            "side": "player",
+            "to": "void",
+            "zoneOf": "player"
+          }
+        ]
+      },
+      {
+        "uuid": "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+        "side": "enemy",
+        "variant": "amplified",
+        "drawCounts": {
+          "player": 1,
+          "enemy": 2
+        },
+        "prevented": [
+          {
+            "kind": "prevented",
+            "instance": "i1",
+            "side": "player",
+            "to": "void",
+            "zoneOf": "player"
+          }
+        ]
+      }
+    ]
+  },
+  "nativeSweep": {
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-MM9x0z",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.186/invocations/sweep-MM9x0z",
+      "counts": {
+        "pass": 44,
+        "skip": 36
+      },
+      "attemptCounts": {
+        "pass": 44,
+        "skip": 36
+      },
+      "hostLoad": 16.48828125,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 10,
+        "serve": 2295,
+        "scenario": 323132.1174989999,
+        "cleanup": 540.2667920000385,
+        "execution": 326042.253292,
+        "total": 326052.253292
+      }
+    },
+    "cleanup": {
+      "utc": "2026-10-12T15:24:25.366920+00:00",
+      "groups": [
+        46769,
+        46593,
+        47133
+      ],
+      "live": [],
+      "ownProviderRecordRetained": false,
+      "portFree": true
+    }
+  },
+  "supplemental": {
+    "report": "invocations/run-DAGgYK/activation-workflows.result.json",
+    "ok": true,
+    "caps": [],
+    "calls": [
+      {
+        "viewport": "desktop",
+        "step": 0,
+        "ms": 22548
+      },
+      {
+        "viewport": "desktop",
+        "step": 1,
+        "ms": 3083
+      },
+      {
+        "viewport": "desktop",
+        "step": 2,
+        "ms": 13319
+      },
+      {
+        "viewport": "mobile",
+        "step": 0,
+        "ms": 28087
+      },
+      {
+        "viewport": "mobile",
+        "step": 1,
+        "ms": 9847
+      },
+      {
+        "viewport": "mobile",
+        "step": 2,
+        "ms": 10799
+      }
+    ],
+    "results": {
+      "desktop": {
+        "previous": {
+          "previous": {
+            "uuid": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+            "ids": {
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "player": {
+                "front": [
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null
+                ],
+                "back": [
+                  "i1",
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null
+                ],
+                "hand": [
+                  "i2"
+                ],
+                "void": []
+              },
+              "enemy": {
+                "front": [
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null
+                ],
+                "back": [
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null
+                ],
+                "hand": [],
+                "void": []
+              }
+            },
+            "source": "i1",
+            "cost": "i2",
+            "moved": [
+              {
+                "seq": 3,
+                "index": 0,
+                "kind": "repositioned",
+                "instance": "i1",
+                "event": {
+                  "kind": "repositioned",
+                  "instance": "i1",
+                  "side": "player",
+                  "from": {
+                    "rank": "back",
+                    "index": 0
+                  },
+                  "to": {
+                    "rank": "back",
+                    "index": 1
+                  },
+                  "swappedWith": null
+                },
+                "cards": {
+                  "i1": "31501d09-5dde-44f4-a938-7ca95ad988a0"
+                }
+              }
+            ],
+            "positiveX": 1,
+            "activations": [
+              {
+                "seq": 2,
+                "index": 3,
+                "kind": "abilityActivated",
+                "instance": null,
+                "event": {
+                  "kind": "abilityActivated",
+                  "side": "player",
+                  "source": "i1",
+                  "ability": 0
+                },
+                "cards": {
+                  "i1": "31501d09-5dde-44f4-a938-7ca95ad988a0"
+                }
+              },
+              {
+                "seq": 5,
+                "index": 1,
+                "kind": "abilityActivated",
+                "instance": null,
+                "event": {
+                  "kind": "abilityActivated",
+                  "side": "player",
+                  "source": "i1",
+                  "ability": 1
+                },
+                "cards": {
+                  "i1": "31501d09-5dde-44f4-a938-7ca95ad988a0"
+                }
+              }
+            ],
+            "geometry": {
+              "width": 89.5,
+              "height": 89.5,
+              "rank": "player-back",
+              "slot": "B1",
+              "spark": "2"
+            },
+            "logs": {
+              "actions": [
+                {
+                  "gameId": "gxisn9",
+                  "version": 0,
+                  "side": "player",
+                  "action": {
+                    "kind": "activate",
+                    "source": "i1",
+                    "ability": 0
+                  },
+                  "answers": [
+                    {
+                      "fingerprint": "13qdx7xxbu9",
+                      "value": [
+                        "i2"
+                      ],
+                      "auto": true
+                    }
+                  ],
+                  "timestamp": "2026-10-12T15:29:52.524Z",
+                  "event": "engine.action",
+                  "seq": 26
+                },
+                {
+                  "gameId": "gxisn9",
+                  "version": 2,
+                  "side": "player",
+                  "action": {
+                    "kind": "activate",
+                    "source": "i1",
+                    "ability": 1
+                  },
+                  "answers": [
+                    {
+                      "fingerprint": "1c31nbet14v",
+                      "value": 1
+                    }
+                  ],
+                  "timestamp": "2026-10-12T15:29:55.506Z",
+                  "event": "engine.action",
+                  "seq": 44
+                }
+              ],
+              "prompts": [
+                {
+                  "gameId": "gxisn9",
+                  "version": 1,
+                  "promptId": "1:2:0",
+                  "side": "player",
+                  "kind": "chooseSlot",
+                  "role": "move",
+                  "source": "i1",
+                  "cardId": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+                  "privateTo": null,
+                  "fingerprint": "p2rt9dzrys",
+                  "timestamp": "2026-10-12T15:29:52.525Z",
+                  "event": "engine.promptOpened",
+                  "seq": 27
+                },
+                {
+                  "gameId": "gxisn9",
+                  "version": 2,
+                  "promptId": "2:3:0",
+                  "side": "player",
+                  "kind": "chooseNumber",
+                  "role": "chooseX",
+                  "source": "i1",
+                  "cardId": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+                  "privateTo": null,
+                  "fingerprint": "1c31nbet14v",
+                  "timestamp": "2026-10-12T15:29:55.268Z",
+                  "event": "engine.promptOpened",
+                  "seq": 38
+                }
+              ]
+            },
+            "expired": true
+          },
+          "uuid": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+          "ids": {
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "player": {
+              "front": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "back": [
+                "i1",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "hand": [],
+              "void": []
+            },
+            "enemy": {
+              "front": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "back": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "hand": [],
+              "void": []
+            }
+          },
+          "source": "i1",
+          "moved": [
+            {
+              "seq": 3,
+              "index": 0,
+              "kind": "repositioned",
+              "instance": "i1",
+              "event": {
+                "kind": "repositioned",
+                "instance": "i1",
+                "side": "player",
+                "from": {
+                  "rank": "back",
+                  "index": 0
+                },
+                "to": {
+                  "rank": "back",
+                  "index": 1
+                },
+                "swappedWith": null
+              },
+              "cards": {
+                "i1": "8cb543d7-e70b-4526-b473-bb17dcaee2a7"
+              }
+            }
+          ],
+          "activation": [
+            {
+              "seq": 2,
+              "index": 1,
+              "kind": "abilityActivated",
+              "instance": null,
+              "event": {
+                "kind": "abilityActivated",
+                "side": "player",
+                "source": "i1",
+                "ability": 1
+              },
+              "cards": {
+                "i1": "8cb543d7-e70b-4526-b473-bb17dcaee2a7"
+              }
+            }
+          ],
+          "energy": 1,
+          "logs": {
+            "action": {
+              "gameId": "pb66fe",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "activate",
+                "source": "i1",
+                "ability": 1
+              },
+              "answers": [],
+              "timestamp": "2026-10-12T15:30:10.319Z",
+              "event": "engine.action",
+              "seq": 26
+            },
+            "opened": {
+              "gameId": "pb66fe",
+              "version": 1,
+              "promptId": "1:2:0",
+              "side": "player",
+              "kind": "chooseSlot",
+              "role": "move",
+              "source": "i1",
+              "cardId": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+              "privateTo": null,
+              "fingerprint": "26n2i1ec9yy",
+              "timestamp": "2026-10-12T15:30:10.320Z",
+              "event": "engine.promptOpened",
+              "seq": 27
+            }
+          }
+        },
+        "uuid": "128d1878-a505-4766-91a2-e5a29498bc4e",
+        "ids": {
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "player": {
+            "front": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "back": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "hand": [
+              "i1",
+              "i2",
+              "i3"
+            ],
+            "void": []
+          },
+          "enemy": {
+            "front": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "back": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "hand": [
+              "i12"
+            ],
+            "void": []
+          }
+        },
+        "source": "i1",
+        "cost": "i2",
+        "target": "i12",
+        "prevent": [
+          {
+            "seq": 4,
+            "index": 4,
+            "kind": "prevented",
+            "instance": "i12",
+            "event": {
+              "kind": "prevented",
+              "instance": "i12",
+              "side": "enemy",
+              "to": "void",
+              "zoneOf": "enemy"
+            },
+            "cards": {
+              "i12": "8cb543d7-e70b-4526-b473-bb17dcaee2a7"
+            }
+          }
+        ],
+        "energy": 0,
+        "offering": true,
+        "endedBanished": true,
+        "logs": {
+          "action": {
+            "gameId": "7998x3",
+            "version": 1,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i1",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "26d7rwbvbw",
+                "value": 1,
+                "auto": true
+              },
+              {
+                "fingerprint": "1pcd5am9c2j",
+                "value": [
+                  "i12"
+                ],
+                "auto": true
+              },
+              {
+                "fingerprint": "491d9uhla2",
+                "value": [
+                  "i2"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-12T15:30:17.330Z",
+            "event": "engine.action",
+            "seq": 38
+          },
+          "opened": {
+            "gameId": "7998x3",
+            "version": 1,
+            "promptId": "1:2:2",
+            "side": "player",
+            "kind": "chooseCards",
+            "role": "offeringCost",
+            "source": "i1",
+            "cardId": "128d1878-a505-4766-91a2-e5a29498bc4e",
+            "privateTo": null,
+            "fingerprint": "491d9uhla2",
+            "timestamp": "2026-10-12T15:30:15.060Z",
+            "event": "engine.promptOpened",
+            "seq": 30
+          }
+        }
+      },
+      "mobile": {
+        "previous": {
+          "previous": {
+            "uuid": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+            "ids": {
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "player": {
+                "front": [
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null
+                ],
+                "back": [
+                  "i1",
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null
+                ],
+                "hand": [
+                  "i2"
+                ],
+                "void": []
+              },
+              "enemy": {
+                "front": [
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null
+                ],
+                "back": [
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null
+                ],
+                "hand": [],
+                "void": []
+              }
+            },
+            "source": "i1",
+            "cost": "i2",
+            "moved": [
+              {
+                "seq": 3,
+                "index": 0,
+                "kind": "repositioned",
+                "instance": "i1",
+                "event": {
+                  "kind": "repositioned",
+                  "instance": "i1",
+                  "side": "player",
+                  "from": {
+                    "rank": "back",
+                    "index": 0
+                  },
+                  "to": {
+                    "rank": "back",
+                    "index": 1
+                  },
+                  "swappedWith": null
+                },
+                "cards": {
+                  "i1": "31501d09-5dde-44f4-a938-7ca95ad988a0"
+                }
+              }
+            ],
+            "positiveX": 1,
+            "activations": [
+              {
+                "seq": 2,
+                "index": 3,
+                "kind": "abilityActivated",
+                "instance": null,
+                "event": {
+                  "kind": "abilityActivated",
+                  "side": "player",
+                  "source": "i1",
+                  "ability": 0
+                },
+                "cards": {
+                  "i1": "31501d09-5dde-44f4-a938-7ca95ad988a0"
+                }
+              },
+              {
+                "seq": 5,
+                "index": 1,
+                "kind": "abilityActivated",
+                "instance": null,
+                "event": {
+                  "kind": "abilityActivated",
+                  "side": "player",
+                  "source": "i1",
+                  "ability": 1
+                },
+                "cards": {
+                  "i1": "31501d09-5dde-44f4-a938-7ca95ad988a0"
+                }
+              }
+            ],
+            "geometry": {
+              "width": 53.859375,
+              "height": 53.859375,
+              "rank": "player-back",
+              "slot": "B1",
+              "spark": "2"
+            },
+            "logs": {
+              "actions": [
+                {
+                  "gameId": "3hzgst",
+                  "version": 0,
+                  "side": "player",
+                  "action": {
+                    "kind": "activate",
+                    "source": "i1",
+                    "ability": 0
+                  },
+                  "answers": [
+                    {
+                      "fingerprint": "13qdx7xxbu9",
+                      "value": [
+                        "i2"
+                      ],
+                      "auto": true
+                    }
+                  ],
+                  "timestamp": "2026-10-12T15:30:36.580Z",
+                  "event": "engine.action",
+                  "seq": 26
+                },
+                {
+                  "gameId": "3hzgst",
+                  "version": 2,
+                  "side": "player",
+                  "action": {
+                    "kind": "activate",
+                    "source": "i1",
+                    "ability": 1
+                  },
+                  "answers": [
+                    {
+                      "fingerprint": "1c31nbet14v",
+                      "value": 1
+                    }
+                  ],
+                  "timestamp": "2026-10-12T15:30:39.611Z",
+                  "event": "engine.action",
+                  "seq": 44
+                }
+              ],
+              "prompts": [
+                {
+                  "gameId": "3hzgst",
+                  "version": 1,
+                  "promptId": "1:2:0",
+                  "side": "player",
+                  "kind": "chooseSlot",
+                  "role": "move",
+                  "source": "i1",
+                  "cardId": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+                  "privateTo": null,
+                  "fingerprint": "p2rt9dzrys",
+                  "timestamp": "2026-10-12T15:30:36.581Z",
+                  "event": "engine.promptOpened",
+                  "seq": 27
+                },
+                {
+                  "gameId": "3hzgst",
+                  "version": 2,
+                  "promptId": "2:3:0",
+                  "side": "player",
+                  "kind": "chooseNumber",
+                  "role": "chooseX",
+                  "source": "i1",
+                  "cardId": "31501d09-5dde-44f4-a938-7ca95ad988a0",
+                  "privateTo": null,
+                  "fingerprint": "1c31nbet14v",
+                  "timestamp": "2026-10-12T15:30:39.400Z",
+                  "event": "engine.promptOpened",
+                  "seq": 38
+                }
+              ]
+            },
+            "expired": true
+          },
+          "uuid": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+          "ids": {
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "player": {
+              "front": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "back": [
+                "i1",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "hand": [],
+              "void": []
+            },
+            "enemy": {
+              "front": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "back": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "hand": [],
+              "void": []
+            }
+          },
+          "source": "i1",
+          "moved": [
+            {
+              "seq": 3,
+              "index": 0,
+              "kind": "repositioned",
+              "instance": "i1",
+              "event": {
+                "kind": "repositioned",
+                "instance": "i1",
+                "side": "player",
+                "from": {
+                  "rank": "back",
+                  "index": 0
+                },
+                "to": {
+                  "rank": "back",
+                  "index": 1
+                },
+                "swappedWith": null
+              },
+              "cards": {
+                "i1": "8cb543d7-e70b-4526-b473-bb17dcaee2a7"
+              }
+            }
+          ],
+          "activation": [
+            {
+              "seq": 2,
+              "index": 1,
+              "kind": "abilityActivated",
+              "instance": null,
+              "event": {
+                "kind": "abilityActivated",
+                "side": "player",
+                "source": "i1",
+                "ability": 1
+              },
+              "cards": {
+                "i1": "8cb543d7-e70b-4526-b473-bb17dcaee2a7"
+              }
+            }
+          ],
+          "energy": 1,
+          "logs": {
+            "action": {
+              "gameId": "vxquz8",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "activate",
+                "source": "i1",
+                "ability": 1
+              },
+              "answers": [],
+              "timestamp": "2026-10-12T15:31:00.992Z",
+              "event": "engine.action",
+              "seq": 26
+            },
+            "opened": {
+              "gameId": "vxquz8",
+              "version": 1,
+              "promptId": "1:2:0",
+              "side": "player",
+              "kind": "chooseSlot",
+              "role": "move",
+              "source": "i1",
+              "cardId": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+              "privateTo": null,
+              "fingerprint": "26n2i1ec9yy",
+              "timestamp": "2026-10-12T15:31:00.992Z",
+              "event": "engine.promptOpened",
+              "seq": 27
+            }
+          }
+        },
+        "uuid": "128d1878-a505-4766-91a2-e5a29498bc4e",
+        "ids": {
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "player": {
+            "front": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "back": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "hand": [
+              "i1",
+              "i2",
+              "i3"
+            ],
+            "void": []
+          },
+          "enemy": {
+            "front": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "back": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "hand": [
+              "i12"
+            ],
+            "void": []
+          }
+        },
+        "source": "i1",
+        "cost": "i2",
+        "target": "i12",
+        "prevent": [
+          {
+            "seq": 4,
+            "index": 4,
+            "kind": "prevented",
+            "instance": "i12",
+            "event": {
+              "kind": "prevented",
+              "instance": "i12",
+              "side": "enemy",
+              "to": "void",
+              "zoneOf": "enemy"
+            },
+            "cards": {
+              "i12": "8cb543d7-e70b-4526-b473-bb17dcaee2a7"
+            }
+          }
+        ],
+        "energy": 0,
+        "offering": true,
+        "endedBanished": true,
+        "logs": {
+          "action": {
+            "gameId": "zp3zou",
+            "version": 1,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i1",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "26d7rwbvbw",
+                "value": 1,
+                "auto": true
+              },
+              {
+                "fingerprint": "1pcd5am9c2j",
+                "value": [
+                  "i12"
+                ],
+                "auto": true
+              },
+              {
+                "fingerprint": "491d9uhla2",
+                "value": [
+                  "i2"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-12T15:31:10.392Z",
+            "event": "engine.action",
+            "seq": 38
+          },
+          "opened": {
+            "gameId": "zp3zou",
+            "version": 1,
+            "promptId": "1:2:2",
+            "side": "player",
+            "kind": "chooseCards",
+            "role": "offeringCost",
+            "source": "i1",
+            "cardId": "128d1878-a505-4766-91a2-e5a29498bc4e",
+            "privateTo": null,
+            "fingerprint": "491d9uhla2",
+            "timestamp": "2026-10-12T15:31:07.639Z",
+            "event": "engine.promptOpened",
+            "seq": 30
+          }
+        }
+      }
+    },
+    "captures": [
+      "fallen-gain-desktop.png",
+      "fallen-gain-mobile.png"
+    ],
+    "visualInspection": "Desktop and mobile captures show the moved source, spark 2, duration clock, energy 2/3 and visible phase controls with clear board geometry.",
+    "cleanup": {
+      "utc": "2026-10-12T15:31:43.969451+00:00",
+      "groups": [
+        54207,
+        54195,
+        54299
+      ],
+      "live": [],
+      "ownProviderRecordRetained": false,
+      "portFree": true
+    },
+    "historicalObserverFailures": [
+      {
+        "run": "supplemental",
+        "invocation": "run-NAp8x3",
+        "error": "desktop#0: Error: qa.battle Fallen chosen positive X gain: stalled: no progress for 45000 ms; last action none; {\"at\":\"near:day\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":6}}; history near:day\n    at fail (evalmachine.<anonymous>:1249:7)\n    at Object.playUntil (evalmachine.<anonymous>:1276:54)\n    at async fallen (evalmachine.<anonymous>:1571:3)\n    at async evalmachine.<anonymous>:1590:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 51976
+          }
+        ],
+        "disposition": "private browser QA scripting/readiness failure; no product verdict",
+        "repair": "Second Fallen tap ran during queued movement presentation; no second accepted activation intent. Wait for actual destination DOM and live role before tapping.",
+        "scriptSha256": "7b33e7f03fd6c3d426f38e1ecf472dc8c56d6aeee5bfd7580d9b8626db3f5119"
+      },
+      {
+        "run": "supplemental-corrected",
+        "invocation": "run-ZLhSVf",
+        "error": "desktop#2: Error: click [data-testid=\"battle-card-picker-candidate-i2\"]: timed out after 15000 ms; last probe: no rendered element\n    at Object.click (evalmachine.<anonymous>:651:15)\n    at async offering (evalmachine.<anonymous>:1563:3)\n    at async evalmachine.<anonymous>:1578:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 33545
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 16155
+          },
+          {
+            "viewport": "desktop",
+            "step": 2,
+            "ms": 28963
+          }
+        ],
+        "disposition": "private browser QA scripting/readiness failure; no product verdict",
+        "repair": "Fallen and Cloud desktop assertions completed; Offering cost was on the existing hand surface, while the private observer requested a gallery-only selector. Use the existing battle driver on the rendered prompt.",
+        "scriptSha256": "9b3203c189e6f982e207dc51a60d131cf78ee0f936c14c818157774a09141eac"
+      }
+    ]
+  },
+  "resourceProofs": {
+    "beforeFirstBrowser": {
+      "time": "2026-10-12T15:18:32.614745+00:00",
+      "pids": [
+        6097,
+        6101,
+        20142,
+        20250,
+        30586,
+        30593,
+        33209,
+        33213,
+        54513,
+        54517,
+        85540,
+        85544,
+        90663,
+        90666
+      ],
+      "groups": [
+        6097,
+        6101,
+        20142,
+        20250,
+        30586,
+        30593,
+        33209,
+        33213,
+        54513,
+        54517,
+        85544,
+        90663,
+        90666
+      ],
+      "live": []
+    },
+    "afterFirstObserverFailure": {
+      "utc": "2026-10-12T15:26:35.117721+00:00",
+      "groups": [
+        40820,
+        40816,
+        40914
+      ],
+      "live": [],
+      "ownProviderRecordRetained": false,
+      "portFree": true
+    },
+    "afterSecondObserverFailure": {
+      "utc": "2026-10-12T15:29:43.477241+00:00",
+      "groups": [
+        70587,
+        70461,
+        71086
+      ],
+      "live": [],
+      "ownProviderRecordRetained": false,
+      "portFree": true
+    },
+    "finalBeforeMetadataAck": {
+      "utc": "2026-10-12T15:35:07.299260+00:00",
+      "pids": [
+        6097,
+        6101,
+        20142,
+        20250,
+        29104,
+        29109,
+        30586,
+        30593,
+        33209,
+        33213,
+        40816,
+        40820,
+        40914,
+        46593,
+        46769,
+        47133,
+        54195,
+        54207,
+        54299,
+        54513,
+        54517,
+        70461,
+        70587,
+        71086,
+        85540,
+        85544,
+        90663,
+        90666
+      ],
+      "groups": [
+        6097,
+        6101,
+        20142,
+        20250,
+        29090,
+        29109,
+        30586,
+        30593,
+        33209,
+        33213,
+        40816,
+        40820,
+        40914,
+        46593,
+        46769,
+        47133,
+        54195,
+        54207,
+        54299,
+        54513,
+        54517,
+        70461,
+        70587,
+        71086,
+        85544,
+        90663,
+        90666
+      ],
+      "live": []
+    },
+    "finalBeforeMetadataAckAfterDensityCorrection": {
+      "utc": "2026-10-12T15:44:37.964679+00:00",
+      "pids": [
+        3863,
+        3871,
+        6097,
+        6101,
+        20142,
+        20250,
+        29104,
+        29109,
+        30586,
+        30593,
+        33209,
+        33213,
+        40816,
+        40820,
+        40914,
+        46593,
+        46769,
+        47133,
+        54195,
+        54207,
+        54299,
+        54513,
+        54517,
+        70461,
+        70587,
+        71086,
+        85540,
+        85544,
+        90663,
+        90666,
+        98053,
+        98063,
+        98145
+      ],
+      "groups": [
+        3837,
+        3871,
+        6097,
+        6101,
+        20142,
+        20250,
+        29090,
+        29109,
+        30586,
+        30593,
+        33209,
+        33213,
+        40816,
+        40820,
+        40914,
+        46593,
+        46769,
+        47133,
+        54195,
+        54207,
+        54299,
+        54513,
+        54517,
+        70461,
+        70587,
+        71086,
+        85544,
+        90663,
+        90666,
+        98053,
+        98063,
+        98145
+      ],
+      "live": []
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "sysctl -n vm.loadavg one-minute value at review command start; native display precision 6.14. Full OS load samples remain in each actual command receipt."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "scriptingCorrectionWindow": {
+    "start": "2026-10-12T15:25:20.266219+00:00",
+    "end": "2026-10-12T15:31:13.784246+00:00",
+    "elapsedMin": 5.891967116666667,
+    "meaning": "Observed correction and replay wall interval, not productive CPU time; below approximately ten minutes."
+  },
+  "captureDensityCorrection": {
+    "cause": "The shared qa.capture API explicitly writes scale css; its original captures have 1440x900 and390x844 PNG dimensions, at 1 device-independent pixel per CSS pixel. Native context devicePixelRatio is2.",
+    "scope": "Private owned native scenario only; native QaPage.screenshot scale device writes two new invocation captures. All previous 1x artifacts remain unchanged. No shared source or runtime changes.",
+    "invocation": "run-I8tuZU",
+    "report": "invocations/run-I8tuZU/density-captures.result.json",
+    "ok": true,
+    "caps": [],
+    "captures": [
+      {
+        "viewport": "desktop",
+        "filename": "fallen-gain-2x-desktop.png",
+        "relativePath": "invocations/run-I8tuZU/fallen-gain-2x-desktop.png",
+        "actualPngWidth": 2880,
+        "actualPngHeight": 1800,
+        "deviceScale": 2,
+        "cssWidth": 1440,
+        "cssHeight": 900,
+        "sha256": "171eca20713960d4fa6f8098996b53ed67d5be8ae6838e399c3a8415f0a8c287",
+        "visualInspection": "Crisp and readable moved source, 2 spark, duration clock, energy 2/3, phase controls; complete CSS viewport retained."
+      },
+      {
+        "viewport": "mobile",
+        "filename": "fallen-gain-2x-mobile.png",
+        "relativePath": "invocations/run-I8tuZU/fallen-gain-2x-mobile.png",
+        "actualPngWidth": 780,
+        "actualPngHeight": 1688,
+        "deviceScale": 2,
+        "cssWidth": 390,
+        "cssHeight": 844,
+        "sha256": "9d3104c7ba3b99fb71ade00b8aadccc218f14ee660d0a152143c1d697ac0b5f3",
+        "visualInspection": "Crisp and readable moved source, 2 spark, duration clock, energy 2/3, phase controls; complete CSS viewport retained."
+      }
+    ],
+    "cleanup": {
+      "utc": "2026-10-12T15:42:02.692017+00:00",
+      "nativeInvocation": "run-I8tuZU",
+      "slot": 1,
+      "port": 5274,
+      "serverPid": 98145,
+      "groups": [
+        98063,
+        98053,
+        98145
+      ],
+      "live": [],
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+          "exists": false,
+          "belongsToThisBead": false
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": {
+          "exists": false,
+          "belongsToThisBead": false
+        }
+      },
+      "portFree": true,
+      "scriptSha256": "c491f2f7d32096f2c809d5e78c60df6a152517473a9c3daf7f0a2f23aba268f6",
+      "liveProviderIdentitySnapshot": "not captured; actual native report identifies the owned slot and server; normal close completed with exit0",
+      "observerNote": "One read-only manual snapshot used the previous slot0 path and found it absent; current invocation actually used slot1. No state mutation or extra browser tool."
+    },
+    "observedCaptureAndInspectionWindow": {
+      "start": "2026-10-12T15:40:39.605487+00:00",
+      "end": "2026-10-12T15:43:27.140724+00:00",
+      "elapsedMin": 2.79225395,
+      "limit": "Command start through completed dimension/visual inspection and cleanup evidence; earlier investigation has no separate observed start clock. Wall time, not productive CPU time."
+    }
+  }
+}

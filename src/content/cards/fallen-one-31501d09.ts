@@ -1,3 +1,6 @@
+import { activated, discardCost, energyX, self, x } from "../../engine/dsl/builders";
+import { untilEndOfTurn } from "../../engine/dsl/triggers";
+import { gainSpark, move } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 374,
   art: { x: 0, y: 1, scale: 1.07 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated([discardCost()], move(self()), { speed: "fast" }),
+    activated([energyX()], gainSpark(self(), x(), untilEndOfTurn())),
+  ],
+  verifiedText: "2do4uegzszi",
 });

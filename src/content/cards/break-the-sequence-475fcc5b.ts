@@ -1,3 +1,5 @@
+import { event, stackItem } from "../../engine/dsl/builders";
+import { draw, eachPlayer, prevent, sequence } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +22,9 @@ export default card({
   cardNumber: 410,
   art: { x: 0.126, y: 0.398, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(sequence(
+    prevent(stackItem()),
+    variant.amplified ? sequence(draw(2), draw(1, "opponent")) : eachPlayer(draw(1)),
+  ))],
+  verifiedText: "130impsuw4w",
 });
