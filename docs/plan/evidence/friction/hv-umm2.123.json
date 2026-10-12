@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.123",
+  "phase": 5,
+  "implementMin": 30,
+  "localValidationS": {
+    "focused": 3.0,
+    "preflight": 0.7,
+    "fuzz": 78.4,
+    "sweep": 310.9,
+    "judged": 119.7,
+    "review": 40.8,
+    "knip": 2.5
+  },
+  "hostLoad": 8.1,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 12,
+      "note": "judged opponent-hand scenario: playUntil auto-answered the discardChosen prompt when the predicate read probe.pending.purpose from battle state; far-hand DOM nests data-battle-card-id and hidden cards use opaque view ids, so a hand-settle wait must dedupe and accept non-instance ids"
+    }
+  ]
+}

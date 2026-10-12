@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   artOwned: true,
   cardNumber: 162,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(p.discardChosen({ costAtMost: variant.amplified ? 3 : 2 }))],
+  verifiedText: "1yql4gpxl8z",
 });

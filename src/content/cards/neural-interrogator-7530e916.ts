@@ -1,3 +1,5 @@
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 83,
   art: { x: 0, y: -0.533, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), p.sequence(p.discardChosen(), p.draw(1, "opponent")))],
+  verifiedText: "12jaczf8717",
 });
