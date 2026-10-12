@@ -132,13 +132,14 @@ const completeAuthoringFixtures = new Map<string, string>([
     export function pointsCost() {} export function returnCost() {}
     export function discardHandCost() {} export function discardCostFilter() {}
     export function banishXCost() {} export function banishFromAnyVoidCost() {}
+    export function abandonXCost() {}
   `],
   ["src/engine/dsl/triggers.ts", `
     export function whenDissolved() {} export function whenDiscardSelf() {}
     export function whenPutIntoVoid() {} export function atEndOfTurn() {}
   `],
   ["src/engine/dsl/types.ts", `
-    export type PaymentCost = { tag: "banishFromHand"; count: number };
+    export type PaymentCost = { tag: "banishFromHand"; count: number } | { tag: "discard"; count: "x"; min?: number };
     export type Condition = { tag: "energyAtLeast"; amount: number } | { tag: "thisTurn" };
     export type ValueExpr = { tag: "handSize" } | { tag: "storedCounters" } | { tag: "playedThisTurn" };
     export type Trigger = { tag: "play"; nth?: number; from?: "hand" | "void" }
@@ -146,12 +147,14 @@ const completeAuthoringFixtures = new Map<string, string>([
       | { tag: "reclaim" } | { tag: "returnToHand" } | { tag: "erode" }
       | { tag: "foresee" } | { tag: "copy" } | { tag: "removesEnemy" };
     export type FunctionalZone = "hand" | "void" | "deck";
-    export interface ActivatedAbility { oncePerTurn?: boolean }
+    export interface ActivatedAbility { oncePerTurn?: boolean; zone?: FunctionalZone }
     export type Speed = "standard" | "fast";
     export interface CharacterSelector { figment?: boolean; hasAbility?: string; challenging?: boolean; costAtLeast?: number }
     export interface StackItemSelector { costAtMost?: number }
-    export interface CardFilter { costAtMost?: number }
+    export interface CardFilter { costAtMost?: number; sparkAtMost?: number }
     export interface ZoneCardSpec { zone: "hand" | "void" | "deck" }
+    export interface ZoneTargetSpec { zone: "void"; costAtMost?: number | { tag: "x" } }
+    export type BoundValue = number | { tag: "x" } | { tag: "sourceSpark" };
     export interface StaticAbility { zone?: FunctionalZone }
     export type Ability = { tag: "playCondition" } | { tag: "alternativeCost" };
     export interface TriggeredAbility { oncePerTurn?: boolean }
@@ -161,6 +164,7 @@ const completeAuthoringFixtures = new Map<string, string>([
     }
   `],
   ["src/engine/effects/types.ts", 'export type CardRef = { tag: "source" } | { tag: "lastPlayed" };'],
+  ["src/engine/effects/primitives/grant-reclaim.ts", 'export type ReclaimCards = { tag: "inZone" } | { tag: "movedBy" } | { tag: "subject" };'],
 ]);
 const expectedCapabilityNames = [
   "banishFromHandCost", "conditionControls", "conditionEnergyAtLeast", "conditionCostPaid",
@@ -174,6 +178,8 @@ const expectedCapabilityNames = [
   "whenErodeTrigger", "whenForeseeTrigger", "whenCopyTrigger", "whenRemovesEnemyTrigger",
   "whenPutIntoVoidTrigger", "whenPlayFromVoidTrigger", "drawTriggerFilter",
   "materializeNthTrigger", "atEndOfTurnTrigger", "firstTimeEachTurn", "typeRemap",
+  "discardCostFilterMin", "abandonXCost", "cardFilterSparkBounds", "voidTargetXBound",
+  "boundSourceSpark", "activatedFromVoid", "grantReclaimTriggeringCard",
 ] as const;
 // Each independently authored row contains only that capability's intended API.
 // Virtual namespaces let all rows share one compiler/library model.
@@ -228,6 +234,13 @@ const minimalApiFixtures = [
   ["atEndOfTurnTrigger", triggersModule, 'export function atEndOfTurn() {}'],
   ["firstTimeEachTurn", typesModule, 'export interface TriggeredAbility { oncePerTurn?: boolean }'],
   ["typeRemap", typesModule, 'export interface DeckMods { typeRemap?: { selectorSubtype: string; conditionalFigmentSubtype: string } }'],
+  ["discardCostFilterMin", typesModule, 'export type PaymentCost = { kind: "discard"; min?: number };'],
+  ["abandonXCost", buildersModule, 'export function abandonXCost() {}'],
+  ["cardFilterSparkBounds", typesModule, 'export interface CardFilter { sparkAtMost?: number }'],
+  ["voidTargetXBound", typesModule, 'export interface ZoneTargetSpec { costAtMost?: number }'],
+  ["boundSourceSpark", typesModule, 'export type BoundValue = number | { kind: "sourceSpark" };'],
+  ["activatedFromVoid", typesModule, 'export interface ActivatedAbility { zone?: "void" }'],
+  ["grantReclaimTriggeringCard", "src/engine/effects/primitives/grant-reclaim.ts", 'export type ReclaimCards = { kind: "subject" };'],
 ] as const;
 const scopedModule = (capability: string, module: string) => `inventory-intended/${capability}/${module}`;
 const minimalSources = new Map<string, string>();

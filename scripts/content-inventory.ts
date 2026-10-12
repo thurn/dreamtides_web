@@ -19,7 +19,11 @@
  * - **Tags** come from the regex rules in `RULES` over each entity's printed
  *   and amplified text, split into cost and effect clauses, then the manual
  *   corrections in `CORRECTIONS`. Each tag names a mechanic family, the
- *   primitives and DSL forms it needs, and the prompt kinds it raises.
+ *   primitives and DSL forms it needs, and the prompt kinds it raises. A
+ *   variant rule for parameterized text ("Abandon X", "≤X● cost events in
+ *   your void", "this character's ✦" as a bound) claims the text it matches
+ *   from the fixed-form rules it refines, so that text needs the variant's
+ *   capability rather than the fixed form's.
  * - **Primitives** in `PRIMITIVES` are probed against src/engine: a primitive
  *   module exists when its file is listed in effects/primitives/index.ts, a
  *   builder when src/engine/dsl exports it, and a DSL addition when its named
@@ -386,6 +390,9 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("selectorChallenger", [registered(DSL_TYPES, "CharacterSelector", { option: "challenging" })], ["CharacterSelector"], { note: "challengers" }),
   dsl("selectorBounds", [registered(DSL_TYPES, "CharacterSelector", { option: "costAtLeast" })], ["CharacterSelector"], { note: "exact, ≥, X-valued, and relative cost and ✦ bounds" }),
   dsl("cardFilterBounds", [registered(DSL_TYPES, "CardFilter", { option: "costAtMost" })], ["CardFilter"], { note: `cost and ✦ bounds on play and materialize filters (${GAP_36})` }),
+  dsl("cardFilterSparkBounds", [registered(DSL_TYPES, "CardFilter", { option: "sparkAtMost" })], ["CardFilter"], { note: "✦ bounds on a card filter (\"Discover a ≤2✦ character\")" }),
+  dsl("voidTargetXBound", [registered(DSL_TYPES, "ZoneTargetSpec", { option: "costAtMost" })], ["CardRef"], { note: "void targets bounded by X (\"up to two ≤X● cost events in your void\")" }),
+  dsl("boundSourceSpark", [registered(DSL_TYPES, "BoundValue", { member: "sourceSpark", pending: "member" })], ["CharacterSelector"], { note: "a cost or ✦ bound read from the source's ✦ (\"with ✦ less than or equal to this character's ✦\")" }),
   dsl("zoneCardRefs", [registered(DSL_TYPES, "ZoneCardSpec")], ["CardRef"], { note: "references to cards in a void, deck, or hand" }),
   dsl("randomSelection", [callable(DSL_BUILDERS, "randomIn")], ["CardRef"], { note: "\"a random …\" selections" }),
   dsl("valueZoneCounts", [callable(DSL_BUILDERS, "countCards")], ["ValueExpr"], { note: "counts of cards in a zone" }),
@@ -395,18 +402,22 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("turnHistory", [registered(DSL_TYPES, "ValueExpr", { member: "playedThisTurn", pending: "member" }), registered(DSL_TYPES, "Condition", { member: "thisTurn", pending: "member" })], ["ValueExpr", "Condition"], { note: "turn counters: cards played, discarded, dissolved this turn" }),
   dsl("historyRefs", [registered("src/engine/effects/types.ts", "CardRef", { member: "lastPlayed", pending: "member" })], ["CardRef"], { note: `"the last warrior you played" (${GAP_38})` }),
   dsl("staticZones", [registered(DSL_TYPES, "StaticAbility", { option: "zone" })], ["StaticAbility"], { note: `statics that work from hand, void, or deck (C4; ${GAP_37})` }),
+  dsl("activatedFromVoid", [registered(DSL_TYPES, "ActivatedAbility", { option: "zone", pending: "option" })], ["Ability"], { note: "activated abilities that work from the void (\"…: Materialize this character from your void\")" }),
+  dsl("grantReclaimTriggeringCard", [registered(`${P}grant-reclaim.ts`, "ReclaimCards", { member: "subject" })], ["CardRef"], { note: "Reclaim granted to the card a trigger concerns (\"When you discard a card, it gains reclaim\")" }),
   dsl("playCondition", [registered(DSL_TYPES, "Ability", { member: "playCondition", pending: "member" })], ["Ability"], { note: "\"Play this event only if …\"" }),
   dsl("alternativeCost", [registered(DSL_TYPES, "Ability", { member: "alternativeCost", pending: "member" })], ["Ability"], { note: "\"you may play this card for …\"" }),
   dsl("pointsCost", [callable(DSL_BUILDERS, "pointsCost")], ["PaymentCost"], { note: "pay ⍟ as a cost" }),
   dsl("returnCost", [callable(DSL_BUILDERS, "returnCost")], ["PaymentCost"], { note: "\"Return a character you control to hand:\" as a cost" }),
   dsl("discardHandCost", [callable(DSL_BUILDERS, "discardHandCost")], ["PaymentCost"], { note: "discard every eligible hand card as a cost, without a choice" }),
   dsl("discardCostFilter", [callable(DSL_BUILDERS, "discardCostFilter")], ["PaymentCost"], { note: "discard a matching card or X cards as a cost" }),
+  dsl("discardCostFilterMin", [registered(DSL_TYPES, "PaymentCost", { member: "discard", option: "min" })], ["PaymentCost"], { note: "\"Discard X cards\" whose X is at least 1 (discardCostFilter count \"x\" with min)" }),
+  dsl("abandonXCost", [{ ...callable(DSL_BUILDERS, "abandonXCost"), pending: "export" }], ["PaymentCost"], { note: "\"Abandon X figments\" as a cost: the abandoned count is X" }),
   dsl("banishXCost", [callable(DSL_BUILDERS, "banishXCost")], ["PaymentCost"], { note: "banish X cards from your void" }),
   dsl("banishFromAnyVoidCost", [callable(DSL_BUILDERS, "banishFromAnyVoidCost")], ["PaymentCost"], { note: "banish a card from the opponent's or any void as a cost" }),
   dsl("whenDissolvedTrigger", [callable(DSL_TRIGGERS, "whenDissolved")], ["Trigger"], { note: "\"when a character you control is dissolved\"" }),
   dsl("whenDiscardSelfTrigger", [callable(DSL_TRIGGERS, "whenDiscardSelf")], ["Trigger"], { note: "\"when you discard this card\"" }),
   dsl("whenReclaimTrigger", [registered(DSL_TYPES, "Trigger", { member: "reclaim" })], ["Trigger"]),
-  dsl("whenReturnTrigger", [registered(DSL_TYPES, "Trigger", { member: "returnToHand", pending: "member" })], ["Trigger"]),
+  dsl("whenReturnTrigger", [registered(DSL_TYPES, "Trigger", { member: "returnToHand" })], ["Trigger"]),
   dsl("whenErodeTrigger", [registered(DSL_TYPES, "Trigger", { member: "erode" })], ["Trigger"]),
   dsl("whenForeseeTrigger", [registered(DSL_TYPES, "Trigger", { member: "foresee", pending: "member" })], ["Trigger"]),
   dsl("whenCopyTrigger", [registered(DSL_TYPES, "Trigger", { member: "copy", pending: "member" })], ["Trigger"], { note: `"when you copy" (${GAP_38})` }),
@@ -414,7 +425,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("whenPutIntoVoidTrigger", [callable(DSL_TRIGGERS, "whenPutIntoVoid")], ["Trigger"]),
   dsl("whenPlayFromVoidTrigger", [registered(DSL_TYPES, "Trigger", { member: "play", option: "from", optionLiteral: "void" })], ["Trigger"], { note: "\"when you play a card from your void\"" }),
   dsl("drawTriggerFilter", [registered(DSL_TYPES, "Trigger", { member: "draw", option: "filter", pending: "option" })], ["Trigger"], { note: "\"when you draw a character\"" }),
-  dsl("materializeNthTrigger", [registered(DSL_TYPES, "Trigger", { member: "materialize", option: "nth", pending: "option" })], ["Trigger"], { note: "\"your second spirit animal in a turn\"" }),
+  dsl("materializeNthTrigger", [registered(DSL_TYPES, "Trigger", { member: "materialize", option: "nth" })], ["Trigger"], { note: "\"your second spirit animal in a turn\"" }),
   dsl("atEndOfTurnTrigger", [callable(DSL_TRIGGERS, "atEndOfTurn")], ["Trigger"], { note: "\"at the end of your turn\" (Ending)" }),
   dsl("firstTimeEachTurn", [registered(DSL_TYPES, "TriggeredAbility", { option: "oncePerTurn" })], ["TriggeredAbility"], { note: "\"the first time each turn …\"" }),
   dsl("typeRemap", [registered(DSL_TYPES, "DeckMods", { option: "typeRemap", pending: "option" })], ["Variant"], { note: `C12 type remap for selectors and figments (${GAP_38})` }),
@@ -477,6 +488,10 @@ interface Rule {
   readonly family: number;
   readonly part?: TextPart;
   readonly re: RegExp;
+  /** Other parts the rule reads: each `re` must match its part, or must not with `absent`. */
+  readonly context?: readonly { readonly part: TextPart; readonly re: RegExp; readonly absent?: true }[];
+  /** The fixed-form tags this variant refines: they do not read the text it matches. */
+  readonly claims?: readonly string[];
   readonly needs: readonly string[];
   readonly prompts?: readonly PromptKey[];
 }
@@ -486,6 +501,9 @@ interface Rule {
 // (effect clauses, the default), "cost" (activated-ability costs and
 // additional costs), or "all". `family` is the rule's mechanic family,
 // `needs` the primitives it requires, `prompts` the prompt kinds it raises.
+// A variant rule's `claims` names the fixed-form rules whose evidence it
+// matches with a parameter (X, or this character's ✦): those rules test
+// their part with the variant's matches removed.
 
 const RULES: readonly Rule[] = [
   // Keywords (family 2).
@@ -546,6 +564,8 @@ const RULES: readonly Rule[] = [
   { tag: "return-own-to-hand", family: 6, re: /Return (a|all but one|all other|another)? ?characters? (you control )?to (your )?hand|return this character to hand|Return all other characters to hand/i, needs: ["returnToHand"] },
   { tag: "return-from-void", family: 6, re: /from (your|their|each player's) void to (your |their )?hand|return (it|this card|this character) (from your void )?to (your )?hand|Put the banished card into your hand|card from your void to your hand/i, needs: ["returnFromVoid"] },
   { tag: "grant-reclaim", family: 6, re: /gains? reclaim|have reclaim|to gain reclaim/i, needs: ["grantReclaim"] },
+  { tag: "grant-reclaim-triggering", family: 6, part: "all", re: /\bwhen you [^,.\n]*(?<!this card|this character), (it|that card) gains reclaim|The first card you \w+ each turn gains reclaim/i, needs: ["grantReclaimTriggeringCard"] },
+  { tag: "activated-from-void", family: 6, part: "all", re: /(^|\n)(?:❖+\s*[–-]\s*)?(?!When|If|Once|Until|At the|While|Choose|Support)[^:\n▸]+:\s[^\n]*\bthis (character|card) from your void/i, needs: ["activatedFromVoid"] },
   { tag: "play-from-zone", family: 6, re: /you may (immediately )?play [^.]*from (your|the top of your|your hand or) (void|deck)|play (that|this) card from your void|play characters from the top of your deck|play this character from your void/i, needs: ["playFromZone"] },
   { tag: "reclaim-not-banished", family: 6, re: /not banished when they leave play/i, needs: ["reclaimNotBanished"] },
   { tag: "void-zone", family: 6, re: /(this|that) (card|character) is in your void|from your void\.|this character from your void/i, needs: ["functionalZones"] },
@@ -649,10 +669,13 @@ const RULES: readonly Rule[] = [
   { tag: "cost-energy", family: 0, part: "cost", re: /\d+●/, needs: ["energy"] },
   { tag: "cost-energy-x", family: 0, part: "all", re: /(^|\n|, )X●[,:]|X●: |X● cost|cost X●|Choose a value of X|with cost X\b/, needs: ["energyX"], prompts: ["chooseX"] },
   { tag: "cost-abandon", family: 0, part: "cost", re: /\bAbandon (a|an|another|two|\d|a non-figment|X)/i, needs: ["abandonCost"], prompts: ["abandonCost"] },
+  { tag: "cost-abandon-x", family: 0, part: "cost", re: /\bAbandon X\b/i, claims: ["cost-abandon"], needs: ["abandonXCost"], prompts: ["abandonCost"] },
   { tag: "cost-abandon-self", family: 0, part: "cost", re: /\b[Aa]bandon this character/, needs: ["abandonCost"] },
   { tag: "cost-discard-hand", family: 0, part: "cost", re: /\bDiscard your hand\b/i, needs: ["discardHandCost"] },
   { tag: "cost-discard", family: 0, part: "cost", re: /\bDiscard (a|an|\d|X|two)/i, needs: ["discardCost"], prompts: ["discardCost"] },
   { tag: "cost-discard-filter", family: 0, part: "cost", re: /\bDiscard (a character|an event|a ≤|X cards)/i, needs: ["discardCostFilter"] },
+  // "Discard X cards" whose effects all scale with X: zero would do nothing, so X is at least 1 (rules § Costs, Requirements, and X).
+  { tag: "cost-discard-x-min", family: 0, part: "cost", re: /\bDiscard X cards\b/i, context: [{ part: "effect", re: /\bX(?![+\w])/ }, { part: "effect", re: /\bX\+\d/, absent: true }], needs: ["discardCostFilterMin"] },
   { tag: "cost-banish-void", family: 0, part: "cost", re: /\bBanish (\d+|a|X) (cards?|character) from (your|the opponent's|a) void|banish \d+ cards from your void|banish X cards/i, needs: ["banishFromVoidCost"], prompts: ["banishCost"] },
   { tag: "cost-banish-any-void", family: 0, part: "cost", re: /from (the opponent's|a) void/i, needs: ["banishFromAnyVoidCost"] },
   { tag: "cost-banish-x", family: 0, part: "cost", re: /banish X cards/i, needs: ["banishXCost"], prompts: ["chooseX"] },
@@ -666,6 +689,9 @@ const RULES: readonly Rule[] = [
 
   // Neutral: selectors, values, conditions.
   { tag: "selector-bounds", family: 0, part: "all", re: /≤X|with X✦|with cost X●|cost X●|≥\d|with cost (less|greater)|less than or equal|lower cost|lesser cost|higher cost|greater than that card's cost|(?<![≤≥\d])[0-9]● cost (character|event|card)|cost 1● higher|with ✦ less|with 1✦|≤1✦ character|a 1✦ character|with the highest ✦/i, needs: ["selectorBounds"] },
+  { tag: "void-target-x-bound", family: 0, part: "all", re: /\b(a|an|one|two|up to \w+) ≤X● cost [^.]*?\b(in|from) (your|the opponent's|a) void\b/i, claims: ["selector-bounds"], needs: ["voidTargetXBound"] },
+  { tag: "bound-source-spark", family: 0, part: "all", re: /(with (cost|✦) )?(less than or equal to|greater than or equal to|less than|greater than|at most|at least) this character's ✦/i, claims: ["selector-bounds", "value-card-stat"], needs: ["boundSourceSpark"] },
+  { tag: "card-filter-spark-bounds", family: 0, part: "all", re: /\b(Discover|draws?|you play|play) (a|an) (non-figment )?[≤≥]\d+✦ (character|card)\b|[≤≥]\d+✦ (characters?|cards?) (from|in) (your|the opponent's|a) (void|hand|deck)\b/i, needs: ["cardFilterSparkBounds"] },
   { tag: "selector-has-ability", family: 0, part: "all", re: /(Characters|Characters you control) with ▸\w+ abilities/i, needs: ["selectorHasAbility"] },
   { tag: "stack-selector-bounds", family: 0, re: /Prevent a played ≤|Return a played ≤/i, needs: ["stackSelectorBounds"] },
   { tag: "selector-challenger", family: 0, part: "all", re: /challengers?\b|challenging character/i, needs: ["selectorChallenger"] },
@@ -835,9 +861,19 @@ function splitClauses(text: string): TextParts {
   return { cost: cost.join("\n"), effect: effect.join("\n"), condition: condition.join("\n"), all: text };
 }
 
+const everyMatch = (re: RegExp): RegExp => new RegExp(re.source, re.flags.includes("g") ? re.flags : `${re.flags}g`);
+
 function applyRules(text: string, rules: readonly Rule[]): Rule[] {
   const parts = splitClauses(text);
-  return rules.filter((rule) => rule.re.test(parts[rule.part ?? "effect"]));
+  const matched = rules.filter((rule) =>
+    rule.re.test(parts[rule.part ?? "effect"]) && (rule.context ?? []).every((context) => context.re.test(parts[context.part]) !== (context.absent === true)));
+  return matched.filter((rule) => {
+    const variants = matched.filter((variant) => variant.claims?.includes(rule.tag) === true);
+    if (variants.length === 0) return true;
+    // A neutral separator, so the removed span cannot join its neighbors into new evidence.
+    const rest = variants.reduce((remaining, variant) => remaining.replace(everyMatch(variant.re), "\u0000"), parts[rule.part ?? "effect"]);
+    return rule.re.test(rest);
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -901,6 +937,7 @@ for (const info of TAGS.values()) for (const need of info.needs) primitive(need)
 for (const needs of Object.values(TRANSFIGURATION_NEEDS)) for (const need of needs) primitive(need);
 for (const entry of GAPS) primitive(entry.primitive);
 for (const tag of [...UNIQUE_TAGS, ...KEYWORD_TAGS]) if (!TAGS.has(tag)) throw new Error(`unknown tag ${tag}`);
+for (const rule of RULES) for (const tag of rule.claims ?? []) if (!TAGS.has(tag)) throw new Error(`${rule.tag} claims unknown tag ${tag}`);
 
 // ---------------------------------------------------------------------------
 // Rules decisions and card text clarifications that name an entity.

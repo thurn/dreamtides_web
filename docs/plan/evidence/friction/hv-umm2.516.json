@@ -1,0 +1,26 @@
+{
+  "bead": "hv-umm2.516",
+  "phase": 5,
+  "implementMin": 22,
+  "localValidationS": {
+    "generate": 1.9,
+    "check": 1.3,
+    "focused": 4.8,
+    "review": 9.6,
+    "knip": 2.8
+  },
+  "hostLoad": 4.37,
+  "testDelta": {
+    "files": 1,
+    "lines": 93,
+    "jsdomFiles": 0,
+    "cases": 25
+  },
+  "friction": [
+    {
+      "tag": "inventory-fulfilled-marker",
+      "minutes": 3,
+      "note": "The generator refused to run on base: whenReturnTrigger (0d8c0a97c) and materializeNthTrigger (39c84fe7a) had landed with their pending markers still declared; both bindings were verified and retired before the variant comparison baseline"
+    }
+  ]
+}
