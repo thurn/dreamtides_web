@@ -98,6 +98,29 @@ describe("playFromZone recovery", () => {
     expect(malformed({ filter: { costAtMost: "2" } })).toBeNull();
   });
 
+  it.each(["sparkAtMost", "sparkAtLeast"] as const)("validates saved %s as a finite signed number", (bound) => {
+    const { state } = granted();
+    const withBound = (value: unknown) => sliceOf({
+      ...state, floating: [{ ...state.floating[0], change: { ...state.floating[0].change, filter: { [bound]: value } } }],
+    } as BattleState);
+    for (const value of ["2", null, {}, [], true, NaN, Infinity, -Infinity]) {
+      const decoded = savedJourney(withBound(value));
+      expect(parseJourneyBattleFoldState(decoded)).toBeNull();
+      // The public parser also rejects a decoded object containing non-finite numbers.
+      const savedSlice = (decoded.engine as { slice: BattleSlice }).slice;
+      savedSlice.committed.floating = withBound(value).committed.floating;
+      expect(parseJourneyBattleFoldState(decoded)).toBeNull();
+    }
+    for (const value of [-2, 0, 1.5]) {
+      const original = withBound(value);
+      const parsed = parseJourneyBattleFoldState(savedJourney(original));
+      expect(parsed).not.toBeNull();
+      expect(parsed!.engine.slice.committed.floating[0].change).toEqual(original.committed.floating[0].change);
+      expect(stateHash(parsed!.engine.slice.committed)).toBe(stateHash(original.committed));
+      expect(engine.legalActions(parsed!.engine.slice.committed, "player")).toEqual(engine.legalActions(original.committed, "player"));
+    }
+  });
+
   it("commits and publishes no permission when its step fails after granting it", () => {
     const { state, ids } = placed({ hand: [PERMIT.permitThenFail.id], void: [v.event0.id] });
     const fold = createFoldAdapter(engine, { checkEventPrefix: true });

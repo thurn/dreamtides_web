@@ -188,6 +188,28 @@ describe("drawMatching", () => {
     expect(engine.view(result.state, "enemy").sides.player.deck).toEqual({ count: 2, known: [] });
   });
 
+  it.each([
+    [{ sparkAtMost: 2 }, { sparkAtMost: 0 }],
+    [{ sparkAtLeast: 1 }, { sparkAtLeast: 8 }],
+  ])("treats different literal spark bounds as anonymous draws: %j then %j", (first, second) => {
+    const source = fixture(15, () => [event(sequence(drawMatching(first), drawMatching(second)))]);
+    const local = createEngine(testCatalog([source]));
+    const { state, ids } = boardState(local.catalog, {
+      active: "player", phase: "day",
+      player: { hand: [source.id], deck: [v.vanilla1.id, v.vanilla2.id, v.event1.id] }, enemy: { deck: filler },
+    });
+    state.knownTo.enemy = [ids.player.deck[1]];
+    const before = stateHash(state);
+    const result = local.apply(state, "player", play(ids.player.hand[0]), NO_PROMPTS);
+    expect(result.state.sides.player.hand).toEqual([ids.player.deck[0]]);
+    expect(result.state.sides.player.deck).toEqual(ids.player.deck.slice(1));
+    expect(result.state.turnLog.drawn.player).toBe(1);
+    expect(local.view(result.state, "enemy").sides.player.deck).toEqual({ count: 2, known: [] });
+    expect(stateHash(state)).toBe(before);
+    const reloaded = JSON.parse(JSON.stringify(state)) as BattleState;
+    expect(stateHash(local.apply(reloaded, "player", play(ids.player.hand[0]), NO_PROMPTS).state)).toBe(stateHash(result.state));
+  });
+
   it("rolls back a failed resolution's draw/count/knowledge changes, preserving the committed play and publishing no partial draw", () => {
     const { state, ids } = board(failure.id);
     state.knownTo.enemy = [ids.player.deck[2]];

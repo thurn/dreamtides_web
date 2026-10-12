@@ -775,7 +775,9 @@ function isCardFilter(value: unknown): boolean {
     optional(isCardKind)(value.cardType) &&
     optional(isString)(value.subtype) &&
     optional(isIndex)(value.costAtMost) &&
-    optional(isIndex)(value.costAtLeast)
+    optional(isIndex)(value.costAtLeast) &&
+    optional(isFiniteNumber)(value.sparkAtMost) &&
+    optional(isFiniteNumber)(value.sparkAtLeast)
   );
 }
 

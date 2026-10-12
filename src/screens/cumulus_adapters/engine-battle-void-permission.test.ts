@@ -213,6 +213,22 @@ describe("play permissions on the battle screen", () => {
     expect(log(once, "player")).not.toBe(log(once, "enemy"));
   });
 
+  it.each([true, false])("qualifies spark-bounded permission copy with named=%s", (named) => {
+    const status = (filter: CardFilter): EngineStatusCopy => ({ kind: "playFrom", named, filter, next: false, expiry: { at: "never" } });
+    const label = (filter: CardFilter) => engineStatusLabel(status(filter), "player");
+    const unbounded = label({});
+    const filters: readonly CardFilter[] = [
+      { sparkAtMost: 0 }, { sparkAtMost: 2 }, { sparkAtLeast: 0 }, { sparkAtLeast: 2 },
+      { sparkAtLeast: 2, sparkAtMost: 2 }, { sparkAtLeast: 1, sparkAtMost: 2 },
+    ];
+    const labels = filters.map(label);
+    expect(labels).not.toContain(unbounded);
+    expect(new Set(labels).size).toBe(filters.length);
+    const combined = { cardType: "character" as const, costAtMost: 2, sparkAtLeast: 1, sparkAtMost: 2 };
+    expect(label(combined)).not.toBe(label({ cardType: "character", costAtMost: 2 }));
+    expect(label(combined)).not.toBe(label({ sparkAtLeast: 1, sparkAtMost: 2 }));
+  });
+
   it.each([
     { filter: { subtype: testCardSubtype("Fixture Warrior") }, named: false, next: false },
     { filter: { cardType: "character", costAtMost: 2 }, named: false, next: false },

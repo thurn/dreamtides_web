@@ -120,6 +120,11 @@ export const LAB = {
     subtype: "Warrior", speed: "standard", status: "authored",
     abilities: () => [staticAbility(p.playFromZone("void", { cardType: "character" }))],
   },
+  /** A public permission covering only characters within inclusive spark bounds. */
+  sparkVoidPermit: {
+    ...SYNTHETIC.vanilla1, id: syntheticId(0x46200), status: "authored",
+    abilities: () => [staticAbility(p.playFromZone("void", { sparkAtLeast: 1, sparkAtMost: 2 }))],
+  },
   /** Return a void card after an optional resolution-time payment. */
   optionalReturn: labEvent(0x70, 0, p.returnFromVoid(everyIn("void"), { pay: 1 })),
   /** "Draw 2 cards, then discard a card." */
@@ -774,6 +779,17 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     },
     script: [],
     presents: [{ side: "player", action: (ids) => ({ kind: "play", card: at(ids.player.void, 0), from: "void" }) }],
+  },
+  {
+    name: "spark-void-permission",
+    description: "A spark-bounded void permission with both boundary matches and nonmatching cards",
+    setup: {
+      active: "player", phase: "day",
+      player: { back: [LAB.sparkVoidPermit.id], void: [SYNTHETIC.vanilla0.id, vanillas[0], vanillas[1], vanillas[2], SYNTHETIC.event0.id], energy: 3, deck: deck(6) },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+    presents: [{ side: "player", action: (ids) => ({ kind: "play", card: at(ids.player.void, 1), from: "void" }) }],
   },
   {
     name: "card-statuses",

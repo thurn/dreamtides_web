@@ -1,0 +1,240 @@
+{
+  "bead": "hv-umm2.462",
+  "phase": 5,
+  "base": "fcc6fa461c7f05e9590e34ff99471a9a1704edf4",
+  "scope": {
+    "productionFiles": 3,
+    "productionNetLines": 8,
+    "labFixtures": 1,
+    "labDefinitions": 1,
+    "labNetLines": 16,
+    "testDelta": {
+      "files": 0,
+      "netLines": 61,
+      "jsdomFiles": 0,
+      "newCases": 6,
+      "newEntrypoints": 0,
+      "contractModuleLines": [
+        262,
+        158,
+        263
+      ]
+    }
+  },
+  "claimToPrecommit": {
+    "start": "2026-10-12T02:11:51Z",
+    "endpoint": "2026-10-12T02:35:42.314338+00:00",
+    "endpointProvenance": "Refreshed after parent precommit acknowledgement, immediately before final schema, staging and the single commit. Actual Git start/end are retained in commit.json in ignored QA evidence."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review test-related step started at 2026-10-12T02:28:41.774Z, one-minute load 24.15869140625. This loaded related suite is not a low-load full-suite budget measurement."
+      }
+    }
+  },
+  "commands": {
+    "focused-final": {
+      "start": "2026-10-12T02:27:23.469434+00:00",
+      "end": "2026-10-12T02:27:32.178098+00:00",
+      "wallS": 8.70844445900002,
+      "exit": 0,
+      "pgid": 99538
+    },
+    "review-final": {
+      "start": "2026-10-12T02:28:40.758271+00:00",
+      "end": "2026-10-12T02:29:50.460843+00:00",
+      "wallS": 69.70143375000043,
+      "exit": 0,
+      "pgid": 11996
+    },
+    "knip-final": {
+      "start": "2026-10-12T02:29:59.132473+00:00",
+      "end": "2026-10-12T02:30:01.607755+00:00",
+      "wallS": 2.4751500420024968,
+      "exit": 0,
+      "pgid": 20495
+    }
+  },
+  "regressions": {
+    "originalReaders": {
+      "failed": 4,
+      "log": "red.log"
+    },
+    "originalFormatter": {
+      "failed": 2,
+      "log": "red-copy.log"
+    },
+    "finiteGuardMutation": {
+      "failed": 2,
+      "log": "red-finite-guard.log",
+      "boundary": "Canonical JSON stringify converts non-finite numbers to null, which is rejected. A decoded save object directly containing NaN or infinity is also rejected; a typeof-number-only guard fails these tests."
+    },
+    "restoration": "All temporary production edits were restored byte-for-byte; final runtime source hashes match the final QA freeze. Initial test insertion stopped after two files when its UI insertion marker was not found; formatter red evidence is a separate subsequent test run."
+  },
+  "failurePaths": [
+    {
+      "case": "Mid-step error",
+      "coverage": "src/engine/effects/primitives/contracts/draw-matching.contracts.ts: rolls back a failed resolution's draw/count/knowledge changes, preserving the committed play and publishing no partial draw",
+      "application": "A failed draw resolution keeps committed deck and knowledge unchanged. The comparator adds no step or error path."
+    },
+    {
+      "case": "Reload/restart",
+      "coverage": "src/engine/effects/primitives/contracts/draw-matching.contracts.ts: replays a suspended draw prefix after JSON reload and accepts one owning answer while rejecting wrong-side/stale/concurrent answers; src/engine/effects/primitives/contracts/play-from-zone-recovery.contracts.ts: keeps a one-play permission through a cancelled play and a reload mid-route-choice, and uses it only by its own route",
+      "application": "Existing reload contracts cover resumed steps. New finite-bound parser cases preserve the reloaded permission, state hash and legal actions."
+    },
+    {
+      "case": "Partial write",
+      "coverage": "src/engine/effects/primitives/contracts/play-from-zone-recovery.contracts.ts: commits and publishes no permission when its step fails after granting it",
+      "application": "The fold keeps failed permission writes unpublished. CardFilter validation and permission formatting are readers and perform no writes; draw comparator uses the existing atomic step."
+    },
+    {
+      "case": "Invalid/stale input",
+      "coverage": "src/engine/effects/primitives/contracts/play-from-zone-recovery.contracts.ts: validates saved %s as a finite signed number; keeps a one-play permission through a cancelled play and a reload mid-route-choice, and uses it only by its own route",
+      "application": "Both bounds reject malformed decoded and serialized save inputs; finite constants retain legality. Existing permission route contract rejects illegal answers and stale void plays after consumption."
+    },
+    {
+      "case": "Concurrent actors",
+      "coverage": "src/engine/effects/primitives/contracts/draw-matching.contracts.ts: replays a suspended draw prefix after JSON reload and accepts one owning answer while rejecting wrong-side/stale/concurrent answers",
+      "application": "A pending prompt accepts only its owning side once and rejects later stale answers. The three consumers introduce no actor, prompt, scheduling boundary or write; no additional concurrent transition test applies."
+    }
+  ],
+  "qa": {
+    "baseline": "Exact base copy module with repaired readers and same final synthetic lab fixture; not an unchanged whole-game baseline.",
+    "presentation": "Existing visible status glyph is 28 by 28 px and its copy is the accessible aria-label. No visible caption was added.",
+    "baselineReport": {
+      "file": "spark-permission-baseline.result.json",
+      "sha256": "abafb0f286731a59a71dd8d032229c8c02315c59307d056aa48a4ef596b5e76a"
+    },
+    "finalReport": {
+      "file": "spark-permission-final.result.json",
+      "sha256": "c958304e1e4f5d710e1b9ed71fe37004d2bdf11ab19b58b61e130dd90426b1a8"
+    },
+    "normalIntents": "Both viewports played i10 then i9 from the void, printing UUIDs ending 0003 then 0002; energy 3 to 1 to 0, leaving i8/i11/i12 (0-spark, 3-spark and null-spark event). Each persisted log contains 31 rows; caps are empty.",
+    "captures": [
+      "spark-permission-baseline-chooser-desktop.png",
+      "spark-permission-baseline-chooser-mobile.png",
+      "spark-permission-baseline-played-desktop.png",
+      "spark-permission-baseline-played-mobile.png",
+      "spark-permission-baseline-status-desktop.png",
+      "spark-permission-baseline-status-mobile.png",
+      "spark-permission-final-chooser-desktop.png",
+      "spark-permission-final-chooser-mobile.png",
+      "spark-permission-final-played-desktop.png",
+      "spark-permission-final-played-mobile.png",
+      "spark-permission-final-status-desktop.png",
+      "spark-permission-final-status-mobile.png"
+    ],
+    "browserContextIds": "Not emitted by the canonical runner. Its two MCP calls per run returned successfully and normal cleanup cleared the ownership record.",
+    "resourceGroups": {
+      "baselineRunner": 84021,
+      "baselineServer": 84033,
+      "finalRunner": 86715,
+      "finalServer": 86833
+    },
+    "port": 5174,
+    "resourceStatus": "Recorded runner/server groups are absent; own server cleanup reports port free and browser ownership record is absent. The canonical runner settled its active calls and normal close; provider context IDs are not emitted.",
+    "gameLogs": [
+      {
+        "file": "spark-permission-baseline-desktop.jsonl",
+        "rows": 31,
+        "sha256": "39cfa7dfb608513de58df6ff9e94a032e31c2754ee7723ea2e4a470163d21592"
+      },
+      {
+        "file": "spark-permission-baseline-mobile.jsonl",
+        "rows": 31,
+        "sha256": "ee4c36e0eed599e50ea3d803114c6a8e8feeaadc7329b27c6bbc4aac7e6658cf"
+      },
+      {
+        "file": "spark-permission-final-desktop.jsonl",
+        "rows": 31,
+        "sha256": "2bdcb8c8fe5b1deb4b160a9a802000e24284eea32b4e80a6753320d2b1d095bc"
+      },
+      {
+        "file": "spark-permission-final-mobile.jsonl",
+        "rows": 31,
+        "sha256": "f7f71a623bede2b531010f2efb41f08dc8db39e00ed17f3c3b107e252c020033"
+      }
+    ],
+    "provenance": "Published cardPlayed events and instance-to-printing UUID observations are in the result. Distinct archived persisted JSONL logs contain the normal engine.action intents, not literal cardPlayed rows.",
+    "coldReview": "Parent independently reviewed baseline/final status and final chooser/settled played captures at both viewports; passed.",
+    "baselineWallMs": {
+      "browserLeaseWait": 46,
+      "serve": 1287,
+      "scenario": 18290,
+      "total": 19646
+    },
+    "finalWallMs": {
+      "browserLeaseWait": 46,
+      "serve": 951,
+      "scenario": 42379,
+      "total": 43405
+    }
+  },
+  "evidence": "Full logs, receipts and source hashes are retained in the primary ignored QA directory; final manifest is refreshed before commit.",
+  "hostLoadSamples": [
+    {
+      "step": "prepare",
+      "at": "2026-10-12T02:28:40.985Z",
+      "oneMinute": 24.15869140625
+    },
+    {
+      "step": "typecheck",
+      "at": "2026-10-12T02:28:41.771Z",
+      "oneMinute": 24.15869140625
+    },
+    {
+      "step": "typecheck-node",
+      "at": "2026-10-12T02:28:41.772Z",
+      "oneMinute": 24.15869140625
+    },
+    {
+      "step": "import-cycles",
+      "at": "2026-10-12T02:28:41.773Z",
+      "oneMinute": 24.15869140625
+    },
+    {
+      "step": "lint",
+      "at": "2026-10-12T02:28:41.774Z",
+      "oneMinute": 24.15869140625
+    },
+    {
+      "step": "test-related",
+      "at": "2026-10-12T02:28:41.774Z",
+      "oneMinute": 24.15869140625
+    },
+    {
+      "step": "friction-records",
+      "at": "2026-10-12T02:28:41.774Z",
+      "oneMinute": 24.15869140625
+    },
+    {
+      "step": "restore-local-assets",
+      "at": "2026-10-12T02:29:49.508Z",
+      "oneMinute": 16.00732421875
+    }
+  ],
+  "resourceGroups": {
+    "dispatch-friction": 39958,
+    "knip": 72812,
+    "red": 45857,
+    "red-finite-guard": 95166,
+    "knip-final": 20495,
+    "red-copy": 49015,
+    "qa-baseline": 84021,
+    "focused": 57172,
+    "focused-final": 99538,
+    "qa-final": 86715,
+    "review": 65167,
+    "review-final": 11996,
+    "install": 35093,
+    "baselineServer": 84033,
+    "finalServer": 86833
+  },
+  "resourceStatus": "All recorded command and server process groups absent; no active check, browser lease, provider, or dev server. Browser context IDs were not emitted by the canonical runner.",
+  "rawEvidence": {
+    "manifest": "validation-evidence-manifest.json",
+    "sha256": "d5bc66bcc426b7cb0fc0cde28c82fa70a2dcebab8827c0a6a761c13e97bcdc4d",
+    "scope": "Frozen validation receipts, logs, QA captures and source hashes. Final endpoint schema and actual commit receipts are separate delivery evidence."
+  }
+}
