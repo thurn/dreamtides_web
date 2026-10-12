@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { abandonCost, activated, additionalCost, energy, fromVoid as voidTarget, keyword, staticAbility, thisCardIn } from "../../../dsl/builders";
 import { playPermission } from "../../../continuous/permissions";
-import { createEngine } from "../../../engine";
+import { createEngine, IllegalAction } from "../../../engine";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import { oncePerTurnKey } from "../../../rules/activation";
 import { cloneState } from "../../../state/clone";
@@ -211,12 +211,27 @@ describe("once-per-turn static playFromZone", () => {
 
   it("preserves an unused allowance on play-choice failure and supports a valid retry", () => {
     const { state, ids } = onceBoard({ back: [onceCards.source.id], void: [onceCards.failing.id, v.event0.id], energy: 3 });
+    const [failing, retry] = ids.player.void;
+    const key = onceKey(state, ids.player.back[0]);
     const beforeHash = stateHash(state);
-    expect(() => onceAct(state, fromVoid(ids.player.void[0]), new Answering(undefined, 1))).toThrow();
+    // The failing play is legal and offered the source's allowance, so the fault below is its play hook's.
+    expect(onceEngine.legalActions(state, "player")).toContainEqual(fromVoid(failing));
+    expect(permissionFor(state, failing)).toEqual({ consumes: null, oncePerTurn: key });
+    let fault: unknown;
+    try {
+      onceAct(state, fromVoid(failing), new Answering(undefined, 1));
+    } catch (error) {
+      fault = error;
+    }
+    expect(fault).not.toBeInstanceOf(IllegalAction);
+    expect(fault).toEqual(new Error("the play fails mid-step"));
     expect(stateHash(state)).toBe(beforeHash);
-    expect(permissionFor(state, ids.player.void[1])).not.toBeNull();
-    const recovered = settle(onceAct(state, fromVoid(ids.player.void[1])));
-    expect(permissionFor(recovered, ids.player.void[1])).toBeNull();
+    expect(permissionFor(state, retry)).toEqual({ consumes: null, oncePerTurn: key });
+    const committed = onceAct(state, fromVoid(retry));
+    expect(committed.oncePerTurn).toEqual([key]);
+    const recovered = settle(committed);
+    expect(recovered.oncePerTurn).toEqual([key]);
+    expect(permissionFor(recovered, retry)).toBeNull();
   });
 
   it("preserves a committed allowance and the pending stack card when a later resolution fails", () => {
