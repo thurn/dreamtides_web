@@ -1580,9 +1580,16 @@ through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
   and a subject observed at triggering; determinization preserves that
   public scalar. A visible queued reader with a withheld retained value carries
   `subjectCostHidden: true` without a numeric value or subject alias. A sample
-  binds it to compatible sampled card costs and retains viewer concealment;
-  readers of the same publicly declared first-draw event share that sampled
-  value. Legacy absence remains an absent binding. The saved queue validates
+  binds it to compatible sampled card costs and retains viewer concealment.
+  When a ceased subject has no compatible sampled record, public compatible
+  printed definitions supply scalar possibilities without a physical alias.
+  Opaque-capable branches are draws and non-self created discards in another
+  side's hand: board, stack, void, and self occasions expose their subjects at
+  matching. Public draw counters exclude
+  impossible branches while keeping an earlier queued ordinal
+  viable after later draws. Readers of the same declared side and draw ordinal
+  share the sampled value; genuine branch ambiguity remains unresolved.
+  Legacy absence remains an absent binding. The saved queue validates
   the optional finite nonnegative number. Resolving contexts supply null
   when no binding exists, which reads as 0; static scopes reject the value.
 - `everyIn(zone, filter, { player, another, costAtMost })`: every matching

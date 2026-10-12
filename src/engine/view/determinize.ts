@@ -45,6 +45,7 @@
  */
 import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import { Layers } from "../continuous/layers";
+import { matchesFilter } from "../continuous/characteristics";
 import { worksInZone } from "../dsl/abilities";
 import { fixedEnergy } from "../dsl/energy";
 import type { CardFilter, Trigger } from "../dsl/types";
@@ -153,32 +154,37 @@ function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, catalog
   const assignedDraws = new Map<Side, Set<InstanceId>>();
   const layers = new Layers(state, catalog);
   const visibleQueue = view.triggerQueue.filter(trigger => trigger.source !== null && trigger.origin !== null);
+  const matches = (filter: CardFilter | undefined, card: Pick<CharacteristicsView, "cardType" | "subtype" | "allTypes" | "spark">, cost: number) =>
+    filter === undefined || matchesFilter({ ...card, cost }, filter);
   for (const [index, shown] of visibleQueue.entries()) {
     if (shown.subjectCostHidden !== true || shown.source === null || shown.origin === null) continue;
     const body = triggerBody(catalog, shown.origin, shown.ability, shown.node);
     const domains = (trigger: Trigger): { sides: readonly Side[]; filter?: CardFilter; key?: string }[] => {
       if (trigger.on === "either") return trigger.triggers.flatMap(domains);
+      // Current matching can conceal draws and created discards in another hand. Self, play, board and void occasions expose their subject at matching.
+      if (trigger.on !== "draw" && (trigger.on !== "discard" || trigger.self === true)) return [];
       const sides = "player" in trigger && (trigger.player === "you" || trigger.player === "opponent")
         ? [trigger.player === "you" ? shown.controller : opponent(shown.controller)] : SIDES;
-      return [{ sides, ...("filter" in trigger ? { filter: trigger.filter } : {}),
-        ...(trigger.on === "draw" && trigger.nth !== undefined && sides.length === 1 ? { key: `draw:${sides[0]}:${String(trigger.nth)}` } : {}) }];
+      const viableSides = sides.filter(side => side !== view.viewer && (trigger.on !== "draw" || (view.turnLog.drawn[side] > 0 && (trigger.nth === undefined || trigger.nth <= view.turnLog.drawn[side]))));
+      if (viableSides.length === 0) return [];
+      return [{ sides: viableSides, ...("filter" in trigger ? { filter: trigger.filter } : {}),
+        ...(trigger.on === "draw" && trigger.nth !== undefined && viableSides.length === 1 ? { key: `draw:${viableSides[0]}:${String(trigger.nth)}` } : {}) }];
     };
-    const candidates = domains(body.trigger).flatMap(domain => {
+    const candidates = domains(body.trigger).flatMap<{ id: InstanceId | undefined; cost: number; key: string | undefined; side: Side }>(domain => {
       const compatible = Object.values(state.instances).filter(instance => {
         if (!domain.sides.includes(instance.controller)) return false;
-        const filter = domain.filter, card = layers.of(instance.id), cost = fixedEnergy(instanceCard(catalog, instance).costs);
-        return filter === undefined || ((filter.cardType === undefined || card.cardType === filter.cardType) &&
-          (filter.subtype === undefined || card.allTypes || card.subtype === filter.subtype) &&
-          (filter.costAtMost === undefined || cost <= filter.costAtMost) && (filter.costAtLeast === undefined || cost >= filter.costAtLeast) &&
-          (filter.sparkAtMost === undefined || (card.spark !== null && card.spark <= filter.sparkAtMost)) &&
-          (filter.sparkAtLeast === undefined || (card.spark !== null && card.spark >= filter.sparkAtLeast)));
+        return matches(domain.filter, layers.of(instance.id), fixedEnergy(instanceCard(catalog, instance).costs));
       });
       // Current hidden holdings constrain the latent subject; public records remain possible after it moved.
       const hidden = compatible.filter(instance => instance.zone === "hand" || instance.zone === "deck");
-      return (hidden.length === 0 ? compatible : hidden).map(instance => ({ id: instance.id, cost: fixedEnergy(instanceCard(catalog, instance).costs), key: domain.key, side: domain.sides[0] }));
+      const live = (hidden.length === 0 ? compatible : hidden).map(instance => ({ id: instance.id, cost: fixedEnergy(instanceCard(catalog, instance).costs), key: domain.key, side: domain.sides[0] }));
+      if (live.length > 0) return live;
+      // A ceased created subject has no sampled physical record. Public compatible printings supply scalar possibilities only.
+      return catalog.cardDefinitions.filter(card => matches(domain.filter, { ...card, allTypes: false, spark: card.spark === "x" ? 0 : card.spark }, fixedEnergy(card.costs)))
+        .map(card => ({ id: undefined, cost: fixedEnergy(card.costs), key: domain.key, side: domain.sides[0] }));
     });
     const existing = candidates.find(candidate => candidate.key !== undefined && sharedDraws.has(candidate.key));
-    const unused = candidates.filter(candidate => candidate.key === undefined || !assignedDraws.get(candidate.side)?.has(candidate.id));
+    const unused = candidates.filter(candidate => candidate.key === undefined || candidate.id === undefined || !assignedDraws.get(candidate.side)?.has(candidate.id));
     // Different public draw ordinals allocate distinct sampled records while available. A reused or departed historical card has no recoverable alias.
     const available = unused.length === 0 ? candidates : unused;
     const selected = existing ?? available[Math.floor(random() * available.length)];
@@ -187,7 +193,7 @@ function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, catalog
     if (selected.key !== undefined && !sharedDraws.has(selected.key)) {
       sharedDraws.set(selected.key, cost);
       const assigned = assignedDraws.get(selected.side) ?? new Set<InstanceId>();
-      assigned.add(selected.id);
+      if (selected.id !== undefined) assigned.add(selected.id);
       assignedDraws.set(selected.side, assigned);
     }
     state.triggerQueue[index] = { ...state.triggerQueue[index], lastKnownSubjectCost: cost, subjectHiddenFrom: [view.viewer] };

@@ -99,6 +99,8 @@ export type PrintedCard = Omit<EngineCardDefinition, "id">;
 
 /** Card, Dreamwell, avatar, and dreamsign definitions by UUID. */
 export interface EngineCatalog {
+  /** Public printed definitions for compatible historical sampling; no battle identities or observations. */
+  readonly cardDefinitions: readonly EngineCardDefinition[];
   /** Public catalog cost ceiling, with X counting as 0; used only for free Discover cost choices. */
   readonly maximumFixedCost: number;
   /**
@@ -291,6 +293,7 @@ export function createCatalog(
   );
   let outsidePlay: boolean | undefined;
   return {
+    cardDefinitions: [...cardsById.values()],
     characterTypes: characterTypes(cards, figments),
     memo: new WeakMap(),
     statics: new Map(),

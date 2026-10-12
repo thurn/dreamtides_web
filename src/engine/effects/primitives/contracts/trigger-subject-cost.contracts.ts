@@ -4,9 +4,9 @@ import type { Engine } from "../../../engine";
 import type { EngineCardDefinition } from "../../../catalog";
 import { createEngine } from "../../../engine";
 import { characterYouControl, energy, energyX, event, everyIn, fromVoid, self, staticAbility, triggerSubjectCost } from "../../../dsl/builders";
-import { NO_DECK_MODS } from "../../../dsl/types";
+import { NO_DECK_MODS, type Trigger } from "../../../dsl/types";
 import { thisCharacterSpark } from "../../../dsl/values";
-import { triggered, whenDissolved, whenDraw } from "../../../dsl/triggers";
+import { either, triggered, whenDiscard, whenDissolved, whenDraw, whenMaterialize, whenYouPlay } from "../../../dsl/triggers";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import { eventSeenBy } from "../../../events";
 import { stateHash } from "../../../state/hash";
@@ -242,6 +242,98 @@ describe("triggering subject copiable cost", () => {
     const legacy = engine.determinize({ ...view, triggerQueue: [legacyTrigger] }, { player: lists.player, enemy: lists.enemy }, () => 0.4);
     expect(legacy.triggerQueue[0]).not.toHaveProperty("lastKnownSubjectCost");
     expect(step(engine, legacy, { kind: "resolveTrigger" }).state.sides[viewer].score).toBe(0);
+  });
+
+  it.each(SIDES)("samples compatible historical cost after a hidden created discard for %s", viewer => {
+    const holder = opponent(viewer);
+    const subject: EngineCardDefinition = { ...v.vanilla3, id: syntheticId(0x592001), subtype: "Mage", spark: 2 };
+    const decoy: EngineCardDefinition = { ...subject, id: syntheticId(0x592002), costs: [energy(5)] };
+    const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x592003), abilities: () => [triggered(whenDiscard("opponent", { cardType: "character", subtype: "Mage", costAtLeast: 3, costAtMost: 3, sparkAtLeast: 2, sparkAtMost: 2 }), p.gainPoints(triggerSubjectCost()))] };
+    const create: EngineCardDefinition = { ...v.event0, id: syntheticId(0x592004), abilities: () => [event(p.createCard(subject.id))] };
+    const discard: EngineCardDefinition = { ...v.event0, id: syntheticId(0x592005), abilities: () => [event(p.discard(1))] };
+    const engine = createEngine(testCatalog([subject, decoy, watcher, create, discard]));
+    const initial = boardState(engine.catalog, { active: holder, phase: "day", [viewer]: { back: [watcher.id] }, [holder]: { hand: [create.id, discard.id] } });
+    const state = { ...initial.state, config: { ...initial.state.config, autoAnswerForcedPrompts: false } };
+    const cast = step(engine, state, { kind: "play", card: initial.ids[holder].hand[0], from: "hand" });
+    const made = step(engine, cast.state, { kind: "resolveTop" });
+    const created = made.events.find(item => item.kind === "cardCreated");
+    if (created?.kind !== "cardCreated") throw new Error("Missing real created card");
+    const cast2 = step(engine, made.state, { kind: "play", card: initial.ids[holder].hand[1], from: "hand" });
+    const discarded = step(engine, cast2.state, { kind: "resolveTop" }, [[created.instance]]);
+    expect(discarded.state.instances[created.instance]).toBeUndefined();
+    const view = engine.view(discarded.state, viewer), before = structuredClone(view);
+    expect(view.triggerQueue[0]).toMatchObject({ subject: null, subjectCostHidden: true });
+    expect(view.triggerQueue[0]).not.toHaveProperty("lastKnownSubjectCost");
+    const lists = { [viewer]: [{ cardId: watcher.id }], [holder]: [create.id, discard.id].map(cardId => ({ cardId })) };
+    const sample = engine.determinize(view, { player: lists.player, enemy: lists.enemy }, () => 0.99);
+    expect(view).toEqual(before);
+    expect(comparableView(engine.view(sample, viewer))).toEqual(comparableView(view));
+    expect(sample.triggerQueue[0].subject).toBeNull();
+    expect(step(engine, sample, { kind: "resolveTrigger" }).state.sides[viewer].score).toBe(3);
+  });
+
+  it.each(SIDES.flatMap(viewer => [false, true].map(bothDrawn => ({ viewer, bothDrawn }))))("excludes an identified either draw branch for $viewer/bothDrawn=$bothDrawn", ({ viewer, bothDrawn }) => {
+    const holder = opponent(viewer);
+    const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x592010), abilities: () => [triggered(either(whenDraw("opponent", 1), whenDraw("you", 1)), p.gainPoints(triggerSubjectCost()))] };
+    const draw: EngineCardDefinition = { ...v.event0, id: syntheticId(0x592011), abilities: () => [event(bothDrawn ? p.sequence(p.draw(1, "opponent"), p.draw(1)) : p.draw(1))] };
+    const engine = createEngine(testCatalog([watcher, draw]));
+    const initial = boardState(engine.catalog, { active: holder, phase: "day", [viewer]: { back: [watcher.id], hand: [v.vanilla5.id], deck: bothDrawn ? [v.vanilla5.id] : [] }, [holder]: { hand: [draw.id], deck: [v.vanilla3.id] } });
+    const cast = step(engine, initial.state, { kind: "play", card: initial.ids[holder].hand[0], from: "hand" });
+    const drawn = step(engine, cast.state, { kind: "resolveTop" }), view = engine.view(drawn.state, viewer);
+    expect(view.turnLog.drawn[viewer]).toBe(bothDrawn ? 1 : 0);
+    expect(view.turnLog.drawn[holder]).toBe(1);
+    expect(view.triggerQueue[bothDrawn ? 1 : 0]).toMatchObject({ subject: null, subjectCostHidden: true });
+    if (bothDrawn) expect(view.triggerQueue[0]).toMatchObject({ lastKnownSubjectCost: 5 });
+    const lists = { [viewer]: [watcher.id, v.vanilla5.id, ...(bothDrawn ? [v.vanilla5.id] : [])].map(cardId => ({ cardId })), [holder]: [draw.id, v.vanilla3.id].map(cardId => ({ cardId })) };
+    const sample = engine.determinize(view, { player: lists.player, enemy: lists.enemy }, () => 0.99);
+    expect(sample.triggerQueue.map(item => item.lastKnownSubjectCost)).toEqual(bothDrawn ? [5, 3] : [3]);
+    expect(comparableView(engine.view(sample, viewer))).toEqual(comparableView(view));
+    const first = step(engine, sample, { kind: "resolveTrigger" });
+    expect((bothDrawn ? step(engine, first.state, { kind: "resolveTrigger" }) : first).state.sides[viewer].score).toBe(bothDrawn ? 8 : 3);
+  });
+
+  const publicBranches = [
+    { label: "dawn", trigger: { on: "dawn" } }, { label: "materialized", trigger: { on: "materialized" } },
+    { label: "challenge", trigger: { on: "challenge" } }, { label: "dissolved", trigger: { on: "dissolved" } },
+    { label: "play", trigger: whenYouPlay() }, { label: "materialize", trigger: whenMaterialize() },
+  ] satisfies readonly { label: string; trigger: Trigger }[];
+  it.each(SIDES.flatMap(viewer => publicBranches.map(branch => ({ viewer, ...branch }))))("shares the viable draw ordinal despite $label for $viewer", ({ viewer, label, trigger }) => {
+    const holder = opponent(viewer), ambiguous = label === "dawn";
+    const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x592012), abilities: () => [
+      triggered(either(whenDraw("opponent", 1), trigger), p.gainPoints(triggerSubjectCost())), triggered(whenDraw("opponent", 1), p.gainPoints(triggerSubjectCost())),
+    ] };
+    const draw: EngineCardDefinition = { ...v.event0, id: syntheticId(0x592013), abilities: () => [event(p.draw(1))] };
+    const engine = createEngine(testCatalog([watcher, draw]));
+    const initial = boardState(engine.catalog, { active: holder, phase: "day", [viewer]: { back: [watcher.id], hand: [v.vanilla5.id] }, [holder]: { hand: [draw.id, ...(ambiguous ? [v.vanilla5.id] : [])], deck: [v.vanilla3.id] } });
+    const cast = step(engine, initial.state, { kind: "play", card: initial.ids[holder].hand[0], from: "hand" });
+    const drawn = step(engine, cast.state, { kind: "resolveTop" }), view = engine.view(drawn.state, viewer);
+    const lists = { [viewer]: [watcher.id, v.vanilla5.id].map(cardId => ({ cardId })), [holder]: [draw.id, ...(ambiguous ? [v.vanilla5.id] : []), v.vanilla3.id].map(cardId => ({ cardId })) };
+    for (const entropy of [0.4, 0.6]) {
+      const sample = engine.determinize(view, { player: lists.player, enemy: lists.enemy }, () => entropy);
+      const cost = sample.triggerQueue[0].lastKnownSubjectCost;
+      expect(ambiguous ? [3, 5] : [3]).toContain(cost);
+      expect(sample.triggerQueue[1].lastKnownSubjectCost).toBe(cost);
+      expect(comparableView(engine.view(sample, viewer))).toEqual(comparableView(view));
+      const first = step(engine, sample, { kind: "resolveTrigger" });
+      expect(step(engine, first.state, { kind: "resolveTrigger" }).state.sides[viewer].score).toBe(cost! * 2);
+    }
+  });
+
+  it.each(SIDES)("keeps an earlier queued ordinal viable after later draws for %s", viewer => {
+    const holder = opponent(viewer);
+    const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x592014), abilities: () => [triggered(either(whenDraw("opponent", 1), whenDraw("you", 1)), p.gainPoints(triggerSubjectCost()))] };
+    const draw: EngineCardDefinition = { ...v.event0, id: syntheticId(0x592015), abilities: () => [event(p.draw(2))] };
+    const engine = createEngine(testCatalog([watcher, draw]));
+    const initial = boardState(engine.catalog, { active: holder, phase: "day", [viewer]: { back: [watcher.id] }, [holder]: { hand: [draw.id], deck: [v.vanilla3.id, v.vanilla5.id] } });
+    const cast = step(engine, initial.state, { kind: "play", card: initial.ids[holder].hand[0], from: "hand" });
+    const drawn = step(engine, cast.state, { kind: "resolveTop" }), view = engine.view(drawn.state, viewer);
+    expect(view.turnLog.drawn[holder]).toBe(2);
+    expect(view.triggerQueue).toHaveLength(1);
+    const lists = { [viewer]: [{ cardId: watcher.id }], [holder]: [draw.id, v.vanilla3.id, v.vanilla5.id].map(cardId => ({ cardId })) };
+    const sample = engine.determinize(view, { player: lists.player, enemy: lists.enemy }, () => 0.4);
+    expect([3, 5]).toContain(sample.triggerQueue[0].lastKnownSubjectCost);
+    expect(comparableView(engine.view(sample, viewer))).toEqual(comparableView(view));
+    expect(step(engine, sample, { kind: "resolveTrigger" }).state.sides[viewer].score).toBe(sample.triggerQueue[0].lastKnownSubjectCost);
   });
 
   it.each(SIDES)("captures a generated figment's zero cost before it ceases for %s", side => {

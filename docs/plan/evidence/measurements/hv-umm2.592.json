@@ -1,0 +1,237 @@
+{
+  "bead": "hv-umm2.592",
+  "base": "36c5e550e4e9e84be5c01cb0e1c88109cc4801db",
+  "status": "all ordinary and final full checks complete; endpoint authorized; final schema and commit receipts emitted after this metadata",
+  "implementationWindow": {
+    "start": "2026-10-12T23:19:22Z",
+    "end": "2026-10-12T23:53:10.298527Z",
+    "minutes": 33.80497545,
+    "basis": "Conservative whole claim-to-parent-endpoint ownership proxy including parent install/setup, source-free design/analysis/admission/coordination delays, intended negatives, author and branch repairs, intermediate/final checks, waits and evidence. Not CPU or editing-only time.",
+    "firstHelperObservation": "2026-10-12T23:21:24Z",
+    "parentDispatchPre": "2026-10-12T23:21:07.566117Z",
+    "parentDispatchPost": "2026-10-12T23:21:26.517718Z",
+    "dispatch": "Exact dispatch unsampled; pre/post and helper observation retained without a guessed exact start.",
+    "writeACK": "2026-10-12T23:25:48.854023Z",
+    "endpointReceipt": "/tmp/dreamtides-executor-01a12e91/592-endpoint-ack.json",
+    "tail": "Actual endpoint-to-commit tail is retained in592-commit.json/final handoff, not guessed inside this record."
+  },
+  "sourceManifest": {
+    "docs/plan/engine-design.md": "0e2f4029479f50faecf2b34dcd84e28d39de6346ffce2a2ad3007be71103d082",
+    "src/engine/catalog.ts": "cf0b03f472be9e75af4316d83da6a39fa36359207527ae709604499e14e5e63e",
+    "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "b6cf22491a8fdeff0362eeb3488cb9d2be26d37f48aabe68bebdc9ca21a7db31",
+    "src/engine/view/determinize.ts": "36b53af9a58944f2e75a52de29578cbf6d28f31245b6f1ad443464fd488ff3fd",
+    "docs/plan/evidence/pre-existing/hv-umm2.592.md": "1ce8080a6ac63130a8d78f2839da3bdaef4f632be9d3d3e5b86222cb987dd538"
+  },
+  "footprint": {
+    "productionChurn": 33,
+    "documentationChurn": 13,
+    "testNetLines": 92,
+    "moduleLines": 429,
+    "newCases": 20,
+    "newTestEntrypoints": 0,
+    "newJsdom": 0
+  },
+  "apiFallout": {
+    "newField": "EngineCatalog.readonly cardDefinitions:readonly EngineCardDefinition[]; createCatalog supplies derived snapshot of public definitions.",
+    "consumer": "Only admitted determinize historical fallback;47EngineCatalog importers/30createCatalog callers stayread-only, worker factory alreadyrebuilds local catalog. Actualmap592-api-fallout.json.",
+    "reader": "Private adapter uses unchanged canonical matchesFilter; no characteristics API/body edit.",
+    "unchanged": "No new function signature, state/view/event/saved/worker manifest schema, observation metadata, private identity or production/UI behavior.",
+    "privacyClassification": "Current actual matcher/resource orders classify opaque-capable occasions as draw and nonself created discard from another sidehand. Others expose subject: played/reclaimedstack; materialized/publicplay; namedselfmaterialized/challenge/dissolved; publicplay/predeparturelookbacks, spark and scoring; publicvoid discard/erode/enteredVoid andbefore-departureleftVoid. No capture/matcher/body change, observations or history invented."
+  },
+  "importerMap": "/tmp/dreamtides-executor-01a12e91/592-api-fallout.json",
+  "fiveFailurePaths": {
+    "midStepError": "Pure reconstruction throws if no legitimate compatible candidate; existing malformed marker guards retained. No new pending step or catch protocol.",
+    "partialWrite": "New created-discard public contract compares input view clone and sampled projection; reconstruction mutates only its newly allocated state, returns only successful output.",
+    "reloadRestart": "Existing zero/legacy/public scalar and sampled exact-view roundtrip contracts remaingreen; no saved schema change. Public retained queue scalar remains authoritative.",
+    "invalidStaleInput": "Existing malformed marker guards remain; actual current matcher/event privacy permits opaque costs only for opposing-hand draw and nonself created discard, excluding public/self/no-subject branches. Positive counters and earliernth<=current constrain draws without inferring secret history. Pure reconstruction accepts no gameplay promptID/staleintent.",
+    "concurrentActors": "Candidate allocations and catalog snapshot reads are synchronous/local; no shared actor state or lockprotocol added. Existing gameplay arbitration unchanged."
+  },
+  "commands": {
+    "stage1": "/tmp/dreamtides-executor-01a12e91/592-stage1.json",
+    "owning-negative": "/tmp/dreamtides-executor-01a12e91/592-owning-negative.json",
+    "focus": "/tmp/dreamtides-executor-01a12e91/592-focus.json",
+    "focus2": "/tmp/dreamtides-executor-01a12e91/592-focus2.json",
+    "typecheck": "/tmp/dreamtides-executor-01a12e91/592-typecheck.json",
+    "typecheck2": "/tmp/dreamtides-executor-01a12e91/592-typecheck2.json",
+    "owning": "/tmp/dreamtides-executor-01a12e91/592-owning.json",
+    "review": "/tmp/dreamtides-executor-01a12e91/592-review.json",
+    "knip": "/tmp/dreamtides-executor-01a12e91/592-knip.json",
+    "owning2": "/tmp/dreamtides-executor-01a12e91/592-owning2.json",
+    "review2": "/tmp/dreamtides-executor-01a12e91/592-review2.json",
+    "knip2": "/tmp/dreamtides-executor-01a12e91/592-knip2.json",
+    "positive-counters-negative": "/tmp/dreamtides-executor-01a12e91/592-positive-counters-negative.json",
+    "owning3": "/tmp/dreamtides-executor-01a12e91/592-owning3.json",
+    "knip3": "/tmp/dreamtides-executor-01a12e91/592-knip3.json",
+    "review3": "/tmp/dreamtides-executor-01a12e91/592-review3.json",
+    "full-inner": "/tmp/dreamtides-executor-01a12e91/592-full-inner.json",
+    "full-outer": "/tmp/dreamtides-executor-01a12e91/592-full-outer.json",
+    "owning4": "/tmp/dreamtides-executor-01a12e91/592-owning4.json",
+    "review4": "/tmp/dreamtides-executor-01a12e91/592-review4.json",
+    "knip4": "/tmp/dreamtides-executor-01a12e91/592-knip4.json",
+    "full2-inner": "/tmp/dreamtides-executor-01a12e91/592-full2-inner.json",
+    "full2-outer": "/tmp/dreamtides-executor-01a12e91/592-full2-outer.json"
+  },
+  "parentProofs": {
+    "592-parent-final-probe.json": "/tmp/dreamtides-executor-01a12e91/592-parent-final-probe.json",
+    "592-positive-counters-final.json": "/tmp/dreamtides-executor-01a12e91/592-positive-counters-final.json",
+    "592-positive-counters-before.json": "/tmp/dreamtides-executor-01a12e91/592-positive-counters-before.json",
+    "592-parent-final-source-manifest.json": "/tmp/dreamtides-executor-01a12e91/592-parent-final-source-manifest.json",
+    "592-dispatch-timing.json": "/tmp/dreamtides-executor-01a12e91/592-dispatch-timing.json",
+    "592-install.json": "/tmp/dreamtides-executor-01a12e91/592-install.json",
+    "592-named-self-before2.json": "/tmp/dreamtides-executor-01a12e91/592-named-self-before2.json",
+    "592-named-self-before.json": "/tmp/dreamtides-executor-01a12e91/592-named-self-before.json",
+    "592-parent-final2-probe.json": "/tmp/dreamtides-executor-01a12e91/592-parent-final2-probe.json",
+    "592-positive-counters-final2.json": "/tmp/dreamtides-executor-01a12e91/592-positive-counters-final2.json",
+    "592-named-self-final.json": "/tmp/dreamtides-executor-01a12e91/592-named-self-final.json",
+    "592-parent-final2-source-manifest.json": "/tmp/dreamtides-executor-01a12e91/592-parent-final2-source-manifest.json"
+  },
+  "classification": {
+    "stage1": "Four intended actualcurrent-base defects, no fixtureerrors,32963/32948 exit0/2.112971s. Script reports confirmed failures, not runtimeacceptancePASS.",
+    "owningNegative": "4intended either/sharedfailures+2createdfixture unused-answer failures+2later-countercontrolsPASS. IndependentStage1creatednegatives remainvalid.",
+    "intermediateChecks": "review/review2 andowning/owning2 green on intermediate source, beforecanonicaladapter/positive-counter repair; not final acceptance.",
+    "positiveCounters": "Parent actual2defects with bothdrawncountspositive; owning91209/91190 confirms2expectedfailures+2zerocountercontrolsPASS.",
+    "finalOwning": "2388tests3files5.854110s, includes55owning-module cases (20added).",
+    "finalReview": "277files5250tests/type/lint/cycles green58.532340s; actualstartload3.53515625, endload23.5009765625 scopedseparately.",
+    "finalKnip": "Exit0/5.504155s.",
+    "preCategoryReview": "Review3 277files5240tests/68.128579s was before named/public class repair, not final validation.",
+    "historicalNamedProbes": "Parent entropy.99 diagnostic87908/87900 exit0/.517310s chose a possible value; entropy.4 88503/88495 exit1/.546390s23:40:41.574679\u219242.121047 proves2namedself defects,0fixtureerrors. Final named-self probe68869/68752 passes. Positive-only entropy cannot establish correctness for other public samples."
+  },
+  "correctionWindows": [
+    {
+      "cause": "Engine automatic singleton choice left the explicit ScriptedSource answer UNUSED. Fixture config autoAnswerForcedPrompts:false makes the public explicit choice consume it.",
+      "start": "2026-10-12T23:28:16.660656Z",
+      "end": "2026-10-12T23:29:21.967944Z",
+      "seconds": 65.307288
+    },
+    {
+      "cause": "TypeScript flatMap inferred live-onlyInstanceId from first branch; explicit privatecandidate union admits scalar-only historicalcandidate with idundefined.",
+      "start": "2026-10-12T23:29:19.704623Z",
+      "end": "2026-10-12T23:30:05.403813Z",
+      "seconds": 45.69919
+    },
+    {
+      "cause": "Combined author correction elapsed union; overlapping2.263321s not counted twice.",
+      "start": "2026-10-12T23:28:16.660656Z",
+      "end": "2026-10-12T23:30:05.403813Z",
+      "seconds": 108.743157
+    },
+    {
+      "cause": "Public both-positive counters reveal marker alsoexcludes vieweridentifiedhand. Includes waitingforintermediatefinite review, fixturenegative, repair and renewedrequiredchecks.",
+      "start": "2026-10-12T23:33:26.274282Z",
+      "end": "2026-10-12T23:39:45.853926+00:00",
+      "functionalEnd": "2026-10-12T23:35:51.153412Z",
+      "functionalSeconds": 144.87913,
+      "seconds": 379.579644
+    },
+    {
+      "cause": "Named-self challenge still supplied unrelated hand cost; bounded current matcher/resource classification excludes all public/self/no-subject alternatives. Includes source-free class audit/parent coordination and renewedchecks.",
+      "start": "2026-10-12T23:40:41.574679Z",
+      "end": "2026-10-12T23:51:06.325997+00:00",
+      "functionalEnd": "2026-10-12T23:46:41.221982Z",
+      "functionalSeconds": 359.647303,
+      "seconds": 624.751318
+    }
+  ],
+  "correctionAccounting": {
+    "authorUnionSeconds": 108.743157,
+    "authorOverlapSeconds": 2.263321,
+    "bothPositiveCompleteSeconds": 379.579644,
+    "namedPublicClassCompleteSeconds": 624.751318,
+    "totalDisjointSeconds": 1113.0741189999999,
+    "minutes": 18.551235316666666,
+    "scope": "Complete correction windows include author investigation and parent semantic classification/coordination through actual final green. Functional endpoints are separate from full endpoints; no sum of failed subprocess durations substitutes for elapsed repair."
+  },
+  "canonicalReaderAdjustment": "Parent precise source request arrivedduring firstreview; it settled at23:32:15.722122 before canonical matchesFilter import/adapter. Firstreview55.919284s retained asintermediate; secondreview51.559505s alsointermediate before newpositivecounterrepair. No invented exactcoordinationstart/PID.",
+  "preNamedFull": {
+    "inner": {
+      "pid": 53427,
+      "observer": 53423,
+      "start": "2026-10-12T23:38:07.480629+00:00",
+      "end": "2026-10-12T23:39:45.853926+00:00",
+      "seconds": 98.37234245800937,
+      "exit": 0,
+      "cmd": [
+        "npm",
+        "run",
+        "review:full"
+      ]
+    },
+    "outer": {
+      "pid": 53422,
+      "observer": 53408,
+      "start": "2026-10-12T23:38:07.455276+00:00",
+      "end": "2026-10-12T23:39:45.858659+00:00",
+      "seconds": 98.40242025000043,
+      "exit": 0,
+      "cmd": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "python3",
+        "/tmp/dreamtides-executor-01a12e91/592-run.py",
+        "full-inner",
+        "npm",
+        "run",
+        "review:full"
+      ]
+    },
+    "queueAndLaunchSeconds": 0.025353,
+    "scope": "PRE-named-self repair full; canonicalexclusiveworkers2. Repeatedonlybecauseactualnewsource defect followed. Not final acceptance.",
+    "result": "361files6279tests and bundle/type/lint/cycles green. Predecessor560full remainsbaseline, not new592execution."
+  },
+  "finalFull": {
+    "inner": {
+      "pid": 54560,
+      "observer": 54559,
+      "start": "2026-10-12T23:49:18.376307+00:00",
+      "end": "2026-10-12T23:51:06.325997+00:00",
+      "seconds": 107.94863862500642,
+      "exit": 0,
+      "cmd": [
+        "npm",
+        "run",
+        "review:full"
+      ]
+    },
+    "outer": {
+      "pid": 54557,
+      "observer": 54547,
+      "start": "2026-10-12T23:49:18.352131+00:00",
+      "end": "2026-10-12T23:51:06.331433+00:00",
+      "seconds": 107.97823083300318,
+      "exit": 0,
+      "cmd": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "python3",
+        "/tmp/dreamtides-executor-01a12e91/592-run.py",
+        "full2-inner",
+        "npm",
+        "run",
+        "review:full"
+      ]
+    },
+    "queueAndLaunchSeconds": 0.024176,
+    "scope": "FINALcategory source canonicalexclusiveheavylock/workers2; firstinside-lock observation, exact acquisitioninstant unsampled.",
+    "result": "361files6289tests and bundle/type/lint/cycles/schema green."
+  },
+  "resources": {
+    "receipt": "/tmp/dreamtides-executor-01a12e91/592-resources.json",
+    "observedAt": "2026-10-12T23:51:56.056951+00:00",
+    "knownIdentities": 179,
+    "allAbsent": true,
+    "scope": "Exactknown592finite/setup/parentverification identities and bothownfull temporarymockserver identities. No nativeMCP/browser/provider/lease/serverworkflow or genericfuzz launched. Isolatedfull syntheticcleanup failures are intendedtest assertions, not592QAincidents. No signaling or peerrecord access.",
+    "finiteReads": "Short read/tool/edit/resource operations without independently sampled subprocess clocks/IDs retain tool observations; unknowns are not fabricated."
+  },
+  "historicalContext": {
+    "review560": "Independent promoted560 Sol review316.025361s and parent four-finding verification58457/58443 exit0/2.747466s23:16:09.752625\u219212.500075 preceded this claim. First runtime-path attempt57632/57619 failed before fixture execution in.050928s; retained as historical setup failure, not new592negative or CPU inside ownership window.",
+    "priorFull": "560full6178tests is predecessor baseline, not592execution. New sharedcatalog API has actual two-worker full verification.",
+    "QA": "No new browser, provider, native lease, screenshots, production weightedfuzz or genericfuzz launched/claimed. Full infrastructure temporary mock-server fixtures are isolated existing tests."
+  },
+  "preExisting": "docs/plan/evidence/pre-existing/hv-umm2.592.md"
+}

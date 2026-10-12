@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.592",
+  "phase": 5,
+  "implementMin": 33.80497545,
+  "implementWindow": {
+    "start": "2026-10-12T23:19:22Z",
+    "end": "2026-10-12T23:53:10.298527Z"
+  },
+  "localValidationS": {
+    "focused": 5.854110375003074,
+    "review": 58.532339915997,
+    "knip": 5.504154790993198,
+    "full": 107.94863862500642,
+    "fullOuter": 107.97823083300318
+  },
+  "hostLoad": 3.53515625,
+  "testDelta": {
+    "files": 0,
+    "lines": 92,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 18.551235316666666,
+      "note": "Elapsed union of author fixture/type correction108.743157s plus disjoint both-positive marker379.579644s and named/public-class624.751318s repairs through their actual required full endpoints. Includes investigation/parent coordination/finite intermediate checks; overlapping author windows not counted twice. Command durations remain separate; not CPU."
+    }
+  ]
+}
