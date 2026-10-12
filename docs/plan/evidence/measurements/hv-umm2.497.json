@@ -1,0 +1,258 @@
+{
+  "bead": "hv-umm2.497",
+  "phase": 5,
+  "base": "051c696f89c00817c3cc2ca98c6a907bb584d658",
+  "scope": "contentArtCatalog identity map and existing parseCardId import only; 4 additions / 3 deletions, zero test change. Local full/fuzz/browser and independent CLI review are not required for this bounded unmarked internal refactor.",
+  "claimToPrecommit": {
+    "start": "2026-10-12T05:37:54Z",
+    "endpoint": "2026-10-12T05:48:21.278164+00:00",
+    "endpointProvenance": "Actual whole-claim endpoint after root PRECOMMIT acknowledgement, immediately before final numeric schema, staging and Git. Includes root initial native health inspection, research, coordination and validation. Actual commit invocation start/end/exit is in the separate immutable delivery receipt."
+  },
+  "proof": {
+    "equalCatalogBytes": true,
+    "paritySHA256": "84e1c6a2b515a373d720833cfcae12a52f40484fe9715dc0eeed9c86bddcc142",
+    "scope": "One-off local diagnostic of the exact frozen catalog and a matching card/reference pair uppercased in memory, restored in finally. Synthetic parser probe normalizes a mixed-case UUID and rejects a display name, malformed UUID and null. This is not a mutable content CI assertion.",
+    "linkerBytesEqualBase": true,
+    "testModuleBytesEqualBase": true,
+    "invalidInput": "parseCardId throws for malformed authored card or Exploration UUIDs at this boundary; valid catalog output and mixed-case normalization are preserved."
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "file": "scripts/setup-assets.test.ts",
+      "title": "preserves a desired-path regular file on conflict and recovers on the next pass",
+      "coverage": "Existing synthetic contract run unchanged; publication and actor lifecycle bytes are preserved."
+    },
+    {
+      "path": "reload or restart",
+      "file": "scripts/setup-assets.test.ts",
+      "title": "preserves published assets and recovers across kill interleaving",
+      "coverage": "Existing synthetic contract run unchanged; publication and actor lifecycle bytes are preserved."
+    },
+    {
+      "path": "partial write",
+      "file": "scripts/setup-assets.test.ts",
+      "title": "preserves published assets and recovers across metadata interleaving",
+      "coverage": "Existing synthetic contract run unchanged; publication and actor lifecycle bytes are preserved."
+    },
+    {
+      "path": "invalid or stale input",
+      "file": "scripts/setup-assets.test.ts",
+      "title": "refreshes stale links, prunes missing art, and preserves Exploration priority",
+      "coverage": "Existing synthetic contract run unchanged; publication and actor lifecycle bytes are preserved."
+    },
+    {
+      "path": "concurrent actors",
+      "file": "scripts/setup-assets.test.ts",
+      "title": "preserves published assets and recovers across stale interleaving",
+      "coverage": "Existing synthetic contract run unchanged; publication and actor lifecycle bytes are preserved."
+    }
+  ],
+  "validation": {
+    "install": {
+      "exitCode": 0,
+      "wallSeconds": 2.9150638330029324,
+      "receipt": "install.json",
+      "sha256": "825c3ec0fab898870e37825191fbb6be0f54fd309f58899838aba353c44175e1"
+    },
+    "dispatch-friction": {
+      "exitCode": 0,
+      "wallSeconds": 0.21949512499850243,
+      "receipt": "dispatch-friction.json",
+      "sha256": "2bac3fae2f7f6476933a6188740e69a77bd76b13024d8b01f84ef2fcbfb80340"
+    },
+    "prepare": {
+      "exitCode": 0,
+      "wallSeconds": 2.2591797499990207,
+      "receipt": "prepare.json",
+      "sha256": "7831f53177ca6bf7a13dfdbd8351857be52a9ab79066ab3bb4cbfd1cc71b9b8f"
+    },
+    "parity-before": {
+      "exitCode": 0,
+      "wallSeconds": 0.8993637919993489,
+      "receipt": "parity-before.json",
+      "sha256": "943c370a3a4a3d0eb1b867c45dc54f436bae81156d82cfaf9c360827e64ac061"
+    },
+    "parity-after": {
+      "exitCode": 0,
+      "wallSeconds": 0.6213776670010702,
+      "receipt": "parity-after.json",
+      "sha256": "0e53423cfad87136c5121301c542040e7a2f188d90d15e9ac08c76a85d6a1228"
+    },
+    "focused": {
+      "exitCode": 0,
+      "wallSeconds": 6.034437374997651,
+      "receipt": "focused.json",
+      "sha256": "c34000179c3ffb49449f7d299ed106017a4afd2dba75b6a8cf22d47163e719a3"
+    },
+    "review": {
+      "exitCode": 0,
+      "wallSeconds": 11.505178583000088,
+      "receipt": "review.json",
+      "sha256": "0af139c2df4ebb5fd2991a77061732dfd936088cd7cea9b9f4fd05217b0b9462"
+    },
+    "knip": {
+      "exitCode": 0,
+      "wallSeconds": 3.5544544580006914,
+      "receipt": "knip.json",
+      "sha256": "619a86feb56c55e52e24cd21504a233b808dc338c30a0da1b8f1655d6e582fc5"
+    },
+    "counts": {
+      "focusedTests": 15,
+      "focusedFiles": 1,
+      "reviewTests": 15,
+      "reviewFiles": 1,
+      "nonTestSourceAdded": 4,
+      "nonTestSourceDeleted": 3,
+      "fixturesObservedCreatedAndRemoved": 14,
+      "actorCloseReceipts": 16
+    },
+    "final-friction": {
+      "exitCode": 0,
+      "wallSeconds": 0.3051960830016469,
+      "receipt": "final-friction.json",
+      "sha256": "dace74003edafc856910dfbdb152137a653f00fae528966eaa812be72125f89e"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual review typecheck step start 2026-10-12T05:45:13.739Z; one-minute load 18.52978515625."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "runtime": {
+    "browser": false,
+    "server": false,
+    "provider": false,
+    "heavy": false,
+    "artifactDirectory": "artifacts/qa/hv-umm2.497",
+    "focusedReceipts": "focused-resources.json",
+    "reviewReceipts": "review-resources.json",
+    "reviewActorVisibility": "Agent reporter exposes no allocation or closure details. The same 15 unchanged tests pass under focused default reporter with complete 14 fixture and 16 actor receipts; aggregate own process group exits and is absent.",
+    "resources": [
+      {
+        "name": "install",
+        "pid": 75264,
+        "pgid": 75264,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "dispatch-friction",
+        "pid": 88984,
+        "pgid": 88984,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "prepare",
+        "pid": 92570,
+        "pgid": 92570,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "parity-before",
+        "pid": 92824,
+        "pgid": 92824,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "parity-after",
+        "pid": 93652,
+        "pgid": 93652,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "focused",
+        "pid": 93731,
+        "pgid": 93731,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "review",
+        "pid": 33957,
+        "pgid": 33957,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "knip",
+        "pid": 37756,
+        "pgid": 37756,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "final-friction",
+        "pid": 42474,
+        "pgid": 42474,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      }
+    ]
+  },
+  "friction": [],
+  "hostLoadSamples": [
+    {
+      "step": "prepare",
+      "startedAt": "2026-10-12T05:45:13.137Z",
+      "oneMinute": 18.52978515625
+    },
+    {
+      "step": "typecheck",
+      "startedAt": "2026-10-12T05:45:13.739Z",
+      "oneMinute": 18.52978515625
+    },
+    {
+      "step": "typecheck-node",
+      "startedAt": "2026-10-12T05:45:13.740Z",
+      "oneMinute": 18.52978515625
+    },
+    {
+      "step": "import-cycles",
+      "startedAt": "2026-10-12T05:45:13.741Z",
+      "oneMinute": 18.52978515625
+    },
+    {
+      "step": "lint",
+      "startedAt": "2026-10-12T05:45:13.741Z",
+      "oneMinute": 18.52978515625
+    },
+    {
+      "step": "test-related",
+      "startedAt": "2026-10-12T05:45:13.742Z",
+      "oneMinute": 18.52978515625
+    },
+    {
+      "step": "friction-records",
+      "startedAt": "2026-10-12T05:45:13.742Z",
+      "oneMinute": 18.52978515625
+    },
+    {
+      "step": "restore-local-assets",
+      "startedAt": "2026-10-12T05:45:23.808Z",
+      "oneMinute": 24.52099609375
+    }
+  ],
+  "sourceFreeze": {
+    "scripts/setup-assets.ts": "ffd1d4a15a488113b2f676f66a88221249fac75258379d895afa607d2a909bc6",
+    "scripts/setup-assets.test.ts": "8d6397817fe84596682ac9d728bc71669e1a0a0e88c59e106124835cba79de2e"
+  },
+  "rawReceiptManifest": {
+    "filename": "raw-manifest.json",
+    "sha256": "0bcc2f6b8ad1ec717d87841cc434d6211a54294408ab2912fd900dc5d5c5fdb2",
+    "entries": 32
+  },
+  "implementMin": 10.454636066666666,
+  "parentAcknowledged": true
+}

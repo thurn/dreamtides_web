@@ -29,6 +29,7 @@ import {
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { parseCardId, type CardId } from "../src/types/card-identity.ts";
 
 /** The image references the art linker resolves. */
 export interface ArtCatalog {
@@ -571,8 +572,8 @@ export async function contentArtCatalog(): Promise<ArtCatalog> {
   const { DREAMSCAPES } = await import("../src/content/dreamscapes.ts");
   const { DREAM_GUIDES } = await import("../src/content/guides.ts");
   const { ATLAS } = await import("../src/content/atlas.ts");
-  const imageNumberByCardId = new Map<string, number>(
-    CARDS.map((card) => [card.id.toLowerCase(), card.imageNumber]),
+  const imageNumberByCardId = new Map<CardId, number>(
+    CARDS.map((card) => [parseCardId(card.id), card.imageNumber]),
   );
   const offerTileImageNumbers = AUGURY.archetypes.flatMap((archetype) => {
     const presentation: { backgroundArt?: { imageNumber: number } } =
@@ -592,7 +593,7 @@ export async function contentArtCatalog(): Promise<ArtCatalog> {
     dreamsignImageNames: DREAMSIGNS.map((dreamsign) => dreamsign.imageName),
     explorationImageNumbers: EXPLORATION.encounters.flatMap((encounter) => {
       const imageNumber = imageNumberByCardId.get(
-        encounter.cardId.toLowerCase(),
+        parseCardId(encounter.cardId),
       );
       return imageNumber === undefined ? [] : [imageNumber];
     }),
