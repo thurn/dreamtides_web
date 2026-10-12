@@ -1,0 +1,947 @@
+{
+  "bead": "hv-umm2.461",
+  "base": "4079d17bb6ec48d7e5eca300e3c3addca6bcaac1",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.461",
+  "dispatchWindow": {
+    "start": "2026-10-12T00:57:15+00:00",
+    "basis": "Parent dispatch UTC is approximate. The full wall includes research, diagnostic restoration, coordination and checks; the final evidence boundary will immediately precede commit.",
+    "evidenceAt": "2026-10-12T01:03:58.758169+00:00",
+    "finalEvidenceAt": "2026-10-12T01:05:29.141214+00:00",
+    "elapsedToCommitBoundaryMin": 8.24,
+    "boundary": "Approximate parent dispatch to final evidence/commit boundary. This write immediately precedes commit; a sub-minute commit tail is included at the disclosed precision."
+  },
+  "scope": [
+    "scripts/content-inventory.ts",
+    "docs/plan/evidence/content-inventory.json",
+    "own friction, measurement JSON and pre-existing notes"
+  ],
+  "implementation": "Retire the two verified fulfilled Trigger member annotations for Reclaim and Erode. The lifecycle guard, public resolver API and all other descriptors are unchanged. Generic registered pending support remains used by 16 absent forms.",
+  "freshBaseMarkedObservation": {
+    "artifact": "before-public-results.json",
+    "markedForms": 18,
+    "fulfilled": [
+      "whenReclaimTrigger",
+      "whenErodeTrigger"
+    ],
+    "missingForms": 16,
+    "afterMarkedForms": 16,
+    "C12": "The intended DeckMods.typeRemap option is absent and remains pending.",
+    "callables": "Public whenReclaim, whenErode and whenErodeSelf return their corresponding registered trigger forms. Intended Trigger members validate when annotations are omitted.",
+    "authority": "Completed hv-umm2.91 and hv-umm2.87 provide Reclaim and Erode; filed native UUID scopes remain authoritative."
+  },
+  "negativeProof": {
+    "base": "4079d17bb6ec48d7e5eca300e3c3addca6bcaac1",
+    "observedAt": "2026-10-12T00:58:47.175695+00:00",
+    "sourceSha256": "0755fd9422e217b987fd6a96df3a2bb13efeea50b3eba694cf7f00d5dd2afe93",
+    "testSha256": "5e390310c8d32e643b015d3a65b9811b94edb0c4f9a1c16f507793625157cf67",
+    "trackedInventorySha256": "2c9fd5cc6a24e8584fe42639efe8b9d2db1e260bdce459a0bec253bd148b4943",
+    "unchangedCli": {
+      "exit": 1,
+      "wallSeconds": 2.397,
+      "log": "before-cli-check.log"
+    },
+    "publicProbe": {
+      "exit": 0,
+      "wallSeconds": 2.689
+    }
+  },
+  "diagnosticBaseline": {
+    "label": "Diagnostic only: fulfilled-marker rejection bypass and console-only all-capability observer; not unchanged CLI success.",
+    "sourceBeforeSha256": "0755fd9422e217b987fd6a96df3a2bb13efeea50b3eba694cf7f00d5dd2afe93",
+    "inventoryBeforeSha256": "2c9fd5cc6a24e8584fe42639efe8b9d2db1e260bdce459a0bec253bd148b4943",
+    "diagnosticSourceSha256": "14403023ce69566178ffbec8bf1e863e0c92c2f69719637dfd131846f88e83de",
+    "exit": 0,
+    "wallSeconds": 1.815,
+    "inventorySha256": "10954f4c348b1fc69fd3890bf62030134ac7ef16294dbe91d0eab36673472f6b",
+    "availabilityCount": 189,
+    "sourceRestoredIdentically": true,
+    "inventoryRestoredIdentically": true,
+    "restoredSourceSha256": "0755fd9422e217b987fd6a96df3a2bb13efeea50b3eba694cf7f00d5dd2afe93",
+    "restoredInventorySha256": "2c9fd5cc6a24e8584fe42639efe8b9d2db1e260bdce459a0bec253bd148b4943",
+    "observedAt": "2026-10-12T01:01:29.409802+00:00"
+  },
+  "diagnosticExplanation": "The unchanged CLI exits 1 at the fulfilled-marker guard. The fresh diagnostic baseline temporarily bypasses only that rejection, with a console-only observer for all 189 availability flags. This diagnostic success is not an unchanged CLI success. Source and inventory restore byte-identically in finally. The final observer preserves every validation and also restores exact intended bytes.",
+  "comparison": {
+    "allAvailability": {
+      "entries": 189,
+      "unchanged": 189,
+      "differences": []
+    },
+    "freshDiagnosticVsFinal": {
+      "entities": 1209,
+      "allEntityFieldsIdentical": true,
+      "projectionBefore": 219,
+      "projectionAfter": 219,
+      "differences": [
+        {
+          "path": "/primitives/152/forms/0/pending",
+          "before": "member",
+          "after": null
+        },
+        {
+          "path": "/primitives/158/forms/0/pending",
+          "before": "member",
+          "after": null
+        }
+      ]
+    },
+    "trackedVsFinal": {
+      "trackedProjection": 221,
+      "freshProjection": 219,
+      "availabilityDifferences": [
+        {
+          "name": "whenErodeTrigger",
+          "before": false,
+          "after": true
+        },
+        {
+          "name": "whenReclaimTrigger",
+          "before": false,
+          "after": true
+        }
+      ],
+      "allUuidSetIdentical": true,
+      "changedEntities": [
+        {
+          "id": "01298848-1ebb-48a1-b00b-d7e0af890870",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-64",
+              "after": "cards-65"
+            }
+          ]
+        },
+        {
+          "id": "0269e363-5567-47a4-80cd-8ebc061fe7e1",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-61",
+              "after": "cards-62"
+            }
+          ]
+        },
+        {
+          "id": "06a4709d-fbef-4ea2-aa5e-caa2beac80ab",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-85",
+              "after": "cards-86"
+            }
+          ]
+        },
+        {
+          "id": "0a19c54c-7a2e-4614-99c9-2c9142729ebb",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-68",
+              "after": "cards-69"
+            }
+          ]
+        },
+        {
+          "id": "0bddeb19-ff49-4a77-bc06-955377ba3ed1",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "120ea441-f6ff-434b-973c-bde459f65368",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "161482b6-af07-4d9e-822d-8c738672beb9",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-59",
+              "after": "cards-60"
+            }
+          ]
+        },
+        {
+          "id": "18ff6a45-148a-40bf-85ae-4a51f32f406a",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-57",
+              "after": "cards-58"
+            }
+          ]
+        },
+        {
+          "id": "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-62",
+              "after": "cards-63"
+            }
+          ]
+        },
+        {
+          "id": "3811a0a2-66af-4c06-b179-948dfa9b2ee3",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-60",
+              "after": "cards-61"
+            }
+          ]
+        },
+        {
+          "id": "3e83cbe2-2b21-4804-9906-4b4735db9869",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-58",
+              "after": "cards-59"
+            }
+          ]
+        },
+        {
+          "id": "4124a05c-b6dd-4334-b202-59fa17d77668",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-84",
+              "after": "cards-85"
+            }
+          ]
+        },
+        {
+          "id": "43628666-2ecd-47a7-b2c0-241cda0de5e8",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "44ae8838-4714-43a5-a7bd-e9f806f35ca9",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-60",
+              "after": "cards-61"
+            }
+          ]
+        },
+        {
+          "id": "4733876a-d6b1-48d2-b322-5f71aee9f3d6",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-59",
+              "after": "cards-60"
+            }
+          ]
+        },
+        {
+          "id": "4752fc43-6696-4bc3-88d0-4d5b97622fa8",
+          "fields": [
+            {
+              "path": "/requiredPrimitives/existing",
+              "beforeLength": 4,
+              "afterLength": 5
+            },
+            {
+              "path": "/requiredPrimitives/new",
+              "beforeLength": 1,
+              "afterLength": 0
+            },
+            {
+              "path": "/routing/1",
+              "before": "prim-when-erode-trigger",
+              "after": "cards-56"
+            },
+            {
+              "path": "/rulesDecisions",
+              "before": null,
+              "after": [
+                "RD-hv-umm2.87-1",
+                "RD-hv-umm2.87-2"
+              ]
+            },
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "55340736-7fc5-4555-8f47-081d770a6e8d",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-83",
+              "after": "cards-84"
+            }
+          ]
+        },
+        {
+          "id": "5e1b943f-9fa2-4055-b613-5dd09a048c99",
+          "fields": [
+            {
+              "path": "/rulesDecisions",
+              "before": null,
+              "after": [
+                "RD-hv-umm2.452-1"
+              ]
+            },
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "6af8cf81-9e9e-481f-b518-f5dadad99b27",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-60",
+              "after": "cards-61"
+            }
+          ]
+        },
+        {
+          "id": "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-56",
+              "after": "cards-57"
+            }
+          ]
+        },
+        {
+          "id": "724a1362-3f0f-4b77-b14e-22c0b877349a",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-63",
+              "after": "cards-64"
+            }
+          ]
+        },
+        {
+          "id": "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "770b21e4-ea6a-4910-8fca-2ec5b8813da1",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "8436eaae-e410-4bfb-89d2-55bebf5a8144",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "85251f03-c873-46d8-81be-ab421c901a53",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-62",
+              "after": "cards-63"
+            }
+          ]
+        },
+        {
+          "id": "89c0d03c-2199-415a-bc66-89e451034328",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-84",
+              "after": "cards-85"
+            }
+          ]
+        },
+        {
+          "id": "8adfa141-6864-4f5f-a9ca-59306eaf5432",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+          "fields": [
+            {
+              "path": "/requiredPrimitives/existing",
+              "beforeLength": 2,
+              "afterLength": 3
+            },
+            {
+              "path": "/requiredPrimitives/new",
+              "beforeLength": 1,
+              "afterLength": 0
+            },
+            {
+              "path": "/rulesDecisions",
+              "before": null,
+              "after": [
+                "RD-hv-umm2.87-1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "8c117d3f-09af-4312-9897-694a76bd23c6",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-64",
+              "after": "cards-65"
+            }
+          ]
+        },
+        {
+          "id": "946dbb36-0a90-495a-bf0f-17351c93d74b",
+          "fields": [
+            {
+              "path": "/requiredPrimitives/existing",
+              "beforeLength": 2,
+              "afterLength": 3
+            },
+            {
+              "path": "/requiredPrimitives/new",
+              "beforeLength": 1,
+              "afterLength": 0
+            },
+            {
+              "path": "/rulesDecisions",
+              "before": null,
+              "after": [
+                "RD-hv-umm2.87-1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "9d63ba3e-fafb-466e-8418-ce5f8941ba30",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-61",
+              "after": "cards-62"
+            }
+          ]
+        },
+        {
+          "id": "a7c2ee76-48c9-4587-8f01-81d00ae280cb",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-67",
+              "after": "cards-68"
+            }
+          ]
+        },
+        {
+          "id": "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "b6d1df72-d989-4689-a599-4490a0c2568d",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-69",
+              "after": "cards-70"
+            }
+          ]
+        },
+        {
+          "id": "bd27a996-bcdd-4f49-95c2-92c9d5875344",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "c36e67ab-fbee-4d83-b57b-34d34f60e17c",
+          "fields": [
+            {
+              "path": "/requiredPrimitives/existing",
+              "beforeLength": 4,
+              "afterLength": 5
+            },
+            {
+              "path": "/requiredPrimitives/new",
+              "beforeLength": 1,
+              "afterLength": 0
+            },
+            {
+              "path": "/rulesDecisions",
+              "beforeLength": 1,
+              "afterLength": 2
+            }
+          ]
+        },
+        {
+          "id": "c6d8a7cc-3856-4030-96eb-450e406dec33",
+          "fields": [
+            {
+              "path": "/requiredPrimitives/existing",
+              "beforeLength": 4,
+              "afterLength": 5
+            },
+            {
+              "path": "/requiredPrimitives/new",
+              "beforeLength": 1,
+              "afterLength": 0
+            },
+            {
+              "path": "/routing/1",
+              "before": "prim-when-reclaim-trigger",
+              "after": "cards-83"
+            },
+            {
+              "path": "/rulesDecisions",
+              "before": null,
+              "after": [
+                "RD-hv-umm2.91-1",
+                "RD-hv-umm2.91-2"
+              ]
+            },
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "cbabe603-1333-42bd-85c0-555c664b60b3",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-65",
+              "after": "cards-66"
+            }
+          ]
+        },
+        {
+          "id": "cc1c1acd-f0ff-46cc-94d9-401b9daf253f",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-58",
+              "after": "cards-59"
+            }
+          ]
+        },
+        {
+          "id": "cf173b05-7bf2-465b-91e2-41f213c536d1",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-87",
+              "after": "cards-88"
+            }
+          ]
+        },
+        {
+          "id": "d1c25546-dcf2-481e-8f00-9afef3adf24b",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "e4e8d3b9-3463-4b92-8fbe-35064f72402d",
+          "fields": [
+            {
+              "path": "/requiredPrimitives/existing",
+              "beforeLength": 3,
+              "afterLength": 4
+            },
+            {
+              "path": "/requiredPrimitives/new",
+              "beforeLength": 1,
+              "afterLength": 0
+            },
+            {
+              "path": "/rulesDecisions",
+              "before": null,
+              "after": [
+                "RD-hv-umm2.87-1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "eae928f6-aab2-415e-b4b1-b9c3ed8e6818",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "f0a70e7d-46af-4d32-92cc-9d510e97a07e",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-66",
+              "after": "cards-67"
+            }
+          ]
+        },
+        {
+          "id": "f46490a5-7030-4ade-93e9-bedb5813f590",
+          "fields": [
+            {
+              "path": "/routing/1",
+              "before": "cards-86",
+              "after": "cards-87"
+            }
+          ]
+        },
+        {
+          "id": "fa7dadd8-c72f-42e7-b203-3d22aa36122f",
+          "fields": [
+            {
+              "path": "/requiredPrimitives/existing",
+              "beforeLength": 2,
+              "afterLength": 3
+            },
+            {
+              "path": "/requiredPrimitives/new",
+              "beforeLength": 1,
+              "afterLength": 0
+            },
+            {
+              "path": "/routing/1",
+              "before": "prim-when-reclaim-trigger",
+              "after": "cards-84"
+            },
+            {
+              "path": "/rulesDecisions",
+              "before": null,
+              "after": [
+                "RD-hv-umm2.91-1"
+              ]
+            },
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        },
+        {
+          "id": "faadc87f-98fe-4a58-b1a9-a7c0cff70e08",
+          "fields": [
+            {
+              "path": "/status",
+              "before": "pending",
+              "after": "authored"
+            }
+          ]
+        }
+      ],
+      "changedEntityFieldNames": [
+        "/requiredPrimitives/existing",
+        "/requiredPrimitives/new",
+        "/routing/1",
+        "/rulesDecisions",
+        "/status"
+      ],
+      "otherTopLevelChanged": [
+        "summary",
+        "beads",
+        "primitives",
+        "promptKinds",
+        "entities"
+      ]
+    },
+    "retiredAnnotations": [
+      "whenReclaimTrigger member=reclaim pending=member",
+      "whenErodeTrigger member=erode pending=member"
+    ]
+  },
+  "afterPublicProbe": {
+    "exit": 0,
+    "wallSeconds": 1.663,
+    "sourceSha256": "6df5be03b9c9e48c4a1829e028dff294a1a494177fa75a8e42eac29d3e68eecf",
+    "markedForms": 16,
+    "fulfilledForms": 0
+  },
+  "afterAvailabilityObserver": {
+    "label": "Console-only final availability observation; validation and output bytes are unchanged.",
+    "sourceBeforeSha256": "6df5be03b9c9e48c4a1829e028dff294a1a494177fa75a8e42eac29d3e68eecf",
+    "inventoryBeforeSha256": "82793689a2cfd2e2d29c0e37aaaad1758fae27019990a820eec2babfcff906e7",
+    "observerSourceSha256": "ddb3e9424ed0ae2fa8c10ccbadcdeb84d8976230cc457a24b738ddd0ef130944",
+    "exit": 0,
+    "wallSeconds": 1.821,
+    "availabilityCount": 189,
+    "sourceRestoredIdentically": true,
+    "inventoryRestoredIdentically": true,
+    "restoredSourceSha256": "6df5be03b9c9e48c4a1829e028dff294a1a494177fa75a8e42eac29d3e68eecf",
+    "restoredInventorySha256": "82793689a2cfd2e2d29c0e37aaaad1758fae27019990a820eec2babfcff906e7",
+    "observedAt": "2026-10-12T01:02:38.732764+00:00"
+  },
+  "checks": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts"
+      ],
+      "exit": 0,
+      "wallSeconds": 7.683,
+      "observedAt": "2026-10-12T01:01:49.683990+00:00"
+    },
+    {
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "exit": 0,
+      "wallSeconds": 1.788,
+      "observedAt": "2026-10-12T01:01:51.472665+00:00"
+    },
+    {
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts",
+        "--check"
+      ],
+      "exit": 0,
+      "wallSeconds": 1.607,
+      "observedAt": "2026-10-12T01:01:53.079560+00:00"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exit": 0,
+      "wallSeconds": 10.866,
+      "startedAt": "2026-10-12T01:04:07.825236+00:00",
+      "loadAtStart": "{ 22.07 19.60 18.81 }",
+      "oneMinuteLoad": 22.07,
+      "completedAt": "2026-10-12T01:04:18.691876+00:00"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "exit": 0,
+      "wallSeconds": 3.044,
+      "startedAt": "2026-10-12T01:04:18.695445+00:00",
+      "loadAtStart": "{ 25.43 20.41 19.10 }",
+      "oneMinuteLoad": 25.43,
+      "completedAt": "2026-10-12T01:04:21.739690+00:00"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "command": "npm run review",
+      "startedAt": "2026-10-12T01:04:07.825236+00:00",
+      "oneMinuteLoad": 22.07,
+      "raw": "{ 22.07 19.60 18.81 }"
+    },
+    {
+      "command": "npm run knip",
+      "startedAt": "2026-10-12T01:04:18.695445+00:00",
+      "oneMinuteLoad": 25.43,
+      "raw": "{ 25.43 20.41 19.10 }"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting observation"
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": -2
+  },
+  "testEvidence": "The existing test source is byte-identical. Removing two fulfilled annotations naturally reduces generated lifecycle cases from 91 to 89; all 48 intended public bindings and generic lifecycle controls remain covered. No new test entrypoints or fixtures.",
+  "fallout": {
+    "exportedApiChanged": false,
+    "consumer": "scripts/content-inventory.test.ts",
+    "consumerSourceChanged": false,
+    "outsideAreaChanges": [],
+    "productionChangedLines": 4
+  },
+  "validationScope": "Metadata-only registration change: focused synthetic contracts, CLI regeneration/check, review and Knip. No runtime, architecture, infrastructure or configuration change; no full, browser or fuzz run.",
+  "runtimeLedger": {
+    "install": {
+      "observer": 32075,
+      "exit": 0,
+      "reportedWallSeconds": 3
+    },
+    "servers": [],
+    "browserContexts": [],
+    "providers": [],
+    "heavyLocks": [],
+    "remainingOwnedProcesses": [],
+    "temporaryMutations": "Diagnostic guard bypass and console-only observers restored source and inventory byte-identically in finally.",
+    "commandObservers": [
+      {
+        "session": 56256,
+        "scope": "focused and CLI commands",
+        "exit": 0,
+        "settled": true
+      },
+      {
+        "session": 53482,
+        "scope": "review and Knip",
+        "exit": 0,
+        "settled": true
+      }
+    ],
+    "processObservation": "Final process listing matched only the transient inspection shell and rg command. No owned validation child remains. Shared project services were not changed."
+  },
+  "preExisting": [
+    "The install reports 17 inherited advisories: 9 moderate, 7 high and 1 critical.",
+    "The tracked inventory snapshot differs from the fresh unchanged-generator diagnostic. Full fresh and tracked comparisons are preserved separately."
+  ],
+  "remainingWork": [],
+  "sourceProof": {
+    "exactGeneratorChange": "Only pending=member removed from registered Trigger reclaim and erode descriptors.",
+    "allOtherSourceBytesIdentical": true,
+    "lifecycleGuardByteIdentical": true,
+    "allOtherDescriptorBytesIdentical": true,
+    "catalogUuidFieldsPreserved": 1209,
+    "derivedTrackedFieldsAllowed": [
+      "requiredPrimitives",
+      "routing",
+      "rulesDecisions",
+      "status"
+    ],
+    "finalSourceSha256": {
+      "scripts/content-inventory.ts": "6df5be03b9c9e48c4a1829e028dff294a1a494177fa75a8e42eac29d3e68eecf",
+      "scripts/content-inventory.test.ts": "5e390310c8d32e643b015d3a65b9811b94edb0c4f9a1c16f507793625157cf67",
+      "docs/plan/evidence/content-inventory.json": "82793689a2cfd2e2d29c0e37aaaad1758fae27019990a820eec2babfcff906e7"
+    }
+  },
+  "artifactManifest": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.461/evidence-manifest.json",
+    "artifactCount": 35,
+    "sha256": "086282316ad885313f3c4f40d6e92619e77363d5f4a635f389f9dc790cda06db"
+  },
+  "checksOutcome": {
+    "focusedCases": 89,
+    "reviewCases": 89,
+    "allExitZero": true,
+    "cliAvailability": 189,
+    "entities": 1209
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "bead": "hv-umm2.461",
+  "phase": 5,
+  "implementMin": 8.24,
+  "localValidationS": {
+    "installReported": 3,
+    "unchangedCliCheck": 2.397,
+    "publicProbe": 2.689,
+    "diagnosticBaseline": 1.815,
+    "focused": 7.683,
+    "cliRegenerate": 1.788,
+    "cliCheck": 1.607,
+    "review": 10.866,
+    "knip": 3.044
+  },
+  "hostLoad": 22.07,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": -2
+  },
+  "friction": []
+}
