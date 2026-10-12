@@ -18,24 +18,27 @@
  * `cardPlayed` whose card left its owner's void for the stack, by Reclaim or a
  * play permission (RD-hv-umm2.93-1), and "When you return a character to
  * hand" abilities a `leftPlay` for a hand, as the character last was in play
- * (RD-hv-umm2.102-1).
+ * (RD-hv-umm2.102-1), and "When you materialize your second …" abilities a
+ * `materialized` by its place among its side's materializations this turn
+ * (RD-hv-umm2.107-1).
  */
 import type { EngineCatalog } from "../catalog";
 import { cardMatchesFilter, playedMatchesFilter } from "../continuous/characteristics";
 import { worksInZone } from "../dsl/abilities";
 import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
-import type { CardFilter, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
+import type { CardFilter, MaterializedSelector, MaterializeNth, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
 import type { CardPlayedEvent } from "../events/kinds/card-played";
 import type { LeftPlayEvent } from "../events/kinds/left-play";
+import type { MaterializedEvent } from "../events/kinds/materialized";
 import { conditionHolds } from "../effects/interpreter";
 import type { EngineEvent, EngineEventKind } from "../events";
 import { instanceOrigin, oncePerTurnKey, originAbilities } from "../rules/activation";
 import { endFloating, floatingTriggers } from "../rules/floating";
-import { recordMaterialized } from "../rules/turn-log";
+import { materializedThisTurn, recordMaterialized } from "../rules/turn-log";
 import { charactersInPlay, isFigment } from "../rules/zones";
 import type { EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { opponent, SIDES, sourceInstance } from "../state/ids";
-import type { BattleState, FloatingEffect, QueuedTrigger, SparkGain } from "../state/types";
+import type { BattleState, FloatingEffect, MaterializedCard, QueuedTrigger, SparkGain } from "../state/types";
 import type { ArmedDissolve, StepContext, TriggerListener } from "../steps/types";
 import { sidesBlindTo } from "../view/knowledge";
 import { triggerBody } from "./body";
@@ -233,6 +236,29 @@ function playedFromVoid(state: BattleState, id: InstanceId): boolean {
   return state.stack.some((item) => item.kind === "card" && item.instance === id && item.playedFromVoid === true);
 }
 
+/** Whether a turn-log materialization record matches a counted selector by the type it materialized with. */
+function materializedMatches(card: MaterializedCard, selector: MaterializedSelector): boolean {
+  return (
+    card.cardType === "character" &&
+    (selector.subtype === undefined || card.allTypes || card.subtype === selector.subtype) &&
+    // A character with all character types is of every type, the excluded one included.
+    (selector.notSubtype === undefined || !(card.allTypes || card.subtype === selector.notSubtype))
+  );
+}
+
+/**
+ * Whether the materialization `event` announces, of a character the trigger's
+ * subject matched, is the `nth` (or, with `atLeast`, at least that) of its
+ * side's this turn matching `selector` by type as each materialized.
+ * `matchEvent` has just recorded it as its side's newest record, with the
+ * types the subject read; earlier records count whether or not their
+ * characters are still in play (RD-hv-umm2.107-1).
+ */
+function isNthMaterialized(state: BattleState, event: MaterializedEvent, selector: MaterializedSelector, nth: MaterializeNth): boolean {
+  const count = materializedThisTurn(state, event.side).filter((card) => materializedMatches(card, selector)).length;
+  return typeof nth === "number" ? count === nth : count >= nth.atLeast;
+}
+
 /** `matchTrigger` for one trigger kind; `TRIGGER_EVENTS` lists the events each case can match. */
 function matchKind(
   state: BattleState,
@@ -283,7 +309,9 @@ function matchKind(
       return trigger.nth === undefined || played.length === trigger.nth ? { subject: event.instance } : null;
     }
     case "materialize":
-      return event.kind === "materialized" && subjectMatches(state, catalog, trigger.subject, event.instance, listener)
+      return event.kind === "materialized" &&
+        subjectMatches(state, catalog, trigger.subject, event.instance, listener) &&
+        (trigger.nth === undefined || isNthMaterialized(state, event, trigger.subject, trigger.nth))
         ? { subject: event.instance }
         : null;
     case "draw":

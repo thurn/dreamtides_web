@@ -7,6 +7,8 @@ import type {
   Condition,
   Duration,
   FunctionalZone,
+  MaterializedSelector,
+  MaterializeNth,
   NamedTrigger,
   PlayerRef,
   SubjectSpec,
@@ -85,9 +87,29 @@ export function whenPlayFromVoid(player: PlayerRef = "you", filter: CardFilter =
   return { on: "play", player, filter, from: "void" };
 }
 
-/** "When you materialize a character matching `subject`". */
-export function whenMaterialize(subject: TriggerSubject = { controller: "you" }): Trigger {
-  return { on: "materialize", subject };
+const MATERIALIZED_SELECTOR_FIELDS: readonly string[] = ["controller", "subtype", "notSubtype"] satisfies readonly (keyof MaterializedSelector)[];
+
+/** Whether `subject` asks only what a turn-log materialization record answers: whose character, and its type. */
+function isMaterializedSelector(subject: TriggerSubject): subject is MaterializedSelector {
+  return subject !== "self" && Object.keys(subject).every((field) => MATERIALIZED_SELECTOR_FIELDS.includes(field));
+}
+
+/**
+ * "When you materialize a character matching `subject`", or with `nth` "your
+ * `nth` such character this turn" (a number) or "… if it is not among the
+ * first" (`{ atLeast }`), counted by type as each materialized. A counted
+ * subject names only whose characters and their types.
+ */
+export function whenMaterialize(subject?: TriggerSubject): Trigger;
+export function whenMaterialize(subject: MaterializedSelector, nth: MaterializeNth): Trigger;
+export function whenMaterialize(subject: TriggerSubject = { controller: "you" }, nth?: MaterializeNth): Trigger {
+  if (nth === undefined) return { on: "materialize", subject };
+  if (!isMaterializedSelector(subject)) {
+    throw new Error(`A counted "when you materialize" names only whose characters and their types, not ${JSON.stringify(subject)}`);
+  }
+  const least = typeof nth === "number" ? nth : nth.atLeast;
+  if (!Number.isSafeInteger(least) || least < 1) throw new Error(`A counted "when you materialize" needs a positive count, not ${least}`);
+  return { on: "materialize", subject, nth };
 }
 
 /** "When you draw a card", or "your `nth` card this turn". */

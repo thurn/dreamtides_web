@@ -490,6 +490,20 @@ export type NamedTrigger = "materialized" | "dawn" | "dusk" | "night" | "challen
 /** The cards a "when" trigger concerns: the ability's own card, or characters matching a selector. */
 export type TriggerSubject = "self" | CharacterSelector;
 
+/**
+ * The part of a character selector a turn-log materialization record
+ * answers: whose character it is, and its type as it materialized.
+ */
+export type MaterializedSelector = Pick<CharacterSelector, "controller" | "subtype" | "notSubtype">;
+
+/**
+ * Which of a player's matching materializations this turn a "when you
+ * materialize" trigger matches: exactly the `nth` ("your second spirit animal
+ * in a turn" is `2`), or each from the `atLeast`th on ("if it is not the
+ * first spirit animal you have materialized this turn" is `{ atLeast: 2 }`).
+ */
+export type MaterializeNth = number | { readonly atLeast: number };
+
 /** What makes a triggered ability trigger (rules § Ability Types → Triggered abilities). */
 export type Trigger =
   | { readonly on: NamedTrigger }
@@ -503,7 +517,16 @@ export type Trigger =
    * play a card from your void; RD-hv-umm2.93-1). It counts no `nth`.
    */
   | { readonly on: "play"; readonly player: PlayerRef; readonly filter: CardFilter; readonly from: "void"; readonly nth?: never }
-  | { readonly on: "materialize"; readonly subject: TriggerSubject }
+  | { readonly on: "materialize"; readonly subject: TriggerSubject; readonly nth?: never }
+  /**
+   * "When you materialize your second spirit animal in a turn": a
+   * materialization matching `subject` that is the `nth` matching one its
+   * player announced this turn, counted by the turn log's records of every
+   * character that player materialized, by type as it materialized, the one
+   * just announced included (rules § Ability Types → Counting
+   * materializations; RD-hv-umm2.107-1, RD-hv-umm2.107-2).
+   */
+  | { readonly on: "materialize"; readonly subject: MaterializedSelector; readonly nth: MaterializeNth }
   | { readonly on: "draw"; readonly player: PlayerRef; readonly nth?: number }
   /**
    * "When you discard a card": each card matching `filter` discarded from

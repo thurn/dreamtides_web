@@ -1,4 +1,9 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenMaterialize } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
+
+const spiritAnimal = () => characterYouControl({ subtype: "Spirit Animal" });
 
 export default card({
   name: "Paleclaw Panther",
@@ -19,5 +24,9 @@ export default card({
   cardNumber: 232,
   art: { x: 0.168, y: 0, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(whenMaterialize(spiritAnimal()), p.gainEnergy(1)),
+    triggered(whenMaterialize(spiritAnimal(), 2), p.drawMatching({ subtype: "Spirit Animal" })),
+  ],
+  verifiedText: "12sboosva0u",
 });

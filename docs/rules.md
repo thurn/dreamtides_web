@@ -1639,6 +1639,27 @@ control to hand," the ability sees those that leave while it still works. "It"
 is the returned card, wherever it is as the ability resolves (see [A card's own
 cost](#costs-requirements-and-x)).
 
+**Counting materializations:** An ability such as "When you materialize your
+second spirit animal in a turn, draw a spirit animal" counts the matching
+characters you have materialized this turn, including the one just
+materialized, and triggers only for the one that brings the count to exactly
+two. Every materialization of a character under your control counts, each
+time it happens: a character played from a hand, put into play from any
+zone, created as a figment or figment copy, or rematerialized while in play.
+Characters that have since left play or ceased to exist still count, and so
+do characters materialized before the ability's card entered play, so a card
+with the ability that is itself the second spirit animal you materialize
+sees its own materialization. Characters put into play by one effect are
+counted one at a time, in the order they enter. Each materialization matches
+by the character's type as it materialized: a character that has all
+character types as it materializes is a spirit animal, and a later change to
+its types does not change what that materialization counted toward. "When
+you materialize a spirit animal, if it is not the first spirit animal you
+have materialized this turn, …" counts the same way and triggers for every
+matching materialization after the first. The count only grows during a
+turn, so a materialization that was not the first is still not the first
+as the ability resolves.
+
 **Intervening conditions:** A triggered ability written "When X, if Y, …", or
 "▸Dawn: If Y, …", triggers only if Y is true when X happens, and when it
 resolves it does nothing unless Y is still true.
