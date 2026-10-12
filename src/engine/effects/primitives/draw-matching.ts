@@ -21,11 +21,17 @@ function publicFilter(ctx: StepContext, env: EffectEnv, filter: CardFilter, view
   if (effect === null) return false;
   const nodes = everyNode(effect).filter((node): node is DrawMatchingNode => node.op === "drawMatching");
   // Differing filters in one ability supply no public predicate proof.
-  return nodes.length > 0 && nodes.every((node) =>
-    node.filter.cardType === filter.cardType && node.filter.subtype === filter.subtype &&
-    node.filter.costAtMost === filter.costAtMost && node.filter.costAtLeast === filter.costAtLeast &&
-    node.filter.sparkAtMost === filter.sparkAtMost && node.filter.sparkAtLeast === filter.sparkAtLeast,
-  );
+  return nodes.length > 0 && nodes.every((node) => {
+    const equal = {
+      cardType: node.filter.cardType === filter.cardType,
+      subtype: node.filter.subtype === filter.subtype,
+      costAtMost: node.filter.costAtMost === filter.costAtMost,
+      costAtLeast: node.filter.costAtLeast === filter.costAtLeast,
+      sparkAtMost: node.filter.sparkAtMost === filter.sparkAtMost,
+      sparkAtLeast: node.filter.sparkAtLeast === filter.sparkAtLeast,
+    } satisfies Record<keyof CardFilter, boolean>;
+    return Object.values(equal).every(Boolean);
+  });
 }
 
 export const drawMatchingPrimitive = definePrimitive<DrawMatchingNode>({

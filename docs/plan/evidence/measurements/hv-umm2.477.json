@@ -1,0 +1,490 @@
+{
+  "bead": "hv-umm2.477",
+  "phase": 5,
+  "base": "977a99b844f26c9fa7d60771f8a97951a98659bc",
+  "scope": {
+    "source": [
+      "src/engine/effects/primitives/draw-matching.ts",
+      "src/rules/battle/fold.ts",
+      "src/runtime/battle-prompt-messages.ts"
+    ],
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "fallout": [],
+    "newModules": 0,
+    "publicTypesChanged": false,
+    "runtimeBehaviorChanged": false
+  },
+  "claimToPrecommit": {
+    "start": "2026-10-12T02:46:41Z",
+    "endpoint": "2026-10-12T03:08:33.561138+00:00",
+    "endpointProvenance": "Real endpoint after root final acknowledgement, immediately before final numeric schema, staging and commit. Total includes coordination wait at the precommit boundary."
+  },
+  "sourceFreeze": {
+    "src/engine/effects/primitives/draw-matching.ts": "42814ff38bf5e6e3f59e5be7cced24cbe02373816db38a33a5c1ccbdd87dd43b",
+    "src/rules/battle/fold.ts": "6cd2cd73383c78d105f0b4aca336d30c817b6a07c3ecea196b21e9b13d8dd926",
+    "src/runtime/battle-prompt-messages.ts": "082a4eacfbc09aecb1c9f24ee81293255501a51b92d0802a2ae1ec740f6f665d"
+  },
+  "proof": {
+    "compileTime": "Required Record<keyof CardFilter, ...> entries cover all authorable keys. Draw equality consumes every comparison; saved validation consumes every optional guard; permission qualification and formatting consume each required field's paired qualified/text entry in cost, spark, subtype, card-type order.",
+    "omissions": {
+      "receipt": "compiler-omission-proof.json",
+      "sha256": "e75d85321a8ff4ccaa1ca67747db1f477a91125ac07a21dfb3364e917bbe4ecd",
+      "threeTS1360Rejections": true,
+      "allRestoredExactly": true
+    },
+    "copyParity": {
+      "equalBytes": true,
+      "baselineSHA256": "4db471a36a308ec8d27bb00cf35983246b812b150836ae5a88b08a5ea4c07e44",
+      "finalSHA256": "4db471a36a308ec8d27bb00cf35983246b812b150836ae5a88b08a5ea4c07e44",
+      "rows": 8640
+    },
+    "parityScope": "Read-only diagnostic matrix of 2160 synthetic filters and 8640 public formatter rows, covering named/unnamed, next/repeating, qualification and prohibition labels and permission effect log output. Includes explicit undefined, zero, signed/fractional spark, equal/ranged and inverted bounds, empty/nonempty subtype. No copy assertions were added to CI.",
+    "validationSemantics": "Cost bounds retain optional nonnegative integer guards; spark bounds retain optional finite signed and fractional guards. Card type/subtype guards and all six strict equality comparisons are preserved."
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "coverage": "No new transition or error handler. Existing drawMatching contract rolls back a failed resolution's draw/count/knowledge changes, preserving the committed play and publishing no partial draw (src/engine/effects/primitives/contracts/draw-matching.contracts.ts), and playFromZone recovery contract commits and publishes no permission when its step fails after granting it (src/engine/effects/primitives/contracts/play-from-zone-recovery.contracts.ts).",
+      "existingContracts": [
+        {
+          "file": "src/engine/effects/primitives/contracts/draw-matching.contracts.ts",
+          "title": "rolls back a failed resolution's draw/count/knowledge changes, preserving the committed play and publishing no partial draw"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/play-from-zone-recovery.contracts.ts",
+          "title": "commits and publishes no permission when its step fails after granting it"
+        }
+      ]
+    },
+    {
+      "path": "reload or restart",
+      "coverage": "No serialization or recovery transition change. Existing drawMatching contract replays a suspended draw prefix after JSON reload and accepts one owning answer while rejecting wrong-side/stale/concurrent answers, and playFromZone recovery contract stores only its floating change: a JSON reload and a saved journey battle read the same permission.",
+      "existingContracts": [
+        {
+          "file": "src/engine/effects/primitives/contracts/draw-matching.contracts.ts",
+          "title": "replays a suspended draw prefix after JSON reload and accepts one owning answer while rejecting wrong-side/stale/concurrent answers"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/play-from-zone-recovery.contracts.ts",
+          "title": "stores only its floating change: a JSON reload and a saved journey battle read the same permission"
+        }
+      ]
+    },
+    {
+      "path": "partial write",
+      "coverage": "These local readers do not write input or introduce persistence. Existing drawMatching rollback contract and playFromZone recovery commits and publishes no permission when its step fails after granting it cover atomic publication.",
+      "existingContracts": [
+        {
+          "file": "src/engine/effects/primitives/contracts/draw-matching.contracts.ts",
+          "title": "rolls back a failed resolution's draw/count/knowledge changes, preserving the committed play and publishing no partial draw"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/play-from-zone-recovery.contracts.ts",
+          "title": "commits and publishes no permission when its step fails after granting it"
+        }
+      ]
+    },
+    {
+      "path": "invalid or stale input",
+      "coverage": "Existing playFromZone recovery validates saved %s as a finite signed number covers both spark fields; stores only its floating change: a JSON reload and a saved journey battle read the same permission rejects malformed cost. Existing drawMatching replays a suspended draw prefix after JSON reload and accepts one owning answer while rejecting wrong-side/stale/concurrent answers covers illegal and stale answers.",
+      "existingContracts": [
+        {
+          "file": "src/engine/effects/primitives/contracts/play-from-zone-recovery.contracts.ts",
+          "title": "validates saved %s as a finite signed number"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/play-from-zone-recovery.contracts.ts",
+          "title": "stores only its floating change: a JSON reload and a saved journey battle read the same permission"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/draw-matching.contracts.ts",
+          "title": "replays a suspended draw prefix after JSON reload and accepts one owning answer while rejecting wrong-side/stale/concurrent answers"
+        }
+      ]
+    },
+    {
+      "path": "concurrent actors",
+      "coverage": "No new actor, shared mutable record or write. Existing drawMatching replays a suspended draw prefix after JSON reload and accepts one owning answer while rejecting wrong-side/stale/concurrent answers proves owning-answer selection and wrong-side/concurrent bounce. The static validator record is read-only in use.",
+      "existingContracts": [
+        {
+          "file": "src/engine/effects/primitives/contracts/draw-matching.contracts.ts",
+          "title": "replays a suspended draw prefix after JSON reload and accepts one owning answer while rejecting wrong-side/stale/concurrent answers"
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "dispatch-friction": {
+      "wallSeconds": 0.197032959000353,
+      "exitCode": 0,
+      "receipt": "dispatch-friction.json",
+      "sha256": "6811861b6bed07b73f7330e02dd50823aeceef168565f2a6a42e6aad386027df"
+    },
+    "omit-saved-filter": {
+      "wallSeconds": 7.810369708000508,
+      "exitCode": 2,
+      "receipt": "omit-saved-filter.json",
+      "sha256": "72bebbd7844e454523a767d6d9fe5c1dee8432675a5b58fd6d6c58dfc49cd7e7"
+    },
+    "knip": {
+      "wallSeconds": 2.840889250001055,
+      "exitCode": 0,
+      "receipt": "knip.json",
+      "sha256": "a0dd428482bad0a85ad40a575fbe78e2ce27c8535dbb4b94e2496e41ba6628b5"
+    },
+    "omit-draw-matching": {
+      "wallSeconds": 7.8649299159988,
+      "exitCode": 2,
+      "receipt": "omit-draw-matching.json",
+      "sha256": "829fe753e6e6e830f60bfdd606b1e5cf92f188730fe66b25ec5f0faf516f4608"
+    },
+    "omit-permission-filter": {
+      "wallSeconds": 7.790929708000476,
+      "exitCode": 2,
+      "receipt": "omit-permission-filter.json",
+      "sha256": "f502454c38c8c445c2b3a7ed2e207950200d06e31ba084fd86957c806d9ebd50"
+    },
+    "focused-void": {
+      "wallSeconds": 3.817938125001092,
+      "exitCode": 0,
+      "receipt": "focused-void.json",
+      "sha256": "bea78c280f9e5ddd33daf7a92bdb4f33be22846db5959eb3d029433af62818d8"
+    },
+    "focused-contracts": {
+      "wallSeconds": 3.3134518330007268,
+      "exitCode": 0,
+      "receipt": "focused-contracts.json",
+      "sha256": "e2b7ed1e2195f9117a063ea9d96f90dd193f595eee5e4278af980b634eaefa70"
+    },
+    "compile-prepared": {
+      "wallSeconds": 7.781510333999904,
+      "exitCode": 0,
+      "receipt": "compile-prepared.json",
+      "sha256": "7de5cc8699f47d43a81296d168e1ae47623542a65987fb15c23fda100f0cf1c0"
+    },
+    "formatter-baseline": {
+      "wallSeconds": 0.2221846659995208,
+      "exitCode": 0,
+      "receipt": "formatter-baseline.json",
+      "sha256": "cabf8417a4c33828afd1bec7da5d8cc59cb3c5b0210dc62d26d90a73ac6e58db"
+    },
+    "prepare": {
+      "wallSeconds": 1.1018119170003047,
+      "exitCode": 0,
+      "receipt": "prepare.json",
+      "sha256": "12932f539369f768702ef82ab7ecc0edf66f92cdfa63581ad666de578c741a21"
+    },
+    "formatter-final": {
+      "wallSeconds": 0.21562579199962784,
+      "exitCode": 0,
+      "receipt": "formatter-final.json",
+      "sha256": "5155c7aa7b4fe4fb389d2dd1b50d5c459c2a8c126c7f0fc41e7fcea9899fd230"
+    },
+    "review": {
+      "wallSeconds": 56.507600124998135,
+      "exitCode": 0,
+      "receipt": "review.json",
+      "sha256": "4e39780a7da7d421a48c8b94cb0495d54f99e169f4d9e588417cf9dc592f89df"
+    },
+    "install": {
+      "wallSeconds": 2.525112832998275,
+      "exitCode": 0,
+      "receipt": "install.json",
+      "sha256": "c76f701b487814bf0bad9ff91cc8d7ce9825afca580d3986494c8561b5efbc38"
+    },
+    "compile": {
+      "wallSeconds": 8.825366041000962,
+      "exitCode": 2,
+      "receipt": "compile.json",
+      "sha256": "384dd31d2ee39afc2df1121b3f21e3e35ce7fb23dd4b6fada92783fde1c29284"
+    },
+    "counts": {
+      "focusedContracts": 22,
+      "focusedVoidPermission": 18,
+      "reviewRelatedFiles": 267,
+      "reviewRelatedTests": 3750,
+      "frictionRecords": 466,
+      "historicalUnknowns": 41
+    },
+    "final-friction": {
+      "wallSeconds": 0.20344166699942434,
+      "exitCode": 0,
+      "receipt": "final-friction.json",
+      "sha256": "9dc4016e3e171d0a2a1270056b74ddc8431c1d90cc6b75ddcc185f42153edaa8"
+    },
+    "final-schema": {
+      "wallSeconds": 0.06720570800098358,
+      "exitCode": 0,
+      "receipt": "final-schema.json",
+      "sha256": "e6aa7465badab33b8cb4092ad01cd31db4aa470b97cb74faf70763dc256784b7"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review typecheck step start at 2026-10-12T02:57:24.713Z; actual one-minute load 6.755859375."
+      }
+    }
+  },
+  "runtime": {
+    "artifactDirectory": "artifacts/qa/hv-umm2.477",
+    "resources": [
+      {
+        "name": "dispatch-friction",
+        "pid": 5605,
+        "pgid": 5605,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "omit-saved-filter",
+        "pid": 17731,
+        "pgid": 17731,
+        "exitCode": 2,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "knip",
+        "pid": 36825,
+        "pgid": 36825,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "omit-draw-matching",
+        "pid": 17079,
+        "pgid": 17079,
+        "exitCode": 2,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "omit-permission-filter",
+        "pid": 18340,
+        "pgid": 18340,
+        "exitCode": 2,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "focused-void",
+        "pid": 24924,
+        "pgid": 24924,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "focused-contracts",
+        "pid": 19745,
+        "pgid": 19745,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "compile-prepared",
+        "pid": 14923,
+        "pgid": 14923,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "formatter-baseline",
+        "pid": 7915,
+        "pgid": 7915,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "prepare",
+        "pid": 13846,
+        "pgid": 13846,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "formatter-final",
+        "pid": 13231,
+        "pgid": 13231,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "review",
+        "pid": 27407,
+        "pgid": 27407,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "install",
+        "pid": 2776,
+        "pgid": 2776,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "compile",
+        "pid": 11102,
+        "pgid": 11102,
+        "exitCode": 2,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "final-friction",
+        "pid": 48775,
+        "pgid": 48775,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      },
+      {
+        "name": "final-schema",
+        "pid": 43225,
+        "pgid": 43225,
+        "exitCode": 0,
+        "remainingGroupProcesses": []
+      }
+    ],
+    "browser": false,
+    "server": false,
+    "heavy": false,
+    "provider": false,
+    "freshCheck": {
+      "checkedAt": "2026-10-12T03:00:02.229437+00:00",
+      "groups": [
+        5605,
+        17731,
+        36825,
+        17079,
+        18340,
+        24924,
+        19745,
+        14923,
+        7915,
+        13846,
+        13231,
+        27407,
+        2776,
+        11102,
+        48775,
+        43225
+      ],
+      "remaining": []
+    }
+  },
+  "setupObservation": "First raw compiler invocation preceded generated token materialization and returned module-not-found diagnostics only. Existing prepare-workspace passed; prepared compiler passed. The failed setup receipt is retained and is not omission proof or a product defect.",
+  "browserQA": "No browser run: public formatter matrix is byte-exact and no presentation, interaction or state transition changes. Existing 462 captures are prior evidence, not rerun evidence.",
+  "friction": [],
+  "hostLoadSamples": [
+    {
+      "command": "focused-contracts",
+      "step": "prepare",
+      "startedAt": "2026-10-12T02:55:51.845Z",
+      "oneMinute": 6.93994140625
+    },
+    {
+      "command": "focused-contracts",
+      "step": "test",
+      "startedAt": "2026-10-12T02:55:52.296Z",
+      "oneMinute": 6.93994140625
+    },
+    {
+      "command": "focused-contracts",
+      "step": "restore-local-assets",
+      "startedAt": "2026-10-12T02:55:54.577Z",
+      "oneMinute": 6.9443359375
+    },
+    {
+      "command": "focused-void",
+      "step": "prepare",
+      "startedAt": "2026-10-12T02:56:55.171Z",
+      "oneMinute": 6.2392578125
+    },
+    {
+      "command": "focused-void",
+      "step": "test",
+      "startedAt": "2026-10-12T02:56:55.907Z",
+      "oneMinute": 6.2392578125
+    },
+    {
+      "command": "focused-void",
+      "step": "restore-local-assets",
+      "startedAt": "2026-10-12T02:56:58.316Z",
+      "oneMinute": 6.2197265625
+    },
+    {
+      "command": "review",
+      "step": "prepare",
+      "startedAt": "2026-10-12T02:57:24.169Z",
+      "oneMinute": 6.755859375
+    },
+    {
+      "command": "review",
+      "step": "typecheck",
+      "startedAt": "2026-10-12T02:57:24.713Z",
+      "oneMinute": 6.755859375
+    },
+    {
+      "command": "review",
+      "step": "typecheck-node",
+      "startedAt": "2026-10-12T02:57:24.715Z",
+      "oneMinute": 6.755859375
+    },
+    {
+      "command": "review",
+      "step": "import-cycles",
+      "startedAt": "2026-10-12T02:57:24.715Z",
+      "oneMinute": 6.755859375
+    },
+    {
+      "command": "review",
+      "step": "lint",
+      "startedAt": "2026-10-12T02:57:24.715Z",
+      "oneMinute": 6.755859375
+    },
+    {
+      "command": "review",
+      "step": "test-related",
+      "startedAt": "2026-10-12T02:57:24.716Z",
+      "oneMinute": 6.755859375
+    },
+    {
+      "command": "review",
+      "step": "friction-records",
+      "startedAt": "2026-10-12T02:57:24.716Z",
+      "oneMinute": 6.755859375
+    },
+    {
+      "command": "review",
+      "step": "restore-local-assets",
+      "startedAt": "2026-10-12T02:58:20.058Z",
+      "oneMinute": 9.53662109375
+    },
+    {
+      "command": "knip",
+      "step": "prepare",
+      "startedAt": "2026-10-12T02:58:33.657Z",
+      "oneMinute": 8.83837890625
+    },
+    {
+      "command": "knip",
+      "step": "knip",
+      "startedAt": "2026-10-12T02:58:34.101Z",
+      "oneMinute": 8.83837890625
+    },
+    {
+      "command": "knip",
+      "step": "restore-local-assets",
+      "startedAt": "2026-10-12T02:58:35.916Z",
+      "oneMinute": 8.83837890625
+    }
+  ],
+  "sourceFreezeVerifiedAt": "2026-10-12T03:00:02.180088+00:00",
+  "rawReceiptManifest": {
+    "filename": "raw-manifest.json",
+    "sha256": "6072c7246af3eacf8f46fccefee99853f7a213201ad8b5e3668c482ee248636f"
+  },
+  "parentAcknowledged": true,
+  "implementMin": 21.876018966666667
+}

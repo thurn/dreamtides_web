@@ -509,20 +509,36 @@ function reclaimCostPhrase(costs: readonly Cost[] | undefined): string {
   return costs === undefined ? "" : ` (cost: ${costs.length === 0 ? "nothing" : costs.map(costPhrase).join(", ")})`;
 }
 
+/** Each authorable restriction supplies both permission qualification and its ordered copy. */
+function permissionFilterFields(filter: CardFilter, many: boolean) {
+  const { costAtLeast: lower, costAtMost: upper, sparkAtLeast: sparkLower, sparkAtMost: sparkUpper } = filter;
+  return {
+    costAtLeast: {
+      qualified: lower !== undefined,
+      text: lower === undefined ? "" : upper === undefined ? `≥${String(lower)} energy cost`
+        : lower === upper ? `${String(lower)} energy cost` : `${String(lower)}–${String(upper)} energy cost`,
+    },
+    costAtMost: {
+      qualified: upper !== undefined,
+      text: lower === undefined && upper !== undefined ? `≤${String(upper)} energy cost` : "",
+    },
+    sparkAtLeast: {
+      qualified: sparkLower !== undefined,
+      text: sparkLower === undefined ? "" : sparkUpper === undefined ? `≥${String(sparkLower)}✦`
+        : sparkLower === sparkUpper ? `${String(sparkLower)}✦` : `${String(sparkLower)}–${String(sparkUpper)}✦`,
+    },
+    sparkAtMost: {
+      qualified: sparkUpper !== undefined,
+      text: sparkLower === undefined && sparkUpper !== undefined ? `≤${String(sparkUpper)}✦` : "",
+    },
+    subtype: { qualified: Boolean(filter.subtype), text: filter.subtype },
+    cardType: { qualified: filter.cardType !== undefined, text: `${filter.cardType ?? "card"}${many ? "s" : ""}` },
+  } satisfies Record<keyof CardFilter, { readonly qualified: boolean; readonly text: string | undefined }>;
+}
+
 /** The permission's effective type/subtype, copiable cost, and spark restrictions. */
 function permittedCardKind(filter: CardFilter, many: boolean): string {
-  const { costAtLeast: lower, costAtMost: upper } = filter;
-  const cost = lower !== undefined && upper !== undefined
-    ? lower === upper ? `${String(lower)} energy cost` : `${String(lower)}–${String(upper)} energy cost`
-    : upper !== undefined ? `≤${String(upper)} energy cost`
-      : lower !== undefined ? `≥${String(lower)} energy cost` : "";
-  const { sparkAtLeast: sparkLower, sparkAtMost: sparkUpper } = filter;
-  const spark = sparkLower !== undefined && sparkUpper !== undefined
-    ? sparkLower === sparkUpper ? `${String(sparkLower)}✦` : `${String(sparkLower)}–${String(sparkUpper)}✦`
-    : sparkUpper !== undefined ? `≤${String(sparkUpper)}✦`
-      : sparkLower !== undefined ? `≥${String(sparkLower)}✦` : "";
-  const cardType = filter.cardType ?? "card";
-  return [cost, spark, filter.subtype, `${cardType}${many ? "s" : ""}`].filter(Boolean).join(" ");
+  return Object.values(permissionFilterFields(filter, many)).map((field) => field.text).filter(Boolean).join(" ");
 }
 
 /** The qualified cards a permission covers, one when it is consumed by the next play. */
@@ -682,7 +698,7 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
           : `${status.once ? "A delayed ability triggers" : "An ability triggers"}${momentPhrase(status.moment, status.once, human)}`
       }${expiryPhrase(status.expiry, human)}`;
     case "playFrom": {
-      const qualified = status.filter.cardType !== undefined || Boolean(status.filter.subtype) || status.filter.costAtLeast !== undefined || status.filter.costAtMost !== undefined || status.filter.sparkAtLeast !== undefined || status.filter.sparkAtMost !== undefined;
+      const qualified = Object.values(permissionFilterFields(status.filter, false)).some((field) => field.qualified);
       const named = `Can be played from the void${qualified ? ` (${permittedCardKind(status.filter, false)})` : ""}`;
       return `${status.named ? named : `May play ${permittedCards(status)} from the void`}${expiryPhrase(status.expiry, human)}`;
     }

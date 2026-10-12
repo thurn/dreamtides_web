@@ -29,7 +29,7 @@ import type {
 } from "../../battle/types";
 import type { BattleInit as EngineBattleInit } from "../../engine";
 import type { BattleIntent, BattleSlice } from "../../engine/fold/slice";
-import type { Keyword } from "../../engine/dsl/types";
+import type { CardFilter, Keyword } from "../../engine/dsl/types";
 import type { Answer } from "../../engine/prompts/types";
 import type { Action } from "../../engine/rules/actions";
 import {
@@ -769,16 +769,17 @@ function isVariant(value: unknown): boolean {
   );
 }
 
+const CARD_FILTER_VALIDATORS = {
+  cardType: optional(isCardKind),
+  subtype: optional(isString),
+  costAtMost: optional(isIndex),
+  costAtLeast: optional(isIndex),
+  sparkAtMost: optional(isFiniteNumber),
+  sparkAtLeast: optional(isFiniteNumber),
+} satisfies Record<keyof CardFilter, (value: unknown) => boolean>;
+
 function isCardFilter(value: unknown): boolean {
-  return (
-    isPlainRecord(value) &&
-    optional(isCardKind)(value.cardType) &&
-    optional(isString)(value.subtype) &&
-    optional(isIndex)(value.costAtMost) &&
-    optional(isIndex)(value.costAtLeast) &&
-    optional(isFiniteNumber)(value.sparkAtMost) &&
-    optional(isFiniteNumber)(value.sparkAtLeast)
-  );
+  return isPlainRecord(value) && Object.entries(CARD_FILTER_VALIDATORS).every(([field, validate]) => validate(value[field]));
 }
 
 function isNextBattleEffects(value: unknown): boolean {
