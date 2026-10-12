@@ -8,7 +8,7 @@ import { isLegalAnswer } from "../prompts/answers";
 import { activated, energy, event } from "../dsl/builders";
 import { discover, draw, gainEnergy, gainPoints } from "../effects/primitives";
 import type { ConfirmPrompt, Prompt, PromptRole } from "../prompts/types";
-import { onChallenge, onDusk, triggered } from "../dsl/triggers";
+import { onChallenge, onDusk, onNight, triggered } from "../dsl/triggers";
 import { battleSeed, opponent, type InstanceId, type Side } from "../state/ids";
 import type { BattleInit, BattleState } from "../state/types";
 import { boardState } from "../testing/board";
@@ -250,6 +250,43 @@ describe("Greedy", () => {
     const finished = deciding.apply(moved, side, { kind: "pass" }, NO_PROMPTS).state;
     expect(finished.result).toMatchObject({ kind: "victory", winner: side });
     expect(deciding.apply(day, side, { kind: "pass" }, NO_PROMPTS).state.result).toBeNull();
+  });
+
+  it.each(["player", "enemy"] as const)("keeps %s's useful non-active Dusk move through the Night outcome", (side) => {
+    // Named Night triggers belong to the active side; the reward reads the
+    // opponent's blockers only after the real Dusk-ending designation.
+    const challenger: EngineCardDefinition = {
+      ...SYNTHETIC.vanilla2, id: syntheticId(0x4631),
+      abilities: () => [triggered(onNight(), gainPoints({ value: "count", of: { controller: "opponent", blocking: true } }, "opponent"))],
+    };
+    const deciding = createEngine(testCatalog([challenger]));
+    const active = opponent(side);
+    const initial = boardState(deciding.catalog, { active, phase: "day", scoreToWin: 1, [active]: { front: [challenger.id], deck }, [side]: { back: [SYNTHETIC.vanilla1.id], deck } }).state;
+    const dusk = deciding.apply(initial, active, { kind: "pass" }, NO_PROMPTS).state;
+    expect(dusk.turn.phase).toBe("dusk");
+    expect(dusk.turn.active).toBe(active);
+    const decision = deciding.decision(dusk);
+    if (decision?.side !== side) throw new Error("wrong Dusk actor");
+    const legal = deciding.legalActions(dusk, side);
+    const decklists = { [active]: entries([challenger.id, ...deck]), [side]: entries([SYNTHETIC.vanilla1.id, ...deck]) } as Record<Side, ReturnType<typeof entries>>;
+    const request: PolicyRequest = { policy: "greedy", side, key: decisionKeyOf(sliceOf(dusk)), view: deciding.view(dusk, side), decision: { kind: "topLevel", decision, legal }, decklists, seed: battleSeed("useful-dusk-move"), budget: { iterations: 128 } };
+    const before = JSON.stringify(dusk);
+    const result = runPolicy(deciding, request);
+    expect(runPolicy(deciding, JSON.parse(JSON.stringify(request)) as PolicyRequest)).toEqual(result);
+    expect(JSON.stringify(dusk)).toBe(before);
+    if (result.choice.kind !== "action") throw new Error("not an action");
+    expect(legal).toContainEqual(result.choice.action);
+    expect(result.choice.action.kind).toBe("reposition");
+    const moved = deciding.apply(dusk, side, result.choice.action, NO_PROMPTS).state;
+    expect(moved.turn.phase).toBe("dusk");
+    expect(moved.result).toBeNull();
+    const finished = deciding.apply(moved, side, { kind: "pass" }, NO_PROMPTS).state;
+    expect(finished.turn.phase).toBe("night");
+    expect(finished.result).toMatchObject({ kind: "victory", winner: side });
+    const passed = deciding.apply(dusk, side, { kind: "pass" }, NO_PROMPTS).state;
+    expect(passed.turn.phase).toBe("night");
+    expect(passed.result).toBeNull();
+    expect(passed.sides[side].score).toBe(dusk.sides[side].score);
   });
 
   it("plays the character that adds the most board spark", () => {

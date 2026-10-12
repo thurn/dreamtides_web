@@ -1,0 +1,452 @@
+{
+  "bead": "hv-umm2.463",
+  "phase": 5,
+  "base": "4079d17bb6ec48d7e5eca300e3c3addca6bcaac1",
+  "scope": {
+    "source": [
+      "src/engine/policy/policy.test.ts"
+    ],
+    "productionChanged": false,
+    "testDelta": {
+      "netLines": 37,
+      "entrypoints": 0,
+      "jsdomFiles": 0,
+      "plainContractModules": 0,
+      "parameterizedCases": 2,
+      "entrypointLines": 477
+    }
+  },
+  "claimToPrecommit": {
+    "start": "2026-10-12T00:56:28Z",
+    "startProvenance": "Fresh native assignment acknowledgement supplied by parent.",
+    "endpoint": "2026-10-12T01:02:22.694906+00:00",
+    "endpointProvenance": "Real endpoint refreshed after parent final acknowledgement immediately before final schema, staging and commit."
+  },
+  "sourceFreeze": {
+    "path": "src/engine/policy/policy.test.ts",
+    "sha256": "a069c60cab8529adc1667ed4a32ef82e75972d7d296962c247cbb464c896ed38",
+    "frozenAt": "2026-10-12T01:00:05.996718+00:00",
+    "verifiedAfterChecks": "2026-10-12T01:00:51.135354+00:00"
+  },
+  "hostLoadSamples": [
+    {
+      "step": "prepare",
+      "startedAt": "2026-10-12T00:58:35.615Z",
+      "oneMinute": 15.43408203125
+    },
+    {
+      "step": "test",
+      "startedAt": "2026-10-12T00:58:36.759Z",
+      "oneMinute": 15.43408203125
+    },
+    {
+      "step": "restore-local-assets",
+      "startedAt": "2026-10-12T00:58:37.904Z",
+      "oneMinute": 15.43408203125
+    },
+    {
+      "command": "focused-final",
+      "step": "prepare",
+      "startedAt": "2026-10-12T01:00:06.276Z",
+      "oneMinute": 15.57763671875
+    },
+    {
+      "command": "focused-final",
+      "step": "test",
+      "startedAt": "2026-10-12T01:00:07.104Z",
+      "oneMinute": 15.57763671875
+    },
+    {
+      "command": "focused-final",
+      "step": "restore-local-assets",
+      "startedAt": "2026-10-12T01:00:08.636Z",
+      "oneMinute": 15.57763671875
+    },
+    {
+      "command": "review",
+      "step": "prepare",
+      "startedAt": "2026-10-12T01:00:09.473Z",
+      "oneMinute": 15.611328125
+    },
+    {
+      "command": "review",
+      "step": "typecheck",
+      "startedAt": "2026-10-12T01:00:10.091Z",
+      "oneMinute": 15.611328125
+    },
+    {
+      "command": "review",
+      "step": "typecheck-node",
+      "startedAt": "2026-10-12T01:00:10.093Z",
+      "oneMinute": 15.611328125
+    },
+    {
+      "command": "review",
+      "step": "import-cycles",
+      "startedAt": "2026-10-12T01:00:10.093Z",
+      "oneMinute": 15.611328125
+    },
+    {
+      "command": "review",
+      "step": "lint",
+      "startedAt": "2026-10-12T01:00:10.094Z",
+      "oneMinute": 15.611328125
+    },
+    {
+      "command": "review",
+      "step": "test-related",
+      "startedAt": "2026-10-12T01:00:10.094Z",
+      "oneMinute": 15.611328125
+    },
+    {
+      "command": "review",
+      "step": "friction-records",
+      "startedAt": "2026-10-12T01:00:10.095Z",
+      "oneMinute": 15.611328125
+    },
+    {
+      "command": "review",
+      "step": "restore-local-assets",
+      "startedAt": "2026-10-12T01:00:17.930Z",
+      "oneMinute": 17.96435546875
+    },
+    {
+      "command": "knip",
+      "step": "prepare",
+      "startedAt": "2026-10-12T01:00:18.702Z",
+      "oneMinute": 17.96435546875
+    },
+    {
+      "command": "knip",
+      "step": "knip",
+      "startedAt": "2026-10-12T01:00:19.225Z",
+      "oneMinute": 17.40625
+    },
+    {
+      "command": "knip",
+      "step": "restore-local-assets",
+      "startedAt": "2026-10-12T01:00:21.435Z",
+      "oneMinute": 17.40625
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final npm run review prepare step start at 2026-10-12T01:00:09.473Z"
+      }
+    }
+  },
+  "independentReviewDisposition": {
+    "reviewOf": "hv-umm2.454",
+    "source": "e0ff5248eefe940f5e49e38021f92a65cf884da6",
+    "base": "3874aca91793ee9589dc31d331b1da439d6ab215",
+    "report": "/tmp/root454/review.md",
+    "sha256": "aa6f7870a3da1853a30b3f0e125b25b3a34d0a3042a1cc9f8986cfe9c5e19f28",
+    "settledProviderReceipt": "/tmp/root454/review-settled.json",
+    "acceptedFinding": "Useful non-active Dusk movement lacked a contract for both actors. The new case uses active-side Night trigger ownership and opponent blocker selectors.",
+    "otherAdvisories": [
+      "Per-decision simulations and neutral ties are bounded; consecutive live reposition actions have no universal cap.",
+      "The extra window pass shares the existing stackPassLimit allowance and favors safe progress when unfinished.",
+      "The public-version fault facade has no verified concrete failure; its advisory is non-actionable for this test-only bead."
+    ],
+    "productionDefectEstablished": false
+  },
+  "behavioralContract": {
+    "names": [
+      "keeps player's useful non-active Dusk move through the Night outcome",
+      "keeps enemy's useful non-active Dusk move through the Night outcome"
+    ],
+    "fixture": "A synthetic active-side Night trigger grants its opponent points for designated blockers. The inactive actor begins in back rank; only a legally chosen useful move followed by the actual Dusk-ending pass reaches victory. Direct pass reaches Night with no result or score benefit.",
+    "budgets": {
+      "iterations": 128
+    },
+    "replay": "Identical complete result from a serialized request; original state remains byte-identical.",
+    "assertionLimits": "No fixed destination, heuristic score or weight, private simulation counts, production catalog, copy or time assertions."
+  },
+  "mutation": {
+    "scope": "Temporary test-local Engine facade only; no production path writes. Both real assertions still use the unmodified engine.",
+    "attempts": [
+      {
+        "name": "mutation-denied-dusk",
+        "exitCode": 0,
+        "disposition": "Mutation insertion script failed before the temporary facade was written. Unchanged selected cases passed; this attempt is not red evidence."
+      },
+      {
+        "name": "mutation-denied-dusk-2",
+        "exitCode": 1,
+        "disposition": "Facade denied completion of a Dusk pass in policy simulation. Both selected contracts failed because the policy chose pass instead of reposition. Exact green source restored before final validation."
+      }
+    ],
+    "greenSourceSHA256": "a069c60cab8529adc1667ed4a32ef82e75972d7d296962c247cbb464c896ed38"
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "coverage": "Test-only delta adds no new transition or error handling. Existing keeps legal progress and its input intact under a error simulated boundary continuation covers the repair boundary."
+    },
+    {
+      "path": "reload or restart",
+      "coverage": "Both new named contracts replay the complete policy result from a JSON-serialized public request."
+    },
+    {
+      "path": "partial write",
+      "coverage": "Both new named contracts assert the original input remains byte-identical. Policy decisions write no persistent state; this bead changes tests only."
+    },
+    {
+      "path": "invalid or stale input",
+      "coverage": "Both new named contracts assert the chosen action belongs to actual legal actions. No intent submission or request freshness implementation changes; stale-key rejection remains host and fold scope."
+    },
+    {
+      "path": "concurrent actors",
+      "coverage": "Each new actor case owns independent engine, board and request state. No shared mutable policy state or concurrent writes are introduced by this test-only delta."
+    }
+  ],
+  "priorBrowserQA": {
+    "bead": "hv-umm2.454",
+    "reportSHA256": "f0fc2149d062b21086136781dc239ba8d9121df11082aae57cfa9e6296cb2736",
+    "path": "artifacts/qa/hv-umm2.454",
+    "scope": "Existing real default Greedy healthy-worker desktop/mobile Threshold Challenge payment re-judgment. This bead produces no browser run and makes no broader liveness claim."
+  },
+  "validation": {
+    "focusedInitial": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "start": "2026-10-12T00:58:35.015010+00:00",
+      "end": "2026-10-12T00:58:38.311238+00:00",
+      "wallSeconds": 3.296070165999481,
+      "exitCode": 0,
+      "pid": 36312,
+      "pgid": 36312,
+      "freshGroupMembers": []
+    },
+    "focusedFinal": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "start": "2026-10-12T01:00:06.030300+00:00",
+      "end": "2026-10-12T01:00:09.178979+00:00",
+      "wallSeconds": 3.148493042001064,
+      "exitCode": 0,
+      "pid": 44765,
+      "pgid": 44765,
+      "freshGroupMembers": []
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T01:00:09.216804+00:00",
+      "end": "2026-10-12T01:00:18.441690+00:00",
+      "wallSeconds": 9.224593665998327,
+      "exitCode": 0,
+      "pid": 45181,
+      "pgid": 45181,
+      "freshGroupMembers": []
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T01:00:18.474794+00:00",
+      "end": "2026-10-12T01:00:22.017098+00:00",
+      "wallSeconds": 3.5421372079999855,
+      "exitCode": 0,
+      "pid": 46015,
+      "pgid": 46015,
+      "freshGroupMembers": []
+    },
+    "counts": {
+      "focusedTests": 25,
+      "reviewRelatedFiles": 1,
+      "reviewRelatedTests": 25,
+      "frictionRecords": 442,
+      "historicalUnknowns": 41
+    },
+    "scope": "Affected policy entrypoint plus diff-aware lint, both typechecks, import cycles and friction schema; no full suite, browser run or fuzz.",
+    "schemaFinal": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T01:00:51.160277+00:00",
+      "end": "2026-10-12T01:00:51.265134+00:00",
+      "wallSeconds": 0.10472970800037729,
+      "exitCode": 0,
+      "pid": 51014,
+      "pgid": 51014,
+      "freshGroupMembers": []
+    },
+    "schemaAfterAcknowledgement": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T01:02:22.695525+00:00",
+      "end": "2026-10-12T01:02:22.785077+00:00",
+      "wallSeconds": 0.08958475000144972,
+      "exitCode": 0,
+      "group": "Same owned finalize group, settled in external receipt."
+    }
+  },
+  "runtime": {
+    "install": {
+      "execSession": 63827,
+      "actualExitCode": 0,
+      "pgid": null,
+      "note": "Short native command completed before PID sampling; actual native completion retained. No npm server or watcher was launched."
+    },
+    "ownedReceipts": [
+      {
+        "argv": [
+          "npm",
+          "run",
+          "friction:triggers"
+        ],
+        "start": "2026-10-12T00:58:11.812768+00:00",
+        "end": "2026-10-12T00:58:12.067058+00:00",
+        "wallSeconds": 0.25420808299895725,
+        "exitCode": 0,
+        "pid": 34514,
+        "pgid": 34514,
+        "freshGroupMembers": []
+      },
+      {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/policy/policy.test.ts"
+        ],
+        "start": "2026-10-12T00:58:35.015010+00:00",
+        "end": "2026-10-12T00:58:38.311238+00:00",
+        "wallSeconds": 3.296070165999481,
+        "exitCode": 0,
+        "pid": 36312,
+        "pgid": 36312,
+        "freshGroupMembers": []
+      },
+      {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/policy/policy.test.ts"
+        ],
+        "start": "2026-10-12T01:00:06.030300+00:00",
+        "end": "2026-10-12T01:00:09.178979+00:00",
+        "wallSeconds": 3.148493042001064,
+        "exitCode": 0,
+        "pid": 44765,
+        "pgid": 44765,
+        "freshGroupMembers": []
+      },
+      {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "start": "2026-10-12T01:00:18.474794+00:00",
+        "end": "2026-10-12T01:00:22.017098+00:00",
+        "wallSeconds": 3.5421372079999855,
+        "exitCode": 0,
+        "pid": 46015,
+        "pgid": 46015,
+        "freshGroupMembers": []
+      },
+      {
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "src/engine/policy/policy.test.ts",
+          "-t",
+          "useful non-active Dusk"
+        ],
+        "start": "2026-10-12T00:59:15.174709+00:00",
+        "end": "2026-10-12T00:59:16.402617+00:00",
+        "wallSeconds": 1.2277724590003345,
+        "exitCode": 1,
+        "pid": 40027,
+        "pgid": 40027,
+        "freshGroupMembers": []
+      },
+      {
+        "argv": [
+          "npx",
+          "vitest",
+          "run",
+          "src/engine/policy/policy.test.ts",
+          "-t",
+          "useful non-active Dusk"
+        ],
+        "start": "2026-10-12T00:59:04.413920+00:00",
+        "end": "2026-10-12T00:59:05.601742+00:00",
+        "wallSeconds": 1.1876935420004884,
+        "exitCode": 0,
+        "pid": 38864,
+        "pgid": 38864,
+        "freshGroupMembers": []
+      },
+      {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "start": "2026-10-12T01:00:09.216804+00:00",
+        "end": "2026-10-12T01:00:18.441690+00:00",
+        "wallSeconds": 9.224593665998327,
+        "exitCode": 0,
+        "pid": 45181,
+        "pgid": 45181,
+        "freshGroupMembers": []
+      },
+      {
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "start": "2026-10-12T01:00:51.160277+00:00",
+        "end": "2026-10-12T01:00:51.265134+00:00",
+        "wallSeconds": 0.10472970800037729,
+        "exitCode": 0,
+        "pid": 51014,
+        "pgid": 51014,
+        "freshGroupMembers": []
+      }
+    ],
+    "freshCheck": {
+      "checkedAt": "2026-10-12T01:00:51.265134+00:00",
+      "groups": [
+        34514,
+        36312,
+        38864,
+        40027,
+        44765,
+        45181,
+        46015,
+        51014
+      ],
+      "remaining": []
+    },
+    "durableReceiptDirectory": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.463/verification"
+  },
+  "friction": [],
+  "parentAcknowledged": true,
+  "implementMin": 5.911581766666667
+}
