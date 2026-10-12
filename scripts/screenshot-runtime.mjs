@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { execFileSync, spawn } from "node:child_process";
 import { pathToFileURL } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
@@ -202,6 +202,39 @@ export async function stopProcessTree(child, timeoutMs = 5_000) {
     // The process tree exited between the timeout and the signal.
   }
   await Promise.race([exited, sleep(1_000)]);
+}
+
+/**
+ * Whether every process listening on TCP `port` descends from `pid`, so a
+ * server that answers there is the caller's own and not a peer's that bound
+ * the port first.
+ *
+ * @param {number} port
+ * @param {number} pid
+ * @returns {boolean}
+ */
+export function listenerOwnedBy(port, pid) {
+  /** @type {string} */
+  let listeners;
+  try {
+    listeners = execFileSync("lsof", ["-nP", "-a", `-iTCP:${String(port)}`, "-sTCP:LISTEN", "-t"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+  } catch (error) {
+    // lsof exits 1 when nothing matches.
+    if (typeof error === "object" && error !== null && "status" in error && error.status === 1) return false;
+    throw error;
+  }
+  const parents = new Map(execFileSync("ps", ["-A", "-o", "pid=,ppid="], { encoding: "utf8" })
+    .trim().split("\n").map((line) => {
+      const [child = 0, parent = 0] = line.trim().split(/\s+/u).map(Number);
+      return [child, parent];
+    }));
+  const pids = listeners.split("\n").filter((line) => line !== "").map(Number);
+  return pids.length > 0 && pids.every((listener) => {
+    for (let current = listener; current > 1; current = parents.get(current) ?? 1) {
+      if (current === pid) return true;
+    }
+    return false;
+  });
 }
 
 /**

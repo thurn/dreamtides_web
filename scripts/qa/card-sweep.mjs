@@ -6,8 +6,8 @@
 //
 // For each card, side, and variant it runs the `card-lab-play` scenario
 // (scripts/qa/scenarios/card-lab-play.mjs) in the card-lab through a runner
-// session (`openQaSession`: its own dev server, MCP client, and the browser
-// lease), and appends one QA ledger line per verdict to
+// session (`openQaSession`: its own dev server, MCP client, and browser
+// slot), and appends one QA ledger line per verdict to
 // docs/plan/evidence/qa-ledger/<bead>.jsonl. The defaults sweep every
 // variant on both sides. A card's base run reports the variants it can take;
 // the others are recorded as `skip` without a run. A run that hangs fails at
@@ -16,17 +16,19 @@
 // `starter` names the catalog's Starter
 // cards. Each ledger line's `commit` is the base OID the bead was built on,
 // `git merge-base HEAD staging`. Exits 1 when any effective cell verdict is `fail`.
-// At each card boundary where other processes queue for the browser lease,
-// the sweep closes its session and opens a fresh one behind them
-// (`sweepCards`); the summary separates lease wait from execution.
+// At each card boundary where other processes queue and every browser slot is
+// taken, the sweep closes its session and opens a fresh one behind them
+// (`sweepCards`); the summary separates lease wait from execution. Each
+// invocation's server log, reports, and captures live in its own
+// `artifacts/qa/<bead>/sweep-*/` directory.
 
 import { execFileSync } from "node:child_process";
 import { appendFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { loadavg } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { browserLeaseWaiters } from "./browser-lease.mjs";
-import { openQaSession, say } from "./run-scenario.mjs";
+import { browserLeaseContended } from "./browser-lease.mjs";
+import { openQaSession, qaCaptureDir, say } from "./run-scenario.mjs";
 import cardLabPlay from "./scenarios/card-lab-play.mjs";
 
 const repoRoot = resolve(fileURLToPath(new URL("../..", import.meta.url)));
@@ -141,27 +143,28 @@ export async function runSweepCell({ run, closed, save, record }) {
 }
 
 /**
- * Sweeps each card through a QA session, yielding the browser lease at every
- * card boundary where other processes wait for it: the session (its server,
- * browser, and lease) closes, and a fresh one opens and queues behind them.
- * Stops after a card that leaves its session non-runnable.
+ * Sweeps each card through a QA session, yielding its browser slot at every
+ * card boundary where `contended` holds (`browserLeaseContended`: processes
+ * wait and no slot is free for them): the session (its server, browser, and
+ * slot) closes, and a fresh one opens and queues behind them. Stops after a
+ * card that leaves its session non-runnable.
  *
  * @template {{ closed: () => boolean, close: () => Promise<void> }} S
  * @param {string[]} cards
- * @param {{ open: () => Promise<S>, waiters: (session: S) => number, sweepCard: (card: string, session: S) => Promise<void> }} operations
+ * @param {{ open: () => Promise<S>, contended: (session: S) => Promise<boolean>, sweepCard: (card: string, session: S) => Promise<void> }} operations
  * @returns {Promise<{ sessions: number, yields: number }>}
  */
-export async function sweepCards(cards, { open, waiters, sweepCard }) {
+export async function sweepCards(cards, { open, contended, sweepCard }) {
   let session = /** @type {S | null} */ (null);
   let sessions = 0;
   let yields = 0;
   try {
     for (const card of cards) {
-      if (session !== null && waiters(session) > 0) {
+      if (session !== null && await contended(session)) {
         const yielding = session;
         session = null;
         yields++;
-        say(`yielding the browser lease to queued waiters before card ${card}`);
+        say(`yielding a browser slot to queued waiters before card ${card}`);
         await yielding.close();
       }
       if (session === null) {
@@ -210,27 +213,24 @@ async function main() {
 
   /** Summed over the sweep's sessions. */
   const wallMs = { browserLeaseWait: 0, serve: 0, scenario: 0, cleanup: 0 };
-  /** @type {string | null} */
-  let captureDir = null;
-  /** @type {string | null} */
-  let invocationDir = null;
+  const captureDir = qaCaptureDir(options.bead);
+  mkdirSync(captureDir, { recursive: true });
+  const invocationDir = mkdtempSync(join(captureDir, "sweep-"));
+  const invocation = basename(invocationDir);
   const { sessions, yields } = await sweepCards(options.cards, {
     open: async () => {
-      const session = await openQaSession({ bead: options.bead, label: "card-sweep", port: options.port, prod: false, minify: false, cwd: null });
+      const session = await openQaSession({ bead: options.bead, label: `${invocation}/card-sweep`, port: options.port, prod: false, minify: false, cwd: null });
       wallMs.browserLeaseWait += session.wallMs.browserLeaseWait ?? 0;
       wallMs.serve += session.wallMs.serve ?? 0;
-      captureDir = session.captureDir;
       return { ...session, close: async () => {
         const cleanupStarted = performance.now();
         try { await session.close(); } finally { wallMs.cleanup += performance.now() - cleanupStarted; }
       } };
     },
-    waiters: (session) => browserLeaseWaiters(session.leasePath),
+    contended: (session) => browserLeaseContended(session.leasePath),
     sweepCard: async (card, session) => {
       const scenarioStarted = performance.now();
       try {
-        const artifacts = invocationDir ??= mkdtempSync(join(session.captureDir, "sweep-"));
-        const invocation = basename(artifacts);
         for (const side of options.sides) {
           /** @type {string[] | null} */
           let eligible = null;
@@ -249,7 +249,7 @@ async function main() {
               closed: session.closed,
               save: (report, attempt) => {
                 const filename = `sweep-${card}-${variant}-${side}-attempt-${String(attempt)}.result.json`;
-                writeFileSync(join(artifacts, filename), JSON.stringify(report, null, 2) + "\n");
+                writeFileSync(join(invocationDir, filename), JSON.stringify(report, null, 2) + "\n");
                 return `${invocation}/${filename}`;
               },
               record: (line) => record({ ...base, ...line }),
@@ -265,8 +265,8 @@ async function main() {
   const total = performance.now() - startedClock;
   const summary = { event: "cardSweepSummary", counts, attemptCounts, hostLoad, sessions, leaseYields: yields,
     wallMs: { ...wallMs, execution: total - wallMs.browserLeaseWait, total } };
-  if (invocationDir !== null) writeFileSync(join(invocationDir, "summary.json"), JSON.stringify(summary, null, 2) + "\n");
-  if (captureDir !== null) writeFileSync(join(captureDir, "card-sweep.summary.json"), JSON.stringify(summary, null, 2) + "\n");
+  writeFileSync(join(invocationDir, "summary.json"), JSON.stringify(summary, null, 2) + "\n");
+  writeFileSync(join(captureDir, "card-sweep.summary.json"), JSON.stringify(summary, null, 2) + "\n");
   say(JSON.stringify(summary));
   say(`sweep total ${(total / 1000).toFixed(1)} s: browser lease wait ${(wallMs.browserLeaseWait / 1000).toFixed(1)} s over ${String(sessions)} sessions, execution ${((total - wallMs.browserLeaseWait) / 1000).toFixed(1)} s at load ${hostLoad.toFixed(2)}: cells ${JSON.stringify(counts)}, attempts ${JSON.stringify(attemptCounts)}; ledger ${ledger}`);
   process.exitCode = (counts.fail ?? 0) > 0 ? 1 : 0;

@@ -19,9 +19,10 @@
 // response is lost when the call outlasts about five minutes, so a longer
 // walk is split into steps or viewports.
 //
-// The runner serves <checkout> (default: this one) on a free port of 5174 or
-// higher (never 5173): `scripts/dev.mjs`, or with --prod `vite build` into a
-// temporary directory and `vite preview`. The production build skips
+// The runner takes one of the repository's browser slots (README § Browser
+// QA) and serves <checkout> (default: this one) with a strict port, the first
+// free one in its slot's range from 5174 (never 5173): `scripts/dev.mjs`, or
+// with --prod `vite build` into a temporary directory and `vite preview`. The production build skips
 // minification unless --minify, so `__caps` names the real identifiers; the
 // chunking and module evaluation order are the production bundle's. It opens its own MCP client, whose
 // first root is the primary checkout, so captures land in
@@ -31,17 +32,20 @@
 // captures as <scenario>.result.json, stops its own process group, and exits
 // non-zero when the scenario throws or any document's __caps is not empty.
 
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { execFileSync, spawn } from "node:child_process";
 import { closeSync, existsSync, mkdirSync, mkdtempSync, openSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "node:fs";
 import { createConnection, createServer } from "node:net";
 import { loadavg, tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
+import { setTimeout as delay } from "node:timers/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createBattleDriver, createQa } from "./prelude.mjs";
-import { acquireBrowserLease, browserLeasePath } from "./browser-lease.mjs";
+import { acquireBrowserLease, browserLeasePath, tryBrowserLock } from "./browser-lease.mjs";
+import { QA_PORTS_PER_SLOT } from "./browser-qa-capacity.mjs";
 import {
   connectPlaywrightMcp,
+  listenerOwnedBy,
   McpToolResponseError,
   parseMcpResult,
   sleep,
@@ -203,6 +207,15 @@ async function loadScenario(path) {
   };
 }
 
+/**
+ * A bead's capture directory, `artifacts/qa/<bead>/` of the primary checkout.
+ *
+ * @param {string} bead
+ */
+export function qaCaptureDir(bead) {
+  return join(primaryCheckoutOf(repoRoot), "artifacts", "qa", bead);
+}
+
 /** @returns {string} */
 function primaryCheckoutOf(/** @type {string} */ checkout) {
   const commonDir = execFileSync(
@@ -236,12 +249,19 @@ async function isPortFree(port) {
   });
 }
 
-/** @returns {Promise<number>} */
-async function findFreePort() {
-  for (let port = FIRST_QA_PORT; port < FIRST_QA_PORT + 200; port++) {
+/**
+ * The first free port in a browser slot's range. Slot holders exclude each
+ * other, so two holders never pick the same port.
+ *
+ * @param {number} slot
+ * @returns {Promise<number>}
+ */
+async function findFreePort(slot) {
+  const first = FIRST_QA_PORT + slot * QA_PORTS_PER_SLOT;
+  for (let port = first; port < first + QA_PORTS_PER_SLOT; port++) {
     if (await isPortFree(port)) return port;
   }
-  throw new Error("no free port from 5174 upward");
+  throw new Error(`no free port in browser slot ${String(slot)}'s range from ${String(first)}`);
 }
 
 /**
@@ -316,7 +336,9 @@ export function say(message) {
  * @property {number} port
  * @property {number | null} serverPid
  * @property {string} captureDir
- * @property {string} leasePath The repository browser lease the session holds until `close()` settles.
+ * @property {string} leasePath The repository's browser admission path (`browserLeasePath`).
+ * @property {number} slot The browser slot the session holds until `close()` settles.
+ * @property {string} ownerPath The slot's ownership record.
  * @property {Record<string, number>} wallMs Browser lease wait, build, and serve times.
  * @property {(scenarioSource: string, args: Record<string, string>, timeoutMs: number, call?: QaCall) => Promise<import("./prelude.mjs").QaResult>} run
  *   Runs one scenario function's source with the helper prelude on the session's server.
@@ -462,21 +484,30 @@ export async function runScenarioPlan(run, plan, args, timeoutMs, { captureDir, 
  * `main`, and tools built on it such as the card sweep. Stops everything on
  * `close()`, SIGINT, or SIGTERM.
  *
+ * The session owns the evidence named by its bead and label: it holds a
+ * kernel lock on `<label>.server.log` from before it waits for a browser slot
+ * until cleanup settles, so a concurrent run with the same bead and label
+ * fails before it touches any of that evidence. Sessions serving the same
+ * checkout start their servers one at a time, under a kernel lock keyed by
+ * the checkout, because workspace preparation is not safe to run twice at
+ * once in one checkout.
+ *
  * @param {{ bead: string, label: string, port: number | null, prod: boolean, minify: boolean, cwd: string | null }} options
  * @returns {Promise<QaSession>}
  */
 export async function openQaSession(options) {
   const checkout = options.cwd ?? repoRoot;
   const primaryCheckout = primaryCheckoutOf(repoRoot);
-  const captureDir = join(primaryCheckout, "artifacts", "qa", options.bead);
-  mkdirSync(captureDir, { recursive: true });
+  const captureDir = qaCaptureDir(options.bead);
+  const serverLog = join(captureDir, `${options.label}.server.log`);
+  mkdirSync(dirname(serverLog), { recursive: true });
   const controller = new AbortController();
   const { signal } = controller;
   let port = options.port ?? FIRST_QA_PORT;
   let logFd = /** @type {number | null} */ (null);
   let outDir = /** @type {string | null} */ (null);
   const leasePath = browserLeasePath(primaryCheckout);
-  const ownerPath = `${leasePath}.owner.json`;
+  let ownerPath = "";
   let ownRecord = /** @type {string | null} */ (null);
   let owner = /** @type {Record<string, string | number> | null} */ (null);
   const retainOwner = (/** @type {string} */ providerState) => {
@@ -493,7 +524,10 @@ export async function openQaSession(options) {
     unlinkSync(ownerPath);
     ownRecord = null;
   };
-  let lease = /** @type {Awaited<ReturnType<typeof acquireBrowserLease>> | null} */ (null);
+  let evidence = /** @type {Awaited<ReturnType<typeof tryBrowserLock>>} */ (null);
+  let starting = /** @type {Awaited<ReturnType<typeof tryBrowserLock>>} */ (null);
+  const startPath = join(primaryCheckout, "artifacts", "qa", `.serve-${createHash("sha256").update(checkout).digest("hex").slice(0, 16)}.lock`);
+  let lease = /** @type {import("./browser-lease.mjs").BrowserLease | null} */ (null);
   let builder = /** @type {import("node:child_process").ChildProcess | null} */ (null);
   let server = /** @type {import("node:child_process").ChildProcess | null} */ (null);
   let mcp = /** @type {Awaited<ReturnType<typeof connectPlaywrightMcp>> | null} */ (null);
@@ -542,7 +576,12 @@ export async function openQaSession(options) {
           }
         } finally {
           for (const [name, handler] of handlers) process.removeListener(name, handler);
-          await lease?.release();
+          try {
+            await starting?.release();
+            await lease?.release();
+          } finally {
+            await evidence?.release();
+          }
         }
       }
     })();
@@ -562,20 +601,28 @@ export async function openQaSession(options) {
   }
 
   startup = (async () => {
+    evidence = await tryBrowserLock(serverLog, signal);
+    if (evidence === null) throw new Error(`another live QA run owns ${serverLog} and the evidence its label names`);
     const waitStart = Date.now();
-    lease = await acquireBrowserLease(leasePath, { signal, onWait: () => say(`waiting for browser lease ${leasePath}`) });
-    if (existsSync(ownerPath)) throw new Error(`browser provider requires reconciliation before QA startup: ${ownerPath}`);
+    lease = await acquireBrowserLease(leasePath, { signal, onWait: () => say(`waiting for a browser slot (${leasePath})`) });
     wallMs.browserLeaseWait = Date.now() - waitStart;
+    ownerPath = lease.ownerPath;
+    for (const retained of lease.quarantined) say(`passed over a browser slot retained for reconciliation: ${retained}`);
+    say(`holding browser slot ${String(lease.slot)} (${lease.path})`);
     signal.throwIfAborted();
-    port = options.port ?? (await findFreePort());
+    port = options.port ?? (await findFreePort(lease.slot));
     if (!(await isPortFree(port))) throw new Error(`port ${String(port)} is in use`);
     signal.throwIfAborted();
     const baseUrl = `http://localhost:${String(port)}`;
-    const serverLog = join(captureDir, `${options.label}.server.log`);
     logFd = openSync(serverLog, "w");
     outDir = options.prod ? mkdtempSync(join(tmpdir(), "dreamtides-qa-")) : null;
     say(`${options.label} for ${options.bead}: serving ${checkout} ${options.prod ? "(production build)" : "(dev)"} on port ${String(port)}; server log ${serverLog}`);
     const serveStart = Date.now();
+    while ((starting = await tryBrowserLock(startPath, signal)) === null) {
+      if (wallMs.serveWait === undefined) say(`waiting for another run's server startup in ${checkout}`);
+      wallMs.serveWait = Date.now() - serveStart;
+      await delay(300, undefined, { signal });
+    }
     if (outDir !== null) {
       for (const [command, args] of /** @type {Array<[string, string[]]>} */ ([
         [process.execPath, ["scripts/prepare-workspace.mjs"]],
@@ -590,13 +637,15 @@ export async function openQaSession(options) {
       signal.throwIfAborted();
       server = spawnLogged("vite", ["preview", "--outDir", outDir, "--port", String(port), "--strictPort"], { cwd: checkout, logFd });
     } else {
-      server = spawnLogged(process.execPath, ["scripts/dev.mjs", "--port", String(port)], { cwd: checkout, logFd });
+      server = spawnLogged(process.execPath, ["scripts/dev.mjs", "--port", String(port), "--strictPort"], { cwd: checkout, logFd });
     }
     await waitUntilServing(baseUrl, server, 120_000, signal);
+    if (!listenerOwnedBy(port, Number(server.pid))) throw new Error(`port ${String(port)} is answered by a process outside server ${String(server.pid)}`);
+    await starting.release();
     wallMs.serve = Date.now() - serveStart;
     signal.throwIfAborted();
     say(`server pid ${String(server.pid)} (process group) serving ${baseUrl}`);
-    owner = { token: randomUUID(), pid: process.pid, bead: options.bead, label: options.label, checkout, startedAt: new Date().toISOString(), providerState: "active" };
+    owner = { token: randomUUID(), pid: process.pid, bead: options.bead, label: options.label, checkout, slot: lease.slot, port, startedAt: new Date().toISOString(), providerState: "active" };
     const record = `${JSON.stringify(owner)}\n`;
     writeFileSync(ownerPath, record, { flag: "wx" });
     ownRecord = record;
@@ -614,7 +663,8 @@ export async function openQaSession(options) {
   }
   const baseUrl = `http://localhost:${String(port)}`;
   const client = /** @type {Awaited<ReturnType<typeof connectPlaywrightMcp>> | null} */ (mcp);
-  if (client === null) {
+  const held = /** @type {import("./browser-lease.mjs").BrowserLease | null} */ (lease);
+  if (client === null || held === null) {
     await close();
     throw new Error("QA startup did not create its MCP client");
   }
@@ -636,6 +686,8 @@ export async function openQaSession(options) {
     serverPid: server?.pid ?? null,
     captureDir,
     leasePath,
+    slot: held.slot,
+    ownerPath,
     wallMs,
     run,
     runPlan: (plan, args, timeoutMs, options = {}) =>
@@ -668,6 +720,7 @@ async function main() {
       mode: options.prod ? "prod" : "dev",
       checkout: options.cwd ?? repoRoot,
       port: session.port,
+      slot: session.slot,
       serverPid: session.serverPid,
       hostLoad,
       wallMs,

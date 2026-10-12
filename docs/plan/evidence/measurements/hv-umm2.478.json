@@ -1,0 +1,45 @@
+{
+  "bead": "hv-umm2.478",
+  "phase": 5,
+  "baseline": {
+    "source": "docs/plan/evidence/measurements/hv-umm2.465.json",
+    "browserLeaseWaitS": { "median": 232.8, "max": 742.8 },
+    "capacity": 1
+  },
+  "capacity": { "setting": "BROWSER_QA_SLOTS", "module": "scripts/qa/browser-qa-capacity.mjs", "slots": 2, "portsPerSlot": 100 },
+  "mcpIsolation": {
+    "service": "launchd com.dthurn.codex.playwright-mcp, http://127.0.0.1:8931/mcp",
+    "package": "@playwright/mcp 0.0.79 (playwright-core 1.63.0-alpha-2026-08-05)",
+    "config": { "browser.isolated": true, "headless": true, "sharedBrowserContext": "unset" },
+    "source": [
+      "tools/mcp/program.ts factory.create: useSharedBrowser = sharedBrowserContext || browser.isolated; one shared browser, browser.newContext(contextOptions) per client",
+      "dispose callback: while other clients remain, closes only that client's context; the browser closes with the last client",
+      "BrowserBackend.callTool: browser_close sets isClose and disposes only its own backend",
+      "utils/mcp/http.ts: each streamable-HTTP session (mcp-session-id) creates its own backend through factory.create"
+    ]
+  },
+  "realCheck": {
+    "artifacts": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.478/",
+    "attempt1": {
+      "result": "battle-result failed before serving: both dev servers ran prepare-workspace in one checkout (setup-assets symlink EEXIST); ai-reveal passed on slot 0, port 5174. Fixed by per-checkout startup serialization.",
+      "logs": ["battle-result.server.log (overwritten by attempt 2)"]
+    },
+    "attempt2": {
+      "hostLoad": 7.34,
+      "note": "an older-checkout card sweep (hv-umm2.144, single-slot protocol, --port 5174) held slot 0 throughout; battle-result ran on slot 1 beside it, and ai-reveal queued then took slot 1 when battle-result released it",
+      "runs": [
+        { "scenario": "battle-result", "ok": true, "slot": 1, "port": 5274, "serverPid": 23708, "wallMs": { "browserLeaseWait": 5, "serve": 1036, "scenario": 8929, "total": 10012 }, "portFreeAfter": true },
+        { "scenario": "ai-reveal", "ok": true, "slot": 1, "port": 5274, "serverPid": 26805, "wallMs": { "browserLeaseWait": 10219, "serve": 1040, "scenario": 6091, "total": 17393 }, "portFreeAfter": true }
+      ]
+    },
+    "attempt3": {
+      "hostLoad": 8.48,
+      "scenarios": "bead-local ctx-a/ctx-b: each adds a context cookie for host localhost and lists the context's qa_ctx_* cookies for 30 s while the other does the same",
+      "runs": [
+        { "scenario": "ctx-a", "ok": true, "slot": 1, "port": 5274, "serverPid": 33964, "seenCookies": ["qa_ctx_a"], "wallMs": { "browserLeaseWait": 6, "serve": 1660, "scenario": 34374, "total": 36085 }, "portFreeAfter": true },
+        { "scenario": "ctx-b", "ok": true, "slot": 0, "port": 5174, "serverPid": 34175, "seenCookies": ["qa_ctx_b"], "wallMs": { "browserLeaseWait": 110, "serveWait": 1520, "serve": 3172, "scenario": 32732, "total": 36063 }, "portFreeAfter": true }
+      ],
+      "conclusion": "two runs held both slots at once on distinct ports and server process groups, in separate MCP browser contexts, each with its own result, server log, and game log; the older-checkout run (hv-umm2.144 mass-final, --port 5174) queued for slot 0 and started at 03:22:02Z after ctx-b released it"
+    }
+  }
+}

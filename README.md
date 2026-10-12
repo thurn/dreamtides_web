@@ -120,7 +120,7 @@ node scripts/qa/run-scenario.mjs smoke --bead <bead-id> --prod   # vite build + 
 | Option | Effect |
 | --- | --- |
 | `--bead <id>` | Required. Captures and the report go to `artifacts/qa/<id>/` of the primary checkout |
-| `--port <n>` | Serve on `n` (5174 or higher); default: the first free port from 5174 |
+| `--port <n>` | Serve on `n` (5174 or higher); default: the first free port of the run's browser slot range, from `5174 + 100 × slot` |
 | `--prod` | Build into a temporary directory and serve it with `vite preview`; unminified, so `__caps` names real identifiers |
 | `--minify` | With `--prod`, keep the production minifier |
 | `--cwd <checkout>` | Serve another checkout, such as a detached base worktree outside the repository |
@@ -128,44 +128,88 @@ node scripts/qa/run-scenario.mjs smoke --bead <bead-id> --prod   # vite build + 
 | `--viewports <list>` | Run the scenario once per viewport, `desktop` and/or `mobile` (default: the module's `viewports`, else `desktop`) |
 | `--timeout <s>` | Time limit for the whole run, every call included (default 900) |
 
-The scenario runner and card sweep automatically acquire the same native
-browser lease, `artifacts/browser-qa.lock` in the primary checkout, across all
-worktrees. A waiting command starts its server and MCP connection after the
-previous command finishes browser and server cleanup.
+The scenario runner and card sweep automatically take one of the repository's
+**browser slots**, shared by every worktree, so up to `BROWSER_QA_SLOTS`
+runs (two; `scripts/qa/browser-qa-capacity.mjs`) use the Playwright MCP
+service at once. Each slot is a native kernel lock in the primary checkout:
+slot 0 is `artifacts/browser-qa.lock`, and slot `s` of 1 or more is
+`artifacts/qa/.browser-qa.slot-<s>.lock`. A waiting command starts its server
+and MCP connection only once it holds a slot, which its previous holder
+releases after finishing browser and server cleanup.
 
-Waiters are served first come, first served. Each takes a ticket,
-`artifacts/qa/.browser-qa.lock.queue/<sequence>-<pid>`, and attempts the
-kernel lock only while its ticket is the oldest live one; it refreshes the
-ticket while it waits and removes it once it holds the lease or gives up.
-Waiters reap a ticket ahead of them whose process has exited or that has not
-been refreshed for 30 s, so a killed waiter never blocks the queue. The kernel
-lock alone excludes holders: a process that takes the lock without a ticket
-may run ahead of the queue, but never alongside the holder. The card sweep
-yields at card boundaries: before each card after the first, if any process is
-queued, it closes its session (browser, server, and lease) and opens a fresh
-one behind the waiters. Its summary records `sessions`, `leaseYields`, and
-`wallMs.browserLeaseWait`, `serve`, `scenario`, and `cleanup` summed over its
-sessions, with `execution` as the total less lease wait. A lease wait that
-costs a bead friction is recorded under the canonical tag `browser-lease-wait`
-(`docs/plan/evidence/friction-tags.json` aliases its variants).
+Each run owns what it starts: its MCP client and the browser context the
+service creates for that client alone (`browser.isolated`), its server's
+process group, its port, its slot's ownership record, and the evidence its
+bead and label name. Its cleanup touches nothing else, so one run's close,
+failure, signal, or crash never closes or erases another live run's.
+
+- **Admission.** Waiters are served first come, first served. Each takes a
+  ticket, `artifacts/qa/.browser-qa.lock.queue/<sequence>-<pid>`, and
+  attempts the slots only while its ticket is the oldest live one, taking
+  the first free slot from the highest down; it refreshes the ticket while it
+  waits and removes it once it holds a slot or gives up. Waiters reap a
+  ticket ahead of them whose process has exited or that has not been
+  refreshed for 30 s, so a killed waiter never blocks the queue. The kernel
+  locks alone exclude holders: a process that takes a lock without a ticket
+  may run ahead of the queue, but never shares a slot.
+- **Ports.** A run serves with a strict port on `--port`, or on the first
+  free port of its slot's range, `5174 + 100 × s` upward
+  (`QA_PORTS_PER_SLOT`), so two slot holders never pick the same port. Once
+  the server answers, every process listening on the port must descend from
+  the run's own server, or the run fails rather than use a server it did not
+  start.
+- **Startup.** Runs serving the same checkout start their servers one at a
+  time, under a kernel lock keyed by the checkout
+  (`artifacts/qa/.serve-<hash>.lock`), because workspace preparation is not
+  safe to run twice at once in one checkout; `wallMs.serveWait` records that
+  wait.
+- **Evidence.** A run holds a kernel lock on its server log,
+  `artifacts/qa/<bead-id>/<label>.server.log`, from before it waits for a
+  slot until its cleanup settles. The runner's label is its report name; the
+  sweep's is `sweep-*/card-sweep`, inside the invocation directory that also
+  holds its reports and captures. A second live run with the same bead and
+  label fails before it writes any of that evidence.
+- **Yielding.** The card sweep yields at card boundaries: before each card
+  after the first, if any process is queued and no slot is free for it
+  (every slot is held or retained for reconciliation), it closes its session
+  (browser, server, and slot) and opens a fresh one behind the waiters. Its
+  summary records `sessions`, `leaseYields`, and `wallMs.browserLeaseWait`,
+  `serve`, `scenario`, and `cleanup` summed over its sessions, with
+  `execution` as the total less lease wait. A lease wait that costs a bead
+  friction is recorded under the canonical tag `browser-lease-wait`
+  (`docs/plan/evidence/friction-tags.json` aliases its variants).
 
 SIGINT/SIGTERM cancels waiting or drains startup and cleanup before releasing
-the lease. An ownership record, `artifacts/browser-qa.lock.owner.json`, covers MCP connection and use.
-Normal cleanup closes the browser, drains active RPC calls, then closes the SDK
-transport while retaining the lease through owned server cleanup. A signal
-first aborts startup and stops the current owned server or builder, then joins
-that cleanup sequence. Confirmed browser close and settled provider responses
+the slot. Each slot's ownership record, `<slot lock>.owner.json` (slot 0's is
+`artifacts/browser-qa.lock.owner.json`), covers MCP connection and use and
+names the run's bead, label, slot, port, and pid. Normal cleanup closes the
+browser, drains active RPC calls, then closes the SDK transport while
+retaining the slot through owned server cleanup. A signal first aborts
+startup and stops the current owned server or builder, then joins that
+cleanup sequence. Confirmed browser close and settled provider responses
 clear the runner's exact ownership record. An uncertain RPC makes its session
 non-runnable; a failed close, uncertain transport rejection, or caller crash
-leaves the record and subsequent CLI sessions refuse to start. Reconcile the
-recorded provider execution before clearing the record and retrying.
-Kernel lease release on pipe EOF proves local lock recovery;
-provider completion requires separate confirmation. The lease is
-separate from `artifacts/heavy.lock`: browser runs (`run-scenario`,
-`card-sweep`) take the browser lease only, never the heavy slot, and no command
-holds the heavy slot while it waits for the browser lease.
-`wallMs.browserLeaseWait` records lease wait separately from build, serve, and
-scenario execution.
+leaves the record, and the slot is retained for reconciliation: later runs
+pass over it and use another slot, and refuse to start only when every slot
+is retained. Reconcile the recorded provider execution before clearing that
+record. Kernel release on pipe EOF proves local lock recovery; provider
+completion requires separate confirmation. The slots are separate from
+`artifacts/heavy.lock`: browser runs (`run-scenario`, `card-sweep`) take a
+browser slot only, never the heavy slot, and no command holds the heavy slot
+while it waits for a browser slot. `wallMs.browserLeaseWait` records slot
+wait separately from build, serve, and scenario execution.
+
+**Single-slot peers.** A runner from an older checkout takes only slot 0,
+reads only slot 0's ownership record, and waits in the same ticket queue,
+attempting only at its head; the slot protocol with a capacity of one is
+exactly that protocol. Together they never exceed the capacity: the older
+runner contends with slot 0's holder, and may run beside a holder of
+another slot, whose resources its cleanup never touches (it stops only its
+own process groups, closes only its own MCP client, and removes only its own
+exact record at slot 0's path). Slot holders take slot 0 last, leaving it to
+older runners while another slot is free. An older waiter at the head of the
+queue waits for slot 0 even while another slot is free, and the waiters
+behind it keep their place.
 
 The runner starts its server in its own process group (`scripts/dev.mjs`, or
 `vite preview`), connects its own MCP client with the primary checkout as the
@@ -707,7 +751,7 @@ node scripts/qa/card-sweep.mjs --bead <id> --cards <uuid,...|starter> \
 ```
 
 The sweep (workflow § Card QA) opens a runner session (its own dev server
-and MCP client, reopened at a card boundary where it yields the browser lease;
+and MCP client, reopened at a card boundary where it yields its browser slot;
 see [Browser QA](#browser-qa)) and, for each card, side, and variant, runs
 `scripts/qa/scenarios/card-lab-play.mjs` in the card-lab with `debug=1`: it
 plays the card through the UI, and `qa.battle` answers each human prompt
@@ -729,7 +773,7 @@ when any effective cell verdict is `fail`. Ledger attempts carry
 failure and its retry are retained. Each invocation owns a unique artifact
 subdirectory, with separate reports and captures per attempt. Summaries show
 effective cell counts and raw attempt counts separately, plus total wall
-time, browser lease wait, and execution excluding that wait.
+time, browser slot wait, and execution excluding that wait.
 
 ## Architecture
 

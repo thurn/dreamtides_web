@@ -1,12 +1,13 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { spawn, execFileSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { once } from "node:events";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { acquireBrowserLease as acquireNativeBrowserLease, browserLeasePath } from "./browser-lease.mjs";
+import { acquireBrowserLease as acquireNativeBrowserLease, browserLeasePath, browserOwnerPath, browserSlotPath } from "./browser-lease.mjs";
+import { leaseFixtures, lockHeld } from "./browser-lease-fixture.mjs";
 import { openQaSession as openNativeQaSession } from "./run-scenario.mjs";
 import * as runtime from "../screenshot-runtime.mjs";
 // Fixture subprocesses stay inside Tollgate's session. The actual native
@@ -86,6 +87,7 @@ beforeEach(() => {
     }
     return realKill(pid, signal);
   });
+  vi.spyOn(runtime, "listenerOwnedBy").mockReturnValue(true);
   vi.spyOn(runtime, "stopProcessTree").mockImplementation(async (child) => {
     if (child === null || child.exitCode !== null || child.signalCode !== null) return;
     if (!fixtureIo.children.includes(child)) throw new Error("foreign fixture process");
@@ -110,6 +112,7 @@ afterEach(async () => {
     child.kill("SIGKILL");
     await exited;
   }
+  await fixtures.cleanup();
   fixtureIo.gitCwd = null;
   fixtureIo.ready = Promise.resolve();
   vi.useRealTimers();
@@ -146,58 +149,24 @@ function sessionFixture() {
   return { root, worktree, path: browserLeasePath(root) };
 }
 
-/** @param {string} path @param {boolean} [withOwner] */
-function leaseProcess(path, withOwner = false) {
-  const moduleUrl = new URL("./browser-lease.mjs", import.meta.url).href;
-  const child = spawn(process.execPath, ["--input-type=module", "-e", `
-    import cp from "node:child_process";
-    import { syncBuiltinESMExports } from "node:module";
-    const originalSpawn = cp.spawn;
-    const owned = new Map();
-    cp.spawn = (command, args, options) => {
-      const child = originalSpawn(command, args, { ...options, detached: false });
-      owned.set(child.pid, child);
-      return child;
-    };
-    syncBuiltinESMExports();
-    const originalKill = process.kill.bind(process);
-    process.kill = (pid, signal) => {
-      const child = pid < 0 ? owned.get(-pid) : null;
-      if (child) { child.stdin?.end(); return originalKill(-pid, signal); }
-      return originalKill(pid, signal);
-    };
-    const { acquireBrowserLease } = await import(${JSON.stringify(moduleUrl)});
-    import { writeFileSync } from "node:fs";
-    const controller = new AbortController();
-    let lease;
-    process.on("message", async (command) => {
-      if (command === "abort") controller.abort();
-      if (command === "release") { await lease.release(); process.exit(0); }
-    });
-    try {
-      lease = await acquireBrowserLease(${JSON.stringify(path)}, {
-        signal: controller.signal, onWait: () => process.send("waiting"),
-      });
-      if (${String(withOwner)}) writeFileSync(${JSON.stringify(`${path}.owner.json`)}, JSON.stringify({ token: "synthetic-crashed-owner", pid: process.pid }));
-      process.send("acquired");
-    } catch { process.exit(2); }
-  `], { stdio: ["ignore", "ignore", "inherit", "ipc"] });
-  return child;
-}
+const fixtures = leaseFixtures();
+/** @param {string} path @param {number} slot */
+const ownerOf = (path, slot) => browserOwnerPath(browserSlotPath(path, slot));
+/** Holds every browser slot, so the next waiter queues. @param {string} path */
+const holdEverySlot = (path) => Promise.all([acquireBrowserLease(path), acquireBrowserLease(path)]);
 
 describe("repository browser lease", () => {
   it("serializes native processes through cleanup and composes with another lock", async () => {
     const { root, path } = leaseFixture();
-    const first = await acquireBrowserLease(path);
-    const second = leaseProcess(path);
-    expect((await once(second, "message"))[0]).toBe("waiting");
+    const [first] = await holdEverySlot(path);
+    const second = fixtures.leaseProcess(path);
+    expect(await second.first).toBe("waiting");
     // The caller's machine heavy lock has a different inode and is independent.
     expect(execFileSync("lockf", ["-k", "-t", "0", join(root, "heavy.lock"), process.execPath, "-e", "process.stdout.write('ok')"], { encoding: "utf8" })).toBe("ok");
-    const acquired = once(second, "message");
     await Promise.all([first.release(), first.release()]);
-    expect((await acquired)[0]).toBe("acquired");
-    const exited = once(second, "exit");
-    second.send("release");
+    expect(await second.acquired).toBe(first.slot);
+    const exited = once(second.child, "exit");
+    second.child.send("release");
     expect((await exited)[0]).toBe(0);
     const third = await acquireBrowserLease(path);
     await third.release();
@@ -216,16 +185,17 @@ describe("repository browser lease", () => {
       const primary = await openQaSession({ bead: "synthetic-lease", label: "primary", port, prod: false, minify: false, cwd: root });
       expect(fixtureIo.children.map((child) => child.pid)).toContain(primary.serverPid);
       expect(primary.captureDir).toBe(join(root, "artifacts", "qa", "synthetic-lease"));
-      expect(existsSync(`${path}.owner.json`)).toBe(true);
+      expect(primary.leasePath).toBe(path);
+      expect(existsSync(primary.ownerPath)).toBe(true);
       await primary.close();
-      expect(existsSync(`${path}.owner.json`)).toBe(false);
+      expect(existsSync(primary.ownerPath)).toBe(false);
       fixtureIo.gitCwd = worktree;
       const linked = await openQaSession({ bead: "synthetic-lease", label: "linked", port, prod: false, minify: false, cwd: worktree });
       expect(fixtureIo.children.map((child) => child.pid)).toContain(linked.serverPid);
       expect(linked.captureDir).toBe(primary.captureDir);
-      expect(existsSync(`${path}.owner.json`)).toBe(true);
+      expect(existsSync(linked.ownerPath)).toBe(true);
       await linked.close();
-      expect(existsSync(`${path}.owner.json`)).toBe(false);
+      expect(existsSync(linked.ownerPath)).toBe(false);
       expect(fixtureIo.children.every((child) => child.exitCode !== null || child.signalCode !== null)).toBe(true);
       expect(existsSync(join(primary.captureDir, "primary.server.log"))).toBe(true);
       expect(existsSync(join(primary.captureDir, "linked.server.log"))).toBe(true);
@@ -237,11 +207,11 @@ describe("repository browser lease", () => {
   });
   it("settles an interrupted waiter without releasing its peer's lease", async () => {
     const { path } = leaseFixture();
-    const holder = await acquireBrowserLease(path);
-    const waiter = leaseProcess(path);
-    expect((await once(waiter, "message"))[0]).toBe("waiting");
-    const exited = once(waiter, "exit");
-    waiter.send("abort");
+    const [holder] = await holdEverySlot(path);
+    const waiter = fixtures.leaseProcess(path);
+    expect(await waiter.first).toBe("waiting");
+    const exited = once(waiter.child, "exit");
+    waiter.child.send("abort");
     expect((await exited)[0]).toBe(2);
     const controller = new AbortController();
     await expect(acquireBrowserLease(path, { signal: controller.signal, onWait: () => controller.abort() })).rejects.toThrow();
@@ -252,27 +222,28 @@ describe("repository browser lease", () => {
   it("recovers the native lock after parent crash while quarantining its remote ownership", async () => {
     const { root, path } = sessionFixture();
     const connect = vi.spyOn(runtime, "connectPlaywrightMcp").mockRejectedValue(new Error("unexpected synthetic connection"));
-    const holder = leaseProcess(path, true);
-    expect((await once(holder, "message"))[0]).toBe("acquired");
-    const exited = once(holder, "exit");
-    holder.kill("SIGKILL");
+    const holder = fixtures.leaseProcess(path, { owner: true });
+    const crashed = await holder.acquired;
+    const exited = once(holder.child, "exit");
+    holder.child.kill("SIGKILL");
     await exited;
     const recovered = await acquireBrowserLease(path);
+    expect(recovered.quarantined).toEqual([ownerOf(path, crashed)]);
     await recovered.release();
-    expect(existsSync(`${path}.owner.json`)).toBe(true);
+    writeFileSync(recovered.ownerPath, "synthetic retained record");
     await expect(openQaSession({ bead: "synthetic-lease", label: "after-crash", port: null, prod: false, minify: false, cwd: root })).rejects.toThrow(/requires reconciliation/);
     expect(connect).not.toHaveBeenCalled();
-    expect(existsSync(`${path}.owner.json`)).toBe(true);
+    expect([crashed, recovered.slot].every((slot) => existsSync(ownerOf(path, slot)))).toBe(true);
   });
   it("rejects permanent native path failures rather than retrying them", async () => {
     const { root } = leaseFixture();
     const denied = join(root, "denied.lock");
     writeFileSync(denied, "", { mode: 0 });
-    await expect(acquireBrowserLease(denied)).rejects.toThrow(/lockf exited/);
+    await expect(acquireBrowserLease(denied, { slots: 1 })).rejects.toThrow(/lockf exited/);
   });
   it("interrupts session acquisition before starting any server or MCP client", async () => {
     const { root, path } = sessionFixture();
-    const holder = await acquireBrowserLease(path);
+    const [holder] = await holdEverySlot(path);
     const connect = vi.spyOn(runtime, "connectPlaywrightMcp").mockRejectedValue(new Error("unexpected synthetic connection"));
     const exited = notification();
     const exit = vi.spyOn(process, "exit").mockImplementation(() => { exited.resolve(); return /** @type {never} */ (undefined); });
@@ -304,23 +275,26 @@ describe("repository browser lease", () => {
     const beforeInt = process.listenerCount("SIGINT");
     const session = await openQaSession({ bead: "synthetic-lease", label: "close", port: null, prod: false, minify: false, cwd: root });
     try {
-      expect(existsSync(`${path}.owner.json`)).toBe(true);
+      expect(existsSync(session.ownerPath)).toBe(true);
       const closing = session.close();
       const rejected = expect(closing).rejects.toThrow(/synthetic close failure/);
       expect(session.close()).toBe(closing);
       await expect(session.run("async () => null", {}, 1)).rejects.toThrow(/closed/);
       await closeStarted.promise;
       expect(browserClose).toHaveBeenCalledOnce();
-      const controller = new AbortController();
-      await expect(acquireBrowserLease(path, { signal: controller.signal, onWait: () => controller.abort() })).rejects.toThrow();
+      expect(lockHeld(browserSlotPath(path, session.slot))).toBe(true);
       finishClose();
       await rejected;
       expect(process.listenerCount("SIGINT")).toBe(beforeInt);
-      expect(existsSync(`${path}.owner.json`)).toBe(true);
-      await expect(openQaSession({ bead: "synthetic-lease", label: "quarantined", port: null, prod: false, minify: false, cwd: root })).rejects.toThrow(/requires reconciliation/);
+      expect(readFileSync(session.ownerPath, "utf8")).toContain('"providerState":"close-unconfirmed"');
+      expect(lockHeld(browserSlotPath(path, session.slot))).toBe(false);
+      const passed = await acquireBrowserLease(path);
+      expect(passed.quarantined).toEqual([session.ownerPath]);
+      await passed.release();
       // This synthetic provider is now explicitly reconciled by the fixture.
-      rmSync(`${path}.owner.json`);
+      rmSync(session.ownerPath);
       const next = await acquireBrowserLease(path);
+      expect(next.slot).toBe(session.slot);
       await next.release();
     } finally {
       finishClose();
@@ -345,15 +319,15 @@ describe("repository browser lease", () => {
       expect(connect).toHaveBeenCalledOnce();
       process.listeners("SIGTERM").at(-1)?.("SIGTERM");
       expect(browserClose).not.toHaveBeenCalled();
-      expect(existsSync(`${path}.owner.json`)).toBe(true);
-      const controller = new AbortController();
-      await expect(acquireBrowserLease(path, { signal: controller.signal, onWait: () => controller.abort() })).rejects.toThrow();
+      // A lone session takes the highest slot.
+      expect(existsSync(ownerOf(path, 1))).toBe(true);
+      expect(lockHeld(browserSlotPath(path, 1))).toBe(true);
       finishConnection({ call: vi.fn(), close: browserClose });
       await rejected;
       await exited.promise;
       expect(exit).toHaveBeenCalledWith(143);
       expect(browserClose).toHaveBeenCalledOnce();
-      expect(existsSync(`${path}.owner.json`)).toBe(false);
+      expect(existsSync(ownerOf(path, 1))).toBe(false);
       expect(process.listenerCount("SIGTERM")).toBe(beforeTerm);
       const next = await acquireBrowserLease(path);
       await next.release();
@@ -371,12 +345,12 @@ describe("repository browser lease", () => {
     const lease = await acquireBrowserLease(path);
     await lease.release();
     expect(process.listenerCount("SIGTERM")).toBe(beforeTerm);
-    expect(existsSync(`${path}.owner.json`)).toBe(false);
+    expect([0, 1].some((slot) => existsSync(ownerOf(path, slot)))).toBe(false);
   });
 });
 describe("MCP browser ownership confirmation", () => {
   it("quarantines semantic browser_close errors while closing the SDK transport", async () => {
-    const { root, path } = sessionFixture();
+    const { root } = sessionFixture();
     vi.spyOn(Client.prototype, "connect").mockResolvedValue(undefined);
     const call = vi.spyOn(Client.prototype, "callTool").mockResolvedValue({ isError: true, content: [{ type: "text", text: "synthetic semantic close failure" }] });
     const sdkClose = vi.spyOn(Client.prototype, "close").mockResolvedValue(undefined);
@@ -384,7 +358,7 @@ describe("MCP browser ownership confirmation", () => {
     await expect(session.close()).rejects.toThrow(/synthetic semantic close failure/);
     expect(call).toHaveBeenCalledWith({ name: "browser_close", arguments: {} });
     expect(sdkClose).toHaveBeenCalledOnce();
-    expect(existsSync(`${path}.owner.json`)).toBe(true);
+    expect(existsSync(session.ownerPath)).toBe(true);
   });
   it.each([false, true])("closes before draining active RPC, preserving transport uncertainty=%s", async (transportRejects) => {
     const { root, path } = sessionFixture();
@@ -404,15 +378,14 @@ describe("MCP browser ownership confirmation", () => {
     try {
       await closeStarted.promise;
       expect(browserClose).toHaveBeenCalledOnce();
-      // Browser close happened, but the outstanding RPC still owns the lease.
-      const controller = new AbortController();
-      await expect(acquireBrowserLease(path, { signal: controller.signal, onWait: () => controller.abort() })).rejects.toThrow();
-      expect(existsSync(`${path}.owner.json`)).toBe(true);
+      // Browser close happened, but the outstanding RPC still owns the slot.
+      expect(lockHeld(browserSlotPath(path, session.slot))).toBe(true);
+      expect(existsSync(session.ownerPath)).toBe(true);
       finishCall();
       await result;
       await closed;
-      expect(existsSync(`${path}.owner.json`)).toBe(transportRejects);
-      if (transportRejects) expect(readFileSync(`${path}.owner.json`, "utf8")).toContain('"providerState":"call-unconfirmed"');
+      expect(existsSync(session.ownerPath)).toBe(transportRejects);
+      if (transportRejects) expect(readFileSync(session.ownerPath, "utf8")).toContain('"providerState":"call-unconfirmed"');
     } finally {
       finishCall();
       await running.catch(() => {});
@@ -420,7 +393,7 @@ describe("MCP browser ownership confirmation", () => {
     }
   });
   it("stops a session after an uncertain RPC without issuing subsequent verdict calls", async () => {
-    const { root, path } = sessionFixture();
+    const { root } = sessionFixture();
     const call = vi.fn().mockRejectedValue(new Error("synthetic uncertain RPC"));
     vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ call, close: vi.fn().mockResolvedValue(undefined) });
     const session = await openQaSession({ bead: "synthetic-lease", label: "uncertain", port: null, prod: false, minify: false, cwd: root });
@@ -429,10 +402,10 @@ describe("MCP browser ownership confirmation", () => {
     await expect(session.run("async () => null", {}, 1)).rejects.toThrow(/requires provider reconciliation/);
     expect(call).toHaveBeenCalledOnce();
     await expect(session.close()).rejects.toThrow(/provider completion is unconfirmed/);
-    expect(existsSync(`${path}.owner.json`)).toBe(true);
+    expect(existsSync(session.ownerPath)).toBe(true);
   });
   it("treats a structured semantic RPC rejection as a settled provider response", async () => {
-    const { root, path } = sessionFixture();
+    const { root } = sessionFixture();
     vi.spyOn(Client.prototype, "connect").mockResolvedValue(undefined);
     const call = vi.spyOn(Client.prototype, "callTool")
       .mockResolvedValueOnce({ isError: true, content: [{ type: "text", text: "synthetic semantic run rejection" }] })
@@ -446,10 +419,10 @@ describe("MCP browser ownership confirmation", () => {
     expect(call).toHaveBeenCalledTimes(2);
     await session.close();
     expect(sdkClose).toHaveBeenCalledOnce();
-    expect(existsSync(`${path}.owner.json`)).toBe(false);
+    expect(existsSync(session.ownerPath)).toBe(false);
   });
   it("drains semantic RPC settlement between browser close and SDK transport teardown", async () => {
-    const { root, path } = sessionFixture();
+    const { root } = sessionFixture();
     const events = /** @type {string[]} */ ([]);
     const closeStarted = notification();
     let finishCall = /** @type {() => void} */ (() => {});
@@ -479,7 +452,7 @@ describe("MCP browser ownership confirmation", () => {
       await result;
       await closing;
       expect(events).toEqual(["browser-closed", "rpc-settled", "transport-closed"]);
-      expect(existsSync(`${path}.owner.json`)).toBe(false);
+      expect(existsSync(session.ownerPath)).toBe(false);
     } finally {
       finishCall();
       await running.catch(() => {});
@@ -487,14 +460,14 @@ describe("MCP browser ownership confirmation", () => {
     }
   });
   it("preserves a replacement ownership record after confirmed provider completion", async () => {
-    const { root, path } = sessionFixture();
+    const { root } = sessionFixture();
     const browserClose = vi.fn().mockResolvedValue(undefined);
     vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ call: vi.fn(), close: browserClose });
     const session = await openQaSession({ bead: "synthetic-lease", label: "replacement", port: null, prod: false, minify: false, cwd: root });
     const replacement = JSON.stringify({ token: "different-synthetic-owner" });
-    writeFileSync(`${path}.owner.json`, replacement);
+    writeFileSync(session.ownerPath, replacement);
     await expect(session.close()).rejects.toThrow(/owner record changed/);
     expect(browserClose).toHaveBeenCalledOnce();
-    expect(readFileSync(`${path}.owner.json`, "utf8")).toBe(replacement);
+    expect(readFileSync(session.ownerPath, "utf8")).toBe(replacement);
   });
 });

@@ -201,8 +201,8 @@ describe("sweep cell attempts", () => {
 
 /**
  * Sweeps synthetic cards through stub sessions, each standing for one held
- * browser lease, and returns the open/card/close sequence.
- * @param {string[]} cards @param {number[]} queued waiters seen at each boundary
+ * browser slot, and returns the open/card/close sequence.
+ * @param {string[]} cards @param {boolean[]} queued whether each boundary is contended
  * @param {string | null} [breaks] the card after which the session is non-runnable
  */
 async function sweep(cards, queued, breaks = null) {
@@ -218,7 +218,7 @@ async function sweep(cards, queued, breaks = null) {
       return Promise.resolve({ id, broken: () => { broken = true; }, closed: () => broken,
         close: () => { events.push(`close ${String(id)}`); return Promise.resolve(); } });
     },
-    waiters: () => boundaries.shift() ?? 0,
+    contended: () => Promise.resolve(boundaries.shift() ?? false),
     sweepCard: (card, session) => {
       events.push(`${card} in ${String(session.id)}`);
       if (card === breaks) session.broken();
@@ -229,21 +229,21 @@ async function sweep(cards, queued, breaks = null) {
 }
 
 describe("sweep lease yielding", () => {
-  it("releases and re-takes the lease at each card boundary with queued waiters", async () => {
-    const { events, result } = await sweep(["a", "b", "c"], [1, 2]);
+  it("releases and re-takes its slot at each contended card boundary", async () => {
+    const { events, result } = await sweep(["a", "b", "c"], [true, true]);
     expect(events).toEqual(["open 1", "a in 1", "close 1", "open 2", "b in 2", "close 2", "open 3", "c in 3", "close 3"]);
     expect(result).toEqual({ sessions: 3, yields: 2 });
   });
 
-  it("keeps its session across a boundary nobody waits at", async () => {
-    const { events, result } = await sweep(["a", "b", "c"], [0, 1]);
+  it("keeps its session across an uncontended boundary", async () => {
+    const { events, result } = await sweep(["a", "b", "c"], [false, true]);
     expect(events).toEqual(["open 1", "a in 1", "b in 1", "close 1", "open 2", "c in 2", "close 2"]);
     expect(result).toEqual({ sessions: 2, yields: 1 });
   });
 
   it("stops after a card that leaves its session non-runnable", async () => {
-    const { events, boundaries } = await sweep(["a", "b", "c"], [1, 1], "b");
+    const { events, boundaries } = await sweep(["a", "b", "c"], [true, true], "b");
     expect(events).toEqual(["open 1", "a in 1", "close 1", "open 2", "b in 2", "close 2"]);
-    expect(boundaries).toEqual([1]);
+    expect(boundaries).toEqual([true]);
   });
 });

@@ -1174,12 +1174,18 @@ launch browsers directly.** The project details (scenes, URL parameters,
 assert-before-acting) are in the README's Browser QA section.
 
 Each session runs one browser-QA subagent at a time (D17). Scenario runs and
-card sweeps open their own MCP clients against the shared Playwright provider.
-Their automatic repository-wide browser lease coordinates CLI ownership
-across worktrees through browser and owned-server cleanup. Each run serves its
-worktree on its own port from 5174. Coordinate interactive MCP use with active
-provider owners. See [README § Browser QA](../../README.md#browser-qa) for the
-lease, ownership record, and confirmed cleanup and reconciliation contracts.
+card sweeps open their own MCP clients, each with its own isolated browser
+context, against the shared Playwright provider. They share the repository's
+two browser slots (D17) across worktrees: a run waits first come, first served
+for a free slot and holds it through browser and owned-server cleanup, so two
+runs proceed at once and a third waits. Each run serves its worktree on its
+own port in its slot's range from 5174, and owns its server, MCP client,
+ownership record, and evidence; its cleanup touches no other run's. A card
+sweep yields its slot at a card boundary only while others wait and every slot
+is taken. Coordinate interactive MCP use with active provider owners. See
+[README § Browser QA](../../README.md#browser-qa) for the slot, port,
+evidence, ownership record, confirmed cleanup and reconciliation contracts,
+and how runners from older checkouts share slot 0.
 
 ### Scenario runner
 
@@ -1190,8 +1196,9 @@ that repeats the server, error buffer, click, wait, and capture plumbing:
 node scripts/qa/run-scenario.mjs <scenario> --bead <bead-id> [--port <n>] [--prod] [--viewports desktop,mobile]
 ```
 
-- **What it owns.** It serves the worktree on the first free port from 5174
-  (dev server, or with `--prod` a `vite build` served by `vite preview`),
+- **What it owns.** It takes a browser slot and serves the worktree with a
+  strict port, the first free one in that slot's range from 5174 (dev
+  server, or with `--prod` a `vite build` served by `vite preview`),
   opens its own MCP client with the primary checkout as the first root,
   installs `__caps` as an init script so load-time errors count, and stops
   its own process group on exit or signal. The report lands in
@@ -1339,7 +1346,7 @@ unknown errors and transport exceptions keep their failing verdict.
 Both attempt ledger lines and complete raw reports remain in invocation-
 unique artifact directories; captures are distinct per attempt. Effective
 cell counts and exit status use the final attempt. Summary output separates
-raw attempt counts, effective cells, total wall time, browser lease wait and
+raw attempt counts, effective cells, total wall time, browser slot wait and
 execution excluding lease wait.
 
 **Judged setup.** One runner call opens and stages a board with load-time
@@ -1543,7 +1550,7 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
   `cargo test --workspace`, and a Tollgate release build. Focused tests,
   `npm run review`, `npm run knip`, `npm install`, `card-sweep`, and
   `run-scenario` take no heavy slot, and no command holds the heavy slot while
-  it waits for the browser lease. Heavy commands run under the machine-wide
+  it waits for a browser slot. Heavy commands run under the machine-wide
   heavy slot, one at a time across every session:
 
   ```sh
@@ -1555,8 +1562,14 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
 - **Labels.** The session adds `heavy` or `browser` when a bead's acceptance
   needs heavy validation or interactive browser QA. It decides from the
   bead's text at dispatch if the label is missing.
+- **Browser slots.** Scenario runs and card sweeps share
+  `BROWSER_QA_SLOTS` browser slots (two; `scripts/qa/browser-qa-capacity.mjs`)
+  across every session, first come, first served. The runner takes one
+  automatically ([Browser QA](#browser-qa)); the heavy slot is separate.
 - **QA ports.** Each session takes the first free port from 5174 for its
-  bead and records it ([Dispatch](#dispatch-a-bead)).
+  bead and records it ([Dispatch](#dispatch-a-bead)). A scenario run or card
+  sweep serves on the first free port of its browser slot's range, from
+  `5174 + 100 × slot`.
 - **Soaks and tournaments.** Run them in batches of at most 30 minutes, with
   worker processes sized to the idle capacity: up to 8 on a quiet machine,
   fewer while several sessions validate. They may overlap Tollgate validation

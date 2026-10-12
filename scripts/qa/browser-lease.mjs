@@ -1,11 +1,38 @@
 import { spawn } from "node:child_process";
-import { mkdirSync, readdirSync, statSync, unlinkSync, utimesSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync, utimesSync, writeFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
+import { BROWSER_QA_SLOTS } from "./browser-qa-capacity.mjs";
 
-/** @param {string} primaryCheckout */
+/**
+ * The repository's browser admission path: slot 0's kernel lock, the lock a
+ * single-slot peer takes, from which the queue and the other slots derive.
+ *
+ * @param {string} primaryCheckout
+ */
 export function browserLeasePath(primaryCheckout) {
   return join(primaryCheckout, "artifacts", "browser-qa.lock");
+}
+
+/**
+ * Slot `slot`'s kernel lock. Slot 0 is the admission path itself; the others
+ * live under the gitignored `artifacts/qa/`, where single-slot peers never
+ * look.
+ *
+ * @param {string} path
+ * @param {number} slot
+ */
+export function browserSlotPath(path, slot) {
+  return slot === 0 ? path : join(dirname(path), "qa", `.${basename(path, ".lock")}.slot-${String(slot)}.lock`);
+}
+
+/**
+ * A slot's ownership record. Slot 0's is the record single-slot peers read.
+ *
+ * @param {string} slotPath
+ */
+export function browserOwnerPath(slotPath) {
+  return `${slotPath}.owner.json`;
 }
 
 /**
@@ -120,7 +147,7 @@ function refresh(queue, name) {
 
 /**
  * How many processes wait in the lease's queue, reaping the tickets of
- * waiters that are gone. A holder yields at a boundary when this is nonzero.
+ * waiters that are gone.
  *
  * @param {string} path
  */
@@ -131,19 +158,20 @@ export function browserLeaseWaiters(path) {
 
 // lockf owns the kernel lock while this child has its parent's pipe. EOF
 // releases it even when the parent exits without running JavaScript cleanup.
-const HOLDER = 'process.stdout.write("ready\\n"); process.stdin.resume(); process.stdin.on("end", () => process.exit(0));';
+const HOLDER = ["/bin/sh", "-c", "echo ready; exec cat >/dev/null"];
 
 /**
- * One nonblocking native attempt. A busy attempt exits before retrying, so
- * killing a waiting caller cannot leave an orphan blocked inside lockf.
+ * One nonblocking native attempt on the kernel lock at `path`, held until
+ * `release()`. A busy attempt (null) exits before returning, so killing a
+ * waiting caller cannot leave an orphan blocked inside lockf.
  *
  * @param {string} path
- * @param {AbortSignal | undefined} signal
+ * @param {AbortSignal} [signal]
  * @returns {Promise<{ release: () => Promise<void> } | null>}
  */
-async function attempt(path, signal) {
+export async function tryBrowserLock(path, signal) {
   signal?.throwIfAborted();
-  const child = spawn("lockf", ["-k", "-t", "0", path, process.execPath, "-e", HOLDER], {
+  const child = spawn("lockf", ["-k", "-t", "0", path, ...HOLDER], {
     stdio: ["pipe", "pipe", "pipe"], detached: true,
   });
   let diagnostic = "";
@@ -198,17 +226,99 @@ async function attempt(path, signal) {
 }
 
 /**
- * Acquire the repository browser slot, independent of the externally held
- * heavy slot, first come first served. The waiter takes a ticket in the
- * lease's queue and attempts the kernel lock only while its ticket is the
- * oldest live one; the kernel lock alone excludes holders, so a process that
- * ignores the queue may take the lock first but never shares it. The ticket
- * is gone once this settles. onWait runs once after actual contention.
+ * Whether the kernel lock at `path` is free, by one nonblocking attempt that
+ * runs no command under it.
  *
  * @param {string} path
- * @param {{ signal?: AbortSignal, onWait?: () => void }} [options]
  */
-export async function acquireBrowserLease(path, { signal, onWait } = {}) {
+async function lockFree(path) {
+  mkdirSync(dirname(path), { recursive: true });
+  const child = spawn("lockf", ["-k", "-t", "0", path, "/usr/bin/true"], { stdio: ["ignore", "ignore", "pipe"] });
+  let diagnostic = "";
+  child.stderr?.on("data", (chunk) => { diagnostic += String(chunk); });
+  const code = await new Promise((/** @type {(code: number | null) => void} */ done, reject) => {
+    child.once("error", reject);
+    child.once("close", done);
+  });
+  if (code === 0) return true;
+  if (code === 75) return false;
+  throw new Error(`browser lease lockf exited ${String(code)}: ${diagnostic.trim()}`);
+}
+
+/**
+ * Whether a slot carries an ownership record while no holder has its lock:
+ * a record retained for provider reconciliation. A holder clears its record
+ * before it releases, so a record seen again after the lock tested free is
+ * retained.
+ *
+ * @param {string} slotPath
+ */
+async function quarantined(slotPath) {
+  const ownerPath = browserOwnerPath(slotPath);
+  return existsSync(ownerPath) && await lockFree(slotPath) && existsSync(ownerPath);
+}
+
+/**
+ * A held browser slot.
+ *
+ * @typedef {object} BrowserLease
+ * @property {number} slot
+ * @property {string} path The slot's kernel lock.
+ * @property {string} ownerPath The slot's ownership record.
+ * @property {string[]} quarantined Records of slots passed over because they
+ *   are retained for reconciliation.
+ * @property {() => Promise<void>} release
+ */
+
+/**
+ * Takes the first free slot, highest first: a single-slot peer only ever
+ * takes slot 0, so a slot holder leaves it to them while another is free.
+ * A slot whose record is retained for reconciliation is passed over; when
+ * every slot's is, startup cannot proceed.
+ *
+ * @param {string} path
+ * @param {number} slots
+ * @param {AbortSignal | undefined} signal
+ * @returns {Promise<BrowserLease | null>}
+ */
+async function takeSlot(path, slots, signal) {
+  /** @type {string[]} */
+  const retained = [];
+  for (let slot = slots - 1; slot >= 0; slot--) {
+    const slotPath = browserSlotPath(path, slot);
+    const ownerPath = browserOwnerPath(slotPath);
+    if (existsSync(ownerPath)) {
+      if (await quarantined(slotPath)) retained.push(ownerPath);
+      continue;
+    }
+    const lock = await tryBrowserLock(slotPath, signal);
+    if (lock === null) continue;
+    // A holder may have retained its record between the check and the lock.
+    if (!existsSync(ownerPath)) return { slot, path: slotPath, ownerPath, quarantined: retained, release: lock.release };
+    await lock.release();
+    retained.push(ownerPath);
+  }
+  if (retained.length === slots) {
+    throw new Error(`browser provider requires reconciliation before QA startup: ${retained.join(", ")}`);
+  }
+  return null;
+}
+
+/**
+ * Acquire one of the repository's browser slots, independent of the
+ * externally held heavy slot, first come first served. The waiter takes a
+ * ticket in the admission path's queue and attempts the slots' kernel locks
+ * only while its ticket is the oldest live one; the kernel locks alone
+ * exclude holders, so a process that ignores the queue may take a slot
+ * first but never shares one. `slots` is the capacity; with 1, this is the
+ * single-slot protocol on slot 0. The ticket is gone once this settles.
+ * onWait runs once after actual contention.
+ *
+ * @param {string} path
+ * @param {{ signal?: AbortSignal, onWait?: () => void, slots?: number }} [options]
+ * @returns {Promise<BrowserLease>}
+ */
+export async function acquireBrowserLease(path, { signal, onWait, slots = BROWSER_QA_SLOTS } = {}) {
   signal?.throwIfAborted();
   mkdirSync(dirname(path), { recursive: true });
   const queue = browserLeaseQueuePath(path);
@@ -220,7 +330,7 @@ export async function acquireBrowserLease(path, { signal, onWait } = {}) {
       // The first ticket that is this one or a live waiter's; gone waiters
       // ahead of it are reaped on the way.
       if (tickets(queue).find((entry) => entry.name === ticket || waiting(queue, entry))?.name === ticket) {
-        const lease = await attempt(path, signal);
+        const lease = await takeSlot(path, slots, signal);
         if (lease !== null) return lease;
       }
       if (!reported) { reported = true; onWait?.(); }
@@ -229,4 +339,21 @@ export async function acquireBrowserLease(path, { signal, onWait } = {}) {
   } finally {
     removeTicket(join(queue, ticket));
   }
+}
+
+/**
+ * Whether a slot holder should yield at a boundary: processes wait in the
+ * queue and no slot is free for them. A slot is free when its lock is and it
+ * carries no ownership record.
+ *
+ * @param {string} path
+ * @param {number} [slots]
+ */
+export async function browserLeaseContended(path, slots = BROWSER_QA_SLOTS) {
+  if (browserLeaseWaiters(path) === 0) return false;
+  for (let slot = 0; slot < slots; slot++) {
+    const slotPath = browserSlotPath(path, slot);
+    if (!existsSync(browserOwnerPath(slotPath)) && await lockFree(slotPath)) return false;
+  }
+  return true;
 }

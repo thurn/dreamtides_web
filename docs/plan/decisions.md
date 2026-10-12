@@ -535,6 +535,13 @@ visibly slows the run or other work.
   one release run can overlap. Concurrent candidates queue behind them.
 - **QA ports.** Each session's QA servers take the first free port from 5174
   and record it in the bead notes. Port 5173 is never used.
+- **Browser QA capacity:** two concurrent scenario runs or card sweeps across
+  all sessions, set in one place (`BROWSER_QA_SLOTS` in
+  `scripts/qa/browser-qa-capacity.mjs`). Each takes a browser slot first come,
+  first served and owns an isolated MCP browser context, its own server
+  process group and port, its ownership record, and its evidence; one run's
+  cleanup, failure, or crash never closes or erases another's. Raising the
+  capacity is a change to this decision.
 - **Interactive browser QA** through the Playwright MCP tools runs in one
   subagent per session at a time (label `browser`): a session's subagents
   share its MCP connection, while separate sessions get isolated browser
