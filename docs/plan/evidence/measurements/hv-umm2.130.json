@@ -1,0 +1,626 @@
+{
+  "bead": "hv-umm2.130",
+  "base": "02721b0361c9e4561ca2b4a8bb811888dd0dc4f1",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.130",
+  "dispatchWindow": {
+    "start": "2026-10-11T23:52:45+00:00",
+    "basis": "Parent supplied approximate dispatch UTC. Exact helper receipt is not retained. Full dispatch-to-final-evidence wall includes research, fixture corrections, validation, native browser queue waits and evidence; final commit immediately follows the evidence boundary.",
+    "finalEvidenceAt": "2026-10-12T00:35:43.025514+00:00",
+    "elapsedMin": 42.97,
+    "boundary": "Final evidence-only amendment corrects spacing in a mutation label. This observation immediately precedes amendment; approximate dispatch and the sub-minute commit tail are disclosed."
+  },
+  "entities": [
+    "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6",
+    "0bddeb19-ff49-4a77-bc06-955377ba3ed1",
+    "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6",
+    "8436eaae-e410-4bfb-89d2-55bebf5a8144"
+  ],
+  "scope": [
+    "src/content/cards/exiles-of-the-last-light-b56b3411.ts",
+    "src/content/cards/frontline-martyr-8436eaae.ts",
+    "src/content/cards/gilded-catalyst-0bddeb19.ts",
+    "src/content/cards/night-raid-commando-1cbbfd57.ts",
+    "src/content/specs/cards-18.scenarios.ts",
+    "src/content/specs/index.ts"
+  ],
+  "authoringAudit": {
+    "immutableFields": "immutable-fields-proof.json checks every original catalog property except pending/abilities/verifiedText; all four sets are byte-identical at the AST property level.",
+    "clauses": "Exiles pays another controlled character, gains 1/2 energy and gives the opposing controller 1 point. Martyr self-abandons for 3/4 energy. Catalyst exhausts, discards its entire eligible hand, self-abandons, then gains 3/4. Night self-abandons for 1/2 and its own Dissolved draws exactly one.",
+    "verifiedText": "All four use expectedVerifiedText of immutable base/amplified printing; content gate verifies every authored variant.",
+    "existingAuthorities": [
+      "RD-hv-umm2.334-1",
+      "RD-hv-umm2.342-1"
+    ],
+    "newRulesDecisions": [],
+    "cardIssues": [],
+    "engineEdits": 0
+  },
+  "D20": {
+    "module": "src/content/specs/cards-18.scenarios.ts",
+    "lines": 82,
+    "cases": 8,
+    "reason": "Compound whole-hand/exhaust/self-abandon payment and own Dissolved draw followed by a source-independent activated gain require coupled scenarios. Each prints base/amplified for both controllers. Catalyst is played then reaches the next own Day through six normal passes before exhausting; that Day includes one actual draw which the whole hand cost also discards. Simple Exiles/Martyr clauses use primitive composition plus coverage/fuzz/sweep; no duplicate real-card cases.",
+    "entrypointDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0,
+      "cases": 8
+    },
+    "plainModuleDelta": {
+      "files": 1,
+      "lines": 82
+    },
+    "fixtureLines": 0
+  },
+  "validation": {
+    "focused": {
+      "exit": 0,
+      "wallSeconds": 2.647,
+      "scenarioSha256": "c2fdee243369656784c410a3556170436edd91e3e5549f3fc498a8646d4d3a24"
+    },
+    "positiveCases": 55,
+    "review": {
+      "exit": 0,
+      "wallSeconds": 35.371,
+      "startingHostLoad": 7.64306640625
+    },
+    "reviewFiles": 220,
+    "reviewCases": 2863,
+    "knip": {
+      "exit": 0,
+      "wallSeconds": 2.829,
+      "startingHostLoad": 9.2841796875
+    },
+    "preflight": {
+      "exit": 0,
+      "wallSeconds": 0.729,
+      "startingHostLoad": 6.04638671875,
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6,0bddeb19-ff49-4a77-bc06-955377ba3ed1,1cbbfd57-f510-4a02-a4b3-f043a4fb99d6,8436eaae-e410-4bfb-89d2-55bebf5a8144"
+      ]
+    },
+    "preflightCounts": {
+      "pass": 40,
+      "skip": 40,
+      "fail": 0
+    },
+    "full": "Not warranted: no infrastructure/configuration/cross-cutting architecture changes."
+  },
+  "correctionProvenance": {
+    "initialFixtureBackObjects": {
+      "log": "focused-initial.log",
+      "failed": 8,
+      "passed": 47,
+      "reason": "Back placement requires CardId, while variants are supported in hand DeckEntry placement. Local fixture error, not a base defect."
+    },
+    "freshExhaustion": {
+      "log": "focused-final.log",
+      "failed": 4,
+      "passed": 51,
+      "reason": "A normally played character enters exhausted. The scenario uses normal Ending phase progression before paying its exhaust cost."
+    },
+    "eventName": {
+      "log": "focused-ready-source.log",
+      "failed": 4,
+      "passed": 51,
+      "reason": "Correct engine event is exhaustionChanged."
+    },
+    "firstGreen": "focused-accepted.log",
+    "initialStaticFailure": {
+      "log": "review-final.log",
+      "wallSeconds": 41.116,
+      "reason": "Four unnecessary non-null assertions in own scenario; related cases passed, lint failed. Assertions removed."
+    },
+    "invalidReadyEventControl": {
+      "positiveLog": "focused-final-exact.log",
+      "reviewLog": "review-final-exact.log",
+      "reviewWallSeconds": 34.442,
+      "negative": "removed-exhaust-cost-invalid-fixture.log",
+      "provenance": "removed-exhaust-cost-invalid-provenance.json",
+      "disposition": "The positive fixture expected a per-character ready event that Ending does not emit, so the mutation attempt is invalid evidence. Retained diagnostic only."
+    },
+    "acceptedPositive": {
+      "log": "focused-final-accepted.log",
+      "sha256": "c2fdee243369656784c410a3556170436edd91e3e5549f3fc498a8646d4d3a24",
+      "cases": 55
+    },
+    "acceptedMutation": {
+      "label": "VALID removed-payment witness: preceding exact scenario positive passes 55 cases; removing only exhaustSelf fails 4 Catalyst cases while 4 Night controls pass.",
+      "exit": 1,
+      "wallSeconds": 1.634,
+      "cardSourceSha256": "04c8e385052602c0851231b927d422294acffda8354b680120ddb4da214f7834",
+      "mutantSha256": "873d62562a14469e8df4c5e0cc06cadbe0f1f488745d3353147bf5db6fe466d6",
+      "scenarioSha256": "c2fdee243369656784c410a3556170436edd91e3e5549f3fc498a8646d4d3a24",
+      "sourceRestoredIdentically": true,
+      "priorInvalidAttempt": "removed-exhaust-cost-invalid-provenance.json"
+    },
+    "acceptedMutationCounts": {
+      "failed": 4,
+      "passed": 4,
+      "skipped": 35
+    },
+    "publicProbeCorrection": {
+      "firstFixture": "functional-probe-first-fixture.ts",
+      "firstError": "functional-probe-first.stderr.log",
+      "reason": "RecordedAnswer has no prompt object; capture the actual prompt via InlineSource public answer callback. The corrected probe passes four Exiles both-controller/base/amplified observations and two empty-hand Catalyst observations.",
+      "accepted": "functional-probe.json"
+    }
+  },
+  "fuzz": {
+    "command": [
+      "lockf",
+      "-k",
+      "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "npm",
+      "run",
+      "fuzz:engine",
+      "--",
+      "--games",
+      "300",
+      "--weight-uuids",
+      "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6,0bddeb19-ff49-4a77-bc06-955377ba3ed1,1cbbfd57-f510-4a02-a4b3-f043a4fb99d6,8436eaae-e410-4bfb-89d2-55bebf5a8144"
+    ],
+    "exit": 0,
+    "wrapperWallSeconds": 80.854,
+    "engineWallSeconds": 79.9,
+    "cpuSeconds": 87.5,
+    "games": 300,
+    "steps": 156808,
+    "prompts": 3140,
+    "failures": 0,
+    "seeds": "fuzz-0 through fuzz-299; default interactive-every 10",
+    "targets": [
+      {
+        "uuid": "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6",
+        "included": 618,
+        "exercised": 212
+      },
+      {
+        "uuid": "0bddeb19-ff49-4a77-bc06-955377ba3ed1",
+        "included": 617,
+        "exercised": 287
+      },
+      {
+        "uuid": "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6",
+        "included": 614,
+        "exercised": 251
+      },
+      {
+        "uuid": "8436eaae-e410-4bfb-89d2-55bebf5a8144",
+        "included": 615,
+        "exercised": 259
+      }
+    ],
+    "heavyWait": "Not separately instrumented. Wrapper wall includes process startup/lock acquisition; engine wall is separately reported. The difference is not claimed as lock wait.",
+    "sourceValidity": "Only scenario assertions changed after fuzz. All production card bytes are restored identically after the mutation; final source hashes anchor unchanged game/catalog proof."
+  },
+  "browser": {
+    "sweep": {
+      "event": "cardSweepSummary",
+      "counts": {
+        "pass": 40,
+        "skip": 40
+      },
+      "attemptCounts": {
+        "pass": 40,
+        "skip": 40
+      },
+      "hostLoad": 22.32275390625,
+      "sessions": 4,
+      "leaseYields": 3,
+      "wallMs": {
+        "browserLeaseWait": 578956,
+        "serve": 4680,
+        "scenario": 365494.7803750001,
+        "cleanup": 1042.20850100003,
+        "execution": 371271.81133399997,
+        "total": 950227.811334
+      }
+    },
+    "matrix": "sweep-cell-matrix.json",
+    "judged": {
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 133158,
+        "serve": 1251,
+        "scenario": 23802,
+        "total": 158236
+      },
+      "hostLoad": 17.583984375,
+      "serverPid": 83167,
+      "port": 5175,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 12805
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 10996
+        }
+      ]
+    },
+    "sampling": [
+      {
+        "uuid": "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6",
+        "firstByte": 190
+      },
+      {
+        "uuid": "0bddeb19-ff49-4a77-bc06-955377ba3ed1",
+        "firstByte": 42
+      },
+      {
+        "uuid": "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6",
+        "firstByte": 23
+      },
+      {
+        "uuid": "8436eaae-e410-4bfb-89d2-55bebf5a8144",
+        "firstByte": 188
+      }
+    ],
+    "newPromptStatusVisualKinds": 0,
+    "judgedPasses": 2,
+    "functionalPasses": 2,
+    "captures": [
+      {
+        "filename": "night-raid-ready-desktop.png",
+        "width": 1440,
+        "height": 900,
+        "sha256": "5f2bdb95000ebc049d0d0995c63aa29caf5082965a58225f2c101322a7565399"
+      },
+      {
+        "filename": "night-raid-resolved-desktop.png",
+        "width": 1440,
+        "height": 900,
+        "sha256": "52f8c3f4d62f09ddd97837d61086cf826f672a383bfeacd60678178602973bdc"
+      },
+      {
+        "filename": "night-raid-ready-mobile.png",
+        "width": 390,
+        "height": 844,
+        "sha256": "1d937ab3e0ff0d7620f58cc47f3d7fda88e874402a7a791c720cb5d88afd8f4c"
+      },
+      {
+        "filename": "night-raid-resolved-mobile.png",
+        "width": 390,
+        "height": 844,
+        "sha256": "9a35e121c19990017e946ce622634c7323370e0b030f861e7a4a121a721e4f83"
+      }
+    ],
+    "captureScale": "README qa.capture contract is CSS scale; actual PNG dimensions verified from IHDR, not inferred from viewport.",
+    "visualVerdict": "Implementer viewed all four Night before/after captures. Ready activation affordance, departure/void, drawn hand and energy are clear and contained on desktop/mobile. Parent independently corroborated all four images and normal-control script; no additional capture needed.",
+    "games": [
+      {
+        "uuid": "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6",
+        "viewport": "desktop",
+        "gameId": "oas9qg",
+        "source": "i1",
+        "file": "night-desktop-oas9qg.jsonl",
+        "rows": 31,
+        "before": {
+          "hand": [],
+          "deckTop": "i2",
+          "energy": 0
+        },
+        "after": {
+          "hand": [
+            "i2"
+          ],
+          "void": [
+            "i1"
+          ],
+          "energy": 1,
+          "sourceZone": "void"
+        },
+        "geometry": {
+          "x": 254.5,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5,
+          "hit": true,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        }
+      },
+      {
+        "uuid": "0bddeb19-ff49-4a77-bc06-955377ba3ed1",
+        "viewport": "desktop",
+        "gameId": "r2u46m",
+        "source": "i1",
+        "file": "catalyst-desktop-r2u46m.jsonl",
+        "rows": 29,
+        "before": {
+          "hand": [
+            "i2",
+            "i3"
+          ],
+          "deckTop": "i4",
+          "energy": 0
+        },
+        "after": {
+          "hand": [],
+          "void": [
+            "i1",
+            "i3",
+            "i2"
+          ],
+          "energy": 3,
+          "sourceZone": "void"
+        },
+        "geometry": {
+          "x": 254.5,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5,
+          "hit": true,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        }
+      },
+      {
+        "uuid": "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6",
+        "viewport": "mobile",
+        "gameId": "moejdp",
+        "source": "i1",
+        "file": "night-mobile-moejdp.jsonl",
+        "rows": 31,
+        "before": {
+          "hand": [],
+          "deckTop": "i2",
+          "energy": 0
+        },
+        "after": {
+          "hand": [
+            "i2"
+          ],
+          "void": [
+            "i1"
+          ],
+          "energy": 1,
+          "sourceZone": "void"
+        },
+        "geometry": {
+          "x": 23.40625,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375,
+          "hit": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          }
+        }
+      },
+      {
+        "uuid": "0bddeb19-ff49-4a77-bc06-955377ba3ed1",
+        "viewport": "mobile",
+        "gameId": "suxacz",
+        "source": "i1",
+        "file": "catalyst-mobile-suxacz.jsonl",
+        "rows": 29,
+        "before": {
+          "hand": [
+            "i2",
+            "i3"
+          ],
+          "deckTop": "i4",
+          "energy": 0
+        },
+        "after": {
+          "hand": [],
+          "void": [
+            "i1",
+            "i3",
+            "i2"
+          ],
+          "energy": 3,
+          "sourceZone": "void"
+        },
+        "geometry": {
+          "x": 23.40625,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375,
+          "hit": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          }
+        }
+      }
+    ],
+    "errors": "All 40 passing raw sweep reports and all four judged/functional case buffers are empty; no browser failure or adaptive retry occurred.",
+    "logs": "game-log-audit.json references all four actually persisted game exports, including Night logs extracted from the scenario return before navigation. Native runner exports its final Catalyst game per viewport as well. Sweep raw reports retain per-cell lab side/UUID/events, without claiming a per-game JSONL export the sweep does not produce.",
+    "QAConsistency": "Review and asset restoration finished before browser service. No source/materialization edits while any browser session served this checkout."
+  },
+  "runtime": {
+    "leasePath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock",
+    "sweep": {
+      "runnerPid": 28855,
+      "startedAt": "2026-10-12T00:03:15.817663+00:00",
+      "endedAt": "2026-10-12T00:19:11.124735+00:00",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.130",
+        "--cards",
+        "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6,0bddeb19-ff49-4a77-bc06-955377ba3ed1,1cbbfd57-f510-4a02-a4b3-f043a4fb99d6,8436eaae-e410-4bfb-89d2-55bebf5a8144",
+        "--port",
+        "5175"
+      ],
+      "status": "exited",
+      "exit": 0,
+      "wallSeconds": 955.296
+    },
+    "judged": {
+      "runnerPid": 71863,
+      "startedAt": "2026-10-12T00:19:39.800483+00:00",
+      "endedAt": "2026-10-12T00:22:23.379755+00:00",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.130/abandon-payments.mjs",
+        "--bead",
+        "hv-umm2.130",
+        "--port",
+        "5175",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "status": "exited",
+      "exit": 0,
+      "wallSeconds": 163.577
+    },
+    "serverGroups": [
+      31750,
+      67185,
+      91398,
+      33640,
+      83167
+    ],
+    "stoppedGroups": [
+      31750,
+      67185,
+      91398,
+      33640,
+      83167
+    ],
+    "boundPorts": [
+      5175
+    ],
+    "portFreeAtObservation": true,
+    "ownOwnerRemaining": false,
+    "MCPClients": [
+      "qa-card-sweep-28855",
+      "qa-abandon-payments-71863"
+    ],
+    "contextSettlement": "Native successful close awaited browser close and provider/transport drain before owned server cleanup and lease release; each server group has its explicit stop message. Exact browser context IDs are not separately exposed.",
+    "allToolObserversSettled": true,
+    "heavySlotHeld": false,
+    "remainingWriters": [],
+    "observedAt": "2026-10-12T00:25:03.664494+00:00"
+  },
+  "fallout": {
+    "exportedAPIChanges": 0,
+    "mechanicalConsumers": [],
+    "unusedFallout": "Knip passes; new plain scenario is registered once additively in the existing registry. No orphaned files or exports."
+  },
+  "hostLoadSamples": {
+    "acceptedReviewGroupStart": 7.64306640625,
+    "acceptedKnipGroupStart": 9.2841796875,
+    "fuzzCommandGroupStart": 5.2392578125,
+    "preflightStart": 6.04638671875,
+    "sweepStart": 22.32275390625,
+    "judgedStart": 17.583984375
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final accepted npm run review command group start, before preparation; actual one-minute sample."
+      }
+    }
+  },
+  "sourceHashes": {
+    "src/content/cards/exiles-of-the-last-light-b56b3411.ts": "230f8e2a20c8ea1e9fa85f1901894c9859c033d675829600c1be79b1b7b5b1d4",
+    "src/content/cards/frontline-martyr-8436eaae.ts": "2d598466c83895c64ff6a54004c7d9aa417b2b9679ad749fe67a88ec816d6150",
+    "src/content/cards/gilded-catalyst-0bddeb19.ts": "04c8e385052602c0851231b927d422294acffda8354b680120ddb4da214f7834",
+    "src/content/cards/night-raid-commando-1cbbfd57.ts": "ee2ad85b3be9fb02884ce83dbff0525117b8a8123d50ee1aba40c09871353c7f",
+    "src/content/specs/cards-18.scenarios.ts": "c2fdee243369656784c410a3556170436edd91e3e5549f3fc498a8646d4d3a24",
+    "src/content/specs/index.ts": "da7e082c924ccbbc76a98d7e0630da263e6a2c34517db2d80fda15a8644ab776"
+  },
+  "frictionMinutes": {
+    "browserLeaseWait": 11.87
+  },
+  "reviewPolicy": "Composition non-core. Card/registry non-test code delta is 24 changed lines; scenario/evidence/generated QA data are separately counted. Parent determines final independent-review policy; no threshold is crossed.",
+  "manifest": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.130/evidence-manifest.json",
+    "artifacts": 113,
+    "sha256": "60598e2622e12d8ec17c64207f008ad6a057c7b873e8746a95ae90982af8b679"
+  },
+  "parentAcceptance": "Parent accepted final source checks, functional evidence and all four cold visual images; requested no additional source edits/captures/aggregate checks.",
+  "originalValidationBase": "d6531765b93d192f3c6890781b1038aaeb00f5c3",
+  "originalCompletedSource": "9bef049c6ca625d1c318dfe28a582e1e068cd702",
+  "registryRecovery": {
+    "originalSource": "9bef049c6ca625d1c318dfe28a582e1e068cd702",
+    "originalBase": "d6531765b93d192f3c6890781b1038aaeb00f5c3",
+    "failedCandidate": "01a12d84-91db-7d93-8169-dbef67303298",
+    "parkedCheckpoint": "f60509a0633da3832b64e080898a209342daa083",
+    "updatedCheckpoint": "39e3a58de4c1bc1d74859c1285f3c514ac7351ff",
+    "updatedBase": "02721b0361c9e4561ca2b4a8bb811888dd0dc4f1",
+    "parkedCheckpointNeverSubmitted": true,
+    "conflictPath": "src/content/specs/index.ts",
+    "combinedBothRegistrationsProven": true,
+    "originalFiveBehaviorSourceHashesUnchanged": true,
+    "originalEvidenceRemainsTiedToOriginalSource": true,
+    "updatedIndexSha256": "da7e082c924ccbbc76a98d7e0630da263e6a2c34517db2d80fda15a8644ab776",
+    "checks": {
+      "focused": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "src/engine/content-gates.test.ts"
+        ],
+        "exit": 0,
+        "wallSeconds": 2.993,
+        "startingHostLoad": 17.287109375,
+        "startedAt": "2026-10-12T00:33:08.679694+00:00",
+        "updatedBase": "02721b0361c9e4561ca2b4a8bb811888dd0dc4f1"
+      },
+      "review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "exit": 0,
+        "wallSeconds": 44.741,
+        "startingHostLoad": 17.287109375,
+        "startedAt": "2026-10-12T00:33:11.673385+00:00",
+        "updatedBase": "02721b0361c9e4561ca2b4a8bb811888dd0dc4f1"
+      },
+      "knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "exit": 0,
+        "wallSeconds": 2.502,
+        "startingHostLoad": 23.14208984375,
+        "startedAt": "2026-10-12T00:33:56.414978+00:00",
+        "updatedBase": "02721b0361c9e4561ca2b4a8bb811888dd0dc4f1"
+      }
+    },
+    "completedAt": "2026-10-12T00:35:05.221694+00:00",
+    "verification": "Original card programs and 82-line scenario stay byte-identical; registry combines both exact inputs. Focused, review and Knip on new base pass. Original mutation, weighted fuzz and browser evidence remain tied to original source; conflict resolution changes only test registration, so no new fuzz/browser run.",
+    "evidenceValidation": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "exit": 0,
+      "log": "parent-friction-validation.log",
+      "priorInvocation": "Incorrect scripts/validate-friction.mjs path exited MODULE_NOT_FOUND; corrected to the actual review step command. This was an invocation error, not a failed schema check."
+    }
+  },
+  "priorArtifactManifest": {
+    "filename": "evidence-manifest-original.json",
+    "sha256": "7b96c1eb970ecc44fabe86ed2632fc207557296d33bf546b6d7867ca72e06296",
+    "artifacts": 106
+  }
+}

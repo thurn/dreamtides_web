@@ -1,3 +1,6 @@
+import { abandonSelfCost, activated } from "../../engine/dsl/builders";
+import { onDissolved, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 399,
   art: { x: 0.025, y: 1, scale: 1.2 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [activated([abandonSelfCost()], p.gainEnergy(v.amplified ? 2 : 1)), triggered(onDissolved(), p.draw(1))],
+  verifiedText: "vizlyf3vkd",
 });

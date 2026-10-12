@@ -1,3 +1,5 @@
+import { abandonSelfCost, activated, discardHandCost, exhaustSelf } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 485,
   art: { x: -0.024, y: 0.669, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [activated([exhaustSelf(), discardHandCost(), abandonSelfCost()], p.gainEnergy(v.amplified ? 4 : 3))],
+  verifiedText: "29mwuz8279r",
 });

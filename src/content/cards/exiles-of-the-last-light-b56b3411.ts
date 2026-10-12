@@ -1,3 +1,5 @@
+import { abandonCost, activated } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 192,
   art: { x: -0.414, y: 0.3, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [activated([abandonCost({ another: true })], p.sequence(p.gainEnergy(v.amplified ? 2 : 1), p.gainPoints(1, "opponent")))],
+  verifiedText: "1ez1ydn2d2s",
 });

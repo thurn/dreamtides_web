@@ -6,6 +6,7 @@
 import type { ScenarioModule } from "../../engine/testing/scenario";
 import cards04 from "./cards-04.scenarios";
 import cards09 from "./cards-09.scenarios";
+import cards18 from "./cards-18.scenarios";
 import primChooseSubtype from "./prim-choose-subtype.scenarios";
 import primCreateCard from "./prim-create-card.scenarios";
 import primDrawMatching from "./prim-draw-matching.scenarios";
@@ -16,4 +17,4 @@ import primSelectorChallenger from "./prim-selector-challenger.scenarios";
 import primWhenErodeTrigger from "./prim-when-erode-trigger.scenarios";
 import primWhenPutIntoVoidTrigger from "./prim-when-put-into-void-trigger.scenarios";
 
-export const SCENARIO_MODULES: readonly ScenarioModule[] = [cards04, cards09, primChooseSubtype, primCreateCard, primDrawMatching, primLosePoints, primPlayFromZone, primReturnFromVoid, primSelectorChallenger, primWhenErodeTrigger, primWhenPutIntoVoidTrigger];
+export const SCENARIO_MODULES: readonly ScenarioModule[] = [cards04, cards09, cards18, primChooseSubtype, primCreateCard, primDrawMatching, primLosePoints, primPlayFromZone, primReturnFromVoid, primSelectorChallenger, primWhenErodeTrigger, primWhenPutIntoVoidTrigger];

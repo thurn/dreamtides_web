@@ -1,0 +1,40 @@
+{
+  "bead": "hv-umm2.130",
+  "phase": 5,
+  "implementMin": 42.97,
+  "localValidationS": {
+    "installReported": 2,
+    "focused": 2.647,
+    "removedPaymentProbe": 1.634,
+    "review": 35.371,
+    "knip": 2.829,
+    "weighted300": 80.854,
+    "preflight": 0.729,
+    "sweepExecution": 371.272,
+    "sweepLeaseWait": 578.956,
+    "judgedScenario": 23.802,
+    "judgedLeaseWait": 133.158,
+    "recoveryFocused": 2.993,
+    "recoveryReview": 44.741,
+    "recoveryKnip": 2.502
+  },
+  "hostLoad": 7.64306640625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 8
+  },
+  "friction": [
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 11.87,
+      "note": "Native sweep yielded at three card boundaries to queued peers; sweep and judged runner cumulatively waited for the shared browser lease. Detailed queue and execution windows are recorded separately."
+    },
+    {
+      "tag": "additive-registry-conflict",
+      "minutes": 4.67,
+      "note": "One additive scenario registry conflict with landed whenErode entry. Root followed native update rollback/park/reapply protocol; original/full delta preserved, parked checkpoint never submitted, both entries and unchanged behavior sources proven. Timing starts at recorded submission boundary and includes recovery/revalidation."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+# hv-umm2.130 observations
+
+The four filed UUIDs are authoritative. The current inventory routes them through positional keys cards-25 and cards-26; this batch keeps the filed cards-18 scope and scenario slug. Gilded Catalyst uses `discardHandCost()` under RD-hv-umm2.334-1. Night Raid Commando uses the last in-play controller for its own Dissolved trigger under RD-hv-umm2.342-1. No new rules ambiguity or source defect was encountered during authoring.
+
+The parent reports a completed 2-second fresh install with inherited dependency advisories. Preparation logs contain missing-art warnings for disposable materializations; preparation and restoration complete. No dependency or materialized asset source changes are included.
+
+Initial scenario failures are local fixture corrections: variant entries are supported in hand placement, characters enter play exhausted and clear that status through normal Ending progression, and the exhaustion event is `exhaustionChanged`. All eight coupled scenarios pass after those corrections. Raw logs preserve each attempted fixture version; they do not establish a pre-existing engine defect.
+
+
+The first static check also found four unnecessary non-null assertions in the new scenario. A proposed per-character ready-event assertion failed its positive control because Ending clears character exhaustion without that event; this is retained as an invalid witness, not an engine defect. The passing scenario uses the actual next own `turnStarted` boundary and requires the payment exhaustion after it. Its corrected removed-exhaust mutation fails exactly four Catalyst cases while four Night controls pass, with byte-identical source restoration. The public probe's first error concerned the recorded-answer shape; its accepted version captures real prompts via the public answer callback. Measurements enumerate every attempted validation and its disposition.
+
+The native sweep and judged workflow both pass with empty error buffers. Shared browser lease queueing costs 11.87 minutes across the four-session sweep and the judged runner; native timing separates queue wait from actual execution. The existing hand fan places the lower part of a drawn hand card below the viewport while keeping its name/cost and playable affordance visible. Desktop and mobile Night captures show the expected board departure, void and energy result without a new layout defect. Parent cold visual corroboration passes. No additional pre-existing source issue or outside-scope repair was encountered.

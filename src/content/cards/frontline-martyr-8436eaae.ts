@@ -1,3 +1,5 @@
+import { abandonSelfCost, activated } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 103,
   art: { x: 0, y: 1, scale: 1.16 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [activated([abandonSelfCost()], p.gainEnergy(v.amplified ? 4 : 3))],
+  verifiedText: "11mjyux08jy",
 });
