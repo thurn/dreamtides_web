@@ -1,3 +1,5 @@
+import { all, characterYouControl, staticAbility } from "../../engine/dsl/builders";
+import { sparkModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,8 @@ export default card({
   cardNumber: 163,
   art: { x: 0, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    staticAbility(sparkModifier(all(characterYouControl()), variant.amplified ? 2 : 1), { zone: "void" }),
+  ],
+  verifiedText: "23dkquo3c0z",
 });

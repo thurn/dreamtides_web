@@ -1,3 +1,5 @@
+import { all, characterYouControl, staticAbility } from "../../engine/dsl/builders";
+import { setBaseSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 466,
   art: { x: 0, y: 1, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [staticAbility(setBaseSpark(all(characterYouControl({ another: true })), 10))],
+  verifiedText: "295v7zt6aiv",
 });

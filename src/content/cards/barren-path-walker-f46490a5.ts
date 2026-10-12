@@ -1,3 +1,5 @@
+import { countCards, self, staticAbility } from "../../engine/dsl/builders";
+import { sparkModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 188,
   art: { x: -0.294, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [staticAbility(sparkModifier(self(), countCards("void", { cardType: "character" })))],
+  verifiedText: "1x44osej0rg",
 });

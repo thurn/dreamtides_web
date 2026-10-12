@@ -1,3 +1,6 @@
+import { characterYouControl, thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenDissolved } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +23,13 @@ export default card({
   artOwned: false,
   cardNumber: 380,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    // Its void ability watches other dissolves, not its own (RD-hv-umm2.65-1).
+    triggered(
+      whenDissolved(characterYouControl()),
+      p.payTo({ energy: 1 }, p.materialize(thisCardIn("void"), { awakened: variant.amplified })),
+      { zone: "void" },
+    ),
+  ],
+  verifiedText: "gd2ljukuyb",
 });

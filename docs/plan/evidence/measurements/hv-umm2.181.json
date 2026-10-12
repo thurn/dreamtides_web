@@ -1,0 +1,240 @@
+{
+  "bead": "hv-umm2.181",
+  "base": "778222e2399f526ed126c48b8cbccaf6b6b8ff09",
+  "implementStartProvenance": "Exact post-claim parent spawn_agent dispatch timestamp from its native rollout. Includes research, coordination, waits and verification; parent worktree creation/npm install preceded dispatch.",
+  "entities": [
+    "7def28c4-d75a-47e1-ae86-5b7093cc0419",
+    "8451340c-02c5-465a-8c25-51efb2dc857a",
+    "455ef341-8a26-44e1-b287-19e53bdc6158",
+    "f46490a5-7030-4ade-93e9-bedb5813f590"
+  ],
+  "scope": {
+    "newPrimitives": 0,
+    "engineBehaviorChanged": false,
+    "nonTestAddedDeleted": 30,
+    "scenarioModule": "cards-69",
+    "scenarioCases": 22,
+    "scenarioLines": 115,
+    "testDeltaPolicy": "Plain scenario lines count as test lines; no .test file or jsdom test added."
+  },
+  "rules": {
+    "newDecisions": [],
+    "newCardIssues": [],
+    "existingDecisions": [
+      "RD-hv-umm2.65-1",
+      "RD-hv-umm2.93-2"
+    ],
+    "anchors": [
+      "rules.md: References to cards in a zone",
+      "rules.md: Counting cards in a zone",
+      "rules.md: Spark",
+      "rules.md: Where triggered abilities work",
+      "rules.md: When a character is dissolved"
+    ],
+    "actualPaymentPrompt": "confirm:optionalCost via existing payTo; unaffordable payment asks no confirmation"
+  },
+  "focused": {
+    "artifact": "focused.log",
+    "filesPassed": 2,
+    "casesPassed": 173,
+    "scenarioCasesPassed": 160,
+    "ownScenarioCases": 22,
+    "contentGateCasesPassed": 13,
+    "wrapperS": 4.22,
+    "initialHarnessCorrections": "Mandatory empty Dreamwell catalog argument added, recorded answers checked via value, and forced single-target answers omitted. All authored cards retained the proposed DSL composition.",
+    "finalRefined": {
+      "artifact": "focused-refined.log",
+      "wrapperS": 3.32,
+      "filesPassed": 2,
+      "casesPassed": 173
+    }
+  },
+  "fuzz": {
+    "artifact": "fuzz.log",
+    "games": 300,
+    "steps": 150317,
+    "prompts": 3713,
+    "interactiveReruns": 371,
+    "failures": 0,
+    "wallS": 177,
+    "wrapperS": 178.2,
+    "cpuS": 187.8,
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "included": [
+      612,
+      618,
+      618,
+      619
+    ],
+    "exercised": [
+      245,
+      38,
+      204,
+      257
+    ],
+    "timingScope": "Engine summary wall excludes lockf/wrapper overhead; wrapper wall is178.20s."
+  },
+  "preflight": {
+    "artifact": "preflight.log",
+    "event": "labPreflightSummary",
+    "cards": [
+      "7def28c4-d75a-47e1-ae86-5b7093cc0419",
+      "8451340c-02c5-465a-8c25-51efb2dc857a",
+      "455ef341-8a26-44e1-b287-19e53bdc6158",
+      "f46490a5-7030-4ade-93e9-bedb5813f590"
+    ],
+    "variants": [
+      "base",
+      "amplified",
+      "empowered",
+      "kindled",
+      "resonant",
+      "inspired",
+      "enduring",
+      "hastened",
+      "attuned",
+      "perfected"
+    ],
+    "sides": [
+      "player",
+      "enemy"
+    ],
+    "counts": {
+      "pass": 36,
+      "pending": 0,
+      "skip": 44,
+      "fail": 0
+    },
+    "elapsedMs": 24.63041599999997,
+    "hostLoad": 18.9130859375,
+    "enemyMode": "scripted-lab-play-first-legal-prompts",
+    "wrapperS": 1.69
+  },
+  "sweep": {
+    "event": "cardSweepSummary",
+    "invocation": "invocations/sweep-wUviKF",
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.181/invocations/sweep-wUviKF",
+    "counts": {
+      "pass": 36,
+      "skip": 44
+    },
+    "attemptCounts": {
+      "pass": 36,
+      "skip": 44
+    },
+    "hostLoad": 17.18212890625,
+    "sessions": 1,
+    "leaseYields": 0,
+    "wallMs": {
+      "browserLeaseWait": 10,
+      "serve": 2620,
+      "scenario": 365687.5592080001,
+      "cleanup": 2839.056833999988,
+      "execution": 371236.163209,
+      "total": 371246.163209
+    },
+    "rawReports": 36,
+    "capsErrors": 0,
+    "reportErrors": 0,
+    "captureCount": 0,
+    "artifact": "sweep.log",
+    "wrapperS": 371.47
+  },
+  "d21": {
+    "firstBytes": [
+      103,
+      140,
+      254,
+      54
+    ],
+    "sampled": [],
+    "newPromptKinds": [],
+    "newStatuses": [],
+    "newVisualEffects": [],
+    "judgedRequired": 0,
+    "judgedPerformed": 0,
+    "rationale": "All four SHA-256 first bytes exceed25. Authored forms compose established confirm optional-payment, ready/exhausted and spark displays. Classification is recorded in base/player native sweep notes."
+  },
+  "runtime": {
+    "serverPid": 36011,
+    "processGroup": 36011,
+    "port": 5274,
+    "browserSlot": 1,
+    "provider": "http://localhost:8931/mcp",
+    "owner": "native card-sweep runner",
+    "cleanup": "Native runner closed its MCP client/context and server group36011, reporting port5274free. Audit found no group36011members; peerPID76987 had already reused5274 and was left untouched. Shared provider remains running.",
+    "remainingOwnedRuntimes": []
+  },
+  "commands": {
+    "review": {
+      "start": "2026-10-12T15:10:21.779Z",
+      "wallS": 39.417519084,
+      "hostLoad": 9.71,
+      "exit": 0,
+      "filesPassed": 223,
+      "testsPassed": 3705,
+      "artifact": "review.log",
+      "requiredPhases": [
+        "friction-records",
+        "typecheck",
+        "typecheck-node",
+        "lint",
+        "import-cycles",
+        "test-related"
+      ]
+    },
+    "reviewInitial": {
+      "start": "2026-10-12T15:08:17.414Z",
+      "wallS": 45.816530583,
+      "hostLoad": 11.72,
+      "exit": 0,
+      "filesPassed": 223,
+      "testsPassed": 3705,
+      "artifact": "review-initial.log"
+    },
+    "knip": {
+      "start": "2026-10-12T15:11:27.246Z",
+      "wallS": 2.789702792,
+      "hostLoad": 8.25,
+      "exit": 0,
+      "artifact": "knip.log"
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "review",
+      "start": "2026-10-12T15:08:17.414Z",
+      "oneMinute": 11.72
+    },
+    {
+      "command": "review-refined",
+      "start": "2026-10-12T15:10:21.779Z",
+      "oneMinute": 9.71
+    },
+    {
+      "command": "knip",
+      "start": "2026-10-12T15:11:27.246Z",
+      "oneMinute": 8.25
+    }
+  ],
+  "implementWindow": {
+    "start": "2026-10-12T14:54:28.561Z",
+    "end": "2026-10-12T15:13:00.000Z"
+  },
+  "implementMin": 18.523983333333334,
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "required final review command start via sysctl vm.loadavg"
+      }
+    }
+  },
+  "validationSourceRefinement": "Parent review requested setup costs and unrelated source printed-spark expectations derive from their card metadata. Only scenario fixtures/expectations changed after fuzz/preflight/sweep; production card DSL is identical, so runtime evidence remains applicable.",
+  "reviewRouting": {
+    "required": false,
+    "reason": "Ordinary composition using landed primitives; 30 non-test changed lines, no new prompt kind or engine form (D18)."
+  },
+  "preExistingEvidence": "pre-existing/hv-umm2.181.md",
+  "commitBoundary": "2026-10-12T15:13:00.000Z",
+  "commitWindowEndProvenance": "Exact source commit committer timestamp at the final evidence/schema validation and commit boundary."
+}
