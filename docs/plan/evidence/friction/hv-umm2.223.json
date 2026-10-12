@@ -1,0 +1,44 @@
+{
+  "bead": "hv-umm2.223",
+  "phase": 5,
+  "implementMin": 50.97438505,
+  "implementWindow": {
+    "start": "2026-10-12T21:40:36Z",
+    "end": "2026-10-12T22:31:34.463103+00:00"
+  },
+  "localValidationS": {
+    "abilities-controls-fixed": 48.30903041599959,
+    "abilities-first": 39.33472062500368,
+    "abilities-fixed-close": 36.96247483299521,
+    "abilities-journal-replay": 98.83438000000024,
+    "abilities-random-enemy": 38.33502454200061,
+    "abilities-remaining": 24.495103875000495,
+    "abilities-routing-fixed": 36.91435854200972,
+    "abilities-void-route-fixed": 99.12984999999753,
+    "focused-final": 10.01446125000075,
+    "focused-fixed": 12.517070500005502,
+    "focused": 9.768934083011118,
+    "fuzz-inner": 177.29775425000116,
+    "knip": 4.224904082991998,
+    "preflight": 1.1631528750003781,
+    "review-final": 48.14213925000513,
+    "review": 51.29310441699636,
+    "schema-preqa": 0.10761954200279433,
+    "sweep": 119.83421375000034,
+    "zeva-provenance": 23.318999166993308,
+    "schema-final": 0.11907137499656528
+  },
+  "hostLoad": 5.41943359375,
+  "testDelta": {
+    "files": 0,
+    "lines": 106,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 21.98583125,
+      "note": "Observed recovery21:56:35.370574Z to22:18:34.520449Z. Close/sole-activation/void routing assumptions, second Keeper readiness, protected deck setup/normal worker policy, and mount-scoped probe replay observation were corrected from actual source/raw receipts. All failed attempts retained; this interval is not command-wall sum or full dispatch time."
+    }
+  ]
+}

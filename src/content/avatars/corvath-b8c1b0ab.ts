@@ -1,3 +1,5 @@
+import { triggered, triggeringCard, whenDiscard } from "../../engine/dsl/triggers";
+import { grantReclaim } from "../../engine/effects/primitives";
 import { avatar } from "../define";
 
 export default avatar({
@@ -43,5 +45,6 @@ export default avatar({
     "770b21e4-ea6a-4910-8fca-2ec5b8813da1",
     "af739e3d-bc61-4fab-bf81-a22e78d7e524",
   ],
-  pending: true,
+  abilities: () => [triggered(whenDiscard(), grantReclaim(triggeringCard(), { duration: "untilEndOfTurn" }), { oncePerTurn: true })],
+  verifiedText: "18m3ftbyzpr",
 });

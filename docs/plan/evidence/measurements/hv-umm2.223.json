@@ -1,0 +1,3404 @@
+{
+  "bead": "hv-umm2.223",
+  "base": "1fe05c5d67c3c3f0f2fcd840bb7049a21ae1bf62",
+  "dispatch": "2026-10-12T21:40:36Z",
+  "commands": [
+    {
+      "name": "abilities-controls-fixed",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+        "--bead",
+        "hv-umm2.223",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-12T22:03:00.911635+00:00",
+      "end": "2026-10-12T22:03:49.221278+00:00",
+      "wallS": 48.30903041599959,
+      "CPU_S": 7.341184,
+      "exit": 1,
+      "pid": 16331,
+      "pgid": 16331,
+      "startLoad": [
+        4.791015625,
+        10.7412109375,
+        13.86962890625
+      ],
+      "endLoad": [
+        5.39208984375,
+        9.9794921875,
+        13.40673828125
+      ]
+    },
+    {
+      "name": "abilities-first",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+        "--bead",
+        "hv-umm2.223",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-12T21:55:56.035337+00:00",
+      "end": "2026-10-12T21:56:35.370574+00:00",
+      "wallS": 39.33472062500368,
+      "CPU_S": 7.787529,
+      "exit": 1,
+      "pid": 69634,
+      "pgid": 69634,
+      "startLoad": [
+        20.6044921875,
+        17.724609375,
+        16.59033203125
+      ],
+      "endLoad": [
+        26.03466796875,
+        19.5830078125,
+        17.3271484375
+      ]
+    },
+    {
+      "name": "abilities-fixed-close",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+        "--bead",
+        "hv-umm2.223",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-12T21:57:12.342538+00:00",
+      "end": "2026-10-12T21:57:49.305538+00:00",
+      "wallS": 36.96247483299521,
+      "CPU_S": 8.581875,
+      "exit": 1,
+      "pid": 46201,
+      "pgid": 46201,
+      "startLoad": [
+        17.81298828125,
+        18.2841796875,
+        16.9541015625
+      ],
+      "endLoad": [
+        13.66748046875,
+        17.2060546875,
+        16.6142578125
+      ]
+    },
+    {
+      "name": "abilities-journal-replay",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+        "--bead",
+        "hv-umm2.223",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "first=4",
+        "--arg",
+        "policy=random",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-12T22:16:55.685047+00:00",
+      "end": "2026-10-12T22:18:34.520449+00:00",
+      "wallS": 98.83438000000024,
+      "CPU_S": 8.573367000000001,
+      "exit": 0,
+      "pid": 52897,
+      "pgid": 52897,
+      "startLoad": [
+        10.35400390625,
+        8.849609375,
+        10.43701171875
+      ],
+      "endLoad": [
+        15.14111328125,
+        11.4541015625,
+        11.2978515625
+      ]
+    },
+    {
+      "name": "abilities-random-enemy",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+        "--bead",
+        "hv-umm2.223",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "first=4",
+        "--arg",
+        "policy=random",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-12T22:13:22.510752+00:00",
+      "end": "2026-10-12T22:14:00.846225+00:00",
+      "wallS": 38.33502454200061,
+      "CPU_S": 6.531534000000001,
+      "exit": 1,
+      "pid": 93348,
+      "pgid": 93348,
+      "startLoad": [
+        7.0390625,
+        9.34716796875,
+        11.166015625
+      ],
+      "endLoad": [
+        6.462890625,
+        8.89697265625,
+        10.916015625
+      ]
+    },
+    {
+      "name": "abilities-remaining",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+        "--bead",
+        "hv-umm2.223",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "first=3",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-12T22:04:58.284477+00:00",
+      "end": "2026-10-12T22:05:22.779917+00:00",
+      "wallS": 24.495103875000495,
+      "CPU_S": 6.94859,
+      "exit": 1,
+      "pid": 19402,
+      "pgid": 19402,
+      "startLoad": [
+        3.7822265625,
+        8.55712890625,
+        12.59814453125
+      ],
+      "endLoad": [
+        4.17138671875,
+        8.2568359375,
+        12.37109375
+      ]
+    },
+    {
+      "name": "abilities-routing-fixed",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+        "--bead",
+        "hv-umm2.223",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-12T22:00:39.149386+00:00",
+      "end": "2026-10-12T22:01:16.064224+00:00",
+      "wallS": 36.91435854200972,
+      "CPU_S": 7.483471999999999,
+      "exit": 1,
+      "pid": 8529,
+      "pgid": 8529,
+      "startLoad": [
+        10.57421875,
+        14.33203125,
+        15.48876953125
+      ],
+      "endLoad": [
+        8.4794921875,
+        13.4306640625,
+        15.11474609375
+      ]
+    },
+    {
+      "name": "abilities-void-route-fixed",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+        "--bead",
+        "hv-umm2.223",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "first=3",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-12T22:07:36.288872+00:00",
+      "end": "2026-10-12T22:09:15.419935+00:00",
+      "wallS": 99.12984999999753,
+      "CPU_S": 7.65689,
+      "exit": 1,
+      "pid": 23268,
+      "pgid": 23268,
+      "startLoad": [
+        4.318359375,
+        6.7490234375,
+        11.1689453125
+      ],
+      "endLoad": [
+        14.91259765625,
+        8.60009765625,
+        11.32958984375
+      ]
+    },
+    {
+      "name": "focused-final",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/testing/avatar-lab.test.ts"
+      ],
+      "start": "2026-10-12T21:46:17.542979+00:00",
+      "end": "2026-10-12T21:46:27.557639+00:00",
+      "wallS": 10.01446125000075,
+      "CPU_S": 15.988745999999999,
+      "exit": 0,
+      "pid": 71926,
+      "pgid": 71926,
+      "startLoad": [
+        19.90576171875,
+        17.51708984375,
+        15.18212890625
+      ],
+      "endLoad": [
+        20.765625,
+        17.76611328125,
+        15.29638671875
+      ]
+    },
+    {
+      "name": "focused-fixed",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/testing/avatar-lab.test.ts"
+      ],
+      "start": "2026-10-12T21:45:59.111445+00:00",
+      "end": "2026-10-12T21:46:11.628739+00:00",
+      "wallS": 12.517070500005502,
+      "CPU_S": 17.354433,
+      "exit": 1,
+      "pid": 63776,
+      "pgid": 63776,
+      "startLoad": [
+        14.73388671875,
+        16.37646484375,
+        14.7314453125
+      ],
+      "endLoad": [
+        20.7685546875,
+        17.64404296875,
+        15.212890625
+      ]
+    },
+    {
+      "name": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/testing/avatar-lab.test.ts"
+      ],
+      "start": "2026-10-12T21:45:39.303866+00:00",
+      "end": "2026-10-12T21:45:49.072994+00:00",
+      "wallS": 9.768934083011118,
+      "CPU_S": 15.452916000000002,
+      "exit": 1,
+      "pid": 62175,
+      "pgid": 62175,
+      "startLoad": [
+        13.97265625,
+        16.42236328125,
+        14.7119140625
+      ],
+      "endLoad": [
+        12.90673828125,
+        16.11181640625,
+        14.62158203125
+      ]
+    },
+    {
+      "name": "fuzz-inner",
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4,4d5e3933-7dd6-406b-922d-dd78acfa044a,b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e,60bd584b-5bc8-4ee7-8a98-cbb304eb71ab"
+      ],
+      "start": "2026-10-12T21:48:54.509866+00:00",
+      "end": "2026-10-12T21:51:51.809680+00:00",
+      "wallS": 177.29775425000116,
+      "CPU_S": 194.16707200000002,
+      "exit": 0,
+      "pid": 73306,
+      "pgid": 73306,
+      "startLoad": [
+        14.8125,
+        17.8662109375,
+        15.837890625
+      ],
+      "endLoad": [
+        13.087890625,
+        18.455078125,
+        16.6826171875
+      ]
+    },
+    {
+      "name": "fuzz-locked",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/223-resume-helper/run.py",
+        "fuzz-inner",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4,4d5e3933-7dd6-406b-922d-dd78acfa044a,b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e,60bd584b-5bc8-4ee7-8a98-cbb304eb71ab"
+      ],
+      "start": "2026-10-12T21:48:54.484555+00:00",
+      "end": "2026-10-12T21:51:51.813864+00:00",
+      "wallS": 177.32724249998864,
+      "CPU_S": 194.19403699999998,
+      "exit": 0,
+      "pid": 73302,
+      "pgid": 73302,
+      "startLoad": [
+        14.8125,
+        17.8662109375,
+        15.837890625
+      ],
+      "endLoad": [
+        13.087890625,
+        18.455078125,
+        16.6826171875
+      ]
+    },
+    {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T21:48:37.853572+00:00",
+      "end": "2026-10-12T21:48:42.078606+00:00",
+      "wallS": 4.224904082991998,
+      "CPU_S": 4.31564,
+      "exit": 0,
+      "pid": 71704,
+      "pgid": 71704,
+      "startLoad": [
+        14.89892578125,
+        18.07470703125,
+        15.8759765625
+      ],
+      "endLoad": [
+        14.02587890625,
+        17.8408203125,
+        15.80615234375
+      ]
+    },
+    {
+      "name": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--avatars",
+        "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4,4d5e3933-7dd6-406b-922d-dd78acfa044a,b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e,60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+        "--variants",
+        "base",
+        "--as",
+        "both"
+      ],
+      "start": "2026-10-12T21:51:57.136878+00:00",
+      "end": "2026-10-12T21:51:58.300112+00:00",
+      "wallS": 1.1631528750003781,
+      "CPU_S": 1.2454999999999998,
+      "exit": 0,
+      "pid": 89839,
+      "pgid": 89839,
+      "startLoad": [
+        12.35986328125,
+        18.21484375,
+        16.60791015625
+      ],
+      "endLoad": [
+        12.35986328125,
+        18.21484375,
+        16.60791015625
+      ]
+    },
+    {
+      "name": "review-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T21:47:43.230931+00:00",
+      "end": "2026-10-12T21:48:31.373669+00:00",
+      "wallS": 48.14213925000513,
+      "CPU_S": 131.75530700000002,
+      "exit": 0,
+      "pid": 67272,
+      "pgid": 67272,
+      "startLoad": [
+        24.9765625,
+        19.88916015625,
+        16.3193359375
+      ],
+      "endLoad": [
+        16.97412109375,
+        18.57177734375,
+        16.02294921875
+      ]
+    },
+    {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T21:46:31.394170+00:00",
+      "end": "2026-10-12T21:47:22.687911+00:00",
+      "wallS": 51.29310441699636,
+      "CPU_S": 164.231121,
+      "exit": 2,
+      "pid": 98815,
+      "pgid": 98815,
+      "startLoad": [
+        20.765625,
+        17.76611328125,
+        15.29638671875
+      ],
+      "endLoad": [
+        25.36181640625,
+        19.54931640625,
+        16.11572265625
+      ]
+    },
+    {
+      "name": "schema-final",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T22:28:39.972538+00:00",
+      "end": "2026-10-12T22:28:40.091722+00:00",
+      "wallS": 0.11907137499656528,
+      "CPU_S": 0.08607999999999999,
+      "exit": 0,
+      "pid": 44052,
+      "pgid": 44052,
+      "startLoad": [
+        8.1220703125,
+        9.28515625,
+        10.27685546875
+      ],
+      "endLoad": [
+        8.1220703125,
+        9.28515625,
+        10.27685546875
+      ]
+    },
+    {
+      "name": "schema-preqa",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T21:53:06.225985+00:00",
+      "end": "2026-10-12T21:53:06.333679+00:00",
+      "wallS": 0.10761954200279433,
+      "CPU_S": 0.076055,
+      "exit": 0,
+      "pid": 94141,
+      "pgid": 94141,
+      "startLoad": [
+        7.00927734375,
+        15.50244140625,
+        15.7060546875
+      ],
+      "endLoad": [
+        7.00927734375,
+        15.50244140625,
+        15.7060546875
+      ]
+    },
+    {
+      "name": "sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.223",
+        "--avatars",
+        "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4,4d5e3933-7dd6-406b-922d-dd78acfa044a,b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e,60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+        "--variants",
+        "base",
+        "--as",
+        "both",
+        "--timeout",
+        "60"
+      ],
+      "start": "2026-10-12T21:53:22.589247+00:00",
+      "end": "2026-10-12T21:55:22.424870+00:00",
+      "wallS": 119.83421375000034,
+      "CPU_S": 10.694702,
+      "exit": 0,
+      "pid": 95153,
+      "pgid": 95153,
+      "startLoad": [
+        6.24609375,
+        14.7734375,
+        15.43896484375
+      ],
+      "endLoad": [
+        14.4072265625,
+        16.4521484375,
+        16.12109375
+      ]
+    },
+    {
+      "name": "zeva-provenance",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/223-resume-helper/zeva-provenance.mjs",
+        "--bead",
+        "hv-umm2.223",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "first=1",
+        "--timeout",
+        "900"
+      ],
+      "start": "2026-10-12T22:25:04.169863+00:00",
+      "end": "2026-10-12T22:25:27.489149+00:00",
+      "wallS": 23.318999166993308,
+      "CPU_S": 7.293933,
+      "exit": 0,
+      "pid": 35269,
+      "pgid": 35269,
+      "startLoad": [
+        9.23486328125,
+        10.7255859375,
+        10.92333984375
+      ],
+      "endLoad": [
+        11.14697265625,
+        11.02734375,
+        11.02392578125
+      ]
+    }
+  ],
+  "normalIteration": [
+    {
+      "attempt": "focused",
+      "cause": "Event departure driver enters void before queued Avatar trigger; fixture was not empty on second departure.",
+      "repair": "Local synthetic character activation returns each card, keeping the observer pool exact."
+    },
+    {
+      "attempt": "focused-fixed",
+      "cause": "Second return target uniquely legal, automatically answered; redundant scripted answer unused.",
+      "repair": "Keep only actual first target answer."
+    },
+    {
+      "attempt": "review",
+      "cause": "Projected trigger event source is nullable.",
+      "repair": "Explicit null guards in own scenario filters."
+    }
+  ],
+  "scope": {
+    "leaves": 4,
+    "scenarioModule": "src/content/specs/avatars-03.scenarios.ts",
+    "scenarioCases": 4,
+    "newTestEntrypoints": 0,
+    "jsdomEntrypoints": 0,
+    "APIExporterImporterFallout": [],
+    "engineFormsAdded": [],
+    "scenarioLines": 106,
+    "nonTestChangedLines": 21
+  },
+  "D20": "Corvath source/subject/turn limit/expiry/reset and Vaela random remaining/permanent grant compositions lack combined primitive contracts. Four own scenarios cover both controllers; Vaela check runs an explicit local public-engine synthetic fixture, while its shared-runner registration has no actions.",
+  "D21": {
+    "newPromptKinds": [],
+    "newStatuses": [],
+    "newVisualEffects": [],
+    "hashSamples": [
+      {
+        "uuid": "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
+        "firstByte": 28,
+        "sampled": false
+      },
+      {
+        "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+        "firstByte": 177,
+        "sampled": false
+      },
+      {
+        "uuid": "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+        "firstByte": 51,
+        "sampled": false
+      },
+      {
+        "uuid": "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+        "firstByte": 242,
+        "sampled": false
+      }
+    ],
+    "judgedRequired": 0,
+    "qualification": "Automatic hash samples0/new prompts,statuses,VFX0. Two actual owner-provenance risk captures judged separately; no16-case viewport coverage claimed.",
+    "judgedActualCaptures": [
+      {
+        "file": "zeva-player-reclaim-desktop.png",
+        "invocation": "run-gA9fHy",
+        "viewport": "desktop",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "density": 2,
+        "SHA256": "dabc5605db4ef11f0c8cf715c2bf557b79e04b26c192a1db7d91bd6cffcf00c2",
+        "judgment": "Owner-scoped selected profile and opposite inactive profile confirmed in assembled Reclaim workflow. Desktop controls clear; mobile fanned hand covers the lower portrait/exhaust-marker area and part of the nearby void card, so geometry proves owner/bounds rather than a fully unobscured portrait. Existing assembled surface; no new layout introduced."
+      },
+      {
+        "file": "zeva-player-reclaim-mobile.png",
+        "invocation": "run-gA9fHy",
+        "viewport": "mobile",
+        "pixels": [
+          780,
+          1688
+        ],
+        "density": 2,
+        "SHA256": "75205526747c33082732cfa239d1a745bb8d2980f90878639e3581c4c5862835",
+        "judgment": "Owner-scoped selected profile and opposite inactive profile confirmed in assembled Reclaim workflow. Desktop controls clear; mobile fanned hand covers the lower portrait/exhaust-marker area and part of the nearby void card, so geometry proves owner/bounds rather than a fully unobscured portrait. Existing assembled surface; no new layout introduced."
+      }
+    ],
+    "newSurfaceCount": 0,
+    "sampleCount": 0
+  },
+  "preflight": [
+    {
+      "uuid": "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
+      "side": "player",
+      "entityKind": "avatar",
+      "variant": "base",
+      "verdict": "pass",
+      "reason": null,
+      "detail": null,
+      "instance": null,
+      "zone": null,
+      "answers": 0,
+      "passes": 0,
+      "events": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i22"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i23"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i6"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i5"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i17"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i50"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i42"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i45"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i40"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i37"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "turnStarted",
+          "side": "player",
+          "round": 1,
+          "turnNumber": 1,
+          "extra": false
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dreamwell",
+          "active": "player"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 0,
+          "maxChange": 0,
+          "cause": "refresh"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "draw",
+          "active": "player"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dawn",
+          "active": "player"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "day",
+          "active": "player"
+        }
+      ],
+      "exercised": false,
+      "elapsedMs": 7.998917000000006
+    },
+    {
+      "uuid": "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
+      "side": "enemy",
+      "entityKind": "avatar",
+      "variant": "base",
+      "verdict": "pass",
+      "reason": null,
+      "detail": null,
+      "instance": null,
+      "zone": null,
+      "answers": 0,
+      "passes": 0,
+      "events": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i5"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i22"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i17"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i25"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i9"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i31"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i34"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i33"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i50"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i49"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "turnStarted",
+          "side": "enemy",
+          "round": 1,
+          "turnNumber": 1,
+          "extra": false
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dreamwell",
+          "active": "enemy"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 0,
+          "maxChange": 0,
+          "cause": "refresh"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "draw",
+          "active": "enemy"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dawn",
+          "active": "enemy"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "day",
+          "active": "enemy"
+        }
+      ],
+      "exercised": false,
+      "elapsedMs": 1.810916999999904
+    },
+    {
+      "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+      "side": "player",
+      "entityKind": "avatar",
+      "variant": "base",
+      "verdict": "pass",
+      "reason": null,
+      "detail": null,
+      "instance": null,
+      "zone": null,
+      "answers": 0,
+      "passes": 0,
+      "events": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i10"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i13"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i17"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i24"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i16"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i49"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i35"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i50"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i27"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i47"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "turnStarted",
+          "side": "player",
+          "round": 1,
+          "turnNumber": 1,
+          "extra": false
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dreamwell",
+          "active": "player"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 0,
+          "maxChange": 0,
+          "cause": "refresh"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "draw",
+          "active": "player"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dawn",
+          "active": "player"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "day",
+          "active": "player"
+        }
+      ],
+      "exercised": false,
+      "elapsedMs": 1.7195420000000468
+    },
+    {
+      "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+      "side": "enemy",
+      "entityKind": "avatar",
+      "variant": "base",
+      "verdict": "pass",
+      "reason": null,
+      "detail": null,
+      "instance": null,
+      "zone": null,
+      "answers": 0,
+      "passes": 0,
+      "events": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i21"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i6"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i9"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i11"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i1"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i40"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i35"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i46"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i29"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i31"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "turnStarted",
+          "side": "enemy",
+          "round": 1,
+          "turnNumber": 1,
+          "extra": false
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dreamwell",
+          "active": "enemy"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 0,
+          "maxChange": 0,
+          "cause": "refresh"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "draw",
+          "active": "enemy"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dawn",
+          "active": "enemy"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "day",
+          "active": "enemy"
+        }
+      ],
+      "exercised": false,
+      "elapsedMs": 1.2182080000000042
+    },
+    {
+      "uuid": "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+      "side": "player",
+      "entityKind": "avatar",
+      "variant": "base",
+      "verdict": "pass",
+      "reason": null,
+      "detail": null,
+      "instance": null,
+      "zone": null,
+      "answers": 0,
+      "passes": 0,
+      "events": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i19"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i25"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i18"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i10"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i9"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i46"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i37"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i43"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i29"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i45"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "turnStarted",
+          "side": "player",
+          "round": 1,
+          "turnNumber": 1,
+          "extra": false
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dreamwell",
+          "active": "player"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 0,
+          "maxChange": 0,
+          "cause": "refresh"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "draw",
+          "active": "player"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dawn",
+          "active": "player"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "day",
+          "active": "player"
+        }
+      ],
+      "exercised": false,
+      "elapsedMs": 1.2167500000000473
+    },
+    {
+      "uuid": "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+      "side": "enemy",
+      "entityKind": "avatar",
+      "variant": "base",
+      "verdict": "pass",
+      "reason": null,
+      "detail": null,
+      "instance": null,
+      "zone": null,
+      "answers": 0,
+      "passes": 0,
+      "events": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i18"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i20"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i2"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i5"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i12"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i44"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i41"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i39"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i35"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i37"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "turnStarted",
+          "side": "enemy",
+          "round": 1,
+          "turnNumber": 1,
+          "extra": false
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dreamwell",
+          "active": "enemy"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 0,
+          "maxChange": 0,
+          "cause": "refresh"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "draw",
+          "active": "enemy"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dawn",
+          "active": "enemy"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "day",
+          "active": "enemy"
+        }
+      ],
+      "exercised": false,
+      "elapsedMs": 0.9949169999999867
+    },
+    {
+      "uuid": "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+      "side": "player",
+      "entityKind": "avatar",
+      "variant": "base",
+      "verdict": "pass",
+      "reason": null,
+      "detail": null,
+      "instance": null,
+      "zone": null,
+      "answers": 0,
+      "passes": 0,
+      "events": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i14"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i25"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i16"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i4"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i1"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i38"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i50"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i42"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i45"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i33"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "turnStarted",
+          "side": "player",
+          "round": 1,
+          "turnNumber": 1,
+          "extra": false
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dreamwell",
+          "active": "player"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 0,
+          "maxChange": 0,
+          "cause": "refresh"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "draw",
+          "active": "player"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dawn",
+          "active": "player"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "day",
+          "active": "player"
+        }
+      ],
+      "exercised": false,
+      "elapsedMs": 1.001292000000035
+    },
+    {
+      "uuid": "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+      "side": "enemy",
+      "entityKind": "avatar",
+      "variant": "base",
+      "verdict": "pass",
+      "reason": null,
+      "detail": null,
+      "instance": null,
+      "zone": null,
+      "answers": 0,
+      "passes": 0,
+      "events": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i17"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i22"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i5"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i13"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i15"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i48"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i39"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i40"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i37"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i31"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 10,
+          "maxChange": 10,
+          "cause": "refresh"
+        },
+        {
+          "kind": "turnStarted",
+          "side": "enemy",
+          "round": 1,
+          "turnNumber": 1,
+          "extra": false
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dreamwell",
+          "active": "enemy"
+        },
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 10,
+          "max": 10,
+          "change": 0,
+          "maxChange": 0,
+          "cause": "refresh"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "draw",
+          "active": "enemy"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "dawn",
+          "active": "enemy"
+        },
+        {
+          "kind": "phaseChanged",
+          "phase": "day",
+          "active": "enemy"
+        }
+      ],
+      "exercised": false,
+      "elapsedMs": 0.9037499999999454
+    },
+    {
+      "event": "labPreflightSummary",
+      "cards": [],
+      "avatars": [
+        "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
+        "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+        "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+        "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab"
+      ],
+      "variants": [
+        "base"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "counts": {
+        "pass": 8,
+        "pending": 0,
+        "skip": 0,
+        "fail": 0
+      },
+      "elapsedMs": 19.712166000000025,
+      "hostLoad": 12.35986328125,
+      "enemyMode": "normal-avatar-first-turn-first-legal-prompts"
+    }
+  ],
+  "priorChronology": {
+    "sourceFreeAttemptDispatch": "2026-10-12T20:49:14.429Z",
+    "negativeWitness": "Original external 1.730817s comparator witness, separate from resumed implementation and validation.",
+    "requiredPrerequisite": "hv-umm2.576 landed 1fe05c5d67c3c3f0f2fcd840bb7049a21ae1bf62 with reviewed dynamic exact-cost option; prerequisite resources/timings excluded from resumed measurements."
+  },
+  "failurePaths": {
+    "errorAndPartial": "random-exact-cost.contracts.ts237 genuine failure after exact pick publishes no partial materialization; grant-reclaim-subject.contracts.ts252 genuine failure after discard rolls back.",
+    "reload": "Existing captured-cost/queued-subject replay contracts plus actual persisted saved-game normal fold of all8 desktop controller flows and Zeva player mobile. Player exact full slice equality; enemy same game/history-prefix/source journal/physical printings retained with normal AI continuation. Probe history is mount-scoped, not persisted event history.",
+    "staleAndCompetingActors": "random-exact-cost.contracts.ts212 and fold-intents.test.ts85\u201391 reject sequential competing/stale answers; no timing concurrency claimed.",
+    "newTransition": "N/A: four declarative content callbacks reuse ordinary activated/triggered/grant paths; no new saved state or intent form."
+  },
+  "QA": {
+    "initialization": {
+      "preflightPass": 8,
+      "preflightExercised": 0,
+      "nativeSweepPass": 8,
+      "nativeSweepAttempts": 9,
+      "failure": "First Vaela player native deadline timeout; one native permitted timeout retry passed. Absent top-level ok/error:null was not treated as semantic pass.",
+      "rawEvidence": "invocations/sweep-XF1WSX/run-IPQVVa"
+    },
+    "authoredManualScope": "All8 controller workflows ondesktop; scoped Zeva player desktop/mobile owner-provenance follow-up. No full16matrix claim.",
+    "acceptedCases": [
+      {
+        "caseIndex": null,
+        "uuid": "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
+        "side": "player",
+        "flow": "materialize",
+        "policy": null,
+        "gameId": "4t4upz",
+        "ids": {
+          "payment": "i51",
+          "exact": "i52",
+          "decoy": "i53"
+        },
+        "recipe": [
+          {
+            "zone": "play",
+            "card": "5e5e5e5e-0000-4000-8000-000000000002",
+            "instance": "i51",
+            "version": 5
+          },
+          {
+            "zone": "deck",
+            "card": "229ab3a1-3720-41a2-924c-8fe112188f8e",
+            "instance": "i52",
+            "version": 6
+          },
+          {
+            "zone": "deck",
+            "card": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i53",
+            "version": 7
+          }
+        ],
+        "sources": [
+          {
+            "kind": "abilityResolved",
+            "side": "player",
+            "source": {
+              "kind": "avatar",
+              "side": "player"
+            },
+            "ability": 0
+          }
+        ],
+        "grants": [],
+        "secondDiscard": null,
+        "geometry": {
+          "x": 698,
+          "y": 617.8571166992188,
+          "width": 44,
+          "height": 44,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "profiles": null,
+        "reload": {
+          "version": 9,
+          "avatar": {
+            "id": "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
+            "exhausted": true
+          }
+        },
+        "invocation": "run-YnMlS8",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-YnMlS8/abilities.result.json",
+        "rawSHA256": "fb3bdfde76bfc0be6c9297a8bbdc216834d3170490e6f6f7290fa07968bac8f3",
+        "savedRows": 36,
+        "sourceJournalSeqs": [],
+        "actualPolicySeqs": [],
+        "historyPrefixLength": 4,
+        "Caps": []
+      },
+      {
+        "caseIndex": null,
+        "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+        "side": "player",
+        "flow": "grant",
+        "policy": null,
+        "gameId": "skamrd",
+        "ids": {
+          "target": "i51",
+          "discard": "i52"
+        },
+        "recipe": [
+          {
+            "zone": "void",
+            "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+            "instance": "i51",
+            "version": 5
+          },
+          {
+            "zone": "hand",
+            "card": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+            "instance": "i52",
+            "version": 6
+          }
+        ],
+        "sources": [
+          {
+            "kind": "abilityResolved",
+            "side": "player",
+            "source": {
+              "kind": "avatar",
+              "side": "player"
+            },
+            "ability": 0
+          }
+        ],
+        "grants": [
+          {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "player",
+            "source": {
+              "kind": "avatar",
+              "side": "player"
+            },
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "keyword",
+              "instance": "i51",
+              "keyword": "reclaim",
+              "gains": true
+            }
+          }
+        ],
+        "secondDiscard": null,
+        "geometry": {
+          "x": 698,
+          "y": 94.12723541259766,
+          "width": 44,
+          "height": 43.99999237060547,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "profiles": null,
+        "reload": {
+          "version": 8,
+          "avatar": {
+            "id": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "exhausted": true
+          }
+        },
+        "invocation": "run-YnMlS8",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-YnMlS8/abilities.result.json",
+        "rawSHA256": "fb3bdfde76bfc0be6c9297a8bbdc216834d3170490e6f6f7290fa07968bac8f3",
+        "savedRows": 39,
+        "sourceJournalSeqs": [],
+        "actualPolicySeqs": [],
+        "historyPrefixLength": 4,
+        "Caps": []
+      },
+      {
+        "caseIndex": null,
+        "uuid": "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+        "side": "player",
+        "flow": "discard",
+        "policy": null,
+        "gameId": "no6u6s",
+        "ids": {
+          "producer": "i51",
+          "producer2": "i52",
+          "discard": "i53"
+        },
+        "recipe": [
+          {
+            "zone": "play",
+            "card": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+            "instance": "i51",
+            "version": 5
+          },
+          {
+            "zone": "play",
+            "card": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+            "instance": "i52",
+            "version": 6
+          },
+          {
+            "zone": "hand",
+            "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+            "instance": "i53",
+            "version": 7
+          }
+        ],
+        "sources": [
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "avatar",
+              "side": "player"
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          }
+        ],
+        "grants": [
+          {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "player",
+            "source": {
+              "kind": "avatar",
+              "side": "player"
+            },
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "keyword",
+              "instance": "i53",
+              "keyword": "reclaim",
+              "gains": true
+            }
+          }
+        ],
+        "secondDiscard": {
+          "kind": "discarded",
+          "side": "player",
+          "instance": "i19"
+        },
+        "geometry": {
+          "x": 698,
+          "y": 617.8571166992188,
+          "width": 44,
+          "height": 44,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "profiles": null,
+        "reload": {
+          "version": 12,
+          "avatar": {
+            "id": "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+            "exhausted": false
+          }
+        },
+        "invocation": "run-YnMlS8",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-YnMlS8/abilities.result.json",
+        "rawSHA256": "fb3bdfde76bfc0be6c9297a8bbdc216834d3170490e6f6f7290fa07968bac8f3",
+        "savedRows": 58,
+        "sourceJournalSeqs": [],
+        "actualPolicySeqs": [],
+        "historyPrefixLength": 7,
+        "Caps": []
+      },
+      {
+        "caseIndex": 3,
+        "uuid": "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+        "side": "player",
+        "flow": "depart",
+        "policy": null,
+        "gameId": "jhnrhd",
+        "ids": {
+          "target": "i51",
+          "departure": "i52"
+        },
+        "recipe": [
+          {
+            "zone": "void",
+            "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+            "instance": "i51",
+            "version": 5
+          },
+          {
+            "zone": "void",
+            "card": "fa7dadd8-c72f-42e7-b203-3d22aa36122f",
+            "instance": "i52",
+            "version": 6
+          }
+        ],
+        "sources": [
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "avatar",
+              "side": "player"
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          }
+        ],
+        "grants": [
+          {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "player",
+            "source": {
+              "kind": "avatar",
+              "side": "player"
+            },
+            "expiry": {
+              "at": "never"
+            },
+            "change": {
+              "kind": "keyword",
+              "instance": "i51",
+              "keyword": "reclaim",
+              "gains": true
+            }
+          }
+        ],
+        "secondDiscard": null,
+        "geometry": {
+          "owner": "player",
+          "disabled": null,
+          "x": 698,
+          "y": 617.8571166992188,
+          "width": 44,
+          "height": 44,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "selected": true
+        },
+        "profiles": [
+          {
+            "owner": "player",
+            "disabled": null,
+            "x": 698,
+            "y": 617.8571166992188,
+            "width": 44,
+            "height": 44,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "selected": true
+          }
+        ],
+        "reload": {
+          "version": 10,
+          "avatar": {
+            "id": "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+            "exhausted": false
+          }
+        },
+        "invocation": "run-KULs6F",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-KULs6F/abilities.result.json",
+        "rawSHA256": "b315d93c363b0b9bac33e4418e3852b7d40f41677091efa94f8c5ecd1e91d387",
+        "savedRows": 37,
+        "sourceJournalSeqs": [],
+        "actualPolicySeqs": [],
+        "historyPrefixLength": 3,
+        "Caps": []
+      },
+      {
+        "caseIndex": 4,
+        "uuid": "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
+        "side": "enemy",
+        "flow": "materialize",
+        "policy": "random",
+        "gameId": "snuqkp",
+        "ids": {
+          "payment": "i51",
+          "exact": "i52",
+          "decoy": "i53",
+          "padding1": "i54",
+          "padding2": "i55"
+        },
+        "recipe": [
+          {
+            "zone": "play",
+            "card": "5e5e5e5e-0000-4000-8000-000000000002",
+            "instance": "i51",
+            "version": 24
+          },
+          {
+            "zone": "deck",
+            "card": "229ab3a1-3720-41a2-924c-8fe112188f8e",
+            "instance": "i52",
+            "version": 25
+          },
+          {
+            "zone": "deck",
+            "card": "5e5e5e5e-0000-4000-8000-000000000004",
+            "instance": "i53",
+            "version": 26
+          },
+          {
+            "zone": "deck",
+            "card": "5e5e5e5e-0000-4000-8000-000000000002",
+            "instance": "i54",
+            "version": 27
+          },
+          {
+            "zone": "deck",
+            "card": "5e5e5e5e-0000-4000-8000-000000000002",
+            "instance": "i55",
+            "version": 28
+          }
+        ],
+        "sources": [
+          {
+            "kind": "abilityResolved",
+            "side": "enemy",
+            "source": {
+              "kind": "avatar",
+              "side": "enemy"
+            },
+            "ability": 0
+          }
+        ],
+        "grants": [],
+        "secondDiscard": null,
+        "geometry": {
+          "owner": "enemy",
+          "disabled": null,
+          "x": 698,
+          "y": 94.12723541259766,
+          "width": 44,
+          "height": 43.99999237060547,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "selected": true
+        },
+        "profiles": [
+          {
+            "owner": "enemy",
+            "disabled": null,
+            "x": 698,
+            "y": 94.12723541259766,
+            "width": 44,
+            "height": 43.99999237060547,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "selected": true
+          }
+        ],
+        "reload": {
+          "version": 89,
+          "avatar": {
+            "id": "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
+            "exhausted": true
+          },
+          "historyPrefixPreserved": true,
+          "physicalPrintingsPreserved": true,
+          "sourceResolutionPreserved": true,
+          "qualification": "same saved game with preserved prefix and physical identities; normal AI may continue"
+        },
+        "invocation": "run-eKeU9d",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-eKeU9d/abilities.result.json",
+        "rawSHA256": "779e2039beb1b364e4faf4b258444a317d2a01088192a423c3934e2757c1b6e3",
+        "savedRows": 114,
+        "sourceJournalSeqs": [
+          84
+        ],
+        "actualPolicySeqs": [
+          26,
+          29,
+          33,
+          43,
+          46,
+          49,
+          54,
+          57,
+          60,
+          63,
+          66,
+          70,
+          75,
+          80,
+          82,
+          87
+        ],
+        "historyPrefixLength": 27,
+        "Caps": []
+      },
+      {
+        "caseIndex": 5,
+        "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+        "side": "enemy",
+        "flow": "grant",
+        "policy": "random",
+        "gameId": "2jxb5z",
+        "ids": {
+          "target": "i51",
+          "discard": "i52"
+        },
+        "recipe": [
+          {
+            "zone": "void",
+            "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+            "instance": "i51",
+            "version": 25
+          },
+          {
+            "zone": "hand",
+            "card": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+            "instance": "i52",
+            "version": 26
+          }
+        ],
+        "sources": [
+          {
+            "kind": "abilityResolved",
+            "side": "enemy",
+            "source": {
+              "kind": "avatar",
+              "side": "enemy"
+            },
+            "ability": 0
+          }
+        ],
+        "grants": [
+          {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "enemy",
+            "source": {
+              "kind": "avatar",
+              "side": "enemy"
+            },
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "keyword",
+              "instance": "i51",
+              "keyword": "reclaim",
+              "gains": true
+            }
+          }
+        ],
+        "secondDiscard": null,
+        "geometry": {
+          "owner": "enemy",
+          "disabled": null,
+          "x": 698,
+          "y": 94.12723541259766,
+          "width": 44,
+          "height": 43.99999237060547,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "selected": true
+        },
+        "profiles": [
+          {
+            "owner": "enemy",
+            "disabled": null,
+            "x": 698,
+            "y": 94.12723541259766,
+            "width": 44,
+            "height": 43.99999237060547,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "selected": true
+          }
+        ],
+        "reload": {
+          "version": 63,
+          "avatar": {
+            "id": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "exhausted": false
+          },
+          "historyPrefixPreserved": true,
+          "physicalPrintingsPreserved": true,
+          "sourceResolutionPreserved": true,
+          "qualification": "same saved game with preserved prefix and physical identities; normal AI may continue"
+        },
+        "invocation": "run-eKeU9d",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-eKeU9d/abilities.result.json",
+        "rawSHA256": "779e2039beb1b364e4faf4b258444a317d2a01088192a423c3934e2757c1b6e3",
+        "savedRows": 79,
+        "sourceJournalSeqs": [
+          59
+        ],
+        "actualPolicySeqs": [
+          26,
+          29,
+          32,
+          36,
+          43,
+          46,
+          51,
+          55,
+          57,
+          61
+        ],
+        "historyPrefixLength": 16,
+        "Caps": []
+      },
+      {
+        "caseIndex": 6,
+        "uuid": "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+        "side": "enemy",
+        "flow": "discard",
+        "policy": "random",
+        "gameId": "4zu2qn",
+        "ids": {
+          "producer": "i51",
+          "producer2": "i52",
+          "discard": "i53"
+        },
+        "recipe": [
+          {
+            "zone": "play",
+            "card": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+            "instance": "i51",
+            "version": 22
+          },
+          {
+            "zone": "play",
+            "card": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+            "instance": "i52",
+            "version": 23
+          },
+          {
+            "zone": "hand",
+            "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+            "instance": "i53",
+            "version": 24
+          }
+        ],
+        "sources": [
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "avatar",
+              "side": "enemy"
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          }
+        ],
+        "grants": [
+          {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "enemy",
+            "source": {
+              "kind": "avatar",
+              "side": "enemy"
+            },
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "keyword",
+              "instance": "i35",
+              "keyword": "reclaim",
+              "gains": true
+            }
+          }
+        ],
+        "secondDiscard": null,
+        "geometry": {
+          "owner": "enemy",
+          "disabled": null,
+          "x": 698,
+          "y": 94.12723541259766,
+          "width": 44,
+          "height": 43.99999237060547,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "selected": true
+        },
+        "profiles": [
+          {
+            "owner": "enemy",
+            "disabled": null,
+            "x": 698,
+            "y": 94.12723541259766,
+            "width": 44,
+            "height": 43.99999237060547,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "selected": true
+          }
+        ],
+        "reload": {
+          "version": 45,
+          "avatar": {
+            "id": "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+            "exhausted": false
+          },
+          "historyPrefixPreserved": true,
+          "physicalPrintingsPreserved": true,
+          "sourceResolutionPreserved": true,
+          "qualification": "same saved game with preserved prefix and physical identities; normal AI may continue"
+        },
+        "invocation": "run-eKeU9d",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-eKeU9d/abilities.result.json",
+        "rawSHA256": "779e2039beb1b364e4faf4b258444a317d2a01088192a423c3934e2757c1b6e3",
+        "savedRows": 64,
+        "sourceJournalSeqs": [
+          50
+        ],
+        "actualPolicySeqs": [
+          26,
+          30,
+          38,
+          44,
+          46,
+          52
+        ],
+        "historyPrefixLength": 12,
+        "Caps": []
+      },
+      {
+        "caseIndex": 7,
+        "uuid": "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+        "side": "enemy",
+        "flow": "depart",
+        "policy": "random",
+        "gameId": "f63g8t",
+        "ids": {
+          "target": "i51",
+          "departure": "i52"
+        },
+        "recipe": [
+          {
+            "zone": "void",
+            "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+            "instance": "i51",
+            "version": 24
+          },
+          {
+            "zone": "void",
+            "card": "fa7dadd8-c72f-42e7-b203-3d22aa36122f",
+            "instance": "i52",
+            "version": 25
+          }
+        ],
+        "sources": [
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "avatar",
+              "side": "enemy"
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          }
+        ],
+        "grants": [
+          {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "enemy",
+            "source": {
+              "kind": "avatar",
+              "side": "enemy"
+            },
+            "expiry": {
+              "at": "never"
+            },
+            "change": {
+              "kind": "keyword",
+              "instance": "i51",
+              "keyword": "reclaim",
+              "gains": true
+            }
+          }
+        ],
+        "secondDiscard": null,
+        "geometry": {
+          "owner": "enemy",
+          "disabled": null,
+          "x": 698,
+          "y": 94.12723541259766,
+          "width": 44,
+          "height": 43.99999237060547,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "selected": true
+        },
+        "profiles": [
+          {
+            "owner": "enemy",
+            "disabled": null,
+            "x": 698,
+            "y": 94.12723541259766,
+            "width": 44,
+            "height": 43.99999237060547,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "selected": true
+          }
+        ],
+        "reload": {
+          "version": 57,
+          "avatar": {
+            "id": "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+            "exhausted": false
+          },
+          "historyPrefixPreserved": true,
+          "physicalPrintingsPreserved": true,
+          "sourceResolutionPreserved": true,
+          "qualification": "same saved game with preserved prefix and physical identities; normal AI may continue"
+        },
+        "invocation": "run-eKeU9d",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-eKeU9d/abilities.result.json",
+        "rawSHA256": "779e2039beb1b364e4faf4b258444a317d2a01088192a423c3934e2757c1b6e3",
+        "savedRows": 77,
+        "sourceJournalSeqs": [
+          55
+        ],
+        "actualPolicySeqs": [
+          26,
+          29,
+          33,
+          40,
+          43,
+          48,
+          51,
+          59,
+          62
+        ],
+        "historyPrefixLength": 13,
+        "Caps": []
+      },
+      {
+        "caseIndex": 1,
+        "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+        "side": "player",
+        "flow": "grant",
+        "policy": "greedy",
+        "gameId": "v4cqio",
+        "ids": {
+          "target": "i51",
+          "discard": "i52"
+        },
+        "recipe": [
+          {
+            "zone": "void",
+            "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+            "instance": "i51",
+            "version": 5
+          },
+          {
+            "zone": "hand",
+            "card": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+            "instance": "i52",
+            "version": 6
+          }
+        ],
+        "sources": [
+          {
+            "kind": "abilityResolved",
+            "side": "player",
+            "source": {
+              "kind": "avatar",
+              "side": "player"
+            },
+            "ability": 0
+          }
+        ],
+        "grants": [
+          {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "player",
+            "source": {
+              "kind": "avatar",
+              "side": "player"
+            },
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "keyword",
+              "instance": "i51",
+              "keyword": "reclaim",
+              "gains": true
+            }
+          }
+        ],
+        "secondDiscard": null,
+        "geometry": {
+          "owner": "player",
+          "disabled": null,
+          "x": 698,
+          "y": 617.8571166992188,
+          "width": 44,
+          "height": 44,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "selected": true
+        },
+        "profiles": [
+          {
+            "owner": "enemy",
+            "disabled": "true",
+            "x": 698,
+            "y": 94.12723541259766,
+            "width": 44,
+            "height": 43.99999237060547,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "selected": false
+          },
+          {
+            "owner": "player",
+            "disabled": null,
+            "x": 698,
+            "y": 617.8571166992188,
+            "width": 44,
+            "height": 44,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "selected": true
+          }
+        ],
+        "reload": {
+          "version": 8,
+          "avatar": {
+            "id": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "exhausted": true
+          },
+          "historyPrefixPreserved": true,
+          "physicalPrintingsPreserved": true,
+          "sourceResolutionPreserved": true,
+          "qualification": "exact full slice equality"
+        },
+        "invocation": "run-gA9fHy",
+        "viewport": "desktop",
+        "rawReport": "invocations/run-gA9fHy/zeva-provenance.result.json",
+        "rawSHA256": "6ae03ff6c1ac0bd763247dbbebbee53f1d164eb7f57fd439a7fa20c809559a98",
+        "savedRows": 39,
+        "sourceJournalSeqs": [
+          35
+        ],
+        "actualPolicySeqs": [],
+        "historyPrefixLength": 4,
+        "Caps": []
+      },
+      {
+        "caseIndex": 1,
+        "uuid": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+        "side": "player",
+        "flow": "grant",
+        "policy": "greedy",
+        "gameId": "d6sjs2",
+        "ids": {
+          "target": "i51",
+          "discard": "i52"
+        },
+        "recipe": [
+          {
+            "zone": "void",
+            "card": "69964b8e-0f38-4fb7-a0cd-89430ef04c2d",
+            "instance": "i51",
+            "version": 5
+          },
+          {
+            "zone": "hand",
+            "card": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+            "instance": "i52",
+            "version": 6
+          }
+        ],
+        "sources": [
+          {
+            "kind": "abilityResolved",
+            "side": "player",
+            "source": {
+              "kind": "avatar",
+              "side": "player"
+            },
+            "ability": 0
+          }
+        ],
+        "grants": [
+          {
+            "kind": "effectStarted",
+            "effect": "e1",
+            "controller": "player",
+            "source": {
+              "kind": "avatar",
+              "side": "player"
+            },
+            "expiry": {
+              "at": "endOfTurn"
+            },
+            "change": {
+              "kind": "keyword",
+              "instance": "i51",
+              "keyword": "reclaim",
+              "gains": true
+            }
+          }
+        ],
+        "secondDiscard": null,
+        "geometry": {
+          "owner": "player",
+          "disabled": null,
+          "x": 173,
+          "y": 580.109375,
+          "width": 44,
+          "height": 44,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "selected": true
+        },
+        "profiles": [
+          {
+            "owner": "enemy",
+            "disabled": "true",
+            "x": 173,
+            "y": 104.578125,
+            "width": 44,
+            "height": 44,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "selected": false
+          },
+          {
+            "owner": "player",
+            "disabled": null,
+            "x": 173,
+            "y": 580.109375,
+            "width": 44,
+            "height": 44,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "selected": true
+          }
+        ],
+        "reload": {
+          "version": 8,
+          "avatar": {
+            "id": "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+            "exhausted": true
+          },
+          "historyPrefixPreserved": true,
+          "physicalPrintingsPreserved": true,
+          "sourceResolutionPreserved": true,
+          "qualification": "exact full slice equality"
+        },
+        "invocation": "run-gA9fHy",
+        "viewport": "mobile",
+        "rawReport": "invocations/run-gA9fHy/zeva-provenance.result.json",
+        "rawSHA256": "6ae03ff6c1ac0bd763247dbbebbee53f1d164eb7f57fd439a7fa20c809559a98",
+        "savedRows": 39,
+        "sourceJournalSeqs": [
+          35
+        ],
+        "actualPolicySeqs": [],
+        "historyPrefixLength": 4,
+        "Caps": []
+      }
+    ],
+    "reports": [
+      {
+        "invocation": "run-ZOB5Vd",
+        "rawReport": "invocations/run-ZOB5Vd/abilities.result.json",
+        "SHA256": "d592317da1247ed366b18abc778b73fafa00911593dd8610072084aad103f8e5",
+        "ok": false,
+        "error": "desktop#0: Error: click text /Close engine debug panel/: timed out after 15000 ms; last probe: no rendered element\n    at Object.click (evalmachine.<anonymous>:748:15)\n    at async abilityCase (evalmachine.<anonymous>:1708:3)\n    at async evalmachine.<anonymous>:1784:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "completeNotes": 0,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1988,
+          "scenario": 36446,
+          "total": 38518
+        }
+      },
+      {
+        "invocation": "run-D34Xog",
+        "rawReport": "invocations/run-D34Xog/abilities.result.json",
+        "SHA256": "3bc3f439b950173a41186d15384ba2779b6fe7c9ec6887a749a90ebb00ba3f60",
+        "ok": false,
+        "error": "desktop#2: QaTimeoutError: waitVisible [data-testid=\"battle-choice-prompt-option-0\"]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async activate (evalmachine.<anonymous>:1712:5)\n    at async abilityCase (evalmachine.<anonymous>:1721:30)\n    at async evalmachine.<anonymous>:1784:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)",
+        "caps": [],
+        "completeNotes": 0,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 2001,
+          "scenario": 34089,
+          "total": 36160
+        }
+      },
+      {
+        "invocation": "run-joRMfX",
+        "rawReport": "invocations/run-joRMfX/abilities.result.json",
+        "SHA256": "5ce80579b76698b746a04459198b2179fc0416d2ec93f5e87f9097b252ccbb2c",
+        "ok": false,
+        "error": "desktop#2: Error: chooser or direct legal activation: TimeoutError: page.waitForFunction: Timeout 14989ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async activate (evalmachine.<anonymous>:1713:5)\n    at async abilityCase (evalmachine.<anonymous>:1757:5)\n    at async evalmachine.<anonymous>:1793:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)",
+        "caps": [],
+        "completeNotes": 2,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1666,
+          "scenario": 34384,
+          "total": 36151
+        }
+      },
+      {
+        "invocation": "run-YnMlS8",
+        "rawReport": "invocations/run-YnMlS8/abilities.result.json",
+        "SHA256": "fb3bdfde76bfc0be6c9297a8bbdc216834d3170490e6f6f7290fa07968bac8f3",
+        "ok": false,
+        "error": "desktop#3: QaTimeoutError: waitVisible [data-card-zone-browser=\"viewer:void\"]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async abilityCase (evalmachine.<anonymous>:1728:7)\n    at async evalmachine.<anonymous>:1799:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "caps": [],
+        "completeNotes": 3,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 2573,
+          "scenario": 44957,
+          "total": 47594
+        }
+      },
+      {
+        "invocation": "run-RCcFOs",
+        "rawReport": "invocations/run-RCcFOs/abilities.result.json",
+        "SHA256": "e4ded3a25883c0b26603ed405234b8ec036da3c60a64b8d1955d06980f8d9402",
+        "ok": false,
+        "error": "desktop#0: QaTimeoutError: waitVisible [data-card-zone-browser=\"viewer:void\"]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async abilityCase (evalmachine.<anonymous>:1729:7)\n    at async evalmachine.<anonymous>:1800:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "caps": [],
+        "completeNotes": 0,
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 2256,
+          "scenario": 21041,
+          "total": 23816
+        }
+      },
+      {
+        "invocation": "run-KULs6F",
+        "rawReport": "invocations/run-KULs6F/abilities.result.json",
+        "SHA256": "b315d93c363b0b9bac33e4418e3852b7d40f41677091efa94f8c5ecd1e91d387",
+        "ok": false,
+        "error": "desktop#1: QaTimeoutError: qa.battle actual enemy 9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4 ability exercise: timed out after 60000 ms; last action pass (main) at far:dusk; {\"at\":\"near:day\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":10,\"events\":141}}; history far:dawn > far:day > far:dusk > near:dawn > near:day > near:night > far:dawn > far:day > far:dusk > near:day\n    at Object.timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.playUntil (evalmachine.<anonymous>:1372:52)\n    at async abilityCase (evalmachine.<anonymous>:1729:3)\n    at async evalmachine.<anonymous>:1800:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "caps": [],
+        "completeNotes": 1,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2581,
+          "scenario": 95220,
+          "total": 97862
+        }
+      },
+      {
+        "invocation": "run-teIX5g",
+        "rawReport": "invocations/run-teIX5g/abilities.result.json",
+        "SHA256": "ce961900bf9384019bd708bc55f973c304d89d88a71dd73b9c3031f42d152edd",
+        "ok": false,
+        "error": "desktop#0: Error: reloaded normal fold does not retain recorded Avatar resolution\n    at abilityCase (evalmachine.<anonymous>:1804:38)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async evalmachine.<anonymous>:1817:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "caps": [],
+        "completeNotes": 0,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1654,
+          "scenario": 35874,
+          "total": 37586
+        }
+      },
+      {
+        "invocation": "run-eKeU9d",
+        "rawReport": "invocations/run-eKeU9d/abilities.result.json",
+        "SHA256": "779e2039beb1b364e4faf4b258444a317d2a01088192a423c3934e2757c1b6e3",
+        "ok": true,
+        "error": null,
+        "caps": [],
+        "completeNotes": 4,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2577,
+          "scenario": 95355,
+          "total": 98027
+        }
+      },
+      {
+        "invocation": "run-gA9fHy",
+        "rawReport": "invocations/run-gA9fHy/zeva-provenance.result.json",
+        "SHA256": "6ae03ff6c1ac0bd763247dbbebbee53f1d164eb7f57fd439a7fa20c809559a98",
+        "ok": true,
+        "error": null,
+        "caps": [],
+        "completeNotes": 2,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1660,
+          "scenario": 20797,
+          "total": 22533
+        }
+      }
+    ],
+    "attemptReceipts": [
+      {
+        "name": "sweep",
+        "argv": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.223",
+          "--avatars",
+          "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4,4d5e3933-7dd6-406b-922d-dd78acfa044a,b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e,60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+          "--variants",
+          "base",
+          "--as",
+          "both",
+          "--timeout",
+          "60"
+        ],
+        "start": "2026-10-12T21:53:22.589247+00:00",
+        "end": "2026-10-12T21:55:22.424870+00:00",
+        "wallS": 119.83421375000034,
+        "CPU_S": 10.694702,
+        "exit": 0,
+        "pid": 95153,
+        "pgid": 95153,
+        "startLoad": [
+          6.24609375,
+          14.7734375,
+          15.43896484375
+        ],
+        "endLoad": [
+          14.4072265625,
+          16.4521484375,
+          16.12109375
+        ]
+      },
+      {
+        "name": "abilities-first",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+          "--bead",
+          "hv-umm2.223",
+          "--viewports",
+          "desktop",
+          "--timeout",
+          "900"
+        ],
+        "start": "2026-10-12T21:55:56.035337+00:00",
+        "end": "2026-10-12T21:56:35.370574+00:00",
+        "wallS": 39.33472062500368,
+        "CPU_S": 7.787529,
+        "exit": 1,
+        "pid": 69634,
+        "pgid": 69634,
+        "startLoad": [
+          20.6044921875,
+          17.724609375,
+          16.59033203125
+        ],
+        "endLoad": [
+          26.03466796875,
+          19.5830078125,
+          17.3271484375
+        ]
+      },
+      {
+        "name": "abilities-fixed-close",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+          "--bead",
+          "hv-umm2.223",
+          "--viewports",
+          "desktop",
+          "--timeout",
+          "900"
+        ],
+        "start": "2026-10-12T21:57:12.342538+00:00",
+        "end": "2026-10-12T21:57:49.305538+00:00",
+        "wallS": 36.96247483299521,
+        "CPU_S": 8.581875,
+        "exit": 1,
+        "pid": 46201,
+        "pgid": 46201,
+        "startLoad": [
+          17.81298828125,
+          18.2841796875,
+          16.9541015625
+        ],
+        "endLoad": [
+          13.66748046875,
+          17.2060546875,
+          16.6142578125
+        ]
+      },
+      {
+        "name": "abilities-routing-fixed",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+          "--bead",
+          "hv-umm2.223",
+          "--viewports",
+          "desktop",
+          "--timeout",
+          "900"
+        ],
+        "start": "2026-10-12T22:00:39.149386+00:00",
+        "end": "2026-10-12T22:01:16.064224+00:00",
+        "wallS": 36.91435854200972,
+        "CPU_S": 7.483471999999999,
+        "exit": 1,
+        "pid": 8529,
+        "pgid": 8529,
+        "startLoad": [
+          10.57421875,
+          14.33203125,
+          15.48876953125
+        ],
+        "endLoad": [
+          8.4794921875,
+          13.4306640625,
+          15.11474609375
+        ]
+      },
+      {
+        "name": "abilities-controls-fixed",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+          "--bead",
+          "hv-umm2.223",
+          "--viewports",
+          "desktop",
+          "--timeout",
+          "900"
+        ],
+        "start": "2026-10-12T22:03:00.911635+00:00",
+        "end": "2026-10-12T22:03:49.221278+00:00",
+        "wallS": 48.30903041599959,
+        "CPU_S": 7.341184,
+        "exit": 1,
+        "pid": 16331,
+        "pgid": 16331,
+        "startLoad": [
+          4.791015625,
+          10.7412109375,
+          13.86962890625
+        ],
+        "endLoad": [
+          5.39208984375,
+          9.9794921875,
+          13.40673828125
+        ]
+      },
+      {
+        "name": "abilities-remaining",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+          "--bead",
+          "hv-umm2.223",
+          "--viewports",
+          "desktop",
+          "--arg",
+          "first=3",
+          "--timeout",
+          "900"
+        ],
+        "start": "2026-10-12T22:04:58.284477+00:00",
+        "end": "2026-10-12T22:05:22.779917+00:00",
+        "wallS": 24.495103875000495,
+        "CPU_S": 6.94859,
+        "exit": 1,
+        "pid": 19402,
+        "pgid": 19402,
+        "startLoad": [
+          3.7822265625,
+          8.55712890625,
+          12.59814453125
+        ],
+        "endLoad": [
+          4.17138671875,
+          8.2568359375,
+          12.37109375
+        ]
+      },
+      {
+        "name": "abilities-void-route-fixed",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+          "--bead",
+          "hv-umm2.223",
+          "--viewports",
+          "desktop",
+          "--arg",
+          "first=3",
+          "--timeout",
+          "900"
+        ],
+        "start": "2026-10-12T22:07:36.288872+00:00",
+        "end": "2026-10-12T22:09:15.419935+00:00",
+        "wallS": 99.12984999999753,
+        "CPU_S": 7.65689,
+        "exit": 1,
+        "pid": 23268,
+        "pgid": 23268,
+        "startLoad": [
+          4.318359375,
+          6.7490234375,
+          11.1689453125
+        ],
+        "endLoad": [
+          14.91259765625,
+          8.60009765625,
+          11.32958984375
+        ]
+      },
+      {
+        "name": "abilities-random-enemy",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+          "--bead",
+          "hv-umm2.223",
+          "--viewports",
+          "desktop",
+          "--arg",
+          "first=4",
+          "--arg",
+          "policy=random",
+          "--timeout",
+          "900"
+        ],
+        "start": "2026-10-12T22:13:22.510752+00:00",
+        "end": "2026-10-12T22:14:00.846225+00:00",
+        "wallS": 38.33502454200061,
+        "CPU_S": 6.531534000000001,
+        "exit": 1,
+        "pid": 93348,
+        "pgid": 93348,
+        "startLoad": [
+          7.0390625,
+          9.34716796875,
+          11.166015625
+        ],
+        "endLoad": [
+          6.462890625,
+          8.89697265625,
+          10.916015625
+        ]
+      },
+      {
+        "name": "abilities-journal-replay",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a1304d/223-resume-helper/abilities.mjs",
+          "--bead",
+          "hv-umm2.223",
+          "--viewports",
+          "desktop",
+          "--arg",
+          "first=4",
+          "--arg",
+          "policy=random",
+          "--timeout",
+          "900"
+        ],
+        "start": "2026-10-12T22:16:55.685047+00:00",
+        "end": "2026-10-12T22:18:34.520449+00:00",
+        "wallS": 98.83438000000024,
+        "CPU_S": 8.573367000000001,
+        "exit": 0,
+        "pid": 52897,
+        "pgid": 52897,
+        "startLoad": [
+          10.35400390625,
+          8.849609375,
+          10.43701171875
+        ],
+        "endLoad": [
+          15.14111328125,
+          11.4541015625,
+          11.2978515625
+        ]
+      },
+      {
+        "name": "zeva-provenance",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a1304d/223-resume-helper/zeva-provenance.mjs",
+          "--bead",
+          "hv-umm2.223",
+          "--viewports",
+          "desktop,mobile",
+          "--arg",
+          "first=1",
+          "--timeout",
+          "900"
+        ],
+        "start": "2026-10-12T22:25:04.169863+00:00",
+        "end": "2026-10-12T22:25:27.489149+00:00",
+        "wallS": 23.318999166993308,
+        "CPU_S": 7.293933,
+        "exit": 0,
+        "pid": 35269,
+        "pgid": 35269,
+        "startLoad": [
+          9.23486328125,
+          10.7255859375,
+          10.92333984375
+        ],
+        "endLoad": [
+          11.14697265625,
+          11.02734375,
+          11.02392578125
+        ]
+      }
+    ],
+    "resources": "/tmp/dreamtides-executor-01a1304d/223-resume-helper/final-resource-settlement.json",
+    "freeze": "2026-10-12T21:53:22.504898+00:00",
+    "geometryQualification": "Earlier first UUID-matching Zeva portrait y94 belonged to inactive enemy status; it was not selected control proof. run-gA9fHy enumerates both matching profiles and selects actual data-owner=player.",
+    "policyQualification": "Final enemy flows use actual Random worker policy and ordinary engine.action/answer history. Greedy debug-added hidden deck membership observation was source-based inference, not a proven general policy defect.",
+    "savedLogQualification": "Debug recipe, initial game recipe, engine actions/answers and RNG reconstruct materialization; no direct materialized JSONL record claim. Original live source resolution retained separately from mount-scoped probe on reload.",
+    "captures": [
+      {
+        "file": "zeva-player-reclaim-desktop.png",
+        "invocation": "run-gA9fHy",
+        "viewport": "desktop",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "density": 2,
+        "SHA256": "dabc5605db4ef11f0c8cf715c2bf557b79e04b26c192a1db7d91bd6cffcf00c2",
+        "judgment": "Owner-scoped selected profile and opposite inactive profile confirmed in assembled Reclaim workflow. Desktop controls clear; mobile fanned hand covers the lower portrait/exhaust-marker area and part of the nearby void card, so geometry proves owner/bounds rather than a fully unobscured portrait. Existing assembled surface; no new layout introduced."
+      },
+      {
+        "file": "zeva-player-reclaim-mobile.png",
+        "invocation": "run-gA9fHy",
+        "viewport": "mobile",
+        "pixels": [
+          780,
+          1688
+        ],
+        "density": 2,
+        "SHA256": "75205526747c33082732cfa239d1a745bb8d2980f90878639e3581c4c5862835",
+        "judgment": "Owner-scoped selected profile and opposite inactive profile confirmed in assembled Reclaim workflow. Desktop controls clear; mobile fanned hand covers the lower portrait/exhaust-marker area and part of the nearby void card, so geometry proves owner/bounds rather than a fully unobscured portrait. Existing assembled surface; no new layout introduced."
+      }
+    ],
+    "partialQualification": "Failed aggregate reports remain failures; only durable completed case notes are accepted individually. Earlier run-D34Xog callback progress without durable completed notes was not counted."
+  },
+  "sourceHashes": {
+    "src/content/avatars/caedryn-9d64a4a2.ts": "963f3db980a1e7b8c25e3c1804c0a0dbaba9dcdceb4dc24bdf06b0019b1cfc80",
+    "src/content/avatars/corvath-b8c1b0ab.ts": "5a9cfe2dbc3165247d6b59bc6d1920cfde96235c26e157bf62576eb44274e222",
+    "src/content/avatars/vaela-60bd584b.ts": "97cf5bf3a8af126012bf57e475d052bf951dae0f71f64c343c4d7f2524697492",
+    "src/content/avatars/zeva-4d5e3933.ts": "ea012b273f0409d35abd18869b472d6bd705daf9bfbd8677430148c548320911",
+    "src/content/specs/avatars-03.scenarios.ts": "0f066a1ed607464e2796c8bd4fa23126559237968a31cfa83af8276bceb0e658"
+  },
+  "QAIteration": [
+    {
+      "run": "run-ZOB5Vd",
+      "cause": "Wrong rendered Close selector; observation failure before activation",
+      "repair": "Actual aria-label Close engine debug panel"
+    },
+    {
+      "run": "run-D34Xog",
+      "cause": "Sole Keeper activation directly opens discard prompt",
+      "repair": "Wait chooser or actual direct activation prompt/version"
+    },
+    {
+      "run": "run-joRMfX",
+      "cause": "Second Keeper presentation not yet actionable",
+      "repair": "Bounded main-action and exact role-button readiness"
+    },
+    {
+      "run": "run-YnMlS8",
+      "cause": "Void layout wrapper click did not establish action route",
+      "repair": "Click actual testid child"
+    },
+    {
+      "run": "run-RCcFOs",
+      "cause": "Legal human void plays open action chooser, not browser",
+      "repair": "Use documented EngineBattleScreen normal void routing"
+    },
+    {
+      "run": "run-KULs6F",
+      "cause": "Enemy next-turn draw consumed deck witnesses; Greedy failed to exercise Avatar within bound",
+      "repair": "Protected exact2/decoy3 recipe with ordinary cost1 padding and normal Random policy; no forced action"
+    },
+    {
+      "run": "run-teIX5g",
+      "cause": "Actual Caedryn source resolved; extra historical live-probe demand failed after reload",
+      "repair": "Persisted journal/history-prefix/physical identity reconstruction; not replay divergence"
+    }
+  ],
+  "QAScriptingRecovery": {
+    "start": "2026-10-12T21:56:35.370574Z",
+    "end": "2026-10-12T22:18:34.520449Z",
+    "seconds": 1319.149875,
+    "minutes": 21.98583125,
+    "qualification": "Observed first failure to corrected accepted flow, not sum of runtimes or full dispatch interval."
+  },
+  "timingQualification": "Commands retain measured wall/child CPU/load and actual identities; fuzz outer/inner overlap not summed. Heavy admission gap0.025311s; native wait separately wallMs.wait. Four source hash helper invocations had aggregate tool wall2.356359s, individual UTC/CPU not measured. Parent install2.399095s is separate parent observation, not own measured child CPU.",
+  "evidenceFinalizationIteration": {
+    "externalDraftErrors": [
+      "Cleanup receipt ports optional: key access corrected before any repository write.",
+      "Early player notes omit later sourceJournal field: optional provenance field corrected before repository write."
+    ],
+    "sourceChanges": 0,
+    "qualification": "Early player durable notes use exact full-slice saved equality; later enemy/Zeva notes additionally record persisted source journal seqs."
+  },
+  "lineCountQualification": "Actual final plain scenario module106lines by filesystem count. Earlier125-line description was an inaccurate prose count; sourceSHA remained0f066a1e throughout QA."
+}

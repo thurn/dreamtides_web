@@ -1,3 +1,6 @@
+import { randomIn } from "../../engine/dsl/builders";
+import { triggered, whenLeavesVoid } from "../../engine/dsl/triggers";
+import { grantReclaim } from "../../engine/effects/primitives";
 import { avatar } from "../define";
 
 export default avatar({
@@ -43,5 +46,6 @@ export default avatar({
     "bedee263-27b9-4d73-ab77-6b5c747dff69",
     "16d2e85d-f940-43dd-9867-784b3a5ec5d7",
   ],
-  pending: true,
+  abilities: () => [triggered(whenLeavesVoid(), grantReclaim(randomIn("void", 1)))],
+  verifiedText: "1phn0pke0ae",
 });

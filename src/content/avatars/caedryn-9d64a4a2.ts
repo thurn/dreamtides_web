@@ -1,3 +1,5 @@
+import { abandonCostCapture, activated, energy, exhaustSelf, plus, randomIn, x } from "../../engine/dsl/builders";
+import { materialize } from "../../engine/effects/primitives";
 import { avatar } from "../define";
 
 export default avatar({
@@ -42,5 +44,6 @@ export default avatar({
     "6b739127-1a23-4c5d-877a-8829dd7a8b8c",
     "2e8571c0-4faf-4e7a-a702-26952d2035ee",
   ],
-  pending: true,
+  abilities: () => [activated([energy(2), exhaustSelf(), abandonCostCapture()], materialize(randomIn("deck", 1, { cardType: "character" }, { costExactly: plus(x(), 1) })))],
+  verifiedText: "eu1yfx433q",
 });

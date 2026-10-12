@@ -1,3 +1,5 @@
+import { activated, discardCost, energy, exhaustSelf, fromVoid } from "../../engine/dsl/builders";
+import { grantReclaim } from "../../engine/effects/primitives";
 import { avatar } from "../define";
 
 export default avatar({
@@ -43,5 +45,6 @@ export default avatar({
     "8e003d04-e489-4c55-9c72-fc5612909d07",
     "99101fce-f2b4-4032-b999-317ce3e4a6dd",
   ],
-  pending: true,
+  abilities: () => [activated([energy(2), exhaustSelf(), discardCost()], grantReclaim(fromVoid({ cardType: "event" }), { duration: "untilEndOfTurn" }), { speed: "fast" })],
+  verifiedText: "263xcf840ro",
 });
