@@ -1,3 +1,5 @@
+import { energy, enemyCharacter, event, reclaim, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 128,
   art: { x: 0.294, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [event(p.dissolve(target(enemyCharacter({ costAtMost: v.amplified ? 3 : 2 })))), reclaim(energy(5))],
+  verifiedText: "i48rvk0kno",
 });

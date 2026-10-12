@@ -1,0 +1,48 @@
+{
+  "bead": "hv-umm2.145",
+  "base": "0d8c0a97c",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.145",
+  "dispatchWindow": {
+    "firstTimestamp": "2026-10-12T02:34:37Z",
+    "commitAt": "2026-10-12T03:13Z",
+    "elapsedMin": 39,
+    "basis": "Worktree creation time is the dispatch proxy; the commit time ends the window."
+  },
+  "entities": {
+    "006e2f95-59a2-4cda-a777-e64f4aa31060": "event(dissolve(target(enemyCharacter({ costAtMost: 2 | 3 amplified })))), reclaim(energy(5))",
+    "027ae231-6569-49bb-866f-7c36ec794a11": "event(dissolve(target(enemyCharacter({ sparkAtMost: 3 | 4 amplified }))))",
+    "09332e5b-3b4e-458f-9df0-3fc0419f65c3": "event(dissolve(target(enemyCharacter({ costAtMost: 3 | 4 amplified }))))",
+    "4cece464-2fde-483d-af92-04cd0341be5b": "event(dissolve(all(anyCharacter({ sparkAtMost: x() })))), xMinimum 0 (RD-hv-umm2.145-1)",
+    "7762759b-c1df-4c86-9dbb-a49d152f3616": "event(dissolve(target(enemyCharacter({ sparkAtMost: 1 | 2 amplified })))), reclaim(energy(1))"
+  },
+  "scenarioSpecs": "none: every entity is a plain composition of existing primitives and selector bounds (D20)",
+  "commands": {
+    "focused": { "command": "npx vitest run src/engine/content-gates.test.ts src/content/content-index.test.ts", "wallS": 5, "result": "2 files, 27 tests pass" },
+    "fallout": { "command": "npx tsc --noEmit -p tsconfig.json and tsconfig.node.json", "wallS": 19, "result": "no error files" },
+    "preflight": { "command": "npm run lab:preflight -- --cards <5 uuids>", "wallS": 1.1, "result": { "pass": 66, "skip": 34, "fail": 0, "pending": 0 }, "hostLoad": 23.57 },
+    "fuzz": { "command": "lockf -k artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids <5 uuids>", "lockWaitS": 144, "wallS": 320, "engineWallS": 174.8, "games": 300, "steps": 169487, "failures": 0, "hostLoadAtAcquire": 15.86, "targets": { "006e2f95": { "included": 621, "exercised": 390 }, "027ae231": { "included": 611, "exercised": 228 }, "09332e5b": { "included": 612, "exercised": 390 }, "4cece464": { "included": 614, "exercised": 291 }, "7762759b": { "included": 616, "exercised": 352 } } },
+    "sweep": { "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.145 --cards <5 uuids> --port 5175", "wallS": 1766, "browserLeaseWaitS": 1235.75, "executionS": 525.04, "sessions": 5, "leaseYields": 4, "hostLoad": 23.18, "cells": { "pass": 66, "skip": 34, "fail": 0 } },
+    "knip": { "command": "npm run knip", "wallS": 4, "result": "pass" },
+    "review": { "command": "npm run review", "wallS": 49, "hostLoadAtStart": 5.67, "result": "221 files, 3085 tests pass" }
+  },
+  "hostLoadSamples": { "preflight": 23.57, "fuzzAcquire": 15.86, "sweep": 23.18, "reviewStart": 5.67 },
+  "schemaNormalization": { "fields": { "hostLoad": { "measuredFor": "npm run review start (1-minute vm.loadavg)" } } },
+  "engineProbes": {
+    "basis": "Uncommitted runScenario and legalActions probe in the session scratchpad on the content catalog plus synthetic vanillas.",
+    "results": [
+      "4cece464 with X = 0 costs 2 and dissolves the 0✦ characters of both sides; with X = 1 costs 3 and dissolves every ≤1✦ character of both sides, sparing 2✦ and 3✦",
+      "006e2f95 dissolves a ≤2● cost enemy for 1, then plays from the void by Reclaim for 5 and is banished; Reclaim is not offered at 4 energy; amplified dissolves a 3● cost enemy; with only a 3● cost enemy the base card is unplayable",
+      "7762759b dissolves a 1✦ enemy, then by Reclaim for 1 a 0✦ enemy, and is banished; Reclaim is not offered when only a 2✦ enemy is in play",
+      "027ae231 dissolves a 3✦ enemy; none of the five is playable against a lone 5● 5✦ enemy"
+    ]
+  },
+  "judgedQa": {
+    "required": [],
+    "basis": "No entity introduces a new prompt kind, status indicator or visual effect (chooseTargets:target, chooseMode:playRoute and the paid-X chooseX prompt already exist), and no UUID's SHA-256 first byte is below 26 (74, 227, 184, 147, 75)."
+  },
+  "rulesDecisions": ["RD-hv-umm2.145-1"],
+  "cardIssues": ["docs/plan/evidence/card-issues/7762759b-c1df-4c86-9dbb-a49d152f3616--hv-umm2.145.md"],
+  "runtime": [
+    { "process": "card-sweep dev server", "pids": [8159, 57865, 89020, 39817, 5918], "port": 5175, "stopped": true, "note": "one process group per sweep session; each stopped by the sweep with the port verified free" }
+  ]
+}

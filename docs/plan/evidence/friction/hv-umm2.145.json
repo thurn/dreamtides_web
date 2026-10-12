@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.145",
+  "phase": 5,
+  "implementMin": 39,
+  "localValidationS": {
+    "focused": 5,
+    "fallout": 19,
+    "preflight": 1.1,
+    "fuzz": 320,
+    "fuzzEngine": 174.8,
+    "fuzzLockWait": 144,
+    "sweep": 1766,
+    "sweepExecution": 525.04,
+    "sweepLeaseWait": 1235.75,
+    "review": 49,
+    "knip": 4
+  },
+  "hostLoad": 5.67,
+  "testDelta": { "files": 0, "lines": 0, "jsdomFiles": 0 },
+  "friction": [
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 20.6,
+      "note": "The card sweep waited 1235.8 s for the shared browser lease across five sessions and four yields to queued peer sweeps; execution took 525.0 s. Measured waiting, not diagnosis."
+    }
+  ]
+}

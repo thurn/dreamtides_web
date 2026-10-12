@@ -968,6 +968,11 @@ choice of "up to" a number always has one.
 
 **Dissolve** — Move a target character from play to the void.
 
+"Dissolve each ≤X✦ character" does not target. As the effect resolves, it
+dissolves every character in play whose spark is at most the paid X, the
+characters of the player who played it included. X may be 0, which dissolves
+each 0✦ character.
+
 **Banish** — Permanently remove a card by sending it to its owner's Banished
 zone. Variants include banish from play, banish from the void, banish until the
 banishing card leaves play, banish until the next Day phase, and banish until

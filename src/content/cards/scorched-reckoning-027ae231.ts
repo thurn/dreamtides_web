@@ -1,3 +1,5 @@
+import { enemyCharacter, event, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 77,
   art: { x: 0.336, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [event(p.dissolve(target(enemyCharacter({ sparkAtMost: v.amplified ? 4 : 3 }))))],
+  verifiedText: "231qurrl3c8",
 });
