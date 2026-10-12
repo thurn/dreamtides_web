@@ -1,3 +1,5 @@
+import { abandonCost, event, fromVoid, reclaim } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,9 @@ export default card({
   cardNumber: 394,
   art: { x: 0, y: 1, scale: 1.1 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    event(p.materialize(fromVoid({ cardType: "character", costAtMost: variant.amplified ? 3 : 2 }))),
+    reclaim(abandonCost()),
+  ],
+  verifiedText: "1wi4oe02315",
 });
