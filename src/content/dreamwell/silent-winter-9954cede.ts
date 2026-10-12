@@ -1,3 +1,5 @@
+import { enemyCharacter, event, target } from "../../engine/dsl/builders";
+import { banishUntil } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: true,
   cardNumber: 17,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [event(banishUntil(target(enemyCharacter()), "untilEndOfTurn"))],
+  verifiedText: "99ahkzandw",
 });

@@ -1,0 +1,923 @@
+{
+  "bead": "hv-umm2.216",
+  "base": "95214a57f3bf2e97c6baa9585baf151e5f1b62ca",
+  "dispatch": {
+    "timestamp": "2026-10-12T19:15:00.232Z",
+    "callId": "call_980e37e47d8b4655b84fbb223a62ebb0",
+    "receipt": "/tmp/hv-umm2.216-dispatch.json"
+  },
+  "status": "Required local acceptance passed; parent metadata-clock ACK received; single local commit and native delivery follow this observed evidence freeze.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual review wrapper start, os.getloadavg one-minute reading9.29345703125; no timing/load performance comparison inferred"
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "d20": {
+    "scenarios": 0,
+    "reason": "Existing primitive composition; drawThenIf/gainMaxEnergy and banish-until/Dreamwell bonuses have public synthetic contracts"
+  },
+  "d21": {
+    "sampleBytes": [
+      197,
+      111,
+      124,
+      178,
+      32,
+      158
+    ],
+    "mandatoryJudged": 0,
+    "newPromptStatusVisualKinds": 0
+  },
+  "sourceCodeChangedLines": 30,
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "commands": [
+    {
+      "name": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/zones.test.ts",
+        "src/engine/rules/durations.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/content/specs/specs.test.ts",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/engine/testing/lab-preflight.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell04-root-v2",
+      "start": "2026-10-12T19:21:25.280571+00:00",
+      "hostLoad": [
+        8.83349609375,
+        15.783203125,
+        16.99853515625
+      ],
+      "pid": 73203,
+      "pgid": 73203,
+      "end": "2026-10-12T19:21:33.410240+00:00",
+      "exit": 0,
+      "wallSeconds": 8.129437291994691
+    },
+    {
+      "name": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "120ec4c2-aa7b-48f4-be9f-f39820e565ca,d585b78a-dfe3-4e12-95ac-432c3c880540,de98477c-e216-4618-bff1-0e24bd982fdb,02e8ea92-1218-413c-9f0b-4c865a3921d3,a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf,9954cede-8a16-4053-b6e9-da745f4540f5"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell04-root-v2",
+      "start": "2026-10-12T19:21:43.862575+00:00",
+      "hostLoad": [
+        7.830078125,
+        15.2216796875,
+        16.7763671875
+      ],
+      "pid": 74492,
+      "pgid": 74492,
+      "end": "2026-10-12T19:21:44.895684+00:00",
+      "exit": 0,
+      "wallSeconds": 1.0330163329927018
+    },
+    {
+      "name": "fuzz",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "120ec4c2-aa7b-48f4-be9f-f39820e565ca,d585b78a-dfe3-4e12-95ac-432c3c880540,de98477c-e216-4618-bff1-0e24bd982fdb,02e8ea92-1218-413c-9f0b-4c865a3921d3,a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf,9954cede-8a16-4053-b6e9-da745f4540f5"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell04-root-v2",
+      "start": "2026-10-12T19:21:51.666672+00:00",
+      "hostLoad": [
+        7.3271484375,
+        14.86865234375,
+        16.63232421875
+      ],
+      "pid": 75007,
+      "pgid": 75007,
+      "end": "2026-10-12T19:24:17.185560+00:00",
+      "exit": 0,
+      "wallSeconds": 145.51625637500547
+    },
+    {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell04-root-v2",
+      "start": "2026-10-12T19:24:22.048115+00:00",
+      "hostLoad": [
+        9.29345703125,
+        13.99609375,
+        16.07666015625
+      ],
+      "pid": 36021,
+      "pgid": 36021,
+      "end": "2026-10-12T19:25:03.042268+00:00",
+      "exit": 0,
+      "wallSeconds": 40.993375999998534
+    },
+    {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell04-root-v2",
+      "start": "2026-10-12T19:25:12.122830+00:00",
+      "hostLoad": [
+        7.69140625,
+        12.92236328125,
+        15.56494140625
+      ],
+      "pid": 39635,
+      "pgid": 39635,
+      "end": "2026-10-12T19:25:15.397014+00:00",
+      "exit": 0,
+      "wallSeconds": 3.274044457997661
+    },
+    {
+      "name": "schema-before-browser",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell04-root-v2",
+      "start": "2026-10-12T19:25:27.784222+00:00",
+      "hostLoad": [
+        7.0634765625,
+        12.53173828125,
+        15.37939453125
+      ],
+      "pid": 40721,
+      "pgid": 40721,
+      "end": "2026-10-12T19:25:27.846343+00:00",
+      "exit": 0,
+      "wallSeconds": 0.06204200000502169
+    },
+    {
+      "name": "sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.216",
+        "--cards",
+        "120ec4c2-aa7b-48f4-be9f-f39820e565ca,d585b78a-dfe3-4e12-95ac-432c3c880540,de98477c-e216-4618-bff1-0e24bd982fdb,02e8ea92-1218-413c-9f0b-4c865a3921d3,a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf,9954cede-8a16-4053-b6e9-da745f4540f5",
+        "--port",
+        "5276",
+        "--capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell04-root-v2",
+      "start": "2026-10-12T19:25:35.985636+00:00",
+      "hostLoad": [
+        6.751953125,
+        12.283203125,
+        15.2578125
+      ],
+      "pid": 40944,
+      "pgid": 40944,
+      "end": "2026-10-12T19:27:49.943805+00:00",
+      "exit": 0,
+      "wallSeconds": 133.95572829099547
+    },
+    {
+      "name": "silent-player",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.216/silent-winter-normal.mjs",
+        "--bead",
+        "hv-umm2.216",
+        "--port",
+        "5276",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "as=player"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell04-root-v2",
+      "start": "2026-10-12T19:27:59.242913+00:00",
+      "hostLoad": [
+        13.55517578125,
+        11.98828125,
+        14.607421875
+      ],
+      "pid": 96037,
+      "pgid": 96037,
+      "end": "2026-10-12T19:29:07.283769+00:00",
+      "exit": 0,
+      "wallSeconds": 68.03930254200532
+    },
+    {
+      "name": "silent-enemy",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.216/silent-winter-normal.mjs",
+        "--bead",
+        "hv-umm2.216",
+        "--port",
+        "5276",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "as=enemy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell04-root-v2",
+      "start": "2026-10-12T19:29:15.619617+00:00",
+      "hostLoad": [
+        21.873046875,
+        14.45947265625,
+        15.27294921875
+      ],
+      "pid": 26564,
+      "pgid": 26564,
+      "end": "2026-10-12T19:29:52.057381+00:00",
+      "exit": 0,
+      "wallSeconds": 36.43704079200688
+    },
+    {
+      "name": "schema-final",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell04-root-v2",
+      "start": "2026-10-12T19:32:02.900130+00:00",
+      "hostLoad": [
+        7.20849609375,
+        11.263671875,
+        13.830078125
+      ],
+      "pid": 15408,
+      "pgid": 15408,
+      "end": "2026-10-12T19:32:03.011934+00:00",
+      "exit": 0,
+      "wallSeconds": 0.11174599999503698
+    }
+  ],
+  "runtime": {
+    "observedAt": "2026-10-12T19:31:51.140745+00:00",
+    "processGroups": [
+      {
+        "pgid": 73203,
+        "members": [],
+        "settled": true
+      },
+      {
+        "pgid": 74492,
+        "members": [],
+        "settled": true
+      },
+      {
+        "pgid": 75007,
+        "members": [],
+        "settled": true
+      },
+      {
+        "pgid": 36021,
+        "members": [],
+        "settled": true
+      },
+      {
+        "pgid": 39635,
+        "members": [],
+        "settled": true
+      },
+      {
+        "pgid": 40721,
+        "members": [],
+        "settled": true
+      },
+      {
+        "pgid": 40944,
+        "members": [],
+        "settled": true
+      },
+      {
+        "pgid": 96037,
+        "members": [],
+        "settled": true
+      },
+      {
+        "pgid": 26564,
+        "members": [],
+        "settled": true
+      },
+      {
+        "pgid": 40974,
+        "members": [],
+        "settled": true
+      },
+      {
+        "pgid": 96088,
+        "members": [],
+        "settled": true
+      },
+      {
+        "pgid": 27083,
+        "members": [],
+        "settled": true
+      }
+    ],
+    "port": 5276,
+    "listeners": [],
+    "browserContexts": "All three runners returned terminal success after own isolated client/context cleanup; no provider cleanup error reported",
+    "leases": "Three runner leases released after server cleanup; no shared service modified"
+  },
+  "metadataComparison": [
+    {
+      "file": "src/content/dreamwell/autumn-glade-02e8ea92.ts",
+      "printedMetadataByteEquivalent": true,
+      "baselineSha256": "6078234650462e3051dae130c3658481137746a35c16de2836dc5312fd2b68d8"
+    },
+    {
+      "file": "src/content/dreamwell/broken-aqueduct-a9c254c4.ts",
+      "printedMetadataByteEquivalent": true,
+      "baselineSha256": "f3ad64d6aecb7173d8c6f687d08f5a9e048aaae17a19b7fdc8c39852d795f99a"
+    },
+    {
+      "file": "src/content/dreamwell/prismatic-pastures-d585b78a.ts",
+      "printedMetadataByteEquivalent": true,
+      "baselineSha256": "57694dc0e18679a14afbb34a2e75400f429b9f00cf22b051515f4fa5856c54bc"
+    },
+    {
+      "file": "src/content/dreamwell/silent-winter-9954cede.ts",
+      "printedMetadataByteEquivalent": true,
+      "baselineSha256": "75cf572772e04cbf7ddbfcf7fe4270cbd3230090ec032de7383027dbfa17c0d5"
+    },
+    {
+      "file": "src/content/dreamwell/sunset-pool-120ec4c2.ts",
+      "printedMetadataByteEquivalent": true,
+      "baselineSha256": "c6dd785aa3116920c1f53df8e15f1a1cbe6d37f4df11c92492e5718f7a2b6b9b"
+    },
+    {
+      "file": "src/content/dreamwell/twilight-radiance-de98477c.ts",
+      "printedMetadataByteEquivalent": true,
+      "baselineSha256": "1dc89220ad58493ad0b99e7333136c80cfb5a416155e4278f2edbc49d4b6f707"
+    }
+  ],
+  "normalForcingBonusAudit": [
+    {
+      "uuid": "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
+      "side": "player",
+      "effectEnergy": [
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 4,
+          "max": 3,
+          "change": 1,
+          "maxChange": 0,
+          "cause": "effect"
+        }
+      ],
+      "effectPoints": [],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i1"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i2"
+        }
+      ],
+      "pending": false
+    },
+    {
+      "uuid": "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
+      "side": "enemy",
+      "effectEnergy": [
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 4,
+          "max": 3,
+          "change": 1,
+          "maxChange": 0,
+          "cause": "effect"
+        }
+      ],
+      "effectPoints": [],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i9"
+        },
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i10"
+        }
+      ],
+      "pending": false
+    },
+    {
+      "uuid": "d585b78a-dfe3-4e12-95ac-432c3c880540",
+      "side": "player",
+      "effectEnergy": [
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 5,
+          "max": 2,
+          "change": 3,
+          "maxChange": 0,
+          "cause": "effect"
+        }
+      ],
+      "effectPoints": [],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i1"
+        }
+      ],
+      "pending": false
+    },
+    {
+      "uuid": "d585b78a-dfe3-4e12-95ac-432c3c880540",
+      "side": "enemy",
+      "effectEnergy": [
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 5,
+          "max": 2,
+          "change": 3,
+          "maxChange": 0,
+          "cause": "effect"
+        }
+      ],
+      "effectPoints": [],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i9"
+        }
+      ],
+      "pending": false
+    },
+    {
+      "uuid": "de98477c-e216-4618-bff1-0e24bd982fdb",
+      "side": "player",
+      "effectEnergy": [
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 4,
+          "max": 3,
+          "change": 1,
+          "maxChange": 0,
+          "cause": "effect"
+        }
+      ],
+      "effectPoints": [],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i1"
+        }
+      ],
+      "pending": false
+    },
+    {
+      "uuid": "de98477c-e216-4618-bff1-0e24bd982fdb",
+      "side": "enemy",
+      "effectEnergy": [
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 4,
+          "max": 3,
+          "change": 1,
+          "maxChange": 0,
+          "cause": "effect"
+        }
+      ],
+      "effectPoints": [],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i9"
+        }
+      ],
+      "pending": false
+    },
+    {
+      "uuid": "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+      "side": "player",
+      "effectEnergy": [],
+      "effectPoints": [
+        {
+          "kind": "pointsScored",
+          "side": "player",
+          "amount": 2,
+          "cause": "effect"
+        }
+      ],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i1"
+        }
+      ],
+      "pending": false
+    },
+    {
+      "uuid": "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+      "side": "enemy",
+      "effectEnergy": [],
+      "effectPoints": [
+        {
+          "kind": "pointsScored",
+          "side": "enemy",
+          "amount": 2,
+          "cause": "effect"
+        }
+      ],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i9"
+        }
+      ],
+      "pending": false
+    },
+    {
+      "uuid": "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
+      "side": "player",
+      "effectEnergy": [
+        {
+          "kind": "energyChanged",
+          "side": "enemy",
+          "current": 2,
+          "max": 3,
+          "change": 0,
+          "maxChange": 1,
+          "cause": "effect"
+        }
+      ],
+      "effectPoints": [],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i1"
+        }
+      ],
+      "pending": false
+    },
+    {
+      "uuid": "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
+      "side": "enemy",
+      "effectEnergy": [
+        {
+          "kind": "energyChanged",
+          "side": "player",
+          "current": 2,
+          "max": 3,
+          "change": 0,
+          "maxChange": 1,
+          "cause": "effect"
+        }
+      ],
+      "effectPoints": [],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i9"
+        }
+      ],
+      "pending": false
+    },
+    {
+      "uuid": "9954cede-8a16-4053-b6e9-da745f4540f5",
+      "side": "player",
+      "effectEnergy": [],
+      "effectPoints": [],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "player",
+          "instance": "i1"
+        }
+      ],
+      "pending": false
+    },
+    {
+      "uuid": "9954cede-8a16-4053-b6e9-da745f4540f5",
+      "side": "enemy",
+      "effectEnergy": [],
+      "effectPoints": [],
+      "draws": [
+        {
+          "kind": "cardDrawn",
+          "side": "enemy",
+          "instance": "i9"
+        }
+      ],
+      "pending": false
+    }
+  ],
+  "fuzz": {
+    "games": 300,
+    "steps": 143167,
+    "failures": 0,
+    "engineWallSeconds": 144.0,
+    "engineCpuSeconds": 157.8,
+    "inclusionPerUuid": 1200,
+    "exerciseInFiledUuidOrder": [
+      250,
+      107,
+      319,
+      315,
+      252,
+      234
+    ],
+    "wrapperSeconds": 145.51625637500547,
+    "receipt": "helper-validation/fuzz.json",
+    "scope": "Dreamwell coverage exercised counts observed dreamwellDrawn, not proof of every possible bonus branch"
+  },
+  "qa": {
+    "sweep": {
+      "pass": 12,
+      "skip": 108,
+      "fail": 0,
+      "pending": 0,
+      "attempts": 120,
+      "invocation": "invocations/sweep-OiVrIw",
+      "evidenceDir": "invocations/sweep-OiVrIw/run-nLRT71",
+      "captures": 12,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pngPixels": {
+        "width": 2880,
+        "height": 1800
+      },
+      "capsEmptyEligibleReports": 12
+    },
+    "supplemental": [
+      {
+        "bead": "hv-umm2.216",
+        "uuid": "9954cede-8a16-4053-b6e9-da745f4540f5",
+        "variant": "base",
+        "as": "player",
+        "mode": "supplemental",
+        "verdict": "pass",
+        "viewport": "desktop",
+        "physical": "i9",
+        "printing": "5e5e5e5e-0000-4000-8000-000000000007",
+        "notes": "Hand-only declaration; normal preceding-Night Fast play, forced Dreamwell, sole target auto-answer, banishment and same-turn Ending materialization to prior-controller B0; event/history, persisted UUID draw/exact effect-ended log, DOM uncovered hit geometry, empty Caps.",
+        "screens": [
+          "silent-winter-player-banished-desktop.png",
+          "silent-winter-player-returned-desktop.png"
+        ],
+        "evidenceDir": "invocations/run-1ZHsoa",
+        "rawReport": "invocations/run-1ZHsoa/silent-winter-normal.result.json"
+      },
+      {
+        "bead": "hv-umm2.216",
+        "uuid": "9954cede-8a16-4053-b6e9-da745f4540f5",
+        "variant": "base",
+        "as": "player",
+        "mode": "supplemental",
+        "verdict": "pass",
+        "viewport": "mobile",
+        "physical": "i9",
+        "printing": "5e5e5e5e-0000-4000-8000-000000000007",
+        "notes": "Hand-only declaration; normal preceding-Night Fast play, forced Dreamwell, sole target auto-answer, banishment and same-turn Ending materialization to prior-controller B0; event/history, persisted UUID draw/exact effect-ended log, DOM uncovered hit geometry, empty Caps.",
+        "screens": [
+          "silent-winter-player-returned-mobile.png"
+        ],
+        "evidenceDir": "invocations/run-1ZHsoa",
+        "rawReport": "invocations/run-1ZHsoa/silent-winter-normal.result.json"
+      },
+      {
+        "bead": "hv-umm2.216",
+        "uuid": "9954cede-8a16-4053-b6e9-da745f4540f5",
+        "variant": "base",
+        "as": "enemy",
+        "mode": "supplemental",
+        "verdict": "pass",
+        "viewport": "desktop",
+        "physical": "i1",
+        "printing": "5e5e5e5e-0000-4000-8000-000000000007",
+        "notes": "Hand-only declaration; normal preceding-Night Fast play, forced Dreamwell, sole target auto-answer, banishment and same-turn Ending materialization to prior-controller B0; event/history, persisted UUID draw/exact effect-ended log, DOM uncovered hit geometry, empty Caps.",
+        "screens": [
+          "silent-winter-enemy-banished-desktop.png",
+          "silent-winter-enemy-returned-desktop.png"
+        ],
+        "evidenceDir": "invocations/run-CatmQn",
+        "rawReport": "invocations/run-CatmQn/silent-winter-normal.result.json"
+      },
+      {
+        "bead": "hv-umm2.216",
+        "uuid": "9954cede-8a16-4053-b6e9-da745f4540f5",
+        "variant": "base",
+        "as": "enemy",
+        "mode": "supplemental",
+        "verdict": "pass",
+        "viewport": "mobile",
+        "physical": "i1",
+        "printing": "5e5e5e5e-0000-4000-8000-000000000007",
+        "notes": "Hand-only declaration; normal preceding-Night Fast play, forced Dreamwell, sole target auto-answer, banishment and same-turn Ending materialization to prior-controller B0; event/history, persisted UUID draw/exact effect-ended log, DOM uncovered hit geometry, empty Caps.",
+        "screens": [
+          "silent-winter-enemy-returned-mobile.png"
+        ],
+        "evidenceDir": "invocations/run-CatmQn",
+        "rawReport": "invocations/run-CatmQn/silent-winter-normal.result.json"
+      }
+    ],
+    "supplementalFailures": 0,
+    "retries": 0,
+    "capturesInspected": [
+      "silent-winter-player-returned-mobile.png",
+      "silent-winter-player-banished-desktop.png",
+      "silent-winter-enemy-returned-desktop.png"
+    ],
+    "dimensionsVerified": {
+      "desktop": [
+        2880,
+        1800
+      ],
+      "mobile": [
+        780,
+        1688
+      ]
+    },
+    "persistedLogRows": {
+      "asPlayerDesktop": 59,
+      "asPlayerMobile": 59,
+      "asEnemyDesktop": 54,
+      "asEnemyMobile": 54
+    },
+    "d21RequiredForSupplemental": false
+  },
+  "validation": {
+    "focused": {
+      "files": 7,
+      "cases": 2419
+    },
+    "review": {
+      "files": 223,
+      "cases": 4182,
+      "exit": 0
+    },
+    "knip": {
+      "exit": 0
+    },
+    "preflight": {
+      "pass": 12,
+      "skip": 108,
+      "fail": 0
+    },
+    "reviewFull": {
+      "run": false,
+      "reason": "Source-only content composition; no infrastructure, repository configuration or cross-cutting architecture change"
+    }
+  },
+  "reviewPolicy": {
+    "required": false,
+    "sourceChangedLines": 30,
+    "newCapability": false,
+    "phaseGate": false,
+    "parentIndependentLeafAudit": "Read complete six-leaf diff and builders; exact settled composition. No cold review required by threshold."
+  },
+  "provenance": {
+    "parentInstall": "Fresh dependencies supplied before helper dispatch; parent session32577 actual exit0",
+    "sourceFreeAuditAndPrerequisites": "Parent initial source-free audit and hv-umm2.541/hv-xms9/hv-umm2.571 implementation/review/delivery predate helper dispatch and are separate provenance",
+    "helperWindow": "Starts exactly at actual2026-10-12T19:15:00.232Z dispatch and includes research, ACK wait, coordination, validation, QA and commit"
+  },
+  "hostLoadSamples": [
+    {
+      "name": "focused",
+      "start": "2026-10-12T19:21:25.280571+00:00",
+      "values": [
+        8.83349609375,
+        15.783203125,
+        16.99853515625
+      ]
+    },
+    {
+      "name": "preflight",
+      "start": "2026-10-12T19:21:43.862575+00:00",
+      "values": [
+        7.830078125,
+        15.2216796875,
+        16.7763671875
+      ]
+    },
+    {
+      "name": "fuzz",
+      "start": "2026-10-12T19:21:51.666672+00:00",
+      "values": [
+        7.3271484375,
+        14.86865234375,
+        16.63232421875
+      ]
+    },
+    {
+      "name": "review",
+      "start": "2026-10-12T19:24:22.048115+00:00",
+      "values": [
+        9.29345703125,
+        13.99609375,
+        16.07666015625
+      ]
+    },
+    {
+      "name": "knip",
+      "start": "2026-10-12T19:25:12.122830+00:00",
+      "values": [
+        7.69140625,
+        12.92236328125,
+        15.56494140625
+      ]
+    },
+    {
+      "name": "schema-before-browser",
+      "start": "2026-10-12T19:25:27.784222+00:00",
+      "values": [
+        7.0634765625,
+        12.53173828125,
+        15.37939453125
+      ]
+    },
+    {
+      "name": "sweep",
+      "start": "2026-10-12T19:25:35.985636+00:00",
+      "values": [
+        6.751953125,
+        12.283203125,
+        15.2578125
+      ]
+    },
+    {
+      "name": "silent-player",
+      "start": "2026-10-12T19:27:59.242913+00:00",
+      "values": [
+        13.55517578125,
+        11.98828125,
+        14.607421875
+      ]
+    },
+    {
+      "name": "silent-enemy",
+      "start": "2026-10-12T19:29:15.619617+00:00",
+      "values": [
+        21.873046875,
+        14.45947265625,
+        15.27294921875
+      ]
+    }
+  ],
+  "finalEvidenceSchema": {
+    "exit": 0,
+    "wallSeconds": 0.11174599999503698,
+    "receipt": "helper-validation/schema-final.json"
+  },
+  "commitClock": {
+    "evidenceFreeze": "2026-10-12T19:33:50.319956+00:00",
+    "parentAck": "Parent independently matched10path hashes/124ledger rows/settledruntime and accepted metadata-clock protocol",
+    "receipt": "helper-validation/commit-clock.json",
+    "precision": "Git committer timestamp has whole-second precision; actual process start/end and semantic timestamp comparison are retained externally after Git returns. This freeze is not claimed as the actual commit before that comparison."
+  }
+}

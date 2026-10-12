@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import { gainEnergy } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: true,
   cardNumber: 6,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [event(gainEnergy(1))],
+  verifiedText: "is5c3tz5l2",
 });

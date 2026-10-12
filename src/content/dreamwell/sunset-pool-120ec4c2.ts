@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import { drawThenIf, gainEnergy } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: false,
   cardNumber: 44,
   tags: [],
-  pending: true,
+  abilities: () => [event(drawThenIf({ cardType: "character" }, gainEnergy(1)))],
+  verifiedText: "gmbnazkl8w",
 });

@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import { gainMaxEnergy } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -12,5 +14,6 @@ export default dreamwellCard({
   cardNumber: 31,
   tags: [],
   art: { x: 0, y: 1, scale: 1 },
-  pending: true,
+  abilities: () => [event(gainMaxEnergy(1, "opponent"))],
+  verifiedText: "20mcn3qyag8",
 });
