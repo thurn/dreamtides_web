@@ -1,3 +1,5 @@
+import { event, x } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -9,6 +11,7 @@ export default card({
     "Discover a character with cost X and materialize it with awakened.",
   energyCost: 1,
   energyCosts: ["1", "X"],
+  xMinimum: 0,
   cardType: "Event",
   subtype: "",
   rarity: "Uncommon",
@@ -20,5 +23,13 @@ export default card({
   artOwned: false,
   cardNumber: 293,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    event(
+      p.materialize(
+        p.discover({ cardType: "character" }, { costExactly: x() }),
+        { awakened: variant.amplified },
+      ),
+    ),
+  ],
+  verifiedText: "sw1zd3q5by",
 });

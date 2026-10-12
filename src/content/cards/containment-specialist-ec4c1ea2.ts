@@ -1,3 +1,5 @@
+import { activated, energy, self } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,14 @@ export default card({
   cardNumber: 378,
   art: { x: 0.159, y: 0.141, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated(
+      [energy(4)],
+      p.sequence(
+        p.gainPoints(variant.amplified ? 2 : 1),
+        p.gainSpark(self(), 1),
+      ),
+    ),
+  ],
+  verifiedText: "1g55bmwrzai",
 });

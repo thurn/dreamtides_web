@@ -1,3 +1,12 @@
+import {
+  activated,
+  characterYouControl,
+  exhaustSelf,
+  keyword,
+  self,
+  target,
+} from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +30,15 @@ export default card({
   cardNumber: 481,
   art: { x: 0, y: -0.668, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    keyword("awakened"),
+    activated(
+      [exhaustSelf()],
+      p.sequence(
+        p.rematerialize(target(characterYouControl())),
+        p.gainSpark(self(), variant.amplified ? 2 : 1),
+      ),
+    ),
+  ],
+  verifiedText: "kd3jeakyi8",
 });

@@ -1,0 +1,178 @@
+{
+  "bead": "hv-umm2.175",
+  "base": "e27d1d60604e125888fac78ff1d6565c1a76bd6c",
+  "entities": 4,
+  "newPrimitives": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "reviewPolicy": {
+    "coreReview": false,
+    "nonTestLinesChanged": 63,
+    "required": false,
+    "reason": "Composition-only modules below 100 non-test changed lines; no phase gate or new primitive."
+  },
+  "rulesAudit": {
+    "xMinimum": "Dreamcatcher paid exact-cost Discover has xMinimum 0 under Discover normative text; Field Reverent activation energyX(0) meaningfully sets friendly base spark to zero under contextual X rules.",
+    "rematerialize": "The physical source stays in play and exhausted after paying its own activation cost; Awakened checks actual entry only. Existing rematerialize contracts preserve instance/status.",
+    "normativeSections": [
+      "Costs, Requirements, and X",
+      "Spark / Base spark",
+      "Keywords and Effects / Discover",
+      "Keywords and Effects / Materialize",
+      "Keywords and Effects / Rematerialize",
+      "Keywords and Effects / Awakened"
+    ],
+    "ladder": "not invoked; existing normative rules settle the clauses.",
+    "readOnlyPlumbing": [
+      "src/engine/rules/timing.ts",
+      "src/engine/steps/kinds/play.ts",
+      "src/engine/rules/legality.ts",
+      "src/engine/rules/zones.ts",
+      "src/engine/rules/stack.ts",
+      "src/engine/dsl/selectors.ts",
+      "src/engine/dsl/values.ts",
+      "src/engine/effects/interpreter.ts",
+      "src/engine/continuous/layers.ts",
+      "src/engine/rules/floating.ts",
+      "src/rules/battle/fold.ts"
+    ],
+    "bodyFixes": []
+  },
+  "preflight": {
+    "pass": 44,
+    "skip": 36,
+    "fail": 0,
+    "wallS": 2.11,
+    "engineElapsedMs": 68.610625,
+    "hostLoad": 9.208984375,
+    "options": "all default variants, both sides"
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 153163,
+    "executionWallS": 139.9,
+    "cpuS": 151.7,
+    "commandWallSIncludingHeavySlotWait": 270.05,
+    "failures": 0,
+    "exerciseCounts": [
+      239,
+      275,
+      217,
+      217
+    ]
+  },
+  "sweep": {
+    "latestCells": {
+      "pass": 44,
+      "skip": 36,
+      "fail": 0
+    },
+    "uniqueCells": 80,
+    "summaries": [
+      {
+        "event": "cardSweepSummary",
+        "invocation": "invocations/sweep-J6U6pM",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.175/invocations/sweep-J6U6pM",
+        "counts": {
+          "pass": 44,
+          "skip": 36
+        },
+        "attemptCounts": {
+          "pass": 44,
+          "skip": 36
+        },
+        "hostLoad": 9.9208984375,
+        "sessions": 1,
+        "leaseYields": 0,
+        "wallMs": {
+          "browserLeaseWait": 9,
+          "serve": 2617,
+          "scenario": 399298.97550099995,
+          "cleanup": 624.6529159999918,
+          "execution": 402612.037125,
+          "total": 402621.037125
+        }
+      }
+    ],
+    "rawReportCount": 44,
+    "capsEntries": 0,
+    "failureDisposition": "No failed attempts or retries."
+  },
+  "judged": {
+    "cases": 0,
+    "required": false,
+    "shaFirstBytes": [
+      134,
+      124,
+      132,
+      196
+    ],
+    "reason": "No UUID is below 26; all prompt kinds, status indicators and visual effects already exist.",
+    "captures": []
+  },
+  "tests": {
+    "addedScenarios": 4,
+    "addedScenarioLines": 72,
+    "addedTestFiles": 0,
+    "jsdomDelta": 0,
+    "D20": "Own-ability interaction: self-rematerialization retains physical source, paid exhaustion and exact permanent spark gain for base/amplified on both sides. Other cards use ordinary primitive composition.",
+    "initialHarnessCorrection": "The sole legal self-target is selected automatically; removed an unused scripted answer before final passing focused validation."
+  },
+  "runtimeLedger": {
+    "runnerPids": [
+      66381,
+      66390
+    ],
+    "serverProcessGroups": [
+      66426
+    ],
+    "serverChildPids": [
+      66441,
+      66479
+    ],
+    "heavyCommandPids": [
+      42762,
+      42770
+    ],
+    "ports": [
+      5174
+    ],
+    "provider": "Runner-owned Playwright MCP client/browser context",
+    "state": "Fuzz and browser commands exited 0. Runner reported provider cleanup and port free; independent ps found all recorded browser PIDs absent, lsof found no 5174 listener."
+  },
+  "validation": {
+    "focused": {
+      "wallS": 3.32,
+      "testFiles": 2,
+      "tests": 123,
+      "passed": true
+    },
+    "coverageGate": "Passed in focused and final review related suite.",
+    "review": {
+      "wallS": 37.61,
+      "hostLoad": 6.33154296875,
+      "testFiles": 223,
+      "tests": 3619,
+      "start": "2026-10-12T14:00:31.855Z",
+      "passed": true,
+      "scope": "Entire npm run review wrapper, including prepare, related tests and asset restoration."
+    },
+    "knip": {
+      "wallS": 2.79,
+      "passed": true
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "review start",
+      "oneMinute": 6.33,
+      "at": "2026-10-12T14:00:31.655520+00:00"
+    }
+  ],
+  "scope": {
+    "filedAreasOnly": true,
+    "fallout": [],
+    "printedCatalogFieldsChanged": false,
+    "exportedSymbolChanges": false
+  }
+}

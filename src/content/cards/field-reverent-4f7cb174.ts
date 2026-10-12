@@ -1,3 +1,11 @@
+import {
+  activated,
+  all,
+  characterYouControl,
+  energyX,
+  x,
+} from "../../engine/dsl/builders";
+import { setBaseSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +26,11 @@ export default card({
   artOwned: false,
   cardNumber: 428,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated(
+      [energyX(0)],
+      setBaseSpark(all(characterYouControl()), x(), "untilEndOfTurn"),
+    ),
+  ],
+  verifiedText: "1q7bzo6mxp8",
 });
