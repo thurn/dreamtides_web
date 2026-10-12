@@ -36,8 +36,10 @@ export interface DreamwellConfig {
  */
 export interface BattleConfig {
   readonly scoreToWin: number;
-  /** Rounds after which an unfinished battle is a draw (P11). */
-  readonly turnLimit: number;
+  /** Rounds after which an unfinished battle is a draw (P11), or `null` for unrestricted rounds. */
+  readonly turnLimit: number | null;
+  /** Sides eligible for any victory condition; absent means both sides. */
+  readonly victorySides?: readonly Side[];
   readonly handLimit: number;
   readonly openingHandSize: Readonly<Record<Side, number>>;
   readonly startingSide: Side;
@@ -109,6 +111,34 @@ export interface NextBattleEffects {
   }[];
 }
 
+/** One physical copy from the full input deck, placed without a zone-change effect. */
+export type BattlePlacement = {
+  readonly side: Side;
+  readonly deckIndex: number;
+} & (
+  | { readonly zone: "hand" | "void"; readonly slot?: never; readonly exhausted?: never }
+  | { readonly zone: "play"; readonly slot: Slot; readonly exhausted?: boolean }
+);
+
+/** A normal turn at entry to Draw, Dawn, or Day, with explicitly ordered decks and hands. */
+export interface BattleSetup {
+  readonly placements: readonly BattlePlacement[];
+  readonly sides: Readonly<Record<Side, {
+    readonly currentEnergy: number;
+    readonly maxEnergy: number;
+    readonly score: number;
+  }>>;
+  readonly turn: {
+    readonly active: Side;
+    readonly phase: "draw" | "dawn" | "day";
+    readonly round: number;
+    readonly turnNumber: number;
+    readonly sideTurns: Readonly<Record<Side, number>>;
+    readonly lastNormal: Side;
+  };
+  readonly dreamwell: { readonly deck: readonly DreamwellCardId[]; readonly next: number };
+}
+
 /** Everything a battle needs to start. */
 export interface BattleInit {
   /** Battle seed, derived by the host from the game seed and battle index. */
@@ -124,6 +154,11 @@ export interface BattleInit {
   readonly dreamsigns?: Readonly<Partial<Record<Side, readonly DreamsignId[]>>>;
   /** Each side's next-battle effects. */
   readonly nextBattle?: Readonly<Partial<Record<Side, NextBattleEffects>>>;
+  /** Explicit initial zones/resources at a supported phase boundary; input decks are ordered. */
+  readonly setup?: BattleSetup;
+  readonly victorySides?: readonly Side[];
+  /** Positive round limit, or `null` to permit any number of rounds. */
+  readonly turnLimit?: number | null;
 }
 
 export interface CardStatus {

@@ -1,11 +1,11 @@
 import { cardMatchesFilter } from "../../continuous/characteristics";
 import { buildDreamwellDeck } from "../../rules/dreamwell";
 import { drawCard, setEnergy } from "../../rules/resources";
-import { beginFirstTurn } from "../../rules/turn";
+import { beginFirstTurn, beginPreparedPhase } from "../../rules/turn";
 import { SIDES } from "../../state/ids";
 import type { DreamwellCardId, Side } from "../../state/ids";
 import { shuffleInPlace } from "../../state/rng";
-import type { BattleInit, OpeningHandDraw } from "../../state/types";
+import type { BattleInit, BattleSetup, OpeningHandDraw } from "../../state/types";
 import type { StepContext, StepDefinition } from "../types";
 
 /**
@@ -20,10 +20,13 @@ export interface BeginBattleStep {
   readonly openingHand?: Readonly<Partial<Record<Side, readonly OpeningHandDraw[]>>>;
   /** Energy, current and maximum, each side begins with. */
   readonly startingEnergy?: Readonly<Partial<Record<Side, number>>>;
+  /** Entry to an explicitly prepared phase, without opening-hand effects. */
+  readonly preparedPhase?: BattleSetup["turn"]["phase"];
 }
 
 /** The `beginBattle` step that starts a battle from its init. */
 export function beginBattleStep(init: BattleInit): BeginBattleStep {
+  if (init.setup !== undefined) return { kind: "beginBattle", dreamwell: init.dreamwell, preparedPhase: init.setup.turn.phase };
   const openingHand: Partial<Record<Side, readonly OpeningHandDraw[]>> = {};
   const startingEnergy: Partial<Record<Side, number>> = {};
   for (const side of SIDES) {
@@ -62,6 +65,10 @@ export const beginBattle: StepDefinition<BeginBattleStep> = {
   canceller: () => null,
   run(ctx, step) {
     const { state } = ctx;
+    if (step.preparedPhase !== undefined) {
+      beginPreparedPhase(ctx, step.preparedPhase);
+      return;
+    }
     for (const side of SIDES) {
       shuffleInPlace(state, `shuffle:${side}`, state.sides[side].deck);
     }

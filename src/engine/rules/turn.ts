@@ -8,6 +8,7 @@ import { expireAt } from "./floating";
 import { discardCard, drawCard, setEnergy } from "./resources";
 import { emptyTurnLog } from "./turn-log";
 import { endBattle } from "./victory";
+import type { BattleSetup } from "../state/types";
 import { banish, charactersInPlay, instanceOf } from "./zones";
 
 function enterPhase(ctx: StepContext, phase: Phase): void {
@@ -54,6 +55,11 @@ function enterPhase(ctx: StepContext, phase: Phase): void {
     default:
       return;
   }
+}
+
+/** Enters a declared pre-combat boundary through the ordinary phase lifecycle. */
+export function beginPreparedPhase(ctx: StepContext, phase: BattleSetup["turn"]["phase"]): void {
+  enterPhase(ctx, phase);
 }
 
 /**
@@ -172,7 +178,7 @@ export function beginNextTurn(ctx: StepContext): void {
     next = opponent(turn.lastNormal);
     extra = false;
     if (next === state.config.startingSide) {
-      if (turn.round >= state.config.turnLimit) {
+      if (state.config.turnLimit !== null && turn.round >= state.config.turnLimit) {
         endBattle(ctx, { kind: "draw", reason: "turnLimit" });
         return;
       }

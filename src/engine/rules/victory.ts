@@ -54,6 +54,7 @@ export function checkVictory(ctx: StepContext, events: readonly EngineEvent[]): 
   const target = state.config.scoreToWin;
   const wins: { readonly side: Side; readonly reason: WinReason }[] = [];
   for (const side of SIDES) {
+    if (state.config.victorySides !== undefined && !state.config.victorySides.includes(side)) continue;
     const sources = winConditionSources(state, ctx.catalog, side);
     if (sources.length > 0) {
       ctx.emit({ kind: "winConditionMet", side, sources });

@@ -179,6 +179,47 @@ the Dreamwell construction rules (`config.dreamwell`). `initialState`
 starting side, and next-battle opening-hand changes (D39), so a serialized
 state determines its own replay.
 
+`BattleInit.setup` declares an ordered initial position at entry to Draw,
+Dawn, or Day. Every physical copy belongs to the complete `init.decks`
+recipe. A placement names its side and zero-based deck-entry index, then
+places that copy in a hand, void, or character-only play slot. Distinct
+copies of the same card UUID receive distinct instance IDs. Placements
+preserve their declared hand/void order, rank holes and exhaustion; the
+remaining deck keeps its input order. These initial copies have ordinary
+deck provenance and are not effect-created cards. Policy decklists and
+catalog manifests retain the complete recipe, including placed copies.
+
+Setup supplies each side's nonnegative finite score and current/maximum
+energy (current energy may exceed maximum), the coherent counters of a
+normal alternating turn, and the ordered Dreamwell deck with its next
+index. The engine validates unique bounded physical-copy references,
+unique bounded slots, effective recipe card types, catalogs, counters and
+phase boundaries before publishing any state. Its prepared begin step
+enters the declared phase through the ordinary lifecycle: Draw performs
+the normal draw and first-turn skip, Dawn triggers resolve, and Day opens
+the normal decision window. Initial placement invents no materialization,
+start-of-turn, or prior-phase events. Combat boundaries require their own
+challenge and turn-history contexts and are outside this setup contract.
+
+Prepared setup conflicts with next-battle `startingEnergy` other than zero,
+nonempty extra `openingHand` draws, or a nonzero `openingHandDelta`.
+Cost-reduction-only next-battle effects apply to the full recipe normally.
+Avatars and Dreamsigns retain their ordinary continuous and phase-trigger
+behavior; their start-of-turn abilities wait for actual subsequent turn
+starts.
+
+`BattleInit.victorySides` optionally declares a nonempty unique set of
+eligible sides for score, in-play win conditions and resolved win effects.
+The victory check considers them in the standard side order, preserving
+simultaneous-win draw reasons. Its copied `config.victorySides` is absent
+for ordinary battles, which consider both sides. `BattleInit.turnLimit`
+sets a positive round limit or `null` for unrestricted rounds; an omitted
+option uses the battle catalog limit. Ordinary initialization retains its
+seeded shuffle, deal, events and serialized config shape. Configured options
+survive cloning and serialization; the saved-fold validator checks the
+declared setup and result options structurally, and engine initialization
+resolves their catalog identities.
+
 **`BattleState` never contains a pending prompt.** Prompts exist only while a
 step runs. In interactive play they are reconstructed from the in-flight
 record ([Fold integration](#fold-integration)). This is what makes state
@@ -783,7 +824,7 @@ rounds would begin (P11). Its "at the start of your turn" triggers resolve
 before its Dreamwell phase (`turn.beginning`).
 
 **Victory check** (`rules/victory.ts`, P5, C15). After every completed step
-the runner checks each side for a win:
+the runner checks each eligible side for a win:
 
 - its score is at or above `scoreToWin` (reason `score`);
 - otherwise, a card in play or emblem it controls has a `winCondition`
@@ -794,7 +835,7 @@ the runner checks each side for a win:
 
 One winning side gets the victory. Both winning in the same check is a draw,
 with reason `score` when both won by score and `winCondition` otherwise.
-The check emits a `winConditionMet` event for each side with a holding win
+The check emits a `winConditionMet` event for each eligible side with a holding win
 condition, naming its sources, before `battleEnded`; a resolving
 `winTheGame` emits one naming its card as it resolves. A `winConditionMet`
 naming a card in a hand or deck (a hidden trigger's `winTheGame`) is private

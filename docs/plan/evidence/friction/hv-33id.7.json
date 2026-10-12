@@ -1,0 +1,28 @@
+{
+  "bead": "hv-33id.7",
+  "phase": 6,
+  "implementMin": 37.50245248333333,
+  "implementWindow": {
+    "start": "2026-10-12T20:06:51.709Z",
+    "end": "2026-10-12T20:44:21.856149+00:00"
+  },
+  "localValidationS": {
+    "focused": 12.654192165995482,
+    "review": 55.135449374996824,
+    "knip": 3.650401958002476,
+    "reviewFull": 702.4937266250054
+  },
+  "hostLoad": 8.21533203125,
+  "testDelta": {
+    "files": 1,
+    "lines": 311,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 10.079156916666667,
+      "note": "Required full review queued behind a separate acceptance tournament. Minutes are the observed queue-and-launch upper bound; no foreign holder action or retry."
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import { isFixedChange } from "../../engine/view/knowledge";
+import { BATTLE } from "../../content/battle";
 // The authoritative in-battle slice of the fold state: a journey battle,
 // which is an engine battle (`engine-battle.ts`), or the standalone tutorial
 // battle on its sandbox board, plus the cursor model that lets the sandbox
@@ -734,8 +735,79 @@ function isEngineBattleInit(value: unknown): boolean {
     optional(sideRecord(arrayOf(parses(parseDreamsignId)), true))(
       value.dreamsigns,
     ) &&
-    optional(sideRecord(isNextBattleEffects, true))(value.nextBattle)
+    optional(sideRecord(isNextBattleEffects, true))(value.nextBattle) &&
+    optional(isVictorySides)(value.victorySides) &&
+    optional(nullable(isPositiveIndex))(value.turnLimit) &&
+    (value.setup === undefined || isEngineSetup(value.setup, value))
   );
+}
+
+function isPositiveIndex(value: unknown): value is number {
+  return isIndex(value) && value > 0;
+}
+
+function isVictorySides(value: unknown): boolean {
+  return isArrayOf(value, isSide) && value.length > 0 && new Set(value).size === value.length;
+}
+
+function hasOnlyFields(value: unknown, fields: readonly string[]): value is Record<string, unknown> {
+  return isPlainRecord(value) && Object.keys(value).every((key) => fields.includes(key));
+}
+
+function isNonnegativeNumber(value: unknown): boolean {
+  return isFiniteNumber(value) && value >= 0;
+}
+
+/** Saved declarations are structural; catalog resolution belongs to engine initialization. */
+function isEngineSetup(value: unknown, init: Record<string, unknown>): boolean {
+  if (!hasOnlyFields(value, ["placements", "sides", "turn", "dreamwell"]) ||
+      !isArrayOf(value.placements, isPlainRecord) || !sideRecord((resources) =>
+        hasOnlyFields(resources, ["currentEnergy", "maxEnergy", "score"]) &&
+        [resources.currentEnergy, resources.maxEnergy, resources.score].every(isNonnegativeNumber))(value.sides) ||
+      !hasOnlyFields(value.turn, ["active", "phase", "round", "turnNumber", "sideTurns", "lastNormal"]) ||
+      !hasOnlyFields(value.dreamwell, ["deck", "next"]) || !isArrayOf(value.dreamwell.deck, parses(parseDreamwellCardId)) ||
+      !isIndex(value.dreamwell.next) || value.dreamwell.next > value.dreamwell.deck.length ||
+      !isArrayOf(init.dreamwell, parses(parseDreamwellCardId)) ||
+      !isPlainRecord(init.decks)) return false;
+  const dreamwellCatalog = init.dreamwell;
+  if (new Set(dreamwellCatalog).size !== dreamwellCatalog.length || !value.dreamwell.deck.every((id) => dreamwellCatalog.includes(id))) return false;
+  const turn = value.turn;
+  if (!isSide(turn.active) || turn.lastNormal !== turn.active || (turn.phase !== "draw" && turn.phase !== "dawn" && turn.phase !== "day") ||
+      !isPositiveIndex(turn.round) || !isPositiveIndex(turn.turnNumber) || !sideRecord(isIndex)(turn.sideTurns) ||
+      !isPlainRecord(turn.sideTurns)) return false;
+  const first = init.startingSide ?? BATTLE.startingSide;
+  const second = first === "player" ? "enemy" : "player";
+  const limit = init.turnLimit === undefined ? BATTLE.turnLimit : init.turnLimit;
+  if ((first !== "player" && first !== "enemy") || turn.sideTurns[first] !== Math.ceil(turn.turnNumber / 2) ||
+      turn.sideTurns[second] !== Math.floor(turn.turnNumber / 2) || turn.round !== Math.ceil(turn.turnNumber / 2) ||
+      turn.active !== (turn.turnNumber % 2 === 1 ? first : second) ||
+      (limit !== null && (!isPositiveIndex(limit) || turn.round > limit))) return false;
+  if (isPlainRecord(init.nextBattle) && Object.values(init.nextBattle).some((effects) =>
+    !isPlainRecord(effects) || effects.startingEnergy !== 0 || !Array.isArray(effects.openingHand) || effects.openingHand.length !== 0 ||
+    !isArrayOf(effects.smallerHandAndCostDiscount, (discount) => isPlainRecord(discount) && discount.openingHandDelta === 0))) return false;
+  const copies = new Set<string>();
+  const slots = new Set<string>();
+  for (const placement of value.placements) {
+    if (!hasOnlyFields(placement, ["side", "deckIndex", "zone", "slot", "exhausted"])) return false;
+    const side = sideFromUnknown(placement.side);
+    if (side === null || !isIndex(placement.deckIndex) || !Array.isArray(init.decks[side]) ||
+        placement.deckIndex >= init.decks[side].length || (placement.zone !== "hand" && placement.zone !== "void" && placement.zone !== "play")) return false;
+    const copy = `${side}:${placement.deckIndex}`;
+    if (copies.has(copy)) return false;
+    copies.add(copy);
+    if (placement.zone !== "play") {
+      if (placement.slot !== undefined || placement.exhausted !== undefined) return false;
+      continue;
+    }
+    if (!hasOnlyFields(placement.slot, ["rank", "index"]) ||
+        (placement.slot.rank !== "front" && placement.slot.rank !== "back") || !isIndex(placement.slot.index) ||
+        placement.slot.index >= (placement.slot.rank === "front" ? FRONT_RANK_SIZE : BACK_RANK_SIZE) ||
+        !optional(isBoolean)(placement.exhausted)) return false;
+    const cell = `${side}:${placement.slot.rank}:${placement.slot.index}`;
+    if (slots.has(cell)) return false;
+    slots.add(cell);
+  }
+  return true;
 }
 
 function isEngineDeckEntry(value: unknown): boolean {
@@ -839,6 +911,7 @@ function isInFlight(value: unknown): boolean {
     isPlainRecord(value) &&
     isPlainRecord(value.step) &&
     oneOf(STEP_KINDS)(value.step.kind) &&
+    (value.step.kind !== "beginBattle" || optional(oneOf({ draw: true, dawn: true, day: true }))(value.step.preparedPhase)) &&
     isBoolean(value.automatic) &&
     isArrayOf(value.answers, isRecordedAnswer)
   );
@@ -980,7 +1053,6 @@ function isBattleConfig(value: unknown): boolean {
     isPlainRecord(value) &&
     [
       value.scoreToWin,
-      value.turnLimit,
       value.handLimit,
       value.resolutionCap,
       value.mandatoryLoopCheckFrom,
@@ -990,6 +1062,8 @@ function isBattleConfig(value: unknown): boolean {
       value.feasibilitySearchRuns,
       value.discoverOptions,
     ].every(isIndex) &&
+    nullable(isPositiveIndex)(value.turnLimit) &&
+    optional(isVictorySides)(value.victorySides) &&
     sideRecord(isIndex)(value.openingHandSize) &&
     isSide(value.startingSide) &&
     isBoolean(value.skipFirstDraw) &&

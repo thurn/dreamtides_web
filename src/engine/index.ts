@@ -40,6 +40,8 @@ export type {
   AvatarEmblem,
   BattleConfig,
   BattleInit,
+  BattlePlacement,
+  BattleSetup,
   BattleResult,
   BattleState,
   CardInstance,

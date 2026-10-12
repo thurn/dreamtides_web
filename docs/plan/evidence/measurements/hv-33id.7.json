@@ -1,0 +1,780 @@
+{
+  "bead": "hv-33id.7",
+  "implementationWindow": {
+    "startUtc": "2026-10-12T20:06:51.709Z",
+    "startKind": "exact parent native post-claim dispatch call_f57b19f57ee34f06949b7640df68b68b",
+    "modelStartKnown": false,
+    "endUtc": "2026-10-12T20:44:21.856149+00:00",
+    "endKind": "parent-ACK commit-clock metadata proxy; actual Git receipt retained separately",
+    "elapsedIncludesResearchCoordinationQueuesAndVerification": true,
+    "elapsedMinutes": 37.50245248333333
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final npm run review prepare/typecheck/lint/test-related launch; measured runner load=8.21533203125"
+      }
+    }
+  },
+  "contract": {
+    "module": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts",
+    "newCases": 14,
+    "plainContractLines": 311,
+    "testEntrypointDelta": 0,
+    "jsdomFileDelta": 0,
+    "publicBoundary": "Engine.createBattle/apply/view, public policy recipes/manifest, fold start/reduce and saved fold parse",
+    "setupBoundaries": [
+      "draw",
+      "dawn",
+      "day"
+    ],
+    "copyReferences": "unique bounded deck indices select physical initial copies; content identity remains branded UUID",
+    "nextBattleConflicts": [
+      "startingEnergy !== 0",
+      "openingHand.length !== 0",
+      "any smallerHandAndCostDiscount openingHandDelta !== 0"
+    ],
+    "nextBattleCompatible": "costReduction-only applies through dealtDeck to full recipes",
+    "defaultCompatibility": {
+      "ordinaryHash": "14f231277fcd60",
+      "retainedPublicBeforeAfterSnapshotEqual": true,
+      "beforeExtrasIgnored": true,
+      "afterExtrasIgnored": false,
+      "ciPinsNoProductionDefaultHash": true,
+      "finalSourceProbe": true
+    },
+    "failurePaths": {
+      "init": "Malformed physical references/zones/slots/readiness/resources/counters/phase/recipe variants and unavailable card/Dreamwell/Avatar/Dreamsign are rejected before observer publication; resources allow current energy above maximum. Unsupported combat histories are outside this API.",
+      "config": "Empty/duplicate/unknown sides and nonpositive/nonintegral/nonfinite limits reject; null disables only turn-limit draw, other cap/loop draws remain ordinary.",
+      "saved": "Malformed declared setup and result config, and unsupported preparedPhase reject structurally; well-formed absent catalog IDs remain accepted by the existing save contract. deserializeState remains the existing raw JSON loader.",
+      "actions": "Public play/reposition/pass/real ordered Draw and boundary triggers observed; existing engine legality owns action rejection. UI/browser failure paths not applicable to this internal API."
+    },
+    "consumerBoundary": "This bead proves the generic setup/config API. Authored tutorial prefix turn/Dreamwell sequence and initial-hand reveal provenance are mapped and verified by the later tutorial consumer bead; no whole-prefix mapping is claimed here.",
+    "actualCases": [
+      {
+        "name": "  it(\"enters Draw with a real ordered draw and preserves the first-turn skip\", () => {",
+        "line": 76,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"allocates distinct physical copies, rank holes/readiness, full recipes and ordered remaining decks\", () => {",
+        "line": 92,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"plays and repositions declared copies through normal actions, then draws in declared order\", () => {",
+        "line": 114,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"enters Dawn with ordinary card/emblem triggers and without fabricated arrival or first-turn triggers\", () => {",
+        "line": 127,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"keeps cost discounts in every declared recipe while rejecting conflicting opening-hand and energy modifiers\", () => {",
+        "line": 138,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"rejects malformed declarations atomically before any observer sees state\", () => {",
+        "line": 153,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"validates play against the effective deck-entry type\", () => {",
+        "line": 204,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"uses eligible sides as a set and preserves simultaneous-score draw priority\", () => {",
+        "line": 216,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"applies eligibility to static and resolved win conditions for either active side\", () => {",
+        "line": 225,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"ends at a configured round boundary and permits the next round when disabled\", () => {",
+        "line": 246,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"rejects malformed result configuration\", () => {",
+        "line": 255,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"round-trips configured snapshots and continues public fold actions without mutating the source\", () => {",
+        "line": 265,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"accepts ordinary old save fields and keeps absent result options absent\", () => {",
+        "line": 283,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      },
+      {
+        "name": "  it(\"rejects malformed new save fields and an unsupported prepared boundary\", () => {",
+        "line": 292,
+        "file": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts"
+      }
+    ]
+  },
+  "mutations": [
+    {
+      "name": "mutation-victory",
+      "path": "src/engine/rules/victory.ts",
+      "sourceSHA256": "b7abe032e59e0df52e1aba928ed0571e6263cd6969a859f713cd7de7b458d534",
+      "restoredSHA256": "b7abe032e59e0df52e1aba928ed0571e6263cd6969a859f713cd7de7b458d534",
+      "exit": 1
+    },
+    {
+      "name": "mutation-turn-limit",
+      "path": "src/engine/rules/turn.ts",
+      "sourceSHA256": "99876bb0bb042d5de24ff6c7c344680cd06f087562c74a03f8de2f48b9dbae0a",
+      "restoredSHA256": "99876bb0bb042d5de24ff6c7c344680cd06f087562c74a03f8de2f48b9dbae0a",
+      "exit": 1
+    },
+    {
+      "name": "mutation-placements",
+      "path": "src/engine/state/create.ts",
+      "sourceSHA256": "0ed30d07fb802f17c8df79cc69851b63a1edae220365b95971e651cd60fb8ddb",
+      "restoredSHA256": "0ed30d07fb802f17c8df79cc69851b63a1edae220365b95971e651cd60fb8ddb",
+      "exit": 1
+    },
+    {
+      "name": "mutation-validation",
+      "path": "src/engine/state/create.ts",
+      "sourceSHA256": "0ed30d07fb802f17c8df79cc69851b63a1edae220365b95971e651cd60fb8ddb",
+      "restoredSHA256": "0ed30d07fb802f17c8df79cc69851b63a1edae220365b95971e651cd60fb8ddb",
+      "exit": 1
+    },
+    {
+      "name": "mutation-save-config",
+      "path": "src/rules/battle/fold.ts",
+      "sourceSHA256": "2a8fd4c42e441ed2630d7a512e3bddaa72fbc45c3270c5448039b139c3a24973",
+      "restoredSHA256": "2a8fd4c42e441ed2630d7a512e3bddaa72fbc45c3270c5448039b139c3a24973",
+      "exit": 1
+    }
+  ],
+  "validationReceipts": [
+    {
+      "name": "baseline-final",
+      "cmd": [
+        "./node_modules/.bin/tsx",
+        "/tmp/worker-init7/prechange.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 3734,
+      "pgid": 3734,
+      "start": "2026-10-12T20:32:11.697828+00:00",
+      "hostLoad": "{ 5.03 7.42 8.76 }",
+      "status": "exited",
+      "exit": 0,
+      "wallS": 1.9689540410035988,
+      "end": "2026-10-12T20:32:13.670484+00:00"
+    },
+    {
+      "name": "focused-corrected",
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "declared"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 61665,
+      "pgid": 61665,
+      "start": "2026-10-12T20:23:25.870811+00:00",
+      "hostLoad": "{ 7.42 10.11 10.05 }",
+      "status": "exited",
+      "exit": 0,
+      "wallS": 4.860566292001749,
+      "end": "2026-10-12T20:23:30.734484+00:00"
+    },
+    {
+      "name": "focused-final",
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "declared"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 57655,
+      "pgid": 57655,
+      "start": "2026-10-12T20:21:13.750327+00:00",
+      "hostLoad": "{ 11.37 11.75 10.53 }",
+      "status": "exited",
+      "exit": 1,
+      "wallS": 4.639624375005951,
+      "end": "2026-10-12T20:21:18.393547+00:00"
+    },
+    {
+      "name": "focused-first",
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "declared"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 26329,
+      "pgid": 26329,
+      "start": "2026-10-12T20:19:34.249524+00:00",
+      "hostLoad": "{ 14.99 11.88 10.40 }",
+      "status": "exited",
+      "exit": 0,
+      "wallS": 6.549650999993901,
+      "end": "2026-10-12T20:19:40.802395+00:00"
+    },
+    {
+      "name": "focused-integration",
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/turn.test.ts",
+        "src/engine/rules/turn-log.test.ts",
+        "src/engine/core.test.ts",
+        "src/engine/fold/fold.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 65141,
+      "pgid": 65141,
+      "start": "2026-10-12T20:25:34.852911+00:00",
+      "hostLoad": "{ 9.05 9.65 9.85 }",
+      "status": "exited",
+      "exit": 0,
+      "wallS": 12.654192165995482,
+      "end": "2026-10-12T20:25:47.509706+00:00"
+    },
+    {
+      "name": "knip-final",
+      "cmd": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 99269,
+      "pgid": 99269,
+      "start": "2026-10-12T20:28:56.949282+00:00",
+      "hostLoad": "{ 9.06 9.11 9.55 }",
+      "status": "exited",
+      "exit": 0,
+      "wallS": 3.650401958002476,
+      "end": "2026-10-12T20:29:00.603324+00:00"
+    },
+    {
+      "name": "mutation-placements",
+      "cmd": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "declared"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 99678,
+      "pgid": 99678,
+      "start": "2026-10-12T20:29:19.516957+00:00",
+      "hostLoad": "{ 7.88 8.82 9.43 }",
+      "status": "exited",
+      "exit": 1,
+      "wallS": 2.593321416992694,
+      "end": "2026-10-12T20:29:22.113394+00:00"
+    },
+    {
+      "name": "mutation-save-config",
+      "cmd": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "declared"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 99744,
+      "pgid": 99744,
+      "start": "2026-10-12T20:29:24.686923+00:00",
+      "hostLoad": "{ 7.57 8.74 9.40 }",
+      "status": "exited",
+      "exit": 1,
+      "wallS": 2.55902979199891,
+      "end": "2026-10-12T20:29:27.248559+00:00"
+    },
+    {
+      "name": "mutation-turn-limit",
+      "cmd": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "declared"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 63725,
+      "pgid": 63725,
+      "start": "2026-10-12T20:24:43.616355+00:00",
+      "hostLoad": "{ 7.46 9.48 9.81 }",
+      "status": "exited",
+      "exit": 1,
+      "wallS": 2.690236291004112,
+      "end": "2026-10-12T20:24:46.309400+00:00"
+    },
+    {
+      "name": "mutation-validation",
+      "cmd": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "declared"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 99705,
+      "pgid": 99705,
+      "start": "2026-10-12T20:29:22.137725+00:00",
+      "hostLoad": "{ 7.88 8.82 9.43 }",
+      "status": "exited",
+      "exit": 1,
+      "wallS": 2.5220124170009512,
+      "end": "2026-10-12T20:29:24.662433+00:00"
+    },
+    {
+      "name": "mutation-victory",
+      "cmd": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "declared"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 63676,
+      "pgid": 63676,
+      "start": "2026-10-12T20:24:41.007893+00:00",
+      "hostLoad": "{ 7.67 9.56 9.84 }",
+      "status": "exited",
+      "exit": 1,
+      "wallS": 2.579881541998475,
+      "end": "2026-10-12T20:24:43.590392+00:00"
+    },
+    {
+      "name": "review-final",
+      "cmd": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 88497,
+      "pgid": 88497,
+      "start": "2026-10-12T20:27:48.486941+00:00",
+      "hostLoad": "{ 8.22 9.05 9.57 }",
+      "status": "exited",
+      "exit": 0,
+      "wallS": 55.135449374996824,
+      "end": "2026-10-12T20:28:43.626106+00:00"
+    },
+    {
+      "name": "review-first",
+      "cmd": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 66247,
+      "pgid": 66247,
+      "start": "2026-10-12T20:26:18.837080+00:00",
+      "hostLoad": "{ 6.46 8.89 9.56 }",
+      "status": "exited",
+      "exit": 1,
+      "wallS": 55.32295245899877,
+      "end": "2026-10-12T20:27:14.163024+00:00"
+    },
+    {
+      "name": "review-full-final",
+      "cmd": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 932,
+      "pgid": 932,
+      "start": "2026-10-12T20:29:49.738585+00:00",
+      "hostLoad": "{ 8.64 8.89 9.43 }",
+      "status": "exited",
+      "exit": 0,
+      "wallS": 702.4937266250054,
+      "end": "2026-10-12T20:41:32.240506+00:00"
+    },
+    {
+      "name": "typecheck-prepared",
+      "cmd": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-7-declared-battle-setup",
+      "pid": 59050,
+      "pgid": 59050,
+      "start": "2026-10-12T20:21:38.838720+00:00",
+      "hostLoad": "{ 10.04 11.40 10.44 }",
+      "status": "exited",
+      "exit": 2,
+      "wallS": 11.844183916997281,
+      "end": "2026-10-12T20:21:50.685584+00:00"
+    }
+  ],
+  "resourceClosure": {
+    "browser": "none",
+    "server": "none",
+    "reviewer": "parent owns asynchronous review after commit",
+    "nativeWorkflow": "parent only; helper ran no Hive/Tollgate native operation",
+    "processGroups": "final populated from owned validation receipts; initial direct tsc exact PID unknown, session2946 exited",
+    "remainingOwnedGroupMembers": [],
+    "verifiedAt": "2026-10-12T20:42:04.434091+00:00",
+    "initialUnreceiptedCompiler": "session2946 completed; exact PID/group/exit unknown",
+    "foreignResources": "read-only observations only; no kill/unlock/cleanup"
+  },
+  "preExistingIssues": [],
+  "sourceManifest": [
+    {
+      "path": "src/engine/state/types.ts",
+      "sha256": "4962ffa12411816e6edd7dd8d99eb40494b309986455e90c6726b01ceeeef4cf",
+      "gitBlob": "6f8b7b59065aa9c68bdf0fc526ab54ffd6c20390",
+      "lines": 817
+    },
+    {
+      "path": "src/engine/state/create.ts",
+      "sha256": "0ed30d07fb802f17c8df79cc69851b63a1edae220365b95971e651cd60fb8ddb",
+      "gitBlob": "1a9f8c776c7e670a9da23bb492caf39e71693441",
+      "lines": 320
+    },
+    {
+      "path": "src/engine/steps/kinds/begin-battle.ts",
+      "sha256": "fc8d6e5e63b2bfdb14016c94217fcdd6a7d48afb7145ec2bb31cf2793b7f0b4f",
+      "gitBlob": "e7565306bbcc7c104e9818ef690a6424a192f2e5",
+      "lines": 86
+    },
+    {
+      "path": "src/engine/rules/victory.ts",
+      "sha256": "b7abe032e59e0df52e1aba928ed0571e6263cd6969a859f713cd7de7b458d534",
+      "gitBlob": "f82588099059d70e2500b316e21d111dc9b60ece",
+      "lines": 78
+    },
+    {
+      "path": "src/engine/rules/turn.ts",
+      "sha256": "99876bb0bb042d5de24ff6c7c344680cd06f087562c74a03f8de2f48b9dbae0a",
+      "gitBlob": "59773cc559d2932bf82c1434e449e86400bdb9b9",
+      "lines": 259
+    },
+    {
+      "path": "src/engine/index.ts",
+      "sha256": "8b594a91dc94d601feb2d0494f512893f80a7451bdc9739c679d77d8cee4df44",
+      "gitBlob": "398e64c32dec95ba9c3356441dec2058c705621d",
+      "lines": 80
+    },
+    {
+      "path": "src/rules/battle/fold.ts",
+      "sha256": "2a8fd4c42e441ed2630d7a512e3bddaa72fbc45c3270c5448039b139c3a24973",
+      "gitBlob": "f88a27dc4bf11d5cd9d2e5689a940315fbaeb28e",
+      "lines": 1678
+    },
+    {
+      "path": "src/engine/effects/primitives/contracts/battle-setup.contracts.ts",
+      "sha256": "65bea3bf0d6b359583f8bea8466a723e40436038155e6feb195d35966e776d1c",
+      "gitBlob": "3afed1b279bf394edd619335f5248f97f262359f",
+      "lines": 311
+    },
+    {
+      "path": "docs/plan/engine-design.md",
+      "sha256": "01b07cb5ffc79ae4283b9d024f89ae02448d9ddb47551de7e14046ce94770835",
+      "gitBlob": "1fc005a01787b8500d2ea071f7dc021b1bff7fb9",
+      "lines": 2583
+    }
+  ],
+  "supersededMutationWitnesses": [
+    {
+      "name": "mutation-placements",
+      "sourceSHA256": "972e81127e19fd7816e733e82ef175329a37518c00699c6cac52ea44d6ba7f9e",
+      "exit": 1,
+      "wallS": null,
+      "pid": null,
+      "pgid": null
+    },
+    {
+      "name": "mutation-validation",
+      "sourceSHA256": "972e81127e19fd7816e733e82ef175329a37518c00699c6cac52ea44d6ba7f9e",
+      "exit": 1,
+      "wallS": 2.6537882499978878,
+      "pid": null,
+      "pgid": null
+    },
+    {
+      "name": "mutation-save-config",
+      "sourceSHA256": "5703aba24e5995010374a85ae7d6d156b05c4bd70fa360ba6753af73b5e98e20",
+      "exit": 1,
+      "wallS": 2.6627929170063,
+      "pid": null,
+      "pgid": null
+    }
+  ],
+  "supersededProvenance": "These three first raw receipts/logs/dispatch logs were overwritten during the required final-source reruns. First source/restoration hashes and exits survive the helper tool transcript; parent observed the two known wall durations and intended assertion failures. Original start/end/PID/PG and placement wall remain unknown. Final reruns retain exact current-source raw receipts and logs; this manifest covers surviving versions only.",
+  "unreceiptedDiagnostics": [
+    {
+      "path": "/tmp/worker-init7/typecheck-first.log",
+      "toolSession": 2946,
+      "compilerPID": null,
+      "compilerExit": null,
+      "wrapperExit": 0,
+      "scope": "Direct compiler diagnostic before canonical prepare; missing generated token mirrors plus an own saved-guard narrowing error subsequently corrected. Compiler exit was not captured because the shell ended with cat. Session completed."
+    }
+  ],
+  "reviewFullLocks": {
+    "outer": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "inner": "canonical runner journey-full-review.lock",
+    "workers": 2,
+    "queueAndLaunchUpperBoundS": 604.749415,
+    "queueUpperBoundScope": "Outer/inner waiting plus process startup up to the canonical prepare timestamp; no claim of zero queue wait",
+    "readOnlyQueueWitness": "At 20:32:36Z own lockf932 waited with 0-byte log; separate lockf97572 had the heavy file open and ran an acceptance tournament. No foreign resource modified."
+  },
+  "survivingRawArtifacts": [
+    {
+      "path": "/tmp/worker-init7/afterchange.json",
+      "sha256": "3306f16b06a0e8fd710493d7f6c38007eb70d41a3b58aedce9b30183430e5c0c",
+      "bytes": 13942
+    },
+    {
+      "path": "/tmp/worker-init7/baseline-final.log",
+      "sha256": "3306f16b06a0e8fd710493d7f6c38007eb70d41a3b58aedce9b30183430e5c0c",
+      "bytes": 13942
+    },
+    {
+      "path": "/tmp/worker-init7/baseline-final.receipt.json",
+      "sha256": "614acb3140db4e5c84bcab965c90d01930d22468d13fa06e9ba20b6f7a788638",
+      "bytes": 423
+    },
+    {
+      "path": "/tmp/worker-init7/fixture-resource-closure.json",
+      "sha256": "43453289648f225d610a57f5ea4a5ae3b0c946570b6fd74772a568b5d45817cf",
+      "bytes": 983
+    },
+    {
+      "path": "/tmp/worker-init7/focused-corrected.log",
+      "sha256": "16f5c8b4521b9ec3072cef694c8423550207bb9f3128d74c9e36996ede350e03",
+      "bytes": 51199
+    },
+    {
+      "path": "/tmp/worker-init7/focused-corrected.receipt.json",
+      "sha256": "e624f5e68aeb3c9cf18fc3a148662a9251edec0566a4c7a0fc195fd1af806c94",
+      "bytes": 474
+    },
+    {
+      "path": "/tmp/worker-init7/focused-final.log",
+      "sha256": "ddce553184a2101dd2c528c2abfada367162526ed216644a5b6d8e24a9c6fa0f",
+      "bytes": 52463
+    },
+    {
+      "path": "/tmp/worker-init7/focused-final.receipt.json",
+      "sha256": "dc6b2760750e0b8127501bcb3623ea7e7ea92277889ffcb569c2b3e08be70860",
+      "bytes": 471
+    },
+    {
+      "path": "/tmp/worker-init7/focused-first.log",
+      "sha256": "abda945e16af61bf45672405b360b385545c867b39c17dbb81d304fbce2bb0ea",
+      "bytes": 51209
+    },
+    {
+      "path": "/tmp/worker-init7/focused-first.receipt.json",
+      "sha256": "6453e74daf652503a349d85ede069c728e02babcd71fcd973823e7c9c9405b50",
+      "bytes": 471
+    },
+    {
+      "path": "/tmp/worker-init7/focused-integration.log",
+      "sha256": "f8ac1febca930545ca4213163fa777545d7a139c2f67a8d949d82c98e6eda69d",
+      "bytes": 51306
+    },
+    {
+      "path": "/tmp/worker-init7/focused-integration.receipt.json",
+      "sha256": "f434e888cd9d501ff1880f1b2aeb7399c9b3647cd4c2de7cc5db7822b7dffed7",
+      "bytes": 594
+    },
+    {
+      "path": "/tmp/worker-init7/knip-final.log",
+      "sha256": "c712f8070594ab53ad6f385e5edac8cf6480ca81bfde9e85aae6753b319285cf",
+      "bytes": 50828
+    },
+    {
+      "path": "/tmp/worker-init7/knip-final.receipt.json",
+      "sha256": "8352b10bc2164769a728cbe25eaf957ada588a2570f0e1a01d9591b0cb58dadf",
+      "bytes": 385
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-placements.dispatch.log",
+      "sha256": "fcde1e87c6fb60d43f243032cfec9f45c410804f46e40017fe84c72937863718",
+      "bytes": 9611
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-placements.log",
+      "sha256": "3193d9cc4d841142f12f660a85860ded81f7272c887cf0c953472b29c5767e99",
+      "bytes": 9171
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-placements.receipt.json",
+      "sha256": "2e1c82c3c262418369fe8f382157f60a7e0ddfab3e139bdfadd9a0033a072065",
+      "bytes": 486
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-report.json",
+      "sha256": "a48c6bf59966dff70ddb60712f9f102ba33ae1c47515fa1a948854353a6d22d8",
+      "bytes": 1387
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-save-config.dispatch.log",
+      "sha256": "5a3e11b7a8e0d75899a1925ee58ea60e31ac353b7cccf3b7bec5e7d566a68b71",
+      "bytes": 10494
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-save-config.log",
+      "sha256": "869da326688dac8492591ec3492e85476c6f5e0f3b7d665b252239bd778724f2",
+      "bytes": 23282
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-save-config.receipt.json",
+      "sha256": "8ea96aa6ba7a6e9b7c89b3f8756fda723f5d6aa0be0c189298196e3089d9f434",
+      "bytes": 486
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-turn-limit.dispatch.log",
+      "sha256": "d7f1b567a9a57475965adfd85c246882fb72c3f5d1b6260699b74687d8830d67",
+      "bytes": 1843
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-turn-limit.log",
+      "sha256": "3cfc4754d019923f9f44f9da6b231110926dced0603ef97c6f1e91db4b97a0b7",
+      "bytes": 1403
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-turn-limit.receipt.json",
+      "sha256": "b31fcc224aa8ab6232750fc4f9733a49cebead288e3d85f493fdfc2f613925d2",
+      "bytes": 486
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-validation.dispatch.log",
+      "sha256": "b4eddc4cdf2187d1338880a9944c4acecc7d273487847ddbcbcda8c6c2bedf2f",
+      "bytes": 3435
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-validation.log",
+      "sha256": "baa6eb661b98e1cad36212cf54bef797d6bf5d7fc5a2806f6b51ae7ca7a94ec9",
+      "bytes": 2994
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-validation.receipt.json",
+      "sha256": "f11256275985a5bf3109bd7024fd6d21bff942c1e54bcabcc40e4be395e5d78f",
+      "bytes": 487
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-victory.dispatch.log",
+      "sha256": "6b41099276006b2064ca3ed04ed748fba64b66dbb8e88804d22ee3767ef38c6a",
+      "bytes": 2632
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-victory.log",
+      "sha256": "d826c74c4296740894ef98f11e1672039fe06459f524abda4123e2d1245a0dad",
+      "bytes": 2195
+    },
+    {
+      "path": "/tmp/worker-init7/mutation-victory.receipt.json",
+      "sha256": "c036b7296d0497da792a7854fdf1c459cb508a562d5617d5d4642cd7c32b9d92",
+      "bytes": 483
+    },
+    {
+      "path": "/tmp/worker-init7/mutations.py",
+      "sha256": "5cdf745614371aa838595c9c0c88b90304d4dacb4c89caf7bf332a1d0ef29680",
+      "bytes": 1948
+    },
+    {
+      "path": "/tmp/worker-init7/prechange.json",
+      "sha256": "cca1b5b1162412e925d33bb4201025e40828157c25af45715d1b3c8df297e029",
+      "bytes": 13941
+    },
+    {
+      "path": "/tmp/worker-init7/prechange.ts",
+      "sha256": "c55fb93b16636657d82c66e3e47dc78322db050daed53c019627da58048aeccc",
+      "bytes": 1349
+    },
+    {
+      "path": "/tmp/worker-init7/review-final.log",
+      "sha256": "522ab2a7e6da689580d5b1824c28659be2915fbe94325224b893f76d6dd692df",
+      "bytes": 52078
+    },
+    {
+      "path": "/tmp/worker-init7/review-final.receipt.json",
+      "sha256": "151dd0aba5c0221c3dae1055d856b32647e0ecb78269bb5486e4f4d42df5ad76",
+      "bytes": 390
+    },
+    {
+      "path": "/tmp/worker-init7/review-first.log",
+      "sha256": "5d5f9699193e1a44e786dbb376b5a85f2659a08a0481365b8fa272ae2434c01f",
+      "bytes": 53119
+    },
+    {
+      "path": "/tmp/worker-init7/review-first.receipt.json",
+      "sha256": "96bfbdc4c055aa5bb533b27b8031271c603e0cbd73b8a81c4bb359056cfeee79",
+      "bytes": 389
+    },
+    {
+      "path": "/tmp/worker-init7/review-full-final.log",
+      "sha256": "0de62a72633fa5a1056ad96787b8f12ab62e60c6ea4484b32752e2c96346e9ec",
+      "bytes": 104255
+    },
+    {
+      "path": "/tmp/worker-init7/review-full-final.receipt.json",
+      "sha256": "b9aa0753645ce6e79603529b4fff4e63c92cab8ae589a4c6aaba4255152fd944",
+      "bytes": 475
+    },
+    {
+      "path": "/tmp/worker-init7/run.py",
+      "sha256": "6dbd78ccb51bbbf0132527166635e2d52d8bf6923ccf60e297a28a2a8b276cbe",
+      "bytes": 980
+    },
+    {
+      "path": "/tmp/worker-init7/typecheck-first.log",
+      "sha256": "1f023407e7f256136d85bbb63f8400beb4ba4b15e91d86a6e18997b69ca2cabe",
+      "bytes": 15213
+    },
+    {
+      "path": "/tmp/worker-init7/typecheck-prepared.log",
+      "sha256": "5a7181a623f55bc310305dc12b371fad238cdf0dc954e019c781d21508a27e3c",
+      "bytes": 53176
+    },
+    {
+      "path": "/tmp/worker-init7/typecheck-prepared.receipt.json",
+      "sha256": "c26dd72ff5066e74d0540d12f181a94aa7bfd9a1cf4b3d4c8a652a0d57a06fd3",
+      "bytes": 402
+    }
+  ],
+  "immutableManifest": {
+    "path": "/tmp/worker-init7/immutable-manifest.json",
+    "sha256": "0cb4f31d501c117285e4e0446da98dc6f88e48fcaadf40f45b025c54686afa40"
+  }
+}
