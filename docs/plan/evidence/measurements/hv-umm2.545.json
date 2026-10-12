@@ -1,0 +1,1035 @@
+{
+  "bead": "hv-umm2.545",
+  "assignedBase": "26b12691f491514bd692809f464d100ff53cb3c4",
+  "implementationWindow": {
+    "start": "2026-10-12T14:23:50.662704+00:00",
+    "startKind": "parent post-dispatch proxy; actual helper/model start unknown",
+    "end": "2026-10-12T14:55:03.386930+00:00",
+    "endKind": "parent-approved commit metadata clock; actual Git subprocess execution recorded separately",
+    "actualHelperStartKnown": false,
+    "limit": "actual installation began before proxy; actual command clocks remain independent",
+    "elapsedProxyMinutes": 31.212070433333334
+  },
+  "validationReceipts": {
+    "heavy-acquired": {
+      "observed": "2026-10-12T14:39:27.438648+00:00",
+      "pid": 54165,
+      "pgid": 54164,
+      "hostLoad": [
+        3.5537109375,
+        6.62841796875,
+        9.68603515625
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 53414,
+      "pgid": 53414,
+      "start": "2026-10-12T14:39:05.619380+00:00",
+      "hostLoad": "{ 3.80 6.88 9.85 }",
+      "end": "2026-10-12T14:39:08.622189+00:00",
+      "exit": 0,
+      "seconds": 3.0028133329979028
+    },
+    "heavy-wrapper-slot-final": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-qa-boundaries-545/heavy-acquired-slot-final.py"
+      ],
+      "pid": 3458,
+      "pgid": 3458,
+      "start": "2026-10-12T14:49:08.334748+00:00",
+      "hostLoad": "{ 25.55 16.01 12.84 }",
+      "end": "2026-10-12T14:51:42.672263+00:00",
+      "exit": 0,
+      "seconds": 154.33538762499666
+    },
+    "review-slot-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 40446,
+      "pgid": 40446,
+      "start": "2026-10-12T14:48:14.754660+00:00",
+      "hostLoad": "{ 16.78 12.66 11.51 }",
+      "end": "2026-10-12T14:48:47.946188+00:00",
+      "exit": 0,
+      "seconds": 33.19110612499935
+    },
+    "focused-accepted": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "pid": 4811,
+      "pgid": 4811,
+      "start": "2026-10-12T14:37:08.994516+00:00",
+      "hostLoad": "{ 3.13 8.18 10.69 }",
+      "end": "2026-10-12T14:37:29.948650+00:00",
+      "exit": 0,
+      "seconds": 20.953976417004014
+    },
+    "knip-slot-final": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 83257,
+      "pgid": 83257,
+      "start": "2026-10-12T14:48:57.234584+00:00",
+      "hostLoad": "{ 26.13 15.80 12.73 }",
+      "end": "2026-10-12T14:49:00.556350+00:00",
+      "exit": 0,
+      "seconds": 3.321754791002604
+    },
+    "negative-signal": {
+      "pid": 82965,
+      "pgid": 82965,
+      "start": "2026-10-12T14:26:57.465825+00:00",
+      "end": "2026-10-12T14:26:58.938139+00:00",
+      "exit": 0,
+      "seconds": 1.472328458003176
+    },
+    "node-types": {
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.node.json"
+      ],
+      "pid": 30538,
+      "pgid": 30538,
+      "start": "2026-10-12T14:33:04.654884+00:00",
+      "hostLoad": "{ 13.94 12.53 12.54 }",
+      "end": "2026-10-12T14:33:08.584751+00:00",
+      "exit": 2,
+      "seconds": 3.9298794999995152
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs",
+        "scripts/screenshot-runtime.test.mjs"
+      ],
+      "pid": 33126,
+      "pgid": 33126,
+      "start": "2026-10-12T14:30:15.739331+00:00",
+      "hostLoad": "{ 17.09 11.80 12.35 }",
+      "end": "2026-10-12T14:30:42.167899+00:00",
+      "exit": 1,
+      "seconds": 26.428375374998723
+    },
+    "focused-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "pid": 21252,
+      "pgid": 21252,
+      "start": "2026-10-12T14:32:57.512461+00:00",
+      "hostLoad": "{ 15.19 12.71 12.61 }",
+      "end": "2026-10-12T14:33:18.244492+00:00",
+      "exit": 0,
+      "seconds": 20.73188349999691
+    },
+    "full-slot-final": {
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 17986,
+      "pgid": 17986,
+      "start": "2026-10-12T14:50:12.483577+00:00",
+      "hostLoad": "{ 15.75 14.93 12.66 }",
+      "end": "2026-10-12T14:51:42.665693+00:00",
+      "exit": 0,
+      "seconds": 90.18088395900122
+    },
+    "review-accepted": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 27523,
+      "pgid": 27523,
+      "start": "2026-10-12T14:38:19.622822+00:00",
+      "hostLoad": "{ 3.98 7.47 10.22 }",
+      "end": "2026-10-12T14:38:45.627003+00:00",
+      "exit": 0,
+      "seconds": 26.003974584004027
+    },
+    "native": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-qa-boundaries-545/native-smoke.mjs"
+      ],
+      "pid": 32114,
+      "pgid": 32114,
+      "start": "2026-10-12T14:41:14.567742+00:00",
+      "hostLoad": "{ 13.62 8.92 10.19 }",
+      "end": "2026-10-12T14:41:18.973024+00:00",
+      "exit": 0,
+      "seconds": 4.405283042004157
+    },
+    "native-slot-final": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-qa-boundaries-545/native-smoke.mjs"
+      ],
+      "pid": 52482,
+      "pgid": 52482,
+      "start": "2026-10-12T14:52:19.989408+00:00",
+      "hostLoad": "{ 11.02 13.37 12.34 }",
+      "end": "2026-10-12T14:52:24.525024+00:00",
+      "exit": 0,
+      "seconds": 4.535586790996604
+    },
+    "heavy-acquired-slot-final": {
+      "observed": "2026-10-12T14:50:12.462720+00:00",
+      "pid": 17976,
+      "pgid": 3458,
+      "hostLoad": [
+        15.75146484375,
+        14.9287109375,
+        12.662109375
+      ]
+    },
+    "full": {
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 54168,
+      "pgid": 54168,
+      "start": "2026-10-12T14:39:27.455463+00:00",
+      "hostLoad": "{ 3.55 6.63 9.69 }",
+      "end": "2026-10-12T14:40:58.063976+00:00",
+      "exit": 0,
+      "seconds": 90.60770133299957
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 37394,
+      "pgid": 37394,
+      "start": "2026-10-12T14:42:18.600078+00:00",
+      "hostLoad": "{ 17.30 10.81 10.80 }",
+      "end": "2026-10-12T14:42:18.728290+00:00",
+      "exit": 0,
+      "seconds": 0.12825033300032374
+    },
+    "focused-slot-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "pid": 87477,
+      "pgid": 87477,
+      "start": "2026-10-12T14:47:20.316858+00:00",
+      "hostLoad": "{ 16.01 11.57 11.07 }",
+      "end": "2026-10-12T14:47:43.560488+00:00",
+      "exit": 0,
+      "seconds": 23.24334762500075
+    },
+    "typecheck": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 38734,
+      "pgid": 38734,
+      "start": "2026-10-12T14:30:22.260800+00:00",
+      "hostLoad": "{ 18.21 12.12 12.46 }",
+      "end": "2026-10-12T14:30:30.167402+00:00",
+      "exit": 2,
+      "seconds": 7.906571707993862
+    },
+    "lint-boundaries": {
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "scripts/qa/qa-signal-fixture.mjs"
+      ],
+      "pid": 3915,
+      "pgid": 3915,
+      "start": "2026-10-12T14:36:03.175507+00:00",
+      "hostLoad": "{ 5.35 9.66 11.37 }",
+      "end": "2026-10-12T14:36:04.481828+00:00",
+      "exit": 0,
+      "seconds": 1.3063391670002602
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 47598,
+      "pgid": 47598,
+      "start": "2026-10-12T14:33:42.373527+00:00",
+      "hostLoad": "{ 10.70 11.87 12.30 }",
+      "end": "2026-10-12T14:34:11.404409+00:00",
+      "exit": 1,
+      "seconds": 29.030651084001875
+    },
+    "focused-slot-repair": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "pid": 41123,
+      "pgid": 41123,
+      "start": "2026-10-12T14:46:38.173811+00:00",
+      "hostLoad": "{ 6.41 9.47 10.35 }",
+      "end": "2026-10-12T14:47:03.942468+00:00",
+      "exit": 1,
+      "seconds": 25.76836750000075
+    },
+    "negative-wrapper": {
+      "pid": 80492,
+      "pgid": 80492,
+      "start": "2026-10-12T14:25:15.998382+00:00",
+      "end": "2026-10-12T14:25:16.101717+00:00",
+      "exit": 0,
+      "seconds": 0.10338004100049147
+    },
+    "heavy-wrapper": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-qa-boundaries-545/heavy-acquired.py"
+      ],
+      "pid": 54164,
+      "pgid": 54164,
+      "start": "2026-10-12T14:39:27.419660+00:00",
+      "hostLoad": "{ 3.55 6.63 9.69 }",
+      "end": "2026-10-12T14:40:58.071243+00:00",
+      "exit": 0,
+      "seconds": 90.65077124999516
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 77427,
+      "pgid": 77427,
+      "start": "2026-10-12T14:35:02.512561+00:00",
+      "hostLoad": "{ 7.83 10.81 11.87 }",
+      "end": "2026-10-12T14:35:28.634789+00:00",
+      "exit": 1,
+      "seconds": 26.12201875000028
+    },
+    "install": {
+      "pid": 78177,
+      "pgid": 78177,
+      "start": "2026-10-12T14:23:46.751627+00:00",
+      "end": "2026-10-12T14:23:49.549136+00:00",
+      "exit": 0,
+      "seconds": 2.7975161249996745
+    },
+    "schema-slot-final": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 54029,
+      "pgid": 54029,
+      "start": "2026-10-12T14:53:31.803240+00:00",
+      "hostLoad": "{ 6.34 11.36 11.66 }",
+      "end": "2026-10-12T14:53:31.920758+00:00",
+      "exit": 0,
+      "seconds": 0.11755604200152447
+    }
+  },
+  "failurePaths": {
+    "errors": "actual browser/callback/transport, startup/cleanup and phase-bearing clear causes retained even if coercion fails",
+    "interrupt": "actual owned SIGINT/SIGTERM diagnostic and interruption rejection; concurrent public close tested",
+    "partialWrite": "post-unlink directory flush keeps unlinked outcome, exact publication and receipt ordering preserved",
+    "invalidStaleConcurrent": "prior exact-byte/changed-record/admission/uncertain RPC protections retained by unchanged assertions",
+    "restart": "durable owner records and existing reconciliation authority unchanged; no restart authority added"
+  },
+  "negativeWitnessLimit": "Signal negative reporter explicitly invokes fallback close after recording broken before-exit state; fallback settlement is not a production acceptance pass",
+  "sdk": {
+    "version": "1.29.0",
+    "files": {
+      "node_modules/@modelcontextprotocol/sdk/dist/esm/client/index.js": "a5e17addde5d50e0b2a4ac5961d0f59fd044ff47b01b69e715c3b7ab23075bbd",
+      "node_modules/@modelcontextprotocol/sdk/dist/esm/client/streamableHttp.js": "728ae66a1cdeb8bfabc4c0fe2b94ec1e4f7a5575d6c8d269be04229a8f858577",
+      "node_modules/@modelcontextprotocol/sdk/dist/esm/shared/protocol.js": "8de524602541771e084f7185e7d0fc418b8142a9cae1bd80a3ee7c70e9a9e132"
+    }
+  },
+  "native": {
+    "owner": {
+      "token": "8fd76d99-3a65-4f92-b7db-91c79e03a9b6",
+      "pid": 52482,
+      "bead": "hv-umm2.545",
+      "label": "boundary-cleanup-smoke",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-545-qa-boundaries",
+      "slot": 1,
+      "port": 5274,
+      "startedAt": "2026-10-12T14:52:22.473Z",
+      "providerState": "active",
+      "mcpSessionId": "283418a2-64ca-4dab-8b33-2d1129bbeb73",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25"
+    },
+    "recordedSessionConfirmedByToolsList": true,
+    "qa": {
+      "result": {
+        "caps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        }
+      },
+      "error": null,
+      "log": [],
+      "captures": [],
+      "caps": [],
+      "traces": []
+    },
+    "serverPid": 52514,
+    "slotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+    "port": 5274,
+    "wallMs": {
+      "browserLeaseWait": 6,
+      "serve": 2271
+    },
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.545/invocations/run-MdI5VN",
+    "completionReceipt": {
+      "token": "8fd76d99-3a65-4f92-b7db-91c79e03a9b6",
+      "pid": 52482,
+      "bead": "hv-umm2.545",
+      "label": "boundary-cleanup-smoke",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-545-qa-boundaries",
+      "slot": 1,
+      "port": 5274,
+      "startedAt": "2026-10-12T14:52:22.473Z",
+      "providerState": "execution-completed",
+      "mcpSessionId": "283418a2-64ca-4dab-8b33-2d1129bbeb73",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25",
+      "mcpExecutionCompleted": true
+    },
+    "flushes": [
+      {
+        "stage": "complete-file-fsynced",
+        "at": "2026-10-12T14:52:23.991Z"
+      },
+      {
+        "stage": "published-directory-fsynced",
+        "at": "2026-10-12T14:52:23.995Z"
+      }
+    ],
+    "cleanup": {
+      "providerClosed": true,
+      "ownerRecordAbsent": true,
+      "serverRecordAbsent": true,
+      "serverPidAbsent": true,
+      "portFree": true,
+      "kernelLockReleased": true
+    }
+  },
+  "sourceHashes": {
+    "scripts/screenshot-runtime.mjs": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8",
+    "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+    "scripts/qa/browser-owner-record.mjs": "9261762e7b28204630cd9fdf004b557df3b9a992b51260d54de1341133cfcede",
+    "scripts/qa/browser-owner-record.test.mjs": "16f5dae16dc2817ee66e831543a3f21a10b719c14e13482273a569de12fa29f7",
+    "scripts/qa/run-scenario-boundaries.test.mjs": "231198f3f325aa8a11647b8f7522e835a83d56dd4398a26d9e086b0dc46c5947",
+    "scripts/qa/qa-signal-fixture.mjs": "d9457714d7847ce7032e7c694a965c5a5d9290e1aeee596b238266c3d700c1ad"
+  },
+  "preNativeResourceProof": {
+    "observed": "2026-10-12T14:52:09.983274+00:00",
+    "groups": [
+      3458,
+      3915,
+      4811,
+      17986,
+      21252,
+      27523,
+      30538,
+      32114,
+      32147,
+      33126,
+      37394,
+      38734,
+      40446,
+      41123,
+      47598,
+      53414,
+      54164,
+      54168,
+      77427,
+      78177,
+      80492,
+      82965,
+      83257,
+      87477
+    ],
+    "processes": [
+      {
+        "receipt": "heavy-acquired.json",
+        "pid": 54165,
+        "pgid": 54164
+      },
+      {
+        "receipt": "knip.json",
+        "pid": 53414,
+        "pgid": 53414
+      },
+      {
+        "receipt": "heavy-wrapper-slot-final.json",
+        "pid": 3458,
+        "pgid": 3458
+      },
+      {
+        "receipt": "review-slot-final.json",
+        "pid": 40446,
+        "pgid": 40446
+      },
+      {
+        "receipt": "focused-accepted.json",
+        "pid": 4811,
+        "pgid": 4811
+      },
+      {
+        "receipt": "knip-slot-final.json",
+        "pid": 83257,
+        "pgid": 83257
+      },
+      {
+        "receipt": "negative-signal.json",
+        "pid": 82965,
+        "pgid": 82965
+      },
+      {
+        "receipt": "node-types.json",
+        "pid": 30538,
+        "pgid": 30538
+      },
+      {
+        "receipt": "focused.json",
+        "pid": 33126,
+        "pgid": 33126
+      },
+      {
+        "receipt": "focused-final.json",
+        "pid": 21252,
+        "pgid": 21252
+      },
+      {
+        "receipt": "full-slot-final.json",
+        "pid": 17986,
+        "pgid": 17986
+      },
+      {
+        "receipt": "review-accepted.json",
+        "pid": 27523,
+        "pgid": 27523
+      },
+      {
+        "receipt": "native.json",
+        "pid": 32114,
+        "pgid": 32114
+      },
+      {
+        "receipt": "heavy-acquired-slot-final.json",
+        "pid": 17976,
+        "pgid": 3458
+      },
+      {
+        "receipt": "full.json",
+        "pid": 54168,
+        "pgid": 54168
+      },
+      {
+        "receipt": "schema.json",
+        "pid": 37394,
+        "pgid": 37394
+      },
+      {
+        "receipt": "focused-slot-final.json",
+        "pid": 87477,
+        "pgid": 87477
+      },
+      {
+        "receipt": "typecheck.json",
+        "pid": 38734,
+        "pgid": 38734
+      },
+      {
+        "receipt": "lint-boundaries.json",
+        "pid": 3915,
+        "pgid": 3915
+      },
+      {
+        "receipt": "review.json",
+        "pid": 47598,
+        "pgid": 47598
+      },
+      {
+        "receipt": "focused-slot-repair.json",
+        "pid": 41123,
+        "pgid": 41123
+      },
+      {
+        "receipt": "negative-wrapper.json",
+        "pid": 80492,
+        "pgid": 80492
+      },
+      {
+        "receipt": "heavy-wrapper.json",
+        "pid": 54164,
+        "pgid": 54164
+      },
+      {
+        "receipt": "review-final.json",
+        "pid": 77427,
+        "pgid": 77427
+      },
+      {
+        "receipt": "install.json",
+        "pid": 78177,
+        "pgid": 78177
+      }
+    ],
+    "remaining": [],
+    "sourceHashesMatch": true
+  },
+  "validationScope": {
+    "focused": "final-source4files74cases; public forced availability and actual returned slot assertions",
+    "review": "final-source8files117cases, own evidence schema",
+    "full": "final-source350files5317cases, workers2 under actual heavy kernel lease",
+    "native": "renewed positive actual isolated client and owned server after final source/validation; earlier positive remains historical"
+  },
+  "runtimeLedgerLimit": "Synthetic fixture subprocesses stay in each recorded check job group; public fixtures assert actual child close and ordinary descendant lifetime settlement. Their individual command clocks are not invented. Unchanged-source signal probe records native PID/PPID/lstart/command and distinguishes fallback cleanup.",
+  "testDelta": {
+    "files": 1,
+    "lines": 158,
+    "jsdomFiles": 0
+  },
+  "frictionAccounting": {
+    "tag": "local-edit-correction",
+    "observedLowerBoundStart": "2026-10-12T14:30:42.167899+00:00",
+    "observedEndpoint": "2026-10-12T14:51:42.665693+00:00",
+    "elapsedMinutes": 21.00829656666667,
+    "scope": "initial failed focused diagnostic cause-text contract through corrected fixture typing, parent default-slot correction, actual private holder release and final repeated validation/coordination; includes heavy entry wait, not active CPU"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-slot-final actual command-start one-minute sysctl vm.loadavg observation16.78 at14:48:14.754660Z; observed rounded value only"
+      }
+    }
+  },
+  "finalResourceProof": {
+    "observed": "2026-10-12T14:53:31.995187+00:00",
+    "groups": [
+      3458,
+      3915,
+      4811,
+      17986,
+      21252,
+      27523,
+      30538,
+      32114,
+      32147,
+      33126,
+      37394,
+      38734,
+      40446,
+      41123,
+      47598,
+      52482,
+      52514,
+      53414,
+      54029,
+      54164,
+      54168,
+      77427,
+      78177,
+      80492,
+      82965,
+      83257,
+      87477
+    ],
+    "processes": [
+      {
+        "receipt": "heavy-acquired.json",
+        "pid": 54165,
+        "pgid": 54164
+      },
+      {
+        "receipt": "knip.json",
+        "pid": 53414,
+        "pgid": 53414
+      },
+      {
+        "receipt": "heavy-wrapper-slot-final.json",
+        "pid": 3458,
+        "pgid": 3458
+      },
+      {
+        "receipt": "review-slot-final.json",
+        "pid": 40446,
+        "pgid": 40446
+      },
+      {
+        "receipt": "focused-accepted.json",
+        "pid": 4811,
+        "pgid": 4811
+      },
+      {
+        "receipt": "knip-slot-final.json",
+        "pid": 83257,
+        "pgid": 83257
+      },
+      {
+        "receipt": "negative-signal.json",
+        "pid": 82965,
+        "pgid": 82965
+      },
+      {
+        "receipt": "node-types.json",
+        "pid": 30538,
+        "pgid": 30538
+      },
+      {
+        "receipt": "focused.json",
+        "pid": 33126,
+        "pgid": 33126
+      },
+      {
+        "receipt": "focused-final.json",
+        "pid": 21252,
+        "pgid": 21252
+      },
+      {
+        "receipt": "schema-slot-final.json",
+        "pid": 54029,
+        "pgid": 54029
+      },
+      {
+        "receipt": "full-slot-final.json",
+        "pid": 17986,
+        "pgid": 17986
+      },
+      {
+        "receipt": "review-accepted.json",
+        "pid": 27523,
+        "pgid": 27523
+      },
+      {
+        "receipt": "native.json",
+        "pid": 32114,
+        "pgid": 32114
+      },
+      {
+        "receipt": "native-slot-final.json",
+        "pid": 52482,
+        "pgid": 52482
+      },
+      {
+        "receipt": "heavy-acquired-slot-final.json",
+        "pid": 17976,
+        "pgid": 3458
+      },
+      {
+        "receipt": "full.json",
+        "pid": 54168,
+        "pgid": 54168
+      },
+      {
+        "receipt": "schema.json",
+        "pid": 37394,
+        "pgid": 37394
+      },
+      {
+        "receipt": "focused-slot-final.json",
+        "pid": 87477,
+        "pgid": 87477
+      },
+      {
+        "receipt": "typecheck.json",
+        "pid": 38734,
+        "pgid": 38734
+      },
+      {
+        "receipt": "lint-boundaries.json",
+        "pid": 3915,
+        "pgid": 3915
+      },
+      {
+        "receipt": "review.json",
+        "pid": 47598,
+        "pgid": 47598
+      },
+      {
+        "receipt": "focused-slot-repair.json",
+        "pid": 41123,
+        "pgid": 41123
+      },
+      {
+        "receipt": "negative-wrapper.json",
+        "pid": 80492,
+        "pgid": 80492
+      },
+      {
+        "receipt": "heavy-wrapper.json",
+        "pid": 54164,
+        "pgid": 54164
+      },
+      {
+        "receipt": "review-final.json",
+        "pid": 77427,
+        "pgid": 77427
+      },
+      {
+        "receipt": "install.json",
+        "pid": 78177,
+        "pgid": 78177
+      }
+    ],
+    "remaining": [],
+    "sourceHashesMatch": true
+  },
+  "historicalNativeBeforeSlotCorrection": {
+    "owner": {
+      "token": "b24189e7-82e6-4398-8eda-9539600b3e2a",
+      "pid": 32114,
+      "bead": "hv-umm2.545",
+      "label": "boundary-cleanup-smoke",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-545-qa-boundaries",
+      "slot": 1,
+      "port": 5274,
+      "startedAt": "2026-10-12T14:41:16.106Z",
+      "providerState": "active",
+      "mcpSessionId": "6f7717cd-80eb-4afd-99e3-c9acaea65600",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25"
+    },
+    "recordedSessionConfirmedByToolsList": true,
+    "qa": {
+      "result": {
+        "caps": {
+          "errors": [],
+          "rejections": [],
+          "consoleErrors": []
+        }
+      },
+      "error": null,
+      "log": [],
+      "captures": [],
+      "caps": [],
+      "traces": []
+    },
+    "serverPid": 32147,
+    "slotPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock",
+    "port": 5274,
+    "wallMs": {
+      "browserLeaseWait": 6,
+      "serve": 1385
+    },
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.545/invocations/run-U4fwKa",
+    "completionReceipt": {
+      "token": "b24189e7-82e6-4398-8eda-9539600b3e2a",
+      "pid": 32114,
+      "bead": "hv-umm2.545",
+      "label": "boundary-cleanup-smoke",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-545-qa-boundaries",
+      "slot": 1,
+      "port": 5274,
+      "startedAt": "2026-10-12T14:41:16.106Z",
+      "providerState": "execution-completed",
+      "mcpSessionId": "6f7717cd-80eb-4afd-99e3-c9acaea65600",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25",
+      "mcpExecutionCompleted": true
+    },
+    "flushes": [
+      {
+        "stage": "complete-file-fsynced",
+        "at": "2026-10-12T14:41:18.437Z"
+      },
+      {
+        "stage": "published-directory-fsynced",
+        "at": "2026-10-12T14:41:18.441Z"
+      }
+    ],
+    "cleanup": {
+      "providerClosed": true,
+      "ownerRecordAbsent": true,
+      "serverRecordAbsent": true,
+      "serverPidAbsent": true,
+      "portFree": true,
+      "kernelLockReleased": true
+    }
+  },
+  "heavyEntryObservation": {
+    "wrapperStart": "2026-10-12T14:49:08.334748+00:00",
+    "leaseEntryObserved": "2026-10-12T14:50:12.462720+00:00",
+    "elapsedStartToEntrySeconds": 64.127972,
+    "limit": "includes launch bookkeeping; precise kernel-block entry clock unknown"
+  },
+  "historicalResourceProofBeforeSlotCorrection": {
+    "observed": "2026-10-12T14:42:18.544073+00:00",
+    "groups": [
+      3915,
+      4811,
+      21252,
+      27523,
+      30538,
+      32114,
+      32147,
+      33126,
+      38734,
+      47598,
+      53414,
+      54164,
+      54168,
+      77427,
+      78177,
+      80492,
+      82965
+    ],
+    "processes": [
+      {
+        "receipt": "heavy-acquired.json",
+        "pid": 54165,
+        "pgid": 54164
+      },
+      {
+        "receipt": "knip.json",
+        "pid": 53414,
+        "pgid": 53414
+      },
+      {
+        "receipt": "focused-accepted.json",
+        "pid": 4811,
+        "pgid": 4811
+      },
+      {
+        "receipt": "negative-signal.json",
+        "pid": 82965,
+        "pgid": 82965
+      },
+      {
+        "receipt": "node-types.json",
+        "pid": 30538,
+        "pgid": 30538
+      },
+      {
+        "receipt": "focused.json",
+        "pid": 33126,
+        "pgid": 33126
+      },
+      {
+        "receipt": "focused-final.json",
+        "pid": 21252,
+        "pgid": 21252
+      },
+      {
+        "receipt": "review-accepted.json",
+        "pid": 27523,
+        "pgid": 27523
+      },
+      {
+        "receipt": "native.json",
+        "pid": 32114,
+        "pgid": 32114
+      },
+      {
+        "receipt": "full.json",
+        "pid": 54168,
+        "pgid": 54168
+      },
+      {
+        "receipt": "typecheck.json",
+        "pid": 38734,
+        "pgid": 38734
+      },
+      {
+        "receipt": "lint-boundaries.json",
+        "pid": 3915,
+        "pgid": 3915
+      },
+      {
+        "receipt": "review.json",
+        "pid": 47598,
+        "pgid": 47598
+      },
+      {
+        "receipt": "negative-wrapper.json",
+        "pid": 80492,
+        "pgid": 80492
+      },
+      {
+        "receipt": "heavy-wrapper.json",
+        "pid": 54164,
+        "pgid": 54164
+      },
+      {
+        "receipt": "review-final.json",
+        "pid": 77427,
+        "pgid": 77427
+      },
+      {
+        "receipt": "install.json",
+        "pid": 78177,
+        "pgid": 78177
+      }
+    ],
+    "remaining": [],
+    "sourceHashesMatch": true
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.545",
+  "phase": 5,
+  "implementMin": 31.212070433333334,
+  "implementWindow": {
+    "start": "2026-10-12T14:23:50.662704+00:00",
+    "end": "2026-10-12T14:55:03.386930+00:00"
+  },
+  "localValidationS": {
+    "focused": 23.24334762500075,
+    "review": 33.19110612499935,
+    "knip": 3.321754791002604,
+    "full": 90.18088395900122,
+    "browser": 4.535586790996604
+  },
+  "hostLoad": 16.78,
+  "testDelta": {
+    "files": 1,
+    "lines": 158,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 21.00829656666667,
+      "note": "Observed lower-bound elapsed diagnostic/test-fixture correction, parent feedback, private-holder settlement and repeated validation/coordination/heavy entry wait; not productive editing or CPU. Actual detection/model start unknown; exact clocks retained in own measurements."
+    }
+  ]
+}

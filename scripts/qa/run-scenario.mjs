@@ -329,6 +329,13 @@ async function waitUntilServing(baseUrl, child, timeoutMs, signal) {
   }
 }
 
+/** Error formatting is subordinate to retaining the actual cause.
+ * @param {unknown} error
+ */
+function describeFailure(error) {
+  try { return String(error); } catch { return "unprintable cleanup cause"; }
+}
+
 /** @param {string} message */
 export function say(message) {
   process.stderr.write(`[qa] ${message}\n`);
@@ -546,16 +553,14 @@ export async function openQaSession(options) {
   let startup = Promise.resolve();
   let cleanup = /** @type {Promise<void> | null} */ (null);
   const handlers = /** @type {Map<NodeJS.Signals, () => void>} */ (new Map());
+  const interruptionFailures = /** @type {Array<{ stage: string, error: unknown }>} */ ([]);
   const close = () => {
     cleanup ??= (async () => {
       // A startup connection may finish after interruption. Drain it before
       // closing its browser and releasing the repository lease.
       await startup.catch(() => {});
       let closeUnconfirmed = false;
-      const failures = /** @type {Array<{ stage: string, error: unknown }>} */ ([]);
-      const describeFailure = (/** @type {unknown} */ error) => {
-        try { return String(error); } catch { return "unprintable cleanup cause"; }
-      };
+      const failures = interruptionFailures;
       /** Attempt every owned cleanup stage; rejection does not replace earlier causes.
        * @param {string} stage @param {() => unknown | Promise<unknown>} operation
        */
@@ -631,12 +636,27 @@ export async function openQaSession(options) {
   };
   for (const name of /** @type {const} */ (["SIGINT", "SIGTERM"])) {
     const handler = () => {
-      say(`${name}: stopping`);
       controller.abort();
-      // Build/serve startup must settle promptly. Its next await checks abort
-      // before another process is spawned; cleanup joins that startup promise.
-      void Promise.all([stopProcessTree(builder), ownedServer?.stop()])
-        .catch((error) => say(`server interruption requires reconciliation: ${String(error)}`)).then(close).finally(() => process.exit(name === "SIGINT" ? 130 : 143));
+      try { say(`${name}: stopping`); }
+      catch (error) { interruptionFailures.push({ stage: `${name} diagnostic`, error }); }
+      // Abort before diagnostics, settle interruption, and always join cached
+      // cleanup. Reporting errors cannot prevent resource and lease release.
+      void (async () => {
+        try {
+          const stages = ["builder interruption", "server interruption"];
+          const interrupted = await Promise.allSettled([stopProcessTree(builder), ownedServer?.stop()]);
+          for (const [index, result] of interrupted.entries()) {
+            if (result.status !== "rejected") continue;
+            interruptionFailures.push({ stage: stages[index] ?? "startup interruption", error: result.reason });
+            try { say(`server interruption requires reconciliation: ${describeFailure(result.reason)}`); }
+            catch (diagnosticError) { interruptionFailures.push({ stage: "server interruption diagnostic", error: diagnosticError }); }
+          }
+          try { await close(); }
+          catch (error) {
+            try { say(`signal cleanup failed: ${describeFailure(error)}`); } catch { /* Cleanup is already settled. */ }
+          }
+        } finally { process.exit(name === "SIGINT" ? 130 : 143); }
+      })();
     };
     handlers.set(name, handler);
     process.once(name, handler);
@@ -714,7 +734,7 @@ export async function openQaSession(options) {
     await startup;
   } catch (error) {
     try { await close(); } catch (cleanupError) {
-      throw new AggregateError([error, cleanupError], `QA startup failed: ${String(error)}; cleanup: ${String(cleanupError)}`);
+      throw new AggregateError([error, cleanupError], `QA startup failed: ${describeFailure(error)}; cleanup: ${describeFailure(cleanupError)}`);
     }
     throw error;
   }

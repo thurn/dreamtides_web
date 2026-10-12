@@ -62,6 +62,12 @@ function fixture() {
 /** @param {string} path */
 const bytes = (path) => readFileSync(path);
 describe("atomic browser ownership publication", () => {
+  it.each(/** @type {const} */ (["verify", "unlink", "directory-sync"]))("retains unprintable clear cause and phase %s", (phase) => {
+    const cause = { toString() { throw new Error("synthetic formatting rejection"); } };
+    const error = new BrowserOwnerClearError(phase, cause);
+    expect(error.cause).toBe(cause);
+    expect(error).toMatchObject({ phase, unlinked: phase === "directory-sync" });
+  });
   it("publishes complete records with file and directory flushes, then clears exact ownership", () => {
     const { root, path, owner, record } = fixture();
     record.publish(owner);

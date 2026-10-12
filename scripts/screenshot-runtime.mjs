@@ -80,17 +80,20 @@ export async function connectPlaywrightMcp({
     /** @param {(browserCloseConfirmed: boolean) => Promise<void>} [beforeTransportClose] */
     async close(beforeTransportClose) {
       let browserCloseConfirmed = false;
+      const failures = /** @type {unknown[]} */ ([]);
       try {
         const result = await client.callTool({ name: "browser_close", arguments: {} });
         if (result.isError) throw new McpToolResponseError("browser_close", result);
         browserCloseConfirmed = true;
-      } finally {
-        try {
-          await beforeTransportClose?.(browserCloseConfirmed);
-        } finally {
-          await client.close();
-        }
-      }
+      } catch (error) { failures.push(error); }
+      // The receipt callback observes the actual browser response and settles
+      // before transport shutdown, even when either earlier stage rejects.
+      try { await beforeTransportClose?.(browserCloseConfirmed); }
+      catch (error) { failures.push(error); }
+      try { await client.close(); }
+      catch (error) { failures.push(error); }
+      if (failures.length === 1) throw failures[0];
+      if (failures.length > 1) throw new AggregateError(failures, "MCP browser, completion callback or transport cleanup failed");
     },
   };
 }

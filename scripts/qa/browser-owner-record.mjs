@@ -6,7 +6,9 @@ import { dirname } from "node:path";
 export class BrowserOwnerClearError extends Error {
   /** @param {"verify" | "unlink" | "directory-sync"} phase @param {unknown} cause */
   constructor(phase, cause) {
-    super(`browser owner clear failed at ${phase}: ${String(cause)}`, { cause });
+    let description = "unprintable clear cause";
+    try { description = String(cause); } catch { /* Preserve the phase and original cause. */ }
+    super(`browser owner clear failed at ${phase}: ${description}`, { cause });
     this.name = "BrowserOwnerClearError";
     this.phase = phase;
     this.unlinked = phase === "directory-sync";
