@@ -1,3 +1,5 @@
+import { either, onDawn, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 471,
   art: { x: 0, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [triggered(either(onMaterialized(), onDawn()), p.sequence(p.gainEnergy(2), p.gainPoints(v.amplified ? 2 : 3, "opponent")))],
+  verifiedText: "1mod6j6cjuq",
 });

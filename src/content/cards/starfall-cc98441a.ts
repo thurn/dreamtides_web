@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 473,
   isStarter: false,
-  pending: true,
+  abilities: (v) => [event(p.gainEnergy(v.amplified ? 4 : 3))],
+  verifiedText: "1geue1kjo5r",
 });
