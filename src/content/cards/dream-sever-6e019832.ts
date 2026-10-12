@@ -1,3 +1,5 @@
+import { event, stackItem } from "../../engine/dsl/builders";
+import { prevent } from "../../engine/effects/primitives/prevent";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 65,
   art: { x: 0, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(prevent(stackItem({ controller: "opponent", cardType: "event" }), { unlessPays: variant.amplified ? 3 : 2 }))],
+  verifiedText: "2ezod7y6tlk",
 });

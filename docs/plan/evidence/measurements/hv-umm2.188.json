@@ -1,0 +1,241 @@
+{
+  "bead": "hv-umm2.188",
+  "base": "5af32ccb2c91d57c38fd43484605a5b6fb4ceaf7",
+  "dispatch": {
+    "original": "2026-10-12T15:25:55.453Z",
+    "originalReceipt": "call_qARp1cJbTEtm5BjNO7Ww8wmm",
+    "resume": "2026-10-12T16:19:38.321Z",
+    "resumeReceipt": "call_e7bd867b6e864633bde8f620e4511091",
+    "prerequisite": "hv-umm2.551",
+    "prerequisiteImplementationMin": 39.8907,
+    "provenance": "The gross implementation window includes the source-free checkpoint, separate prerequisite implementation, and its review and delivery. The original worktree was unchanged and removed by the parent; resumed implementation uses the parent's fresh current-base worktree."
+  },
+  "scope": {
+    "entities": [
+      "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad",
+      "21e376da-f4c3-4a60-bd63-a272b35db5a6",
+      "6e019832-2e0c-4166-81c3-54f7995425df",
+      "d24ea640-638d-4ce2-b15d-b3f4588bda6b"
+    ],
+    "newPrimitives": [],
+    "newRulesDecisions": [],
+    "newCardIssues": [],
+    "scenarioSpecs": 0,
+    "d20": "All four abilities are ordinary existing primitive compositions. Synthetic Prevent/cost-filter/delayed-trigger/copy contracts cover their observable contracts; the production coverage, fuzz and card-lab gates cover authored definitions."
+  },
+  "d21": {
+    "firstBytes": [
+      78,
+      29,
+      41,
+      63
+    ],
+    "sampled": [],
+    "newPromptKinds": [],
+    "newStatusIndicators": [],
+    "newVisualEffects": [],
+    "judged": 0,
+    "existingPresentation": "chooseTargets target and payOrDecline preventUnlessPays use the registered prompt surfaces. Delayed triggers use the existing delayedTrigger duration badge and effectStarted/effectEnded logging; cardCopied and prevented have travel presentation. hv-umm2.551 supplies the bottom-deck primitive and prompt-lab fixture."
+  },
+  "rulings": [
+    "RD-hv-7x4l.1-3",
+    "RD-hv-7x4l.6-1",
+    "RD-hv-7x4l.8-4",
+    "docs/rules.md Prevent owner-deck redirection and conditional-opponent targeting",
+    "docs/rules.md Cost conditions: copiable cost, X=0, play-cost modifiers excluded"
+  ],
+  "validation": {
+    "focused": {
+      "exit": 0,
+      "files": 5,
+      "tests": 2091,
+      "wallS": 7.47,
+      "cpuUserS": 10.27,
+      "cpuSystemS": 1.63,
+      "rawLog": "local-validation/focused.log",
+      "scope": [
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/content/specs/specs.test.ts"
+      ]
+    },
+    "fuzz": {
+      "exit": 0,
+      "games": 300,
+      "steps": 152756,
+      "failures": 0,
+      "boundedLegality": 0,
+      "boundedPrompts": 0,
+      "interactiveReruns": 385,
+      "engineWallS": 146.4,
+      "engineCpuS": 160.4,
+      "wallS": 147.15,
+      "rawLog": "local-validation/fuzz.log",
+      "targetCoverage": [
+        {
+          "uuid": "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad",
+          "included": 615,
+          "exercised": 317
+        },
+        {
+          "uuid": "21e376da-f4c3-4a60-bd63-a272b35db5a6",
+          "included": 613,
+          "exercised": 352
+        },
+        {
+          "uuid": "6e019832-2e0c-4166-81c3-54f7995425df",
+          "included": 616,
+          "exercised": 297
+        },
+        {
+          "uuid": "d24ea640-638d-4ce2-b15d-b3f4588bda6b",
+          "included": 617,
+          "exercised": 397
+        }
+      ]
+    },
+    "preflight": {
+      "exit": 0,
+      "pass": 48,
+      "pending": 0,
+      "skip": 32,
+      "fail": 0,
+      "wallS": 1.0,
+      "rawLog": "local-validation/preflight.log",
+      "variants": "all",
+      "as": "both"
+    },
+    "sweep": {
+      "exit": 0,
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-v4cqQN",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.188/invocations/sweep-v4cqQN",
+      "counts": {
+        "pass": 48,
+        "skip": 32
+      },
+      "attemptCounts": {
+        "pass": 48,
+        "skip": 32
+      },
+      "hostLoad": 11.0693359375,
+      "sessions": 4,
+      "leaseYields": 3,
+      "wallMs": {
+        "browserLeaseWait": 413060,
+        "serve": 6884,
+        "scenario": 344532.31787500007,
+        "cleanup": 2452.1123749999097,
+        "execution": 354073.15737499995,
+        "total": 767133.157375
+      },
+      "wallS": 767.3,
+      "rawLog": "local-validation/sweep.log",
+      "variants": "all",
+      "as": "both",
+      "browserErrors": 0,
+      "preservedFailAttempts": 0,
+      "judged": 0,
+      "rawReportCount": 48
+    },
+    "review": {
+      "exit": 0,
+      "wallS": 37.1,
+      "files": 223,
+      "tests": 3871,
+      "rawLog": "local-validation/review.log"
+    },
+    "knip": {
+      "exit": 0,
+      "wallS": 2.73,
+      "rawLog": "local-validation/knip.log"
+    },
+    "schema": {
+      "exit": 0,
+      "wallS": 0.05,
+      "records": 600,
+      "rawLog": "local-validation/schema.log"
+    }
+  },
+  "runtime": {
+    "fuzz": {
+      "session": 5619,
+      "pids": [
+        80183,
+        80192,
+        80193,
+        80238,
+        80241
+      ],
+      "status": "exit 0; owned PIDs absent"
+    },
+    "browser": {
+      "session": 83906,
+      "runnerPids": [
+        79650,
+        79661
+      ],
+      "status": "exit 0; all owned contexts, servers and leases cleaned",
+      "serverGroups": [
+        99091,
+        89227,
+        34282,
+        60218
+      ],
+      "sessions": [
+        "run-RUnZ8E",
+        "run-T3u9SE",
+        "run-gsjDR6",
+        "run-gayAAV"
+      ],
+      "slot": 1,
+      "port": 5275,
+      "cleanupVerification": {
+        "ownedProcessesRemaining": [],
+        "listeners": [],
+        "ownProviderRecordRetained": false,
+        "ownServerRecordRetained": false
+      }
+    },
+    "finalVerification": {
+      "at": "2026-10-12T16:42:48Z",
+      "ownedProcessesRemaining": [],
+      "port5275Listeners": [],
+      "ownProviderRecordRetained": false,
+      "ownServerRecordRetained": false
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "measuredFor": "post-focused/start-fuzz",
+      "oneMinute": 17.95
+    },
+    {
+      "measuredFor": "fuzz-running",
+      "oneMinute": 12.84
+    },
+    {
+      "measuredFor": "review start",
+      "oneMinute": 5.54
+    }
+  ],
+  "evidenceRoot": "artifacts/qa/hv-umm2.188/",
+  "authoringNotes": [
+    "The initial tsx inline hash invocation used unsupported top-level await in CJS evaluation; wrapping it in an async function completed the normal expectedVerifiedText hash calculation. No printed field changed."
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review start"
+      }
+    }
+  },
+  "finalClock": {
+    "commitUtc": "2026-10-12T16:42:48Z",
+    "grossImplementMin": 76.87578333333333,
+    "resumedElapsedMin": 23.161316666666668,
+    "committerDateProtocol": "Fresh live UTC, retained as the explicit Git committer date and friction window end."
+  }
+}

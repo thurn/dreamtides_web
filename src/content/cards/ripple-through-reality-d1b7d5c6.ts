@@ -1,3 +1,5 @@
+import { event, stackItem } from "../../engine/dsl/builders";
+import { prevent } from "../../engine/effects/primitives/prevent";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +22,6 @@ export default card({
   cardNumber: 189,
   art: { x: 0.454, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(prevent(stackItem(), { destination: variant.amplified ? "deckBottom" : "deckTop" }))],
+  verifiedText: "1x5bq0r6pd6",
 });

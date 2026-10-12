@@ -1,3 +1,7 @@
+import { event } from "../../engine/dsl/builders";
+import { triggeringCard, whenYouPlay } from "../../engine/dsl/triggers";
+import { copyCard } from "../../engine/effects/primitives/copy-card";
+import { delayed } from "../../engine/effects/primitives/floating-trigger";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,6 @@ export default card({
   cardNumber: 197,
   art: { x: 0.294, y: 0.398, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(delayed(whenYouPlay({ cardType: "event", costAtMost: variant.amplified ? 3 : 2 }), copyCard(triggeringCard()), "untilEndOfTurn"))],
+  verifiedText: "18i1iqcw4jp",
 });
