@@ -1,3 +1,5 @@
+import { self, staticAbility } from "../../engine/dsl/builders";
+import { giveAllTypes } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 379,
   art: { x: 0.7, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [staticAbility(giveAllTypes(self()))],
+  verifiedText: "q9tuoj6tuq",
 });

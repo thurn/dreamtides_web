@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.195",
+  "phase": 5,
+  "implementMin": 40.754,
+  "implementWindow": {
+    "start": "2026-10-12T15:35:47+00:00",
+    "end": "2026-10-12T16:16:32.227853+00:00"
+  },
+  "localValidationS": {
+    "focus": 5.416,
+    "owning": 9.38,
+    "preflight": 2.044,
+    "review": 54.574,
+    "knip": 4.233,
+    "fuzz": 410.192,
+    "sweep": 304.596,
+    "provider-reconcile": 0.064,
+    "sweep-continuation": 479.699
+  },
+  "hostLoad": 12.16650390625,
+  "testDelta": {
+    "files": 0,
+    "lines": 56,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "qa-runner-mcp-timeout",
+      "minutes": 22.561,
+      "note": "Conservative full initial sweep start through successful scoped continuation end includes timeout, protected reconciliation, parent justiciar investigation/archival, coordination, fresh lease wait and recovery QA. Exact failed-call start is unknown. Initial304.596s failed process and .252s parent archival remain separate metrics; no completion receipt fabricated."
+    }
+  ]
+}

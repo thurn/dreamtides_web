@@ -1,3 +1,5 @@
+import { abandonCostCapture, additionalCost, event, x } from "../../engine/dsl/builders";
+import { discover, materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,10 @@ export default card({
   cardNumber: 387,
   art: { x: 0, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    // Higher cost compares with the abandoned Warrior's captured copiable cost (RD-hv-umm2.83-2).
+    additionalCost(abandonCostCapture({ subtype: "Warrior" })),
+    event(materialize(discover({ cardType: "character", subtype: "Warrior" }, { costGreaterThan: x() }), { awakened: variant.amplified })),
+  ],
+  verifiedText: "1we80xnp9rx",
 });

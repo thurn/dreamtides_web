@@ -1,3 +1,6 @@
+import { activated, all, characterYouControl, energy, self, staticAbility } from "../../engine/dsl/builders";
+import { untilEndOfTurn } from "../../engine/dsl/triggers";
+import { giveAllTypes } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,9 @@ export default card({
   artOwned: false,
   cardNumber: 427,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    staticAbility(giveAllTypes(self())),
+    activated([energy(1)], giveAllTypes(all(characterYouControl()), untilEndOfTurn())),
+  ],
+  verifiedText: "1vubnjddzjr",
 });

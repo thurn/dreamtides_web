@@ -1,3 +1,5 @@
+import { activated, energy, self, staticAbility } from "../../engine/dsl/builders";
+import { giveAllTypes, move } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,9 @@ export default card({
   artOwned: false,
   cardNumber: 356,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    staticAbility(giveAllTypes(self())),
+    activated([energy(1)], move(self()), { speed: "fast" }),
+  ],
+  verifiedText: "2g7r4meumoi",
 });

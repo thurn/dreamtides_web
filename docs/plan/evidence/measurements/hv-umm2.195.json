@@ -1,0 +1,603 @@
+{
+  "bead": "hv-umm2.195",
+  "base": "d0e645c8b17b4d0148c5952cf91ab27351a329e1",
+  "status": "LOCALLY VALIDATED; parent certified delivery/cleanup owed",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T15:35:47+00:00",
+    "startProvenance": "Parent claim ACK is the explicitly authorized conservative ownership proxy including parent installation/preparation, helper research/design/implementation/coordination/verification/waits. Exact dispatch is unknown.",
+    "parentPredispatchUtc": "2026-10-12T15:37:12.427311Z",
+    "parentPostdispatchUtc": "2026-10-12T15:38:00.326214Z",
+    "helperFirstObservedUtc": "2026-10-12T15:38:09Z",
+    "nativeSourceAckReceiptUpdatedUtc": "2026-10-12T15:43:15Z",
+    "endUtc": "2026-10-12T16:16:32.227853+00:00",
+    "endProvenance": "Actual precommit evidence cutoff after ordinary checks and owned QA cleanup; final standalone schema/commit tail qualified and excluded, actual commit timestamp recorded by Git."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Required review typecheck/cycles/lint/test-related start15:47:49.420\u201315:47:49.423Z"
+      }
+    }
+  },
+  "scope": {
+    "sourcePaths": [
+      "src/content/cards/temporal-aperture-d2c22fdc.ts",
+      "src/content/cards/shapeshifter-spirit-9d51dca1.ts",
+      "src/content/cards/boundless-wanderer-7fb4b7f5.ts",
+      "src/content/cards/signal-resonant-42427d15.ts",
+      "src/content/specs/cards-83.scenarios.ts"
+    ],
+    "productionChangedLines": 31,
+    "testDelta": {
+      "scenarioLines": 56,
+      "net": 56,
+      "entrypoints": 0,
+      "jsdomFiles": 0,
+      "newCases": 8
+    },
+    "immutablePrintedFields": "Four immutable catalog prefixes compared byte-identical against base; authored abilities replace pending with literal verifiedText and imports.",
+    "verifiedText": [
+      {
+        "id": "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c",
+        "hash": "1we80xnp9rx"
+      },
+      {
+        "id": "9d51dca1-28d7-4e8e-bc13-c5b665d6db72",
+        "hash": "q9tuoj6tuq"
+      },
+      {
+        "id": "7fb4b7f5-0dfc-4151-8a88-82f822960b61",
+        "hash": "1vubnjddzjr"
+      },
+      {
+        "id": "42427d15-c019-4786-9d7e-285829c4f3cb",
+        "hash": "2g7r4meumoi"
+      }
+    ],
+    "newPrimitives": [],
+    "newExports": [],
+    "fallout": [],
+    "newKindsStatusesVisuals": [],
+    "newInfrastructureOrRuntimeApi": false,
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "D20": "Eight Temporal Aperture rows span both controllers/baseamp and captured synthetic payee costs1/2. Unique higher-cost candidate versus equal/lower/no-match controls distinguishes strict captured copiable-cost selection after payment, discovery, and materialization. All physical IDs come from setup/public events; subject energy is derived. Existing owning contracts cover all-types, movement, layers, variable-X play and broader cost capture semantics."
+  },
+  "sourceSHA256": {
+    "src/content/cards/temporal-aperture-d2c22fdc.ts": "8a5756cd6f769e0be030a264a4f69d604f74f18de9869e3d53fdef97bda4037e",
+    "src/content/cards/shapeshifter-spirit-9d51dca1.ts": "eb7c8ab91743bd3fca904ff01f73c0f5dffa1769a4c99c3da7e4d9983179fa15",
+    "src/content/cards/boundless-wanderer-7fb4b7f5.ts": "092d99c74fe9d63e728b1b38de0afff9c718043c1d63a5eedf30a5c418a1376c",
+    "src/content/cards/signal-resonant-42427d15.ts": "9f60f419fcfda4f0cb1aaa2a49c95a224070c9cea84e9635d5f50465f7ba50ae",
+    "src/content/specs/cards-83.scenarios.ts": "b4b343a2d78d59cf9794142d2e0d4cabfcfd79374596376595f0e51e8f3d912a"
+  },
+  "validation": [
+    {
+      "name": "focus",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-83"
+      ],
+      "pid": 53464,
+      "observerPid": 53456,
+      "startUtc": "2026-10-12T15:45:14.652819+00:00",
+      "endUtc": "2026-10-12T15:45:20.069299+00:00",
+      "wallS": 5.416,
+      "exit": 0,
+      "log": "/tmp/hv-195-focus.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "owning",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/continuous/continuous.test.ts",
+        "src/engine/continuous/continuous-zones.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 15178,
+      "observerPid": 15167,
+      "startUtc": "2026-10-12T15:46:33.928058+00:00",
+      "endUtc": "2026-10-12T15:46:43.308290+00:00",
+      "wallS": 9.38,
+      "exit": 0,
+      "log": "/tmp/hv-195-owning.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c,9d51dca1-28d7-4e8e-bc13-c5b665d6db72,7fb4b7f5-0dfc-4151-8a88-82f822960b61,42427d15-c019-4786-9d7e-285829c4f3cb",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 22154,
+      "observerPid": 22133,
+      "startUtc": "2026-10-12T15:47:47.513899+00:00",
+      "endUtc": "2026-10-12T15:47:49.557869+00:00",
+      "wallS": 2.044,
+      "exit": 0,
+      "log": "/tmp/hv-195-preflight.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 22153,
+      "observerPid": 22134,
+      "startUtc": "2026-10-12T15:47:47.513866+00:00",
+      "endUtc": "2026-10-12T15:48:42.088702+00:00",
+      "wallS": 54.574,
+      "exit": 0,
+      "log": "/tmp/hv-195-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 46579,
+      "observerPid": 46554,
+      "startUtc": "2026-10-12T15:52:30.414411+00:00",
+      "endUtc": "2026-10-12T15:52:34.647614+00:00",
+      "wallS": 4.233,
+      "exit": 0,
+      "log": "/tmp/hv-195-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "fuzz",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c,9d51dca1-28d7-4e8e-bc13-c5b665d6db72,7fb4b7f5-0dfc-4151-8a88-82f822960b61,42427d15-c019-4786-9d7e-285829c4f3cb"
+      ],
+      "pid": 46581,
+      "observerPid": 46553,
+      "startUtc": "2026-10-12T15:52:30.414851+00:00",
+      "endUtc": "2026-10-12T15:59:20.619443+00:00",
+      "wallS": 410.192,
+      "exit": 0,
+      "log": "/tmp/hv-195-fuzz.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.195",
+        "--cards",
+        "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c,9d51dca1-28d7-4e8e-bc13-c5b665d6db72,7fb4b7f5-0dfc-4151-8a88-82f822960b61,42427d15-c019-4786-9d7e-285829c4f3cb",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 46580,
+      "observerPid": 46555,
+      "startUtc": "2026-10-12T15:52:30.414410+00:00",
+      "endUtc": "2026-10-12T15:57:35.013542+00:00",
+      "wallS": 304.596,
+      "exit": 2,
+      "log": "/tmp/hv-195-sweep.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "provider-reconcile",
+      "command": [
+        "node",
+        "scripts/qa/provider-ownership.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock"
+      ],
+      "pid": 75517,
+      "observerPid": 75505,
+      "startUtc": "2026-10-12T15:59:19.135525+00:00",
+      "endUtc": "2026-10-12T15:59:19.199479+00:00",
+      "wallS": 0.064,
+      "exit": 0,
+      "log": "/tmp/hv-195-provider-reconcile.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "sweep-continuation",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.195",
+        "--cards",
+        "7fb4b7f5-0dfc-4151-8a88-82f822960b61,42427d15-c019-4786-9d7e-285829c4f3cb",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 22981,
+      "observerPid": 22960,
+      "startUtc": "2026-10-12T16:07:04.391736+00:00",
+      "endUtc": "2026-10-12T16:15:04.097713+00:00",
+      "wallS": 479.699,
+      "exit": 0,
+      "log": "/tmp/hv-195-sweep-continuation.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "parentInstall": {
+    "command": [
+      "npm",
+      "install"
+    ],
+    "observerPid": 86149,
+    "pid": 88162,
+    "start": "2026-10-12T15:36:04.546476+00:00",
+    "terminal": true,
+    "end": "2026-10-12T15:36:07.128070+00:00",
+    "wallS": 2.5816038330012816,
+    "exit": 0
+  },
+  "qa": {
+    "preflight": {
+      "pass": 38,
+      "skip": 42,
+      "pending": 0,
+      "fail": 0,
+      "variants": "all",
+      "as": "both"
+    },
+    "continuationSummary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-Vna8bn",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.195/invocations/sweep-Vna8bn",
+      "counts": {
+        "pass": 20,
+        "skip": 20
+      },
+      "attemptCounts": {
+        "pass": 20,
+        "skip": 20,
+        "fail": 1
+      },
+      "hostLoad": 4.97607421875,
+      "sessions": 2,
+      "leaseYields": 1,
+      "wallMs": {
+        "browserLeaseWait": 283831,
+        "serve": 3296,
+        "scenario": 191110.17470799998,
+        "cleanup": 1193.3018339999544,
+        "execution": 195686.08112500003,
+        "total": 479517.081125
+      }
+    },
+    "latestCellCounts": {
+      "pass": 38,
+      "skip": 42
+    },
+    "latestCellCount": 80,
+    "retainedAttemptRows": 92,
+    "originalAttemptCounts": {
+      "pass": 23,
+      "skip": 27,
+      "fail": 1
+    },
+    "rawAudit": "/tmp/hv-195-qa-final-audit.json",
+    "rawPassReports": 43,
+    "rawErrors": 0,
+    "rawCaps": 0,
+    "rawFailureKinds": 0,
+    "cellIdentityMatches": true,
+    "ledger": "docs/plan/evidence/qa-ledger/hv-umm2.195.jsonl",
+    "captures": [],
+    "judged": {
+      "count": 0,
+      "reason": "D21 bytes192/253/176/85 all unsampled; existing kinds/status/visual indicators only."
+    },
+    "recordedCommit": "d0e645c8b17b4d0148c5952cf91ab27351a329e1",
+    "provenance": "Both sweeps against dirty own WT before commit: ledger HEAD is base, not a committed-source claim. All five source/scenario hashes equal the pre-validation manifest. Original failed provider row retained; latest-cell union is complete80cells38pass42skip.",
+    "contract": "Prescribed card-play/resolution sweep; coupled captured-cost behavior covered by D20 and owning contracts, not a blanket all-ability browser claim.",
+    "rawReportScope": "Zero errors/Caps/failureKinds applies to all43 passing raw reports. Both failed attempt rows and raw reports are retained separately; latest80cells have no unresolved failure.",
+    "retainedFailedAttempts": [
+      {
+        "uuid": "7fb4b7f5-0dfc-4151-8a88-82f822960b61",
+        "variant": "base",
+        "side": "enemy",
+        "effective": true,
+        "failureKinds": [
+          "unknown",
+          "unknown"
+        ],
+        "rawReport": "invocations/sweep-57t0xe/run-oq6XXi/sweep-7fb4b7f5-0dfc-4151-8a88-82f822960b61-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "42427d15-c019-4786-9d7e-285829c4f3cb",
+        "variant": "attuned",
+        "side": "player",
+        "effective": false,
+        "failureKinds": [
+          "timeout"
+        ],
+        "rawReport": "invocations/sweep-Vna8bn/run-tYSgGk/sweep-42427d15-c019-4786-9d7e-285829c4f3cb-attuned-player-attempt-1.result.json"
+      }
+    ]
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 160923,
+    "engineWallS": 162.0,
+    "cpuS": 176.3,
+    "failures": 0,
+    "commandWallS": 410.192,
+    "targets": [
+      {
+        "kind": "card",
+        "uuid": "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c",
+        "included": 609,
+        "exercised": 200
+      },
+      {
+        "kind": "card",
+        "uuid": "9d51dca1-28d7-4e8e-bc13-c5b665d6db72",
+        "included": 607,
+        "exercised": 287
+      },
+      {
+        "kind": "card",
+        "uuid": "7fb4b7f5-0dfc-4151-8a88-82f822960b61",
+        "included": 614,
+        "exercised": 303
+      },
+      {
+        "kind": "card",
+        "uuid": "42427d15-c019-4786-9d7e-285829c4f3cb",
+        "included": 617,
+        "exercised": 289
+      }
+    ],
+    "heavyWaitS": null,
+    "waitProvenance": "Own46581 waiting lock with empty log observed after command start; exact acquisition/queue time unknown. First startup output observed15:57:13Z. Whole410.192s command wall includes wait/startup/shutdown.",
+    "terminalLog": "/tmp/hv-195-fuzz.log"
+  },
+  "review": {
+    "files": 223,
+    "tests": 3862,
+    "wallS": 54.574,
+    "lint": "pass",
+    "typechecks": "pass",
+    "cycles": "pass",
+    "knipWallS": 4.233,
+    "full": "Not indicated: composition/plain scenario only, unchanged infrastructure/config/architecture.",
+    "independent": "No core-review label/new-kind/over100 changed non-test code trigger; production31changedlines. Required reviews use parent fresh read-only gpt-5.6-sol CodexCLI under human override until2026-10-14T01:00Z."
+  },
+  "corrections": {
+    "validation": "Focused/owning/preflight/review/Knip/fuzz pass first attempt. Original browser sweep exit2 was provider timeout then missing transport, not a confirmed card defect; failed attempt retained.",
+    "providerIncident": {
+      "windowStartUtc": "2026-10-12T15:52:30.414410+00:00",
+      "windowEndUtc": "2026-10-12T16:15:04.097713+00:00",
+      "minutes": 22.561388383333334,
+      "windowProvenance": "Conservative initial sweep start through successful continuation includes pre-failure cells because exact failed-call start is unknown; full repair/coordination/wait/recovery QA retained, not archival-process-only time.",
+      "supportedReconciler": "provider-completion-unconfirmed; record protected",
+      "parentRetirementReceipt": "/tmp/dreamtides-executor-01a12e91/195-provider-retirement.json",
+      "parentRetirement": {
+        "startUtc": "2026-10-12T16:05:48.972Z",
+        "endUtc": "2026-10-12T16:05:49.225Z",
+        "wallS": 0.25156662500000004,
+        "pid": 15368,
+        "terminal": true,
+        "exit": 0,
+        "state": "incident-archived",
+        "token": "1f0f9127-57d7-4b22-8e8b-8eda0299ba35",
+        "sessionId": "2ed4dda9-ba36-477b-8281-21bfccba1ddf",
+        "archive": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json.justiciar-0aad50f9-53c6-42cc-a07a-6d343f1631c6.json",
+        "sha256": "0003989ccd7fa458d78167620840e46926ec6452c3f065886f9821fc82f62e92",
+        "observations": [
+          {
+            "observedUtc": "2026-10-12T16:05:49.084Z",
+            "providerDescendants": [],
+            "chromiumProcesses": [],
+            "runner": "absent",
+            "serverRecord": "absent",
+            "qaPort": "free"
+          },
+          {
+            "observedUtc": "2026-10-12T16:05:49.220Z",
+            "providerDescendants": [],
+            "chromiumProcesses": [],
+            "runner": "absent",
+            "serverRecord": "absent",
+            "qaPort": "free"
+          }
+        ],
+        "transport": {
+          "status": 404,
+          "body": "Session not found"
+        },
+        "basis": "Justiciar same-task bounded proof: old local browser generation exited; initialized fixed raw context cannot relaunch; absent exact transport prevents new dispatch; dead runner/server and unchanged exact record. Not automated receipt-based retirement; no completion receipt fabricated; no peer or service mutation."
+      },
+      "authority": "Parent same-task justiciar recovery under current README incident workflow. Exact token bytes archived under own kernel lock after additional backend/process/transport evidence; no false completed-execution receipt, peer or service mutation. Executor restored before continuation."
+    },
+    "finiteReads": "Finite setup/inspection/hash PIDs and exact read durations not captured remain unknown. One finite unmatched-glob inspection was corrected by file discovery; no runtime/source effect. Whole conservative ownership proxy includes reads, coordination and waits.",
+    "settledAutomaticRetry": "Continuation Signal attuned/player attempt1 is timeout-only, Caps empty, error null, effective:false. Public navigation asks for attuned but settles on previous kindled URL; supported single fresh retry passes. Preserved inside full incident/recovery window; no card/source cause inferred."
+  },
+  "runtime": {
+    "commandReceiptNames": [
+      "focus",
+      "owning",
+      "preflight",
+      "review",
+      "knip",
+      "fuzz",
+      "sweep",
+      "provider-reconcile",
+      "sweep-continuation"
+    ],
+    "commandReceiptPrefix": "/tmp/hv-195-",
+    "parentInstall": "/tmp/dreamtides-executor-01a12e91/195-install-receipt.json",
+    "qa": {
+      "runner": 22981,
+      "observer": 22960,
+      "serverPidAndGroup": 77759,
+      "slot": 1,
+      "port": 5274,
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpSessionId": "79a86d8a-d4d7-4a52-9622-d685178b84cc",
+      "protocol": "2025-11-25",
+      "ownerSnapshot": "/tmp/hv-195-qa-continuation-owner2-snapshot.json",
+      "originalOwnerSnapshot": "/tmp/hv-195-qa-owner-snapshot.json",
+      "terminal": true,
+      "cleanupMs": 1193.3018339999544,
+      "proof": "Continuation terminal0 guarded runner closes isolated browser/settles RPCs, stops own server group/client, clears exact own records/releases lease. Original uncertain lifetime has parent exact incident archival receipt; no ordinary completion claimed.",
+      "lifetimes": [
+        {
+          "owner": {
+            "token": "a9490806-5187-4254-89d7-90c9e03489b6",
+            "pid": 22981,
+            "bead": "hv-umm2.195",
+            "label": "card-sweep",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/type-synergies-cards83-195",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-12T16:09:20.819Z",
+            "providerState": "active",
+            "mcpSessionId": "8811095f-e5a5-4436-86ed-752ac3265474",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "server": {
+            "token": "c973ce26-bdf3-4fab-9236-1184ad7230c4",
+            "runner": {
+              "pid": 22981,
+              "group": 22960,
+              "started": "Mon Oct 12 09:07:04 2026",
+              "state": "S",
+              "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.195 --cards 7fb4b7f5-0dfc-4151-8a88-82f822960b61,42427d15-c019-4786-9d7e-285829c4f3cb --variants all --as both"
+            },
+            "server": {
+              "pid": 41215,
+              "group": 41215,
+              "started": "Mon Oct 12 09:09:19 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergies-cards83-195/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json c973ce26-bdf3-4fab-9236-1184ad7230c4 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergies-cards83-195",
+            "port": 5274
+          },
+          "observedUtc": "2026-10-12T16:09:46.974811+00:00"
+        },
+        {
+          "owner": {
+            "token": "d472180e-6cea-4e1c-ae9d-295ca1bf6684",
+            "pid": 22981,
+            "bead": "hv-umm2.195",
+            "label": "card-sweep",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/type-synergies-cards83-195",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-12T16:12:57.500Z",
+            "providerState": "active",
+            "mcpSessionId": "79a86d8a-d4d7-4a52-9622-d685178b84cc",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "server": {
+            "token": "4244b84d-4b3b-4aae-9625-22e4df4ce299",
+            "runner": {
+              "pid": 22981,
+              "group": 22960,
+              "started": "Mon Oct 12 09:07:04 2026",
+              "state": "S",
+              "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.195 --cards 7fb4b7f5-0dfc-4151-8a88-82f822960b61,42427d15-c019-4786-9d7e-285829c4f3cb --variants all --as both"
+            },
+            "server": {
+              "pid": 77759,
+              "group": 77759,
+              "started": "Mon Oct 12 09:12:55 2026",
+              "state": "Us",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergies-cards83-195/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 4244b84d-4b3b-4aae-9625-22e4df4ce299 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergies-cards83-195",
+            "port": 5274
+          },
+          "observedUtc": "2026-10-12T16:14:12.104040+00:00"
+        }
+      ]
+    },
+    "resourceObservation": {
+      "observedUtc": "2026-10-12T16:16:32.227853+00:00",
+      "capturedPidIdentitiesChecked": [
+        15167,
+        15178,
+        15368,
+        22133,
+        22134,
+        22153,
+        22154,
+        22960,
+        22981,
+        41215,
+        46553,
+        46554,
+        46555,
+        46579,
+        46580,
+        46581,
+        46701,
+        53456,
+        53464,
+        75505,
+        75517,
+        77759,
+        86149,
+        88162
+      ],
+      "liveMatches": []
+    },
+    "remainingOwnedProviders": [],
+    "remainingOwnedBrowsers": [],
+    "remainingOwnedServers": [],
+    "remainingOwnedLeases": [],
+    "unknowns": "Finite inspection/hash/evidence wrapper PIDs not captured; no fabricated descendant identities, dispatch or wait values.",
+    "writers": "Source/tests frozen after first focus; QA ledger writer terminal before final evidence. Only own evidence/schema/commit tail remains.",
+    "finalSchemaTailReceipt": "/tmp/hv-195-schema-final.json"
+  }
+}
