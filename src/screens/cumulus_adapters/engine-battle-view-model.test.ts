@@ -9,21 +9,133 @@
 import { describe, expect, it } from "vitest";
 import { createEngine, type Action } from "../../engine";
 import { createCatalog } from "../../engine/catalog";
+import { event } from "../../engine/dsl/builders";
+import { chooseOne } from "../../engine/effects/primitives/choose-one";
+import { draw } from "../../engine/effects/primitives/draw";
+import { gainEnergy } from "../../engine/effects/primitives/gain-energy";
 import { createFoldAdapter, type BattleSlice } from "../../engine/fold/slice";
+import { boardState } from "../../engine/testing/board";
+import { dreamwellLabBattle } from "../../engine/testing/card-lab";
+import { SYNTHETIC_CARDS, SYNTHETIC } from "../../engine/testing/synthetic-cards";
 import { PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle } from "../../engine/testing/prompt-lab";
 import { firstLegalAnswer, isLegalAnswer } from "../../engine/prompts/answers";
 import type { Answer, PromptRole } from "../../engine/prompts/types";
-import { parseBattleCardId } from "../../types/identifiers";
+import { parseBattleCardId, parseBattleId, parseDreamwellCardId, parsePromptId } from "../../types/identifiers";
 import {
+  buildEngineBattleScreenModel,
+  enginePrintedKeywords,
+  type EngineBattleViewInput,
   type EngineBattleAffordances,
   type EngineBattleScreenModel,
 } from "./engine-battle-view-model";
 import { type PendingEnginePrompt, type PromptSurface } from "./prompt-host-view-model";
-import { screenOf } from "./engine-battle-view-model.fixtures";
+import { cards, screenOf } from "./engine-battle-view-model.fixtures";
 
 const labEngine = createEngine(
   createCatalog(PROMPT_LAB_DEFINITIONS.cards, [], PROMPT_LAB_DEFINITIONS.emblems, PROMPT_LAB_DEFINITIONS.figments),
 );
+
+describe("Dreamwell modal source copy", () => {
+  const sourceId = parseDreamwellCardId("00000000-0000-4000-8000-000000054601");
+  const otherId = parseDreamwellCardId("00000000-0000-4000-8000-000000054602");
+  const modeCopy = ["Draw a card", "gain 2●"];
+  const renderedText = `Choose one: ${modeCopy.join(" or ")}.`;
+  const definition = { id: sourceId, order: 4, energyAdded: 0, status: "authored" as const,
+    abilities: () => [event(chooseOne(draw(1), gainEnergy(2)))] };
+  const engine = createEngine(createCatalog(SYNTHETIC_CARDS, [definition, { ...definition, id: otherId }]));
+  const fold = createFoldAdapter(engine);
+  const source = (cardId = sourceId, text = renderedText) => ({ cardId,
+    displaySnapshot: { id: cardId, name: "Synthetic shared name", renderedText: text, energyAdded: 0, imageNumber: 0 } });
+  const opening = () => {
+    const lab = dreamwellLabBattle(engine, { cardId: sourceId, side: "player" }, [sourceId, otherId]);
+    const out = fold.reduce(lab.slice, { kind: "battleAction", side: "enemy", action: { kind: "pass" } });
+    if (out.kind !== "applied" || out.error !== null) throw new Error("fixture pass failed");
+    const pending = fold.pending(out.slice);
+    if (pending === null || pending.prompt.kind !== "chooseMode") throw new Error("missing modal Dreamwell prompt");
+    return { out, pending: { ...pending, prompt: pending.prompt } };
+  };
+  const inputOf = (pending: ReturnType<typeof opening>["pending"]): EngineBattleViewInput => ({
+    battleId: parseBattleId("battle-dreamwell-copy"), human: "player", view: engine.view(pending.display, "player"),
+    legal: [], prompt: pending.prompt, playing: null, decision: null, presented: true, notice: null,
+    cards, catalog: engine.catalog, printedKeywords: enginePrintedKeywords(engine.catalog),
+    avatars: { player: { avatar: null }, enemy: { avatar: null } }, opponentName: "Synthetic opponent",
+    essenceReward: 0, resultDismissed: false,
+  });
+  const choices = (input: EngineBattleViewInput) => {
+    const model = buildEngineBattleScreenModel(input);
+    if (model.prompt.surface.kind !== "choice") throw new Error("missing choice surface");
+    return { model, options: model.prompt.surface.options };
+  };
+
+  it("resolves the pinned UUID once despite matching source display names, preserving authored mode order", () => {
+    const { pending } = opening();
+    const sources = new Map([[sourceId, source()], [otherId, source(otherId, "Choose one: Other first; or other second.")]]);
+    const resolved: typeof sourceId[] = [];
+    const { model, options } = choices({ ...inputOf(pending), dreamwellCard: (id) => { resolved.push(id); return sources.get(id) ?? null; } });
+    expect(pending.prompt.purpose.source).toEqual({ kind: "dreamwell", side: "player", id: sourceId });
+    expect(resolved).toEqual([sourceId]);
+    expect(model.prompt.sourceCard).toBeNull();
+    expect(model.prompt.host?.heading?.detail).toContain(source().displaySnapshot.name);
+    expect(options.map((option) => option.select)).toEqual(pending.prompt.options.map((option) => ({ kind: "answer", answer: option.mode })));
+    options.forEach((option, index) => expect(option.label.toLowerCase()).toContain(modeCopy[index].toLowerCase()));
+    expect(options.map((option) => option.label)).not.toEqual(choices(inputOf(pending)).options.map((option) => option.label));
+  });
+
+  it.each([0, 1])("submits offered mode %i with matching observed effects through saved replay and rejects stale answers", (index) => {
+    const { out, pending } = opening();
+    const { options } = choices({ ...inputOf(pending), dreamwellCard: () => source() });
+    const select = options[index].select;
+    if (select.kind !== "answer") throw new Error("choice is not an answer");
+    const intent = { kind: "answer" as const, side: "player" as const, promptId: pending.prompt.id, value: select.answer };
+    const before = JSON.stringify(out.slice);
+    for (const slice of [out.slice, JSON.parse(before) as BattleSlice]) {
+      const replayedPending = createFoldAdapter(engine).pending(slice);
+      if (replayedPending === null) throw new Error("saved prompt missing");
+      expect(choices({ ...inputOf({ ...replayedPending, prompt: pending.prompt }), dreamwellCard: () => source() }).options).toEqual(options);
+      expect(fold.reduce(slice, { ...intent, promptId: parsePromptId("999:0:0") })).toMatchObject({ kind: "bounced", reason: "stalePrompt" });
+      expect(fold.reduce(slice, { ...intent, value: 2 })).toMatchObject({ kind: "bounced", reason: "illegalAnswer" });
+      const answered = fold.reduce(slice, intent);
+      if (answered.kind !== "applied") throw new Error(answered.reason);
+      expect(answered.error).toBeNull();
+      expect(answered.slice.committed.sides.player.hand).toHaveLength(index === 0 ? 2 : 1);
+      expect(answered.slice.committed.sides.player.currentEnergy).toBe(index === 0 ? 2 : 4);
+      expect(answered.published.filter((effect) => effect.kind === "cardDrawn" && effect.side === "player")).toHaveLength(index === 0 ? 2 : 1);
+      expect(answered.published.filter((effect) => effect.kind === "energyChanged" && effect.cause === "effect")).toHaveLength(index === 0 ? 0 : 1);
+      expect(fold.reduce(answered.slice, intent)).toMatchObject({ kind: "bounced", reason: "noPendingPrompt" });
+    }
+    expect(JSON.stringify(out.slice)).toBe(before);
+  });
+
+  it("retains numbered fallback for absent or malformed models and holds or hides unanswered prompts", () => {
+    const { pending } = opening();
+    const input = inputOf(pending);
+    const fallback = choices(input).options;
+    for (const dreamwellCard of [() => null, () => source(sourceId, "Synthetic nonmodal rules"), () => source(sourceId, "Choose one: One only.")]) {
+      expect(choices({ ...input, dreamwellCard }).options).toEqual(fallback);
+    }
+    const held = buildEngineBattleScreenModel({ ...input, presented: false, dreamwellCard: () => source() });
+    expect(held.prompt.surface.kind).toBe("held");
+    expect(held.view.choicePrompt).toBeNull();
+    const waiting = buildEngineBattleScreenModel({ ...input, human: "enemy", view: engine.view(pending.display, "enemy"), dreamwellCard: () => source() });
+    expect(waiting.prompt.surface.kind).toBe("waiting");
+    expect(waiting.view.choicePrompt).toBeNull();
+  });
+
+  it("keeps instance-backed chooseOne copy independent of the Dreamwell resolver", () => {
+    const { pending } = opening();
+    const { state, ids } = boardState(engine.catalog, { active: "player", phase: "day", player: { hand: [SYNTHETIC.vanilla1.id] } });
+    const input = inputOf(pending);
+    const instanceCards = Object.assign((instance: Parameters<typeof cards>[0]) => {
+      const model = cards(instance);
+      return { ...model, displaySnapshot: { ...model.displaySnapshot, renderedText } };
+    }, { nameOf: (identity: Parameters<typeof cards.nameOf>[0]) => cards.nameOf(identity) });
+    const { model, options } = choices({ ...input, view: engine.view(state, "player"), cards: instanceCards,
+      prompt: { ...pending.prompt, purpose: { ...pending.prompt.purpose, source: ids.player.hand[0] } },
+      dreamwellCard: () => { throw new Error("instance source queried Dreamwell"); } });
+    expect(model.prompt.sourceCard?.id).toBe(parseBattleCardId(ids.player.hand[0]));
+    options.forEach((option, index) => expect(option.label.toLowerCase()).toContain(modeCopy[index].toLowerCase()));
+  });
+});
 
 describe("deck-top battle affordances", () => {
   it("separates known owner top plays from hand/void plays, with no deeper or enemy affordance", () => {

@@ -29,6 +29,7 @@
 // submitted; the fold checks it again and bounces a stale or illegal one.
 
 import type { BattleForeseeResult } from "../../cumulus/components/battle/BattleForeseeEditor";
+import type { DreamwellCardModel } from "../../cumulus/components/battle/DreamwellCard";
 import type {
   BattlePromptArrangeView,
   BattlePromptHostView,
@@ -78,7 +79,7 @@ export interface PromptHostInput {
   readonly loopOffer: { readonly maxCount: number } | null;
   readonly cardView: EngineCardViewBuilder;
   /** Resolves the pinned public source UUID immediately before its prompt is shown. */
-  readonly dreamwellName?: (id: DreamwellCardId) => string | null;
+  readonly dreamwellCard?: (id: DreamwellCardId) => DreamwellCardModel | null;
 }
 
 /** What one choice button of the control row does when chosen. */
@@ -256,9 +257,11 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
   const source = sourceInstance(prompt, view);
   const sourceCard = source === null ? null : cardView(source);
   const origin = prompt.purpose.source;
-  const sourceName = origin !== null && typeof origin !== "string" && origin.kind === "dreamwell"
-    ? input.dreamwellName?.(origin.id) ?? null
-    : sourceCard?.model.displaySnapshot.name ?? null;
+  const dreamwellSource = origin !== null && typeof origin !== "string" && origin.kind === "dreamwell"
+    ? input.dreamwellCard?.(origin.id) ?? null
+    : null;
+  const sourceName = dreamwellSource?.displaySnapshot.name ?? sourceCard?.model.displaySnapshot.name ?? null;
+  const sourceText = dreamwellSource?.displaySnapshot.renderedText ?? sourceCard?.model.displaySnapshot.renderedText ?? null;
   if (prompt.side !== human) {
     // The opponent answers; a private prompt's cards never reach this view,
     // and the human learns only that the opponent is choosing.
@@ -417,8 +420,8 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
       );
     case "chooseMode": {
       const texts =
-        prompt.purpose.role === "chooseOne" && sourceCard !== null
-          ? enginePromptModeTexts(sourceCard.model.displaySnapshot.renderedText, prompt.options.length)
+        prompt.purpose.role === "chooseOne" && sourceText !== null
+          ? enginePromptModeTexts(sourceText, prompt.options.length)
           : null;
       return choice(
         prompt,

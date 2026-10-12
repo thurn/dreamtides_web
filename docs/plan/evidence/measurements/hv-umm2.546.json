@@ -1,0 +1,790 @@
+{
+  "bead": "hv-umm2.546",
+  "phase": 5,
+  "base": "a3416d8201ef23eaf4fe1dca11666b455251da80",
+  "dispatchUtc": "2026-10-12T16:24:28.132Z",
+  "dispatchProvenance": {
+    "toolCall": "call_f35587f918d24e6089119394fbcdb06a",
+    "source": "Parent own native journal; actual helper dispatch tool-call timestamp, model-start time unknown."
+  },
+  "windowScope": "Elapsed actual parent helper dispatch through the immediately pre-commit clock observation, including read-only admission, implementation, browser capacity, changed QA harness attempts and verification. Actual immutable committer timestamp and observation delta are retained in the ignored commit receipt.",
+  "checks": {
+    "focused": {
+      "exit": 0,
+      "seconds": 4.374871730804443,
+      "receipt": "focused-final.txt",
+      "files": 1,
+      "tests": 8
+    },
+    "review": {
+      "exit": 0,
+      "seconds": 16.891375064849854,
+      "hostLoad": "{ 12.43 11.42 11.36 }",
+      "start": "2026-10-12T16:46:45.929499+00:00",
+      "receipt": "review-final.txt",
+      "files": 14,
+      "tests": 118,
+      "scope": "Final three source/test files plus all four staged evidence files, including friction schema."
+    },
+    "knip": {
+      "exit": 0,
+      "seconds": 3.415066719055176,
+      "start": "2026-10-12T16:44:12.426469+00:00",
+      "receipt": "knip.txt"
+    },
+    "notApplicable": {
+      "full": "Two pure UI builders and bounded tests; no test infrastructure or cross-cutting architecture.",
+      "fuzz": "No engine rules or production content changes."
+    },
+    "sourceReview": {
+      "exit": 0,
+      "seconds": 13.563971757888794,
+      "hostLoad": "{ 9.61 13.74 13.92 }",
+      "start": "2026-10-12T16:34:34.154726+00:00",
+      "receipt": "review-source.txt",
+      "files": 14,
+      "tests": 118
+    },
+    "iterationWitnesses": [
+      {
+        "receipt": "focused.txt",
+        "exit": 1,
+        "seconds": 4.641774892807007,
+        "disposition": "Synthetic stale prompt ID was nonnumeric and rejected by the identity parser; corrected fixture input."
+      },
+      {
+        "receipt": "review-first.txt",
+        "exit": 2,
+        "seconds": 16.327023029327393,
+        "disposition": "Test return type lost chooseMode narrowing and separated a method reference; corrected own test typing. Related 118 tests passed in that iteration."
+      }
+    ]
+  },
+  "hostLoadSamples": [
+    {
+      "command": "npm run review",
+      "utc": "2026-10-12T16:34:34.154726+00:00",
+      "oneMinute": 9.61
+    },
+    {
+      "command": "npm run review",
+      "utc": "2026-10-12T16:46:45.929499+00:00",
+      "oneMinute": 12.43,
+      "scope": "Final staged source and evidence review"
+    }
+  ],
+  "testDelta": {
+    "nativeTestEntrypoints": 0,
+    "plainTestLineNet": 112,
+    "jsdomMarkers": 0,
+    "gitNumstat": {
+      "added": 114,
+      "removed": 2
+    },
+    "scope": "Existing engine-battle-view-model.test.ts only; all 112 net lines counted, no new contract/support or jsdom file."
+  },
+  "runtimeSource": {
+    "base": "a3416d8201ef23eaf4fe1dca11666b455251da80",
+    "indexOriginalSha": "ef2679b375af996706fd3e953dd6dc608234751d99286eace52d4a7a3a2882fb",
+    "syntheticFixtureSha": "21ceae3fa03f4740d450749b73ec8bac4a69422f3e6f30da4621d4d47bf2300f",
+    "sourceSha": {
+      "src/screens/cumulus_adapters/engine-battle-view-model.ts": "13a20e4d264259dd843cfbc201ffba18273c6dd5441bbbe90bf2bc6ebc98c22c",
+      "src/screens/cumulus_adapters/prompt-host-view-model.ts": "3d56b8ac4057946bb64ef02059684c8fb7b0fcfc7e5cf78982e376c3b8069a1b",
+      "src/screens/cumulus_adapters/engine-battle-view-model.test.ts": "a70a4e7dec18a51d531a62c2103ffb174f1b0a454ef3ecf69b2147f306247166"
+    }
+  },
+  "temporaryQaAssembly": {
+    "uuid": "00000000-0000-4000-8000-000000054601",
+    "fixture": "dreamwell-modal-fixture.ts",
+    "nativePath": "src/content/dreamwell/index.ts",
+    "operation": "Single temporary import/list row in own worktree after native openQaSession prepare/server/provider startup, then existing native card-lab, normal Night pass and typed UI choices. Existing engine and display builders load the same synthetic UUID.",
+    "restoration": {
+      "originalSha": "ef2679b375af996706fd3e953dd6dc608234751d99286eace52d4a7a3a2882fb",
+      "restoredSha": "ef2679b375af996706fd3e953dd6dc608234751d99286eace52d4a7a3a2882fb",
+      "utc": "2026-10-12T16:43:19.879Z",
+      "serverClosed": true
+    },
+    "committed": false,
+    "retainedFixture": "dreamwell-modal-fixture.ts"
+  },
+  "qa": {
+    "invocation": "run-YDaRjh",
+    "result": "dreamwell-modal.result.json",
+    "error": null,
+    "caps": [],
+    "wallMs": {
+      "browserLeaseWait": 40402,
+      "serve": 2291,
+      "scenario": 63812,
+      "total": 106573
+    },
+    "cells": [
+      {
+        "cell": "desktop#0",
+        "mode": 0,
+        "gameId": "jcc28s",
+        "sourceUuid": "00000000-0000-4000-8000-000000054601",
+        "promptId": "12:13:0",
+        "answer": {
+          "gameId": "jcc28s",
+          "version": 12,
+          "promptId": "12:13:0",
+          "side": "player",
+          "fingerprint": "26azh97e0mo",
+          "value": 0,
+          "timestamp": "2026-10-12T16:42:26.815Z",
+          "event": "engine.promptAnswered",
+          "seq": 10
+        },
+        "intent": {
+          "event": "game_event",
+          "timestamp": "2026-10-12T16:42:26.801Z",
+          "gameId": "jcc28s",
+          "seq": 3,
+          "type": "BATTLE_ANSWER",
+          "actor": "k5odpoj3wis3khwuxbpxq8th",
+          "outcome": "applied",
+          "intentKey": "engine-player:battle:unscoped:site-5::0::dreamscape-1:12:13:0"
+        },
+        "source": {
+          "gameId": "jcc28s",
+          "version": 12,
+          "promptId": "12:13:0",
+          "side": "player",
+          "kind": "chooseMode",
+          "role": "chooseOne",
+          "source": {
+            "kind": "dreamwell",
+            "side": "player",
+            "id": "00000000-0000-4000-8000-000000054601"
+          },
+          "cardId": null,
+          "privateTo": null,
+          "fingerprint": "26azh97e0mo",
+          "timestamp": "2026-10-12T16:42:18.365Z",
+          "event": "engine.promptOpened",
+          "seq": 22
+        },
+        "drawn": {
+          "gameId": "jcc28s",
+          "version": 11,
+          "detail": {
+            "kind": "dreamwellDrawn",
+            "side": "player",
+            "card": "00000000-0000-4000-8000-000000054601",
+            "energyAdded": 0
+          },
+          "timestamp": "2026-10-12T16:42:18.361Z",
+          "event": "engine.dreamwell",
+          "seq": 19
+        },
+        "geometry": [
+          {
+            "index": 0,
+            "label": "Draw a card",
+            "x": 1007.4375,
+            "y": 597,
+            "width": 126.6875,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 125,
+            "clientWidth": 125
+          },
+          {
+            "index": 1,
+            "label": "Gain 2\u25cf",
+            "x": 1142.125,
+            "y": 597,
+            "width": 98.375,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 96,
+            "clientWidth": 96
+          }
+        ],
+        "reloadedGeometry": [
+          {
+            "index": 0,
+            "label": "Draw a card",
+            "x": 1007.4375,
+            "y": 597,
+            "width": 126.6875,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 125,
+            "clientWidth": 125
+          },
+          {
+            "index": 1,
+            "label": "Gain 2\u25cf",
+            "x": 1142.125,
+            "y": 597,
+            "width": 98.375,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 96,
+            "clientWidth": 96
+          }
+        ],
+        "assertedEffects": {
+          "hand": 2,
+          "currentEnergy": 2,
+          "phase": "day"
+        },
+        "effectEvidence": "Successful executed scenario assertions before this cell note, followed by successful same-game effect reload assertion."
+      },
+      {
+        "cell": "desktop#1",
+        "mode": 1,
+        "gameId": "t3tpgd",
+        "sourceUuid": "00000000-0000-4000-8000-000000054601",
+        "promptId": "12:13:0",
+        "answer": {
+          "gameId": "t3tpgd",
+          "version": 12,
+          "promptId": "12:13:0",
+          "side": "player",
+          "fingerprint": "26azh97e0mo",
+          "value": 1,
+          "timestamp": "2026-10-12T16:42:43.832Z",
+          "event": "engine.promptAnswered",
+          "seq": 10
+        },
+        "intent": {
+          "event": "game_event",
+          "timestamp": "2026-10-12T16:42:43.821Z",
+          "gameId": "t3tpgd",
+          "seq": 3,
+          "type": "BATTLE_ANSWER",
+          "actor": "pr95xtda62izfb86mb6xmqxt",
+          "outcome": "applied",
+          "intentKey": "engine-player:battle:unscoped:site-5::0::dreamscape-1:12:13:0"
+        },
+        "source": {
+          "gameId": "t3tpgd",
+          "version": 12,
+          "promptId": "12:13:0",
+          "side": "player",
+          "kind": "chooseMode",
+          "role": "chooseOne",
+          "source": {
+            "kind": "dreamwell",
+            "side": "player",
+            "id": "00000000-0000-4000-8000-000000054601"
+          },
+          "cardId": null,
+          "privateTo": null,
+          "fingerprint": "26azh97e0mo",
+          "timestamp": "2026-10-12T16:42:34.584Z",
+          "event": "engine.promptOpened",
+          "seq": 24
+        },
+        "drawn": {
+          "gameId": "t3tpgd",
+          "version": 11,
+          "detail": {
+            "kind": "dreamwellDrawn",
+            "side": "player",
+            "card": "00000000-0000-4000-8000-000000054601",
+            "energyAdded": 0
+          },
+          "timestamp": "2026-10-12T16:42:34.582Z",
+          "event": "engine.dreamwell",
+          "seq": 21
+        },
+        "geometry": [
+          {
+            "index": 0,
+            "label": "Draw a card",
+            "x": 1007.4375,
+            "y": 597,
+            "width": 126.6875,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 125,
+            "clientWidth": 125
+          },
+          {
+            "index": 1,
+            "label": "Gain 2\u25cf",
+            "x": 1142.125,
+            "y": 597,
+            "width": 98.375,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 96,
+            "clientWidth": 96
+          }
+        ],
+        "reloadedGeometry": [
+          {
+            "index": 0,
+            "label": "Draw a card",
+            "x": 1007.4375,
+            "y": 597,
+            "width": 126.6875,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 125,
+            "clientWidth": 125
+          },
+          {
+            "index": 1,
+            "label": "Gain 2\u25cf",
+            "x": 1142.125,
+            "y": 597,
+            "width": 98.375,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 96,
+            "clientWidth": 96
+          }
+        ],
+        "assertedEffects": {
+          "hand": 1,
+          "currentEnergy": 4,
+          "phase": "day"
+        },
+        "effectEvidence": "Successful executed scenario assertions before this cell note, followed by successful same-game effect reload assertion."
+      },
+      {
+        "cell": "mobile#0",
+        "mode": 0,
+        "gameId": "k8we9x",
+        "sourceUuid": "00000000-0000-4000-8000-000000054601",
+        "promptId": "12:13:0",
+        "answer": {
+          "gameId": "k8we9x",
+          "version": 12,
+          "promptId": "12:13:0",
+          "side": "player",
+          "fingerprint": "26azh97e0mo",
+          "value": 0,
+          "timestamp": "2026-10-12T16:42:59.759Z",
+          "event": "engine.promptAnswered",
+          "seq": 10
+        },
+        "intent": {
+          "event": "game_event",
+          "timestamp": "2026-10-12T16:42:59.752Z",
+          "gameId": "k8we9x",
+          "seq": 3,
+          "type": "BATTLE_ANSWER",
+          "actor": "tpic9n3bwfa2sj7vv2nfduwf",
+          "outcome": "applied",
+          "intentKey": "engine-player:battle:unscoped:site-5::0::dreamscape-1:12:13:0"
+        },
+        "source": {
+          "gameId": "k8we9x",
+          "version": 12,
+          "promptId": "12:13:0",
+          "side": "player",
+          "kind": "chooseMode",
+          "role": "chooseOne",
+          "source": {
+            "kind": "dreamwell",
+            "side": "player",
+            "id": "00000000-0000-4000-8000-000000054601"
+          },
+          "cardId": null,
+          "privateTo": null,
+          "fingerprint": "26azh97e0mo",
+          "timestamp": "2026-10-12T16:42:51.575Z",
+          "event": "engine.promptOpened",
+          "seq": 22
+        },
+        "drawn": {
+          "gameId": "k8we9x",
+          "version": 11,
+          "detail": {
+            "kind": "dreamwellDrawn",
+            "side": "player",
+            "card": "00000000-0000-4000-8000-000000054601",
+            "energyAdded": 0
+          },
+          "timestamp": "2026-10-12T16:42:51.573Z",
+          "event": "engine.dreamwell",
+          "seq": 19
+        },
+        "geometry": [
+          {
+            "index": 0,
+            "label": "Draw a card",
+            "x": 148.9375,
+            "y": 522.828125,
+            "width": 126.6875,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 125,
+            "clientWidth": 125
+          },
+          {
+            "index": 1,
+            "label": "Gain 2\u25cf",
+            "x": 283.625,
+            "y": 522.828125,
+            "width": 98.375,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 96,
+            "clientWidth": 96
+          }
+        ],
+        "reloadedGeometry": [
+          {
+            "index": 0,
+            "label": "Draw a card",
+            "x": 148.9375,
+            "y": 522.828125,
+            "width": 126.6875,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 125,
+            "clientWidth": 125
+          },
+          {
+            "index": 1,
+            "label": "Gain 2\u25cf",
+            "x": 283.625,
+            "y": 522.828125,
+            "width": 98.375,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 96,
+            "clientWidth": 96
+          }
+        ],
+        "assertedEffects": {
+          "hand": 2,
+          "currentEnergy": 2,
+          "phase": "day"
+        },
+        "effectEvidence": "Successful executed scenario assertions before this cell note, followed by successful same-game effect reload assertion."
+      },
+      {
+        "cell": "mobile#1",
+        "mode": 1,
+        "gameId": "8cocm5",
+        "sourceUuid": "00000000-0000-4000-8000-000000054601",
+        "promptId": "12:13:0",
+        "answer": {
+          "gameId": "8cocm5",
+          "version": 12,
+          "promptId": "12:13:0",
+          "side": "player",
+          "fingerprint": "26azh97e0mo",
+          "value": 1,
+          "timestamp": "2026-10-12T16:43:14.392Z",
+          "event": "engine.promptAnswered",
+          "seq": 10
+        },
+        "intent": {
+          "event": "game_event",
+          "timestamp": "2026-10-12T16:43:14.386Z",
+          "gameId": "8cocm5",
+          "seq": 3,
+          "type": "BATTLE_ANSWER",
+          "actor": "7jnr4an5jqv4cygufdz9xb5s",
+          "outcome": "applied",
+          "intentKey": "engine-player:battle:unscoped:site-5::0::dreamscape-1:12:13:0"
+        },
+        "source": {
+          "gameId": "8cocm5",
+          "version": 12,
+          "promptId": "12:13:0",
+          "side": "player",
+          "kind": "chooseMode",
+          "role": "chooseOne",
+          "source": {
+            "kind": "dreamwell",
+            "side": "player",
+            "id": "00000000-0000-4000-8000-000000054601"
+          },
+          "cardId": null,
+          "privateTo": null,
+          "fingerprint": "26azh97e0mo",
+          "timestamp": "2026-10-12T16:43:06.243Z",
+          "event": "engine.promptOpened",
+          "seq": 24
+        },
+        "drawn": {
+          "gameId": "8cocm5",
+          "version": 11,
+          "detail": {
+            "kind": "dreamwellDrawn",
+            "side": "player",
+            "card": "00000000-0000-4000-8000-000000054601",
+            "energyAdded": 0
+          },
+          "timestamp": "2026-10-12T16:43:06.243Z",
+          "event": "engine.dreamwell",
+          "seq": 21
+        },
+        "geometry": [
+          {
+            "index": 0,
+            "label": "Draw a card",
+            "x": 148.9375,
+            "y": 522.828125,
+            "width": 126.6875,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 125,
+            "clientWidth": 125
+          },
+          {
+            "index": 1,
+            "label": "Gain 2\u25cf",
+            "x": 283.625,
+            "y": 522.828125,
+            "width": 98.375,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 96,
+            "clientWidth": 96
+          }
+        ],
+        "reloadedGeometry": [
+          {
+            "index": 0,
+            "label": "Draw a card",
+            "x": 148.9375,
+            "y": 522.828125,
+            "width": 126.6875,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 125,
+            "clientWidth": 125
+          },
+          {
+            "index": 1,
+            "label": "Gain 2\u25cf",
+            "x": 283.625,
+            "y": 522.828125,
+            "width": 98.375,
+            "height": 42,
+            "fits": true,
+            "hit": true,
+            "disabled": false,
+            "scrollWidth": 96,
+            "clientWidth": 96
+          }
+        ],
+        "assertedEffects": {
+          "hand": 1,
+          "currentEnergy": 4,
+          "phase": "day"
+        },
+        "effectEvidence": "Successful executed scenario assertions before this cell note, followed by successful same-game effect reload assertion."
+      }
+    ],
+    "captureDimensions": [
+      {
+        "filename": "desktop-mode0-ready-css.png",
+        "width": 1440,
+        "height": 900,
+        "sha256": "8a3c7da9e95fa9bbea90f5662bab89bcd2aa37cfe8e436609664ba5283203699"
+      },
+      {
+        "filename": "desktop-mode0-ready.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "fe3ed98a669b0e635e5ff14a4027369662d333f997366b03db5a8946bcaa1f8c"
+      },
+      {
+        "filename": "desktop-mode0-resolved-css.png",
+        "width": 1440,
+        "height": 900,
+        "sha256": "9e0a04e84f5abbe38b182178e2c56a4d539c4d5742ad1586ac29d52b4615f40a"
+      },
+      {
+        "filename": "desktop-mode0-resolved.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "0bcd537e01a2a573c7ddd6343bde797cb727b95d329d03b63fbaed9250ea47e1"
+      },
+      {
+        "filename": "desktop-mode1-ready-css.png",
+        "width": 1440,
+        "height": 900,
+        "sha256": "e9cf9cd1c4a65de708106ee19e1eeea46b0169ca0bcfaaf26bff1b4bddbd065e"
+      },
+      {
+        "filename": "desktop-mode1-ready.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "ab87211e52fa4c7208c9baf6373f39dd9403734ed87fe942db53ad7737fbff43"
+      },
+      {
+        "filename": "desktop-mode1-resolved-css.png",
+        "width": 1440,
+        "height": 900,
+        "sha256": "bbead9d599f68543a6eb9681d0195587d23228301bb8c3e9f716bc03506e7e13"
+      },
+      {
+        "filename": "desktop-mode1-resolved.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "d5c937697609875a97e992df05101fe6c9f117d399ce3ff0154f19a394c99c71"
+      },
+      {
+        "filename": "mobile-mode0-ready-css.png",
+        "width": 390,
+        "height": 844,
+        "sha256": "1f723b8124e21a894b0de08eb9c37a42a2822152c5363720e3e9637d235aff96"
+      },
+      {
+        "filename": "mobile-mode0-ready.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "5b98bb639d9a1a3a0a8660017a7b62874e8ef1eda90ed72209e080925f827967"
+      },
+      {
+        "filename": "mobile-mode0-resolved-css.png",
+        "width": 390,
+        "height": 844,
+        "sha256": "62e2294f1050f14b75e63e183bccc472028ffd767733c1f28c7585dcb8aa76cd"
+      },
+      {
+        "filename": "mobile-mode0-resolved.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "16a8e29adabb25588532bcefb3b1742bc06e1b1034010fae5a00ed4778697963"
+      },
+      {
+        "filename": "mobile-mode1-ready-css.png",
+        "width": 390,
+        "height": 844,
+        "sha256": "5630c8ff46b22cb649015ddac25164650ba817793431ca708a05f5a2641d0c2b"
+      },
+      {
+        "filename": "mobile-mode1-ready.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "0b02d82112a351b8b0d19ca54796216490cc15498191097d6a9ebbd82cefb002"
+      },
+      {
+        "filename": "mobile-mode1-resolved-css.png",
+        "width": 390,
+        "height": 844,
+        "sha256": "9ddf95dedfc22340c35f36b2965c118a61bb0d3bfc0c5dfb2eb74e6829f640b2"
+      },
+      {
+        "filename": "mobile-mode1-resolved.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "b3d6da7a1fba3ec86093ef4c24fa7664cf89b15d2a8c0a815fd815b4d26965e2"
+      }
+    ],
+    "visualInspection": "Original native 2x desktop ready/draw and mobile both ready/energy states inspected by helper; parent inspected desktop ready and mobile energy ready. Synthetic imageNumber0 cards use their deliberate fixture surface.",
+    "failedHarnessAttempts": [
+      {
+        "invocation": "run-OaZfKv",
+        "error": "desktop#0: QaTimeoutError: typed persisted answer, UUID source and ordinary action: the persisted log of game 4itypc (35 lines) did not satisfy the predicate within 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.waitFor (evalmachine.<anonymous>:695:17)\n    at async mode0 (evalmachine.<anonymous>:1695:21)\n    at async evalmachine.<anonymous>:1717:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 64165,
+          "serve": 2556,
+          "scenario": 26485,
+          "total": 93261
+        },
+        "disposition": "Ignored QA predicate compared game-event and engine-log sequence counters; native desktop draw and pending reload succeeded."
+      },
+      {
+        "invocation": "run-2Peu1Q",
+        "error": "mobile#0: Error: open /?goto=card-lab&card=00000000-0000-4000-8000-000000054601&variant=base&as=player&seed=54600&debug=1: viewport is 1440x900, not 390x844\n    at Object.open (evalmachine.<anonymous>:726:15)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async mode0 (evalmachine.<anonymous>:1666:3)\n    at async evalmachine.<anonymous>:1730:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 13607,
+          "serve": 1043,
+          "scenario": 37152,
+          "total": 51858
+        },
+        "disposition": "Owned CDP desktop metrics remained active at mobile open; desktop both modes and native 2x images succeeded."
+      }
+    ],
+    "sequenceCorrelation": "game_event intentKey carries the prompt ID; engine.promptAnswered carries that prompt ID and numeric value. Each namespace retains its own seq."
+  },
+  "runtimeLedger": [
+    {
+      "invocation": "run-OaZfKv",
+      "serverPid": 75830,
+      "driverPid": 67380,
+      "port": 5274,
+      "state": "Native provider/context/server cleanup completed, driver terminal, port free reported."
+    },
+    {
+      "invocation": "run-2Peu1Q",
+      "serverPid": 88661,
+      "driverPid": 86787,
+      "port": 5174,
+      "state": "Native provider/context/server cleanup completed, driver terminal, port free reported."
+    },
+    {
+      "invocation": "run-YDaRjh",
+      "serverPid": 95588,
+      "port": 5174,
+      "state": "Native provider/context/server cleanup completed, driver exit0, port free reported; original index hash restored.",
+      "driverPid": 90174
+    }
+  ],
+  "coreFailurePaths": {
+    "missingOrMalformedSource": "retains numbered fallback for absent or malformed models and holds or hides unanswered prompts",
+    "reload": "submits offered mode %i with matching observed effects through saved replay and rejects stale answers; all four native cells also reload pending and completed effects",
+    "invalidStaleConcurrent": "Both mode contracts reject stale/illegal input and replayed duplicate answers; the pure builder introduces no actor authority or state transition.",
+    "midStepErrorInterruptPartialWrite": "No new engine/persistence transition. The change reads an optional already-resolved display snapshot in a pure builder; existing fold transactions own these paths. Missing model and incompatible rendered copy fall back through existing parser contracts.",
+    "instanceControl": "keeps instance-backed chooseOne copy independent of the Dreamwell resolver"
+  },
+  "reviewRouting": "Required fresh read-only GPT Sol gpt-5.6-sol core review is parent-owned under the temporary human policy ending 2026-10-14T01:00:00Z; this record claims author validation only.",
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "baselineWitness": {
+    "scope": "Read-only inline native engine/fold/builder before writes",
+    "seconds": 1.9903766250000001,
+    "exit": 0,
+    "sourceUuid": "00000000-0000-4000-8000-000000054601",
+    "sourceCard": null,
+    "observedOptions": [
+      {
+        "label": "Option 1",
+        "answer": 0
+      },
+      {
+        "label": "Option 2",
+        "answer": 1
+      }
+    ],
+    "completeRenderedModelPassed": true
+  },
+  "windowEndObservedUtc": "2026-10-12T16:50:03.833016+00:00"
+}
