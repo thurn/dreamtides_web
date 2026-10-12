@@ -1,0 +1,92 @@
+{
+  "bead": "hv-umm2.578",
+  "base": "1f68aec7475ccf8a343d9e39769afca441c03c0a",
+  "status": "ordinary validation complete; endpoint authorized; schema and commit receipts emitted after this metadata",
+  "implementationWindow": {
+    "start": "2026-10-12T21:35:09Z",
+    "end": "2026-10-12T21:47:15.789074+00:00",
+    "minutes": 12.1131512333,
+    "basis": "Conservative whole claim-to-parent-endpoint-ACK ownership proxy including setup, read-only research, coordination, expected negatives, author correction and all checks; not CPU or editing-only time.",
+    "firstHelperObservation": "2026-10-12T21:36:24Z",
+    "parentDispatchPre": "2026-10-12T21:36:05.215094Z",
+    "parentDispatchPost": "2026-10-12T21:36:26.738508Z",
+    "dispatch": "Exact dispatch unsampled; bracket is observational.",
+    "writeACK": "2026-10-12T21:42:40.735096Z",
+    "endpointReceipt": "/tmp/dreamtides-executor-01a12e91/578-endpoint-ack.json",
+    "tail": "Actual endpoint-to-commit tail is emitted in578-commit.json and final handoff; no guessed commit timestamp is embedded."
+  },
+  "sourceManifest": {
+    "src/engine/view/determinize.ts": "ae7442c964128575c1aef8935ab2ccc783ae8f73d7eda931393c30ac519c10d7",
+    "src/engine/effects/primitives/contracts/disable-source-privacy.contracts.ts": "9ab208758c818bdf9fd4b24313ce7b562cb5383190498b097545fd8c41f0e6e2"
+  },
+  "footprint": {
+    "productionChurn": 8,
+    "testNetLines": 72,
+    "moduleLines": 359,
+    "newCases": 8,
+    "newEntrypoints": 0,
+    "newJsdom": 0
+  },
+  "sourceFallout": "No changed/exported API, importer, persisted schema, gameplay, default privacy or normal presentation. Both prior pool lines restored exactly; only early eight-line guard persists.",
+  "fiveFailurePaths": {
+    "midStepError": "Synchronous determinize guard throws before tag-dependent member prebinding; four malformed descriptors test error and unchanged caller input. No new pending engine step.",
+    "partialWrite": "Same caller-immutability contracts prove rejection publishes no mutated input or partially returned state. Reconstruction output is returned only on success.",
+    "reloadRestart": "No new persisted field or reconstruction protocol; existing missing/null/member/obligation/ceased controls remain green in owning module. Reload has no new branch.",
+    "invalidStaleInput": "Four recognized-tag combination controls directly cover malformed API input; stale gameplay prompt applicability is unchanged because this pure API does not accept prompt IDs or intents.",
+    "concurrentActors": "No shared sampling state or actor arbitration added; each deterministic reconstruction operates on caller input independently. Concurrent gameplay arbitration is outside this changed boundary."
+  },
+  "commands": {
+    "stage1": "/tmp/dreamtides-executor-01a12e91/578-stage1.json",
+    "focus": "/tmp/dreamtides-executor-01a12e91/578-focus.json",
+    "typecheck": "/tmp/dreamtides-executor-01a12e91/578-typecheck.json",
+    "direct-counterfactual": "/tmp/dreamtides-executor-01a12e91/578-direct-counterfactual.json",
+    "reconcile-counterfactual": "/tmp/dreamtides-executor-01a12e91/578-reconcile-counterfactual.json",
+    "focus-final": "/tmp/dreamtides-executor-01a12e91/578-focus-final.json",
+    "typecheck-final": "/tmp/dreamtides-executor-01a12e91/578-typecheck-final.json",
+    "review": "/tmp/dreamtides-executor-01a12e91/578-review.json",
+    "knip": "/tmp/dreamtides-executor-01a12e91/578-knip.json"
+  },
+  "outcomes": {
+    "stage1": "Three real public-engine cases: intended mixed obligation/ceased rejection failure, direct known-producer and forced-reconciliation controls pass; no fixture errors.",
+    "counterfactuals": "Each isolated prior pool line causes its corresponding two-controller contracts to fail. Both repairs restored in finally with SHAae7442c964128575c1aef8935ab2ccc783ae8f73d7eda931393c30ac519c10d7. No lasting pool change.",
+    "focusFinal": "22 passed owning cases, 2232 other hub cases skipped,2.942558s. Eight added cases.",
+    "review": "91files3716tests passed,33.091328s; typecheck/lint/cycles also green.",
+    "knip": "Exit0/4.303952s."
+  },
+  "authorCorrection": {
+    "cause": "Malformed synthetic descriptors built with optional spreads did not satisfy the view union; explicit union-shaped descriptors preserve actual malformed runtime tags without casts.",
+    "start": "2026-10-12T21:43:57.959929+00:00",
+    "end": "2026-10-12T21:45:21.466516+00:00",
+    "seconds": 83.506587,
+    "minutes": 1.3917764499999998,
+    "failedCommandSeconds": 14.65175104199443,
+    "basis": "Complete first failed typecheck start through corrected isolated typecheck end, including investigation, editing and verification."
+  },
+  "priorCoverage": "Predecessor hv-wp4u certified full/general200 and desktop/mobile native evidence apply to unchanged normal producer semantics, not claimed as new578 executions. No local heavy/browser job launched.",
+  "resources": {
+    "ownInstrumentedPids": [
+      20819,
+      20885,
+      42191,
+      42203,
+      57112,
+      57117,
+      58199,
+      58202,
+      60350,
+      60351,
+      60368,
+      60369,
+      61534,
+      61535,
+      61552,
+      61553,
+      99518,
+      99535
+    ],
+    "precommitAllAbsentAt": "2026-10-12T21:46:29.764135+00:00",
+    "parentEndpoint": "24known identities freshly absent at endpoint ACK. No owned browser, server, provider, lease or heavy job launched.",
+    "finiteReads": "Read/tool operations not independently instrumented retain tool wall observations; no subprocess clocks or CPU durations invented."
+  },
+  "preExisting": "docs/plan/evidence/pre-existing/hv-umm2.578.md"
+}

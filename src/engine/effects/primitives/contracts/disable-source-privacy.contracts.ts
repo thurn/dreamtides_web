@@ -1,7 +1,7 @@
 /** Hidden producer contracts compare public views and ordinary future play. */
 import { describe, expect, it } from "vitest";
 import { activated, all, anyCharacter, characterYouControl, energy, event, everyIn } from "../../../dsl/builders";
-import { triggered, whenDraw } from "../../../dsl/triggers";
+import { triggered, whenDraw, whenOpponentPlays } from "../../../dsl/triggers";
 import type { Condition } from "../../../dsl/types";
 import type { EngineCardDefinition } from "../../../catalog";
 import { createEngine } from "../../../engine";
@@ -91,6 +91,29 @@ function ceasedWorld(visibleTargets: number) {
   const lists = { player: [target.id, source.id, copy.id, conceal.id].map((cardId) => ({ cardId })),
     enemy: Array.from({ length: visibleTargets }, () => ({ cardId: target.id })) };
   return { engine, state, observed, created, lists, view: engine.view(state, "enemy") };
+}
+/** Real revelation precedes the sole hidden producer's second opponent-play trigger. */
+function knownProducerWorld(condition: Condition | null, side: Side) {
+  const other: Side = side === "player" ? "enemy" : "player";
+  const producer: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x578001), abilities: () => [
+    triggered(whenOpponentPlays({ cardType: "event" }, 2), p.disableTriggers(all(anyCharacter()), "permanent", condition, "triggeredAndActivated"), { zone: "hand" }),
+  ] };
+  const target: EngineCardDefinition = { ...v.vanilla2, id: syntheticId(0x578002), abilities: () => [activated([energy(0)], p.gainPoints(1))] };
+  const reveal: EngineCardDefinition = { ...v.event0, id: syntheticId(0x578003), abilities: () => [event(p.reveal("opponent"))] };
+  const starter: EngineCardDefinition = { ...v.event0, id: syntheticId(0x578004), abilities: () => [event(p.sequence())] };
+  const engine = createEngine(testCatalog([producer, target, reveal, starter]));
+  const initial = boardState(engine.catalog, { active: side, phase: "day", [side]: { back: [target.id], hand: [reveal.id, starter.id], energy: 8 }, [other]: { hand: [producer.id], energy: 8 } });
+  let state = initial.state;
+  const events = [];
+  for (const card of initial.ids[side].hand) {
+    const cast = engine.apply(state, side, { kind: "play", card, from: "hand" }, NO_PROMPTS);
+    const done = passUntil(engine, cast.state, next => next.stack.length === 0 && next.triggerQueue.length === 0);
+    state = done.state; events.push(...cast.events, ...done.events);
+  }
+  const view = engine.view(state, side), id = initial.ids[other].hand[0];
+  const lists = { [side]: [target.id, reveal.id, starter.id].map(cardId => ({ cardId })), [other]: [{ cardId: producer.id }] };
+  // Both named sides remain explicit in the deck-list contract.
+  return { engine, state, view, id, other, events, lists: { player: lists.player, enemy: lists.enemy } };
 }
 const sliceOf = (committed: BattleState): BattleSlice => ({ committed, inFlight: null, publishedEvents: 0, attempt: 0 });
 function applied(outcome: IntentOutcome): BattleSlice {
@@ -184,6 +207,55 @@ describe("combined disabling private source attribution", () => {
     expect(next.floating.every((effect) => effect.sourceObservedBy?.includes(side) === false)).toBe(true);
   });
 
+  it.each(["member-obligation", "member-ceased", "obligation-ceased", "all"])("rejects ambiguous %s provenance without mutating its caller", (tags) => {
+    const { engine, view, lists } = knownProducerWorld(null, "player");
+    const effect = view.floating[0];
+    const source = tags === "member-obligation" ? { member: 0, obligation: effect.id }
+      : tags === "member-ceased" ? { member: 0, ceased: effect.id }
+        : tags === "obligation-ceased" ? { obligation: effect.id, ceased: effect.id }
+          : { member: 0, obligation: effect.id, ceased: effect.id };
+    const invalid = { ...view, floating: [{ ...effect, rememberedSource: source }] };
+    const before = structuredClone(invalid);
+    expect(() => engine.determinize(invalid, lists, () => 0)).toThrow(/ambiguous producer provenance/);
+    expect(invalid).toEqual(before);
+  });
+
+  it.each(SIDES)("directly samples the known physical producer or absence for %s", (side) => {
+    const { engine, state, view, lists, id, other, events } = knownProducerWorld(null, side);
+    expect(state.floating).toHaveLength(1); expect(state.floating[0].source).toBe(id);
+    expect(view.floating[0].source).toBeNull();
+    expect(view.sides[other].hand.known).toEqual([{ index: 0, id }]);
+    const started = events.filter(item => item.kind === "effectStarted");
+    expect(started).toHaveLength(1);
+    expect(eventSeenBy(started[0], side, state)).toEqual({ ...started[0], source: null });
+    // This world has only two semantic choices: the known hand instance and absence.
+    const samples = [0, 1 - Number.EPSILON].map(value => engine.determinize(view, lists, () => value));
+    expect(samples.some(sample => sources(sample)[0] === id)).toBe(true);
+    expect(samples.some(sample => sample.instances[sources(sample)[0]] === undefined)).toBe(true);
+    for (const sample of samples) {
+      expect(sample.instances[id]).toEqual(state.instances[id]);
+      expect(sample.sides[other].hand).toEqual([id]);
+      expect(comparableView(engine.view(sample, side))).toEqual(comparableView(view));
+      expect(engine.legalActions(sample, side)).toEqual(engine.legalActions(state, side));
+    }
+  });
+
+  it.each(SIDES)("reconciles an absent initial choice to the sole known hand producer for %s", (side) => {
+    const direct = knownProducerWorld(null, side);
+    const absentEntropy = [0, 1 - Number.EPSILON].find(value => {
+      const sample = direct.engine.determinize(direct.view, direct.lists, () => value);
+      return sample.instances[sources(sample)[0]] === undefined;
+    });
+    if (absentEntropy === undefined) throw new Error("Missing semantic absent-source control");
+    const { engine, state, view, lists, id, other } = knownProducerWorld({ cond: "sourceIn", zone: "hand" }, side);
+    expect(state.floating[0].source).toBe(id);
+    const sample = engine.determinize(view, lists, () => absentEntropy);
+    expect(sources(sample)).toEqual([id]);
+    expect(sample.instances[id]).toEqual(state.instances[id]); expect(sample.sides[other].hand).toEqual([id]);
+    expect(comparableView(engine.view(sample, side))).toEqual(comparableView(view));
+    expect(engine.legalActions(sample, side)).toEqual(engine.legalActions(state, side));
+  });
+
   it("keeps later physical revelation separate from causal attribution and validates strict modes", () => {
     const { engine, world } = fixture(null), original = world(true);
     const observed = structuredClone(original.state);
@@ -257,7 +329,7 @@ describe("combined disabling private source attribution", () => {
     ];
     for (const seen of invalid) {
       const before = structuredClone(seen);
-      expect(() => engine.determinize(seen, lists, () => 0.4)).toThrow(/invalid ceased source anchor/);
+      expect(() => engine.determinize(seen, lists, () => 0.4)).toThrow(/invalid ceased source anchor|ambiguous producer provenance/);
       expect(seen).toEqual(before);
     }
   });

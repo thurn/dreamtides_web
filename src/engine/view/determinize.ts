@@ -331,6 +331,14 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     return { id: effect.id, controller: effect.controller, source: rememberedSource(effect.source), timestamp: effect.timestamp,
       expiry: { at: "never" }, change: { ...copy(effect.change), instance: target } };
   }));
+  // Validate combined provenance before any tag-dependent reconstruction.
+  for (const effect of view.floating) {
+    const source = effect.rememberedSource;
+    if (effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated" && source != null &&
+        ["member", "obligation", "ceased"].filter(tag => tag in source).length !== 1) {
+      throw new Error("Cannot determinize ambiguous producer provenance");
+    }
+  }
   // Bind combined sources before captured cohorts clone the shared member map.
   for (const effect of view.floating) {
     if (effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated" && effect.rememberedSource != null && "member" in effect.rememberedSource) {
