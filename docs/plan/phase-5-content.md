@@ -261,7 +261,7 @@ composition beads skip it.
    staging and engine resolution failures before starting a browser. Use the
    same `--variants` and `--as` options for a focused preflight and sweep.
    Then run the browser sweep on the bead's port:
-   `node scripts/qa/card-sweep.mjs --bead <id> --cards <entity uuids> --port <port>`,
+   `node scripts/qa/card-sweep.mjs --bead <id> --cards <entity uuids>`,
    with the bead's entity UUIDs comma-separated. Its defaults cover every
    variant the card can take, base and amplified among them, `as=player` and
    `as=enemy`. Every `fail` is fixed and re-swept.

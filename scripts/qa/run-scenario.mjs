@@ -633,7 +633,10 @@ export async function openQaSession(options) {
     ownerPath = lease.ownerPath;
     say(`holding browser slot ${String(lease.slot)} (${lease.path})`);
     signal.throwIfAborted();
-    port = options.port ?? (await findFreePort(lease.slot));
+    const firstPort = FIRST_QA_PORT + lease.slot * QA_PORTS_PER_SLOT;
+    const requestedFits = options.port !== null && options.port >= firstPort && options.port < firstPort + QA_PORTS_PER_SLOT;
+    port = requestedFits ? Number(options.port) : await findFreePort(lease.slot);
+    if (options.port !== null && !requestedFits) say(`requested port ${String(options.port)} is outside browser slot ${String(lease.slot)}; selected port ${String(port)}`);
     if (!(await isPortFree(port))) throw new Error(`port ${String(port)} is in use`);
     signal.throwIfAborted();
     const baseUrl = `http://localhost:${String(port)}`;

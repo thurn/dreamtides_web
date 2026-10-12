@@ -1,0 +1,623 @@
+{
+  "bead": "hv-umm2.528",
+  "implementationWindow": {
+    "startUtc": "2026-10-12T11:27:19.664590+00:00",
+    "startKind": "parent post-spawn proxy; actual helper/model start unknown",
+    "actualHelperStartKnown": false,
+    "endUtc": "2026-10-12T11:45:22Z",
+    "endKind": "parent-authorized precommit metadata proxy; actual Git separately receipted",
+    "elapsedProxyMinutes": 18.0389235
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementMin": {
+        "source": "Normalized parent post-spawn/precommit proxies; actual helper/model start unknown",
+        "actualGitReceipt": "/tmp/dreamtides-slot-ports-528/helper-receipts/commit.json"
+      },
+      "hostLoad": {
+        "measuredFor": "final npm run review (final-review) start"
+      }
+    }
+  },
+  "contract": {
+    "negative": "Unchanged production selected identical requested ports in distinct slots; four amended public lifecycle cases fail, seven unrelated cases pass.",
+    "positive": "Held-slot requested bounds, fresh queued reopening under another held slot, same-slot occupied request strict failure without server/MCP startup.",
+    "fixture": "Real kernel locks and contained synthetic server children; synthetic network/HTTP/listener/MCP boundaries, exact public openQaSession body.",
+    "testFileLines": 500,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "newCases": 5,
+    "existingAssertionsAndCommentsPreserved": true,
+    "expectedExamples": [
+      [
+        5174,
+        [
+          5174,
+          5274
+        ]
+      ],
+      [
+        5274,
+        [
+          5174,
+          5274
+        ]
+      ],
+      [
+        5374,
+        [
+          5174,
+          5274
+        ]
+      ],
+      [
+        65500,
+        [
+          5174,
+          5274
+        ]
+      ],
+      [
+        5175,
+        [
+          5175,
+          5274
+        ]
+      ],
+      [
+        5275,
+        [
+          5174,
+          5275
+        ]
+      ]
+    ],
+    "oracle": "Explicit public request/expected-per-slot examples, including free nonfirst ports; no production conditional copied."
+  },
+  "validationReceipts": {
+    "start": {
+      "observation": "2026-10-12T11:28:14.689257+00:00",
+      "meaning": "post-install helper observation; actual spawn/install process clocks unavailable",
+      "hostLoad": [
+        6.52978515625,
+        6.9423828125,
+        9.1064453125
+      ],
+      "npmInstall": {
+        "exitCode": 0,
+        "packagesAdded": 388,
+        "reportedSeconds": 2,
+        "exactExecutionSeconds": null,
+        "processIdentity": null
+      }
+    },
+    "fixture-setup-failure": {
+      "failure": "size assertion before write; seven fixture blank separators insufficient for first draft",
+      "sourceWrites": false,
+      "subsequentTest": "original suite baseline only; not negative witness"
+    },
+    "baseline": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 68292,
+      "pgid": 68292,
+      "startUtc": "2026-10-12T11:31:33.025276+00:00",
+      "hostLoadStart": [
+        24.75244140625,
+        14.916015625,
+        11.931640625
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:31:42.019759+00:00",
+      "elapsedS": 8.995898500004841,
+      "hostLoadEnd": [
+        22.2373046875,
+        14.70361328125,
+        11.890625
+      ]
+    },
+    "unchanged-negative": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 76543,
+      "pgid": 76543,
+      "startUtc": "2026-10-12T11:32:31.662399+00:00",
+      "hostLoadStart": [
+        17.041015625,
+        14.3427734375,
+        11.90966796875
+      ],
+      "exit": 1,
+      "endUtc": "2026-10-12T11:32:41.819675+00:00",
+      "elapsedS": 10.158700415995554,
+      "hostLoadEnd": [
+        15.7177734375,
+        14.1494140625,
+        11.86962890625
+      ]
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-slots.test.mjs",
+        "scripts/qa/card-sweep.test.mjs",
+        "scripts/qa/browser-lease-slots.test.mjs",
+        "scripts/qa/browser-lease-order.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 83762,
+      "pgid": 83762,
+      "startUtc": "2026-10-12T11:33:05.793629+00:00",
+      "hostLoadStart": [
+        14.615234375,
+        13.95703125,
+        11.8623046875
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:33:18.655712+00:00",
+      "elapsedS": 12.863448834003066,
+      "hostLoadEnd": [
+        18.478515625,
+        14.85400390625,
+        12.21875
+      ]
+    },
+    "intermediate-focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-slots.test.mjs",
+        "scripts/qa/card-sweep.test.mjs",
+        "scripts/qa/browser-lease-slots.test.mjs",
+        "scripts/qa/browser-lease-order.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 78551,
+      "pgid": 78551,
+      "startUtc": "2026-10-12T11:37:00.959972+00:00",
+      "hostLoadStart": [
+        21.89111328125,
+        17.5361328125,
+        13.88818359375
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:37:13.954284+00:00",
+      "elapsedS": 12.995768291999411,
+      "hostLoadEnd": [
+        24.75927734375,
+        18.4287109375,
+        14.2724609375
+      ]
+    },
+    "intermediate-full": {
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 31914,
+      "pgid": 31914,
+      "startUtc": "2026-10-12T11:34:50.418358+00:00",
+      "hostLoadStart": [
+        10.82275390625,
+        13.54052734375,
+        11.99560546875
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:36:25.951260+00:00",
+      "elapsedS": 95.53330037499836,
+      "hostLoadEnd": [
+        19.8349609375,
+        16.978515625,
+        13.564453125
+      ]
+    },
+    "intermediate-heavy-wrapper": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-slot-ports-528/helper-receipts/heavy.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 31905,
+      "pgid": 31905,
+      "startUtc": "2026-10-12T11:34:50.368401+00:00",
+      "hostLoadStart": [
+        10.82275390625,
+        13.54052734375,
+        11.99560546875
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:36:25.960200+00:00",
+      "elapsedS": 95.59236095900269,
+      "hostLoadEnd": [
+        19.8349609375,
+        16.978515625,
+        13.564453125
+      ]
+    },
+    "intermediate-heavy-acquired": {
+      "event": "heavy kernel lock acquired (observed inside lockf command)",
+      "observedUtc": "2026-10-12T11:34:50.392766+00:00",
+      "pid": 31907,
+      "pgid": 31905,
+      "hostLoad": [
+        10.82275390625,
+        13.54052734375,
+        11.99560546875
+      ]
+    },
+    "intermediate-heavy-released": {
+      "event": "full execution settled; lockf releases after command exits",
+      "observedUtc": "2026-10-12T11:36:25.955978+00:00",
+      "exit": 0
+    },
+    "table-setup-failure": {
+      "failure": "Readable typed table increases four lines; no remaining admitted fixture/case blank separators; prewrite assertion stops source edit.",
+      "sourceWrites": false,
+      "subsequentTest": "Unchanged four-row intermediate focused run, not final six-row coverage."
+    },
+    "final-focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/run-scenario-slots.test.mjs",
+        "scripts/qa/card-sweep.test.mjs",
+        "scripts/qa/browser-lease-slots.test.mjs",
+        "scripts/qa/browser-lease-order.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 15792,
+      "pgid": 15792,
+      "startUtc": "2026-10-12T11:38:55.209969+00:00",
+      "hostLoadStart": [
+        11.71142578125,
+        16.1171875,
+        13.8603515625
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:39:10.380362+00:00",
+      "elapsedS": 15.1722607079937,
+      "hostLoadEnd": [
+        11.65966796875,
+        15.89697265625,
+        13.8212890625
+      ]
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 16105,
+      "pgid": 16105,
+      "startUtc": "2026-10-12T11:33:53.443346+00:00",
+      "hostLoadStart": [
+        15.77099609375,
+        14.65625,
+        12.2568359375
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:34:12.114443+00:00",
+      "elapsedS": 18.672616709001886,
+      "hostLoadEnd": [
+        15.189453125,
+        14.6015625,
+        12.27978515625
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 30591,
+      "pgid": 30591,
+      "startUtc": "2026-10-12T11:34:36.347173+00:00",
+      "hostLoadStart": [
+        12.07666015625,
+        13.9111328125,
+        12.09716796875
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:34:39.680222+00:00",
+      "elapsedS": 3.3344538750025094,
+      "hostLoadEnd": [
+        11.58984375,
+        13.77978515625,
+        12.06103515625
+      ]
+    },
+    "final-review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 26616,
+      "pgid": 26616,
+      "startUtc": "2026-10-12T11:39:26.033725+00:00",
+      "hostLoadStart": [
+        10.767578125,
+        15.49267578125,
+        13.712890625
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:39:49.767030+00:00",
+      "elapsedS": 23.73481945799722,
+      "hostLoadEnd": [
+        10.04052734375,
+        14.96435546875,
+        13.57470703125
+      ]
+    },
+    "final-knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 41437,
+      "pgid": 41437,
+      "startUtc": "2026-10-12T11:40:03.550192+00:00",
+      "hostLoadStart": [
+        9.11767578125,
+        14.60302734375,
+        13.46240234375
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:40:06.901524+00:00",
+      "elapsedS": 3.353104042005725,
+      "hostLoadEnd": [
+        8.86767578125,
+        14.4599609375,
+        13.41845703125
+      ]
+    },
+    "full": {
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 43913,
+      "pgid": 43913,
+      "startUtc": "2026-10-12T11:41:49.534635+00:00",
+      "hostLoadStart": [
+        6.51171875,
+        11.8427734375,
+        12.501953125
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:43:13.224285+00:00",
+      "elapsedS": 83.69052612499945,
+      "hostLoadEnd": [
+        7.421875,
+        11.09130859375,
+        12.16552734375
+      ]
+    },
+    "heavy-wrapper": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-slot-ports-528/helper-receipts/heavy.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 41699,
+      "pgid": 41699,
+      "startUtc": "2026-10-12T11:40:17.727296+00:00",
+      "hostLoadStart": [
+        7.95849609375,
+        14.08203125,
+        13.2958984375
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:43:13.231979+00:00",
+      "elapsedS": 175.5046770839981,
+      "hostLoadEnd": [
+        7.421875,
+        11.09130859375,
+        12.16552734375
+      ]
+    },
+    "heavy-acquired": {
+      "event": "heavy kernel lock acquired (observed inside lockf command)",
+      "observedUtc": "2026-10-12T11:41:49.511909+00:00",
+      "pid": 43911,
+      "pgid": 41699,
+      "hostLoad": [
+        6.51171875,
+        11.8427734375,
+        12.501953125
+      ]
+    },
+    "heavy-released": {
+      "event": "full execution settled; lockf releases after command exits",
+      "observedUtc": "2026-10-12T11:43:13.227915+00:00",
+      "exit": 0
+    },
+    "native-smoke": {
+      "command": [
+        "node",
+        "/tmp/dreamtides-slot-ports-528/helper-receipts/native-smoke.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 63429,
+      "pgid": 63429,
+      "startUtc": "2026-10-12T11:43:38.952887+00:00",
+      "hostLoadStart": [
+        5.34716796875,
+        10.23681640625,
+        11.81787109375
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:43:42.524976+00:00",
+      "elapsedS": 3.5731832919991575,
+      "hostLoadEnd": [
+        5.34716796875,
+        10.23681640625,
+        11.81787109375
+      ]
+    },
+    "final-schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "pid": 64733,
+      "pgid": 64733,
+      "startUtc": "2026-10-12T11:44:34.394832+00:00",
+      "hostLoadStart": [
+        4.17724609375,
+        9.05419921875,
+        11.275390625
+      ],
+      "exit": 0,
+      "endUtc": "2026-10-12T11:44:34.455162+00:00",
+      "elapsedS": 0.06169016700005159,
+      "hostLoadEnd": [
+        4.17724609375,
+        9.05419921875,
+        11.275390625
+      ]
+    }
+  },
+  "browser": {
+    "startUtc": "2026-10-12T11:43:39.054Z",
+    "endUtc": "2026-10-12T11:43:42.520Z",
+    "pid": 63429,
+    "requestedPort": 65500,
+    "heldSlot": 1,
+    "actualPort": 5274,
+    "serverPid": 63457,
+    "owner": {
+      "token": "20536e3e-0f2f-456a-95c7-88627141155b",
+      "pid": 63429,
+      "bead": "hv-umm2.528",
+      "label": "outside-port-smoke",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-528-slot-ports",
+      "slot": 1,
+      "port": 5274,
+      "startedAt": "2026-10-12T11:43:40.426Z",
+      "providerState": "active",
+      "mcpSessionId": "2720bc88-42ee-4559-a8f9-5669c93a6e21",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25"
+    },
+    "report": {
+      "result": {
+        "url": "http://localhost:5274/",
+        "root": "HTML"
+      },
+      "error": null,
+      "log": [],
+      "captures": [],
+      "caps": [],
+      "traces": []
+    },
+    "cleanup": {
+      "providerClose": "production close settled",
+      "serverIdentity": null,
+      "ownerRecord": false,
+      "serverRecord": false,
+      "listeners": "",
+      "kernelReacquired": true
+    },
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.528/invocations/run-Wl60XU",
+    "scope": "One actual owned isolated MCP context and server; root navigation/read/Caps plus held-slot fallback diagnostic. Concurrent/yield behavior covered by synthetic public two-slot contracts; no product screenshots needed."
+  },
+  "speedClaim": null,
+  "historicalValidation": "First focused/review/Knip/full preceded final free-nonfirst public examples. Final changed contracts receive renewed focused/review/Knip/full before native QA.",
+  "heavyLease": {
+    "wrapperStartUtc": "2026-10-12T11:40:17.727296+00:00",
+    "acquiredObservationUtc": "2026-10-12T11:41:49.511909+00:00",
+    "wrapperToAcquiredObservedS": 91.784613,
+    "scope": "Includes acquisition and command startup; not isolated kernel wait. Actual full execution separately timed.",
+    "workers": 2
+  },
+  "validationTotals": {
+    "focused": {
+      "files": 4,
+      "cases": 42
+    },
+    "review": {
+      "files": 5,
+      "cases": 65
+    },
+    "full": {
+      "files": 347,
+      "cases": 5012
+    }
+  },
+  "sourceFreeze": {
+    "README.md": "8ade2105a2daffd29be1a49a3a01b5f7a43f2d30f754dbff2f63e1ea2d617527",
+    "docs/plan/phase-5-content.md": "fd797941c71384ec7e255af6daac017f1c13a92c0125d9bf56dc2f5f8481cec3",
+    "scripts/qa/run-scenario.mjs": "0c509df21a423509bf2f84a0118a98bce9df5288a4dac377ec82925b956a0be3",
+    "scripts/qa/run-scenario-slots.test.mjs": "b93a815491ea3631ac28bb17251a02b483cf158bb29833dd1558afdba583c1c0"
+  },
+  "cleanup": {
+    "observedUtc": "2026-10-12T11:44:25.913185+00:00",
+    "recordedGroups": [
+      15792,
+      16105,
+      26616,
+      30591,
+      31905,
+      31914,
+      41437,
+      41699,
+      43913,
+      63429,
+      63457,
+      68292,
+      76543,
+      78551,
+      83762
+    ],
+    "members": [],
+    "sourceFreezeUnchanged": true
+  },
+  "postInstallObservation": {
+    "observedUtc": "2026-10-12T11:28:14.689257+00:00",
+    "meaning": "post-install helper observation; actual spawn/install process clocks unavailable",
+    "npmInstall": {
+      "exitCode": 0,
+      "packagesAdded": 388,
+      "reportedSeconds": 2,
+      "exactExecutionSeconds": null,
+      "processIdentity": null
+    }
+  }
+}

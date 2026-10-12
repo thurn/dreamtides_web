@@ -120,7 +120,7 @@ node scripts/qa/run-scenario.mjs smoke --bead <bead-id> --prod   # vite build + 
 | Option | Effect |
 | --- | --- |
 | `--bead <id>` | Required. Captures and the report go to `artifacts/qa/<id>/` of the primary checkout |
-| `--port <n>` | Serve on `n` (5174 or higher); default: the first free port of the run's browser slot range, from `5174 + 100 × slot` |
+| `--port <n>` | Serve on `n` when it belongs to the held browser slot; otherwise use that slot's first free port and report the choice. Default: the first free port from `5174 + 100 × slot` |
 | `--prod` | Build into a temporary directory and serve it with `vite preview`; unminified, so `__caps` names real identifiers |
 | `--minify` | With `--prod`, keep the production minifier |
 | `--cwd <checkout>` | Serve another checkout, such as a detached base worktree outside the repository |
@@ -152,12 +152,15 @@ failure, signal, or crash never closes or erases another live run's.
   refreshed for 30 s, so a killed waiter never blocks the queue. The kernel
   locks alone exclude holders: a process that takes a lock without a ticket
   may run ahead of the queue, but never shares a slot.
-- **Ports.** A run serves with a strict port on `--port`, or on the first
-  free port of its slot's range, `5174 + 100 × s` upward
-  (`QA_PORTS_PER_SLOT`), so two slot holders never pick the same port. Once
-  the server answers, every process listening on the port must descend from
-  the run's own server, or the run fails rather than use a server it did not
-  start.
+- **Ports.** Slot `s` owns ports from `5174 + 100 × s` through the next
+  99 ports (`QA_PORTS_PER_SLOT`). A run honors `--port` inside its held
+  slot's range with a strict port; an occupied requested port fails. A request
+  outside the held slot's range selects its first free port and reports the
+  choice. Each fresh lease, including a sweep reopening after yielding,
+  selects against its current slot, so two slot holders choose distinct
+  ports. Once the server answers, every process listening on the port must
+  descend from the run's own server, or the run fails rather than use a
+  server it did not start.
 - **Startup.** Runs serving the same checkout start their servers one at a
   time, under a kernel lock keyed by the checkout
   (`artifacts/qa/.serve-<hash>.lock`), because workspace preparation is not

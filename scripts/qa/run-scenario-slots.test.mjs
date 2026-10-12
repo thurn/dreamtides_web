@@ -12,12 +12,12 @@ import { lockHeld } from "./browser-lease-fixture.mjs";
 import { openQaSession } from "./run-scenario.mjs";
 import * as runtime from "../screenshot-runtime.mjs";
 import * as ownership from "./server-ownership.mjs";
-
 // Concurrent sessions in one test process. The native slot locks, evidence
 // locks, and synthetic server processes are real; sockets, HTTP readiness,
 // the listener check, and the MCP client are synthetic, one per session.
 const fixtureIo = vi.hoisted(() => ({
   prod: false,
+  occupied: /** @type {number | null} */ (null),
   logFds: /** @type {number[]} */ ([]),
   buildDirs: /** @type {string[]} */ ([]),
   gitCwd: /** @type {string | null} */ (null),
@@ -79,9 +79,9 @@ vi.mock("node:net", async (importOriginal) => {
   const { EventEmitter } = await import("node:events");
   return {
     ...actual,
-    createConnection: vi.fn(() => {
+    createConnection: vi.fn((/** @type {{ port: number }} */ options) => {
       const socket = Object.assign(new EventEmitter(), { destroy() {} });
-      queueMicrotask(() => socket.emit("error", new Error("synthetic unused port")));
+      queueMicrotask(() => fixtureIo.occupied === options.port ? socket.emit("connect") : socket.emit("error", new Error("synthetic unused port")));
       return socket;
     }),
     createServer: vi.fn(() => {
@@ -95,7 +95,6 @@ vi.mock("node:net", async (importOriginal) => {
     }),
   };
 });
-
 const sessions = /** @type {Awaited<ReturnType<typeof openQaSession>>[]} */ ([]);
 const directories = /** @type {string[]} */ ([]);
 const realKill = process.kill.bind(process);
@@ -130,14 +129,13 @@ afterEach(async () => {
     child.kill("SIGKILL");
     await exited;
   }
-  fixtureIo.gitCwd = null; fixtureIo.prod = false; fixtureIo.logFds.splice(0); fixtureIo.buildDirs.splice(0);
+  fixtureIo.gitCwd = null; fixtureIo.prod = false; fixtureIo.occupied = null; fixtureIo.logFds.splice(0); fixtureIo.buildDirs.splice(0);
   fixtureIo.ready.clear();
   fixtureIo.servers.splice(0);
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
   for (const path of directories.splice(0)) rmSync(path, { recursive: true, force: true });
 });
-
 function primaryFixture() {
   const root = join(realpathSync(mkdtempSync(join(tmpdir(), "dreamtides-qa-slots-"))), "primary");
   directories.push(join(root, ".."));
@@ -148,14 +146,12 @@ function primaryFixture() {
   fixtureIo.gitCwd = root;
   return { root, path: browserLeasePath(root) };
 }
-
-/** @param {string} root @param {string} label */
-async function open(root, label) {
-  const session = await openQaSession({ bead: "synthetic-slots", label, port: null, prod: false, minify: false, cwd: root });
+/** @param {string} root @param {string} label @param {number | null} [port] */
+async function open(root, label, port = null) {
+  const session = await openQaSession({ bead: "synthetic-slots", label, port, prod: false, minify: false, cwd: root });
   sessions.push(session);
   return session;
 }
-
 /** @param {runtime.McpToolResult} [result] Per-client result; failing labels reject close. */
 function connectClients(result = { content: [{ type: "text", text: "### Result\n{}" }] }) {
   return vi.spyOn(runtime, "connectPlaywrightMcp").mockImplementation((options) => Promise.resolve({
@@ -164,10 +160,8 @@ function connectClients(result = { content: [{ type: "text", text: "### Result\n
     close: options?.name?.includes("failing") === true ? vi.fn().mockRejectedValue(new Error("synthetic close failure")) : vi.fn().mockResolvedValue(undefined),
   }));
 }
-
 /** @param {number | null} pid */
 const serverRunning = (pid) => fixtureIo.children.some((child) => child.pid === pid && child.exitCode === null && child.signalCode === null);
-
 /** @param {string} source @param {string} from @param {string} to */
 function fixtureReplace(source, from, to) {
   if (source.split(from).length !== 2) throw new Error(`fixture boundary drift: ${from}`);
@@ -405,10 +399,10 @@ describe("concurrent QA sessions", () => {
     expect(existsSync(session.ownerPath)).toBe(uncertain);
     if (uncertain) expect(readFileSync(session.ownerPath, "utf8")).toContain("close-unconfirmed");
   });
-  it("runs two sessions on separate slots, ports, servers, and records, and queues a third for a released slot", async () => {
+  it.each(/** @type {[number, [number, number]][]} */ ([[5174, [5174, 5274]], [5274, [5174, 5274]], [5374, [5174, 5274]], [65500, [5174, 5274]], [5175, [5175, 5274]], [5275, [5174, 5275]]]))("keeps requested port %s inside each held slot across queued reopening", async (requested, expected) => {
     const { root, path } = primaryFixture();
-    connectClients();
-    const [a, b] = await Promise.all([open(root, "a"), open(root, "b")]);
+    const connect = connectClients();
+    const [a, b] = await Promise.all([open(root, "a", requested), open(root, "b", requested)]);
     expect(new Set([a.slot, b.slot])).toEqual(new Set([0, 1]));
     expect(a.port).not.toBe(b.port);
     expect(a.serverPid).not.toBe(b.serverPid);
@@ -416,19 +410,25 @@ describe("concurrent QA sessions", () => {
     expect(fixtureIo.servers.map((event) => event.split(" ")[0])).toEqual(["spawn", "ready", "spawn", "ready"]);
     expect([a, b].every((session) => serverRunning(session.serverPid))).toBe(true);
     for (const session of [a, b]) {
+      expect(session.port).toBe(expected[session.slot]);
       expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).toMatchObject({ slot: session.slot, port: session.port, pid: process.pid,
         mcpSessionId: `synthetic-qa-${session === a ? "a" : "b"}-${String(process.pid)}`, mcpUrl: "http://localhost:8931/mcp", mcpProtocolVersion: "2025-11-25" });
     }
     // Only slot 0's record is the one single-slot peers read.
     expect([a, b].filter((session) => session.ownerPath === `${path}.owner.json`).map((session) => session.slot)).toEqual([0]);
-
-    const third = open(root, "c");
+    const third = open(root, "c", a.port);
     while (browserLeaseWaiters(path) === 0) await delay(20);
-    await a.close();
+    await b.close();
     const c = await third;
-    expect(c.slot).toBe(a.slot);
-    expect(c.port).not.toBe(b.port);
-    expect(c.ownerPath).toBe(a.ownerPath);
+    expect(c.slot).toBe(b.slot);
+    expect(c.port).not.toBe(a.port);
+    expect(c.ownerPath).toBe(b.ownerPath);
+    expect(c.port).toBe(5174 + c.slot * 100); expect(serverRunning(a.serverPid)).toBe(true);
+    await c.close(); const spawned = fixtureIo.servers.length; const connected = connect.mock.calls.length;
+    fixtureIo.occupied = c.port;
+    await expect(open(root, "occupied", c.port)).rejects.toThrow(/is in use/);
+    expect(fixtureIo.servers.length).toBe(spawned); expect(connect.mock.calls.length).toBe(connected);
+    expect(lockHeld(browserSlotPath(path, c.slot))).toBe(false);
   });
   it("quarantines only the slot whose cleanup failed and leaves the other session live", async () => {
     const { root, path } = primaryFixture();
