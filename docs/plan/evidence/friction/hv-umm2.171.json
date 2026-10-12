@@ -1,0 +1,40 @@
+{
+  "bead": "hv-umm2.171",
+  "phase": 5,
+  "implementMin": 29.187,
+  "implementWindow": {
+    "start": "2026-10-12T13:30:15+00:00",
+    "end": "2026-10-12T13:59:26.240760+00:00"
+  },
+  "hostLoad": 10.24951171875,
+  "localValidationS": {
+    "install": 3.205,
+    "doctor": 1.356,
+    "focused": 5.463,
+    "ordered-focused": 5.063,
+    "owning-contracts": 9.976,
+    "preflight": 1.344,
+    "fuzz": 168.811,
+    "sweep": 223.209,
+    "review": 43.408,
+    "knip": 4.737,
+    "schema": 0.076,
+    "corrected-schema": 0.127,
+    "frozen-schema": 0.097,
+    "commit": 0.037
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 63,
+    "jsdomFiles": 0,
+    "cases": 8
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 1.291583,
+      "note": "First standalone evidence validator rejected own older friction template missing current required implementWindow. Actual repair window13:55:54.207626Z failure start through13:57:11.702585Z corrected schema end is77.494959s/1.291583min, including editing/coordination and both commands. Failed command0.076s remains separately recorded. Fixed actual claim/end timestamps; source/tests unchanged. Whole implementMin already includes this interval."
+    }
+  ],
+  "phaseStatus": "Locally validated; parent certified promotion and cleanup owed"
+}

@@ -1,3 +1,5 @@
+import { abandonCost, activated, exhaustSelf, randomIn, self } from "../../engine/dsl/builders";
+import { gainSpark, materialize, sequence } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 321,
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([exhaustSelf(), abandonCost({ costAtMost: 2 })], sequence(materialize(randomIn("deck", 1, { cardType: "character", costAtMost: 2 })), gainSpark(self(), 1)))],
+  verifiedText: "1gzscwgul3y",
 });

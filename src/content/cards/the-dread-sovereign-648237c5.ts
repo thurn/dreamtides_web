@@ -1,3 +1,5 @@
+import { abandonCost, activated, energyX, exhaustSelf, x } from "../../engine/dsl/builders";
+import { discover, materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,6 @@ export default card({
   cardNumber: 52,
   art: { x: 0, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [activated([energyX(0), exhaustSelf(), abandonCost({ another: true })], materialize(discover({ cardType: "character" }, { costExactly: x() }), { awakened: variant.amplified }))],
+  verifiedText: "6g1clbnn0r",
 });

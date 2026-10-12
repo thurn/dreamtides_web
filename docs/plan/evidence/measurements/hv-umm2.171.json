@@ -1,0 +1,700 @@
+{
+  "bead": "hv-umm2.171",
+  "base": "fc15e846af294d373f6743343ceb6d32eb5257eb",
+  "status": "LOCALLY VALIDATED FINAL; parent certified promotion/cleanup owed",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T13:30:15+00:00",
+    "startProvenance": "Actual parent claim ACK; conservative ownership proxy includes all parent preparation/routing, helper install/design/implementation/checks, coordination/corrections and waits. Exact helper dispatch boundary unknown.",
+    "parentPredispatchUtc": "2026-10-12T13:30:50Z",
+    "parentPostdispatchUtc": "2026-10-12T13:31:51.227391Z",
+    "helperFirstObservedUtc": "2026-10-12T13:32:06Z",
+    "implementAckUtc": "2026-10-12T13:35:46Z",
+    "endUtc": "2026-10-12T13:59:26.240760+00:00",
+    "endProvenance": "Actual final precommit evidence refresh after ordinary checks and QA cleanup; standalone frozen-schema/commit tail excluded, definitive commit timestamp in Git."
+  },
+  "validation": [
+    {
+      "name": "install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "pid": 5638,
+      "startUtc": "2026-10-12T13:32:05.310985+00:00",
+      "endUtc": "2026-10-12T13:32:08.516511+00:00",
+      "wallS": 3.205,
+      "exit": 0,
+      "log": "/tmp/hv-171-install.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "doctor",
+      "command": [
+        "tg",
+        "--no-launch",
+        "doctor"
+      ],
+      "pid": 37254,
+      "startUtc": "2026-10-12T13:33:16.743066+00:00",
+      "endUtc": "2026-10-12T13:33:18.099689+00:00",
+      "wallS": 1.356,
+      "exit": 0,
+      "log": "/tmp/hv-171-doctor.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-59"
+      ],
+      "pid": 35054,
+      "startUtc": "2026-10-12T13:39:12.180157+00:00",
+      "endUtc": "2026-10-12T13:39:17.643787+00:00",
+      "wallS": 5.463,
+      "exit": 0,
+      "log": "/tmp/hv-171-focused.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "ordered-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-59"
+      ],
+      "pid": 91981,
+      "startUtc": "2026-10-12T13:41:36.776977+00:00",
+      "endUtc": "2026-10-12T13:41:41.840602+00:00",
+      "wallS": 5.063,
+      "exit": 0,
+      "log": "/tmp/hv-171-ordered-focused.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "owning-contracts",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/content/specs/specs.test.ts"
+      ],
+      "pid": 46167,
+      "startUtc": "2026-10-12T13:42:39.766299+00:00",
+      "endUtc": "2026-10-12T13:42:49.742232+00:00",
+      "wallS": 9.976,
+      "exit": 0,
+      "log": "/tmp/hv-171-owning-contracts.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "7977748d-02c1-4702-ba68-5c49f7f0759b,0637b453-4362-4f01-b3e6-07c27af9c847,648237c5-ceff-4a28-aaf8-4aa099eae80d",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 6532,
+      "startUtc": "2026-10-12T13:43:37.957794+00:00",
+      "endUtc": "2026-10-12T13:43:39.301953+00:00",
+      "wallS": 1.344,
+      "exit": 0,
+      "log": "/tmp/hv-171-preflight.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "fuzz",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "7977748d-02c1-4702-ba68-5c49f7f0759b,0637b453-4362-4f01-b3e6-07c27af9c847,648237c5-ceff-4a28-aaf8-4aa099eae80d"
+      ],
+      "pid": 6533,
+      "startUtc": "2026-10-12T13:43:37.958103+00:00",
+      "endUtc": "2026-10-12T13:46:26.769652+00:00",
+      "wallS": 168.811,
+      "exit": 0,
+      "log": "/tmp/hv-171-fuzz.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.171",
+        "--cards",
+        "7977748d-02c1-4702-ba68-5c49f7f0759b,0637b453-4362-4f01-b3e6-07c27af9c847,648237c5-ceff-4a28-aaf8-4aa099eae80d",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 54120,
+      "startUtc": "2026-10-12T13:44:46.405663+00:00",
+      "endUtc": "2026-10-12T13:48:29.615706+00:00",
+      "wallS": 223.209,
+      "exit": 0,
+      "log": "/tmp/hv-171-sweep.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 13943,
+      "startUtc": "2026-10-12T13:49:01.306557+00:00",
+      "endUtc": "2026-10-12T13:49:44.714498+00:00",
+      "wallS": 43.408,
+      "exit": 0,
+      "log": "/tmp/hv-171-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 43500,
+      "startUtc": "2026-10-12T13:51:34.275945+00:00",
+      "endUtc": "2026-10-12T13:51:39.013254+00:00",
+      "wallS": 4.737,
+      "exit": 0,
+      "log": "/tmp/hv-171-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 64605,
+      "startUtc": "2026-10-12T13:55:54.207626+00:00",
+      "endUtc": "2026-10-12T13:55:54.283897+00:00",
+      "wallS": 0.076,
+      "exit": 2,
+      "log": "/tmp/hv-171-schema.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "corrected-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 19810,
+      "startUtc": "2026-10-12T13:57:11.575186+00:00",
+      "endUtc": "2026-10-12T13:57:11.702585+00:00",
+      "wallS": 0.127,
+      "exit": 0,
+      "log": "/tmp/hv-171-corrected-schema.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "frozen-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 51889,
+      "startUtc": "2026-10-12T13:58:22.287580+00:00",
+      "endUtc": "2026-10-12T13:58:22.384497+00:00",
+      "wallS": 0.097,
+      "exit": 0,
+      "log": "/tmp/hv-171-frozen-schema.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "commit",
+      "command": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/hv-171-commit.txt"
+      ],
+      "pid": 52094,
+      "startUtc": "2026-10-12T13:58:22.521836+00:00",
+      "endUtc": "2026-10-12T13:58:22.559005+00:00",
+      "wallS": 0.037,
+      "exit": 0,
+      "log": "/tmp/hv-171-commit.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "scope": {
+    "source": [
+      "src/content/cards/flesh-cultivator-7977748d.ts",
+      "src/content/cards/pyreling-0637b453.ts",
+      "src/content/cards/the-dread-sovereign-648237c5.ts",
+      "src/content/specs/cards-59.scenarios.ts"
+    ],
+    "nonTestChangedLines": 16,
+    "scenarioModuleLines": 63,
+    "scenarioCases": 8,
+    "testDelta": {
+      "added": 63,
+      "deleted": 0,
+      "net": 63,
+      "entrypoints": 0,
+      "jsdomFiles": 0
+    },
+    "fallout": [],
+    "newPrimitives": [],
+    "newKindsStatusesVisuals": [],
+    "sharedIndexEdits": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "printedFields": "Immutable printed fields preserved; only pending replaced by exact abilities/verifiedText plus imports.",
+    "verifiedText": {
+      "7977748d-02c1-4702-ba68-5c49f7f0759b": "1gzscwgul3y",
+      "0637b453-4362-4f01-b3e6-07c27af9c847": "1bwgednl589",
+      "648237c5-ceff-4a28-aaf8-4aa099eae80d": "6g1clbnn0r"
+    }
+  },
+  "sourceSHA256": {
+    "src/content/cards/flesh-cultivator-7977748d.ts": "b85a9cac8b4b5da8de913b507f14a981cc5c91fe85186d3d80484ca4ab70e5c0",
+    "src/content/cards/pyreling-0637b453.ts": "e249b4d03e214bdd9cdd0358e8a0c3b22973535e1297a19a893f19d248d1242d",
+    "src/content/cards/the-dread-sovereign-648237c5.ts": "73925686ec4391cdddb51a9b617abfff557fccafa826ee276a1321ac61e6e86f",
+    "src/content/specs/cards-59.scenarios.ts": "c23b1b1900b35e61e65e0032c3dadbdee112b7a9fe34558e188d4290fc47768a"
+  },
+  "qaProvenance": {
+    "recordedCommit": "fc15e846af294d373f6743343ceb6d32eb5257eb",
+    "interpretation": "QA ran against the dirty owned worktree with these three authored modules and scenario before final commit. Recorded commit is the base HEAD, not a committed source claim. Exact content/test bytes bind via sourceSHA256; parent observed identical hashes before final freeze. Ledger metadata retained unchanged.",
+    "rawReportAudit": "/tmp/dreamtides-executor-01a12e91/171-parent-qa-audit.json",
+    "parentAuditStartUtc": "2026-10-12T13:52:40.239816Z",
+    "parentAuditEndUtc": "2026-10-12T13:52:40.246280Z",
+    "parentAuditWallS": 0.006464,
+    "rawReports": 32,
+    "errors": 0,
+    "caps": 0,
+    "failureKinds": 0,
+    "cellIdentityMatches": true,
+    "parentAuditCorrections": "First two optional extraction attempts raised KeyError on skip rows lacking rawReport/player rows omitting as. Corrected against actual emitter; each tool wall0.1s, exact subprocess times unknown. Whole claim window includes correction/coordination; no source, runtime or QA failure."
+  },
+  "qa": {
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-GaU9Gz",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.171/invocations/sweep-GaU9Gz",
+      "counts": {
+        "pass": 32,
+        "skip": 28
+      },
+      "attemptCounts": {
+        "pass": 32,
+        "skip": 28
+      },
+      "hostLoad": 13.005859375,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1994,
+        "scenario": 220389.00829099998,
+        "cleanup": 542.529165999993,
+        "execution": 223004.863375,
+        "total": 223010.863375
+      }
+    },
+    "ledger": "docs/plan/evidence/qa-ledger/hv-umm2.171.jsonl",
+    "preflight": {
+      "pass": 32,
+      "skip": 28,
+      "pending": 0,
+      "fail": 0,
+      "variants": "all",
+      "as": "both"
+    },
+    "judged": {
+      "count": 0,
+      "reason": "All three first bytes92/145/97 unsampled; existing kinds/statuses/visuals only. No extra judged matrix required."
+    },
+    "captures": [],
+    "contract": "Prescribed card-play/resolution sweep; no blanket activation-browser claim. Pyreling cost/trigger activation covered by eight D20 scenarios."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 155787,
+    "failures": 0,
+    "wallS": 167.6,
+    "cpuS": 181.2,
+    "commandWallS": 168.811,
+    "heavyWaitS": null,
+    "heavyWaitProvenance": "Not separately instrumented. Header proves acquisition, not zero queue wait; full command wall captures all wait/startup/shutdown.",
+    "targets": [
+      {
+        "uuid": "7977748d-02c1-4702-ba68-5c49f7f0759b",
+        "included": 621,
+        "exercised": 238
+      },
+      {
+        "uuid": "0637b453-4362-4f01-b3e6-07c27af9c847",
+        "included": 617,
+        "exercised": 292
+      },
+      {
+        "uuid": "648237c5-ceff-4a28-aaf8-4aa099eae80d",
+        "included": 612,
+        "exercised": 264
+      }
+    ]
+  },
+  "review": {
+    "requiredReview": {
+      "files": 223,
+      "tests": 3588,
+      "lint": "pass",
+      "typecheck": "both projects pass",
+      "wallS": 43.408
+    },
+    "independentTrigger": "No core/new-kind label or >100 non-test code lines;16 changed non-test lines. No additional cold review triggered.",
+    "temporaryRouting": "Human policy: any required independent review uses fresh readonly gpt-5.6-sol Codex CLI until2026-10-14T01:00Z; parent owns dispatch. No Claude attempt or review provider started.",
+    "full": "Not indicated for bounded composition/test module, no infrastructure/config or architecture change."
+  },
+  "runtime": {
+    "commands": [
+      {
+        "name": "install",
+        "command": [
+          "npm",
+          "install"
+        ],
+        "pid": 5638,
+        "startUtc": "2026-10-12T13:32:05.310985+00:00",
+        "endUtc": "2026-10-12T13:32:08.516511+00:00",
+        "wallS": 3.205,
+        "exit": 0,
+        "log": "/tmp/hv-171-install.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "doctor",
+        "command": [
+          "tg",
+          "--no-launch",
+          "doctor"
+        ],
+        "pid": 37254,
+        "startUtc": "2026-10-12T13:33:16.743066+00:00",
+        "endUtc": "2026-10-12T13:33:18.099689+00:00",
+        "wallS": 1.356,
+        "exit": 0,
+        "log": "/tmp/hv-171-doctor.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "-t",
+          "cards-59"
+        ],
+        "pid": 35054,
+        "startUtc": "2026-10-12T13:39:12.180157+00:00",
+        "endUtc": "2026-10-12T13:39:17.643787+00:00",
+        "wallS": 5.463,
+        "exit": 0,
+        "log": "/tmp/hv-171-focused.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "ordered-focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "-t",
+          "cards-59"
+        ],
+        "pid": 91981,
+        "startUtc": "2026-10-12T13:41:36.776977+00:00",
+        "endUtc": "2026-10-12T13:41:41.840602+00:00",
+        "wallS": 5.063,
+        "exit": 0,
+        "log": "/tmp/hv-171-ordered-focused.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "owning-contracts",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/content-gates.test.ts",
+          "src/content/specs/specs.test.ts"
+        ],
+        "pid": 46167,
+        "startUtc": "2026-10-12T13:42:39.766299+00:00",
+        "endUtc": "2026-10-12T13:42:49.742232+00:00",
+        "wallS": 9.976,
+        "exit": 0,
+        "log": "/tmp/hv-171-owning-contracts.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "preflight",
+        "command": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "7977748d-02c1-4702-ba68-5c49f7f0759b,0637b453-4362-4f01-b3e6-07c27af9c847,648237c5-ceff-4a28-aaf8-4aa099eae80d",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "pid": 6532,
+        "startUtc": "2026-10-12T13:43:37.957794+00:00",
+        "endUtc": "2026-10-12T13:43:39.301953+00:00",
+        "wallS": 1.344,
+        "exit": 0,
+        "log": "/tmp/hv-171-preflight.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "fuzz",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "7977748d-02c1-4702-ba68-5c49f7f0759b,0637b453-4362-4f01-b3e6-07c27af9c847,648237c5-ceff-4a28-aaf8-4aa099eae80d"
+        ],
+        "pid": 6533,
+        "startUtc": "2026-10-12T13:43:37.958103+00:00",
+        "endUtc": "2026-10-12T13:46:26.769652+00:00",
+        "wallS": 168.811,
+        "exit": 0,
+        "log": "/tmp/hv-171-fuzz.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "sweep",
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.171",
+          "--cards",
+          "7977748d-02c1-4702-ba68-5c49f7f0759b,0637b453-4362-4f01-b3e6-07c27af9c847,648237c5-ceff-4a28-aaf8-4aa099eae80d",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "pid": 54120,
+        "startUtc": "2026-10-12T13:44:46.405663+00:00",
+        "endUtc": "2026-10-12T13:48:29.615706+00:00",
+        "wallS": 223.209,
+        "exit": 0,
+        "log": "/tmp/hv-171-sweep.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 13943,
+        "startUtc": "2026-10-12T13:49:01.306557+00:00",
+        "endUtc": "2026-10-12T13:49:44.714498+00:00",
+        "wallS": 43.408,
+        "exit": 0,
+        "log": "/tmp/hv-171-review.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 43500,
+        "startUtc": "2026-10-12T13:51:34.275945+00:00",
+        "endUtc": "2026-10-12T13:51:39.013254+00:00",
+        "wallS": 4.737,
+        "exit": 0,
+        "log": "/tmp/hv-171-knip.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "schema",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 64605,
+        "startUtc": "2026-10-12T13:55:54.207626+00:00",
+        "endUtc": "2026-10-12T13:55:54.283897+00:00",
+        "wallS": 0.076,
+        "exit": 2,
+        "log": "/tmp/hv-171-schema.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "corrected-schema",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 19810,
+        "startUtc": "2026-10-12T13:57:11.575186+00:00",
+        "endUtc": "2026-10-12T13:57:11.702585+00:00",
+        "wallS": 0.127,
+        "exit": 0,
+        "log": "/tmp/hv-171-corrected-schema.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "frozen-schema",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 51889,
+        "startUtc": "2026-10-12T13:58:22.287580+00:00",
+        "endUtc": "2026-10-12T13:58:22.384497+00:00",
+        "wallS": 0.097,
+        "exit": 0,
+        "log": "/tmp/hv-171-frozen-schema.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "commit",
+        "command": [
+          "git",
+          "commit",
+          "-F",
+          "/tmp/hv-171-commit.txt"
+        ],
+        "pid": 52094,
+        "startUtc": "2026-10-12T13:58:22.521836+00:00",
+        "endUtc": "2026-10-12T13:58:22.559005+00:00",
+        "wallS": 0.037,
+        "exit": 0,
+        "log": "/tmp/hv-171-commit.log",
+        "terminal": true,
+        "ports": []
+      }
+    ],
+    "server": {
+      "pid": 54161,
+      "group": 54161,
+      "port": 5274,
+      "slot": 1,
+      "runner": 54120,
+      "terminal": true,
+      "startupSource": "Sweep runtime log explicitly names owned process group and port.",
+      "cleanup": "Successful terminal0 sweep;542.529ms cleanup; own group absent and port listener absent at cleanup inspection. Exact provider/server records absent then. Runner clear path permits clearing only after confirmed browser_close and settled RPCs, then awaits server/client/lease/evidence teardown.",
+      "reuse": "Later record belongs to peer hv-umm2.174 runner41778/server41810 started13:50:44 on5274. Peer reused released slot/port; never touched peer records/server/listener. Own lifetime claims remain scoped."
+    },
+    "providers": [],
+    "browsers": [],
+    "leases": [],
+    "remainingOwnedServers": [],
+    "remainingOwnedPorts": [],
+    "readOnlyFiniteCommands": "Inspection/hash-calculation wrapper PIDs not captured, not invented; finite commands returned.",
+    "writer": "Sole helper source frozen after ordered-focused check; QA ledger writer/sweep settled before final evidence and one commit. All captured commands terminal before handoff."
+  },
+  "corrections": {
+    "ordering": "Parent requested observable event-index assertion after first green focus: abandoned\u2192queued\u2192resolved\u2192cardDrawn. All eight rerun green; no broader tests had started.",
+    "typedPredicate": "Own gain event extraction uses flatMap discriminant narrowing before required review; no type/lint failure.",
+    "readOnlyLookupErrors": "Some design reads referenced missing guessed paths/unmatched globs; corrected by actual module discovery. No source effect, failed test or invented timing; whole claim interval includes these reads.",
+    "parentAudit": "Actual two KeyErrors and correction described in qaProvenance; no QA defect."
+  },
+  "evidenceCorrection": {
+    "failedSchema": {
+      "pid": 64605,
+      "exit": 2,
+      "wallS": 0.076
+    },
+    "repairWindow": {
+      "startUtc": "2026-10-12T13:55:54.207626Z",
+      "endUtc": "2026-10-12T13:57:11.702585Z",
+      "wallS": 77.494959,
+      "minutes": 1.291583
+    },
+    "repair": "Required implementWindow added using actual claim/end timestamps. Initial friction proxy counted only failed command; parent corrected metric to full repair window before frozen handoff. All attempts retained; evidence-only schema/amend, runtime/source checks remain valid."
+  },
+  "failureEvidence": "No failed runtime acceptance check or new product defect; own evidence schema failure and repair retained. Existing primitive contracts cover materialize/Discover/random references/awakened and source departure; D20 eight real card scenarios prove cost payment triggers own ability before captured draw, self source still draws after departure with no spark gain. All announcements and state are observable."
+}

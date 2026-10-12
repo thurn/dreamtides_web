@@ -1,3 +1,6 @@
+import { abandonCost, activated, energy, self } from "../../engine/dsl/builders";
+import { triggered, whenAbandon } from "../../engine/dsl/triggers";
+import { draw, gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,6 @@ export default card({
   cardNumber: 472,
   art: { x: -0.162, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(whenAbandon(), gainSpark(self(), variant.amplified ? 2 : 1)), activated([energy(3), abandonCost()], draw(1))],
+  verifiedText: "1bwgednl589",
 });
