@@ -4,11 +4,11 @@ import type { StepContext } from "../steps/types";
 import { banishedAsReclaimed, ceaseToExist, instanceOf, moveInstance, moveToHand } from "./zones";
 
 /**
- * Where a prevented card goes: its owner's void, or a variant's "top of its
- * owner's deck", "its owner's hand", or "your hand" (the preventing
+ * Where a prevented card goes: its owner's void, or a variant's "top or bottom
+ * of its owner's deck", "its owner's hand", or "your hand" (the preventing
  * player's hand, while its owner stays its owner).
  */
-export type PreventDestination = "void" | "deckTop" | "ownerHand" | "yourHand";
+export type PreventDestination = "void" | "deckTop" | "deckBottom" | "ownerHand" | "yourHand";
 
 /**
  * Prevents the card `id` on the stack for `preventer`, the controller of the
@@ -46,6 +46,10 @@ export function preventCard(
       return;
     case "deckTop":
       moveInstance(ctx, id, "deck", "top");
+      ctx.emit({ kind: "prevented", instance: id, side, to: "deck", zoneOf: owner });
+      return;
+    case "deckBottom":
+      moveInstance(ctx, id, "deck", "bottom");
       ctx.emit({ kind: "prevented", instance: id, side, to: "deck", zoneOf: owner });
       return;
     case "ownerHand":

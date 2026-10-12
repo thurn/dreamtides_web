@@ -1,0 +1,734 @@
+{
+  "bead": "hv-umm2.551",
+  "baseOid": "d82b1404246632762c0619150b56f1f997d08c57",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/prevent-deck-bottom551-root",
+  "implementationWindow": {
+    "start": "2026-10-12T15:30:41.560Z",
+    "startKind": "Actual parent post-claim implementation dispatch call_9ae61cfbd6914ad49d475e3efb1cbab2",
+    "end": "2026-10-12T16:10:35Z",
+    "endKind": "Designated exact UTC Git committer timestamp; single commit uses GIT_COMMITTER_DATE, and post-commit Git receipt verifies the stored value"
+  },
+  "contractModule": {
+    "file": "src/engine/effects/primitives/contracts/prevent-deck-bottom.contracts.ts",
+    "lines": 218,
+    "cases": 15,
+    "newTestEntrypoints": 0,
+    "coverage": [
+      "Both preventers and both owners, including cross-controlled cards",
+      "Nonempty deck bottom versus top and unchanged rest order",
+      "Both public views retain target position while other hidden cards remain hidden",
+      "Existing known deck position retained; determinization fidelity; JSON restart",
+      "Created before reclaimed replacement; reclaimed protection uses owner",
+      "Unpreventable card; stale departed target; invalid answer; wrong actor; stale prompt after cancel",
+      "Pending target choice reload; LOAD_STATE parser; failed resolution after movement keeps committed destination unchanged"
+    ]
+  },
+  "fuzz": {
+    "mode": "fuzz",
+    "fixture": "5e5e5e5e-0000-4000-8000-000000000145",
+    "seedPrefix": "hv-umm2.551-deck-bottom",
+    "first": 0,
+    "games": 300,
+    "started": "2026-10-12T15:40:24.439Z",
+    "hostLoad": 3.73046875,
+    "included": 661,
+    "exercised": 400,
+    "bottomPreventions": 329,
+    "steps": 155154,
+    "prompts": 3976,
+    "interactiveGames": 30,
+    "reruns": 396,
+    "failures": [],
+    "sampleSeeds": [
+      {
+        "seed": "hv-umm2.551-deck-bottom-0",
+        "ordinal": 0,
+        "bottom": 1,
+        "coverage": {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000145"
+          },
+          "included": 2,
+          "exercised": 1
+        }
+      },
+      {
+        "seed": "hv-umm2.551-deck-bottom-2",
+        "ordinal": 2,
+        "bottom": 1,
+        "coverage": {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000145"
+          },
+          "included": 2,
+          "exercised": 2
+        }
+      },
+      {
+        "seed": "hv-umm2.551-deck-bottom-3",
+        "ordinal": 3,
+        "bottom": 1,
+        "coverage": {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000145"
+          },
+          "included": 2,
+          "exercised": 2
+        }
+      },
+      {
+        "seed": "hv-umm2.551-deck-bottom-4",
+        "ordinal": 4,
+        "bottom": 1,
+        "coverage": {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000145"
+          },
+          "included": 2,
+          "exercised": 2
+        }
+      },
+      {
+        "seed": "hv-umm2.551-deck-bottom-5",
+        "ordinal": 5,
+        "bottom": 1,
+        "coverage": {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000145"
+          },
+          "included": 3,
+          "exercised": 2
+        }
+      },
+      {
+        "seed": "hv-umm2.551-deck-bottom-7",
+        "ordinal": 7,
+        "bottom": 2,
+        "coverage": {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000145"
+          },
+          "included": 2,
+          "exercised": 2
+        }
+      },
+      {
+        "seed": "hv-umm2.551-deck-bottom-8",
+        "ordinal": 8,
+        "bottom": 3,
+        "coverage": {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000145"
+          },
+          "included": 2,
+          "exercised": 3
+        }
+      },
+      {
+        "seed": "hv-umm2.551-deck-bottom-10",
+        "ordinal": 10,
+        "bottom": 1,
+        "coverage": {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000145"
+          },
+          "included": 2,
+          "exercised": 1
+        }
+      },
+      {
+        "seed": "hv-umm2.551-deck-bottom-12",
+        "ordinal": 12,
+        "bottom": 1,
+        "coverage": {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000145"
+          },
+          "included": 2,
+          "exercised": 3
+        }
+      },
+      {
+        "seed": "hv-umm2.551-deck-bottom-13",
+        "ordinal": 13,
+        "bottom": 2,
+        "coverage": {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000145"
+          },
+          "included": 2,
+          "exercised": 2
+        }
+      }
+    ],
+    "cpuS": 181.745551,
+    "wallS": 167.99751174999997,
+    "ended": "2026-10-12T15:43:12.439Z"
+  },
+  "preflight": {
+    "mode": "preflight",
+    "fixture": "5e5e5e5e-0000-4000-8000-000000000145",
+    "started": "2026-10-12T15:39:16.878Z",
+    "ended": "2026-10-12T15:39:16.889Z",
+    "wallS": 0.009496624999999995,
+    "hostLoad": 6.013671875,
+    "rows": [
+      {
+        "uuid": "5e5e5e5e-0000-4000-8000-000000000145",
+        "side": "player",
+        "variant": "base",
+        "verdict": "pass",
+        "reason": null,
+        "detail": null,
+        "instance": "i1",
+        "zone": "void",
+        "resolved": true,
+        "answers": 0,
+        "passes": 0,
+        "events": [
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 0,
+            "max": 1,
+            "change": -1,
+            "maxChange": 0,
+            "cause": "payment"
+          },
+          {
+            "kind": "cardPlayed",
+            "side": "enemy",
+            "instance": "i10"
+          },
+          {
+            "kind": "promptAutoAnswered",
+            "side": "player",
+            "prompt": "chooseTargets",
+            "purpose": {
+              "source": "i1",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000145",
+              "ability": 0,
+              "role": "target"
+            }
+          },
+          {
+            "kind": "cardPlayed",
+            "side": "player",
+            "instance": "i1"
+          },
+          {
+            "kind": "resolved",
+            "instance": "i1"
+          },
+          {
+            "kind": "prevented",
+            "instance": "i10",
+            "side": "enemy",
+            "to": "deck",
+            "zoneOf": "enemy"
+          },
+          {
+            "kind": "enteredVoid",
+            "instance": "i1",
+            "side": "player",
+            "from": "stack"
+          }
+        ]
+      },
+      {
+        "uuid": "5e5e5e5e-0000-4000-8000-000000000145",
+        "side": "enemy",
+        "variant": "base",
+        "verdict": "pass",
+        "reason": null,
+        "detail": null,
+        "instance": "i11",
+        "zone": "void",
+        "resolved": true,
+        "answers": 0,
+        "passes": 1,
+        "events": [
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 1,
+            "max": 2,
+            "change": -1,
+            "maxChange": 0,
+            "cause": "payment"
+          },
+          {
+            "kind": "cardPlayed",
+            "side": "player",
+            "instance": "i1"
+          },
+          {
+            "kind": "promptAutoAnswered",
+            "side": "enemy",
+            "prompt": "chooseTargets",
+            "purpose": {
+              "source": "i11",
+              "cardId": "5e5e5e5e-0000-4000-8000-000000000145",
+              "ability": 0,
+              "role": "target"
+            }
+          },
+          {
+            "kind": "cardPlayed",
+            "side": "enemy",
+            "instance": "i11"
+          },
+          {
+            "kind": "resolved",
+            "instance": "i11"
+          },
+          {
+            "kind": "prevented",
+            "instance": "i1",
+            "side": "player",
+            "to": "deck",
+            "zoneOf": "player"
+          },
+          {
+            "kind": "enteredVoid",
+            "instance": "i11",
+            "side": "enemy",
+            "from": "stack"
+          }
+        ]
+      }
+    ]
+  },
+  "validationReceipts": {
+    "focusedInitial": {
+      "exit": 0,
+      "cases": 1865,
+      "wallS": 8.39,
+      "hostLoad": 18.5869140625,
+      "scope": "Primitive contract discovery before two known-position cases and fixture entries were added"
+    },
+    "focused": {
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/testing/tooling.test.ts",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/prevent-deck-bottom551-root",
+      "start": "2026-10-12T15:46:54.172Z",
+      "end": "2026-10-12T15:47:05.826Z",
+      "wallS": 11.65098662499804,
+      "hostLoad": 18.6,
+      "hostLoadEnd": 16.66,
+      "pid": 17284,
+      "pgid": 17284,
+      "exit": 1,
+      "log": "focused.log"
+    },
+    "baseline": {
+      "label": "baseline",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/determinize.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/prevent-deck-bottom551-root",
+      "start": "2026-10-12T15:50:43.962Z",
+      "end": "2026-10-12T15:50:48.022Z",
+      "wallS": 4.057065000000875,
+      "hostLoad": 21.36,
+      "hostLoadEnd": 22.61,
+      "pid": 38017,
+      "pgid": 38017,
+      "exit": 0,
+      "log": "baseline.log"
+    },
+    "focusedRepair": {
+      "label": "focused-repair",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/determinize-loops.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/testing/tooling.test.ts",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/prevent-deck-bottom551-root",
+      "start": "2026-10-12T15:59:20.640Z",
+      "end": "2026-10-12T15:59:29.790Z",
+      "wallS": 9.148116249998566,
+      "hostLoad": 8.39,
+      "hostLoadEnd": 8.23,
+      "pid": 75627,
+      "pgid": 75627,
+      "exit": 0,
+      "log": "focused-repair.log",
+      "testCounts": {
+        "files": 9,
+        "cases": 2003
+      }
+    },
+    "reviewFailed": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/prevent-deck-bottom551-root",
+      "start": "2026-10-12T16:03:26.720Z",
+      "end": "2026-10-12T16:04:15.515Z",
+      "wallS": 48.791131457997835,
+      "hostLoad": 4.0,
+      "hostLoadEnd": 5.43,
+      "pid": 82677,
+      "pgid": 82677,
+      "exit": 2,
+      "log": "review.log"
+    },
+    "reviewFinal": {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/prevent-deck-bottom551-root",
+      "start": "2026-10-12T16:05:19.579Z",
+      "end": "2026-10-12T16:06:02.310Z",
+      "wallS": 42.72794912500831,
+      "hostLoad": 4.65,
+      "hostLoadEnd": 4.7,
+      "pid": 14751,
+      "pgid": 14751,
+      "exit": 0,
+      "log": "review-final.log",
+      "testCounts": {
+        "files": 268,
+        "cases": 4524
+      }
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/prevent-deck-bottom551-root",
+      "start": "2026-10-12T16:06:41.593Z",
+      "end": "2026-10-12T16:06:45.554Z",
+      "wallS": 3.9583493749960326,
+      "hostLoad": 4.46,
+      "hostLoadEnd": 4.83,
+      "pid": 19752,
+      "pgid": 19752,
+      "exit": 0,
+      "log": "knip.log"
+    },
+    "schema": {
+      "label": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/prevent-deck-bottom551-root",
+      "start": "2026-10-12T16:07:59.793Z",
+      "end": "2026-10-12T16:07:59.896Z",
+      "wallS": 0.1009301659942139,
+      "hostLoad": 4.68,
+      "hostLoadEnd": 4.68,
+      "pid": 30607,
+      "pgid": 30607,
+      "exit": 0,
+      "log": "schema.log"
+    }
+  },
+  "fuzzCorrection": {
+    "firstInvocationExit": 1,
+    "gamesExecuted": 0,
+    "reason": "Filtered catalog-only cards retained the removed fixture target; figmentSupport validates targets. Catalog-only targets and weightedCardIds are undefined; original targeted pool remains unchanged for games. FUZZ_SYNTHETIC carries the identical fixture definition. No targeted figments are requested."
+  },
+  "browser": {
+    "attempt1": {
+      "exit": 1,
+      "invocation": "run-nRa4Fv",
+      "failure": "Private QA full-rectangle-in-viewport assertion failed on an intentionally clipped fanned hand card with an actionable center; assertion corrected to visible intersection plus uncovered viewport point",
+      "serverPid": 5116,
+      "port": 5174,
+      "cleanup": "Actual terminal exit1; runner reported port free; group absent"
+    },
+    "attempt2": {
+      "exit": 0,
+      "invocation": "run-bvh2tp",
+      "serverPid": 31526,
+      "requestedPort": 5275,
+      "port": 5174,
+      "slot": 0,
+      "hostLoad": 20.11669921875,
+      "wallMs": {
+        "browserLeaseWait": 9,
+        "serve": 1364,
+        "scenario": 58827,
+        "total": 60528
+      },
+      "cases": 4,
+      "captures": 6,
+      "caps": [],
+      "cleanup": "Actual terminal exit0; runner reported port free; owned group absent. Another session subsequently leased the port; it was left untouched."
+    },
+    "scope": "Two admitted synthetic prompt-lab scenes, both controllers on desktop/mobile, actual human play/pass interactions, source/target UUID events, owner deck append/rest order, both sides target knowledge and bottom index, actionable DOM point, Caps, persisted game reload",
+    "sourceRouteCorrection": "Synthetic card-lab URL resolves against journey card database and rejects synthetic UUID. Additive own prompt-lab scenes use existing normal host and LOAD_STATE; no runtime resolver or harness API edits."
+  },
+  "privateArtifacts": {
+    "root": "artifacts/qa/hv-umm2.551/ of primary checkout",
+    "validatorSHA256": "149f0f793c00b3b65a11c7d555d81cf917df07c4dc1061882e5fea0bd9dd5189",
+    "judgedSHA256": "d992c54a3631c38319589da21ca00a4f23eb892b56138b5ab48008a1be2b9efa",
+    "repro": "Copy validate.ts into artifacts/qa/hv-umm2.551/ of the candidate checkout; run lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npx tsx artifacts/qa/hv-umm2.551/validate.ts fuzz 300. A single ordinal uses fuzz 1 <ordinal>."
+  },
+  "reviewRequirement": {
+    "coreReview": true,
+    "routing": "Parent runs fresh read-only Codex CLI gpt-5.6-sol under temporary user-authorized routing through 2026-10-14T01:00:00Z",
+    "status": "Parent-owned after helper commit"
+  },
+  "rules": {
+    "RDs": [],
+    "cardIssues": [],
+    "authority": "Current docs/rules.md Hand owner redirect and Put on top or bottom unshuffled knowledge semantics"
+  },
+  "recipe": {
+    "1": "Parent native claim, worktree and area audit; ACK exact bounded bodies/additive fixtures",
+    "2": "No production entity authoring",
+    "3": "Existing Prevent destination extension; new synthetic contract module auto-discovered; no new registrations or pending inventory marker",
+    "4": "Settled owner redirect; positive Prevent paragraph clarification, no new RD",
+    "5": "No production entity scenario module",
+    "6": "300 actual weighted synthetic games; targeted fixture inclusion/exercise/resolution measured",
+    "7": "Synthetic direct API lab preflight for both controllers; synthetic browser scenes use admitted fixture route",
+    "8": "Four judged synthetic browser cells; no new visual surface",
+    "9": "Final validation and single local commit; parent owns cold review and delivery"
+  },
+  "fullReviewRationale": "No test-infrastructure, repository-wide configuration, or cross-cutting production architecture change.",
+  "baselineWitness": {
+    "base": "d82b1404246632762c0619150b56f1f997d08c57",
+    "beforeSHA": {
+      "src/engine/rules/stack.ts": "1a8ff31ec56b3bb379dcb9838074114a86d05adf371756a5e80ddc002131a0b4",
+      "src/engine/effects/primitives/prevent.ts": "315cbd67c9a9b3e2b52ed295751f75b28c0063c0943f2ffcacd99e453ebcc779",
+      "src/engine/testing/stack-cards.ts": "09a81ca8bfe628728a5dabab6ebba4742275ba763d813fdc64dea134bffe55c3",
+      "src/engine/testing/prompt-lab.ts": "efaf4e31c8ade225b9bc0ea4fb9404d8b14837415ce976e35f7beabba1f0e043"
+    },
+    "paths": [
+      "src/engine/rules/stack.ts",
+      "src/engine/effects/primitives/prevent.ts",
+      "src/engine/testing/stack-cards.ts",
+      "src/engine/testing/prompt-lab.ts"
+    ],
+    "afterSHA": {
+      "src/engine/rules/stack.ts": "1a8ff31ec56b3bb379dcb9838074114a86d05adf371756a5e80ddc002131a0b4",
+      "src/engine/effects/primitives/prevent.ts": "315cbd67c9a9b3e2b52ed295751f75b28c0063c0943f2ffcacd99e453ebcc779",
+      "src/engine/testing/stack-cards.ts": "09a81ca8bfe628728a5dabab6ebba4742275ba763d813fdc64dea134bffe55c3",
+      "src/engine/testing/prompt-lab.ts": "efaf4e31c8ade225b9bc0ea4fb9404d8b14837415ce976e35f7beabba1f0e043"
+    },
+    "restoredExact": true,
+    "exit": 0,
+    "wallS": 4.150405416992726,
+    "testCounts": {
+      "passed": 38,
+      "failed": 0
+    }
+  },
+  "preExistingFinding": {
+    "file": "src/engine/view/determinize.test.ts",
+    "failure": "UnknownLoopRecording l3 during the sampling test random continuation",
+    "newSourceResult": {
+      "passed": 1984,
+      "failed": 1,
+      "files": 8
+    },
+    "baseResult": {
+      "passed": 38,
+      "failed": 0,
+      "files": 1
+    },
+    "interpretation": "The added synthetic fixture changes default-pool seed samples. An offered loop whose sampled recording is unknown preserves the public offer and deliberately refuses replay. Existing dedicated loop contracts assert that refusal; broad sampling continuation reaches it without handling the unsupported exploration boundary.",
+    "repairResult": "Focused nine files passed, including unchanged dedicated determinize-loops contracts"
+  },
+  "frictionWindows": {
+    "diagnosis": {
+      "start": "2026-10-12T15:47:05.826Z",
+      "end": "2026-10-12T15:53:38Z",
+      "scope": "Final focused failure terminal to repaired focused lockf launch; elapsed diagnostic/coordination/witness queue/test repair, not isolated editing",
+      "endPrecision": "OS process start has one-second resolution"
+    },
+    "focusedRepairOuter": {
+      "pid": 50176,
+      "process": "lockf wrapper",
+      "start": "2026-10-12T15:53:38Z",
+      "observationSource": "TZ=UTC ps -p 50176 -o pid,lstart,etime while still waiting; OS process-start timestamp has one-second resolution",
+      "observedElapsed": "03:05",
+      "innerStart": "2026-10-12T15:59:20.640Z",
+      "pureKernelWait": null,
+      "wrapperToInnerStartS": 342.64,
+      "scope": "OS lockf process start (one-second resolution) to inner metered command start after acquisition; includes startup, not pure isolated kernel wait"
+    },
+    "earlierQueueDurationKnown": false,
+    "reviewCancelledOuter": {
+      "pid": 77783,
+      "process": "lockf wrapper",
+      "start": "2026-10-12T16:00:19Z",
+      "observationSource": "TZ=UTC ps process-start observed before inner review.log existed; one-second resolution",
+      "innerStart": null,
+      "pureKernelWait": null,
+      "cancelledAt": "2026-10-12T16:03:26.643Z",
+      "exit": 130,
+      "noInnerEffectStarted": true,
+      "wrapperToCancellationS": 187.643
+    },
+    "resourceCorrection": "Agent mistakenly wrapped lightweight focused/review checks in the shared heavy lock. Parent applied D17: an exact owned unstarted review waiter received SIGINT; its actual exit130 and absent PID were verified. Review, Knip and schema execute sequentially without the heavy slot. Fuzz300 keeps its required heavy lock; explicit requested baseline witness also retained its lock."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 5,
+    "jsdomFiles": 0
+  },
+  "testCounting": "No new .test entrypoint; a 218-line plain synthetic contract module contributes 15 discovered cases. Existing determinize.test.ts has 6 lines added and 1 deleted (+5).",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final npm run review starting host load (sysctl vm.loadavg one-minute value)"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "final review start",
+      "at": "2026-10-12T16:03:26.720Z",
+      "oneMinute": 4.0
+    },
+    {
+      "scope": "final review start",
+      "at": "2026-10-12T16:05:19.579Z",
+      "oneMinute": 4.65
+    }
+  ],
+  "reviewFixtureCorrection": "Owned contract fixture used Array.at outside configured browser target and reassigned readonly printing properties. Equivalent indexed last-card reads and whole-record fixture replacements preserve the asserted behavior; production source is unchanged.",
+  "runtimeLedger": [
+    {
+      "kind": "browser attempt1",
+      "sessionHandle": 60579,
+      "serverGroup": 5116,
+      "port": 5174,
+      "exit": 1,
+      "cleanup": "terminal; runner closed owned context and server; port free at cleanup"
+    },
+    {
+      "kind": "browser attempt2",
+      "sessionHandle": 62783,
+      "serverGroup": 31526,
+      "port": 5174,
+      "exit": 0,
+      "cleanup": "terminal; owned context/server closed; port free at cleanup; later peer lease untouched"
+    },
+    {
+      "kind": "weighted fuzz",
+      "sessionHandle": 68587,
+      "processGroup": 97583,
+      "exit": 0,
+      "cleanup": "terminal; owned descendants absent"
+    },
+    {
+      "kind": "baseline witness",
+      "sessionHandle": 59728,
+      "processGroup": 81684,
+      "exit": 0,
+      "cleanup": "terminal; exact source restore SHA verified"
+    },
+    {
+      "kind": "focused repair",
+      "sessionHandle": 62911,
+      "processGroup": 50176,
+      "commandGroup": 75627,
+      "exit": 0,
+      "cleanup": "terminal"
+    },
+    {
+      "kind": "unstarted review queue",
+      "sessionHandle": 85283,
+      "processGroup": 77783,
+      "exit": 130,
+      "cleanup": "owned waiter alone interrupted before child/effect; absent"
+    },
+    {
+      "kind": "final review",
+      "sessionHandle": 32095,
+      "processGroup": 14751,
+      "exit": 0,
+      "cleanup": "terminal"
+    },
+    {
+      "kind": "knip",
+      "sessionHandle": 58078,
+      "processGroup": 19752,
+      "exit": 0,
+      "cleanup": "terminal"
+    }
+  ],
+  "runtimeCleanup": {
+    "observedAt": "2026-10-12T16:07:59.768Z",
+    "checkedPids": [
+      5116,
+      31526,
+      97583,
+      97592,
+      97608,
+      97616,
+      81684,
+      38017,
+      17284,
+      50176,
+      75627,
+      77783,
+      82677,
+      14751,
+      19752
+    ],
+    "remaining": "",
+    "ownCommandsSequential": true,
+    "browserValidationQuiescent": true,
+    "portScope": "Runner receipts establish port-free at own cleanup; global port may be held by a later peer and is not touched."
+  },
+  "sourceFreeze": {
+    "src/engine/rules/stack.ts": "1a8ff31ec56b3bb379dcb9838074114a86d05adf371756a5e80ddc002131a0b4",
+    "src/engine/effects/primitives/prevent.ts": "315cbd67c9a9b3e2b52ed295751f75b28c0063c0943f2ffcacd99e453ebcc779",
+    "src/engine/testing/stack-cards.ts": "09a81ca8bfe628728a5dabab6ebba4742275ba763d813fdc64dea134bffe55c3",
+    "src/engine/testing/prompt-lab.ts": "efaf4e31c8ade225b9bc0ea4fb9404d8b14837415ce976e35f7beabba1f0e043",
+    "src/engine/view/determinize.test.ts": "4a00684c75721e08ec4ea22b9e9bbb1cc7ecd515ed52d6610bc78e81455b782a",
+    "src/engine/effects/primitives/contracts/prevent-deck-bottom.contracts.ts": "0c28fcaca89d363d5c405a6444dd9c941b677a6b0c73b39fb59fce32082c517b"
+  },
+  "deliveryBoundary": "Owning parent obtains required fresh read-only Sol review and performs exact candidate delivery. Helper makes one local commit and stops."
+}

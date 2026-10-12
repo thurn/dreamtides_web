@@ -1,0 +1,41 @@
+{
+  "bead": "hv-umm2.551",
+  "phase": 5,
+  "implementMin": 39.89066666666667,
+  "implementWindow": {
+    "start": "2026-10-12T15:30:41.560Z",
+    "end": "2026-10-12T16:10:35Z"
+  },
+  "localValidationS": {
+    "focusedInitial": 8.39,
+    "focusedFailed": 11.65098662499804,
+    "baseline": 4.057065000000875,
+    "fuzz": 167.99751174999997,
+    "preflight": 0.009496624999999995,
+    "browserFailed": 6.7,
+    "browser": 60.528,
+    "focusedRepair": 9.148116249998566,
+    "reviewFailed": 48.791131457997835,
+    "review": 42.72794912500831,
+    "knip": 3.9583493749960326,
+    "schema": 0.1009301659942139
+  },
+  "hostLoad": 4.65,
+  "testDelta": {
+    "files": 0,
+    "lines": 5,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 6.536233333333333,
+      "note": "Measured failure-to-repair-launch diagnostic interval: owning seeded determinization check encountered the designed unknown-loop-record refusal. Includes parent scope audit, exact-base negative witness, its uninstrumented queue and bounded owning-test repair; not productive editing or CPU. OS repair launch has one-second resolution."
+    },
+    {
+      "tag": "heavy-slot-wait",
+      "minutes": 8.83805,
+      "note": "Agent avoidably wrapped lightweight checks in the shared heavy lock. Observed nonoverlapping focused repair queue/startup342.640s and unstarted review queue-to-owned-cancellation187.643s total530.283s; OS starts have one-second resolution and pure kernel wait is unknown. Command execution is separate. Corrected to sequential lightweight checks without heavy lock; no shared-host defect."
+    }
+  ]
+}

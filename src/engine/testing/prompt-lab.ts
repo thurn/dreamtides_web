@@ -308,6 +308,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
     text: "Look at the top 4 cards of your deck. Choose one: Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral.",
   },
   [STACK.preventUnlessPays.id]: { name: "Lab Denial", text: "Prevent a card the opponent played unless they pay 2●." },
+  [STACK.preventToDeckBottom.id]: { name: "Lab Undertow", text: "Prevent a played card. Put it on the bottom of its owner's deck." },
   [STACK.preventUnlessAbandons.id]: { name: "Lab Ransom", text: "Prevent a card the opponent played unless they abandon a non-figment character." },
   [STACK.banishVoidToDraw.id]: { name: "Lab Exhumation", text: "To play this card, banish 2 cards from your void. Draw a card." },
   [LOOP.freePoints.id]: { name: "Lab Engine", text: "Gain 1⍟." },
@@ -1007,6 +1008,26 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     },
     script: [play("player", (ids) => first(ids.player.hand)), play("enemy", (ids) => first(ids.enemy.hand))],
     presents: [{ side: "player", answer: () => false }],
+  },
+  {
+    name: "prevent-deck-bottom-player",
+    description: "The human prevents the enemy's event onto the bottom of its owner's deck",
+    setup: {
+      active: "enemy", phase: "day",
+      player: { hand: [STACK.preventToDeckBottom.id], energy: 2, deck: deck(6) },
+      enemy: { hand: [SYNTHETIC.event0.id], energy: 2, deck: deck(6) },
+    },
+    script: [play("enemy", (ids) => first(ids.enemy.hand))],
+  },
+  {
+    name: "prevent-deck-bottom-enemy",
+    description: "The enemy prevents the human's event onto the bottom of its owner's deck",
+    setup: {
+      active: "player", phase: "day",
+      player: { hand: [SYNTHETIC.event0.id, SYNTHETIC.interruptEvent.id], energy: 2, deck: deck(6) },
+      enemy: { hand: [STACK.preventToDeckBottom.id], energy: 2, deck: deck(6) },
+    },
+    script: [play("player", (ids) => first(ids.player.hand)), play("enemy", (ids) => first(ids.enemy.hand))],
   },
   {
     name: "prevent-unless-abandons",

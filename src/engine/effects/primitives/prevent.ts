@@ -14,8 +14,8 @@ export type UnlessAbandonsPredicate = Omit<CharacterSelector, "controller">;
 
 /**
  * "Prevent a card": the chosen card leaves the stack without resolving and
- * goes to its owner's void, or to `destination` for the "put it on top of
- * its owner's deck", "into its owner's hand", and "put that card into your
+ * goes to its owner's void, or to `destination` for the "put it on top or on
+ * the bottom of its owner's deck", "into its owner's hand", and "put that card into your
  * hand" variants. With `unlessPays`, the opponent of the prevent's
  * controller may pay that much ● to keep the card on the stack. With
  * `unlessAbandons`, that opponent may instead abandon a character they

@@ -1326,8 +1326,11 @@ enemy character. In effect both characters in the challenge are dissolved.
 **Prevent** — Counter a card on the stack, sending it to its owner's void
 without resolving. Prevent effects are always Interrupts. Variants include
 conditional forms such as "Prevent an event unless the opponent pays 2●," and
-forms that send the card elsewhere: on top of its owner's deck, into its
-owner's hand, or into your hand (see [Zones](#zones) → Hand).
+forms that send the card elsewhere: on top or on the bottom of its owner's
+deck, into its owner's hand, or into your hand (see [Zones](#zones) → Hand).
+A deck destination uses the card's owner, even when another player played
+the card. The rest of that deck keeps its order, and both players know the
+prevented card's new position.
 
 In a conditional form, "the opponent" is the opponent of the Prevent's
 controller, and the played card it prevents is one that opponent played. They

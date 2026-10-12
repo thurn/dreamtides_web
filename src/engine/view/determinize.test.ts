@@ -78,7 +78,12 @@ describe("determinize", () => {
         expect(invariantViolations(sampled, engine.catalog)).toEqual([]);
         expect(engine.decision(sampled) !== null || sampled.result !== null).toBe(true);
         const later = playRandomActions(engine, sampled, new PolicyRandom(battleSeed(`legal-play-${String(index)}`)), {
-          stop: (_state, actions) => actions >= 30,
+          stop: (current, actions) => {
+            // An unknown sampled recording preserves the offer but cannot be explored.
+            // The loop owner's view distinguishes it from an opponent's hidden recording.
+            const loop = engine.view(current, viewer).loop;
+            return actions >= 30 || (loop !== null && engine.view(current, loop.side).loop?.recording === undefined);
+          },
         });
         expect(later.end).not.toBe("noDecision");
         expect(invariantViolations(later.state, engine.catalog)).toEqual([]);

@@ -74,6 +74,8 @@ export const STACK = {
   preventToHand: card(3, "event", 0, () => [event(p.prevent(stackItem({ controller: "opponent" }), { destination: "ownerHand" }))], "interrupt"),
   /** ❖❖ "Prevent a played card, then put that card into your hand." */
   preventToYourHand: card(17, "event", 0, () => [event(p.prevent(stackItem(), { destination: "yourHand" }))], "interrupt"),
+  /** ❖❖ "Prevent a played card. Put it on the bottom of its owner's deck." */
+  preventToDeckBottom: card(25, "event", 0, () => [event(p.prevent(stackItem(), { destination: "deckBottom" }))], "interrupt"),
   /** ❖❖ "Prevent a card the opponent played unless they pay 2●." */
   preventUnlessPays: card(4, "event", 1, () => [event(p.prevent(stackItem({ controller: "opponent" }), { unlessPays: 2 }))], "interrupt"),
   /** ❖❖ "Prevent a card the opponent played unless they abandon a non-figment character." */
