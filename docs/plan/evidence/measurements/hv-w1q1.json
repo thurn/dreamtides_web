@@ -1,0 +1,131 @@
+{
+  "bead": "hv-w1q1",
+  "base": "fe157727186c5bfca37593bed5ad38d358bd9869",
+  "implementationWindow": {
+    "start": "2026-10-12T10:17:53Z",
+    "end": "2026-10-12T10:20:16.742613+00:00",
+    "scope": "Observed parent dispatch sample immediately before helper authorization through final precommit; includes read-only research, coordination and verification. Final commit tail is bounded by the source committer timestamp.",
+    "finalPrecommitAt": "2026-10-12T10:20:16.742613+00:00"
+  },
+  "commands": {
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "wallS": 0.18869104199984577,
+      "start": "2026-10-12T10:18:57.346613+00:00",
+      "end": "2026-10-12T10:18:57.535455+00:00",
+      "exit": 0,
+      "wrapperPid": 3973,
+      "npmPid": 3984,
+      "terminal": true,
+      "receipt": "/tmp/hv-w1q1-review.log"
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "wallS": 4.35338299999421,
+      "start": "2026-10-12T10:18:57.535781+00:00",
+      "end": "2026-10-12T10:19:01.889228+00:00",
+      "exit": 0,
+      "wrapperPid": 3973,
+      "npmPid": 4061,
+      "terminal": true,
+      "receipt": "/tmp/hv-w1q1-knip.log"
+    },
+    "reviewFinal": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "wallS": 0.2786865840025712,
+      "start": "2026-10-12T10:19:40.224711+00:00",
+      "end": "2026-10-12T10:19:40.503557+00:00",
+      "exit": 0,
+      "wrapperPid": 17027,
+      "npmPid": 17028,
+      "terminal": true,
+      "receipt": "/tmp/hv-w1q1-review-final.log"
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "wallS": 0.06062191700038966,
+      "start": "2026-10-12T10:20:16.743053+00:00",
+      "end": "2026-10-12T10:20:16.803682+00:00",
+      "exit": 0,
+      "wrapperPid": 17911,
+      "nodePid": 17919,
+      "terminal": true,
+      "receipt": "/tmp/hv-w1q1-schema.log"
+    }
+  },
+  "audit": {
+    "grepCommand": [
+      "rg",
+      "-n",
+      "^- Ladder:",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.145-1.md",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.494-1.md"
+    ],
+    "grepExit": 0,
+    "grepReceipt": "/tmp/hv-w1q1-ladder-grep.log",
+    "grepLines": 2,
+    "baselineNormativeAsPrototypeClaims": 2,
+    "finalNormativeAsPrototypeClaims": 0,
+    "changedRDs": [
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.145-1.md",
+        "line": 2,
+        "before": "- Ladder: 2 (rules.md \u00a7 Costs, Requirements, and X \u2192 X costs leaves 0 for X to context; \u00a7 Spark \u2192 Spark outside play makes a \u2726 criterion compare a character's effective spark in play; \u00a7 Targeting says effects such as \"Dissolve all characters\" do not target), supported by 4 (MTG The Meathook Massacre, the card's `mtgName`, which gives each creature on both sides \u2212X/\u2212X and may be cast with X = 0)",
+        "after": "- Ladder: 4 (MTG The Meathook Massacre, the card's `mtgName`, gives each creature on both sides \u2212X/\u2212X and may be cast with X = 0), then 5 for the contextual meaningful reading of X = 0, the simplest reading consistent with the printed text. The ladder is not invoked for the settled normative rules.md \u00a7 Costs, Requirements, and X \u2192 X costs, \u00a7 Spark \u2192 Spark outside play and \u00a7 Targeting rules: contextual zero, effective spark in play, and non-targeting \"Dissolve all characters\" effects.",
+        "nonLadderBytesEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.494-1.md",
+        "line": 2,
+        "before": "- Ladder: 2 (rules.md already settles every part but the reference: \"When you discard a card\" triggers once per card discarded from your hand by any cause, RD-hv-umm2.78-1 makes a gain with no stated duration permanent and plain Reclaim keep the card's cost, and \"When you discard this card, it gains reclaim\" names its card only while it is in your void), then 5 (simplest reading consistent with the printed text) for the reference \"it\"; step 1 is silent (no D-, C-, or P-entry names this card), and step 3 is silent (the `~/dreamtides` Rust engine parses `GainsReclaim` but implements no mutation for it)",
+        "after": "- Ladder: 5 (the simplest reading consistent with the printed text) for the reference \"it\". The ladder is not invoked for the settled normative rules.md discard and Reclaim rules: \"When you discard a card\" triggers once per card discarded from your hand by any cause, RD-hv-umm2.78-1 establishes a permanent plain gain keeping the card's cost, and \"When you discard this card, it gains reclaim\" names its card only while it is in your void. Those established anchors supply normative support, rather than a new prototype-behavior claim. Step 1 is silent (no D-, C-, or P-entry names this card), and step 3 is silent (the `~/dreamtides` Rust engine parses `GainsReclaim` but implements no mutation for it).",
+        "nonLadderBytesEqual": true
+      }
+    ],
+    "nonLadderByteEquality": true,
+    "scope": "Exactly145-1 and494-1; no other RD audit or changes. No new prototype history or external analog asserted; settled norms distinguished from original supported rungs4/5."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementMin": {
+        "measuredFor": "Whole observed parent dispatch sample10:17:53Z to final precommit, including helper research/checks; committer tail separately bounded."
+      },
+      "hostLoad": {
+        "measuredFor": "Knip prepare-stage start2026-10-12T10:18:57.713Z console receipt"
+      },
+      "testDelta.files": {
+        "definition": "New Vitest runner entrypoints; zero"
+      },
+      "testDelta.lines": {
+        "definition": "Test additions; zero"
+      }
+    }
+  },
+  "runtime": {
+    "longLived": [],
+    "ports": [],
+    "terminalExecSessions": [
+      58704
+    ],
+    "status": "All finite checks terminal; no server, browser or provider started. No heavy command or heavy slot required by D17."
+  },
+  "verificationScope": "Documentation-only; initial review exits0 with no applicable checks; Knip pass; final review includes evidence validation. No tests, full review, fuzz, browser QA or independent review.",
+  "preExistingIssues": [],
+  "failedCommands": []
+}
