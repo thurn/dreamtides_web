@@ -1,0 +1,343 @@
+{
+  "bead": "hv-umm2.176",
+  "phase": 5,
+  "base": "62543a58c43bccb34c665c93e7ef6756d5b90d39",
+  "implementWindowProvenance": {
+    "start": "2026-10-12T13:59:59Z",
+    "source": "Parent supplied measured UTC boundary immediately before implementation dispatch; actual model start is unknown.",
+    "end": "Precommit UTC clock, refreshed immediately before commit; within one minute of commit."
+  },
+  "scope": {
+    "entities": [
+      "3cda9dd7-cb81-43c1-9db5-1444d7363e13",
+      "88994286-96db-4ba6-a660-b30ae9b52cff",
+      "c11eb833-a45b-4983-949d-848039d0504c"
+    ],
+    "newPrimitives": [],
+    "newPromptKinds": [],
+    "newStatuses": [],
+    "fallout": [],
+    "rulesDecisionsCreated": [],
+    "cardIssuesCreated": [],
+    "existingDecision": "RD-hv-7x4l.7-1",
+    "reviewPolicy": "Small composition; not core-review under D18. Parent handles delivery. No independent CLI code review was required or dispatched."
+  },
+  "composition": {
+    "spirit": "Resolving forDuration sparkModifier locks affected characters and count at resolution; it emits continuous effect changes, not sparkGained.",
+    "siphoner": "onChallenge payTo exact discard1 then draw1; separate whenDiscard gainSpark self2/base or3/amplified untilEndOfTurn.",
+    "aerie": "onChallenge payTo exact discard1 then permanent self gain2/base or4/amplified."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 4,
+    "plainScenarioModules": 1,
+    "plainScenarioLines": 58
+  },
+  "D20": {
+    "newScenarios": "cards-64 intrinsic Siphoner payment/draw\u2192separate source gain\u2192boosted Challenge scoring\u2192Ending expiry, both actors/base+amp. Other cards are primitive compositions.",
+    "reusedPaymentContracts": [
+      "pay-to.contracts.ts",
+      "pay-to-recovery.contracts.ts"
+    ]
+  },
+  "D21": {
+    "sha256FirstBytes": [
+      98,
+      2,
+      246
+    ],
+    "sampled": [
+      "88994286-96db-4ba6-a660-b30ae9b52cff"
+    ],
+    "judgedCells": 8,
+    "finalPass": 8,
+    "observationalFailedAttempts": 3,
+    "screens": [
+      "siphoner-active-desktop.png",
+      "siphoner-active-mobile.png",
+      "siphoner-enemy-amplified-active-desktop.png"
+    ],
+    "imageScale": "README/native qa.capture CSS scale",
+    "dimensions": {
+      "siphoner-active-desktop.png": [
+        1440,
+        900
+      ],
+      "siphoner-active-mobile.png": [
+        390,
+        844
+      ],
+      "siphoner-enemy-amplified-active-desktop.png": [
+        1440,
+        900
+      ]
+    },
+    "visualInspection": "Implementer and parent inspected all representative final states; clock and spark4/base or5/amplified visible, source in bounds and controls clear.",
+    "observedDecline": "Base-player desktop and mobile use actual No control once, then accept next normal Challenge. Existing cancellation contracts are cited; no separate browser cancel/back workflow is claimed."
+  },
+  "validation": {
+    "focused": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/content/specs/specs.test.ts src/engine/content-gates.test.ts",
+      "exit": 0,
+      "wallS": 4.12,
+      "testStepS": 2.3,
+      "files": 2,
+      "tests": 127
+    },
+    "review": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+      "exit": 0,
+      "wallS": 54.079,
+      "stepsS": {
+        "prepare": 1.2,
+        "typecheck": 5.4,
+        "typecheckNode": 7.5,
+        "importCycles": 2.9,
+        "lint": 6.3,
+        "related": 52.2,
+        "restore": 0.7
+      },
+      "files": 223,
+      "tests": 3623
+    },
+    "knip": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run knip",
+      "exit": 0,
+      "wallS": 3.257,
+      "stepS": 1.7
+    },
+    "fuzz": {
+      "command": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids <exact-three-UUIDs>",
+      "exit": 0,
+      "nativeExecutionWallS": 160.9,
+      "cpuS": 171.6,
+      "games": 300,
+      "steps": 146120,
+      "prompts": 4161,
+      "interactiveReruns": 378,
+      "failures": 0,
+      "included": [
+        613,
+        616,
+        612
+      ],
+      "exercised": [
+        98,
+        205,
+        298
+      ],
+      "lockWaitS": "Not separately timestamped; no measured lease-wait claim."
+    },
+    "preflight": {
+      "command": "npm run lab:preflight -- --cards <exact-three-UUIDs> --variants all --as both",
+      "exit": 0,
+      "nativeEngineWallS": 0.033919292,
+      "pass": 32,
+      "skip": 28,
+      "fail": 0
+    },
+    "sweep": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-KWXbcF",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.176/invocations/sweep-KWXbcF",
+      "counts": {
+        "pass": 32,
+        "skip": 28
+      },
+      "attemptCounts": {
+        "pass": 32,
+        "skip": 28
+      },
+      "hostLoad": 25.75390625,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 2015,
+        "scenario": 340893.17425000004,
+        "cleanup": 786.4761660000077,
+        "execution": 343763.969542,
+        "total": 343769.969542
+      }
+    },
+    "judged": {
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1354,
+        "scenario": 230905,
+        "total": 232320
+      },
+      "exit": 0,
+      "caps": [],
+      "cells": 8,
+      "resultInvocation": "run-eq00iX"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review prepare/typecheck/related start at2026-10-12T14:08:36.100Z; native review os.loadavg 1-minute sample29.32275390625, equivalent kernel metric to sysctl vm.loadavg."
+      },
+      "testDelta": {
+        "scope": "*.test files and lines; plain scenario module/cases/lines are separately recorded."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "focused": 24.73974609375,
+    "review": 29.32275390625,
+    "knip": 24.1181640625,
+    "preflight": 27.0498046875,
+    "sweep": 25.75390625,
+    "judgedFinal": 5.37890625
+  },
+  "failedJudgedAttempts": [
+    {
+      "attempt": 1,
+      "error": "desktop#0: Error: active duration indicator missing\n    at judged (evalmachine.<anonymous>:1633:64)\n    at async evalmachine.<anonymous>:1658:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "wallMs": {
+        "browserLeaseWait": 8,
+        "serve": 1701,
+        "scenario": 37564,
+        "total": 39341
+      },
+      "caps": [],
+      "classification": "ignored-script observation mistake; final matching cell passes after concrete observation repair"
+    },
+    {
+      "attempt": 2,
+      "error": "desktop#0: Error: expired duration indicator retained\n    at judged (evalmachine.<anonymous>:1642:48)\n    at async evalmachine.<anonymous>:1659:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 1970,
+        "scenario": 51369,
+        "total": 53408
+      },
+      "caps": [],
+      "classification": "ignored-script observation mistake; final matching cell passes after concrete observation repair"
+    },
+    {
+      "attempt": 3,
+      "error": "desktop#0: QaTimeoutError: qa.battle Challenge payment and separate spark trigger: timed out after 90000 ms; last action pass (main) at near:night; {\"at\":\"near:night\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":167}}; history near:day > near:night > far:dawn > far:day > far:dusk > far:challenge > near:dawn > near:day > near:dusk > near:night\n    at Object.timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.playUntil (evalmachine.<anonymous>:1275:52)\n    at async judged (evalmachine.<anonymous>:1598:5)\n    at async evalmachine.<anonymous>:1660:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1686,
+        "scenario": 174809,
+        "total": 176629
+      },
+      "caps": [],
+      "classification": "ignored-script observation mistake; final matching cell passes after concrete observation repair"
+    }
+  ],
+  "qaObservationRecoveryWindow": {
+    "start": "2026-10-12T14:11:21.249Z",
+    "end": "2026-10-12T14:20:28.833Z",
+    "elapsedMin": 9.126399999999999,
+    "scope": "First judged runtime startup through final repaired runtime startup, including three failed attempts and repair analysis; excludes final passing acceptance and initial scenario preparation. Below10min for this measured recovery span."
+  },
+  "sourceFreeze": {
+    "sha256": {
+      "src/content/cards/spirit-bond-3cda9dd7.ts": "c3c09a985418e8912a40df6c0f6e58363bc232a206fd022897cd78d0d69e38b0",
+      "src/content/cards/smoke-siphoner-88994286.ts": "f40e757cce04b6802808f15caa2d9c3280ecc507f34eb3a4a1e61e35f06dccd6",
+      "src/content/cards/aerie-defender-c11eb833.ts": "992f210d45f133ec5ff04f132a5558d21c2833a64fb80d00a49645a4c07e7e7a",
+      "src/content/specs/cards-64.scenarios.ts": "648c437756ff0ad7a512a9c9a657dd6f7cdd423d54aedf9087625ecc5d201df8"
+    },
+    "unchangedAfterRequiredReview": {
+      "src/content/cards/spirit-bond-3cda9dd7.ts": true,
+      "src/content/cards/smoke-siphoner-88994286.ts": true,
+      "src/content/cards/aerie-defender-c11eb833.ts": true,
+      "src/content/specs/cards-64.scenarios.ts": true
+    },
+    "printedText": "Original printed fields untouched; verifiedText hashes match expectedVerifiedText for all three modules."
+  },
+  "runtimeLedger": [
+    {
+      "kind": "weighted-fuzz",
+      "pids": [
+        93316,
+        93756,
+        93836
+      ],
+      "unifiedSession": 6168,
+      "cleanup": "exit0; final scoped PID check none running"
+    },
+    {
+      "kind": "sweep",
+      "pid": 17106,
+      "serverPid": 17168,
+      "port": 5274,
+      "unifiedSession": 45468,
+      "providerHandles": "Native summary does not expose provider identity; owner record was cleared before attempted snapshot. No token/context invented.",
+      "cleanup": "exit0 native cleanup port free and final scoped PIDs none running"
+    },
+    {
+      "kind": "judged-attempt1",
+      "pid": 46476,
+      "serverPid": 46544,
+      "port": 5274,
+      "slot": 1,
+      "token": "6b4e9706-7a57-44fe-b83e-a22968e9d3d8",
+      "mcpSessionId": "743034a4-0297-467b-bc97-5819418859fa",
+      "provider": "http://localhost:8931/mcp",
+      "protocol": "2025-11-25",
+      "startedAt": "2026-10-12T14:11:21.249Z",
+      "cleanup": "native browser_close/owner-clear/server-tree/lease close completed; command terminal; cleanup reported port free; final scoped PID check found none running"
+    },
+    {
+      "kind": "judged-attempt2",
+      "pid": 98591,
+      "serverPid": 98639,
+      "port": 5274,
+      "slot": 1,
+      "token": "1276d440-9351-462b-872b-d4449e393abe",
+      "mcpSessionId": "e6a0adc6-380a-4cb0-aea3-7768d14dafd2",
+      "provider": "http://localhost:8931/mcp",
+      "protocol": "2025-11-25",
+      "startedAt": "2026-10-12T14:12:46.768Z",
+      "cleanup": "native browser_close/owner-clear/server-tree/lease close completed; command terminal; cleanup reported port free; final scoped PID check found none running"
+    },
+    {
+      "kind": "judged-attempt3",
+      "pid": 10203,
+      "serverPid": 10250,
+      "port": 5274,
+      "slot": 1,
+      "token": "14ffa0bf-f8e1-4d87-8ae8-e799ccba1abd",
+      "mcpSessionId": "5a99abb8-6bcc-4fd0-8d51-d436e09ea413",
+      "provider": "http://localhost:8931/mcp",
+      "protocol": "2025-11-25",
+      "startedAt": "2026-10-12T14:14:46.026Z",
+      "cleanup": "native browser_close/owner-clear/server-tree/lease close completed; command terminal; cleanup reported port free; final scoped PID check found none running"
+    },
+    {
+      "kind": "judged-attempt4",
+      "pid": 73055,
+      "serverPid": 73098,
+      "port": 5174,
+      "slot": 0,
+      "token": "503298b4-a2a8-4ab3-bf30-339345e16fe9",
+      "mcpSessionId": "efee2982-1bd2-42b3-aa70-2d60130e4048",
+      "provider": "http://localhost:8931/mcp",
+      "protocol": "2025-11-25",
+      "startedAt": "2026-10-12T14:20:28.833Z",
+      "cleanup": "native browser_close/owner-clear/server-tree/lease close completed; command terminal; cleanup reported port free; final scoped PID check found none running"
+    }
+  ],
+  "rawReceipts": {
+    "directory": "/tmp/dreamtides-executor-01a1304d/176-validation",
+    "ignoredScenario": "judged-final.mjs",
+    "sweep": "sweep-raw-reports/ (33 nativeJSON reports)",
+    "judged": "judged-attempt1-raw/ through judged-attempt4-raw/; persisted JSONL and native result; owner receipts retained",
+    "primaryInvocations": [
+      "sweep-KWXbcF",
+      "run-DR5MMI",
+      "run-oQrQ3M",
+      "run-NvlkiG",
+      "run-eq00iX"
+    ]
+  },
+  "undone": [],
+  "precommitClock": "2026-10-12T14:28:18Z"
+}

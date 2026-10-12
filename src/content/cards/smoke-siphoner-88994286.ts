@@ -1,3 +1,6 @@
+import { self } from "../../engine/dsl/builders";
+import { onChallenge, triggered, whenDiscard } from "../../engine/dsl/triggers";
+import { draw, gainSpark, payTo } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 169,
   art: { x: -0.189, y: 0.897, scale: 1.07 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onChallenge(), payTo({ discard: 1 }, draw(1))),
+    triggered(whenDiscard(), gainSpark(self(), variant.amplified ? 3 : 2, "untilEndOfTurn")),
+  ],
+  verifiedText: "5er3yt6bri",
 });

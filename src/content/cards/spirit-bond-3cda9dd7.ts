@@ -1,3 +1,5 @@
+import { all, characterYouControl, count, event, lockedAtResolution } from "../../engine/dsl/builders";
+import { forDuration, sparkModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 13,
   art: { x: -0.294, y: -0.102, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(forDuration("untilEndOfTurn", sparkModifier(all(characterYouControl()), lockedAtResolution(count(characterYouControl())))))],
+  verifiedText: "x9b99sltkd",
 });
