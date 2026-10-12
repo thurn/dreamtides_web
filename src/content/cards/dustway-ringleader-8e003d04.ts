@@ -1,4 +1,9 @@
+import { activated, characterYouControl, energy, exhaustSelf } from "../../engine/dsl/builders";
+import { triggered, whenScores } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
 import { card } from "../define";
+import outsider from "../figments/outsider-bf9ccca0";
 
 export default card({
   name: "Dustway Ringleader",
@@ -21,5 +26,15 @@ export default card({
   cardNumber: 241,
   art: { x: -0.541, y: 0.18, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated(
+      [energy(3), exhaustSelf()],
+      p.materializeFigments(parseFigmentId(outsider.id), 1, { spark: variant.amplified ? 2 : 1 }),
+    ),
+    triggered(
+      whenScores(characterYouControl({ subtype: "Outsider" })),
+      p.sequence(p.draw(1), p.gainPoints(2)),
+    ),
+  ],
+  verifiedText: "aquk0s4rm9",
 });

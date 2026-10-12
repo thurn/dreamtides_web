@@ -1,0 +1,1570 @@
+{
+  "bead": "hv-umm2.161",
+  "base": "0ca13b3bc8c62708b5db8c948693d42a35892ff9",
+  "implementWindow": {
+    "dispatchPostObservation": "2026-10-12T08:19:37.213316Z",
+    "dispatchClockStatus": "post-dispatch proxy; actual helper/model start uninstrumented",
+    "implementAcknowledgedAt": "2026-10-12T08:21:59.460030Z",
+    "commitMetadataAt": "2026-10-12T09:13:04Z",
+    "actualGitReceipt": {
+      "file": "git-commit.json",
+      "directory": "/tmp/dreamtides-figment-cards-161/helper-receipts",
+      "meaning": "Actual Git start/end/PID recorded separately by the command wrapper after commit acknowledgement."
+    },
+    "precommitEvidenceObservedAt": "2026-10-12T09:11:59.194443+00:00",
+    "metadataClockMeaning": "Parent precommit observation supplied for Git author/committer metadata and proxy elapsed normalization; actual Git process clock is separate."
+  },
+  "commands": {
+    "focused": {
+      "label": "focused",
+      "command": "npm",
+      "args": [
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts",
+        "src/content/specs/specs.test.ts",
+        "src/engine/rules/figments.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:23:36.653Z",
+      "wrapperPid": 16899,
+      "childPid": 16916,
+      "identity": "16916 16899 16916 Mon Oct 12 01:23:36 2026     node /opt/homebrew/bin/npm test -- src/engine/content-gates.test.ts src/content/specs/specs.test.ts src/engine/rules/figments.test.ts src/engine/triggers/triggers-patterns.test.ts",
+      "startHostLoad": [
+        5.8525390625,
+        6.05517578125,
+        8.56103515625
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:23:40.338Z",
+      "elapsedMs": 3685,
+      "endHostLoad": [
+        6.1044921875,
+        6.10400390625,
+        8.5634765625
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "focused-final": {
+      "label": "focused-final",
+      "command": "npm",
+      "args": [
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:25:01.856Z",
+      "wrapperPid": 19289,
+      "childPid": 19304,
+      "identity": "19304 19289 19304 Mon Oct 12 01:25:01 2026     node /opt/homebrew/bin/npm test -- src/content/specs/specs.test.ts",
+      "startHostLoad": [
+        5.78662109375,
+        6.103515625,
+        8.34716796875
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:25:05.527Z",
+      "elapsedMs": 3671,
+      "endHostLoad": [
+        8.76611328125,
+        6.7158203125,
+        8.5498046875
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "review": {
+      "label": "review",
+      "command": "npm",
+      "args": [
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:23:52.657Z",
+      "wrapperPid": 17696,
+      "childPid": 17706,
+      "identity": "17706 17696 17706 Mon Oct 12 01:23:52 2026     node /opt/homebrew/bin/npm run review",
+      "startHostLoad": [
+        6.1005859375,
+        6.1005859375,
+        8.533203125
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:24:38.237Z",
+      "elapsedMs": 45580,
+      "endHostLoad": [
+        6.16650390625,
+        6.21435546875,
+        8.4541015625
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "knip": {
+      "label": "knip",
+      "command": "npm",
+      "args": [
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:25:09.745Z",
+      "wrapperPid": 19987,
+      "childPid": 19999,
+      "identity": "19999 19987 19999 Mon Oct 12 01:25:09 2026     node /opt/homebrew/bin/npm run knip",
+      "startHostLoad": [
+        8.76611328125,
+        6.7158203125,
+        8.5498046875
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:25:13.375Z",
+      "elapsedMs": 3630,
+      "endHostLoad": [
+        11.50732421875,
+        7.31787109375,
+        8.75146484375
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "fuzz-wrapper": {
+      "label": "fuzz-wrapper",
+      "command": "lockf",
+      "args": [
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node",
+        "/tmp/dreamtides-figment-cards-161/helper-receipts/measure.mjs",
+        "fuzz-execution",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "724a1362-3f0f-4b77-b14e-22c0b877349a,8e003d04-e489-4c55-9c72-fc5612909d07,ccff822e-e2ae-4d38-9720-6df289dbe4cd"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:25:25.906Z",
+      "wrapperPid": 31949,
+      "childPid": 32042,
+      "identity": "32042 31949 32042 Mon Oct 12 01:25:25 2026     lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock node /tmp/dreamtides-figment-cards-161/helper-receipts/measure.mjs fuzz-execution npm run fuzz:engine -- --games 300 --weight-uuids 724a1362-3f0f-4b77-b14e-22c0b877349a,8e003d04-e489-4c55-9c72-fc5612909d07,ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+      "startHostLoad": [
+        16.50439453125,
+        8.6376953125,
+        9.197265625
+      ],
+      "workers": "2",
+      "end": "2026-10-12T08:28:00.211Z",
+      "elapsedMs": 154305,
+      "endHostLoad": [
+        14.28564453125,
+        12.03955078125,
+        10.5810546875
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "fuzz-execution": {
+      "label": "fuzz-execution",
+      "command": "npm",
+      "args": [
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "724a1362-3f0f-4b77-b14e-22c0b877349a,8e003d04-e489-4c55-9c72-fc5612909d07,ccff822e-e2ae-4d38-9720-6df289dbe4cd"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:25:25.954Z",
+      "wrapperPid": 32069,
+      "childPid": 32121,
+      "identity": "32121 32069 32121 Mon Oct 12 01:25:25 2026     node /opt/homebrew/bin/npm run fuzz:engine -- --games 300 --weight-uuids 724a1362-3f0f-4b77-b14e-22c0b877349a,8e003d04-e489-4c55-9c72-fc5612909d07,ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+      "startHostLoad": [
+        16.50439453125,
+        8.6376953125,
+        9.197265625
+      ],
+      "workers": "2",
+      "end": "2026-10-12T08:28:00.207Z",
+      "elapsedMs": 154253,
+      "endHostLoad": [
+        14.28564453125,
+        12.03955078125,
+        10.5810546875
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "omission": {
+      "label": "omission",
+      "command": "python3",
+      "args": [
+        "/tmp/dreamtides-figment-cards-161/helper-receipts/omission.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:28:18.023Z",
+      "wrapperPid": 67273,
+      "childPid": 67286,
+      "identity": "67286 67273 67286 Mon Oct 12 01:28:18 2026     python3 /tmp/dreamtides-figment-cards-161/helper-receipts/omission.py",
+      "startHostLoad": [
+        12.30224609375,
+        11.7099609375,
+        10.48876953125
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:28:21.121Z",
+      "elapsedMs": 3098,
+      "endHostLoad": [
+        11.87744140625,
+        11.63134765625,
+        10.46826171875
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "review-final": {
+      "label": "review-final",
+      "command": "npm",
+      "args": [
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:28:47.313Z",
+      "wrapperPid": 69457,
+      "childPid": 69473,
+      "identity": "69473 69457 69473 Mon Oct 12 01:28:47 2026     node /opt/homebrew/bin/npm run review",
+      "startHostLoad": [
+        9.32421875,
+        11.048828125,
+        10.29150390625
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:29:28.488Z",
+      "elapsedMs": 41175,
+      "endHostLoad": [
+        8.71337890625,
+        10.69091796875,
+        10.1953125
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "preflight": {
+      "label": "preflight",
+      "command": "npm",
+      "args": [
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "724a1362-3f0f-4b77-b14e-22c0b877349a,8e003d04-e489-4c55-9c72-fc5612909d07,ccff822e-e2ae-4d38-9720-6df289dbe4cd"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:29:39.691Z",
+      "wrapperPid": 72916,
+      "childPid": 72934,
+      "identity": "72934 72916 72934 Mon Oct 12 01:29:39 2026     node /opt/homebrew/bin/npm run lab:preflight -- --cards 724a1362-3f0f-4b77-b14e-22c0b877349a,8e003d04-e489-4c55-9c72-fc5612909d07,ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+      "startHostLoad": [
+        7.8349609375,
+        10.43701171875,
+        10.11083984375
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:29:40.320Z",
+      "elapsedMs": 629,
+      "endHostLoad": [
+        7.68798828125,
+        10.36328125,
+        10.08642578125
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "sweep": {
+      "label": "sweep",
+      "command": "node",
+      "args": [
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.161",
+        "--cards",
+        "724a1362-3f0f-4b77-b14e-22c0b877349a,8e003d04-e489-4c55-9c72-fc5612909d07,ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+        "--capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:29:51.954Z",
+      "wrapperPid": 73299,
+      "childPid": 73309,
+      "identity": "73309 73299 73309 Mon Oct 12 01:29:51 2026     node scripts/qa/card-sweep.mjs --bead hv-umm2.161 --cards 724a1362-3f0f-4b77-b14e-22c0b877349a,8e003d04-e489-4c55-9c72-fc5612909d07,ccff822e-e2ae-4d38-9720-6df289dbe4cd --capture",
+      "startHostLoad": [
+        7.30029296875,
+        10.18701171875,
+        10.0263671875
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:35:49.898Z",
+      "elapsedMs": 357944,
+      "endHostLoad": [
+        24.97119140625,
+        17.314453125,
+        13.0654296875
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "supplemental-captain": {
+      "label": "supplemental-captain",
+      "command": "node",
+      "args": [
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.161/activated-behavior.mjs",
+        "--bead",
+        "hv-umm2.161",
+        "--arg",
+        "card=724a1362-3f0f-4b77-b14e-22c0b877349a",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:36:27.557Z",
+      "wrapperPid": 44284,
+      "childPid": 44302,
+      "identity": "44302 44284 44302 Mon Oct 12 01:36:27 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.161/activated-behavior.mjs --bead hv-umm2.161 --arg card=724a1362-3f0f-4b77-b14e-22c0b877349a --timeout 240",
+      "startHostLoad": [
+        22.5732421875,
+        17.5625,
+        13.3447265625
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:37:25.098Z",
+      "elapsedMs": 57541,
+      "endHostLoad": [
+        26.32373046875,
+        19.89208984375,
+        14.5009765625
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "supplemental-ringleader": {
+      "label": "supplemental-ringleader",
+      "command": "node",
+      "args": [
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.161/activated-behavior.mjs",
+        "--bead",
+        "hv-umm2.161",
+        "--arg",
+        "card=8e003d04-e489-4c55-9c72-fc5612909d07",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:37:43.691Z",
+      "wrapperPid": 74466,
+      "childPid": 74482,
+      "identity": "74482 74466 74482 Mon Oct 12 01:37:43 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.161/activated-behavior.mjs --bead hv-umm2.161 --arg card=8e003d04-e489-4c55-9c72-fc5612909d07 --timeout 240",
+      "startHostLoad": [
+        23.4482421875,
+        19.66748046875,
+        14.5458984375
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:39:17.704Z",
+      "elapsedMs": 94013,
+      "endHostLoad": [
+        17.77685546875,
+        20.0830078125,
+        15.341796875
+      ],
+      "code": 1,
+      "signal": null
+    },
+    "supplemental-ringleader-fixed": {
+      "label": "supplemental-ringleader-fixed",
+      "command": "node",
+      "args": [
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.161/activated-behavior.mjs",
+        "--bead",
+        "hv-umm2.161",
+        "--arg",
+        "card=8e003d04-e489-4c55-9c72-fc5612909d07",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:41:15.015Z",
+      "wrapperPid": 14269,
+      "childPid": 14288,
+      "identity": "14288 14269 14288 Mon Oct 12 01:41:15 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.161/activated-behavior.mjs --bead hv-umm2.161 --arg card=8e003d04-e489-4c55-9c72-fc5612909d07 --timeout 240",
+      "startHostLoad": [
+        26.57763671875,
+        21.7861328125,
+        16.5556640625
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:44:44.528Z",
+      "elapsedMs": 209513,
+      "endHostLoad": [
+        13.06494140625,
+        18.36669921875,
+        16.28076171875
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "supplemental-simulacra": {
+      "label": "supplemental-simulacra",
+      "command": "node",
+      "args": [
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.161/activated-behavior.mjs",
+        "--bead",
+        "hv-umm2.161",
+        "--arg",
+        "card=ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:45:43.105Z",
+      "wrapperPid": 90708,
+      "childPid": 90750,
+      "identity": "90750 90708 90750 Mon Oct 12 01:45:43 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.161/activated-behavior.mjs --bead hv-umm2.161 --arg card=ccff822e-e2ae-4d38-9720-6df289dbe4cd --timeout 240",
+      "startHostLoad": [
+        9.45654296875,
+        16.37158203125,
+        15.6748046875
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:48:19.635Z",
+      "elapsedMs": 156530,
+      "endHostLoad": [
+        5.68408203125,
+        11.927734375,
+        13.95458984375
+      ],
+      "code": 130,
+      "signal": null
+    },
+    "supplemental-simulacra-fixed": {
+      "label": "supplemental-simulacra-fixed",
+      "command": "node",
+      "args": [
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.161/activated-behavior.mjs",
+        "--bead",
+        "hv-umm2.161",
+        "--arg",
+        "card=ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:49:00.746Z",
+      "wrapperPid": 35697,
+      "childPid": 35712,
+      "identity": "35712 35697 35712 Mon Oct 12 01:49:00 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.161/activated-behavior.mjs --bead hv-umm2.161 --arg card=ccff822e-e2ae-4d38-9720-6df289dbe4cd --timeout 240",
+      "startHostLoad": [
+        5.07177734375,
+        10.85693359375,
+        13.4521484375
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:55:05.130Z",
+      "elapsedMs": 364384,
+      "endHostLoad": [
+        5.41455078125,
+        7.2080078125,
+        10.7587890625
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "supplemental-settled-suffix": {
+      "label": "supplemental-settled-suffix",
+      "command": "node",
+      "args": [
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.161/settled-suffix.mjs",
+        "--bead",
+        "hv-umm2.161",
+        "--arg",
+        "card=724a1362-3f0f-4b77-b14e-22c0b877349a",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T08:55:57.250Z",
+      "wrapperPid": 16329,
+      "childPid": 16367,
+      "identity": "16367 16329 16367 Mon Oct 12 01:55:57 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.161/settled-suffix.mjs --bead hv-umm2.161 --arg card=724a1362-3f0f-4b77-b14e-22c0b877349a --timeout 240",
+      "startHostLoad": [
+        4.794921875,
+        6.763671875,
+        10.37158203125
+      ],
+      "workers": null,
+      "end": "2026-10-12T08:59:29.971Z",
+      "elapsedMs": 212721,
+      "endHostLoad": [
+        20.6826171875,
+        11.54736328125,
+        11.42724609375
+      ],
+      "code": 1,
+      "signal": null
+    },
+    "supplemental-mobile-settled-final": {
+      "label": "supplemental-mobile-settled-final",
+      "command": "node",
+      "args": [
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.161/settled-suffix-fixed.mjs",
+        "--bead",
+        "hv-umm2.161",
+        "--viewports",
+        "mobile",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T09:05:59.294Z",
+      "wrapperPid": 99072,
+      "childPid": 99094,
+      "identity": "99094 99072 99094 Mon Oct 12 02:05:59 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.161/settled-suffix-fixed.mjs --bead hv-umm2.161 --viewports mobile --timeout 180",
+      "startHostLoad": [
+        24.29541015625,
+        16.04736328125,
+        13.068359375
+      ],
+      "workers": null,
+      "end": "2026-10-12T09:06:46.933Z",
+      "elapsedMs": 47639,
+      "endHostLoad": [
+        22.64697265625,
+        17.0390625,
+        13.615234375
+      ],
+      "code": 0,
+      "signal": null
+    },
+    "supplemental-settled-suffix-fixed": {
+      "label": "supplemental-settled-suffix-fixed",
+      "command": "node",
+      "args": [
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.161/settled-suffix-fixed.mjs",
+        "--bead",
+        "hv-umm2.161",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T09:02:26.987Z",
+      "wrapperPid": 35718,
+      "childPid": 35731,
+      "identity": "35731 35718 35731 Mon Oct 12 02:02:26 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.161/settled-suffix-fixed.mjs --bead hv-umm2.161 --timeout 240",
+      "startHostLoad": [
+        7.697265625,
+        10.02685546875,
+        10.857421875
+      ],
+      "workers": null,
+      "end": "2026-10-12T09:03:23.710Z",
+      "elapsedMs": 56723,
+      "endHostLoad": [
+        6.42626953125,
+        9.271484375,
+        10.52294921875
+      ],
+      "code": 1,
+      "signal": null
+    },
+    "schema-final": {
+      "label": "schema-final",
+      "command": "node",
+      "args": [
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-161-figment-cards",
+      "start": "2026-10-12T09:13:13.791Z",
+      "wrapperPid": 82246,
+      "childPid": 82250,
+      "identity": "82250 82246 82250 Mon Oct 12 02:13:13 2026     node scripts/friction-triggers.mjs --validate-records",
+      "startHostLoad": [
+        16.205078125,
+        16.5068359375,
+        14.8359375
+      ],
+      "workers": null,
+      "end": "2026-10-12T09:13:13.911Z",
+      "elapsedMs": 120,
+      "endHostLoad": [
+        16.205078125,
+        16.5068359375,
+        14.8359375
+      ],
+      "code": 0,
+      "signal": null
+    }
+  },
+  "d20": {
+    "scenario": "cards-49",
+    "cases": 1,
+    "purpose": "Captain activation draw-discard supplies its own once-per-turn figment trigger",
+    "compositionOnly": [
+      "8e003d04-e489-4c55-9c72-fc5612909d07",
+      "ccff822e-e2ae-4d38-9720-6df289dbe4cd"
+    ],
+    "oncePerTurnRepeatReset": "existing synthetic triggers-patterns.test.ts"
+  },
+  "d21": {
+    "judged": 0,
+    "newPromptStatusVisualForms": [],
+    "sample": [
+      {
+        "uuid": "724a1362-3f0f-4b77-b14e-22c0b877349a",
+        "firstByte": 109,
+        "sampled": false
+      },
+      {
+        "uuid": "8e003d04-e489-4c55-9c72-fc5612909d07",
+        "firstByte": 219,
+        "sampled": false
+      },
+      {
+        "uuid": "ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+        "firstByte": 45,
+        "sampled": false
+      }
+    ],
+    "note": "Existing chooseCards:discard and chooseTargets:target forms, figment and temporary-effect presentation; complete scripted default variant/both-side sweep supplies QA."
+  },
+  "observations": [
+    {
+      "tag": "local-edit-correction",
+      "note": "Parent requested parseFigmentId(shadow.id) in scenario expected identity. Source edit window unmeasured; focused scenario recheck 3.671s is measured lower bound."
+    },
+    {
+      "note": "Initial discovery attempted guessed file paths; failures were read-only and corrected by rg inventory. Discovery cost unmeasured."
+    },
+    {
+      "note": "Review preparation creates a hermetic asset view and restores all local assets before browser QA."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "note": "First Ringleader continuation attempted an exhausted newly materialized Outsider advance. Retry waits for next ready playerDay; production source stays frozen. Failed run94.013s is measured lower bound of correction cost."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "note": "First Captain desktop capture preceded token animation settlement; ignored script now explicitly waits for created figment visibility before capture. Mobile capture showed Shadow; focused desktop follow-up planned."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "note": "Prior isolated client games cannot reopen in a new browser client; suffix failure212.721s total retained. Reconstruct same normal flow within final client; suppress duplicate activation captures."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "note": "Combined suffix desktop succeeded but mobile custom read threw on transient probe absence. EngineDebugPanel publishes/deletes probe across effect lifecycle. Mobile-only corrected observer waits for exact owned source UUID; initial35rows/Caps empty retained."
+    },
+    {
+      "tag": "local-edit-correction",
+      "note": "One manually transcribed parent-status omission SHA was corrected immediately from the actual receipt. Tracked omission evidence always used actual JSON; correction cost unmeasured."
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review internal typecheck/lint/test-related start at 2026-10-12T08:23:53.386Z"
+      }
+    }
+  },
+  "omissionWitness": {
+    "beforeSHA256": "7e3a20a2542fdb17e3554704474b7b15aa82cc7c897349a888deff4158bc18b7",
+    "start": "2026-10-12T08:28:18.045476+00:00",
+    "omitted": "Captain triggered ability only; imports preserved",
+    "source": "src/content/cards/radiants-captain-724a1362.ts",
+    "testExit": 1,
+    "expectedCaseSeen": true,
+    "restoredSHA256": "7e3a20a2542fdb17e3554704474b7b15aa82cc7c897349a888deff4158bc18b7",
+    "end": "2026-10-12T08:28:21.117415+00:00",
+    "result": "Expected one Captain coupling scenario failure and74passing scenarios; original bytes restored in finally."
+  },
+  "sweep": {
+    "event": "cardSweepSummary",
+    "invocation": "invocations/sweep-cxRYPR",
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.161/invocations/sweep-cxRYPR",
+    "counts": {
+      "pass": 36,
+      "skip": 24
+    },
+    "attemptCounts": {
+      "pass": 36,
+      "skip": 24
+    },
+    "hostLoad": 7.30029296875,
+    "sessions": 1,
+    "leaseYields": 0,
+    "wallMs": {
+      "browserLeaseWait": 5,
+      "serve": 1350,
+      "scenario": 354569.7523749999,
+      "cleanup": 1825.6753339999705,
+      "execution": 357781.821584,
+      "total": 357786.821584
+    },
+    "cleanup": {
+      "at": "2026-10-12T08:36:27.477530+00:00",
+      "slot": 1,
+      "port": 5274,
+      "portConnectCode": 0,
+      "portFree": false,
+      "ownerRecordAbsent": false,
+      "serverRecordAbsent": false,
+      "ownedProcessObservation": "",
+      "providerClosureProof": "native runner completed close; check exact ownership tokens because slot may be reused",
+      "ownerExactTokenAbsent": true,
+      "ownerRecordReused": true,
+      "serverExactTokenAbsent": true,
+      "serverRecordReused": true,
+      "portFreeAtNativeCleanup": true,
+      "portReusedAtLaterObservation": true,
+      "note": "The runner reported port free during its own cleanup. Later shared slot/port state belongs to a replacement owner; no replacement resources touched."
+    },
+    "captureContract": "qa.capture CSS scale1440x900 full desktop viewport; screenshot filenames only in tracked ledger",
+    "manualInspected": [
+      "sweep-724a1362-base-player-attempt-1.png",
+      "sweep-8e003d04-base-player-attempt-1.png",
+      "sweep-ccff822e-base-player-attempt-1.png"
+    ],
+    "gameLogs": "card-sweep uses session.run and does not export persisted game logs; supplemental run-scenario exports them",
+    "matrix": [
+      {
+        "uuid": "724a1362-3f0f-4b77-b14e-22c0b877349a",
+        "as": "player",
+        "verdict": "pass",
+        "count": 7
+      },
+      {
+        "uuid": "724a1362-3f0f-4b77-b14e-22c0b877349a",
+        "as": "player",
+        "verdict": "skip",
+        "count": 3
+      },
+      {
+        "uuid": "724a1362-3f0f-4b77-b14e-22c0b877349a",
+        "as": "enemy",
+        "verdict": "pass",
+        "count": 7
+      },
+      {
+        "uuid": "724a1362-3f0f-4b77-b14e-22c0b877349a",
+        "as": "enemy",
+        "verdict": "skip",
+        "count": 3
+      },
+      {
+        "uuid": "8e003d04-e489-4c55-9c72-fc5612909d07",
+        "as": "player",
+        "verdict": "pass",
+        "count": 6
+      },
+      {
+        "uuid": "8e003d04-e489-4c55-9c72-fc5612909d07",
+        "as": "player",
+        "verdict": "skip",
+        "count": 4
+      },
+      {
+        "uuid": "8e003d04-e489-4c55-9c72-fc5612909d07",
+        "as": "enemy",
+        "verdict": "pass",
+        "count": 6
+      },
+      {
+        "uuid": "8e003d04-e489-4c55-9c72-fc5612909d07",
+        "as": "enemy",
+        "verdict": "skip",
+        "count": 4
+      },
+      {
+        "uuid": "ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+        "as": "player",
+        "verdict": "pass",
+        "count": 5
+      },
+      {
+        "uuid": "ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+        "as": "player",
+        "verdict": "skip",
+        "count": 5
+      },
+      {
+        "uuid": "ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+        "as": "enemy",
+        "verdict": "pass",
+        "count": 5
+      },
+      {
+        "uuid": "ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+        "as": "enemy",
+        "verdict": "skip",
+        "count": 5
+      }
+    ]
+  },
+  "supplemental": [
+    {
+      "card": "724a1362-3f0f-4b77-b14e-22c0b877349a",
+      "invocation": "invocations/run-KpPz0p",
+      "as": "player",
+      "variant": "base",
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "functionalPass": 2,
+      "visualStatus": "mobile inspected pass; desktop capture preceded completed token presentation, focused desktop follow-up required",
+      "gameRows": [
+        38,
+        38
+      ],
+      "caps": [],
+      "browserLeaseWaitMs": 37270
+    },
+    {
+      "card": "8e003d04-e489-4c55-9c72-fc5612909d07",
+      "invocation": "invocations/run-0kf1iP",
+      "as": "player",
+      "variant": "base",
+      "viewports": [
+        "desktop"
+      ],
+      "activation": "Outsider creation passed before failed scoring continuation",
+      "continuation": "QA-script illegal exhausted advance timeout; rules Repositioning prohibits exhausted character moving to front; zones createInPlay marks non-Awakened figment exhausted",
+      "gameRows": [
+        31
+      ],
+      "caps": [],
+      "effective": false
+    }
+  ],
+  "sourceRuntimeFreeze": {
+    "at": "2026-10-12T08:49:43.928131+00:00",
+    "sourcePaths": [
+      {
+        "path": "src/content/cards/radiants-captain-724a1362.ts",
+        "sha256": "7e3a20a2542fdb17e3554704474b7b15aa82cc7c897349a888deff4158bc18b7",
+        "gitBlob": "7a89df0257fe684d5d8decf35befc4c4f4defdae",
+        "matchesStaged": true
+      },
+      {
+        "path": "src/content/cards/dustway-ringleader-8e003d04.ts",
+        "sha256": "17a8681532d5384d0c8b48e5f589d7130888fa6fbcc435eeadd2699b04c7edb8",
+        "gitBlob": "1cb4b0d5161b075ae58df77a5f01afacabd869fc",
+        "matchesStaged": true
+      },
+      {
+        "path": "src/content/cards/simulacra-ccff822e.ts",
+        "sha256": "e7a52a18f01ab032048bd68c455f51423d063cb7fc051116c1842eca079e69a7",
+        "gitBlob": "2e6daa0925e3d2499cf904a1f5c103cf284c4915",
+        "matchesStaged": true
+      },
+      {
+        "path": "src/content/specs/cards-49.scenarios.ts",
+        "sha256": "6cbc71ba75c92726733b3b55cda956b2e5b5bdd78a2342dfd147f4b6386e53b3",
+        "gitBlob": "6e9cf475c0cbcc23eca5abdf4800afb238bd91e4",
+        "matchesStaged": true
+      }
+    ]
+  },
+  "ringleaderFixed": {
+    "invocation": "invocations/run-Uznhpc",
+    "rawReport": "invocations/run-Uznhpc/activated-behavior.result.json",
+    "as": "player",
+    "variant": "base",
+    "ok": true,
+    "caps": [],
+    "wallMs": {
+      "browserLeaseWait": 134828,
+      "serve": 1665,
+      "scenario": 72254,
+      "total": 208785
+    },
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "filename": "activated-behavior-desktop.jsonl",
+        "gameId": "djbibh",
+        "rows": 73
+      },
+      {
+        "viewport": "mobile",
+        "filename": "activated-behavior-mobile.jsonl",
+        "gameId": "w8q73h",
+        "rows": 73
+      }
+    ],
+    "captures": [
+      {
+        "filename": "activated-8e003d04-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "filename": "scored-8e003d04-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "filename": "activated-8e003d04-mobile.png",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "filename": "scored-8e003d04-mobile.png",
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "checked": "Normal next playerDay readies materialized Outsider; normal UI advance then lane1score\u2192own trigger\u2192draw and+2points, final3score/hand2 bothviewports; early scoring frames retain1point animation pending final suffix HUD capture."
+  },
+  "simulacraFixed": {
+    "invocation": "invocations/run-G8jcoU",
+    "rawReport": "invocations/run-G8jcoU/activated-behavior.result.json",
+    "as": "player",
+    "variant": "base",
+    "ok": true,
+    "caps": [],
+    "wallMs": {
+      "browserLeaseWait": 322337,
+      "serve": 1371,
+      "scenario": 39946,
+      "total": 363687
+    },
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "filename": "activated-behavior-desktop.jsonl",
+        "gameId": "krqvhn",
+        "rows": 44
+      },
+      {
+        "viewport": "mobile",
+        "filename": "activated-behavior-mobile.jsonl",
+        "gameId": "fpkcvg",
+        "rows": 44
+      }
+    ],
+    "captures": [
+      {
+        "filename": "activated-ccff822e-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "filename": "ending-ccff822e-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "filename": "activated-ccff822e-mobile.png",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "filename": "ending-ccff822e-mobile.png",
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "cleanup": {
+      "at": "2026-10-12T08:55:57.197647+00:00",
+      "slot": 0,
+      "port": 5174,
+      "portFreeAtNativeCleanup": true,
+      "ownedProcessObservation": "",
+      "ownerExactTokenAbsent": true,
+      "ownerRecordAbsent": false,
+      "ownerRecordReused": true,
+      "serverExactTokenAbsent": true,
+      "serverRecordAbsent": false,
+      "serverRecordReused": true,
+      "portConnectCode": 0,
+      "portFreeAtObservation": false
+    },
+    "checked": "Source-self copied printing UUID/base spark3 and fresh statuses; temporary expiry at Ending; copied physical card absent from committed state and rendered DOM; all four images manually inspected."
+  },
+  "simulacraQueuedCancellation": {
+    "at": "2026-10-12T08:48:19.630603+00:00",
+    "pid": 90750,
+    "identity": "90750 90708 90750 Mon Oct 12 01:45:43 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.161/activated-behavior.mjs --bead hv-umm2.161 --arg card=ccff822e-e2ae-4d38-9720-6df289dbe4cd --timeout 240",
+    "reason": "queued runner loads scenario before lease; reload updated explicit expired-copy DOM-removal proof",
+    "lastObserved": "waiting, no browser slot/server/provider started",
+    "signal": "SIGINT"
+  },
+  "ignoredQaScriptManifest": [
+    {
+      "filename": "activated-behavior.mjs",
+      "sha256": "d921359cd4d42b6f32d8ee82d21691ffd70a1aace9b5ec0b0bcaf7f2fe1d23cf",
+      "versionScope": "latest retained script; historical source hashes not instrumented"
+    },
+    {
+      "filename": "settled-suffix.mjs",
+      "sha256": "6430ab566b189177e6ac1538dc9ae441ddf9eb59642fddc1c37379f816886a97",
+      "versionScope": "latest retained script; historical source hashes not instrumented"
+    },
+    {
+      "filename": "settled-ringleader.mjs",
+      "sha256": "93264336f3be8946d7f2626dde908d577bef38f4652e719b8006fc41a5cd7c79",
+      "versionScope": "latest retained script; historical source hashes not instrumented"
+    },
+    {
+      "filename": "settled-suffix-fixed.mjs",
+      "sha256": "b0c5f989a64308c15cdae105b1ec5c26c3767d7898372e4781f72372b4ee337e",
+      "versionScope": "latest retained script; historical source hashes not instrumented"
+    }
+  ],
+  "suffixFailure": {
+    "invocation": "invocations/run-v4KSaq",
+    "caps": [],
+    "gameLogs": {
+      "rows": 0,
+      "reason": "no local games database"
+    },
+    "cause": "MCP browser clients have isolated storage. Fresh same-client reconstruction is the corrected final scenario."
+  },
+  "qaLedgerTotals": {
+    "originalSweepRows": 60,
+    "originalEffectiveSweepPass": 36,
+    "originalEffectiveSweepSkip": 24,
+    "originalFailures": 0,
+    "supplementalRows": 12,
+    "supplementalRawPass": 9,
+    "supplementalRawFail": 3,
+    "unfixedSupplementalFailures": 0,
+    "requiredFunctionalCardViewportFlows": 6,
+    "finalSettledCaptureSuffixes": 3,
+    "d21Judged": 0,
+    "cancelledBeforeBrowserRunner": 1,
+    "note": "Supplemental functional passes and final capture suffixes have distinct scopes; prior failed continuations/observer attempts are retained with effective:false."
+  },
+  "settledDesktopAndFailedMobile": {
+    "invocation": "invocations/run-frJai8",
+    "rawReport": "invocations/run-frJai8/settled-suffix-fixed.result.json",
+    "ok": false,
+    "caps": [],
+    "wallMs": {
+      "browserLeaseWait": 13,
+      "serve": 1969,
+      "scenario": 53914,
+      "total": 55951
+    },
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "filename": "settled-suffix-fixed-desktop.jsonl",
+        "gameId": "wee2st",
+        "rows": 38
+      },
+      {
+        "viewport": "mobile",
+        "filename": "settled-suffix-fixed-mobile.jsonl",
+        "gameId": "eqqot6",
+        "rows": 35
+      }
+    ],
+    "captures": [
+      {
+        "filename": "scored-settled-8e003d04-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "filename": "activated-724a1362-desktop.png",
+        "width": 1440,
+        "height": 900
+      }
+    ]
+  },
+  "settledMobileFinal": {
+    "invocation": "invocations/run-nYBpmw",
+    "rawReport": "invocations/run-nYBpmw/settled-suffix-fixed.result.json",
+    "ok": true,
+    "caps": [],
+    "wallMs": {
+      "browserLeaseWait": 5,
+      "serve": 1358,
+      "scenario": 45529,
+      "total": 46926
+    },
+    "gameLogs": [
+      {
+        "viewport": "mobile",
+        "filename": "settled-suffix-fixed-mobile.jsonl",
+        "gameId": "uzhnkw",
+        "rows": 73
+      }
+    ],
+    "captures": [
+      {
+        "filename": "scored-settled-8e003d04-mobile.png",
+        "width": 390,
+        "height": 844
+      }
+    ]
+  },
+  "resourceCleanup": {
+    "at": "2026-10-12T09:09:32.426933+00:00",
+    "allMeasuredCommandsTerminal": true,
+    "observedOwnedPids": [
+      14269,
+      14288,
+      16329,
+      16367,
+      16899,
+      16916,
+      17696,
+      17706,
+      19289,
+      19304,
+      19987,
+      19999,
+      31949,
+      32042,
+      32069,
+      32121,
+      35697,
+      35712,
+      35718,
+      35731,
+      35811,
+      44284,
+      44302,
+      54762,
+      63616,
+      67273,
+      67286,
+      69457,
+      69473,
+      72916,
+      72934,
+      73299,
+      73309,
+      73347,
+      74466,
+      74482,
+      74549,
+      79928,
+      90708,
+      90750,
+      91938,
+      99072,
+      99094,
+      99171
+    ],
+    "ownedPidObservations": "",
+    "ownedServerGroups": [
+      73347,
+      63616,
+      74549,
+      54762,
+      91938,
+      79928,
+      35811,
+      99171
+    ],
+    "ownedGroupObservations": "",
+    "providerRecords": [
+      {
+        "slot": 0,
+        "kind": "owner",
+        "recordAbsent": true,
+        "ownRecordAbsent": true,
+        "replacementRecordIgnored": false
+      },
+      {
+        "slot": 0,
+        "kind": "server",
+        "recordAbsent": true,
+        "ownRecordAbsent": true,
+        "replacementRecordIgnored": false
+      },
+      {
+        "slot": 1,
+        "kind": "owner",
+        "recordAbsent": true,
+        "ownRecordAbsent": true,
+        "replacementRecordIgnored": false
+      },
+      {
+        "slot": 1,
+        "kind": "server",
+        "recordAbsent": true,
+        "ownRecordAbsent": true,
+        "replacementRecordIgnored": false
+      }
+    ],
+    "ports": [
+      {
+        "port": 5174,
+        "freeAtFinalObservation": true,
+        "nativeOwnedCleanupReportedFree": true,
+        "laterReuseClassified": "replacement if current port active; owned server groups absent"
+      },
+      {
+        "port": 5274,
+        "freeAtFinalObservation": true,
+        "nativeOwnedCleanupReportedFree": true,
+        "laterReuseClassified": "replacement if current port active; owned server groups absent"
+      }
+    ],
+    "providerProof": "All native runner calls returned actual reports; close finished before command terminal, own provider/server record absent at both slots. Replacement records and active ports are untouched.",
+    "cancelledQueuedRunner": {
+      "pid": 90750,
+      "terminalExit": 130,
+      "slotServerClientStarted": false
+    },
+    "olderTokensNotSnapshotted": [
+      "supplemental-captain",
+      "supplemental-settled-suffix",
+      "supplemental-settled-suffix-fixed",
+      "supplemental-mobile-settled-final"
+    ],
+    "note": "Natural native cleanup handled all groups; no post-run signal was needed.",
+    "qaClientsCompleted": 8,
+    "activeQaClientCount": 0,
+    "fuzzDescendantPids": [
+      32277,
+      32455,
+      32990
+    ],
+    "fuzzDescendantObservation": "Recorded descendant PIDs32277/32455/32990 observed absent after final cleanup."
+  },
+  "captureInventory": {
+    "count": 50,
+    "screens": [
+      {
+        "invocation": "run-frJai8",
+        "filename": "activated-724a1362-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "run-frJai8",
+        "filename": "scored-settled-8e003d04-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "run-nYBpmw",
+        "filename": "scored-settled-8e003d04-mobile.png",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-kindled-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-resonant-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-base-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-attuned-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-amplified-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-attuned-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-amplified-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-ccff822e-empowered-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-kindled-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-perfected-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-attuned-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-empowered-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-ccff822e-attuned-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-base-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-attuned-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-resonant-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-perfected-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-empowered-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-ccff822e-perfected-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-base-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-perfected-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-ccff822e-kindled-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-ccff822e-base-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-kindled-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-ccff822e-base-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-base-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-empowered-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-ccff822e-empowered-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-amplified-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-ccff822e-kindled-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-amplified-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-ccff822e-perfected-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-ccff822e-attuned-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-8e003d04-kindled-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-perfected-player-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "sweep-cxRYPR",
+        "filename": "sweep-724a1362-empowered-enemy-attempt-1.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "run-Uznhpc",
+        "filename": "scored-8e003d04-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "run-Uznhpc",
+        "filename": "activated-8e003d04-mobile.png",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "invocation": "run-Uznhpc",
+        "filename": "activated-8e003d04-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "run-Uznhpc",
+        "filename": "scored-8e003d04-mobile.png",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "invocation": "run-KpPz0p",
+        "filename": "activated-724a1362-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "run-KpPz0p",
+        "filename": "activated-724a1362-mobile.png",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "invocation": "run-0kf1iP",
+        "filename": "activated-8e003d04-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "run-G8jcoU",
+        "filename": "ending-ccff822e-mobile.png",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "invocation": "run-G8jcoU",
+        "filename": "ending-ccff822e-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "run-G8jcoU",
+        "filename": "activated-ccff822e-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "invocation": "run-G8jcoU",
+        "filename": "activated-ccff822e-mobile.png",
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "manualInspected": "Three standard desktop base captures and every14supplemental capture, including failed/early frames and all settled suffix frames. Final desktop/mobileHUD3, CaptainShadow2, copied3spark+timer then physicalDOMabsence inspected.",
+    "cssScale": true
+  },
+  "browserLeaseWait": {
+    "completedNativeWaitMs": 676194,
+    "cancelledWaitingWrapperMs": 156530,
+    "cancelledWaitNote": "queued wrapper entire156.530s includes launcher overhead; exact native lock wait unseparated",
+    "totalMeasuredLowerBoundMs": 676194
+  }
+}
