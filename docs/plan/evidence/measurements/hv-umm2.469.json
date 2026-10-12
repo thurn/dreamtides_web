@@ -1,0 +1,504 @@
+{
+  "bead": "hv-umm2.469",
+  "base": "d67df4698c4304847a01fbc20d093e3d1f107268",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.469",
+  "dispatchWindow": {
+    "start": "2026-10-12T01:37:00+00:00",
+    "basis": "Parent approximate dispatch UTC, disclosed as approximate. Full elapsed wall includes source/rule audit, public negative proofs, implementation, scoped checks and final evidence/commit preparation.",
+    "evidenceAt": "2026-10-12T01:48:32.497869+00:00",
+    "finalEvidenceAt": "2026-10-12T02:04:34.450867+00:00",
+    "elapsedToCommitBoundaryMin": 27.57,
+    "boundary": "Approximate parent dispatch through final amended evidence/commit boundary. Includes initial implementation, parent pre-submission control audit, scoped refinement and final checks; the sub-minute commit tail is disclosed at this precision."
+  },
+  "scope": [
+    "src/engine/testing/lab-solver.ts costNeeds variable discard cardinality",
+    "src/engine/testing/lab-cost-staging.test.ts",
+    "src/engine/rules/costs-discard-x-min.test.ts nested affordability",
+    "src/engine/effects/primitives/contracts/cost-composition.contracts.ts discard-min rows",
+    "own friction, measurements and pre-existing notes"
+  ],
+  "ruleAuthority": "Existing RD-hv-umm2.457-1 and rules.md Costs/Discard X: one shared X, declared minimum, source exclusion, atomic matching-card payment. Explicit/granted Reclaim replaces base energy but preserves additional costs; Offering binds X=0, which cannot pay a mandatory positive minimum. No rule change.",
+  "implementation": "One typed expression stages max(1,min) for a variable discard. The positive X witness for absent/zero min remains one staged card; fixed/whole-hand/reveal behavior is preserved. No new helper or exported signature.",
+  "beforeProof": {
+    "source": {
+      "base": "d67df4698c4304847a01fbc20d093e3d1f107268",
+      "observedAt": "2026-10-12T01:40:31.301228+00:00",
+      "sourceSha256": {
+        "src/engine/testing/lab-solver.ts": "3afb014740fc16d93cac4e13bc4ca32fe6bb59d579e35722df2db6a850e7c1d5",
+        "src/engine/testing/lab-cost-staging.test.ts": "e5afceae8c6c6b5f1c3d83a2e99695115d8c4f6943baacd7614e4c81fe47f6cf",
+        "src/engine/rules/costs-discard-x-min.test.ts": "55f2dc938254e1d94ef38810cdb04dcf73ffb01c91910606eeaafbe94b8cfae1",
+        "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "b5ff7dc58d41fe68f264b90c71b8ea161bfeabd1e45e65b97e86bd32a1a0708b",
+        "src/engine/rules/costs.ts": "99a74c98f373529ea44520a1c928e58dfdbe1582cb95b45ba6bae0f47a67770f"
+      },
+      "lines": {
+        "src/engine/testing/lab-solver.ts": 444,
+        "src/engine/testing/lab-cost-staging.test.ts": 112,
+        "src/engine/rules/costs-discard-x-min.test.ts": 303,
+        "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": 374,
+        "src/engine/rules/costs.ts": 502
+      }
+    },
+    "publicNegative": {
+      "kind": "Exact final public lab regression on untouched solver, after all public control refinements.",
+      "solverBeforeSha256": "3afb014740fc16d93cac4e13bc4ca32fe6bb59d579e35722df2db6a850e7c1d5",
+      "finalSolverSha256": "db326be87c5ccfe0118735562f27a7e80c2b4b56a852c5fffd3fe7ba59120396",
+      "finalTestSha256": "16eda56b73117b378ad69fee21a7e5e5d7dde39975a0074597d3a3a792f72389",
+      "priorProofs": [
+        "lab-unchanged-negative.log",
+        "lab-control-correction-attempt02-negative.log"
+      ],
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/lab-cost-staging.test.ts"
+      ],
+      "exit": 1,
+      "wallSeconds": 1.647,
+      "restoredByteIdentically": true,
+      "restoredSolverSha256": "db326be87c5ccfe0118735562f27a7e80c2b4b56a852c5fffd3fe7ba59120396",
+      "completedAt": "2026-10-12T01:59:08.876444+00:00"
+    },
+    "failedCases": 4,
+    "passingControls": 16,
+    "failureMeaning": "The exact final public lab test gives 4 failures and 16 valid controls on the untouched solver. Source and final test hashes are retained; the final solver restores identically in finally.",
+    "controls": [
+      "absent/zero-X pays a public selected legal minimum independently of staged count",
+      "fixed discard moves its two chosen physical IDs",
+      "whole-hand payment consumes every eligible input ID excluding source",
+      "reveal keeps chosen IDs and emits no discards",
+      "composed payment retains selected reveal IDs; target payment observes selected target departure"
+    ],
+    "initialNegative": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/lab-cost-staging.test.ts"
+      ],
+      "exit": 1,
+      "wallSeconds": 4.162,
+      "completedAt": "2026-10-12T01:40:35.497041+00:00",
+      "solverSha256": "3afb014740fc16d93cac4e13bc4ca32fe6bb59d579e35722df2db6a850e7c1d5",
+      "testSha256": "17fafc5dfdf00a597ca0fc76bee6ec8a8fd3f3e7d9a2976e7df2932c61c49857",
+      "solverUnchanged": true
+    }
+  },
+  "positiveControl": {
+    "command": [
+      "npm",
+      "test",
+      "--",
+      "src/engine/testing/lab-cost-staging.test.ts",
+      "src/engine/rules/costs-discard-x-min.test.ts",
+      "src/engine/effects/primitives/contracts.test.ts"
+    ],
+    "exit": 0,
+    "wallSeconds": 4.76,
+    "loadAtStart": "{ 4.73 9.88 14.04 }",
+    "oneMinuteLoad": 4.73,
+    "completedAt": "2026-10-12T02:00:39.346029+00:00",
+    "labTestSha256": "16eda56b73117b378ad69fee21a7e5e5d7dde39975a0074597d3a3a792f72389",
+    "files": 3,
+    "cases": 1212,
+    "labCases": 20,
+    "nestedCostFileCases": 23,
+    "plainContractRunnerCases": 1169,
+    "exactHashes": {
+      "src/engine/testing/lab-solver.ts": "db326be87c5ccfe0118735562f27a7e80c2b4b56a852c5fffd3fe7ba59120396",
+      "src/engine/testing/lab-cost-staging.test.ts": "16eda56b73117b378ad69fee21a7e5e5d7dde39975a0074597d3a3a792f72389",
+      "src/engine/rules/costs-discard-x-min.test.ts": "1e940ec565667a2274dc2c44f5324110fbafa435cfe9a79fbcaff994b1539c8f",
+      "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "9d7815987538eb7f4a7bbcf34efecbd62333451255dbe1c15f5cd5ba365b6029",
+      "src/engine/rules/costs.ts": "99a74c98f373529ea44520a1c928e58dfdbe1582cb95b45ba6bae0f47a67770f"
+    }
+  },
+  "mutationProof": {
+    "kind": "Meaningful mutation regression witness, not an original-base failure.",
+    "mutation": {
+      "before": "return cost.cost === \"banishFromVoid\" ? cost.min : cost.cost === \"discard\" ? (cost.min ?? 0) : 0;",
+      "after": "return cost.cost === \"banishFromVoid\" ? cost.min : 0;"
+    },
+    "originalCostsSha256": "99a74c98f373529ea44520a1c928e58dfdbe1582cb95b45ba6bae0f47a67770f",
+    "mutantCostsSha256": "520971efe9f4085e20c034b9bfbfb6bafe1615901b991e37a47064548de60a16",
+    "testSha256": "1e940ec565667a2274dc2c44f5324110fbafa435cfe9a79fbcaff994b1539c8f",
+    "positiveControl": "focused-attempt01.log: all 1,212 cases passed with the original costs.ts and final four-file source.",
+    "startedAt": "2026-10-12T01:44:58.863715+00:00",
+    "command": [
+      "npm",
+      "test",
+      "--",
+      "src/engine/rules/costs-discard-x-min.test.ts",
+      "-t",
+      "nested discard-X minimum affordability"
+    ],
+    "exit": 1,
+    "wallSeconds": 2.832,
+    "restoredByteIdentically": true,
+    "restoredCostsSha256": "99a74c98f373529ea44520a1c928e58dfdbe1582cb95b45ba6bae0f47a67770f",
+    "completedAt": "2026-10-12T01:45:01.696171+00:00",
+    "failedCases": 8,
+    "passingExactBoundAndDeclineControls": 6,
+    "unrelatedSkipped": 9,
+    "failureMeaning": "Temporarily reverting leastCount discard minimum detection breaks public nested choice eligibility and optional omission for short matching hands and previously bound X below minimum, on both sides.",
+    "mutationOnly": "Not an original-base defect and not a retained costs.ts edit."
+  },
+  "coverage": {
+    "lab": "Both controllers: minimums 2 and 3 regressions; absent/zero-X legal public selected payment, fixed discard IDs, every eligible whole-hand ID, reveal retention/no-discard, compounded reveal and selected target departure. Expected IDs come from pre-payment input or chosen public answers, not output or default staging quantities.",
+    "nested": "Both controllers: short filtered matching hands and nonmatching card controls; choice alternative and optional omission when X is absent or bound below minimum; exact X2 payments; affordable optional decline. Public prompt eligibility and card moves/energy/points are asserted.",
+    "composition": "All existing mode/route rows also exercise shared X=2 and least-2 discard, observing energy, points, distinct actual card moves and Draw X. Hand/permission/plain/printed/granted Reclaim pricing comes from the independent ruled formula. Offering rows assert normal mode legal and Offering mode illegal, then pay normally; generic hand action presence is not used as an Offering proof.",
+    "existingShapes": "Existing mandatory/optional/choice/X/no-extra rows stay in the matrix.",
+    "caseDeltaDomain": "14 new lab cases +14 nested cases +22 Offering eligibility cases =50. Extra discard-min coverage within existing matrix bodies is not counted as new Vitest cases."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 140,
+    "jsdomFiles": 0,
+    "cases": 50
+  },
+  "plainContractDelta": {
+    "modules": 0,
+    "lines": 43,
+    "cases": 22,
+    "entrypoint": false
+  },
+  "lineCounts": {
+    "lab": 180,
+    "costs": 375,
+    "composition": 417,
+    "limit": "Every changed source/test module remains below 500 lines. The unchanged read-only costs.ts is outside this repair."
+  },
+  "fallout": {
+    "exportedApiChanged": false,
+    "LabBoardAndLabEnergyUnchanged": true,
+    "sourceLinesAdded": 1,
+    "sourceLinesDeleted": 1,
+    "readOnlyCostsSha256": "99a74c98f373529ea44520a1c928e58dfdbe1582cb95b45ba6bae0f47a67770f",
+    "labBoardImportersReadOnly": [
+      "card-lab.ts",
+      "tooling-card-lab.test.ts",
+      "lab-preflight.test.ts",
+      "value-zone-counts contracts",
+      "card-filter-bounds contracts",
+      "return-cost contracts",
+      "card-filter-spark contracts",
+      "banish-from-any-void-cost contracts"
+    ],
+    "outsideAreasChanged": []
+  },
+  "checks": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/lab-cost-staging.test.ts",
+        "src/engine/rules/costs-discard-x-min.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "exit": 0,
+      "wallSeconds": 5.94,
+      "loadAtStart": "{ 19.26 20.68 20.30 }",
+      "completedAt": "2026-10-12T01:43:31.584287+00:00"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exit": 0,
+      "wallSeconds": 12.246,
+      "startedAt": "2026-10-12T01:49:13.219901+00:00",
+      "loadAtStart": "{ 7.29 10.82 15.61 }",
+      "oneMinuteLoad": 7.29,
+      "completedAt": "2026-10-12T01:49:25.466122+00:00"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "exit": 0,
+      "wallSeconds": 2.571,
+      "startedAt": "2026-10-12T01:49:25.469245+00:00",
+      "loadAtStart": "{ 7.96 10.84 15.57 }",
+      "oneMinuteLoad": 7.96,
+      "completedAt": "2026-10-12T01:49:28.039863+00:00"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "exit": 0,
+      "wallSeconds": 0.091,
+      "completedAt": "2026-10-12T01:52:32.834908+00:00",
+      "ownRecordSha256": "f7e305233aad55408f8a28e20fcf9b5a413ed39936705af94439579d7e66ad3c"
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/lab-cost-staging.test.ts",
+        "src/engine/rules/costs-discard-x-min.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "exit": 0,
+      "wallSeconds": 4.76,
+      "loadAtStart": "{ 4.73 9.88 14.04 }",
+      "oneMinuteLoad": 4.73,
+      "completedAt": "2026-10-12T02:00:39.346029+00:00",
+      "labTestSha256": "16eda56b73117b378ad69fee21a7e5e5d7dde39975a0074597d3a3a792f72389"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exit": 0,
+      "wallSeconds": 11.247,
+      "startedAt": "2026-10-12T02:00:39.349025+00:00",
+      "loadAtStart": "{ 4.91 9.83 14.00 }",
+      "oneMinuteLoad": 4.91,
+      "completedAt": "2026-10-12T02:00:50.596165+00:00"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "exit": 0,
+      "wallSeconds": 1.863,
+      "startedAt": "2026-10-12T02:00:50.599017+00:00",
+      "loadAtStart": "{ 5.43 9.79 13.94 }",
+      "oneMinuteLoad": 5.43,
+      "completedAt": "2026-10-12T02:00:52.461772+00:00"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "exit": 0,
+      "wallSeconds": 0.098,
+      "completedAt": "2026-10-12T02:03:30.726723+00:00",
+      "ownRecordSha256": "829273117bb9b141f60b318d44ac71297119ba1e4813e5b03ce12614c37a96d6"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "exit": 0,
+      "wallSeconds": 0.064,
+      "completedAt": "2026-10-12T02:04:34.515184+00:00",
+      "ownRecordSha256": "b0c9f1b447489856af67a6e52a54f88289e3cc927cb8c7655fbb1a243c439ec6",
+      "scope": "Final evidence-only prose/window normalization; source and tests unchanged."
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "command": "focused",
+      "oneMinuteLoad": 19.26,
+      "raw": "{ 19.26 20.68 20.30 }"
+    },
+    {
+      "command": "npm run review",
+      "startedAt": "2026-10-12T01:49:13.219901+00:00",
+      "oneMinuteLoad": 7.29,
+      "raw": "{ 7.29 10.82 15.61 }"
+    },
+    {
+      "command": "npm run knip",
+      "startedAt": "2026-10-12T01:49:25.469245+00:00",
+      "oneMinuteLoad": 7.96,
+      "raw": "{ 7.96 10.84 15.57 }"
+    },
+    {
+      "command": "npm test -- src/engine/testing/lab-cost-staging.test.ts src/engine/rules/costs-discard-x-min.test.ts src/engine/effects/primitives/contracts.test.ts",
+      "oneMinuteLoad": 4.73,
+      "raw": "{ 4.73 9.88 14.04 }"
+    },
+    {
+      "command": "npm run review",
+      "oneMinuteLoad": 4.91,
+      "raw": "{ 4.91 9.83 14.00 }"
+    },
+    {
+      "command": "npm run knip",
+      "oneMinuteLoad": 5.43,
+      "raw": "{ 5.43 9.79 13.94 }"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting observation"
+      },
+      "testDelta": {
+        "measuredFor": "Existing .test.ts entrypoint net lines +140, no file/jsdom additions; plain contracts net lines +43 reported separately."
+      }
+    }
+  },
+  "validationScope": "Narrow lab fixture-resource fix and synthetic public coverage. No player rule, API, persistent state, presentation, infrastructure or configuration change. Existing focused tests, review and Knip; no full, browser, fuzz or heavy command.",
+  "runtimeLedger": {
+    "parentInstall": {
+      "observer": 26844,
+      "exit": 0,
+      "reportedWallSeconds": 2
+    },
+    "commandSessions": [
+      {
+        "session": 39158,
+        "exit": 0,
+        "scope": "public negative wrapper captured npm exit1"
+      },
+      {
+        "session": 13688,
+        "exit": 0,
+        "scope": "focused positive"
+      },
+      {
+        "session": 78726,
+        "exit": 0,
+        "scope": "mutation wrapper captured npm exit1 and restored source"
+      },
+      {
+        "session": 9548,
+        "exit": 0,
+        "scope": "final review and Knip"
+      }
+    ],
+    "servers": [],
+    "browserContexts": [],
+    "providers": [],
+    "heavyLocks": [],
+    "remainingOwnedProcesses": [],
+    "closure": {
+      "recordedSessions": [
+        39158,
+        13688,
+        78726,
+        9548,
+        45097,
+        78762,
+        35261
+      ],
+      "allObserversClosed": true,
+      "allCommandChildrenStopped": true,
+      "costsRestoredByteIdentically": true,
+      "readOnlyCostsSha256": "99a74c98f373529ea44520a1c928e58dfdbe1582cb95b45ba6bae0f47a67770f",
+      "servers": [],
+      "browserContexts": [],
+      "providers": [],
+      "heavyLocks": [],
+      "remainingOwnedProcesses": [],
+      "observation": "Final process listing matched only the transient inspection shell and rg process. No owned validation child remains. Shared services and other worktrees are untouched.",
+      "finalSolverRestoredByteIdentically": true,
+      "refinementObservers": "Initial and exact-final lab negative wrappers captured expected exit1, then restored final solver in finally; final focused/review/Knip process group completed exit0. No remaining owned runtime resources."
+    },
+    "finalSchemaCommand": "Final amended friction parser passed; own record bytes remain unchanged after the retained hash observation."
+  },
+  "preExisting": [
+    "Inherited 17 dependency advisories: 9 moderate, 7 high and 1 critical.",
+    "Parent observed fulfilled whenPlayFromVoidTrigger annotation separately; tracked by hv-umm2.470, outside this bead."
+  ],
+  "remainingWork": [],
+  "caseCountsBasis": "20 lab cases +23 discard-min cases +1169 cases in the existing eager plain-contract runner =1212 focused cases; new cases are14+14+22.",
+  "artifactManifest": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.469/evidence-manifest.json",
+    "artifactCount": 45,
+    "sha256": "00345b33349098ff65cb9fa3335c540b08a40a96a07ec6c3c3da6a3fa05157ce"
+  },
+  "finalSourceSha256": {
+    "src/engine/testing/lab-solver.ts": "db326be87c5ccfe0118735562f27a7e80c2b4b56a852c5fffd3fe7ba59120396",
+    "src/engine/testing/lab-cost-staging.test.ts": "16eda56b73117b378ad69fee21a7e5e5d7dde39975a0074597d3a3a792f72389",
+    "src/engine/rules/costs-discard-x-min.test.ts": "1e940ec565667a2274dc2c44f5324110fbafa435cfe9a79fbcaff994b1539c8f",
+    "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "9d7815987538eb7f4a7bbcf34efecbd62333451255dbe1c15f5cd5ba365b6029",
+    "src/engine/rules/costs.ts": "99a74c98f373529ea44520a1c928e58dfdbe1582cb95b45ba6bae0f47a67770f"
+  },
+  "finalChecksOutcome": {
+    "focusedFiles": 3,
+    "focusedCases": 1212,
+    "reviewFiles": 19,
+    "reviewCases": 1501,
+    "knipExit": 0,
+    "allPassing": true,
+    "mutationRestored": true,
+    "finalLabFixture": "16eda56b73117b378ad69fee21a7e5e5d7dde39975a0074597d3a3a792f72389"
+  },
+  "controlRefinement": {
+    "source": "lab-cost-staging.test.ts only",
+    "scope": "Public cost/card movement controls replace assertions on default staging quantities and entire battlefield occupancy. Fixed count semantics remain asserted; expected IDs come from input state or recorded public answers.",
+    "preExistingCoupling": "The base compounded-cost control binds remaining hand count/subtype to minimal staging; the targeted control binds all enemy slots to its one staged target. Parent identified these as default algorithm assertions in the same file.",
+    "priorAcceptance": "Initial commit333f1bd32 was not submitted. Prior proofs/checks remain retained with their exact earlier lab fixture hash, not final acceptance.",
+    "finalUntouchedNegative": {
+      "kind": "Exact final public lab regression on untouched solver, after all public control refinements.",
+      "solverBeforeSha256": "3afb014740fc16d93cac4e13bc4ca32fe6bb59d579e35722df2db6a850e7c1d5",
+      "finalSolverSha256": "db326be87c5ccfe0118735562f27a7e80c2b4b56a852c5fffd3fe7ba59120396",
+      "finalTestSha256": "16eda56b73117b378ad69fee21a7e5e5d7dde39975a0074597d3a3a792f72389",
+      "priorProofs": [
+        "lab-unchanged-negative.log",
+        "lab-control-correction-attempt02-negative.log"
+      ],
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/lab-cost-staging.test.ts"
+      ],
+      "exit": 1,
+      "wallSeconds": 1.647,
+      "restoredByteIdentically": true,
+      "restoredSolverSha256": "db326be87c5ccfe0118735562f27a7e80c2b4b56a852c5fffd3fe7ba59120396",
+      "completedAt": "2026-10-12T01:59:08.876444+00:00"
+    },
+    "failedCases": 4,
+    "controls": 16,
+    "nestedMatrixAndCostsHashesUnchanged": true,
+    "costsMutationReused": "Nested/matrix/cost source bytes are unchanged, so the earlier meaningful costs mutation remains valid; it is not rerun.",
+    "finalPassing": "focused-final.log, final lab SHA 16eda56b\u2026, four source stamps in source-final.json"
+  },
+  "initialAcceptanceArchive": {
+    "source": "333f1bd32a6af970a0fa8ebf3a6250ff9e210024 (unsubmitted, superseded by amended single commit)",
+    "measurement": "measurements-initial-commit.json",
+    "manifest": "evidence-manifest-initial-commit.json",
+    "manifestSha256": "d8ad1d99270b494a7a5175c4ccd788693d27e36d4834c2a41711ae6d4a877bd5",
+    "artifactCount": 23,
+    "sourceStamps": "source-initial-commit.json",
+    "status": "Prior-version proof retained, not final lab-control acceptance."
+  },
+  "priorVersionPositiveControl": {
+    "command": [
+      "npm",
+      "test",
+      "--",
+      "src/engine/testing/lab-cost-staging.test.ts",
+      "src/engine/rules/costs-discard-x-min.test.ts",
+      "src/engine/effects/primitives/contracts.test.ts"
+    ],
+    "exit": 0,
+    "wallSeconds": 5.94,
+    "loadAtStart": "{ 19.26 20.68 20.30 }",
+    "completedAt": "2026-10-12T01:43:31.584287+00:00",
+    "files": 3,
+    "cases": 1212,
+    "labCases": 20,
+    "nestedCostFileCases": 23,
+    "plainContractRunnerCases": 1169,
+    "exactHashes": {
+      "src/engine/testing/lab-solver.ts": "db326be87c5ccfe0118735562f27a7e80c2b4b56a852c5fffd3fe7ba59120396",
+      "src/engine/testing/lab-cost-staging.test.ts": "17fafc5dfdf00a597ca0fc76bee6ec8a8fd3f3e7d9a2976e7df2932c61c49857",
+      "src/engine/rules/costs-discard-x-min.test.ts": "1e940ec565667a2274dc2c44f5324110fbafa435cfe9a79fbcaff994b1539c8f",
+      "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "9d7815987538eb7f4a7bbcf34efecbd62333451255dbe1c15f5cd5ba365b6029",
+      "src/engine/rules/costs.ts": "99a74c98f373529ea44520a1c928e58dfdbe1582cb95b45ba6bae0f47a67770f"
+    }
+  }
+}

@@ -13,7 +13,7 @@ import { describe, expect, it } from "vitest";
 import embraceTheInfinite from "../../content/cards/embrace-the-infinite-79b37916";
 import type { EngineCardDefinition } from "../catalog";
 import { engineCardFromContent } from "../content-catalog";
-import { additionalCost, discardCostFilter, discardHandCost, energy, energyX, event, x } from "../dsl/builders";
+import { additionalCost, choiceCost, optionalCost, pointsCost, discardCostFilter, discardHandCost, energy, energyX, event, x } from "../dsl/builders";
 import type { PaymentCost } from "../dsl/types";
 import { gainPoints } from "../effects/primitives/gain-points";
 import { createEngine } from "../engine";
@@ -198,6 +198,78 @@ describe("discard X with a least X", () => {
     ];
     expect(malformed).toHaveLength(2);
   });
+});
+
+describe("nested discard-X minimum affordability", () => {
+  for (const side of ["player", "enemy"] as const) {
+    it.each(["choice", "optional"] as const)(`keeps the valid %s fallback when ${side}'s matching hand is below minimum`, (kind) => {
+      const cost = discardCostFilter({ cardType: "character" }, { count: "x", min: 2 });
+      const card = synthetic(46901, () => [additionalCost(kind === "choice" ? choiceCost([cost], [pointsCost(1)]) : optionalCost(cost)), event(gainPoints(1))]);
+      const current = createEngine(testCatalog([card]));
+      const { state, ids } = boardState(current.catalog, { active: side, phase: "day", [side]: {
+        hand: [card.id, v.vanilla1.id, v.event0.id], score: 3, energy: 1,
+      } });
+      const prepared = { ...state, config: { ...state.config, autoAnswerForcedPrompts: false } };
+      const prompts: Prompt[] = [];
+      const paid = current.apply(prepared, side, play(ids[side].hand[0]), {
+        answer(prompt) {
+          prompts.push(prompt);
+          if (prompt.kind === "chooseMode") {
+            expect(prompt.options.find((option) => option.mode === 0)?.legal).toBe(false);
+            expect(prompt.options.find((option) => option.mode === 1)?.legal).toBe(true);
+            return 1;
+          }
+          if (prompt.kind === "confirm") return false;
+          throw new Error(`Unexpected ${prompt.kind}`);
+        },
+      });
+      expect(prompts.some((prompt) => prompt.purpose.role === "optionalCost")).toBe(false);
+      expect(discardedBy(paid.events)).toEqual([]);
+      expect(paid.state.sides[side].hand).toEqual(ids[side].hand.slice(1));
+      expect(paid.state.sides[side].score).toBe(kind === "choice" ? 3 : 4);
+      expect(invariantViolations(paid.state, current.catalog)).toEqual([]);
+    });
+
+    it.each([
+      { kind: "choice", bound: 1, accept: true, discarded: 0 },
+      { kind: "optional", bound: 1, accept: true, discarded: 0 },
+      { kind: "choice", bound: 2, accept: true, discarded: 2 },
+      { kind: "optional", bound: 2, accept: true, discarded: 2 },
+      { kind: "optional", bound: 2, accept: false, discarded: 0 },
+    ] as const)(`checks $kind at shared X=$bound as ${side}, accept=$accept`, ({ kind, bound, accept, discarded }) => {
+      const cost = discardCostFilter({ cardType: "character" }, { count: "x", min: 2 });
+      const card = synthetic(46902, () => [additionalCost(kind === "choice" ? choiceCost([cost], [pointsCost(1)]) : optionalCost(cost)), event(gainPoints(x()))], { costs: [energyX(0)] });
+      const current = createEngine(testCatalog([card]));
+      const { state, ids } = boardState(current.catalog, { active: side, phase: "day", [side]: {
+        hand: [card.id, v.vanilla1.id, v.vanilla2.id, v.event0.id], score: 3, energy: 3,
+      } });
+      const prepared = { ...state, config: { ...state.config, autoAnswerForcedPrompts: false } };
+      const prompts: Prompt[] = [];
+      const paid = current.apply(prepared, side, play(ids[side].hand[0]), {
+        answer(prompt) {
+          prompts.push(prompt);
+          if (prompt.purpose.role === "chooseX") return bound;
+          if (prompt.kind === "chooseMode") {
+            expect(prompt.options.find((option) => option.mode === 0)?.legal).toBe(bound >= 2);
+            return bound >= 2 ? 0 : 1;
+          }
+          if (prompt.kind === "confirm") return accept;
+          if (prompt.kind === "chooseCards") {
+            expect(prompt).toMatchObject({ min: 2, max: 2 });
+            expect(sorted(prompt.candidates)).toEqual(sorted(ids[side].hand.slice(1, 3)));
+            return ids[side].hand.slice(1, 3);
+          }
+          throw new Error(`Unexpected ${prompt.kind}`);
+        },
+      });
+      expect(prompts.some((prompt) => prompt.purpose.role === "optionalCost")).toBe(kind === "optional" && bound >= 2);
+      expect(discardedBy(paid.events)).toEqual(ids[side].hand.slice(1, 1 + discarded));
+      for (const id of ids[side].hand.slice(1, 1 + discarded)) expect(paid.state.instances[id].zone).toBe("void");
+      expect(paid.state.sides[side].currentEnergy).toBe(3 - bound);
+      expect(paid.state.sides[side].score).toBe(3 + bound - (kind === "choice" && bound < 2 ? 1 : 0));
+      expect(invariantViolations(paid.state, current.catalog)).toEqual([]);
+    });
+  }
 });
 
 describe("Embrace the Infinite's Reclaim across suspension, failure and response", () => {

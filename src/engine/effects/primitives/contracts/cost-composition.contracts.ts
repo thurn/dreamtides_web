@@ -24,7 +24,7 @@ import { draw } from "../draw";
 import { payTo } from "../pay-to";
 import { ScriptedSource } from "../../../steps/sources";
 import type { EngineCardDefinition } from "../../../catalog";
-import { additionalCost, choiceCost, energy, energyX, event, keyword, optionalCost, pointsCost, reclaim } from "../../../dsl/builders";
+import { additionalCost, choiceCost, energy, energyX, event, discardCostFilter, x, keyword, optionalCost, pointsCost, reclaim } from "../../../dsl/builders";
 import type { Ability, CardCost } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
 import type { Answer, Prompt } from "../../../prompts/types";
@@ -156,7 +156,7 @@ const ROUTES: { readonly [R in PlayRoute]: readonly [RouteVariant, ...RouteVaria
 };
 
 /** The subject's additional energy shapes. */
-type Extra = "none" | "mandatory" | "optionalPaid" | "optionalDeclined" | "choice" | "x";
+type Extra = "none" | "mandatory" | "optionalPaid" | "optionalDeclined" | "choice" | "x" | "discardMin";
 interface ExtraSetup {
   readonly abilities: readonly Ability[];
   /** Energy the extra adds as paid in the row; X's is `X` where the route includes X. */
@@ -176,9 +176,11 @@ const EXTRAS: { readonly [E in Extra]: ExtraSetup } = {
   choice: { abilities: [additionalCost(choiceCost([energy(1)], [energy(3)]))], paid: 3, least: 1 },
   /** A printed, printed Reclaim or granted Reclaim cost of N● plus X. */
   x: { abilities: [], paid: 0, least: 0 },
+  /** Shared X● and a least-2 discard-X cost, followed by drawing that X. */
+  discardMin: { abilities: [additionalCost(discardCostFilter({}, { count: "x", min: X })), event(draw(x()))], paid: 0, least: 0 },
 };
 
-const withX = (amount: number, extra: Extra): CardCost[] => [energy(amount), ...(extra === "x" ? [energyX(0)] : [])];
+const withX = (amount: number, extra: Extra): CardCost[] => [energy(amount), ...(extra === "x" || extra === "discardMin" ? [energyX(0)] : [])];
 const SHAPE_ABILITIES: { readonly [S in Shape]: (extra: Extra) => readonly Ability[] } = {
   plain: () => [],
   offering: () => [keyword("offering")],
@@ -209,6 +211,10 @@ class RowAnswers implements AnswerSource {
     if (role === "chooseX") return X;
     if (role === "chooseCost") return 1;
     if (role === "optionalCost" && this.extra.accept !== undefined) return this.extra.accept;
+    if (role === "discardCost" && prompt.kind === "chooseCards") {
+      expect(prompt).toMatchObject({ min: X, max: X });
+      return prompt.candidates.slice(0, X);
+    }
     if (role === "offeringCost" && prompt.kind === "chooseCards") return [prompt.candidates.find((id) => id !== null)!];
     throw new Error(`unexpected ${role} prompt`);
   }
@@ -220,9 +226,10 @@ const INCREASES: readonly Mode[] = ["cost.increase", "cost.nextIncrease"];
 /** The subject placed for `route`, with the route's grants and then the row's changes floating in timestamp order. */
 function arranged(route: RouteVariant, extra: Extra, steps: readonly Step[], available = ENERGY) {
   const card = subjectFor(route.shape, extra);
+  const hand = extra === "discardMin" ? [v.vanilla1.id, v.vanilla2.id] : [v.vanilla1.id];
   const { state, ids } = boardState(engine.catalog, {
     active: PLAYER, phase: "day",
-    [PLAYER]: { hand: route.from === "hand" ? [card.id, v.vanilla1.id] : [v.vanilla1.id], void: route.from === "void" ? [card.id] : [], back: [v.vanilla1.id], energy: available, score: SCORE, deck },
+    [PLAYER]: { hand: route.from === "hand" ? [card.id, ...hand] : hand, void: route.from === "void" ? [card.id] : [], back: [v.vanilla1.id], energy: available, score: SCORE, deck },
     [opponent(PLAYER)]: { back: [v.vanilla1.id], score: SCORE, deck },
   });
   const id = route.from === "hand" ? ids[PLAYER].hand[0] : ids[PLAYER].void[0];
@@ -267,14 +274,26 @@ interface Outcome {
   readonly reclaimed: boolean;
   readonly offering: boolean;
   readonly nextLeft: readonly EffectId[];
+  readonly discarded?: number;
+  readonly drawn?: number;
 }
 
 function observed(route: RouteVariant, extra: Extra, steps: readonly Step[]): Outcome {
   const { state, id, nextIds } = arranged(route, extra, steps);
   const result = engine.apply(state, PLAYER, { kind: "play", card: id, from: route.from }, new RowAnswers(route, EXTRAS[extra]));
   expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
+  if (extra === "discardMin") {
+    const discarded = result.events.flatMap((event) => event.kind === "discarded" ? [event.instance] : []);
+    expect([...discarded].sort()).toEqual(state.sides[PLAYER].hand.filter((card) => card !== id).sort());
+    for (const card of discarded) expect(result.state.instances[card].zone).toBe("void");
+    expect(result.state.sides[PLAYER].deck).toHaveLength(state.sides[PLAYER].deck.length - X);
+  }
   return {
     extra,
+    ...(extra === "discardMin" ? {
+      discarded: result.events.filter((event) => event.kind === "discarded").length,
+      drawn: result.state.turnLog.drawn[PLAYER] - state.turnLog.drawn[PLAYER],
+    } : {}),
     energy: ENERGY - result.state.sides[PLAYER].currentEnergy,
     points: SCORE - result.state.sides[PLAYER].score,
     opponentPoints: SCORE - result.state.sides[opponent(PLAYER)].score,
@@ -287,7 +306,8 @@ function observed(route: RouteVariant, extra: Extra, steps: readonly Step[]): Ou
 function ruled(route: RouteVariant, extra: Extra, steps: readonly Step[], routeName: PlayRoute): Outcome {
   return {
     extra,
-    energy: ruledEnergy(steps, route, EXTRAS[extra].paid, extra === "x" ? X : 0),
+    ...(extra === "discardMin" ? { discarded: X, drawn: X } : {}),
+    energy: ruledEnergy(steps, route, EXTRAS[extra].paid, extra === "x" || extra === "discardMin" ? X : 0),
     points: POINTS,
     opponentPoints: 0,
     reclaimed: routeName === "reclaim",
@@ -310,16 +330,39 @@ const BASELINE = ROUTE_ROWS.map(({ name, route }) => ({ label: `no cost change b
 
 describe("cost composition table", () => {
   it.each([...BASELINE, ...ROWS])("$label pays the ruled energy and ⍟ for every extra", ({ steps, name, route }) => {
-    const actual = EXTRA_NAMES.map((extra) => observed(route, extra, steps));
-    expect(actual).toEqual(EXTRA_NAMES.map((extra) => ruled(route, extra, steps, name)));
+    const extras = EXTRA_NAMES.filter((extra) => extra !== "discardMin" || route.x);
+    const actual = extras.map((extra) => observed(route, extra, steps));
+    expect(actual).toEqual(extras.map((extra) => ruled(route, extra, steps, name)));
   });
 
   it.each([...BASELINE, ...ROWS].filter(({ route }) => route.choose === null))("$label is offered from its least ruled energy", ({ steps, route }) => {
     const affordable = EXTRA_NAMES.map((extra) => {
-      const least = ruledEnergy(steps, route, EXTRAS[extra].least, 0);
+      const least = ruledEnergy(steps, route, EXTRAS[extra].least, extra === "discardMin" ? X : 0);
       return { extra, atLeast: offered(route, extra, steps, least), belowLeast: least > 0 && offered(route, extra, steps, least - 1) };
     });
     expect(affordable).toEqual(EXTRA_NAMES.map((extra) => ({ extra, atLeast: true, belowLeast: false })));
+  });
+  it.each([...BASELINE, ...ROWS].filter(({ name }) => name === "offering"))("$label withholds Offering X=0 but permits normal discard-min play", ({ steps, route }) => {
+    const { state, id } = arranged(route, "discardMin", steps);
+    const answers = new RowAnswers({ ...route, choose: 0 }, EXTRAS.discardMin);
+    let routeObserved = false;
+    const prepared = { ...state, config: { ...state.config, autoAnswerForcedPrompts: false } };
+    const result = engine.apply(prepared, PLAYER, { kind: "play", card: id, from: "hand" }, {
+      answer(prompt) {
+        if (prompt.purpose.role === "playRoute" && prompt.kind === "chooseMode") {
+          routeObserved = true;
+          expect(prompt.options.find((option) => option.mode === 0)?.legal).toBe(true);
+          expect(prompt.options.find((option) => option.mode === 1)?.legal).toBe(false);
+        }
+        return answers.answer(prompt);
+      },
+    });
+    expect(routeObserved).toBe(true);
+    expect(result.state.instances[id].status.offering).toBe(false);
+    expect(ENERGY - result.state.sides[PLAYER].currentEnergy).toBe(ruledEnergy(steps, { ...route, replacement: null, x: true }, 0, X));
+    expect(result.events.filter((event) => event.kind === "discarded")).toHaveLength(X);
+    expect(result.state.turnLog.drawn[PLAYER] - state.turnLog.drawn[PLAYER]).toBe(X);
+    expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
   });
 });
 

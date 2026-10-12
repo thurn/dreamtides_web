@@ -1,0 +1,26 @@
+{
+  "bead": "hv-umm2.469",
+  "phase": 5,
+  "implementMin": 27.57,
+  "localValidationS": {
+    "installReported": 2,
+    "initialLabNegative": 4.162,
+    "intermediateLabNegative": 2.181,
+    "labFinalExactNegative": 1.647,
+    "initialFocused": 5.94,
+    "focused": 4.76,
+    "nestedMutationNegative": 2.832,
+    "initialReview": 12.246,
+    "review": 11.247,
+    "initialKnip": 2.571,
+    "knip": 1.863
+  },
+  "hostLoad": 4.91,
+  "testDelta": {
+    "files": 0,
+    "lines": 140,
+    "jsdomFiles": 0,
+    "cases": 50
+  },
+  "friction": []
+}
