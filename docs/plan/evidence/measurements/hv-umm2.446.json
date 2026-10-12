@@ -1,0 +1,191 @@
+{
+  "bead": "hv-umm2.446",
+  "base": "46784810c7f604be675a4a7d5c4d31318676cc20",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.446",
+  "dispatchWindow": {
+    "start": "2026-10-12T00:42:15+00:00",
+    "basis": "Parent-supplied approximate dispatch UTC; exact helper receipt timestamp is not retained. Full wall includes reading, public fixture proof, validation and evidence. Final observation immediately precedes commit.",
+    "evidenceAt": "2026-10-12T00:47:52.351141+00:00",
+    "finalEvidenceAt": "2026-10-12T00:49:42.416582+00:00",
+    "elapsedMin": 7.46,
+    "boundary": "Final observation immediately precedes staging and commit; approximate dispatch basis and sub-minute commit tail are disclosed."
+  },
+  "scope": [
+    "src/rules/battle/fold.ts:isTurnState",
+    "src/rules/battle/engine-battle-intents.test.ts:LOAD_STATE",
+    "own friction, measurement JSON and pre-existing notes"
+  ],
+  "contract": "Absent/undefined and literal true endingCleanup values are valid. False, null, strings, numbers, plain objects and arrays are malformed. Only this optional typed marker is newly constrained; all other fields/validators and engine behavior remain unchanged.",
+  "testPolicy": {
+    "publicAPI": "validateLoadedState plus JSON serialization roundtrip",
+    "fixture": "Existing deterministic replay provider fixtures; a valid structural saved Ending-phase snapshot represents the pending-cleanup boundary. It is not claimed as a new engine-flow test or an observed runToDecision suspension.",
+    "validControls": [
+      "absent",
+      "explicit undefined",
+      "literal true"
+    ],
+    "malformedCases": [
+      false,
+      null,
+      "true",
+      0,
+      1,
+      {},
+      []
+    ],
+    "existingCases": 9,
+    "addedCases": 10,
+    "totalCases": 19,
+    "testDelta": {
+      "files": 0,
+      "lines": 39,
+      "jsdomFiles": 0,
+      "cases": 10
+    },
+    "fileLines": 390,
+    "newEntrypoints": 0
+  },
+  "baseline": {
+    "base": "46784810c7f604be675a4a7d5c4d31318676cc20",
+    "foldSha256": "33ddbf708d0194ce7ccbc39184ad7a04508f1a4ebc4ca81270e2b1b82e9c4ff1",
+    "testSha256": "1e11d4065f3fec439c984819adfaa1abc7776c12e7d04c8b254bb5a9b38533e1",
+    "testLines": 351
+  },
+  "negativeProofs": {
+    "first": {
+      "artifact": "unchanged-negative.json",
+      "log": "unchanged-negative.log",
+      "counts": {
+        "failed": 7,
+        "passed": 12
+      },
+      "limitation": "First assertion rejected direct admission expectations before the JSON rejection assertion could run. Positive roundtrip controls did run."
+    },
+    "bothPathsBeforeProduction": {
+      "artifact": "unchanged-final-fixture-negative.json",
+      "log": "unchanged-final-fixture-negative.log",
+      "counts": {
+        "failed": 7,
+        "passed": 12
+      },
+      "note": "Both public admission results are computed before assertion. Raw formatter labels the empty-array case undefined; the final fixture uses named table rows to avoid ambiguous formatting."
+    },
+    "exactFinalFixture": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/engine-battle-intents.test.ts"
+      ],
+      "exit": 1,
+      "wallSeconds": 3.622,
+      "startingHostLoad": 8.0634765625,
+      "baselineFoldSha256": "33ddbf708d0194ce7ccbc39184ad7a04508f1a4ebc4ca81270e2b1b82e9c4ff1",
+      "testSha256": "f1150eafb0a62ab6bba714f16ffdb67dbf7a2be4578e0053cd5d61923bd957b2",
+      "intendedFoldSha256": "c4ec358c163c35c32d7585dbd8ad19ec1311b3ff660bba55f1de5d12243ddef4",
+      "intendedRestoredIdentically": true,
+      "failed": 7,
+      "passed": 12,
+      "total": 19,
+      "labelClarification": "Named object table rows explicitly preserve and identify array/object marker values; raw earlier formatter labeled array undefined. Both direct and JSON-roundtrip admission are evaluated."
+    },
+    "exactNegativeLog": "exact-final-fixture-negative.log"
+  },
+  "focused": {
+    "command": [
+      "npm",
+      "test",
+      "--",
+      "src/rules/battle/engine-battle-intents.test.ts"
+    ],
+    "exit": 0,
+    "wallSeconds": 2.992,
+    "startingHostLoad": 8.21826171875,
+    "foldSha256": "c4ec358c163c35c32d7585dbd8ad19ec1311b3ff660bba55f1de5d12243ddef4",
+    "testSha256": "f1150eafb0a62ab6bba714f16ffdb67dbf7a2be4578e0053cd5d61923bd957b2",
+    "cases": 19,
+    "testLines": 390
+  },
+  "focusedLog": "focused-final-exact.log",
+  "priorPositive": {
+    "artifact": "focused-final.json",
+    "log": "focused-final.log",
+    "cases": 19
+  },
+  "production": "One optional literal-true/undefined check in isTurnState; source marker/schema already exists. No helper abstraction or exported API change.",
+  "fallout": {
+    "exportedTypes": [],
+    "forcedConsumers": [],
+    "unusedExportsFiles": "None introduced."
+  },
+  "install": {
+    "performedBy": "Parent before helper writes in this fresh worktree",
+    "observer": 32922,
+    "exit": 0,
+    "reportedWallSeconds": 2,
+    "inheritedAdvisories": {
+      "total": 17,
+      "severityDistribution": "Not retained for this install observation."
+    },
+    "packageAndLockChanged": false
+  },
+  "validationPolicy": "Focused existing test, review and Knip. No infrastructure/config/cross-cutting architecture change; no full, browser, fuzz or heavy slot warranted.",
+  "hostLoadSamples": {
+    "exactNegativeStart": 8.0634765625,
+    "focusedStart": 8.21826171875,
+    "reviewGroupStart": 8.5771484375,
+    "knipGroupStart": 9.54736328125
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final npm run review command group starting one-minute observation, before workspace preparation."
+      }
+    }
+  },
+  "runtimeLedger": {
+    "servers": [],
+    "browserContexts": [],
+    "MCPProviders": [],
+    "heavySlots": [],
+    "observers": "All synchronous focused/baseline subprocesses exited; final review/Knip observer18258 completed exit 0 with asset restoration finished.",
+    "writers": [],
+    "resourcesSettled": true
+  },
+  "sourceHashes": {
+    "baselineFold": "33ddbf708d0194ce7ccbc39184ad7a04508f1a4ebc4ca81270e2b1b82e9c4ff1",
+    "baselineTest": "1e11d4065f3fec439c984819adfaa1abc7776c12e7d04c8b254bb5a9b38533e1",
+    "finalFold": "c4ec358c163c35c32d7585dbd8ad19ec1311b3ff660bba55f1de5d12243ddef4",
+    "finalTest": "f1150eafb0a62ab6bba714f16ffdb67dbf7a2be4578e0053cd5d61923bd957b2"
+  },
+  "reviewPolicy": "Non-core, three changed non-test lines, no architecture expansion or independent-review threshold; parent determines final delivery.",
+  "validation": {
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exit": 0,
+      "wallSeconds": 21.745,
+      "startingHostLoad": 8.5771484375,
+      "files": 67,
+      "cases": 1724
+    },
+    "knip-final": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "exit": 0,
+      "wallSeconds": 3.324,
+      "startingHostLoad": 9.54736328125
+    }
+  },
+  "manifest": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.446/evidence-manifest.json",
+    "artifacts": 22,
+    "sha256": "282c228ca2f5e43e9bf2f67ffeb323814f10f3bc53b3a09226b4acdb6de5f986"
+  }
+}

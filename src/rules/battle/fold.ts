@@ -1004,7 +1004,8 @@ function isTurnState(value: unknown): boolean {
     isSide(value.lastNormal) &&
     isArrayOf(value.extraTurns, isSide) &&
     nullable(isIndex)(value.challengeLane) &&
-    isBoolean(value.beginning)
+    isBoolean(value.beginning) &&
+    (value.endingCleanup === undefined || value.endingCleanup === true)
   );
 }
 

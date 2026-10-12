@@ -200,6 +200,45 @@ describe("stale and invalid intents", () => {
 
 
 describe("LOAD_STATE", () => {
+  /** A stable saved Ending snapshot at the pending-cleanup boundary. */
+  function endingSnapshot(state: FoldState, marker: unknown, present = true) {
+    const battle = journeyBattleOf(state.battle);
+    if (battle === null) throw new Error("no journey battle");
+    const committed = battle.engine.slice.committed;
+    return { snapshot: state.journey, battle: {
+      ...battle, engine: { ...battle.engine, slice: { ...battle.engine.slice, committed: {
+        ...committed, turn: { ...committed.turn, phase: "ending", ...(present ? { endingCleanup: marker } : {}) },
+      } } },
+    } };
+  }
+
+  it.each([
+    { label: "absent", marker: undefined, present: false },
+    { label: "undefined", marker: undefined, present: true },
+    { label: "literal true", marker: true, present: true },
+  ])("keeps a valid $label endingCleanup marker through public load and JSON roundtrip", ({ marker, present }) => {
+    const state = begun(), payload = endingSnapshot(state, marker, present);
+    expect(validateLoadedState(state, payload)?.battle).toEqual(payload.battle);
+    const roundtrip = JSON.parse(JSON.stringify(payload)) as Record<string, unknown>;
+    const loaded = validateLoadedState(state, roundtrip);
+    expect(loaded?.battle).toEqual(roundtrip.battle);
+    const turn = journeyBattleOf(loaded?.battle ?? null)?.engine.slice.committed.turn;
+    expect(turn?.phase).toBe("ending");
+    expect(turn?.endingCleanup).toBe(marker);
+  });
+
+  it.each([
+    { label: "false", marker: false }, { label: "null", marker: null },
+    { label: "string", marker: "true" }, { label: "zero", marker: 0 },
+    { label: "one", marker: 1 }, { label: "object", marker: {} }, { label: "array", marker: [] },
+  ])("rejects malformed $label endingCleanup marker through public load and JSON roundtrip", ({ marker }) => {
+    const state = begun(), payload = endingSnapshot(state, marker);
+    const direct = validateLoadedState(state, payload);
+    const roundtrip = validateLoadedState(state, JSON.parse(JSON.stringify(payload)) as Record<string, unknown>);
+    expect({ directAccepted: direct !== null, roundtripAccepted: roundtrip !== null })
+      .toEqual({ directAccepted: false, roundtripAccepted: false });
+  });
+
   it("keeps a journey battle's init, engine battle and valid score snapshots, and refuses malformed metadata or mode", () => {
     const state = begun();
     const battle = journeyBattleOf(state.battle);

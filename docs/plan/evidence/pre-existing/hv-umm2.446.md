@@ -1,0 +1,7 @@
+# hv-umm2.446 observations
+
+The assigned saved-input validator gap is reproduced through public `validateLoadedState`: false, null, a string, zero, one, an object and an array endingCleanup marker are all admitted on the untouched base. The exact final fixture observes both direct and JSON-roundtrip admission before assertion. Seven rejection expectations fail while twelve valid/existing controls pass. The final predicate admits absent/undefined or literal true and rejects the malformed values. This fulfills the validation follow-up recorded by hv-umm2.86.
+
+Raw earlier proof is retained separately. Its first direct assertion prevents evaluation of the following JSON rejection assertion; the refined fixture computes both paths first. Named table rows make the array/object values explicit because the raw test-title formatter displayed the array row as undefined. The exact final fixture negative restores the intended fold source byte-identically in finally. These fixture refinements do not establish a separate production defect.
+
+The parent reports the completed fresh install (exit 0, 2 seconds) with 17 inherited advisories; the severity distribution for this install observation is not retained. Package and lock files are unchanged. Disposable preparation materializations emit missing-art warnings; setup and restoration complete. No additional source issue or outside-scope repair was encountered. The separately parent-owned inventory marker work is outside this bead.
