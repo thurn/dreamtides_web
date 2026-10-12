@@ -27,8 +27,9 @@ export type AmongSource =
  * "Put a <filter> from among <cards> into your hand" (rules § Keywords and
  * Effects → Erode, and § Zones → Hand): the controller chooses `count` of
  * the cards `among` names that match the filter and the cost bound, all of
- * them when fewer match, and puts each into their hand (`cardTaken`). With
- * no matching card nothing is chosen.
+ * them when fewer match, and puts each into their hand (`cardTaken`) in
+ * the order the cards are offered, whatever order the answer lists them.
+ * With no matching card nothing is chosen.
  *
  * With `optional` ("You may") the controller takes none or the full number
  * (RD-hv-umm2.502-1): a take of one card may choose none, and a take of
@@ -72,7 +73,9 @@ export const takeFromAmongPrimitive = definePrimitive<TakeFromAmongNode>({
       min: node.optional && count === 1 ? 0 : taken,
       max: taken,
     });
-    for (const id of chosen) take(ctx, id, side);
+    // A chooseCards answer is a set (canonicalAnswer): the cards go to hand in the order offered.
+    const picked = new Set(chosen);
+    for (const id of candidates) if (picked.has(id)) take(ctx, id, side);
   },
 });
 
