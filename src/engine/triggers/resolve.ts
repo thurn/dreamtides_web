@@ -17,7 +17,7 @@ export function resolveQueuedTrigger(ctx: StepContext, trigger: QueuedTrigger): 
 }
 
 function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
-  const { source, controller, origin, ability, node, subject, gain, scored, captured } = trigger;
+  const { source, controller, origin, ability, node, subject, gain, scored, captured, lastKnownSourceSpark } = trigger;
   const body = triggerBody(ctx.catalog, origin, ability, node);
   const applied =
     body.condition === null ||
@@ -28,6 +28,7 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
   if (choices === null) return;
   resolveEffect(ctx, body.effect, {
     source,
+    ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     origin,
     ability,
     root: body.root,

@@ -99,6 +99,8 @@ export interface StepContext {
    * step and is never battle state.
    */
   readonly armedDissolves: Map<InstanceId, ArmedDissolve>;
+  /** Effective spark captured before each source leaves play in this step; replay rebuilds it. */
+  readonly departedSourceSpark: Map<InstanceId, number>;
   /** A uniform draw in `[0, 1)` from the named stream. */
   random(stream: string): number;
   /**

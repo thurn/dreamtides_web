@@ -197,6 +197,8 @@ export interface QueuedTriggerView {
   readonly gain?: SparkGain;
   /** The positive challenge award a scoring trigger matched; absent for other triggers. */
   readonly scored?: number;
+  /** Retained only while the viewer can identify this trigger's source. */
+  readonly lastKnownSourceSpark?: number;
   /**
    * The captured cards a floating or delayed trigger kept, as for a floating
    * change; absent when it kept none, and when the viewer cannot see its
@@ -414,9 +416,12 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     });
   // A trigger from a source the viewer cannot see shows none of its captured cards.
   const changeView = (change: FloatingChange, sourceSeen: boolean): FloatingChangeView => {
-    if (change.kind !== "trigger" || change.captured === undefined) return copy(change);
-    const { captured, ...rest } = change;
-    return sourceSeen ? { ...copy(rest), captured: capturedView(captured) } : copy(rest);
+    if (change.kind !== "trigger") return copy(change);
+    const { captured, lastKnownSourceSpark, ...rest } = change;
+    return { ...copy(rest),
+      ...(sourceSeen && captured !== undefined ? { captured: capturedView(captured) } : {}),
+      ...(sourceSeen && lastKnownSourceSpark !== undefined ? { lastKnownSourceSpark } : {}),
+    };
   };
   // Hidden captured members are numbered in the order the floating effects, then the queued triggers, show them.
   const floating = state.floating.filter(floatingVisible).map((effect): FloatingEffectView => {
@@ -437,6 +442,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     subject: seesSubject(state, trigger, viewer) ? trigger.subject : null,
     ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
     ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
+    ...(trigger.lastKnownSourceSpark === undefined || !visibleSource(trigger.source) ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),
     ...(trigger.captured === undefined || !visibleSource(trigger.source) ? {} : { captured: capturedView(trigger.captured) }),
   }));
   const descriptor = (record: RememberedCard): HiddenCardDescriptor => ({

@@ -8,6 +8,8 @@ export interface LeftPlayEvent {
   /** Its controller in play. */
   readonly side: Side;
   readonly to: Zone | null;
+  /** Effective spark before departure ends any changes; absent in legacy events. */
+  readonly spark?: number;
 }
 
 export const leftPlay = publicEvent<LeftPlayEvent>("leftPlay");

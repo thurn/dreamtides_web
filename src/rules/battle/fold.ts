@@ -1158,7 +1158,8 @@ function isStackItem(value: unknown): boolean {
     isAbilitySource(value.source) &&
     isIndex(value.ability) &&
     isAbilityOrigin(value.origin) &&
-    isEffectChoices(value.choices)
+    isEffectChoices(value.choices) &&
+    optional((spark) => isFiniteNumber(spark) && spark >= 0)(value.lastKnownSourceSpark)
   );
 }
 
@@ -1219,7 +1220,8 @@ const FLOATING_CHANGE_VALIDATORS: {
     isFiniteNumber(value.amount) &&
     isBoolean(value.next),
   cardCost: (value) => isInstanceId(value.instance) && (value.mode === "set" || value.mode === "increase" || value.mode === "reduce") && isIndex(value.amount),
-  trigger: (value) => isEffectRef(value.ref) && isBoolean(value.once) && optional(arrayOf(isInstanceId))(value.captured),
+  trigger: (value) => isEffectRef(value.ref) && isBoolean(value.once) && optional(arrayOf(isInstanceId))(value.captured) &&
+    optional((spark) => isFiniteNumber(spark) && spark >= 0)(value.lastKnownSourceSpark),
   disableTriggers: (value) => isInstanceId(value.instance) && optional(isPlainRecord)(value.while),
   banishedUntil: (value) => isInstanceId(value.instance) && isSide(value.side),
   banishedToHandUntil: (value) => isInstanceId(value.instance) && isIndex(value.banishedAt) && value.banishedAt > 0,
@@ -1272,6 +1274,7 @@ function isQueuedTrigger(value: unknown): boolean {
     nullable(isInstanceId)(value.subject) &&
     optional(arrayOf(isSide))(value.subjectHiddenFrom) &&
     optional(arrayOf(isInstanceId))(value.captured) &&
+    optional((spark) => isFiniteNumber(spark) && spark >= 0)(value.lastKnownSourceSpark) &&
     optional((scored) => isFiniteNumber(scored) && scored >= 0)(value.scored) &&
     optional(
       (gain) =>

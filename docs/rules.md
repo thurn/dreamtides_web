@@ -569,7 +569,15 @@ only on gains.
 effect resolves, every change to it included: gained spark, spark with a
 duration, and spark it has from static abilities and Support. A later part
 of the same effect, as in "Then this character gains +1✦," does not change
-the value already read.
+the value already read. If the source leaves play while its ability is queued,
+on the stack, delayed, or resolving, the ability reads the effective spark
+immediately before that departure, including changes that end as it leaves.
+This applies when the source ceases to exist and to an ability activated by
+abandoning its source. If the same card is in play again when the value is
+read, its current effective spark applies. A source with no in-play information
+for that ability contributes 0; an emblem is not a character and contributes 0.
+Only resolving effects read this value; a static ability cannot read its own
+spark through this expression.
 
 **Additional spark:** An ability such as "When a character you control gains
 ✦, it gains 1 additional ✦" applies to each gain, and the additional ✦ has

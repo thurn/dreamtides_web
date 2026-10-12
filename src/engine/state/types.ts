@@ -262,6 +262,8 @@ export type AbilityOrigin =
 
 /** An activated ability on the stack. */
 export interface AbilityStackItem extends StackItemBase {
+  /** Effective spark just before the source last left play, while this ability waited. */
+  readonly lastKnownSourceSpark?: number;
   readonly kind: "ability";
   readonly source: AbilitySource;
   /** The ability's index in its source's ability list. */
@@ -436,7 +438,7 @@ export type FloatingChange =
    * binding keeps that binding's cards as `captured`, in the order they
    * entered play, for its effect's captured-card references.
    */
-  | { readonly kind: "trigger"; readonly ref: EffectRef; readonly once: boolean; readonly captured?: readonly InstanceId[] }
+  | { readonly kind: "trigger"; readonly ref: EffectRef; readonly once: boolean; readonly captured?: readonly InstanceId[]; readonly lastKnownSourceSpark?: number }
   /** The instance's triggered abilities do not trigger, while `while` holds if given. */
   | { readonly kind: "disableTriggers"; readonly instance: InstanceId; readonly while?: Condition }
   /** "Banish … until …": as the effect ends, the banished card returns to play under `side` (F3). */
@@ -463,6 +465,8 @@ export interface FloatingEffect {
  * since changed zones or ceased to exist.
  */
 export interface QueuedTrigger {
+  /** Effective spark just before the source last left play, while this trigger waited. */
+  readonly lastKnownSourceSpark?: number;
   readonly source: AbilitySource;
   readonly controller: Side;
   readonly origin: AbilityOrigin;

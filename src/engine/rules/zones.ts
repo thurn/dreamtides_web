@@ -13,7 +13,8 @@
  *    instead (RD-hv-7x4l.8-1).
  */
 import type { AbilitySource, InstanceId, Side, Slot, Zone } from "../state/ids";
-import { BACK_RANK_SIZE } from "../state/ids";
+import { BACK_RANK_SIZE, sourceInstance } from "../state/ids";
+import { effectiveSpark } from "./spark";
 import type { BattleState, CardInstance, EffectChoices, FloatingEffect, Printing } from "../state/types";
 import type { Variant } from "../dsl/types";
 import type { EngineCatalog } from "../catalog";
@@ -87,6 +88,19 @@ export function charactersInPlay(state: BattleState, side: Side): InstanceId[] {
   return [...backRank, ...frontRank].filter((id): id is InstanceId => id !== null);
 }
 
+/** Retains a departure's effective spark for pending and currently resolving abilities. */
+function captureSourceSpark(ctx: StepContext, instance: CardInstance): number {
+  const lastKnownSourceSpark = effectiveSpark(ctx.state, ctx.catalog, instance.id);
+  ctx.departedSourceSpark.set(instance.id, lastKnownSourceSpark);
+  ctx.state.triggerQueue = ctx.state.triggerQueue.map((trigger) => sourceInstance(trigger.source) === instance.id
+    ? { ...trigger, lastKnownSourceSpark } : trigger);
+  ctx.state.stack = ctx.state.stack.map((item) => item.kind === "ability" && sourceInstance(item.source) === instance.id
+    ? { ...item, lastKnownSourceSpark } : item);
+  ctx.state.floating = ctx.state.floating.map((effect) => effect.change.kind === "trigger" && sourceInstance(effect.source) === instance.id
+    ? { ...effect, change: { ...effect.change, lastKnownSourceSpark } } : effect);
+  return lastKnownSourceSpark;
+}
+
 /**
  * Announces that an instance is about to leave play or the void for `to`
  * (`null` when it ceases to exist), while it is still there, so "leaves" triggers
@@ -94,7 +108,8 @@ export function charactersInPlay(state: BattleState, side: Side): InstanceId[] {
  */
 function depart(ctx: StepContext, instance: CardInstance, to: Zone | null): void {
   if (instance.zone === "play" && to !== "play") {
-    ctx.emit({ kind: "leftPlay", instance: instance.id, side: instance.controller, to });
+    const spark = captureSourceSpark(ctx, instance);
+    ctx.emit({ kind: "leftPlay", instance: instance.id, side: instance.controller, to, spark });
     expireAt(ctx, { at: "sourceLeavesPlay", source: instance.id });
   } else if (instance.zone === "void") {
     ctx.emit({ kind: "leftVoid", instance: instance.id, side: instance.controller, to });
@@ -396,7 +411,10 @@ export function ceaseToExist(
   const side = instance.controller;
   const from = instance.zone;
   if (options.silent === true) {
-    if (instance.zone === "play") expireAt(ctx, { at: "sourceLeavesPlay", source: id });
+    if (instance.zone === "play") {
+      captureSourceSpark(ctx, instance);
+      expireAt(ctx, { at: "sourceLeavesPlay", source: id });
+    }
   } else {
     depart(ctx, instance, null);
   }

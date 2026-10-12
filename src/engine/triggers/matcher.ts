@@ -446,8 +446,11 @@ function enqueueAbility(
  * never see it as this trigger's subject.
  */
 function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
+  const self = sourceInstance(matched.source);
+  const lastKnownSourceSpark = self === null ? matched.lastKnownSourceSpark : (ctx.departedSourceSpark.get(self) ?? matched.lastKnownSourceSpark);
+  const retained = lastKnownSourceSpark === undefined ? matched : { ...matched, lastKnownSourceSpark };
   const hidden = matched.subject === null ? [] : sidesBlindTo(ctx.state, matched.subject);
-  const trigger: QueuedTrigger = hidden.length === 0 ? matched : { ...matched, subjectHiddenFrom: hidden };
+  const trigger: QueuedTrigger = hidden.length === 0 ? retained : { ...retained, subjectHiddenFrom: hidden };
   ctx.state.triggerQueue.push(trigger);
   ctx.emit({
     kind: "triggerQueued",
@@ -459,6 +462,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
     ...(trigger.subjectHiddenFrom === undefined ? {} : { subjectHiddenFrom: [...trigger.subjectHiddenFrom] }),
     ...(trigger.gain === undefined ? {} : { gain: trigger.gain }),
     ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
+    ...(trigger.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),
   });
 }
 
@@ -513,7 +517,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
   for (const effect of ordered) {
     const floating = floatingListener(ctx, effect);
     if (floating === null || effect.change.kind !== "trigger") continue;
-    const { ref, once, captured } = effect.change;
+    const { ref, once, captured, lastKnownSourceSpark } = effect.change;
     const isArmed = armedHere.includes(effect);
     const match = matchTrigger(ctx.state, ctx.catalog, floating.trigger, event, floating.listener, true, isArmed);
     if (match === null) continue;
@@ -526,6 +530,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
       node: ref.node,
       ...match,
       ...(captured === undefined ? {} : { captured: [...captured] }),
+      ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     });
   }
 }

@@ -20,6 +20,7 @@ export interface TriggerQueuedEvent {
   readonly gain?: SparkGain;
   /** The positive challenge award a scoring trigger matched; absent for other triggers. */
   readonly scored?: number;
+  readonly lastKnownSourceSpark?: number;
 }
 
 /**
@@ -34,7 +35,9 @@ export const triggerQueued: EventDefinition<TriggerQueuedEvent> = {
   kind: "triggerQueued",
   privateTo: (event, state) => sourcePrivacy(event.source, state),
   redact(event, viewer, state) {
-    const seen = redactSource(event, viewer, state);
+    const redacted = redactSource(event, viewer, state);
+    const { lastKnownSourceSpark, ...anonymous } = redacted;
+    const seen = redacted.source === null && lastKnownSourceSpark !== undefined ? anonymous : redacted;
     return seen.subject === null || seesSubject(state, seen, viewer) ? seen : { ...seen, subject: null };
   },
 };

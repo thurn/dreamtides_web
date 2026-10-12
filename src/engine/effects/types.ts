@@ -73,6 +73,8 @@ export interface MovedCards {
 
 /** What a primitive sees while it resolves. */
 export interface EffectEnv {
+  /** The pending ability's retained departure spark; live in-play spark takes precedence. */
+  readonly lastKnownSourceSpark: number | null;
   /** The card or emblem whose ability this is. */
   readonly source: AbilitySource;
   /** Where the ability's definition comes from. */

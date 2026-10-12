@@ -4,7 +4,7 @@ import type { PromptRole } from "../../prompts/types";
 import { chooseX, payCosts, planCosts } from "../../rules/costs";
 import { slotOf } from "../../rules/zones";
 import type { AbilitySource } from "../../state/ids";
-import { opponent } from "../../state/ids";
+import { opponent, sourceInstance } from "../../state/ids";
 import type { StepDefinition } from "../types";
 
 /**
@@ -46,7 +46,9 @@ export const activate: StepDefinition<ActivateStep> = {
     if (ability.oncePerTurn === true) {
       state.oncePerTurn.push(oncePerTurnKey(step.source, step.ability));
     }
-    state.stack.push({ kind: "ability", source: step.source, ability: step.ability, origin, controller: side, choices: captured, x: plan.x, optionalPaid: plan.optionalPaid });
+    const self = sourceInstance(step.source);
+    const lastKnownSourceSpark = self === null ? undefined : ctx.departedSourceSpark.get(self);
+    state.stack.push({ ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }), kind: "ability", source: step.source, ability: step.ability, origin, controller: side, choices: captured, x: plan.x, optionalPaid: plan.optionalPaid });
     ctx.emit({ kind: "abilityActivated", side, source: step.source, ability: step.ability });
     state.priority = opponent(side);
   },

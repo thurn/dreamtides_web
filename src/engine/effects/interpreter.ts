@@ -519,7 +519,9 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     movedCosts: (ref) => env.moved.costs(ref.node),
     sourceSpark: () => {
       const self = sourceInstance(env.source);
-      return self !== null && ctx.state.instances[self]?.zone === "play" ? effectiveSpark(ctx.state, ctx.catalog, self) : 0;
+      if (self === null) return 0;
+      return ctx.state.instances[self]?.zone === "play" ? effectiveSpark(ctx.state, ctx.catalog, self)
+        : (ctx.departedSourceSpark.get(self) ?? env.lastKnownSourceSpark ?? 0);
     },
   });
 }
@@ -726,6 +728,8 @@ export function effectEntersPlay(effect: EffectNode): boolean {
 }
 
 export interface ResolveOptions {
+  /** Effective spark retained when this pending ability's source left play. */
+  readonly lastKnownSourceSpark?: number;
   readonly source: AbilitySource;
   /** Where the ability's definition comes from; prompt purposes carry its card or emblem. */
   readonly origin: AbilityOrigin;
@@ -916,6 +920,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
   const specs = collectTargets(effect, chosen);
   const env: EffectEnv = {
     source: options.source,
+    lastKnownSourceSpark: options.lastKnownSourceSpark ?? null,
     origin: options.origin,
     ability: options.ability,
     root: options.root ?? effect,

@@ -4,7 +4,7 @@
  * authored; authored abilities build for both variants from registered
  * primitives, hold static-only primitives only as a static ability's whole
  * effect, declare every play-time target they hold, and keep play-time
- * targets and triggering-card references out of static abilities; each
+ * targets, triggering-card references, and resolving source-spark reads out of static abilities; each
  * authored entity's verifiedText matches its text; and every figment has a
  * unique UUID and a non-negative integer base spark. Each check collects its
  * failures as `${kind} ${id}: message`, so a failing gate names every
@@ -33,6 +33,7 @@ import {
 } from "./dsl/builders";
 import { onMaterialized, triggered, triggeringCard, whenDraw } from "./dsl/triggers";
 import type { Ability } from "./dsl/types";
+import { thisCharacterSpark } from "./dsl/values";
 import { expectedVerifiedText } from "./dsl/verified-text";
 import { engineCardFromContent } from "./content-catalog";
 import { everyNode } from "./effects/interpreter";
@@ -132,7 +133,7 @@ function primitiveFailures(abilities: readonly Ability[]): string[] {
 const PLAY_TIME_REFERENCES: readonly unknown[] = ["target", "stackTarget", "subject"];
 
 /**
- * The play-time target and triggering-card references a static ability's
+ * The play-time target, triggering-card and resolving source-spark references a static ability's
  * effect holds anywhere in its tree. The layer evaluation has no target
  * chosen and no triggering event to read, so each covers no character and
  * that part of the static ability affects nothing.
@@ -145,6 +146,7 @@ function staticReferenceFailures(abilities: readonly Ability[]): string[] {
     const visit = (value: unknown): void => {
       if (typeof value !== "object" || value === null || seen.has(value)) return;
       seen.add(value);
+      if ("value" in value && value.value === "sourceSpark") kinds.push("sourceSpark");
       if ("kind" in value && PLAY_TIME_REFERENCES.includes(value.kind)) kinds.push(String(value.kind));
       if ("kind" in value && value.kind === "inZone" && "pick" in value && value.pick === "target") kinds.push("inZone target");
       for (const field of Object.values(value)) visit(field);
@@ -248,6 +250,7 @@ describe("content gates", () => {
     expect(staticReferenceFailures([staticAbility(sparkModifier(target(characterYouControl()), 1))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(sparkModifier(triggeringCard(), 1))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(createCopyInHand(fromVoid()))])).toHaveLength(1);
+    expect(staticReferenceFailures([staticAbility(sparkModifier(all(characterYouControl()), thisCharacterSpark()))])).toHaveLength(1);
   });
 
   it("rejects a static-only primitive anywhere but as a static ability's whole effect", () => {

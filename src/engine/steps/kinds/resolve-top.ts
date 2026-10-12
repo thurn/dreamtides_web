@@ -63,6 +63,7 @@ function resolveAbility(ctx: StepContext, item: AbilityStackItem): void {
   }
   resolveEffect(ctx, ability.effect, {
     source: item.source,
+    ...(item.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: item.lastKnownSourceSpark }),
     origin: item.origin,
     ability: item.ability,
     controller: item.controller,

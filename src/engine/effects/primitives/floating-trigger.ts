@@ -1,4 +1,5 @@
 import type { Duration, Trigger } from "../../dsl/types";
+import { sourceInstance } from "../../state/ids";
 import { startDuration } from "../../rules/durations";
 import { addFloating } from "../../rules/floating";
 import { everyNode } from "../interpreter";
@@ -26,6 +27,8 @@ export const floatingTriggerPrimitive = definePrimitive<FloatingTriggerNode>({
     if (index < 0) throw new Error("A floating trigger is not part of its ability's effect");
     const expiry = startDuration(ctx, node.duration, env.controller, env.source, []);
     if (expiry === null) return;
+    const self = sourceInstance(env.source);
+    const lastKnownSourceSpark = self === null ? null : (ctx.departedSourceSpark.get(self) ?? env.lastKnownSourceSpark);
     // Inside a withMaterialized binding, the trigger keeps the binding's cards for its later resolution.
     addFloating(ctx, {
       controller: env.controller,
@@ -35,6 +38,7 @@ export const floatingTriggerPrimitive = definePrimitive<FloatingTriggerNode>({
         kind: "trigger",
         ref: { origin: env.origin, ability: env.ability, node: index },
         once: node.once,
+        ...(lastKnownSourceSpark === null ? {} : { lastKnownSourceSpark }),
         ...(env.captured === null ? {} : { captured: [...env.captured] }),
       },
     });

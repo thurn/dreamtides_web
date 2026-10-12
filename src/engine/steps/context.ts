@@ -61,6 +61,7 @@ export class Context implements StepContext {
   /** The cards shown to one side alone so far (`disclose`). */
   readonly disclosed: Disclosure[] = [];
   readonly armedDissolves = new Map<InstanceId, ArmedDissolve>();
+  readonly departedSourceSpark = new Map<InstanceId, number>();
   committed = false;
   /** The knowledge settlers of the `settlingKnowledge` calls running now, outermost first. */
   private readonly settlers: (() => void)[] = [];
