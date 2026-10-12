@@ -235,21 +235,73 @@ describe("last-known source spark", () => {
     expect(stateHash(replayed.committed)).toBe(stateHash(direct.committed));
   });
 
-  it("validates retained queued, stacked and delayed values at the saved-state boundary", () => {
-    const board = setup({ back: [delayedReader.id, reader.id] });
-    const source = board.ids.player.back[0]!;
+  it("shows a created source's post-departure trigger event publicly without its source or retained spark", () => {
+    const board = setup({ back: [killer.id] });
+    const source = placeFigment(board.state, "player", { rank: "front", index: 0 }, { kind: "figmentCopy", cardId: dying.id, spark: 7 });
+    const queued = step(board.state, { kind: "play", card: board.ids.player.void[0], from: "void" }).state;
+    const departed = step(queued, { kind: "resolveTrigger" });
+    expect(departed.state.instances[source]).toBeUndefined();
+    const event = departed.events.find((entry) => entry.kind === "triggerQueued" && entry.source === source);
+    if (event?.kind !== "triggerQueued") throw new Error("expected the created source's Dissolved trigger");
+    expect(event.lastKnownSourceSpark).toBe(7);
+    const { lastKnownSourceSpark: _retained, ...anonymous } = event;
+    for (const viewer of ["player", "enemy"] as const) {
+      expect(eventSeenBy(event, viewer, departed.state)).toStrictEqual({ ...anonymous, source: null, subject: null });
+    }
+    expect(step(departed.state, { kind: "resolveTrigger" }).state.sides.player.score).toBe(7);
+  });
+
+  it("omits a ceased created source's retained spark from every view of its delayed triggers", () => {
+    const board = setup({});
+    const source = placeFigment(board.state, "player", { rank: "back", index: 0 }, { kind: "figmentCopy", cardId: delayedReader.id, spark: 4 });
     const active = step(board.state, { kind: "activate", source, ability: 0 }).state;
     const waiting = step(active, { kind: "resolveTop" }).state;
+    expect(waiting.instances[source]).toBeUndefined();
+    expect(waiting.floating.map((effect) => effect.change)).toEqual([
+      expect.objectContaining({ kind: "trigger", lastKnownSourceSpark: 7 }), expect.objectContaining({ kind: "trigger", lastKnownSourceSpark: 7 })]);
+    for (const viewer of ["player", "enemy"] as const) {
+      const shown = E.view(waiting, viewer);
+      expect(shown.floating.filter((effect) => effect.change.kind === "trigger" && "lastKnownSourceSpark" in effect.change)).toEqual([]);
+      expect(JSON.stringify(shown)).not.toContain("lastKnownSourceSpark");
+    }
     const queued = step(waiting, { kind: "play", card: board.ids.player.void[0], from: "void" }).state;
-    expect(parseJourneyBattleFoldState(saved(queued))).not.toBeNull();
-    for (const bad of [-1, "5", null, Number.POSITIVE_INFINITY, Number.NaN]) {
-      for (const where of ["triggerQueue", "floating", "stack"] as const) {
-        const fixture = deserializeState(serializeState(queued));
-        if (where === "triggerQueue") fixture.triggerQueue = fixture.triggerQueue.map((entry) => ({ ...entry, lastKnownSourceSpark: bad as number }));
-        if (where === "floating") fixture.floating = waiting.floating.map((entry) => ({ ...entry, change: { ...entry.change, lastKnownSourceSpark: bad as number } }));
-        if (where === "stack") fixture.stack = [{ kind: "ability", source, origin: { kind: "card", cardId: delayedReader.id, variant: { amplified: false } },
-          controller: "player", ability: 0, choices: { modes: [], targets: [] }, x: null, optionalPaid: [], lastKnownSourceSpark: bad as number }];
-        expect(parseJourneyBattleFoldState(saved(fixture)), `${where}:${String(bad)}`).toBeNull();
+    const first = step(queued, { kind: "resolveTrigger" }).state;
+    expect(step(first, { kind: "resolveTrigger" }).state.sides.player.score).toBe(14);
+  });
+
+  it("validates retained queued, stacked and delayed values at the saved-state boundary", () => {
+    const board = setup({ back: [delayedReader.id, reader.id] });
+    const active = step(board.state, { kind: "activate", source: board.ids.player.back[0]!, ability: 0 }).state;
+    const waiting = step(active, { kind: "resolveTop" }).state;
+    const queued = step(waiting, { kind: "play", card: board.ids.player.void[0], from: "void" }).state;
+    const respond = setup({ back: [activation.id] }, { hand: [killingResponse.id] });
+    const activated = step(respond.state, { kind: "activate", source: respond.ids.player.back[0]!, ability: 0 }).state;
+    const responded = step(activated, { kind: "play", card: respond.ids.enemy.hand[0], from: "hand" }).state;
+    const stacked = step(responded, { kind: "resolveTop" }).state;
+    type Retaining = { readonly lastKnownSourceSpark?: number };
+    const retained = <T extends Retaining>(entries: readonly T[], spark: unknown): T[] =>
+      entries.map((entry) => entry.lastKnownSourceSpark === undefined ? entry : { ...entry, lastKnownSourceSpark: spark as number });
+    const fixtures = {
+      triggerQueue: { base: queued, held: queued.triggerQueue, vary: (state: BattleState, spark: unknown) => {
+        state.triggerQueue = retained(state.triggerQueue, spark);
+      } },
+      floating: { base: waiting, held: waiting.floating.map((effect) => effect.change), vary: (state: BattleState, spark: unknown) => {
+        state.floating = state.floating.map((effect) => effect.change.kind !== "trigger" ? effect : { ...effect, change: retained([effect.change], spark)[0] });
+      } },
+      stack: { base: stacked, held: stacked.stack, vary: (state: BattleState, spark: unknown) => {
+        state.stack = state.stack.map((item) => item.kind === "ability" ? retained([item], spark)[0] : item);
+      } },
+    };
+    expect(stacked.stack).toEqual([expect.objectContaining({ kind: "ability", source: respond.ids.player.back[0], lastKnownSourceSpark: 2 })]);
+    for (const [where, { base, held, vary }] of Object.entries(fixtures)) {
+      expect(held.some((entry) => (entry as Retaining).lastKnownSourceSpark !== undefined), where).toBe(true);
+      expect(parseJourneyBattleFoldState(saved(base)), `${where}:base`).not.toBeNull();
+      for (const spark of [0, 6, -1, "5", null, Number.POSITIVE_INFINITY, Number.NaN]) {
+        const fixture = deserializeState(serializeState(base));
+        vary(fixture, spark);
+        const parsed = parseJourneyBattleFoldState(saved(fixture));
+        if (spark === 0 || spark === 6) expect(parsed, `${where}:${spark}`).not.toBeNull();
+        else expect(parsed, `${where}:${String(spark)}`).toBeNull();
       }
     }
   });
