@@ -325,6 +325,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [SYNTHETIC.interruptEvent.id]: { name: "Lab Quickstep", text: "Interrupt. No effect." },
   [DSL.selfCostWarrior.id]: { name: "Lab Warband Champion", text: "This character costs 1● less for each Warrior you control." },
   [DSL.drawTwo.id]: { name: "Lab Study", text: "Draw 2 cards." },
+  [DSL.exactCostGenesis.id]: { name: "Lab Exact Genesis", text: "To play this card, abandon a character. Materialize a random character from your deck with cost exactly 1● higher than the abandoned character's cost." },
   [DSL.dissolveEnemy.id]: { name: "Lab Unmaking", text: "Fast. Dissolve an enemy." },
   [DSL.pumpPermanently.id]: { name: "Lab Blessing", text: "Up to 2 characters you control gain +1✦." },
   [DSL.chooseDrawOrPoints.id]: { name: "Lab Crossroads", text: "Choose one: Draw a card; or gain 1⍟." },
@@ -451,6 +452,22 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "exact-cost-player", description: "A captured abandon cost plus one selects an exact-cost deck character",
+    setup: { active: "player", phase: "day",
+      player: { hand: [DSL.exactCostGenesis.id], back: [SYNTHETIC.vanilla1.id],
+        deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id, SYNTHETIC.event1.id], energy: 5 },
+      enemy: { deck: [SYNTHETIC.event0.id] } },
+    script: [], presents: [playHand(0)],
+  },
+  {
+    name: "exact-cost-enemy", description: "An enemy exact-cost deck selection waits for the human's response",
+    setup: { active: "enemy", phase: "day",
+      player: { hand: [SYNTHETIC.interruptEvent.id], deck: [SYNTHETIC.event0.id], energy: 1 },
+      enemy: { hand: [DSL.exactCostGenesis.id], back: [SYNTHETIC.vanilla1.id],
+        deck: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla3.id, SYNTHETIC.event1.id], energy: 5 } },
+    script: [play("enemy", ids => first(ids.enemy.hand))],
+  },
   {
     name: "redraw-hand", description: "An optional whole-hand discard followed by the captured number of draws",
     setup: { active: "player", phase: "day", player: { hand: [DSL.mayRedrawHand.id, vanillas[0], vanillas[1]], energy: 3, deck: deck(6) }, enemy: { deck: deck(6) } },

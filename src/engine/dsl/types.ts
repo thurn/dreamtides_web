@@ -273,6 +273,8 @@ export interface ZoneRandomSpec extends ZoneCardsBase {
   readonly zone: CountedZone;
   readonly count: number;
   readonly costGreaterThan?: ValueExpr;
+  /** Read once at resolution; conjoined with the filter and any exclusive lower bound. */
+  readonly costExactly?: ValueExpr;
 }
 
 /** "This character from your void": the effect's source while it is in its controller's `zone`. */

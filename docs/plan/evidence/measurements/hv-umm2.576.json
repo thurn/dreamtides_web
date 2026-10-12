@@ -1,0 +1,699 @@
+{
+  "bead": "hv-umm2.576",
+  "base": "599370f08892c3f36623d78ce553f390fa0f4f25",
+  "dispatch": "2026-10-12T21:03:36.643Z",
+  "provisionalBeforeQA": false,
+  "sourceScope": "three optional dynamic equality bodies; one additive DSL fixture and presentation row; two native prompt-lab fixture rows; one plain contract module",
+  "productionEntities": [],
+  "syntheticFixtureId": "5e5e5e5e-0000-4000-8000-000000057600",
+  "normalIteration": [
+    "Read-only guessed file/wildcard diagnostics were not acceptance checks.",
+    "Initial UUID Map dedup inference corrected by parent before effects; catalog duplicate guard retained.",
+    "Two supported typecheck failures involved own contract unused imports, readonly fixture assignments, and figment typing; no external API fallout.",
+    "First equality mutation failed 4/19; strengthened six captured-plus-one source forms with higher-only negatives, second mutation failed 10/19; exact interpreter SHA restored.",
+    "First card-lab browser run failed unknownCard/console Caps: presentation metadata does not add the synthetic UUID to journeyContent.cardDatabase. After all runtime groups settled, parent admitted two native prompt-lab fixture rows, and the unneeded lab override was restored to base. No resolver/production catalog/QA infrastructure body changed.",
+    "Second browser run reached correct player materialization but the helper sampled DOM geometry immediately; no geometry diagnostic was retained, so timing was an inference. Added bounded geometry readiness and actual same-game reload in the external helper only; third run passed. These attempts retain distinct raw reports."
+  ],
+  "commands": {
+    "countercheck": {
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "random exact copiable cost|exact bound transaction recovery"
+      ],
+      "start": "2026-10-12T21:15:15.256341+00:00",
+      "end": "2026-10-12T21:15:19.874308+00:00",
+      "wallS": 4.617809457995463,
+      "childCpuS": 6.308321,
+      "pid": 26740,
+      "pgid": 26740,
+      "exit": 1,
+      "loadBefore": [
+        13.5,
+        13.83984375,
+        13.40576171875
+      ],
+      "loadAfter": [
+        12.8994140625,
+        13.70947265625,
+        13.3623046875
+      ]
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T21:17:33.653238+00:00",
+      "end": "2026-10-12T21:17:37.700532+00:00",
+      "wallS": 4.046820540999761,
+      "childCpuS": 4.036446,
+      "pid": 59510,
+      "pgid": 59510,
+      "exit": 0,
+      "loadBefore": [
+        10.17138671875,
+        12.56591796875,
+        12.9560546875
+      ],
+      "loadAfter": [
+        9.5966796875,
+        12.40673828125,
+        12.8974609375
+      ]
+    },
+    "countercheck-strengthened": {
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "random exact copiable cost|exact bound transaction recovery"
+      ],
+      "start": "2026-10-12T21:15:52.387139+00:00",
+      "end": "2026-10-12T21:15:57.458168+00:00",
+      "wallS": 5.070841458000359,
+      "childCpuS": 7.082187,
+      "pid": 54225,
+      "pgid": 54225,
+      "exit": 1,
+      "loadBefore": [
+        11.5146484375,
+        13.25390625,
+        13.2080078125
+      ],
+      "loadAfter": [
+        11.79345703125,
+        13.28271484375,
+        13.21826171875
+      ]
+    },
+    "focused": {
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "start": "2026-10-12T21:12:50.324173+00:00",
+      "end": "2026-10-12T21:12:59.309519+00:00",
+      "wallS": 8.98514800000703,
+      "childCpuS": 12.157897,
+      "pid": 65666,
+      "pgid": 65666,
+      "exit": 0,
+      "loadBefore": [
+        18.84423828125,
+        12.8466796875,
+        12.9697265625
+      ],
+      "loadAfter": [
+        17.8427734375,
+        12.82080078125,
+        12.9580078125
+      ]
+    },
+    "review": {
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T21:16:11.792984+00:00",
+      "end": "2026-10-12T21:17:15.887254+00:00",
+      "wallS": 64.09331600001315,
+      "childCpuS": 175.71812200000002,
+      "pid": 55539,
+      "pgid": 55539,
+      "exit": 0,
+      "loadBefore": [
+        11.111328125,
+        13.056640625,
+        13.1376953125
+      ],
+      "loadAfter": [
+        12.0068359375,
+        13.0244140625,
+        13.1220703125
+      ]
+    },
+    "fuzz-lock": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/576-helper/run.py",
+        "fuzz-inner",
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/576-helper/weighted-fuzz.mts",
+        "--games",
+        "300",
+        "--seed",
+        "hv-umm2.576-exact",
+        "--interactive-every",
+        "10",
+        "--weight-uuids",
+        "5e5e5e5e-0000-4000-8000-000000057600"
+      ],
+      "start": "2026-10-12T21:17:48.386339+00:00",
+      "end": "2026-10-12T21:20:26.881034+00:00",
+      "wallS": 158.49220374999277,
+      "childCpuS": 171.73841000000002,
+      "pid": 59960,
+      "pgid": 59960,
+      "exit": 0,
+      "loadBefore": [
+        8.58203125,
+        12.0966796875,
+        12.78125
+      ],
+      "loadAfter": [
+        21.712890625,
+        15.46142578125,
+        13.98291015625
+      ]
+    },
+    "typecheck": {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-10-12T21:13:58.477743+00:00",
+      "end": "2026-10-12T21:14:12.345666+00:00",
+      "wallS": 13.867585957996198,
+      "childCpuS": 28.911151999999998,
+      "pid": 95813,
+      "pgid": 95813,
+      "exit": 2,
+      "loadBefore": [
+        21.92236328125,
+        14.62890625,
+        13.60498046875
+      ],
+      "loadAfter": [
+        21.8544921875,
+        15.01123046875,
+        13.76123046875
+      ]
+    },
+    "typecheck-fixed": {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-10-12T21:14:53.002881+00:00",
+      "end": "2026-10-12T21:14:56.753110+00:00",
+      "wallS": 3.750094375005574,
+      "childCpuS": 7.9004460000000005,
+      "pid": 24260,
+      "pgid": 24260,
+      "exit": 2,
+      "loadBefore": [
+        15.09326171875,
+        14.1416015625,
+        13.49951171875
+      ],
+      "loadAfter": [
+        14.68505859375,
+        14.07275390625,
+        13.47900390625
+      ]
+    },
+    "schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T21:20:09.272314+00:00",
+      "end": "2026-10-12T21:20:09.389280+00:00",
+      "wallS": 0.11684387498826254,
+      "childCpuS": 0.086667,
+      "pid": 19761,
+      "pgid": 19761,
+      "exit": 0,
+      "loadBefore": [
+        18.97509765625,
+        14.50244140625,
+        13.6162109375
+      ],
+      "loadAfter": [
+        18.97509765625,
+        14.50244140625,
+        13.6162109375
+      ]
+    },
+    "qa": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/576-helper/judged.mjs",
+        "--bead",
+        "hv-umm2.576",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "start": "2026-10-12T21:21:06.411024+00:00",
+      "end": "2026-10-12T21:21:25.845538+00:00",
+      "wallS": 19.434156791001442,
+      "childCpuS": 7.638154,
+      "pid": 73624,
+      "pgid": 73624,
+      "exit": 1,
+      "loadBefore": [
+        17.423828125,
+        15.28515625,
+        13.994140625
+      ],
+      "loadAfter": [
+        15.078125,
+        14.87939453125,
+        13.8779296875
+      ]
+    },
+    "qa-third": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/576-helper/judged.mjs",
+        "--bead",
+        "hv-umm2.576",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "start": "2026-10-12T21:28:50.547214+00:00",
+      "end": "2026-10-12T21:29:28.503740+00:00",
+      "wallS": 37.95592024999496,
+      "childCpuS": 8.656787,
+      "pid": 736,
+      "pgid": 736,
+      "exit": 0,
+      "loadBefore": [
+        15.8603515625,
+        15.0634765625,
+        13.98681640625
+      ],
+      "loadAfter": [
+        13.62060546875,
+        14.5458984375,
+        13.84375
+      ]
+    },
+    "review-final": {
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T21:25:23.484189+00:00",
+      "end": "2026-10-12T21:26:27.970441+00:00",
+      "wallS": 64.4852825840062,
+      "childCpuS": 175.78299199999998,
+      "pid": 32942,
+      "pgid": 32942,
+      "exit": 0,
+      "loadBefore": [
+        10.2998046875,
+        11.56494140625,
+        12.6025390625
+      ],
+      "loadAfter": [
+        20.34765625,
+        14.07666015625,
+        13.4560546875
+      ]
+    },
+    "coverage": {
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": "2026-10-12T21:18:39.857021+00:00",
+      "end": "2026-10-12T21:18:44.064785+00:00",
+      "wallS": 4.207617125008255,
+      "childCpuS": 5.3865,
+      "pid": 75132,
+      "pgid": 75132,
+      "exit": 0,
+      "loadBefore": [
+        15.138671875,
+        13.046875,
+        13.07421875
+      ],
+      "loadAfter": [
+        17.04931640625,
+        13.4775390625,
+        13.22607421875
+      ]
+    },
+    "fuzz-inner": {
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/576-helper/weighted-fuzz.mts",
+        "--games",
+        "300",
+        "--seed",
+        "hv-umm2.576-exact",
+        "--interactive-every",
+        "10",
+        "--weight-uuids",
+        "5e5e5e5e-0000-4000-8000-000000057600"
+      ],
+      "start": "2026-10-12T21:17:48.409613+00:00",
+      "end": "2026-10-12T21:20:26.876993+00:00",
+      "wallS": 158.46514683299756,
+      "childCpuS": 171.714145,
+      "pid": 59964,
+      "pgid": 59964,
+      "exit": 0,
+      "loadBefore": [
+        8.58203125,
+        12.0966796875,
+        12.78125
+      ],
+      "loadAfter": [
+        21.712890625,
+        15.46142578125,
+        13.98291015625
+      ]
+    },
+    "qa-second": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/576-helper/judged.mjs",
+        "--bead",
+        "hv-umm2.576",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "start": "2026-10-12T21:27:20.141604+00:00",
+      "end": "2026-10-12T21:27:27.481648+00:00",
+      "wallS": 7.339846832997864,
+      "childCpuS": 7.769427,
+      "pid": 24464,
+      "pgid": 24464,
+      "exit": 1,
+      "loadBefore": [
+        18.8212890625,
+        14.888671875,
+        13.80712890625
+      ],
+      "loadAfter": [
+        17.92578125,
+        14.82568359375,
+        13.79736328125
+      ]
+    },
+    "focused-final": {
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "start": "2026-10-12T21:13:49.100625+00:00",
+      "end": "2026-10-12T21:13:57.896385+00:00",
+      "wallS": 8.795564791988,
+      "childCpuS": 12.05594,
+      "pid": 75405,
+      "pgid": 75405,
+      "exit": 0,
+      "loadBefore": [
+        21.4697265625,
+        14.3076171875,
+        13.48193359375
+      ],
+      "loadAfter": [
+        21.92236328125,
+        14.62890625,
+        13.60498046875
+      ]
+    },
+    "knip-final": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T21:26:47.983218+00:00",
+      "end": "2026-10-12T21:26:52.397587+00:00",
+      "wallS": 4.414176666003186,
+      "childCpuS": 5.409019,
+      "pid": 21427,
+      "pgid": 21427,
+      "exit": 0,
+      "loadBefore": [
+        21.15283203125,
+        14.7333984375,
+        13.70947265625
+      ],
+      "loadAfter": [
+        22.82177734375,
+        15.18603515625,
+        13.875
+      ]
+    },
+    "schema-final": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T21:26:57.571606+00:00",
+      "end": "2026-10-12T21:26:57.698959+00:00",
+      "wallS": 0.1272213749907678,
+      "childCpuS": 0.095742,
+      "pid": 23017,
+      "pgid": 23017,
+      "exit": 0,
+      "loadBefore": [
+        22.515625,
+        15.2490234375,
+        13.90478515625
+      ],
+      "loadAfter": [
+        22.515625,
+        15.2490234375,
+        13.90478515625
+      ]
+    },
+    "schema-ready": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T21:32:03.509115+00:00",
+      "end": "2026-10-12T21:32:03.619850+00:00",
+      "wallS": 0.11064629099564627,
+      "childCpuS": 0.076356,
+      "pid": 51606,
+      "pgid": 51606,
+      "exit": 0,
+      "loadBefore": [
+        9.24072265625,
+        12.48779296875,
+        13.11767578125
+      ],
+      "loadAfter": [
+        9.24072265625,
+        12.48779296875,
+        13.11767578125
+      ]
+    }
+  },
+  "failurePaths": {
+    "error": "synthetic resolver throws after exact materialization; fold reports error and no partial materialized publication",
+    "replay": "serialized stack X and reloaded captured-cost prompt match exact physical selection and RNG",
+    "partialWrite": "cancel prior payment leaves committed state and publications unchanged; resolver error discards partial zones/RNG/knowledge",
+    "staleState": "old prompt or repeated answered prompt rejects; live interrupt removes eligibility before resolution",
+    "competingActor": "sequential wrong-side answer and action during in-flight prompt reject; no true concurrency/timing claim"
+  },
+  "D21": {
+    "productionHashSample": "N/A: no production entity authored",
+    "newPromptStatusVisual": "none: existing abandon/cost/materialize controls reused",
+    "QA": "synthetic normal player/enemy workflow on desktop/mobile"
+  },
+  "fullSuite": "not run: parent admitted narrow optional field and additive fixture scope, no cross-cutting architecture or infrastructure change",
+  "fuzzCatalog": "canonical-only pool constructs catalog; separate targeted sampling pool appends registered genuine DSL fixture",
+  "coldReview": "parent-owned fresh read-only gpt-5.6-sol after immutable commit under temporary same-family override",
+  "fuzz": {
+    "games": 300,
+    "steps": 142100,
+    "prompts": 6850,
+    "interactiveGames": 30,
+    "interactiveReruns": 666,
+    "failures": 0,
+    "fixtureIncluded": 664,
+    "fixtureExercised": 319,
+    "engineWallS": 156.6,
+    "engineCpuS": 170.6,
+    "executionWrapperS": 158.46514683299756,
+    "lockStartupWaitS": 0.023274,
+    "provenance": "genuine registered synthetic exact-cost DSL fixture; no production entity authored"
+  },
+  "QAFirstAttempt": {
+    "run": "run-7RNtVR",
+    "exit": 1,
+    "wallS": 19.434156791001442,
+    "reason": "synthetic source unknown to card-lab journey database",
+    "MCPUUID": "55ce9550-30e1-4c09-a69a-1ed5dc5366e2",
+    "groupsSettled": [
+      73618,
+      73624,
+      73646,
+      73653,
+      73663
+    ],
+    "rawReport": "judged.result.json",
+    "caps": "unknownCard console error retained"
+  },
+  "QARepairScope": "only two additive native prompt-lab fixture rows; lab-overrides.ts restored base",
+  "QAEnemySource": "public engine fixture script at construction; human live response pass resolves exact materialization; logs/history provenance labeled separately",
+  "resourceQualification": "All observed original runner/server/log-lock/slot-lock/observer groups settled. Slot paths were already reused by another peer after final native cleanup: current existence is distinct from exact owned token identity; both owned token matches false. No peer record modified. Port free was observed by native cleanup at its completion, not asserted after peer reuse.",
+  "noFrictionThresholdClaim": "Routine proposal/typechecking/test/QA helper corrections are detailed here; no problem was measured over approximately ten minutes. Command duration is not repair duration.",
+  "QA": [
+    {
+      "attempt": 1,
+      "invocation": "run-7RNtVR",
+      "rawReportSHA256": "d1c994f0a1b99ebde822847169dd9a618c21b69ac4e97154432f853f3daa2205",
+      "ok": false,
+      "error": "desktop#0: Error: exact-cost lab and immutable history recipe: __caps [{\"href\":\"http://localhost:5274/?goto=card-lab&card=5e5e5e5e-0000-4000-8000-000000057600&variant=base&as=player&seed=1&debug=1&game=vstfze\",\"caps\":{\"errors\":[],\"rejections\":[],\"consoleErrors\":[\"card-lab: unknownCard for {\\\"card\\\":\\\"5e5e5e5e-0000-4000-8000-000000057600\\\",\\\"variant\\\":\\\"base\\\",\\\"side\\\":\\\"player\\\"}\"]}}]\n    at assertObserved (evalmachine.<anonymous>:190:34)\n    at Object.waitFor (evalmachine.<anonymous>:779:29)\n    at async exactCost (evalmachine.<anonymous>:1657:21)\n    at async evalmachine.<anonymous>:1709:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+      "caps": [
+        {
+          "href": "http://localhost:5274/?goto=card-lab&card=5e5e5e5e-0000-4000-8000-000000057600&variant=base&as=player&seed=1&debug=1&game=vstfze",
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": [
+              "card-lab: unknownCard for {\"card\":\"5e5e5e5e-0000-4000-8000-000000057600\",\"variant\":\"base\",\"side\":\"player\"}"
+            ]
+          }
+        }
+      ],
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1675,
+        "scenario": 17018,
+        "total": 18752
+      }
+    },
+    {
+      "attempt": 2,
+      "invocation": "run-5D2v6G",
+      "rawReportSHA256": "f4e6ea7512fc24f4c2e038d499c8ebaf7d6d9b647ee1eb388b64c336c453aa8b",
+      "ok": false,
+      "error": "desktop#0: Error: exact-cost selected card or response control geometry invalid\n    at exactCost (evalmachine.<anonymous>:1693:206)\n    at async evalmachine.<anonymous>:1711:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 8,
+        "serve": 1990,
+        "scenario": 4532,
+        "total": 6608
+      }
+    },
+    {
+      "attempt": 3,
+      "invocation": "run-JtQP5B",
+      "rawReportSHA256": "9fa0e68d8855da23f35e179a1ed90772daf2e77c65174293bb550f274daea6c7",
+      "ok": true,
+      "error": null,
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 2879,
+        "scenario": 34259,
+        "total": 37196
+      }
+    }
+  ],
+  "testDelta": {
+    "plainModules": 1,
+    "plainLines": 251,
+    "newContractTests": 19,
+    "newVitestEntrypoints": 0,
+    "newJsdomFiles": 0,
+    "additiveExistingNativeFixtureChecks": 2
+  },
+  "mutation": {
+    "first": "4 failed / 15 passed / 2237 skipped",
+    "strengthened": "10 failed / 9 passed / 2237 skipped; all six captured-cost source forms rejected higher-only pools",
+    "restored": {
+      "at": "2026-10-12T21:16:11.770679+00:00",
+      "expectedSHA": "0d0590ddd139cb67b4719ff4ce7e194472ffe65862fe9db92d5b984b5f7cc008",
+      "actualSHA": "0d0590ddd139cb67b4719ff4ce7e194472ffe65862fe9db92d5b984b5f7cc008"
+    }
+  },
+  "fallout": "Both supported typecheck errors were confined to this new contract fixture. Final review typechecks passed; no external mechanical fallout or consumer bodies edited.",
+  "validationSummary": {
+    "finalReview": {
+      "tests": 5052,
+      "files": 271,
+      "wrapperWallS": 64.4852825840062
+    },
+    "finalKnip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T21:26:47.983218+00:00",
+      "end": "2026-10-12T21:26:52.397587+00:00",
+      "wallS": 4.414176666003186,
+      "childCpuS": 5.409019,
+      "pid": 21427,
+      "pgid": 21427,
+      "exit": 0,
+      "loadBefore": [
+        21.15283203125,
+        14.7333984375,
+        13.70947265625
+      ],
+      "loadAfter": [
+        22.82177734375,
+        15.18603515625,
+        13.875
+      ]
+    },
+    "coverage": {
+      "tests": 20,
+      "wallS": 4.207617125008255
+    },
+    "fullSuite": "not run; parent admitted narrow scope",
+    "weightedFuzz": "retained exact DSL/interpreter fixture SHAs unchanged after additive presentation fixture repair"
+  },
+  "CPUAccounting": "Outer fuzz-lock includes inner fuzz CPU/wall; do not add its CPU to inner execution CPU. Friction localValidationS excludes the outer fuzz-lock duration. Lock admission startup 0.023274 seconds is separate.",
+  "preCommitEndpoint": "2026-10-12T21:34:05.997374+00:00",
+  "preCommitEndpointScope": "actual helper dispatch through fresh clock immediately before schema, staging and Git commit; actual Git receipt is external"
+}

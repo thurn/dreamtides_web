@@ -705,7 +705,10 @@ function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): 
       return state.sides[side].deck.slice(0, Math.max(0, ref.count)).filter(matches);
     case "random": {
       const above = ref.costGreaterThan === undefined ? null : evaluate(ctx, ref.costGreaterThan, env);
-      const pool = state.sides[side][ref.zone].filter((id) => matches(id) && (above === null || copiableCostOf(state, catalog, id) > above));
+      const exact = ref.costExactly === undefined ? null : evaluate(ctx, ref.costExactly, env);
+      const pool = state.sides[side][ref.zone].filter((id) => matches(id)
+        && (above === null || copiableCostOf(state, catalog, id) > above)
+        && (exact === null || copiableCostOf(state, catalog, id) === exact));
       const picked: InstanceId[] = [];
       while (picked.length < ref.count && pool.length > 0) {
         const [card] = pool.splice(Math.floor(ctx.random(RANDOM_SELECTION_STREAM) * pool.length), 1);

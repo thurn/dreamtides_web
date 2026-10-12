@@ -5,6 +5,8 @@
  */
 import type { EngineCardDefinition } from "../catalog";
 import {
+  abandonCostCapture,
+  additionalCost,
   anyCharacter,
   characterYouControl,
   controls,
@@ -17,6 +19,8 @@ import {
   fromVoid,
   keyword,
   noCardsIn,
+  plus,
+  randomIn,
   staticAbility,
   target,
   targetWhen,
@@ -54,6 +58,11 @@ const events = (...list: Ability[]) => () => list;
 
 /** DSL fixtures by role. */
 export const DSL = {
+  /** Captured abandon cost plus one, as an exact resolving deck bound. */
+  exactCostGenesis: authored(0x57600 - 200, "event", 0, events(
+    additionalCost(abandonCostCapture()),
+    event(p.materialize(randomIn("deck", 1, { cardType: "character" }, { costExactly: plus(x(), 1) }))),
+  )),
   /** An ordinary top draw with a branch bound to that physical card. Reserved prerequisite fixture identity. */
   drawThenIfCharacter: authored(0x21600, "event", 0, events(event(p.drawThenIf({ cardType: "character" }, p.gainEnergy(1))))),
   /** Optional whole-hand discard, then the captured number of ordinary draws. */
