@@ -1,3 +1,5 @@
+import { abandonCost, activated, exhaustSelf, fromVoid, ofSubtype } from "../../engine/dsl/builders";
+import { materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,11 @@ export default card({
   artOwned: false,
   cardNumber: 286,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated(
+      [exhaustSelf(), abandonCost(ofSubtype("Warrior"))],
+      materialize(fromVoid({ cardType: "character", ...ofSubtype("Warrior") }), { awakened: variant.amplified }),
+    ),
+  ],
+  verifiedText: "221732plzq6",
 });

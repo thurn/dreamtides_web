@@ -1,0 +1,432 @@
+{
+  "bead": "hv-umm2.199",
+  "baseCommit": "0018a0b80c1a06d585ca92ea0a59c088a7085661",
+  "dispatch": {
+    "start": "2026-10-12T15:51:04.741Z",
+    "provenance": "parent dispatch.json supplied by parent"
+  },
+  "localValidation": {
+    "focused": {
+      "stepSumS": 5.2,
+      "scope": "prepare2.0 + test2.4 + restore0.8; command overhead not measured",
+      "files": 2,
+      "tests": 201,
+      "newScenarioCases": 12
+    },
+    "review": {
+      "start": "2026-10-12T15:57:33.305797+00:00",
+      "wallS": 42.05525570799364,
+      "exitCode": 0,
+      "hostLoad1Minute": 15.16
+    },
+    "knip": {
+      "wallS": 3.397610125000938,
+      "exitCode": 0
+    },
+    "fuzz": {
+      "start": "2026-10-12T16:01:36.031566+00:00",
+      "startedEpoch": 1791820896.031563,
+      "wallS": 140.04606699943542,
+      "exitCode": 0,
+      "queueWaitS": 164.1077220439911,
+      "totalWallS": 304.1584961414337
+    },
+    "preflight": {
+      "wallS": 0.8532120409945492,
+      "exitCode": 0
+    },
+    "browserStartupBlocked": {
+      "wallS": 0.22432791600294877,
+      "exitCode": 2,
+      "observerPid": 4350
+    },
+    "sweep": {
+      "wallS": 1022.3516268340027,
+      "exitCode": 0,
+      "observerPid": 19256
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "measuredFor": "review command start before preparation",
+      "oneMinute": 15.16
+    },
+    {
+      "measuredFor": "review validation group actual start",
+      "oneMinute": 15.1572265625
+    }
+  ],
+  "testDeltaAccounting": {
+    "testEntrypoints": 0,
+    "plainScenarioModulesAdded": 1,
+    "plainScenarioLinesAdded": 96,
+    "scenarioCasesAdded": 12,
+    "jsdomFiles": 0
+  },
+  "sourceFreeze": {
+    "src/content/cards/bloodbroker-a7820b34.ts": "748c0235339712b48a280f6990a2a9bc96d8330d5df32954c59271a32f4dab35",
+    "src/content/cards/crescendo-channeler-867b98cf.ts": "0ffce4270388201cf432aaf3d7ea244171a1955190688af9c7dda8729d3582d2",
+    "src/content/cards/prophet-of-the-consumed-8a5d7d67.ts": "3584853e4e400a33b90ceea85d73a1b167674ef2c63b87c1a9391a8c8a71197d",
+    "src/content/specs/cards-87.scenarios.ts": "67291edbaad445925496306dd7edd75ae6c9bba6e822905aae7f9a496052fe61"
+  },
+  "d20": {
+    "bloodbroker": "captured sacrifice cost persists after void movement/figment cessation",
+    "prophet": "self-sacrifice preserves earlier void target; amplified entry awakened is scoped to the materialized target",
+    "crescendo": "own Dawn figment contributes to subsequent count"
+  },
+  "d21": {
+    "judged": 0,
+    "reason": "all entity SHA-256 samples false; existing abandonCost/target/discover prompts, warrior figment and exhausted/ready entry surfaces; no new prompt, status or visual effect",
+    "sampleFirstBytes": {
+      "a7820b34-9fdc-46cc-8357-53c8caa056b1": 167,
+      "8a5d7d67-91c9-41c4-b22e-8287954efa09": 248,
+      "867b98cf-171b-497b-9252-9af5dcf70726": 108
+    }
+  },
+  "counts": {
+    "cards": 3,
+    "printedVariants": 5,
+    "newPrimitives": 0,
+    "rulesDecisions": 0,
+    "cardIssues": 0,
+    "preflightPass": 32,
+    "preflightSkip": 28,
+    "preflightFail": 0,
+    "sweepEffectivePass": 32,
+    "sweepSkip": 28,
+    "sweepEffectiveFail": 0,
+    "sweepAttempts": 61,
+    "sweepRawFail": 1,
+    "judged": 0
+  },
+  "authoringValidationFailures": [
+    {
+      "toolSession": 33780,
+      "cause": "wrong parseFigmentId import from types/identifiers; prepare module import failed",
+      "repair": "import existing branded helper from engine/state/ids"
+    },
+    {
+      "toolSession": 36135,
+      "cause": "wrong intermediate parseFigmentId import from types/card-identity; prepare module import failed",
+      "repair": "import existing branded helper from engine/state/ids"
+    },
+    {
+      "toolSession": 29223,
+      "cause": "eight scenarios supplied a manual answer for a single legal auto-answered payment, so ScriptedSource retained one unused answer",
+      "repair": "remove unnecessary scripted answers; all12 scenarios pass with unchanged abilities"
+    }
+  ],
+  "browserFailure": {
+    "phase": "lease admission before own server/provider/cells",
+    "cause": "both shared slots retain peer call-and-close-unconfirmed records",
+    "originalReport": "sweep.log",
+    "providerObservation": "browser-retained-observation.json",
+    "cellsRun": 0,
+    "retainedRecordsChanged": false,
+    "resolution": "Parent authorized a fresh normal invocation after peer195 settled its own exact record and slot1 became usable; original failed startup retained.",
+    "sourceChanges": false
+  },
+  "runtimeLedger": {
+    "fuzz": {
+      "observerPid": 73481,
+      "lockfPid": 73491,
+      "group": 73481,
+      "innerPid": 79794,
+      "npmPid": 79797,
+      "tsxPid": 79813,
+      "nodePid": 79814,
+      "state": "all completed; no runtime port"
+    },
+    "blockedSweep": {
+      "observerPid": 4350,
+      "port": null,
+      "mcpSession": null,
+      "lease": null,
+      "serverStarted": false,
+      "state": "exited2 before admission"
+    },
+    "sweep": {
+      "observerPid": 19256,
+      "runnerPid": 19277,
+      "runnerGroup": 19256,
+      "sessions": [
+        {
+          "provider": {
+            "token": "c4780bf7-25b1-4d49-ad47-931122a978f9",
+            "pid": 19277,
+            "bead": "hv-umm2.199",
+            "label": "card-sweep",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-12T16:08:26.887Z",
+            "providerState": "active",
+            "mcpSessionId": "21520bcc-c61f-4965-bafa-80a7b9447ca6",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "server": {
+            "token": "47417641-7d5e-42da-b403-b82e778aaa28",
+            "runner": {
+              "pid": 19277,
+              "group": 19256,
+              "started": "Mon Oct 12 09:06:38 2026",
+              "state": "S",
+              "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.199 --cards a7820b34-9fdc-46cc-8357-53c8caa056b1,8a5d7d67-91c9-41c4-b22e-8287954efa09,867b98cf-171b-497b-9252-9af5dcf70726"
+            },
+            "server": {
+              "pid": 33750,
+              "group": 33750,
+              "started": "Mon Oct 12 09:08:24 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 47417641-7d5e-42da-b403-b82e778aaa28 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87",
+            "port": 5274
+          },
+          "members": [
+            {
+              "pid": 33750,
+              "ppid": 19277,
+              "pgid": 33750,
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 47417641-7d5e-42da-b403-b82e778aaa28 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 33778,
+              "ppid": 33750,
+              "pgid": 33750,
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 33963,
+              "ppid": 33778,
+              "pgid": 33750,
+              "command": "node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/node_modules/.bin/vite --port 5274 --strictPort"
+            },
+            {
+              "pid": 34003,
+              "ppid": 33963,
+              "pgid": 33750,
+              "command": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+            }
+          ]
+        },
+        {
+          "provider": {
+            "token": "da483b95-3b33-4801-953c-474d0a78ed77",
+            "pid": 19277,
+            "bead": "hv-umm2.199",
+            "label": "card-sweep",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-12T16:11:49.773Z",
+            "providerState": "active",
+            "mcpSessionId": "c27ab560-7449-4732-bd70-c64edbcb3246",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "server": {
+            "token": "ea4f6e81-47e9-4792-803a-fdacd843194a",
+            "runner": {
+              "pid": 19277,
+              "group": 19256,
+              "started": "Mon Oct 12 09:06:38 2026",
+              "state": "S",
+              "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.199 --cards a7820b34-9fdc-46cc-8357-53c8caa056b1,8a5d7d67-91c9-41c4-b22e-8287954efa09,867b98cf-171b-497b-9252-9af5dcf70726"
+            },
+            "server": {
+              "pid": 68756,
+              "group": 68756,
+              "started": "Mon Oct 12 09:11:47 2026",
+              "state": "Us",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json ea4f6e81-47e9-4792-803a-fdacd843194a /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87",
+            "port": 5274
+          },
+          "members": [
+            {
+              "pid": 68756,
+              "ppid": 19277,
+              "pgid": 68756,
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json ea4f6e81-47e9-4792-803a-fdacd843194a /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 68772,
+              "ppid": 68756,
+              "pgid": 68756,
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 68987,
+              "ppid": 68772,
+              "pgid": 68756,
+              "command": "node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/node_modules/.bin/vite --port 5274 --strictPort"
+            },
+            {
+              "pid": 69007,
+              "ppid": 68987,
+              "pgid": 68756,
+              "command": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+            }
+          ]
+        },
+        {
+          "provider": {
+            "token": "464d4423-f8c9-4e78-b185-b4c743db057a",
+            "pid": 19277,
+            "bead": "hv-umm2.199",
+            "label": "card-sweep",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-12T16:21:13.099Z",
+            "providerState": "active",
+            "mcpSessionId": "6b8dd045-679c-4db6-a4bd-64776488c8eb",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "server": {
+            "token": "d5251031-708e-4017-aa36-51b8b1d1ba40",
+            "runner": {
+              "pid": 19277,
+              "group": 19256,
+              "started": "Mon Oct 12 09:06:38 2026",
+              "state": "S",
+              "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.199 --cards a7820b34-9fdc-46cc-8357-53c8caa056b1,8a5d7d67-91c9-41c4-b22e-8287954efa09,867b98cf-171b-497b-9252-9af5dcf70726"
+            },
+            "server": {
+              "pid": 74075,
+              "group": 74075,
+              "started": "Mon Oct 12 09:21:11 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json d5251031-708e-4017-aa36-51b8b1d1ba40 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87",
+            "port": 5274
+          },
+          "members": [
+            {
+              "pid": 74075,
+              "ppid": 19277,
+              "pgid": 74075,
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json d5251031-708e-4017-aa36-51b8b1d1ba40 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 74092,
+              "ppid": 74075,
+              "pgid": 74075,
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 74382,
+              "ppid": 74092,
+              "pgid": 74075,
+              "command": "node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/node_modules/.bin/vite --port 5274 --strictPort"
+            },
+            {
+              "pid": 74427,
+              "ppid": 74382,
+              "pgid": 74075,
+              "command": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards87/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+            }
+          ]
+        }
+      ],
+      "closed": true,
+      "ownProcessesAbsent": [
+        19256,
+        19277,
+        33750,
+        33778,
+        33963,
+        34003,
+        68756,
+        68772,
+        68987,
+        69007,
+        74075,
+        74092,
+        74382,
+        74427
+      ],
+      "ownGroupsEmpty": [
+        33750,
+        68756,
+        74075
+      ],
+      "browserAndTransport": "native runner normal cleanup closed each exact MCP session and cleared its own exact record before releasing each lease",
+      "port5274": "runner recorded port free at each own cleanup boundary; now reused by peer189 and untouched",
+      "currentPeer": {
+        "bead": "hv-umm2.189",
+        "pid": 73850,
+        "token": "8d9f141b-c35d-4003-9ad7-8629b0431142",
+        "port": 5274,
+        "mcpSessionId": "3a0809cc-39d4-43ce-b6aa-00c0ffaf3d5f"
+      }
+    }
+  },
+  "fallout": [],
+  "artifacts": [
+    "focused.log",
+    "review.log",
+    "knip.log",
+    "fuzz.log",
+    "preflight.jsonl",
+    "sweep.log",
+    "browser-retained-observation.json",
+    "sweep-resumed.log",
+    "invocations/sweep-YVtoFy/summary.json",
+    "runtime-ledger.json"
+  ],
+  "independentReview": {
+    "required": false,
+    "reason": "composition only,28 added non-test source lines, no new form"
+  },
+  "sweepSummary": {
+    "event": "cardSweepSummary",
+    "invocation": "invocations/sweep-YVtoFy",
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.199/invocations/sweep-YVtoFy",
+    "counts": {
+      "pass": 32,
+      "skip": 28
+    },
+    "attemptCounts": {
+      "pass": 32,
+      "skip": 28,
+      "fail": 1
+    },
+    "hostLoad": 4.46240234375,
+    "sessions": 3,
+    "leaseYields": 2,
+    "wallMs": {
+      "browserLeaseWait": 749983,
+      "serve": 5849,
+      "scenario": 264398.690209,
+      "cleanup": 1861.0905839999614,
+      "execution": 272234.67966699996,
+      "total": 1022217.679667
+    }
+  },
+  "sweepTimeout": {
+    "uuid": "867b98cf-171b-497b-9252-9af5dcf70726",
+    "variant": "attuned",
+    "side": "enemy",
+    "originalReport": "invocations/sweep-YVtoFy/run-1riJ3b/sweep-867b98cf-171b-497b-9252-9af5dcf70726-attuned-enemy-attempt-1.result.json",
+    "attempt": 1,
+    "effective": false,
+    "failureKinds": [
+      "timeout"
+    ],
+    "originalCaps": [],
+    "nativeRetry": "attempt2 pass, one permitted timeout-only retry from runnable session; no manual retry",
+    "observedBoundary": "card-lab report waitForFunction deadline39195ms; navigation observations requested attuned but returned the earlier resonant document; source of competing navigation not established"
+  },
+  "finalSourceHashesMatch": true,
+  "precommitEnd": {
+    "measuredAt": "2026-10-12T16:25:37.416840Z",
+    "provenance": "UTC observed immediately before final schema check and Git commit; actual commit timestamp retained in Git and parent delivery evidence",
+    "scope": "implementer dispatch through precommit; includes all research, authoring, validation, heavy queue and browser lease waits"
+  }
+}

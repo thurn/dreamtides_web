@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.199",
+  "phase": 5,
+  "implementMin": 34.54459733333333,
+  "implementWindow": {
+    "start": "2026-10-12T15:51:04.741Z",
+    "end": "2026-10-12T16:25:37.416840Z"
+  },
+  "localValidationS": {
+    "focused": 5.2,
+    "review": 42.05525570799364,
+    "knip": 3.397610125000938,
+    "fuzz": 140.04606699943542,
+    "preflight": 0.8532120409945492,
+    "sweep": 272.23467966699997
+  },
+  "hostLoad": 15.16,
+  "testDelta": {
+    "files": 0,
+    "lines": 96,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 12.499716666666666,
+      "note": "Native default sweep waited749.983s across3sessions with2fairness yields while one shared slot retained peer ownership; original pre-allocation startup refusal retained separately. No peer records, services or processes changed."
+    }
+  ]
+}

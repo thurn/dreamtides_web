@@ -1,3 +1,5 @@
+import { abandonCostCapture, activated, exhaustSelf, ofSubtype, plus, x } from "../../engine/dsl/builders";
+import { discover, materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,11 @@ export default card({
   cardNumber: 372,
   art: { x: 0, y: 0.328, scale: 1 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated(
+      [exhaustSelf(), abandonCostCapture(ofSubtype("Warrior"))],
+      materialize(discover({ cardType: "character", ...ofSubtype("Warrior") }, { costExactly: plus(x(), 1) })),
+    ),
+  ],
+  verifiedText: "khtj8tccrr",
 });
