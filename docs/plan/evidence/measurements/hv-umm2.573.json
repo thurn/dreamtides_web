@@ -1,0 +1,1440 @@
+{
+  "bead": "hv-umm2.573",
+  "base": "a7490317db77dbcc70eb9cd76bc778d923417493",
+  "frozenAudit": {
+    "frozenAt": "2026-10-12T19:38:54.579658+00:00",
+    "base": "a7490317db77dbcc70eb9cd76bc778d923417493",
+    "covers": [
+      "hv-umm2.197",
+      "hv-umm2.203",
+      "hv-umm2.204",
+      "hv-umm2.207",
+      "hv-umm2.208",
+      "hv-umm2.212",
+      "hv-umm2.213",
+      "hv-umm2.214",
+      "hv-umm2.215",
+      "hv-umm2.216",
+      "hv-umm2.218",
+      "hv-umm2.553",
+      "hv-umm2.556",
+      "hv-umm2.557",
+      "hv-umm2.561",
+      "hv-umm2.562",
+      "hv-umm2.563",
+      "hv-umm2.564",
+      "hv-umm2.565",
+      "hv-umm2.567",
+      "hv-umm2.568",
+      "hv-umm2.569",
+      "hv-umm2.570",
+      "hv-umm2.571",
+      "hv-umm2.572",
+      "hv-xms9"
+    ],
+    "inputs": [
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.197.json",
+        "sha256": "33d67a4f001b42369fe7caca31ce5a6ea641b8c4d8039263b47a9e22c72e38cb"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.203.json",
+        "sha256": "37ac6392df6bb8390d700c1fd65ec3efd72df2aef7f4f5ebf4987299bc0f10f0"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.204.json",
+        "sha256": "c81e35530cfda52fd62da4f0ad15c4e1ba39626b37e4a04d86faa02441c5c566"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.207.json",
+        "sha256": "5fb7e9f4ac94a6af364dc1545b69a4ef32ac0f703b1723d05d11b3d25233e2cf"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.208.json",
+        "sha256": "6b51dd08e4f67c621a206939bcccd7b69443e28e0f4acb2a75fd2d04338b8d3f"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.212.json",
+        "sha256": "aa13e02a63a4d50bc52a4164d13c7a11fc68511be2d0aa80229c2fe9dd07a8da"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.213.json",
+        "sha256": "a8c4586cf5ef91ea52aa2cd881201a5b21b55a81d8c72f3af3d82a4be78e8337"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.214.json",
+        "sha256": "27951fef11f1a09066ce80297502cf07a405970a1979e21bc88442700522d82a"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.215.json",
+        "sha256": "a440d3a3fda731dd646ecfc4fdb6310bd9c9776301d7ab12aaf917660938b177"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.216.json",
+        "sha256": "f50c86771e2d74fe039e7c829aed74a253bf6a84ea5517dbf695a33faeaf4c72"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.218.json",
+        "sha256": "c5426ed175fefcd857b63972438f4f10a69ab5f096d7acef377bab1953517d1e"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.553.json",
+        "sha256": "6cc7bad71306de5c3f38f3cd0133d57587752850e56e70054e0d51c2c6ca4ef7"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.556.json",
+        "sha256": "234a53b6bc7211d57ff84a911c21a644b24f0e87f570017454eae95c9b0787f8"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.557.json",
+        "sha256": "c3debaee5456ea5432f2e9e01f91cc619d39690eaae9cd70c04422c2955b03c7"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.561.json",
+        "sha256": "54be4a8856f1600a659b425597c305bfe7b39d4907374f2a2e5b5bc3528edfe5"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.562.json",
+        "sha256": "7e6e236d272c701e63ac47533ee3beb8e36b8b34ba88b91ede81fcddc936460c"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.563.json",
+        "sha256": "db4ccbc737cda6051fea54ec38950ebe394b160317051700130816b6bc996f1d"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.564.json",
+        "sha256": "0d0acc4b407844d5ba3f20821a42894a3f860edaf4ed337aecbfc1ae81fd31a0"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.565.json",
+        "sha256": "cd91cf94fb10bfc04a39921164be70baec51b82ee48d5a63b30cd54774302f59"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.567.json",
+        "sha256": "ac5e3ebeca0204e49826f5a2ff1ea6e69a7d5cab9b88bf016b5ffafa572a9a32"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.568.json",
+        "sha256": "e273e1f71e111215998deed0c8a166884a4509fc7ce97b8a462823098fd30650"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.569.json",
+        "sha256": "121faa1d41b5ecb620aae7f3edf51d86df244cbc9193bfb11a17d75de3b0553c"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.570.json",
+        "sha256": "3dd3277cecb407b1128159ed59529febbb4adf876380f7eeff2f845123cdd086"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.571.json",
+        "sha256": "6bb4fb5dc2c8638cd2aca91a9b943d7407421de2cbdab90f532fec99a0f2b897"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-umm2.572.json",
+        "sha256": "c18cd5d73b3910691de62dcfe36bc9838a0adf5a26f283b04226479a7a00170d"
+      },
+      {
+        "path": "docs/plan/evidence/friction/hv-xms9.json",
+        "sha256": "7311711917c85a62f33f2cc1c4233166bee607af28c3d2b6fd8a9c289e31aca1"
+      },
+      {
+        "path": "docs/plan/evidence/friction.jsonl",
+        "sha256": "60d54f02639c4b15b5ce1236e72d70632e09f5df6a8c611b08edfa49c6eebbc7"
+      },
+      {
+        "path": "docs/plan/evidence/metrics.md",
+        "sha256": "515a6ffbd6de852537c1d6f27e9e6d9ba7a4d66cb800e6a03355b0fc38452b41"
+      },
+      {
+        "path": "docs/plan/evidence/introspection.jsonl",
+        "sha256": "871d0616f48a22309e3f4ff4407bc90175cfb3a22beb639a989c0682577b21dd"
+      },
+      {
+        "path": "docs/plan/evidence/friction-tags.json",
+        "sha256": "0edbf5483483c7ea443f0316c98970b5c8f1f2ed3afbf557f1d2b4f8349cb266"
+      }
+    ],
+    "lastRetrospective": {
+      "retrospective": "2026-10-12",
+      "phase": 5,
+      "bead": "hv-umm2.561",
+      "covers": [
+        "hv-roz5",
+        "hv-sob5",
+        "hv-umm2.177",
+        "hv-umm2.178",
+        "hv-umm2.181",
+        "hv-umm2.185",
+        "hv-umm2.186",
+        "hv-umm2.187",
+        "hv-umm2.188",
+        "hv-umm2.189",
+        "hv-umm2.195",
+        "hv-umm2.198",
+        "hv-umm2.199",
+        "hv-umm2.200",
+        "hv-umm2.205",
+        "hv-umm2.515",
+        "hv-umm2.545",
+        "hv-umm2.546",
+        "hv-umm2.547",
+        "hv-umm2.548",
+        "hv-umm2.550",
+        "hv-umm2.551",
+        "hv-umm2.552",
+        "hv-umm2.555",
+        "hv-umm2.558",
+        "hv-vnue"
+      ]
+    },
+    "parentReadCorrection": "Initial snapshot-copy attempt used wrong metrics path docs/plan/metrics.md and failed before freeze manifest; correct existing evidence/metrics.md resolved with rg, all copies refreshed."
+  },
+  "helper": {
+    "task": "/root/phase5_retrospective573",
+    "dispatch": {
+      "timestamp": "2026-10-12T19:40:01.234Z",
+      "call_id": "call_887c742549fd4c4d8acbbbac7c9e60a4",
+      "task": "phase5_retrospective573"
+    },
+    "firstClock": "2026-10-12T19:40:26Z",
+    "terminalClock": "2026-10-12T19:48:47Z",
+    "clockPrecision": "seconds",
+    "role": "Fresh read-only Sage, no writes/native mutations/validators/runtimes/providers",
+    "hashComparisons": 60,
+    "newImprovementBeads": [],
+    "budgetRevisions": [],
+    "triggerDispositionsAdded": []
+  },
+  "parentWindow": {
+    "start": "2026-10-12T19:37:43Z",
+    "scope": "Parent self-implements evidence after read-only Sage audit; native claim whole-second timestamp is a conservative ownership-start proxy, not an invented helper dispatch. Includes setup, audit, research, coordination, validation and packaging; actual Sage dispatch separately retained."
+  },
+  "gate": {
+    "finalCandidates": [
+      {
+        "bead": "hv-umm2.197",
+        "candidate": "01a13166-3472-70b1-914d-46b2cd68a767",
+        "source": "5416820974816c986bd612126bac65922f2b2db6",
+        "tested": "4ddfa38b995c601041125d91369adb25f290c0f7",
+        "gateSeconds": 91.055,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 5234,
+            "exit_code": 0,
+            "log_hash": "9ba92e31784ff10a0fb100b497a0517dbd96935c818b5daec7ff15ec0e73a264",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 85821,
+            "exit_code": 0,
+            "log_hash": "ff9328adbdf424f330376a2cae4607236f339075f80af2592cc1982fdf11ec68",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54218
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native authoritative source OID and own changed friction blob; standalone Bead trailer absent"
+      },
+      {
+        "bead": "hv-umm2.203",
+        "candidate": "01a13129-ef13-7502-a535-dd11604df234",
+        "source": "4e212b56d2be10f6597041d8b330798684b0b0d0",
+        "tested": "fcd9a10a08e700f51b5de76edcca0022f48324a6",
+        "gateSeconds": 79.456,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4376,
+            "exit_code": 0,
+            "log_hash": "09b3529cb7bac3d581f603b19cbe53fe3e80c5a677e02dc9a5de8e517af1bf24",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 75080,
+            "exit_code": 0,
+            "log_hash": "9c2157d2e240489f1a72a90999879692c80c63463487e5caf69dcd9cf4b1ab24",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54264
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.204",
+        "candidate": "01a1318b-6eb3-7ec2-a7e4-f2418d80617a",
+        "source": "5e6fa874d84ae763f29534b8db9c68db9748da90",
+        "tested": "a1b2f2d67cfb70418f55fc640fa0acfa9b070dbc",
+        "gateSeconds": 93.639,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4993,
+            "exit_code": 0,
+            "log_hash": "6c14ec3562513b5e4683f9177f6c348aef0ef880cff1bbc4472344dd4e9cdff4",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 88646,
+            "exit_code": 0,
+            "log_hash": "c1676702a697e5b21ce919d2b1a548ee4b5406862c6f83dc41dd61daf4a8ecca",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54250
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.207",
+        "candidate": "01a13161-8ebb-7b51-b11a-907255640c8c",
+        "source": "05bfc99ab4cf57308d6150d313a9f7ca7cdb1eb2",
+        "tested": "f80b08365b887f966209d207b02ef379186092b7",
+        "gateSeconds": 94.209,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4775,
+            "exit_code": 0,
+            "log_hash": "0ed6e69aa5435cb17b023524ec7d0663fbeab2ac6cd23c01d780b3fb16b4aec9",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 89434,
+            "exit_code": 0,
+            "log_hash": "569c9437b07563fb00291692438b07225d539738bc2ab2018bbabbdcb08fc9ba",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54391
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.208",
+        "candidate": "01a13178-09ab-72a0-819b-5c75236f6b5b",
+        "source": "e54524ee40e676326d4cc859c6effdda49a8043a",
+        "tested": "82d82927e538a4f001d32e8661a9d5ee72309806",
+        "gateSeconds": 86.893,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 5422,
+            "exit_code": 0,
+            "log_hash": "9ca15b56ef0a957332ae7e4fc083840580e6bcb8d76ab6c07a42f9e2747c5091",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 81471,
+            "exit_code": 0,
+            "log_hash": "f0011f8d1bb7ebd08951d8c20f74c55ea04ea9f5ae199c13730de693070110b1",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54257
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.212",
+        "candidate": "01a1312d-fd1e-75c0-9017-37c43c8819b9",
+        "source": "6f69731270e14733a3b0ec301a82b619c608228b",
+        "tested": "c284ce775645f6f080597c32e5d5f849748b1ad3",
+        "gateSeconds": 87.604,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4373,
+            "exit_code": 0,
+            "log_hash": "918bf589161276bd36b5d9c544d4d3014e9037e32f844011db39b6dc70d84c86",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 83231,
+            "exit_code": 0,
+            "log_hash": "e0707d07a9cdbce02d718183237e5c03461243c5ac1b92a2f6e9207df560f3bb",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54571
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.213",
+        "candidate": "01a13185-ecfb-7d80-acdb-d2e77585c07a",
+        "source": "be866695bc8fdda6239b3594c16cee792a8fb9f8",
+        "tested": "59ce7afe9147b5083e09e89ccebc7ac84f4d931c",
+        "gateSeconds": 90.198,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4870,
+            "exit_code": 0,
+            "log_hash": "a350e26bede0a517ef3e39db3ef8c20b1dc83b11beecefbb1cdc096f840e2256",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 85328,
+            "exit_code": 0,
+            "log_hash": "f6650a5ca6c71cb47ab07a2bec2ec88a2cbdaf9e5b450f9238df7fc120776174",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54299
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.214",
+        "candidate": "01a1316a-5444-71a3-9684-bfec9d4445b2",
+        "source": "bc02661c413b5c6e3a9c18e7d3805b99ec935bb9",
+        "tested": "5be8538ba5c7bcd686a621ec8b7b60c58c9fe82a",
+        "gateSeconds": 96.929,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4822,
+            "exit_code": 0,
+            "log_hash": "a5fb5220298f281cab8130cf8f7783b22ea155a2b10b214899accac5d1d79005",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 92107,
+            "exit_code": 0,
+            "log_hash": "259e4a42248b211934aa3154495bbe38bf5d9bdbfa3439fae1e31b047d978d35",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54924
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.215",
+        "candidate": "01a1318b-c36e-7da3-8ff0-671ddadbf3c0",
+        "source": "a386df4539b30a71c4319c7bc01b4bdf1561e70a",
+        "tested": "9e99f9bcf0008c1c362f319d8607b8973bba1b2b",
+        "gateSeconds": 95.305,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 6310,
+            "exit_code": 0,
+            "log_hash": "77de2f50c77ae376f568afd120a272b35fd1ed2d100b8a9bbf8d8e2f22dae981",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 88995,
+            "exit_code": 0,
+            "log_hash": "d5d814c695a8992badc38de01b5cf81020c3f08767e1869b94e5208011f79199",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54803
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID and own friction blob; Bead marker is inline"
+      },
+      {
+        "bead": "hv-umm2.216",
+        "candidate": "01a1319c-1df5-7461-96c2-7736341f5e81",
+        "source": "120efe12e0f3349f45cb23442398593d47e0409c",
+        "tested": "a7490317db77dbcc70eb9cd76bc778d923417493",
+        "gateSeconds": 88.734,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4271,
+            "exit_code": 0,
+            "log_hash": "cecee0757dc8bca56dc5f8ad184f2b6ba72af0898c0c696a9c92e95328b9e578",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 84463,
+            "exit_code": 0,
+            "log_hash": "93092fa5f00cc5c1fb042cb761cb8b048e05a4537e235ba9a69e8e3c46b1a765",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54222
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.218",
+        "candidate": "01a1317e-3c64-7d00-9fa5-e58799ce4fdd",
+        "source": "92dfdf7b7797577f2e2f762b2d3ac004b86db531",
+        "tested": "b535719ec0f0059d30431befc63ee7000406aab3",
+        "gateSeconds": 92.046,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 5248,
+            "exit_code": 0,
+            "log_hash": "793d2a8b0264c9249f3b218173819a35e9a77df60540fd8d7b05c333e62a8539",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 86798,
+            "exit_code": 0,
+            "log_hash": "cf1c2d63da56ea9785be27e8a08b1ec4c7b5652da0ccf345aee6962444339425",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54261
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.553",
+        "candidate": "01a13118-6112-7f20-a37b-628b0ebece9f",
+        "source": "95e496b88b4c4cc7b755941630460dbc00011c38",
+        "tested": "2217aa6ba44f2ad843f7a92703267108f9ffacdd",
+        "gateSeconds": 90.926,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 5116,
+            "exit_code": 0,
+            "log_hash": "806273d059ef4427aac80d0a08fa3f1c7b12c9768a2ebcbef83c1f730d789954",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 85810,
+            "exit_code": 0,
+            "log_hash": "e8dc8449e4eba5b5d5ef6228f7a67f855b0cc7128227a5e2a49531e09deca101",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54389
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.556",
+        "candidate": "01a13165-045e-74d3-aab2-23e590ae7018",
+        "source": "f389becb59240f3bb80da6a836e76675f0d0bb06",
+        "tested": "ed9fa94c359ef5d34909afbf298a7245864b5168",
+        "gateSeconds": 92.899,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4980,
+            "exit_code": 0,
+            "log_hash": "47544a01b781b8a5af344d47a9c94cd8471346aea0690c3b3f8d1aede7f3fa22",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 87919,
+            "exit_code": 0,
+            "log_hash": "1f45f5fb71a52d4ed4559aa89dfd739ca356375d909dc5d4b1af8f9d9d51c33e",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54405
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.557",
+        "candidate": "01a1311f-fe78-7da1-922c-8d952e2bb9e4",
+        "source": "b6b6e62330f9d41788b91fb756c3e5714657aeda",
+        "tested": "74422f73ad893a61e0de6a52dd4b0ab93e1514af",
+        "gateSeconds": 36.803,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4797,
+            "exit_code": 0,
+            "log_hash": "1864002c78bef8f21504d8a9d65fe1ad537e33ffa33729816a59afcb08a72ae6",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 32006,
+            "exit_code": 0,
+            "log_hash": "dae7a36a110d51730873c89d00d5275558e0701e4539828bbbdc6d70f36d6ce2",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54194
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.561",
+        "candidate": "01a13121-f11e-73a2-a9d4-ab62b3fc5181",
+        "source": "a5eb75e0238e71ebcb7f48e1ad93982e37cf13ca",
+        "tested": "5f83560a65f77396f7b1582211222f8ff2ee6c8f",
+        "gateSeconds": 17.645,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 5086,
+            "exit_code": 0,
+            "log_hash": "6e538e0695548a325d64a39dfd750d96663041343604cb557a6e8ea390225165",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 12559,
+            "exit_code": 0,
+            "log_hash": "53afdd84627ac555462cd4dc76ba8d8540021b71f6c93d2def9481cc64057ed4",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 1456
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.562",
+        "candidate": "01a1314b-57b4-7371-afd6-07371dfaf5d8",
+        "source": "33ed6ff25f640ec79ce4c57f38782427b373ee45",
+        "tested": "2b79616c0c48b082a627ad94481ff55c481c9657",
+        "gateSeconds": 98.074,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 7266,
+            "exit_code": 0,
+            "log_hash": "cab93c4b889c4f2d885f1c6f86f381aa0b4c8ec669f00a2b6060e11328f3fdfd",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 90808,
+            "exit_code": 0,
+            "log_hash": "5c27feb8ad8d5f090be1bd1778707fdfd282afcb586a7c5029fb4fc9d2c45c23",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54524
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.563",
+        "candidate": "01a1313d-4999-7df2-927a-6e11905f79b6",
+        "source": "56d72bfa89a10f355d57770e5ef2c022e5f151b2",
+        "tested": "2fcdd9a18c64b4bd7e24de502b145cd31956959a",
+        "gateSeconds": 20.809,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 6755,
+            "exit_code": 0,
+            "log_hash": "c642d24010325e54718a6dac0b846c4adf35f568ba6b0abc88357cbefb178378",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 14054,
+            "exit_code": 0,
+            "log_hash": "7da70e206a0647a19ea764c2223c06d3ec8e0f3553e2df3cdfaa029ae56e63d4",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 1451
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.564",
+        "candidate": "01a13132-660b-74b2-96cf-55824d8a8768",
+        "source": "60e8bfd8d1cd1a6006f528b735cc3a1e4ac7d2f7",
+        "tested": "5d93c937bf2d3c16a57ff3314b5edb0e30c6f475",
+        "gateSeconds": 89.693,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 5105,
+            "exit_code": 0,
+            "log_hash": "c4a78a227bf9d7dcb62198d1fdb2f31d0b2117b4de506ec0adf91e7c04b4b620",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 84588,
+            "exit_code": 0,
+            "log_hash": "88d1476fe59af6094ab5cfa4bc5867ebb6793c4fdc2e0c94fc8cfbdffa6a6604",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54379
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.565",
+        "candidate": "01a1313c-737d-7e63-8e5a-bad53bd489c7",
+        "source": "b97e217a4d38f99dd47d171a2ee0f42a75fed309",
+        "tested": "d148f81dc34a1c101752c44d3f319f23df8d2061",
+        "gateSeconds": 81.424,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4315,
+            "exit_code": 0,
+            "log_hash": "9d7074b226d7d8ca7c66091b325cc145670bc74d3f2ca531c20bb6df82a0285c",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 77109,
+            "exit_code": 0,
+            "log_hash": "deb93bcb6ea15a28068ca24ff8a336558bf7bebd4cbe946405ce4fcdbfdbce47",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54258
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.567",
+        "candidate": "01a1314c-081b-7142-92e5-983e91c2ec17",
+        "source": "d6ebcf0b87c0bc6d76835cd86b6e5ad2b3790c64",
+        "tested": "c699205d3f09550c65eb9870c2bc29e5f14083bf",
+        "gateSeconds": 84.294,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4586,
+            "exit_code": 0,
+            "log_hash": "08d1ddfa2e66af8ab34634454571f9ae265e3228bcfe8045f92dd623358b2ed1",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 79708,
+            "exit_code": 0,
+            "log_hash": "017a6639a6d33d2a9aa91ac06f0b6ce77c801d54f2ddcd309b4db21263525295",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54293
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.568",
+        "candidate": "01a13195-2b39-7a40-a75c-273b46117e50",
+        "source": "486a9054039ca535f8c55a5585fbe0d508bf324e",
+        "tested": "acc297058624c3f1247bdcdd4b95210d870605b3",
+        "gateSeconds": 84.064,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4615,
+            "exit_code": 0,
+            "log_hash": "bf3510f18e3aafb8644425a322defa82a111a2b9206dc3f30f45013894f7763d",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 79449,
+            "exit_code": 0,
+            "log_hash": "253bfd2dfba374a5dc77e55cea9f35d2230c1f3f48b1cf9b1ed6e0525b92cdb6",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54241
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.569",
+        "candidate": "01a1315f-4d98-7862-92c8-83a41fa54b31",
+        "source": "cd12266376cb03d126e05a6ec89b69c59f8fa6ed",
+        "tested": "5b323fc0bc488dc66683c31fa010d5234c6b7548",
+        "gateSeconds": 95.189,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 5383,
+            "exit_code": 0,
+            "log_hash": "1b796967ef5c5913c0c79cd1edb3747b4b940b158ede008fdcb7d9ecd42edd88",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 89806,
+            "exit_code": 0,
+            "log_hash": "7ceb1b5c71831ec6d58b6c9a60144c5f67f1cd60a9c06e630de052d054cce82d",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54948
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.570",
+        "candidate": "01a13174-7062-7421-b855-b057ebc68d62",
+        "source": "e26a519d6f6b9bc6a76ecdee69f8ea4db0d1de93",
+        "tested": "9caed7168332ce4f5977d953578fbf3a4d5b9d81",
+        "gateSeconds": 17.492,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4514,
+            "exit_code": 0,
+            "log_hash": "3ada3bf27448877f4ec5962e38d1cfdb3846925618859c4dab740855df1df51d",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 12978,
+            "exit_code": 0,
+            "log_hash": "5ffde19f671fde3e1c504e65acac5e520df40144b02747109d771bc18e5c265a",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 2238
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.571",
+        "candidate": "01a13182-3117-7282-bf24-59d1a1493457",
+        "source": "0b20f22ab02ec8a0dd6a53a473cab3dcb9bf2b2b",
+        "tested": "6b4a3f8a8165b3ba3747d98f43a29a82159f9998",
+        "gateSeconds": 83.798,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4664,
+            "exit_code": 0,
+            "log_hash": "cffe166a821101491b3a570a65cb33145dabb48463c0988e03dcbd5788cf0cbb",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 79134,
+            "exit_code": 0,
+            "log_hash": "963d7893839523b1f796aeb19c070eebbb4e10ed1de60d5406596d748b01176d",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54257
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-umm2.572",
+        "candidate": "01a13183-91d5-79a3-b6e4-23aff63ef236",
+        "source": "433d840a05ec8cd5d61966ef3dc3f8b45fa790f2",
+        "tested": "95214a57f3bf2e97c6baa9585baf151e5f1b62ca",
+        "gateSeconds": 32.572,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 5058,
+            "exit_code": 0,
+            "log_hash": "be7278de42827fa7c8b4fa57e7e7baa06c197e1877507c96d30f3476fb3480f3",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 27514,
+            "exit_code": 0,
+            "log_hash": "6e1c41fb4ce042ce5676397460714a9a705aa18ec61589ecf28c7f6ee8191a6a",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 2264
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      },
+      {
+        "bead": "hv-xms9",
+        "candidate": "01a1315b-cb1d-75c0-86b7-a7439ad2083f",
+        "source": "efe4d2690f39cdb7373a7993b3de1361f18d989c",
+        "tested": "efe4d2690f39cdb7373a7993b3de1361f18d989c",
+        "gateSeconds": 82.603,
+        "stepResults": [
+          {
+            "diagnostics": [],
+            "elapsed_ms": 4592,
+            "exit_code": 0,
+            "log_hash": "6ceb0270312e42bbdb11c6cac86fd6546138c7ecc64ce3a2bf2e960163044931",
+            "name": "dependencies",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 0,
+            "stdout_end": 26
+          },
+          {
+            "diagnostics": [],
+            "elapsed_ms": 78011,
+            "exit_code": 0,
+            "log_hash": "be05ee52f0d6b43994db4a1b7cdca49fd27e5fa45b0b3ec869d97009c7ec71d4",
+            "name": "review-gate",
+            "result_class": "success",
+            "reused_from_attempt_id": null,
+            "signal": null,
+            "stderr_end": 69973,
+            "stdout_end": 54258
+          }
+        ],
+        "integrationHostLoad": null,
+        "association": "Native source OID, standalone Bead trailer and own friction blob"
+      }
+    ],
+    "medianSeconds": 88.169,
+    "minSeconds": 17.492,
+    "maxSeconds": 98.074,
+    "over60": 21,
+    "over90": 11,
+    "integrationHostLoad": null,
+    "comparableLoadTrigger": "UNKNOWN: local earlier review samples do not measure integration host load",
+    "consecutiveOver90Runs": [
+      [
+        "hv-umm2.569",
+        "hv-umm2.207",
+        "hv-umm2.556",
+        "hv-umm2.197",
+        "hv-umm2.214"
+      ],
+      [
+        "hv-umm2.213",
+        "hv-umm2.204",
+        "hv-umm2.215"
+      ]
+    ]
+  },
+  "release": {
+    "snapshot": "audit/release-status.json",
+    "passedRuns": 24,
+    "medianSuccessfulStepSumSeconds": 210.519,
+    "rangeSeconds": [
+      196.266,
+      239.218
+    ],
+    "state": "pending",
+    "lag": {
+      "commits": 1,
+      "since": [
+        2026,
+        285,
+        19,
+        36,
+        9,
+        545914000,
+        0,
+        0,
+        0
+      ]
+    },
+    "holds": [],
+    "promotionPause": null,
+    "publication": "Not established for frozen staging"
+  },
+  "history": {
+    "events": 500,
+    "firstSequence": 21648,
+    "lastSequence": 22147,
+    "firstCreatedAt": [
+      2026,
+      285,
+      17,
+      41,
+      50,
+      465872000,
+      0,
+      0,
+      0
+    ],
+    "lastCreatedAt": [
+      2026,
+      285,
+      19,
+      38,
+      36,
+      115626000,
+      0,
+      0,
+      0
+    ],
+    "scope": "Supported default500-event partial window, not complete historical event history",
+    "preCiMergeConflictCount": 6,
+    "queueCreatedToBuildsetStart": {
+      "observations": 20,
+      "medianSeconds": 0.21433,
+      "rangeSeconds": [
+        0.117998,
+        166.318491
+      ],
+      "isolatedQueueWait": null,
+      "scope": "Preparation/admission/setup plus queue; six older final candidates lack creation event"
+    }
+  },
+  "heterogeneousLocalMeasurements": {
+    "reviewMedianSeconds": 45.110403,
+    "reviewN": 26,
+    "focusedMedianSeconds": 7.678238,
+    "focusedN": 22,
+    "scope": "Recorded fields across different selectors/source phases; not uniform one-file or comparable-load benchmarks;569 review field is retained failed attempt"
+  },
+  "D19": {
+    "staticConfiguredEntrypoints": 351,
+    "jsdomPragmas": 82,
+    "physicalEntrypointLines": 84293,
+    "previous561PhysicalLines": 84014,
+    "actualLineDelta": 279,
+    "entrypointDelta": 0,
+    "jsdomDelta": 0,
+    "engineContentJsdom": 0,
+    "heterogeneousReportedFrictionDelta": {
+      "files": 3,
+      "lines": 2235,
+      "jsdomFiles": 0
+    },
+    "scope": "Tracked paths matching configured patterns; no new suite run claimed. Plain contracts/scenarios and corrections make reported friction totals distinct from chronological entrypoint delta. File-count/jsdom-count caps withdrawn; current suite timing and reasoned size exceptions apply.",
+    "over500": [
+      {
+        "file": "scripts/friction-triggers.test.mjs",
+        "lines": 510,
+        "reason": "Current573 native retentionreason for coherent synthetic CLI/evidence contracts, historical539 explicit size reason absent"
+      },
+      {
+        "file": "src/engine/testing/tooling-card-lab.test.ts",
+        "lines": 519,
+        "reason": "Native572 bounded525 declared-board correctness regression admission"
+      },
+      {
+        "file": "src/battle/tutorial-battle-controller.test.ts",
+        "lines": 584,
+        "reason": "D38 native47xj.19 and33id.1 tutorial port contracts"
+      },
+      {
+        "file": "src/battle/use-tutorial-battle-interactions.test.tsx",
+        "lines": 664,
+        "reason": "D38 native47xj.19 and33id.1"
+      },
+      {
+        "file": "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+        "lines": 2023,
+        "reason": "D38 native47xj.19 and33id.1"
+      },
+      {
+        "file": "src/screens/cumulus_adapters/TutorialScreenAdapter.test.tsx",
+        "lines": 655,
+        "reason": "D38 native47xj.21 and33id.1"
+      },
+      {
+        "file": "src/screens/cumulus_adapters/tutorial-battle-view-model.test.ts",
+        "lines": 575,
+        "reason": "D38 native47xj.21 and33id.1"
+      },
+      {
+        "file": "src/screens/cumulus_adapters/tutorial-view-model.test.ts",
+        "lines": 1880,
+        "reason": "D38 native47xj.21 tutorial exception"
+      }
+    ],
+    "fullSuiteComparison": {
+      "loaded556Seconds": 78.1,
+      "loaded556HostLoad": 19.6157,
+      "controlledMwpiMedianSeconds": 46.8,
+      "controlledMwpiHostLoadRange": [
+        3.5,
+        7.5
+      ],
+      "currentLowLoadCertification": null
+    }
+  },
+  "measurementCorrections": [
+    {
+      "bead": "hv-umm2.553",
+      "source": "95e496b88b4c4cc7b755941630460dbc00011c38",
+      "committer": "2026-10-12T10:10:35-07:00",
+      "frictionSha256": "6cc7bad71306de5c3f38f3cd0133d57587752850e56e70054e0d51c2c6ca4ef7",
+      "actualDispatch": {
+        "timestamp": "2026-10-12T15:58:41.006Z",
+        "call_id": "call_gmy7y7C5b8KMyKGNPImjIQfS"
+      },
+      "start": "2026-10-12T15:58:41.006Z",
+      "actualWindowMin": 71.89989999999999
+    },
+    {
+      "bead": "hv-umm2.557",
+      "source": "b6b6e62330f9d41788b91fb756c3e5714657aeda",
+      "committer": "2026-10-12T10:19:02-07:00",
+      "frictionSha256": "c3debaee5456ea5432f2e9e01f91cc619d39690eaae9cd70c04422c2955b03c7",
+      "start": "2026-10-12T16:57:58.225Z",
+      "actualWindowMin": 21.06291666666667
+    },
+    {
+      "bead": "hv-umm2.567",
+      "source": "d6ebcf0b87c0bc6d76835cd86b6e5ad2b3790c64",
+      "committer": "2026-10-12T11:06:33-07:00",
+      "frictionSha256": "ac5e3ebeca0204e49826f5a2ff1ea6e69a7d5cab9b88bf016b5ffafa572a9a32",
+      "start": "2026-10-12T17:49:42.482000+00:00",
+      "actualWindowMin": 16.841966666666668
+    }
+  ],
+  "canonicalHomes": {
+    "additiveRegistry": "hv-umm2.563",
+    "missingPrimitive": "hv-umm2.558",
+    "unresolvedDisablingPrivacy": "hv-77u6",
+    "unresolvedDrawnCardEmphasis": "hv-umm2.566",
+    "fuzzPerformance": "hv-umm2.526"
+  },
+  "fixedHistoricalUnknowns": 41,
+  "preexistingQualifications": [
+    "197 absent standalone Bead trailer",
+    "215 inline Bead marker",
+    "Three historical windows corrected with immutable prior copies",
+    "No isolated integration load or queue wait observation"
+  ],
+  "inspectionCorrections": [
+    "Parent wrong metrics path before freeze, corrected through rg and all copies refreshed",
+    "Parent candidate glob included note-id JSON, corrected to candidate-01a*.json before source map",
+    "Helper wrong retained-file guesses corrected through discovery",
+    "Helper anchored trailer matcher initially24 then authoritative association26",
+    "Helper intermediate states mislabeled failures in scratch summarizer, final native terminal/result classifications authoritative"
+  ],
+  "validation": {
+    "install": {
+      "start": "2026-10-12T19:38:13.824499+00:00",
+      "end": "2026-10-12T19:38:17.080608+00:00",
+      "pid": 30173,
+      "pgid": 30173,
+      "exit": 0,
+      "wallSeconds": 3.25596520799445
+    },
+    "review": {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:53:43.965380+00:00",
+      "hostLoadRaw": "{ 11.81 10.66 10.29 }",
+      "pid": 60583,
+      "pgid": 60583,
+      "end": "2026-10-12T19:53:44.284204+00:00",
+      "wallSeconds": 0.3153151250007795,
+      "exit": 0
+    },
+    "knip": {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T19:53:51.334621+00:00",
+      "hostLoadRaw": "{ 11.26 10.57 10.26 }",
+      "pid": 61376,
+      "pgid": 61376,
+      "end": "2026-10-12T19:53:57.877128+00:00",
+      "wallSeconds": 6.537688917000196,
+      "exit": 0
+    },
+    "schema": {
+      "name": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T19:54:11.923636+00:00",
+      "hostLoadRaw": "{ 15.85 11.59 10.63 }",
+      "pid": 62888,
+      "pgid": 62888,
+      "end": "2026-10-12T19:54:12.035487+00:00",
+      "wallSeconds": 0.10720133299764711,
+      "exit": 0
+    }
+  },
+  "rawEvidence": "artifacts/qa/hv-umm2.573/audit; all selected native records/statuses/source objects and frozen source hashes retained",
+  "hostLoadSamples": [
+    {
+      "command": "review",
+      "sample": "{ 11.81 10.66 10.29 }",
+      "at": "2026-10-12T19:53:43.965380+00:00"
+    },
+    {
+      "command": "knip",
+      "sample": "{ 11.26 10.57 10.26 }",
+      "at": "2026-10-12T19:53:51.334621+00:00"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final staged documentation review starting host load, parsed from actual sysctl receipt"
+      }
+    }
+  },
+  "resourceSettlement": {
+    "at": "2026-10-12T19:55:17.643622+00:00",
+    "groups": [
+      {
+        "pgid": 30173,
+        "members": []
+      },
+      {
+        "pgid": 60583,
+        "members": []
+      },
+      {
+        "pgid": 61376,
+        "members": []
+      },
+      {
+        "pgid": 62888,
+        "members": []
+      }
+    ],
+    "helper": "Terminal read-only, no provider/runtime/browser/lease started"
+  },
+  "precommitEndpoint": {
+    "at": "2026-10-12T19:55:17.643837+00:00",
+    "scope": "Observed evidence endpoint immediately before final schema and Git; actual Git committer/process clocks retained externally and compared semantically"
+  }
+}

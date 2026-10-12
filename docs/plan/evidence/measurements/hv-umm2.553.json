@@ -1204,5 +1204,28 @@
     "noNewRuntime": "No browser/server/MCP client/provider/lease created during either integration recovery; helpers terminal. All recorded children/groups absent atactual exit.",
     "sourceChanges": "Only own DSL fixture imports/two definitions and own timing/measurement records; all landedpeerDSLbytes retained.",
     "heavyRerun": "None: own rule/effect bodies unchanged; strict additive registry resolution with collision-free synthetic identity only."
+  },
+  "retrospectiveCorrection573": {
+    "bead": "hv-umm2.573",
+    "sourceOid": "95e496b88b4c4cc7b755941630460dbc00011c38",
+    "originalFrictionSha256": "6cc7bad71306de5c3f38f3cd0133d57587752850e56e70054e0d51c2c6ca4ef7",
+    "originalMeasurementsSha256": "05f96830169381c9e9a464dfbe9971656f9163c0738d3b8ffd338c1e634a628d",
+    "originalImplementWindow": {
+      "start": "2026-10-12T16:00:15+00:00",
+      "end": "2026-10-12T17:10:26.699143+00:00"
+    },
+    "originalImplementMin": 70.19498571666666,
+    "correctedImplementWindow": {
+      "start": "2026-10-12T15:58:41.006Z",
+      "end": "2026-10-12T10:10:35-07:00"
+    },
+    "correctedImplementMin": 71.89989999999999,
+    "gitCommitterWholeSecondPrecision": true,
+    "dispatchEvidence": {
+      "timestamp": "2026-10-12T15:58:41.006Z",
+      "call_id": "call_gmy7y7C5b8KMyKGNPImjIQfS"
+    },
+    "scope": "Actual dispatch-to-final-source Git committer window; preserve original command, source, QA, host-load and recovery evidence; retained frozen inputs remain immutable",
+    "rawProof": "artifacts/qa/hv-umm2.573/audit/measurement-correction-proofs.json"
   }
 }

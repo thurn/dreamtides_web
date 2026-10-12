@@ -692,5 +692,28 @@
   "owed": [
     "parent exact immutable source cold gpt-5.6-sol CLI review under temporary user routing",
     "parent exact authorized native candidate promotion and cleanup"
-  ]
+  ],
+  "retrospectiveCorrection573": {
+    "bead": "hv-umm2.573",
+    "sourceOid": "d6ebcf0b87c0bc6d76835cd86b6e5ad2b3790c64",
+    "originalFrictionSha256": "ac5e3ebeca0204e49826f5a2ff1ea6e69a7d5cab9b88bf016b5ffafa572a9a32",
+    "originalMeasurementsSha256": "571b4818aabbeb619c02f7c8b5af5649020f27a5c7c1d64ec1155a468001e5b5",
+    "originalImplementWindow": {
+      "start": "2026-10-12T17:49:42.482000+00:00",
+      "end": "2026-10-12T18:05:24.854837+00:00"
+    },
+    "originalImplementMin": 15.70621395,
+    "correctedImplementWindow": {
+      "start": "2026-10-12T17:49:42.482000+00:00",
+      "end": "2026-10-12T11:06:33-07:00"
+    },
+    "correctedImplementMin": 16.841966666666668,
+    "gitCommitterWholeSecondPrecision": true,
+    "dispatchEvidence": {
+      "timestamp": "2026-10-12T17:49:42.482000+00:00",
+      "scope": "Existing retained original dispatch; model execution start remains unknown"
+    },
+    "scope": "Actual dispatch-to-final-source Git committer window; preserve original command, source, QA, host-load and recovery evidence; retained frozen inputs remain immutable",
+    "rawProof": "artifacts/qa/hv-umm2.573/audit/measurement-correction-proofs.json"
+  }
 }

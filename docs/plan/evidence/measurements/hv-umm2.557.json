@@ -537,5 +537,28 @@
     "docs/plan/evidence/measurements/hv-umm2.557.json",
     "docs/plan/evidence/pre-existing/hv-umm2.557.md",
     "docs/plan/evidence/qa-ledger/hv-umm2.557.jsonl"
-  ]
+  ],
+  "retrospectiveCorrection573": {
+    "bead": "hv-umm2.573",
+    "sourceOid": "b6b6e62330f9d41788b91fb756c3e5714657aeda",
+    "originalFrictionSha256": "c3debaee5456ea5432f2e9e01f91cc619d39690eaae9cd70c04422c2955b03c7",
+    "originalMeasurementsSha256": "64fe6a1ceadf0cb269db573c69d45e6231a48d8ec33d9e6d3e449afae14b0381",
+    "originalImplementWindow": {
+      "start": "2026-10-12T16:57:58.225Z",
+      "end": "2026-10-12T17:17:19.939922+00:00"
+    },
+    "originalImplementMin": 19.361915366666665,
+    "correctedImplementWindow": {
+      "start": "2026-10-12T16:57:58.225Z",
+      "end": "2026-10-12T10:19:02-07:00"
+    },
+    "correctedImplementMin": 21.06291666666667,
+    "gitCommitterWholeSecondPrecision": true,
+    "dispatchEvidence": {
+      "timestamp": "2026-10-12T16:57:58.225Z",
+      "scope": "Existing retained original dispatch; model execution start remains unknown"
+    },
+    "scope": "Actual dispatch-to-final-source Git committer window; preserve original command, source, QA, host-load and recovery evidence; retained frozen inputs remain immutable",
+    "rawProof": "artifacts/qa/hv-umm2.573/audit/measurement-correction-proofs.json"
+  }
 }
