@@ -37,6 +37,7 @@ function frictionFile(bead, phase, tags) {
     phase,
     hostLoad: 2.5,
     implementMin: 4,
+    implementWindow: { start: "2026-01-01T00:00:00Z", end: "2026-01-01T00:04:00Z" },
     friction: tags.map((tag) => ({ tag, minutes: 10, note: "x" })),
   };
 }
@@ -51,6 +52,7 @@ function frictionFile(bead, phase, tags) {
  *   cadence?: number,
  *   phaseCadence?: Record<string, number>,
  *   unknowns?: unknown,
+ *   exempt?: unknown,
  * }} evidence
  */
 function evidenceFixture({
@@ -60,6 +62,7 @@ function evidenceFixture({
   cadence = 3,
   phaseCadence = {},
   unknowns = [],
+  exempt = [],
 }) {
   const directory = mkdtempSync(join(tmpdir(), "friction-triggers-"));
   temporaryDirectories.push(directory);
@@ -82,6 +85,7 @@ function evidenceFixture({
       retrospectiveCadence: cadence,
       phaseRetrospectiveCadence: phaseCadence,
       historicalUnknowns: unknowns,
+      implementWindowExempt: exempt,
       aliases: { "slow-hook": "hook-misfire", "hook-refusal": "hook-misfire" },
     }),
   );
@@ -232,9 +236,9 @@ describe("friction triggers", () => {
   });
 });
 
-/** @param {unknown} record @param {unknown} unknowns */
-function recordFixture(record, unknowns = []) {
-  const directory = evidenceFixture({ unknowns });
+/** @param {unknown} record @param {unknown} unknowns @param {unknown} exempt */
+function recordFixture(record, unknowns = [], exempt = []) {
+  const directory = evidenceFixture({ unknowns, exempt });
   /** @param {string} _key @param {unknown} value */
   const overflowNumber = (_key, value) =>
     value === Infinity
@@ -290,7 +294,7 @@ describe("friction record schema", () => {
   });
 
   it("accepts finite zero/fractional measurements, string notes and extra fields", () => {
-    const record = { ...validRecord(), hostLoad: 0, implementMin: 0.25, extra: { preserved: true },
+    const record = { ...validRecord(), hostLoad: 0, implementMin: 4.25, extra: { preserved: true },
       friction: [{ tag: "test-tag", minutes: 0, note: "", seconds: 0 }] };
     expect(readFrictionRecords(recordFixture(record))[0].tags).toEqual(["test-tag"]);
     expect(runFrictionTriggers(recordFixture({ ...record, friction: [] })).report.exitCode).toBe(0);
@@ -405,4 +409,102 @@ describe("friction evidence validation", () => {
     );
     expect(cli.status).toBe(2);
   });
+});
+
+describe("friction record implement window", () => {
+  /** @param {string} directory */
+  const validate = (directory) =>
+    spawnSync(process.execPath, [SCRIPT, "--validate-records", directory], {
+      encoding: "utf8",
+    });
+
+  /**
+   * @param {string} directory
+   * @param {string} field
+   */
+  const expectRejected = (directory, field) => {
+    expect(() => validateFrictionEvidence(directory)).toThrow(field);
+    const cli = validate(directory);
+    expect(cli.status).toBe(2);
+    expect(cli.stderr).toContain("hv-synthetic.json");
+    expect(cli.stderr).toContain(field);
+  };
+
+  /** @param {unknown} start @param {unknown} end @param {number} implementMin */
+  const windowed = (start, end, implementMin = 4) => ({
+    ...validRecord(),
+    implementMin,
+    implementWindow: { start, end },
+  });
+
+  it("requires a window on a record whose bead is not exempt", () => {
+    const record = validRecord();
+    delete record.implementWindow;
+    expectRejected(recordFixture(record), "implementWindow");
+    expectRejected(recordFixture({ ...record, implementWindow: "4m" }), "implementWindow");
+    expectRejected(recordFixture(record, [], ["hv-other"]), "implementWindow");
+  });
+
+  it("accepts an exempt record without a window", () => {
+    const record = validRecord();
+    delete record.implementWindow;
+    const directory = recordFixture(record, [], ["hv-synthetic"]);
+    expect(validateFrictionEvidence(directory).records).toBe(1);
+    expect(validate(directory).status).toBe(0);
+  });
+
+  it.each([
+    { start: "2026-01-01T00:00:00Z", end: "2026-01-01T00:04:00Z", implementMin: 4 },
+    { start: "2026-01-01T00:00Z", end: "2026-01-01T00:05:00.000Z", implementMin: 4 },
+    { start: "2026-01-01T01:00:00+01:00", end: "2026-01-01T00:03:00Z", implementMin: 4 },
+    { start: "2025-12-31T23:59:30-00:30", end: "2026-01-01T00:33:30Z", implementMin: 4 },
+  ])("accepts a consistent window ($start to $end for $implementMin min)", ({ start, end, implementMin }) => {
+    const directory = recordFixture(windowed(start, end, implementMin));
+    expect(validateFrictionEvidence(directory).records).toBe(1);
+    expect(validate(directory).status).toBe(0);
+  });
+
+  it.each([5.5, 2.5, 40])("rejects implementMin %s against a 4-minute window", (implementMin) => {
+    expectRejected(recordFixture(windowed("2026-01-01T00:00:00Z", "2026-01-01T00:04:00Z", implementMin)), "implementMin");
+  });
+
+  it("checks an exempt record's window when it has one", () => {
+    const record = windowed("2026-01-01T00:00:00Z", "2026-01-01T00:30:00Z");
+    expectRejected(recordFixture(record, [], ["hv-synthetic"]), "implementMin");
+  });
+
+  it.each([
+    ["2026-01-01T00:04:00Z", "2026-01-01T00:04:00Z"],
+    ["2026-01-01T00:04:00Z", "2026-01-01T00:00:00Z"],
+    ["2026-01-01T00:00:00Z", "2026-01-01T00:30:00+01:00"],
+  ])("rejects a window that does not end after it starts (%s to %s)", (start, end) => {
+    expectRejected(recordFixture(windowed(start, end, 0)), "implementWindow.end");
+  });
+
+  it.each([
+    "2026-01-01T00:00:00",
+    "2026-01-01 00:00:00Z",
+    "2026-01-01",
+    "2026-01-01T00:00:00+0100",
+    "2026-02-30T00:00:00Z",
+    "2026-13-01T00:00:00Z",
+    "2026-01-01T24:00:00Z",
+    "2026-01-01T00:00:00+24:00",
+    "",
+    1767225600000,
+    null,
+  ])("rejects a malformed or offset-free start timestamp (%s)", (start) => {
+    expectRejected(recordFixture(windowed(start, "2026-01-01T00:04:00Z")), "implementWindow.start");
+  });
+
+  it("rejects a malformed end timestamp", () => {
+    expectRejected(recordFixture(windowed("2026-01-01T00:00:00Z", "2026-01-01T00:04:00")), "implementWindow.end");
+  });
+
+  it.each([{}, "hv-synthetic", [""], [1], ["hv-synthetic", "hv-synthetic"]])(
+    "rejects an invalid exemption list (%j)",
+    (exempt) => {
+      expect(() => validateFrictionEvidence(recordFixture(validRecord(), [], exempt))).toThrow("implementWindowExempt");
+    },
+  );
 });

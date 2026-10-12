@@ -10,8 +10,11 @@
 // Inputs, all under the evidence directory (docs/plan/evidence by default):
 // - friction/<bead-id>.json and friction.jsonl: friction records;
 // - friction-tags.json: { triggerBeads, retrospectiveCadence,
-//   phaseRetrospectiveCadence?, aliases }, where phaseRetrospectiveCadence
-//   maps a phase to the cadence that replaces retrospectiveCadence for it;
+//   phaseRetrospectiveCadence?, aliases, historicalUnknowns?,
+//   implementWindowExempt? }, where phaseRetrospectiveCadence maps a phase to
+//   the cadence that replaces retrospectiveCadence for it, and
+//   implementWindowExempt is the frozen list of beads whose per-bead record
+//   may omit implementWindow;
 // - introspection.jsonl: dispositions {tag, phase, bead | reason} and
 //   retrospectives {retrospective: <date>, phase, bead?, covers: [bead ids]}.
 //
@@ -38,6 +41,7 @@ const VALIDATE_RECORDS_FLAG = "--validate-records";
  *   phaseRetrospectiveCadence: Record<string, number>,
  *   aliases: Record<string, string>,
  *   historicalUnknowns: UnknownMeasurement[],
+ *   implementWindowExempt: Set<string>,
  * }} TagConfig
  * @typedef {{ tag: string, phase: string, bead?: string, reason?: string }} Disposition
  * @typedef {{ date: string, phase: string, bead?: string, covers: string[] }} Retrospective
@@ -111,17 +115,72 @@ function readJsonLines(path) {
     });
 }
 
+const TIMESTAMP =
+  /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?(?:Z|[+-](\d{2}):(\d{2}))$/;
+
+/**
+ * Milliseconds since the epoch of an ISO-8601 date-time with an explicit
+ * offset (`Z` or `±hh:mm`) and a real calendar date.
+ *
+ * @param {unknown} value
+ * @param {string} where
+ */
+function asTimestamp(value, where) {
+  const match = typeof value === "string" ? TIMESTAMP.exec(value) : null;
+  const time = match === null ? NaN : Date.parse(/** @type {string} */ (value));
+  if (match !== null && Number.isFinite(time)) {
+    const [, year, month, day, hour, minute, second = "0", offsetHour = "0", offsetMinute = "0"] = match;
+    const calendarDay = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day))).getUTCDate();
+    if (
+      calendarDay === Number(day) && Number(month) <= 12 && Number(hour) <= 23 && Number(minute) <= 59 &&
+      Number(second) <= 59 && Number(offsetHour) <= 23 && Number(offsetMinute) <= 59
+    ) {
+      return time;
+    }
+  }
+  throw new Error(`${where}: expected an ISO-8601 date-time with an explicit offset (Z or ±hh:mm)`);
+}
+
+/**
+ * The implementer's dispatch-to-commit window: required unless the bead is in
+ * the frozen exemption list, and when present its length in minutes must match
+ * a measured implementMin within one minute.
+ *
+ * @param {Record<string, unknown>} record
+ * @param {string} bead
+ * @param {string} where
+ * @param {Set<string>} exempt
+ */
+function checkImplementWindow(record, bead, where, exempt) {
+  if (record.implementWindow === undefined) {
+    if (exempt.has(bead)) return;
+    throw new Error(`${where} implementWindow: expected { start, end } timestamps`);
+  }
+  const window = asObject(record.implementWindow, `${where} implementWindow`);
+  const start = asTimestamp(window.start, `${where} implementWindow.start`);
+  const end = asTimestamp(window.end, `${where} implementWindow.end`);
+  if (end <= start) throw new Error(`${where} implementWindow.end: expected a time after implementWindow.start`);
+  const windowMin = (end - start) / 60_000;
+  if (typeof record.implementMin === "number" && Math.abs(record.implementMin - windowMin) > 1) {
+    throw new Error(
+      `${where} implementMin: expected the implementWindow length (${String(windowMin)} minutes) within 1 minute`,
+    );
+  }
+}
+
 /**
  * Per-bead JSON uses measured fields; legacy JSONL has a separate bare-tag mode.
  * Only exact configured historical fields may carry an explicit unknown null.
  *
  * @param {unknown} raw
  * @param {string} where
- * @param {UnknownMeasurement[]} historicalUnknowns
- * @param {boolean} legacy
+ * @param {Pick<TagConfig, "historicalUnknowns" | "implementWindowExempt"> | null} config
+ *   the per-bead record rules, or null for a legacy JSONL line
  * @returns {FrictionRecord}
  */
-function parseFrictionRecord(raw, where, historicalUnknowns, legacy) {
+function parseFrictionRecord(raw, where, config) {
+  const legacy = config === null;
+  const historicalUnknowns = config?.historicalUnknowns ?? [];
   const record = asObject(raw, where);
   const bead = asString(record.bead, `${where} bead`);
   const friction = legacy ? record.friction ?? [] : record.friction;
@@ -139,9 +198,10 @@ function parseFrictionRecord(raw, where, historicalUnknowns, legacy) {
       throw new Error(`${where} ${field}: expected a finite number`);
     }
   };
-  if (!legacy) {
+  if (config !== null) {
     measured(record.hostLoad, "hostLoad");
     measured(record.implementMin, "implementMin");
+    checkImplementWindow(record, bead, where, config.implementWindowExempt);
   }
   return {
     bead,
@@ -167,7 +227,7 @@ function parseFrictionRecord(raw, where, historicalUnknowns, legacy) {
  * @returns {FrictionRecord[]}
  */
 export function readFrictionRecords(evidenceDir) {
-  const { historicalUnknowns } = readTagConfig(evidenceDir);
+  const config = readTagConfig(evidenceDir);
   const frictionDir = join(evidenceDir, "friction");
   const files = existsSync(frictionDir)
     ? readdirSync(frictionDir)
@@ -183,11 +243,11 @@ export function readFrictionRecords(evidenceDir) {
     } catch {
       throw new Error(`${path}: invalid JSON`);
     }
-    return parseFrictionRecord(raw, path, historicalUnknowns, false);
+    return parseFrictionRecord(raw, path, config);
   });
   const legacyPath = join(evidenceDir, "friction.jsonl");
   readJsonLines(legacyPath).forEach((line, index) =>
-    records.push(parseFrictionRecord(line, `${legacyPath}:${index + 1}`, [], true)),
+    records.push(parseFrictionRecord(line, `${legacyPath}:${index + 1}`, null)),
   );
   return records;
 }
@@ -230,8 +290,19 @@ export function readTagConfig(evidenceDir) {
     seen.add(key);
     return { bead, field, sourceSHA256, reason };
   });
+  const rawExempt = config.implementWindowExempt ?? [];
+  if (!Array.isArray(rawExempt)) throw new Error(`${path} implementWindowExempt: expected an array`);
+  /** @type {Set<string>} */
+  const implementWindowExempt = new Set();
+  rawExempt.forEach((raw, index) => {
+    const where = `${path} implementWindowExempt[${index}]`;
+    const bead = asString(raw, where);
+    if (implementWindowExempt.has(bead)) throw new Error(`${where}: duplicate bead`);
+    implementWindowExempt.add(bead);
+  });
   return {
     historicalUnknowns,
+    implementWindowExempt,
     triggerBeads: /** @type {number} */ (triggerBeads),
     retrospectiveCadence: /** @type {number} */ (retrospectiveCadence),
     phaseRetrospectiveCadence: Object.fromEntries(

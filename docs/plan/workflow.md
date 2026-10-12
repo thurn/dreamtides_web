@@ -1012,18 +1012,21 @@ retrospectives. None of them waits for the phase's mason pass.
 ### Friction ledger
 
 Every bead writes one file, `docs/plan/evidence/friction/<bead-id>.json`, in
-its own commit. Keep new records compact, using these seven fields. Put
-measurement windows, provenance, command scopes and detailed observations in
-`docs/plan/evidence/measurements/<bead-id>.json`.
+its own commit. Keep new records compact, using these eight fields. Put
+other measurement windows, provenance, command scopes and detailed
+observations in `docs/plan/evidence/measurements/<bead-id>.json`.
 
 ```json
-{"bead":"hv-xxx","phase":3,"implementMin":95,"localValidationS":{"review":38,"focused":12,"fuzz":40},"hostLoad":12.4,"testDelta":{"files":-3,"lines":-820,"jsdomFiles":-2},"friction":[{"tag":"lab-solver-override","minutes":25,"note":"setup solver could not place a target for a void-only selector"}]}
+{"bead":"hv-xxx","phase":3,"implementMin":95,"implementWindow":{"start":"2026-03-04T09:10:00Z","end":"2026-03-04T10:45:00Z"},"localValidationS":{"review":38,"focused":12,"fuzz":40},"hostLoad":12.4,"testDelta":{"files":-3,"lines":-820,"jsdomFiles":-2},"friction":[{"tag":"lab-solver-override","minutes":25,"note":"setup solver could not place a target for a void-only selector"}]}
 ```
 
-- **`implementMin`** is the implementer's wall time in minutes from dispatch
-  to commit, including research, coordination, queue waits and verification.
-  Record the measurement window in the bead's measurement JSON; this measures
-  elapsed wall time rather than productive editing time.
+- **`implementWindow`** records the implementer's own window: `start` is the
+  bead's post-claim dispatch to its implementer and `end` is the
+  implementer's commit, each an ISO-8601 date-time with an explicit offset
+  (`Z` or `±hh:mm`). **`implementMin`** is that window's length in minutes,
+  within 1. It includes research, coordination, queue waits and
+  verification, and measures elapsed wall time rather than productive editing
+  time.
 - **`hostLoad`** is `sysctl -n vm.loadavg`'s 1-minute value when the
   validation ran. Prefer the review step's starting value. An observation from
   another validation step or command group records its actual scope in
@@ -1043,9 +1046,14 @@ measurement windows, provenance, command scopes and detailed observations in
 
 `npm run friction:triggers` validates each per-bead JSON file: `hostLoad`,
 `implementMin` and each friction entry's `minutes` are finite numbers;
-`friction` is an array of objects with string `note` and kebab-case `tag`.
-Zero and fractional measurements, empty notes, empty friction arrays and
-additional fields are accepted. Malformed input identifies its file/field and
+`friction` is an array of objects with string `note` and kebab-case `tag`;
+`implementWindow` holds `start` and `end` timestamps with explicit offsets,
+`end` is after `start`, and `implementMin` matches the window's length within
+1 minute. Every record carries `implementWindow` except those of the beads in
+the frozen `implementWindowExempt` list in `friction-tags.json`, whose records
+predate the field; a window an exempt record does carry is checked the same
+way, and the list never gains beads. Zero and fractional measurements, empty
+notes, empty friction arrays and additional fields are accepted. Malformed input identifies its file/field and
 exits 2; an undispositioned trigger exits 1; a valid dispositioned report exits 0.
 
 `npm run review` and `review:gate` run the same schema validation
