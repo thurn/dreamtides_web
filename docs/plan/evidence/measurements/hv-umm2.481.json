@@ -1,0 +1,331 @@
+{
+  "bead": "hv-umm2.481",
+  "base": "b88c84396fe82254cce981624ac27652dbcde2c3",
+  "implementationWindow": {
+    "claim": "2026-10-12T03:56:26Z",
+    "endpoint": "2026-10-12T04:24:36.406753+00:00",
+    "scope": "Claim to endpoint immediately before final schema/Git, including research, read-only sage audit, parent verification, exports, filing and checks. Actual Git invocation/exit follows in separate ignored receipt."
+  },
+  "coverage": {
+    "previous": "hv-umm2.465",
+    "sourceFreezeAt": "2026-10-12T03:57:31.297758+00:00",
+    "count": 35,
+    "allNativeClosedCompleted": true,
+    "priorIntersection": [],
+    "beads": [
+      "hv-umm2.102",
+      "hv-umm2.107",
+      "hv-umm2.120",
+      "hv-umm2.134",
+      "hv-umm2.135",
+      "hv-umm2.136",
+      "hv-umm2.137",
+      "hv-umm2.138",
+      "hv-umm2.140",
+      "hv-umm2.142",
+      "hv-umm2.144",
+      "hv-umm2.145",
+      "hv-umm2.146",
+      "hv-umm2.147",
+      "hv-umm2.209",
+      "hv-umm2.447",
+      "hv-umm2.457",
+      "hv-umm2.459",
+      "hv-umm2.461",
+      "hv-umm2.462",
+      "hv-umm2.464",
+      "hv-umm2.465",
+      "hv-umm2.466",
+      "hv-umm2.467",
+      "hv-umm2.468",
+      "hv-umm2.469",
+      "hv-umm2.470",
+      "hv-umm2.474",
+      "hv-umm2.475",
+      "hv-umm2.477",
+      "hv-umm2.478",
+      "hv-umm2.479",
+      "hv-umm2.483",
+      "hv-umm2.488",
+      "hv-umm2.93"
+    ]
+  },
+  "rawEvidence": {
+    "directory": "artifacts/qa/hv-umm2.481",
+    "manifests": [
+      {
+        "file": "audit-input-manifest.json",
+        "sha256": "10422e2cc5edcbb520d536acd9a416d0f83e9330a67768b86e77a6763f23162e"
+      },
+      {
+        "file": "supplemental-evidence-manifest.json",
+        "sha256": "2ff09c4438dec18194cbac5829b6957e9cb58bd9b750fa91b1b7360623ea2032"
+      },
+      {
+        "file": "sage-report-manifest.json",
+        "sha256": "8465912cb98ac0bf5b072b9c6a1cda2686fc655be899c7668eddbaf42b5337eb"
+      }
+    ],
+    "report": "sage-report/report.json",
+    "reportSHA256": "63843fc0577ee62b01d1bec90f2bfeedcf49913e9475235a17107d8f82bedbfe",
+    "parentAudit": "parent-report-audit.json",
+    "finalValidationManifest": {
+      "file": "final-validation-manifest.json",
+      "entries": 168,
+      "sha256": "a23f97fee0cb2ab47c0404ce5e55c2a75f3c82ae7ff6cf4552e9c868e0b54da0"
+    }
+  },
+  "gate": {
+    "uniqueCandidates": 39,
+    "states": {
+      "promoted": 35,
+      "merge-conflict": 3,
+      "failed": 1
+    },
+    "passedStepSums": {
+      "n": 35,
+      "medianS": 102.269,
+      "minS": 15.294,
+      "maxS": 143.628
+    },
+    "selectedEngineContentStepSums": {
+      "n": 27,
+      "medianS": 109.223,
+      "minS": 34.963,
+      "maxS": 143.628
+    },
+    "excludedFromSelectedCohort": [
+      "hv-umm2.459",
+      "hv-umm2.461",
+      "hv-umm2.465",
+      "hv-umm2.466",
+      "hv-umm2.467",
+      "hv-umm2.470",
+      "hv-umm2.478",
+      "hv-umm2.488"
+    ],
+    "scope": "Sum final passed generation dependencies/review-gate elapsed_ms; excludes queue/authorization/cleanup. Candidate elapsed_ms is native attempt execution, not claim-to-land or pure queue. All promoted automatic cleanup completed.",
+    "historyBoundedEvents": 500,
+    "historyDoesNotEstablishCompleteInterval": true
+  },
+  "release": {
+    "retainedStates": {
+      "check-passed": 22,
+      "superseded": 2,
+      "running": 1
+    },
+    "passedElapsed": {
+      "n": 22,
+      "medianS": 204.798,
+      "minS": 165.343,
+      "maxS": 249.183
+    },
+    "reviewFull": {
+      "n": 22,
+      "medianS": 104.958,
+      "minS": 75.893,
+      "maxS": 134.124
+    },
+    "fuzz": {
+      "n": 22,
+      "medianS": 94.604,
+      "minS": 85.069,
+      "maxS": 114.904
+    },
+    "completeIntervalFailureCount": "UNKNOWN",
+    "freezeState": "pending",
+    "freezeLag": {
+      "commits": 2,
+      "since": [
+        2026,
+        285,
+        3,
+        44,
+        38,
+        953283000,
+        0,
+        0,
+        0
+      ]
+    },
+    "holds": [],
+    "pause": null
+  },
+  "localRecordedChecks": {
+    "reviewAllScopes": {
+      "n": 35,
+      "medianS": 46,
+      "minS": 0.170421875,
+      "maxS": 85
+    },
+    "selectedCodeReview": {
+      "n": 29,
+      "medianS": 50.25376512500043,
+      "minS": 11.247,
+      "maxS": 85
+    },
+    "selectedExclusions": [
+      "hv-umm2.459",
+      "hv-umm2.461",
+      "hv-umm2.465",
+      "hv-umm2.466",
+      "hv-umm2.467",
+      "hv-umm2.470"
+    ],
+    "focusedMixedScopes": {
+      "n": 32,
+      "medianS": 5.0,
+      "minS": 0.10656312500032072,
+      "maxS": 18.4
+    },
+    "comparableLoadBudgetConclusion": "UNKNOWN; source scopes and actual loads differ."
+  },
+  "D19": {
+    "entrypoints": 342,
+    "entrypointLines": 80697,
+    "jsdomFiles": 82,
+    "plainContracts": 95,
+    "contractLines": 19486,
+    "scenarioModules": 18,
+    "scenarioLines": 1313,
+    "plainContractsUnder500": true,
+    "tutorialSurvivors": 6,
+    "countsInformational": true
+  },
+  "nativeCompletionTail": {
+    "sampleBeads": [
+      "hv-umm2.134",
+      "hv-umm2.479",
+      "hv-umm2.483"
+    ],
+    "internalPreparePlusConcurrentChecksS": [
+      53.3,
+      70.4,
+      71.5
+    ],
+    "nativeReviewGateS": [
+      116.832,
+      122.76,
+      136.655
+    ],
+    "actualTestStartLoads": [
+      32.4130859375,
+      31.57421875,
+      18.306640625
+    ],
+    "stdoutApproxBytes": 4100000,
+    "noCloseTimeoutWarningInTheseGates": true,
+    "producerExitDrainAndSettlementContribution": "UNKNOWN",
+    "owner": "hv-umm2.492",
+    "attributionOrSpeedClaim": false
+  },
+  "shutdownWarnings": {
+    "samplePassedReleases": 3,
+    "closeTimeoutMs": 10000,
+    "actualTestStepS": [
+      92.1,
+      74.3,
+      78.7
+    ],
+    "actualTestStartLoads": [
+      34.991,
+      13.915,
+      19.171
+    ],
+    "existingLocalDiagnostic": "hv-umm2.467: unchanged baseline and reporter diagnostic passed without reproducing the warning.",
+    "ownerAndNetDelay": "UNKNOWN"
+  },
+  "improvements": [
+    {
+      "bead": "hv-umm2.492",
+      "key": "improvement=native-command-completion-tail/phase-5",
+      "areas": "Own evidence only",
+      "after": [
+        "hv-umm2.481",
+        "hv-umm2.467"
+      ],
+      "gate": "hv-umm2.46",
+      "filingProof": "completion-tail-filing/",
+      "sourceRepairRequiresSeparateConfirmedCause": true
+    }
+  ],
+  "triggerDisposition": {
+    "tag": "fuzz-only-invariant",
+    "line": {
+      "tag": "fuzz-only-invariant",
+      "phase": 5,
+      "reason": "The three reports have distinct repaired causes: hv-umm2.86 deferred Ending announced-change coverage now checks every step (review coverage hv-umm2.449); hv-umm2.87 created-source Reclaim legality is retained in views/determinization (review coverage hv-umm2.455); hv-umm2.475 repeated-shuffle redaction membership and branch gaps are resolved by hv-umm2.479 and its independently reviewed, mutation-sensitive prevented-to-deck follow-up hv-umm2.483. Current source movement audit and valid negative receipts establish these bounded fixes; no additional shared runtime or recipe defect is established. D19 synthetic observable contracts remain the testing boundary."
+    },
+    "newSharedRuntimeDefect": false
+  },
+  "measurementCorrection": {
+    "at": "2026-10-12T04:19:35.067369+00:00",
+    "bead": "hv-umm2.478",
+    "source": "1d869e33c7488f67b4badde5e4467a5cd123a364",
+    "field": "testDelta.lines",
+    "before": 313,
+    "after": 312,
+    "beforeSHA256": "8c9f883f5809c67f7b39b69794fb5f7f303a47f1ce33b772fcb74526c5cc23f9",
+    "afterSHA256": "05c7a142bf70a7b4c6d331a07e443a6384540f29c295677ef576303dc52c6c60",
+    "authority": "docs/plan/workflow.md Friction: next retrospective corrects landed measurement in its own commit.",
+    "gitNetTerms": [
+      -68,
+      191,
+      -27,
+      216,
+      0
+    ],
+    "otherBytesUnchanged": true
+  },
+  "recordedDeltaScope": {
+    "originalFrozen": {
+      "files": 12,
+      "lines": 2774,
+      "jsdomFiles": 0
+    },
+    "normalizedLineTotalAfter478Correction": 2773,
+    "gitSourceClassesSeparate": true,
+    "ownTestDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    }
+  },
+  "budgetRevision": null,
+  "limitations": [
+    "No native calls, tests, fuzz, browser, server, provider, install, source edit or other worktree inspection by this read-only helper.",
+    "Exact frozen35 source and hashes define coverage; native state supplements have separate later observation timestamps.",
+    "Retained500-event history and25 release runs are bounded; no complete interval release failure count, full queue/usage/prerequisite wait total, or low-load compliance conclusion.",
+    "Individual missing measurement files for136/138/142/147/457/464/488 are not invented; friction/native/source evidence still covers them.",
+    "Raw 483 setup failure and mutation evidence remain distinct.",
+    "New source repair needs an observed current cause. Existing active owners and review chains are reused. One bounded evidence-only native completion attribution duty is distinct from closed467 and recommended."
+  ],
+  "checks": {
+    "review": {
+      "receipt": "review.json",
+      "wallS": 0.5523255830012204,
+      "exit": 0,
+      "scope": "Friction-record schema only"
+    },
+    "knip": {
+      "receipt": "knip.json",
+      "wallS": 5.972941875003016,
+      "exit": 0,
+      "scope": "Unused code check"
+    },
+    "triggers-final": {
+      "receipt": "triggers-final.json",
+      "wallS": 0.20439683400036301,
+      "exit": 0,
+      "scope": "All fired triggers dispositioned, cadence 1 uncovered own record"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Review friction-records schema step started 2026-10-12T04:22:09.822Z"
+      }
+    }
+  },
+  "ownRuntime": "Install and sequential review/Knip/trigger command groups exited 0 and are absent. Read-only sage terminal; no provider/browser/server/heavy commands."
+}
