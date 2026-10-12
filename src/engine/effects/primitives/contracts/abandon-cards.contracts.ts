@@ -146,6 +146,46 @@ describe("abandonCards", () => {
     expect(abandoned(end(current).events)).toEqual([member]);
   });
 
+  it("abandons both captured figments after the delayed controller regains its stolen member", () => {
+    const { state, ids } = setup({ hand: [CAPTURE.raise.id, CAPTURE.seize.id] }, { hand: [CAPTURE.seize.id] });
+    const raised = play(state, ids.player.hand[0]).state;
+    const captured = cohort(raised);
+    expect(captured).toHaveLength(2);
+    expect(captured.map((id) => raised.instances[id].controller)).toEqual(["player", "player"]);
+    const delayed = raised.floating.find((effect) => effect.change.kind === "trigger")!;
+    expect(delayed.controller).toBe("player");
+    const priority = engine.apply(raised, "player", { kind: "pass" }, NO_PROMPTS).state;
+    const stolen = play(priority, ids.enemy.hand[0], "enemy", new ScriptedSource([[captured[0]]])).state;
+    expect(stolen.instances[captured[0]].controller).toBe("enemy");
+    expect(stolen.floating.find((effect) => effect.id === delayed.id)).toEqual(delayed);
+    const returnedPriority = engine.apply(stolen, "enemy", { kind: "pass" }, NO_PROMPTS).state;
+    const restored = play(returnedPriority, ids.player.hand[1], "player", new ScriptedSource([[captured[0]]])).state;
+    expect(captured.map((id) => restored.instances[id].controller)).toEqual(["player", "player"]);
+    expect(restored.floating.find((effect) => effect.id === delayed.id)).toEqual(delayed);
+    expect(cohort(restored)).toEqual(captured);
+    const ended = end(restored);
+    expect(abandoned(ended.events)).toEqual(captured);
+    expect(captured.map((id) => zone(ended.state, id))).toEqual([null, null]);
+  });
+
+  it("abandons ordinary captured members in original order after reentry reverses their entry order", () => {
+    const { state, ids } = setup({ hand: [CAPTURE.ordinary.id, CAPTURE.bounce.id], void: [SYNTHETIC.vanilla0.id, SYNTHETIC.vanilla1.id] });
+    const captured = ids.player.void;
+    const raised = play(state, ids.player.hand[0]).state;
+    expect(cohort(raised)).toEqual(captured);
+    expect(raised.instances[captured[0]].enteredZoneAt).toBeLessThan(raised.instances[captured[1]].enteredZoneAt);
+    const returned = play(raised, ids.player.hand[1], "player", new ScriptedSource([[captured[0]]])).state;
+    expect(zone(returned, captured[0])).toBe("hand");
+    expect(zone(returned, captured[1])).toBe("play");
+    const replayed = play(returned, captured[0]).state;
+    expect(captured.map((id) => zone(replayed, id))).toEqual(["play", "play"]);
+    expect(replayed.instances[captured[0]].enteredZoneAt).toBeGreaterThan(replayed.instances[captured[1]].enteredZoneAt);
+    expect(cohort(replayed)).toEqual(captured);
+    const ended = end(replayed);
+    expect(abandoned(ended.events)).toEqual(captured);
+    expect(captured.map((id) => zone(ended.state, id))).toEqual(["void", "void"]);
+  });
+
   it("preserves public cohort views and legal actions through serialization and determinization", () => {
     const { state, ids } = setup({ hand: [CAPTURE.raise.id] });
     const raised = play(state, ids.player.hand[0]).state;

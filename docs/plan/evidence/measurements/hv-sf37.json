@@ -1,0 +1,190 @@
+{
+  "bead": "hv-sf37",
+  "base": "c2a0398ac7b5e7642dbd6dc619a7c4759f3283ab",
+  "scope": "Two synthetic observable contracts in the existing plain module; production behavior unchanged.",
+  "implementWindow": {
+    "dispatchUtc": "2026-10-12T12:09:00.017923+00:00",
+    "preCommitObservedUtc": "2026-10-12T12:18:31.854325+00:00",
+    "dispatchToObservationMin": 9.5306067
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review launch group",
+        "utc": "2026-10-12T12:14:37.090419+00:00"
+      }
+    }
+  },
+  "validation": {
+    "attempts": {
+      "knip": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 97328,
+        "pgid": 97328,
+        "startUtc": "2026-10-12T12:14:55.741653+00:00",
+        "endUtc": "2026-10-12T12:14:58.388728+00:00",
+        "wallSeconds": 2.646971958994982,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-abandon-control-order"
+      },
+      "focused": {
+        "argv": [
+          "npm",
+          "exec",
+          "--",
+          "vitest",
+          "run",
+          "src/engine/effects/primitives/contracts/abandon-cards.contracts.ts",
+          "-t",
+          "regains its stolen member|reentry reverses their entry order"
+        ],
+        "pid": 94974,
+        "pgid": 94974,
+        "startUtc": "2026-10-12T12:13:17.908168+00:00",
+        "endUtc": "2026-10-12T12:13:18.842582+00:00",
+        "wallSeconds": 0.9342994170001475,
+        "exit": 1,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-abandon-control-order"
+      },
+      "review": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 96898,
+        "pgid": 96898,
+        "startUtc": "2026-10-12T12:14:37.112285+00:00",
+        "endUtc": "2026-10-12T12:14:47.300138+00:00",
+        "wallSeconds": 10.187688291996892,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-abandon-control-order"
+      },
+      "focused-hub": {
+        "argv": [
+          "npm",
+          "exec",
+          "--",
+          "vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "regains its stolen member|reentry reverses their entry order"
+        ],
+        "pid": 95183,
+        "pgid": 95183,
+        "startUtc": "2026-10-12T12:13:31.532023+00:00",
+        "endUtc": "2026-10-12T12:13:34.118127+00:00",
+        "wallSeconds": 2.58599329199933,
+        "exit": 1,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-abandon-control-order"
+      },
+      "focused-corrected": {
+        "argv": [
+          "npm",
+          "exec",
+          "--",
+          "vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "regains its stolen member|reentry reverses their entry order"
+        ],
+        "pid": 96167,
+        "pgid": 96167,
+        "startUtc": "2026-10-12T12:13:53.246942+00:00",
+        "endUtc": "2026-10-12T12:13:55.714912+00:00",
+        "wallSeconds": 2.4678438330010977,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-abandon-control-order"
+      },
+      "install": {
+        "argv": [
+          "npm",
+          "install"
+        ],
+        "pid": 80445,
+        "pgid": 80445,
+        "startUtc": "2026-10-12T12:12:34.660756+00:00",
+        "endUtc": "2026-10-12T12:12:37.076938+00:00",
+        "wallSeconds": 2.4159078329976182,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-abandon-control-order"
+      },
+      "schema": {
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 19531,
+        "pgid": 19531,
+        "startUtc": "2026-10-12T12:15:28.363736+00:00",
+        "endUtc": "2026-10-12T12:15:28.424277+00:00",
+        "wallSeconds": 0.06043591699562967,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-abandon-control-order"
+      }
+    },
+    "countedCostsSeconds": {
+      "focused": 5.988136542000575,
+      "review": 10.187688291996892,
+      "knip": 2.646971958994982,
+      "schema": 0.06043591699562967
+    },
+    "setup": {
+      "install": {
+        "argv": [
+          "npm",
+          "install"
+        ],
+        "pid": 80445,
+        "pgid": 80445,
+        "startUtc": "2026-10-12T12:12:34.660756+00:00",
+        "endUtc": "2026-10-12T12:12:37.076938+00:00",
+        "wallSeconds": 2.4159078329976182,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/captured-abandon-control-order"
+      }
+    },
+    "failureProvenance": [
+      {
+        "attempt": "focused",
+        "exit": 1,
+        "cause": "Direct .contracts.ts filter finds no standalone Vitest test; corrected command targets existing contracts.test.ts hub."
+      },
+      {
+        "attempt": "focused-hub",
+        "exit": 1,
+        "cause": "Regain-control setup omitted enemy priority pass after theft; ordinary reentry case passed. Initial source retained externally; corrected fixture passes priority normally."
+      }
+    ],
+    "fullFuzzBrowser": "Not run: test-only coverage, no infrastructure or product behavior change.",
+    "totalCountedSeconds": 18.88323270998808,
+    "finalRelatedTests": {
+      "files": 1,
+      "tests": 1588,
+      "exit": 0
+    },
+    "focusedNewCases": {
+      "passed": 2,
+      "skipped": 1586,
+      "exit": 0
+    },
+    "reviewInitialMissingArtWarnings": 259,
+    "schema": {
+      "exit": 0,
+      "receipt": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/sf37-evidence/schema.receipt.json"
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 40,
+    "jsdomFiles": 0
+  },
+  "runtime": "All validation commands terminal. No server, browser, reviewer or other long-lived runtime started; final scoped process proof is external."
+}
