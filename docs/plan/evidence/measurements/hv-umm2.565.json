@@ -1,0 +1,268 @@
+{
+  "bead": "hv-umm2.565",
+  "base": "fcd9a10a08e700f51b5de76edcca0022f48324a6",
+  "dispatch": {
+    "timestamp": "2026-10-12T17:36:16.748Z",
+    "callId": "call_68f8e1af0e174217b738c8159a419ee2",
+    "tool": "spawn_agent"
+  },
+  "implementationWindow": {
+    "scope": "Gross elapsed dispatch through implementer commit, including research, coordination and verification. End is a pre-commit receipt refreshed immediately before commit; actual committer delta is retained separately.",
+    "preCommitReceipt": "2026-10-12T17:47:01.205511+00:00"
+  },
+  "commands": {
+    "base-negative": {
+      "name": "base-negative",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/determinize.test.ts",
+        "-t",
+        "finite targeting protection fidelity"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/finite-target-protection565-root",
+      "started": "2026-10-12T17:39:15.335127+00:00",
+      "pid": 73765,
+      "pgid": 73765,
+      "hostLoad": "{ 10.48 13.36 13.47 }",
+      "status": "settled",
+      "ended": "2026-10-12T17:39:21.609897+00:00",
+      "elapsedS": 6.274603165991721,
+      "exitCode": 1
+    },
+    "focused": {
+      "name": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/rules/activation.test.ts",
+        "src/engine/rules/durations.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/finite-target-protection565-root",
+      "started": "2026-10-12T17:39:29.462798+00:00",
+      "pid": 76945,
+      "pgid": 76945,
+      "hostLoad": "{ 15.71 14.35 13.82 }",
+      "status": "settled",
+      "ended": "2026-10-12T17:39:39.595347+00:00",
+      "elapsedS": 10.132078791997628,
+      "exitCode": 0
+    },
+    "focused-final": {
+      "name": "focused-final",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/rules/activation.test.ts",
+        "src/engine/rules/durations.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/finite-target-protection565-root",
+      "started": "2026-10-12T17:40:07.625503+00:00",
+      "pid": 28805,
+      "pgid": 28805,
+      "hostLoad": "{ 16.81 14.97 14.08 }",
+      "status": "settled",
+      "ended": "2026-10-12T17:40:15.547472+00:00",
+      "elapsedS": 7.92180237499997,
+      "exitCode": 0
+    },
+    "review": {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/finite-target-protection565-root",
+      "started": "2026-10-12T17:40:28.970696+00:00",
+      "pid": 31007,
+      "pgid": 31007,
+      "hostLoad": "{ 13.90 14.43 13.91 }",
+      "status": "settled",
+      "ended": "2026-10-12T17:41:29.506188+00:00",
+      "elapsedS": 60.53457879200869,
+      "exitCode": 1
+    },
+    "review-final": {
+      "name": "review-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/finite-target-protection565-root",
+      "started": "2026-10-12T17:41:07.726997+00:00",
+      "pid": 33608,
+      "pgid": 33608,
+      "hostLoad": "{ 16.94 15.04 14.15 }",
+      "status": "settled",
+      "ended": "2026-10-12T17:42:07.639522+00:00",
+      "elapsedS": 59.91179149999516,
+      "exitCode": 0
+    },
+    "knip": {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/finite-target-protection565-root",
+      "started": "2026-10-12T17:42:11.574911+00:00",
+      "pid": 87756,
+      "pgid": 87756,
+      "hostLoad": "{ 15.49 15.44 14.39 }",
+      "status": "settled",
+      "ended": "2026-10-12T17:42:16.653958+00:00",
+      "elapsedS": 5.078470374995959,
+      "exitCode": 0
+    },
+    "fuzz-queue": {
+      "name": "fuzz-queue",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.565/local-validation/run.py",
+        "fuzz-execution",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/finite-target-protection565-root",
+      "started": "2026-10-12T17:42:26.757666+00:00",
+      "pid": 88890,
+      "pgid": 88890,
+      "hostLoad": "{ 14.86 15.33 14.37 }",
+      "status": "settled",
+      "ended": "2026-10-12T17:44:20.592598+00:00",
+      "elapsedS": 113.83335945899307,
+      "exitCode": 0
+    },
+    "fuzz-execution": {
+      "name": "fuzz-execution",
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/finite-target-protection565-root",
+      "started": "2026-10-12T17:42:26.787192+00:00",
+      "pid": 88897,
+      "pgid": 88897,
+      "hostLoad": "{ 14.86 15.33 14.37 }",
+      "status": "settled",
+      "ended": "2026-10-12T17:44:20.588745+00:00",
+      "elapsedS": 113.8001952499908,
+      "exitCode": 0
+    },
+    "schema": {
+      "name": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/finite-target-protection565-root",
+      "started": "2026-10-12T17:45:22.401646+00:00",
+      "pid": 24766,
+      "pgid": 24766,
+      "hostLoad": "{ 7.12 12.13 13.25 }",
+      "status": "settled",
+      "ended": "2026-10-12T17:45:22.510343+00:00",
+      "elapsedS": 0.10860429199237842,
+      "exitCode": 0
+    }
+  },
+  "rawArtifactDirectory": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.565/local-validation",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final wrapper start",
+        "source": "review-final.json sysctl -n vm.loadavg first value"
+      }
+    }
+  },
+  "validationResults": {
+    "baseNegative": "The exact original carriesLegality keyword branch fails all four synthetic rows because finite protection is omitted from the view.",
+    "focusedFinal": "2088 tests in 5 owning/related test files passed.",
+    "reviewFinal": "4725 tests in 268 related test files, lint, typecheck, node typecheck and import-cycle checks passed.",
+    "knip": "No unused exports, files or dependencies.",
+    "fuzz": "Default current production catalog; 200 games, 103511 steps, 2981 prompts, 305 interactive re-runs, zero failures; 111.6 s internal wall and 122.6 s CPU. Parent hv-umm2.207 owns original exact-seed and weighted300 acceptance after this bead lands."
+  },
+  "failedAttempts": [
+    {
+      "command": "review",
+      "exitCode": 1,
+      "reason": "Two unnecessary non-null assertions in the new fixture; removed before final review. Related tests and typechecks passed, lint failed."
+    }
+  ],
+  "checkOverlap": {
+    "start": "2026-10-12T17:41:07.726997+00:00",
+    "end": "2026-10-12T17:41:29.506188+00:00",
+    "seconds": 21.779191,
+    "reason": "Implementation helper launched the corrected aggregate before the first aggregate finished its remaining related tests; both own groups settled and final restoration completed before Knip or fuzz. No peer process or browser affected."
+  },
+  "heavySlot": {
+    "command": "fuzz-queue",
+    "execution": "fuzz-execution",
+    "entryLatencyS": 0.029526,
+    "entryLatencyScope": "Outer dispatch to inner execution receipt; includes slot wait and wrapper launch overhead, not an exact isolated lock-wait measurement."
+  },
+  "assetRestoration": {
+    "bothReviewRuns": "564/564 cards; 32 avatar portraits and cutouts; 153/153 dreamsigns; 226 journey; 521/521 exploration; Dream Atlas linked.",
+    "verification": {
+      "symlinks": 1570,
+      "broken": []
+    }
+  },
+  "failurePaths": {
+    "newStateTransitions": [],
+    "errorMidStep": "No new resolving step or mutation. The public illegal activation rejection and unchanged input state are exercised; projection reads complete existing floating records.",
+    "reloadOrRestart": "No serialized shape, fold, identity or event kind changes. Source redaction reads the reconstructed current record; no new recovery operation applies.",
+    "partialWrite": "Pure visibility classification performs no persistence writes; no partial-write test applies.",
+    "invalidOrStaleInput": "No new action or intent acceptance boundary. The existing legal-action API rejects the infeasible activation without mutating its state; stale-intent validation is outside this change.",
+    "concurrentActors": "Pure per-state, per-viewer projection has no asynchronous work or shared write; both controllers and viewers are exercised, and no new actor interleaving applies."
+  },
+  "privacyAndExpiry": "Existing changed-instance and sourceLeavesPlay expiry visibility guards are untouched. Existing effectStarted consumer null-redacts hidden/ceased independent sources; all synthetic rows assert it through eventSeenBy. Source-dependent durations begin only for sources in play and end on departure. Real and sampled ordinary end-of-turn expiry removes the finite record and restores target/payment feasibility.",
+  "additionalValidation": "No infrastructure/configuration or cross-cutting architecture changes, so no local review:full. Existing public effective characteristics and authoritative human actions are correct; this projection/determinization repair requires no browser workflow.",
+  "preExistingIssues": "None discovered outside scope.",
+  "independentReview": "Parent session owns the fresh read-only gpt-5.6-sol review under the temporary user-authorized same-family routing. No independent review claimed by helper.",
+  "testDelta": {
+    "files": 0,
+    "lines": 75,
+    "jsdomFiles": 0
+  },
+  "runtime": {
+    "at": "2026-10-12T17:45:22.376947+00:00",
+    "recordedGroups": [
+      28805,
+      31007,
+      33608,
+      73765,
+      76945,
+      87756,
+      88890,
+      88897
+    ],
+    "remaining": [],
+    "browser": null,
+    "server": null
+  }
+}

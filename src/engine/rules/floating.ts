@@ -170,11 +170,12 @@ export function changedInstance(change: FloatingChange): InstanceId | null {
 /**
  * Whether a floating change carries complete legality data of its own: a
  * cost change, a play permission (gained or lost Reclaim among them, with
- * its costs), or a play restriction or limit. A view and a determinization
- * keep it, with its source redacted, when its source is hidden or has ceased
+ * its costs), a targeting restriction, or a play restriction or limit.
+ * A view and a determinization keep it, with its source redacted, when its
+ * source is hidden or has ceased
  * to exist, such as a copy of an event that resolved, so the cards a player
- * may play and their costs read the same in every determinization
- * (view/view.ts).
+ * may play, their costs, and legal targets read the same in every
+ * determinization (view/view.ts).
  */
 export function carriesLegality(change: FloatingChange): boolean {
   switch (change.kind) {
@@ -185,7 +186,7 @@ export function carriesLegality(change: FloatingChange): boolean {
     case "playLimit":
       return true;
     case "keyword":
-      return change.keyword === "reclaim";
+      return change.keyword === "reclaim" || change.keyword === "cannotBeTargeted";
     default:
       return false;
   }
