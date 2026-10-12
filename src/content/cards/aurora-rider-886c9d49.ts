@@ -1,3 +1,6 @@
+import { fromVoid } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 405,
   art: { x: 0.216, y: 1, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(whenYouPlay({ subtype: "Warrior" }), p.optional(p.materialize(fromVoid({ cardType: "character", costAtMost: 2 })))),
+  ],
+  verifiedText: "1cjqpod0108",
+
 });

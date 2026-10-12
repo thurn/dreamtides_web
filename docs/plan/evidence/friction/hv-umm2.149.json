@@ -1,0 +1,24 @@
+{
+  "bead": "hv-umm2.149",
+  "phase": 5,
+  "implementMin": 53.64,
+  "localValidationS": {
+    "review": 43.45,
+    "fuzz": 148.5,
+    "sweep": 338.9,
+    "judged": 146.563
+  },
+  "hostLoad": 3.416015625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 21.75,
+      "note": "Representative provider request timed out before any card observation; operational reconciliation took approximately21.75minutes from representative start06:17:14UTC through positive inventory/guarded own-record repair06:38:59UTC. Scratch geometry/API/debug-rail errors were corrected separately and all final fixtures passed; failed/unknown attempts retained."
+    }
+  ]
+}

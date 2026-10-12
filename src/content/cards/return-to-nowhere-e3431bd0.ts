@@ -1,3 +1,5 @@
+import { enemyCharacter, event, fromVoid, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,13 @@ export default card({
   cardNumber: 96,
   art: { x: 0, y: 0, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(p.chooseOne(
+      p.dissolve(target(enemyCharacter({ sparkAtMost: 2 }))),
+      p.sequence(p.draw(2), p.discard(2)),
+      p.returnFromVoid(fromVoid({ cardType: "character", costAtMost: 2 })),
+    )),
+  ],
+  verifiedText: "1fqwo4q0f0d",
+
 });

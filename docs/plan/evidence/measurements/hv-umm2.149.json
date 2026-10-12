@@ -1,0 +1,133 @@
+{
+  "bead": "hv-umm2.149",
+  "base": "2f94ff4e0220c43b81e44f07a3bb7d7451619434",
+  "measurementWindow": {
+    "dispatchUtc": "2026-10-12T06:02:07+00:00",
+    "dispatchProvenance": "Owned Tollgate branch creation reflog at23:02:07 PDT; exact earlier helper dispatch not retained, this conservative interval includes subsequent research, coordination, recovery, waits and verification.",
+    "completionUtc": "2026-10-12T06:55:45.656001+00:00",
+    "completionProvenance": "UTC immediately before evidence schema check and single commit; commit timestamp definitive."
+  },
+  "validation": {
+    "focused": {
+      "cases": 1374,
+      "result": "pass",
+      "timing": "not retained"
+    },
+    "review": {
+      "startUtc": "2026-10-12T06:18:27.366Z",
+      "finishUtc": "2026-10-12T06:19:10.817Z",
+      "wallS": 43.451,
+      "testFiles": 221,
+      "cases": 3211,
+      "result": "pass; related step42.4s; Vitest37.60s"
+    },
+    "knip": {
+      "result": "exit0",
+      "timing": "not retained"
+    },
+    "preflight": {
+      "pass": 30,
+      "skip": 30,
+      "fail": 0
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 152698,
+      "engineWallS": 148.5,
+      "cpuS": 160.2,
+      "prompts": 4575,
+      "interactiveReruns": 422,
+      "failures": 0,
+      "included": [
+        614,
+        612,
+        624
+      ],
+      "exercised": [
+        204,
+        217,
+        370
+      ],
+      "heavySlot": true
+    },
+    "sweep": {
+      "pass": 30,
+      "skip": 30,
+      "fail": 0,
+      "wallS": 338.9,
+      "invocation": "invocations/sweep-ZL3bg1",
+      "sessions": 1,
+      "retries": 0,
+      "yields": 0
+    },
+    "judged": {
+      "fixtures": 8,
+      "pass": 8,
+      "fail": 0,
+      "finalScenarioWallS": 146.563,
+      "reports": [
+        "invocations/run-zQ4T3r/hv-umm2.149-judged.result.json",
+        "invocations/run-awipt8/hv-umm2.149-judged.result.json",
+        "invocations/run-g5lgtg/hv-umm2.149-judged.result.json",
+        "invocations/run-5pXsX6/hv-umm2.149-judged.result.json"
+      ],
+      "screenshotDimensions": {
+        "desktop": "1440x900 CSS screenshot",
+        "mobile": "390x844 CSS screenshot"
+      },
+      "visualReview": "Parent inspected Aurora desktop optional, mobile optional/settled, Starsea desktop base/mobile base/mobile amplified; preview/options fit viewport; raw geometry and physical identities confirmed."
+    }
+  },
+  "failedHarnessAttempts": [
+    {
+      "invocation": "run-T28gFZ",
+      "outcome": "MCP timeout before observations; close Session not found; exact own lease reconciled only after positive inventory proof"
+    },
+    {
+      "invocation": "run-xNwD5t",
+      "outcome": "Geometry read15ms after450ms card travel began; corrected rendered-control wait; cleanup confirmed"
+    },
+    {
+      "invocation": "run-iiRbfQ",
+      "outcome": "Scratch internal legalActions diagnostic lacked memo; corrected public createEngine API; cleanup confirmed"
+    },
+    {
+      "invocation": "run-Ngxin2",
+      "outcome": "Passed eligibility/payment/consumption/renewal then settled-state wait blocked by open debug rail; corrected rail dismissal; cleanup confirmed"
+    },
+    {
+      "log": "starsea-base-desktop-closed.log",
+      "outcome": "Parent admission rejected occupied port while last helper run settled; no page/provider action; original helper run-awipt8 passed"
+    }
+  ],
+  "recovery": {
+    "inventory": "invocations/run-kXkFko/provider-inventory.result.json",
+    "receipt": "provider-reconciliation.json retained session scratch",
+    "reconciledUtc": "2026-10-12T06:38:59.305Z",
+    "scope": "Only byte-exact own slot0 owner record; no peer record/service restart"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Review start prepare/typechecks/test-related"
+      },
+      "implementMin": {
+        "measuredFor": "Owned worktree creation through precommit sample"
+      }
+    }
+  },
+  "runtime": {
+    "port": 5175,
+    "finalServerPid": 38092,
+    "finalRunnerPid": 38057,
+    "state": "All invoked browser close/server cleanup completed; port free; original reconciled provider absent",
+    "helper": "/root/void_recursion_cards hit model capacity after launching final base desktop; parent took over remaining QA/evidence/commit; no helper writers remain"
+  },
+  "D20": "Existing primitive composition; no new scenario specs required",
+  "D21": {
+    "886c9d49-b25f-4ddd-97f0-2ec4b42eda89": 16,
+    "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6": 219,
+    "e3431bd0-5a81-497f-9ec9-18275b568c00": 51
+  },
+  "reviewPolicy": "Three catalog compositions26added/3deleted non-test lines; no core-review/newAPI; independent review not required."
+}

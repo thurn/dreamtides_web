@@ -1,3 +1,5 @@
+import { staticAbility } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,9 @@ export default card({
   cardNumber: 39,
   art: { x: 0, y: -0.083, scale: 1.27 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    staticAbility(p.playFromZone("void", { cardType: "character", costAtMost: variant.amplified ? 3 : 2 }, { oncePerTurn: true })),
+  ],
+  verifiedText: "2bjwjr8xoax",
+
 });
