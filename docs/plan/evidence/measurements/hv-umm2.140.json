@@ -1,0 +1,1076 @@
+{
+  "bead": "hv-umm2.140",
+  "base": "0c627396775ecc2eb6322b1e3ee9eee6dfe6eee9",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.140",
+  "dispatchWindow": {
+    "ownershipStart": "2026-10-12T02:16:33Z",
+    "start": "2026-10-12T02:18:27Z",
+    "basis": "Approximate pre-dispatch native brief-write proxy supplied by parent (mtime 02:18:27.533158Z). Helper receipt was not retained. Full wall includes research, validation, native lease waits and evidence; commit tail is recorded at finalization.",
+    "finalEvidenceAt": "2026-10-12T03:40:38.460317+00:00",
+    "elapsedMin": 82.19,
+    "tail": "Includes original acceptance, native candidate conflict, recovery, reapplication, updated checks and final parent ACK. This evidence boundary immediately precedes amendment; actual amended commit UTC and tail are retained in integration-commit-receipt.json."
+  },
+  "entities": [
+    "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+    "c73f978e-8196-4589-a432-845265115555",
+    "7df5255e-bf23-4c14-b31b-be89fb864ee0",
+    "32f3d6f2-43c5-4510-a23e-558769a7a8c9"
+  ],
+  "immutableFields": "immutable-fields-result.json verifies every original AST property except pending/abilities/verifiedText and authorized Grounded xMinimum=0. Printed energyCost:null remains unchanged.",
+  "D20": {
+    "module": "src/content/specs/cards-28.scenarios.ts",
+    "cases": 4,
+    "reason": "Lightning source-linked return combines Regent departure draw with its reentry banish. Both controllers and Regent printed variants run through normal plays and turn boundaries. Chosen physical IDs define outcomes. Wind and Grounded use existing primitive composition; Grounded has a separate ignored public X=0 probe.",
+    "entrypointDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0,
+      "cases": 4
+    },
+    "plainScenarioModules": 1,
+    "plainScenarioLines": 52
+  },
+  "D21": {
+    "firstBytes": {
+      "7be2e6d7-abff-4c44-a0c3-35460da1693c": 198,
+      "c73f978e-8196-4589-a432-845265115555": 150,
+      "7df5255e-bf23-4c14-b31b-be89fb864ee0": 30,
+      "32f3d6f2-43c5-4510-a23e-558769a7a8c9": 254
+    },
+    "sampled": [],
+    "judgedRequired": [
+      "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+      "c73f978e-8196-4589-a432-845265115555"
+    ],
+    "reason": "First production banishUntil uses the existing return status surface, so both entities require desktop/mobile own and enemy visibility/expiry judgment."
+  },
+  "fallout": [],
+  "exportedApiChanges": 0,
+  "validation": {
+    "install": {
+      "exit": 0,
+      "wallReportedS": 2,
+      "observer": 57073,
+      "source": "Parent setup report"
+    },
+    "focused": {
+      "exit": 0,
+      "wallS": 3.125,
+      "files": 2,
+      "cases": 67,
+      "log": "focused-final.log",
+      "receipt": "focused-final.json"
+    },
+    "review": {
+      "exit": 0,
+      "wallS": 67.9,
+      "files": 221,
+      "cases": 2986,
+      "loadAtStart": 22.3037109375,
+      "log": "review.log"
+    },
+    "knip": {
+      "exit": 0,
+      "wallS": 3.6,
+      "log": "knip.log"
+    },
+    "groundedZero": {
+      "exit": 0,
+      "wallS": 0.59,
+      "cases": 4,
+      "log": "grounded-zero-probe.json",
+      "negative": "Energy zero and only cost-one enemy: mandatory target excludes play on both sides."
+    },
+    "weighted300": {
+      "exit": 0,
+      "commandWallS": 196.62,
+      "engineWallS": 182.0,
+      "engineCpuS": 192.5,
+      "steps": 160359,
+      "failures": 0,
+      "bounded": {
+        "legality": 0,
+        "prompts": 0
+      },
+      "targets": [
+        {
+          "uuid": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+          "included": 615,
+          "exercised": 251
+        },
+        {
+          "uuid": "c73f978e-8196-4589-a432-845265115555",
+          "included": 608,
+          "exercised": 251
+        },
+        {
+          "uuid": "7df5255e-bf23-4c14-b31b-be89fb864ee0",
+          "included": 614,
+          "exercised": 429
+        },
+        {
+          "uuid": "32f3d6f2-43c5-4510-a23e-558769a7a8c9",
+          "included": 615,
+          "exercised": 253
+        }
+      ],
+      "log": "weighted-fuzz.log",
+      "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "timingBasis": "Command wall includes npm/lock/startup; engine-reported execution retained separately. Lock queue alone was not instrumented.",
+      "seeds": "fuzz-0 through fuzz-299 (default prefix fuzz, first 0); interactive replay every tenth game"
+    },
+    "preflight": {
+      "exit": 0,
+      "wallS": 0.99,
+      "engineMs": 56.640417,
+      "counts": {
+        "pass": 42,
+        "skip": 38,
+        "fail": 0
+      },
+      "log": "preflight.log"
+    },
+    "sweep": {
+      "exit": 0,
+      "commandWallS": 1507.15,
+      "summary": {
+        "event": "cardSweepSummary",
+        "counts": {
+          "pass": 42,
+          "skip": 38
+        },
+        "attemptCounts": {
+          "pass": 42,
+          "skip": 38,
+          "fail": 1
+        },
+        "hostLoad": 21.31494140625,
+        "sessions": 4,
+        "leaseYields": 3,
+        "wallMs": {
+          "browserLeaseWait": 1138915,
+          "serve": 5257,
+          "scenario": 357004.063625,
+          "cleanup": 824.7726660001208,
+          "execution": 363142.5475420002,
+          "total": 1502057.5475420002
+        }
+      },
+      "log": "sweep.log",
+      "ledger": "raw-sweep-ledger.jsonl",
+      "scope": "80 UUID/variant/side cells, player is default side and enemy is explicit as=enemy in the raw ledger."
+    },
+    "judged": {
+      "initial-judged-lightning-player.result.json": {
+        "ok": true,
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 158092,
+          "serve": 1254,
+          "scenario": 18278,
+          "total": 177652
+        },
+        "serverPid": 66853,
+        "hostLoad": 22.125,
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 10600
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 7677
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.140/judged-lightning-player-desktop.jsonl",
+            "gameId": "an64fx",
+            "selectedBy": "url",
+            "rows": 39,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.140/judged-lightning-player-mobile.jsonl",
+            "gameId": "3yy7qw",
+            "selectedBy": "url",
+            "rows": 41,
+            "reason": null
+          }
+        ]
+      },
+      "judged-lightning-player.result.json": {
+        "ok": true,
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 456142,
+          "serve": 1260,
+          "scenario": 19297,
+          "total": 476727
+        },
+        "serverPid": 27506,
+        "hostLoad": 6.275390625,
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 10919
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 8377
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.140/judged-lightning-player-desktop.jsonl",
+            "gameId": "u78ykg",
+            "selectedBy": "url",
+            "rows": 41,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.140/judged-lightning-player-mobile.jsonl",
+            "gameId": "izgvq7",
+            "selectedBy": "url",
+            "rows": 39,
+            "reason": null
+          }
+        ]
+      },
+      "wind-phase-attempt01-judged-remaining.result.json": {
+        "ok": false,
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 420511,
+          "serve": 945,
+          "scenario": 94456,
+          "total": 515936
+        },
+        "serverPid": 93037,
+        "hostLoad": 9.53662109375,
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 94456
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.140/judged-remaining-desktop.jsonl",
+            "gameId": "aqw7a8",
+            "selectedBy": "url",
+            "rows": 281,
+            "reason": null
+          }
+        ]
+      },
+      "judged-remaining.result.json": {
+        "ok": true,
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 159070,
+          "serve": 1557,
+          "scenario": 206545,
+          "total": 367200
+        },
+        "serverPid": 33986,
+        "hostLoad": 6.04150390625,
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 49380
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 29245
+          },
+          {
+            "viewport": "desktop",
+            "step": 2,
+            "ms": 50064
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 15824
+          },
+          {
+            "viewport": "mobile",
+            "step": 1,
+            "ms": 15160
+          },
+          {
+            "viewport": "mobile",
+            "step": 2,
+            "ms": 46869
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.140/judged-remaining-desktop.jsonl",
+            "gameId": "w2392p",
+            "selectedBy": "url",
+            "rows": 87,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.140/judged-remaining-mobile.jsonl",
+            "gameId": "hg8xnd",
+            "selectedBy": "url",
+            "rows": 88,
+            "reason": null
+          }
+        ]
+      }
+    }
+  },
+  "diagnostics": [
+    {
+      "log": "scenarios-attempt01.log",
+      "exit": 1,
+      "wallS": 6.705,
+      "disposition": "Malformed fixture import, no tests collected; retained source/provenance."
+    },
+    {
+      "log": "scenarios-attempt02.log",
+      "exit": 1,
+      "wallS": 4.423,
+      "failed": 4,
+      "skipped": 51,
+      "disposition": "Incorrect observable chronology assertion; corrected after scene-order-probe.json showed actual departure/return timing."
+    },
+    {
+      "log": "immutable-fields-attempt01-diagnostic.json",
+      "exit": 1,
+      "disposition": "Probe looked for the wrong content factory; corrected AST probe passed. Exact first tool stderr is retained in transcript."
+    },
+    {
+      "rawReport": "initial-judged-lightning-player.result.json",
+      "exit": 0,
+      "disposition": "Functional workflow passed; final mobile capture was during motion. Preserved initial report/script/logs/images, corrected enabled-control and rendered-target final capture boundary. Final fresh workflow passes both viewports."
+    },
+    {
+      "rawReport": "wind-phase-attempt01-judged-remaining.result.json",
+      "exit": 1,
+      "gameId": "aqw7a8",
+      "disposition": "Script incorrectly required an Ending decision; it kept passing after the active Night decision. Retained full script/report/server log/failure image and persisted 281-row game log. wind-boundary-probe.json establishes exact Day/Dusk/Night/next-Day physical-target state. Adaptive run removes only incorrect Ending clause and passes six cases."
+    },
+    {
+      "log": "wind-player-queued-cancel.log",
+      "receipt": "wind-player-queued-cancel.json",
+      "exit": 143,
+      "disposition": "Exact owned pre-lease runner was stopped to reload revised ignored capture readiness; no server/context started."
+    },
+    {
+      "rawReport": "sweep-VJJxHE/sweep-c73f978e-8196-4589-a432-845265115555-empowered-player-attempt-1.result.json",
+      "effective": false,
+      "disposition": "Initialization timeout while awaiting lab report, caps empty, no lab/start log. Native sweep protocol made its one fresh-navigation retry; attempt 2 passes. Both raw reports and ledger rows remain. Underlying cause is unproven; no engine fault inferred."
+    }
+  ],
+  "rulesDecisions": [
+    "RD-hv-umm2.140-1"
+  ],
+  "cardIssues": [],
+  "runtimeLedger": [
+    {
+      "command": "focused/import attempts and ignored probes",
+      "observers": [
+        12498,
+        17333,
+        3894
+      ],
+      "status": "All terminal; initial import/chronology attempts exit 1, corrected focus and probes exit 0."
+    },
+    {
+      "command": "review/Knip/weighted300",
+      "observers": [
+        61501,
+        31096,
+        3916
+      ],
+      "status": "All exit 0; fuzz Node 83646/group 82299 stopped."
+    },
+    {
+      "command": "sweep",
+      "observer": 53215,
+      "runnerPid": 3367,
+      "group": 3344,
+      "servers": [
+        29015,
+        68603,
+        23223,
+        84541
+      ],
+      "port": 5175,
+      "leases": [
+        "2534d3ea-58a5-4a23-92df-c400265cea78",
+        "9beb9b14-c2fa-409c-9b26-47076b8150ef",
+        "48dbebfa-7b70-4073-a9e1-90f36d2fbaf7"
+      ],
+      "status": "Exit 0. Four isolated native MCP sessions closed at yields/final cleanup; every owned server tree stopped, port free reported. Third token was not captured; raw timing remains in native summary."
+    },
+    {
+      "command": "initial/final player Lightning judged",
+      "observers": [
+        82917,
+        47508
+      ],
+      "servers": [
+        66853,
+        27506
+      ],
+      "port": 5175,
+      "status": "Both exit 0; native contexts/provider calls closed, server trees stopped, port free reported. Initial lease token not retained."
+    },
+    {
+      "command": "queued Wind canceled",
+      "observer": 15357,
+      "runnerPid": 73454,
+      "group": 73446,
+      "status": "Exit 143 after scoped SIGTERM before lease grant; no server/context."
+    },
+    {
+      "command": "first/adaptive combined judged",
+      "observers": [
+        10512,
+        21062
+      ],
+      "runners": [
+        34888,
+        12561
+      ],
+      "servers": [
+        93037,
+        33986
+      ],
+      "port": 5175,
+      "leases": [
+        "b543922f-a2ff-4bbf-84fb-6b26db292367",
+        "7e8d3f73-dc20-4245-983f-8eb0155abad9"
+      ],
+      "status": "First exits 1, adaptive exits 0. Both native contexts/providers closed and server trees stopped; port free reported. Final ps check finds no listed owned runtime PID alive."
+    }
+  ],
+  "sourceFreeze": {
+    "at": "2026-10-12T02:38:33.614993+00:00",
+    "files": {
+      "src/content/cards/windcutter-7be2e6d7.ts": "bde5a9d42858c6323d9b648a018b9ce62a521d5e4ba398cc807e66ceb532e6d5",
+      "src/content/cards/lightning-channeler-c73f978e.ts": "39ebce21a8a816d7b4b6f63191bc86cc6417b809148f9a9d5804de489325bae2",
+      "src/content/cards/grounded-7df5255e.ts": "171e410387304c5a55f17bcdc875644b710254ff5af4b3472c9cf1c0d48ec4e5",
+      "src/content/cards/lurking-regent-32f3d6f2.ts": "36eb3eef796f11b38fc1ccddd3bc9327eb5cd667912b4a17e4cf88e00ba710d2",
+      "src/content/specs/cards-28.scenarios.ts": "c63dd49c63044edb94c6f32b4ed34a717f782371e195be1499cc30324d7309e3",
+      "src/content/specs/index.ts": "e533d83e638cc4cb43ce6940a16e2415c8e0cc55e19c4130e6c89171340e5d6e",
+      "docs/rules.md": "dd2841ff858a5e4836526f00df3179bae1a1a9a8c6e107d4d459a5aab6b71f4b",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.140-1.md": "34dd6b198c301ccd03ec792e5742a5db91268871b04dbd3e7dfca7741acdb6c2"
+    },
+    "groundedProbe": {
+      "grounded-zero-probe.ts": "1850f875db94a4d8013db2b0225231e3c1fd57aad73735fb61db0630324f3b17",
+      "grounded-zero-probe.json": "8b61fff785418b320a8d1c22ec46afb27cca23c7816f7b8cda9a7f976f6920e6",
+      "grounded-zero-probe.stderr": "08ab301a1e19991ace5118a5947b4123ca71aea461a0153f55a5397233bb3845"
+    }
+  },
+  "judgedCases": [
+    {
+      "workflow": "judged-lightning-player",
+      "viewport": "desktop",
+      "uuid": "c73f978e-8196-4589-a432-845265115555",
+      "variant": "base",
+      "controller": "player",
+      "gameId": "u78ykg",
+      "source": "i1",
+      "target": "i11",
+      "expiry": {
+        "at": "sourceLeavesPlay",
+        "source": "i1"
+      },
+      "activeSideTurns": {
+        "player": 2,
+        "enemy": 2
+      },
+      "returnedSideTurns": {
+        "player": 2,
+        "enemy": 2
+      },
+      "effectEndedEvent": {
+        "kind": "effectEnded",
+        "effect": "e1"
+      },
+      "returnEvent": {
+        "kind": "materialized",
+        "instance": "i11",
+        "side": "enemy",
+        "slot": {
+          "rank": "back",
+          "index": 0
+        }
+      },
+      "logFile": "judged-lightning-player-desktop.jsonl",
+      "logRows": 41,
+      "geometry": [
+        {
+          "label": "A banished card returns to play while its source is in play",
+          "x": 706,
+          "y": 130.12722778320312,
+          "width": 28,
+          "height": 28,
+          "contained": true
+        }
+      ],
+      "caps": [],
+      "rawReport": "judged-lightning-player.result.json"
+    },
+    {
+      "workflow": "judged-lightning-player",
+      "viewport": "mobile",
+      "uuid": "c73f978e-8196-4589-a432-845265115555",
+      "variant": "base",
+      "controller": "player",
+      "gameId": "izgvq7",
+      "source": "i1",
+      "target": "i11",
+      "expiry": {
+        "at": "sourceLeavesPlay",
+        "source": "i1"
+      },
+      "activeSideTurns": {
+        "player": 2,
+        "enemy": 2
+      },
+      "returnedSideTurns": {
+        "player": 2,
+        "enemy": 2
+      },
+      "effectEndedEvent": {
+        "kind": "effectEnded",
+        "effect": "e1"
+      },
+      "returnEvent": {
+        "kind": "materialized",
+        "instance": "i11",
+        "side": "enemy",
+        "slot": {
+          "rank": "back",
+          "index": 0
+        }
+      },
+      "logFile": "judged-lightning-player-mobile.jsonl",
+      "logRows": 39,
+      "geometry": [
+        {
+          "label": "A banished card returns to play while its source is in play",
+          "x": 181,
+          "y": 140.578125,
+          "width": 28,
+          "height": 28,
+          "contained": true
+        }
+      ],
+      "caps": [],
+      "rawReport": "judged-lightning-player.result.json"
+    },
+    {
+      "workflow": "judged-wind-player",
+      "viewport": "desktop",
+      "uuid": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+      "variant": "base",
+      "controller": "player",
+      "gameId": "ovxgjg",
+      "source": "i1",
+      "target": "i10",
+      "expiry": {
+        "at": "endOfTurn"
+      },
+      "activeSideTurns": {
+        "player": 2,
+        "enemy": 2
+      },
+      "returnedSideTurns": {
+        "player": 2,
+        "enemy": 3
+      },
+      "effectEndedEvent": {
+        "kind": "effectEnded",
+        "effect": "e1"
+      },
+      "returnEvent": {
+        "kind": "materialized",
+        "instance": "i10",
+        "side": "enemy",
+        "slot": {
+          "rank": "back",
+          "index": 0
+        }
+      },
+      "logFile": "judged-wind-player-desktop-ovxgjg.jsonl",
+      "logRows": 41,
+      "geometry": [
+        {
+          "label": "A banished card returns to play at end of turn",
+          "x": 706,
+          "y": 130.12722778320312,
+          "width": 28,
+          "height": 28,
+          "contained": true
+        }
+      ],
+      "caps": [],
+      "rawReport": "judged-remaining.result.json"
+    },
+    {
+      "workflow": "judged-lightning-enemy",
+      "viewport": "desktop",
+      "uuid": "c73f978e-8196-4589-a432-845265115555",
+      "variant": "amplified",
+      "controller": "enemy",
+      "gameId": "g8ur66",
+      "source": "i12",
+      "target": "i1",
+      "expiry": {
+        "at": "sourceLeavesPlay",
+        "source": "i12"
+      },
+      "activeSideTurns": {
+        "player": 3,
+        "enemy": 2
+      },
+      "returnedSideTurns": {
+        "player": 3,
+        "enemy": 2
+      },
+      "effectEndedEvent": {
+        "kind": "effectEnded",
+        "effect": "e1"
+      },
+      "returnEvent": {
+        "kind": "materialized",
+        "instance": "i1",
+        "side": "player",
+        "slot": {
+          "rank": "back",
+          "index": 0
+        }
+      },
+      "logFile": "judged-lightning-enemy-desktop-g8ur66.jsonl",
+      "logRows": 46,
+      "geometry": [
+        {
+          "label": "A banished card returns to play while its source is in play",
+          "x": 706,
+          "y": 653.8571166992188,
+          "width": 28,
+          "height": 28,
+          "contained": true
+        }
+      ],
+      "caps": [],
+      "rawReport": "judged-remaining.result.json"
+    },
+    {
+      "workflow": "judged-wind-enemy",
+      "viewport": "desktop",
+      "uuid": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+      "variant": "amplified",
+      "controller": "enemy",
+      "gameId": "w2392p",
+      "source": "i11",
+      "target": "i1",
+      "expiry": {
+        "at": "turnStart",
+        "side": "enemy"
+      },
+      "activeSideTurns": {
+        "player": 4,
+        "enemy": 3
+      },
+      "returnedSideTurns": {
+        "player": 4,
+        "enemy": 4
+      },
+      "effectEndedEvent": {
+        "kind": "effectEnded",
+        "effect": "e1"
+      },
+      "returnEvent": {
+        "kind": "materialized",
+        "instance": "i1",
+        "side": "player",
+        "slot": {
+          "rank": "back",
+          "index": 0
+        }
+      },
+      "logFile": "judged-wind-enemy-desktop-w2392p.jsonl",
+      "logRows": 87,
+      "geometry": [
+        {
+          "label": "A banished card returns to play at your opponent's next turn",
+          "x": 706,
+          "y": 653.8571166992188,
+          "width": 28,
+          "height": 28,
+          "contained": true
+        }
+      ],
+      "caps": [],
+      "rawReport": "judged-remaining.result.json"
+    },
+    {
+      "workflow": "judged-wind-player",
+      "viewport": "mobile",
+      "uuid": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+      "variant": "base",
+      "controller": "player",
+      "gameId": "xeavne",
+      "source": "i1",
+      "target": "i10",
+      "expiry": {
+        "at": "endOfTurn"
+      },
+      "activeSideTurns": {
+        "player": 2,
+        "enemy": 2
+      },
+      "returnedSideTurns": {
+        "player": 2,
+        "enemy": 3
+      },
+      "effectEndedEvent": {
+        "kind": "effectEnded",
+        "effect": "e1"
+      },
+      "returnEvent": {
+        "kind": "materialized",
+        "instance": "i10",
+        "side": "enemy",
+        "slot": {
+          "rank": "back",
+          "index": 0
+        }
+      },
+      "logFile": "judged-wind-player-mobile-xeavne.jsonl",
+      "logRows": 41,
+      "geometry": [
+        {
+          "label": "A banished card returns to play at end of turn",
+          "x": 181,
+          "y": 140.578125,
+          "width": 28,
+          "height": 28,
+          "contained": true
+        }
+      ],
+      "caps": [],
+      "rawReport": "judged-remaining.result.json"
+    },
+    {
+      "workflow": "judged-lightning-enemy",
+      "viewport": "mobile",
+      "uuid": "c73f978e-8196-4589-a432-845265115555",
+      "variant": "amplified",
+      "controller": "enemy",
+      "gameId": "phx5ak",
+      "source": "i12",
+      "target": "i1",
+      "expiry": {
+        "at": "sourceLeavesPlay",
+        "source": "i12"
+      },
+      "activeSideTurns": {
+        "player": 3,
+        "enemy": 2
+      },
+      "returnedSideTurns": {
+        "player": 3,
+        "enemy": 2
+      },
+      "effectEndedEvent": {
+        "kind": "effectEnded",
+        "effect": "e1"
+      },
+      "returnEvent": {
+        "kind": "materialized",
+        "instance": "i1",
+        "side": "player",
+        "slot": {
+          "rank": "back",
+          "index": 0
+        }
+      },
+      "logFile": "judged-lightning-enemy-mobile-phx5ak.jsonl",
+      "logRows": 46,
+      "geometry": [
+        {
+          "label": "A banished card returns to play while its source is in play",
+          "x": 181,
+          "y": 616.109375,
+          "width": 28,
+          "height": 28,
+          "contained": true
+        }
+      ],
+      "caps": [],
+      "rawReport": "judged-remaining.result.json"
+    },
+    {
+      "workflow": "judged-wind-enemy",
+      "viewport": "mobile",
+      "uuid": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+      "variant": "amplified",
+      "controller": "enemy",
+      "gameId": "hg8xnd",
+      "source": "i11",
+      "target": "i1",
+      "expiry": {
+        "at": "turnStart",
+        "side": "enemy"
+      },
+      "activeSideTurns": {
+        "player": 4,
+        "enemy": 3
+      },
+      "returnedSideTurns": {
+        "player": 4,
+        "enemy": 4
+      },
+      "effectEndedEvent": {
+        "kind": "effectEnded",
+        "effect": "e1"
+      },
+      "returnEvent": {
+        "kind": "materialized",
+        "instance": "i1",
+        "side": "player",
+        "slot": {
+          "rank": "back",
+          "index": 0
+        }
+      },
+      "logFile": "judged-wind-enemy-mobile-hg8xnd.jsonl",
+      "logRows": 88,
+      "geometry": [
+        {
+          "label": "A banished card returns to play at your opponent's next turn",
+          "x": 181,
+          "y": 616.109375,
+          "width": 28,
+          "height": 28,
+          "contained": true
+        }
+      ],
+      "caps": [],
+      "rawReport": "judged-remaining.result.json"
+    }
+  ],
+  "captureDimensions": {
+    "wind-enemy-active-desktop.png": [
+      1440,
+      900
+    ],
+    "lightning-enemy-active-mobile.png": [
+      390,
+      844
+    ],
+    "wind-phase-attempt01-temporary-banish-failure-desktop.png": [
+      1440,
+      900
+    ],
+    "wind-enemy-active-mobile.png": [
+      390,
+      844
+    ],
+    "initial-lightning-player-active-mobile.png": [
+      390,
+      844
+    ],
+    "lightning-player-returned-desktop.png": [
+      1440,
+      900
+    ],
+    "lightning-player-active-desktop.png": [
+      1440,
+      900
+    ],
+    "wind-enemy-returned-mobile.png": [
+      390,
+      844
+    ],
+    "lightning-enemy-active-desktop.png": [
+      1440,
+      900
+    ],
+    "wind-enemy-returned-desktop.png": [
+      1440,
+      900
+    ],
+    "wind-player-returned-desktop.png": [
+      1440,
+      900
+    ],
+    "wind-player-active-mobile.png": [
+      390,
+      844
+    ],
+    "wind-player-active-desktop.png": [
+      1440,
+      900
+    ],
+    "initial-lightning-player-returned-mobile.png": [
+      390,
+      844
+    ],
+    "lightning-player-returned-mobile.png": [
+      390,
+      844
+    ],
+    "initial-lightning-player-active-desktop.png": [
+      1440,
+      900
+    ],
+    "lightning-enemy-returned-mobile.png": [
+      390,
+      844
+    ],
+    "initial-lightning-player-returned-desktop.png": [
+      1440,
+      900
+    ],
+    "temporary-banish-failure-desktop.png": [
+      1440,
+      900
+    ],
+    "wind-player-returned-mobile.png": [
+      390,
+      844
+    ],
+    "lightning-player-active-mobile.png": [
+      390,
+      844
+    ],
+    "lightning-enemy-returned-desktop.png": [
+      1440,
+      900
+    ]
+  },
+  "visualJudgment": {
+    "outcome": "pass",
+    "basis": "Helper inspected active player Lightning mobile, settled return mobile, player Wind desktop, enemy Wind desktop, enemy Lightning mobile and returned enemy Wind mobile. Parent independently corroborated additional desktop/mobile active/returned captures. Status markers, normal controls and returned targets are contained at README CSS viewports.",
+    "viewports": {
+      "desktop": [
+        1440,
+        900
+      ],
+      "mobile": [
+        390,
+        844
+      ]
+    },
+    "remainingParentColdReview": "Parent final source/raw-report/geometry/event/log/mobile cold visual collection passed before COMMIT ACK."
+  },
+  "allGameLogChecks": {
+    "source": "judged-verified.json",
+    "cases": 8,
+    "result": "Each final persisted game log has physical/UUID provenance; no ai.error, ai.fallback or debug_card_lab_script_failed rows. Per-workflow JSONL exports preserve games before combined navigation."
+  },
+  "remainingAcceptance": "All implementation and updated-base local acceptance complete. Parent owns resubmission/promotion.",
+  "parentAcceptance": {
+    "at": "2026-10-12T03:23:59.721540+00:00",
+    "source": "COMMIT ACK in parent message",
+    "artifactHashesVerified": 142,
+    "sourceHashesVerified": 12,
+    "coreReview": "Not required: 30 changed non-test code lines, composition, no core criterion.",
+    "diagnostic": "Parent reader initially assumed flat events; corrected nested-event reading verified chronology. Reader-only, no source/CI issue."
+  },
+  "originalAcceptance": {
+    "sourceOid": "4b8507438dfc52e4ccdb0e702dfc973e751c866b",
+    "base": "0ad1d510e244f9fc00e717e944bf303dd1c3b5cf",
+    "manifest": "original-source-4b8507438-manifest.json",
+    "manifestSha": "7ee6ed6c504067969c74c7fc3fa58fe8f5cf3a280791903136e29310c2d65cc1",
+    "artifactCount": 149,
+    "scope": "All original validation, weighted fuzz, preflight, sweep and judged proof applies to this original source/base. No repeated fuzz/browser run is claimed on the updated base.",
+    "retentionReason": "All four authored ability bodies and the coupled scenario are byte-identical. Reapplication changes only additive documentation and scenario registration, preserving peer contents. Updated focused/gates/review/Knip validate combined integration."
+  },
+  "integrationRecovery": {
+    "candidate": "01a12e25-6e0a-72c1-8cb5-715f6369edb1",
+    "candidateOutcome": "Terminal merge-conflict; never authorized.",
+    "nativeFirstUpdate": {
+      "exit": 5,
+      "outcome": "Clean rollback to original source 4b8507438 with parent 0ad1d510. Parent doctor observer 97255 exited 0, healthy, with no pending update block.",
+      "source": "Parent-reported native result; helper performed no native action."
+    },
+    "parkedPaths": [
+      "docs/rules.md",
+      "src/content/specs/index.ts"
+    ],
+    "temporaryCheckpoint": "e2cbf474517f8585d0219e60bc29b03d2df4a292",
+    "checkpointSubmitted": false,
+    "updatedParkedHead": "9f61e737670e5de8c5369d24647080e0ff3d2386",
+    "updatedBase": "0c627396775ecc2eb6322b1e3ee9eee6dfe6eee9",
+    "nativeSuccessfulUpdate": "Parent tg --no-launch update succeeded; doctor observer 6120 exited 0, healthy, with a clean tree before reapplication.",
+    "reapplicationProof": "integration-reapplication-proof.json",
+    "proofSha": "1ad6c943e31dcd82de2793a43260d296bc4495c08493655475e6e2d188ead469",
+    "dependencyCompatibility": "package.json/package-lock.json unchanged across original and updated bases; installed dependencies retained. Normal workspace preparation/restoration completed through checks.",
+    "window": {
+      "start": "2026-10-12T03:29:10+00:00",
+      "basis": "Checkpoint committer timestamp is a precise retained repair-tail proxy; it excludes earlier conflict diagnosis/failed update/parking preparation. Full dispatch-to-final-commit wall includes those earlier intervals.",
+      "observedEnd": "2026-10-12T03:40:38.460317+00:00",
+      "elapsedMin": 11.47
+    },
+    "checks": {
+      "focused": {
+        "log": "integration-focused.log",
+        "exit": 0,
+        "wallS": 4.54,
+        "files": 2,
+        "cases": 69,
+        "observer": 29913
+      },
+      "review": {
+        "log": "integration-review.log",
+        "exit": 0,
+        "wallS": 59.89,
+        "files": 221,
+        "cases": 3105,
+        "loadAtStart": 30.87646484375,
+        "observer": 7545
+      },
+      "knip": {
+        "log": "integration-knip.log",
+        "exit": 0,
+        "wallS": 2.76,
+        "observer": 59795
+      }
+    },
+    "resources": "All integration observers exited 0 and asset restoration completed. No server, browser context, provider, heavy job or other runtime started.",
+    "parentFinalAck": {
+      "at": "2026-10-12T03:40:38.460317+00:00",
+      "manifestVerified": "8faddb70749ba67d67a3a3104013d3efb9d296e40033967002fa9b5bcd960aec",
+      "artifacts": 158,
+      "sourceFiles": 12,
+      "outcome": "Parent verified all original own behavior hashes and the reversible combined-file proof; updated checks/schema accepted. Final amendment authorized."
+    }
+  },
+  "combinedSourceFreeze": {
+    "src/content/cards/windcutter-7be2e6d7.ts": "bde5a9d42858c6323d9b648a018b9ce62a521d5e4ba398cc807e66ceb532e6d5",
+    "src/content/cards/lightning-channeler-c73f978e.ts": "39ebce21a8a816d7b4b6f63191bc86cc6417b809148f9a9d5804de489325bae2",
+    "src/content/cards/grounded-7df5255e.ts": "171e410387304c5a55f17bcdc875644b710254ff5af4b3472c9cf1c0d48ec4e5",
+    "src/content/cards/lurking-regent-32f3d6f2.ts": "36eb3eef796f11b38fc1ccddd3bc9327eb5cd667912b4a17e4cf88e00ba710d2",
+    "src/content/specs/cards-28.scenarios.ts": "c63dd49c63044edb94c6f32b4ed34a717f782371e195be1499cc30324d7309e3",
+    "src/content/specs/index.ts": "ca97c6c8e2c927ced7efa50fbb73fb23f9beef235bf8767d35f54469d0b05b5f",
+    "docs/rules.md": "93491383c54df28e97cf81f51afc5628e539ce03683b824d326df1eb1504419a",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.140-1.md": "34dd6b198c301ccd03ec792e5742a5db91268871b04dbd3e7dfca7741acdb6c2"
+  }
+}

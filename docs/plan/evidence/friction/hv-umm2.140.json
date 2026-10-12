@@ -1,0 +1,40 @@
+{
+  "bead": "hv-umm2.140",
+  "phase": 5,
+  "implementMin": 82.19,
+  "localValidationS": {
+    "installReported": 2,
+    "focused": 3.125,
+    "groundedZeroProbe": 0.59,
+    "review": 67.9,
+    "knip": 3.6,
+    "weighted300": 196.62,
+    "preflight": 0.99,
+    "sweepExecution": 363.1425475420002,
+    "sweepLeaseWait": 1138.915,
+    "judgedScenario": 338.576,
+    "judgedLeaseWait": 1193.815,
+    "integrationFocused": 4.54,
+    "integrationReview": 59.89,
+    "integrationKnip": 2.76
+  },
+  "hostLoad": 30.87646484375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 4
+  },
+  "friction": [
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 38.88,
+      "note": "Native sweep yields and judged sessions waited in the shared queue. Execution, queue windows, fixture corrections and raw outcomes are detailed in measurements/hv-umm2.140.json."
+    },
+    {
+      "tag": "additive-registry-conflict",
+      "minutes": 11.47,
+      "note": "Two additive rules/index conflicts required native clean rollback, unsubmitted parked checkpoint, parent update and exact reapplication preserving peer bytes. Measured repair-tail proxy and full elapsed/provenance are in measurements/hv-umm2.140.json."
+    }
+  ]
+}

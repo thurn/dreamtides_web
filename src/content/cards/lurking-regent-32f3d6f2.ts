@@ -1,4 +1,7 @@
 import { card } from "../define";
+import { enemyCharacter, target } from "../../engine/dsl/builders";
+import { onMaterialized, triggered, whenLeavesPlay } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 
 export default card({
   name: "Lurking Regent",
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 149,
   art: { x: 0.068, y: 0.897, scale: 1.07 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onMaterialized(), p.banish(target(enemyCharacter({ costAtMost: variant.amplified ? 5 : 4 })))),
+    triggered(whenLeavesPlay(), p.draw(1, "opponent")),
+  ],
+  verifiedText: "amotb47erk",
 });

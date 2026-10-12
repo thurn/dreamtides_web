@@ -1,4 +1,7 @@
 import { card } from "../define";
+import { enemyCharacter, target } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 
 export default card({
   name: "Lightning Channeler",
@@ -21,5 +24,6 @@ export default card({
   cardNumber: 373,
   art: { x: 0, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(onMaterialized(), p.banishUntil(target(enemyCharacter({ costAtMost: variant.amplified ? 3 : 2 })), "whileSourceInPlay"))],
+  verifiedText: "uifrojqisc",
 });

@@ -1,4 +1,7 @@
 import { card } from "../define";
+import { enemyCharacter, target } from "../../engine/dsl/builders";
+import { onChallenge, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 
 export default card({
   name: "Windcutter",
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 1,
   art: { x: -0.426, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(onChallenge(), p.banishUntil(target(enemyCharacter()), variant.amplified ? "untilYourNextTurn" : "untilEndOfTurn"))],
+  verifiedText: "20wwv7t9gcs",
 });
