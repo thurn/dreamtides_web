@@ -1,0 +1,1142 @@
+{
+  "bead": "hv-umm2.222",
+  "base": "6d4dee15656510eca90988a2e99110c74ac8eb95",
+  "dispatch": {
+    "at": "2026-10-12T22:41:53.237Z",
+    "callId": "call_e118735842124e02ad1660e07d5d25de",
+    "task": "/root/avatar_mix222",
+    "modelStart": "UNKNOWN"
+  },
+  "endpointStatus": "Parent final native clock ACK received; prospective observed endpoint immediately before automatic Git commit. Actual automatic committer timestamp and process receipt are retained read-only in primary ignored artifacts; no Git date override.",
+  "parentSetup": {
+    "claim": "2026-10-12T22:26:41Z",
+    "install": {
+      "pid": 80424,
+      "pgid": 80424,
+      "exit": 0,
+      "start": "2026-10-12T22:32:19.902979Z",
+      "end": "2026-10-12T22:32:22.584847Z",
+      "elapsedS": 2.681873
+    },
+    "excludedFromImplementWindow": true,
+    "priorOwnerNativeStartedAt": "2026-10-12T20:44:10Z"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 91,
+    "jsdomFiles": 0,
+    "cases": 4,
+    "plainScenarioModules": 1,
+    "configuredTestEntrypoints": 0,
+    "scope": "One plain avatars-02.scenarios.ts auto-discovered by unchanged existing specs.test.ts; no added configured test file or jsdom file. Lines count the new scenario module.",
+    "actualPlainModuleDelta": {
+      "files": 1,
+      "lines": 91,
+      "jsdomFiles": 0
+    },
+    "configuredTestEntrypointDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "evidenceConventionQualification": "friction.testDelta.files=0 counts configured test entrypoints; lines91 counts the new plain scenario module. Actual plain scenario module delta1/+91/0 and case delta4 are separate."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "successful review-02 start2026-10-12T22:51:46.931651+00:00"
+      }
+    }
+  },
+  "rules": {
+    "C16": "current energy>=5; intervening Dawn condition",
+    "RD-hv-7x4l.6-3": "positive opponent character challenge scoring only",
+    "RD-hv-7x4l.17-3": "first/start-own-turn resolution before Dreamwell refill"
+  },
+  "producerReuse": {
+    "uuid": "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+    "source": "3a89e4a331ca6c4b1fb2946603fd6580e16a7fb6",
+    "leafByteUnchanged": true,
+    "audit": "producer-reuse-audit.json",
+    "qualification": "Prior successful producer source-specific QA with provenance, not fresh current browser execution. Four local leaves authored; all five receive current weighted300, preflight and sweep. Producer core review remains producer parent responsibility."
+  },
+  "publicBoundaryEvidence": {
+    "artifact": "public-boundaries.json",
+    "observations": 12,
+    "runtimeApi": "createBattle + boardState synthetic fixtures + normal engine pass intents",
+    "senemhet": [
+      4,
+      5,
+      6,
+      10
+    ],
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "drusus": "0->1->0; trigger resolution/effect before Dreamwell/refill; second own turn no trigger",
+    "threxan": "first-own-turn draw+1 versus no-Avatar baseline; second-own no trigger"
+  },
+  "sourceScope": [
+    "four pending Avatar leaves",
+    "one original Kell-only scenario module",
+    "own evidence and Drusus UUID card issue"
+  ],
+  "sourceReadOnly": [
+    "whole Karev leaf",
+    "all engine/UI/harness/hubs/config/inventory/rules/RD"
+  ],
+  "commands": [
+    {
+      "label": "boundaries-01",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/avatar-mix222-root/boundaries.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 40649,
+      "observerPgid": 40649,
+      "startUtc": "2026-10-12T22:47:20.975074+00:00",
+      "loadAverage": [
+        6.46337890625,
+        5.56982421875,
+        7.24755859375
+      ],
+      "pid": 40658,
+      "pgid": 40658,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:47:22.937742+00:00",
+      "elapsedS": 1.962560082989512,
+      "cpuUserS": 1.088779,
+      "cpuSystemS": 0.642972,
+      "maxRss": 408666112
+    },
+    {
+      "label": "focused-01",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "avatars-02"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 36545,
+      "observerPgid": 36545,
+      "startUtc": "2026-10-12T22:46:46.456029+00:00",
+      "loadAverage": [
+        5.95166015625,
+        5.39111328125,
+        7.2587890625
+      ],
+      "pid": 36556,
+      "pgid": 36556,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:46:51.817938+00:00",
+      "elapsedS": 5.3616691659990465,
+      "cpuUserS": 4.520485,
+      "cpuSystemS": 1.779062,
+      "maxRss": 390545408
+    },
+    {
+      "label": "focused-02",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/avatar-lab.test.ts",
+        "src/engine/testing/tooling-card-lab.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 41444,
+      "observerPgid": 41444,
+      "startUtc": "2026-10-12T22:47:41.498995+00:00",
+      "loadAverage": [
+        5.4619140625,
+        5.4013671875,
+        7.14794921875
+      ],
+      "pid": 41453,
+      "pgid": 41453,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:47:49.895920+00:00",
+      "elapsedS": 8.396654333002516,
+      "cpuUserS": 10.831613,
+      "cpuSystemS": 1.869138,
+      "maxRss": 734871552
+    },
+    {
+      "label": "focused-03",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "avatars-02"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 76625,
+      "observerPgid": 76625,
+      "startUtc": "2026-10-12T22:51:36.564961+00:00",
+      "loadAverage": [
+        9.91748046875,
+        7.10009765625,
+        7.40283203125
+      ],
+      "pid": 76634,
+      "pgid": 76634,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:51:40.139719+00:00",
+      "elapsedS": 3.5746131669875467,
+      "cpuUserS": 3.787958,
+      "cpuSystemS": 1.171433,
+      "maxRss": 361660416
+    },
+    {
+      "label": "fuzz-01",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "9e4862fd-e18c-463e-9d5f-e5d73c29a66f,b99936ca-97f9-4930-af5a-fa9ef92557ef,1cc5a88a-134f-42f7-a0ae-95ace44b3745,bdd3a3a7-242c-4d2b-8071-ebe56891a340,133e22dd-f81b-406d-b4e3-98c346d7fd4e"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 41913,
+      "observerPgid": 41912,
+      "startUtc": "2026-10-12T22:47:57.215153+00:00",
+      "loadAverage": [
+        5.2841796875,
+        5.36474609375,
+        7.10400390625
+      ],
+      "pid": 41914,
+      "pgid": 41914,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:50:27.002274+00:00",
+      "elapsedS": 149.79638345900457,
+      "cpuUserS": 162.310087,
+      "cpuSystemS": 1.419581,
+      "maxRss": 899334144
+    },
+    {
+      "label": "fuzz-lock-01",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/avatar-mix222-root/observe.py",
+        "fuzz-01",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "9e4862fd-e18c-463e-9d5f-e5d73c29a66f,b99936ca-97f9-4930-af5a-fa9ef92557ef,1cc5a88a-134f-42f7-a0ae-95ace44b3745,bdd3a3a7-242c-4d2b-8071-ebe56891a340,133e22dd-f81b-406d-b4e3-98c346d7fd4e"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 41891,
+      "observerPgid": 41891,
+      "startUtc": "2026-10-12T22:47:57.194922+00:00",
+      "loadAverage": [
+        5.2841796875,
+        5.36474609375,
+        7.10400390625
+      ],
+      "pid": 41912,
+      "pgid": 41912,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:50:27.005393+00:00",
+      "elapsedS": 149.81971733299724,
+      "cpuUserS": 162.324618,
+      "cpuSystemS": 1.425895,
+      "maxRss": 899334144
+    },
+    {
+      "label": "judged-01",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.222",
+        "--viewports",
+        "desktop"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 80136,
+      "observerPgid": 80136,
+      "startUtc": "2026-10-12T22:53:15.324340+00:00",
+      "loadAverage": [
+        9.35986328125,
+        7.92822265625,
+        7.701171875
+      ],
+      "pid": 80144,
+      "pgid": 80144,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:54:02.521999+00:00",
+      "elapsedS": 47.1971467090043,
+      "cpuUserS": 4.779418,
+      "cpuSystemS": 2.49441,
+      "maxRss": 697827328
+    },
+    {
+      "label": "knip-01",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 79142,
+      "observerPgid": 79142,
+      "startUtc": "2026-10-12T22:52:44.185757+00:00",
+      "loadAverage": [
+        10.60009765625,
+        7.8837890625,
+        7.67529296875
+      ],
+      "pid": 79150,
+      "pgid": 79150,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:52:48.293348+00:00",
+      "elapsedS": 4.107437958999071,
+      "cpuUserS": 3.216013,
+      "cpuSystemS": 1.224622,
+      "maxRss": 568541184
+    },
+    {
+      "label": "preflight-01",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--avatars",
+        "9e4862fd-e18c-463e-9d5f-e5d73c29a66f,b99936ca-97f9-4930-af5a-fa9ef92557ef,1cc5a88a-134f-42f7-a0ae-95ace44b3745,bdd3a3a7-242c-4d2b-8071-ebe56891a340,133e22dd-f81b-406d-b4e3-98c346d7fd4e",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 79408,
+      "observerPgid": 79408,
+      "startUtc": "2026-10-12T22:52:53.275738+00:00",
+      "loadAverage": [
+        11.40087890625,
+        8.1357421875,
+        7.76611328125
+      ],
+      "pid": 79416,
+      "pgid": 79416,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:52:54.479634+00:00",
+      "elapsedS": 1.2038103750091977,
+      "cpuUserS": 0.95292,
+      "cpuSystemS": 0.392024,
+      "maxRss": 359104512
+    },
+    {
+      "label": "review-01",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 46514,
+      "observerPgid": 46514,
+      "startUtc": "2026-10-12T22:50:42.432776+00:00",
+      "loadAverage": [
+        7.34033203125,
+        6.072265625,
+        7.07861328125
+      ],
+      "pid": 46523,
+      "pgid": 46523,
+      "exit": 2,
+      "endUtc": "2026-10-12T22:51:30.749931+00:00",
+      "elapsedS": 48.316825208996306,
+      "cpuUserS": 143.165523,
+      "cpuSystemS": 17.205189,
+      "maxRss": 4324196352
+    },
+    {
+      "label": "review-02",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 77185,
+      "observerPgid": 77185,
+      "startUtc": "2026-10-12T22:51:46.931651+00:00",
+      "loadAverage": [
+        9.86865234375,
+        7.17919921875,
+        7.42724609375
+      ],
+      "pid": 77193,
+      "pgid": 77193,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:52:40.066995+00:00",
+      "elapsedS": 53.134936040994944,
+      "cpuUserS": 123.418341,
+      "cpuSystemS": 19.217227,
+      "maxRss": 3696820224
+    },
+    {
+      "label": "schema-01",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 79681,
+      "observerPgid": 79681,
+      "startUtc": "2026-10-12T22:53:03.440173+00:00",
+      "loadAverage": [
+        10.79736328125,
+        8.1142578125,
+        7.76220703125
+      ],
+      "pid": 79691,
+      "pgid": 79691,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:53:03.553081+00:00",
+      "elapsedS": 0.11266983300447464,
+      "cpuUserS": 0.050969,
+      "cpuSystemS": 0.024038,
+      "maxRss": 55984128
+    },
+    {
+      "label": "sweep-01",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.222",
+        "--avatars",
+        "9e4862fd-e18c-463e-9d5f-e5d73c29a66f,b99936ca-97f9-4930-af5a-fa9ef92557ef,1cc5a88a-134f-42f7-a0ae-95ace44b3745,bdd3a3a7-242c-4d2b-8071-ebe56891a340,133e22dd-f81b-406d-b4e3-98c346d7fd4e",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 86647,
+      "observerPgid": 86647,
+      "startUtc": "2026-10-12T22:54:07.807163+00:00",
+      "loadAverage": [
+        7.3076171875,
+        7.53515625,
+        7.5634765625
+      ],
+      "pid": 86655,
+      "pgid": 86655,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:56:51.462793+00:00",
+      "elapsedS": 163.65463666600408,
+      "cpuUserS": 17.94125,
+      "cpuSystemS": 10.206305,
+      "maxRss": 693370880
+    },
+    {
+      "label": "schema-02",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 15329,
+      "observerPgid": 15329,
+      "startUtc": "2026-10-12T22:58:49.511465+00:00",
+      "loadAverage": [
+        5.08837890625,
+        6.92724609375,
+        7.3125
+      ],
+      "pid": 15339,
+      "pgid": 15339,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:58:49.621146+00:00",
+      "elapsedS": 0.10960808300296776,
+      "cpuUserS": 0.050075999999999996,
+      "cpuSystemS": 0.023441,
+      "maxRss": 55902208
+    },
+    {
+      "label": "diff-check-01",
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/avatar-mix222-root",
+      "observerPid": 15763,
+      "observerPgid": 15763,
+      "startUtc": "2026-10-12T22:59:05.263557+00:00",
+      "loadAverage": [
+        7.30517578125,
+        7.2919921875,
+        7.4326171875
+      ],
+      "pid": 15773,
+      "pgid": 15773,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:59:05.274459+00:00",
+      "elapsedS": 0.010741249992861412,
+      "cpuUserS": 0.003457,
+      "cpuSystemS": 0.004536,
+      "maxRss": 10551296
+    }
+  ],
+  "failures": [
+    {
+      "label": "review-01",
+      "exit": 2,
+      "reason": "Own scenario public abilities type optional; fixed by explicit authored subject invariant/narrowing. Related tests4471 passed but aggregate failed.",
+      "supersededBy": "review-02",
+      "raw": "review-01.log"
+    }
+  ],
+  "evidenceCheckpoint": "2026-10-12T22:58:30.845192+00:00",
+  "hostLoadSamples": [
+    {
+      "label": "boundaries-01",
+      "startUtc": "2026-10-12T22:47:20.975074+00:00",
+      "loadAverage": [
+        6.46337890625,
+        5.56982421875,
+        7.24755859375
+      ]
+    },
+    {
+      "label": "focused-01",
+      "startUtc": "2026-10-12T22:46:46.456029+00:00",
+      "loadAverage": [
+        5.95166015625,
+        5.39111328125,
+        7.2587890625
+      ]
+    },
+    {
+      "label": "focused-02",
+      "startUtc": "2026-10-12T22:47:41.498995+00:00",
+      "loadAverage": [
+        5.4619140625,
+        5.4013671875,
+        7.14794921875
+      ]
+    },
+    {
+      "label": "focused-03",
+      "startUtc": "2026-10-12T22:51:36.564961+00:00",
+      "loadAverage": [
+        9.91748046875,
+        7.10009765625,
+        7.40283203125
+      ]
+    },
+    {
+      "label": "fuzz-01",
+      "startUtc": "2026-10-12T22:47:57.215153+00:00",
+      "loadAverage": [
+        5.2841796875,
+        5.36474609375,
+        7.10400390625
+      ]
+    },
+    {
+      "label": "fuzz-lock-01",
+      "startUtc": "2026-10-12T22:47:57.194922+00:00",
+      "loadAverage": [
+        5.2841796875,
+        5.36474609375,
+        7.10400390625
+      ]
+    },
+    {
+      "label": "judged-01",
+      "startUtc": "2026-10-12T22:53:15.324340+00:00",
+      "loadAverage": [
+        9.35986328125,
+        7.92822265625,
+        7.701171875
+      ]
+    },
+    {
+      "label": "knip-01",
+      "startUtc": "2026-10-12T22:52:44.185757+00:00",
+      "loadAverage": [
+        10.60009765625,
+        7.8837890625,
+        7.67529296875
+      ]
+    },
+    {
+      "label": "preflight-01",
+      "startUtc": "2026-10-12T22:52:53.275738+00:00",
+      "loadAverage": [
+        11.40087890625,
+        8.1357421875,
+        7.76611328125
+      ]
+    },
+    {
+      "label": "review-01",
+      "startUtc": "2026-10-12T22:50:42.432776+00:00",
+      "loadAverage": [
+        7.34033203125,
+        6.072265625,
+        7.07861328125
+      ]
+    },
+    {
+      "label": "review-02",
+      "startUtc": "2026-10-12T22:51:46.931651+00:00",
+      "loadAverage": [
+        9.86865234375,
+        7.17919921875,
+        7.42724609375
+      ]
+    },
+    {
+      "label": "schema-01",
+      "startUtc": "2026-10-12T22:53:03.440173+00:00",
+      "loadAverage": [
+        10.79736328125,
+        8.1142578125,
+        7.76220703125
+      ]
+    },
+    {
+      "label": "sweep-01",
+      "startUtc": "2026-10-12T22:54:07.807163+00:00",
+      "loadAverage": [
+        7.3076171875,
+        7.53515625,
+        7.5634765625
+      ]
+    },
+    {
+      "label": "schema-02",
+      "startUtc": "2026-10-12T22:58:49.511465+00:00",
+      "loadAverage": [
+        5.08837890625,
+        6.92724609375,
+        7.3125
+      ]
+    }
+  ],
+  "runtime": {
+    "observedAt": "2026-10-12T22:59:21.843070+00:00",
+    "observedGroups": [
+      3667,
+      6709,
+      15329,
+      15339,
+      15763,
+      15773,
+      36545,
+      36556,
+      40649,
+      40658,
+      41444,
+      41453,
+      41891,
+      41912,
+      41914,
+      46514,
+      46523,
+      76625,
+      76634,
+      77185,
+      77193,
+      79142,
+      79150,
+      79408,
+      79416,
+      79681,
+      79691,
+      80136,
+      80144,
+      80189,
+      86647,
+      86655,
+      97172
+    ],
+    "liveGroupMembers": [],
+    "servers": [
+      {
+        "pidAndPgid": 80189,
+        "port": 5174,
+        "nativeResult": "cleanup attempted; port free"
+      },
+      {
+        "pidAndPgid": 97172,
+        "port": 5174,
+        "nativeResult": "cleanup attempted; port free"
+      },
+      {
+        "pidAndPgid": 3667,
+        "port": 5174,
+        "nativeResult": "cleanup attempted; port free"
+      },
+      {
+        "pidAndPgid": 6709,
+        "port": 5174,
+        "nativeResult": "cleanup attempted; port free"
+      }
+    ],
+    "browserQualification": "Judged and sweep command aggregates exited0; existing native close path requires confirmed browser_close, settled RPC and transport close before clearing owner. Sweep used3 sequential contexts with2 card-boundary lease yields, never concurrent owned clients. Exact MCPsession IDs are not exposed in these retained runner summaries; no guessed identifier."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 137619,
+    "prompts": 7338,
+    "interactiveReruns": 771,
+    "failures": 0,
+    "includedPerUuid": 120,
+    "exercisedByUuid": {
+      "9e4862fd-e18c-463e-9d5f-e5d73c29a66f": 386,
+      "b99936ca-97f9-4930-af5a-fa9ef92557ef": 119,
+      "1cc5a88a-134f-42f7-a0ae-95ace44b3745": 477,
+      "bdd3a3a7-242c-4d2b-8071-ebe56891a340": 120,
+      "133e22dd-f81b-406d-b4e3-98c346d7fd4e": 0
+    },
+    "staticExerciseQualification": "Kell static permissions do not produce abilityResolved/triggerResolved; judged public normal play proves actual permission exercise.",
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "lockRequest": "2026-10-12T22:47:57.194922+00:00",
+    "actualExecutionStart": "2026-10-12T22:47:57.215153+00:00",
+    "queueS": 0.020231,
+    "wallAndCpuQualification": "Observer raw elapsed/child CPU are retained per command; wrapper and nested fuzz CPU scopes overlap and are not summed."
+  },
+  "browser": {
+    "judged": {
+      "port": 5174,
+      "slot": 0,
+      "serverPid": 80189,
+      "invocation": "run-UmbTNm",
+      "hostLoad": 9.35986328125,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 1699,
+        "scenario": 44709,
+        "total": 46501
+      },
+      "ok": true,
+      "error": null,
+      "caps": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 12441
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 32266
+        }
+      ]
+    },
+    "sweep": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-QPj9Da",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.222/invocations/sweep-QPj9Da",
+      "counts": {
+        "pass": 10,
+        "skip": 90
+      },
+      "attemptCounts": {
+        "pass": 10,
+        "skip": 90
+      },
+      "hostLoad": 7.3076171875,
+      "sessions": 3,
+      "leaseYields": 2,
+      "wallMs": {
+        "browserLeaseWait": 120690,
+        "serve": 4001,
+        "scenario": 37043.642001000015,
+        "cleanup": 1683.1295830000017,
+        "execution": 42857.177000000025,
+        "total": 163547.17700000003
+      }
+    },
+    "baseObservations": [
+      {
+        "uuid": "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+        "side": "enemy",
+        "observedAvatar": {
+          "id": "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+          "exhausted": false
+        },
+        "exercised": false,
+        "exercise": [],
+        "rawReport": "invocations/sweep-QPj9Da/run-7boiHg/sweep-9e4862fd-e18c-463e-9d5f-e5d73c29a66f-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+        "side": "player",
+        "observedAvatar": {
+          "id": "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+          "exhausted": false
+        },
+        "exercised": false,
+        "exercise": [],
+        "rawReport": "invocations/sweep-QPj9Da/run-7boiHg/sweep-9e4862fd-e18c-463e-9d5f-e5d73c29a66f-base-player-attempt-1.result.json"
+      },
+      {
+        "uuid": "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
+        "side": "enemy",
+        "observedAvatar": {
+          "id": "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
+          "exhausted": false
+        },
+        "exercised": true,
+        "exercise": [
+          {
+            "seq": 1,
+            "index": 18,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "avatar",
+                "side": "enemy"
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          }
+        ],
+        "rawReport": "invocations/sweep-QPj9Da/run-LDagr5/sweep-1cc5a88a-134f-42f7-a0ae-95ace44b3745-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
+        "side": "player",
+        "observedAvatar": {
+          "id": "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
+          "exhausted": false
+        },
+        "exercised": true,
+        "exercise": [
+          {
+            "seq": 1,
+            "index": 18,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "avatar",
+                "side": "player"
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          }
+        ],
+        "rawReport": "invocations/sweep-QPj9Da/run-LDagr5/sweep-1cc5a88a-134f-42f7-a0ae-95ace44b3745-base-player-attempt-1.result.json"
+      },
+      {
+        "uuid": "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+        "side": "enemy",
+        "observedAvatar": {
+          "id": "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+          "exhausted": false
+        },
+        "exercised": true,
+        "exercise": [
+          {
+            "seq": 1,
+            "index": 14,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "avatar",
+                "side": "enemy"
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          }
+        ],
+        "rawReport": "invocations/sweep-QPj9Da/run-LDagr5/sweep-b99936ca-97f9-4930-af5a-fa9ef92557ef-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+        "side": "player",
+        "observedAvatar": {
+          "id": "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+          "exhausted": false
+        },
+        "exercised": true,
+        "exercise": [
+          {
+            "seq": 1,
+            "index": 14,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "avatar",
+                "side": "player"
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          }
+        ],
+        "rawReport": "invocations/sweep-QPj9Da/run-LDagr5/sweep-b99936ca-97f9-4930-af5a-fa9ef92557ef-base-player-attempt-1.result.json"
+      },
+      {
+        "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+        "side": "enemy",
+        "observedAvatar": {
+          "id": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+          "exhausted": false
+        },
+        "exercised": true,
+        "exercise": [
+          {
+            "seq": 1,
+            "index": 14,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "avatar",
+                "side": "enemy"
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          }
+        ],
+        "rawReport": "invocations/sweep-QPj9Da/run-LDagr5/sweep-bdd3a3a7-242c-4d2b-8071-ebe56891a340-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+        "side": "player",
+        "observedAvatar": {
+          "id": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+          "exhausted": false
+        },
+        "exercised": true,
+        "exercise": [
+          {
+            "seq": 1,
+            "index": 14,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "avatar",
+                "side": "player"
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          }
+        ],
+        "rawReport": "invocations/sweep-QPj9Da/run-LDagr5/sweep-bdd3a3a7-242c-4d2b-8071-ebe56891a340-base-player-attempt-1.result.json"
+      },
+      {
+        "uuid": "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
+        "side": "enemy",
+        "observedAvatar": {
+          "id": "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
+          "exhausted": false
+        },
+        "exercised": false,
+        "exercise": [],
+        "rawReport": "invocations/sweep-QPj9Da/run-evW0Zh/sweep-133e22dd-f81b-406d-b4e3-98c346d7fd4e-base-enemy-attempt-1.result.json"
+      },
+      {
+        "uuid": "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
+        "side": "player",
+        "observedAvatar": {
+          "id": "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
+          "exhausted": false
+        },
+        "exercised": false,
+        "exercise": [],
+        "rawReport": "invocations/sweep-QPj9Da/run-evW0Zh/sweep-133e22dd-f81b-406d-b4e3-98c346d7fd4e-base-player-attempt-1.result.json"
+      }
+    ],
+    "countsQualification": "Native sweep100 cells10pass90skip, raw attempts100, no failures/retries;8 additive author/D21/judged/producer evidence rows are not sweep cells.",
+    "captureProof": {
+      "filenames": [
+        "kell-live-permission-[object Object].png",
+        "kell-renewed-play-[object Object].png"
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ],
+      "nativeDimensions": [
+        2880,
+        1800
+      ],
+      "namingQualification": "Actual viewport object string filename retained; no rerun solely for naming."
+    },
+    "logging": "Judged game95 persisted rows; UUID setup and physical ordinary void-play intents/actions seq35/i51 andseq72/i52. Constructor engine events observed through native public probe/history before LOAD_STATE; energyChanged has no dedicated engine.energy logger row."
+  },
+  "preflight": {
+    "summary": {
+      "event": "labPreflightSummary",
+      "cards": [],
+      "avatars": [
+        "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+        "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+        "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
+        "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+        "133e22dd-f81b-406d-b4e3-98c346d7fd4e"
+      ],
+      "dreamsigns": [],
+      "variants": [
+        "base",
+        "amplified",
+        "empowered",
+        "kindled",
+        "resonant",
+        "inspired",
+        "enduring",
+        "hastened",
+        "attuned",
+        "perfected"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "counts": {
+        "pass": 10,
+        "pending": 0,
+        "skip": 90,
+        "fail": 0
+      },
+      "elapsedMs": 23.69262500000002,
+      "hostLoad": 11.40087890625,
+      "enemyMode": "normal-avatar-first-turn-first-legal-prompts"
+    },
+    "raw": "checks/preflight-01.log"
+  },
+  "allOriginalEntities": [
+    [
+      "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+      38
+    ],
+    [
+      "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+      106
+    ],
+    [
+      "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
+      161
+    ],
+    [
+      "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+      200
+    ],
+    [
+      "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
+      31
+    ]
+  ],
+  "fallout": "None: no exported API or shared consumer source changes.",
+  "newPrimitives": [],
+  "newRulesDecisions": [],
+  "cardIssues": [
+    "bdd3a3a7-242c-4d2b-8071-ebe56891a340--hv-umm2.222.md"
+  ],
+  "preExistingIssues": [],
+  "reviewRouting": "No local cold review owed for20 non-test leaf delta lines, no new core form. User temporary gpt-5.6-sol routing remains parent review authority; producer review is separate.",
+  "frictionQualification": "No single observed friction cause exceeds about10 minutes. Browser queue120.690s is included in gross implementWindow and separately measured; review optional-ability correction and source-free coordination are retained in raw command/evidence intervals.",
+  "sourceHashes": {
+    "src/content/avatars/karev-soltis-9e4862fd.ts": "182bf7e71d23d5ab09253f23ab21c71a20c6159043627eaa01d827614d438ed4",
+    "src/content/avatars/threxan-b99936ca.ts": "b22c525d9510d149ee17fe61f10af900101f2e37bdf359fa8f29a19eeda3816e",
+    "src/content/avatars/senemhet-1cc5a88a.ts": "5dbc2e3b0de9b6d680f0e7538510cf30e67b70c7830984442260e1aa7c7a04a2",
+    "src/content/avatars/drusus-calvus-bdd3a3a7.ts": "229fbffaeb434bfb62c35d8e1a4b63f4b8f1fbcb5f933c9a07cd5018fe431f07",
+    "src/content/avatars/kell-tarn-133e22dd.ts": "4dc32eb45e825a9a9b171da86b1fd81274a70d16f940e275e1519e7a3fae15c4",
+    "src/content/specs/avatars-02.scenarios.ts": "8480182fd79bb956627a1e443570a4bc2b88175271599433f3cdada8a228a551"
+  },
+  "finalSchema": {
+    "exit": 0,
+    "records": 660,
+    "raw": "checks/schema-02.log",
+    "actualEndUtc": "2026-10-12T22:58:49.621146+00:00"
+  },
+  "stagedDiffCheck": {
+    "exit": 0,
+    "actualEndUtc": "2026-10-12T22:59:05.274459+00:00",
+    "raw": "checks/diff-check-01.log"
+  },
+  "implementEndpoint": {
+    "at": "2026-10-12T23:00:44.420112+00:00",
+    "qualification": "Prospective observed metadata endpoint; automatic Git committer supplies actual end. Gross window tolerance is1 minute; actual delta is recorded after commit in commit-process.json/commit-metadata.json, not invented here.",
+    "parentAckAt": "2026-10-12T23:00:07.593657Z",
+    "nativeAckSha256": "071528e6c5300583a974bf8a7d055ae7636f147619f0917380f007a14e4de2b0",
+    "preMetadataFrozenTree": "012717b4278ac2ef9ec37dea84e2b700779957a1",
+    "preMetadataStagedDiffSha256": "437ae1a7d0910e0885ae6406c322e309e54ff87c98551cb59d82f373ed35835a",
+    "metadataOnlyPaths": [
+      "docs/plan/evidence/friction/hv-umm2.222.json",
+      "docs/plan/evidence/measurements/hv-umm2.222.json"
+    ]
+  }
+}

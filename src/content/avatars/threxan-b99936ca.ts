@@ -1,4 +1,6 @@
 import { avatar } from "../define";
+import { atStartOfFirstTurn, triggered } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
 
 export default avatar({
   name: "Threxan",
@@ -57,5 +59,6 @@ export default avatar({
       "7343b376-88d2-45fe-8b5e-79763480ee7e",
     ],
   },
-  pending: true,
+  abilities: () => [triggered(atStartOfFirstTurn(), draw(1))],
+  verifiedText: "1qojl9f3ap2",
 });

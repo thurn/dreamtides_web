@@ -1,4 +1,6 @@
 import { avatar } from "../define";
+import { conditionCardCounts, staticAbility } from "../../engine/dsl/builders";
+import { playFromZone } from "../../engine/effects/primitives";
 
 export default avatar({
   name: "Kell Tarn",
@@ -43,5 +45,6 @@ export default avatar({
     "23a7aca4-3c64-4963-a9a0-d3638822df48",
     "ffec9fdd-d948-4756-b7df-39b9e982613e",
   ],
-  pending: true,
+  abilities: () => [staticAbility(playFromZone("void", { cardType: "character" }, { oncePerTurn: true }), { while: conditionCardCounts("void", 7) })],
+  verifiedText: "2giu2ueurjc",
 });
