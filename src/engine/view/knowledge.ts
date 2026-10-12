@@ -44,6 +44,15 @@ import type { BattleState, CardInstance, FixedCardChange, FloatingEffect, Printi
  */
 export function rememberKnownCards(state: BattleState): void {
   const records = state.rememberedCards ??= { player: [], enemy: [] };
+  // A remembered printing alone does not identify a later private producer.
+  // Record only attribution this side can actually see at this boundary.
+  state.floating = state.floating.map((effect) => {
+    const { change } = effect;
+    if (change.kind !== "disableTriggers" || change.mode !== "triggeredAndActivated") return effect;
+    const observed = SIDES.filter((side) => effect.sourceObservedBy?.includes(side) === true ||
+      (identifies(state, change.instance, side) && seesSource(state, effect.source, side)));
+    return observed.length === (effect.sourceObservedBy?.length ?? 0) ? effect : { ...effect, sourceObservedBy: observed };
+  });
   // Each card's fixed permanent effects, in floating order, from one pass over the floating effects.
   const fixed = new Map<InstanceId, RememberedEffect[]>();
   for (const effect of state.floating) {
@@ -610,6 +619,17 @@ export function keepPublishedKnowledge(committed: BattleState, display: BattleSt
       next ??= { ...committed, knownTo: { player: [...committed.knownTo.player], enemy: [...committed.knownTo.enemy] } };
       learn(next, side, before);
     }
+  }
+  // Attribution of an existing combined obligation is published knowledge too.
+  // A rolled-back start has no matching committed effect and supplies no record.
+  for (const effect of committed.floating) {
+    if (effect.change.kind !== "disableTriggers" || effect.change.mode !== "triggeredAndActivated") continue;
+    const shown = display.floating.find((entry) => entry.id === effect.id && JSON.stringify(entry.source) === JSON.stringify(effect.source));
+    if (shown === undefined) continue;
+    const observed = SIDES.filter((side) => effect.sourceObservedBy?.includes(side) === true || shown.sourceObservedBy?.includes(side) === true);
+    if (observed.length === (effect.sourceObservedBy?.length ?? 0)) continue;
+    next ??= { ...committed };
+    next.floating = next.floating.map((entry) => entry.id === effect.id ? { ...entry, sourceObservedBy: observed } : entry);
   }
   return next ?? committed;
 }

@@ -1279,7 +1279,9 @@ function isFloatingEffect(value: unknown): boolean {
     isAbilitySource(value.source) &&
     isIndex(value.timestamp) &&
     isExpiry(value.expiry) &&
-    isFloatingChange(value.change)
+    isFloatingChange(value.change) &&
+    (value.sourceObservedBy === undefined || (isPlainRecord(value.change) && value.change.kind === "disableTriggers" && value.change.mode === "triggeredAndActivated" &&
+      isArrayOf(value.sourceObservedBy, isSide) && new Set(value.sourceObservedBy).size === value.sourceObservedBy.length))
   );
 }
 

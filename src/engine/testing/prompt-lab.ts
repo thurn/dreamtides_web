@@ -81,6 +81,9 @@ export const LAB = {
   },
   /** Combined suppression in the existing status and effect presentation surface. */
   disableAbilities: labEvent(0x56241, 0, p.disableTriggers(characterTarget(enemyCharacter()), "untilEndOfTurn", null, "triggeredAndActivated")),
+  /** Public source attribution can become anonymous while a combined turn obligation lasts. */
+  hiddenDisable: labEvent(0x77a40, 0, p.disableTriggers(characterTarget(characterYouControl()), "untilEndOfTurn", null, "triggeredAndActivated")),
+  hiddenDisableShuffle: labEvent(0x77a41, 0, p.shuffleInto([everyIn("void")])),
   /** A complete optional resolving energy and discard payment before drawing. */
   resolvingPayment: labEvent(0x43800, 0, p.payTo({ energy: 2, discard: 1 }, p.draw(2))),
   /** Grant a full extra turn using the ordinary queue. */
@@ -264,6 +267,8 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
   [LAB.disableBearer.id]: { name: "Lab Ability Bearer", text: "Vengeful. 1●: Gain 1⍟. ▸Dusk: Gain 2⍟. This character has +1✦." },
   [LAB.disableAbilities.id]: { name: "Lab Combined Silence", text: "Disable an enemy’s triggered and activated abilities this turn." },
+  [LAB.hiddenDisable.id]: { name: "Lab Hidden Silence", text: "Disable a character you control’s triggered and activated abilities this turn." },
+  [LAB.hiddenDisableShuffle.id]: { name: "Lab Source Concealment", text: "Shuffle your void into your deck." },
   [DSL.conditionalRemoval.id]: { name: "Lab Conditional Removal", text: "If you control 3 or more warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy." },
   [DSL.conditionalDawn.id]: { name: "Lab Conditional Dawn", text: "▸Dawn: Give a warrior you control +1✦. If you control no warriors, gain 2⍟ instead." },
   [DECK_TOP.keeper.id]: { name: "Lab Petal Keeper", text: "If you control 3 or more characters, reveal the top card of your deck. You may play characters from the top of your deck. 0●: Return another character to hand. 0●: Foresee 1." },
@@ -1192,6 +1197,13 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     setup: { active: "player", phase: "day", player: { hand: [LAB.disableAbilities.id], deck: deck(8) }, enemy: { back: [LAB.disableBearer.id], deck: deck(8) } },
     script: [],
     presents: [playHand(0)],
+  },
+  {
+    name: "present-hidden-disable",
+    description: "Presentation: combined disabling remains public while its source is concealed, then expires normally",
+    setup: { active: "player", phase: "day", player: { back: [LAB.disableBearer.id], hand: [LAB.hiddenDisable.id, LAB.hiddenDisableShuffle.id], energy: 8, deck: deck(8) }, enemy: { deck: deck(8) } },
+    script: [],
+    presents: [playHand(0), playHand(1)],
   },
   {
     name: "present-status",

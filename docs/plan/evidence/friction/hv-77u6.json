@@ -1,0 +1,31 @@
+{
+  "bead": "hv-77u6",
+  "phase": 5,
+  "implementMin": 87.35636083333334,
+  "implementWindow": {
+    "start": "2026-10-12T18:24:04.864Z",
+    "end": "2026-10-12T19:51:26.245650+00:00"
+  },
+  "localValidationS": {
+    "review": 56.648331707998295,
+    "knip": 3.9086399170046207,
+    "focused": 8.035595375011326,
+    "mutations": 15.883700792008312,
+    "full": 94.04382970900042,
+    "fuzz": 91.85212649998721,
+    "qa": 72.63688437500969
+  },
+  "hostLoad": 15.7431640625,
+  "testDelta": {
+    "files": 1,
+    "lines": 432,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "hidden-source-privacy",
+      "minutes": 22,
+      "note": "Reachable private hand producers required a bounded observation representation and native admission; wall interval 19:06:38\u201319:28:52 includes source/probe audit and parent admission, not productive editing time."
+    }
+  ]
+}

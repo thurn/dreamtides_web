@@ -1,0 +1,1675 @@
+{
+  "bead": "hv-77u6",
+  "base": "2b79616c0c48b082a627ad94481ff55c481c9657",
+  "dispatchProvenance": {
+    "actualParentDispatch": "2026-10-12T18:24:04.864Z",
+    "actualModelStart": "unknown",
+    "installPredatesDispatch": true,
+    "installation": {
+      "actualPid": 27187,
+      "observerPid": 27181,
+      "start": "2026-10-12T18:19:53.110294Z",
+      "end": "2026-10-12T18:19:55.185311Z",
+      "exit": 0,
+      "wallS": 2.07503
+    },
+    "implementationAck": "2026-10-12T18:37:04.488376Z",
+    "observationCorrectionAck": "2026-10-12T19:11:18.495544+00:00",
+    "fidelityFalloutAck": "2026-10-12T19:28:52.268538+00:00",
+    "includesResearchAdmissionQueueAndVerification": true
+  },
+  "endpoint": {
+    "parentAck": "2026-10-12T19:51:26.245650+00:00",
+    "gitAuthorDate": "2026-10-12T19:51:26.245650+00:00",
+    "gitCommitterDate": "2026-10-12T19:51:26.245650+00:00",
+    "gitStoredPrecision": "whole seconds; parent ACK fractions remain in measurement window",
+    "implementWindowEnd": "2026-10-12T19:51:26.245650+00:00",
+    "actualGitExecution": "separate stdout receipt retained by parent; no post-commit evidence writes",
+    "preMetadataTree": "929c969af0c53938809c2f9015466d8d6784a1f7",
+    "parentIndependentResourceProof": {
+      "allOwn84Pids80GroupsAbsent": true,
+      "port5274Free": true,
+      "twoExactProviderSettlements": true,
+      "qaLedgerVerdicts": 3
+    },
+    "renewedSchema": {
+      "actualPid": 58579,
+      "pgid": 58579,
+      "start": "2026-10-12T19:53:22.991757+00:00",
+      "end": "2026-10-12T19:53:23.097935+00:00",
+      "exit": 0,
+      "output": "Friction evidence valid: 620 records, 41 historical unknown measurements"
+    },
+    "renewedResourceProof": {
+      "at": "2026-10-12T19:53:23.105491+00:00",
+      "pidPgidObservation": "  PID  PGID STARTED                      COMMAND\n",
+      "port5274Free": true,
+      "ownExactOwnerRecordsCleared": true,
+      "distinctPeerOwner": null,
+      "allValidationAndQaSettled": true
+    }
+  },
+  "validation": [
+    {
+      "label": "alias-corrected-probe",
+      "observerPid": 52816,
+      "observerPgid": 52816,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:17:41.447619Z",
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-disable-view-obligation-77u6/unobserved-alias-probe.ts"
+      ],
+      "hostLoad": 16.28125,
+      "pid": 52831,
+      "pgid": 52831,
+      "end": "2026-10-12T19:17:42.566228Z",
+      "exit": 0,
+      "wallS": 1.1184681660088245,
+      "cpuS": 1.251035
+    },
+    {
+      "label": "blind-condition-probe",
+      "observerPid": 90720,
+      "observerPgid": 90720,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:30:53.124422Z",
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-disable-view-obligation-77u6/blind-condition-probe.ts"
+      ],
+      "hostLoad": 23.7666015625,
+      "pid": 90736,
+      "pgid": 90736,
+      "end": "2026-10-12T18:30:54.205671Z",
+      "exit": 0,
+      "wallS": 1.0809932920092251,
+      "cpuS": 1.218808
+    },
+    {
+      "label": "final-focused-2",
+      "observerPid": 30474,
+      "observerPgid": 30474,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:33:05.828467Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/determinize.test.ts"
+      ],
+      "hostLoad": 5.015625,
+      "pid": 30554,
+      "pgid": 30554,
+      "end": "2026-10-12T19:33:13.864286Z",
+      "exit": 0,
+      "wallS": 8.035595375011326,
+      "cpuS": 12.93755
+    },
+    {
+      "label": "final-focused",
+      "observerPid": 16164,
+      "observerPgid": 16164,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:32:39.474478Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/determinize.test.ts"
+      ],
+      "hostLoad": 5.1142578125,
+      "pid": 16174,
+      "pgid": 16174,
+      "end": "2026-10-12T19:32:47.843016Z",
+      "exit": 1,
+      "wallS": 8.36833349999506,
+      "cpuS": 12.214070999999999
+    },
+    {
+      "label": "final-knip",
+      "observerPid": 52942,
+      "observerPgid": 52942,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:36:29.198078Z",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "hostLoad": 18.99755859375,
+      "pid": 52952,
+      "pgid": 52952,
+      "end": "2026-10-12T19:36:33.106941Z",
+      "exit": 0,
+      "wallS": 3.9086399170046207,
+      "cpuS": 4.400258
+    },
+    {
+      "label": "final-mutations",
+      "observerPid": 46460,
+      "observerPgid": 46460,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:34:13.468136Z",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-disable-view-obligation-77u6/final-mutation-check.py"
+      ],
+      "hostLoad": 5.33984375,
+      "pid": 46570,
+      "pgid": 46570,
+      "end": "2026-10-12T19:34:29.352198Z",
+      "exit": 0,
+      "wallS": 15.883700792008312,
+      "cpuS": 25.219257000000002
+    },
+    {
+      "label": "final-review",
+      "observerPid": 22922,
+      "observerPgid": 22922,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:35:26.502379Z",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoad": 15.7431640625,
+      "pid": 22943,
+      "pgid": 22943,
+      "end": "2026-10-12T19:36:23.151804Z",
+      "exit": 0,
+      "wallS": 56.648331707998295,
+      "cpuS": 176.927909
+    },
+    {
+      "label": "final-typecheck-2",
+      "observerPid": 43188,
+      "observerPgid": 43188,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:33:57.977200Z",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "hostLoad": 4.35595703125,
+      "pid": 43197,
+      "pgid": 43197,
+      "end": "2026-10-12T19:34:06.257450Z",
+      "exit": 0,
+      "wallS": 8.28003541599901,
+      "cpuS": 13.180916999999999
+    },
+    {
+      "label": "final-typecheck",
+      "observerPid": 42366,
+      "observerPgid": 42366,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:33:24.409126Z",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "hostLoad": 5.10400390625,
+      "pid": 42377,
+      "pgid": 42377,
+      "end": "2026-10-12T19:33:32.674982Z",
+      "exit": 2,
+      "wallS": 8.265619625002728,
+      "cpuS": 12.784836
+    },
+    {
+      "label": "focused-1",
+      "observerPid": 76683,
+      "observerPgid": 76683,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:45:10.605960Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/primitives.test.ts"
+      ],
+      "hostLoad": 15.76025390625,
+      "pid": 76794,
+      "pgid": 76794,
+      "end": "2026-10-12T18:45:13.778394Z",
+      "exit": 1,
+      "wallS": 3.1723247920017457,
+      "cpuS": 3.942864
+    },
+    {
+      "label": "focused-2",
+      "observerPid": 4007,
+      "observerPgid": 4007,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:45:30.342505Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "anonymous combined disabling obligations"
+      ],
+      "hostLoad": 16.9189453125,
+      "pid": 4065,
+      "pgid": 4065,
+      "end": "2026-10-12T18:45:35.157584Z",
+      "exit": 1,
+      "wallS": 4.8149057919945335,
+      "cpuS": 6.823638
+    },
+    {
+      "label": "focused-3",
+      "observerPid": 12778,
+      "observerPgid": 12778,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:46:24.254903Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "anonymous combined disabling obligations"
+      ],
+      "hostLoad": 14.2587890625,
+      "pid": 12790,
+      "pgid": 12790,
+      "end": "2026-10-12T18:46:29.360374Z",
+      "exit": 1,
+      "wallS": 5.105298707989277,
+      "cpuS": 7.095047
+    },
+    {
+      "label": "focused-4",
+      "observerPid": 56157,
+      "observerPgid": 56157,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:48:53.352790Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "anonymous combined disabling obligations"
+      ],
+      "hostLoad": 8.7900390625,
+      "pid": 56362,
+      "pgid": 56362,
+      "end": "2026-10-12T18:48:57.932683Z",
+      "exit": 1,
+      "wallS": 4.57977966600447,
+      "cpuS": 6.088087
+    },
+    {
+      "label": "focused-5",
+      "observerPid": 79867,
+      "observerPgid": 79867,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:50:19.070606Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "anonymous combined disabling obligations"
+      ],
+      "hostLoad": 5.0576171875,
+      "pid": 79876,
+      "pgid": 79876,
+      "end": "2026-10-12T18:50:23.121218Z",
+      "exit": 0,
+      "wallS": 4.050519041004009,
+      "cpuS": 5.671634
+    },
+    {
+      "label": "focused-6",
+      "observerPid": 42094,
+      "observerPgid": 42094,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:53:46.477363Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/determinize.test.ts"
+      ],
+      "hostLoad": 20.62548828125,
+      "pid": 42106,
+      "pgid": 42106,
+      "end": "2026-10-12T18:53:57.101020Z",
+      "exit": 1,
+      "wallS": 10.62342520900711,
+      "cpuS": 15.941431
+    },
+    {
+      "label": "focused-7",
+      "observerPid": 48358,
+      "observerPgid": 48358,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:55:11.219658Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/view/view.test.ts",
+        "src/engine/view/determinize.test.ts"
+      ],
+      "hostLoad": 14.201171875,
+      "pid": 48375,
+      "pgid": 48375,
+      "end": "2026-10-12T18:55:22.214816Z",
+      "exit": 0,
+      "wallS": 10.995036125008482,
+      "cpuS": 16.907944999999998
+    },
+    {
+      "label": "full-execution",
+      "observerPid": 44691,
+      "observerPgid": 26140,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:39:13.681486Z",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "hostLoad": 9.4931640625,
+      "heavyLockAcquired": "2026-10-12T19:39:13.681615Z",
+      "pid": 44694,
+      "pgid": 26140,
+      "end": "2026-10-12T19:40:47.727067Z",
+      "exit": 0,
+      "wallS": 94.04382970900042,
+      "cpuS": 240.599512
+    },
+    {
+      "label": "full-wrapper",
+      "observerPid": 26099,
+      "observerPgid": 26099,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:38:09.022955Z",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-disable-view-obligation-77u6/observe.py",
+        "full-execution",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "hostLoad": 11.23095703125,
+      "pid": 26140,
+      "pgid": 26140,
+      "end": "2026-10-12T19:40:47.730725Z",
+      "exit": 0,
+      "wallS": 158.704882541002,
+      "cpuS": 240.624931
+    },
+    {
+      "label": "fuzz-execution",
+      "observerPid": 78292,
+      "observerPgid": 78291,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:41:10.618827Z",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "hostLoad": 6.03662109375,
+      "heavyLockAcquired": "2026-10-12T19:41:10.618925Z",
+      "pid": 78293,
+      "pgid": 78291,
+      "end": "2026-10-12T19:42:42.455043Z",
+      "exit": 0,
+      "wallS": 91.85212649998721,
+      "cpuS": 101.834857
+    },
+    {
+      "label": "fuzz-wrapper",
+      "observerPid": 78281,
+      "observerPgid": 78281,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:41:10.598296Z",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-disable-view-obligation-77u6/observe.py",
+        "fuzz-execution",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "hostLoad": 6.03662109375,
+      "pid": 78291,
+      "pgid": 78291,
+      "end": "2026-10-12T19:42:42.458342Z",
+      "exit": 0,
+      "wallS": 91.87594262500352,
+      "cpuS": 101.85725500000001
+    },
+    {
+      "label": "initial-probe",
+      "observerPid": 43002,
+      "observerPgid": 43002,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:40:42.338001Z",
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-disable-view-obligation-77u6/public-probe.ts"
+      ],
+      "hostLoad": 13.0390625,
+      "pid": 43115,
+      "pgid": 43115,
+      "end": "2026-10-12T18:40:43.423991Z",
+      "exit": 0,
+      "wallS": 1.0858876659913221,
+      "cpuS": 1.252894
+    },
+    {
+      "label": "install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "observerPid": 27181,
+      "observerPgid": 27181,
+      "startUtc": "2026-10-12T18:19:53.110294+00:00",
+      "pid": 27187,
+      "pgid": 27187,
+      "exit": 0,
+      "endUtc": "2026-10-12T18:19:55.185311+00:00",
+      "elapsedS": 2.075030334002804
+    },
+    {
+      "label": "masked-overlap-probe",
+      "observerPid": 56339,
+      "observerPgid": 56339,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:36:44.698910Z",
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-disable-view-obligation-77u6/masked-overlap-probe.ts"
+      ],
+      "hostLoad": 23.01123046875,
+      "pid": 56513,
+      "pgid": 56513,
+      "end": "2026-10-12T18:36:45.712001Z",
+      "exit": 0,
+      "wallS": 1.0129865830094786,
+      "cpuS": 1.152844
+    },
+    {
+      "label": "mutations",
+      "observerPid": 72872,
+      "observerPgid": 72872,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:01:30.789720Z",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-disable-view-obligation-77u6/mutation-check.py"
+      ],
+      "hostLoad": 5.28759765625,
+      "pid": 72881,
+      "pgid": 72881,
+      "end": "2026-10-12T19:01:40.455050Z",
+      "exit": 0,
+      "wallS": 9.665192833010224,
+      "cpuS": 15.190894
+    },
+    {
+      "label": "observation-fidelity-probe",
+      "observerPid": 38411,
+      "observerPgid": 38411,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:24:53.935411Z",
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-disable-view-obligation-77u6/observation-fidelity-probe.ts"
+      ],
+      "hostLoad": 9.00634765625,
+      "pid": 38423,
+      "pgid": 38423,
+      "end": "2026-10-12T19:24:54.946884Z",
+      "exit": 0,
+      "wallS": 1.01136783399852,
+      "cpuS": 1.153681
+    },
+    {
+      "label": "observed-focused",
+      "observerPid": 63440,
+      "observerPgid": 63440,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:19:45.331736Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "anonymous combined disabling obligations"
+      ],
+      "hostLoad": 22.92724609375,
+      "pid": 63597,
+      "pgid": 63597,
+      "end": "2026-10-12T19:19:52.443865Z",
+      "exit": 0,
+      "wallS": 7.1117637080024,
+      "cpuS": 7.652452
+    },
+    {
+      "label": "privacy-focused-2",
+      "observerPid": 88002,
+      "observerPgid": 88002,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:31:33.673909Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "combined disabling private source attribution"
+      ],
+      "hostLoad": 7.71826171875,
+      "pid": 88030,
+      "pgid": 88030,
+      "end": "2026-10-12T19:31:38.692253Z",
+      "exit": 1,
+      "wallS": 5.018165166999097,
+      "cpuS": 6.832801
+    },
+    {
+      "label": "privacy-focused-3",
+      "observerPid": 15579,
+      "observerPgid": 15579,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:32:11.175141Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "combined disabling private source attribution"
+      ],
+      "hostLoad": 6.474609375,
+      "pid": 15593,
+      "pgid": 15593,
+      "end": "2026-10-12T19:32:15.559437Z",
+      "exit": 0,
+      "wallS": 4.383991082999273,
+      "cpuS": 5.584238
+    },
+    {
+      "label": "privacy-focused",
+      "observerPid": 84812,
+      "observerPgid": 84812,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:30:53.624745Z",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "combined disabling private source attribution"
+      ],
+      "hostLoad": 10.306640625,
+      "pid": 84823,
+      "pgid": 84823,
+      "end": "2026-10-12T19:30:58.029924Z",
+      "exit": 1,
+      "wallS": 4.405015292009921,
+      "cpuS": 5.8456589999999995
+    },
+    {
+      "label": "qa-early",
+      "observerPid": 80483,
+      "observerPgid": 80483,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:43:04.835895Z",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-disable-view-obligation-77u6/hidden-disable.mjs",
+        "--bead",
+        "hv-77u6",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "early=1",
+        "--timeout",
+        "600"
+      ],
+      "hostLoad": 4.85400390625,
+      "pid": 80497,
+      "pgid": 80497,
+      "end": "2026-10-12T19:43:20.694620Z",
+      "exit": 0,
+      "wallS": 15.858838290994754,
+      "cpuS": 7.119784999999999
+    },
+    {
+      "label": "qa-final",
+      "observerPid": 83375,
+      "observerPgid": 83375,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:44:17.191592Z",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-disable-view-obligation-77u6/hidden-disable.mjs",
+        "--bead",
+        "hv-77u6",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ],
+      "hostLoad": 4.56640625,
+      "pid": 83384,
+      "pgid": 83384,
+      "end": "2026-10-12T19:45:29.829249Z",
+      "exit": 0,
+      "wallS": 72.63688437500969,
+      "cpuS": 7.153435
+    },
+    {
+      "label": "review-1",
+      "observerPid": 61249,
+      "observerPgid": 61249,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:57:57.153133Z",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoad": 21.10205078125,
+      "pid": 61262,
+      "pgid": 61262,
+      "end": "2026-10-12T18:58:52.037197Z",
+      "exit": 2,
+      "wallS": 54.88351720900391,
+      "cpuS": 173.216076
+    },
+    {
+      "label": "typecheck",
+      "observerPid": 66923,
+      "observerPgid": 66923,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T18:59:09.454943Z",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "hostLoad": 12.69580078125,
+      "pid": 66935,
+      "pgid": 66935,
+      "end": "2026-10-12T18:59:20.025768Z",
+      "exit": 0,
+      "wallS": 10.570660917001078,
+      "cpuS": 23.280939
+    },
+    {
+      "label": "unobserved-alias-probe",
+      "observerPid": 148,
+      "observerPgid": 148,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:06:38.022690Z",
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-disable-view-obligation-77u6/unobserved-alias-probe.ts"
+      ],
+      "hostLoad": 15.9326171875,
+      "pid": 163,
+      "pgid": 163,
+      "end": "2026-10-12T19:06:39.040083Z",
+      "exit": 0,
+      "wallS": 1.0172085419908399,
+      "cpuS": 1.128034
+    },
+    {
+      "label": "final-evidence-schema",
+      "observerPid": 13446,
+      "observerPgid": 13446,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:47:14.922412Z",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "hostLoad": 5.54052734375,
+      "pid": 13463,
+      "pgid": 13463,
+      "end": "2026-10-12T19:47:15.020279Z",
+      "exit": 0,
+      "wallS": 0.09781849999853875,
+      "cpuS": 0.070198
+    },
+    {
+      "label": "final-evidence-schema-2",
+      "observerPid": 44935,
+      "observerPgid": 44926,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+      "start": "2026-10-12T19:49:21.398043Z",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "hostLoad": 7.73583984375,
+      "pid": 44936,
+      "pgid": 44936,
+      "end": "2026-10-12T19:49:21.496577Z",
+      "exit": 0,
+      "wallS": 0.09845070900337305,
+      "cpuS": 0.073831
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "label": "alias-corrected-probe",
+      "at": "2026-10-12T19:17:41.447619Z",
+      "oneMinute": 16.28125,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "blind-condition-probe",
+      "at": "2026-10-12T18:30:53.124422Z",
+      "oneMinute": 23.7666015625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "final-focused-2",
+      "at": "2026-10-12T19:33:05.828467Z",
+      "oneMinute": 5.015625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "final-focused",
+      "at": "2026-10-12T19:32:39.474478Z",
+      "oneMinute": 5.1142578125,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "final-knip",
+      "at": "2026-10-12T19:36:29.198078Z",
+      "oneMinute": 18.99755859375,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "final-mutations",
+      "at": "2026-10-12T19:34:13.468136Z",
+      "oneMinute": 5.33984375,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "final-review",
+      "at": "2026-10-12T19:35:26.502379Z",
+      "oneMinute": 15.7431640625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "final-typecheck-2",
+      "at": "2026-10-12T19:33:57.977200Z",
+      "oneMinute": 4.35595703125,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "final-typecheck",
+      "at": "2026-10-12T19:33:24.409126Z",
+      "oneMinute": 5.10400390625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "focused-1",
+      "at": "2026-10-12T18:45:10.605960Z",
+      "oneMinute": 15.76025390625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "focused-2",
+      "at": "2026-10-12T18:45:30.342505Z",
+      "oneMinute": 16.9189453125,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "focused-3",
+      "at": "2026-10-12T18:46:24.254903Z",
+      "oneMinute": 14.2587890625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "focused-4",
+      "at": "2026-10-12T18:48:53.352790Z",
+      "oneMinute": 8.7900390625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "focused-5",
+      "at": "2026-10-12T18:50:19.070606Z",
+      "oneMinute": 5.0576171875,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "focused-6",
+      "at": "2026-10-12T18:53:46.477363Z",
+      "oneMinute": 20.62548828125,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "focused-7",
+      "at": "2026-10-12T18:55:11.219658Z",
+      "oneMinute": 14.201171875,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "full-execution",
+      "at": "2026-10-12T19:39:13.681486Z",
+      "oneMinute": 9.4931640625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "full-wrapper",
+      "at": "2026-10-12T19:38:09.022955Z",
+      "oneMinute": 11.23095703125,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "fuzz-execution",
+      "at": "2026-10-12T19:41:10.618827Z",
+      "oneMinute": 6.03662109375,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "fuzz-wrapper",
+      "at": "2026-10-12T19:41:10.598296Z",
+      "oneMinute": 6.03662109375,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "initial-probe",
+      "at": "2026-10-12T18:40:42.338001Z",
+      "oneMinute": 13.0390625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "masked-overlap-probe",
+      "at": "2026-10-12T18:36:44.698910Z",
+      "oneMinute": 23.01123046875,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "mutations",
+      "at": "2026-10-12T19:01:30.789720Z",
+      "oneMinute": 5.28759765625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "observation-fidelity-probe",
+      "at": "2026-10-12T19:24:53.935411Z",
+      "oneMinute": 9.00634765625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "observed-focused",
+      "at": "2026-10-12T19:19:45.331736Z",
+      "oneMinute": 22.92724609375,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "privacy-focused-2",
+      "at": "2026-10-12T19:31:33.673909Z",
+      "oneMinute": 7.71826171875,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "privacy-focused-3",
+      "at": "2026-10-12T19:32:11.175141Z",
+      "oneMinute": 6.474609375,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "privacy-focused",
+      "at": "2026-10-12T19:30:53.624745Z",
+      "oneMinute": 10.306640625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "qa-early",
+      "at": "2026-10-12T19:43:04.835895Z",
+      "oneMinute": 4.85400390625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "qa-final",
+      "at": "2026-10-12T19:44:17.191592Z",
+      "oneMinute": 4.56640625,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "review-1",
+      "at": "2026-10-12T18:57:57.153133Z",
+      "oneMinute": 21.10205078125,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "typecheck",
+      "at": "2026-10-12T18:59:09.454943Z",
+      "oneMinute": 12.69580078125,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    },
+    {
+      "label": "unobserved-alias-probe",
+      "at": "2026-10-12T19:06:38.022690Z",
+      "oneMinute": 15.9326171875,
+      "measuredBy": "os.getloadavg, same host one-minute load as sysctl vm.loadavg"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final-review starting host one-minute load, 19:35:26.502379Z",
+        "provenance": "actual process receipt starting host one-minute load"
+      }
+    }
+  },
+  "mutationChecks": [
+    {
+      "name": "retention",
+      "path": "src/engine/rules/floating.ts",
+      "start": "2026-10-12T19:34:13.488652Z",
+      "observerPid": 46570,
+      "observerPgid": 46570,
+      "sha256Before": "16f1eea0e85e67f3a20db68058532449589a1a7a8070530f821ca7b2d6a5aa17",
+      "pid": 46613,
+      "pgid": 46613,
+      "exit": 1,
+      "caught": true,
+      "end": "2026-10-12T19:34:16.024370Z",
+      "wallS": 2.5355905830074335,
+      "sha256Restored": "16f1eea0e85e67f3a20db68058532449589a1a7a8070530f821ca7b2d6a5aa17"
+    },
+    {
+      "name": "reconciliation",
+      "path": "src/engine/view/determinize.ts",
+      "start": "2026-10-12T19:34:16.024865Z",
+      "observerPid": 46570,
+      "observerPgid": 46570,
+      "sha256Before": "a298aebe091f06882fb5c964e2df047bd667f36cffbdd96ec595f68a6c919c7b",
+      "pid": 50046,
+      "pgid": 50046,
+      "exit": 1,
+      "caught": true,
+      "end": "2026-10-12T19:34:18.608565Z",
+      "wallS": 2.5836645840026904,
+      "sha256Restored": "a298aebe091f06882fb5c964e2df047bd667f36cffbdd96ec595f68a6c919c7b"
+    },
+    {
+      "name": "dynamic-source",
+      "path": "src/engine/view/view.ts",
+      "start": "2026-10-12T19:34:18.609020Z",
+      "observerPid": 46570,
+      "observerPgid": 46570,
+      "sha256Before": "51341f0065faf1e20f1495ee26c95e78fb726d1d5dabfc1d7243c919881e3652",
+      "pid": 53566,
+      "pgid": 53566,
+      "exit": 1,
+      "caught": true,
+      "end": "2026-10-12T19:34:21.544825Z",
+      "wallS": 2.9357667500007665,
+      "sha256Restored": "51341f0065faf1e20f1495ee26c95e78fb726d1d5dabfc1d7243c919881e3652"
+    },
+    {
+      "name": "cohort-prebinding",
+      "path": "src/engine/view/determinize.ts",
+      "start": "2026-10-12T19:34:21.545314Z",
+      "observerPid": 46570,
+      "observerPgid": 46570,
+      "sha256Before": "a298aebe091f06882fb5c964e2df047bd667f36cffbdd96ec595f68a6c919c7b",
+      "pid": 57192,
+      "pgid": 57192,
+      "exit": 1,
+      "caught": true,
+      "end": "2026-10-12T19:34:24.204491Z",
+      "wallS": 2.6591399169992656,
+      "sha256Restored": "a298aebe091f06882fb5c964e2df047bd667f36cffbdd96ec595f68a6c919c7b"
+    },
+    {
+      "name": "private-alias",
+      "path": "src/engine/view/view.ts",
+      "start": "2026-10-12T19:34:24.204975Z",
+      "observerPid": 46570,
+      "observerPgid": 46570,
+      "sha256Before": "51341f0065faf1e20f1495ee26c95e78fb726d1d5dabfc1d7243c919881e3652",
+      "pid": 60780,
+      "pgid": 60780,
+      "exit": 1,
+      "caught": true,
+      "end": "2026-10-12T19:34:26.747193Z",
+      "wallS": 2.542185167010757,
+      "sha256Restored": "51341f0065faf1e20f1495ee26c95e78fb726d1d5dabfc1d7243c919881e3652"
+    },
+    {
+      "name": "published-attribution",
+      "path": "src/engine/view/knowledge.ts",
+      "start": "2026-10-12T19:34:26.747675Z",
+      "observerPid": 46570,
+      "observerPgid": 46570,
+      "sha256Before": "8753255cca8b5163e996e15b203f7030b71ecdded2ca2410a4c1a92ad9b99cb0",
+      "pid": 63971,
+      "pgid": 63971,
+      "exit": 1,
+      "caught": true,
+      "end": "2026-10-12T19:34:29.348466Z",
+      "wallS": 2.600760832996457,
+      "sha256Restored": "8753255cca8b5163e996e15b203f7030b71ecdded2ca2410a4c1a92ad9b99cb0"
+    }
+  ],
+  "failurePaths": {
+    "concealmentAndSampling": "Both controllers/viewers, every supported sourceIn zone, sourceWasReclaimed, energy, another exclusion, source X, created-source cessation, observed captured cohorts, all four general durations; existing anonymous combined disabling obligations contracts.",
+    "privacy": "Private hand-trigger shared versus separate producers have equal redacted events and whole views; original dynamic while permits both subsequent futures. Masked overlap with different expiries retains only aggregate constraints.",
+    "metadataAndReplay": "Privacy module persists strict observation metadata, legacy omission, malformed duplicate/wrong mode, published reveal/shuffle/error rollback, prompt reload/replay, illegal answer, concurrent actor, wrong chooser, non-cancellable published prefix and stale attempt. Existing selective contracts contain floating-start rollback and activation cancel/restart.",
+    "partialWrite": "Fold published prefix tests cover non-atomic event presentation and contained gameplay rollback. Determinization is synchronous, returns only after bounded reconciliation and rejects malformed/impossible/cap input; interrupted execution has no returned state or durable writes.",
+    "inapplicable": "No event schema, asynchronous database, reader, content or catalog change. SourceSpark while is unsupported authoritative input; recorded separately, not widened."
+  },
+  "sourceFreeze": {
+    "at": "2026-10-12T19:43:04.806273+00:00",
+    "base": "2b79616c0c48b082a627ad94481ff55c481c9657",
+    "paths": {
+      "docs/plan/engine-design.md": "dfae1f35c2250b1a480e45a8f89a8de07852d3825cfce87d41a7ac352267c10f",
+      "src/engine/effects/primitives/contracts/disable-source-privacy.contracts.ts": "e3c400ef3bf12e9384bbe8134edcc51593354d0e334dc0e1f0a95c48903c983a",
+      "src/engine/effects/primitives/contracts/disable-triggers.contracts.ts": "97d164fff052281620b71c5a67611807530f934ef79041db5b864be36b665049",
+      "src/engine/rules/floating.ts": "16f1eea0e85e67f3a20db68058532449589a1a7a8070530f821ca7b2d6a5aa17",
+      "src/engine/state/types.ts": "a17526d9f8c1b3bf2e76802c87e7dcf6804530d73a764af0dd9e5dae23749880",
+      "src/engine/testing/determinization-fidelity.ts": "8b58d4c427f3041cffdf3c00cbfc08aa9c5531ea76da5334532507166d8ab48e",
+      "src/engine/testing/prompt-lab.ts": "7a60b15b54af66cf519258f386bfed9c9b70538dda3fb4c130e84b64caba2f2d",
+      "src/engine/view/determinize.ts": "a298aebe091f06882fb5c964e2df047bd667f36cffbdd96ec595f68a6c919c7b",
+      "src/engine/view/knowledge.ts": "8753255cca8b5163e996e15b203f7030b71ecdded2ca2410a4c1a92ad9b99cb0",
+      "src/engine/view/view.ts": "51341f0065faf1e20f1495ee26c95e78fb726d1d5dabfc1d7243c919881e3652",
+      "src/rules/battle/fold.ts": "d3d4eb0286a0d767526e131cf9aaba65b41dc0cac0530684ef1c60d8434a5164"
+    },
+    "allCodeWritingAndHeavyGroupsSettled": true,
+    "finalMatches": true,
+    "noSourceWritesAfterFreeze": true
+  },
+  "qa": {
+    "reports": [
+      {
+        "invocation": "run-BQCNDq",
+        "report": "invocations/run-BQCNDq/hidden-disable.result.json",
+        "label": "early-desktop",
+        "port": 5274,
+        "serverPid": 80525,
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 12675
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-77u6/invocations/run-BQCNDq/hidden-disable-desktop.jsonl",
+            "gameId": "672yvg",
+            "selectedBy": "url",
+            "rows": 44,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "invocation": "run-8XcNEE",
+        "report": "invocations/run-8XcNEE/hidden-disable.result.json",
+        "label": "final-desktop-mobile",
+        "port": 5274,
+        "serverPid": 83423,
+        "caps": [],
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 39068
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 31739
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-77u6/invocations/run-8XcNEE/hidden-disable-desktop.jsonl",
+            "gameId": "ag9o86",
+            "selectedBy": "url",
+            "rows": 77,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-77u6/invocations/run-8XcNEE/hidden-disable-mobile.jsonl",
+            "gameId": "ayk7at",
+            "selectedBy": "url",
+            "rows": 75,
+            "reason": null
+          }
+        ]
+      }
+    ],
+    "finalViewportProofs": [
+      {
+        "bead": "hv-77u6",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000056240",
+        "entityKind": "engine-rule",
+        "mode": "judged",
+        "variant": "base",
+        "viewport": "desktop",
+        "commit": "2b79616c0c48b082a627ad94481ff55c481c9657",
+        "invocation": "invocations/run-8XcNEE",
+        "evidenceDir": "invocations/run-8XcNEE",
+        "rawReport": "invocations/run-8XcNEE/hidden-disable.result.json",
+        "verdict": "pass",
+        "effective": true,
+        "attempt": 1,
+        "failureKinds": [],
+        "screens": [
+          "hidden-disable-desktop-concealed-2x.png",
+          "hidden-disable-desktop-reloaded-2x.png",
+          "hidden-disable-desktop-restored-2x.png"
+        ],
+        "imageChecks": [
+          {
+            "filename": "hidden-disable-desktop-concealed-2x.png",
+            "pixels": [
+              2880,
+              1800
+            ],
+            "visuallyInspected": true,
+            "sha256": "ad117afa3682f1545313e82bb91b7a5f5697b12b652f72777ca18b5645a627fc"
+          },
+          {
+            "filename": "hidden-disable-desktop-reloaded-2x.png",
+            "pixels": [
+              2880,
+              1800
+            ],
+            "visuallyInspected": true,
+            "sha256": "7d1d8dd261fa752c1245fdee9ce45d356ac9ba5bf16305df3b01035b040870d9"
+          },
+          {
+            "filename": "hidden-disable-desktop-restored-2x.png",
+            "pixels": [
+              2880,
+              1800
+            ],
+            "visuallyInspected": true,
+            "sha256": "bd68329178a3cc902c7d0a634fffe71f157004316a46e80fb3226ae1445b186d"
+          }
+        ],
+        "caps": [],
+        "geometry": {
+          "hiddenGeometry": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "hit": true,
+            "badge": true,
+            "badgeBox": {
+              "x": 258.078125,
+              "y": 487.078125,
+              "width": 23.265625,
+              "height": 23.265625
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "reloadGeometry": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "hit": true,
+            "badge": true,
+            "badgeBox": {
+              "x": 258.078125,
+              "y": 487.078125,
+              "width": 23.265625,
+              "height": 23.265625
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "expiryGeometry": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5,
+            "hit": true,
+            "badge": false,
+            "badgeBox": null,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        },
+        "gameLog": {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-77u6/invocations/run-8XcNEE/hidden-disable-desktop.jsonl",
+          "gameId": "ag9o86",
+          "selectedBy": "url",
+          "rows": 77,
+          "reason": null
+        },
+        "notes": "Ordinary activation before suppression, public event then blind void shuffle, retained typed target/mode/effect/current-turn expiry and badge, unavailable activation with no submitted intent/cost; ordinary reload retains state and badge; ordinary expiry restores activation with exact cost/score. UUID intent acceptance was read before effect waits. Synthetic cards intentionally use lab presentation."
+      },
+      {
+        "bead": "hv-77u6",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000056240",
+        "entityKind": "engine-rule",
+        "mode": "judged",
+        "variant": "base",
+        "viewport": "mobile",
+        "commit": "2b79616c0c48b082a627ad94481ff55c481c9657",
+        "invocation": "invocations/run-8XcNEE",
+        "evidenceDir": "invocations/run-8XcNEE",
+        "rawReport": "invocations/run-8XcNEE/hidden-disable.result.json",
+        "verdict": "pass",
+        "effective": true,
+        "attempt": 1,
+        "failureKinds": [],
+        "screens": [
+          "hidden-disable-mobile-concealed-2x.png",
+          "hidden-disable-mobile-reloaded-2x.png",
+          "hidden-disable-mobile-restored-2x.png"
+        ],
+        "imageChecks": [
+          {
+            "filename": "hidden-disable-mobile-concealed-2x.png",
+            "pixels": [
+              780,
+              1688
+            ],
+            "visuallyInspected": true,
+            "sha256": "2e18838411512e34840d27ce90c754ca7aea536d9cbb4e95dbdf407b51d7d6ab"
+          },
+          {
+            "filename": "hidden-disable-mobile-reloaded-2x.png",
+            "pixels": [
+              780,
+              1688
+            ],
+            "visuallyInspected": true,
+            "sha256": "2e18838411512e34840d27ce90c754ca7aea536d9cbb4e95dbdf407b51d7d6ab"
+          },
+          {
+            "filename": "hidden-disable-mobile-restored-2x.png",
+            "pixels": [
+              780,
+              1688
+            ],
+            "visuallyInspected": true,
+            "sha256": "d2e6e713bcbcace699b34169e7a961d1ffcd188d6c24b4d18336f06d58eae250"
+          }
+        ],
+        "caps": [],
+        "geometry": {
+          "hiddenGeometry": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375,
+            "hit": true,
+            "badge": true,
+            "badgeBox": {
+              "x": 25.546875,
+              "y": 418.03125,
+              "width": 14,
+              "height": 14
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "reloadGeometry": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375,
+            "hit": true,
+            "badge": true,
+            "badgeBox": {
+              "x": 25.546875,
+              "y": 418.03125,
+              "width": 14,
+              "height": 14
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "expiryGeometry": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375,
+            "hit": true,
+            "badge": false,
+            "badgeBox": null,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          }
+        },
+        "gameLog": {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-77u6/invocations/run-8XcNEE/hidden-disable-mobile.jsonl",
+          "gameId": "ayk7at",
+          "selectedBy": "url",
+          "rows": 75,
+          "reason": null
+        },
+        "notes": "Ordinary activation before suppression, public event then blind void shuffle, retained typed target/mode/effect/current-turn expiry and badge, unavailable activation with no submitted intent/cost; ordinary reload retains state and badge; ordinary expiry restores activation with exact cost/score. UUID intent acceptance was read before effect waits. Synthetic cards intentionally use lab presentation."
+      }
+    ],
+    "earlyVisualInspectionBeforeFinalMatrix": true,
+    "earlySettlement": [
+      {
+        "at": "2026-10-12T19:44:03.834205+00:00",
+        "owner": {
+          "token": "8b087b55-aed3-4039-a364-500304b0fa5a",
+          "pid": 80497,
+          "bead": "hv-77u6",
+          "label": "hidden-disable",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T19:43:07.342Z",
+          "providerState": "active",
+          "mcpSessionId": "5511b0be-9856-4381-ac90-0d7bfc8d0524",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "ownerRecordAbsent": true,
+        "distinctPeerOwner": null,
+        "portFree": true,
+        "runnerAndServerProcessObservation": "  PID  PGID STARTED                      COMMAND\n",
+        "completion": "native runner exit0 confirms browser_close, joined calls, exact owner clear, server tree cleanup"
+      }
+    ],
+    "finalSettlement": [
+      {
+        "at": "2026-10-12T19:47:14.818571+00:00",
+        "owner": {
+          "token": "0a2a7a3d-996b-4f87-a68b-e05ed57041cc",
+          "pid": 83384,
+          "bead": "hv-77u6",
+          "label": "hidden-disable",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T19:44:18.359Z",
+          "providerState": "active",
+          "mcpSessionId": "9c2180ae-8e93-4b3c-bef7-f7b890122ec2",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "ownerRecordAbsent": true,
+        "distinctPeerOwner": null,
+        "portFree": true,
+        "runnerAndServerProcessObservation": "  PID  PGID STARTED                      COMMAND\n",
+        "completion": "native runner exit0 certifies browser_close, joined calls, provider completion and exact owner clear, server tree cleanup; cleanup stdout confirms port free before any reuse"
+      }
+    ],
+    "sourceFreezeMatchesBeforeAndAfterQa": true,
+    "noProductOrObservationFailures": true,
+    "preliminaryViewportProof": {
+      "bead": "hv-77u6",
+      "uuid": "5e5e5e5e-0000-4000-8000-000000056240",
+      "entityKind": "engine-rule",
+      "mode": "judged",
+      "variant": "base",
+      "viewport": "desktop",
+      "commit": "2b79616c0c48b082a627ad94481ff55c481c9657",
+      "invocation": "invocations/run-BQCNDq",
+      "evidenceDir": "invocations/run-BQCNDq",
+      "rawReport": "invocations/run-BQCNDq/hidden-disable.result.json",
+      "verdict": "pass",
+      "effective": true,
+      "preliminary": true,
+      "attempt": 1,
+      "failureKinds": [],
+      "screens": [
+        "hidden-disable-desktop-concealed-2x.png"
+      ],
+      "imageChecks": [
+        {
+          "filename": "hidden-disable-desktop-concealed-2x.png",
+          "pixels": [
+            2880,
+            1800
+          ],
+          "visuallyInspected": true,
+          "sha256": "ad117afa3682f1545313e82bb91b7a5f5697b12b652f72777ca18b5645a627fc"
+        }
+      ],
+      "caps": [],
+      "geometry": {
+        "hiddenGeometry": {
+          "x": 254.5,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5,
+          "hit": true,
+          "badge": true,
+          "badgeBox": {
+            "x": 258.078125,
+            "y": 487.078125,
+            "width": 23.265625,
+            "height": 23.265625
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        }
+      },
+      "gameLog": {
+        "viewport": "desktop",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-77u6/invocations/run-BQCNDq/hidden-disable-desktop.jsonl",
+        "gameId": "672yvg",
+        "selectedBy": "url",
+        "rows": 44,
+        "reason": null
+      },
+      "notes": "Preliminary desktop verdict covers ordinary baseline activation, disable play and blind source concealment, retained typed obligation/badge, unavailable activation without intent/cost, and early visual inspection. This early invocation does not exercise reload or expiry; the separate final viewport verdicts provide those checks."
+    }
+  },
+  "resources": {
+    "at": "2026-10-12T19:47:14.818571+00:00",
+    "allOwnValidationReceiptExits": [
+      {
+        "label": "final-knip",
+        "pid": 52952,
+        "pgid": 52952,
+        "exit": 0
+      },
+      {
+        "label": "final-review",
+        "pid": 22943,
+        "pgid": 22943,
+        "exit": 0
+      },
+      {
+        "label": "full-execution",
+        "pid": 44694,
+        "pgid": 26140,
+        "exit": 0
+      },
+      {
+        "label": "full-wrapper",
+        "pid": 26140,
+        "pgid": 26140,
+        "exit": 0
+      },
+      {
+        "label": "fuzz-execution",
+        "pid": 78293,
+        "pgid": 78291,
+        "exit": 0
+      },
+      {
+        "label": "fuzz-wrapper",
+        "pid": 78291,
+        "pgid": 78291,
+        "exit": 0
+      },
+      {
+        "label": "qa-early",
+        "pid": 80497,
+        "pgid": 80497,
+        "exit": 0
+      },
+      {
+        "label": "qa-final",
+        "pid": 83384,
+        "pgid": 83384,
+        "exit": 0
+      }
+    ],
+    "latestOwnPidPgidObservation": "  PID  PGID STARTED                      COMMAND\n",
+    "providerSettlement": [
+      {
+        "at": "2026-10-12T19:47:14.818571+00:00",
+        "owner": {
+          "token": "0a2a7a3d-996b-4f87-a68b-e05ed57041cc",
+          "pid": 83384,
+          "bead": "hv-77u6",
+          "label": "hidden-disable",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T19:44:18.359Z",
+          "providerState": "active",
+          "mcpSessionId": "9c2180ae-8e93-4b3c-bef7-f7b890122ec2",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "ownerRecordAbsent": true,
+        "distinctPeerOwner": null,
+        "portFree": true,
+        "runnerAndServerProcessObservation": "  PID  PGID STARTED                      COMMAND\n",
+        "completion": "native runner exit0 certifies browser_close, joined calls, provider completion and exact owner clear, server tree cleanup; cleanup stdout confirms port free before any reuse"
+      }
+    ],
+    "sharedHeavyLock": "both own wrappers exited0; no own heavy group remains",
+    "peerPreservation": "Exact own owner tokens only read; native runner cleared its own records and process trees. Shared MCP singleton and peer records preserved.",
+    "earlyProviderSettlement": [
+      {
+        "at": "2026-10-12T19:44:03.834205+00:00",
+        "owner": {
+          "token": "8b087b55-aed3-4039-a364-500304b0fa5a",
+          "pid": 80497,
+          "bead": "hv-77u6",
+          "label": "hidden-disable",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T19:43:07.342Z",
+          "providerState": "active",
+          "mcpSessionId": "5511b0be-9856-4381-ac90-0d7bfc8d0524",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "ownerRecordAbsent": true,
+        "distinctPeerOwner": null,
+        "portFree": true,
+        "runnerAndServerProcessObservation": "  PID  PGID STARTED                      COMMAND\n",
+        "completion": "native runner exit0 confirms browser_close, joined calls, exact owner clear, server tree cleanup"
+      }
+    ],
+    "finalProviderSettlement": [
+      {
+        "at": "2026-10-12T19:47:14.818571+00:00",
+        "owner": {
+          "token": "0a2a7a3d-996b-4f87-a68b-e05ed57041cc",
+          "pid": 83384,
+          "bead": "hv-77u6",
+          "label": "hidden-disable",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-77u6-disable-view-obligation",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T19:44:18.359Z",
+          "providerState": "active",
+          "mcpSessionId": "9c2180ae-8e93-4b3c-bef7-f7b890122ec2",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "ownerRecordAbsent": true,
+        "distinctPeerOwner": null,
+        "portFree": true,
+        "runnerAndServerProcessObservation": "  PID  PGID STARTED                      COMMAND\n",
+        "completion": "native runner exit0 certifies browser_close, joined calls, provider completion and exact owner clear, server tree cleanup; cleanup stdout confirms port free before any reuse"
+      }
+    ],
+    "verdictAccounting": {
+      "ledgerLines": 3,
+      "preliminaryDesktop": 1,
+      "finalDesktopMobile": 2,
+      "at": "2026-10-12T19:49:21.373046+00:00"
+    }
+  },
+  "reviewRouting": "Parent owns fresh cold read-only gpt-5.6-sol CLI after immutable commit under user temporary routing; helper runs no reviewer.",
+  "heavyValidation": {
+    "workers": 2,
+    "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "fullQueueS": 64.658531,
+    "fuzzQueueS": 0.020531,
+    "queueClock": "actual inner observer entry minus outer wrapper entry; execution CPU is child CPU, not queue elapsed"
+  },
+  "finalSchemaCheck": {
+    "label": "final-evidence-schema-2",
+    "exit": 0,
+    "at": "2026-10-12T19:49:21.496577Z"
+  }
+}

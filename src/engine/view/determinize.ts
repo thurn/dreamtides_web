@@ -37,6 +37,8 @@
  *   shows the loop's recording, and is refused when it withholds it;
  * - an effect a side may pay to end whose source the viewer cannot see
  *   names its controller's avatar as its source;
+ * - combined disabling retains anonymous card sources and aggregate public
+ *   suppression; its original conditions keep reading those cards as they move;
  * - a play permission whose source is hidden or ceased also uses its
  *   controller's avatar: its filter, named card, duration, and consumption
  *   are independent of its source identity.
@@ -47,11 +49,12 @@ import { worksInZone } from "../dsl/abilities";
 import { loopSignature } from "../loops/signature";
 import { emptyLoopTracker } from "../loops/types";
 import { instanceOrigin, originAbilities } from "../rules/activation";
+import { abilitiesDisabled } from "../rules/ability-disabling";
 import { buildDreamwellDeck } from "../rules/dreamwell";
 import { canonicalHash } from "../state/hash";
 import { isFixedEffect } from "./knowledge";
 import { freshStatus, variantOf } from "../state/create";
-import type { AbilitySource, InstanceId, Side } from "../state/ids";
+import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
 import type { BattleState, CardInstance, DeckEntry, FloatingChange, FloatingEffect, PayableEffect, QueuedTrigger, SideState, RememberedEffect } from "../state/types";
 import {
@@ -60,6 +63,7 @@ import {
   type CapturedCardView,
   type CharacteristicsView,
   type FloatingChangeView,
+  type FloatingEffectView,
   type HiddenCapturedCardView,
   type HiddenCardDescriptor,
   type HiddenZoneView,
@@ -134,6 +138,7 @@ function slots(zone: HiddenZoneView): (InstanceId | null)[] {
 export function determinize(view: BattleView, decklists: Decklists, random: () => number, catalog: EngineCatalog): BattleState {
   const state = deal(view, decklists, random, catalog);
   reconcile(state, view, catalog);
+  reconcileDisabling(state, view, catalog, random);
   restoreLoop(state, view);
   return state;
 }
@@ -299,11 +304,23 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     instances[id] = { ...instances[id], printing: copy(descriptor.printing), variant: copy(descriptor.variant), status: copy(descriptor.status) };
     assigned.set(descriptor.member, id);
   }
-  const rememberedSource = (source: AbilitySource | { readonly member: number } | null): AbilitySource => {
+  const capturedFacts = [...view.floating.flatMap(({ change }) => change.kind === "trigger" ? change.captured ?? [] : []),
+    ...view.triggerQueue.flatMap((trigger) => trigger.captured ?? [])].filter((card): card is HiddenCapturedCardView => typeof card !== "string");
+  const rememberedSource = (source: AbilitySource | { readonly member: number } | null, allowUnknown = false): AbilitySource => {
     if (source !== null && typeof source === "object" && "member" in source) {
       const resolved = assigned.get(source.member);
-      if (resolved === undefined) throw new Error(`Missing anonymous source member ${String(source.member)}`);
-      return resolved;
+      if (resolved !== undefined) return resolved;
+      if (!allowUnknown || !Number.isSafeInteger(source.member) || source.member < 0) throw new Error(`Missing anonymous source member ${String(source.member)}`);
+      // Legacy saves can carry a public obligation without a remembered printing.
+      // Such a source can belong to either side, including an opponent-owned card.
+      const captured = capturedFacts.find((card) => card.member === source.member);
+      const pool = hidden.filter((id) => ![...assigned.values()].includes(id) && (captured === undefined ||
+        (instances[id].owner === captured.owner && canonicalHash(instances[id].printing) === canonicalHash(captured.printing) &&
+          canonicalHash(instances[id].variant) === canonicalHash(captured.variant))));
+      const chosen = pool[Math.floor(random() * pool.length)];
+      if (chosen === undefined) throw new Error(`Cannot determinize anonymous source member ${String(source.member)}: no hidden card`);
+      assigned.set(source.member, chosen);
+      return chosen;
     }
     // A reserved nonexistent identity keeps unknown/ceased attribution null.
     return source ?? `i${next++}`;
@@ -314,6 +331,26 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     return { id: effect.id, controller: effect.controller, source: rememberedSource(effect.source), timestamp: effect.timestamp,
       expiry: { at: "never" }, change: { ...copy(effect.change), instance: target } };
   }));
+  // Bind combined sources before captured cohorts clone the shared member map.
+  for (const effect of view.floating) {
+    if (effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated" && effect.rememberedSource != null && "member" in effect.rememberedSource) {
+      rememberedSource(effect.rememberedSource, true);
+    }
+  }
+  const opaque = new Map<EffectId, InstanceId>();
+  const opaqueSource = (effect: FloatingEffectView): InstanceId => {
+    const provenance = effect.rememberedSource;
+    if (provenance == null || !("obligation" in provenance) || provenance.obligation !== effect.id) throw new Error("Cannot determinize invalid source obligation");
+    const previous = opaque.get(effect.id);
+    if (previous !== undefined) return previous;
+    // No private alias or existence relationship is in the input: producers
+    // may be the same hidden card, distinct cards, or an unattributed ceased card.
+    const absent: InstanceId = `i${next++}`;
+    const pool = [...hidden, absent];
+    const source = pool[Math.floor(random() * pool.length)];
+    opaque.set(effect.id, source);
+    return source;
+  };
   const captured = standIns(view, sides, instances, random, assigned);
   const triggerQueue: QueuedTrigger[] = view.triggerQueue.flatMap((trigger) =>
     trigger.source === null || trigger.origin === null
@@ -360,8 +397,12 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     floating: [...anonymousEffects, ...view.floating.map((effect): FloatingEffect => {
       const { rememberedSource: provenance, ...record } = copy(effect);
       return { ...record,
-        source: provenance !== undefined ? rememberedSource(provenance)
-          : effect.source === null ? { kind: "avatar", side: effect.controller } : copy(effect.source),
+        source: provenance != null && "obligation" in provenance ? opaqueSource(effect)
+          : provenance !== undefined ? rememberedSource(provenance, effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated")
+            : effect.source === null && effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated" ? rememberedSource(null)
+              : effect.source === null ? { kind: "avatar", side: effect.controller } : copy(effect.source),
+        ...(effect.change.kind === "disableTriggers" && effect.change.mode === "triggeredAndActivated"
+          ? { sourceObservedBy: provenance != null && "obligation" in provenance ? [] : [viewer] } : {}),
         change: floatingChange(effect.change, captured) };
     })].sort((a, b) => a.timestamp - b.timestamp || Number(a.id.slice(1)) - Number(b.id.slice(1))),
     turnLog: {
@@ -573,4 +614,120 @@ function reconcile(state: BattleState, view: BattleView, catalog: EngineCatalog)
     break;
   }
   state.clock = Math.max(state.clock, ...hidden.map((slot) => state.instances[at(slot)].enteredZoneAt));
+}
+
+/**
+ * Reconcile only aggregate public suppression. Source predicates are private
+ * individually: overlapping effects can mask which hidden source is in a deck.
+ * Hidden source cards retain their anonymous links and original dynamic while;
+ * future draws, plays, and expiry therefore evaluate the ordinary rules.
+ *
+ * The search partitions the dealt hidden cards among compatible hidden zones;
+ * observed ownership/printing/status stay fixed. A legacy source whose status
+ * was never observed can have either prior Reclaim play. It uses the battle's
+ * work cap and rejects an impossible/bounded view before exposing any state.
+ */
+function reconcileDisabling(state: BattleState, view: BattleView, catalog: EngineCatalog, random: () => number): void {
+  if (view.disabledActivations === undefined) return;
+  if (!Number.isSafeInteger(state.config.resolutionCap) || state.config.resolutionCap < 1) throw new Error("Cannot determinize invalid battle work cap");
+  const combined = state.floating.filter(({ change }) => change.kind === "disableTriggers" && change.mode === "triggeredAndActivated");
+  const targets = [...new Set(combined.flatMap(({ change }) => change.kind === "disableTriggers" ? [change.instance] : []))];
+  const disabled = new Set(view.disabledActivations);
+  if (disabled.size !== view.disabledActivations.length || [...disabled].some((id) => !targets.includes(id) || !(id in view.instances))) {
+    throw new Error("Cannot determinize invalid aggregate activation suppression");
+  }
+  const agrees = () => targets.every((id) => abilitiesDisabled(state, catalog, id, "activated") === disabled.has(id));
+  if (agrees()) return;
+  const baseline = distance(state, view, catalog).total;
+  const bins = SIDES.flatMap((side) => (["deck", "hand"] as const).map((zone) => ({
+    side, zone, original: [...state.sides[side][zone]],
+    capacity: state.sides[side][zone].filter((id) => !(id in view.instances)).length,
+    cards: [] as InstanceId[],
+  }))).filter((bin) => bin.capacity > 0);
+  const hidden = bins.flatMap((bin) => bin.original.filter((id) => !(id in view.instances)));
+  const hiddenSet = new Set(hidden);
+  let sourceIds = new Set(combined.flatMap((effect) => typeof effect.source === "string" && hiddenSet.has(effect.source) ? [effect.source] : []));
+  const observed = new Set((state.rememberedCards?.[view.viewer] ?? []).map((record) => record.instance));
+  let uncertainReclaim = new Set(combined.flatMap((effect) => effect.change.kind === "disableTriggers" && effect.change.while?.cond === "sourceWasReclaimed" &&
+    typeof effect.source === "string" && hiddenSet.has(effect.source) && !observed.has(effect.source) ? [effect.source] : []));
+  // Place source members first; ordinary hidden cards then fill the counts.
+  let cards = [...hidden.filter((id) => sourceIds.has(id)), ...hidden.filter((id) => !sourceIds.has(id))];
+  const originalBin = new Map(hidden.map((id) => [id, bins.find((bin) => bin.original.includes(id))]));
+  const placed = new Set<InstanceId>();
+  let work = 0;
+  const sourcePredicatesAgree = () => targets.every((id) => {
+    const effects = combined.filter((effect) => effect.change.kind === "disableTriggers" && effect.change.instance === id);
+    // Other predicates can depend on the completed hidden-zone partition.
+    if (effects.some((effect) => effect.change.kind === "disableTriggers" && effect.change.while !== undefined &&
+      effect.change.while.cond !== "sourceIn" && effect.change.while.cond !== "sourceWasReclaimed")) return true;
+    if (effects.some((effect) => typeof effect.source === "string" && hiddenSet.has(effect.source) && !placed.has(effect.source))) return true;
+    return abilitiesDisabled(state, catalog, id, "activated") === disabled.has(id);
+  });
+  const install = () => {
+    for (const bin of bins) {
+      let index = 0;
+      state.sides[bin.side][bin.zone] = bin.original.map((id) => id in view.instances ? id : bin.cards[index++]);
+    }
+  };
+  const search = (index: number): boolean => {
+    if (++work > state.config.resolutionCap) throw new Error("Cannot determinize aggregate activation suppression within the battle work cap");
+    if (index === cards.length) {
+      install();
+      return agrees() && distance(state, view, catalog).total <= baseline;
+    }
+    const id = cards[index];
+    const instance = state.instances[id];
+    const before = { zone: instance.zone, controller: instance.controller, playedViaReclaim: instance.status.playedViaReclaim };
+    const choices = bins.filter((bin) => bin.cards.length < bin.capacity &&
+      (bin.zone !== "deck" || (instance.owner === bin.side && !instance.status.created)))
+      .sort((a, b) => Number(b === originalBin.get(id)) - Number(a === originalBin.get(id)));
+    for (const bin of choices) {
+      bin.cards.push(id);
+      instance.zone = bin.zone;
+      instance.controller = bin.side;
+      placed.add(id);
+      const statuses = uncertainReclaim.has(id)
+        ? random() < 0.5 ? [before.playedViaReclaim, !before.playedViaReclaim] : [!before.playedViaReclaim, before.playedViaReclaim]
+        : [before.playedViaReclaim];
+      for (const status of statuses) {
+        instance.status.playedViaReclaim = status;
+        if (sourcePredicatesAgree() && search(index + 1)) return true;
+      }
+      bin.cards.pop();
+      placed.delete(id);
+      Object.assign(instance, { zone: before.zone, controller: before.controller });
+      instance.status.playedViaReclaim = before.playedViaReclaim;
+    }
+    return false;
+  };
+  const unknown = view.floating.flatMap((shown) => shown.rememberedSource != null && "obligation" in shown.rememberedSource
+    ? [{ index: combined.findIndex((effect) => effect.id === shown.id), id: shown.id }] : []);
+  const candidates = unknown.map(({ index }) => {
+    if (index < 0) throw new Error("Cannot determinize invalid source obligation");
+    const source = combined[index].source;
+    const absent: InstanceId = typeof source === "string" && !(source in state.instances) ? source : `i${state.nextInstance++}`;
+    return [...new Set([source, ...hidden, absent])];
+  });
+  const bind = (index: number): boolean => {
+    if (++work > state.config.resolutionCap) throw new Error("Cannot determinize aggregate activation suppression within the battle work cap");
+    if (index === unknown.length) {
+      sourceIds = new Set(combined.flatMap((effect) => typeof effect.source === "string" && hiddenSet.has(effect.source) ? [effect.source] : []));
+      uncertainReclaim = new Set(combined.flatMap((effect) => effect.change.kind === "disableTriggers" && effect.change.while?.cond === "sourceWasReclaimed" &&
+        typeof effect.source === "string" && hiddenSet.has(effect.source) && !observed.has(effect.source) ? [effect.source] : []));
+      cards = [...hidden.filter((id) => sourceIds.has(id)), ...hidden.filter((id) => !sourceIds.has(id))];
+      return search(0);
+    }
+    const entry = unknown[index];
+    const at = state.floating.findIndex((effect) => effect.id === entry.id);
+    const before = combined[entry.index];
+    for (const source of candidates[index]) {
+      combined[entry.index] = { ...before, source };
+      state.floating[at] = combined[entry.index];
+      if (bind(index + 1)) return true;
+    }
+    combined[entry.index] = before;
+    state.floating[at] = before;
+    return false;
+  };
+  if (!bind(0)) throw new Error("Cannot determinize impossible aggregate activation suppression");
 }

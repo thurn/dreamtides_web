@@ -152,7 +152,9 @@ interface CapturedScope {
  * (`capturedRecord`).
  */
 function effectRecord(state: BattleState, effect: FloatingEffect | PayableEffect, side: Side, scope: CapturedScope): string {
-  const { source, ...rest } = effect;
+  // Observation history is private metadata, independent of this viewer's obligation.
+  const { source, sourceObservedBy: _observed, ...rest } = { ...effect,
+    sourceObservedBy: "change" in effect ? effect.sourceObservedBy : undefined };
   const affects = "affects" in effect ? { affects: effect.affects.filter((id) => identifies(state, id, side)) } : {};
   const change = "change" in effect && effect.change.kind === "trigger" && effect.change.captured !== undefined
     ? { change: { ...effect.change, captured: capturedRecord(scope.state, effect.change.captured, side, scope.members) } }

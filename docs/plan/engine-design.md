@@ -924,7 +924,20 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   (`triggerNamed`).
 - **Disabled triggers** (`disableTriggers`, optionally while a condition
   holds) suppress matching; a look-back ability reads them as it was armed
-  (below).
+  (below). Combined `triggeredAndActivated` effects also carry a public
+  activation-legality obligation when their source is hidden or ceased. Views
+  keep the effect, target, duration, and original condition with anonymous
+  source provenance, and expose aggregate activation suppression per visible
+  target. Observed attribution retains public source and cohort relations. A
+  never-observed producer has an opaque obligation keyed by effect identity,
+  permitting shared, distinct, or ceased sources without disclosing that
+  private relation. Attribution observations persist through save/replay and
+  published knowledge recovery; views omit their private history. Individual
+  source-condition results remain private. Determinization
+  retains dynamic source links, reconciles compatible hidden placements against
+  the aggregate under the battle work cap, and rejects impossible or bounded
+  reconstructions before returning a state. Subsequent source movement and
+  duration boundaries use the ordinary condition and expiry rules.
 - **Additional spark** (C17, rules § Spark → Additional spark): `gainSpark`
   emits `sparkGained` with the gain's amount, its expiry (`never` for a
   permanent gain), and `additional: false`. The `gainsSpark` trigger

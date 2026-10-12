@@ -494,6 +494,8 @@ export interface FloatingEffect {
   readonly timestamp: number;
   readonly expiry: Expiry;
   readonly change: FloatingChange;
+  /** Combined-only source attribution actually observed by these sides; absent legacy records are conservative. */
+  readonly sourceObservedBy?: readonly Side[];
 }
 
 /**

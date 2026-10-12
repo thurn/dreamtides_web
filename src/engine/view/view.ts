@@ -33,6 +33,7 @@ import { fixedEnergy } from "../dsl/energy";
 import type { Keyword, Variant } from "../dsl/types";
 import type { CardSubtype } from "../../types/card-identity";
 import { changedInstance, keptWithoutSource } from "../rules/floating";
+import { abilitiesDisabled } from "../rules/ability-disabling";
 import { banishedAsReclaimed } from "../rules/zones";
 import { playCosts } from "../rules/costs";
 import { materializedThisTurn } from "../rules/turn-log";
@@ -178,8 +179,8 @@ export interface FloatingEffectView {
   readonly timestamp: number;
   readonly expiry: Expiry;
   readonly change: FloatingChangeView;
-  /** Safely observed provenance for a fixed permanent effect whose source is currently unidentified. */
-  readonly rememberedSource?: { readonly member: number } | null;
+  /** Observed anonymous card provenance, or a public effect obligation with private producer identity; null retains unattributed or publicly ceased provenance. */
+  readonly rememberedSource?: { readonly member: number } | { readonly obligation: EffectId } | null;
 }
 
 /**
@@ -299,6 +300,8 @@ export interface BattleView {
    * when their source is unidentified.
    */
   readonly floating: readonly FloatingEffectView[];
+  /** Aggregate suppression of public targets with combined effects; individual condition truths remain private. */
+  readonly disabledActivations?: readonly InstanceId[];
   /**
    * Currently applicable static void/deck-top play permissions, derived from layer 6
    * for presentation, only from sources the viewer can identify. Sources are
@@ -433,10 +436,15 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     const observed = observedFixedEffect(state, viewer, effect.id);
     const record = observed ?? effect;
     const sourceSeen = visibleSource(record.source);
-    return { ...copy(record), source: sourceSeen ? copy(record.source) : null,
+    const { sourceObservedBy: _sourceObservedBy, ...shown } = copy(record);
+    return { ...shown, source: sourceSeen ? copy(record.source) : null,
       change: changeView(record.change, sourceSeen),
-      ...(observed !== undefined && !sourceSeen && typeof record.source === "string"
-        ? { rememberedSource: anonymousSource(record.source) } : {}) };
+      ...(!sourceSeen && typeof record.source === "string" && record.change.kind === "disableTriggers" && record.change.mode === "triggeredAndActivated"
+        ? { rememberedSource: record.sourceObservedBy?.includes(viewer) === true
+          ? state.instances[record.source] === undefined ? null : { member: memberFor(record.source) }
+          : { obligation: record.id } }
+        : observed !== undefined && !sourceSeen && typeof record.source === "string"
+          ? { rememberedSource: anonymousSource(record.source) } : {}) };
   });
   const triggerQueue = state.triggerQueue.map((trigger): QueuedTriggerView => ({
     ...(trigger.kind === "dreamwellBonus" ? { kind: trigger.kind } : {}),
@@ -511,6 +519,9 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       affects: effect.affects.filter(visible),
     })),
     floating,
+    ...(floating.some(({ change }) => change.kind === "disableTriggers" && change.mode === "triggeredAndActivated")
+      ? { disabledActivations: [...new Set(floating.flatMap(({ change }) => change.kind === "disableTriggers" && change.mode === "triggeredAndActivated" ? [change.instance] : []))]
+        .filter((id) => abilitiesDisabled(state, catalog, id, "activated")) } : {}),
     staticPlayPermissions: layers.changes(6).flatMap(({ change, effect, staticSource }) =>
       effect === null && staticSource !== null && visibleSource(staticSource) && change.kind === "playFrom" && (change.instance === null || visible(change.instance))
         ? [copy(change)]
