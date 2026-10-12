@@ -1,3 +1,5 @@
+import { activated, discardCostFilter, enemyCharacter, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,8 @@ export default card({
   cardNumber: 235,
   art: { x: -0.368, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([discardCostFilter({ cardType: "character", costAtMost: 2 })], p.dissolve(target(enemyCharacter({ costAtMost: variant.amplified ? 3 : 2 })))),
+  ],
+  verifiedText: "1vulc99n5pg",
 });

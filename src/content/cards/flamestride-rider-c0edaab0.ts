@@ -1,3 +1,5 @@
+import { abandonSelfCost, activated, enemyCharacter, energy, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,8 @@ export default card({
   cardNumber: 332,
   art: { x: 0.21, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([energy(1), abandonSelfCost()], p.chooseOne(p.draw(1), p.dissolve(target(enemyCharacter({ sparkAtMost: variant.amplified ? 3 : 2 }))))),
+  ],
+  verifiedText: "ls98bfkwzw",
 });

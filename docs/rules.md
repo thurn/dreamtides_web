@@ -882,7 +882,10 @@ X as it is played. Whether 0 is a legal choice for X is contextual and not
 printed on the card — generally, if choosing 0 would not make sense, it is not
 allowed. For example, a character with X cost and X spark cannot be played for 0
 just to make it immediately dissolve, and an event cannot generally be played for
-no effect merely to increase a card count. An event that banishes an enemy with cost X● may choose X = 0 when it has a legal cost-zero enemy to banish. A card written with two costs, such as
+no effect merely to increase a card count. An event that banishes an enemy with cost X● may choose X = 0 when it has a legal cost-zero enemy to banish. The minimum applies to the whole card, whatever
+mode is then chosen: "Choose one: Gain X⍟ or dissolve an enemy with X✦" may be
+played for X = 0, because dissolving a 0✦ enemy is meaningful, and its gain
+mode is then also legal and gains nothing. A card written with two costs, such as
 "2 X", requires paying 2● first and then X●. X is picked before the card's
 targets, so a target bounded by X, as in "Return a character with cost X● to
 hand", is chosen among the characters that match the picked X; that card may

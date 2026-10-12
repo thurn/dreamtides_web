@@ -1,3 +1,6 @@
+import { abandonSelfCost, activated, enemyCharacter, target } from "../../engine/dsl/builders";
+import { thisCharacterSpark } from "../../engine/dsl/values";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 507,
   art: { x: 0, y: 0.331, scale: 1.77 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([abandonSelfCost()], p.dissolve(target(enemyCharacter({ sparkAtMost: thisCharacterSpark() }))))],
+  verifiedText: "w13or9cb1r",
 });
