@@ -457,7 +457,7 @@ export function routeDomain(
 
     // --- sites ---
     case "OPEN_SITE":
-      return journeyCase(state, sites.openSite(journey, payload, ctx));
+      return journeyCase(state, sites.openSite(journey, payload, ctx, modifiers));
     case "CHOOSE_RANDOM_SITE":
       return journeyCase(state, sites.chooseRandomSite(journey, payload));
     case "REROLL_EXPLORATION":
@@ -476,7 +476,7 @@ export function routeDomain(
     case "REJECT_DREAMSIGN_OFFER":
       return journeyCase(state, sites.rejectDreamsignOffer(journey, payload));
     case "ACCEPT_ESSENCE":
-      return journeyCase(state, sites.acceptEssence(journey, payload, ctx));
+      return journeyCase(state, sites.acceptEssence(journey, payload, ctx, modifiers));
     case "REROLL_AUGURY":
       return journeyCase(state, sites.rerollAugury(journey, payload));
     case "FORCE_AUGURY_ARCHETYPE":

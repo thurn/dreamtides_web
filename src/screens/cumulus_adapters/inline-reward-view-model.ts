@@ -1,3 +1,5 @@
+import { essenceSiteGain } from "../../rules/journey/journey-essence";
+import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import type {
   DreamscapeNode,
   JourneyState,
@@ -6,6 +8,14 @@ import type {
 } from "../../types/journey";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
+
+function isInlineRewardSite(
+  site: SiteState | undefined,
+  runtime: SiteRuntimeState | undefined,
+): site is SiteState {
+  return site?.type === "Reward" || (site?.type === "Essence" &&
+    runtime?.kind === "reward" && runtime.journeyEssenceSource !== undefined);
+}
 
 export type InlineRewardCompletionKind = "essence" | "reward";
 
@@ -49,7 +59,7 @@ export function resolveRewardReplacement(
   );
   if (
     purgeIndex < 0 ||
-    site?.type !== "Reward" ||
+    !isInlineRewardSite(site, runtime) ||
     runtime?.kind !== "reward" ||
     runtime.reward.rewardType !== "dreamsign"
   )
@@ -58,7 +68,7 @@ export function resolveRewardReplacement(
     siteId: site.id,
     purgeIndex,
     fields: {
-      siteType: "Reward",
+      siteType: site.type,
       outcome: "replaced_dreamsign",
       siteId: site.id,
       dreamsignId: runtime.reward.dreamsign.id,
@@ -77,7 +87,7 @@ export function resolveRewardDecline(
   const site = node.sites.find((candidate) => candidate.id === siteId);
   const runtime = state.siteRuntime[siteId];
   if (
-    site?.type !== "Reward" ||
+    !isInlineRewardSite(site, runtime) ||
     runtime?.kind !== "reward" ||
     runtime.reward.rewardType !== "dreamsign"
   )
@@ -96,25 +106,27 @@ export function resolveRewardDecline(
 export function buildInlineRewardCompletionLog(
   site: SiteState | undefined,
   runtime: SiteRuntimeState | undefined,
-  state: Pick<JourneyState, "essence">,
+  state: Pick<JourneyState, "essence" | "dreamsigns">,
+  modifiers: JourneyModifierRegistry = journeyModifierRegistry,
 ): InlineRewardCompletionLog | null {
   if (site?.type === "Essence" && runtime?.kind === "essence") {
     if (runtime.accepted) return null;
+    const amount = essenceSiteGain(state, runtime.amount, modifiers);
     return {
       kind: "essence",
       fields: {
         siteType: "Essence",
         outcome: "collected",
         siteId: site.id,
-        rewardAmount: runtime.amount,
+        rewardAmount: amount,
         isEnhanced: site.isEnhanced,
         essenceBefore: state.essence,
-        essenceAfter: state.essence + runtime.amount,
+        essenceAfter: state.essence + amount,
       },
     };
   }
   if (
-    site?.type !== "Reward" ||
+    !isInlineRewardSite(site, runtime) ||
     runtime?.kind !== "reward" ||
     runtime.accepted
   ) {
@@ -124,7 +136,7 @@ export function buildInlineRewardCompletionLog(
   return {
     kind: "reward",
     fields: {
-      siteType: "Reward",
+      siteType: site.type,
       outcome: "collected",
       siteId: site.id,
       rewardType: reward.rewardType,

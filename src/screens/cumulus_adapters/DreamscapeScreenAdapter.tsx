@@ -79,7 +79,7 @@ export function DreamscapeScreenAdapter() {
       if (selection === null) return;
       logEvent("site_entered", selection.fields);
       if (selection.site.type === "Essence") {
-        if (state.siteRuntime[siteId]?.kind !== "essence") {
+        if (state.siteRuntime[siteId] === undefined) {
           mutations.ensureEssenceSiteRuntime(siteId, selection.site.isEnhanced);
         }
       } else if (selection.site.type === "Reward") {

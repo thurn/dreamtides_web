@@ -559,6 +559,9 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
   if (!isRecord(value.screen)) return false;
   if (!isRecord(value.siteRuntime)) return false;
   for (const runtime of Object.values(value.siteRuntime)) {
+    if (isRecord(runtime) && runtime.journeyEssenceSource !== undefined &&
+      (runtime.kind !== "reward" || !isRecord(runtime.reward) || runtime.reward.rewardType !== "dreamsign" ||
+        dreamsignIdFromUnknown(runtime.journeyEssenceSource) === null)) return false;
     if (isRecord(runtime) && runtime.kind === "exploration" && !validJourneySiteCounters(runtime.journeySiteRerolls)) return false;
     if (
       isRecord(runtime) &&

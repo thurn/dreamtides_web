@@ -11,7 +11,7 @@
  * implemented; it plays text-less), `vanilla` (no rules text), or authored
  * `abilities` with the `verifiedText` hash of the text they implement.
  */
-import type { JourneySitesEffect } from "../types/journey";
+import type { JourneyEssenceEffect, JourneySitesEffect } from "../types/journey";
 import type { KnownCardSubtype } from "../types/card-identity";
 import type { CardRole, CardType, Rarity } from "../types/cards";
 import type { AbilityList } from "../engine/dsl/types";
@@ -82,6 +82,7 @@ export type CardDefinition = CardFields & ContentStatus;
 interface DreamsignFields {
   /** Journey-only declarative clause consumed by the UUID modifier registry. */
   readonly journeySites?: JourneySitesEffect;
+  readonly journeyEssence?: JourneyEssenceEffect;
   readonly id: Uuid;
   readonly name: string;
   readonly imageName: string;

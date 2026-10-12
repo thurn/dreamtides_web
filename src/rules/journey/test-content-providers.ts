@@ -23,6 +23,7 @@ export function testSiteContentProvider(
     economyData: economyFixture(),
     gambleData: gambleFixture(),
     openSite: () => null,
+    openEssenceDreamsignReward: () => null,
     rerollShop: () => null,
     rerollExploration: () => null,
     resolveAugury: () => null,

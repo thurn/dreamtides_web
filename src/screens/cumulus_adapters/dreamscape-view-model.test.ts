@@ -1,3 +1,6 @@
+import { makeTestAtlasNode } from "../../testing/atlas-fixtures";
+import { createJourneyModifierRegistry } from "../../rules/journey/modifier-registry";
+import { journeyEssence } from "../../rules/journey/journey-essence";
 import { describe, expect, it } from "vitest";
 import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 import type {
@@ -340,4 +343,22 @@ describe("dreamscapeSceneRef", () => {
       ),
     ).toBeNull();
   });
+});
+
+
+it("uses live Essence multipliers and a persisted Pearl reward in the existing inline model", () => {
+  const source = testDreamsignId("synthetic-quote-source");
+  const incoming = testDreamsignId("synthetic-pearl-offer");
+  const held = { id: source, name: "Same name", effectDescription: "Synthetic", imageName: "synthetic" };
+  const essenceSite: SiteState = { id: parseSiteId("essence-quote"), type: "Essence", isVisited: false, isEnhanced: false };
+  const node = makeTestAtlasNode(parseAtlasNodeId("quote-node"), [essenceSite]);
+  const state = { ...testJourneyState(), dreamsigns: [held], maxDreamsigns: 1 };
+  state.siteRuntime[essenceSite.id] = { kind: "essence", amount: 7, accepted: false };
+  const registry = createJourneyModifierRegistry([journeyEssence(source, { kind: "multiplyEssenceSiteGain", factor: 3 })]);
+  const view = () => buildDreamscapeViewImpl(node, "Synthetic", null, state, MINIMAL_SITES_DATA, 2, null, undefined, registry);
+  expect(view().inlineRewards[essenceSite.id]).toEqual({ kind: "essence", amount: 21 });
+  state.siteRuntime[essenceSite.id] = { kind: "reward", reward: { rewardType: "dreamsign", dreamsign: { ...held, id: incoming } }, remainingDreamsignPoolIds: [], accepted: false, journeyEssenceSource: source };
+  expect(view().inlineRewards[essenceSite.id]).toMatchObject({ kind: "dreamsign", dreamsign: { id: incoming }, requiresReplacement: true });
+  state.dreamsigns = [];
+  expect(view().inlineRewards[essenceSite.id]).toMatchObject({ kind: "dreamsign", dreamsign: { id: incoming }, requiresReplacement: false });
 });

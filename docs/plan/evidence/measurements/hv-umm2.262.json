@@ -1,0 +1,2703 @@
+{
+  "bead": "hv-umm2.262",
+  "phase": 5,
+  "base": "7545f04b9a48c268c2e43178ce718a7729a96c79",
+  "implementationProvenance": {
+    "grossWindowStartProxy": "2026-10-12T22:11:21.522332Z",
+    "dispatchBracketEnd": "2026-10-12T22:11:54.261584Z",
+    "exactHelperDispatch": "unobserved",
+    "modelStart": "unobserved",
+    "windowScope": "Conservative parent-before-dispatch proxy through future final authored commit, including research, admissions, checks, browser-slot waits, QA retries, and parked prerequisite recovery.",
+    "implementationStatus": "Implementation and runtime acceptance complete; parent cold core review and certified delivery follow the final authored amend.",
+    "finalEndpointUTC": "2026-10-12T23:45:30.087194+00:00",
+    "implementMin": 94.1427477,
+    "endpointSemantics": "Host UTC sampled immediately before final metadata/schema/staging/amend. Actual commit invocation UTC bracket and Git second-precision committer timestamp retained outside worktree; timestamp representation is microseconds, clock accuracy is unspecified. Original gross proxy window includes research, all waits/checks/QA and inactive591 recovery; exact helper dispatch/model start unobserved."
+  },
+  "testEntrypointDelta": {
+    "files": 2,
+    "lines": 327,
+    "jsdomFiles": 0,
+    "newFiles": {
+      "src/rules/journey/journey-essence.test.ts": 247,
+      "src/session/providers/site-provider-essence.test.ts": 34
+    },
+    "existingContractNetLines": {
+      "src/screens/cumulus_adapters/dreamscape-view-model.test.ts": 21,
+      "src/screens/cumulus_adapters/inline-reward-view-model.test.ts": 25
+    },
+    "fixtureNetLinesSeparate": 0,
+    "scenarioLinesCommitted": 0,
+    "scope": "All plain tracked .test.ts contract entrypoint net lines; ignored native QA wrapper/temporary scenes are excluded and not committed.",
+    "addedLines": 329,
+    "deletedLines": 2,
+    "netLines": 327,
+    "countReceipt": "262-resumed-test-count.json",
+    "policy": "workflow testDelta is added minus deleted; final friction lines327. Prior parent331 added interpretation was corrected against actual numstat; 331 is not a measured count.",
+    "touchedFiles": 4,
+    "addedFiles": 2,
+    "deletedFiles": 0
+  },
+  "validation": {
+    "sourceBase": "7545f04b9a48c268c2e43178ce718a7729a96c79",
+    "focused": {
+      "label": "resumed-focus",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-essence.test.ts",
+        "src/rules/journey/journey-sites.test.ts",
+        "src/rules/journey/sites-rewards.test.ts",
+        "src/session/providers/site-provider-essence.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/screens/cumulus_adapters/inline-reward-view-model.test.ts"
+      ],
+      "startUTC": "2026-10-12T23:29:16.823550+00:00",
+      "endUTC": "2026-10-12T23:29:22.436915+00:00",
+      "wallS": 5.613161750006839,
+      "startLoad1": 17.8837890625,
+      "exitCode": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-essence262-sol",
+      "files": 6,
+      "cases": 62,
+      "scope": "Actual measured wrapper wall time on combined source; prior4.7s rounded phase sum remains historical."
+    },
+    "review": {
+      "label": "resumed-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUTC": "2026-10-12T23:29:52.613186+00:00",
+      "endUTC": "2026-10-12T23:30:38.229824+00:00",
+      "wallS": 45.616158083008486,
+      "startLoad1": 13.66748046875,
+      "exitCode": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-essence262-sol",
+      "files": 234,
+      "cases": 4563
+    },
+    "knip": {
+      "label": "resumed-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUTC": "2026-10-12T23:31:35.924593+00:00",
+      "endUTC": "2026-10-12T23:31:39.084218+00:00",
+      "wallS": 3.1594662919960683,
+      "startLoad1": 8.83203125,
+      "exitCode": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-essence262-sol"
+    },
+    "full": {
+      "label": "resumed-full",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "startUTC": "2026-10-12T23:32:03.324092+00:00",
+      "endUTC": "2026-10-12T23:33:42.304464+00:00",
+      "wallS": 98.97937808300776,
+      "startLoad1": 7.8896484375,
+      "exitCode": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-essence262-sol",
+      "files": 364,
+      "cases": 6292,
+      "testStepS": 71.2,
+      "testStepStartUTC": "2026-10-12T23:32:27.180Z",
+      "testStepLoad1": 7.9736328125
+    },
+    "heavySlot": {
+      "label": "resumed-fullslot",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "python3",
+        "/tmp/262-run-check.py",
+        "resumed-full",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "startUTC": "2026-10-12T23:32:03.300846+00:00",
+      "endUTC": "2026-10-12T23:33:42.308670+00:00",
+      "wallS": 99.00682291699923,
+      "startLoad1": 7.8896484375,
+      "exitCode": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-essence262-sol",
+      "acquisitionWaitS": 0.023246
+    },
+    "scope": "Combined source checks passed before source freeze/native QA. No aggregates repeated after unchanged restoration or evidence-only edits. All prior failed rounds and behavior-negative controls retained under priorValidation/primary ignored validation receipts."
+  },
+  "api": {
+    "newExports": {
+      "JourneyEssenceEffect": [
+        "content/define",
+        "three scoped catalog leaves",
+        "journey-essence",
+        "modifier-registry"
+      ],
+      "journeyEssence": [
+        "modifier-registry",
+        "own synthetic contracts and existing builder controls"
+      ],
+      "essenceSiteGain": [
+        "dreamscape-view-model",
+        "inline-reward-view-model",
+        "own synthetic contracts"
+      ],
+      "essenceReplacementSource": [
+        "sites"
+      ]
+    },
+    "provider": "Strict offerCount:1 openEssenceDreamsignReward; production provider and synthetic test provider implement it; sites owns validation, source attribution and atomic pool/runtime application.",
+    "boundaries": "Root always passes its existing production-default registry into OPEN/ACCEPT. Optional registry absent in direct pure sites calls preserves ordinary preparation. New pure projections require registry.",
+    "persistedShape": "Optional Reward runtime journeyEssenceSource UUID only; loader validates reward-kind Dreamsign provenance. Existing missing field remains valid.",
+    "events": "Existing OPEN_SITE, ACCEPT_ESSENCE, ACCEPT_REWARD, COMPLETE_SITE, START_JOURNEY and TRAVEL_TO_DREAMSCAPE; no new event/action/React game-flow gate.",
+    "logs": "Every applied held copy has source UUID/held index, node/site UUIDs, numeric before/after; Pearl preparation logs once with incoming UUID."
+  },
+  "failureProofs": {
+    "nullOrInvalidGeneration": "Public OPEN and legacy ACCEPT bounce unchanged; no Essence fallback/pool consumption/log.",
+    "interruptedProvider": "Production-mode LocalLog contains thrown mid-generation exception as bounced atomic result; replay unchanged, later valid preparation/collection recovers.",
+    "reload": "JSON event replay and administrative saved-state load preserve exact prepared marker and consumed reward; malformed marker rejected.",
+    "staleOrPartial": "Foreign/visited/accepted/missing marker/wrong node/wrong type preparation/decline controls reject before provider or completion; repeated reward commits once.",
+    "concurrent": "Public reducer partner-conflict CAS prevents competing reward collection/decline; no partial write."
+  },
+  "qa": {
+    "fixtureScope": "Exactly four temporary admitted callbacks over live foundation/providers; local unopened standard Essence, declared synthetic enhanced Essence (not reachable ordinary guide enhancement), max1 cap, or unchanged available-node foundation with balance107. Native debug ADD_DREAMSIGN then ordinary player flow; no private app writes/dispatch/provider replacement.",
+    "parentVisual": [
+      {
+        "recordedUTC": "2026-10-12T22:56:09.705893+00:00",
+        "observer": "parent cold visual inspection",
+        "actualViewTime": "unobserved",
+        "invocation": "run-SQFQFR",
+        "captures": [
+          "essence-star-standard-desktop-reloaded.png",
+          "essence-star-standard-mobile-reloaded.png"
+        ],
+        "observation": "HUD515 visible/legible within viewport; visited Essence absent and remaining Battle visible; mobile menu/avatar/Dreamsign dock fit. Parent inspected ignored images only; no source commands/writes."
+      },
+      {
+        "recordedUTC": "2026-10-12T23:00:14.723194+00:00",
+        "observer": "parent cold visual inspection",
+        "actualViewTime": "unobserved",
+        "invocation": "run-nED1kJ",
+        "captures": [
+          "essence-pearl-cap-replace-standard-desktop-cap-choice.png",
+          "essence-pearl-cap-replace-standard-mobile-cap-choice.png"
+        ],
+        "observation": "Incoming/held art and replace/keep controls visible without clipping; existing mobile fullscreen dialog fits."
+      },
+      {
+        "recordedUTC": "2026-10-12T23:10:23.345758+00:00",
+        "observer": "parent cold visual inspection",
+        "actualViewTime": "unobserved",
+        "invocation": "run-rbHjsJ",
+        "captures": [
+          "essence-worm-standard-desktop-reloaded.png",
+          "essence-worm-standard-mobile-reloaded.png"
+        ],
+        "observation": "HUD128.4 visibly legible and within viewport; Banded dock and ordinary nodes intact."
+      },
+      {
+        "invocation": "run-1yCtwq",
+        "assessment": "Actual desktop and mobile PNGs inspected: reloaded959 visible, both Star art objects docked, visitedEssence absent and remainingBattle/menu/deck/HUD fit. Native base213 to426 to852; initial107 to959, reload959. No defaultamount assumption.",
+        "screens": [
+          "essence-star-standard-copies2-desktop-reloaded.png",
+          "essence-star-standard-copies2-mobile-reloaded.png"
+        ]
+      },
+      {
+        "invocation": "run-EkQY4A",
+        "assessment": "Actual desktop/mobile reloaded PNGs inspected: HUD154.08 legible, both BandedWorm objects and actualStar companion docked; ordinary sites/menu/deck/HUD fit. Native two source-copy diagnostics107\u2192128.4\u2192154.08 persist same game on reload; no Star entry application.",
+        "screens": [
+          "essence-worm-standard-copies2-with-star-desktop-reloaded.png",
+          "essence-worm-standard-copies2-with-star-mobile-reloaded.png"
+        ]
+      }
+    ],
+    "attempts": [
+      {
+        "invocation": "run-4mrEEL",
+        "ok": false,
+        "error": "desktop#0: Error: visited Essence: TimeoutError: page.waitForFunction: Timeout 14999ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async essenceSites (evalmachine.<anonymous>:1710:5)\n    at async evalmachine.<anonymous>:1731:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "port": 5174,
+        "slot": 0,
+        "serverPid": 43947,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1692,
+          "scenario": 24279,
+          "total": 26027
+        },
+        "hostLoad": 5.9462890625,
+        "firstLogTimestamp": "2026-10-12T22:49:21.013Z",
+        "caps": [],
+        "result": {
+          "desktop": null
+        },
+        "captures": [
+          "essence-star-standard-desktop-before-visit.png"
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "rhdi92",
+            "rows": 30,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-4mrEEL",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-qb4rXL",
+        "ok": true,
+        "error": null,
+        "port": 5174,
+        "slot": 0,
+        "serverPid": 46115,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 1360,
+          "scenario": 29262,
+          "total": 30689
+        },
+        "hostLoad": 6.1611328125,
+        "firstLogTimestamp": "2026-10-12T22:50:35.788Z",
+        "caps": [],
+        "result": {
+          "desktop": {
+            "mode": "star",
+            "enhanced": false,
+            "source": "af92858a-0c50-4abf-a622-04c024ca32b3",
+            "fixture": "standard",
+            "geometry": {
+              "x": 682.9375,
+              "y": 376.3570251464844,
+              "width": 60,
+              "height": 60,
+              "vw": 1440,
+              "vh": 900
+            },
+            "application": {
+              "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_ESSENCE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "gained": 204,
+                "essence": 311
+              },
+              "after": {
+                "gained": 408,
+                "essence": 515
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:50:40.934Z",
+              "gameId": "ywsnqq",
+              "seq": 4
+            },
+            "collection": {
+              "gameId": "ywsnqq",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardAmount": 408,
+              "isEnhanced": false,
+              "essenceBefore": 107,
+              "essenceAfter": 515,
+              "timestamp": "2026-10-12T22:50:40.933Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "gameId": "ywsnqq"
+          },
+          "mobile": {
+            "mode": "star",
+            "enhanced": false,
+            "source": "af92858a-0c50-4abf-a622-04c024ca32b3",
+            "fixture": "standard",
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.7533264160156,
+              "width": 60,
+              "height": 60,
+              "vw": 390,
+              "vh": 844
+            },
+            "application": {
+              "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_ESSENCE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "gained": 204,
+                "essence": 311
+              },
+              "after": {
+                "gained": 408,
+                "essence": 515
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:50:55.556Z",
+              "gameId": "3prryh",
+              "seq": 4
+            },
+            "collection": {
+              "gameId": "3prryh",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardAmount": 408,
+              "isEnhanced": false,
+              "essenceBefore": 107,
+              "essenceAfter": 515,
+              "timestamp": "2026-10-12T22:50:55.555Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "gameId": "3prryh"
+          }
+        },
+        "captures": [
+          "essence-star-standard-desktop-before-visit.png",
+          "essence-star-standard-desktop-settled-result.png",
+          "essence-star-standard-desktop-reloaded.png",
+          "essence-star-standard-mobile-before-visit.png",
+          "essence-star-standard-mobile-settled-result.png",
+          "essence-star-standard-mobile-reloaded.png"
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "ywsnqq",
+            "rows": 33,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "3prryh",
+            "rows": 33,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-qb4rXL",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-nhvqo9",
+        "ok": true,
+        "error": null,
+        "port": 5174,
+        "slot": 0,
+        "serverPid": 66762,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 1671,
+          "scenario": 27364,
+          "total": 29122
+        },
+        "hostLoad": 9.6630859375,
+        "firstLogTimestamp": "2026-10-12T22:51:16.352Z",
+        "caps": [],
+        "result": {
+          "desktop": {
+            "mode": "star",
+            "enhanced": true,
+            "source": "af92858a-0c50-4abf-a622-04c024ca32b3",
+            "fixture": "enhanced",
+            "geometry": {
+              "x": 682.9375,
+              "y": 376.42919921875,
+              "width": 60,
+              "height": 60,
+              "vw": 1440,
+              "vh": 900
+            },
+            "application": {
+              "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_ESSENCE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "gained": 409,
+                "essence": 516
+              },
+              "after": {
+                "gained": 818,
+                "essence": 925
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:51:20.567Z",
+              "gameId": "ssesvi",
+              "seq": 4
+            },
+            "collection": {
+              "gameId": "ssesvi",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardAmount": 818,
+              "isEnhanced": true,
+              "essenceBefore": 107,
+              "essenceAfter": 925,
+              "timestamp": "2026-10-12T22:51:20.566Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "gameId": "ssesvi"
+          },
+          "mobile": {
+            "mode": "star",
+            "enhanced": true,
+            "source": "af92858a-0c50-4abf-a622-04c024ca32b3",
+            "fixture": "enhanced",
+            "geometry": {
+              "x": 163.078125,
+              "y": 350.739013671875,
+              "width": 60,
+              "height": 60,
+              "vw": 390,
+              "vh": 844
+            },
+            "application": {
+              "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_ESSENCE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "gained": 409,
+                "essence": 516
+              },
+              "after": {
+                "gained": 818,
+                "essence": 925
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:51:34.664Z",
+              "gameId": "kna9xi",
+              "seq": 4
+            },
+            "collection": {
+              "gameId": "kna9xi",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardAmount": 818,
+              "isEnhanced": true,
+              "essenceBefore": 107,
+              "essenceAfter": 925,
+              "timestamp": "2026-10-12T22:51:34.663Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "gameId": "kna9xi"
+          }
+        },
+        "captures": [
+          "essence-star-enhanced-desktop-before-visit.png",
+          "essence-star-enhanced-desktop-settled-result.png",
+          "essence-star-enhanced-desktop-reloaded.png",
+          "essence-star-enhanced-mobile-before-visit.png",
+          "essence-star-enhanced-mobile-settled-result.png",
+          "essence-star-enhanced-mobile-reloaded.png"
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "ssesvi",
+            "rows": 33,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "kna9xi",
+            "rows": 33,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-nhvqo9",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-8hABAk",
+        "ok": false,
+        "error": "desktop#0: Error: missing visible HUD balance\n    at essenceSites (evalmachine.<anonymous>:1719:79)\n    at async evalmachine.<anonymous>:1733:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+        "port": 5174,
+        "slot": 0,
+        "serverPid": 78775,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 1980,
+          "scenario": 17327,
+          "total": 19381
+        },
+        "hostLoad": 10.6376953125,
+        "firstLogTimestamp": "2026-10-12T22:52:39.199Z",
+        "caps": [],
+        "result": {
+          "desktop": null
+        },
+        "captures": [
+          "essence-star-standard-desktop-before-visit.png",
+          "essence-star-standard-desktop-settled-result.png"
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "v3bdzs",
+            "rows": 33,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-8hABAk",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-SQFQFR",
+        "ok": true,
+        "error": null,
+        "port": 5174,
+        "slot": 0,
+        "serverPid": 85807,
+        "wallMs": {
+          "browserLeaseWait": 36527,
+          "serve": 1665,
+          "scenario": 29485,
+          "total": 67732
+        },
+        "hostLoad": 8.1474609375,
+        "firstLogTimestamp": "2026-10-12T22:54:07.154Z",
+        "caps": [],
+        "result": {
+          "desktop": {
+            "mode": "star",
+            "enhanced": false,
+            "source": "af92858a-0c50-4abf-a622-04c024ca32b3",
+            "fixture": "standard",
+            "geometry": {
+              "x": 682.9375,
+              "y": 376.2042541503906,
+              "width": 60,
+              "height": 60,
+              "vw": 1440,
+              "vh": 900
+            },
+            "application": {
+              "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_ESSENCE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "gained": 204,
+                "essence": 311
+              },
+              "after": {
+                "gained": 408,
+                "essence": 515
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:54:12.348Z",
+              "gameId": "xa4ef2",
+              "seq": 4
+            },
+            "collection": {
+              "gameId": "xa4ef2",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardAmount": 408,
+              "isEnhanced": false,
+              "essenceBefore": 107,
+              "essenceAfter": 515,
+              "timestamp": "2026-10-12T22:54:12.347Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "515",
+            "balanceAfter": "515",
+            "gameId": "xa4ef2"
+          },
+          "mobile": {
+            "mode": "star",
+            "enhanced": false,
+            "source": "af92858a-0c50-4abf-a622-04c024ca32b3",
+            "fixture": "standard",
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.2855529785156,
+              "width": 60,
+              "height": 60,
+              "vw": 390,
+              "vh": 844
+            },
+            "application": {
+              "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_ESSENCE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "gained": 204,
+                "essence": 311
+              },
+              "after": {
+                "gained": 408,
+                "essence": 515
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:54:27.935Z",
+              "gameId": "atz5sm",
+              "seq": 4
+            },
+            "collection": {
+              "gameId": "atz5sm",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardAmount": 408,
+              "isEnhanced": false,
+              "essenceBefore": 107,
+              "essenceAfter": 515,
+              "timestamp": "2026-10-12T22:54:27.934Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "515",
+            "balanceAfter": "515",
+            "gameId": "atz5sm"
+          }
+        },
+        "captures": [
+          "essence-star-standard-desktop-before-visit.png",
+          "essence-star-standard-desktop-settled-result.png",
+          "essence-star-standard-desktop-reloaded.png",
+          "essence-star-standard-mobile-before-visit.png",
+          "essence-star-standard-mobile-settled-result.png",
+          "essence-star-standard-mobile-reloaded.png"
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "xa4ef2",
+            "rows": 33,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "atz5sm",
+            "rows": 33,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-SQFQFR",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-MWaIVv",
+        "ok": true,
+        "error": null,
+        "port": 5174,
+        "slot": 0,
+        "serverPid": 98394,
+        "wallMs": {
+          "browserLeaseWait": 16998,
+          "serve": 1349,
+          "scenario": 27681,
+          "total": 46081
+        },
+        "hostLoad": 5.87060546875,
+        "firstLogTimestamp": "2026-10-12T22:55:37.823Z",
+        "caps": [],
+        "result": {
+          "desktop": {
+            "mode": "star",
+            "enhanced": true,
+            "source": "af92858a-0c50-4abf-a622-04c024ca32b3",
+            "fixture": "enhanced",
+            "geometry": {
+              "x": 682.9375,
+              "y": 375.68310546875,
+              "width": 60,
+              "height": 60,
+              "vw": 1440,
+              "vh": 900
+            },
+            "application": {
+              "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_ESSENCE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "gained": 409,
+                "essence": 516
+              },
+              "after": {
+                "gained": 818,
+                "essence": 925
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:55:43.119Z",
+              "gameId": "9r6hxs",
+              "seq": 4
+            },
+            "collection": {
+              "gameId": "9r6hxs",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardAmount": 818,
+              "isEnhanced": true,
+              "essenceBefore": 107,
+              "essenceAfter": 925,
+              "timestamp": "2026-10-12T22:55:43.118Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "925",
+            "balanceAfter": "925",
+            "gameId": "9r6hxs"
+          },
+          "mobile": {
+            "mode": "star",
+            "enhanced": true,
+            "source": "af92858a-0c50-4abf-a622-04c024ca32b3",
+            "fixture": "enhanced",
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.0496826171875,
+              "width": 60,
+              "height": 60,
+              "vw": 390,
+              "vh": 844
+            },
+            "application": {
+              "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_ESSENCE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "gained": 409,
+                "essence": 516
+              },
+              "after": {
+                "gained": 818,
+                "essence": 925
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:55:57.024Z",
+              "gameId": "f3jaii",
+              "seq": 4
+            },
+            "collection": {
+              "gameId": "f3jaii",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardAmount": 818,
+              "isEnhanced": true,
+              "essenceBefore": 107,
+              "essenceAfter": 925,
+              "timestamp": "2026-10-12T22:55:57.023Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "925",
+            "balanceAfter": "925",
+            "gameId": "f3jaii"
+          }
+        },
+        "captures": [
+          "essence-star-enhanced-desktop-before-visit.png",
+          "essence-star-enhanced-desktop-settled-result.png",
+          "essence-star-enhanced-desktop-reloaded.png",
+          "essence-star-enhanced-mobile-before-visit.png",
+          "essence-star-enhanced-mobile-settled-result.png",
+          "essence-star-enhanced-mobile-reloaded.png"
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "9r6hxs",
+            "rows": 33,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "f3jaii",
+            "rows": 33,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-MWaIVv",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-nED1kJ",
+        "ok": true,
+        "error": null,
+        "port": 5174,
+        "slot": 0,
+        "serverPid": 8195,
+        "wallMs": {
+          "browserLeaseWait": 24041,
+          "serve": 2572,
+          "scenario": 33361,
+          "total": 60028
+        },
+        "hostLoad": 8.87744140625,
+        "firstLogTimestamp": "2026-10-12T22:56:58.127Z",
+        "caps": [],
+        "result": {
+          "desktop": {
+            "mode": "pearl-cap-replace",
+            "enhanced": false,
+            "source": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+            "fixture": "cap",
+            "geometry": {
+              "x": 682.9375,
+              "y": 375.72998046875,
+              "width": 60,
+              "height": 60,
+              "vw": 1440,
+              "vh": 900
+            },
+            "application": {
+              "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+              "hook": "after_journey_event",
+              "eventType": "OPEN_SITE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "offered": 0,
+                "essence": 107
+              },
+              "after": {
+                "offered": 1,
+                "essence": 107
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1",
+                "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:57:02.127Z",
+              "gameId": "stnysp",
+              "seq": 3
+            },
+            "collection": {
+              "gameId": "stnysp",
+              "siteType": "Essence",
+              "outcome": "replaced_dreamsign",
+              "siteId": "site-1",
+              "dreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+              "replacedDreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+              "isEnhanced": false,
+              "timestamp": "2026-10-12T22:57:06.019Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "107",
+            "balanceAfter": "107",
+            "gameId": "stnysp"
+          },
+          "mobile": {
+            "mode": "pearl-cap-replace",
+            "enhanced": false,
+            "source": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+            "fixture": "cap",
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.6327819824219,
+              "width": 60,
+              "height": 60,
+              "vw": 390,
+              "vh": 844
+            },
+            "application": {
+              "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+              "hook": "after_journey_event",
+              "eventType": "OPEN_SITE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "offered": 0,
+                "essence": 107
+              },
+              "after": {
+                "offered": 1,
+                "essence": 107
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1",
+                "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:57:19.255Z",
+              "gameId": "p7zons",
+              "seq": 3
+            },
+            "collection": {
+              "gameId": "p7zons",
+              "siteType": "Essence",
+              "outcome": "replaced_dreamsign",
+              "siteId": "site-1",
+              "dreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+              "replacedDreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+              "isEnhanced": false,
+              "timestamp": "2026-10-12T22:57:21.438Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "107",
+            "balanceAfter": "107",
+            "gameId": "p7zons"
+          }
+        },
+        "captures": [
+          "essence-pearl-cap-replace-standard-desktop-before-visit.png",
+          "essence-pearl-cap-replace-standard-desktop-cap-choice.png",
+          "essence-pearl-cap-replace-standard-desktop-settled-result.png",
+          "essence-pearl-cap-replace-standard-desktop-reloaded.png",
+          "essence-pearl-cap-replace-standard-mobile-before-visit.png",
+          "essence-pearl-cap-replace-standard-mobile-cap-choice.png",
+          "essence-pearl-cap-replace-standard-mobile-settled-result.png",
+          "essence-pearl-cap-replace-standard-mobile-reloaded.png"
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "stnysp",
+            "rows": 33,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "p7zons",
+            "rows": 33,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-nED1kJ",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-rbHjsJ",
+        "ok": true,
+        "error": null,
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 14399,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1670,
+          "scenario": 29616,
+          "total": 31361
+        },
+        "hostLoad": 6.7177734375,
+        "firstLogTimestamp": "2026-10-12T22:58:15.271Z",
+        "caps": [],
+        "result": {
+          "desktop": {
+            "mode": "worm",
+            "enhanced": false,
+            "source": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+            "fixture": "entry",
+            "geometry": {
+              "x": 63.75,
+              "y": 382.5,
+              "width": 112.5,
+              "height": 112.5,
+              "vw": 1440,
+              "vh": 900
+            },
+            "application": {
+              "dreamsignId": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+              "hook": "after_journey_event",
+              "eventType": "TRAVEL_TO_DREAMSCAPE",
+              "siteId": null,
+              "heldIndex": 0,
+              "before": {
+                "essence": 107
+              },
+              "after": {
+                "essence": 128.4,
+                "gained": 21.400000000000002
+              },
+              "target": {
+                "nodeId": "dreamscape-1",
+                "siteIds": []
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:58:19.203Z",
+              "gameId": "iexftp",
+              "seq": 3
+            },
+            "balanceBefore": "128.4",
+            "balanceAfter": "128.4",
+            "gameId": "iexftp"
+          },
+          "mobile": {
+            "mode": "worm",
+            "enhanced": false,
+            "source": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+            "fixture": "entry",
+            "geometry": {
+              "x": 154.55555725097656,
+              "y": 623.5,
+              "width": 80.88888549804688,
+              "height": 80.888916015625,
+              "vw": 390,
+              "vh": 844
+            },
+            "application": {
+              "dreamsignId": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+              "hook": "after_journey_event",
+              "eventType": "TRAVEL_TO_DREAMSCAPE",
+              "siteId": null,
+              "heldIndex": 0,
+              "before": {
+                "essence": 107
+              },
+              "after": {
+                "essence": 128.4,
+                "gained": 21.400000000000002
+              },
+              "target": {
+                "nodeId": "dreamscape-1",
+                "siteIds": []
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T22:58:33.439Z",
+              "gameId": "zaqi7e",
+              "seq": 3
+            },
+            "balanceBefore": "128.4",
+            "balanceAfter": "128.4",
+            "gameId": "zaqi7e"
+          }
+        },
+        "captures": [
+          "essence-worm-standard-desktop-before-entry.png",
+          "essence-worm-standard-desktop-settled-result.png",
+          "essence-worm-standard-desktop-reloaded.png",
+          "essence-worm-standard-mobile-before-entry.png",
+          "essence-worm-standard-mobile-settled-result.png",
+          "essence-worm-standard-mobile-reloaded.png"
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "iexftp",
+            "rows": 33,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "zaqi7e",
+            "rows": 33,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-rbHjsJ",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-DQ6SHC",
+        "ok": false,
+        "error": "desktop#0: Error: click [data-journey-debug-editor] button[aria-label=\"Close\"]: __caps [{\"href\":\"http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-essence-standard&seed=1&debug=1&game=vavswb\",\"caps\":{\"errors\":[],\"rejections\":[],\"consoleErrors\":[\"Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted \u2014 the behavior is unsupported and could change in a future version. | af92858a-0c50-4abf-a622-04c024ca32b3\",\"Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted \u2014 the behavior is unsupported and could change in a future version. | af92858a-0c50-4abf-a622-04c024ca32b3\",\"Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted \u2014 the behavior is unsupported and could change in a future version. | af92858a-0c50-4abf-a622-04c024ca32b3\"]}}]; last probe: (1396, 44) hits null\n    at Object.click (evalmachine.<anonymous>:748:15)\n    at async essenceSites (evalmachine.<anonymous>:1676:3)\n    at async evalmachine.<anonymous>:1752:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 17548,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1361,
+          "scenario": 4615,
+          "total": 6038
+        },
+        "hostLoad": 9.001953125,
+        "firstLogTimestamp": "2026-10-12T23:00:18.893Z",
+        "caps": [
+          {
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-essence-standard&seed=1&debug=1&game=vavswb",
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": [
+                "Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted \u2014 the behavior is unsupported and could change in a future version. | af92858a-0c50-4abf-a622-04c024ca32b3",
+                "Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted \u2014 the behavior is unsupported and could change in a future version. | af92858a-0c50-4abf-a622-04c024ca32b3",
+                "Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted \u2014 the behavior is unsupported and could change in a future version. | af92858a-0c50-4abf-a622-04c024ca32b3"
+              ]
+            }
+          }
+        ],
+        "result": {
+          "desktop": null
+        },
+        "captures": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "vavswb",
+            "rows": 24,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-DQ6SHC",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-FxMXgH",
+        "ok": true,
+        "error": null,
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 20407,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 1701,
+          "scenario": 59399,
+          "total": 61178
+        },
+        "hostLoad": 10.58154296875,
+        "firstLogTimestamp": "2026-10-12T23:01:59.042Z",
+        "caps": [],
+        "result": {
+          "desktop": {
+            "mode": "pearl",
+            "copies": 1,
+            "companion": false,
+            "enhanced": false,
+            "source": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+            "fixture": "standard",
+            "geometry": {
+              "x": 682.9375,
+              "y": 371.72003173828125,
+              "width": 60,
+              "height": 60,
+              "vw": 1440,
+              "vh": 900
+            },
+            "applications": [
+              {
+                "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+                "hook": "after_journey_event",
+                "eventType": "OPEN_SITE",
+                "siteId": "site-1",
+                "heldIndex": 0,
+                "before": {
+                  "offered": 0,
+                  "essence": 107
+                },
+                "after": {
+                  "offered": 1,
+                  "essence": 107
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "nodeId": "dreamscape-1",
+                  "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:02:11.190Z",
+                "gameId": "itnzsw",
+                "seq": 3
+              }
+            ],
+            "application": {
+              "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+              "hook": "after_journey_event",
+              "eventType": "OPEN_SITE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "offered": 0,
+                "essence": 107
+              },
+              "after": {
+                "offered": 1,
+                "essence": 107
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1",
+                "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T23:02:11.190Z",
+              "gameId": "itnzsw",
+              "seq": 3
+            },
+            "collection": {
+              "gameId": "itnzsw",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardType": "dreamsign",
+              "dreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+              "isEnhanced": false,
+              "timestamp": "2026-10-12T23:02:12.405Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "107",
+            "balanceAfter": "107",
+            "gameId": "itnzsw"
+          },
+          "mobile": {
+            "mode": "pearl",
+            "copies": 1,
+            "companion": false,
+            "enhanced": false,
+            "source": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+            "fixture": "standard",
+            "geometry": {
+              "x": 163.078125,
+              "y": 350.0959777832031,
+              "width": 60,
+              "height": 60,
+              "vw": 390,
+              "vh": 844
+            },
+            "applications": [
+              {
+                "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+                "hook": "after_journey_event",
+                "eventType": "OPEN_SITE",
+                "siteId": "site-1",
+                "heldIndex": 0,
+                "before": {
+                  "offered": 0,
+                  "essence": 107
+                },
+                "after": {
+                  "offered": 1,
+                  "essence": 107
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "nodeId": "dreamscape-1",
+                  "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:02:36.378Z",
+                "gameId": "335efo",
+                "seq": 3
+              }
+            ],
+            "application": {
+              "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+              "hook": "after_journey_event",
+              "eventType": "OPEN_SITE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "offered": 0,
+                "essence": 107
+              },
+              "after": {
+                "offered": 1,
+                "essence": 107
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1",
+                "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T23:02:36.378Z",
+              "gameId": "335efo",
+              "seq": 3
+            },
+            "collection": {
+              "gameId": "335efo",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardType": "dreamsign",
+              "dreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+              "isEnhanced": false,
+              "timestamp": "2026-10-12T23:02:37.623Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "107",
+            "balanceAfter": "107",
+            "gameId": "335efo"
+          }
+        },
+        "captures": [
+          "essence-pearl-standard-desktop-before-visit.png",
+          "essence-pearl-standard-desktop-settled-result.png",
+          "essence-pearl-standard-desktop-reloaded.png",
+          "essence-pearl-standard-mobile-before-visit.png",
+          "essence-pearl-standard-mobile-settled-result.png",
+          "essence-pearl-standard-mobile-reloaded.png"
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "itnzsw",
+            "rows": 33,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "335efo",
+            "rows": 33,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-FxMXgH",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-KeS6Tp",
+        "ok": true,
+        "error": null,
+        "port": 5174,
+        "slot": 0,
+        "serverPid": 9890,
+        "wallMs": {
+          "browserLeaseWait": 14818,
+          "serve": 2316,
+          "scenario": 56390,
+          "total": 73627
+        },
+        "hostLoad": 16.87548828125,
+        "firstLogTimestamp": "2026-10-12T23:03:58.898Z",
+        "caps": [],
+        "result": {
+          "desktop": {
+            "mode": "pearl",
+            "copies": 1,
+            "companion": false,
+            "enhanced": true,
+            "source": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+            "fixture": "enhanced",
+            "geometry": {
+              "x": 682.9375,
+              "y": 372.6437072753906,
+              "width": 60,
+              "height": 60,
+              "vw": 1440,
+              "vh": 900
+            },
+            "applications": [
+              {
+                "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+                "hook": "after_journey_event",
+                "eventType": "OPEN_SITE",
+                "siteId": "site-1",
+                "heldIndex": 0,
+                "before": {
+                  "offered": 0,
+                  "essence": 107
+                },
+                "after": {
+                  "offered": 1,
+                  "essence": 107
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "nodeId": "dreamscape-1",
+                  "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:04:05.075Z",
+                "gameId": "tthoj8",
+                "seq": 3
+              }
+            ],
+            "application": {
+              "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+              "hook": "after_journey_event",
+              "eventType": "OPEN_SITE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "offered": 0,
+                "essence": 107
+              },
+              "after": {
+                "offered": 1,
+                "essence": 107
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1",
+                "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T23:04:05.075Z",
+              "gameId": "tthoj8",
+              "seq": 3
+            },
+            "collection": {
+              "gameId": "tthoj8",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardType": "dreamsign",
+              "dreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+              "isEnhanced": true,
+              "timestamp": "2026-10-12T23:04:06.309Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "107",
+            "balanceAfter": "107",
+            "gameId": "tthoj8"
+          },
+          "mobile": {
+            "mode": "pearl",
+            "copies": 1,
+            "companion": false,
+            "enhanced": true,
+            "source": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+            "fixture": "enhanced",
+            "geometry": {
+              "x": 163.078125,
+              "y": 346.2144470214844,
+              "width": 60,
+              "height": 60,
+              "vw": 390,
+              "vh": 844
+            },
+            "applications": [
+              {
+                "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+                "hook": "after_journey_event",
+                "eventType": "OPEN_SITE",
+                "siteId": "site-1",
+                "heldIndex": 0,
+                "before": {
+                  "offered": 0,
+                  "essence": 107
+                },
+                "after": {
+                  "offered": 1,
+                  "essence": 107
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "nodeId": "dreamscape-1",
+                  "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:04:28.773Z",
+                "gameId": "499ux8",
+                "seq": 3
+              }
+            ],
+            "application": {
+              "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+              "hook": "after_journey_event",
+              "eventType": "OPEN_SITE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "offered": 0,
+                "essence": 107
+              },
+              "after": {
+                "offered": 1,
+                "essence": 107
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1",
+                "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T23:04:28.773Z",
+              "gameId": "499ux8",
+              "seq": 3
+            },
+            "collection": {
+              "gameId": "499ux8",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardType": "dreamsign",
+              "dreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+              "isEnhanced": true,
+              "timestamp": "2026-10-12T23:04:29.987Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "107",
+            "balanceAfter": "107",
+            "gameId": "499ux8"
+          }
+        },
+        "captures": [
+          "essence-pearl-enhanced-desktop-before-visit.png",
+          "essence-pearl-enhanced-desktop-settled-result.png",
+          "essence-pearl-enhanced-desktop-reloaded.png",
+          "essence-pearl-enhanced-mobile-before-visit.png",
+          "essence-pearl-enhanced-mobile-settled-result.png",
+          "essence-pearl-enhanced-mobile-reloaded.png"
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "tthoj8",
+            "rows": 33,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "499ux8",
+            "rows": 33,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-KeS6Tp",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-88Tf6E",
+        "ok": true,
+        "error": null,
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 94631,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1993,
+          "scenario": 41434,
+          "total": 44393
+        },
+        "hostLoad": 27.17041015625,
+        "firstLogTimestamp": "2026-10-12T23:05:31.138Z",
+        "caps": [],
+        "result": {
+          "desktop": {
+            "mode": "pearl-cap-decline",
+            "copies": 1,
+            "companion": false,
+            "enhanced": false,
+            "source": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+            "fixture": "cap",
+            "geometry": {
+              "x": 682.9375,
+              "y": 373.25201416015625,
+              "width": 60,
+              "height": 60,
+              "vw": 1440,
+              "vh": 900
+            },
+            "applications": [
+              {
+                "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+                "hook": "after_journey_event",
+                "eventType": "OPEN_SITE",
+                "siteId": "site-1",
+                "heldIndex": 0,
+                "before": {
+                  "offered": 0,
+                  "essence": 107
+                },
+                "after": {
+                  "offered": 1,
+                  "essence": 107
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "nodeId": "dreamscape-1",
+                  "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:05:36.985Z",
+                "gameId": "5q2thm",
+                "seq": 3
+              }
+            ],
+            "application": {
+              "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+              "hook": "after_journey_event",
+              "eventType": "OPEN_SITE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "offered": 0,
+                "essence": 107
+              },
+              "after": {
+                "offered": 1,
+                "essence": 107
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1",
+                "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T23:05:36.985Z",
+              "gameId": "5q2thm",
+              "seq": 3
+            },
+            "collection": {
+              "gameId": "5q2thm",
+              "siteId": "site-1",
+              "dreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+              "outcome": "kept_current_collection",
+              "timestamp": "2026-10-12T23:05:41.372Z",
+              "event": "reward_declined",
+              "seq": 27
+            },
+            "balanceBefore": "107",
+            "balanceAfter": "107",
+            "gameId": "5q2thm"
+          },
+          "mobile": {
+            "mode": "pearl-cap-decline",
+            "copies": 1,
+            "companion": false,
+            "enhanced": false,
+            "source": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+            "fixture": "cap",
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.2217102050781,
+              "width": 60,
+              "height": 60,
+              "vw": 390,
+              "vh": 844
+            },
+            "applications": [
+              {
+                "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+                "hook": "after_journey_event",
+                "eventType": "OPEN_SITE",
+                "siteId": "site-1",
+                "heldIndex": 0,
+                "before": {
+                  "offered": 0,
+                  "essence": 107
+                },
+                "after": {
+                  "offered": 1,
+                  "essence": 107
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "nodeId": "dreamscape-1",
+                  "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:05:54.788Z",
+                "gameId": "38t4pj",
+                "seq": 3
+              }
+            ],
+            "application": {
+              "dreamsignId": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+              "hook": "after_journey_event",
+              "eventType": "OPEN_SITE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "offered": 0,
+                "essence": 107
+              },
+              "after": {
+                "offered": 1,
+                "essence": 107
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1",
+                "incomingDreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T23:05:54.788Z",
+              "gameId": "38t4pj",
+              "seq": 3
+            },
+            "collection": {
+              "gameId": "38t4pj",
+              "siteId": "site-1",
+              "dreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+              "outcome": "kept_current_collection",
+              "timestamp": "2026-10-12T23:05:56.860Z",
+              "event": "reward_declined",
+              "seq": 27
+            },
+            "balanceBefore": "107",
+            "balanceAfter": "107",
+            "gameId": "38t4pj"
+          }
+        },
+        "captures": [
+          "essence-pearl-cap-decline-standard-desktop-before-visit.png",
+          "essence-pearl-cap-decline-standard-desktop-cap-choice.png",
+          "essence-pearl-cap-decline-standard-desktop-settled-result.png",
+          "essence-pearl-cap-decline-standard-desktop-reloaded.png",
+          "essence-pearl-cap-decline-standard-mobile-before-visit.png",
+          "essence-pearl-cap-decline-standard-mobile-cap-choice.png",
+          "essence-pearl-cap-decline-standard-mobile-settled-result.png",
+          "essence-pearl-cap-decline-standard-mobile-reloaded.png"
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "5q2thm",
+            "rows": 33,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "38t4pj",
+            "rows": 33,
+            "reason": null
+          }
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-88Tf6E",
+        "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+        "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925"
+      },
+      {
+        "invocation": "run-1yCtwq",
+        "ok": true,
+        "error": null,
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 89482,
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 1350,
+          "scenario": 58699,
+          "total": 60111
+        },
+        "hostLoad": 15.16845703125,
+        "caps": [],
+        "result": {
+          "desktop": {
+            "mode": "star",
+            "copies": 2,
+            "companion": false,
+            "enhanced": false,
+            "source": "af92858a-0c50-4abf-a622-04c024ca32b3",
+            "fixture": "standard",
+            "geometry": {
+              "x": 682.9375,
+              "y": 375.9992980957031,
+              "width": 60,
+              "height": 60,
+              "vw": 1440,
+              "vh": 900
+            },
+            "applications": [
+              {
+                "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+                "hook": "after_journey_event",
+                "eventType": "ACCEPT_ESSENCE",
+                "siteId": "site-1",
+                "heldIndex": 0,
+                "before": {
+                  "gained": 213,
+                  "essence": 320
+                },
+                "after": {
+                  "gained": 426,
+                  "essence": 533
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "nodeId": "dreamscape-1"
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:35:26.427Z",
+                "gameId": "jakykc",
+                "seq": 5
+              },
+              {
+                "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+                "hook": "after_journey_event",
+                "eventType": "ACCEPT_ESSENCE",
+                "siteId": "site-1",
+                "heldIndex": 1,
+                "before": {
+                  "gained": 426,
+                  "essence": 533
+                },
+                "after": {
+                  "gained": 852,
+                  "essence": 959
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "nodeId": "dreamscape-1"
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:35:26.427Z",
+                "gameId": "jakykc",
+                "seq": 5
+              }
+            ],
+            "application": {
+              "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_ESSENCE",
+              "siteId": "site-1",
+              "heldIndex": 1,
+              "before": {
+                "gained": 426,
+                "essence": 533
+              },
+              "after": {
+                "gained": 852,
+                "essence": 959
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T23:35:26.427Z",
+              "gameId": "jakykc",
+              "seq": 5
+            },
+            "collection": {
+              "gameId": "jakykc",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardAmount": 852,
+              "isEnhanced": false,
+              "essenceBefore": 107,
+              "essenceAfter": 959,
+              "timestamp": "2026-10-12T23:35:26.427Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "959",
+            "balanceAfter": "959",
+            "gameId": "jakykc"
+          },
+          "mobile": {
+            "mode": "star",
+            "copies": 2,
+            "companion": false,
+            "enhanced": false,
+            "source": "af92858a-0c50-4abf-a622-04c024ca32b3",
+            "fixture": "standard",
+            "geometry": {
+              "x": 163.078125,
+              "y": 349.78564453125,
+              "width": 60,
+              "height": 60,
+              "vw": 390,
+              "vh": 844
+            },
+            "applications": [
+              {
+                "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+                "hook": "after_journey_event",
+                "eventType": "ACCEPT_ESSENCE",
+                "siteId": "site-1",
+                "heldIndex": 0,
+                "before": {
+                  "gained": 213,
+                  "essence": 320
+                },
+                "after": {
+                  "gained": 426,
+                  "essence": 533
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "nodeId": "dreamscape-1"
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:35:55.527Z",
+                "gameId": "uv8qpo",
+                "seq": 5
+              },
+              {
+                "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+                "hook": "after_journey_event",
+                "eventType": "ACCEPT_ESSENCE",
+                "siteId": "site-1",
+                "heldIndex": 1,
+                "before": {
+                  "gained": 426,
+                  "essence": 533
+                },
+                "after": {
+                  "gained": 852,
+                  "essence": 959
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "nodeId": "dreamscape-1"
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:35:55.527Z",
+                "gameId": "uv8qpo",
+                "seq": 5
+              }
+            ],
+            "application": {
+              "dreamsignId": "af92858a-0c50-4abf-a622-04c024ca32b3",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_ESSENCE",
+              "siteId": "site-1",
+              "heldIndex": 1,
+              "before": {
+                "gained": 426,
+                "essence": 533
+              },
+              "after": {
+                "gained": 852,
+                "essence": 959
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "nodeId": "dreamscape-1"
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T23:35:55.527Z",
+              "gameId": "uv8qpo",
+              "seq": 5
+            },
+            "collection": {
+              "gameId": "uv8qpo",
+              "siteType": "Essence",
+              "outcome": "collected",
+              "siteId": "site-1",
+              "rewardAmount": 852,
+              "isEnhanced": false,
+              "essenceBefore": 107,
+              "essenceAfter": 959,
+              "timestamp": "2026-10-12T23:35:55.527Z",
+              "event": "site_completed",
+              "seq": 27
+            },
+            "balanceBefore": "959",
+            "balanceAfter": "959",
+            "gameId": "uv8qpo"
+          }
+        },
+        "captures": [
+          "essence-star-standard-copies2-desktop-before-visit.png",
+          "essence-star-standard-copies2-desktop-settled-result.png",
+          "essence-star-standard-copies2-desktop-reloaded.png",
+          "essence-star-standard-copies2-mobile-before-visit.png",
+          "essence-star-standard-copies2-mobile-settled-result.png",
+          "essence-star-standard-copies2-mobile-reloaded.png"
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-1yCtwq",
+        "base": "7545f04b9a48c268c2e43178ce718a7729a96c79",
+        "sourceTreeSHA256": "9b3c01eb8b8c358733b9ac740838cd28dcf431387360006249d6c0ee8f51559a",
+        "servedQaSHA256": "be0873217957784ca4e15cbe656bbeea20018ffe2b2653f9eb2de19159892bca",
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "jakykc",
+            "rows": 35,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "uv8qpo",
+            "rows": 35,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "invocation": "run-EkQY4A",
+        "ok": true,
+        "error": null,
+        "port": 5274,
+        "slot": 1,
+        "serverPid": 48531,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 2295,
+          "scenario": 26054,
+          "total": 28448
+        },
+        "hostLoad": 15.36181640625,
+        "caps": [],
+        "result": {
+          "desktop": {
+            "mode": "worm",
+            "copies": 2,
+            "companion": true,
+            "enhanced": false,
+            "source": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+            "fixture": "entry",
+            "geometry": {
+              "x": 63.75,
+              "y": 382.5,
+              "width": 112.5,
+              "height": 112.5,
+              "vw": 1440,
+              "vh": 900
+            },
+            "applications": [
+              {
+                "dreamsignId": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+                "hook": "after_journey_event",
+                "eventType": "TRAVEL_TO_DREAMSCAPE",
+                "siteId": null,
+                "heldIndex": 0,
+                "before": {
+                  "essence": 107
+                },
+                "after": {
+                  "essence": 128.4,
+                  "gained": 21.400000000000002
+                },
+                "target": {
+                  "nodeId": "dreamscape-1",
+                  "siteIds": []
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:36:58.020Z",
+                "gameId": "qhpd7q",
+                "seq": 5
+              },
+              {
+                "dreamsignId": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+                "hook": "after_journey_event",
+                "eventType": "TRAVEL_TO_DREAMSCAPE",
+                "siteId": null,
+                "heldIndex": 1,
+                "before": {
+                  "essence": 128.4
+                },
+                "after": {
+                  "essence": 154.08,
+                  "gained": 25.680000000000003
+                },
+                "target": {
+                  "nodeId": "dreamscape-1",
+                  "siteIds": []
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:36:58.020Z",
+                "gameId": "qhpd7q",
+                "seq": 5
+              }
+            ],
+            "application": {
+              "dreamsignId": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+              "hook": "after_journey_event",
+              "eventType": "TRAVEL_TO_DREAMSCAPE",
+              "siteId": null,
+              "heldIndex": 1,
+              "before": {
+                "essence": 128.4
+              },
+              "after": {
+                "essence": 154.08,
+                "gained": 25.680000000000003
+              },
+              "target": {
+                "nodeId": "dreamscape-1",
+                "siteIds": []
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T23:36:58.020Z",
+              "gameId": "qhpd7q",
+              "seq": 5
+            },
+            "balanceBefore": "154.08",
+            "balanceAfter": "154.08",
+            "gameId": "qhpd7q"
+          },
+          "mobile": {
+            "mode": "worm",
+            "copies": 2,
+            "companion": true,
+            "enhanced": false,
+            "source": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+            "fixture": "entry",
+            "geometry": {
+              "x": 154.55555725097656,
+              "y": 623.5,
+              "width": 80.88888549804688,
+              "height": 80.888916015625,
+              "vw": 390,
+              "vh": 844
+            },
+            "applications": [
+              {
+                "dreamsignId": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+                "hook": "after_journey_event",
+                "eventType": "TRAVEL_TO_DREAMSCAPE",
+                "siteId": null,
+                "heldIndex": 0,
+                "before": {
+                  "essence": 107
+                },
+                "after": {
+                  "essence": 128.4,
+                  "gained": 21.400000000000002
+                },
+                "target": {
+                  "nodeId": "dreamscape-1",
+                  "siteIds": []
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:37:10.873Z",
+                "gameId": "duzwcj",
+                "seq": 5
+              },
+              {
+                "dreamsignId": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+                "hook": "after_journey_event",
+                "eventType": "TRAVEL_TO_DREAMSCAPE",
+                "siteId": null,
+                "heldIndex": 1,
+                "before": {
+                  "essence": 128.4
+                },
+                "after": {
+                  "essence": 154.08,
+                  "gained": 25.680000000000003
+                },
+                "target": {
+                  "nodeId": "dreamscape-1",
+                  "siteIds": []
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-12T23:37:10.873Z",
+                "gameId": "duzwcj",
+                "seq": 5
+              }
+            ],
+            "application": {
+              "dreamsignId": "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+              "hook": "after_journey_event",
+              "eventType": "TRAVEL_TO_DREAMSCAPE",
+              "siteId": null,
+              "heldIndex": 1,
+              "before": {
+                "essence": 128.4
+              },
+              "after": {
+                "essence": 154.08,
+                "gained": 25.680000000000003
+              },
+              "target": {
+                "nodeId": "dreamscape-1",
+                "siteIds": []
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-12T23:37:10.873Z",
+              "gameId": "duzwcj",
+              "seq": 5
+            },
+            "balanceBefore": "154.08",
+            "balanceAfter": "154.08",
+            "gameId": "duzwcj"
+          }
+        },
+        "captures": [
+          "essence-worm-standard-copies2-with-star-desktop-before-entry.png",
+          "essence-worm-standard-copies2-with-star-desktop-settled-result.png",
+          "essence-worm-standard-copies2-with-star-desktop-reloaded.png",
+          "essence-worm-standard-copies2-with-star-mobile-before-entry.png",
+          "essence-worm-standard-copies2-with-star-mobile-settled-result.png",
+          "essence-worm-standard-copies2-with-star-mobile-reloaded.png"
+        ],
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.262/invocations/run-EkQY4A",
+        "base": "7545f04b9a48c268c2e43178ce718a7729a96c79",
+        "sourceTreeSHA256": "9b3c01eb8b8c358733b9ac740838cd28dcf431387360006249d6c0ee8f51559a",
+        "servedQaSHA256": "be0873217957784ca4e15cbe656bbeea20018ffe2b2653f9eb2de19159892bca",
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "qhpd7q",
+            "rows": 36,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "duzwcj",
+            "rows": 36,
+            "reason": null
+          }
+        ]
+      }
+    ],
+    "strictPassInvocations": {
+      "star-standard": "run-SQFQFR",
+      "star-enhanced": "run-MWaIVv",
+      "pearl-cap-replace-standard": "run-nED1kJ",
+      "worm-standard": "run-rbHjsJ",
+      "pearl-standard": "run-FxMXgH",
+      "pearl-enhanced": "run-KeS6Tp",
+      "pearl-cap-decline-standard": "run-88Tf6E"
+    },
+    "priorQualification": "run-qb4rXL and run-nhvqo9 have numeric rule/provider/capture and persisted-log proof; missing HUD selector returned undefined, so they are not successful HUD-equality controls. Later strict source-bound runs assert visible numbers.",
+    "remaining": "None in implementation/runtime acceptance; parent cold core review and delivery remain session duties.",
+    "battleApplicability": "Fuzz pool rejects journey-only empty battle abilities. Current Dreamsign lab can initialize inert emblems; authored pass/first battleDay supplies no journey clause coverage. Parent accepted applicable P8 journey contracts and judged site/travel workflows; no battle300/sweep claim.",
+    "historicalFreeze": {
+      "base": "e09219304f98ffb35832a7de7052ceb35487e09a",
+      "frozenUTC": "2026-10-12T22:48:43.650591+00:00",
+      "fileCount": 2363,
+      "treeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7"
+    },
+    "historicalServedFreeze": {
+      "base": "e09219304f98ffb35832a7de7052ceb35487e09a",
+      "sourceTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+      "sourceFileCount": 2363,
+      "originalQaSHA256": "b9216f4f4ce3ff754ac6cab42352109550632e5efb4b79a0257a7adb8599c12f",
+      "servedQaSHA256": "56e681bfcb11a2cc0b8d87ac704466c9aab5d3cafa4a26cd3d219eb60b93f925",
+      "registrationCount": 4,
+      "fixtureScope": "local synthetic Essence branches and balance107 over unchanged live foundation/providers; no pregranted modifiers"
+    },
+    "historicalRestore": {
+      "base": "e09219304f98ffb35832a7de7052ceb35487e09a",
+      "restoredUTC": "2026-10-12T23:06:49.176581+00:00",
+      "qaOriginalSHA256": "b9216f4f4ce3ff754ac6cab42352109550632e5efb4b79a0257a7adb8599c12f",
+      "qaByteExact": true,
+      "functionalFileCount": 2363,
+      "functionalTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+      "functionalChanges": [],
+      "allOwnedRunnersTerminal": true,
+      "drainProof": "262-runtime-drain.json"
+    },
+    "historicalDrain": {
+      "recordedUTC": "2026-10-12T23:06:48.885375+00:00",
+      "invocationCount": 12,
+      "knownServerPids": [
+        8195,
+        9890,
+        14399,
+        17548,
+        20407,
+        43947,
+        46115,
+        66762,
+        78775,
+        85807,
+        94631,
+        98394
+      ],
+      "knownServerProcessesAbsent": true,
+      "runnerTerminalAndPortFreeReceipts": {
+        "262-qa-star-standard2.txt": true,
+        "262-qa-pearl-cap-replace.txt": true,
+        "262-qa-star-standard3.txt": true,
+        "262-qa-worm.txt": true,
+        "262-qa-star-standard4.txt": true,
+        "262-qa-star-duplicates.txt": true,
+        "262-qa-star-enhanced2.txt": true,
+        "262-qa-pearl-cap-decline.txt": true,
+        "262-qa-star-enhanced.txt": true,
+        "262-qa-star-standard.txt": true,
+        "262-qa-pearl-enhanced.txt": true,
+        "262-qa-pearl-standard.txt": true
+      },
+      "retainedOwnBrowserOwnerRecords": [],
+      "providerCompletionBasis": "Every owned runner returned terminal after its documented awaited context/client/lease cleanup; all12 own raw shutdown receipts report port free. Process/record absence is supplemental, not sole evidence of provider completion."
+    },
+    "sourceFreeze": {
+      "base": "7545f04b9a48c268c2e43178ce718a7729a96c79",
+      "head": "07601119a5ffe13075bd7ab4964733c20ab71d62",
+      "frozenUTC": "2026-10-12T23:34:22.925600+00:00",
+      "fileCount": 2373,
+      "treeSHA256": "9b3c01eb8b8c358733b9ac740838cd28dcf431387360006249d6c0ee8f51559a"
+    },
+    "servedFreeze": {
+      "base": "7545f04b9a48c268c2e43178ce718a7729a96c79",
+      "head": "07601119a5ffe13075bd7ab4964733c20ab71d62",
+      "sourceTreeSHA256": "9b3c01eb8b8c358733b9ac740838cd28dcf431387360006249d6c0ee8f51559a",
+      "sourceFileCount": 2373,
+      "originalQaSHA256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "servedQaSHA256": "be0873217957784ca4e15cbe656bbeea20018ffe2b2653f9eb2de19159892bca",
+      "registrationCount": 4,
+      "originalBackup": "262-resumed-qa-scenes.before",
+      "historicalOriginalBackupPreservedSHA256": "b9216f4f4ce3ff754ac6cab42352109550632e5efb4b79a0257a7adb8599c12f"
+    },
+    "restore": {
+      "base": "7545f04b9a48c268c2e43178ce718a7729a96c79",
+      "head": "07601119a5ffe13075bd7ab4964733c20ab71d62",
+      "restoredUTC": "2026-10-12T23:38:42.439217+00:00",
+      "qaOriginalSHA256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "qaByteExact": true,
+      "functionalFileCount": 2373,
+      "functionalTreeSHA256": "9b3c01eb8b8c358733b9ac740838cd28dcf431387360006249d6c0ee8f51559a",
+      "functionalChanges": [],
+      "allOwnedRunnersTerminal": true,
+      "drainProof": "262-resumed-runtime-drain.json",
+      "historicalQaBackupSHA256": "b9216f4f4ce3ff754ac6cab42352109550632e5efb4b79a0257a7adb8599c12f"
+    },
+    "drain": {
+      "recordedUTC": "2026-10-12T23:38:42.189233+00:00",
+      "invocations": [
+        "run-1yCtwq",
+        "run-EkQY4A"
+      ],
+      "knownServerPids": [
+        89482,
+        48531
+      ],
+      "knownServerProcessesAbsent": true,
+      "runnerTerminalAndPortFreeReceipts": {
+        "resumed-qa-star-duplicates": true,
+        "resumed-qa-worm-duplicates": true
+      },
+      "retainedOwnBrowserOwnerRecords": [],
+      "providerCompletionBasis": "Both final owned runners returned terminal0 after their documented awaited context/client/lease cleanup; raw shutdown receipts report port free. Process/record absence is supplemental, not sole provider completion evidence."
+    },
+    "historicalBlocker": "run-DQ6SHC second native Star grant yields three existing duplicate React UUID keys/Caps errors before collection; prerequisite hv-umm2.591. Duplicate Worm with native Star companion remains unattempted until renderer repaired.",
+    "priorWorkflowApplicability": "Prior sourcee092 strict single-Star/Pearl/single-Worm flows remain applicable: parent byte-proof preserves all26 owned whole files (only inherited additive rules differ). 591 changes private rendering keys with no public API/rule/provider/quote changes; final combined checks plus new native duplicate workflows validate repaired rendering. Prior missing-HUD attempts remain qualified and original duplicate FAIL is preserved.",
+    "attemptCount": 14,
+    "finalDuplicatePassInvocations": {
+      "star": "run-1yCtwq",
+      "wormWithStarCompanion": "run-EkQY4A"
+    }
+  },
+  "checkpoint": {
+    "status": "Historical inactive local checkpoint awaiting591; prerequisite completed and duplicate acceptance passed on combined source.",
+    "prerequisite": "hv-umm2.591 completed",
+    "ordinaryRewardFollowup": "hv-umm2.586",
+    "friction": "Historical checkpoint was not the final endpoint. Final compact eight-field friction is stamped from original conservative proxy through coordinated final endpoint."
+  },
+  "priorBase": "e09219304f98ffb35832a7de7052ceb35487e09a",
+  "priorValidation": {
+    "baseline": {
+      "receipt": "262-baseline.txt",
+      "terminal": 14115,
+      "exitCode": 0,
+      "files": 3,
+      "cases": 16
+    },
+    "preimplementationNegative": {
+      "receipt": "262-negative-3.txt",
+      "terminal": 77253,
+      "exitCode": 0,
+      "files": 1,
+      "cases": 1,
+      "scope": "Real public production reducer gap assertions for Star/Pearl/Worm on synthetic state; preceding two harness errors retained."
+    },
+    "focused": {
+      "receipt": "262-focus3.txt",
+      "terminal": 16922,
+      "exitCode": 0,
+      "files": 6,
+      "cases": 62,
+      "wallS": 4.7,
+      "wallScope": "Sum of wrapper-reported prepare/test/restore phase durations rounded to 0.1s; whole invocation time was unobserved.",
+      "phaseDurations": {
+        "prepare": "1.7",
+        "test": "2.3",
+        "restore-local-assets": "0.7"
+      }
+    },
+    "behaviorNegative": {
+      "startUTC": "2026-10-12T22:43:31.608223+00:00",
+      "endUTC": "2026-10-12T22:43:35.104962+00:00",
+      "exitCode": 1,
+      "control": "temporarily disable factory descriptor and post-event hooks; owning public reducer contracts remain unchanged",
+      "sourceSHA256": "6bf6750cef95e511a9fc1f943e66253c37feecf2ff36dd31ba6895ad869ff312",
+      "restoredByteExact": true,
+      "load1": 3.78662109375
+    },
+    "review": {
+      "label": "review2",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUTC": "2026-10-12T22:44:01.673025+00:00",
+      "endUTC": "2026-10-12T22:44:42.808821+00:00",
+      "wallS": 41.135306208001566,
+      "startLoad1": 3.80419921875,
+      "exitCode": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-essence262-sol"
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUTC": "2026-10-12T22:45:35.524969+00:00",
+      "endUTC": "2026-10-12T22:45:38.766626+00:00",
+      "wallS": 3.2415422500052955,
+      "startLoad1": 3.53515625,
+      "exitCode": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-essence262-sol"
+    },
+    "full": {
+      "label": "full",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "startUTC": "2026-10-12T22:45:56.626092+00:00",
+      "endUTC": "2026-10-12T22:47:35.742397+00:00",
+      "wallS": 99.11524308299704,
+      "startLoad1": 3.8857421875,
+      "exitCode": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-essence262-sol"
+    },
+    "heavySlot": {
+      "label": "fullslot",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "python3",
+        "/tmp/262-run-check.py",
+        "full",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "startUTC": "2026-10-12T22:45:56.601837+00:00",
+      "endUTC": "2026-10-12T22:47:35.746288+00:00",
+      "wallS": 99.143379000001,
+      "startLoad1": 3.8857421875,
+      "exitCode": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-essence262-sol"
+    },
+    "counts": {
+      "review": {
+        "files": 232,
+        "cases": 4453
+      },
+      "full": {
+        "files": 362,
+        "cases": 6182,
+        "testStepS": 72.1,
+        "testStepLoad1": 4.90234375
+      }
+    },
+    "failedRounds": [
+      {
+        "receipt": "262-focus1.txt",
+        "terminal": 29862,
+        "exitCode": 1,
+        "files": 5,
+        "cases": 56,
+        "passed": 55,
+        "cause": "New Pearl decline exposed existing inline completion guard."
+      },
+      {
+        "receipt": "262-focus2.txt",
+        "terminal": 10789,
+        "exitCode": 1,
+        "files": 3,
+        "cases": 15,
+        "passed": 13,
+        "cause": "Own synthetic provider test assumed a particular shuffled first UUID; corrected to membership/one pool consumption."
+      },
+      {
+        "receipt": "262-typecheck1.txt",
+        "terminal": 3428,
+        "exitCode": 2,
+        "cause": "Own hook union return inference and untyped mock parameter; corrected."
+      },
+      {
+        "receipt": "262-review1.txt",
+        "terminal": 5256,
+        "exitCode": 1,
+        "files": 232,
+        "cases": 4452,
+        "passed": 4449,
+        "cause": "Three same owning controls plus own eager registry cycle and JSON test lint error; corrected in scope."
+      }
+    ],
+    "observationScope": "Single local host-load observations; no controlled comparison or performance causality claim."
+  },
+  "recovery": {
+    "prerequisite": "hv-umm2.591",
+    "status": "certified/promoted/completed and included in finalBASE7545",
+    "checkpointReceipt": {
+      "checkpointOID": "3b75cba2edba7fb8d7ad548af79c1c320fb63f81",
+      "base": "e09219304f98ffb35832a7de7052ceb35487e09a",
+      "parentOID": "e09219304f98ffb35832a7de7052ceb35487e09a",
+      "invocationUTCBefore": "2026-10-12T23:13:30.386105+00:00",
+      "invocationUTCAfter": "2026-10-12T23:13:30.437074+00:00",
+      "GitCommitterTimestamp": "2026-10-12T16:13:30-07:00",
+      "GitCommitterUnixSeconds": 1791846810,
+      "GitPrecision": "seconds",
+      "purpose": "LOCAL acceptance-incomplete checkpoint awaiting591, NOT final endpoint/commit",
+      "pathCount": 27,
+      "stagedDiffSHA256": "db5d048e1e67ba73be83769a1e6e7ebea9e126b32e15004bf08ed29de8ab5e3e",
+      "worktreeClean": true,
+      "allOwnedRuntimesTerminal": true,
+      "qaOriginalSHA256": "b9216f4f4ce3ff754ac6cab42352109550632e5efb4b79a0257a7adb8599c12f",
+      "functionalTreeSHA256": "a3cb7a09639e134983a3b1e8124e0101966903d5fd0e8fc162400316ec15ccc7",
+      "remainingAcceptance": "Native duplicate-Star collection and sequential duplicate-Worm travel with native Star companion after591 repair; original proxy22:11:21.522332Z through future final commit gross window still owed."
+    },
+    "updateReceipt": {
+      "action": "updated",
+      "branch": "wt/journey-essence262-sol",
+      "message": "Rebased one clean feature commit to 07601119a5.",
+      "new_oid": {
+        "bytes": "07601119a5ffe13075bd7ab4964733c20ab71d62",
+        "format": "sha1"
+      },
+      "old_oid": {
+        "bytes": "3b75cba2edba7fb8d7ad548af79c1c320fb63f81",
+        "format": "sha1"
+      },
+      "path": "/Users/dthurn/dreamtides_web/.worktrees/journey-essence262-sol"
+    },
+    "sourceProof": {
+      "at": "2026-10-12T23:28:21.883885+00:00",
+      "head": "07601119a5ffe13075bd7ab4964733c20ab71d62",
+      "base": "7545f04b9a48c268c2e43178ce718a7729a96c79",
+      "ownCheckpointPathsCompared": 27,
+      "changedOwnWholeFileBytes": [
+        "docs/rules.md"
+      ],
+      "qaScenesSHA": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "clean": true,
+      "repairCompleted": "completed"
+    },
+    "observedInactiveWindow": {
+      "start": "2026-10-12T23:13:30.437074+00:00",
+      "end": "2026-10-12T23:28:21.883885+00:00",
+      "minutes": 14.85744685,
+      "scope": "Checkpoint invocation completion through parent observed combined-source proof; includes root cause audit/repair/checks/review/delivery/update and coordination. End is an observed source-proof time, not actual helper resumption/model start."
+    },
+    "repairValidationQualification": "591 focused8.7922s preceded tooltip-focus assertions; its final review includes exact111-line renderer test/all4cases and native final renderer QA. Current combined262 checks run on the final repair; no unchanged591 checks repeated."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Resumed review test-related start 2026-10-12T23:29:53.553Z, 1-minute load=13.66748046875."
+      },
+      "testDelta": {
+        "scope": "Net plain contracts:329 added minus2 deleted=327 lines across4 touched entrypoints;2 new/0 deleted gives net files2, jsdomFiles0. Root591111-line renderer test belongs to base and is excluded."
+      },
+      "localValidationS": {
+        "scope": "Latest combined measured wrapper commands; full is inside exclusive lock, actual lock acquisition wait retained separately. Original focused4.7 was phase-sum/whole invocation unobserved and is historical."
+      }
+    }
+  }
+}

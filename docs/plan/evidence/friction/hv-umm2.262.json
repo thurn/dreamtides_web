@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.262",
+  "phase": 5,
+  "implementMin": 94.1427477,
+  "implementWindow": {
+    "start": "2026-10-12T22:11:21.522332Z",
+    "end": "2026-10-12T23:45:30.087194+00:00"
+  },
+  "localValidationS": {
+    "focused": 5.613161750006839,
+    "review": 45.616158083008486,
+    "knip": 3.1594662919960683,
+    "full": 98.97937808300776
+  },
+  "hostLoad": 13.66748046875,
+  "testDelta": {
+    "files": 2,
+    "lines": 327,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "rules-ambiguity",
+      "minutes": 15.4692,
+      "note": "Original conservative before-dispatch proxy22:11:21.522332Z through nativeWRITEACK22:26:49.675892Z: bounded D10/rounding/holding/API admission compound elapsed coordination window, not productive editing; exact helper dispatch/model start unobserved."
+    },
+    {
+      "tag": "duplicate-dreamsign-keys",
+      "minutes": 14.8574,
+      "note": "Observed inactive checkpoint invocation completion23:13:30.437074Z through parent combined-source proof23:28:21.883885Z during root591 cause repair/review/certified delivery/update and coordination. Elapsed recovery window, not editing effort or exact resumption dispatch; original gross window includes it. Original Caps FAIL and final duplicate passes retained."
+    }
+  ]
+}

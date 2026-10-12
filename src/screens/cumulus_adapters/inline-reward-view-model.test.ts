@@ -4,11 +4,16 @@ import type {
   RewardSiteRuntime,
 } from "../../types/journey";
 import { parseSiteId } from "../../types/identifiers";
+import { testJourneyState } from "../../testing/journey-genesis";
+import { makeTestAtlasNode } from "../../testing/atlas-fixtures";
+import { parseAtlasNodeId } from "../../types/identifiers";
 import { testDreamsignId } from "../../types/test-identities";
-import { buildInlineRewardCompletionLog } from "./inline-reward-view-model";
+import { createJourneyModifierRegistry } from "../../rules/journey/modifier-registry";
+import { journeyEssence } from "../../rules/journey/journey-essence";
+import { buildInlineRewardCompletionLog, resolveInlineReward, resolveRewardReplacement, resolveRewardDecline } from "./inline-reward-view-model";
 
 describe("inline-reward-view-model", () => {
-  const STATE = { essence: 90 };
+  const STATE = { essence: 90, dreamsigns: [] };
 
   function site(type: SiteState["type"]): SiteState {
     return {
@@ -46,4 +51,24 @@ describe("inline-reward-view-model", () => {
       expect(result?.fields.dreamsignId).toBe(dreamsignId);
     });
   });
+});
+
+
+it("projects live Essence holdings and reuses single Reward collection/cap choices for a marked Essence site", () => {
+  const source = testDreamsignId("synthetic-source");
+  const incoming = testDreamsignId("synthetic-incoming");
+  const held = { id: source, name: "Same name", effectDescription: "Synthetic" };
+  const site: SiteState = { id: parseSiteId("essence"), type: "Essence", isEnhanced: false, isVisited: false };
+  const state = { ...testJourneyState(), essence: 11, dreamsigns: [held], maxDreamsigns: 1 };
+  const registry = createJourneyModifierRegistry([journeyEssence(source, { kind: "multiplyEssenceSiteGain", factor: 3 })]);
+  const amount = buildInlineRewardCompletionLog(site, { kind: "essence", amount: 7, accepted: false }, state, registry);
+  expect(amount?.fields).toMatchObject({ rewardAmount: 21, essenceBefore: 11, essenceAfter: 32 });
+  const runtime: RewardSiteRuntime = { kind: "reward", reward: { rewardType: "dreamsign", dreamsign: { ...held, id: incoming } }, accepted: false, remainingDreamsignPoolIds: [], journeyEssenceSource: source };
+  state.siteRuntime[site.id] = runtime;
+  expect(resolveInlineReward(site, runtime, state)).toEqual({ kind: "replacement" });
+  expect(resolveInlineReward(site, runtime, { ...state, maxDreamsigns: 2 })).toMatchObject({ kind: "reward", fields: { siteType: "Essence", dreamsignId: incoming } });
+  const node = makeTestAtlasNode(parseAtlasNodeId("inline-node"), [site]);
+  expect(resolveRewardReplacement(node, state, site.id, source)).toMatchObject({ purgeIndex: 0, fields: { siteType: "Essence", dreamsignId: incoming, replacedDreamsignId: source } });
+  expect(resolveRewardDecline(node, state, site.id)).toMatchObject({ fields: { dreamsignId: incoming } });
+  expect(buildInlineRewardCompletionLog(site, { ...runtime, journeyEssenceSource: undefined }, state)).toBeNull();
 });

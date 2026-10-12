@@ -644,6 +644,20 @@ export function createSiteContentProvider(
     sitesData: content.sitesData,
     economyData: content.economyData,
     gambleData: content.gambleData,
+    openEssenceDreamsignReward: ({ journey, rng, offerCount }) => {
+      const draw = drawDreamsignOptions(
+        journey.remainingDreamsignPool, content.dreamsignTemplates, offerCount,
+        dreamsignRegenerationPoolIds(journey), streamFromKeyed(rng),
+      );
+      const dreamsign = draw.offeredDreamsigns[0];
+      if (dreamsign === undefined) return null;
+      const remainingDreamsignPool = draw.remainingDreamsignPool.map(parseDreamsignId);
+      return {
+        runtime: { kind: "reward", reward: { rewardType: "dreamsign", dreamsign },
+          remainingDreamsignPoolIds: remainingDreamsignPool, accepted: false },
+        remainingDreamsignPool,
+      };
+    },
     openSite: ({
       journey,
       site,

@@ -43,6 +43,8 @@ import type {
   TransfiguredSiteOfferModifier,
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
+import { essenceReplacementSource } from "./journey-essence";
+import type { JourneyModifierRegistry } from "./modifier-registry";
 import { purgeVisitCost } from "../../purge/purge-pricing";
 import {
   isRandomSiteDestinationType,
@@ -109,6 +111,13 @@ export interface SiteContentProvider {
     runtime: ExplorationSiteRuntime;
     selectionRulesVersion: SelectionRulesVersion;
   }): ExplorationSiteRuntime | null;
+  /** Prepare exactly one free Dreamsign for an Essence replacement, or bounce. */
+  openEssenceDreamsignReward(input: {
+    journey: JourneyState;
+    site: SiteState;
+    rng: (drawIndex: number) => number;
+    offerCount: 1;
+  }): SiteOpenResult | null;
   openSite(input: {
     journey: JourneyState;
     site: SiteState;
@@ -358,10 +367,29 @@ function randomIntInRange(
  * provider wired, or an Augury / Exploration open whose
  * `selectionRulesVersion` names another protocol.
  */
+function prepareEssenceReplacement(
+  journey: JourneyState,
+  site: SiteState,
+  ctx: EventContext,
+  source: { dreamsignId: DreamsignId; offerCount: 1 },
+): JourneyState | null {
+  const result = contentProvider?.openEssenceDreamsignReward({
+    journey, site, rng: ctx.rng, offerCount: source.offerCount,
+  });
+  if (result == null || result.runtime.kind !== "reward" || result.runtime.accepted ||
+    result.runtime.reward.rewardType !== "dreamsign") return null;
+  const next = withRuntime(journey, site.id, {
+    ...result.runtime, journeyEssenceSource: source.dreamsignId,
+  });
+  return { ...next, ...(result.remainingDreamsignPool === undefined ? {} :
+    { remainingDreamsignPool: [...result.remainingDreamsignPool] }) };
+}
+
 export function openSite(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  modifiers?: JourneyModifierRegistry,
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
@@ -412,6 +440,9 @@ export function openSite(
       });
     }
     case "Essence": {
+      if (site.isVisited) return null;
+      const source = modifiers === undefined ? null : essenceReplacementSource(journey, modifiers);
+      if (source !== null) return prepareEssenceReplacement(journey, site, ctx, source);
       const economy = contentProvider?.economyData.siteRewards.essence;
       if (economy === undefined) return null;
       const rewardRange = site.isEnhanced ? economy.enhanced : economy.standard;
@@ -626,6 +657,7 @@ export function acceptEssence(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  modifiers?: JourneyModifierRegistry,
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
@@ -637,6 +669,8 @@ export function acceptEssence(
   if (existing?.accepted) return null;
   const site = findSite(journey, siteId);
   if (site?.type !== "Essence") return null;
+  const source = existing === undefined && modifiers !== undefined ? essenceReplacementSource(journey, modifiers) : null;
+  if (source !== null) return prepareEssenceReplacement(journey, site, ctx, source);
   const economy = contentProvider?.economyData.siteRewards.essence;
   if (economy === undefined) return null;
   const rewardRange = site.isEnhanced ? economy.enhanced : economy.standard;
@@ -969,15 +1003,16 @@ export function completeSite(
   payload: Record<string, unknown>,
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
-  if (
-    siteId === null ||
-    journey.screen.type !== "site" ||
-    journey.screen.siteId !== siteId ||
-    !canVisitSite(journey, siteId)
-  ) {
-    return null;
-  }
+  if (siteId === null) return null;
   const runtime = journey.siteRuntime[siteId];
+  const inlinePearl = journey.screen.type === "dreamscape" &&
+    journey.currentDreamscape !== null &&
+    journey.atlas.nodes[journey.currentDreamscape]?.sites.some((site) =>
+      site.id === siteId && site.type === "Essence") === true &&
+    runtime?.kind === "reward" && !runtime.accepted &&
+    runtime.journeyEssenceSource !== undefined && runtime.reward.rewardType === "dreamsign";
+  if ((!inlinePearl && (journey.screen.type !== "site" || journey.screen.siteId !== siteId)) ||
+    !canVisitSite(journey, siteId)) return null;
   if (runtime?.kind === "gamble") {
     if (
       runtime.gameId === "gravok-three-gate-wager" &&

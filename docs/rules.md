@@ -2380,3 +2380,25 @@ make a mandatory loop with the ones after it, and the count of consecutive
 automatic game actions starts again after it. A choice with only one option
 does not. Repetitions of an optional loop are the player's own actions, so
 they never make a mandatory loop either.
+
+## Journey Essence Effects
+
+An Essence-site multiplier applies to the positive Essence collected from that
+site, once for each copy held when collection succeeds. The prepared base amount
+is immutable; the displayed collection amount derives from the current holdings.
+Opening, navigation, and unrelated Essence gains do not collect the quote.
+
+A replacement of an Essence site's reward prepares one Dreamsign instead of
+Essence when that site's initial reward is prepared. The first held replacement
+source supplies the single reward, including when collection is submitted before
+opening. An already prepared reward persists through later gains or losses of
+Dreamsigns. A replacement is collected through the ordinary free Dreamsign reward
+flow; at the collection limit, the player can replace a held Dreamsign or decline.
+If a valid Dreamsign cannot be prepared, the intent bounces and consumes nothing.
+
+A percentage of current Essence on entering a new dreamscape applies after a
+successful journey start or travel changes the current dreamscape. It uses the
+current balance at each held copy's turn, including prior copies' gains. Currency
+supports fractional values; the percentage is the printed numerator divided by
+its denominator, without rounding. Same-node reentry, navigation, rerolls, replay,
+and administrative state loading do not independently award an entry gain.

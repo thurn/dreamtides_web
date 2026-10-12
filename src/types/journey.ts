@@ -185,6 +185,12 @@ export type JourneySitesEffect =
   | { readonly kind: "additionalEnhancedSite"; readonly count: number }
   | { readonly kind: "rerollExploration"; readonly rerollsPerSite: number };
 
+/** Catalog clauses implemented by journeyEssence. */
+export type JourneyEssenceEffect =
+  | { readonly kind: "multiplyEssenceSiteGain"; readonly factor: number }
+  | { readonly kind: "replaceEssenceSiteReward"; readonly offerCount: 1 }
+  | { readonly kind: "newDreamscapeEssence"; readonly numerator: number; readonly denominator: number };
+
 /** An earned enhancement remains recorded when sites or holdings change. */
 export interface JourneySiteEnhancement {
   readonly dreamsignId: DreamsignId;
@@ -419,6 +425,8 @@ export interface ShopSiteRuntime {
  * case of an empty Dreamsign pool.
  */
 export interface RewardSiteRuntime {
+  /** UUID provenance of an Essence site replacement, absent for ordinary rewards. */
+  journeyEssenceSource?: DreamsignId;
   kind: "reward";
   reward:
     | {

@@ -1,3 +1,5 @@
+import { essenceSiteGain } from "../../rules/journey/journey-essence";
+import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 // The pure view-model builder for the Cumulus dreamscape screen. Every mapping
 // rule between journey domain data and `DreamscapeScreen`'s view types lives here
@@ -274,15 +276,17 @@ export function buildDreamscapeView(
   draftPickCount: number,
   replacementSiteId: SiteId | null = null,
   tutorialConfiguration?: TutorialDreamscapeConfiguration,
+  modifiers: JourneyModifierRegistry = journeyModifierRegistry,
 ): DreamscapeView {
   const inlineRewards: Record<string, InlineRewardView> = {};
   node.sites.forEach((site) => {
     const runtime = state.siteRuntime?.[site.id];
     if (site.type === "Essence" && runtime?.kind === "essence") {
-      inlineRewards[site.id] = { kind: "essence", amount: runtime.amount };
+      inlineRewards[site.id] = { kind: "essence", amount: essenceSiteGain(state, runtime.amount, modifiers) };
       return;
     }
-    if (site.type !== "Reward" || runtime?.kind !== "reward") {
+    if (runtime?.kind !== "reward" || (site.type !== "Reward" &&
+      !(site.type === "Essence" && runtime.journeyEssenceSource !== undefined))) {
       return;
     }
     if (runtime.reward.rewardType === "dreamsign") {
