@@ -1,0 +1,2426 @@
+{
+  "bead": "hv-umm2.465",
+  "phase": 5,
+  "measurementWindow": {
+    "claimUtc": "2026-10-12T01:05:27+00:00",
+    "preparationUtc": "2026-10-12T01:29:49.443654+00:00",
+    "endpointBasis": "Final source/evidence/resource acceptance immediately before final schema, staging and single commit. Actual successful commit interval is retained externally; Git dates are real.",
+    "implementMin": 24.3740609
+  },
+  "frozenInputs": {
+    "bead": "hv-umm2.465",
+    "observedAt": "2026-10-12T01:08:11.562629+00:00",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-465-workflow-retrospective",
+    "base": "9bc5640a8f21c5f14f2cecdf4e6e1631f25b0a50",
+    "cadence": {
+      "phase": "5",
+      "frictionFiles": 239,
+      "uncovered": [
+        "hv-umm2.110",
+        "hv-umm2.122",
+        "hv-umm2.123",
+        "hv-umm2.130",
+        "hv-umm2.131",
+        "hv-umm2.211",
+        "hv-umm2.436",
+        "hv-umm2.438",
+        "hv-umm2.441",
+        "hv-umm2.442",
+        "hv-umm2.443",
+        "hv-umm2.444",
+        "hv-umm2.445",
+        "hv-umm2.446",
+        "hv-umm2.449",
+        "hv-umm2.450",
+        "hv-umm2.451",
+        "hv-umm2.452",
+        "hv-umm2.454",
+        "hv-umm2.455",
+        "hv-umm2.456",
+        "hv-umm2.458",
+        "hv-umm2.463",
+        "hv-umm2.86",
+        "hv-umm2.87",
+        "hv-umm2.91"
+      ],
+      "lastRetrospective": {
+        "date": "2026-10-11",
+        "phase": "5",
+        "bead": "hv-umm2.442",
+        "covers": [
+          "hv-umm2.108",
+          "hv-umm2.109",
+          "hv-umm2.112",
+          "hv-umm2.121",
+          "hv-umm2.392",
+          "hv-umm2.393",
+          "hv-umm2.399",
+          "hv-umm2.406",
+          "hv-umm2.407",
+          "hv-umm2.409",
+          "hv-umm2.413",
+          "hv-umm2.414",
+          "hv-umm2.424",
+          "hv-umm2.425",
+          "hv-umm2.426",
+          "hv-umm2.427",
+          "hv-umm2.428",
+          "hv-umm2.429",
+          "hv-umm2.430",
+          "hv-umm2.431",
+          "hv-umm2.432",
+          "hv-umm2.433",
+          "hv-umm2.434",
+          "hv-umm2.435",
+          "hv-umm2.437",
+          "hv-umm2.439",
+          "hv-umm2.440"
+        ]
+      },
+      "due": true
+    },
+    "ids": [
+      "hv-umm2.110",
+      "hv-umm2.122",
+      "hv-umm2.123",
+      "hv-umm2.130",
+      "hv-umm2.131",
+      "hv-umm2.211",
+      "hv-umm2.436",
+      "hv-umm2.438",
+      "hv-umm2.441",
+      "hv-umm2.442",
+      "hv-umm2.443",
+      "hv-umm2.444",
+      "hv-umm2.445",
+      "hv-umm2.446",
+      "hv-umm2.449",
+      "hv-umm2.450",
+      "hv-umm2.451",
+      "hv-umm2.452",
+      "hv-umm2.454",
+      "hv-umm2.455",
+      "hv-umm2.456",
+      "hv-umm2.458",
+      "hv-umm2.463",
+      "hv-umm2.86",
+      "hv-umm2.87",
+      "hv-umm2.91"
+    ],
+    "sha256": {
+      "docs/plan/evidence/friction/hv-umm2.110.json": "bcb6fda6e2ba992b560e616d8ce14fc277ecaf59ad55d8c852af19c163de5df9",
+      "docs/plan/evidence/measurements/hv-umm2.110.json": "c29435eeb891d22d06b5b3d4978b165c7f6ccb757de28f2c69ec5f1677e9c5e4",
+      "docs/plan/evidence/qa-ledger/hv-umm2.110.jsonl": "b0eca160390e7525e4d5c771d476e5b8438ba4f5ebb41fb6f505fdb2bebac324",
+      "docs/plan/evidence/friction/hv-umm2.122.json": "58954814c8801ab2ef37b85738bb2582eb032e5c0ef2a9aade157a8bc1a92481",
+      "docs/plan/evidence/measurements/hv-umm2.122.json": "1c41c555f342bc6ab1d02b80f3e6b251b16d2829fd26f1b5f72fd0a73104fa08",
+      "docs/plan/evidence/pre-existing/hv-umm2.122.md": "74b85943f44c09d734fc0b975f2ee135635106bbb5fe8b96cfeab358ccede8d8",
+      "docs/plan/evidence/qa-ledger/hv-umm2.122.jsonl": "1b5bdde9260209e0cdf9d984ac648548570fcfadee1fd0423c88de1775194257",
+      "docs/plan/evidence/friction/hv-umm2.123.json": "6ae3b42184d59dcb76b58cf661997c2bf80570fc9263ad903c0f6c8ea4357573",
+      "docs/plan/evidence/qa-ledger/hv-umm2.123.jsonl": "8347ca630820fd61875721f63a26acef73b0b895cea957133ece531a523ed182",
+      "docs/plan/evidence/friction/hv-umm2.130.json": "f6c47a1cac15d3cc3be376e65e04e1f248ce79a1a03392ce2ad02b417005d07f",
+      "docs/plan/evidence/measurements/hv-umm2.130.json": "659c8d43955ef3a8da0c1f48fd062cb86b0b81accf5ca3d9eb0a42cc334b8b5f",
+      "docs/plan/evidence/pre-existing/hv-umm2.130.md": "3884add8d9726133fb43a4c2fef32de245e31a6d21674cfbb31a5b7fbf106157",
+      "docs/plan/evidence/qa-ledger/hv-umm2.130.jsonl": "3776ef2bb95991b41d71bdaca9d251014c6e34d2d9a5c3c17853947cabf60569",
+      "docs/plan/evidence/friction/hv-umm2.131.json": "0e3e298aaf1015cde560286d61e3c4e9f27caf0325fe2fc5cb0a159a072787c0",
+      "docs/plan/evidence/pre-existing/hv-umm2.131.md": "95de8d3379614c8832c4cbcd40664e27b14101f17a616d7eb254d10e2f1d96e5",
+      "docs/plan/evidence/qa-ledger/hv-umm2.131.jsonl": "f6862785008b483a10d95630c7a60f7be118acfec45341a2e44d57ddda551548",
+      "docs/plan/evidence/friction/hv-umm2.211.json": "8f15cd3ee1df77f90e3b2519a8ad95d5c0fa1976ca5b21c61c60646533516a73",
+      "docs/plan/evidence/measurements/hv-umm2.211.json": "5d61d1a6ac5ef6dc48363e96d1d899b8277f15ece999cb1cebfe204bece93805",
+      "docs/plan/evidence/qa-ledger/hv-umm2.211.jsonl": "ea278db26e5561d28a734713b8c6b12b73ec2e0a60903ec975cf46514178b722",
+      "docs/plan/evidence/friction/hv-umm2.436.json": "a41549290399bed63bdba10899845d1fb56f58edc8b4473b72a1f69aa60d2264",
+      "docs/plan/evidence/measurements/hv-umm2.436.json": "13e0fb201caa27fc4e9d83906fb82ee4108ded6fa3c193b956b71aa2331e5d6d",
+      "docs/plan/evidence/pre-existing/hv-umm2.436.md": "71a25d13bb4edcc22d1407cf195a74be607894affc966770f3eba40be308f35a",
+      "docs/plan/evidence/qa-ledger/hv-umm2.436.jsonl": "284e1c82ec5c43420e759166a262cbdee69130273ced43527883836c595c9b09",
+      "docs/plan/evidence/friction/hv-umm2.438.json": "b89280d7354a5c135b621652e1b7eff6520cea05b8c68bfd28f5c123034ef84f",
+      "docs/plan/evidence/measurements/hv-umm2.438.json": "d86856aeeb65ec4e42d4c286a272ab81e0a9215a69509151322f7314556f9b67",
+      "docs/plan/evidence/pre-existing/hv-umm2.438.md": "ce009382958d086c08d3955ec56d21f65141e743e1e4b77e9d94d5b2368918c6",
+      "docs/plan/evidence/qa-ledger/hv-umm2.438.jsonl": "b50f27aa1c14ca19fbc6e696061f242e112a80f2db6d0e3ad9a941e409dff94c",
+      "docs/plan/evidence/friction/hv-umm2.441.json": "395f621474546d35abdee7415d5506d58df6138eb53ca8b9d87d95fff1e6888d",
+      "docs/plan/evidence/measurements/hv-umm2.441.json": "539461e74f3b26cc7ae8471726b3ee6770ab8dc10c5c0150794e6963e701cc92",
+      "docs/plan/evidence/pre-existing/hv-umm2.441.md": "64f364a7d79456f23c97162c21ea3d2277cb643b972fdb9643a6b4fe24737a61",
+      "docs/plan/evidence/friction/hv-umm2.442.json": "a2ffe8430c54850edda49d36fe5d8e863893ae26605174e378376dedab7fc5ad",
+      "docs/plan/evidence/measurements/hv-umm2.442.json": "faaccbc6af8ee682ac6f29204f1ddd56af93f86473ffff78b1e6049919b76822",
+      "docs/plan/evidence/pre-existing/hv-umm2.442.md": "699d50cf59ac9427714b1681d7406d2a0a250b37b892ddcbe952339278823653",
+      "docs/plan/evidence/friction/hv-umm2.443.json": "dd5d658adde4ced8596b2396ee93491e24778f8934a4aaae9428fa89d59b1b56",
+      "docs/plan/evidence/measurements/hv-umm2.443.json": "73921d151c111c6ad7230c52d6bc2761170dccc964a81151bad2c99396f55843",
+      "docs/plan/evidence/qa-ledger/hv-umm2.443.jsonl": "71dc00b3f394f7668342d4ccd9ec239c3b8a167d8d37ab574197514de01d9e0a",
+      "docs/plan/evidence/friction/hv-umm2.444.json": "c6cc86715e5afe5ef20e6528b6f2669dd267b85e303e5f001a63875dfd8d2969",
+      "docs/plan/evidence/measurements/hv-umm2.444.json": "d1b10e56de82ccb9d2b894480ed78804cf26b3af4f219da917591a1b62967e6d",
+      "docs/plan/evidence/friction/hv-umm2.445.json": "a52eabeafb94aa54aea78849d47989b8836721165ca1e080f1777039f5d84e75",
+      "docs/plan/evidence/pre-existing/hv-umm2.445.md": "1e17704b756fd1c4e89f07ae828b68a29bf3d2105a7586355c9bce41d8a3fc89",
+      "docs/plan/evidence/qa-ledger/hv-umm2.445.jsonl": "35f7ae1ce751d6bbb6039a2ec11d45b28644499b882b8bad1be8ad7f881ead1d",
+      "docs/plan/evidence/friction/hv-umm2.446.json": "850ae4cdabe92a60c81c6d5ef4b55317e248f17d65862943f86c0a46facea0d8",
+      "docs/plan/evidence/measurements/hv-umm2.446.json": "7b3d4fa048b1c4ef295e00c2215af7d3110e4f4f0e7c3a777064323902869dfd",
+      "docs/plan/evidence/pre-existing/hv-umm2.446.md": "c913117eb3079127f009c77cf12b35dd222bd9ecb7cf0519fb74b4c968536c1b",
+      "docs/plan/evidence/friction/hv-umm2.449.json": "275b98ae2ddceb04f5fc9054e94a775a6c5b0995648c51008b279b96351f8034",
+      "docs/plan/evidence/friction/hv-umm2.450.json": "0be43af3f3ba7716bd51622f324c4cbfd550df3f84400961a417ea0eedb0b8f8",
+      "docs/plan/evidence/measurements/hv-umm2.450.json": "970283861666c392311a1b016cc90c50f0f474fcae19dfe52186503e6ab60c1c",
+      "docs/plan/evidence/friction/hv-umm2.451.json": "e19e92a3d0303b360164e0c476e59acdfc120a482c4b64ae7c44362492458519",
+      "docs/plan/evidence/measurements/hv-umm2.451.json": "d2bac25e7343e0637c1c6ec8dcb0846b656b95736adcc24de33c1f861afa8135",
+      "docs/plan/evidence/pre-existing/hv-umm2.451.md": "c15176274054116f578014bb29be678ea6a86159e4b8cf8ea1702e3a0fd37c24",
+      "docs/plan/evidence/friction/hv-umm2.452.json": "b2bfefd74e19b7987650b46cfb34d7edf80687516063397ed0f3d597188407f0",
+      "docs/plan/evidence/measurements/hv-umm2.452.json": "2d70a51a4e129b898310ca60838f43b3991ca97525f636568effc1112c4ce309",
+      "docs/plan/evidence/pre-existing/hv-umm2.452.md": "217581f3064764ded13ec8cc8ea0052b6b66278fcbaf1f7414e6984be54720d1",
+      "docs/plan/evidence/qa-ledger/hv-umm2.452.jsonl": "6b7172560388faea6970dd02afe1edee187a317c50734f6e86b2662e391eefcd",
+      "docs/plan/evidence/friction/hv-umm2.454.json": "10216a4ad159db02352528e7df0a31d29914fa2a0782df82574a57434fe84963",
+      "docs/plan/evidence/measurements/hv-umm2.454.json": "4892d1d8cd358fb7995a2d4fb5b61ed6ec8ed4ab6526e264221d502c5c02e800",
+      "docs/plan/evidence/pre-existing/hv-umm2.454.md": "a384b28905bb72bfa2921432c0cb9cdbfa7a2eb1fb69256d414b23f723b33ede",
+      "docs/plan/evidence/qa-ledger/hv-umm2.454.jsonl": "4f8d4fb453138f159a54a8d4964216ca27f24faa4f40a7e6c8ed921ec44df229",
+      "docs/plan/evidence/friction/hv-umm2.455.json": "e844d7444501799e9f9b5dec685842954fde673a1476bd6766e513ab9e906381",
+      "docs/plan/evidence/measurements/hv-umm2.455.json": "46e7d477f33f80846dd7b94f4276bf4ab4561054dbe43ae75007dfe3afd37f98",
+      "docs/plan/evidence/pre-existing/hv-umm2.455.md": "3f6cbb6b3724991e5b39b21d5153ff3e85af36390122e4000e8970c25f18a4b1",
+      "docs/plan/evidence/friction/hv-umm2.456.json": "92c369e2272aa3f4ec6221a350522c92107fb133c65c6a80fe1893d8e2e728a1",
+      "docs/plan/evidence/measurements/hv-umm2.456.json": "16920dbf0d9f37c8e34be320f702e21e828caaf322e59467138262502de7e595",
+      "docs/plan/evidence/pre-existing/hv-umm2.456.md": "7d020ea6279f0ec4f0dc1093b442373ab99a3369822d6d958b816eedb6d2e2ab",
+      "docs/plan/evidence/qa-ledger/hv-umm2.456.jsonl": "c1ed38c60fb9c418be2675ef8e43771dbcd0beaac3a0ee716c0a7722edd12ff5",
+      "docs/plan/evidence/friction/hv-umm2.458.json": "382dc6500643f42c60cec207d4a258745a079884bb76075f82cdd199296b7799",
+      "docs/plan/evidence/friction/hv-umm2.463.json": "fe0368218cf3217b4c05532c378cd1c059866fc131fd903331240813d581fa3d",
+      "docs/plan/evidence/measurements/hv-umm2.463.json": "f21f3ab51c8d98a4b13003854c125afb18c58ee253656a5601b6558c146b7ccd",
+      "docs/plan/evidence/pre-existing/hv-umm2.463.md": "44d1efddd57354a1332895a9c6e741dc2e6f1bd029db8ea916253b190222c33c",
+      "docs/plan/evidence/friction/hv-umm2.86.json": "251523c0d7d976ac18d78993ba11fa176c80316b09c51562d6afbf48a54528dc",
+      "docs/plan/evidence/measurements/hv-umm2.86.json": "4b6e435aded59db1f61e8754dc2b315227b1dea6babe6a8e5d67a88f0f13ab11",
+      "docs/plan/evidence/pre-existing/hv-umm2.86.md": "1477ea352e54d7427d80b6b5c998fca1deeb8497f2b6df9720ddd4f80285f138",
+      "docs/plan/evidence/qa-ledger/hv-umm2.86.jsonl": "23fc7d3699c0a209a89b4c15ef394132282a45fa2b44183b358ea97f4b01ff1a",
+      "docs/plan/evidence/friction/hv-umm2.87.json": "e60c440a13fc6b03c089fc3d670cf2d5c58157c316fb99db9ecf5a98faf9c3a3",
+      "docs/plan/evidence/measurements/hv-umm2.87.json": "093a82375f234483b09ba35d01d1a8b7d2f1704c65a6338299e1edd271281b86",
+      "docs/plan/evidence/pre-existing/hv-umm2.87.md": "962eb4af1c2f47603c656a1449848904e5ad25ea17b6791f63785c0cc2e3646a",
+      "docs/plan/evidence/qa-ledger/hv-umm2.87.jsonl": "e5ced6d6e3296bb2550a09038e5de86b96ea54fbebe7f2b0e151222b80ae7ca8",
+      "docs/plan/evidence/friction/hv-umm2.91.json": "0058aca2a9dd2149a6d8869724aeb3240271cca9d84bbb1cebdabe74deb836fc",
+      "docs/plan/evidence/measurements/hv-umm2.91.json": "74346ff0a4d9b955a1627a37ba09db317adca23a506eb98171a9e8e61658cff1",
+      "docs/plan/evidence/pre-existing/hv-umm2.91.md": "390a481470fe1dcb909125321fdbb94602bbf3f7f6bcbaba4cae33b93b33f1ca",
+      "docs/plan/evidence/qa-ledger/hv-umm2.91.jsonl": "a1bba4168ac04ad8bbfed8280334806b9800324e65926693251c1b96acde1706"
+    }
+  },
+  "sageAudit": {
+    "bead": "hv-umm2.465",
+    "scope": {
+      "phase": 5,
+      "since": "hv-umm2.442",
+      "frozenAt": "2026-10-12T01:08:11.562629+00:00",
+      "immutableBase": "9bc5640a8f21c5f14f2cecdf4e6e1631f25b0a50",
+      "coverage": [
+        "hv-umm2.110",
+        "hv-umm2.122",
+        "hv-umm2.123",
+        "hv-umm2.130",
+        "hv-umm2.131",
+        "hv-umm2.211",
+        "hv-umm2.436",
+        "hv-umm2.438",
+        "hv-umm2.441",
+        "hv-umm2.442",
+        "hv-umm2.443",
+        "hv-umm2.444",
+        "hv-umm2.445",
+        "hv-umm2.446",
+        "hv-umm2.449",
+        "hv-umm2.450",
+        "hv-umm2.451",
+        "hv-umm2.452",
+        "hv-umm2.454",
+        "hv-umm2.455",
+        "hv-umm2.456",
+        "hv-umm2.458",
+        "hv-umm2.463",
+        "hv-umm2.86",
+        "hv-umm2.87",
+        "hv-umm2.91"
+      ],
+      "recordCount": 26,
+      "hashCount": 81,
+      "allHashesVerified": true,
+      "mismatches": [],
+      "coveragePolicy": "Includes 442\u2019s own record, excludes 465\u2019s future record and later landed records. 239 Phase 5 friction records existed at freeze; the frozen cohort is authoritative.",
+      "hashVerificationBasis": "All 81 hashes verified against immutable Git base after parent edits. Archived original friction files for 130/455/458 also match frozen manifest; corrected working-copy values are separate.",
+      "referenceManifest": "frozenInputs.sha256"
+    },
+    "inputs": {
+      "freeze": "freeze.json",
+      "nativeNotes": "beads.json",
+      "unfinishedInventories": [
+        "hive_project.json",
+        "intended_project.json"
+      ],
+      "canonicalDuty": "canonical-all-status.json",
+      "candidateExport": "candidate-export.json",
+      "candidateStatuses": "candidate-status/*.json",
+      "history": "tg-history.json",
+      "release": "release-status.json",
+      "fullTestLogs": "release-log-samples.json and release-logs/*.jsonl",
+      "source": "Owned worktree only; read-only git/rg/Python, no native commands, npm, materialization, tests, fuzz, browser or servers."
+    },
+    "nativeProvenance": {
+      "all26ClosedCompleted": true,
+      "candidateStatusesObserved": 31,
+      "noncandidateOrUnavailableNoteUUIDs": 2,
+      "trailerVerifiedIdentities": 24,
+      "alternateAssociations": [
+        {
+          "bead": "hv-umm2.449",
+          "source": "f27c5396e1f38b9a957c01c8305b8032338571db",
+          "candidate": "01a12d52-12cb-77f1-af75-dbaa44e1f479",
+          "basis": "committed-friction-plus-native"
+        },
+        {
+          "bead": "hv-umm2.445",
+          "source": "51b309589ec97350ee7b2481208ff58a1c1b7db0",
+          "candidate": "01a12d47-0356-7be2-b38b-360dbec99030",
+          "basis": "committed-friction-plus-native"
+        }
+      ],
+      "historyEvents": 500,
+      "historyStartUtc": "2026-10-11T23:22:51.248868Z",
+      "historyEndUtc": "2026-10-12T01:08:07.569052Z",
+      "historyCompleteInterval": false,
+      "mergeConflictCandidates": [
+        {
+          "bead": "hv-umm2.211",
+          "candidate": "01a12d70-0571-7d83-ad3c-490d5985c228"
+        },
+        {
+          "bead": "hv-umm2.130",
+          "candidate": "01a12d84-91db-7d93-8169-dbef67303298"
+        },
+        {
+          "bead": "hv-umm2.91",
+          "candidate": "01a12d93-b9a4-7793-b523-bebe98779e93"
+        }
+      ],
+      "invalidatedGeneration": "86 has one invalidated attempt with no step results followed by a passed attempt. This is not a failed test gate.",
+      "failedVotingStepsObserved": 0,
+      "publication": "Promotion/completed cleanup proves staged delivery. Frozen release is pending, lag 1, no hold or promotion pause; publication is not inferred."
+    },
+    "metrics": {
+      "targets": {
+        "reviewTypicalLogicS": 45,
+        "focusedS": 10,
+        "gateOneFileS": 60,
+        "releaseStageS": 300,
+        "fullTestTwoWorkersLowLoadS": 60,
+        "fileCount": "Informational; D19 withdrew test/jsdom count ceilings.",
+        "fileSize": "Approximately 500 lines or an explicit surviving reason."
+      },
+      "gateAll26": {
+        "n": 26,
+        "medianS": 52.4195,
+        "minS": 15.189,
+        "maxS": 117.721,
+        "over60": 8,
+        "scope": "Final passed promoted gate step sums, one per covered bead. Mixed code/contract/tooling/comment/evidence scopes; not all are one-file changes.",
+        "hostLoad": "Unknown; local loads do not certify gate load."
+      },
+      "gateStrict24": {
+        "n": 24,
+        "medianS": 52.4195,
+        "minS": 15.189,
+        "maxS": 117.721,
+        "over60": 7
+      },
+      "gateSamples": [
+        {
+          "bead": "hv-umm2.122",
+          "candidate": "01a12d86-497d-7071-9021-a771f119ca73",
+          "source": "763cb612498dfdeb1aa49816774b534af3fade76",
+          "association": "Bead trailer",
+          "gateS": 53.216,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.512
+            },
+            {
+              "name": "review-gate",
+              "s": 48.704
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.123",
+          "candidate": "01a12d6b-60bd-7d00-bcdf-399a88f7724a",
+          "source": "b08c98fba82137677f96e494075490c7292496ab",
+          "association": "Bead trailer",
+          "gateS": 52.01,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.61
+            },
+            {
+              "name": "review-gate",
+              "s": 47.4
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.446",
+          "candidate": "01a12d96-fb8e-7dc0-ae6e-9380ae23340c",
+          "source": "b1ff047e2d9bbb99ce1ea9144a9c4c5912a10fb4",
+          "association": "Bead trailer",
+          "gateS": 115.413,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.796
+            },
+            {
+              "name": "review-gate",
+              "s": 110.617
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.86",
+          "candidate": "01a12d3b-7da9-7520-97f1-7bf031160a7f",
+          "source": "39d9de9722a77a312e99310dc60921ebb03f1354",
+          "association": "Bead trailer",
+          "gateS": 50.709,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.522
+            },
+            {
+              "name": "review-gate",
+              "s": 46.187
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.436",
+          "candidate": "01a12d89-04c8-7631-ae64-763f5514bb41",
+          "source": "8369761e86bc64817aa1699ca088ee531ed0fa15",
+          "association": "Bead trailer",
+          "gateS": 57.697,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.609
+            },
+            {
+              "name": "review-gate",
+              "s": 53.088
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.449",
+          "candidate": "01a12d52-12cb-77f1-af75-dbaa44e1f479",
+          "source": "f27c5396e1f38b9a957c01c8305b8032338571db",
+          "association": "committed-friction-plus-native",
+          "gateS": 72.119,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 5.465
+            },
+            {
+              "name": "review-gate",
+              "s": 66.654
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.451",
+          "candidate": "01a12d58-1cf7-7f40-9966-85b05956db52",
+          "source": "fff8645904b4c098065392e02f389255ec1efdcf",
+          "association": "Bead trailer",
+          "gateS": 17.399,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 5.21
+            },
+            {
+              "name": "review-gate",
+              "s": 12.189
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.131",
+          "candidate": "01a12d80-80ef-7c61-a702-f3ed5e7a91f5",
+          "source": "02721b0361c9e4561ca2b4a8bb811888dd0dc4f1",
+          "association": "Bead trailer",
+          "gateS": 52.774,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.37
+            },
+            {
+              "name": "review-gate",
+              "s": 48.404
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.87",
+          "candidate": "01a12d75-ba58-7be3-9703-de924029b7e8",
+          "source": "575bb6554ee8d0380cc60b42913956be1d2b6079",
+          "association": "Bead trailer",
+          "gateS": 50.083,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.27
+            },
+            {
+              "name": "review-gate",
+              "s": 45.813
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.130",
+          "candidate": "01a12d8a-6c49-7fd1-896a-21c0a27779c9",
+          "source": "4799ee07c9a059650af9360fa3865445abea964d",
+          "association": "Bead trailer",
+          "gateS": 116.864,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 5.041
+            },
+            {
+              "name": "review-gate",
+              "s": 111.823
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.452",
+          "candidate": "01a12d96-05ce-7740-ade5-048b01e73831",
+          "source": "5e1d2591d62d4894307560e0c29d2ad649eb0cb1",
+          "association": "Bead trailer",
+          "gateS": 117.721,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 5.459
+            },
+            {
+              "name": "review-gate",
+              "s": 112.262
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.211",
+          "candidate": "01a12d78-49a6-76d2-951c-f8e1cd6de5c0",
+          "source": "c6a43931c6b172d2d18b6f8257883e2ac3b2f294",
+          "association": "Bead trailer",
+          "gateS": 52.065,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.672
+            },
+            {
+              "name": "review-gate",
+              "s": 47.393
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.444",
+          "candidate": "01a12d38-e8ce-7fb0-9e4b-46c903d93f8f",
+          "source": "7bb59c03e8f4fa80f53c09c0661f06805cf16661",
+          "association": "Bead trailer",
+          "gateS": 57.077,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.946
+            },
+            {
+              "name": "review-gate",
+              "s": 52.131
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.458",
+          "candidate": "01a12d9b-a3c6-7932-9ebc-57bc3008353b",
+          "source": "163878dd20ce4093c14250cf6b72869dcf0476cd",
+          "association": "Bead trailer",
+          "gateS": 117.261,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.371
+            },
+            {
+              "name": "review-gate",
+              "s": 112.89
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.463",
+          "candidate": "01a12da2-3a3c-7ee3-9efc-a6a6abb64797",
+          "source": "0c29d81802caba770c312b3c303478282ab54335",
+          "association": "Bead trailer",
+          "gateS": 18.421,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.739
+            },
+            {
+              "name": "review-gate",
+              "s": 13.682
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.91",
+          "candidate": "01a12d95-1fb7-7a22-a5e4-ac8a563329e7",
+          "source": "ab2d5ab8027a391d9a6f7391e37dc3cc3a8d560f",
+          "association": "Bead trailer",
+          "gateS": 65.849,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.577
+            },
+            {
+              "name": "review-gate",
+              "s": 61.272
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.455",
+          "candidate": "01a12d96-25fe-7f21-840d-39ef6cb3a715",
+          "source": "9d8adbba95f033914a5a24e90d1a1ddfff356729",
+          "association": "Bead trailer",
+          "gateS": 18.09,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.505
+            },
+            {
+              "name": "review-gate",
+              "s": 13.585
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.450",
+          "candidate": "01a12d52-7736-71f3-a245-6dfbbc97fe10",
+          "source": "e0b574558bbb28fc24dc9920fb258841e33623e0",
+          "association": "Bead trailer",
+          "gateS": 113.276,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 7.201
+            },
+            {
+              "name": "review-gate",
+              "s": 106.075
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.445",
+          "candidate": "01a12d47-0356-7be2-b38b-360dbec99030",
+          "source": "51b309589ec97350ee7b2481208ff58a1c1b7db0",
+          "association": "committed-friction-plus-native",
+          "gateS": 30.74,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 7.13
+            },
+            {
+              "name": "review-gate",
+              "s": 23.61
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.110",
+          "candidate": "01a12d46-784a-74a1-a56c-56aaf18c8c90",
+          "source": "08d90aaa216d102a99bb6e68e61c6a6ef0d5be9d",
+          "association": "Bead trailer",
+          "gateS": 55.08,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.595
+            },
+            {
+              "name": "review-gate",
+              "s": 50.485
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.454",
+          "candidate": "01a12d96-2b17-7180-89de-cf55a0400c73",
+          "source": "e0ff5248eefe940f5e49e38021f92a65cf884da6",
+          "association": "Bead trailer",
+          "gateS": 29.62,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.813
+            },
+            {
+              "name": "review-gate",
+              "s": 24.807
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.438",
+          "candidate": "01a12d4e-f645-7610-adae-e7e4e9fb86f6",
+          "source": "bdc242316db90cbb2959dc573272342b3e67b788",
+          "association": "Bead trailer",
+          "gateS": 63.058,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 5.751
+            },
+            {
+              "name": "review-gate",
+              "s": 57.307
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.456",
+          "candidate": "01a12d95-c4d4-7b80-9452-59258b53b477",
+          "source": "18bde934a15a207d0cc2fd4f8287500e5ef926ca",
+          "association": "Bead trailer",
+          "gateS": 20.804,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 6.949
+            },
+            {
+              "name": "review-gate",
+              "s": 13.855
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.443",
+          "candidate": "01a12d3f-e185-7732-a047-97d270e1cab5",
+          "source": "af30db3d04656b1757638ebb82a1e9c85bf4d696",
+          "association": "Bead trailer",
+          "gateS": 23.844,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 5.36
+            },
+            {
+              "name": "review-gate",
+              "s": 18.484
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.441",
+          "candidate": "01a12d3b-1d33-7512-866e-86bc86eb2d4c",
+          "source": "8903f834184d3f18f2e32ce37408274df28407da",
+          "association": "Bead trailer",
+          "gateS": 15.189,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 3.169
+            },
+            {
+              "name": "review-gate",
+              "s": 12.02
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.442",
+          "candidate": "01a12d3d-704b-7661-afb5-dd273fa1f328",
+          "source": "532035173bbf44a3422e62b4a2a5134be4c8b436",
+          "association": "Bead trailer",
+          "gateS": 17.886,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 5.91
+            },
+            {
+              "name": "review-gate",
+              "s": 11.976
+            }
+          ]
+        }
+      ],
+      "releasePassed": {
+        "n": 21,
+        "medianS": 150.551,
+        "minS": 128.062,
+        "maxS": 208.398,
+        "over300": 0,
+        "sampleScope": "21 passed buildsets in the bounded frozen release history; ranges can cover multiple beads. Three superseded and one running run are separate.",
+        "hostLoad": "Unknown for aggregate comparisons."
+      },
+      "releaseSamples": [
+        {
+          "run": "01a12da2-c69f-7d71-a05f-6e33f840aa7d",
+          "target": "9bc5640a8f21c5f14f2cecdf4e6e1631f25b0a50",
+          "sumStepsS": 176.531,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.754
+            },
+            {
+              "name": "review-full",
+              "s": 84.517
+            },
+            {
+              "name": "fuzz",
+              "s": 87.26
+            }
+          ]
+        },
+        {
+          "run": "01a12d9d-d415-7cd1-b6fe-bd3d900c1c11",
+          "target": "e7de6866f1246776eee0587a61dfc8711d45edbf",
+          "sumStepsS": 208.398,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.865
+            },
+            {
+              "name": "review-full",
+              "s": 102.856
+            },
+            {
+              "name": "fuzz",
+              "s": 100.677
+            }
+          ]
+        },
+        {
+          "run": "01a12d9b-eeb4-78c1-b93a-a34004530aec",
+          "target": "4079d17bb6ec48d7e5eca300e3c3addca6bcaac1",
+          "sumStepsS": 195.31,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 5.009
+            },
+            {
+              "name": "review-full",
+              "s": 94.62
+            },
+            {
+              "name": "fuzz",
+              "s": 95.681
+            }
+          ]
+        },
+        {
+          "run": "01a12d99-02ab-7553-9ab2-478e59bff719",
+          "target": "cca4390f73a261e13136bc059bc4e5c6d163bb1f",
+          "sumStepsS": 204.88,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.385
+            },
+            {
+              "name": "review-full",
+              "s": 107.406
+            },
+            {
+              "name": "fuzz",
+              "s": 93.089
+            }
+          ]
+        },
+        {
+          "run": "01a12d96-51ec-7681-a4b0-994dbfab4e8b",
+          "target": "ab2d5ab8027a391d9a6f7391e37dc3cc3a8d560f",
+          "sumStepsS": 197.893,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 6.856
+            },
+            {
+              "name": "review-full",
+              "s": 102.092
+            },
+            {
+              "name": "fuzz",
+              "s": 88.945
+            }
+          ]
+        },
+        {
+          "run": "01a12d8c-5db0-7871-ad78-325f10406ab3",
+          "target": "46784810c7f604be675a4a7d5c4d31318676cc20",
+          "sumStepsS": 171.278,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.423
+            },
+            {
+              "name": "review-full",
+              "s": 78.933
+            },
+            {
+              "name": "fuzz",
+              "s": 87.922
+            }
+          ]
+        },
+        {
+          "run": "01a12d8a-0c67-7722-9351-93680c0b8df3",
+          "target": "9e304b0868168e9ed2f6a2e07878d2fe4aaed969",
+          "sumStepsS": 202.823,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.616
+            },
+            {
+              "name": "review-full",
+              "s": 104.904
+            },
+            {
+              "name": "fuzz",
+              "s": 93.303
+            }
+          ]
+        },
+        {
+          "run": "01a12d87-3931-7510-bbfc-37ad91c41e6e",
+          "target": "3874aca91793ee9589dc31d331b1da439d6ab215",
+          "sumStepsS": 143.339,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.742
+            },
+            {
+              "name": "review-full",
+              "s": 81.693
+            },
+            {
+              "name": "fuzz",
+              "s": 56.904
+            }
+          ]
+        },
+        {
+          "run": "01a12d81-6e9d-7ca1-9aa6-155619f6daea",
+          "target": "02721b0361c9e4561ca2b4a8bb811888dd0dc4f1",
+          "sumStepsS": 133.17,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.58
+            },
+            {
+              "name": "review-full",
+              "s": 76.498
+            },
+            {
+              "name": "fuzz",
+              "s": 52.092
+            }
+          ]
+        },
+        {
+          "run": "01a12d79-30c5-7b50-84d6-6d1756602a75",
+          "target": "3e11a9514df29c81b87502d31844bd40e2a54a40",
+          "sumStepsS": 128.062,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.079
+            },
+            {
+              "name": "review-full",
+              "s": 72.248
+            },
+            {
+              "name": "fuzz",
+              "s": 51.735
+            }
+          ]
+        },
+        {
+          "run": "01a12d76-a37c-78f2-ab61-da31bd4d4cf3",
+          "target": "0295a8f2d305fede834df4c65567298edfe8c44d",
+          "sumStepsS": 133.798,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.077
+            },
+            {
+              "name": "review-full",
+              "s": 73.083
+            },
+            {
+              "name": "fuzz",
+              "s": 56.638
+            }
+          ]
+        },
+        {
+          "run": "01a12d6c-48a0-7170-9ae7-12ab005f392b",
+          "target": "b08c98fba82137677f96e494075490c7292496ab",
+          "sumStepsS": 135.575,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 3.896
+            },
+            {
+              "name": "review-full",
+              "s": 76.575
+            },
+            {
+              "name": "fuzz",
+              "s": 55.104
+            }
+          ]
+        },
+        {
+          "run": "01a12d58-b79a-7a11-9fce-ece17341967e",
+          "target": "d6531765b93d192f3c6890781b1038aaeb00f5c3",
+          "sumStepsS": 136.232,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.406
+            },
+            {
+              "name": "review-full",
+              "s": 77.124
+            },
+            {
+              "name": "fuzz",
+              "s": 54.702
+            }
+          ]
+        },
+        {
+          "run": "01a12d55-1a26-7a51-8654-df13ed238263",
+          "target": "4941fda5b8e78cd79db2837411924ec68b433c79",
+          "sumStepsS": 150.551,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.847
+            },
+            {
+              "name": "review-full",
+              "s": 90.463
+            },
+            {
+              "name": "fuzz",
+              "s": 55.241
+            }
+          ]
+        },
+        {
+          "run": "01a12d53-4648-70f0-b523-b144b83704f1",
+          "target": "f27c5396e1f38b9a957c01c8305b8032338571db",
+          "sumStepsS": 168.458,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 7.161
+            },
+            {
+              "name": "review-full",
+              "s": 105.816
+            },
+            {
+              "name": "fuzz",
+              "s": 55.481
+            }
+          ]
+        },
+        {
+          "run": "01a12d50-08c5-76a1-91dc-a81a61d7194f",
+          "target": "bf0c8c2b320cdd798225be0cc504b4ffdf1db7f8",
+          "sumStepsS": 176.954,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.965
+            },
+            {
+              "name": "review-full",
+              "s": 107.137
+            },
+            {
+              "name": "fuzz",
+              "s": 64.852
+            }
+          ]
+        },
+        {
+          "run": "01a12d48-0c0f-7af1-8094-d423fd2bbb9a",
+          "target": "0fa8d8b8d134f3d24d0e9b9c8502f344dc609efd",
+          "sumStepsS": 136.238,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.7
+            },
+            {
+              "name": "review-full",
+              "s": 75.302
+            },
+            {
+              "name": "fuzz",
+              "s": 56.236
+            }
+          ]
+        },
+        {
+          "run": "01a12d47-69fd-7221-9757-8f1861a87bd1",
+          "target": "03a10afb57873276bac18cd2c79dcf8100f54b59",
+          "sumStepsS": 139.263,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 7.114
+            },
+            {
+              "name": "review-full",
+              "s": 80.722
+            },
+            {
+              "name": "fuzz",
+              "s": 51.427
+            }
+          ]
+        },
+        {
+          "run": "01a12d40-6b43-7020-9802-b2983d5b2c10",
+          "target": "8146b37067fb7a3bbd995ba6f308a5627dbb080b",
+          "sumStepsS": 135.432,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 5.732
+            },
+            {
+              "name": "review-full",
+              "s": 76.848
+            },
+            {
+              "name": "fuzz",
+              "s": 52.852
+            }
+          ]
+        },
+        {
+          "run": "01a12d3d-df80-7e81-8082-e62ebd674300",
+          "target": "0b2bf4aaf97cab3409d29e0af459a84583afe0f8",
+          "sumStepsS": 145.779,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.868
+            },
+            {
+              "name": "review-full",
+              "s": 89.802
+            },
+            {
+              "name": "fuzz",
+              "s": 51.109
+            }
+          ]
+        },
+        {
+          "run": "01a12d3c-cce8-74a2-bf0a-2a205bc1f049",
+          "target": "1b0b4cfe169e7c6f3454d4d278f69fd0f436e572",
+          "sumStepsS": 150.872,
+          "steps": [
+            {
+              "name": "dependencies",
+              "s": 4.865
+            },
+            {
+              "name": "review-full",
+              "s": 89.097
+            },
+            {
+              "name": "fuzz",
+              "s": 56.91
+            }
+          ]
+        }
+      ],
+      "releaseReviewFull": {
+        "n": 21,
+        "medianS": 84.517,
+        "minS": 72.248,
+        "maxS": 107.406
+      },
+      "releaseFuzz": {
+        "n": 21,
+        "medianS": 56.638,
+        "minS": 51.109,
+        "maxS": 100.677
+      },
+      "releaseFailuresObserved": 0,
+      "localRecordedReviewAll26": {
+        "n": 26,
+        "medianS": 36.7855,
+        "minS": 0.3622732920002818,
+        "maxS": 66,
+        "over45": 6
+      },
+      "localRecordedReviewWithoutEvidence442": {
+        "n": 25,
+        "medianS": 38.2,
+        "minS": 6.876908709000418,
+        "maxS": 66
+      },
+      "localRecordedFocused": {
+        "n": 23,
+        "medianS": 3.148493042001064,
+        "minS": 1.6892487500008428,
+        "maxS": 6.33,
+        "over10": 0
+      },
+      "localAggregationScope": "Compact recorded review value (438 review2) and focused value (438 focused5), not an assertion of same check selection or same load. 130\u2019s final combined-base recovery review/focused are separately 44.741/2.993 seconds; earlier recorded values are preserved. No timing speed causality is inferred.",
+      "localSamples": [
+        {
+          "bead": "hv-umm2.110",
+          "recordedReviewS": 39,
+          "recordedFocusedS": 2,
+          "recordedHostLoad": 13.23,
+          "recordedTestDelta": {
+            "files": 1,
+            "lines": 335,
+            "jsdomFiles": 0
+          },
+          "friction": [
+            {
+              "tag": "browser-qa-scripting",
+              "minutes": 10,
+              "note": "judged QA dev server: scripts/dev.mjs spawns bare `vite`, which needs node_modules/.bin on PATH when started directly, and port 5174 was taken by another session's server after the sweep released it, so the judged server moved to 5175"
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.122",
+          "recordedReviewS": 53.34492500000033,
+          "recordedFocusedS": 5.231767874999605,
+          "recordedHostLoad": 22.505859375,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 0,
+            "jsdomFiles": 0
+          },
+          "friction": [
+            {
+              "tag": "browser-lease-wait",
+              "minutes": 12.348133333333333,
+              "note": "The required five-card sweep waited 740.888 seconds across five FIFO browser sessions and four card-boundary yields. Execution was 572.322 seconds; earlier judged-run queue timings and unknown exact session UTC boundaries are recorded separately."
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.123",
+          "recordedReviewS": 40.8,
+          "recordedFocusedS": 3.0,
+          "recordedHostLoad": 8.1,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 0,
+            "jsdomFiles": 0
+          },
+          "friction": [
+            {
+              "tag": "browser-qa-scripting",
+              "minutes": 12,
+              "note": "judged opponent-hand scenario: playUntil auto-answered the discardChosen prompt when the predicate read probe.pending.purpose from battle state; far-hand DOM nests data-battle-card-id and hidden cards use opaque view ids, so a hand-settle wait must dedupe and accept non-instance ids"
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.130",
+          "recordedReviewS": 35.371,
+          "recordedFocusedS": 2.647,
+          "recordedHostLoad": 7.64306640625,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 83,
+            "jsdomFiles": 0,
+            "cases": 8
+          },
+          "friction": [
+            {
+              "tag": "browser-lease-wait",
+              "minutes": 11.87,
+              "note": "Native sweep yielded at three card boundaries to queued peers; sweep and judged runner cumulatively waited for the shared browser lease. Detailed queue and execution windows are recorded separately."
+            },
+            {
+              "tag": "additive-registry-conflict",
+              "minutes": 4.67,
+              "note": "One additive scenario registry conflict with landed whenErode entry. Root followed native update rollback/park/reapply protocol; original/full delta preserved, parked checkpoint never submitted, both entries and unchanged behavior sources proven. Timing starts at recorded submission boundary and includes recovery/revalidation."
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.131",
+          "recordedReviewS": 38.2,
+          "recordedFocusedS": 3.0,
+          "recordedHostLoad": 5.66,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 0,
+            "jsdomFiles": 0
+          },
+          "friction": [
+            {
+              "tag": "browser-lease-wait",
+              "minutes": 12,
+              "note": "The card sweep waited 742.8 s for the shared browser lease over four sessions; execution itself took 247.9 s"
+            },
+            {
+              "tag": "inventory-missed-primitive",
+              "minutes": 10,
+              "note": "The inventory routed Embrace the Infinite to a composition bead, but its 'Reclaim \u2013 Discard X cards' needs a least X of 1 on the variable discard cost, which the DSL lacks; the card stays pending"
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.211",
+          "recordedReviewS": 22.03642466599922,
+          "recordedFocusedS": 2.6139342909991683,
+          "recordedHostLoad": 6.3388671875,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 155,
+            "jsdomFiles": 0
+          },
+          "friction": [
+            {
+              "tag": "browser-qa-scripting",
+              "minutes": 13.64083685,
+              "note": "QA-repair elapsed window: visual pointer-hit and ephemeral live-Day/publication-batch assumptions refined to durable ordered observations; includes separately retained lease waits."
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.436",
+          "recordedReviewS": 47.8,
+          "recordedFocusedS": 3.8,
+          "recordedHostLoad": 9.4580078125,
+          "recordedTestDelta": {
+            "files": 1,
+            "lines": 380,
+            "jsdomFiles": 0
+          },
+          "friction": [
+            {
+              "tag": "bead-areas-incomplete",
+              "minutes": 11,
+              "note": "Source audit established that durable observation snapshots, source provenance, typed saved-state plumbing and loop bookkeeping were necessary; native Areas were widened before production writes."
+            },
+            {
+              "tag": "browser-lease-wait",
+              "minutes": 11.8,
+              "note": "Shared-browser queue waits across fixture refinements and acceptance. Terminal runner receipts measure 5.773 minutes; the canceled queued attempt contributed approximately 6 minutes observed from process elapsed-time/queue ownership before graceful termination. No peer process was interrupted; provider/server ownership was never acquired in canceled attempts."
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.438",
+          "recordedReviewS": 39.04053266599931,
+          "recordedFocusedS": 3.8589309170001798,
+          "recordedHostLoad": 6.876953125,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 348,
+            "jsdomFiles": 0
+          },
+          "friction": [
+            {
+              "tag": "local-edit-correction",
+              "minutes": 1.2,
+              "note": "Approximate additional failed validation time: synthetic assertions used wrong event/log fields and assumed deferred targets were selected after child bodies; recovery assertions were bounded to published hand identities and committed deck positions. Fixture fingerprint and cancellable typing were corrected. Detailed failed attempts are retained in measurements; no engine defect or shared body repair."
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.441",
+          "recordedReviewS": 14.189,
+          "recordedFocusedS": 5.777,
+          "recordedHostLoad": 29.80224609375,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 63,
+            "jsdomFiles": 0,
+            "cases": 24
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.442",
+          "recordedReviewS": 0.3622732920002818,
+          "recordedFocusedS": null,
+          "recordedHostLoad": 30.15087890625,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 0,
+            "jsdomFiles": 0
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.443",
+          "recordedReviewS": 16.0,
+          "recordedFocusedS": 3.5,
+          "recordedHostLoad": 27.4658203125,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 0,
+            "jsdomFiles": 0
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.444",
+          "recordedReviewS": 53.63946812499944,
+          "recordedFocusedS": null,
+          "recordedHostLoad": 30.74,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 0,
+            "jsdomFiles": 0
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.445",
+          "recordedReviewS": 16,
+          "recordedFocusedS": 2,
+          "recordedHostLoad": 6.23,
+          "recordedTestDelta": {
+            "files": 1,
+            "lines": 143,
+            "jsdomFiles": 0
+          },
+          "friction": [
+            {
+              "tag": "bead-areas-incomplete",
+              "minutes": 10,
+              "note": "the delayed trigger's moment needs the catalog (triggerBody over the view's EffectRef), which the battle screen model never received; wiring catalog: engine.catalog from EngineBattleScreen.tsx was outside the filed areas, so stopped and reported for widening"
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.446",
+          "recordedReviewS": 21.745,
+          "recordedFocusedS": 2.992,
+          "recordedHostLoad": 8.5771484375,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 39,
+            "jsdomFiles": 0,
+            "cases": 10
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.449",
+          "recordedReviewS": 49,
+          "recordedFocusedS": 3,
+          "recordedHostLoad": 18.04,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 94,
+            "jsdomFiles": 0
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.450",
+          "recordedReviewS": 66,
+          "recordedFocusedS": 4,
+          "recordedHostLoad": 27.01,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 43,
+            "jsdomFiles": 0
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.451",
+          "recordedReviewS": 13.404,
+          "recordedFocusedS": 6.33,
+          "recordedHostLoad": 18.19775390625,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 0,
+            "jsdomFiles": 0,
+            "cases": -1
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.452",
+          "recordedReviewS": 45,
+          "recordedFocusedS": 4,
+          "recordedHostLoad": 7.24,
+          "recordedTestDelta": {
+            "files": 1,
+            "lines": 253,
+            "jsdomFiles": 0,
+            "cases": 13
+          },
+          "friction": [
+            {
+              "tag": "plan-brief-mismatch",
+              "minutes": 10,
+              "note": "The brief asked for an opponent response before the \u25b8Materialized trigger resolves, but triggered abilities never use the stack (rules \u00a7 Playing Cards and the Stack); the concurrent-actor contract responds to the card on the stack instead"
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.454",
+          "recordedReviewS": 10.439074542000526,
+          "recordedFocusedS": 1.6892487500008428,
+          "recordedHostLoad": 7.857421875,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 83,
+            "jsdomFiles": 0
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.455",
+          "recordedReviewS": 9.551252583998576,
+          "recordedFocusedS": 4.719393958999717,
+          "recordedHostLoad": 8.724609375,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 77,
+            "jsdomFiles": 0
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.456",
+          "recordedReviewS": 6.876908709000418,
+          "recordedFocusedS": 2.949296124999819,
+          "recordedHostLoad": 23.93212890625,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 125,
+            "jsdomFiles": 0
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.458",
+          "recordedReviewS": 20,
+          "recordedFocusedS": null,
+          "recordedHostLoad": 10,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 9,
+            "jsdomFiles": 0
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.463",
+          "recordedReviewS": 9.224593665998327,
+          "recordedFocusedS": 3.148493042001064,
+          "recordedHostLoad": 15.611328125,
+          "recordedTestDelta": {
+            "files": 0,
+            "lines": 37,
+            "jsdomFiles": 0
+          },
+          "friction": []
+        },
+        {
+          "bead": "hv-umm2.86",
+          "recordedReviewS": 46,
+          "recordedFocusedS": 5,
+          "recordedHostLoad": 7.52,
+          "recordedTestDelta": {
+            "files": 2,
+            "lines": 427,
+            "jsdomFiles": 0
+          },
+          "friction": [
+            {
+              "tag": "bead-areas-incomplete",
+              "minutes": 10,
+              "note": "'\u2264X\u25cf cost character in your void' needed an X-valued bound on a void zone reference (ZoneEverySpec, everyIn, resolveZoneCards) outside the filed areas; stopped and reported for widening"
+            },
+            {
+              "tag": "fuzz-only-invariant",
+              "minutes": 10,
+              "note": "the deferred Ending cleanup readied characters in a step with no phaseChanged; only the per-step announced-change check in the fuzz caught it, so the first 300-game run was wasted; the contracts now check every step"
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.87",
+          "recordedReviewS": 42,
+          "recordedFocusedS": 3,
+          "recordedHostLoad": 5.32,
+          "recordedTestDelta": {
+            "files": 2,
+            "lines": 386,
+            "jsdomFiles": 0
+          },
+          "friction": [
+            {
+              "tag": "fuzz-only-invariant",
+              "minutes": 15,
+              "note": "a copy of From the Barrow (a created card) left a Reclaim grant whose source had ceased to exist; view and determinize dropped it, so determinized legality lost the void play. Only the fuzz's determinization-fidelity check caught it (first 300-game run, 224 s, 2 failures); fixed by counting Reclaim keyword changes as legality data in carriesLegality, with a contract"
+            }
+          ]
+        },
+        {
+          "bead": "hv-umm2.91",
+          "recordedReviewS": 42,
+          "recordedFocusedS": 4,
+          "recordedHostLoad": 6.38,
+          "recordedTestDelta": {
+            "files": 2,
+            "lines": 394,
+            "jsdomFiles": 0
+          },
+          "friction": [
+            {
+              "tag": "bead-areas-incomplete",
+              "minutes": 12,
+              "note": "the inventory routed Thornwood Delver's \"X is this character's \u2726\" to valueCardStats as existing, but only costOf existed; added thisCharacterSpark, and a source that left play needs a last-known spark that requires the saved trigger queue and resolve-trigger step outside the bead's areas (reported, RD-hv-umm2.91-2 Open)"
+            }
+          ]
+        }
+      ],
+      "fullTestSample": [
+        {
+          "run": "01a12d9b-eeb4-78c1-b93a-a34004530aec",
+          "log": "/tmp/phase5-retro442/release-logs/01a12d9b-eeb4-78c1-b93a-a34004530aec.jsonl",
+          "sha256": "b8aeee2d03cf75b6adcfa3a5d36a988db5b90ace75389dd1c07fe9e74eb50d62",
+          "testStartUtc": "2026-10-12T00:57:07.501Z",
+          "actualTestStartLoad": 25.5322265625,
+          "testStepWallS": 64.3,
+          "exitCode": 0,
+          "testFileCount": null,
+          "testCount": null,
+          "closeTimeoutWarning": true,
+          "timeoutMs": 10000
+        },
+        {
+          "run": "01a12d9d-d415-7cd1-b6fe-bd3d900c1c11",
+          "log": "/tmp/phase5-retro442/release-logs/01a12d9d-d415-7cd1-b6fe-bd3d900c1c11.jsonl",
+          "sha256": "94c6645666a8e8a583261b78c9ad35e2c4a4954adf756f134c79a43ab9bca36a",
+          "testStartUtc": "2026-10-12T01:00:28.475Z",
+          "actualTestStartLoad": 16.89306640625,
+          "testStepWallS": 67.0,
+          "exitCode": 0,
+          "testFileCount": null,
+          "testCount": null,
+          "closeTimeoutWarning": true,
+          "timeoutMs": 10000
+        },
+        {
+          "run": "01a12da2-c69f-7d71-a05f-6e33f840aa7d",
+          "log": "/tmp/phase5-retro442/release-logs/01a12da2-c69f-7d71-a05f-6e33f840aa7d.jsonl",
+          "sha256": "adf1e8c8fb0c7ee4839b394579ae081bddf6c2aa1adf87235c50e33804423e77",
+          "testStartUtc": "2026-10-12T01:03:56.397Z",
+          "actualTestStartLoad": 23.99658203125,
+          "testStepWallS": 56.6,
+          "exitCode": 0,
+          "testFileCount": 338,
+          "testCount": 4371,
+          "closeTimeoutWarning": false,
+          "timeoutMs": null
+        }
+      ],
+      "D19Assessment": "Latest 56.6-second full-test step passes the numerical ceiling at load 23.9966. Other two steps are 64.3/67.0 seconds at loads 25.5322/16.8931 and include shutdown warnings. None is a controlled low-load gate measurement, so low-load D19 compliance or breach remains unknown. File-size assessment keeps six existing tutorial survivors under Phase 6/D38 scope; there is no admitted budget change."
+    },
+    "testFootprint": {
+      "testFiles": 338,
+      "testLines": 79600,
+      "jsdomFiles": 82,
+      "plainContracts": 90,
+      "plainContractLines": 17987,
+      "over500": [
+        {
+          "file": "src/battle/tutorial-battle-controller.test.ts",
+          "lines": 584
+        },
+        {
+          "file": "src/battle/use-tutorial-battle-interactions.test.tsx",
+          "lines": 664
+        },
+        {
+          "file": "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+          "lines": 2023
+        },
+        {
+          "file": "src/screens/cumulus_adapters/TutorialScreenAdapter.test.tsx",
+          "lines": 655
+        },
+        {
+          "file": "src/screens/cumulus_adapters/tutorial-battle-view-model.test.ts",
+          "lines": 575
+        },
+        {
+          "file": "src/screens/cumulus_adapters/tutorial-view-model.test.ts",
+          "lines": 1880
+        }
+      ],
+      "prior442Snapshot": {
+        "testFiles": 336,
+        "testLines": 78550,
+        "jsdomFiles": 82,
+        "plainContracts": 82
+      },
+      "sourceDeltaDefinition": "git show --numstat per final promoted source; suffix .test/.spec, .contracts, .scenarios classified separately. Contract-directory support modules have separate counts. This is source growth, not a runtime-cost estimate.",
+      "recordedCohortDelta": {
+        "files": 10,
+        "lines": 3398,
+        "jsdomFiles": 0
+      },
+      "sourceClassifiedCohortDelta": {
+        "entrypoints": {
+          "files": 2,
+          "netLines": 1050
+        },
+        "plainContracts": {
+          "files": 8,
+          "netLines": 1951
+        },
+        "scenarios": {
+          "files": 3,
+          "netLines": 233
+        },
+        "contractSupport": {
+          "files": 2,
+          "netLines": 238
+        },
+        "testFixtureAndScenarioRegistryNetLines": 2
+      },
+      "definitionNotes": [
+        "Compact historical files include plain contract modules, not only executable entrypoints.",
+        "445: delayed-trigger test +140, presentation-screen test +1, void-permission test +1 and view-model fixture +1 explain compact 143.",
+        "130: scenario +82 and scenario-registry +1 net are present in source/detailed measurements; compact lines is 0.",
+        "455: sole contract path +80/-3 =77 net, 83 touched; compact lines is83.",
+        "458: existing test +10/-1 = 9 net, 10 added; parent corrects compact lines to 9.",
+        "Parent separately corrects 130/455/458 under native admission. Original frozen 3398 and corrected 3474 compact totals remain separate; corrected 3474 equals explicit source-classified net growth including 238 contract-support lines, one fixture line and one scenario-registry line."
+      ],
+      "sourceBreakdown": "test-delta-source.json"
+    },
+    "waiting": {
+      "knownBrowserReceiptsS": {
+        "122Sweep": 740.888,
+        "122JudgedSevenReportedRuns": 207.149,
+        "130SweepPlusJudged": 712.114,
+        "131Sweep": 742.8,
+        "211Sweep": 85.594,
+        "211RetainedFailedLiveDay": 137.823,
+        "438EarlyPlusFinal": 0.09,
+        "454DefaultWorkerRejudgment": 0.043,
+        "456SweepPlusJudged": 515.202
+      },
+      "sumPolicy": "No project-wide wait total is claimed. These are non-overlapping named receipts where recorded; other waits and canceled queued observations are incomplete. 436 compact browser wait is approximately 11.8 minutes with measured terminal receipts plus an approximately six-minute canceled queued attempt, not a fully exact total.",
+      "browserFIFO": "122 yields four card boundaries in five sessions;130 yields three in four sessions;131 has four sessions;456 yields two in three sessions. Serialization cost is expected under the documented shared browser policy, with existing 428 disposition.",
+      "heavy": "122 wrapper318.878 versus script71.9 seconds includes pre-command lock acquisition/npm startup; the roughly245-second pre-command bound is not pure queue.130 weighted wrapper80.854 has unknown exact lock wait.438 wrapper-inner .029 seconds is startup-inclusive, not pure queue.",
+      "prerequisites": "86\u2019s untouched early research was released behind exact cohort capture392;122\u2019s untouched discovery was released behind438. Native first started_at values do not measure continuous active implementation. Fresh reclaim proxies and source-specific receipts govern their later windows.",
+      "usageLimits": "No complete quantified usage/quota waiting series is retained for this frozen cohort. Absence of a captured wait does not establish zero.",
+      "idleLaneBudget": "Unknown; dispatch/close notes and bounded history do not establish a complete denominator for the 15 percent idle-lane target."
+    },
+    "qa": {
+      "ledgerSamples": [
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.110.jsonl",
+          "rows": 21,
+          "rawVerdicts": {
+            "pass": 9,
+            "skip": 12
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.122.jsonl",
+          "rows": 109,
+          "rawVerdicts": {
+            "fail": 3,
+            "pass": 52,
+            "skip": 54
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.123.jsonl",
+          "rows": 83,
+          "rawVerdicts": {
+            "pass": 45,
+            "skip": 38
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.130.jsonl",
+          "rows": 84,
+          "rawVerdicts": {
+            "pass": 44,
+            "skip": 40
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.131.jsonl",
+          "rows": 80,
+          "rawVerdicts": {
+            "pass": 38,
+            "skip": 42
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.211.jsonl",
+          "rows": 64,
+          "rawVerdicts": {
+            "pending": 4,
+            "skip": 48,
+            "pass": 12
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.436.jsonl",
+          "rows": 6,
+          "rawVerdicts": {
+            "fail": 2,
+            "pass": 4
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.438.jsonl",
+          "rows": 2,
+          "rawVerdicts": {
+            "pass": 2
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.443.jsonl",
+          "rows": 1,
+          "rawVerdicts": {
+            "pass": 1
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.445.jsonl",
+          "rows": 2,
+          "rawVerdicts": {
+            "pass": 2
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.452.jsonl",
+          "rows": 23,
+          "rawVerdicts": {
+            "pass": 13,
+            "skip": 10
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.454.jsonl",
+          "rows": 2,
+          "rawVerdicts": {
+            "pass": 2
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.456.jsonl",
+          "rows": 12,
+          "rawVerdicts": {
+            "pending": 8,
+            "pass": 4
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.86.jsonl",
+          "rows": 23,
+          "rawVerdicts": {
+            "pass": 14,
+            "skip": 8,
+            "fail": 1
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.87.jsonl",
+          "rows": 22,
+          "rawVerdicts": {
+            "pass": 14,
+            "skip": 8
+          }
+        },
+        {
+          "file": "docs/plan/evidence/qa-ledger/hv-umm2.91.jsonl",
+          "rows": 43,
+          "rawVerdicts": {
+            "pass": 23,
+            "skip": 20
+          }
+        }
+      ],
+      "policySeparation": "122 Random payment proofs and 454 default healthy Greedy worker rejudgment are separately labeled; actual original source UUID/printing/resources/log outcomes are retained.",
+      "timeouts": "122 has exactly two raw healthy timeout-only single retries that pass.436/211 retained harness failures are source input/observation corrections, not generic timeout forgiveness.456 enforces pure timeout-only retry classification without derivative product-check suppression.",
+      "clauseCoverage": "Weighted inclusion/played counters and normal card sweep do not certify every trigger, activation or variant.438 synthetic LAB primitive is outside the smoke catalog pool.",
+      "judgedFixes": "Original122 policy failure links454 and original86 status judgment links445; own later rejudgment PASS lines support these dispositions."
+    },
+    "reviews": [
+      {
+        "bead": "hv-umm2.110",
+        "status": "Completed Codex review; three accepted findings implemented",
+        "dispositions": [
+          "hv-umm2.450"
+        ]
+      },
+      {
+        "bead": "hv-umm2.86",
+        "status": "Completed Codex review; four accepted findings implemented",
+        "dispositions": [
+          "hv-umm2.449"
+        ]
+      },
+      {
+        "bead": "hv-umm2.87",
+        "status": "Completed Codex review; accepted contract gap implemented",
+        "dispositions": [
+          "hv-umm2.455"
+        ]
+      },
+      {
+        "bead": "hv-umm2.91",
+        "status": "Completed Codex review; two accepted findings owned by existing unfinished duty",
+        "dispositions": [
+          "hv-umm2.460"
+        ]
+      },
+      {
+        "bead": "hv-umm2.211",
+        "status": "Completed and settled Opus review; two accepted low findings implemented",
+        "dispositions": [
+          "hv-umm2.456"
+        ]
+      },
+      {
+        "bead": "hv-umm2.436",
+        "status": "Completed and settled Opus review; two accepted findings filed",
+        "dispositions": [
+          "hv-umm2.458",
+          "hv-umm2.459"
+        ]
+      },
+      {
+        "bead": "hv-umm2.438",
+        "status": "Completed and settled Opus review; no actionable finding",
+        "dispositions": []
+      },
+      {
+        "bead": "hv-umm2.452",
+        "status": "Completed Codex review; two accepted findings filed",
+        "dispositions": [
+          "hv-umm2.464"
+        ]
+      },
+      {
+        "bead": "hv-umm2.454",
+        "status": "Completed and settled Opus review; accepted Dusk coverage implemented",
+        "dispositions": [
+          "hv-umm2.463"
+        ]
+      },
+      {
+        "bead": "hv-umm2.463",
+        "status": "Completed and settled Opus review; no actionable finding",
+        "dispositions": []
+      }
+    ],
+    "structuralDispositions": [
+      {
+        "cause": "Inventory pending binding lifecycle and actual fulfilled annotations",
+        "beads": [
+          "hv-umm2.441",
+          "hv-umm2.451"
+        ],
+        "measurement": "Minimal synthetic negative controls and fresh byte-preservation; no benchmark benefit claim."
+      },
+      {
+        "cause": "Dreamwell durable event evidence and timeout classification",
+        "beads": [
+          "hv-umm2.211",
+          "hv-umm2.456"
+        ],
+        "measurement": "Public ordered evidence and single-retry contract; no matched speed claim."
+      },
+      {
+        "cause": "Public remembered fixed-effect exhaustiveness",
+        "beads": [
+          "hv-umm2.436",
+          "hv-umm2.458",
+          "hv-umm2.459"
+        ],
+        "measurement": "458 is complete;459 owns measured marginal overhead before optimization."
+      },
+      {
+        "cause": "Missing discard minimum and departed-source spark",
+        "beads": [
+          "hv-umm2.457",
+          "hv-umm2.460"
+        ],
+        "measurement": "Existing unfinished canonical scopes; no duplicates."
+      },
+      {
+        "cause": "Additive registry/log integration conflict",
+        "beads": [
+          "hv-umm2.130",
+          "hv-umm2.91",
+          "hv-umm2.211"
+        ],
+        "measurement": "Owning-session update/park/reapply protocol preserves peers.130 measures a 4.67-minute inclusive recovery episode; other exact comparable totals are unknown. No separate recurring protocol defect is established."
+      },
+      {
+        "cause": "Areas and generic QA scripting",
+        "beads": [
+          "hv-umm2.307",
+          "hv-umm2.308",
+          "hv-umm2.428",
+          "hv-umm2.440"
+        ],
+        "measurement": "Existing native Areas/QA/FIFO/brief dispositions are authoritative; actual new missing API131 is separately457."
+      }
+    ],
+    "cohortAudits": [
+      {
+        "bead": "hv-umm2.110",
+        "finding": "gainAbilities is authored with synthetic contracts and a passing weighted smoke/sweep. Independent Codex accepted static-timestamp, dissolve look-back and saved-input validation findings; 450 implements all three. Browser scripting friction is already under the existing QA disposition."
+      },
+      {
+        "bead": "hv-umm2.122",
+        "finding": "Five UUID card compositions use the resolving payment supplied by 438. Weighted 300-game smoke passes; its counters certify plays, not every activated/triggered clause or variant. Original healthy Greedy Dusk failure remains recorded; explicit Random payment judgment is separate. 454 rejudges the original default-worker workflow. Two timeout-only sweep attempts receive one healthy fresh retry each, retaining raw failures and passing retries."
+      },
+      {
+        "bead": "hv-umm2.123",
+        "finding": "Draw/discard compositions retain 45 pass and 38 skip ledger rows. Opponent-hand harness corrections concern prompt metadata, opaque view identities and DOM deduplication. This is documented scripting friction, not a confirmed additional engine defect."
+      },
+      {
+        "bead": "hv-umm2.130",
+        "finding": "Four UUID compositions and eight coupled scenarios pass. Native FIFO sweep/judged wait is 712.114 seconds. The scenario registry conflict is recovered in the same owned worktree, preserving both registrations; focused/review/Knip rerun on the combined base while byte-identical behavior keeps prior fuzz/browser evidence tied to its original source."
+      },
+      {
+        "bead": "hv-umm2.131",
+        "finding": "Four cards are authored; the fifth exact UUID requires a variable-discard minimum. Existing canonical 457 owns that primitive and sampled judgment. The sweep separates 742.8 seconds queue from 247.9 seconds execution. No duplicate missing-capability work is proposed."
+      },
+      {
+        "bead": "hv-umm2.211",
+        "finding": "Dreamwell fixture construction and ordered public draw/refresh/Day evidence use ordinary intents. Failed visual/live-Day premises are retained harness attempts with caps empty. One integration conflict involves additive log and preflight test entries; same-worktree recovery preserves both. Independent Opus accepted timeout-derivative and headless parity findings; completed 456 implements them."
+      },
+      {
+        "bead": "hv-umm2.436",
+        "finding": "Remembered public fixed changes retain typed observation/source provenance through hidden/ceased sources and determinization. Final synthetic, full, fuzz and browser checks pass; earlier source associations and fixture-loader/GameId mistakes remain explicit. Exact Opus review accepted future type-table exhaustiveness (458) and unmeasured observation/simulation overhead (459). The latter is a measurement question, not a proven regression."
+      },
+      {
+        "bead": "hv-umm2.438",
+        "finding": "Fixed compound resolving payments have 31 own synthetic cases, recovery/bounce contracts and actual LAB desktop/mobile payment/decline/unaffordability evidence. The unweighted smoke does not cover synthetic LAB payTo specifically. Exact Opus review completed with no actionable finding; explicit labStage handles the advisory resource-staging limitation."
+      },
+      {
+        "bead": "hv-umm2.441",
+        "finding": "Pending-descriptor lifecycle diagnostics are proven with minimal synthetic bindings and expected-negative controls. All fresh entity fields/availability are preserved. This fulfills the prior 435 review; the small source change has no additional review requirement in the frozen notes. Inherited inventory staleness is separately documented."
+      },
+      {
+        "bead": "hv-umm2.442",
+        "finding": "The previous retrospective has a four-file evidence-only scope, 0.362-second friction-only selected review and separate Knip. Its own record is part of this new cohort. Its 27-record coverage and dispositions are contextual evidence, not a repeated audit of those 27 records."
+      },
+      {
+        "bead": "hv-umm2.443",
+        "finding": "Private mobile status-badge clearance has bounded baseline/final visual evidence. Frozen notes describe the original 393 review permissions correction; they do not provide a complete later outcome for that external review. No outcome is inferred from successful 443 delivery."
+      },
+      {
+        "bead": "hv-umm2.444",
+        "finding": "Two documentation comments preserve identical runtime tokens and add no tests. Selected review still reaches 261 related files at a loaded host. This resolves two accepted 439 comment findings; no timing benefit is claimed."
+      },
+      {
+        "bead": "hv-umm2.445",
+        "finding": "Borrowed Minutes captured cards receive delayed-ability badges and accessible firing-moment copy through catalog plumbing, with player/enemy desktop/mobile rejudgment. Its pre-existing notes retain generic log copy, inaccessible sighted badge text and an invalid display fixture. This bounded fix clears the recorded 86 judgment; those observations are not reclassified as newly audited runtime defects here."
+      },
+      {
+        "bead": "hv-umm2.446",
+        "finding": "Saved-state loading rejects malformed Ending continuation markers, with direct/JSON-roundtrip expected-negative controls and valid compatibility cases. This fulfills the 86 validator follow-up with no browser or new production flow."
+      },
+      {
+        "bead": "hv-umm2.449",
+        "finding": "Four accepted 86 review findings become stale/racing Ending contracts, structural no-trigger progression, supported constant/X cost bounds, lab staging and current DSL documentation. Native source association is committed-friction-plus-native because the source message lacks a Bead trailer."
+      },
+      {
+        "bead": "hv-umm2.450",
+        "finding": "Verified gained static timestamps, gained dissolve matching and persisted gain validation findings from the 110 review are implemented. Selected review is 66 seconds at recorded load 27.01, which is not a comparable low-load overrun diagnosis. No separate completed independent review of 450 is claimed."
+      },
+      {
+        "bead": "hv-umm2.451",
+        "finding": "Only the fulfilled atEndOfTurn pending annotation is retired. The real initial diagnostic, fresh baseline preservation and inherited tracked inventory drift are separated. Current native UUID scope is authoritative; this is not a content repartition."
+      },
+      {
+        "bead": "hv-umm2.452",
+        "finding": "Constant spark CardFilter bounds and Rift Pilgrim pass synthetic contracts, smoke, preflight, sweep and judged workflows. Trigger response wording is corrected through the existing rules. Known reader fallout is canonical 462; independent Codex accepted continuous-layer and determinized-history defects as 464. Both remain unfinished in the frozen inventory."
+      },
+      {
+        "bead": "hv-umm2.454",
+        "finding": "A reposition simulation advances the same main boundary and resolves bounded continuations before comparison. Default Greedy healthy-worker desktop/mobile payment rejudgment clears 122\u2019s original failure; no policy override is used. Exact Opus review accepted useful-Dusk coverage as 463; broader global movement bounds remain explicitly outside the proven contract."
+      },
+      {
+        "bead": "hv-umm2.455",
+        "finding": "Eight test-only gained/lost Reclaim hidden/ceased-source contracts and two omission probes prove legality/fidelity retention. Exact production defect repair is not asserted; a separate explicit-loss witness points to existing canonical 372. No browser/fuzz/full repetition is warranted for these synthetic contracts."
+      },
+      {
+        "bead": "hv-umm2.456",
+        "finding": "Dreamwell timeout-only product predicates and headless draw/refresh/Day parity are fixed with synthetic causal probes and actual representative controls. The four pending bonus statuses are expected content state. Its 515.202-second native browser wait is separate from execution. Required infrastructure full check is retained with source association."
+      },
+      {
+        "bead": "hv-umm2.458",
+        "finding": "A typed exhaustive FixedCardChange table and observable-effect agreement test fulfill 436\u2019s future-drift finding. This structural change has no measured speed claim. 459 remains the exact subsequent overhead measurement duty."
+      },
+      {
+        "bead": "hv-umm2.463",
+        "finding": "Both controllers have a meaningful legal Dusk move and resulting Night blocking/reward contract in the existing 477-line policy entrypoint. Test-local fault facade proves the contract without claiming real worker fault injection. Exact Opus review completed, settled and reports no actionable findings before this freeze."
+      },
+      {
+        "bead": "hv-umm2.86",
+        "finding": "Ending continuation preserves exact captured cohorts and ordering. A fuzzer announced-change invariant failure is repaired and contracted before the final passing smoke. Independent Codex accepted four coverage/staging/documentation findings as completed 449; validator 446 and status judgment 445 are also completed. An earlier generation was invalidated, then the final gate passed; no CI test-failure repair is inferred."
+      },
+      {
+        "bead": "hv-umm2.87",
+        "finding": "whenErode adds a source-ceased Reclaim legality retention repair exposed by a two-failure initial weighted smoke. Final smoke/sweep pass. Codex\u2019s accepted hidden-source/lost-Reclaim contract gap is completed by 455; no new repeated-cost proposal duplicates that duty."
+      },
+      {
+        "bead": "hv-umm2.91",
+        "finding": "whenReclaim and source spark authoring retain an open last-known spark ruling when source departs. The additive scenario registry conflict is recovered without changing engine bytes. Codex\u2019s two accepted departed-source/static-context findings are already owned by unfinished 460."
+      }
+    ],
+    "newProposals": [
+      {
+        "causeKey": "vitest-post-test-shutdown/phase-5",
+        "title": "Identify and repair recurring Vitest shutdown ownership",
+        "cause": "Two of three retained passed release full-test steps emit the same 10,000 ms close timeout after tests complete. The concrete resource owner is unknown; this proposes a bounded diagnostic investigation, not a speculative runtime optimization.",
+        "support": [
+          {
+            "run": "01a12d9b-eeb4-78c1-b93a-a34004530aec",
+            "log": "/tmp/phase5-retro442/release-logs/01a12d9b-eeb4-78c1-b93a-a34004530aec.jsonl",
+            "sha256": "b8aeee2d03cf75b6adcfa3a5d36a988db5b90ace75389dd1c07fe9e74eb50d62",
+            "testStartUtc": "2026-10-12T00:57:07.501Z",
+            "actualTestStartLoad": 25.5322265625,
+            "testStepWallS": 64.3,
+            "exitCode": 0,
+            "testFileCount": null,
+            "testCount": null,
+            "closeTimeoutWarning": true,
+            "timeoutMs": 10000
+          },
+          {
+            "run": "01a12d9d-d415-7cd1-b6fe-bd3d900c1c11",
+            "log": "/tmp/phase5-retro442/release-logs/01a12d9d-d415-7cd1-b6fe-bd3d900c1c11.jsonl",
+            "sha256": "94c6645666a8e8a583261b78c9ad35e2c4a4954adf756f134c79a43ab9bca36a",
+            "testStartUtc": "2026-10-12T01:00:28.475Z",
+            "actualTestStartLoad": 16.89306640625,
+            "testStepWallS": 67.0,
+            "exitCode": 0,
+            "testFileCount": null,
+            "testCount": null,
+            "closeTimeoutWarning": true,
+            "timeoutMs": 10000
+          }
+        ],
+        "comparisonControl": [
+          {
+            "run": "01a12da2-c69f-7d71-a05f-6e33f840aa7d",
+            "log": "/tmp/phase5-retro442/release-logs/01a12da2-c69f-7d71-a05f-6e33f840aa7d.jsonl",
+            "sha256": "adf1e8c8fb0c7ee4839b394579ae081bddf6c2aa1adf87235c50e33804423e77",
+            "testStartUtc": "2026-10-12T01:03:56.397Z",
+            "actualTestStartLoad": 23.99658203125,
+            "testStepWallS": 56.6,
+            "exitCode": 0,
+            "testFileCount": 338,
+            "testCount": 4371,
+            "closeTimeoutWarning": false,
+            "timeoutMs": null
+          }
+        ],
+        "initialAreas": [
+          "Own evidence and bounded canonical two-worker diagnostics; concrete source paths must be admitted after identifying an owner."
+        ],
+        "conditionalAreas": "After identifying the resource owner, the parent must check and admit the exact owning test/support teardown path before changes there. No broad runtime change is authorized by this proposal.",
+        "stableMetric": "Record presence/count of close-timeout warnings and the interval from completed test reporting to actual process exit for the same two-worker command and source/fixture scope, retaining actual step load. First isolate an owning shutdown witness; after a bounded cleanup fix show the same witness closes without the diagnostic timeout while its observable test contract passes. Treat overall full-suite wall separately; do not assert a 10-second speedup from the warning alone.",
+        "constraints": [
+          "Use retained logs first and existing hanging-process reporter; identify a resource before cleanup repair.",
+          "Do not increase/lower teardown timeout, hide the warning, force process exit, weaken assertions, add a mutable-data test gate or change budgets.",
+          "New work receives its own bead and native Areas/serialization checks. No diagnostics or benchmark ran during this retrospective."
+        ],
+        "duplicateEvidence": {
+          "unfinishedAdmitted": 210,
+          "unfinishedIntended": 5,
+          "matches": [],
+          "search": "hanging-process, close timed, open handle, test shutdown, teardown and vitest-sync-hang in full unfinished descriptions/notes",
+          "priorRetrospective442": "No retained close-timeout/resource-shutdown finding. Historical vitest synchronous trigger hangs concern different causes.",
+          "parentRequired": "Parent checks completed; all-status stable key sole 467, full fresh unfinished semantic query empty. Concrete source-path/owner checks remain required when a diagnostic identifies an owner."
+        },
+        "expectedDisposition": "Accepted and filed as 467. Its diagnostic result and conditional concrete cleanup repair are separate authorized work, not executed by this retrospective.",
+        "bead": "hv-umm2.467",
+        "filed": "Parent performed fresh all-status canonical and full unfinished semantic queries; sole 467 admitted after 465 and before gate 46, with exact edges before project admission. Proof: shutdown-filing/. No known resource cause or low-load violation is asserted."
+      }
+    ],
+    "unknowns": [
+      "Resource responsible for repeated Vitest shutdown timeout and whether exactly 10 seconds is its net marginal wall cost.",
+      "Comparable low-load D19 full-test performance and all gate/release step loads outside the three decoded logs.",
+      "Complete interval release failures/CI repair history before the 500-event history window; observed exports show no failed voting step.",
+      "Whole-project queue/usage/prerequisite totals and idle-lane denominator.",
+      "Exact 122 per-session UTC boundaries; filesystem report timestamps are bounds only.",
+      "393 reviewer\u2019s complete later outcome is not recorded in the frozen 443 notes; no extrapolated status.",
+      "Mixed compact test-delta definitions; explicit source classification is retained rather than rewritten."
+    ],
+    "conclusion": "One recurring shutdown diagnostic cause is accepted as canonical hv-umm2.467. Existing 459/460/457/462/464 scopes and completed fixes cover the other concrete findings. No additional optimization, budget revision, benchmark or test-pruning bead is justified by these loaded-host observations.",
+    "parentCorrections": {
+      "admittedBeforeWrites": true,
+      "sourceProof": "correction-source-proof.json",
+      "originalArchive": "frozen-originals/",
+      "corrections": [
+        {
+          "bead": "hv-umm2.130",
+          "path": "docs/plan/evidence/friction/hv-umm2.130.json",
+          "before": 0,
+          "after": 83
+        },
+        {
+          "bead": "hv-umm2.455",
+          "path": "docs/plan/evidence/friction/hv-umm2.455.json",
+          "before": 83,
+          "after": 77
+        },
+        {
+          "bead": "hv-umm2.458",
+          "path": "docs/plan/evidence/friction/hv-umm2.458.json",
+          "before": 10,
+          "after": 9
+        }
+      ],
+      "correctedCompactAggregate": {
+        "files": 10,
+        "lines": 3474,
+        "jsdomFiles": 0
+      },
+      "scope": "Only these three testDelta.lines fields are corrected by the parent under explicit native Areas admission. Original frozen samples/aggregate remain recorded separately; no runtime, test, budget or other field changes."
+    }
+  },
+  "measurementCorrections": [
+    {
+      "bead": "hv-umm2.130",
+      "path": "docs/plan/evidence/friction/hv-umm2.130.json",
+      "before": 0,
+      "after": 83
+    },
+    {
+      "bead": "hv-umm2.455",
+      "path": "docs/plan/evidence/friction/hv-umm2.455.json",
+      "before": 83,
+      "after": 77
+    },
+    {
+      "bead": "hv-umm2.458",
+      "path": "docs/plan/evidence/friction/hv-umm2.458.json",
+      "before": 10,
+      "after": 9
+    }
+  ],
+  "sourceCorrectionProof": {
+    "hv-umm2.130": {
+      "source": "4799ee07c9a059650af9360fa3865445abea964d",
+      "kind": "gate",
+      "rows": [
+        "82\t0\tsrc/content/specs/cards-18.scenarios.ts",
+        "2\t1\tsrc/content/specs/index.ts"
+      ]
+    },
+    "hv-umm2.458": {
+      "source": "163878dd20ce4093c14250cf6b72869dcf0476cd",
+      "kind": "gate",
+      "rows": [
+        "10\t1\tsrc/engine/view/view-knowledge.test.ts"
+      ]
+    },
+    "hv-umm2.455": {
+      "source": "9d8adbba95f033914a5a24e90d1a1ddfff356729",
+      "kind": "gate",
+      "rows": [
+        "80\t3\tsrc/engine/effects/primitives/contracts/when-erode-trigger.contracts.ts"
+      ]
+    }
+  },
+  "newImprovementBeads": [
+    "hv-umm2.467"
+  ],
+  "helperReportProvenance": {
+    "sha256": "8516194a882e82087fd89dcac12858de9e2cbaa7fc3ef68774d700a1f9c28a92",
+    "summaryDerived": "Duplicate path/manifest fields are omitted from the embedded audit; original report is retained in ignored audit inputs.",
+    "readOnlyHelper": "sage_retrospective_465 completed with no repository, test, benchmark, browser, server or native action."
+  },
+  "runtimeAndValidation": {
+    "commands": [
+      {
+        "label": "schema",
+        "pid": 50458,
+        "pgid": 50458,
+        "startedUtc": "2026-10-12T01:26:18.792981+00:00",
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "wrapperStartLoad": [
+          22.14013671875,
+          22.259765625,
+          20.51953125
+        ],
+        "state": "finished",
+        "seconds": 0.10656312500032072,
+        "finishedUtc": "2026-10-12T01:26:18.899737+00:00",
+        "exitCode": 0
+      },
+      {
+        "label": "trigger-after",
+        "pid": 50488,
+        "pgid": 50488,
+        "startedUtc": "2026-10-12T01:26:18.900134+00:00",
+        "argv": [
+          "npm",
+          "run",
+          "friction:triggers"
+        ],
+        "wrapperStartLoad": [
+          22.14013671875,
+          22.259765625,
+          20.51953125
+        ],
+        "state": "finished",
+        "seconds": 0.23525595899991458,
+        "finishedUtc": "2026-10-12T01:26:19.135410+00:00",
+        "exitCode": 0
+      },
+      {
+        "label": "review",
+        "pid": 50610,
+        "pgid": 50610,
+        "startedUtc": "2026-10-12T01:26:19.135746+00:00",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "wrapperStartLoad": [
+          22.14013671875,
+          22.259765625,
+          20.51953125
+        ],
+        "state": "finished",
+        "seconds": 0.32826658399972075,
+        "finishedUtc": "2026-10-12T01:26:19.464028+00:00",
+        "exitCode": 0
+      },
+      {
+        "label": "knip",
+        "pid": 50846,
+        "pgid": 50846,
+        "startedUtc": "2026-10-12T01:26:19.464389+00:00",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "wrapperStartLoad": [
+          22.14013671875,
+          22.259765625,
+          20.51953125
+        ],
+        "state": "finished",
+        "seconds": 5.3411906250003085,
+        "finishedUtc": "2026-10-12T01:26:24.805623+00:00",
+        "exitCode": 0
+      }
+    ],
+    "install": {
+      "execSession": 77388,
+      "actualExit": 0,
+      "npmReportedS": 3,
+      "pid": "Not sampled before short command completion."
+    },
+    "dispatchFriction": {
+      "pid": 16092,
+      "pgid": 16092,
+      "start": "2026-10-12T01:08:11.209887+00:00",
+      "end": "2026-10-12T01:08:11.465458+00:00",
+      "exitCode": 0
+    },
+    "freshObservedUtc": "2026-10-12T01:28:33.759711+00:00",
+    "groupsAbsent": [
+      16092,
+      50458,
+      50488,
+      50610,
+      50846
+    ],
+    "helperTerminal": true,
+    "servers": [],
+    "browsers": [],
+    "providers": [],
+    "reviewScope": {
+      "selected": "Friction records only; no runtime tests or static code checks selected for evidence diff.",
+      "records": 444,
+      "historicalUnknownMeasurements": 41,
+      "testsSelected": 0
+    },
+    "knip": "Sequential after review; workspace preparation, Knip and restoration passed."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "newEntrypoints": 0,
+    "newPlainModules": 0
+  },
+  "budgetDecision": "Current targets remain unchanged; observed loads/scopes do not certify a low-load D19 breach. Canonical 467 investigates the recurring close warning without asserting a resource cause.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual npm run review friction-records step start at 2026-10-12T01:26:19.383Z"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "friction-records",
+      "startUtc": "2026-10-12T01:26:19.383Z",
+      "oneMinute": 22.14013671875
+    }
+  ]
+}

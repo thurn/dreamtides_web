@@ -21,7 +21,7 @@
   "hostLoad": 7.64306640625,
   "testDelta": {
     "files": 0,
-    "lines": 0,
+    "lines": 83,
     "jsdomFiles": 0,
     "cases": 8
   },

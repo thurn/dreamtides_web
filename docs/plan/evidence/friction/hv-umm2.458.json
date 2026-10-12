@@ -9,7 +9,7 @@
   "hostLoad": 10,
   "testDelta": {
     "files": 0,
-    "lines": 10,
+    "lines": 9,
     "jsdomFiles": 0
   },
   "friction": []
