@@ -85,6 +85,8 @@ export interface OrderedChange {
   readonly timestamp: number;
   /** The floating effect making the change; `null` for a static ability. */
   readonly effect: EffectId | null;
+  /** The originating static ability's source; `null` for a floating effect. Internal provenance for visibility checks. */
+  readonly staticSource: AbilitySource | null;
   /** Source order for a static ability, creation order for a floating effect. */
   readonly order: number;
 }
@@ -254,12 +256,12 @@ export class Layers {
     this.state.floating.forEach((effect, index) => {
       const change = effect.change;
       if (!isContinuousChange(change) || LAYER[change.kind] !== layer) return;
-      ordered.push({ change, timestamp: effect.timestamp, effect: effect.id, order: index });
+      ordered.push({ change, timestamp: effect.timestamp, effect: effect.id, staticSource: null, order: index });
     });
     for (const entry of this.statics) {
       if (entry.layer !== layer) continue;
       for (const change of this.expand(entry)) {
-        ordered.push({ change, timestamp: entry.timestamp, effect: null, order: entry.order });
+        ordered.push({ change, timestamp: entry.timestamp, effect: null, staticSource: entry.source, order: entry.order });
       }
     }
     ordered.sort(byTimestamp);

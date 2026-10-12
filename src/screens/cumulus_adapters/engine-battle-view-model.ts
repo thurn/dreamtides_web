@@ -28,7 +28,7 @@ import type { Action, BattleView, EffectId, InstanceId, InstanceView, LoopId, Si
 import { opponent, sourceKey } from "../../engine";
 import { instanceCard, type EngineCatalog } from "../../engine/catalog";
 import type { Keyword, Trigger } from "../../engine/dsl/types";
-import type { CardStatus, EffectRef } from "../../engine/state/types";
+import type { CardStatus, EffectRef, Expiry, FloatingChange } from "../../engine/state/types";
 import { triggerBody } from "../../engine/triggers/body";
 import type { PresentationVisual } from "../../battle/components/presentation-items";
 import {
@@ -440,10 +440,13 @@ export function engineStatuses(
   const mark = (instance: InstanceId, entry: BattleStatusBadgeView) => {
     if (view.instances[instance] !== undefined) cards.set(instance, [...(cards.get(instance) ?? []), entry]);
   };
-  for (const change of view.staticPlayPermissions ?? []) {
-    const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, filter: change.filter, next: change.next, expiry: { at: "never" } };
+  const playFromBadge = (change: Extract<FloatingChange, { readonly kind: "playFrom" }>, expiry: Expiry) => {
+    const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, filter: change.filter, next: change.next, expiry };
     if (change.instance === null) sides[change.player].push(badge("duration", status));
     else mark(change.instance, badge("duration", status));
+  };
+  for (const change of view.staticPlayPermissions ?? []) {
+    playFromBadge(change, { at: "never" });
   }
   for (const { change, expiry, controller, source } of view.floating) {
     const lasting = expiry.at !== "never";
@@ -510,9 +513,7 @@ export function engineStatuses(
         break;
       }
       case "playFrom": {
-        const status: EngineStatusCopy = { kind: "playFrom", named: change.instance !== null, filter: change.filter, next: change.next, expiry };
-        if (change.instance === null) sides[change.player].push(badge("duration", status));
-        else mark(change.instance, badge("duration", status));
+        playFromBadge(change, expiry);
         break;
       }
       case "cannotPlay": {

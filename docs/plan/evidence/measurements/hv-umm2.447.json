@@ -1,0 +1,306 @@
+{
+  "bead": "hv-umm2.447",
+  "base": "e63276c2dd0d15ecb14cca9728e4863c4e364ff6",
+  "measurementWindow": {
+    "nativeClaimUtc": "2026-10-12T00:54:48Z",
+    "helperDispatchUtc": "not separately timestamped; preceded unchanged-source witness",
+    "frictionImplementMinBasis": "native claim to commit preparation, including parent setup and helper research; an explicitly labelled dispatch proxy",
+    "commitPreparationUtc": "2026-10-12T01:12:06.648238+00:00",
+    "nativeClaimToCommitPreparationMin": 17.310803966666665
+  },
+  "negativeWitness": {
+    "receipt": "unchanged-witness.log",
+    "sourceHashes": "unchanged-source.sha256",
+    "result": "intended failure: observed opposing hand-source permission versus absent static permission in seeded sampled comparableView; one failed,16 passed",
+    "seed": "static-permission-c",
+    "sourceUuid": "5e5e5e5e-0000-4000-8000-000000003930",
+    "unchangedProductionFiles": [
+      "src/engine/continuous/layers.ts",
+      "src/engine/view/view.ts",
+      "src/screens/cumulus_adapters/engine-battle-view-model.ts"
+    ],
+    "deckControl": "supported zone:any applies in deck and hand; hidden deck alternatives test omission and equality, not the original hand-specific negative failure"
+  },
+  "checks": {
+    "focused": {
+      "scope": "3 synthetic files: static-play-permissions, determinize, engine-battle-void-permission;71 tests before last knowledge/badge additions",
+      "starts": [
+        {
+          "step": "prepare",
+          "utc": "2026-10-12T00:58:43.691Z",
+          "oneMinuteLoad": 14.43798828125
+        },
+        {
+          "step": "test",
+          "utc": "2026-10-12T00:58:44.381Z",
+          "oneMinuteLoad": 13.84228515625
+        },
+        {
+          "step": "restore-local-assets",
+          "utc": "2026-10-12T00:58:46.524Z",
+          "oneMinuteLoad": 13.84228515625
+        }
+      ],
+      "stepElapsedSeconds": {
+        "prepare": 0.7,
+        "test": 2.1,
+        "restore-local-assets": 0.4
+      },
+      "receipt": "focused.log",
+      "aggregateWallSeconds": 3.2
+    },
+    "review": {
+      "scope": "required related check:264files3529tests plus typechecks/lint/cycles; finalsource held fixed",
+      "starts": [
+        {
+          "step": "prepare",
+          "utc": "2026-10-12T01:01:29.423Z",
+          "oneMinuteLoad": 16.5322265625
+        },
+        {
+          "step": "typecheck",
+          "utc": "2026-10-12T01:01:30.008Z",
+          "oneMinuteLoad": 16.5322265625
+        },
+        {
+          "step": "typecheck-node",
+          "utc": "2026-10-12T01:01:30.009Z",
+          "oneMinuteLoad": 16.5322265625
+        },
+        {
+          "step": "import-cycles",
+          "utc": "2026-10-12T01:01:30.009Z",
+          "oneMinuteLoad": 16.5322265625
+        },
+        {
+          "step": "lint",
+          "utc": "2026-10-12T01:01:30.010Z",
+          "oneMinuteLoad": 16.5322265625
+        },
+        {
+          "step": "test-related",
+          "utc": "2026-10-12T01:01:30.010Z",
+          "oneMinuteLoad": 16.5322265625
+        },
+        {
+          "step": "restore-local-assets",
+          "utc": "2026-10-12T01:02:20.065Z",
+          "oneMinuteLoad": 13.58544921875
+        }
+      ],
+      "stepElapsedSeconds": {
+        "prepare": 0.6,
+        "typecheck-node": 1.1,
+        "import-cycles": 1.5,
+        "typecheck": 1.7,
+        "lint": 3.0,
+        "test-related": 50.1,
+        "restore-local-assets": 0.7
+      },
+      "receipt": "review-final.log",
+      "aggregateWallSeconds": 51.4
+    },
+    "knip": {
+      "scope": "whole-repository unused exports/files",
+      "starts": [
+        {
+          "step": "prepare",
+          "utc": "2026-10-12T01:00:08.981Z",
+          "oneMinuteLoad": 15.611328125
+        },
+        {
+          "step": "knip",
+          "utc": "2026-10-12T01:00:09.748Z",
+          "oneMinuteLoad": 15.611328125
+        },
+        {
+          "step": "restore-local-assets",
+          "utc": "2026-10-12T01:00:12.913Z",
+          "oneMinuteLoad": 15.611328125
+        }
+      ],
+      "stepElapsedSeconds": {
+        "prepare": 0.8,
+        "knip": 3.2,
+        "restore-local-assets": 0.7
+      },
+      "receipt": "knip.log",
+      "aggregateWallSeconds": 4.7
+    }
+  },
+  "initialReviewFailure": {
+    "receipt": "review.log",
+    "result": "test fixture type slips: literal deck is not FunctionalZone (use any); forgetShuffledDeck requires IDs, not side. Corrected within existing tests. The first check had source changes during compilation; final review held all source fixed and passed."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 92,
+    "jsdomFiles": 0
+  },
+  "sourceFallout": "OrderedChange import audit has no external importers; internal readonly typed provenance on existing layer records. BattleView schema and persisted state/event/catalog/rules semantics unchanged. Adapter seam local only.",
+  "reviewFull": "not required: typed internal provenance, one presentation visibility filter, local UI mapping seam; no cross-cutting architecture or test infrastructure change",
+  "transitionsAndRecovery": {
+    "hiddenAlternatives": "hand/deck placement swaps with identical counts produce identical opposing comparable views; three seeds preserve full comparable presentation",
+    "knownSources": "own hand, revealed opponent hand and both revealed decks retain permissions; source provenance remains outside permission projection",
+    "forgetting": "deck shuffle knowledge loss clears permission for both viewers while retained earlier known view is unchanged",
+    "sourceLifetime": "existing source departure and control-transfer projection/badge contracts pass",
+    "conditions": "existing chosen-subtype applicability projection/badge contracts pass",
+    "failurePartialState": "presentation derives from committed view; layer provenance changes neither resolve nor emit nor persist. Existing partial-view optional-field path passes",
+    "reload": "existing serialize/deserialize permission projection test passes; seeded known-source view reconstructs exact presentation",
+    "floating": "hidden named target remains omitted; source privacy and single floating badges and all qualified numeric-zero bounds pass"
+  },
+  "qa": {
+    "early": {
+      "receipt": "early.result.json",
+      "uuidLog": "early-mobile.jsonl",
+      "screens": [
+        "early-god-mobile.png"
+      ],
+      "wallMs": {
+        "browserLeaseWait": 135763,
+        "serve": 1258,
+        "scenario": 5851,
+        "total": 142900
+      },
+      "hostLoad": 11.74853515625,
+      "source": "current447source after final review/assetrestore",
+      "visual": "loaded actual God/Avatar art; 28px badge fully visible,20px above hand. Parent cold-inspected same early capture."
+    },
+    "runtime": {
+      "earlyServerProcessGroup": 85089,
+      "cleanup": "Both runner observers terminal exit0; native browser clients/contexts and leases closed; exact85089/30051 groups stopped; final ps has neither group. Each runner reported free5174 at cleanup; laterpeer node35553 reused5174 and remained untouched. No owned runtime writers retained.",
+      "finalServerProcessGroup": 30051,
+      "port": 5174
+    },
+    "final": {
+      "receipt": "judged.result.json",
+      "scenario": "judged.mjs",
+      "sourceHashes": "final-source.sha256 verified unchanged after required review and browser runs",
+      "wallMs": {
+        "browserLeaseWait": 189597,
+        "serve": 1255,
+        "scenario": 18489,
+        "total": 209365
+      },
+      "hostLoad": 10.90087890625,
+      "screens": [
+        "live-god-desktop.png",
+        "live-god-mobile.png",
+        "live-god-void-choice-desktop.png",
+        "live-god-void-choice-mobile.png",
+        "live-god-removed-desktop.png",
+        "live-god-removed-mobile.png"
+      ],
+      "dimensions": {
+        "desktop": [
+          1440,
+          900
+        ],
+        "mobile": [
+          390,
+          844
+        ]
+      },
+      "visual": "Viewed final desktop/mobile board, mobile chooser/removal; loaded God and Avatar art, badge complete and mobile hand gap20px retained",
+      "publicLegalObservation": "read-only engine legalActions using current content and developmentLab catalog inputs over actual committed probe state; no intents submitted by observation",
+      "outcomes": {
+        "desktop": {
+          "offered": [
+            {
+              "kind": "play",
+              "card": "i11",
+              "from": "void"
+            }
+          ],
+          "excluded": [
+            "i12",
+            "i13"
+          ],
+          "ordinaryVoidPlay": {
+            "instance": "i11",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000002",
+            "reclaim": false
+          },
+          "sourceZone": "void",
+          "afterLegal": [],
+          "pileBefore": {
+            "count": "3",
+            "ring": "playable"
+          },
+          "after": {
+            "badges": 0,
+            "voidRing": null,
+            "count": "4"
+          },
+          "geometry": {
+            "label": "May play \u22642 energy cost characters from the void",
+            "x": 706,
+            "y": 653.8571166992188,
+            "width": 28,
+            "height": 28,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "game": "2hfh3g"
+        },
+        "mobile": {
+          "offered": [
+            {
+              "kind": "play",
+              "card": "i11",
+              "from": "void"
+            }
+          ],
+          "excluded": [
+            "i12",
+            "i13"
+          ],
+          "ordinaryVoidPlay": {
+            "instance": "i11",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000000002",
+            "reclaim": false
+          },
+          "sourceZone": "void",
+          "afterLegal": [],
+          "pileBefore": {
+            "count": "3",
+            "ring": "playable"
+          },
+          "after": {
+            "badges": 0,
+            "voidRing": null,
+            "count": "4"
+          },
+          "geometry": {
+            "label": "May play \u22642 energy cost characters from the void",
+            "x": 181,
+            "y": 616.109375,
+            "width": 28,
+            "height": 28,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "game": "zpm3hc"
+        }
+      },
+      "logs": [
+        {
+          "filename": "judged-desktop.jsonl",
+          "game": "2hfh3g",
+          "rows": 40
+        },
+        {
+          "filename": "judged-mobile.jsonl",
+          "game": "zpm3hc",
+          "rows": 40
+        }
+      ],
+      "caps": [],
+      "coldVisualReview": "Parent cold-inspected final desktop, mobile, mobile chooser and mobile removed:pass; loaded God/Avatar art, complete badge,20pxhandclearance, normalpicker, absentbadge/ringafterremoval. Parent independently verifiedallfivesource/testhashes."
+    }
+  }
+}

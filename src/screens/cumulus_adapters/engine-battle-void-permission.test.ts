@@ -15,6 +15,7 @@ import { energy, staticAbility } from "../../engine/dsl/builders";
 import { playFromZone } from "../../engine/effects/primitives/play-from-zone";
 import { CHOSEN_SUBTYPE } from "../../engine/effects/primitives/choose-subtype";
 import { cloneState } from "../../engine/state/clone";
+import { revealToBoth } from "../../engine/view/knowledge";
 import { syntheticId } from "../../engine/testing/synthetic-cards";
 import { surfaceChoices } from "./prompt-host-view-model";
 import type { FloatingEffect } from "../../engine/state/types";
@@ -102,6 +103,24 @@ describe("play permissions on the battle screen", () => {
     } finally {
       statusCopy.mockRestore();
     }
+  });
+
+  it("badges an identifiable hand-source permission while withholding it from an uninformed viewer", () => {
+    const sourceCard = {
+      id: syntheticId(0x4470), cardType: "character" as const, costs: [energy(4)], spark: 3,
+      subtype: testCardSubtype("Fixture Ancient"), speed: "standard" as const, status: "authored" as const,
+      abilities: () => [staticAbility(playFromZone("void", { cardType: "character", costAtMost: 0 }), { zone: "hand" })],
+    };
+    const local = createEngine(zoneCatalog([sourceCard]));
+    const { state, ids } = boardState(local.catalog, { active: "enemy", phase: "day", enemy: { hand: [sourceCard.id], deck } });
+    const statuses = (next: BattleState, viewer: "player" | "enemy") => engineStatuses(local.view(next, viewer), viewer, () => []).sides;
+    expect(statuses(state, "player")).toEqual({ player: [], enemy: [] });
+    expect(statuses(state, "enemy").enemy).toHaveLength(1);
+    const known = cloneState(state);
+    known.version += 1;
+    revealToBoth(known, [ids.enemy.hand[0]]);
+    expect(statuses(known, "player").enemy).toHaveLength(1);
+    expect(statuses(known, "player").player).toEqual([]);
   });
 
   it("keeps named hidden floating permissions private and visible floating badges single", () => {

@@ -286,7 +286,8 @@ export interface BattleView {
   readonly floating: readonly FloatingEffectView[];
   /**
    * Currently applicable static void-play permissions, derived from layer 6
-   * for presentation. Sources are not identified; a permission naming a card
+   * for presentation, only from sources the viewer can identify. Sources are
+   * not identified in this list; a permission naming a card
    * the viewer cannot identify is omitted. Absent in older presentation views.
    */
   readonly staticPlayPermissions?: readonly Extract<FloatingChange, { readonly kind: "playFrom" }>[];
@@ -486,8 +487,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
       affects: effect.affects.filter(visible),
     })),
     floating,
-    staticPlayPermissions: layers.changes(6).flatMap(({ change, effect }) =>
-      effect === null && change.kind === "playFrom" && (change.instance === null || visible(change.instance))
+    staticPlayPermissions: layers.changes(6).flatMap(({ change, effect, staticSource }) =>
+      effect === null && staticSource !== null && visibleSource(staticSource) && change.kind === "playFrom" && (change.instance === null || visible(change.instance))
         ? [copy(change)]
         : [],
     ),
