@@ -1,3 +1,5 @@
+import { characterYouControl, controls, enemyCharacter, event, ofSubtype, targetWhen } from "../../engine/dsl/builders";
+import { dissolve } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,9 @@ export default card({
   cardNumber: 336,
   art: { x: -0.294, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(dissolve(targetWhen(
+    controls(characterYouControl(ofSubtype("Warrior")), variant.amplified ? 2 : 3),
+    enemyCharacter(), enemyCharacter({ sparkAtMost: 2 }),
+  )))],
+  verifiedText: "14l5wf0xhc",
 });

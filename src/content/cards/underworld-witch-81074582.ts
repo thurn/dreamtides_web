@@ -1,3 +1,6 @@
+import { abandonCost, activated, exhaustSelf, fromVoid, ofSubtype } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { erode, materialize } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 414,
   art: { x: 0, y: 0.936, scale: 1 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(onMaterialized(), erode(3)),
+    activated([exhaustSelf(), abandonCost(ofSubtype("Warrior"))], materialize(fromVoid({ cardType: "character", ...ofSubtype("Warrior"), costAtMost: 2 }))),
+  ],
+  verifiedText: "2517phasgrj",
 });

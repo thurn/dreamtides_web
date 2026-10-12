@@ -1,0 +1,711 @@
+{
+  "bead": "hv-umm2.197",
+  "base": "5d93c937bf2d3c16a57ff3314b5edb0e30c6f475",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review starting one-minute sysctl load",
+        "value": 5.25
+      },
+      "implementWindow": {
+        "startSource": "original native dispatch journal",
+        "endSource": "Final precommit timestamp; exact commit process receipt is separate and the timestamp is within one minute of commit."
+      }
+    }
+  },
+  "windows": {
+    "originalDispatch": "2026-10-12T15:47:04.402Z",
+    "oldProxy": "2026-10-12T15:47:18.394095Z",
+    "firstProbe": {
+      "start": "2026-10-12T15:51:32.241914+00:00",
+      "end": "2026-10-12T15:51:33.411141+00:00",
+      "receipt": "conditional-target-probe.receipt.json"
+    },
+    "originalTerminalParkingEdge": null,
+    "freshDispatch": "2026-10-12T17:58:26.471Z",
+    "currentEndpoint": "2026-10-12T18:35:10.402199+00:00",
+    "interpretation": "Elapsed main window includes research, coordination, prerequisite parking, other-bead work, waits and verification. Overlapping windows are not summed productive time, CPU or quota."
+  },
+  "prerequisiteIntervals": {
+    "553": {
+      "claim": "2026-10-12T15:56:28Z",
+      "dispatch": "2026-10-12T15:58:41.006Z",
+      "precommit": "2026-10-12T17:10:26.699143Z",
+      "amendStart": "2026-10-12T17:10:35.564825Z",
+      "amendEnd": "2026-10-12T17:10:35.599487Z",
+      "approveStart": "2026-10-12T17:10:59.036707Z",
+      "approveEnd": "2026-10-12T17:12:19.447657Z",
+      "close": "2026-10-12T17:14:01Z",
+      "reviewStart": "2026-10-12T17:10:49.240179Z",
+      "reviewEnd": "2026-10-12T17:15:56.039921Z",
+      "provenance": "parent /tmp/root553 and /tmp/root564/originating-dispatch-corrections.json; frozen proxy records preserved"
+    },
+    "564": {
+      "claim": "2026-10-12T17:23:40Z",
+      "dispatch": "2026-10-12T17:26:44.280Z",
+      "commitEnd": "2026-10-12T17:38:14.736581Z",
+      "approveStart": "2026-10-12T17:39:21.915702Z",
+      "approveEnd": "2026-10-12T17:40:45.843977Z",
+      "close": "2026-10-12T17:44:24Z",
+      "reviewStart": "2026-10-12T17:39:21.169644Z",
+      "reviewEnd": "2026-10-12T17:45:08.553806Z",
+      "provenance": "parent /tmp/root564 and /tmp/worker564/final-handoff.json"
+    },
+    "215": {
+      "sourceHelperValidationOverlap": false,
+      "note": "Dormant clean checkpoint; native dependency coordination only in original197 dispatch-to-resume interval."
+    }
+  },
+  "commands": {
+    "ghost-qa": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/worker197-resume/ghost-judged.mjs",
+        "--bead",
+        "hv-umm2.197",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:09:58.822573+00:00",
+      "end": "2026-10-12T18:10:30.447496+00:00",
+      "exit": 1,
+      "wallSeconds": 31.62449812500563,
+      "pid": 12415,
+      "pgid": 12415,
+      "load": "{ 31.49 18.00 13.98 }",
+      "groupRemainingAtExit": []
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:03:58.443914+00:00",
+      "end": "2026-10-12T18:04:01.689059+00:00",
+      "exit": 0,
+      "wallSeconds": 3.2402227919956204,
+      "pid": 32125,
+      "pgid": 32125,
+      "load": "{ 6.78 8.90 11.05 }",
+      "groupRemainingAtExit": []
+    },
+    "ghost-growth-qa": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/worker197-resume/ghost-growth-judged.mjs",
+        "--bead",
+        "hv-umm2.197",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:27:04.327922+00:00",
+      "end": "2026-10-12T18:28:33.214427+00:00",
+      "exit": 0,
+      "wallSeconds": 88.90008008299628,
+      "pid": 47991,
+      "pgid": 47991,
+      "load": "{ 17.30 13.66 13.22 }",
+      "groupRemainingAtExit": []
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:03:14.222367+00:00",
+      "end": "2026-10-12T18:03:54.601093+00:00",
+      "exit": 0,
+      "wallSeconds": 40.378200374994776,
+      "pid": 31329,
+      "pgid": 31329,
+      "load": "{ 5.25 8.94 11.18 }",
+      "groupRemainingAtExit": []
+    },
+    "witch-qa-corrected": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/worker197-resume/witch-judged.mjs",
+        "--bead",
+        "hv-umm2.197",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:23:32.235736+00:00",
+      "end": "2026-10-12T18:24:38.227519+00:00",
+      "exit": 0,
+      "wallSeconds": 65.990913792004,
+      "pid": 33930,
+      "pgid": 33930,
+      "load": "{ 4.77 8.45 11.70 }",
+      "groupRemainingAtExit": []
+    },
+    "fury-qa-corrected": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/worker197-resume/fury-judged.mjs",
+        "--bead",
+        "hv-umm2.197",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:13:53.891376+00:00",
+      "end": "2026-10-12T18:13:59.956448+00:00",
+      "exit": 1,
+      "wallSeconds": 6.064928042003885,
+      "pid": 27443,
+      "pgid": 27443,
+      "load": "{ 11.56 18.11 15.38 }",
+      "groupRemainingAtExit": []
+    },
+    "fury-qa": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/worker197-resume/fury-judged.mjs",
+        "--bead",
+        "hv-umm2.197",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:07:47.609449+00:00",
+      "end": "2026-10-12T18:09:53.511507+00:00",
+      "exit": 1,
+      "wallSeconds": 125.90061037499981,
+      "pid": 91534,
+      "pgid": 91534,
+      "load": "{ 20.60 11.75 11.50 }",
+      "groupRemainingAtExit": []
+    },
+    "preflight": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "81074582-dfb3-497c-8c04-f97a24d6b1d4,f79c63f6-7cf1-4030-be39-217fd3c2fb7f,f7084ba7-8c85-4847-80df-b0c98ec77d78"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:04:05.827357+00:00",
+      "end": "2026-10-12T18:04:07.374179+00:00",
+      "exit": 0,
+      "wallSeconds": 1.5466005420021247,
+      "pid": 32360,
+      "pgid": 32360,
+      "load": "{ 6.56 8.82 11.01 }",
+      "groupRemainingAtExit": []
+    },
+    "fury-qa-final": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/worker197-resume/fury-judged.mjs",
+        "--bead",
+        "hv-umm2.197",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:14:52.178877+00:00",
+      "end": "2026-10-12T18:16:18.835352+00:00",
+      "exit": 0,
+      "wallSeconds": 86.65543629199965,
+      "pid": 33615,
+      "pgid": 33615,
+      "load": "{ 20.22 18.98 15.84 }",
+      "groupRemainingAtExit": []
+    },
+    "witch-qa": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/worker197-resume/witch-judged.mjs",
+        "--bead",
+        "hv-umm2.197",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:20:21.784235+00:00",
+      "end": "2026-10-12T18:21:44.921351+00:00",
+      "exit": 1,
+      "wallSeconds": 83.13613433299179,
+      "pid": 29267,
+      "pgid": 29267,
+      "load": "{ 6.34 11.44 13.34 }",
+      "groupRemainingAtExit": []
+    },
+    "coverage": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:03:04.979205+00:00",
+      "end": "2026-10-12T18:03:09.455313+00:00",
+      "exit": 0,
+      "wallSeconds": 4.475902165999287,
+      "pid": 31097,
+      "pgid": 31097,
+      "load": "{ 5.32 9.08 11.25 }",
+      "groupRemainingAtExit": []
+    },
+    "fury-cancel-qa": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/worker197-resume/fury-cancel-judged.mjs",
+        "--bead",
+        "hv-umm2.197",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:25:36.001734+00:00",
+      "end": "2026-10-12T18:26:40.717340+00:00",
+      "exit": 0,
+      "wallSeconds": 64.71483199999784,
+      "pid": 91185,
+      "pgid": 91185,
+      "load": "{ 16.53 11.69 12.52 }",
+      "groupRemainingAtExit": []
+    },
+    "sweep": {
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.197",
+        "--cards",
+        "81074582-dfb3-497c-8c04-f97a24d6b1d4,f79c63f6-7cf1-4030-be39-217fd3c2fb7f,f7084ba7-8c85-4847-80df-b0c98ec77d78"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:07:24.588066+00:00",
+      "end": "2026-10-12T18:13:41.770358+00:00",
+      "exit": 0,
+      "wallSeconds": 377.17813395800476,
+      "pid": 89588,
+      "pgid": 89588,
+      "load": "{ 15.15 10.16 10.94 }",
+      "groupRemainingAtExit": []
+    },
+    "fuzz-outer": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/worker197-resume/record.py",
+        "fuzz-inner",
+        "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "81074582-dfb3-497c-8c04-f97a24d6b1d4,f79c63f6-7cf1-4030-be39-217fd3c2fb7f,f7084ba7-8c85-4847-80df-b0c98ec77d78"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:04:14.376375+00:00",
+      "end": "2026-10-12T18:06:36.030964+00:00",
+      "exit": 0,
+      "wallSeconds": 141.65291558299214,
+      "pid": 32479,
+      "pgid": 32479,
+      "load": "{ 6.01 8.63 10.91 }",
+      "groupRemainingAtExit": []
+    },
+    "fuzz-inner": {
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "81074582-dfb3-497c-8c04-f97a24d6b1d4,f79c63f6-7cf1-4030-be39-217fd3c2fb7f,f7084ba7-8c85-4847-80df-b0c98ec77d78"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:04:14.401567+00:00",
+      "end": "2026-10-12T18:06:35.979750+00:00",
+      "exit": 0,
+      "wallSeconds": 141.57657712500077,
+      "pid": 32482,
+      "pgid": 32482,
+      "load": "{ 6.01 8.63 10.91 }",
+      "groupRemainingAtExit": []
+    },
+    "ghost-qa-corrected": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/worker197-resume/ghost-judged.mjs",
+        "--bead",
+        "hv-umm2.197",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:17:36.421794+00:00",
+      "end": "2026-10-12T18:20:05.309011+00:00",
+      "exit": 0,
+      "wallSeconds": 148.88546408399998,
+      "pid": 92802,
+      "pgid": 92802,
+      "load": "{ 8.78 14.86 14.73 }",
+      "groupRemainingAtExit": []
+    },
+    "evidence-schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-197-subtype-synergies",
+      "start": "2026-10-12T18:32:10.845713+00:00",
+      "end": "2026-10-12T18:32:10.968124+00:00",
+      "exit": 0,
+      "wallSeconds": 0.12233858299441636,
+      "pid": 57348,
+      "pgid": 57348,
+      "load": "{ 24.88 20.51 16.34 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "counts": {
+    "entities": 3,
+    "printedAmplifiedVariants": 2,
+    "nonTestAdd": 26,
+    "nonTestDelete": 3,
+    "nonTestChurn": 29,
+    "scenarioModules": 0,
+    "allPlainScenarioLines": 0,
+    "testEntrypoints": 0,
+    "jsdomFiles": 0,
+    "newPrimitives": 0,
+    "ownRD": 0,
+    "cardIssues": 0,
+    "sweepEffective": {
+      "pass": 34,
+      "skip": 26,
+      "fail": 0,
+      "pending": 0
+    },
+    "sweepRawAttempts": 60,
+    "judgedProductionPassRows": 24,
+    "focusedCaptureCorrectionPassRows": 2,
+    "retainedHarnessFailureRows": 4,
+    "preExistingDevelopmentChromeFailureRows": 1
+  },
+  "d20": {
+    "decision": "No scenarios: primitive composition with settled synthetic conditional target/branch, zone-card, cost ordering, figment and permanent gain contracts.",
+    "failurePaths": [
+      {
+        "path": "live Fury restriction changes while target is bound",
+        "disposition": "Existing conditional-target contracts cover normal threshold3/2, live changes, controllers, copy and replay."
+      },
+      {
+        "path": "inactive Ghost target branch",
+        "disposition": "Existing conditional-target contracts cover selected instruction scopes and local missing-target behavior."
+      },
+      {
+        "path": "void target disappears or changes before materialization",
+        "disposition": "Existing zone-card-refs/materialize contracts cover live matching, physical identity and replay."
+      },
+      {
+        "path": "abandon payment/cancellation/pre-cost target ordering",
+        "disposition": "Existing abandon-cost-order and activation/zone target contracts cover atomic payment and pre-cost target references."
+      },
+      {
+        "path": "zero-spark intrinsic Vengeful figment entry/capacity",
+        "disposition": "Existing figment/keyword entry contracts cover creation and capacity; catalog Wraith has intrinsicVengeful. No duplicate grant changes entry timing."
+      }
+    ],
+    "newFailureTests": "Composition N/A; no mirrored primitive tests."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 150913,
+    "prompts": 4281,
+    "interactiveReruns": 395,
+    "failures": 0,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 3
+    },
+    "targets": [
+      {
+        "uuid": "81074582-dfb3-497c-8c04-f97a24d6b1d4",
+        "included": 616,
+        "exercised": 239
+      },
+      {
+        "uuid": "f79c63f6-7cf1-4030-be39-217fd3c2fb7f",
+        "included": 615,
+        "exercised": 385
+      },
+      {
+        "uuid": "f7084ba7-8c85-4847-80df-b0c98ec77d78",
+        "included": 611,
+        "exercised": 229
+      }
+    ],
+    "coverageLimit": "Exercised UUID counts do not assert branch coverage. Native focused workflows provide activation and Dawn proof.",
+    "outerBeforeInnerUpperBoundSeconds": 0.025192,
+    "outerMinusInnerSeconds": 0.07633845799136907,
+    "timingScope": "Start/acquisition and total wrapper overhead bounds; not pure lock wait."
+  },
+  "qa": {
+    "method": "Canonical native MCP runner and sweep, ownleasedslots/servers >=5174, existingpublicinitialstage APIs and normal actions. No actor/policy/private-state rewrite.",
+    "failureDisposition": [
+      [
+        "fury",
+        "run-33cROh",
+        "fury-judged",
+        "First setup/readiness attempt recorded no play intent; battle observation became empty. Exact causal boundary is uncertain; corrected current-document readiness and canonical hand-control use succeed."
+      ],
+      [
+        "fury",
+        "run-qnMNrK",
+        "fury-judged",
+        "Prompt correctly offered the two legal physical enemies; QA expected candidates incorrectly included null empty rank slots. Physical occupants are filtered in the corrected harness."
+      ],
+      [
+        "ghost",
+        "run-MWDRkw",
+        "ghost-judged",
+        "Immediate post-stage read encountered a temporarily absent lazy probe before a play intent. Corrected harness waits the visible main boundary."
+      ],
+      [
+        "witch",
+        "run-7JBom5",
+        "witch-judged",
+        "Entry Erode3 and normal phase intents succeeded; the activation tap emitted no activation intent while the rendered source was still catching up with fold readiness. Corrected harness waits visible ready source and Day phase."
+      ]
+    ],
+    "captureCaptions": {
+      "fury-settled-desktop.png": "Original transition observation; run-SAxI7o fury-resolved-desktop.png is final rank-removal proof.",
+      "fury-settled-mobile.png": "Original transition observation; run-SAxI7o fury-resolved-mobile.png is final rank-removal proof.",
+      "ghost-dawn-desktop.png": "Original creation/transition observation with0 displayed spark; engine next-Dawn gain is separately proven.",
+      "ghost-dawn-mobile.png": "Original creation/transition observation with0 displayed spark; engine next-Dawn gain is separately proven.",
+      "ghost-grown-desktop.png": "Same physical amplified Wraith observed displaying2 after permanent gain.",
+      "ghost-grown-mobile.png": "Same physical amplified Wraith observed displaying2 after permanent gain."
+    },
+    "productionPaths": "Fury16 threshold/controller/variant/device cases plus2normalCancel; Ghost4both-Dawn variant/device cases and2focused displayed-growth corrections; Witch2real Erode/pre-cost voidtarget/activation cases.",
+    "preExisting": "docs/plan/evidence/pre-existing/hv-umm2.197.md",
+    "caps": "All native reports have empty Caps; first four failures are harness readiness/expectation failures."
+  },
+  "sourceHashes": [
+    {
+      "path": "src/content/cards/underworld-witch-81074582.ts",
+      "sha256": "a51b6ea7025bfb5a52139ffd2564f7910af589ce9c0c5b9190be85b1885f603c"
+    },
+    {
+      "path": "src/content/cards/fury-of-the-clan-f79c63f6.ts",
+      "sha256": "789ffd8440f0bd194c31eb69683c2e21f72f57e58ce082b6d4b66e5be93be549"
+    },
+    {
+      "path": "src/content/cards/ghostcaller-f7084ba7.ts",
+      "sha256": "105a8202a216c914858228a4fec6024eaefe18f848edb0e2f751a69db6a75a92"
+    }
+  ],
+  "original13Records": {
+    "manifestSha256": "7977db3976a943615c6e73a2987447663ed93491d23c6f013e456165907e4f14",
+    "entries": 13,
+    "allHashesMatch": true,
+    "records": {
+      "after-proof.json": {
+        "sha256": "0d3cd6f5c189aef6b8641d3420053867e8a5bc9688453fa26bd63eaf2bd63012",
+        "bytes": 1024
+      },
+      "baseline-hashes.json": {
+        "sha256": "96980fa9752412f3faf60dba51215216039af01394b051e3dab8c75b764317de",
+        "bytes": 879
+      },
+      "conditional-target-probe.receipt.json": {
+        "sha256": "e2b39ac55fe0e47f1afdb448e3a4732f67e04718d3e1c6671285888368051ff2",
+        "bytes": 427
+      },
+      "conditional-target-probe.started.json": {
+        "sha256": "5be5ff52bb7e6c27bf9318877fbc24f05e8ebe0cd521086173ee89161ee21bf8",
+        "bytes": 302
+      },
+      "conditional-target-probe.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "conditional-target-probe.stdout": {
+        "sha256": "3c6145982ee6929697f9b8400f5163951f9c8b920d5c0c988ac7781d49e6ef7f",
+        "bytes": 35052
+      },
+      "conditional-target-probe.ts": {
+        "sha256": "85cabd0b2682ebf63a322e28057f387012763dac5315e0bc8c79ba36a5e86c1d",
+        "bytes": 3928
+      },
+      "initial-observation.json": {
+        "sha256": "27b0a8a7774a64e500ee565620a552818c52ddeacf47c0c0096141803f66991a",
+        "bytes": 321
+      },
+      "parent-dispatch-observation.json": {
+        "sha256": "2d7f03fd36d199273f1d6effaba99633ce3663280af6830750bae4249d1d6799",
+        "bytes": 186
+      },
+      "parent-install.receipt.json": {
+        "sha256": "87a710a236035742be5e3dea2de30af5cd5d63d169c532ba227d439bd5cf7095",
+        "bytes": 360
+      },
+      "parent-install.started.json": {
+        "sha256": "18e280dd6401a36a1e964376cb13448cb270341e2afd3c853690e14ddb142e9a",
+        "bytes": 235
+      },
+      "record.py": {
+        "sha256": "2f678373a19308f508a173237b56f84b0bedb0711c9957ca04f5169f76048d9f",
+        "bytes": 1294
+      },
+      "resources-settled.json": {
+        "sha256": "dc1f5fe7309f90c27e4e7b864426d77356f531221dd4e69f30b34d13747be6b4",
+        "bytes": 241
+      }
+    }
+  },
+  "preQaManifest": {
+    "file": "pre-qa-manifest.json",
+    "sha256": "1b17bac65c3851b6df4fa62e416f957de23e518a7a26b627204258b36aeae851",
+    "repositoryInputs": 2295,
+    "repositoryInputsMatch": true,
+    "totalEntries": 2298,
+    "evolvingQaPaths": 3,
+    "initialGhostDraftSha256": "42781453e64fd339d0017dcdfc436c14abd3335c38e544174d9407fbb028ceba",
+    "initialGhostDraftBytesRetained": false,
+    "attributionGap": "Initial Ghost draft was overwritten during QA-only corrections. First failed Ghost callback exact byte linkage was not recorded; retainedv1 may include a later log-predicate repair. Its immediate missing-probe failure precedes that predicate. Current corrected full and focused-growth scripts are retained exactly. Do not infer a wholly unchanged preQA manifest."
+  },
+  "retainedScripts": [
+    {
+      "file": "ghost-judged-v1.mjs",
+      "sha256": "76a892fe64943a5fd508523bdaedad7043b93ade1504c4d86b6f320d6a4e1f98"
+    },
+    {
+      "file": "witch-judged.mjs",
+      "sha256": "d60600c31e9cdd06f0a2c25edd93bcd475408df0b51171c38a9e5858b41a8b9e"
+    },
+    {
+      "file": "witch-judged-v1.mjs",
+      "sha256": "b05ab73392fb2fdc89df4207ec14cb817955f088b5cfd9398fef80418e994525"
+    },
+    {
+      "file": "witch-judged-v2.mjs",
+      "sha256": "9f6b33ebc48c597bf6a8690d1002378ca2e363d527b6e1faccf14c0167800687"
+    },
+    {
+      "file": "fury-judged-v2.mjs",
+      "sha256": "5248708f17e981ad870e41d11d5c43c8f6ef04190b4a7d921252ba962528dce3"
+    },
+    {
+      "file": "fury-judged-v1.mjs",
+      "sha256": "8973539923528adb456d49ea9b166429f1fb3e3baec32ff340281a89baa54a34"
+    },
+    {
+      "file": "ghost-judged.mjs",
+      "sha256": "f564d1f7991d85c953e68ec830dbac51579641a087c88032871ebe0b8d837f6a"
+    },
+    {
+      "file": "fury-cancel-judged.mjs",
+      "sha256": "72c00837400988244adc1581737a728198a7e4435ac0a6e0b1ffe635fe4eb439"
+    },
+    {
+      "file": "fury-judged.mjs",
+      "sha256": "86a3aae75132a61a027687f9731d90bac761984b7c6f856011efec985ba5dee8"
+    },
+    {
+      "file": "ghost-growth-judged.mjs",
+      "sha256": "f55ca51bc74746151063a7ea22cb0f7ad36bf726dbab61753d95a4662d09aeae"
+    }
+  ],
+  "reviewRouting": {
+    "newReviewRequired": false,
+    "reason": "29non-testlines, pure settled composition, no core-review label/new surface; parent verified. Required553/564 fresh Sol reviews settled.",
+    "temporaryPolicy": "All required reviews until2026-10-14T01:00Z use fresh read-only CodexCLI gpt-5.6-sol; no Claude retry."
+  },
+  "resources": {
+    "at": "2026-10-12T18:32:57.417204+00:00",
+    "ownedPids": [
+      12415,
+      13562,
+      27443,
+      27481,
+      29267,
+      29295,
+      31097,
+      31329,
+      32125,
+      32360,
+      32479,
+      32482,
+      33615,
+      33930,
+      33959,
+      34168,
+      41667,
+      47991,
+      48029,
+      57348,
+      89588,
+      89629,
+      91185,
+      91229,
+      91534,
+      92802,
+      92841
+    ],
+    "ownedProcessGroups": [
+      12415,
+      13562,
+      27443,
+      27481,
+      29267,
+      29295,
+      31097,
+      31329,
+      32125,
+      32360,
+      32479,
+      32482,
+      33615,
+      33930,
+      33959,
+      34168,
+      41667,
+      47991,
+      48029,
+      57348,
+      89588,
+      89629,
+      91185,
+      91229,
+      91534,
+      92802,
+      92841
+    ],
+    "liveOwnedProcesses": [],
+    "retainedOwnProviderOrServerRecords": [],
+    "cleanup": "Native reports confirm each own server port free and cleanup; peer records left untouched."
+  }
+}
