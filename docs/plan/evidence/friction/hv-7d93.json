@@ -1,0 +1,27 @@
+{
+  "bead": "hv-7d93",
+  "phase": 5,
+  "implementMin": 11.73,
+  "localValidationS": {
+    "witness": 5.481,
+    "repaired-focused": 4.525,
+    "affected": 6.475,
+    "review": 51.126,
+    "repaired-review": 49.413,
+    "knip": 69.721,
+    "schema": 0.103,
+    "final-schema": 0.059,
+    "knipExecutionStage": 1.9
+  },
+  "hostLoad": 8.15234375,
+  "testDelta": {
+    "files": 0,
+    "lines": 191,
+    "jsdomFiles": 0,
+    "cases": 22
+  },
+  "friction": [],
+  "validationNotes": {
+    "knip": "69.721s command wall includes66.541s launch-to-preparation lock-wait proxy; actual Knip step1.9s. Parent overconstrained lightweight check, subsequently corrected D17 classification; one invocation completed without retry or peer action."
+  }
+}

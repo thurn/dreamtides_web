@@ -328,7 +328,7 @@ export function planCosts(
     const allAnswersPayable = options.endsPlayTime === true && !nested && isLast &&
       (cost.cost === "discard" || cost.cost === "banishFromVoid" || cost.cost === "banishFromAnyVoid") &&
       !("captureCost" in cost && cost.captureCost === true) && resourcesPayable();
-    const chosen = ctx.choose<ChooseCardsPrompt>({
+    const selected = ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards",
       side,
       purpose: purpose(CARD_ROLE[cost.cost]),
@@ -337,6 +337,8 @@ export function planCosts(
       // Too few candidates for the least X is an empty prompt, a dead end like a short fixed count.
       max: count ?? Math.max(remaining.length, leastCount(cost)),
     }, allAnswersPayable ? { allAnswersPayable: true } : undefined);
+    const selectedIds = new Set(selected);
+    const chosen = remaining.filter((id) => selectedIds.has(id));
     // A captured card cost (a discarded or abandoned card's) is read now,
     // before payment, so it holds even for a figment that then ceases to exist.
     const captures = "captureCost" in cost && cost.captureCost === true;

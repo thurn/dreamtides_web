@@ -1,0 +1,304 @@
+{
+  "bead": "hv-7d93",
+  "base": "e42821537fcff9806ca3aed83a7a5600b8505dbf",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T10:22:53Z",
+    "startProvenance": "Explicit parent helper dispatch clock; includes read-only research, coordination, implementation, checks and waits. Native claim ACK10:22:46Z precedes this window.",
+    "endUtc": "2026-10-12T10:34:36.994456+00:00",
+    "endProvenance": "Final precommit evidence refresh; final schema and commit tail excluded, actual commit timestamp definitive."
+  },
+  "validation": [
+    {
+      "name": "witness",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "selected cost order contracts"
+      ],
+      "pid": 9918,
+      "startUtc": "2026-10-12T10:27:11.976915+00:00",
+      "endUtc": "2026-10-12T10:27:17.458013+00:00",
+      "wallS": 5.481,
+      "exit": 1,
+      "log": "/tmp/hv-7d93-witness.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "repaired-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "selected cost order contracts"
+      ],
+      "pid": 28853,
+      "startUtc": "2026-10-12T10:27:56.899919+00:00",
+      "endUtc": "2026-10-12T10:28:01.425392+00:00",
+      "wallS": 4.525,
+      "exit": 1,
+      "log": "/tmp/hv-7d93-repaired-focused.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "affected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts"
+      ],
+      "pid": 32059,
+      "startUtc": "2026-10-12T10:28:33.213236+00:00",
+      "endUtc": "2026-10-12T10:28:39.688367+00:00",
+      "wallS": 6.475,
+      "exit": 0,
+      "log": "/tmp/hv-7d93-affected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 53315,
+      "startUtc": "2026-10-12T10:29:55.960756+00:00",
+      "endUtc": "2026-10-12T10:30:47.087771+00:00",
+      "wallS": 51.126,
+      "exit": 2,
+      "log": "/tmp/hv-7d93-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "repaired-review",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 67029,
+      "startUtc": "2026-10-12T10:31:16.764026+00:00",
+      "endUtc": "2026-10-12T10:32:06.177578+00:00",
+      "wallS": 49.413,
+      "exit": 0,
+      "log": "/tmp/hv-7d93-repaired-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 82187,
+      "startUtc": "2026-10-12T10:32:17.873332+00:00",
+      "endUtc": "2026-10-12T10:33:27.595321+00:00",
+      "wallS": 69.721,
+      "exit": 0,
+      "log": "/tmp/hv-7d93-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 93611,
+      "startUtc": "2026-10-12T10:32:55.405620+00:00",
+      "endUtc": "2026-10-12T10:32:55.509207+00:00",
+      "wallS": 0.103,
+      "exit": 0,
+      "log": "/tmp/hv-7d93-schema.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 97406,
+      "startUtc": "2026-10-12T10:34:00.596078+00:00",
+      "endUtc": "2026-10-12T10:34:00.655261+00:00",
+      "wallS": 0.059,
+      "exit": 0,
+      "log": "/tmp/hv-7d93-final-schema.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "unchangedSourceWitness": {
+    "failed": 20,
+    "passed": 2,
+    "cases": 22,
+    "failureScope": "Fourteen supported selected-form/controller permutations, ordered groups, X and selected-prefix full-state equivalence fail before source repair. Forced whole-hand/self and singleton capture controls pass.",
+    "readOnlyRevalidation": {
+      "observerChunk": "ef026a",
+      "pid": "not captured; finite command terminal exit0",
+      "loopsEqual": true,
+      "forwardHash": "024bb0f04241d0",
+      "reverseHash": "12c7767a41336b",
+      "forwardDiscarded": [
+        "i2",
+        "i4"
+      ],
+      "reverseDiscarded": [
+        "i4",
+        "i2"
+      ],
+      "forwardVoid": [
+        "i4",
+        "i2"
+      ],
+      "reverseVoid": [
+        "i2",
+        "i4"
+      ]
+    }
+  },
+  "fixtureCorrection": {
+    "observer": "repaired-focused",
+    "scope": "One assertion newly reached after normalization: chooseNumber max5 assumed raw energy capacity; guard correctly narrows to3 matching affordable hand cards. Expectation corrected to3; production unchanged.",
+    "productFailuresAttribution": "This assertion was not reached by the initial intended X permutation failure. First repaired run21pass/1fixturefail."
+  },
+  "scope": {
+    "productionPaths": [
+      "src/engine/rules/costs.ts"
+    ],
+    "body": "Local planCosts plan selected physical IDs, ordered by captured remaining candidates before existing X/sourceDeparted/used/payments logic.",
+    "productionDiff": {
+      "added": 3,
+      "removed": 1
+    },
+    "unchangedBodies": [
+      "payCosts",
+      "Context",
+      "replay",
+      "saved-state validators"
+    ],
+    "fallout": [],
+    "exportedApi": [],
+    "schemaChanges": false
+  },
+  "testDelta": {
+    "plainModules": 1,
+    "runnerFiles": 0,
+    "jsdomFiles": 0,
+    "lines": 191,
+    "cases": 22
+  },
+  "contracts": {
+    "selectedForms": [
+      "discard",
+      "abandon",
+      "return",
+      "reveal",
+      "banishFromVoid",
+      "banishFromAnyVoid",
+      "banishFromHand"
+    ],
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "identity": "Duplicate UUID printing with distinct physical instance IDs; matching candidates retain current side/back/front or own/opponent void order.",
+    "controls": [
+      "Printed multi-cost order and earlier-selection exclusions",
+      "Nested alternatives and paid optional groups",
+      "Count captured X and independently bounded energy X",
+      "Forced whole-hand and explicit self costs",
+      "Singleton printed-cost capture",
+      "Raw selected prefix, reload, cancellation, stale/invalid/wrong actor/concurrent and duplicate answers"
+    ]
+  },
+  "recoveryCoverage": {
+    "newSelectedPrefix": "Before-payment JSON prefix is reconstructed with raw submitted answer unchanged; committed state stays at start through reload/cancel; completion matches equivalent set and commits once.",
+    "existingRollbackContracts": [
+      "returnCost > rolls back all earlier return and energy writes when the paying step throws, publishing no partial movement",
+      "banishFromAnyVoidCost > rolls back energy and both owners' banishment when the public paying step throws"
+    ],
+    "unchangedRunner": "Focused contracts/fold-intents/fold-prompts/loops run existing clone-and-commit and error boundary contracts. No new persistence or partial-write protocol."
+  },
+  "compatibility": {
+    "inFlightBeforePayment": "Selected cost answers retain current RecordedAnswer shape/fingerprint and raw values; reordered plan is rebuilt on resume and payment occurs after existing commit point.",
+    "historicalCommittedState": "The repair orders each newly planned payment; existing saved zone contents and loop histories retain their stored data. Schema unchanged.",
+    "crossVersionPublishedPrefixLimit": "For an old step suspended later in its effect after paying a multi-card cost, presentation/log rows already published may keep previous submitted payment order. Resume rebuilds the prefix in current candidate order and skips the persisted publishedEvents count; those historical payloads are not rewritten. No event-payload migration or retroactive normalization claimed."
+  },
+  "preExisting": "No additional confirmed issue outside selected payment ordering.",
+  "checksNotRun": {
+    "full": "Bounded local internal correction, no cross-cutting architecture/configuration/test infrastructure changes.",
+    "fuzz": "Entity-free deterministic correction; staged release supplies fuzz.",
+    "browser": "No player-facing prompt/renderer/interaction changes."
+  },
+  "runtime": {
+    "servers": [],
+    "ports": [],
+    "browsers": [],
+    "providers": [],
+    "writers": "One implementation helper; each command PID tracked by finite wrapper and settled before dependent edits/checks.",
+    "terminalProcesses": "All captured command root PIDs terminal; read-only reenactment finite exit0 with PID not captured. No servers, ports, browsers, providers."
+  },
+  "validationCounts": {
+    "affected": {
+      "files": 5,
+      "cases": 1547
+    },
+    "firstReviewTests": {
+      "files": 268,
+      "cases": 4051,
+      "result": "pass; command failed typecheck"
+    },
+    "finalReview": {
+      "files": 268,
+      "cases": 4051
+    }
+  },
+  "typeFixtureRepair": {
+    "error": "Required typecheck rejected unbranded arbitrary synthetic subtypes and widened filter type.",
+    "repair": "Existing parseCardSubtype creates both custom synthetic subtype constants; filter retains that branded value.",
+    "scope": "New contract only; physical strings and behavior unchanged; production unchanged."
+  },
+  "proceduralAttempt": {
+    "context": "Metadata refresh attempted while Knip waited on requested shared lock.",
+    "result": "Missing /tmp/hv-7d93-knip.json raised FileNotFoundError before writes; interim schema validated existing evidence. Refresh awaited actual terminal command receipt; no source mutation or retry.",
+    "knipWallTime": "69.721s includes lock wait; execution stage timestamps retained in raw log."
+  },
+  "knipWaitAttribution": {
+    "totalWallS": 69.721,
+    "launchToPreparationS": 66.541,
+    "preparationStartedUtc": "2026-10-12T10:33:24.414Z",
+    "knipStageS": 1.9,
+    "cause": "Parent requested quick review/Knip under shared heavy lock; parent subsequently corrected that Knip is outside D17 heavy list. Existing one invocation completed before correction; no termination/retry/replacement or peer/shared lock mutation.",
+    "waitProvenance": "Launch-to-preparation wall interval is a lock-wait proxy including wrapper startup, not a kernel timing measurement."
+  }
+}
