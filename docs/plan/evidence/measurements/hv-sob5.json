@@ -1,0 +1,111 @@
+{
+  "bead": "hv-sob5",
+  "base": "1135fe84f9a5bf3a7b760fea63c0bd6693a879e5",
+  "implementWindowProvenance": {
+    "start": "Parent native rollout spawn timestamp: call_40fe94a3f4a34eaa9430878689881cad, 2026-10-12T14:30:48.775Z.",
+    "firstHelperRead": "Own native rollout first read-only exec: 2026-10-12T14:30:54.837Z.",
+    "end": "UTC sampled at final commit invocation and used as the Git committer timestamp; includes research, coordination and verification."
+  },
+  "validation": {
+    "focused": {
+      "command": "npx vitest run src/engine/effects/primitives/contracts.test.ts -t 'mandatory cost-captured activation X|cost-captured X replay and atomic payment'",
+      "wallS": 3.65,
+      "passed": 78
+    },
+    "focusedRelated": {
+      "passed": 143,
+      "note": "Intermediate 70 own cases plus landed activated-X, abandon-X and selected-cost contracts; eight further own boundary cases subsequently pass in focused/full runs."
+    },
+    "review": {
+      "command": "npm run review",
+      "wallS": 54.17,
+      "files": 268,
+      "passed": 4398
+    },
+    "knip": {
+      "command": "npm run knip",
+      "wallS": 4.4
+    },
+    "reviewFull": {
+      "command": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run review:full",
+      "wallS": 99.76,
+      "userS": 220.44,
+      "sysS": 33.27,
+      "files": 349,
+      "passed": 5389,
+      "otherChecks": [
+        "full lint",
+        "both type checks",
+        "knip",
+        "import cycles",
+        "friction schema",
+        "production bundle"
+      ]
+    },
+    "fuzz": {
+      "command": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 200 --seed hv-sob5-cost-captured-x",
+      "wallS": 93.24,
+      "engineWallS": 92.4,
+      "engineCpuS": 102.6,
+      "games": 200,
+      "steps": 105816,
+      "prompts": 2848,
+      "interactiveReruns": 322,
+      "bounded": {
+        "legality": 0,
+        "prompts": 0
+      },
+      "failures": 0
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-12T14:41:31.326Z",
+      "scope": "npm run review prepare start",
+      "oneMinute": 14.71875
+    },
+    {
+      "at": "2026-10-12T14:42:31.937Z",
+      "scope": "npm run review:full prepare start",
+      "oneMinute": 20.03515625
+    }
+  ],
+  "resourceLedger": [
+    {
+      "kind": "full review heavy lock",
+      "pid": 44256,
+      "childNpmPid": 44349,
+      "port": null,
+      "state": "exited after pass"
+    },
+    {
+      "kind": "seeded fuzz heavy lock",
+      "pid": 16115,
+      "childEnginePid": 16156,
+      "port": null,
+      "state": "exited after pass"
+    }
+  ],
+  "qa": {
+    "browserRequired": false,
+    "captures": [],
+    "note": "Headless prompt/cost protocol repair with no UI or presentation edit. Full validation synthetic resource tests own their transient server fixtures."
+  },
+  "failurePaths": [
+    "mid-preparation error preserves input state",
+    "post-payment synthetic error rolls back energy and captured-card writes without publishing payment",
+    "serialized fresh-engine replay at every prefix",
+    "invalid and stale answers and wrong-X target fingerprints rejected",
+    "other actor and concurrent action rejected while in flight",
+    "completed answer cannot replay a payment"
+  ],
+  "scopeLimitations": [
+    "nested optional or alternative X dependencies retain their own protocol and need separate semantic admission",
+    "self-referential capture selectors not covered",
+    "card play preparation not changed"
+  ],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "preExistingIssues": [],
+  "reviewRouting": "Parent schedules fresh read-only gpt-5.6-sol Codex CLI review under temporary user override; implementation helper does not review its own work."
+}

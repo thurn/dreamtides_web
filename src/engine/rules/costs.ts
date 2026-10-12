@@ -218,6 +218,59 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
   banishFromHand: "offeringCost",
 };
 
+/** An activation's local X binding and mandatory captured-card selections before targeting. */
+export interface PreparedCostX {
+  readonly x: number | null;
+  readonly payments: readonly PlannedCost[];
+}
+
+/**
+ * Prepares mandatory cost-captured X only when the activation's immediate
+ * modes or targets read it. Count costs choose a number before targeting;
+ * copiable-cost captures choose their actual payment card. These selections
+ * are replay-local and planCosts validates them against every other payment
+ * and target before the commit point. Targetless activation protocols retain
+ * their printed-order card choices. Energy-X and abandon-X preparation use
+ * chooseX in either case. Nested choices keep their own planning protocol.
+ */
+export function prepareCostX(
+  ctx: StepContext,
+  side: Side,
+  source: AbilitySource,
+  costs: readonly Cost[],
+  purpose: (role: PromptRole) => PromptPurpose,
+  targetsNeedX: boolean,
+): PreparedCostX {
+  let x = chooseX(ctx, side, costs, purpose("chooseX"));
+  const payments: PlannedCost[] = [];
+  if (!targetsNeedX) return { x, payments };
+  for (const cost of costs) {
+    if (cost.cost !== "discard" && cost.cost !== "abandon") continue;
+    if (cost.captureCost !== true) continue;
+    const candidates = cardCandidates(ctx.state, ctx.catalog, side, source, cost, x ?? undefined)
+      .filter(id => !payments.some(payment => payment.cards.includes(id)));
+    const selected = ctx.choose<ChooseCardsPrompt>({
+      kind: "chooseCards", side, purpose: purpose(CARD_ROLE[cost.cost]), candidates, min: 1, max: 1,
+    });
+    const cards = candidates.filter(id => selected.includes(id));
+    const value = copiableCostOf(ctx.state, ctx.catalog, cards[0]);
+    if (x !== null && x !== value) throw new Infeasible("Captured card payment disagrees with X");
+    x = value;
+    payments.push({ cost, cards });
+  }
+  const counts = costs.filter((cost): cost is ChoosingCost =>
+    (cost.cost === "discard" || cost.cost === "banishFromVoid" || cost.cost === "abandon") && cost.count === "x",
+  );
+  if (x === null && counts.length > 0) {
+    const min = Math.max(...counts.map(leastCount));
+    const max = Math.min(...counts.map(cost => cardCandidates(ctx.state, ctx.catalog, side, source, cost)
+      .filter(id => !payments.some(payment => payment.cards.includes(id))).length));
+    if (max < min) throw new Infeasible("Too few matching cards for cost-captured X");
+    x = ctx.choose<ChooseNumberPrompt>({ kind: "chooseNumber", side, purpose: purpose("chooseX"), min, max });
+  }
+  return { x, payments };
+}
+
 /**
  * Settles how the costs will be paid, as play-time prompts in printed order:
  * which alternative of each "A or B" cost (an alternative is legal when it
@@ -241,7 +294,9 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
  * already-payable resources to prove all its card selections at once.
  * `selectorX` supplies prepared X to character-cost selectors during play or
  * activation. Callers with no explicit binding, including manual planning,
- * use the source card's stored X.
+ * use the source card's stored X. `preparedPayments` carries mandatory
+ * copiable-cost captures selected before activation targeting; these cards
+ * must still be available and distinct from targets and earlier payments.
  */
 export function planCosts(
   ctx: StepContext,
@@ -252,7 +307,7 @@ export function planCosts(
   purpose: (role: PromptRole) => PromptPurpose,
   excluded: readonly InstanceId[],
   modifier: CostModifier = NO_COST_MODIFIER,
-  options: { readonly endsPlayTime?: true; readonly selectorX?: number } = {},
+  options: { readonly endsPlayTime?: true; readonly selectorX?: number; readonly preparedPayments?: readonly PlannedCost[] } = {},
 ): CostPlan {
   const { state, catalog } = ctx;
   const used = [...excluded];
@@ -343,7 +398,13 @@ export function planCosts(
     const allAnswersPayable = options.endsPlayTime === true && !nested && isLast &&
       (cost.cost === "discard" || cost.cost === "banishFromVoid" || cost.cost === "banishFromAnyVoid") &&
       !("captureCost" in cost && cost.captureCost === true) && resourcesPayable();
-    const selected = ctx.choose<ChooseCardsPrompt>({
+    const prepared = options.preparedPayments?.find(payment => payment.cost === cost);
+    if (prepared !== undefined && (
+      prepared.cards.length !== (count ?? leastCount(cost)) ||
+      prepared.cards.some(id => !remaining.includes(id)) ||
+      new Set(prepared.cards).size !== prepared.cards.length
+    )) throw new Infeasible("Prepared cost cards conflict with targets or another payment");
+    const selected = prepared?.cards ?? ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards",
       side,
       purpose: purpose(CARD_ROLE[cost.cost]),

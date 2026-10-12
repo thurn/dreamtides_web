@@ -1,0 +1,23 @@
+{
+  "bead": "hv-sob5",
+  "phase": 5,
+  "implementMin": 17.354,
+  "implementWindow": {
+    "start": "2026-10-12T14:30:48.775Z",
+    "end": "2026-10-12T14:48:10Z"
+  },
+  "localValidationS": {
+    "focused": 3.65,
+    "review": 54.17,
+    "knip": 4.4,
+    "reviewFull": 99.76,
+    "fuzz": 93.24
+  },
+  "hostLoad": 14.71875,
+  "testDelta": {
+    "files": 1,
+    "lines": 331,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
