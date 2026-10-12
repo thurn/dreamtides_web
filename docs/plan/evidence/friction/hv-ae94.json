@@ -1,0 +1,25 @@
+{
+  "bead": "hv-ae94",
+  "phase": 5,
+  "implementMin": 12.648,
+  "hostLoad": 25.28125,
+  "localValidationS": {
+    "played-event-focused": 5.911,
+    "old-count-counterfactual": 4.121,
+    "restored-focused": 3.796,
+    "affected": 5.865,
+    "review": 47.606,
+    "knip": 4.121,
+    "schema": 0.118,
+    "frozen-schema": 0.059,
+    "commit": 0.025
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 39,
+    "jsdomFiles": 0,
+    "cases": 2
+  },
+  "friction": [],
+  "phaseStatus": "Locally validated; parent native delivery owed"
+}

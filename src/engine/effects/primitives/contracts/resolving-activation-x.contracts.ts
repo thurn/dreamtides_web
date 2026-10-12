@@ -17,6 +17,7 @@ import { boardState } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { abandon } from "../abandon";
+import { banishSelfOnResolve } from "../banish-self-on-resolve";
 import { chooseOne } from "../choose-one";
 import { choosePlayer } from "../choose-player";
 import { chooseSubtype } from "../choose-subtype";
@@ -26,6 +27,7 @@ import { grant } from "../grant";
 import { ifThen } from "../if-then";
 import { payTo } from "../pay-to";
 import { prevent } from "../prevent";
+import { sequence } from "../sequence";
 
 const exactX = enemyCharacter({ sparkAtLeast: x(), sparkAtMost: x() });
 const predicate = { sparkAtLeast: x(), sparkAtMost: x() };
@@ -188,8 +190,6 @@ describe("resolving activation X contracts", () => {
     if (pending?.prompt.kind !== "chooseTargets") throw new Error("Missing deferred targets");
     expect(pending.prompt.candidates).toEqual(f.ids.enemy.back.slice(0, 2));
     expect(pending).toEqual(fold.pending(targeting));
-    expect(saved.inFlight?.answers.map(answer => answer.value)).toEqual([true]);
-    expect(saved.inFlight?.automatic).toBe(true);
     expect(saved.committed.sides.player.currentEnergy).toBe(3);
     expect(targeting.committed).toEqual(confirming.committed);
     expect(reload.reduce(saved, { kind: "answer", side: "player", promptId: pending.prompt.id, value: [instance(f.ids.enemy.back[2])] }).kind).toBe("bounced");
@@ -227,4 +227,43 @@ describe("resolving activation X contracts", () => {
     expect(stateHash(resolving.committed)).toBe(before);
     expect(resolving.committed.sides.player.currentEnergy).toBe(3);
   });
+
+  for (const side of ["player", "enemy"] as const) it(`${side} played event retains chosen X after banishing its stack source`, () => {
+    const card: EngineCardDefinition = {
+      ...v.event0, id: syntheticId(0x7120), costs: [energyX(0)],
+      abilities: () => [event(sequence(
+        banishSelfOnResolve(), gainPoints(count(exactX)),
+        ifThen(controls(exactX, 2), gainPoints(1)),
+        abandon("you", predicate), payTo({ energy: 1 }, dissolve(target(exactX))),
+      ))],
+    };
+    const E = createEngine(testCatalog([card]));
+    const other: Side = side === "player" ? "enemy" : "player";
+    const { state: placed, ids } = boardState(E.catalog, { active: side, phase: "day",
+      [side]: { hand: [card.id], back: [v.vanilla2.id, v.vanilla2.id, v.vanilla3.id], energy: 5, deck },
+      [other]: { back: [v.vanilla2.id, v.vanilla2.id, v.vanilla3.id], deck },
+    });
+    const state = { ...placed, config: { ...placed.config, autoAnswerForcedPrompts: false } };
+    const source = ids[side].hand[0];
+    const own = instance(ids[side].back[0]);
+    const selected = instance(ids[other].back[0]);
+    const answers = new Answers([2, [own], true, [selected]]);
+    const result = E.apply(state, side, { kind: "play", card: source, from: "hand" }, answers);
+    answers.exhausted();
+    expect(answers.prompts.map(prompt => prompt.kind)).toEqual(["chooseNumber", "chooseCards", "confirm", "chooseTargets"]);
+    expect(answers.prompts[1]).toMatchObject({ candidates: ids[side].back.slice(0, 2) });
+    expect(answers.prompts[3]).toMatchObject({ candidates: ids[other].back.slice(0, 2) });
+    expect(result.state.instances[source]).toMatchObject({ zone: "banished", status: { x: null } });
+    expect(result.state.sides[side].score).toBe(3);
+    expect(result.state.sides[side].currentEnergy).toBe(2);
+    expect(result.events).toContainEqual(expect.objectContaining({ kind: "banished", instance: source }));
+    expect(result.events).toContainEqual({ kind: "abandoned", instance: own, side });
+    expect(result.events).toContainEqual({ kind: "dissolved", instance: selected, side: other });
+    expect(result.state.instances[own].zone).toBe("void");
+    expect(result.state.instances[selected].zone).toBe("void");
+    for (const owner of [side, other]) for (const id of ids[owner].back.slice(1)) expect(result.state.instances[instance(id)].zone).toBe("play");
+    expect(result.events.some(event => event.kind === "noLegalTarget")).toBe(false);
+    expect(invariantViolations(result.state, E.catalog)).toEqual([]);
+  });
+
 });

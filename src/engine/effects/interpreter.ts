@@ -568,7 +568,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
   });
 }
 
-/** What a condition is checked against: its controller, source, and paid optional costs. */
+/** What a condition is checked against: its controller, source, paid optional costs, and optional resolving X. */
 export type { ConditionScope } from "../dsl/conditions";
 
 /** Whether a condition holds now, including intervening conditions outside a resolving effect. */

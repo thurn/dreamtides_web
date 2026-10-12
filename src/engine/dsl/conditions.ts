@@ -12,7 +12,7 @@ export interface ConditionScope {
   readonly controller: Side;
   readonly source: AbilitySource;
   readonly optionalPaid: readonly boolean[];
-  /** Resolving X; static scopes omit it and retain stored source X. */
+  /** Resolving X; scopes without a resolving binding omit it and read stored source X. */
   readonly x?: number | null;
 }
 

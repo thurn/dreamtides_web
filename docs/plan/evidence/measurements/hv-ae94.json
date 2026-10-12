@@ -1,0 +1,425 @@
+{
+  "bead": "hv-ae94",
+  "base": "42207781b2ac89efa72e1a8dea8ed344b399358e",
+  "status": "LOCALLY VALIDATED FINAL; parent native delivery owed",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T12:41:05+00:00",
+    "startProvenance": "Parent predispatch sample; near-dispatch proxy, not exact runtime boundary. Native claim12:40:08Z is separate. Includes all helper read/research, coordination, tests, counterfactual, verification and evidence.",
+    "endUtc": "2026-10-12T12:53:43.890601+00:00",
+    "endProvenance": "Actual final pre-amend evidence refresh after ordinary checks and parent-confirmed pre-existing documentation; final schema/amend tail excluded, definitive commit timestamp in Git."
+  },
+  "scope": {
+    "productionCommentsOnly": [
+      "src/engine/dsl/selectors.ts boundOf X comment",
+      "src/engine/effects/interpreter.ts ConditionScope re-export comment",
+      "src/engine/dsl/conditions.ts optional x field comment"
+    ],
+    "test": "Existing resolving-activation-x.contracts.ts: append two played-event cases plus imports; delete exactly two saved inFlight internals assertions. Preserve observable reload/actor/stale/target/payment-once/fingerprint and existing52-case matrix.",
+    "moduleLines": 269,
+    "newCases": 2,
+    "testDelta": {
+      "added": 41,
+      "deleted": 2,
+      "net": 39,
+      "entrypoints": 0,
+      "jsdomFiles": 0
+    },
+    "fallout": [],
+    "behaviorChanges": false,
+    "signatureChanges": false,
+    "schemaChanges": false,
+    "DSLChanges": false,
+    "entities": []
+  },
+  "validation": [
+    {
+      "name": "played-event-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "played event retains chosen X after banishing its stack source"
+      ],
+      "pid": 68895,
+      "startUtc": "2026-10-12T12:43:52.172774+00:00",
+      "endUtc": "2026-10-12T12:43:58.084393+00:00",
+      "wallS": 5.911,
+      "exit": 0,
+      "log": "/tmp/hv-ae94-played-event-focused.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "old-count-counterfactual",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "played event retains chosen X after banishing its stack source"
+      ],
+      "pid": 97963,
+      "startUtc": "2026-10-12T12:44:32.433067+00:00",
+      "endUtc": "2026-10-12T12:44:36.554666+00:00",
+      "wallS": 4.121,
+      "exit": 1,
+      "log": "/tmp/hv-ae94-old-count-counterfactual.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "restored-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "resolving activation X contracts"
+      ],
+      "pid": 3547,
+      "startUtc": "2026-10-12T12:45:08.466079+00:00",
+      "endUtc": "2026-10-12T12:45:12.261921+00:00",
+      "wallS": 3.796,
+      "exit": 0,
+      "log": "/tmp/hv-ae94-restored-focused.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "affected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts"
+      ],
+      "pid": 6493,
+      "startUtc": "2026-10-12T12:45:52.969889+00:00",
+      "endUtc": "2026-10-12T12:45:58.834644+00:00",
+      "wallS": 5.865,
+      "exit": 0,
+      "log": "/tmp/hv-ae94-affected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 16419,
+      "startUtc": "2026-10-12T12:47:15.303400+00:00",
+      "endUtc": "2026-10-12T12:48:02.909649+00:00",
+      "wallS": 47.606,
+      "exit": 0,
+      "log": "/tmp/hv-ae94-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 36126,
+      "startUtc": "2026-10-12T12:48:09.356477+00:00",
+      "endUtc": "2026-10-12T12:48:13.477742+00:00",
+      "wallS": 4.121,
+      "exit": 0,
+      "log": "/tmp/hv-ae94-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 92649,
+      "startUtc": "2026-10-12T12:49:21.891503+00:00",
+      "endUtc": "2026-10-12T12:49:22.009479+00:00",
+      "wallS": 0.118,
+      "exit": 0,
+      "log": "/tmp/hv-ae94-schema.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "frozen-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 96202,
+      "startUtc": "2026-10-12T12:50:04.792400+00:00",
+      "endUtc": "2026-10-12T12:50:04.851814+00:00",
+      "wallS": 0.059,
+      "exit": 0,
+      "log": "/tmp/hv-ae94-frozen-schema.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "commit",
+      "command": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/hv-ae94-commit.txt"
+      ],
+      "pid": 96214,
+      "startUtc": "2026-10-12T12:50:04.917658+00:00",
+      "endUtc": "2026-10-12T12:50:04.943083+00:00",
+      "wallS": 0.025,
+      "exit": 0,
+      "log": "/tmp/hv-ae94-commit.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "counterfactual": {
+    "startUtc": "2026-10-12T12:44:32.411752+00:00",
+    "endUtc": "2026-10-12T12:44:36.559035+00:00",
+    "restoredExactBytes": true,
+    "sha256": "b34c0eb96f0087558774615fbe1d69f037929a3bb6e7bf0a28abed210fc97cf0",
+    "mutation": "Only evaluate selector-count selectorX argument restored to undefined; comments/callers unchanged",
+    "resultExit": 1
+  },
+  "failureProof": "Actual old evaluate count selectorX restored to undefined fails both played-event cases on public score1 versus3. Workflow choices remain legal; exact original production bytes restored in finally before restored focused/affected/review checks. No claim of independent counterfactual proof for every reader.",
+  "observableCoverage": "Real energy-X played event chooses2, banishes its own source stack item, gains2 from count plus1 from resolving controls, abandons selected own2spark physical instance, pays1 and chooses/dissolves selected enemy2spark instance. Both controllers retain3spark and duplicate2spark controls, source banished/statusXnull, final energy2 and score3; existing announcement and invariant contracts checked.",
+  "classification": "Documentation and coverage only, no new runtime transition or production body changes. Focused54cases and affected hub/fold, required review under parent-requested heavy lock/workers2, Knip outside lock/schema. No full/fuzz/browser/coreCLI required.",
+  "limits": {
+    "static": "Existing before/after keyword assertion pins observable retained-source behavior; static layer callers cannot receive resolving context. No invented static context or private helper test.",
+    "otherReaders": "Parent separate real-engine diagnostics confirm sourceSpark predicate exceptions and stored-X numeric-value discrepancy; native hv-vnue/hv-roz5 own them. Not reproduced by this helper or repaired by this scope.",
+    "playedEvent": "Representative sequence tests count, resolving controls, abandon and deferred payTo target. No new played-event prevent/mode branch coverage claim."
+  },
+  "runtime": {
+    "commands": [
+      {
+        "name": "played-event-focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "played event retains chosen X after banishing its stack source"
+        ],
+        "pid": 68895,
+        "startUtc": "2026-10-12T12:43:52.172774+00:00",
+        "endUtc": "2026-10-12T12:43:58.084393+00:00",
+        "wallS": 5.911,
+        "exit": 0,
+        "log": "/tmp/hv-ae94-played-event-focused.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "old-count-counterfactual",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "played event retains chosen X after banishing its stack source"
+        ],
+        "pid": 97963,
+        "startUtc": "2026-10-12T12:44:32.433067+00:00",
+        "endUtc": "2026-10-12T12:44:36.554666+00:00",
+        "wallS": 4.121,
+        "exit": 1,
+        "log": "/tmp/hv-ae94-old-count-counterfactual.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "restored-focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "resolving activation X contracts"
+        ],
+        "pid": 3547,
+        "startUtc": "2026-10-12T12:45:08.466079+00:00",
+        "endUtc": "2026-10-12T12:45:12.261921+00:00",
+        "wallS": 3.796,
+        "exit": 0,
+        "log": "/tmp/hv-ae94-restored-focused.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "affected",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/fold/fold-prompts.test.ts",
+          "src/engine/fold/fold-intents.test.ts"
+        ],
+        "pid": 6493,
+        "startUtc": "2026-10-12T12:45:52.969889+00:00",
+        "endUtc": "2026-10-12T12:45:58.834644+00:00",
+        "wallS": 5.865,
+        "exit": 0,
+        "log": "/tmp/hv-ae94-affected.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "review",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 16419,
+        "startUtc": "2026-10-12T12:47:15.303400+00:00",
+        "endUtc": "2026-10-12T12:48:02.909649+00:00",
+        "wallS": 47.606,
+        "exit": 0,
+        "log": "/tmp/hv-ae94-review.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 36126,
+        "startUtc": "2026-10-12T12:48:09.356477+00:00",
+        "endUtc": "2026-10-12T12:48:13.477742+00:00",
+        "wallS": 4.121,
+        "exit": 0,
+        "log": "/tmp/hv-ae94-knip.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "schema",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 92649,
+        "startUtc": "2026-10-12T12:49:21.891503+00:00",
+        "endUtc": "2026-10-12T12:49:22.009479+00:00",
+        "wallS": 0.118,
+        "exit": 0,
+        "log": "/tmp/hv-ae94-schema.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "frozen-schema",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 96202,
+        "startUtc": "2026-10-12T12:50:04.792400+00:00",
+        "endUtc": "2026-10-12T12:50:04.851814+00:00",
+        "wallS": 0.059,
+        "exit": 0,
+        "log": "/tmp/hv-ae94-frozen-schema.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "commit",
+        "command": [
+          "git",
+          "commit",
+          "-F",
+          "/tmp/hv-ae94-commit.txt"
+        ],
+        "pid": 96214,
+        "startUtc": "2026-10-12T12:50:04.917658+00:00",
+        "endUtc": "2026-10-12T12:50:04.943083+00:00",
+        "wallS": 0.025,
+        "exit": 0,
+        "log": "/tmp/hv-ae94-commit.log",
+        "terminal": true,
+        "ports": []
+      }
+    ],
+    "servers": [],
+    "ports": [],
+    "browsers": [],
+    "leases": [],
+    "providers": [],
+    "setup": {
+      "pid": 29795,
+      "exit": 0,
+      "terminal": true,
+      "owner": "Parent predispatch npm-install observer",
+      "timestamps": "Not supplied, not invented"
+    },
+    "inspections": "Finite read/status/helper wrapper commands returned; their uncaptured PIDs are not invented. Counterfactual test subprocess PID is captured in receipt; restoration completed.",
+    "writer": "Sole helper; production bodies restored and read-only after counterfactual. Checks drain before final source/evidence freeze and one local commit."
+  },
+  "finalChecks": {
+    "focused": "54passed,3.796s after exact production restoration",
+    "affected": "3files/1655passed,5.865s",
+    "review": "268files/4203tests, lint and both TypeScript checks pass,47.606s",
+    "knip": "Pass outside heavy lock,4.121s",
+    "schema": "Final frozen-schema tail captured after evidence refresh and accounted in final handoff."
+  },
+  "parentPreExisting": {
+    "sourceSparkFollowUp": "hv-vnue",
+    "storedXValuesFollowUp": "hv-roz5",
+    "scope": "Parent separate verification, unchanged production behavior on42207781 plus comment-only edits; own count counterfactual does not run on those failing paths. No code/test changes in evidence-only amendment.",
+    "receipts": [
+      {
+        "path": "/tmp/dreamtides-executor-01a12e91/myhi-preexisting-verification.json",
+        "pid": 64990,
+        "exit": 0,
+        "wallS": 1.1649156249986845,
+        "startUtc": "2026-10-12T12:43:07.264677+00:00",
+        "endUtc": "2026-10-12T12:43:08.429748+00:00",
+        "terminal": true,
+        "finding": "Resolving abandon and controls this-character-spark predicates throw; actually played X3 character fixed1 activation gainPointsX gives0 while stored-X3 target bound correctly dissolves2spark enemy."
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a12e91/myhi-source-spark-prevent.json",
+        "pid": 2115,
+        "exit": 0,
+        "wallS": 0.41261379099887563,
+        "startUtc": "2026-10-12T12:44:55.656819+00:00",
+        "endUtc": "2026-10-12T12:44:56.069616+00:00",
+        "terminal": true,
+        "finding": "Actual Interrupt prevent-unless-abandons source-spark predicate throws."
+      }
+    ]
+  },
+  "review": "Exact independent myhi review /tmp/dreamtides-executor-01a12e91/reviews/hv-myhi.md fully read; no blocking finding. ae94 discharges admitted comments, played-event coverage and brittle assertions only."
+}

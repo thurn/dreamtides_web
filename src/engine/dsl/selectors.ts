@@ -69,8 +69,9 @@ export function zoneCount(state: BattleState, catalog: EngineCatalog, count: Car
 export type SourceSparkReader = () => number;
 
 /**
- * A selector bound now: a constant; for X, an explicit play-preparation X,
- * otherwise the source card's X; a zone count, read through `read`; or the
+ * A selector bound now: a constant; for X, an explicit preparation or
+ * resolving binding, otherwise the source card's stored X; a zone count,
+ * read through `read`; or the
  * source's ✦ through `sourceSpark`, which throws without a reader.
  */
 function boundOf(
