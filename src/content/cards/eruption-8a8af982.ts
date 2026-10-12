@@ -1,3 +1,6 @@
+import { enemyCharacter, event, target, thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenScores } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 508,
   art: { x: -0.342, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    event(p.dissolve(target(enemyCharacter({ sparkAtMost: variant.amplified ? 3 : 2 })))),
+    triggered(whenScores(enemyCharacter()), p.returnFromVoid(thisCardIn("void")), { zone: "void" }),
+  ],
+  verifiedText: "spg674zv4l",
 });

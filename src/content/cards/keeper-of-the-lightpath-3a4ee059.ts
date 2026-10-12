@@ -1,3 +1,5 @@
+import { activated, exhaustSelf, fromVoid } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 102,
   art: { x: -0.096, y: 0.9, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([exhaustSelf()], p.grantReclaim(fromVoid({ cardType: "event", costAtMost: 3 })))],
+  verifiedText: "lkc20t1c1c",
 });

@@ -471,11 +471,19 @@ A character "scores ⍟" when a challenge converts its spark into victory points
 that is, when an unpaired challenger scores or when a challenger wins a blocked
 lane. This is the event that
 abilities reading "When an X you control scores ⍟" respond to, and abilities
-reading "When the opponent scores ⍟" respond to it once for each character the
-opponent controls that scores. A character that scores 0⍟ does not score. By contrast, a
+reading "When the opponent scores ⍟" or "When an enemy scores ⍟" respond to it
+once for each character the opponent controls that scores. A character that scores 0⍟ does not score. By contrast, a
 flat "gain N⍟" effect (such as an Abandon-for-points ability, or Fatigue) awards
 victory points to a player without any character scoring, and does not count as
 a character scoring.
+
+An ability such as "When an enemy scores ⍟, return this card from your void
+to your hand" names your void, so it works while its card is there (see
+[Ability Types](#ability-types)), not while the card is in play, in a hand, or
+on the stack. "This card" names the card while it is in your void: when
+several enemies score in one Challenge phase, it returns once, and a trigger
+that resolves after the card has left the void does nothing. Returning it is
+not a draw.
 
 An equivalent quantity of ⍟ in an ability triggered by scoring is the number
 of points that challenge awarded, captured when the character scored. A later
