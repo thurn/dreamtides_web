@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   parseBattleCardId as cardId,
   parsePromptId,
+  type BattleCardId,
 } from "../../types/identifiers";
 import type {
   MobileBattleCardPickerView,
@@ -144,6 +145,42 @@ describe("MobileBattleScreen", () => {
     click(submit());
     expect(onCardPickerSubmit).toHaveBeenCalledWith(candidateIds.slice(0, 2));
     expect(onHandCardActivate).not.toHaveBeenCalled();
+  });
+
+  it("rings every board-picker candidate as a legal target before selection and as selected after, leaving others unringed", () => {
+    const view = makeView();
+    const [backCard, frontCard] = [view.player.backRank[1]?.card, view.player.frontRank[0]?.card];
+    const [handCard, otherHandCard] = view.playerHand;
+    if (backCard == null || frontCard == null || handCard === undefined || otherHandCard === undefined) {
+      throw new Error("fixture has no cards");
+    }
+    const ring = (container: HTMLElement, id: BattleCardId) =>
+      [...query(container, `[data-battlefield-card][data-battle-card-id="${id}"]`).querySelectorAll<HTMLElement>("*")]
+        .map((element) => element.style.boxShadow)
+        .filter((shadow) => shadow !== "")
+        .join(" / ");
+    const plain = mount(view, { canInteract: false });
+    const targetable = mount(view, { canInteract: false, targetableCardIds: [backCard.id] });
+    const picker = { ...cardPicker([[backCard, "backRank"], [handCard, "hand"]], { count: 2, minCount: 1 }), ringCandidates: true };
+    const container = mount({ ...view, cardPicker: picker }, { canInteract: false, onCardPickerSelectionChange: vi.fn() });
+    const unselectedHand = ring(container, otherHandCard.id);
+
+    expect(ring(container, backCard.id)).toBe(ring(targetable, backCard.id));
+    expect(ring(container, backCard.id)).not.toBe(ring(plain, backCard.id));
+    expect(ring(container, handCard.id)).not.toBe(unselectedHand);
+    expect(ring(container, frontCard.id)).toBe(ring(plain, frontCard.id));
+
+    const candidateRings = [ring(container, backCard.id), ring(container, handCard.id)];
+    click(query(container, `[data-battlefield-card][data-battle-card-id="${backCard.id}"]`));
+    click(query(container, `[data-battlefield-card][data-battle-card-id="${handCard.id}"]`));
+    const selectedRings = [ring(container, backCard.id), ring(container, handCard.id)];
+    selectedRings.forEach((selected, index) => {
+      expect(selected).not.toBe(candidateRings[index]);
+    });
+    expect(selectedRings[0]).not.toBe(ring(plain, backCard.id));
+    expect(selectedRings[1]).not.toBe(unselectedHand);
+    expect(ring(container, frontCard.id)).toBe(ring(plain, frontCard.id));
+    expect(ring(container, otherHandCard.id)).toBe(unselectedHand);
   });
 
   it("steps the prompt's source card aside while a choice on the battlefield is open", () => {

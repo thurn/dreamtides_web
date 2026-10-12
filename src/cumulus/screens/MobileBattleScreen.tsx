@@ -274,6 +274,12 @@ export interface MobileBattleCardPickerView {
   readonly canResolve: boolean;
   readonly presentation: "board" | "gallery";
   /**
+   * On the board, every candidate wears the legal-target ring before it is
+   * selected, as a targetable card does. Otherwise only `highlighted`
+   * candidates are ringed there.
+   */
+  readonly ringCandidates?: boolean;
+  /**
    * The gallery offers Cancel (`onPromptCancel`) beside its one answer
    * control: the play awaiting it may still be cancelled.
    */
@@ -684,6 +690,25 @@ function pickerCandidate(
       (candidate) => candidate.instanceId === instanceId,
     ) ?? null
   );
+}
+
+/**
+ * The ring a board card wears while a card picker is open: the selected ring
+ * once chosen, else the legal-target ring for a ringed candidate, else none
+ * (which also suppresses the card's playable outline).
+ */
+function pickerCardSelection(
+  cardPicker: MobileBattleCardPickerView,
+  candidate: MobileBattleCardPickerCandidateView | null,
+  selected: boolean,
+): { readonly selected: boolean; readonly kind: GameCardSelection } {
+  return {
+    selected:
+      selected ||
+      (candidate !== null &&
+        (candidate.highlighted || cardPicker.ringCandidates === true)),
+    kind: selected ? CARD_PICKER_SELECTION : CARD_PICKER_HIGHLIGHT_SELECTION,
+  };
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
@@ -1126,15 +1151,13 @@ const FarHand = memo(function FarHand({
                 zone="far-hand"
                 showRulesText
                 selection={
-                  candidate === null
+                  cardPicker === null || candidate === null
                     ? undefined
-                    : {
-                        selected:
-                          selectedPickerCardIds.includes(cardId) || highlighted,
-                        kind: selectedPickerCardIds.includes(cardId)
-                          ? CARD_PICKER_SELECTION
-                          : CARD_PICKER_HIGHLIGHT_SELECTION,
-                      }
+                    : pickerCardSelection(
+                        cardPicker,
+                        candidate,
+                        selectedPickerCardIds.includes(cardId),
+                      )
                 }
                 interaction={
                   pickerCandidateIds.has(cardId)
@@ -1870,12 +1893,13 @@ const Rank = memo(function Rank({
                         : isStackTarget
                           ? { selected: true, kind: STACK_TARGET_SELECTION }
                           : undefined
-                      : {
-                          selected: isPickerSelected || isPickerHighlighted,
-                          kind: isPickerSelected
-                            ? CARD_PICKER_SELECTION
-                            : CARD_PICKER_HIGHLIGHT_SELECTION,
-                        }
+                      : cardPicker === null
+                        ? undefined
+                        : pickerCardSelection(
+                            cardPicker,
+                            candidate,
+                            isPickerSelected,
+                          )
                   }
                   interaction={
                     candidate !== null
@@ -2174,12 +2198,7 @@ const NearHand = memo(function NearHand({
             selection={
               cardPicker === null
                 ? undefined
-                : {
-                    selected: isPickerSelected || isPickerHighlighted,
-                    kind: isPickerSelected
-                      ? CARD_PICKER_SELECTION
-                      : CARD_PICKER_HIGHLIGHT_SELECTION,
-                  }
+                : pickerCardSelection(cardPicker, candidate, isPickerSelected)
             }
             interaction={
               cardPicker !== null

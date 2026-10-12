@@ -358,6 +358,9 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
             optional: min === 0,
             canResolve: true,
             presentation: onBoard ? "board" : "gallery",
+            // Every candidate is legal: ring each as the targets surface
+            // rings its targetable characters.
+            ringCandidates: true,
             cancellable: prompt.cancellable && min > 0,
           },
           answer: cardsAnswer,

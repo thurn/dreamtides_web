@@ -168,7 +168,7 @@ describe("buildEngineBattleScreenModel", () => {
     const editor = screenAtPrompt(state, foresee);
     const [first, second] = ids.player.back.map(id);
 
-    expect(picker.model.view.cardPicker).toMatchObject({ count: 2, minCount: 0, optional: true, presentation: "board" });
+    expect(picker.model.view.cardPicker).toMatchObject({ count: 2, minCount: 0, optional: true, presentation: "board", ringCandidates: true });
     const pick = surfaceOf(picker.model, "picker").answer;
     expect(pick([first, second])).toEqual(ids.player.back);
     expect(pick([first])).toEqual([ids.player.back[0]]);
@@ -183,6 +183,20 @@ describe("buildEngineBattleScreenModel", () => {
       { card: bottom, to: "top" },
       { card: top, to: "void" },
     ]);
+  });
+
+  it("rings each character an abandon cost may take on the board, the cost's every candidate", () => {
+    const { committed } = labSlice("void-activation");
+    const activate = engine.legalActions(committed, "player").find((action) => action.kind === "activate");
+    if (activate === undefined) throw new Error("no activation");
+    const { model } = screenAtPrompt(committed, activate);
+    const { picker } = surfaceOf(model, "picker");
+    const { backRank, frontRank } = committed.sides.player;
+    const inPlay = [...backRank, ...frontRank].flatMap((instance) => (instance === null ? [] : [id(instance)]));
+
+    expect(picker.presentation).toBe("board");
+    expect(picker.ringCandidates).toBe(true);
+    expect(new Set(picker.candidateIds)).toEqual(new Set(inPlay));
   });
 
   it.each([
@@ -212,6 +226,7 @@ describe("buildEngineBattleScreenModel", () => {
     const picker = surfaceOf(model, "picker");
 
     expect(picker.picker.presentation).toBe(presentation);
+    expect(picker.picker.ringCandidates).toBe(true);
     expect(picker.picker.candidateIds).toEqual(candidates.map(id));
     expect(picker.picker.candidates.map((candidate) => candidate.owner)).toEqual([holder, holder]);
     expect(new Set(picker.picker.candidates.map((candidate) => candidate.cardUuid)).size).toBe(1);
