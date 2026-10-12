@@ -10,6 +10,7 @@ import type {
   AdditionalCostAbility,
   AllSpec,
   BoundValue,
+  TriggerSubjectCostValue,
   CardCountValue,
   CardFilter,
   CharacterSelector,
@@ -319,6 +320,7 @@ export function fromVoid(
     readonly upTo?: boolean;
     readonly another?: boolean;
     readonly costAtMost?: ZoneTargetSpec["costAtMost"];
+    readonly costLessThan?: ZoneTargetSpec["costLessThan"];
   } = {},
 ): ZoneTargetSpec {
   return {
@@ -331,6 +333,7 @@ export function fromVoid(
     ...(options.upTo === true ? { upTo: true } : {}),
     ...(options.another === true ? { another: true } : {}),
     ...(options.costAtMost === undefined ? {} : { costAtMost: options.costAtMost }),
+    ...(options.costLessThan === undefined ? {} : { costLessThan: options.costLessThan }),
   };
 }
 
@@ -423,6 +426,9 @@ export function x(): XValue {
 export function plus(of: ValueExpr, amount: number): ValueExpr {
   return { value: "plus", of, amount };
 }
+
+/** The triggering subject's captured copiable cost; 0 when a resolving effect has no binding. */
+export function triggerSubjectCost(): TriggerSubjectCostValue { return { value: "subjectCost" }; }
 
 /**
  * "That card", for a value: the cards `node`, an earlier node of the same

@@ -95,6 +95,8 @@ export interface EffectEnv {
   readonly root: EffectNode;
   /** The card the triggering event concerns, for a trigger; otherwise `null`. */
   readonly subject: InstanceId | null;
+  /** Copiable cost captured for this trigger; null outside a bound trigger. */
+  readonly lastKnownSubjectCost: number | null;
   /** The gain a "when … gains ✦" trigger matched; otherwise `null`. */
   readonly gain: SparkGain | null;
   /** The positive challenge award the scoring trigger matched; otherwise `null`. */

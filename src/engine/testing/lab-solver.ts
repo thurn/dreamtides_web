@@ -10,7 +10,7 @@ import { mentionsChosenSubtype } from "../effects/primitives/choose-subtype";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
 import { fixedEnergy, xCost } from "../dsl/energy";
-import type { Ability, BoundValue, CardCost, CardCountValue, CardFilter, CharacterPredicate, CharacterSelector, Cost, PlayerRef, StackItemSelector, TriggeredAbility, Variant, ZoneTargetSpec } from "../dsl/types";
+import type { Ability, BoundValue, VoidCostBound, CardCost, CardCountValue, CardFilter, CharacterPredicate, CharacterSelector, Cost, PlayerRef, StackItemSelector, TriggeredAbility, Variant, ZoneTargetSpec } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -51,8 +51,8 @@ function sparkOf(card: EngineCardDefinition): number {
  * card's spark (`labSourceSpark`): a ▸Materialized trigger's source is in
  * play with it, and an event, which has none, reads 0.
  */
-function sourceSparkAs<T extends Partial<Record<"sparkAtLeast" | "sparkAtMost" | "costAtLeast" | "costAtMost", BoundValue>> & { readonly anyOf?: readonly CharacterPredicate[] }>(bounds: T, spark: number): T {
-  const keys = ["sparkAtLeast", "sparkAtMost", "costAtLeast", "costAtMost"] as const;
+function sourceSparkAs<T extends Partial<Record<"sparkAtLeast" | "sparkAtMost" | "costAtLeast" | "costAtMost" | "costLessThan", VoidCostBound>> & { readonly anyOf?: readonly CharacterPredicate[] }>(bounds: T, spark: number): T {
+  const keys = ["sparkAtLeast", "sparkAtMost", "costAtLeast", "costAtMost", "costLessThan"] as const;
   const rewritten = keys.reduce((result, key) => {
     const bound = result[key];
     return typeof bound === "object" && bound.value === "sourceSpark" ? { ...result, [key]: spark } : result;
@@ -251,10 +251,14 @@ const NO_X: XRange = { min: 0, max: 0 };
  * answers that lead to a legal play, so a required target leaves the play
  * only the Xs at least its cost.
  */
-function voidTargetFor(engine: Engine, spec: ZoneTargetSpec, pool: readonly EngineCardDefinition[], xRange: XRange | null): CardId {
-  const { filter, costAtMost } = spec;
-  if (typeof costAtMost !== "object") return cardFor(engine, boundedFilter(filter, costAtMost), pool);
-  return cardFor(engine, filter, pool, (cost) => admitsX({ costAtMost }, 0, cost, xRange ?? NO_X));
+function voidTargetFor(engine: Engine, spec: ZoneTargetSpec, pool: readonly EngineCardDefinition[], xRange: XRange | null, subjectCost: number | null = null): CardId {
+  const fits = (cost: number, bound: VoidCostBound | undefined, strict: boolean): boolean => {
+    if (bound === undefined) return true;
+    const limit = typeof bound === "number" ? bound : bound.value === "subjectCost" ? subjectCost ?? 0
+      : bound.value === "x" ? (xRange ?? NO_X).max : undefined;
+    return limit === undefined || (strict ? cost < limit : cost <= limit);
+  };
+  return cardFor(engine, spec.filter, pool, cost => fits(cost, spec.costAtMost, false) && fits(cost, spec.costLessThan, true));
 }
 
 /**
@@ -429,6 +433,21 @@ export function labBoard(
   const countRange: XRange | null = activationCosts.reduce<XRange | null>((range, cost) => cost.cost === "abandon" && cost.count === "x" ? { min: Math.max(range?.min ?? 0, cost.min), max: Math.max(range?.max ?? 0, 1, cost.min) } : range, null);
   const materialized = abilities.filter(isMaterializedTrigger).map((ability) => ability.effect);
   const sourceSpark = labSourceSpark(engine, cardId, variant, xRange);
+  const subjectCost = fixedEnergy(instanceCard(engine.catalog, { printing: { kind: "card", cardId }, variant }).costs);
+  const stageVoid = (spec: ZoneTargetSpec, captured: number | null) => {
+    const targetSide = spec.player === "you" ? side : opponent(side);
+    const staged = sourceSparkAs(spec, sourceSpark);
+    for (let index = 0; index < spec.count; index++) {
+      const card = voidTargetFor(engine, staged, pool, xRange, captured);
+      voids[targetSide].push(card);
+      for (const [bound, strict] of [[staged.costAtMost, false], [staged.costLessThan, true]] as const) {
+        if (typeof bound !== "object" || bound.value !== "countCards") continue;
+        const countSide = bound.player === "you" ? side : opponent(side);
+        const needed = fixedEnergy(engine.catalog.card(card).costs) + (strict ? 1 : 0);
+        for (let count = 0; count < needed; count++) zones[bound.zone][countSide].push(bound.zone === "void" ? cardFor(engine, bound.filter, pool) : SYNTHETIC.vanilla1.id);
+      }
+    }
+  };
   for (const spec of materialized.flatMap(everyTarget)) {
     if (spec.kind === "stackTarget") {
       opener ??= stackOpener(spec.selector);
@@ -441,8 +460,7 @@ export function labBoard(
       continue;
     }
     if (spec.kind !== "inZone") continue;
-    const voidSide = spec.player === "you" ? side : opponent(side);
-    for (let index = 0; index < spec.count; index++) voids[voidSide].push(voidTargetFor(engine, sourceSparkAs(spec, sourceSpark), pool, xRange));
+    stageVoid(spec, subjectCost);
   }
   const played = [...abilities.flatMap((ability) => (ability.kind === "event" ? [ability.effect] : [])), ...materialized];
   for (const filter of played.flatMap(opponentHandChoices)) hands[opponent(side)].push(cardFor(engine, filter, pool));
@@ -461,8 +479,7 @@ export function labBoard(
         continue;
       }
       if (spec.kind === "inZone") {
-        const voidSide = spec.player === "you" ? side : opponent(side);
-        for (let index = 0; index < spec.count; index++) voids[voidSide].push(voidTargetFor(engine, sourceSparkAs(spec, sourceSpark), pool, xRange));
+        stageVoid(spec, null);
         continue;
       }
       const targetSide = spec.selector.controller === "you" ? side : opponent(side);

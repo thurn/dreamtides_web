@@ -19,6 +19,8 @@ export interface ValueScope {
   readonly x: number | null;
   /** The scoring trigger's captured challenge award, absent outside its resolution. */
   readonly scored?: number | null;
+  /** Present only in a resolving context; null means no captured subject. */
+  readonly subjectCost?: number | null;
   count(selector: CharacterSelector): number;
   countCards(count: CardCountValue): number;
   movedCosts?(ref: MovedCardRef): readonly number[];
@@ -38,6 +40,9 @@ export function thisCharacterSpark(): SourceSparkValue {
 export function evaluateValue(state: BattleState, value: ValueExpr, scope: ValueScope): number {
   if (typeof value === "number") return value;
   switch (value.value) {
+    case "subjectCost":
+      if (scope.subjectCost === undefined) throw new Error("A static ability cannot read a triggering subject cost");
+      return scope.subjectCost ?? 0;
     case "scored":
       return scope.scored ?? 0;
     case "x":

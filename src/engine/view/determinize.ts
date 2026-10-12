@@ -43,9 +43,12 @@
  *   controller's avatar: its filter, named card, duration, and consumption
  *   are independent of its source identity.
  */
-import { plainVariant, type EngineCatalog } from "../catalog";
+import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import { Layers } from "../continuous/layers";
 import { worksInZone } from "../dsl/abilities";
+import { fixedEnergy } from "../dsl/energy";
+import type { CardFilter, Trigger } from "../dsl/types";
+import { triggerBody } from "../triggers/body";
 import { loopSignature } from "../loops/signature";
 import { emptyLoopTracker } from "../loops/types";
 import { instanceOrigin, originAbilities } from "../rules/activation";
@@ -139,8 +142,56 @@ export function determinize(view: BattleView, decklists: Decklists, random: () =
   const state = deal(view, decklists, random, catalog);
   reconcile(state, view, catalog);
   reconcileDisabling(state, view, catalog, random);
+  restoreHiddenSubjectCosts(state, view, catalog, random);
   restoreLoop(state, view);
   return state;
+}
+
+/** Samples opaque values, keeping the viewer's original concealment rather than acquiring observations. */
+function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, catalog: EngineCatalog, random: () => number): void {
+  const sharedDraws = new Map<string, number>();
+  const assignedDraws = new Map<Side, Set<InstanceId>>();
+  const layers = new Layers(state, catalog);
+  const visibleQueue = view.triggerQueue.filter(trigger => trigger.source !== null && trigger.origin !== null);
+  for (const [index, shown] of visibleQueue.entries()) {
+    if (shown.subjectCostHidden !== true || shown.source === null || shown.origin === null) continue;
+    const body = triggerBody(catalog, shown.origin, shown.ability, shown.node);
+    const domains = (trigger: Trigger): { sides: readonly Side[]; filter?: CardFilter; key?: string }[] => {
+      if (trigger.on === "either") return trigger.triggers.flatMap(domains);
+      const sides = "player" in trigger && (trigger.player === "you" || trigger.player === "opponent")
+        ? [trigger.player === "you" ? shown.controller : opponent(shown.controller)] : SIDES;
+      return [{ sides, ...("filter" in trigger ? { filter: trigger.filter } : {}),
+        ...(trigger.on === "draw" && trigger.nth !== undefined && sides.length === 1 ? { key: `draw:${sides[0]}:${String(trigger.nth)}` } : {}) }];
+    };
+    const candidates = domains(body.trigger).flatMap(domain => {
+      const compatible = Object.values(state.instances).filter(instance => {
+        if (!domain.sides.includes(instance.controller)) return false;
+        const filter = domain.filter, card = layers.of(instance.id), cost = fixedEnergy(instanceCard(catalog, instance).costs);
+        return filter === undefined || ((filter.cardType === undefined || card.cardType === filter.cardType) &&
+          (filter.subtype === undefined || card.allTypes || card.subtype === filter.subtype) &&
+          (filter.costAtMost === undefined || cost <= filter.costAtMost) && (filter.costAtLeast === undefined || cost >= filter.costAtLeast) &&
+          (filter.sparkAtMost === undefined || (card.spark !== null && card.spark <= filter.sparkAtMost)) &&
+          (filter.sparkAtLeast === undefined || (card.spark !== null && card.spark >= filter.sparkAtLeast)));
+      });
+      // Current hidden holdings constrain the latent subject; public records remain possible after it moved.
+      const hidden = compatible.filter(instance => instance.zone === "hand" || instance.zone === "deck");
+      return (hidden.length === 0 ? compatible : hidden).map(instance => ({ id: instance.id, cost: fixedEnergy(instanceCard(catalog, instance).costs), key: domain.key, side: domain.sides[0] }));
+    });
+    const existing = candidates.find(candidate => candidate.key !== undefined && sharedDraws.has(candidate.key));
+    const unused = candidates.filter(candidate => candidate.key === undefined || !assignedDraws.get(candidate.side)?.has(candidate.id));
+    // Different public draw ordinals allocate distinct sampled records while available. A reused or departed historical card has no recoverable alias.
+    const available = unused.length === 0 ? candidates : unused;
+    const selected = existing ?? available[Math.floor(random() * available.length)];
+    if (selected === undefined) throw new Error("Cannot determinize hidden subject cost without a compatible sampled card");
+    const cost = selected.key === undefined ? selected.cost : sharedDraws.get(selected.key) ?? selected.cost;
+    if (selected.key !== undefined && !sharedDraws.has(selected.key)) {
+      sharedDraws.set(selected.key, cost);
+      const assigned = assignedDraws.get(selected.side) ?? new Set<InstanceId>();
+      assigned.add(selected.id);
+      assignedDraws.set(selected.side, assigned);
+    }
+    state.triggerQueue[index] = { ...state.triggerQueue[index], lastKnownSubjectCost: cost, subjectHiddenFrom: [view.viewer] };
+  }
 }
 
 /**
@@ -377,6 +428,12 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     return source;
   };
   const captured = standIns(view, sides, instances, random, assigned);
+  for (const trigger of view.triggerQueue) {
+    if (trigger.subjectCostHidden !== undefined && (trigger.subjectCostHidden !== true || trigger.lastKnownSubjectCost !== undefined ||
+        trigger.subject !== null || trigger.source === null || trigger.origin === null || trigger.kind === "dreamwellBonus")) {
+      throw new Error("Cannot determinize invalid hidden subject cost");
+    }
+  }
   const triggerQueue: QueuedTrigger[] = view.triggerQueue.flatMap((trigger) =>
     trigger.source === null || trigger.origin === null
       ? []
@@ -389,6 +446,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
           ability: trigger.ability,
           node: trigger.node,
           subject: trigger.subject,
+          ...(trigger.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
           ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
           ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
           ...(trigger.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),

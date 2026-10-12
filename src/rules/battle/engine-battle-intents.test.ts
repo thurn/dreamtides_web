@@ -7,7 +7,7 @@ import { runStep } from "../../engine/steps/runner";
 import { NO_PROMPTS } from "../../engine/steps/sources";
 import { boardState } from "../../engine/testing/board";
 import { STACK } from "../../engine/testing/stack-cards";
-import { SYNTHETIC, testCatalog } from "../../engine/testing/synthetic-cards";
+import { SYNTHETIC, SYNTHETIC_DREAMWELL, testCatalog } from "../../engine/testing/synthetic-cards";
 import { stateHash } from "../../engine/state/hash";
 import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 import { testEventActor } from "../../types/test-identities";
@@ -350,6 +350,26 @@ describe("LOAD_STATE", () => {
     }
     const malformed = ["not-a-number", "3", -2, NaN, Infinity, -Infinity, null, {}, [], true];
     expect(malformed.filter((scored) => load(withScore(scored)) !== null)).toEqual([]);
+  });
+
+  it("preserves finite queued subject costs and rejects malformed values and bonus contexts", () => {
+    const state = begun(), battle = journeyBattleOf(state.battle);
+    if (battle === null) throw new Error("no journey battle");
+    const instance = battle.engine.slice.committed.instances[firstCard(state)];
+    if (instance.printing.kind !== "card") throw new Error("no fixture card printing");
+    const trigger = { source: instance.id, controller: instance.controller, origin: { kind: "card", cardId: instance.printing.cardId, variant: instance.variant }, ability: 0, node: null, subject: instance.id };
+    const payload = (cost: unknown, bonus = false) => {
+      const id = SYNTHETIC_DREAMWELL[0].id;
+      const record = bonus ? { kind: "dreamwellBonus", source: { kind: "dreamwell", id, side: instance.controller }, controller: instance.controller, origin: { kind: "dreamwell", id }, ability: 0, node: null, subject: null } : trigger;
+      return { ...battle, engine: { ...battle.engine, slice: { ...battle.engine.slice, committed: { ...battle.engine.slice.committed,
+        triggerQueue: [{ ...record, ...(cost === undefined ? {} : { lastKnownSubjectCost: cost }) }],
+      } } } };
+    };
+    const load = (cost: unknown, bonus = false) => validateLoadedState(state, { snapshot: state.journey, battle: payload(cost, bonus) });
+    for (const cost of [undefined, 0, 2, 1.5]) expect(load(cost)?.battle).toEqual(payload(cost));
+    for (const cost of [null, -1, NaN, Infinity, "2", {}, [], true]) expect(load(cost)).toBeNull();
+    expect(load(undefined, true)?.battle).toEqual(payload(undefined, true));
+    expect(load(0, true)).toBeNull();
   });
 
   it("loads loop prompt visibility conservatively and rejects malformed or partial metadata", () => {

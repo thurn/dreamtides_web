@@ -1,0 +1,283 @@
+{
+  "bead": "hv-umm2.560",
+  "base": "f4f062712ac61bb7bebc70477b6e640831349daa",
+  "status": "ordinary and final full validation complete; endpoint authorized; final schema and commit receipts emitted after this metadata",
+  "implementationWindow": {
+    "start": "2026-10-12T21:55:41Z",
+    "end": "2026-10-12T23:04:28.849234Z",
+    "minutes": 68.79748723333334,
+    "basis": "Conservative whole claim-to-parent-endpoint ownership proxy including parent install/preparation, source-free research, analysis/admission delays, coordination, intended negatives, author errors, checks and shared-lock waits. Not CPU or editing-only time.",
+    "firstHelperObservation": "2026-10-12T21:57:11Z",
+    "dispatchPre": "2026-10-12T21:56:56.304578Z",
+    "dispatchPost": "2026-10-12T21:57:48.188202Z",
+    "dispatch": "Exact dispatch unsampled; observations bracket it without defining an exact start.",
+    "initialWriteACK": "2026-10-12T22:07:13.077830Z",
+    "hiddenWriteACK": "2026-10-12T22:44:29.129134Z",
+    "hiddenLookupACK": "2026-10-12T22:48:22.622723Z",
+    "endpointReceipt": "/tmp/dreamtides-executor-01a12e91/560-endpoint-ack.json",
+    "tail": "Actual endpoint-to-commit tail is recorded in560-commit.json and final handoff; no guessed commit timestamp is embedded."
+  },
+  "sourceManifest": {
+    "docs/plan/engine-design.md": "f6f75154cd5412c2c1f6d137ed46e28e7ba07a3d351f61c904a35209fceee3b0",
+    "src/engine/dsl/builders.ts": "ba679cee972d013464c13a0874dd717324e7c59e3e51eea47d128f939d4b0de5",
+    "src/engine/dsl/selectors.ts": "3684b3eb2ea7950fa8d139c0d766d75781b8b4ecc65052ab8d30ccd476fdef62",
+    "src/engine/dsl/types.ts": "c9db003646cdd832b3c57d695c6485f59b46176fac94292ceffe573ef40c822f",
+    "src/engine/dsl/values.ts": "9a5238c5df8cdc82497578894a08ebb72200986dc46c92f1cda396a201ebd3d9",
+    "src/engine/effects/interpreter.ts": "616daef12ca90185ca39a099fa409e197e4df946918fed9fb618d05e95fb56f8",
+    "src/engine/effects/types.ts": "d1aa7f6b6fe2deadad159408eb38a23ac2c8d0476ef6b77aa92aeca7dc153d1c",
+    "src/engine/events/kinds/trigger-queued.ts": "180754cdc82d9cf2518502936672dd85d36c6d72a6feec44897d0c15d84430cf",
+    "src/engine/state/types.ts": "d9bc845b500cfdb79b64315bc8dc2101d48e97d8f136502934a35b2cfb7cf471",
+    "src/engine/steps/kinds/activate.ts": "f02014351f42c8f19250b2ef94241c667e544a11b5002001d7f0e70e9f0deef4",
+    "src/engine/steps/types.ts": "a5baa51c81f95f314221c3335dd55213a13298001c69bc8c36738136f065e5ef",
+    "src/engine/testing/lab-solver.ts": "c179cbabf68be4f950f07704ed84f8fd106d54be09325a136024d187290bee7d",
+    "src/engine/triggers/matcher.ts": "f5a4e3bfecdb9a8fa7a3d1cae92c392e6b353197c9dc17b3208280ea4f48dc92",
+    "src/engine/triggers/resolve.ts": "1d04322b29d7318ef4cdb9bf955ce3233098af73c453846b813e14e6b0f54ac0",
+    "src/engine/view/determinize.ts": "9a7a9eb41cb4ee22791755814d25a7452628735751b3cbb14a1bc6d96ba353b3",
+    "src/engine/view/view.ts": "0c7c6f82c206aebe8d470015fac09768d203175d558db34a8f694169d3e475b8",
+    "src/rules/battle/engine-battle-intents.test.ts": "b8c275be099974dfe43dfe1af1e58ed96088d50d92ca90e410317ef85ebbee98",
+    "src/rules/battle/fold.ts": "e6efa704ae66a3ca2a355703952790b2cdbd542eeee2349192273ae5216bd698",
+    "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "cbc05432218b04fd3cb915deeecc8ba8a9cbbb6c5721f3838917a5985648df45",
+    "src/engine/effects/primitives/contracts/strict-void-cost.contracts.ts": "6e8720ea785541aebbeb6766f59a362d1eee72945740abca080cf5980a103da6",
+    "docs/plan/evidence/pre-existing/hv-umm2.560.md": "97a74fb805fb77f39dc3a948cededdb5fb353a3da5c837ad96911a856a28ecff"
+  },
+  "preRepairSourceManifest": "/tmp/dreamtides-executor-01a12e91/560-source-manifest.json",
+  "footprint": {
+    "productionChurn": 221,
+    "documentationChurn": 18,
+    "testNetLines": 426,
+    "newContractLines": {
+      "trigger-subject-cost": 337,
+      "strict-void-cost": 69
+    },
+    "existingSavedTestNetLines": 20,
+    "newCases": 48,
+    "newPlainContractModules": 2,
+    "newTestEntrypoints": 0,
+    "newJsdom": 0
+  },
+  "apiFallout": {
+    "newTypes": [
+      "TriggerSubjectCostValue",
+      "VoidCostBound"
+    ],
+    "builder": "triggerSubjectCost():TriggerSubjectCostValue; fromVoid accepts optionalcostLessThan and widened voidcostAtMost",
+    "trailingArguments": [
+      "boundNow(...,subjectCost?:number|null)",
+      "targetCandidates(...,subjectCost:number|null=null)",
+      "chooseOnResolution(...,subjectCost:number|null=null)"
+    ],
+    "retainedFields": "ArmedTriggers.subjectCost optionalnumber; QueuedTrigger/TriggerQueuedEvent/QueuedTriggerView/ResolveOptions.lastKnownSubjectCost optionalnumber; EffectEnv nullable scalar; ValueScope optionalsubjectCost number|null; QueuedTriggerView.subjectCostHidden?:true (view-only, not persisted/event field)",
+    "privacy": "Visible retained queued costs project unchanged; withheld actual retained costs project subjectCostHidden:true only. The marker carries no numeric secret, printing, physical subject ID or past alias. Reconstruction uses compatible sampled records, retains subjectHiddenFrom:[viewer], exact public view/event roundtrip; no new actual observations. Same declared side/nth shares scalar, different nths consume distinct compatible records while available. Reused/departed historical alias and exact secret order remain unproven; exhausted sampled allocation falls back without inferring aliases.",
+    "unchangedConsumers": "Context/layers/UI/registry/generalprivacy untouched. Actual importer list560-importer-fallout.txt.",
+    "schema": "Additive optional queue/event scalar, validated finite nonnegative and prohibited for Dreamwell bonus; missing old scalar remains resolvingnull0; no version/eventkind/prompt change.",
+    "lookupConsumers": "Read-only triggerBody/instanceCard/fixedEnergy lookups admitted560-hidden-lookup-ack.json. Layers.of already present in determinize. No change to their definitions/signatures; candidate filter includes effective type/subtype/allTypes/copied cost/spark min/max."
+  },
+  "importerMap": "/tmp/dreamtides-executor-01a12e91/560-importer-fallout.txt",
+  "fiveFailurePaths": {
+    "midStepError": "trigger-subject-cost.contracts.ts contains real public-fold resolveTrigger failure after subject-cost gainPoints and before invalid synthetic figment materialization; error is contained and retained queue scalar survives.",
+    "reloadRestart": "Both controllers actual fold play\u2192answer\u2192automatic trigger; JSON validated reload at target/confirm prefixes, identical public prompts and loaded/direct completed state hashes.",
+    "partialWrite": "Contained error after resource write keeps score0, queue lastKnownSubjectCost3 and caller committed hash unchanged; copied subject cost was already committed before this step.",
+    "invalidStaleInput": "Queued scalar finite/nonnegative saved validation, malformed values and Dreamwell context rejection; illegal equal-cost target, stale target prompt during confirm, noPendingPrompt after completion, static reader absence rejection. Hidden marker+numeric/visible subject/missing source or origin reject immutable caller views before queue reconstruction; explicit0/missinglegacy bothcontrollers. Structured avatar sources, equal private-history views, shared nth and distinct public multiset constraints exercised through public engine transitions.",
+    "concurrentActors": "Actual suspended automatic trigger rejects competing battleAction as stepInFlight and opposite actor answer as notYourPrompt; pure retained scalar adds no actor protocol."
+  },
+  "commands": {
+    "capability": "/tmp/dreamtides-executor-01a12e91/560-capability.json",
+    "negative": "/tmp/dreamtides-executor-01a12e91/560-negative.json",
+    "type1": "/tmp/dreamtides-executor-01a12e91/560-type1.json",
+    "type2": "/tmp/dreamtides-executor-01a12e91/560-type2.json",
+    "subject-focus": "/tmp/dreamtides-executor-01a12e91/560-subject-focus.json",
+    "focus2": "/tmp/dreamtides-executor-01a12e91/560-focus2.json",
+    "focus3": "/tmp/dreamtides-executor-01a12e91/560-focus3.json",
+    "focus4": "/tmp/dreamtides-executor-01a12e91/560-focus4.json",
+    "focus5": "/tmp/dreamtides-executor-01a12e91/560-focus5.json",
+    "capture-counterfactual": "/tmp/dreamtides-executor-01a12e91/560-capture-counterfactual.json",
+    "strict-counterfactual": "/tmp/dreamtides-executor-01a12e91/560-strict-counterfactual.json",
+    "type3": "/tmp/dreamtides-executor-01a12e91/560-type3.json",
+    "type4": "/tmp/dreamtides-executor-01a12e91/560-type4.json",
+    "owning": "/tmp/dreamtides-executor-01a12e91/560-owning.json",
+    "runtime": "/tmp/dreamtides-executor-01a12e91/560-runtime.json",
+    "review": "/tmp/dreamtides-executor-01a12e91/560-review.json",
+    "knip": "/tmp/dreamtides-executor-01a12e91/560-knip.json",
+    "full-wait-observation": "/tmp/dreamtides-executor-01a12e91/560-full-wait-observation.json",
+    "hidden-both-negative": "/tmp/dreamtides-executor-01a12e91/560-hidden-both-negative.json",
+    "hidden-both-fixed": "/tmp/dreamtides-executor-01a12e91/560-hidden-both-fixed.json",
+    "hidden-focus": "/tmp/dreamtides-executor-01a12e91/560-hidden-focus.json",
+    "hidden-focus2": "/tmp/dreamtides-executor-01a12e91/560-hidden-focus2.json",
+    "hidden-type": "/tmp/dreamtides-executor-01a12e91/560-hidden-type.json",
+    "hidden-focus3": "/tmp/dreamtides-executor-01a12e91/560-hidden-focus3.json",
+    "hidden-owning": "/tmp/dreamtides-executor-01a12e91/560-hidden-owning.json",
+    "numbered-own-negative": "/tmp/dreamtides-executor-01a12e91/560-numbered-own-negative.json",
+    "hidden-focus4": "/tmp/dreamtides-executor-01a12e91/560-hidden-focus4.json",
+    "hidden-owning2": "/tmp/dreamtides-executor-01a12e91/560-hidden-owning2.json",
+    "review2": "/tmp/dreamtides-executor-01a12e91/560-review2.json",
+    "knip2": "/tmp/dreamtides-executor-01a12e91/560-knip2.json",
+    "full2-inner": "/tmp/dreamtides-executor-01a12e91/560-full2-inner.json",
+    "full2-outer": "/tmp/dreamtides-executor-01a12e91/560-full2-outer.json",
+    "parent:560-install.json": "/tmp/dreamtides-executor-01a12e91/560-install.json",
+    "parent:560-entry-friction.json": "/tmp/dreamtides-executor-01a12e91/560-entry-friction.json",
+    "parent:560-dispatch-timing.json": "/tmp/dreamtides-executor-01a12e91/560-dispatch-timing.json",
+    "parent:560-parent-reentry-observations.json": "/tmp/dreamtides-executor-01a12e91/560-parent-reentry-observations.json",
+    "parent:560-hidden-future.json": "/tmp/dreamtides-executor-01a12e91/560-hidden-future.json",
+    "parent:560-numbered-multiplicity-before.json": "/tmp/dreamtides-executor-01a12e91/560-numbered-multiplicity-before.json",
+    "parent:560-hidden-future-final.json": "/tmp/dreamtides-executor-01a12e91/560-hidden-future-final.json",
+    "parent:560-numbered-multiplicity-final.json": "/tmp/dreamtides-executor-01a12e91/560-numbered-multiplicity-final.json",
+    "parent:560-parent-source-audit.json": "/tmp/dreamtides-executor-01a12e91/560-parent-source-audit.json",
+    "parent:560-parent-final-source-manifest.json": "/tmp/dreamtides-executor-01a12e91/560-parent-final-source-manifest.json"
+  },
+  "outcomes": {
+    "baseline": "Four current-base public ordinary/copied flows both controllers; eight intended unsupported/capture assertions fail. No fixture errors in these baseline probes.",
+    "counterfactuals": "Eight capture assertions and six strict-less assertions fail under individually removed repairs; finally restores exact source bytes. Matcher SHA at counterfactual c12a48a751fca574378f12b2b8ecb6e150aa90ceb073bf25ad96436944872fa6; interpreter616daef12ca90185ca39a099fa409e197e4df946918fed9fb618d05e95fb56f8. Matcher JSDoc subsequently changed within scope, so counterfactual restore SHA is qualified to that earlier source.",
+    "hiddenFailures": "Parent original future gain0 vs3 and own both-controller future negatives are genuine sampled-world defects. Parent draw2 multiplicity and own two-controller [3,3] vs[3,5] are genuine semantic negatives. Both repaired and retained separately from fixture errors.",
+    "fixtureFailures": "Initial optional target-before-confirm, helper shadow/labBoard shape, manual publication counter and pending/completed actor expectations were fixture/protocol mistakes. The real replay-prefix mismatch was caused by test-seeded publishedEvents0 despite triggerResolved publication; public fold play flow repairs it without production fold-prefix changes. Wrong parseAvatarId import is a later fixture-only error.",
+    "focused": "Final48cases/2files pass2.537239s; broader affected7files2393tests pass9.026644s.",
+    "review": "Final275files5154tests plus type/lint/cycles green55.724536s; review start load7.168457.",
+    "knip": "Final exit0/4.336948s.",
+    "independentFinal": "Parent original hidden-future and numbered-multiplicity witnesses both pass on frozen final hashes, receipts retained.",
+    "limits": "No recovered actual private subject order, printing, physical identity or hidden historical alias. Publicly equal numbered obligations share a latent scalar; differing ordinals consume distinct compatible sampled records while available. Exhausted/reused/departed historical identity stays unproven. Marker roundtrip preserves viewer concealment."
+  },
+  "correctionWindows": [
+    {
+      "start": "2026-10-12T22:09:36.439174+00:00",
+      "end": "2026-10-12T22:11:21.109238+00:00",
+      "seconds": 104.670064,
+      "cause": "Direct tsc before disposable preparation plus unfinished lab type integration and overbroad builder insertion."
+    },
+    {
+      "start": "2026-10-12T22:14:51.159875+00:00",
+      "end": "2026-10-12T22:21:16.021988+00:00",
+      "seconds": 384.862113,
+      "cause": "Optional target-before-confirm, manually seeded publication counter, public-priority setup, helper shadow/labBoard shape, stale versus completed answer contracts; corrected through actual fold play flow without production protocol edits."
+    },
+    {
+      "start": "2026-10-12T22:22:49.624617+00:00",
+      "end": "2026-10-12T22:24:38.085954+00:00",
+      "seconds": 108.461337,
+      "cause": "One unused synthetic test local variable, corrected before required review."
+    },
+    {
+      "start": "2026-10-12T22:30:47.129459Z",
+      "end": "2026-10-12T23:03:45.281649+00:00",
+      "cause": "Real hidden sampled-future gain0 vs3: compatible latent reconstruction, explicit view-only concealment, parent analysis/admission/coordination, structured source/filter corrections, multiplicity allocation and required post-repair full. Overall interval remains open until final full terminal; includes nested windows, not CPU.",
+      "seconds": 1978.15219,
+      "minutes": 32.96920316666667
+    },
+    {
+      "start": "2026-10-12T22:55:23.685516Z",
+      "end": "2026-10-12T22:55:51.279427Z",
+      "seconds": 27.593911,
+      "cause": "Fixture-only wrong parseAvatarId import; two failures40passes, corrected to existing identifiers module, focus2green42. Nested inside hidden repair interval."
+    },
+    {
+      "start": "2026-10-12T22:57:51.555061Z",
+      "end": "2026-10-12T22:59:03.925721Z",
+      "seconds": 72.37066,
+      "cause": "Parent actual public draw2 multiplicity failure, own both-controller intendednegative then sampled allocation repair. Functional green48 cases; required review/full endpoint reported separately. Nested inside overall hidden repair interval."
+    }
+  ],
+  "frictionAccounting": {
+    "disjointRepairSeconds": 2576.145704,
+    "minutes": 42.93576173333334,
+    "nestedWindows": "Parser27.593911s and functional multiplicity72.370660s are included in the complete hidden1978.152190s window, not added twice. Intended baseline failures are kept as negatives, not green acceptance or fixture mistakes.",
+    "parentCoordination": "Hidden window includes actual analysis/native admission/read-only coordination delay. Parent scratch config projects list/dict parse correction was immediate, no source effect; PID/time unknown in560-parent-reentry-observations.json."
+  },
+  "full": {
+    "preRepair": {
+      "outer": {
+        "pid": 42415,
+        "observer": 42403,
+        "start": "2026-10-12T22:27:21.313940+00:00",
+        "end": "2026-10-12T22:32:01.675467+00:00",
+        "seconds": 280.35861733301135,
+        "exit": 0,
+        "cmd": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "python3",
+          "/tmp/dreamtides-executor-01a12e91/560-run.py",
+          "full-inner",
+          "npm",
+          "run",
+          "review:full"
+        ]
+      },
+      "inner": {
+        "pid": 45838,
+        "observer": 45836,
+        "start": "2026-10-12T22:30:21.083783+00:00",
+        "end": "2026-10-12T22:32:01.671392+00:00",
+        "seconds": 100.58650383300846,
+        "exit": 0,
+        "cmd": [
+          "npm",
+          "run",
+          "review:full"
+        ]
+      },
+      "queueAndLaunchSeconds": 179.769843,
+      "result": "358files6168tests and bundle green, PRE-hidden repair only; not final acceptance."
+    },
+    "final": {
+      "outer": {
+        "pid": 17994,
+        "observer": 17972,
+        "start": "2026-10-12T23:00:28.098824+00:00",
+        "end": "2026-10-12T23:03:45.288059+00:00",
+        "seconds": 197.18806116699125,
+        "exit": 0,
+        "cmd": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "python3",
+          "/tmp/dreamtides-executor-01a12e91/560-run.py",
+          "full2-inner",
+          "npm",
+          "run",
+          "review:full"
+        ]
+      },
+      "inner": {
+        "pid": 20128,
+        "observer": 20125,
+        "start": "2026-10-12T23:01:39.198754+00:00",
+        "end": "2026-10-12T23:03:45.281649+00:00",
+        "seconds": 126.0820812919992,
+        "exit": 0,
+        "cmd": [
+          "npm",
+          "run",
+          "review:full"
+        ]
+      },
+      "queueAndLaunchSeconds": 71.09993,
+      "result": "358files6178tests plus bundle/type/lint/cycles/schema green; workers2 undercanonicalexclusiveheavylock. First inner start is inside-lock observation; exact acquisition instant unsampled."
+    }
+  },
+  "runtimeProof": {
+    "receipt": "/tmp/dreamtides-executor-01a12e91/560-runtime.json",
+    "driver": "/tmp/dreamtides-executor-01a12e91/560-runtime.mts",
+    "trace": "/tmp/dreamtides-executor-01a12e91/560-runtime-traces.json",
+    "layouts": 40,
+    "scope": "Public synthetic Engine/fold ordinary intents, typed JSON load, queued/public scalar and physical strict return, invariant checks;20eachcontroller/20regular20copied/subjectcost1\u20135; no browser or production weightedfuzz claimed.",
+    "sourceScope": "Forty layouts ran on pre-hidden-repair source and cover unchanged public retained-scalar/strict-return flows. Final hidden sampling is covered by post-repair owning contracts and independent frozen probes, not falsely claimed as a rerun of the40-layout driver."
+  },
+  "resources": {
+    "receipt": "/tmp/dreamtides-executor-01a12e91/560-resources.json",
+    "observedAt": "2026-10-12T23:04:05.205807+00:00",
+    "knownIdentityCount": 184,
+    "absent": 182,
+    "reusedNumericPids": {
+      "6880": "Unrelated cat; parent confirmed start23:03:22Z. Original focus PID had already exited.",
+      "35222": "Unrelated Tollgate TEMP server-launcher in another checkout; original runtime CLI had exited. No signaling or peer record access."
+    },
+    "ownJobs": "All finite controlled560 jobs terminal. No actual task browser/provider/context/server/lease workflow launched; existing full-suite infrastructure fixtures use isolated temporary mock servers and expected synthetic cleanup failures, retained in logs.",
+    "finiteReads": "Short read/tool/edit/resource operations without independently sampled subprocess IDs or clocks retain tool observations; unknown timing/PIDs are not fabricated."
+  },
+  "coverage": "Two coherent plain contracts plus owning saved validation, actual public Engine/fold steps. Production cards and their weighted/sampled native QA remain206, with no560production/card/visual acceptance claimed.",
+  "preExisting": "docs/plan/evidence/pre-existing/hv-umm2.560.md"
+}

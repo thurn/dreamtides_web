@@ -1553,7 +1553,7 @@ controller: the hand that side holds, the deck or void it owns. They are
 card references (`CardRef`), so any primitive holding one resolves them
 through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
 
-- `fromVoid(filter, { player, count, upTo, another, costAtMost })` ("a
+- `fromVoid(filter, { player, count, upTo, another, costAtMost, costLessThan })` ("a
   character from your void"): a `ZoneTargetSpec`, a play-time target
   (`PlayTimeTarget`) declared by `cardTarget`. It is chosen with the
   character and stack targets, in a `chooseTargets` prompt with the `target`
@@ -1571,6 +1571,20 @@ through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
   (`voidTargetMatching`, RD-hv-umm2.495-1). The lab solver stages, for a bound by X, a matching
   void card whose copiable cost some X the play can choose admits; a
   required target then leaves the play only the Xs at least that cost.
+  `costLessThan` compares strictly with the same live bound forms, including
+  `triggerSubjectCost()`. A trigger body that reads that value keeps
+  `lastKnownSubjectCost` in its queued record and publication event: the
+  subject’s copiable cost before departure for a look-back event, or as the
+  event matched otherwise. A ceased subject keeps its scalar independently
+  of its current identity. Projection keeps it only with a visible source
+  and a subject observed at triggering; determinization preserves that
+  public scalar. A visible queued reader with a withheld retained value carries
+  `subjectCostHidden: true` without a numeric value or subject alias. A sample
+  binds it to compatible sampled card costs and retains viewer concealment;
+  readers of the same publicly declared first-draw event share that sampled
+  value. Legacy absence remains an absent binding. The saved queue validates
+  the optional finite nonnegative number. Resolving contexts supply null
+  when no binding exists, which reads as 0; static scopes reject the value.
 - `everyIn(zone, filter, { player, another, costAtMost })`: every matching
   card there, in zone order, chosen by nobody. `costAtMost` ("each ≤X● cost
   character in your void") is a constant or the source's X (`x()`); the
@@ -1638,7 +1652,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15), `banishSelfOnResolve` ("Banish this card": the resolving event goes from the stack to its owner's Banished zone as the instruction resolves, so `resolveTop` does not put it into the void; RD-hv-umm2.475-1) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices), `withMaterialized(materialize, effect)` (binds `capturedCards()`) | `forEach`, `takeExtraTurn` (C8) |
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X, a `countCards` zone count, or `thisCharacterSpark()` (RD-hv-umm2.501-1), figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid` and `everyIn`, each with an optional `costAtMost`, a constant or X, and for `fromVoid` also a zone count or `thisCharacterSpark()`: `fromVoid` checks it as its targets are offered and again as the effect resolves (RD-hv-umm2.495-1), `everyIn` reads it once as the effect resolves (RD-hv-umm2.86-2); `topOfDeck`, `randomIn`, `thisCardIn`) | |
-| Values | constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost"), `thisCharacterSpark()` (the source's effective ✦ in a resolving effect, its retained last-known ✦ once it has left play, RD-hv-umm2.460-1) | stored counters, turn counters |
+| Values | `triggerSubjectCost()` (the trigger subject’s captured copiable cost; resolving null reads 0, static scopes reject it), constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost"), `thisCharacterSpark()` (the source's effective ✦ in a resolving effect, its retained last-known ✦ once it has left play, RD-hv-umm2.460-1) | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |

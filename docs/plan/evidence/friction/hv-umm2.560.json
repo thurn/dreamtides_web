@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.560",
+  "phase": 5,
+  "implementMin": 68.79748723333334,
+  "implementWindow": {
+    "start": "2026-10-12T21:55:41Z",
+    "end": "2026-10-12T23:04:28.849234Z"
+  },
+  "localValidationS": {
+    "focused": 2.5372392080025747,
+    "owning": 9.02664399999776,
+    "review": 55.724535749992356,
+    "knip": 4.336948374999338,
+    "full": 126.0820812919992,
+    "fullOuter": 197.18806116699125
+  },
+  "hostLoad": 7.16845703125,
+  "testDelta": {
+    "files": 0,
+    "lines": 426,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 42.93576173333334,
+      "note": "Complete disjoint initial type/fixture/type-local correction windows plus concealed sampled-future repair through final full. Includes parent analysis/admission/coordination and waits; nested parser/multiplicity windows are not added twice. Actual command durations remain separate; elapsed wall time, not CPU."
+    }
+  ]
+}

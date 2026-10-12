@@ -198,6 +198,10 @@ export interface QueuedTriggerView {
   readonly ability: number;
   readonly node: number | null;
   readonly subject: InstanceId | null;
+  /** Retained only for a source visible to the viewer and a subject observed at triggering. */
+  readonly lastKnownSubjectCost?: number;
+  /** An existing captured cost withheld from this viewer; no value or private subject alias. */
+  readonly subjectCostHidden?: true;
   /** The gain a "when … gains ✦" trigger matched, which is public; absent for any other trigger. */
   readonly gain?: SparkGain;
   /** The positive challenge award a scoring trigger matched; absent for other triggers. */
@@ -471,6 +475,8 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     ability: trigger.ability,
     node: trigger.node,
     subject: seesSubject(state, trigger, viewer) ? trigger.subject : null,
+    ...(trigger.lastKnownSubjectCost === undefined || !visibleSource(trigger.source) || trigger.subjectHiddenFrom?.includes(viewer) === true ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
+    ...(trigger.lastKnownSubjectCost !== undefined && visibleSource(trigger.source) && trigger.subjectHiddenFrom?.includes(viewer) === true ? { subjectCostHidden: true } : {}),
     ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
     ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
     ...(trigger.lastKnownSourceSpark === undefined || !visibleSource(trigger.source) ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),

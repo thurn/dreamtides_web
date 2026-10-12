@@ -6,7 +6,7 @@ import { charactersInPlay, slotOf } from "../rules/zones";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import { opponent, sourceInstance, SIDES } from "../state/ids";
 import type { BattleState } from "../state/types";
-import type { BoundValue, CardCountValue, CharacterSelector, PlayerRef, StackItemSelector } from "./types";
+import type { BoundValue, VoidCostBound, CardCountValue, CharacterSelector, PlayerRef, StackItemSelector } from "./types";
 
 /**
  * Reads the characteristics a selector compares: the effective ones for
@@ -78,11 +78,12 @@ function boundOf(
   state: BattleState,
   catalog: EngineCatalog,
   read: CharacteristicsReader,
-  bound: BoundValue,
+  bound: VoidCostBound,
   controller: Side,
   source: AbilitySource,
   selectorX?: number,
   sourceSpark?: SourceSparkReader,
+  subjectCost?: number | null,
 ): number {
   if (typeof bound === "number") return bound;
   switch (bound.value) {
@@ -90,6 +91,9 @@ function boundOf(
       return selectorX ?? sourceX(state, source);
     case "countCards":
       return zoneCountWith(state, catalog, read, bound, controller);
+    case "subjectCost":
+      if (subjectCost === undefined) throw new Error("A static ability cannot read a triggering subject cost");
+      return subjectCost ?? 0;
     case "sourceSpark":
       if (sourceSpark === undefined) throw new Error("A static ability cannot read this character's ✦");
       return sourceSpark();
@@ -100,13 +104,14 @@ function boundOf(
 export function boundNow(
   state: BattleState,
   catalog: EngineCatalog,
-  bound: BoundValue,
+  bound: VoidCostBound,
   controller: Side,
   source: AbilitySource,
   selectorX?: number,
   sourceSpark?: SourceSparkReader,
+  subjectCost?: number | null,
 ): number {
-  return boundOf(state, catalog, (id) => characteristics(state, catalog).of(id), bound, controller, source, selectorX, sourceSpark);
+  return boundOf(state, catalog, (id) => characteristics(state, catalog).of(id), bound, controller, source, selectorX, sourceSpark, subjectCost);
 }
 
 /** Whether a character in play matches the selector, for an effect controlled by `controller`. */

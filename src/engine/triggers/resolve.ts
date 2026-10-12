@@ -18,7 +18,7 @@ export function resolveQueuedTrigger(ctx: StepContext, trigger: QueuedTrigger): 
 }
 
 function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
-  const { source, controller, origin, ability, node, subject, gain, scored, captured, lastKnownSourceSpark, linkedSource } = trigger;
+  const { source, controller, origin, ability, node, subject, gain, scored, captured, lastKnownSourceSpark, lastKnownSubjectCost, linkedSource } = trigger;
   const body = trigger.kind === "dreamwellBonus"
     ? dreamwellBody(ctx, trigger)
     : triggerBody(ctx.catalog, origin, ability, node);
@@ -27,7 +27,7 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
     conditionHolds(ctx.state, ctx.catalog, body.condition, { controller, source, optionalPaid: [] });
   ctx.emit({ kind: "triggerResolved", source, controller, ability, node, applied, ...(linkedSource === undefined ? {} : { linkedSource }) });
   if (!applied) return;
-  const choices = chooseOnResolution(ctx, body.effect, controller, source, (role) => purposeOf(source, origin, ability, role), lastKnownSourceSpark);
+  const choices = chooseOnResolution(ctx, body.effect, controller, source, (role) => purposeOf(source, origin, ability, role), lastKnownSourceSpark, undefined, undefined, lastKnownSubjectCost ?? null);
   if (choices === null) return;
   resolveEffect(ctx, body.effect, {
     source,
@@ -37,6 +37,7 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
     ability,
     root: body.root,
     subject,
+    ...(lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost }),
     gain: gain ?? null,
     scored: scored ?? null,
     captured: captured ?? null,

@@ -89,6 +89,11 @@ export interface SourceSparkValue {
  */
 export type BoundValue = number | XValue | CardCountValue | SourceSparkValue;
 
+/** The triggering subject's captured copiable cost, before departure for look-back triggers; resolving effects only. */
+export interface TriggerSubjectCostValue { readonly value: "subjectCost" }
+/** A void target can also compare with its trigger's retained subject cost. */
+export type VoidCostBound = BoundValue | TriggerSubjectCostValue;
+
 /**
  * Which characters in play a selector matches. Cost bounds read the
  * copiable cost (rules § Costs, Requirements, and X → Cost changes); ✦ bounds
@@ -232,7 +237,9 @@ export interface ZoneTargetSpec extends ZoneCardsBase {
    * selector's bound, it is read as targets are offered and again as the
    * effect resolves (RD-hv-umm2.495-1, RD-hv-umm2.501-1).
    */
-  readonly costAtMost?: BoundValue;
+  readonly costAtMost?: VoidCostBound;
+  /** Strictly less than this resolving bound. */
+  readonly costLessThan?: VoidCostBound;
 }
 
 /**
@@ -307,6 +314,7 @@ export type ValueExpr =
   | XValue
   /** The positive points awarded by the challenge that triggered this ability; 0 outside a scoring trigger. */
   | { readonly value: "scored" }
+  | TriggerSubjectCostValue
   /**
    * "That card's cost": the copiable cost of the cards `of` names, captured
    * just before they moved, so a card that then ceased to exist still has

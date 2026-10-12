@@ -16,6 +16,8 @@ export interface TriggerQueuedEvent {
   /** A floating or delayed trigger's node; `null` for a triggered ability. */
   readonly node: number | null;
   readonly subject: InstanceId | null;
+  /** Retained subject cost, visible only to sides that observed the subject at triggering. */
+  readonly lastKnownSubjectCost?: number;
   /** The sides that could not identify `subject` as the ability triggered; absent when both could. */
   readonly subjectHiddenFrom?: readonly Side[];
   /** The gain a "when … gains ✦" trigger matched; absent for any other trigger. */
@@ -38,8 +40,10 @@ export const triggerQueued: EventDefinition<TriggerQueuedEvent> = {
   privateTo: (event, state) => sourcePrivacy(event.source, state),
   redact(event, viewer, state) {
     const redacted = redactSource(event, viewer, state);
-    const { lastKnownSourceSpark, linkedSource, ...anonymous } = redacted;
-    const seen = redacted.source === null && (lastKnownSourceSpark !== undefined || linkedSource !== undefined) ? anonymous : redacted;
+    const { lastKnownSubjectCost: _subjectCost, ...withoutCost } = redacted;
+    const costSeen = redacted.source !== null && redacted.subjectHiddenFrom?.includes(viewer) !== true ? redacted : withoutCost;
+    const { lastKnownSourceSpark, linkedSource, ...anonymous } = costSeen;
+    const seen = costSeen.source === null && (lastKnownSourceSpark !== undefined || linkedSource !== undefined) ? anonymous : costSeen;
     return seen.subject === null || seesSubject(state, seen, viewer) ? seen : { ...seen, subject: null };
   },
 };

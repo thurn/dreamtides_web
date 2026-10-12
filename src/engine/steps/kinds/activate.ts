@@ -1,4 +1,4 @@
-import type { BoundValue, CharacterSelector } from "../../dsl/types";
+import type { VoidCostBound, CharacterSelector } from "../../dsl/types";
 import { primitiveDefinition } from "../../effects/registry";
 import type { EffectNode } from "../../effects/types";
 import { choosePlayTime, purposeOf } from "../../effects/interpreter";
@@ -28,7 +28,7 @@ export interface ActivateStep {
   readonly ability: number;
 }
 
-function boundNeedsX(bound: BoundValue | undefined): boolean {
+function boundNeedsX(bound: VoidCostBound | undefined): boolean {
   return typeof bound === "object" && bound.value === "x";
 }
 
@@ -48,7 +48,7 @@ function targetsNeedX(effect: EffectNode, seen = new Set<EffectNode>()): boolean
       return selectorNeedsX(spec.selector) || (alternate !== undefined &&
         (selectorNeedsX(alternate.otherwise) || (alternate.condition.cond === "controls" && selectorNeedsX(alternate.condition.selector))));
     }
-    return spec.kind === "inZone" && boundNeedsX(spec.costAtMost);
+    return spec.kind === "inZone" && (boundNeedsX(spec.costAtMost) || boundNeedsX(spec.costLessThan));
   }) || (definition.children?.(effect) ?? []).some(child => targetsNeedX(child, seen));
 }
 

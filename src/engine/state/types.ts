@@ -554,6 +554,8 @@ export interface LinkedBanishedCards extends LinkedSourceContext {
 }
 
 interface QueuedAbility {
+  /** Copiable subject cost captured for a body that reads it. */
+  readonly lastKnownSubjectCost?: number;
   readonly linkedSource?: LinkedSourceContext;
   /** Effective spark just before the source last left play, while this trigger waited. */
   readonly lastKnownSourceSpark?: number;

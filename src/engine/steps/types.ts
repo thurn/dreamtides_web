@@ -105,6 +105,8 @@ export interface ArmedTriggers {
   readonly abilities: ReadonlyMap<OncePerTurnKey, ArmedAbility>;
   readonly floating: readonly FloatingEffect[];
   readonly origin: AbilityOrigin | null;
+  /** The departing subject’s copiable cost before it leaves play. */
+  readonly subjectCost?: number;
 }
 
 /**

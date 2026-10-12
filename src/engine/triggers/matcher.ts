@@ -28,7 +28,7 @@ import { linkedSourceContext, sourceAbilityGroups } from "../rules/linked-banish
  * (RD-hv-umm2.532-1).
  */
 import type { EngineCatalog } from "../catalog";
-import { cardMatchesFilter, playedMatchesFilter } from "../continuous/characteristics";
+import { cardMatchesFilter, copiableCostOf, playedMatchesFilter } from "../continuous/characteristics";
 import { worksInZone } from "../dsl/abilities";
 import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, MaterializedSelector, MaterializeNth, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
@@ -178,6 +178,7 @@ function subjectMatches(
 /** A match, the card its event concerns, and the gain a "when … gains ✦" trigger matched. */
 interface Match {
   readonly subject: InstanceId | null;
+  readonly lastKnownSubjectCost?: number;
   readonly gain?: SparkGain;
   readonly scored?: number;
 }
@@ -483,6 +484,13 @@ function enqueueAbility(
   enqueue(ctx, { source: listener.source, controller: listener.controller, origin: listener.origin, ability: index, node: null, ...match });
 }
 
+/** Whether this body reads the retained subject value, including nested value and target fields. */
+function readsSubjectCost(value: unknown, seen = new Set<object>()): boolean {
+  if (value === null || typeof value !== "object" || seen.has(value)) return false;
+  seen.add(value);
+  return ("value" in value && value.value === "subjectCost") || Object.values(value).some(field => readsSubjectCost(field, seen));
+}
+
 /**
  * Queues `matched`, recording the sides that cannot identify its subject as
  * it triggers (a card drawn into or discarded from a hidden hand), which
@@ -494,7 +502,11 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
   const effect = triggerBody(ctx.catalog, matched.origin, matched.ability, matched.node).effect;
   const linkedSource = everyNode(effect).some((node) => node.op === "linkedBanish")
     ? linkedSourceContext(ctx, matched.source, matched.origin, matched.ability) : null;
-  const retained = { ...matched,
+  const { lastKnownSubjectCost: armedCost, ...record } = matched;
+  const subjectCost = readsSubjectCost(effect) ? armedCost ?? (matched.subject !== null && ctx.state.instances[matched.subject] !== undefined
+    ? copiableCostOf(ctx.state, ctx.catalog, matched.subject) : undefined) : undefined;
+  const retained = { ...record,
+    ...(subjectCost === undefined ? {} : { lastKnownSubjectCost: subjectCost }),
     ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     ...(linkedSource === null ? {} : { linkedSource }),
   };
@@ -508,6 +520,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
     ability: trigger.ability,
     node: trigger.node,
     subject: trigger.subject,
+    ...(trigger.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
     ...(trigger.subjectHiddenFrom === undefined ? {} : { subjectHiddenFrom: [...trigger.subjectHiddenFrom] }),
     ...(trigger.gain === undefined ? {} : { gain: trigger.gain }),
     ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
@@ -541,7 +554,7 @@ function matchListener(ctx: StepContext, side: Side, listener: Listener, event: 
     if (matching.controller !== side) return;
     const inZone = matching.emblem || worksInZone(ability.zone, matching.zone);
     const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, armedAbility !== undefined);
-    if (match !== null) enqueueAbility(ctx, matching, ability, index, match, armedAbility ?? null);
+    if (match !== null) enqueueAbility(ctx, matching, ability, index, { ...match, ...(armed.subjectCost === undefined ? {} : { lastKnownSubjectCost: armed.subjectCost }) }, armedAbility ?? null);
   });
 }
 
@@ -587,6 +600,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
       ability: ref.ability,
       node: ref.node,
       ...match,
+      ...(armed.subjectCost === undefined ? {} : { lastKnownSubjectCost: armed.subjectCost }),
       ...(captured === undefined ? {} : { captured: [...captured] }),
       ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     });
@@ -671,7 +685,7 @@ function armLookbacks(ctx: StepContext, event: LeftPlayEvent, departing: Departu
       if (armsFor(state, catalog, entry.kind, floating.trigger, event.instance, floating.listener)) entry.floating.push(effect);
     }
   }
-  for (const { kind, abilities, floating } of armed) ctx.armedTriggers[kind].set(event.instance, { abilities, floating, origin });
+  for (const { kind, abilities, floating } of armed) ctx.armedTriggers[kind].set(event.instance, { abilities, floating, origin, ...(leaving === undefined ? {} : { subjectCost: copiableCostOf(state, catalog, event.instance) }) });
 }
 
 /** The abilities armed for the look-back `event` of its character, consumed by it. */

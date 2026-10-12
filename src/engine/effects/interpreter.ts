@@ -204,11 +204,13 @@ function voidTargetMatching(
   id: InstanceId,
   selectorX?: number,
   sourceSpark?: SourceSparkReader,
+  subjectCost: number | null = null,
 ): boolean {
   if (!inZoneMatching(state, catalog, spec, resolvePlayer(controller, spec.player), source, id)) return false;
-  const bound = spec.costAtMost;
-  if (bound === undefined) return true;
-  return copiableCostOf(state, catalog, id) <= boundNow(state, catalog, bound, controller, source, selectorX, sourceSpark);
+  const cost = copiableCostOf(state, catalog, id);
+  const bound = (value: NonNullable<ZoneTargetSpec["costAtMost"]>) => boundNow(state, catalog, value, controller, source, selectorX, sourceSpark, subjectCost);
+  return (spec.costAtMost === undefined || cost <= bound(spec.costAtMost)) &&
+    (spec.costLessThan === undefined || cost < bound(spec.costLessThan));
 }
 
 /** The cards in a void a zone target may choose by its filter and cost bound, in void order, targetable or not. */
@@ -220,9 +222,10 @@ function matchingVoidCards(
   source: AbilitySource,
   selectorX?: number,
   sourceSpark?: SourceSparkReader,
+  subjectCost: number | null = null,
 ): InstanceId[] {
   return state.sides[resolvePlayer(controller, spec.player)].void
-    .filter((id) => voidTargetMatching(state, catalog, spec, controller, source, id, selectorX, sourceSpark));
+    .filter((id) => voidTargetMatching(state, catalog, spec, controller, source, id, selectorX, sourceSpark, subjectCost));
 }
 
 /**
@@ -238,12 +241,13 @@ export function targetCandidates(
   source: AbilitySource,
   selectorX?: number,
   sourceSpark?: SourceSparkReader,
+  subjectCost: number | null = null,
 ): InstanceId[] {
   switch (spec.kind) {
     case "stackTarget":
       return targetable(state, catalog, matchingStackItems(state, catalog, spec.selector, controller, source));
     case "inZone":
-      return targetable(state, catalog, matchingVoidCards(state, catalog, spec, controller, source, selectorX, sourceSpark));
+      return targetable(state, catalog, matchingVoidCards(state, catalog, spec, controller, source, selectorX, sourceSpark, subjectCost));
     case "target":
       return targetable(state, catalog, matchingCharacters(state, catalog, targetSelector(state, catalog, spec, controller, source, selectorX, sourceSpark), controller, source, selectorX, sourceSpark));
   }
@@ -302,25 +306,26 @@ function modeLegal(
   sourceSpark: SourceSparkReader,
   inherited?: ChoiceBindings,
   deferConditionals = false,
+  subjectCost: number | null = null,
 ): boolean {
   const definition = primitiveDefinition(node.op);
   const targetsAvailable = (definition.targets?.(node) ?? []).every(
     (spec) => {
       const bound = inherited?.targetsOf(spec) ?? null;
       return bound !== null ||
-        targetCandidates(state, catalog, spec, controller, source, selectorX, sourceSpark).length >= targetBounds(spec).min;
+        targetCandidates(state, catalog, spec, controller, source, selectorX, sourceSpark, subjectCost).length >= targetBounds(spec).min;
     },
   );
   if (!targetsAvailable) return false;
   if (deferConditionals && definition.deferConditionalChoices === true) return true;
   const modes = definition.modes?.(node);
   if (modes === undefined) {
-    return (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source, selectorX, sourceSpark, inherited, deferConditionals));
+    return (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost));
   }
   const bound = inherited?.modeOf(node) ?? null;
-  if (bound === null) return modes.some((mode) => modeLegal(state, catalog, mode, controller, source, selectorX, sourceSpark, inherited, deferConditionals));
+  if (bound === null) return modes.some((mode) => modeLegal(state, catalog, mode, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost));
   const chosen = modes[bound];
-  return chosen !== undefined && modeLegal(state, catalog, chosen, controller, source, selectorX, sourceSpark, inherited, deferConditionals);
+  return chosen !== undefined && modeLegal(state, catalog, chosen, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost);
 }
 
 /**
@@ -472,6 +477,7 @@ export function chooseOnResolution(
   lastKnownSourceSpark?: number | null,
   inherited?: ChoiceBindings,
   selectorX?: number,
+  subjectCost: number | null = null,
 ): EffectChoices | null {
   const sourceSpark = sourceSparkReader(ctx, source, lastKnownSourceSpark ?? null);
   const modes: number[] = [];
@@ -484,7 +490,7 @@ export function chooseOnResolution(
         modes.push(bound);
         return bound;
       }
-      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark, inherited, true));
+      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark, inherited, true, subjectCost));
       if (blocked || !legal.includes(true)) {
         blocked = true;
         return 0;
@@ -503,7 +509,7 @@ export function chooseOnResolution(
   const targets = collectTargets(effect, chosenModes(effect, modes, true), true).map((spec) => {
     const bound = inherited?.targetsOf(spec) ?? null;
     if (bound !== null) return [...bound];
-    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark);
+    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark, subjectCost);
     const bounds = targetBounds(spec);
     if (candidates.length < bounds.min) {
       ctx.emit({ kind: "noLegalTarget", source });
@@ -578,6 +584,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     source: env.source,
     x: env.x ?? sourceX(ctx.state, env.source),
     scored: env.scored,
+    subjectCost: env.lastKnownSubjectCost,
     count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env)).length,
     countCards: (count) => zoneCount(ctx.state, ctx.catalog, count, env.controller),
     movedCosts: (ref) => env.moved.costs(ref.node),
@@ -718,7 +725,7 @@ function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): 
     }
     case "target": {
       const chosen = env.targetsOf(ref) ?? [];
-      const legal = targetable(state, catalog, chosen.filter((id) => voidTargetMatching(state, catalog, ref, env.controller, env.source, id, env.x ?? undefined, resolvingSourceSpark(ctx, env))));
+      const legal = targetable(state, catalog, chosen.filter((id) => voidTargetMatching(state, catalog, ref, env.controller, env.source, id, env.x ?? undefined, resolvingSourceSpark(ctx, env), env.lastKnownSubjectCost)));
       if (legal.length === 0 && chosen.length > 0) {
         ctx.emit({ kind: "noLegalTarget", source: env.source });
       }
@@ -775,6 +782,7 @@ export interface ResolveOptions {
   readonly root?: EffectNode;
   /** The card the triggering event concerns, for a trigger. */
   readonly subject?: InstanceId | null;
+  readonly lastKnownSubjectCost?: number;
   /** The gain a "when … gains ✦" trigger matched. */
   readonly gain?: SparkGain | null;
   /** The positive challenge award the scoring trigger matched. */
@@ -965,6 +973,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     ability: options.ability,
     root: options.root ?? effect,
     subject: options.subject ?? null,
+    lastKnownSubjectCost: options.lastKnownSubjectCost ?? null,
     gain: options.gain ?? null,
     scored: options.scored ?? null,
     controller: options.controller,
@@ -999,7 +1008,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
  * nearest enclosing choices.
  */
 export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: EffectEnv, retainConditionalBindings = false): void {
-  const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env.lastKnownSourceSpark, env, env.x ?? undefined);
+  const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env.lastKnownSourceSpark, env, env.x ?? undefined, env.lastKnownSubjectCost);
   if (choices === null) return;
   const chosen = chosenModes(effect, choices.modes, true);
   const specs = collectTargets(effect, chosen, true);
