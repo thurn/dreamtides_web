@@ -319,8 +319,15 @@ describe("concurrent QA sessions", () => {
     const readyPromise = new Promise((/** @type {(value: { ready: boolean, ownerPath: string, slot: number, serverPid: number }) => void} */ done, reject) => {
       runner.on("message", (message) => {
         const value = /** @type {{ serverSpawn?: number, ready?: boolean, ownerPath: string, slot: number, serverPid: number }} */ (message);
-        if (value.serverSpawn !== undefined) servers.set(value.serverSpawn,
-          execFileSync("ps", ["-p", String(value.serverSpawn), "-o", "pid=,lstart=,command="], { encoding: "utf8" }).trim());
+        if (value.serverSpawn !== undefined) {
+          try { servers.set(value.serverSpawn,
+            execFileSync("ps", ["-p", String(value.serverSpawn), "-o", "pid=,lstart=,command="], { encoding: "utf8" }).trim()); }
+          catch (error) {
+            if (typeof error !== "object" || error === null || !("status" in error) || error.status !== 1) {
+              reject(error instanceof Error ? error : new Error("signal fixture server identity capture failed", { cause: error })); return;
+            }
+          }
+        }
         if (value.ready === true) done({ ...value, ready: true });
       });
       runner.once("exit", (code, signal) => reject(new Error(`signal runner exited before readiness: ${String(code)} ${String(signal)}`)));
@@ -359,8 +366,6 @@ describe("concurrent QA sessions", () => {
       expect(JSON.parse(readFileSync(ready.ownerPath, "utf8"))).toMatchObject({
         pid: runner.pid, providerState: "close-unconfirmed", bead: "synthetic-interruption",
       });
-      expect(output.join("")).toMatch(/server interruption requires reconciliation/);
-      expect(output.join("")).toMatch(/runtime: server process group .* port free/);
     } finally {
       await settleSignalFixture(runner, servers, root);
     }

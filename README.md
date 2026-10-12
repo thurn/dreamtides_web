@@ -199,9 +199,10 @@ leaves the provider record. Either a provider record or a server record
 protects its slot before and after lock acquisition: later runs pass over
 retained slots and use another usable slot, and refuse startup when every
 slot is retained. A live holder's locked slot remains ordinary contention.
-Yield checks use the same usable-slot rules as admission. Reconcile the recorded provider execution before clearing that
-record. Kernel release on pipe EOF proves local lock recovery; provider
-completion requires separate confirmation. The slots are separate from
+Yield checks use the same usable-slot rules as admission. Reconcile the
+recorded provider execution before clearing that record. Kernel release on
+pipe EOF proves local lock recovery; provider completion requires separate
+confirmation. The slots are separate from
 `artifacts/heavy.lock`: browser runs (`run-scenario`, `card-sweep`) take a
 browser slot only, never the heavy slot, and no command holds the heavy slot
 while it waits for a browser slot. `wallMs.browserLeaseWait` records slot
@@ -228,14 +229,16 @@ signal, a same-lifetime ambiguous command observation disables every further
 signal and permits only bounded observation until the leader is absent and
 the group is empty. A bounded observation of known same-lifetime ambiguity
 after a verified signal reports `server-observation-unsettled` when it remains
-unsettled. An identity rejection before signaling, or an unknown or reused
-lifetime observed after signaling, reports `identity-mismatch`. An ordinary
-verified group that remains unsettled reports `server-unsettled`. Changed records and unknown or reused lifetimes
-retain their evidence. Unknown new members disable further signals and can
-leave a live server protected pending reconciliation. Signal and normal-close cleanup share
-one shutdown operation. Reconciliation checks descendant identities and
-whole-group settlement, preserving
-malformed, partial, reused, changed, or ambiguous records for inspection.
+unsettled. A present mismatched identity before signaling, or an unknown or
+reused lifetime observed after signaling, reports `identity-mismatch`.
+Insufficient or missing pre-signal identity evidence can report `unverified`.
+An ordinary verified group that remains unsettled reports `server-unsettled`.
+Changed records and unknown or reused lifetimes retain their evidence. Unknown
+new members disable further signals and can leave a live server protected
+pending reconciliation. Signal and normal-close cleanup share one shutdown
+operation. Reconciliation checks descendant identities and whole-group
+settlement, preserving malformed, partial, reused, changed, or ambiguous
+records for inspection.
 An absent launcher with durable member identities can settle those verified
 survivors; unknown survivors protect the record. An empty group is settled.
 A stopped server clears only its exact server record. The provider's
