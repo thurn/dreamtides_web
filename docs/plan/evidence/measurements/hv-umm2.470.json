@@ -1,0 +1,411 @@
+{
+  "bead": "hv-umm2.470",
+  "base": "2043b8972d19d1c4faef8d94507538316b6b4daf",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.470",
+  "dispatchWindow": {
+    "claim": "2026-10-12T01:57:06+00:00",
+    "evidenceAt": "2026-10-12T02:05:58.927358+00:00",
+    "elapsedMin": 12.108615183333335,
+    "basis": "Exact native claim to final endpoint after parent prose correction ACK; final numeric schema and amended Git commit follow. Actual Git timestamps and original helper commit are retained separately in root delivery receipts.",
+    "finalClaimToPrecommitEndpoint": "2026-10-12T02:09:12.516911+00:00"
+  },
+  "implementation": "The verified public Trigger play/from/void descriptor has its intended binding without a pending annotation. The resolver lifecycle guard and every API name remain intact. One existing descriptor line changes; no newly dead support, test source, engine API or catalog changes.",
+  "publicProof": {
+    "capabilities": 47,
+    "individualForms": 48,
+    "markedBefore": 16,
+    "fulfilledCount": 1,
+    "fulfilled": {
+      "name": "whenPlayFromVoidTrigger",
+      "form": {
+        "module": "src/engine/dsl/types.ts",
+        "symbol": "Trigger",
+        "kind": "form",
+        "member": "play",
+        "option": "from",
+        "optionLiteral": "void",
+        "pending": "option"
+      },
+      "exists": true,
+      "declared": "Error: fulfilled pending capability src/engine/dsl/types.ts:Trigger member=play option=from value=void: verify the intended public binding and remove pending=option",
+      "intended": true
+    },
+    "stillMissing": 15,
+    "C12": "DeckMods.typeRemap is actually absent and retains pending option. It is not inferred from own-card type overrides.",
+    "allUnmarkedIndividualFormsValid": true,
+    "callableProof": {
+      "callable": true,
+      "value": {
+        "on": "play",
+        "player": "you",
+        "filter": {},
+        "from": "void"
+      },
+      "sourceSHA256": "recorded in artifact manifest"
+    },
+    "completeObservations": {
+      "filename": "public-probe.stdout",
+      "sha256": "93183ee0d5db4d869de678f57600afa517cfda6126d2caacedda752c759df66e"
+    },
+    "authority": "Owned Trigger type and exported whenPlayFromVoid provide the intended form; completed93 implements it. Local history441/451/461 defines the marker lifecycle."
+  },
+  "negativeProof": {
+    "unchangedCliActualExit": 1,
+    "completeRawFailure": {
+      "filename": "unchanged-cli.stderr",
+      "sha256": "ba46f0659d880ca6e90a025f7224b3f88792e2d67be919f113bc9adca24d49a9"
+    },
+    "sourceSHA256": "6df5be03b9c9e48c4a1829e028dff294a1a494177fa75a8e42eac29d3e68eecf",
+    "testSHA256": "5e390310c8d32e643b015d3a65b9811b94edb0c4f9a1c16f507793625157cf67",
+    "inheritedInventorySHA256": "82793689a2cfd2e2d29c0e37aaaad1758fae27019990a820eec2babfcff906e7",
+    "limit": "The actual unchanged CLI fails. Diagnostic generation is explicitly labeled and does not establish unchanged CLI success."
+  },
+  "diagnosticBaseline": {
+    "label": "Diagnostic only: fulfilled rejection bypass with console availability observer; unchanged CLI failed separately",
+    "before": {
+      "scripts/content-inventory.ts": "6df5be03b9c9e48c4a1829e028dff294a1a494177fa75a8e42eac29d3e68eecf",
+      "docs/plan/evidence/content-inventory.json": "82793689a2cfd2e2d29c0e37aaaad1758fae27019990a820eec2babfcff906e7"
+    },
+    "modifiedSourceSHA256": "55526e54a10ca5b1063621176ad402ad7fd66eeaff6b1fea99872d7093333387",
+    "exit": 0,
+    "diagnosticOutputSHA256": "c9503518f8baa758805c2ba6aed76b256520f6d487fb8eccd2a1a54128ae4327",
+    "availabilityCount": 189,
+    "after": {
+      "scripts/content-inventory.ts": "6df5be03b9c9e48c4a1829e028dff294a1a494177fa75a8e42eac29d3e68eecf",
+      "docs/plan/evidence/content-inventory.json": "82793689a2cfd2e2d29c0e37aaaad1758fae27019990a820eec2babfcff906e7"
+    },
+    "byteIdenticalRestoration": true
+  },
+  "finalObserver": {
+    "label": "Console-only final availability observer, all CLI validation active",
+    "before": {
+      "scripts/content-inventory.ts": "24198ebd8b099468d8f96e2d5e2ba365957719d3beda784782f87028ecee7bbe",
+      "docs/plan/evidence/content-inventory.json": "9290446c6a0cbbdbef2d974a88d9a9900bf692b77d6d1f7b97c8bdf06a15f1e0"
+    },
+    "modifiedSourceSHA256": "20a7c0366dda3977ce50fab764100eb5871c2f70cbf0dd43de23087c97b648e9",
+    "exit": 0,
+    "availabilityCount": 189,
+    "after": {
+      "scripts/content-inventory.ts": "24198ebd8b099468d8f96e2d5e2ba365957719d3beda784782f87028ecee7bbe",
+      "docs/plan/evidence/content-inventory.json": "9290446c6a0cbbdbef2d974a88d9a9900bf692b77d6d1f7b97c8bdf06a15f1e0"
+    },
+    "byteIdenticalRestoration": true
+  },
+  "comparison": {
+    "allAvailability": {
+      "entries": 189,
+      "unchanged": 189,
+      "differences": []
+    },
+    "freshDiagnosticVsFinal": {
+      "entities": 1209,
+      "allEntityFieldsIdentical": true,
+      "uuidSetsIdentical": true,
+      "projectionBefore": 218,
+      "projectionAfter": 218,
+      "differences": [
+        {
+          "path": "/primitives/156/forms/0/pending",
+          "before": "option",
+          "after": null
+        }
+      ]
+    },
+    "trackedVsFinal": {
+      "uuidSetsIdentical": true,
+      "trackedProjection": 219,
+      "freshProjection": 218,
+      "availabilityDifferences": [
+        {
+          "name": "whenPlayFromVoidTrigger",
+          "before": false,
+          "after": true
+        }
+      ],
+      "changedEntityCount": 42,
+      "changedTopLevelFields": [
+        "summary",
+        "beads",
+        "primitives",
+        "entities"
+      ],
+      "changedEntityFieldCounts": {
+        "requiredPrimitives": 12,
+        "status": 18,
+        "routing": 16,
+        "rulesDecisions": 6,
+        "cardIssues": 1
+      }
+    },
+    "hashes": {
+      "inherited": "82793689a2cfd2e2d29c0e37aaaad1758fae27019990a820eec2babfcff906e7",
+      "freshDiagnostic": "c9503518f8baa758805c2ba6aed76b256520f6d487fb8eccd2a1a54128ae4327",
+      "final": "9290446c6a0cbbdbef2d974a88d9a9900bf692b77d6d1f7b97c8bdf06a15f1e0"
+    },
+    "exhaustiveUuidFieldComparison": {
+      "filename": "comparison.json",
+      "sha256": "ccbefe9cf7366245e862d83bedf0b40c3946ad4d86389fa4ce2ae0b91f58a06a"
+    },
+    "authority": "The inherited 219 to current 218 planning projection and 42 changed UUID records describe source already present on the owned base. The annotation effect is isolated by fresh diagnostic comparison. Filed native UUID scope governs execution."
+  },
+  "validation": {
+    "checks": [
+      {
+        "label": "callable-proof",
+        "start": "2026-10-12T02:02:57.168411+00:00",
+        "end": "2026-10-12T02:02:58.603292+00:00",
+        "seconds": 1.4347799999995914,
+        "startLoad": 4.96533203125,
+        "pid": 48908,
+        "pgid": 48908,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "cli-check",
+        "start": "2026-10-12T02:00:42.822049+00:00",
+        "end": "2026-10-12T02:00:44.182854+00:00",
+        "seconds": 1.3606861250009388,
+        "startLoad": 5.64208984375,
+        "pid": 36250,
+        "pgid": 36250,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "cli-regenerate",
+        "start": "2026-10-12T02:00:29.855035+00:00",
+        "end": "2026-10-12T02:00:31.115033+00:00",
+        "seconds": 1.2598952499993175,
+        "startLoad": 4.53662109375,
+        "pid": 34239,
+        "pgid": 34239,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "compact-schema",
+        "start": "2026-10-12T02:05:39.560439+00:00",
+        "end": "2026-10-12T02:05:39.734075+00:00",
+        "seconds": 0.17351104199951806,
+        "startLoad": 7.5556640625,
+        "pid": 55970,
+        "pgid": 55970,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "diagnostic-baseline",
+        "start": "2026-10-12T02:00:09.062593+00:00",
+        "end": "2026-10-12T02:00:11.150090+00:00",
+        "seconds": 2.0873945000003005,
+        "startLoad": 5.4482421875,
+        "pid": 31349,
+        "pgid": 31349,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "dispatch-friction",
+        "start": "2026-10-12T01:59:00.317368+00:00",
+        "end": "2026-10-12T01:59:00.460923+00:00",
+        "seconds": 0.1434074579992739,
+        "startLoad": 6.17333984375,
+        "pid": 24005,
+        "pgid": 24005,
+        "actualExit": 2,
+        "liveMembers": []
+      },
+      {
+        "label": "dispatch-friction-corrected",
+        "start": "2026-10-12T01:59:08.644590+00:00",
+        "end": "2026-10-12T01:59:08.800154+00:00",
+        "seconds": 0.15548820900039573,
+        "startLoad": 6.8798828125,
+        "pid": 24395,
+        "pgid": 24395,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "final-observer",
+        "start": "2026-10-12T02:01:00.248513+00:00",
+        "end": "2026-10-12T02:01:01.532294+00:00",
+        "seconds": 1.2836956669998472,
+        "startLoad": 4.822265625,
+        "pid": 38739,
+        "pgid": 38739,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "final-schema",
+        "start": "2026-10-12T02:03:27.401668+00:00",
+        "end": "2026-10-12T02:03:27.556633+00:00",
+        "seconds": 0.1548480829987966,
+        "startLoad": 5.07275390625,
+        "pid": 51199,
+        "pgid": 51199,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "focused",
+        "start": "2026-10-12T02:00:36.725710+00:00",
+        "end": "2026-10-12T02:00:43.137619+00:00",
+        "seconds": 6.411717332999615,
+        "startLoad": 4.91455078125,
+        "pid": 35277,
+        "pgid": 35277,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "install",
+        "start": "2026-10-12T01:58:34.803791+00:00",
+        "end": "2026-10-12T01:58:36.971540+00:00",
+        "seconds": 2.1676187089997256,
+        "startLoad": 5.33203125,
+        "pid": 22108,
+        "pgid": 22108,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "knip",
+        "start": "2026-10-12T02:02:40.706465+00:00",
+        "end": "2026-10-12T02:02:43.284226+00:00",
+        "seconds": 2.577645166000366,
+        "startLoad": 4.9365234375,
+        "pid": 47701,
+        "pgid": 47701,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "public-probe",
+        "start": "2026-10-12T01:59:25.172482+00:00",
+        "end": "2026-10-12T01:59:27.056427+00:00",
+        "seconds": 1.8838336249991698,
+        "startLoad": 6.369140625,
+        "pid": 25395,
+        "pgid": 25395,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "review",
+        "start": "2026-10-12T02:02:27.521102+00:00",
+        "end": "2026-10-12T02:02:37.619056+00:00",
+        "seconds": 10.097707583998272,
+        "startLoad": 4.009765625,
+        "pid": 46673,
+        "pgid": 46673,
+        "actualExit": 0,
+        "liveMembers": []
+      },
+      {
+        "label": "unchanged-cli",
+        "start": "2026-10-12T01:59:00.317268+00:00",
+        "end": "2026-10-12T01:59:02.194398+00:00",
+        "seconds": 1.8770121659999859,
+        "startLoad": 6.17333984375,
+        "pid": 24004,
+        "pgid": 24004,
+        "actualExit": 1,
+        "liveMembers": []
+      }
+    ],
+    "focused": {
+      "entrypoints": 1,
+      "passed": 88,
+      "priorParameterizedCountDerived": 89,
+      "priorCountBasis": "Final observed 88 plus one fulfilled pending declaration; no unchanged focused run was performed.",
+      "caseCountDelta": -1,
+      "sourceLinesDelta": 0,
+      "entrypointsDelta": 0,
+      "jsdomDelta": 0,
+      "testFileLines": 365,
+      "contracts": "Stable synthetic fixtures exercise actual intended APIs, aliases, usable options/literals and the pending lifecycle including missing C12."
+    },
+    "review": {
+      "passed": 88,
+      "relatedEntrypoints": 1,
+      "staticSteps": [
+        "typecheck",
+        "typecheck-node",
+        "lint",
+        "import-cycles",
+        "friction-records"
+      ],
+      "actualFirstStep": "prepare",
+      "actualFirstStepStart": "2026-10-12T02:02:27.739Z",
+      "actualFirstStepLoad": 4.009765625,
+      "hostLoadBasis": "Actual review prepare step start used for compact hostLoad; no low-load certification or speedup claim."
+    },
+    "finalSchema": {
+      "records": 457,
+      "historicalUnknowns": 41
+    },
+    "scope": "Focused existing inventory contracts, normal CLI regeneration/check, related review and sequential Knip. No full suite, new test entrypoints, browser, fuzz or benchmark."
+  },
+  "resources": {
+    "checkedAt": "2026-10-12T02:05:58.910353+00:00",
+    "allListedCommandGroupsAbsent": true,
+    "browser": null,
+    "server": null,
+    "provider": null,
+    "externalReview": null,
+    "wrapperPIDs": null,
+    "wrapperPIDLimit": "Foreground tool wrappers completed with actual exits; wrapper PIDs were not sampled. Isolated child PIDs/PGs are recorded and independently absent.",
+    "diagnosticWrapperSession": 89438,
+    "diagnosticWrapperExit": 0,
+    "finalObserverWrapperSession": 65503,
+    "finalObserverWrapperExit": 0
+  },
+  "durableEvidence": {
+    "manifest": {
+      "filename": "artifact-manifest.json",
+      "sha256": "b5551b6b88272955e9a8a2e21efaf38d89deecceb6f611c860e1d643314f8322"
+    },
+    "files": 67,
+    "baseline": {
+      "filename": "fresh-diagnostic-baseline.json",
+      "sha256": "c9503518f8baa758805c2ba6aed76b256520f6d487fb8eccd2a1a54128ae4327"
+    },
+    "all189BaselineFlags": {
+      "filename": "baseline-availability.json",
+      "sha256": "f7f4f36579524792861728d0beade77e43fb2b54c127e669722eec0617cb04f2"
+    },
+    "all189FinalFlags": {
+      "filename": "final-availability.json",
+      "sha256": "f7f4f36579524792861728d0beade77e43fb2b54c127e669722eec0617cb04f2"
+    },
+    "publicForms": {
+      "filename": "public-probe.stdout",
+      "sha256": "93183ee0d5db4d869de678f57600afa517cfda6126d2caacedda752c759df66e"
+    },
+    "callable": {
+      "filename": "callable-proof.stdout",
+      "sha256": "5bbe5281f5eab4853ca32f7bf89bc818f5a5ae32aee452e8efc07810f30b885a"
+    },
+    "comparison": {
+      "filename": "comparison.json",
+      "sha256": "ccbefe9cf7366245e862d83bedf0b40c3946ad4d86389fa4ce2ae0b91f58a06a"
+    },
+    "baselineRestoration": {
+      "filename": "diagnostic-restoration.json",
+      "sha256": "0f96a180ca1641f6a82ef0cafc7c56e41fb26e16e5a9ec45164166be018feb89"
+    },
+    "finalRestoration": {
+      "filename": "final-observer-restoration.json",
+      "sha256": "68ca399a9441325a75c5d4eb2efe466df403412ab398146201400ae93820adb4"
+    },
+    "receiptNaming": "Each check label has matching .json receipt, .stdout and .stderr files in the complete durable manifest."
+  },
+  "limits": [
+    "The unsupported initial friction --json call exited 2 and the corrected report exited 0; both are retained.",
+    "Temporary observers restore both source and inventory byte-identically in finally.",
+    "No independent core review is required for this unmarked metadata repair."
+  ]
+}

@@ -412,7 +412,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("whenCopyTrigger", [registered(DSL_TYPES, "Trigger", { member: "copy", pending: "member" })], ["Trigger"], { note: `"when you copy" (${GAP_38})` }),
   dsl("whenRemovesEnemyTrigger", [registered(DSL_TYPES, "Trigger", { member: "removesEnemy", pending: "member" })], ["Trigger"], { note: "\"when you dissolve or banish an enemy\"" }),
   dsl("whenPutIntoVoidTrigger", [callable(DSL_TRIGGERS, "whenPutIntoVoid")], ["Trigger"]),
-  dsl("whenPlayFromVoidTrigger", [registered(DSL_TYPES, "Trigger", { member: "play", option: "from", optionLiteral: "void", pending: "option" })], ["Trigger"], { note: "\"when you play a card from your void\"" }),
+  dsl("whenPlayFromVoidTrigger", [registered(DSL_TYPES, "Trigger", { member: "play", option: "from", optionLiteral: "void" })], ["Trigger"], { note: "\"when you play a card from your void\"" }),
   dsl("drawTriggerFilter", [registered(DSL_TYPES, "Trigger", { member: "draw", option: "filter", pending: "option" })], ["Trigger"], { note: "\"when you draw a character\"" }),
   dsl("materializeNthTrigger", [registered(DSL_TYPES, "Trigger", { member: "materialize", option: "nth", pending: "option" })], ["Trigger"], { note: "\"your second spirit animal in a turn\"" }),
   dsl("atEndOfTurnTrigger", [callable(DSL_TRIGGERS, "atEndOfTurn")], ["Trigger"], { note: "\"at the end of your turn\" (Ending)" }),
