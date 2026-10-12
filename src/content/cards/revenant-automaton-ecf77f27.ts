@@ -1,3 +1,6 @@
+import { abandonCost, activated, thisCardIn } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 191,
   art: { x: 0.256, y: 0.115, scale: 1.77 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(onMaterialized(), p.gainPoints(1)),
+    activated([abandonCost()], p.materialize(thisCardIn("void")), { zone: "void" }),
+  ],
+  verifiedText: "g0954j4obr",
 });

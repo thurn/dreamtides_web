@@ -1,0 +1,141 @@
+{
+  "bead": "hv-umm2.151",
+  "implementWindow": {
+    "startUtc": "2026-10-12T10:04:00Z",
+    "endUtc": "2026-10-12T10:24:59Z",
+    "endpoint": "evidence write before commit; implementMin adds ~3 min for the commit",
+    "scope": "implementation subagent from dispatch brief to commit"
+  },
+  "validation": {
+    "focused-specs": {
+      "command": "npm test -- src/content/specs/specs.test.ts",
+      "exit": 0,
+      "wallSeconds": 3.5,
+      "cases": 78
+    },
+    "content-gates": {
+      "command": "npm test -- src/engine/content-gates.test.ts",
+      "exit": 0,
+      "wallSeconds": 2.8,
+      "cases": 12
+    },
+    "fuzz": {
+      "command": "lockf -k artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids <3 uuids>",
+      "exit": 0,
+      "wallSeconds": 160,
+      "internalWallSeconds": 147.7,
+      "hostLoadAtStart": 5.73
+    },
+    "preflight": {
+      "command": "npm run lab:preflight -- --cards <3 uuids>",
+      "exit": 0,
+      "wallSeconds": 1,
+      "counts": {
+        "pass": 32,
+        "skip": 28
+      }
+    },
+    "sweep": {
+      "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.151 --cards <3 uuids>",
+      "exit": 0,
+      "wallSeconds": 202,
+      "port": 5274,
+      "serverPgid": 56390,
+      "hostLoad": 11.95,
+      "invocation": "invocations/sweep-Fxmmof",
+      "counts": {
+        "pass": 32,
+        "skip": 28
+      }
+    },
+    "judged-debug": {
+      "command": "node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.151/judged.mjs --bead hv-umm2.151",
+      "exit": 1,
+      "wallSeconds": 200,
+      "runs": 4,
+      "note": "scenario development runs; failures were scenario scripting (chooser includes Cancel, tap during presentation), not card behavior"
+    },
+    "judged-final": {
+      "command": "node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.151/judged.mjs --bead hv-umm2.151 --viewports desktop,mobile",
+      "exit": 0,
+      "wallSeconds": 110,
+      "port": 5274,
+      "serverPgid": 25425,
+      "hostLoad": 6.31,
+      "invocation": "invocations/run-SCTexR"
+    },
+    "review-lint-fail": {
+      "command": "npm run review",
+      "exit": 1,
+      "wallSeconds": 45,
+      "note": "two unnecessary non-null assertions in the new scenario module"
+    },
+    "review": {
+      "command": "npm run review",
+      "exit": 0,
+      "wallSeconds": 41,
+      "hostLoadAtStart": 11.99
+    },
+    "knip": {
+      "command": "npm run knip",
+      "exit": 0,
+      "wallSeconds": 3
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final npm run review start, 1-minute OS load"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "fuzzStart": 5.73,
+    "sweep": 11.95,
+    "judgedFinal": 6.31,
+    "firstReviewStart": 15.8,
+    "finalReviewStart": 11.99
+  },
+  "d20": {
+    "specs": [
+      "ecf77f27-df0f-47c4-99c2-48d7fa46a137 void activation re-triggers its own Materialized"
+    ],
+    "noSpec": {
+      "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b": "composition of energy, exhaustSelf, abandonCost, returnFromVoid and draw",
+      "ed4d5342-0690-40b7-ab48-6b76035466f2": "composition; self-abandon-then-return-from-void targeting is covered by the prim-return-from-void scenario for Ruptured Dynamo"
+    }
+  },
+  "d21": {
+    "sampled": [
+      "ed4d5342-0690-40b7-ab48-6b76035466f2"
+    ],
+    "newPromptKindsStatusesEffects": [],
+    "additionallyJudged": [
+      "ecf77f27-df0f-47c4-99c2-48d7fa46a137 (first real void activation, per brief)"
+    ]
+  },
+  "fuzz": {
+    "games": 300,
+    "failures": 0,
+    "targets": [
+      {
+        "uuid": "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b",
+        "included": 617,
+        "exercised": 259
+      },
+      {
+        "uuid": "ecf77f27-df0f-47c4-99c2-48d7fa46a137",
+        "included": 614,
+        "exercised": 295
+      },
+      {
+        "uuid": "ed4d5342-0690-40b7-ab48-6b76035466f2",
+        "included": 612,
+        "exercised": 327
+      }
+    ]
+  },
+  "newRulesDecisions": [],
+  "newCardIssues": [],
+  "inventory": "content-inventory.ts --check reports the inventory stale only for these three entities' pending->authored status; composition beads do not regenerate it"
+}

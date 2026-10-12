@@ -1,3 +1,6 @@
+import { abandonCost, activated, energy, exhaustSelf, fromVoid } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
+import { returnFromVoid } from "../../engine/effects/primitives/return-from-void";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 327,
   art: { x: -0.049, y: 0.897, scale: 1.07 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([energy(1)], returnFromVoid(fromVoid({ cardType: "character", costAtMost: variant.amplified ? 3 : 2 }))),
+    activated([energy(1), exhaustSelf(), abandonCost()], p.draw(1)),
+  ],
+  verifiedText: "2blidjdrwap",
 });

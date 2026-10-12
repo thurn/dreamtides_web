@@ -1,3 +1,6 @@
+import { abandonSelfCost, activated, discardCost, energy, exhaustSelf, fromVoid } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
+import { returnFromVoid } from "../../engine/effects/primitives/return-from-void";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 344,
   art: { x: 0.172, y: -0.636, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated([exhaustSelf(), discardCost()], p.erode(2)),
+    activated([energy(4), abandonSelfCost()], returnFromVoid(fromVoid({ cardType: "character" }))),
+  ],
+  verifiedText: "1d5drfktk7b",
 });
