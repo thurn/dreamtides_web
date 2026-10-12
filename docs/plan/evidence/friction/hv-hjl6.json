@@ -1,0 +1,23 @@
+{
+  "bead": "hv-hjl6",
+  "phase": 5,
+  "implementMin": 15.311415833333333,
+  "implementWindow": {
+    "start": "2026-10-12T13:55:26.127Z",
+    "end": "2026-10-12T14:10:44.811950+00:00"
+  },
+  "localValidationS": {
+    "focused": 3.4130070409955806,
+    "review": 17.85966191600164,
+    "knip": 4.878975749998062,
+    "reviewFull": 126.42088008300198,
+    "browser": 43.115266624998185
+  },
+  "hostLoad": 34.08,
+  "testDelta": {
+    "files": 0,
+    "lines": 132,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

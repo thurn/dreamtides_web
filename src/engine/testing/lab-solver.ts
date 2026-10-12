@@ -387,7 +387,7 @@ function costNeeds(costs: readonly Cost[]): CostNeeds {
  * targets as well, bounded by the staged count.
  * A ⍟ additional cost gets that many
  * points in `side`'s score, wherever it sits among alternatives and
- * optional costs (`costNeeds`). A card with a stack target answers an
+ * optional costs (`costNeeds`). An event or ▸Materialized trigger with a stack target answers an
  * item of the opponent's: unless a board is declared, the opponent is active
  * in its Day holding a matching opener (`stackOpener`) as its first hand
  * card, and `opener` names that side; the lab plays the opener before the
@@ -420,6 +420,10 @@ export function labBoard(
   const materialized = abilities.filter(isMaterializedTrigger).map((ability) => ability.effect);
   const sourceSpark = labSourceSpark(engine, cardId, variant, xRange);
   for (const spec of materialized.flatMap(everyTarget)) {
+    if (spec.kind === "stackTarget") {
+      opener ??= stackOpener(spec.selector);
+      continue;
+    }
     // A ▸Materialized character target of your own gets a character of yours ahead of the card, so the card is not its only choice.
     if (spec.kind === "target" && spec.selector.controller === "you") {
       const selector = sourceSparkAs(spec.selector, sourceSpark);

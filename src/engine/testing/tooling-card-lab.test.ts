@@ -2,10 +2,10 @@
  * The card-lab setup solver and the card-lab battle.
  */
 import { describe, expect, it } from "vitest";
-import type { EngineCardDefinition } from "../catalog";
+import { instanceCard, type EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
 import { DSL, DSL_CARDS } from "./dsl-cards";
-import { createFoldAdapter } from "../fold/slice";
+import { createFoldAdapter, type BattleIntent } from "../fold/slice";
 import { labBoard } from "./lab-solver";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 import {
@@ -21,6 +21,9 @@ import {
   fromVoid,
   optionalCost,
   pointsCost,
+  keyword,
+  revealCost,
+  stackItem,
   target,
   x,
 } from "../dsl/builders";
@@ -41,6 +44,11 @@ import { eachPlayer } from "../effects/primitives/each-player";
 import { cardMatchesFilter } from "../continuous/characteristics";
 import type { AdditionalCost, CardFilter } from "../dsl/types";
 import { engine } from "./tooling.fixtures";
+import { cardLabBattle, cardLabFixture } from "./card-lab";
+import { boardState } from "./board";
+import { prevent } from "../effects/primitives/prevent";
+import type { EngineEvent } from "../events";
+import { NO_PROMPTS } from "../steps/sources";
 
 /**
  * Plays `card` on its lab board as `side`, choosing the X equal to the staged
@@ -72,6 +80,130 @@ function dissolvesStagedEnemy(labEngine: Engine, card: EngineCardDefinition, poo
 }
 
 describe("card-lab setup solver", () => {
+  it.each(["player", "enemy"] as const)("returns a Materialized stack opener usable by the real card-lab caller as %s", (side) => {
+    const other = side === "player" ? "enemy" : "player";
+    for (const controller of ["any", "opponent"] as const) for (const cardType of [undefined, "character", "event"] as const) for (const route of [0, 1]) {
+      const card: EngineCardDefinition = {
+        ...SYNTHETIC.interruptCharacter, id: syntheticId(940), status: "authored",
+        abilities: () => [
+          keyword("offering"), additionalCost(optionalCost(revealCost())),
+          triggered(onMaterialized(), prevent(stackItem({ controller, cardType }))),
+        ],
+      };
+      const labEngine = createEngine(testCatalog([...DSL_CARDS, card]));
+      const solved = labBoard(labEngine, card.id, [], side);
+      expect(solved.opener).toBe(other);
+      expect(solved.state.stack).toEqual([]);
+      expect(solved.state.turn.active).toBe(other);
+      const rebuilt = boardState(labEngine.catalog, solved.setup);
+      expect(rebuilt.state).toEqual(solved.state);
+      const stagedOpener = rebuilt.ids[other].hand[0];
+      expect(stagedOpener).not.toBe(rebuilt.ids[side].hand[0]);
+      expect(instanceCard(labEngine.catalog, rebuilt.state.instances[stagedOpener]).cardType).toBe(cardType ?? "event");
+      const request = { entry: { cardId: card.id }, variant: "base" as const, side };
+      const fixture = cardLabFixture(labEngine, request, []);
+      const fixtureIds = boardState(labEngine.catalog, fixture.setup).ids;
+      const opener = fixtureIds[other].hand[0];
+      const source = fixtureIds[side].hand[0];
+      expect(fixture.script.map((step) => "side" in step ? step.side : null)).toEqual(side === "enemy" ? [other, side] : [other]);
+      const events: EngineEvent[] = [];
+      let slice = cardLabBattle(labEngine, request, [], (published) => events.push(...published)).slice;
+      expect(slice.committed.stack.some((item) => item.kind === "card" && item.instance === opener)).toBe(true);
+      const adapter = createFoldAdapter(labEngine);
+      const apply = (intent: BattleIntent): void => {
+        const result = adapter.reduce(slice, intent);
+        if (result.kind === "bounced") throw new Error(result.reason);
+        expect(result.error).toBeNull();
+        events.push(...result.published);
+        slice = result.slice;
+      };
+      if (side === "player") apply({ kind: "battleAction", side, action: { kind: "play", card: source, from: "hand" } });
+      for (let steps = 0; slice.inFlight !== null || slice.committed.stack.length > 0; steps++) {
+        if (steps >= 20) throw new Error("lab workflow did not settle");
+        const pending = adapter.pending(slice)?.prompt;
+        if (pending !== undefined) {
+          const value = (() => {
+            if (pending.kind === "chooseMode" && pending.purpose.role === "playRoute") {
+              expect(pending.options[route]?.legal).toBe(true);
+              return route;
+            }
+            if (pending.kind === "confirm" && pending.purpose.role === "optionalCost") return false;
+            if (pending.kind === "chooseCards") {
+              expect(pending.candidates).not.toContain(source);
+              return pending.candidates.slice(0, pending.min);
+            }
+            if (pending.kind === "chooseTargets") {
+              expect(slice.committed.instances[source]?.zone).toBe("play");
+              expect(pending.candidates).toEqual([opener]);
+              return [opener];
+            }
+            throw new Error(`unexpected ${pending.kind} ${pending.purpose.role}`);
+          })();
+          apply({ kind: "answer", side: pending.side, promptId: pending.id, value });
+        } else {
+          const decision = labEngine.decision(slice.committed);
+          if (decision === null) throw new Error("no lab decision");
+          apply({ kind: "battleAction", side: decision.side, action: { kind: "pass" } });
+        }
+      }
+      expect(events.filter((event) => event.kind === "prevented")).toEqual([expect.objectContaining({ instance: opener, side: other, to: "void" })]);
+      const materializedAt = events.findIndex((event) => event.kind === "materialized" && event.instance === source);
+      expect(materializedAt).toBeGreaterThanOrEqual(0);
+      expect(events.findIndex((event) => event.kind === "prevented")).toBeGreaterThan(materializedAt);
+      expect(events.some((event) => event.kind === "noLegalTarget")).toBe(false);
+      expect(slice.committed.instances[opener]?.zone).toBe("void");
+      expect(slice.committed.instances[source]?.status.offering).toBe(route === 1);
+      expect(invariantViolations(slice.committed, labEngine.catalog)).toEqual([]);
+    }
+  });
+
+  it("preserves own-controller Materialized selectors and explicit staged boards", () => {
+    for (const side of ["player", "enemy"] as const) {
+      const own: EngineCardDefinition = {
+        ...SYNTHETIC.interruptCharacter, id: syntheticId(941), status: "authored",
+        abilities: () => [triggered(onMaterialized(), prevent(stackItem({ controller: "you" })))],
+      };
+      const opposing: EngineCardDefinition = { ...own, id: syntheticId(942), abilities: () => [triggered(onMaterialized(), prevent(stackItem()))] };
+      const labEngine = createEngine(testCatalog([...DSL_CARDS, own, opposing]));
+      const solved = labBoard(labEngine, own.id, [], side);
+      expect(solved.opener).toBeNull();
+      expect(solved.state.turn.active).toBe(side);
+      const source = solved.state.sides[side].hand[0];
+      const played = labEngine.apply(solved.state, side, { kind: "play", card: source, from: "hand" }, NO_PROMPTS);
+      const resolved = passUntil(labEngine, played.state, (state) => state.stack.length === 0);
+      expect([...played.events, ...resolved.steps.flatMap((step) => step.events)].some((event) => event.kind === "noLegalTarget")).toBe(true);
+      expect([...played.events, ...resolved.steps.flatMap((step) => step.events)].some((event) => event.kind === "prevented")).toBe(false);
+      const stage = { [side]: { hand: [opposing.id, SYNTHETIC.vanilla2.id], void: [SYNTHETIC.vanilla3.id], energy: 3 } };
+      const declared = labBoard(labEngine, opposing.id, [], side, stage);
+      expect(declared.opener).toBeNull();
+      expect(declared.state.turn.active).toBe(side);
+      expect(declared.setup[side]).toMatchObject(stage[side]);
+      expect(cardLabFixture(labEngine, { entry: { cardId: opposing.id }, variant: "base", side, stage }, []).script).toEqual([]);
+    }
+  });
+
+  it("retains event stack-target staging and excludes the played source", () => {
+    for (const side of ["player", "enemy"] as const) {
+      const card: EngineCardDefinition = { ...SYNTHETIC.interruptEvent, id: syntheticId(943), status: "authored", abilities: () => [event(prevent(stackItem({ cardType: "event" })))] };
+      const labEngine = createEngine(testCatalog([...DSL_CARDS, card]));
+      const solved = labBoard(labEngine, card.id, [], side);
+      const other = side === "player" ? "enemy" : "player";
+      expect(solved.opener).toBe(other);
+      const { state, ids } = boardState(labEngine.catalog, solved.setup);
+      const opener = ids[other].hand[0];
+      const source = ids[side].hand[0];
+      const opening = labEngine.apply(state, other, { kind: "play", card: opener, from: "hand" }, NO_PROMPTS);
+      const played = labEngine.apply(opening.state, side, { kind: "play", card: source, from: "hand" }, { answer(prompt) {
+        if (prompt.kind !== "chooseTargets") throw new Error(`unexpected ${prompt.kind}`);
+        expect(prompt.candidates).toEqual([opener]);
+        return [opener];
+      } });
+      const resolved = passUntil(labEngine, played.state, (state) => state.stack.length === 0);
+      expect([...played.events, ...resolved.steps.flatMap((step) => step.events)].filter((event) => event.kind === "prevented")).toEqual([expect.objectContaining({ instance: opener })]);
+      expect(resolved.state.instances[source]?.zone).toBe("void");
+    }
+  });
+
   it("stages subtype-only and combined type/subtype void targets with canonical filter matching", () => {
     const mage: EngineCardDefinition = { ...SYNTHETIC.vanilla1, id: syntheticId(907), subtype: "Mage" };
     const eventCard: EngineCardDefinition = { ...SYNTHETIC.event0, id: syntheticId(912), subtype: "Ember" };

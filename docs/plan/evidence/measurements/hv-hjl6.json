@@ -1,0 +1,332 @@
+{
+  "bead": "hv-hjl6",
+  "base": "e27d1d60604e125888fac78ff1d6565c1a76bd6c",
+  "negativeWitness": {
+    "log": "/tmp/hjl6-validation/unchanged-source.log",
+    "unchangedSource": "src/engine/testing/lab-solver.ts",
+    "result": "Two both-controller contracts fail: returned opener null; other 15 contracts pass."
+  },
+  "contracts": {
+    "materializedWorkflowCells": 24,
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "selectors": [
+      "any",
+      "opponent",
+      "you"
+    ],
+    "cardTypes": [
+      "unconstrained",
+      "character",
+      "event"
+    ],
+    "routes": [
+      "hand",
+      "offering"
+    ],
+    "caller": "cardLabFixture and cardLabBattle via createFoldAdapter; physical IDs allocated from actual fixture setup",
+    "returnedState": "Pre-opener state; reconstructing setup matches it, caller scripts opener separately.",
+    "ownController": "No opposing opener; trigger observes noLegalTarget and prevents nothing.",
+    "declaredStage": "Supplied zones and energies retained; no automatic opener or caller script.",
+    "offering": "Optional reveal cost stages a second hand card, optional payment declined; Offering banishes that physical card."
+  },
+  "rulesDecision": "not invoked: existing targeting, response timing and Prevent semantics settle setup; no engine rule change",
+  "scope": "lab-solver Materialized stackTarget branch and current documentation; existing synthetic tooling-card-lab contracts; own evidence",
+  "reviewPolicy": "Non-core repair with four non-test logic lines; no core/phase-gate cold review required. Temporary user-authorized gpt-5.6-sol routing applies if parent schedules a review.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Corrected npm run review command start"
+      }
+    }
+  },
+  "validation": [
+    {
+      "name": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/engine/testing/lab-cost-staging.test.ts",
+        "src/engine/testing/tooling-card-lab-script.test.ts"
+      ],
+      "start": "2026-10-12T14:03:19.991805+00:00",
+      "end": "2026-10-12T14:03:23.407707+00:00",
+      "wallS": 3.4130070409955806,
+      "pid": 22287,
+      "exitCode": 0,
+      "load": "{ 13.90 13.16 13.32 }"
+    },
+    {
+      "name": "review-corrected",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T14:06:11.016196+00:00",
+      "end": "2026-10-12T14:06:28.885300+00:00",
+      "wallS": 17.85966191600164,
+      "pid": 58601,
+      "exitCode": 0,
+      "load": "{ 34.08 22.07 16.98 }"
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T14:06:42.622636+00:00",
+      "end": "2026-10-12T14:06:47.506787+00:00",
+      "wallS": 4.878975749998062,
+      "pid": 62857,
+      "exitCode": 0,
+      "load": "{ 30.22 22.31 17.25 }"
+    },
+    {
+      "name": "full",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T14:07:04.357116+00:00",
+      "end": "2026-10-12T14:09:10.784191+00:00",
+      "wallS": 126.42088008300198,
+      "pid": 64369,
+      "exitCode": 0,
+      "load": "{ 23.11 21.28 17.02 }",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      }
+    }
+  ],
+  "browser": {
+    "coverage": "Existing authored event stack-target opener/target UI smoke; new Materialized behavior is established by synthetic actual fixture/fold contracts. Production Threadbreaker is pending under separate owner.",
+    "receipt": {
+      "name": "browser-corrected",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "card-lab-play",
+        "--bead",
+        "hv-hjl6",
+        "--arg",
+        "card=795a7b54-40d5-42f9-bc3a-9e92bc938c2d",
+        "--arg",
+        "variant=base",
+        "--arg",
+        "as=player",
+        "--arg",
+        "capture=hjl6-stack-prevent",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-12T14:04:30.691808+00:00",
+      "end": "2026-10-12T14:05:13.810910+00:00",
+      "wallS": 43.115266624998185,
+      "pid": 6669,
+      "exitCode": 0,
+      "load": "{ 25.48 17.05 14.80 }"
+    },
+    "invocation": "run-stXgc2",
+    "verdicts": {
+      "desktop": "pass",
+      "mobile": "pass"
+    },
+    "caps": [],
+    "wallMs": {
+      "browserLeaseWait": 9,
+      "serve": 1402,
+      "scenario": 40788,
+      "total": 42319
+    },
+    "screens": [
+      "hjl6-stack-prevent.png"
+    ],
+    "captureNote": "Existing scenario uses one requested basename for both viewports; retained capture shows final mobile state and was inspected.",
+    "logs": [
+      "card-lab-play-desktop.jsonl",
+      "card-lab-play-mobile.jsonl"
+    ],
+    "failedInvocation": "run-lOu2Ss"
+  },
+  "failedAttempts": [
+    {
+      "name": "browser",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "card-lab-play",
+        "--bead",
+        "hv-hjl6",
+        "--arg",
+        "card=5e5e5e5e-0000-4000-8000-00000000012d",
+        "--arg",
+        "as=player",
+        "--arg",
+        "capture=hjl6-stack-prevent",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-12T14:03:32.540556+00:00",
+      "end": "2026-10-12T14:03:52.505007+00:00",
+      "wallS": 19.961015375003626,
+      "pid": 23093,
+      "exitCode": 1,
+      "load": "{ 16.67 13.75 13.53 }",
+      "diagnosis": "Own invocation error: synthetic UUID outside card-lab content boundary and missing explicit variant. Corrected with existing authored event and variant=base; no product failure inferred."
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T14:05:38.564787+00:00",
+      "end": "2026-10-12T14:06:02.304762+00:00",
+      "wallS": 23.73600291699404,
+      "pid": 19202,
+      "exitCode": 1,
+      "load": "{ 26.90 19.38 15.86 }",
+      "diagnosis": "Eight unnecessary non-null test assertions; removed and final review passed."
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "command": "focused",
+      "start": "2026-10-12T14:03:19.991805+00:00",
+      "oneMinute": 13.9
+    },
+    {
+      "command": "browser",
+      "start": "2026-10-12T14:03:32.540556+00:00",
+      "oneMinute": 16.67
+    },
+    {
+      "command": "browser-corrected",
+      "start": "2026-10-12T14:04:30.691808+00:00",
+      "oneMinute": 25.48
+    },
+    {
+      "command": "review",
+      "start": "2026-10-12T14:05:38.564787+00:00",
+      "oneMinute": 26.9
+    },
+    {
+      "command": "review-corrected",
+      "start": "2026-10-12T14:06:11.016196+00:00",
+      "oneMinute": 34.08
+    },
+    {
+      "command": "knip",
+      "start": "2026-10-12T14:06:42.622636+00:00",
+      "oneMinute": 30.22
+    },
+    {
+      "command": "full",
+      "start": "2026-10-12T14:07:04.357116+00:00",
+      "oneMinute": 23.11
+    }
+  ],
+  "runtimes": {
+    "providers": [
+      {
+        "service": "http://localhost:8931/mcp",
+        "ownership": "Existing shared Playwright MCP service",
+        "clients": "Both native runner callers terminal; no owned review provider",
+        "leases": "Released on native runner terminal completion"
+      }
+    ],
+    "servers": [
+      {
+        "invocation": "run-lOu2Ss",
+        "pid": 23140,
+        "processGroup": 23140,
+        "port": 5174,
+        "status": "Native cleanup receipt: port free; PID absent at final ps"
+      },
+      {
+        "invocation": "run-stXgc2",
+        "pid": 6866,
+        "processGroup": 6866,
+        "port": 5174,
+        "status": "Native cleanup receipt: port free; PID absent at final ps"
+      }
+    ],
+    "validationProcesses": [
+      {
+        "pid": 22287,
+        "command": "focused",
+        "status": "terminal",
+        "exitCode": 0
+      },
+      {
+        "pid": 23093,
+        "command": "browser",
+        "status": "terminal",
+        "exitCode": 1
+      },
+      {
+        "pid": 6669,
+        "command": "browser-corrected",
+        "status": "terminal",
+        "exitCode": 0
+      },
+      {
+        "pid": 19202,
+        "command": "review",
+        "status": "terminal",
+        "exitCode": 1
+      },
+      {
+        "pid": 58601,
+        "command": "review-corrected",
+        "status": "terminal",
+        "exitCode": 0
+      },
+      {
+        "pid": 62857,
+        "command": "knip",
+        "status": "terminal",
+        "exitCode": 0
+      },
+      {
+        "pid": 64369,
+        "command": "full",
+        "status": "terminal",
+        "exitCode": 0
+      }
+    ],
+    "fullProcessGroup": {
+      "pid": 64358,
+      "status": "Absent at final ps; child Vitest67120/esbuild67140 absent"
+    },
+    "install": {
+      "toolSession": 49595,
+      "exitCode": 0
+    },
+    "cleanupObservedAt": "2026-10-12T14:10:16.267350+00:00"
+  },
+  "preExistingIssues": [],
+  "testDelta": {
+    "files": 0,
+    "lines": 132,
+    "jsdomFiles": 0,
+    "cases": 4,
+    "finalModuleLines": 416
+  },
+  "memoryPressureSample": {
+    "systemFreePercent": 68,
+    "scope": "Observed during full validation; no runtime memory threshold imposed"
+  }
+}
