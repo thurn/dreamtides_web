@@ -1,0 +1,222 @@
+{
+  "bead": "hv-umm2.506",
+  "base": "e9840a042dfcee8a9909cfcd5f0b7e510d01ac9f",
+  "claimToImplementationEndpoint": {
+    "start": "2026-10-12T05:22:40Z",
+    "endpoint": "2026-10-12T05:35:51.733642+00:00",
+    "meaning": "Whole ownership window including research, coordination, validation and queue; final endpoint stamped after parent ACK immediately before schema/Git."
+  },
+  "scope": {
+    "testFile": "scripts/setup-assets.test.ts",
+    "testDelta": {
+      "files": 0,
+      "lines": 51,
+      "jsdomFiles": 0
+    },
+    "productionChanged": false,
+    "fallout": []
+  },
+  "contracts": {
+    "cleanup": "Owned actors settle closed only after native close. Spawn errors retain the original Error diagnostic; registered cleanup awaits all settled actor outcomes before removing fixtures. Every kill checks for a defined owned child PID. The shared cleanup is registered directly with afterEach; its framework invocation is inspected, not a test of Vitest.",
+    "backstops": "Public beforeEach TestContext.task.timeout supplies the resolved outer timeout to parent barrier, child pause budget and spawn watchdog. Their windows begin during the test, so none expires before its outer timeout. Zero-budget contract asserts exit/error outcomes without elapsed thresholds.",
+    "servedNamespace": "Complete sorted top-level public entries, including a synthetic unrelated foreign file, are captured before interruption and compared during pause, after hard kill and after recovery."
+  },
+  "checks": {
+    "focused-allocation-audit": {
+      "receipt": "focused-allocation-audit.runtime.json",
+      "exit": 0,
+      "wallSeconds": 4.792736917002912
+    },
+    "dispatch-triggers": {
+      "receipt": "dispatch-triggers.runtime.json",
+      "exit": 0,
+      "wallSeconds": 0.2743295410000428
+    },
+    "install": {
+      "receipt": "install.runtime.json",
+      "exit": 0,
+      "wallSeconds": 2.9986138340027537
+    },
+    "focused-visible-receipts": {
+      "receipt": "focused-visible-receipts.runtime.json",
+      "exit": 0,
+      "wallSeconds": 3.8871971660009876
+    },
+    "review": {
+      "receipt": "review.runtime.json",
+      "exit": 0,
+      "wallSeconds": 11.272835708001367
+    },
+    "full": {
+      "receipt": "full.runtime.json",
+      "exit": 0,
+      "wallSeconds": 122.39933079199909
+    },
+    "knip": {
+      "receipt": "knip.runtime.json",
+      "exit": 0,
+      "wallSeconds": 2.9581794170007925
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "focused-allocation-audit",
+      "step": "test",
+      "at": "2026-10-12T05:29:51.133Z",
+      "load": 20.5830078125
+    },
+    {
+      "command": "review",
+      "step": "test-related",
+      "at": "2026-10-12T05:30:01.417Z",
+      "load": 18.8818359375
+    },
+    {
+      "command": "full",
+      "step": "prepare",
+      "at": "2026-10-12T05:31:02.858Z",
+      "load": 9.271484375
+    },
+    {
+      "command": "full",
+      "step": "test",
+      "at": "2026-10-12T05:31:30.404Z",
+      "load": 9.2646484375
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review test-related actual command-step start"
+      }
+    }
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step (product)",
+      "tests": [
+        "preserves a desired-path regular file on conflict and recovers on the next pass",
+        "preserves published assets and recovers across restart interleaving"
+      ]
+    },
+    {
+      "path": "restart",
+      "tests": [
+        "preserves published assets and recovers across kill interleaving"
+      ]
+    },
+    {
+      "path": "partial write",
+      "tests": [
+        "preserves published assets and recovers across metadata interleaving"
+      ]
+    },
+    {
+      "path": "invalid or stale input",
+      "tests": [
+        "refreshes stale links, prunes missing art, and preserves Exploration priority"
+      ]
+    },
+    {
+      "path": "concurrent actors",
+      "tests": [
+        "preserves published assets and recovers across stale interleaving",
+        "preserves published assets and recovers across prune interleaving"
+      ]
+    }
+  ],
+  "receiptVisibility": {
+    "suppressedRuns": [
+      "focused-allocation-audit.runtime.json"
+    ],
+    "finalAudit": "focused-visible-receipts.runtime.json",
+    "explanation": "npm test agent reporter suppresses passing-test console output despite silent=false. Direct default reporter with silent=false retains actual allocations, closes and removals. No source or aggregate rerun."
+  },
+  "newHarnessContracts": [
+    "cleans registered fixtures after a spawn failure without replacing its diagnostic",
+    "closes a registered paused actor and removes its fixture through shared cleanup"
+  ],
+  "negativeProof": {
+    "nativeOriginal": "Root probe confirms original rejected cleanup skips fixture deletion; native close still emits. No leaked-process claim.",
+    "mutants": [
+      {
+        "mutant": "cleanup-rejects",
+        "selection": "cleans registered fixtures after a spawn failure",
+        "actualExit": 1,
+        "restoredExactBytes": true,
+        "sha256": "d22e6b504a856dc2ae9241fd7a55fc673d06623f6a0324ad59e0741a3104bd76"
+      },
+      {
+        "mutant": "public-namespace",
+        "selection": "kill interleaving",
+        "actualExit": 1,
+        "restoredExactBytes": true,
+        "sha256": "d22e6b504a856dc2ae9241fd7a55fc673d06623f6a0324ad59e0741a3104bd76"
+      },
+      {
+        "mutant": "registry-omission",
+        "selection": "closes a registered paused actor",
+        "actualExit": 1,
+        "restoredExactBytes": true,
+        "sha256": "d22e6b504a856dc2ae9241fd7a55fc673d06623f6a0324ad59e0741a3104bd76"
+      }
+    ]
+  },
+  "failedImplementationAttempts": [
+    {
+      "receipt": "focused-initial.runtime.json",
+      "meaning": "Mistaken vi.getConfig API; fixture removal receipts retained; not product evidence."
+    },
+    {
+      "receipt": "focused-corrected.runtime.json",
+      "meaning": "SIGKILL before summary while cleanup attempted to kill a failed-spawn handle without a PID. Group is absent; actor closure and individual fixture-removal endpoints were not observed and remain unknown. Exact empty residual disposition recorded separately."
+    }
+  ],
+  "unattributedEmptyRoot": [
+    {
+      "root": "/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/setup-assets-test-cTqEF1",
+      "ownedByInput": false,
+      "mtime": 1791782813.236524,
+      "entries": []
+    }
+  ],
+  "unattributedDisposition": "Retained by parent instruction: mtime proximity does not prove ownership. It is not claimed as an owned remaining resource.",
+  "qa": {
+    "browser": "Not applicable; test infrastructure only.",
+    "fuzz": "Not applicable; no engine/fuzzer/recipe change.",
+    "rawEvidence": "Immutable receipts under artifacts/qa/hv-umm2.506, referenced by filename only."
+  },
+  "resources": {
+    "servers": [],
+    "browserContexts": [],
+    "actors": "Not detached; inherit captured validation command groups. All observed closes and removed fixtures retained in silent=false focused/mutant output."
+  },
+  "raw-manifest": {
+    "filename": "raw-manifest.json",
+    "sha256": "bb0f53022b7b42bcf244dd309ff4451cca5d75f2dfcea697d51c04d229aceab2",
+    "summary": null
+  },
+  "resource-check": {
+    "filename": "resource-check.json",
+    "sha256": "5154cd1320d2adb2a8612bb05b53f65570d7ed03c05766df2e8d81c30e748a00",
+    "summary": {
+      "commandGroups": 15,
+      "observedActorPIDs": 17,
+      "observedFixtureRoots": 27,
+      "outstandingProcesses": 0,
+      "outstandingFixtures": 0
+    }
+  },
+  "fullCounts": {
+    "testFiles": "343 passed (343)",
+    "tests": "4707 passed (4707)",
+    "workers": 2,
+    "lock": "primary artifacts/heavy.lock",
+    "performanceClaim": "None; loaded observations are not a controlled low-load benchmark."
+  },
+  "heavyWindow": {
+    "wrapperToPrepareSeconds": 20.677047,
+    "meaning": "Lock queue plus startup upper bound, not pure wait.",
+    "actualFullTestStepSeconds": 70.3
+  }
+}

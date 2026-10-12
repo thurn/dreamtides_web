@@ -15,7 +15,7 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   defaultArtPaths,
   imageCacheFileName,
@@ -36,27 +36,32 @@ interface Actor {
   readonly closed: Promise<ActorResult>;
 }
 const activeActors = new Set<Actor>();
+let actorBackstopMs: number;
+
+beforeEach(({ task }) => { actorBackstopMs = task.timeout; });
 
 async function stopActors(actors: Iterable<Actor>): Promise<void> {
   const owned = [...actors];
   for (const actor of owned) {
-    if (actor.child.exitCode === null && actor.child.signalCode === null) {
+    if (actor.child.pid !== undefined && actor.child.exitCode === null && actor.child.signalCode === null) {
       actor.child.kill("SIGKILL");
     }
   }
-  await Promise.all(owned.map((actor) => actor.closed));
+  await Promise.allSettled(owned.map((actor) => actor.closed));
 }
 
-afterEach(async () => {
+async function cleanupRegisteredResources(): Promise<void> {
   await stopActors(activeActors);
   for (const root of roots.splice(0)) {
     rmSync(root, { recursive: true, force: true });
     console.log(JSON.stringify({ assetFixtureRemoved: root }));
   }
-});
+}
+
+afterEach(cleanupRegisteredResources);
 
 async function atBarrier(marker: string, actor: Actor): Promise<void> {
-  const deadline = Date.now() + 5_000;
+  const deadline = Date.now() + actorBackstopMs;
   while (!existsSync(marker)) {
     if (actor.child.exitCode !== null || actor.child.signalCode !== null) {
       const result = await actor.closed;
@@ -123,31 +128,45 @@ function actorFixture(root: string, paths: ReturnType<typeof defaultArtPaths>) {
   const input = join(root, "input.json");
   writeFileSync(input, JSON.stringify({ catalog: CATALOG, paths, linker: pathToFileURL(join(import.meta.dirname, "setup-assets.ts")).href }));
   const actors: Actor[] = [];
-  const run = (mode: string, budget = 8_000): Actor => {
-    const child = spawn(process.execPath, ["--import", "tsx", actorFile, input, marker, release, mode, String(budget)], { stdio: ["ignore", "ignore", "pipe"] });
-    let stderr = "";
-    child.stderr?.on("data", (data: Buffer) => { stderr += data.toString(); });
-    const watchdog = setTimeout(() => child.kill("SIGKILL"), 10_000);
-    const closed = new Promise<ActorResult>((resolve, reject) => {
-      child.once("error", reject);
-      child.once("close", (code, signal) => {
-        clearTimeout(watchdog);
-        activeActors.delete(actor);
-        console.log(JSON.stringify({ assetActor: mode, pid: child.pid, exit: code, signal }));
-        resolve({ code, signal, stderr });
-      });
-    });
-    const actor: Actor = { child, closed };
+  const run = (mode: string, budget = actorBackstopMs): Actor => {
+    const actor = startActor(process.execPath, ["--import", "tsx", actorFile, input, marker, release, mode, String(budget)], mode);
     actors.push(actor);
-    activeActors.add(actor);
     return actor;
   };
   return { marker, release, actors, run };
 }
 
+function startActor(command: string, args: string[], mode: string): Actor {
+  const child = spawn(command, args, { stdio: ["ignore", "ignore", "pipe"] });
+  let stderr = "";
+  let spawnError: Error | undefined;
+  child.stderr?.on("data", (data: Buffer) => { stderr += data.toString(); });
+  // Containment starts no earlier than the enclosing test's timeout.
+  const watchdog = setTimeout(() => {
+    if (child.pid !== undefined) child.kill("SIGKILL");
+  }, actorBackstopMs);
+  const closed = new Promise<ActorResult>((resolve, reject) => {
+    child.once("error", (error) => { spawnError = error; });
+    child.once("close", (code, signal) => {
+      clearTimeout(watchdog);
+      activeActors.delete(actor);
+      console.log(JSON.stringify({ assetActor: mode, pid: child.pid, exit: code, signal, spawnError: spawnError?.message }));
+      if (spawnError) reject(spawnError);
+      else resolve({ code, signal, stderr });
+    });
+  });
+  // A failed spawn may close before its owner starts awaiting it. The owner
+  // still receives the original rejection; cleanup awaits the close as well.
+  void closed.catch(() => {});
+  const actor: Actor = { child, closed };
+  activeActors.add(actor);
+  return actor;
+}
+
 function fixtureRoot(): string {
   const root = mkdtempSync(join(tmpdir(), "setup-assets-test-"));
   roots.push(root);
+  console.log(JSON.stringify({ assetFixtureCreated: root }));
   return root;
 }
 
@@ -294,6 +313,8 @@ describe("art linker", () => {
     touch(join(paths.journeyArtDir, "dream-555.jpg"));
     touch(join(paths.explorationHighResArtDir, "101.jpg"));
     linkArt(CATALOG, paths);
+    touch(join(paths.publicDir, "foreign.txt"));
+    const publishedEntries = readdirSync(paths.publicDir).sort();
     const cardLink = join(paths.publicDir, "cards", "101.webp");
     let staleSource: string | undefined;
     if (mode === "stale") {
@@ -312,9 +333,10 @@ describe("art linker", () => {
       await atBarrier(fixture.marker, first);
       if (mode === "restart") await first.closed;
       if (mode === "kill") {
-        first.child.kill("SIGKILL");
+        expect(readdirSync(paths.publicDir).sort()).toEqual(publishedEntries);
+        if (first.child.pid !== undefined) first.child.kill("SIGKILL");
         expect((await first.closed).signal).toBe("SIGKILL");
-        expect(readdirSync(paths.publicDir).filter((name) => name.startsWith(".art-links-"))).toEqual([]);
+        expect(readdirSync(paths.publicDir).sort()).toEqual(publishedEntries);
         const stagingRoot = join(paths.publicDir, "..", ".generated", "art-links");
         const interruptedPasses = readdirSync(stagingRoot);
         expect(interruptedPasses).toHaveLength(1);
@@ -342,7 +364,7 @@ describe("art linker", () => {
       expect(JSON.parse(readFileSync(metadataFile, "utf8"))).toEqual({ "555": "jpg" });
       if (interruptedStaging !== undefined) {
         expect(readFileSync(interruptedStaging, "utf8")).toBe("{");
-        expect(readdirSync(paths.publicDir).filter((name) => name.startsWith(".art-links-"))).toEqual([]);
+        expect(readdirSync(paths.publicDir).sort()).toEqual(publishedEntries);
       }
     } finally {
       await stopActors(fixture.actors);
@@ -364,8 +386,38 @@ describe("art linker", () => {
       }
     })()).rejects.toThrow("Artificial owner failure");
     expect((await actor.closed).signal).toBe("SIGKILL");
-    expect(() => process.kill(actor.child.pid!, 0)).toThrow();
     expect(existsSync(fixture.release)).toBe(false);
+  });
+
+  it("cleans registered fixtures after a spawn failure without replacing its diagnostic", async () => {
+    const root = fixtureRoot();
+    const command = join(root, "missing-executable");
+    const actor = startActor(command, [], "spawn-error");
+    const diagnosticPromise = actor.closed.catch((error: NodeJS.ErrnoException) => error);
+    await cleanupRegisteredResources();
+    const diagnostic = await diagnosticPromise;
+    expect(diagnostic).toMatchObject({ code: "ENOENT", path: command });
+    expect(existsSync(root)).toBe(false);
+    expect(await actor.closed.catch((error: Error) => error)).toBe(diagnostic);
+  });
+
+  it("closes a registered paused actor and removes its fixture through shared cleanup", async () => {
+    const root = fixtureRoot();
+    const paths = defaultArtPaths(join(root, "repo"), join(root, "home"));
+    touch(join(paths.imageCacheDir, imageCacheFileName(101)));
+    const fixture = actorFixture(root, paths);
+    const actor = fixture.run("link");
+    try {
+      await atBarrier(fixture.marker, actor);
+      await cleanupRegisteredResources();
+      // Inspect the actual close outcome before awaiting it: an omitted
+      // registration fails promptly and the emergency finally contains it.
+      expect(actor.child.signalCode).toBe("SIGKILL");
+      expect((await actor.closed).signal).toBe("SIGKILL");
+      expect(existsSync(root)).toBe(false);
+    } finally {
+      await stopActors(fixture.actors);
+    }
   });
 
   it("closes a paused actor when its own barrier deadline expires", async () => {
@@ -379,7 +431,6 @@ describe("art linker", () => {
       expect(closed.code).toBe(1);
       expect(closed.stderr).toContain("Actor barrier deadline exceeded");
       expect(existsSync(fixture.marker)).toBe(true);
-      expect(() => process.kill(actor.child.pid!, 0)).toThrow();
       expect(existsSync(fixture.release)).toBe(false);
     } finally {
       await stopActors(fixture.actors);
