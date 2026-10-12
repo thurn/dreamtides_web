@@ -125,6 +125,8 @@ export const DSL = {
   takeFromOpponentHand: authored(44, "event", 0, events(event(p.takeFromAmong(p.opponentHand())))),
   /** "Look at the top 4 cards of your deck. Choose one: Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral." */
   lookAtTopDraw: authored(45, "event", 0, events(event(p.chooseOne(p.lookAtTop(4, { draw: 1 }), p.lookAtTop(4, { draw: 2, ephemeral: true }))))),
+  /** "Erode 4. You may put two of those cards into your hand." */
+  erodeTakeTwo: authored(46, "event", 0, events(event(p.takeFromAmong(p.movedBy(p.erode(4)), { count: 2, optional: true })))),
 } as const;
 
 export const DSL_CARDS: readonly EngineCardDefinition[] = Object.values(DSL);

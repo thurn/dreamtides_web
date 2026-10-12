@@ -1,6 +1,6 @@
 import { characteristics, copiableCostOf, filterSubjectOf, matchesFilter } from "../../continuous/characteristics";
 import type { CardFilter } from "../../dsl/types";
-import type { ChooseCardsPrompt } from "../../prompts/types";
+import type { ChooseCardsPrompt, ConfirmPrompt } from "../../prompts/types";
 import { instanceOf, moveToHand } from "../../rules/zones";
 import { opponent, type InstanceId, type Side } from "../../state/ids";
 import type { StepContext } from "../../steps/types";
@@ -25,10 +25,15 @@ export type AmongSource =
 
 /**
  * "Put a <filter> from among <cards> into your hand" (rules § Keywords and
- * Effects → Erode, and § Zones → Hand): the controller chooses one of the
- * cards `among` names that matches the filter and the cost bound, and puts
- * it into their hand (`cardTaken`). With `optional` ("You may") they may
- * choose none. With no matching card nothing is chosen.
+ * Effects → Erode, and § Zones → Hand): the controller chooses `count` of
+ * the cards `among` names that match the filter and the cost bound, all of
+ * them when fewer match, and puts each into their hand (`cardTaken`). With
+ * no matching card nothing is chosen.
+ *
+ * With `optional` ("You may") the controller takes none or the full number
+ * (RD-hv-umm2.502-1): a take of one card may choose none, and a take of
+ * several asks its "you may" first (`youMay`) and then chooses exactly
+ * that many.
  */
 export interface TakeFromAmongNode {
   readonly op: "takeFromAmong";
@@ -36,6 +41,8 @@ export interface TakeFromAmongNode {
   readonly filter: CardFilter;
   /** "≤N● cost": the card's copiable cost, with X counting as 0, is at most this. */
   readonly costAtMost?: number;
+  /** "Put two of those cards": how many cards are taken; one when absent. */
+  readonly count?: number;
   readonly optional: boolean;
 }
 
@@ -52,6 +59,9 @@ export const takeFromAmongPrimitive = definePrimitive<TakeFromAmongNode>({
         (node.costAtMost === undefined || copiableCostOf(ctx.state, ctx.catalog, id) <= node.costAtMost),
     );
     if (candidates.length === 0) return;
+    const count = node.count ?? 1;
+    const taken = Math.min(count, candidates.length);
+    if (node.optional && count > 1 && !ctx.choose<ConfirmPrompt>({ kind: "confirm", side, purpose: env.purpose("youMay") })) return;
     const fromHand = node.among.kind === "opponentHand";
     const chosen = ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards",
@@ -59,8 +69,8 @@ export const takeFromAmongPrimitive = definePrimitive<TakeFromAmongNode>({
       ...(fromHand ? { privateTo: side } : {}),
       purpose: env.purpose(fromHand ? "chooseFromOpponentHand" : "chooseAmong"),
       candidates,
-      min: node.optional ? 0 : 1,
-      max: 1,
+      min: node.optional && count === 1 ? 0 : taken,
+      max: taken,
     });
     for (const id of chosen) take(ctx, id, side);
   },
@@ -101,13 +111,16 @@ export function opponentHand(): AmongSource {
 
 export function takeFromAmong(
   among: AmongSource,
-  options: { readonly filter?: CardFilter; readonly costAtMost?: number; readonly optional?: boolean } = {},
+  options: { readonly filter?: CardFilter; readonly costAtMost?: number; readonly count?: number; readonly optional?: boolean } = {},
 ): TakeFromAmongNode {
+  const count = options.count ?? 1;
+  if (!Number.isSafeInteger(count) || count <= 0) throw new Error("takeFromAmong count must be a positive safe integer");
   return {
     op: "takeFromAmong",
     among,
     filter: options.filter ?? {},
     ...(options.costAtMost === undefined ? {} : { costAtMost: options.costAtMost }),
+    ...(count === 1 ? {} : { count }),
     optional: options.optional ?? false,
   };
 }

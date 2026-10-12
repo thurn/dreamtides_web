@@ -1187,6 +1187,14 @@ card's copiable cost, with X in its cost counting as 0, as for Discover. With
 "Return … to your hand" works the same way. Putting the card into your hand is
 not a draw.
 
+An effect that names a number of those cards, as in "Erode 4. You may put two
+of those cards into your hand," puts exactly that many: with "You may" you
+first decide whether to put any, then choose that many of the eroded cards, so
+you put either none or the full number, never fewer. If fewer matching cards
+were eroded than the number, such as when Fatigue kept some from being eroded,
+you put all of them. Without "You may" you choose that many, or put all of
+them when fewer match.
+
 **Fatigue** — If a player would draw from an empty deck, or erode from an empty
 deck, they suffer Fatigue instead. For each card they would have drawn or eroded,
 the opponent gains an increasing number of victory points, doubling each time:

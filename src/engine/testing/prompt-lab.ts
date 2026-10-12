@@ -256,6 +256,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
     name: "Lab Sifting Sands",
     text: "Erode 3. You may put a ≤2● cost character from among those cards into your hand.",
   },
+  [DSL.erodeTakeTwo.id]: { name: "Lab Parting Mist", text: "Erode 4. You may put two of those cards into your hand." },
   [DSL.takeFromOpponentHand.id]: { name: "Lab Pickpocket", text: "Look at the opponent's hand. Put a card from it into your hand." },
   [DSL.lookAtTopDraw.id]: {
     name: "Lab Pilgrimage",
@@ -620,6 +621,22 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     },
     script: [],
     presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.player.deck, 0)] }],
+  },
+  {
+    name: "take-two-from-among",
+    description: "Erode 4, then a \"you may\" and, on Yes, exactly two of the eroded cards into the hand",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: {
+        hand: [DSL.erodeTakeTwo.id],
+        energy: 2,
+        deck: [vanillas[0], vanillas[2], SYNTHETIC.interruptEvent.id, vanillas[1], ...deck(3)],
+      },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+    presents: [playHand(0), { side: "player", answer: () => true }, { side: "player", answer: (ids) => [at(ids.player.deck, 0), at(ids.player.deck, 3)] }],
   },
   {
     name: "take-from-opponent-hand",

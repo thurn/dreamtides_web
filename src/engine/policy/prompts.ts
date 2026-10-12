@@ -223,7 +223,7 @@ const ROLE_STRATEGIES = {
   discover: { cards: "gain", number: "largest", chain: "finite" },
   // A free cost to look for, never paid: no answer does less.
   discoverCost: { cards: "hostile", number: "discoverCost", chain: "finite" },
-  // An optional take accepts none.
+  // An optional take of one card accepts none; a take of several asks its "you may" (youMay) first, then takes the most valuable cards.
   chooseAmong: { cards: "gain", number: "largest", chain: "loopable" },
   chooseFromOpponentHand: { cards: "gain", number: "largest", chain: "loopable" },
   shuffleInto: { cards: "loss", number: "largest", chain: "finite" },
