@@ -440,6 +440,8 @@ export type PaymentCost =
   /** Abandon characters you control that match the selector; captureCost captures one character’s copiable cost as X. */
   | { readonly cost: "abandon"; readonly selector: CharacterSelector | SelfSpec; readonly count: number; readonly captureCost?: never }
   | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: 1; readonly captureCost: true }
+  /** Abandon X matching controlled characters; choose X before targets, at least min. */
+  | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: "x"; readonly min: number; readonly captureCost?: never }
   /** Return matching characters you control to hand, applying ordinary zone replacements. */
   | { readonly cost: "return"; readonly selector: CharacterSelector; readonly count: number }
   /** Discard a fixed number of matching hand cards. */

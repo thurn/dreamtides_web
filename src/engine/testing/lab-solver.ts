@@ -10,7 +10,7 @@ import { mentionsChosenSubtype } from "../effects/primitives/choose-subtype";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
 import { fixedEnergy, xCost } from "../dsl/energy";
-import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, PlayerRef, StackItemSelector, TriggeredAbility, Variant, ZoneTargetSpec } from "../dsl/types";
+import type { Ability, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, Cost, PlayerRef, StackItemSelector, TriggeredAbility, Variant, ZoneTargetSpec } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -315,7 +315,7 @@ interface CostNeeds {
  * payable and an optional one is offered, and the most ⍟ one set of
  * branches pays, since only one alternative of a choice is paid.
  */
-function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds {
+function costNeeds(costs: readonly Cost[]): CostNeeds {
   const empty: CostNeeds = { voidCards: [], handCards: [], characters: [], points: 0 };
   const parts = costs.map((cost): CostNeeds => {
     switch (cost.cost) {
@@ -341,7 +341,7 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
       case "abandon": {
         const selector = cost.selector;
         // The source is in hand as a card is played; another staged instance cannot pay a self-only cost.
-        return "kind" in selector ? empty : { ...empty, characters: Array.from({ length: cost.count }, () => selector) };
+        return "kind" in selector ? empty : { ...empty, characters: Array.from({ length: cost.count === "x" ? Math.max(1, cost.min) : cost.count }, () => selector) };
       }
       case "discard":
       case "reveal":
@@ -381,7 +381,10 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * (`costNeeds`): a payer-void banish its fixed count, or its least X, in
  * `side`'s void; a banish from a selected void its fixed count in the
  * opponent's void when it names the opponent, else in `side`'s void; discard and reveal costs get matching cards
- * beside the source in hand, and abandon costs get matching own characters.
+ * beside the source in hand, and abandon costs get matching own characters. Figment-only costs get
+ * figment copies carried in the setup, so rebuilding the fixture retains
+ * them. Abandon-X activated abilities get their matching cost resources and
+ * targets as well, bounded by the staged count.
  * A ⍟ additional cost gets that many
  * points in `side`'s score, wherever it sits among alternatives and
  * optional costs (`costNeeds`). A card with a stack target answers an
@@ -401,7 +404,8 @@ export function labBoard(
   const entry: DeckEntry = typeof card === "string" ? { cardId: card } : card;
   const cardId = entry.cardId;
   const definition = engine.catalog.card(cardId);
-  const back: Record<Side, CardId[]> = { player: [], enemy: [] };
+  const back: Record<Side, (CardId | null)[]> = { player: [], enemy: [] };
+  const figments: Record<Side, NonNullable<SideSetup["figments"]>[number][]> = { player: [], enemy: [] };
   const voids: Record<Side, CardId[]> = { player: [], enemy: [] };
   const hands: Record<Side, CardId[]> = { player: [], enemy: [] };
   const decks: Record<Side, CardId[]> = { player: [], enemy: [] };
@@ -410,6 +414,9 @@ export function labBoard(
   const xRange = labXRange(definition.costs);
   const variant = variantOf(entry);
   const abilities = definition.abilities(variant);
+  const countActivations = abilities.filter((ability) => ability.kind === "activated" && ability.costs.some((cost) => cost.cost === "abandon" && cost.count === "x"));
+  const activationCosts = countActivations.flatMap((ability) => ability.kind === "activated" ? ability.costs : []);
+  const countRange: XRange | null = activationCosts.reduce<XRange | null>((range, cost) => cost.cost === "abandon" && cost.count === "x" ? { min: Math.max(range?.min ?? 0, cost.min), max: Math.max(range?.max ?? 0, 1, cost.min) } : range, null);
   const materialized = abilities.filter(isMaterializedTrigger).map((ability) => ability.effect);
   const sourceSpark = labSourceSpark(engine, cardId, variant, xRange);
   for (const spec of materialized.flatMap(everyTarget)) {
@@ -432,7 +439,7 @@ export function labBoard(
   for (const { choosers, selector } of played.flatMap(abandonChoices)) {
     for (const chooser of choosers) back[chooser === "you" ? side : opponent(side)].push(characterFor(engine, selector, pool, xRange));
   }
-  for (const specs of eventTargetSpecs(definition, variant)) {
+  for (const specs of [...eventTargetSpecs(definition, variant), ...countActivations.map((ability) => ability.kind === "activated" ? everyTarget(ability.effect) : [])]) {
     for (const spec of specs) {
       // A stack target needs an item on the stack, which a Day board never has: the opponent plays an opener first.
       if (spec.kind === "stackTarget") {
@@ -447,7 +454,7 @@ export function labBoard(
       const targetSide = spec.selector.controller === "you" ? side : opponent(side);
       const selector = sourceSparkAs(spec.selector, sourceSpark);
       for (let index = 0; index < (spec.count ?? 1); index++) {
-        const character = characterFor(engine, selector, pool, xRange);
+        const character = characterFor(engine, selector, pool, xRange ?? countRange);
         back[targetSide].push(character);
         for (const { count, cards } of countNeeds(engine, selector, character)) {
           const countSide = count.player === "you" ? side : opponent(side);
@@ -458,15 +465,18 @@ export function labBoard(
       }
     }
   }
-  const { voidCards, handCards, characters, points: score } = costNeeds(additionalCosts(definition, variant));
+  const { voidCards, handCards, characters, points: score } = costNeeds([...additionalCosts(definition, variant), ...activationCosts]);
   for (const need of voidCards) {
     const of = need.player === "opponent" ? opponent(side) : side;
     voids[of].push(cardFor(engine, need.filter, pool));
   }
   for (const filter of handCards) hands[side].push(cardFor(engine, filter, pool));
   for (const selector of characters) {
-    const character = characterFor(engine, selector, pool, xRange);
-    back[side].push(character);
+    const character = characterFor(engine, selector.figment === true ? { ...selector, figment: undefined } : selector, pool, xRange ?? countRange);
+    if (selector.figment === true) {
+      figments[side].push({ slot: { rank: "back", index: back[side].length }, printing: { kind: "figmentCopy", cardId: character, spark: null } });
+      back[side].push(null);
+    } else back[side].push(character);
     for (const { count, cards } of countNeeds(engine, selector, character)) {
       const countSide = count.player === "you" ? side : opponent(side);
       for (let index = 0; index < cards; index++) {
@@ -476,8 +486,8 @@ export function labBoard(
   }
   const deck = (of: Side): CardId[] => [...Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id), ...decks[of]];
   const sides: Record<Side, SideSetup> = {
-    player: { back: back.player, void: voids.player, deck: deck("player"), ...(hands.player.length > 0 ? { hand: hands.player } : {}) },
-    enemy: { back: back.enemy, void: voids.enemy, deck: deck("enemy"), ...(hands.enemy.length > 0 ? { hand: hands.enemy } : {}) },
+    player: { figments: figments.player, back: back.player, void: voids.player, deck: deck("player"), ...(hands.player.length > 0 ? { hand: hands.player } : {}) },
+    enemy: { figments: figments.enemy, back: back.enemy, void: voids.enemy, deck: deck("enemy"), ...(hands.enemy.length > 0 ? { hand: hands.enemy } : {}) },
   };
   sides[side] = { ...sides[side], hand: [entry, ...hands[side]], energy: LAB_ENERGY, ...(score > 0 ? { score } : {}) };
   const opening = staged === undefined && opener !== null ? opponent(side) : null;
@@ -486,10 +496,16 @@ export function labBoard(
     sides[opening] = { ...sides[opening], hand: [opener, ...(sides[opening].hand ?? [])], energy };
   }
   const base: BoardSetup = { active: opening ?? side, phase: "day", ...sides, ...LAB_OVERRIDES[cardId] };
+  // An explicitly declared rank replaces its solver occupants, including
+  // figments; separately declared figments are authoritative.
+  const declaredSide = (original: SideSetup | undefined, declared: SideSetup | undefined): SideSetup => ({
+    ...original, ...declared,
+    figments: declared?.figments ?? (original?.figments ?? []).filter(({ slot }) => declared?.[slot.rank] === undefined),
+  });
   const setup: BoardSetup = staged === undefined ? base : {
     ...base,
-    player: { ...base.player, ...staged.player },
-    enemy: { ...base.enemy, ...staged.enemy },
+    player: declaredSide(base.player, staged.player),
+    enemy: declaredSide(base.enemy, staged.enemy),
   };
   const { state, ids } = boardState(engine.catalog, setup);
   let answering = state;

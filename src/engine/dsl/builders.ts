@@ -96,6 +96,13 @@ export function abandonCost(extra: Omit<CharacterSelector, "controller"> = {}, c
   return { cost: "abandon", selector: { controller: "you", ...extra }, count };
 }
 
+/** "Abandon X characters" matching the selector, choosing X before targets. */
+export function abandonXCost(options: { readonly min?: number; readonly selector?: Omit<CharacterSelector, "controller"> } = {}): PaymentCost {
+  const min = options.min ?? 0;
+  if (!Number.isSafeInteger(min) || min < 0) throw new Error("abandonXCost min must be a non-negative safe integer");
+  return { cost: "abandon", selector: { ...options.selector, controller: "you" }, count: "x", min };
+}
+
 /**
  * "Abandon a character: …, where X is that character's cost": one matching
  * character, whose copiable cost is captured as X before it is abandoned.

@@ -24,7 +24,7 @@ import { draw } from "../draw";
 import { payTo } from "../pay-to";
 import { ScriptedSource } from "../../../steps/sources";
 import type { EngineCardDefinition } from "../../../catalog";
-import { additionalCost, choiceCost, energy, energyX, event, discardCostFilter, x, keyword, optionalCost, pointsCost, reclaim } from "../../../dsl/builders";
+import { abandonXCost, additionalCost, choiceCost, energy, energyX, event, discardCostFilter, x, keyword, optionalCost, pointsCost, reclaim } from "../../../dsl/builders";
 import type { Ability, CardCost } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
 import type { Answer, Prompt } from "../../../prompts/types";
@@ -33,7 +33,7 @@ import type { EffectId, InstanceId, Side } from "../../../state/ids";
 import { opponent } from "../../../state/ids";
 import type { BattleState, CardCostMode, FloatingEffect } from "../../../state/types";
 import type { AnswerSource } from "../../../steps/types";
-import { boardState } from "../../../testing/board";
+import { boardState, placeFigment } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 
@@ -164,7 +164,7 @@ const ROUTES: { readonly [R in PlayRoute]: readonly [RouteVariant, ...RouteVaria
 };
 
 /** The subject's additional energy shapes. */
-type Extra = "none" | "mandatory" | "optionalPaid" | "optionalDeclined" | "choice" | "x" | "discardMin";
+type Extra = "none" | "mandatory" | "optionalPaid" | "optionalDeclined" | "choice" | "x" | "discardMin" | "abandonCount";
 interface ExtraSetup {
   readonly abilities: readonly Ability[];
   /** Energy the extra adds as paid in the row; X's is `X` where the route includes X. */
@@ -174,6 +174,7 @@ interface ExtraSetup {
   readonly accept?: boolean;
 }
 const EXTRAS: { readonly [E in Extra]: ExtraSetup } = {
+  abandonCount: { abilities: [additionalCost(abandonXCost({ min: 1, selector: { figment: true } }))], paid: 0, least: 0 },
   none: { abilities: [], paid: 0, least: 0 },
   /** "To play this card, pay 1●." */
   mandatory: { abilities: [additionalCost(energy(1))], paid: 1, least: 1 },
@@ -219,6 +220,7 @@ class RowAnswers implements AnswerSource {
     if (role === "chooseX") return X;
     if (role === "chooseCost") return 1;
     if (role === "optionalCost" && this.extra.accept !== undefined) return this.extra.accept;
+    if (role === "abandonCost" && prompt.kind === "chooseCards") return prompt.candidates.slice(0, X);
     if (role === "discardCost" && prompt.kind === "chooseCards") {
       expect(prompt).toMatchObject({ min: X, max: X });
       return prompt.candidates.slice(0, X);
@@ -241,6 +243,7 @@ function arranged(route: RouteVariant, extra: Extra, steps: readonly Step[], ava
     [PLAYER]: { hand: route.from === "hand" ? [card.id, ...hand] : hand, void: route.from === "void" ? [card.id] : [], back: [v.vanilla1.id], energy: available, score: SCORE, deck },
     [opponent(PLAYER)]: { back: [v.vanilla1.id], score: SCORE, deck },
   });
+  if (extra === "abandonCount") for (const index of [0, 1]) placeFigment(state, PLAYER, { rank: "front", index }, { kind: "figmentCopy", cardId: v.vanilla1.id, spark: null });
   const id = route.from === "hand" ? ids[PLAYER].hand[0] : ids[PLAYER].void[0];
   const sources: Record<Who, InstanceId> = { self: ids[PLAYER].back[0]!, opponent: ids[opponent(PLAYER)].back[0]! };
   const side = (who: Who): Side => (who === "self" ? PLAYER : opponent(PLAYER));
@@ -291,6 +294,7 @@ function observed(route: RouteVariant, extra: Extra, steps: readonly Step[]): Ou
   const { state, id, nextIds } = arranged(route, extra, steps);
   const result = engine.apply(state, PLAYER, { kind: "play", card: id, from: route.from }, new RowAnswers(route, EXTRAS[extra]));
   expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
+  if (extra === "abandonCount") expect(result.events.filter((event) => event.kind === "abandoned")).toHaveLength(X);
   if (extra === "discardMin") {
     const discarded = result.events.flatMap((event) => event.kind === "discarded" ? [event.instance] : []);
     expect([...discarded].sort()).toEqual(state.sides[PLAYER].hand.filter((card) => card !== id).sort());

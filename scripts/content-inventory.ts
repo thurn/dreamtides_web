@@ -411,7 +411,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("discardHandCost", [callable(DSL_BUILDERS, "discardHandCost")], ["PaymentCost"], { note: "discard every eligible hand card as a cost, without a choice" }),
   dsl("discardCostFilter", [callable(DSL_BUILDERS, "discardCostFilter")], ["PaymentCost"], { note: "discard a matching card or X cards as a cost" }),
   dsl("discardCostFilterMin", [registered(DSL_TYPES, "PaymentCost", { member: "discard", option: "min" })], ["PaymentCost"], { note: "\"Discard X cards\" whose X is at least 1 (discardCostFilter count \"x\" with min)" }),
-  dsl("abandonXCost", [{ ...callable(DSL_BUILDERS, "abandonXCost"), pending: "export" }], ["PaymentCost"], { note: "\"Abandon X figments\" as a cost: the abandoned count is X" }),
+  dsl("abandonXCost", [callable(DSL_BUILDERS, "abandonXCost")], ["PaymentCost"], { note: "\"Abandon X figments\" as a cost: the abandoned count is X" }),
   dsl("banishXCost", [callable(DSL_BUILDERS, "banishXCost")], ["PaymentCost"], { note: "banish X cards from your void" }),
   dsl("banishFromAnyVoidCost", [callable(DSL_BUILDERS, "banishFromAnyVoidCost")], ["PaymentCost"], { note: "banish a card from the opponent's or any void as a cost" }),
   dsl("whenDissolvedTrigger", [callable(DSL_TRIGGERS, "whenDissolved")], ["Trigger"], { note: "\"when a character you control is dissolved\"" }),

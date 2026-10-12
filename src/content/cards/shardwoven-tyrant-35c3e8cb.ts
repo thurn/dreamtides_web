@@ -1,3 +1,8 @@
+import { abandonXCost, activated, energy, enemyCharacter, target, x } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { dissolve, materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import ethereal from "../figments/ethereal-3eddb1b8";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +26,9 @@ export default card({
   cardNumber: 432,
   art: { x: 0.175, y: 1, scale: 2.07 },
   isStarter: false,
-  pending: true,
+  verifiedText: "e14k3w5f5t",
+  abilities: (variant) => [
+    triggered(onDawn(), materializeFigments(parseFigmentId(ethereal.id), 1, { spark: variant.amplified ? 2 : 1 })),
+    activated([energy(1), abandonXCost({ selector: { figment: true } })], dissolve(target(enemyCharacter({ sparkAtLeast: x(), sparkAtMost: x() })))),
+  ],
 });

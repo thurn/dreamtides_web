@@ -10,7 +10,7 @@ export function costPhrase(cost: Cost): string {
     case "exhaustSelf":
       return "exhaust it";
     case "abandon":
-      return `abandon ${plural(cost.count, "character", "characters")}`;
+      return cost.count === "x" ? "abandon X characters" : `abandon ${plural(cost.count, "character", "characters")}`;
     case "return":
       return `return ${plural(cost.count, "character", "characters")} to hand`;
     case "discard":
@@ -85,7 +85,7 @@ function boundPhrase(bound: BoundValue): string {
   return `the number of ${cards} in ${bound.player === "you" ? "your" : "your opponent’s"} ${bound.zone}`;
 }
 
-function characterCostPhrase(count: number, selector: CharacterSelector): string {
+function characterCostPhrase(count: number | "x", selector: CharacterSelector): string {
   const adjectives = [
     selector.another === true ? "other" : "",
     selector.exhausted === undefined ? "" : selector.exhausted ? "exhausted" : "ready",
@@ -103,7 +103,7 @@ function characterCostPhrase(count: number, selector: CharacterSelector): string
       return bound === undefined ? [] : [`with ${key.startsWith("spark") ? "spark" : "energy cost"} at ${key.endsWith("Most") ? "most" : "least"} ${boundPhrase(bound)}`];
     }),
   ].filter(Boolean);
-  return [String(count), ...adjectives, count === 1 ? "character" : "characters", ...restrictions].join(" ");
+  return [count === "x" ? "X" : String(count), ...adjectives, count === 1 ? "character" : "characters", ...restrictions].join(" ");
 }
 
 function variableMinimum(cost: Extract<PaymentCost, { readonly count: number | "x" }>): string {
@@ -121,7 +121,7 @@ function choiceCostPhrase(cost: PaymentCost): string {
     case "energy":
       return `pay ${costPhrase(cost)}`;
     case "abandon":
-      return `abandon ${"kind" in cost.selector ? "this character" : characterCostPhrase(cost.count, cost.selector)}${capture}`;
+      return `abandon ${"kind" in cost.selector ? "this character" : characterCostPhrase(cost.count, cost.selector)}${capture}${variableMinimum(cost)}`;
     case "return":
       return `return ${characterCostPhrase(cost.count, cost.selector)} to hand`;
     case "discard":

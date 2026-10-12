@@ -38,7 +38,7 @@ export interface PlannedCost {
 
 /** How a list of costs will be paid, settled by play-time prompts before the commit point. */
 export interface CostPlan {
-  /** Shared X chosen for energy or captured from a discarded or banished count, or a discarded or abandoned card's cost. */
+  /** Shared X chosen for energy or abandonment, or captured from a discarded or banished count, or a discarded or abandoned card's cost. */
   readonly x: number | null;
   /**
    * The whole energy cost — the fixed energy (top-level, and each chosen
@@ -70,10 +70,11 @@ export function additionalCosts(definition: PrintedCard, variant: Variant): Addi
 }
 
 /**
- * Chooses X as a play-time prompt when the costs have an X part: from its
- * minimum up to the most the side can pay once the fixed part and the cost
- * modifications apply. An unaffordable X is an empty prompt, which makes the
- * play illegal. `null` without an X part.
+ * Chooses X before targets for an energy-X or abandon-X cost. Energy-X is
+ * bounded by payable energy after fixed costs and modifications; abandon-X
+ * by controlled matching characters and its declared minimum. The feasibility
+ * guard further limits answers to jointly payable target and cost choices.
+ * Returns null when neither form needs numeric preparation.
  */
 export function chooseX(
   ctx: StepContext,
@@ -83,13 +84,21 @@ export function chooseX(
   modifier: CostModifier = NO_COST_MODIFIER,
 ): number | null {
   const variable = xCost(costs);
-  if (variable === null) return null;
+  const counts = costs.filter((cost): cost is Extract<PaymentCost, { cost: "abandon"; count: "x" }> => cost.cost === "abandon" && cost.count === "x");
+  if (variable === null && counts.length === 0) return null;
+  const energyMax = variable === null ? Infinity : ctx.state.sides[side].currentEnergy - fixedEnergy(costs) - modifier.increase + modifier.reduction;
+  const source = purpose.source;
+  if (counts.length > 0 && source === null) throw new Error("An abandon-X choice requires its source");
+  const countMax = counts.map((cost) => source === null ? 0 : cardCandidates(ctx.state, ctx.catalog, side, source, cost).length);
+  const min = Math.max(variable?.min ?? 0, ...counts.map((cost) => cost.min));
+  const max = Math.min(energyMax, ...countMax);
+  if (counts.length > 0 && max < min) throw new Infeasible("Too few matching characters for abandon X");
   return ctx.choose<ChooseNumberPrompt>({
     kind: "chooseNumber",
     side,
     purpose,
-    min: variable.min,
-    max: ctx.state.sides[side].currentEnergy - fixedEnergy(costs) - modifier.increase + modifier.reduction,
+    min,
+    max,
   });
 }
 
@@ -154,10 +163,10 @@ function discardsHand(cost: PaymentCost): boolean {
   return cost.cost === "discard" && cost.count === "hand";
 }
 
-/** The fewest cards a variable count accepts: a variable void banish's or discard's least X, else 0. */
+/** The declared minimum of a variable abandon, void banish or discard count, else 0. */
 function leastCount(cost: ChoosingCost): number {
   if (cost.count !== "x") return 0;
-  return cost.cost === "banishFromVoid" ? cost.min : cost.cost === "discard" ? (cost.min ?? 0) : 0;
+  return cost.cost === "banishFromVoid" || cost.cost === "abandon" ? cost.min : cost.cost === "discard" ? (cost.min ?? 0) : 0;
 }
 
 /** The cards that could pay a card-choosing cost, before excluding cards already used. */
@@ -170,13 +179,17 @@ function cardCandidates(
   selectorX?: number,
 ): InstanceId[] {
   switch (cost.cost) {
-    case "abandon":
+    case "abandon": {
       if ("kind" in cost.selector) {
         if (typeof source !== "string") return [];
         const instance = state.instances[source];
         return instance?.zone === "play" && instance.controller === side ? [source] : [];
       }
-      return matchingCharacters(state, catalog, cost.selector, side, source, selectorX);
+      const matches = matchingCharacters(state, catalog, cost.selector, side, source, selectorX);
+      // The explicit count-X form pays only controlled characters, even
+      // when authored directly with an unrestricted or opposing selector.
+      return cost.count === "x" ? matches.filter(id => state.instances[id]?.controller === side) : matches;
+    }
     case "return":
       return matchingCharacters(state, catalog, cost.selector, side, source, selectorX);
     case "discard":
@@ -245,7 +258,8 @@ export function planCosts(
   const used = [...excluded];
   const available = state.sides[side].currentEnergy;
   /** The energy committed so far before cost modifications: the top-level parts and X, then each chosen nested part. */
-  let baseEnergy = fixedEnergy(costs) + (x ?? 0);
+  const energyX = xCost(costs) === null ? 0 : (x ?? 0);
+  let baseEnergy = fixedEnergy(costs) + energyX;
   let countersLeft = storedCounters(state, source) - spent(costs, "counters");
   /** The payer's ⍟ left once the top-level and chosen nested ⍟ costs are paid; never below 0 for a payable plan. */
   let pointsLeft = state.sides[side].score - spent(costs, "points");
@@ -385,7 +399,7 @@ export function planCosts(
   // Every completed plan uses the same resource check as its nested choices
   // and terminal proof: an unaffordable plan is a dead end before commitment.
   if (!resourcesPayable()) throw new Infeasible(`${side} cannot pay the planned resources`);
-  const fixed = Math.min(total, adjustedEnergy(baseEnergy - (x ?? 0), modifier));
+  const fixed = Math.min(total, adjustedEnergy(baseEnergy - energyX, modifier));
   return { x: capturedX, energy: { fixed, x: total - fixed }, payments, optionalPaid };
 }
 

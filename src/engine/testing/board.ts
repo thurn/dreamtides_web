@@ -24,6 +24,8 @@ export function cardIdOf(state: BattleState, id: InstanceId): CardId {
 }
 
 export interface SideSetup {
+  /** Ready figments placed at explicit rank positions, preserved in lab fixture setup. */
+  readonly figments?: readonly { readonly slot: Slot; readonly printing: Exclude<Printing, { readonly kind: "card" }> }[];
   /** Front-rank cards by lane index (`F0`…); `null` leaves a lane empty. */
   readonly front?: readonly (CardId | null)[];
   readonly back?: readonly (CardId | null)[];
@@ -118,6 +120,12 @@ export function boardState(
       sideState.backRank[index] = id;
       ids[side].back.push(id);
     });
+    for (const figment of sideSetup.figments ?? []) {
+      if (figment.printing.kind === "figment") catalog.figment(figment.printing.figment);
+      else catalog.card(figment.printing.cardId);
+      const id = placeFigment(state, side, figment.slot, figment.printing);
+      ids[side][figment.slot.rank][figment.slot.index] = id;
+    }
     for (const entry of sideSetup.hand ?? []) {
       const id = typeof entry === "string" ? mint(side, entry, "hand") : mint(side, entry.cardId, "hand", variantOf(entry));
       sideState.hand.push(id);

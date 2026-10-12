@@ -1,12 +1,14 @@
 /** Public lab fixtures supply the resources that the printed additional costs can pay. */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../catalog";
-import { abandonCost, additionalCost, banishFromVoidCost, choiceCost, discardCostFilter, discardHandCost, event, optionalCost, pointsCost, revealCost, target, enemyCharacter } from "../dsl/builders";
+import { abandonCost, abandonXCost, activated, additionalCost, banishFromVoidCost, choiceCost, discardCostFilter, discardHandCost, event, optionalCost, pointsCost, revealCost, target, enemyCharacter, energy, x } from "../dsl/builders";
 import type { AdditionalCost } from "../dsl/types";
 import { createEngine } from "../engine";
 import { dissolve, gainPoints, sequence } from "../effects/primitives";
 import type { InstanceId } from "../state/ids";
 import { invariantViolations } from "./invariants";
+import { cardLabBattle } from "./card-lab";
+import { boardState } from "./board";
 import { labBoard } from "./lab-solver";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 import { CHOSEN_HAND_BANISH_CARDS, HAND_BANISH } from "./chosen-hand-banish-cards";
@@ -26,6 +28,39 @@ function source(index: number, costs: readonly AdditionalCost[], targeting = fal
 
 for (const side of ["player", "enemy"] as const) {
   describe(`additional-cost lab staging as ${side}`, () => {
+    it("preserves controlled figment cost resources across setup reconstruction and card-lab creation", () => {
+      const card: EngineCardDefinition = { ...mage, id: syntheticId(0x51210), abilities: () => [activated([energy(1), abandonXCost({ selector: { figment: true }, min: 1 })], dissolve(target(enemyCharacter({ sparkAtLeast: x(), sparkAtMost: x() }))))] };
+      const engine = createEngine(testCatalog([mage, card]));
+      const solved = labBoard(engine, card.id, pool, side);
+      const reconstructed = boardState(engine.catalog, solved.setup).state;
+      const stagedFigments = (state: typeof reconstructed) => Object.values(state.instances).filter(instance => instance.controller === side && instance.printing.kind === "figmentCopy");
+      expect(stagedFigments(reconstructed)).toHaveLength(1);
+      for (const back of [[], [warrior.id]]) {
+        const declared = labBoard(engine, card.id, pool, side, { [side]: { back } });
+        const rebuilt = boardState(engine.catalog, declared.setup).state;
+        expect(stagedFigments(rebuilt)).toHaveLength(0);
+        expect(rebuilt.sides[side].backRank.filter(id => id !== null)).toHaveLength(back.length);
+      }
+      const otherRank = labBoard(engine, card.id, pool, side, { [side]: { front: [warrior.id] } });
+      expect(stagedFigments(boardState(engine.catalog, otherRank.setup).state)).toHaveLength(1);
+      const explicit = labBoard(engine, card.id, pool, side, { [side]: { back: [], figments: [{ slot: { rank: "front", index: 0 }, printing: { kind: "figmentCopy", cardId: warrior.id, spark: null } }] } });
+      const explicitState = boardState(engine.catalog, explicit.setup).state;
+      expect(stagedFigments(explicitState)).toHaveLength(1);
+      expect(explicitState.sides[side].frontRank[0]).not.toBeNull();
+      const lab = cardLabBattle(engine, { entry: { cardId: card.id }, side, variant: "base" }, pool);
+      expect(stagedFigments(lab.slice.committed)).toHaveLength(1);
+      const play = engine.apply(reconstructed, side, { kind: "play", card: reconstructed.sides[side].hand[0], from: "hand" }, { answer() { throw new Error("Unexpected prompt"); } });
+      const ready = play.state;
+      const sourceId = Object.values(ready.instances).find(instance => instance.printing.kind === "card" && instance.printing.cardId === card.id)!.id;
+      const result = engine.apply(ready, side, { kind: "activate", source: sourceId, ability: 0 }, { answer(prompt) {
+        if (prompt.kind === "chooseNumber") return 1;
+        if (prompt.kind === "chooseCards" || prompt.kind === "chooseTargets") return prompt.candidates.slice(0, prompt.min);
+        throw new Error(`Unexpected ${prompt.kind}`);
+      } });
+      expect(result.events.filter(event => event.kind === "abandoned")).toHaveLength(1);
+      expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
+    });
+
     it.each([HAND_BANISH.freeCard, HAND_BANISH.paidCharacter])("stages a matching chosen-hand duration candidate for $id", (source) => {
       const engine = createEngine(testCatalog(CHOSEN_HAND_BANISH_CARDS));
       const { state } = labBoard(engine, source.id, [SYNTHETIC.event0, SYNTHETIC.vanilla1], side);

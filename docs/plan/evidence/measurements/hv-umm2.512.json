@@ -1,0 +1,683 @@
+{
+  "bead": "hv-umm2.512",
+  "base": "cdb024b65724d3c5793c93ff41a665158f7d2bbe",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+  "implementWindowProvenance": {
+    "start": "First tool clock sample 2026-10-12T13:00:56Z, a dispatch-start proxy; parent dispatch approximately13:00:42Z. End is sampled immediately before the commit command, with actual Git command receipt retained outside checkout."
+  },
+  "checks": {
+    "review-passing": {
+      "name": "review-passing",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T13:20:32.371728+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 6.36328125,
+      "pid": 19653,
+      "pgid": 19653,
+      "end": "2026-10-12T13:21:20.029635+00:00",
+      "elapsedS": 47.657434165994346,
+      "exit": 0
+    },
+    "focused-control": {
+      "name": "focused-control",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/lab-cost-staging.test.ts"
+      ],
+      "start": "2026-10-12T13:24:41.723742+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 6.60205078125,
+      "pid": 43396,
+      "pgid": 43396,
+      "end": "2026-10-12T13:24:48.700252+00:00",
+      "elapsedS": 6.976471000001766,
+      "exit": 0
+    },
+    "inventory-check": {
+      "name": "inventory-check",
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts",
+        "--check"
+      ],
+      "start": "2026-10-12T13:22:16.051988+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 6.43798828125,
+      "pid": 22865,
+      "pgid": 22865,
+      "end": "2026-10-12T13:22:18.341383+00:00",
+      "elapsedS": 2.2894429580046562,
+      "exit": 0
+    },
+    "preflight-final": {
+      "name": "preflight-final",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b"
+      ],
+      "start": "2026-10-12T13:22:16.051987+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 6.43798828125,
+      "pid": 22864,
+      "pgid": 22864,
+      "end": "2026-10-12T13:22:17.377241+00:00",
+      "elapsedS": 1.3252953749979497,
+      "exit": 0
+    },
+    "knip": {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T13:11:04.253817+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 15.40673828125,
+      "pid": 54923,
+      "pgid": 54923,
+      "end": "2026-10-12T13:11:08.610305+00:00",
+      "elapsedS": 4.356477624998661,
+      "exit": 0
+    },
+    "activation": {
+      "name": "activation",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-512-recovery/activation.mjs",
+        "--bead",
+        "hv-umm2.512"
+      ],
+      "start": "2026-10-12T13:17:29.979216+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 5.14111328125,
+      "pid": 14687,
+      "pgid": 14687,
+      "end": "2026-10-12T13:17:53.657247+00:00",
+      "elapsedS": 23.67782070800604,
+      "exit": 0
+    },
+    "knip-final": {
+      "name": "knip-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T13:22:16.051980+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 6.43798828125,
+      "pid": 22863,
+      "pgid": 22863,
+      "end": "2026-10-12T13:22:19.520144+00:00",
+      "elapsedS": 3.4681628750040545,
+      "exit": 0
+    },
+    "focused-final": {
+      "name": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/lab-cost-staging.test.ts"
+      ],
+      "start": "2026-10-12T13:18:46.542655+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 4.8525390625,
+      "pid": 16634,
+      "pgid": 16634,
+      "end": "2026-10-12T13:18:53.879113+00:00",
+      "elapsedS": 7.336418708000565,
+      "exit": 0
+    },
+    "activation-first": {
+      "name": "activation",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-512-recovery/activation.mjs",
+        "--bead",
+        "hv-umm2.512"
+      ],
+      "start": "2026-10-12T13:15:41.417874+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 6.9580078125,
+      "pid": 11717,
+      "pgid": 11717,
+      "end": "2026-10-12T13:16:54.441231+00:00",
+      "elapsedS": 73.02262504200189,
+      "exit": 1
+    },
+    "knip-control": {
+      "name": "knip-control",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T13:26:38.341766+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 8.16845703125,
+      "pid": 46339,
+      "pgid": 46339,
+      "end": "2026-10-12T13:26:42.118211+00:00",
+      "elapsedS": 3.7764421669999138,
+      "exit": 0
+    },
+    "sweep": {
+      "name": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.512",
+        "--cards",
+        "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b",
+        "--capture"
+      ],
+      "start": "2026-10-12T13:12:30.431641+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 13.16357421875,
+      "pid": 2116,
+      "pgid": 2116,
+      "end": "2026-10-12T13:14:19.455317+00:00",
+      "elapsedS": 109.02257329200074,
+      "exit": 0
+    },
+    "fuzz": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b"
+      ],
+      "start": "2026-10-12T13:09:55.805495+00:00",
+      "pid": 50113,
+      "pgid": 50113,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 22.0810546875,
+      "end": "2026-10-12T13:12:53.734982+00:00",
+      "elapsedS": 177.92751045800105,
+      "exit": 0
+    },
+    "review-control": {
+      "name": "review-control",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T13:25:03.301025+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 6.447265625,
+      "pid": 44029,
+      "pgid": 44029,
+      "end": "2026-10-12T13:25:51.488563+00:00",
+      "elapsedS": 48.187067624996416,
+      "exit": 0
+    },
+    "review-final": {
+      "name": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T13:11:03.086766+00:00",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+      "load": 15.40673828125,
+      "pid": 54766,
+      "pgid": 54766,
+      "end": "2026-10-12T13:12:04.516370+00:00",
+      "elapsedS": 61.42900174999522,
+      "exit": 2
+    }
+  },
+  "finalCheckSelection": {
+    "focused": "focused-control",
+    "review": "review-control",
+    "knip": "knip-control",
+    "inventory": "inventory-check",
+    "preflight": "preflight-final"
+  },
+  "focused": {
+    "files": 2,
+    "cases": 1710,
+    "newContractLines": 208,
+    "costCompositionLines": 432,
+    "labStagingLines": 234
+  },
+  "review": {
+    "files": 269,
+    "cases": 4260
+  },
+  "weightedFuzz": {
+    "games": 300,
+    "steps": 151376,
+    "engineWallS": 176.8,
+    "cpuS": 188.9,
+    "prompts": 4013,
+    "interactiveReruns": 367,
+    "failures": 0,
+    "targetCounts": {
+      "included": 617,
+      "exercised": 225
+    },
+    "wrapperElapsedIncludesHeavyLock": true,
+    "separatelyMeasuredLockWait": null
+  },
+  "qa": {
+    "sweep": {
+      "invocation": "invocations/sweep-G82BPc",
+      "pass": 14,
+      "skip": 6,
+      "fail": 0,
+      "sessions": 1,
+      "leaseWaitMs": 8,
+      "internalTotalMs": 108803.324
+    },
+    "activation": {
+      "invocation": "invocations/run-xb8ZcQ",
+      "verdict": "pass",
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "scenarioMs": 21545,
+      "caps": [],
+      "beforeEnergy": 6,
+      "afterEnergy": 5,
+      "ability": 1,
+      "chosenX": 1,
+      "eligibleFigments": 3,
+      "paidFigments": 1,
+      "exactSparkTargets": 2,
+      "physicalTargetDissolved": true,
+      "persistedActivationLog": true,
+      "numberControlsGeometry": {
+        "desktop": [
+          {
+            "x": 1002.8125,
+            "y": 598,
+            "width": 40,
+            "height": 40,
+            "inViewport": true
+          },
+          {
+            "x": 1094.8125,
+            "y": 598,
+            "width": 40,
+            "height": 40,
+            "inViewport": true
+          },
+          {
+            "x": 1142.8125,
+            "y": 597,
+            "width": 97.6875,
+            "height": 42,
+            "inViewport": true
+          }
+        ],
+        "mobile": [
+          {
+            "x": 144.3125,
+            "y": 523.828125,
+            "width": 40,
+            "height": 40,
+            "inViewport": true
+          },
+          {
+            "x": 236.3125,
+            "y": 523.828125,
+            "width": 40,
+            "height": 40,
+            "inViewport": true
+          },
+          {
+            "x": 284.3125,
+            "y": 522.828125,
+            "width": 97.6875,
+            "height": 42,
+            "inViewport": true
+          }
+        ]
+      }
+    },
+    "failedActivation": {
+      "invocation": "invocations/run-Uf6uk0",
+      "verdict": "fail",
+      "viewportsCompleted": [
+        "desktop"
+      ],
+      "cause": "Scenario waited for the one-candidate target prompt that existing forced-answer behavior skipped; retained payment-prompt suspension proves no partial debit. Fixture changed to two exact-X targets; source unchanged.",
+      "caps": []
+    },
+    "judged": {
+      "required": false,
+      "count": 0,
+      "reason": "Existing chooseNumber/chooseX, chooseTargets/target and chooseCards/abandonCost surfaces; UUID D21 byte0xd0 is not sampled."
+    },
+    "captureDimensions": {
+      "desktop": [
+        1440,
+        900
+      ],
+      "mobile": [
+        390,
+        844
+      ],
+      "scale": "CSS, per configured runner"
+    },
+    "visualInspection": [
+      "Helper inspected desktop numeric selection and mobile payment capture.",
+      "Parent inspected desktop payment and mobile numeric capture; controls/workflow visible."
+    ]
+  },
+  "evidenceReuse": {
+    "afterQaChanges": [
+      "Declared-rank lab merge filters inherited figments only when that rank is explicitly replaced; autogenerated sweep setup unchanged. Distinguishing reconstruction contracts pass for both sides.",
+      "New-form controller guard is equivalent for the authored card because abandonXCost builder already supplies selector controller you. Final both-controller raw opposing/any selector contracts pass. Fuzz/sweep/activation source behavior for the authored UUID is unchanged."
+    ]
+  },
+  "inventoryRefresh": {
+    "entityCount": 1209,
+    "planningBeadsBefore": 218,
+    "planningBeadsAfter": 217,
+    "parentStructuralFieldRefreshCounts": {
+      "routing": 210,
+      "rulesDecisions": 17,
+      "status": 18,
+      "cardIssues": 2,
+      "requiredPrimitives": 3
+    },
+    "provenance": "Current generator refresh of a stale base projection; only exact512 UUID content source authored; --check passes; marker is exported abandonXCost."
+  },
+  "iterationFailures": [
+    {
+      "log": "contracts-first.log",
+      "exit": 1,
+      "cause": "New count-X minimum greater than candidates formed an invalid numeric prompt; repaired new branch with Infeasible. Test fixtures assumed suspended stepStart field and retained Interrupt stack item after automatic resolution; corrected to committed start and observable resolution."
+    },
+    {
+      "log": "focused-second.log",
+      "exit": 1,
+      "cause": "Synthetic lab play already auto-resolved; redundant opposing pass was illegal. Fixture corrected."
+    },
+    {
+      "log": "review-first.log",
+      "exit": 2,
+      "cause": "Unused cost-type imports and test fixture readonly config/CardInfo property mistakes; corrected."
+    },
+    {
+      "log": "review-final.log",
+      "exit": 2,
+      "cause": "Unused Greedy discover-cost callback returned array instead of ReadonlySet; corrected."
+    },
+    {
+      "log": "types.log",
+      "exit": 2,
+      "cause": "Iteration direct compiler ran before all test type fixes; prepared final review checks both configurations."
+    }
+  ],
+  "sourceChangeCounts": {
+    "nonTestSourcePaths": 8,
+    "nonTestAdded": 90,
+    "nonTestDeleted": 34,
+    "testDelta": {
+      "files": 1,
+      "lines": 247,
+      "jsdomFiles": 0
+    },
+    "generatedInventoryAdded": 884,
+    "generatedInventoryDeleted": 897
+  },
+  "finalSourceSha256": {
+    "scripts/content-inventory.ts": "bf7cf51498e5acc59ee6e5f4a681c8c358c1d80a4a48101359cd9a4911767870",
+    "src/content/cards/shardwoven-tyrant-35c3e8cb.ts": "7fd62da7be31400258e16d365ee8b7a9a6324fe046c78e8c776db638f444cf68",
+    "src/engine/dsl/builders.ts": "d3ab38deced43f11740a98e966e18df1b1a5be6a6a4bd34d70a12b368dccd1e0",
+    "src/engine/dsl/types.ts": "d0543f33d7ab7153d25f0d3c2f732c3b48996a279f498f1369af34a033f34508",
+    "src/engine/rules/costs.ts": "fd9aa768417e13f1e58f29c6adf23c1b64cd65bd60e55ce4aa076a0ae56edc79",
+    "src/engine/testing/board.ts": "182add23315b34b7d13742aa84105454ee7c68bdf5e0c07ae64e3556204f5e00",
+    "src/engine/testing/lab-solver.ts": "5ad1a99a6d20c7b4cdcabd597523e0279d07db75ae8b69b639d5e32f26ecd3a6",
+    "src/runtime/battle-cost-messages.ts": "a4537d179df5492ffee5ab861832ed6ea8e8e0fbc97ea85a4758a3d744b5a0c5"
+  },
+  "runtime": {
+    "checks": [
+      {
+        "name": "review-passing",
+        "pid": 19653,
+        "pgid": 19653,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:20:32.371728+00:00",
+        "end": "2026-10-12T13:21:20.029635+00:00",
+        "exit": 0
+      },
+      {
+        "name": "focused-control",
+        "pid": 43396,
+        "pgid": 43396,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:24:41.723742+00:00",
+        "end": "2026-10-12T13:24:48.700252+00:00",
+        "exit": 0
+      },
+      {
+        "name": "inventory-check",
+        "pid": 22865,
+        "pgid": 22865,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:22:16.051988+00:00",
+        "end": "2026-10-12T13:22:18.341383+00:00",
+        "exit": 0
+      },
+      {
+        "name": "preflight-final",
+        "pid": 22864,
+        "pgid": 22864,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:22:16.051987+00:00",
+        "end": "2026-10-12T13:22:17.377241+00:00",
+        "exit": 0
+      },
+      {
+        "name": "knip",
+        "pid": 54923,
+        "pgid": 54923,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:11:04.253817+00:00",
+        "end": "2026-10-12T13:11:08.610305+00:00",
+        "exit": 0
+      },
+      {
+        "name": "activation",
+        "pid": 14687,
+        "pgid": 14687,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:17:29.979216+00:00",
+        "end": "2026-10-12T13:17:53.657247+00:00",
+        "exit": 0
+      },
+      {
+        "name": "knip-final",
+        "pid": 22863,
+        "pgid": 22863,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:22:16.051980+00:00",
+        "end": "2026-10-12T13:22:19.520144+00:00",
+        "exit": 0
+      },
+      {
+        "name": "focused-final",
+        "pid": 16634,
+        "pgid": 16634,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:18:46.542655+00:00",
+        "end": "2026-10-12T13:18:53.879113+00:00",
+        "exit": 0
+      },
+      {
+        "name": "activation",
+        "pid": 11717,
+        "pgid": 11717,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:15:41.417874+00:00",
+        "end": "2026-10-12T13:16:54.441231+00:00",
+        "exit": 1
+      },
+      {
+        "name": "knip-control",
+        "pid": 46339,
+        "pgid": 46339,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:26:38.341766+00:00",
+        "end": "2026-10-12T13:26:42.118211+00:00",
+        "exit": 0
+      },
+      {
+        "name": "sweep",
+        "pid": 2116,
+        "pgid": 2116,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:12:30.431641+00:00",
+        "end": "2026-10-12T13:14:19.455317+00:00",
+        "exit": 0
+      },
+      {
+        "name": null,
+        "pid": 50113,
+        "pgid": 50113,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:09:55.805495+00:00",
+        "end": "2026-10-12T13:12:53.734982+00:00",
+        "exit": 0
+      },
+      {
+        "name": "review-control",
+        "pid": 44029,
+        "pgid": 44029,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:25:03.301025+00:00",
+        "end": "2026-10-12T13:25:51.488563+00:00",
+        "exit": 0
+      },
+      {
+        "name": "review-final",
+        "pid": 54766,
+        "pgid": 54766,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x-cost-512-recovery",
+        "start": "2026-10-12T13:11:03.086766+00:00",
+        "end": "2026-10-12T13:12:04.516370+00:00",
+        "exit": 2
+      }
+    ],
+    "qaServers": [
+      {
+        "pgid": 2165,
+        "port": 5274,
+        "context": "Owned isolated Playwright MCP client, slot1",
+        "cleanup": "Runner browser/context/SDK and owned server cleanup terminal; port free reported."
+      },
+      {
+        "pgid": 11745,
+        "port": 5274,
+        "context": "Owned isolated Playwright MCP client, slot1",
+        "cleanup": "Runner browser/context/SDK and owned server cleanup terminal; port free reported."
+      },
+      {
+        "pgid": 14726,
+        "port": 5274,
+        "context": "Owned isolated Playwright MCP client, slot1",
+        "cleanup": "Runner browser/context/SDK and owned server cleanup terminal; port free reported."
+      }
+    ],
+    "cleanupObservedAt": "2026-10-12T13:29:33.312256+00:00",
+    "groupsObservedAbsent": [
+      2116,
+      2165,
+      11717,
+      11745,
+      14687,
+      14726,
+      16634,
+      19653,
+      22863,
+      22864,
+      22865,
+      43396,
+      44029,
+      46339,
+      50113,
+      54766,
+      54923
+    ],
+    "unwrappedTerminalSessions": [
+      {
+        "session": 88644,
+        "exit": 2
+      },
+      {
+        "session": 55052,
+        "exit": 1
+      },
+      {
+        "session": 60882,
+        "exit": 1
+      },
+      {
+        "session": 76146,
+        "exit": 2
+      },
+      {
+        "session": 27563,
+        "exit": 0
+      },
+      {
+        "session": 19566,
+        "exit": 0
+      },
+      {
+        "session": 24623,
+        "exit": 0
+      },
+      {
+        "session": 47504,
+        "exit": 2
+      }
+    ],
+    "additionalAgents": 0,
+    "retainedProvider": false
+  },
+  "failurePathCoverage": [
+    "Minimum/maximum and meaningful zero",
+    "Matching controlled cards vs non-figments/opponent figments",
+    "Joint overlapping cost/target feasibility",
+    "Count-only energy partition vs actual energy-X",
+    "Invalid count/duplicate/foreign/noncandidate answers",
+    "Wrong-side/stale/concurrent intents",
+    "Cold reload, replay fingerprint divergence, cancel/reopen",
+    "Real Interrupt activation, both controllers, Greedy prompt policy",
+    "Synthetic failure after payment rolls back energy and card writes",
+    "Lab declaration rank replacement, explicit figments and preserved unspecified rank"
+  ]
+}

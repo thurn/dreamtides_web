@@ -919,6 +919,17 @@ when abandoned, has a cost of 0●, and a figment copy has the cost it copied.
 Any character the player controls can pay the cost, including the character
 whose ability it is.
 
+**Abandon X characters:** Choose X before the ability's targets, then choose
+exactly X distinct matching characters you control to pay. A target or a
+character used for another cost cannot also pay this cost. The chosen count
+is limited by the characters available and travels with the stack item, even
+when the abandoned figments cease to exist. This count spends no energy
+beyond the ability's separately printed ● costs; if the ability also pays
+X●, both payments use the same X. Under the contextual X rule, "1●, Abandon
+X figments: Dissolve an enemy with X✦" may choose 0 when a legal 0✦ enemy
+exists: pay 1●, abandon nothing, and dissolve that enemy. Cancellation or an
+invalid answer before commitment pays nothing.
+
 **Discard X cards:** X is the number of cards chosen to pay this cost. Zero
 is a legal X only when it has a meaningful effect under the contextual X
 rule, such as drawing a fixed number of cards; otherwise X is at least 1, and
