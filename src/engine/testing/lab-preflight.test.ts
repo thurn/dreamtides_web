@@ -10,7 +10,7 @@ import { dissolve } from "../effects/primitives/dissolve";
 import { effectiveSpark } from "../rules/spark";
 import { copiableCostOf } from "../continuous/characteristics";
 import { materialize } from "../effects/primitives/materialize";
-import type { CardCost, ZoneEverySpec } from "../dsl/types";
+import { NO_DECK_MODS, type CardCost, type ZoneEverySpec } from "../dsl/types";
 import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
 import { grantReclaim } from "../effects/primitives/grant-reclaim";
 import { firstLegalAnswer } from "../prompts/answers";
@@ -197,6 +197,31 @@ describe("node card-lab preflight", () => {
       const other = side === "player" ? "enemy" : "player";
       expect(enemies.sides[other].backRank.flatMap((id) => id === null ? [] : [effectiveSpark(enemies, staging.catalog, id)]), side).toEqual([0]);
       expect(runCardLabPreflight(staging, request(sentinel, side), pool), side).toMatchObject({ verdict: "pass", resolved: true });
+    }
+  });
+
+  it("stages targets bounded by this character's ✦ at the played variant's spark and at the X the lab plays for a variable ✦", () => {
+    /** "▸Materialized: Choose a ≥3● event in your void with cost ≤ this character's ✦ to gain reclaim 0●". */
+    const reclaiming = (index: number, base: EngineCardDefinition, spark: EngineCardDefinition["spark"], costs: readonly CardCost[]): EngineCardDefinition => ({
+      ...base, id: syntheticId(index), status: "authored", spark, costs,
+      abilities: () => [triggered(onMaterialized(), grantReclaim(fromVoid({ cardType: "event", costAtLeast: 3 }, { costAtMost: thisCharacterSpark() }), { costs: [energy(0)] }))],
+    });
+    // A 2✦ character played with +2✦ from its deck modifications, and an X✦ character whose X is at least 3.
+    const boosted = reclaiming(1963, SYNTHETIC.vanilla2, 2, SYNTHETIC.vanilla2.costs);
+    const variable = reclaiming(1964, SYNTHETIC.vanilla2, "x", [energyX(3)]);
+    const costing = (index: number, cost: number): EngineCardDefinition => ({ ...SYNTHETIC.event0, id: syntheticId(index), costs: [energy(cost)] });
+    const pool = [costing(1965, 5), costing(1966, 4), costing(1967, 3)];
+    const staging = createEngine(testCatalog([boosted, variable, ...pool]));
+    const cases = [
+      { entry: { cardId: boosted.id, deckMods: { ...NO_DECK_MODS, sparkBonus: 2 } }, cost: 4 },
+      { entry: { cardId: variable.id }, cost: 3 },
+    ];
+    for (const { entry, cost } of cases) for (const side of ["player", "enemy"] as const) {
+      const staged = labBoard(staging, entry, pool, side).state;
+      expect(staged.sides[side].void.map((id) => copiableCostOf(staged, staging.catalog, id)), `${entry.cardId}/${side}`).toEqual([cost]);
+      const result = runCardLabPreflight(staging, { entry, variant: "base", side }, pool);
+      expect(result, `${entry.cardId}/${side}`).toMatchObject({ verdict: "pass", resolved: true });
+      expect(result.events.filter((event) => event.kind === "noLegalTarget"), `${entry.cardId}/${side}`).toEqual([]);
     }
   });
 

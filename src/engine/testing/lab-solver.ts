@@ -2,7 +2,7 @@
  * The card-lab setup solver: a minimal legal board on which a card can be
  * played. Specs, the card-lab scene, and the sweep share it.
  */
-import { printedCardId, type EngineCardDefinition } from "../catalog";
+import { instanceCard, printedCardId, type EngineCardDefinition } from "../catalog";
 import { matchesFilter } from "../continuous/characteristics";
 import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
@@ -10,7 +10,7 @@ import { mentionsChosenSubtype } from "../effects/primitives/choose-subtype";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
 import { fixedEnergy, xCost } from "../dsl/energy";
-import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, PlayerRef, StackItemSelector, TriggeredAbility, ZoneTargetSpec } from "../dsl/types";
+import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, PlayerRef, StackItemSelector, TriggeredAbility, Variant, ZoneTargetSpec } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -48,8 +48,8 @@ function sparkOf(card: EngineCardDefinition): number {
 
 /**
  * Bounds by "this character's ✦" read as the constant `spark`, the played
- * card's printed spark: a ▸Materialized trigger's source is in play with
- * it, and an event, which has none, reads 0.
+ * card's spark (`labSourceSpark`): a ▸Materialized trigger's source is in
+ * play with it, and an event, which has none, reads 0.
  */
 function sourceSparkAs<T extends Partial<Record<"sparkAtLeast" | "sparkAtMost" | "costAtLeast" | "costAtMost", BoundValue>>>(bounds: T, spark: number): T {
   const keys = ["sparkAtLeast", "sparkAtMost", "costAtLeast", "costAtMost"] as const;
@@ -68,6 +68,17 @@ interface XRange {
 function labXRange(costs: readonly CardCost[]): XRange | null {
   const variable = xCost(costs);
   return variable === null ? null : { min: variable.min, max: LAB_ENERGY - fixedEnergy(costs) };
+}
+
+/**
+ * The ✦ the played card enters play with: its variant's printed card's
+ * (`instanceCard`, with its deck-entry spark bonus and type change), a
+ * variable ✦ at the least X the play can choose, which the lab's first legal
+ * answer picks, and 0 for an event.
+ */
+function labSourceSpark(engine: Engine, cardId: CardId, variant: Variant, xRange: XRange | null): number {
+  const { spark } = instanceCard(engine.catalog, { printing: { kind: "card", cardId }, variant });
+  return spark === null ? 0 : spark === "x" ? (xRange?.min ?? 0) : spark;
 }
 
 /**
@@ -356,7 +367,7 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * target a matching card in the void, on the side it selects, relative to
  * `side`, whose ✦ and cost admit an X the play can choose (a void target's
  * cost bound by X admitting one, `voidTargetFor`, and a bound by "this
- * character's ✦" read as the card's printed spark, `sourceSparkAs`), with as many
+ * character's ✦" read as the spark the played variant enters play with, `sourceSparkAs`), with as many
  * cards in the counted zone as an upper ✦ or cost bound by a zone count
  * needs (`countNeeds`): matching void cards, or cards in a hand beside the
  * played card, or in a deck beside its 8; a ▸Materialized trigger's void targets get their void cards too,
@@ -400,7 +411,7 @@ export function labBoard(
   const variant = variantOf(entry);
   const abilities = definition.abilities(variant);
   const materialized = abilities.filter(isMaterializedTrigger).map((ability) => ability.effect);
-  const sourceSpark = sparkOf(definition);
+  const sourceSpark = labSourceSpark(engine, cardId, variant, xRange);
   for (const spec of materialized.flatMap(everyTarget)) {
     // A ▸Materialized character target of your own gets a character of yours ahead of the card, so the card is not its only choice.
     if (spec.kind === "target" && spec.selector.controller === "you") {
