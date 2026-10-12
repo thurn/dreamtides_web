@@ -579,22 +579,26 @@ export async function openQaSession(options) {
         throw error;
       } finally {
         try {
-          await stopProcessTree(builder);
-          await stopProcessTree(server);
-          ownedServer?.clear();
-          if (logFd !== null) closeSync(logFd);
-          if (outDir !== null) rmSync(outDir, { recursive: true, force: true });
-          if (server !== null) {
-            const free = await isPortFree(port);
-            say(`runtime: server process group ${String(server.pid)} on port ${String(port)} stopped; port ${free ? "free" : "STILL IN USE"}`);
-          }
+          try { await stopProcessTree(builder); } finally { await ownedServer?.stop(); }
         } finally {
-          for (const [name, handler] of handlers) process.removeListener(name, handler);
           try {
-            await starting?.release();
-            await lease?.release();
+            try {
+              if (logFd !== null) { closeSync(logFd); logFd = null; }
+            } finally {
+              try {
+                if (outDir !== null) { rmSync(outDir, { recursive: true, force: true }); outDir = null; }
+              } finally {
+                if (server !== null) {
+                  const free = await isPortFree(port);
+                  say(`runtime: server process group ${String(server.pid)} on port ${String(port)} cleanup attempted; port ${free ? "free" : "STILL IN USE"}`);
+                }
+              }
+            }
           } finally {
-            await evidence?.release();
+            for (const [name, handler] of handlers) process.removeListener(name, handler);
+            try {
+              try { await starting?.release(); } finally { await lease?.release(); }
+            } finally { await evidence?.release(); }
           }
         }
       }
@@ -607,8 +611,8 @@ export async function openQaSession(options) {
       controller.abort();
       // Build/serve startup must settle promptly. Its next await checks abort
       // before another process is spawned; cleanup joins that startup promise.
-      void Promise.all([stopProcessTree(builder), stopProcessTree(server)])
-        .then(close).finally(() => process.exit(name === "SIGINT" ? 130 : 143));
+      void Promise.all([stopProcessTree(builder), ownedServer?.stop()])
+        .catch((error) => say(`server interruption requires reconciliation: ${String(error)}`)).then(close).finally(() => process.exit(name === "SIGINT" ? 130 : 143));
     };
     handlers.set(name, handler);
     process.once(name, handler);

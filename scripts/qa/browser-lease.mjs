@@ -35,9 +35,16 @@ export function browserOwnerPath(slotPath) {
   return `${slotPath}.owner.json`;
 }
 
+/** @param {string} slotPath */
+export const serverRecordPath = (slotPath) => `${slotPath}.server.json`;
+
+/** Ownership records that independently protect the same slot. @param {string} slotPath */
+const slotRecords = (slotPath) => [browserOwnerPath(slotPath), serverRecordPath(slotPath)].filter((path) => existsSync(path));
+
 /**
- * The arrival queue of a lease: one empty ticket file per waiting process,
- * `<sequence>-<pid>`, under the gitignored `artifacts/qa/`.
+ * The arrival queue of a lease: one `<sequence>-<pid>` ticket per waiting
+ * process under gitignored `artifacts/qa/`. Modern tickets declare slot
+ * capacity as JSON; empty legacy tickets need slot 0.
  *
  * @param {string} path
  */
@@ -247,16 +254,15 @@ async function lockFree(path) {
 }
 
 /**
- * Whether a slot carries an ownership record while no holder has its lock:
- * a record retained for provider reconciliation. A holder clears its record
- * before it releases, so a record seen again after the lock tested free is
- * retained.
- *
+ * Records retained on a free kernel lock. Live holders' records are unavailable
+ * too, but are contention rather than retained reconciliation evidence.
  * @param {string} slotPath
  */
-async function quarantined(slotPath) {
-  const ownerPath = browserOwnerPath(slotPath);
-  return existsSync(ownerPath) && await lockFree(slotPath) && existsSync(ownerPath);
+async function retainedRecords(slotPath) {
+  if (slotRecords(slotPath).length === 0) return [];
+  const lock = await tryBrowserLock(slotPath);
+  if (lock === null) return [];
+  try { return slotRecords(slotPath); } finally { await lock.release(); }
 }
 
 /**
@@ -285,22 +291,26 @@ async function quarantined(slotPath) {
 async function takeSlot(path, slots, signal) {
   /** @type {string[]} */
   const retained = [];
+  let retainedSlots = 0;
   for (let slot = slots - 1; slot >= 0; slot--) {
     const slotPath = browserSlotPath(path, slot);
     const ownerPath = browserOwnerPath(slotPath);
-    if (existsSync(ownerPath)) {
-      if (await quarantined(slotPath)) retained.push(ownerPath);
+    if (slotRecords(slotPath).length > 0) {
+      const records = await retainedRecords(slotPath);
+      if (records.length > 0) { retained.push(...records); retainedSlots++; }
       continue;
     }
     const lock = await tryBrowserLock(slotPath, signal);
     if (lock === null) continue;
     // A holder may have retained its record between the check and the lock.
-    if (!existsSync(ownerPath)) return { slot, path: slotPath, ownerPath, quarantined: retained, release: lock.release };
+    const records = slotRecords(slotPath);
+    if (records.length === 0) return { slot, path: slotPath, ownerPath, quarantined: retained, release: lock.release };
     await lock.release();
-    retained.push(ownerPath);
+    retained.push(...records);
+    retainedSlots++;
   }
-  if (retained.length === slots) {
-    throw new Error(`browser provider requires reconciliation before QA startup: ${retained.join(", ")}`);
+  if (retainedSlots === slots) {
+    throw new Error(`browser slot requires reconciliation before QA startup: ${retained.join(", ")}`);
   }
   return null;
 }
@@ -362,7 +372,7 @@ export async function browserLeaseContended(path, slots = BROWSER_QA_SLOTS, held
   if (heldSlot !== undefined && heldSlot >= capacity) return false;
   for (let slot = 0; slot < capacity; slot++) {
     const slotPath = browserSlotPath(path, slot);
-    if (!existsSync(browserOwnerPath(slotPath)) && await lockFree(slotPath)) return false;
+    if (slotRecords(slotPath).length === 0 && await lockFree(slotPath) && slotRecords(slotPath).length === 0) return false;
   }
   return true;
 }

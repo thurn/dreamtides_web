@@ -1185,8 +1185,15 @@ sweep yields at a card boundary when the oldest live waiter needs its held
 slot and has no eligible free slot. Legacy slot-0 waiters therefore receive
 slot 0 even when slot 1 is free; slot-1 sweeps can continue. Coordinate interactive MCP use with active provider owners. See
 [README § Browser QA](../../README.md#browser-qa) for the slot, port,
-evidence, ownership record, confirmed cleanup and reconciliation contracts,
+evidence, independent provider/server ownership records, confirmed cleanup
+and reconciliation contracts,
 and how runners from older checkouts share slot 0.
+Either ownership record protects a slot during admission and yield checks.
+Records on free locks are retained reconciliation evidence; a live holder's
+locked slot remains contention. Owned server shutdown records verified group
+members and waits for their settlement, including descendants after leader
+exit. Unknown identities protect the record. Log descriptors, temporary build
+directories and local locks receive cleanup even if server settlement fails.
 
 ### Scenario runner
 

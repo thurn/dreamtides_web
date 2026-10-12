@@ -195,9 +195,11 @@ startup and stops the current owned server or builder, then joins that
 cleanup sequence. Confirmed browser close and settled provider responses
 clear the runner's exact ownership record. An uncertain RPC makes its session
 non-runnable; a failed close, uncertain transport rejection, or caller crash
-leaves the record, and the slot is retained for reconciliation: later runs
-pass over it and use another slot, and refuse to start only when every slot
-is retained. Reconcile the recorded provider execution before clearing that
+leaves the provider record. Either a provider record or a server record
+protects its slot before and after lock acquisition: later runs pass over
+retained slots and use another usable slot, and refuse startup when every
+slot is retained. A live holder's locked slot remains ordinary contention.
+Yield checks use the same usable-slot rules as admission. Reconcile the recorded provider execution before clearing that
 record. Kernel release on pipe EOF proves local lock recovery; provider
 completion requires separate confirmation. The slots are separate from
 `artifacts/heavy.lock`: browser runs (`run-scenario`, `card-sweep`) take a
@@ -218,9 +220,19 @@ node scripts/qa/server-ownership.mjs <exact-slot-lock-path>
 
 The command takes that slot's kernel lock, protects every live runner PID,
 verifies the launcher's exact identity, and signals only that isolated group.
-It checks descendant identities and whole-group settlement, preserving
+Shutdown durably records verified group-member identities before signaling
+and waits for whole-group settlement. OS process state identifies recorded
+same-lifetime zombies, which wait for reaping without another signal; live
+process commands still match exactly for signaling. After a verified own
+signal, a same-lifetime ambiguous command observation disables every further
+signal and permits only bounded observation until the leader is absent and
+the group is empty. Persistent ambiguity, changed records and unknown or
+reused lifetimes retain their evidence. Signal and normal-close cleanup share
+one shutdown operation. Reconciliation checks descendant identities and
+whole-group settlement, preserving
 malformed, partial, reused, changed, or ambiguous records for inspection.
-An absent launcher settles only when its entire recorded group is empty.
+An absent launcher with durable member identities can settle those verified
+survivors; unknown survivors protect the record. An empty group is settled.
 A stopped server clears only its exact server record. The provider's
 `.owner.json` remains intact: a dead runner does not certify browser closure,
 and provider reconciliation is still required before admitting that slot.
@@ -241,7 +253,9 @@ The runner starts its server in its own process group (`scripts/dev.mjs`, or
 `vite preview`), connects its own MCP client with the primary checkout as the
 first root (`scripts/screenshot-runtime.mjs`), runs the scenario, and stops
 that process group on exit or on SIGINT/SIGTERM, then reports whether the
-port is free. It prints a JSON report (result, log, captures, every document
+port is free. Log descriptors, temporary production build directories and
+local locks are independently cleaned up even when server settlement fails;
+the exact unsettled server record remains available for reconciliation. It prints a JSON report (result, log, captures, every document
 whose `__caps` was not empty, wall times, host load) and writes it to
 `artifacts/qa/<bead-id>/invocations/run-*/<scenario>[-prod].result.json`, beside the server's
 log. It exits 1 when the scenario throws or any `__caps` is not empty.

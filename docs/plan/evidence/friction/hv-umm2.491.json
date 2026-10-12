@@ -1,0 +1,26 @@
+{
+  "bead": "hv-umm2.491",
+  "phase": 5,
+  "implementMin": 52.26259826666667,
+  "localValidationS": {
+    "focused-observation-contracts-final": 3.6513104590012517,
+    "review-observation-final": 19.187619667001854,
+    "knip-observation-final": 2.602558082999167,
+    "full-observation-final": 127.57866341699992,
+    "startup-crash-observation-final": 0.8390493330007303,
+    "mcp-acceptance-observation-final": 11.892009750001307
+  },
+  "hostLoad": 23.291015625,
+  "testDelta": {
+    "files": 0,
+    "lines": 260,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "server-shutdown-lifecycle",
+      "minutes": 27.65650486666667,
+      "note": "Two source-changing actual MCP acceptance attempts passed their workflow but exited2 on cleanup identity mismatch. Initial pre-stat focused trace identified a recorded <defunct> transition; later failure cause remains unknown. Approved post-verified-signal observation-only settlement was implemented within this bead and verified by deterministic contracts plus final unmodified MCP acceptance; all earlier failures/source hashes are retained."
+    }
+  ]
+}

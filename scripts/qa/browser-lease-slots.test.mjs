@@ -9,6 +9,7 @@ import {
   browserLeaseQueuePath,
   browserOwnerPath,
   browserSlotPath,
+  serverRecordPath,
 } from "./browser-lease.mjs";
 import { leaseFixtures, lockHeld, releaseHolder } from "./browser-lease-fixture.mjs";
 import { sweepCards } from "./card-sweep.mjs";
@@ -16,6 +17,7 @@ import { sweepCards } from "./card-sweep.mjs";
 // Slots this test process takes itself keep their native lockf holders in
 // the test's session: the holders' isolated groups become direct children,
 // each still released by closing its pipe.
+const race = vi.hoisted(() => ({ path: "" }));
 const owned = vi.hoisted(() => /** @type {import("node:child_process").ChildProcess[]} */ ([]));
 vi.mock("node:child_process", async (importOriginal) => {
   const actual = /** @type {typeof import("node:child_process")} */ (await importOriginal());
@@ -23,6 +25,11 @@ vi.mock("node:child_process", async (importOriginal) => {
     ...actual,
     spawn: vi.fn((/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").SpawnOptions} */ options) => {
       const child = actual.spawn(command, args, { ...options, detached: false });
+      if (args.includes(race.path) && race.path !== "" && args.includes("echo ready; exec cat >/dev/null")) {
+        const path = race.path;
+        child.stdout?.prependOnceListener("data", () => writeFileSync(serverRecordPath(path), "server appeared during admission"));
+        race.path = "";
+      }
       owned.push(child);
       return child;
     }),
@@ -34,6 +41,7 @@ const leases = /** @type {Array<{ release: () => Promise<void> }>} */ ([]);
 afterEach(async () => {
   await Promise.all(leases.splice(0).map((lease) => lease.release()));
   await fixtures.cleanup();
+  race.path = "";
   for (const child of owned.splice(0)) {
     if (child.exitCode !== null || child.signalCode !== null) continue;
     const exited = once(child, "close");
@@ -66,6 +74,52 @@ function queueSyntheticWaiter(path, slots = 2) {
 }
 
 describe("browser slot recovery", () => {
+  it("skips server-only retained slots and reports their exact reconciliation paths", async () => {
+    const path = fixtures.leasePath();
+    const high = browserSlotPath(path, 1);
+    // A holder creates the slot directory; no provider ownership is needed.
+    const first = await acquire(path); await first.release();
+    writeFileSync(serverRecordPath(high), "retained server");
+    const next = await acquire(path);
+    expect(next.slot).toBe(0);
+    expect(next.quarantined).toEqual([serverRecordPath(high)]);
+    expect(readFileSync(serverRecordPath(high), "utf8")).toBe("retained server");
+  });
+
+  it("counts all-retained slots once even when both independent records exist", async () => {
+    const path = fixtures.leasePath();
+    const first = await acquire(path); await first.release();
+    const records = [serverRecordPath(browserSlotPath(path, 1)), ownerOf(path, 1), serverRecordPath(path)];
+    for (const record of records) writeFileSync(record, "retained");
+    const failure = /** @type {unknown} */ (await acquireBrowserLease(path).catch((/** @type {unknown} */ error) => error));
+    expect(failure).toBeInstanceOf(Error);
+    for (const record of records) expect(String(failure)).toContain(record);
+    expect(records.every((record) => readFileSync(record, "utf8") === "retained")).toBe(true);
+    expect([0, 1].some((slot) => lockHeld(browserSlotPath(path, slot)))).toBe(false);
+  });
+
+  it("protects a server record appearing after precheck and before acquired-lock admission", async () => {
+    const path = fixtures.leasePath();
+    race.path = browserSlotPath(path, 1);
+    const lease = await acquire(path);
+    expect(lease.slot).toBe(0);
+    expect(lease.quarantined).toEqual([serverRecordPath(browserSlotPath(path, 1))]);
+    expect(lockHeld(browserSlotPath(path, 1))).toBe(false);
+  });
+
+  it("waits for a held server slot rather than declaring every slot retained", async () => {
+    const path = fixtures.leasePath();
+    const held = await acquire(path);
+    writeFileSync(serverRecordPath(held.path), "live server");
+    writeFileSync(serverRecordPath(path), "retained other server");
+    const waiter = fixtures.leaseProcess(path);
+    expect(await waiter.first).toBe("waiting");
+    rmSync(serverRecordPath(held.path));
+    await held.release();
+    expect(await waiter.acquired).toBe(held.slot);
+    await releaseHolder(waiter);
+  });
+
   it("recovers a killed holder's slot for the next waiter without touching the live slot", async () => {
     const path = fixtures.leasePath();
     const killed = fixtures.leaseProcess(path);
@@ -149,7 +203,9 @@ describe("browser slot yielding", () => {
     expect(await browserLeaseContended(path)).toBe(true);
     await other.release();
     expect(await browserLeaseContended(path)).toBe(false);
-    writeFileSync(other.ownerPath, "synthetic retained record");
+    writeFileSync(serverRecordPath(other.path), "synthetic retained server record");
+    expect(await browserLeaseContended(path)).toBe(true);
+    writeFileSync(other.ownerPath, "synthetic retained provider record");
     expect(await browserLeaseContended(path)).toBe(true);
     dequeue();
     expect(await browserLeaseContended(path)).toBe(false);

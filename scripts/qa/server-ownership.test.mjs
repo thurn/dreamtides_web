@@ -12,6 +12,8 @@ import { processIdentity, reconcileServer, serverRecordPath, spawnOwnedServer } 
 
 const boundaries = vi.hoisted(() => ({ identities: /** @type {Map<number, string>} */ (new Map()),
   missingIdentity: false,
+  fastDelay: false,
+  afterDelay: /** @type {(() => void) | null} */ (null),
   launched: /** @type {import("node:child_process").ChildProcess[]} */ ([]),
   children: /** @type {Map<number, import("node:child_process").ChildProcess>} */ (new Map()) }));
 vi.mock("node:child_process", async (original) => {
@@ -25,7 +27,11 @@ vi.mock("node:child_process", async (original) => {
     execFileSync: (/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").ExecFileSyncOptions} */ options) => {
       if (command === "ps" && args[0] === "-A") return [...boundaries.identities].filter(([pid]) => {
         const child = boundaries.children.get(pid); return child?.exitCode === null && child.signalCode === null;
-      }).map(([, line]) => line).join("\n");
+      }).map(([, line]) => line).concat(boundaries.launched.flatMap((child) => {
+        if (child.exitCode !== null || child.signalCode !== null) return [];
+        const line = String(actual.execFileSync("ps", ["-p", String(child.pid), "-o", "pid=,pgid=,lstart=,stat=,command="], options));
+        return [line.replace(/^(\s*)(\d+)\s+\d+/u, "$1$2 $2")];
+      })).join("\n");
       const pid = command === "ps" ? Number(args[1]) : 0;
       if (boundaries.missingIdentity && boundaries.launched.some((child) => child.pid === pid)) return "";
       const line = boundaries.identities.get(pid);
@@ -33,9 +39,19 @@ vi.mock("node:child_process", async (original) => {
         const child = boundaries.children.get(pid);
         return child?.exitCode === null && child.signalCode === null ? line : "";
       }
-      return actual.execFileSync(command, args, options);
+      const result = actual.execFileSync(command, args, options);
+      if (command === "ps") return String(result).split("\n").map((line) => line.replace(/^(\s*)(\d+)\s+\d+/u,
+        (whole, pad, pid) => boundaries.launched.some((child) => child.pid === Number(pid)) ? `${pad}${pid} ${pid}` : whole)).join("\n");
+      return result;
     },
   };
+});
+vi.mock("node:timers/promises", async (original) => {
+  const actual = /** @type {typeof import("node:timers/promises")} */ (await original());
+  return { ...actual, setTimeout: async (/** @type {number} */ ms) => {
+    if (!boundaries.fastDelay) await actual.setTimeout(ms);
+    boundaries.afterDelay?.();
+  } };
 });
 const directories = /** @type {string[]} */ ([]);
 const children = /** @type {import("node:child_process").ChildProcess[]} */ ([]);
@@ -45,7 +61,7 @@ afterEach(async () => {
     if (child.exitCode !== null || child.signalCode !== null) continue;
     const exited = once(child, "exit"); child.kill("SIGKILL"); await exited;
   }
-  boundaries.missingIdentity = false; boundaries.launched.splice(0);
+  boundaries.missingIdentity = false; boundaries.fastDelay = false; boundaries.afterDelay = null; boundaries.launched.splice(0);
   boundaries.identities.clear(); boundaries.children.clear();
   for (const dir of directories.splice(0)) rmSync(dir, { recursive: true, force: true });
 });
@@ -60,7 +76,7 @@ async function serverFixture() {
     { stdio: ["ignore", "pipe", "inherit"] }); children.push(child);
   await once(/** @type {import("node:stream").Readable} */ (child.stdout), "data");
   const pid = Number(child.pid);
-  boundaries.identities.set(pid, `${String(pid)} ${String(pid)} Sun Oct 11 20:00:00 2026 node 11111111-1111-4111-8111-111111111111`);
+  boundaries.identities.set(pid, `${String(pid)} ${String(pid)} Sun Oct 11 20:00:00 2026 S node 11111111-1111-4111-8111-111111111111`);
   boundaries.children.set(pid, child);
   const identity = processIdentity(pid);
   if (identity === null) throw new Error("fixture identity missing");
@@ -72,6 +88,136 @@ const record = (where, value) => writeFileSync(where.record, JSON.stringify(valu
 // 999999999 is outside macOS/Linux's process id range; only synthetic input.
 const deadRunner = { pid: 999999999 };
 describe("identity-safe local orphan reconciliation", () => {
+  it.each(["settles", "persistent", "restored-live"])("observes post-signal same-lifetime command ambiguity without escalation (%s)", async (outcome) => {
+    const f = fixture(); const server = await serverFixture();
+    record(f, { token: "11111111-1111-4111-8111-111111111111", runner: deadRunner, server: server.identity });
+    const provider = readFileSync(f.owner, "utf8");
+    boundaries.fastDelay = true;
+    let polls = 0;
+    const actualKill = process.kill.bind(process);
+    const signals = /** @type {NodeJS.Signals[]} */ ([]);
+    vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
+      if (pid !== -server.identity.group) return actualKill(pid, signal);
+      signals.push(/** @type {NodeJS.Signals} */ (signal));
+      boundaries.identities.set(server.identity.pid,
+        `${String(server.identity.pid)} ${String(server.identity.group)} ${server.identity.started} S node ambiguous-command`);
+      return true;
+    });
+    boundaries.afterDelay = () => {
+      if (++polls === 2) {
+        if (outcome === "settles") boundaries.identities.set(server.identity.pid, "");
+        if (outcome === "restored-live") boundaries.identities.set(server.identity.pid,
+          `${String(server.identity.pid)} ${String(server.identity.group)} ${server.identity.started} S ${server.identity.command}`);
+      }
+    };
+    expect((await reconcileServer(f.slot)).state).toBe(outcome === "settles" ? "stopped" : "identity-mismatch");
+    expect(signals).toEqual(["SIGTERM"]);
+    expect(existsSync(f.record)).toBe(outcome !== "settles");
+    expect(readFileSync(f.owner, "utf8")).toBe(provider);
+  });
+
+  it("protects a changed live command before any verified signal", async () => {
+    const f = fixture(); const server = await serverFixture();
+    record(f, { token: "11111111-1111-4111-8111-111111111111", runner: deadRunner, server: server.identity });
+    boundaries.identities.set(server.identity.pid,
+      `${String(server.identity.pid)} ${String(server.identity.group)} ${server.identity.started} S node changed-live-command`);
+    const actualKill = process.kill.bind(process);
+    const signals = /** @type {NodeJS.Signals[]} */ ([]);
+    vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
+      if (pid === -server.identity.group) { signals.push(/** @type {NodeJS.Signals} */ (signal)); return true; }
+      return actualKill(pid, signal);
+    });
+    expect((await reconcileServer(f.slot)).state).toBe("identity-mismatch");
+    expect(signals).toEqual([]); expect(existsSync(f.record)).toBe(true);
+    expect(server.child.exitCode).toBeNull();
+  });
+
+  it.each([false, true])("waits for recorded same-lifetime zombies to reap (initially exited: %s)", async (alreadyExited) => {
+    const f = fixture(); const server = await serverFixture();
+    record(f, { token: "11111111-1111-4111-8111-111111111111", runner: deadRunner, server: server.identity });
+    boundaries.fastDelay = true;
+    if (alreadyExited) boundaries.identities.set(server.identity.pid,
+      `${String(server.identity.pid)} ${String(server.identity.group)} ${server.identity.started} Z <defunct>`);
+    let polls = 0;
+    const actualKill = process.kill.bind(process);
+    const signals = /** @type {NodeJS.Signals[]} */ ([]);
+    vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
+      if (pid !== -server.identity.group) return actualKill(pid, signal);
+      signals.push(/** @type {NodeJS.Signals} */ (signal));
+      boundaries.identities.set(server.identity.pid,
+        `${String(server.identity.pid)} ${String(server.identity.group)} ${server.identity.started} Z <defunct>`);
+      return true;
+    });
+    boundaries.afterDelay = () => {
+      if (++polls === 2) {
+        // Reaping follows zombie observation, deterministically rather than
+        // relying on a host timing threshold or an escaped child process.
+        boundaries.identities.set(server.identity.pid, "");
+      }
+    };
+    expect((await reconcileServer(f.slot)).state).toBe("stopped");
+    expect(signals).toEqual(alreadyExited ? [] : ["SIGTERM"]);
+    expect(existsSync(f.record)).toBe(false);
+  });
+
+  it("settles durable recorded descendants after their leader exits", async () => {
+    const f = fixture(); const leader = await serverFixture(); const member = await serverFixture();
+    const identity = { ...member.identity, group: leader.identity.group };
+    boundaries.identities.set(identity.pid, `${String(identity.pid)} ${String(identity.group)} ${identity.started} S ${identity.command}`);
+    record(f, { token: "11111111-1111-4111-8111-111111111111", runner: deadRunner,
+      server: leader.identity, members: [leader.identity, identity].map(({ pid, group, started, command }) =>
+        ({ pid, group, started, command })) });
+    const exited = once(leader.child, "exit"); leader.child.kill("SIGTERM"); await exited;
+    const owner = readFileSync(f.owner, "utf8");
+    const actualKill = process.kill.bind(process);
+    vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
+      if (pid === -leader.identity.group) { member.child.kill(/** @type {NodeJS.Signals} */ (signal)); return true; }
+      return actualKill(pid, signal);
+    });
+    expect(await reconcileServer(f.slot)).toMatchObject({ state: "stopped", alreadyExited: true });
+    expect(member.child.signalCode).toBe("SIGTERM");
+    expect(existsSync(f.record)).toBe(false); expect(readFileSync(f.owner, "utf8")).toBe(owner);
+  });
+
+  it.each(["changed", "reused", "new-member", "unsettled"])("preserves %s shutdown evidence and provider bytes", async (kind) => {
+    const f = fixture(); const server = await serverFixture();
+    const newcomer = kind === "new-member" ? await serverFixture() : null;
+    record(f, { token: "11111111-1111-4111-8111-111111111111", runner: deadRunner, server: server.identity });
+    const owner = readFileSync(f.owner, "utf8");
+    boundaries.fastDelay = true;
+    const actualKill = process.kill.bind(process);
+    vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
+      if (pid !== -server.identity.group) return actualKill(pid, signal);
+      if (kind === "changed") writeFileSync(f.record, "changed by another actor");
+      if (newcomer !== null) boundaries.identities.set(newcomer.identity.pid,
+        `${String(newcomer.identity.pid)} ${String(server.identity.group)} ${newcomer.identity.started} S ${newcomer.identity.command}`);
+      if (kind === "reused") boundaries.identities.set(server.identity.pid,
+        `${String(server.identity.pid)} 999999998 ${server.identity.started} S node reused-in-another-group`);
+      return true; // Explicit synthetic unsettled OS boundary; never a group signal.
+    });
+    expect((await reconcileServer(f.slot)).state).toBe(kind === "changed" ? "record-changed" : (kind === "reused" || kind === "new-member") ? "identity-mismatch" : "server-unsettled");
+    expect(existsSync(f.record)).toBe(true); expect(readFileSync(f.owner, "utf8")).toBe(owner);
+    expect(server.child.exitCode).toBeNull();
+  });
+
+  it("makes owned shutdown single-flight and clears only after its group settles", async () => {
+    const f = fixture(); const logFd = openSync(join(dirname(f.slot), "server.log"), "w");
+    const owned = await spawnOwnedServer({ slotPath: f.slot, command: process.execPath,
+      args: ["-e", "setInterval(() => {}, 60000)"], cwd: dirname(f.slot), logFd, port: 6000 });
+    children.push(owned.child);
+    const actualKill = process.kill.bind(process);
+    const signals = /** @type {NodeJS.Signals[]} */ ([]);
+    vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
+      if (pid === -Number(owned.child.pid)) { signals.push(/** @type {NodeJS.Signals} */ (signal)); owned.child.kill(/** @type {NodeJS.Signals} */ (signal)); return true; }
+      return actualKill(pid, signal);
+    });
+    try {
+      const first = owned.stop(); expect(owned.stop()).toBe(first); await first;
+      expect(signals).toEqual(["SIGTERM"]); expect(existsSync(f.record)).toBe(false);
+      await owned.stop(); expect(signals).toEqual(["SIGTERM"]);
+    } finally { closeSync(logFd); }
+  });
+
   it.each(["identity", "write"])("settles a gated launcher after a %s failure before returning", async (kind) => {
     const f = fixture();
     boundaries.missingIdentity = kind === "identity";
@@ -117,7 +263,7 @@ describe("identity-safe local orphan reconciliation", () => {
   it("protects surviving group members when their recorded leader is absent", async () => {
     const f = fixture(); const server = await serverFixture();
     const group = 999999998;
-    boundaries.identities.set(Number(server.child.pid), `${String(server.child.pid)} ${String(group)} Sun Oct 11 20:00:00 2026 node fixture-member`);
+    boundaries.identities.set(Number(server.child.pid), `${String(server.child.pid)} ${String(group)} Sun Oct 11 20:00:00 2026 S node fixture-member`);
     record(f, { token: "11111111-1111-4111-8111-111111111111", runner: deadRunner,
       server: { ...server.identity, pid: group, group } });
     expect((await reconcileServer(f.slot)).state).toBe("unverified");

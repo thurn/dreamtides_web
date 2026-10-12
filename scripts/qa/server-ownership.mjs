@@ -5,17 +5,18 @@ import { randomUUID } from "node:crypto";
 import { existsSync, readFileSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { setTimeout as delay } from "node:timers/promises";
-import { tryBrowserLock } from "./browser-lease.mjs";
+import { serverRecordPath, tryBrowserLock } from "./browser-lease.mjs";
+export { serverRecordPath } from "./browser-lease.mjs";
 
 /** @param {string} line */
 function parseIdentity(line) {
-  const match = /^(\d+)\s+(\d+)\s+(\w{3}\s+\w{3}\s+\d+\s+[\d:]+\s+\d{4})\s+(.+)$/u.exec(line.trim());
-  return match === null ? null : { pid: Number(match[1]), group: Number(match[2]), started: match[3], command: match[4] };
+  const match = /^(\d+)\s+(\d+)\s+(\w{3}\s+\w{3}\s+\d+\s+[\d:]+\s+\d{4})\s+(\S+)\s+(.+)$/u.exec(line.trim());
+  return match === null ? null : { pid: Number(match[1]), group: Number(match[2]), started: match[3], state: match[4], command: match[5] };
 }
 
 /** @param {number} group */
 function groupMembers(group) {
-  return execFileSync("ps", ["-A", "-o", "pid=,pgid=,lstart=,command="],
+  return execFileSync("ps", ["-A", "-o", "pid=,pgid=,lstart=,stat=,command="],
     { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).split("\n")
     .flatMap((line) => { const value = parseIdentity(line); return value?.group === group ? [value] : []; });
 }
@@ -23,7 +24,7 @@ function groupMembers(group) {
 /** @param {number} pid */
 export function processIdentity(pid) {
   try {
-    const line = execFileSync("ps", ["-p", String(pid), "-o", "pid=,pgid=,lstart=,command="],
+    const line = execFileSync("ps", ["-p", String(pid), "-o", "pid=,pgid=,lstart=,stat=,command="],
       { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
     return parseIdentity(line);
   } catch (error) {
@@ -31,9 +32,6 @@ export function processIdentity(pid) {
     throw error;
   }
 }
-
-/** @param {string} slotPath */
-export const serverRecordPath = (slotPath) => `${slotPath}.server.json`;
 
 /**
  * Records an isolated launcher before releasing its gate. Its token appears
@@ -59,7 +57,7 @@ export async function spawnOwnedServer({ slotPath, command, args, cwd, logFd, po
       child.stdin?.end();
       throw new Error("server launcher identity could not be established");
     }
-    const record = JSON.stringify({ token, runner, server, cwd, port }) + "\n";
+    let record = JSON.stringify({ token, runner, server, cwd, port }) + "\n";
     const temporary = `${recordPath}.${token}.tmp`;
     try {
       writeFileSync(temporary, record, { flag: "wx" });
@@ -72,11 +70,19 @@ export async function spawnOwnedServer({ slotPath, command, args, cwd, logFd, po
       if (existsSync(temporary)) unlinkSync(temporary);
       throw error;
     }
-    return { child, clear: () => {
-      if (readFileSync(recordPath, "utf8") !== record) throw new Error(`server record changed: ${recordPath}`);
-      if (processIdentity(server.pid) !== null || groupMembers(server.group).length > 0) throw new Error(`server group remains live: ${String(server.group)}`);
-      unlinkSync(recordPath);
+    let stopping = /** @type {Promise<void> | null} */ (null);
+    return { child, stop: () => {
+      stopping ??= (async () => {
+        if (readFileSync(recordPath, "utf8") !== record) throw new Error(`server record changed: ${recordPath}`);
+        const value = parsedRecord(/** @type {unknown} */ (JSON.parse(record)));
+        if (value === null) throw new Error(`server record invalid: ${recordPath}`);
+        const result = await settleServer(recordPath, record, value, (next) => { record = next; });
+        if (result.state !== "stopped") throw new Error(`server cleanup ${result.state}: ${recordPath}`);
+        await closed;
+      })();
+      return stopping;
     } };
+
   } catch (error) {
     child.stdin?.end();
     await closed;
@@ -96,9 +102,113 @@ function parsedRecord(value) {
     !("started" in server) || !("command" in server) || typeof server.pid !== "number" ||
     !Number.isInteger(server.pid) || server.pid <= 1 || server.group !== server.pid ||
     typeof server.started !== "string" || typeof server.command !== "string" || !server.command.includes(value.token)) return null;
+  const members = "members" in value ? value.members : undefined;
+  if (members !== undefined && (!Array.isArray(members) || !members.every((/** @type {unknown} */ member) =>
+    typeof member === "object" && member !== null && "pid" in member && typeof member.pid === "number" &&
+    Number.isInteger(member.pid) && member.pid > 1 && "group" in member && member.group === server.pid &&
+    "started" in member && typeof member.started === "string" && "command" in member && typeof member.command === "string"))) return null;
   return { token: value.token, runner: { pid: runner.pid },
     server: { pid: server.pid, group: server.pid, started: server.started, command: server.command },
-    port: "port" in value && typeof value.port === "number" ? value.port : null };
+    port: "port" in value && typeof value.port === "number" ? value.port : null,
+    members: /** @type {Array<Omit<NonNullable<ReturnType<typeof processIdentity>>, "state">> | undefined} */ (members) };
+}
+
+/** @param {Omit<NonNullable<ReturnType<typeof processIdentity>>, "state">} expected @param {ReturnType<typeof processIdentity>} actual */
+const sameIdentity = (expected, actual) => sameLifetime(expected, actual) && expected.command === actual?.command;
+
+/** @param {Omit<NonNullable<ReturnType<typeof processIdentity>>, "state">} expected @param {ReturnType<typeof processIdentity>} actual */
+const sameLifetime = (expected, actual) => actual !== null && expected.pid === actual.pid &&
+  expected.group === actual.group && expected.started === actual.started;
+
+/** A recorded zombie has exited; wait for its reaping without treating its OS
+ * display command as an executing identity. Live commands stay exact.
+ * @param {Omit<NonNullable<ReturnType<typeof processIdentity>>, "state">} expected
+ * @param {ReturnType<typeof processIdentity>} actual
+ */
+const settledIdentity = (expected, actual) => sameIdentity(expected, actual) ||
+  (sameLifetime(expected, actual) && actual?.state.startsWith("Z") === true);
+
+/**
+ * Settle the exact recorded group, including verified descendants after leader
+ * exit. Unknown members or a changed record stop signals and preserve evidence.
+ * @param {string} path
+ * @param {string} raw
+ * @param {NonNullable<ReturnType<typeof parsedRecord>>} record
+ * @param {(next: string) => void} [updated]
+ */
+async function settleServer(path, raw, record, updated) {
+  const expected = record.server;
+  if (expected.pid === process.pid || expected.group === processIdentity(process.pid)?.group) return { state: "unverified", path };
+  const current = processIdentity(expected.pid);
+  if (current !== null && !settledIdentity(expected, current)) return { state: "identity-mismatch", path };
+  let remaining = groupMembers(expected.group);
+  let members = record.members;
+  if (members === undefined && remaining.length > 0) {
+    if (current === null) return { state: "unverified", path };
+    if (current.state.startsWith("Z")) {
+      // The launch record verifies only this exited lifetime. Unknown
+      // descendants require their own durable pre-shutdown identities.
+      if (!remaining.every((member) => settledIdentity(expected, member))) return { state: "unverified", path };
+    } else if (!remaining.some((member) => sameIdentity(expected, member))) return { state: "identity-mismatch", path };
+    members = remaining;
+    if (readFileSync(path, "utf8") !== raw) return { state: "record-changed", path };
+    const next = JSON.stringify({ .../** @type {Record<string, unknown>} */ (JSON.parse(raw)), members }) + "\n";
+    const temporary = `${path}.${record.token}.tmp`;
+    try {
+      writeFileSync(temporary, next, { flag: "wx" });
+      if (readFileSync(path, "utf8") !== raw) return { state: "record-changed", path };
+      renameSync(temporary, path);
+    } finally { if (existsSync(temporary)) unlinkSync(temporary); }
+    raw = next;
+    updated?.(next);
+  }
+  let sentSignal = false;
+  let observeOnly = false;
+  let leaderNow = current;
+  const settled = () => leaderNow === null && remaining.length === 0;
+  const checked = () => {
+    if (readFileSync(path, "utf8") !== raw) return "record-changed";
+    leaderNow = processIdentity(expected.pid);
+    if (leaderNow !== null && !settledIdentity(expected, leaderNow)) {
+      if (!sentSignal || !sameLifetime(expected, leaderNow)) return "identity-mismatch";
+      observeOnly = true;
+    }
+    remaining = groupMembers(expected.group);
+    for (const member of remaining) {
+      const original = members?.find((identity) => sameLifetime(identity, member));
+      if (original === undefined) return "identity-mismatch";
+      if (!settledIdentity(original, member)) {
+        if (!sentSignal) return "identity-mismatch";
+        observeOnly = true;
+      }
+    }
+    return null;
+  };
+  let invalid = checked();
+  if (invalid !== null) return { state: invalid, path };
+  for (const [signal, attempts] of /** @type {Array<[NodeJS.Signals, number]>} */ ([["SIGTERM", 50], ["SIGKILL", 10]])) {
+    if (settled()) break;
+    invalid = checked();
+    if (invalid !== null) return { state: invalid, path };
+    if (settled()) break;
+    // After a verified own signal, a same-lifetime ambiguous observation
+    // permanently disables further signals. Empty group + absent leader is
+    // the only successful terminal condition; persistent ambiguity is retained.
+    if (!observeOnly && remaining.some((member) => !member.state.startsWith("Z"))) {
+      try { process.kill(-expected.group, signal); sentSignal = true; } catch (error) {
+        if (!(typeof error === "object" && error !== null && "code" in error && error.code === "ESRCH")) throw error;
+      }
+    }
+    for (let attempt = 0; attempt < attempts && !settled(); attempt++) {
+      await delay(100);
+      invalid = checked();
+      if (invalid !== null) return { state: invalid, path };
+    }
+  }
+  if (!settled()) return { state: observeOnly ? "identity-mismatch" : "server-unsettled", path };
+  if (readFileSync(path, "utf8") !== raw) return { state: "record-changed", path };
+  unlinkSync(path);
+  return { state: "stopped", path, pid: expected.pid, port: record.port, ...(current === null ? { alreadyExited: true } : {}) };
 }
 
 /**
@@ -119,42 +229,7 @@ export async function reconcileServer(slotPath) {
     if (record === null) return { state: "unverified", path };
     // Any live runner PID, including a reused one, protects the record.
     if (processIdentity(record.runner.pid) !== null) return { state: "live-runner", path };
-    const expected = record.server;
-    const matches = (/** @type {ReturnType<typeof processIdentity>} */ actual) => actual !== null &&
-      actual.pid === expected.pid && actual.group === expected.group && actual.started === expected.started && actual.command === expected.command;
-    if (expected.pid === process.pid || expected.group === processIdentity(process.pid)?.group) return { state: "unverified", path };
-    const current = processIdentity(expected.pid);
-    if (current === null) {
-      // An absent leader is settled only when its entire recorded group is empty.
-      if (groupMembers(expected.group).length > 0) return { state: "unverified", path };
-      if (readFileSync(path, "utf8") !== raw) return { state: "record-changed", path };
-      unlinkSync(path);
-      return { state: "stopped", path, pid: expected.pid, port: record.port, alreadyExited: true };
-    }
-    if (!matches(current)) return { state: "identity-mismatch", path };
-    if (readFileSync(path, "utf8") !== raw) return { state: "record-changed", path };
-    const members = groupMembers(expected.group);
-    if (!members.some((member) => matches(member))) return { state: "identity-mismatch", path };
-    process.kill(-expected.group, "SIGTERM");
-    let remaining = groupMembers(expected.group);
-    for (let attempt = 0; attempt < 50 && remaining.length > 0; attempt++) {
-      await delay(100);
-      remaining = groupMembers(expected.group);
-    }
-    if (remaining.length > 0) {
-      if (!remaining.every((member) => members.some((original) => JSON.stringify(original) === JSON.stringify(member)))) {
-        return { state: "identity-mismatch", path };
-      }
-      process.kill(-expected.group, "SIGKILL");
-      for (let attempt = 0; attempt < 10 && remaining.length > 0; attempt++) {
-        await delay(100);
-        remaining = groupMembers(expected.group);
-      }
-    }
-    if (remaining.length > 0) return { state: "server-unsettled", path };
-    if (readFileSync(path, "utf8") !== raw) return { state: "record-changed", path };
-    unlinkSync(path);
-    return { state: "stopped", path, pid: expected.pid, port: record.port };
+    return await settleServer(path, raw, record);
   } finally { await lock.release(); }
 }
 

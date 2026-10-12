@@ -1,0 +1,695 @@
+{
+  "bead": "hv-umm2.491",
+  "phase": 5,
+  "measurementWindow": {
+    "start": "2026-10-12T04:14:52.244104+00:00",
+    "startKind": "completed-spawn-note proxy",
+    "actualDispatch": null,
+    "dispatchBracket": [
+      "2026-10-12T04:14:10.992562+00:00",
+      "2026-10-12T04:14:52.244104+00:00"
+    ],
+    "end": "2026-10-12T05:07:08+00:00",
+    "endKind": "actual Git source committer clock sampled immediately before commit invocation",
+    "dispatchProxyToEndMin": 52.26259826666667,
+    "actualDispatchToEndMinBounds": {
+      "lower": 52.26259826666667,
+      "upper": 52.950123966666666
+    }
+  },
+  "validationReceipts": [
+    {"name":"focused","command":["npm","test","--","scripts/qa/browser-lease-slots.test.mjs","scripts/qa/server-ownership.test.mjs","scripts/qa/run-scenario-slots.test.mjs"],"pid":18536,"startedAt":"2026-10-12T04:20:23.856949+00:00","endedAt":"2026-10-12T04:20:31.863540+00:00","wallS":8.006526458000735,"hostLoad":13.279296875,"exitCode":0},
+    {"name":"review","command":["npm","run","review"],"pid":26788,"startedAt":"2026-10-12T04:21:23.270035+00:00","endedAt":"2026-10-12T04:21:41.979367+00:00","wallS":18.709136165998643,"hostLoad":15.3046875,"exitCode":2},
+    {"name":"review-corrected","command":["npm","run","review"],"pid":47410,"startedAt":"2026-10-12T04:22:07.623679+00:00","endedAt":"2026-10-12T04:22:26.414005+00:00","wallS":18.790130416997272,"hostLoad":20.98291015625,"exitCode":2},
+    {"name":"review-final","command":["npm","run","review"],"pid":60042,"startedAt":"2026-10-12T04:23:05.671920+00:00","endedAt":"2026-10-12T04:23:21.724367+00:00","wallS":16.052279333001934,"hostLoad":17.41259765625,"exitCode":0},
+    {"name":"knip","command":["npm","run","knip"],"pid":72193,"startedAt":"2026-10-12T04:24:09.143726+00:00","endedAt":"2026-10-12T04:24:12.244360+00:00","wallS":3.1006285000003118,"hostLoad":11.4140625,"exitCode":0},
+    {"name":"full","command":["lockf","-k","/Users/dthurn/dreamtides_web/artifacts/heavy.lock","env","JOURNEY_TEST_WORKERS=2","npm","run","review:full"],"pid":74701,"startedAt":"2026-10-12T04:24:43.313327+00:00","endedAt":"2026-10-12T04:27:49.922241+00:00","wallS":186.60204104199875,"hostLoad":10.4228515625,"exitCode":0},
+    {"name":"review-identity-final","command":["npm","run","review"],"pid":16102,"startedAt":"2026-10-12T04:29:16.164946+00:00","endedAt":"2026-10-12T04:29:33.386542+00:00","wallS":17.221381416999066,"hostLoad":14.75,"exitCode":0},
+    {"name":"focused-identity-final","command":["npm","test","--","scripts/qa/server-ownership.test.mjs"],"pid":38201,"startedAt":"2026-10-12T04:29:55.808426+00:00","endedAt":"2026-10-12T04:29:59.480004+00:00","wallS":3.671574915999372,"hostLoad":18.84912109375,"exitCode":0},
+    {"name":"knip-identity-final","command":["npm","run","knip"],"pid":53691,"startedAt":"2026-10-12T04:30:30.941294+00:00","endedAt":"2026-10-12T04:30:33.826892+00:00","wallS":2.885592834001727,"hostLoad":26.140625,"exitCode":0},
+    {"name":"full-identity-final","command":["lockf","-k","/Users/dthurn/dreamtides_web/artifacts/heavy.lock","env","JOURNEY_TEST_WORKERS=2","npm","run","review:full"],"pid":58950,"startedAt":"2026-10-12T04:31:02.401918+00:00","endedAt":"2026-10-12T04:32:39.951796+00:00","wallS":97.54849549999926,"hostLoad":23.58251953125,"exitCode":0},
+    {"name":"startup-crash","command":["node","/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-check.mjs"],"pid":82562,"startedAt":"2026-10-12T04:33:04.088910+00:00","endedAt":"2026-10-12T04:33:04.897605+00:00","wallS":0.8087190000005648,"hostLoad":12.005859375,"exitCode":0},
+    {"name":"mcp-smoke","command":["node","scripts/qa/run-scenario.mjs","card-lab-play","--bead","hv-umm2.491","--arg","card=66959155-9e79-459e-afdb-eb4c0fbdeb11","--arg","variant=base","--arg","as=player","--arg","capture=normal-mcp-smoke","--viewports","desktop","--timeout","120"],"pid":83703,"startedAt":"2026-10-12T04:33:13.832734+00:00","endedAt":"2026-10-12T04:33:46.848612+00:00","wallS":33.01543974999731,"hostLoad":11.47607421875,"exitCode":2},
+    {"name":"smoke-retained-reconcile","command":["node","scripts/qa/server-ownership.mjs","/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock"],"pid":2822,"startedAt":"2026-10-12T04:34:42.507008+00:00","endedAt":"2026-10-12T04:34:42.658288+00:00","wallS":0.15131900000051246,"hostLoad":15.44287109375,"exitCode":0},
+    {"name":"shutdown-diagnosis","command":["node","/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/shutdown-diagnosis.mjs"],"pid":17847,"startedAt":"2026-10-12T04:35:30.657868+00:00","endedAt":"2026-10-12T04:35:32.257928+00:00","wallS":1.6000755420027417,"hostLoad":28.64990234375,"exitCode":2},
+    {"name":"diagnostic-retained-reconcile","command":["node","scripts/qa/server-ownership.mjs","/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock"],"pid":30224,"startedAt":"2026-10-12T04:37:18.054068+00:00","endedAt":"2026-10-12T04:37:18.241981+00:00","wallS":0.18798487499952898,"hostLoad":16.443359375,"exitCode":0},
+    {"name":"focused-zombie-final","command":["npm","test","--","scripts/qa/server-ownership.test.mjs","scripts/qa/run-scenario-slots.test.mjs"],"pid":30297,"startedAt":"2026-10-12T04:37:18.342612+00:00","endedAt":"2026-10-12T04:37:27.987861+00:00","wallS":9.645149374999164,"hostLoad":16.443359375,"exitCode":0},
+    {"name":"review-zombie-final","command":["npm","run","review"],"pid":35246,"startedAt":"2026-10-12T04:37:33.392334+00:00","endedAt":"2026-10-12T04:37:50.538214+00:00","wallS":17.14566508400094,"hostLoad":21.935546875,"exitCode":0},
+    {"name":"focused-legacy-members","command":["npm","test","--","scripts/qa/server-ownership.test.mjs"],"pid":59563,"startedAt":"2026-10-12T04:38:43.149638+00:00","endedAt":"2026-10-12T04:38:46.043450+00:00","wallS":2.8938042080008017,"hostLoad":16.06689453125,"exitCode":0},
+    {"name":"review-zombie-entry-final","command":["npm","run","review"],"pid":64762,"startedAt":"2026-10-12T04:39:46.390761+00:00","endedAt":"2026-10-12T04:40:03.923414+00:00","wallS":17.532437333000416,"hostLoad":9.958984375,"exitCode":0},
+    {"name":"knip-zombie-final","command":["npm","run","knip"],"pid":87101,"startedAt":"2026-10-12T04:41:02.485283+00:00","endedAt":"2026-10-12T04:41:04.823632+00:00","wallS":2.338350124999124,"hostLoad":8.70556640625,"exitCode":0},
+    {"name":"focused-zombie-entry-final","command":["npm","test","--","scripts/qa/server-ownership.test.mjs"],"pid":87453,"startedAt":"2026-10-12T04:41:14.338580+00:00","endedAt":"2026-10-12T04:41:18.020065+00:00","wallS":3.6814647920000425,"hostLoad":8.43017578125,"exitCode":0},
+    {"name":"full-zombie-final","command":["lockf","-k","/Users/dthurn/dreamtides_web/artifacts/heavy.lock","env","JOURNEY_TEST_WORKERS=2","npm","run","review:full"],"pid":89309,"startedAt":"2026-10-12T04:41:51.471610+00:00","endedAt":"2026-10-12T04:46:04.939588+00:00","wallS":253.46433354200053,"hostLoad":7.71435546875,"exitCode":0},
+    {"name":"startup-crash-final","command":["node","/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-check.mjs"],"pid":23801,"startedAt":"2026-10-12T04:46:59.670953+00:00","endedAt":"2026-10-12T04:47:00.523846+00:00","wallS":0.8529128750014934,"hostLoad":6.99560546875,"exitCode":0},
+    {"name":"mcp-smoke-final","command":["node","scripts/qa/run-scenario.mjs","card-lab-play","--bead","hv-umm2.491","--arg","card=66959155-9e79-459e-afdb-eb4c0fbdeb11","--arg","variant=base","--arg","as=player","--arg","capture=normal-mcp-smoke-final","--viewports","desktop","--timeout","120"],"pid":24218,"startedAt":"2026-10-12T04:47:06.888169+00:00","endedAt":"2026-10-12T04:47:18.018272+00:00","wallS":11.129977249998774,"hostLoad":6.99560546875,"exitCode":2},
+    {"name":"second-smoke-retained-reconcile","command":["node","scripts/qa/server-ownership.mjs","/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock"],"pid":40473,"startedAt":"2026-10-12T04:48:58.413652+00:00","endedAt":"2026-10-12T04:48:58.565241+00:00","wallS":0.1516222079990257,"hostLoad":6.18701171875,"exitCode":0},
+    {"name":"shutdown-final-body-trace","command":["node","/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/shutdown-diagnosis-final-body.mjs"],"pid":40524,"startedAt":"2026-10-12T04:48:58.608707+00:00","endedAt":"2026-10-12T04:49:00.557328+00:00","wallS":1.94862708400251,"hostLoad":6.18701171875,"exitCode":0},
+    {"name":"mcp-rejection-diagnostic","command":["node","/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/mcp-rejection-trace-runner.mjs","card-lab-play","--bead","hv-umm2.491","--arg","card=66959155-9e79-459e-afdb-eb4c0fbdeb11","--arg","variant=base","--arg","as=player","--arg","capture=cleanup-rejection-trace","--viewports","desktop","--timeout","120"],"pid":44639,"startedAt":"2026-10-12T04:50:51.426111+00:00","endedAt":"2026-10-12T04:51:00.801714+00:00","wallS":9.37550249999913,"hostLoad":8.67041015625,"exitCode":0},
+    {"name":"focused-observation-final","command":["npm","test","--","scripts/qa/server-ownership.test.mjs","scripts/qa/run-scenario-slots.test.mjs"],"pid":88587,"startedAt":"2026-10-12T04:55:14.646027+00:00","endedAt":"2026-10-12T04:55:23.430020+00:00","wallS":8.783902916999068,"hostLoad":12.63037109375,"exitCode":0},
+    {"name":"review-observation-final","command":["npm","run","review"],"pid":8080,"startedAt":"2026-10-12T04:56:14.131304+00:00","endedAt":"2026-10-12T04:56:33.319165+00:00","wallS":19.187619667001854,"hostLoad":23.291015625,"exitCode":0},
+    {"name":"focused-observation-contracts-final","command":["npm","test","--","scripts/qa/server-ownership.test.mjs"],"pid":22257,"startedAt":"2026-10-12T04:57:06.478699+00:00","endedAt":"2026-10-12T04:57:10.130031+00:00","wallS":3.6513104590012517,"hostLoad":15.24365234375,"exitCode":0},
+    {"name":"knip-observation-final","command":["npm","run","knip"],"pid":27640,"startedAt":"2026-10-12T04:57:58.597521+00:00","endedAt":"2026-10-12T04:58:01.200078+00:00","wallS":2.602558082999167,"hostLoad":12.013671875,"exitCode":0},
+    {"name":"full-observation-final","command":["lockf","-k","/Users/dthurn/dreamtides_web/artifacts/heavy.lock","env","JOURNEY_TEST_WORKERS=2","npm","run","review:full"],"pid":30110,"startedAt":"2026-10-12T04:58:29.319103+00:00","endedAt":"2026-10-12T05:00:36.899572+00:00","wallS":127.57866341699992,"hostLoad":10.13134765625,"exitCode":0},
+    {"name":"startup-crash-observation-final","command":["node","/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-check.mjs"],"pid":44503,"startedAt":"2026-10-12T05:01:07.874771+00:00","endedAt":"2026-10-12T05:01:08.713790+00:00","wallS":0.8390493330007303,"hostLoad":8.46630859375,"exitCode":0},
+    {"name":"mcp-acceptance-observation-final","command":["node","scripts/qa/run-scenario.mjs","card-lab-play","--bead","hv-umm2.491","--arg","card=66959155-9e79-459e-afdb-eb4c0fbdeb11","--arg","variant=base","--arg","as=player","--arg","capture=normal-mcp-smoke-observation","--viewports","desktop","--timeout","120"],"pid":44832,"startedAt":"2026-10-12T05:01:14.346774+00:00","endedAt":"2026-10-12T05:01:26.238904+00:00","wallS":11.892009750001307,"hostLoad":8.0283203125,"exitCode":0}
+  ],
+  "fullValidationRuns": [
+    {"name":"full","wrapperWallS":186.60204104199875,"firstStageAt":"2026-10-12T04:26:01.925000+00:00","leaseWaitPlusMinimalStartupS":78.611673,"firstStageToTerminalS":107.997241,"files":343,"cases":4648,"sourceManifest":{"scripts/qa/browser-lease.mjs":"66467fd4d057ea965bafcb912ae06fe81aeca686c54dbe97f0014ed8d509e314","scripts/qa/server-ownership.mjs":"67c4fc02897c114abf9299456dd145d88f7c3b55c1195e0966c91d61c16e81c4","scripts/qa/run-scenario.mjs":"54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c","scripts/screenshot-runtime.mjs":"dfb67ab06dc7ce9b2c3c7bf849ae4c9bfd1c6d488886fe2c8ed0b43d65385415"},"attribution":"retained earlier source; superseded by concrete source-changing verification","note":"Initial queue comment changed during first full; manifest was sampled afterward and exact loaded comment version is unknown. Runtime behavior was unchanged by that comment."},
+    {"name":"full-identity-final","wrapperWallS":97.54849549999926,"firstStageAt":"2026-10-12T04:31:02.607000+00:00","leaseWaitPlusMinimalStartupS":0.205082,"firstStageToTerminalS":97.344796,"files":343,"cases":4648,"sourceManifest":{"scripts/qa/browser-lease.mjs":"66467fd4d057ea965bafcb912ae06fe81aeca686c54dbe97f0014ed8d509e314","scripts/qa/server-ownership.mjs":"3f1930889d668128fc2e4ede673c6d05f789e86fb9fe2125f061d7a0ea405538","scripts/qa/run-scenario.mjs":"54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c","scripts/qa/browser-lease-slots.test.mjs":"8444795731265ec90b6ab75baf42f79e442aeb0a1f3e63c23d58833bc37c4ce8","scripts/qa/server-ownership.test.mjs":"25f583bc4f2751b117bf55317c3d62b40ba3ea6cd3fc8e265ede46cc182d98de","scripts/qa/run-scenario-slots.test.mjs":"11352d86a09b1dc69e44e32bd3c504d6d24d82db870ada8206ed5251291db336","scripts/screenshot-runtime.mjs":"dfb67ab06dc7ce9b2c3c7bf849ae4c9bfd1c6d488886fe2c8ed0b43d65385415"},"attribution":"retained earlier source; superseded by concrete source-changing verification","note":""},
+    {"name":"full-zombie-final","wrapperWallS":253.46433354200053,"firstStageAt":"2026-10-12T04:44:43.177000+00:00","leaseWaitPlusMinimalStartupS":171.70539,"firstStageToTerminalS":81.762588,"files":343,"cases":4650,"sourceManifest":{"scripts/qa/browser-lease.mjs":"66467fd4d057ea965bafcb912ae06fe81aeca686c54dbe97f0014ed8d509e314","scripts/qa/server-ownership.mjs":"5f6133cee387373f668aa2dda2431a2543de0f817c4f7867fc2bb38be08fb3eb","scripts/qa/run-scenario.mjs":"54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c","scripts/qa/browser-lease-slots.test.mjs":"8444795731265ec90b6ab75baf42f79e442aeb0a1f3e63c23d58833bc37c4ce8","scripts/qa/server-ownership.test.mjs":"121ace6663fcd344bf54c81213538223dc0751126670101a1f6759b4f198d0df","scripts/qa/run-scenario-slots.test.mjs":"11352d86a09b1dc69e44e32bd3c504d6d24d82db870ada8206ed5251291db336","scripts/screenshot-runtime.mjs":"dfb67ab06dc7ce9b2c3c7bf849ae4c9bfd1c6d488886fe2c8ed0b43d65385415"},"attribution":"retained earlier source; superseded by concrete source-changing verification","note":""},
+    {"name":"full-observation-final","wrapperWallS":127.57866341699992,"firstStageAt":"2026-10-12T04:59:03.634000+00:00","leaseWaitPlusMinimalStartupS":34.314897,"firstStageToTerminalS":93.265572,"files":343,"cases":4655,"sourceManifest":{"scripts/qa/browser-lease.mjs":"66467fd4d057ea965bafcb912ae06fe81aeca686c54dbe97f0014ed8d509e314","scripts/qa/server-ownership.mjs":"3ab222724778097700775b29b9333b04fefe6c3742d8cb43d369589a8b8f1d77","scripts/qa/run-scenario.mjs":"54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c","scripts/qa/browser-lease-slots.test.mjs":"8444795731265ec90b6ab75baf42f79e442aeb0a1f3e63c23d58833bc37c4ce8","scripts/qa/server-ownership.test.mjs":"dd0f73eb5098c0884b02b9e527ccf2962ade28654059e21c57d7cfc478a200eb","scripts/qa/run-scenario-slots.test.mjs":"11352d86a09b1dc69e44e32bd3c504d6d24d82db870ada8206ed5251291db336","scripts/screenshot-runtime.mjs":"dfb67ab06dc7ce9b2c3c7bf849ae4c9bfd1c6d488886fe2c8ed0b43d65385415"},"attribution":"final exact source","note":""}
+  ],
+  "finalAcceptedFull": {
+    "name": "full-observation-final",
+    "files": 343,
+    "cases": 4655,
+    "heavyLease": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "workers": 2
+  },
+  "sourceSha256": {
+    "scripts/qa/browser-lease.mjs": "66467fd4d057ea965bafcb912ae06fe81aeca686c54dbe97f0014ed8d509e314",
+    "scripts/qa/server-ownership.mjs": "3ab222724778097700775b29b9333b04fefe6c3742d8cb43d369589a8b8f1d77",
+    "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+    "scripts/qa/browser-lease-slots.test.mjs": "8444795731265ec90b6ab75baf42f79e442aeb0a1f3e63c23d58833bc37c4ce8",
+    "scripts/qa/server-ownership.test.mjs": "dd0f73eb5098c0884b02b9e527ccf2962ade28654059e21c57d7cfc478a200eb",
+    "scripts/qa/run-scenario-slots.test.mjs": "11352d86a09b1dc69e44e32bd3c504d6d24d82db870ada8206ed5251291db336",
+    "scripts/screenshot-runtime.mjs": "dfb67ab06dc7ce9b2c3c7bf849ae4c9bfd1c6d488886fe2c8ed0b43d65385415"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 260,
+    "jsdomFiles": 0
+  },
+  "hostLoadSamples": [
+    {
+      "name": "focused",
+      "loadAtWrapperStart": 13.279296875
+    },
+    {
+      "name": "review",
+      "loadAtWrapperStart": 15.3046875
+    },
+    {
+      "name": "review-corrected",
+      "loadAtWrapperStart": 20.98291015625
+    },
+    {
+      "name": "review-final",
+      "loadAtWrapperStart": 17.41259765625
+    },
+    {
+      "name": "knip",
+      "loadAtWrapperStart": 11.4140625
+    },
+    {
+      "name": "full",
+      "loadAtWrapperStart": 10.4228515625
+    },
+    {
+      "name": "review-identity-final",
+      "loadAtWrapperStart": 14.75
+    },
+    {
+      "name": "focused-identity-final",
+      "loadAtWrapperStart": 18.84912109375
+    },
+    {
+      "name": "knip-identity-final",
+      "loadAtWrapperStart": 26.140625
+    },
+    {
+      "name": "full-identity-final",
+      "loadAtWrapperStart": 23.58251953125
+    },
+    {
+      "name": "startup-crash",
+      "loadAtWrapperStart": 12.005859375
+    },
+    {
+      "name": "mcp-smoke",
+      "loadAtWrapperStart": 11.47607421875
+    },
+    {
+      "name": "smoke-retained-reconcile",
+      "loadAtWrapperStart": 15.44287109375
+    },
+    {
+      "name": "shutdown-diagnosis",
+      "loadAtWrapperStart": 28.64990234375
+    },
+    {
+      "name": "diagnostic-retained-reconcile",
+      "loadAtWrapperStart": 16.443359375
+    },
+    {
+      "name": "focused-zombie-final",
+      "loadAtWrapperStart": 16.443359375
+    },
+    {
+      "name": "review-zombie-final",
+      "loadAtWrapperStart": 21.935546875
+    },
+    {
+      "name": "focused-legacy-members",
+      "loadAtWrapperStart": 16.06689453125
+    },
+    {
+      "name": "review-zombie-entry-final",
+      "loadAtWrapperStart": 9.958984375
+    },
+    {
+      "name": "knip-zombie-final",
+      "loadAtWrapperStart": 8.70556640625
+    },
+    {
+      "name": "focused-zombie-entry-final",
+      "loadAtWrapperStart": 8.43017578125
+    },
+    {
+      "name": "full-zombie-final",
+      "loadAtWrapperStart": 7.71435546875
+    },
+    {
+      "name": "startup-crash-final",
+      "loadAtWrapperStart": 6.99560546875
+    },
+    {
+      "name": "mcp-smoke-final",
+      "loadAtWrapperStart": 6.99560546875
+    },
+    {
+      "name": "second-smoke-retained-reconcile",
+      "loadAtWrapperStart": 6.18701171875
+    },
+    {
+      "name": "shutdown-final-body-trace",
+      "loadAtWrapperStart": 6.18701171875
+    },
+    {
+      "name": "mcp-rejection-diagnostic",
+      "loadAtWrapperStart": 8.67041015625
+    },
+    {
+      "name": "focused-observation-final",
+      "loadAtWrapperStart": 12.63037109375
+    },
+    {
+      "name": "review-observation-final",
+      "loadAtWrapperStart": 23.291015625
+    },
+    {
+      "name": "focused-observation-contracts-final",
+      "loadAtWrapperStart": 15.24365234375
+    },
+    {
+      "name": "knip-observation-final",
+      "loadAtWrapperStart": 12.013671875
+    },
+    {
+      "name": "full-observation-final",
+      "loadAtWrapperStart": 10.13134765625
+    },
+    {
+      "name": "startup-crash-observation-final",
+      "loadAtWrapperStart": 8.46630859375
+    },
+    {
+      "name": "mcp-acceptance-observation-final",
+      "loadAtWrapperStart": 8.0283203125
+    }
+  ],
+  "failedAcceptance": [
+    {
+      "name": "mcp-smoke",
+      "wrapperExit": 2,
+      "serverGroup": 83768,
+      "port": 5274,
+      "evidenceDir": "invocations/run-oFAfzq",
+      "rawReport": "invocations/run-oFAfzq/card-lab-play.result.json",
+      "capture": "normal-mcp-smoke.png",
+      "sourceManifest": {
+        "scripts/qa/browser-lease.mjs": "66467fd4d057ea965bafcb912ae06fe81aeca686c54dbe97f0014ed8d509e314",
+        "scripts/qa/server-ownership.mjs": "3f1930889d668128fc2e4ede673c6d05f789e86fb9fe2125f061d7a0ea405538",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "scripts/qa/browser-lease-slots.test.mjs": "8444795731265ec90b6ab75baf42f79e442aeb0a1f3e63c23d58833bc37c4ce8",
+        "scripts/qa/server-ownership.test.mjs": "25f583bc4f2751b117bf55317c3d62b40ba3ea6cd3fc8e265ede46cc182d98de",
+        "scripts/qa/run-scenario-slots.test.mjs": "11352d86a09b1dc69e44e32bd3c504d6d24d82db870ada8206ed5251291db336",
+        "scripts/screenshot-runtime.mjs": "dfb67ab06dc7ce9b2c3c7bf849ae4c9bfd1c6d488886fe2c8ed0b43d65385415"
+      },
+      "cleanup": "identity-mismatch; provider confirmed/owner absent; exact empty group later reconciled",
+      "reconcileReceipt": {
+        "name": "smoke-retained-reconcile",
+        "command": [
+          "node",
+          "scripts/qa/server-ownership.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock"
+        ],
+        "pid": 2822,
+        "startedAt": "2026-10-12T04:34:42.507008+00:00",
+        "endedAt": "2026-10-12T04:34:42.658288+00:00",
+        "wallS": 0.15131900000051246,
+        "hostLoad": 15.44287109375,
+        "exitCode": 0
+      }
+    },
+    {
+      "name": "mcp-smoke-final",
+      "wrapperExit": 2,
+      "serverGroup": 24262,
+      "port": 5175,
+      "evidenceDir": "invocations/run-c64Whp",
+      "rawReport": "invocations/run-c64Whp/card-lab-play.result.json",
+      "capture": "normal-mcp-smoke-final.png",
+      "sourceManifest": {
+        "scripts/qa/browser-lease.mjs": "66467fd4d057ea965bafcb912ae06fe81aeca686c54dbe97f0014ed8d509e314",
+        "scripts/qa/server-ownership.mjs": "5f6133cee387373f668aa2dda2431a2543de0f817c4f7867fc2bb38be08fb3eb",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "scripts/qa/browser-lease-slots.test.mjs": "8444795731265ec90b6ab75baf42f79e442aeb0a1f3e63c23d58833bc37c4ce8",
+        "scripts/qa/server-ownership.test.mjs": "121ace6663fcd344bf54c81213538223dc0751126670101a1f6759b4f198d0df",
+        "scripts/qa/run-scenario-slots.test.mjs": "11352d86a09b1dc69e44e32bd3c504d6d24d82db870ada8206ed5251291db336",
+        "scripts/screenshot-runtime.mjs": "dfb67ab06dc7ce9b2c3c7bf849ae4c9bfd1c6d488886fe2c8ed0b43d65385415"
+      },
+      "cleanup": "identity-mismatch; provider confirmed/owner absent; exact empty group later reconciled",
+      "reconcileReceipt": {
+        "name": "second-smoke-retained-reconcile",
+        "command": [
+          "node",
+          "scripts/qa/server-ownership.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock"
+        ],
+        "pid": 40473,
+        "startedAt": "2026-10-12T04:48:58.413652+00:00",
+        "endedAt": "2026-10-12T04:48:58.565241+00:00",
+        "wallS": 0.1516222079990257,
+        "hostLoad": 6.18701171875,
+        "exitCode": 0
+      }
+    }
+  ],
+  "failureCause": "Second acceptance cleanup rejection remains unknown. No exact rejected current/expected identity was captured; final-body standalone and actual-MCP diagnostics did not reproduce it.",
+  "failurePathCoverage": {
+    "error": "closes owned log/build resources after settlement failure, confirmed and uncertain provider variants; gated launcher identity/write errors settle children",
+    "interrupt": "owned stop single-flight/idempotence, shared by signal and normal cleanup; startup-window actual runner SIGKILL is separate ignored QA",
+    "restart": "durable recorded descendants after leader exit; legacy member records without stat; retained server-only admission; manual exact empty-group reconciliation of failed own runs",
+    "partialWrite": "malformed/partial records and invalid tokens retained; record changed during verified shutdown rejects immediately; durable record uses atomic rename",
+    "staleInput": "changed live command before any signal is protected; reused PID/group, unknown new member and missing leader with unverified survivors remain protected",
+    "concurrentActors": "record appears between precheck/native acquired lock; all-retained count by slot even with both records; held live-server lock remains contention; legacy/modern FIFO and usable-slot yielding",
+    "observationOnly": "transient same-lifetime ambiguity can settle only at leader absent+group empty; persistent ambiguity and restored-live command retain record without SIGKILL; observed ambiguity permanently disables further signals",
+    "zombie": "initially exited and post-signal known same-lifetime zombie waits for reaping without zombie-only signals"
+  },
+  "fixtureCorrection": [
+    {
+      "pid": 19044,
+      "verifiedCommand": "19044     1 Sun Oct 11 21:20:26 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-IZiOUh/primary/scripts/dev.mjs --port 5274",
+      "signal": "SIGTERM"
+    },
+    {
+      "pid": 27694,
+      "verifiedCommand": "27694     1 Sun Oct 11 21:21:32 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-KSiYKl/primary/scripts/dev.mjs --port 5274",
+      "signal": "SIGTERM"
+    }
+  ],
+  "resourceAudits": {
+    "postFailedDiagnosis": {
+      "19044": "",
+      "27694": "",
+      "82572": "",
+      "82609": "",
+      "82627": "",
+      "83703": "",
+      "83768": "",
+      "83885": "",
+      "83948": "",
+      "83992": "",
+      "17847": "",
+      "17861": "",
+      "17880": "",
+      "17962": "",
+      "17983": "",
+      "owned_worktree_server_commands": [],
+      "slot1_provider_record_state": {
+        "bead": "hv-umm2.155",
+        "pid": 65235,
+        "is_491": false
+      }
+    },
+    "parentFinal": {
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/invocations/run-LL5EPC/card-lab-play.result.json",
+      "reportSha256": "716bd955c969f65bd3b657f33a519860a3e5cabb09c17f5107096ecb94d74630",
+      "caps": [],
+      "error": null,
+      "gameLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/invocations/run-LL5EPC/card-lab-play-desktop.jsonl",
+      "rows": 28,
+      "ownedGroupsAbsent": [
+        44536,
+        44881,
+        44668,
+        40544,
+        24262,
+        17861,
+        83768
+      ],
+      "slot0RecordsAbsent": true
+    }
+  },
+  "runtimeLedger": {
+    "validationCommands": [
+      {
+        "name": "focused",
+        "pid": 18536,
+        "exitCode": 0,
+        "receipt": "focused.json"
+      },
+      {
+        "name": "review",
+        "pid": 26788,
+        "exitCode": 2,
+        "receipt": "review.json"
+      },
+      {
+        "name": "review-corrected",
+        "pid": 47410,
+        "exitCode": 2,
+        "receipt": "review-corrected.json"
+      },
+      {
+        "name": "review-final",
+        "pid": 60042,
+        "exitCode": 0,
+        "receipt": "review-final.json"
+      },
+      {
+        "name": "knip",
+        "pid": 72193,
+        "exitCode": 0,
+        "receipt": "knip.json"
+      },
+      {
+        "name": "full",
+        "pid": 74701,
+        "exitCode": 0,
+        "receipt": "full.json"
+      },
+      {
+        "name": "review-identity-final",
+        "pid": 16102,
+        "exitCode": 0,
+        "receipt": "review-identity-final.json"
+      },
+      {
+        "name": "focused-identity-final",
+        "pid": 38201,
+        "exitCode": 0,
+        "receipt": "focused-identity-final.json"
+      },
+      {
+        "name": "knip-identity-final",
+        "pid": 53691,
+        "exitCode": 0,
+        "receipt": "knip-identity-final.json"
+      },
+      {
+        "name": "full-identity-final",
+        "pid": 58950,
+        "exitCode": 0,
+        "receipt": "full-identity-final.json"
+      },
+      {
+        "name": "startup-crash",
+        "pid": 82562,
+        "exitCode": 0,
+        "receipt": "startup-crash.json"
+      },
+      {
+        "name": "mcp-smoke",
+        "pid": 83703,
+        "exitCode": 2,
+        "receipt": "mcp-smoke.json"
+      },
+      {
+        "name": "smoke-retained-reconcile",
+        "pid": 2822,
+        "exitCode": 0,
+        "receipt": "smoke-retained-reconcile.json"
+      },
+      {
+        "name": "shutdown-diagnosis",
+        "pid": 17847,
+        "exitCode": 2,
+        "receipt": "shutdown-diagnosis.json"
+      },
+      {
+        "name": "diagnostic-retained-reconcile",
+        "pid": 30224,
+        "exitCode": 0,
+        "receipt": "diagnostic-retained-reconcile.json"
+      },
+      {
+        "name": "focused-zombie-final",
+        "pid": 30297,
+        "exitCode": 0,
+        "receipt": "focused-zombie-final.json"
+      },
+      {
+        "name": "review-zombie-final",
+        "pid": 35246,
+        "exitCode": 0,
+        "receipt": "review-zombie-final.json"
+      },
+      {
+        "name": "focused-legacy-members",
+        "pid": 59563,
+        "exitCode": 0,
+        "receipt": "focused-legacy-members.json"
+      },
+      {
+        "name": "review-zombie-entry-final",
+        "pid": 64762,
+        "exitCode": 0,
+        "receipt": "review-zombie-entry-final.json"
+      },
+      {
+        "name": "knip-zombie-final",
+        "pid": 87101,
+        "exitCode": 0,
+        "receipt": "knip-zombie-final.json"
+      },
+      {
+        "name": "focused-zombie-entry-final",
+        "pid": 87453,
+        "exitCode": 0,
+        "receipt": "focused-zombie-entry-final.json"
+      },
+      {
+        "name": "full-zombie-final",
+        "pid": 89309,
+        "exitCode": 0,
+        "receipt": "full-zombie-final.json"
+      },
+      {
+        "name": "startup-crash-final",
+        "pid": 23801,
+        "exitCode": 0,
+        "receipt": "startup-crash-final.json"
+      },
+      {
+        "name": "mcp-smoke-final",
+        "pid": 24218,
+        "exitCode": 2,
+        "receipt": "mcp-smoke-final.json"
+      },
+      {
+        "name": "second-smoke-retained-reconcile",
+        "pid": 40473,
+        "exitCode": 0,
+        "receipt": "second-smoke-retained-reconcile.json"
+      },
+      {
+        "name": "shutdown-final-body-trace",
+        "pid": 40524,
+        "exitCode": 0,
+        "receipt": "shutdown-final-body-trace.json"
+      },
+      {
+        "name": "mcp-rejection-diagnostic",
+        "pid": 44639,
+        "exitCode": 0,
+        "receipt": "mcp-rejection-diagnostic.json"
+      },
+      {
+        "name": "focused-observation-final",
+        "pid": 88587,
+        "exitCode": 0,
+        "receipt": "focused-observation-final.json"
+      },
+      {
+        "name": "review-observation-final",
+        "pid": 8080,
+        "exitCode": 0,
+        "receipt": "review-observation-final.json"
+      },
+      {
+        "name": "focused-observation-contracts-final",
+        "pid": 22257,
+        "exitCode": 0,
+        "receipt": "focused-observation-contracts-final.json"
+      },
+      {
+        "name": "knip-observation-final",
+        "pid": 27640,
+        "exitCode": 0,
+        "receipt": "knip-observation-final.json"
+      },
+      {
+        "name": "full-observation-final",
+        "pid": 30110,
+        "exitCode": 0,
+        "receipt": "full-observation-final.json"
+      },
+      {
+        "name": "startup-crash-observation-final",
+        "pid": 44503,
+        "exitCode": 0,
+        "receipt": "startup-crash-observation-final.json"
+      },
+      {
+        "name": "mcp-acceptance-observation-final",
+        "pid": 44832,
+        "exitCode": 0,
+        "receipt": "mcp-acceptance-observation-final.json"
+      }
+    ],
+    "standaloneFinalCrash": {
+      "ok": true,
+      "originalRunnerSha256": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+      "fixtureRunnerSha256": "a183dc578d9619431a87e403ebb1bce904ac9c5634a35f60f0d0ceb973f493a5",
+      "substitutions": [
+        "repoRoot explicit WT",
+        "primaryCheckoutOf isolated fixture root",
+        "relative imports absolute",
+        "fixture-only pause immediately before waitUntilServing; server record durable, provider record absent",
+        "MCP connect forbidden; zero MCP requests"
+      ],
+      "runnerPid": 44508,
+      "terminal": {
+        "code": null,
+        "signal": "SIGKILL"
+      },
+      "record": {
+        "token": "8c09602c-ba42-4763-8aaf-9ab5f4b8cad9",
+        "runner": {
+          "pid": 44508,
+          "group": 44490,
+          "started": "Sun Oct 11 22:01:07 2026",
+          "state": "S",
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture/runner.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture/scenario.mjs --bead hv-umm2.491 --cwd /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture"
+        },
+        "server": {
+          "pid": 44536,
+          "group": 44536,
+          "started": "Sun Oct 11 22:01:08 2026",
+          "state": "Rs",
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/hv-umm2-491-server-slot-cleanup/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture/artifacts/qa/.browser-qa.slot-1.lock.server.json 8c09602c-ba42-4763-8aaf-9ab5f4b8cad9 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5275 --strictPort"
+        },
+        "cwd": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture",
+        "port": 5275
+      },
+      "before": {
+        "runner": {
+          "pid": 44508,
+          "group": 44490,
+          "started": "Sun Oct 11 22:01:07 2026",
+          "state": "S",
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture/runner.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture/scenario.mjs --bead hv-umm2.491 --cwd /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture"
+        },
+        "launcher": {
+          "pid": 44536,
+          "group": 44536,
+          "started": "Sun Oct 11 22:01:08 2026",
+          "state": "Ss",
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/hv-umm2-491-server-slot-cleanup/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture/artifacts/qa/.browser-qa.slot-1.lock.server.json 8c09602c-ba42-4763-8aaf-9ab5f4b8cad9 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5275 --strictPort"
+        },
+        "members": [
+          "44536 44536 Sun Oct 11 22:01:08 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/hv-umm2-491-server-slot-cleanup/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture/artifacts/qa/.browser-qa.slot-1.lock.server.json 8c09602c-ba42-4763-8aaf-9ab5f4b8cad9 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5275 --strictPort",
+          "44552 44536 Sun Oct 11 22:01:08 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5275 --strictPort"
+        ],
+        "providerRecordPresent": false
+      },
+      "alternate": {
+        "slot": 0,
+        "retained": [
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture/artifacts/qa/.browser-qa.slot-1.lock.server.json"
+        ]
+      },
+      "reconciled": {
+        "state": "stopped",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491/startup-crash-observation-fixture/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "pid": 44536,
+        "port": 5275
+      },
+      "after": {
+        "launcher": null,
+        "members": [],
+        "providerRecordPresent": false,
+        "serverRecordPresent": false
+      },
+      "portFree": true,
+      "provider": "never connected; owner record absent throughout"
+    },
+    "actualFinalMcp": {
+      "runnerPid": 44832,
+      "serverGroup": 44881,
+      "port": 5174,
+      "evidenceDir": "invocations/run-LL5EPC",
+      "rawReport": "invocations/run-LL5EPC/card-lab-play.result.json",
+      "gameLog": "invocations/run-LL5EPC/card-lab-play-desktop.jsonl",
+      "rows": 28,
+      "caps": [],
+      "provider": "confirmed browser close, active RPC join and SDK transport close before terminal0; exact own slot0 records absent",
+      "terminal": "wrapper exit0; leader absent, recorded group empty and portfree confirmed by parent resource audit"
+    },
+    "diagnostics": [
+      {
+        "name": "shutdown-diagnosis",
+        "exitCode": 2,
+        "group": 17861,
+        "sourceAttribution": "pre-stat body; identified recorded defunct command transition; exact empty group later reconciled"
+      },
+      {
+        "name": "shutdown-final-body-trace",
+        "exitCode": 0,
+        "group": 40544,
+        "sourceAttribution": "stat/zombie body; did not reproduce second failure; group settled"
+      },
+      {
+        "name": "mcp-rejection-diagnostic",
+        "exitCode": 0,
+        "group": 44668,
+        "sourceAttribution": "stat/zombie body plus failure-only logging; no rejection; diagnostic only"
+      }
+    ]
+  },
+  "qaEvidenceRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.491",
+  "finalQa": {
+    "startupCrash": "startup-crash-observation.result.json",
+    "startupCrashFixture": "startup-crash-observation-fixture",
+    "mcpReport": "invocations/run-LL5EPC/card-lab-play.result.json",
+    "capture": "normal-mcp-smoke-observation.png",
+    "caps": [],
+    "rows": 28,
+    "normalIntent": "normal player hand tap; engine.action play from hand; UUID-based catalog identity"
+  },
+  "importerFallout": "Runner and existing coherent QA test siblings consume owned-server/path APIs; shared helper re-export preserves imports without a cycle. No fallout edits, new source exports/files, generic runtime, provider, capacity, engine, UI or card changes. Final type/lint/full/Knip pass.",
+  "preExistingIssues": [],
+  "rulesDecisions": [],
+  "notes": [
+    "All full commands ran under heavy lock with JOURNEY_TEST_WORKERS=2. Source-changing full repetitions follow concrete identity safety/lifecycle repairs; no unchanged aggregate retry.",
+    "Two failed reviews exited2 despite passing related tests; typed unknown-value/fixture annotations were corrected. Original aggregate failures remain retained.",
+    "First resource-failure fixture left two attributable contained descendants19044/27694; exact verified commands were stopped and fixture was corrected to settle real children before injecting its retained-record failure boundary. All later resource audits found them absent.",
+    "First pre-stat shutdown trace reproduced a <defunct> command mismatch. Final-body standalone and failure-only MCP traces exited0 without reproducing second acceptance failure. The second actual failure cause is unknown; diagnostic successes are not acceptance.",
+    "Observation-only recovery does not assert a ps cause or relax live signal identity. Unknown/reused lifetimes or changed record reject immediately; only known same-lifetime ambiguity after a verified own signal can observe without further power.",
+    "CI fixtures use ordinary contained children and OS identity/signal boundaries; production-like isolated process groups are confined to ignored standalone QA. No real MCP request occurs in the startup crash fixture.",
+    "Final source preparation/full/restoration completed before final crash/MCP acceptance. No runtime source changed afterward.",
+    "Parent cold Opus core review and native candidate delivery are session responsibilities after this sole source commit."
+  ]
+}

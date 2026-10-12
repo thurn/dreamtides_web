@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { execFileSync } from "node:child_process";
 import { once } from "node:events";
-import { appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
+import { fstatSync, appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
@@ -10,11 +10,15 @@ import { browserLeasePath, browserLeaseWaiters, browserSlotPath } from "./browse
 import { lockHeld } from "./browser-lease-fixture.mjs";
 import { openQaSession } from "./run-scenario.mjs";
 import * as runtime from "../screenshot-runtime.mjs";
+import * as ownership from "./server-ownership.mjs";
 
 // Concurrent sessions in one test process. The native slot locks, evidence
 // locks, and synthetic server processes are real; sockets, HTTP readiness,
 // the listener check, and the MCP client are synthetic, one per session.
 const fixtureIo = vi.hoisted(() => ({
+  prod: false,
+  logFds: /** @type {number[]} */ ([]),
+  buildDirs: /** @type {string[]} */ ([]),
   gitCwd: /** @type {string | null} */ (null),
   children: /** @type {import("node:child_process").ChildProcess[]} */ ([]),
   ready: /** @type {Map<string, Promise<void>>} */ (new Map()),
@@ -27,7 +31,11 @@ vi.mock("node:child_process", async (importOriginal) => {
     spawn: vi.fn((/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").SpawnOptions} */ options) => {
       const server = args[0]?.endsWith("/server-launcher.mjs") === true;
       const stdio = /** @type {import("node:child_process").SpawnOptions["stdio"]} */ (server && Array.isArray(options.stdio) ? [...options.stdio, "ipc"] : options.stdio);
-      const child = actual.spawn(command, args, { ...options, stdio, detached: false });
+      const build = fixtureIo.prod && !server && command !== "lockf";
+      const actualCommand = build ? process.execPath : command;
+      const actualArgs = build ? ["-e", ""] : fixtureIo.prod && server ? [...args.slice(0, 3), process.execPath,
+        join(String(options.cwd), "scripts/dev.mjs"), "--port", String(args[args.indexOf("--port") + 1])] : args;
+      const child = actual.spawn(actualCommand, actualArgs, { ...options, stdio, detached: false });
       if (server) {
         const port = String(args[args.indexOf("--port") + 1]);
         fixtureIo.servers.push(`spawn ${port}`);
@@ -48,6 +56,21 @@ vi.mock("node:child_process", async (importOriginal) => {
         (whole, pad, pid) => fixtureIo.children.some((child) => child.pid === Number(pid)) ? `${pad}${pid} ${pid}` : whole)).join("\n");
       return result;
     }),
+  };
+});
+vi.mock("node:fs", async (importOriginal) => {
+  const actual = /** @type {typeof import("node:fs")} */ (await importOriginal());
+  return { ...actual,
+    openSync: (/** @type {string} */ path, /** @type {string} */ flags) => {
+      const fd = actual.openSync(path, flags);
+      if (path.endsWith(".server.log")) fixtureIo.logFds.push(fd);
+      return fd;
+    },
+    mkdtempSync: (/** @type {string} */ prefix) => {
+      const path = actual.mkdtempSync(prefix);
+      if (prefix.endsWith("dreamtides-qa-")) fixtureIo.buildDirs.push(path);
+      return path;
+    },
   };
 });
 vi.mock("node:net", async (importOriginal) => {
@@ -106,7 +129,7 @@ afterEach(async () => {
     child.kill("SIGKILL");
     await exited;
   }
-  fixtureIo.gitCwd = null;
+  fixtureIo.gitCwd = null; fixtureIo.prod = false; fixtureIo.logFds.splice(0); fixtureIo.buildDirs.splice(0);
   fixtureIo.ready.clear();
   fixtureIo.servers.splice(0);
   vi.restoreAllMocks();
@@ -144,6 +167,41 @@ function connectClients() {
 const serverRunning = (pid) => fixtureIo.children.some((child) => child.pid === pid && child.exitCode === null && child.signalCode === null);
 
 describe("concurrent QA sessions", () => {
+  it.each([false, true])("closes owned log/build resources after settlement failure (uncertain provider: %s)", async (uncertain) => {
+    const { root, path } = primaryFixture();
+    fixtureIo.prod = true;
+    connectClients();
+    const original = ownership.spawnOwnedServer;
+    vi.spyOn(ownership, "spawnOwnedServer").mockImplementation(async (options) => {
+      const owned = await original(options);
+      const record = ownership.serverRecordPath(options.slotPath);
+      const raw = readFileSync(record, "utf8");
+      return { ...owned, stop: async () => {
+        // Settle the real contained fixture before injecting the retained-record
+        // failure boundary; no fixture descendant can escape test cleanup.
+        await owned.stop();
+        writeFileSync(record, raw);
+        throw new Error("synthetic server unsettled");
+      } };
+    });
+    const session = await openQaSession({ bead: "synthetic-slots", label: uncertain ? "failing-resources" : "resources", port: null,
+      prod: true, minify: false, cwd: root });
+    sessions.push(session);
+    const record = ownership.serverRecordPath(browserSlotPath(path, session.slot));
+    const bytes = readFileSync(record, "utf8");
+    const fd = fixtureIo.logFds.at(-1); const build = fixtureIo.buildDirs.at(-1);
+    if (fd === undefined || build === undefined) throw new Error("fixture resources missing");
+    expect(existsSync(build)).toBe(true);
+    await expect(session.close()).rejects.toThrow(/synthetic server unsettled/);
+    expect(() => fstatSync(fd)).toThrow();
+    expect(existsSync(build)).toBe(false);
+    expect(readFileSync(record, "utf8")).toBe(bytes);
+    expect(lockHeld(browserSlotPath(path, session.slot))).toBe(false);
+    // The confirmed synthetic provider close is independent of server failure.
+    expect(existsSync(session.ownerPath)).toBe(uncertain);
+    if (uncertain) expect(readFileSync(session.ownerPath, "utf8")).toContain("close-unconfirmed");
+  });
+
   it("runs two sessions on separate slots, ports, servers, and records, and queues a third for a released slot", async () => {
     const { root, path } = primaryFixture();
     connectClients();
