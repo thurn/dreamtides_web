@@ -2,6 +2,12 @@ import { describe, expect, it, vi } from "vitest";
 import { createSweepCounts, parseSweepArgs, runSweepCell, sweepCards } from "./card-sweep.mjs";
 import cardLabPlay from "./scenarios/card-lab-play.mjs";
 
+it("selects Dreamsign UUIDs exclusively without changing card and avatar domains", () => {
+  const id = "5e5e5e5e-0000-4000-8000-000000022800";
+  expect(parseSweepArgs(["--bead", "fixture", "--dreamsigns", id])).toMatchObject({ cards: [id], entityKind: "dreamsign" });
+  for (const domain of ["--cards", "--avatars"]) expect(() => parseSweepArgs(["--bead", "fixture", "--dreamsigns", id, domain, id])).toThrow();
+});
+
 /** @param {string[]} failureKinds @param {string} verdict */
 const report = (failureKinds = [], verdict = "fail") => ({
   result: { verdict, notes: "synthetic failure details", failureKinds },

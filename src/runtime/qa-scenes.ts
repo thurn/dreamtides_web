@@ -1,3 +1,5 @@
+import { dreamsignIdFromUnknown } from "../types/identifiers";
+import { dreamsignLabBattle, type DreamsignLabRequest } from "../engine/testing/dreamsign-lab";
 import type { EngineEvent } from "../engine";
 import { avatarLabBattle, type AvatarLabRequest } from "../engine/testing/avatar-lab";
 import { parseAvatarId } from "../types/identifiers";
@@ -463,6 +465,7 @@ function promptLabScene(fixture: PromptLabFixture): QaScene {
 interface CardLabTokens {
   readonly card: string;
   readonly avatar?: string;
+  readonly dreamsign?: string;
   readonly ambiguous?: boolean;
   readonly variant: string;
   readonly side: string;
@@ -470,16 +473,19 @@ interface CardLabTokens {
 }
 
 const CARD_LAB_PREFIX = "card-lab:";
+const DREAMSIGN_LAB_PREFIX = "card-lab-dreamsign:";
+const AMBIGUOUS_DREAMSIGN_LAB_PREFIX = "card-lab-dreamsign-ambiguous:";
 const AVATAR_LAB_PREFIX = "card-lab-avatar:";
 const AMBIGUOUS_LAB_PREFIX = "card-lab-avatar-ambiguous:";
 
 type CardLabResolution =
+  | { readonly kind: "ok"; readonly entityKind: "dreamsign"; readonly request: DreamsignLabRequest; readonly eligible: readonly CardLabVariant[] }
   | { readonly kind: "ok"; readonly entityKind: "card"; readonly request: CardLabRequest; readonly card: CardData; readonly eligible: readonly CardLabVariant[] }
   | { readonly kind: "ok"; readonly entityKind: "avatar"; readonly request: AvatarLabRequest; readonly eligible: readonly CardLabVariant[] }
   | { readonly kind: "ok"; readonly entityKind: "dreamwell"; readonly request: DreamwellLabRequest; readonly eligible: readonly CardLabVariant[] }
   | {
       readonly kind: "rejected";
-      readonly reason: "unknownCard" | "unknownAvatar" | "ambiguousRequest" | "unknownVariant" | "unknownSide" | "ineligibleVariant" | "unplayable" | "invalidStage";
+      readonly reason: "unknownCard" | "unknownAvatar" | "unknownDreamsign" | "ambiguousRequest" | "unknownVariant" | "unknownSide" | "ineligibleVariant" | "unplayable" | "invalidStage";
       readonly eligible: readonly CardLabVariant[];
       readonly detail?: string;
     };
@@ -487,6 +493,17 @@ type CardLabResolution =
 /** Resolves a card-lab request against the content: the card, its eligible variants, and its deck entry. */
 function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens, engine?: Engine): CardLabResolution {
   if (tokens.ambiguous === true) return { kind: "rejected", reason: "ambiguousRequest", eligible: [] };
+  if (tokens.dreamsign !== undefined) {
+    const dreamsignId = dreamsignIdFromUnknown(tokens.dreamsign);
+    if (dreamsignId === null || !journeyContent.dreamsignTemplates.some(dreamsign => dreamsign.id === dreamsignId)) return { kind: "rejected", reason: "unknownDreamsign", eligible: [] };
+    const eligible = ["base"] as const;
+    const variant = cardLabVariant(tokens.variant);
+    if (variant === null) return { kind: "rejected", reason: "unknownVariant", eligible };
+    if (tokens.side !== "player" && tokens.side !== "enemy") return { kind: "rejected", reason: "unknownSide", eligible };
+    if (variant !== "base") return { kind: "rejected", reason: "ineligibleVariant", eligible };
+    if (tokens.stage !== undefined) return { kind: "rejected", reason: "invalidStage", eligible };
+    return { kind: "ok", entityKind: "dreamsign", request: { dreamsignId, side: tokens.side }, eligible };
+  }
   if (tokens.avatar !== undefined) {
     let avatarId;
     try { avatarId = parseAvatarId(tokens.avatar); }
@@ -558,14 +575,15 @@ function cardLabDeckEntry(card: CardData, variant: CardLabVariant): DeckEntry {
  */
 function cardLabScene(id: QaSceneId): QaScene {
   const normalized = id.toLowerCase();
-  const ambiguous = normalized.startsWith(AMBIGUOUS_LAB_PREFIX);
-  const avatar = ambiguous || normalized.startsWith(AVATAR_LAB_PREFIX);
-  const prefix = ambiguous ? AMBIGUOUS_LAB_PREFIX : avatar ? AVATAR_LAB_PREFIX : CARD_LAB_PREFIX;
+  const dreamsign = normalized.startsWith(DREAMSIGN_LAB_PREFIX) || normalized.startsWith(AMBIGUOUS_DREAMSIGN_LAB_PREFIX);
+  const ambiguous = normalized.startsWith(AMBIGUOUS_LAB_PREFIX) || normalized.startsWith(AMBIGUOUS_DREAMSIGN_LAB_PREFIX);
+  const avatar = !dreamsign && (ambiguous || normalized.startsWith(AVATAR_LAB_PREFIX));
+  const prefix = dreamsign ? ambiguous ? AMBIGUOUS_DREAMSIGN_LAB_PREFIX : DREAMSIGN_LAB_PREFIX : ambiguous ? AMBIGUOUS_LAB_PREFIX : avatar ? AVATAR_LAB_PREFIX : CARD_LAB_PREFIX;
   const [card = "", variant = "base", side = "player", encodedStage] = id.slice(prefix.length).split(":");
   let stage: string | undefined;
   try { stage = encodedStage === undefined ? undefined : decodeURIComponent(encodedStage); }
   catch { stage = "invalid"; }
-  const tokens: CardLabTokens = { card: avatar ? "" : card.toLowerCase(), ...(avatar ? { avatar: card.toLowerCase(), ambiguous } : {}), variant: variant.toLowerCase(), side: side.toLowerCase(), ...(stage === undefined ? {} : { stage }) };
+  const tokens: CardLabTokens = { card: avatar || dreamsign ? "" : card.toLowerCase(), ...(dreamsign ? { dreamsign: card.toLowerCase(), ambiguous } : {}), ...(avatar ? { avatar: card.toLowerCase(), ambiguous } : {}), variant: variant.toLowerCase(), side: side.toLowerCase(), ...(stage === undefined ? {} : { stage }) };
   return {
     id,
     label: "Card Lab",
@@ -575,6 +593,10 @@ function cardLabScene(id: QaSceneId): QaScene {
     build: (journeyContent, options) => {
       const state = battleLayerSceneState(1)(journeyContent, options);
       const resolved = resolveCardLab(journeyContent, tokens);
+      if (state !== null && resolved.kind === "ok" && resolved.entityKind === "dreamsign") {
+        const template = journeyContent.dreamsignTemplates.find(candidate => candidate.id === resolved.request.dreamsignId);
+        return template === undefined ? state : { ...state, dreamsigns: resolved.request.side === "player" ? [createDreamsign(template)] : [] };
+      }
       if (state === null || resolved.kind !== "ok" || resolved.entityKind !== "card") return state;
       return { ...state, deck: [...state.deck, cardLabDeckEntry(resolved.card, resolved.request.variant)] };
     },
@@ -590,6 +612,7 @@ function publishCardLab(tokens: CardLabTokens, resolved: CardLabResolution, engi
   const report = {
     card: tokens.card,
     ...(tokens.avatar === undefined ? {} : { avatar: tokens.avatar }),
+    ...(tokens.dreamsign === undefined ? {} : { dreamsign: tokens.dreamsign }),
     variant: tokens.variant,
     side: tokens.side,
     stage: tokens.stage ?? null,
@@ -598,8 +621,8 @@ function publishCardLab(tokens: CardLabTokens, resolved: CardLabResolution, engi
     detail: resolved.kind === "ok" ? null : (resolved.detail ?? null),
     eligibleVariants: resolved.eligible,
     entityKind: resolved.kind === "ok" ? resolved.entityKind : null,
-    cardStatus: resolved.kind === "ok" ? resolved.entityKind === "card" ? cardLabContentStatus(resolved.request.entry.cardId) : resolved.entityKind === "avatar" ? engine.catalog.avatar(resolved.request.avatarId).status : engine.catalog.dreamwellCard(resolved.request.cardId).status : null,
-    cardType: resolved.kind === "ok" ? resolved.entityKind === "card" ? resolved.card.cardType : resolved.entityKind === "avatar" ? "Avatar" : "Dreamwell" : null,
+    cardStatus: resolved.kind === "ok" ? resolved.entityKind === "card" ? cardLabContentStatus(resolved.request.entry.cardId) : resolved.entityKind === "dreamsign" ? engine.catalog.dreamsign(resolved.request.dreamsignId).status : resolved.entityKind === "avatar" ? engine.catalog.avatar(resolved.request.avatarId).status : engine.catalog.dreamwellCard(resolved.request.cardId).status : null,
+    cardType: resolved.kind === "ok" ? resolved.entityKind === "card" ? resolved.card.cardType : resolved.entityKind === "dreamsign" ? "Dreamsign" : resolved.entityKind === "avatar" ? "Avatar" : "Dreamwell" : null,
   };
   (globalThis as { __cardLab?: unknown }).__cardLab = report;
   logEvent(resolved.kind === "ok" ? "debug_card_lab_loaded" : "debug_card_lab_rejected", report);
@@ -618,7 +641,9 @@ function withCardLab(battle: JourneyBattleFoldState, tokens: CardLabTokens, jour
   const published: EngineEvent[] = [];
   if (resolved.kind === "ok") {
     try {
-      lab = resolved.entityKind === "avatar"
+      lab = resolved.entityKind === "dreamsign"
+        ? dreamsignLabBattle(engine, resolved.request, events => published.push(...events))
+        : resolved.entityKind === "avatar"
         ? avatarLabBattle(engine, resolved.request, events => published.push(...events))
         : resolved.entityKind === "dreamwell"
         ? dreamwellLabBattle(engine, resolved.request, journeyContent.dreamwellCards.map((card) => card.id))
@@ -629,6 +654,15 @@ function withCardLab(battle: JourneyBattleFoldState, tokens: CardLabTokens, jour
   }
   publishCardLab(tokens, resolved, engine);
   if (lab === null) return battle;
+  if (resolved.kind === "ok" && resolved.entityKind === "dreamsign") {
+    const template = journeyContent.dreamsignTemplates.find(candidate => candidate.id === resolved.request.dreamsignId);
+    if (template === undefined) return withLabBattle(battle, lab, published);
+    const summary = createDreamsign(template);
+    const presented = { ...battle, init: { ...battle.init, avatarSummary: null, opponentAbilityActive: false,
+      enemyDescriptor: { ...battle.init.enemyDescriptor, dreamsigns: resolved.request.side === "enemy" ? [summary] : [] },
+    } };
+    return withLabBattle(presented, lab, published);
+  }
   if (resolved.kind !== "ok" || resolved.entityKind !== "avatar") return withLabBattle(battle, lab, published);
   const avatar = journeyContent.avatars.find(candidate => candidate.id === resolved.request.avatarId);
   if (avatar === undefined) return withLabBattle(battle, lab, published);
@@ -1508,7 +1542,7 @@ const cardLabScenes = new Map<string, QaScene>();
 export function findQaScene(id: QaSceneId): QaScene | null {
   const trimmed = id.trim();
   const normalized = trimmed.toLowerCase();
-  if (normalized.startsWith(CARD_LAB_PREFIX) || normalized.startsWith(AVATAR_LAB_PREFIX) || normalized.startsWith(AMBIGUOUS_LAB_PREFIX)) {
+  if (normalized.startsWith(DREAMSIGN_LAB_PREFIX) || normalized.startsWith(AMBIGUOUS_DREAMSIGN_LAB_PREFIX) || normalized.startsWith(CARD_LAB_PREFIX) || normalized.startsWith(AVATAR_LAB_PREFIX) || normalized.startsWith(AMBIGUOUS_LAB_PREFIX)) {
     const scene = cardLabScenes.get(trimmed) ?? cardLabScene(parseQaSceneId(trimmed));
     cardLabScenes.set(trimmed, scene);
     return scene;

@@ -36,7 +36,7 @@ const VARIANTS = ["base", "amplified", "empowered", "kindled", "resonant", "insp
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 
 /**
- * @typedef {{ bead: string, cards: string[], entityKind: "card" | "avatar", variants: string[], sides: string[], timeoutS: number, port: number | null, capture: boolean }} SweepOptions
+ * @typedef {{ bead: string, cards: string[], entityKind: "card" | "avatar" | "dreamsign", variants: string[], sides: string[], timeoutS: number, port: number | null, capture: boolean }} SweepOptions
  */
 
 /**
@@ -55,9 +55,9 @@ export function parseSweepArgs(argv) {
       return next;
     };
     if (arg === "--bead") options.bead = value();
-    else if (arg === "--cards" || arg === "--avatars") {
+    else if (arg === "--cards" || arg === "--avatars" || arg === "--dreamsigns") {
       domains.add(arg);
-      options.entityKind = arg === "--avatars" ? "avatar" : "card";
+      options.entityKind = arg === "--dreamsigns" ? "dreamsign" : arg === "--avatars" ? "avatar" : "card";
       const raw = value();
       options.cards = raw === "starter" && arg === "--cards" ? starterCards() : raw.split(",");
     }
@@ -73,8 +73,8 @@ export function parseSweepArgs(argv) {
     else throw new Error(`unknown argument ${arg}`);
   }
   if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/u.test(options.bead)) throw new Error("--bead <id> is required");
-  if (domains.size > 1) throw new Error("--cards and --avatars are mutually exclusive");
-  if (options.cards.length === 0) throw new Error("--cards <uuid,...|starter> or --avatars <uuid,...> is required");
+  if (domains.size > 1) throw new Error("--cards, --avatars and --dreamsigns are mutually exclusive");
+  if (options.cards.length === 0) throw new Error("--cards <uuid,...|starter> or --avatars/--dreamsigns <uuid,...> is required");
   const badVariant = options.variants.find((variant) => !VARIANTS.includes(variant));
   if (badVariant !== undefined) throw new Error(`unknown variant ${badVariant}; one of ${VARIANTS.join(", ")}`);
   if (options.variants[0] !== "base") options.variants = ["base", ...options.variants.filter((variant) => variant !== "base")];
@@ -241,7 +241,7 @@ async function main() {
           let eligible = null;
           for (const variant of options.variants) {
             if (session.closed()) return;
-            const base = { uuid: card, variant, ...(options.entityKind === "avatar" ? { entityKind: "avatar" } : {}), ...(side === "enemy" ? { as: "enemy" } : {}) };
+            const base = { uuid: card, variant, ...(options.entityKind !== "card" ? { entityKind: options.entityKind } : {}), ...(side === "enemy" ? { as: "enemy" } : {}) };
             if (eligible !== null && !eligible.includes(variant)) {
               record({ ...base, invocation, evidenceDir: relative(captureDir, session.captureDir), verdict: "skip", notes: "the card cannot take this variant", screens: [], attempt: 1, effective: true });
               continue;
@@ -250,7 +250,7 @@ async function main() {
             const timeoutMs = options.timeoutS * 1000;
             const result = await runSweepCell({
               run: (attempt) => session.run(cardLabPlay.toString(),
-                { [options.entityKind === "avatar" ? "avatar" : "card"]: card, variant, as: side, timeoutMs: String(timeoutMs), capture: capture === "" ? "" : `${capture}-attempt-${String(attempt)}` }, timeoutMs + 30_000),
+                { [options.entityKind]: card, variant, as: side, timeoutMs: String(timeoutMs), capture: capture === "" ? "" : `${capture}-attempt-${String(attempt)}` }, timeoutMs + 30_000),
               closed: session.closed,
               save: (report, attempt) => {
                 const filename = `sweep-${card}-${variant}-${side}-attempt-${String(attempt)}.result.json`;

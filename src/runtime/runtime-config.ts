@@ -261,9 +261,12 @@ function parseGotoScene(params: URLSearchParams): QaSceneId | null {
   if (trimmed.toLowerCase() !== "card-lab") return parseQaSceneId(trimmed);
   const token = (name: string, fallback: string) => (params.get(name) ?? fallback).trim().toLowerCase().replace(/:/gu, "");
   const stage = params.get("labStage");
+  const dreamsign = params.has("dreamsign");
   const avatar = params.has("avatar");
-  const prefix = avatar ? params.has("card") || params.getAll("avatar").length !== 1 ? "card-lab-avatar-ambiguous" : "card-lab-avatar" : "card-lab";
-  return parseQaSceneId(`${prefix}:${token(avatar ? "avatar" : "card", "")}:${token("variant", "base")}:${token("as", "player")}${stage === null ? "" : `:${encodeURIComponent(stage)}`}`);
+  const domain = dreamsign ? "dreamsign" : avatar ? "avatar" : "card";
+  const ambiguous = domain !== "card" && (["card", "avatar", "dreamsign"].filter(name => params.has(name)).length > 1 || params.getAll(domain).length !== 1);
+  const prefix = domain === "card" ? "card-lab" : `card-lab-${domain}${ambiguous ? "-ambiguous" : ""}`;
+  return parseQaSceneId(`${prefix}:${token(domain, "")}:${token("variant", "base")}:${token("as", "player")}${stage === null ? "" : `:${encodeURIComponent(stage)}`}`);
 }
 
 function parseSeedOverride(rawSeed: string | null): number | null {

@@ -1,0 +1,59 @@
+{
+  "bead": "hv-umm2.228",
+  "phase": 5,
+  "implementMin": 56.980843150000005,
+  "implementWindow": {
+    "start": "2026-10-12T20:47:30.140Z",
+    "end": "2026-10-12T21:44:28.990589+00:00"
+  },
+  "localValidationS": {
+    "baseline": 6.204116106033325,
+    "route-focused": 4.337000131607056,
+    "focused": 4.597629070281982,
+    "focused-corrected": 6.88248610496521,
+    "review": 45.29463601112366,
+    "focused-final": 5.885807037353516,
+    "review-corrected": 40.07549285888672,
+    "review-final": 35.070467948913574,
+    "identity-focused": 2.591402053833008,
+    "identity-corrected": 2.6754391193389893,
+    "review-source-final": 35.18650507926941,
+    "knip": 3.447463035583496,
+    "preflight": 1.038114070892334,
+    "full": 88.80990791320801,
+    "schema-before-qa": 0.11243510246276855,
+    "friction-before-qa": 0.19568705558776855,
+    "sweep": 32.233850955963135,
+    "host-baseline": 2.6806282997131348,
+    "host-focused": 4.102267742156982,
+    "host-review": 35.49247717857361,
+    "host-knip": 4.670939922332764,
+    "fingerprint-baseline": 2.9102349281311035,
+    "fingerprint-focused": 4.426175355911255,
+    "fingerprint-review": 37.41734719276428,
+    "default-baseline": 2.5506739616394043,
+    "default-focused": 3.458117961883545,
+    "default-review": 34.57656502723694,
+    "default-knip": 4.456905841827393,
+    "repaired-full": 101.59870529174805,
+    "schema-final-source": 0.0678250789642334,
+    "friction-final-source": 0.15984392166137695,
+    "sweep-repaired": 28.73792791366577,
+    "browser": 160.34249901771545,
+    "schema-evidence": 0.13031005859375,
+    "friction-evidence": 0.25798988342285156
+  },
+  "hostLoad": 9.072265625,
+  "testDelta": {
+    "files": 3,
+    "lines": 222,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 17.119942383333335,
+      "note": "Own serialized-host URLSearchParams failure retained as 40 failed sweep cells; dependency-free URL assembly, duplicate Dreamsign cache fingerprint, and default controller/variant alignment repaired with separate public red witnesses. Focused/review/Knip and required exclusive two-worker full passed on repaired source before final native QA. This interval includes diagnosis and final validation, not only edits."
+    }
+  ]
+}

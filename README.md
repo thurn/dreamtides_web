@@ -921,6 +921,26 @@ ability resolution. A pending definition reports `pending`, including when
 initialization succeeds. Content-specific trigger and activation workflows
 remain part of each avatar's authored QA.
 
+Dreamsign emblems use `?goto=card-lab&dreamsign=<uuid>&as=player|enemy`
+and `--dreamsigns <uuid,...>` for the sweep and Node preflight. The base
+variant initializes exactly that side's Dreamsign at index zero, with the
+opposite Dreamsign list empty and both avatars absent. The normal first turn
+preserves constructor observations, triggers and prompts. Ability source
+`{kind:"dreamsign",side,index}` identifies the UUID in that side's ordered
+emblems. The selected battle summary uses that UUID; the opposite summary
+list is empty. Combined card/avatar/Dreamsign parameters, repeated Dreamsign
+parameters, unknown UUIDs and staging declarations reject. Other recognized
+variants are ineligible. Domain selection flags are mutually exclusive.
+
+Dreamsign results prove fixture initialization and settled first-turn
+progression. `exercised` separately records matching resolved emblem
+abilities. Pending definitions report `pending`; vanilla definitions can
+pass initialization with `exercised=false`. Battle-lab results do not prove
+journey-only effects or content-specific triggers requiring another workflow.
+The existing battle ability chooser exposes legal Dreamsign activations;
+collection icons are not part of the live battle's mobile presentation.
+
+
 The sweep (workflow § Card QA) opens a runner session (its own dev server
 and MCP client, reopened at a card boundary where it yields its browser slot;
 see [Browser QA](#browser-qa)) and, for each card, side, and variant, runs

@@ -38,7 +38,7 @@ async function fixture(args = {}) {
 describe("QA observations across navigation", () => {
   const avatar = "5e5e5e5e-0000-4000-8000-000000000574";
   const card = "5e5e5e5e-0000-4000-8000-000000000002";
-  it.each([[{ avatar, as: "player" }, avatar], [{ avatar, as: "enemy" }, avatar], [{ card, avatar }, card], [{ card: "", avatar }, ""], [{}, null]])("preserves navigation identity and failure cleanup for %j", async (args, uuid) => {
+  it.each([[{ dreamsign: avatar, as: "player" }, avatar], [{ dreamsign: avatar, as: "enemy" }, avatar], [{ avatar, as: "player" }, avatar], [{ avatar, as: "enemy" }, avatar], [{ card, avatar }, card], [{ card: "", avatar }, ""], [{}, null]])("preserves navigation identity and failure cleanup for %j", async (args, uuid) => {
       const { qa, evaluate, goto } = await fixture(/** @type {Record<string, string>} */ (args));
       evaluate.mockResolvedValue({ href: "http://localhost:5174/lab", documentId: "fixture", caps: { errors: [], rejections: [], consoleErrors: [] } });
       const original = new Error("Synthetic navigation failure"); goto.mockRejectedValueOnce(original);
@@ -303,11 +303,11 @@ describe("QA observations across navigation", () => {
 // Run the installed browser init script with synthetic storage/document globals.
 // This covers the cache's public metadata contract without another DOM environment.
 describe("QA lab observation cache", () => {
-  it("restores exact published outcomes only for the complete persisted game/request", async () => {
+  it.each(["card", "avatar", "dreamsign"])("restores exact published outcomes only for the complete persisted %s request", async domain => {
     const { init } = await fixture();
     /** @type {Map<string, string>} */
     const storage = new Map();
-    const query = new URLSearchParams({ game: "saved-game", goto: "card-lab", card: "synthetic-card", variant: "base", as: "player", seed: "1" });
+    const query = new URLSearchParams({ game: "saved-game", goto: "card-lab", [domain]: "5e5e5e5e-0000-4000-8000-000000022800", variant: "base", as: "player", seed: "1" });
     const document = (/** @type {string} */ search) => {
       /** @type {Map<string, () => void>} */
       const events = new Map();
@@ -323,14 +323,18 @@ describe("QA lab observation cache", () => {
     };
     for (const status of ["ready", "rejected"]) {
       const original = document(`?${query}`);
-      const report = { status, card: "synthetic-card", reason: status === "ready" ? null : "unplayable", detail: "synthetic outcome" };
+      const report = { status, [domain]: query.get(domain), reason: status === "ready" ? null : "unplayable", detail: "synthetic outcome" };
       Object.assign(original.win, { __cardLab: report });
       original.events.get("pagehide")?.();
       expect(document(`?${query}`).win).toMatchObject({ __cardLab: report });
-      for (const field of ["game", "goto", "card", "avatar", "variant", "as", "seed", "labStage"]) {
+      for (const field of ["game", "goto", "card", "avatar", "dreamsign", "variant", "as", "seed", "labStage"]) {
         const stale = new URLSearchParams(query);
         stale.set(field, "different");
         expect(document(`?${stale}`).win).not.toHaveProperty("__cardLab");
+      }
+      if (domain === "dreamsign") {
+        const duplicate = new URLSearchParams(query); duplicate.append("dreamsign", query.get("dreamsign") ?? "");
+        expect(document(`?${duplicate}`).win).not.toHaveProperty("__cardLab");
       }
       const fresh = new URLSearchParams(query);
       fresh.delete("game");

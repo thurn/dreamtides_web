@@ -41,6 +41,12 @@ describe("runtime-config", () => {
       expect(parseRuntimeConfig(`?goto=card-lab&card=${card}&labStage=${encodeURIComponent(stage)}`).gotoScene).toBe(`card-lab:${card}:base:player:${encodeURIComponent(stage)}`);
     });
 
+    it("keeps explicit dreamsign identities and rejects combined or repeated domains", () => {
+      const id = "5e5e5e5e-0000-4000-8000-000000022800";
+      for (const side of ["player", "enemy"]) expect(parseRuntimeConfig(`?goto=card-lab&dreamsign=${id}&as=${side}`).gotoScene).toBe(`card-lab-dreamsign:${id}:base:${side}`);
+      for (const extra of [`&card=${id}`, `&avatar=${id}`, `&dreamsign=${id}`]) expect(parseRuntimeConfig(`?goto=card-lab&dreamsign=${id}${extra}`).gotoScene).toBe(`card-lab-dreamsign-ambiguous:${id}:base:player`);
+    });
+
     it("keeps explicit avatar requests separate from card UUIDs and preserves ambiguous requests", () => {
       const uuid = "5e5e5e5e-0000-4000-8000-000000021901";
       expect(parseRuntimeConfig(`?goto=card-lab&avatar=${uuid}`).gotoScene).toBe(`card-lab-avatar:${uuid}:base:player`);

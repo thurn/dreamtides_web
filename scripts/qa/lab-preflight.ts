@@ -1,3 +1,5 @@
+import { runDreamsignLabPreflight } from "../../src/engine/testing/dreamsign-lab";
+import { parseDreamsignId, type DreamsignId } from "../../src/types/identifiers";
 /** Node-only card-lab preflight. Run before the browser sweep with the same card/variant/side options. */
 import { runAvatarLabPreflight } from "../../src/engine/testing/avatar-lab";
 import { parseAvatarId, type AvatarId } from "../../src/types/identifiers";
@@ -19,6 +21,7 @@ import { parseDeckEntryId, parseDreamwellCardId } from "../../src/types/identifi
 function options(argv: readonly string[]) {
   let cards: CardId[] = [];
   let avatars: AvatarId[] = [];
+  let dreamsigns: DreamsignId[] = [];
   const domains = new Set<string>();
   let variants: readonly CardLabVariant[] = CARD_LAB_VARIANTS;
   let sides: readonly Side[] = SIDES;
@@ -28,6 +31,7 @@ function options(argv: readonly string[]) {
     if (value === undefined) throw new Error(`${argument} requires a value`);
     switch (argument) {
       case "--cards": domains.add("card"); cards = value.split(",").map(parseCardId); break;
+      case "--dreamsigns": domains.add("dreamsign"); dreamsigns = value.split(",").map(parseDreamsignId); break;
       case "--avatars": domains.add("avatar"); avatars = value.split(",").map(parseAvatarId); break;
       case "--variants":
         variants = value === "all" ? CARD_LAB_VARIANTS : value.split(",").map((token) => {
@@ -44,9 +48,9 @@ function options(argv: readonly string[]) {
       default: throw new Error(`Unknown argument ${argument}`);
     }
   }
-  if (domains.size > 1) throw new Error("--cards and --avatars are mutually exclusive");
-  if (cards.length + avatars.length === 0) throw new Error("--cards or --avatars <uuid,...> is required");
-  return { cards, avatars, variants, sides };
+  if (domains.size > 1) throw new Error("--cards, --avatars and --dreamsigns are mutually exclusive");
+  if (cards.length + avatars.length + dreamsigns.length === 0) throw new Error("--cards, --avatars or --dreamsigns <uuid,...> is required");
+  return { cards, avatars, dreamsigns, variants, sides };
 }
 
 function main() {
@@ -72,6 +76,13 @@ function main() {
     withLab(contentFigmentDefinitions(), PROMPT_LAB_DEFINITIONS.figments),
   ));
   const counts = { pass: 0, pending: 0, skip: 0, fail: 0 };
+  for (const uuid of requested.dreamsigns) for (const side of requested.sides) for (const variant of requested.variants) {
+    const runStarted = performance.now();
+    const row = variant === "base" ? runDreamsignLabPreflight(engine, { dreamsignId: uuid, side })
+      : { uuid, side, variant, entityKind: "dreamsign", verdict: "skip" as const, reason: "ineligibleVariant", detail: null };
+    counts[row.verdict]++;
+    console.log(JSON.stringify({ ...row, elapsedMs: performance.now() - runStarted }));
+  }
   for (const uuid of requested.avatars) for (const side of requested.sides) for (const variant of requested.variants) {
     const runStarted = performance.now();
     const row = variant === "base"
@@ -101,7 +112,7 @@ function main() {
     counts[row.verdict]++;
     console.log(JSON.stringify({ ...row, elapsedMs: performance.now() - runStarted }));
   }
-  console.log(JSON.stringify({ event: "labPreflightSummary", ...requested, counts, elapsedMs: performance.now() - started, hostLoad, enemyMode: requested.avatars.length > 0 ? "normal-avatar-first-turn-first-legal-prompts" : "scripted-lab-play-first-legal-prompts" }));
+  console.log(JSON.stringify({ event: "labPreflightSummary", ...requested, counts, elapsedMs: performance.now() - started, hostLoad, enemyMode: requested.dreamsigns.length > 0 ? "normal-dreamsign-first-turn-first-legal-prompts" : requested.avatars.length > 0 ? "normal-avatar-first-turn-first-legal-prompts" : "scripted-lab-play-first-legal-prompts" }));
   process.exitCode = counts.fail > 0 ? 1 : 0;
 }
 
