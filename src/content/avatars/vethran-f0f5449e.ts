@@ -1,3 +1,5 @@
+import { activated, energy, energyX, exhaustSelf, x } from "../../engine/dsl/builders";
+import { discover } from "../../engine/effects/primitives/discover";
 import { avatar } from "../define";
 
 export default avatar({
@@ -57,5 +59,6 @@ export default avatar({
       "7343b376-88d2-45fe-8b5e-79763480ee7e",
     ],
   },
-  pending: true,
+  abilities: () => [activated([energy(3), energyX(), exhaustSelf()], discover({}, { costExactly: x() }))],
+  verifiedText: "juz4guz06v",
 });

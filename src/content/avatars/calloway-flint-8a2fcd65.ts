@@ -1,3 +1,5 @@
+import { activated, energy, exhaustSelf } from "../../engine/dsl/builders";
+import { draw } from "../../engine/effects/primitives/draw";
 import { avatar } from "../define";
 
 export default avatar({
@@ -57,5 +59,6 @@ export default avatar({
       "7343b376-88d2-45fe-8b5e-79763480ee7e",
     ],
   },
-  pending: true,
+  abilities: () => [activated([energy(4), exhaustSelf()], draw(1), { speed: "interrupt" })],
+  verifiedText: "fvtsek1sfh",
 });

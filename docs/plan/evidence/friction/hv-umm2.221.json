@@ -1,0 +1,31 @@
+{
+  "bead": "hv-umm2.221",
+  "phase": 5,
+  "implementMin": 51.35602025,
+  "implementWindow": {
+    "start": "2026-10-12T20:51:24.085000+00:00",
+    "end": "2026-10-12T21:42:45.446215+00:00"
+  },
+  "localValidationS": {
+    "focused": 11.441264416993363,
+    "review": 48.05261633299233,
+    "knip": 3.969865665989346,
+    "fuzz300": 159.7363602080004,
+    "preflight": 1.3694972499943106,
+    "sweep": 59.207433834002586,
+    "schema": 0.11746245800168253
+  },
+  "hostLoad": 15.5380859375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 15.591914495116722,
+      "note": "Private QA API/readiness/setup assumptions required diagnosis and bounded script corrections. Gross setup/debug/coordination windows, excluding four successful Seld acceptance wrappers; detailed receipts/windows in measurements. Includes separate Vrakmoth readiness correction; no source/harness change or settled-case aggregate rerun."
+    }
+  ]
+}

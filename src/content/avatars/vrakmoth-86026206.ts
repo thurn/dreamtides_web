@@ -1,3 +1,5 @@
+import { triggered, whenDiscard } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives/draw";
 import { avatar } from "../define";
 
 export default avatar({
@@ -45,5 +47,6 @@ export default avatar({
     "29c4c45d-33df-42ac-bf28-387eb00264aa",
     "6fa9c440-3912-4b1e-868c-840ae772fe1c",
   ],
-  pending: true,
+  abilities: () => [triggered(whenDiscard(), draw(1, "you", { ephemeral: true }), { oncePerTurn: true })],
+  verifiedText: "1rx8hy19dk5",
 });

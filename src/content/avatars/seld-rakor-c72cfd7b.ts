@@ -1,3 +1,6 @@
+import { conditionCardCounts } from "../../engine/dsl/builders";
+import { atStartOfTurn, triggered } from "../../engine/dsl/triggers";
+import { foresee } from "../../engine/effects/primitives/foresee";
 import { avatar } from "../define";
 
 export default avatar({
@@ -58,5 +61,6 @@ export default avatar({
       "7343b376-88d2-45fe-8b5e-79763480ee7e",
     ],
   },
-  pending: true,
+  abilities: () => [triggered(atStartOfTurn(), foresee(1), { condition: conditionCardCounts("void", 3) })],
+  verifiedText: "2fkoewgjqgn",
 });
