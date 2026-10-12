@@ -1,0 +1,89 @@
+{
+  "bead": "hv-umm2.496",
+  "phase": 5,
+  "kind": "introspection repair (gate completion tail, follows hv-umm2.492)",
+  "measurementWindow": {
+    "dispatchUtc": "2026-10-12T04:36:02Z",
+    "dispatchSource": "worktree .git birth time (the subagent started after it)",
+    "precommitEndpointUtc": "2026-10-12T04:51:00Z",
+    "elapsedMin": 15
+  },
+  "change": {
+    "file": "vitest.config.ts",
+    "setting": "test.silent = \"passed-only\"",
+    "vitestVersion": "4.1.0",
+    "effect": "The default reporter drops console output attributed to passing tests and, on failure, prints the failing test's, suite's or file's captured console output beside the failure. src/logging.ts, the D40 transports and scripts/review.mjs are unchanged.",
+    "optOut": "npx vitest run --silent=false"
+  },
+  "method": {
+    "command": "lockf -k artifacts/heavy.lock env -u AI_AGENT -u CLAUDECODE -u CLAUDE_CODE sh -c '{ npm run review:gate 2>&1; echo EXIT $? <iso time>; } | node throttle.mjs <out> 118'",
+    "wholeSuiteTrigger": "a temporary comment appended to src/logging.ts (161 related test files > cap 40, so test-gate ran all 343 files); reverted before commit",
+    "agentEnvUnset": "Vitest 4.1 picks its agent reporter, which defaults to silent \"passed-only\", when std-env detects an AI agent (AI_AGENT, CLAUDECODE, CLAUDE_CODE). Tollgate's gate runs without those variables, so they were unset to reproduce the gate's default reporter.",
+    "consumer": "throttle.mjs reads stdout+stderr in 8192-byte frames every 118 ms (~68 KiB/s, the drain rate hv-umm2.492 observed) and holds at most 64 KiB, so the producer sees pipe backpressure",
+    "internalFinish": "test-gate 'started at' time plus its 'finished in' seconds",
+    "producerExit": "the EXIT line's time, taken after npm run review:gate returned",
+    "rawEvidence": "artifacts/qa/hv-umm2.496/ (before.out, after.out, before-agent.out, *.meta.json, *.load, failing-proof.out, full.out, throttle.mjs, tail.mjs)"
+  },
+  "before": {
+    "testGateStartedUtc": "2026-10-12T04:42:47.679Z",
+    "hostLoad1m": 6.93,
+    "stdoutBytes": 4163275,
+    "testGateBlockBytes": 4114804,
+    "consoleJsonLineBytes": 3814638,
+    "frames": 515,
+    "testGateFinishedInS": 55.3,
+    "internalFinishToProducerExitS": 56.368,
+    "internalFinishToLastFrameS": 59.865,
+    "tests": "343 files, 4651 tests passed"
+  },
+  "after": {
+    "testGateStartedUtc": "2026-10-12T04:46:05.761Z",
+    "hostLoad1m": 7.69,
+    "stdoutBytes": 121402,
+    "testGateBlockBytes": 72710,
+    "consoleJsonLineBytes": 0,
+    "frames": 21,
+    "testGateFinishedInS": 57.1,
+    "internalFinishToProducerExitS": 0.608,
+    "internalFinishToLastFrameS": 0.986,
+    "tests": "343 files, 4651 tests passed",
+    "remainingTestGateOutput": "one pass line per test file (343) plus about 110 '[qa]' lines (17.5 KB) that scripts/qa/run-scenario.mjs say() writes with process.stderr.write during scripts/qa tests"
+  },
+  "agentReporterReference": {
+    "note": "Same whole-suite gate with the agent variables set, before the change: what agent sessions saw locally all along.",
+    "testGateStartedUtc": "2026-10-12T04:39:40.259Z",
+    "hostLoad1m": 10.13,
+    "stdoutBytes": 67156,
+    "testGateBlockBytes": 18463,
+    "internalFinishToProducerExitS": 0.472,
+    "internalFinishToLastFrameS": 0.58
+  },
+  "failingTestLogEvidence": {
+    "file": "artifacts/qa/hv-umm2.496/failing-proof.out",
+    "throwawayTest": "src/throwaway-hv-umm2-496.test.ts (deleted): one passing and one failing test, each calling logEvent with a distinct marker event",
+    "command": "env -u AI_AGENT -u CLAUDECODE -u CLAUDE_CODE npx vitest run src/throwaway-hv-umm2-496.test.ts",
+    "result": "exit 1; the failing test's logEvent JSON line printed under 'stdout | src/throwaway-hv-umm2-496.test.ts > failing test logs'; the passing test's marker absent (0 matches); with --silent=false both markers print"
+  },
+  "reviewMjsReplay": "Not changed. After the config change the buffered test-gate block is 72.7 KB, about 1 s at the observed drain rate, and it carries the pass/fail summary the gate log needs.",
+  "localValidationS": {
+    "review": 7.13,
+    "knip": 3.16,
+    "reviewFull": 83,
+    "reviewFullHeavySlotWaitS": 48,
+    "scope": "npm run review and npm run knip in the worktree; npm run review:full once under the heavy slot with the agent variables unset (full.out 121357 bytes, 343 files / 4651 tests passed, test step 57.5 s)"
+  },
+  "hostLoadSamples": {
+    "baselineAgentGateLockAcquired": 10.4,
+    "baselineGateLockAcquired": 6.93,
+    "afterGateLockAcquired": 7.69,
+    "localReviewStart": 7.58,
+    "reviewFullLockAcquired": 6.18
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "1-minute load at the npm run review start in the worktree"
+      }
+    }
+  }
+}

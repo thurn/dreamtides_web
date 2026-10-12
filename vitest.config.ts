@@ -48,6 +48,12 @@ export default defineConfig({
   test: {
     exclude: EXCLUDED_FILES,
     setupFiles: ["src/testing/setup-dom.ts"],
+    // Console output from passing tests is dropped; a failing test, suite,
+    // or file prints the console output it captured beside its failure. The
+    // `src/logging.ts` console transport writes megabytes of journey-log JSON
+    // across the suite, and `review:gate` replays its test output through
+    // Tollgate's log pipe after the run. `--silent=false` shows every log.
+    silent: "passed-only",
     // Run after-hooks in definition order so the setup file's render
     // teardown unmounts before a test file's own afterEach clears the DOM.
     sequence: { hooks: "list" },
