@@ -1,3 +1,6 @@
+import { fromVoid, ofSubtype } from "../../engine/dsl/builders";
+import { onDissolved, triggered } from "../../engine/dsl/triggers";
+import { grantReclaim } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 468,
   art: { x: 0, y: 0.218, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onDissolved(), grantReclaim(fromVoid(ofSubtype("Survivor"))))],
+  verifiedText: "p2wal9vesq",
 });

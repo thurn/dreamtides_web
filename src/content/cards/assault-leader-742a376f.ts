@@ -1,3 +1,6 @@
+import { all, characterYouControl, ofSubtype } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 221,
   art: { x: 0.21, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onDawn(), gainSpark(all(characterYouControl(ofSubtype("Warrior"))), 1))],
+  verifiedText: "w5lgqiwbdu",
 });

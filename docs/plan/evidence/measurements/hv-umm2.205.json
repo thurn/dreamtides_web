@@ -1,0 +1,765 @@
+{
+  "bead": "hv-umm2.205",
+  "base": "4f43c7891e75e13f832c4ec7bbaedcbf3892bc03",
+  "dispatch": {
+    "start": "2026-10-12T16:41:01.396Z",
+    "provenance": "Parent supplied exact spawn dispatch; retained205-validation/dispatch.json"
+  },
+  "status": "validated; resources settled; precommit",
+  "plainScenarioDelta": {
+    "files": 1,
+    "lines": 85,
+    "cases": 8,
+    "jsdomFiles": 0
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "d20": {
+    "primitiveCompositions": [
+      "78b5a42d-b099-48f1-a1b4-5b6bc177adeb",
+      "742a376f-68db-466a-b087-405188634ba4"
+    ],
+    "scenarioRationale": "Winterbough own Materialized/Dawn erosion feeds its static permission; Eternal dissolved source or another own Survivor gains Reclaim; both controllers, synthetic surrounding fixtures."
+  },
+  "d21": {
+    "firstBytes": [
+      242,
+      131,
+      229,
+      83
+    ],
+    "sampled": [
+      false,
+      false,
+      false,
+      false
+    ],
+    "requiredJudged": 0,
+    "newSurfaces": [],
+    "rationale": "Existing filtered draw, spark gain, chooseTargets:target, grantReclaim status and static permission/playable void affordances. Inventory chooseCards:chooseInZone prediction is approximate; Winter static permission makes no target prompt."
+  },
+  "newPrimitives": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "fallout": [],
+  "authoringAttempts": [
+    {
+      "file": "focused.log",
+      "failed": 8,
+      "passed": 209,
+      "stageSumS": 4.3,
+      "cause": "Redundant scenario passes after automatic run-to-decision resolution."
+    },
+    {
+      "file": "focused-repaired.log",
+      "failed": 4,
+      "passed": 213,
+      "stageSumS": 3.5,
+      "cause": "Expected next-Dawn deck offset omitted ordinary Draw-before-Dawn."
+    },
+    {
+      "file": "focused-final.log",
+      "failed": 0,
+      "passed": 217,
+      "stageSumS": 3.5,
+      "scope": "scenario registry/all discovered modules and coverage gate"
+    }
+  ],
+  "commands": {
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93",
+      "start": "2026-10-12T16:51:05.233690+00:00",
+      "load": "{ 25.28 14.83 12.50 }",
+      "wrapperPid": 10243,
+      "wrapperPgid": 10243,
+      "pid": 10267,
+      "end": "2026-10-12T16:51:52.939325+00:00",
+      "wallS": 47.7026504999958,
+      "exitCode": 0
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93",
+      "start": "2026-10-12T16:52:04.235982+00:00",
+      "load": "{ 25.68 16.65 13.32 }",
+      "wrapperPid": 74882,
+      "wrapperPgid": 74882,
+      "pid": 74977,
+      "end": "2026-10-12T16:52:08.672110+00:00",
+      "wallS": 4.432414167007664,
+      "exitCode": 0
+    },
+    "fuzz-total": {
+      "label": "fuzz-total",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/205-helper/run-check.py",
+        "fuzz-execution",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "78b5a42d-b099-48f1-a1b4-5b6bc177adeb,96e2c30c-930c-47af-abb0-d4fbab454d56,742a376f-68db-466a-b087-405188634ba4,4e1c0192-2649-489f-aad3-75ff2887c0a7"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93",
+      "start": "2026-10-12T16:52:27.614070+00:00",
+      "load": "{ 24.58 17.06 13.56 }",
+      "wrapperPid": 90141,
+      "wrapperPgid": 90141,
+      "pid": 90153,
+      "end": "2026-10-12T16:54:47.599777+00:00",
+      "wallS": 139.9817260830023,
+      "exitCode": 0
+    },
+    "fuzz-execution": {
+      "label": "fuzz-execution",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "78b5a42d-b099-48f1-a1b4-5b6bc177adeb,96e2c30c-930c-47af-abb0-d4fbab454d56,742a376f-68db-466a-b087-405188634ba4,4e1c0192-2649-489f-aad3-75ff2887c0a7"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93",
+      "start": "2026-10-12T16:52:27.642889+00:00",
+      "load": "{ 24.58 17.06 13.56 }",
+      "wrapperPid": 90154,
+      "wrapperPgid": 90141,
+      "pid": 90159,
+      "end": "2026-10-12T16:54:47.595750+00:00",
+      "wallS": 139.94873079100216,
+      "exitCode": 0
+    },
+    "preflight": {
+      "label": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "78b5a42d-b099-48f1-a1b4-5b6bc177adeb,96e2c30c-930c-47af-abb0-d4fbab454d56,742a376f-68db-466a-b087-405188634ba4,4e1c0192-2649-489f-aad3-75ff2887c0a7"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93",
+      "start": "2026-10-12T16:55:17.830440+00:00",
+      "load": "{ 17.77 18.29 14.78 }",
+      "wrapperPid": 54738,
+      "wrapperPgid": 54738,
+      "pid": 54750,
+      "end": "2026-10-12T16:55:18.884288+00:00",
+      "wallS": 1.0509438330045668,
+      "exitCode": 0
+    },
+    "sweep": {
+      "label": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.205",
+        "--cards",
+        "78b5a42d-b099-48f1-a1b4-5b6bc177adeb,96e2c30c-930c-47af-abb0-d4fbab454d56,742a376f-68db-466a-b087-405188634ba4,4e1c0192-2649-489f-aad3-75ff2887c0a7"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93",
+      "start": "2026-10-12T16:55:37.577944+00:00",
+      "load": "{ 14.81 17.57 14.60 }",
+      "wrapperPid": 56598,
+      "wrapperPgid": 56598,
+      "pid": 56609,
+      "end": "2026-10-12T17:01:28.791112+00:00",
+      "wallS": 351.20864529098617,
+      "exitCode": 0
+    }
+  },
+  "sourceFreeze": {
+    "sha256": {
+      "src/content/cards/shard-wielder-78b5a42d.ts": "648ac3b7bb0efbfc21359c4ac3b1831c0fda54f22850dbf08666eaa34f980275",
+      "src/content/cards/winterbough-guide-96e2c30c.ts": "b74ff433fa0f522bbf9490fc530bb18fef3faa7a1440bfbd70fafad58d7d0aa1",
+      "src/content/cards/assault-leader-742a376f.ts": "3b052f5b315a2f915436ab650e3f11d64b5fc31042b8bdf931ef23de8a9be0ff",
+      "src/content/cards/eternal-soul-4e1c0192.ts": "ad5839c8fd6e3678faabbfd80fe8167e4fcbcf0c643523b3d750bf0689f37ac0",
+      "src/content/specs/cards-93.scenarios.ts": "4e0c2a7cad394f76136d1cf46ea1811d87fb59fdc1b8e8de1630e9cf4f3a3bcd"
+    },
+    "afterRuntimeMatches": true
+  },
+  "runtime": {
+    "initial": {
+      "ownerFile": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+      "owner": {
+        "token": "04e459ac-935c-42c4-b200-690ab30b87e4",
+        "pid": 56609,
+        "bead": "hv-umm2.205",
+        "label": "card-sweep",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-12T16:55:39.472Z",
+        "providerState": "active",
+        "mcpSessionId": "33a45b4e-5037-4caa-a3c6-8fd593c287c9",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "processes": [
+        {
+          "pid": 56598,
+          "ppid": 1772,
+          "pgid": 56598,
+          "command": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python"
+        },
+        {
+          "pid": 56609,
+          "ppid": 56598,
+          "pgid": 56598,
+          "command": "node"
+        },
+        {
+          "pid": 56632,
+          "ppid": 56609,
+          "pgid": 56632,
+          "command": "lockf"
+        },
+        {
+          "pid": 56633,
+          "ppid": 56632,
+          "pgid": 56632,
+          "command": "cat"
+        },
+        {
+          "pid": 56639,
+          "ppid": 56609,
+          "pgid": 56639,
+          "command": "lockf"
+        },
+        {
+          "pid": 56641,
+          "ppid": 56639,
+          "pgid": 56639,
+          "command": "cat"
+        },
+        {
+          "pid": 56649,
+          "ppid": 56609,
+          "pgid": 56649,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node"
+        },
+        {
+          "pid": 56666,
+          "ppid": 56649,
+          "pgid": 56649,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node"
+        },
+        {
+          "pid": 56725,
+          "ppid": 56666,
+          "pgid": 56649,
+          "command": "node"
+        },
+        {
+          "pid": 56736,
+          "ppid": 56725,
+          "pgid": 56649,
+          "command": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93/node_modules/@esbuild/darwin-arm64/bin/esbuild"
+        }
+      ],
+      "servers": [
+        {
+          "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "value": {
+            "token": "b67d1ca8-34e9-4257-bdd3-7b32764010c2",
+            "runner": {
+              "pid": 56609,
+              "group": 56598,
+              "started": "Mon Oct 12 09:55:37 2026",
+              "state": "S",
+              "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.205 --cards 78b5a42d-b099-48f1-a1b4-5b6bc177adeb,96e2c30c-930c-47af-abb0-d4fbab454d56,742a376f-68db-466a-b087-405188634ba4,4e1c0192-2649-489f-aad3-75ff2887c0a7"
+            },
+            "server": {
+              "pid": 56649,
+              "group": 56649,
+              "started": "Mon Oct 12 09:55:37 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json b67d1ca8-34e9-4257-bdd3-7b32764010c2 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93",
+            "port": 5274
+          }
+        }
+      ]
+    },
+    "snapshots": [
+      {
+        "timestamp": "2026-10-12T16:59:03.343570+00:00",
+        "owners": [
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "value": {
+              "token": "04e459ac-935c-42c4-b200-690ab30b87e4",
+              "pid": 56609,
+              "bead": "hv-umm2.205",
+              "label": "card-sweep",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-12T16:55:39.472Z",
+              "providerState": "active",
+              "mcpSessionId": "33a45b4e-5037-4caa-a3c6-8fd593c287c9",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "servers": [
+          {
+            "file": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "value": {
+              "token": "b67d1ca8-34e9-4257-bdd3-7b32764010c2",
+              "runner": {
+                "pid": 56609,
+                "group": 56598,
+                "started": "Mon Oct 12 09:55:37 2026",
+                "state": "S",
+                "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.205 --cards 78b5a42d-b099-48f1-a1b4-5b6bc177adeb,96e2c30c-930c-47af-abb0-d4fbab454d56,742a376f-68db-466a-b087-405188634ba4,4e1c0192-2649-489f-aad3-75ff2887c0a7"
+              },
+              "server": {
+                "pid": 56649,
+                "group": 56649,
+                "started": "Mon Oct 12 09:55:37 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json b67d1ca8-34e9-4257-bdd3-7b32764010c2 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93",
+              "port": 5274
+            }
+          }
+        ],
+        "processes": [
+          {
+            "pid": 56598,
+            "ppid": 1772,
+            "pgid": 56598,
+            "command": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python"
+          },
+          {
+            "pid": 56609,
+            "ppid": 56598,
+            "pgid": 56598,
+            "command": "node"
+          },
+          {
+            "pid": 56632,
+            "ppid": 56609,
+            "pgid": 56632,
+            "command": "lockf"
+          },
+          {
+            "pid": 56633,
+            "ppid": 56632,
+            "pgid": 56632,
+            "command": "cat"
+          },
+          {
+            "pid": 56639,
+            "ppid": 56609,
+            "pgid": 56639,
+            "command": "lockf"
+          },
+          {
+            "pid": 56641,
+            "ppid": 56639,
+            "pgid": 56639,
+            "command": "cat"
+          },
+          {
+            "pid": 56649,
+            "ppid": 56609,
+            "pgid": 56649,
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node"
+          },
+          {
+            "pid": 56666,
+            "ppid": 56649,
+            "pgid": 56649,
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node"
+          },
+          {
+            "pid": 56725,
+            "ppid": 56666,
+            "pgid": 56649,
+            "command": "node"
+          },
+          {
+            "pid": 56736,
+            "ppid": 56725,
+            "pgid": 56649,
+            "command": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards93/node_modules/@esbuild/darwin-arm64/bin/esbuild"
+          }
+        ]
+      },
+      {
+        "timestamp": "2026-10-12T17:02:20.108219+00:00",
+        "owners": [],
+        "servers": [],
+        "processes": []
+      }
+    ],
+    "settled": {
+      "runner": 56609,
+      "runnerGroup": 56598,
+      "serverGroup": 56649,
+      "ownedPids": [
+        56598,
+        56609,
+        56632,
+        56633,
+        56639,
+        56641,
+        56649,
+        56666,
+        56725,
+        56736
+      ],
+      "allAbsent": true,
+      "ownProviderRecordAbsent": true,
+      "ownServerRecordAbsent": true,
+      "port5274Free": true,
+      "nativeTerminalExitCode": 0,
+      "providerCompletionReceiptIndividuallySampled": false,
+      "receiptNote": "Native successful close and owner clearing were observed through terminal exit and absent exact records; transient completion receipt not individually sampled.",
+      "unfinished": []
+    }
+  },
+  "sweep": {
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-EXBokq",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.205/invocations/sweep-EXBokq",
+      "counts": {
+        "pass": 40,
+        "skip": 40
+      },
+      "attemptCounts": {
+        "pass": 40,
+        "skip": 40
+      },
+      "hostLoad": 14.814453125,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1673,
+        "scenario": 348702.573623,
+        "cleanup": 575.1845830000238,
+        "execution": 351012.449209,
+        "total": 351018.449209
+      }
+    },
+    "ledgerRows": 80,
+    "rawReports": [
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-78b5a42d-b099-48f1-a1b4-5b6bc177adeb-base-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-78b5a42d-b099-48f1-a1b4-5b6bc177adeb-empowered-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-78b5a42d-b099-48f1-a1b4-5b6bc177adeb-kindled-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-78b5a42d-b099-48f1-a1b4-5b6bc177adeb-resonant-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-78b5a42d-b099-48f1-a1b4-5b6bc177adeb-perfected-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-78b5a42d-b099-48f1-a1b4-5b6bc177adeb-base-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-78b5a42d-b099-48f1-a1b4-5b6bc177adeb-empowered-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-78b5a42d-b099-48f1-a1b4-5b6bc177adeb-kindled-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-78b5a42d-b099-48f1-a1b4-5b6bc177adeb-resonant-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-78b5a42d-b099-48f1-a1b4-5b6bc177adeb-perfected-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-base-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-amplified-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-empowered-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-kindled-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-resonant-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-perfected-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-base-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-amplified-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-empowered-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-kindled-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-resonant-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-96e2c30c-930c-47af-abb0-d4fbab454d56-perfected-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-742a376f-68db-466a-b087-405188634ba4-base-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-742a376f-68db-466a-b087-405188634ba4-empowered-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-742a376f-68db-466a-b087-405188634ba4-kindled-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-742a376f-68db-466a-b087-405188634ba4-resonant-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-742a376f-68db-466a-b087-405188634ba4-perfected-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-742a376f-68db-466a-b087-405188634ba4-base-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-742a376f-68db-466a-b087-405188634ba4-empowered-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-742a376f-68db-466a-b087-405188634ba4-kindled-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-742a376f-68db-466a-b087-405188634ba4-resonant-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-742a376f-68db-466a-b087-405188634ba4-perfected-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-4e1c0192-2649-489f-aad3-75ff2887c0a7-base-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-4e1c0192-2649-489f-aad3-75ff2887c0a7-empowered-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-4e1c0192-2649-489f-aad3-75ff2887c0a7-kindled-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-4e1c0192-2649-489f-aad3-75ff2887c0a7-perfected-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-4e1c0192-2649-489f-aad3-75ff2887c0a7-base-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-4e1c0192-2649-489f-aad3-75ff2887c0a7-empowered-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-4e1c0192-2649-489f-aad3-75ff2887c0a7-kindled-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "filename": "invocations/sweep-EXBokq/run-IGB6yv/sweep-4e1c0192-2649-489f-aad3-75ff2887c0a7-perfected-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      }
+    ],
+    "captures": 0,
+    "judged": 0
+  },
+  "sourceDelta": {
+    "files": 4,
+    "additions": 23,
+    "deletions": 4,
+    "nonTestChangedLines": 27
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting 2026-10-12T16:51:05.233690+00:00",
+        "value": 25.28
+      },
+      "implementWindow": {
+        "start": "Exact parent spawn dispatch retained205-validation/dispatch.json",
+        "end": "Measured precommit endpoint, actual commit expected within one minute; parent receives commit timestamp"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "review",
+      "start": "2026-10-12T16:51:05.233690+00:00",
+      "load": "{ 25.28 14.83 12.50 }"
+    },
+    {
+      "scope": "knip",
+      "start": "2026-10-12T16:52:04.235982+00:00",
+      "load": "{ 25.68 16.65 13.32 }"
+    },
+    {
+      "scope": "fuzz-total",
+      "start": "2026-10-12T16:52:27.614070+00:00",
+      "load": "{ 24.58 17.06 13.56 }"
+    },
+    {
+      "scope": "fuzz-execution",
+      "start": "2026-10-12T16:52:27.642889+00:00",
+      "load": "{ 24.58 17.06 13.56 }"
+    },
+    {
+      "scope": "preflight",
+      "start": "2026-10-12T16:55:17.830440+00:00",
+      "load": "{ 17.77 18.29 14.78 }"
+    },
+    {
+      "scope": "sweep",
+      "start": "2026-10-12T16:55:37.577944+00:00",
+      "load": "{ 14.81 17.57 14.60 }"
+    }
+  ],
+  "fuzzTiming": {
+    "admissionStartupGapS": 0.028819,
+    "executionS": 139.94873079100216,
+    "outerS": 139.9817260830023,
+    "gapScope": "Includes lock admission and inner wrapper startup; not asserted as pure queue contention"
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 145274,
+    "prompts": 3621,
+    "interactiveReruns": 368,
+    "engineWallS": 138.9,
+    "cpuS": 152.3,
+    "failures": 0,
+    "exercised": [
+      211,
+      232,
+      237,
+      303
+    ]
+  },
+  "focusedTiming": {
+    "scope": "Summed printed native stages, not wrapper elapsed",
+    "finalS": 3.5,
+    "retainedFailedAttemptS": [
+      4.3,
+      3.5
+    ]
+  },
+  "rdProtocol": "Existing rules settle all clauses, ladder not invoked; C12 type references used through registered filters.",
+  "precommitEnd": "2026-10-12T17:03:19.461686+00:00"
+}

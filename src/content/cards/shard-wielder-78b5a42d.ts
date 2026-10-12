@@ -1,3 +1,6 @@
+import { ofSubtype } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { drawMatching } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 59,
   art: { x: -0.458, y: 1, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), drawMatching(ofSubtype("Warrior")))],
+  verifiedText: "26wnwlxvceh",
 });

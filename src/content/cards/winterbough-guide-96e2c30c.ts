@@ -1,3 +1,6 @@
+import { ofSubtype, staticAbility } from "../../engine/dsl/builders";
+import { either, onDawn, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { erode, playFromZone } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 292,
   art: { x: 0, y: 0.766, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(either(onMaterialized(), onDawn()), erode(variant.amplified ? 2 : 1)),
+    staticAbility(playFromZone("void", ofSubtype("Warrior"), { oncePerTurn: true })),
+  ],
+  verifiedText: "zparrguagk",
 });
