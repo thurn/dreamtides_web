@@ -488,8 +488,8 @@ non-additively:
 **Add no edge** for additive edits to shared registries and hub files:
 
 - a new union member in `src/engine/dsl/types.ts` or a new builder;
-- an entry in `src/engine/effects/primitives/index.ts`,
-  `src/content/specs/index.ts`, or another registration list;
+- an entry in `src/engine/effects/primitives/index.ts` or another
+  registration list;
 - appended tests in a shared group test file;
 - a new section of `docs/rules.md`, and the per-bead evidence files;
 - hub areas (`engine hubs`, `fold hubs`) taken only for such additions, and

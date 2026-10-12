@@ -1,7 +1,7 @@
 /**
  * Runs Phase 5 scenario modules (engine-design § Scenario specs). The test
- * file `specs.test.ts` runs every scenario registered in `index.ts` as its own
- * named case.
+ * file `specs.test.ts` runs every scenario of the modules `index.ts`
+ * discovers as its own named case.
  */
 import type { Engine } from "../../engine/engine";
 import { runScenario, type NamedScenario, type ScenarioModule, type ScenarioResult } from "../../engine/testing/scenario";
@@ -18,14 +18,14 @@ export function runNamedScenario(engine: Engine, scenario: NamedScenario): Scena
 }
 
 /**
- * The registry's structural problems: a slug registered twice, a module with
- * no scenarios, and a scenario name used twice in one module.
+ * The discovered modules' structural problems: a slug used twice, a module
+ * with no scenarios, and a scenario name used twice in one module.
  */
 export function scenarioRegistryProblems(modules: readonly ScenarioModule[]): string[] {
   const problems: string[] = [];
   const slugs = new Set<string>();
   for (const module of modules) {
-    if (slugs.has(module.slug)) problems.push(`${module.slug}: registered twice`);
+    if (slugs.has(module.slug)) problems.push(`${module.slug}: used twice`);
     slugs.add(module.slug);
     if (module.scenarios.length === 0) problems.push(`${module.slug}: no scenarios`);
     const names = new Set<string>();

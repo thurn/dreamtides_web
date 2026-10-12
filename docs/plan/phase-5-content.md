@@ -65,8 +65,8 @@ The planning projection carries these edges:
   inventory lists them per bead (`serializedAfter`): a bead that changes an
   entity module or an engine logic file another bead also changes waits for
   the previous one. Appending to `primitives/index.ts`, `dsl/types.ts`,
-  `dsl/builders.ts`, `dsl/triggers.ts`, or `specs/index.ts` is additive and
-  needs no edge. Each engine primitive or DSL form newly introduced by a
+  `dsl/builders.ts`, or `dsl/triggers.ts` is additive and needs no edge, and a
+  scenario module needs no registration. Each engine primitive or DSL form newly introduced by a
   Phase 5 engine bead gets its own contract module. Existing coherent joint
   contracts cover coupled forms (`exhaust` in `awaken.contracts.ts`, `grant`
   in `cannot-be-targeted.contracts.ts`). Builders, journey hooks, and the
@@ -235,14 +235,14 @@ composition beads skip it.
      that starts with the subject entity's UUID, a `spec` for `runScenario`,
      and a `check` that asserts on the result with vitest's `expect`. Both
      types come from `src/engine/testing/scenario.ts`.
-   - **Registration:** in `src/content/specs/index.ts`, one default import,
-     `import <beadKey> from "./<bead-key>.scenarios";`, and one entry in
-     `SCENARIO_MODULES`, in slug order.
+   - **Discovery:** `src/content/specs/index.ts` finds every
+     `<bead-key>.scenarios.ts` module by `import.meta.glob`, in slug order;
+     a bead adds its module file and edits no shared list.
    - **Run:** `npm test -- src/content/specs/specs.test.ts`. That one test
-     file runs every registered scenario as its own case, named
+     file runs every discovered scenario as its own case, named
      `<bead-key> > <scenario name>`, on the content catalog plus the
      synthetic cards, in the `node` environment. Its registry case fails on
-     a module file that is not registered, a slug registered twice, a module
+     a module whose slug is not its file name, a slug used twice, a module
      with no scenarios, or a scenario name used twice.
 6. **Fuzz smoke:** `npm run fuzz:engine -- --games 300 --weight-uuids <bead entities>`.
    Decks are biased to include the bead's entities, and every game checks

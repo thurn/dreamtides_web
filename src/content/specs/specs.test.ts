@@ -1,5 +1,5 @@
 /**
- * Phase 5 scenario specs (D20): every scenario of every registered batch
+ * Phase 5 scenario specs (D20): every scenario of every discovered batch
  * module, each its own named case, run on the content engine. The synthetic
  * cards are in the catalog beside the content, so a spec's filler cards stay
  * fixed while the content changes.
@@ -31,7 +31,7 @@ const engine = createEngine(
 );
 
 describe("scenario registry", () => {
-  it("registers every scenario module exactly once under its file's slug", () => {
+  it("discovers every scenario module exactly once under its file's slug", () => {
     const files = readdirSync(new URL(".", import.meta.url))
       .filter((file) => file.endsWith(MODULE_SUFFIX))
       .map((file) => file.slice(0, -MODULE_SUFFIX.length));

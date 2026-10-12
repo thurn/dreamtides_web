@@ -2267,9 +2267,10 @@ Greedy unless `?ai=random|greedy` selects one.
   it directly. Phase 5 writes at most one scenario module per content bead, per D20:
   `src/content/specs/<bead-key>.scenarios.ts`, a plain module whose default
   export is a `ScenarioModule`, a slug and its `NamedScenario`s, each a name,
-  a spec, and a `check` on the result. `src/content/specs/index.ts` registers
-  every module, and one test file, `src/content/specs/specs.test.ts`, runs
-  each registered scenario as its own named case through `runNamedScenario`
+  a spec, and a `check` on the result. `src/content/specs/index.ts` discovers
+  every module (`import.meta.glob`, in slug order), so a bead edits no shared
+  list, and one test file, `src/content/specs/specs.test.ts`, runs
+  each discovered scenario as its own named case through `runNamedScenario`
   (`src/content/specs/runner.ts`), so the whole phase pays one file's module
   import ([D19](decisions.md#d19-test-pruning)). Like every engine and
   content test, it runs in the `node` environment:
