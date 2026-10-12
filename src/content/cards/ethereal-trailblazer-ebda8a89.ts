@@ -1,3 +1,6 @@
+import { characterYouControl, controls, ofSubtype } from "../../engine/dsl/builders";
+import { either, onDawn, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { gainEnergy, ifThen } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,11 @@ export default card({
   cardNumber: 15,
   art: { x: -0.294, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(either(onMaterialized(), onDawn()), ifThen(
+      controls(characterYouControl(ofSubtype("Warrior")), variant.amplified ? 2 : 3),
+      gainEnergy(1),
+    )),
+  ],
+  verifiedText: "2f7cffxadyv",
 });

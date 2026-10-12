@@ -1,3 +1,7 @@
+import { abandonCost, activated, discardCost, exhaustSelf, fromVoid, ofSubtype } from "../../engine/dsl/builders";
+import { materializeFigments, returnFromVoid } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import survivor from "../figments/survivor-5256888f";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +25,9 @@ export default card({
   cardNumber: 135,
   art: { x: 0, y: 0.243, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([exhaustSelf(), discardCost()], materializeFigments(parseFigmentId(survivor.id), 1, { spark: variant.amplified ? 2 : 1 })),
+    activated([exhaustSelf(), abandonCost(ofSubtype("Survivor"))], returnFromVoid(fromVoid({ cardType: "character", ...ofSubtype("Survivor") }), { toYourHand: true })),
+  ],
+  verifiedText: "t8e7vh7g88",
 });

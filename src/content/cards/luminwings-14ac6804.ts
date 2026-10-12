@@ -1,3 +1,6 @@
+import { characterYouControl, controls, ofSubtype } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { gainEnergy, ifThen } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,12 @@ export default card({
   cardNumber: 230,
   art: { x: 0.06, y: 0.369, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onDawn(), ifThen(
+      controls(characterYouControl(ofSubtype("Spirit Animal")), 3),
+      gainEnergy(variant.amplified ? 3 : 2),
+      gainEnergy(variant.amplified ? 2 : 1),
+    )),
+  ],
+  verifiedText: "ahssmzqpvo",
 });
