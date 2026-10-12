@@ -15,7 +15,7 @@ import type { ArrangeAnswer, Prompt } from "../prompts/types";
 import { PolicyRandom } from "../policy/random";
 import { cloneState } from "../state/clone";
 import { determinize } from "./determinize";
-import { keepDisclosures, showPrivately } from "./knowledge";
+import { isFixedChange, keepDisclosures, showPrivately } from "./knowledge";
 import { promptView, view } from "./view";
 import { catalog, v, p, fixture } from "./view.fixtures";
 
@@ -158,5 +158,14 @@ describe("event redaction invariant", () => {
     const queued: EngineEvent = { kind: "triggerQueued", source: shown, controller: "player", ability: 0, node: null, subject: hidden, subjectHiddenFrom: ["player"] };
     expect(strings(queued).has(hidden)).toBe(true);
     expect(eventRedactionViolations([drawn, queued], state, state)).toEqual([]);
+  });
+
+  it("classifies each targeted change kind as fixed or source-reading and rejects everything else", () => {
+    for (const kind of ["allTypes", "subtype", "keyword", "baseSpark", "spark", "cardCost", "playFrom", "cannotPlay"]) {
+      expect(isFixedChange(kind)).toBe(true);
+    }
+    for (const kind of ["abilities", "cost", "playLimit", "trigger", "unknown", "toString", "__proto__", "", 7, null, undefined]) {
+      expect(isFixedChange(kind)).toBe(false);
+    }
   });
 });

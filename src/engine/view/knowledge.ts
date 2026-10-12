@@ -69,9 +69,26 @@ export function rememberKnownCards(state: BattleState): void {
   }
 }
 
+/**
+ * Whether each targeted continuous change kind is fixed: its resolved semantics
+ * do not read its source. Keyed by every `FixedCardChange` kind, so a new
+ * targeted kind is a type error here until it is classified.
+ */
+const FIXED_CHANGE_KINDS: Readonly<Record<FixedCardChange["kind"], boolean>> = {
+  allTypes: true,
+  subtype: true,
+  keyword: true,
+  abilities: false,
+  baseSpark: true,
+  spark: true,
+  cardCost: true,
+  playFrom: true,
+  cannotPlay: true,
+};
+
 /** Fixed continuous changes whose resolved semantics do not read their source. */
 export function isFixedChange(kind: unknown): kind is FixedCardChange["kind"] {
-  return ["allTypes", "subtype", "keyword", "baseSpark", "spark", "cardCost", "playFrom", "cannotPlay"].some((allowed) => allowed === kind);
+  return typeof kind === "string" && Object.prototype.hasOwnProperty.call(FIXED_CHANGE_KINDS, kind) && FIXED_CHANGE_KINDS[kind as FixedCardChange["kind"]];
 }
 
 /** Narrows observed fixed permanent effects to the snapshot's data model. */
