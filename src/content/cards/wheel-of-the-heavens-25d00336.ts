@@ -1,3 +1,5 @@
+import { event, everyIn } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,14 @@ export default card({
   cardNumber: 7,
   art: { x: 0.21, y: 0.369, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(
+      p.sequence(
+        p.eachPlayer(p.shuffleInto([everyIn("hand"), everyIn("void")])),
+        p.eachPlayer(p.draw(5)),
+        p.banishSelfOnResolve(),
+      ),
+    ),
+  ],
+  verifiedText: "11fqyq4vzgw",
 });

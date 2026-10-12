@@ -597,7 +597,8 @@ cards and abilities require the stack to be empty at the moment they are played.
 
 **Stack resolution:** Cards and activated abilities on the stack resolve
 last-in, first-out. An event resolves by applying its effect and moving to the
-void; a character resolves by entering play.
+void, unless its effect already moved it off the stack, as "Banish this card"
+does; a character resolves by entering play.
 
 **Conditional alternatives:** An effect written "Do A. If Y, do B instead"
 checks Y as that instruction resolves, before doing A. If Y holds, do B;
@@ -987,6 +988,16 @@ opponent's void" chooses those void cards as targets (see
 [Targeting](#targeting)). A card banished from a hand or a deck is shown to
 both players as it enters the Banished zone, and a created card ceases to exist
 instead (see [Created Cards](#created-cards)).
+
+"Banish this card" on an event moves that event from the stack to its owner's
+Banished zone as that instruction resolves, in printed order, so "Each player
+shuffles their hand and void into their deck, then draws 5 cards. Banish this
+card." banishes it after the draws. Until then it is on the stack, never in the
+void, so its own "shuffle your void" does not move it, and once banished it does
+not go to the void as it finishes resolving. A Prevented event never resolves
+and goes where the Prevent sends it, the void unless stated otherwise. A copy
+ceases to exist instead (see [Created Cards](#created-cards)), and a reclaimed
+event is banished either way (see Reclaim).
 
 "Banish a chosen character from the opponent's hand" is chosen like a [chosen
 discard](#zones): you choose as that effect resolves, and only the cards that
@@ -1405,7 +1416,8 @@ them for everyone.
 ## Ability Types
 
 **Event abilities** — Effects printed on event cards. They resolve when the event
-resolves from the stack, then the event moves to the void.
+resolves from the stack, then the event moves to the void unless they moved it
+(see Banish).
 
 **Triggered abilities** — Abilities that fire automatically when a game event
 occurs. The named (▸) triggers are:

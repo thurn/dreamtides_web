@@ -259,7 +259,7 @@ export class EventRedaction {
     const problems: string[] = [];
     const shuffled = new Set<InstanceId>();
     const shown: Record<Side, Set<InstanceId>> = { player: new Set(), enemy: new Set() };
-    for (const event of events) {
+    for (const [index, event] of events.entries()) {
       for (const viewer of SIDES) {
         const seen = eventSeenBy(event, viewer, after);
         if (seen === null) continue;
@@ -295,7 +295,10 @@ export class EventRedaction {
         if (id !== null && shownDuring(event, viewer, id)) shown[viewer].add(id);
       }
       if (event.kind === "shuffledIntoDeck") {
-        for (const id of [...before.sides[event.side].deck, ...after.sides[event.side].deck, ...event.cards]) {
+        // A card a later shuffle of the same deck names was not yet in it, as when each player shuffles in turn.
+        const later = new Set(events.slice(index + 1).flatMap((next) => (next.kind === "shuffledIntoDeck" && next.side === event.side ? next.cards : [])));
+        const remaining = after.sides[event.side].deck.filter((id) => !later.has(id));
+        for (const id of [...before.sides[event.side].deck, ...remaining, ...event.cards]) {
           if (id !== null) {
             shuffled.add(id);
             for (const viewer of SIDES) shown[viewer].delete(id);

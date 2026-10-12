@@ -18,6 +18,7 @@ import {
   awakenPrimitive,
   banishPrimitive,
   banishCardsPrimitive,
+  banishSelfOnResolvePrimitive,
   banishUntilPrimitive,
   changeCardCostPrimitive,
   chooseOnePrimitive,
@@ -105,6 +106,9 @@ const DEFINITIONS = {
   },
   get banishCards() {
     return banishCardsPrimitive;
+  },
+  get banishSelfOnResolve() {
+    return banishSelfOnResolvePrimitive;
   },
   get banishUntil() {
     return banishUntilPrimitive;

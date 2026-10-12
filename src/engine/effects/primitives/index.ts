@@ -4,6 +4,7 @@ export * from "./abandon";
 export * from "./awaken";
 export * from "./banish";
 export * from "./banish-cards";
+export * from "./banish-self-on-resolve";
 export * from "./banish-until";
 export * from "./choose-one";
 export * from "./choose-player";

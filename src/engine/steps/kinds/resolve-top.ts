@@ -10,8 +10,9 @@ import type { StepContext, StepDefinition } from "../types";
  * Resolves the top item of the stack. A character enters play in the
  * back-rank position it was dropped on if still open, else its controller's
  * leftmost open one; an event goes to its owner's void (a copy or other
- * created card ceases to exist instead); an activated ability applies its
- * effect and leaves the stack.
+ * created card ceases to exist instead) unless its effect already moved it
+ * off the stack, as "Banish this card" does (`banishSelfOnResolve`); an
+ * activated ability applies its effect and leaves the stack.
  * Afterwards the resolved item's controller receives priority if the stack is
  * still non-empty (D13).
  */
@@ -47,7 +48,7 @@ function resolveCard(ctx: StepContext, item: CardStackItem): void {
       instance.status.x = item.x;
       enterPlay(ctx, item.instance, item.controller, slot);
     }
-  } else {
+  } else if (state.instances[item.instance]?.zone === "stack") {
     moveInstance(ctx, item.instance, "void");
   }
 }
