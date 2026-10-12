@@ -679,5 +679,25 @@
     "sourceDuringServing": "Six source/test hashes frozen for both runs; QA base HEAD was dirty59ce, bound by actual manifest. No code/test/evidence edits during ownservers.",
     "lease": "First automatic slot0/5174 ended normally. Corrected automatic slot1/5274/providerf941... ended normally. At final audit slot1/current5274 are peer-reused with differenttoken; only own lifetime proven, sharedrecords/listener untouched."
   },
-  "resources": "All24 recorded finite PID identities absent at19:44:30.927330. No owned writer/job/server/provider/client/lease remains; no shared recovery or quarantine. Parent alone cold Sol/promotion owed."
+  "resources": "All24 recorded finite PID identities absent at19:44:30.927330. No owned writer/job/server/provider/client/lease remains; no shared recovery or quarantine. Parent alone cold Sol/promotion owed.",
+  "retrospectiveWindowCorrection": {
+    "correctedBy": "hv-umm2.593",
+    "observedAt": "2026-10-12T23:30:23.806988+00:00",
+    "source": "ed9ea4616ce7c7c3f8b9df0b3ba720a3835f69de",
+    "sourceGitCommitter": "2026-10-12T12:48:35-07:00",
+    "sourceFrictionSha256": "ff3ee4d158021c9b02b5146d4226a4392605b18ce6730bb1c4e1ab0493b32447",
+    "sourceMeasurementSha256": "8ba8e2d937ab5fd9b9d61d644bfa45f38bcbcb5844d029e2cf704b282ab214f8",
+    "originalWindow": {
+      "start": "2026-10-12T19:15:18+00:00",
+      "end": "2026-10-12T19:47:00.933932+00:00"
+    },
+    "originalImplementMin": 31.715565533333333,
+    "correctedWindow": {
+      "start": "2026-10-12T19:15:18+00:00",
+      "end": "2026-10-12T19:48:35Z"
+    },
+    "correctedImplementMin": 33.28333333333333,
+    "gitWholeSecondFinalizationTailS": 94.066068,
+    "basis": "Original start remains a conservative native-claim ownership proxy; exact implementation-helper dispatch is UNKNOWN. Automatic Git committer endpoint is observed from the authoritative immutable final source at whole-second precision. Gross elapsed includes finalization. Original measurement objects, prospective ACK cutoffs and command/process receipts remain intact; Git metadata does not invent exact process start/end."
+  }
 }

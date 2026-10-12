@@ -149,5 +149,25 @@
     "knip": "passed",
     "nativeQA": "QA4 complete functional desktop/mobile plus QA5 rendered concealed badge captures; corrected2latestPASS"
   },
-  "validationScope": "No production entities, weighted300, repeated catalog sweep, extra test entrypoint/jsdom, private browser dispatch/state patch, renderer or shared config change. Parent owns exact cold Sol core review/certified candidate."
+  "validationScope": "No production entities, weighted300, repeated catalog sweep, extra test entrypoint/jsdom, private browser dispatch/state patch, renderer or shared config change. Parent owns exact cold Sol core review/certified candidate.",
+  "retrospectiveWindowCorrection": {
+    "correctedBy": "hv-umm2.593",
+    "observedAt": "2026-10-12T23:30:23.808646+00:00",
+    "source": "c4ed2eba8e1d4f338406838a24751b5fcdc78375",
+    "sourceGitCommitter": "2026-10-12T14:24:36-07:00",
+    "sourceFrictionSha256": "657e64f5b39b9e1ee36339d4a03d4d6c172cb5f8d50e753aeb41bce19a1eb5bf",
+    "sourceMeasurementSha256": "dba69851b76aa0b3aa295abb445048a6587ec5d1263febdb7ab92a2a9a11048a",
+    "originalWindow": {
+      "start": "2026-10-12T20:11:12+00:00",
+      "end": "2026-10-12T21:21:13.210996+00:00"
+    },
+    "originalImplementMin": 70.0201832667,
+    "correctedWindow": {
+      "start": "2026-10-12T20:11:12+00:00",
+      "end": "2026-10-12T21:24:36Z"
+    },
+    "correctedImplementMin": 73.4,
+    "gitWholeSecondFinalizationTailS": 202.789004,
+    "basis": "Original start remains a conservative native-claim ownership proxy; exact implementation-helper dispatch is UNKNOWN. Automatic Git committer endpoint is observed from the authoritative immutable final source at whole-second precision. Gross elapsed includes finalization. Original measurement objects, prospective ACK cutoffs and command/process receipts remain intact; Git metadata does not invent exact process start/end."
+  }
 }

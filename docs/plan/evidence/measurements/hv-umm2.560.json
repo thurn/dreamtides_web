@@ -279,5 +279,25 @@
     "finiteReads": "Short read/tool/edit/resource operations without independently sampled subprocess IDs or clocks retain tool observations; unknown timing/PIDs are not fabricated."
   },
   "coverage": "Two coherent plain contracts plus owning saved validation, actual public Engine/fold steps. Production cards and their weighted/sampled native QA remain206, with no560production/card/visual acceptance claimed.",
-  "preExisting": "docs/plan/evidence/pre-existing/hv-umm2.560.md"
+  "preExisting": "docs/plan/evidence/pre-existing/hv-umm2.560.md",
+  "retrospectiveWindowCorrection": {
+    "correctedBy": "hv-umm2.593",
+    "observedAt": "2026-10-12T23:30:23.807892+00:00",
+    "source": "c06a407db00bf779354086d275a04d50a79b9f6e",
+    "sourceGitCommitter": "2026-10-12T16:06:48-07:00",
+    "sourceFrictionSha256": "db5d7a3d341ec8df09c499305881af3f19a878e2f7c7cb69a1f98eac93c44746",
+    "sourceMeasurementSha256": "b6da53654d85dad0db992b2fb1750a41b06478330788844fa1c5320fbe4f98ef",
+    "originalWindow": {
+      "start": "2026-10-12T21:55:41Z",
+      "end": "2026-10-12T23:04:28.849234Z"
+    },
+    "originalImplementMin": 68.79748723333334,
+    "correctedWindow": {
+      "start": "2026-10-12T21:55:41Z",
+      "end": "2026-10-12T23:06:48Z"
+    },
+    "correctedImplementMin": 71.11666666666666,
+    "gitWholeSecondFinalizationTailS": 139.150766,
+    "basis": "Original start remains a conservative native-claim ownership proxy; exact implementation-helper dispatch is UNKNOWN. Automatic Git committer endpoint is observed from the authoritative immutable final source at whole-second precision. Gross elapsed includes finalization. Original measurement objects, prospective ACK cutoffs and command/process receipts remain intact; Git metadata does not invent exact process start/end."
+  }
 }

@@ -1,0 +1,715 @@
+{
+  "bead": "hv-umm2.593",
+  "base": "36c5e550e4e9e84be5c01cb0e1c88109cc4801db",
+  "scope": "Documentation retrospective with six admitted narrow historical JSON measurement corrections; no source-code/test/runtime/UI changes.",
+  "auditFreeze": {
+    "at": "2026-10-12T23:22:35.726307+00:00",
+    "base": "36c5e550e4e9e84be5c01cb0e1c88109cc4801db",
+    "coverage": [
+      "hv-77u6",
+      "hv-aq9d",
+      "hv-by8q",
+      "hv-qyu6",
+      "hv-umm2.217",
+      "hv-umm2.219",
+      "hv-umm2.221",
+      "hv-umm2.222",
+      "hv-umm2.223",
+      "hv-umm2.224",
+      "hv-umm2.228",
+      "hv-umm2.231",
+      "hv-umm2.242",
+      "hv-umm2.260",
+      "hv-umm2.289",
+      "hv-umm2.560",
+      "hv-umm2.566",
+      "hv-umm2.573",
+      "hv-umm2.574",
+      "hv-umm2.575",
+      "hv-umm2.576",
+      "hv-umm2.577",
+      "hv-umm2.578",
+      "hv-umm2.579",
+      "hv-wp4u"
+    ],
+    "sourceFiles": [
+      {
+        "bead": "hv-77u6",
+        "path": "docs/plan/evidence/friction/hv-77u6.json",
+        "sha256": "1b1e7161824f8d25c8b95b83a0806a92848630ebfcf18e31fc936143734e8231",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-77u6.json"
+      },
+      {
+        "bead": "hv-77u6",
+        "path": "docs/plan/evidence/measurements/hv-77u6.json",
+        "sha256": "9f4dcae52e29f510786c068f534a5b0593d30546e9fde49109ee09c022d6d5be",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-77u6.json"
+      },
+      {
+        "bead": "hv-aq9d",
+        "path": "docs/plan/evidence/friction/hv-aq9d.json",
+        "sha256": "ed9292126cb7d3acdf94a5eee9fa9700b91465e0e6085b27c21f08f4227d259f",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-aq9d.json"
+      },
+      {
+        "bead": "hv-aq9d",
+        "path": "docs/plan/evidence/measurements/hv-aq9d.json",
+        "sha256": "ddb200a31f35642258b3a767d5ad0e5d71eac54874798e9d851072e41d2e95dd",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-aq9d.json"
+      },
+      {
+        "bead": "hv-by8q",
+        "path": "docs/plan/evidence/friction/hv-by8q.json",
+        "sha256": "718fdf72d7ae0f3345871caed9415381a818ad143cea913aba3a5c487cd9d785",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-by8q.json"
+      },
+      {
+        "bead": "hv-by8q",
+        "path": "docs/plan/evidence/measurements/hv-by8q.json",
+        "sha256": "853d7328dda355715d1b1070fc380a1291a6f451947067e5535edf32d6aac26d",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-by8q.json"
+      },
+      {
+        "bead": "hv-qyu6",
+        "path": "docs/plan/evidence/friction/hv-qyu6.json",
+        "sha256": "3d9ad64b8e5fca36db66816b7cf1eba4f07e6ecf4d1262cc92443f41aa5c5e3d",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-qyu6.json"
+      },
+      {
+        "bead": "hv-qyu6",
+        "path": "docs/plan/evidence/measurements/hv-qyu6.json",
+        "sha256": "c87c25d483689d59e8b4b23756b781b5e1f77d3d078d7b251291070d91ebbe0a",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-qyu6.json"
+      },
+      {
+        "bead": "hv-umm2.217",
+        "path": "docs/plan/evidence/friction/hv-umm2.217.json",
+        "sha256": "ce6785dbe80b6254c478ee6b442a47bfff5fed9162ab571ada429ae09c2bce1c",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.217.json"
+      },
+      {
+        "bead": "hv-umm2.217",
+        "path": "docs/plan/evidence/measurements/hv-umm2.217.json",
+        "sha256": "6da3897a3d2d18370cf73fb79653f57c2f481d2c6eeb914880cc850f6296746f",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.217.json"
+      },
+      {
+        "bead": "hv-umm2.219",
+        "path": "docs/plan/evidence/friction/hv-umm2.219.json",
+        "sha256": "f442dcac9684970e366142bb358fa5c062a1605748fc132c7c72dee023f0aae6",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.219.json"
+      },
+      {
+        "bead": "hv-umm2.219",
+        "path": "docs/plan/evidence/measurements/hv-umm2.219.json",
+        "sha256": "014bbfbb78f1c49263d8665c5004be949a79473747bbbc94f84bb35e51b9f7d9",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.219.json"
+      },
+      {
+        "bead": "hv-umm2.221",
+        "path": "docs/plan/evidence/friction/hv-umm2.221.json",
+        "sha256": "53646c296f5eb71ea13f690c6b45de15a43333c7e15e8be5054a4a2e4ebc843c",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.221.json"
+      },
+      {
+        "bead": "hv-umm2.221",
+        "path": "docs/plan/evidence/measurements/hv-umm2.221.json",
+        "sha256": "1b22dbd291497fcce7e8f5684740dc7ba84a5e0d2b52baa690c1fde251f64dfd",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.221.json"
+      },
+      {
+        "bead": "hv-umm2.222",
+        "path": "docs/plan/evidence/friction/hv-umm2.222.json",
+        "sha256": "caaf104957f85bb3d158438740fb5df85214ef6568b06e8b84fe0a1087e14873",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.222.json"
+      },
+      {
+        "bead": "hv-umm2.222",
+        "path": "docs/plan/evidence/measurements/hv-umm2.222.json",
+        "sha256": "10da668a708044b19bddd299d36d48d458dccf583fb21eb401270f10749f3e8a",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.222.json"
+      },
+      {
+        "bead": "hv-umm2.223",
+        "path": "docs/plan/evidence/friction/hv-umm2.223.json",
+        "sha256": "3754b6609d66ed959b9c58f01434cd1a23e6f8784bd06d322363f9e243b3877b",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.223.json"
+      },
+      {
+        "bead": "hv-umm2.223",
+        "path": "docs/plan/evidence/measurements/hv-umm2.223.json",
+        "sha256": "aa4c8b1bf291b0d238d6fea7d8e7b0227c0de6fbd2025ada987d61627101bf66",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.223.json"
+      },
+      {
+        "bead": "hv-umm2.224",
+        "path": "docs/plan/evidence/friction/hv-umm2.224.json",
+        "sha256": "9fa39103a2b31b6c3a3e5ecdb26edb6bc77d71acde65aaa9b16a7c8608cb3213",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.224.json"
+      },
+      {
+        "bead": "hv-umm2.224",
+        "path": "docs/plan/evidence/measurements/hv-umm2.224.json",
+        "sha256": "9ebec57261c8b068aabf606b36a79672e1f8809eb554bac6c65d52d2141cc6cd",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.224.json"
+      },
+      {
+        "bead": "hv-umm2.228",
+        "path": "docs/plan/evidence/friction/hv-umm2.228.json",
+        "sha256": "ce6f3e01e7f0fd1e018e698a8b9547860cfa160ba9769a9dfd742ae7ab21ad8c",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.228.json"
+      },
+      {
+        "bead": "hv-umm2.228",
+        "path": "docs/plan/evidence/measurements/hv-umm2.228.json",
+        "sha256": "b16e1f22e92260e13f0af6fe068819c25765077064c5e1abc380b7a8bb69c003",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.228.json"
+      },
+      {
+        "bead": "hv-umm2.231",
+        "path": "docs/plan/evidence/friction/hv-umm2.231.json",
+        "sha256": "acbf5bcd755d86326639b6f1cac0e89de0dc90258b0c39d7fe5f6699e463cda7",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.231.json"
+      },
+      {
+        "bead": "hv-umm2.231",
+        "path": "docs/plan/evidence/measurements/hv-umm2.231.json",
+        "sha256": "fa34a8d8b55e4f1c73184e627dd63cf0d0bc9ef65dd702c6ab31dfaffda06d4a",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.231.json"
+      },
+      {
+        "bead": "hv-umm2.242",
+        "path": "docs/plan/evidence/friction/hv-umm2.242.json",
+        "sha256": "b0c1a50222df860f761cf574a99f3d72a6f8a5df5f7c12ea41ad5d6680f32fa1",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.242.json"
+      },
+      {
+        "bead": "hv-umm2.242",
+        "path": "docs/plan/evidence/measurements/hv-umm2.242.json",
+        "sha256": "7991787d44b1ed5392c200d68d30615bf0cbacb114b2e470364493454cbc8934",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.242.json"
+      },
+      {
+        "bead": "hv-umm2.260",
+        "path": "docs/plan/evidence/friction/hv-umm2.260.json",
+        "sha256": "a304ba48009454b62d26f790ee8e97b6a8b7a0514b5dde38fcac633d514af12f",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.260.json"
+      },
+      {
+        "bead": "hv-umm2.260",
+        "path": "docs/plan/evidence/measurements/hv-umm2.260.json",
+        "sha256": "7f50013c63e45785ae460bee5918d8d0e07f28491c30ae6702cd07df78fabc6e",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.260.json"
+      },
+      {
+        "bead": "hv-umm2.289",
+        "path": "docs/plan/evidence/friction/hv-umm2.289.json",
+        "sha256": "322317a034d36a14e57594c34d1151eb40996293a5f9fa82044d417753f5b274",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.289.json"
+      },
+      {
+        "bead": "hv-umm2.289",
+        "path": "docs/plan/evidence/measurements/hv-umm2.289.json",
+        "sha256": "54c38fcdd8717dcdb239b02506560e7005f427ad2f13db390a5d6c478026558f",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.289.json"
+      },
+      {
+        "bead": "hv-umm2.560",
+        "path": "docs/plan/evidence/friction/hv-umm2.560.json",
+        "sha256": "db5d7a3d341ec8df09c499305881af3f19a878e2f7c7cb69a1f98eac93c44746",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.560.json"
+      },
+      {
+        "bead": "hv-umm2.560",
+        "path": "docs/plan/evidence/measurements/hv-umm2.560.json",
+        "sha256": "b6da53654d85dad0db992b2fb1750a41b06478330788844fa1c5320fbe4f98ef",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.560.json"
+      },
+      {
+        "bead": "hv-umm2.566",
+        "path": "docs/plan/evidence/friction/hv-umm2.566.json",
+        "sha256": "ff3ee4d158021c9b02b5146d4226a4392605b18ce6730bb1c4e1ab0493b32447",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.566.json"
+      },
+      {
+        "bead": "hv-umm2.566",
+        "path": "docs/plan/evidence/measurements/hv-umm2.566.json",
+        "sha256": "8ba8e2d937ab5fd9b9d61d644bfa45f38bcbcb5844d029e2cf704b282ab214f8",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.566.json"
+      },
+      {
+        "bead": "hv-umm2.573",
+        "path": "docs/plan/evidence/friction/hv-umm2.573.json",
+        "sha256": "0770c69f8fcbce0c75eef63d5d82064116a73398481db365e442e24b4aab000c",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.573.json"
+      },
+      {
+        "bead": "hv-umm2.573",
+        "path": "docs/plan/evidence/measurements/hv-umm2.573.json",
+        "sha256": "5bc9ac82bf63e236beb02f1109ee6c27d186c765dbbdada4537386faeedd5340",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.573.json"
+      },
+      {
+        "bead": "hv-umm2.574",
+        "path": "docs/plan/evidence/friction/hv-umm2.574.json",
+        "sha256": "f501ce35f468246112b5ba6e216f5b046407e25c33f73eea0e1573a7ff595f7e",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.574.json"
+      },
+      {
+        "bead": "hv-umm2.574",
+        "path": "docs/plan/evidence/measurements/hv-umm2.574.json",
+        "sha256": "106307afbaf2afc67c33bbfec995775f30b0a753036757ea6d7741ee2a41f921",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.574.json"
+      },
+      {
+        "bead": "hv-umm2.575",
+        "path": "docs/plan/evidence/friction/hv-umm2.575.json",
+        "sha256": "10ea8aaebeb01b223de062cf916f53174afddec1af9c24ea846b877f342d0b03",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.575.json"
+      },
+      {
+        "bead": "hv-umm2.575",
+        "path": "docs/plan/evidence/measurements/hv-umm2.575.json",
+        "sha256": "23d2df29715382d3ba5888e24046d800e507bb757f65720b5aac00ec42955bd9",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.575.json"
+      },
+      {
+        "bead": "hv-umm2.576",
+        "path": "docs/plan/evidence/friction/hv-umm2.576.json",
+        "sha256": "bf448d92f6bb43c1fc2b8ca94a1909ae37eaedf07f3f19d00594255cf5c15d42",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.576.json"
+      },
+      {
+        "bead": "hv-umm2.576",
+        "path": "docs/plan/evidence/measurements/hv-umm2.576.json",
+        "sha256": "b5a416a91eeae800960d5d1c10bfc413f7cccc76d7b8e2ec589aea2c3ac60fb4",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.576.json"
+      },
+      {
+        "bead": "hv-umm2.577",
+        "path": "docs/plan/evidence/friction/hv-umm2.577.json",
+        "sha256": "fca0eec6564c93a48ba55c91e55a7a7d0ab48f61c49ceff22c19646e9591a06e",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.577.json"
+      },
+      {
+        "bead": "hv-umm2.577",
+        "path": "docs/plan/evidence/measurements/hv-umm2.577.json",
+        "sha256": "cd8e5256375294ca5ab8b33387a8668f8a9963952b37ca6aa1c9d611901adf4d",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.577.json"
+      },
+      {
+        "bead": "hv-umm2.578",
+        "path": "docs/plan/evidence/friction/hv-umm2.578.json",
+        "sha256": "6579dedde1f0bea90b9fe3d9ed2859770d1077821e69c8694720283c08c9a489",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.578.json"
+      },
+      {
+        "bead": "hv-umm2.578",
+        "path": "docs/plan/evidence/measurements/hv-umm2.578.json",
+        "sha256": "a23879cea037769e111a61ca83127b23e39b6e5c3edc463f004139e1afa13368",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.578.json"
+      },
+      {
+        "bead": "hv-umm2.579",
+        "path": "docs/plan/evidence/friction/hv-umm2.579.json",
+        "sha256": "fe5cf8b42cd5df8dce6329fbe2fd8dca370452c16e0a8a7e39219291318eedb5",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-umm2.579.json"
+      },
+      {
+        "bead": "hv-umm2.579",
+        "path": "docs/plan/evidence/measurements/hv-umm2.579.json",
+        "sha256": "a4d572c389aabf87d84b379bd15195db4f2b6cc9606a932009be60fe0b465b9b",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-umm2.579.json"
+      },
+      {
+        "bead": "hv-wp4u",
+        "path": "docs/plan/evidence/friction/hv-wp4u.json",
+        "sha256": "657e64f5b39b9e1ee36339d4a03d4d6c172cb5f8d50e753aeb41bce19a1eb5bf",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction/hv-wp4u.json"
+      },
+      {
+        "bead": "hv-wp4u",
+        "path": "docs/plan/evidence/measurements/hv-wp4u.json",
+        "sha256": "dba69851b76aa0b3aa295abb445048a6587ec5d1263febdb7ab92a2a9a11048a",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/measurements/hv-wp4u.json"
+      },
+      {
+        "path": "docs/plan/evidence/introspection.jsonl",
+        "sha256": "57edb233f72c6c48d6b4d8e754f480e8ffd3912793b1da4508818347769e1ae5",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/introspection.jsonl"
+      },
+      {
+        "path": "docs/plan/evidence/friction-tags.json",
+        "sha256": "0edbf5483483c7ea443f0316c98970b5c8f1f2ed3afbf557f1d2b4f8349cb266",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/friction-tags.json"
+      },
+      {
+        "path": "docs/plan/evidence/metrics.md",
+        "sha256": "515a6ffbd6de852537c1d6f27e9e6d9ba7a4d66cb800e6a03355b0fc38452b41",
+        "copiedRelative": "frozen-inputs/docs/plan/evidence/metrics.md"
+      }
+    ],
+    "qualifiedScope": "All25 currently uncovered Phase5 records at audit freeze on lateststaging. Later landings excluded; actual agent dispatch retained separately. Native all25closed/completed; historic source timestamps can precede lastretro and are not reattributed.",
+    "metricsPathCorrection": {
+      "at": "2026-10-12T23:22:51.732420+00:00",
+      "initial": "docs/plan/metrics.md missing",
+      "actual": "docs/plan/evidence/metrics.md",
+      "resolvedBeforeSageDispatch": true
+    }
+  },
+  "auditorDispatch": {
+    "dispatch": "2026-10-12T23:23:50.778Z",
+    "call_id": "call_493d36706a2544288996ffd611674015",
+    "task": "/root/phase5_retrospective593",
+    "journal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-43-09-01a1305a-56c7-7f63-bcb4-bfed10880d6d.jsonl",
+    "bead": "hv-umm2.593",
+    "scope": "sole fresh read-only Sage; parent authors evidence afterterminal"
+  },
+  "authorWindow": {
+    "kind": "parent self-implementation",
+    "start": "2026-10-12T23:20:39Z",
+    "basis": "Conservative post-claim native ownership proxy, includes own setup, research, fresh read-only Sage audit, coordination and verification. Exact model start UNKNOWN; Sage dispatch is separate.",
+    "endpoint": "2026-10-12T23:34:23.779964Z",
+    "endpointStatus": "FINAL PROSPECTIVE cutoff before immediate serial schema/whitespace/Git; automatic committer/process outcome captured read-only in ignored QA after execution. Whole-second semantic difference must remain qualified.",
+    "grossMinAtCutoff": 13.746332733333332
+  },
+  "parentSetup": {
+    "install": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retro593-root",
+      "pid": 31875,
+      "pgid": 31875,
+      "start": "2026-10-12T23:21:22.852936+00:00",
+      "end": "2026-10-12T23:21:25.206869+00:00",
+      "elapsedS": 2.3538376670039725,
+      "exit": 0
+    },
+    "metricsPathCorrection": {
+      "at": "2026-10-12T23:22:51.732420+00:00",
+      "initial": "docs/plan/metrics.md missing",
+      "actual": "docs/plan/evidence/metrics.md",
+      "resolvedBeforeSageDispatch": true
+    },
+    "freshNativeClaim": "2026-10-12T23:20:39Z"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual npm run review start 2026-10-12T23:32:28.380549+00:00"
+      }
+    }
+  },
+  "nativeClosure": {
+    "records": 25,
+    "allClosedCompleted": true,
+    "raw": "audit/native-inputs.json"
+  },
+  "nativeDelivery": {
+    "selectedFinalCandidates": 25,
+    "promoted": 25,
+    "automaticCleanupCompleted": 23,
+    "manualLifecycleQualified": [
+      "hv-umm2.224",
+      "hv-umm2.228"
+    ],
+    "rawDirectory": "audit/candidates/",
+    "successfulReads": 50,
+    "readerWrappersAllTerminal": true
+  },
+  "history": {
+    "raw": "audit/tollgate-history.json",
+    "events": 500,
+    "sequences": [
+      22420,
+      22919
+    ],
+    "start": "2026-10-12T20:59:27.788740Z",
+    "end": "2026-10-12T23:21:37.730684Z",
+    "scope": "Partial supported history; exact native status and framed gate logs supplement all selected finals."
+  },
+  "gate": {
+    "stepSumMedianS": 87.74,
+    "stepSumRangeS": [
+      16.785,
+      122.321
+    ],
+    "n": 25,
+    "overTarget60": 18,
+    "overTrigger90": 9,
+    "wholeSuiteSelections": 18,
+    "consecutiveOver90": [
+      "hv-umm2.222",
+      "hv-umm2.242",
+      "hv-umm2.560"
+    ],
+    "consecutiveTestStageStartLoads": [
+      6.7285,
+      24.062,
+      14.6382
+    ],
+    "adjacentComparable": [
+      false,
+      false
+    ],
+    "comparisonPractice": "Absolute difference <= max(2,20% of lower starting load), existing387 practice.",
+    "wholeStageTrace": "UNKNOWN",
+    "wholeStageMeanLoad": "UNKNOWN",
+    "dependencyLoad": "UNKNOWN",
+    "distinctNewBudgetTrigger": false,
+    "qualification": "Step sums exclude candidate admin/queue; >60 target exceedance is separate from >90 monitored trigger. Starting samples do not prove controlled sustained low load."
+  },
+  "release": {
+    "snapshotRaw": "audit/release-status.json",
+    "state": "green",
+    "lagCommits": 0,
+    "target": "36c5e550e4e9e84be5c01cb0e1c88109cc4801db",
+    "holds": [],
+    "promotionPause": null,
+    "activeRun": null,
+    "retainedGreenRuns": 24,
+    "stepSumMedianS": 216.038,
+    "stepSumRangeS": [
+      200.494,
+      259.197
+    ],
+    "dependencyMedianS": 4.579,
+    "fullReviewMedianS": 107.785,
+    "fuzzMedianS": 102.937,
+    "loadTraces": "UNKNOWN",
+    "qualification": "Retained releases are not a one-to-one mapping to25beads; no publication assertion or comparable-fuzz conclusion."
+  },
+  "localFields": {
+    "reviewN": 25,
+    "reviewMedianS": 45.294636,
+    "focusedN": 23,
+    "focusedMedianS": 7.028125,
+    "qualification": "Heterogeneous selectors, aggregate attempts and combined full-run fields; informational, not comparable single-file measurements."
+  },
+  "testFootprint": {
+    "configuredEntrypoints": 361,
+    "jsdomPragmas": 82,
+    "physicalNewlineLines": 86177,
+    "engineContentJsdomMatches": [],
+    "chronologicalVs573": {
+      "files": 10,
+      "lines": 1884
+    },
+    "heterogeneousFrictionDelta": {
+      "files": 13,
+      "lines": 3955,
+      "jsdomFiles": 0
+    },
+    "plainVsConfiguredQualification": "231plaincontracts1/+182/0 vsconfigured0;222plainKellscenario1/+91/0 vscompactconfiguredfile0 separately.",
+    "survivingLargeFileReasons": "SixD38tutorialcontracts;572tooling-card-lab519;573unchangedcoherentfrictionCLI510. Counts have no withdrawn ceiling.",
+    "raw": "audit/static-entrypoints.json"
+  },
+  "budgetDisposition": {
+    "newRevision": false,
+    "controlledLowLoadD19Compliance": "UNESTABLISHED",
+    "retainedObligations": [
+      "hv-umm2.526",
+      "hv-umm2.46"
+    ],
+    "confirmedControlledOverBudgetResponse": "D19 test-cut required; timings neither waive nor fulfill duty."
+  },
+  "existingFindingHomes": [
+    "hv-umm2.592",
+    "hv-o3w0"
+  ],
+  "newImprovements": [],
+  "newTriggerDispositions": [],
+  "historicalUnknownsPreserved": 41,
+  "phase5FiredTagsDispositioned": 13,
+  "windowCorrections": [
+    {
+      "bead": "hv-umm2.566",
+      "source": "ed9ea4616ce7c7c3f8b9df0b3ba720a3835f69de",
+      "gitCommitter": "2026-10-12T12:48:35-07:00",
+      "oldFrictionSha256": "ff3ee4d158021c9b02b5146d4226a4392605b18ce6730bb1c4e1ab0493b32447",
+      "currentFrictionSha256": "ff3ee4d158021c9b02b5146d4226a4392605b18ce6730bb1c4e1ab0493b32447",
+      "oldMeasurementSha256": "8ba8e2d937ab5fd9b9d61d644bfa45f38bcbcb5844d029e2cf704b282ab214f8",
+      "recordedWindow": {
+        "start": "2026-10-12T19:15:18+00:00",
+        "end": "2026-10-12T19:47:00.933932+00:00"
+      },
+      "oldImplementMin": 31.715565533333333,
+      "correctedEnd": "2026-10-12T19:48:35Z",
+      "correctedGrossMin": 33.28333333333333,
+      "tailS": 94.066068,
+      "measurementKeys": [
+        "bead",
+        "base",
+        "status",
+        "measurementWindow",
+        "schemaNormalization",
+        "scope",
+        "sourceManifest",
+        "commands",
+        "correctionWindows",
+        "readCorrections",
+        "baseline",
+        "coreFailurePaths",
+        "qa",
+        "resources"
+      ]
+    },
+    {
+      "bead": "hv-umm2.560",
+      "source": "c06a407db00bf779354086d275a04d50a79b9f6e",
+      "gitCommitter": "2026-10-12T16:06:48-07:00",
+      "oldFrictionSha256": "db5d7a3d341ec8df09c499305881af3f19a878e2f7c7cb69a1f98eac93c44746",
+      "currentFrictionSha256": "db5d7a3d341ec8df09c499305881af3f19a878e2f7c7cb69a1f98eac93c44746",
+      "oldMeasurementSha256": "b6da53654d85dad0db992b2fb1750a41b06478330788844fa1c5320fbe4f98ef",
+      "recordedWindow": {
+        "start": "2026-10-12T21:55:41Z",
+        "end": "2026-10-12T23:04:28.849234Z"
+      },
+      "oldImplementMin": 68.79748723333334,
+      "correctedEnd": "2026-10-12T23:06:48Z",
+      "correctedGrossMin": 71.11666666666666,
+      "tailS": 139.150766,
+      "measurementKeys": [
+        "bead",
+        "base",
+        "status",
+        "implementationWindow",
+        "sourceManifest",
+        "preRepairSourceManifest",
+        "footprint",
+        "apiFallout",
+        "importerMap",
+        "fiveFailurePaths",
+        "commands",
+        "outcomes",
+        "correctionWindows",
+        "frictionAccounting",
+        "full",
+        "runtimeProof",
+        "resources",
+        "coverage",
+        "preExisting"
+      ]
+    },
+    {
+      "bead": "hv-wp4u",
+      "source": "c4ed2eba8e1d4f338406838a24751b5fcdc78375",
+      "gitCommitter": "2026-10-12T14:24:36-07:00",
+      "oldFrictionSha256": "657e64f5b39b9e1ee36339d4a03d4d6c172cb5f8d50e753aeb41bce19a1eb5bf",
+      "currentFrictionSha256": "657e64f5b39b9e1ee36339d4a03d4d6c172cb5f8d50e753aeb41bce19a1eb5bf",
+      "oldMeasurementSha256": "dba69851b76aa0b3aa295abb445048a6587ec5d1263febdb7ab92a2a9a11048a",
+      "recordedWindow": {
+        "start": "2026-10-12T20:11:12+00:00",
+        "end": "2026-10-12T21:21:13.210996+00:00"
+      },
+      "oldImplementMin": 70.0201832667,
+      "correctedEnd": "2026-10-12T21:24:36Z",
+      "correctedGrossMin": 73.4,
+      "tailS": 202.789004,
+      "measurementKeys": [
+        "bead",
+        "base",
+        "status",
+        "implementationWindow",
+        "sourceManifest",
+        "footprint",
+        "sourceFallout",
+        "fiveFailurePaths",
+        "commands",
+        "stage1",
+        "failedAndCorrected",
+        "heavyTiming",
+        "hostLoad",
+        "qa",
+        "resources",
+        "compatibility",
+        "checks",
+        "validationScope"
+      ]
+    }
+  ],
+  "correctionBasis": "Append retrospectiveWindowCorrection to old measurements, update only friction endpoint/minutes; original measurement/receipts/ACK cutoffs retained. Three automatic-Git ends at whole-second precision, claim proxy start with actual helper dispatch UNKNOWN. Forced ACK metadata77u6/aq9d/by8q retain execution UNKNOWN.",
+  "parentAwait": {
+    "after": "hv-umm2.222",
+    "session": 22354,
+    "pid": 69222,
+    "scope": "Foreground native await while only epics ready; no work/drain signal. Fresh cadence observation25due caused deliberate exact-owner SIGINT130 terminal before filing593. Preclaim interval excluded from parent authorWindow; isolated wait duration UNKNOWN, no invented utilization.",
+    "settled": true
+  },
+  "auditorOutcome": {
+    "terminal": true,
+    "readOnly": true,
+    "writes": 0,
+    "validators": 0,
+    "runtimes": 0,
+    "providers": 0
+  },
+  "commands": [
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retro593-root",
+      "pid": 56593,
+      "pgid": 56593,
+      "start": "2026-10-12T23:32:28.380549+00:00",
+      "end": "2026-10-12T23:32:28.749065+00:00",
+      "elapsedS": 0.3680094159935834,
+      "hostLoad": 7.9736328125,
+      "exit": 0
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retro593-root",
+      "pid": 67775,
+      "pgid": 67775,
+      "start": "2026-10-12T23:32:36.803973+00:00",
+      "end": "2026-10-12T23:32:42.779156+00:00",
+      "elapsedS": 5.975038042000961,
+      "hostLoad": 7.615234375,
+      "exit": 0
+    },
+    {
+      "name": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T23:33:08.369242+00:00",
+      "end": "2026-10-12T23:33:08.480868+00:00",
+      "elapsedS": 0.11123891700117383,
+      "exit": 0,
+      "result": "Friction evidence valid: 665 records, 41 historical unknown measurements"
+    }
+  ],
+  "fallout": [],
+  "preExistingIssues": [],
+  "coldReview": "Not required:0non-testcode/test changes, no core-review newform; fresh read-only Sage is the required retrospective auditor. TemporarySol code-review routing remains honest and separate.",
+  "hostLoadSamples": [
+    {
+      "step": "review",
+      "at": "2026-10-12T23:32:28.380549+00:00",
+      "oneMinuteLoad": 7.9736328125
+    }
+  ],
+  "runtime": {
+    "sourceHelpersTerminal": true,
+    "validatorsTerminal": true,
+    "browserAndProvidersStarted": 0,
+    "ownedInstallPid": 31875,
+    "ownedReviewPid": 56593,
+    "ownedKnipPid": 67775,
+    "qualification": "One-shot native read batches all returned actual exit0; no long-lived checker/runtime/provider remains."
+  }
+}
