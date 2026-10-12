@@ -1,7 +1,11 @@
 // Apollyon's possible incarnations. Atlas generation selects one definition
-// per run to present the final Avatar's title and deck description.
+// per run; its authored recipe and pending Aspect share that stable identity.
 
-export const APOLLYON_INCARNATIONS = [
+import { APOLLYON_DESIGNS } from "./apollyon/design";
+import type { ApollyonIncarnationDefinition } from "./apollyon/types";
+import { parseApollyonIncarnationId } from "../types/identifiers";
+
+const INCARNATION_METADATA = [
   {
     id: "1380edc9-09ed-44df-ad09-ab4cbfc081b5",
     title: "Apollyon, the World's End",
@@ -72,4 +76,10 @@ export const APOLLYON_INCARNATIONS = [
       "Apollyon has the Aspect of Frenzy: Warriors awaken into the final rapture.",
     deckType: "Event/Awaken Warriors",
   },
-];
+] as const;
+
+export const APOLLYON_INCARNATIONS: readonly ApollyonIncarnationDefinition[] = INCARNATION_METADATA.map((incarnation) => {
+  const design = APOLLYON_DESIGNS.get(parseApollyonIncarnationId(incarnation.id));
+  if (design === undefined) throw new Error(`Missing Apollyon design ${incarnation.id}`);
+  return { ...incarnation, ...design };
+});

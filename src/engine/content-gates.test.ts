@@ -12,6 +12,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { AVATARS } from "../content/avatars";
+import { APOLLYON_INCARNATIONS } from "../content/apollyon";
 import { CARDS } from "../content/cards";
 import type { ContentStatus, Uuid } from "../content/define";
 import { DREAMSIGNS } from "../content/dreamsigns";
@@ -70,6 +71,7 @@ const ENTITIES: readonly Entity[] = [
   ...CARDS.map((card) => ({ kind: "card", id: card.id, text: card.renderedText, amplifiedText: card.amplifiedText, status: card })),
   ...DREAMSIGNS.map((sign) => ({ kind: "dreamsign", id: sign.id, text: sign.effectDescription, status: sign })),
   ...AVATARS.map((avatar) => ({ kind: "avatar", id: avatar.id, text: avatar.renderedText, status: avatar })),
+  ...APOLLYON_INCARNATIONS.map(({ aspect }) => ({ kind: "apollyonAspect", id: aspect.id, text: aspect.renderedText, status: aspect })),
   ...DREAMWELL_CARDS.map((card) => ({ kind: "dreamwell", id: card.id, text: card.renderedText, status: card })),
   ...FIGMENTS.map((figment) => ({ kind: "figment", id: figment.id, text: figment.renderedText, status: figment })),
 ];

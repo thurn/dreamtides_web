@@ -5,6 +5,7 @@ import type { Tides4Tuning } from "../../types/draft-data";
 import type { CardData } from "../../types/cards";
 import type {
   AffiliationContent,
+  ApollyonIncarnationContent,
   AvatarContent,
   DreamsignTemplate,
 } from "../../types/content";
@@ -44,6 +45,8 @@ export interface TideOpponentDeckBuild {
   finalCards: CardData[];
   joinedTideIds: TideId[];
   dreamsign: DreamsignTemplate | null;
+  /** Authored boss Dreamsigns, independent of ordinary progression selection. */
+  curatedDreamsigns?: readonly DreamsignTemplate[];
   modifications: {
     startersAdded: CardData[];
     cardsCut: CardData[];
@@ -94,9 +97,14 @@ function iterativeDeck(args: {
   bandMinimum: number;
   rng: () => number;
   index: ReturnType<typeof buildTideAffinityIndex>;
+  initial?: readonly CardData[];
 }): CardData[] {
   const remaining = new Map(args.candidates.map((card) => [card.id, card]));
-  const selected: CardData[] = [];
+  const selected = [...(args.initial ?? [])];
+  for (const card of selected) {
+    remaining.delete(card.id);
+    addCardVector(args.context, card.id, args.index);
+  }
   while (selected.length < args.targetSize && remaining.size > 0) {
     const ranked: RankedCard[] = [...remaining.values()].map((card) => {
       const affinity = cardAffinity(card.id, args.context, args.index);
@@ -134,9 +142,39 @@ export function buildTideOpponentDeck(args: {
   deckSize: number;
   tides4Decks: Tides4DecksJson;
   tides4Tuning: Tides4Tuning;
+  curated?: Pick<ApollyonIncarnationContent, "deckRecipe" | "dreamsignIds">;
   deferLog?: (emit: () => void) => void;
 }): TideOpponentDeckBuild | null {
-  if (args.opponentAvatar === null) return null;
+  if (args.opponentAvatar === null) {
+    if (args.curated !== undefined) throw new Error("Missing Apollyon pool Avatar");
+    return null;
+  }
+  const cardById = new Map([...args.cardDatabase.values()].map((card) => [card.id, card]));
+  const recipe = args.curated?.deckRecipe;
+  const signatures = (recipe?.signatureCardIds ?? []).map((id) => {
+    const card = cardById.get(id);
+    if (card === undefined) throw new Error(`Unknown Apollyon signature ${id}`);
+    return card;
+  });
+  if (recipe !== undefined) {
+    if (recipe.poolAvatarId !== args.opponentAvatar.id || args.tides4Decks.tidePoolByAvatar[recipe.poolAvatarId] === undefined) {
+      throw new Error(`Unknown Apollyon pool ${recipe.poolAvatarId}`);
+    }
+    if (signatures.length > 10 || signatures.length > args.deckSize || new Set(recipe.signatureCardIds).size !== signatures.length) {
+      throw new Error("Invalid Apollyon signature recipe");
+    }
+    for (const id of recipe.archetypeTideIds) {
+      if (!args.tides4Decks.tides.some((tide) => tide.id === id)) throw new Error(`Unknown Apollyon tide ${id}`);
+    }
+  }
+  const curatedDreamsigns = args.curated?.dreamsignIds.map((id) => {
+    const sign = args.dreamsignTemplates.find((candidate) => candidate.id === id);
+    if (sign === undefined) throw new Error(`Unknown Apollyon Dreamsign ${id}`);
+    return sign;
+  });
+  if (curatedDreamsigns !== undefined && (curatedDreamsigns.length < 1 || curatedDreamsigns.length > 2 || new Set(args.curated?.dreamsignIds).size !== curatedDreamsigns.length)) {
+    throw new Error("Invalid Apollyon Dreamsign recipe");
+  }
   const cardNameById = new Map(
     [...args.cardDatabase.values()].map((card) => [card.id, card.name]),
   );
@@ -147,18 +185,16 @@ export function buildTideOpponentDeck(args: {
     args.tides4Tuning,
   );
   const index = buildTideAffinityIndex(args.tides4Decks);
-  const cardById = new Map(
-    [...args.cardDatabase.values()].map((card) => [card.id, card]),
-  );
   const joinedTideIds = generated.tides4Provenance.tides
     .filter((tide) => tide.joined)
     .map((tide) => tide.id);
   const context = new Map<TideId, number>();
   addTideIds(context, joinedTideIds);
   addTideIds(context, args.affiliation?.tideIds ?? []);
+  addTideIds(context, recipe?.archetypeTideIds ?? []);
   const rng = makeRng((args.poolSeed ^ 0x9e3779b9) >>> 0);
   const dreamsign =
-    args.completionLevel >= args.progression.dreamsignsFromLayer
+    curatedDreamsigns !== undefined ? null : args.completionLevel >= args.progression.dreamsignsFromLayer
       ? chooseDreamsign({
           templates: args.dreamsignTemplates,
           context,
@@ -168,6 +204,7 @@ export function buildTideOpponentDeck(args: {
         })
       : null;
   addTideIds(context, dreamsign?.tideIds ?? []);
+  for (const sign of curatedDreamsigns ?? []) addTideIds(context, sign.tideIds ?? []);
 
   let legendariesSuppressed = 0;
   const candidates = [...generated.counts.keys()].flatMap((cardId) => {
@@ -190,13 +227,15 @@ export function buildTideOpponentDeck(args: {
     bandMinimum: args.tides4Decks.selection.bandMinimum,
     rng,
     index,
+    initial: signatures,
   });
 
   const starterCount = Math.min(
     args.progression.starterDilution[args.completionLevel] ?? 0,
-    baseCards.length,
+    baseCards.length - signatures.length,
   );
-  const cutRanked = baseCards
+  const signatureIds = new Set(recipe?.signatureCardIds ?? []);
+  const cutRanked = baseCards.filter((card) => !signatureIds.has(card.id))
     .map((card) => ({ card, affinity: cardAffinity(card.id, context, index) }))
     .sort(
       (left, right) =>
@@ -224,6 +263,7 @@ export function buildTideOpponentDeck(args: {
     finalCards,
     joinedTideIds,
     dreamsign,
+    ...(curatedDreamsigns === undefined ? {} : { curatedDreamsigns }),
     modifications: { startersAdded, cardsCut, legendariesSuppressed },
     abilityActive:
       args.completionLevel >= args.progression.abilityActiveFromLayer,
@@ -238,6 +278,7 @@ export function buildTideOpponentDeck(args: {
       affiliationId: args.affiliation?.id ?? null,
       affiliationTideIds: args.affiliation?.tideIds ?? [],
       joinedTideIds,
+      ...(recipe === undefined ? {} : { archetypeTideIds: recipe.archetypeTideIds, signatureCardIds: recipe.signatureCardIds, dreamsignIds: args.curated?.dreamsignIds }),
       dreamsignId: dreamsign?.id ?? null,
       targetDeckSize: args.deckSize,
       completionLevel: args.completionLevel,

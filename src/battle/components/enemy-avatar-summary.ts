@@ -12,7 +12,7 @@ export function resolveEnemyAvatarSummary(
 ): BattleAvatarSummary {
   const sourceAvatar = findEnemySourceAvatar(enemyDescriptor, journeyContent);
   return {
-    id: sourceAvatar?.id ?? enemyDescriptor.id,
+    id: enemyDescriptor.aspectId ?? sourceAvatar?.id ?? enemyDescriptor.id,
     imageNumber:
       enemyDescriptor.imageNumber ?? sourceAvatar?.imageNumber ?? "001",
     name: enemyDescriptor.name,

@@ -9,6 +9,10 @@ import {
   dreamscapeIdFromUnknown,
   guideArtKeyFromUnknown,
   guideIdFromUnknown,
+  parseApollyonIncarnationId,
+  parseAvatarId,
+  parseDreamsignId,
+  parseTideId,
   parseDreamscapeArtKey,
   parseDreamscapeId,
   parseGuideArtKey,
@@ -17,6 +21,7 @@ import {
   type DreamscapeId,
   type GuideId,
 } from "../types/identifiers";
+import { parseCardId } from "../types/card-identity";
 import type { AtlasData } from "../types/atlas-data";
 import { SITE_TYPES } from "../types/site-type";
 import {
@@ -226,7 +231,29 @@ export function loadAffiliations(): AffiliationContent[] {
 
 /** Returns Apollyon's incarnation definitions from the content modules. */
 export function loadApollyonIncarnations(): ApollyonIncarnationContent[] {
-  return asContent<ApollyonIncarnationContent[]>(apollyonIncarnationsDocument());
+  return apollyonIncarnationsDocument().map((incarnation) => {
+    const signatureCardIds = incarnation.deckRecipe.signatureCardIds.map(parseCardId);
+    const dreamsignIds = incarnation.dreamsignIds.map(parseDreamsignId);
+    if (signatureCardIds.length > 10 || new Set(signatureCardIds).size !== signatureCardIds.length) {
+      throw new Error(`Invalid Apollyon signatures ${incarnation.id}`);
+    }
+    if (dreamsignIds.length < 1 || dreamsignIds.length > 2 || new Set(dreamsignIds).size !== dreamsignIds.length) {
+      throw new Error(`Invalid Apollyon Dreamsigns ${incarnation.id}`);
+    }
+    const [first, second] = dreamsignIds;
+    if (first === undefined) throw new Error(`Missing Apollyon Dreamsign ${incarnation.id}`);
+    return {
+      ...incarnation,
+      id: parseApollyonIncarnationId(incarnation.id),
+      aspect: { ...incarnation.aspect, id: parseAvatarId(incarnation.aspect.id) },
+      deckRecipe: {
+        poolAvatarId: parseAvatarId(incarnation.deckRecipe.poolAvatarId),
+        archetypeTideIds: incarnation.deckRecipe.archetypeTideIds.map(parseTideId),
+        signatureCardIds,
+      },
+      dreamsignIds: second === undefined ? [first] : [first, second],
+    };
+  });
 }
 
 // ---------------------------------------------------------------------------

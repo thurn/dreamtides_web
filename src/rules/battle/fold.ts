@@ -73,6 +73,7 @@ import type {
 import {
   parseAtlasNodeId,
   parseAvatarId,
+  parseApollyonIncarnationId,
   parseBattleId,
   parseDreamsignId,
   parseDreamwellCardId,
@@ -656,6 +657,9 @@ function isBattleEnemyDescriptor(value: unknown): boolean {
     isPlainRecord(value) &&
     parses(parseOpponentId)(value.id) &&
     optional(parses(parseAvatarId))(value.avatarId) &&
+    optional(parses(parseApollyonIncarnationId))(value.incarnationId) &&
+    optional(parses(parseAvatarId))(value.aspectId) &&
+    ((value.incarnationId === undefined) === (value.aspectId === undefined)) &&
     isString(value.name) &&
     isString(value.subtitle) &&
     optional(isString)(value.imageNumber) &&

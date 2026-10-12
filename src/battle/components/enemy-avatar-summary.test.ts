@@ -4,7 +4,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { getLogEntries, resetLog } from "../../logging";
 import type { AvatarContent } from "../../types/content";
-import { testAvatarId, testOpponentId } from "../../types/test-identities";
+import { testApollyonIncarnationId, testAvatarId, testOpponentId } from "../../types/test-identities";
 import type { BattleEnemyDescriptor } from "../types";
 import { resolveEnemyAvatarSummary } from "./enemy-avatar-summary";
 
@@ -49,6 +49,14 @@ function descriptor(
 
 describe("resolveEnemyAvatarSummary", () => {
   beforeEach(() => resetLog());
+
+  it("preserves the distinct boss Aspect identity without a roster Avatar lookup", () => {
+    const aspectId = testAvatarId("boss-aspect");
+    const summary = resolveEnemyAvatarSummary(descriptor({ aspectId, incarnationId: testApollyonIncarnationId("boss-incarnation") }), CONTENT);
+    expect(summary.id).toBe(aspectId);
+    expect(summary.portraitFocus).toBeUndefined();
+    expect(getLogEntries()).toEqual([]);
+  });
 
   it("resolves the Avatar the descriptor's UUID names among same-name Avatars", () => {
     const summary = resolveEnemyAvatarSummary(

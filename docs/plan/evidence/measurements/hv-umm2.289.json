@@ -1,0 +1,1609 @@
+{
+  "bead": "hv-umm2.289",
+  "phase": 5,
+  "base": "a1b2f2d67cfb70418f55fc640fa0acfa9b070dbc",
+  "implementWindow": {
+    "start": "2026-10-12T19:23:48.723Z",
+    "end": "2026-10-12T20:15:15.103795+00:00"
+  },
+  "windowQualification": "Exact parent dispatch to fresh precommit endpoint. Actual Git start/end/exit and final source file hashes are retained by the parent in its delivery receipts; endpoint refreshed immediately before the single commit.",
+  "scope": {
+    "step": "Phase5.8 steps1,3,4; types/provisional all-ten design and boss construction",
+    "liveProductionAspects": "All10pending/empty; proposed AbilityLists separate",
+    "authors": "290\u2013294 adopt/verify live mechanics;29550-game sanity separate",
+    "entityUUIDs": [
+      "1380edc9-09ed-44df-ad09-ab4cbfc081b5",
+      "3fe26475-8023-46d3-b13b-86673b92e3d0",
+      "57c65dfd-a125-440e-a410-c8c4a314b1d1",
+      "80b6296d-840e-4ed7-b684-5aadc0981bf4",
+      "8890b892-0634-4b8a-bfc0-018adfa979a7",
+      "9a1bf275-2763-4db9-ad10-86d8f7e7efdf",
+      "9ae35d68-a432-45f6-ab8c-07572a25ad6b",
+      "ac116276-5569-491b-85c9-e192823bddae",
+      "ccc0385e-ff00-4be3-a807-99e4def47d2d",
+      "e70d2d02-9ba6-434b-94d3-73ad29d3e9f4"
+    ]
+  },
+  "commands": {
+    "types-initial": {
+      "argv": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "start": "2026-10-12T19:42:57.618250+00:00",
+      "loadStart": [
+        4.9287109375,
+        8.3564453125,
+        11.2509765625
+      ],
+      "pid": 80389,
+      "pgid": 80389,
+      "end": "2026-10-12T19:43:06.360326+00:00",
+      "exit": 2,
+      "wallS": 8.742286417007563,
+      "cpuS": 13.062697,
+      "loadEnd": [
+        4.705078125,
+        8.19580078125,
+        11.15966796875
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "types-prepared": {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-10-12T19:43:41.631247+00:00",
+      "loadStart": [
+        5.2216796875,
+        7.94873046875,
+        10.94970703125
+      ],
+      "pid": 82580,
+      "pgid": 82580,
+      "end": "2026-10-12T19:43:52.065479+00:00",
+      "exit": 0,
+      "wallS": 10.434079790997203,
+      "cpuS": 22.749349000000002,
+      "loadEnd": [
+        5.328125,
+        7.88330078125,
+        10.89111328125
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "focused-initial": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-init.test.ts",
+        "src/battle/components/enemy-avatar-summary.test.ts"
+      ],
+      "start": "2026-10-12T19:45:55.015592+00:00",
+      "loadStart": [
+        3.89208984375,
+        6.5654296875,
+        9.9716796875
+      ],
+      "pid": 85980,
+      "pgid": 85980,
+      "end": "2026-10-12T19:45:58.423736+00:00",
+      "exit": 1,
+      "wallS": 3.4080173749971436,
+      "cpuS": 4.66191,
+      "loadEnd": [
+        4.140625,
+        6.572265625,
+        9.9541015625
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "focused-corrected": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-init.test.ts",
+        "src/battle/components/enemy-avatar-summary.test.ts"
+      ],
+      "start": "2026-10-12T19:46:59.141530+00:00",
+      "loadStart": [
+        4.1630859375,
+        6.095703125,
+        9.541015625
+      ],
+      "pid": 13095,
+      "pgid": 13095,
+      "end": "2026-10-12T19:47:03.953711+00:00",
+      "exit": 0,
+      "wallS": 4.811845749994973,
+      "cpuS": 5.55317,
+      "loadEnd": [
+        4.47021484375,
+        6.126953125,
+        9.53173828125
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "countercheck-resolver": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-init.test.ts"
+      ],
+      "start": "2026-10-12T19:48:09.689548+00:00",
+      "loadStart": [
+        5.51318359375,
+        6.07421875,
+        9.2578125
+      ],
+      "pid": 14591,
+      "pgid": 14591,
+      "end": "2026-10-12T19:48:14.052398+00:00",
+      "exit": 1,
+      "wallS": 4.362705542007461,
+      "cpuS": 5.6748709999999996,
+      "loadEnd": [
+        5.5517578125,
+        6.07275390625,
+        9.23828125
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "review-initial": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:48:37.671402+00:00",
+      "loadStart": [
+        5.10205078125,
+        5.90869140625,
+        9.0859375
+      ],
+      "pid": 42795,
+      "pgid": 42795,
+      "end": "2026-10-12T19:49:16.723788+00:00",
+      "exit": 2,
+      "wallS": 39.05192741700739,
+      "cpuS": 117.624837,
+      "loadEnd": [
+        7.73583984375,
+        6.45703125,
+        9.1376953125
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "review-corrected": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:49:46.246829+00:00",
+      "loadStart": [
+        6.95654296875,
+        6.41015625,
+        9.0439453125
+      ],
+      "pid": 45403,
+      "pgid": 45403,
+      "end": "2026-10-12T19:50:21.615947+00:00",
+      "exit": 2,
+      "wallS": 35.36869408399798,
+      "cpuS": 122.620564,
+      "loadEnd": [
+        4.7138671875,
+        5.90576171875,
+        8.7529296875
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "knip-initial": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T19:50:39.185199+00:00",
+      "loadStart": [
+        4.65185546875,
+        5.80078125,
+        8.6474609375
+      ],
+      "pid": 46531,
+      "pgid": 46531,
+      "end": "2026-10-12T19:50:43.191390+00:00",
+      "exit": 0,
+      "wallS": 4.006039250001777,
+      "cpuS": 4.4014880000000005,
+      "loadEnd": [
+        5.880859375,
+        6.0361328125,
+        8.7138671875
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "fuzz-control": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/289-helper/fuzz.ts"
+      ],
+      "start": "2026-10-12T19:51:03.752609+00:00",
+      "loadStart": [
+        16.0146484375,
+        8.30712890625,
+        9.4638671875
+      ],
+      "pid": 71349,
+      "pgid": 71349,
+      "end": "2026-10-12T19:53:11.590441+00:00",
+      "exit": 0,
+      "wallS": 127.83655150000413,
+      "cpuS": 140.21644700000002,
+      "loadEnd": [
+        17.34033203125,
+        11.369140625,
+        10.51904296875
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "types-final-fixture": {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-10-12T19:53:16.647842+00:00",
+      "loadStart": [
+        16.35205078125,
+        11.26318359375,
+        10.486328125
+      ],
+      "pid": 58110,
+      "pgid": 58110,
+      "end": "2026-10-12T19:53:21.374327+00:00",
+      "exit": 0,
+      "wallS": 4.726328082993859,
+      "cpuS": 8.00877,
+      "loadEnd": [
+        15.60302734375,
+        11.1923828125,
+        10.4658203125
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "lint-fixture": {
+      "argv": [
+        "node_modules/.bin/eslint",
+        "src/battle/integration/apollyon-init.test.ts",
+        "src/content/apollyon/types.ts"
+      ],
+      "start": "2026-10-12T19:53:44.170601+00:00",
+      "loadStart": [
+        11.80615234375,
+        10.65966796875,
+        10.29443359375
+      ],
+      "pid": 60670,
+      "pgid": 60670,
+      "end": "2026-10-12T19:53:46.682470+00:00",
+      "exit": 0,
+      "wallS": 2.511785417009378,
+      "cpuS": 4.076092,
+      "loadEnd": [
+        11.80615234375,
+        10.65966796875,
+        10.29443359375
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "review-final": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:54:09.391804+00:00",
+      "loadStart": [
+        13.134765625,
+        10.9921875,
+        10.41943359375
+      ],
+      "pid": 62599,
+      "pgid": 62599,
+      "end": "2026-10-12T19:55:03.700726+00:00",
+      "exit": 0,
+      "wallS": 54.30827512498945,
+      "cpuS": 145.49014,
+      "loadEnd": [
+        27.12939453125,
+        15.27685546875,
+        12.05029296875
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "full-final": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T19:55:34.287519+00:00",
+      "loadStart": [
+        26.3154296875,
+        16.142578125,
+        12.470703125
+      ],
+      "pid": 43931,
+      "pgid": 43931,
+      "end": "2026-10-12T19:57:43.963006+00:00",
+      "exit": 0,
+      "wallS": 129.6741754169925,
+      "cpuS": 309.074257,
+      "loadEnd": [
+        20.86376953125,
+        18.24853515625,
+        13.87890625
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "find-qa-seed": {
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/289-helper/find-seed.ts"
+      ],
+      "start": "2026-10-12T19:55:21.516612+00:00",
+      "loadStart": [
+        25.1796875,
+        15.4130859375,
+        12.15380859375
+      ],
+      "pid": 17854,
+      "pgid": 17854,
+      "end": "2026-10-12T19:55:22.908907+00:00",
+      "exit": 1,
+      "wallS": 1.3921264590026112,
+      "cpuS": 1.504788,
+      "loadEnd": [
+        25.7255859375,
+        15.68798828125,
+        12.27001953125
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "find-qa-seed-corrected": {
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/289-helper/find-seed.ts"
+      ],
+      "start": "2026-10-12T19:55:55.146542+00:00",
+      "loadStart": [
+        24.951171875,
+        16.56591796875,
+        12.7119140625
+      ],
+      "pid": 51753,
+      "pgid": 51753,
+      "end": "2026-10-12T19:55:57.424502+00:00",
+      "exit": 0,
+      "wallS": 2.2777910419972613,
+      "cpuS": 2.6442829999999997,
+      "loadEnd": [
+        24.234375,
+        16.55615234375,
+        12.73095703125
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "knip-final": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T19:58:56.595718+00:00",
+      "loadStart": [
+        20.29736328125,
+        19.0615234375,
+        14.560546875
+      ],
+      "pid": 9752,
+      "pgid": 9752,
+      "end": "2026-10-12T19:59:01.271593+00:00",
+      "exit": 0,
+      "wallS": 4.675711374991806,
+      "cpuS": 4.505699,
+      "loadEnd": [
+        21.234375,
+        19.27587890625,
+        14.66259765625
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "qa-kernel": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "apollyon-kernel",
+        "--bead",
+        "hv-umm2.289",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-12T19:59:29.055119+00:00",
+      "loadStart": [
+        19.8349609375,
+        19.1591796875,
+        14.78173828125
+      ],
+      "pid": 13684,
+      "pgid": 13684,
+      "end": "2026-10-12T19:59:46.952504+00:00",
+      "exit": 0,
+      "wallS": 17.89710424999066,
+      "cpuS": 8.02198,
+      "loadEnd": [
+        16.65283203125,
+        18.49560546875,
+        14.64599609375
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    },
+    "qa-kernel-repeat": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "apollyon-kernel",
+        "--bead",
+        "hv-umm2.289",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-12T20:02:58.416676+00:00",
+      "pid": 79859,
+      "pgid": 79859,
+      "purpose": "Retain exact native provider/server identity missed by first fast completed workflow.",
+      "end": "2026-10-12T20:03:16.146673+00:00",
+      "wallS": 17.72972312499769,
+      "exit": 0,
+      "observations": [
+        {
+          "at": "2026-10-12T20:03:00.665544+00:00",
+          "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "owner": {
+            "token": "d0752566-9a97-4a7d-932d-555a633db6bd",
+            "pid": 79859,
+            "bead": "hv-umm2.289",
+            "label": "apollyon-kernel",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-provisional-design",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-12T20:03:00.616Z",
+            "providerState": "active",
+            "mcpSessionId": "45298451-90c9-44cd-9767-c77d482f11ae",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "server": {
+            "token": "4c169f9a-40ff-4f5c-8015-2c3e92a78a97",
+            "runner": {
+              "pid": 79859,
+              "group": 79859,
+              "started": "Mon Oct 12 13:02:58 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs apollyon-kernel --bead hv-umm2.289 --viewports desktop,mobile --timeout 240"
+            },
+            "server": {
+              "pid": 79907,
+              "group": 79907,
+              "started": "Mon Oct 12 13:02:58 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/apollyon-provisional-design/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 4c169f9a-40ff-4f5c-8015-2c3e92a78a97 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-provisional-design",
+            "port": 5274
+          }
+        }
+      ],
+      "processIdentities": [
+        "79859 79847 79859 Mon Oct 12 13:02:58 2026     node scripts/qa/run-scenario.mjs apollyon-kernel --bead hv-umm2.289 --viewports desktop,mobile --timeout 240"
+      ],
+      "scope": "Own worktree; external timing wrapper; whole command inclusive of imports/preparation/queues. No low-load performance claim."
+    }
+  },
+  "acceptance": {
+    "focused": {
+      "tests": 26,
+      "files": 2,
+      "exit": 0
+    },
+    "review": {
+      "tests": 4219,
+      "files": 227,
+      "exit": 0
+    },
+    "full": {
+      "tests": 5900,
+      "files": 352,
+      "exit": 0,
+      "workers": 2,
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock"
+    },
+    "knip": {
+      "exit": 0
+    },
+    "aggregateFailures": [
+      "review-initial exit2 (related tests pass is not aggregate acceptance)",
+      "review-corrected exit2 (4219 related tests pass is not aggregate acceptance)"
+    ]
+  },
+  "countercheck": {
+    "start": "2026-10-12T19:48:09.665685+00:00",
+    "path": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-provisional-design/src/battle/integration/create-battle-init.ts",
+    "beforeSHA256": "dc010b2d57abcd0ffa540b18a6a07acdfcf1b108ef20a968983bfbc393939f63",
+    "mutation": "omit optional apollyon configuration at resolver only",
+    "mutatedSHA256": "9fa7919d0b90a55ab203ce46be3b1b33026c705f804b473dbb8a12d6ebb58dfc",
+    "exit": 1,
+    "restoredSHA256": "dc010b2d57abcd0ffa540b18a6a07acdfcf1b108ef20a968983bfbc393939f63",
+    "restoredExact": true,
+    "end": "2026-10-12T19:48:14.057129+00:00",
+    "failed": 17,
+    "passingCompatibilityControls": 5,
+    "qualification": "Expected deliberate negative run, not acceptance failure; source restored exact then final aggregate passes."
+  },
+  "failurePaths": {
+    "error": "Unknown selected Incarnation/pool/tide/signature/Dreamsign; invalid cardinality, duplicate UUID and missing pool inputs rejected before logs.",
+    "reloadReplay": "Repeated init equality, JSON roundtrip and public folded-battle parser preserves paired identities; unpaired Aspect rejected. All300inline replay hashes and30interactive replays pass.",
+    "partialWrite": "Provider speculative begin then settle(seq,false) discards reconstruction logs.",
+    "staleInvalid": "Explicit unknown non-null selected Incarnation fails; old optional/null cases retain documented default/legacy policy.",
+    "concurrentActors": "Two identical provider builds same seq produce same init, settle accepted seq emits once; second settle false. Synthetic sequential actor simulation; no timing/concurrency schedule claim."
+  },
+  "fuzz": {
+    "start": "2026-10-12T19:51:05.368Z",
+    "end": "2026-10-12T19:53:11.518Z",
+    "executionWallS": 126.147436042,
+    "requestedGames": 300,
+    "gamesCompleted": 300,
+    "steps": 158203,
+    "prompts": 3204,
+    "interactive": 30,
+    "failures": 0,
+    "coverage": [
+      {
+        "target": {
+          "kind": "avatar",
+          "uuid": "395f7a98-d40a-4b42-a4c6-6f38648255f7"
+        },
+        "included": 55,
+        "exercised": 0
+      },
+      {
+        "target": {
+          "kind": "avatar",
+          "uuid": "5caf07f1-9bfb-4696-9b5b-6b57fe49e7ef"
+        },
+        "included": 55,
+        "exercised": 0
+      },
+      {
+        "target": {
+          "kind": "avatar",
+          "uuid": "61ade662-2bfe-474a-860c-5f8aa586babc"
+        },
+        "included": 55,
+        "exercised": 0
+      },
+      {
+        "target": {
+          "kind": "avatar",
+          "uuid": "e9fa35a7-fe02-4046-b10b-78e1abcc557a"
+        },
+        "included": 55,
+        "exercised": 0
+      },
+      {
+        "target": {
+          "kind": "avatar",
+          "uuid": "e4261c6a-af79-4b94-adbb-91e69b9de0dc"
+        },
+        "included": 55,
+        "exercised": 0
+      },
+      {
+        "target": {
+          "kind": "avatar",
+          "uuid": "649a0d89-a07d-4bc0-ade6-ea9eb5805c80"
+        },
+        "included": 55,
+        "exercised": 0
+      },
+      {
+        "target": {
+          "kind": "avatar",
+          "uuid": "00974abd-19d8-4d83-8af9-6a34e67f11a0"
+        },
+        "included": 54,
+        "exercised": 0
+      },
+      {
+        "target": {
+          "kind": "avatar",
+          "uuid": "d5599cfc-eb2b-465d-8e1b-076cb118ac59"
+        },
+        "included": 54,
+        "exercised": 0
+      },
+      {
+        "target": {
+          "kind": "avatar",
+          "uuid": "9bcfcec6-873a-4d2b-992d-91fecdd96208"
+        },
+        "included": 54,
+        "exercised": 0
+      },
+      {
+        "target": {
+          "kind": "avatar",
+          "uuid": "8c8bc6a5-6ece-4ba2-a360-f93619373bbf"
+        },
+        "included": 54,
+        "exercised": 0
+      },
+      {
+        "target": {
+          "kind": "avatar",
+          "uuid": "7200c846-e961-4de8-b803-286539cf72e3"
+        },
+        "included": 54,
+        "exercised": 54
+      }
+    ],
+    "qualification": "Ten production Aspects are pending and inclusion only; the separate authored synthetic control exercises the reused emblem route. Proposed DSL metadata is not live. Wrapper-to-inner start includes imports and possible lock wait, not measured pure lock contention; no balance result.",
+    "wrapperWallS": 127.83655150000413,
+    "CPUChildrenS": 140.21644700000002,
+    "startupQueueImportsUpperBoundS": 1.615391,
+    "pendingIncluded": 546,
+    "pendingExercised": 0,
+    "authoredSyntheticControlIncluded": 54,
+    "authoredSyntheticControlExercised": 54
+  },
+  "testDelta": {
+    "entrypoints": {
+      "files": 1,
+      "lines": 214,
+      "jsdomFiles": 0
+    },
+    "plainContractsOrScenarios": {
+      "files": 0,
+      "lines": 0
+    },
+    "details": "One204-line synthetic node contract entrypoint; existing summary test net8lines and sanctioned content-gate entity set+2lines. No per-incarnation entrypoint, scenario or UI-string assertions."
+  },
+  "fallout": {
+    "ApollyonIncarnationContent": [
+      "src/runtime/qa-scenes.fixtures.ts neutral mechanical fields"
+    ],
+    "CreateBattleInitInput": [
+      "src/session/providers/battle-init-provider.ts production optional typed config"
+    ],
+    "BattleEnemyDescriptor": [
+      "src/rules/battle/fold.ts paired branded metadata validation",
+      "src/battle/components/enemy-avatar-summary.ts exact Aspect identity"
+    ],
+    "TideOpponentDeckBuild": [
+      "src/battle/integration/create-battle-init.ts curated Dreamsign read"
+    ]
+  },
+  "qa": {
+    "reports": {
+      "run-xNnhDQ": {
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1681,
+          "scenario": 15430,
+          "total": 17171
+        },
+        "ok": true,
+        "error": null,
+        "caps": [],
+        "result": {
+          "desktop": {
+            "expected": {
+              "incarnationId": "ccc0385e-ff00-4be3-a807-99e4def47d2d",
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "signatureCardIds": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ]
+            },
+            "preview": {
+              "ids": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "geometry": [
+                {
+                  "id": "apollyon:ccc0385e-ff00-4be3-a807-99e4def47d2d",
+                  "x": 40,
+                  "y": 24,
+                  "width": 682.09375,
+                  "height": 852
+                },
+                {
+                  "id": "cumulus-battle-start-begin",
+                  "x": 1239.34375,
+                  "y": 736.640625,
+                  "width": 127.65625,
+                  "height": 42
+                }
+              ],
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              }
+            },
+            "state": {
+              "version": 4,
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ],
+              "cardIds": [
+                "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+                "42427d15-c019-4786-9d7e-285829c4f3cb",
+                "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+                "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+                "eae700c9-5005-4627-b8d6-a5c2c273e61a",
+                "8e003d04-e489-4c55-9c72-fc5612909d07",
+                "15b63630-d9f8-473b-9717-15ad91ff2f16",
+                "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
+                "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                "6cf545ba-b014-4333-a0da-573e8f97d734",
+                "5ce69085-aa75-4654-8abe-f9e773931e63",
+                "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+                "29088c75-c2c9-40dc-a77a-65360e464b45",
+                "13c45db4-ebab-4364-a14a-59a2e9c52bb5",
+                "7f90d17b-9146-4550-a372-a9d77e814ce6",
+                "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+                "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+                "795a7b54-40d5-42f9-bc3a-9e92bc938c2d",
+                "3725379c-676d-4efd-81ee-7e45d80db6d0",
+                "ce84b8af-b802-42d3-8a31-36827cff17b2",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+                "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
+                "f4b34207-2ad4-421b-8798-9c20320607ae",
+                "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+                "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+                "4f29a241-9265-4669-a189-5a2a91923e12",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+                "128d1878-a505-4766-91a2-e5a29498bc4e"
+              ],
+              "geometry": {
+                "x": 698,
+                "y": 94.12723541259766,
+                "width": 44,
+                "height": 43.99999237060547
+              },
+              "pending": null,
+              "inFlight": false
+            },
+            "record": {
+              "gameId": "fx4fqi",
+              "battleEntryKey": "site-11::6::dreamscape-20",
+              "incarnationId": "ccc0385e-ff00-4be3-a807-99e4def47d2d",
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "selection": "run-incarnation",
+              "poolAvatarId": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "archetypeTideIds": [
+                "4fcd40ac-b03f-405f-9236-a00139cbdcc8",
+                "f3f6da0b-f83f-4e66-a4e1-8e35a8d27488"
+              ],
+              "signatureCardIds": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ],
+              "finalCardIds": [
+                "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+                "42427d15-c019-4786-9d7e-285829c4f3cb",
+                "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+                "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+                "eae700c9-5005-4627-b8d6-a5c2c273e61a",
+                "8e003d04-e489-4c55-9c72-fc5612909d07",
+                "15b63630-d9f8-473b-9717-15ad91ff2f16",
+                "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
+                "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                "6cf545ba-b014-4333-a0da-573e8f97d734",
+                "5ce69085-aa75-4654-8abe-f9e773931e63",
+                "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+                "29088c75-c2c9-40dc-a77a-65360e464b45",
+                "13c45db4-ebab-4364-a14a-59a2e9c52bb5",
+                "7f90d17b-9146-4550-a372-a9d77e814ce6",
+                "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+                "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+                "795a7b54-40d5-42f9-bc3a-9e92bc938c2d",
+                "3725379c-676d-4efd-81ee-7e45d80db6d0",
+                "ce84b8af-b802-42d3-8a31-36827cff17b2",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+                "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
+                "f4b34207-2ad4-421b-8798-9c20320607ae",
+                "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+                "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+                "4f29a241-9265-4669-a189-5a2a91923e12",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+                "128d1878-a505-4766-91a2-e5a29498bc4e"
+              ],
+              "seed": 3,
+              "poolSeed": 1597463004,
+              "opponentsContentHash": "17f8020eeec143b45272c6212c02a6aaf9643ca278858b314a76f409443250bc",
+              "aspectStatus": "pending",
+              "timestamp": "2026-10-12T19:59:36.721Z",
+              "event": "apollyon_opponent_constructed",
+              "seq": 89
+            },
+            "qualification": "Current construction/presentation only; live Aspect pending and its activated proposed mechanic not exercised."
+          },
+          "mobile": {
+            "expected": {
+              "incarnationId": "ccc0385e-ff00-4be3-a807-99e4def47d2d",
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "signatureCardIds": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ]
+            },
+            "preview": {
+              "ids": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "geometry": [
+                {
+                  "id": "apollyon:ccc0385e-ff00-4be3-a807-99e4def47d2d",
+                  "x": -208.1875,
+                  "y": 43.0625,
+                  "width": 678.5625,
+                  "height": 708.9375
+                },
+                {
+                  "id": "cumulus-battle-start-begin",
+                  "x": 237.34375,
+                  "y": 693,
+                  "width": 127.65625,
+                  "height": 42
+                }
+              ],
+              "viewport": {
+                "width": 390,
+                "height": 844
+              }
+            },
+            "state": {
+              "version": 4,
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ],
+              "cardIds": [
+                "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+                "42427d15-c019-4786-9d7e-285829c4f3cb",
+                "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+                "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+                "eae700c9-5005-4627-b8d6-a5c2c273e61a",
+                "8e003d04-e489-4c55-9c72-fc5612909d07",
+                "15b63630-d9f8-473b-9717-15ad91ff2f16",
+                "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
+                "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                "6cf545ba-b014-4333-a0da-573e8f97d734",
+                "5ce69085-aa75-4654-8abe-f9e773931e63",
+                "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+                "29088c75-c2c9-40dc-a77a-65360e464b45",
+                "13c45db4-ebab-4364-a14a-59a2e9c52bb5",
+                "7f90d17b-9146-4550-a372-a9d77e814ce6",
+                "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+                "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+                "795a7b54-40d5-42f9-bc3a-9e92bc938c2d",
+                "3725379c-676d-4efd-81ee-7e45d80db6d0",
+                "ce84b8af-b802-42d3-8a31-36827cff17b2",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+                "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
+                "f4b34207-2ad4-421b-8798-9c20320607ae",
+                "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+                "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+                "4f29a241-9265-4669-a189-5a2a91923e12",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+                "128d1878-a505-4766-91a2-e5a29498bc4e"
+              ],
+              "geometry": {
+                "x": 173,
+                "y": 104.578125,
+                "width": 44,
+                "height": 44
+              },
+              "pending": null,
+              "inFlight": false
+            },
+            "record": {
+              "gameId": "anxopm",
+              "battleEntryKey": "site-11::6::dreamscape-20",
+              "incarnationId": "ccc0385e-ff00-4be3-a807-99e4def47d2d",
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "selection": "run-incarnation",
+              "poolAvatarId": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "archetypeTideIds": [
+                "4fcd40ac-b03f-405f-9236-a00139cbdcc8",
+                "f3f6da0b-f83f-4e66-a4e1-8e35a8d27488"
+              ],
+              "signatureCardIds": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ],
+              "finalCardIds": [
+                "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+                "42427d15-c019-4786-9d7e-285829c4f3cb",
+                "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+                "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+                "eae700c9-5005-4627-b8d6-a5c2c273e61a",
+                "8e003d04-e489-4c55-9c72-fc5612909d07",
+                "15b63630-d9f8-473b-9717-15ad91ff2f16",
+                "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
+                "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                "6cf545ba-b014-4333-a0da-573e8f97d734",
+                "5ce69085-aa75-4654-8abe-f9e773931e63",
+                "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+                "29088c75-c2c9-40dc-a77a-65360e464b45",
+                "13c45db4-ebab-4364-a14a-59a2e9c52bb5",
+                "7f90d17b-9146-4550-a372-a9d77e814ce6",
+                "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+                "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+                "795a7b54-40d5-42f9-bc3a-9e92bc938c2d",
+                "3725379c-676d-4efd-81ee-7e45d80db6d0",
+                "ce84b8af-b802-42d3-8a31-36827cff17b2",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+                "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
+                "f4b34207-2ad4-421b-8798-9c20320607ae",
+                "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+                "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+                "4f29a241-9265-4669-a189-5a2a91923e12",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+                "128d1878-a505-4766-91a2-e5a29498bc4e"
+              ],
+              "seed": 3,
+              "poolSeed": 1597463004,
+              "opponentsContentHash": "17f8020eeec143b45272c6212c02a6aaf9643ca278858b314a76f409443250bc",
+              "aspectStatus": "pending",
+              "timestamp": "2026-10-12T19:59:43.776Z",
+              "event": "apollyon_opponent_constructed",
+              "seq": 89
+            },
+            "qualification": "Current construction/presentation only; live Aspect pending and its activated proposed mechanic not exercised."
+          }
+        },
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-xNnhDQ/apollyon-preview-desktop.png",
+            "href": "http://localhost:5274/dreamscape/6-limbo/battle?goto=battle7&seed=3&debug=1&ai=greedy&game=fx4fqi",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-xNnhDQ/apollyon-begun-desktop.png",
+            "href": "http://localhost:5274/dreamscape/6-limbo/battle?goto=battle7&seed=3&debug=1&ai=greedy&game=fx4fqi",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-xNnhDQ/apollyon-preview-mobile.png",
+            "href": "http://localhost:5274/dreamscape/6-limbo/battle?goto=battle7&seed=3&debug=1&ai=greedy&game=anxopm",
+            "width": 390,
+            "height": 844
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-xNnhDQ/apollyon-begun-mobile.png",
+            "href": "http://localhost:5274/dreamscape/6-limbo/battle?goto=battle7&seed=3&debug=1&ai=greedy&game=anxopm",
+            "width": 390,
+            "height": 844
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-xNnhDQ/apollyon-kernel-desktop.jsonl",
+            "gameId": "fx4fqi",
+            "selectedBy": "url",
+            "rows": 96,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-xNnhDQ/apollyon-kernel-mobile.jsonl",
+            "gameId": "anxopm",
+            "selectedBy": "url",
+            "rows": 96,
+            "reason": null
+          }
+        ]
+      },
+      "run-yCzFNY": {
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1987,
+          "scenario": 14896,
+          "total": 16946
+        },
+        "ok": true,
+        "error": null,
+        "caps": [],
+        "result": {
+          "desktop": {
+            "expected": {
+              "incarnationId": "ccc0385e-ff00-4be3-a807-99e4def47d2d",
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "signatureCardIds": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ]
+            },
+            "preview": {
+              "ids": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "geometry": [
+                {
+                  "id": "apollyon:ccc0385e-ff00-4be3-a807-99e4def47d2d",
+                  "x": 40,
+                  "y": 24,
+                  "width": 682.09375,
+                  "height": 852
+                },
+                {
+                  "id": "cumulus-battle-start-begin",
+                  "x": 1239.34375,
+                  "y": 736.640625,
+                  "width": 127.65625,
+                  "height": 42
+                }
+              ],
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              }
+            },
+            "state": {
+              "version": 4,
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ],
+              "cardIds": [
+                "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+                "42427d15-c019-4786-9d7e-285829c4f3cb",
+                "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+                "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+                "eae700c9-5005-4627-b8d6-a5c2c273e61a",
+                "8e003d04-e489-4c55-9c72-fc5612909d07",
+                "15b63630-d9f8-473b-9717-15ad91ff2f16",
+                "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
+                "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                "6cf545ba-b014-4333-a0da-573e8f97d734",
+                "5ce69085-aa75-4654-8abe-f9e773931e63",
+                "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+                "29088c75-c2c9-40dc-a77a-65360e464b45",
+                "13c45db4-ebab-4364-a14a-59a2e9c52bb5",
+                "7f90d17b-9146-4550-a372-a9d77e814ce6",
+                "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+                "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+                "795a7b54-40d5-42f9-bc3a-9e92bc938c2d",
+                "3725379c-676d-4efd-81ee-7e45d80db6d0",
+                "ce84b8af-b802-42d3-8a31-36827cff17b2",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+                "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
+                "f4b34207-2ad4-421b-8798-9c20320607ae",
+                "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+                "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+                "4f29a241-9265-4669-a189-5a2a91923e12",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+                "128d1878-a505-4766-91a2-e5a29498bc4e"
+              ],
+              "geometry": {
+                "x": 698,
+                "y": 94.12723541259766,
+                "width": 44,
+                "height": 43.99999237060547
+              },
+              "pending": null,
+              "inFlight": false
+            },
+            "record": {
+              "gameId": "uqaeh9",
+              "battleEntryKey": "site-11::6::dreamscape-20",
+              "incarnationId": "ccc0385e-ff00-4be3-a807-99e4def47d2d",
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "selection": "run-incarnation",
+              "poolAvatarId": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "archetypeTideIds": [
+                "4fcd40ac-b03f-405f-9236-a00139cbdcc8",
+                "f3f6da0b-f83f-4e66-a4e1-8e35a8d27488"
+              ],
+              "signatureCardIds": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ],
+              "finalCardIds": [
+                "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+                "42427d15-c019-4786-9d7e-285829c4f3cb",
+                "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+                "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+                "eae700c9-5005-4627-b8d6-a5c2c273e61a",
+                "8e003d04-e489-4c55-9c72-fc5612909d07",
+                "15b63630-d9f8-473b-9717-15ad91ff2f16",
+                "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
+                "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                "6cf545ba-b014-4333-a0da-573e8f97d734",
+                "5ce69085-aa75-4654-8abe-f9e773931e63",
+                "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+                "29088c75-c2c9-40dc-a77a-65360e464b45",
+                "13c45db4-ebab-4364-a14a-59a2e9c52bb5",
+                "7f90d17b-9146-4550-a372-a9d77e814ce6",
+                "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+                "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+                "795a7b54-40d5-42f9-bc3a-9e92bc938c2d",
+                "3725379c-676d-4efd-81ee-7e45d80db6d0",
+                "ce84b8af-b802-42d3-8a31-36827cff17b2",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+                "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
+                "f4b34207-2ad4-421b-8798-9c20320607ae",
+                "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+                "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+                "4f29a241-9265-4669-a189-5a2a91923e12",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+                "128d1878-a505-4766-91a2-e5a29498bc4e"
+              ],
+              "seed": 3,
+              "poolSeed": 1597463004,
+              "opponentsContentHash": "17f8020eeec143b45272c6212c02a6aaf9643ca278858b314a76f409443250bc",
+              "aspectStatus": "pending",
+              "timestamp": "2026-10-12T20:03:06.366Z",
+              "event": "apollyon_opponent_constructed",
+              "seq": 89
+            },
+            "qualification": "Current construction/presentation only; live Aspect pending and its activated proposed mechanic not exercised."
+          },
+          "mobile": {
+            "expected": {
+              "incarnationId": "ccc0385e-ff00-4be3-a807-99e4def47d2d",
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "signatureCardIds": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ]
+            },
+            "preview": {
+              "ids": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "geometry": [
+                {
+                  "id": "apollyon:ccc0385e-ff00-4be3-a807-99e4def47d2d",
+                  "x": -208.1875,
+                  "y": 43.0625,
+                  "width": 678.5625,
+                  "height": 708.9375
+                },
+                {
+                  "id": "cumulus-battle-start-begin",
+                  "x": 237.34375,
+                  "y": 693,
+                  "width": 127.65625,
+                  "height": 42
+                }
+              ],
+              "viewport": {
+                "width": 390,
+                "height": 844
+              }
+            },
+            "state": {
+              "version": 4,
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ],
+              "cardIds": [
+                "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+                "42427d15-c019-4786-9d7e-285829c4f3cb",
+                "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+                "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+                "eae700c9-5005-4627-b8d6-a5c2c273e61a",
+                "8e003d04-e489-4c55-9c72-fc5612909d07",
+                "15b63630-d9f8-473b-9717-15ad91ff2f16",
+                "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
+                "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                "6cf545ba-b014-4333-a0da-573e8f97d734",
+                "5ce69085-aa75-4654-8abe-f9e773931e63",
+                "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+                "29088c75-c2c9-40dc-a77a-65360e464b45",
+                "13c45db4-ebab-4364-a14a-59a2e9c52bb5",
+                "7f90d17b-9146-4550-a372-a9d77e814ce6",
+                "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+                "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+                "795a7b54-40d5-42f9-bc3a-9e92bc938c2d",
+                "3725379c-676d-4efd-81ee-7e45d80db6d0",
+                "ce84b8af-b802-42d3-8a31-36827cff17b2",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+                "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
+                "f4b34207-2ad4-421b-8798-9c20320607ae",
+                "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+                "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+                "4f29a241-9265-4669-a189-5a2a91923e12",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+                "128d1878-a505-4766-91a2-e5a29498bc4e"
+              ],
+              "geometry": {
+                "x": 173,
+                "y": 104.578125,
+                "width": 44,
+                "height": 44
+              },
+              "pending": null,
+              "inFlight": false
+            },
+            "record": {
+              "gameId": "kk6bob",
+              "battleEntryKey": "site-11::6::dreamscape-20",
+              "incarnationId": "ccc0385e-ff00-4be3-a807-99e4def47d2d",
+              "aspectId": "9bcfcec6-873a-4d2b-992d-91fecdd96208",
+              "selection": "run-incarnation",
+              "poolAvatarId": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "archetypeTideIds": [
+                "4fcd40ac-b03f-405f-9236-a00139cbdcc8",
+                "f3f6da0b-f83f-4e66-a4e1-8e35a8d27488"
+              ],
+              "signatureCardIds": [
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+              ],
+              "dreamsignIds": [
+                "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+              ],
+              "finalCardIds": [
+                "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+                "42427d15-c019-4786-9d7e-285829c4f3cb",
+                "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+                "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+                "eae700c9-5005-4627-b8d6-a5c2c273e61a",
+                "8e003d04-e489-4c55-9c72-fc5612909d07",
+                "15b63630-d9f8-473b-9717-15ad91ff2f16",
+                "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
+                "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+                "6cf545ba-b014-4333-a0da-573e8f97d734",
+                "5ce69085-aa75-4654-8abe-f9e773931e63",
+                "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+                "29088c75-c2c9-40dc-a77a-65360e464b45",
+                "13c45db4-ebab-4364-a14a-59a2e9c52bb5",
+                "7f90d17b-9146-4550-a372-a9d77e814ce6",
+                "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+                "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+                "795a7b54-40d5-42f9-bc3a-9e92bc938c2d",
+                "3725379c-676d-4efd-81ee-7e45d80db6d0",
+                "ce84b8af-b802-42d3-8a31-36827cff17b2",
+                "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "954e8d50-d494-4fb2-b4c7-74979083b774",
+                "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+                "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
+                "f4b34207-2ad4-421b-8798-9c20320607ae",
+                "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+                "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+                "4f29a241-9265-4669-a189-5a2a91923e12",
+                "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+                "128d1878-a505-4766-91a2-e5a29498bc4e"
+              ],
+              "seed": 3,
+              "poolSeed": 1597463004,
+              "opponentsContentHash": "17f8020eeec143b45272c6212c02a6aaf9643ca278858b314a76f409443250bc",
+              "aspectStatus": "pending",
+              "timestamp": "2026-10-12T20:03:13.050Z",
+              "event": "apollyon_opponent_constructed",
+              "seq": 89
+            },
+            "qualification": "Current construction/presentation only; live Aspect pending and its activated proposed mechanic not exercised."
+          }
+        },
+        "captures": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-yCzFNY/apollyon-preview-desktop.png",
+            "href": "http://localhost:5274/dreamscape/6-limbo/battle?goto=battle7&seed=3&debug=1&ai=greedy&game=uqaeh9",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-yCzFNY/apollyon-begun-desktop.png",
+            "href": "http://localhost:5274/dreamscape/6-limbo/battle?goto=battle7&seed=3&debug=1&ai=greedy&game=uqaeh9",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-yCzFNY/apollyon-preview-mobile.png",
+            "href": "http://localhost:5274/dreamscape/6-limbo/battle?goto=battle7&seed=3&debug=1&ai=greedy&game=kk6bob",
+            "width": 390,
+            "height": 844
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-yCzFNY/apollyon-begun-mobile.png",
+            "href": "http://localhost:5274/dreamscape/6-limbo/battle?goto=battle7&seed=3&debug=1&ai=greedy&game=kk6bob",
+            "width": 390,
+            "height": 844
+          }
+        ],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-yCzFNY/apollyon-kernel-desktop.jsonl",
+            "gameId": "uqaeh9",
+            "selectedBy": "url",
+            "rows": 96,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-yCzFNY/apollyon-kernel-mobile.jsonl",
+            "gameId": "kk6bob",
+            "selectedBy": "url",
+            "rows": 96,
+            "reason": null
+          }
+        ]
+      }
+    },
+    "sourceFreeze": {
+      "at": "2026-10-12T19:59:29.026964+00:00",
+      "base": "a1b2f2d67cfb70418f55fc640fa0acfa9b070dbc",
+      "files": {
+        "docs/design.md": "80109934f002f89710a8c959fab65e7b62fdbb96f699ba8ddc6b7eef1e7ae258",
+        "src/battle/components/enemy-avatar-summary.test.ts": "61c0a2fe3080f95a48d4c619589a5a58e8a4645395db225b257cb4f0da0590fd",
+        "src/battle/components/enemy-avatar-summary.ts": "a9a2d71d0191397f86116574d6c7af790f71729b3a763ec068ff38bc7ed9332e",
+        "src/battle/integration/apollyon-init.test.ts": "698a198372ec80b65a3cebaa37ea3df6826cd691b269269f8f135b8b759f6592",
+        "src/battle/integration/create-battle-init.ts": "dc010b2d57abcd0ffa540b18a6a07acdfcf1b108ef20a968983bfbc393939f63",
+        "src/battle/integration/tide-opponent-deck.ts": "12a0a3bc5f2e9e452ee7a4e8300285c00d87bdf3c847b3f94e77b55adfe0bbfc",
+        "src/battle/types.ts": "496e43a04090002308c46b35fc91f085c7c8a018e18572d9f79aa36bb266b0f5",
+        "src/content/apollyon.ts": "905f416e5407f730e83e49fc47a825e2ea4d87209cf1ca7b84986f5ad0c41bc0",
+        "src/content/apollyon/design.ts": "234d4063445c9ca0202a5691597c21df4d47b0426d0b88dc1ebcb5f01b1ff6df",
+        "src/content/apollyon/types.ts": "8792a2b2fe9640a387568083bae3d05a8cbb9986a085a42d80f21067a6f8f885",
+        "src/data/dreamscapes.ts": "0c4fb777ed8b546e26baf9694b22c8de048402bea30f5134a6b3d86e60cd346f",
+        "src/engine/content-catalog.ts": "e1717a3c4e277ebe83746120f7169ba36f1816037945378d454a9aae758fb345",
+        "src/engine/content-gates.test.ts": "2690c91592b8e4f78912956d58b371dcbe39af3676f5b91cc5c134313764e76e",
+        "src/rules/battle/fold.ts": "151e634676386faf58f77dbca5f3ba8623a0ebe60f78a3da7bcd2d598be8313a",
+        "src/runtime/qa-scenes.fixtures.ts": "da48c60a5f25b49d861c2a8965515785a7fb5230a06f63f88e7deffb24854360",
+        "src/session/providers/battle-init-provider.ts": "fa6c6a9d5d589e50f3579b2431c39ea6a7500bf5d6d8fb597c9f328e48754600",
+        "src/types/content.ts": "b971e5584cf293aa2b3fc9437bb25fc45a8a4b53293f3358c50816c0ca4dd002"
+      },
+      "qaScenario": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/apollyon-kernel.mjs",
+      "qaScenarioSHA256": "d367b059272912ee555525ffb805ec06ee640acd3f865016b516f2723e4c80d8"
+    },
+    "cleanup": {
+      "at": "2026-10-12T20:04:25.381488+00:00",
+      "all17SHAUnchanged": true,
+      "mismatches": [],
+      "mcpSessionId": "45298451-90c9-44cd-9767-c77d482f11ae",
+      "providerURL": "http://localhost:8931/mcp",
+      "nativeObserver": {
+        "at": "2026-10-12T20:03:00.665544+00:00",
+        "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "owner": {
+          "token": "d0752566-9a97-4a7d-932d-555a633db6bd",
+          "pid": 79859,
+          "bead": "hv-umm2.289",
+          "label": "apollyon-kernel",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-provisional-design",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T20:03:00.616Z",
+          "providerState": "active",
+          "mcpSessionId": "45298451-90c9-44cd-9767-c77d482f11ae",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "serverPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "server": {
+          "token": "4c169f9a-40ff-4f5c-8015-2c3e92a78a97",
+          "runner": {
+            "pid": 79859,
+            "group": 79859,
+            "started": "Mon Oct 12 13:02:58 2026",
+            "state": "Ss",
+            "command": "node scripts/qa/run-scenario.mjs apollyon-kernel --bead hv-umm2.289 --viewports desktop,mobile --timeout 240"
+          },
+          "server": {
+            "pid": 79907,
+            "group": 79907,
+            "started": "Mon Oct 12 13:02:58 2026",
+            "state": "Rs",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/apollyon-provisional-design/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 4c169f9a-40ff-4f5c-8015-2c3e92a78a97 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/apollyon-provisional-design",
+          "port": 5274
+        }
+      },
+      "ownedGroups": [
+        13684,
+        13741,
+        79859,
+        79907,
+        71349
+      ],
+      "remaining": [],
+      "port5274Exit": 1,
+      "port5274Listener": "",
+      "recordsAfter": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": null,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": null
+      },
+      "images": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-xNnhDQ/apollyon-preview-desktop.png": {
+          "sha256": "ca465932e5e40d03d64dd3c4db9ea68094516993e5aa8b8d7aad287bb3ace1a7",
+          "width": 2880,
+          "height": 1800
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-xNnhDQ/apollyon-preview-mobile.png": {
+          "sha256": "ee9b0367ef8a930b794b52a0eba09f7349ae50b487b5e65fe5305b35b31e0a13",
+          "width": 780,
+          "height": 1688
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-xNnhDQ/apollyon-begun-desktop.png": {
+          "sha256": "e3ef540c61f59252555a72d0585f41e5a0db43f06480a005053137b476e6d315",
+          "width": 2880,
+          "height": 1800
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-xNnhDQ/apollyon-begun-mobile.png": {
+          "sha256": "48b8737d46b960c2129276679892f13a8bfdc156e4d6ad237648649ce5ba6fcf",
+          "width": 780,
+          "height": 1688
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-yCzFNY/apollyon-preview-desktop.png": {
+          "sha256": "ca465932e5e40d03d64dd3c4db9ea68094516993e5aa8b8d7aad287bb3ace1a7",
+          "width": 2880,
+          "height": 1800
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-yCzFNY/apollyon-preview-mobile.png": {
+          "sha256": "ee9b0367ef8a930b794b52a0eba09f7349ae50b487b5e65fe5305b35b31e0a13",
+          "width": 780,
+          "height": 1688
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-yCzFNY/apollyon-begun-desktop.png": {
+          "sha256": "e3ef540c61f59252555a72d0585f41e5a0db43f06480a005053137b476e6d315",
+          "width": 2880,
+          "height": 1800
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.289/invocations/run-yCzFNY/apollyon-begun-mobile.png": {
+          "sha256": "48b8737d46b960c2129276679892f13a8bfdc156e4d6ad237648649ce5ba6fcf",
+          "width": 780,
+          "height": 1688
+        }
+      },
+      "qualification": "First run MCP UUID unobserved; repeat exact provider/server identity retained from native ownership records. Observer sampled runner process directly and native server record supplies actual server lstart/group; descendant identities not directly sampled. Both native invocations0/normal close, exact owner/server records cleared and groups absent."
+    },
+    "qualification": "Sampled Unplaceable actual seed3, actual loaded content and folded preview\u2192Begin, desktop/mobile twice. First runtime pass valid but MCPUUID unobserved; repeat closes resource observation gap. Pending activated Aspect mechanic not exercised; existing A portrait placeholder, all current title/footer/control fits. Actor/dreamsign/signature identity assertions use UUIDs.",
+    "previewGeometryQualification": "The two recorded preview rectangles are the scene Avatar/object bounds and the Begin button, not the glass panel. Mobile preview object x=-208.1875,width678.5625 reflects its observed scene framing. Positive object/button rectangles were asserted; glass panel/title/footer bounds were not separately measured. Title/footer/control fit is the image judgment over8 preserved captures, including parent cold inspection."
+  },
+  "reviewRouting": "Core cold review required; parent owns fresh read-only Codex CLI gpt-5.6-sol after helper terminal under temporary user override. This file does not claim that review has run.",
+  "sourceEvidenceQualification": "Substantive source/test/presentation/docs hashes frozen and unchanged across both own native QA servers. Images remain primary gitignored captures, never committed. This measurement contains provenance, not a performance assertion.",
+  "iterationDetails": [
+    {
+      "tag": "fixture-authoring",
+      "note": "First focused run failed4/25 because fixture asserted points instead of score and nested log.data instead of flat log payload; corrected public-field assumptions, final26 pass. Failed run retained.",
+      "timingQualification": "Actual command wall durations are in commands receipts. Total issue/repair time was not measured; no problem exceeding~10minutes is established, so this normal iteration is excluded from the friction problems ledger."
+    },
+    {
+      "tag": "unprepared-typecheck",
+      "note": "Direct tsc before workspace preparation reported generated token mirrors missing and2 wrong randomIn argument orders; supported npm typecheck prepares mirrors and passes after corrections. Initial failure retained.",
+      "timingQualification": "Actual command wall durations are in commands receipts. Total issue/repair time was not measured; no problem exceeding~10minutes is established, so this normal iteration is excluded from the friction problems ledger."
+    },
+    {
+      "tag": "aggregate-fixture-repair",
+      "note": "Both aggregate reviews failed (exit2) despite related tests passing; first7lint+readonly-map type errors and secondmissing4JourneyContent fixture catalogs. Changed fixtures/types; targeted lint and supported typecheck now0. Aggregates retained as failed, never counted acceptance.",
+      "timingQualification": "Actual command wall durations are in commands receipts. Total issue/repair time was not measured; no problem exceeding~10minutes is established, so this normal iteration is excluded from the friction problems ledger."
+    },
+    {
+      "tag": "qa-resource-evidence",
+      "note": "First17.897s native workflow passed before live MCP ownership sample. One bounded unchanged-source repeat starts observer before startup, retains provider/server exact identities and passes. Both separate invocation captures preserved; first not labeled runtime failure.",
+      "timingQualification": "Actual command wall durations are in commands receipts. Total issue/repair time was not measured; no problem exceeding~10minutes is established, so this normal iteration is excluded from the friction problems ledger."
+    }
+  ],
+  "finalResourceSettlement": {
+    "at": "2026-10-12T20:07:38.734874+00:00",
+    "actualCommandGroups": [
+      9752,
+      13095,
+      13684,
+      13741,
+      14591,
+      17854,
+      42795,
+      43931,
+      45403,
+      46531,
+      51753,
+      58110,
+      60670,
+      62599,
+      71349,
+      79859,
+      79907,
+      80389,
+      82580,
+      85980
+    ],
+    "matches": [],
+    "qualification": "Read-only current group snapshot of18 actual command receipts plus2 native server groups; no fabricated transient process identities. Native repeat ownership record also retains server leader identity."
+  }
+}

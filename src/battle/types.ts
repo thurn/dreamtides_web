@@ -15,7 +15,7 @@ import type { ContentHash } from "../types/content-hash";
 import type { DreamwellCardName } from "../types/catalog-names";
 import type { BattleId } from "../types/identifiers";
 import type { SiteId } from "../types/identifiers";
-import type { AtlasNodeId, AvatarId } from "../types/identifiers";
+import type { ApollyonIncarnationId, AtlasNodeId, AvatarId } from "../types/identifiers";
 import type { BattleCardId } from "../types/identifiers";
 import type {
   BattleEntryKey,
@@ -294,6 +294,9 @@ export interface BattleEnemyDescriptor {
   id: OpponentId;
   /** The opponent Avatar; absent for the synthetic fallback opponent. */
   avatarId?: AvatarId;
+  /** Boss incarnation and its distinct permanent Aspect emblem, carried together. */
+  incarnationId?: ApollyonIncarnationId;
+  aspectId?: AvatarId;
   name: string;
   subtitle: string;
   imageNumber?: Avatar["imageNumber"];

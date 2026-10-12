@@ -1,4 +1,5 @@
 import { AVATARS } from "../content/avatars";
+import { APOLLYON_INCARNATIONS } from "../content/apollyon";
 import { CARDS } from "../content/cards";
 import type { CardDefinition, DreamwellCardDefinition } from "../content/define";
 import { DREAMSIGNS } from "../content/dreamsigns";
@@ -88,7 +89,7 @@ export function contentDreamwellDefinitions(): EngineDreamwellDefinition[] {
 
 /** Avatar emblems from the catalog; a pending avatar has no abilities (D36). */
 export function contentAvatarDefinitions(): EngineAvatarDefinition[] {
-  return AVATARS.map((avatar) => ({
+  return [...AVATARS, ...APOLLYON_INCARNATIONS.map((incarnation) => incarnation.aspect)].map((avatar) => ({
     id: parseAvatarId(avatar.id),
     status: contentState(avatar),
     abilities: avatar.abilities ?? NO_ABILITIES,

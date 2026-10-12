@@ -10,6 +10,7 @@
 
 import type { JourneyContent } from "../../data/journey-content";
 import { createBattleInit } from "../../battle/integration/create-battle-init";
+import { APOLLYON_BATTLE_DESIGN } from "../../content/apollyon/design";
 import {
   allocateBattleCardInstance,
   createInitialBattleState,
@@ -149,6 +150,7 @@ function buildBattleStart(
     state: journey,
     cardDatabase: content.cardDatabase,
     avatars: content.avatars,
+    apollyon: { incarnations: content.apollyonIncarnations, ...APOLLYON_BATTLE_DESIGN },
     dreamscapes: content.dreamscapes,
     affiliations: content.affiliations,
     dreamwellCards: content.dreamwellCards,
@@ -192,6 +194,12 @@ export function journeyContentEngine(content: JourneyContent): Engine {
   const cached = contentEngines.get(content);
   if (cached !== undefined) return cached;
   const lab = developmentLabDefinitions();
+  const aspectDefinitions = content.apollyonIncarnations.map(({ aspect }) => ({
+    id: aspect.id,
+    status: aspect.abilities !== undefined ? "authored" as const : aspect.vanilla === true ? "vanilla" as const : "pending" as const,
+    abilities: aspect.abilities ?? (() => []),
+  }));
+  const avatarDefinitions = withLoaded(contentAvatarDefinitions(), aspectDefinitions, (definition) => definition);
   const engine = createEngine(
     createCatalog(
       [...withLoaded(contentCardDefinitions(), [...content.cardDatabase.values()], textlessCard), ...lab.cards],
@@ -207,7 +215,7 @@ export function journeyContentEngine(content: JourneyContent): Engine {
         }),
       ),
       {
-        avatars: [...withLoaded(contentAvatarDefinitions(), content.avatars, textlessEmblem), ...(lab.emblems.avatars ?? [])],
+        avatars: [...withLoaded(avatarDefinitions, content.avatars, textlessEmblem), ...(lab.emblems.avatars ?? [])],
         dreamsigns: [
           ...withLoaded(contentDreamsignDefinitions(), content.dreamsignTemplates, textlessEmblem),
           ...(lab.emblems.dreamsigns ?? []),

@@ -21,6 +21,7 @@ import type {
   TideId,
 } from "./identifiers";
 import type { DisplayText } from "../runtime/text";
+import type { ApollyonDesign } from "../content/apollyon/types";
 
 /** Normalized point locating an Avatar's head in its portrait artwork. */
 export interface AvatarPortraitFocus {
@@ -118,7 +119,7 @@ export interface DreamGuideContent {
  * its `title` (epithet) and `description` (short deck summary) are surfaced in
  * the UI. `deckType` is design-reference metadata and is never displayed.
  */
-export interface ApollyonIncarnationContent {
+export interface ApollyonIncarnationContent extends ApollyonDesign {
   id: ApollyonIncarnationId;
   title: string;
   description: string;

@@ -30,6 +30,7 @@ import {
   testApollyonIncarnationId,
   testCardId,
   testAvatarId,
+  testDreamsignId,
   testDreamwellCardId,
   testDreamwellCardName,
   testJourneySeed,
@@ -61,12 +62,18 @@ function makeIncarnations(): ApollyonIncarnationContent[] {
       title: "First Incarnation",
       description: "A test incarnation.",
       deckType: "test-deck",
+      aspect: { id: testAvatarId("incarnation-aspect-1"), renderedText: "", proposedAbilities: () => [], pending: true },
+      deckRecipe: { poolAvatarId: testAvatarId("avatar-1"), archetypeTideIds: [], signatureCardIds: [] },
+      dreamsignIds: [testDreamsignId("dreamsign-1")],
     },
     {
       id: testApollyonIncarnationId("incarnation-2"),
       title: "Second Incarnation",
       description: "Another test incarnation.",
       deckType: "test-deck",
+      aspect: { id: testAvatarId("incarnation-aspect-2"), renderedText: "", proposedAbilities: () => [], pending: true },
+      deckRecipe: { poolAvatarId: testAvatarId("avatar-1"), archetypeTideIds: [], signatureCardIds: [] },
+      dreamsignIds: [testDreamsignId("dreamsign-1")],
     },
   ];
 }

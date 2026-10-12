@@ -2,10 +2,12 @@ import type { CardData, Rarity } from "../../types/cards";
 import type { JourneySeed } from "../../types/journey-seed";
 import type {
   AffiliationContent,
+  ApollyonIncarnationContent,
   AvatarContent,
   DreamscapeContent,
   DreamsignTemplate,
 } from "../../types/content";
+import type { ApollyonBattleConfig } from "../../content/apollyon/types";
 import type {
   BattleModifier,
   DreamscapeNode,
@@ -82,6 +84,8 @@ export interface CreateBattleInitInput {
   >;
   cardDatabase: ReadonlyMap<number, CardData>;
   avatars: readonly AvatarContent[];
+  /** The run's boss catalog and the explicit compatibility default. */
+  apollyon?: ApollyonBattleConfig<ApollyonIncarnationContent>;
   /**
    * Dreamscape definitions, used to resolve the affiliation backing the
    * dreamscape this battle takes place in so the opponent deck can lean toward
@@ -222,7 +226,11 @@ export function createBattleInit(input: CreateBattleInitInput): BattleStart {
     currentNode,
     input.dreamscapes ?? [],
   );
-  const opponentAvatar = selectOpponentAvatar(
+  const boss = resolveApollyon(input);
+  const bossPoolAvatar = boss === null ? null : avatars.find((avatar) => avatar.id === boss.incarnation.deckRecipe.poolAvatarId);
+  if (boss !== null && bossPoolAvatar === undefined) throw new Error(`Unknown Apollyon pool Avatar ${boss.incarnation.deckRecipe.poolAvatarId}`);
+  if (boss !== null && (input.tides4Decks === undefined || input.tides4Tuning === undefined)) throw new Error("Missing Apollyon Tide pool data");
+  const opponentAvatar = bossPoolAvatar ?? selectOpponentAvatar(
     avatars,
     state.avatar?.id ?? null,
     streams.enemyDescriptor,
@@ -256,12 +264,14 @@ export function createBattleInit(input: CreateBattleInitInput): BattleStart {
           deckSize: opponentsData.opponentDeckSize,
           tides4Decks: input.tides4Decks,
           tides4Tuning: input.tides4Tuning,
+          ...(boss === null ? {} : { curated: boss.incarnation }),
           deferLog: (emit) => {
             emitTideDeckLog = emit;
           },
         });
 
   const opponentDreamsigns =
+    tideBuild?.curatedDreamsigns ?? (
     tideBuild?.dreamsign === undefined || tideBuild?.dreamsign === null
       ? buildOpponentDreamsigns(
           completionLevelAtStart,
@@ -269,12 +279,22 @@ export function createBattleInit(input: CreateBattleInitInput): BattleStart {
           dreamsignTemplates,
           streams.enemyDescriptor,
         )
-      : [tideBuild.dreamsign];
-  const enemyDescriptorBase = buildEnemyDescriptor(
+      : [tideBuild.dreamsign]);
+  const enemyDescriptorBase: BattleEnemyDescriptor = boss === null ? buildEnemyDescriptor(
     opponentAvatar,
     opponentDreamsigns,
     streams.enemyDescriptor.nextFloat,
-  );
+  ) : {
+    id: parseOpponentId(`apollyon:${boss.incarnation.id}`),
+    incarnationId: boss.incarnation.id,
+    aspectId: boss.incarnation.aspect.id,
+    name: boss.incarnation.title,
+    subtitle: boss.incarnation.description,
+    portraitSeed: 0,
+    abilityText: boss.incarnation.aspect.renderedText,
+    dreamsigns: opponentDreamsigns,
+    signatureCards: [],
+  };
 
   const chosenCards = tideBuild?.finalCards ?? null;
   const enemyDeckDefinition = finalizeEnemyDeck(
@@ -293,24 +313,47 @@ export function createBattleInit(input: CreateBattleInitInput): BattleStart {
   const signatureCandidates = enemyDeckDefinition
     .map((definition) => cardDatabase.get(definition.cardNumber))
     .filter((card): card is CardData => card !== undefined);
-  const signatureSelections = selectSignatureCards({
+  const signatureSelections = boss === null ? selectSignatureCards({
     abilityText: opponentAvatar?.renderedText ?? "",
     candidates: signatureCandidates,
     count: opponentsData.battle.opponentSignatureCardCount,
-  });
+  }) : [];
   const enemyDescriptor = freezeBattleEnemyDescriptor({
     ...enemyDescriptorBase,
-    signatureCards: signatureSelections.map(
+    signatureCards: boss === null ? signatureSelections.map(
       (selection): BattleSignatureCard => ({
         cardId: selection.cardId,
         cardNumber: selection.cardNumber,
         name: selection.name,
       }),
-    ),
+    ) : boss.incarnation.deckRecipe.signatureCardIds.map((id) => {
+      const card = signatureCandidates.find((candidate) => candidate.id === id);
+      if (card === undefined) throw new Error(`Missing finalized Apollyon signature ${id}`);
+      return { cardId: card.id, cardNumber: card.cardNumber, name: card.name };
+    }),
   });
 
   // Assemble the deferred opponent reconstruction logs.
   const emitOpponentLogs = (): void => {
+    if (boss !== null) {
+      logEvent("apollyon_opponent_constructed", {
+        battleEntryKey,
+        incarnationId: boss.incarnation.id,
+        aspectId: boss.incarnation.aspect.id,
+        selection: boss.selection,
+        poolAvatarId: boss.incarnation.deckRecipe.poolAvatarId,
+        archetypeTideIds: boss.incarnation.deckRecipe.archetypeTideIds,
+        signatureCardIds: boss.incarnation.deckRecipe.signatureCardIds,
+        dreamsignIds: boss.incarnation.dreamsignIds,
+        finalCardIds: enemyDeckDefinition.map((card) => card.cardId),
+        seed,
+        poolSeed,
+        opponentsContentHash: opponentsData.contentHash,
+        aspectStatus: boss.incarnation.aspect.abilities !== undefined ? "authored" : boss.incarnation.aspect.vanilla === true ? "vanilla" : "pending",
+      });
+      emitTideDeckLog?.();
+      return;
+    }
     // The signature-card pick is independent of opponent deck construction
     // ran, so it is recorded for every battle. `matchedTerms` / `score` make the
     // pick reconstructable: each card is chosen for the glossary keywords it
@@ -364,10 +407,10 @@ export function createBattleInit(input: CreateBattleInitInput): BattleStart {
       state.battleModifiers,
     ),
   );
-  const opponentAbilityActive = opponentAbilityIsActive(
+  const opponentAbilityActive = boss === null ? opponentAbilityIsActive(
     completionLevelAtStart,
     opponentsData.progression.abilityActiveFromLayer,
-  );
+  ) : boss.incarnation.aspect.abilities !== undefined;
   // The opening dreamscape (completion level 0) is a shorter, gentler
   // introduction won at 10 points; every later dreamscape is played to 25.
   const scoreTargetIndex = Math.min(
@@ -398,7 +441,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleStart {
     journey: state,
     enemy: {
       deck: enemyDeckDefinition.map((definition) => definition.cardId),
-      avatar: opponentAbilityActive
+      avatar: boss !== null ? boss.incarnation.aspect.id : opponentAbilityActive
         ? (enemyDescriptor.avatarId ?? null)
         : null,
       dreamsigns: enemyDescriptor.dreamsigns.map((dreamsign) => dreamsign.id),
@@ -409,6 +452,19 @@ export function createBattleInit(input: CreateBattleInitInput): BattleStart {
     dreamwell: (input.dreamwellCards ?? []).map((card) => card.id),
   });
   return { init, engineInit };
+}
+
+/** Explicit selected identities are authoritative; historical catalogs retain their seeded fallback. */
+function resolveApollyon(input: CreateBattleInitInput): { incarnation: ApollyonIncarnationContent; selection: "run-incarnation" | "legacy-default" } | null {
+  const config = input.apollyon;
+  if (config === undefined || input.state.currentDreamscape === null || input.state.currentDreamscape !== input.state.atlas.bossNodeId) return null;
+  const selected = input.state.atlas.bossIncarnationId ?? null;
+  const incarnation = config.incarnations.find((entry) => entry.id === (selected ?? config.legacyDefaultIncarnationId));
+  if (incarnation === undefined) {
+    if (selected !== null) throw new Error(`Unknown Apollyon incarnation ${selected}`);
+    return null;
+  }
+  return { incarnation, selection: selected === null ? "legacy-default" : "run-incarnation" };
 }
 
 /** The display definition of a Dreamwell card. */

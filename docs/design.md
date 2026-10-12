@@ -225,12 +225,52 @@ and each has a color and an emblem shown on the card.
 
 ## Apollyon
 
-Apollyon, the Doom of Humanity, is the final boss: always the same character,
-appearing in one of ten **incarnations** chosen when the atlas is generated.
-Each incarnation has a title, an Aspect description, and a deck archetype.
-The incarnations are currently presentation only; their battle mechanics
-(an Aspect ability, a curated boss deck, and 1–2 Dreamsigns each) are
-provisional and are documented here once implemented.
+Apollyon is the final boss, appearing in one of ten **incarnations** selected
+when the atlas is generated. The incarnation UUID is authoritative for the
+boss battle. Its distinct Aspect UUID occupies the engine's permanent Avatar
+emblem slot; the Aspect is not a selectable journey Avatar. The three curated
+signature cards, one Dreamsign and archetype tide bias are defined alongside
+its provisional DSL specification in `src/content/apollyon/design.ts`.
+
+**Provisional design.** The battle construction and recipes are active. Each
+Aspect has a separate `proposedAbilities` specification and a `pending`
+live definition, so the engine gives it an empty ability list. Pair-authoring
+work adopts and verifies each specification as live abilities; the subsequent
+sanity work measures 50 Greedy-vs-Greedy games per incarnation against layer-6
+decks. These designs carry no balance or win-rate claim.
+
+| Incarnation UUID and Aspect | Proposed emblem ability | Design rationale and deck focus |
+| --- | --- | --- |
+| `1380edc9-09ed-44df-ad09-ab4cbfc081b5` — World's End / Ravening | Once per turn, playing a spirit animal materializes a 1✦ spirit animal figment. | Bounded pack growth turns animals into a chorus. The Grath pool and Stampede/One Pack tides emphasize swarm support; Dreamborne Leviathan, Ghostlight Wolves and Emerald Guardian are signatures, with Magic Fish sustaining the pack. |
+| `3fe26475-8023-46d3-b13b-86673b92e3d0` — End of Causality / Catastrophe | Copy the second event played each turn. | A finite event echo supplies storm tempo. Copies are not played cards. Ovanel's pool and Gathering Tempest/Doubling Current bias support Echoes of the Journey, Echo Architect and Echoes of Eternity; Witch Hat provides cards rather than another copy trigger. |
+| `80b6296d-840e-4ed7-b684-5aadc0981bf4` — Doom of Humanity / Slaughter | Warriors you control have +1✦. | A continuous strength bonus rewards gathered ranks and support geometry. Eldrik's pool and Drums of War/Sundering Vanguard favor Dawn Commander, Warrior's Path and Winter Harbinger, with Ivory Claw replenishment. |
+| `ac116276-5569-491b-85c9-e192823bddae` — Butcher / Hunger | Once per turn, abandoning a character draws a card. | Sacrifice feeds another survivor without an automatic sacrifice loop. Kragg's pool and Rite of the Swarm/Cull's Bounty support Corrupted Host, Soulkindler and Tidewreck Navigator; Shadow Droplet supplies survivor reclaim. |
+| `57c65dfd-a125-440e-a410-c8c4a314b1d1` — Last Word / Haunting | Dawn returns a random ≤2● cost character from your void to hand. | The cheap host keeps returning but pays to reenter play. Seraveth's pool and Hunger of the Deep/Unending Host favor Sunrise Strummer, Void Salvager and Voidsire; Mandrake Root reinforces smaller-character recovery. |
+| `e70d2d02-9ba6-434b-94d3-73ad29d3e9f4` — Broken Cycle / Damnation | Once per turn, a reclaimed character gains +1✦ permanently. | Repeated passage through the void builds a soul's strength. Vaela's pool and Embers into Flame/Eternal Cycle favor Amber Aurelia, Spirit of Smoldering Echoes and Echo Technician, with Dragon Egg rewarding the return route. |
+| `9ae35d68-a432-45f6-ab8c-07572a25ad6b` — Keeper of Names / Suffering | Once per turn, the discarded card gains reclaim until end of turn. | Discard creates one immediate opportunity rather than limitless card flow. Corvath's pool and Echoes in the Abyss/Drowned Archive favor Ritekeeper, Resonance Surveyor and Soulkindler; Honeycombs helps pay for recursion. |
+| `8890b892-0634-4b8a-bfc0-018adfa979a7` — Sovereign of the Void / Oblivion | Dawn grants reclaim to a random character in your void if it contains at least seven cards. | Density unlocks a growing recursion resource without free mass revival. Kell Tarn's pool and Harvest of the Fallen/Risen from the Depths favor Ashen Remnant, Vessel of Echoes and Voidsire; Eyeball Plant supplies another cost-gated reclaim route. |
+| `ccc0385e-ff00-4be3-a807-99e4def47d2d` — Unplaceable / Violation | 2● and exhaust the Aspect: dissolve an enemy with ≤2✦. | Precise removal opens lanes for Outsiders, with exhaustion limiting each use. Edran's pool and Unseen Procession/Long Attrition favor Paradox Corps Enforcer, Abyssal Deputy and Breach Artist; Cloud Lens supports cheap event tempo. |
+| `9a1bf275-2763-4db9-ad10-86d8f7e7efdf` — Herald of Revelation / Frenzy | Playing the second event each turn awakens warriors you control. | A timed rapture rewards events followed by warrior challenges. Eldrik's pool and Dawn's Charge/Drums of War favor Conduit of Resonance, Winter Harbinger and Warrior's Path; Black Attuned connects the event and warrior plans. |
+
+Recipes use real roster Avatar UUIDs solely as seeded Tide pool sources. Their
+explicit tide UUIDs and signature card UUIDs seed the shared affinity ranking;
+signatures remain present once each through fill and starter dilution. Names
+are display references in this rationale, never keys or equality predicates.
+The catalog records all card, tide, Dreamsign, Aspect and pool-source UUIDs.
+
+The configured historical default is Doom of Humanity. A historical atlas
+with an absent or null incarnation uses that default when its supplied catalog
+contains it. Historical callers without boss configuration, and catalogs
+without the configured default, retain their seeded ordinary opponent route.
+An explicitly selected unknown incarnation is an error when boss configuration
+is supplied. Battle construction does not mutate the atlas or select another
+incarnation. The boss descriptor preserves paired incarnation/Aspect UUIDs;
+engine replay preserves the same permanent emblem and exact deck/Dreamsigns.
+
+`apollyon_opponent_constructed` records the selection mode, incarnation,
+Aspect, pool source, tide bias, signature and Dreamsign UUIDs, final card UUIDs,
+seeds, opponent tuning hash and live Aspect status. Its reconstruction logs
+share the battle transaction's deferred commit handoff.
 
 ## Future: meta-progression
 
