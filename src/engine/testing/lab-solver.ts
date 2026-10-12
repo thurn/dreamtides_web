@@ -153,6 +153,7 @@ function characterFor(
   selector: CharacterSelector,
   pool: readonly EngineCardDefinition[],
   xRange: XRange | null,
+  automaticFixture = true,
 ): { readonly card: CardId; readonly predicates: readonly Omit<CharacterSelector, "controller" | "anyOf">[] } {
   const fitting = (card: EngineCardDefinition): readonly Omit<CharacterSelector, "controller" | "anyOf">[] | null => {
     const spark = sparkOf(card);
@@ -160,6 +161,8 @@ function characterFor(
     if (card.cardType !== "character") return null;
     const branches = selector.anyOf === undefined ? [{}] : selector.anyOf;
     for (const branch of branches) {
+      // Automatic catalog fixtures are ready back-rank characters without challenge roles.
+      if (automaticFixture && (branch.exhausted === true || branch.rank === "front" || branch.challenging === true || branch.blocking === true)) continue;
       const predicates = [selector, branch];
       if (predicates.every(predicate =>
         // The solver places catalog cards, never figments.
@@ -434,7 +437,7 @@ export function labBoard(
     // A ▸Materialized character target of your own gets a character of yours ahead of the card, so the card is not its only choice.
     if (spec.kind === "target" && spec.selector.controller === "you") {
       const selector = sourceSparkAs(spec.selector, sourceSpark);
-      for (let index = 0; index < (spec.count ?? 1); index++) back[side].push(characterFor(engine, selector, pool, xRange).card);
+      for (let index = 0; index < (spec.count ?? 1); index++) back[side].push(characterFor(engine, selector, pool, xRange, staged === undefined).card);
       continue;
     }
     if (spec.kind !== "inZone") continue;
@@ -448,7 +451,7 @@ export function labBoard(
     voids[player === "you" ? side : opponent(side)].push(cardFor(engine, filter, pool));
   }
   for (const { choosers, selector } of played.flatMap(abandonChoices)) {
-    for (const chooser of choosers) back[chooser === "you" ? side : opponent(side)].push(characterFor(engine, selector, pool, xRange).card);
+    for (const chooser of choosers) back[chooser === "you" ? side : opponent(side)].push(characterFor(engine, selector, pool, xRange, staged === undefined).card);
   }
   for (const specs of [...eventTargetSpecs(definition, variant), ...countActivations.map((ability) => ability.kind === "activated" ? everyTarget(ability.effect) : [])]) {
     for (const spec of specs) {
@@ -465,7 +468,7 @@ export function labBoard(
       const targetSide = spec.selector.controller === "you" ? side : opponent(side);
       const selector = sourceSparkAs(spec.selector, sourceSpark);
       for (let index = 0; index < (spec.count ?? 1); index++) {
-        const character = characterFor(engine, selector, pool, xRange ?? countRange);
+        const character = characterFor(engine, selector, pool, xRange ?? countRange, staged === undefined);
         back[targetSide].push(character.card);
         for (const { count, cards } of countNeeds(engine, character.predicates, character.card)) {
           const countSide = count.player === "you" ? side : opponent(side);
@@ -483,7 +486,7 @@ export function labBoard(
   }
   for (const filter of handCards) hands[side].push(cardFor(engine, filter, pool));
   for (const selector of characters) {
-    const character = characterFor(engine, selector.figment === true ? { ...selector, figment: undefined } : selector, pool, xRange ?? countRange);
+    const character = characterFor(engine, selector.figment === true ? { ...selector, figment: undefined } : selector, pool, xRange ?? countRange, staged === undefined);
     if (selector.figment === true) {
       figments[side].push({ slot: { rank: "back", index: back[side].length }, printing: { kind: "figmentCopy", cardId: character.card, spark: null } });
       back[side].push(null);

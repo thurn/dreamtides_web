@@ -81,6 +81,54 @@ function dissolvesStagedEnemy(labEngine: Engine, card: EngineCardDefinition, poo
 }
 
 describe("card-lab setup solver", () => {
+  it.each(["player", "enemy"] as const)("preserves a declared front-rank alternative through real play and reconstruction as %s", (side) => {
+    const mage: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(0x57231), subtype: "Mage" };
+    const card: EngineCardDefinition = { ...SYNTHETIC.event0, id: syntheticId(0x57232), status: "authored", abilities: () => [event(dissolve(target(enemyCharacter({ anyOf: [{ rank: "front", subtype: "Mage" }] }))))] };
+    const other = side === "player" ? "enemy" : "player";
+    const labEngine = createEngine(testCatalog([card, mage]));
+    const solved = labBoard(labEngine, card.id, [mage], side, { [other]: { back: [], front: [mage.id] } });
+    for (const state of [solved.state, boardState(labEngine.catalog, solved.setup).state]) {
+      const [staged] = state.sides[other].frontRank.filter((id): id is InstanceId => id !== null);
+      expect(state.instances[staged].printing).toEqual({ kind: "card", cardId: mage.id });
+      const action = labEngine.legalActions(state, side).find(candidate => candidate.kind === "play");
+      if (action === undefined) throw new Error("Missing declared play");
+      const played = labEngine.apply(state, side, action, { answer(prompt) {
+        if (prompt.kind !== "chooseTargets") throw new Error(`Unexpected ${prompt.kind}`);
+        expect(prompt.candidates).toEqual([staged]); return [staged];
+      } });
+      const resolved = passUntil(labEngine, played.state, next => next.stack.length === 0).state;
+      expect(resolved.instances[staged]).toMatchObject({ zone: "void", printing: { kind: "card", cardId: mage.id } });
+      expect(invariantViolations(resolved, labEngine.catalog)).toEqual([]);
+    }
+  });
+  it.each(["player", "enemy"] as const)("skips incompatible fixture alternatives and rebuilds a playable fallback as %s", (side) => {
+    const mage: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(0x57201), subtype: "Mage" };
+    const highMage: EngineCardDefinition = { ...SYNTHETIC.vanilla3, id: syntheticId(0x57202), subtype: "Mage" };
+    const unsupported = [{ exhausted: true }, { rank: "front" }, { challenging: true }, { blocking: true }] as const;
+    for (const anyOf of [undefined, ...unsupported.map(predicate => [predicate, { subtype: "Mage" as const }])]) {
+      const card: EngineCardDefinition = { ...SYNTHETIC.event0, id: syntheticId(0x57203), status: "authored",
+        abilities: () => [event(dissolve(target(enemyCharacter({ sparkAtMost: 2, exhausted: false, rank: "back", challenging: false, blocking: false,
+          ...(anyOf === undefined ? { subtype: "Mage" as const } : { anyOf }),
+        }))))] };
+      const labEngine = createEngine(testCatalog([card, highMage, mage]));
+      const solved = labBoard(labEngine, card.id, [highMage, mage], side);
+      for (const state of [solved.state, boardState(labEngine.catalog, solved.setup).state]) {
+        const targets = state.sides[side === "player" ? "enemy" : "player"].backRank.filter((id): id is InstanceId => id !== null);
+        expect(targets).toHaveLength(1);
+        const [staged] = targets as [InstanceId];
+        expect(state.instances[staged].printing).toEqual({ kind: "card", cardId: mage.id });
+        const played = labEngine.apply(state, side, { kind: "play", card: state.sides[side].hand[0], from: "hand" }, { answer(prompt) {
+          if (prompt.kind !== "chooseTargets") throw new Error(`Unexpected ${prompt.kind}`);
+          expect(prompt.candidates).toEqual([staged]); return [staged];
+        } });
+        const resolved = passUntil(labEngine, played.state, next => next.stack.length === 0).state;
+        expect(resolved.instances[staged]).toMatchObject({ zone: "void", printing: { kind: "card", cardId: mage.id } });
+        expect(invariantViolations(resolved, labEngine.catalog)).toEqual([]);
+      }
+    }
+    const impossible: EngineCardDefinition = { ...SYNTHETIC.event0, id: syntheticId(0x57204), status: "authored", abilities: () => [event(dissolve(target(enemyCharacter({ anyOf: unsupported }))))] };
+    expect(() => labBoard(createEngine(testCatalog([impossible, mage])), impossible.id, [mage], side)).toThrow();
+  });
   it.each(["player", "enemy"] as const)("stages one satisfiable alternative with common X and that branch’s counts as %s", (side) => {
     const decoy: EngineCardDefinition = { ...SYNTHETIC.vanilla5, id: syntheticId(0x55620), subtype: "Mage", costs: [energy(1)] };
     const valid: EngineCardDefinition = { ...SYNTHETIC.vanilla3, id: syntheticId(0x55621), subtype: "Mage", costs: [energy(5)] };

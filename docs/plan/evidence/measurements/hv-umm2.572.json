@@ -1,0 +1,1265 @@
+{
+  "bead": "hv-umm2.572",
+  "base": "5be8538ba5c7bcd686a621ec8b7b60c58c9fe82a",
+  "dispatch": {
+    "timestamp": "2026-10-12T18:46:59.344Z",
+    "call_id": "call_604fe23e95864a369b3fa0d39fbe8bed",
+    "receipt": "/tmp/572-dispatch-exact.json",
+    "actualModelStart": "unobserved"
+  },
+  "clockScope": "Exact parent spawn tool-call through final precommit endpoint refreshed under parent metadata CLOCK/COMMIT ACK. Gross elapsed window includes research, coordination, waits, failed expected negatives, mutations and verification. Actual Git commit timestamp is second precision; parent verifies the small endpoint delta.",
+  "finalClockAcknowledged": true,
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review command starting load at 2026-10-12T19:03:12.621429+00:00"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "name": "focused",
+      "load": "{ 5.35 10.99 13.98 }",
+      "start": "2026-10-12T18:49:58.412453+00:00"
+    },
+    {
+      "name": "baseline-restored",
+      "load": "{ 5.72 10.89 13.91 }",
+      "start": "2026-10-12T18:50:06.696758+00:00"
+    },
+    {
+      "name": "mutation-ignored-stage",
+      "load": "{ 5.06 10.49 13.71 }",
+      "start": "2026-10-12T18:50:21.104783+00:00"
+    },
+    {
+      "name": "mutation-exhausted",
+      "load": "{ 4.61 10.04 13.47 }",
+      "start": "2026-10-12T18:50:43.384407+00:00"
+    },
+    {
+      "name": "mutation-front",
+      "load": "{ 4.57 9.94 13.42 }",
+      "start": "2026-10-12T18:50:44.444322+00:00"
+    },
+    {
+      "name": "mutation-challenger",
+      "load": "{ 4.57 9.94 13.42 }",
+      "start": "2026-10-12T18:50:45.506697+00:00"
+    },
+    {
+      "name": "mutation-blocker",
+      "load": "{ 4.57 9.94 13.42 }",
+      "start": "2026-10-12T18:50:46.549699+00:00"
+    },
+    {
+      "name": "focused-restored",
+      "load": "{ 4.67 9.69 13.27 }",
+      "start": "2026-10-12T18:50:59.527561+00:00"
+    },
+    {
+      "name": "review",
+      "load": "{ 20.54 12.83 14.18 }",
+      "start": "2026-10-12T18:51:56.156819+00:00"
+    },
+    {
+      "name": "knip",
+      "load": "{ 32.64 16.53 15.48 }",
+      "start": "2026-10-12T18:52:29.006364+00:00"
+    },
+    {
+      "name": "declared-negative",
+      "load": "{ 10.40 16.21 16.05 }",
+      "start": "2026-10-12T18:59:35.101402+00:00"
+    },
+    {
+      "name": "focused-final",
+      "load": "{ 5.25 12.73 14.71 }",
+      "start": "2026-10-12T19:01:20.617842+00:00"
+    },
+    {
+      "name": "baseline-final",
+      "load": "{ 5.00 12.08 14.42 }",
+      "start": "2026-10-12T19:01:46.480449+00:00"
+    },
+    {
+      "name": "declared-final",
+      "load": "{ 5.00 12.08 14.42 }",
+      "start": "2026-10-12T19:01:46.480614+00:00"
+    },
+    {
+      "name": "mutation-final-ignored-stage",
+      "load": "{ 6.64 12.06 14.37 }",
+      "start": "2026-10-12T19:02:01.316144+00:00"
+    },
+    {
+      "name": "mutation-final-exhausted",
+      "load": "{ 6.64 12.06 14.37 }",
+      "start": "2026-10-12T19:02:02.964812+00:00"
+    },
+    {
+      "name": "mutation-final-front",
+      "load": "{ 6.64 12.06 14.37 }",
+      "start": "2026-10-12T19:02:04.477960+00:00"
+    },
+    {
+      "name": "mutation-final-challenger",
+      "load": "{ 9.79 12.63 14.56 }",
+      "start": "2026-10-12T19:02:06.149339+00:00"
+    },
+    {
+      "name": "mutation-final-blocker",
+      "load": "{ 9.79 12.63 14.56 }",
+      "start": "2026-10-12T19:02:07.770433+00:00"
+    },
+    {
+      "name": "mutation-final-force-automatic",
+      "load": "{ 13.17 13.28 14.77 }",
+      "start": "2026-10-12T19:02:09.698431+00:00"
+    },
+    {
+      "name": "focused-restored-final",
+      "load": "{ 24.67 16.13 15.76 }",
+      "start": "2026-10-12T19:02:41.084808+00:00"
+    },
+    {
+      "name": "review-final",
+      "load": "{ 19.54 15.69 15.61 }",
+      "start": "2026-10-12T19:03:12.621429+00:00"
+    },
+    {
+      "name": "knip-final",
+      "load": "{ 21.67 16.76 16.00 }",
+      "start": "2026-10-12T19:04:10.623938+00:00"
+    }
+  ],
+  "commands": [
+    {
+      "name": "focused",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "start": "2026-10-12T18:49:58.412453+00:00",
+      "end": "2026-10-12T18:50:06.138071+00:00",
+      "wallS": 7.72550250000495,
+      "exit": 0,
+      "load": "{ 5.35 10.99 13.98 }",
+      "pid": 79315,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/focused.log"
+    },
+    {
+      "name": "baseline-restored",
+      "args": [
+        "npx",
+        "--no-install",
+        "tsx",
+        "/tmp/hv-umm2.572-validation/baseline.ts"
+      ],
+      "start": "2026-10-12T18:50:06.696758+00:00",
+      "end": "2026-10-12T18:50:08.452370+00:00",
+      "wallS": 1.755520416991203,
+      "exit": 0,
+      "load": "{ 5.72 10.89 13.91 }",
+      "pid": 79585,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/baseline-restored.log"
+    },
+    {
+      "name": "mutation-ignored-stage",
+      "args": [
+        "npx",
+        "--no-install",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "skips incompatible fixture",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:50:21.104783+00:00",
+      "end": "2026-10-12T18:50:22.327850+00:00",
+      "wallS": 1.2229570829949807,
+      "exit": 1,
+      "load": "{ 5.06 10.49 13.71 }",
+      "pid": 79982,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/mutation-ignored-stage.log"
+    },
+    {
+      "name": "mutation-exhausted",
+      "args": [
+        "npx",
+        "--no-install",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "skips incompatible fixture",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:50:43.384407+00:00",
+      "end": "2026-10-12T18:50:44.422446+00:00",
+      "wallS": 1.0379624999914085,
+      "exit": 1,
+      "load": "{ 4.61 10.04 13.47 }",
+      "pid": 80515,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/mutation-exhausted.log"
+    },
+    {
+      "name": "mutation-front",
+      "args": [
+        "npx",
+        "--no-install",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "skips incompatible fixture",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:50:44.444322+00:00",
+      "end": "2026-10-12T18:50:45.485104+00:00",
+      "wallS": 1.0407137090078322,
+      "exit": 1,
+      "load": "{ 4.57 9.94 13.42 }",
+      "pid": 80569,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/mutation-front.log"
+    },
+    {
+      "name": "mutation-challenger",
+      "args": [
+        "npx",
+        "--no-install",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "skips incompatible fixture",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:50:45.506697+00:00",
+      "end": "2026-10-12T18:50:46.525484+00:00",
+      "wallS": 1.0187025839986745,
+      "exit": 1,
+      "load": "{ 4.57 9.94 13.42 }",
+      "pid": 80603,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/mutation-challenger.log"
+    },
+    {
+      "name": "mutation-blocker",
+      "args": [
+        "npx",
+        "--no-install",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "skips incompatible fixture",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T18:50:46.549699+00:00",
+      "end": "2026-10-12T18:50:47.576605+00:00",
+      "wallS": 1.0268136659869924,
+      "exit": 1,
+      "load": "{ 4.57 9.94 13.42 }",
+      "pid": 80636,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/mutation-blocker.log"
+    },
+    {
+      "name": "focused-restored",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "start": "2026-10-12T18:50:59.527561+00:00",
+      "end": "2026-10-12T18:51:07.358540+00:00",
+      "wallS": 7.830839583999477,
+      "exit": 0,
+      "load": "{ 4.67 9.69 13.27 }",
+      "pid": 81082,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/focused-restored.log"
+    },
+    {
+      "name": "review",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T18:51:56.156819+00:00",
+      "end": "2026-10-12T18:52:21.478227+00:00",
+      "wallS": 25.32097166699532,
+      "exit": 0,
+      "load": "{ 20.54 12.83 14.18 }",
+      "pid": 83794,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/review.log"
+    },
+    {
+      "name": "knip",
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T18:52:29.006364+00:00",
+      "end": "2026-10-12T18:52:33.780865+00:00",
+      "wallS": 4.774347792001208,
+      "exit": 0,
+      "load": "{ 32.64 16.53 15.48 }",
+      "pid": 85791,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/knip.log"
+    },
+    {
+      "name": "declared-negative",
+      "args": [
+        "npx",
+        "--no-install",
+        "tsx",
+        "/tmp/hv-umm2.572-validation/declared-negative.ts"
+      ],
+      "start": "2026-10-12T18:59:35.101402+00:00",
+      "end": "2026-10-12T18:59:36.312825+00:00",
+      "wallS": 1.2113343330129283,
+      "exit": 1,
+      "load": "{ 10.40 16.21 16.05 }",
+      "pid": 68544,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/declared-negative.log"
+    },
+    {
+      "name": "focused-final",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "start": "2026-10-12T19:01:20.617842+00:00",
+      "end": "2026-10-12T19:01:27.599828+00:00",
+      "wallS": 6.981876625010045,
+      "exit": 0,
+      "load": "{ 5.25 12.73 14.71 }",
+      "pid": 72649,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/focused-final.log"
+    },
+    {
+      "name": "baseline-final",
+      "args": [
+        "npx",
+        "--no-install",
+        "tsx",
+        "/tmp/hv-umm2.572-validation/baseline.ts"
+      ],
+      "start": "2026-10-12T19:01:46.480449+00:00",
+      "end": "2026-10-12T19:01:47.964050+00:00",
+      "wallS": 1.4835613750037737,
+      "exit": 0,
+      "load": "{ 5.00 12.08 14.42 }",
+      "pid": 73268,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/baseline-final.log"
+    },
+    {
+      "name": "declared-final",
+      "args": [
+        "npx",
+        "--no-install",
+        "tsx",
+        "/tmp/hv-umm2.572-validation/declared-negative.ts"
+      ],
+      "start": "2026-10-12T19:01:46.480614+00:00",
+      "end": "2026-10-12T19:01:47.944569+00:00",
+      "wallS": 1.463773042007233,
+      "exit": 0,
+      "load": "{ 5.00 12.08 14.42 }",
+      "pid": 73269,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/declared-final.log"
+    },
+    {
+      "name": "mutation-final-ignored-stage",
+      "args": [
+        "npx",
+        "--no-install",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "skips incompatible fixture",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T19:02:01.316144+00:00",
+      "end": "2026-10-12T19:02:02.933061+00:00",
+      "wallS": 1.616844583011698,
+      "exit": 1,
+      "load": "{ 6.64 12.06 14.37 }",
+      "pid": 73751,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/mutation-final-ignored-stage.log"
+    },
+    {
+      "name": "mutation-final-exhausted",
+      "args": [
+        "npx",
+        "--no-install",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "skips incompatible fixture",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T19:02:02.964812+00:00",
+      "end": "2026-10-12T19:02:04.445033+00:00",
+      "wallS": 1.4800883749994682,
+      "exit": 1,
+      "load": "{ 6.64 12.06 14.37 }",
+      "pid": 73846,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/mutation-final-exhausted.log"
+    },
+    {
+      "name": "mutation-final-front",
+      "args": [
+        "npx",
+        "--no-install",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "skips incompatible fixture",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T19:02:04.477960+00:00",
+      "end": "2026-10-12T19:02:06.113448+00:00",
+      "wallS": 1.6353955830127234,
+      "exit": 1,
+      "load": "{ 6.64 12.06 14.37 }",
+      "pid": 74007,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/mutation-final-front.log"
+    },
+    {
+      "name": "mutation-final-challenger",
+      "args": [
+        "npx",
+        "--no-install",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "skips incompatible fixture",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T19:02:06.149339+00:00",
+      "end": "2026-10-12T19:02:07.738986+00:00",
+      "wallS": 1.5892532500001835,
+      "exit": 1,
+      "load": "{ 9.79 12.63 14.56 }",
+      "pid": 74155,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/mutation-final-challenger.log"
+    },
+    {
+      "name": "mutation-final-blocker",
+      "args": [
+        "npx",
+        "--no-install",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "skips incompatible fixture",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T19:02:07.770433+00:00",
+      "end": "2026-10-12T19:02:09.664890+00:00",
+      "wallS": 1.89431925000099,
+      "exit": 1,
+      "load": "{ 9.79 12.63 14.56 }",
+      "pid": 74364,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/mutation-final-blocker.log"
+    },
+    {
+      "name": "mutation-final-force-automatic",
+      "args": [
+        "npx",
+        "--no-install",
+        "vitest",
+        "run",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "-t",
+        "preserves a declared front-rank alternative",
+        "--maxWorkers",
+        "2"
+      ],
+      "start": "2026-10-12T19:02:09.698431+00:00",
+      "end": "2026-10-12T19:02:11.476213+00:00",
+      "wallS": 1.7776567090040771,
+      "exit": 1,
+      "load": "{ 13.17 13.28 14.77 }",
+      "pid": 74473,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/mutation-final-force-automatic.log"
+    },
+    {
+      "name": "focused-restored-final",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "start": "2026-10-12T19:02:41.084808+00:00",
+      "end": "2026-10-12T19:02:50.661477+00:00",
+      "wallS": 9.57647437498963,
+      "exit": 0,
+      "load": "{ 24.67 16.13 15.76 }",
+      "pid": 18484,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/focused-restored-final.log"
+    },
+    {
+      "name": "review-final",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:03:12.621429+00:00",
+      "end": "2026-10-12T19:03:31.730982+00:00",
+      "wallS": 19.109347250006977,
+      "exit": 0,
+      "load": "{ 19.54 15.69 15.61 }",
+      "pid": 29674,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/review-final.log"
+    },
+    {
+      "name": "knip-final",
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T19:04:10.623938+00:00",
+      "end": "2026-10-12T19:04:13.982661+00:00",
+      "wallS": 3.358578083003522,
+      "exit": 0,
+      "load": "{ 21.67 16.76 16.00 }",
+      "pid": 33939,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/knip-final.log"
+    }
+  ],
+  "negative": {
+    "start": "2026-10-12T18:48:12.471309+00:00",
+    "end": "2026-10-12T18:48:14.309046+00:00",
+    "wallS": 1.8376250839937711,
+    "exit": 1,
+    "loadAverage": [
+      8.76806640625,
+      13.234375,
+      15.04541015625
+    ],
+    "base": "5be8538ba5c7bcd686a621ec8b7b60c58c9fe82a",
+    "before": {
+      "src/engine/testing/lab-solver.ts": "710749d01c43bb3ac5268e5cb55de54aa876d130f118fa0addc1ff49c37a8c03",
+      "src/engine/testing/tooling-card-lab.test.ts": "1d4d54f9891bdbffbc6122e6869732cef5d142460c229b5d9b79a48865cce6c0"
+    },
+    "after": {
+      "src/engine/testing/lab-solver.ts": "710749d01c43bb3ac5268e5cb55de54aa876d130f118fa0addc1ff49c37a8c03",
+      "src/engine/testing/tooling-card-lab.test.ts": "1d4d54f9891bdbffbc6122e6869732cef5d142460c229b5d9b79a48865cce6c0"
+    },
+    "command": [
+      "npx",
+      "--no-install",
+      "tsx",
+      "/tmp/hv-umm2.572-validation/baseline.ts"
+    ],
+    "trackedWrites": 0
+  },
+  "mutations": {
+    "broad": {
+      "before": "2a1068765f66e31c265bbc8929258ff702309f388da1d0996589eead51c47c4a",
+      "mutated": "710749d01c43bb3ac5268e5cb55de54aa876d130f118fa0addc1ff49c37a8c03",
+      "restored": "2a1068765f66e31c265bbc8929258ff702309f388da1d0996589eead51c47c4a",
+      "exit": 1,
+      "restoredExactly": true
+    },
+    "individualPredicates": {
+      "originalSha256": "2a1068765f66e31c265bbc8929258ff702309f388da1d0996589eead51c47c4a",
+      "results": [
+        {
+          "name": "exhausted",
+          "exit": 1,
+          "restoredExactly": true
+        },
+        {
+          "name": "front",
+          "exit": 1,
+          "restoredExactly": true
+        },
+        {
+          "name": "challenger",
+          "exit": 1,
+          "restoredExactly": true
+        },
+        {
+          "name": "blocker",
+          "exit": 1,
+          "restoredExactly": true
+        }
+      ]
+    },
+    "meaning": "Phase1 mutations qualify checkpoint source only. Final six mutations re-run the broad automatic guard removal, four individual predicate omissions and forcing automatic restrictions on declared fixtures; each fails both controllers and restores exact final source before focused qualification.",
+    "final": {
+      "sourceSha256": "2c5da8a815d23d47d87d8cddd8fc925d16cd6c6c884b8fe897f0dc8da0724a9f",
+      "results": [
+        {
+          "name": "ignored-stage",
+          "exit": 1,
+          "mutatedSha256": "250c4e9f64a309166cef523b6c3281b25c9b60419bd0b97bb28cf9b99f87a07d",
+          "restoredExactly": true
+        },
+        {
+          "name": "exhausted",
+          "exit": 1,
+          "mutatedSha256": "8ab39f4cfe595fb5ce88906e9de4d3e49692aad30e423653f96a626275bae0d7",
+          "restoredExactly": true
+        },
+        {
+          "name": "front",
+          "exit": 1,
+          "mutatedSha256": "44f400b83115f178784dda932216fe33bd7d02826e0dbf926eb9be58acc3218c",
+          "restoredExactly": true
+        },
+        {
+          "name": "challenger",
+          "exit": 1,
+          "mutatedSha256": "4ad10a58ef92ee205da38791b6753327eddd2b80c79a54b1a39755a18dd4c853",
+          "restoredExactly": true
+        },
+        {
+          "name": "blocker",
+          "exit": 1,
+          "mutatedSha256": "fef50819da6860525e643ff23965e1c278fcffe246f5efb82c8903c332fa2c25",
+          "restoredExactly": true
+        },
+        {
+          "name": "force-automatic",
+          "exit": 1,
+          "mutatedSha256": "78c22edaf5c3babc17324586a56b1cc0acaea917ece04e1e21ad69a87ca76a17",
+          "restoredExactly": true
+        }
+      ]
+    }
+  },
+  "testDelta": {
+    "value": {
+      "files": 0,
+      "lines": 48,
+      "jsdomFiles": 0
+    },
+    "basis": "Plain physical newline count in tracked .test.ts/.test.tsx entrypoints, no normalization: 471 -> 519 lines in the existing node owner, 48 additive lines, zero new entrypoints or jsdom files."
+  },
+  "sourceHashMap": {
+    "src/engine/testing/lab-solver.ts": "2c5da8a815d23d47d87d8cddd8fc925d16cd6c6c884b8fe897f0dc8da0724a9f",
+    "src/engine/testing/tooling-card-lab.test.ts": "b1a8166381ecba126bc89485aa69e4f5e52c165a8b26688d93d9795becb5f8d9"
+  },
+  "scope": {
+    "implementation": "characterFor automatic branch viability only; private automaticFixture parameter and all four labBoard callsites pass staged===undefined",
+    "fallout": [],
+    "preserved": "Existing outer predicate AND, subtype/notSubtype/figment checks, bounds, common X, chosen-branch counts, sourceSpark normalization, ordinary conjunction behavior and printing preference remain in their existing code paths. No matcher/type/engine flow/state/API/UI/catalog/registry changes.",
+    "declaredPolicy": "All four private callers pass staged===undefined. Explicit staged inputs retain existing suggestion/authoritative merge and final-playability policy. LAB_OVERRIDES is currently empty; no registry change or new baked-in override policy is introduced."
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "coverage": "No new engine transition. Incompatible alternatives are skipped during synchronous fixture construction; the synthetic test also rejects an all-incompatible selector with toThrow().",
+      "declaredTest": {
+        "file": "src/engine/testing/tooling-card-lab.test.ts",
+        "name": "preserves a declared front-rank alternative through real play and reconstruction as %s"
+      },
+      "test": {
+        "file": "src/engine/testing/tooling-card-lab.test.ts",
+        "name": "skips incompatible fixture alternatives and rebuilds a playable fallback as %s"
+      }
+    },
+    {
+      "path": "reload or restart mid-operation",
+      "coverage": "The public test reconstructs each solved setup with boardState and resolves a real play on both the solved and reconstructed boards. This proves setup reconstruction, not battle-fold replay.",
+      "declaredTest": {
+        "file": "src/engine/testing/tooling-card-lab.test.ts",
+        "name": "preserves a declared front-rank alternative through real play and reconstruction as %s"
+      },
+      "test": {
+        "file": "src/engine/testing/tooling-card-lab.test.ts",
+        "name": "skips incompatible fixture alternatives and rebuilds a playable fallback as %s"
+      }
+    },
+    {
+      "path": "partial write",
+      "coverage": "Not applicable: characterFor returns a local card/predicate selection or throws, without persistent writes or externally visible partial state."
+    },
+    {
+      "path": "invalid or stale input",
+      "coverage": "Both controllers reject exhausted/front/challenger/blocker first leaves, preserve the outer spark cap and supported ready/back/non-role predicates, resolve the matching Mage fallback, and reject all-incompatible input. No stored input or new stale-state transition is introduced.",
+      "declaredTest": {
+        "file": "src/engine/testing/tooling-card-lab.test.ts",
+        "name": "preserves a declared front-rank alternative through real play and reconstruction as %s"
+      },
+      "test": {
+        "file": "src/engine/testing/tooling-card-lab.test.ts",
+        "name": "skips incompatible fixture alternatives and rebuilds a playable fallback as %s"
+      }
+    },
+    {
+      "path": "concurrent actors",
+      "coverage": "Not applicable: deterministic fixture construction uses local arrays and read-only catalog definitions; no shared mutation, event publishing, or new engine transition is introduced."
+    }
+  ],
+  "qa": {
+    "applicability": "Synthetic public labBoard/real engine play/setup reconstruction proof. No production card, native browser fixture or fuzzer driver added. Browser/full/fuzz checks are not required for this bounded fixture-selection repair; original 556 full-suite 5813-pass evidence remains evidence of its original source only, not this final source. Parent retains 204 production/native card sweep ownership. Declared front-rank setup is verified through public labBoard and real play on solved and reconstructed boards; no new declared-input validation introduced.",
+    "matrix": "Both controllers, all four incompatible automatic alternatives then Mage fallback, plain supported conjunction, outer spark cap, authoritative declared front-rank setup, original and reconstructed setups, stable physical target printing and invariants. Existing owning tests retain X/count/sourceSpark checks.",
+    "screens": []
+  },
+  "reviewRouting": {
+    "required": "Fresh exact-source read-only gpt-5.6-sol Codex CLI core review, owned by parent after commit. Temporary human-authorized routing expires 2026-10-14T01:00:00Z.",
+    "findingDisposition": "Original 556 Sol P1 accepted by parent; 572 carries this bounded repair. Parent records actual 572 reviewer outcome."
+  },
+  "runtimeLedger": [
+    {
+      "pid": 79315,
+      "port": null,
+      "commandReceipt": "focused",
+      "stopped": true
+    },
+    {
+      "pid": 79585,
+      "port": null,
+      "commandReceipt": "baseline-restored",
+      "stopped": true
+    },
+    {
+      "pid": 79982,
+      "port": null,
+      "commandReceipt": "mutation-ignored-stage",
+      "stopped": true
+    },
+    {
+      "pid": 80515,
+      "port": null,
+      "commandReceipt": "mutation-exhausted",
+      "stopped": true
+    },
+    {
+      "pid": 80569,
+      "port": null,
+      "commandReceipt": "mutation-front",
+      "stopped": true
+    },
+    {
+      "pid": 80603,
+      "port": null,
+      "commandReceipt": "mutation-challenger",
+      "stopped": true
+    },
+    {
+      "pid": 80636,
+      "port": null,
+      "commandReceipt": "mutation-blocker",
+      "stopped": true
+    },
+    {
+      "pid": 81082,
+      "port": null,
+      "commandReceipt": "focused-restored",
+      "stopped": true
+    },
+    {
+      "pid": 83794,
+      "port": null,
+      "commandReceipt": "review",
+      "stopped": true
+    },
+    {
+      "pid": 85791,
+      "port": null,
+      "commandReceipt": "knip",
+      "stopped": true
+    },
+    {
+      "pid": 68544,
+      "port": null,
+      "commandReceipt": "declared-negative",
+      "stopped": true
+    },
+    {
+      "pid": 72649,
+      "port": null,
+      "commandReceipt": "focused-final",
+      "stopped": true
+    },
+    {
+      "pid": 73268,
+      "port": null,
+      "commandReceipt": "baseline-final",
+      "stopped": true
+    },
+    {
+      "pid": 73269,
+      "port": null,
+      "commandReceipt": "declared-final",
+      "stopped": true
+    },
+    {
+      "pid": 73751,
+      "port": null,
+      "commandReceipt": "mutation-final-ignored-stage",
+      "stopped": true
+    },
+    {
+      "pid": 73846,
+      "port": null,
+      "commandReceipt": "mutation-final-exhausted",
+      "stopped": true
+    },
+    {
+      "pid": 74007,
+      "port": null,
+      "commandReceipt": "mutation-final-front",
+      "stopped": true
+    },
+    {
+      "pid": 74155,
+      "port": null,
+      "commandReceipt": "mutation-final-challenger",
+      "stopped": true
+    },
+    {
+      "pid": 74364,
+      "port": null,
+      "commandReceipt": "mutation-final-blocker",
+      "stopped": true
+    },
+    {
+      "pid": 74473,
+      "port": null,
+      "commandReceipt": "mutation-final-force-automatic",
+      "stopped": true
+    },
+    {
+      "pid": 18484,
+      "port": null,
+      "commandReceipt": "focused-restored-final",
+      "stopped": true
+    },
+    {
+      "pid": 29674,
+      "port": null,
+      "commandReceipt": "review-final",
+      "stopped": true
+    },
+    {
+      "pid": 33939,
+      "port": null,
+      "commandReceipt": "knip-final",
+      "stopped": true
+    }
+  ],
+  "runtimeScope": "No server, watcher, browser context, listener or persistent runtime started. Baseline subprocess PID uninstrumented; synchronous receipt is terminal. Command process PIDs recorded by runner; exact resource absence checked before commit.",
+  "failedAttempts": "Initial automatic baseline exit1 and expected mutations are genuine negatives. Parent found a real declared-front regression in checkpoint 1d595 before submission; its public comparison and own declared negative are retained. A scratch evidence-script edit first aborted on a nonexistent replacement needle before writing any file; corrected next attempt. Missing art warnings from temporary local-assets preparation are pre-existing workspace warnings, followed by successful restoration.",
+  "retention": "Raw logs and precise timing/load/CPU receipts retained in /tmp/hv-umm2.572-validation; parent archives before Tollgate cleanup.",
+  "phase1Checkpoint": {
+    "source": "1d595c7903ea61083fc730944232780efae0b0b9",
+    "qualification": "Unsubmitted checkpoint evidence only; the declared-front regression was discovered by parent before submission. Initial positives do not qualify final amended source.",
+    "clock": {
+      "head": "1d595c7903ea61083fc730944232780efae0b0b9",
+      "endpoint": "2026-10-12T18:54:28.894272+00:00",
+      "actualGitCommitTimestamp": "2026-10-12T11:54:29-07:00",
+      "afterCommitObserved": "2026-10-12T18:54:29.157272+00:00",
+      "gitClockPrecision": "seconds",
+      "endpointToGitClockSeconds": 0.105728,
+      "clean": true
+    },
+    "friction": {
+      "bead": "hv-umm2.572",
+      "phase": 5,
+      "implementMin": 7.492504533333333,
+      "implementWindow": {
+        "start": "2026-10-12T18:46:59.344Z",
+        "end": "2026-10-12T18:54:28.894272+00:00"
+      },
+      "localValidationS": {
+        "focused": 7.830839583999477,
+        "review": 25.32097166699532,
+        "knip": 4.774347792001208
+      },
+      "hostLoad": 20.54,
+      "testDelta": {
+        "files": 0,
+        "lines": 28,
+        "jsdomFiles": 0
+      },
+      "friction": []
+    },
+    "measurementsReceipt": "/tmp/hv-umm2.572-validation/phase1-measurements.json"
+  },
+  "declaredRegression": {
+    "parentProbe": {
+      "exit": 0,
+      "end": "2026-10-12T18:56:40.496432+00:00",
+      "base": "5be8538ba5c7bcd686a621ec8b7b60c58c9fe82a",
+      "head": "1d595c7903ea61083fc730944232780efae0b0b9",
+      "scope": "Original base lab module copied with imports relocated only; current actual source unchanged"
+    },
+    "ownNegative": {
+      "name": "declared-negative",
+      "args": [
+        "npx",
+        "--no-install",
+        "tsx",
+        "/tmp/hv-umm2.572-validation/declared-negative.ts"
+      ],
+      "start": "2026-10-12T18:59:35.101402+00:00",
+      "end": "2026-10-12T18:59:36.312825+00:00",
+      "wallS": 1.2113343330129283,
+      "exit": 1,
+      "load": "{ 10.40 16.21 16.05 }",
+      "pid": 68544,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/declared-negative.log"
+    },
+    "finalPositive": {
+      "name": "declared-final",
+      "args": [
+        "npx",
+        "--no-install",
+        "tsx",
+        "/tmp/hv-umm2.572-validation/declared-negative.ts"
+      ],
+      "start": "2026-10-12T19:01:46.480614+00:00",
+      "end": "2026-10-12T19:01:47.944569+00:00",
+      "wallS": 1.463773042007233,
+      "exit": 0,
+      "load": "{ 5.00 12.08 14.42 }",
+      "pid": 73269,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/declared-final.log"
+    },
+    "contract": "staged input remains authoritative, merges after automatic suggestion, and retains existing final-playability policy; private compatibility filtering applies only when staged is undefined."
+  },
+  "finalQualification": {
+    "focused": {
+      "name": "focused-restored-final",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "start": "2026-10-12T19:02:41.084808+00:00",
+      "end": "2026-10-12T19:02:50.661477+00:00",
+      "wallS": 9.57647437498963,
+      "exit": 0,
+      "load": "{ 24.67 16.13 15.76 }",
+      "pid": 18484,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/focused-restored-final.log"
+    },
+    "review": {
+      "name": "review-final",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:03:12.621429+00:00",
+      "end": "2026-10-12T19:03:31.730982+00:00",
+      "wallS": 19.109347250006977,
+      "exit": 0,
+      "load": "{ 19.54 15.69 15.61 }",
+      "pid": 29674,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/review-final.log"
+    },
+    "knip": {
+      "name": "knip-final",
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T19:04:10.623938+00:00",
+      "end": "2026-10-12T19:04:13.982661+00:00",
+      "wallS": 3.358578083003522,
+      "exit": 0,
+      "load": "{ 21.67 16.76 16.00 }",
+      "pid": 33939,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/knip-final.log"
+    },
+    "automaticPublicProbe": {
+      "name": "baseline-final",
+      "args": [
+        "npx",
+        "--no-install",
+        "tsx",
+        "/tmp/hv-umm2.572-validation/baseline.ts"
+      ],
+      "start": "2026-10-12T19:01:46.480449+00:00",
+      "end": "2026-10-12T19:01:47.964050+00:00",
+      "wallS": 1.4835613750037737,
+      "exit": 0,
+      "load": "{ 5.00 12.08 14.42 }",
+      "pid": 73268,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/baseline-final.log"
+    },
+    "declaredPublicProbe": {
+      "name": "declared-final",
+      "args": [
+        "npx",
+        "--no-install",
+        "tsx",
+        "/tmp/hv-umm2.572-validation/declared-negative.ts"
+      ],
+      "start": "2026-10-12T19:01:46.480614+00:00",
+      "end": "2026-10-12T19:01:47.944569+00:00",
+      "wallS": 1.463773042007233,
+      "exit": 0,
+      "load": "{ 5.00 12.08 14.42 }",
+      "pid": 73269,
+      "port": null,
+      "stopped": true,
+      "log": "/tmp/hv-umm2.572-validation/declared-final.log"
+    }
+  },
+  "finalRuntimeCheck": {
+    "at": "2026-10-12T19:04:30.854908+00:00",
+    "records": [
+      {
+        "pid": 80569,
+        "name": "mutation-front",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 80515,
+        "name": "mutation-exhausted",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 73846,
+        "name": "mutation-final-exhausted",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 73269,
+        "name": "declared-final",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 85791,
+        "name": "knip",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 80603,
+        "name": "mutation-challenger",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 18484,
+        "name": "focused-restored-final",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 80636,
+        "name": "mutation-blocker",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 68544,
+        "name": "declared-negative",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 73268,
+        "name": "baseline-final",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 79585,
+        "name": "baseline-restored",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 33939,
+        "name": "knip-final",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 79315,
+        "name": "focused",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 79982,
+        "name": "mutation-ignored-stage",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 74364,
+        "name": "mutation-final-blocker",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 72649,
+        "name": "focused-final",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 74155,
+        "name": "mutation-final-challenger",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 74473,
+        "name": "mutation-final-force-automatic",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 81082,
+        "name": "focused-restored",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 83794,
+        "name": "review",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 29674,
+        "name": "review-final",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 73751,
+        "name": "mutation-final-ignored-stage",
+        "present": false,
+        "actual": ""
+      },
+      {
+        "pid": 74007,
+        "name": "mutation-final-front",
+        "present": false,
+        "actual": ""
+      }
+    ],
+    "servers": [],
+    "browserContexts": [],
+    "ports": []
+  },
+  "amendPackagingRecovery": {
+    "at": "2026-10-12T19:07:12.016561+00:00",
+    "failedPrecommitEndpoint": "2026-10-12T19:06:07.395324+00:00",
+    "stagedPaths": [
+      "docs/plan/evidence/friction/hv-umm2.572.json",
+      "docs/plan/evidence/measurements/hv-umm2.572.json",
+      "docs/plan/evidence/qa-ledger/hv-umm2.572.jsonl",
+      "src/engine/testing/lab-solver.ts",
+      "src/engine/testing/tooling-card-lab.test.ts"
+    ],
+    "baseDiffPaths": [
+      "docs/plan/evidence/friction/hv-umm2.572.json",
+      "docs/plan/evidence/measurements/hv-umm2.572.json",
+      "docs/plan/evidence/pre-existing/hv-umm2.572.md",
+      "docs/plan/evidence/qa-ledger/hv-umm2.572.jsonl",
+      "src/engine/testing/lab-solver.ts",
+      "src/engine/testing/tooling-card-lab.test.ts"
+    ],
+    "failure": "Overstrict packaging assertion required unchanged pre-existing evidence to appear in the amendment staged diff; no commit attempted and no source changed.",
+    "recovery": "Require staged paths subset of admitted six and total original-base diff exactly those six."
+  }
+}
