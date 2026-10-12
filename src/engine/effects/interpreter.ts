@@ -610,7 +610,7 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
       return self !== null && namesCharacter(ctx, self, env) ? [self] : [];
     }
     case "all":
-      return matchingCharacters(ctx.state, ctx.catalog, ref.selector, env.controller, env.source, undefined, resolvingSourceSpark(ctx, env));
+      return matchingCharacters(ctx.state, ctx.catalog, ref.selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env));
     case "subject": {
       const subject = env.subject;
       return subject !== null && namesCharacter(ctx, subject, env) ? [subject] : [];
@@ -620,14 +620,14 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
       const selector = { controller: "you" as const, ...ref.selector };
       return self === null
         ? []
-        : supportedBy(ctx.state, self).filter((id) => matchesCharacter(ctx.state, ctx.catalog, selector, id, env.controller, env.source, undefined, resolvingSourceSpark(ctx, env)));
+        : supportedBy(ctx.state, self).filter((id) => matchesCharacter(ctx.state, ctx.catalog, selector, id, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env)));
     }
     case "target": {
       const chosen = env.targetsOf(ref) ?? [];
       const legal = targetable(
         ctx.state,
         ctx.catalog,
-        chosen.filter((id) => matchesCharacter(ctx.state, ctx.catalog, ref.selector, id, env.controller, env.source, undefined, resolvingSourceSpark(ctx, env))),
+        chosen.filter((id) => matchesCharacter(ctx.state, ctx.catalog, ref.selector, id, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env))),
       );
       if (legal.length === 0 && chosen.length > 0) {
         ctx.emit({ kind: "noLegalTarget", source: env.source });
@@ -695,7 +695,7 @@ function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): 
     }
     case "target": {
       const chosen = env.targetsOf(ref) ?? [];
-      const legal = targetable(state, catalog, chosen.filter((id) => voidTargetMatching(state, catalog, ref, env.controller, env.source, id, undefined, resolvingSourceSpark(ctx, env))));
+      const legal = targetable(state, catalog, chosen.filter((id) => voidTargetMatching(state, catalog, ref, env.controller, env.source, id, env.x ?? undefined, resolvingSourceSpark(ctx, env))));
       if (legal.length === 0 && chosen.length > 0) {
         ctx.emit({ kind: "noLegalTarget", source: env.source });
       }

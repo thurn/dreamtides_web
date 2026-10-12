@@ -1,0 +1,37 @@
+{
+  "bead": "hv-07c9",
+  "phase": 5,
+  "implementMin": 42.44,
+  "localValidationS": {
+    "witness": 4.557,
+    "repaired-focused": 3.863,
+    "resumed-witness": 4.501,
+    "history-counterfactual": 4.289,
+    "affected": 5.878,
+    "review": 40.276,
+    "zero-focused": 4.031,
+    "final-affected": 5.979,
+    "final-review": 43.749,
+    "repaired-affected": 7.273,
+    "accepted-review": 43.506,
+    "legacy-row": 2.078,
+    "verified-review": 46.523,
+    "knip": 3.837,
+    "final-schema": 0.112
+  },
+  "hostLoad": 16.1572265625,
+  "testDelta": {
+    "files": 0,
+    "lines": 250,
+    "jsdomFiles": 0,
+    "cases": 31
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 2.346,
+      "note": "Sum of failed required/affected aggregate wall proxies during own readonly-config and legacy test/script repairs; includes two broad reviews prematurely launched before inspecting focused failures (87.255s). Editing/coordination time excluded; raw receipts retained."
+    }
+  ],
+  "phaseStatus": "Locally validated final with full original dispatch, serialized wait and resumption window; parent review/delivery owed."
+}

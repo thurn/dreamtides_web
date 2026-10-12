@@ -1,5 +1,5 @@
 /**
- * A chosen energy X bound before targets: play-time and stored activation X
+ * A chosen energy X bound before targets: play-time and activation X with stored fallback
  * in target, modal, and additional-cost selectors, through reload, cancel,
  * and rejected answers.
  */
@@ -37,14 +37,16 @@ it("uses chosen play X for modal availability and additional-cost selectors with
   expect(after.instances[targetCard!]?.zone).toBe("play");
 });
 
-it("keeps activation selectors bound to the source's stored played X", () => {
-  const { state, ids } = board({ back: [SEARCH.storedActivationX.id, v.vanilla2.id, v.vanilla2.id, v.vanilla2.id], energy: 3 });
-  const [sourceCard, targetCard, payment] = ids.player.back;
+it("uses chosen activation X while preserving the source's stored played X", () => {
+  const { state: placed, ids } = board({ back: [SEARCH.storedActivationX.id, v.vanilla1.id, v.vanilla1.id, v.vanilla2.id], energy: 3 });
+  const state = { ...placed, config: { ...placed.config, autoAnswerForcedPrompts: false } };
+  const [sourceCard, targetCard, payment, untouched] = ids.player.back;
   state.instances[sourceCard!].status.x = 2;
   const after = run(state, "player", { kind: "activate", source: sourceCard!, ability: 0 }, [1, [targetCard!], [payment!]]).state;
   expect(after.stack[0]).toMatchObject({ kind: "ability", x: 1, choices: { modes: [], targets: [[targetCard]] } });
   expect(after.instances[sourceCard!].status.x).toBe(2);
   expect(after.instances[payment!]?.zone).toBe("void");
+  expect(after.instances[untouched!]?.zone).toBe("play");
   expect(after.sides.player.currentEnergy).toBe(2);
 });
 

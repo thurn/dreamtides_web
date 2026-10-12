@@ -38,9 +38,9 @@ export const activate: StepDefinition<ActivateStep> = {
     }
     const purpose = (role: PromptRole) => purposeOf(step.source, origin, step.ability, role);
     const x = chooseX(ctx, side, ability.costs, purpose("chooseX"));
-    const [choices] = choosePlayTime(ctx, [{ ability: step.ability, effect: ability.effect }], side, step.source, (_, role) => purpose(role));
+    const [choices] = choosePlayTime(ctx, [{ ability: step.ability, effect: ability.effect }], side, step.source, (_, role) => purpose(role), x ?? undefined);
     if (choices === undefined) throw new Error("choosePlayTime returns one entry per ability");
-    const plan = planCosts(ctx, side, step.source, ability.costs, x, purpose, choices.targets.flat(), undefined, { endsPlayTime: true });
+    const plan = planCosts(ctx, side, step.source, ability.costs, x, purpose, choices.targets.flat(), undefined, { endsPlayTime: true, ...(x === null ? {} : { selectorX: x }) });
     const abandoned = plan.payments.find(({ cost }) => cost.cost === "abandon")?.cards[0];
     const position = abandoned === undefined ? null : slotOf(state, abandoned);
     const captured = position === null ? choices : { ...choices, abandonedPosition: { side, slot: { ...position } } };

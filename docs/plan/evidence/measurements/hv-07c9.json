@@ -1,0 +1,786 @@
+{
+  "bead": "hv-07c9",
+  "base": "2eede04990c2250de8371f4d23a7a157d261c96a",
+  "status": "LOCALLY VALIDATED FINAL \u2014 parent exact-source core review and delivery owed",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T10:50:20Z",
+    "startProvenance": "Explicit parent helper dispatch, includes read-only routing, implementation, focused checks and coordination wait. Native claim10:50:12Z.",
+    "endUtc": "2026-10-12T11:32:46.613616+00:00",
+    "endProvenance": "Final pre-amend evidence refresh; original dispatch through serialized wait/resumption/local verification included. Final schema and amend tail excluded; actual final commit timestamp definitive."
+  },
+  "validation": [
+    {
+      "name": "witness",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "activated chosen X contracts"
+      ],
+      "pid": 66564,
+      "startUtc": "2026-10-12T10:54:10.940708+00:00",
+      "endUtc": "2026-10-12T10:54:15.497974+00:00",
+      "wallS": 4.557,
+      "exit": 1,
+      "log": "/tmp/hv-07c9-witness.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "repaired-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "activated chosen X contracts"
+      ],
+      "pid": 85170,
+      "startUtc": "2026-10-12T10:54:52.034790+00:00",
+      "endUtc": "2026-10-12T10:54:55.897936+00:00",
+      "wallS": 3.863,
+      "exit": 1,
+      "log": "/tmp/hv-07c9-repaired-focused.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "resumed-witness",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "activated chosen X contracts"
+      ],
+      "pid": 70633,
+      "startUtc": "2026-10-12T11:17:14.431094+00:00",
+      "endUtc": "2026-10-12T11:17:18.932741+00:00",
+      "wallS": 4.501,
+      "exit": 1,
+      "log": "/tmp/hv-07c9-resumed-witness.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "history-counterfactual",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "rejects a recorded target prefix carrying the wrong X-bound fingerprint"
+      ],
+      "pid": 73270,
+      "startUtc": "2026-10-12T11:17:50.909572+00:00",
+      "endUtc": "2026-10-12T11:17:55.202718+00:00",
+      "wallS": 4.289,
+      "exit": 1,
+      "log": "/tmp/hv-07c9-history-counterfactual.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "affected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts"
+      ],
+      "pid": 74426,
+      "startUtc": "2026-10-12T11:18:06.950869+00:00",
+      "endUtc": "2026-10-12T11:18:12.830353+00:00",
+      "wallS": 5.878,
+      "exit": 0,
+      "log": "/tmp/hv-07c9-affected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 78138,
+      "startUtc": "2026-10-12T11:19:52.696108+00:00",
+      "endUtc": "2026-10-12T11:20:32.972449+00:00",
+      "wallS": 40.276,
+      "exit": 2,
+      "log": "/tmp/hv-07c9-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "zero-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "activated chosen X contracts"
+      ],
+      "pid": 81142,
+      "startUtc": "2026-10-12T11:22:45.131523+00:00",
+      "endUtc": "2026-10-12T11:22:49.162228+00:00",
+      "wallS": 4.031,
+      "exit": 0,
+      "log": "/tmp/hv-07c9-zero-focused.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "final-affected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts"
+      ],
+      "pid": 83790,
+      "startUtc": "2026-10-12T11:24:53.797593+00:00",
+      "endUtc": "2026-10-12T11:24:59.776760+00:00",
+      "wallS": 5.979,
+      "exit": 1,
+      "log": "/tmp/hv-07c9-final-affected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "final-review",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 84186,
+      "startUtc": "2026-10-12T11:25:13.801396+00:00",
+      "endUtc": "2026-10-12T11:25:57.551351+00:00",
+      "wallS": 43.749,
+      "exit": 1,
+      "log": "/tmp/hv-07c9-final-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "repaired-affected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts"
+      ],
+      "pid": 86213,
+      "startUtc": "2026-10-12T11:26:40.132911+00:00",
+      "endUtc": "2026-10-12T11:26:47.406164+00:00",
+      "wallS": 7.273,
+      "exit": 1,
+      "log": "/tmp/hv-07c9-repaired-affected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "accepted-review",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 87699,
+      "startUtc": "2026-10-12T11:27:37.190916+00:00",
+      "endUtc": "2026-10-12T11:28:20.697573+00:00",
+      "wallS": 43.506,
+      "exit": 1,
+      "log": "/tmp/hv-07c9-accepted-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "legacy-row",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/costs-play-x.test.ts"
+      ],
+      "pid": 88733,
+      "startUtc": "2026-10-12T11:28:42.055417+00:00",
+      "endUtc": "2026-10-12T11:28:44.133927+00:00",
+      "wallS": 2.078,
+      "exit": 0,
+      "log": "/tmp/hv-07c9-legacy-row.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "verified-review",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 95420,
+      "startUtc": "2026-10-12T11:29:08.562807+00:00",
+      "endUtc": "2026-10-12T11:29:55.086528+00:00",
+      "wallS": 46.523,
+      "exit": 0,
+      "log": "/tmp/hv-07c9-verified-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 17176,
+      "startUtc": "2026-10-12T11:30:06.269805+00:00",
+      "endUtc": "2026-10-12T11:30:10.107046+00:00",
+      "wallS": 3.837,
+      "exit": 0,
+      "log": "/tmp/hv-07c9-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 74904,
+      "startUtc": "2026-10-12T11:32:08.797384+00:00",
+      "endUtc": "2026-10-12T11:32:08.909411+00:00",
+      "wallS": 0.112,
+      "exit": 0,
+      "log": "/tmp/hv-07c9-final-schema.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "counts": {
+    "unchangedSource": {
+      "cases": 13,
+      "failed": 10,
+      "passed": 3
+    },
+    "twoCallRepair": {
+      "cases": 13,
+      "failed": 7,
+      "passed": 6
+    },
+    "resumedBeforeResolver": {
+      "cases": 25,
+      "failed": 13,
+      "passed": 12
+    },
+    "affected": {
+      "files": 5,
+      "cases": 1586,
+      "result": "pass"
+    },
+    "finalAffected": {
+      "files": 6,
+      "cases": 1596,
+      "passed": 1595,
+      "failed": 1,
+      "result": "Legacy fixture forced-answer script failure, repaired with explicit configuration."
+    },
+    "focusedFinal": {
+      "cases": 31,
+      "result": "pass"
+    },
+    "legacyRowFinal": {
+      "cases": 4,
+      "result": "pass"
+    },
+    "finalReview": {
+      "files": 268,
+      "cases": 4106,
+      "result": "pass"
+    }
+  },
+  "scope": {
+    "productionPaths": [
+      "src/engine/steps/kinds/activate.ts",
+      "src/engine/effects/interpreter.ts"
+    ],
+    "productionDiff": {
+      "added": 6,
+      "removed": 6
+    },
+    "body": "Existing activation target/cost preparation receives non-null chosen X; existing resolving selectors receive env.x ?? undefined; source-X fallback retained when null.",
+    "contractPath": "src/engine/effects/primitives/contracts/activated-x-targets.contracts.ts",
+    "contractLines": 250,
+    "newCases": 31,
+    "runnerFiles": 0,
+    "jsdomFiles": 0,
+    "fallout": [],
+    "exports": [],
+    "schemaChanges": false,
+    "interpreterWrites": "Four existing selectorX arguments in resolveCharacters all/supported/target and resolveZoneCards target only; condition evaluator and every other interpreter body untouched.",
+    "documentationOnly": [
+      "src/engine/rules/costs.ts planCosts selectorX comment"
+    ],
+    "updatedExistingContract": "src/engine/rules/costs-play-x.test.ts activation row and intro only, fresh native test-doc admission; fixture module unchanged."
+  },
+  "requiredSerializedRepair": {
+    "dependency": "hv-umm2.513",
+    "path": "src/engine/effects/interpreter.ts",
+    "function": "resolveCharacters target branch matching predicate",
+    "proposed": "Forward env.x ?? undefined into existing matchesCharacter selectorX argument. No new matching/schema helper.",
+    "remainingFailures": [
+      "Four chosen X0/2 vs stored source X3 resolution cases across both controllers",
+      "Two exact-X activation-offer cases whose selected targets remain unaffected on resolution",
+      "Actual Interrupt revalidation against paid X"
+    ],
+    "cause": "Resolver reads source stored X because selectorX is undefined, despite chosen X retained in effect environment.",
+    "authority": "Exact native resume receipt /tmp/dreamtides-executor-01a12e91/bead07c9-resume-ack.json after fresh owner audit; future interpreter owners serialize after07c9.",
+    "disposition": "Completed only after513 closed/completed and parent-native update; actual before-repair witnesses retained."
+  },
+  "failurePaths": {
+    "errorMidStep": "Refined wrong-X recorded prefix throws ReplayDivergence before payment with start state hash unchanged. Affected fold-prompts illegal answer rollback and fold-intents failed/reloaded-prefix recovery pass.",
+    "reloadRestart": "Raw chosen-X prefix before targeting reconstructs current prompt and completes identical full state; passes after caller-only repair.",
+    "partialWrite": "Chosen prefix/reload/cancel test checks no committed debit before payment and cancellation keeps start state; no new persistence write.",
+    "invalidStaleInput": "New reload test rejects changed attempt, wrong actor and target outside chosen-X candidates; passes after caller-only repair.",
+    "concurrentActors": "Same test rejects another action during in-flight targeting and duplicate final answer; passes after caller-only repair.",
+    "interrupt": "Actual Interrupt changes selected spark2 to3; final resolver rejects it against chosen2 and preserves already-paid energy. Affected hub passes."
+  },
+  "knownLimits": {
+    "legacyInvalidPrefixes": "No wrong-target fingerprint alias or migration. Recorded target prefix with mismatching X-bound fingerprint fails existing replay boundary; test passes.",
+    "countOnlyX": "Linked512 owns new count preparation and distinguishing count X from energy X; no generic numeric prompts added.",
+    "otherResolvingSelectors": "Inspection-only patterns remain outside scope, no demonstrated assertion claimed."
+  },
+  "checksOwed": [
+    "Parent exact-source other-model-family core review",
+    "Parent candidate/promotion/cleanup"
+  ],
+  "checkpointProtocol": "Parent-authorized local checkpoint serialized wait complete; amend sole rebased checkpoint after local required checks. Parent owns other-family core review and candidate delivery.",
+  "runtime": {
+    "commands": [
+      {
+        "name": "witness",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "activated chosen X contracts"
+        ],
+        "pid": 66564,
+        "startUtc": "2026-10-12T10:54:10.940708+00:00",
+        "endUtc": "2026-10-12T10:54:15.497974+00:00",
+        "wallS": 4.557,
+        "exit": 1,
+        "log": "/tmp/hv-07c9-witness.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "repaired-focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "activated chosen X contracts"
+        ],
+        "pid": 85170,
+        "startUtc": "2026-10-12T10:54:52.034790+00:00",
+        "endUtc": "2026-10-12T10:54:55.897936+00:00",
+        "wallS": 3.863,
+        "exit": 1,
+        "log": "/tmp/hv-07c9-repaired-focused.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "resumed-witness",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "activated chosen X contracts"
+        ],
+        "pid": 70633,
+        "startUtc": "2026-10-12T11:17:14.431094+00:00",
+        "endUtc": "2026-10-12T11:17:18.932741+00:00",
+        "wallS": 4.501,
+        "exit": 1,
+        "log": "/tmp/hv-07c9-resumed-witness.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "history-counterfactual",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "rejects a recorded target prefix carrying the wrong X-bound fingerprint"
+        ],
+        "pid": 73270,
+        "startUtc": "2026-10-12T11:17:50.909572+00:00",
+        "endUtc": "2026-10-12T11:17:55.202718+00:00",
+        "wallS": 4.289,
+        "exit": 1,
+        "log": "/tmp/hv-07c9-history-counterfactual.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "affected",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/fold/fold-prompts.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/engine/loops/loops.test.ts",
+          "src/engine/loops/loops-mandatory.test.ts"
+        ],
+        "pid": 74426,
+        "startUtc": "2026-10-12T11:18:06.950869+00:00",
+        "endUtc": "2026-10-12T11:18:12.830353+00:00",
+        "wallS": 5.878,
+        "exit": 0,
+        "log": "/tmp/hv-07c9-affected.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "review",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 78138,
+        "startUtc": "2026-10-12T11:19:52.696108+00:00",
+        "endUtc": "2026-10-12T11:20:32.972449+00:00",
+        "wallS": 40.276,
+        "exit": 2,
+        "log": "/tmp/hv-07c9-review.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "zero-focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "activated chosen X contracts"
+        ],
+        "pid": 81142,
+        "startUtc": "2026-10-12T11:22:45.131523+00:00",
+        "endUtc": "2026-10-12T11:22:49.162228+00:00",
+        "wallS": 4.031,
+        "exit": 0,
+        "log": "/tmp/hv-07c9-zero-focused.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "final-affected",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/rules/costs-play-x.test.ts",
+          "src/engine/fold/fold-prompts.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/engine/loops/loops.test.ts",
+          "src/engine/loops/loops-mandatory.test.ts"
+        ],
+        "pid": 83790,
+        "startUtc": "2026-10-12T11:24:53.797593+00:00",
+        "endUtc": "2026-10-12T11:24:59.776760+00:00",
+        "wallS": 5.979,
+        "exit": 1,
+        "log": "/tmp/hv-07c9-final-affected.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "final-review",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 84186,
+        "startUtc": "2026-10-12T11:25:13.801396+00:00",
+        "endUtc": "2026-10-12T11:25:57.551351+00:00",
+        "wallS": 43.749,
+        "exit": 1,
+        "log": "/tmp/hv-07c9-final-review.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "repaired-affected",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/rules/costs-play-x.test.ts",
+          "src/engine/fold/fold-prompts.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/engine/loops/loops.test.ts",
+          "src/engine/loops/loops-mandatory.test.ts"
+        ],
+        "pid": 86213,
+        "startUtc": "2026-10-12T11:26:40.132911+00:00",
+        "endUtc": "2026-10-12T11:26:47.406164+00:00",
+        "wallS": 7.273,
+        "exit": 1,
+        "log": "/tmp/hv-07c9-repaired-affected.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "accepted-review",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 87699,
+        "startUtc": "2026-10-12T11:27:37.190916+00:00",
+        "endUtc": "2026-10-12T11:28:20.697573+00:00",
+        "wallS": 43.506,
+        "exit": 1,
+        "log": "/tmp/hv-07c9-accepted-review.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "legacy-row",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/rules/costs-play-x.test.ts"
+        ],
+        "pid": 88733,
+        "startUtc": "2026-10-12T11:28:42.055417+00:00",
+        "endUtc": "2026-10-12T11:28:44.133927+00:00",
+        "wallS": 2.078,
+        "exit": 0,
+        "log": "/tmp/hv-07c9-legacy-row.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "verified-review",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 95420,
+        "startUtc": "2026-10-12T11:29:08.562807+00:00",
+        "endUtc": "2026-10-12T11:29:55.086528+00:00",
+        "wallS": 46.523,
+        "exit": 0,
+        "log": "/tmp/hv-07c9-verified-review.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 17176,
+        "startUtc": "2026-10-12T11:30:06.269805+00:00",
+        "endUtc": "2026-10-12T11:30:10.107046+00:00",
+        "wallS": 3.837,
+        "exit": 0,
+        "log": "/tmp/hv-07c9-knip.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "final-schema",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 74904,
+        "startUtc": "2026-10-12T11:32:08.797384+00:00",
+        "endUtc": "2026-10-12T11:32:08.909411+00:00",
+        "wallS": 0.112,
+        "exit": 0,
+        "log": "/tmp/hv-07c9-final-schema.log",
+        "terminal": true,
+        "ports": []
+      }
+    ],
+    "servers": [],
+    "ports": [],
+    "browsers": [],
+    "leases": [],
+    "providers": [],
+    "readOnlyDiagnostics": "Finite read/status commands returned normally; their PIDs were not captured and are not invented.",
+    "writer": "Source and evidence frozen after final schema/amend; helper stops. All captured finite command PIDs terminal, no resources."
+  },
+  "originalBase": "812f7496d111eca36cb14516262fc1e4470d1521",
+  "checkpoint": {
+    "original": "61e08a7eefde407d99f15639371ec63e1306ce42",
+    "originalBase": "812f7496d111eca36cb14516262fc1e4470d1521",
+    "rebased": "c62b3d17c1391fa40933106a5ed3820042738f01",
+    "parent": "2eede04990c2250de8371f4d23a7a157d261c96a",
+    "promotion": "Unvalidated checkpoint was not submitted; final source amends sole checkpoint after parent-native update."
+  },
+  "serializedWait": {
+    "owner": "hv-umm2.513",
+    "justiciar": "Parent invoked same-task justiciar with temporary fire title; preserved clean checkpoint, live owner and exact failed contracts. No shared process/provider/access change. Native Hive await returned existing assignment07c9; no queue-drain or permission inference.",
+    "resume": "513 closedcompleted with tested19cab0616b8e0180d0df0ad6594c5ff69ddb4454; parent tg update rebased checkpoint to c62b3d17 over2eede049.",
+    "sourceOfEvidence": "Native resume ACK notes, retained exact receipt path.",
+    "measurement": "Original dispatch10:50:20Z through final precommit, including full serialized wait; no clock reset."
+  },
+  "parentDiagnostics": [
+    {
+      "pid": 82026,
+      "exit": 0,
+      "wallS": 0.7988109588623047,
+      "stdout": "{\"sourceStoredX\":0,\"chosenX\":2,\"target\":\"i6\",\"targetCost\":2,\"energy\":3,\"noLegalTarget\":[{\"kind\":\"noLegalTarget\",\"source\":\"i1\"}],\"grantEvents\":[],\"eventKinds\":[\"promptAutoAnswered\",\"energyChanged\",\"abilityActivated\",\"abilityResolved\",\"noLegalTarget\"]}\n",
+      "stderr": "",
+      "terminal": true,
+      "source": "61e08a7eefde407d99f15639371ec63e1306ce42"
+    },
+    {
+      "pid": 31775,
+      "exit": 0,
+      "wallS": 0.8507718750042841,
+      "stdout": "{\"kind\":\"all\",\"sourceStoredX\":3,\"chosenX\":2,\"shouldDissolve\":\"i9\",\"shouldKeep\":\"i10\",\"actualDissolved\":[\"i10\"],\"zones\":[[\"i9\",\"play\"],[\"i10\",\"void\"]]}\n{\"kind\":\"supported\",\"sourceStoredX\":3,\"chosenX\":2,\"shouldDissolve\":\"i1\",\"shouldKeep\":\"i2\",\"actualDissolved\":[\"i2\"],\"zones\":[[\"i1\",\"play\"],[\"i2\",\"void\"]]}\n",
+      "stderr": "",
+      "terminal": true,
+      "source": "61e08a7eefde407d99f15639371ec63e1306ce42"
+    }
+  ],
+  "historicalFingerprintRefinement": {
+    "initialWeakControl": "Checkpoint wrong prompt injected allowed:[[oldTarget]], adding unrelated fingerprint metadata; it passed before caller repair. Original receipts retained as weaker metadata-mismatch control.",
+    "finalContract": "Changes candidates only, preserving actual bounds, role and allowed state from the raised prompt.",
+    "counterfactual": "Focused test with old caller forwarding restored failed expected ReplayDivergence assertion (no rejection). Caller restored in finally. Final affected hub passes refined contract; no fingerprint/Context compatibility aliases."
+  },
+  "reviewRepair": {
+    "firstReview": {
+      "casesPassed": 4099,
+      "casesFailed": 1,
+      "typecheck": "readonly config assignment in own fixture two sites"
+    },
+    "ownFixtureRepair": "Construct copied state/config; no cast, readonly mutation workaround or production change.",
+    "legacyTestRepair": "Existing energyX activation row expected chosen1 to select/pay two2-cost cards from stored source X2. Normative ability-X rule requires chosen1; row now selects/pays two1-cost instances, preserves stored2 and retains untouched2-cost control. Only row/intro changed with native ACK.",
+    "documentationRepair": "Only existing planCosts selectorX comment states prepared play/activation X and source fallback when no explicit binding; no planner logic changed.",
+    "forcedLegacyFixture": {
+      "failures": [
+        "Leading numeric script entry consumed as target after sole payable X1 auto-answered",
+        "Remaining singleton payment auto-answered, leaving one unused script entry"
+      ],
+      "repair": "One-row copied config explicitly disables forced auto-answers; complete [1,target,payment] script. Four-case owning test passes before final required review. Fixture module/default configuration unchanged."
+    },
+    "wastedChecks": {
+      "commands": [
+        "final-review",
+        "accepted-review"
+      ],
+      "wallS": 87.255,
+      "cause": "Broad check launched before inspecting prior focused failure receipt twice. Full raw terminal failures retained, not acceptance results. Concrete repair followed by green owning row before verified-review."
+    }
+  },
+  "zeroCoverage": "All four nullable resolver sites exercised with chosen0, chosen2 and null fallback for both controllers. Character target zero cases already present; six extra zero cases protect all/supported/void against truthiness fallback.",
+  "auxiliaryReadError": "One read-only inspection used a workdir missing leading slash; process creation rejected before launch. Corrected absolute path; no PID/effect.",
+  "legacyTargetFollowUp": {
+    "bead": "hv-sob5",
+    "scope": "Existing mandatory discard count/captured-card-cost targeting preparation, distinct from512 introduced abandon-only preparation/accounting.",
+    "diagnostics": [
+      {
+        "pid": 79622,
+        "exit": 0,
+        "wallS": 0.42364541700226255,
+        "stdout": "{\"storedX\":null,\"targetSpark\":2,\"eligiblePaymentCards\":3,\"fixedEnergy\":1,\"availableEnergy\":5,\"activateActions\":[]}\n",
+        "stderr": "",
+        "terminal": true,
+        "sourceBase": "2eede04990c2250de8371f4d23a7a157d261c96a",
+        "sourceScope": "dirty owned07c9 branch after both caller and four resolver argument repairs, no other production edits"
+      },
+      {
+        "pid": 84182,
+        "exit": 0,
+        "wallS": 0.4359521250007674,
+        "stdout": "{\"storedX\":null,\"targetSpark\":2,\"capturedPaymentCost\":2,\"fixedEnergy\":1,\"availableEnergy\":5,\"activateActions\":[]}\n",
+        "stderr": "",
+        "terminal": true,
+        "sourceBase": "2eede04990c2250de8371f4d23a7a157d261c96a",
+        "sourceScope": "owned07c9 branch after caller and four resolver repairs; diagnostics read-only"
+      }
+    ],
+    "otherForms": "Inspection only, no reproduced blanket claim."
+  }
+}

@@ -226,8 +226,9 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
  * caller whose next operation is the commit point: it allows a final discard
  * or void banish (from the payer's void or a selected void) with
  * already-payable resources to prove all its card selections at once.
- * `selectorX` binds character-cost selectors during a card's play preparation
- * to its chosen energy X; activation and manual callers use the source card's X.
+ * `selectorX` supplies prepared X to character-cost selectors during play or
+ * activation. Callers with no explicit binding, including manual planning,
+ * use the source card's stored X.
  */
 export function planCosts(
   ctx: StepContext,
