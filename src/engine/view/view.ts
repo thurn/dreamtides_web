@@ -364,10 +364,12 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   const visible = (id: InstanceId): boolean => id in instances;
   const playedView = (card: PlayedCard): PlayedCardView => {
     const known = visible(card.instance);
-    // Legacy records can recover a cost only from a card this viewer sees.
-    // Private printing is not evidence of a publicly known historical cost.
+    // Legacy records can recover a cost or spark only from a card this viewer
+    // sees. Private printing is not evidence of a publicly known historical
+    // cost or spark.
     const cost = card.cost ?? (known ? copiableCostOf(state, catalog, card.instance) : undefined);
-    return { ...card, instance: known ? card.instance : null, ...(cost === undefined ? {} : { cost }) };
+    const spark = card.spark !== undefined ? card.spark : known ? layers.of(card.instance).spark : undefined;
+    return { ...card, instance: known ? card.instance : null, ...(cost === undefined ? {} : { cost }), ...(spark === undefined ? {} : { spark }) };
   };
   const visibleSource = (source: AbilitySource): boolean => typeof source !== "string" || visible(source);
   const visibleChoices = (choices: EffectChoices): EffectChoices => ({

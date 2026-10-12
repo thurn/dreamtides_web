@@ -1036,7 +1036,13 @@ Ordering within a layer:
   then cards in any zone by instance number), then floating records in
   creation order (RD-hv-7x4l.7-2).
 - A static ability's selectors and values read the characteristics of the
-  layers before its own, so no layer depends on itself.
+  layers before its own, so no layer depends on itself. The exception is the
+  base spark and spark of a card outside play, which its reader
+  (`staticReader`) gives final (RD-hv-umm2.464-1): static abilities change
+  those only for characters in play (`changes` throws on a static layer-4 or
+  layer-5 change naming any other card), so that spark comes from the card's
+  copiable values, floating changes, and gained spark alone, and reading it
+  expands no static ability, its own included.
 - Cost selectors (`costAtMost`) read the copiable cost (C4, C13).
 
 Dynamic values such as "+X✦ where X is…" are **locked at resolution** unless
@@ -1089,8 +1095,9 @@ nothing.
 **Cards outside play.** `grantCardKeyword(cardsIn(zone, filter, player),
 keyword)` is the static "Cards in your hand have Offering" (layer 3): each
 card in that player's hand (the hand it holds), deck, or void (the ones it
-owns) whose layer-2 type and subtype match the filter has the keyword while
-it is there (RD-hv-umm2.52-1). It reads layer 2 through `StaticEnv.read`,
+owns) whose layer-2 type and subtype, and final spark, match the filter has
+the keyword while it is there (RD-hv-umm2.52-1, RD-hv-umm2.464-1). It reads
+layer 2, and the final spark of cards outside play, through `StaticEnv.read`,
 so a fresh evaluation, such as the invariant check's, never consults a
 memoized one. It is static only (`staticOnly`): its `resolve` throws, since a
 floating record naming a card in a hidden zone would name it in the public
@@ -1521,7 +1528,8 @@ a void only those matching the filter (RD-hv-umm2.76-1). `zoneCountWith` in
 `dsl/selectors.ts` counts them through a `CharacteristicsReader`: a resolving
 effect's value and every selector check read effective characteristics, and a
 static ability's value and selectors read the layers before its own, so no
-layer depends on itself. A bound reads the count each time the selector is
+layer depends on itself, with the final spark of each counted card
+(RD-hv-umm2.464-1). A bound reads the count each time the selector is
 checked, so a chosen target is checked against the count again as the effect
 resolves. A hand or deck count takes no filter, since which hidden cards
 match is not public; counts read only public information and name no card.

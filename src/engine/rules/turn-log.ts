@@ -9,16 +9,17 @@ export function emptyTurnLog(): TurnLog {
 }
 
 /**
- * Records that `side` played `card`, with its effective type, subtype, and
- * "has all character types" and its copiable cost as it is played, before
- * its "when you play" triggers match. "When you play" filters and counts read
- * these, so a later type change does not alter what an earlier play matched
- * (RD-hv-7x4l.34-1), and a created card that has since ceased to exist still
- * matches by its cost.
+ * Records that `side` played `card`, with its effective type, subtype,
+ * "has all character types", and spark and its copiable cost as it is
+ * played, before its "when you play" triggers match. "When you play" filters
+ * and counts read these, so a later type or spark change does not alter what
+ * an earlier play matched (RD-hv-7x4l.34-1, RD-hv-umm2.464-1), and a card
+ * that has since ceased to exist or become unidentifiable in a hidden zone
+ * still matches by its cost and spark.
  */
 export function recordPlayed(state: BattleState, catalog: EngineCatalog, side: Side, card: InstanceId): void {
-  const { cardType, subtype, allTypes } = characteristicsOf(state, catalog, card);
-  state.turnLog.played[side].push({ instance: card, cardType, subtype, allTypes, cost: copiableCostOf(state, catalog, card) });
+  const { cardType, subtype, allTypes, spark } = characteristicsOf(state, catalog, card);
+  state.turnLog.played[side].push({ instance: card, cardType, subtype, allTypes, cost: copiableCostOf(state, catalog, card), spark });
 }
 
 /** Records that `side` drew a card, before its "when you draw" triggers match. */

@@ -91,20 +91,20 @@ export function matchesEveryCard(filter: CardFilter): boolean {
 
 /**
  * Whether a played card's turn-log record matches a card filter: by the
- * type, subtype, "has all character types", and copiable cost it was played
- * with (RD-hv-7x4l.34-1), so a created card that has ceased to exist still
- * matches. A saved record without a cost reads its instance's copiable cost,
- * which never changes, and only for a filter with a cost bound. When that
- * instance has ceased, an unknown historical cost matches no cost bound.
- * A ✦ bound reads the played instance's current effective spark
- * (RD-hv-umm2.452-1); a played card that has ceased to exist matches no ✦
- * bound.
+ * type, subtype, "has all character types", copiable cost, and effective
+ * spark it was played with (RD-hv-7x4l.34-1, RD-hv-umm2.464-1), so a card
+ * that has ceased to exist, or that no determinization can identify in a
+ * hidden zone, still matches. A saved record without a cost or a spark reads
+ * its instance's copiable cost, which never changes, or current spark, and
+ * only for a filter with that bound. When that instance has ceased, an
+ * unknown historical cost or spark matches no such bound.
  */
 export function playedMatchesFilter(state: BattleState, catalog: EngineCatalog, played: PlayedCard, filter: CardFilter): boolean {
   const exists = state.instances[played.instance] !== undefined;
-  if ((hasCostBound(filter) && played.cost === undefined && !exists) || (hasSparkBound(filter) && !exists)) return false;
+  const unknown = (bounded: boolean, recorded: unknown) => bounded && recorded === undefined && !exists;
+  if (unknown(hasCostBound(filter), played.cost) || unknown(hasSparkBound(filter), played.spark)) return false;
   const cost = played.cost ?? (hasCostBound(filter) ? copiableCostOf(state, catalog, played.instance) : 0);
-  const spark = hasSparkBound(filter) ? characteristicsOf(state, catalog, played.instance).spark : null;
+  const spark = played.spark !== undefined ? played.spark : hasSparkBound(filter) ? characteristicsOf(state, catalog, played.instance).spark : null;
   return matchesFilter({ cardType: played.cardType, subtype: played.subtype, allTypes: played.allTypes, cost, spark }, filter);
 }
 

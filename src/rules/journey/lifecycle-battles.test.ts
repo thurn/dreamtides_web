@@ -199,7 +199,7 @@ describe("LOAD_STATE journey battles", () => {
     expect(out.state.battle).toEqual(battle);
   });
 
-  it("loads a saved turn log whose play records carry a copiable cost or omit it, and cost-bounded filters", () => {
+  it("loads a saved turn log whose play records carry a copiable cost and spark or omit them, and cost-bounded filters", () => {
     const { state, battle } = savedBattle();
     const committed = battle.engine.slice.committed;
     const [handCard] = committed.sides.player.hand;
@@ -211,6 +211,7 @@ describe("LOAD_STATE journey battles", () => {
     };
     for (const [path, value] of [
       [[...state_, "turnLog", "played", "player"], [{ ...record, cost: 2 }]],
+      [[...state_, "turnLog", "played", "player"], [{ ...record, cost: 2, spark: 3 }, { ...record, cardType: "event", spark: null }]],
       [[...state_, "turnLog", "played", "player"], [record]],
       [[...state_, "turnLog", "played", "player"], [{ ...record, instance: "i999" }]],
       [[...state_, "floating"], [costChange]],
@@ -301,6 +302,10 @@ describe("LOAD_STATE journey battles", () => {
       [
         [...state_, "turnLog", "played", "player"],
         [{ instance: handCard, cardType: "character", subtype: "", allTypes: false, cost: -1 }],
+      ],
+      [
+        [...state_, "turnLog", "played", "player"],
+        [{ instance: handCard, cardType: "character", subtype: "", allTypes: false, cost: 1, spark: "2" }],
       ],
       [
         [...state_, "floating"],

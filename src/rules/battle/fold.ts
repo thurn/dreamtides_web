@@ -1289,8 +1289,9 @@ function isTurnLog(value: unknown): boolean {
           isCardKind(played.cardType) &&
           isString(played.subtype) &&
           isBoolean(played.allTypes) &&
-          // A saved record may omit its cost (PlayedCard.cost).
-          optional(isIndex)(played.cost),
+          // A saved record may omit its cost and spark (PlayedCard.cost, PlayedCard.spark).
+          optional(isIndex)(played.cost) &&
+          optional(nullable(isIndex))(played.spark),
       ),
     )(value.played) &&
     sideRecord(isIndex)(value.drawn)

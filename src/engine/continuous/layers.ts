@@ -26,7 +26,11 @@
  * effect's is its `timestamp`. Ties go to static abilities first, in source
  * order, then floating effects in creation order (RD-hv-7x4l.7-2). A static
  * ability's selectors and values read the characteristics the layers before
- * its own produced, so no layer depends on itself.
+ * its own produced, so no layer depends on itself. The one exception is the
+ * spark of a card outside play, which they read final (RD-hv-umm2.464-1):
+ * static abilities change the base spark and spark of characters in play
+ * only, so that spark comes from the card's copiable values, its gained
+ * spark and floating changes alone, and reading it expands no static ability.
  */
 import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
@@ -235,6 +239,7 @@ export class Layers {
   private readonly layers = new Map<Layer, OrderedChange[]>();
   private readonly byInstance = new Map<Layer, Map<InstanceId, OrderedChange[]>>();
   private readonly computed = new Map<number, Map<InstanceId, Characteristics>>();
+  private readonly outsidePlay = new Map<InstanceId, Pick<Characteristics, "baseSpark" | "spark">>();
 
   constructor(
     readonly state: BattleState,
@@ -252,15 +257,11 @@ export class Layers {
   changes(layer: Layer): readonly OrderedChange[] {
     const cached = this.layers.get(layer);
     if (cached !== undefined) return cached;
-    const ordered: OrderedChange[] = [];
-    this.state.floating.forEach((effect, index) => {
-      const change = effect.change;
-      if (!isContinuousChange(change) || LAYER[change.kind] !== layer) return;
-      ordered.push({ change, timestamp: effect.timestamp, effect: effect.id, staticSource: null, order: index });
-    });
+    const ordered = this.floatingChanges(layer, null);
     for (const entry of this.statics) {
       if (entry.layer !== layer) continue;
       for (const change of this.expand(entry)) {
+        if (layer === 4 || layer === 5) this.assertInPlay(change);
         ordered.push({ change, timestamp: entry.timestamp, effect: null, staticSource: entry.source, order: entry.order });
       }
     }
@@ -272,6 +273,57 @@ export class Layers {
   /** A reader of the characteristics after `layer`, for selectors evaluated by later layers. */
   reader(layer: number): CharacteristicsReader {
     return (id) => this.through(id, layer);
+  }
+
+  /**
+   * The reader of a static ability applying after `layer`: characteristics
+   * after `layer`, except that a card outside play has its final base spark
+   * and spark, which ✦ bounds on card filters compare (RD-hv-umm2.464-1).
+   */
+  private staticReader(layer: number): CharacteristicsReader {
+    if (layer >= 5) return this.reader(layer);
+    return (id) => {
+      const before = this.through(id, layer);
+      if (before.baseSpark === null || this.state.instances[id]?.zone === "play") return before;
+      return { ...before, ...this.sparkOutsidePlay(id) };
+    };
+  }
+
+  /**
+   * The final base spark and spark of a character card outside play. Static
+   * abilities change those of characters in play only (`assertInPlay`), so
+   * the card's copiable spark, its floating base-spark settings, its gained
+   * spark, and its floating spark modifications give them, and reading them
+   * expands no static ability: a static ability that changes spark never
+   * reads its own change.
+   */
+  private sparkOutsidePlay(id: InstanceId): Pick<Characteristics, "baseSpark" | "spark"> {
+    const cached = this.outsidePlay.get(id);
+    if (cached !== undefined) return cached;
+    const based = this.apply(this.through(id, 1), id, 4, this.floatingChanges(4, id));
+    const { baseSpark, spark } = this.apply(based, id, 5, this.floatingChanges(5, id));
+    const result = { baseSpark, spark };
+    this.outsidePlay.set(id, result);
+    return result;
+  }
+
+  /** The floating changes of `layer`, only those to the card `only` when it is given, in the order they apply. */
+  private floatingChanges(layer: Layer, only: InstanceId | null): OrderedChange[] {
+    const ordered: OrderedChange[] = [];
+    this.state.floating.forEach((effect, index) => {
+      const change = effect.change;
+      if (!isContinuousChange(change) || LAYER[change.kind] !== layer || (only !== null && changed(change) !== only)) return;
+      ordered.push({ change, timestamp: effect.timestamp, effect: effect.id, staticSource: null, order: index });
+    });
+    return ordered.sort(byTimestamp);
+  }
+
+  /** Static abilities set base spark and modify spark only of characters in play, which `sparkOutsidePlay` relies on. */
+  private assertInPlay(change: ContinuousChange): void {
+    const target = changed(change);
+    if (target !== null && this.state.instances[target]?.zone !== "play") {
+      throw new Error(`A static ${change.kind} change names ${target}, which is not in play`);
+    }
   }
 
   /**
@@ -288,7 +340,7 @@ export class Layers {
       if (chosen === null) return [];
       node = withChosenSubtype(node, chosen);
     }
-    const read = this.reader(entry.layer - 1);
+    const read = this.staticReader(entry.layer - 1);
     const self = sourceInstance(entry.source);
     const characters = (ref: CharacterRef): InstanceId[] => {
       switch (ref.kind) {
@@ -379,8 +431,7 @@ export class Layers {
     };
   }
 
-  private apply(before: Characteristics, id: InstanceId, layer: Layer): Characteristics {
-    const changes = this.changesTo(id, layer);
+  private apply(before: Characteristics, id: InstanceId, layer: Layer, changes = this.changesTo(id, layer)): Characteristics {
     if (layer === 5) {
       if (before.baseSpark === null) return before;
       const gained = this.state.instances[id]?.status.gainedSpark ?? 0;

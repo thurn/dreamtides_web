@@ -506,6 +506,13 @@ export interface PlayedCard {
    * historical cost is unknown and matches no cost-bounded filter.
    */
   readonly cost?: number;
+  /**
+   * Its effective spark as it was played (`null` for an event), which
+   * ✦-bounded filters compare (RD-hv-umm2.464-1). A record in a saved state
+   * that lacks it is matched by its instance's current spark instead when
+   * that instance still exists; otherwise it matches no ✦-bounded filter.
+   */
+  readonly spark?: number | null;
 }
 
 /** Counters for the current turn, reset as each turn begins. */

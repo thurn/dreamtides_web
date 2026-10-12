@@ -535,8 +535,9 @@ spark with a duration. Spark a character _has_ from a static ability applies
 only in play. A criterion such as "a ≤2✦ character" or "a ≥3✦ card" compares
 that spark wherever the card is, and the effective spark of a character in
 play. An event has no spark and never meets a ✦ criterion. A "when you play"
-criterion with a ✦ bound reads the played card's spark as it is now; a played
-card that has ceased to exist meets none.
+criterion with a ✦ bound reads the spark the card had as it was played, like
+its types: a later change to its spark, or its move to a deck, does not
+change which of these abilities its play matched or counted toward.
 
 **Values fixed as an effect resolves:** When a resolving effect gives
 characters spark, a keyword, a new base spark, or another change for a while,
@@ -1687,7 +1688,11 @@ Mage. If "has all character types" applies after "is a Mage", it has every
 character type. A static ability decides which characters it changes, and
 by how much, from what the earlier
 steps produced: an ability that changes spark reads types, keywords, and base
-spark, but not other spark changes.
+spark, but not other spark changes. A ✦ criterion on a card outside play is
+the exception: it reads that card's spark with every change applied, even in
+an ability of an earlier step, as "Cards in your hand with ≤2✦ have Offering"
+reads the spark a hand card gained. Static abilities never change the spark of
+a card outside play, so no ability reads a spark it changes itself.
 
 **Modal abilities** — Abilities that present multiple options, written as "Choose
 one:" followed by the available effects (each with its own cost where relevant). A card or activated ability's mode is chosen as it is played, before its
