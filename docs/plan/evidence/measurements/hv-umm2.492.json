@@ -1,0 +1,236 @@
+{
+  "bead": "hv-umm2.492",
+  "phase": 5,
+  "kind": "observation-only introspection duty (gate completion tail)",
+  "measurementWindow": {
+    "dispatchUtc": "2026-10-12T04:27:43.079395+00:00",
+    "dispatchSource": "Subagent start receipt artifacts/qa/hv-umm2.492/start.txt",
+    "precommitEndpointUtc": "2026-10-12T04:34:45.807939+00:00",
+    "elapsedMin": 7.045475733333333
+  },
+  "rawEvidence": {
+    "directory": "artifacts/qa/hv-umm2.492",
+    "live": [
+      "live/status.jsonl",
+      "live/ps.jsonl",
+      "live/ps-events.jsonl",
+      "live/cpu.txt",
+      "live/follow-01a12e5f-b495-7232-a0d9-2bee35c882cb.jsonl",
+      "live/item-01a12e5f-b495.status.json",
+      "live/item-01a12e5f-b495.review-gate.jsonl"
+    ],
+    "retained": [
+      "history-logs/",
+      "history-analysis.json",
+      "../hv-umm2.481/validation-logs/"
+    ]
+  },
+  "observedGate": {
+    "itemId": "01a12e5f-b495-7232-a0d9-2bee35c882cb",
+    "kind": "gate",
+    "buildset": "01a12e5f-baf2-7392-a336-9f0e366eb68e",
+    "subject": "feat(content): author cards-42 Keeper of the Lightpath, Phantom Angler, Vanishing Inquisitor and Eruption",
+    "ownerWriterCandidateChanged": false,
+    "finalState": "promoted",
+    "slot": "01a10f36-6614-76f0-8a5a-d69fa3767e91",
+    "testGateScope": "221 related files for 5 changed files exceed 40; whole suite (343 files)",
+    "reviewStartLoad1m": 19.61962890625,
+    "concurrentRelease": "release run 01a12e5d-1d60-78d2-9aae-42b84d3a93c9 (review-full) ran in the other slot throughout"
+  },
+  "timeline": {
+    "units": "seconds relative to the broker monotonic origin of the review-gate step (wall 2026-10-12T04:29:53.420Z) unless an ISO time is given",
+    "buildsetStartedUtc": "2026-10-12T04:29:48.280Z",
+    "dependenciesElapsedS": 5.116,
+    "reviewGateStartUtc": {
+      "value": "2026-10-12T04:29:53.420Z",
+      "source": "first frame wall_time minus its monotonic_ns; buildset start + dependencies elapsed gives 04:29:53.396Z"
+    },
+    "prepare": {
+      "startS": 0.212,
+      "finishS": 0.912
+    },
+    "concurrentChecks": {
+      "startS": 0.889,
+      "finishS": {
+        "friction-records": 0.991,
+        "import-cycles": 2.69,
+        "lint": 4.59,
+        "typecheck-node": 6.09,
+        "typecheck": 15.189,
+        "test-gate": 67.091
+      }
+    },
+    "lastInternalFinishedS": 67.091,
+    "vitestRootExit": {
+      "afterS": 66.862,
+      "beforeS": 67.187,
+      "source": "ps poll bracket: pid 37652 last seen 04:31:00.282Z, gone 04:31:00.607Z"
+    },
+    "lingeringToolDescendantsAfterLastFinished": "none: no vitest/tsc/eslint/esbuild descendant of the gate process group survived past 04:31:00.607Z",
+    "bufferedBurstFirstFrameS": 67.157,
+    "producerExit": {
+      "processes": "node scripts/review.mjs gate (pid 37220) and npm run review:gate (pid 37186)",
+      "afterS": 124.814,
+      "beforeS": 125.117,
+      "source": "ps poll bracket 04:31:58.234Z..04:31:58.537Z"
+    },
+    "producerCpuDuringDrain": {
+      "cpuTimeS": {
+        "at04:30:52Z": 0.13,
+        "at04:31:57Z": 0.14
+      },
+      "state": "S (sleeping) every sample",
+      "meaning": "blocked on stdout pipe backpressure, not computing"
+    },
+    "lastFrameS": 127.266,
+    "lastFrameWallUtc": "2026-10-12T04:32:00.688Z",
+    "nativeReviewGateElapsedS": 127.315,
+    "nativeStepEndUtc": "2026-10-12T04:32:00.735Z (origin + elapsed_ms)",
+    "buildsetFinishedUtc": "2026-10-12T04:32:00.814Z",
+    "followerLastReceiptUtc": "2026-10-12T04:32:00.903Z",
+    "followerExitUtc": "2026-10-12T04:32:01.549Z",
+    "followerReceiptLagS": {
+      "n": 509,
+      "median": 0.273,
+      "min": 0.011,
+      "max": 0.522,
+      "scope": "local receipt minus frame wall_time, live frames only"
+    }
+  },
+  "gapBreakdownS": {
+    "lastInternalFinishedToStepEnd": 60.224,
+    "drainWhileProducerAlive": {
+      "min": 57.723,
+      "max": 58.026
+    },
+    "producerExitToLastFrame": {
+      "min": 2.149,
+      "max": 2.452
+    },
+    "lastFrameToNativeStepEnd": 0.049,
+    "nativeStepEndToBuildsetFinish": 0.079
+  },
+  "stdout": {
+    "reviewGateStdoutBytes": 4169492,
+    "reviewGateStderrBytes": 69973,
+    "testGateBufferedBytes": 4123868,
+    "burst": {
+      "frames": 509,
+      "full8192Frames": 508,
+      "bytes": 4167835,
+      "spanS": 60.109,
+      "KiBPerS": 67.7,
+      "interframeMs": {
+        "median": 69.2,
+        "p90": 316.4,
+        "quantization": "clusters near multiples of ~24 ms"
+      }
+    },
+    "consoleJsonLineBytes": 4001839,
+    "topEmitters": {
+      "src/runtime/qa-scenes.test.ts": 2374445,
+      "src/runtime/qa-scenes-battle.test.ts": 1000334,
+      "src/runtime/qa-scenes-atlas.test.ts": 302352,
+      "src/components/ScreenRouter.test.tsx": 109778
+    },
+    "emitter": "src/logging.ts console transport (single-line JSON console.log) during passing tests"
+  },
+  "consumerSide": {
+    "tollgateWorkerPid": 37185,
+    "workerCpuPercent": "3.3-4.0 steady before and during drain",
+    "appPid": 714,
+    "appCpuPercent": "6-106, not saturated through the drain",
+    "cpuBound": false
+  },
+  "retainedComparison": {
+    "source": "tg --no-launch --json logs for every history item with a review step at 04:27:43Z (artifacts/qa/hv-umm2.492/history-analysis.json), including the three hv-umm2.481 samples",
+    "fullSuiteReviewGate": {
+      "n": 8,
+      "nativeS": {
+        "min": 104.513,
+        "max": 136.655
+      },
+      "lastInternalFinishedS": {
+        "min": 62.317,
+        "max": 79.706
+      },
+      "lastInternalFinishedToLastFrameS": {
+        "min": 42.174,
+        "max": 64.908
+      },
+      "burstKiBPerS": {
+        "min": 63.5,
+        "max": 96.9
+      },
+      "burstFrames": 509,
+      "lastFrameToStepEndS": {
+        "min": 0.022,
+        "max": 0.11
+      }
+    },
+    "focusedReviewGate": {
+      "n": 4,
+      "stdoutBytes": {
+        "min": 1454,
+        "max": 23068
+      },
+      "nativeS": {
+        "min": 12.064,
+        "max": 16.531
+      },
+      "burst": "none"
+    },
+    "reviewFull": {
+      "n": 10,
+      "lastInternalFinishedToLastFrameS": {
+        "min": 1.07,
+        "max": 1.947
+      },
+      "note": "buffered bursts overlap later sequential steps, so the post-check tail stays under 2 s"
+    }
+  },
+  "conclusion": {
+    "status": "confirmed",
+    "cause": "After test-gate finishes, scripts/review.mjs writes its ~4.1 MB buffered output in one process.stdout.write. Tollgate's log consumer drains the pipe at ~64-97 KiB/s in 8192-byte frames, so the producer stays alive, blocked and idle, for 42-65 s; the native step ends 0.02-0.11 s after the last frame. About 97% of those bytes are passing-test console JSON from src/logging.ts.",
+    "notCause": [
+      "producer computation (0.01 s CPU over the drain)",
+      "lingering vitest/tsc/eslint descendants",
+      "step settlement after the last frame"
+    ],
+    "unresolved": "Why the Tollgate consumer path reads at ~68 KiB/s while not CPU bound (timer cadence, IPC or persistence) is not observable read-only.",
+    "speedClaim": null,
+    "repairBead": {
+      "warranted": true,
+      "likelyFiles": [
+        "src/logging.ts",
+        "vitest.config.ts"
+      ],
+      "alternative": "scripts/review.mjs (do not replay passing buffered output in gate mode)",
+      "tollgateSide": "Consumer throughput is a Tollgate observation, not a run-blocking defect under D16."
+    }
+  },
+  "unavailable": [
+    "Native per-step start/end timestamps: status exposes buildset started_at/finished_at and per-step elapsed_ms only; step start derived from the broker monotonic origin.",
+    "Running-step state: step_results stay empty until the buildset finishes, so the review-gate entry was inferred from process and log evidence.",
+    "Exact producer and vitest exit instants: ps polling brackets of ~0.3 s only.",
+    "Live receipt of frames before 04:30:43.683Z: the follower attached at step offset ~50 s (watcher filtered kind 'candidate', gate items have kind 'gate'); earlier frames arrived as backlog.",
+    "Pipe occupancy, worker-internal buffering and the frame stamping point inside Tollgate.",
+    "Which Tollgate component (worker or app) sets the ~24 ms read cadence."
+  ],
+  "localValidationS": {
+    "review": 0.33,
+    "knip": 3.64,
+    "scope": "npm run review (quick: friction-records only) and npm run knip in the worktree"
+  },
+  "hostLoadSamples": {
+    "reviewGateStart": 19.61962890625,
+    "localReviewStart": 16.73095703125
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "1-minute load at the observed live gate's review-gate start (review.mjs started line); local review started at 16.73"
+      }
+    }
+  }
+}
