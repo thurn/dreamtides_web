@@ -237,6 +237,12 @@ export interface CardStackItem extends StackItemBase {
   readonly choices: readonly EffectChoices[];
   /** The back-rank position a character was dropped on, used when it resolves if still open. */
   readonly slot?: Slot;
+  /**
+   * The card was played from its owner's void, by Reclaim or a play
+   * permission, which "When you play a card from your void" abilities match
+   * (RD-hv-umm2.93-1); absent for a play from a hand and for a copy.
+   */
+  readonly playedFromVoid?: true;
 }
 
 /**

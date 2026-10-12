@@ -494,7 +494,15 @@ export type TriggerSubject = "self" | CharacterSelector;
 export type Trigger =
   | { readonly on: NamedTrigger }
   /** "When you play your `nth` … this turn" counts only the plays that match. */
-  | { readonly on: "play"; readonly player: PlayerRef; readonly filter: CardFilter; readonly nth?: number }
+  | { readonly on: "play"; readonly player: PlayerRef; readonly filter: CardFilter; readonly nth?: number; readonly from?: never }
+  /**
+   * "When you play a card from your void": each card matching `filter`, by
+   * its characteristics as it was played, that `player` plays from their
+   * void, by Reclaim or a play permission alike, matched as its play is
+   * announced with the card on the stack (rules § Ability Types → When you
+   * play a card from your void; RD-hv-umm2.93-1). It counts no `nth`.
+   */
+  | { readonly on: "play"; readonly player: PlayerRef; readonly filter: CardFilter; readonly from: "void"; readonly nth?: never }
   | { readonly on: "materialize"; readonly subject: TriggerSubject }
   | { readonly on: "draw"; readonly player: PlayerRef; readonly nth?: number }
   /**

@@ -1,0 +1,4 @@
+# Pre-existing issues found by hv-umm2.93
+
+- `scripts/content-inventory.ts` (the `whenPlayFromVoidTrigger` capability, and `whenReclaimTrigger` before it) still marks its binding `pending: "option"` (`pending: "member"`); with the `Trigger` form now present, the inventory resolver's `validate` reports a fulfilled pending capability when the inventory is regenerated. The script belongs to bead 5.1 and is outside this bead's areas.
+- `src/rules/battle/fold.ts` `isStackItem` validates a saved card stack item's `slot` but not its other optional fields, so a saved `playedFromVoid` of another type passes validation. The matcher only reads `playedFromVoid === true`, and only in the play step that wrote it, so a malformed saved value cannot trigger anything; adding the check needs `fold.ts`, outside this bead's areas.

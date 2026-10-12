@@ -11,10 +11,12 @@
  * match a card's `enteredVoid`, as it is once in the void (RD-hv-umm2.77-1),
  * "When you discard this card" abilities their own card's `discarded`, from
  * the void it went to (RD-hv-umm2.82-1), "When you erode …" abilities a
- * card's `eroded`, also once it is in its owner's void (RD-hv-umm2.87-1), and
+ * card's `eroded`, also once it is in its owner's void (RD-hv-umm2.87-1),
  * "When you reclaim …" abilities a `cardPlayed` whose play used Reclaim, with
  * the card on the stack, where "When you reclaim this character" sees it
- * (RD-hv-umm2.91-1).
+ * (RD-hv-umm2.91-1), and "When you play a card from your void" abilities a
+ * `cardPlayed` whose card left its owner's void for the stack, by Reclaim or a
+ * play permission (RD-hv-umm2.93-1).
  */
 import type { EngineCatalog } from "../catalog";
 import { cardMatchesFilter, playedMatchesFilter } from "../continuous/characteristics";
@@ -218,6 +220,15 @@ function reclaimMatches(
   return played !== undefined && playedMatchesFilter(state, catalog, played, trigger.filter);
 }
 
+/**
+ * Whether the card `id` a `cardPlayed` announces was played from its owner's
+ * void, by Reclaim or a play permission: the stack item it was just played
+ * onto records the move (RD-hv-umm2.93-1).
+ */
+function playedFromVoid(state: BattleState, id: InstanceId): boolean {
+  return state.stack.some((item) => item.kind === "card" && item.instance === id && item.playedFromVoid === true);
+}
+
 /** `matchTrigger` for one trigger kind; `TRIGGER_EVENTS` lists the events each case can match. */
 function matchKind(
   state: BattleState,
@@ -261,6 +272,7 @@ function matchKind(
         : null;
     case "play": {
       if (event.kind !== "cardPlayed" || event.side !== resolvePlayer(you, trigger.player)) return null;
+      if (trigger.from === "void" && !playedFromVoid(state, event.instance)) return null;
       // Each play matches by the characteristics it was recorded with (RD-hv-7x4l.34-1).
       const played = state.turnLog.played[event.side].filter((card) => playedMatchesFilter(state, catalog, card, trigger.filter));
       if (played[played.length - 1]?.instance !== event.instance) return null;

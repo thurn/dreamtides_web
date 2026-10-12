@@ -1020,6 +1020,15 @@ resolves, whoever controls it then. Card identity persists across zones (see
 again is affected, while one in another zone is not. If none entered play, or
 none is in play then, that part does nothing.
 
+"Return this character to play with awakened," and likewise "Materialize this
+character from your void with awakened," puts the character into play as an
+awakened character enters: without the exhausted status, so it can challenge,
+block, and pay ☾ costs that turn. It does not gain the Awakened keyword. Only
+a character that this effect puts into play is awakened: if the character is
+no longer in your void as the effect resolves, or the back rank is full, the
+effect does nothing, and it does not awaken that character when another
+effect has already put it into play.
+
 **Rematerialize** — Trigger an in-play character's materialization again, firing
 its ▸Materialized trigger and any "When you materialize" triggers.
 
@@ -1425,7 +1434,9 @@ see.
 
 **Where triggered abilities work:** A triggered ability works while its card is
 in play. An ability that names another zone, such as "▸Dawn: If this card is in
-your void, …", works while the card is in that zone instead. Avatar and
+your void, …", works while the card is in that zone instead, and so does an
+ability that returns its own character from your void to play, such as "When
+you play a card from your void, return this character to play." Avatar and
 dreamsign abilities always work. A ▸Dissolved ability triggers from wherever
 the dissolved card went, and "When you reclaim this character" from the stack. It triggers for the player who controlled the character
 as it left play, among that player's abilities, ordered by the zone it went to.
@@ -1557,6 +1568,25 @@ they leave play," gains again each time it is reclaimed. If the card leaves
 the stack before the ability resolves, as when an earlier ability prevents
 it, the ability does nothing to it. Abilities that trigger "when a character
 gains ✦" see only characters in play, so they do not see this gain.
+
+**When you play a card from your void:** An ability such as "When you play a
+card from your void, return this character to play" triggers once for each
+card you play from your void, by Reclaim, printed or gained, or by an effect
+that lets you play it from there (see [Playing from the
+void](#playing-cards-and-the-stack)), as that play is announced, with the card
+on the stack. A card played from a hand does not trigger it, nor does a card
+put into play or onto the stack without being played, such as a materialized
+character or a copy. The ability matches the card by its type and subtype as
+it was played, as "when you play" abilities do. "Return this character to
+play" names the character's own card in your void, so that ability works
+while its card is in your void, the zone it returns from, and does nothing in
+play or in any other zone. It never sees its own card played from your void,
+since that card is then on the stack. "This character" is its card in your
+void as the ability resolves: if the card has left the void by then, as when
+an earlier ability returned it to play or to your hand, the ability does
+nothing, and with the back rank full the card stays in your void (see
+[Battlefield Capacity](#battlefield-capacity)). "When the opponent plays a
+card from their void" works the same way with the opponent's plays.
 
 **Intervening conditions:** A triggered ability written "When X, if Y, …", or
 "▸Dawn: If Y, …", triggers only if Y is true when X happens, and when it

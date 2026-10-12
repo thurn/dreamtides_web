@@ -74,6 +74,17 @@ export function whenOpponentPlays(filter: CardFilter = {}, nth?: number): Trigge
   return { on: "play", player: "opponent", filter, ...(nth === undefined ? {} : { nth }) };
 }
 
+/**
+ * "When you play a card from your void" (or "When the opponent plays a card
+ * from their void", with `player`): each card matching `filter`, as it was
+ * played, that player plays from their void by Reclaim or a play permission,
+ * matched as its play is announced, with the card on the stack. An ability
+ * that works from the void does not see its own card played from there.
+ */
+export function whenPlayFromVoid(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {
+  return { on: "play", player, filter, from: "void" };
+}
+
 /** "When you materialize a character matching `subject`". */
 export function whenMaterialize(subject: TriggerSubject = { controller: "you" }): Trigger {
   return { on: "materialize", subject };

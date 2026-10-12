@@ -246,7 +246,10 @@ export function copyChoices(choices: EffectChoices): EffectChoices {
   return { modes: [...choices.modes], targets: choices.targets.map((list) => [...list]) };
 }
 
-/** Moves an instance onto the top of the stack under `controller`, with its play-time choices. */
+/**
+ * Moves an instance onto the top of the stack under `controller`, with its
+ * play-time choices, remembering whether it was played from a void.
+ */
 export function moveToStack(
   ctx: StepContext,
   id: InstanceId,
@@ -261,6 +264,7 @@ export function moveToStack(
 ): void {
   const { state } = ctx;
   const instance = instanceOf(state, id);
+  const fromVoid = instance.zone === "void";
   depart(ctx, instance, "stack");
   detach(state, instance);
   instance.controller = controller;
@@ -274,6 +278,7 @@ export function moveToStack(
     x: played.x,
     optionalPaid: [...played.optionalPaid],
     ...(played.slot === undefined ? {} : { slot: played.slot }),
+    ...(fromVoid ? { playedFromVoid: true } : {}),
   });
 }
 
