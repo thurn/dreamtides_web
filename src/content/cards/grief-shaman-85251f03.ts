@@ -1,3 +1,7 @@
+import { abandonCost, activated, exhaustSelf } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import shadow from "../figments/shadow-86125402";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,11 @@ export default card({
   cardNumber: 278,
   art: { x: 0, y: 0.644, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated(
+      [exhaustSelf(), abandonCost()],
+      p.materializeFigments(parseFigmentId(shadow.id), 1, { spark: variant.amplified ? 3 : 2 }),
+    ),
+  ],
+  verifiedText: "pj7ub9acm3",
 });

@@ -1,3 +1,7 @@
+import { abandonCost, activated } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import warrior from "../figments/warrior-bb1a5acd";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +24,11 @@ export default card({
   artOwned: false,
   cardNumber: 313,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated(
+      [abandonCost({ subtype: "Warrior", figment: false })],
+      p.materializeFigments(parseFigmentId(warrior.id), variant.amplified ? 2 : 1, { spark: 1 }),
+    ),
+  ],
+  verifiedText: "1gyndbhp39e",
 });

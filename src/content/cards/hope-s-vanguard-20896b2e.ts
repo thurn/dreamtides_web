@@ -1,3 +1,7 @@
+import { activated, discardCost } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import survivor from "../figments/survivor-5256888f";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +22,11 @@ export default card({
   artOwned: false,
   cardNumber: 422,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated(
+      [discardCost()],
+      p.materializeFigments(parseFigmentId(survivor.id), 1, { spark: variant.amplified ? 2 : 1 }),
+    ),
+  ],
+  verifiedText: "baz3ij69am",
 });
