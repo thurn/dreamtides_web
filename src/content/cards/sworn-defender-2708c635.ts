@@ -1,3 +1,5 @@
+import { activated, characterYouControl, exhaustSelf, target, upTo } from "../../engine/dsl/builders";
+import { grant } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,12 @@ export default card({
   cardNumber: 245,
   art: { x: 0.042, y: 1, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated(
+      [exhaustSelf()],
+      grant(variant.amplified ? upTo(characterYouControl({ another: true }), 2) : target(characterYouControl({ another: true })), "cannotBeTargeted", "untilEndOfTurn"),
+      { speed: "interrupt" },
+    ),
+  ],
+  verifiedText: "tckih93jpv",
 });

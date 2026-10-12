@@ -1,3 +1,5 @@
+import { all, characterYouControl, event } from "../../engine/dsl/builders";
+import { awaken, sequence, triggerAbility } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,8 @@ export default card({
   artOwned: false,
   cardNumber: 251,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(sequence(triggerAbility(all(characterYouControl()), "dawn"), awaken(all(characterYouControl())))),
+  ],
+  verifiedText: "5vwfiavdek",
 });

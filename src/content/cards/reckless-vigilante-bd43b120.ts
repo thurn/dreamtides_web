@@ -1,3 +1,5 @@
+import { abandonCost, activated, characterYouControl, target, upTo } from "../../engine/dsl/builders";
+import { grant } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,12 @@ export default card({
   cardNumber: 345,
   art: { x: 0, y: 0, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated(
+      [abandonCost({ another: true })],
+      grant(variant.amplified ? upTo(characterYouControl(), 2) : target(characterYouControl()), "cannotBeTargeted", "untilEndOfTurn"),
+      { speed: "interrupt" },
+    ),
+  ],
+  verifiedText: "5aifp9ur1s",
 });
