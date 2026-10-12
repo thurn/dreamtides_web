@@ -1017,9 +1017,11 @@ analog:
    plays this turn. `rules/timing.ts` `playRestricted` reads both inside
    `canPlay`, so legality, the play step's own check, and every route of
    play agree (RD-hv-umm2.109-2). A change naming a card is hidden like a
-   `cardCost` change, and costs, permissions, and restrictions are kept with
-   a redacted source by the view and determinization
-   (`rules/floating.ts` `carriesLegality`). The static-only
+   `cardCost` change, and costs, permissions (a gained or lost Reclaim among
+   them), and restrictions are kept with a redacted source by the view and
+   determinization (`rules/floating.ts` `carriesLegality`), so a Reclaim
+   grant from a resolved copy, whose source ceased to exist, still reaches
+   every determinization. The static-only
    `reclaimNotBanished` change, read by `banishedAsReclaimed` (below), shares
    the layer too.
 
@@ -1443,7 +1445,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
-| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenDiscardSelf()` (works from the void), `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `atEndOfTurn(player?)` (as the Ending phase begins), `either` | |
+| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenDiscardSelf()` (works from the void), `whenErode(player, filter)`, `whenErodeSelf()` (works from the void), `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `atEndOfTurn(player?)` (as the Ending phase begins), `either` | |
 
 Discover accepts an exact copiable-cost value expression or a strict lower
 bound (`costGreaterThan`) alongside its card filter, or a free

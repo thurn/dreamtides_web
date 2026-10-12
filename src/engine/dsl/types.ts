@@ -484,6 +484,15 @@ export type Trigger =
    * void (rules § Ability Types → When you discard this card).
    */
   | { readonly on: "discard"; readonly player: PlayerRef; readonly filter: CardFilter; readonly self?: true }
+  /**
+   * "When you erode a card": each card matching `filter` that Erode puts from
+   * `player`'s deck into its void, whoever's effect made them erode, matched
+   * as it is in the void (rules § Keywords and Effects → Erode). With
+   * `self`, "When you erode this card": only the ability's own card, so the
+   * ability works from the void (rules § Ability Types → When you discard or
+   * erode this card).
+   */
+  | { readonly on: "erode"; readonly player: PlayerRef; readonly filter: CardFilter; readonly self?: true }
   | { readonly on: "abandon"; readonly player: PlayerRef; readonly filter: CardFilter }
   | { readonly on: "leavesPlay"; readonly subject: TriggerSubject }
   /**

@@ -1058,7 +1058,11 @@ after Erode is the card the Erode put into your void, and names no card when
 Erode caused Fatigue instead. Gained Reclaim works exactly like printed Reclaim.
 With no stated duration it is permanent and travels with the card across zones
 (see [Zone Changes](#zone-changes)); "until end of turn" ends it then, wherever
-the card is. A gained "Reclaim N●" is played from the void for N● in place of
+the card is. A grant to a group, as in "Until end of turn, events in
+your void gain reclaim," gives Reclaim to the cards that match as it resolves,
+as with [values fixed as an effect resolves](#spark): an event put into your
+void later that turn does not gain it, and neither does the card whose effect
+it is, which is still on the stack as it resolves. A gained "Reclaim N●" is played from the void for N● in place of
 any printed Reclaim cost; if a card gains several, the most recent applies.
 Gaining plain Reclaim keeps the cost the card already had: a card with
 "Reclaim 2●" that gains reclaim is still played from the void for 2●. A card
@@ -1478,6 +1482,28 @@ does not see other cards discarded. "It" and "this card" name the card while
 it is in your void: if it leaves the void before the ability resolves, the
 ability does nothing to it. Both players see the card and the ability
 trigger, even when it was discarded from a hidden hand.
+
+**When you erode a card:** An ability such as "When you erode a card, a
+random character you control gains +1✦" triggers once for each card that
+Erode puts from your deck into your void, whatever made you erode: your own
+effect, or the opponent's, as in "The opponent erodes 2." An
+Erode puts its cards into the void one at a time, and each triggers the
+ability on its own. The ability sees the eroded card as it is in the void.
+Only Erode erodes: a card sent to the void by Foresee, discarded, or
+dissolved is not eroded, and an Erode that causes Fatigue instead erodes no
+card. "When the opponent erodes a card" works the same way with the
+opponent's deck and void.
+
+**When you discard or erode this card:** An ability such as "When you
+discard or erode this card, it gains reclaim 3●" works from the void and
+triggers on each occasion: once its card has been discarded from your hand
+into your void, as for "When you discard this card," and once Erode has put
+it from your deck into your void, whatever made you erode. A card already in
+the void does not see other cards discarded or eroded, and only the card
+itself triggers its ability. "It" and "this card" name the card while it is
+in your void: if it leaves the void before the ability resolves, the ability
+does nothing to it. Both players see the card and the ability trigger, even
+when it was eroded from a hidden deck.
 
 **Intervening conditions:** A triggered ability written "When X, if Y, …", or
 "▸Dawn: If Y, …", triggers only if Y is true when X happens, and when it

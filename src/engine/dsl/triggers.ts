@@ -15,16 +15,18 @@ import type {
   TriggerSubject,
 } from "./types";
 
-/** Whether `trigger`, or one of its `either` branches, is "When you discard this card". */
-function concernsOwnDiscard(trigger: Trigger): boolean {
-  return trigger.on === "either" ? trigger.triggers.some(concernsOwnDiscard) : trigger.on === "discard" && trigger.self === true;
+/** Whether `trigger`, or one of its `either` branches, is "When you discard this card" or "When you erode this card". */
+function concernsOwnArrival(trigger: Trigger): boolean {
+  if (trigger.on === "either") return trigger.triggers.some(concernsOwnArrival);
+  return (trigger.on === "discard" || trigger.on === "erode") && trigger.self === true;
 }
 
 /**
  * "When …, …". Works in play unless `zone` names a functional zone. "When
- * you discard this card" sees its card only in the void it was discarded
- * into, so an ability with it must work in the void, and only there: a
- * discarded created card, announced while still in hand, never enters one.
+ * you discard this card" and "When you erode this card" see their card only
+ * in the void it went to, so an ability with either must work in the void,
+ * and only there: a discarded created card, announced while still in hand,
+ * never enters one.
  */
 export function triggered(
   trigger: Trigger,
@@ -32,8 +34,8 @@ export function triggered(
   options: { readonly zone?: FunctionalZone; readonly condition?: Condition; readonly oncePerTurn?: boolean } = {},
 ): TriggeredAbility {
   const zone = options.zone ?? "play";
-  if (concernsOwnDiscard(trigger) && zone !== "void") {
-    throw new Error(`"When you discard this card" works from the void, not "${zone}"`);
+  if (concernsOwnArrival(trigger) && zone !== "void") {
+    throw new Error(`"When you discard or erode this card" works from the void, not "${zone}"`);
   }
   return {
     kind: "triggered",
@@ -93,6 +95,25 @@ export function whenDiscard(player: PlayerRef = "you", filter: CardFilter = {}):
  */
 export function whenDiscardSelf(): Trigger {
   return { on: "discard", player: "you", filter: {}, self: true };
+}
+
+/**
+ * "When you erode a card" (or "When the opponent erodes a card", with
+ * `player`): each card matching `filter` that Erode puts from that player's
+ * deck into their void, matched in the void.
+ */
+export function whenErode(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {
+  return { on: "erode", player, filter };
+}
+
+/**
+ * "When you erode this card": its own erode from its owner's deck, by any
+ * cause, matched once the card is in its owner's void. The ability works
+ * from the void, so `triggered` requires `zone: "void"`. "When you discard
+ * or erode this card" is `either(whenDiscardSelf(), whenErodeSelf())`.
+ */
+export function whenErodeSelf(): Trigger {
+  return { on: "erode", player: "you", filter: {}, self: true };
 }
 
 export function whenAbandon(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {

@@ -1,3 +1,6 @@
+import { energy, event, everyIn, thisCardIn } from "../../engine/dsl/builders";
+import { either, triggered, untilEndOfTurn, whenDiscardSelf, whenErodeSelf } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 496,
   art: { x: 0.228, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(p.grantReclaim(everyIn("void", { cardType: "event" }), { duration: untilEndOfTurn() })),
+    triggered(either(whenDiscardSelf(), whenErodeSelf()), p.grantReclaim(thisCardIn("void"), { costs: [energy(3)] }), { zone: "void" }),
+  ],
+  verifiedText: "1o0bqvac7ek",
 });
