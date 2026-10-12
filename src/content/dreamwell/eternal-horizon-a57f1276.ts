@@ -1,3 +1,5 @@
+import { all, characterYouControl, event } from "../../engine/dsl/builders";
+import { gainSpark } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: true,
   cardNumber: 23,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [event(gainSpark(all(characterYouControl()), 1))],
+  verifiedText: "1mo8snk8bz2",
 });

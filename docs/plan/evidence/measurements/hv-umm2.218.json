@@ -1,0 +1,1509 @@
+{
+  "bead": "hv-umm2.218",
+  "base": "5be8538ba5c7bcd686a621ec8b7b60c58c9fe82a",
+  "entities": [
+    "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+    "51caf26d-83bf-45a9-bc80-010d353277db",
+    "a57f1276-3fb6-4527-b538-953fbace35cf"
+  ],
+  "sourceScope": {
+    "modules": 3,
+    "nonTestLinesAdded": 14,
+    "nonTestLinesRemoved": 3,
+    "newPrimitives": [],
+    "fallout": [],
+    "metadataPreserved": "UUIDs, canonical text, order, energyAdded, artwork and default exports preserved."
+  },
+  "source": {
+    "a0fbcbd9-96ee-4392-add7-e1d436f99553": {
+      "module": "src/content/dreamwell/rusted-edifice-a0fbcbd9.ts",
+      "sha256": "a03845c91fb361abbb95a243c14cdbe2c7c6aa4b5709306cb128a44821de34bf"
+    },
+    "51caf26d-83bf-45a9-bc80-010d353277db": {
+      "module": "src/content/dreamwell/nomad-s-verge-51caf26d.ts",
+      "sha256": "c5254ac63e0b3ca1a85b4fe4811ad60b504c1c91d320830b49515a0027bc64ea"
+    },
+    "a57f1276-3fb6-4527-b538-953fbace35cf": {
+      "module": "src/content/dreamwell/eternal-horizon-a57f1276.ts",
+      "sha256": "08817ad3917472cf802d7666227863111fddfdfb2aa18f967ff51d1fff650f8e"
+    }
+  },
+  "d20": {
+    "scenariosAdded": 0,
+    "reason": "Plain composition of existing void targeting/return, figment materialization and permanent all-controlled-character spark. Existing synthetic contracts cover these public forms; temporary populated-board observations are non-gating diagnostics."
+  },
+  "rulings": [
+    "RD-hv-umm2.59-1",
+    "rules.md Zones, Spark, Creating Figments at Capacity"
+  ],
+  "newRulesDecisions": [],
+  "cardIssues": [],
+  "d21": {
+    "newPromptKinds": [],
+    "newStatuses": [],
+    "newVisualEffects": [],
+    "judgedApplicable": false,
+    "sample": [
+      {
+        "uuid": "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+        "firstByte": 236,
+        "sampled": false
+      },
+      {
+        "uuid": "51caf26d-83bf-45a9-bc80-010d353277db",
+        "firstByte": 36,
+        "sampled": false
+      },
+      {
+        "uuid": "a57f1276-3fb6-4527-b538-953fbace35cf",
+        "firstByte": 187,
+        "sampled": false
+      }
+    ]
+  },
+  "publicObservation": {
+    "pendingBaseline": [
+      {
+        "uuid": "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+        "status": "pending",
+        "side": "player",
+        "returned": false,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "invariants": []
+      },
+      {
+        "uuid": "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+        "status": "pending",
+        "side": "enemy",
+        "returned": false,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "invariants": []
+      },
+      {
+        "uuid": "51caf26d-83bf-45a9-bc80-010d353277db",
+        "status": "pending",
+        "side": "player",
+        "returned": false,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "invariants": []
+      },
+      {
+        "uuid": "51caf26d-83bf-45a9-bc80-010d353277db",
+        "status": "pending",
+        "side": "enemy",
+        "returned": false,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "invariants": []
+      },
+      {
+        "uuid": "a57f1276-3fb6-4527-b538-953fbace35cf",
+        "status": "pending",
+        "side": "player",
+        "returned": false,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "invariants": []
+      },
+      {
+        "uuid": "a57f1276-3fb6-4527-b538-953fbace35cf",
+        "status": "pending",
+        "side": "enemy",
+        "returned": false,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "invariants": []
+      }
+    ],
+    "populatedAuthored": [
+      {
+        "uuid": "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+        "status": "authored",
+        "side": "player",
+        "prompts": [
+          {
+            "kind": "chooseTargets",
+            "side": "player",
+            "purpose": {
+              "source": {
+                "kind": "dreamwell",
+                "side": "player",
+                "id": "a0fbcbd9-96ee-4392-add7-e1d436f99553"
+              },
+              "cardId": null,
+              "ability": 0,
+              "role": "target"
+            },
+            "candidates": [
+              "i11",
+              "i12"
+            ],
+            "min": 1,
+            "max": 1,
+            "cancellable": false
+          }
+        ],
+        "events": [
+          {
+            "kind": "phaseChanged",
+            "phase": "challenge",
+            "active": "enemy"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "ending",
+            "active": "enemy"
+          },
+          {
+            "kind": "turnStarted",
+            "side": "player",
+            "round": 3,
+            "turnNumber": 5,
+            "extra": false
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dreamwell",
+            "active": "player"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 0,
+            "max": 0,
+            "change": 0,
+            "maxChange": 0,
+            "cause": "refresh"
+          },
+          {
+            "kind": "dreamwellDrawn",
+            "side": "player",
+            "card": "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+            "energyAdded": 1
+          },
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 1,
+            "max": 1,
+            "change": 1,
+            "maxChange": 1,
+            "cause": "refresh"
+          },
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamwell",
+              "side": "player",
+              "id": "a0fbcbd9-96ee-4392-add7-e1d436f99553"
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "subject": null
+          },
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamwell",
+              "side": "player",
+              "id": "a0fbcbd9-96ee-4392-add7-e1d436f99553"
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          },
+          {
+            "kind": "leftVoid",
+            "instance": "i11",
+            "side": "player",
+            "to": "hand"
+          },
+          {
+            "kind": "returnedToHand",
+            "instance": "i11",
+            "side": "player"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "draw",
+            "active": "player"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i3"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dawn",
+            "active": "player"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          }
+        ],
+        "invariants": [],
+        "returned": true,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "floating": [],
+        "phase": "day"
+      },
+      {
+        "uuid": "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+        "status": "authored",
+        "side": "enemy",
+        "prompts": [
+          {
+            "kind": "chooseTargets",
+            "side": "enemy",
+            "purpose": {
+              "source": {
+                "kind": "dreamwell",
+                "side": "enemy",
+                "id": "a0fbcbd9-96ee-4392-add7-e1d436f99553"
+              },
+              "cardId": null,
+              "ability": 0,
+              "role": "target"
+            },
+            "candidates": [
+              "i20",
+              "i21"
+            ],
+            "min": 1,
+            "max": 1,
+            "cancellable": false
+          }
+        ],
+        "events": [
+          {
+            "kind": "phaseChanged",
+            "phase": "challenge",
+            "active": "player"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "ending",
+            "active": "player"
+          },
+          {
+            "kind": "turnStarted",
+            "side": "enemy",
+            "round": 2,
+            "turnNumber": 5,
+            "extra": false
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dreamwell",
+            "active": "enemy"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 0,
+            "max": 0,
+            "change": 0,
+            "maxChange": 0,
+            "cause": "refresh"
+          },
+          {
+            "kind": "dreamwellDrawn",
+            "side": "enemy",
+            "card": "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+            "energyAdded": 1
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 1,
+            "max": 1,
+            "change": 1,
+            "maxChange": 1,
+            "cause": "refresh"
+          },
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamwell",
+              "side": "enemy",
+              "id": "a0fbcbd9-96ee-4392-add7-e1d436f99553"
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "subject": null
+          },
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamwell",
+              "side": "enemy",
+              "id": "a0fbcbd9-96ee-4392-add7-e1d436f99553"
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          },
+          {
+            "kind": "leftVoid",
+            "instance": "i20",
+            "side": "enemy",
+            "to": "hand"
+          },
+          {
+            "kind": "returnedToHand",
+            "instance": "i20",
+            "side": "enemy"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "draw",
+            "active": "enemy"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i12"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dawn",
+            "active": "enemy"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          }
+        ],
+        "invariants": [],
+        "returned": true,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "floating": [],
+        "phase": "day"
+      },
+      {
+        "uuid": "51caf26d-83bf-45a9-bc80-010d353277db",
+        "status": "authored",
+        "side": "player",
+        "prompts": [],
+        "events": [
+          {
+            "kind": "phaseChanged",
+            "phase": "challenge",
+            "active": "enemy"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "ending",
+            "active": "enemy"
+          },
+          {
+            "kind": "turnStarted",
+            "side": "player",
+            "round": 3,
+            "turnNumber": 5,
+            "extra": false
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dreamwell",
+            "active": "player"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 0,
+            "max": 0,
+            "change": 0,
+            "maxChange": 0,
+            "cause": "refresh"
+          },
+          {
+            "kind": "dreamwellDrawn",
+            "side": "player",
+            "card": "51caf26d-83bf-45a9-bc80-010d353277db",
+            "energyAdded": 1
+          },
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 1,
+            "max": 1,
+            "change": 1,
+            "maxChange": 1,
+            "cause": "refresh"
+          },
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamwell",
+              "side": "player",
+              "id": "51caf26d-83bf-45a9-bc80-010d353277db"
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "subject": null
+          },
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamwell",
+              "side": "player",
+              "id": "51caf26d-83bf-45a9-bc80-010d353277db"
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          },
+          {
+            "kind": "cardCreated",
+            "instance": "i23",
+            "side": "player",
+            "printing": {
+              "kind": "figment",
+              "figment": "3eddb1b8-95f2-4688-a1b3-f523a13ce0af",
+              "spark": 1
+            },
+            "zone": "play"
+          },
+          {
+            "kind": "materialized",
+            "instance": "i23",
+            "side": "player",
+            "slot": {
+              "rank": "back",
+              "index": 1
+            }
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "draw",
+            "active": "player"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i3"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dawn",
+            "active": "player"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          }
+        ],
+        "invariants": [],
+        "returned": false,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [
+          {
+            "printing": {
+              "kind": "figment",
+              "figment": "3eddb1b8-95f2-4688-a1b3-f523a13ce0af",
+              "spark": 1
+            },
+            "exhausted": true
+          }
+        ],
+        "floating": [],
+        "phase": "day"
+      },
+      {
+        "uuid": "51caf26d-83bf-45a9-bc80-010d353277db",
+        "status": "authored",
+        "side": "enemy",
+        "prompts": [],
+        "events": [
+          {
+            "kind": "phaseChanged",
+            "phase": "challenge",
+            "active": "player"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "ending",
+            "active": "player"
+          },
+          {
+            "kind": "turnStarted",
+            "side": "enemy",
+            "round": 2,
+            "turnNumber": 5,
+            "extra": false
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dreamwell",
+            "active": "enemy"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 0,
+            "max": 0,
+            "change": 0,
+            "maxChange": 0,
+            "cause": "refresh"
+          },
+          {
+            "kind": "dreamwellDrawn",
+            "side": "enemy",
+            "card": "51caf26d-83bf-45a9-bc80-010d353277db",
+            "energyAdded": 1
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 1,
+            "max": 1,
+            "change": 1,
+            "maxChange": 1,
+            "cause": "refresh"
+          },
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamwell",
+              "side": "enemy",
+              "id": "51caf26d-83bf-45a9-bc80-010d353277db"
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "subject": null
+          },
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamwell",
+              "side": "enemy",
+              "id": "51caf26d-83bf-45a9-bc80-010d353277db"
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          },
+          {
+            "kind": "cardCreated",
+            "instance": "i23",
+            "side": "enemy",
+            "printing": {
+              "kind": "figment",
+              "figment": "3eddb1b8-95f2-4688-a1b3-f523a13ce0af",
+              "spark": 1
+            },
+            "zone": "play"
+          },
+          {
+            "kind": "materialized",
+            "instance": "i23",
+            "side": "enemy",
+            "slot": {
+              "rank": "back",
+              "index": 1
+            }
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "draw",
+            "active": "enemy"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i12"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dawn",
+            "active": "enemy"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          }
+        ],
+        "invariants": [],
+        "returned": false,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [
+          {
+            "printing": {
+              "kind": "figment",
+              "figment": "3eddb1b8-95f2-4688-a1b3-f523a13ce0af",
+              "spark": 1
+            },
+            "exhausted": true
+          }
+        ],
+        "floating": [],
+        "phase": "day"
+      },
+      {
+        "uuid": "a57f1276-3fb6-4527-b538-953fbace35cf",
+        "status": "authored",
+        "side": "player",
+        "prompts": [],
+        "events": [
+          {
+            "kind": "phaseChanged",
+            "phase": "challenge",
+            "active": "enemy"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "ending",
+            "active": "enemy"
+          },
+          {
+            "kind": "turnStarted",
+            "side": "player",
+            "round": 3,
+            "turnNumber": 5,
+            "extra": false
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dreamwell",
+            "active": "player"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 0,
+            "max": 0,
+            "change": 0,
+            "maxChange": 0,
+            "cause": "refresh"
+          },
+          {
+            "kind": "dreamwellDrawn",
+            "side": "player",
+            "card": "a57f1276-3fb6-4527-b538-953fbace35cf",
+            "energyAdded": 0
+          },
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 0,
+            "max": 0,
+            "change": 0,
+            "maxChange": 0,
+            "cause": "refresh"
+          },
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamwell",
+              "side": "player",
+              "id": "a57f1276-3fb6-4527-b538-953fbace35cf"
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "subject": null
+          },
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamwell",
+              "side": "player",
+              "id": "a57f1276-3fb6-4527-b538-953fbace35cf"
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          },
+          {
+            "kind": "sparkGained",
+            "instance": "i2",
+            "amount": 1,
+            "expiry": {
+              "at": "never"
+            },
+            "additional": false
+          },
+          {
+            "kind": "sparkGained",
+            "instance": "i1",
+            "amount": 1,
+            "expiry": {
+              "at": "never"
+            },
+            "additional": false
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "draw",
+            "active": "player"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i3"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dawn",
+            "active": "player"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          }
+        ],
+        "invariants": [],
+        "returned": false,
+        "ownSpark": [
+          1,
+          1
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "floating": [],
+        "phase": "day"
+      },
+      {
+        "uuid": "a57f1276-3fb6-4527-b538-953fbace35cf",
+        "status": "authored",
+        "side": "enemy",
+        "prompts": [],
+        "events": [
+          {
+            "kind": "phaseChanged",
+            "phase": "challenge",
+            "active": "player"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "ending",
+            "active": "player"
+          },
+          {
+            "kind": "turnStarted",
+            "side": "enemy",
+            "round": 2,
+            "turnNumber": 5,
+            "extra": false
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dreamwell",
+            "active": "enemy"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 0,
+            "max": 0,
+            "change": 0,
+            "maxChange": 0,
+            "cause": "refresh"
+          },
+          {
+            "kind": "dreamwellDrawn",
+            "side": "enemy",
+            "card": "a57f1276-3fb6-4527-b538-953fbace35cf",
+            "energyAdded": 0
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 0,
+            "max": 0,
+            "change": 0,
+            "maxChange": 0,
+            "cause": "refresh"
+          },
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamwell",
+              "side": "enemy",
+              "id": "a57f1276-3fb6-4527-b538-953fbace35cf"
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "subject": null
+          },
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamwell",
+              "side": "enemy",
+              "id": "a57f1276-3fb6-4527-b538-953fbace35cf"
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          },
+          {
+            "kind": "sparkGained",
+            "instance": "i11",
+            "amount": 1,
+            "expiry": {
+              "at": "never"
+            },
+            "additional": false
+          },
+          {
+            "kind": "sparkGained",
+            "instance": "i10",
+            "amount": 1,
+            "expiry": {
+              "at": "never"
+            },
+            "additional": false
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "draw",
+            "active": "enemy"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i12"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dawn",
+            "active": "enemy"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          }
+        ],
+        "invariants": [],
+        "returned": false,
+        "ownSpark": [
+          1,
+          1
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "floating": [],
+        "phase": "day"
+      }
+    ],
+    "scope": "Non-gating temporary public engine forced-draw witness; selected event void return on both sides, exact Ethereal spark1/exhausted, own both-rank gainedSpark1 permanent/no floating duration and opponent unchanged. Native stock forced-Dreamwell fixture has empty void/ranks and therefore only exercises no-candidate/no-character settlement for Edifice/Horizon.",
+    "nomadFullCapacity": [
+      {
+        "uuid": "51caf26d-83bf-45a9-bc80-010d353277db",
+        "status": "authored",
+        "side": "player",
+        "prompts": [],
+        "events": [
+          {
+            "kind": "phaseChanged",
+            "phase": "challenge",
+            "active": "enemy"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "ending",
+            "active": "enemy"
+          },
+          {
+            "kind": "turnStarted",
+            "side": "player",
+            "round": 3,
+            "turnNumber": 5,
+            "extra": false
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dreamwell",
+            "active": "player"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 0,
+            "max": 0,
+            "change": 0,
+            "maxChange": 0,
+            "cause": "refresh"
+          },
+          {
+            "kind": "dreamwellDrawn",
+            "side": "player",
+            "card": "51caf26d-83bf-45a9-bc80-010d353277db",
+            "energyAdded": 1
+          },
+          {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 1,
+            "max": 1,
+            "change": 1,
+            "maxChange": 1,
+            "cause": "refresh"
+          },
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamwell",
+              "side": "player",
+              "id": "51caf26d-83bf-45a9-bc80-010d353277db"
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "subject": null
+          },
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamwell",
+              "side": "player",
+              "id": "51caf26d-83bf-45a9-bc80-010d353277db"
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          },
+          {
+            "kind": "capacityReached",
+            "side": "player",
+            "instance": null,
+            "missing": 1
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "draw",
+            "active": "player"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i12"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dawn",
+            "active": "player"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "player"
+          }
+        ],
+        "invariants": [],
+        "returned": false,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "floating": [],
+        "phase": "day"
+      },
+      {
+        "uuid": "51caf26d-83bf-45a9-bc80-010d353277db",
+        "status": "authored",
+        "side": "enemy",
+        "prompts": [],
+        "events": [
+          {
+            "kind": "phaseChanged",
+            "phase": "challenge",
+            "active": "player"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "ending",
+            "active": "player"
+          },
+          {
+            "kind": "turnStarted",
+            "side": "enemy",
+            "round": 2,
+            "turnNumber": 5,
+            "extra": false
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dreamwell",
+            "active": "enemy"
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 0,
+            "max": 0,
+            "change": 0,
+            "maxChange": 0,
+            "cause": "refresh"
+          },
+          {
+            "kind": "dreamwellDrawn",
+            "side": "enemy",
+            "card": "51caf26d-83bf-45a9-bc80-010d353277db",
+            "energyAdded": 1
+          },
+          {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 1,
+            "max": 1,
+            "change": 1,
+            "maxChange": 1,
+            "cause": "refresh"
+          },
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamwell",
+              "side": "enemy",
+              "id": "51caf26d-83bf-45a9-bc80-010d353277db"
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "subject": null
+          },
+          {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamwell",
+              "side": "enemy",
+              "id": "51caf26d-83bf-45a9-bc80-010d353277db"
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          },
+          {
+            "kind": "capacityReached",
+            "side": "enemy",
+            "instance": null,
+            "missing": 1
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "draw",
+            "active": "enemy"
+          },
+          {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i21"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "dawn",
+            "active": "enemy"
+          },
+          {
+            "kind": "phaseChanged",
+            "phase": "day",
+            "active": "enemy"
+          }
+        ],
+        "invariants": [],
+        "returned": false,
+        "ownSpark": [
+          0,
+          0
+        ],
+        "opponentSpark": 0,
+        "figments": [],
+        "floating": [],
+        "phase": "day"
+      }
+    ]
+  },
+  "validation": {
+    "baseline": {
+      "label": "baseline",
+      "cmd": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamwell218/witness.ts"
+      ],
+      "pid": 79167,
+      "exit": 1,
+      "start": "2026-10-12T18:49:55.625965+00:00",
+      "end": "2026-10-12T18:49:57.520582+00:00",
+      "seconds": 1.8945446669968078,
+      "hostLoad": 5.34716796875
+    },
+    "baseline-corrected": {
+      "label": "baseline-corrected",
+      "cmd": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamwell218/witness.ts"
+      ],
+      "pid": 79691,
+      "exit": 0,
+      "start": "2026-10-12T18:50:11.462967+00:00",
+      "end": "2026-10-12T18:50:15.750113+00:00",
+      "seconds": 4.287092250000569,
+      "hostLoad": 5.14990234375
+    },
+    "witness": {
+      "label": "witness",
+      "cmd": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamwell218/witness.ts"
+      ],
+      "pid": 80377,
+      "exit": 0,
+      "start": "2026-10-12T18:50:37.946873+00:00",
+      "end": "2026-10-12T18:50:39.012032+00:00",
+      "seconds": 1.065083041001344,
+      "hostLoad": 4.75537109375
+    },
+    "witness-populated": {
+      "label": "witness-populated",
+      "cmd": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamwell218/witness.ts"
+      ],
+      "pid": 81190,
+      "exit": 0,
+      "start": "2026-10-12T18:51:02.296311+00:00",
+      "end": "2026-10-12T18:51:03.510007+00:00",
+      "seconds": 1.2136067079991335,
+      "hostLoad": 4.66796875
+    },
+    "witness-capacity": {
+      "label": "witness-capacity",
+      "cmd": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamwell218/witness-capacity.ts"
+      ],
+      "pid": 41298,
+      "exit": 0,
+      "start": "2026-10-12T18:53:35.146315+00:00",
+      "end": "2026-10-12T18:53:36.790294+00:00",
+      "seconds": 1.6438846670062048,
+      "hostLoad": 22.63623046875
+    },
+    "focus": {
+      "label": "focus",
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/engine/rules/turn.test.ts",
+        "src/engine/testing/lab-preflight.test.ts"
+      ],
+      "pid": 80723,
+      "exit": 0,
+      "start": "2026-10-12T18:50:50.557497+00:00",
+      "end": "2026-10-12T18:50:58.156199+00:00",
+      "seconds": 7.598606082989136,
+      "hostLoad": 4.46533203125
+    },
+    "preflight": {
+      "label": "preflight",
+      "cmd": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "a0fbcbd9-96ee-4392-add7-e1d436f99553,51caf26d-83bf-45a9-bc80-010d353277db,a57f1276-3fb6-4527-b538-953fbace35cf",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 81043,
+      "exit": 0,
+      "start": "2026-10-12T18:50:58.180916+00:00",
+      "end": "2026-10-12T18:50:59.146614+00:00",
+      "seconds": 0.9655941249948228,
+      "hostLoad": 4.66796875
+    },
+    "review": {
+      "label": "review",
+      "cmd": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 87531,
+      "exit": 0,
+      "start": "2026-10-12T18:52:35.121465+00:00",
+      "end": "2026-10-12T18:53:24.503635+00:00",
+      "seconds": 49.38183020800352,
+      "hostLoad": 24.482421875
+    },
+    "knip": {
+      "label": "knip",
+      "cmd": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 40384,
+      "exit": 0,
+      "start": "2026-10-12T18:53:24.533384+00:00",
+      "end": "2026-10-12T18:53:28.874406+00:00",
+      "seconds": 4.340883541997755,
+      "hostLoad": 24.482421875
+    },
+    "fuzz": {
+      "label": "fuzz",
+      "cmd": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "a0fbcbd9-96ee-4392-add7-e1d436f99553,51caf26d-83bf-45a9-bc80-010d353277db,a57f1276-3fb6-4527-b538-953fbace35cf"
+      ],
+      "pid": 82167,
+      "exit": 0,
+      "start": "2026-10-12T18:51:26.679917+00:00",
+      "end": "2026-10-12T18:56:16.447596+00:00",
+      "seconds": 289.76620920799905,
+      "hostLoad": 19.49365234375
+    },
+    "sweep": {
+      "label": "sweep",
+      "cmd": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.218",
+        "--cards",
+        "a0fbcbd9-96ee-4392-add7-e1d436f99553,51caf26d-83bf-45a9-bc80-010d353277db,a57f1276-3fb6-4527-b538-953fbace35cf",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 7339,
+      "exit": 0,
+      "start": "2026-10-12T18:56:51.658714+00:00",
+      "end": "2026-10-12T18:58:02.721250+00:00",
+      "seconds": 71.06211741699371,
+      "hostLoad": 21.89453125
+    },
+    "friction": {
+      "label": "friction",
+      "cmd": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "pid": 70893,
+      "exit": 0,
+      "start": "2026-10-12T19:00:07.793660+00:00",
+      "end": "2026-10-12T19:00:07.959869+00:00",
+      "seconds": 0.16611087499768473,
+      "hostLoad": 8.765625
+    }
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 148725,
+    "engineWallS": 169.6,
+    "failures": 0,
+    "targets": [
+      {
+        "uuid": "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+        "included": 1200,
+        "exercised": 256
+      },
+      {
+        "uuid": "51caf26d-83bf-45a9-bc80-010d353277db",
+        "included": 1200,
+        "exercised": 324
+      },
+      {
+        "uuid": "a57f1276-3fb6-4527-b538-953fbace35cf",
+        "included": 1200,
+        "exercised": 148
+      }
+    ],
+    "timingScope": "Outer289.766s includes exclusive-lock waiting and process startup;169.6s is rounded engine-reported wall. Their difference is not an exact isolated lock-wait observation."
+  },
+  "qa": {
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-p6Iw90",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.218/invocations/sweep-p6Iw90",
+      "counts": {
+        "pass": 6,
+        "skip": 54
+      },
+      "attemptCounts": {
+        "pass": 6,
+        "skip": 54
+      },
+      "hostLoad": 17.03857421875,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 2605,
+        "scenario": 67116.15983399999,
+        "cleanup": 733.1453330000077,
+        "execution": 70873.311208,
+        "total": 70879.311208
+      }
+    },
+    "reports": [
+      {
+        "file": "run-WHoMfq/sweep-51caf26d-83bf-45a9-bc80-010d353277db-base-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "run-WHoMfq/sweep-51caf26d-83bf-45a9-bc80-010d353277db-base-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "run-WHoMfq/sweep-a0fbcbd9-96ee-4392-add7-e1d436f99553-base-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "run-WHoMfq/sweep-a0fbcbd9-96ee-4392-add7-e1d436f99553-base-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "run-WHoMfq/sweep-a57f1276-3fb6-4527-b538-953fbace35cf-base-enemy-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      },
+      {
+        "file": "run-WHoMfq/sweep-a57f1276-3fb6-4527-b538-953fbace35cf-base-player-attempt-1.result.json",
+        "caps": [],
+        "error": null
+      }
+    ],
+    "settlement": {
+      "at": "2026-10-12T18:58:53.558262+00:00",
+      "session": "893f915f-9c76-461c-8bbd-cef9408a12a9",
+      "status": 404,
+      "body": "Session not found",
+      "runnerPid": 7339,
+      "serverPid": 7376,
+      "ownProcessObservation": "  PID  PPID  PGID COMMAND\n",
+      "ownedRecordRemains": false
+    },
+    "captures": [],
+    "coverageLimit": "Native stock Edifice/Horizon have no void candidates/controlled characters; populated public-engine diagnostics above exercise both bonuses. No sampled/new-surface judged QA applies."
+  },
+  "reviewRequirement": {
+    "nonTestSourceLines": 17,
+    "mandatoryCore": false,
+    "reason": "Composition bead has no core-review label, introduces no form or prompt, and changes17non-testsource lines."
+  },
+  "schema": {
+    "records": 626,
+    "exit": 0
+  },
+  "frictionTriggerExit": 0,
+  "runtimeFinalObservation": {
+    "at": "2026-10-12T19:00:46.060826+00:00",
+    "ownedCommandPids": [
+      "70893",
+      "80723",
+      "40384",
+      "79691",
+      "81190",
+      "80377",
+      "41298",
+      "7339",
+      "79167",
+      "7339",
+      "87531",
+      "81043",
+      "82167",
+      "7339",
+      "7376"
+    ],
+    "output": "  PID  PPID  PGID COMMAND\n",
+    "remaining": false
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "bead": "hv-umm2.218",
+  "phase": 5,
+  "implementMin": 14.744104883333334,
+  "implementWindow": {
+    "start": "2026-10-12T18:46:01.415000+00:00",
+    "end": "2026-10-12T19:00:46.061293+00:00"
+  },
+  "localValidationS": {
+    "baseline": 1.8945446669968078,
+    "baseline-corrected": 4.287092250000569,
+    "witness": 1.065083041001344,
+    "witness-populated": 1.2136067079991335,
+    "focus": 7.598606082989136,
+    "preflight": 0.9655941249948228,
+    "witness-capacity": 1.6438846670062048,
+    "review": 49.38183020800352,
+    "knip": 4.340883541997755,
+    "fuzz": 289.76620920799905,
+    "sweep": 71.06211741699371,
+    "friction": 0.16611087499768473
+  },
+  "hostLoad": 8.765625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 0.3038255166666667,
+      "note": "Temporary witness correction18:49:57.520582\u201318:50:15.750113: selected an exported contentFigmentDefinitions API after the initial nonexistent conversion export failed before observation. Initial1.895s failure and corrected4.287s run retained. No repository source correction."
+    },
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 0.0001,
+      "note": "Native sweep browserLeaseWait6ms; separate execution70.873s, one session and zero yields."
+    }
+  ]
+}

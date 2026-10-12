@@ -1,4 +1,8 @@
+import { event } from "../../engine/dsl/builders";
+import { materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
 import { dreamwellCard } from "../define";
+import ethereal from "../figments/ethereal-3eddb1b8";
 
 export default dreamwellCard({
   name: "Nomad's Verge",
@@ -11,5 +15,6 @@ export default dreamwellCard({
   artOwned: false,
   cardNumber: 25,
   tags: [],
-  pending: true,
+  abilities: () => [event(materializeFigments(parseFigmentId(ethereal.id), 1, { spark: 1 }))],
+  verifiedText: "2cw5pg0lkqi",
 });
