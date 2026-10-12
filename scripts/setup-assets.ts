@@ -13,10 +13,16 @@
 import { createHash } from "node:crypto";
 import {
   existsSync,
+  lstatSync,
   mkdirSync,
+  mkdtempSync,
   readdirSync,
+  readlinkSync,
+  renameSync,
+  rmdirSync,
   rmSync,
   symlinkSync,
+  unlinkSync,
   writeFileSync,
 } from "node:fs";
 import { homedir } from "node:os";
@@ -163,25 +169,90 @@ export function journeyImageIdFromFilename(
   return { imageNumber: match[1], extension: match[2] };
 }
 
-function recreateDir(dir: string): void {
-  // macOS watchers can briefly retain generated children while Vite is live.
-  rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
+interface ArtRefresh {
+  readonly directories: Set<string>;
+  readonly entries: Set<string>;
+  readonly stagingDir: string;
+  nextLink: number;
+}
+
+function hasCode(error: unknown, code: string): boolean {
+  return error instanceof Error && "code" in error && error.code === code;
+}
+
+function prepareDir(refresh: ArtRefresh, dir: string): void {
   mkdirSync(dir, { recursive: true });
+  if (!lstatSync(dir).isDirectory()) {
+    throw new Error(`Art directory conflicts with an existing file: ${dir}`);
+  }
+  refresh.directories.add(dir);
+  refresh.entries.add(dir);
+}
+
+/** An existing identical link is success; differing links change atomically. */
+function linkExisting(
+  refresh: ArtRefresh,
+  source: string,
+  destination: string,
+): void {
+  refresh.entries.add(destination);
+  try {
+    symlinkSync(source, destination);
+    return;
+  } catch (error) {
+    if (!hasCode(error, "EEXIST")) throw error;
+  }
+  if (!lstatSync(destination).isSymbolicLink()) {
+    throw new Error(`Art link conflicts with an existing file: ${destination}`);
+  }
+  if (readlinkSync(destination) === source) return;
+  const staged = join(refresh.stagingDir, String(refresh.nextLink++));
+  symlinkSync(source, staged);
+  renameSync(staged, destination);
 }
 
 /** Links one file when it exists; returns whether it was linked. */
-function linkIfPresent(source: string, destination: string): boolean {
+function linkIfPresent(
+  refresh: ArtRefresh,
+  source: string,
+  destination: string,
+): boolean {
   if (!existsSync(source)) {
     console.warn(`  Warning: missing art ${source}`);
     return false;
   }
-  symlinkSync(source, destination);
+  linkExisting(refresh, source, destination);
   return true;
 }
 
-function linkCardImages(catalog: ArtCatalog, paths: ArtPaths): void {
+/** Prune generated symlinks, preserving directory identity and foreign files. */
+function pruneGenerated(refresh: ArtRefresh, dir: string): void {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (refresh.entries.has(path)) continue;
+    try {
+      if (entry.isSymbolicLink()) {
+        unlinkSync(path);
+      } else if (entry.isDirectory()) {
+        pruneGenerated(refresh, path);
+        rmdirSync(path);
+      } else {
+        throw new Error(`Generated art directory contains an unrelated file: ${path}`);
+      }
+    } catch (error) {
+      // Another same-catalog pass may have pruned the same obsolete entry.
+      if (!hasCode(error, "ENOENT")) throw error;
+    }
+  }
+}
+
+function linkCardImages(
+  catalog: ArtCatalog,
+  paths: ArtPaths,
+  refresh: ArtRefresh,
+): void {
   const cardsDir = join(paths.publicDir, "cards");
-  recreateDir(cardsDir);
+  prepareDir(refresh, cardsDir);
   const imageNumbers = new Set(
     catalog.cardImageNumbers.filter((imageNumber) => imageNumber > 0),
   );
@@ -189,7 +260,11 @@ function linkCardImages(catalog: ArtCatalog, paths: ArtPaths): void {
   for (const imageNumber of imageNumbers) {
     const cachePath = join(paths.imageCacheDir, imageCacheFileName(imageNumber));
     if (existsSync(cachePath)) {
-      symlinkSync(cachePath, join(cardsDir, `${String(imageNumber)}.webp`));
+      linkExisting(
+        refresh,
+        cachePath,
+        join(cardsDir, `${String(imageNumber)}.webp`),
+      );
       linked++;
     }
   }
@@ -199,11 +274,15 @@ function linkCardImages(catalog: ArtCatalog, paths: ArtPaths): void {
   );
 }
 
-function linkAvatarArt(catalog: ArtCatalog, paths: ArtPaths): void {
+function linkAvatarArt(
+  catalog: ArtCatalog,
+  paths: ArtPaths,
+  refresh: ArtRefresh,
+): void {
   const avatarsDir = join(paths.publicDir, "avatars");
   const cutoutsDir = join(avatarsDir, "cutout");
-  recreateDir(avatarsDir);
-  mkdirSync(cutoutsDir, { recursive: true });
+  prepareDir(refresh, avatarsDir);
+  prepareDir(refresh, cutoutsDir);
   const names = new Map<string, string>();
   for (const avatar of catalog.avatars) {
     if (!names.has(avatar.imageNumber))
@@ -215,6 +294,7 @@ function linkAvatarArt(catalog: ArtCatalog, paths: ArtPaths): void {
     const filename = `${imageNumber}.png`;
     if (
       linkIfPresent(
+        refresh,
         join(paths.avatarArtDir, filename),
         join(avatarsDir, filename),
       )
@@ -224,6 +304,7 @@ function linkAvatarArt(catalog: ArtCatalog, paths: ArtPaths): void {
     // Transparent full-body renders used where the Avatar stands on UI chrome.
     if (
       linkIfPresent(
+        refresh,
         join(paths.avatarArtDir, "cutout", filename),
         join(cutoutsDir, filename),
       )
@@ -236,14 +317,19 @@ function linkAvatarArt(catalog: ArtCatalog, paths: ArtPaths): void {
   );
 }
 
-function linkDreamsignArt(catalog: ArtCatalog, paths: ArtPaths): void {
+function linkDreamsignArt(
+  catalog: ArtCatalog,
+  paths: ArtPaths,
+  refresh: ArtRefresh,
+): void {
   const dreamsignsDir = join(paths.publicDir, "dreamsigns");
-  recreateDir(dreamsignsDir);
+  prepareDir(refresh, dreamsignsDir);
   const imageNames = new Set(catalog.dreamsignImageNames);
   let linked = 0;
   for (const imageName of imageNames) {
     if (
       linkIfPresent(
+        refresh,
         join(paths.dreamsignArtDir, imageName),
         join(dreamsignsDir, imageName),
       )
@@ -261,15 +347,16 @@ function linkDreamsignArt(catalog: ArtCatalog, paths: ArtPaths): void {
  * `public/journeys/<imageId>.<ext>`. `imageId-extension.json` records each
  * id's extension so the browser can build URLs without filesystem access.
  */
-function linkJourneyArt(paths: ArtPaths): void {
+function linkJourneyArt(paths: ArtPaths, refresh: ArtRefresh): void {
   const journeysDir = join(paths.publicDir, "journeys");
-  recreateDir(journeysDir);
+  prepareDir(refresh, journeysDir);
   const extensions: Record<string, string> = {};
   if (existsSync(paths.journeyArtDir)) {
     for (const filename of readdirSync(paths.journeyArtDir)) {
       const parsed = journeyImageIdFromFilename(filename);
       if (parsed === null || extensions[parsed.imageNumber] !== undefined) continue;
-      symlinkSync(
+      linkExisting(
+        refresh,
         join(paths.journeyArtDir, filename),
         join(journeysDir, `${parsed.imageNumber}.${parsed.extension}`),
       );
@@ -280,10 +367,14 @@ function linkJourneyArt(paths: ArtPaths): void {
       `  Warning: journey art directory not found at ${paths.journeyArtDir}`,
     );
   }
+  const metadata = join(journeysDir, "imageId-extension.json");
+  const staged = join(refresh.stagingDir, "imageId-extension.json");
   writeFileSync(
-    join(journeysDir, "imageId-extension.json"),
+    staged,
     `${JSON.stringify(extensions, null, 2)}\n`,
   );
+  renameSync(staged, metadata);
+  refresh.entries.add(metadata);
   console.log(
     `Linked ${String(Object.keys(extensions).length)} journey images`,
   );
@@ -313,16 +404,21 @@ function collectJpegPaths(dir: string, recursive: boolean): string[] {
  * full-resolution files win; other encounters use the one matching source
  * file.
  */
-function linkExplorationArt(catalog: ArtCatalog, paths: ArtPaths): void {
+function linkExplorationArt(
+  catalog: ArtCatalog,
+  paths: ArtPaths,
+  refresh: ArtRefresh,
+): void {
   const destination = join(paths.publicDir, "exploration");
-  recreateDir(destination);
+  prepareDir(refresh, destination);
   const wanted = new Set(catalog.explorationImageNumbers.map(String));
   const linked = new Set<string>();
   if (existsSync(paths.explorationHighResArtDir)) {
     for (const filename of readdirSync(paths.explorationHighResArtDir)) {
       const match = /^(\d+)\.jpg$/u.exec(filename);
       if (match === null || !wanted.has(match[1])) continue;
-      symlinkSync(
+      linkExisting(
+        refresh,
         join(paths.explorationHighResArtDir, filename),
         join(destination, filename),
       );
@@ -340,7 +436,7 @@ function linkExplorationArt(catalog: ArtCatalog, paths: ArtPaths): void {
         ? sourceMatches
         : taggedFiles.filter((path) => pattern.test(path));
     if (matches.length !== 1) continue;
-    symlinkSync(matches[0], join(destination, `${imageNumber}.jpg`));
+    linkExisting(refresh, matches[0], join(destination, `${imageNumber}.jpg`));
     linked.add(imageNumber);
   }
   console.log(
@@ -353,47 +449,59 @@ function linkExplorationArt(catalog: ArtCatalog, paths: ArtPaths): void {
  * (`<id>_icon.png`), the final dream under the Atlas boss art keys, guide
  * portraits keyed by guide art key, and the round frame for unrevealed nodes.
  */
-function linkAtlasArt(catalog: ArtCatalog, paths: ArtPaths): void {
+function linkAtlasArt(
+  catalog: ArtCatalog,
+  paths: ArtPaths,
+  refresh: ArtRefresh,
+): void {
   const scenesDir = join(paths.publicDir, "dreamscapes");
   const iconsDir = join(paths.publicDir, "dreamscape-icons");
   const guidesDir = join(paths.publicDir, "dream-guides");
   const atlasDir = join(paths.publicDir, "atlas");
   for (const dir of [scenesDir, iconsDir, guidesDir, atlasDir])
-    recreateDir(dir);
+    prepareDir(refresh, dir);
   const { atlas } = catalog;
   for (const name of catalog.dreamscapeArtNames) {
     linkIfPresent(
+      refresh,
       join(paths.dreamscapeSceneArtDir, `${name}.png`),
       join(scenesDir, `${name}.png`),
     );
     linkIfPresent(
+      refresh,
       join(paths.dreamscapeIconArtDir, `${name}_icon.png`),
       join(iconsDir, `${name}.png`),
     );
   }
   linkIfPresent(
+    refresh,
     join(paths.dreamscapeSceneArtDir, atlas.bossSceneSource),
     join(scenesDir, `${atlas.bossSceneArtName}.png`),
   );
   linkIfPresent(
+    refresh,
     join(paths.dreamscapeIconArtDir, atlas.bossIconSource),
     join(iconsDir, `${atlas.bossIconArtName}.png`),
   );
   for (const guide of catalog.guidePortraits) {
     linkIfPresent(
+      refresh,
       join(paths.dreamGuideArtDir, guide.portraitSource),
       join(guidesDir, `${guide.artName}.png`),
     );
   }
   linkIfPresent(
+    refresh,
     join(paths.dreamGuideArtDir, atlas.bossFigureSource),
     join(guidesDir, `${atlas.bossFigureArtName}.png`),
   );
   linkIfPresent(
+    refresh,
     join(paths.dreamscapeIconArtDir, atlas.unrevealedFrameSource),
     join(atlasDir, atlas.unrevealedFrameFile),
   );
   linkIfPresent(
+    refresh,
     paths.tutorialDialogueFrameArtPath,
     join(atlasDir, "Round_frame.png"),
   );
@@ -403,26 +511,41 @@ function linkAtlasArt(catalog: ArtCatalog, paths: ArtPaths): void {
 /** Links every referenced art file into `paths.publicDir`. */
 export function linkArt(catalog: ArtCatalog, paths: ArtPaths): void {
   mkdirSync(paths.publicDir, { recursive: true });
-  linkCardImages(catalog, paths);
-  linkAvatarArt(catalog, paths);
-  linkDreamsignArt(catalog, paths);
-  linkJourneyArt(paths);
-  const mainMenuDir = join(paths.publicDir, "main-menu");
-  recreateDir(mainMenuDir);
-  linkIfPresent(
-    paths.mainMenuBackgroundArtPath,
-    join(mainMenuDir, "background.jpg"),
-  );
-  linkExplorationArt(catalog, paths);
-  const cardFrameDir = join(paths.publicDir, "card-frame");
-  recreateDir(cardFrameDir);
-  for (const filename of CARD_FRAME_FILES) {
+  const refresh: ArtRefresh = {
+    directories: new Set(),
+    entries: new Set(),
+    stagingDir: mkdtempSync(join(paths.publicDir, ".art-links-")),
+    nextLink: 0,
+  };
+  // Staging is outside every managed directory, so concurrent pruning cannot
+  // erase another pass's publication files. Each pass cleans only its own.
+  try {
+    linkCardImages(catalog, paths, refresh);
+    linkAvatarArt(catalog, paths, refresh);
+    linkDreamsignArt(catalog, paths, refresh);
+    linkJourneyArt(paths, refresh);
+    const mainMenuDir = join(paths.publicDir, "main-menu");
+    prepareDir(refresh, mainMenuDir);
     linkIfPresent(
-      join(paths.cardFrameArtDir, filename),
-      join(cardFrameDir, filename),
+      refresh,
+      paths.mainMenuBackgroundArtPath,
+      join(mainMenuDir, "background.jpg"),
     );
+    linkExplorationArt(catalog, paths, refresh);
+    const cardFrameDir = join(paths.publicDir, "card-frame");
+    prepareDir(refresh, cardFrameDir);
+    for (const filename of CARD_FRAME_FILES) {
+      linkIfPresent(
+        refresh,
+        join(paths.cardFrameArtDir, filename),
+        join(cardFrameDir, filename),
+      );
+    }
+    linkAtlasArt(catalog, paths, refresh);
+    for (const dir of refresh.directories) pruneGenerated(refresh, dir);
+  } finally {
+    rmSync(refresh.stagingDir, { recursive: true, force: true });
   }
-  linkAtlasArt(catalog, paths);
 }
 
 /** The art references of the `src/content` catalogs. */

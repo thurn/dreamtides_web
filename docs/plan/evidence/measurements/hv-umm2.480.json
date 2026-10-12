@@ -1,0 +1,307 @@
+{
+  "bead": "hv-umm2.480",
+  "phase": 5,
+  "base": "d8c5682855961a6d7830e9db80193b8e1fcbfa0c",
+  "scope": {
+    "source": [
+      "scripts/setup-assets.ts"
+    ],
+    "tests": [
+      "scripts/setup-assets.test.ts"
+    ],
+    "testDelta": {
+      "files": 0,
+      "lines": 158,
+      "jsdomFiles": 0
+    },
+    "fallout": [],
+    "publicAPIChanged": false,
+    "runtimeUIChanged": false
+  },
+  "claimToPrecommit": {
+    "start": "2026-10-12T04:30:10Z",
+    "endpoint": "2026-10-12T04:51:31.480650+00:00",
+    "provenance": "Actual endpoint after parent precommit ACK, immediately before final schema and Git; includes research, coordination, heavy-slot queue and all checks."
+  },
+  "semantics": {
+    "concurrency": "Same stable catalog, source library and destination paths. Per-file atomic publication and fresh-pass recovery; the complete generated tree is not a batch transaction.",
+    "refresh": "Managed directories retain identity. Referenced available art creates or verifies exact symlinks, differing symlinks atomically replace, and obsolete generated symlinks and empty obsolete generated directories prune. Foreign regular files fail explicitly and remain intact.",
+    "staging": "Each pass owns a unique public/.art-links-* directory outside every managed art directory. Finally removes its own staging only; hard OS termination can leave an inert private staging directory without changing the served art paths.",
+    "journey": "Complete JSON stages then atomically renames to the owned journeys/imageId-extension.json path.",
+    "unchanged": "Missing-art fallback, curated/source/tagged Exploration priority, served names, content selection and public linkArt API."
+  },
+  "negativeProof": {
+    "at": "2026-10-12T04:42:59.749925+00:00",
+    "originalSHA256": "067e5a036946e6a6556afae6d97e9f3719a3d143b607b6d7a173cd8f7ff91a9c",
+    "finalSHA256": "0774e2a1dec23983af1ee14195250fd8d5f39843f1629c2a5d50aa1915fecd8a",
+    "exit": 1,
+    "restoredSHA256": "0774e2a1dec23983af1ee14195250fd8d5f39843f1629c2a5d50aa1915fecd8a",
+    "finalTestAssertionRefinement": "The source remains exactly restored. Following lint, exit-code assertions use typed .toBe values rather than any-typed expected matcher objects; test cases and observable contracts are unchanged.",
+    "finalCounts": {
+      "tests": 9,
+      "failed": 6,
+      "passed": 3
+    }
+  },
+  "checks": {
+    "focused-final": {
+      "exit": 0,
+      "wallSeconds": 2.9911035420009284,
+      "receipt": "focused-final.runtime.json"
+    },
+    "negative-metadata": {
+      "exit": 1,
+      "wallSeconds": 2.6527380000006815,
+      "receipt": "negative-metadata.runtime.json"
+    },
+    "review-final": {
+      "exit": 0,
+      "wallSeconds": 8.518528417000198,
+      "receipt": "review-final.runtime.json"
+    },
+    "negative": {
+      "exit": 1,
+      "wallSeconds": 4.022334499997669,
+      "receipt": "negative.runtime.json"
+    },
+    "install": {
+      "exit": 0,
+      "wallSeconds": 2.630867207997653,
+      "receipt": "install.runtime.json"
+    },
+    "negative-final": {
+      "exit": 1,
+      "wallSeconds": 3.0897499169986986,
+      "receipt": "negative-final.runtime.json"
+    },
+    "friction-report": {
+      "exit": 0,
+      "wallSeconds": 0.16446312500193017,
+      "receipt": "friction-report.runtime.json"
+    },
+    "focused-validated": {
+      "exit": 0,
+      "wallSeconds": 3.264254917001381,
+      "receipt": "focused-validated.runtime.json"
+    },
+    "focused": {
+      "exit": 0,
+      "wallSeconds": 2.7873070830028155,
+      "receipt": "focused.runtime.json"
+    },
+    "review": {
+      "exit": 1,
+      "wallSeconds": 8.12163479100127,
+      "receipt": "review.runtime.json"
+    },
+    "full": {
+      "exit": 0,
+      "wallSeconds": 175.61804395799845,
+      "receipt": "full.runtime.json"
+    },
+    "knip": {
+      "exit": 0,
+      "wallSeconds": 3.080187833002128,
+      "receipt": "knip.runtime.json"
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "prepare",
+      "at": "2026-10-12T04:44:57.508Z",
+      "load": 6.6611328125
+    },
+    {
+      "step": "typecheck",
+      "at": "2026-10-12T04:44:58.028Z",
+      "load": 6.6611328125
+    },
+    {
+      "step": "typecheck-node",
+      "at": "2026-10-12T04:44:58.029Z",
+      "load": 6.6611328125
+    },
+    {
+      "step": "import-cycles",
+      "at": "2026-10-12T04:44:58.030Z",
+      "load": 6.6611328125
+    },
+    {
+      "step": "lint",
+      "at": "2026-10-12T04:44:58.030Z",
+      "load": 6.6611328125
+    },
+    {
+      "step": "test-related",
+      "at": "2026-10-12T04:44:58.030Z",
+      "load": 6.6611328125
+    },
+    {
+      "step": "friction-records",
+      "at": "2026-10-12T04:44:58.031Z",
+      "load": 6.6611328125
+    },
+    {
+      "step": "restore-local-assets",
+      "at": "2026-10-12T04:45:05.317Z",
+      "load": 7.44921875
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final actual review command-step start; Vitest initializes later"
+      }
+    }
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "tests": [
+        "preserves an unrelated 0007.png file on conflict and recovers on the next pass",
+        "preserves an unrelated foreign.txt file on conflict and recovers on the next pass"
+      ],
+      "detail": "Foreign regular files at desired destinations and during stale-entry pruning remain intact; earlier links may be published, and a fresh pass converges after the conflict is resolved."
+    },
+    {
+      "path": "reload or restart mid-operation",
+      "tests": [
+        "preserves published assets and recovers across restart interleaving"
+      ],
+      "detail": "A child process throws after writing partial staged JSON, exits 1, then a fresh child process completes successfully with valid served JSON and exact required symlinks."
+    },
+    {
+      "path": "partial write",
+      "tests": [
+        "preserves published assets and recovers across metadata interleaving",
+        "preserves published assets and recovers across restart interleaving"
+      ],
+      "detail": "A deliberate partial JSON payload is observable only in private staging; the served metadata retains its previous complete JSON object until rename."
+    },
+    {
+      "path": "invalid or stale input",
+      "tests": [
+        "refreshes stale links, prunes missing art, and preserves Exploration priority",
+        "preserves an unrelated 0007.png file on conflict and recovers on the next pass",
+        "preserves an unrelated foreign.txt file on conflict and recovers on the next pass"
+      ],
+      "detail": "Differing and dangling generated symlinks refresh, obsolete entries and missing-source links disappear, ambiguous Exploration sources fall back to missing art, and foreign files fail explicitly."
+    },
+    {
+      "path": "concurrent actors",
+      "tests": [
+        "preserves published assets and recovers across link interleaving",
+        "preserves published assets and recovers across metadata interleaving",
+        "preserves published assets and recovers across prune interleaving"
+      ],
+      "detail": "Two real processes share one temporary public tree and catalog. Barriers force duplicate link creation, partial metadata publication, and duplicate pruning of an obsolete nested directory; both actors succeed."
+    }
+  ],
+  "qa": {
+    "browser": "Not applicable: served URLs, targets and presentation preserve the existing contract; real temporary filesystem contracts cover the change.",
+    "fuzz": "Not applicable: no engine, fuzzer or step-runner change.",
+    "providers": "Parent owns exact-source independent Claude review after commit."
+  },
+  "rawEvidence": {
+    "manifest": "raw-manifest.json",
+    "sha256": "f1749e2c721df365b78fd38a7462bb26c05b615b3324473151e665147a12cb63",
+    "entries": 42,
+    "immutable": true
+  },
+  "fullReview": {
+    "testFiles": 343,
+    "tests": 4650,
+    "testStepSeconds": 56.9,
+    "testStepStart": "2026-10-12T04:47:28.953Z",
+    "testStepLoad": 8.09423828125,
+    "wrapperSeconds": 175.61804395799845,
+    "prepareStart": "2026-10-12T04:47:04.240Z",
+    "queueAndStartupUpperBoundS": 90.680114,
+    "pureLockWaitS": "UNKNOWN: no separate acquisition marker",
+    "workers": 2,
+    "performanceClaim": false,
+    "steps": [
+      {
+        "step": "prepare",
+        "at": "2026-10-12T04:47:04.240Z",
+        "load": 6.99560546875
+      },
+      {
+        "step": "lint",
+        "at": "2026-10-12T04:47:04.923Z",
+        "load": 6.99560546875
+      },
+      {
+        "step": "typecheck",
+        "at": "2026-10-12T04:47:04.924Z",
+        "load": 6.99560546875
+      },
+      {
+        "step": "typecheck-node",
+        "at": "2026-10-12T04:47:04.925Z",
+        "load": 6.99560546875
+      },
+      {
+        "step": "import-cycles",
+        "at": "2026-10-12T04:47:04.925Z",
+        "load": 6.99560546875
+      },
+      {
+        "step": "knip",
+        "at": "2026-10-12T04:47:04.925Z",
+        "load": 6.99560546875
+      },
+      {
+        "step": "friction-records",
+        "at": "2026-10-12T04:47:04.926Z",
+        "load": 6.99560546875
+      },
+      {
+        "step": "test",
+        "at": "2026-10-12T04:47:28.953Z",
+        "load": 8.09423828125
+      },
+      {
+        "step": "bundle",
+        "at": "2026-10-12T04:48:25.870Z",
+        "load": 6.1806640625
+      },
+      {
+        "step": "restore-local-assets",
+        "at": "2026-10-12T04:48:28.674Z",
+        "load": 6.1806640625
+      }
+    ]
+  },
+  "sourceFreeze": {
+    "scripts/setup-assets.ts": "0774e2a1dec23983af1ee14195250fd8d5f39843f1629c2a5d50aa1915fecd8a",
+    "scripts/setup-assets.test.ts": "4156d4a42fc5ada0a88a8a251c4026e147ffa933392c1a1221945d5a68765a24"
+  },
+  "runtime": {
+    "receipt": "runtime-settled.json",
+    "groups": [
+      1987,
+      3224,
+      12602,
+      13099,
+      14628,
+      29900,
+      39872,
+      58895,
+      84779,
+      89369,
+      90088,
+      98910,
+      99278
+    ],
+    "allGone": true,
+    "actorsClosed": 25,
+    "fixtureRootsRemoved": 28
+  },
+  "focused": {
+    "finalCounts": 9,
+    "files": 1,
+    "wrapperSeconds": 3.264254917001381,
+    "finalAssertionRefinementValidatedBy": "review-final and full"
+  }
+}
