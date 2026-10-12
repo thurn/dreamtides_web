@@ -12,26 +12,51 @@ import {
   type DraftPoolCopiesByCard,
 } from "../types/draft";
 import { cardsDocument, tides4Document } from "../content/documents";
+import type { CardDefinition } from "../content/define";
+
+type CardDisplayInput = Readonly<
+  Omit<CardData, "id" | "name" | "subtype" | "roles" | "energyCosts">
+> & {
+  readonly id: CardDefinition["id"];
+  readonly name: CardDefinition["name"];
+  readonly subtype: CardDefinition["subtype"];
+  readonly roles?: readonly NonNullable<CardData["roles"]>[number][];
+  readonly energyCosts?: readonly string[];
+};
 
 /**
  * Returns the card catalog from the `src/content/cards/` modules as a Map
  * keyed by card number.
  */
-export function loadCardsV2Database(): Map<number, CardData> {
-  const cards = cardsDocument() as unknown as Array<
-    Omit<CardData, "id" | "name" | "subtype"> & {
-      id: unknown;
-      name: unknown;
-      subtype: unknown;
-    }
-  >;
+export function loadCardsV2Database(
+  cards: readonly CardDisplayInput[] = cardsDocument(),
+): Map<number, CardData> {
   const database = new Map<number, CardData>();
   for (const card of cards) {
     database.set(card.cardNumber, {
-      ...card,
       id: parseCardId(card.id),
       name: parseCardName(card.name),
       subtype: parseCardSubtype(card.subtype),
+      cardNumber: card.cardNumber,
+      cardType: card.cardType,
+      isStarter: card.isStarter,
+      energyCost: card.energyCost,
+      spark: card.spark,
+      isFast: card.isFast,
+      renderedText: card.renderedText,
+      imageNumber: card.imageNumber,
+      artOwned: card.artOwned,
+      ...(card.roles === undefined ? {} : { roles: [...card.roles] }),
+      ...(card.rarity === undefined ? {} : { rarity: card.rarity }),
+      ...(card.energyCosts === undefined ? {} : { energyCosts: [...card.energyCosts] }),
+      ...(card.sparkVariable === undefined ? {} : { sparkVariable: card.sparkVariable }),
+      ...(card.isInterrupt === undefined ? {} : { isInterrupt: card.isInterrupt }),
+      ...(card.reclaimCost === undefined ? {} : { reclaimCost: card.reclaimCost }),
+      ...(card.amplifiedText === undefined ? {} : { amplifiedText: card.amplifiedText }),
+      ...(card.mtgName === undefined ? {} : { mtgName: card.mtgName }),
+      ...(card.art === undefined ? {} : {
+        art: { x: card.art.x, y: card.art.y, scale: card.art.scale },
+      }),
     });
   }
   return database;

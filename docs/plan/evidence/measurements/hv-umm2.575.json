@@ -1,0 +1,1978 @@
+{
+  "bead": "hv-umm2.575",
+  "sourceBase": "128beee605680c2168c688c847c8285f0b6c398a",
+  "implementation": {
+    "kind": "direct self implementation under same-task justiciar",
+    "helper": null,
+    "modelStart": "unobserved",
+    "start": "2026-10-12T20:43:44.064608+00:00",
+    "startBasis": "native claim ACK observed, own setup/implementation interval; original preclaim cause diagnosis belongs to260",
+    "end": "2026-10-12T21:00:50.854772+00:00",
+    "endBasis": "precommit clock observation; actual commit precision/bracket preserved in native delivery receipt",
+    "parkedBead": "hv-umm2.260",
+    "parkedCheckpoint": "e88880374dc1b7c5dbf3ea4e81a8d5059ffe0256"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "passing review related-test start at2026-10-12T20:54:25.190Z"
+      },
+      "localValidationS": {
+        "focused": "review test step only2.4s; wrapper includes prepare/restore",
+        "review": "review critical related-test step19.8s; whole successful group20:54:24.168Z through20:54:45.7Z; raw scopes retained",
+        "knip": "Knip step only2.0s",
+        "full": "106.379s whole kernel-lock wrapper including wait/setup/allchecks/bundle/restore; raw individual steps separate"
+      },
+      "testDelta": {
+        "files": "one new plain Vitest entrypoint",
+        "lines": "162 new test entrypoint lines; fixtures reused read-only",
+        "jsdomFiles": "zero"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "focused": [
+      [
+        "prepare",
+        "2026-10-12T20:53:28.744Z",
+        "11.1396484375"
+      ],
+      [
+        "test",
+        "2026-10-12T20:53:30.367Z",
+        "10.72802734375"
+      ],
+      [
+        "restore-local-assets",
+        "2026-10-12T20:53:32.718Z",
+        "10.72802734375"
+      ]
+    ],
+    "review": [
+      [
+        "prepare",
+        "2026-10-12T20:53:40.138Z",
+        "9.61962890625"
+      ],
+      [
+        "typecheck",
+        "2026-10-12T20:53:40.862Z",
+        "9.61962890625"
+      ],
+      [
+        "typecheck-node",
+        "2026-10-12T20:53:40.863Z",
+        "9.61962890625"
+      ],
+      [
+        "import-cycles",
+        "2026-10-12T20:53:40.863Z",
+        "9.61962890625"
+      ],
+      [
+        "lint",
+        "2026-10-12T20:53:40.863Z",
+        "9.61962890625"
+      ],
+      [
+        "test-related",
+        "2026-10-12T20:53:40.864Z",
+        "9.61962890625"
+      ],
+      [
+        "restore-local-assets",
+        "2026-10-12T20:53:59.681Z",
+        "9.22265625"
+      ]
+    ],
+    "review-pass": [
+      [
+        "prepare",
+        "2026-10-12T20:54:24.168Z",
+        "7.79443359375"
+      ],
+      [
+        "typecheck",
+        "2026-10-12T20:54:25.187Z",
+        "9.33203125"
+      ],
+      [
+        "typecheck-node",
+        "2026-10-12T20:54:25.188Z",
+        "9.33203125"
+      ],
+      [
+        "import-cycles",
+        "2026-10-12T20:54:25.189Z",
+        "9.33203125"
+      ],
+      [
+        "lint",
+        "2026-10-12T20:54:25.189Z",
+        "9.33203125"
+      ],
+      [
+        "test-related",
+        "2026-10-12T20:54:25.190Z",
+        "9.33203125"
+      ],
+      [
+        "restore-local-assets",
+        "2026-10-12T20:54:44.975Z",
+        "8.515625"
+      ]
+    ],
+    "knip": [
+      [
+        "prepare",
+        "2026-10-12T20:55:00.637Z",
+        "8.234375"
+      ],
+      [
+        "knip",
+        "2026-10-12T20:55:01.408Z",
+        "8.234375"
+      ],
+      [
+        "restore-local-assets",
+        "2026-10-12T20:55:03.455Z",
+        "8.234375"
+      ]
+    ],
+    "full": [
+      [
+        "prepare",
+        "2026-10-12T20:55:08.518Z",
+        "8.61572265625"
+      ],
+      [
+        "lint",
+        "2026-10-12T20:55:09.470Z",
+        "8.61572265625"
+      ],
+      [
+        "typecheck",
+        "2026-10-12T20:55:09.471Z",
+        "8.61572265625"
+      ],
+      [
+        "typecheck-node",
+        "2026-10-12T20:55:09.472Z",
+        "8.61572265625"
+      ],
+      [
+        "import-cycles",
+        "2026-10-12T20:55:09.473Z",
+        "8.61572265625"
+      ],
+      [
+        "knip",
+        "2026-10-12T20:55:09.473Z",
+        "8.61572265625"
+      ],
+      [
+        "friction-records",
+        "2026-10-12T20:55:09.474Z",
+        "8.61572265625"
+      ],
+      [
+        "test",
+        "2026-10-12T20:55:35.890Z",
+        "17.17431640625"
+      ],
+      [
+        "bundle",
+        "2026-10-12T20:56:49.741Z",
+        "12.7265625"
+      ],
+      [
+        "restore-local-assets",
+        "2026-10-12T20:56:53.071Z",
+        "12.7265625"
+      ]
+    ],
+    "negative": [],
+    "mutant": []
+  },
+  "checks": {
+    "focused": {
+      "exitCode": 0,
+      "files": 1,
+      "cases": 6
+    },
+    "firstReview": {
+      "exitCode": 2,
+      "failure": "Own test fixture type inference widened UUID/union field; corrected test-only types, retained raw receipt"
+    },
+    "review": {
+      "exitCode": 0,
+      "files": 71,
+      "cases": 705
+    },
+    "knip": {
+      "exitCode": 0
+    },
+    "full": {
+      "start": "2026-10-12T20:55:08.305786+00:00",
+      "end": "2026-10-12T20:56:54.697017+00:00",
+      "elapsedSeconds": 106.37855874998786,
+      "exitCode": 0,
+      "command": "heavylocked JOURNEY_TEST_WORKERS=2 npm run review:full",
+      "files": 354,
+      "cases": 6052,
+      "workers": 2,
+      "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock"
+    },
+    "negativeDiagnostic": {
+      "exitCode": 1,
+      "scope": "outside-WT catalog observation before code; not a mutable-production CI test",
+      "failure": "loadedCard.abilities holds a function"
+    },
+    "syntheticCounterfactual": {
+      "exitCode": 1,
+      "transform": "outside-WT Vite transform restores spread in memory; tracked source untouched",
+      "failedCases": 4,
+      "passedCases": 2,
+      "failure": "Both real LocalLog Transfiguration contracts throw previewCard.abilities holds a function"
+    }
+  },
+  "rawValidationDirectory": "artifacts/qa/hv-umm2.575/validation",
+  "sourceFreeze": {
+    "bead": "hv-umm2.575",
+    "base": "128beee605680c2168c688c847c8285f0b6c398a",
+    "utc": "2026-10-12T20:57:03.971892+00:00",
+    "sha256": "e7155ca0ffe1b2e499324df6d389deab53098f77016f42e8e2eb0187c9571113",
+    "fileCount": 2219,
+    "raw": "artifacts/qa/hv-umm2.575/validation/575-source-freeze.json"
+  },
+  "postQaSourceProof": {
+    "utc": "2026-10-12T20:59:29.072661+00:00",
+    "files": 2219,
+    "diffs": [],
+    "sha256": "e7155ca0ffe1b2e499324df6d389deab53098f77016f42e8e2eb0187c9571113"
+  },
+  "qa": [
+    {
+      "scenario": "transfiguration",
+      "bead": "hv-umm2.575",
+      "mode": "dev",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/serializable-card-data575-sol",
+      "port": 5274,
+      "slot": 1,
+      "serverPid": 48639,
+      "invocation": "run-CdZp5Y",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-CdZp5Y",
+      "hostLoad": 11.48974609375,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 2630,
+        "scenario": 28498,
+        "total": 31201
+      },
+      "ok": true,
+      "result": {
+        "desktop": {
+          "enhanced": false,
+          "viewport": "desktop",
+          "entries": [
+            "deck-2",
+            "deck-1",
+            "deck-3"
+          ],
+          "restored": [
+            "deck-2",
+            "deck-1",
+            "deck-3"
+          ],
+          "entry": "deck-2",
+          "form": "cumulus-transfiguration-form-Empowered",
+          "geometry": {
+            "x": 1214.8125,
+            "y": 648.46875,
+            "width": 176.1875,
+            "height": 42,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "disabled": null
+          },
+          "gameUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+          "applied": {
+            "event": "game_event",
+            "timestamp": "2026-10-12T20:57:30.900Z",
+            "gameId": "34qdtw",
+            "seq": 4,
+            "type": "ACCEPT_TRANSFIGURATION_CHOICE",
+            "actor": "64uuw2a2345trj77uicqe96r",
+            "outcome": "applied"
+          }
+        },
+        "mobile": {
+          "enhanced": false,
+          "viewport": "mobile",
+          "entries": [
+            "deck-2",
+            "deck-1",
+            "deck-3"
+          ],
+          "restored": [
+            "deck-2",
+            "deck-1",
+            "deck-3"
+          ],
+          "entry": "deck-2",
+          "form": "cumulus-transfiguration-form-Empowered",
+          "geometry": {
+            "x": 182.390625,
+            "y": 701,
+            "width": 176.1875,
+            "height": 42,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "disabled": null
+          },
+          "gameUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+          "applied": {
+            "event": "game_event",
+            "timestamp": "2026-10-12T20:57:42.769Z",
+            "gameId": "ikw3os",
+            "seq": 4,
+            "type": "ACCEPT_TRANSFIGURATION_CHOICE",
+            "actor": "t2uggbherivzi5yz5anb4j8d",
+            "outcome": "applied"
+          }
+        }
+      },
+      "error": null,
+      "log": [
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 1,
+            "expectedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+            "deadline": null,
+            "callDeadline": 1791838937401,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 1,
+                "at": 1791838637405,
+                "phase": "started",
+                "observedUrl": "about:blank",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 2,
+                "at": 1791838637405,
+                "phase": "caps-before",
+                "observedUrl": "about:blank",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": null
+              },
+              {
+                "order": 3,
+                "at": 1791838637405,
+                "phase": "goto-started",
+                "observedUrl": "about:blank",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 4,
+                "at": 1791838637409,
+                "phase": "request",
+                "observedUrl": "about:blank",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "requestUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1"
+              },
+              {
+                "order": 5,
+                "at": 1791838637445,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "frameUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1"
+              },
+              {
+                "order": 6,
+                "at": 1791838638218,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 7,
+                "at": 1791838638218,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 8,
+                "at": 1791838638222,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 9,
+                "at": 1791838638232,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": {
+                  "href": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                  "id": "3bee36a7-f412-4269-8b7b-6298e822fc58",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 10,
+                "at": 1791838638232,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 11,
+                "at": 1791838638232,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 2,
+            "expectedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+            "deadline": null,
+            "callDeadline": 1791838937401,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 12,
+                "at": 1791838644534,
+                "phase": "started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 13,
+                "at": 1791838644558,
+                "phase": "caps-before",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                  "id": "3bee36a7-f412-4269-8b7b-6298e822fc58",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 14,
+                "at": 1791838644558,
+                "phase": "goto-started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 15,
+                "at": 1791838644583,
+                "phase": "request",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "requestUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw"
+              },
+              {
+                "order": 16,
+                "at": 1791838644591,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "frameUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw"
+              },
+              {
+                "order": 17,
+                "at": 1791838644966,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 18,
+                "at": 1791838644966,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 19,
+                "at": 1791838644967,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 20,
+                "at": 1791838644980,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                  "id": "37c2e6a0-267d-4419-86b2-ac8ee43e1333",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 21,
+                "at": 1791838644980,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 22,
+                "at": 1791838644980,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 1,
+            "expectedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+            "deadline": null,
+            "callDeadline": 1791838954692,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 1,
+                "at": 1791838654707,
+                "phase": "started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 2,
+                "at": 1791838654710,
+                "phase": "caps-before",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                  "id": "37c2e6a0-267d-4419-86b2-ac8ee43e1333",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 3,
+                "at": 1791838654710,
+                "phase": "goto-started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 4,
+                "at": 1791838654723,
+                "phase": "request",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "requestUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1"
+              },
+              {
+                "order": 5,
+                "at": 1791838654762,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "frameUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1"
+              },
+              {
+                "order": 6,
+                "at": 1791838655176,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 7,
+                "at": 1791838655176,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 8,
+                "at": 1791838655178,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 9,
+                "at": 1791838655188,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": {
+                  "href": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                  "id": "f7daf7b0-6856-49db-97a5-52bf40477b52",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 10,
+                "at": 1791838655189,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 11,
+                "at": 1791838655189,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "mobile#0"
+        },
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 2,
+            "expectedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+            "deadline": null,
+            "callDeadline": 1791838954692,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 12,
+                "at": 1791838658399,
+                "phase": "started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 13,
+                "at": 1791838658400,
+                "phase": "caps-before",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                  "id": "f7daf7b0-6856-49db-97a5-52bf40477b52",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 14,
+                "at": 1791838658400,
+                "phase": "goto-started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 15,
+                "at": 1791838658404,
+                "phase": "request",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "requestUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os"
+              },
+              {
+                "order": 16,
+                "at": 1791838658412,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "frameUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os"
+              },
+              {
+                "order": 17,
+                "at": 1791838658875,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 18,
+                "at": 1791838658875,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 19,
+                "at": 1791838658877,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 20,
+                "at": 1791838658884,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                  "id": "8cd68cb7-9513-453c-bb2d-70a28b5d5663",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 21,
+                "at": 1791838658885,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 22,
+                "at": 1791838658885,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "mobile#0"
+        }
+      ],
+      "captures": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-CdZp5Y/transfiguration-standard-desktop-opened.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-CdZp5Y/transfiguration-standard-desktop-selected.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-CdZp5Y/transfiguration-standard-desktop-resolved.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration&seed=1&debug=1&game=34qdtw",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-CdZp5Y/transfiguration-standard-mobile-opened.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-CdZp5Y/transfiguration-standard-mobile-selected.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-CdZp5Y/transfiguration-standard-mobile-resolved.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration&seed=1&debug=1&game=ikw3os",
+          "width": 390,
+          "height": 844
+        }
+      ],
+      "caps": [],
+      "traces": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 17925
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 10573
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-CdZp5Y/transfiguration-desktop.jsonl",
+          "gameId": "34qdtw",
+          "selectedBy": "url",
+          "rows": 40,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-CdZp5Y/transfiguration-mobile.jsonl",
+          "gameId": "ikw3os",
+          "selectedBy": "url",
+          "rows": 40,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "scenario": "transfiguration",
+      "bead": "hv-umm2.575",
+      "mode": "dev",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/serializable-card-data575-sol",
+      "port": 5274,
+      "slot": 1,
+      "serverPid": 79976,
+      "invocation": "run-ceg2aw",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-ceg2aw",
+      "hostLoad": 14.37158203125,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 2918,
+        "scenario": 64456,
+        "total": 67460
+      },
+      "ok": true,
+      "result": {
+        "desktop": {
+          "enhanced": true,
+          "viewport": "desktop",
+          "entries": [
+            "deck-1",
+            "deck-2",
+            "deck-3",
+            "deck-4",
+            "deck-5",
+            "deck-6",
+            "deck-7",
+            "deck-8",
+            "deck-9",
+            "deck-10"
+          ],
+          "restored": [
+            "deck-1",
+            "deck-2",
+            "deck-3",
+            "deck-4",
+            "deck-5",
+            "deck-6",
+            "deck-7",
+            "deck-8",
+            "deck-9",
+            "deck-10"
+          ],
+          "entry": "deck-1",
+          "form": "cumulus-transfiguration-form-Empowered",
+          "geometry": {
+            "x": 1214.8125,
+            "y": 648.46875,
+            "width": 176.1875,
+            "height": 42,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "disabled": null
+          },
+          "gameUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+          "applied": {
+            "event": "game_event",
+            "timestamp": "2026-10-12T20:58:46.356Z",
+            "gameId": "tntggj",
+            "seq": 5,
+            "type": "ACCEPT_TRANSFIGURATION_CHOICE",
+            "actor": "c66of4erqgyrvtaktuqr964s",
+            "outcome": "applied"
+          }
+        },
+        "mobile": {
+          "enhanced": true,
+          "viewport": "mobile",
+          "entries": [
+            "deck-1",
+            "deck-2",
+            "deck-3",
+            "deck-4",
+            "deck-5",
+            "deck-6",
+            "deck-7",
+            "deck-8",
+            "deck-9",
+            "deck-10"
+          ],
+          "restored": [
+            "deck-1",
+            "deck-2",
+            "deck-3",
+            "deck-4",
+            "deck-5",
+            "deck-6",
+            "deck-7",
+            "deck-8",
+            "deck-9",
+            "deck-10"
+          ],
+          "entry": "deck-1",
+          "form": "cumulus-transfiguration-form-Empowered",
+          "geometry": {
+            "x": 182.390625,
+            "y": 701,
+            "width": 176.1875,
+            "height": 42,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "disabled": null
+          },
+          "gameUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+          "applied": {
+            "event": "game_event",
+            "timestamp": "2026-10-12T20:59:02.040Z",
+            "gameId": "dprzw5",
+            "seq": 4,
+            "type": "ACCEPT_TRANSFIGURATION_CHOICE",
+            "actor": "jmaq35i8xjp33af4y926f7uk",
+            "outcome": "applied"
+          }
+        }
+      },
+      "error": null,
+      "log": [
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 1,
+            "expectedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+            "deadline": null,
+            "callDeadline": 1791838986243,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 1,
+                "at": 1791838686261,
+                "phase": "started",
+                "observedUrl": "about:blank",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 2,
+                "at": 1791838686261,
+                "phase": "caps-before",
+                "observedUrl": "about:blank",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": null
+              },
+              {
+                "order": 3,
+                "at": 1791838686261,
+                "phase": "goto-started",
+                "observedUrl": "about:blank",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 4,
+                "at": 1791838686363,
+                "phase": "request",
+                "observedUrl": "about:blank",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "requestUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1"
+              },
+              {
+                "order": 5,
+                "at": 1791838686474,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "frameUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1"
+              },
+              {
+                "order": 6,
+                "at": 1791838701459,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 7,
+                "at": 1791838701459,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 8,
+                "at": 1791838701552,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 9,
+                "at": 1791838702253,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": {
+                  "href": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                  "id": "2059457a-9430-4bb4-8068-79fe690d0dee",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 10,
+                "at": 1791838702253,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 11,
+                "at": 1791838702253,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 2,
+            "expectedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+            "deadline": null,
+            "callDeadline": 1791838986243,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 12,
+                "at": 1791838717204,
+                "phase": "started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 13,
+                "at": 1791838717205,
+                "phase": "caps-before",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                  "id": "2059457a-9430-4bb4-8068-79fe690d0dee",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 14,
+                "at": 1791838717205,
+                "phase": "goto-started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 15,
+                "at": 1791838717209,
+                "phase": "request",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "requestUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj"
+              },
+              {
+                "order": 16,
+                "at": 1791838717239,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "frameUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj"
+              },
+              {
+                "order": 17,
+                "at": 1791838718282,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 18,
+                "at": 1791838718282,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 19,
+                "at": 1791838718285,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 20,
+                "at": 1791838718474,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                  "id": "a56a84d1-8bd0-4c90-8604-f6dbb81438c5",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 21,
+                "at": 1791838718474,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 22,
+                "at": 1791838718474,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 1,
+            "expectedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+            "deadline": null,
+            "callDeadline": 1791839030933,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 1,
+                "at": 1791838731139,
+                "phase": "started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 2,
+                "at": 1791838731142,
+                "phase": "caps-before",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                  "id": "a56a84d1-8bd0-4c90-8604-f6dbb81438c5",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 3,
+                "at": 1791838731142,
+                "phase": "goto-started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 4,
+                "at": 1791838731148,
+                "phase": "request",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "requestUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1"
+              },
+              {
+                "order": 5,
+                "at": 1791838731175,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ],
+                "frameUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1"
+              },
+              {
+                "order": 6,
+                "at": 1791838732036,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 7,
+                "at": 1791838732036,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 8,
+                "at": 1791838732039,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 9,
+                "at": 1791838732051,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "document": {
+                  "href": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                  "id": "603c236e-e883-44b0-9a24-835974f132c9",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 10,
+                "at": 1791838732051,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ]
+              },
+              {
+                "order": 11,
+                "at": 1791838732051,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/?goto=transfiguration-enhanced&seed=1&debug=1",
+                "scope": "operation",
+                "initiatingOperation": 1,
+                "activeOperations": [
+                  1
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "mobile#0"
+        },
+        {
+          "label": "qa.navigation",
+          "data": {
+            "operation": 2,
+            "expectedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+            "deadline": null,
+            "callDeadline": 1791839030933,
+            "waitUntil": "domcontentloaded",
+            "allowErrors": false,
+            "cell": {
+              "uuid": null,
+              "variant": null,
+              "controller": null
+            },
+            "clock": "node-wall",
+            "events": [
+              {
+                "order": 12,
+                "at": 1791838737502,
+                "phase": "started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 13,
+                "at": 1791838737505,
+                "phase": "caps-before",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                  "id": "603c236e-e883-44b0-9a24-835974f132c9",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 14,
+                "at": 1791838737505,
+                "phase": "goto-started",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 15,
+                "at": 1791838737540,
+                "phase": "request",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "requestUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5"
+              },
+              {
+                "order": 16,
+                "at": 1791838737570,
+                "phase": "framenavigated",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ],
+                "frameUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5"
+              },
+              {
+                "order": 17,
+                "at": 1791838738318,
+                "phase": "domcontentloaded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 18,
+                "at": 1791838738318,
+                "phase": "goto-settled",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 19,
+                "at": 1791838738319,
+                "phase": "load",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                "scope": "page",
+                "initiatingOperation": null,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 20,
+                "at": 1791838738330,
+                "phase": "document-after",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "document": {
+                  "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                  "id": "cde079ff-1ea4-49c4-839e-5040b9133f49",
+                  "caps": {
+                    "errors": [],
+                    "rejections": [],
+                    "consoleErrors": []
+                  }
+                }
+              },
+              {
+                "order": 21,
+                "at": 1791838738330,
+                "phase": "succeeded",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ]
+              },
+              {
+                "order": 22,
+                "at": 1791838738330,
+                "phase": "listener-cleanup",
+                "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+                "scope": "operation",
+                "initiatingOperation": 2,
+                "activeOperations": [
+                  2
+                ],
+                "outcome": "removed"
+              }
+            ],
+            "droppedEvents": 0,
+            "observationErrors": [],
+            "droppedObservationErrors": 0,
+            "outcome": "succeeded",
+            "failedPhase": null,
+            "error": null,
+            "contextDestroyed": false,
+            "errorCauses": [],
+            "listenerCleanup": "removed"
+          },
+          "at": "mobile#0"
+        }
+      ],
+      "captures": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-ceg2aw/transfiguration-enhanced-desktop-opened.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-ceg2aw/transfiguration-enhanced-desktop-selected.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-ceg2aw/transfiguration-enhanced-desktop-resolved.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration-enhanced&seed=1&debug=1&game=tntggj",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-ceg2aw/transfiguration-enhanced-mobile-opened.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-ceg2aw/transfiguration-enhanced-mobile-selected.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-ceg2aw/transfiguration-enhanced-mobile-resolved.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=transfiguration-enhanced&seed=1&debug=1&game=dprzw5",
+          "width": 390,
+          "height": 844
+        }
+      ],
+      "caps": [],
+      "traces": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 50491
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 13963
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-ceg2aw/transfiguration-desktop.jsonl",
+          "gameId": "tntggj",
+          "selectedBy": "url",
+          "rows": 40,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.575/invocations/run-ceg2aw/transfiguration-mobile.jsonl",
+          "gameId": "dprzw5",
+          "selectedBy": "url",
+          "rows": 40,
+          "reason": null
+        }
+      ]
+    }
+  ],
+  "cleanup": {
+    "standard": "53986terminal0; group48639 closed, port5274 free; provider/client/browser lease settled",
+    "enhanced": "99346terminal0; group79976 closed, port5274 free; provider/client/browser lease settled"
+  },
+  "preExistingIssues": "none encountered outside admitted cause repair",
+  "reviewRouting": "fresh read-only gpt-5.6-sol required under temporary user policy; launch exact committed source asynchronously"
+}
