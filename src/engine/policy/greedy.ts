@@ -1,7 +1,8 @@
 /**
  * The Greedy policy: a one-ply search. For a top-level decision it samples
  * determinizations of its view (D22), applies each legal action to each,
- * resolves the stack with both sides passing, and scores the result with a
+ * resolves the stack with both sides passing, ends a reposition’s main
+ * window to match passing’s phase boundary, and scores the result with a
  * simple evaluation: score difference, board spark, cards in hand, and
  * energy. The action with the best mean score wins. Prompts are answered
  * with the prompt heuristic (`greedyAnswer`), live and in simulation; a
@@ -73,7 +74,9 @@ function simulationSource(engine: Engine): InlineSource {
 
 /**
  * The score of `action` in the determinized `state`: the action applied,
- * then the stack resolved with both sides passing. `null` when the action
+ * then the stack resolved with both sides passing. A reposition also ends
+ * its current main window to include the same phase-boundary consequences
+ * as passing. `null` when the action
  * is not legal in this sample or the simulation fails.
  */
 function simulate(
@@ -97,11 +100,23 @@ function simulate(
       }
     }
     let current = applied.state;
+    let endedWindow = false;
     for (let passes = 0; passes < GREEDY.stackPassLimit && current.result === null; passes++) {
       const next = engine.decision(current);
-      if (next?.kind !== "respond") break;
+      if (next?.kind !== "respond") {
+        // Compare a free move with passing at the same horizon. Resolve any
+        // responses first, and end only this candidate's original window.
+        if (
+          action.kind !== "reposition" || endedWindow || next?.kind !== "main" ||
+          next.side !== side || current.turn.phase !== state.turn.phase
+        ) break;
+        endedWindow = true;
+      }
       current = engine.apply(current, next.side, { kind: "pass" }, source).state;
     }
+    // A bounded response chain can consume the pass allowance before the
+    // window ends. An unfinished move cannot compete with a completed pass.
+    if (action.kind === "reposition" && !endedWindow && current.result === null) return null;
     return evaluatePosition(engine.view(current, side), side);
   } catch {
     return null;

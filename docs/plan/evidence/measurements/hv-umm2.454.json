@@ -1,0 +1,831 @@
+{
+  "bead": "hv-umm2.454",
+  "base": "3874aca91793ee9589dc31d331b1da439d6ab215",
+  "dispatch": "2026-10-12T00:34:02Z",
+  "preCommitEndpoint": "2026-10-12T00:49:20.777388+00:00",
+  "scope": [
+    "src/engine/policy/greedy.ts",
+    "src/engine/policy/policy.test.ts",
+    "own friction, measurements, pre-existing and QA ledger"
+  ],
+  "cause": "Pass advances the main window while a free reposition otherwise scores before the same phase-boundary consequences. Reposition simulations resolve responses, end their original window once and exclude incomplete continuations.",
+  "tunableChanges": [],
+  "logging": "Existing ai.decision UUID candidate/score/choice traces reconstruct the horizon comparison and committed normal intents. No new log schema or unlogged flow state.",
+  "sourceFreeze": {
+    "src/engine/policy/greedy.ts": "c7f8e30c12a6dc0f4f047045ffede41b5cb7db5aaaa21170165b15ecb3ac867d",
+    "src/engine/policy/policy.test.ts": "06b83897777f72e7d1181042c2e2be6f6ead7cb253152c9824bd5c5dbac76012"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 83,
+    "jsdomFiles": 0,
+    "newCases": 6,
+    "entrypoints": 0,
+    "plainContractFiles": 0,
+    "policyEntrypointLines": 440
+  },
+  "validation": [
+    {
+      "label": "original-regression",
+      "pid": 79596,
+      "pgid": 79596,
+      "start": "2026-10-12T00:38:04.277228+00:00",
+      "end": "2026-10-12T00:38:07.641205+00:00",
+      "seconds": 3.4049657089999528,
+      "load": "{ 32.53 21.81 16.41 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "advances|phase-boundary"
+      ],
+      "exitCode": 1,
+      "remaining": []
+    },
+    {
+      "label": "focused",
+      "pid": 85933,
+      "pgid": 85933,
+      "start": "2026-10-12T00:38:30.550841+00:00",
+      "end": "2026-10-12T00:38:32.795823+00:00",
+      "seconds": 2.2848337499999616,
+      "load": "{ 30.30 22.22 16.72 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "exitCode": 1,
+      "remaining": []
+    },
+    {
+      "label": "focused-2",
+      "pid": 93098,
+      "pgid": 93098,
+      "start": "2026-10-12T00:38:54.427054+00:00",
+      "end": "2026-10-12T00:38:56.984666+00:00",
+      "seconds": 2.5934162919984374,
+      "load": "{ 28.02 22.41 16.95 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "exitCode": 1,
+      "remaining": []
+    },
+    {
+      "label": "original-regression-2",
+      "pid": 99623,
+      "pgid": 99623,
+      "start": "2026-10-12T00:39:24.024177+00:00",
+      "end": "2026-10-12T00:39:25.967278+00:00",
+      "seconds": 1.979114750000008,
+      "load": "{ 20.16 21.05 16.65 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "advances|phase-boundary|boundary step"
+      ],
+      "exitCode": 1,
+      "remaining": []
+    },
+    {
+      "label": "focused-3",
+      "pid": 191,
+      "pgid": 191,
+      "start": "2026-10-12T00:39:26.028793+00:00",
+      "end": "2026-10-12T00:39:28.095317+00:00",
+      "seconds": 2.1011996249999356,
+      "load": "{ 20.16 21.05 16.65 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "exitCode": 1,
+      "remaining": []
+    },
+    {
+      "label": "original-regression-3",
+      "pid": 4828,
+      "pgid": 4828,
+      "start": "2026-10-12T00:39:46.626860+00:00",
+      "end": "2026-10-12T00:39:48.443374+00:00",
+      "seconds": 1.8514521659999446,
+      "load": "{ 15.77 19.99 16.37 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "advances|phase-boundary|boundary step"
+      ],
+      "exitCode": 1,
+      "remaining": []
+    },
+    {
+      "label": "focused-4",
+      "pid": 5197,
+      "pgid": 5197,
+      "start": "2026-10-12T00:39:48.504999+00:00",
+      "end": "2026-10-12T00:39:51.112902+00:00",
+      "seconds": 2.6470314170001075,
+      "load": "{ 16.35 20.04 16.41 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "focused-5",
+      "pid": 18884,
+      "pgid": 18884,
+      "start": "2026-10-12T00:41:02.998320+00:00",
+      "end": "2026-10-12T00:41:04.961368+00:00",
+      "seconds": 1.9975903329996072,
+      "load": "{ 22.71 21.68 17.34 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "review",
+      "pid": 19261,
+      "pgid": 19261,
+      "start": "2026-10-12T00:41:05.018624+00:00",
+      "end": "2026-10-12T00:41:17.234124+00:00",
+      "seconds": 12.25020379200032,
+      "load": "{ 21.37 21.42 17.27 }",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "knip",
+      "pid": 20997,
+      "pgid": 20997,
+      "start": "2026-10-12T00:41:17.297504+00:00",
+      "end": "2026-10-12T00:41:20.486275+00:00",
+      "seconds": 3.238304041999072,
+      "load": "{ 19.40 20.99 17.17 }",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "evidence-schema",
+      "pid": 27008,
+      "pgid": 27008,
+      "start": "2026-10-12T00:42:00.046772+00:00",
+      "end": "2026-10-12T00:42:00.140994+00:00",
+      "seconds": 0.12650408300032723,
+      "load": "{ 13.25 19.12 16.67 }",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "qa",
+      "pid": 27035,
+      "pgid": 27035,
+      "start": "2026-10-12T00:42:00.217814+00:00",
+      "end": "2026-10-12T00:42:07.984980+00:00",
+      "seconds": 7.796869040999809,
+      "load": "{ 13.25 19.12 16.67 }",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.454/greedy-threshold.mjs",
+        "--bead",
+        "hv-umm2.454",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "exitCode": 130,
+      "remaining": []
+    },
+    {
+      "label": "limit-guard-red",
+      "pid": 35252,
+      "pgid": 35252,
+      "start": "2026-10-12T00:42:54.412844+00:00",
+      "end": "2026-10-12T00:42:56.393785+00:00",
+      "seconds": 2.012002916999336,
+      "load": "{ 7.86 16.61 15.89 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "non-settling simulated boundary"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "focused-final",
+      "pid": 35469,
+      "pgid": 35469,
+      "start": "2026-10-12T00:42:56.446877+00:00",
+      "end": "2026-10-12T00:42:58.127477+00:00",
+      "seconds": 1.7104844999994384,
+      "load": "{ 7.86 16.61 15.89 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "review-final",
+      "pid": 35688,
+      "pgid": 35688,
+      "start": "2026-10-12T00:42:58.176869+00:00",
+      "end": "2026-10-12T00:43:08.583652+00:00",
+      "seconds": 10.439074542000526,
+      "load": "{ 7.86 16.61 15.89 }",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "knip-final",
+      "pid": 36104,
+      "pgid": 36104,
+      "start": "2026-10-12T00:43:08.636168+00:00",
+      "end": "2026-10-12T00:43:10.493894+00:00",
+      "seconds": 1.8891161249994184,
+      "load": "{ 8.39 16.29 15.78 }",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "limit-guard-red-2",
+      "pid": 36665,
+      "pgid": 36665,
+      "start": "2026-10-12T00:43:31.092233+00:00",
+      "end": "2026-10-12T00:43:32.786863+00:00",
+      "seconds": 1.7247694159996172,
+      "load": "{ 7.19 15.49 15.51 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts",
+        "-t",
+        "non-settling simulated boundary"
+      ],
+      "exitCode": 1,
+      "remaining": []
+    },
+    {
+      "label": "focused-green-after-red",
+      "pid": 36767,
+      "pgid": 36767,
+      "start": "2026-10-12T00:43:32.837728+00:00",
+      "end": "2026-10-12T00:43:34.498286+00:00",
+      "seconds": 1.6892487500008428,
+      "load": "{ 7.19 15.49 15.51 }",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/policy/policy.test.ts"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "qa-final",
+      "pid": 40108,
+      "pgid": 40108,
+      "start": "2026-10-12T00:44:00.609697+00:00",
+      "end": "2026-10-12T00:44:34.810200+00:00",
+      "seconds": 34.24831095800073,
+      "load": "{ 6.77 14.60 15.18 }",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.454/greedy-threshold.mjs",
+        "--bead",
+        "hv-umm2.454",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "exitCode": 1,
+      "remaining": []
+    },
+    {
+      "label": "qa-corrected",
+      "pid": 43745,
+      "pgid": 43745,
+      "start": "2026-10-12T00:45:18.721721+00:00",
+      "end": "2026-10-12T00:45:40.684942+00:00",
+      "seconds": 21.99554737500148,
+      "load": "{ 6.90 12.83 14.46 }",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.454/greedy-threshold.mjs",
+        "--bead",
+        "hv-umm2.454",
+        "--port",
+        "5174",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "evidence-final",
+      "pid": 47933,
+      "pgid": 47933,
+      "start": "2026-10-12T00:47:32.037041+00:00",
+      "end": "2026-10-12T00:47:32.136027+00:00",
+      "seconds": 0.13643749999937427,
+      "load": "{ 9.31 11.50 13.67 }",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    },
+    {
+      "label": "precommit-schema",
+      "pid": 56306,
+      "pgid": 56306,
+      "start": "2026-10-12T00:49:20.540572+00:00",
+      "end": "2026-10-12T00:49:20.654943+00:00",
+      "seconds": 0.15700575000118988,
+      "load": "{ 20.20 13.98 14.32 }",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "exitCode": 0,
+      "remaining": []
+    }
+  ],
+  "reviewResult": {
+    "tests": 1208,
+    "files": 11,
+    "staticChecks": "typecheck, node typecheck, import cycles, lint and friction schema pass",
+    "workers": 2,
+    "scope": "Diff-related review; no full/heavy benchmark or unrelated Random fuzz is claimed."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review prepare step start at 2026-10-12T00:42:58.342Z. Exact test/static step starts at 00:42:58.724\u2013726Z sampled 7.46826171875."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "original-regression",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:38:04.277228+00:00",
+      "value": "{ 32.53 21.81 16.41 }"
+    },
+    {
+      "label": "focused",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:38:30.550841+00:00",
+      "value": "{ 30.30 22.22 16.72 }"
+    },
+    {
+      "label": "focused-2",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:38:54.427054+00:00",
+      "value": "{ 28.02 22.41 16.95 }"
+    },
+    {
+      "label": "original-regression-2",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:39:24.024177+00:00",
+      "value": "{ 20.16 21.05 16.65 }"
+    },
+    {
+      "label": "focused-3",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:39:26.028793+00:00",
+      "value": "{ 20.16 21.05 16.65 }"
+    },
+    {
+      "label": "original-regression-3",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:39:46.626860+00:00",
+      "value": "{ 15.77 19.99 16.37 }"
+    },
+    {
+      "label": "focused-4",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:39:48.504999+00:00",
+      "value": "{ 16.35 20.04 16.41 }"
+    },
+    {
+      "label": "focused-5",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:41:02.998320+00:00",
+      "value": "{ 22.71 21.68 17.34 }"
+    },
+    {
+      "label": "review",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:41:05.018624+00:00",
+      "value": "{ 21.37 21.42 17.27 }"
+    },
+    {
+      "label": "knip",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:41:17.297504+00:00",
+      "value": "{ 19.40 20.99 17.17 }"
+    },
+    {
+      "label": "evidence-schema",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:42:00.046772+00:00",
+      "value": "{ 13.25 19.12 16.67 }"
+    },
+    {
+      "label": "qa",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:42:00.217814+00:00",
+      "value": "{ 13.25 19.12 16.67 }"
+    },
+    {
+      "label": "limit-guard-red",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:42:54.412844+00:00",
+      "value": "{ 7.86 16.61 15.89 }"
+    },
+    {
+      "label": "focused-final",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:42:56.446877+00:00",
+      "value": "{ 7.86 16.61 15.89 }"
+    },
+    {
+      "label": "review-final",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:42:58.176869+00:00",
+      "value": "{ 7.86 16.61 15.89 }"
+    },
+    {
+      "label": "knip-final",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:43:08.636168+00:00",
+      "value": "{ 8.39 16.29 15.78 }"
+    },
+    {
+      "label": "limit-guard-red-2",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:43:31.092233+00:00",
+      "value": "{ 7.19 15.49 15.51 }"
+    },
+    {
+      "label": "focused-green-after-red",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:43:32.837728+00:00",
+      "value": "{ 7.19 15.49 15.51 }"
+    },
+    {
+      "label": "qa-final",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:44:00.609697+00:00",
+      "value": "{ 6.77 14.60 15.18 }"
+    },
+    {
+      "label": "qa-corrected",
+      "scope": "Measured wrapper start",
+      "start": "2026-10-12T00:45:18.721721+00:00",
+      "value": "{ 6.90 12.83 14.46 }"
+    }
+  ],
+  "causalEvidence": {
+    "originalSourceRed": "original-regression-3: five actual cases fail on exact base greedy.ts; valid fixture source tests before the added non-settling parameterization. Both actor phase and useful movement plus continuation exception assertions fail.",
+    "guardOnlyRed": "limit-guard-red-2: one failed and 22 skipped with only the incomplete-continuation guard absent.",
+    "fixedGreen": "focused-green-after-red: all 23 policy cases pass on exact frozen final bytes."
+  },
+  "authoringCorrections": [
+    "Initial useful Night fixture used an invalid blocker selector and then an inactive-side named Night trigger. Correct fixture uses the moving active side\u2019s Dusk trigger and actual challenger count; invalid attempts are retained as authoring failures, not product defects.",
+    "First guard-removal attempt used a mismatched newline string and retained the guard; its green receipt is not causal red evidence. Exact substring removal yields the retained one-case red.",
+    "The first queued QA command was canceled to add the explicit bound contract; exit 130 and no server/provider acquisition.",
+    "The first served default-policy desktop run completed payment but its final URL assertion used URL in the runner VM. The correction executes that assertion inside the browser read callback; original script/report/log retained.",
+    "Two tool-code parsing mistakes failed before any shell/native action and were corrected."
+  ],
+  "qa": {
+    "report": "greedy-threshold.result.json",
+    "hashes": {
+      "greedy-threshold.result.json": "f0fc2149d062b21086136781dc239ba8d9121df11082aae57cfa9e6296cb2736",
+      "greedy-threshold-desktop.jsonl": "3f3a08534967b2edd3913e0125b9c4647d23263ae73148af7e96b3b24f27bec2",
+      "greedy-threshold-mobile.jsonl": "2340acf04dafa4837dca3ecaff19b02e4a2144adf690ba1bc5a2506c29ec7c60",
+      "greedy-threshold-early-harness-failed.result.json": "38595f21a18165852d292533e86ce603bf8a66699a551da8bfa163ae57ad6a24",
+      "greedy-threshold-early-harness-failed-desktop.jsonl": "f44fd3ad306727c5d407a60fa743d1fad9c4da558d7e85c9395eafa1f847f661"
+    },
+    "ok": true,
+    "error": null,
+    "caps": [],
+    "wallMs": {
+      "browserLeaseWait": 43,
+      "serve": 948,
+      "scenario": 15708,
+      "total": 16724
+    },
+    "wrapperSeconds": 21.99554737500148,
+    "views": {
+      "desktop": {
+        "source": "i1",
+        "printing": {
+          "kind": "card",
+          "cardId": "d1c25546-dcf2-481e-8f00-9afef3adf24b"
+        },
+        "energy": 2,
+        "hand": [
+          "i3",
+          "i4",
+          "i5"
+        ],
+        "discarded": [
+          "i2"
+        ],
+        "drawn": [
+          "i4",
+          "i5"
+        ],
+        "worker": {
+          "boots": [
+            {
+              "gameId": "ggazoc",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "side": "enemy",
+              "worker": 1,
+              "cause": "initial",
+              "outcome": "ready",
+              "ms": 589.3000000007451,
+              "timestamp": "2026-10-12T00:45:23.040Z",
+              "event": "ai.workerBoot",
+              "seq": 27
+            }
+          ],
+          "decisionPolicy": "greedy",
+          "source": "worker",
+          "chosen": {
+            "kind": "action",
+            "action": {
+              "kind": "pass"
+            }
+          },
+          "bad": []
+        },
+        "geometry": {
+          "source": {
+            "x": 301.25,
+            "y": 390,
+            "width": 89.5,
+            "height": 89.5,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "phase": {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        }
+      },
+      "mobile": {
+        "source": "i1",
+        "printing": {
+          "kind": "card",
+          "cardId": "d1c25546-dcf2-481e-8f00-9afef3adf24b"
+        },
+        "energy": 2,
+        "hand": [
+          "i3",
+          "i4",
+          "i5"
+        ],
+        "discarded": [
+          "i2"
+        ],
+        "drawn": [
+          "i4",
+          "i5"
+        ],
+        "worker": {
+          "boots": [
+            {
+              "gameId": "kipvxd",
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "side": "enemy",
+              "worker": 1,
+              "cause": "initial",
+              "outcome": "ready",
+              "ms": 606.3000000007451,
+              "timestamp": "2026-10-12T00:45:31.489Z",
+              "event": "ai.workerBoot",
+              "seq": 27
+            }
+          ],
+          "decisionPolicy": "greedy",
+          "source": "worker",
+          "chosen": {
+            "kind": "action",
+            "action": {
+              "kind": "pass"
+            }
+          },
+          "bad": []
+        },
+        "geometry": {
+          "source": {
+            "x": 52.328125,
+            "y": 358.03125,
+            "width": 53.859375,
+            "height": 53.859375,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "phase": {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          }
+        }
+      }
+    },
+    "parentColdReview": "Root accepted both settled paid captures, both offer captures and the mobile discard capture before final handoff. Source art, printing, physical F0, costs, controls and resources are readable; both field thumbnails are visible.",
+    "originalFailure": {
+      "bead": "hv-umm2.122",
+      "report": "threshold-early-failed.result.json",
+      "reportSHA256": "2404add8baf82106798fcbcf23d18dcf979304f9cef3d238d0fc2f5c41649689",
+      "log": "threshold-early-failed-desktop.jsonl",
+      "logSHA256": "a9cbb115b055575f18ad50c24f8c4c65369ac30a74dafd72e066c80ba080a1cc",
+      "retainedUnchanged": true
+    }
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "coverage": "keeps legal progress and its input intact under a error simulated boundary continuation",
+      "reason": "Only the new simulated boundary pass is faulted after a real candidate creates a work state; completed legal progress remains available and live input is unchanged."
+    },
+    {
+      "path": "reload or restart",
+      "coverage": "advances player/enemy through Dusk despite an opponent\u2019s Challenge benefit, with legal replay after restart",
+      "reason": "Each actor reproduces the same complete policy result from a JSON-serialized request, then applies its legal choice through the real engine."
+    },
+    {
+      "path": "partial write",
+      "coverage": "normal both-actor restart contracts and both simulated boundary fault contracts",
+      "reason": "The policy writes no persistent state; all simulations operate on determinizations. These contracts assert the original live state stays byte-identical even when continuation fails or never settles."
+    },
+    {
+      "path": "invalid or stale input",
+      "coverage": "both-actor legal-choice assertions; no new stale-submission transition",
+      "reason": "The policy consumes a supplied immutable view and legal set. Decision-key freshness and intent rejection remain host/fold contracts; no request protocol or submission code changes in this bead."
+    },
+    {
+      "path": "concurrent actors",
+      "coverage": "both-actor Dusk/restart and useful-movement contracts; no shared mutable policy state",
+      "reason": "Each call owns its simulation state and random stream and returns a choice. The policy does not submit intents or write game state, so there is no new concurrent write transition."
+    },
+    {
+      "path": "bounded continuation exhaustion",
+      "coverage": "keeps legal progress and its input intact under a non-settling simulated boundary continuation",
+      "reason": "A narrow fault facade models a response continuation that makes no progress; the shared existing stackPassLimit stops it. With only the incomplete-continuation guard absent, the case fails by choosing a neutral reposition."
+    },
+    {
+      "path": "iteration and wall-clock exhaustion",
+      "coverage": "stops at its iteration budget and its wall-clock cap, keeping the best candidate it weighed",
+      "reason": "The existing public budget contract exercises legal pass fallbacks; counted iteration and clock semantics are unchanged."
+    }
+  ],
+  "runtime": {
+    "checkedAt": "2026-10-12T00:49:20.777170+00:00",
+    "ownedGroups": [
+      79596,
+      85933,
+      93098,
+      99623,
+      191,
+      4828,
+      5197,
+      18884,
+      19261,
+      20997,
+      27008,
+      27035,
+      35252,
+      35469,
+      35688,
+      36104,
+      36665,
+      36767,
+      40108,
+      43745,
+      47933,
+      56306,
+      42202,
+      43757
+    ],
+    "remaining": [],
+    "servers": [
+      {
+        "pgid": 42202,
+        "port": 5174,
+        "stopped": true,
+        "runner": 40108
+      },
+      {
+        "pgid": 43757,
+        "port": 5174,
+        "stopped": true,
+        "runner": 43745
+      }
+    ],
+    "installAndDispatchFriction": {
+      "execSession": 93783,
+      "actualExitCode": 0,
+      "pid": "Not sampled before this short command group exited. The native exec completion is retained in the session; later runtime receipts record exact process groups."
+    },
+    "browserCleanup": "Canonical runners confirmed server group stopped and port free; actual CLI exits and fresh owned-group absence are verified. Waiting SIGINT run acquired neither server nor provider."
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "fallout": [],
+  "remainingWork": "Parent exact-commit other-family core review and native candidate delivery.",
+  "parentAcknowledgedAt": "Final acknowledgement received before this precommit timing endpoint.",
+  "implementMin": 15.312956466666666
+}

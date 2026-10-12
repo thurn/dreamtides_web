@@ -6,9 +6,10 @@ import { createEngine, type Engine } from "../engine";
 import { createFoldAdapter, decisionKeyOf, sidePending, type BattleSlice, type FoldAdapter } from "../fold/slice";
 import { isLegalAnswer } from "../prompts/answers";
 import { activated, energy, event } from "../dsl/builders";
-import { discover, gainEnergy } from "../effects/primitives";
+import { discover, draw, gainEnergy, gainPoints } from "../effects/primitives";
 import type { ConfirmPrompt, Prompt, PromptRole } from "../prompts/types";
-import { battleSeed, type InstanceId, type Side } from "../state/ids";
+import { onChallenge, onDusk, triggered } from "../dsl/triggers";
+import { battleSeed, opponent, type InstanceId, type Side } from "../state/ids";
 import type { BattleInit, BattleState } from "../state/types";
 import { boardState } from "../testing/board";
 import { CYCLE, LOOP } from "../testing/loop-cards";
@@ -167,6 +168,88 @@ describe("Greedy", () => {
     const answered = discoveringFold.reduce(outcome.slice, { kind: "answer", side: "enemy", promptId: pending.prompt.id, value: 3 });
     if (answered.kind !== "applied" || answered.error !== null) throw new Error("answer failed");
     expect(answered.slice.committed.sides.enemy.hand).toEqual([ids.enemy.deck[1]]);
+  });
+
+  it.each(["player", "enemy"] as const)("advances %s through Dusk despite an opponent's Challenge benefit, with legal replay after restart", (side) => {
+    const challenger: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(0x4541), abilities: () => [triggered(onChallenge(), draw(2))] };
+    const deciding = createEngine(testCatalog([challenger]));
+    const active = opponent(side);
+    const setup = { active, phase: "day" as const, [active]: { front: [challenger.id], deck }, [side]: { back: [SYNTHETIC.vanilla1.id], deck } };
+    let current = deciding.apply(boardState(deciding.catalog, setup).state, active, { kind: "pass" }, NO_PROMPTS).state;
+    const decklists = { [active]: entries([challenger.id, ...deck]), [side]: entries([SYNTHETIC.vanilla1.id, ...deck]) } as Record<Side, ReturnType<typeof entries>>;
+    for (let step = 0; step < 4 && current.turn.phase === "dusk"; step++) {
+      const decision = deciding.decision(current);
+      if (decision?.side !== side) throw new Error("wrong Dusk actor");
+      const legal = deciding.legalActions(current, side);
+      const request: PolicyRequest = { policy: "greedy", side, key: decisionKeyOf(sliceOf(current)), view: deciding.view(current, side), decision: { kind: "topLevel", decision, legal }, decklists, seed: battleSeed("reposition-progress"), budget: { iterations: 128 } };
+      const before = JSON.stringify(current);
+      const result = runPolicy(deciding, request);
+      expect(runPolicy(deciding, JSON.parse(JSON.stringify(request)) as PolicyRequest)).toEqual(result);
+      expect(JSON.stringify(current)).toBe(before);
+      expect(result.choice.kind).toBe("action");
+      if (result.choice.kind !== "action") throw new Error("not an action");
+      expect(legal).toContainEqual(result.choice.action);
+      current = deciding.apply(current, side, result.choice.action, NO_PROMPTS).state;
+    }
+    expect(current.turn.phase).toBe("night");
+    expect(current.sides[active].hand).toHaveLength(2);
+  });
+
+  it.each(["error", "non-settling"] as const)("keeps legal progress and its input intact under a %s simulated boundary continuation", (failure) => {
+    const challenger: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(0x4543), abilities: () => [triggered(onChallenge(), draw(2))] };
+    const deciding = createEngine(testCatalog([challenger]));
+    const initial = boardState(deciding.catalog, { active: "player", phase: "day", player: { front: [challenger.id], deck }, enemy: { back: [SYNTHETIC.vanilla1.id], deck } }).state;
+    const dusk = deciding.apply(initial, "player", { kind: "pass" }, NO_PROMPTS).state;
+    const decision = deciding.decision(dusk);
+    if (decision === null) throw new Error("no decision");
+    // All real operations delegate to the engine; only the new simulation
+    // continuation is faulted, after its candidate has produced a work state.
+    const inContinuation = (current: BattleState) => current.turn.phase === "dusk" && current.version > dusk.version;
+    const failing: Engine = {
+      ...deciding,
+      decision(current) {
+        return failure === "non-settling" && inContinuation(current) ? { kind: "respond", side: "enemy" } : deciding.decision(current);
+      },
+      apply(current, side, action, answers, observe) {
+        if (action.kind === "pass" && inContinuation(current)) {
+          if (failure === "error") throw new Error("boundary failure");
+          // Model a faulty continuation that makes no progress on its work
+          // state; the real candidate and completed pass still use the engine.
+          return { state: current, events: [], answers: [], bounded: [] };
+        }
+        return deciding.apply(current, side, action, answers, observe);
+      },
+    };
+    const before = JSON.stringify(dusk);
+    const result = runPolicy(failing, { policy: "greedy", side: "enemy", key: decisionKeyOf(sliceOf(dusk)), view: deciding.view(dusk, "enemy"), decision: { kind: "topLevel", decision, legal: deciding.legalActions(dusk, "enemy") }, decklists: { player: entries([challenger.id, ...deck]), enemy: entries([SYNTHETIC.vanilla1.id, ...deck]) }, seed: battleSeed("failed-boundary"), budget: { iterations: 128 } });
+    expect(result.choice).toEqual({ kind: "action", action: { kind: "pass" } });
+    expect(JSON.stringify(dusk)).toBe(before);
+    expect(deciding.apply(dusk, "enemy", { kind: "pass" }, NO_PROMPTS).state.turn.phase).toBe("night");
+  });
+
+  it.each(["player", "enemy"] as const)("keeps %s's legal reposition that improves the phase-boundary outcome", (side) => {
+    const blocker: EngineCardDefinition = {
+      ...SYNTHETIC.vanilla1, id: syntheticId(0x4542),
+      abilities: () => [triggered(onDusk(), gainPoints({ value: "count", of: { controller: "you", challenging: true } }))],
+    };
+    const deciding = createEngine(testCatalog([blocker]));
+    const active = side;
+    const setup = { active, phase: "day" as const, scoreToWin: 1, [opponent(side)]: { front: [SYNTHETIC.vanilla2.id], deck }, [side]: { back: [blocker.id], deck } };
+    const day = boardState(deciding.catalog, setup).state;
+    const decision = deciding.decision(day);
+    if (decision?.side !== side) throw new Error("wrong main actor");
+    const legal = deciding.legalActions(day, side);
+    const decklists = { [opponent(side)]: entries([SYNTHETIC.vanilla2.id, ...deck]), [side]: entries([blocker.id, ...deck]) } as Record<Side, ReturnType<typeof entries>>;
+    const request: PolicyRequest = { policy: "greedy", side, key: decisionKeyOf(sliceOf(day)), view: deciding.view(day, side), decision: { kind: "topLevel", decision, legal }, decklists, seed: battleSeed("useful-reposition"), budget: { iterations: 128 } };
+    const result = runPolicy(deciding, request);
+    if (result.choice.kind !== "action") throw new Error("not an action");
+    expect(legal).toContainEqual(result.choice.action);
+    expect(result.choice.action.kind).toBe("reposition");
+    const moved = deciding.apply(day, side, result.choice.action, NO_PROMPTS).state;
+    expect(moved.result).toBeNull();
+    const finished = deciding.apply(moved, side, { kind: "pass" }, NO_PROMPTS).state;
+    expect(finished.result).toMatchObject({ kind: "victory", winner: side });
+    expect(deciding.apply(day, side, { kind: "pass" }, NO_PROMPTS).state.result).toBeNull();
   });
 
   it("plays the character that adds the most board spark", () => {
