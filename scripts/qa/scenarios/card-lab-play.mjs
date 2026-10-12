@@ -73,6 +73,7 @@ export default async function cardLabPlay(qa) {
         const afterDraw = probe.events.filter((record) => draw !== undefined &&
           (record.seq > draw.seq || (record.seq === draw.seq && record.index > draw.index)));
         return {
+          observedDraw: probe.events.find(({ event }) => event.kind === "dreamwellDrawn")?.event ?? null,
           draw: draw?.event ?? null,
           day: afterDraw.find(({ event }) => event.kind === "phaseChanged" && event.active === owner && event.phase === "day")?.event ?? null,
           refresh: afterDraw.find(({ event }) => event.kind === "energyChanged" && event.side === owner && event.cause === "refresh")?.event ?? null,
@@ -83,6 +84,7 @@ export default async function cardLabPlay(qa) {
       let last = await readDraw();
       let answered = 0;
       let passes = 0;
+      let timedOut = false;
       try {
         const run = await qa.battle.playUntil(async (battle) => {
           last = await readDraw();
@@ -97,12 +99,16 @@ export default async function cardLabPlay(qa) {
         answered = run.answers;
         passes = run.passes;
       } catch (error) {
-        fail(error instanceof Error ? error.message : String(error), qa.isTimeout(error) ? "timeout" : "unknown");
+        timedOut = qa.isTimeout(error);
+        fail(error instanceof Error ? error.message : String(error), timedOut ? "timeout" : "unknown");
         last = await readDraw();
       }
-      if (last.draw === null) fail("no requested UUID and side Dreamwell draw");
-      if (last.refresh === null || last.refresh.maxChange !== last.draw?.energyAdded) fail("no matching catalog energy refresh");
-      if (last.next < 1) fail("the shared Dreamwell did not advance");
+      if (last.observedDraw !== null && (last.observedDraw.card !== card || last.observedDraw.side !== side)) fail("the observed Dreamwell draw has the wrong UUID or side");
+      // An interrupted run cannot prove absent downstream evidence. Observed
+      // contradictions and caps errors remain product failures, even on timeout.
+      if (last.draw === null && !timedOut) fail("no requested UUID and side Dreamwell draw");
+      if ((last.refresh === null && !timedOut) || (last.refresh !== null && last.refresh.maxChange !== last.draw?.energyAdded)) fail("no matching catalog energy refresh");
+      if (last.next < 1 && (!timedOut || (last.draw !== null && last.pending === null && !last.inFlight && last.stack === 0))) fail("the shared Dreamwell did not advance");
       const errors = await caps();
       if (errors.length > 0) fail(`__caps: ${errors.join(" | ")}`);
       const screens = [];

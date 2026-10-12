@@ -1,0 +1,982 @@
+{
+  "bead": "hv-umm2.456",
+  "base": "3e11a9514df29c81b87502d31844bd40e2a54a40",
+  "dispatchUtc": "2026-10-12T00:27:05.744552+00:00",
+  "provisionalPreparationUtc": "2026-10-12T00:45:52.617692+00:00",
+  "implementationWindow": {
+    "start": "2026-10-12T00:27:05.744552+00:00",
+    "end": "2026-10-12T00:48:41.908377+00:00",
+    "endBoundary": "Final pre-commit temporal/provenance preparation after parent ACK; actual commit start/end/exit and complete dispatch-through-commit interval are recorded in external commit.json/final.json.",
+    "includes": "Research, initial install, baseline, parent implementation ACK wait, implementation, expected negative reproduction, lint correction, validation and native resource queues; final parent COMMIT ACK wait is included at final preparation."
+  },
+  "authoredEntities": [],
+  "sourceAreas": [
+    "scripts/qa/scenarios/card-lab-play.mjs",
+    "scripts/qa/card-sweep.test.mjs",
+    "src/engine/testing/lab-preflight.ts",
+    "src/engine/testing/lab-preflight.test.ts"
+  ],
+  "nonTestSourceAdditionsAndDeletions": 37,
+  "testDelta": {
+    "files": 0,
+    "lines": 125,
+    "jsdomFiles": 0
+  },
+  "sourceSha256": {
+    "scripts/qa/scenarios/card-lab-play.mjs": "c2e64aaa5099c13553ed348b212cf382e0497e4085c90c7017da35feca89995e",
+    "scripts/qa/card-sweep.test.mjs": "5c85beae8e1104354d091c5d8dc51006eca20bc27ce78d2f23c3ed4c6a7ce0ee",
+    "src/engine/testing/lab-preflight.ts": "119b733b046d3bcecb113d284c87a8b0d6c26ec64146fe3ff3bac645f47a5a04",
+    "src/engine/testing/lab-preflight.test.ts": "e673d6e82ed40928d019729437dc58f88c9430cf4a84afb792d2a741acc4f8e9"
+  },
+  "researchBaseline": {
+    "at": "2026-10-12T00:31:01.236085+00:00",
+    "base": "3e11a9514df29c81b87502d31844bd40e2a54a40",
+    "dispatch": "2026-10-12T00:27:05.744552+00:00",
+    "sourceHashes": {
+      "scripts/qa/scenarios/card-lab-play.mjs": "af1746cfed152317c2d3c875d1358b0d071ea62a5dbb4aa7d305659de898d3b4",
+      "scripts/qa/card-sweep.test.mjs": "bc3562b8c57c89cfa0ea475645dbd2797cabf9cfd1c1fba0ba0d54346ecab37e",
+      "src/engine/testing/lab-preflight.ts": "e8f03713128c886519dfe7381e4c281157268322b054b79ead41444df164d0bd",
+      "src/engine/testing/lab-preflight.test.ts": "e13bdb984fd44910933dd6df870077655e3053502943399f321faf0591c07bb1"
+    },
+    "install": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "exit": 0,
+      "npmReportedSeconds": 2,
+      "ptySession": 74930,
+      "actualProcessPid": null,
+      "measurementLimit": "Initial tool started before observer instrumentation; exact wall/PID not captured."
+    },
+    "baseline": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/card-sweep.test.mjs",
+        "src/engine/testing/lab-preflight.test.ts"
+      ],
+      "exit": 0,
+      "testFiles": 2,
+      "tests": 25,
+      "prepareSeconds": 0.8,
+      "testSeconds": 1.0,
+      "restoreSeconds": 0.4,
+      "testStarted": "2026-10-12T00:29:07.381Z",
+      "hostLoad": 11.96923828125,
+      "ptySession": 82037,
+      "actualProcessPid": null,
+      "measurementLimit": "Review step timings/load retained from tool output; exact outer wall/PID unavailable."
+    },
+    "sourceEdits": false,
+    "testInfrastructure": true
+  },
+  "commands": [
+    {
+      "label": "focused",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/card-sweep.test.mjs",
+        "src/engine/testing/lab-preflight.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-qa-classification",
+      "pid": 41517,
+      "pgid": 41517,
+      "observerPid": 41503,
+      "started": "2026-10-12T00:33:56.359614+00:00",
+      "finished": "2026-10-12T00:33:59.309046+00:00",
+      "elapsedS": 2.949296124999819,
+      "exit": 0,
+      "startLoad": [
+        23.14208984375,
+        14.5517578125,
+        13.09765625
+      ],
+      "endLoad": [
+        23.37060546875,
+        14.74169921875,
+        13.1728515625
+      ],
+      "rawRecord": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/focused.json",
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/focused.log"
+    },
+    {
+      "label": "preflight",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "9954cede-8a16-4053-b6e9-da745f4540f5,662b7393-751c-4aa9-8150-5f20b4d176a4,e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "--variants",
+        "base",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-qa-classification",
+      "pid": 44580,
+      "pgid": 44580,
+      "observerPid": 44568,
+      "started": "2026-10-12T00:34:26.073575+00:00",
+      "finished": "2026-10-12T00:34:26.884516+00:00",
+      "elapsedS": 0.8108048330013844,
+      "exit": 0,
+      "startLoad": [
+        20.76416015625,
+        14.77294921875,
+        13.2255859375
+      ],
+      "endLoad": [
+        20.76416015625,
+        14.77294921875,
+        13.2255859375
+      ],
+      "rawRecord": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/preflight.json",
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/preflight.log"
+    },
+    {
+      "label": "negative",
+      "command": [
+        "python3",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/negative.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-qa-classification",
+      "pid": 46123,
+      "pgid": 46123,
+      "observerPid": 46110,
+      "started": "2026-10-12T00:34:42.804090+00:00",
+      "finished": "2026-10-12T00:34:44.473760+00:00",
+      "elapsedS": 1.6695710419990064,
+      "exit": 1,
+      "startLoad": [
+        19.6181640625,
+        14.84130859375,
+        13.2783203125
+      ],
+      "endLoad": [
+        19.0078125,
+        14.7939453125,
+        13.2705078125
+      ],
+      "rawRecord": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/negative.json",
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/negative.log"
+    },
+    {
+      "label": "review",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-qa-classification",
+      "pid": 48312,
+      "pgid": 48312,
+      "observerPid": 48291,
+      "started": "2026-10-12T00:35:12.416741+00:00",
+      "finished": "2026-10-12T00:35:19.328120+00:00",
+      "elapsedS": 6.911212916000295,
+      "exit": 1,
+      "startLoad": [
+        14.0556640625,
+        13.9599609375,
+        13.0126953125
+      ],
+      "endLoad": [
+        15.76318359375,
+        14.32421875,
+        13.15234375
+      ],
+      "rawRecord": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/review.json",
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/review.log"
+    },
+    {
+      "label": "review-final",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-qa-classification",
+      "pid": 54503,
+      "pgid": 54503,
+      "observerPid": 54492,
+      "started": "2026-10-12T00:35:44.891909+00:00",
+      "finished": "2026-10-12T00:35:51.768994+00:00",
+      "elapsedS": 6.876908709000418,
+      "exit": 0,
+      "startLoad": [
+        23.93212890625,
+        16.30126953125,
+        13.89599609375
+      ],
+      "endLoad": [
+        22.81640625,
+        16.1962890625,
+        13.873046875
+      ],
+      "rawRecord": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/review-final.json",
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/review-final.log"
+    },
+    {
+      "label": "knip",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-qa-classification",
+      "pid": 57240,
+      "pgid": 57240,
+      "observerPid": 57230,
+      "started": "2026-10-12T00:36:11.579731+00:00",
+      "finished": "2026-10-12T00:36:14.570614+00:00",
+      "elapsedS": 2.990698416999294,
+      "exit": 0,
+      "startLoad": [
+        23.07177734375,
+        16.6318359375,
+        14.080078125
+      ],
+      "endLoad": [
+        21.86474609375,
+        16.48828125,
+        14.04443359375
+      ],
+      "rawRecord": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/knip.json",
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/knip.log"
+    },
+    {
+      "label": "full",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-qa-classification",
+      "pid": 62761,
+      "pgid": 62761,
+      "observerPid": 62666,
+      "started": "2026-10-12T00:36:53.962975+00:00",
+      "finished": "2026-10-12T00:39:29.781173+00:00",
+      "elapsedS": 155.81650962499953,
+      "exit": 0,
+      "startLoad": [
+        29.53515625,
+        18.78515625,
+        14.9755859375
+      ],
+      "endLoad": [
+        19.0283203125,
+        20.79541015625,
+        16.58349609375
+      ],
+      "rawRecord": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/full.json",
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/full.log"
+    },
+    {
+      "label": "sweep",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.456",
+        "--cards",
+        "9954cede-8a16-4053-b6e9-da745f4540f5,662b7393-751c-4aa9-8150-5f20b4d176a4,e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "--variants",
+        "base",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-qa-classification",
+      "pid": 59012,
+      "pgid": 59012,
+      "observerPid": 58980,
+      "started": "2026-10-12T00:36:33.662525+00:00",
+      "finished": "2026-10-12T00:43:20.606455+00:00",
+      "elapsedS": 406.9331260000017,
+      "exit": 0,
+      "startLoad": [
+        20.71875,
+        16.53076171875,
+        14.11328125
+      ],
+      "endLoad": [
+        7.6552734375,
+        15.8662109375,
+        15.64013671875
+      ],
+      "rawRecord": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/sweep.json",
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/sweep.log"
+    },
+    {
+      "label": "judged",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.456/dreamwell-evidence.mjs",
+        "--bead",
+        "hv-umm2.456",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-qa-classification",
+      "pid": 95003,
+      "pgid": 95003,
+      "observerPid": 94978,
+      "started": "2026-10-12T00:39:03.388914+00:00",
+      "finished": "2026-10-12T00:42:31.944334+00:00",
+      "elapsedS": 208.5474356249997,
+      "exit": 0,
+      "startLoad": [
+        24.78662109375,
+        21.90185546875,
+        16.83544921875
+      ],
+      "endLoad": [
+        9.5419921875,
+        17.64404296875,
+        16.2197265625
+      ],
+      "rawRecord": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/judged.json",
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/judged.log"
+    },
+    {
+      "label": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-qa-classification",
+      "pid": 44672,
+      "pgid": 44672,
+      "observerPid": 44657,
+      "started": "2026-10-12T00:45:52.651784+00:00",
+      "finished": "2026-10-12T00:45:52.940222+00:00",
+      "elapsedS": 0.2882577919990581,
+      "exit": 0,
+      "startLoad": [
+        7.236328125,
+        12.32373046875,
+        14.21337890625
+      ],
+      "endLoad": [
+        7.236328125,
+        12.32373046875,
+        14.21337890625
+      ],
+      "rawRecord": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/schema.json",
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/schema.log"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "command": "focused",
+      "step": "prepare",
+      "started": "2026-10-12T00:33:56.566Z",
+      "load1m": 23.14208984375
+    },
+    {
+      "command": "focused",
+      "step": "test",
+      "started": "2026-10-12T00:33:57.345Z",
+      "load1m": 23.14208984375
+    },
+    {
+      "command": "focused",
+      "step": "restore-local-assets",
+      "started": "2026-10-12T00:33:58.882Z",
+      "load1m": 23.37060546875
+    },
+    {
+      "command": "negative",
+      "step": "prepare",
+      "started": "2026-10-12T00:34:43.029Z",
+      "load1m": 19.6181640625
+    },
+    {
+      "command": "negative",
+      "step": "test",
+      "started": "2026-10-12T00:34:43.467Z",
+      "load1m": 19.0078125
+    },
+    {
+      "command": "negative",
+      "step": "restore-local-assets",
+      "started": "2026-10-12T00:34:44.076Z",
+      "load1m": 19.0078125
+    },
+    {
+      "command": "review",
+      "step": "prepare",
+      "started": "2026-10-12T00:35:12.598Z",
+      "load1m": 14.0556640625
+    },
+    {
+      "command": "review",
+      "step": "typecheck",
+      "started": "2026-10-12T00:35:13.014Z",
+      "load1m": 14.0556640625
+    },
+    {
+      "command": "review",
+      "step": "typecheck-node",
+      "started": "2026-10-12T00:35:13.015Z",
+      "load1m": 14.0556640625
+    },
+    {
+      "command": "review",
+      "step": "import-cycles",
+      "started": "2026-10-12T00:35:13.015Z",
+      "load1m": 14.0556640625
+    },
+    {
+      "command": "review",
+      "step": "lint",
+      "started": "2026-10-12T00:35:13.015Z",
+      "load1m": 14.0556640625
+    },
+    {
+      "command": "review",
+      "step": "test-related",
+      "started": "2026-10-12T00:35:13.016Z",
+      "load1m": 14.0556640625
+    },
+    {
+      "command": "review",
+      "step": "friction-records",
+      "started": "2026-10-12T00:35:13.016Z",
+      "load1m": 14.0556640625
+    },
+    {
+      "command": "review",
+      "step": "restore-local-assets",
+      "started": "2026-10-12T00:35:18.619Z",
+      "load1m": 15.76318359375
+    },
+    {
+      "command": "review-final",
+      "step": "prepare",
+      "started": "2026-10-12T00:35:45.079Z",
+      "load1m": 23.93212890625
+    },
+    {
+      "command": "review-final",
+      "step": "typecheck",
+      "started": "2026-10-12T00:35:45.505Z",
+      "load1m": 23.93212890625
+    },
+    {
+      "command": "review-final",
+      "step": "typecheck-node",
+      "started": "2026-10-12T00:35:45.506Z",
+      "load1m": 23.93212890625
+    },
+    {
+      "command": "review-final",
+      "step": "import-cycles",
+      "started": "2026-10-12T00:35:45.507Z",
+      "load1m": 23.93212890625
+    },
+    {
+      "command": "review-final",
+      "step": "lint",
+      "started": "2026-10-12T00:35:45.507Z",
+      "load1m": 23.93212890625
+    },
+    {
+      "command": "review-final",
+      "step": "test-related",
+      "started": "2026-10-12T00:35:45.507Z",
+      "load1m": 23.93212890625
+    },
+    {
+      "command": "review-final",
+      "step": "friction-records",
+      "started": "2026-10-12T00:35:45.508Z",
+      "load1m": 23.93212890625
+    },
+    {
+      "command": "review-final",
+      "step": "restore-local-assets",
+      "started": "2026-10-12T00:35:51.162Z",
+      "load1m": 22.81640625
+    },
+    {
+      "command": "knip",
+      "step": "prepare",
+      "started": "2026-10-12T00:36:11.770Z",
+      "load1m": 23.07177734375
+    },
+    {
+      "command": "knip",
+      "step": "knip",
+      "started": "2026-10-12T00:36:12.225Z",
+      "load1m": 23.07177734375
+    },
+    {
+      "command": "knip",
+      "step": "restore-local-assets",
+      "started": "2026-10-12T00:36:13.948Z",
+      "load1m": 21.86474609375
+    },
+    {
+      "command": "full",
+      "step": "prepare",
+      "started": "2026-10-12T00:38:14.570Z",
+      "load1m": 32.998046875
+    },
+    {
+      "command": "full",
+      "step": "lint",
+      "started": "2026-10-12T00:38:14.997Z",
+      "load1m": 32.998046875
+    },
+    {
+      "command": "full",
+      "step": "typecheck",
+      "started": "2026-10-12T00:38:14.999Z",
+      "load1m": 32.998046875
+    },
+    {
+      "command": "full",
+      "step": "typecheck-node",
+      "started": "2026-10-12T00:38:14.999Z",
+      "load1m": 32.998046875
+    },
+    {
+      "command": "full",
+      "step": "import-cycles",
+      "started": "2026-10-12T00:38:15.000Z",
+      "load1m": 32.998046875
+    },
+    {
+      "command": "full",
+      "step": "knip",
+      "started": "2026-10-12T00:38:15.001Z",
+      "load1m": 32.998046875
+    },
+    {
+      "command": "full",
+      "step": "friction-records",
+      "started": "2026-10-12T00:38:15.001Z",
+      "load1m": 32.998046875
+    },
+    {
+      "command": "full",
+      "step": "test",
+      "started": "2026-10-12T00:38:36.629Z",
+      "load1m": 31.9599609375
+    },
+    {
+      "command": "full",
+      "step": "bundle",
+      "started": "2026-10-12T00:39:26.303Z",
+      "load1m": 20.16259765625
+    },
+    {
+      "command": "full",
+      "step": "restore-local-assets",
+      "started": "2026-10-12T00:39:29.104Z",
+      "load1m": 19.0283203125
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final successful npm run review invocation; starting prepare/typecheck/lint sample (review-final.log).",
+        "value": 23.93212890625
+      },
+      "implementMin": {
+        "measuredFor": "Original dispatch through final pre-commit temporal/provenance preparation, including research, implementation ACK wait, validation/resource queues and parent COMMIT ACK wait. Actual commit wall and final elapsed interval are retained in external sidecars."
+      },
+      "localValidationS": {
+        "measuredFor": "Observed outer command wall times. Full includes heavy-slot queue; sweep and judged include native browser-lease queues. Failed checks and expected negative are separate command records."
+      }
+    }
+  },
+  "validation": {
+    "baseline": {
+      "files": 2,
+      "tests": 25,
+      "exit": 0
+    },
+    "focused": {
+      "files": 2,
+      "tests": 32,
+      "exit": 0
+    },
+    "finalReviewRelated": {
+      "files": 4,
+      "tests": 66,
+      "exit": 0
+    },
+    "full": {
+      "files": 337,
+      "tests": 4294,
+      "exit": 0,
+      "runs": 1,
+      "firstPrepareUtc": "2026-10-12T00:38:14.570Z",
+      "outerBeforeFirstPrepareS": 80.607025,
+      "beforePrepareScope": "Upper bound including native heavy-slot wait plus command startup, rather than an invented pure lock-wait duration.",
+      "testStepS": 49.7
+    },
+    "knipExit": 0,
+    "weightedFuzz": "Not required for zero authored entities and QA evidence classification; no engine or game-rule changes.",
+    "frictionSchemaExit": 0
+  },
+  "expectedNegative": {
+    "baselineSha256": "af1746cfed152317c2d3c875d1358b0d071ea62a5dbb4aa7d305659de898d3b4",
+    "fixedSha256": "c2e64aaa5099c13553ed348b212cf382e0497e4085c90c7017da35feca89995e",
+    "restoredSha256": "c2e64aaa5099c13553ed348b212cf382e0497e4085c90c7017da35feca89995e",
+    "expectedExit": 1,
+    "actualExit": 1,
+    "restored": true,
+    "contract": "Original scenario produces timeout plus three derivative product failures before draw; the added public retry contract fails with actual exit 1. Fixed scenario bytes restored exactly."
+  },
+  "failedAttempts": [
+    {
+      "command": "review",
+      "exit": 1,
+      "classification": "Authored synthetic-host require-await lint errors; direct Promise methods corrected and final review/full pass. Retained outside semantic QA ledger."
+    },
+    {
+      "command": "negative",
+      "exit": 1,
+      "classification": "Expected deterministic regression reproduction on original scenario, outside semantic QA ledger."
+    }
+  ],
+  "ordinaryPreservation": {
+    "scenarioOrdinaryBytesEqual": true,
+    "scenarioSha256": "1b762e0862f3850b537a9b3cb45fab22b41fd41ab64ced64c7754edbcdae577a",
+    "nodeOrdinaryBytesEqual": true,
+    "nodeSha256": "55f8995adb927bb74062c7511aff8350ec5bb7530b2362ea4caaa522130f6133"
+  },
+  "qa": {
+    "controls": [
+      {
+        "uuid": "9954cede-8a16-4053-b6e9-da745f4540f5",
+        "side": "player",
+        "energy": 0,
+        "gameId": "zctvkn",
+        "rows": 29,
+        "filename": "control-9954cede-8a16-4053-b6e9-da745f4540f5-player-zctvkn.jsonl",
+        "verdict": "pending"
+      },
+      {
+        "uuid": "9954cede-8a16-4053-b6e9-da745f4540f5",
+        "side": "enemy",
+        "energy": 0,
+        "gameId": "c3mgcv",
+        "rows": 28,
+        "filename": "control-9954cede-8a16-4053-b6e9-da745f4540f5-enemy-c3mgcv.jsonl",
+        "verdict": "pending"
+      },
+      {
+        "uuid": "662b7393-751c-4aa9-8150-5f20b4d176a4",
+        "side": "player",
+        "energy": 2,
+        "gameId": "z3s74y",
+        "rows": 29,
+        "filename": "control-662b7393-751c-4aa9-8150-5f20b4d176a4-player-z3s74y.jsonl",
+        "verdict": "pending"
+      },
+      {
+        "uuid": "662b7393-751c-4aa9-8150-5f20b4d176a4",
+        "side": "enemy",
+        "energy": 2,
+        "gameId": "i3r4dv",
+        "rows": 29,
+        "filename": "control-662b7393-751c-4aa9-8150-5f20b4d176a4-enemy-i3r4dv.jsonl",
+        "verdict": "pending"
+      },
+      {
+        "uuid": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "side": "player",
+        "energy": null,
+        "gameId": "vy9jcu",
+        "rows": 28,
+        "filename": "control-e83014d3-9d35-4e80-a1b3-9b25360ad2af-player-vy9jcu.jsonl",
+        "verdict": "pass"
+      },
+      {
+        "uuid": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "side": "enemy",
+        "energy": null,
+        "gameId": "59gr6b",
+        "rows": 31,
+        "filename": "control-e83014d3-9d35-4e80-a1b3-9b25360ad2af-enemy-59gr6b.jsonl",
+        "verdict": "pass"
+      }
+    ],
+    "preflightCounts": {
+      "pass": 2,
+      "pending": 4,
+      "fail": 0
+    },
+    "sweepSummary": {
+      "event": "cardSweepSummary",
+      "counts": {
+        "pending": 4,
+        "pass": 2
+      },
+      "attemptCounts": {
+        "pending": 4,
+        "pass": 2
+      },
+      "hostLoad": 20.71875,
+      "sessions": 3,
+      "leaseYields": 2,
+      "wallMs": {
+        "browserLeaseWait": 342580,
+        "serve": 3487,
+        "scenario": 54741.430916,
+        "cleanup": 783.2580410000664,
+        "execution": 59055.420459000045,
+        "total": 401635.42045900004
+      }
+    },
+    "judged": {
+      "report": "dreamwell-evidence.result.json",
+      "caps": [],
+      "error": null,
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 172622,
+        "serve": 1253,
+        "scenario": 29256,
+        "total": 203158
+      },
+      "serverPid": 26215,
+      "port": 5174
+    },
+    "ledgerModes": [
+      "sweep",
+      "judged"
+    ],
+    "captures": [],
+    "presentationScope": "Existing controls and presentation; six native control workflows and durable logs suffice. No authored entities or new visual states.",
+    "logProvenance": "Bundled native scenario reads each game before next navigation/context close; complete JSONL lines retained in raw result and per-game control files. CLI sweep raw reports retain actual ordered probe evidence; bundled log games are distinct control executions.",
+    "browserLeaseWaitTotalS": 515.202
+  },
+  "resources": {
+    "at": "2026-10-12T00:46:35.534608+00:00",
+    "recordedPids": [
+      336,
+      433,
+      1443,
+      15165,
+      20764,
+      24537,
+      24538,
+      24546,
+      24556,
+      24559,
+      24653,
+      24665,
+      24679,
+      24767,
+      26207,
+      26209,
+      26215,
+      26220,
+      26237,
+      26352,
+      26357,
+      26384,
+      34393,
+      35876,
+      35877,
+      35878,
+      35879,
+      35881,
+      35896,
+      35897,
+      41503,
+      41517,
+      44568,
+      44580,
+      44657,
+      44672,
+      46110,
+      46123,
+      48291,
+      48312,
+      48335,
+      48394,
+      48397,
+      48422,
+      48423,
+      48424,
+      48425,
+      48426,
+      48438,
+      48983,
+      54492,
+      54503,
+      54525,
+      54590,
+      54598,
+      54646,
+      54647,
+      54648,
+      54649,
+      54650,
+      54666,
+      55493,
+      57230,
+      57240,
+      57260,
+      57321,
+      57327,
+      57370,
+      57550,
+      58980,
+      59012,
+      59544,
+      62666,
+      62761,
+      76671,
+      77221,
+      80191,
+      80192,
+      80200,
+      80218,
+      80224,
+      80409,
+      80487,
+      81902,
+      81940,
+      82013,
+      82016,
+      82138,
+      82139,
+      82140,
+      82141,
+      82142,
+      87504,
+      87553,
+      87668,
+      87669,
+      87679,
+      87777,
+      87905,
+      87932,
+      87933,
+      87941,
+      88096,
+      88243,
+      88423,
+      88424,
+      88442,
+      88604,
+      88605,
+      88618,
+      88753,
+      88754,
+      88775,
+      88914,
+      88939,
+      89007,
+      89121,
+      89122,
+      89141,
+      89249,
+      89311,
+      89359,
+      89448,
+      89449,
+      89454,
+      89576,
+      94487,
+      94535,
+      94641,
+      94681,
+      94740,
+      94787,
+      94833,
+      94893,
+      94955,
+      94978,
+      95003,
+      95121,
+      96985,
+      97001,
+      97015,
+      97036,
+      97054,
+      97101,
+      97102,
+      97136,
+      97153,
+      97154,
+      97171,
+      97188,
+      97263,
+      97265
+    ],
+    "liveRecordedProcesses": [],
+    "psExit": 1,
+    "ownNativeServerGroups": [
+      80200,
+      24546,
+      35878,
+      26215
+    ],
+    "currentBrowserOwner": {
+      "token": "61246dfd-b21e-425f-879a-404f3edaf6bc",
+      "pid": 40108,
+      "bead": "hv-umm2.454",
+      "label": "greedy-threshold",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-454-greedy-dusk",
+      "startedAt": "2026-10-12T00:44:19.957Z",
+      "providerState": "active"
+    },
+    "ownProviderRecordCleared": true,
+    "port5174": {
+      "exit": 0,
+      "listeners": "COMMAND   PID   USER   FD   TYPE           DEVICE SIZE/OFF NODE NAME\nnode    42209 dthurn   34u  IPv4 0x526605b23e5cdf      0t0  TCP 127.0.0.1:5174 (LISTEN)\n"
+    },
+    "cleanupScope": "Native runners stopped only their own server groups, confirmed browser_close and joined provider RPCs before clearing own owner records. Shared MCP and peer resources retained.",
+    "runningObserverSidecars": [],
+    "initialProcessMeasurementLimit": "Initial install/baseline exact PID/outer wall unavailable; both tool sessions reached actual exit 0. No active initial command remains."
+  },
+  "commitProtocol": {
+    "sourceFreeze": "All source/test/evidence content and QA resources freeze before parent COMMIT ACK. Only friction/measurement temporal/provenance fields update immediately before the one detailed Conventional Commit.",
+    "actualCommitSidecar": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/456-implementation-evidence/commit.json"
+  },
+  "finalPreparationUtc": "2026-10-12T00:48:41.908377+00:00",
+  "parentCommitAck": {
+    "authority": "Parent /root FINAL COMMIT ACK",
+    "verified": "Exact eight paths/hashes, index==worktree, base, 19 QA artifacts, ordinary suffixes, canonical rows, persisted UUID/side/energy logs and fresh152PID absence.",
+    "acceptedFrozenPatchSha256": "bfa73c6a14092103979da45103475dfc11dfa8fe74a469125165d787eb382e73",
+    "preparationUtc": "2026-10-12T00:48:41.908377+00:00"
+  }
+}

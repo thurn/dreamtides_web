@@ -37,7 +37,7 @@ export interface DreamwellLabPreflightResult {
   readonly variant: "base";
   readonly entityKind: "dreamwell";
   readonly verdict: "pass" | "pending" | "fail";
-  readonly reason: "fixtureFailed" | "engineError" | "stalled" | "missingDraw" | null;
+  readonly reason: "fixtureFailed" | "engineError" | "stalled" | "missingDraw" | "missingDay" | "energyMismatch" | null;
   readonly detail: string | null;
   readonly instance: null;
   readonly zone: null;
@@ -45,6 +45,22 @@ export interface DreamwellLabPreflightResult {
   readonly answers: number;
   readonly passes: number;
   readonly events: readonly EngineEvent[];
+}
+
+/** Ordered public evidence, accumulated across normal intent/answer publications. */
+export function dreamwellLabEvidence(
+  events: readonly EngineEvent[],
+  request: DreamwellLabRequest,
+  catalogEnergy: number,
+): "missingDraw" | "missingDay" | "energyMismatch" | null {
+  const drawIndex = events.findIndex((event) => event.kind === "dreamwellDrawn" && event.side === request.side && event.card === request.cardId);
+  if (drawIndex < 0) return "missingDraw";
+  const draw = events[drawIndex];
+  const later = events.slice(drawIndex + 1);
+  const refresh = later.find((event) => event.kind === "energyChanged" && event.side === request.side && event.cause === "refresh");
+  if (draw.kind !== "dreamwellDrawn" || draw.energyAdded !== catalogEnergy || refresh?.kind !== "energyChanged" || refresh.maxChange !== catalogEnergy) return "energyMismatch";
+  if (!later.some((event) => (event.kind === "phaseChanged" && event.active === request.side && event.phase === "day") || event.kind === "battleEnded")) return "missingDay";
+  return null;
 }
 
 /** Enters the requested side's next turn through normal passes and answers. */
@@ -84,7 +100,10 @@ export function runDreamwellLabPreflight(
       if (outcome.error !== null) return result("fail", "engineError", outcome.error.message);
       if (pending === null) passes++; else answers++;
     }
-    return result(engine.catalog.dreamwellCard(request.cardId).status === "pending" ? "pending" : "pass");
+    const definition = engine.catalog.dreamwellCard(request.cardId);
+    const evidenceFailure = dreamwellLabEvidence(events, request, definition.energyAdded);
+    if (evidenceFailure !== null) return result("fail", evidenceFailure, "Requested Dreamwell draw lacks matching normal-turn evidence");
+    return result(definition.status === "pending" ? "pending" : "pass");
   } catch (error) {
     return result("fail", fixture ? "fixtureFailed" : "engineError", error instanceof Error ? error.message : String(error));
   }

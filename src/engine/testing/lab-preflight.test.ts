@@ -2,6 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { createCatalog, type EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
+import type { EngineEvent } from "../events";
 import { abandonCost, additionalCost, energyX, event, everyIn, fromVoid, x } from "../dsl/builders";
 import { copiableCostOf } from "../continuous/characteristics";
 import { materialize } from "../effects/primitives/materialize";
@@ -10,7 +11,7 @@ import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
 import { LAB, PROMPT_LAB_DEFINITIONS } from "./prompt-lab";
 import { parseCardSubtype } from "../../types/card-identity";
 import { cardLabBattle } from "./card-lab";
-import { runCardLabPreflight, runDreamwellLabPreflight } from "./lab-preflight";
+import { dreamwellLabEvidence, runCardLabPreflight, runDreamwellLabPreflight } from "./lab-preflight";
 import { labBoard } from "./lab-solver";
 import { STACK } from "./stack-cards";
 import { SYNTHETIC, SYNTHETIC_DREAMWELL, syntheticId, testCatalog } from "./synthetic-cards";
@@ -29,13 +30,47 @@ describe("node Dreamwell lab preflight", () => {
       expect(result.events.filter((event) => event.kind === "dreamwellDrawn")).toEqual([
         { kind: "dreamwellDrawn", side, card: definition.id, energyAdded: definition.energyAdded },
       ]);
+      expect(dreamwellLabEvidence(result.events, { cardId: definition.id, side }, definition.energyAdded)).toBeNull();
     });
   }
   it("classifies an unavailable fixture and an invalid intent budget", () => {
     const source = { cardId: catalog[0], side: "player" as const };
     expect(runDreamwellLabPreflight(labEngine, source, catalog.slice(1))).toMatchObject({ verdict: "fail", reason: "fixtureFailed", events: [], drawn: false });
     expect(runDreamwellLabPreflight(labEngine, source, catalog, 0)).toMatchObject({ verdict: "fail", reason: "stalled", events: [], drawn: false });
+    const stalled = { ...labEngine, decision: () => null };
+    expect(runDreamwellLabPreflight(stalled, source, catalog)).toMatchObject({ verdict: "fail", reason: "missingDraw", events: [], drawn: false });
+    const failed = { ...labEngine, decision: () => { throw new Error("synthetic engine failure"); } };
+    expect(runDreamwellLabPreflight(failed, source, catalog)).toMatchObject({ verdict: "fail", reason: "engineError", events: [], drawn: false });
   });
+
+  for (const side of ["player", "enemy"] as const) for (const energy of [0, 2]) {
+    it(`validates ordered ${side} evidence across publications with catalog energy ${energy}`, () => {
+      const source = { cardId: catalog[6], side };
+      const other = side === "player" ? "enemy" : "player";
+      const draw: EngineEvent = { kind: "dreamwellDrawn", side, card: source.cardId, energyAdded: energy };
+      const refresh: EngineEvent = { kind: "energyChanged", side, cause: "refresh", current: 2 + energy, max: 2 + energy, change: energy, maxChange: energy };
+      const day: EngineEvent = { kind: "phaseChanged", active: side, phase: "day" };
+      const ended: EngineEvent = { kind: "battleEnded", result: { kind: "draw", reason: "turnLimit" } };
+      // A draw publication can precede the answer batch containing refresh
+      // and Day. Later phase evidence does not invalidate the observed Day.
+      const publications: readonly (readonly EngineEvent[])[] = [[refresh, day], [draw], [refresh, day], [{ kind: "phaseChanged", active: side, phase: "dusk" }]];
+      expect(dreamwellLabEvidence(publications.flat(), source, energy)).toBeNull();
+      expect(dreamwellLabEvidence([draw, refresh, ended], source, energy)).toBeNull();
+      for (const events of [[], [{ ...draw, card: catalog[7] }], [{ ...draw, side: other }]] as readonly EngineEvent[][]) {
+        expect(dreamwellLabEvidence(events, source, energy)).toBe("missingDraw");
+      }
+      for (const events of [[day, draw, refresh], [draw, refresh, { ...day, active: other }], [ended, draw, refresh]] as readonly EngineEvent[][]) {
+        expect(dreamwellLabEvidence(events, source, energy)).toBe("missingDay");
+      }
+      for (const events of [
+        [refresh, draw, day], [draw, { ...refresh, side: other }, day],
+        [draw, { ...refresh, cause: "payment" }, day], [draw, { ...refresh, maxChange: energy + 1 }, refresh, day],
+        [{ ...draw, energyAdded: energy + 1 }, refresh, day],
+      ] as readonly EngineEvent[][]) {
+        expect(dreamwellLabEvidence(events, source, energy)).toBe("energyMismatch");
+      }
+    });
+  }
 });
 
 describe("node card-lab preflight", () => {

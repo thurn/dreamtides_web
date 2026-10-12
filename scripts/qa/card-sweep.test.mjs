@@ -25,7 +25,97 @@ async function cell(outcomes, closed = false) {
   return { result, records, saved };
 }
 
+/**
+ * A public scenario host with synthetic, ordered probe evidence and a typed deadline.
+ * @param {{ draw?: Record<string, unknown> | null, refresh?: Record<string, unknown> | null, next?: number, errors?: string[], timeout?: boolean, suspended?: boolean }} [options]
+ */
+async function dreamwellScenario({ draw = null, refresh = null, next = 0, errors = [], timeout = true, suspended = false } = {}) {
+  const uuid = "5e5e5e5e-0000-4000-8000-000000000e06";
+  const deadline = Object.assign(new Error("synthetic deadline"), { name: "QaTimeoutError" });
+  const lab = { card: uuid, status: "ready", reason: null, detail: null, eligibleVariants: ["base"], entityKind: "dreamwell", cardStatus: "pending", cardType: "Dreamwell" };
+  const events = [draw, refresh, { kind: "phaseChanged", active: "enemy", phase: "day" }]
+    .filter((event) => event !== null).map((event, index) => ({ seq: 7, index, event }));
+  vi.stubGlobal("window", { __cardLab: lab, __engineProbe: {
+    slice: { committed: { stack: [], result: null, turn: { active: "enemy", phase: "dusk" }, dreamwell: { next }, sides: { enemy: { currentEnergy: 2, maxEnergy: 2 } } }, inFlight: suspended ? {} : null },
+    decision: { side: "player" }, pending: suspended ? { kind: "chooseCards", side: "player", id: "synthetic-prompt" } : null, events,
+  } });
+  try {
+    const qa = /** @type {import("./prelude.mjs").Qa} */ (/** @type {unknown} */ ({
+      args: { card: uuid, variant: "base", as: "enemy" }, viewport: { width: 1440, height: 900 },
+      open: async () => {}, waitVisible: async () => {},
+      waitFor: (/** @type {string} */ _label, /** @type {() => unknown} */ observe) => Promise.resolve(observe()),
+      read: (/** @type {(arg: unknown) => unknown} */ observe, /** @type {unknown} */ arg) => Promise.resolve(observe(arg)),
+      caps: () => Promise.resolve({ errors, rejections: [], consoleErrors: [] }),
+      isTimeout: (/** @type {unknown} */ error) => error === deadline,
+      battle: { playUntil: () => timeout ? Promise.reject(deadline) : Promise.resolve({ answers: 0, passes: 1 }) },
+    }));
+    return { ...report(), result: await cardLabPlay(qa) };
+  } finally { vi.unstubAllGlobals(); }
+}
+
 describe("sweep cell attempts", () => {
+  it("retries an interrupted Dreamwell before its draw once, retaining both actual scenario reports", async () => {
+    const timeout = await dreamwellScenario();
+    expect(timeout.result).toMatchObject({ verdict: "fail", failureKinds: ["timeout"], drawn: null, refresh: null });
+    const draw = { kind: "dreamwellDrawn", side: "enemy", card: "5e5e5e5e-0000-4000-8000-000000000e06", energyAdded: 0 };
+    const refresh = { kind: "energyChanged", side: "enemy", cause: "refresh", maxChange: 0 };
+    const success = await dreamwellScenario({ draw, refresh, next: 1, timeout: false });
+    const retried = await cell([timeout, success]);
+    expect(retried.saved).toEqual([timeout, success]);
+    expect(retried.records.map(({ effective }) => effective)).toEqual([false, true]);
+    expect(retried.result.verdict).toBe("pending");
+    const exhausted = await cell([timeout, timeout, success]);
+    expect(exhausted.saved).toEqual([timeout, timeout]);
+    expect(exhausted.result.verdict).toBe("fail");
+  });
+
+  it("preserves witnessed Dreamwell contradictions and caps errors on a deadline without retry", async () => {
+    const draw = { kind: "dreamwellDrawn", side: "enemy", card: "5e5e5e5e-0000-4000-8000-000000000e06", energyAdded: 0 };
+    for (const fault of [
+      { errors: ["synthetic caps failure"] },
+      { draw: { ...draw, side: "player" }, next: 1 },
+      { draw: { ...draw, card: "5e5e5e5e-0000-4000-8000-000000000e07" }, next: 1 },
+      { draw, refresh: { kind: "energyChanged", side: "enemy", cause: "refresh", maxChange: 2 }, next: 1 },
+      { draw, next: 0 },
+    ]) {
+      const mixed = await dreamwellScenario(fault);
+      expect(mixed.result.failureKinds).toContain("timeout");
+      expect(mixed.result.failureKinds).toContain("product");
+      const result = await cell([mixed, report([], "pass")]);
+      expect(result.saved).toEqual([mixed]);
+      expect(result.result.verdict).toBe("fail");
+    }
+    expect((await dreamwellScenario({ draw, next: 1 })).result.failureKinds).toEqual(["timeout"]);
+    const suspended = await dreamwellScenario({ draw, next: 0, suspended: true });
+    expect(suspended.result.failureKinds).toEqual(["timeout"]);
+    expect((await cell([suspended, report([], "pass")])).saved).toHaveLength(2);
+  });
+
+  it("preserves the ordinary card timeout's missing-resolution product failure", async () => {
+    const uuid = "5e5e5e5e-0000-4000-8000-000000000001";
+    const lab = { card: uuid, status: "ready", reason: null, detail: null, eligibleVariants: ["base"], entityKind: "card", cardStatus: "vanilla", cardType: "Event" };
+    const deadline = new Error("synthetic deadline");
+    let reads = 0;
+    vi.stubGlobal("window", { __cardLab: lab, __engineProbe: {
+      slice: { committed: { instances: { i1: { id: "i1", owner: "enemy", zone: "void", printing: { kind: "card", cardId: uuid } } }, stack: [], result: null }, inFlight: null },
+      decision: { side: "enemy" }, pending: null, events: [],
+    } });
+    try {
+      const qa = /** @type {import("./prelude.mjs").Qa} */ (/** @type {unknown} */ ({
+        args: { card: uuid, variant: "base", as: "enemy" }, viewport: { width: 1440, height: 900 },
+        open: async () => {}, waitVisible: async () => {}, sleep: async () => {}, note: () => {},
+        waitFor: (/** @type {string} */ _label, /** @type {() => unknown} */ observe) => Promise.resolve(observe()),
+        read: (/** @type {(arg: unknown) => unknown} */ observe, /** @type {unknown} */ arg) => Promise.resolve(observe(arg)),
+        caps: () => Promise.resolve({ errors: [], rejections: [], consoleErrors: [] }),
+        isTimeout: (/** @type {unknown} */ error) => error === deadline,
+        battle: { state: () => Promise.resolve({ board: String(reads++), canPass: true }), playUntil: () => Promise.reject(deadline) },
+      }));
+      const result = await cardLabPlay(qa);
+      expect(result).toMatchObject({ verdict: "fail", failureKinds: ["timeout", "product"] });
+      expect((await cell([{ ...report(), result }, report([], "pass")])).saved).toHaveLength(1);
+    } finally { vi.unstubAllGlobals(); }
+  });
+
   for (const invalid of [null, "splitBatch", "wrongDaySide", "missingDraw"]) it(`checks durable normal-turn draw evidence at Dusk (${String(invalid)})`, async () => {
     const uuid = "5e5e5e5e-0000-4000-8000-000000000e06";
     const lab = { card: uuid, status: "ready", reason: null, detail: null, eligibleVariants: ["base"], entityKind: "dreamwell", cardStatus: "pending", cardType: "Dreamwell" };
