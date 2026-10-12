@@ -1,0 +1,1360 @@
+{
+  "bead": "hv-umm2.137",
+  "dispatch": "2026-10-12T01:22:40.231917Z",
+  "base": "2dd2893b9b48e70ccef6e2a47c44a6101ff6a37c",
+  "window": {
+    "through": "2026-10-12T01:39:45.939417+00:00",
+    "commitEnd": "Actual commit end retained externally in commit-runtime.json; immutable commit cannot contain its own end.",
+    "dispatchToCommitPreparationMin": 17.095125,
+    "commitPreparation": "Immediately before authorized exact staging/commit; original dispatch includes research, all waits and final parent audit. Actual commit process start/end/exit/PID are retained by external commit-runtime.json."
+  },
+  "commandRecords": {
+    "install": {
+      "label": "install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25",
+      "pid": 35244,
+      "pgid": 35244,
+      "observerPid": 35232,
+      "started": "2026-10-12T01:23:42.174779+00:00",
+      "finished": "2026-10-12T01:23:44.925609+00:00",
+      "elapsedS": 2.750726249998479,
+      "exit": 0,
+      "startLoad": [
+        23.25244140625,
+        22.95654296875,
+        20.39501953125
+      ],
+      "endLoad": [
+        22.83154296875,
+        22.8740234375,
+        20.380859375
+      ],
+      "observedPids": [
+        35244,
+        35426,
+        35430
+      ],
+      "processes": [
+        {
+          "pid": 35244,
+          "ppid": 35232,
+          "pgid": 35244,
+          "command": "<defunct>"
+        },
+        {
+          "pid": 35426,
+          "ppid": 35244,
+          "pgid": 35244,
+          "command": "node install.js"
+        },
+        {
+          "pid": 35430,
+          "ppid": 35426,
+          "pgid": 35244,
+          "command": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/esbuild/bin/esbuild --version"
+        }
+      ]
+    },
+    "focused": {
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25",
+      "pid": 47887,
+      "pgid": 47887,
+      "observerPid": 47869,
+      "started": "2026-10-12T01:25:48.376977+00:00",
+      "finished": "2026-10-12T01:25:55.619000+00:00",
+      "elapsedS": 7.241851000000679,
+      "exit": 0,
+      "startLoad": [
+        21.36962890625,
+        22.10498046875,
+        20.4033203125
+      ],
+      "endLoad": [
+        21.90185546875,
+        22.19873046875,
+        20.45654296875
+      ],
+      "observedPids": [
+        47887,
+        47909,
+        47973,
+        47977,
+        47990,
+        48089,
+        48110,
+        48500
+      ],
+      "processes": [
+        {
+          "pid": 47887,
+          "ppid": 47869,
+          "pgid": 47887,
+          "command": "<defunct>"
+        },
+        {
+          "pid": 47909,
+          "ppid": 47887,
+          "pgid": 47887,
+          "command": "node scripts/review.mjs test src/engine/triggers/triggers.test.ts src/engine/triggers/triggers-patterns.test.ts src/engine/triggers/triggers-dissolved.test.ts src/engine/effects/primitives/contracts.test.ts"
+        },
+        {
+          "pid": 47973,
+          "ppid": 47909,
+          "pgid": 47887,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/prepare-workspace.mjs"
+        },
+        {
+          "pid": 47977,
+          "ppid": 47973,
+          "pgid": 47887,
+          "command": "(node)"
+        },
+        {
+          "pid": 47990,
+          "ppid": 47977,
+          "pgid": 47887,
+          "command": "<defunct>"
+        },
+        {
+          "pid": 48089,
+          "ppid": 47909,
+          "pgid": 47887,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/vitest/vitest.mjs run src/engine/triggers/triggers.test.ts src/engine/triggers/triggers-patterns.test.ts src/engine/triggers/triggers-dissolved.test.ts src/engine/effects/primitives/contracts.test.ts"
+        },
+        {
+          "pid": 48110,
+          "ppid": 48089,
+          "pgid": 47887,
+          "command": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+        },
+        {
+          "pid": 48500,
+          "ppid": 47909,
+          "pgid": 47887,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/setup-assets.ts"
+        }
+      ]
+    },
+    "coverage": {
+      "label": "coverage",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25",
+      "pid": 53325,
+      "pgid": 53325,
+      "observerPid": 53310,
+      "started": "2026-10-12T01:26:46.241902+00:00",
+      "finished": "2026-10-12T01:26:49.730112+00:00",
+      "elapsedS": 3.488082707999638,
+      "exit": 0,
+      "startLoad": [
+        17.9912109375,
+        21.2705078125,
+        20.2216796875
+      ],
+      "endLoad": [
+        17.9912109375,
+        21.2705078125,
+        20.2216796875
+      ],
+      "observedPids": [
+        53325,
+        53345,
+        53406,
+        53411,
+        53476,
+        53507,
+        53682
+      ],
+      "processes": [
+        {
+          "pid": 53325,
+          "ppid": 53310,
+          "pgid": 53325,
+          "command": "<defunct>"
+        },
+        {
+          "pid": 53345,
+          "ppid": 53325,
+          "pgid": 53325,
+          "command": "node scripts/review.mjs test src/engine/content-gates.test.ts"
+        },
+        {
+          "pid": 53406,
+          "ppid": 53345,
+          "pgid": 53325,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/prepare-workspace.mjs"
+        },
+        {
+          "pid": 53411,
+          "ppid": 53406,
+          "pgid": 53325,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/setup-assets.ts"
+        },
+        {
+          "pid": 53476,
+          "ppid": 53345,
+          "pgid": 53325,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/vitest/vitest.mjs run src/engine/content-gates.test.ts"
+        },
+        {
+          "pid": 53507,
+          "ppid": 53476,
+          "pgid": 53325,
+          "command": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+        },
+        {
+          "pid": 53682,
+          "ppid": 53345,
+          "pgid": 53325,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/setup-assets.ts"
+        }
+      ]
+    },
+    "preflight": {
+      "label": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "290ea9db-0340-4838-842a-0dea09b5340a,91d9afed-ea29-43af-9021-0f3ecbdc252e,0d867086-8413-40c3-820f-1a5de486577e,37d9165f-2b3a-44a2-848b-401cf4466a7c,4644db03-fbcd-4af5-a229-17962ce093d5,ffec9fdd-d948-4756-b7df-39b9e982613e"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25",
+      "pid": 48955,
+      "pgid": 48955,
+      "observerPid": 48941,
+      "started": "2026-10-12T01:26:00.500485+00:00",
+      "finished": "2026-10-12T01:26:01.282522+00:00",
+      "elapsedS": 0.7818297920002806,
+      "exit": 0,
+      "startLoad": [
+        22.95068359375,
+        22.4111328125,
+        20.54150390625
+      ],
+      "endLoad": [
+        22.95068359375,
+        22.4111328125,
+        20.54150390625
+      ],
+      "observedPids": [
+        48955,
+        48975,
+        48980,
+        48988
+      ],
+      "processes": [
+        {
+          "pid": 48955,
+          "ppid": 48941,
+          "pgid": 48955,
+          "command": "(node)"
+        },
+        {
+          "pid": 48975,
+          "ppid": 48955,
+          "pgid": 48955,
+          "command": "(node)"
+        },
+        {
+          "pid": 48980,
+          "ppid": 48975,
+          "pgid": 48955,
+          "command": "(node)"
+        },
+        {
+          "pid": 48988,
+          "ppid": 48980,
+          "pgid": 48955,
+          "command": "(esbuild)"
+        }
+      ]
+    },
+    "fuzz": {
+      "label": "fuzz",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "290ea9db-0340-4838-842a-0dea09b5340a,91d9afed-ea29-43af-9021-0f3ecbdc252e,0d867086-8413-40c3-820f-1a5de486577e,37d9165f-2b3a-44a2-848b-401cf4466a7c,4644db03-fbcd-4af5-a229-17962ce093d5,ffec9fdd-d948-4756-b7df-39b9e982613e"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25",
+      "pid": 49055,
+      "pgid": 49055,
+      "observerPid": 49044,
+      "started": "2026-10-12T01:26:01.337218+00:00",
+      "finished": "2026-10-12T01:28:12.399227+00:00",
+      "elapsedS": 131.06118195800082,
+      "exit": 0,
+      "startLoad": [
+        22.95068359375,
+        22.4111328125,
+        20.54150390625
+      ],
+      "endLoad": [
+        17.44189453125,
+        19.9697265625,
+        19.80322265625
+      ],
+      "observedPids": [
+        49055,
+        49058,
+        49077,
+        49081,
+        49093
+      ],
+      "processes": [
+        {
+          "pid": 49055,
+          "ppid": 49044,
+          "pgid": 49055,
+          "command": "(lockf)"
+        },
+        {
+          "pid": 49058,
+          "ppid": 49055,
+          "pgid": 49055,
+          "command": "(node)"
+        },
+        {
+          "pid": 49077,
+          "ppid": 49058,
+          "pgid": 49055,
+          "command": "(node)"
+        },
+        {
+          "pid": 49081,
+          "ppid": 49077,
+          "pgid": 49055,
+          "command": "(node)"
+        },
+        {
+          "pid": 49093,
+          "ppid": 49081,
+          "pgid": 49055,
+          "command": "<defunct>"
+        }
+      ]
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25",
+      "pid": 54352,
+      "pgid": 54352,
+      "observerPid": 54342,
+      "started": "2026-10-12T01:26:57.693312+00:00",
+      "finished": "2026-10-12T01:27:47.947431+00:00",
+      "elapsedS": 50.25376512500043,
+      "exit": 0,
+      "startLoad": [
+        16.45458984375,
+        20.8330078125,
+        20.07861328125
+      ],
+      "endLoad": [
+        14.64404296875,
+        19.763671875,
+        19.7314453125
+      ],
+      "observedPids": [
+        54352,
+        54374,
+        54435,
+        54440,
+        54472,
+        54478,
+        54479,
+        54480,
+        54481,
+        54482,
+        54495,
+        58328
+      ],
+      "processes": [
+        {
+          "pid": 54352,
+          "ppid": 54342,
+          "pgid": 54352,
+          "command": "(node)"
+        },
+        {
+          "pid": 54374,
+          "ppid": 54352,
+          "pgid": 54352,
+          "command": "node scripts/review.mjs quick"
+        },
+        {
+          "pid": 54435,
+          "ppid": 54374,
+          "pgid": 54352,
+          "command": "(node)"
+        },
+        {
+          "pid": 54440,
+          "ppid": 54435,
+          "pgid": 54352,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/setup-assets.ts"
+        },
+        {
+          "pid": 54472,
+          "ppid": 54435,
+          "pgid": 54352,
+          "command": "(node)"
+        },
+        {
+          "pid": 54478,
+          "ppid": 54374,
+          "pgid": 54352,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/typescript/bin/tsc --noEmit false --declaration --emitDeclarationOnly --outDir /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/.cache/journey-review/declarations --incremental --tsBuildInfoFile /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/.cache/journey-review/tsconfig.tsbuildinfo"
+        },
+        {
+          "pid": 54479,
+          "ppid": 54374,
+          "pgid": 54352,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/typescript/bin/tsc -p tsconfig.node.json --incremental --tsBuildInfoFile /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/.cache/journey-review/tsconfig.node.tsbuildinfo"
+        },
+        {
+          "pid": 54480,
+          "ppid": 54374,
+          "pgid": 54352,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/import-cycles.mjs"
+        },
+        {
+          "pid": 54481,
+          "ppid": 54374,
+          "pgid": 54352,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/run-eslint.mjs src/content/cards/duskreaper-4644db03.ts src/content/cards/fathomless-maw-0d867086.ts src/content/cards/guide-of-lost-souls-37d9165f.ts src/content/cards/skull-weaver-ffec9fdd.ts src/content/cards/starcatcher-91d9afed.ts src/content/cards/volcanic-channeler-290ea9db.ts"
+        },
+        {
+          "pid": 54482,
+          "ppid": 54374,
+          "pgid": 54352,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/vitest/vitest.mjs related --run --passWithNoTests src/content/cards/duskreaper-4644db03.ts src/content/cards/fathomless-maw-0d867086.ts src/content/cards/guide-of-lost-souls-37d9165f.ts src/content/cards/skull-weaver-ffec9fdd.ts src/content/cards/starcatcher-91d9afed.ts src/content/cards/volcanic-channeler-290ea9db.ts"
+        },
+        {
+          "pid": 54495,
+          "ppid": 54482,
+          "pgid": 54352,
+          "command": "(esbuild)"
+        },
+        {
+          "pid": 58328,
+          "ppid": 54374,
+          "pgid": 54352,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/setup-assets.ts"
+        }
+      ]
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25",
+      "pid": 58723,
+      "pgid": 58723,
+      "observerPid": 58713,
+      "started": "2026-10-12T01:27:52.134676+00:00",
+      "finished": "2026-10-12T01:27:54.844650+00:00",
+      "elapsedS": 2.709865583999999,
+      "exit": 0,
+      "startLoad": [
+        13.79150390625,
+        19.501953125,
+        19.63916015625
+      ],
+      "endLoad": [
+        14.20849609375,
+        19.4931640625,
+        19.63525390625
+      ],
+      "observedPids": [
+        58723,
+        58744,
+        58805,
+        58810,
+        58848,
+        58972
+      ],
+      "processes": [
+        {
+          "pid": 58723,
+          "ppid": 58713,
+          "pgid": 58723,
+          "command": "<defunct>"
+        },
+        {
+          "pid": 58744,
+          "ppid": 58723,
+          "pgid": 58723,
+          "command": "node scripts/review.mjs knip"
+        },
+        {
+          "pid": 58805,
+          "ppid": 58744,
+          "pgid": 58723,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/prepare-workspace.mjs"
+        },
+        {
+          "pid": 58810,
+          "ppid": 58805,
+          "pgid": 58723,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/setup-assets.ts"
+        },
+        {
+          "pid": 58848,
+          "ppid": 58744,
+          "pgid": 58723,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/knip/bin/knip.js"
+        },
+        {
+          "pid": 58972,
+          "ppid": 58744,
+          "pgid": 58723,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/setup-assets.ts"
+        }
+      ]
+    },
+    "schema": {
+      "label": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25",
+      "pid": 41663,
+      "pgid": 41663,
+      "observerPid": 41645,
+      "started": "2026-10-12T01:37:24.939744+00:00",
+      "finished": "2026-10-12T01:37:25.217650+00:00",
+      "elapsedS": 0.2778089589992305,
+      "exit": 0,
+      "startLoad": [
+        17.19677734375,
+        17.0625,
+        18.98828125
+      ],
+      "endLoad": [
+        20.5439453125,
+        17.75830078125,
+        19.22265625
+      ],
+      "observedPids": [
+        41663
+      ],
+      "processes": [
+        {
+          "pid": 41663,
+          "ppid": 41645,
+          "pgid": 41663,
+          "command": "<defunct>"
+        }
+      ]
+    },
+    "sweep": {
+      "label": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.137",
+        "--cards",
+        "290ea9db-0340-4838-842a-0dea09b5340a,91d9afed-ea29-43af-9021-0f3ecbdc252e,0d867086-8413-40c3-820f-1a5de486577e,37d9165f-2b3a-44a2-848b-401cf4466a7c,4644db03-fbcd-4af5-a229-17962ce093d5,ffec9fdd-d948-4756-b7df-39b9e982613e",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25",
+      "pid": 50555,
+      "pgid": 50555,
+      "observerPid": 50519,
+      "started": "2026-10-12T01:26:19.008263+00:00",
+      "finished": "2026-10-12T01:36:36.170125+00:00",
+      "elapsedS": 617.1585376250005,
+      "exit": 0,
+      "startLoad": [
+        22.14013671875,
+        22.259765625,
+        20.51953125
+      ],
+      "endLoad": [
+        6.43212890625,
+        15.916015625,
+        18.7353515625
+      ],
+      "observedPids": [
+        9416,
+        11312,
+        15450,
+        15451,
+        15458,
+        15468,
+        15475,
+        15652,
+        15673,
+        50555,
+        50650,
+        50651,
+        50703,
+        50793,
+        50841,
+        51162,
+        51188
+      ],
+      "processes": [
+        {
+          "pid": 50555,
+          "ppid": 50519,
+          "pgid": 50555,
+          "command": "<defunct>"
+        },
+        {
+          "pid": 50650,
+          "ppid": 50555,
+          "pgid": 50650,
+          "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock /opt/homebrew/Cellar/node@24/24.16.0/bin/node -e process.stdout.write(\"ready\\n\"); process.stdin.resume(); process.stdin.on(\"end\", () => process.exit(0));"
+        },
+        {
+          "pid": 50651,
+          "ppid": 50650,
+          "pgid": 50650,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node -e process.stdout.write(\"ready\\n\"); process.stdin.resume(); process.stdin.on(\"end\", () => process.exit(0));"
+        },
+        {
+          "pid": 50703,
+          "ppid": 50555,
+          "pgid": 50703,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174"
+        },
+        {
+          "pid": 50793,
+          "ppid": 50703,
+          "pgid": 50793,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs"
+        },
+        {
+          "pid": 50841,
+          "ppid": 50793,
+          "pgid": 50793,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/setup-assets.ts"
+        },
+        {
+          "pid": 51162,
+          "ppid": 50703,
+          "pgid": 51162,
+          "command": "node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/.bin/vite --strictPort --port 5174"
+        },
+        {
+          "pid": 51188,
+          "ppid": 51162,
+          "pgid": 51162,
+          "command": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+        },
+        {
+          "pid": 9416,
+          "ppid": 50555,
+          "pgid": 9416,
+          "command": "(lockf)"
+        },
+        {
+          "pid": 11312,
+          "ppid": 50555,
+          "pgid": 11312,
+          "command": "(lockf)"
+        },
+        {
+          "pid": 15450,
+          "ppid": 50555,
+          "pgid": 15450,
+          "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock /opt/homebrew/Cellar/node@24/24.16.0/bin/node -e process.stdout.write(\"ready\\n\"); process.stdin.resume(); process.stdin.on(\"end\", () => process.exit(0));"
+        },
+        {
+          "pid": 15451,
+          "ppid": 15450,
+          "pgid": 15450,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node -e process.stdout.write(\"ready\\n\"); process.stdin.resume(); process.stdin.on(\"end\", () => process.exit(0));"
+        },
+        {
+          "pid": 15458,
+          "ppid": 50555,
+          "pgid": 15458,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174"
+        },
+        {
+          "pid": 15468,
+          "ppid": 15458,
+          "pgid": 15468,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs"
+        },
+        {
+          "pid": 15475,
+          "ppid": 15468,
+          "pgid": 15468,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/scripts/setup-assets.ts"
+        },
+        {
+          "pid": 15652,
+          "ppid": 15458,
+          "pgid": 15652,
+          "command": "node /Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/.bin/vite --strictPort --port 5174"
+        },
+        {
+          "pid": 15673,
+          "ppid": 15652,
+          "pgid": 15652,
+          "command": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+        }
+      ]
+    }
+  },
+  "hostLoadSamples": {
+    "install": {
+      "start": [
+        23.25244140625,
+        22.95654296875,
+        20.39501953125
+      ],
+      "end": [
+        22.83154296875,
+        22.8740234375,
+        20.380859375
+      ]
+    },
+    "focused": {
+      "start": [
+        21.36962890625,
+        22.10498046875,
+        20.4033203125
+      ],
+      "end": [
+        21.90185546875,
+        22.19873046875,
+        20.45654296875
+      ]
+    },
+    "coverage": {
+      "start": [
+        17.9912109375,
+        21.2705078125,
+        20.2216796875
+      ],
+      "end": [
+        17.9912109375,
+        21.2705078125,
+        20.2216796875
+      ]
+    },
+    "preflight": {
+      "start": [
+        22.95068359375,
+        22.4111328125,
+        20.54150390625
+      ],
+      "end": [
+        22.95068359375,
+        22.4111328125,
+        20.54150390625
+      ]
+    },
+    "fuzz": {
+      "start": [
+        22.95068359375,
+        22.4111328125,
+        20.54150390625
+      ],
+      "end": [
+        17.44189453125,
+        19.9697265625,
+        19.80322265625
+      ]
+    },
+    "review": {
+      "start": [
+        16.45458984375,
+        20.8330078125,
+        20.07861328125
+      ],
+      "end": [
+        14.64404296875,
+        19.763671875,
+        19.7314453125
+      ]
+    },
+    "knip": {
+      "start": [
+        13.79150390625,
+        19.501953125,
+        19.63916015625
+      ],
+      "end": [
+        14.20849609375,
+        19.4931640625,
+        19.63525390625
+      ]
+    },
+    "schema": {
+      "start": [
+        17.19677734375,
+        17.0625,
+        18.98828125
+      ],
+      "end": [
+        20.5439453125,
+        17.75830078125,
+        19.22265625
+      ]
+    },
+    "sweep": {
+      "start": [
+        22.14013671875,
+        22.259765625,
+        20.51953125
+      ],
+      "end": [
+        6.43212890625,
+        15.916015625,
+        18.7353515625
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final successful review outer-command starting one-minute host load measured by external observer."
+      },
+      "testDelta": {
+        "measuredFor": "No test or scenario source paths changed; existing public synthetic contracts and coverage executed."
+      }
+    }
+  },
+  "sourceHashes": {
+    "src/content/cards/volcanic-channeler-290ea9db.ts": "e70cebc1dd2cfc8368cd29b58fe6041334c5c747ec1433ad3a2a00ee5ac0f3fd",
+    "src/content/cards/starcatcher-91d9afed.ts": "a5b8949b3cade65acf0d0ffc06204a360ed70edebe64e64ab4ce86b98fa59255",
+    "src/content/cards/fathomless-maw-0d867086.ts": "f96362092394cbb3b4b1294be9025f2c40582a02f234932432cf62b582b0ae6a",
+    "src/content/cards/guide-of-lost-souls-37d9165f.ts": "d93aa3a1bf9a6ce57563ef80754038816b7c8fd27548c2c2b3fb6daf9eb294c0",
+    "src/content/cards/duskreaper-4644db03.ts": "58888589ffa1fb74735703b228e956eb945fc50651eb5411d97ec2dc6f39c17f",
+    "src/content/cards/skull-weaver-ffec9fdd.ts": "feaa570cdb57d1e85358e00bacc030b4162c94d9b8926697ba48629a922bae76"
+  },
+  "immutableCatalogData": {
+    "src/content/cards/volcanic-channeler-290ea9db.ts": {
+      "baseSha256": "c54dc0d45f9b31cc3394bac1e7e802b3bd6d818893c53b4c8898f1eb76e4590c",
+      "implementedSha256": "e70cebc1dd2cfc8368cd29b58fe6041334c5c747ec1433ad3a2a00ee5ac0f3fd",
+      "printedAndCatalogFieldsBytePreserved": true
+    },
+    "src/content/cards/starcatcher-91d9afed.ts": {
+      "baseSha256": "f8e40618cc1797d626e961046d58524ee58b2841a78dfc944b32b43c13c1a694",
+      "implementedSha256": "a5b8949b3cade65acf0d0ffc06204a360ed70edebe64e64ab4ce86b98fa59255",
+      "printedAndCatalogFieldsBytePreserved": true
+    },
+    "src/content/cards/fathomless-maw-0d867086.ts": {
+      "baseSha256": "15654b33f47fd350a1c7d2fc32304529007c724f9ca757823bd1cebc1b5703b8",
+      "implementedSha256": "f96362092394cbb3b4b1294be9025f2c40582a02f234932432cf62b582b0ae6a",
+      "printedAndCatalogFieldsBytePreserved": true
+    },
+    "src/content/cards/guide-of-lost-souls-37d9165f.ts": {
+      "baseSha256": "388736a8528ad95be6d982eb832798d3fccc798597610ecfb9d8630689e5720e",
+      "implementedSha256": "d93aa3a1bf9a6ce57563ef80754038816b7c8fd27548c2c2b3fb6daf9eb294c0",
+      "printedAndCatalogFieldsBytePreserved": true
+    },
+    "src/content/cards/duskreaper-4644db03.ts": {
+      "baseSha256": "b1bf53b698242a08c43276ca52626e29c7c0d3498d903df5c42ac5aced907d10",
+      "implementedSha256": "58888589ffa1fb74735703b228e956eb945fc50651eb5411d97ec2dc6f39c17f",
+      "printedAndCatalogFieldsBytePreserved": true
+    },
+    "src/content/cards/skull-weaver-ffec9fdd.ts": {
+      "baseSha256": "89650584ffcfc6652a93533952b1736d0b9a127c69a9a0635259d764c16cb19a",
+      "implementedSha256": "feaa570cdb57d1e85358e00bacc030b4162c94d9b8926697ba48629a922bae76",
+      "printedAndCatalogFieldsBytePreserved": true
+    }
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 142931,
+    "wallS": 130.5,
+    "cpuS": 140.7,
+    "prompts": 2504,
+    "interactiveReruns": 253,
+    "failures": 0,
+    "replayDivergences": 0,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 0
+    },
+    "targetCoverage": [
+      {
+        "kind": "card",
+        "uuid": "290ea9db-0340-4838-842a-0dea09b5340a",
+        "included": 609,
+        "exercised": 172
+      },
+      {
+        "kind": "card",
+        "uuid": "91d9afed-ea29-43af-9021-0f3ecbdc252e",
+        "included": 617,
+        "exercised": 195
+      },
+      {
+        "kind": "card",
+        "uuid": "0d867086-8413-40c3-820f-1a5de486577e",
+        "included": 619,
+        "exercised": 203
+      },
+      {
+        "kind": "card",
+        "uuid": "37d9165f-2b3a-44a2-848b-401cf4466a7c",
+        "included": 616,
+        "exercised": 227
+      },
+      {
+        "kind": "card",
+        "uuid": "4644db03-fbcd-4af5-a229-17962ce093d5",
+        "included": 618,
+        "exercised": 227
+      },
+      {
+        "kind": "card",
+        "uuid": "ffec9fdd-d948-4756-b7df-39b9e982613e",
+        "included": 609,
+        "exercised": 243
+      }
+    ],
+    "heavySlot": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "outerWallS": 131.06118195800082,
+    "queueWaitS": null,
+    "acquisitionStartupAndObserverOverheadS": 0.5611819580008159,
+    "queueProvenance": "External elapsed time includes acquisition and startup; native fuzzer independently measures execution to 0.1 second. Exact isolated lockwait was not observed and is not inferred from overhead."
+  },
+  "qa": {
+    "preflight": {
+      "event": "labPreflightSummary",
+      "cards": [
+        "290ea9db-0340-4838-842a-0dea09b5340a",
+        "91d9afed-ea29-43af-9021-0f3ecbdc252e",
+        "0d867086-8413-40c3-820f-1a5de486577e",
+        "37d9165f-2b3a-44a2-848b-401cf4466a7c",
+        "4644db03-fbcd-4af5-a229-17962ce093d5",
+        "ffec9fdd-d948-4756-b7df-39b9e982613e"
+      ],
+      "variants": [
+        "base",
+        "amplified",
+        "empowered",
+        "kindled",
+        "resonant",
+        "inspired",
+        "enduring",
+        "hastened",
+        "attuned",
+        "perfected"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "counts": {
+        "pass": 52,
+        "pending": 0,
+        "skip": 68,
+        "fail": 0
+      },
+      "elapsedMs": 29.912791999999968,
+      "hostLoad": 22.95068359375,
+      "enemyMode": "scripted-lab-play-first-legal-prompts"
+    },
+    "sweep": {
+      "event": "cardSweepSummary",
+      "counts": {
+        "pass": 52,
+        "skip": 68
+      },
+      "attemptCounts": {
+        "pass": 52,
+        "skip": 68,
+        "fail": 1
+      },
+      "hostLoad": 22.14013671875,
+      "sessions": 2,
+      "leaseYields": 1,
+      "wallMs": {
+        "browserLeaseWait": 66753,
+        "serve": 3408,
+        "scenario": 541149.0354569999,
+        "cleanup": 489.0289580000681,
+        "execution": 545088.783666,
+        "total": 611841.783666
+      }
+    },
+    "ledger": {
+      "rows": 121,
+      "effectivePass": 52,
+      "effectiveSkip": 68,
+      "effectiveFail": 0,
+      "attemptPass": 52,
+      "attemptSkip": 68,
+      "attemptFail": 1,
+      "retries": 1
+    },
+    "judged": {
+      "count": 0,
+      "shaFirstBytes": [
+        176,
+        123,
+        113,
+        195,
+        242,
+        251
+      ],
+      "newPromptStatusVisualKinds": 0
+    },
+    "rawReports": [
+      {
+        "file": "sweep-s222Qt/sweep-290ea9db-0340-4838-842a-0dea09b5340a-base-player-attempt-1.result.json",
+        "sha256": "23e90cd0a4c0ccec54e793ab0593634b3bd338f047dc20f7a31d1fe921fc186b"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-290ea9db-0340-4838-842a-0dea09b5340a-empowered-player-attempt-1.result.json",
+        "sha256": "4f92546c40a1ae5f3c8c8edf545144267aab796e6d2849de5a478d93d28c0647"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-290ea9db-0340-4838-842a-0dea09b5340a-kindled-player-attempt-1.result.json",
+        "sha256": "071503fc640a425d2c6a80cb9108242a797e18af5cffd2e6510a54e98920364a"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-290ea9db-0340-4838-842a-0dea09b5340a-perfected-player-attempt-1.result.json",
+        "sha256": "3ee97a8eabd8ca6dfafa63d334340a02d33998281ecb91f048589ac2e4b66c07"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-290ea9db-0340-4838-842a-0dea09b5340a-base-enemy-attempt-1.result.json",
+        "sha256": "ce11e39603dac560d2c76b3c324aa0e4461cf0b5cc4cfd582ba4af49af09300c"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-290ea9db-0340-4838-842a-0dea09b5340a-empowered-enemy-attempt-1.result.json",
+        "sha256": "8ed06c8667d6b5fd5b84af2173486e2e69f724d63568e632d8ee737684e3b33e"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-290ea9db-0340-4838-842a-0dea09b5340a-kindled-enemy-attempt-1.result.json",
+        "sha256": "c2abe6af1d6e12a230b6f905dbf0f767d7a6016e212bcd6037bc865f933f792e"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-290ea9db-0340-4838-842a-0dea09b5340a-perfected-enemy-attempt-1.result.json",
+        "sha256": "082785bc942fa224cbd927872bbdf33322e8510c3f02bb9d581dc9650c349b39"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-91d9afed-ea29-43af-9021-0f3ecbdc252e-base-player-attempt-1.result.json",
+        "sha256": "94aed233125a7a5cf3232117148a8523266392da4e5003249e5a3eeda79b94e3"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-91d9afed-ea29-43af-9021-0f3ecbdc252e-amplified-player-attempt-1.result.json",
+        "sha256": "430d0080e56f4ffa725b52f05a4609d370473ebdf1d9de1042d578b3af574f35"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-91d9afed-ea29-43af-9021-0f3ecbdc252e-empowered-player-attempt-1.result.json",
+        "sha256": "8b380e8fb7b504576b702bb791c8f92030fb0458dc08ec3d5bc0e7eaa6dddac2"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-91d9afed-ea29-43af-9021-0f3ecbdc252e-kindled-player-attempt-1.result.json",
+        "sha256": "d19baef911cdfe0a7af29e9d0565dbcb737a6036ecc540a1263a8ae69427411f"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-91d9afed-ea29-43af-9021-0f3ecbdc252e-perfected-player-attempt-1.result.json",
+        "sha256": "25cfb3b8d5d6a73eda8bf9eed2443852f4637ee2eee0775a690d95453acaca6b"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-91d9afed-ea29-43af-9021-0f3ecbdc252e-base-enemy-attempt-1.result.json",
+        "sha256": "180d9428293c3be6fb0d2d6e90a2bc8165413eed797d8750b38ceebf53f056e9"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-91d9afed-ea29-43af-9021-0f3ecbdc252e-amplified-enemy-attempt-1.result.json",
+        "sha256": "d387b7ff42f7599fdee703b7fe250526ea989212577bf1c0f277d4dbb161e6b9"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-91d9afed-ea29-43af-9021-0f3ecbdc252e-empowered-enemy-attempt-1.result.json",
+        "sha256": "abd835f95f037182d90a0279026c6c1393ee3e7599d52a0945f50545fa00208b"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-91d9afed-ea29-43af-9021-0f3ecbdc252e-kindled-enemy-attempt-1.result.json",
+        "sha256": "8cff08474ce93e1634a2ea7747362492060240d78517297249d7119da99ac6eb"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-91d9afed-ea29-43af-9021-0f3ecbdc252e-perfected-enemy-attempt-1.result.json",
+        "sha256": "ed5df24d444769f847d9be93e1642a0baa637f5aaadcbcac13449442b6ddbcfc"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-0d867086-8413-40c3-820f-1a5de486577e-base-player-attempt-1.result.json",
+        "sha256": "9d21d5943df98e4bf467c77611d31c4bef5301240632554f08cb0467f7fd737a"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-0d867086-8413-40c3-820f-1a5de486577e-amplified-player-attempt-1.result.json",
+        "sha256": "d7fe0405eae998bb2e2ca00b19f8f05a0312011d22cd046caf47748b1ac835b2"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-0d867086-8413-40c3-820f-1a5de486577e-empowered-player-attempt-1.result.json",
+        "sha256": "bd2d8f43942c8429421e6ba4b921f6478e2f5866b7da40c9cd06b82c9d94c792"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-0d867086-8413-40c3-820f-1a5de486577e-kindled-player-attempt-1.result.json",
+        "sha256": "8224f40bf86a3f5acaa1b5fbf36cd268fb9f8f07146774d17fefe9853c3ed214"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-0d867086-8413-40c3-820f-1a5de486577e-perfected-player-attempt-1.result.json",
+        "sha256": "d2bc9ecaa339494ead02b121d2ec22d9800d84cc7cedbb7253e08defcdf89e27"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-0d867086-8413-40c3-820f-1a5de486577e-base-enemy-attempt-1.result.json",
+        "sha256": "e13c7d4db6e916c7e1d212e0ae8b76eea1288b39aad38d85cbbcb3f66a7b14d1"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-0d867086-8413-40c3-820f-1a5de486577e-amplified-enemy-attempt-1.result.json",
+        "sha256": "d9cd294f3eee7ef8dbf3f8466cd91192e4ac06bb901159866be95048610dcd36"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-0d867086-8413-40c3-820f-1a5de486577e-empowered-enemy-attempt-1.result.json",
+        "sha256": "6bb2fcc1c5b8cfcce9e7a5ac1e06fabfd7c64f007f115db181d5658a1996217f"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-0d867086-8413-40c3-820f-1a5de486577e-kindled-enemy-attempt-1.result.json",
+        "sha256": "b3f5b2d5a56f092cd631a0c149f9e0448b7ffd48aee2f2a73a4926bf5352367f"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-0d867086-8413-40c3-820f-1a5de486577e-perfected-enemy-attempt-1.result.json",
+        "sha256": "39ff916f3965cb0de07bad6d78d032acb9ea0121d741f2a12452b94fba8760ff"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-37d9165f-2b3a-44a2-848b-401cf4466a7c-base-player-attempt-1.result.json",
+        "sha256": "5d4ec5877202acfbc9a0ee9eec77cb9a244c283c174818081186964dba77f9e5"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-37d9165f-2b3a-44a2-848b-401cf4466a7c-empowered-player-attempt-1.result.json",
+        "sha256": "79f292d9d573f1373321aab054ab2c840602877bf3a01762509af572940946c0"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-37d9165f-2b3a-44a2-848b-401cf4466a7c-kindled-player-attempt-1.result.json",
+        "sha256": "cffe72c7ce883bb1e074a8bd17a5e53ba72a35071394aeb8e48ce34340882297"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-37d9165f-2b3a-44a2-848b-401cf4466a7c-perfected-player-attempt-1.result.json",
+        "sha256": "7de1f5ea151c96af5fd56a97d7821a53e21963a90677eae4ff8fac8e4b1f9820"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-37d9165f-2b3a-44a2-848b-401cf4466a7c-base-enemy-attempt-1.result.json",
+        "sha256": "0c1d48a2349a1dd99e8107d55ffb03695d697200deae383724b1b20b38253571"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-37d9165f-2b3a-44a2-848b-401cf4466a7c-empowered-enemy-attempt-1.result.json",
+        "sha256": "3a63370fa9f5f8fb9bda0242ed4b73dc883f9ab3690f3432fe92d39f53ef4a1c"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-37d9165f-2b3a-44a2-848b-401cf4466a7c-kindled-enemy-attempt-1.result.json",
+        "sha256": "d520aa007187d82af4f3bafc5adaa96c230c3f03d5ef8f5bf426e02728c2ceed"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-37d9165f-2b3a-44a2-848b-401cf4466a7c-perfected-enemy-attempt-1.result.json",
+        "sha256": "3d07e189ffbb07806b9dbcca611e6327104be35d7f899628e512dca5b3a22f1b"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-4644db03-fbcd-4af5-a229-17962ce093d5-base-player-attempt-1.result.json",
+        "sha256": "50ff6a9dd2b7a8b3addab9563268fb933b13160819c7edccfdcc294e498c922f"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-4644db03-fbcd-4af5-a229-17962ce093d5-empowered-player-attempt-1.result.json",
+        "sha256": "fd5a28aa3d713fa75b52d799f0099feff200ecf1d9f823456bae3f9dc07a7089"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-4644db03-fbcd-4af5-a229-17962ce093d5-kindled-player-attempt-1.result.json",
+        "sha256": "691c042721a51875035345e410a6024bc69b14569748becca236fafd5bce2a6c"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-4644db03-fbcd-4af5-a229-17962ce093d5-perfected-player-attempt-1.result.json",
+        "sha256": "ee3c48e0130eb8bff1f683ae3b30e965ea1a0fa91a419447cd0251c96cf1f760"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-4644db03-fbcd-4af5-a229-17962ce093d5-base-enemy-attempt-1.result.json",
+        "sha256": "537c9290f93af1e694d9660f2521383ceaf526af2671da279efd12fc2de8604f"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-4644db03-fbcd-4af5-a229-17962ce093d5-empowered-enemy-attempt-1.result.json",
+        "sha256": "56d8d1442cc53cb84673ff4136e021d50aeb5841143089cf847ead13b3ab4af6"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-4644db03-fbcd-4af5-a229-17962ce093d5-kindled-enemy-attempt-1.result.json",
+        "sha256": "72aa8c37545f8643a93f5f99774b9ed5f60fc4ad6ebaa4ee233d24a5934e0e7f"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-4644db03-fbcd-4af5-a229-17962ce093d5-perfected-enemy-attempt-1.result.json",
+        "sha256": "b0b5e0991c3fc23a95a3e12c9b2fecc90747d84edf45f300896f02badb38b90c"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-ffec9fdd-d948-4756-b7df-39b9e982613e-base-player-attempt-1.result.json",
+        "sha256": "f5c4cb7e0614a117ebd24b69ef7563d0bf4d25600fc73f46b21023b8ef3fdf49"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-ffec9fdd-d948-4756-b7df-39b9e982613e-empowered-player-attempt-1.result.json",
+        "sha256": "348ebc285dbdae15df3456a7b46fced283a6340abbd37fd5f9f83b5c60b45bb7"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-ffec9fdd-d948-4756-b7df-39b9e982613e-kindled-player-attempt-1.result.json",
+        "sha256": "6df388c96a9e1eb3682d1922a69eb0e3a93a993a6ab15115362bbc7d19bf7962"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-ffec9fdd-d948-4756-b7df-39b9e982613e-perfected-player-attempt-1.result.json",
+        "sha256": "fff5271d4258beb6efd243a9348b5df76a4d110e5b45605fa0e79faa578f98ec"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-ffec9fdd-d948-4756-b7df-39b9e982613e-perfected-player-attempt-2.result.json",
+        "sha256": "8815099df266b3826a0d48a22589ff7df3f6631c2dcc6e4c8ba6f6adb65a8ab5"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-ffec9fdd-d948-4756-b7df-39b9e982613e-base-enemy-attempt-1.result.json",
+        "sha256": "ab3bef9ba80a15e79432ed3bc2b7a0512dae19576b76cd730d582b30522d5e01"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-ffec9fdd-d948-4756-b7df-39b9e982613e-empowered-enemy-attempt-1.result.json",
+        "sha256": "320fa905efeb69547d52eb6a6b6e4599b0a2c67d7289b2aa5f45e732feb74529"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-ffec9fdd-d948-4756-b7df-39b9e982613e-kindled-enemy-attempt-1.result.json",
+        "sha256": "22a1b05db07dbb55f7a07d27bd02bdd2b055ab6f1c4dfde62282633263c40bdc"
+      },
+      {
+        "file": "sweep-s222Qt/sweep-ffec9fdd-d948-4756-b7df-39b9e982613e-perfected-enemy-attempt-1.result.json",
+        "sha256": "aa3860327cc8c7698668ad78d59a3b73e113a79ae1ecb9f27fab171eec1da4f6"
+      }
+    ],
+    "screenshots": [],
+    "gameLogs": "No design debugging or judged games required; native sweep raw reports and Node public preflight events retained. No per-game JSONL export claimed."
+  },
+  "resources": {
+    "checkedAt": "2026-10-12T01:37:37.299049+00:00",
+    "observedPidCount": 72,
+    "historicIdsCurrentlyPresent": [],
+    "observedProcessGroups": [
+      9416,
+      11312,
+      15450,
+      15458,
+      15468,
+      15652,
+      35244,
+      41663,
+      47887,
+      48955,
+      49055,
+      50555,
+      50650,
+      50703,
+      50793,
+      51162,
+      53325,
+      54352,
+      58723
+    ],
+    "historicGroupsCurrentlyPresent": [],
+    "ownProcessesRemaining": false,
+    "ownProviderSettled": true,
+    "initialObservedProvider": {
+      "token": "b3573d1c-fa52-4561-be31-a5b18b170545",
+      "pid": 50555,
+      "bead": "hv-umm2.137",
+      "label": "card-sweep",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25",
+      "startedAt": "2026-10-12T01:26:21.468Z",
+      "providerState": "active"
+    },
+    "finalObservedProvider": {
+      "token": "c718e231-7b93-471f-b265-1fb780d4492b",
+      "pid": 50555,
+      "bead": "hv-umm2.137",
+      "label": "card-sweep",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-cards25",
+      "startedAt": "2026-10-12T01:34:41.684Z",
+      "providerState": "active"
+    },
+    "sessionTokenProvenance": "Externally captured first and last active native ownership records; native summary and actual0 retain the complete lifecycle and cleanup. Unobserved intermediate identities are not fabricated.",
+    "ownerNow": {
+      "token": "13cac394-1d70-4cf1-b770-c1418661e6e0",
+      "pid": 92601,
+      "bead": "hv-umm2.120",
+      "label": "card-sweep",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-08",
+      "startedAt": "2026-10-12T01:36:32.673Z",
+      "providerState": "active"
+    },
+    "port": 5174,
+    "portFree": true,
+    "serverGroups": [
+      50703,
+      15458
+    ],
+    "ownedServerCleanup": {
+      "nativeConfirmations": [
+        "[qa] runtime: server process group 50703 on port 5174 stopped; port free",
+        "[qa] runtime: server process group 15458 on port 5174 stopped; port free"
+      ],
+      "cleanupMs": 489.0289580000681
+    }
+  },
+  "newPrimitives": [],
+  "fallout": [],
+  "scenarios": {
+    "count": 0,
+    "reason": "Six single triggered fixed-gain abilities directly compose tested primitives. Existing lookback/self-departure contracts cover the dissolved/leavesPlay behavior; no own ability interaction or unusual functional zone."
+  },
+  "rulesDecisionsApplied": [
+    "RD-hv-umm2.65-1",
+    "RD-hv-umm2.65-2",
+    "RD-hv-umm2.333-1",
+    "RD-hv-7x4l.17-2"
+  ],
+  "newRulesDecisions": [],
+  "cardIssues": [],
+  "preExistingIssues": [],
+  "failedAcceptanceRuns": [
+    {
+      "run": "sweep",
+      "uuid": "ffec9fdd-d948-4756-b7df-39b9e982613e",
+      "variant": "perfected",
+      "side": "player",
+      "attempt": 1,
+      "failureKinds": [
+        "timeout"
+      ],
+      "rawReport": "sweep-s222Qt/sweep-ffec9fdd-d948-4756-b7df-39b9e982613e-perfected-player-attempt-1.result.json",
+      "resolution": "Native allowed timeout-only retry passed on unchanged source at attempt2; both canonical ledger rows retained. Failed raw report caps/error empty and has no published game/lab state. No engine/product defect inferred and no per-game JSONL claim."
+    }
+  ],
+  "fullReview": "Not required for bounded direct content composition without test infrastructure/config/cross-cutting architecture changes."
+}

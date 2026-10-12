@@ -1,3 +1,6 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenDissolved } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 249,
   art: { x: -0.294, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenDissolved(characterYouControl()), p.gainPoints(1))],
+  verifiedText: "w015af792x",
 });

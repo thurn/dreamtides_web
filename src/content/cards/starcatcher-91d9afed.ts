@@ -1,3 +1,5 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 437,
   isStarter: false,
-  pending: true,
+  abilities: (v) => [triggered(whenYouPlay({ cardType: "event" }), p.gainEnergy(v.amplified ? 2 : 1))],
+  verifiedText: "s1b1j1uwep",
 });

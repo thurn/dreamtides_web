@@ -1,3 +1,6 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenDissolved } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 277,
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenDissolved(characterYouControl()), p.gainEnergy(1))],
+  verifiedText: "vtkdeonil0",
 });

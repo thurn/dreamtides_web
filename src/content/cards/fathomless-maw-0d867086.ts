@@ -1,3 +1,5 @@
+import { triggered, whenAbandon } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 67,
   isStarter: false,
-  pending: true,
+  abilities: (v) => [triggered(whenAbandon("you", { cardType: "character" }), p.gainPoints(v.amplified ? 2 : 1))],
+  verifiedText: "2fvdjujajkz",
 });
