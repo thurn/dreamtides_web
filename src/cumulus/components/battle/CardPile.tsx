@@ -58,7 +58,8 @@ export interface CardPileProps {
   readonly testId?: DomTestId;
   /**
    * Draw the canonical playable ring on the topmost card: the viewer may play
-   * a card from this pile now. A face-down or empty pile shows none.
+   * a card from this pile, or activate an ability that works there, now. A
+   * face-down or empty pile shows none.
    */
   readonly selection?: "playable";
 }

@@ -79,7 +79,8 @@ once, even partway through a phase. In each check:
 - A player at or above the threshold wins.
 - A character in play, an avatar, or a dreamsign whose ability says "you win
   the game" when a condition holds wins the battle for its controller in any
-  check where that condition is true. A condition that is true only partway
+  check where that condition is true. A card in any other zone, such as a void
+  where its activated abilities may work, does not. A condition that is true only partway
   through an action and false by the check does not win.
 - An event or ability whose effect says "you win the game" checks its
   condition as that effect resolves. If the condition holds then, the effect's
@@ -1819,6 +1820,28 @@ abilities are Day-only while the stack is empty, Fast abilities follow Fast
 timing, and Interrupt abilities follow Interrupt timing. An activated ability
 on the stack is independent of its source: it resolves even if its source has
 left play, using the ability as it was when activated.
+
+**Where activated abilities work:** A card's activated ability works while its
+card is in play. An ability that moves its own card out of your void, such as
+"Abandon a character: Materialize this character from your void," works while
+its card is in your void instead, and only there: it cannot be activated while
+the card is in play or in any other zone. The card's owner activates it, since
+a card in a void is controlled by its owner, under the ability's usual timing
+and once-per-turn limit. ☾ and other costs that only a character in play can
+pay, such as "Abandon this character," cannot be paid from the void, so an
+ability with one of them cannot be activated there. Any other cost is paid as
+usual; a cost that banishes cards from your void may banish the ability's own
+card. An ability that would put a character into play cannot be activated
+while your back rank is full (see [Battlefield
+Capacity](#battlefield-capacity)), even if its cost would abandon a
+character. When several cards in your void have such abilities, they come
+after your avatar, dreamsigns, and characters in play, in the order the cards
+were created for the battle. Once activated, the ability resolves like any
+other: "this character" is its card in your void as the ability resolves, so
+if the card has left the void by then, as when the opponent banishes it in
+response or a cost banished it, the ability does nothing to it, and the rest
+of the ability still resolves. A card's "you win the game" ability never works
+from the void (see [Objective](#objective)).
 
 **Static abilities** — Always-on rule modifications that apply while their source
 is in play, such as cost reductions, spark bonuses for matching characters, or

@@ -77,6 +77,12 @@ export interface CardChoiceGridCardView<EntryId extends string = DeckEntryId> {
   selection?: GameCardSelection;
   /** Detach activation and physical gestures, then dim the tile. */
   disabled?: boolean;
+  /**
+   * `false` leaves this tile without a press action, undimmed, while the
+   * grid's other tiles take presses: a void card the viewer cannot play or
+   * activate in a browser whose ringed cards act.
+   */
+  pressable?: false;
   /** Optional danger outline for purge targets. */
   emphasis?: "danger";
   /** Small uncontained line rendered below the card. */
@@ -410,7 +416,7 @@ function CardChoiceGridItem<EntryId extends string>({
             unavailable={disabled}
             testId={card.testId}
             onPress={
-              onCardPress === undefined
+              onCardPress === undefined || card.pressable === false
                 ? undefined
                 : () => onCardPress(card.entryId)
             }

@@ -58,6 +58,7 @@ import {
   type EngineChooser,
   type EngineEmblemNamer,
   voidBrowserCards,
+  voidCardActions,
 } from "../../screens/cumulus_adapters/engine-battle-view-model";
 import {
   surfaceChoices,
@@ -519,6 +520,15 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     [submitAction],
   );
 
+  // A ringed void browser tile: its one action now, or the chooser of its play and abilities.
+  const pressVoidCard = (id: BattleCardId): void => {
+    const options = voidCardActions(affordances, id);
+    if (options.length === 0) return;
+    setBrowsed(null);
+    if (options.length === 1) submitAction(options[0], "void-browser");
+    else setAbilityChooser({ kind: "card", id });
+  };
+
   const statusActionable = affordances.emblemActivations.length > 0 || affordances.statusPayToEnd.length > 0;
   const draggedCard = drag?.source === "battlefield" ? drag.id : null;
   const targetIds = surface.kind === "targets" ? surface.ids : NO_TARGETS;
@@ -713,6 +723,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
           zone={browsed.zone}
           cards={browsedCards}
           onClose={() => setBrowsed(null)}
+          onCardPress={browsed.side === HUMAN && browsed.zone === "void" ? pressVoidCard : undefined}
         />
       )}
       {logOpen ? (

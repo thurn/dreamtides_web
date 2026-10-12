@@ -50,6 +50,8 @@ export interface CardZoneBrowserOverlayProps<
   readonly ownerSwitch?: CardZoneBrowserOwnerSwitch;
   /** Dismisses the browser. */
   readonly onClose: () => void;
+  /** Activates one card entry, such as a card the viewer may play or activate from its void. */
+  readonly onCardPress?: (entryId: EntryId) => void;
   /** Starts a native drag for one physical card entry. */
   readonly onCardDragStart?: (
     entryId: EntryId,
@@ -133,6 +135,7 @@ export function CardZoneBrowserOverlay<EntryId extends string = DeckEntryId>({
   cards,
   ownerSwitch,
   onClose,
+  onCardPress,
   onCardDragStart,
   onCardDragEnd,
   onCardContextMenu,
@@ -365,6 +368,7 @@ export function CardZoneBrowserOverlay<EntryId extends string = DeckEntryId>({
           cards={galleryCards}
           emptyLabel={cards.length === 0 ? "No Cards." : "No Matching Cards."}
           presentation="overlay"
+          onCardPress={onCardPress}
           onCardDragStart={onCardDragStart}
           onCardDragEnd={onCardDragEnd}
           onCardContextMenu={onCardContextMenu}

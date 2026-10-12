@@ -17,6 +17,11 @@ export function opponent(side: Side): Side {
 /** A card instance in one battle; stable across zone changes. */
 export type InstanceId = `i${number}`;
 
+/** An instance's creation number: instances are numbered in the order they were created for the battle. */
+export function instanceNumber(id: InstanceId): number {
+  return Number(id.slice(1));
+}
+
 export type { CardId } from "../../types/card-identity";
 export type { AvatarId, DreamsignId, DreamwellCardId } from "../../types/identifiers";
 

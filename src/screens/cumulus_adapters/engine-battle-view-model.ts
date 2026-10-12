@@ -85,7 +85,7 @@ export interface EngineBattleAffordances {
   readonly plays: ReadonlyMap<BattleCardId, PlayAction>;
   /** Void cards with a legal Reclaim play. */
   readonly voidPlays: ReadonlyMap<BattleCardId, PlayAction>;
-  /** Characters with legal activated abilities. */
+  /** Characters in play, and void cards whose abilities work there, with legal activated abilities. */
   readonly activations: ReadonlyMap<BattleCardId, readonly ActivateAction[]>;
   /** The legal activated abilities of the human's avatar and dreamsigns. */
   readonly emblemActivations: readonly ActivateAction[];
@@ -653,10 +653,10 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
       position: side === human ? "near" : "far",
       deckCardIds: hiddenZoneIds(view, side, "deck"),
       banishedCardCount: state.banished.length,
-      // Only the human's own Reclaim plays mark its void; the opponent's void stays unmarked.
+      // Only the human's own void plays and void activations mark its void; the opponent's void stays unmarked.
       voidCards: cardsOf(
         [...state.void].reverse(),
-        side === human ? (id) => affordances.voidPlays.has(parseBattleCardId(id)) : undefined,
+        side === human ? (id) => voidCardActions(affordances, parseBattleCardId(id)).length > 0 : undefined,
       ),
       backRank: rank(state.backRank, "back"),
       frontRank: rank(state.frontRank, "front"),
@@ -789,16 +789,25 @@ export function repositionForDrop(
 }
 
 /**
+ * What the human may do with one of its void cards now: play it from the
+ * void, then each of its abilities that work from there, in ability order.
+ */
+export function voidCardActions(affordances: EngineBattleAffordances, id: BattleCardId): Action[] {
+  const play = affordances.voidPlays.get(id);
+  return [...(play === undefined ? [] : [play]), ...(affordances.activations.get(id) ?? [])];
+}
+
+/**
  * A void as the zone browser shows it, oldest card first: each card with its
- * status badges, and the playable ring on each card the viewer may play from
- * its void now.
+ * status badges, and the playable ring on each card the viewer may play or
+ * activate from its void now; only a ringed card takes presses.
  */
 export function voidBrowserCards(side: MobileBattleSideView): CardChoiceGridCardView<BattleCardId>[] {
   return [...side.voidCards].reverse().map((card) => ({
     entryId: card.id,
     model: card.model,
     ...(card.statuses === undefined ? {} : { statuses: card.statuses }),
-    ...(card.showPlayableOutline ? { selection: "playable" as const } : {}),
+    ...(card.showPlayableOutline ? { selection: "playable" as const } : { pressable: false as const }),
   }));
 }
 
@@ -853,7 +862,10 @@ export function figmentMergeTargets(
   return targets;
 }
 
-/** A chooser the human opened: a character's abilities, the void's Reclaim plays, or the emblems' abilities. */
+/**
+ * A chooser the human opened: a card's abilities (a void card's play from
+ * the void first), the void's plays, or the emblems' abilities.
+ */
 export type EngineChooser =
   | { readonly kind: "card"; readonly id: BattleCardId }
   | { readonly kind: "void" }
@@ -921,12 +933,14 @@ function chooserOptions(
     case "card": {
       const activations = affordances.activations.get(chooser.id) ?? [];
       const payments = (affordances.payToEnd.get(chooser.id) ?? []).map(payment);
-      if (activations.length + payments.length === 0) return [];
+      const voidPlay = affordances.voidPlays.get(chooser.id);
       const instance = instances.get(chooser.id);
+      const plays = voidPlay === undefined || instance === undefined ? [] : [act({ kind: "playFromVoid", name: cards(instance).displaySnapshot.name }, voidPlay)];
+      if (activations.length + payments.length === 0) return [];
       const abilities = instance === undefined ? [] : instanceCard(catalog, instance).abilities(instance.variant);
       const activatedIndices = abilities.flatMap((ability, index) => ability.kind === "activated" ? [index] : []);
       const texts = instance === undefined ? null : engineActivatedAbilityTexts(cards(instance).displaySnapshot.renderedText, activatedIndices.length);
-      return [...activations.map((action) => act({
+      return [...plays, ...activations.map((action) => act({
         kind: "ability",
         index: action.ability,
         text: texts?.[activatedIndices.indexOf(action.ability)] ?? null,

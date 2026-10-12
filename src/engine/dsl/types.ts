@@ -483,6 +483,13 @@ export type AdditionalCost = PaymentCost | ChoiceCost | OptionalCost;
  */
 export type Cost = AdditionalCost | EnergyXCost;
 
+/**
+ * Where an activated ability works: in play, or from its card's owner's void
+ * ("…: Materialize this character from your void"). An emblem's abilities
+ * always work.
+ */
+export type ActivationZone = Extract<FunctionalZone, "play" | "void">;
+
 /** "Cost: Effect" — an ability its controller activates; it goes on the stack. */
 export interface ActivatedAbility {
   readonly kind: "activated";
@@ -490,6 +497,13 @@ export interface ActivatedAbility {
   readonly effect: Effect;
   readonly speed: Speed;
   readonly oncePerTurn?: boolean;
+  /**
+   * Where its card must be to activate it; absent means play. From the void,
+   * its card's owner activates it, and ☾ and other costs only a character in
+   * play can pay are unpayable (rules § Ability Types → Where activated
+   * abilities work).
+   */
+  readonly zone?: ActivationZone;
 }
 
 /**

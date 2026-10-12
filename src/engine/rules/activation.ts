@@ -6,15 +6,18 @@
 import type { EngineCatalog } from "../catalog";
 import type { Ability, ActivatedAbility } from "../dsl/types";
 import { BASE_VARIANT } from "../dsl/types";
-import type { AbilitySource, CardId, OncePerTurnKey, Side } from "../state/ids";
-import { sourceKey } from "../state/ids";
+import type { AbilitySource, CardId, OncePerTurnKey, Side, Zone } from "../state/ids";
+import { instanceNumber, sourceKey } from "../state/ids";
 import type { AbilityOrigin, BattleState, CardInstance } from "../state/types";
 import { costsPayable } from "./costs";
 import { effectEntersPlay } from "../effects/interpreter";
 import { freeBackSlotsAfterStack, timingAllows } from "./timing";
 import { charactersInPlay } from "./zones";
 
-/** The side controlling a source now, or `null` when the source is gone. */
+/**
+ * The side controlling a source now, or `null` when the source is gone. A
+ * card in a void, a deck, or the Banished zone is controlled by its owner.
+ */
 export function sourceController(state: BattleState, source: AbilitySource): Side | null {
   if (typeof source === "string") {
     return state.instances[source]?.controller ?? null;
@@ -97,11 +100,10 @@ export function oncePerTurnKey(source: AbilitySource, index: number, enteredZone
 }
 
 /**
- * Every source `side` may activate abilities from, in the fixed order: its
+ * `side`'s sources whose abilities work in play, in the fixed order: its
  * avatar, its dreamsigns, then its characters in play, B0→B9 then F0→F8.
- * Cards in other zones have no activated abilities in play.
  */
-export function abilitySources(state: BattleState, side: Side): AbilitySource[] {
+export function inPlaySources(state: BattleState, side: Side): AbilitySource[] {
   const sideState = state.sides[side];
   return [
     ...(sideState.avatar === null ? [] : [{ kind: "avatar", side } as const]),
@@ -110,9 +112,30 @@ export function abilitySources(state: BattleState, side: Side): AbilitySource[] 
   ];
 }
 
+/** Whether an activated ability works from `zone`: a card's in play unless it names the void (rules § Ability Types). */
+function activatesFrom(ability: ActivatedAbility, zone: Zone): boolean {
+  return (ability.zone ?? "play") === zone;
+}
+
+/**
+ * Every source `side` may activate abilities from, in the fixed order of
+ * `inPlaySources`, then the cards in its void with an ability that works
+ * there, in the order they were created for the battle (rules § Ability
+ * Types → Where activated abilities work). A void holds only its owner's
+ * cards, so `side` owns each. Cards in other zones have no activated
+ * abilities that work.
+ */
+export function abilitySources(state: BattleState, catalog: EngineCatalog, side: Side): AbilitySource[] {
+  const fromVoid = state.sides[side].void
+    .filter((id) => originAbilities(catalog, instanceOrigin(state.instances[id])).some((ability) => ability.kind === "activated" && activatesFrom(ability, "void")))
+    .sort((a, b) => instanceNumber(a) - instanceNumber(b));
+  return [...inPlaySources(state, side), ...fromVoid];
+}
+
 /**
  * Whether `side` may begin activating the ability now: it controls the
- * source, the ability's timing allows it, an ability that would put
+ * source, the source's card is in the zone the ability works from (play,
+ * or its owner's void), the ability's timing allows it, an ability that would put
  * characters into play has an open back-rank position, a once-per-turn
  * ability is unused this turn, and the costs that need no choice are
  * payable. The dry run of the `activate` step checks the choices.
@@ -125,9 +148,9 @@ export function canActivate(
   index: number,
 ): boolean {
   if (sourceController(state, source) !== side) return false;
-  if (typeof source === "string" && state.instances[source]?.zone !== "play") return false;
   const ability = activatedAbilityAt(state, catalog, source, index);
   if (ability === null) return false;
+  if (typeof source === "string" && !activatesFrom(ability, state.instances[source].zone)) return false;
   if (!timingAllows(state, side, ability.speed)) return false;
   if (effectEntersPlay(ability.effect) && freeBackSlotsAfterStack(state, catalog, side) <= 0) return false;
   if (ability.oncePerTurn === true && state.oncePerTurn.includes(oncePerTurnKey(source, index))) {

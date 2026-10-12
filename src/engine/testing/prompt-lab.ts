@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { additionalCost, discardCostFilter, optionalCost, reclaim, activated, banishFromAnyVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, upTo, x } from "../dsl/builders";
+import { additionalCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
@@ -114,6 +114,18 @@ export const LAB = {
     id: syntheticId(0x392), cardType: "character", costs: [energy(0)], spark: 1,
     subtype: "Mage", speed: "standard", status: "authored",
     abilities: () => [activated([banishFromAnyVoidCost(1, {}, "opponent")], p.gainPoints(1))],
+  },
+  /** "Abandon a character: Materialize this character from your void." Works only from its owner's void. */
+  voidRevenant: {
+    id: syntheticId(0x49000), cardType: "character", costs: [energy(3)], spark: 2,
+    subtype: "Ancient", speed: "standard", status: "authored",
+    abilities: () => [activated([abandonCost()], p.materialize(thisCardIn("void")), { zone: "void" })],
+  },
+  /** "2●, Banish a card from your void: Materialize this character from your void." Works only from its owner's void. */
+  voidReaper: {
+    id: syntheticId(0x49001), cardType: "character", costs: [energy(4)], spark: 3,
+    subtype: "Ancient", speed: "standard", status: "authored",
+    abilities: () => [activated([energy(2), banishFromVoidCost(1)], p.materialize(thisCardIn("void")), { zone: "void" })],
   },
   /** "You may play characters from your void." */
   voidPermit: {
@@ -321,6 +333,8 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [STACK.counterBattery.id]: { name: "Lab Battery", text: "1⧗, ☾: Gain 2●." },
   [STACK.revealWarrior.id]: { name: "Lab Herald", text: "Reveal a Warrior card from your hand: Gain 1●. Once per turn." },
   [STACK.payableEffect.id]: { name: "Lab Shackles", text: "Until the opponent pays 2●, each enemy is shackled." },
+  [LAB.voidRevenant.id]: { name: "Lab Revenant", text: "Abandon a character: Materialize this character from your void." },
+  [LAB.voidReaper.id]: { name: "Lab Reaper", text: "2●, Banish a card from your void: Materialize this character from your void." },
   [LAB.divination.id]: {
     name: "Lab Divination",
     text: "As you play this, look at the top 2 cards of your deck: put one into your hand and the other on the top or bottom of your deck.",
@@ -801,6 +815,21 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     name: "any-void-cost", description: "Banish an opponent void card as an activation cost",
     setup: { active: "player", phase: "day", player: { back: [LAB.anyVoidPayer.id], deck: deck(6) }, enemy: { void: [vanillas[0], vanillas[1], vanillas[2]], deck: deck(6) } },
     script: [],
+  },
+  {
+    name: "void-activation",
+    description: "Activated abilities that work from the void: a ringed void pile and void browser tiles that activate",
+    setup: {
+      active: "player",
+      phase: "day",
+      player: { back: [vanillas[0], vanillas[2]], void: [vanillas[1], LAB.voidRevenant.id, LAB.voidReaper.id], energy: 2, deck: deck(6) },
+      enemy: { deck: deck(6) },
+    },
+    script: [],
+    presents: [
+      { side: "player", action: (ids) => ({ kind: "activate", source: at(ids.player.void, 1), ability: 0 }) },
+      target((ids) => at(ids.player.back, 0)),
+    ],
   },
   {
     name: "void-cost",

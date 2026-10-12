@@ -78,7 +78,7 @@ function computeMoves(state: BattleState, catalog: EngineCatalog, side: Side, se
       .map((card) => ({ card, from })),
   );
   const activations: LegalActivation[] = [];
-  for (const source of abilitySources(state, side)) {
+  for (const source of abilitySources(state, catalog, side)) {
     const origin = abilityOrigin(state, source);
     if (origin === null) continue;
     originAbilities(catalog, origin).forEach((ability, index) => {

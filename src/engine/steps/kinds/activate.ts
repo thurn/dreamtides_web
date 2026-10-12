@@ -8,11 +8,14 @@ import { opponent, sourceInstance } from "../../state/ids";
 import type { StepDefinition } from "../types";
 
 /**
- * Activates an ability of a card in play or an emblem: play-time choices
+ * Activates an ability of a card in play, of a card in its owner's void
+ * whose ability works there, or of an emblem: play-time choices
  * (X, then modes, then targets, then the costs' alternatives, optional
  * costs, and cards), then the commit point,
  * then the costs, then the ability goes on the stack and the opponent
- * receives priority (D13).
+ * receives priority (D13). The stack item keeps the source's ability
+ * origin as activated, so it resolves as activated even after its card has
+ * left play or the void.
  */
 export interface ActivateStep {
   readonly kind: "activate";

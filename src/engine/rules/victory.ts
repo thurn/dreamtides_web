@@ -5,7 +5,7 @@ import { SIDES } from "../state/ids";
 import type { BattleResult, BattleState, WinReason } from "../state/types";
 import type { EngineCatalog } from "../catalog";
 import type { StepContext } from "../steps/types";
-import { abilityOrigin, abilitySources, originAbilities } from "./activation";
+import { abilityOrigin, inPlaySources, originAbilities } from "./activation";
 
 export function endBattle(ctx: StepContext, result: BattleResult): void {
   if (ctx.state.result !== null) {
@@ -18,11 +18,12 @@ export function endBattle(ctx: StepContext, result: BattleResult): void {
 
 /**
  * The sources `side` controls whose "you win the game" condition holds now
- * (C15): its emblems and its characters in play, in `abilitySources` order.
- * Cards in any other zone have no such ability in effect.
+ * (C15): its emblems and its characters in play, in `inPlaySources` order.
+ * Cards in any other zone, a void included where activated abilities may
+ * work, have no such ability in effect (RD-hv-umm2.490-1).
  */
 export function winConditionSources(state: BattleState, catalog: EngineCatalog, side: Side): AbilitySource[] {
-  return abilitySources(state, side).filter((source) => {
+  return inPlaySources(state, side).filter((source) => {
     const origin = abilityOrigin(state, source);
     return (
       origin !== null &&

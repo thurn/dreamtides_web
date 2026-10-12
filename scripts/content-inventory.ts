@@ -402,7 +402,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("turnHistory", [registered(DSL_TYPES, "ValueExpr", { member: "playedThisTurn", pending: "member" }), registered(DSL_TYPES, "Condition", { member: "thisTurn", pending: "member" })], ["ValueExpr", "Condition"], { note: "turn counters: cards played, discarded, dissolved this turn" }),
   dsl("historyRefs", [registered("src/engine/effects/types.ts", "CardRef", { member: "lastPlayed", pending: "member" })], ["CardRef"], { note: `"the last warrior you played" (${GAP_38})` }),
   dsl("staticZones", [registered(DSL_TYPES, "StaticAbility", { option: "zone" })], ["StaticAbility"], { note: `statics that work from hand, void, or deck (C4; ${GAP_37})` }),
-  dsl("activatedFromVoid", [registered(DSL_TYPES, "ActivatedAbility", { option: "zone", pending: "option" })], ["Ability"], { note: "activated abilities that work from the void (\"…: Materialize this character from your void\")" }),
+  dsl("activatedFromVoid", [registered(DSL_TYPES, "ActivatedAbility", { option: "zone" })], ["Ability"], { note: "activated abilities that work from the void (\"…: Materialize this character from your void\")" }),
   dsl("grantReclaimTriggeringCard", [registered(`${P}grant-reclaim.ts`, "ReclaimCards", { member: "subject" })], ["CardRef"], { note: "Reclaim granted to the card a trigger concerns (\"When you discard a card, it gains reclaim\")" }),
   dsl("playCondition", [registered(DSL_TYPES, "Ability", { member: "playCondition", pending: "member" })], ["Ability"], { note: "\"Play this event only if …\"" }),
   dsl("alternativeCost", [registered(DSL_TYPES, "Ability", { member: "alternativeCost", pending: "member" })], ["Ability"], { note: "\"you may play this card for …\"" }),

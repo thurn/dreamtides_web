@@ -5,6 +5,7 @@ import type { EffectNode } from "../effects/types";
 import type {
   Ability,
   ActivatedAbility,
+  ActivationZone,
   AdditionalCost,
   AdditionalCostAbility,
   AllSpec,
@@ -54,11 +55,15 @@ export function staticAbility(effect: Effect, options: { readonly zone?: Functio
   return { kind: "static", effect, zone: options.zone ?? "play" };
 }
 
-/** "Cost: Effect". Standard speed unless stated. */
+/**
+ * "Cost: Effect". Standard speed unless stated. Works in play unless `zone`
+ * is "void": "Abandon a character: Materialize this character from your
+ * void" works only while its card is in its owner's void.
+ */
 export function activated(
   costs: readonly Cost[],
   effect: Effect,
-  options: { readonly speed?: Speed; readonly oncePerTurn?: boolean } = {},
+  options: { readonly speed?: Speed; readonly oncePerTurn?: boolean; readonly zone?: ActivationZone } = {},
 ): ActivatedAbility {
   return {
     kind: "activated",
@@ -66,6 +71,7 @@ export function activated(
     effect,
     speed: options.speed ?? "standard",
     ...(options.oncePerTurn === true ? { oncePerTurn: true } : {}),
+    ...(options.zone === "void" ? { zone: "void" } : {}),
   };
 }
 
