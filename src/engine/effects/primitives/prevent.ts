@@ -51,7 +51,7 @@ function paysEnergy(ctx: StepContext, env: EffectEnv, payer: Side, energy: numbe
  * they control none.
  */
 function abandons(ctx: StepContext, env: EffectEnv, payer: Side, predicate: UnlessAbandonsPredicate): boolean {
-  const candidates: InstanceId[] = matchingCharacters(ctx.state, ctx.catalog, { ...predicate, controller: "you" }, payer, env.source);
+  const candidates: InstanceId[] = matchingCharacters(ctx.state, ctx.catalog, { ...predicate, controller: "you" }, payer, env.source, env.x ?? undefined);
   if (candidates.length === 0) return false;
   const accepts = ctx.choose<ConfirmPrompt>({ kind: "confirm", side: payer, purpose: env.purpose("preventUnlessAbandons") });
   if (!accepts) return false;

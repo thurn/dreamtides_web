@@ -185,8 +185,8 @@ function inZoneMatching(
  * Whether a void card is one a zone target may name now: in that void,
  * matching its filter, and within its cost bound, read now against the
  * card's copiable cost (RD-hv-umm2.495-1). The bound is read like a
- * character selector's: an X bound reads `selectorX`, the X picked as a card
- * is being played, and otherwise the source card's X; a source ✦ bound reads
+ * character selector's: an X bound reads `selectorX`, the prepared or resolving
+ * ability's X, and otherwise the source card's stored X; a source ✦ bound reads
  * `sourceSpark` (RD-hv-umm2.501-1).
  */
 function voidTargetMatching(
@@ -379,9 +379,9 @@ export interface PlayTimeAbility {
 /**
  * The play-time choices of `abilities` as `source` is played or activated:
  * every ability's modes, in order, then every ability's targets, in order.
- * Returns one entry per ability. `selectorX` supplies the chosen X while a
- * card is being played before its stack item exists; other callers read the
- * source card's stack or in-play X.
+ * Returns one entry per ability. `selectorX` supplies the chosen X for a
+ * play or activation before its stack item exists; callers without an
+ * explicit binding read the source card's stack or in-play X.
  */
 export function choosePlayTime(
   ctx: StepContext,
@@ -433,8 +433,8 @@ function promptTargets(
 }
 
 /**
- * Choices for an effect made as it resolves, for a triggered ability, which
- * does not use the stack: modes, then targets, in walk order. A required
+ * Choices made for a pending triggered ability or a deferred subtree of a
+ * resolving card or activated ability: modes, then targets, in walk order. A required
  * choice with no legal option makes that part of the effect do nothing (rules
  * § Targeting): a target spec with fewer candidates than it requires gets no
  * targets and no prompt, and a modal node with no legal mode makes the whole
@@ -443,7 +443,9 @@ function promptTargets(
  * empty target selections; their legality is checked as the effect resolves.
  * A bound by the source's ✦ reads `lastKnownSourceSpark`, the value the
  * pending ability retained, once its source has left play, as its
- * resolution does (RD-hv-umm2.501-1).
+ * resolution does (RD-hv-umm2.501-1). `selectorX` supplies the resolving
+ * ability's X for deferred choices; when omitted, selectors read stored
+ * source X, including trigger callers without a captured binding.
  */
 export function chooseOnResolution(
   ctx: StepContext,
@@ -453,6 +455,7 @@ export function chooseOnResolution(
   purpose: (role: PromptRole) => PromptPurpose,
   lastKnownSourceSpark?: number | null,
   inherited?: ChoiceBindings,
+  selectorX?: number,
 ): EffectChoices | null {
   const sourceSpark = sourceSparkReader(ctx, source, lastKnownSourceSpark ?? null);
   const modes: number[] = [];
@@ -465,7 +468,7 @@ export function chooseOnResolution(
         modes.push(bound);
         return bound;
       }
-      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, undefined, sourceSpark, inherited));
+      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark, inherited));
       if (blocked || !legal.includes(true)) {
         blocked = true;
         return 0;
@@ -483,7 +486,7 @@ export function chooseOnResolution(
   const targets = collectTargets(effect, chosenModes(effect, modes)).map((spec) => {
     const bound = inherited?.targetsOf(spec) ?? null;
     if (bound !== null) return [...bound];
-    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, undefined, sourceSpark);
+    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark);
     const bounds = targetBounds(spec);
     if (candidates.length < bounds.min) {
       ctx.emit({ kind: "noLegalTarget", source });
@@ -558,7 +561,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     source: env.source,
     x: env.x,
     scored: env.scored,
-    count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source, undefined, resolvingSourceSpark(ctx, env)).length,
+    count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env)).length,
     countCards: (count) => zoneCount(ctx.state, ctx.catalog, count, env.controller),
     movedCosts: (ref) => env.moved.costs(ref.node),
     sourceSpark: resolvingSourceSpark(ctx, env),
@@ -971,7 +974,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
  * nearest enclosing choices.
  */
 export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: EffectEnv): void {
-  const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env.lastKnownSourceSpark, env);
+  const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env.lastKnownSourceSpark, env, env.x ?? undefined);
   if (choices === null) return;
   const chosen = chosenModes(effect, choices.modes);
   const specs = collectTargets(effect, chosen);

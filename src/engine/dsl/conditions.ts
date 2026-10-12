@@ -7,11 +7,13 @@ import type { BattleState } from "../state/types";
 import { matchingCharactersWith, resolvePlayer, zoneCountWith, type CharacteristicsReader } from "./selectors";
 import type { Condition } from "./types";
 
-/** The condition's controller, source, and optional costs paid by its stack item. */
+/** The condition's controller, source, and captured stack-item bindings. */
 export interface ConditionScope {
   readonly controller: Side;
   readonly source: AbilitySource;
   readonly optionalPaid: readonly boolean[];
+  /** Resolving X; static scopes omit it and retain stored source X. */
+  readonly x?: number | null;
 }
 
 /** Resolving conditions read effective characteristics; static conditions read the layers before their effect. */
@@ -24,7 +26,7 @@ export function conditionHoldsWith(
 ): boolean {
   switch (condition.cond) {
     case "controls": {
-      const count = matchingCharactersWith(state, catalog, read, condition.selector, scope.controller, scope.source).length;
+      const count = matchingCharactersWith(state, catalog, read, condition.selector, scope.controller, scope.source, scope.x ?? undefined).length;
       return count >= condition.atLeast && (condition.atMost === undefined || count <= condition.atMost);
     }
     case "energyAtLeast":

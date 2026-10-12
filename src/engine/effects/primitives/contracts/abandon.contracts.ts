@@ -159,7 +159,7 @@ describe("abandon", () => {
     }
   });
 
-  it.each([false, true])("uses source-card X for bounds and activation X for values (played X: %s)", (playedX) => {
+  it.each([false, true])("uses activation X for bounds and values while retaining played source X (played X: %s)", (playedX) => {
     const { state, ids } = boardState(engine.catalog, {
       active: "player", phase: "day",
       player: { hand: playedX ? [retainedXActivator.id] : [], back: playedX ? [] : [xActivator.id], energy: 5, deck },
@@ -187,15 +187,24 @@ describe("abandon", () => {
     expect(activationX).toMatchObject({ kind: "chooseNumber", side: "player", purpose: { role: "chooseX" } });
     const intent = { kind: "answer" as const, side: "player" as const, promptId: activationX.id, value: 3 };
     const outcome = fresh.reduce(saved, intent);
-    const done = applied(outcome);
-    expect(done).toEqual(applied(fold.reduce(slice, intent)));
-    expect(fresh.pending(done)).toBeNull();
+    const abandoning = applied(outcome);
+    expect(abandoning).toEqual(applied(fold.reduce(slice, intent)));
+    const restored = JSON.parse(JSON.stringify(abandoning)) as BattleSlice;
+    const restart = createFoldAdapter(engine, { checkEventPrefix: true });
+    const choice = restart.pending(restored)!.prompt;
+    expect(choice).toEqual(fresh.pending(abandoning)!.prompt);
+    expect(choice).toMatchObject({ kind: "chooseCards", side: "enemy", candidates: ids.enemy.back });
+    const chosen = ids.enemy.back[1]!;
+    const finished = restart.reduce(restored, { kind: "answer", side: "enemy", promptId: choice.id, value: [chosen] });
+    const done = applied(finished);
+    expect(restart.pending(done)).toBeNull();
     expect(done.committed.sides.player.score).toBe(3);
-    expect(done.committed.sides.enemy.void).toEqual(playedX ? [ids.enemy.back[0]] : []);
-    expect(done.committed.instances[ids.enemy.back[1]!].zone).toBe("play");
-    if (outcome.kind !== "applied") throw new Error("answer bounced");
-    expect(outcome.published.filter((e) => e.kind === "abandoned")).toEqual(
-      playedX ? [{ kind: "abandoned", instance: ids.enemy.back[0], side: "enemy" }] : [],
+    expect(done.committed.sides.enemy.void).toEqual([chosen]);
+    expect(done.committed.instances[ids.enemy.back[0]!].zone).toBe("play");
+    expect(done.committed.instances[me].status.x).toBe(playedX ? 1 : null);
+    if (finished.kind !== "applied") throw new Error("answer bounced");
+    expect(finished.published.filter((e) => e.kind === "abandoned")).toEqual(
+      [{ kind: "abandoned", instance: chosen, side: "enemy" }],
     );
     expect(invariantViolations(done.committed, engine.catalog)).toEqual([]);
   });

@@ -16,7 +16,7 @@ export const abandonPrimitive = definePrimitive<AbandonNode>({
   resolve(ctx, node, env) {
     const side = resolvePlayer(env.controller, node.chooser);
     const candidates = matchingCharacters(
-      ctx.state, ctx.catalog, { ...node.predicate, controller: "you" }, side, env.source,
+      ctx.state, ctx.catalog, { ...node.predicate, controller: "you" }, side, env.source, env.x ?? undefined,
     );
     if (candidates.length === 0) return;
     const [chosen] = ctx.choose<ChooseCardsPrompt>({

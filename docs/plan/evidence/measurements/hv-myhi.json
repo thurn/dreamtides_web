@@ -1,0 +1,782 @@
+{
+  "bead": "hv-myhi",
+  "base": "c82a2977ef04f67997b7fb8f0bafaf11158e5388",
+  "status": "LOCALLY VALIDATED FINAL; parent exact-source core review and delivery owed",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T11:54:13+00:00",
+    "startProvenance": "Parent near-dispatch sample, not exact runtime boundary; includes all myhi research, coordination, implementation and local validation. Earlier read-only diagnostic was separate task.",
+    "startConfidence": "near-dispatch proxy",
+    "endUtc": "2026-10-12T12:14:12.728455+00:00",
+    "endProvenance": "Actual final pre-amend evidence refresh after ordinary checks and metric correction; final schema/amend tail excluded, definitive final commit time in Git."
+  },
+  "validation": [
+    {
+      "name": "witness",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "resolving activation X contracts"
+      ],
+      "pid": 17388,
+      "startUtc": "2026-10-12T11:59:16.097554+00:00",
+      "endUtc": "2026-10-12T11:59:20.089503+00:00",
+      "wallS": 3.992,
+      "exit": 1,
+      "log": "/tmp/hv-myhi-witness.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "refined-witness",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "resolving activation X contracts"
+      ],
+      "pid": 19226,
+      "startUtc": "2026-10-12T12:00:46.670567+00:00",
+      "endUtc": "2026-10-12T12:00:49.934834+00:00",
+      "wallS": 3.264,
+      "exit": 1,
+      "log": "/tmp/hv-myhi-refined-witness.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "additional-witness",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retains paid X after|prevent unless-abandons"
+      ],
+      "pid": 20172,
+      "startUtc": "2026-10-12T12:01:17.889303+00:00",
+      "endUtc": "2026-10-12T12:01:21.518177+00:00",
+      "wallS": 3.629,
+      "exit": 1,
+      "log": "/tmp/hv-myhi-additional-witness.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "prevent-null-control",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "prevent unless-abandons uses stored X"
+      ],
+      "pid": 20854,
+      "startUtc": "2026-10-12T12:01:43.975853+00:00",
+      "endUtc": "2026-10-12T12:01:48.001717+00:00",
+      "wallS": 4.026,
+      "exit": 0,
+      "log": "/tmp/hv-myhi-prevent-null-control.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "repaired-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "resolving activation X contracts"
+      ],
+      "pid": 21423,
+      "startUtc": "2026-10-12T12:02:17.338639+00:00",
+      "endUtc": "2026-10-12T12:02:21.855822+00:00",
+      "wallS": 4.517,
+      "exit": 0,
+      "log": "/tmp/hv-myhi-repaired-focused.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "affected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts"
+      ],
+      "pid": 23057,
+      "startUtc": "2026-10-12T12:02:58.974763+00:00",
+      "endUtc": "2026-10-12T12:03:07.381488+00:00",
+      "wallS": 8.407,
+      "exit": 1,
+      "log": "/tmp/hv-myhi-affected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "legacy-row",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "uses activation X for bounds and values while retaining played source X"
+      ],
+      "pid": 75447,
+      "startUtc": "2026-10-12T12:04:52.094824+00:00",
+      "endUtc": "2026-10-12T12:04:58.105588+00:00",
+      "wallS": 6.01,
+      "exit": 0,
+      "log": "/tmp/hv-myhi-legacy-row.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "repaired-affected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts"
+      ],
+      "pid": 18415,
+      "startUtc": "2026-10-12T12:05:15.510390+00:00",
+      "endUtc": "2026-10-12T12:05:24.229516+00:00",
+      "wallS": 8.719,
+      "exit": 0,
+      "log": "/tmp/hv-myhi-repaired-affected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 31156,
+      "startUtc": "2026-10-12T12:06:37.821540+00:00",
+      "endUtc": "2026-10-12T12:07:29.203337+00:00",
+      "wallS": 51.381,
+      "exit": 2,
+      "log": "/tmp/hv-myhi-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "typed-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "resolving activation X contracts"
+      ],
+      "pid": 36927,
+      "startUtc": "2026-10-12T12:07:48.182876+00:00",
+      "endUtc": "2026-10-12T12:07:53.760771+00:00",
+      "wallS": 5.578,
+      "exit": 0,
+      "log": "/tmp/hv-myhi-typed-focused.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "final-review",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 38076,
+      "startUtc": "2026-10-12T12:08:08.320186+00:00",
+      "endUtc": "2026-10-12T12:08:55.673169+00:00",
+      "wallS": 47.352,
+      "exit": 2,
+      "log": "/tmp/hv-myhi-final-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "corrected-typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 71988,
+      "startUtc": "2026-10-12T12:09:20.655590+00:00",
+      "endUtc": "2026-10-12T12:09:23.817322+00:00",
+      "wallS": 3.162,
+      "exit": 0,
+      "log": "/tmp/hv-myhi-corrected-typecheck.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "validated-review",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 74149,
+      "startUtc": "2026-10-12T12:09:52.699627+00:00",
+      "endUtc": "2026-10-12T12:10:37.020273+00:00",
+      "wallS": 44.32,
+      "exit": 0,
+      "log": "/tmp/hv-myhi-validated-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 77879,
+      "startUtc": "2026-10-12T12:10:55.156940+00:00",
+      "endUtc": "2026-10-12T12:10:58.201831+00:00",
+      "wallS": 3.045,
+      "exit": 0,
+      "log": "/tmp/hv-myhi-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 79847,
+      "startUtc": "2026-10-12T12:12:12.818851+00:00",
+      "endUtc": "2026-10-12T12:12:12.917146+00:00",
+      "wallS": 0.098,
+      "exit": 0,
+      "log": "/tmp/hv-myhi-schema.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "frozen-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 80918,
+      "startUtc": "2026-10-12T12:12:50.985865+00:00",
+      "endUtc": "2026-10-12T12:12:51.082903+00:00",
+      "wallS": 0.097,
+      "exit": 0,
+      "log": "/tmp/hv-myhi-frozen-schema.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "commit",
+      "command": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/hv-myhi-commit.txt"
+      ],
+      "pid": 88426,
+      "startUtc": "2026-10-12T12:13:11.514554+00:00",
+      "endUtc": "2026-10-12T12:13:11.542103+00:00",
+      "wallS": 0.027,
+      "exit": 0,
+      "log": "/tmp/hv-myhi-commit.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "scope": {
+    "production": [
+      "src/engine/dsl/conditions.ts",
+      "src/engine/effects/interpreter.ts",
+      "src/engine/effects/primitives/abandon.ts",
+      "src/engine/effects/primitives/prevent.ts"
+    ],
+    "contractPath": "src/engine/effects/primitives/contracts/resolving-activation-x.contracts.ts",
+    "contractLines": 230,
+    "newCases": 52,
+    "testDeltaBreakdown": {
+      "newModuleLines": 230,
+      "existingAbandonAdded": 18,
+      "existingAbandonDeleted": 9,
+      "existingAbandonNet": 9,
+      "totalNetTestLines": 239
+    },
+    "updatedExistingContract": "abandon.contracts.ts row162\u2013201 and label only; native extra test admission; fixtures and other rows unchanged",
+    "fallout": [],
+    "additiveSignatures": [
+      "chooseOnResolution optional appended selectorX",
+      "ConditionScope optional x"
+    ],
+    "schemaChanges": false,
+    "newPromptKinds": false,
+    "newEntities": false,
+    "testInfrastructureChanges": false,
+    "metricCorrection": "Parent workflow1034 requires added-minus-deleted test lines:230 new +18 added -9 deleted existing =239. First local commit907070f amended before handoff; source/test unchanged and schema-only validation after this evidence correction."
+  },
+  "baseline": {
+    "witness": "32 failed /14 passed: chosen deferred wrappers/modes/count/controls/abandon fail; own source-payment/prefix fixtures initially wrong. Full receipt preserved.",
+    "refined-witness": "38 failed/14 passed: candidate-only historical fingerprint now fails because old engine accepts stored-X prefix; prevent null assertion initially used wrong surviving-stack field/score. Source-departure after explicit self-payment now exposes missing deferred binding.",
+    "additional-witness": "8 failed: source-departure2 and chosen prevent4 are reader failures; null prevent2 are own stack assertion errors.",
+    "prevent-null-control": "2 passed on unchanged production after fixture corrections.",
+    "repaired-focused": "52 passed after bounded reader repair.",
+    "affected": "1668 passed/2 failed existing abandon semantic row; native extra admission before edit.",
+    "legacy-row": "2 passed corrected chosen-X row before another affected suite.",
+    "review": "4184 related tests pass; own broad EffectNode fixture type and Prompt[].at library mismatch fail lint/typecheck; whole51.381s receipt retained.",
+    "typed-focused": "52 passed after contract-only type/index corrections, before final required review.",
+    "final-review": "4184 related tests pass; own Effect import from DSL types is not exported;47.352s retained. Corrected to existing effects/registry after actual builder inspection.",
+    "corrected-typecheck": "Both TypeScript project checks pass after final one-line import correction before validated-review."
+  },
+  "fixtureCorrections": [
+    "Automatic deferred step starts after paid activation: prefix is [true], committed energy3, target suspension keeps optional resolving payment private. Cancellation correctly bounces notCancellable.",
+    "Historic wrong-target prefix changes candidates only; preserves actual role/bounds/allowed. Old engine accepts it; repaired engine throws ReplayDivergence without mutating committed state.",
+    "Forced-auto answer disabled in own fixtures so self-abandon requires explicit [source] payment answer.",
+    "Prevent keeps original spell on stack after Interrupt ability resolves, with score0; CardStackItem uses instance identity."
+  ],
+  "failurePaths": {
+    "errorMidStep": "Candidate-only mismatching old target fingerprint throws ReplayDivergence with resolving committed hash unchanged and already-paid activation2 retained. Existing fold illegal-answer/error recovery affected checks also required.",
+    "reloadRestart": "Actual automatic deferred step JSON prefix [true] rebuilds same prompt/full state and finishes identically to inline engine.",
+    "partialWrite": "Optional payment1 is private until deferred target answer completes; committed energy3 retained across suspension; completion energy2. No new persistence operation.",
+    "invalidStaleInput": "Wrong actor, changed attempt, stored-X target outside chosen-X candidates rejected.",
+    "concurrentActors": "New action during in-flight resolution and duplicate final answer bounced; payments commit once.",
+    "interrupt": "Real Interrupt prevent response verifies opponent conditional payment against paid X; source-self-abandon control exercises captured binding after departure.",
+    "cancel": "Deferred automatic prompt after activation commitment correctly rejects cancellation; unchanged precommit numeric cancellation covered existing fold tests."
+  },
+  "knownLimits": {
+    "historicalPrefixes": "Legacy stored-X target fingerprint rejects existing replay validation; no wrong-target aliases or migration. Historical published events retain their original behavior.",
+    "countCapture": "hv-sob5 owns existing mandatory count/captured-cost target preparation; fixed1+discard capture1 after stored3 targeting is reproduced, not repaired here.",
+    "newAbandonX": "hv-umm2.512 owns introduced abandon-X count preparation and count-versus-energy accounting.",
+    "staticAndTriggerFallback": "Static conditions omit x and keep stored source semantics; direct trigger chooseOnResolution callers omit appended arg. Existing no-binding fallback unchanged."
+  },
+  "parentDiagnostics": [
+    {
+      "pid": 51972,
+      "exit": 0,
+      "wallS": 1.214,
+      "startUtc": "2026-10-12T11:48:28.109459+00:00",
+      "endUtc": "2026-10-12T11:48:29.323550+00:00",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a12e91/07c9-review-verification.mts"
+      ],
+      "terminal": true,
+      "receipt": "/tmp/dreamtides-executor-01a12e91/07c9-review-verification.json",
+      "task": "Prior read-only research"
+    },
+    {
+      "pid": 13935,
+      "exit": 0,
+      "wallS": 1.3440208329993766,
+      "startUtc": "2026-10-12T11:56:54.437603+00:00",
+      "endUtc": "2026-10-12T11:56:55.781767+00:00",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a12e91/07c9-prevent-verification.mts"
+      ],
+      "terminal": true,
+      "receipt": "/tmp/dreamtides-executor-01a12e91/07c9-prevent-verification.json",
+      "task": "Parent myhi expanded-scope diagnostic"
+    }
+  ],
+  "parentFailedPreventFixture": {
+    "pid": 12948,
+    "exit": 1,
+    "wallS": 0.747,
+    "terminal": true,
+    "reason": "Parent first Fast fixture timing illegal; corrected to actual Interrupt; no source effects. Exact start/end not supplied and not invented."
+  },
+  "runtime": {
+    "commands": [
+      {
+        "name": "witness",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "resolving activation X contracts"
+        ],
+        "pid": 17388,
+        "startUtc": "2026-10-12T11:59:16.097554+00:00",
+        "endUtc": "2026-10-12T11:59:20.089503+00:00",
+        "wallS": 3.992,
+        "exit": 1,
+        "log": "/tmp/hv-myhi-witness.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "refined-witness",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "resolving activation X contracts"
+        ],
+        "pid": 19226,
+        "startUtc": "2026-10-12T12:00:46.670567+00:00",
+        "endUtc": "2026-10-12T12:00:49.934834+00:00",
+        "wallS": 3.264,
+        "exit": 1,
+        "log": "/tmp/hv-myhi-refined-witness.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "additional-witness",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "retains paid X after|prevent unless-abandons"
+        ],
+        "pid": 20172,
+        "startUtc": "2026-10-12T12:01:17.889303+00:00",
+        "endUtc": "2026-10-12T12:01:21.518177+00:00",
+        "wallS": 3.629,
+        "exit": 1,
+        "log": "/tmp/hv-myhi-additional-witness.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "prevent-null-control",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "prevent unless-abandons uses stored X"
+        ],
+        "pid": 20854,
+        "startUtc": "2026-10-12T12:01:43.975853+00:00",
+        "endUtc": "2026-10-12T12:01:48.001717+00:00",
+        "wallS": 4.026,
+        "exit": 0,
+        "log": "/tmp/hv-myhi-prevent-null-control.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "repaired-focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "resolving activation X contracts"
+        ],
+        "pid": 21423,
+        "startUtc": "2026-10-12T12:02:17.338639+00:00",
+        "endUtc": "2026-10-12T12:02:21.855822+00:00",
+        "wallS": 4.517,
+        "exit": 0,
+        "log": "/tmp/hv-myhi-repaired-focused.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "affected",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/fold/fold-prompts.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/engine/loops/loops.test.ts",
+          "src/engine/loops/loops-mandatory.test.ts"
+        ],
+        "pid": 23057,
+        "startUtc": "2026-10-12T12:02:58.974763+00:00",
+        "endUtc": "2026-10-12T12:03:07.381488+00:00",
+        "wallS": 8.407,
+        "exit": 1,
+        "log": "/tmp/hv-myhi-affected.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "legacy-row",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "uses activation X for bounds and values while retaining played source X"
+        ],
+        "pid": 75447,
+        "startUtc": "2026-10-12T12:04:52.094824+00:00",
+        "endUtc": "2026-10-12T12:04:58.105588+00:00",
+        "wallS": 6.01,
+        "exit": 0,
+        "log": "/tmp/hv-myhi-legacy-row.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "repaired-affected",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/fold/fold-prompts.test.ts",
+          "src/engine/fold/fold-intents.test.ts",
+          "src/engine/loops/loops.test.ts",
+          "src/engine/loops/loops-mandatory.test.ts"
+        ],
+        "pid": 18415,
+        "startUtc": "2026-10-12T12:05:15.510390+00:00",
+        "endUtc": "2026-10-12T12:05:24.229516+00:00",
+        "wallS": 8.719,
+        "exit": 0,
+        "log": "/tmp/hv-myhi-repaired-affected.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "review",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 31156,
+        "startUtc": "2026-10-12T12:06:37.821540+00:00",
+        "endUtc": "2026-10-12T12:07:29.203337+00:00",
+        "wallS": 51.381,
+        "exit": 2,
+        "log": "/tmp/hv-myhi-review.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "typed-focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "resolving activation X contracts"
+        ],
+        "pid": 36927,
+        "startUtc": "2026-10-12T12:07:48.182876+00:00",
+        "endUtc": "2026-10-12T12:07:53.760771+00:00",
+        "wallS": 5.578,
+        "exit": 0,
+        "log": "/tmp/hv-myhi-typed-focused.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "final-review",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 38076,
+        "startUtc": "2026-10-12T12:08:08.320186+00:00",
+        "endUtc": "2026-10-12T12:08:55.673169+00:00",
+        "wallS": 47.352,
+        "exit": 2,
+        "log": "/tmp/hv-myhi-final-review.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "corrected-typecheck",
+        "command": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "pid": 71988,
+        "startUtc": "2026-10-12T12:09:20.655590+00:00",
+        "endUtc": "2026-10-12T12:09:23.817322+00:00",
+        "wallS": 3.162,
+        "exit": 0,
+        "log": "/tmp/hv-myhi-corrected-typecheck.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "validated-review",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 74149,
+        "startUtc": "2026-10-12T12:09:52.699627+00:00",
+        "endUtc": "2026-10-12T12:10:37.020273+00:00",
+        "wallS": 44.32,
+        "exit": 0,
+        "log": "/tmp/hv-myhi-validated-review.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 77879,
+        "startUtc": "2026-10-12T12:10:55.156940+00:00",
+        "endUtc": "2026-10-12T12:10:58.201831+00:00",
+        "wallS": 3.045,
+        "exit": 0,
+        "log": "/tmp/hv-myhi-knip.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "schema",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 79847,
+        "startUtc": "2026-10-12T12:12:12.818851+00:00",
+        "endUtc": "2026-10-12T12:12:12.917146+00:00",
+        "wallS": 0.098,
+        "exit": 0,
+        "log": "/tmp/hv-myhi-schema.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "frozen-schema",
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 80918,
+        "startUtc": "2026-10-12T12:12:50.985865+00:00",
+        "endUtc": "2026-10-12T12:12:51.082903+00:00",
+        "wallS": 0.097,
+        "exit": 0,
+        "log": "/tmp/hv-myhi-frozen-schema.log",
+        "terminal": true,
+        "ports": []
+      },
+      {
+        "name": "commit",
+        "command": [
+          "git",
+          "commit",
+          "-F",
+          "/tmp/hv-myhi-commit.txt"
+        ],
+        "pid": 88426,
+        "startUtc": "2026-10-12T12:13:11.514554+00:00",
+        "endUtc": "2026-10-12T12:13:11.542103+00:00",
+        "wallS": 0.027,
+        "exit": 0,
+        "log": "/tmp/hv-myhi-commit.log",
+        "terminal": true,
+        "ports": []
+      }
+    ],
+    "servers": [],
+    "ports": [],
+    "browsers": [],
+    "leases": [],
+    "providers": [],
+    "readOnlyInspection": "Finite read/status commands returned normally; PIDs not captured and not invented. No other worktree/native commands.",
+    "writer": "Sole helper source/evidence writer; source frozen after final-source checks, evidence tail then one commit. All command observers settled before handoff."
+  },
+  "finalValidation": {
+    "affected": "5files/1670tests pass,8.719s",
+    "review": "268files/4184tests plus both TypeScript projects and lint pass,44.320s",
+    "knip": "Pass outside heavy lock,3.045s",
+    "schema": "Final standalone validation receipt is captured after evidence freeze; excluded tail, final handoff accounts for PID/time."
+  },
+  "correctionWindows": [
+    {
+      "startUtc": "2026-10-12T11:59:20.089503+00:00",
+      "endUtc": "2026-10-12T12:01:48.001717+00:00",
+      "wallS": 147.912,
+      "provenance": "First baseline completion to unchanged prevent null control completion; spans own replay/self-payment/stack fixture corrections and deliberate distinguishing witness checks, not a pure-waste claim."
+    },
+    {
+      "startUtc": "2026-10-12T12:07:29.203337+00:00",
+      "endUtc": "2026-10-12T12:09:23.817322+00:00",
+      "wallS": 114.614,
+      "provenance": "First failed review terminal to isolated corrected typecheck terminal; includes actual repair/coordination, typed focused and avoidable second broad review. Both full51.381/47.352s failed receipts retained."
+    }
+  ],
+  "checkOrdering": "Corrected isolated typecheck green before validated-review;52 focused was green before final type-only import correction. Parent relaxed unnecessary exact-import runtime repeat; no subsequent source edits or extra broad checks.",
+  "setup": {
+    "pid": 62969,
+    "exit": 0,
+    "terminal": true,
+    "owner": "Parent pre-dispatch npm install observer",
+    "startUtc": null,
+    "endUtc": null,
+    "provenance": "Parent brief supplies observer identity/terminal result; timestamps were not supplied and are not invented."
+  },
+  "classification": "Bounded internal entity-free reader forwarding; focused affected checks/review/Knip/schema. No local full/fuzz/browser needed; parent other-family exact-source core review required."
+}
