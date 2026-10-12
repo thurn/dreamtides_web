@@ -1,6 +1,6 @@
 # RD-hv-umm2.473-1: Duration-bound chosen hand banishment returns to the owner's hand
 
-- Ladder: 1 (the Hand ownership rule and the effect-start source-presence boundary in Durations and RD-hv-7x4l.6-4), then 4 (the Magic Comprehensive Rules analog, 610.3 and 400.3, adapted to Dreamtides' persistent physical identity and its explicit permission to hold another player's card).
+- Ladder: 4 (the Magic Comprehensive Rules analog, 610.3 and 400.3, adapted to Dreamtides' persistent physical identity and its explicit permission to hold another player's card). The Hand ownership rule and the effect-start source-presence boundary in Durations and RD-hv-7x4l.6-4 are normative rule anchors.
 - rules.md: § Zones → Hand; § Keywords and Effects → Banish; § Durations; § Zone Changes; § Created Cards.
 - Affects: 1bae969b-0bc4-4777-86f3-1e860d601c5c and ea118471-164b-4d7f-bb02-044c862ed07e, and other chosen hand banishment with a duration.
 - Why: Both affected texts choose a card in a hand, and the unrestricted form can choose an event. A return to the original zone is a hand return for either card type. Ownership stays fixed when another player holds a card; an ordinary return goes to its owner's hand. The from-play return remains the prior controller's materialization under F3. A created card ceases to exist instead. The return identifies the exact physical card and the recorded entry into the Banished zone, so leaving that zone and entering it again does not revive the earlier return. Private matching-card selection and public banishment follow RD-hv-umm2.74-1.
