@@ -629,16 +629,16 @@ function withCardLab(battle: JourneyBattleFoldState, tokens: CardLabTokens, jour
   }
   publishCardLab(tokens, resolved, engine);
   if (lab === null) return battle;
-  const loaded = withLabBattle(battle, lab, published);
-  if (resolved.kind !== "ok" || resolved.entityKind !== "avatar") return loaded;
+  if (resolved.kind !== "ok" || resolved.entityKind !== "avatar") return withLabBattle(battle, lab, published);
   const avatar = journeyContent.avatars.find(candidate => candidate.id === resolved.request.avatarId);
-  if (avatar === undefined) return loaded;
-  return {
-    ...loaded,
+  if (avatar === undefined) return withLabBattle(battle, lab, published);
+  const presented = {
+    ...battle,
     init: resolved.request.side === "player"
-      ? { ...loaded.init, avatarSummary: avatar }
-      : { ...loaded.init, opponentAbilityActive: true, enemyDescriptor: { ...loaded.init.enemyDescriptor, avatarId: avatar.id, name: avatar.name, subtitle: avatar.title, imageNumber: avatar.imageNumber, abilityText: avatar.renderedText } },
+      ? { ...battle.init, avatarSummary: avatar, opponentAbilityActive: false }
+      : { ...battle.init, avatarSummary: null, opponentAbilityActive: true, enemyDescriptor: { ...battle.init.enemyDescriptor, avatarId: avatar.id, name: avatar.name, subtitle: avatar.title, imageNumber: avatar.imageNumber, abilityText: avatar.renderedText } },
   };
+  return withLabBattle(presented, lab, published);
 }
 
 /** Display data for a lab card the battle screen shows: its QA name and text, and its printed values. */

@@ -7,7 +7,8 @@ import cardLabPlay from "./scenarios/card-lab-play.mjs";
 afterEach(() => vi.useRealTimers());
 
 /** A synthetic page: observations, navigation interruptions, and host errors only. */
-async function fixture() {
+/** @param {Record<string, string>} [args] */
+async function fixture(args = {}) {
   const evaluate = vi.fn();
   const goto = vi.fn().mockResolvedValue(undefined);
   /** @type {Map<string, (...args: unknown[]) => void>} */
@@ -28,13 +29,23 @@ async function fixture() {
     off: (/** @type {string} */ name) => listeners.delete(name),
     waitForTimeout: async (/** @type {number} */ ms) => vi.advanceTimersByTimeAsync(ms),
   }));
-  const qa = await createQa(page, { baseUrl: "http://localhost:5174", bead: "fixture", captureDir: "/fixture", prod: false, args: {} });
+  const qa = await createQa(page, { baseUrl: "http://localhost:5174", bead: "fixture", captureDir: "/fixture", prod: false, args });
   const emit = (/** @type {keyof import('./prelude.mjs').Caps} */ kind, /** @type {string} */ message, documentId = "departed") =>
     listeners.get("console")?.({ type: () => "debug", text: () => `dreamtides:qa:caps:${JSON.stringify({ kind, message, documentId, href: "http://localhost:5174/lab", index: 1 })}` });
   return { qa, evaluate, listeners, init, waitForFunction, page, goto, emit, screenshot };
 }
 
 describe("QA observations across navigation", () => {
+  const avatar = "5e5e5e5e-0000-4000-8000-000000000574";
+  const card = "5e5e5e5e-0000-4000-8000-000000000002";
+  it.each([[{ avatar, as: "player" }, avatar], [{ avatar, as: "enemy" }, avatar], [{ card, avatar }, card], [{ card: "", avatar }, ""], [{}, null]])("preserves navigation identity and failure cleanup for %j", async (args, uuid) => {
+      const { qa, evaluate, goto } = await fixture(/** @type {Record<string, string>} */ (args));
+      evaluate.mockResolvedValue({ href: "http://localhost:5174/lab", documentId: "fixture", caps: { errors: [], rejections: [], consoleErrors: [] } });
+      const original = new Error("Synthetic navigation failure"); goto.mockRejectedValueOnce(original);
+      await expect(qa.goto("/next")).rejects.toBe(original);
+      const diagnostic = (await qa.finish(null, null)).log.find(({ label }) => label === "qa.navigation")?.data;
+      expect(diagnostic).toMatchObject({ cell: { uuid }, outcome: "failed", failedPhase: "goto", listenerCleanup: "removed" });
+  });
   it("verifies declared staging from immutable history and returns distinct initial physical ids after AI movement", async () => {
     const { qa, evaluate, waitForFunction, goto } = await fixture();
     const uuid = "5e5e5e5e-0000-4000-8000-000000000002";

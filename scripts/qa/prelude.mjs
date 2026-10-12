@@ -789,7 +789,7 @@ export async function createQa(page, config) {
     /** @type {string[]} */
     const observationErrors = [];
     const diagnostic = { operation, expectedUrl, deadline, callDeadline, waitUntil, allowErrors,
-      cell: { uuid: config.args.card ?? null, variant: config.args.variant ?? null, controller: config.args.as ?? null },
+      cell: { uuid: config.args.card ?? config.args.avatar ?? null, variant: config.args.variant ?? null, controller: config.args.as ?? null },
       clock: "node-wall", events, droppedEvents: 0, observationErrors, droppedObservationErrors: 0,
       outcome: "pending", failedPhase: /** @type {string | null} */ (null), error: /** @type {string | null} */ (null),
       contextDestroyed: false, errorCauses: /** @type {string[]} */ ([]), listenerCleanup: "pending" };

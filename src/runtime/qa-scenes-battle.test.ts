@@ -3,6 +3,15 @@
 // battle scenes park on their Battle start screens.
 
 import { describe, expect, it, vi } from "vitest";
+import * as battleInitProviders from "../session/providers/battle-init-provider";
+import { createEngine, type EngineEvent } from "../engine";
+import { atStartOfFirstTurn, triggered } from "../engine/dsl/triggers";
+import { gainPoints } from "../engine/effects/primitives/gain-points";
+import { avatarLabBattle } from "../engine/testing/avatar-lab";
+import { EngineProbeHistory } from "../battle/components/engine-probe-events";
+import type { CommittedEvent } from "../eventlog/local-log";
+import { buildBattleAvatarStatus } from "../screens/cumulus_adapters/mobile-battle-view-model";
+import { resolveEnemyAvatarSummary } from "../battle/components/enemy-avatar-summary";
 import { parseQaSceneId } from "../types/identifiers";
 import { layerOrdinal } from "../types/layer-name";
 import {
@@ -72,6 +81,67 @@ describe("the battle layer QA scenes", () => {
         expect(battle?.engine.slice.history).toBeUndefined();
       }
     } finally { errors.mockRestore(); }
+  });
+
+  it.each(["player", "enemy"] as const)("presents only the %s avatar ability as available", side => {
+    const base = battleSceneContent();
+    const content = { ...base, opponentsData: { ...base.opponentsData, progression: { ...base.opponentsData.progression, abilityActiveFromLayer: 0 } } };
+    const avatar = content.avatars[0];
+    const scene = parseQaSceneId(`card-lab-avatar:${avatar.id}:base:${side}`);
+    const journey = buildQaScene(scene, content, SCENE_OPTIONS);
+    if (journey === null) throw new Error("Avatar journey missing");
+    const battle = buildQaSceneBattle(scene, content, journey);
+    if (battle === null) throw new Error("Avatar lab missing");
+    const profiles = { player: buildBattleAvatarStatus(battle.init.avatarSummary, false), enemy: buildBattleAvatarStatus(resolveEnemyAvatarSummary(battle.init.enemyDescriptor, content), !battle.init.opponentAbilityActive) };
+    expect(profiles[side].avatarProfile?.id).toBe(avatar.id);
+    if (side === "enemy") expect(profiles.player.avatarProfile).toBeUndefined();
+    else expect(profiles.enemy.avatarProfile?.unavailable).toBe(true);
+  });
+
+  it.each(["player", "enemy"] as const)("retains %s first-turn observations at the exact final LOAD_STATE init", side => {
+    const content = battleSceneContent();
+    const avatar = content.avatars[0];
+    const factory = battleInitProviders.createBattleInitProvider;
+    const original = factory(content).engine;
+    const definition = { id: avatar.id, status: "authored" as const, abilities: () => [triggered(atStartOfFirstTurn(), gainPoints(2))] };
+    const engine = createEngine({ ...original.catalog, avatar: id => id === avatar.id ? definition : original.catalog.avatar(id) });
+    const injected = vi.spyOn(battleInitProviders, "createBattleInitProvider").mockImplementation(value => factory(value, engine));
+    try {
+      const scene = parseQaSceneId(`card-lab-avatar:${avatar.id}:base:${side}`);
+      const journey = buildQaScene(scene, content, SCENE_OPTIONS);
+      if (journey === null) throw new Error("Synthetic avatar journey missing");
+      const expected: EngineEvent[] = [];
+      avatarLabBattle(engine, { avatarId: avatar.id, side }, events => expected.push(...events));
+      const battle = buildQaSceneBattle(scene, content, journey);
+      if (battle === null) throw new Error("Synthetic avatar battle missing");
+      const load = (seq: number, value: typeof battle): CommittedEvent => ({ seq, event: { type: "LOAD_STATE", payload: { snapshot: journey, battle: value }, actor: testEventActor("avatar-observation"), clientTimestamp: new Date(0).toISOString(), basedOnSeq: seq - 1 } });
+      const committed = load(7, battle);
+      const applied = reduceGameEvent(initialFoldState(journey.seed, TEST_CONTENT_CONFIG), committed.event, { contentConfig: TEST_CONTENT_CONFIG, seq: committed.seq, rng: () => 0, intervening: [], timestamp: new Date(0).toISOString() });
+      expect(applied.outcome).toBe("applied");
+      const loaded = journeyBattleOf(applied.state.battle);
+      if (loaded === null) throw new Error("Synthetic avatar LOAD_STATE missing");
+      expect(loaded.init).toBe(battle.init);
+      expect(loaded.engine.slice.committed.sides[side].score).toBe(2);
+      const shadow = { ...battle, init: { ...battle.init } };
+      const history = new EngineProbeHistory(loaded.init, [committed, load(9, shadow)]);
+      expect(history.events.map(({ seq, index, event }) => [seq, index, event])).toEqual(expected.map((event, index) => [7, index, event]));
+      expect(history.events.find(({ event }) => event.kind === "triggerResolved")?.event).toMatchObject({ source: { kind: "avatar", side }, controller: side });
+      history.append({ seq: 7, events: expected });
+      expect(history.events).toHaveLength(expected.length);
+      expect(new EngineProbeHistory(battle.init, [load(9, shadow)]).events).toEqual([]);
+      expect(new EngineProbeHistory(shadow.init, [committed]).events).toEqual([]);
+      const reloaded = structuredClone(battle);
+      expect(new EngineProbeHistory(reloaded.init, [load(11, reloaded)]).events).toEqual([]);
+      const [card] = content.cardDatabase.values();
+      const ordinary = parseQaSceneId(`card-lab:${card.id}:base:enemy`);
+      const ordinaryJourney = buildQaScene(ordinary, content, SCENE_OPTIONS);
+      if (ordinaryJourney === null) throw new Error("Card control journey missing");
+      const ordinaryBattle = buildQaSceneBattle(ordinary, content, ordinaryJourney);
+      if (ordinaryBattle === null) throw new Error("Card control battle missing");
+      const cardLoad: CommittedEvent = { seq: 13, event: { ...committed.event, payload: { snapshot: ordinaryJourney, battle: ordinaryBattle } } };
+      const control = new EngineProbeHistory(ordinaryBattle.init, [cardLoad]).events.find(({ event }) => event.kind === "cardPlayed" && event.side === "enemy");
+      expect(control).toMatchObject({ seq: 13, kind: "cardPlayed", event: { side: "enemy" } });
+    } finally { injected.mockRestore(); }
   });
 
   it("loads a forced Dreamwell UUID for either side and validates requests before publishing it", () => {
