@@ -33,7 +33,7 @@ export function loadCardsV2Database(
 ): Map<number, CardData> {
   const database = new Map<number, CardData>();
   for (const card of cards) {
-    database.set(card.cardNumber, {
+    const display = {
       id: parseCardId(card.id),
       name: parseCardName(card.name),
       subtype: parseCardSubtype(card.subtype),
@@ -57,7 +57,11 @@ export function loadCardsV2Database(
       ...(card.art === undefined ? {} : {
         art: { x: card.art.x, y: card.art.y, scale: card.art.scale },
       }),
-    });
+    } satisfies CardData;
+    // Every declared field, including optional fields, participates in projection.
+    const complete: Exclude<keyof CardData, keyof typeof display> extends never
+      ? CardData : never = display;
+    database.set(card.cardNumber, complete);
   }
   return database;
 }
