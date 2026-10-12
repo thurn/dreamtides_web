@@ -337,5 +337,13 @@
     "baselineFailureAttribution": "Initial random expectations were fixture errors, not a product regression; the corrected failing baseline remains seven acceptance witnesses and two passing controls.",
     "schemaFlagCorrection": "Initial --validate-records-only exit2 is retained; tool declares --validate-records."
   },
-  "preExistingFollowUp": "hv-7d93"
+  "preExistingFollowUp": "hv-7d93",
+  "implementMinCorrection": {
+    "correctedBy": "hv-umm2.529",
+    "priorAckOnlyMin": 11.48,
+    "claimAt": "2026-10-12T09:32:37Z",
+    "sourceCommitterAt": "2026-10-12T09:59:10Z",
+    "correctedProxyMin": 26.55,
+    "scope": "Conservative observed claim-to-commit proxy including helper research, coordination and verification; exact dispatch timestamp is unavailable. Original narrower implementation-window observations are retained."
+  }
 }

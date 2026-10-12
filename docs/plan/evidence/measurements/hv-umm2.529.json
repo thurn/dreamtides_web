@@ -1,0 +1,665 @@
+{
+  "bead": "hv-umm2.529",
+  "base": "92c6719798efdf14f1e736e118523ce6d62cbc9d",
+  "implementationWindow": {
+    "start": "2026-10-12T10:02:21Z",
+    "end": "2026-10-12T10:14:40.264504+00:00",
+    "scope": "Observed claim-to-final-precommit proxy including read-only research, coordination and verification; exact dispatch unknown. ACK and first measured inspection retained separately; short commit tail bounded by source committer timestamp.",
+    "firstMeasuredInspection": "2026-10-12T10:07:12Z",
+    "startProvenance": "Parent observed native claim receipt; exact dispatch unavailable. Conservative claim-to-precommit proxy includes research, coordination and verification; ACK retained separately.",
+    "observedClaimAt": "2026-10-12T10:02:21Z",
+    "claimProvenance": "Parent observed native claim receipt; exact dispatch timestamp unavailable.",
+    "finalPrecommitAt": "2026-10-12T10:14:40.264504+00:00",
+    "claimToPrecommitMin": 12.321075066666667,
+    "ackAt": "2026-10-12T10:06:41Z"
+  },
+  "commands": {
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-12T10:10:21.044492+00:00",
+      "endedAt": "2026-10-12T10:10:21.237178+00:00",
+      "wallS": 0.19257770799595164,
+      "exit": 0,
+      "wrapperPid": 47865,
+      "npmPid": 47949,
+      "terminal": true,
+      "receipt": "/tmp/hv-529-review.log"
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startedAt": "2026-10-12T10:10:21.237507+00:00",
+      "endedAt": "2026-10-12T10:10:25.749910+00:00",
+      "wallS": 4.512378916995658,
+      "exit": 0,
+      "wrapperPid": 47865,
+      "npmPid": 48348,
+      "terminal": true,
+      "receipt": "/tmp/hv-529-knip.log"
+    },
+    "reviewFinal": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-12T10:12:12.824645+00:00",
+      "endedAt": "2026-10-12T10:12:13.180046+00:00",
+      "wallS": 0.3554317500020261,
+      "exit": 0,
+      "wrapperPid": 57123,
+      "npmPid": 57124,
+      "terminal": true,
+      "receipt": "/tmp/hv-529-review-final.log"
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startedAt": "2026-10-12T10:12:13.180428+00:00",
+      "endedAt": "2026-10-12T10:12:13.241652+00:00",
+      "wallS": 0.061251584003912285,
+      "exit": 0,
+      "wrapperPid": 57123,
+      "nodePid": 57194,
+      "terminal": true,
+      "receipt": "/tmp/hv-529-schema.log"
+    },
+    "reviewEvidenceFinal": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-12T10:12:50.828927+00:00",
+      "endedAt": "2026-10-12T10:12:51.155624+00:00",
+      "wallS": 0.3267233330043382,
+      "exit": 0,
+      "wrapperPid": 57809,
+      "npmPid": 57810,
+      "terminal": true,
+      "receipt": "/tmp/hv-529-review-evidence-final.log"
+    },
+    "reviewProvenance": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-12T10:14:40.030700+00:00",
+      "endedAt": "2026-10-12T10:14:40.264464+00:00",
+      "wallS": 0.2338017919973936,
+      "exit": 0,
+      "wrapperPid": 59658,
+      "npmPid": 59668,
+      "terminal": true,
+      "receipt": "/tmp/hv-529-review-provenance.log"
+    }
+  },
+  "audit": {
+    "grepCommand": [
+      "rg",
+      "-n",
+      "-i",
+      "^\\s*[-*]?\\s*Ladder:",
+      "docs/plan/evidence/rules-decisions"
+    ],
+    "grepReceipt": "/tmp/hv-529-ladder-grep.log",
+    "grepExit": 0,
+    "rdFiles": 173,
+    "ladderLines": 173,
+    "baselineFalseStep1": 28,
+    "finalFalseStep1": 0,
+    "step1ClaimPattern": "(?:^\\s*-\\s*Ladder:\\s*1\\b|(?:then|after|with|\\([a-z]\\))\\s+1\\s*(?:\\(|for\\b))",
+    "entryPattern": "(?<![\\w-])[DCPF]\\d+\\b",
+    "formatAudit": "All 173 Ladder declarations are single-line dash bullets; inventory includes primary numeric forms, D10 step wording, secondary then/after/with claims and lettered clauses. RD anchor suffixes, MTG rule numbers and silent ranges are not treated as rung claims. All surviving rung-1 claims were manually reviewed against their actual D/C/P/F entries.",
+    "changedRDs": [
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.8-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 (engine-design \u00a7 Zones and zone changes lists the replacements in order; rules \u00a7 Keywords and Effects \u2192 Veil, Reclaim, Abandon), then 5 for what the order implies",
+        "after": "- Ladder: 5 for the replacement composition, the simplest reading consistent with the rules and affected text; engine-design \u00a7 Zones and zone changes and rules.md \u00a7 Keywords and Effects \u2192 Veil, Reclaim, Abandon supply the normative replacement order and keyword rules.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.102-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Ability Types \u2192 Where triggered abilities work: abilities that trigger when a card leaves play see it as it was just before it left; \u00a7 Ability Types \u2192 When a character is dissolved: \"a character you control\" includes the ability's own card, \"another\" does not; \u00a7 Zones \u2192 Hand and \u00a7 Keywords and Effects \u2192 Erode: \"When you discard\" and \"When you erode\" match whatever effect caused the move; \u00a7 Zone Changes: the created-card and reclaimed replacements turn a move into ceasing to exist or a banish), then 3 silent (read-only `~/dreamtides` at 0d6afa7dc2eef6048264ffd634da1c2b97886b12 has no return-to-hand trigger: `rules_engine/src/ability_data/src/trigger_event.rs` only `LeavesPlay`), then 4 (MTG 603.10a: leaves-the-battlefield abilities look back in time, so an ability sees its own card leave), then 5 for \"you return\" (the simplest reading consistent with both texts: the returning player is the one whose character it is, as \"you discard\" and \"you erode\" are)",
+        "after": "- Ladder: 4 (MTG 603.10a: leaves-the-battlefield abilities look back in time, so an ability sees its own card leave), then 5 for \"you return\" (the simplest reading consistent with both texts: the returning player is the one whose character it is, as \"you discard\" and \"you erode\" are). rules.md \u00a7 Ability Types \u2192 Where triggered abilities work and When a character is dissolved, \u00a7 Zones \u2192 Hand, \u00a7 Keywords and Effects \u2192 Erode, and \u00a7 Zone Changes supply the normative trigger and replacement rules. The read-only Rust trigger definitions at 0d6afa7dc2eef6048264ffd634da1c2b97886b12 supply no return-to-hand trigger (`rules_engine/src/ability_data/src/trigger_event.rs` has only `LeavesPlay`).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.102-2.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Costs, Requirements, and X \u2192 Cost changes: every increase, then every reduction, never below 0\u25cf; \u2192 A card's own cost: own-card changes apply whoever plays the card and, with no stated duration, are permanent and travel with it; RD-hv-umm2.101-1 and RD-hv-umm2.422-1: own-card increases apply on top of replacement route bases; \u00a7 Zone Changes: a card keeps its identity across zones), agreeing with 4 (MTG 601.2f: cost reductions apply to the total cost after increases)",
+        "after": "- Ladder: 4 (MTG 601.2f: cost reductions apply to the total cost after increases), then 5 for the permanent own-card reduction, the simplest reading consistent with the text. rules.md \u00a7 Costs, Requirements, and X \u2192 Cost changes and A card's own cost, \u00a7 Zone Changes, RD-hv-umm2.101-1 and RD-hv-umm2.422-1 supply the normative cost composition and persistent identity rules.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.107-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Ability Types: \"When you play your second event in a turn\" counts the matching cards that player played this turn, including the one just played, by type as each was played, and a later type change does not alter what a play counted toward; \u00a7 Keywords and Effects \u2192 Materialize and Rematerialize: every entry into play, a created figment included, and every rematerialization fires \"When you materialize\" triggers), then 2 silent (no prototype behavior counts materializations), then 3 silent (read-only `~/dreamtides` at 0d6afa7dc2eef6048264ffd634da1c2b97886b12 declares `TriggerEvent::MaterializeNthThisTurn(Predicate, u32)` but its matcher is `todo!(\"Implement MaterializeNthThisTurn\")` in `rules_engine/src/battle_queries/src/card_ability_queries/trigger_queries.rs`), then 4 (MTG \"your second spell each turn\" abilities count spells cast before the permanent with the ability was on the battlefield, and the triggering spell itself), then 5 for simultaneous entries (Dreamtides announces each materialization on its own, so they count one at a time in the order they enter)",
+        "after": "- Ladder: 4 (MTG \"your second spell each turn\" abilities count spells cast before the permanent with the ability was on the battlefield, and the triggering spell itself), then 5 for simultaneous entries (Dreamtides announces each materialization on its own, so they count one at a time in the order they enter). rules.md \u00a7 Ability Types and \u00a7 Keywords and Effects \u2192 Materialize and Rematerialize supply the normative play-count and entry rules. Step 2 is silent (no prototype behavior counts materializations); step 3 is silent (read-only Rust at 0d6afa7dc2eef6048264ffd634da1c2b97886b12 declares `TriggerEvent::MaterializeNthThisTurn(Predicate, u32)` but its matcher is `todo!(\"Implement MaterializeNthThisTurn\")` in `rules_engine/src/battle_queries/src/card_ability_queries/trigger_queries.rs`).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.107-2.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Ability Types \u2192 Intervening conditions: \"When X, if Y\" triggers only if Y holds as X happens and does nothing unless Y still holds as it resolves; \u00a7 Ability Types \u2192 Counting materializations, RD-hv-umm2.107-1, for what counts), then 5 (the simplest reading consistent with the text: \"not the first\" is \"the second or later\" by the same count)",
+        "after": "- Ladder: 4 for the intervening condition, as established by RD-hv-7x4l.6-2 (MTG 603.4), then 5 for \"not the first\" (the simplest reading consistent with the text: \"the second or later\" by the same count). rules.md \u00a7 Ability Types \u2192 Intervening conditions and Counting materializations, with RD-hv-umm2.107-1, supply the normative condition and count rules.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.108-2.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules \u00a7 Created Cards: a created card is used like a normal card and ceases to exist instead of moving to a deck, a hand, the void, or the Banished zone; \u00a7 Zones: a hand is hidden from the opponent), consistent with the engine's created copies in a hand (`cardCreated` is private to the hand holding it; `zone-card-refs.contracts.ts`)",
+        "after": "- Ladder: 5 for creating the named base printing privately in the hand, the simplest reading consistent with the affected text and the normative rules.md \u00a7 Created Cards and \u00a7 Zones rules; existing created copies in a hand provide corroboration (`cardCreated` is private to the hand holding it; `zone-card-refs.contracts.ts`).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.140-1.md",
+        "line": 3,
+        "before": "- Ladder: 1 (rules.md \u00a7 Costs, Requirements, and X: whether zero is legal depends on a meaningful effect, and cost conditions read copiable cost), then 5 (the simplest reading consistent with the printed target).",
+        "after": "- Ladder: 5 (the simplest reading consistent with the printed target and the normative contextual-zero and copiable-cost rules in rules.md \u00a7 Costs, Requirements, and X).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.143-1.md",
+        "line": 3,
+        "before": "- Ladder: 1 (rules.md \u00a7 Costs, Requirements, and X \u2192 X costs: whether X = 0 is legal depends on whether the play can be meaningful, and X is picked before the card's modes and targets; \u00a7 Modal abilities: a card's mode is chosen as it is played, before its targets), following RD-hv-umm2.140-1 (Grounded) and RD-hv-umm2.145-1 (Collateral Damage); agreeing with 4 (MTG Banefire, the card's `mtgName`, may be cast with X = 0). No D-, C-, or P-entry names this card, and steps 2\u20133 give no implementation of it.",
+        "after": "- Ladder: 4 (MTG Banefire, the card's `mtgName`, may be cast with X = 0), then 5 for the contextual meaningful-mode reading consistent with the printed text. rules.md \u00a7 Costs, Requirements, and X \u2192 X costs and \u00a7 Modal abilities, with RD-hv-umm2.140-1 (Grounded) and RD-hv-umm2.145-1 (Collateral Damage), supply the normative X and mode rules. No D-, C-, or P-entry names this card, and steps 2\u20133 give no implementation of it.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.154-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules \u00a7 Challengers, Blockers, and Scoring: \"When the opponent scores \u235f\" responds once per scoring character; rules \u00a7 Ability Types \u2192 Where triggered abilities work: an ability naming another zone works in that zone), then 5 (simplest reading consistent with the card text)",
+        "after": "- Ladder: 4 for the functional zone, as established by RD-hv-umm2.53-1 (MTG 113.6 and 113.6b), then 5 for the per-enemy trigger and self-void reference, the simplest reading consistent with the card text. rules.md \u00a7 Challengers, Blockers, and Scoring and \u00a7 Ability Types \u2192 Where triggered abilities work supply the normative scoring and zone rules.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.457-1.md",
+        "line": 3,
+        "before": "- Ladder: 1 (rules.md \u00a7 Costs, Requirements, and X: the contextual X rule, the shared X binding of a discard-X cost, RD-hv-umm2.61-1, and the least X of RD-hv-umm2.68-1; \u00a7 Keywords and Effects \u2192 Reclaim), then 5 (the simplest reading consistent with the card text)",
+        "after": "- Ladder: 5 (the simplest reading consistent with the card text and the normative contextual-X, shared discard-X binding and Reclaim rules in rules.md \u00a7 Costs, Requirements, and X and \u00a7 Keywords and Effects \u2192 Reclaim, with RD-hv-umm2.61-1 and RD-hv-umm2.68-1).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.495-1.md",
+        "line": 3,
+        "before": "- Ladder: 1 (rules.md \u00a7 Costs, Requirements, and X: X is picked before targets, a cost condition reads copiable cost, and X = 0 is contextual; \u00a7 Targeting \u2192 Bounds that count: a bound is read as targets are chosen and again as the effect resolves; \u00a7 Playing Cards and the Stack \u2192 Copies on the stack: a copy uses the original's X), following RD-hv-umm2.142-1 and RD-hv-umm2.86-2; no D-, C-, or P-entry names this card.",
+        "after": "- Ladder: 1 (D15: X carries over to a copy), 4 for target bounds checked at choice and resolution as established by RD-hv-umm2.76-1 (MTG 608.2b), and 5 for meaningful X = 0, the simplest reading consistent with the printed text. rules.md \u00a7 Costs, Requirements, and X, \u00a7 Targeting \u2192 Bounds that count and \u00a7 Playing Cards and the Stack \u2192 Copies on the stack, with RD-hv-umm2.142-1 and RD-hv-umm2.86-2, supply the normative X, cost and copy rules; no D-, C-, or P-entry names this card.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.53-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Ability Types \u2192 Where triggered abilities work: an ability that names another zone works there instead), then 4 (MTG 113.6 and 113.6b: abilities function on the battlefield unless they state the zones they function from, and then only from those; MTG 613.7a and 613.7d: a static ability's effect has its object's timestamp, which the object receives as it enters a zone)",
+        "after": "- Ladder: 4 (MTG 113.6 and 113.6b: abilities function on the battlefield unless they state the zones they function from, and then only from those; MTG 613.7a and 613.7d: a static ability's effect has its object's timestamp, which the object receives as it enters a zone). rules.md \u00a7 Ability Types \u2192 Where triggered abilities work supplies the normative zone rule.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.55-2.md",
+        "line": 3,
+        "before": "- Ladder: 1 (the contextual X=0 rule in \u00a7 Costs, Requirements, and X).",
+        "after": "- Ladder: 5 (the simplest reading consistent with the printed Discover criterion and the normative contextual X = 0 rule in rules.md \u00a7 Costs, Requirements, and X).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.59-2.md",
+        "line": 2,
+        "before": "- Ladder: 1 for \"your\" zones (RD-hv-umm2.52-1 reads \"your hand\" as the hand you hold and \"your deck/void\" as the ones you own for statics; the same reading applies to resolving effects), then 5 (simplest reading consistent with every affected text) for the top-of-deck count, the self reference, and hidden reads",
+        "after": "- Ladder: 5 (the simplest reading consistent with every affected text) for applying \"your\" zones to resolving effects, the top-of-deck count, the self reference and hidden reads. RD-hv-umm2.52-1 supplies the normative static-zone reading: \"your hand\" is the hand you hold and \"your deck/void\" are the ones you own.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.61-1.md",
+        "line": 3,
+        "before": "- Ladder: 1 (Dreamtides rules), then 5 (the simplest consistent reading of the printed clauses).",
+        "after": "- Ladder: 5 (the simplest reading consistent with the printed clauses and the normative rules.md \u00a7 Costs, Requirements, and X and \u00a7 Keywords and Effects \u2192 Discover rules).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.66-2.md",
+        "line": 3,
+        "before": "- Ladder: 1 (the contextual X=0 rule in \u00a7 Costs, Requirements, and X).",
+        "after": "- Ladder: 5 (the simplest reading consistent with the printed trigger and the normative contextual X = 0 rule in rules.md \u00a7 Costs, Requirements, and X).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.68-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Costs, Requirements, and X: the contextual X rule and the shared X binding of a discard-X cost, RD-hv-umm2.61-1), then 5 (the simplest reading consistent with the card text)",
+        "after": "- Ladder: 5 (the simplest reading consistent with the card text and the normative contextual-X and shared discard-X binding rules in rules.md \u00a7 Costs, Requirements, and X and RD-hv-umm2.61-1).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.70-1.md",
+        "line": 3,
+        "before": "- Ladder: 2 (existing engine behavior: `resolveLane` pairs a designated challenger in any front lane with a designated blocker now opposite it), after 1 (rules \u00a7 Challengers, Blockers, and Scoring: designations made at the end of Day and Dusk, which Night repositioning can change).",
+        "after": "- Ladder: 2 (existing engine behavior: `resolveLane` pairs a designated challenger in any front lane with a designated blocker now opposite it), with normative support from rules.md \u00a7 Challengers, Blockers, and Scoring: designations made at the end of Day and Dusk, which Night repositioning can change.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.82-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 for which discards count (RD-hv-umm2.116-1 and rules.md \u00a7 Zones \u2192 Hand \"When you discard\": every discard from your hand, whatever caused it), then 3 (read-only `~/dreamtides` at 0d6afa7dc2eef6048264ffd634da1c2b97886b12: `rules_engine/src/battle_mutations/src/effects/discard_cards.rs:36\u201337` moves the card from hand to void and only then pushes `Trigger::Discarded(VoidCardId)`, and `rules_engine/src/ability_data/src/predicate.rs:11\u201319` names the \"this card\"/\"it\" predicates the trigger matches against the owning card; the Rust engine registers no void-zone listeners, and `docs/battle_rules/battle_rules.md` is silent), agreeing with 4 (MTG 603.10a: a discard is not among the look-back triggers, so the ability is checked after the event, with the card in its new zone, and must function there)",
+        "after": "- Ladder: 4 for discard attribution as established by RD-hv-umm2.116-1, and for the functional zone (MTG 603.10a: a discard is not among the look-back triggers, so the ability is checked after the event, with the card in its new zone, and must function there). rules.md \u00a7 Zones \u2192 Hand supplies the normative \"When you discard\" rule: every discard from your hand, whatever caused it. Read-only Rust at 0d6afa7dc2eef6048264ffd634da1c2b97886b12 corroborates the observation (`rules_engine/src/battle_mutations/src/effects/discard_cards.rs:36\u201337` moves the card from hand to void and only then pushes `Trigger::Discarded(VoidCardId)`; `rules_engine/src/ability_data/src/predicate.rs:11\u201319` names the \"this card\"/\"it\" predicates; no void-zone listeners are registered, and `docs/battle_rules/battle_rules.md` is silent).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.84-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Keywords and Effects \u2192 Reclaim: such abilities \"remove the reclaimed status\", the status that also banishes a reclaimed event as it resolves), confirmed by 3 (`~/dreamtides` battle_rules.md: a reclaimed card is banished as it \"would later leave the stack or battlefield\")",
+        "after": "- Ladder: not invoked for removing the reclaimed status, which rules.md \u00a7 Keywords and Effects \u2192 Reclaim settles; 5 for the owner and event-inclusive scope, the simplest reading consistent with \"Cards you reclaim\". The Rust `~/dreamtides/docs/battle_rules/battle_rules.md` wording that a reclaimed card is banished as it \"would later leave the stack or battlefield\" corroborates that status's scope.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.86-2.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Costs, Requirements, and X: a cost condition such as \"\u22642\u25cf cost character\" reads copiable cost, and whether X may be 0 is contextual), then 5 (simplest reading consistent with the card text)",
+        "after": "- Ladder: 5 (the simplest reading consistent with the card text and the normative copiable-cost and contextual-X rules in rules.md \u00a7 Costs, Requirements, and X).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.87-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Keywords and Effects \u2192 Erode N: Erode puts the top cards of a player's deck into their void, \"The opponent erodes 2\" directs it at a player, and an empty deck causes Fatigue instead; RD-hv-umm2.82-1 and rules.md \u00a7 Ability Types \u2192 When you discard this card, which anticipated \"When you discard [or erode] this card\" and settle every other part of the self trigger), then 3 (read-only `~/dreamtides` at 0d6afa7dc2eef6048264ffd634da1c2b97886b12: `rules_engine/src/ability_data/src/trigger_event.rs` and `rules_engine/src/battle_state/src/triggers/trigger.rs` define `Discard` and `PutIntoVoid` triggers but no erode trigger, so it is silent), agreeing with 4 (MTG 603.10a: a card put into a graveyard from a library is not a look-back trigger, so the ability is checked with the card in its new zone; Narcomoeba's \"When Narcomoeba is put into your graveyard from your library\" works from the graveyard)",
+        "after": "- Ladder: 4 (MTG 603.10a: a card put into a graveyard from a library is not a look-back trigger, so the ability is checked with the card in its new zone; Narcomoeba's \"When Narcomoeba is put into your graveyard from your library\" works from the graveyard), then 5 for attributing Erode to the player whose deck the card leaves, the simplest reading consistent with the printed text. rules.md \u00a7 Keywords and Effects \u2192 Erode N and \u00a7 Ability Types \u2192 When you discard this card, with RD-hv-umm2.82-1, supply the normative Erode and self-trigger rules. Step 3 is silent: read-only Rust at 0d6afa7dc2eef6048264ffd634da1c2b97886b12 defines `Discard` and `PutIntoVoid` triggers but no erode trigger in `rules_engine/src/ability_data/src/trigger_event.rs` and `rules_engine/src/battle_state/src/triggers/trigger.rs`.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.87-2.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Spark \u2192 Values fixed as an effect resolves: a resolving effect that changes characters for a while changes those that match as it resolves, and a later arrival is not changed; rules.md \u00a7 Keywords and Effects \u2192 Reclaim and RD-hv-umm2.78-1: gained Reclaim, its duration, and a plain gain keeping the card's cost), agreeing with 4 (MTG 611.2c: a continuous effect from a resolving spell that changes characteristics affects only the objects determined as it resolves; Past in Flames, From the Barrow's reference card, gives flashback only to the cards in the graveyard as it resolves); step 3 is silent (the `~/dreamtides` Rust engine implements no granted Reclaim, RD-hv-umm2.78-1)",
+        "after": "- Ladder: 4 (MTG 611.2c: a continuous effect from a resolving spell that changes characteristics affects only the objects determined as it resolves; Past in Flames, From the Barrow's reference card, gives flashback only to the cards in the graveyard as it resolves). rules.md \u00a7 Spark \u2192 Values fixed as an effect resolves and \u00a7 Keywords and Effects \u2192 Reclaim, with RD-hv-umm2.78-1, supply the normative fixed-set, granted-Reclaim, duration and cost rules. Step 3 is silent (the Rust engine implements no granted Reclaim, RD-hv-umm2.78-1).",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.88-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules \u00a7 Figments: a figment copy \"is a figment in every other respect: it counts for effects that refer to figments\"; each figment \"counts separately as a character and subtype member\"), then 5 for the typed reading",
+        "after": "- Ladder: 1 (C5: a figment copy is a figment and counts for figment synergies), then 5 for the typed reading, the simplest reading consistent with the printed text and rules.md \u00a7 Figments, where each figment counts separately as a character and subtype member.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.91-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Keywords and Effects \u2192 Reclaim: a card played from the void by Reclaim, printed or gained, becomes reclaimed, while a play permission is a separate route; \u00a7 Ability Types \u2192 \"when you play\" abilities match a play by its characteristics as it was played; \u00a7 Ability Types \u2192 Trigger timing and order: triggered abilities resolve before any player receives priority; \u00a7 Spark: gained spark travels with the card across zones), then 3 (read-only `~/dreamtides` at 0d6afa7dc2eef6048264ffd634da1c2b97886b12: `rules_engine/src/battle_mutations/src/play_cards/play_card.rs` `from_void` pushes `Trigger::PlayedCardFromVoid` as the card moves to the stack and applies a play-from-void ability's `if_you_do` effect to the card on the stack; `ability_data/src/trigger_event.rs` has no reclaim trigger), agreeing with 4 (MTG 601.2i: abilities that trigger when a spell is cast trigger once it becomes cast, with the spell on the stack, and a spell's own \"when you cast this spell\" ability works there)",
+        "after": "- Ladder: 1 (D14: triggered abilities resolve before priority passes), then 4 (MTG 601.2i: abilities that trigger when a spell is cast trigger once it becomes cast, with the spell on the stack, and a spell's own \"when you cast this spell\" ability works there). rules.md \u00a7 Keywords and Effects \u2192 Reclaim, \u00a7 Ability Types \u2192 \"when you play\" abilities and Trigger timing and order, and \u00a7 Spark supply the normative route, play-characteristic, timing and persistent-spark rules. Read-only Rust at 0d6afa7dc2eef6048264ffd634da1c2b97886b12 corroborates the stack timing: `rules_engine/src/battle_mutations/src/play_cards/play_card.rs` `from_void` pushes `Trigger::PlayedCardFromVoid` as the card moves to the stack and applies a play-from-void ability's `if_you_do` effect to the card on the stack; `ability_data/src/trigger_event.rs` has no reclaim trigger.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.91-2.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Spark: the effective spark, gained spark, spark with a duration, and static and Support spark included, is what rules read; \u00a7 Spark \u2192 Values fixed as an effect resolves and RD-hv-7x4l.7-1: a value in a resolving effect is determined once as it resolves), agreeing with 4 (MTG 608.2h: a resolving ability determines such a value once, as it is applied, from the source's current information; MTG 608.2c: the parts of an ability are applied in written order)",
+        "after": "- Ladder: 4 (MTG 608.2h: a resolving ability determines such a value once, as it is applied, from the source's current information; MTG 608.2c: the parts of an ability are applied in written order). rules.md \u00a7 Spark and \u00a7 Spark \u2192 Values fixed as an effect resolves, with RD-hv-7x4l.7-1, supply the normative effective-spark and resolution-time-value rules.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.93-1.md",
+        "line": 2,
+        "before": "- Ladder: 1 (rules.md \u00a7 Playing Cards and the Stack \u2192 Playing from the void: Reclaim and a play permission are both ways of playing a card from your own void; \u00a7 Ability Types: \"when you play\" abilities match a play by its characteristics as it was played; RD-hv-umm2.91-1: only \"reclaim\" names the Reclaim route; \u00a7 Keywords and Effects \u2192 Materialize: \"returned 'to play' by an effect\" is a materialize; \u00a7 Ability Types \u2192 Where triggered abilities work), then 3 (read-only `~/dreamtides` at 0d6afa7dc2eef6048264ffd634da1c2b97886b12: `rules_engine/src/battle_mutations/src/play_cards/play_card.rs` `from_void` serves every play from the void, by a Reclaim-style ability and by a static `PlayFromVoid` permission alike, and pushes `Trigger::PlayedCardFromVoid` with the card already on the stack), agreeing with 4 (MTG 601.2i: abilities that trigger when a spell is cast trigger once it becomes cast, with the spell on the stack; MTG 113.6k: an ability that can only work from a zone, as one that returns its own card from a graveyard, functions there)",
+        "after": "- Ladder: 4 (MTG 601.2i: abilities that trigger when a spell is cast trigger once it becomes cast, with the spell on the stack; MTG 113.6k: an ability that can only work from a zone, as one that returns its own card from a graveyard, functions there), then 5 for counting every route of play from the void, the simplest reading consistent with the printed text. rules.md \u00a7 Playing Cards and the Stack \u2192 Playing from the void, \u00a7 Ability Types \u2192 \"when you play\" abilities and Where triggered abilities work, and \u00a7 Keywords and Effects \u2192 Materialize, with RD-hv-umm2.91-1, supply the normative play, Reclaim-route and materialization rules. Read-only Rust at 0d6afa7dc2eef6048264ffd634da1c2b97886b12 corroborates the route-independent stack timing: `rules_engine/src/battle_mutations/src/play_cards/play_card.rs` `from_void` serves Reclaim-style and static `PlayFromVoid` plays and pushes `Trigger::PlayedCardFromVoid` with the card already on the stack.",
+        "nonLadderLinesByteEqual": true
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.93-2.md",
+        "line": 2,
+        "before": "- Ladder: 5 (the simplest reading consistent with every affected card text), agreeing with 1 (rules.md \u00a7 Keywords and Effects \u2192 Awakened: the keyword's only effect is that the character enters play without the exhausted status; \u00a7 Exhaust and Awaken: awakening clears the exhausted status; \u00a7 Zone Changes and \u00a7 Keywords and Effects \u2192 Veil: changes to a card's keywords travel with it across zones)",
+        "after": "- Ladder: 5 (the simplest reading consistent with every affected card text), with normative support from rules.md \u00a7 Keywords and Effects \u2192 Awakened (the character enters play without the exhausted status), \u00a7 Exhaust and Awaken (awakening clears the exhausted status), and \u00a7 Zone Changes and \u00a7 Keywords and Effects \u2192 Veil (keyword changes travel with the card across zones).",
+        "nonLadderLinesByteEqual": true
+      }
+    ],
+    "retainedExplicitStep1": [
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-1.md",
+        "line": 2,
+        "entries": [
+          "D13"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-11.md",
+        "line": 2,
+        "entries": [
+          "C5"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-12.md",
+        "line": 2,
+        "entries": [
+          "C7"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-13.md",
+        "line": 2,
+        "entries": [
+          "C8"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-14.md",
+        "line": 2,
+        "entries": [
+          "C9"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-15.md",
+        "line": 2,
+        "entries": [
+          "C10"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-16.md",
+        "line": 2,
+        "entries": [
+          "C13"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-17.md",
+        "line": 2,
+        "entries": [
+          "C14"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-18.md",
+        "line": 2,
+        "entries": [
+          "C15",
+          "P5"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-19.md",
+        "line": 2,
+        "entries": [
+          "C17"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-2.md",
+        "line": 2,
+        "entries": [
+          "D14"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-20.md",
+        "line": 2,
+        "entries": [
+          "C17"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-21.md",
+        "line": 2,
+        "entries": [
+          "D15",
+          "C1",
+          "C3"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-22.md",
+        "line": 2,
+        "entries": [
+          "P11",
+          "F1",
+          "F4"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-3.md",
+        "line": 2,
+        "entries": [
+          "D15",
+          "C6"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-4.md",
+        "line": 2,
+        "entries": [
+          "D12"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-5.md",
+        "line": 2,
+        "entries": [
+          "P1"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-6.md",
+        "line": 2,
+        "entries": [
+          "P4"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-7.md",
+        "line": 2,
+        "entries": [
+          "P5",
+          "F4",
+          "P11"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-8.md",
+        "line": 2,
+        "entries": [
+          "P6"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.1-9.md",
+        "line": 2,
+        "entries": [
+          "F3"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.17-3.md",
+        "line": 2,
+        "entries": [
+          "D14"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.36-1.md",
+        "line": 2,
+        "entries": [
+          "D12"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.43-1.md",
+        "line": 2,
+        "entries": [
+          "C15",
+          "P5"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.45-1.md",
+        "line": 2,
+        "entries": [
+          "C17"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.46-1.md",
+        "line": 2,
+        "entries": [
+          "C17"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.6-1.md",
+        "line": 2,
+        "entries": [
+          "D14"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.6-4.md",
+        "line": 2,
+        "entries": [
+          "C8",
+          "C7"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.6-5.md",
+        "line": 2,
+        "entries": [
+          "D14"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.8-2.md",
+        "line": 2,
+        "entries": [
+          "F3"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.8-4.md",
+        "line": 2,
+        "entries": [
+          "D15",
+          "C6"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.9-1.md",
+        "line": 2,
+        "entries": [
+          "D12"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-7x4l.9-3.md",
+        "line": 2,
+        "entries": [
+          "D12"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.112-1.md",
+        "line": 3,
+        "entries": [
+          "C8"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.142-1.md",
+        "line": 3,
+        "entries": [
+          "C13"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.318-1.md",
+        "line": 2,
+        "entries": [
+          "C4",
+          "D39",
+          "C13"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.52-1.md",
+        "line": 2,
+        "entries": [
+          "C4"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.62-1.md",
+        "line": 3,
+        "entries": [
+          "D14"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.65-2.md",
+        "line": 2,
+        "entries": [
+          "D14",
+          "D14"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.67-2.md",
+        "line": 2,
+        "entries": [
+          "C13"
+        ]
+      },
+      {
+        "file": "docs/plan/evidence/rules-decisions/RD-hv-umm2.86-1.md",
+        "line": 2,
+        "entries": [
+          "C8"
+        ]
+      }
+    ],
+    "baselineReceipt": "/tmp/hv-529-audit-before.json",
+    "finalReceipt": "/tmp/hv-529-audit-after.json",
+    "nonLadderByteEquality": true,
+    "workflowSentenceCount": 1,
+    "recordedCommandReproducedLines": 173
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Knip prepare-stage start2026-10-12T10:10:21.422Z; review skipped applicable checks for documentation-only diff"
+      },
+      "testDelta.files": {
+        "definition": "New Vitest runner entrypoints; zero"
+      },
+      "testDelta.lines": {
+        "definition": "Test additions; zero"
+      },
+      "implementMin": {
+        "measuredFor": "Observed native claim10:02:21Z through final precommit refresh; exact dispatch unavailable, commit tail separately bounded by source timestamp."
+      }
+    }
+  },
+  "runtime": {
+    "longLived": [],
+    "ports": [],
+    "status": "All finite commands terminal; no server, browser or provider context started.",
+    "terminalExecSessions": [
+      48209
+    ],
+    "heavySlot": "No listed heavy command ran; review/Knip take no heavy slot under workflow D17."
+  },
+  "verificationScope": "Documentation and measurement evidence only. Initial review exit0/no applicable checks; final review includes friction schema validation. Knip exit0. No test additions, local full, fuzz, browser QA or independent review. No numeric RD Ladder parser discovered; content-inventory aggregates UUIDs from RD prose.",
+  "preExistingIssues": [
+    "hv-w1q1"
+  ],
+  "failedCommands": [],
+  "mechanicalFallout": [
+    "Correct prior hv-umm2.508 implementMin from ACK-only11.48min to observed claim-to-source-committer26.55min; original narrow observations retained. Exact two508 evidence paths admitted by native bead529-measurement-correction-ack.json."
+  ]
+}

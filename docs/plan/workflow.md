@@ -1499,6 +1499,8 @@ decision:
    - Why: …
    ```
 
+   Use the `rules.md:` line for normative rules and earlier RD anchors, and the `Ladder:` line for the actual D10 step and its supporting evidence, or `not invoked` when the normative rules settle the clause.
+
 3. **Encode it once** in the engine. Add a primitive test if the decision
    changes primitive behavior.
 

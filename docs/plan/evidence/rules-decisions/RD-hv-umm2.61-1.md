@@ -1,6 +1,6 @@
 # RD-hv-umm2.61-1: Discard costs capture their count or copiable card cost
 
-- Ladder: 1 (Dreamtides rules), then 5 (the simplest consistent reading of the printed clauses).
+- Ladder: 5 (the simplest reading consistent with the printed clauses and the normative rules.md § Costs, Requirements, and X and § Keywords and Effects → Discover rules).
 - rules.md: § Costs, Requirements, and X; § Keywords and Effects → Discover.
 - Affects: 94818862-2875-4ee1-8f72-7c0cdc624202, 435ed83c-f7a6-4a73-a684-67fcc4e49bc4, 4f0f0811-1a4c-4d42-a804-77dba8707792.
 

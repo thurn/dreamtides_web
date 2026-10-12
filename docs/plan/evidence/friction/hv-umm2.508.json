@@ -1,7 +1,7 @@
 {
   "bead": "hv-umm2.508",
   "phase": 5,
-  "implementMin": 11.48,
+  "implementMin": 26.55,
   "localValidationS": {
     "corrected-witness": 3.209,
     "repaired-focused": 3.984,
