@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.563",
+  "phase": 5,
+  "implementMin": 25.363529916666668,
+  "implementWindow": {
+    "start": "2026-10-12T17:24:35.405Z",
+    "end": "2026-10-12T17:49:57.216795+00:00"
+  },
+  "localValidationS": {
+    "focused-evidence": 0.6584747919987421,
+    "schema": 0.09230358300555963,
+    "review": 0.24428637498931494,
+    "knip": 4.4810097080044216,
+    "trigger-after": 0.16108749998966232,
+    "focused-final": 0.7179542079975363,
+    "schema-final": 0.07824058299593162,
+    "combined-focused": 0.26239316700957716,
+    "combined-schema": 0.10097149999637622,
+    "combined-review": 0.303287333008484,
+    "combined-knip": 3.5874477499892237
+  },
+  "hostLoad": 4.84,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "additive-registry-conflict",
+      "minutes": 12.395896583333332,
+      "note": "One additive evidence-ledger collision with peer561 retrospective row. Elapsed from exact parent submission orchestration dispatch through final precommit includes native clean rollback, unsubmitted parked checkpoint/update/reapply, source qualification and combined checks; coordination wall time, not productive editing."
+    }
+  ]
+}

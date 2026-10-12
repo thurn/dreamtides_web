@@ -1,0 +1,667 @@
+{
+  "bead": "hv-umm2.563",
+  "baseOid": "5d93c937bf2d3c16a57ff3314b5edb0e30c6f475",
+  "scope": "Exactly one additive trigger reason and own friction/measurement/pre-existing evidence; zero source, test, API, behavior, rendering, workflow, config, historical-evidence or fallout change. No new tests, browser/runtime/heavy command or required code review for this documentation scope.",
+  "finding": "Expected resolved additive collisions; no additional current unresolved common defect established by the three observations.",
+  "trigger": {
+    "tag": "additive-registry-conflict",
+    "phase": 5,
+    "inputs": [
+      "hv-umm2.130",
+      "hv-umm2.140",
+      "hv-umm2.553"
+    ],
+    "beforeReport": "/tmp/203-recovery-friction.txt",
+    "beforeReportSHA256": "a31cc9994d363fb104d8b89d05edf557fa67435d0af7c7dd8f11a7850f500191",
+    "ledgerBaseSHA256": "0f4c6eb2ff4bc29ad150fad26272d237e205743c8e0a3279df9b5f0ea13fa514",
+    "ledgerBaseLines": 53,
+    "disposition": {
+      "tag": "additive-registry-conflict",
+      "phase": 5,
+      "reason": "Audit hv-umm2.563: hv-umm2.130 and hv-umm2.140 report concurrent additive scenario-list/rules collisions; current scenario modules use the discovery delivered by hv-umm2.488. hv-umm2.553 reports two different additive fixture paths and a resolved synthetic UUID collision. All three final candidates are certified, promoted and cleaned; exact source comparisons preserve peer bytes and owned behavior, with fresh combined checks. Current UUID uniqueness/catalog guards and the parent-owned rollback/checkpoint/update procedure cover these recoveries. Additive concurrency is intentional, and no additional unresolved common defect is established. Historical timing scopes and hv-umm2.553's peer-owned asynchronous core-review obligation are retained in measurements/hv-umm2.563.json."
+    },
+    "afterExit": 0,
+    "afterReportLine": "  phase 5  additive-registry-conflict (3 beads) -> Audit hv-umm2.563: hv-umm2.130 and hv-umm2.140 report concurrent additive scenario-list/rules collisions; current scenario modules use the discovery delivered by hv-umm2.488. hv-umm2.553 reports two different additive fixture paths and a resolved synthetic UUID collision. All three final candidates are certified, promoted and cleaned; exact source comparisons preserve peer bytes and owned behavior, with fresh combined checks. Current UUID uniqueness/catalog guards and the parent-owned rollback/checkpoint/update procedure cover these recoveries. Additive concurrency is intentional, and no additional unresolved common defect is established. Historical timing scopes and hv-umm2.553's peer-owned asynchronous core-review obligation are retained in measurements/hv-umm2.563.json."
+  },
+  "audit": [
+    {
+      "bead": "hv-umm2.130",
+      "observation": {
+        "minutes": 4.67,
+        "scope": "4.67 minutes from recorded submission boundary through recovery/revalidation; historical friction has no implementWindow. Approximate original dispatch and original acceptance window retain their disclosed provenance."
+      },
+      "originalSourceOid": "9bef049c6ca625d1c318dfe28a582e1e068cd702",
+      "finalSourceOid": "4799ee07c9a059650af9360fa3865445abea964d",
+      "finalSourceBaseOid": "02721b0361c9e4561ca2b4a8bb811888dd0dc4f1",
+      "failedCandidates": [
+        {
+          "id": "01a12d84-91db-7d93-8169-dbef67303298",
+          "sourceOid": "9bef049c6ca625d1c318dfe28a582e1e068cd702",
+          "state": "merge-conflict",
+          "promotionAuthorized": false,
+          "paths": [
+            "src/content/specs/index.ts"
+          ]
+        }
+      ],
+      "finalCandidate": {
+        "id": "01a12d8a-6c49-7fd1-896a-21c0a27779c9",
+        "sourceOid": "4799ee07c9a059650af9360fa3865445abea964d",
+        "state": "promoted",
+        "cleanupState": "completed",
+        "promotionAuthorized": true,
+        "certificateId": "01a12d8c-48e9-74e1-bb44-94fc95c42741",
+        "testedOid": "46784810c7f604be675a4a7d5c4d31318676cc20",
+        "expectedIntegrationParentOid": "9e304b0868168e9ed2f6a2e07878d2fe4aaed969",
+        "checkoutVerified": true
+      },
+      "nativeOutcome": {
+        "status": "closed",
+        "resolution": "completed",
+        "closedAt": "2026-10-12T00:39:48Z"
+      },
+      "recovery": {
+        "cleanRollback": "Native owner notes and committed recovery record report restored exact clean source, doctor healthy and no pending update intent. Helper performs no native calls.",
+        "parkedCheckpoint": "f60509a0633da3832b64e080898a209342daa083",
+        "updatedCheckpoint": "39e3a58de4c1bc1d74859c1285f3c514ac7351ff",
+        "updatedBase": "02721b0361c9e4561ca2b4a8bb811888dd0dc4f1",
+        "checkpointSubmitted": false,
+        "protocol": "Own delta retained outside worktree; conflicting paths parked, parent native update, exact own additions reapplied retaining peer bytes, combined focused/review/Knip checks; original full/fuzz/browser evidence retains original source scope."
+      },
+      "sourceProof": {
+        "ownedBehaviorAndContractPathsUnchanged": [
+          "src/content/cards/exiles-of-the-last-light-b56b3411.ts",
+          "src/content/cards/frontline-martyr-8436eaae.ts",
+          "src/content/cards/gilded-catalyst-0bddeb19.ts",
+          "src/content/cards/night-raid-commando-1cbbfd57.ts",
+          "src/content/specs/cards-18.scenarios.ts"
+        ],
+        "ownedSrcPathsMatchCertifiedTestedBlobs": true,
+        "testedAncestorOfAuditBase": true,
+        "peerRegistrySHA256": "3c362694799a1bc86d5859b52adf0a49cd1f9f55f8588fb89ba656567168d65b"
+      },
+      "combinedChecks": {
+        "focused": {
+          "exit": 0,
+          "seconds": 2.993
+        },
+        "review": {
+          "exit": 0,
+          "seconds": 44.741
+        },
+        "knip": {
+          "exit": 0,
+          "seconds": 2.502
+        }
+      }
+    },
+    {
+      "bead": "hv-umm2.140",
+      "observation": {
+        "minutes": 11.47,
+        "scope": "11.47 minutes from checkpoint committer timestamp 03:29:10Z through 03:40:38.460317Z; repair-tail proxy excludes earlier diagnosis, failed update and parking preparation. Historical friction has no implementWindow."
+      },
+      "originalSourceOid": "4b8507438dfc52e4ccdb0e702dfc973e751c866b",
+      "finalSourceOid": "eca9d0c9c527167c57bb193de921a0a46fc29309",
+      "finalSourceBaseOid": "0c627396775ecc2eb6322b1e3ee9eee6dfe6eee9",
+      "failedCandidates": [
+        {
+          "id": "01a12e25-6e0a-72c1-8cb5-715f6369edb1",
+          "sourceOid": "4b8507438dfc52e4ccdb0e702dfc973e751c866b",
+          "state": "merge-conflict",
+          "promotionAuthorized": false,
+          "paths": [
+            "docs/rules.md",
+            "src/content/specs/index.ts"
+          ]
+        }
+      ],
+      "finalCandidate": {
+        "id": "01a12e34-abd6-7122-bfb0-c7bb6de3fba3",
+        "sourceOid": "eca9d0c9c527167c57bb193de921a0a46fc29309",
+        "state": "promoted",
+        "cleanupState": "completed",
+        "promotionAuthorized": true,
+        "certificateId": "01a12e36-5f67-72e3-82de-4eb870988575",
+        "testedOid": "109f5d49932e5b0d8ade0b4b926c283dfba8ad8d",
+        "expectedIntegrationParentOid": "665e3f2851906e4698d02bc7a25bc5ca3ab2d623",
+        "checkoutVerified": true
+      },
+      "nativeOutcome": {
+        "status": "closed",
+        "resolution": "completed",
+        "closedAt": "2026-10-12T03:48:21Z"
+      },
+      "recovery": {
+        "cleanRollback": "Native owner notes and committed recovery record report restored exact clean source, doctor healthy and no pending update intent. Helper performs no native calls.",
+        "parkedCheckpoint": "e2cbf474517f8585d0219e60bc29b03d2df4a292",
+        "updatedCheckpoint": "9f61e737670e5de8c5369d24647080e0ff3d2386",
+        "updatedBase": "0c627396775ecc2eb6322b1e3ee9eee6dfe6eee9",
+        "checkpointSubmitted": false,
+        "protocol": "Own delta retained outside worktree; conflicting paths parked, parent native update, exact own additions reapplied retaining peer bytes, combined focused/review/Knip checks; original full/fuzz/browser evidence retains original source scope."
+      },
+      "sourceProof": {
+        "ownedBehaviorAndContractPathsUnchanged": [
+          "src/content/cards/grounded-7df5255e.ts",
+          "src/content/cards/lightning-channeler-c73f978e.ts",
+          "src/content/cards/lurking-regent-32f3d6f2.ts",
+          "src/content/cards/windcutter-7be2e6d7.ts",
+          "src/content/specs/cards-28.scenarios.ts"
+        ],
+        "ownedSrcPathsMatchCertifiedTestedBlobs": true,
+        "testedAncestorOfAuditBase": true,
+        "peerRegistrySHA256": "120e663d0d559c85d63dc5e144b0ee63faff2e6e200250617c93e8fa781fe6a1",
+        "peerRulesSHA256": "4b27ff3c13c99de2c7f8060980fcb24635e3e2d45d12766ad51a7e07f344ed43",
+        "testedRulesScope": "Certified integration also includes later peer materialized-turn loop wording. Own X=0 sentence is retained; whole source/tested rules-byte equality is not asserted."
+      },
+      "combinedChecks": {
+        "focused": {
+          "exit": 0,
+          "seconds": 4.54
+        },
+        "review": {
+          "exit": 0,
+          "seconds": 59.89
+        },
+        "knip": {
+          "exit": 0,
+          "seconds": 2.76
+        }
+      }
+    },
+    {
+      "bead": "hv-umm2.553",
+      "observation": {
+        "minutes": 17.02831905,
+        "scope": "17.02831905 minutes from original submission observation 16:53:25Z through final replacement precommit 17:10:26.699143Z; includes two different-path recoveries, UUID adjustment, coordination, checks and timing correction. Original implementWindow starts at disclosed late proxy 16:00:15Z; exact original dispatch unknown."
+      },
+      "originalSourceOid": "5716f91fb28f27f550a44be35148c1fea88b6c0e",
+      "finalSourceOid": "95e496b88b4c4cc7b755941630460dbc00011c38",
+      "finalSourceBaseOid": "2dfecb25b6114c4efeda8a028c9103ad50c5cace",
+      "failedCandidates": [
+        {
+          "id": "01a13108-895d-7983-999a-cbedb1f29709",
+          "sourceOid": "5716f91fb28f27f550a44be35148c1fea88b6c0e",
+          "state": "merge-conflict",
+          "promotionAuthorized": false,
+          "paths": [
+            "src/engine/testing/prompt-lab.ts"
+          ]
+        },
+        {
+          "id": "01a13113-19c0-73c0-831c-f3986d90311a",
+          "sourceOid": "a6d69ef8d92dd8299f5447f6aa245f8fd001112b",
+          "state": "merge-conflict",
+          "promotionAuthorized": false,
+          "paths": [
+            "src/engine/testing/dsl-cards.ts"
+          ]
+        }
+      ],
+      "finalCandidate": {
+        "id": "01a13118-6112-7f20-a37b-628b0ebece9f",
+        "sourceOid": "95e496b88b4c4cc7b755941630460dbc00011c38",
+        "state": "promoted",
+        "cleanupState": "completed",
+        "promotionAuthorized": true,
+        "certificateId": "01a13119-cb70-7f51-aab5-7db9683b8b1d",
+        "testedOid": "2217aa6ba44f2ad843f7a92703267108f9ffacdd",
+        "expectedIntegrationParentOid": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+        "checkoutVerified": true
+      },
+      "nativeOutcome": {
+        "status": "closed",
+        "resolution": "completed",
+        "closedAt": "2026-10-12T17:14:01Z"
+      },
+      "recovery": {
+        "cleanRollback": "Native owner notes and committed recovery record report restored exact clean source, doctor healthy and no pending update intent. Helper performs no native calls.",
+        "parkedCheckpoint": "bb85754c8eaa6f070d14095d5b0a38b279f57fdd",
+        "updatedCheckpoint": "43ec45650e36f55e551434125f3b3908285de4e7",
+        "updatedBase": "176a138dd495e31df901fbd091069241b423de3e",
+        "checkpointSubmitted": false,
+        "protocol": "Own delta retained outside worktree; conflicting paths parked, parent native update, exact own additions reapplied retaining peer bytes, combined focused/review/Knip checks; original full/fuzz/browser evidence retains original source scope.",
+        "secondUpdatedCheckpoint": "93d34b18d704a9dfe0383e61b7c367855919e37a",
+        "secondUpdatedBase": "2dfecb25b6114c4efeda8a028c9103ad50c5cace",
+        "movingStaging": "Later global staging advancement recorded after completed update; ancestry/cleanliness/native doctor verified, no pending-intent claim."
+      },
+      "sourceProof": {
+        "ownedBehaviorAndContractPathsUnchanged": [
+          "src/engine/dsl/builders.ts",
+          "src/engine/dsl/types.ts",
+          "src/engine/effects/interpreter.ts",
+          "src/engine/effects/primitives/contracts/conditional-targets.contracts.ts",
+          "src/engine/effects/primitives/if-then.ts",
+          "src/engine/effects/types.ts",
+          "src/engine/triggers/resolve.ts"
+        ],
+        "ownedSrcPathsMatchCertifiedTestedBlobs": true,
+        "testedAncestorOfAuditBase": true,
+        "peerDSLFixtureSHA256": "90403bc71058ec29c19e4d7ef46351b1ecd25a981ee6e7f66d3218c73a91f3bb",
+        "peerPromptFixtureSHA256": "228bd9c247971bbed2441891b70430dd27473a973f4cc987cd69aeff1b1a848b",
+        "ownFixtureAdjustment": "Peer hv-umm2.555 authored index48 preserved; own indices48/49 become49/50. Own ability/type/copy bodies unchanged. Prompt fixture additions identical to original; stripping own fixture/import additions reconstructs each final source parent byte-for-byte."
+      },
+      "combinedChecks": {
+        "focused": {
+          "exit": 0,
+          "seconds": 10.234325834011543
+        },
+        "review": {
+          "exit": 0,
+          "seconds": 54.73837245898903
+        },
+        "knip": {
+          "exit": 0,
+          "seconds": 3.414202625004691
+        }
+      },
+      "review": "Exported native snapshot reports ACTIVE fresh read-only gpt-5.6-sol exact final range review under temporary user routing. Peer owner retains the asynchronous obligation; this conflict audit neither owns nor completes that review.",
+      "retainedFailedProbe": "Second integration focused attempt exit1/4.594524792s ran against an incomplete parked checkpoint and used a nonexistent QA path; corrected fully restored-source existing-path command passed. Failed attempt is diagnostic, not acceptance."
+    }
+  ],
+  "currentContracts": [
+    {
+      "paths": [
+        "src/content/specs/index.ts:8",
+        "src/content/specs/specs.test.ts:34",
+        "src/content/specs/runner.ts:24"
+      ],
+      "evidence": "Sorted eager scenario glob discovers per-batch modules; public contract checks every scenario module exactly once under its file slug, with duplicate/empty-module/name checks.",
+      "deliveredBy": "hv-umm2.488",
+      "commitOid": "b88c84396fe82254cce981624ac27652dbcde2c3",
+      "alreadyDispositionedTag": "additive-scenario-registry-conflict/phase-5"
+    },
+    {
+      "paths": [
+        "src/engine/effects/primitives/contracts.test.ts:6",
+        "src/engine/effects/registry.ts:328"
+      ],
+      "evidence": "Eager contract module discovery and typed satisfies primitive registration completeness. Public contracts are inspected, not newly executed by this documentation audit."
+    },
+    {
+      "paths": [
+        "src/engine/testing/dsl-cards.ts:34",
+        "src/engine/testing/tooling.test.ts:120",
+        "src/engine/catalog.ts:280"
+      ],
+      "evidence": "Fixture authored index maps through syntheticId(200+index); current 50 literal authored indices are unique. Public lab definition UUID uniqueness test and catalog duplicate UUID rejection protect combined fixture composition."
+    },
+    {
+      "paths": [
+        "docs/plan/workflow.md:472",
+        "docs/plan/workflow.md:736",
+        "docs/plan/phase-5-content.md:63",
+        "docs/plan/phase-5-content.md:177"
+      ],
+      "evidence": "Additive registry entries permit concurrency; substantive shared-body/contract changes require edges. Parent-only native update, clean rollback, unsubmitted checkpoint, retained peer additions and proportionate combined-source checks govern recovery. These three receipts establish neither a repeated same-body cause nor a need for blanket serialization/automatic union merging."
+    }
+  ],
+  "sourceSnapshotSHA256": {
+    "docs/plan/workflow.md": "e25c1988382e33a3e4c3b477eee98d84bfa5e343fbba9572cbbfa8923f3ceb12",
+    "docs/plan/phase-5-content.md": "c77163c272737f8f2992bf3b92e2fb801e3a133e000f6ef72092b02b7c55a0d5",
+    "src/content/specs/index.ts": "ab5efcc38d72018c30b4f1e6b75a80d2ed044c0bb2c2d20e4765843d75aac287",
+    "src/content/specs/specs.test.ts": "3eacd63bc3319fa4c7c1fbaf0e4af50c49c144da937a2426ef1badfb796cbbc3",
+    "src/content/specs/runner.ts": "35e4c7189a24acff7c2ba394492f22394e83b95b9d93c9decf57d7d8d8f7cbdb",
+    "src/engine/testing/dsl-cards.ts": "fa5a74e66804aef964ac728f80c523d6d5d4a5215a0158d9cdbd2f1c7816d41f",
+    "src/engine/testing/tooling.test.ts": "16b5548c3e496ed563af190550582513ced3610869d1213c24f00397863b8560",
+    "src/engine/catalog.ts": "3f0150c867a87235c375ec042b9d10dfd9aa8ee549af5599b06e41f592496187",
+    "src/engine/effects/primitives/contracts.test.ts": "f701be511468bd3363891fcc76f80823c68a89b4605297db9b0d58fff1b8f948",
+    "src/engine/effects/registry.ts": "4251871f88200a2aec17051fa0157ac081e60147399656eadc4dbe1b9257494f"
+  },
+  "rawProvenance": [
+    {
+      "path": "/tmp/563-candidate-01a12d84-91db-7d93-8169-dbef67303298.json",
+      "sha256": "afe42d0c06835db2dd28983dbaae5798de24876ed56b79120890a2b9fb0e8007"
+    },
+    {
+      "path": "/tmp/563-candidate-01a12d8a-6c49-7fd1-896a-21c0a27779c9.json",
+      "sha256": "93ef7e79e98484031be61cf72fbb5b37d592c115efa2c888519a04b0525dc59b"
+    },
+    {
+      "path": "/tmp/563-candidate-01a12e25-6e0a-72c1-8cb5-715f6369edb1.json",
+      "sha256": "960395ed1f33e1a67461c6b10fa9da2c00409aa6a0a03bd4a2e1fc213580e59e"
+    },
+    {
+      "path": "/tmp/563-candidate-01a12e34-abd6-7122-bfb0-c7bb6de3fba3.json",
+      "sha256": "e402f5dde0c077151918f020da283402bb7df751c268f92f25ce2746fac63fab"
+    },
+    {
+      "path": "/tmp/563-candidate-01a13108-895d-7983-999a-cbedb1f29709.json",
+      "sha256": "18dde362bc263d4603c25897fbaf78327bd6ba641407453a4f3dda9639261323"
+    },
+    {
+      "path": "/tmp/563-candidate-01a13113-19c0-73c0-831c-f3986d90311a.json",
+      "sha256": "998acdcc04da51d5126280e5a503c223677654e8939289f486c52447907296e7"
+    },
+    {
+      "path": "/tmp/563-candidate-01a13118-6112-7f20-a37b-628b0ebece9f.json",
+      "sha256": "2761df82ca921c6f62eb3fe22f910c888baf246ffacb0e57dc7d339615515fbe"
+    },
+    {
+      "path": "/tmp/563-dispatch-exact.json",
+      "sha256": "fec71f3b5e4e4a4af8482f3288996e4bbc8b0306c41c8ae1a6a1a50963683dfe"
+    },
+    {
+      "path": "/tmp/563-hv-umm2.130.json",
+      "sha256": "c1724b88ae2d4754fa18d6c4ed05b61a4a9e196d4089182e34ba14711caeedd4"
+    },
+    {
+      "path": "/tmp/563-hv-umm2.140.json",
+      "sha256": "f28a2e6ed0f02e83919ecbe0346829232fa3d00f03dad8ebbb206c909c205b98"
+    },
+    {
+      "path": "/tmp/563-hv-umm2.553.json",
+      "sha256": "ba525ed30859c759c9e58fbeb9dc102a235653ecdef6a8838d8b1e0c1fd0c8c3"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.130.json",
+      "sha256": "36f595977a7224b3a882a63a6f600147275f8aecff3d8c3ec6f2743c4e8e0045"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.130.json",
+      "sha256": "659c8d43955ef3a8da0c1f48fd062cb86b0b81accf5ca3d9eb0a42cc334b8b5f"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.140.json",
+      "sha256": "afcebe7adff91b205d9898471582a588ed89ce6a65fc69720c60c15cafaedc27"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.140.json",
+      "sha256": "4eab673d994156f1abdded8de828e05e5b0dcaf1650419f1c890f88fb2190ffe"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-umm2.553.json",
+      "sha256": "6cc7bad71306de5c3f38f3cd0133d57587752850e56e70054e0d51c2c6ca4ef7"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-umm2.553.json",
+      "sha256": "05f96830169381c9e9a464dfbe9971656f9163c0738d3b8ffd338c1e634a628d"
+    }
+  ],
+  "implementWindowProvenance": {
+    "start": "2026-10-12T17:24:35.405Z",
+    "source": "Exact parent journal spawn_agent call_52db024a6adc41e4bf7c9c79185bb3d1, retained /tmp/563-dispatch-exact.json. Model-start unknown.",
+    "end": "2026-10-12T17:49:57.216795+00:00",
+    "scope": "Whole original helper dispatch through parent final commit, including original audit, metadata waits, native conflict recovery and combined checks. Original helper-only window retained separately; no productive-time claim.",
+    "parentWriteAck": "Parent scope message acknowledged four paths and reason before first evidence edit.",
+    "metadataClockAck": "Parent acknowledged exact staged four-path evidence, measured review scope and final endpoint refresh before one commit."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Parent combined-base npm run review command start",
+        "observedUtc": "2026-10-12T17:48:47.773652+00:00",
+        "oneMinute": 4.84
+      }
+    }
+  },
+  "readOnlyCorrections": [
+    "Two guessed source paths (primitive contracts.ts and engine/registry.ts) were absent; corrected to actual contracts.test.ts and effects/registry.ts. No source effect.",
+    "First blob assertion assumed all final source paths equal tested paths. hv-umm2.140 docs/rules.md includes later peer materialized-loop wording at its certified integration parent; narrowed to exact owned src equality, own sentence retention and reversible peer-base proof.",
+    "Parent read-only catalog directory guesses were corrected via rg to src/engine/catalog.ts; no source effect."
+  ],
+  "validation": {
+    "focused-evidence": {
+      "argv": [
+        "python3",
+        "/tmp/hv-umm2.563-validation/focused.py"
+      ],
+      "start": "2026-10-12T17:34:02.770803+00:00",
+      "end": "2026-10-12T17:34:03.437705+00:00",
+      "seconds": 0.6584747919987421,
+      "exit": 0,
+      "pid": 47923,
+      "pgid": 47923,
+      "groupRemainingAtExit": [],
+      "receipt": "/tmp/hv-umm2.563-validation/focused-evidence.json",
+      "receiptSHA256": "a8f2e2c1c98cc0078094268f8ac4ebbd85359c2bc55f876bf3fbb8d04a5f0b9b",
+      "log": "/tmp/hv-umm2.563-validation/focused-evidence.log",
+      "logSHA256": "6a9dfeb2627be4bdbb5bc1bbf8e6485342a774224a71ed4ecfb587001013ae57"
+    },
+    "schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T17:34:02.770807+00:00",
+      "end": "2026-10-12T17:34:02.871563+00:00",
+      "seconds": 0.09230358300555963,
+      "exit": 0,
+      "pid": 47922,
+      "pgid": 47922,
+      "groupRemainingAtExit": [],
+      "receipt": "/tmp/hv-umm2.563-validation/schema.json",
+      "receiptSHA256": "c96c165a57ed4e1bcd6dd8d44c4c7385249c836e81432a6330827045d30f2303",
+      "log": "/tmp/hv-umm2.563-validation/schema.log",
+      "logSHA256": "9a2677e9da70dda827ed1937d495f07f348896f1c89f9f00dbf91e3c12a6c4e8"
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T17:34:08.767554+00:00",
+      "end": "2026-10-12T17:34:09.014486+00:00",
+      "seconds": 0.24428637498931494,
+      "exit": 0,
+      "pid": 48408,
+      "pgid": 48408,
+      "groupRemainingAtExit": [],
+      "receipt": "/tmp/hv-umm2.563-validation/review.json",
+      "receiptSHA256": "8ffe63fd3e6e6ab562fca700b5b2abf039e6471719a9b0cd435ede396932e6ff",
+      "log": "/tmp/hv-umm2.563-validation/review.log",
+      "logSHA256": "6d9dd5cda35bbbfbc4104c5ea1fe724fa03d6298ce09ded418156cdfff0ebcbf",
+      "scope": "Four documentation files; only friction-records executed, 612 valid records/41 accepted historical unknowns. No product test run or code-review claim."
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T17:34:12.178347+00:00",
+      "end": "2026-10-12T17:34:16.661990+00:00",
+      "seconds": 4.4810097080044216,
+      "exit": 0,
+      "pid": 48686,
+      "pgid": 48686,
+      "groupRemainingAtExit": [],
+      "receipt": "/tmp/hv-umm2.563-validation/knip.json",
+      "receiptSHA256": "494fc9e62430954938df2994d30aa158a0eda7275d5614a68b3b533cfdb06a6c",
+      "log": "/tmp/hv-umm2.563-validation/knip.log",
+      "logSHA256": "326f09251e2d213d5378a7c9eae744b37cb383afaf4b2fc5c3b72ec5e013cb72",
+      "scope": "Prepared disposable workspace, Knip, restore-local-assets all passed; source/preparation warnings retained in raw log, generated outputs excluded from commit."
+    },
+    "trigger-after": {
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-12T17:34:19.891032+00:00",
+      "end": "2026-10-12T17:34:20.054577+00:00",
+      "seconds": 0.16108749998966232,
+      "exit": 0,
+      "pid": 49304,
+      "pgid": 49304,
+      "groupRemainingAtExit": [],
+      "receipt": "/tmp/hv-umm2.563-validation/trigger-after.json",
+      "receiptSHA256": "0065e9cf24526b61607583d98e6a091442b3fff5a6ad894c0d72fdae800af278",
+      "log": "/tmp/hv-umm2.563-validation/trigger-after.log",
+      "logSHA256": "2ef4485fc3c8c3caf99d9ed0e023fa15977d2e004629241bbdeb5cdffa923010"
+    },
+    "focused-final": {
+      "argv": [
+        "python3",
+        "/tmp/hv-umm2.563-validation/focused.py"
+      ],
+      "start": "2026-10-12T17:35:04.005222+00:00",
+      "end": "2026-10-12T17:35:04.726824+00:00",
+      "seconds": 0.7179542079975363,
+      "exit": 0,
+      "receipt": "/tmp/hv-umm2.563-validation/focused-final.json",
+      "receiptSHA256": "9ded1411f5628aeb28cc16e0d7d2154f0c8026d7d4a2420293cb5e6ab9ee9aa3",
+      "log": "/tmp/hv-umm2.563-validation/focused-final.log",
+      "logSHA256": "6a9dfeb2627be4bdbb5bc1bbf8e6485342a774224a71ed4ecfb587001013ae57",
+      "groupRemainingAtExit": []
+    },
+    "schema-final": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T17:35:04.005219+00:00",
+      "end": "2026-10-12T17:35:04.086964+00:00",
+      "seconds": 0.07824058299593162,
+      "exit": 0,
+      "receipt": "/tmp/hv-umm2.563-validation/schema-final.json",
+      "receiptSHA256": "3b360af767f0179031bf7e21f127c7b210714f97620de2e0757d2f1a5f5d7627",
+      "log": "/tmp/hv-umm2.563-validation/schema-final.log",
+      "logSHA256": "9a2677e9da70dda827ed1937d495f07f348896f1c89f9f00dbf91e3c12a6c4e8",
+      "groupRemainingAtExit": []
+    }
+  },
+  "failurePaths": "Documentation evidence only: reject malformed JSON/window, duplicate or changed ledger prefix, incorrect source/certificate link, lost peer bytes and altered owned behavior via focused checks/schema. Game error/reload/interrupt/recovery/concurrent behavior is unchanged; new product tests do not apply.",
+  "resources": "Only short evidence/review/Knip commands; no server, browser, heavy lease or independent review provider started. Parent owns native claim/candidate/delivery and peer553 owns its asynchronous review.",
+  "hostLoadSamples": {
+    "focused-evidence": {
+      "at": "2026-10-12T17:34:02.770803+00:00",
+      "load": 8.3,
+      "scope": "Command wrapper sysctl -n vm.loadavg observation immediately before child spawn."
+    },
+    "schema": {
+      "at": "2026-10-12T17:34:02.770807+00:00",
+      "load": 8.3,
+      "scope": "Command wrapper sysctl -n vm.loadavg observation immediately before child spawn."
+    },
+    "review": {
+      "at": "2026-10-12T17:34:08.767554+00:00",
+      "load": 7.87,
+      "scope": "Command wrapper sysctl -n vm.loadavg observation immediately before child spawn."
+    },
+    "knip": {
+      "at": "2026-10-12T17:34:12.178347+00:00",
+      "load": 7.64,
+      "scope": "Command wrapper sysctl -n vm.loadavg observation immediately before child spawn."
+    },
+    "trigger-after": {
+      "at": "2026-10-12T17:34:19.891032+00:00",
+      "load": 7.35,
+      "scope": "Command wrapper sysctl -n vm.loadavg observation immediately before child spawn."
+    },
+    "review-step": {
+      "at": "2026-10-12T17:34:08.949Z",
+      "load": 7.8740234375,
+      "scope": "Exact review friction-records starting value."
+    },
+    "combined-review": {
+      "at": "2026-10-12T17:48:47.773652+00:00",
+      "load": 4.84,
+      "scope": "Parent combined-base review command-start sysctl observation."
+    }
+  },
+  "originalAuditBaseOid": "74422f73ad893a61e0de6a52dd4b0ab93e1514af",
+  "sourceSnapshotSHA256Scope": "Frozen original audit input at originalAuditBaseOid. Its currentContracts citations and literal fixture count describe that input; original raw receipts and source comparisons remain tied to their exact OIDs.",
+  "originalImplementerWindow": {
+    "start": "2026-10-12T17:24:35.405Z",
+    "end": "2026-10-12T17:37:11.026118+00:00"
+  },
+  "originalImplementerMin": 12.5936853,
+  "parentRecovery": {
+    "failedCandidate": "01a13130-f329-7572-a9d3-81cd91522397",
+    "state": "terminal merge-conflict before certification; no approval",
+    "conflictingPath": "docs/plan/evidence/introspection.jsonl",
+    "landedPeer": "hv-umm2.561 retrospective row",
+    "originalSource": "67f75bba2143b6eae54e94280f05e9122bb6eac3",
+    "originalBase": "74422f73ad893a61e0de6a52dd4b0ab93e1514af",
+    "originalInputs": "/tmp/hv-umm2.563-recovery/manifest.json",
+    "originalDelta": "/tmp/hv-umm2.563-recovery/owned-delta.patch",
+    "firstNativeUpdate": {
+      "exit": 5,
+      "outcome": "clean rollback to exact original source; no rebase in progress"
+    },
+    "firstDoctor": "Reported a transient authoritative staging observed/recorded mismatch during peer promotion, not a worktree-update block. Native subsequent update and fresh doctor establish current state.",
+    "parkedCheckpoint": "eb80c9f57c739cbc1b49ba10a0f69f3fe713d23e",
+    "parkedSubmitted": false,
+    "checkpointUpdate": {
+      "action": "updated",
+      "exit": 0,
+      "receipt": "/tmp/563-update-checkpoint.json"
+    },
+    "reappliedProof": {
+      "updatedCheckpoint": "9e9819228684658edcd3fcd311863bf41ef66e46",
+      "updatedBase": "5d93c937bf2d3c16a57ff3314b5edb0e30c6f475",
+      "stagingObserved": "5d93c937bf2d3c16a57ff3314b5edb0e30c6f475",
+      "parentEqualsObservedStaging": true,
+      "peerLedgerSHA256": "b82feef40dabda9d7085d2df050e99d51f0f57c081599129598ef3d6ad64be85",
+      "ownRowSHA256": "9deb50a0408c9a1fdaedf943dab94841c646bf55a6d9e630706d5e2d681974a9",
+      "peerRows": 54,
+      "combinedRows": 55,
+      "ownRows": 1,
+      "utc": "2026-10-12T17:43:52.940694+00:00"
+    },
+    "changedOriginalInputHashesAtCombinedBase": {
+      "src/engine/effects/registry.ts": {
+        "original": "4251871f88200a2aec17051fa0157ac081e60147399656eadc4dbe1b9257494f",
+        "combinedBase": "53296e6af29e5f83759753ea17d70a0387d7593794ada4cb000faffd9c33a30e"
+      }
+    },
+    "combinedFixtureIndexCount": 50,
+    "combinedFixtureIndicesUnique": true,
+    "scope": "Parent is sole final implementer after helper stopped. Exact original helper dispatch stays window start; final window includes native recovery, coordination and combined checks, not productive editing. No source/test/behavior changes. Prior audit/check receipts remain original-source scoped.",
+    "submissionObservation": {
+      "utc": "2026-10-12T17:37:33.463Z",
+      "callId": "call_tKGz2GpOShkiMjrfevHVliDb",
+      "scope": "Exact parent outer submission orchestration dispatch, includes preceding clean-source verification; native TG request start unknown."
+    },
+    "throughFinalPrecommitMinutes": 12.395896583333332,
+    "combinedChecks": {
+      "focused": {
+        "exit": 0,
+        "seconds": 0.26239316700957716,
+        "start": "2026-10-12T17:48:47.404510+00:00",
+        "scope": "Combined peer prefix + exact own row, unique phase/tag, original native/input hashes at frozen original audit base, all3 tested ancestry and17 owned behavior/contract blob equality; no runtime tests."
+      },
+      "schema": {
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "exit": 0,
+        "seconds": 0.10097149999637622,
+        "start": "2026-10-12T17:48:47.669879+00:00",
+        "hostLoad": 4.84,
+        "scope": "Combined base documentation-only validation; original checks retained separately."
+      },
+      "review": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "exit": 0,
+        "seconds": 0.303287333008484,
+        "start": "2026-10-12T17:48:47.773652+00:00",
+        "hostLoad": 4.84,
+        "scope": "Combined base documentation-only validation; original checks retained separately."
+      },
+      "knip": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "exit": 0,
+        "seconds": 3.5874477499892237,
+        "start": "2026-10-12T17:48:48.079916+00:00",
+        "hostLoad": 4.84,
+        "scope": "Combined base documentation-only validation; original checks retained separately."
+      }
+    },
+    "updatedDoctor": "All checks healthy at receipt /tmp/563-updated-doctor.txt; no worktree-update block."
+  }
+}
