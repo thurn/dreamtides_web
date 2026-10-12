@@ -1,0 +1,26 @@
+{
+  "bead": "hv-umm2.537",
+  "phase": 5,
+  "implementMin": 41,
+  "implementWindow": {
+    "start": "2026-10-12T12:05:00Z",
+    "end": "2026-10-12T12:46:00Z"
+  },
+  "localValidationS": {
+    "review": 1,
+    "knip": 5
+  },
+  "hostLoad": 8,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "usage-limit-interruption",
+      "minutes": 28,
+      "note": "the read-only sage audit subagent stopped at a session usage limit about 12:10Z after gathering bead and Tollgate data (last scratch write), and resumed with its context about 12:38Z (completion minus its 5.2-minute resumed run); estimated, included in implementMin"
+    }
+  ]
+}
