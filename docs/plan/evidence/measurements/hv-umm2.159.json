@@ -1,0 +1,529 @@
+{
+  "bead": "hv-umm2.159",
+  "base": "4b38729a85dee5b31d09911d6400022a3c77dffe",
+  "dispatchWindow": {
+    "proxy": "2026-10-12T05:34:09.495372Z",
+    "firstTool": "2026-10-12T05:34:30Z",
+    "proxyToFirstToolSApprox": 20.505,
+    "basis": "Parent pre-dispatch brief-write proxy; actual helper receipt unobserved. Implementation wall includes research, verification and native queue waits through final commit.",
+    "evidenceCompletedAt": "2026-10-12T06:44:29.804035+00:00",
+    "implementMin": 70.34,
+    "commitTail": "Original evidence window ended 2026-10-12T06:44:29.804035Z. Subsequent elapsed time includes an unobserved/model-capacity interval. Takeover window is measured separately; none of these durations is an active-work or throughput claim."
+  },
+  "scope": {
+    "cardModules": [
+      "src/content/cards/brawler-battlesuit-44ae8838.ts",
+      "src/content/cards/dragonfly-engine-f9a65b32.ts",
+      "src/content/cards/ash-harbinger-956aaeb1.ts",
+      "src/content/cards/carrion-lord-a5056a4c.ts"
+    ],
+    "productionChangedLines": 33,
+    "engineChanges": false,
+    "exportedApiChanges": false,
+    "fallout": [],
+    "rulesDecision": "Existing abandonment, copiable-cost, figment and return rules settle all clauses; no new rule decision or card issue required.",
+    "scenario": "One auto-discovered D20 module proves Carrion activation -> selected abandonment -> trigger -> creation and created figment abandonment -> cessation -> successor, symmetrically for both controllers and variants.",
+    "scenarioDiscovery": "Existing import.meta.glob; no registry edit.",
+    "remainingAcceptance": "Local acceptance complete on the fresh takeover base; exact candidate certification and promotion follow the task commit."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 4,
+    "plainScenarioModules": 1,
+    "plainScenarioLines": 72
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review prepare start 2026-10-12T05:49:49.019Z",
+        "oneMinute": 27.974609375
+      }
+    }
+  },
+  "validation": {
+    "install": {
+      "observer": 7613,
+      "exit": 0,
+      "reportedS": 3,
+      "provenance": "Parent setup receipt"
+    },
+    "focusedInitial": {
+      "observer": 84398,
+      "exit": 0,
+      "wallS": 4.68,
+      "files": 1,
+      "cases": 4,
+      "skipped": 70,
+      "log": "focused-attempt01.log"
+    },
+    "mutation": {
+      "observer": 37183,
+      "wallS": 3.975,
+      "failed": 4,
+      "skipped": 70,
+      "meaningful": "Only Carrion triggered creation replaced with gainEnergy(0); trigger shape and ability indices preserved. All four selected-abandonment creation contracts fail. Source restored byte-identically in finally.",
+      "provenance": "creation-mutation-provenance.json",
+      "log": "creation-mutation.log"
+    },
+    "focusedFinal": {
+      "observer": 37183,
+      "exit": 0,
+      "wallS": 3.47,
+      "files": 2,
+      "cases": 86,
+      "log": "focused-final.log"
+    },
+    "review": {
+      "observer": 15257,
+      "exit": 0,
+      "wallS": 49.45,
+      "files": 221,
+      "cases": 3195,
+      "log": "review.log",
+      "assetRestoration": "Completed before first browser request."
+    },
+    "knip": {
+      "observer": 11617,
+      "exit": 0,
+      "wallS": 3.58,
+      "log": "knip.log"
+    },
+    "weightedFuzz": {
+      "observer": 29101,
+      "exit": 0,
+      "outerWallS": 169.07,
+      "executionWallS": 169.023,
+      "request": "fuzz-request.json",
+      "acquired": "fuzz-acquired.json",
+      "execution": "fuzz-execution.json",
+      "games": 300,
+      "steps": 156717,
+      "prompts": 4571,
+      "interactiveReruns": 432,
+      "failures": 0,
+      "boundedPrompts": 2,
+      "boundedLegality": 0,
+      "targetExerciseCountsFiledUuidOrder": [
+        833,
+        790,
+        166,
+        273
+      ],
+      "resultCounts": {
+        "player": 140,
+        "enemy": 160
+      },
+      "log": "fuzz.log",
+      "seeds": {
+        "prefix": "fuzz",
+        "first": 0,
+        "last": 299,
+        "basis": "Actual CLI defaults read from scripts/fuzz-engine.ts; exact request and wrapper retain the four UUID inputs."
+      }
+    },
+    "preflight": {
+      "observer": 73594,
+      "exit": 0,
+      "outerWallS": 1.6,
+      "cells": 80,
+      "pass": 42,
+      "skip": 38,
+      "fail": 0,
+      "pending": 0,
+      "log": "lab-preflight.log"
+    },
+    "brawlerContinuation": {
+      "observer": 81728,
+      "exit": 0,
+      "counts": {
+        "pass": 3,
+        "skip": 4
+      },
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1648,
+        "scenario": 53910.733083,
+        "cleanup": 552.133041999994,
+        "execution": 56148.171833,
+        "total": 56153.171833
+      },
+      "summary": "invocations/sweep-0TUDCq/summary.json",
+      "log": "card-sweep-brawler-continuation.log"
+    },
+    "otherThreeSweep": {
+      "observer": 22209,
+      "exit": 1,
+      "counts": {
+        "pass": 31,
+        "skip": 28,
+        "fail": 1
+      },
+      "summary": "invocations/sweep-s33IWi/summary.json",
+      "disposition": "One missing-probe observation resolved by separately retained targeted fresh pass; raw failure preserved."
+    },
+    "targetedFreshSweep": {
+      "observer": 51374,
+      "exit": 0,
+      "counts": {
+        "pass": 2
+      },
+      "summary": "invocations/sweep-gGkXOA/summary.json"
+    }
+  },
+  "qa": {
+    "d21SampleBytes": [
+      147,
+      87,
+      190,
+      90
+    ],
+    "randomSampled": 0,
+    "judgedReason": "First production Warrior and Monstrosity visual appearances, with their payment and trigger workflows.",
+    "requiredOutcomes": 8,
+    "representative": {
+      "observer": 68674,
+      "exit": 0,
+      "report": "invocations/run-NMe6bQ/ash-player-base.result.json",
+      "gameId": "sib8dp",
+      "persistedRows": 101,
+      "caps": [],
+      "source": "i1",
+      "createdAndPaid": [
+        "i21",
+        "i22"
+      ],
+      "target": "i12",
+      "actualAbilities": [
+        0,
+        0,
+        1
+      ],
+      "actualPlayerSideTurns": [
+        2,
+        3,
+        4
+      ],
+      "wallsMs": {
+        "browserLeaseWait": 6,
+        "serve": 1661,
+        "scenario": 47699,
+        "total": 49406
+      }
+    },
+    "remaining": "No unresolved local cell: latest80 requested sweep cells42pass/38skip;8 judged passes. All historical failed attempts retained with dispositions.",
+    "diagnostics": [
+      {
+        "observer": 57469,
+        "exit": 1,
+        "kind": "ignored script schema read",
+        "report": "invocations/run-GKXHte/ash-player-base.result.json",
+        "disposition": "Corrected state.turn.sideTurns read; representative adaptive run passed."
+      },
+      {
+        "observer": 31193,
+        "exit": 2,
+        "kind": "MCP transport uncertainty",
+        "report": "invocations/sweep-IyytI0/run-WXtAcl/sweep-44ae8838-4714-43a5-a7bd-e9f806f35ca9-resonant-enemy-attempt-1.result.json",
+        "disposition": "Exact provider reconciled under native slot lock; remaining cells passed in a separately retained continuation. Raw null outcome and unspecified transport cause remain recorded."
+      },
+      {
+        "observer": 51100,
+        "exit": 1,
+        "kind": "ignored public event pagination assertion",
+        "report": "invocations/run-vwRAHk/judged.result.json",
+        "gameId": "4nvpaq",
+        "rows": 110,
+        "actualAbilities": [
+          0,
+          0,
+          1
+        ],
+        "caps": [],
+        "disposition": "Actual third activation, exact Warrior payments and dissolution completed. Public reader first page omitted later events; adaptive reader consumes all pages."
+      },
+      {
+        "observer": 22209,
+        "exit": 1,
+        "kind": "missing engine-probe observation during resolution",
+        "report": "invocations/sweep-s33IWi/run-vi0QkD/sweep-a5056a4c-542b-4a7c-8fe6-895126c7d4c8-empowered-enemy-attempt-1.result.json",
+        "caps": [],
+        "initialObservation": {
+          "zone": "stack",
+          "decision": {
+            "kind": "respond",
+            "side": "player"
+          },
+          "pending": null
+        },
+        "disposition": "Diagnosed manual live-WT evidence-write exposure; same cell passed once under corrected frozen-WT/fresh-document boundary. Exact disappearance causation remains unproven, no production/harness repair claimed."
+      }
+    ],
+    "solverDecks": {
+      "player": 8,
+      "enemy": 8,
+      "basis": "Actual initial committed state in accepted representative, not a declared deck override. Existing labStage has no deck field."
+    },
+    "judgedFinal": {
+      "observer": 38072,
+      "exit": 0,
+      "report": "invocations/run-6huD1k/judged.result.json",
+      "outcomeProof": "judged-final-outcomes.json",
+      "sevenPassed": 7,
+      "withPriorRepresentative": 8,
+      "caps": [],
+      "wallsMs": {
+        "browserLeaseWait": 5,
+        "serve": 1660,
+        "scenario": 239427,
+        "total": 241124
+      },
+      "loadedScript": "judged-attempt02.mjs",
+      "reusableScript": "judged.mjs",
+      "readerFinalization": "judged-reader-finalization.json",
+      "allEventHistoriesComplete": true,
+      "rawEventCounts": [
+        12,
+        18,
+        82,
+        120
+      ],
+      "captures": "capture-dimensions.json",
+      "visualCorroboration": "Parent inspected all eight workflow capture outcomes; actual spark1/2/4/5, status and controls contained. Helper additionally inspected two mobile first-production figment captures. This was a contextual parent visual inspection, not a fresh independent cold reviewer."
+    },
+    "sweepFinal": {
+      "coverage": "card-sweep-final-coverage.json",
+      "terminalReceipts": "sweep-terminal-receipts.json",
+      "latestCounts": {
+        "pass": 42,
+        "skip": 38
+      },
+      "latestCells": 80,
+      "rawCounts": {
+        "pass": 44,
+        "skip": 38,
+        "fail": 2
+      },
+      "rawRows": 84,
+      "judgedRawCounts": {
+        "pass": 8,
+        "fail": 2
+      },
+      "allLedgerRows": 94,
+      "manualFreshContinuation": "Original transport failure followed exact provider reconciliation; later missing-probe exposure followed one frozen-worktree fresh-document diagnostic. Neither is labeled an automatic timeout-only retry."
+    },
+    "workflowExposure": {
+      "observedCommand": "Own Python command copied active remaining-sweep owner/server observations then wrote WT measurements JSON before printing base/amplified enemy passes.",
+      "activeObservationsAt": "2026-10-12T06:30:16.960Z",
+      "failedRawReceiptAt": "2026-10-12T06:30:17.950Z",
+      "limits": "This proves a forbidden manual live-WT-write exposure. It does not prove exact evaluation time, reload or disappearance causation; server log has no reload entry.",
+      "correction": "All manual WT source/evidence/dependency writes frozen throughout the one targeted fresh-document run. Native per-cell ledger appends remain the documented runner protocol.",
+      "sameCellPass": "invocations/sweep-gGkXOA/run-Ypbq0A/sweep-a5056a4c-542b-4a7c-8fe6-895126c7d4c8-empowered-enemy-attempt-1.result.json",
+      "speculativeRepairFiled": false
+    }
+  },
+  "runtimeLedger": [
+    {
+      "kind": "first representative",
+      "observer": 57469,
+      "exit": 1,
+      "runnerPid": 20024,
+      "serverGroup": 20074,
+      "devPid": 20089,
+      "port": 5274,
+      "slot": 1,
+      "invocation": "run-GKXHte",
+      "settled": true,
+      "serverToken": "c7cfbf06-3a67-4251-8c80-783f21397118"
+    },
+    {
+      "kind": "accepted representative",
+      "observer": 68674,
+      "exit": 0,
+      "runnerPid": 21810,
+      "serverGroup": 21846,
+      "devPid": 21861,
+      "port": 5274,
+      "slot": 1,
+      "invocation": "run-NMe6bQ",
+      "settled": true,
+      "serverToken": "6a4140d1-d41c-44e9-9bc3-0d6155fd903a"
+    },
+    {
+      "kind": "sweep",
+      "observer": 31193,
+      "runnerPid": 24089,
+      "serverGroup": 24137,
+      "devPid": 24159,
+      "port": 5274,
+      "slot": 1,
+      "invocation": "sweep-IyytI0/run-WXtAcl",
+      "settled": true,
+      "exit": 2,
+      "serverSettled": true,
+      "providerSettled": true,
+      "providerOwnerToken": "61af68b7-5af7-4a0d-abca-a92e6ae83f8e",
+      "providerState": "call-and-close-unconfirmed",
+      "reconciliation": "Parent exact native slot-lock reconciliation; closed HTTP session lifecycle and independent physical absence evidence, without service restart or peer operations. Original timeout cause remains unspecified.",
+      "reconciliationProof": "provider-reconciliation-final.json",
+      "serverToken": "6ff411bd-d02e-46a2-a17e-f1090934ca3e"
+    },
+    {
+      "kind": "first combined judgments",
+      "observer": 51100,
+      "exit": 1,
+      "runnerPid": 46061,
+      "serverGroup": 46096,
+      "port": 5274,
+      "slot": 1,
+      "providerToken": "b5cdb692-bcf2-4ef6-ae9f-1012e36b80ee",
+      "serverToken": "a195c933-ac2b-41f3-896c-782fd0bbf92c",
+      "invocation": "run-vwRAHk",
+      "settled": true
+    },
+    {
+      "kind": "accepted combined judgments",
+      "observer": 38072,
+      "exit": 0,
+      "runnerPid": 50598,
+      "serverGroup": 50642,
+      "port": 5274,
+      "slot": 1,
+      "providerToken": "4e5b74e4-73ec-4946-b626-50f4ba785309",
+      "serverToken": "99a91870-b821-41b4-baa7-caa7ffbd8898",
+      "invocation": "run-6huD1k",
+      "settled": true
+    },
+    {
+      "kind": "Brawler post-reconciliation continuation",
+      "observer": 81728,
+      "exit": 0,
+      "serverGroup": 24236,
+      "port": 5274,
+      "slot": 1,
+      "invocation": "sweep-0TUDCq",
+      "runnerPid": "Unobserved before termination; actual CLI observer exit and own server group retained.",
+      "counts": {
+        "pass": 3,
+        "skip": 4
+      },
+      "settled": true,
+      "basis": "Deliberate remaining-cell continuation after exact provider reconciliation, with CLI-required base readiness control. Original transport failure retained."
+    },
+    {
+      "kind": "remaining three-card sweep",
+      "observer": 22209,
+      "runnerPid": 57647,
+      "serverGroup": 57743,
+      "port": 5274,
+      "slot": 1,
+      "providerToken": "e77d9cc3-4011-4b8a-b76d-80fcb9d82398",
+      "serverToken": "c8330a5e-1db7-469f-9e76-7cbe236da384",
+      "settled": true,
+      "exit": 1
+    },
+    {
+      "kind": "targeted frozen-WT fresh document",
+      "observer": 51374,
+      "exit": 0,
+      "serverGroup": 5399,
+      "runnerPid": "Unobserved before short run terminated; native CLI observer and exact server group retained.",
+      "port": 5274,
+      "slot": 1,
+      "invocation": "sweep-gGkXOA",
+      "settled": true,
+      "wallsMs": {
+        "browserLeaseWait": 5,
+        "serve": 1350,
+        "scenario": 15158.105709,
+        "cleanup": 556.4376669999983,
+        "total": 17105.18475
+      }
+    }
+  ],
+  "limitations": [
+    "Weighted fuzz is correctness/exercise evidence, not a throughput performance claim.",
+    "Browser captures use README CSS scale: desktop 1440x900 and mobile 390x844."
+  ],
+  "sourceProofs": {
+    "freeze": "source-freeze.json",
+    "current": "post-qa-source-proof.json",
+    "canonical": "canonical-metadata-proof.json",
+    "parent": "parent-source-proof.json",
+    "allFiveBehaviorFilesUnchanged": true
+  },
+  "resources": {
+    "proof": "resource-settlement.json",
+    "allOwnedObserversTerminal": true,
+    "allObservedOwnedPidsAbsent": true,
+    "finalPort5274Free": true,
+    "initialProviderReconciled": "provider-reconciliation-final.json",
+    "sharedServicesRestarted": false,
+    "noForeignProcessSignaled": true
+  },
+  "frictionMeasurement": {
+    "tag": "browser-qa-scripting",
+    "minutes": 10.94,
+    "scope": "Combined observed failed-run receipts, their adaptive validation execution and original provider receipt-to-reconciliation window. Includes successful adaptive QA execution; not a marginal CPU/editing attribution.",
+    "components": {
+      "firstSchemaAttemptTotalS": 9.498,
+      "correctedRepresentativeTotalS": 49.406,
+      "paginationAttemptTotalS": 67.806,
+      "adaptiveEnemyDesktopStepS": 91.771,
+      "targetedFreshTotalS": 17.10518475,
+      "providerFailureRawReceiptAt": "2026-10-12T06:10:56.410032+00:00",
+      "providerReconciledAt": "2026-10-12T06:17:57.134766+00:00",
+      "providerReceiptToReconciliationS": 420.724734
+    },
+    "causes": "Ignored QA schema and pagination readers, exact MCP provider recovery, and correction of forbidden manual live-WT evidence writes. All attempts retained; no gameplay change."
+  },
+  "takeover": {
+    "thread": "01a13041-0d78-7db1-a5b3-c1766d80776b",
+    "base": "fc15e846af294d373f6743343ceb6d32eb5257eb",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/cards-47-takeover",
+    "startedAt": "2026-10-12T13:21:06+00:00",
+    "precommitAt": "2026-10-12T13:39:13.648421+00:00",
+    "wallMin": 18.13,
+    "originalLocalEvidenceMin": 70.34,
+    "unobservedGapExcludedFromImplementMin": true,
+    "behaviorBytesEqualToOriginalFreeze": true,
+    "localChecks": {
+      "install": "exit0, 2s reported, unchanged lockfile",
+      "specs": "exit0, takeover-focused.log",
+      "contentGates": "exit0, 13cases, takeover-gates.log",
+      "review": "exit0, 223files/3584cases, takeover-review.log",
+      "knip": "exit0, takeover-knip.log",
+      "preflight": "exit0, 80cells42pass38skip, takeover-preflight.log",
+      "weightedFuzz": "exit0, 300games/159156steps/4814prompts/464interactiveReruns/0failures, takeover-fuzz.log"
+    },
+    "sweep": {
+      "base": "fc15e846af294d373f6743343ceb6d32eb5257eb",
+      "latestCells": 80,
+      "latestCounts": {
+        "pass": 42,
+        "skip": 38
+      },
+      "freshRawCounts": {
+        "pass": 43,
+        "skip": 38,
+        "fail": 7
+      },
+      "freshRawRows": 88,
+      "judgedPasses": 8,
+      "fullSweep": "invocations/sweep-pXoWxo/summary.json",
+      "coldAffectedCells": "invocations/sweep-Mc1tqI/summary.json",
+      "disposition": "Original same-session timeout and aborted-navigation rows remain. One deliberate new-browser/new-server diagnostic covered the four affected player variants and mandatory base control; five passes, no source edits. Exact navigation abort cause remains unproven."
+    },
+    "judged": {
+      "proof": "takeover-judged-proof.json",
+      "outcomes": 8,
+      "caps": [],
+      "report": "invocations/run-8q6tbj/takeover-judged.result.json",
+      "dimensions": "takeover-capture-dimensions.json",
+      "visualInspection": "Own desktop/mobile Ash creation and Carrion creation captures inspected; recorded card geometry contained. No renderer/UI source edits."
+    },
+    "resources": "takeover-resource-proof.json",
+    "reviewRouting": "33 non-test changed lines; composition only, no new primitive/prompt; no mandatory independent review. Temporary user Sol policy applies to any required review."
+  }
+}

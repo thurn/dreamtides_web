@@ -1,3 +1,6 @@
+import { characterYouControl, target } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { returnToHand } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 312,
   art: { x: 0.45, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), returnToHand(target(characterYouControl())))],
+  verifiedText: "rm7tzr515w",
 });

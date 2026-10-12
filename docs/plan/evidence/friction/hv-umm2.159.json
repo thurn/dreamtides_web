@@ -1,0 +1,47 @@
+{
+  "bead": "hv-umm2.159",
+  "phase": 5,
+  "implementMin": 88.47,
+  "localValidationS": {
+    "installReported": 3,
+    "focusedInitial": 4.68,
+    "mutation": 3.975,
+    "focusedFinal": 3.47,
+    "review": 49.45,
+    "knip": 3.58,
+    "weightedFuzzOuter": 169.07,
+    "preflightOuter": 1.6,
+    "representativeQa": 49.406,
+    "judgedQa": 241.124,
+    "brawlerContinuation": 56.153171833,
+    "otherThreeSweep": 222.609005334,
+    "targetedFresh": 17.10518475,
+    "takeoverReviewReported": 65.6,
+    "takeoverFuzzExecution": 150.0,
+    "takeoverJudgedTotal": 240.948,
+    "takeoverSweepTotal": 474.042691375,
+    "takeoverColdAffectedTotal": 54.875816958
+  },
+  "hostLoad": 27.974609375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 4,
+    "plainScenarioModules": 1,
+    "plainScenarioLines": 72
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 10.94,
+      "note": "Combined measured QA diagnostic, adaptive validation and provider reconciliation windows; schema/pagination readers and manual live-WT evidence writes were corrected. Details and attribution limits are in the measurement JSON."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 0.91,
+      "note": "One deliberate cold-session diagnostic for four affected Carrion player variants after same-session timeouts/aborted navigations, plus required base control:5pass. Original7failedattempts retained. Reported time is the whole diagnostic, not marginal editing/CPU attribution."
+    }
+  ],
+  "measurementBasis": "implementMin sums original observed evidence window70.34min and takeover elapsed wall; excludes unobserved/model-capacity gap, includes waits and validation, and is not active work. takeoverReviewReported is the sum of command phases reported in the native review log, not an observed outer wall."
+}
