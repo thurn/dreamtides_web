@@ -1,0 +1,48 @@
+{
+  "bead": "hv-umm2.569",
+  "phase": 5,
+  "implementMin": 27.085331,
+  "implementWindow": {
+    "start": "2026-10-12T17:59:59+00:00",
+    "end": "2026-10-12T18:27:04.119882+00:00"
+  },
+  "localValidationS": {
+    "baseline": 1.676,
+    "focus": 5.798,
+    "typecheck": 12.221,
+    "focus-corrected": 4.907,
+    "focus-final": 9.135,
+    "typecheck-corrected": 3.534,
+    "counterfactual": 4.795,
+    "review": 45.936,
+    "lint-repaired": 2.268,
+    "review-final": 40.94,
+    "knip": 4.646,
+    "full": 100.364,
+    "judged": 31.993,
+    "judged-corrected": 24.805
+  },
+  "hostLoad": 12.5625,
+  "testDelta": {
+    "files": 0,
+    "lines": 125,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 1.627545,
+      "note": "Full focused/type fixture repair18:11:14.478439\u201318:12:52.131142: combined publication draws, undo observable state instead of attempt/history counters, optional loaded battle null handling. Failed process durations retained separately."
+    },
+    {
+      "tag": "local-edit-correction",
+      "minutes": 2.561356,
+      "note": "Full required-review repair18:14:18.103037\u201318:16:51.784391: lint unsafe JSON argument corrected with the declared load roundtrip type, isolated affected lint then final review. Full failed review45.936s retained."
+    },
+    {
+      "tag": "local-edit-correction",
+      "minutes": 2.486992,
+      "note": "Full sampled-script repair18:19:43.823416\u201318:22:13.042941: physical card ID is nested under candidate wrapper; fix ignored scenario selector, preserve initial21.406s lease wait and failed31.993s process. Successful functional witness retains intentional outside-Areas visual failure566."
+    }
+  ]
+}

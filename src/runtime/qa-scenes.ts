@@ -28,6 +28,7 @@ import {
   CARD_LAB_VARIANTS,
   cardLabBattle,
   dreamwellLabBattle,
+  dreamwellLabStageFromUnknown,
   cardLabStageFromUnknown,
   cardLabVariant,
   variantTransfiguration,
@@ -488,8 +489,12 @@ function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens): 
     if (variant === null) return { kind: "rejected", reason: "unknownVariant", eligible };
     if (tokens.side !== "player" && tokens.side !== "enemy") return { kind: "rejected", reason: "unknownSide", eligible };
     if (variant !== "base") return { kind: "rejected", reason: "ineligibleVariant", eligible };
-    if (tokens.stage !== undefined) return { kind: "rejected", reason: "invalidStage", eligible };
-    return { kind: "ok", entityKind: "dreamwell", request: { cardId: dreamwellId, side: tokens.side }, eligible };
+    try {
+      const stage = tokens.stage === undefined ? undefined : dreamwellLabStageFromUnknown(JSON.parse(tokens.stage));
+      return { kind: "ok", entityKind: "dreamwell", request: { cardId: dreamwellId, side: tokens.side, ...(stage === undefined ? {} : { stage }) }, eligible };
+    } catch (error) {
+      return { kind: "rejected", reason: "invalidStage", eligible, detail: error instanceof Error ? error.message : String(error) };
+    }
   }
   const eligible: CardLabVariant[] = [
     "base",

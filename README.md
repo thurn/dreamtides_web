@@ -840,8 +840,11 @@ on the preceding side's Night with that UUID as the next shared draw. A normal
 pass enters the requested side's turn, applies its catalog energy, and publishes
 `dreamwellDrawn`; the persisted `engine.dreamwell` log records UUID, side and
 energy. The complete Dreamwell catalog remains available for recurring cycles.
-Dreamwell cards accept the base variant and report other variants as ineligible;
-declared `labStage` is rejected. The preflight and browser sweep check the actual
+Dreamwell cards accept the base variant and report other variants as ineligible.
+Optional `labStage` JSON supplies initial hands before the first pass, for example
+`{"player":{"hand":["<card-uuid>"]},"enemy":{"hand":[]}}`. Only `player`,
+`enemy`, and their `hand` lists are accepted; omitted hands are empty. The URL and card-lab report record the declaration; the persisted initial battle
+and history retain its physical cards. The preflight and browser sweep check the actual
 draw and settled prompts/stack, and classify a successful pending definition as
 `pending`. Ordinary card UUIDs use their played-instance and resolution checks.
 

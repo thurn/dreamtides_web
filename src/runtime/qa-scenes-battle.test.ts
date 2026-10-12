@@ -54,13 +54,57 @@ describe("the battle layer QA scenes", () => {
     }
     const errors = vi.spyOn(console, "error").mockImplementation(() => undefined);
     try {
-      for (const [suffix, reason] of [["bogus:player", "unknownVariant"], ["base:nobody", "unknownSide"], ["amplified:player", "ineligibleVariant"], ["base:player:%7B%7D", "invalidStage"]]) {
+      for (const [suffix, reason] of [["bogus:player", "unknownVariant"], ["base:nobody", "unknownSide"], ["amplified:player", "ineligibleVariant"], ["base:player:%7B%22enemyScript%22%3A%5B%5D%7D", "invalidStage"]]) {
         const { battle } = labOf(`card-lab:${card.id}:${suffix}`);
         expect(report()).toMatchObject({ status: "rejected", reason });
         expect(battle?.engine?.slice.history).toBeUndefined();
       }
       labOf("card-lab:not-a-uuid:base:player");
       expect(report()).toMatchObject({ status: "rejected", reason: "unknownCard" });
+    } finally { errors.mockRestore(); }
+  });
+  for (const side of ["player", "enemy"] as const) it(`loads and persists declared Dreamwell hands for ${side}`, () => {
+    const content = battleSceneContent();
+    const card = content.dreamwellCards[0];
+    const stage = { player: { hand: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla2.id] }, enemy: { hand: [SYNTHETIC.vanilla3.id] } };
+    const encoded = encodeURIComponent(JSON.stringify(stage));
+    const id = parseQaSceneId(`card-lab:${card.id}:base:${side}:${encoded}`);
+    const journey = buildQaScene(id, content, SCENE_OPTIONS);
+    if (journey === null) throw new Error("declared Dreamwell scene did not build");
+    const battle = buildQaSceneBattle(id, content, journey);
+    if (battle === null) throw new Error("declared Dreamwell battle did not build");
+    const state = battle.engine.slice.committed;
+    expect(state.sides.player.hand).toHaveLength(2);
+    expect(new Set(state.sides.player.hand).size).toBe(2);
+    expect(state.sides.enemy.hand).toHaveLength(1);
+    expect(state.sides.player.hand.map(instance => state.instances[instance].printing)).toEqual(stage.player.hand.map(cardId => ({ kind: "card", cardId })));
+    expect(state.sides.enemy.hand.map(instance => state.instances[instance].printing)).toEqual(stage.enemy.hand.map(cardId => ({ kind: "card", cardId })));
+    expect(state.turn).toMatchObject({ active: side === "player" ? "enemy" : "player", phase: "night" });
+    expect(state.sides.player.currentEnergy).toBe(2);
+    expect(state.sides.enemy.currentEnergy).toBe(2);
+    expect((globalThis as { __cardLab?: unknown }).__cardLab).toMatchObject({ status: "ready", stage: JSON.stringify(stage) });
+    const load = { snapshot: journey, battle };
+    const loaded = validateLoadedState({ ...initialFoldState(journey.seed, TEST_CONTENT_CONFIG), journey }, JSON.parse(JSON.stringify(load)) as typeof load);
+    expect(journeyBattleOf(loaded?.battle ?? null)?.engine.slice).toEqual(battle.engine.slice);
+    expect(battle.engine.slice.history?.base.committed.sides.player.hand).toEqual(state.sides.player.hand);
+  });
+  it("accepts an empty hand declaration and rejects unsupported or unknown hand inputs atomically", () => {
+    const content = battleSceneContent();
+    const card = content.dreamwellCards[0];
+    const build = (stage: unknown) => {
+      const id = parseQaSceneId(`card-lab:${card.id}:base:player:${encodeURIComponent(JSON.stringify(stage))}`);
+      const journey = buildQaScene(id, content, SCENE_OPTIONS);
+      if (journey === null) throw new Error("scene missing");
+      return buildQaSceneBattle(id, content, journey);
+    };
+    expect(build({})?.engine.slice.committed.sides.player.hand).toEqual([]);
+    expect((globalThis as { __cardLab?: unknown }).__cardLab).toMatchObject({ status: "ready" });
+    const errors = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    try {
+      for (const stage of [{ player: { deck: [] } }, { enemyScript: [] }, { player: { hand: ["bogus"] } }, { player: { hand: [testCardId("unknown-stage-card")] } }]) {
+        expect(build(stage)?.engine.slice.history).toBeUndefined();
+        expect((globalThis as { __cardLab?: unknown }).__cardLab).toMatchObject({ status: "rejected" });
+      }
     } finally { errors.mockRestore(); }
   });
   const displayLayers = [1, 2, 3, 4, 5, 6, 7];

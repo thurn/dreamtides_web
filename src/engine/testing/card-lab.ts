@@ -73,6 +73,29 @@ export interface CardLabRequest {
 export interface DreamwellLabRequest {
   readonly cardId: DreamwellCardId;
   readonly side: Side;
+  readonly stage?: DreamwellLabStage;
+}
+
+/** Initial hand overrides; omitted hands retain the empty default. */
+export interface DreamwellLabStage {
+  readonly player?: { readonly hand?: readonly CardId[] };
+  readonly enemy?: { readonly hand?: readonly CardId[] };
+}
+
+/** Strict hand-only declaration boundary, shared by typed and URL requests. */
+export function dreamwellLabStageFromUnknown(value: unknown): DreamwellLabStage {
+  const invalid = (): never => { throw new Error("Invalid declared Dreamwell hand stage"); };
+  if (!record(value) || Object.keys(value).some(key => key !== "player" && key !== "enemy")) return invalid();
+  const stage: Partial<Record<Side, { readonly hand?: readonly CardId[] }>> = {};
+  for (const side of SIDES) {
+    const input = value[side];
+    if (input === undefined) continue;
+    if (!record(input) || Object.keys(input).some(key => key !== "hand")) return invalid();
+    if (input.hand === undefined) { stage[side] = {}; continue; }
+    if (!Array.isArray(input.hand)) return invalid();
+    stage[side] = { hand: input.hand.map((card: unknown) => cardIdFromUnknown(card) ?? invalid()) };
+  }
+  return stage;
 }
 
 /**
@@ -88,11 +111,13 @@ export function dreamwellLabBattle(
   engine.catalog.dreamwellCard(request.cardId);
   if (!catalog.includes(request.cardId)) throw new Error("Dreamwell lab UUID is absent from its catalog");
   for (const id of catalog) engine.catalog.dreamwellCard(id);
+  const stage = request.stage === undefined ? {} : dreamwellLabStageFromUnknown(request.stage);
+  for (const side of SIDES) for (const card of stage[side]?.hand ?? []) engine.catalog.card(card);
   const deck = Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id);
   const lab = promptLabBattle(engine, {
     name: `dreamwell-lab:${request.cardId}:${request.side}`,
     description: `The next Dreamwell draw of ${request.cardId} for ${request.side}`,
-    setup: { active: opponent(request.side), phase: "night", round: 2, player: { deck, energy: 2 }, enemy: { deck, energy: 2 } },
+    setup: { active: opponent(request.side), phase: "night", round: 2, player: { deck, energy: 2, hand: stage.player?.hand ?? [] }, enemy: { deck, energy: 2, hand: stage.enemy?.hand ?? [] } },
     script: [],
   });
   return {

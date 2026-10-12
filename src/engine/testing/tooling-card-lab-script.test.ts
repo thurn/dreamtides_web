@@ -1,15 +1,19 @@
 /** Declared card-lab scripts through normal intents, replay and policy handoff. */
 import { describe, expect, it } from "vitest";
-import type { EngineCardDefinition } from "../catalog";
+import type { EngineCardDefinition, EngineDreamwellDefinition } from "../catalog";
 import { createEngine } from "../engine";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
 import { FRONT_RANK_SIZE, opponent } from "../state/ids";
-import { cardLabBattle, cardLabEnemyAction, cardLabStageFromUnknown, dreamwellLabBattle, type CardLabStage } from "./card-lab";
+import { cardLabBattle, cardLabEnemyAction, cardLabStageFromUnknown, dreamwellLabBattle, dreamwellLabStageFromUnknown, type CardLabStage } from "./card-lab";
 import { aiDecision } from "../policy/decide";
 import { supportersOf } from "../continuous/support";
 import { applyDebugOp, withHistory } from "../debug/debug-actions";
 import { SYNTHETIC, SYNTHETIC_DREAMWELL, syntheticId, testCatalog } from "./synthetic-cards";
-import { activated, exhaustSelf, reclaim, energy } from "../dsl/builders";
+import { activated, exhaustSelf, reclaim, energy, event } from "../dsl/builders";
+import { createCatalog } from "../catalog";
+import { sequence } from "../effects/primitives/sequence";
+import { draw } from "../effects/primitives/draw";
+import { discard } from "../effects/primitives/discard";
 import { chooseOne } from "../effects/primitives/choose-one";
 import { gainPoints } from "../effects/primitives/gain-points";
 import { abandon } from "../effects/primitives/abandon";
@@ -326,5 +330,82 @@ describe("card-lab battle", () => {
     const recovered = applyDebugOp(faulty, failed.slice, { kind: "undo", keep: 0 });
     if (recovered.kind !== "applied") throw new Error("fault recovery failed");
     expect(cardLabEnemyAction(faulty, lab.init, recovered.slice)).toEqual(action);
+  });
+});
+
+
+describe("declared Dreamwell initial hands", () => {
+  const well: EngineDreamwellDefinition = {
+    id: SYNTHETIC_DREAMWELL[0].id, order: 1, energyAdded: 1, status: "authored",
+    abilities: () => [event(sequence(draw(1), discard(1)))],
+  };
+  const catalog = [well.id];
+  const stagedEngine = createEngine(createCatalog(Object.values(SYNTHETIC), [well]));
+  it("preserves empty defaults for omitted and explicitly empty hand declarations", () => {
+    const base = dreamwellLabBattle(stagedEngine, { cardId: well.id, side: "player" }, catalog);
+    for (const stage of [{}, { player: {}, enemy: {} }, { player: { hand: [] }, enemy: { hand: [] } }]) {
+      expect(dreamwellLabBattle(stagedEngine, { cardId: well.id, side: "player", stage }, catalog)).toEqual(base);
+    }
+  });
+  it("rejects malformed or unsupported declarations before constructing a battle", () => {
+    for (const value of [null, [], { enemyScript: [] }, { phase: "night" }, { player: null },
+      { player: { energy: 4 } }, { enemy: { front: [] } }, { player: { hand: null } },
+      { player: { hand: [null] } }, { enemy: { hand: ["not-a-uuid"] } }]) {
+      expect(() => dreamwellLabStageFromUnknown(value)).toThrow();
+    }
+    const input = { player: { hand: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla2.id] } };
+    const parsed = dreamwellLabStageFromUnknown(input);
+    expect(parsed).toEqual(input);
+    expect(parsed.player?.hand).not.toBe(input.player.hand);
+    const unknown = syntheticId(0x569ff);
+    expect(() => dreamwellLabBattle(stagedEngine, { cardId: well.id, side: "player", stage: { player: { hand: [unknown] } } }, catalog)).toThrow();
+    expect(input.player.hand).toEqual([SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla2.id]);
+  });
+  for (const side of ["player", "enemy"] as const) it(`retains ${side}'s declared hand through real draws, reload, answers and restart`, () => {
+    const request = { cardId: well.id, side, stage: { player: { hand: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla2.id] }, enemy: { hand: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla2.id] } } };
+    const lab = dreamwellLabBattle(stagedEngine, request, catalog);
+    const base = withHistory(lab.slice);
+    const priorHand = base.committed.sides[side].hand;
+    expect(new Set(priorHand).size).toBe(2);
+    expect(priorHand.every(id => base.committed.instances[id].printing.kind === "card" && base.committed.instances[id].printing.cardId === SYNTHETIC.vanilla2.id)).toBe(true);
+    expect(base.committed.turn).toMatchObject({ active: opponent(side), phase: "night" });
+    expect(base.committed.dreamwell).toEqual({ deck: catalog, next: 0, catalog });
+    const adapter = createFoldAdapter(stagedEngine, { checkEventPrefix: true });
+    const pass = { kind: "battleAction", side: opponent(side), action: { kind: "pass" } } as const;
+    const opening = adapter.reduce(base, pass);
+    if (opening.kind !== "applied" || opening.error !== null) throw new Error("declared draw failed");
+    expect(adapter.reduce(JSON.parse(JSON.stringify(base)) as BattleSlice, pass)).toEqual(opening);
+    const pending = adapter.pending(opening.slice);
+    if (pending?.prompt.kind !== "chooseCards") throw new Error("declared hand did not yield a discard choice");
+    expect(pending.prompt.purpose.role).toBe("discard");
+    expect(pending.prompt.candidates).toHaveLength(3);
+    expect(new Set(pending.prompt.candidates).size).toBe(3);
+    expect(pending.prompt.candidates).toEqual(pending.display.sides[side].hand);
+    expect(pending.prompt.candidates).toEqual(expect.arrayContaining(priorHand));
+    expect(opening.slice.committed.sides[side].currentEnergy).toBe(3);
+    const answer = { kind: "answer", side, promptId: pending.prompt.id, value: [priorHand[0]] } as const;
+    const reloaded = JSON.parse(JSON.stringify(opening.slice)) as BattleSlice;
+    expect(adapter.pending(reloaded)?.prompt).toEqual(pending.prompt);
+    expect(adapter.reduce(reloaded, { ...answer, side: opponent(side) })).toMatchObject({ kind: "bounced", reason: "notYourPrompt" });
+    expect(adapter.reduce(reloaded, { ...answer, promptId: parsePromptId("0:0:99") })).toMatchObject({ kind: "bounced", reason: "stalePrompt" });
+    expect(adapter.reduce(reloaded, { ...answer, value: [] })).toMatchObject({ kind: "bounced", reason: "illegalAnswer" });
+    const complete = adapter.reduce(reloaded, answer);
+    if (complete.kind !== "applied" || complete.error !== null) throw new Error("declared discard failed");
+    expect(adapter.reduce(opening.slice, answer)).toEqual(complete);
+    expect(complete.slice.committed.instances[priorHand[0]].zone).toBe("void");
+    expect(complete.slice.committed.sides[side].hand).toContain(priorHand[1]);
+    expect([...opening.published, ...complete.published].filter(e => e.kind === "dreamwellDrawn")).toHaveLength(1);
+    expect([...opening.published, ...complete.published].filter(e => e.kind === "cardDrawn")).toHaveLength(2);
+    expect(complete.published.filter(e => e.kind === "discarded")).toEqual([{ kind: "discarded", side, instance: priorHand[0] }]);
+    expect(adapter.reduce(complete.slice, answer)).toMatchObject({ kind: "bounced", reason: "noPendingPrompt" });
+    const undo = applyDebugOp(stagedEngine, JSON.parse(JSON.stringify(complete.slice)) as BattleSlice, { kind: "undo", keep: 0 });
+    if (undo.kind !== "applied") throw new Error("declared restart failed");
+    expect(undo.slice.committed.sides[side].hand).toEqual(priorHand);
+    const restarted = adapter.reduce(undo.slice, pass);
+    if (restarted.kind !== "applied" || restarted.error !== null) throw new Error("restart draw failed");
+    expect(restarted.published).toEqual(opening.published);
+    expect(restarted.slice.committed).toEqual(opening.slice.committed);
+    const restartedPrompt = adapter.pending(restarted.slice)?.prompt;
+    expect(restartedPrompt?.kind === "chooseCards" ? restartedPrompt.candidates : []).toEqual(pending.prompt.candidates);
   });
 });

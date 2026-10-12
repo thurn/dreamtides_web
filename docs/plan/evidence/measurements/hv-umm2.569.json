@@ -1,0 +1,494 @@
+{
+  "bead": "hv-umm2.569",
+  "base": "2fcdd9a18c64b4bd7e24de502b145cd31956959a",
+  "status": "LOCALLY VALIDATED; outside-Areas highlight judged failure hv-umm2.566; parent core review/certified delivery owed",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T17:59:59+00:00",
+    "startProvenance": "Parent claim ACK is conservative whole-ownership proxy covering installation/preparation, design, baseline, implementation, coordination, failed attempts, repairs and waits. Exact dispatch unknown.",
+    "helperFirstObservedUtc": "2026-10-12T18:05:03Z",
+    "endUtc": "2026-10-12T18:27:04.119882+00:00",
+    "endProvenance": "Actual precommit evidence cutoff after all ordinary checks and owned QA cleanup; final standalone schema and commit tail excluded/qualified, actual commit time recorded by Git."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "First measured prepare step in final required review; host load is not CPU utilization."
+      }
+    }
+  },
+  "scope": {
+    "sourcePaths": [
+      "README.md",
+      "src/engine/testing/card-lab.ts",
+      "src/runtime/qa-scenes.ts",
+      "src/content/dreamwell/astral-interface-ee1ef770.ts",
+      "src/engine/testing/tooling-card-lab-script.test.ts",
+      "src/runtime/qa-scenes-battle.test.ts"
+    ],
+    "productionChangedLines": 43,
+    "testDelta": {
+      "toolingNetLines": 81,
+      "runtimeNetLines": 44,
+      "net": 125,
+      "newCases": 7,
+      "entrypoints": 0,
+      "jsdomFiles": 0
+    },
+    "newApi": [
+      "DreamwellLabStage (hand-only)",
+      "dreamwellLabStageFromUnknown",
+      "optional DreamwellLabRequest.stage"
+    ],
+    "fallout": {
+      "updatedConsumers": [
+        "src/runtime/qa-scenes.ts",
+        "src/engine/testing/tooling-card-lab-script.test.ts"
+      ],
+      "unchangedConsumers": [
+        "src/engine/testing/lab-preflight.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model.test.ts"
+      ],
+      "savedSchema": false,
+      "rulesUiPromptChanges": false
+    },
+    "companion": "Astral file byte-identical to dd4627b38b395a9f7c703a77c1981cd89f149231; every printed field/energy/order preserved.",
+    "defaults": "Hand omission/empty stage keeps preceding Night, active side, decks, energy, forced UUID and full recurring catalog. No enemyScript/phase/board injection.",
+    "D20": "No new content scenario; seven bounded synthetic public setup/fold/LOAD_STATE cases in existing two test entrypoints.",
+    "D21": "Existing discard role/visual; sampled companion desktop/mobile interaction judged fail566 with functional pass."
+  },
+  "sourceSHA256": {
+    "README.md": "d18a407bda7d3dba4066226afd6d403dd3b6ce2609adfc32fedf141c66d702e8",
+    "src/engine/testing/card-lab.ts": "756df801b78ef81a854a21efd427906fba1e8b29ed2b03422763cb81a7bd78de",
+    "src/runtime/qa-scenes.ts": "713ed1e5ff1959be6a4bf00425be5e6230e88b5e4dadc8f8d08f552c23b98de0",
+    "src/content/dreamwell/astral-interface-ee1ef770.ts": "180a72e289b18e0eabdbe578df75d0840d79434de8e4fcf8e0ee436d8315de66",
+    "src/engine/testing/tooling-card-lab-script.test.ts": "d2957b5e8412d717f15e2678f51228ce6d6b232030495f7cee08020cd3a840d6",
+    "src/runtime/qa-scenes-battle.test.ts": "b294827d55c2d6488b1bce8b1ba69a3797acf444bfe5400dbaea3984db3a82f0"
+  },
+  "validation": [
+    {
+      "name": "baseline",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/hv-569-baseline.mts"
+      ],
+      "pid": 88322,
+      "observerPid": 88306,
+      "startUtc": "2026-10-12T18:07:17.096126+00:00",
+      "endUtc": "2026-10-12T18:07:18.772215+00:00",
+      "wallS": 1.676,
+      "exit": 0,
+      "log": "/tmp/hv-569-baseline.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "focus",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling-card-lab-script.test.ts",
+        "src/runtime/qa-scenes-battle.test.ts"
+      ],
+      "pid": 65221,
+      "observerPid": 65209,
+      "startUtc": "2026-10-12T18:11:14.478439+00:00",
+      "endUtc": "2026-10-12T18:11:20.276179+00:00",
+      "wallS": 5.798,
+      "exit": 1,
+      "log": "/tmp/hv-569-focus.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 16038,
+      "observerPid": 16026,
+      "startUtc": "2026-10-12T18:11:58.146831+00:00",
+      "endUtc": "2026-10-12T18:12:10.368019+00:00",
+      "wallS": 12.221,
+      "exit": 2,
+      "log": "/tmp/hv-569-typecheck.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "focus-corrected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling-card-lab-script.test.ts",
+        "src/runtime/qa-scenes-battle.test.ts"
+      ],
+      "pid": 17324,
+      "observerPid": 17237,
+      "startUtc": "2026-10-12T18:11:59.296626+00:00",
+      "endUtc": "2026-10-12T18:12:04.203917+00:00",
+      "wallS": 4.907,
+      "exit": 1,
+      "log": "/tmp/hv-569-focus-corrected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "focus-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling-card-lab-script.test.ts",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "pid": 22660,
+      "observerPid": 22648,
+      "startUtc": "2026-10-12T18:12:42.996454+00:00",
+      "endUtc": "2026-10-12T18:12:52.131142+00:00",
+      "wallS": 9.135,
+      "exit": 0,
+      "log": "/tmp/hv-569-focus-final.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "typecheck-corrected",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "pid": 22829,
+      "observerPid": 22819,
+      "startUtc": "2026-10-12T18:12:44.112870+00:00",
+      "endUtc": "2026-10-12T18:12:47.646588+00:00",
+      "wallS": 3.534,
+      "exit": 0,
+      "log": "/tmp/hv-569-typecheck-corrected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "counterfactual",
+      "command": [
+        "python3",
+        "/tmp/hv-569-counterfactual.py"
+      ],
+      "pid": 25547,
+      "observerPid": 25536,
+      "startUtc": "2026-10-12T18:13:27.073062+00:00",
+      "endUtc": "2026-10-12T18:13:31.868514+00:00",
+      "wallS": 4.795,
+      "exit": 0,
+      "log": "/tmp/hv-569-counterfactual.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 29064,
+      "observerPid": 29055,
+      "startUtc": "2026-10-12T18:14:18.103037+00:00",
+      "endUtc": "2026-10-12T18:15:04.040030+00:00",
+      "wallS": 45.936,
+      "exit": 1,
+      "log": "/tmp/hv-569-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "lint-repaired",
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/runtime/qa-scenes-battle.test.ts"
+      ],
+      "pid": 84608,
+      "observerPid": 84595,
+      "startUtc": "2026-10-12T18:15:45.203915+00:00",
+      "endUtc": "2026-10-12T18:15:47.472038+00:00",
+      "wallS": 2.268,
+      "exit": 0,
+      "log": "/tmp/hv-569-lint-repaired.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 86926,
+      "observerPid": 86912,
+      "startUtc": "2026-10-12T18:16:10.844031+00:00",
+      "endUtc": "2026-10-12T18:16:51.784391+00:00",
+      "wallS": 40.94,
+      "exit": 0,
+      "log": "/tmp/hv-569-review-final.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 90424,
+      "observerPid": 90414,
+      "startUtc": "2026-10-12T18:17:01.997158+00:00",
+      "endUtc": "2026-10-12T18:17:06.643106+00:00",
+      "wallS": 4.646,
+      "exit": 0,
+      "log": "/tmp/hv-569-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "full",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/hv-569-heavy-body.py"
+      ],
+      "pid": 91856,
+      "observerPid": 91845,
+      "startUtc": "2026-10-12T18:17:21.398462+00:00",
+      "endUtc": "2026-10-12T18:19:01.764279+00:00",
+      "wallS": 100.364,
+      "exit": 0,
+      "log": "/tmp/hv-569-full.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "judged",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.569",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 25967,
+      "observerPid": 25959,
+      "startUtc": "2026-10-12T18:19:43.823416+00:00",
+      "endUtc": "2026-10-12T18:20:15.817247+00:00",
+      "wallS": 31.993,
+      "exit": 1,
+      "log": "/tmp/hv-569-judged.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "judged-corrected",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.569",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 31435,
+      "observerPid": 31426,
+      "startUtc": "2026-10-12T18:21:48.237487+00:00",
+      "endUtc": "2026-10-12T18:22:13.042941+00:00",
+      "wallS": 24.805,
+      "exit": 0,
+      "log": "/tmp/hv-569-judged-corrected.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "baseline": "Both controllers on unchanged source ignore proposed initial hands and auto-answer sole-card discard after real first forced Dreamwell draw. Exit0 is diagnostic success; acceptance=false is intended product negative. Original pending=null evidence is unaffected by later correcting scratch predicate to pending.prompt.",
+  "counterfactual": {
+    "startUtc": "2026-10-12T18:13:27.097086+00:00",
+    "endUtc": "2026-10-12T18:13:31.864594+00:00",
+    "wallS": 4.7673722920008,
+    "npmPid": 25549,
+    "npmExit": 1,
+    "restoredExactSource": true,
+    "expectedFailure": true
+  },
+  "full": {
+    "bodyPid": 91857,
+    "npmPid": 91859,
+    "startUtc": "2026-10-12T18:17:21.420198+00:00",
+    "endUtc": "2026-10-12T18:19:01.760749+00:00",
+    "wallS": 100.33937299999525,
+    "exit": 0
+  },
+  "parentInstall": {
+    "pid": 28603,
+    "observerPid": 28592,
+    "startUtc": "2026-10-12T18:00:36.342968Z",
+    "endUtc": "2026-10-12T18:00:39.436932Z",
+    "wallS": 3.093961,
+    "exit": 0,
+    "provenance": "Parent supplied actual installation receipt; not repeated."
+  },
+  "qa": {
+    "rawReport": "invocations/run-7gNZ56/judged.result.json",
+    "functional": "Both desktop/mobile passed candidate membership, physical old-card discard/new-card retention and public draw-before-discard order; Caps empty, actual taps/submission succeeded.",
+    "judged": "fail566, not a waived/passing presentation acceptance",
+    "captures": {
+      "astral-desktop-offer.png": [
+        2880,
+        1800
+      ],
+      "astral-desktop-selected.png": [
+        2880,
+        1800
+      ],
+      "astral-mobile-offer.png": [
+        780,
+        1688
+      ],
+      "astral-mobile-selected.png": [
+        780,
+        1688
+      ]
+    },
+    "actualDpr": 2,
+    "dirtyHead": "2fcdd9a18c64b4bd7e24de502b145cd31956959a",
+    "sourceBinding": "Six-path SHA manifest binds unchanged prepared source/tests; recorded QA commit is base, not future final sourceOID.",
+    "lifetimes": [
+      {
+        "attempt": "first",
+        "runner": 25967,
+        "serverGroup": 28894,
+        "slot": 1,
+        "port": 5274,
+        "sessionId": null,
+        "note": "Session ID not captured before fast completion; report/log has normal cleanup and portfree, no inferred completion receipt."
+      },
+      {
+        "owner": {
+          "token": "75704cef-2be9-4a57-8a40-851d39f372c7",
+          "pid": 31435,
+          "bead": "hv-umm2.569",
+          "label": "judged",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-initial-hands-569",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T18:21:50.070Z",
+          "providerState": "active",
+          "mcpSessionId": "8dfc9350-14e4-47fd-b734-338156373077",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "server": {
+          "token": "4c183283-9d91-44d8-9b25-0fc106130f6d",
+          "runner": {
+            "pid": 31435,
+            "group": 31426,
+            "started": "Mon Oct 12 11:21:48 2026",
+            "state": "S",
+            "command": "node scripts/qa/run-scenario.mjs judged --bead hv-umm2.569 --viewports desktop,mobile"
+          },
+          "server": {
+            "pid": 31463,
+            "group": 31463,
+            "started": "Mon Oct 12 11:21:48 2026",
+            "state": "Rs",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/dreamwell-initial-hands-569/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 4c183283-9d91-44d8-9b25-0fc106130f6d /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-initial-hands-569",
+          "port": 5274
+        }
+      }
+    ],
+    "cleanup": "Both runner terminal receipts and logs establish normal server cleanup/portfree at lifetime end. Own owner absent; shared service/peer records untouched.",
+    "parentAudit": "/tmp/dreamtides-executor-01a12e91/569-parent-qa-audit.json"
+  },
+  "runtime": {
+    "observedUtc": "2026-10-12T18:27:04.119882+00:00",
+    "pids": {
+      "16026": "absent",
+      "16038": "absent",
+      "17237": "absent",
+      "17324": "absent",
+      "22648": "absent",
+      "22660": "absent",
+      "22819": "absent",
+      "22829": "absent",
+      "25536": "absent",
+      "25547": "absent",
+      "25549": "absent",
+      "25959": "absent",
+      "25967": "absent",
+      "28592": "absent",
+      "28603": "absent",
+      "28894": "absent",
+      "29055": "absent",
+      "29064": "absent",
+      "31426": "absent",
+      "31435": "absent",
+      "31463": "absent",
+      "65209": "absent",
+      "65221": "absent",
+      "84595": "absent",
+      "84608": "absent",
+      "86912": "absent",
+      "86926": "absent",
+      "88306": "absent",
+      "88322": "absent",
+      "90414": "absent",
+      "90424": "absent",
+      "91845": "absent",
+      "91856": "absent",
+      "91857": "absent",
+      "91859": "absent"
+    },
+    "slots": {
+      "0": "owner file absent",
+      "1": "owner file absent"
+    },
+    "writers": "None after this evidence write; schema/commit finite tail follows. No server/provider/client left owned."
+  },
+  "coreFailurePaths": {
+    "midStepError": "Existing dreamwell-bonus.contracts.ts rollback test retains committed draw after failure. New hand stage is pre-construction validated data on the same atomic path, not a new resolving step.",
+    "reloadRestart": "New public JSON base/pending replay preserves physical IDs/prompt IDs; public undo restart restores hands/state/events/candidates. Runtime LOAD_STATE accepts saved staged slice/history.",
+    "partialWrite": "Strict decoder/catalog checks before constructor; new invalid runtime requests publish plain fallback without partial lab history. Existing Dreamwell-bonus public load test rejects malformed/partially written queued records. No new persisted schema.",
+    "invalidStaleInput": "New malformed/unsupported/unknown declarations and illegal/foreign/stale answers reject; original pending slice replay stays coherent.",
+    "concurrentActors": "New duplicate answer after first completion bounces noPendingPrompt; replicas from saved prefix yield identical completion and once-only draw/discard publication."
+  },
+  "retainedCorrections": {
+    "focusedTypeWindow": {
+      "start": "2026-10-12T18:11:14.478439Z",
+      "end": "2026-10-12T18:12:52.131142Z"
+    },
+    "reviewWindow": {
+      "start": "2026-10-12T18:14:18.103037Z",
+      "end": "2026-10-12T18:16:51.784391Z"
+    },
+    "qaWindow": {
+      "start": "2026-10-12T18:19:43.823416Z",
+      "end": "2026-10-12T18:22:13.042941Z"
+    }
+  },
+  "original213": "Original correction starts17:44:43.624694Z; this prerequisite reaches functional witness18:22:13.042941Z. Original213 remains released/checkpointed and requires parent reclaim/update/exact-scene acceptance; this milestone is not its completed acceptance. Original two failed fixture receipts130/44.047s and1/56.839s remain unchanged.",
+  "otherFiniteReadCorrections": "Guessed config/metrics/overlay paths or glob matches were corrected by actual discovery; finite tool reads made no source changes. Exact shell PIDs/subprocess durations were not captured; whole ownership proxy includes elapsed cost. Synthetic runtime fixture is already stable, not mutable production content. No fixture correction needed.",
+  "classification": "Mandatory infrastructure full passed, no generic fuzz required. Native core-review required; parent fresh readonly gpt-5.6-sol CLI under human override through2026-10-14T01:00Z."
+}

@@ -1,3 +1,7 @@
+import { event } from "../../engine/dsl/builders";
+import { discard } from "../../engine/effects/primitives/discard";
+import { draw } from "../../engine/effects/primitives/draw";
+import { sequence } from "../../engine/effects/primitives/sequence";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +15,6 @@ export default dreamwellCard({
   artOwned: true,
   cardNumber: 7,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [event(sequence(draw(1), discard(1)))],
+  verifiedText: "73adwzu8jt",
 });
