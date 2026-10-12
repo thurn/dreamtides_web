@@ -1,0 +1,65 @@
+{
+  "bead": "hv-umm2.530",
+  "base": "92c6719798efdf14f1e736e118523ce6d62cbc9d",
+  "purpose": "Retire fulfilled pending inventory markers and regenerate content-inventory.json so no pending entity lists a new primitive whose exported form exists. Planning data only; filed native bead scopes stay authoritative.",
+  "before": {
+    "generatorCheck": "exit 1: capability boundSourceSpark: fulfilled pending capability src/engine/dsl/types.ts:BoundValue member=sourceSpark",
+    "fulfilledMarkers": [
+      {
+        "name": "boundSourceSpark",
+        "form": { "module": "src/engine/dsl/types.ts", "symbol": "BoundValue", "kind": "form", "member": "sourceSpark", "pending": "member" },
+        "landedBy": "hv-umm2.501",
+        "exportedForm": "SourceSparkValue { value: \"sourceSpark\" } in the BoundValue union (src/engine/dsl/types.ts), built by thisCharacterSpark() in src/engine/dsl/values.ts"
+      },
+      {
+        "name": "activatedFromVoid",
+        "form": { "module": "src/engine/dsl/types.ts", "symbol": "ActivatedAbility", "kind": "form", "option": "zone" },
+        "landedBy": "hv-umm2.490",
+        "exportedForm": "ActivatedAbility.zone; marker retired by hv-umm2.490 without regenerating the inventory"
+      }
+    ],
+    "staleNewPrimitives": [
+      { "id": "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", "new": ["boundSourceSpark"] },
+      { "id": "95711262-8510-475c-a572-c1cd144d54cb", "new": ["boundSourceSpark"] },
+      { "id": "ecf77f27-df0f-47c4-99c2-48d7fa46a137", "new": ["activatedFromVoid"] },
+      { "id": "fd355778-abea-4513-844c-91bf75929ebe", "new": ["activatedFromVoid"] }
+    ],
+    "beads": 219,
+    "primitiveBeads": 33,
+    "newPrimitives": 33,
+    "pendingCards": 275
+  },
+  "after": {
+    "binding": "registered(DSL_TYPES, \"BoundValue\", { member: \"sourceSpark\" }) with no pending marker",
+    "generatorCheck": "exit 0: content-inventory.json is current",
+    "registrationAreasCheck": "exit 0: registration Areas are current",
+    "remainingPendingMarkersResolving": 0,
+    "entitiesListingExistingPrimitiveAsNew": 0,
+    "pendingEntitiesListingExistingPrimitiveAsNew": 0,
+    "beads": 218,
+    "primitiveBeads": 31,
+    "newPrimitives": 31,
+    "pendingCards": 242,
+    "retiredPrimitiveBeads": ["prim-bound-source-spark", "prim-activated-from-void"]
+  },
+  "entityChanges": {
+    "requiredPrimitivesMovedToExisting": [
+      "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a",
+      "95711262-8510-475c-a572-c1cd144d54cb",
+      "ecf77f27-df0f-47c4-99c2-48d7fa46a137",
+      "fd355778-abea-4513-844c-91bf75929ebe"
+    ],
+    "statusPendingToAuthored": 33,
+    "rulesDecisionsOrCardIssuesChanged": 9,
+    "routingRenumberedOnly": 264
+  },
+  "commands": {
+    "checkBase": { "command": "npx tsx scripts/content-inventory.ts --check", "exit": 1, "s": 1.5 },
+    "generate": { "command": "npx tsx scripts/content-inventory.ts", "exit": 0, "s": 1.9 },
+    "check": { "command": "npx tsx scripts/content-inventory.ts --check", "exit": 0, "s": 1.5 },
+    "registrationAreasCheck": { "command": "npx tsx scripts/content-inventory.ts --refresh-registration-areas --check", "exit": 0, "s": 1.5 },
+    "focused": { "files": 3, "tests": 114, "s": 6.6 },
+    "review": { "exit": 0, "s": 12.8, "load": 12.14 },
+    "knip": { "exit": 0, "s": 3.1 }
+  }
+}

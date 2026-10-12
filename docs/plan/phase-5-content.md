@@ -125,6 +125,10 @@ composition beads skip it.
    and briefs a subagent with its filed Entities, Areas, acceptance criteria,
    and dependencies ([workflow](workflow.md#dispatch)). Read inventory
    `entities` records by each filed UUID to inspect the current catalog data.
+   When `npm run bead:entities -- <filed UUIDs>` lists a
+   `requiredPrimitives.new` entry that neither the bead itself introduces nor
+   a closed prerequisite supplies, the session stops before dispatch and
+   records the missing primitive in the bead notes.
    Before writing the brief, match each entity's printed text against the
    mechanic families below. For every listed file the bead's `Areas:` line
    does not already cover, add it with
@@ -164,6 +168,10 @@ composition beads skip it.
    exhaustive over `CardCostMode`, its player cost change shapes, and
    `PlayRoute`, with expected payments derived from the settled rulings. Run
    `npm test -- src/engine/effects/primitives/contracts.test.ts`.
+   When the inventory marks the bead's capability `pending`, the bead runs
+   `npx tsx scripts/content-inventory.ts` and retires or corrects that marker
+   in `scripts/content-inventory.ts` in its own commit, with the regenerated
+   `content-inventory.json`.
    The registry index is the catalog (Phase 3.4). Every primitive bead, and
    every bead that introduces a prompt kind or floating change kind, takes the
    [`registration hubs`](workflow.md#hub-areas) area with `engine hubs`,

@@ -392,7 +392,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("cardFilterBounds", [registered(DSL_TYPES, "CardFilter", { option: "costAtMost" })], ["CardFilter"], { note: `cost and ✦ bounds on play and materialize filters (${GAP_36})` }),
   dsl("cardFilterSparkBounds", [registered(DSL_TYPES, "CardFilter", { option: "sparkAtMost" })], ["CardFilter"], { note: "✦ bounds on a card filter (\"Discover a ≤2✦ character\")" }),
   dsl("voidTargetXBound", [registered(DSL_TYPES, "ZoneTargetSpec", { option: "costAtMost" })], ["CardRef"], { note: "void targets bounded by X (\"up to two ≤X● cost events in your void\")" }),
-  dsl("boundSourceSpark", [registered(DSL_TYPES, "BoundValue", { member: "sourceSpark", pending: "member" })], ["CharacterSelector"], { note: "a cost or ✦ bound read from the source's ✦ (\"with ✦ less than or equal to this character's ✦\")" }),
+  dsl("boundSourceSpark", [registered(DSL_TYPES, "BoundValue", { member: "sourceSpark" })], ["CharacterSelector"], { note: "a cost or ✦ bound read from the source's ✦ (\"with ✦ less than or equal to this character's ✦\")" }),
   dsl("zoneCardRefs", [registered(DSL_TYPES, "ZoneCardSpec")], ["CardRef"], { note: "references to cards in a void, deck, or hand" }),
   dsl("randomSelection", [callable(DSL_BUILDERS, "randomIn")], ["CardRef"], { note: "\"a random …\" selections" }),
   dsl("valueZoneCounts", [callable(DSL_BUILDERS, "countCards")], ["ValueExpr"], { note: "counts of cards in a zone" }),

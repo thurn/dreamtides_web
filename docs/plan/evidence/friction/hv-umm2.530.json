@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.530",
+  "phase": 5,
+  "implementMin": 14,
+  "localValidationS": {
+    "check-base": 1.5,
+    "generate": 1.9,
+    "check": 1.5,
+    "registration-areas-check": 1.5,
+    "focused": 6.6,
+    "review": 12.8,
+    "knip": 3.1
+  },
+  "hostLoad": 12.14,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 0
+  },
+  "friction": [
+    {
+      "tag": "inventory-fulfilled-marker",
+      "minutes": 1,
+      "note": "The generator refused to run on base: boundSourceSpark (BoundValue member sourceSpark, landed by hv-umm2.501 as SourceSparkValue) still declared pending=member; hv-umm2.490 retired activatedFromVoid without regenerating content-inventory.json"
+    }
+  ]
+}
