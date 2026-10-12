@@ -1,0 +1,290 @@
+{
+  "bead": "hv-umm2.482",
+  "phase": 5,
+  "measurementWindow": {
+    "start": "2026-10-12T03:42:08.953229+00:00",
+    "startKind": "completed-spawn-note proxy",
+    "actualDispatch": null,
+    "dispatchBracket": [
+      "2026-10-12T03:41:12.986835+00:00",
+      "2026-10-12T03:42:08.953229+00:00"
+    ],
+    "end": "2026-10-12T04:04:00+00:00",
+    "endKind": "actual Git source commit committer clock, sampled immediately before commit invocation",
+    "dispatchProxyToCommitMin": 21.850779516666666,
+    "actualDispatchToCommitMinBounds": {
+      "lower": 21.850779516666666,
+      "upper": 22.783552750000002
+    }
+  },
+  "validationReceipts": [
+    {
+      "name": "review-final-recovery",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 95444,
+      "startedAt": "2026-10-12T03:54:21.604794+00:00",
+      "endedAt": "2026-10-12T03:54:33.528480+00:00",
+      "wallS": 11.923573292002402,
+      "hostLoad": 15.14599609375,
+      "exitCode": 0
+    },
+    {
+      "name": "knip-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 6535,
+      "startedAt": "2026-10-12T03:55:04.227230+00:00",
+      "endedAt": "2026-10-12T03:55:06.453232+00:00",
+      "wallS": 2.2260053749996587,
+      "hostLoad": 14.720703125,
+      "exitCode": 0
+    },
+    {
+      "name": "full",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 7565,
+      "startedAt": "2026-10-12T03:55:15.784512+00:00",
+      "endedAt": "2026-10-12T03:56:56.984840+00:00",
+      "wallS": 101.19909779199952,
+      "hostLoad": 12.91796875,
+      "exitCode": 0
+    },
+    {
+      "name": "crash",
+      "command": [
+        "node",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.482/crash-check.mjs"
+      ],
+      "pid": 28773,
+      "startedAt": "2026-10-12T03:57:15.701415+00:00",
+      "endedAt": "2026-10-12T03:57:16.815195+00:00",
+      "wallS": 1.1138011250004638,
+      "hostLoad": 15.75634765625,
+      "exitCode": 0
+    },
+    {
+      "name": "runner-smoke",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "card-lab-play",
+        "--bead",
+        "hv-umm2.482",
+        "--arg",
+        "card=66959155-9e79-459e-afdb-eb4c0fbdeb11",
+        "--arg",
+        "variant=base",
+        "--arg",
+        "as=player",
+        "--arg",
+        "capture=runner-smoke",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "120"
+      ],
+      "pid": 32628,
+      "startedAt": "2026-10-12T03:57:58.525183+00:00",
+      "endedAt": "2026-10-12T03:58:13.419322+00:00",
+      "wallS": 14.894007667000551,
+      "hostLoad": 12.49365234375,
+      "exitCode": 0
+    },
+    {
+      "name": "sweep-a",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.482",
+        "--cards",
+        "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+        "--variants",
+        "base",
+        "--as",
+        "player",
+        "--capture",
+        "--timeout",
+        "120"
+      ],
+      "pid": 34656,
+      "startedAt": "2026-10-12T03:58:22.310384+00:00",
+      "endedAt": "2026-10-12T03:58:37.047201+00:00",
+      "wallS": 14.73668216599981,
+      "hostLoad": 12.1611328125,
+      "exitCode": 0
+    },
+    {
+      "name": "sweep-b",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.482",
+        "--cards",
+        "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+        "--variants",
+        "base",
+        "--as",
+        "player",
+        "--capture",
+        "--timeout",
+        "120"
+      ],
+      "pid": 38082,
+      "startedAt": "2026-10-12T03:59:03.996030+00:00",
+      "endedAt": "2026-10-12T03:59:20.952066+00:00",
+      "wallS": 16.955875791001745,
+      "hostLoad": 18.67626953125,
+      "exitCode": 0
+    }
+  ],
+  "failedValidation": [
+    {
+      "review": "review-1",
+      "cause": "typed JSON boundary lint and fixture signal type checks",
+      "corrected": "unknown-value narrowing and typed signal boundary"
+    },
+    {
+      "review": "review-2",
+      "cause": "inferred record captured by closure",
+      "corrected": "constant record inside gated launch try block"
+    }
+  ],
+  "runtimeLedger": [
+    {
+      "kind": "standalone crash fixture",
+      "runnerPid": 28777,
+      "launcherGroup": 28814,
+      "httpChild": 28835,
+      "port": 5274,
+      "terminal": "runner SIGKILL, group reconciled; all PIDs absent/port free",
+      "provider": "synthetic paused connect, no actual request; owner bytes retained in isolated fixture",
+      "receipt": "crash.result.json"
+    },
+    {
+      "kind": "actual MCP runner",
+      "pid": 32628,
+      "serverGroup": 32669,
+      "port": 5174,
+      "terminal": "exit0; group absent/portfree, exact owner/server records absent",
+      "provider": "close() confirmed and source-defined active RPC join completed before terminal exit",
+      "evidenceDir": "invocations/run-FdbWHe",
+      "result": "card-lab-play.result.json",
+      "gameLog": "card-lab-play-desktop.jsonl",
+      "rows": 28,
+      "capture": "runner-smoke.png",
+      "caps": []
+    },
+    {
+      "kind": "actual MCP sweep",
+      "pid": 34656,
+      "serverGroup": 34711,
+      "port": 5174,
+      "terminal": "exit0; group absent/portfree, exact owner/server records absent",
+      "provider": "session close() confirmed before terminal exit",
+      "evidenceDir": "invocations/sweep-wIgZKE",
+      "result": "summary.json",
+      "caps": []
+    },
+    {
+      "kind": "actual MCP sweep",
+      "pid": 38082,
+      "serverGroup": 38127,
+      "port": 5174,
+      "terminal": "exit0; group absent/portfree, exact owner/server records absent",
+      "provider": "session close() confirmed before terminal exit",
+      "evidenceDir": "invocations/sweep-KuWvzA",
+      "result": "summary.json",
+      "caps": []
+    }
+  ],
+  "rulesDecisions": [],
+  "scope": "Four accepted482 coordination findings; no rules, UI, engine, performance, capacity or shared provider change.",
+  "sourceSha256": {
+    "scripts/qa/run-scenario.mjs": "bfce6b7108530d60cbb64f3845bfd8ba92f64042f7535bcb9113b25c47419ad1",
+    "scripts/qa/browser-lease.mjs": "1f97f0c7a6bf7f1cffa9e0180b7332c10148c6fbc132b6a87396977864cff6fe",
+    "scripts/qa/server-ownership.mjs": "c81acaf10bcce8ebc0673c74dd066e496215232495eb0bfd4daf4c052a7b02a8",
+    "scripts/qa/card-sweep.mjs": "e4eff00383a3f5228fe228328bc4b0b770e41279266506c54bce5bd27811c3ad",
+    "scripts/qa/server-launcher.mjs": "aa4e713abc8882fc69d3138f09cbf621cd83ffb55aa76f1e0fdf31a929f354d8",
+    "scripts/dev.mjs": "03d1e3af9b8b99edf5698c861aff6c6225fd086bc01e0fd4ff551d9bba998ce8"
+  },
+  "fullValidation": {
+    "files": 343,
+    "cases": 4606,
+    "heavyLease": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "workers": 2,
+    "exitCode": 0
+  },
+  "focusedFinal": {
+    "files": 8,
+    "cases": 69
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 210,
+    "jsdomFiles": 0
+  },
+  "importerFallout": "Runner, sweep, three existing QA test modules, documentation; search found no source consumer of bead-wide sweep summary or root report files. All full checks passed.",
+  "failurePathCoverage": {
+    "error": "Missing launcher identity and failed atomic record-write path settle gated launcher before rejection; foreign listener rejection; provider connection, semantic/transport call, close failures retain established contracts.",
+    "partialWrite": "Malformed/partial JSON and empty/invalid tokens retained without signals; atomic server-record rename and gate release keep launch before-record impossible.",
+    "staleInput": "Reused process start identity and shared PG protected; any live runner PID protected; absent launcher with survivors retained, absent launcher+empty group settles server only.",
+    "concurrentActors": "Two native sessions/slots+third waiter; same-label sessions preserve legacy evidence and export disjoint game logs; slot0 hands off at card boundary to one-slot waiter while slot1free, slot1does not yield for legacy capacity.",
+    "reentry": "Two separate normal sweep invocations retain distinct summaries/reports; stored game-log export uses existing viewport-plan contracts. Browser reload behavior unchanged; full suite includes existing event replay/persistence contracts."
+  },
+  "realQA": {
+    "root": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.482",
+    "crash": "crash.result.json",
+    "runner": {
+      "ok": true,
+      "verdict": "pass",
+      "gameId": "bbd3o9",
+      "normalIntent": "hand-tap battleAction play i1; engine.action version0 player from hand",
+      "caps": []
+    },
+    "sweeps": {
+      "invocations": [
+        "invocations/sweep-wIgZKE",
+        "invocations/sweep-KuWvzA"
+      ],
+      "eachCounts": {
+        "pass": 1
+      },
+      "legacyBeadWideSummaryWritten": false,
+      "rawReportDiscovered": true,
+      "caps": []
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final recovery review command wrapper start"
+      }
+    }
+  },
+  "preExistingIssues": [],
+  "notes": [
+    "Original affected four-suite validation passed40contracts; affected second run passed new ownership/legacy cases.",
+    "Review1 typed-JSON lint+fixture signal types and Review2 inferred captured record failed; retained original logs. Specific fixes led to final review passes.",
+    "Full check ran once on final runtime body. README grammar correction and final measured evidence changes followed; whitespace/schema checked without repeated broad QA.",
+    "CI uses ordinary contained child processes with OS group identity/signal boundary fixtures. Actual detached PG and real runner SIGKILL are standalone ignored QA, separately recorded.",
+    "Server reconciliation never establishes or clears provider completion; crash fixture preserved exact owner bytes."
+  ]
+}

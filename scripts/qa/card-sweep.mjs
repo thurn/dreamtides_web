@@ -20,15 +20,15 @@
 // taken, the sweep closes its session and opens a fresh one behind them
 // (`sweepCards`); the summary separates lease wait from execution. Each
 // invocation's server log, reports, and captures live in its own
-// `artifacts/qa/<bead>/sweep-*/` directory.
+// `artifacts/qa/<bead>/invocations/sweep-*/run-*/` directory.
 
 import { execFileSync } from "node:child_process";
-import { appendFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { loadavg } from "node:os";
-import { basename, dirname, join, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { browserLeaseContended } from "./browser-lease.mjs";
-import { openQaSession, qaCaptureDir, say } from "./run-scenario.mjs";
+import { openQaSession, qaCaptureDir, qaInvocationDir, say } from "./run-scenario.mjs";
 import cardLabPlay from "./scenarios/card-lab-play.mjs";
 
 const repoRoot = resolve(fileURLToPath(new URL("../..", import.meta.url)));
@@ -144,8 +144,8 @@ export async function runSweepCell({ run, closed, save, record }) {
 
 /**
  * Sweeps each card through a QA session, yielding its browser slot at every
- * card boundary where `contended` holds (`browserLeaseContended`: processes
- * wait and no slot is free for them): the session (its server, browser, and
+ * card boundary where `contended` holds (`browserLeaseContended`: the queue head
+ * needs the held slot): the session (its server, browser, and
  * slot) closes, and a fresh one opens and queues behind them. Stops after a
  * card that leaves its session non-runnable.
  *
@@ -215,11 +215,11 @@ async function main() {
   const wallMs = { browserLeaseWait: 0, serve: 0, scenario: 0, cleanup: 0 };
   const captureDir = qaCaptureDir(options.bead);
   mkdirSync(captureDir, { recursive: true });
-  const invocationDir = mkdtempSync(join(captureDir, "sweep-"));
-  const invocation = basename(invocationDir);
+  const invocationDir = qaInvocationDir(options.bead, "sweep");
+  const invocation = relative(captureDir, invocationDir);
   const { sessions, yields } = await sweepCards(options.cards, {
     open: async () => {
-      const session = await openQaSession({ bead: options.bead, label: `${invocation}/card-sweep`, port: options.port, prod: false, minify: false, cwd: null });
+      const session = await openQaSession({ bead: options.bead, label: "card-sweep", invocationDir, port: options.port, prod: false, minify: false, cwd: null });
       wallMs.browserLeaseWait += session.wallMs.browserLeaseWait ?? 0;
       wallMs.serve += session.wallMs.serve ?? 0;
       return { ...session, close: async () => {
@@ -227,7 +227,7 @@ async function main() {
         try { await session.close(); } finally { wallMs.cleanup += performance.now() - cleanupStarted; }
       } };
     },
-    contended: (session) => browserLeaseContended(session.leasePath),
+    contended: (session) => browserLeaseContended(session.leasePath, undefined, session.slot),
     sweepCard: async (card, session) => {
       const scenarioStarted = performance.now();
       try {
@@ -238,21 +238,21 @@ async function main() {
             if (session.closed()) return;
             const base = { uuid: card, variant, ...(side === "enemy" ? { as: "enemy" } : {}) };
             if (eligible !== null && !eligible.includes(variant)) {
-              record({ ...base, verdict: "skip", notes: "the card cannot take this variant", screens: [], attempt: 1, effective: true });
+              record({ ...base, invocation, evidenceDir: relative(captureDir, session.captureDir), verdict: "skip", notes: "the card cannot take this variant", screens: [], attempt: 1, effective: true });
               continue;
             }
             const capture = options.capture ? `sweep-${card.slice(0, 8)}-${variant}-${side}` : "";
             const timeoutMs = options.timeoutS * 1000;
             const result = await runSweepCell({
               run: (attempt) => session.run(cardLabPlay.toString(),
-                { card, variant, as: side, timeoutMs: String(timeoutMs), capture: capture === "" ? "" : `${invocation}/${capture}-attempt-${String(attempt)}` }, timeoutMs + 30_000),
+                { card, variant, as: side, timeoutMs: String(timeoutMs), capture: capture === "" ? "" : `${capture}-attempt-${String(attempt)}` }, timeoutMs + 30_000),
               closed: session.closed,
               save: (report, attempt) => {
                 const filename = `sweep-${card}-${variant}-${side}-attempt-${String(attempt)}.result.json`;
-                writeFileSync(join(invocationDir, filename), JSON.stringify(report, null, 2) + "\n");
-                return `${invocation}/${filename}`;
+                writeFileSync(join(session.captureDir, filename), JSON.stringify(report, null, 2) + "\n");
+                return relative(captureDir, join(session.captureDir, filename));
               },
-              record: (line) => record({ ...base, ...line }),
+              record: (line) => record({ ...base, invocation, evidenceDir: relative(captureDir, session.captureDir), ...line }),
             });
             eligible ??= Array.isArray(result.lab?.eligibleVariants) ? result.lab.eligibleVariants : null;
           }
@@ -263,10 +263,9 @@ async function main() {
     },
   });
   const total = performance.now() - startedClock;
-  const summary = { event: "cardSweepSummary", counts, attemptCounts, hostLoad, sessions, leaseYields: yields,
+  const summary = { event: "cardSweepSummary", invocation, evidenceDir: invocationDir, counts, attemptCounts, hostLoad, sessions, leaseYields: yields,
     wallMs: { ...wallMs, execution: total - wallMs.browserLeaseWait, total } };
   writeFileSync(join(invocationDir, "summary.json"), JSON.stringify(summary, null, 2) + "\n");
-  writeFileSync(join(captureDir, "card-sweep.summary.json"), JSON.stringify(summary, null, 2) + "\n");
   say(JSON.stringify(summary));
   say(`sweep total ${(total / 1000).toFixed(1)} s: browser lease wait ${(wallMs.browserLeaseWait / 1000).toFixed(1)} s over ${String(sessions)} sessions, execution ${((total - wallMs.browserLeaseWait) / 1000).toFixed(1)} s at load ${hostLoad.toFixed(2)}: cells ${JSON.stringify(counts)}, attempts ${JSON.stringify(attemptCounts)}; ledger ${ledger}`);
   process.exitCode = (counts.fail ?? 0) > 0 ? 1 : 0;

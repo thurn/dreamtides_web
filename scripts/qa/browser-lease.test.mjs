@@ -23,7 +23,7 @@ vi.mock("node:child_process", async (importOriginal) => {
   return {
     ...actual,
     spawn: vi.fn((/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").SpawnOptions} */ options) => {
-      const server = args[0] === "scripts/dev.mjs";
+      const server = args[0]?.endsWith("/server-launcher.mjs") === true;
       const stdio = /** @type {import("node:child_process").SpawnOptions["stdio"]} */ (server && Array.isArray(options.stdio) ? [...options.stdio, "ipc"] : options.stdio);
       const child = actual.spawn(command, args, { ...options, stdio, detached: false });
       if (server) fixtureIo.ready = new Promise((done, reject) => {
@@ -40,7 +40,12 @@ vi.mock("node:child_process", async (importOriginal) => {
     }),
     execFileSync: vi.fn((/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").ExecFileSyncOptionsWithStringEncoding} */ options) => {
       const cwd = command === "git" && args.includes("--git-common-dir") ? fixtureIo.gitCwd : null;
-      return actual.execFileSync(command, args, cwd === null ? options : { ...options, cwd });
+      const result = actual.execFileSync(command, args, cwd === null ? options : { ...options, cwd });
+      // The contained fixture models a separate group identity at this OS
+      // boundary; cleanup signals its ordinary child directly, never our PG.
+      if (command === "ps") return result.split("\n").map((line) => line.replace(/^(\s*)(\d+)\s+\d+/u,
+        (whole, pad, pid) => fixtureIo.children.some((child) => child.pid === Number(pid)) ? `${pad}${pid} ${pid}` : whole)).join("\n");
+      return result;
     }),
   };
 });
@@ -184,7 +189,7 @@ describe("repository browser lease", () => {
       vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ call: vi.fn(), close: vi.fn().mockResolvedValue(undefined) });
       const primary = await openQaSession({ bead: "synthetic-lease", label: "primary", port, prod: false, minify: false, cwd: root });
       expect(fixtureIo.children.map((child) => child.pid)).toContain(primary.serverPid);
-      expect(primary.captureDir).toBe(join(root, "artifacts", "qa", "synthetic-lease"));
+      expect(primary.captureDir).toContain(join(root, "artifacts", "qa", "synthetic-lease", "invocations", "run-"));
       expect(primary.leasePath).toBe(path);
       expect(existsSync(primary.ownerPath)).toBe(true);
       await primary.close();
@@ -192,13 +197,13 @@ describe("repository browser lease", () => {
       fixtureIo.gitCwd = worktree;
       const linked = await openQaSession({ bead: "synthetic-lease", label: "linked", port, prod: false, minify: false, cwd: worktree });
       expect(fixtureIo.children.map((child) => child.pid)).toContain(linked.serverPid);
-      expect(linked.captureDir).toBe(primary.captureDir);
+      expect(linked.captureDir).not.toBe(primary.captureDir);
       expect(existsSync(linked.ownerPath)).toBe(true);
       await linked.close();
       expect(existsSync(linked.ownerPath)).toBe(false);
       expect(fixtureIo.children.every((child) => child.exitCode !== null || child.signalCode !== null)).toBe(true);
       expect(existsSync(join(primary.captureDir, "primary.server.log"))).toBe(true);
-      expect(existsSync(join(primary.captureDir, "linked.server.log"))).toBe(true);
+      expect(existsSync(join(linked.captureDir, "linked.server.log"))).toBe(true);
       expect(unrelated.listening).toBe(true);
     } finally {
       await new Promise((/** @type {(error?: Error) => void} */ done) => unrelated.close(done));

@@ -26,7 +26,7 @@
 // minification unless --minify, so `__caps` names the real identifiers; the
 // chunking and module evaluation order are the production bundle's. It opens its own MCP client, whose
 // first root is the primary checkout, so captures land in
-// artifacts/qa/<bead>/. Each viewport pass's persisted game log is saved there
+// artifacts/qa/<bead>/invocations/run-*/. Each viewport pass's persisted game log is saved there
 // as <scenario>[-prod]-<viewport>.jsonl before the browser closes, also when the
 // scenario throws. It prints the result as JSON, writes it beside the
 // captures as <scenario>.result.json, stops its own process group, and exits
@@ -42,6 +42,7 @@ import { setTimeout as delay } from "node:timers/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createBattleDriver, createQa } from "./prelude.mjs";
 import { acquireBrowserLease, browserLeasePath, tryBrowserLock } from "./browser-lease.mjs";
+import { spawnOwnedServer } from "./server-ownership.mjs";
 import { QA_PORTS_PER_SLOT } from "./browser-qa-capacity.mjs";
 import {
   connectPlaywrightMcp,
@@ -336,6 +337,7 @@ export function say(message) {
  * @property {number} port
  * @property {number | null} serverPid
  * @property {string} captureDir
+ * @property {string} invocation
  * @property {string} leasePath The repository's browser admission path (`browserLeasePath`).
  * @property {number} slot The browser slot the session holds until `close()` settles.
  * @property {string} ownerPath The slot's ownership record.
@@ -478,27 +480,37 @@ export async function runScenarioPlan(run, plan, args, timeoutMs, { captureDir, 
   return merged;
 }
 
+/** A new invocation namespace, beneath the bead root used by legacy runners.
+ * @param {string} bead
+ * @param {string} [prefix]
+ */
+export function qaInvocationDir(bead, prefix = "run") {
+  const root = join(qaCaptureDir(bead), "invocations");
+  mkdirSync(root, { recursive: true });
+  return mkdtempSync(join(root, `${prefix}-`));
+}
+
 /**
  * Serves `options.cwd` (default: this checkout) on the runner's port and
  * opens its MCP client, for one or more scenario runs: the runner's own
  * `main`, and tools built on it such as the card sweep. Stops everything on
  * `close()`, SIGINT, or SIGTERM.
  *
- * The session owns the evidence named by its bead and label: it holds a
- * kernel lock on `<label>.server.log` from before it waits for a browser slot
- * until cleanup settles, so a concurrent run with the same bead and label
- * fails before it touches any of that evidence. Sessions serving the same
+ * Each session owns an invocation directory below the bead's capture root,
+ * so same-label sessions and legacy bead-root writers have disjoint evidence.
+ * It holds a native lock on its invocation's server log until cleanup settles.
+ * Sessions serving the same
  * checkout start their servers one at a time, under a kernel lock keyed by
  * the checkout, because workspace preparation is not safe to run twice at
  * once in one checkout.
  *
- * @param {{ bead: string, label: string, port: number | null, prod: boolean, minify: boolean, cwd: string | null }} options
+ * @param {{ bead: string, label: string, port: number | null, prod: boolean, minify: boolean, cwd: string | null, invocationDir?: string }} options
  * @returns {Promise<QaSession>}
  */
 export async function openQaSession(options) {
   const checkout = options.cwd ?? repoRoot;
   const primaryCheckout = primaryCheckoutOf(repoRoot);
-  const captureDir = qaCaptureDir(options.bead);
+  const captureDir = options.invocationDir === undefined ? qaInvocationDir(options.bead) : mkdtempSync(join(options.invocationDir, "run-"));
   const serverLog = join(captureDir, `${options.label}.server.log`);
   mkdirSync(dirname(serverLog), { recursive: true });
   const controller = new AbortController();
@@ -529,6 +541,7 @@ export async function openQaSession(options) {
   const startPath = join(primaryCheckout, "artifacts", "qa", `.serve-${createHash("sha256").update(checkout).digest("hex").slice(0, 16)}.lock`);
   let lease = /** @type {import("./browser-lease.mjs").BrowserLease | null} */ (null);
   let builder = /** @type {import("node:child_process").ChildProcess | null} */ (null);
+  let ownedServer = /** @type {Awaited<ReturnType<typeof spawnOwnedServer>> | null} */ (null);
   let server = /** @type {import("node:child_process").ChildProcess | null} */ (null);
   let mcp = /** @type {Awaited<ReturnType<typeof connectPlaywrightMcp>> | null} */ (null);
   /** @type {Record<string, number>} */
@@ -568,6 +581,7 @@ export async function openQaSession(options) {
         try {
           await stopProcessTree(builder);
           await stopProcessTree(server);
+          ownedServer?.clear();
           if (logFd !== null) closeSync(logFd);
           if (outDir !== null) rmSync(outDir, { recursive: true, force: true });
           if (server !== null) {
@@ -635,9 +649,11 @@ export async function openQaSession(options) {
       }
       wallMs.build = Date.now() - serveStart;
       signal.throwIfAborted();
-      server = spawnLogged("vite", ["preview", "--outDir", outDir, "--port", String(port), "--strictPort"], { cwd: checkout, logFd });
+      ownedServer = await spawnOwnedServer({ slotPath: lease.path, command: "vite", args: ["preview", "--outDir", outDir, "--port", String(port), "--strictPort"], cwd: checkout, logFd, port });
+      server = ownedServer.child;
     } else {
-      server = spawnLogged(process.execPath, ["scripts/dev.mjs", "--port", String(port), "--strictPort"], { cwd: checkout, logFd });
+      ownedServer = await spawnOwnedServer({ slotPath: lease.path, command: process.execPath, args: ["scripts/dev.mjs", "--port", String(port), "--strictPort"], cwd: checkout, logFd, port });
+      server = ownedServer.child;
     }
     await waitUntilServing(baseUrl, server, 120_000, signal);
     if (!listenerOwnedBy(port, Number(server.pid))) throw new Error(`port ${String(port)} is answered by a process outside server ${String(server.pid)}`);
@@ -685,6 +701,7 @@ export async function openQaSession(options) {
     port,
     serverPid: server?.pid ?? null,
     captureDir,
+    invocation: basename(captureDir),
     leasePath,
     slot: held.slot,
     ownerPath,
@@ -722,6 +739,8 @@ async function main() {
       port: session.port,
       slot: session.slot,
       serverPid: session.serverPid,
+      invocation: session.invocation,
+      evidenceDir: session.captureDir,
       hostLoad,
       wallMs,
       ok,

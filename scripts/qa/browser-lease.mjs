@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync, utimesSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, unlinkSync, utimesSync, writeFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import { BROWSER_QA_SLOTS } from "./browser-qa-capacity.mjs";
@@ -114,14 +114,15 @@ function waiting(queue, ticket) {
  * it is created, and `wx` creation never reuses a present name.
  *
  * @param {string} queue
+ * @param {number} slots
  */
-function enqueue(queue) {
+function enqueue(queue, slots) {
   mkdirSync(queue, { recursive: true });
   for (;;) {
     const sequence = (tickets(queue).at(-1)?.sequence ?? 0) + 1;
     const name = `${String(sequence).padStart(12, "0")}-${String(process.pid)}`;
     try {
-      writeFileSync(join(queue, name), "", { flag: "wx" });
+      writeFileSync(join(queue, name), JSON.stringify({ slots }), { flag: "wx" });
       return name;
     } catch (error) {
       if (errorCode(error) !== "EEXIST") throw error;
@@ -322,7 +323,7 @@ export async function acquireBrowserLease(path, { signal, onWait, slots = BROWSE
   signal?.throwIfAborted();
   mkdirSync(dirname(path), { recursive: true });
   const queue = browserLeaseQueuePath(path);
-  const ticket = enqueue(queue);
+  const ticket = enqueue(queue, slots);
   let reported = false;
   try {
     for (;;) {
@@ -342,16 +343,24 @@ export async function acquireBrowserLease(path, { signal, onWait, slots = BROWSE
 }
 
 /**
- * Whether a slot holder should yield at a boundary: processes wait in the
- * queue and no slot is free for them. A slot is free when its lock is and it
- * carries no ownership record.
- *
+ * Whether the queue head needs this holder's slot at a card boundary.
+ * Empty or unrecognized ticket contents describe a legacy slot-0 waiter.
  * @param {string} path
  * @param {number} [slots]
+ * @param {number} [heldSlot]
  */
-export async function browserLeaseContended(path, slots = BROWSER_QA_SLOTS) {
-  if (browserLeaseWaiters(path) === 0) return false;
-  for (let slot = 0; slot < slots; slot++) {
+export async function browserLeaseContended(path, slots = BROWSER_QA_SLOTS, heldSlot) {
+  const queue = browserLeaseQueuePath(path);
+  const head = tickets(queue).find((ticket) => waiting(queue, ticket));
+  if (head === undefined) return false;
+  let capacity = 1;
+  try {
+    const value = /** @type {unknown} */ (JSON.parse(readFileSync(join(queue, head.name), "utf8")));
+    if (typeof value === "object" && value !== null && "slots" in value &&
+      typeof value.slots === "number" && Number.isInteger(value.slots) && value.slots > 0) capacity = Math.min(slots, value.slots);
+  } catch { /* Partial or legacy tickets conservatively need slot 0. */ }
+  if (heldSlot !== undefined && heldSlot >= capacity) return false;
+  for (let slot = 0; slot < capacity; slot++) {
     const slotPath = browserSlotPath(path, slot);
     if (!existsSync(browserOwnerPath(slotPath)) && await lockFree(slotPath)) return false;
   }

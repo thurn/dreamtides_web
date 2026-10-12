@@ -25,7 +25,7 @@ vi.mock("node:child_process", async (importOriginal) => {
   return {
     ...actual,
     spawn: vi.fn((/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").SpawnOptions} */ options) => {
-      const server = args[0] === "scripts/dev.mjs";
+      const server = args[0]?.endsWith("/server-launcher.mjs") === true;
       const stdio = /** @type {import("node:child_process").SpawnOptions["stdio"]} */ (server && Array.isArray(options.stdio) ? [...options.stdio, "ipc"] : options.stdio);
       const child = actual.spawn(command, args, { ...options, stdio, detached: false });
       if (server) {
@@ -41,7 +41,12 @@ vi.mock("node:child_process", async (importOriginal) => {
     }),
     execFileSync: vi.fn((/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").ExecFileSyncOptionsWithStringEncoding} */ options) => {
       const cwd = command === "git" && args.includes("--git-common-dir") ? fixtureIo.gitCwd : null;
-      return actual.execFileSync(command, args, cwd === null ? options : { ...options, cwd });
+      const result = actual.execFileSync(command, args, cwd === null ? options : { ...options, cwd });
+      // The contained fixture models a separate group identity at this OS
+      // boundary; cleanup signals its ordinary child directly, never our PG.
+      if (command === "ps") return result.split("\n").map((line) => line.replace(/^(\s*)(\d+)\s+\d+/u,
+        (whole, pad, pid) => fixtureIo.children.some((child) => child.pid === Number(pid)) ? `${pad}${pid} ${pid}` : whole)).join("\n");
+      return result;
     }),
   };
 });
@@ -188,19 +193,41 @@ describe("concurrent QA sessions", () => {
     expect(existsSync(failing.ownerPath)).toBe(true);
   });
 
-  it("refuses a second live run of the same bead and label before it touches that run's evidence", async () => {
+  it("keeps same-bead same-label runs in distinct evidence namespaces", async () => {
     const { root } = primaryFixture();
-    const connect = connectClients();
+    connectClients();
     const first = await open(root, "same");
     const log = join(first.captureDir, "same.server.log");
     appendFileSync(log, "synthetic evidence\n");
-    await expect(open(root, "same")).rejects.toThrow(/another live QA run owns/);
+    const second = await open(root, "same");
+    expect(second.captureDir).not.toBe(first.captureDir);
     expect(readFileSync(log, "utf8")).toBe("synthetic evidence\n");
-    expect(connect).toHaveBeenCalledOnce();
     expect(serverRunning(first.serverPid)).toBe(true);
-    await first.close();
-    const again = await open(root, "same");
-    expect(again.closed()).toBe(false);
+    expect(serverRunning(second.serverPid)).toBe(true);
+  });
+
+  it("preserves legacy root evidence while same-label sessions save separate game logs", async () => {
+    const { root } = primaryFixture();
+    const report = { result: null, error: null, caps: [], log: [], captures: [], traces: [],
+      gameLog: { gameId: "fixture-game", selectedBy: "url", reason: null, lines: ['{"event":"fixture"}'] } };
+    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({
+      call: vi.fn().mockResolvedValue({ content: [{ type: "text", text: `### Result\n${JSON.stringify(report)}` }] }),
+      close: vi.fn().mockResolvedValue(undefined),
+    });
+    const legacyDir = join(root, "artifacts", "qa", "synthetic-slots");
+    mkdirSync(legacyDir, { recursive: true });
+    const files = ["same.server.log", "same.result.json", "same-desktop.jsonl", "same.png"];
+    for (const file of files) writeFileSync(join(legacyDir, file), "legacy");
+    const [a, b] = await Promise.all([open(root, "same"), open(root, "same")]);
+    const plan = { steps: ["async () => null"], viewports: /** @type {const} */ (["desktop"]) };
+    const logs = await Promise.all([a, b].map((session) => session.runPlan({ ...plan, viewports: [...plan.viewports] }, {}, 1000, { gameLogName: "same" })));
+    expect(logs[0]?.gameLogs[0]?.path).not.toBe(logs[1]?.gameLogs[0]?.path);
+    for (const session of [a, b]) {
+      expect(readFileSync(join(session.captureDir, "same-desktop.jsonl"), "utf8")).toContain('"event":"fixture"');
+      for (const file of ["same.result.json", "same.png"]) writeFileSync(join(session.captureDir, file), session.invocation);
+    }
+    for (const file of files) expect(readFileSync(join(legacyDir, file), "utf8")).toBe("legacy");
+    expect(readFileSync(join(a.captureDir, "same.png"), "utf8")).not.toBe(readFileSync(join(b.captureDir, "same.png"), "utf8"));
   });
 
   it("fails a session whose port is answered outside its own server, releasing its slot", async () => {

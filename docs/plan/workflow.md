@@ -1181,8 +1181,9 @@ for a free slot and holds it through browser and owned-server cleanup, so two
 runs proceed at once and a third waits. Each run serves its worktree on its
 own port in its slot's range from 5174, and owns its server, MCP client,
 ownership record, and evidence; its cleanup touches no other run's. A card
-sweep yields its slot at a card boundary only while others wait and every slot
-is taken. Coordinate interactive MCP use with active provider owners. See
+sweep yields at a card boundary when the oldest live waiter needs its held
+slot and has no eligible free slot. Legacy slot-0 waiters therefore receive
+slot 0 even when slot 1 is free; slot-1 sweeps can continue. Coordinate interactive MCP use with active provider owners. See
 [README § Browser QA](../../README.md#browser-qa) for the slot, port,
 evidence, ownership record, confirmed cleanup and reconciliation contracts,
 and how runners from older checkouts share slot 0.
@@ -1202,8 +1203,13 @@ node scripts/qa/run-scenario.mjs <scenario> --bead <bead-id> [--port <n>] [--pro
   opens its own MCP client with the primary checkout as the first root,
   installs `__caps` as an init script so load-time errors count, and stops
   its own process group on exit or signal. The report lands in
-  `artifacts/qa/<bead-id>/<scenario>[-prod].result.json`; it exits non-zero
+  `artifacts/qa/<bead-id>/invocations/run-*/<scenario>[-prod].result.json`; it exits non-zero
   when the scenario throws or any `__caps` is not empty.
+  Its report prints the exact invocation `evidenceDir`; sweeps retain their
+  summaries under `invocations/sweep-*/summary.json` and identify invocation
+  paths in ledger records. Identity-verified local orphan server cleanup uses
+  `scripts/qa/server-ownership.mjs <exact-slot-lock-path>` while preserving
+  the separate provider quarantine (README § Orphan server reconciliation).
 - **Where scenarios live.** A bead's own scenarios go in its capture
   directory, `artifacts/qa/<bead-id>/<name>.mjs`. Reusable ones are tracked in
   `scripts/qa/scenarios/`.

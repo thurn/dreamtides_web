@@ -163,16 +163,22 @@ failure, signal, or crash never closes or erases another live run's.
   (`artifacts/qa/.serve-<hash>.lock`), because workspace preparation is not
   safe to run twice at once in one checkout; `wallMs.serveWait` records that
   wait.
-- **Evidence.** A run holds a kernel lock on its server log,
-  `artifacts/qa/<bead-id>/<label>.server.log`, from before it waits for a
-  slot until its cleanup settles. The runner's label is its report name; the
-  sweep's is `sweep-*/card-sweep`, inside the invocation directory that also
-  holds its reports and captures. A second live run with the same bead and
-  label fails before it writes any of that evidence.
+- **Evidence.** Each new run allocates
+  `artifacts/qa/<bead-id>/invocations/run-<unique>/` and prints this
+  `evidenceDir` in its JSON report. The directory holds the server log,
+  result, game logs, and captures. Same-bead, same-label runs have separate
+  directories, including when a legacy runner writes at the bead root.
+  Sweeps allocate `invocations/sweep-<unique>/`, with one `run-*` directory
+  per session and an invocation-scoped `summary.json`. Ledger `invocation`,
+  `evidenceDir`, and `rawReport` paths identify the exact evidence; stdout
+  includes the summary's invocation and absolute evidence directory.
 - **Yielding.** The card sweep yields at card boundaries: before each card
-  after the first, if any process is queued and no slot is free for it
-  (every slot is held or retained for reconciliation), it closes its session
-  (browser, server, and slot) and opens a fresh one behind the waiters. Its
+  after the first, when the oldest live waiter needs its held slot and has
+  no eligible free slot. An empty legacy ticket needs slot 0; a slot-0
+  sweep yields to it even while slot 1 is free. A slot-1 sweep keeps running
+  while that legacy waiter needs only slot 0. New tickets declare their slot
+  capacity. When yielding, the sweep closes its session (browser, server,
+  and slot) and opens a fresh one behind the waiters. Its
   summary records `sessions`, `leaseYields`, and `wallMs.browserLeaseWait`,
   `serve`, `scenario`, and `cleanup` summed over its sessions, with
   `execution` as the total less lease wait. A lease wait that costs a bead
@@ -199,6 +205,26 @@ browser slot only, never the heavy slot, and no command holds the heavy slot
 while it waits for a browser slot. `wallMs.browserLeaseWait` records slot
 wait separately from build, serve, and scenario execution.
 
+**Orphan server reconciliation.** The runner records its gated server launcher
+identity before releasing the launch gate in `<slot lock>.server.json`:
+runner and launcher PID, start time and exact command, random command token,
+checkout, and port. The launcher owns an isolated process group; QA dev
+children remain in that group. EOF before the gate opens starts no server.
+To reconcile a dead runner's local server, run:
+
+```sh
+node scripts/qa/server-ownership.mjs <exact-slot-lock-path>
+```
+
+The command takes that slot's kernel lock, protects every live runner PID,
+verifies the launcher's exact identity, and signals only that isolated group.
+It checks descendant identities and whole-group settlement, preserving
+malformed, partial, reused, changed, or ambiguous records for inspection.
+An absent launcher settles only when its entire recorded group is empty.
+A stopped server clears only its exact server record. The provider's
+`.owner.json` remains intact: a dead runner does not certify browser closure,
+and provider reconciliation is still required before admitting that slot.
+
 **Single-slot peers.** A runner from an older checkout takes only slot 0,
 reads only slot 0's ownership record, and waits in the same ticket queue,
 attempting only at its head; the slot protocol with a capacity of one is
@@ -217,13 +243,13 @@ first root (`scripts/screenshot-runtime.mjs`), runs the scenario, and stops
 that process group on exit or on SIGINT/SIGTERM, then reports whether the
 port is free. It prints a JSON report (result, log, captures, every document
 whose `__caps` was not empty, wall times, host load) and writes it to
-`artifacts/qa/<bead-id>/<scenario>[-prod].result.json`, beside the server's
+`artifacts/qa/<bead-id>/invocations/run-*/<scenario>[-prod].result.json`, beside the server's
 log. It exits 1 when the scenario throws or any `__caps` is not empty.
 
 **Game logs.** At each viewport pass's last call, also when the scenario
 throws, the runner reads the current game's persisted journey log (the
 lines the game menu's JSONL export downloads) and saves it as
-`artifacts/qa/<bead-id>/<scenario>[-prod]-<viewport>.jsonl` before the
+`artifacts/qa/<bead-id>/invocations/run-*/<scenario>[-prod]-<viewport>.jsonl` before the
 browser closes. When a call fails without a report, one export-only call
 follows while the session can still run. The report's `gameLogs` lists each
 pass's file, game id, and row count; a pass with no game writes no file,

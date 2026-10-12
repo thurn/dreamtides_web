@@ -39,7 +39,7 @@ export function normalizeForwardedViteArgs(argv) {
  * @param {string[]} args
  */
 function spawnChild(command, args) {
-  const useProcessGroup = process.platform !== "win32";
+  const useProcessGroup = process.platform !== "win32" && process.env.DREAMTIDES_QA_SERVER_GROUP === undefined;
   const child = spawn(command, args, {
     stdio: "inherit",
     detached: useProcessGroup,
@@ -57,7 +57,7 @@ function spawnChild(command, args) {
  * @param {NodeJS.Signals} signal
  */
 function killChild(child, signal) {
-  if (process.platform !== "win32" && child.pid !== undefined) {
+  if (process.platform !== "win32" && process.env.DREAMTIDES_QA_SERVER_GROUP === undefined && child.pid !== undefined) {
     try {
       process.kill(-child.pid, signal);
       return;

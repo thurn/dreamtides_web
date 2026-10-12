@@ -57,10 +57,11 @@ const ownerOf = (path, slot) => browserOwnerPath(browserSlotPath(path, slot));
  * A live waiter's ticket that never attempts a slot: this test process's
  * own, queued without an acquisition behind it.
  * @param {string} path
+ * @param {number} [slots]
  */
-function queueSyntheticWaiter(path) {
+function queueSyntheticWaiter(path, slots = 2) {
   const ticket = join(browserLeaseQueuePath(path), `500000000000-${String(process.pid)}`);
-  writeFileSync(ticket, "");
+  writeFileSync(ticket, slots === 1 ? "" : JSON.stringify({ slots }));
   return () => rmSync(ticket);
 }
 
@@ -152,6 +153,45 @@ describe("browser slot yielding", () => {
     expect(await browserLeaseContended(path)).toBe(true);
     dequeue();
     expect(await browserLeaseContended(path)).toBe(false);
+  });
+
+  it("yields slot0 to a legacy queue head while slot1 is free, without yielding slot1", async () => {
+    const path = fixtures.leasePath();
+    const slot1 = await acquire(path);
+    const slot0 = await acquire(path);
+    await slot1.release();
+    const dequeue = queueSyntheticWaiter(path, 1);
+    expect(slot0.slot).toBe(0);
+    expect(await browserLeaseContended(path, 2, 0)).toBe(true);
+    expect(await browserLeaseContended(path, 2, 1)).toBe(false);
+    dequeue();
+  });
+
+  it("hands slot0 to a single-slot waiter at the next card boundary despite free slot1", async () => {
+    const path = fixtures.leasePath();
+    const slot1 = await acquire(path);
+    let waiter = /** @type {import("./browser-lease-fixture.mjs").LeaseProcess | null} */ (null);
+    const seen = /** @type {number[]} */ ([]);
+    const result = await sweepCards(["a", "b"], {
+      open: async () => {
+        const lease = await acquireBrowserLease(path);
+        seen.push(lease.slot);
+        return { lease, closed: () => false, close: async () => {
+          await lease.release();
+          if (waiter !== null) { await waiter.acquired; await releaseHolder(waiter); waiter = null; }
+        } };
+      },
+      contended: (session) => browserLeaseContended(path, 2, session.lease.slot),
+      sweepCard: async (card) => {
+        if (card === "a") {
+          await slot1.release();
+          waiter = fixtures.leaseProcess(path, { slots: 1 });
+          expect(await waiter.first).toBe("waiting");
+        }
+      },
+    });
+    expect(seen).toEqual([0, 1]);
+    expect(result).toEqual({ sessions: 2, yields: 1 });
   });
 
   it("sweeps on through a boundary with a free slot and yields at one where every slot is taken", async () => {
