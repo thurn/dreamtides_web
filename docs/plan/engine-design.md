@@ -868,10 +868,12 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   lets "leaves play" and "leaves your void" triggers see the card as it last
   was, through the `leftPlay` and `leftVoid` events emitted just before a card
   moves. A `leftPlay` into a void or nowhere arms the "when … is dissolved"
-  abilities that match the character then and records its ability origin,
-  gained abilities included; its `dissolved` event reads the dissolved card's
-  abilities from that origin (`ArmedDissolve`). Nothing triggers before the first turn begins or after the battle
-  ends.
+  abilities that match the character then, one into a void, the Banished
+  zone, or nowhere the "when you abandon …" abilities, and records its
+  ability origin, gained abilities included; its `dissolved` or `abandoned`
+  event reads the departed card's abilities from that origin
+  (`ArmedTriggers`). Nothing triggers before the first turn begins or after
+  the battle ends.
 - **Trigger events.** `TRIGGER_EVENTS` lists the engine event kinds each
   trigger kind can match. A new `Trigger` member fails to type-check until
   it has an entry, the matcher refuses a match on an unlisted event, and
@@ -946,11 +948,24 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   character left play. A departure
   with no `dissolved` (a banish, a return to hand, a figment ceasing to
   exist undissolved) triggers nothing. The armed abilities wait on the
-  step's context (`StepContext.armedDissolves`), never in battle state:
+  step's context (`StepContext.armedTriggers`), never in battle state:
   `leftPlay` and `dissolved` come from one synchronous dissolve with no
   prompt between them. Several characters dissolved by one effect are
   dissolved one at a time, so a card dissolved earlier is not armed for
   later ones.
+- **"When you abandon …"** (rules § Ability Types → When you abandon a
+  character; RD-hv-umm2.532-1): the `abandon` trigger
+  (`whenAbandon(player, filter)`) looks back the same way. As a character's
+  `leftPlay` announces it leaving for the void, the Banished zone (a
+  reclaimed character), or nowhere (a created one), the matcher arms every
+  `abandon` ability, floating triggers included, that works where its card
+  is and whose filter matches the character still in play, its own among
+  them. Its `abandoned` event, emitted once it has moved and before its
+  `dissolved`, matches exactly the armed abilities whose `player` is the
+  abandoning side, in the fixed order, the abandoned card ordered by where
+  it went among the abandoning side's abilities. The two look-back events
+  keep separate records (`StepContext.armedTriggers`, by event kind), each
+  consumed by its own event.
 - **"When … is put into your void"** (rules § Ability Types → When a card is
   put into a void; RD-hv-umm2.77-1): the `putIntoVoid` trigger
   (`whenPutIntoVoid(player, filter)`) does not look back. `relocate` emits

@@ -12,7 +12,7 @@ import { matchEvent } from "../triggers/matcher";
 import { rememberKnownCards, showPrivately } from "../view/knowledge";
 import { promptView, purposeView } from "../view/view";
 import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence, UnrecordedPrompt } from "./errors";
-import type { AnswerSource, ArmedDissolve, Disclosure, EventObserver, RecordedAnswer, StepContext } from "./types";
+import type { AnswerSource, ArmedTriggers, Disclosure, EventObserver, RecordedAnswer, StepContext } from "./types";
 
 export interface ContextOptions {
   /** Presentation observation; failures never change step execution. */
@@ -60,7 +60,7 @@ export class Context implements StepContext {
   readonly rawAnswers: RecordedAnswer[] = [];
   /** The cards shown to one side alone so far (`disclose`). */
   readonly disclosed: Disclosure[] = [];
-  readonly armedDissolves = new Map<InstanceId, ArmedDissolve>();
+  readonly armedTriggers = { dissolved: new Map<InstanceId, ArmedTriggers>(), abandoned: new Map<InstanceId, ArmedTriggers>() };
   readonly departedSourceSpark = new Map<InstanceId, number>();
   readonly departedSourceObjects = new Map<InstanceId, { readonly enteredPlayAt: number; readonly gained: readonly EffectId[] }>();
   committed = false;

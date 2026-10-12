@@ -21,7 +21,11 @@ import { linkedSourceContext, sourceAbilityGroups } from "../rules/linked-banish
  * hand" abilities a `leftPlay` for a hand, as the character last was in play
  * (RD-hv-umm2.102-1), and "When you materialize your second …" abilities a
  * `materialized` by its place among its side's materializations this turn
- * (RD-hv-umm2.107-1).
+ * (RD-hv-umm2.107-1). "When you abandon …" abilities look back like "when …
+ * is dissolved": they are matched against the character as it last was in
+ * play as its `leftPlay` announces it, and trigger once its `abandoned`
+ * event confirms the abandon, so a character sees its own abandon
+ * (RD-hv-umm2.532-1).
  */
 import type { EngineCatalog } from "../catalog";
 import { cardMatchesFilter, playedMatchesFilter } from "../continuous/characteristics";
@@ -40,7 +44,7 @@ import { charactersInPlay, isFigment } from "../rules/zones";
 import type { EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { opponent, SIDES, sourceInstance } from "../state/ids";
 import type { BattleState, FloatingEffect, MaterializedCard, QueuedTrigger, SparkGain } from "../state/types";
-import type { ArmedDissolve, StepContext, TriggerListener } from "../steps/types";
+import type { ArmedTriggers, LookbackEventKind, StepContext, TriggerListener } from "../steps/types";
 import { sidesBlindTo } from "../view/knowledge";
 import { triggerBody } from "./body";
 
@@ -182,10 +186,10 @@ const NO_SUBJECT: Match = { subject: null };
 /**
  * Whether `trigger` matches `event` for `listener`. Every trigger needs its
  * ability to work in the listener's zone (`inZone`), except ▸Dissolved,
- * which fires from wherever the dissolved card went, and "when … is
- * dissolved", which matches only when `armed`: its ability matched the
- * dissolved character, and worked where its card was, as that character left
- * play (`armDissolve`).
+ * which fires from wherever the dissolved card went, and the look-back
+ * triggers "when … is dissolved" and "when you abandon …", which match only
+ * when `armed`: the ability matched the departing character, and worked
+ * where its card was, as that character left play (`armLookbacks`).
  */
 function matchTrigger(
   state: BattleState,
@@ -278,6 +282,10 @@ function matchKind(
   if (trigger.on === "dissolve") {
     return event.kind === "dissolved" && armed ? { subject: event.instance } : null;
   }
+  if (trigger.on === "abandon") {
+    // Armed by its filter against the character still in play; "you" is the side whose ability it was then (RD-hv-umm2.532-1).
+    return event.kind === "abandoned" && armed && event.side === resolvePlayer(you, trigger.player) ? { subject: event.instance } : null;
+  }
   if (trigger.on === "reclaim" && trigger.self === true) {
     // "When you reclaim this character" works from the stack its card was just played onto, whatever its ability's zone.
     return listener.zone === "stack" && event.kind === "cardPlayed" && event.instance === self && reclaimMatches(state, catalog, trigger, event, you)
@@ -339,12 +347,6 @@ function matchKind(
         : null;
     case "reclaim":
       return event.kind === "cardPlayed" && reclaimMatches(state, catalog, trigger, event, you) ? { subject: event.instance } : null;
-    case "abandon":
-      return event.kind === "abandoned" &&
-        event.side === resolvePlayer(you, trigger.player) &&
-        filterMatches(catalog, state, trigger.filter, event.instance)
-        ? { subject: event.instance }
-        : null;
     case "leavesPlay":
       return event.kind === "leftPlay" && subjectMatches(state, catalog, trigger.subject, event.instance, listener)
         ? { subject: event.instance }
@@ -476,16 +478,18 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
 
 /**
  * Matches `listener`'s triggered abilities, in `side`'s order. An ability
- * armed for a dissolve matches as its source was when armed, and only in the
- * order of the side that controlled it then; a listener `side` does not
- * control is a dissolved card's place in that side's order. Its own named
- * ▸Dissolved ability uses the dissolve event's last in-play controller
- * (RD-hv-umm2.342-1); its other abilities use their current controller.
+ * armed for a look-back event matches as its source was when armed, and only
+ * in the order of the side that controlled it then; a listener `side` does
+ * not control is a dissolved or abandoned card's place in that side's order.
+ * Its own named ▸Dissolved ability uses the dissolve event's last in-play
+ * controller (RD-hv-umm2.342-1); its other abilities use their current
+ * controller.
  */
-function matchListener(ctx: StepContext, side: Side, listener: Listener, event: EngineEvent, armed: ArmedDissolve): void {
-  const dissolving = event.kind === "dissolved" && listener.source === event.instance;
-  // A dissolved card's abilities as it left play, those it had gained included (rules § Gaining abilities).
-  const departed = dissolving && armed.origin !== null ? { ...listener, origin: armed.origin } : listener;
+function matchListener(ctx: StepContext, side: Side, listener: Listener, event: EngineEvent, armed: ArmedTriggers): void {
+  const departing = isLookbackEvent(event) && listener.source === event.instance;
+  const dissolving = departing && event.kind === "dissolved";
+  // A departed card's abilities as it left play, those it had gained included (rules § Gaining abilities).
+  const departed = departing && armed.origin !== null ? { ...listener, origin: armed.origin } : listener;
   originAbilities(ctx.catalog, departed.origin).forEach((ability, index) => {
     if (ability.kind !== "triggered") return;
     const armedListener = armed.abilities.get(oncePerTurnKey(listener.source, index));
@@ -515,10 +519,10 @@ function effectNumber(id: EffectId): number {
 
 /**
  * Matches `side`'s floating and delayed triggers in creation order; a
- * delayed trigger ends as it triggers. Those armed for a dissolve match as
- * they were armed, ended since or not.
+ * delayed trigger ends as it triggers. Those armed for a look-back event
+ * match as they were armed, ended since or not.
  */
-function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: ArmedDissolve): void {
+function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: ArmedTriggers): void {
   const armedHere = armed.floating.filter((effect) => effect.controller === side);
   const current = floatingTriggers(ctx.state, side).filter((effect) => !armedHere.some((entry) => entry.id === effect.id));
   const ordered = [...current, ...armedHere].sort((a, b) => effectNumber(a.id) - effectNumber(b.id));
@@ -543,11 +547,32 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
   }
 }
 
-const NOTHING_ARMED: ArmedDissolve = { abilities: new Map(), floating: [], origin: null };
+const NOTHING_ARMED: ArmedTriggers = { abilities: new Map(), floating: [], origin: null };
 
-/** Whether `trigger`, or one of its `either` branches, is a "when … is dissolved" trigger matching `id` as it is now. */
-function dissolveMatches(state: BattleState, catalog: EngineCatalog, trigger: Trigger, id: InstanceId, listener: Listener): boolean {
-  if (trigger.on === "either") return trigger.triggers.some((branch) => dissolveMatches(state, catalog, branch, id, listener));
+/** The look-back events, and the zones a character leaving play for which may go on to announce each (`null`: it ceases to exist). */
+const LOOKBACK_DESTINATIONS: { readonly [K in LookbackEventKind]: readonly (Zone | null)[] } = {
+  dissolved: ["void", null],
+  // A reclaimed character abandoned is banished instead, still abandoned.
+  abandoned: ["void", "banished", null],
+};
+
+const LOOKBACK_EVENTS = Object.keys(LOOKBACK_DESTINATIONS) as LookbackEventKind[];
+
+type LookbackEvent = Extract<EngineEvent, { readonly kind: LookbackEventKind }>;
+
+function isLookbackEvent(event: EngineEvent): event is LookbackEvent {
+  return event.kind === "dissolved" || event.kind === "abandoned";
+}
+
+/**
+ * Whether `trigger`, or one of its `either` branches, is a look-back trigger
+ * for `kind` matching the departing character `id` as it is now: "when …
+ * is dissolved" by its selector (and `figment` flag), "when you abandon …"
+ * by its filter.
+ */
+function armsFor(state: BattleState, catalog: EngineCatalog, kind: LookbackEventKind, trigger: Trigger, id: InstanceId, listener: Listener): boolean {
+  if (trigger.on === "either") return trigger.triggers.some((branch) => armsFor(state, catalog, kind, branch, id, listener));
+  if (kind === "abandoned") return trigger.on === "abandon" && filterMatches(catalog, state, trigger.filter, id);
   if (trigger.on !== "dissolve") return false;
   const instance = state.instances[id];
   if (instance === undefined || (trigger.figment !== undefined && isFigment(instance) !== trigger.figment)) return false;
@@ -555,56 +580,68 @@ function dissolveMatches(state: BattleState, catalog: EngineCatalog, trigger: Tr
 }
 
 /**
- * Arms, as a character leaves play for the void or for nowhere, every "when
- * … is dissolved" ability that works where its card is and matches the
- * character as it is now, still in play: its controller, types, and whether
- * it is a figment. The departing character's own abilities are among them.
- * The record keeps each armed ability as it is now, its source's controller
- * and the floating trigger itself included, and where the character's own
- * abilities come from as it leaves, and waits on the step's context
- * for the character's `dissolved` event; a departure that turns out not to
- * be a dissolve leaves it unused until the character leaves play again.
+ * Arms, as a character leaves play, the look-back abilities its later
+ * `dissolved` or `abandoned` event fires: for a departure to the void or
+ * for nowhere, every "when … is dissolved" ability, and for one to the
+ * void, the Banished zone, or nowhere, every "when you abandon …" ability,
+ * that works where its card is and matches the character as it is now,
+ * still in play: its controller, types, and whether it is a figment. The
+ * departing character's own abilities are among them. Each record keeps
+ * each armed ability as it is now, its source's controller and the floating
+ * trigger itself included, and where the character's own abilities come
+ * from as it leaves, and waits on the step's context for its event; a
+ * departure that turns out not to announce that event leaves it unused
+ * until the character leaves play again.
  */
-function armDissolve(ctx: StepContext, event: LeftPlayEvent, departing: Departure | null): void {
-  ctx.armedDissolves.delete(event.instance);
-  if (event.to !== "void" && event.to !== null) return;
+function armLookbacks(ctx: StepContext, event: LeftPlayEvent, departing: Departure | null): void {
+  const kinds = LOOKBACK_EVENTS.filter((kind) => {
+    ctx.armedTriggers[kind].delete(event.instance);
+    return LOOKBACK_DESTINATIONS[kind].includes(event.to);
+  });
+  if (kinds.length === 0) return;
   const { state, catalog } = ctx;
-  const abilities = new Map<OncePerTurnKey, Listener>();
-  const floating: FloatingEffect[] = [];
+  const leaving = state.instances[event.instance];
+  const origin = leaving === undefined ? null : instanceOrigin(leaving);
+  const armed = kinds.map((kind) => ({ kind, abilities: new Map<OncePerTurnKey, Listener>(), floating: [] as FloatingEffect[] }));
   for (const side of SIDES) {
     for (const listener of listeners(state, side, departing)) {
       originAbilities(catalog, listener.origin).forEach((ability, index) => {
-        if (ability.kind !== "triggered") return;
-        const inZone = listener.emblem || worksInZone(ability.zone, listener.zone);
-        if (inZone && dissolveMatches(state, catalog, ability.trigger, event.instance, listener)) abilities.set(oncePerTurnKey(listener.source, index), listener);
+        if (ability.kind !== "triggered" || !(listener.emblem || worksInZone(ability.zone, listener.zone))) return;
+        for (const entry of armed) {
+          if (armsFor(state, catalog, entry.kind, ability.trigger, event.instance, listener)) entry.abilities.set(oncePerTurnKey(listener.source, index), listener);
+        }
       });
     }
   }
   for (const effect of state.floating) {
-    const entry = floatingListener(ctx, effect);
-    if (entry !== null && dissolveMatches(state, catalog, entry.trigger, event.instance, entry.listener)) floating.push(effect);
+    const floating = floatingListener(ctx, effect);
+    if (floating === null) continue;
+    for (const entry of armed) {
+      if (armsFor(state, catalog, entry.kind, floating.trigger, event.instance, floating.listener)) entry.floating.push(effect);
+    }
   }
-  const leaving = state.instances[event.instance];
-  ctx.armedDissolves.set(event.instance, { abilities, floating, origin: leaving === undefined ? null : instanceOrigin(leaving) });
+  for (const { kind, abilities, floating } of armed) ctx.armedTriggers[kind].set(event.instance, { abilities, floating, origin });
 }
 
-/** The abilities armed for the dissolve of `instance`, consumed by its `dissolved` event. */
-function takeArmed(ctx: StepContext, instance: InstanceId): ArmedDissolve {
-  const armed = ctx.armedDissolves.get(instance);
-  ctx.armedDissolves.delete(instance);
+/** The abilities armed for the look-back `event` of its character, consumed by it. */
+function takeArmed(ctx: StepContext, event: LookbackEvent): ArmedTriggers {
+  const record = ctx.armedTriggers[event.kind];
+  const armed = record.get(event.instance);
+  record.delete(event.instance);
   return armed ?? NOTHING_ARMED;
 }
 
 /**
- * The card an event announces as leaving play, or as dissolved out of it,
- * ordered by where it goes among the abilities of the side that controlled
- * it in play: one announced by `leftPlay`, while it is still there; a
- * dissolved figment or other created card, which fires ▸Dissolved before it
- * ceases to exist; or another dissolved card, in its owner's void.
+ * The card an event announces as leaving play, or as dissolved or abandoned
+ * out of it, ordered by where it goes among the abilities of the side that
+ * controlled it in play: one announced by `leftPlay`, while it is still
+ * there; a dissolved or abandoned figment or other created card, which fires
+ * its abilities before it ceases to exist; or another dissolved or abandoned
+ * card, in its owner's void or, reclaimed, the Banished zone.
  */
 function departure(state: BattleState, event: EngineEvent): Departure | null {
   if (event.kind === "leftPlay") return { instance: event.instance, side: event.side, to: event.to };
-  if (event.kind !== "dissolved") return null;
+  if (!isLookbackEvent(event)) return null;
   const zone = state.instances[event.instance]?.zone;
   if (zone === undefined) return null;
   return { instance: event.instance, side: event.side, to: zone === "play" ? null : zone };
@@ -629,12 +666,12 @@ export function matchEvent(ctx: StepContext, event: EngineEvent): void {
   }
   if (event.kind === "materialized") recordMaterialized(state, ctx.catalog, event.side, event.instance);
   const departing = departure(state, event);
-  const armed = event.kind === "dissolved" ? takeArmed(ctx, event.instance) : NOTHING_ARMED;
+  const armed = isLookbackEvent(event) ? takeArmed(ctx, event) : NOTHING_ARMED;
   for (const side of [state.turn.active, opponent(state.turn.active)]) {
     for (const listener of listeners(state, side, departing)) matchListener(ctx, side, listener, event, armed);
     matchFloating(ctx, side, event, armed);
   }
-  if (event.kind === "leftPlay") armDissolve(ctx, event, departing);
+  if (event.kind === "leftPlay") armLookbacks(ctx, event, departing);
 }
 
 function hasNamed(trigger: Trigger, named: NamedTrigger): boolean {

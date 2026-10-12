@@ -43,16 +43,24 @@ export interface TriggerListener {
 }
 
 /**
- * The "when … is dissolved" abilities a character's `leftPlay` armed, each
- * as it was then, for its `dissolved` event to fire (triggers/matcher.ts):
+ * The events a departing character's look-back abilities wait for: its
+ * `dissolved` ("when … is dissolved") and its `abandoned` ("when you abandon
+ * …"). Each sees the character as it was in play.
+ */
+export type LookbackEventKind = "dissolved" | "abandoned";
+
+/**
+ * The abilities a character's `leftPlay` armed for one of its look-back
+ * events, each as it was then, for that event to fire (triggers/matcher.ts):
  * card and emblem abilities by source and index, with their sources as they
  * were, so a card's ability triggers for the side that controlled it then;
  * and floating and delayed triggers, in creation order, so one whose
  * duration ended as the character left play still triggers. `origin` is
  * where the character's own abilities came from as it left play, abilities
- * it gained included, which its ▸Dissolved abilities are read from.
+ * it gained included, which its own abilities are read from as the event
+ * fires.
  */
-export interface ArmedDissolve {
+export interface ArmedTriggers {
   readonly abilities: ReadonlyMap<OncePerTurnKey, TriggerListener>;
   readonly floating: readonly FloatingEffect[];
   readonly origin: AbilityOrigin | null;
@@ -93,12 +101,13 @@ export interface StepContext {
    */
   settlingKnowledge(settle: () => void, run: () => void): void;
   /**
-   * The trigger matcher's step-local record of armed dissolves, by departing
-   * character. A dissolve emits `leftPlay` and `dissolved` within one call
-   * with no prompt between them, so the record never needs to outlive the
-   * step and is never battle state.
+   * The trigger matcher's step-local record of armed look-back abilities, by
+   * event kind and departing character. A dissolve or an abandon emits
+   * `leftPlay`, `abandoned`, and `dissolved` within one call with no prompt
+   * between them, so the record never needs to outlive the step and is
+   * never battle state.
    */
-  readonly armedDissolves: Map<InstanceId, ArmedDissolve>;
+  readonly armedTriggers: { readonly [K in LookbackEventKind]: Map<InstanceId, ArmedTriggers> };
   /** Effective spark captured before each source leaves play in this step; replay rebuilds it. */
   readonly departedSourceSpark: Map<InstanceId, number>;
   /** Source visits and acquired ability occurrences before this step's departures. */

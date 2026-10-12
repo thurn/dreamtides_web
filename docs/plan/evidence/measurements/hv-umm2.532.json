@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.532",
+  "base": "65fc04d4b",
+  "implementationWindow": {
+    "start": "2026-10-12T10:50:00Z",
+    "end": "2026-10-12T11:13:00Z",
+    "scope": "Estimated from subagent dispatch (start is approximate: first file edit at 11:02:23Z followed about 12 minutes of reading) through the final precommit; includes research, mutation checks, fuzz queueing and verification."
+  },
+  "commands": {
+    "review": { "command": ["npm", "run", "review"], "wallS": 47, "start": "2026-10-12T11:11:49Z", "exit": 0, "tests": 4076 },
+    "knip": { "command": ["npm", "run", "knip"], "wallS": 3, "start": "2026-10-12T11:10:43Z", "exit": 0 },
+    "focused": { "command": ["npx", "vitest", "run", "src/engine/effects/primitives/contracts.test.ts", "src/engine/triggers"], "wallS": 5, "exit": 0, "tests": 1611 },
+    "fuzz": {
+      "command": ["lockf", "-k", "/Users/dthurn/dreamtides_web/artifacts/heavy.lock", "npm", "run", "fuzz:engine", "--", "--games", "300", "--weight-uuids", "0d867086-8413-40c3-820f-1a5de486577e,0637b453-4362-4f01-b3e6-07c27af9c847,8624f9c7-dc92-4f4a-9c79-319b9c121b19,a6866438-3632-408d-b464-c10f8a43a5c2"],
+      "wallS": 125, "lockWaitS": 0, "start": "2026-10-12T11:09:30Z", "exit": 0,
+      "summary": "300 games, 152630 steps, failures 0; targets included/exercised: 0d867086 621/237, 0637b453 615/301, 8624f9c7 612/263, a6866438 621/253"
+    }
+  },
+  "hostLoadSamples": { "fuzzLockAcquired": 18.56, "firstReview": 18.02, "finalReview": 8.47 },
+  "schemaNormalization": { "fields": { "hostLoad": { "measuredFor": "final npm run review start (1-minute vm.loadavg)" } } },
+  "mutations": [
+    { "change": "abandon triggers matched unarmed at the abandoned event (pre-bead behavior)", "contractsFailed": 10, "contractsTotal": 12 },
+    { "change": "departure() ignores abandoned events", "contractsFailed": 2 },
+    { "change": "departed origin applied only for dissolves", "contractsFailed": 1 },
+    { "change": "abandon arming excludes the Banished zone", "contractsFailed": 1 },
+    { "change": "abandon filter read at the abandoned event instead of at arming", "contractsFailed": 1 },
+    { "change": "abandoned event does not consume its armed record", "contractsFailed": 0, "note": "unobservable: every later abandoned event of the instance is preceded by a leftPlay that re-arms it" }
+  ]
+}

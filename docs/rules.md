@@ -1325,7 +1325,8 @@ character they control as the effect resolves. This choice does not target,
 so a character that cannot be targeted by effects can be abandoned. With no
 matching character, that part does nothing and the rest of the effect still
 happens. Abandon cannot be prevented, and it fires the character's ▸Dissolved
-trigger. It is frequently used as a cost. A figment that is abandoned ceases
+trigger and "When you abandon" abilities, its own included (see [Ability
+Types](#ability-types)). It is frequently used as a cost. A figment that is abandoned ceases
 to exist after firing its dissolved triggers.
 
 **Foresee N** — Look at the top N cards of your deck, reorder them in any order,
@@ -1510,10 +1511,12 @@ controls it, and loses them as it leaves play: if it returns, it has only its
 own abilities, and a "Once per turn" ability it gains later in that turn is
 unused. A gained ability that triggers as the character leaves play, such as
 "When this character leaves play", sees it as it was just before it left. So
-do the gained abilities that trigger on its own dissolve, a gained ▸Dissolved
-ability and a gained "When a character you control is dissolved" among them:
-they trigger as it is dissolved, though the gains have ended. A gained ability
-that works only from a void does not see its own character dissolved. A
+do the gained abilities that trigger on its own dissolve or abandon, a gained
+▸Dissolved ability, a gained "When a character you control is dissolved",
+and a gained "When you abandon a character" among them: they trigger as it is
+dissolved or abandoned, though the gains have ended. A gained ability that
+works only from a void does not see its own character dissolved or
+abandoned. A
 gained activated ability already on the stack, or a gained triggered ability
 already waiting to resolve, still resolves after the character leaves play.
 
@@ -1629,6 +1632,34 @@ controller's characters first, back rank `B0` through `B9`, then front rank
 triggers abilities on its own, so a card dissolved earlier by the same effect
 is in the void when the later ones are dissolved, and its "when … is
 dissolved" ability does not see them.
+
+**When you abandon a character:** An ability such as "When you abandon a
+character, draw a card" triggers once for each matching character you
+abandon, whatever makes you abandon it: your own effect, the opponent's
+effect, as in "The opponent abandons a character," a cost, or keeping your
+card from being Prevented. "You" is the player who abandons, who controls
+the character, so the opponent's ability does not see the characters you
+abandon. It sees that character as it was just before it left play: its
+types, including a type it had only through an effect in play, and its other
+characteristics there. "A character" includes the character with the
+ability, which triggers on its own abandon. The ability triggers only if it
+worked where its card was as that character left play, so an ability that
+works in play sees its own card abandoned, with the abilities its card had
+in play, and one that works from the void does not. It triggers for the
+player who controlled its card as that character left play, among that
+player's abilities, even when its card is the abandoned character and goes
+to its owner's void. A floating or delayed trigger that existed as the
+character left play triggers even if its duration ended as the character
+left, so one lasting while its source is in play sees that source's own
+abandon. A figment or other created character that is abandoned ceases to
+exist instead of entering a void, and a reclaimed one is banished instead,
+but each is still abandoned and triggers the ability. "This character" in
+the ability names its card only while that card is in play, so an ability
+that triggered on its own abandon, as in "When you abandon a character, draw
+a card and this character gains +1✦," draws a card and gives no ✦. Several
+characters abandoned together, as in "Abandon two characters," are abandoned
+one at a time: a character abandoned earlier is in the void when the later
+ones are abandoned, and its ability does not see them.
 
 **When a card is put into a void:** An ability such as "When a ≤2● cost
 character is put into your void" triggers once for each matching card that
