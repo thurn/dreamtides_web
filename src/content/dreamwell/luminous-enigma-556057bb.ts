@@ -1,3 +1,5 @@
+import { event, fromVoid } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: true,
   cardNumber: 21,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [event(p.optional(p.putInDeck([fromVoid()], "top")))],
+  verifiedText: "20ydjqzkspo",
 });

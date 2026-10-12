@@ -1,0 +1,581 @@
+{
+  "bead": "hv-umm2.215",
+  "base": "4ddfa38b995c601041125d91369adb25f290c0f7",
+  "checkpointSource": "a043c0ae04436e7fd5f6caced5001b5159cd13de",
+  "implementWindow": {
+    "start": "2026-10-12T06:00:17.305Z",
+    "end": "2026-10-12T19:16:27.336912+00:00",
+    "resumeDispatch": "2026-10-12T18:42:40.742Z",
+    "scope": "Original exact dispatch to final precommit wall. Includes original work, uninstrumented checkpoint parking/coordination, completed separately owned541/546/547/564 prerequisites and197 work, resumed acceptance and review; not a productive/CPU/quota estimate.",
+    "originalEvidenceEndpoint": "2026-10-12T06:14:21.909775+00:00",
+    "modelStart": "unknown",
+    "finalPrecommitEndpoint": "2026-10-12T19:16:27.336912+00:00"
+  },
+  "composition": {
+    "entities": 6,
+    "newPrimitives": 0,
+    "scenarioModules": 0,
+    "scenarioReason": "D20 pure registered primitive composition. Target-before-optional is settled RD-hv-umm2.59-1; no behavior exceeds primitive contracts.",
+    "sourceAdded": 24,
+    "sourceDeleted": 6,
+    "testFilesDelta": 0,
+    "testLinesDelta": 0,
+    "immutableMetadataProof": "immutable-proof.json",
+    "coreReviewRequired": false,
+    "coreReviewReason": "Composition30non-test lines, no core-review label or phase gate; parent owns prerequisite reviews and temporary Sol routing."
+  },
+  "commands": {
+    "enigma-v4-replay-v2": {
+      "argv": [
+        "npx",
+        "tsx",
+        "/tmp/worker215-resume/enigma-v4-replay-v2.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 47327,
+      "pgid": 47327,
+      "start": "2026-10-12T19:07:07.310681+00:00",
+      "end": "2026-10-12T19:07:09.585887+00:00",
+      "exitCode": 0,
+      "wallSeconds": 2.275204000005033,
+      "hostLoadStart": [
+        21.6162109375,
+        16.51708984375,
+        15.8671875
+      ],
+      "childUserCpuSeconds": 1.135847,
+      "childSystemCpuSeconds": 0.61793
+    },
+    "sweep": {
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.215",
+        "--cards",
+        "f9b479cf-02cb-40e1-bb64-70b29977bf15,3a4293da-55a1-4094-898a-df402ffa1c92,556057bb-b134-497e-86c2-c6f30049e9e3,eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a,af2ef62f-d31b-4544-a2b0-f5aab03c2d7c,91deefd2-0400-4c78-ab9f-f6db864ff7e2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 47482,
+      "pgid": 47482,
+      "start": "2026-10-12T18:47:58.378513+00:00",
+      "end": "2026-10-12T18:49:20.823929+00:00",
+      "exitCode": 0,
+      "wallSeconds": 82.4450547919987,
+      "hostLoadStart": [
+        9.71435546875,
+        13.62744140625,
+        15.21337890625
+      ],
+      "childUserCpuSeconds": 6.112346,
+      "childSystemCpuSeconds": 3.302425
+    },
+    "positive-bonus-batch": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "positive-bonus-batch-v1",
+        "--bead",
+        "hv-umm2.215",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 5968,
+      "pgid": 5968,
+      "start": "2026-10-12T18:56:32.252179+00:00",
+      "end": "2026-10-12T18:58:39.323128+00:00",
+      "exitCode": 0,
+      "wallSeconds": 127.07037058399874,
+      "hostLoadStart": [
+        17.15625,
+        17.060546875,
+        16.01171875
+      ],
+      "childUserCpuSeconds": 6.214729,
+      "childSystemCpuSeconds": 2.755223
+    },
+    "fuzz": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/worker215-resume/exec-loaded.py",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "hv-umm2-215-resume",
+        "--weight-uuids",
+        "f9b479cf-02cb-40e1-bb64-70b29977bf15,3a4293da-55a1-4094-898a-df402ffa1c92,556057bb-b134-497e-86c2-c6f30049e9e3,eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a,af2ef62f-d31b-4544-a2b0-f5aab03c2d7c,91deefd2-0400-4c78-ab9f-f6db864ff7e2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 51017,
+      "pgid": 51017,
+      "start": "2026-10-12T18:43:59.464873+00:00",
+      "end": "2026-10-12T18:46:49.065926+00:00",
+      "exitCode": 0,
+      "wallSeconds": 169.60026666600606,
+      "hostLoadStart": [
+        8.02001953125,
+        15.1103515625,
+        15.951171875
+      ],
+      "childUserCpuSeconds": 183.06716,
+      "childSystemCpuSeconds": 1.80137
+    },
+    "positive-enigma-v4": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "positive-enigma-v4",
+        "--bead",
+        "hv-umm2.215",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "600"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 66723,
+      "pgid": 66723,
+      "start": "2026-10-12T18:59:07.023264+00:00",
+      "end": "2026-10-12T19:03:07.750177+00:00",
+      "exitCode": 1,
+      "wallSeconds": 240.7257868339948,
+      "hostLoadStart": [
+        13.10498046875,
+        17.26171875,
+        16.404296875
+      ],
+      "childUserCpuSeconds": 5.622123,
+      "childSystemCpuSeconds": 3.006372
+    },
+    "positive-mine": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "positive-bonus-v3",
+        "--bead",
+        "hv-umm2.215",
+        "--arg",
+        "kind=mine",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 78812,
+      "pgid": 78812,
+      "start": "2026-10-12T18:49:41.230284+00:00",
+      "end": "2026-10-12T18:50:03.866491+00:00",
+      "exitCode": 0,
+      "wallSeconds": 22.636138292000396,
+      "hostLoadStart": [
+        6.1337890625,
+        11.42431640625,
+        14.1787109375
+      ],
+      "childUserCpuSeconds": 4.447036,
+      "childSystemCpuSeconds": 2.180595
+    },
+    "positive-enigma-v2": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "positive-enigma-v2",
+        "--bead",
+        "hv-umm2.215",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 36061,
+      "pgid": 36061,
+      "start": "2026-10-12T18:53:10.859962+00:00",
+      "end": "2026-10-12T18:56:16.683353+00:00",
+      "exitCode": 1,
+      "wallSeconds": 185.82252687501023,
+      "hostLoadStart": [
+        27.65478515625,
+        17.79345703125,
+        16.0166015625
+      ],
+      "childUserCpuSeconds": 5.370818,
+      "childSystemCpuSeconds": 2.57583
+    },
+    "positive-enigma-v5": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "positive-enigma-v5",
+        "--bead",
+        "hv-umm2.215",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "600"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 91105,
+      "pgid": 91105,
+      "start": "2026-10-12T19:05:57.755424+00:00",
+      "end": "2026-10-12T19:06:26.654459+00:00",
+      "exitCode": 143,
+      "wallSeconds": 28.898293709004065,
+      "hostLoadStart": [
+        8.65576171875,
+        13.841796875,
+        14.9619140625
+      ],
+      "childUserCpuSeconds": 4.610416,
+      "childSystemCpuSeconds": 2.251238
+    },
+    "preflight": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "f9b479cf-02cb-40e1-bb64-70b29977bf15,3a4293da-55a1-4094-898a-df402ffa1c92,556057bb-b134-497e-86c2-c6f30049e9e3,eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a,af2ef62f-d31b-4544-a2b0-f5aab03c2d7c,91deefd2-0400-4c78-ab9f-f6db864ff7e2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 51769,
+      "pgid": 51769,
+      "start": "2026-10-12T18:44:11.421011+00:00",
+      "end": "2026-10-12T18:44:13.182429+00:00",
+      "exitCode": 0,
+      "wallSeconds": 1.7614495000016177,
+      "hostLoadStart": [
+        7.4013671875,
+        14.744140625,
+        15.81103515625
+      ],
+      "childUserCpuSeconds": 1.81863,
+      "childSystemCpuSeconds": 0.381337
+    },
+    "positive-enigma": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "positive-enigma-v1",
+        "--bead",
+        "hv-umm2.215",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 79751,
+      "pgid": 79751,
+      "start": "2026-10-12T18:50:13.962608+00:00",
+      "end": "2026-10-12T18:52:39.732022+00:00",
+      "exitCode": 1,
+      "wallSeconds": 145.76877583299938,
+      "hostLoadStart": [
+        5.42431640625,
+        10.74560546875,
+        13.83642578125
+      ],
+      "childUserCpuSeconds": 4.496281,
+      "childSystemCpuSeconds": 2.223534
+    },
+    "focused": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 8325,
+      "pgid": 8325,
+      "start": "2026-10-12T19:09:17.527870+00:00",
+      "end": "2026-10-12T19:09:22.468173+00:00",
+      "exitCode": 0,
+      "wallSeconds": 4.940258250004263,
+      "hostLoadStart": [
+        28.794921875,
+        20.9404296875,
+        17.69970703125
+      ],
+      "childUserCpuSeconds": 3.45478,
+      "childSystemCpuSeconds": 1.3837249999999999
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 9687,
+      "pgid": 9687,
+      "start": "2026-10-12T19:09:37.118532+00:00",
+      "end": "2026-10-12T19:10:21.100774+00:00",
+      "exitCode": 0,
+      "wallSeconds": 43.98150591699232,
+      "hostLoadStart": [
+        28.734375,
+        21.49560546875,
+        17.97705078125
+      ],
+      "childUserCpuSeconds": 130.379812,
+      "childSystemCpuSeconds": 13.99114
+    },
+    "enigma-v4-replay": {
+      "argv": [
+        "npx",
+        "tsx",
+        "/tmp/worker215-resume/enigma-v4-replay.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 89193,
+      "pgid": 89193,
+      "start": "2026-10-12T19:05:33.023100+00:00",
+      "end": "2026-10-12T19:05:34.483117+00:00",
+      "exitCode": 0,
+      "wallSeconds": 1.459872915991582,
+      "hostLoadStart": [
+        11.35498046875,
+        14.740234375,
+        15.30224609375
+      ],
+      "childUserCpuSeconds": 1.102438,
+      "childSystemCpuSeconds": 0.43105699999999997
+    },
+    "enigma-recurrence": {
+      "argv": [
+        "npx",
+        "tsx",
+        "/tmp/worker215-resume/enigma-recurrence.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 42405,
+      "pgid": 42405,
+      "start": "2026-10-12T18:47:37.912858+00:00",
+      "end": "2026-10-12T18:47:41.022608+00:00",
+      "exitCode": 0,
+      "wallSeconds": 3.1097825829929207,
+      "hostLoadStart": [
+        10.37646484375,
+        14.017578125,
+        15.3857421875
+      ],
+      "childUserCpuSeconds": 2.157801,
+      "childSystemCpuSeconds": 1.098156
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-215-dreamwell-flow",
+      "pid": 73368,
+      "pgid": 73368,
+      "start": "2026-10-12T19:11:50.800686+00:00",
+      "end": "2026-10-12T19:11:54.920255+00:00",
+      "exitCode": 0,
+      "wallSeconds": 4.119547415990382,
+      "hostLoadStart": [
+        25.02978515625,
+        22.64990234375,
+        18.9599609375
+      ],
+      "childUserCpuSeconds": 3.561315,
+      "childSystemCpuSeconds": 1.204841
+    }
+  },
+  "focusedCoverage": {
+    "tests": 13,
+    "files": 1
+  },
+  "review": {
+    "tests": 4177,
+    "files": 223
+  },
+  "preflight": {
+    "pass": 12,
+    "skipIneligible": 108,
+    "fail": 0,
+    "scope": "Both controllers/all registered variants. Actual source bonus triggers now run; Enigma/Cavern/Mine default empty-zone branches are supplemented by positive workflows."
+  },
+  "fuzz": {
+    "summary": "fuzz:engine 300 games, 155178 steps, 168.4 s wall, 183.5 s CPU (1.8 games/s wall, 1.6 games/s CPU); prompts 6129; interactive re-runs 598 (1.388 ms each); feasibility bounded {\"legality\":0,\"prompts\":4}; results {\"player\":151,\"enemy\":149,\"draw\":0}; failures 0",
+    "coverage": [
+      {
+        "kind": "dreamwell",
+        "uuid": "f9b479cf-02cb-40e1-bb64-70b29977bf15",
+        "included": 1200,
+        "exercised": 349
+      },
+      {
+        "kind": "dreamwell",
+        "uuid": "3a4293da-55a1-4094-898a-df402ffa1c92",
+        "included": 1200,
+        "exercised": 261
+      },
+      {
+        "kind": "dreamwell",
+        "uuid": "556057bb-b134-497e-86c2-c6f30049e9e3",
+        "included": 1200,
+        "exercised": 140
+      },
+      {
+        "kind": "dreamwell",
+        "uuid": "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
+        "included": 1200,
+        "exercised": 347
+      },
+      {
+        "kind": "dreamwell",
+        "uuid": "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c",
+        "included": 1200,
+        "exercised": 155
+      },
+      {
+        "kind": "dreamwell",
+        "uuid": "91deefd2-0400-4c78-ab9f-f6db864ff7e2",
+        "included": 1200,
+        "exercised": 351
+      }
+    ],
+    "coverageLimit": "Included/exercised counters establish target setup/draw coverage, not every branch.",
+    "queuePlusStartupUpperBoundS": 0.016115,
+    "startedAfterLock": {
+      "event": "lockedCommandStarted",
+      "utc": "2026-10-12T18:43:59.480988+00:00",
+      "pid": 51018,
+      "pgid": 51017,
+      "hostLoad": [
+        8.02001953125,
+        15.1103515625,
+        15.951171875
+      ],
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "hv-umm2-215-resume",
+        "--weight-uuids",
+        "f9b479cf-02cb-40e1-bb64-70b29977bf15,3a4293da-55a1-4094-898a-df402ffa1c92,556057bb-b134-497e-86c2-c6f30049e9e3,eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a,af2ef62f-d31b-4544-a2b0-f5aab03c2d7c,91deefd2-0400-4c78-ab9f-f6db864ff7e2"
+      ]
+    }
+  },
+  "sweep": {
+    "event": "cardSweepSummary",
+    "invocation": "invocations/sweep-NgmToc",
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.215/invocations/sweep-NgmToc",
+    "counts": {
+      "pass": 12,
+      "skip": 108
+    },
+    "attemptCounts": {
+      "pass": 12,
+      "skip": 108
+    },
+    "hostLoad": 9.71435546875,
+    "sessions": 1,
+    "leaseYields": 0,
+    "wallMs": {
+      "browserLeaseWait": 7,
+      "serve": 2031,
+      "scenario": 79542.23770800002,
+      "cleanup": 582.7406250000058,
+      "execution": 82233.053417,
+      "total": 82240.053417
+    }
+  },
+  "positiveWorkflows": {
+    "accepted": 13,
+    "shortMatrix": 10,
+    "mine": 2,
+    "enigmaRecovered": 1,
+    "capsEmpty": true,
+    "batchProof": "batch-recovery-proof.json",
+    "enigmaProof": "enigma-recovered-proof.json",
+    "livePayloadLimit": "The four earlier short-matrix live return payloads are unreturned by the multi-step runner; actual passed assertions/captures are linked to recovered persisted per-game source, intent and answer rows. Enigma producer events are reconstructed from its exact public saved transcript and final state match.",
+    "rawSupplementalFailures": 3,
+    "cancelledSupplementalRuns": 1,
+    "relaxedAgentBreadth": "Parent relaxed agent-imposed Enigma capture/second viewport because D21 requires neither a hash sample nor a new-surface judgment for these six UUIDs. Explicit acceptance remains intact."
+  },
+  "d21": {
+    "requiredJudged": 0,
+    "shaFirstBytes": [
+      52,
+      151,
+      236,
+      79,
+      35,
+      241
+    ],
+    "newPromptKinds": 0,
+    "newStatuses": 0,
+    "newVisuals": 0,
+    "reason": "Every sample byte>=26; registered primitive/prompt surfaces supplied by completed prerequisites."
+  },
+  "rawEvidence": {
+    "currentDirectory": "artifacts/qa/hv-umm2.215/resume-acceptance",
+    "priorDirectory": "artifacts/qa/hv-umm2.215/blocked-runtime",
+    "priorManifestSHA256": "d9578af737a8c0d9a88c3cb1b3dc4a8b5b492c32ba4621d1d8513ad4e66ca226",
+    "priorEntriesVerified": 36,
+    "priorAcceptance": "Draw-only old12-row preflight invalid for bonuses; old interrupted fuzz PG24029 exit-15 wall222.035498s had no completed summary. Old checks retained separately; fresh checks above govern acceptance."
+  },
+  "resources": {
+    "observedAt": "2026-10-12T19:12:27.722924+00:00",
+    "ownedGroups": [
+      5968,
+      6006,
+      8325,
+      9687,
+      36061,
+      36205,
+      42405,
+      47327,
+      47482,
+      47532,
+      51017,
+      51769,
+      66723,
+      66760,
+      73368,
+      78812,
+      78840,
+      79751,
+      79779,
+      89193,
+      91105,
+      91187
+    ],
+    "ownedServerGroups": [
+      66760,
+      6006,
+      79779,
+      36205,
+      78840,
+      91187,
+      47532
+    ],
+    "allGroupsAbsent": true,
+    "nativeRunCleanup": "All complete QA runs report server process group settled and port free; v5 was signalled at parent direction and reports cleanup port free. Own v5 slot0 identities absent, with no browser reconciliation error; clear follows confirmed close and drained active calls. Current foreign slot1 records are untouched.",
+    "v5ProviderOwnIdentityAbsent": true,
+    "v5ServerOwnIdentityAbsent": true
+  },
+  "delivery": "Validated source awaits parent ACK and single amended Conventional Commit; parent exclusively owns native candidate/approval/promotion."
+}

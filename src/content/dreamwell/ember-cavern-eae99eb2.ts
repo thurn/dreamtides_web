@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -12,5 +14,6 @@ export default dreamwellCard({
   cardNumber: 26,
   tags: [],
   art: { x: -1, y: 0.1, scale: 1.2 },
-  pending: true,
+  abilities: () => [event(p.reveal("opponent"))],
+  verifiedText: "z0mmy17obt",
 });

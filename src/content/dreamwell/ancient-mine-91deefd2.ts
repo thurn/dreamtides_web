@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: false,
   cardNumber: 37,
   tags: [],
-  pending: true,
+  abilities: () => [event(p.sequence(p.gainEnergy(2), p.discard(1)))],
+  verifiedText: "22wqmvn7hlj",
 });

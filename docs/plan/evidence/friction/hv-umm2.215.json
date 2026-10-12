@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.215",
+  "phase": 5,
+  "implementMin": 796.1671985333334,
+  "localValidationS": {
+    "focused": 4.940258250004263,
+    "review": 43.98150591699232,
+    "knip": 4.119547415990382
+  },
+  "hostLoad": 28.734375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "qa-script",
+      "minutes": 9.538618159033406,
+      "note": "Measured failed supplemental scenario wall, including genuine normal-game progression: event page limit, one-void-card assumption, and stop predicate crossing presentation. All raw attempts retained; exact v4 positive action recovered from persisted public transcript and parent accepted. Original checkpoint-to-resume interval contains uninstrumented parking/coordination and separately owned prerequisite/197 work; it is not a productive-time or quota estimate."
+    }
+  ],
+  "implementWindow": {
+    "start": "2026-10-12T06:00:17.305Z",
+    "end": "2026-10-12T19:16:27.336912+00:00"
+  }
+}
