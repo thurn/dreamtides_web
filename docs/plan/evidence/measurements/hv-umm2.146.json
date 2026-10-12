@@ -1,0 +1,1787 @@
+{
+  "bead": "hv-umm2.146",
+  "baseOid": "840567a3f1aecca268d20e42c148aee0b48afd8c",
+  "dispatchUtc": "2026-10-12T02:39:32.450918+00:00",
+  "commitFreezeUtc": "2026-10-12T03:22:50.682421+00:00",
+  "sourcePreservation": [
+    {
+      "path": "src/content/cards/molten-duel-6044f6da.ts",
+      "originalSha256": "64564298f4f9fc12c6aa0e7c57aadbaab46862ed43a9aac23b1232c4e4634467",
+      "printedBytesUnchanged": true,
+      "sha256": "2c7f18d221d1520feef85f30d6daa12b170d050b1ed4400fe7902e09fbfaed32"
+    },
+    {
+      "path": "src/content/cards/vengeance-taker-44fb30ba.ts",
+      "originalSha256": "f015119f370ea63560a22b3a30fa08ac89823db5be7a789c78e42a2631b4d2c3",
+      "printedBytesUnchanged": true,
+      "sha256": "5b8181cc38bc8c12ec0383998db4ab8cea432e90f0df081e8823e518d829a0c7"
+    },
+    {
+      "path": "src/content/cards/blind-butcher-3e6a5236.ts",
+      "originalSha256": "34b36d432c30f3e2fee8e95c9943953beb7ea36dae55df2de661d32da894d84d",
+      "printedBytesUnchanged": true,
+      "sha256": "33e1ac23952dc1cee89f90686d01753a53bee722b0ea75d690d27e42c7d389b6"
+    },
+    {
+      "path": "src/content/cards/cast-beyond-the-horizon-8904714c.ts",
+      "originalSha256": "3a42e261f5cf86920cac66fb8df4a9826f68178c46ece4665afebf83d6fb465e",
+      "printedBytesUnchanged": true,
+      "sha256": "2278178ac748cae35db5983139e3b4d87413a591f20f8b47c5a5ea7284b000f1"
+    },
+    {
+      "path": "src/content/cards/forsaken-pact-ac2b2fc5.ts",
+      "originalSha256": "f86454fbb096b62e40479bc2ef61b1feac6bbb98d50a732275bf7e49bfe85ece",
+      "printedBytesUnchanged": true,
+      "sha256": "92bf890d2b8565e145c70447cec76d4db52a6e14822e7858d4f51974f69a0ac0"
+    }
+  ],
+  "install": {
+    "command": "npm install",
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34",
+    "exit": 0,
+    "actualOutput": "added388/audited390/3s;17 vulnerabilities9moderate7high1critical",
+    "reportedCommandElapsedS": 3,
+    "firstToolWallS": 1.2,
+    "startUtc": null,
+    "endUtc": null,
+    "pid": null,
+    "load": null,
+    "telemetryNote": "First invocation completed before process observation; exact spawn/end/outerwall/load/PIDs unobserved. Tool session4741 final exit0 retained."
+  },
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/engine/rules/stack.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34",
+      "startUtc": "2026-10-12T02:43:29.590649+00:00",
+      "wrapperPid": 36048,
+      "hostLoadStart": 35.1513671875,
+      "workers": "2",
+      "pid": 36058,
+      "pgid": 36058,
+      "exit": 0,
+      "endUtc": "2026-10-12T02:43:37.787116+00:00",
+      "elapsedS": 8.196515083312988,
+      "hostLoadEnd": 35.1728515625,
+      "descendants": [
+        {
+          "pid": 36058,
+          "ppid": 36048,
+          "pgid": 36058,
+          "command": "node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts src/engine/triggers/triggers-dissolved.test.ts src/engine/rules/stack.test.ts src/engine/content-gates.test.ts",
+          "firstObservedUtc": "2026-10-12T02:43:29.633429+00:00",
+          "lastObservedUtc": "2026-10-12T02:43:35.786025+00:00"
+        },
+        {
+          "pid": 36090,
+          "ppid": 36058,
+          "pgid": 36058,
+          "command": "node scripts/review.mjs test src/engine/effects/primitives/contracts.test.ts src/engine/triggers/triggers-dissolved.test.ts src/engine/rules/stack.test.ts src/engine/content-gates.test.ts",
+          "firstObservedUtc": "2026-10-12T02:43:31.686080+00:00",
+          "lastObservedUtc": "2026-10-12T02:43:35.786025+00:00"
+        },
+        {
+          "pid": 36347,
+          "ppid": 36090,
+          "pgid": 36058,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/vitest/vitest.mjs run src/engine/effects/primitives/contracts.test.ts src/engine/triggers/triggers-dissolved.test.ts src/engine/rules/stack.test.ts src/engine/content-gates.test.ts",
+          "firstObservedUtc": "2026-10-12T02:43:31.686080+00:00",
+          "lastObservedUtc": "2026-10-12T02:43:35.786025+00:00"
+        },
+        {
+          "pid": 36414,
+          "ppid": 36347,
+          "pgid": 36058,
+          "command": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+          "firstObservedUtc": "2026-10-12T02:43:31.686080+00:00",
+          "lastObservedUtc": "2026-10-12T02:43:35.786025+00:00"
+        }
+      ],
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/focused.log",
+      "timingScope": "wrapper outer start through observed actual child exit; polling resolution up to 2 seconds; includes setup/lease waiting where present"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b,44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e,3e6a5236-9850-4a69-9fe1-48389365a399,8904714c-38a9-491f-92ce-5cb5ece26ab1,ac2b2fc5-90d3-47e0-8332-25f7ba767035"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34",
+      "startUtc": "2026-10-12T02:43:51.820757+00:00",
+      "wrapperPid": 39428,
+      "hostLoadStart": 32.39111328125,
+      "workers": "2",
+      "pid": 39453,
+      "pgid": 39453,
+      "exit": 0,
+      "endUtc": "2026-10-12T02:43:53.873029+00:00",
+      "elapsedS": 2.0523200035095215,
+      "hostLoadEnd": 30.837890625,
+      "descendants": [
+        {
+          "pid": 39453,
+          "ppid": 39428,
+          "pgid": 39453,
+          "command": "node /opt/homebrew/bin/npm run lab:preflight -- --cards 6044f6da-cf71-4dbb-9feb-f71ae66a4f5b,44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e,3e6a5236-9850-4a69-9fe1-48389365a399,8904714c-38a9-491f-92ce-5cb5ece26ab1,ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+          "firstObservedUtc": "2026-10-12T02:43:51.863593+00:00",
+          "lastObservedUtc": "2026-10-12T02:43:51.863593+00:00"
+        }
+      ],
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/preflight.log",
+      "timingScope": "wrapper outer start through observed actual child exit; polling resolution up to 2 seconds; includes setup/lease waiting where present"
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/public-observations.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34",
+      "startUtc": "2026-10-12T02:44:42.262069+00:00",
+      "wrapperPid": 47482,
+      "hostLoadStart": 19.306640625,
+      "workers": "2",
+      "pid": 47495,
+      "pgid": 47495,
+      "exit": 1,
+      "endUtc": "2026-10-12T02:44:44.312819+00:00",
+      "elapsedS": 2.0508182048797607,
+      "hostLoadEnd": 18.32080078125,
+      "descendants": [
+        {
+          "pid": 47495,
+          "ppid": 47482,
+          "pgid": 47495,
+          "command": "node --import tsx /Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/public-observations.ts",
+          "firstObservedUtc": "2026-10-12T02:44:42.304617+00:00",
+          "lastObservedUtc": "2026-10-12T02:44:42.304617+00:00"
+        }
+      ],
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/observations.log",
+      "timingScope": "wrapper outer start through observed actual child exit; polling resolution up to 2 seconds; includes setup/lease waiting where present"
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/public-observations.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34",
+      "startUtc": "2026-10-12T02:45:07.067343+00:00",
+      "wrapperPid": 52304,
+      "hostLoadStart": 15.45556640625,
+      "workers": "2",
+      "pid": 52339,
+      "pgid": 52339,
+      "exit": 0,
+      "endUtc": "2026-10-12T02:45:09.118178+00:00",
+      "elapsedS": 2.050870180130005,
+      "hostLoadEnd": 15.4990234375,
+      "descendants": [
+        {
+          "pid": 52339,
+          "ppid": 52304,
+          "pgid": 52339,
+          "command": "node --import tsx /Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/public-observations.ts",
+          "firstObservedUtc": "2026-10-12T02:45:07.113367+00:00",
+          "lastObservedUtc": "2026-10-12T02:45:07.113367+00:00"
+        }
+      ],
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/observations-corrected.log",
+      "timingScope": "wrapper outer start through observed actual child exit; polling resolution up to 2 seconds; includes setup/lease waiting where present"
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/importer-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34",
+      "startUtc": "2026-10-12T02:46:31.644223+00:00",
+      "wrapperPid": 64356,
+      "hostLoadStart": 12.8974609375,
+      "workers": "2",
+      "pid": 64376,
+      "pgid": 64376,
+      "exit": 1,
+      "endUtc": "2026-10-12T02:46:33.696255+00:00",
+      "elapsedS": 2.05206298828125,
+      "hostLoadEnd": 12.6650390625,
+      "descendants": [
+        {
+          "pid": 64376,
+          "ppid": 64356,
+          "pgid": 64376,
+          "command": "node --import tsx /Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/importer-proof.ts",
+          "firstObservedUtc": "2026-10-12T02:46:31.686177+00:00",
+          "lastObservedUtc": "2026-10-12T02:46:31.686177+00:00"
+        }
+      ],
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/importer.log",
+      "timingScope": "wrapper outer start through observed actual child exit; polling resolution up to 2 seconds; includes setup/lease waiting where present"
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/importer-proof.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34",
+      "startUtc": "2026-10-12T02:47:00.198200+00:00",
+      "wrapperPid": 66795,
+      "hostLoadStart": 10.60498046875,
+      "workers": "2",
+      "pid": 66804,
+      "pgid": 66804,
+      "exit": 0,
+      "endUtc": "2026-10-12T02:47:02.246347+00:00",
+      "elapsedS": 2.0482020378112793,
+      "hostLoadEnd": 10.60498046875,
+      "descendants": [
+        {
+          "pid": 66804,
+          "ppid": 66795,
+          "pgid": 66804,
+          "command": "node --import tsx /Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/importer-proof.mts",
+          "firstObservedUtc": "2026-10-12T02:47:00.237003+00:00",
+          "lastObservedUtc": "2026-10-12T02:47:00.237003+00:00"
+        }
+      ],
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/importer-corrected.log",
+      "timingScope": "wrapper outer start through observed actual child exit; polling resolution up to 2 seconds; includes setup/lease waiting where present"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34",
+      "startUtc": "2026-10-12T02:45:51.240206+00:00",
+      "wrapperPid": 59990,
+      "hostLoadStart": 12.05029296875,
+      "workers": "2",
+      "pid": 60009,
+      "pgid": 60009,
+      "exit": 0,
+      "endUtc": "2026-10-12T02:46:44.489395+00:00",
+      "elapsedS": 53.249232053756714,
+      "hostLoadEnd": 11.78076171875,
+      "descendants": [
+        {
+          "pid": 60009,
+          "ppid": 59990,
+          "pgid": 60009,
+          "command": "node /opt/homebrew/bin/npm run review",
+          "firstObservedUtc": "2026-10-12T02:45:51.281759+00:00",
+          "lastObservedUtc": "2026-10-12T02:46:42.485643+00:00"
+        },
+        {
+          "pid": 60034,
+          "ppid": 60009,
+          "pgid": 60009,
+          "command": "node scripts/review.mjs quick",
+          "firstObservedUtc": "2026-10-12T02:45:53.338384+00:00",
+          "lastObservedUtc": "2026-10-12T02:46:42.485643+00:00"
+        },
+        {
+          "pid": 60153,
+          "ppid": 60034,
+          "pgid": 60009,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/typescript/bin/tsc --noEmit false --declaration --emitDeclarationOnly --outDir /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/.cache/journey-review/declarations --incremental --tsBuildInfoFile /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/.cache/journey-review/tsconfig.tsbuildinfo",
+          "firstObservedUtc": "2026-10-12T02:45:53.338384+00:00",
+          "lastObservedUtc": "2026-10-12T02:46:03.588688+00:00"
+        },
+        {
+          "pid": 60154,
+          "ppid": 60034,
+          "pgid": 60009,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/typescript/bin/tsc -p tsconfig.node.json --incremental --tsBuildInfoFile /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/.cache/journey-review/tsconfig.node.tsbuildinfo",
+          "firstObservedUtc": "2026-10-12T02:45:53.338384+00:00",
+          "lastObservedUtc": "2026-10-12T02:45:55.387021+00:00"
+        },
+        {
+          "pid": 60155,
+          "ppid": 60034,
+          "pgid": 60009,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/scripts/import-cycles.mjs",
+          "firstObservedUtc": "2026-10-12T02:45:53.338384+00:00",
+          "lastObservedUtc": "2026-10-12T02:45:53.338384+00:00"
+        },
+        {
+          "pid": 60156,
+          "ppid": 60034,
+          "pgid": 60009,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/scripts/run-eslint.mjs src/content/cards/blind-butcher-3e6a5236.ts src/content/cards/cast-beyond-the-horizon-8904714c.ts src/content/cards/forsaken-pact-ac2b2fc5.ts src/content/cards/molten-duel-6044f6da.ts src/content/cards/vengeance-taker-44fb30ba.ts",
+          "firstObservedUtc": "2026-10-12T02:45:53.338384+00:00",
+          "lastObservedUtc": "2026-10-12T02:45:55.387021+00:00"
+        },
+        {
+          "pid": 60157,
+          "ppid": 60034,
+          "pgid": 60009,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/vitest/vitest.mjs related --run --passWithNoTests src/content/cards/blind-butcher-3e6a5236.ts src/content/cards/cast-beyond-the-horizon-8904714c.ts src/content/cards/forsaken-pact-ac2b2fc5.ts src/content/cards/molten-duel-6044f6da.ts src/content/cards/vengeance-taker-44fb30ba.ts",
+          "firstObservedUtc": "2026-10-12T02:45:53.338384+00:00",
+          "lastObservedUtc": "2026-10-12T02:46:40.437370+00:00"
+        },
+        {
+          "pid": 60187,
+          "ppid": 60157,
+          "pgid": 60009,
+          "command": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+          "firstObservedUtc": "2026-10-12T02:45:53.338384+00:00",
+          "lastObservedUtc": "2026-10-12T02:46:40.437370+00:00"
+        },
+        {
+          "pid": 65335,
+          "ppid": 60034,
+          "pgid": 60009,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/scripts/setup-assets.ts",
+          "firstObservedUtc": "2026-10-12T02:46:42.485643+00:00",
+          "lastObservedUtc": "2026-10-12T02:46:42.485643+00:00"
+        }
+      ],
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/review.log",
+      "timingScope": "wrapper outer start through observed actual child exit; polling resolution up to 2 seconds; includes setup/lease waiting where present"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34",
+      "startUtc": "2026-10-12T02:47:01.351878+00:00",
+      "wrapperPid": 66902,
+      "hostLoadStart": 10.60498046875,
+      "workers": "2",
+      "pid": 66917,
+      "pgid": 66917,
+      "exit": 0,
+      "endUtc": "2026-10-12T02:47:05.440307+00:00",
+      "elapsedS": 4.0884690284729,
+      "hostLoadEnd": 10.39599609375,
+      "descendants": [
+        {
+          "pid": 66917,
+          "ppid": 66902,
+          "pgid": 66917,
+          "command": "node /opt/homebrew/bin/npm run knip",
+          "firstObservedUtc": "2026-10-12T02:47:01.392459+00:00",
+          "lastObservedUtc": "2026-10-12T02:47:03.439145+00:00"
+        },
+        {
+          "pid": 66938,
+          "ppid": 66917,
+          "pgid": 66917,
+          "command": "node scripts/review.mjs knip",
+          "firstObservedUtc": "2026-10-12T02:47:03.439145+00:00",
+          "lastObservedUtc": "2026-10-12T02:47:03.439145+00:00"
+        },
+        {
+          "pid": 67045,
+          "ppid": 66938,
+          "pgid": 66917,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/knip/bin/knip.js",
+          "firstObservedUtc": "2026-10-12T02:47:03.439145+00:00",
+          "lastObservedUtc": "2026-10-12T02:47:03.439145+00:00"
+        }
+      ],
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/knip.log",
+      "timingScope": "wrapper outer start through observed actual child exit; polling resolution up to 2 seconds; includes setup/lease waiting where present"
+    },
+    {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b,44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e,3e6a5236-9850-4a69-9fe1-48389365a399,8904714c-38a9-491f-92ce-5cb5ece26ab1,ac2b2fc5-90d3-47e0-8332-25f7ba767035"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34",
+      "startUtc": "2026-10-12T02:43:50.662416+00:00",
+      "wrapperPid": 39236,
+      "hostLoadStart": 32.39111328125,
+      "workers": "2",
+      "pid": 39259,
+      "pgid": 39259,
+      "exit": 0,
+      "endUtc": "2026-10-12T02:47:25.628193+00:00",
+      "elapsedS": 214.96586632728577,
+      "hostLoadEnd": 9.4150390625,
+      "descendants": [
+        {
+          "pid": 39259,
+          "ppid": 39236,
+          "pgid": 39259,
+          "command": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 6044f6da-cf71-4dbb-9feb-f71ae66a4f5b,44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e,3e6a5236-9850-4a69-9fe1-48389365a399,8904714c-38a9-491f-92ce-5cb5ece26ab1,ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+          "firstObservedUtc": "2026-10-12T02:43:50.710718+00:00",
+          "lastObservedUtc": "2026-10-12T02:47:23.618077+00:00"
+        },
+        {
+          "pid": 48521,
+          "ppid": 39259,
+          "pgid": 39259,
+          "command": "npm run fuzz:engine --games 300 --weight-uuids ***,***,***,***,***",
+          "firstObservedUtc": "2026-10-12T02:44:48.130741+00:00",
+          "lastObservedUtc": "2026-10-12T02:47:23.618077+00:00"
+        },
+        {
+          "pid": 48564,
+          "ppid": 48521,
+          "pgid": 39259,
+          "command": "node /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/.bin/tsx scripts/fuzz-engine.ts --games 300 --weight-uuids 6044f6da-cf71-4dbb-9feb-f71ae66a4f5b,44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e,3e6a5236-9850-4a69-9fe1-48389365a399,8904714c-38a9-491f-92ce-5cb5ece26ab1,ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+          "firstObservedUtc": "2026-10-12T02:44:48.130741+00:00",
+          "lastObservedUtc": "2026-10-12T02:47:23.618077+00:00"
+        },
+        {
+          "pid": 48569,
+          "ppid": 48564,
+          "pgid": 39259,
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/tsx/dist/loader.mjs scripts/fuzz-engine.ts --games 300 --weight-uuids 6044f6da-cf71-4dbb-9feb-f71ae66a4f5b,44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e,3e6a5236-9850-4a69-9fe1-48389365a399,8904714c-38a9-491f-92ce-5cb5ece26ab1,ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+          "firstObservedUtc": "2026-10-12T02:44:48.130741+00:00",
+          "lastObservedUtc": "2026-10-12T02:47:23.618077+00:00"
+        },
+        {
+          "pid": 48604,
+          "ppid": 48569,
+          "pgid": 39259,
+          "command": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping",
+          "firstObservedUtc": "2026-10-12T02:44:48.130741+00:00",
+          "lastObservedUtc": "2026-10-12T02:47:23.618077+00:00"
+        }
+      ],
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/fuzz.log",
+      "timingScope": "wrapper outer start through observed actual child exit; polling resolution up to 2 seconds; includes setup/lease waiting where present"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.146",
+        "--cards",
+        "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b,44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e,3e6a5236-9850-4a69-9fe1-48389365a399,8904714c-38a9-491f-92ce-5cb5ece26ab1,ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-recursion-cards34",
+      "startUtc": "2026-10-12T02:47:25.460090+00:00",
+      "wrapperPid": 69001,
+      "hostLoadStart": 9.4150390625,
+      "workers": "2",
+      "pid": 69015,
+      "pgid": 69015,
+      "exit": 0,
+      "endUtc": "2026-10-12T03:18:26.065556+00:00",
+      "elapsedS": 1860.6055040359497,
+      "hostLoadEnd": 11.2529296875,
+      "descendants": [
+        {
+          "pid": 69015,
+          "ppid": 69001,
+          "pgid": 69015,
+          "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.146 --cards 6044f6da-cf71-4dbb-9feb-f71ae66a4f5b,44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e,3e6a5236-9850-4a69-9fe1-48389365a399,8904714c-38a9-491f-92ce-5cb5ece26ab1,ac2b2fc5-90d3-47e0-8332-25f7ba767035 --port 5174",
+          "firstObservedUtc": "2026-10-12T02:47:25.499123+00:00",
+          "lastObservedUtc": "2026-10-12T03:18:24.063420+00:00"
+        }
+      ],
+      "rawLog": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/sweep.log",
+      "timingScope": "wrapper outer start through observed actual child exit; polling resolution up to 2 seconds; includes setup/lease waiting where present"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting 1-minute load"
+      }
+    }
+  },
+  "decisions": {
+    "D20": "Five compositions use established primitive/trigger/cost/selector forms. No repository scenario or test added; contracts prove individual forms, with actual-content public observations in scratch for ownDissolved and interruptResponse.",
+    "D21": {
+      "sha256FirstBytes": [
+        207,
+        245,
+        172,
+        137,
+        40
+      ],
+      "sampled": 0,
+      "newPromptStatusVisual": 0,
+      "judged": 0
+    },
+    "rulings": [
+      "docs/rules.md Put on top or on the bottom of a deck; RD-hv-umm2.63-1",
+      "RD-hv-umm2.342-1 last in-play controller for own named Dissolved"
+    ]
+  },
+  "researchCorrections": [
+    "Exploratory nonexistent-file/glob rg/sed reads returned nonzero; corrected to actual owning paths, no product edits or failures.",
+    "First scratch interrupt observation incorrectly expected stack.length2 after apply; engine resolves forced passes automatically. Corrected to public respond decision, legal response and resolution event order. Original attempt retained observations.log.",
+    "Scratch importer proof first ran as .ts outside ESM package and rejected top-level await; renamed .mts and reran successfully. Both attempts retained; no product source change.",
+    "Canonical rawReport filenames are relative to primary QA bead root; an exploratory read from worktree root failed before using the correct root.",
+    "An interim tail-only progress update missed the earlier native timeout. Final effective/raw totals and disposition are derived from complete canonical ledger and raw reports."
+  ],
+  "counts": {
+    "cards": 5,
+    "amplifiedTexts": 3,
+    "newPrimitives": 0,
+    "newForms": 0,
+    "scenarios": 0,
+    "RD": 0,
+    "cardIssues": 0,
+    "testsAdded": 0
+  },
+  "scratchEvidenceRoot": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence",
+  "validationPending": [],
+  "resources": {
+    "ownedServers": [],
+    "sharedService": "Playwright MCP localhost8931; runner opens and closes only own contexts",
+    "heavy": "fuzz only under native lockf -k machine heavy.lock",
+    "finalAudit": {
+      "utc": "2026-10-12T03:18:55.898678+00:00",
+      "serverGroups": [
+        95348,
+        59076,
+        12901,
+        84553
+      ],
+      "nativeAllGroupsStopped": true,
+      "recordedPids": [
+        12901,
+        36048,
+        36058,
+        36090,
+        36347,
+        36414,
+        39236,
+        39259,
+        39428,
+        39453,
+        47482,
+        47495,
+        48521,
+        48564,
+        48569,
+        48604,
+        52304,
+        52339,
+        59076,
+        59990,
+        60009,
+        60034,
+        60153,
+        60154,
+        60155,
+        60156,
+        60157,
+        60187,
+        64356,
+        64376,
+        65335,
+        66795,
+        66804,
+        66902,
+        66917,
+        66938,
+        67045,
+        69001,
+        69015,
+        84553,
+        95348
+      ],
+      "matchingOwnedProcessesAfterCleanup": [],
+      "ownProviderOwnerRecordRetained": false,
+      "cleanupProof": "Native session close joined RPC calls and confirmed browser_close before each server/lease cleanup; summary and command actual0, no provider reconciliation message. Shared MCP service untouched. Port later reused by peer is not an owned resource."
+    }
+  },
+  "importerProof": [
+    {
+      "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+      "status": "authored",
+      "speed": "interrupt",
+      "verifiedText": "1yyhbonr1ir",
+      "base": [
+        {
+          "kind": "event",
+          "effect": {
+            "op": "dissolve",
+            "subject": {
+              "kind": "target",
+              "selector": {
+                "controller": "any",
+                "sparkAtMost": 3
+              },
+              "count": 1
+            }
+          }
+        }
+      ],
+      "amplified": [
+        {
+          "kind": "event",
+          "effect": {
+            "op": "dissolve",
+            "subject": {
+              "kind": "target",
+              "selector": {
+                "controller": "any",
+                "sparkAtMost": 4
+              },
+              "count": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+      "status": "authored",
+      "speed": "standard",
+      "verifiedText": "1d8gp1wfsc",
+      "base": [
+        {
+          "kind": "triggered",
+          "trigger": {
+            "on": "dissolved"
+          },
+          "effect": {
+            "op": "dissolve",
+            "subject": {
+              "kind": "target",
+              "selector": {
+                "controller": "opponent",
+                "sparkAtMost": 2
+              },
+              "count": 1
+            }
+          },
+          "zone": "play"
+        }
+      ],
+      "amplified": [
+        {
+          "kind": "triggered",
+          "trigger": {
+            "on": "dissolved"
+          },
+          "effect": {
+            "op": "dissolve",
+            "subject": {
+              "kind": "target",
+              "selector": {
+                "controller": "opponent",
+                "sparkAtMost": 3
+              },
+              "count": 1
+            }
+          },
+          "zone": "play"
+        }
+      ]
+    },
+    {
+      "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+      "status": "authored",
+      "speed": "standard",
+      "verifiedText": "1ey6cvnx0yk",
+      "base": [
+        {
+          "kind": "triggered",
+          "trigger": {
+            "on": "materialized"
+          },
+          "effect": {
+            "op": "dissolve",
+            "subject": {
+              "kind": "target",
+              "selector": {
+                "controller": "opponent",
+                "sparkAtMost": 2
+              },
+              "count": 1
+            }
+          },
+          "zone": "play"
+        }
+      ],
+      "amplified": [
+        {
+          "kind": "triggered",
+          "trigger": {
+            "on": "materialized"
+          },
+          "effect": {
+            "op": "dissolve",
+            "subject": {
+              "kind": "target",
+              "selector": {
+                "controller": "opponent",
+                "sparkAtMost": 3
+              },
+              "count": 1
+            }
+          },
+          "zone": "play"
+        }
+      ]
+    },
+    {
+      "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+      "status": "authored",
+      "speed": "standard",
+      "verifiedText": "19vavl7m8qp",
+      "base": [
+        {
+          "kind": "event",
+          "effect": {
+            "op": "putInDeck",
+            "from": "cards",
+            "cards": [
+              {
+                "kind": "target",
+                "selector": {
+                  "controller": "opponent"
+                },
+                "count": 1
+              }
+            ],
+            "at": "top"
+          }
+        }
+      ],
+      "amplified": null
+    },
+    {
+      "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+      "status": "authored",
+      "speed": "standard",
+      "verifiedText": "10sktfas66a",
+      "base": [
+        {
+          "kind": "additionalCost",
+          "costs": [
+            {
+              "cost": "abandon",
+              "selector": {
+                "controller": "you",
+                "costAtMost": 2
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "kind": "event",
+          "effect": {
+            "op": "materialize",
+            "from": {
+              "op": "discover",
+              "filter": {
+                "cardType": "character",
+                "costAtMost": 2
+              }
+            }
+          }
+        }
+      ],
+      "amplified": null
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/engine/rules/stack.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": 35.1513671875,
+      "end": 35.1728515625
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b,44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e,3e6a5236-9850-4a69-9fe1-48389365a399,8904714c-38a9-491f-92ce-5cb5ece26ab1,ac2b2fc5-90d3-47e0-8332-25f7ba767035"
+      ],
+      "start": 32.39111328125,
+      "end": 30.837890625
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/public-observations.ts"
+      ],
+      "start": 19.306640625,
+      "end": 18.32080078125
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/public-observations.ts"
+      ],
+      "start": 15.45556640625,
+      "end": 15.4990234375
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/importer-proof.ts"
+      ],
+      "start": 12.8974609375,
+      "end": 12.6650390625
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/importer-proof.mts"
+      ],
+      "start": 10.60498046875,
+      "end": 10.60498046875
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": 12.05029296875,
+      "end": 11.78076171875
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": 10.60498046875,
+      "end": 10.39599609375
+    },
+    {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b,44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e,3e6a5236-9850-4a69-9fe1-48389365a399,8904714c-38a9-491f-92ce-5cb5ece26ab1,ac2b2fc5-90d3-47e0-8332-25f7ba767035"
+      ],
+      "start": 32.39111328125,
+      "end": 9.4150390625
+    },
+    {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.146",
+        "--cards",
+        "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b,44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e,3e6a5236-9850-4a69-9fe1-48389365a399,8904714c-38a9-491f-92ce-5cb5ece26ab1,ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "--port",
+        "5174"
+      ],
+      "start": 9.4150390625,
+      "end": 11.2529296875
+    }
+  ],
+  "fuzz": {
+    "games": 300,
+    "steps": 163561,
+    "nativeWallS": 157.5,
+    "outerWallS": 214.96586632728577,
+    "nativeCpuS": 168.6,
+    "prompts": 4149,
+    "interactiveReruns": 413,
+    "failures": 0,
+    "bounded": {
+      "legality": 0,
+      "prompts": 1
+    },
+    "replay": "final hash every game and interactive every tenth; zero divergence",
+    "targets": [
+      {
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "included": 611,
+        "exercised": 412
+      },
+      {
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "included": 619,
+        "exercised": 280
+      },
+      {
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "included": 611,
+        "exercised": 241
+      },
+      {
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "included": 606,
+        "exercised": 279
+      },
+      {
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "included": 619,
+        "exercised": 262
+      }
+    ],
+    "lockWait": "unisolated; first npm descendant observed approximately57 seconds after wrapperstart; do not equate difference between outer/native wall with exact wait"
+  },
+  "supplementalObservations": {
+    "pass": 8,
+    "coverage": "actual-content ownDissolved Vengeance and Molten interruptResponse, each side and base/amplified; public board/engine/answer/pass helpers only, scratch output not repository scenarios",
+    "raw": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/146-implementation-evidence/observations-corrected.log"
+  },
+  "nodePreflight": {
+    "pass": 58,
+    "skip": 42,
+    "pending": 0,
+    "fail": 0,
+    "ForsakenPactCausalCells": 12,
+    "causalOrder": "abandoned before cardPlayed before cardDiscovered before materialized; actual source and side IDs retained in raw JSONL"
+  },
+  "sweep": {
+    "summary": {
+      "event": "cardSweepSummary",
+      "counts": {
+        "pass": 58,
+        "skip": 42
+      },
+      "attemptCounts": {
+        "pass": 58,
+        "skip": 42,
+        "fail": 2
+      },
+      "hostLoad": 9.4150390625,
+      "sessions": 4,
+      "leaseYields": 3,
+      "wallMs": {
+        "browserLeaseWait": 1286339,
+        "serve": 5860,
+        "scenario": 560743.5298330002,
+        "cleanup": 997.824166000064,
+        "execution": 567638.9741250002,
+        "total": 1853977.9741250002
+      }
+    },
+    "outerWallS": 1860.6055040359497,
+    "ledgerRows": 102,
+    "rawReportCount": 60,
+    "rawReports": [
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-base-player-attempt-1.result.json",
+        "sha256": "b3e69557f1249c685ec4de8f67f3ad0713d6e3e05786da26981126167ae07279",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "base",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-amplified-player-attempt-1.result.json",
+        "sha256": "449a39f9c3a3d25bbe85c11bb8f8f1bf0cbe020bfdb566ba5be118293fe469ac",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "amplified",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-empowered-player-attempt-1.result.json",
+        "sha256": "cfd1b77c62ea6a6ad7330f78af161370a86c8ced0bbfc5de0b8ab17eec63a3b6",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "empowered",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-inspired-player-attempt-1.result.json",
+        "sha256": "f88eb68108f5634060ff89624bfce94ed5418f160fd2c793f33856e4cf8e3a19",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "inspired",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-enduring-player-attempt-1.result.json",
+        "sha256": "b1d35af01b5cc6787affc337c9eec519c21a6e580faee201fc4d3d05a481a8ac",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "enduring",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-perfected-player-attempt-1.result.json",
+        "sha256": "351ab3aad3fbf4ba4cc4ddb28e9a1662cbb718488eb2ae6b40ac97c7ceb12786",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "perfected",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-base-enemy-attempt-1.result.json",
+        "sha256": "8bbd446b6f9d384e8691ef0ef06112926b40c9ce13178a94890d5ea59763471a",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "base",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-amplified-enemy-attempt-1.result.json",
+        "sha256": "7b9a2dd2b790b498d5137039977a5abe158ce78c768b2e1be13af7e2c15a9fb8",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "amplified",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-empowered-enemy-attempt-1.result.json",
+        "sha256": "0185a63ad3595775f0f756d415f7586cb1c23738a4c029c7c076d584a7ce9bce",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "empowered",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-inspired-enemy-attempt-1.result.json",
+        "sha256": "7c95516d0f9817d892f7d2ea039537c45eb89ed2fa7af46e1064194e9d018f02",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "inspired",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-enduring-enemy-attempt-1.result.json",
+        "sha256": "9bdf0b0f114bc09fea4c03c1f550d3efc6486d71489f051e654b2b0bff9018f1",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "enduring",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-6044f6da-cf71-4dbb-9feb-f71ae66a4f5b-perfected-enemy-attempt-1.result.json",
+        "sha256": "d80395c3ab4c04e335559f3af7a09a1533440da3d924aaa260e4b1fcc8e6178f",
+        "uuid": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+        "variant": "perfected",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-base-player-attempt-1.result.json",
+        "sha256": "8649e00468a45567e5b1e1bdcc80b320534b334fab7454e66a0499bcdbf4f286",
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "variant": "base",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-amplified-player-attempt-1.result.json",
+        "sha256": "8a5e25f1e9b8461be0c7775126eec3e24985b477a29c4d270c3320ea2867ef0b",
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "variant": "amplified",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-empowered-player-attempt-1.result.json",
+        "sha256": "e2ec9f2b2f70eb2510edd1cae761c2beb63e4eb9060b98b0349512ce1134e3ed",
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "variant": "empowered",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-kindled-player-attempt-1.result.json",
+        "sha256": "94ce3272fac277a0021b52c33146992c84eea07efb97fa46ad63c46733483344",
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "variant": "kindled",
+        "side": "player",
+        "attempt": 1,
+        "effective": false,
+        "verdict": "fail"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-kindled-player-attempt-2.result.json",
+        "sha256": "59c48e9559f8486917efbacb4be5e65d613cb5cd4604bc1cfb8b0e4e15ca29ed",
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "variant": "kindled",
+        "side": "player",
+        "attempt": 2,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-perfected-player-attempt-1.result.json",
+        "sha256": "c57139882a7dbd64f0ab53b0c3e1129977333e5e44f9569a9203a59cb25954df",
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "variant": "perfected",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-base-enemy-attempt-1.result.json",
+        "sha256": "6b1bbb14b946e58e2f10fbc86d20922194682a46f2f70bc11832066b7d5b2f18",
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "variant": "base",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-amplified-enemy-attempt-1.result.json",
+        "sha256": "a2ec2690557081bb4a111e176b53ba68f2b34245672e44abe25e7628f4fabc22",
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "variant": "amplified",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-empowered-enemy-attempt-1.result.json",
+        "sha256": "c3d6f3ecae0db370c4cc549003e07e1908c274ee0579e655c6109d522046e6f4",
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "variant": "empowered",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-kindled-enemy-attempt-1.result.json",
+        "sha256": "5a5a7e941dfb2ff610195e0840aa9898b70ace1ff1682ea89f5be3ffee90c8b0",
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "variant": "kindled",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-perfected-enemy-attempt-1.result.json",
+        "sha256": "65006f3af58029ac42d6dc0c42ba2cfe551f247f5d26f74444df13434f88f6c3",
+        "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+        "variant": "perfected",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-base-player-attempt-1.result.json",
+        "sha256": "fe31ec3fcdd59b247b968c7c89fd1687a64a5cb595af990d383f045f55d0e09f",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "base",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-amplified-player-attempt-1.result.json",
+        "sha256": "530660f9c6b504a2dfecd7e1c9da9df96d44efefbc5cee826a677ed3ea2509c1",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "amplified",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-empowered-player-attempt-1.result.json",
+        "sha256": "814914b9cd2b0c8ae0cb08ae704e19dda55fafcb998c96d833b4a23b96648a63",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "empowered",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-kindled-player-attempt-1.result.json",
+        "sha256": "bbd5e1d29a4274aeaaf03fcec13bda65107fcb534153e1e7db03a66246aba7a0",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "kindled",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-resonant-player-attempt-1.result.json",
+        "sha256": "6a32280c68310ce881d382d4e75a5263d1c7fb7465bc14d3be59bec663b082da",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "resonant",
+        "side": "player",
+        "attempt": 1,
+        "effective": false,
+        "verdict": "fail"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-resonant-player-attempt-2.result.json",
+        "sha256": "04c170ae6525a8fbda8a6241e986db9906726d2ecee624c0eb9eca856cf86186",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "resonant",
+        "side": "player",
+        "attempt": 2,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-perfected-player-attempt-1.result.json",
+        "sha256": "1ffa92523d723a4bd982a03206400286aa4ac3148f98348c552e8004fa8ef4c0",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "perfected",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-base-enemy-attempt-1.result.json",
+        "sha256": "a343183e817247562525ed4aff6b08f55f87cee22b571feac5d7b15412d01377",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "base",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-amplified-enemy-attempt-1.result.json",
+        "sha256": "44d334454b808f9e8b2ce10c88bc8d1ddeac67ef7661e0a87ddf15cc594df63b",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "amplified",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-empowered-enemy-attempt-1.result.json",
+        "sha256": "7caca8f8a0e62b03f5fdeb01ed0bf9baabbcc2b9ef8499b0f102a04424915746",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "empowered",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-kindled-enemy-attempt-1.result.json",
+        "sha256": "6def0de18da8c0fa9788371b910adb6d8c39ddd5d5dbf69370eace4bbc67aa30",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "kindled",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-resonant-enemy-attempt-1.result.json",
+        "sha256": "64b11e02aa9036f9902f421e30441eace083d58cea4a7379aaba8877f78b068e",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "resonant",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-perfected-enemy-attempt-1.result.json",
+        "sha256": "822bfd05cacd789ffb4497900700021974cc2b5f2b5c969bd5259f5d78423f99",
+        "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "variant": "perfected",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-base-player-attempt-1.result.json",
+        "sha256": "e091b142c016917bf3c00784632f2c8ebc7fa7bf377e5a5bda02a89cfd323c25",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "base",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-empowered-player-attempt-1.result.json",
+        "sha256": "128c6a194602c01d6291226756eb2448bdee0c7334fcf9aaf647ffdf148fb82e",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "empowered",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-inspired-player-attempt-1.result.json",
+        "sha256": "3ea9e3106aa9982965d3994b2a228b1a9cc96df161793586e8a70283e4a95518",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "inspired",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-enduring-player-attempt-1.result.json",
+        "sha256": "450a23e5c89c541972c06113aafc2e27413a381b133d264986fd97a121af18b5",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "enduring",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-hastened-player-attempt-1.result.json",
+        "sha256": "dac3bd93a42252e56c8ae2397086551d0cdb0b718c9bf68c53f307f4d892e7ec",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "hastened",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-perfected-player-attempt-1.result.json",
+        "sha256": "82f87c1499e3a44f8c399d5750064526869144b8c99a3fea43b64920dcc4cf28",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "perfected",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-base-enemy-attempt-1.result.json",
+        "sha256": "b21be325bab6fe4507c2a930f25dcc4034f70a0478d40fdb22d33b738de5498e",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "base",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-empowered-enemy-attempt-1.result.json",
+        "sha256": "ca666e8921733306339e51aff8895143a37c714361c6b863b24d721716f2ac36",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "empowered",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-inspired-enemy-attempt-1.result.json",
+        "sha256": "bc50d3e5055084bcf0b9a7d033ee556bcb08ca485012b2889022188201f1340a",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "inspired",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-enduring-enemy-attempt-1.result.json",
+        "sha256": "e2dcc890222bab42a49f468302f90016c70376d2c26b86d4b60d71457d92afd3",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "enduring",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-hastened-enemy-attempt-1.result.json",
+        "sha256": "40196a9e7aa9e18d75c2015dd0b9d5865777c1b0a23e17c22ee825dd8e59da60",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "hastened",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-8904714c-38a9-491f-92ce-5cb5ece26ab1-perfected-enemy-attempt-1.result.json",
+        "sha256": "247284dd3fdd7c2e46eef1682b01e20021612214f0647be486e6bf0b81c412bf",
+        "uuid": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        "variant": "perfected",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-base-player-attempt-1.result.json",
+        "sha256": "d84d16971cca4214be4a878588d14c58e09c7220139a556afe8b5403665dcd78",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "base",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-empowered-player-attempt-1.result.json",
+        "sha256": "d4319ad604eb834e604ec7c6b625c9e5d422b2245419ea0ed998b13ae2f39e2c",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "empowered",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-inspired-player-attempt-1.result.json",
+        "sha256": "6be636c47aca19c3b4253f37d3f51b70cfa2666524ab2ad80cc8565132e0d239",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "inspired",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-enduring-player-attempt-1.result.json",
+        "sha256": "bc9e48436ba14df62af4d7b83f04f8a3b92f083de5213aac19cc567a297b7261",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "enduring",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-hastened-player-attempt-1.result.json",
+        "sha256": "41f9846cc4a42db2f165f2a939c808dc142feab0d783fdbeb60c7f59df112cee",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "hastened",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-perfected-player-attempt-1.result.json",
+        "sha256": "15037bee66797fb605e6b3f72dfbc9f1d39d91b28fb02a7b0aa28cd7b968cbb2",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "perfected",
+        "side": "player",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-base-enemy-attempt-1.result.json",
+        "sha256": "f79c91d0fe7187a71275d9f747413bc3e93cc9536629146438423ff6e474cfe3",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "base",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-empowered-enemy-attempt-1.result.json",
+        "sha256": "bef233cc47e5e1bc2eed2083cdf43a2cb0646919173dd604817eec742105b850",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "empowered",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-inspired-enemy-attempt-1.result.json",
+        "sha256": "d9ae304d85f29504b933e35c265f04f28ff6cfc8d980e5549ce1789bc989056a",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "inspired",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-enduring-enemy-attempt-1.result.json",
+        "sha256": "34a44f7b3a6664be936a49d2bab529a13c150645643c39d6001bb9f72d734a99",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "enduring",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-hastened-enemy-attempt-1.result.json",
+        "sha256": "a24d9072f326faef6fb20f2650842d3a2e5f51d0a367baefa3976943cd618d09",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "hastened",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      },
+      {
+        "file": "sweep-Dsvr0g/sweep-ac2b2fc5-90d3-47e0-8332-25f7ba767035-perfected-enemy-attempt-1.result.json",
+        "sha256": "a149bb434e128408a13f6bd7e6c53f99dfffaa600de6b859863b5d9dec410985",
+        "uuid": "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+        "variant": "perfected",
+        "side": "enemy",
+        "attempt": 1,
+        "effective": true,
+        "verdict": "pass"
+      }
+    ],
+    "retryDisposition": [
+      {
+        "row": {
+          "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+          "variant": "kindled",
+          "verdict": "fail",
+          "notes": "the card-lab report: TimeoutError: page.waitForFunction: Timeout 58067ms exceeded.",
+          "screens": [],
+          "attempt": 1,
+          "effective": false,
+          "failureKinds": [
+            "timeout"
+          ],
+          "rawReport": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-kindled-player-attempt-1.result.json",
+          "mode": "sweep",
+          "bead": "hv-umm2.146",
+          "commit": "840567a3f1aecca268d20e42c148aee0b48afd8c"
+        },
+        "error": null,
+        "caps": [],
+        "result": {
+          "verdict": "fail",
+          "notes": "the card-lab report: TimeoutError: page.waitForFunction: Timeout 58067ms exceeded.",
+          "failureKinds": [
+            "timeout"
+          ]
+        },
+        "reportSha256": "94ce3272fac277a0021b52c33146992c84eea07efb97fa46ad63c46733483344"
+      },
+      {
+        "row": {
+          "uuid": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+          "variant": "kindled",
+          "verdict": "pass",
+          "notes": "",
+          "screens": [],
+          "attempt": 2,
+          "effective": true,
+          "failureKinds": [],
+          "rawReport": "sweep-Dsvr0g/sweep-44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e-kindled-player-attempt-2.result.json",
+          "entityKind": "card",
+          "mode": "sweep",
+          "bead": "hv-umm2.146",
+          "commit": "840567a3f1aecca268d20e42c148aee0b48afd8c"
+        },
+        "error": null,
+        "caps": [],
+        "result": {
+          "verdict": "pass",
+          "notes": "",
+          "failureKinds": [],
+          "lab": {
+            "card": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+            "variant": "kindled",
+            "side": "player",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base",
+              "amplified",
+              "empowered",
+              "kindled",
+              "perfected"
+            ],
+            "entityKind": "card",
+            "cardStatus": "authored",
+            "cardType": "Character"
+          },
+          "zone": "play",
+          "answered": 0,
+          "passes": 0,
+          "events": [
+            "energyChanged",
+            "cardPlayed",
+            "resolved",
+            "materialized"
+          ],
+          "screens": []
+        },
+        "reportSha256": "59c48e9559f8486917efbacb4be5e65d613cb5cd4604bc1cfb8b0e4e15ca29ed"
+      },
+      {
+        "row": {
+          "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+          "variant": "resonant",
+          "verdict": "fail",
+          "notes": "the card-lab report: TimeoutError: page.waitForFunction: Timeout 59518ms exceeded.",
+          "screens": [],
+          "attempt": 1,
+          "effective": false,
+          "failureKinds": [
+            "timeout"
+          ],
+          "rawReport": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-resonant-player-attempt-1.result.json",
+          "mode": "sweep",
+          "bead": "hv-umm2.146",
+          "commit": "840567a3f1aecca268d20e42c148aee0b48afd8c"
+        },
+        "error": null,
+        "caps": [],
+        "result": {
+          "verdict": "fail",
+          "notes": "the card-lab report: TimeoutError: page.waitForFunction: Timeout 59518ms exceeded.",
+          "failureKinds": [
+            "timeout"
+          ]
+        },
+        "reportSha256": "6a32280c68310ce881d382d4e75a5263d1c7fb7465bc14d3be59bec663b082da"
+      },
+      {
+        "row": {
+          "uuid": "3e6a5236-9850-4a69-9fe1-48389365a399",
+          "variant": "resonant",
+          "verdict": "pass",
+          "notes": "",
+          "screens": [],
+          "attempt": 2,
+          "effective": true,
+          "failureKinds": [],
+          "rawReport": "sweep-Dsvr0g/sweep-3e6a5236-9850-4a69-9fe1-48389365a399-resonant-player-attempt-2.result.json",
+          "entityKind": "card",
+          "mode": "sweep",
+          "bead": "hv-umm2.146",
+          "commit": "840567a3f1aecca268d20e42c148aee0b48afd8c"
+        },
+        "error": null,
+        "caps": [],
+        "result": {
+          "verdict": "pass",
+          "notes": "",
+          "failureKinds": [],
+          "lab": {
+            "card": "3e6a5236-9850-4a69-9fe1-48389365a399",
+            "variant": "resonant",
+            "side": "player",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base",
+              "amplified",
+              "empowered",
+              "kindled",
+              "resonant",
+              "perfected"
+            ],
+            "entityKind": "card",
+            "cardStatus": "authored",
+            "cardType": "Character"
+          },
+          "zone": "play",
+          "answered": 0,
+          "passes": 0,
+          "events": [
+            "energyChanged",
+            "cardPlayed",
+            "resolved",
+            "materialized",
+            "triggerQueued",
+            "triggerResolved",
+            "noLegalTarget"
+          ],
+          "screens": []
+        },
+        "reportSha256": "04c170ae6525a8fbda8a6241e986db9906726d2ecee624c0eb9eca856cf86186"
+      }
+    ],
+    "ForsakenPactBrowserCausalCells": 12,
+    "scope": "Canonical sweep verifies hand play. Own Dissolved and Interrupt response are independently covered by 8 scratch public actual-content observations. The Blind resonant/player retry covers resolution and trigger lifecycle; its noLegalTarget event does not demonstrate an enemy dissolution.",
+    "judged": 0
+  }
+}

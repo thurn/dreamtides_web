@@ -1,3 +1,5 @@
+import { enemyCharacter, event, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 376,
   art: { x: 0, y: 0, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.putInDeck([target(enemyCharacter())], "top"))],
+  verifiedText: "19vavl7m8qp",
 });

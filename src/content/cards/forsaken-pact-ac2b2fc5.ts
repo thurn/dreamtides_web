@@ -1,3 +1,5 @@
+import { abandonCost, additionalCost, event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 130,
   art: { x: 0, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    additionalCost(abandonCost({ costAtMost: 2 })),
+    event(p.materialize(p.discover({ cardType: "character", costAtMost: 2 }))),
+  ],
+  verifiedText: "10sktfas66a",
 });

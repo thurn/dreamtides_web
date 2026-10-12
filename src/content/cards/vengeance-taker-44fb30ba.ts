@@ -1,3 +1,6 @@
+import { enemyCharacter, target } from "../../engine/dsl/builders";
+import { onDissolved, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 231,
   art: { x: 0, y: 0.798, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(onDissolved(), p.dissolve(target(enemyCharacter({ sparkAtMost: variant.amplified ? 3 : 2 }))))],
+  verifiedText: "1d8gp1wfsc",
 });
