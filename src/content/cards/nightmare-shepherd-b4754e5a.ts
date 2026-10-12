@@ -1,3 +1,7 @@
+import { triggered, onMaterialized } from "../../engine/dsl/triggers";
+import { materializeFigments } from "../../engine/effects/primitives";
+import monstrosity from "../figments/monstrosity-ec9f97b2";
+import { parseFigmentId } from "../../engine/state/ids";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,6 @@ export default card({
   cardNumber: 301,
   art: { x: 0, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(onMaterialized(), materializeFigments(parseFigmentId(monstrosity.id), 1, { spark: variant.amplified ? 5 : 4 }))],
+  verifiedText: "lq48qotysu",
 });

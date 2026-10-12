@@ -1,3 +1,7 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { materializeFigments } from "../../engine/effects/primitives";
+import ethereal from "../figments/ethereal-3eddb1b8";
+import { parseFigmentId } from "../../engine/state/ids";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +24,6 @@ export default card({
   cardNumber: 302,
   art: { x: 0.084, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(whenYouPlay({ cardType: "character" }), materializeFigments(parseFigmentId(ethereal.id), 1, { spark: variant.amplified ? 2 : 1 }))],
+  verifiedText: "x2e1yazd9g",
 });

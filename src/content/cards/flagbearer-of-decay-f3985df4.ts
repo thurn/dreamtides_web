@@ -1,3 +1,7 @@
+import { triggered, whenLeavesVoid } from "../../engine/dsl/triggers";
+import { materializeFigments } from "../../engine/effects/primitives";
+import shadow from "../figments/shadow-86125402";
+import { parseFigmentId } from "../../engine/state/ids";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +25,6 @@ export default card({
   cardNumber: 112,
   art: { x: -0.16, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(whenLeavesVoid("you", { cardType: "character" }), materializeFigments(parseFigmentId(shadow.id), 1, { spark: variant.amplified ? 3 : 2 }))],
+  verifiedText: "13tbttn6lqc",
 });
