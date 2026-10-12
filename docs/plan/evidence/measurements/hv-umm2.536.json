@@ -1,0 +1,31 @@
+{
+  "bead": "hv-umm2.536",
+  "base": "c19477570",
+  "implementationWindow": {
+    "start": "2026-10-12T11:33:30Z",
+    "end": "2026-10-12T11:45:00Z",
+    "scope": "Subagent dispatch (start approximate: the first recorded timestamp, 11:34:07Z, followed about half a minute of reading) through the final precommit; includes research, mutation checks, the fuzz smoke and verification. The fuzz smoke waited 166 s for the heavy lock while the reviews ran."
+  },
+  "commands": {
+    "review": { "command": ["npm", "run", "review"], "wallS": 49, "start": "2026-10-12T11:41:42Z", "exit": 0, "tests": 4101, "note": "an earlier run at 11:40:47Z (44 s) failed lint on one unnecessary non-null assertion in the new contracts, fixed before this run" },
+    "knip": { "command": ["npm", "run", "knip"], "wallS": 4, "start": "2026-10-12T11:40:28Z", "exit": 0 },
+    "focused": { "command": ["npx", "vitest", "run", "src/engine/effects/primitives/contracts.test.ts", "src/engine/triggers"], "wallS": 5, "exit": 0, "tests": 1632 },
+    "fuzz": {
+      "command": ["lockf", "-k", "/Users/dthurn/dreamtides_web/artifacts/heavy.lock", "npm", "run", "fuzz:engine", "--", "--games", "200"],
+      "wallS": 243, "lockWaitS": 166, "start": "2026-10-12T11:40:27Z", "exit": 0,
+      "summary": "200 games, 99578 steps, 76.5 s fuzz wall, failures 0; ran on the final engine code (only a test-file lint fix and documentation followed)"
+    }
+  },
+  "hostLoadSamples": { "fuzzStart": 6.97, "fuzzLockAcquired": 7.42, "knip": 6.65, "firstReview": 5.98, "finalReview": 6.27 },
+  "schemaNormalization": { "fields": { "hostLoad": { "measuredFor": "final npm run review start (1-minute vm.loadavg)" } } },
+  "mutations": [
+    { "change": "pre-bead matcher (captured blocks only, armed one-shot triggers matched whether consumed or not)", "contractsFailed": 6, "contractsTotal": 6 },
+    { "change": "armed once-per-turn use read only as armed (no uses since arming)", "contractsFailed": 4, "failed": ["onceEither other + own", "gained onceEither on own abandon", "regained in place within the step", "onceVoid enteredVoid then abandoned"] },
+    { "change": "consumed one-shot triggers not skipped in armed records", "contractsFailed": 2, "failed": ["delayed next time", "delayed while source in play, own abandon"] },
+    { "change": "step records only armed once-per-turn uses", "contractsFailed": 1, "failed": ["onceVoid enteredVoid then abandoned"] },
+    { "change": "step records only non-armed once-per-turn uses", "contractsFailed": 3, "failed": ["onceEither other + own", "gained onceEither on own abandon", "regained in place within the step"] },
+    { "change": "uses since arming read from battle state instead of the step record", "contractsFailed": 1, "failed": ["gained onceEither on own abandon"] },
+    { "change": "every step use blocks, ignoring where arming stood (usesFrom)", "contractsFailed": 1, "failed": ["regained in place within the step"] },
+    { "change": "always record an armed once-per-turn use in battle state", "contractsFailed": 2, "failed": ["abandon unused gained + regain", "dissolve unused gained + regain"] }
+  ]
+}

@@ -9,14 +9,16 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { abandonCost, activated, all, characterYouControl, energy, event, fromVoid, keyword, self, stackItem, staticAbility, target } from "../../../dsl/builders";
-import { onMaterialized, triggered, whenAbandon, whileSourceInPlay } from "../../../dsl/triggers";
+import { either, onMaterialized, triggered, whenAbandon, whenDissolved, whenPutIntoVoid, whileSourceInPlay } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
 import type { EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { Answer } from "../../../prompts/types";
 import type { Action } from "../../../rules/actions";
 import { instanceOrigin } from "../../../rules/activation";
-import { instanceOf } from "../../../rules/zones";
+import { addFloating, endFloating } from "../../../rules/floating";
+import { dissolve, instanceOf } from "../../../rules/zones";
+import { copyJson } from "../../../state/clone";
 import { deserializeState, stateHash } from "../../../state/hash";
 import type { AbilitySource, InstanceId, Side } from "../../../state/ids";
 import type { BattleState } from "../../../state/types";
@@ -31,7 +33,7 @@ import { abandon } from "../abandon";
 import { banishCards } from "../banish-cards";
 import { disableTriggers } from "../disable-triggers";
 import { draw } from "../draw";
-import { floating } from "../floating-trigger";
+import { delayed, floating } from "../floating-trigger";
 import { gainAbilities } from "../gain-abilities";
 import { gainEnergy } from "../gain-energy";
 import { gainPoints } from "../gain-points";
@@ -42,9 +44,11 @@ import { prevent } from "../prevent";
 import { returnToHand } from "../return-to-hand";
 import { sequence } from "../sequence";
 
+const cardId = (index: number) => syntheticId(0xab5320 + index);
+
 function card(index: number, cardType: "character" | "event", abilities: EngineCardDefinition["abilities"], extra: Partial<EngineCardDefinition> = {}): EngineCardDefinition {
   return {
-    id: syntheticId(0xab5320 + index), cardType, costs: [energy(0)], spark: cardType === "character" ? 1 : null,
+    id: cardId(index), cardType, costs: [energy(0)], spark: cardType === "character" ? 1 : null,
     subtype: cardType === "character" ? "Warrior" : "", speed: "standard", status: "authored", abilities, ...extra,
   };
 }
@@ -86,6 +90,34 @@ const A = {
   hermit: card(17, "character", () => [triggered(onMaterialized(), disableTriggers(self(), whileSourceInPlay())), triggered(whenAbandon(), gainPoints(1))]),
   /** "Until end of turn, a character you control's triggered abilities don't trigger while you control no characters." */
   hush: card(18, "event", () => [event(disableTriggers(target(characterYouControl()), "untilEndOfTurn", { cond: "controls", selector: characterYouControl(), atLeast: 0, atMost: 0 }))]),
+  /** "Once per turn, when you abandon a character or a character you control is dissolved, gain 1⍟." */
+  onceEither: card(19, "character", () => [triggered(either(whenAbandon(), whenDissolved()), gainPoints(1), { oncePerTurn: true })]),
+  /** "Once per turn, when you abandon a character or a card is put into your void, gain 1⍟." */
+  onceVoid: card(20, "character", () => [triggered(either(whenAbandon(), whenPutIntoVoid()), gainPoints(1), { oncePerTurn: true })]),
+  /** "The next time you abandon a character or a character you control is dissolved, gain 1⍟." */
+  nextTime: card(21, "event", () => [event(delayed(either(whenAbandon(), whenDissolved()), gainPoints(1)))]),
+  /** "▸Materialized: While this character is in play, the next time you abandon a character or a character you control is dissolved, gain 1⍟." */
+  nextWhile: card(22, "character", () => [triggered(onMaterialized(), delayed(either(whenAbandon(), whenDissolved()), gainPoints(1), whileSourceInPlay()))]),
+  /**
+   * As it resolves: the player's first back-rank character gains `onceWatcher`'s ability, the second is abandoned, that gain
+   * ends, the first gains `onceEither`'s ability at the same index in its place, and the first is abandoned.
+   */
+  regain: card(23, "event", () => [], {
+    synthetic: {
+      resolve(ctx, item) {
+        const [holder, other] = ctx.state.sides[item.controller].backRank;
+        const gain = (index: number) => addFloating(ctx, {
+          controller: item.controller, source: item.instance, expiry: { at: "never" },
+          change: { kind: "abilities", instance: holder!, cardId: cardId(index), variant: copyJson(instanceOf(ctx.state, holder!).variant) },
+        });
+        const first = gain(15);
+        dissolve(ctx, other!, null, true);
+        endFloating(ctx, (effect) => effect.id === first);
+        gain(19);
+        dissolve(ctx, holder!, null, true);
+      },
+    },
+  }),
   /** Abandons the player's first back-rank character as it resolves, then fails. */
   failing: card(14, "event", () => [], {
     synthetic: {
@@ -326,6 +358,77 @@ function applied(outcome: IntentOutcome): BattleSlice {
 }
 const sliceOf = (state: BattleState): BattleSlice => ({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 });
 const reload = (slice: BattleSlice): BattleSlice => ({ ...(JSON.parse(JSON.stringify(slice)) as BattleSlice), committed: deserializeState(JSON.stringify(slice.committed)) });
+
+describe("one abandonment's look-back events", () => {
+  // An abandon announces `abandoned` and then `dissolved`; a limited ability matching both triggers once.
+  it("triggers a once-per-turn ability matching both the abandon and the dissolve once, for another character and for its own card", () => {
+    const other = setup({ back: [A.onceEither.id, v.vanilla1.id], hand: [A.cull.id] });
+    const [watcher, vanilla] = other.ids.player.back;
+    const sent = act(other.state, "player", play(other.ids.player.hand[0]), [[vanilla!]]);
+    expect(queued(sent.events)).toEqual([{ source: watcher, subject: vanilla }]);
+    expect(sent.state.sides.player.score).toBe(1);
+
+    const own = setup({ back: [A.onceEither.id], hand: [A.cull.id] });
+    const self = own.ids.player.back[0]!;
+    const gone = act(own.state, "player", play(own.ids.player.hand[0]));
+    expect(gone.state.instances[self]?.zone).toBe("void");
+    expect(queued(gone.events)).toEqual([{ source: self, subject: self }]);
+    expect(gone.state.sides.player.score).toBe(1);
+  });
+
+  it("triggers a gained once-per-turn ability matching both once on its own card's abandon, whose use battle state does not keep", () => {
+    const { state, ids } = setup({ back: [A.collector.id], hand: [A.cull.id] }, { void: [A.onceEither.id] });
+    const collector = ids.player.back[0]!;
+    // Each prompt here has one legal answer, which the engine gives itself.
+    const collected = act(state, "player", activate(collector)).state;
+    expect(collected.instances[collector]?.status.gainedAbilities).toHaveLength(1);
+    const { state: after, events } = act(collected, "player", play(ids.player.hand[0]));
+    expect(queued(events)).toEqual([{ source: collector, subject: collector }]);
+    expect(after.sides.player.score).toBe(1);
+  });
+
+  it("does not limit a once-per-turn ability gained in place of a used one ended earlier in the same step", () => {
+    const { state, ids } = setup({ back: [v.vanilla1.id, v.vanilla1.id], hand: [A.regain.id] });
+    const [holder, other] = ids.player.back;
+    const { state: after, events } = act(state, "player", play(ids.player.hand[0]));
+    expect(queued(events)).toEqual([{ source: holder, subject: other }, { source: holder, subject: holder }]);
+    expect(after.sides.player.score).toBe(2);
+  });
+
+  it("does not trigger a once-per-turn look-back ability already used by another of its triggers since the character left play", () => {
+    const { state, ids } = setup({ back: [A.onceVoid.id, v.vanilla1.id], hand: [A.cull.id] });
+    const [watcher, vanilla] = ids.player.back;
+    const { state: after, events } = act(state, "player", play(ids.player.hand[0]), [[vanilla!]]);
+    // The abandoned character enters the void before it is announced as abandoned.
+    expect(queued(events)).toEqual([{ source: watcher, subject: vanilla }]);
+    expect(after.sides.player.score).toBe(1);
+  });
+
+  it("triggers a one-shot delayed trigger matching both the abandon and the dissolve once", () => {
+    const { state, ids } = setup({ back: [v.vanilla1.id], hand: [A.nextTime.id, A.cull.id] });
+    const vanilla = ids.player.back[0]!;
+    const [nextTime, cull] = ids.player.hand;
+    const waiting = act(state, "player", play(nextTime)).state;
+    expect(waiting.floating.map((effect) => effect.change.kind)).toEqual(["trigger"]);
+    // The vanilla is the one character to abandon, so the engine answers the prompt itself.
+    const { state: after, events } = act(waiting, "player", play(cull));
+    expect(queued(events)).toEqual([{ source: nextTime, subject: vanilla }]);
+    expect(after.floating).toEqual([]);
+    expect(after.sides.player.score).toBe(1);
+  });
+
+  it("triggers once a one-shot trigger whose duration ended as its own source was abandoned", () => {
+    const { state, ids } = setup({ hand: [A.nextWhile.id, A.cull.id] });
+    const [source, cull] = ids.player.hand;
+    const materialized = act(state, "player", play(source)).state;
+    expect(materialized.floating.map((effect) => effect.change.kind)).toEqual(["trigger"]);
+    const { state: after, events } = act(materialized, "player", play(cull));
+    expect(after.instances[source]?.zone).toBe("void");
+    expect(queued(events)).toEqual([{ source, subject: source }]);
+    expect(after.floating).toEqual([]);
+    expect(after.sides.player.score).toBe(1);
+  });
+});
 
 describe("abandon look-back recovery", () => {
   it("keeps a self-abandon's queued trigger and prompt through a reload, rejects stale, foreign, invalid and concurrent input, and matches inline play", () => {

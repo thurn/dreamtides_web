@@ -909,7 +909,8 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
 - **Once per turn** is keyed by source key and ability index
   (`OncePerTurnKey`, which covers emblems), and cleared as each turn begins;
   the records of a character's gained abilities are also dropped as they end.
-  A look-back ability reads its record as it was armed (below).
+  A look-back ability reads its record as it was armed, and any use of it
+  the step has recorded since (below).
 - **Floating triggers** (`floating`) are "until end of turn, when…".
   **Delayed triggers** (`delayed`) are one-shot "the next time…" floating
   triggers with `once: true`. Both are `floatingTrigger` nodes, and their
@@ -952,6 +953,13 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   once-per-turn use this turn), which `enqueueAbility` reads in place of
   the state at the event, so effects that end or conditions that change as
   the character leaves play neither stop nor free it. A once-per-turn use
+  of its key the step records after arming also blocks it
+  (`StepContext.triggerUses`, step-local), so one departure's `abandoned`
+  and `dissolved`, or another of its triggers between them such as
+  `enteredVoid`, trigger it at most once; a use recorded before arming and
+  since dropped does not. A one-shot (delayed) trigger that triggered in
+  the step is skipped in every armed record still holding it, while one
+  whose duration merely ended still matches. A once-per-turn use
   it triggers is recorded unless the records past its card's own abilities
   were dropped since it was armed, as the card's gained abilities ended, so
   the use never limits an ability the card gains later. A departure

@@ -68,6 +68,26 @@ export interface TriggerBlocks {
 export interface ArmedAbility {
   readonly listener: TriggerListener;
   readonly blocks: TriggerBlocks;
+  /**
+   * How many once-per-turn uses the step had recorded as it was armed
+   * (`TriggerUses.oncePerTurn`): a use of its key recorded since, as it
+   * triggered for the departure's other look-back event or by another
+   * trigger, also blocks it.
+   */
+  readonly usesFrom: number;
+}
+
+/**
+ * The limited triggers that triggered during a step, which abilities armed
+ * for a look-back event read so that one departure's events trigger each at
+ * most once: every once-per-turn use in order (`oncePerTurn`), recorded even
+ * when its battle-state record is not (`BattleState.oncePerTurn`), and the
+ * one-shot floating and delayed triggers that triggered (`once`), each ended
+ * as it triggered though a look-back record may still hold it.
+ */
+export interface TriggerUses {
+  readonly oncePerTurn: OncePerTurnKey[];
+  readonly once: Set<EffectId>;
 }
 
 /**
@@ -129,6 +149,8 @@ export interface StepContext {
    * never battle state.
    */
   readonly armedTriggers: { readonly [K in LookbackEventKind]: Map<InstanceId, ArmedTriggers> };
+  /** The trigger matcher's step-local record of limited triggers that triggered, for the same reason never battle state. */
+  readonly triggerUses: TriggerUses;
   /** Effective spark captured before each source leaves play in this step; replay rebuilds it. */
   readonly departedSourceSpark: Map<InstanceId, number>;
   /** Source visits and acquired ability occurrences before this step's departures. */
