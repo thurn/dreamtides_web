@@ -17,18 +17,19 @@ export function resolveQueuedTrigger(ctx: StepContext, trigger: QueuedTrigger): 
 }
 
 function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
-  const { source, controller, origin, ability, node, subject, gain, scored, captured, lastKnownSourceSpark } = trigger;
+  const { source, controller, origin, ability, node, subject, gain, scored, captured, lastKnownSourceSpark, linkedSource } = trigger;
   const body = triggerBody(ctx.catalog, origin, ability, node);
   const applied =
     body.condition === null ||
     conditionHolds(ctx.state, ctx.catalog, body.condition, { controller, source, optionalPaid: [] });
-  ctx.emit({ kind: "triggerResolved", source, controller, ability, node, applied });
+  ctx.emit({ kind: "triggerResolved", source, controller, ability, node, applied, ...(linkedSource === undefined ? {} : { linkedSource }) });
   if (!applied) return;
   const choices = chooseOnResolution(ctx, body.effect, controller, source, (role) => purposeOf(source, origin, ability, role), lastKnownSourceSpark);
   if (choices === null) return;
   resolveEffect(ctx, body.effect, {
     source,
     ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
+    ...(linkedSource === undefined ? {} : { linkedSource }),
     origin,
     ability,
     root: body.root,

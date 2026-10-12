@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.486",
+  "phase": 5,
+  "implementMin": 73.23,
+  "localValidationS": {
+    "focusedOwnStage": 2.1,
+    "focusedAffectedStage": 7,
+    "failedReviewTestStage": 71.9,
+    "replayRepairStage": 4.3,
+    "reviewTestStage": 59.7,
+    "knip": 2,
+    "fullTestStage": 67.1,
+    "fullLintStage": 20.4,
+    "weighted300Command": 154.56,
+    "preflightEngineCells": 0.019980333,
+    "judgedScenario": 98.822,
+    "judgedLeaseWait": 0.032,
+    "sweepExecution": 72.26661879199999,
+    "sweepLeaseWait": 0.006
+  },
+  "hostLoad": 15.5009765625,
+  "testDelta": {
+    "files": 0,
+    "lines": 392,
+    "jsdomFiles": 0,
+    "cases": 27
+  },
+  "friction": []
+}

@@ -1,3 +1,4 @@
+import type { LinkedSourceContext } from "../../state/types";
 import type { AbilitySource, InstanceId, Side } from "../../state/ids";
 import type { SparkGain } from "../../state/types";
 import { seesSubject } from "../../view/knowledge";
@@ -6,6 +7,7 @@ import type { EventDefinition } from "../types";
 
 /** A triggered ability matched an event and joined the end of the trigger queue (D14). */
 export interface TriggerQueuedEvent {
+  readonly linkedSource?: LinkedSourceContext;
   readonly kind: "triggerQueued";
   /** The engine names it; it is `null` as a side that cannot identify it sees the event (`eventSeenBy`). */
   readonly source: AbilitySource | null;
@@ -36,8 +38,8 @@ export const triggerQueued: EventDefinition<TriggerQueuedEvent> = {
   privateTo: (event, state) => sourcePrivacy(event.source, state),
   redact(event, viewer, state) {
     const redacted = redactSource(event, viewer, state);
-    const { lastKnownSourceSpark, ...anonymous } = redacted;
-    const seen = redacted.source === null && lastKnownSourceSpark !== undefined ? anonymous : redacted;
+    const { lastKnownSourceSpark, linkedSource, ...anonymous } = redacted;
+    const seen = redacted.source === null && (lastKnownSourceSpark !== undefined || linkedSource !== undefined) ? anonymous : redacted;
     return seen.subject === null || seesSubject(state, seen, viewer) ? seen : { ...seen, subject: null };
   },
 };

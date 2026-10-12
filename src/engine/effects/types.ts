@@ -1,7 +1,7 @@
 import type { EngineCatalog } from "../catalog";
 import type { PromptPurpose, PromptRole } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
-import type { AbandonedPosition, AbilityOrigin, BattleState, ContinuousChange, Expiry, SparkGain } from "../state/types";
+import type { AbandonedPosition, AbilityOrigin, LinkedSourceContext, BattleState, ContinuousChange, Expiry, SparkGain } from "../state/types";
 import type { StepContext } from "../steps/types";
 import type { CharacteristicsReader } from "../dsl/selectors";
 import type {
@@ -73,6 +73,7 @@ export interface MovedCards {
 
 /** What a primitive sees while it resolves. */
 export interface EffectEnv {
+  readonly linkedSource: LinkedSourceContext | null;
   /** The pending ability's retained departure spark; live in-play spark takes precedence. */
   readonly lastKnownSourceSpark: number | null;
   /** The card or emblem whose ability this is. */

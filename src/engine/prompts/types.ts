@@ -60,6 +60,7 @@ export type PromptRole =
   | "foresee"
   /** The cards its controller draws from among the top cards of their deck, which they look at. */
   | "lookAtTop"
+  | "lookAtTopBanish"
   /** The card a discover puts into its controller's hand. */
   | "discover"
   /** The exact cost a Discover looks for, chosen freely as it resolves and never paid. */

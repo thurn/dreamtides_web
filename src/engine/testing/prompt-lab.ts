@@ -268,6 +268,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   },
   [DSL.erodeTakeTwo.id]: { name: "Lab Parting Mist", text: "Erode 4. You may put two of those cards into your hand." },
   [DSL.takeFromOpponentHand.id]: { name: "Lab Pickpocket", text: "Look at the opponent's hand. Put a card from it into your hand." },
+  [DSL.linkedBanish.id]: { name: "Lab Linked Banish", text: "Materialized: Look at the top 4 cards and banish one. Dissolved: Put the banished card into your hand." },
   [DSL.lookAtTopDraw.id]: {
     name: "Lab Pilgrimage",
     text: "Look at the top 4 cards of your deck. Choose one: Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral.",
@@ -647,6 +648,12 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     },
     script: [],
     presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.player.deck, 2)] }],
+  },
+  {
+    name: "linked-banish",
+    description: "Choose one top-deck card to banish for the source's paired departure ability",
+    setup: { active: "player", phase: "day", player: { hand: [DSL.linkedBanish.id], deck: [...vanillas, ...deck(3)] }, enemy: { deck: deck(6) } },
+    script: [], presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.player.deck, 2)] }],
   },
   {
     name: "take-from-among",

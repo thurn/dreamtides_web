@@ -219,6 +219,7 @@ const ROLE_STRATEGIES = {
   restrictChosen: { cards: "hostile", number: "largest", chain: "finite" },
   // Where each looked-at card goes steers the chooser's own next draws.
   foresee: { cards: "hostile", number: "largest", chain: "loopable" },
+  lookAtTopBanish: { cards: "gain", number: "largest", chain: "finite" },
   lookAtTop: { cards: "gain", number: "largest", chain: "finite" },
   discover: { cards: "gain", number: "largest", chain: "finite" },
   // A free cost to look for, never paid: no answer does less.

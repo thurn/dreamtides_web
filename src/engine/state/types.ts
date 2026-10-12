@@ -464,7 +464,23 @@ export interface FloatingEffect {
  * `origin` as it was when it triggered, so it resolves even if its source has
  * since changed zones or ceased to exist.
  */
+/** One paired ability occurrence on a source's particular stay in play. */
+export interface LinkedSourceContext {
+  readonly source: InstanceId;
+  readonly enteredPlayAt: number;
+  /** Index within its own or gained definition, independent of other gained groups. */
+  readonly ability: number;
+  /** The acquisition that contributed this pair; absent for the source's printed abilities. */
+  readonly gainedFrom?: EffectId;
+}
+
+/** Cards a linked producer banished during one source object and ability occurrence. */
+export interface LinkedBanishedCards extends LinkedSourceContext {
+  readonly cards: readonly { readonly instance: InstanceId; readonly enteredBanishedAt: number }[];
+}
+
 export interface QueuedTrigger {
+  readonly linkedSource?: LinkedSourceContext;
   /** Effective spark just before the source last left play, while this trigger waited. */
   readonly lastKnownSourceSpark?: number;
   readonly source: AbilitySource;
@@ -687,6 +703,8 @@ export interface BattleState {
   knownTo: Record<Side, InstanceId[]>;
   /** Viewer-specific observed records; absent in older saved battles. */
   rememberedCards?: Record<Side, RememberedCard[]>;
+  /** Durable linkage between separate abilities of one source object. */
+  linkedBanished?: LinkedBanishedCards[];
   /** The last element is the top. */
   stack: StackItem[];
   priority: Side | null;

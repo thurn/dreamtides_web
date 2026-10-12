@@ -1,3 +1,5 @@
+import type { LinkedSourceContext } from "../state/types";
+import { linkedSourceContext } from "../rules/linked-banish";
 import type { EngineCatalog } from "../catalog";
 import type { ChooseModePrompt, ChooseTargetsPrompt, PromptPurpose, PromptRole, PromptSource } from "../prompts/types";
 import {
@@ -764,6 +766,7 @@ export function effectEntersPlay(effect: EffectNode): boolean {
 }
 
 export interface ResolveOptions {
+  readonly linkedSource?: LinkedSourceContext;
   /** Effective spark retained when this pending ability's source left play. */
   readonly lastKnownSourceSpark?: number;
   readonly source: AbilitySource;
@@ -955,6 +958,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
   const chosen = chosenModes(effect, options.choices.modes);
   const specs = collectTargets(effect, chosen);
   const env: EffectEnv = {
+    linkedSource: options.linkedSource ?? (everyNode(effect).some((node) => node.op === "linkedBanish") ? linkedSourceContext(ctx, options.source, options.origin, options.ability) : null),
     source: options.source,
     lastKnownSourceSpark: options.lastKnownSourceSpark ?? null,
     origin: options.origin,

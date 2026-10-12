@@ -1,3 +1,5 @@
+import { liveLinkedBanished } from "../rules/linked-banish";
+import type { LinkedBanishedCards, LinkedSourceContext } from "../state/types";
 import type { LoopAction, LoopCandidate, LoopId } from "../loops/types";
 import type { Prompt, PromptPurpose } from "../prompts/types";
 import type { AbilitySource, AvatarId, DreamsignId, DreamwellCardId, EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
@@ -187,6 +189,7 @@ export interface FloatingEffectView {
  * (`seesSubject`).
  */
 export interface QueuedTriggerView {
+  readonly linkedSource?: LinkedSourceContext;
   readonly controller: Side;
   readonly source: AbilitySource | null;
   readonly origin: AbilityOrigin | null;
@@ -273,6 +276,7 @@ export interface TurnLogView {
  * Every deck and the opponent's hand appear as counts plus the known cards.
  */
 export interface BattleView {
+  readonly linkedBanished?: readonly LinkedBanishedCards[];
   readonly viewer: Side;
   /** The state version this view was built from. */
   readonly version: number;
@@ -434,6 +438,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         ? { rememberedSource: anonymousSource(record.source) } : {}) };
   });
   const triggerQueue = state.triggerQueue.map((trigger): QueuedTriggerView => ({
+    ...(trigger.linkedSource === undefined || !visibleSource(trigger.source) ? {} : { linkedSource: copy(trigger.linkedSource) }),
     controller: trigger.controller,
     source: visibleSource(trigger.source) ? copy(trigger.source) : null,
     origin: visibleSource(trigger.source) ? copy(trigger.origin) : null,
@@ -509,6 +514,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         ? [copy(change)]
         : [],
     ),
+    linkedBanished: liveLinkedBanished(state).filter((record) => visible(record.source)).map(copy),
     triggerQueue,
     turnLog: {
       played: {

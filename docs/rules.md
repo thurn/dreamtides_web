@@ -1371,6 +1371,29 @@ position tracking (see **Put on top or on the bottom of a deck** below). Your
 opponent sees how many you looked at.
 With an empty deck nothing happens, and there is no Fatigue.
 
+"Banish one," after looking at the top cards, has you choose one of the
+cards you looked at as the ability resolves. That card enters the public
+Banished zone. The other cards stay on top of your deck in the same order,
+and only you learn their identities. With no card to choose, nothing is
+banished.
+
+**Linked banishment** — A pair of abilities on one character may banish a
+card and later refer to "the banished card." The later ability names the
+cards that paired ability banished during that character's same stay in
+play, each only while it remains in the Banished visit created by that
+ability. A card that leaves Banished and is banished again is outside the
+link. If the paired ability triggers several times during that stay, "the
+banished card" names each of the cards it banished.
+
+Each copy of the character, and each separately acquired pair of abilities,
+has its own link. A character that leaves play and enters again starts a
+fresh link. An ability already queued keeps the link of the source object
+that triggered it, even if the source leaves play, returns, or ceases to
+exist before it resolves. A preceding queued ability can add cards to that
+same link after the source leaves. "Put the banished card into your hand"
+puts those linked cards into the resolving ability's controller's hand;
+it is not a draw.
+
 "Draw K of the cards," as in "Look at the top 4 cards of your deck. Choose one:
 Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral," draws the K
 looked-at cards you choose. Each is a draw: it fires "when you draw" abilities

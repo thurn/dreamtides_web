@@ -4,7 +4,7 @@ import { forcedAnswer, hasLegalAnswer, isLegalAnswer } from "../prompts/answers"
 import { promptFingerprint } from "../prompts/fingerprint";
 import { isWellFormedPrompt, MalformedPrompt, promptCards } from "../prompts/structure";
 import type { AnswerFor, Prompt, PromptFingerprint, PromptSpec } from "../prompts/types";
-import type { InstanceId, Side } from "../state/ids";
+import type { EffectId, InstanceId, Side } from "../state/ids";
 import { drawRandom } from "../state/rng";
 import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
@@ -62,6 +62,7 @@ export class Context implements StepContext {
   readonly disclosed: Disclosure[] = [];
   readonly armedDissolves = new Map<InstanceId, ArmedDissolve>();
   readonly departedSourceSpark = new Map<InstanceId, number>();
+  readonly departedSourceObjects = new Map<InstanceId, { readonly enteredPlayAt: number; readonly gained: readonly EffectId[] }>();
   committed = false;
   /** The knowledge settlers of the `settlingKnowledge` calls running now, outermost first. */
   private readonly settlers: (() => void)[] = [];

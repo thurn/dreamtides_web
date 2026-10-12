@@ -1,3 +1,4 @@
+import { linkedSourceContext, sourceAbilityGroups } from "../rules/linked-banish";
 /**
  * The event bus and trigger matcher (D14; rules § Ability Types → Trigger
  * timing and order). Every emitted engine event is matched as it happens, so
@@ -30,7 +31,7 @@ import type { CardFilter, MaterializedSelector, MaterializeNth, NamedTrigger, Tr
 import type { CardPlayedEvent } from "../events/kinds/card-played";
 import type { LeftPlayEvent } from "../events/kinds/left-play";
 import type { MaterializedEvent } from "../events/kinds/materialized";
-import { conditionHolds } from "../effects/interpreter";
+import { conditionHolds, everyNode } from "../effects/interpreter";
 import type { EngineEvent, EngineEventKind } from "../events";
 import { instanceOrigin, oncePerTurnKey, originAbilities } from "../rules/activation";
 import { endFloating, floatingTriggers } from "../rules/floating";
@@ -448,7 +449,13 @@ function enqueueAbility(
 function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
   const self = sourceInstance(matched.source);
   const lastKnownSourceSpark = self === null ? matched.lastKnownSourceSpark : (ctx.departedSourceSpark.get(self) ?? matched.lastKnownSourceSpark);
-  const retained = lastKnownSourceSpark === undefined ? matched : { ...matched, lastKnownSourceSpark };
+  const effect = triggerBody(ctx.catalog, matched.origin, matched.ability, matched.node).effect;
+  const linkedSource = everyNode(effect).some((node) => node.op === "linkedBanish")
+    ? linkedSourceContext(ctx, matched.source, matched.origin, matched.ability) : null;
+  const retained = { ...matched,
+    ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
+    ...(linkedSource === null ? {} : { linkedSource }),
+  };
   const hidden = matched.subject === null ? [] : sidesBlindTo(ctx.state, matched.subject);
   const trigger: QueuedTrigger = hidden.length === 0 ? retained : { ...retained, subjectHiddenFrom: hidden };
   ctx.state.triggerQueue.push(trigger);
@@ -463,6 +470,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
     ...(trigger.gain === undefined ? {} : { gain: trigger.gain }),
     ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
     ...(trigger.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),
+    ...(trigger.linkedSource === undefined ? {} : { linkedSource: trigger.linkedSource }),
   });
 }
 
@@ -613,6 +621,12 @@ function departure(state: BattleState, event: EngineEvent): Departure | null {
 export function matchEvent(ctx: StepContext, event: EngineEvent): void {
   const { state } = ctx;
   if (state.turn.turnNumber === 0 || state.result !== null || !TRIGGERING.includes(event.kind)) return;
+  if (event.kind === "leftPlay") {
+    const instance = state.instances[event.instance];
+    if (instance !== undefined) ctx.departedSourceObjects.set(event.instance, {
+      enteredPlayAt: instance.enteredZoneAt, gained: sourceAbilityGroups(state, event.instance),
+    });
+  }
   if (event.kind === "materialized") recordMaterialized(state, ctx.catalog, event.side, event.instance);
   const departing = departure(state, event);
   const armed = event.kind === "dissolved" ? takeArmed(ctx, event.instance) : NOTHING_ARMED;

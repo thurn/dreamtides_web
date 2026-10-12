@@ -39,6 +39,7 @@ export * from "./grant-card-keyword";
 export * from "./grant-reclaim";
 export * from "./if-then";
 export * from "./look-at-top";
+export * from "./linked-banish";
 export * from "./lose-points";
 export * from "./materialize";
 export * from "./materialize-figment-copy";

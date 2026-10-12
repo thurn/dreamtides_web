@@ -2,7 +2,7 @@ import type { EngineCatalog } from "../catalog";
 import type { EngineEvent } from "../events";
 import type { Answer, AnswerFor, Prompt, PromptFingerprint, PromptSpec } from "../prompts/types";
 import type { AbilityOrigin, BattleState, FloatingEffect } from "../state/types";
-import type { AbilitySource, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
+import type { EffectId, AbilitySource, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import type { Step } from "./kinds";
 
 /**
@@ -101,6 +101,8 @@ export interface StepContext {
   readonly armedDissolves: Map<InstanceId, ArmedDissolve>;
   /** Effective spark captured before each source leaves play in this step; replay rebuilds it. */
   readonly departedSourceSpark: Map<InstanceId, number>;
+  /** Source visits and acquired ability occurrences before this step's departures. */
+  readonly departedSourceObjects: Map<InstanceId, { readonly enteredPlayAt: number; readonly gained: readonly EffectId[] }>;
   /** A uniform draw in `[0, 1)` from the named stream. */
   random(stream: string): number;
   /**

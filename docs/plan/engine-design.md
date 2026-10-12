@@ -1463,7 +1463,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Group | Registered | Phase 5 |
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player), `storeCounters` (N⧗ on the source while it is in play, announced by `countersChanged`; RD-hv-umm2.94-1) | `doubleEnergy`, `spendCounters` |
-| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, count, optional })` (`count` cards, all when fewer match; an optional take of several asks its "you may" first, then takes exactly that many), `lookAtTop(n, { draw, ephemeral })`, `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `banishCards(zone refs | capturedCards())` (each named card to its owner's Banished zone), `banishChosen(filter)` (a private resolution-time choice from the opponent's hand, not a discard), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, grouped by source zone in first-reference order, each in its original zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
+| Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, count, optional })` (`count` cards, all when fewer match; an optional take of several asks its "you may" first, then takes exactly that many), `lookAtTop(n, { draw, ephemeral })`, `lookAtTopBanish(n)` / `putLinkedBanishedInHand(producerOffset = -1)` (paired source-object memory, RD-hv-umm2.486-1), `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `banishCards(zone refs | capturedCards())` (each named card to its owner's Banished zone), `banishChosen(filter)` (a private resolution-time choice from the opponent's hand, not a discard), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, grouped by source zone in first-reference order, each in its original zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
 | Characters | `abandon(chooser, predicate)` (one own character chosen at resolution, not a target), `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materialize(from)` (zone-card references or the character a nested Discover moves into hand), `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `rematerialize`, `move(slotRule)`, `gainAbilities(banishCards(…))` (the source, while in play, gains every ability of each card the banish moved; layer 3 `abilities`) |
 | Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`) | |
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15), `banishSelfOnResolve` ("Banish this card": the resolving event goes from the stack to its owner's Banished zone as the instruction resolves, so `resolveTop` does not put it into the void; RD-hv-umm2.475-1) | copying more than once |
@@ -1535,6 +1535,31 @@ cards: its floating record and `effectStarted` event are hidden whole, and
 its queued trigger omits them. The `effectStarted` event logs the cohort's
 instance IDs, less any a side cannot identify, and each `banished` event the
 card it banished.
+
+**Linked banishment** (`linkedBanish`, RD-hv-umm2.486-1) pairs a private
+`lookAtTopBanish(n)` producer with a later `putLinkedBanishedInHand(offset)`
+consumer. The default offset addresses the previous ability in the same
+printed or acquired definition. `BattleState.linkedBanished` stores cells
+for the physical source, its play visit, and its producer's local ability
+index. A gained group's existing abilities-effect ID distinguishes that
+acquisition from every other group; expiring an earlier group does not
+redirect a later one's link. Each cell records the physical Banished visits
+of its members, in producer order, and repeated producers append members.
+The consumer puts members still in those visits into its controller's hand,
+without drawing. Source reentry and copies have independent cells.
+
+`QueuedTrigger.linkedSource` retains the source visit and contributing
+occurrence. The matcher captures departing visits and gained-group IDs before
+their effects expire; resolution reads the durable cell instead of a card
+list copied when the consumer queued. A preceding queued producer can thus
+populate the same old cell after departure, including a ceased created
+source. Optional saved-state fields are validated and cloned as plain data.
+Views show only identifiable-source cells and their eligible public members;
+determinizations retain those exact links. Semantic hashes normalize source
+visit and acquisition equality/current-occurrence relations, preserve member
+order, canonicalize independent cells, and omit inaccessible history.
+Typed trigger events carry the context alongside the existing private look,
+choice, public banishment and card-taken events for production-log replay.
 
 **Zone counts** (`countCards(zone, filter, player)`, `CardCountValue`) are a
 value and a selector bound: the cards in the player's deck, hand, or void, in

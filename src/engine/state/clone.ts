@@ -193,6 +193,7 @@ export function cloneState(state: BattleState): BattleState {
       enemy: state.knownTo.enemy.slice(),
     },
     ...(state.rememberedCards === undefined ? {} : { rememberedCards: copyJson(state.rememberedCards) }),
+    ...(state.linkedBanished === undefined ? {} : { linkedBanished: copyJson(state.linkedBanished) }),
     stack: copyJson(state.stack),
     priority: state.priority,
     payable: copyJson(state.payable),

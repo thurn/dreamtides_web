@@ -1,3 +1,5 @@
+import { onMaterialized, onDissolved, triggered } from "../../engine/dsl/triggers";
+import { lookAtTopBanish, putLinkedBanishedInHand } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 305,
   art: { x: 0.04, y: -0.691, scale: 1.77 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), lookAtTopBanish(4)), triggered(onDissolved(), putLinkedBanishedInHand())],
+  verifiedText: "17b3pbev26y",
 });

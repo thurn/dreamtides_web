@@ -1,3 +1,4 @@
+import { linkedPosition } from "../rules/linked-banish";
 /**
  * Position hashes for loop detection (rules § Infinite Loops). A loop
  * signature abstracts away the monotone resources an optional loop may gain
@@ -56,6 +57,7 @@ const STATE_FIELDS = {
   /** Which hidden cards each side has seen informs no rule. */
   knownTo: "bookkeeping",
   rememberedCards: "bookkeeping",
+  linkedBanished: "position",
   stack: "position",
   priority: "position",
   payable: "position",
@@ -154,6 +156,7 @@ export function loopSignature(state: BattleState): LoopSignature {
     })),
     floating: rankedFloating(state.floating, rank),
     oncePerTurn: liveAllowances(state),
+    ...linkedPosition(state),
   } satisfies Partial<Record<PositionField<typeof STATE_FIELDS>, unknown>>;
   return canonicalHash<LoopSignature>({ ...pick(state, STATE_POSITION), ...projected });
 }
@@ -208,5 +211,6 @@ export function cycleHash(state: BattleState): StateHash {
     instances: rankedInstances(instances, rank, (instance) => instance),
     floating: rankedFloating(state.floating, rank),
     oncePerTurn: liveAllowances(state),
+    ...linkedPosition(state),
   });
 }

@@ -1,0 +1,768 @@
+{
+  "bead": "hv-umm2.486",
+  "base": "dff6ea210a0ac357a918be792e4e6c142373c5e2",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.486",
+  "dispatchWindow": {
+    "start": "2026-10-12T07:19:15.873451+00:00",
+    "basis": "Parent-retained install486v2.log finish mtime, lower-bound proxy for v2 dispatch. Current-source read-only revalidation followed it. Original v1 claim/research began 05:51:08Z and is a separate unquantified interval; clean unused v1 worktree retired by parent.",
+    "finalEvidenceAt": "2026-10-12T08:32:29.883276+00:00",
+    "elapsedMin": 73.23,
+    "tail": "Evidence boundary immediately precedes schema checks and one local commit. Actual commit timestamp supplies the short remaining tail."
+  },
+  "entities": [
+    "22239029-f53c-4ba9-b9b6-29f6592bb722"
+  ],
+  "D20": {
+    "module": "src/content/specs/prim-look-banish-linked.scenarios.ts",
+    "cases": 2,
+    "reason": "Coupled entry choice and later Dissolved consumer under both controllers uses real printing and synthetic dissolve fixture, ample setup energy independent of catalog cost."
+  },
+  "D21": {
+    "firstByte": 16,
+    "sampled": true,
+    "judged": [
+      {
+        "uuid": "22239029-f53c-4ba9-b9b6-29f6592bb722",
+        "variant": "base",
+        "verdict": "pass",
+        "notes": "Actual Materialized private choice / public banishment / Dissolved puts same physical card in last-controller hand without drawing. Desktop public face browser; mobile public battle log. Enemy leftovers remain unknown. DOM settled, geometry checked, caps empty. Parent independently inspected captures and raw results.",
+        "screens": [
+          "invocations/run-T8SomT/pilgrim-player-choice-desktop.png",
+          "invocations/run-T8SomT/pilgrim-player-selected-desktop.png",
+          "invocations/run-T8SomT/pilgrim-player-public-banished-desktop.png",
+          "invocations/run-T8SomT/pilgrim-player-banished-desktop.png",
+          "invocations/run-T8SomT/pilgrim-player-returned-desktop.png"
+        ],
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "rawReport": "invocations/run-T8SomT/hv-umm2.486-judged.result.json",
+        "entityKind": "card",
+        "mode": "judged",
+        "bead": "hv-umm2.486",
+        "commit": "dff6ea210a0ac357a918be792e4e6c142373c5e2",
+        "controller": "player",
+        "viewport": "desktop",
+        "gameId": "hst54q",
+        "logFile": "invocations/run-T8SomT/hv-umm2.486-judged-desktop.jsonl",
+        "state": {
+          "source": "i1",
+          "chosen": "i5",
+          "printing": "5e5e5e5e-0000-4000-8000-000000000002",
+          "banished": {
+            "sourceZone": "play",
+            "selectedZone": "banished"
+          },
+          "returned": {
+            "sourceZone": "void",
+            "selectedZone": "hand",
+            "controller": "player"
+          },
+          "settledDom": {
+            "returnedZone": null,
+            "face": "up"
+          },
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        }
+      },
+      {
+        "uuid": "22239029-f53c-4ba9-b9b6-29f6592bb722",
+        "variant": "base",
+        "verdict": "pass",
+        "notes": "Actual Materialized private choice / public banishment / Dissolved puts same physical card in last-controller hand without drawing. Desktop public face browser; mobile public battle log. Enemy leftovers remain unknown. DOM settled, geometry checked, caps empty. Parent independently inspected captures and raw results.",
+        "screens": [
+          "invocations/run-Su5PFL/pilgrim-player-choice-mobile.png",
+          "invocations/run-Su5PFL/pilgrim-player-selected-mobile.png",
+          "invocations/run-Su5PFL/pilgrim-player-public-log-mobile.png",
+          "invocations/run-Su5PFL/pilgrim-player-banished-mobile.png",
+          "invocations/run-Su5PFL/pilgrim-player-returned-mobile.png"
+        ],
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "rawReport": "invocations/run-Su5PFL/hv-umm2.486-judged.result.json",
+        "entityKind": "card",
+        "mode": "judged",
+        "bead": "hv-umm2.486",
+        "commit": "dff6ea210a0ac357a918be792e4e6c142373c5e2",
+        "controller": "player",
+        "viewport": "mobile",
+        "gameId": "ssyg4j",
+        "logFile": "invocations/run-Su5PFL/hv-umm2.486-judged-mobile.jsonl",
+        "state": {
+          "source": "i1",
+          "chosen": "i5",
+          "printing": "5e5e5e5e-0000-4000-8000-000000000002",
+          "banished": {
+            "sourceZone": "play",
+            "selectedZone": "banished"
+          },
+          "returned": {
+            "sourceZone": "void",
+            "selectedZone": "hand",
+            "controller": "player"
+          },
+          "settledDom": {
+            "returnedZone": null,
+            "face": "up"
+          },
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        }
+      },
+      {
+        "uuid": "22239029-f53c-4ba9-b9b6-29f6592bb722",
+        "variant": "base",
+        "verdict": "pass",
+        "notes": "Actual Materialized private choice / public banishment / Dissolved puts same physical card in last-controller hand without drawing. Desktop public face browser; mobile public battle log. Enemy leftovers remain unknown. DOM settled, geometry checked, caps empty. Parent independently inspected captures and raw results.",
+        "screens": [
+          "invocations/run-CN3hlM/pilgrim-enemy-public-banished-desktop.png",
+          "invocations/run-CN3hlM/pilgrim-enemy-banished-desktop.png",
+          "invocations/run-CN3hlM/pilgrim-enemy-returned-desktop.png"
+        ],
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "rawReport": "invocations/run-CN3hlM/hv-umm2.486-judged.result.json",
+        "entityKind": "card",
+        "mode": "judged",
+        "bead": "hv-umm2.486",
+        "commit": "dff6ea210a0ac357a918be792e4e6c142373c5e2",
+        "controller": "enemy",
+        "viewport": "desktop",
+        "gameId": "edj3ct",
+        "logFile": "invocations/run-CN3hlM/hv-umm2.486-judged-desktop.jsonl",
+        "state": {
+          "source": "i10",
+          "chosen": "i11",
+          "printing": "5e5e5e5e-0000-4000-8000-000000000002",
+          "banished": {
+            "sourceZone": "play",
+            "selectedZone": "banished"
+          },
+          "returned": {
+            "sourceZone": "void",
+            "selectedZone": "hand",
+            "controller": "enemy"
+          },
+          "settledDom": {
+            "returnedZone": "far-hand",
+            "face": "up"
+          },
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        }
+      },
+      {
+        "uuid": "22239029-f53c-4ba9-b9b6-29f6592bb722",
+        "variant": "base",
+        "verdict": "pass",
+        "notes": "Actual Materialized private choice / public banishment / Dissolved puts same physical card in last-controller hand without drawing. Desktop public face browser; mobile public battle log. Enemy leftovers remain unknown. DOM settled, geometry checked, caps empty. Parent independently inspected captures and raw results.",
+        "screens": [
+          "invocations/run-CN3hlM/pilgrim-enemy-public-log-mobile.png",
+          "invocations/run-CN3hlM/pilgrim-enemy-banished-mobile.png",
+          "invocations/run-CN3hlM/pilgrim-enemy-returned-mobile.png"
+        ],
+        "attempt": 1,
+        "effective": true,
+        "failureKinds": [],
+        "rawReport": "invocations/run-CN3hlM/hv-umm2.486-judged.result.json",
+        "entityKind": "card",
+        "mode": "judged",
+        "bead": "hv-umm2.486",
+        "commit": "dff6ea210a0ac357a918be792e4e6c142373c5e2",
+        "controller": "enemy",
+        "viewport": "mobile",
+        "gameId": "zfvcb6",
+        "logFile": "invocations/run-CN3hlM/hv-umm2.486-judged-mobile.jsonl",
+        "state": {
+          "source": "i10",
+          "chosen": "i11",
+          "printing": "5e5e5e5e-0000-4000-8000-000000000002",
+          "banished": {
+            "sourceZone": "play",
+            "selectedZone": "banished"
+          },
+          "returned": {
+            "sourceZone": "void",
+            "selectedZone": "hand",
+            "controller": "enemy"
+          },
+          "settledDom": {
+            "returnedZone": "far-hand",
+            "face": "up"
+          },
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        }
+      }
+    ]
+  },
+  "sourceFreeze": {
+    "src/content/cards/mirrorsea-pilgrim-22239029.ts": "d8a1f19153789eadd441ffa190baaf77e167625bde47a750f15b13ac07192049",
+    "src/content/specs/prim-look-banish-linked.scenarios.ts": "a1fd8a54393e235e3966b9f9188f1a03b39fd335c4cb0d3521e97787df3db450",
+    "src/engine/effects/interpreter.ts": "d9844bcc5f5890ecc7aec01c73cdccea78185c5c0984a728234bf4e267fb9e9e",
+    "src/engine/effects/primitives/contracts/linked-banish-state.contracts.ts": "756d4679489a3b5b58458dce341845216e212b12a23ec40748efa0868c6f90c5",
+    "src/engine/effects/primitives/contracts/linked-banish-support.ts": "905689c62633fc142d6fe515038b9a106d78d357c1a3ea0882ad48ffb1f07c95",
+    "src/engine/effects/primitives/contracts/linked-banish.contracts.ts": "0976f779f4650e8f7aafd6d61825fdfcc6940593c87281632de93d09f13f0472",
+    "src/engine/effects/primitives/index.ts": "dcf47346bef2fcddbe9357a9617287359ba2bda261bcb840d730b25d97282f99",
+    "src/engine/effects/primitives/linked-banish.ts": "5572a49d316c56402fc7fa3a38b6bb4da2c51b7c704423466ae439b489ced563",
+    "src/engine/effects/registry.ts": "015acd5b8f76496e7548e1f153627435bf9e1c11a5a52c94c4921673413f0bd9",
+    "src/engine/effects/types.ts": "7b7a0c6e2578eb96f72287079eeee41ccc00eb2186f7fec1d356c178373aabf3",
+    "src/engine/events/kinds/trigger-queued.ts": "6e90325046279c5d3cbe68d1439c9dded063a406c09e3e65989be6f0859c35bb",
+    "src/engine/events/kinds/trigger-resolved.ts": "8ce0aecc60dda2b9321aebb741921b97d5a5c67f7f04d4ca9c60d775f0f61e61",
+    "src/engine/loops/signature.ts": "70e9b5a2b19d099fdf5f841860f894c2e4e381ccf1b033aabdda16fa6fdf27c1",
+    "src/engine/policy/prompts.ts": "c9740574b61bef21e75f8ccf9284a3a1db6a8037155f3aadda22222785e98c2f",
+    "src/engine/prompts/types.ts": "e258af7dac8b6bcb3e14b59bdd08abf542bacc12578288b1893dd1060bb1ab85",
+    "src/engine/rules/linked-banish.ts": "c4062658012500c4899a4bd414d802a941fc36110d7c417e3be19ce6b4c25ba0",
+    "src/engine/state/clone.ts": "d9e22655487675bf197709f8c28b797a7dc4fee4dcd0de444740fe79f78d6613",
+    "src/engine/state/types.ts": "9b7fad8bf14c28c983ad74ba94eab5b577e997b9e10fb89dab2709b7833a8085",
+    "src/engine/steps/context.ts": "1b967e77cd2f2b121122fa5e8e42aa2e459b1f40eab4128d9df036ee079d6e76",
+    "src/engine/steps/types.ts": "d74be634a5cac8ce123c0a082f6fc8d5b2669214b863679cfd3b6d45ea16e9d4",
+    "src/engine/testing/determinization-fidelity.ts": "0311782f6c60a24b88523da986aa304fbd7bf906d9f2e9e2f2abc21cdd77a492",
+    "src/engine/testing/dsl-cards.ts": "eac998b56c17f2f15944f7dbad13d6b0483bc38b78aba251487ebffa381e0b54",
+    "src/engine/testing/prompt-lab.ts": "250d9e3dcc0639ff8a916a8120cf0ceca11b40423864b71d65c24698ee49d7c4",
+    "src/engine/triggers/matcher.ts": "b5ade671dd4e3c1f2382754d7bd1de515ad240e7a6a057ddd7ad9117d679e54f",
+    "src/engine/triggers/resolve.ts": "fcd0b636f8688e0600194457be81154489a649a5980b75439dc912193c487760",
+    "src/engine/view/determinize.ts": "900cd17ac58933383f8e02686bc88315493385db209de8c9c9a86b58e389b370",
+    "src/engine/view/view.ts": "9d6bd1dadee49051260578ab682f4db8e12c2a9e723a8018208ef7ba811ef6d6",
+    "src/rules/battle/fold.ts": "e624bf07370dff0644c3ab10f5271e4966c69345c5ca9ce370c724e3eced1ad4",
+    "src/runtime/battle-prompt-messages.ts": "a664561eed022e1ac15b4eeee1f0988f0ac7cb156e2b1f67615ea07bac42363e",
+    "src/screens/cumulus_adapters/engine-battle-view-model.test.ts": "7fa107568896eeda8dedf5e4a3464820c460dbe0f6d3f9a483becf5a3bcd8112"
+  },
+  "scope": {
+    "nonTestNetAddedLines": 261,
+    "nonTestLimit": 1500,
+    "newContractsAndScenarioLines": 456,
+    "testEntrypointDelta": {
+      "files": 0,
+      "lines": 392,
+      "jsdomFiles": 0,
+      "cases": 27
+    },
+    "plainContractModules": 3,
+    "plainScenarioModules": 1
+  },
+  "exportedFallout": {
+    "matrix": "hv-umm2.486-importers-v2.json",
+    "capturedBeforeEdits": true,
+    "newPrimitiveExports": [
+      "LinkedBanishNode",
+      "linkedBanishPrimitive",
+      "lookAtTopBanish",
+      "putLinkedBanishedInHand"
+    ],
+    "newStateTypes": [
+      "LinkedSourceContext",
+      "LinkedBanishedCards"
+    ],
+    "stateField": "BattleState.linkedBanished optional table",
+    "queueField": "QueuedTrigger.linkedSource optional context",
+    "sharedHelpers": [
+      "sourceAbilityGroups",
+      "linkedSourceContext",
+      "sameLinkedSource",
+      "liveLinkedBanished",
+      "linkedPosition"
+    ],
+    "consumerGroups": [
+      "primitive registry/barrel",
+      "matcher departure/enqueue and trigger resolution",
+      "interpreter EffectEnv/ResolveOptions",
+      "clone and saved fold validators",
+      "viewer and determinization/fidelity",
+      "semantic signatures",
+      "typed queued/resolved event redaction",
+      "prompt role/policy/copy/lab/expected surface",
+      "own content and deterministic contract modules"
+    ],
+    "zonesFloatingActivation": "Read-only existing producers/consumers. No body edits."
+  },
+  "validation": {
+    "focusedOwn": {
+      "observer": 62105,
+      "exit": 0,
+      "cases": 27,
+      "wallS": 2.1,
+      "scope": "25 linked contracts + 2 D20 scenarios",
+      "log": "hv-umm2.486-focused5.log"
+    },
+    "focusedAffected": {
+      "observer": 65434,
+      "exit": 0,
+      "cases": 1526,
+      "wallS": 7,
+      "scope": "existing 5 entrypoints: primitive contracts, content scenarios, card-lab tooling, engine view model and presentation",
+      "log": "hv-umm2.486-focused-all.log"
+    },
+    "reviewInitial": {
+      "observer": 52842,
+      "exit": 1,
+      "cases": 3988,
+      "passed": 3986,
+      "stages": {
+        "prepare": {
+          "wallS": 0.6,
+          "exit": 0
+        },
+        "import-cycles": {
+          "wallS": 2.1,
+          "exit": 0
+        },
+        "lint": {
+          "wallS": 5.8,
+          "exit": 0
+        },
+        "typecheck-node": {
+          "wallS": 6.5,
+          "exit": 0
+        },
+        "typecheck": {
+          "wallS": 16.6,
+          "exit": 0
+        },
+        "test-related": {
+          "wallS": 71.9,
+          "exit": 1
+        },
+        "restore-local-assets": {
+          "wallS": 0.5,
+          "exit": 0
+        }
+      },
+      "log": "hv-umm2.486-review.log",
+      "reason": "Own empty linked array changed 2 immutable adversarial replay hashes. Explicit undefined projection preserves legacy/no-link hashes; no replay fixtures regenerated."
+    },
+    "replayRepair": {
+      "observer": 93777,
+      "exit": 0,
+      "cases": 34,
+      "wallS": 4.3,
+      "scope": "9 stamped adversarial fixtures +25 linked contracts",
+      "log": "hv-umm2.486-replay-repair.log"
+    },
+    "review": {
+      "observer": 62191,
+      "exit": 0,
+      "files": 269,
+      "cases": 3988,
+      "stages": {
+        "prepare": {
+          "wallS": 0.6,
+          "exit": 0
+        },
+        "import-cycles": {
+          "wallS": 1.8,
+          "exit": 0
+        },
+        "lint": {
+          "wallS": 4.2,
+          "exit": 0
+        },
+        "typecheck-node": {
+          "wallS": 4.8,
+          "exit": 0
+        },
+        "typecheck": {
+          "wallS": 12.1,
+          "exit": 0
+        },
+        "test-related": {
+          "wallS": 59.7,
+          "exit": 0
+        },
+        "restore-local-assets": {
+          "wallS": 1.0,
+          "exit": 0
+        }
+      },
+      "log": "hv-umm2.486-review-repaired.log",
+      "hostLoadStart": 15.5009765625
+    },
+    "knip": {
+      "observer": 15538,
+      "exit": 0,
+      "wallS": 2,
+      "log": "hv-umm2.486-knip.log"
+    },
+    "full": {
+      "observer": 30535,
+      "exit": 0,
+      "files": 345,
+      "cases": 4853,
+      "stages": {
+        "prepare": {
+          "wallS": 0.5,
+          "exit": 0
+        },
+        "friction-records": {
+          "wallS": 0.1,
+          "exit": 0
+        },
+        "typecheck-node": {
+          "wallS": 1.1,
+          "exit": 0
+        },
+        "knip": {
+          "wallS": 1.2,
+          "exit": 0
+        },
+        "import-cycles": {
+          "wallS": 1.4,
+          "exit": 0
+        },
+        "typecheck": {
+          "wallS": 1.6,
+          "exit": 0
+        },
+        "lint": {
+          "wallS": 20.4,
+          "exit": 0
+        },
+        "test": {
+          "wallS": 67.1,
+          "exit": 0
+        },
+        "bundle": {
+          "wallS": 3.2,
+          "exit": 0
+        },
+        "restore-local-assets": {
+          "wallS": 0.6,
+          "exit": 0
+        }
+      },
+      "log": "hv-umm2.486-full.log",
+      "workers": 2,
+      "heavyLock": "artifacts/heavy.lock"
+    },
+    "weighted300": {
+      "observer": 17275,
+      "exit": 0,
+      "games": 300,
+      "steps": 152657,
+      "engineWallS": 152.8,
+      "engineCpuS": 165.7,
+      "commandWallS": 154.56,
+      "prompts": 3907,
+      "interactiveReruns": 399,
+      "bounded": {
+        "legality": 0,
+        "prompts": 1
+      },
+      "failures": 0,
+      "included": 613,
+      "exercised": 285,
+      "uuid": "22239029-f53c-4ba9-b9b6-29f6592bb722",
+      "log": "hv-umm2.486-fuzz.log",
+      "workers": 2,
+      "heavyLock": "artifacts/heavy.lock"
+    },
+    "preflight": {
+      "observer": 18973,
+      "exit": 0,
+      "pass": 10,
+      "ineligibleSkip": 10,
+      "fail": 0,
+      "engineCellsMs": 19.980332999999973,
+      "bothSides": true,
+      "allVariants": true,
+      "hostLoad": 18.2158203125,
+      "log": "hv-umm2.486-preflight.log"
+    },
+    "browserSweep": {
+      "observer": 61450,
+      "exit": 0,
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-9q5LN7",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.486/invocations/sweep-9q5LN7",
+      "counts": {
+        "pass": 10,
+        "skip": 10
+      },
+      "attemptCounts": {
+        "pass": 10,
+        "skip": 10
+      },
+      "hostLoad": 10.8388671875,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1351,
+        "scenario": 70268.613333,
+        "cleanup": 609.9327090000006,
+        "execution": 72266.618792,
+        "total": 72272.618792
+      },
+      "log": "hv-umm2.486-sweep.log"
+    },
+    "frictionSchema": {
+      "exit": 0,
+      "records": 515,
+      "historicalUnknownMeasurements": 41,
+      "command": "node scripts/friction-triggers.mjs --validate-records",
+      "scope": "After own evidence addition; no behavior source change since green review/full/fuzz."
+    }
+  },
+  "judgedAttempts": [
+    {
+      "invocation": "run-5VsVlJ",
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1355,
+        "scenario": 10577,
+        "total": 11969
+      },
+      "hostLoad": 8.6865234375,
+      "serverPid": 88602,
+      "port": 5174,
+      "reason": "Exploratory success; returned screenshot preceded presentation animation settlement. Superseded by DOM-settled run-ky1fzx.",
+      "rawReport": "invocations/run-5VsVlJ/hv-umm2.486-judged.result.json",
+      "logs": [
+        {
+          "viewport": "desktop",
+          "path": "invocations/run-5VsVlJ/hv-umm2.486-judged-desktop.jsonl",
+          "gameId": "qz4woc",
+          "selectedBy": "url",
+          "rows": 47,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "invocation": "run-ky1fzx",
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1350,
+        "scenario": 11912,
+        "total": 13301
+      },
+      "hostLoad": 4.3876953125,
+      "serverPid": 30967,
+      "port": 5174,
+      "reason": "DOM-settled representative accepted by parent before matrix.",
+      "rawReport": "invocations/run-ky1fzx/hv-umm2.486-judged.result.json",
+      "logs": [
+        {
+          "viewport": "desktop",
+          "path": "invocations/run-ky1fzx/hv-umm2.486-judged-desktop.jsonl",
+          "gameId": "vtfbge",
+          "selectedBy": "url",
+          "rows": 47,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "invocation": "run-T8SomT",
+      "ok": false,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1965,
+        "scenario": 35160,
+        "total": 37166
+      },
+      "hostLoad": 5.00244140625,
+      "serverPid": 52381,
+      "port": 5174,
+      "reason": "Desktop all checks pass. Mobile chose/banished successfully but optional desktop-only Banished control wait timed out. QA selector corrected to existing mobile battle log; production behavior unchanged.",
+      "rawReport": "invocations/run-T8SomT/hv-umm2.486-judged.result.json",
+      "logs": [
+        {
+          "viewport": "desktop",
+          "path": "invocations/run-T8SomT/hv-umm2.486-judged-desktop.jsonl",
+          "gameId": "hst54q",
+          "selectedBy": "url",
+          "rows": 47,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "invocations/run-T8SomT/hv-umm2.486-judged-mobile.jsonl",
+          "gameId": "hh9zqp",
+          "selectedBy": "url",
+          "rows": 39,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "invocation": "run-Su5PFL",
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1367,
+        "scenario": 14047,
+        "total": 15455
+      },
+      "hostLoad": 17.7412109375,
+      "serverPid": 38929,
+      "port": 5174,
+      "reason": "Final mobile player all checks pass through existing public log.",
+      "rawReport": "invocations/run-Su5PFL/hv-umm2.486-judged.result.json",
+      "logs": [
+        {
+          "viewport": "mobile",
+          "path": "invocations/run-Su5PFL/hv-umm2.486-judged-mobile.jsonl",
+          "gameId": "ssyg4j",
+          "selectedBy": "url",
+          "rows": 52,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "invocation": "run-ri4jaa",
+      "ok": false,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1059,
+        "scenario": 5528,
+        "total": 6624
+      },
+      "hostLoad": 20.02734375,
+      "serverPid": 45449,
+      "port": 5174,
+      "reason": "Enemy source geometry sampled before presented rank arrival; QA-only waitVisible rank source added. Production engine settled successfully.",
+      "rawReport": "invocations/run-ri4jaa/hv-umm2.486-judged.result.json",
+      "logs": [
+        {
+          "viewport": "desktop",
+          "path": "invocations/run-ri4jaa/hv-umm2.486-judged-desktop.jsonl",
+          "gameId": "jcataz",
+          "selectedBy": "url",
+          "rows": 38,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "invocation": "run-CN3hlM",
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1982,
+        "scenario": 21598,
+        "total": 23622
+      },
+      "hostLoad": 15.58447265625,
+      "serverPid": 64874,
+      "port": 5174,
+      "reason": "Final enemy desktop/mobile all checks pass.",
+      "rawReport": "invocations/run-CN3hlM/hv-umm2.486-judged.result.json",
+      "logs": [
+        {
+          "viewport": "desktop",
+          "path": "invocations/run-CN3hlM/hv-umm2.486-judged-desktop.jsonl",
+          "gameId": "edj3ct",
+          "selectedBy": "url",
+          "rows": 46,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "invocations/run-CN3hlM/hv-umm2.486-judged-mobile.jsonl",
+          "gameId": "zfvcb6",
+          "selectedBy": "url",
+          "rows": 47,
+          "reason": null
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    "Initial edit-script interruption temporarily left helper import unresolved; continuation completed before checks.",
+    "Expanded contract fixture corrected hidden event null expectation, redundant main passes, and Interrupt-event batch collection from actual evidence.",
+    "Initial 72 unnecessary non-null assertions mechanically fixed only in own new modules. run-eslint wrapper treats --fix as a filename; native ESLint CLI used once instead.",
+    "Own first review 2 stamped replay failures repaired by explicit undefined empty/history projection, original fixture hashes unchanged.",
+    "QA-only timing waits and desktop-only selector corrected as separately retained attempts; no product failure claimed."
+  ],
+  "failurePaths": [
+    "Resolution-time deck after Interrupt; prevented card has no linkage; deck sizes0\u20133 no Fatigue.",
+    "Private candidate prompt/public selected member; ambiguous known top bounds removed while known tail retained; enemy leftovers hidden.",
+    "Repeated producer appends ordered cohort; stale/rebanished target original visit excluded.",
+    "Source reentry/copy/created cessation and old FIFO producer+consumer context survive departure; stolen source returns to last controller.",
+    "Two real acquired pairs independent under earlier expiry/index shift and reacquisition; old queued context kept.",
+    "Saved pending choice reload; rejected cross-actor/stale/invalid/cancel; duplicate answer rejected; no partial state; accepted choice then step error rolls back link and zone.",
+    "Saved optional table/context validates malformed/future/duplicate cells/members and cross-source context; clone/owed old-source reload retained.",
+    "Public links survive both determinizations; hidden-source context redacts under established null-source gate while real owed consumer resolves.",
+    "Both hashes normalize visit/gain IDs and independent cell order; different member/source associations differ; inaccessible history and legacy hashes preserved."
+  ],
+  "publicSurface": "Desktop normal Banished browser shows selected physical card alone. Mobile normal battle log displays chosen identity; optional full-card Banished browser is desktop-only at MobileBattleScreen.tsx:4492. No renderer body changes.",
+  "visualJudgment": {
+    "outcome": "pass",
+    "viewports": {
+      "desktop": [
+        1440,
+        900
+      ],
+      "mobile": [
+        390,
+        844
+      ]
+    },
+    "basis": "Helper and parent independently inspected candidate/selected/public/returned frames and raw results. All selected/submit/public measurements fit viewport; normal logs chosen display identity, ranks empty after dissolve, card returned face up, caps empty."
+  },
+  "resources": "All observers terminal. Every QA runner stopped only its own server process group and MCP context and reported port free: groups 88602,30967,52381,38929,45449,64874 and sweep68311. No runtime/provider pending. Shared heavy lock released after full/fuzz; no shared restarts.",
+  "remainingAcceptance": "Parent owns exact committed-source core cold review with other model family and native candidate/promotion.",
+  "failurePathContracts": {
+    "module": "src/engine/effects/primitives/contracts/linked-banish-state.contracts.ts",
+    "error": {
+      "test": "rolls back both banishment and linkage after an accepted choice followed by a step error",
+      "assertions": "After accepted choice: committed deck unchanged, Banished/link empty, no banished publication."
+    },
+    "reload": {
+      "tests": [
+        "saves a pending private choice, rejects cross-actor/stale/invalid answers, and commits its member once after reload",
+        "clones, validates and reloads durable cells and an owed old-object trigger"
+      ],
+      "assertions": "Saved private pending prompt survives fresh adapter; owed old-source cell and queued context survive clone/save/reload."
+    },
+    "partialWrite": {
+      "test": "saves a pending private choice, rejects cross-actor/stale/invalid answers, and commits its member once after reload",
+      "assertions": "Committed state hash and original pending unchanged after rejected inputs; successful commit has one Banished member and duplicate answer bounces."
+    },
+    "staleInvalidInput": {
+      "test": "saves a pending private choice, rejects cross-actor/stale/invalid answers, and commits its member once after reload",
+      "assertions": "stalePrompt, illegalAnswer, notCancellable and noPendingPrompt bounce without mutation."
+    },
+    "concurrentActors": {
+      "test": "saves a pending private choice, rejects cross-actor/stale/invalid answers, and commits its member once after reload",
+      "assertions": "Wrong actor side enemy receives notYourPrompt while player pending remains intact; serialized single owed prompt accepts one valid answer."
+    },
+    "savedValidation": {
+      "test": "clones, validates and reloads durable cells and an owed old-object trigger",
+      "assertions": "Optional legacy table accepted; malformed/future/duplicate cells/members and cross-source queued context rejected."
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "testDelta.lines": {
+        "measuredFor": "Net added deterministic test bodies: new linked-banish.contracts.ts193 + linked-banish-state.contracts.ts169 + D20 scenario30 =392 lines. Existing expected-surface test changes one line in/one out, net0. New support fixture64 lines tracked separately and excluded from this count. No new *.test.ts runner or jsdom file."
+      },
+      "hostLoad": {
+        "measuredFor": "Required changed-source npm run review start at2026-10-12T07:59:59.171Z; log retains15.5009765625."
+      },
+      "implementMin": {
+        "measuredFor": "v2 install-finished lower-bound dispatch proxy to final evidence boundary, includes revalidation/implementation/checks/QA. Original v1 research unquantified and excluded, short final commit tail disclosed."
+      }
+    },
+    "testSupportFixtureLines": 64
+  }
+}

@@ -214,6 +214,14 @@ function anonymousDivergences(engine: Engine, seen: BattleView, sampled: BattleS
   if (canonicalHash(publicEffects) !== canonicalHash(actualEffects)) {
     problems.push(`observed fixed effects ${JSON.stringify(actualEffects)} for ${JSON.stringify(publicEffects)}`);
   }
+  if (canonicalHash(seen.linkedBanished ?? []) !== canonicalHash(measuredView.linkedBanished ?? [])) {
+    problems.push("linked Banished cells disagree with the observed source objects");
+  }
+  const linkedQueue = (view: BattleView) => view.triggerQueue.filter((trigger) => trigger.source !== null && trigger.linkedSource !== undefined)
+    .map(({ source, ability, linkedSource }) => ({ source, ability, linkedSource }));
+  if (canonicalHash(linkedQueue(seen)) !== canonicalHash(linkedQueue(measuredView))) {
+    problems.push("queued linked source objects disagree with their retained contexts");
+  }
   return problems;
 }
 

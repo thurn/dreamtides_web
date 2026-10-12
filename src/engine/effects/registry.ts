@@ -55,6 +55,7 @@ import {
   grantReclaimPrimitive,
   ifThenPrimitive,
   lookAtTopPrimitive,
+  linkedBanishPrimitive,
   losePointsPrimitive,
   materializePrimitive,
   materializeFigmentCopyPrimitive,
@@ -215,6 +216,7 @@ const DEFINITIONS = {
   get ifThen() {
     return ifThenPrimitive;
   },
+  get linkedBanish() { return linkedBanishPrimitive; },
   get lookAtTop() {
     return lookAtTopPrimitive;
   },

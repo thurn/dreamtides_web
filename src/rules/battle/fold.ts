@@ -941,6 +941,7 @@ function isBattleState(value: unknown): boolean {
     isInstances(value.instances) &&
     sideRecord(arrayOf(isInstanceId))(value.knownTo) &&
     (value.rememberedCards === undefined || sideRecord(arrayOf(isRememberedCard))(value.rememberedCards)) &&
+    optional(arrayOf(isLinkedBanishedCards))(value.linkedBanished) &&
     isArrayOf(value.stack, isStackItem) &&
     nullable(isSide)(value.priority) &&
     isArrayOf(value.payable, isPayableEffect) &&
@@ -956,7 +957,8 @@ function isBattleState(value: unknown): boolean {
     isLoopTracker(value.loops) &&
     nullable(isBattleResult)(value.result) &&
     hasConsistentZones(value) &&
-    hasMirroredGainedAbilities(value)
+    hasMirroredGainedAbilities(value) &&
+    hasConsistentLinkedBanish(value)
   );
 }
 
@@ -1263,6 +1265,27 @@ function isFloatingEffect(value: unknown): boolean {
   );
 }
 
+/** History can name a ceased source, but visits are bounded by the battle clock and cells are unambiguous. */
+function hasConsistentLinkedBanish(value: Record<string, unknown>): boolean {
+  const state = value as unknown as BattleState;
+  const records = state.linkedBanished ?? [];
+  if (records.some((record, index) => record.enteredPlayAt > state.clock ||
+    record.cards.some((member, index) => member.enteredBanishedAt > state.clock || record.cards.slice(0, index).some((earlier) => earlier.instance === member.instance && earlier.enteredBanishedAt === member.enteredBanishedAt)) ||
+    records.slice(0, index).some((earlier) => earlier.source === record.source && earlier.enteredPlayAt === record.enteredPlayAt &&
+      earlier.gainedFrom === record.gainedFrom && earlier.ability === record.ability))) return false;
+  return state.triggerQueue.every((trigger) => trigger.linkedSource === undefined || trigger.linkedSource.enteredPlayAt <= state.clock);
+}
+
+function isLinkedSource(value: unknown): boolean {
+  return isPlainRecord(value) && isInstanceId(value.source) && isIndex(value.enteredPlayAt) &&
+    isIndex(value.ability) && optional(isEffectId)(value.gainedFrom);
+}
+
+function isLinkedBanishedCards(value: unknown): boolean {
+  return isLinkedSource(value) && isPlainRecord(value) && isArrayOf(value.cards, (card) =>
+    isPlainRecord(card) && isInstanceId(card.instance) && isIndex(card.enteredBanishedAt));
+}
+
 function isQueuedTrigger(value: unknown): boolean {
   return (
     isPlainRecord(value) &&
@@ -1270,6 +1293,7 @@ function isQueuedTrigger(value: unknown): boolean {
     isSide(value.controller) &&
     isAbilityOrigin(value.origin) &&
     isIndex(value.ability) &&
+    optional((context) => isLinkedSource(context) && (context as Record<string, unknown>).source === value.source)(value.linkedSource) &&
     nullable(isIndex)(value.node) &&
     nullable(isInstanceId)(value.subject) &&
     optional(arrayOf(isSide))(value.subjectHiddenFrom) &&

@@ -319,6 +319,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     trigger.source === null || trigger.origin === null
       ? []
       : [{
+          ...(trigger.linkedSource === undefined ? {} : { linkedSource: copy(trigger.linkedSource) }),
           source: copy(trigger.source),
           controller: trigger.controller,
           origin: copy(trigger.origin),
@@ -353,6 +354,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     stack: view.stack.map((item) => copy(item)),
     priority: view.priority,
     payable,
+    linkedBanished: copy([...(view.linkedBanished ?? [])]),
     triggerQueue,
     floating: [...anonymousEffects, ...view.floating.map((effect): FloatingEffect => {
       const { rememberedSource: provenance, ...record } = copy(effect);

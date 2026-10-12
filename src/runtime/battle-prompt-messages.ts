@@ -121,6 +121,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return "Arrange the top of your deck";
       case "discover":
         return cards("discover");
+      case "lookAtTopBanish":
+        return cards("banish");
       case "lookAtTop":
         return cards("draw");
       case "chooseAmong":
@@ -418,6 +420,8 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
       return "way to arrange the top of your deck";
     case "discover":
       return "card you could discover";
+    case "lookAtTopBanish":
+      return "card you could banish";
     case "lookAtTop":
       return "card you could draw";
     case "chooseAmong":

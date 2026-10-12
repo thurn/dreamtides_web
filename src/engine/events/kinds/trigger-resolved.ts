@@ -1,3 +1,4 @@
+import type { LinkedSourceContext } from "../../state/types";
 import type { AbilitySource, Side } from "../../state/ids";
 import { redactSource, sourcePrivacy } from "../sources";
 import type { EventDefinition } from "../types";
@@ -7,6 +8,7 @@ import type { EventDefinition } from "../types";
  * "if" no longer holds, so it does nothing.
  */
 export interface TriggerResolvedEvent {
+  readonly linkedSource?: LinkedSourceContext;
   readonly kind: "triggerResolved";
   /** The engine names it; it is `null` as a side that cannot identify it sees the event (`eventSeenBy`). */
   readonly source: AbilitySource | null;
@@ -20,5 +22,9 @@ export interface TriggerResolvedEvent {
 export const triggerResolved: EventDefinition<TriggerResolvedEvent> = {
   kind: "triggerResolved",
   privateTo: (event, state) => sourcePrivacy(event.source, state),
-  redact: redactSource,
+  redact(event, viewer, state) {
+    const redacted = redactSource(event, viewer, state);
+    const { linkedSource: _linkedSource, ...anonymous } = redacted;
+    return redacted.source === null ? anonymous : redacted;
+  },
 };
