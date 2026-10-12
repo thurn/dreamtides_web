@@ -704,7 +704,7 @@ When a subagent returns:
    This plan grants promotion authority for in-scope work and in-scope CI
    repairs.
 3. **Start the review** in the background if the bead is core-review
-   ([Reviews](#reviews)), with the other model family's reviewer.
+   ([Reviews](#reviews)), using the current review routing.
 4. **Record** the candidate in the bead notes.
 5. **Wait for the gate** (D43): run
    `tg --no-launch approve <candidate-id> --wait` as a background command and
@@ -887,8 +887,33 @@ Tests follow AGENTS.md and [D19](decisions.md#d19-test-pruning):
 
 ## Reviews
 
-The independent review is a fresh reviewer from the other model family than
-the session that implemented the work
+### Temporary Sol review routing
+
+By user authorization, effective October 12, 2026 until October 13, 2026 at
+18:00 America/Los_Angeles (`2026-10-14T01:00:00Z`), Claude's weekly usage cap
+routes **all code reviews** to a fresh read-only `gpt-5.6-sol` reviewer through
+the Codex CLI. Every session uses the Codex command below, including for
+Codex-authored changes, core-review beads, phase gates, the Track T gate, and
+outstanding Claude review debt. This policy overrides project and skill
+requirements for Claude or the other model family and Claude-unavailable
+waiting, retries, and debt mechanics. Do not attempt or retry Claude reviews
+during this window.
+
+Preserve cold context, the exact base and head OIDs and required review scope,
+read-only access, finding verification and disposition records, validation,
+and delivery requirements. Record the reviewer model and temporary routing
+honestly, including same-family routing for Codex-authored changes. A
+successful required Sol review of the debt's exact range satisfies that review
+obligation; record its findings and dispositions and clear the corresponding
+review-debt label. Claude's cap does not create or retain debt when the
+required Sol review succeeds. At the deadline this override expires
+automatically, and normal Claude/cross-family routing applies to subsequent
+reviews.
+
+### Normal review routing and shared procedure
+
+Under normal routing, the independent review is a fresh reviewer from the
+other model family than the session that implemented the work
 ([D18](decisions.md#d18-review-cadence)): `gpt-5.6-sol` through the Codex CLI
 for a Claude Code session's beads, and `claude-opus-5-5` through the Claude
 Code CLI for a Codex session's beads. It runs:
@@ -908,7 +933,8 @@ under the session's scratch directory. It is created with
 `git worktree add --detach` (read-only use, like `wt-sequence`'s review
 snapshots) and removed when the review returns.
 
-**From a Claude Code session,** review with Codex:
+**During the temporary override, every session reviews with Codex. Under
+normal routing, Claude Code sessions review with Codex:**
 
 ```sh
 /Users/dthurn/.local/bin/codex exec -m gpt-5.6-sol -s read-only -C "$SNAPSHOT" \
@@ -926,8 +952,8 @@ EOF
 )" < /dev/null
 ```
 
-**From a Codex session,** review with Claude. Write the same prompt to
-`$SCRATCH/review-<bead-id>.prompt` and pass it on stdin, because
+**Under normal routing, Codex sessions review with Claude.** Write the same
+prompt to `$SCRATCH/review-<bead-id>.prompt` and pass it on stdin, because
 `--allowedTools` takes several values:
 
 ```sh
@@ -960,7 +986,10 @@ overlap, so list the phase's commits for the reviewer with
 range.
 
 **When the reviewer's family is unavailable** (a usage limit, a signed-out
-CLI, or a service error), follow this procedure:
+CLI, or a service error), follow this procedure under normal routing. During
+the [temporary Sol override](#temporary-sol-review-routing), route Claude
+review debt to Sol and use the discharge procedure above without waiting for
+or retrying Claude:
 
 1. Record `review-debt` in the bead notes, with the base and head OIDs,
    and add the label `review-debt` to the bead. Any session may retry it.
@@ -1618,8 +1647,8 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
 - **Flaky test.** If Tollgate attributes it `flaky-or-non-hermetic`, fix the
   test's hermeticity in a dedicated bead, or delete the test if it fails D19.
   Never retry until green.
-- **Reviewer unavailable** (either family). Handle it as review debt; see
-  [Reviews](#reviews).
+- **Reviewer unavailable** (either family). Follow the current routing and
+  debt procedure in [Reviews](#reviews), including the temporary Sol override.
 - **Playwright MCP unavailable.** Run `playwright-mcp-service start` and retry
   once. If it is still down, continue non-QA work. Record QA debt, and clear it
   before the bead closes, or before the phase gate at the latest.

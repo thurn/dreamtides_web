@@ -5,7 +5,8 @@ These decisions were made with the operator in the planning interview on
 2026-10-04, amended in a replanning session on 2026-10-05 (D16–D19 and
 D26 amended; D43–D45 added), amended on 2026-10-09 for sequential
 execution (D17, D18, D26, D37, D43, and D44), and amended on 2026-10-10 for
-peer executor sessions (D17, D18, D26, D29, D42, D43, D44, and D45). They are
+peer executor sessions (D17, D18, D26, D29, D42, D43, D44, and D45), and
+amended on 2026-10-12 for temporary Sol review routing (D18). They are
 binding for the run. In the
 [rules ambiguity ladder](#d10-rules-ambiguity-ladder) they outrank every other
 precedent.
@@ -728,9 +729,24 @@ before it opened its socket.
 
 ### D18. Review cadence
 
-The independent review is a fresh reviewer from **the other model family**
-than the session that implemented the work, run read-only through that
-family's CLI:
+**Temporary user-authorized routing, October 12–13, 2026.** Effective
+October 12, 2026 until October 13, 2026 at 18:00 America/Los_Angeles
+(`2026-10-14T01:00:00Z`), Claude is at its weekly usage cap. Every session
+uses a fresh read-only `gpt-5.6-sol` reviewer through the Codex CLI for all
+code reviews, including Codex-authored changes, core-review beads, phase
+gates, the Track T gate, and outstanding Claude review debt. This overrides
+project and skill other-family requirements and Claude-unavailable waiting,
+retry, and debt mechanics. Do not attempt or retry Claude reviews during the
+window. Successful required Sol review of the exact range satisfies the
+review obligation and discharges its debt. Preserve cold context, scope,
+finding verification and dispositions, validation, and delivery requirements;
+record temporary and same-family routing honestly. At the deadline the
+override expires automatically and normal Claude/cross-family routing
+applies. See [workflow](workflow.md#temporary-sol-review-routing).
+
+Under normal routing, the independent review is a fresh reviewer from
+**the other model family** than the session that implemented the work, run
+read-only through that family's CLI:
 
 - beads a Claude Code session implemented are reviewed by `gpt-5.6-sol`
   through the Codex CLI, verified on 2026-10-03 (read-only sandbox enforced,
@@ -740,8 +756,7 @@ family's CLI:
 
 It runs:
 
-- at every phase gate and the Track T gate, from the family other than the
-  gate session's;
+- at every phase gate and the Track T gate, using the current review routing;
 - for every bead marked **core-review** on the phase and track pages.
 
 This explicitly authorizes more than the skill's default of one review per
@@ -753,9 +768,9 @@ findings become a follow-up bead, which preempts other ready work and is
 serialized after any running bead in its area. A gate review blocks its gate
 bead until its findings are resolved.
 
-When the reviewer's family is unavailable (a usage limit, a signed-out CLI,
-or a service error), record review debt and continue; see
-[workflow](workflow.md#reviews).
+Under normal routing, when the reviewer's family is unavailable (a usage
+limit, a signed-out CLI, or a service error), record review debt and continue;
+see [workflow](workflow.md#reviews).
 
 ### D19. Test pruning
 

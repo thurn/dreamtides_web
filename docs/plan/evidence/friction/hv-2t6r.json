@@ -1,0 +1,20 @@
+{
+  "bead": "hv-2t6r",
+  "phase": 5,
+  "implementMin": 3.47,
+  "implementWindow": {
+    "start": "2026-10-12T13:05:11Z",
+    "end": "2026-10-12T13:08:39Z"
+  },
+  "localValidationS": {
+    "review": 0.1,
+    "knip": 2.6
+  },
+  "hostLoad": 18.2763671875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
