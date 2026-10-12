@@ -1,3 +1,4 @@
+import type { PaymentCost } from "../dsl/types";
 import type { CardSubtype } from "../../types/card-identity";
 import type { AvatarId, CardId, DreamsignId, InstanceId, Side, Slot } from "../state/ids";
 
@@ -172,6 +173,8 @@ export interface ChooseModePrompt extends PromptBase {
   readonly options: readonly ModeOption[];
   /** For a character type choice (role `chooseSubtype`), the type each mode names, by mode. */
   readonly subtypes?: readonly CardSubtype[];
+  /** The exact payment alternatives of a `chooseCost` prompt, indexed by original mode. */
+  readonly costOptions?: readonly (readonly PaymentCost[])[];
 }
 
 /** Choose an integer in `[min, max]`, such as the value of X. */

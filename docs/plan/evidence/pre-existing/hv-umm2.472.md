@@ -1,0 +1,3 @@
+# hv-umm2.472 pre-existing observations
+
+In the development-only `debug=1` card lab at 390×844, the `engine-debug-open` control (`src/battle/components/EngineDebugPanel.tsx`) overlaps the right edge of `battle-prompt-cancel` (`src/cumulus/screens/battle-overlays/BattlePromptHost.tsx`). The bounded header observation measured Cancel at (269.125,20.750), 88.375×42.000px, and the debug opener at (338.000,12.000), 40.000×40.000px: intersection 19.500×31.250px. Cancel’s center remains hittable. Capture: `pyro-header-choices-mobile.png`; observation invocation `run-eVsBAK`. This is a partial-edge visual observation in debug mode; the cost-choice controls are fully hittable and contained. Parent owns existing-work audit and any independent filing.

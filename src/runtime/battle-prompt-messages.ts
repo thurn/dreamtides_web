@@ -1,5 +1,6 @@
+import { costPhrase, costOptionLabel, permissionFilterFields, permittedCardKind } from "./battle-cost-messages";
 import type { BuiltInBattlePromptRef } from "../data/dreamwell-prompts";
-import type { CardFilter, Cost, Keyword } from "../engine/dsl/types";
+import type { CardFilter, Cost, Keyword, PaymentCost } from "../engine/dsl/types";
 import type { EngineEvent } from "../engine/events";
 import type { ArrangeDestination, PromptKind, PromptRole } from "../engine/prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../engine/state/ids";
@@ -166,6 +167,8 @@ export type EnginePromptOptionCopy =
   | { readonly kind: "skip" }
   /** A mode, with its text when the card's own text spells out each mode. */
   | { readonly kind: "mode"; readonly index: number; readonly text: string | null }
+  /** An exact alternative payment, with numbered fallback for a prompt without cost data. */
+  | { readonly kind: "cost"; readonly index: number; readonly costs: readonly PaymentCost[] | null }
   /** A play route of the playRoute prompt, in the engine's route order: from hand, then as an Offering. */
   | { readonly kind: "route"; readonly index: number }
   /** A play route of the voidRoute prompt, in the engine's route order: by a play permission, then by Reclaim. */
@@ -194,6 +197,8 @@ export function enginePromptOptionLabel(option: EnginePromptOptionCopy): string 
       return "Skip";
     case "mode":
       return option.text ?? `Option ${String(option.index + 1)}`;
+    case "cost":
+      return option.costs === null ? `Option ${String(option.index + 1)}` : costOptionLabel(option.costs);
     case "route":
       return option.index === 0 ? "Pay Its Cost" : "Play as an Offering";
     case "voidRoute":
@@ -469,76 +474,9 @@ function expiryPhrase(expiry: Expiry, human: Side): string {
   }
 }
 
-/** One cost of a stated Reclaim cost ("Reclaim 0●"), as the player reads it. */
-function costPhrase(cost: Cost): string {
-  switch (cost.cost) {
-    case "energy":
-      return `${String(cost.amount)} energy`;
-    case "energyX":
-      return "X energy";
-    case "exhaustSelf":
-      return "exhaust it";
-    case "abandon":
-      return `abandon ${plural(cost.count, "character", "characters")}`;
-    case "return":
-      return `return ${plural(cost.count, "character", "characters")} to hand`;
-    case "discard":
-      if (cost.count === "hand") return "discard your hand";
-      return cost.count === "x" ? "discard X cards" : `discard ${plural(cost.count, "card", "cards")}`;
-    case "counters":
-      return `remove ${plural(cost.amount, "memory counter", "memory counters")}`;
-    case "points":
-      return `pay ${plural(cost.amount, "point", "points")}`;
-    case "banishFromAnyVoid":
-      return `banish ${plural(cost.count, "card", "cards")} from ${cost.player === "any" ? "either void" : cost.player === "opponent" ? "the opponent's void" : "your void"}`;
-    case "banishFromVoid":
-      return `banish ${cost.count === "x" ? "X cards" : plural(cost.count, "card", "cards")} from your void`;
-    case "banishFromHand":
-      return `banish ${plural(cost.count, "other card", "other cards")} from your hand`;
-    case "reveal":
-      return `reveal ${plural(cost.count, "card", "cards")}`;
-    case "choice":
-      return cost.options.map((option) => option.map(costPhrase).join(" and ")).join(" or ");
-    case "optional":
-      return `optionally ${cost.costs.map(costPhrase).join(" and ")}`;
-  }
-}
-
 /** A stated Reclaim cost after the keyword's name; empty when the gain states none. */
 function reclaimCostPhrase(costs: readonly Cost[] | undefined): string {
   return costs === undefined ? "" : ` (cost: ${costs.length === 0 ? "nothing" : costs.map(costPhrase).join(", ")})`;
-}
-
-/** Each authorable restriction supplies both permission qualification and its ordered copy. */
-function permissionFilterFields(filter: CardFilter, many: boolean) {
-  const { costAtLeast: lower, costAtMost: upper, sparkAtLeast: sparkLower, sparkAtMost: sparkUpper } = filter;
-  return {
-    costAtLeast: {
-      qualified: lower !== undefined,
-      text: lower === undefined ? "" : upper === undefined ? `≥${String(lower)} energy cost`
-        : lower === upper ? `${String(lower)} energy cost` : `${String(lower)}–${String(upper)} energy cost`,
-    },
-    costAtMost: {
-      qualified: upper !== undefined,
-      text: lower === undefined && upper !== undefined ? `≤${String(upper)} energy cost` : "",
-    },
-    sparkAtLeast: {
-      qualified: sparkLower !== undefined,
-      text: sparkLower === undefined ? "" : sparkUpper === undefined ? `≥${String(sparkLower)}✦`
-        : sparkLower === sparkUpper ? `${String(sparkLower)}✦` : `${String(sparkLower)}–${String(sparkUpper)}✦`,
-    },
-    sparkAtMost: {
-      qualified: sparkUpper !== undefined,
-      text: sparkLower === undefined && sparkUpper !== undefined ? `≤${String(sparkUpper)}✦` : "",
-    },
-    subtype: { qualified: Boolean(filter.subtype), text: filter.subtype },
-    cardType: { qualified: filter.cardType !== undefined, text: `${filter.cardType ?? "card"}${many ? "s" : ""}` },
-  } satisfies Record<keyof CardFilter, { readonly qualified: boolean; readonly text: string | undefined }>;
-}
-
-/** The permission's effective type/subtype, copiable cost, and spark restrictions. */
-function permittedCardKind(filter: CardFilter, many: boolean): string {
-  return Object.values(permissionFilterFields(filter, many)).map((field) => field.text).filter(Boolean).join(" ");
 }
 
 /** The qualified cards a permission covers, one when it is consumed by the next play. */

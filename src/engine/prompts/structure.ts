@@ -43,11 +43,12 @@ function wellFormedFields(prompt: Prompt): boolean {
       return (prompt.fieldSide === "player" || prompt.fieldSide === "enemy") && distinct(prompt.slots.map((slot) => `${slot.rank}:${String(slot.index)}`)) &&
         prompt.slots.every((slot) => isBound(slot.index) && (slot.rank === "front" ? slot.index < FRONT_RANK_SIZE : slot.rank === "back" && slot.index < BACK_RANK_SIZE));
     case "chooseMode": {
-      const { subtypes } = prompt;
+      const { subtypes, costOptions } = prompt;
       return (
         distinct(prompt.options.map((option) => option.mode)) &&
         prompt.options.every((option) => Number.isInteger(option.mode)) &&
-        (subtypes === undefined || (distinct(subtypes) && prompt.options.every((option) => option.mode >= 0 && option.mode < subtypes.length)))
+        (subtypes === undefined || (distinct(subtypes) && prompt.options.every((option) => option.mode >= 0 && option.mode < subtypes.length))) &&
+        (costOptions === undefined || (prompt.purpose.role === "chooseCost" && prompt.options.every((option) => option.mode >= 0 && option.mode < costOptions.length)))
       );
     }
     case "chooseNumber":

@@ -1,0 +1,772 @@
+{
+  "bead": "hv-umm2.472",
+  "base": "dff6ea210a0ac357a918be792e4e6c142373c5e2",
+  "implementWindow": {
+    "start": "2026-10-12T07:27:28.841747+00:00",
+    "startBoundary": "post-dispatch proxy only; actual helper/model start not instrumented",
+    "end": "2026-10-12T08:02:56Z",
+    "endBoundary": "Parent-supplied Git author/committer metadata clock; actual commit process start/end/PID/exit recorded separately outside the commit in helper-receipts/commit.json",
+    "proxyMinutes": 35.45263755
+  },
+  "sourceWriteAcknowledgment": {
+    "observedAt": "2026-10-12T07:35:35.061274+00:00",
+    "newEdges": [
+      {
+        "id": "hv-umm2.512",
+        "receipt": {
+          "depends_on_id": "hv-umm2.472",
+          "issue_id": "hv-umm2.512",
+          "schema_version": 1,
+          "status": "added",
+          "type": "blocks"
+        }
+      },
+      {
+        "id": "hv-umm2.471",
+        "receipt": {
+          "depends_on_id": "hv-umm2.472",
+          "issue_id": "hv-umm2.471",
+          "schema_version": 1,
+          "status": "added",
+          "type": "blocks"
+        }
+      },
+      {
+        "id": "hv-umm2.139",
+        "receipt": {
+          "depends_on_id": "hv-umm2.472",
+          "issue_id": "hv-umm2.139",
+          "schema_version": 1,
+          "status": "added",
+          "type": "blocks"
+        }
+      },
+      {
+        "id": "hv-umm2.95",
+        "receipt": {
+          "depends_on_id": "hv-umm2.472",
+          "issue_id": "hv-umm2.95",
+          "schema_version": 1,
+          "status": "added",
+          "type": "blocks"
+        }
+      }
+    ],
+    "cycles": [],
+    "pathsAudit": "proposed-engine-area-matches.json"
+  },
+  "commands": {
+    "browser-pyro": {
+      "label": "browser-pyro",
+      "started": "2026-10-12T07:52:07.838880+00:00",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.472/judged-cost-choices.mjs",
+        "--bead",
+        "hv-umm2.472",
+        "--arg",
+        "card=97b359ee-5a7a-4f54-bd65-e6221a893208",
+        "--arg",
+        "label=pyro",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "hostLoadStart": 23.5341796875,
+      "pid": 64851,
+      "identity": "64851 64835 Mon Oct 12 00:52:07 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.472/judged-cost-choices.mjs --bead hv-umm2.472 --arg card=97b359ee-5a7a-4f54-bd65-e6221a893208 --arg label=pyro --viewports desktop,mobile\n",
+      "exit": 0,
+      "ended": "2026-10-12T07:52:23.961764+00:00",
+      "elapsedS": 16.122441291998257,
+      "hostLoadEnd": 20.408203125
+    },
+    "omission-planner": {
+      "label": "omission-planner",
+      "started": "2026-10-12T07:48:16.092637+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts"
+      ],
+      "hostLoadStart": 14.9580078125,
+      "pid": 5829,
+      "identity": " 5829  5808 Mon Oct 12 00:48:16 2026     node /opt/homebrew/bin/npm test -- src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts\n",
+      "exit": 1,
+      "ended": "2026-10-12T07:48:20.198823+00:00",
+      "elapsedS": 4.106077042000834,
+      "hostLoadEnd": 14.48046875
+    },
+    "browser-header-observation": {
+      "label": "browser-header-observation",
+      "started": "2026-10-12T07:55:41.509465+00:00",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.472/judged-cost-choices.mjs",
+        "--bead",
+        "hv-umm2.472",
+        "--arg",
+        "card=97b359ee-5a7a-4f54-bd65-e6221a893208",
+        "--arg",
+        "label=pyro-header",
+        "--arg",
+        "observeOnly=header",
+        "--viewports",
+        "mobile"
+      ],
+      "hostLoadStart": 10.2333984375,
+      "pid": 75138,
+      "identity": "75138 75117 Mon Oct 12 00:55:41 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.472/judged-cost-choices.mjs --bead hv-umm2.472 --arg card=97b359ee-5a7a-4f54-bd65-e6221a893208 --arg label=pyro-header --arg observeOnly=header --viewports mobile\n",
+      "exit": 0,
+      "ended": "2026-10-12T07:55:49.385429+00:00",
+      "elapsedS": 7.8758324590016855,
+      "hostLoadEnd": 9.94384765625
+    },
+    "omission-host": {
+      "label": "omission-host",
+      "started": "2026-10-12T07:48:20.233584+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts"
+      ],
+      "hostLoadStart": 14.48046875,
+      "pid": 7179,
+      "identity": " 7179  5808 Mon Oct 12 00:48:20 2026     node /opt/homebrew/bin/npm test -- src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts\n",
+      "exit": 1,
+      "ended": "2026-10-12T07:48:23.555534+00:00",
+      "elapsedS": 3.321796374999394,
+      "hostLoadEnd": 13.88134765625
+    },
+    "review-first": {
+      "label": "review-first",
+      "started": "2026-10-12T07:42:05.412473+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoadStart": 4.60205078125,
+      "pid": 95332,
+      "identity": "95332 95302 Mon Oct 12 00:42:05 2026     node /opt/homebrew/bin/npm run review\n",
+      "exit": 1,
+      "ended": "2026-10-12T07:42:59.621398+00:00",
+      "elapsedS": 54.20839474999957,
+      "hostLoadEnd": 5.22900390625
+    },
+    "knip-final": {
+      "label": "knip-final",
+      "started": "2026-10-12T07:44:04.506656+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "hostLoadStart": 21.212890625,
+      "pid": 3512,
+      "identity": " 3512  3500 Mon Oct 12 00:44:04 2026     node /opt/homebrew/bin/npm run knip\n",
+      "exit": 0,
+      "ended": "2026-10-12T07:44:07.622453+00:00",
+      "elapsedS": 3.1156696660036687,
+      "hostLoadEnd": 21.212890625
+    },
+    "focused-final": {
+      "label": "focused-final",
+      "started": "2026-10-12T07:41:34.419025+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts",
+        "src/engine/prompts/answers.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/engine/view/view.test.ts"
+      ],
+      "hostLoadStart": 3.736328125,
+      "pid": 85418,
+      "identity": "85418 85410 Mon Oct 12 00:41:34 2026     node /opt/homebrew/bin/npm test -- src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts src/engine/prompts/answers.test.ts src/engine/rules/costs.test.ts src/engine/view/view.test.ts\n",
+      "exit": 0,
+      "ended": "2026-10-12T07:41:37.603978+00:00",
+      "elapsedS": 3.184851500001969,
+      "hostLoadEnd": 3.736328125
+    },
+    "full-final": {
+      "label": "full-final",
+      "started": "2026-10-12T07:44:33.633353+00:00",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "hostLoadStart": 22.8642578125,
+      "pid": 21991,
+      "identity": "21991 21975 Mon Oct 12 00:44:33 2026     lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run review:full\n",
+      "exit": 0,
+      "ended": "2026-10-12T07:46:18.582919+00:00",
+      "elapsedS": 104.94855191699753,
+      "hostLoadEnd": 18.57177734375
+    },
+    "browser-desperation-corrected-selector": {
+      "label": "browser-desperation-corrected-selector",
+      "started": "2026-10-12T07:49:39.319297+00:00",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.472/judged-cost-choices.mjs",
+        "--bead",
+        "hv-umm2.472",
+        "--arg",
+        "card=625fe37e-8059-481c-99fd-109fd02ceedd",
+        "--arg",
+        "label=desperation",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "hostLoadStart": 8.57666015625,
+      "pid": 22436,
+      "identity": "22436 22419 Mon Oct 12 00:49:39 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.472/judged-cost-choices.mjs --bead hv-umm2.472 --arg card=625fe37e-8059-481c-99fd-109fd02ceedd --arg label=desperation --viewports desktop,mobile\n",
+      "exit": 1,
+      "ended": "2026-10-12T07:49:52.589006+00:00",
+      "elapsedS": 13.269521458001691,
+      "hostLoadEnd": 9.18896484375
+    },
+    "browser-desperation": {
+      "label": "browser-desperation",
+      "started": "2026-10-12T07:48:56.855159+00:00",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.472/judged-cost-choices.mjs",
+        "--bead",
+        "hv-umm2.472",
+        "--arg",
+        "card=625fe37e-8059-481c-99fd-109fd02ceedd",
+        "--arg",
+        "label=desperation",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "hostLoadStart": 10.96435546875,
+      "pid": 10956,
+      "identity": "10956 10849 Mon Oct 12 00:48:56 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.472/judged-cost-choices.mjs --bead hv-umm2.472 --arg card=625fe37e-8059-481c-99fd-109fd02ceedd --arg label=desperation --viewports desktop,mobile\n",
+      "exit": 1,
+      "ended": "2026-10-12T07:49:02.699004+00:00",
+      "elapsedS": 5.843713333997584,
+      "hostLoadEnd": 10.966796875
+    },
+    "browser-desperation-mobile-geometry": {
+      "label": "browser-desperation-mobile-geometry",
+      "started": "2026-10-12T07:51:15.019947+00:00",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.472/judged-cost-choices.mjs",
+        "--bead",
+        "hv-umm2.472",
+        "--arg",
+        "card=625fe37e-8059-481c-99fd-109fd02ceedd",
+        "--arg",
+        "label=desperation",
+        "--viewports",
+        "mobile"
+      ],
+      "hostLoadStart": 18.58935546875,
+      "pid": 40569,
+      "identity": "40569 40550 Mon Oct 12 00:51:15 2026     node scripts/qa/run-scenario.mjs artifacts/qa/hv-umm2.472/judged-cost-choices.mjs --bead hv-umm2.472 --arg card=625fe37e-8059-481c-99fd-109fd02ceedd --arg label=desperation --viewports mobile\n",
+      "exit": 0,
+      "ended": "2026-10-12T07:51:44.299364+00:00",
+      "elapsedS": 29.279002041999775,
+      "hostLoadEnd": 22.99951171875
+    },
+    "review-final": {
+      "label": "review-final",
+      "started": "2026-10-12T07:43:02.458644+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoadStart": 5.22900390625,
+      "pid": 99432,
+      "identity": "99432 99424 Mon Oct 12 00:43:02 2026     node /opt/homebrew/bin/npm run review\n",
+      "exit": 0,
+      "ended": "2026-10-12T07:43:52.420196+00:00",
+      "elapsedS": 49.96106058300211,
+      "hostLoadEnd": 18.77880859375
+    },
+    "schema-final": {
+      "label": "schema-final",
+      "started": "2026-10-12T07:59:24.333309+00:00",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "hostLoadStart": 6.72314453125,
+      "pid": 66792,
+      "identity": "66792 66784 Mon Oct 12 00:59:24 2026     node scripts/friction-triggers.mjs --validate-records\n",
+      "exit": 0,
+      "ended": "2026-10-12T07:59:24.423525+00:00",
+      "elapsedS": 0.09012954200443346,
+      "hostLoadEnd": 6.72314453125
+    },
+    "schema-final-corrected-evidence": {
+      "label": "schema-final-corrected-evidence",
+      "started": "2026-10-12T08:01:43.706068+00:00",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "hostLoadStart": 21.2880859375,
+      "pid": 10611,
+      "identity": "10611 10576 Mon Oct 12 01:01:43 2026     node scripts/friction-triggers.mjs --validate-records\n",
+      "exit": 0,
+      "ended": "2026-10-12T08:01:43.769495+00:00",
+      "elapsedS": 0.0631387920002453,
+      "hostLoadEnd": 21.2880859375
+    }
+  },
+  "initialFocusedFailure": {
+    "rawLog": "focused.log",
+    "testCases": 59,
+    "failed": 1,
+    "cause": "Synthetic event resolves automatically after cost payment and gains one point; expected final score changed from 5 to 6. No production behavior repair inferred.",
+    "commandStartNotInstrumented": true
+  },
+  "reviewFailure": {
+    "label": "review-first",
+    "cause": "Lint rejected an untyped synthetic JSON roundtrip; explicit BattleSlice assertion supplies known fixture type."
+  },
+  "sourceFreeze": {
+    "observedAt": "2026-10-12T07:46:21.820926+00:00",
+    "files": [
+      {
+        "path": "src/engine/prompts/fingerprint.ts",
+        "sha256": "2158a950a3ed3ae7776b0a16ece30ddd9e7b46adc435c74dbdfa5418eec22e0d",
+        "lines": 44
+      },
+      {
+        "path": "src/engine/prompts/structure.ts",
+        "sha256": "cd50d577430f28cde8e6052bf441ea6dfd1886e5e342d5d07b328b95cd628397",
+        "lines": 91
+      },
+      {
+        "path": "src/engine/prompts/types.ts",
+        "sha256": "71037d08204d0e52766b9482513b8382af3e200cfefd2997f4a5c8321010ad36",
+        "lines": 280
+      },
+      {
+        "path": "src/engine/rules/costs.ts",
+        "sha256": "9a95e2490d57487641e41c9c8be84633dae682f94265b58b91a2ec6127993edb",
+        "lines": 503
+      },
+      {
+        "path": "src/engine/view/view.ts",
+        "sha256": "79778d1bf54f77b5a242ad31c6bef1732a141c8c25b2dbe681addca7fb92f4d0",
+        "lines": 620
+      },
+      {
+        "path": "src/runtime/battle-prompt-messages.ts",
+        "sha256": "9659edb9b7cc71eecb0fa6e9ffda1a3b4ec83814afb989214bbd5ddacc18d56e",
+        "lines": 925
+      },
+      {
+        "path": "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts",
+        "sha256": "ebc645593aab490053fbc681e77d658cdb3f6ea6259db82e434ee4cdc1d8f875",
+        "lines": 380
+      },
+      {
+        "path": "src/screens/cumulus_adapters/prompt-host-view-model.ts",
+        "sha256": "afa2e59fb5c216c6aa180c533af48dd3817dd35b5caff3f31f09487aa5231326",
+        "lines": 565
+      },
+      {
+        "path": "src/runtime/battle-cost-messages.ts",
+        "sha256": "757f928558daf5a18cf9f5f6329faca14ad128133e32f76582f233e0182fd5c0",
+        "lines": 137
+      }
+    ]
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 119,
+    "jsdomFiles": 0
+  },
+  "tests": {
+    "focusedCases": 59,
+    "focusedFiles": 4,
+    "reviewCases": 3964,
+    "reviewFiles": 269,
+    "fullCases": 4829,
+    "fullFiles": 345,
+    "addedContracts": 4,
+    "largestTouchedContractLines": 380,
+    "newTestEntrypoints": 0,
+    "productCopyAssertions": 0
+  },
+  "fullScope": {
+    "wrapperWallS": 104.94855191699753,
+    "firstStageAt": "2026-10-12T07:44:33.891000+00:00",
+    "preStageIntervalS": 0.257647,
+    "preStageIntervalScope": "combined wrapper launch, lock wait and child startup; not isolated lease wait",
+    "stageStartToTerminalS": 104.691919,
+    "testStageS": 71.4,
+    "budgetAtLowLoadS": 60,
+    "hostLoadStart": 22.8642578125,
+    "hostLoadEnd": 18.57177734375,
+    "classification": "High-load over-budget observation; no comparable low-load source regression demonstrated.",
+    "followup": "hv-mwpi",
+    "actualChildNpmPid": null,
+    "actualChildNpmStart": null,
+    "childIdentityBoundary": "Request arrived after terminal; child identity was not captured; peer process is not attributed."
+  },
+  "omissionProofs": {
+    "planner": {
+      "failedCases": 2,
+      "passedCases": 15,
+      "exit": 1,
+      "durationS": 4.106077042000834
+    },
+    "hostRouting": {
+      "failedCases": 2,
+      "passedCases": 15,
+      "exit": 1,
+      "durationS": 3.321796374999394
+    },
+    "restoration": {
+      "observedAt": "2026-10-12T07:48:23.560691+00:00",
+      "allFrozenSourceBytesMatch": true
+    }
+  },
+  "browserInvocations": [
+    {
+      "invocation": "run-xnDdHb",
+      "ok": false,
+      "error": "desktop#0: Error: source hand control not hittable\n    at judgedCostChoices (evalmachine.<anonymous>:1567:115)\n    at async evalmachine.<anonymous>:1617:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1360,
+        "scenario": 3742,
+        "total": 5140
+      },
+      "serverPid": 11070,
+      "slot": 1,
+      "port": 5274,
+      "rawReport": "judged-cost-choices.result.json",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.472/invocations/run-xnDdHb",
+      "captures": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "judged-cost-choices-desktop.jsonl",
+          "gameId": "reyi37",
+          "selectedBy": "url",
+          "rows": 23,
+          "reason": null
+        }
+      ],
+      "scope": "cost-choice acceptance; per-viewport verdicts in own QA ledger"
+    },
+    {
+      "invocation": "run-ExG2ER",
+      "ok": false,
+      "error": "mobile#0: Error: cost choices overflow or overlap\n    at judgedCostChoices (evalmachine.<anonymous>:1591:118)\n    at async evalmachine.<anonymous>:1618:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "wallMs": {
+        "browserLeaseWait": 4,
+        "serve": 1046,
+        "scenario": 11560,
+        "total": 12645
+      },
+      "serverPid": 22504,
+      "slot": 1,
+      "port": 5274,
+      "rawReport": "judged-cost-choices.result.json",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.472/invocations/run-ExG2ER",
+      "captures": [
+        "desperation-choices-desktop.png",
+        "desperation-resolved-desktop.png"
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "judged-cost-choices-desktop.jsonl",
+          "gameId": "ggzhgi",
+          "selectedBy": "url",
+          "rows": 36,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "judged-cost-choices-mobile.jsonl",
+          "gameId": "kicwmh",
+          "selectedBy": "url",
+          "rows": 30,
+          "reason": null
+        }
+      ],
+      "scope": "cost-choice acceptance; per-viewport verdicts in own QA ledger"
+    },
+    {
+      "invocation": "run-mC26uB",
+      "ok": true,
+      "error": null,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 1987,
+        "scenario": 26439,
+        "total": 28475
+      },
+      "serverPid": 40620,
+      "slot": 1,
+      "port": 5274,
+      "rawReport": "judged-cost-choices.result.json",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.472/invocations/run-mC26uB",
+      "captures": [
+        "desperation-choices-mobile.png",
+        "desperation-resolved-mobile.png"
+      ],
+      "gameLogs": [
+        {
+          "viewport": "mobile",
+          "path": "judged-cost-choices-mobile.jsonl",
+          "gameId": "tphswc",
+          "selectedBy": "url",
+          "rows": 36,
+          "reason": null
+        }
+      ],
+      "scope": "cost-choice acceptance; per-viewport verdicts in own QA ledger"
+    },
+    {
+      "invocation": "run-KeFtRu",
+      "ok": true,
+      "error": null,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 1389,
+        "scenario": 14028,
+        "total": 15462
+      },
+      "serverPid": 64909,
+      "slot": 1,
+      "port": 5274,
+      "rawReport": "judged-cost-choices.result.json",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.472/invocations/run-KeFtRu",
+      "captures": [
+        "pyro-choices-desktop.png",
+        "pyro-resolved-desktop.png",
+        "pyro-choices-mobile.png",
+        "pyro-resolved-mobile.png"
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "judged-cost-choices-desktop.jsonl",
+          "gameId": "tmuztp",
+          "selectedBy": "url",
+          "rows": 37,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "judged-cost-choices-mobile.jsonl",
+          "gameId": "g85n3a",
+          "selectedBy": "url",
+          "rows": 36,
+          "reason": null
+        }
+      ],
+      "scope": "cost-choice acceptance; per-viewport verdicts in own QA ledger"
+    },
+    {
+      "invocation": "run-eVsBAK",
+      "ok": true,
+      "error": null,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1363,
+        "scenario": 5831,
+        "total": 7231
+      },
+      "serverPid": 75201,
+      "slot": 1,
+      "port": 5274,
+      "rawReport": "judged-cost-choices.result.json",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.472/invocations/run-eVsBAK",
+      "captures": [
+        "pyro-header-choices-mobile.png"
+      ],
+      "gameLogs": [
+        {
+          "viewport": "mobile",
+          "path": "judged-cost-choices-mobile.jsonl",
+          "gameId": "9uj93z",
+          "selectedBy": "url",
+          "rows": 30,
+          "reason": null
+        }
+      ],
+      "scope": "pre-existing header observation only"
+    }
+  ],
+  "browserEffectiveMatrix": {
+    "cards": 2,
+    "viewports": 2,
+    "passes": 4,
+    "unresolvedFailures": 0,
+    "screensInspected": 8,
+    "caps": [],
+    "actualPaymentKinds": [
+      "abandoned",
+      "discarded",
+      "pointsScored(-5)"
+    ],
+    "uiCopyOnly": true,
+    "playerFacingLabelsRecordedInRawBrowserReport": true
+  },
+  "headerObservation": {
+    "invocation": "run-eVsBAK",
+    "geometry": {
+      "cancel": {
+        "x": 269.125,
+        "y": 20.75,
+        "width": 88.375,
+        "height": 42,
+        "top": 20.75,
+        "right": 357.5,
+        "bottom": 62.75,
+        "left": 269.125
+      },
+      "opener": {
+        "x": 338,
+        "y": 12,
+        "width": 40,
+        "height": 40,
+        "top": 12,
+        "right": 378,
+        "bottom": 52,
+        "left": 338
+      },
+      "cancelCentreHittable": true,
+      "overlapWidth": 19.5,
+      "overlapHeight": 31.25
+    },
+    "acceptanceWorkflow": false
+  },
+  "resources": {
+    "observedAt": "2026-10-12T07:58:48.236466+00:00",
+    "recordedPids": [
+      3512,
+      5829,
+      7179,
+      10956,
+      11070,
+      21991,
+      22436,
+      22504,
+      40569,
+      40620,
+      42894,
+      43168,
+      43199,
+      43612,
+      43765,
+      44232,
+      44441,
+      45059,
+      45138,
+      45746,
+      46053,
+      46307,
+      46361,
+      46832,
+      47200,
+      47450,
+      47949,
+      48207,
+      48327,
+      48954,
+      49152,
+      49528,
+      49572,
+      50169,
+      50811,
+      64851,
+      64909,
+      75138,
+      75201,
+      85418,
+      95332,
+      99432,
+      66792,
+      10611
+    ],
+    "presentOwnedPidOrGroupMembers": [],
+    "slotRecords": {
+      ".browser-qa.slot-1.lock.owner.json": null,
+      ".browser-qa.slot-1.lock.server.json": null
+    },
+    "browserInvocationsTerminal": true,
+    "ownProviderRecordAbsent": true,
+    "allReportedPortsFree": true,
+    "browserServerGroups": [
+      11070,
+      22504,
+      40620,
+      64909,
+      75201
+    ],
+    "syntheticFixtureGroups": [
+      42894,
+      43168,
+      43199,
+      43612,
+      43765,
+      44232,
+      44441,
+      45059,
+      45138,
+      45746,
+      46053,
+      46307,
+      46361,
+      46832,
+      47200,
+      47450,
+      47949,
+      48207,
+      48327,
+      48954,
+      49152,
+      49528,
+      49572,
+      50169,
+      50811
+    ],
+    "groupProvenance": {
+      "browserServerGroups": "Five actual own card-lab/header MCP invocations; each raw report.serverPid and runner log identifies group/port.",
+      "syntheticFixtureGroups": "Own full-final.log temporary QA-runner subprocess fixtures, including signalContract under dreamtides-qa-slots-PlOIIf and synthetic browser-lease roots; not actual card-lab MCP sessions or peer servers.",
+      "settlement": "Fresh full ps inventory at recorded resource observation found no recorded PID or any member of these group IDs. No cleanup signals issued by this evidence audit."
+    }
+  },
+  "scopeNotes": {
+    "rulesOrCatalogTextEdits": 0,
+    "newPersistentBattleStateFields": 0,
+    "promptsRegeneratedFromSlice": true,
+    "existingReclaimAndPermissionCopyExtraction": "Byte-for-byte body comparison passed apart from export keywords",
+    "qaScenarioVersions": "Ignored script was corrected between invocations; prior script hashes were not captured; corrections and raw results retained.",
+    "d20": "Four synthetic public contracts in one existing plain test entrypoint; net 119 lines; no jsdom file.",
+    "d21SelectedNewContentEntities": 0,
+    "fuzz": "No rules semantics changed; typed prompt presentation seam covered by full deterministic suite and real cost workflows."
+  },
+  "commitMetadataClock": "2026-10-12T08:02:56Z",
+  "actualCommitOperationReceipt": "/tmp/dreamtides-cost-labels-472/helper-receipts/commit.json"
+}

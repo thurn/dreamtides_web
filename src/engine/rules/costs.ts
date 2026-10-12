@@ -360,6 +360,7 @@ export function planCosts(
           kind: "chooseMode",
           side,
           purpose: purpose("chooseCost"),
+          costOptions: cost.options,
           options: cost.options.map((option, index) => ({ mode: index, legal: affordable(option) })),
         });
         for (const part of cost.options[choice] ?? []) plan(part, true);

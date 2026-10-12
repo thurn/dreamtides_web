@@ -594,8 +594,12 @@ export function promptView(prompt: Prompt, viewer: Side, display: BattleState): 
       const { allowed: _allowed, ...rest } = copy(prompt);
       return { ...rest, purpose, cards: prompt.cards.filter(visible) };
     }
+    case "chooseMode": {
+      const { costOptions, ...rest } = copy(prompt);
+      const seesCosts = purpose.source !== null && (prompt.privateTo === undefined || prompt.privateTo === viewer);
+      return { ...rest, purpose, ...(seesCosts && costOptions !== undefined ? { costOptions } : {}) };
+    }
     case "chooseSlot":
-    case "chooseMode":
     case "chooseNumber":
     case "confirm":
     case "payOrDecline":

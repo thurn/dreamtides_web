@@ -21,6 +21,7 @@ export function promptFingerprint(prompt: Prompt): PromptFingerprint {
     case "chooseMode":
       fields.push(prompt.options);
       if (prompt.subtypes !== undefined) fields.push(prompt.subtypes);
+      if (prompt.costOptions !== undefined) fields.push(prompt.costOptions);
       break;
     case "chooseNumber":
       fields.push(prompt.min, prompt.max);

@@ -1,0 +1,69 @@
+{
+  "bead": "hv-umm2.472",
+  "phase": 5,
+  "implementMin": 35.45263755,
+  "localValidationS": {
+    "browser-pyro": 16.122441291998257,
+    "omission-planner": 4.106077042000834,
+    "browser-header-observation": 7.8758324590016855,
+    "omission-host": 3.321796374999394,
+    "review-first": 54.20839474999957,
+    "knip-final": 3.1156696660036687,
+    "focused-final": 3.184851500001969,
+    "full-final": 104.94855191699753,
+    "browser-desperation-corrected-selector": 13.269521458001691,
+    "browser-desperation": 5.843713333997584,
+    "browser-desperation-mobile-geometry": 29.279002041999775,
+    "review-final": 49.96106058300211,
+    "schema-final": 0.09012954200443346
+  },
+  "hostLoad": 22.8642578125,
+  "testDelta": {
+    "files": 0,
+    "lines": 119,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 0.02333333333333333,
+      "note": "Initial focused fixture expected score 5 after cost payment; synthetic event also resolves and gains one point, so final score is 6. Measured 1.4 s unit test execution; engineering correction delay not separately instrumented.",
+      "measurementScope": "failing Vitest duration only"
+    },
+    {
+      "tag": "local-edit-correction",
+      "minutes": 0.9034732458333262,
+      "note": "First review lint rejected implicit any from synthetic JSON.parse roundtrip. Explicit BattleSlice assertion corrected known fixture type; full failed review receipt retained.",
+      "measurementScope": "actual failed review wrapper wall"
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 0.09739522223329307,
+      "note": "First scenario incorrectly combined wrapper zone and child card-ID attributes on one selector. Physical card-ID hook plus visibility wait corrected it; application unchanged.",
+      "measurementScope": "actual failed invocation wrapper wall"
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 0.22115869096669485,
+      "note": "Mobile scenario assumed horizontal-only separation for a flex-wrapped two-row choice surface. Actual 2D rectangle test corrected it; complete desktop pass retained from mixed-fail invocation.",
+      "measurementScope": "mixed invocation wrapper wall includes valid desktop work, not wholly wasted time"
+    },
+    {
+      "tag": "model-provider-capacity",
+      "minutes": 0,
+      "note": "Parent reported initial helper provider-capacity terminal error after source ACK and dispatched one inherited-model retry. No repository writes occurred before that error. Delay was not instrumented; numeric 0 is a lower bound, not measured zero cost.",
+      "measurementScope": "unmeasured delay;0lower bound",
+      "observedMinutes": null
+    }
+  ],
+  "budgetFollowups": [
+    "hv-mwpi"
+  ],
+  "budgetObservation": {
+    "testStageS": 71.4,
+    "hostLoadStart": 22.8642578125,
+    "hostLoadEnd": 18.57177734375,
+    "scope": "high-load full review test phase; not a low-load regression claim"
+  },
+  "implementBoundary": "Post-dispatch proxy to parent-supplied Git metadata clock; actual command execution boundaries retained separately"
+}

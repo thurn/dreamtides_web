@@ -1,13 +1,21 @@
 // The battle screen model's prompt surfaces and their answers, and the
 // opponent's prompts and responses as the human sees them.
 import { describe, expect, it } from "vitest";
-import { type Action, type BattleState } from "../../engine";
-import { type BattleSlice } from "../../engine/fold/slice";
+import { createEngine, type Action, type BattleState } from "../../engine";
+import { createFoldAdapter, type BattleSlice } from "../../engine/fold/slice";
 import { DSL } from "../../engine/testing/dsl-cards";
 import { LAB } from "../../engine/testing/prompt-lab";
-import { SYNTHETIC } from "../../engine/testing/synthetic-cards";
+import { SYNTHETIC, syntheticId, testCatalog } from "../../engine/testing/synthetic-cards";
 import { NO_PROMPTS } from "../../engine/steps/sources";
 import { isLegalAnswer } from "../../engine/prompts/answers";
+import { additionalCost, choiceCost, energy, event, pointsCost } from "../../engine/dsl/builders";
+import type { CharacterSelector, PaymentCost } from "../../engine/dsl/types";
+import { gainPoints } from "../../engine/effects/primitives/gain-points";
+import { boardState } from "../../engine/testing/board";
+import { promptFingerprint } from "../../engine/prompts/fingerprint";
+import { isWellFormedPrompt } from "../../engine/prompts/structure";
+import { narrowPrompt } from "../../engine/prompts/narrow";
+import { promptView } from "../../engine/view/view";
 import { parsePromptId } from "../../types/identifiers";
 import { type EngineBattleScreenModel } from "./engine-battle-view-model";
 import { type PendingEnginePrompt, type PromptSurface } from "./prompt-host-view-model";
@@ -257,5 +265,116 @@ describe("buildEngineBattleScreenModel", () => {
     expect(engine.decision(played)).toEqual({ kind: "respond", side: "enemy" });
     expect(theirs.view.revealedHandCard).toBeNull();
     expect(theirs.view.promptNotice).toEqual({ promptSide: "enemy", reason: "opponent-acting" });
+  });
+});
+
+/** Real play-time cost prompts over synthetic data, independent of the production catalog. */
+function costChoices(choices: readonly (readonly (readonly PaymentCost[])[])[]) {
+  const card = { ...SYNTHETIC.vanilla1, id: syntheticId(0x472), cardType: "event" as const, spark: null,
+    costs: [energy(0)], abilities: () => [additionalCost(...choices.map((options) => choiceCost(...options))), event(gainPoints(1))] };
+  const on = createEngine(testCatalog([card]));
+  const fold = createFoldAdapter(on);
+  const { state, ids } = boardState(on.catalog, { active: "player", phase: "day",
+    player: { hand: [card.id, SYNTHETIC.vanilla1.id], back: [SYNTHETIC.vanilla1.id], energy: 8, score: 8 } });
+  const started = fold.reduce({ committed: state, inFlight: null, publishedEvents: 0, attempt: 0 },
+    { kind: "battleAction", side: "player", action: { kind: "play", card: ids.player.hand[0], from: "hand" } });
+  if (started.kind !== "applied") throw new Error(`cost play bounced: ${started.reason}`);
+  const pending = fold.pending(started.slice);
+  if (pending?.prompt.kind !== "chooseMode") throw new Error("missing cost choice");
+  return { on, fold, slice: started.slice, prompt: pending.prompt, display: pending.display, state };
+}
+
+function costLabels(fixture: ReturnType<typeof costChoices>, prompt: PendingEnginePrompt = fixture.prompt) {
+  return surfaceOf(screenOf(fixture.state, prompt, fixture.display, true, fixture.on), "choice").options.map((option) => option.label);
+}
+
+describe("cost-choice prompt data", () => {
+  it("names the actual sequential alternatives and preserves mode answers through persisted-slice replay", () => {
+    const first = [[energy(1)], [pointsCost(2)]];
+    const second = [[pointsCost(3), energy(2)], []];
+    const fixture = costChoices([first, second]);
+    expect(fixture.prompt.costOptions).toEqual(first);
+    const firstLabels = costLabels(fixture);
+    expect(new Set(firstLabels).size).toBe(2);
+    const { costOptions: _costs, ...legacy } = fixture.prompt;
+    expect(firstLabels).not.toEqual(costLabels(fixture, legacy));
+    expect(choiceAnswers(screenOf(fixture.state, fixture.prompt, fixture.display, true, fixture.on))).toEqual([0, 1]);
+    const replayed = JSON.parse(JSON.stringify(fixture.slice)) as BattleSlice;
+    expect(fixture.fold.pending(replayed)?.prompt).toEqual(fixture.prompt);
+    const answered = fixture.fold.reduce(replayed, { kind: "answer", side: "player", promptId: fixture.prompt.id, value: 0 });
+    if (answered.kind !== "applied") throw new Error("cost answer bounced");
+    const pending = fixture.fold.pending(answered.slice);
+    if (pending?.prompt.kind !== "chooseMode") throw new Error("missing second cost choice");
+    expect(pending.prompt.costOptions).toEqual(second);
+    const secondFixture = { ...fixture, slice: answered.slice, prompt: pending.prompt, display: pending.display };
+    const secondLabels = costLabels(secondFixture);
+    expect(new Set(secondLabels).size).toBe(2);
+    expect(secondLabels.every((label) => label.length > 0)).toBe(true);
+    expect(secondLabels).not.toEqual(firstLabels);
+    expect(choiceAnswers(screenOf(fixture.state, pending.prompt, pending.display, true, fixture.on))).toEqual([0, 1]);
+    const paid = fixture.fold.reduce(answered.slice, { kind: "answer", side: "player", promptId: pending.prompt.id, value: 0 });
+    if (paid.kind !== "applied" || paid.error !== null) throw new Error("compound cost did not commit");
+    expect(paid.slice.committed.sides.player.currentEnergy).toBe(5);
+    expect(paid.slice.committed.sides.player.score).toBe(6);
+  });
+
+  it("retains exact mode-to-cost mapping through narrowed and sparse legal surfaces", () => {
+    const fixture = costChoices([[[energy(1)], [pointsCost(2)]]]);
+    const narrowed = narrowPrompt(fixture.prompt, [1]);
+    expect(narrowed.kind).toBe("chooseMode");
+    if (narrowed.kind !== "chooseMode") throw new Error("wrong kind");
+    const sparse = { ...narrowed, options: narrowed.options.filter((option) => option.legal) };
+    expect(isWellFormedPrompt(sparse)).toBe(true);
+    expect(costLabels(fixture, { ...sparse, id: fixture.prompt.id })).toEqual([costLabels(fixture)[1]]);
+    expect(choiceAnswers(screenOf(fixture.state, { ...sparse, id: fixture.prompt.id }, fixture.display, true, fixture.on))).toEqual([1]);
+    expect(isWellFormedPrompt({ ...fixture.prompt, purpose: { ...fixture.prompt.purpose, role: "chooseOne" } })).toBe(false);
+    expect(isWellFormedPrompt({ ...fixture.prompt, options: [{ mode: 2, legal: true }] })).toBe(false);
+    expect(isWellFormedPrompt({ ...fixture.prompt, options: [{ mode: -1, legal: true }] })).toBe(false);
+    const { costOptions: _costs, ...legacy } = fixture.prompt;
+    expect(promptFingerprint(fixture.prompt)).not.toBe(promptFingerprint(legacy));
+    expect(promptFingerprint({ ...fixture.prompt, costOptions: [[energy(3)], [pointsCost(2)]] })).not.toBe(promptFingerprint(fixture.prompt));
+  });
+
+  it("keeps payment data for its actor and known public source while withholding a hidden or private opponent source", () => {
+    const fixture = costChoices([[[energy(1)], [pointsCost(2)]]]);
+    expect(promptView(fixture.prompt, "player", fixture.display)).toEqual(fixture.prompt);
+    const hidden = promptView(fixture.prompt, "enemy", fixture.display);
+    expect(hidden.purpose.source).toBeNull();
+    expect("costOptions" in hidden).toBe(false);
+    const source = fixture.prompt.purpose.source;
+    if (typeof source !== "string") throw new Error("missing source");
+    const publicState = { ...fixture.display, knownTo: { ...fixture.display.knownTo, enemy: [...fixture.display.knownTo.enemy, source] } };
+    const visible = promptView(fixture.prompt, "enemy", publicState);
+    expect(visible).toEqual(fixture.prompt);
+    expect("costOptions" in promptView({ ...fixture.prompt, privateTo: "player" }, "enemy", publicState)).toBe(false);
+  });
+
+  it("derives copy from every qualified payment without changing unrelated modes", () => {
+    const fixture = costChoices([[[energy(1)], [pointsCost(2)]]]);
+    const pairs: readonly (readonly [PaymentCost, PaymentCost])[] = [
+      [energy(1), energy(4)], [pointsCost(1), pointsCost(3)],
+      [{ cost: "discard", count: 1, filter: {} }, { cost: "discard", count: 1, filter: { subtype: "Warrior", costAtMost: 2 } }],
+      [{ cost: "discard", count: "x", filter: {}, min: 0 }, { cost: "discard", count: "x", filter: {}, min: 2 }],
+      [{ cost: "discard", count: 1, filter: {} }, { cost: "discard", count: 1, filter: {}, captureCost: true }],
+      [{ cost: "abandon", count: 1, selector: { controller: "you" } }, { cost: "abandon", count: 1, selector: { kind: "self" } }],
+      [{ cost: "banishFromVoid", count: "x", filter: {}, min: 1 }, { cost: "banishFromVoid", count: "x", filter: { cardType: "event" }, min: 2 }],
+      [{ cost: "banishFromAnyVoid", count: 1, filter: {}, player: "you" }, { cost: "banishFromAnyVoid", count: 1, filter: {}, player: "opponent" }],
+      [{ cost: "reveal", count: 1, filter: {} }, { cost: "reveal", count: 1, filter: { sparkAtLeast: 3 } }],
+    ];
+    const selectors: readonly CharacterSelector[] = [
+      { controller: "opponent" }, { controller: "you", another: true }, { controller: "you", subtype: "Warrior" },
+      { controller: "you", notSubtype: "Warrior" }, { controller: "you", figment: false }, { controller: "you", exhausted: true },
+      { controller: "you", rank: "front" }, { controller: "you", challenging: true }, { controller: "you", blocking: false },
+      { controller: "you", sparkAtMost: { value: "x" } },
+      { controller: "you", costAtLeast: { value: "countCards", zone: "void", player: "opponent", filter: { cardType: "event" } } },
+    ];
+    const changes = [...pairs, ...selectors.map((selector): readonly [PaymentCost, PaymentCost] =>
+      [{ cost: "return", count: 1, selector: { controller: "you" } }, { cost: "return", count: 1, selector }])];
+    for (const [before, after] of changes) {
+      const left = costLabels(fixture, { ...fixture.prompt, costOptions: [[before], [pointsCost(2)]] });
+      const right = costLabels(fixture, { ...fixture.prompt, costOptions: [[after], [pointsCost(2)]] });
+      expect(right[0]).not.toBe(left[0]);
+      expect(right[1]).toBe(left[1]);
+    }
   });
 });
