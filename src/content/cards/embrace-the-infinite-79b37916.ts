@@ -1,3 +1,5 @@
+import { discardCostFilter, event, reclaim, x } from "../../engine/dsl/builders";
+import { gainPoints } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 391,
   art: { x: -0.047, y: 1, scale: 1.1 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(gainPoints(x())), reclaim(discardCostFilter({}, { count: "x", min: 1 }))],
+  verifiedText: "vyb64xuo6i",
 });

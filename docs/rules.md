@@ -850,12 +850,17 @@ when abandoned, has a cost of 0●, and a figment copy has the cost it copied.
 Any character the player controls can pay the cost, including the character
 whose ability it is.
 
-**Discard X cards:** X is the number of cards chosen to pay this additional
-cost. The variable-discard DSL admits zero; authors use it only when zero
-has a meaningful effect under the contextual X rule, such as drawing a fixed
-number of cards. This X spends no energy beyond the separately printed energy costs.
-When one ability also pays X●, every reference to X uses that same value:
-the discard count or captured card cost must agree with the chosen energy X.
+**Discard X cards:** X is the number of cards chosen to pay this cost. Zero
+is a legal X only when it has a meaningful effect under the contextual X
+rule, such as drawing a fixed number of cards; otherwise X is at least 1, and
+a player whose hand holds no card that could pay cannot play the card this
+way. The card being played never pays its own cost. "Gain X⍟. / Reclaim –
+Discard X cards." is played from hand for X● (at least 1●), or from the void
+by Reclaim by discarding X cards (at least one) in place of its ● cost;
+either way it gains the X it was played for. This X spends no energy beyond
+the separately printed energy costs. When one ability also pays X●, every
+reference to X uses that same value: the discard count or captured card cost
+must agree with the chosen energy X.
 
 **Discard your hand:** As a cost, as in "☾, Discard your hand, abandon this
 character: Gain 3●," this discards every card in the paying player's hand

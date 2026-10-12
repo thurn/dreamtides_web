@@ -112,11 +112,25 @@ export function discardCost(count = 1): PaymentCost {
   return discardCostFilter({}, { count });
 }
 
-/** Discard matching hand cards; capture their count or a single card’s copiable cost as X. */
-export function discardCostFilter(filter: CardFilter, options: { readonly count?: number | "x"; readonly captureCost?: never } | { readonly count?: 1; readonly captureCost: true } = {}): PaymentCost {
-  return options.captureCost === true
-    ? { cost: "discard", count: 1, filter, captureCost: true }
-    : { cost: "discard", count: options.count ?? 1, filter };
+/**
+ * Discard matching hand cards; capture their count or a single card’s
+ * copiable cost as X. A variable count admits 0 unless `min` gives its least
+ * X, as in "Reclaim – Discard X cards" (rules § Costs, Requirements, and X →
+ * Discard X cards).
+ */
+export function discardCostFilter(
+  filter: CardFilter,
+  options:
+    | { readonly count?: number; readonly captureCost?: never; readonly min?: never }
+    | { readonly count: "x"; readonly captureCost?: never; readonly min?: number }
+    | { readonly count?: 1; readonly captureCost: true; readonly min?: never } = {},
+): PaymentCost {
+  if (options.captureCost === true) return { cost: "discard", count: 1, filter, captureCost: true };
+  if (options.count !== "x") return { cost: "discard", count: options.count ?? 1, filter };
+  const { min } = options;
+  if (min === undefined) return { cost: "discard", count: "x", filter };
+  if (!Number.isSafeInteger(min) || min < 0) throw new Error("discardCostFilter min must be a non-negative safe integer");
+  return { cost: "discard", count: "x", filter, min };
 }
 
 /** "Discard your hand" as a cost: every eligible hand card, chosen by nobody; payable with an empty hand. */

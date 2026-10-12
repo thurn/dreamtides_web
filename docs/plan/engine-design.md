@@ -1198,8 +1198,9 @@ Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
 - energy: Fixed, X, or Fixed+X (`energy`, `energyX`);
 - ☾ (`exhaustSelf`; back-rank characters and avatars only);
 - discard matching hand cards (`discardCostFilter`), with a fixed count, an
-  X count, or one card whose copiable cost is captured as X; or discard the
-  whole hand (`discardHandCost`, `count: "hand"`);
+  X count (at least its optional least X, `min`), or one card whose copiable
+  cost is captured as X; or discard the whole hand (`discardHandCost`,
+  `count: "hand"`);
 - abandon, with a fixed count, or one character whose copiable cost is
   captured as X (`abandonCostCapture`);
 - banish matching void cards (`banishFromVoidCost`), with a fixed count, or
@@ -1229,9 +1230,13 @@ before the item goes on the stack. Copies don't pay.
 
 Discard candidates use the shared card filter (effective type/subtype and
 copiable-cost bounds), excluding the source, targets and prior cost cards.
-A variable discard binds X to the chosen count and admits zero. Authors use
-this form only when zero has a meaningful effect under the contextual X
-rule, such as an ability's fixed draw. Single-card cost capture reads its
+A variable discard binds X to the chosen count. Without a `min` it admits
+zero, which authors use only when zero has a meaningful effect under the
+contextual X rule, such as an ability's fixed draw; otherwise they give it
+`min: 1`, as "Reclaim – Discard X cards" does (RD-hv-umm2.457-1). Its least X
+works like a variable void banish's: affordability needs that many matching
+hand cards, the prompt's minimum is that least X, and an X bound earlier
+below it is a dead end. Single-card cost capture reads its
 copiable cost after variant and deck-entry modifications, with an X energy
 part counting as zero, before payment. The captured value travels with the
 stack item. All energy-X, count-X and captured-X payments in one plan agree

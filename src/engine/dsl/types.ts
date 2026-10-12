@@ -402,16 +402,23 @@ export type PaymentCost =
   | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: 1; readonly captureCost: true }
   /** Return matching characters you control to hand, applying ordinary zone replacements. */
   | { readonly cost: "return"; readonly selector: CharacterSelector; readonly count: number }
-  /** Discard matching hand cards. Variable count captures their count as X; captureCost captures one card’s copiable cost as X. */
-  | { readonly cost: "discard"; readonly count: number | "x"; readonly filter: CardFilter; readonly captureCost?: never }
-  | { readonly cost: "discard"; readonly count: 1; readonly filter: CardFilter; readonly captureCost: true }
+  /** Discard a fixed number of matching hand cards. */
+  | { readonly cost: "discard"; readonly count: number; readonly filter: CardFilter; readonly captureCost?: never; readonly min?: never }
+  /**
+   * Discard X matching hand cards: their count is captured as X, which is at
+   * least `min` when given and may otherwise be 0 (rules § Costs,
+   * Requirements, and X → Discard X cards).
+   */
+  | { readonly cost: "discard"; readonly count: "x"; readonly filter: CardFilter; readonly captureCost?: never; readonly min?: number }
+  /** Discard one matching hand card and capture its copiable cost as X. */
+  | { readonly cost: "discard"; readonly count: 1; readonly filter: CardFilter; readonly captureCost: true; readonly min?: never }
   /**
    * "Discard your hand": every card in the payer's hand as the costs are
    * chosen, except the card being played and cards used for its targets or
    * earlier costs. Nobody chooses the cards, and an empty hand pays it
    * (rules § Costs, Requirements, and X → Discard your hand).
    */
-  | { readonly cost: "discard"; readonly count: "hand"; readonly filter?: never; readonly captureCost?: never }
+  | { readonly cost: "discard"; readonly count: "hand"; readonly filter?: never; readonly captureCost?: never; readonly min?: never }
   /** N⧗: spend counters stored on the source (rules § Counters). */
   | { readonly cost: "counters"; readonly amount: number }
   /**
