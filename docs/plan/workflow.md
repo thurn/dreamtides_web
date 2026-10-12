@@ -609,6 +609,8 @@ A gate bead closes only when all of these hold:
 
 ### Implementation brief
 
+Paste `npm run bead:entities -- <filed UUIDs>` output into content briefs for the inventory facts and D21 sample.
+
 Every brief contains, verbatim or by exact path:
 
 - the bead ID, title, description, acceptance criteria, and `Areas:` line;

@@ -258,6 +258,7 @@ composition beads skip it.
    variant the card can take, base and amplified among them, `as=player` and
    `as=enemy`. Every `fail` is fixed and re-swept.
 8. **Judged QA** per D21, by the implementing subagent or a QA subagent:
+   Paste `npm run bead:entities -- <filed UUIDs>` output into the brief to identify each entity and its D21 sample.
    - every entity that introduces a new prompt kind, status indicator, or
      visual effect;
    - plus the D21 10% sample, drawn per entity so it holds across small

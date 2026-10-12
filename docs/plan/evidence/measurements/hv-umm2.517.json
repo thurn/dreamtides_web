@@ -1,0 +1,137 @@
+{
+  "bead": "hv-umm2.517",
+  "implementationWindow": {
+    "start": "2026-10-12T06:15:29.835197+00:00",
+    "end": "2026-10-12T06:24:34.514145+00:00",
+    "endScope": "pre-commit evidence preparation; final commit timing follows"
+  },
+  "receiptDirectory": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/517-implementation-evidence",
+  "validation": {
+    "focused": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "scripts/bead-entities.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-entity-brief",
+      "start": "2026-10-12T06:20:05.539649+00:00",
+      "end": "2026-10-12T06:20:08.249824+00:00",
+      "pid": 48571,
+      "process_group": 48571,
+      "host_load": [
+        4.66162109375,
+        9.83935546875,
+        14.42236328125
+      ],
+      "wall_seconds": 2.7098546660017746,
+      "exit_code": 0
+    },
+    "review": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-entity-brief",
+      "start": "2026-10-12T06:20:45.159034+00:00",
+      "end": "2026-10-12T06:20:51.422188+00:00",
+      "pid": 49594,
+      "process_group": 49594,
+      "host_load": [
+        3.6826171875,
+        8.95947265625,
+        13.88916015625
+      ],
+      "wall_seconds": 6.262942833000125,
+      "exit_code": 0
+    },
+    "knip": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-entity-brief",
+      "start": "2026-10-12T06:21:10.620327+00:00",
+      "end": "2026-10-12T06:21:14.114638+00:00",
+      "pid": 50290,
+      "process_group": 50290,
+      "host_load": [
+        4.95166015625,
+        8.87109375,
+        13.71630859375
+      ],
+      "wall_seconds": 3.4941526660004456,
+      "exit_code": 0
+    }
+  },
+  "observations": [
+    "npm install exited 0; audit reported 17 vulnerabilities: 9 moderate, 7 high, 1 critical.",
+    "Two optional read paths were absent; one offline synthetic fixture search had too small a range. All actual exits retained in external receipts.",
+    "Focused preparation used placeholder asset paths and restored all local card art afterward."
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review command starting one-minute load"
+      }
+    }
+  },
+  "resources": {
+    "servers": [],
+    "browserContexts": [],
+    "heavyCommands": []
+  },
+  "reviewScope": "Bounded developer CLI and two brief instructions; no game runtime or test infrastructure change.",
+  "manualCli": {
+    "manual-known": {
+      "command": [
+        "npm",
+        "run",
+        "bead:entities",
+        "--",
+        "006e2f95-59a2-4cda-a777-e64f4aa31060"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-entity-brief",
+      "start": "2026-10-12T06:21:48.391980+00:00",
+      "end": "2026-10-12T06:21:49.216566+00:00",
+      "pid": 50938,
+      "process_group": 50938,
+      "host_load": [
+        4.2255859375,
+        8.22021484375,
+        13.25634765625
+      ],
+      "wall_seconds": 0.8244961249984044,
+      "exit_code": 0
+    },
+    "manual-unknown": {
+      "command": [
+        "npm",
+        "run",
+        "bead:entities",
+        "--",
+        "ffffffff-ffff-ffff-ffff-ffffffffffff"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/bead-entity-brief",
+      "start": "2026-10-12T06:21:49.237182+00:00",
+      "end": "2026-10-12T06:21:49.553105+00:00",
+      "pid": 50978,
+      "process_group": 50978,
+      "host_load": [
+        4.2255859375,
+        8.22021484375,
+        13.25634765625
+      ],
+      "wall_seconds": 0.3158145000015793,
+      "exit_code": 1
+    }
+  }
+}
