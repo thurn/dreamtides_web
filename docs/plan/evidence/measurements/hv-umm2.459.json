@@ -1,0 +1,483 @@
+{
+  "bead": "hv-umm2.459",
+  "base": "5335cebc8d964faf6ff26947ba8140423ec9959d",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.459",
+  "dispatchWindow": {
+    "start": "2026-10-12T01:14:00+00:00",
+    "basis": "Parent approximate dispatch UTC, disclosed as approximate. Wall includes investigation, fixture corrections, calibration, both whole paired series, coordination, validation and final commit preparation.",
+    "evidenceAt": "2026-10-12T01:25:52.316319+00:00",
+    "finalEvidenceAt": "2026-10-12T01:28:33.190537+00:00",
+    "elapsedToCommitBoundaryMin": 14.55,
+    "boundary": "Approximate parent dispatch through final evidence/commit boundary. This write immediately precedes commit; the sub-minute commit tail is disclosed at that precision."
+  },
+  "outcome": "Measurement-only. The equivalent candidate misses the frozen retain bar; runtime and test source remain byte-identical to the owned base.",
+  "scope": "Only own measurement JSON, compact friction JSON and pre-existing notes are committed. Candidate variants and harness remain ignored textual artifacts.",
+  "originalFeatureContext": {
+    "sourceBead": "hv-umm2.436",
+    "source": "8369761e86bc64817aa1699ca088ee531ed0fa15",
+    "actualCurrentBase": "5335cebc8d964faf6ff26947ba8140423ec9959d",
+    "unmatchedMeasurements": "hv-umm2.436 recorded 200-game engine wall 82.3s / CPU 89.5s and full wall 72.944s on varying loads. Those are context only, not matched attribution or a performance claim.",
+    "historicalFeatureOmissionArm": false
+  },
+  "frozenPlan": {
+    "bead": "hv-umm2.459",
+    "frozenAt": "2026-10-12T01:15:48.587949+00:00",
+    "base": "5335cebc8d964faf6ff26947ba8140423ec9959d",
+    "baselineSourceSha256": "b38868b8160f278321061c9d00f76dd0cf08d354c9cfa572c1022e6500609b49",
+    "arms": {
+      "A": "Current remembered-card feature on owned base.",
+      "B": "Equivalent local fixed-effect grouping once per refresh plus allocation-free first-effect lookup; no cache or schema."
+    },
+    "workload": {
+      "syntheticOnly": true,
+      "seeds": [
+        "remembered-459-0",
+        "remembered-459-1",
+        "remembered-459-2",
+        "remembered-459-3"
+      ],
+      "scenarios": [
+        "baseline 40 cards without fixed effects",
+        "public 40 cards with 16 permanent fixed and 8 expiring effects",
+        "retained 40 cards with 16 permanent fixed effects and hidden/departed sources",
+        "dense 80 cards with 48 permanent fixed and 8 expiring effects"
+      ],
+      "perScenario": "Each seed repeats unchanged refresh, status mutation refresh, clone/JSON reload refresh, both raw views, two deterministic samples, a public normal pass apply, and a final public projection. Hidden cases snapshot public targets first, then hide sources/targets, prune a departed source, and add a private fixed change.",
+      "loop": "Repeat frozen scenarios in the fixed listed order. Hash final states/views/samples/events to compare equivalent outputs and replay fidelity.",
+      "notClaimed": "This is a synthetic remembered-card simulation workload, not a production AI tournament or whole-game throughput benchmark."
+    },
+    "warmup": {
+      "sizeSelection": "Baseline-only calibration: begin at 8 repetitions, double until measured loop wall reaches at least 1.5 seconds, capped at 256. Calibration is not an A/B evidence arm. Then record and freeze that repetition count.",
+      "perArm": "Each fresh child process executes 2 workload repetitions untimed before its timed loop."
+    },
+    "pairedOrder": [
+      "AB",
+      "BA",
+      "AB",
+      "BA",
+      "AB",
+      "BA"
+    ],
+    "perArmRecording": [
+      "UTC, source/harness hashes, exact command, PID, exit, starting/ending one-minute host load",
+      "child loop CPU user/system and monotonic wall, complete child process CPU and wrapper wall",
+      "output SHA and per-scenario fingerprint, fidelity errors"
+    ],
+    "loadComparability": {
+      "rule": "A block is comparable if starting one-minute load differs by at most max(4,25% of paired mean) and both arms exit0 with identical outputs.",
+      "minimumComparableBlocks": 5,
+      "policy": "Keep all six blocks, including any incomparable block. Do not rerun selectively to obtain a win. If fewer than five are comparable, retain measurements only."
+    },
+    "retainBar": {
+      "medianPairedCpuImprovementPercent": 10,
+      "medianPairedWallImprovementPercent": 10,
+      "consistency": "At least 5 of 6 total blocks improve both loop CPU and loop wall; at least 5 load-comparable blocks. All output hashes identical across both source arms, all fidelity checks and focused contracts pass.",
+      "fixedBeforeTiming": true
+    },
+    "resources": "One child at a time, JOURNEY_TEST_WORKERS=2. Synthetic fixed workload is not a D17 heavy command; no heavy lock, full, fuzz, browser or server.",
+    "restoration": "Write each source variant only inside the owned worktree; restore exact intended baseline/final bytes in finally, recording hashes.",
+    "timingNotCiGate": true
+  },
+  "workloadClarifications": {
+    "frozenBeforeArmsAt": "2026-10-12T01:18:38.715383+00:00",
+    "originalPlanSha256": "9205169c38ebe9bc7fca0ae0fd8e192e4fd2c162f87437be1ca72e50054c4493",
+    "change": "Expiring control effects originate from a visible avatar, while fixed permanent effects retain the declared hidden/departed card sources.",
+    "rationale": "Untimed warmup sampled view parity failed when an expiring effect was deliberately given a departed source. The remembered-card feature concerns fixed permanent changes, so public expiring controls avoid broadening the benchmark into that separate semantics. Preserve raw diagnostic, no claim of equivalent arm or performance measurement for this invalid fixture.",
+    "sourceUnchangedSha256": "b38868b8160f278321061c9d00f76dd0cf08d354c9cfa572c1022e6500609b49",
+    "retainBarUnchanged": true,
+    "schemaCorrection": "Before any A/B arm, assign the declared seed to state.seed (BattleSeed), not an RNG counter, and use the actual endOfTurn Expiry tag for expiring controls. Prior successful calibration is retained as an invalid-schema fixture diagnostic; repeat the same declared calibration rule on the corrected fixture.",
+    "finalHarnessSha256": "ed75d8fe7c5f153305cb7646347bf4ff58add47357f5ed6d5be004f77563587c",
+    "correctedAt": "2026-10-12T01:20:01.504542+00:00"
+  },
+  "finalFrozenSize": {
+    "frozenAt": "2026-10-12T01:22:59.171998+00:00",
+    "repeats": 256,
+    "rule": "First valid baseline calibration reaching 1.5s loop wall, capped256, as declared before calibration.",
+    "planSha256": "9205169c38ebe9bc7fca0ae0fd8e192e4fd2c162f87437be1ca72e50054c4493",
+    "harnessSha256": "db7a900e1392673a6945b3549dc15fdd3a07a26243f5c190981f3ba9451d308c"
+  },
+  "finalFrozenSource": {
+    "frozenAt": "2026-10-12T01:22:59.172332+00:00",
+    "planSha256": "9205169c38ebe9bc7fca0ae0fd8e192e4fd2c162f87437be1ca72e50054c4493",
+    "harnessSha256": "db7a900e1392673a6945b3549dc15fdd3a07a26243f5c190981f3ba9451d308c",
+    "repeatCount": 256,
+    "sourceSha256": {
+      "A": "b38868b8160f278321061c9d00f76dd0cf08d354c9cfa572c1022e6500609b49",
+      "B": "21e722a7024d22fa938f07741d130b45470ffc5c6649bc19df87fbbbae82097d"
+    },
+    "codeScope": "Only rememberKnownCards local per-call grouping and observedFixedEffect ordered first lookup. No stored cache/state/type/API/consumer changes.",
+    "lookupConsumer": "Found and missing effects are included in each cycle digest."
+  },
+  "pairedComparison": {
+    "calculatedAt": "2026-10-12T01:23:46.041449+00:00",
+    "planSha256": "9205169c38ebe9bc7fca0ae0fd8e192e4fd2c162f87437be1ca72e50054c4493",
+    "frozenSourceAndHarness": {
+      "frozenAt": "2026-10-12T01:22:59.172332+00:00",
+      "planSha256": "9205169c38ebe9bc7fca0ae0fd8e192e4fd2c162f87437be1ca72e50054c4493",
+      "harnessSha256": "db7a900e1392673a6945b3549dc15fdd3a07a26243f5c190981f3ba9451d308c",
+      "repeatCount": 256,
+      "sourceSha256": {
+        "A": "b38868b8160f278321061c9d00f76dd0cf08d354c9cfa572c1022e6500609b49",
+        "B": "21e722a7024d22fa938f07741d130b45470ffc5c6649bc19df87fbbbae82097d"
+      },
+      "codeScope": "Only rememberKnownCards local per-call grouping and observedFixedEffect ordered first lookup. No stored cache/state/type/API/consumer changes.",
+      "lookupConsumer": "Found and missing effects are included in each cycle digest."
+    },
+    "blocks": [
+      {
+        "block": 1,
+        "order": "AB",
+        "loadGap": 1.2300000000000004,
+        "loadGapLimit": 6.81875,
+        "comparable": true,
+        "outputParity": true,
+        "cpuImprovementPercent": 8.64238617014017,
+        "wallImprovementPercent": 10.017118055182817,
+        "completeChildCpuImprovementPercent": 7.2332549626573535,
+        "wrapperWallImprovementPercent": 8.742453755609203
+      },
+      {
+        "block": 2,
+        "order": "BA",
+        "loadGap": 1.7699999999999996,
+        "loadGapLimit": 7.19375,
+        "comparable": true,
+        "outputParity": true,
+        "cpuImprovementPercent": 5.855700197793434,
+        "wallImprovementPercent": 7.262643799755953,
+        "completeChildCpuImprovementPercent": 4.908832262941809,
+        "wrapperWallImprovementPercent": 6.3259830825171175
+      },
+      {
+        "block": 3,
+        "order": "AB",
+        "loadGap": 0.0,
+        "loadGapLimit": 7.415,
+        "comparable": true,
+        "outputParity": true,
+        "cpuImprovementPercent": 5.416250297465952,
+        "wallImprovementPercent": 6.708244497751858,
+        "completeChildCpuImprovementPercent": 4.323488435596968,
+        "wrapperWallImprovementPercent": 5.506328711059194
+      },
+      {
+        "block": 4,
+        "order": "BA",
+        "loadGap": 0.0,
+        "loadGapLimit": 7.04,
+        "comparable": true,
+        "outputParity": true,
+        "cpuImprovementPercent": 5.138765553325431,
+        "wallImprovementPercent": 6.488772906849272,
+        "completeChildCpuImprovementPercent": 4.772624887271548,
+        "wrapperWallImprovementPercent": 6.058476144437252
+      },
+      {
+        "block": 5,
+        "order": "AB",
+        "loadGap": 0.0,
+        "loadGapLimit": 7.1575,
+        "comparable": true,
+        "outputParity": true,
+        "cpuImprovementPercent": 8.818207321528938,
+        "wallImprovementPercent": 10.34622570988829,
+        "completeChildCpuImprovementPercent": 8.242393269274173,
+        "wrapperWallImprovementPercent": 10.088301042214542
+      },
+      {
+        "block": 6,
+        "order": "BA",
+        "loadGap": 1.009999999999998,
+        "loadGapLimit": 7.03125,
+        "comparable": true,
+        "outputParity": true,
+        "cpuImprovementPercent": 6.48187373089546,
+        "wallImprovementPercent": 8.302049701445647,
+        "completeChildCpuImprovementPercent": 6.247056272848884,
+        "wrapperWallImprovementPercent": 7.539113834061217
+      }
+    ],
+    "comparableBlocks": 6,
+    "allOutputHashesIdentical": true,
+    "cycleSha256": "9fb8ebca0698224bcc2b3e9a23dd317cce354377dff2ee58314b780cfbef2214",
+    "outputSha256": "909ee4599ac491266c213023eeae9f4d8f50528e4a224c11f5fff17c8a2b3771",
+    "medianPairedCpuImprovementPercent": 6.168786964344447,
+    "medianPairedWallImprovementPercent": 7.7823467506008,
+    "bothMetricImprovementBlocks": 6,
+    "retainBarCleared": false,
+    "decision": "Measurement-only result: restore baseline runtime source; no further variant or selective rerun.",
+    "limitations": [
+      "Fixed mixed synthetic workload; not general AI or whole-game throughput.",
+      "Timings include views, copies, serialization, sampling and public engine pass. They do not establish absolute marginal CPU attribution to remembered-card tracking.",
+      "The original hv-umm2.436 loaded-host full/fuzz timings are unmatched context, not a performance comparison.",
+      "The earlier wave1 lacks consumed direct lookup outputs and is excluded from the final keep decision."
+    ],
+    "perArmCommands": 12,
+    "allArmsExitZero": true,
+    "totalWrapperSeconds": 23.677607415998864,
+    "totalLoopWallSeconds": 20.275460878,
+    "totalLoopCpuSeconds": 23.484793,
+    "finalSourceRestoredIdentically": true
+  },
+  "perArmEvidence": {
+    "path": "paired-results.json",
+    "sha256": "daf7b095424850708765e10fb5e851bb5527a1d2f146eb0c9f4a8a64b245fe03",
+    "rows": 12,
+    "fields": "UTC, command, PID via loop receipt, exit, source/harness/output hashes, start/end load, loop wall/user/system/total CPU, whole-child CPU and wrapper wall. Block stdout/stderr logs retained.",
+    "outputScope": "Each cycle jointly hashes four fixed ordered scenarios, including serialized remembered-card record order and cloned status/effects, actual lookup results, public/private views, deterministic samples, events and post-pass state. Separate per-scenario digest files are not recorded; joint SHA detects any contribution difference."
+  },
+  "restoration": {
+    "restoredAt": "2026-10-12T01:23:22.951127+00:00",
+    "baselineRestoredIdentically": true,
+    "sourceSha256": "b38868b8160f278321061c9d00f76dd0cf08d354c9cfa572c1022e6500609b49",
+    "allRecordedArms": 12,
+    "allChildrenTerminated": true
+  },
+  "earlierAttempts": {
+    "fixture1": {
+      "artifact": "benchmark-fixture-attempt01.json",
+      "disposition": "Incorrect ApplyResult.kind assertion fails during untimed warmup; not performance evidence."
+    },
+    "fixture2": {
+      "artifact": "calibration-attempt02.json",
+      "source": "benchmark-fixture-attempt02.ts",
+      "stderr": "calibration-attempt02.stderr.log",
+      "disposition": "Untimed sampling mismatch in an invalid fixture: at:turnEnd was not a real Expiry tag and the seed was assigned to rng.seed instead of state.seed. It does not establish an engine defect. Final controls use public avatar origins and corrected schema; no valid hidden-source expiring-effect reproduction or further investigation is claimed."
+    },
+    "fixture3": {
+      "artifact": "calibration-attempt03.json",
+      "source": "benchmark-fixture-attempt03.ts",
+      "disposition": "Prior calibration retained as invalid-schema fixture diagnostic: correct declared BattleSeed assignment and endOfTurn expiry before valid arms."
+    },
+    "earlierWholeSeries": {
+      "disposition": "Earlier complete six-block series retained as harness diagnostic. Direct lookup values were not consumed by its digest, so it is excluded from final retain decision.",
+      "correctedAt": "2026-10-12T01:22:53.719354+00:00",
+      "correction": "Every measured found/missing observedFixedEffect result now contributes to the cycle digest.",
+      "retainBarUnchanged": true,
+      "newHarnessSha256": "db7a900e1392673a6945b3549dc15fdd3a07a26243f5c190981f3ba9451d308c",
+      "allOriginalArmsRetained": 12,
+      "sourceRestored": {
+        "restoredAt": "2026-10-12T01:21:33.542113+00:00",
+        "baselineRestoredIdentically": true,
+        "sourceSha256": "b38868b8160f278321061c9d00f76dd0cf08d354c9cfa572c1022e6500609b49",
+        "allRecordedArms": 12,
+        "allChildrenTerminated": true
+      }
+    }
+  },
+  "calibrationEvidence": {
+    "final": "calibration.json",
+    "repeats": [
+      8,
+      16,
+      32,
+      64,
+      128,
+      256
+    ],
+    "allExitZero": true,
+    "selectedRepetitions": 256,
+    "selection": "First corrected baseline loop meeting declared 1.5s target at 256 repetitions; identical rule after explicitly recorded harness corrections."
+  },
+  "checks": [
+    {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/engine/view/hidden-card-status.test.ts"
+      ],
+      "exit": 0,
+      "wallSeconds": 2.956,
+      "loadAtStart": "{ 26.35 23.75 20.79 }",
+      "oneMinuteLoad": 26.35,
+      "completedAt": "2026-10-12T01:24:17.707979+00:00"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "exit": 0,
+      "wallSeconds": 0.365,
+      "startedAt": "2026-10-12T01:26:40.659403+00:00",
+      "loadAtStart": "{ 18.86 21.49 20.29 }",
+      "oneMinuteLoad": 18.86,
+      "completedAt": "2026-10-12T01:26:41.024921+00:00"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "exit": 0,
+      "wallSeconds": 3.821,
+      "startedAt": "2026-10-12T01:26:41.028576+00:00",
+      "loadAtStart": "{ 18.86 21.49 20.29 }",
+      "oneMinuteLoad": 18.86,
+      "completedAt": "2026-10-12T01:26:44.849799+00:00"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "command": "focused existing semantic tests",
+      "oneMinuteLoad": 26.35,
+      "raw": "{ 26.35 23.75 20.79 }"
+    },
+    {
+      "command": "npm run review",
+      "startedAt": "2026-10-12T01:26:40.659403+00:00",
+      "oneMinuteLoad": 18.86,
+      "raw": "{ 18.86 21.49 20.29 }"
+    },
+    {
+      "command": "npm run knip",
+      "startedAt": "2026-10-12T01:26:41.028576+00:00",
+      "oneMinuteLoad": 18.86,
+      "raw": "{ 18.86 21.49 20.29 }"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting observation"
+      },
+      "testDelta": {
+        "measuredFor": "No checked-in test source, entrypoint, fixture, jsdom or case changes."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 0
+  },
+  "semanticCoverage": "Existing 23 contracts cover cloned snapshots, fixed/source-reading classification, hidden/private status changes, hidden/ceased source retention, effect order, save/determinization, cancellation and failing-branch isolation. Joint baseline/candidate digest parity supplies measured-workload equivalence; no timing assertion is added to CI.",
+  "fallout": {
+    "exportedApiChanged": false,
+    "schemaOrCacheAdded": false,
+    "changedRuntimeBodies": [],
+    "importersReadOnly": {
+      "rememberKnownCards": [
+        "src/engine/steps/context.ts",
+        "src/engine/view/knowledge.ts internal callers",
+        "src/engine/view/hidden-card-status.test.ts"
+      ],
+      "observedFixedEffect": [
+        "src/engine/view/view.ts",
+        "src/engine/testing/determinization-fidelity.ts"
+      ],
+      "fixedClassification": [
+        "src/engine/view/determinize.ts",
+        "src/rules/battle/fold.ts",
+        "src/engine/view/view-knowledge.test.ts"
+      ]
+    },
+    "outsideAreasChanged": []
+  },
+  "resources": {
+    "install": {
+      "parentObserver": 87905,
+      "exit": 0,
+      "reportedWallSeconds": 2
+    },
+    "lightBenchmark": "Synthetic fixed-state workload, not a fuzz command or full test run; D17 heavy definition does not apply. One fresh child at a time, no browser/server.",
+    "commandObservers": [
+      {
+        "session": 46735,
+        "exit": 1,
+        "scope": "initial harness diagnostic"
+      },
+      {
+        "session": 16624,
+        "exit": 0,
+        "scope": "prior invalid-schema calibration"
+      },
+      {
+        "session": 93009,
+        "exit": 0,
+        "scope": "first valid calibration"
+      },
+      {
+        "session": 60790,
+        "exit": 0,
+        "scope": "earlier whole paired series"
+      },
+      {
+        "session": 61322,
+        "exit": 0,
+        "scope": "final corrected calibration and whole paired series"
+      },
+      {
+        "session": 8671,
+        "exit": 0,
+        "scope": "focused checks"
+      },
+      {
+        "session": 67104,
+        "exit": 0,
+        "scope": "final review and Knip"
+      }
+    ],
+    "servers": [],
+    "browserContexts": [],
+    "providers": [],
+    "heavyLocks": [],
+    "remainingOwnedProcesses": [],
+    "closure": {
+      "recordedCommandSessions": [
+        46735,
+        16624,
+        93009,
+        60790,
+        61322,
+        8671,
+        67104
+      ],
+      "allSessionsClosed": true,
+      "finalWholeSeriesChildren": 12,
+      "allArmExits": 0,
+      "sourceRestoredSha256": "b38868b8160f278321061c9d00f76dd0cf08d354c9cfa572c1022e6500609b49",
+      "allTemporarySourceMutationsRestored": true,
+      "servers": [],
+      "providers": [],
+      "browserContexts": [],
+      "heavyLocks": [],
+      "remainingOwnedProcesses": [],
+      "observation": "Final process listing matched only the transient inspection shell and rg command. No own benchmark or validation child remains; shared services are untouched."
+    }
+  },
+  "validationScope": "Internal measurement-only bead: existing focused contracts, review and Knip. No stored state, production behavior, test infrastructure or configuration change; no full, fuzz or browser acceptance run.",
+  "remainingWork": [],
+  "preExistingDiagnosis": "The attempt02 expiring-effect mismatch predates its seed/expiry schema correction. Exact malformed fixture and raw stderr are retained. It supplies no valid production-defect proof and warrants no separate repair investigation from this evidence alone.",
+  "finalSourceSha256": {
+    "src/engine/view/knowledge.ts": "b38868b8160f278321061c9d00f76dd0cf08d354c9cfa572c1022e6500609b49",
+    "src/engine/view/view-knowledge.test.ts": "5170dbc1dfd9a35262b2ddaaed216021024d2e0a2380cc289d6a367837fa1bc2",
+    "src/engine/view/hidden-card-status.test.ts": "fed109460e1756589977db173213c9fbd2e98534e26a9c6b2aad29be8d1bf678"
+  },
+  "artifactManifest": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.459/evidence-manifest.json",
+    "artifactCount": 120,
+    "sha256": "39acedbaa0c54453b2fdea694aa24212530ab649fbd1242d14f7d67e99cb2dad"
+  },
+  "finalChecksOutcome": {
+    "focusedFiles": 2,
+    "focusedCases": 23,
+    "review": "Evidence-only changed-file path validates 445 friction records; exit0.",
+    "knipExit": 0,
+    "runtimeAndTestSourceUnchanged": true,
+    "retainedOptimization": false
+  },
+  "diagnosticWallWindows": {
+    "finalCalibrationWrapperS": 5.402879,
+    "finalPairedWrapperS": 23.677607415998864,
+    "earlierWholeSeriesWrapperS": 24.181771085002765,
+    "earlierInvalidSchemaCalibrationWrapperS": 6.351825,
+    "firstFailedCalibrationWrapperS": 0.613462,
+    "notCombinedAsValidation": "Prior harness attempts are diagnostics. Only the corrected frozen six-block series governs the retain decision."
+  }
+}
