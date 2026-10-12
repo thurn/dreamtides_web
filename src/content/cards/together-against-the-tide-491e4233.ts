@@ -1,3 +1,7 @@
+import { energy, event, reclaim } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import ethereal from "../figments/ethereal-3eddb1b8";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,9 @@ export default card({
   cardNumber: 429,
   art: { x: 0.042, y: 1, scale: 1.1 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    event(p.materializeFigments(parseFigmentId(ethereal.id), variant.amplified ? 3 : 2, { spark: 1 })),
+    reclaim(energy(2)),
+  ],
+  verifiedText: "223mz4ymg0r",
 });

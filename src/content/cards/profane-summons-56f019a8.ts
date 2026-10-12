@@ -1,3 +1,7 @@
+import { energy, event, reclaim } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import monstrosity from "../figments/monstrosity-ec9f97b2";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,9 @@ export default card({
   cardNumber: 506,
   art: { x: 0.084, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    event(p.materializeFigments(parseFigmentId(monstrosity.id), 1, { spark: variant.amplified ? 5 : 4 })),
+    reclaim(energy(4)),
+  ],
+  verifiedText: "xz6vkvs5ao",
 });

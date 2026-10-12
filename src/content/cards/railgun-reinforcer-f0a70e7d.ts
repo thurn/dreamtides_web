@@ -1,3 +1,8 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenDissolved } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import warrior from "../figments/warrior-bb1a5acd";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +26,13 @@ export default card({
   cardNumber: 171,
   art: { x: 0.084, y: 0.369, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    // The ability watches its own dissolve too, and sees each warrior as it last was in play (RD-hv-umm2.65-1).
+    triggered(
+      whenDissolved(characterYouControl({ subtype: "Warrior" })),
+      p.materializeFigments(parseFigmentId(warrior.id), 1, { spark: variant.amplified ? 2 : 1 }),
+      { oncePerTurn: true },
+    ),
+  ],
+  verifiedText: "1m3srhgpah3",
 });

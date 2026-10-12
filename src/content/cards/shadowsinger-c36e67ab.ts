@@ -1,3 +1,8 @@
+import { characterYouControl, energy, thisCardIn } from "../../engine/dsl/builders";
+import { either, triggered, whenDiscardSelf, whenDissolved, whenErodeSelf } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import survivor from "../figments/survivor-5256888f";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +26,16 @@ export default card({
   cardNumber: 361,
   art: { x: 0.054, y: -0.4, scale: 1.97 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    // The ability watches its own dissolve too, and sees each character as it last was in play (RD-hv-umm2.65-1).
+    triggered(
+      whenDissolved(characterYouControl()),
+      p.materializeFigments(parseFigmentId(survivor.id), 1, { spark: variant.amplified ? 2 : 1 }),
+    ),
+    // "When you discard or erode this card" works from the void (RD-hv-umm2.87-1).
+    triggered(either(whenDiscardSelf(), whenErodeSelf()), p.grantReclaim(thisCardIn("void"), { costs: [energy(0)] }), {
+      zone: "void",
+    }),
+  ],
+  verifiedText: "2dfvt3l2fc5",
 });
