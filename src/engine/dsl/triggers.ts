@@ -116,6 +116,25 @@ export function whenErodeSelf(): Trigger {
   return { on: "erode", player: "you", filter: {}, self: true };
 }
 
+/**
+ * "When you reclaim a card" (or "When the opponent reclaims a card", with
+ * `player`): each card matching `filter`, as it was played, that player
+ * plays from their void by Reclaim, matched as its play is announced.
+ */
+export function whenReclaim(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {
+  return { on: "reclaim", player, filter };
+}
+
+/**
+ * "When you reclaim this character": its own play by Reclaim, matched on the
+ * stack it was just played onto, whatever the ability's zone. "It" and "this
+ * character" name the card there, so "it gains +1✦" gives the card spark
+ * that it keeps as it enters play.
+ */
+export function whenReclaimSelf(): Trigger {
+  return { on: "reclaim", player: "you", filter: {}, self: true };
+}
+
 export function whenAbandon(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {
   return { on: "abandon", player, filter };
 }

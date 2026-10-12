@@ -9,7 +9,7 @@ import {
   zoneCount,
 } from "../dsl/selectors";
 import { evaluateValue } from "../dsl/values";
-import { cardMatchesFilter, characteristics, copiableCostOf } from "../continuous/characteristics";
+import { cardMatchesFilter, characteristics, characteristicsOf, copiableCostOf } from "../continuous/characteristics";
 import { supportedBy } from "../continuous/support";
 import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr, ZoneCardSpec, ZoneTargetSpec } from "../dsl/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
@@ -19,6 +19,7 @@ import { BASE_VARIANT } from "../dsl/types";
 import type { StepContext } from "../steps/types";
 import { randomDeckRemovalSettler, seesSource, type DeckRemovalBounds, type UnorderedDeckRemovals } from "../view/knowledge";
 import { abilityOrigin, originAbilities } from "../rules/activation";
+import { effectiveSpark } from "../rules/spark";
 import type { BanishCardsNode, BanishNamedCardsNode } from "./primitives/banish-cards";
 import type { MaterializeNode } from "./primitives/materialize";
 import { primitiveDefinition } from "./registry";
@@ -484,6 +485,10 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source).length,
     countCards: (count) => zoneCount(ctx.state, ctx.catalog, count, env.controller),
     movedCosts: (ref) => env.moved.costs(ref.node),
+    sourceSpark: () => {
+      const self = sourceInstance(env.source);
+      return self !== null && ctx.state.instances[self]?.zone === "play" ? effectiveSpark(ctx.state, ctx.catalog, self) : 0;
+    },
   });
 }
 
@@ -535,6 +540,19 @@ export function checkCondition(ctx: StepContext, condition: Condition, env: Effe
 }
 
 /**
+ * Whether "this character" or "it" names the card `id` now: a card in play,
+ * or a character card on the stack in an ability of its own that triggered on
+ * its own play, as "When you reclaim this character, it gains +1✦" does
+ * (rules § Ability Types → When you reclaim this character). Elsewhere the
+ * card is no character.
+ */
+function namesCharacter(ctx: StepContext, id: InstanceId, env: EffectEnv): boolean {
+  const zone = ctx.state.instances[id]?.zone;
+  if (zone === "play") return true;
+  return zone === "stack" && env.subject === id && sourceInstance(env.source) === id && characteristicsOf(ctx.state, ctx.catalog, id).cardType === "character";
+}
+
+/**
  * The characters a character effect applies to now. A chosen target that is
  * no longer legal (it no longer matches, or cannot be targeted now) is
  * skipped; if none remain, that part of the effect does nothing and reports
@@ -545,13 +563,13 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
     case "self": {
       // An emblem is never a character (P4).
       const self = sourceInstance(env.source);
-      return self !== null && ctx.state.instances[self]?.zone === "play" ? [self] : [];
+      return self !== null && namesCharacter(ctx, self, env) ? [self] : [];
     }
     case "all":
       return matchingCharacters(ctx.state, ctx.catalog, ref.selector, env.controller, env.source);
     case "subject": {
       const subject = env.subject;
-      return subject !== null && ctx.state.instances[subject]?.zone === "play" ? [subject] : [];
+      return subject !== null && namesCharacter(ctx, subject, env) ? [subject] : [];
     }
     case "supported": {
       const self = sourceInstance(env.source);

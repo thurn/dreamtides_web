@@ -10,14 +10,18 @@
  * event confirms the dissolve. "When … is put into your void" abilities
  * match a card's `enteredVoid`, as it is once in the void (RD-hv-umm2.77-1),
  * "When you discard this card" abilities their own card's `discarded`, from
- * the void it went to (RD-hv-umm2.82-1), and "When you erode …" abilities a
- * card's `eroded`, also once it is in its owner's void (RD-hv-umm2.87-1).
+ * the void it went to (RD-hv-umm2.82-1), "When you erode …" abilities a
+ * card's `eroded`, also once it is in its owner's void (RD-hv-umm2.87-1), and
+ * "When you reclaim …" abilities a `cardPlayed` whose play used Reclaim, with
+ * the card on the stack, where "When you reclaim this character" sees it
+ * (RD-hv-umm2.91-1).
  */
 import type { EngineCatalog } from "../catalog";
 import { cardMatchesFilter, playedMatchesFilter } from "../continuous/characteristics";
 import { worksInZone } from "../dsl/abilities";
 import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
+import type { CardPlayedEvent } from "../events/kinds/card-played";
 import type { LeftPlayEvent } from "../events/kinds/left-play";
 import { conditionHolds } from "../effects/interpreter";
 import type { EngineEvent, EngineEventKind } from "../events";
@@ -51,6 +55,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   draw: ["cardDrawn"],
   discard: ["discarded"],
   erode: ["eroded"],
+  reclaim: ["cardPlayed"],
   abandon: ["abandoned"],
   leavesPlay: ["leftPlay"],
   dissolve: ["dissolved"],
@@ -105,8 +110,10 @@ interface Departure {
 /**
  * `side`'s listeners in the fixed order: avatar, dreamsigns, characters in
  * play (B0→B9 then F0→F8), then cards in its void, hand, and deck, each zone
- * by instance number. A card `departing` from `side`'s play is ordered by
- * the zone it is going to; a card going to no ordered zone (the stack, the
+ * by instance number, then the cards on the stack it controls, bottom
+ * first, where only "When you reclaim this character" works
+ * (RD-hv-umm2.91-1). A card `departing` from `side`'s play is ordered by the
+ * zone it is going to; a card going to no ordered zone (the stack, the
  * Banished zone, or nowhere) comes after the deck (RD-hv-7x4l.17-2). Its
  * listener sees it where it is: while it leaves, still in play; once
  * dissolved, in its owner's void, controlled by its owner, so in `side`'s
@@ -130,6 +137,9 @@ function listeners(state: BattleState, side: Side, departing: Departure | null):
     const arriving = moving !== null && moving.to === zone ? [moving.instance] : [];
     const ids = [...sideState[zone].filter((id) => id !== moving?.instance), ...arriving].sort((a, b) => instanceNumber(a) - instanceNumber(b));
     for (const id of ids) result.push(cardListener(state, id));
+  }
+  for (const item of state.stack) {
+    if (item.kind === "card" && item.controller === side) result.push(cardListener(state, item.instance));
   }
   if (moving !== null && !OTHER_ZONES.some((zone) => zone === moving.to)) result.push(cardListener(state, moving.instance));
   return result;
@@ -190,6 +200,24 @@ function matchTrigger(
   return match;
 }
 
+/**
+ * Whether the play `event` announces is a reclaim `trigger` names: by its
+ * player, using Reclaim (the play step marks the card `playedViaReclaim`
+ * before announcing it), and matching the filter by the characteristics it
+ * was recorded with as it was played, as "when you play" does.
+ */
+function reclaimMatches(
+  state: BattleState,
+  catalog: EngineCatalog,
+  trigger: Extract<Trigger, { readonly on: "reclaim" }>,
+  event: CardPlayedEvent,
+  you: Side,
+): boolean {
+  if (event.side !== resolvePlayer(you, trigger.player) || state.instances[event.instance]?.status.playedViaReclaim !== true) return false;
+  const played = state.turnLog.played[event.side].filter((card) => card.instance === event.instance).pop();
+  return played !== undefined && playedMatchesFilter(state, catalog, played, trigger.filter);
+}
+
 /** `matchTrigger` for one trigger kind; `TRIGGER_EVENTS` lists the events each case can match. */
 function matchKind(
   state: BattleState,
@@ -207,6 +235,12 @@ function matchKind(
   }
   if (trigger.on === "dissolve") {
     return event.kind === "dissolved" && armed ? { subject: event.instance } : null;
+  }
+  if (trigger.on === "reclaim" && trigger.self === true) {
+    // "When you reclaim this character" works from the stack its card was just played onto, whatever its ability's zone.
+    return listener.zone === "stack" && event.kind === "cardPlayed" && event.instance === self && reclaimMatches(state, catalog, trigger, event, you)
+      ? { subject: self }
+      : null;
   }
   if (!inZone) return null;
   switch (trigger.on) {
@@ -258,6 +292,8 @@ function matchKind(
         filterMatches(catalog, state, trigger.filter, event.instance)
         ? { subject: event.instance }
         : null;
+    case "reclaim":
+      return event.kind === "cardPlayed" && reclaimMatches(state, catalog, trigger, event, you) ? { subject: event.instance } : null;
     case "abandon":
       return event.kind === "abandoned" &&
         event.side === resolvePlayer(you, trigger.player) &&

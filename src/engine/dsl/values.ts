@@ -22,6 +22,13 @@ export interface ValueScope {
   count(selector: CharacterSelector): number;
   countCards(count: CardCountValue): number;
   movedCosts?(ref: MovedCardRef): readonly number[];
+  /** The source character's effective spark while it is in play, else 0; absent outside a resolving effect. */
+  sourceSpark?(): number;
+}
+
+/** "This character's ✦", read as a resolving effect reads it (rules § Spark → This character's ✦). */
+export function thisCharacterSpark(): ValueExpr {
+  return { value: "sourceSpark" };
 }
 
 /** The number a value expression stands for now. */
@@ -46,6 +53,9 @@ export function evaluateValue(state: BattleState, value: ValueExpr, scope: Value
       const self = sourceInstance(scope.source);
       return self === null ? 0 : supportersOf(state, self).length;
     }
+    case "sourceSpark":
+      if (scope.sourceSpark === undefined) throw new Error("A static ability cannot read this character's ✦");
+      return scope.sourceSpark();
     case "times":
       return evaluateValue(state, value.of, scope) * value.factor;
     case "locked":

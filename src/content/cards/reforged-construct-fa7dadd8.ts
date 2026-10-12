@@ -1,3 +1,6 @@
+import { energy, reclaim } from "../../engine/dsl/builders";
+import { triggered, triggeringCard, whenReclaimSelf } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 85,
   art: { x: -0.084, y: -0.025, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(whenReclaimSelf(), p.gainSpark(triggeringCard(), variant.amplified ? 2 : 1)),
+    reclaim(energy(0)),
+  ],
+  verifiedText: "le1cjviqg1",
 });

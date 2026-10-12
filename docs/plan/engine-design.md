@@ -870,7 +870,9 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
 - **Ordering.** Matches enqueue in event order. Simultaneous matches use the
   fixed order: the active side first; within a side, avatar → dreamsigns →
   characters, B0→B9 then F0→F8. Cards in other zones follow, ordered by zone
-  (void, hand, deck) and then by instance number; a card leaving play is
+  (void, hand, deck) and then by instance number, then the cards the side
+  controls on the stack, bottom first, where only "When you reclaim this
+  character" works (RD-hv-umm2.91-1); a card leaving play is
   ordered by the zone it is going to, and one going to no ordered zone comes
   last (RD-hv-7x4l.17-2). Each side's floating and delayed triggers follow
   its cards, in creation order.
@@ -1441,11 +1443,11 @@ with the ones Phase 5 primitive beads add, each with tests.
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices), `withMaterialized(materialize, effect)` (binds `capturedCards()`) | `forEach`, `takeExtraTurn` (C8) |
 | Selectors | characters (`CharacterSelector`: controller, subtype, ✦ and cost bounds that may read the source's X or a `countCards` zone count, figment or not, exhausted, rank, challenging or blocking now (rules § Holding a role), "another"); `supported` (C9); stack cards (`stackItem`); card filters (type, subtype, constant cost bounds; `costExactly(n)` for both); players (`you`, `opponent`); cards in a deck, hand, or void (`fromVoid`, `everyIn` with an optional `costAtMost`, a constant or X read once as the effect resolves, `topOfDeck`, `randomIn`, `thisCardIn`) | |
-| Values | constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost") | stored counters, turn counters |
+| Values | constant, `x`, `count(selector)`, hand size, `countCards(zone, filter, player)` (cards in a deck, hand, or void; a filter only for a void), `supporting` (C9), `times`, `lockedAtResolution`, `costOf(cardsMovedBy(node))` ("that card's cost"), `thisCharacterSpark()` (the source's effective ✦ in a resolving effect, 0 once it has left play) | stored counters, turn counters |
 | Durations | `permanent`, `untilEndOfTurn`, `untilYourNextTurn`, `untilNextDay`, `whileSourceInPlay`, `untilOpponentPays(cost)` (C7) | |
 | Conditions | `controls` (`controls(selector, atLeast = 1)`, an optional `atMost`; `controlsNone(selector)` for "if you control no …"), `energyAtLeast`, `costPaid`, `sourceWasReclaimed` (the source's latest actual committed play used Reclaim), `sourceIn`, `cardsIn` (`noCardsIn(zone, player)`, `conditionCardCounts(zone, atLeast, { player, filter, atMost })`) | |
 | Victory | `winCondition(condition)` (an ability: "If …, you win the game" on a card in play or emblem), `winTheGame` (a resolving effect) (C15) | |
-| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenDiscardSelf()` (works from the void), `whenErode(player, filter)`, `whenErodeSelf()` (works from the void), `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `atEndOfTurn(player?)` (as the Ending phase begins), `either` | |
+| Triggers | `onMaterialized`, `onDawn`, `onDusk`, `onNight`, `onChallenge`, `onDissolved`, `whenYouPlay(filter, nth?)`, `whenOpponentPlays`, `whenMaterialize`, `whenDraw`, `whenDiscard`, `whenDiscardSelf()` (works from the void), `whenErode(player, filter)`, `whenErodeSelf()` (works from the void), `whenReclaim(player, filter)`, `whenReclaimSelf()` (works from the stack), `whenAbandon`, `whenLeavesPlay`, `whenDissolved(selector, { figment? })`, `whenScores`, `whenOpponentScores`, `whenLeavesVoid`, `whenPutIntoVoid(player, filter)`, `whenYouChallengeWith(n, selector)` (C10), `atStartOfTurn`, `atStartOfFirstTurn`, `atEndOfTurn(player?)` (as the Ending phase begins), `either` | |
 
 Discover accepts an exact copiable-cost value expression or a strict lower
 bound (`costGreaterThan`) alongside its card filter, or a free

@@ -545,6 +545,13 @@ character _has_ (from static abilities, Support, or similar effects) and a new
 base spark are never gains. Abilities that trigger "when … gains ✦" trigger
 only on gains.
 
+**This character's ✦:** An effect that reads "this character's ✦", as in
+"gain X⍟ where X is this character's ✦", reads the character's spark as the
+effect resolves, every change to it included: gained spark, spark with a
+duration, and spark it has from static abilities and Support. A later part
+of the same effect, as in "Then this character gains +1✦," does not change
+the value already read.
+
 **Additional spark:** An ability such as "When a character you control gains
 ✦, it gains 1 additional ✦" applies to each gain, and the additional ✦ has
 the same duration as the gain that caused it. The additional ✦ triggers no
@@ -1402,7 +1409,7 @@ see.
 in play. An ability that names another zone, such as "▸Dawn: If this card is in
 your void, …", works while the card is in that zone instead. Avatar and
 dreamsign abilities always work. A ▸Dissolved ability triggers from wherever
-the dissolved card went. It triggers for the player who controlled the character
+the dissolved card went, and "When you reclaim this character" from the stack. It triggers for the player who controlled the character
 as it left play, among that player's abilities, ordered by the zone it went to.
 A card dissolved into its owner's void is controlled by its owner there; this
 does not change who controls its ▸Dissolved ability. A dissolved figment or
@@ -1505,6 +1512,34 @@ in your void: if it leaves the void before the ability resolves, the ability
 does nothing to it. Both players see the card and the ability trigger, even
 when it was eroded from a hidden deck.
 
+**When you reclaim a card:** An ability such as "Once per turn, when you
+reclaim a card, gain X⍟ where X is this character's ✦" triggers once for each
+card you play from your void by Reclaim, printed or gained (see [Reclaim](#keywords-and-effects)),
+as that play is announced, with the card on the stack. Only Reclaim reclaims:
+a card played from a hand, or from the void by an effect that lets you play
+it from there, is not reclaimed, and when both that effect and Reclaim cover a
+card in your void, only playing it by Reclaim triggers the ability. The
+ability matches the card by its type and subtype as it was played, as "when
+you play" abilities do. An ability that works in play does not see its own
+card reclaimed, since that card is on the stack. "When the opponent reclaims
+a card" works the same way with the opponent's plays.
+
+**When you reclaim this character:** An ability such as "When you reclaim
+this character, it gains +1✦" triggers when you play its card from your void
+by Reclaim, and only then, not when you play it from a hand or by another
+effect. It works from the stack, where its card is as the play is announced,
+and only the card itself triggers it, never another card reclaimed while it
+waits on the stack. Like every triggered ability, it resolves before the
+opponent receives priority, while the card is still on the stack: "it" and
+"this character" name the card there, and the spark it gains is gained spark,
+which the card keeps as it resolves and enters play and, like all gained
+spark, across zones (see [Spark](#spark)). A reclaimed card that is not
+banished as it leaves play, as with "Cards you reclaim are not banished when
+they leave play," gains again each time it is reclaimed. If the card leaves
+the stack before the ability resolves, as when an earlier ability prevents
+it, the ability does nothing to it. Abilities that trigger "when a character
+gains ✦" see only characters in play, so they do not see this gain.
+
 **Intervening conditions:** A triggered ability written "When X, if Y, …", or
 "▸Dawn: If Y, …", triggers only if Y is true when X happens, and when it
 resolves it does nothing unless Y is still true.
@@ -1547,7 +1582,8 @@ cannot be responded to.
   their avatar, then their dreamsigns, then their characters in play — back
   rank `B0` through `B9`, then front rank `F0` through `F8` — then their
   cards in other zones: void, then hand, then deck, each zone in the order the
-  cards were created for the battle — and then their floating and delayed
+  cards were created for the battle, then the cards they control on the stack,
+  bottom first — and then their floating and delayed
   triggers, in the order they were created. A card that has just left play is
   ordered by the zone it went to; one that went to the stack or the Banished
   zone, or ceased to exist, comes after that player's deck.

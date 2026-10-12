@@ -1,3 +1,7 @@
+import { self } from "../../engine/dsl/builders";
+import { triggered, whenReclaim } from "../../engine/dsl/triggers";
+import { thisCharacterSpark } from "../../engine/dsl/values";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +22,8 @@ export default card({
   artOwned: false,
   cardNumber: 194,
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(whenReclaim(), p.sequence(p.gainPoints(thisCharacterSpark()), p.gainSpark(self(), 1)), { oncePerTurn: true }),
+  ],
+  verifiedText: "1818nj6weq6",
 });

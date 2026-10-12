@@ -285,6 +285,14 @@ export type ValueExpr =
   | CardCountValue
   /** The characters supporting the source (C9): 0–2 while it is in the front rank, 0 elsewhere. */
   | { readonly value: "supporting" }
+  /**
+   * "This character's ✦" in a resolving effect: the source character's
+   * effective spark as the effect reads it, while it is in play (rules §
+   * Spark → This character's ✦). No last-known spark is kept, so it reads 0
+   * once the source has left play (RD-hv-umm2.91-2). A static ability cannot
+   * read it.
+   */
+  | { readonly value: "sourceSpark" }
   /** `of` multiplied by `factor`: "+2✦ for each …". */
   | { readonly value: "times"; readonly of: ValueExpr; readonly factor: number }
   /**
@@ -493,6 +501,17 @@ export type Trigger =
    * erode this card).
    */
   | { readonly on: "erode"; readonly player: PlayerRef; readonly filter: CardFilter; readonly self?: true }
+  /**
+   * "When you reclaim a card": each card matching `filter`, by its
+   * characteristics as it was played, that `player` plays from their void by
+   * Reclaim, printed or gained, matched as its play is announced, with the
+   * card on the stack (rules § Ability Types → When you reclaim a card). A
+   * play from the void by a play permission is not a reclaim. With `self`,
+   * "When you reclaim this character": only the ability's own card, which
+   * works from the stack it was just played onto, whatever the ability's
+   * zone (rules § Ability Types → When you reclaim this character).
+   */
+  | { readonly on: "reclaim"; readonly player: PlayerRef; readonly filter: CardFilter; readonly self?: true }
   | { readonly on: "abandon"; readonly player: PlayerRef; readonly filter: CardFilter }
   | { readonly on: "leavesPlay"; readonly subject: TriggerSubject }
   /**
