@@ -11,7 +11,8 @@
  * out is rebuilt as follows:
  *
  * - hidden cards are fresh instances numbered after every instance the view
- *   names, with fresh status, entering their zones at 0;
+ *   names, entering their zones at 0; anonymous observed descriptors restore
+ *   persistent status and fixed changes after dealing;
  * - the view shows what a static ability working from a hand or a deck
  *   changes but not its card (RD-hv-umm2.53-2), so the deal is then
  *   reconciled with it: hidden cards with such abilities move between their
@@ -47,10 +48,12 @@ import { loopSignature } from "../loops/signature";
 import { emptyLoopTracker } from "../loops/types";
 import { instanceOrigin, originAbilities } from "../rules/activation";
 import { buildDreamwellDeck } from "../rules/dreamwell";
+import { canonicalHash } from "../state/hash";
+import { isFixedEffect } from "./knowledge";
 import { freshStatus, variantOf } from "../state/create";
-import type { InstanceId, Side } from "../state/ids";
+import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import { battleSeed, opponent, SIDES } from "../state/ids";
-import type { BattleState, CardInstance, DeckEntry, FloatingChange, FloatingEffect, PayableEffect, QueuedTrigger, SideState } from "../state/types";
+import type { BattleState, CardInstance, DeckEntry, FloatingChange, FloatingEffect, PayableEffect, QueuedTrigger, SideState, RememberedEffect } from "../state/types";
 import {
   characteristicsView,
   type BattleView,
@@ -58,6 +61,7 @@ import {
   type CharacteristicsView,
   type FloatingChangeView,
   type HiddenCapturedCardView,
+  type HiddenCardDescriptor,
   type HiddenZoneView,
   type InstanceView,
 } from "./view";
@@ -103,8 +107,8 @@ function remaining(entries: readonly DeckEntry[], visible: readonly InstanceView
   for (const instance of visible) {
     const { printing } = instance;
     if (printing.kind !== "card" || instance.status.created) continue;
-    const variant = JSON.stringify(instance.variant);
-    if (!take((entry) => entry.cardId === printing.cardId && JSON.stringify(variantOf(entry)) === variant)) {
+    const variant = canonicalHash(instance.variant);
+    if (!take((entry) => entry.cardId === printing.cardId && canonicalHash(variantOf(entry)) === variant)) {
       take((entry) => entry.cardId === printing.cardId);
     }
   }
@@ -175,14 +179,15 @@ function standIns(
   sides: Readonly<Record<Side, SideState>>,
   instances: Readonly<Record<InstanceId, CardInstance>>,
   random: () => number,
+  remembered: ReadonlyMap<number, InstanceId>,
 ): (cards: readonly CapturedCardView[]) => InstanceId[] {
   const hidden = SIDES.flatMap((side) => [...sides[side].deck, ...sides[side].hand]).filter((id) => !(id in view.instances));
-  const chosen = new Map<number, InstanceId | null>();
-  const taken = new Set<InstanceId>();
+  const chosen = new Map<number, InstanceId | null>(remembered);
+  const taken = new Set<InstanceId>(remembered.values());
   const pick = (card: HiddenCapturedCardView): InstanceId | null => {
     const owned = hidden.filter((id) => !taken.has(id) && instances[id].owner === card.owner);
-    const printed = owned.filter((id) => JSON.stringify(instances[id].printing) === JSON.stringify(card.printing));
-    const varied = printed.filter((id) => JSON.stringify(instances[id].variant) === JSON.stringify(card.variant));
+    const printed = owned.filter((id) => canonicalHash(instances[id].printing) === canonicalHash(card.printing));
+    const varied = printed.filter((id) => canonicalHash(instances[id].variant) === canonicalHash(card.variant));
     const pool = [varied, printed, owned].find((ids) => ids.length > 0) ?? [];
     if (pool.length === 0) return null;
     const id = pool[Math.floor(random() * pool.length)];
@@ -281,7 +286,34 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     }
   }
   const seed = battleSeed(`determinized|${String(Math.floor(random() * 2 ** 53))}`);
-  const captured = standIns(view, sides, instances, random);
+  const descriptors = SIDES.flatMap((owner) => view.hiddenCards?.[owner] ?? []).sort((a, b) => a.member - b.member);
+  const assigned = new Map<number, InstanceId>();
+  const hidden = SIDES.flatMap((holder) => [...sides[holder].deck, ...sides[holder].hand]).filter((id) => !(id in view.instances));
+  for (const descriptor of descriptors) {
+    const pool = hidden.filter((id) => ![...assigned.values()].includes(id) && instances[id].owner === descriptor.owner &&
+      canonicalHash(instances[id].printing) === canonicalHash(descriptor.printing) &&
+      canonicalHash(instances[id].variant) === canonicalHash(descriptor.variant));
+    const id = pool[Math.floor(random() * pool.length)];
+    if (id === undefined) throw new Error(`Cannot determinize anonymous member ${String(descriptor.member)}: no matching decklist card`);
+    instances[id] = { ...instances[id], printing: copy(descriptor.printing), variant: copy(descriptor.variant), status: copy(descriptor.status) };
+    assigned.set(descriptor.member, id);
+  }
+  const rememberedSource = (source: AbilitySource | { readonly member: number } | null): AbilitySource => {
+    if (source !== null && typeof source === "object" && "member" in source) {
+      const resolved = assigned.get(source.member);
+      if (resolved === undefined) throw new Error(`Missing anonymous source member ${String(source.member)}`);
+      return resolved;
+    }
+    // A reserved nonexistent identity keeps unknown/ceased attribution null.
+    return source ?? `i${next++}`;
+  };
+  const anonymousEffects = descriptors.flatMap((descriptor) => descriptor.effects.map((effect): FloatingEffect => {
+    const target = assigned.get(descriptor.member);
+    if (target === undefined) throw new Error("Missing anonymous target");
+    return { id: effect.id, controller: effect.controller, source: rememberedSource(effect.source), timestamp: effect.timestamp,
+      expiry: { at: "never" }, change: { ...copy(effect.change), instance: target } };
+  }));
+  const captured = standIns(view, sides, instances, random, assigned);
   const triggerQueue: QueuedTrigger[] = view.triggerQueue.flatMap((trigger) =>
     trigger.source === null || trigger.origin === null
       ? []
@@ -320,16 +352,18 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     priority: view.priority,
     payable,
     triggerQueue,
-    floating: view.floating.map((effect): FloatingEffect => ({
-      ...copy(effect),
-      source: effect.source === null ? { kind: "avatar", side: effect.controller } : copy(effect.source),
-      change: floatingChange(effect.change, captured),
-    })),
+    floating: [...anonymousEffects, ...view.floating.map((effect): FloatingEffect => {
+      const { rememberedSource: provenance, ...record } = copy(effect);
+      return { ...record,
+        source: provenance !== undefined ? rememberedSource(provenance)
+          : effect.source === null ? { kind: "avatar", side: effect.controller } : copy(effect.source),
+        change: floatingChange(effect.change, captured) };
+    })].sort((a, b) => a.timestamp - b.timestamp || Number(a.id.slice(1)) - Number(b.id.slice(1))),
     turnLog: {
       played: playedCards,
       drawn: { ...view.turnLog.drawn },
     },
-    nextEffect: highest([view.payable, view.floating], "e") + 1,
+    nextEffect: highest([view.payable, view.floating, descriptors], "e") + 1,
     oncePerTurn: [...view.oncePerTurn],
     dreamwell: { deck: [], next: 0, catalog: [] },
     challenge: copy(view.challenge),
@@ -338,6 +372,34 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     loops: emptyLoopTracker(),
     result: copy(view.result),
   };
+  state.nextInstance = next;
+  if (descriptors.length > 0) {
+    state.rememberedCards = { player: [], enemy: [] };
+    state.rememberedCards[viewer] = descriptors.map((descriptor: HiddenCardDescriptor) => {
+      const id = assigned.get(descriptor.member);
+      if (id === undefined) throw new Error("Missing anonymous card");
+      return { instance: id, owner: descriptor.owner, printing: copy(descriptor.printing), variant: copy(descriptor.variant),
+        status: copy(descriptor.status), effects: copy(state.floating.filter((effect): effect is RememberedEffect => isFixedEffect(effect) && effect.change.instance === id)) };
+    });
+  }
+  // A visible target whose observed fixed effect has an unidentified source
+  // keeps that observation too; subsequent views must retain the obligation.
+  for (const shown of view.floating) {
+    if (shown.rememberedSource === undefined) continue;
+    const effect = state.floating.find((entry) => entry.id === shown.id);
+    if (effect === undefined || !isFixedEffect(effect) || effect.change.instance === null) continue;
+    const instance = state.instances[effect.change.instance];
+    if (instance === undefined) throw new Error("Missing observed public target");
+    state.rememberedCards ??= { player: [], enemy: [] };
+    const records = state.rememberedCards[viewer];
+    const previous = records.find((record) => record.instance === instance.id);
+    const effects = [...(previous?.effects ?? []), copy(effect)];
+    const record = { instance: instance.id, owner: instance.owner, printing: copy(instance.printing), variant: copy(instance.variant),
+      status: copy(instance.status), effects };
+    if (previous === undefined) records.push(record);
+    else records[records.indexOf(previous)] = record;
+  }
+  state.clock = Math.max(state.clock, ...anonymousEffects.map((effect) => effect.timestamp));
   buildDreamwellDeck(state, catalog, view.dreamwell.catalog);
   state.dreamwell.deck = state.dreamwell.deck.slice(0, view.dreamwell.remaining);
   return state;

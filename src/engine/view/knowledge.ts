@@ -32,9 +32,57 @@
  * here; only state creation, cloning and determinization build it whole
  * elsewhere (`dreamtides/no-direct-knowledge-writes`).
  */
-import type { AbilitySource, InstanceId, Side } from "../state/ids";
+import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
 import { SIDES } from "../state/ids";
-import type { BattleState, CardInstance } from "../state/types";
+import { copyJson } from "../state/clone";
+import type { BattleState, CardInstance, FixedCardChange, FloatingEffect, RememberedEffect } from "../state/types";
+
+/**
+ * Refresh only records the viewer can identify now. First-observation order is
+ * the order visible instances appear in its view; hidden positions never order
+ * these records. A blind card retains its last observed values.
+ */
+export function rememberKnownCards(state: BattleState): void {
+  const records = state.rememberedCards ??= { player: [], enemy: [] };
+  for (const viewer of SIDES) {
+    if (records[viewer].some((record) => state.instances[record.instance] === undefined)) {
+      records[viewer] = records[viewer].filter((record) => state.instances[record.instance] !== undefined);
+    }
+    const positions = new Map(records[viewer].map((record, index) => [record.instance, index]));
+    for (const instance of Object.values(state.instances)) {
+      if (!knows(state, instance, viewer)) continue;
+      const index = positions.get(instance.id);
+      const previous = index === undefined ? undefined : records[viewer][index];
+      const effects = state.floating.flatMap((effect) => {
+        if (!isFixedEffect(effect) || effect.change.instance !== instance.id) return [];
+        if (seesSource(state, effect.source, viewer)) return [effect];
+        // Source departure cannot erase a fixed change already observed.
+        return previous?.effects.filter((known) => known.id === effect.id) ?? [];
+      });
+      const record = { instance: instance.id, owner: instance.owner, printing: instance.printing,
+        variant: instance.variant, status: instance.status, effects };
+      if (JSON.stringify(previous) === JSON.stringify(record)) continue;
+      const snapshot = copyJson(record);
+      if (index === undefined) records[viewer].push(snapshot);
+      else records[viewer][index] = snapshot;
+    }
+  }
+}
+
+/** Fixed continuous changes whose resolved semantics do not read their source. */
+export function isFixedChange(kind: unknown): kind is FixedCardChange["kind"] {
+  return ["allTypes", "subtype", "keyword", "baseSpark", "spark", "cardCost", "playFrom", "cannotPlay"].some((allowed) => allowed === kind);
+}
+
+/** Narrows observed fixed permanent effects to the snapshot's data model. */
+export function isFixedEffect(effect: FloatingEffect): effect is RememberedEffect {
+  return effect.expiry.at === "never" && "instance" in effect.change && isFixedChange(effect.change.kind);
+}
+
+/** The fixed permanent record this viewer actually observed, independent of its source's current visibility. */
+export function observedFixedEffect(state: BattleState, viewer: Side, id: EffectId): RememberedEffect | undefined {
+  return state.rememberedCards?.[viewer].flatMap((record) => record.effects).find((effect) => effect.id === id);
+}
 
 /** Whether `side` can identify `instance` where it is now. */
 export function knows(state: BattleState, instance: CardInstance, side: Side): boolean {
@@ -110,6 +158,7 @@ function unlearn(state: BattleState, side: Side, id: InstanceId): void {
  * returns the sides that could see it, for `settle` once it has moved.
  */
 export function departKnowledge(state: BattleState, instance: CardInstance): Side[] {
+  rememberKnownCards(state);
   const seers = SIDES.filter((side) => knows(state, instance, side));
   for (const side of SIDES) unlearn(state, side, instance.id);
   return seers;
@@ -140,6 +189,7 @@ export function forgetFilteredDrawPositions(
   drawn: InstanceId,
   removalLimit: (viewer: Side, known: ReadonlySet<InstanceId>) => number,
 ): void {
+  rememberKnownCards(state);
   for (const viewer of SIDES) {
     const known = new Set(state.knownTo[viewer]);
     if (known.has(drawn)) continue;
@@ -181,6 +231,7 @@ export function forgetDeckPositions(
   bounds: DeckRemovalBounds = {},
   unordered: UnorderedDeckRemovals = {},
 ): void {
+  rememberKnownCards(state);
   const decks = SIDES.map((owner) => [...state.sides[owner].deck]);
   const viewers = SIDES.map((viewer) => ({ viewer, known: new Set(state.knownTo[viewer]), forgotten: new Set<InstanceId>() }));
   for (const [ownerIndex, deck] of decks.entries()) {
@@ -219,6 +270,7 @@ export function forgetDeckPositions(
 
 /** As a deck is shuffled, both viewers lose track of every card in it: no place in it is inferable. */
 export function forgetShuffledDeck(state: BattleState, deck: readonly InstanceId[]): void {
+  rememberKnownCards(state);
   for (const viewer of SIDES) {
     state.knownTo[viewer] = state.knownTo[viewer].filter((id) => !deck.includes(id));
   }
@@ -256,6 +308,7 @@ export function randomDeckRemovalSettler(
   bounds: DeckRemovalBounds = {},
   unordered: UnorderedDeckRemovals = {},
 ): () => void {
+  rememberKnownCards(state);
   const decks = { player: [...state.sides.player.deck], enemy: [...state.sides.enemy.deck] };
   const knew = { player: [...state.knownTo.player], enemy: [...state.knownTo.enemy] };
   const entered = new Map([...decks.player, ...decks.enemy].map((id) => [id, state.instances[id]?.enteredZoneAt]));
@@ -276,6 +329,7 @@ export function randomDeckRemovalSettler(
         ...state,
         sides: { player: { ...state.sides.player, deck: decks.player }, enemy: { ...state.sides.enemy, deck: decks.enemy } },
         knownTo: { player: [...knew.player], enemy: [...knew.enemy] },
+        rememberedCards: { player: [], enemy: [] },
       };
       forgetDeckPositions(measured, left, bounds, unordered);
       for (const viewer of SIDES) {
@@ -313,6 +367,7 @@ export function revealToBoth(state: BattleState, ids: readonly InstanceId[]): vo
  * may reorder them.
  */
 export function showPrivately(state: BattleState, side: Side, ids: readonly InstanceId[]): void {
+  rememberKnownCards(state);
   for (const id of ids) {
     const instance = state.instances[id];
     if (instance === undefined) continue;
@@ -321,6 +376,7 @@ export function showPrivately(state: BattleState, side: Side, ids: readonly Inst
     }
     learn(state, side, instance);
   }
+  rememberKnownCards(state);
 }
 
 /** Where `instance` sits in a deck of `state`, or -1 outside a deck. */

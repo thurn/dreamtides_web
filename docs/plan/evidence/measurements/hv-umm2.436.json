@@ -1,0 +1,874 @@
+{
+  "bead": "hv-umm2.436",
+  "base": "8146b37067fb7a3bbd995ba6f308a5627dbb080b",
+  "claimStartedAt": "2026-10-11T23:17:37Z",
+  "measurementWindow": {
+    "scope": "Claim through final local commit, inclusive of research, implementation, coordination, validation and browser lease wait. Final evidence is stamped immediately before commit; Git commit time is the exact terminal boundary.",
+    "finalEvidenceAt": "2026-10-12T00:32:13.909778+00:00",
+    "elapsedToFinalEvidenceMin": 74.61516296666667,
+    "commitBoundary": "Git author/committer date is the terminal claim-to-commit window boundary; evidence generated immediately before the one local commit. Inclusive wall includes every research/coordination/queue/verification stage.",
+    "endedAtCommit": "2026-10-12T00:33:54+00:00",
+    "claimToCommitMin": 76.28333333333333,
+    "commitTimestampBasis": "Git author/committer timestamp selected immediately before evidence validation and commit; same UTC terminal boundary used in implementMin."
+  },
+  "model": {
+    "observation": "Optional durable per-viewer snapshots refresh at observed boundaries, freeze after loss of identity, and retain prior observed permanent fixed obligations when only source visibility changes. Blind private mutations are excluded. Snapshot refresh preserves unchanged records without repeated deep cloning.",
+    "anonymousIdentity": "Printing/variant assignment uses semantic canonical hashing. Anonymous members derive from observable snapshot history and capture/provenance relationships, not current hidden order or physical IDs.",
+    "provenance": "Visible source identity survives; self and remembered hidden-source relationships use stand-ins. Ceased/null provenance uses an isolated branded nonexistent allocation below nextInstance; no live association or avatar attribution is fabricated. Public target obligations carry bounded remembered provenance and survive another public sample.",
+    "compatibility": "Optional field supports conservative legacy saves; clone and loader validate complete side records, unique IDs/effects, exact printing/variant/status/fixed-never forms, target reference and bounded departed source IDs. Bookkeeping is omitted from cycle/loop position identity."
+  },
+  "importerFallout": {
+    "production": "Existing structural BattleView consumers accept additive hiddenCards and rememberedSource; no UI adapter or hub body edit. Persisted BattleState consumers require clone, loader, signature bookkeeping and Context observation hooks.",
+    "test": "Public play-from-zone fixtures allow observed printing only in anonymous descriptors while asserting real source ID and public floating/origin remain redacted. One replay fixture finalHash restamped by existing generator."
+  },
+  "syntheticContracts": {
+    "newTestFile": "src/engine/view/hidden-card-status.test.ts",
+    "lines": 339,
+    "cases": 15,
+    "loaderContracts": "Malformed, stale, future-source, duplicate, partial, clone and legacy LOAD_STATE shapes.",
+    "failurePaths": [
+      "raw sampled status/effect/memory drops are detected without trusting sampled descriptors",
+      "cancel and thrown speculative branch preserve committed knowledge",
+      "private hidden mutation and hidden deck order leave observable view and sample equal",
+      "duplicate printing/variant and cohort matching assign status once",
+      "visible, hidden and ceased external sources before target hides; two-stage public return; source and target reveal independently",
+      "reordered printing/variant/status/effect/source object keys preserve semantic identity and fidelity while effect array order/real source mutation still fail"
+    ],
+    "probes": [
+      {
+        "removed": "semantic printing/variant identity",
+        "result": "Reordered-save fixture fails Cannot determinize anonymous member 0."
+      },
+      {
+        "removed": "semantic remembered obligation comparison",
+        "result": "Reordered-public-effect fixture fails floating effect e1 divergence; restored source before final checks."
+      }
+    ]
+  },
+  "validation": {
+    "focused": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/view/hidden-card-status.test.ts src/engine/view/determinize.test.ts src/engine/effects/primitives/contracts.test.ts src/rules/battle/engine-battle-intents.test.ts",
+      "files": 4,
+      "cases": 1108,
+      "workerWallS": 3.8,
+      "oneMinuteHostLoad": 7.6220703125,
+      "startedAt": "2026-10-12T00:02:04.029Z",
+      "receipt": "/tmp/hv436-locked-focused.log",
+      "exitCode": 0
+    },
+    "review": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run review",
+      "files": 264,
+      "cases": 3408,
+      "workerWallS": 47.8,
+      "oneMinuteHostLoad": 9.4580078125,
+      "startedAt": "2026-10-12T00:02:34.564Z",
+      "receipt": "/tmp/hv436-locked-review.log",
+      "exitCode": 0
+    },
+    "knip": {
+      "command": "JOURNEY_TEST_WORKERS=2 npm run knip",
+      "workerWallS": 1.2,
+      "oneMinuteHostLoad": 22.7666015625,
+      "startedAt": "2026-10-12T00:04:10.089Z",
+      "receipt": "/tmp/hv436-locked-knip.log",
+      "exitCode": 0
+    },
+    "full": {
+      "step": "full-certified",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "startedAt": "2026-10-12T00:04:41.778468+00:00",
+      "endedAt": "2026-10-12T00:05:54.723807+00:00",
+      "wallS": 72.944385625,
+      "hostLoad": "{ 26.07 15.40 13.42 }",
+      "exitCode": 0,
+      "files": 337,
+      "cases": 4221,
+      "receipt": "/tmp/hv436-full-certified.log"
+    },
+    "fuzz": {
+      "step": "fuzz-certified",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200",
+        "--seed",
+        "hv436-status"
+      ],
+      "startedAt": "2026-10-12T00:05:54.724050+00:00",
+      "endedAt": "2026-10-12T00:07:17.520360+00:00",
+      "wallS": 82.79550766700049,
+      "hostLoad": "{ 15.95 14.85 13.38 }",
+      "exitCode": 0,
+      "seed": "hv436-status",
+      "games": 200,
+      "steps": 101490,
+      "engineWallS": 82.3,
+      "cpuS": 89.5,
+      "prompts": 2182,
+      "interactiveReruns": 222,
+      "results": {
+        "player": 111,
+        "enemy": 88,
+        "draw": 1
+      },
+      "failures": 0,
+      "receipt": "/tmp/hv436-fuzz-certified.log"
+    },
+    "heavyLock": "Full and fuzz serial under lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock; released before browser lease acquisition.",
+    "intermediateReceipts": {
+      "full": {
+        "step": "full",
+        "command": [
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "startedAt": "2026-10-11T23:40:04.661375+00:00",
+        "endedAt": "2026-10-11T23:41:24.318421+00:00",
+        "wallS": 79.65629312500005,
+        "hostLoad": "{ 26.62 22.79 20.18 }",
+        "exitCode": 0
+      },
+      "fuzz": {
+        "step": "fuzz",
+        "command": [
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "200",
+          "--seed",
+          "hv436-status"
+        ],
+        "startedAt": "2026-10-11T23:41:24.318692+00:00",
+        "endedAt": "2026-10-11T23:42:52.442541+00:00",
+        "wallS": 88.12302641699989,
+        "hostLoad": "{ 20.34 22.30 20.26 }",
+        "exitCode": 0
+      },
+      "full-final": {
+        "step": "full-final",
+        "command": [
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "startedAt": "2026-10-11T23:50:33.709000+00:00",
+        "endedAt": "2026-10-11T23:51:44.750211+00:00",
+        "wallS": 71.04053974999988,
+        "hostLoad": "{ 6.93 11.20 15.72 }",
+        "exitCode": 0
+      },
+      "fuzz-final": {
+        "step": "fuzz-final",
+        "command": [
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "200",
+          "--seed",
+          "hv436-status"
+        ],
+        "startedAt": "2026-10-11T23:51:44.750453+00:00",
+        "endedAt": "2026-10-11T23:53:07.996530+00:00",
+        "wallS": 83.24530049999885,
+        "hostLoad": "{ 8.59 10.77 15.19 }",
+        "exitCode": 0
+      }
+    },
+    "replayGenerator": {
+      "command": "npm run regenerate-replay-fixtures",
+      "runs": 2,
+      "secondRun": "All three generated fixture bytes identical to first run; adversarial.json finalHash is the only committed delta."
+    },
+    "browserAttempts": [
+      {
+        "attempt": 1,
+        "report": "retained-status.result-attempt01.json",
+        "wallMs": {
+          "browserLeaseWait": 196918,
+          "serve": 1258,
+          "scenario": 4114,
+          "total": 202319
+        },
+        "hostLoad": 12.6728515625,
+        "error": "desktop#0: Error: page.evaluate: Error: typed saved-state fixture rejected\n    at eval (eval at evaluate (:311:30), <anonymous>:41:32)\n    at async <anonymous>:337:30",
+        "caps": [],
+        "cleanup": "Confirmed runner browser close, own server92460 stopped, port5186free; peer ownership advanced."
+      },
+      {
+        "attempt": 2,
+        "report": "retained-status.result-attempt02.json",
+        "wallMs": {
+          "browserLeaseWait": 149710,
+          "serve": 1559,
+          "scenario": 28919,
+          "total": 180211
+        },
+        "hostLoad": 6.61328125,
+        "error": "desktop#0: Error: restored target: TimeoutError: page.waitForFunction: Timeout 14992ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:688:17)\n    at async retainedStatus (evalmachine.<anonymous>:1602:5)\n    at async evalmachine.<anonymous>:1638:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "cleanup": "Browser closed; own server11396 stopped, port5186free."
+      }
+    ],
+    "browser": {
+      "attempt": 3,
+      "command": "JOURNEY_TEST_WORKERS=2 node scripts/qa/run-scenario.mjs retained-status --bead hv-umm2.436 --port 5186 --viewports desktop,mobile --timeout 600",
+      "report": "retained-status.result.json",
+      "reportSHA256": "411d229948885d13c011c668ea9d4375d6d50d62aca20bf6138c6440fc58d44d",
+      "ok": true,
+      "wallMs": {
+        "browserLeaseWait": 44,
+        "serve": 1560,
+        "scenario": 27071,
+        "total": 28700
+      },
+      "hostLoad": 22.67529296875,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "retained-status-desktop.jsonl",
+          "gameId": "7k98kht3frpfax7uifuw",
+          "selectedBy": "url",
+          "rows": 11,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "retained-status-mobile.jsonl",
+          "gameId": "gn5tknoxgyxdded4jeqi",
+          "selectedBy": "url",
+          "rows": 11,
+          "reason": null
+        }
+      ],
+      "cases": {
+        "desktop": [
+          {
+            "gameId": "gwstgx9jmd7s6wwtu6yz",
+            "target": "i1",
+            "source": "i3",
+            "sourceState": "hidden",
+            "printing": "5e5e5e5e-0000-4000-8000-000000000003",
+            "preflight": true,
+            "seed": "board",
+            "decks": {
+              "player": [
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000003",
+                  "amplified": false
+                },
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000003",
+                  "amplified": false
+                }
+              ],
+              "enemy": [
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000002",
+                  "amplified": false
+                },
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000002",
+                  "amplified": false
+                }
+              ]
+            },
+            "before": {
+              "href": "http://localhost:5186/dreamscape/0-firstlight-meadow/battle?game=gwstgx9jmd7s6wwtu6yz&debug=1",
+              "width": 1440,
+              "height": 900,
+              "kinds": [
+                "keyword",
+                "duration"
+              ],
+              "bounds": [
+                {
+                  "x": 258.078125,
+                  "y": 487.078125,
+                  "width": 23.265625,
+                  "height": 23.265625
+                },
+                {
+                  "x": 258.078125,
+                  "y": 512.34375,
+                  "width": 23.265625,
+                  "height": 23.265625
+                }
+              ],
+              "sourceVisible": false
+            },
+            "after": {
+              "href": "http://localhost:5186/dreamscape/0-firstlight-meadow/battle?game=gwstgx9jmd7s6wwtu6yz&debug=1",
+              "width": 1440,
+              "height": 900,
+              "kinds": [
+                "keyword",
+                "duration"
+              ],
+              "bounds": [
+                {
+                  "x": 258.078125,
+                  "y": 487.078125,
+                  "width": 23.265625,
+                  "height": 23.265625
+                },
+                {
+                  "x": 258.078125,
+                  "y": 512.34375,
+                  "width": 23.265625,
+                  "height": 23.265625
+                }
+              ],
+              "sourceVisible": false
+            },
+            "events": [
+              {
+                "seq": 3,
+                "index": 0,
+                "kind": "challengersDesignated",
+                "instance": null,
+                "event": {
+                  "kind": "challengersDesignated",
+                  "side": "player",
+                  "challengers": []
+                },
+                "cards": {}
+              },
+              {
+                "seq": 3,
+                "index": 1,
+                "kind": "phaseChanged",
+                "instance": null,
+                "event": {
+                  "kind": "phaseChanged",
+                  "phase": "dusk",
+                  "active": "player"
+                },
+                "cards": {}
+              },
+              {
+                "seq": 4,
+                "index": 0,
+                "kind": "blockersDesignated",
+                "instance": null,
+                "event": {
+                  "kind": "blockersDesignated",
+                  "side": "enemy",
+                  "blockers": {}
+                },
+                "cards": {}
+              },
+              {
+                "seq": 4,
+                "index": 1,
+                "kind": "phaseChanged",
+                "instance": null,
+                "event": {
+                  "kind": "phaseChanged",
+                  "phase": "night",
+                  "active": "player"
+                },
+                "cards": {}
+              }
+            ]
+          },
+          {
+            "gameId": "7k98kht3frpfax7uifuw",
+            "target": "i1",
+            "source": "i3",
+            "sourceState": "ceased",
+            "printing": "5e5e5e5e-0000-4000-8000-000000000003",
+            "preflight": true,
+            "seed": "board",
+            "decks": {
+              "player": [
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000003",
+                  "amplified": false
+                },
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000003",
+                  "amplified": false
+                }
+              ],
+              "enemy": [
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000002",
+                  "amplified": false
+                }
+              ]
+            },
+            "before": {
+              "href": "http://localhost:5186/dreamscape/0-firstlight-meadow/battle?game=7k98kht3frpfax7uifuw&debug=1",
+              "width": 1440,
+              "height": 900,
+              "kinds": [
+                "keyword",
+                "duration"
+              ],
+              "bounds": [
+                {
+                  "x": 258.078125,
+                  "y": 487.078125,
+                  "width": 23.265625,
+                  "height": 23.265625
+                },
+                {
+                  "x": 258.078125,
+                  "y": 512.34375,
+                  "width": 23.265625,
+                  "height": 23.265625
+                }
+              ],
+              "sourceVisible": false
+            },
+            "after": {
+              "href": "http://localhost:5186/dreamscape/0-firstlight-meadow/battle?game=7k98kht3frpfax7uifuw&debug=1",
+              "width": 1440,
+              "height": 900,
+              "kinds": [
+                "keyword",
+                "duration"
+              ],
+              "bounds": [
+                {
+                  "x": 258.078125,
+                  "y": 487.078125,
+                  "width": 23.265625,
+                  "height": 23.265625
+                },
+                {
+                  "x": 258.078125,
+                  "y": 512.34375,
+                  "width": 23.265625,
+                  "height": 23.265625
+                }
+              ],
+              "sourceVisible": false
+            },
+            "events": [
+              {
+                "seq": 3,
+                "index": 0,
+                "kind": "challengersDesignated",
+                "instance": null,
+                "event": {
+                  "kind": "challengersDesignated",
+                  "side": "player",
+                  "challengers": []
+                },
+                "cards": {}
+              },
+              {
+                "seq": 3,
+                "index": 1,
+                "kind": "phaseChanged",
+                "instance": null,
+                "event": {
+                  "kind": "phaseChanged",
+                  "phase": "dusk",
+                  "active": "player"
+                },
+                "cards": {}
+              },
+              {
+                "seq": 4,
+                "index": 0,
+                "kind": "blockersDesignated",
+                "instance": null,
+                "event": {
+                  "kind": "blockersDesignated",
+                  "side": "enemy",
+                  "blockers": {}
+                },
+                "cards": {}
+              },
+              {
+                "seq": 4,
+                "index": 1,
+                "kind": "phaseChanged",
+                "instance": null,
+                "event": {
+                  "kind": "phaseChanged",
+                  "phase": "night",
+                  "active": "player"
+                },
+                "cards": {}
+              }
+            ]
+          }
+        ],
+        "mobile": [
+          {
+            "gameId": "vtgqafaagrjyjznqwhu9",
+            "target": "i1",
+            "source": "i3",
+            "sourceState": "hidden",
+            "printing": "5e5e5e5e-0000-4000-8000-000000000003",
+            "preflight": true,
+            "seed": "board",
+            "decks": {
+              "player": [
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000003",
+                  "amplified": false
+                },
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000003",
+                  "amplified": false
+                }
+              ],
+              "enemy": [
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000002",
+                  "amplified": false
+                },
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000002",
+                  "amplified": false
+                }
+              ]
+            },
+            "before": {
+              "href": "http://localhost:5186/dreamscape/0-firstlight-meadow/battle?game=vtgqafaagrjyjznqwhu9&debug=1",
+              "width": 390,
+              "height": 844,
+              "kinds": [
+                "keyword",
+                "duration"
+              ],
+              "bounds": [
+                {
+                  "x": 25.546875,
+                  "y": 418.03125,
+                  "width": 14,
+                  "height": 14
+                },
+                {
+                  "x": 25.546875,
+                  "y": 434.03125,
+                  "width": 14,
+                  "height": 14
+                }
+              ],
+              "sourceVisible": false
+            },
+            "after": {
+              "href": "http://localhost:5186/dreamscape/0-firstlight-meadow/battle?game=vtgqafaagrjyjznqwhu9&debug=1",
+              "width": 390,
+              "height": 844,
+              "kinds": [
+                "keyword",
+                "duration"
+              ],
+              "bounds": [
+                {
+                  "x": 25.546875,
+                  "y": 418.03125,
+                  "width": 14,
+                  "height": 14
+                },
+                {
+                  "x": 25.546875,
+                  "y": 434.03125,
+                  "width": 14,
+                  "height": 14
+                }
+              ],
+              "sourceVisible": false
+            },
+            "events": [
+              {
+                "seq": 3,
+                "index": 0,
+                "kind": "challengersDesignated",
+                "instance": null,
+                "event": {
+                  "kind": "challengersDesignated",
+                  "side": "player",
+                  "challengers": []
+                },
+                "cards": {}
+              },
+              {
+                "seq": 3,
+                "index": 1,
+                "kind": "phaseChanged",
+                "instance": null,
+                "event": {
+                  "kind": "phaseChanged",
+                  "phase": "dusk",
+                  "active": "player"
+                },
+                "cards": {}
+              },
+              {
+                "seq": 4,
+                "index": 0,
+                "kind": "blockersDesignated",
+                "instance": null,
+                "event": {
+                  "kind": "blockersDesignated",
+                  "side": "enemy",
+                  "blockers": {}
+                },
+                "cards": {}
+              },
+              {
+                "seq": 4,
+                "index": 1,
+                "kind": "phaseChanged",
+                "instance": null,
+                "event": {
+                  "kind": "phaseChanged",
+                  "phase": "night",
+                  "active": "player"
+                },
+                "cards": {}
+              }
+            ]
+          },
+          {
+            "gameId": "gn5tknoxgyxdded4jeqi",
+            "target": "i1",
+            "source": "i3",
+            "sourceState": "ceased",
+            "printing": "5e5e5e5e-0000-4000-8000-000000000003",
+            "preflight": true,
+            "seed": "board",
+            "decks": {
+              "player": [
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000003",
+                  "amplified": false
+                },
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000003",
+                  "amplified": false
+                }
+              ],
+              "enemy": [
+                {
+                  "cardId": "5e5e5e5e-0000-4000-8000-000000000002",
+                  "amplified": false
+                }
+              ]
+            },
+            "before": {
+              "href": "http://localhost:5186/dreamscape/0-firstlight-meadow/battle?game=gn5tknoxgyxdded4jeqi&debug=1",
+              "width": 390,
+              "height": 844,
+              "kinds": [
+                "keyword",
+                "duration"
+              ],
+              "bounds": [
+                {
+                  "x": 25.546875,
+                  "y": 418.03125,
+                  "width": 14,
+                  "height": 14
+                },
+                {
+                  "x": 25.546875,
+                  "y": 434.03125,
+                  "width": 14,
+                  "height": 14
+                }
+              ],
+              "sourceVisible": false
+            },
+            "after": {
+              "href": "http://localhost:5186/dreamscape/0-firstlight-meadow/battle?game=gn5tknoxgyxdded4jeqi&debug=1",
+              "width": 390,
+              "height": 844,
+              "kinds": [
+                "keyword",
+                "duration"
+              ],
+              "bounds": [
+                {
+                  "x": 25.546875,
+                  "y": 418.03125,
+                  "width": 14,
+                  "height": 14
+                },
+                {
+                  "x": 25.546875,
+                  "y": 434.03125,
+                  "width": 14,
+                  "height": 14
+                }
+              ],
+              "sourceVisible": false
+            },
+            "events": [
+              {
+                "seq": 3,
+                "index": 0,
+                "kind": "challengersDesignated",
+                "instance": null,
+                "event": {
+                  "kind": "challengersDesignated",
+                  "side": "player",
+                  "challengers": []
+                },
+                "cards": {}
+              },
+              {
+                "seq": 3,
+                "index": 1,
+                "kind": "phaseChanged",
+                "instance": null,
+                "event": {
+                  "kind": "phaseChanged",
+                  "phase": "dusk",
+                  "active": "player"
+                },
+                "cards": {}
+              },
+              {
+                "seq": 4,
+                "index": 0,
+                "kind": "blockersDesignated",
+                "instance": null,
+                "event": {
+                  "kind": "blockersDesignated",
+                  "side": "enemy",
+                  "blockers": {}
+                },
+                "cards": {}
+              },
+              {
+                "seq": 4,
+                "index": 1,
+                "kind": "phaseChanged",
+                "instance": null,
+                "event": {
+                  "kind": "phaseChanged",
+                  "phase": "night",
+                  "active": "player"
+                },
+                "cards": {}
+              }
+            ]
+          }
+        ]
+      },
+      "caps": [],
+      "screens": [
+        {
+          "filename": "retained-hidden-desktop.png",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "filename": "interaction-hidden-desktop.png",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "filename": "retained-ceased-desktop.png",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "filename": "interaction-ceased-desktop.png",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "filename": "retained-hidden-mobile.png",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "filename": "interaction-hidden-mobile.png",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "filename": "retained-ceased-mobile.png",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "filename": "interaction-ceased-mobile.png",
+          "width": 390,
+          "height": 844
+        }
+      ],
+      "visualInspection": "Desktop and mobile target cards show both distinct icons with no clipped badge; empty enemy battlefield exposes no source.",
+      "cleanup": "Confirmed browser close; own server process group20209 stopped, port5186free. Browser owner advanced to peer after cleanup.",
+      "logIdentityContract": "Each supported phase pass emits no card-referencing event, so its 11-row persisted export contains physical actions and no content-name or UUID fields. Fixture catalog UUID mappings are in recorded decks/printing plus logged LOAD_STATE provenance; source card identity remains blind/ceased. Runner exported each viewport final own game. Earlier per-case persisted logs became inaccessible after confirmed browser close and require no further acquisition.",
+      "artifactsRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.436",
+      "finalFrozenSourceDiffSHA256": "7a2e081d533d09e6a43e1e16be20a41a60d4a15aac0c7972cc32fffc5af832b4"
+    },
+    "canceledQueueAttempts": [
+      {
+        "pid": 4926,
+        "exit": 143,
+        "providerOrServerAcquired": false,
+        "ticketRemoved": true
+      },
+      {
+        "pid": 7179,
+        "exit": 143,
+        "providerOrServerAcquired": false,
+        "ticketRemoved": true
+      }
+    ]
+  },
+  "provenance": {
+    "workerWallS": "Rounded command-stage wall durations from review.mjs receipts; excludes preparation/restoration and earlier lock wait.",
+    "heavyWallS": "Monotonic Python perf_counter around complete command; ISO UTC time and sysctl vm.loadavg sampled immediately before command under heavy lock.",
+    "testDelta": "New 339-line plain test plus 37 loader-test inserted lines and 6 lines in existing plain primitive contract; no jsdom additions.",
+    "runtime": "No controlled same-host A/B performed; host loads vary. No performance improvement or timing-threshold claim.",
+    "browser": "Runner reports total/lease/serve/scenario/cleanup wall, host load and own process cleanup. Screens are CSS scale; reported rects are DOM measurements."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementMin": {
+        "measuredFor": "Elapsed from parent-supplied native claim timestamp through final commit preparation; Git timestamp records terminal commit boundary."
+      },
+      "hostLoad": {
+        "measuredFor": "One-minute sysctl load at final npm run review preparation start, 2026-10-12T00:02:34.564Z."
+      },
+      "localValidationS": {
+        "measuredFor": "Focused/review/Knip command worker stages from review.mjs; full complete heavy-locked command; fuzz engine reported wall; browser passing scenario wall. Preparations, queue waits and cleanup recorded separately."
+      },
+      "testDelta": {
+        "measuredFor": "339-line new plain test +37 loader-test lines +4 net lines in existing primitive contract; one test file, no jsdom."
+      },
+      "friction.minutes": {
+        "measuredFor": "Area-audit coordination estimate11min. Browser lease11.8min estimate combines measured terminal waits5.773min and observed canceled queue interval approximately6min; no unsupported exact canceled-duration claim."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "focused",
+      "oneMinute": 7.6220703125
+    },
+    {
+      "step": "review",
+      "oneMinute": 9.4580078125
+    },
+    {
+      "step": "knip",
+      "oneMinute": 22.7666015625
+    }
+  ]
+}

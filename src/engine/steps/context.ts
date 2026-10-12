@@ -9,7 +9,7 @@ import { drawRandom } from "../state/rng";
 import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
 import { matchEvent } from "../triggers/matcher";
-import { showPrivately } from "../view/knowledge";
+import { rememberKnownCards, showPrivately } from "../view/knowledge";
 import { promptView, purposeView } from "../view/view";
 import { EmptyPrompt, Feasible, IllegalAnswer, ReplayDivergence, UnrecordedPrompt } from "./errors";
 import type { AnswerSource, ArmedDissolve, Disclosure, EventObserver, RecordedAnswer, StepContext } from "./types";
@@ -78,6 +78,7 @@ export class Context implements StepContext {
 
   choose<P extends Prompt>(spec: PromptSpec<P>, proof?: { readonly allAnswersPayable: true }): AnswerFor<P> {
     this.settleKnowledge();
+    rememberKnownCards(this.state);
     const cancellable =
       !this.committed && this.options.canceller != null && spec.side === this.options.canceller;
     const raw = { ...spec, cancellable } as Prompt;
@@ -212,6 +213,7 @@ export class Context implements StepContext {
   emit(event: EngineEvent): void {
     eventDefinition(event.kind);
     this.settleKnowledge();
+    rememberKnownCards(this.state);
     this.events.push(event);
     if (this.observeEvent !== undefined) {
       try {

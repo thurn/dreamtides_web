@@ -595,6 +595,26 @@ export type BattleResult =
   | { readonly kind: "victory"; readonly winner: Side; readonly reason: WinReason }
   | { readonly kind: "draw"; readonly reason: EndReason };
 
+/** Targeted continuous changes with fixed resolved values and source-independent semantics. */
+export type FixedCardChange = Extract<ContinuousChange, { readonly instance: InstanceId | null }>;
+
+/** A publicly observed permanent fixed change on an identifiable card. */
+export type RememberedEffect = Omit<FloatingEffect, "change" | "expiry"> & {
+  readonly change: FixedCardChange;
+  readonly expiry: { readonly at: "never" };
+};
+
+/** A card record observed by one viewer, retained in first-observation order across hidden-zone forgetting. */
+export interface RememberedCard {
+  readonly instance: InstanceId;
+  readonly owner: Side;
+  readonly printing: Printing;
+  readonly variant: Variant;
+  readonly status: CardStatus;
+  /** Publicly observed permanent fixed continuous changes, including their source provenance. */
+  readonly effects: readonly RememberedEffect[];
+}
+
 /**
  * The complete state of one battle. Plain JSON data: cloning, hashing, and
  * serialization never lose information, and it never contains a pending
@@ -619,6 +639,8 @@ export interface BattleState {
    * zone shows it, in the order it learned them (view/knowledge.ts).
    */
   knownTo: Record<Side, InstanceId[]>;
+  /** Viewer-specific observed records; absent in older saved battles. */
+  rememberedCards?: Record<Side, RememberedCard[]>;
   /** The last element is the top. */
   stack: StackItem[];
   priority: Side | null;

@@ -295,6 +295,43 @@ describe("LOAD_STATE", () => {
 });
 
 
+describe("observed anonymous saved-state records", () => {
+  it("reloads conservative observations and refuses malformed, partial and inconsistent records", () => {
+    const state = begun();
+    const battle = journeyBattleOf(state.battle);
+    if (battle === null) throw new Error("no journey battle");
+    const committed = battle.engine.slice.committed;
+    const instance = committed.instances[firstCard(state)];
+    const record = { instance: instance.id, owner: instance.owner, printing: instance.printing, variant: instance.variant,
+      status: { ...instance.status, gainedSpark: 7 }, effects: [{ id: "e900", controller: instance.controller,
+        source: "i0", timestamp: 0, expiry: { at: "never" }, change: { kind: "keyword", instance: instance.id, keyword: "veil", gains: false } }] };
+    const load = (rememberedCards: unknown) => {
+      const payload = { ...battle, engine: { ...battle.engine, slice: { ...battle.engine.slice, committed: {
+        ...committed, ...(rememberedCards === undefined ? {} : { rememberedCards }),
+      } } } };
+      if (rememberedCards === undefined) delete payload.engine.slice.committed.rememberedCards;
+      return validateLoadedState(state, JSON.parse(JSON.stringify({ snapshot: state.journey, battle: payload })) as Record<string, unknown>);
+    };
+    expect(load(undefined)).not.toBeNull();
+    expect(load({ player: [], enemy: [] })).not.toBeNull();
+    const valid = { player: [record], enemy: [] };
+    const restored = load(valid);
+    expect(restored).not.toBeNull();
+    const loaded = journeyBattleOf(restored?.battle ?? null)?.engine.slice.committed.rememberedCards;
+    expect(loaded).toEqual(valid);
+    expect(loaded).not.toBe(valid);
+    const malformed = [null, {}, [], { player: [] }, { player: [record], enemy: null },
+      { player: [{ ...record, instance: "i999" }], enemy: [] }, { player: [record, record], enemy: [] },
+      { player: [{ ...record, owner: "invalid" }], enemy: [] },
+      { player: [{ ...record, effects: [{ ...record.effects[0], source: `i${committed.nextInstance}` }] }], enemy: [] },
+      { player: [{ ...record, status: { ...record.status, gainedSpark: "7" } }], enemy: [] },
+      { player: [{ ...record, effects: [{ ...record.effects[0], expiry: { at: "endOfTurn" } }] }], enemy: [] },
+      { player: [{ ...record, effects: [{ ...record.effects[0], change: { ...record.effects[0].change, instance: "i999" } }] }], enemy: [] },
+      { player: [{ ...record, effects: [record.effects[0], record.effects[0]] }], enemy: [] }];
+    for (const invalid of malformed) expect(load(invalid), JSON.stringify(invalid)).toBeNull();
+  });
+});
+
 describe("concurrent actors", () => {
   it("bounces an action based before a partner's event and applies a matching answer through it", () => {
     const state = begun();

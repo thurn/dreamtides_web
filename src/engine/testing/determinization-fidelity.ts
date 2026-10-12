@@ -26,9 +26,11 @@ import { carriesLegality, changedInstance } from "../rules/floating";
 import { PolicyRandom } from "../policy/random";
 import type { AbilitySource, BattleSeed, InstanceId, Side, Zone } from "../state/ids";
 import { battleSeed, SIDES } from "../state/ids";
-import type { BattleState, CardInstance, FloatingEffect, PayableEffect } from "../state/types";
+import type { BattleState, CardInstance, FloatingEffect, PayableEffect, RememberedEffect } from "../state/types";
 import type { Decklists } from "../view/determinize";
-import { identifies } from "../view/knowledge";
+import { identifies, isFixedEffect, observedFixedEffect } from "../view/knowledge";
+import { canonicalHash } from "../state/hash";
+import { cloneState } from "../state/clone";
 import type { BattleView } from "../view/view";
 
 /** Zones whose cards both sides see. */
@@ -104,7 +106,7 @@ function owedFloating(state: BattleState, effect: FloatingEffect, side: Side): b
   const changed = changedInstance(effect.change);
   if (changed !== null && !identifies(state, changed, side)) return false;
   if (effect.expiry.at === "sourceLeavesPlay" && !identifies(state, effect.expiry.source, side)) return false;
-  return carriesLegality(effect.change) || seesSource(state, effect.source, side);
+  return carriesLegality(effect.change) || seesSource(state, effect.source, side) || observedFixedEffect(state, side, effect.id) !== undefined;
 }
 
 /**
@@ -176,12 +178,41 @@ function effectDivergences(
     else {
       const record = effectRecord(state, effect, side, real);
       const copied = effectRecord(state, { ...copy, source: effect.source }, side, simulated);
-      const sourced = seesSource(state, effect.source, side) && JSON.stringify(copy.source) !== JSON.stringify(effect.source);
-      if (record !== copied || sourced) problems.push(`${kind} effect ${effect.id} ${JSON.stringify(copy)} for ${record}`);
+      const remembered = observedFixedEffect(state, side, effect.id) !== undefined;
+      const sameSource = remembered ? canonicalHash(copy.source) === canonicalHash(effect.source)
+        : JSON.stringify(copy.source) === JSON.stringify(effect.source);
+      const sourced = seesSource(state, effect.source, side) && !sameSource;
+      const same = remembered ? canonicalHash(JSON.parse(record) as unknown) === canonicalHash(JSON.parse(copied) as unknown)
+        : record === copied;
+      if (!same || sourced) problems.push(`${kind} effect ${effect.id} ${JSON.stringify(copy)} for ${record}`);
     }
   }
   for (const effect of sampled) {
     if (!owed.some((other) => other.id === effect.id)) problems.push(`extra ${kind} effect ${effect.id}`);
+  }
+  return problems;
+}
+
+/** Compare observed anonymous obligations against the sample's raw cards and effects, independently of its remembered copies. */
+function anonymousDivergences(engine: Engine, seen: BattleView, sampled: BattleState, side: Side): string[] {
+  const measured = cloneState(sampled);
+  if (measured.rememberedCards !== undefined) {
+    measured.rememberedCards[side] = measured.rememberedCards[side].flatMap((record) => {
+      const actual = sampled.instances[record.instance];
+      if (actual === undefined) return [];
+      return [{ ...record, owner: actual.owner, printing: actual.printing, variant: actual.variant, status: actual.status,
+        effects: sampled.floating.filter((effect): effect is RememberedEffect => isFixedEffect(effect) && effect.change.instance === actual.id) }];
+    });
+  }
+  const expected = seen.hiddenCards ?? { player: [], enemy: [] };
+  const measuredView = engine.view(measured, side);
+  const actual = measuredView.hiddenCards ?? { player: [], enemy: [] };
+  const problems = canonicalHash(expected) === canonicalHash(actual) ? [] :
+    [`anonymous card descriptors ${JSON.stringify(actual)} for ${JSON.stringify(expected)}`];
+  const publicEffects = seen.floating.filter((effect) => effect.rememberedSource !== undefined);
+  const actualEffects = measuredView.floating.filter((effect) => publicEffects.some((expected) => expected.id === effect.id));
+  if (canonicalHash(publicEffects) !== canonicalHash(actualEffects)) {
+    problems.push(`observed fixed effects ${JSON.stringify(actualEffects)} for ${JSON.stringify(publicEffects)}`);
   }
   return problems;
 }
@@ -195,11 +226,14 @@ function effectDivergences(
 export function determinizationDivergences(engine: Engine, state: BattleState, decklists: Decklists, seed: BattleSeed, ordinal: number): string[] {
   return SIDES.flatMap((side) => {
     const random = new PolicyRandom(battleSeed(`fidelity|${seed}|${String(ordinal)}|${side}`));
-    const sampled = engine.determinize(engine.view(state, side), decklists, () => random.next());
+    const seen = engine.view(state, side);
+    const sampled = engine.determinize(seen, decklists, () => random.next());
+    const anonymousEffects = new Set(SIDES.flatMap((owner) => seen.hiddenCards?.[owner] ?? []).flatMap((record) => record.effects.map((effect) => effect.id)));
     const problems = [
       ...legalActionDivergences(engine, state, sampled, side),
       ...publicCardDivergences(state, sampled),
-      ...effectDivergences("floating", state, state.floating.filter((effect) => owedFloating(state, effect, side)), sampled, sampled.floating, side),
+      ...anonymousDivergences(engine, seen, sampled, side),
+      ...effectDivergences("floating", state, state.floating.filter((effect) => owedFloating(state, effect, side)), sampled, sampled.floating.filter((effect) => !anonymousEffects.has(effect.id)), side),
       ...effectDivergences("payable", state, state.payable, sampled, sampled.payable, side),
     ];
     return problems.map((problem) => `${side}'s determinization: ${problem}`);

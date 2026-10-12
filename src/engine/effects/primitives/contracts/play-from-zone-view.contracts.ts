@@ -49,7 +49,11 @@ function playable(state: BattleState, side: Side, card: InstanceId, source: Inst
     expect(visible.floating[0].source).toBe(hidden ? null : source);
     if (hidden) {
       expect(JSON.stringify(visible)).not.toContain(`"${source}"`);
-      expect(JSON.stringify(visible)).not.toContain(state.floating[0].change.kind === "playFrom" && state.floating[0].change.next ? PERMIT.technician.id : PERMIT.salvager.id);
+      const printing = state.floating[0].change.kind === "playFrom" && state.floating[0].change.next ? PERMIT.technician.id : PERMIT.salvager.id;
+      const { hiddenCards, ...identified } = visible;
+      expect(JSON.stringify(identified)).not.toContain(printing);
+      if (state.instances[source] === undefined) expect(JSON.stringify(hiddenCards ?? {})).not.toContain(printing);
+      else expect(hiddenCards?.[side].map((record) => record.printing)).toContainEqual(state.instances[source].printing);
     }
   }
   const sample = engine.determinize(JSON.parse(JSON.stringify(seen)) as BattleView, decklists, () => 0.5);

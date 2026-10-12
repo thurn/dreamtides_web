@@ -1,3 +1,4 @@
+import { isFixedChange } from "../../engine/view/knowledge";
 // The authoritative in-battle slice of the fold state: a journey battle,
 // which is an engine battle (`engine-battle.ts`), or the standalone tutorial
 // battle on its sandbox board, plus the cursor model that lets the sandbox
@@ -936,6 +937,7 @@ function isBattleState(value: unknown): boolean {
     sideRecord(isSideState)(value.sides) &&
     isInstances(value.instances) &&
     sideRecord(arrayOf(isInstanceId))(value.knownTo) &&
+    (value.rememberedCards === undefined || sideRecord(arrayOf(isRememberedCard))(value.rememberedCards)) &&
     isArrayOf(value.stack, isStackItem) &&
     nullable(isSide)(value.priority) &&
     isArrayOf(value.payable, isPayableEffect) &&
@@ -953,6 +955,15 @@ function isBattleState(value: unknown): boolean {
     hasConsistentZones(value) &&
     hasMirroredGainedAbilities(value)
   );
+}
+
+/** An observed snapshot may be stale; only its physical ownership and fixed-effect targets remain structural references. */
+function isRememberedCard(value: unknown): boolean {
+  return isPlainRecord(value) && isInstanceId(value.instance) && isSide(value.owner) &&
+    isPrinting(value.printing) && isVariant(value.variant) && isCardStatus(value.status) &&
+    isArrayOf(value.effects, (effect) => isFloatingEffect(effect) && isPlainRecord(effect) &&
+      isPlainRecord(effect.expiry) && effect.expiry.at === "never" && isPlainRecord(effect.change) &&
+      effect.change.instance === value.instance && isString(effect.change.kind) && isFixedChange(effect.change.kind));
 }
 
 function isBattleConfig(value: unknown): boolean {
@@ -1364,7 +1375,14 @@ function hasConsistentZones(value: Record<string, unknown>): boolean {
         ) &&
         state.knownTo[side].every((id) =>
           Object.prototype.hasOwnProperty.call(state.instances, id),
-        )
+        ) && (() => {
+          const records = state.rememberedCards?.[side] ?? [];
+          const ids = records.map((record) => record.instance);
+          const effects = records.flatMap((record) => record.effects.map((effect) => effect.id));
+          return new Set(ids).size === ids.length && new Set(effects).size === effects.length &&
+            records.every((record) => state.instances[record.instance]?.owner === record.owner &&
+              record.effects.every((effect) => typeof effect.source !== "string" || Number(effect.source.slice(1)) < state.nextInstance));
+        })()
       );
     }) &&
     state.stack.every(

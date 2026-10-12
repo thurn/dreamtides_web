@@ -9,6 +9,8 @@ import type {
   BattleState,
   CardInstance,
   CardStatus,
+  ContinuousChange,
+  RememberedCard,
   ChallengeState,
   EffectChoices,
   Expiry,
@@ -30,7 +32,7 @@ import type { CardSubtype } from "../../types/card-identity";
 import { carriesLegality, changedInstance } from "../rules/floating";
 import { banishedAsReclaimed } from "../rules/zones";
 import { playCosts } from "../rules/costs";
-import { knows, seesSubject } from "./knowledge";
+import { knows, observedFixedEffect, seesSubject } from "./knowledge";
 
 /**
  * A card's effective characteristics, after every continuous effect (the
@@ -128,6 +130,27 @@ export interface HiddenCapturedCardView {
   readonly variant: Variant;
 }
 
+type WithoutInstance<T> = T extends { readonly instance: InstanceId | null } ? Omit<T, "instance"> : never;
+
+/** A permanent fixed change with anonymous card and source references. */
+export interface HiddenCardEffectView {
+  readonly id: EffectId;
+  readonly controller: Side;
+  readonly timestamp: number;
+  readonly source: AbilitySource | { readonly member: number } | null;
+  readonly change: WithoutInstance<ContinuousChange>;
+}
+
+/** Viewer-observed facts about one anonymous card, without its zone, position or physical identity. */
+export interface HiddenCardDescriptor {
+  readonly member: number;
+  readonly owner: Side;
+  readonly printing: Printing;
+  readonly variant: Variant;
+  readonly status: Readonly<CardStatus>;
+  readonly effects: readonly HiddenCardEffectView[];
+}
+
 /** A captured card as a view shows it: its instance when the viewer can identify it, else a hidden one. */
 export type CapturedCardView = InstanceId | HiddenCapturedCardView;
 
@@ -146,11 +169,13 @@ export type FloatingChangeView =
 export interface FloatingEffectView {
   readonly id: EffectId;
   readonly controller: Side;
-  /** Costs, play permissions and play restrictions retain their changes with a hidden or ceased source redacted to null (`carriesLegality`). */
+  /** Legality changes and observed permanent fixed changes retain their data with an unidentified source redacted to null. */
   readonly source: AbilitySource | null;
   readonly timestamp: number;
   readonly expiry: Expiry;
   readonly change: FloatingChangeView;
+  /** Safely observed provenance for a fixed permanent effect whose source is currently unidentified. */
+  readonly rememberedSource?: { readonly member: number } | null;
 }
 
 /**
@@ -246,14 +271,17 @@ export interface BattleView {
   readonly sides: Readonly<Record<Side, SideView>>;
   /** Every instance the viewer can see, by ID. */
   readonly instances: Readonly<Record<InstanceId, InstanceView>>;
+  /** Anonymous observed records in first-observation order, grouped by ownership. */
+  readonly hiddenCards?: Readonly<Record<Side, readonly HiddenCardDescriptor[]>>;
   /** The last element is the top. Targets the viewer cannot see are omitted. */
   readonly stack: readonly StackItem[];
   readonly priority: Side | null;
   /** Effects a side may pay to end, in registration order. */
   readonly payable: readonly PayableEffectView[];
   /**
-   * Floating effects, in creation order, except those whose source or
-   * changed card the viewer cannot see.
+   * Floating effects in creation order, with identifiable changed cards.
+   * Legality changes and observed permanent fixed changes retain their data
+   * when their source is unidentified.
    */
   readonly floating: readonly FloatingEffectView[];
   /**
@@ -352,20 +380,25 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     const sourceIndependent = carriesLegality(effect.change);
     const sourceSeen = visibleSource(effect.source);
     const expirySeen = effect.expiry.at !== "sourceLeavesPlay" || visible(effect.expiry.source);
-    return (sourceSeen || sourceIndependent) && expirySeen && (changed === null || visible(changed));
+    return (sourceSeen || sourceIndependent || observedFixedEffect(state, viewer, effect.id) !== undefined) && expirySeen && (changed === null || visible(changed));
   };
+  const remembered = new Map((state.rememberedCards?.[viewer] ?? []).map((record) => [record.instance, record]));
   const members = new Map<InstanceId, number>();
+  const memberFor = (id: InstanceId): number => {
+    const existing = members.get(id);
+    if (existing !== undefined) return existing;
+    const member = members.size;
+    members.set(id, member);
+    return member;
+  };
+  const anonymousSource = (source: InstanceId): { readonly member: number } | null =>
+    state.instances[source] !== undefined && remembered.has(source) ? { member: memberFor(source) } : null;
   const capturedView = (captured: readonly InstanceId[]): CapturedCardView[] =>
     captured.flatMap((id): CapturedCardView[] => {
       if (visible(id)) return [id];
       const instance = state.instances[id];
       if (instance === undefined) return [];
-      let member = members.get(id);
-      if (member === undefined) {
-        member = members.size;
-        members.set(id, member);
-      }
-      return [{ member, owner: instance.owner, printing: copy(instance.printing), variant: copy(instance.variant) }];
+      return [{ member: memberFor(id), owner: instance.owner, printing: copy(instance.printing), variant: copy(instance.variant) }];
     });
   // A trigger from a source the viewer cannot see shows none of its captured cards.
   const changeView = (change: FloatingChange, sourceSeen: boolean): FloatingChangeView => {
@@ -374,11 +407,15 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     return sourceSeen ? { ...copy(rest), captured: capturedView(captured) } : copy(rest);
   };
   // Hidden captured members are numbered in the order the floating effects, then the queued triggers, show them.
-  const floating = state.floating.filter(floatingVisible).map((effect): FloatingEffectView => ({
-    ...copy(effect),
-    source: visibleSource(effect.source) ? copy(effect.source) : null,
-    change: changeView(effect.change, visibleSource(effect.source)),
-  }));
+  const floating = state.floating.filter(floatingVisible).map((effect): FloatingEffectView => {
+    const observed = observedFixedEffect(state, viewer, effect.id);
+    const record = observed ?? effect;
+    const sourceSeen = visibleSource(record.source);
+    return { ...copy(record), source: sourceSeen ? copy(record.source) : null,
+      change: changeView(record.change, sourceSeen),
+      ...(observed !== undefined && !sourceSeen && typeof record.source === "string"
+        ? { rememberedSource: anonymousSource(record.source) } : {}) };
+  });
   const triggerQueue = state.triggerQueue.map((trigger): QueuedTriggerView => ({
     controller: trigger.controller,
     source: visibleSource(trigger.source) ? copy(trigger.source) : null,
@@ -390,6 +427,24 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
     ...(trigger.captured === undefined || !visibleSource(trigger.source) ? {} : { captured: capturedView(trigger.captured) }),
   }));
+  const descriptor = (record: RememberedCard): HiddenCardDescriptor => ({
+    member: memberFor(record.instance), owner: record.owner, printing: copy(record.printing),
+    variant: copy(record.variant), status: copy(record.status),
+    effects: record.effects.map((effect): HiddenCardEffectView => {
+      const { instance: _instance, ...change } = effect.change;
+      const source = typeof effect.source !== "string" || visible(effect.source) ? copy(effect.source)
+        : anonymousSource(effect.source);
+      return { id: effect.id, controller: effect.controller, timestamp: effect.timestamp, source, change: copy(change) };
+    }),
+  });
+  const hiddenCards: Record<Side, HiddenCardDescriptor[]> = { player: [], enemy: [] };
+  for (const record of remembered.values()) {
+    const current = state.instances[record.instance];
+    if (current === undefined || visible(record.instance) || (current.zone !== "hand" && current.zone !== "deck")) continue;
+    hiddenCards[record.owner].push(descriptor(record));
+  }
+  hiddenCards.player.sort((a, b) => a.member - b.member);
+  hiddenCards.enemy.sort((a, b) => a.member - b.member);
   const side = (which: Side): SideView => {
     const source = state.sides[which];
     return {
@@ -414,6 +469,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     turn: copy(state.turn),
     sides: { player: side("player"), enemy: side("enemy") },
     instances,
+    ...(hiddenCards.player.length + hiddenCards.enemy.length === 0 ? {} : { hiddenCards }),
     stack: state.stack.map((item) =>
       item.kind === "card"
         ? { ...copy(item), choices: item.choices.map(visibleChoices) }

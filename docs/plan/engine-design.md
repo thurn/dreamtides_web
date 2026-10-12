@@ -1875,6 +1875,20 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     disclosures and identities exposed by published events or prompts
     survive the fold discarding the step
     ([Decisions and prompts](#decisions-and-prompts)).
+- **Anonymous persistent records** are optional `state.rememberedCards[side]`,
+  in first-observation order. Knowledge boundaries and event/prompt observation
+  refresh only identifiable cards; blind records keep their last observed
+  printing, variant and raw status, together with observed permanent fixed
+  continuous changes. A previously observed fixed change keeps its provenance
+  when its source becomes hidden or ceases. When its target returns public, the
+  view retains this observed fixed obligation with anonymous source provenance;
+  subsequent determinizations retain both its raw effect and the target's observed
+  snapshot. Knowing a source alone authorizes none of its later private changes.
+  A view groups blind records by owner
+  as `hiddenCards`, without physical identities, zones or positions. Local member
+  numbers relate captured cohorts and remembered hidden sources using observable
+  history. Later private changes supply no facts for this view. Saved battles
+  without the optional records have conservative anonymous knowledge.
 - **`promptView(prompt, side, display)`** is a pending prompt as `side` sees
   it: its purpose names a source card only when `side` can identify it
   (`purposeView`), even for the side answering, which otherwise sees it
@@ -1955,10 +1969,19 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   reads nothing but the view, so states that look alike to the viewer give
   the same sample for the same draws. It draws a fresh seed (so later
   shuffles and Dreamwell cycles are sampled too) and starts empty what a view
-  does not carry: queued triggers and floating effects from sources the
-  viewer cannot see, the opponent's knowledge, loop history, and the
+  does not carry: queued triggers and unobserved floating effects from sources
+  the viewer cannot see, the opponent's knowledge, loop history, and the
   automatic-step count. The loop on offer and the repetition in progress
   are the view's ([Loops](#loops)). Only the AI uses it.
+  - Anonymous observed descriptors are assigned once to matching owner,
+    printing and variant stand-ins. Status and permanent fixed continuous changes
+    travel with those cards through subsequent draws and materializations. Captured
+    cohorts prefer their assigned members. Visible sources remain identified,
+    remembered hidden sources use their corresponding stand-ins, and an unknown or
+    ceased source uses a reserved nonexistent identity whose viewed source is null.
+    Descriptor fidelity reads sampled raw cards and effects independently of the
+    sample's remembered copies. Observation records are bookkeeping for both
+    optional-loop signatures and mandatory-cycle positions.
   - A static ability working from a hand or a deck shows in the view only
     as what it changes (RD-hv-umm2.53-2), so after dealing, determinization
     reconciles the sample with the characteristics the view shows its cards
