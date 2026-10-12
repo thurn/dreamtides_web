@@ -8,9 +8,10 @@
  */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
-import { energy, event, everyIn, thisCardIn } from "../../../dsl/builders";
+import { energy, event, everyIn, keyword, thisCardIn } from "../../../dsl/builders";
 import { either, onMaterialized, triggered, untilEndOfTurn, whenDiscardSelf, whenErode, whenErodeSelf } from "../../../dsl/triggers";
-import { createEngine } from "../../../engine";
+import { PolicyRandom } from "../../../policy/random";
+import { createEngine, IllegalAction } from "../../../engine";
 import { eventSeenBy, type EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice } from "../../../fold/slice";
 import type { Answer } from "../../../prompts/types";
@@ -18,8 +19,9 @@ import type { Action } from "../../../rules/actions";
 import { hasKeyword } from "../../../rules/keywords";
 import { erodeCard } from "../../../rules/resources";
 import { routeCosts } from "../../../rules/timing";
+import { cloneState } from "../../../state/clone";
 import { deserializeState, stateHash } from "../../../state/hash";
-import { battleSeed, type AbilitySource, type InstanceId, type Side } from "../../../state/ids";
+import { battleSeed, opponent, type AbilitySource, type InstanceId, type Side } from "../../../state/ids";
 import type { BattleState } from "../../../state/types";
 import { NO_PROMPTS, ScriptedSource } from "../../../steps/sources";
 import { boardState, type BoardSetup } from "../../../testing/board";
@@ -27,6 +29,7 @@ import { determinizationDivergences } from "../../../testing/determinization-fid
 import { invariantViolations } from "../../../testing/invariants";
 import { eventRedactionViolations } from "../../../testing/redaction";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
+import type { Decklists } from "../../../view/determinize";
 import { discard } from "../discard";
 import { draw } from "../draw";
 import { erode } from "../erode";
@@ -66,6 +69,8 @@ const D = {
   mayDraw: card(5, "character", 5, () => [triggered(whenErode(), optional(draw(1)))]),
   /** "Until end of turn, events in your void gain reclaim." */
   eventsGainReclaim: card(6, "event", 0, () => [event(grantReclaim(everyIn("void", { cardType: "event" }), { duration: untilEndOfTurn() }))]),
+  reclaimVoid: card(7, "event", 5, () => [keyword("reclaim"), event(gainEnergy(0))]),
+  plainVoid: card(8, "event", 5, () => [event(gainEnergy(0))]),
 } as const;
 const S = {
   erodeOne: card(10, "event", 0, () => [event(erode(1))]),
@@ -285,5 +290,77 @@ describe("a group Reclaim grant whose source ceased to exist", () => {
       enemy: filler.map((cardId) => ({ cardId })),
     };
     expect(determinizationDivergences(E, result.state, decklists, battleSeed("ceased-grant"), 0)).toEqual([]);
+  });
+});
+
+
+// The source is blind or absent before this temporary effect starts. Neither
+// source identity nor remembered permanent observations can carry the change.
+const reclaimMatrix = (["player", "enemy"] as const).flatMap((owner) =>
+  (["hidden", "ceased"] as const).flatMap((sourceState) =>
+    [true, false].map((gains) => ({ owner, sourceState, gains, operation: gains ? "gained" : "lost" })),
+  ),
+);
+
+describe("Reclaim legality independent of source identity", () => {
+  it.each(reclaimMatrix)("preserves $operation Reclaim for $owner from a $sourceState source in both views and samples", ({ owner, sourceState, gains }) => {
+    const targetDefinition = gains ? D.plainVoid : D.reclaimVoid;
+    const other = opponent(owner);
+    const { state, ids } = boardState(E.catalog, {
+      active: owner, phase: "day",
+      [owner]: { void: [targetDefinition.id], deck: [v.vanilla2.id, ...filler], energy: 5 },
+      [other]: { deck: filler },
+    });
+    const [source] = ids[owner].deck;
+    const [target] = ids[owner].void;
+    if (sourceState === "ceased") {
+      state.sides[owner].deck.shift();
+      delete state.instances[source];
+    }
+    const play = { kind: "play", card: target, from: "void" } as const;
+    expect(E.legalActions(cloneState(state), owner).some((action) => JSON.stringify(action) === JSON.stringify(play))).toBe(!gains);
+    state.floating.push({
+      id: "e1", source, controller: owner, timestamp: state.clock,
+      expiry: { at: "endOfTurn" },
+      change: { kind: "keyword", instance: target, keyword: "reclaim", gains,
+        ...(gains ? { reclaimCosts: [energy(1)] } : {}) },
+    });
+    state.nextEffect = 2;
+    const entries = [targetDefinition.id, ...(sourceState === "hidden" ? [v.vanilla2.id] : []), ...filler].map((cardId) => ({ cardId }));
+    const decklists: Decklists = {
+      player: owner === "player" ? entries : filler.map((cardId) => ({ cardId })),
+      enemy: owner === "enemy" ? entries : filler.map((cardId) => ({ cardId })),
+    };
+    const expectedCosts = [energy(gains ? 1 : 5)];
+    const checkPlay = (candidate: BattleState) => {
+      expect(reclaimable(candidate, target)).toBe(gains);
+      expect(reclaimCosts(candidate, target)).toEqual(expectedCosts);
+      expect(E.legalActions(candidate, owner).some((action) => JSON.stringify(action) === JSON.stringify(play))).toBe(gains);
+      if (gains) {
+        const played = act(candidate, owner, play);
+        expect(played.state.sides[owner].currentEnergy).toBe(4);
+        expect(played.state.sides[owner].banished).toContain(target);
+      } else {
+        expect(() => E.apply(candidate, owner, play, NO_PROMPTS)).toThrow(IllegalAction);
+      }
+    };
+    checkPlay(state);
+    for (const viewer of ["player", "enemy"] as const) {
+      const seen = E.view(state, viewer);
+      expect(seen.instances[source]).toBeUndefined();
+      const kept = seen.floating.filter((effect) => effect.change.kind === "keyword" && effect.change.instance === target);
+      expect(kept).toEqual([expect.objectContaining({
+        source: null, expiry: { at: "endOfTurn" },
+        change: { kind: "keyword", instance: target, keyword: "reclaim", gains,
+          ...(gains ? { reclaimCosts: [energy(1)] } : {}) },
+      })]);
+      // The real source's ID is absent even if the sample happens to mint the same number.
+      expect(JSON.stringify(seen)).not.toContain(JSON.stringify(source));
+      const random = new PolicyRandom(battleSeed(`reclaim-${owner}-${sourceState}-${gains}-${viewer}`));
+      const sampled = E.determinize(seen, decklists, () => random.next());
+      expect(invariantViolations(sampled, E.catalog)).toEqual([]);
+      checkPlay(sampled);
+    }
+    expect(determinizationDivergences(E, state, decklists, battleSeed(`reclaim-${owner}-${sourceState}-${gains}`), 0)).toEqual([]);
   });
 });

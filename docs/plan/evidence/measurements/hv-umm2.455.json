@@ -1,0 +1,213 @@
+{
+  "bead": "hv-umm2.455",
+  "base": "46784810c7f604be675a4a7d5c4d31318676cc20",
+  "claimWindow": {
+    "start": "2026-10-12T00:39:14+00:00",
+    "end": "2026-10-12T00:48:55.989898+00:00",
+    "elapsedMinutes": 9.699831633333334,
+    "endMeaning": "commit preparation timestamp, immediately before commit"
+  },
+  "scope": "One existing plain primitive contract module, discovered by contracts.test.ts import.meta.glob; no registry/public importer/runtime delta. Module remains below500 lines.",
+  "testDelta": {
+    "files": 0,
+    "lines": 83,
+    "cases": 8,
+    "jsdomFiles": 0
+  },
+  "matrix": {
+    "axes": {
+      "change": [
+        "gain",
+        "loss"
+      ],
+      "source": [
+        "blind but existing deck source",
+        "ceased source"
+      ],
+      "activeOwner": [
+        "player",
+        "enemy"
+      ],
+      "viewer": [
+        "player",
+        "enemy"
+      ]
+    },
+    "assertions": [
+      "both viewer sources null and original source ID absent from serialized view",
+      "source hidden/ceased before temporary effect starts; fixed remembered observations cannot carry it",
+      "base void-play availability reverses after gained/lost keyword",
+      "observable route costs equal in real and sampled states",
+      "gain charges1 instead of printed5 and banishes reclaimed event",
+      "loss denies play and rejects attempted engine action",
+      "sample state invariants and determinizationDivergences empty"
+    ]
+  },
+  "negativeProbes": [
+    {
+      "name": "omit-legality",
+      "exit": 1,
+      "wallSeconds": 3.0451651249986753,
+      "oneMinuteLoad": 7.88818359375,
+      "restoredSha256": "e79e1c1d02123aef335e25ceb54363dcdbf76951a19981f09f738dfff8a59f24",
+      "path": "src/engine/rules/floating.ts",
+      "before": "return change.keyword === \"reclaim\";",
+      "mutation": "return false;",
+      "matrixFailures": [
+        {
+          "name": "Reclaim legality independent of source identity preserves 'gained' Reclaim for 'player' from a 'hidden' source in both views and samples",
+          "failure": "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'player' from a 'hidden' source in both views and samples",
+          "failure": "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'gained' Reclaim for 'player' from a 'ceased' source in both views and samples",
+          "failure": "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'player' from a 'ceased' source in both views and samples",
+          "failure": "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'gained' Reclaim for 'enemy' from a 'hidden' source in both views and samples",
+          "failure": "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'enemy' from a 'hidden' source in both views and samples",
+          "failure": "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'gained' Reclaim for 'enemy' from a 'ceased' source in both views and samples",
+          "failure": "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'enemy' from a 'ceased' source in both views and samples",
+          "failure": "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]"
+        }
+      ]
+    },
+    {
+      "name": "leak-source",
+      "exit": 1,
+      "wallSeconds": 3.0265695829984907,
+      "oneMinuteLoad": 7.88818359375,
+      "restoredSha256": "c71f19b6434455e0c168f3d932628250f0f92b443a413565bddc03bb4e222033",
+      "path": "src/engine/view/view.ts",
+      "before": "source: sourceSeen ? copy(record.source) : null,",
+      "mutation": "source: copy(record.source),",
+      "matrixFailures": [
+        {
+          "name": "Reclaim legality independent of source identity preserves 'gained' Reclaim for 'player' from a 'hidden' source in both views and samples",
+          "failure": "AssertionError: expected [ \u2026(2) ] to deeply equal []"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'player' from a 'hidden' source in both views and samples",
+          "failure": "AssertionError: expected [ { id: 'e1', source: 'i1', \u2026(4) } ] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'gained' Reclaim for 'player' from a 'ceased' source in both views and samples",
+          "failure": "AssertionError: expected [ { id: 'e1', source: 'i1', \u2026(4) } ] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'player' from a 'ceased' source in both views and samples",
+          "failure": "AssertionError: expected [ { id: 'e1', source: 'i1', \u2026(4) } ] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'gained' Reclaim for 'enemy' from a 'hidden' source in both views and samples",
+          "failure": "AssertionError: expected [ \u2026(2) ] to deeply equal []"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'enemy' from a 'hidden' source in both views and samples",
+          "failure": "AssertionError: expected [ { id: 'e1', source: 'i7', \u2026(4) } ] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'gained' Reclaim for 'enemy' from a 'ceased' source in both views and samples",
+          "failure": "AssertionError: expected [ { id: 'e1', source: 'i7', \u2026(4) } ] to deeply equal [ ObjectContaining{\u2026} ]"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'enemy' from a 'ceased' source in both views and samples",
+          "failure": "AssertionError: expected [ { id: 'e1', source: 'i7', \u2026(4) } ] to deeply equal [ ObjectContaining{\u2026} ]"
+        }
+      ]
+    }
+  ],
+  "commands": {
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "--reporter=json",
+        "--outputFile=/tmp/dreamtides-455-validation/focused.json"
+      ],
+      "startedAt": "2026-10-12T00:46:36.242107+00:00",
+      "wallSeconds": 4.719393958999717,
+      "oneMinuteLoad": 8.04052734375,
+      "exit": 0,
+      "passed": 1112,
+      "failed": 0
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-12T00:48:11.385439+00:00",
+      "wallSeconds": 9.551252583998576,
+      "oneMinuteLoad": 8.724609375,
+      "exit": 0,
+      "log": "/tmp/dreamtides-455-validation/review.log"
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startedAt": "2026-10-12T00:48:20.936907+00:00",
+      "wallSeconds": 2.8936449169996195,
+      "oneMinuteLoad": 9.18310546875,
+      "exit": 0,
+      "log": "/tmp/dreamtides-455-validation/knip.log"
+    }
+  },
+  "preExisting": {
+    "canonical": "hv-umm2.372",
+    "receipt": {
+      "name": "explicit-loss-witness",
+      "exit": 1,
+      "wallSeconds": 3.18008991699935,
+      "sourceHashes": {
+        "src/engine/rules/timing.ts": "39c44d308eb00aab40ef6adce5bea68e0f3c169e8a7b5de17275405d7b5fb886",
+        "src/engine/rules/keywords.ts": "db18f7f7fcb0fa65fc5983061baa7744567c1bda53f52d185642f19a863ea97c",
+        "src/engine/rules/floating.ts": "e79e1c1d02123aef335e25ceb54363dcdbf76951a19981f09f738dfff8a59f24",
+        "src/engine/view/view.ts": "c71f19b6434455e0c168f3d932628250f0f92b443a413565bddc03bb4e222033"
+      },
+      "failures": [
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'player' from a 'hidden' source in both views and samples",
+          "failure": "AssertionError: expected true to be false // Object.is equality"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'player' from a 'ceased' source in both views and samples",
+          "failure": "AssertionError: expected true to be false // Object.is equality"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'enemy' from a 'hidden' source in both views and samples",
+          "failure": "AssertionError: expected true to be false // Object.is equality"
+        },
+        {
+          "name": "Reclaim legality independent of source identity preserves 'lost' Reclaim for 'enemy' from a 'ceased' source in both views and samples",
+          "failure": "AssertionError: expected true to be false // Object.is equality"
+        }
+      ]
+    },
+    "scratch": "/tmp/dreamtides-455-validation/explicit-loss-witness.contracts.ts, explicit-loss-witness.json and explicit-loss-witness.log"
+  },
+  "validationDecision": "Test-only contract strengthening uses focused contracts then review and Knip. Runtime behavior and presentation are unchanged, so browser QA, full review and fuzz are outside the proportional checks.",
+  "ownership": "All owned focused/probe/required-check subprocesses are terminal. Exact floating.ts/view.ts bytes match HEAD. No browser, server, watcher, native delivery or independent-review provider was started. Parent retains native delivery and review authority."
+}
