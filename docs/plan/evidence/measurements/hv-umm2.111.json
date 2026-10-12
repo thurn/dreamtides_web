@@ -1,0 +1,136 @@
+{
+  "bead": "hv-umm2.111",
+  "implementWindow": {
+    "dispatch": "2026-10-12T11:10:28Z",
+    "commit": "2026-10-12T11:57:00Z",
+    "note": "includes the stop for widened areas; implementMin is elapsed wall time to commit"
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "npm run review (first)",
+      "load1": 12.91
+    },
+    {
+      "scope": "npm run review (final)",
+      "load1": 22.34
+    },
+    {
+      "scope": "lab:preflight",
+      "load1": 16.25
+    },
+    {
+      "scope": "card-sweep (final)",
+      "load1": 7.0
+    },
+    {
+      "scope": "judged",
+      "load1": 8.78
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final npm run review start"
+      }
+    }
+  },
+  "validation": {
+    "focusedContracts": {
+      "command": "npm test -- src/engine/effects/primitives/contracts.test.ts",
+      "loseAllAbilitiesCases": 16
+    },
+    "scenarios": {
+      "command": "npm test -- src/content/specs/specs.test.ts",
+      "module": "prim-lose-all-abilities",
+      "cases": 6
+    },
+    "review": {
+      "command": "npm run review",
+      "wallS": 49,
+      "files": 271,
+      "cases": 4135
+    },
+    "knip": {
+      "command": "npm run knip",
+      "wallS": 2
+    },
+    "reviewFull": {
+      "command": "lockf -k artifacts/heavy.lock npm run review:full",
+      "wallS": 105,
+      "cases": 4985
+    },
+    "fuzz": {
+      "command": "lockf -k artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 890970bd-475f-4da4-b835-2fb75882a84d,9e9efbc0-d438-48a9-9551-85c93fb33f3e",
+      "wallS": 139,
+      "failures": 0,
+      "steps": 151623,
+      "targets": {
+        "890970bd-475f-4da4-b835-2fb75882a84d": {
+          "included": 607,
+          "exercised": 247
+        },
+        "9e9efbc0-d438-48a9-9551-85c93fb33f3e": {
+          "included": 608,
+          "exercised": 264
+        }
+      },
+      "firstRun": "152 announced-change failures before the announced-changes.ts fix; 0 after"
+    },
+    "preflight": {
+      "pass": 24,
+      "skip": 16,
+      "fail": 0
+    },
+    "sweep": {
+      "pass": 24,
+      "skip": 16,
+      "fail": 0,
+      "wallS": 257,
+      "invocation": "invocations/sweep-IyDWFp",
+      "note": "an earlier sweep's 3 fails were dev-server reloads from source edits during the sweep; its ledger was discarded and the sweep rerun on the final code"
+    },
+    "judged": {
+      "entities": [
+        "9e9efbc0-d438-48a9-9551-85c93fb33f3e",
+        "890970bd-475f-4da4-b835-2fb75882a84d"
+      ],
+      "verdict": "pass",
+      "reason": "new status indicator and the pay-to-end action",
+      "d21Sampled": false,
+      "invocation": "invocations/run-nD2qCH"
+    }
+  },
+  "reviewFixes": {
+    "findings": [
+      "P2-A mirror-only announcement must be visible to each side that sees the card; effectStarted of a change kept without its source is public for a public card, source redacted",
+      "P2-B a gained static orders after its gain on a timestamp tie",
+      "P3 figment gain badge names the figment",
+      "delta P2: figment copies (card-origin abilities) use the gained-group static ordering"
+    ],
+    "focusedContracts": {
+      "loseAllAbilitiesCases": 20,
+      "contractsTestCases": 1539
+    },
+    "fuzz": {
+      "wallS": 129,
+      "failures": 0,
+      "steps": 151623,
+      "hostLoadAtStart": 10.49
+    },
+    "review": {
+      "cases": 4138
+    },
+    "reviewFull": {
+      "cases": 4988,
+      "hostLoadAtStart": 5.67
+    },
+    "judged": {
+      "invocation": "invocations/run-Rdn00p",
+      "verdict": "pass",
+      "viewport": "desktop"
+    },
+    "reviewDelta": {
+      "cases": 4139
+    }
+  }
+}

@@ -1025,10 +1025,16 @@ analog:
    character is that character type" (`subtype`). A static ability naming
    its source's chosen type (`CHOSEN_SUBTYPE`) reads the latest `subtype`
    change that source made to itself, and makes no change without one.
-3. **Ability adds and removes:** keywords gained and lost (`keyword`), and
-   the abilities of another card a character gained (`abilities`, made by
-   `gainAbilities`; rules § Keywords and Effects → Gaining abilities). An
-   `abilities` change applies that card's keywords here, at its timestamp.
+3. **Ability adds and removes:** keywords gained and lost (`keyword`), the
+   abilities of another card or figment type a character gained
+   (`abilities`, made by `gainAbilities` and by `loseAllAbilities` with
+   `sourceGains`; rules § Keywords and Effects → Gaining abilities), and the
+   loss of all its abilities (`loseAbilities`, made by `loseAllAbilities`;
+   rules § Keywords and Effects → Losing abilities). An `abilities` change
+   applies that card's or figment type's keywords here, at its timestamp;
+   a `loseAbilities` change removes every keyword the character has at its
+   timestamp, so later keyword changes, gains, and static grants add theirs
+   again (RD-hv-umm2.111-1).
    Its other abilities join the character's ability list:
    `rules/floating.ts` mirrors the character's `abilities` changes, in
    creation order, onto `status.gainedAbilities` as each begins and ends, and
@@ -1040,8 +1046,24 @@ analog:
    card's own abilities first, so their indexes never change. The change
    lasts while the character is in play (`sourceLeavesPlay` on itself,
    RD-hv-umm2.110-2); as it ends, the once-per-turn records of the gained
-   positions are dropped. The saved-state check rejects a mirror that
-   disagrees with the changes (`rules/battle/fold.ts`).
+   positions are dropped. A loss works the same way: `rules/floating.ts`
+   mirrors the character's `loseAbilities` changes onto
+   `status.lostAbilities`, the number of its gains that began before its
+   latest loss, and `instanceOrigin` copies it into the origin's `lost`
+   (a figment origin's `lost: true`). `originAbilities` then returns the
+   whole list with the own and earlier-gained positions left as holes, a
+   sparse array: every reader iterates with `forEach`, `some`, or
+   `flatMap`, which skip holes, or reads one index, which is `undefined`,
+   so none sees a lost ability and indexes never change as a loss begins or
+   ends. `cardStatics` bypasses the per-printing statics memo for an
+   instance that has lost its abilities, and `collectStatics` leaves out
+   the lost groups' static abilities. A loss lasts only while its character
+   is in play: `expireAt` ends it as the character leaves, whatever its
+   expiry (RD-hv-umm2.111-2), and an "until the opponent pays" effect none
+   of whose floating effects is left ends unpaid (`endFloating`). A view
+   keeps a loss whose source it cannot see (`keptWithoutSource`). The
+   saved-state check rejects mirrors that disagree with the changes, and a
+   gain or loss naming a card outside play (`rules/battle/fold.ts`).
    Disabled triggers are floating records that the trigger matcher reads.
 4. **Base-spark setting:** "base ✦ becomes 7" (`baseSpark`).
 5. **Spark modifications:** permanent gained spark (`status.gainedSpark`),
@@ -1086,7 +1108,10 @@ Ordering within a layer:
   (0 for an emblem).
 - Ties go to static abilities first, in source order (emblems, player first,
   then cards in any zone by instance number), then floating records in
-  creation order (RD-hv-7x4l.7-2).
+  creation order (RD-hv-7x4l.7-2). A static ability a character gained
+  orders among the floating records just after the `abilities` record that
+  gained it, so a loss made before the gain at the same time never removes
+  it (RD-hv-umm2.111-1).
 - A static ability's selectors, values, and `while` condition read the
   characteristics of the layers before its own, so no layer depends on itself.
   The exception is the
@@ -1514,7 +1539,7 @@ with the ones Phase 5 primitive beads add, each with tests.
 | --- | --- | --- |
 | Resources | `gainEnergy`, `gainMaxEnergy`, `gainPoints` (either player), `storeCounters` (N⧗ on the source while it is in play, announced by `countersChanged`; RD-hv-umm2.94-1) | `doubleEnergy`, `spendCounters` |
 | Cards | `draw` (ephemeral), `discard`, `discardRandom`, `foresee`, `erode`, `createCopyInHand` (ephemeral), `discover(filter)`, `grantCardKeyword(cardsIn(zone, filter, player), keyword)` (static only), `takeFromAmong(movedBy(effect) \| opponentHand(), { filter, costAtMost, count, optional })` (`count` cards, all when fewer match; an optional take of several asks its "you may" first, then takes exactly that many), `lookAtTop(n, { draw, ephemeral })`, `lookAtTopBanish(n)` / `putLinkedBanishedInHand(producerOffset = -1)` (paired source-object memory, RD-hv-umm2.486-1), `shuffleInto(zone refs, { chooseFromHand })` (always shuffles the controller's deck), `banishCards(zone refs | capturedCards())` (each named card to its owner's Banished zone), `banishChosen(filter)` (a private resolution-time choice from the opponent's hand, not a discard), `putInDeck(card refs, top \| bottom)` (each to its owner's deck, unshuffled, grouped by source zone in first-reference order, each in its original zone order), `putFromTop(n, places)` (a private `arrange` of the looked-at cards among top, bottom, hand, and void, each place a count or the rest) | `draw` at cost 0, `reveal` |
-| Characters | `abandon(chooser, predicate)` (one own character chosen at resolution, not a target), `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materialize(from)` (zone-card references or the character a nested Discover moves into hand), `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `rematerialize`, `move(slotRule)`, `gainAbilities(banishCards(…))` (the source, while in play, gains every ability of each card the banish moved; layer 3 `abilities`) |
+| Characters | `abandon(chooser, predicate)` (one own character chosen at resolution, not a target), `dissolve`, `banish`, `banishUntil(duration)`, `returnToHand`, `materialize(from)` (zone-card references or the character a nested Discover moves into hand), `materializeFigments(figment, n, spark)`, `materializeFigmentCopy` (C5), `gainSpark(duration)`, `gainAdditionalSpark` (C17), `setBaseSpark`, `sparkModifier`, `awaken`, `exhaust`, `gainControl`, `grant`/`loseKeyword`, `giveAllTypes`, `triggerAbility`, `disableTriggers(while)`, `phase` (Phasing) | `rematerialize`, `move(slotRule)`, `gainAbilities(banishCards(…))` (the source, while in play, gains every ability of each card the banish moved; layer 3 `abilities`), `loseAllAbilities(subject, { duration, sourceGains })` (each character loses all its abilities while in play, layer 3 `loseAbilities`; with `sourceGains`, the source, while in play, gains the abilities each had as it lost them) |
 | Costs | `costModifier(player, filter, amount, { next, duration })`, `playFromZone("void", filter, { cards, next, duration, player })` (a play permission; static with no `cards`) | |
 | Stack | `prevent(selector, { unlessPays \| unlessAbandons, destination })`, `copyCard` (D15), `banishSelfOnResolve` ("Banish this card": the resolving event goes from the stack to its owner's Banished zone as the instruction resolves, so `resolveTop` does not put it into the void; RD-hv-umm2.475-1) | copying more than once |
 | Flow | `sequence`, `chooseOne(modes)`, `ifThen(Else)`, `repeat`, `optional`, `forDuration`, `floating(when…)`, `delayed(next…)`, `eachPlayer` (active player first, each as "you"; no play-time choices), `withMaterialized(materialize, effect)` (binds `capturedCards()`) | `forEach`, `takeExtraTurn` (C8) |
@@ -2064,7 +2089,12 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     `effectStarted` whose source, or whose changed card
     (`changedInstance`), a side cannot identify is hidden from it whole, as
     the view omits that floating effect: its change can name the source's
-    card (a delayed trigger's `ref.origin`) or a card in a hidden hand;
+    card (a delayed trigger's `ref.origin`) or a card in a hidden hand.
+    The exception is a change the view keeps without its source
+    (`keptWithoutSource`, such as a loss of abilities) to a card in a
+    public zone: it is public, every side that identifies that card sees
+    it begin, and a side that cannot identify its source, such as a
+    created card that has ceased to exist, sees the source `null`;
   - a `triggerQueued` that a side may see shows its subject as the view's
     queued trigger does (`seesSubject`), so the opponent sees a public
     trigger queue without the card it concerns;

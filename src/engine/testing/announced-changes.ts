@@ -7,7 +7,10 @@
  * zone (into, out of, or within the stack, play, a void, or the Banished
  * zone) is named by an event each side may see, perhaps with fields
  * redacted (`eventSeenBy`); a change hidden from a side, such as a card
- * created in the other side's hand, needs only the event its owner sees.
+ * created in the other side's hand, needs only the event its owner sees. A
+ * status a floating change mirrors (`gainedAbilities`, `lostAbilities`) is
+ * named by the `effectStarted` or `effectEnded` event of an effect changing
+ * that card, which each side that sees the card must see.
  *
  * One rules change is announced by its phase instead: the Ending readies
  * every exhausted character (rules § Exhaust and Awaken) in its cleanup,
@@ -16,6 +19,7 @@
  * (`turn.endingCleanup`).
  */
 import { eventSeenBy, type EngineEvent } from "../events";
+import { changedInstance } from "../rules/floating";
 import { SIDES, type InstanceId, type Zone } from "../state/ids";
 import type { BattleState, CardInstance } from "../state/types";
 import { strings } from "./redaction";
@@ -40,8 +44,21 @@ function unchanged(before: BattleState, was: CardInstance | undefined, after: Ba
   if (was === undefined || is === undefined) return was === is;
   if (was.zone !== is.zone || was.controller !== is.controller || slotOf(before, was) !== slotOf(after, is)) return false;
   const status = is.status as unknown as Readonly<Record<string, unknown>>;
-  // An optional status field (`gainedAbilities`) that appears is a change too.
+  // An optional status field (`gainedAbilities`, `lostAbilities`) that appears is a change too.
   return Object.keys(status).length === Object.keys(was.status).length && Object.entries(was.status).every(([field, value]) => status[field] === value);
+}
+
+/** A status without the fields floating changes mirror. */
+function unmirrored(status: CardInstance["status"]): CardInstance["status"] {
+  const { gainedAbilities: _gained, lostAbilities: _lost, ...rest } = status;
+  return rest;
+}
+
+/** The card the floating effect an `effectStarted` or `effectEnded` event names changes, or `null`. */
+function changesCard(event: EngineEvent, before: BattleState, after: BattleState): InstanceId | null {
+  if (event.kind !== "effectStarted" && event.kind !== "effectEnded") return null;
+  const effect = before.floating.find(({ id }) => id === event.effect) ?? after.floating.find(({ id }) => id === event.effect);
+  return effect === undefined ? null : changedInstance(effect.change);
 }
 
 /** Whether a card's only change is the Ending's readying, in a step that changed phase or ran the waiting Ending cleanup. */
@@ -75,7 +92,10 @@ export function unannouncedChanges(events: readonly EngineEvent[], before: Battl
     const from = placeOf(before, was);
     const to = placeOf(after, is);
     if (from === to || readiedByPhase(events, before, after, id)) continue;
-    const naming = events.filter((_event, index) => named()[index]?.has(id) === true);
+    const mirrorOnly = was !== undefined && is !== undefined && placeOf(before, was, unmirrored(was.status)) === placeOf(after, is, unmirrored(is.status));
+    // A mirrored status is announced by the start or end of the effect that changes it, which each side that
+    // sees the card must see too.
+    const naming = events.filter((event, index) => named()[index]?.has(id) === true || (mirrorOnly && changesCard(event, before, after) === id));
     if (naming.length === 0) {
       problems.push(`${id} changed from ${from} to ${to} with no event naming it`);
       continue;

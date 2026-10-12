@@ -1095,12 +1095,22 @@ function isCardStatus(value: unknown): boolean {
     isBoolean(value.offering) &&
     isBoolean(value.ephemeral) &&
     nullable(isFiniteNumber)(value.x) &&
-    optional(isGainedAbilitiesList)(value.gainedAbilities)
+    optional(isGainedAbilitiesList)(value.gainedAbilities) &&
+    optional(isLostCount(value.gainedAbilities))(value.lostAbilities)
   );
 }
 
+/** A count of lost gained groups: at most the number of groups `gained` lists. */
+function isLostCount(gained: unknown): (value: unknown) => boolean {
+  return (value) => isIndex(value) && value <= (Array.isArray(gained) ? gained.length : 0);
+}
+
+/** One gained group: a card for its variant, or a figment type. */
 function isGainedAbilities(value: unknown): boolean {
-  return isPlainRecord(value) && parses(parseCardId)(value.cardId) && isVariant(value.variant);
+  if (!isPlainRecord(value)) return false;
+  return "figment" in value
+    ? Object.keys(value).length === 1 && isFigmentId(value.figment)
+    : parses(parseCardId)(value.cardId) && isVariant(value.variant);
 }
 
 /** A non-empty list of gained abilities: an empty one is absent instead. */
@@ -1112,9 +1122,10 @@ function isAbilityOrigin(value: unknown): boolean {
   if (!isPlainRecord(value)) return false;
   switch (value.kind) {
     case "card":
-      return parses(parseCardId)(value.cardId) && isVariant(value.variant) && optional(isGainedAbilitiesList)(value.gained);
+      return parses(parseCardId)(value.cardId) && isVariant(value.variant) && optional(isGainedAbilitiesList)(value.gained) &&
+        optional(isLostCount(value.gained))(value.lost);
     case "figment":
-      return isFigmentId(value.id);
+      return isFigmentId(value.id) && optional((lost) => lost === true)(value.lost);
     case "avatar":
       return parses(parseAvatarId)(value.id);
     case "dreamsign":
@@ -1238,7 +1249,10 @@ const FLOATING_CHANGE_VALIDATORS: {
     nullable(isInstanceId)(value.instance) &&
     isCardFilter(value.filter),
   playLimit: (value) => isSide(value.player) && isIndex(value.count),
-  abilities: (value) => isInstanceId(value.instance) && parses(parseCardId)(value.cardId) && isVariant(value.variant),
+  abilities: (value) => isInstanceId(value.instance) && ("figment" in value
+    ? Object.keys(value).length === 3 && isFigmentId(value.figment)
+    : parses(parseCardId)(value.cardId) && isVariant(value.variant)),
+  loseAbilities: (value) => isInstanceId(value.instance),
   // This continuous change is made only by static abilities, not saved floating effects.
   reclaimNotBanished: () => false,
 };
@@ -1449,20 +1463,30 @@ function hasConsistentZones(value: Record<string, unknown>): boolean {
  * Whether each instance's `status.gainedAbilities` lists exactly its
  * `abilities` floating changes, in order, and each such change is a gain a
  * character in play made, lasting while it stays there
- * (RD-hv-umm2.110-2): the instance's abilities read the mirror, so a state
- * whose mirror disagrees with its effects would change what it can do.
+ * (RD-hv-umm2.110-2); and whether its `status.lostAbilities` counts the
+ * gains made before its latest `loseAbilities` change, each such change
+ * naming a character in play, since a loss ends as its character leaves
+ * play (RD-hv-umm2.111-2). The instance's abilities read the mirrors, so a
+ * state whose mirrors disagree with its effects would change what it can do.
  */
 function hasMirroredGainedAbilities(value: Record<string, unknown>): boolean {
   const state = value as unknown as BattleState;
   const gained = new Map<InstanceId, unknown[]>();
+  const lost = new Map<InstanceId, number>();
   for (const { source, expiry, change } of state.floating) {
-    if (change.kind !== "abilities") continue;
+    if (change.kind !== "abilities" && change.kind !== "loseAbilities") continue;
     if (!Object.prototype.hasOwnProperty.call(state.instances, change.instance) || state.instances[change.instance].zone !== "play") return false;
+    if (change.kind === "loseAbilities") {
+      lost.set(change.instance, gained.get(change.instance)?.length ?? 0);
+      continue;
+    }
     if (source !== change.instance || expiry.at !== "sourceLeavesPlay" || expiry.source !== change.instance) return false;
-    gained.set(change.instance, [...(gained.get(change.instance) ?? []), { cardId: change.cardId, variant: change.variant }]);
+    const group = "figment" in change ? { figment: change.figment } : { cardId: change.cardId, variant: change.variant };
+    gained.set(change.instance, [...(gained.get(change.instance) ?? []), group]);
   }
   return Object.values(state.instances).every(
-    (instance) => JSON.stringify(instance.status.gainedAbilities ?? []) === JSON.stringify(gained.get(instance.id) ?? []),
+    (instance) => JSON.stringify(instance.status.gainedAbilities ?? []) === JSON.stringify(gained.get(instance.id) ?? []) &&
+      instance.status.lostAbilities === lost.get(instance.id),
   );
 }
 

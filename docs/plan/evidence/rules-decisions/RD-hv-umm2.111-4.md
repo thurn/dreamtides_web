@@ -1,0 +1,5 @@
+# RD-hv-umm2.111-4: Fracture Fate's loss lasts until the affected character's controller pays 3● (4● amplified) as a Fast special action
+- Ladder: 1 (C7: paying to end an effect is a Fast special action, never a response, offered as the top-level `payToEnd` action)
+- rules.md: § Playing Cards and the Stack → Paying to end an effect; § Keywords and Effects → Losing abilities; RD-hv-7x4l.1-12
+- Affects: 9e9efbc0-d438-48a9-9551-85c93fb33f3e (base, amplified)
+- Why: C7 names this card. The event's target is an enemy chosen as it is played; its `loseAllAbilities` change uses the existing `untilOpponentPays` duration, which registers the payable effect for the opponent of the effect's controller, that is the affected character's controller, with the printed cost (3●, or 4● for the amplified text) and links the change to it. Paying spends the energy and ends the loss at once without using the stack; the payment is offered only where that player could play a Fast card and the stack is empty (rules/timing.ts `specialActionAllowed`). If the character leaves play first, the loss and the payable effect end unpaid (RD-hv-umm2.111-2).

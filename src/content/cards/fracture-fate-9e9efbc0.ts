@@ -1,3 +1,6 @@
+import { enemyCharacter, event, target } from "../../engine/dsl/builders";
+import { untilOpponentPays } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,7 @@ export default card({
   cardNumber: 509,
   art: { x: 0.672, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  // C7, RD-hv-7x4l.1-12: the opponent pays to end it as a Fast special action; RD-hv-umm2.111-1, -2.
+  abilities: (variant) => [event(p.loseAllAbilities(target(enemyCharacter()), { duration: untilOpponentPays(variant.amplified ? 4 : 3) }))],
+  verifiedText: "150jra9abq",
 });

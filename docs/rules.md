@@ -1543,6 +1543,33 @@ nothing is gained. The character with the ability gains the abilities of the
 card it banished only if it is still in play as the ability resolves; the card
 is banished either way.
 
+**Losing abilities** — "An enemy loses all abilities" takes every ability the
+character has away from it: its keywords and its triggered, activated, and
+static abilities, those printed on its card (or its figment's) and those it
+gained. It keeps its spark, character type, and statuses; what its own static
+abilities did, such as giving it or other characters spark, stops. The loss applies with the other continuous
+effects in the [order of continuous effects](#ability-types), as of when it
+began: an ability or keyword the character gains after the loss, from a
+resolving effect or from a static ability whose card entered its zone later,
+works; one it had before the loss does not, until the loss ends.
+
+A character loses its abilities only while it stays in play, whoever controls
+it: the loss ends as it leaves play, whatever its duration, and it has all its
+abilities wherever it goes. Having no abilities as it leaves, it triggers
+none of its own "When this character leaves play" or ▸Dissolved abilities. An
+"until the opponent pays N●" loss whose character leaves play ends with it,
+so nothing is left to pay for. An ability of the character already on the
+stack, or a triggered ability already waiting to resolve, still resolves.
+
+"An enemy loses all abilities. This character gains those abilities" then
+gives the character with the ability the abilities the enemy had as it lost
+them: every ability of its card for its variant, or of its figment's type, and
+of each card or figment whose abilities it had gained and not lost, in that
+order (see Gaining abilities). It gains none of the keywords other effects
+gave the enemy or took from it. It keeps them while it stays in play, whatever
+then happens to the enemy, and gains nothing if it is no longer in play as
+the ability resolves; the enemy loses its abilities either way.
+
 **Each player** — "Each player draws two cards" and "Each player discards a
 card" happen once for each player, the active player first, then the opposing
 player, whoever controls the effect. Within each player's part, "you" and

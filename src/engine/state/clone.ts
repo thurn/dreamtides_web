@@ -7,8 +7,8 @@
  * other part with `copyJson`. Typed copies cover only interfaces whose
  * fields are all required, so the compiler flags a field added to one; an
  * interface with optional fields or union members goes through `copyJson`,
- * except `CardStatus`, whose one optional field, `gainedAbilities`, is
- * copied with `copyJson` when present.
+ * except `CardStatus`, whose optional fields, `gainedAbilities` (copied with
+ * `copyJson`) and `lostAbilities`, are copied when present.
  */
 import type {
   AvatarEmblem,
@@ -71,6 +71,7 @@ function copyStatus(status: CardStatus): CardStatus {
     ephemeral: status.ephemeral,
     x: status.x,
     ...(status.gainedAbilities === undefined ? {} : { gainedAbilities: copyJson(status.gainedAbilities) }),
+    ...(status.lostAbilities === undefined ? {} : { lostAbilities: status.lostAbilities }),
   };
 }
 

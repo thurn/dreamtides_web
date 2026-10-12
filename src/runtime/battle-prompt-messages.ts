@@ -521,6 +521,8 @@ export type EngineStatusCopy =
   | { readonly kind: "grantedKeyword"; readonly keyword: Keyword }
   /** The character has the abilities of the card named `name` (`null` when it is unknown), while it is in play. */
   | { readonly kind: "abilities"; readonly name: string | null }
+  /** The character has lost all its abilities. */
+  | { readonly kind: "abilitiesLost"; readonly expiry: Expiry }
   | { readonly kind: "offering" }
   | { readonly kind: "reclaimed" }
   | { readonly kind: "ephemeral" }
@@ -612,6 +614,8 @@ export function engineStatusLabel(status: EngineStatusCopy, human: Side): string
         : `Has ${KEYWORD_NAMES[status.keyword]}`;
     case "abilities":
       return status.name === null ? "Has the abilities of another card" : `Has the abilities of ${status.name}`;
+    case "abilitiesLost":
+      return `Has no abilities${expiryPhrase(status.expiry, human)}`;
     case "offering":
       return "Played by Offering: banished at the end of the turn";
     case "reclaimed":
@@ -929,5 +933,7 @@ function effectStartedText(
       return null;
     case "abilities":
       return line(card(change.instance), { kind: "abilities", name: null });
+    case "loseAbilities":
+      return line(card(change.instance), { kind: "abilitiesLost", expiry });
   }
 }

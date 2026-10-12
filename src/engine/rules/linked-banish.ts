@@ -2,6 +2,7 @@
 import type { AbilitySource, EffectId, InstanceId } from "../state/ids";
 import type { AbilityOrigin, BattleState, LinkedBanishedCards, LinkedSourceContext } from "../state/types";
 import type { StepContext } from "../steps/types";
+import { gainedGroupAbilities } from "./activation";
 
 /** Acquired groups in the same order as the source's gained-ability mirror. */
 export function sourceAbilityGroups(state: BattleState, source: InstanceId): EffectId[] {
@@ -25,7 +26,7 @@ export function linkedSourceContext(ctx: StepContext, source: AbilitySource, ori
   let base = ctx.catalog.card(origin.cardId).abilities(origin.variant).length;
   if (ability < base) return { source, enteredPlayAt: current.enteredPlayAt, ability };
   for (const [index, group] of (origin.gained ?? []).entries()) {
-    const length = ctx.catalog.card(group.cardId).abilities(group.variant).length;
+    const length = gainedGroupAbilities(ctx.catalog, group).length;
     if (ability < base + length) {
       const gainedFrom = current.gained[index];
       if (gainedFrom === undefined) throw new Error("Linked ability has no acquired occurrence");

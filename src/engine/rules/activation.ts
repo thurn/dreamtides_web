@@ -8,7 +8,7 @@ import type { Ability, ActivatedAbility } from "../dsl/types";
 import { BASE_VARIANT } from "../dsl/types";
 import type { AbilitySource, CardId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { instanceNumber, sourceKey } from "../state/ids";
-import type { AbilityOrigin, BattleState, CardInstance } from "../state/types";
+import type { AbilityOrigin, BattleState, CardInstance, GainedAbilities } from "../state/types";
 import { costsPayable } from "./costs";
 import { effectEntersPlay } from "../effects/interpreter";
 import { freeBackSlotsAfterStack, timingAllows } from "./timing";
@@ -30,17 +30,18 @@ export function sourceController(state: BattleState, source: AbilitySource): Sid
 /**
  * Where an instance's abilities come from: its card for its variant, or the
  * card a figment copy copies, followed by the abilities it has gained; or its
- * figment type.
+ * figment type. While it has lost its abilities, the origin says which.
  */
 export function instanceOrigin(instance: CardInstance): AbilityOrigin {
   const { printing } = instance;
-  if (printing.kind === "figment") return { kind: "figment", id: printing.figment };
-  const gained = instance.status.gainedAbilities;
+  const { gainedAbilities: gained, lostAbilities: lost } = instance.status;
+  if (printing.kind === "figment") return { kind: "figment", id: printing.figment, ...(lost === undefined ? {} : { lost: true }) };
   return {
     kind: "card",
     cardId: printing.cardId,
     variant: instance.variant,
     ...(gained === undefined || gained.length === 0 ? {} : { gained: [...gained] }),
+    ...(lost === undefined ? {} : { lost }),
   };
 }
 
@@ -58,18 +59,48 @@ export function abilityOrigin(state: BattleState, source: AbilitySource): Abilit
   return dreamsign === undefined ? null : { kind: "dreamsign", id: dreamsign.id };
 }
 
+/** The abilities one gained group grants: a card's for its variant, or a figment type's. */
+export function gainedGroupAbilities(catalog: EngineCatalog, group: GainedAbilities): readonly Ability[] {
+  return "figment" in group ? catalog.figment(group.figment).abilities(BASE_VARIANT) : catalog.card(group.cardId).abilities(group.variant);
+}
+
+/**
+ * The groups' abilities in order, with the first `lost` groups' positions
+ * left as holes: a sparse list whose length and indexes are those of the
+ * whole list, so iteration (`forEach`, `some`, `flatMap`) skips the lost
+ * abilities and indexing one gives `undefined`.
+ */
+function withoutLost(groups: readonly (readonly Ability[])[], lost: number): readonly Ability[] {
+  const abilities: Ability[] = [];
+  let offset = 0;
+  groups.forEach((group, index) => {
+    if (index >= lost) group.forEach((ability, position) => { abilities[offset + position] = ability; });
+    offset += group.length;
+  });
+  abilities.length = offset;
+  return abilities;
+}
+
 /**
  * The abilities an origin grants: a card's for its variant, then those of
- * each card it gained, in the order gained; or an emblem's.
+ * each card or figment type it gained, in the order gained; or an emblem's.
+ * An origin that lost its abilities (rules § Keywords and Effects → Losing
+ * abilities) keeps their indexes as holes, so every reader that iterates the
+ * list or reads an index sees only the abilities it still has, and indexes
+ * never change as a loss begins or ends.
  */
 export function originAbilities(catalog: EngineCatalog, origin: AbilityOrigin): readonly Ability[] {
   switch (origin.kind) {
     case "card": {
       const own = catalog.card(origin.cardId).abilities(origin.variant);
-      return origin.gained === undefined ? own : [...own, ...origin.gained.flatMap((gained) => catalog.card(gained.cardId).abilities(gained.variant))];
+      if (origin.gained === undefined && origin.lost === undefined) return own;
+      const groups = [own, ...(origin.gained ?? []).map((group) => gainedGroupAbilities(catalog, group))];
+      return origin.lost === undefined ? groups.flat() : withoutLost(groups, origin.lost + 1);
     }
-    case "figment":
-      return catalog.figment(origin.id).abilities(BASE_VARIANT);
+    case "figment": {
+      const own = catalog.figment(origin.id).abilities(BASE_VARIANT);
+      return origin.lost === true ? withoutLost([own], 1) : own;
+    }
     case "avatar":
       return catalog.avatar(origin.id).abilities(BASE_VARIANT);
     case "dreamsign":

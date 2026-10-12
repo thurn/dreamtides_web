@@ -12,8 +12,9 @@
  *    modifications (catalog.ts `instanceCard`);
  * 2. type changes: "has all character types", and "this character is that
  *    character type";
- * 3. ability adds and removes: keywords gained and lost, and the keyword
- *    abilities of the cards a character gained the abilities of;
+ * 3. ability adds and removes: keywords gained and lost, the keyword
+ *    abilities of the cards a character gained the abilities of, and the
+ *    loss of all its abilities, which removes every keyword it has then;
  * 4. base-spark setting;
  * 5. spark modifications: gained spark, spark with a duration, anthems,
  *    Support; clamped at 0;
@@ -42,7 +43,7 @@ import { evaluateValue } from "../dsl/values";
 import { chosenSubtypeOf, mentionsChosenSubtype, withChosenSubtype } from "../effects/primitives/choose-subtype";
 import { primitiveDefinition } from "../effects/registry";
 import type { EffectNode, Layer, StaticEnv } from "../effects/types";
-import { instanceOrigin, originAbilities } from "../rules/activation";
+import { gainedGroupAbilities, instanceOrigin, originAbilities } from "../rules/activation";
 import { charactersInPlay } from "../rules/zones";
 import type { AbilitySource, EffectId, InstanceId, Side, Zone } from "../state/ids";
 import { SIDES, sourceInstance } from "../state/ids";
@@ -69,6 +70,7 @@ const LAYER: Readonly<Record<ContinuousChange["kind"], Layer>> = {
   subtype: 2,
   keyword: 3,
   abilities: 3,
+  loseAbilities: 3,
   baseSpark: 4,
   spark: 5,
   cost: 6,
@@ -96,6 +98,12 @@ export interface OrderedChange {
   readonly staticAbility: number | null;
   /** Source order for a static ability, creation order for a floating effect. */
   readonly order: number;
+  /**
+   * For a static ability a character gained, the creation order of the
+   * floating effect that gained it: on a tie it orders just after that
+   * effect, among the floating effects, as of when it was gained.
+   */
+  readonly gained?: number;
 }
 
 /** A static ability that applies now, with its ordering keys. */
@@ -107,6 +115,8 @@ interface StaticEntry {
   readonly layer: Layer;
   readonly timestamp: number;
   readonly order: number;
+  /** The creation order of the floating effect that gained it, for a gained static ability. */
+  readonly gained?: number;
   readonly while?: StaticCondition;
 }
 
@@ -139,8 +149,8 @@ export type StaticsMemo = Map<string, Map<string | 0 | 1, CardStatics>>;
 
 function cardStatics(catalog: EngineCatalog, instance: CardInstance): CardStatics {
   const { printing, variant } = instance;
-  if (instance.status.gainedAbilities !== undefined) {
-    // Gained abilities belong to this instance, not to its printing and variant.
+  if (instance.status.gainedAbilities !== undefined || instance.status.lostAbilities !== undefined) {
+    // Gained and lost abilities belong to this instance, not to its printing and variant.
     return { abilities: indexedStatics(originAbilities(catalog, instanceOrigin(instance))) };
   }
   const printed = printing.kind === "figment" ? `figment:${printing.figment}` : printing.cardId;
@@ -170,12 +180,13 @@ function cardStatics(catalog: EngineCatalog, instance: CardInstance): CardStatic
  */
 function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry[] {
   const entries: StaticEntry[] = [];
-  const add = (source: AbilitySource, controller: Side, abilities: readonly IndexedStatic[], timestamp: number, zone: Zone | null): void => {
+  const add = (source: AbilitySource, controller: Side, abilities: readonly IndexedStatic[], timestamp: number, zone: Zone | null, gained?: number): void => {
     for (const { ability, index } of abilities) {
       if (zone !== null && !worksInZone(ability.zone, zone)) continue;
       const continuous = primitiveDefinition(ability.effect.op).continuous;
       if (continuous === undefined) throw new Error(`A static ability holds ${ability.effect.op}, which is not continuous`);
       entries.push({ ability: index, source, controller, node: ability.effect, layer: continuous.layer, timestamp, order: entries.length,
+        ...(gained === undefined ? {} : { gained }),
         ...(ability.while === undefined ? {} : { while: ability.while }) });
     }
   };
@@ -205,29 +216,40 @@ function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry
   cards.sort((a, b) => instanceNumber(a.instance.id) - instanceNumber(b.instance.id));
   for (const { instance, abilities } of cards) {
     const { printing } = instance;
-    if (instance.status.gainedAbilities === undefined || printing.kind !== "card") {
+    if (instance.status.gainedAbilities === undefined || printing.kind === "figment") {
       add(instance.id, instance.controller, abilities, instance.enteredZoneAt, instance.zone);
       continue;
     }
-    // A gained static ability is as new as its gain when that began after its character entered its zone.
+    // A gained static ability is as new as its gain, and orders as its gain among changes at the same time,
+    // so a loss made before the gain never removes it. A lost one (its own, and those gained before its
+    // latest loss) does not apply.
+    const lost = instance.status.lostAbilities;
     const own = catalog.card(printing.cardId).abilities(instance.variant);
-    add(instance.id, instance.controller, indexedStatics(own), instance.enteredZoneAt, instance.zone);
+    if (lost === undefined) add(instance.id, instance.controller, indexedStatics(own), instance.enteredZoneAt, instance.zone);
     let offset = own.length;
-    for (const { change, timestamp } of state.floating) {
-      if (change.kind !== "abilities" || change.instance !== instance.id) continue;
-      const gained = catalog.card(change.cardId).abilities(change.variant);
-      add(instance.id, instance.controller, indexedStatics(gained, offset), Math.max(instance.enteredZoneAt, timestamp), instance.zone);
+    let group = 0;
+    state.floating.forEach(({ change, timestamp }, created) => {
+      if (change.kind !== "abilities" || change.instance !== instance.id) return;
+      const gained = gainedGroupAbilities(catalog, change);
+      if (lost === undefined || group >= lost) {
+        add(instance.id, instance.controller, indexedStatics(gained, offset), Math.max(instance.enteredZoneAt, timestamp), instance.zone, created);
+      }
       offset += gained.length;
-    }
+      group += 1;
+    });
   }
   return entries;
 }
 
+/** Ties go to static abilities, in source order, then floating effects and gained static abilities, in creation order. */
 function byTimestamp(a: OrderedChange, b: OrderedChange): number {
+  const floats = (change: OrderedChange): boolean => change.effect !== null || change.gained !== undefined;
+  // A gained static ability follows the floating effect that gained it.
+  const created = (change: OrderedChange): number => (change.gained === undefined ? change.order : change.gained + 0.5);
   return (
     a.timestamp - b.timestamp ||
-    Number(a.effect !== null) - Number(b.effect !== null) ||
-    a.order - b.order
+    Number(floats(a)) - Number(floats(b)) ||
+    (floats(a) ? created(a) - created(b) : a.order - b.order)
   );
 }
 
@@ -281,7 +303,8 @@ export class Layers {
       if (entry.layer !== layer) continue;
       for (const change of this.expand(entry)) {
         if (layer === 4 || layer === 5) this.assertInPlay(change);
-        ordered.push({ change, timestamp: entry.timestamp, effect: null, staticSource: entry.source, staticAbility: entry.ability, order: entry.order });
+        ordered.push({ change, timestamp: entry.timestamp, effect: null, staticSource: entry.source, staticAbility: entry.ability, order: entry.order,
+          ...(entry.gained === undefined ? {} : { gained: entry.gained }) });
       }
     }
     ordered.sort(byTimestamp);
@@ -478,10 +501,14 @@ export class Layers {
           };
           break;
         case "abilities": {
-          const gained = this.catalog.card(change.cardId).abilities(change.variant).flatMap((ability) => (ability.kind === "keyword" ? [ability.keyword] : []));
+          const gained = gainedGroupAbilities(this.catalog, change).flatMap((ability) => (ability.kind === "keyword" ? [ability.keyword] : []));
           result = { ...result, keywords: [...result.keywords.filter((keyword) => !gained.includes(keyword)), ...gained] };
           break;
         }
+        case "loseAbilities":
+          // Every keyword it has now, printed or gained by an earlier change, is lost; later changes add theirs again.
+          result = { ...result, keywords: [] };
+          break;
         case "baseSpark":
           if (result.baseSpark !== null) result = { ...result, baseSpark: change.value, spark: Math.max(0, change.value) };
           break;

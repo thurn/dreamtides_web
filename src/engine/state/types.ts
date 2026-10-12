@@ -159,13 +159,25 @@ export interface CardStatus {
    * the instance alone.
    */
   gainedAbilities?: readonly GainedAbilities[];
+  /**
+   * Present while the character has lost all its abilities (rules § Keywords
+   * and Effects → Losing abilities): it has none of its own, nor those of the
+   * first `lostAbilities` entries of `gainedAbilities`, which it gained before
+   * its latest loss; absent when it has lost none. It mirrors the
+   * character's `loseAbilities` floating changes, and rules/floating.ts alone
+   * writes it, with `gainedAbilities`.
+   */
+  lostAbilities?: number;
 }
 
-/** The abilities of one card that another card gained: those of `cardId` for `variant`. */
-export interface GainedAbilities {
-  readonly cardId: CardId;
-  readonly variant: Variant;
-}
+/**
+ * The abilities a character gained from one source (rules § Keywords and
+ * Effects → Gaining abilities): those of the card `cardId` for `variant`, or
+ * those of the figment type `figment`.
+ */
+export type GainedAbilities =
+  | { readonly cardId: CardId; readonly variant: Variant }
+  | { readonly figment: FigmentId };
 
 /** Where an instance's copiable values (layer 1) come from. */
 export type Printing =
@@ -252,11 +264,20 @@ export interface CardStackItem extends StackItemBase {
 export type AbilityOrigin =
   /**
    * A card's abilities for its variant, then, in order, those of each card
-   * in `gained` (rules/activation.ts `originAbilities`), so the indexes of
-   * its own abilities never change; `gained` is absent when it has none.
+   * or figment type in `gained` (rules/activation.ts `originAbilities`), so
+   * the indexes of its own abilities never change; `gained` is absent when
+   * it has none. With `lost`, it has lost its own abilities and those of the
+   * first `lost` entries of `gained`, which keep their indexes.
    */
-  | { readonly kind: "card"; readonly cardId: CardId; readonly variant: Variant; readonly gained?: readonly GainedAbilities[] }
-  | { readonly kind: "figment"; readonly id: FigmentId }
+  | {
+      readonly kind: "card";
+      readonly cardId: CardId;
+      readonly variant: Variant;
+      readonly gained?: readonly GainedAbilities[];
+      readonly lost?: number;
+    }
+  /** A figment type's abilities; with `lost`, it has lost them. */
+  | { readonly kind: "figment"; readonly id: FigmentId; readonly lost?: true }
   | { readonly kind: "avatar"; readonly id: AvatarId }
   | { readonly kind: "dreamsign"; readonly id: DreamsignId };
 
@@ -365,11 +386,20 @@ export type ContinuousChange =
     }
   /**
    * Layer 3: the character gains the abilities of the card `cardId` for
-   * `variant` (rules § Keywords and Effects → Gaining abilities): its keyword
-   * abilities here, and every other ability through the character's
-   * `status.gainedAbilities`, which mirrors these changes.
+   * `variant`, or of the figment type `figment` (rules § Keywords and
+   * Effects → Gaining abilities): their keyword abilities here, and every
+   * other ability through the character's `status.gainedAbilities`, which
+   * mirrors these changes.
    */
-  | { readonly kind: "abilities"; readonly instance: InstanceId; readonly cardId: CardId; readonly variant: Variant }
+  | ({ readonly kind: "abilities"; readonly instance: InstanceId } & GainedAbilities)
+  /**
+   * Layer 3: the character loses all its abilities (rules § Keywords and
+   * Effects → Losing abilities): its keywords here, as of the change's
+   * timestamp, and every other ability its own or gained before the change
+   * through the character's `status.lostAbilities`, which mirrors these
+   * changes. It ends as the character leaves play, whatever its expiry.
+   */
+  | { readonly kind: "loseAbilities"; readonly instance: InstanceId }
   /** Layer 4: the character's base spark becomes `value`. */
   | { readonly kind: "baseSpark"; readonly instance: InstanceId; readonly value: number }
   /** Layer 5: spark gained with a duration, or spark a character has; it ends wherever the card is. */

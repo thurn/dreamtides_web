@@ -30,6 +30,9 @@ import { instanceCard, type EngineCatalog } from "../../engine/catalog";
 import type { Keyword, Trigger } from "../../engine/dsl/types";
 import type { CardStatus, EffectRef, Expiry, FloatingChange } from "../../engine/state/types";
 import { triggerBody } from "../../engine/triggers/body";
+import { lookupFigmentCatalogEntryById } from "../../battle/state/figment-catalog";
+import { figmentCardDisplayName } from "../../data/figment-card-display";
+import { parseCardId, parseCardName } from "../../types/card-identity";
 import type { PresentationVisual } from "../../battle/components/presentation-items";
 import {
   ENGINE_ABILITY_CHOOSER_TITLE,
@@ -370,6 +373,8 @@ const CARD_STATUS_BADGES = {
   playedViaReclaim: null,
   // Each `abilities` floating change it mirrors badges the card with the card it gained the abilities of.
   gainedAbilities: null,
+  // Each `loseAbilities` floating change it mirrors badges the card while its abilities are lost.
+  lostAbilities: null,
   created: { badge: "created", copy: { kind: "created" } },
   reclaimed: { badge: "duration", copy: { kind: "reclaimed" } },
   offering: { badge: "duration", copy: { kind: "offering" } },
@@ -533,8 +538,17 @@ export function engineStatuses(
       case "playLimit":
         sides[change.player].push(badge("duration", { kind: "playLimit", count: change.count, expiry }));
         break;
-      case "abilities":
-        mark(change.instance, badge("keyword", { kind: "abilities", name: cardModels?.nameOf({ printing: { kind: "card", cardId: change.cardId }, variant: change.variant }) ?? null }));
+      case "abilities": {
+        // A gained figment type's abilities are named as its figments are (engine-card-model.ts).
+        const figment = "figment" in change ? lookupFigmentCatalogEntryById(parseCardId(change.figment)) : undefined;
+        const name = "figment" in change
+          ? figment === undefined ? null : figmentCardDisplayName(figment.name ?? parseCardName("Figment"), figment.subtype)
+          : cardModels?.nameOf({ printing: { kind: "card", cardId: change.cardId }, variant: change.variant });
+        mark(change.instance, badge("keyword", { kind: "abilities", name: name ?? null }));
+        break;
+      }
+      case "loseAbilities":
+        mark(change.instance, badge("triggersDisabled", { kind: "abilitiesLost", expiry }));
         break;
     }
   }

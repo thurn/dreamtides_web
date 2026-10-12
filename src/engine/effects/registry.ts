@@ -57,6 +57,7 @@ import {
   ifThenPrimitive,
   lookAtTopPrimitive,
   linkedBanishPrimitive,
+  loseAllAbilitiesPrimitive,
   losePointsPrimitive,
   materializePrimitive,
   materializeFigmentCopyPrimitive,
@@ -224,6 +225,9 @@ const DEFINITIONS = {
   get linkedBanish() { return linkedBanishPrimitive; },
   get lookAtTop() {
     return lookAtTopPrimitive;
+  },
+  get loseAllAbilities() {
+    return loseAllAbilitiesPrimitive;
   },
   get losePoints() {
     return losePointsPrimitive;

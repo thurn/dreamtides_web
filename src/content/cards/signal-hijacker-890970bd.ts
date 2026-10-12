@@ -1,3 +1,6 @@
+import { enemyCharacter, target } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,7 @@ export default card({
   cardNumber: 316,
   art: { x: 0, y: -0.321, scale: 1.87 },
   isStarter: false,
-  pending: true,
+  // RD-hv-umm2.111-1..3: the enemy loses its abilities while it is in play; this character gains those it had, while in play.
+  abilities: () => [triggered(onMaterialized(), p.loseAllAbilities(target(enemyCharacter()), { sourceGains: true }))],
+  verifiedText: "82puti3zyu",
 });

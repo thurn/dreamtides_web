@@ -4,8 +4,9 @@
  * records here, as are the continuous changes of continuous/layers.ts; each
  * ends when its expiry is reached, wherever its cards are. The layer
  * evaluation reads the continuous records in timestamp order. A character's
- * `abilities` changes are mirrored onto its `status.gainedAbilities` here, as
- * each begins and ends, so its ability list reads from the instance alone.
+ * `abilities` and `loseAbilities` changes are mirrored onto its
+ * `status.gainedAbilities` and `status.lostAbilities` here, as each begins
+ * and ends, so its ability list reads from the instance alone.
  */
 import type { EffectId, InstanceId, Side } from "../state/ids";
 import { oncePerTurnParts } from "../state/ids";
@@ -27,7 +28,7 @@ export function addFloating(
 ): EffectId {
   const id = mintEffectId(ctx.state);
   ctx.state.floating.push({ ...effect, id, timestamp: ctx.state.clock });
-  if (effect.change.kind === "abilities") mirrorGainedAbilities(ctx.state, effect.change.instance);
+  if (effect.change.kind === "abilities" || effect.change.kind === "loseAbilities") mirrorAbilities(ctx.state, effect.change.instance);
   ctx.emit({
     kind: "effectStarted",
     effect: id,
@@ -43,6 +44,8 @@ export function addFloating(
  * Ends every floating effect matching `ends`, in creation order, then does
  * what each one's end does: a card banished until then returns, and a
  * temporary created character ceases to exist (zones.ts `floatingEnded`).
+ * An "until the opponent pays" effect none of whose floating effects is left,
+ * such as one whose character left play, ends unpaid (`endUnlinkedPayable`).
  */
 export function endFloating(ctx: StepContext, ends: (effect: FloatingEffect) => boolean): void {
   const ending = ctx.state.floating.filter(ends);
@@ -50,28 +53,55 @@ export function endFloating(ctx: StepContext, ends: (effect: FloatingEffect) => 
   ctx.state.floating = ctx.state.floating.filter((effect) => !ending.includes(effect));
   for (const effect of ending) {
     if (effect.change.kind === "abilities") abilitiesEnded(ctx, effect.change.instance);
+    else if (effect.change.kind === "loseAbilities") mirrorAbilities(ctx.state, effect.change.instance);
   }
   for (const effect of ending) {
     ctx.emit({ kind: "effectEnded", effect: effect.id });
+  }
+  for (const effect of ending) {
+    if (effect.expiry.at === "paid") endUnlinkedPayable(ctx, effect.expiry.effect);
   }
   for (const effect of ending) floatingEnded(ctx, effect);
 }
 
 /**
- * The abilities `id` has gained: one entry per `abilities` change to it in
- * `floating`, in creation order. Its `status.gainedAbilities` mirrors this.
+ * Ends the payable effect `id`, unpaid, once no floating effect is linked to
+ * it, so nothing offers to pay for an effect that changes nothing. Paying
+ * removes the payable effect before its floating effects end
+ * (rules/payable.ts `endPayable`), so a paid one is already gone.
  */
-function gainedAbilitiesOf(floating: readonly FloatingEffect[], id: InstanceId): GainedAbilities[] {
-  return floating.flatMap(({ change }) => (change.kind === "abilities" && change.instance === id ? [{ cardId: change.cardId, variant: change.variant }] : []));
+function endUnlinkedPayable(ctx: StepContext, id: EffectId): void {
+  const { state } = ctx;
+  const payable = state.payable.find((effect) => effect.id === id);
+  if (payable === undefined || state.floating.some(({ expiry }) => expiry.at === "paid" && expiry.effect === id)) return;
+  state.payable = state.payable.filter((effect) => effect.id !== id);
+  ctx.emit({ kind: "payableEffectEnded", effect: id, payer: payable.payer, paid: false });
 }
 
-/** Sets a character's `status.gainedAbilities` to its `abilities` changes, absent when there are none. */
-function mirrorGainedAbilities(state: BattleState, id: InstanceId): void {
+/** The group of abilities an `abilities` change gives. */
+function gainedGroup(change: Extract<FloatingChange, { readonly kind: "abilities" }>): GainedAbilities {
+  return "figment" in change ? { figment: change.figment } : { cardId: change.cardId, variant: change.variant };
+}
+
+/**
+ * Sets a character's `status.gainedAbilities` to its `abilities` changes, in
+ * creation order, and its `status.lostAbilities` to the number of them made
+ * before its latest `loseAbilities` change; each is absent when there is
+ * none. Creation order is timestamp order, so a gain after a loss survives it.
+ */
+function mirrorAbilities(state: BattleState, id: InstanceId): void {
   const instance = state.instances[id];
   if (instance === undefined) return;
-  const gained = gainedAbilitiesOf(state.floating, id);
+  const gained: GainedAbilities[] = [];
+  let lost: number | undefined;
+  for (const { change } of state.floating) {
+    if (change.kind === "abilities" && change.instance === id) gained.push(gainedGroup(change));
+    else if (change.kind === "loseAbilities" && change.instance === id) lost = gained.length;
+  }
   if (gained.length > 0) instance.status.gainedAbilities = gained;
   else delete instance.status.gainedAbilities;
+  if (lost !== undefined) instance.status.lostAbilities = lost;
+  else delete instance.status.lostAbilities;
 }
 
 /**
@@ -82,7 +112,7 @@ function mirrorGainedAbilities(state: BattleState, id: InstanceId): void {
  */
 function abilitiesEnded(ctx: StepContext, id: InstanceId): void {
   const { state } = ctx;
-  mirrorGainedAbilities(state, id);
+  mirrorAbilities(state, id);
   const instance = state.instances[id];
   if (instance === undefined || instance.printing.kind === "figment") return;
   const own = ctx.catalog.card(instance.printing.cardId).abilities(instance.variant).length;
@@ -92,9 +122,15 @@ function abilitiesEnded(ctx: StepContext, id: InstanceId): void {
   });
 }
 
-/** Ends the floating effects whose expiry is `at` this boundary. */
+/**
+ * Ends the floating effects whose expiry is `at` this boundary. As a
+ * character leaves play, the losses of its abilities end too, whatever their
+ * expiry (rules § Keywords and Effects → Losing abilities).
+ */
 export function expireAt(ctx: StepContext, boundary: Expiry): void {
-  endFloating(ctx, (effect) => sameBoundary(effect.expiry, boundary));
+  endFloating(ctx, (effect) => sameBoundary(effect.expiry, boundary) || (
+    boundary.at === "sourceLeavesPlay" && effect.change.kind === "loseAbilities" && effect.change.instance === boundary.source
+  ));
 }
 
 function sameBoundary(expiry: Expiry, boundary: Expiry): boolean {
@@ -155,11 +191,13 @@ export function carriesLegality(change: FloatingChange): boolean {
 }
 
 /**
- * Legality data and recorded hand returns remain obligations with a redacted
- * source. Their changed card and expiry identities must still be visible.
+ * Legality data, recorded hand returns, and lost abilities remain obligations
+ * with a redacted source: a character that lost its abilities has none in
+ * every determinization, whatever became of the effect's source. Their
+ * changed card and expiry identities must still be visible.
  */
 export function keptWithoutSource(change: FloatingChange): boolean {
-  return carriesLegality(change) || change.kind === "banishedToHandUntil";
+  return carriesLegality(change) || change.kind === "banishedToHandUntil" || change.kind === "loseAbilities";
 }
 
 /** Ends the floating effects that change `id`, when it ceases to exist. */

@@ -429,8 +429,14 @@ function triggerBlocks(state: BattleState, catalog: EngineCatalog, source: Abili
   };
 }
 
+function sameGainedGroup(a: GainedAbilities, b: GainedAbilities | undefined): boolean {
+  if (b === undefined) return false;
+  if ("figment" in a) return "figment" in b && a.figment === b.figment;
+  return "cardId" in b && a.cardId === b.cardId && a.variant === b.variant;
+}
+
 function sameGained(a: readonly GainedAbilities[], b: readonly GainedAbilities[]): boolean {
-  return a.length === b.length && a.every((gained, at) => gained.cardId === b[at]?.cardId && gained.variant === b[at]?.variant);
+  return a.length === b.length && a.every((gained, at) => sameGainedGroup(gained, b[at]));
 }
 
 /**
