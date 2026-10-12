@@ -1,0 +1,259 @@
+{
+  "bead": "hv-umm2.540",
+  "base": "cdb024b65724d3c5793c93ff41a665158f7d2bbe",
+  "implementWindow": {
+    "dispatchUtc": "2026-10-12T12:58:24.807295+00:00",
+    "dispatchProvenance": "Parent post-claim preparation checkpoint before implementation-helper tool dispatch; actual child model start is unknown. Inclusive elapsed window is retained.",
+    "preCommitObservedUtc": "2026-10-12T13:07:46.900875+00:00",
+    "dispatchToObservationMin": 9.368226333333332,
+    "committedEndScope": "The committed end is the immediately-before-commit checkpoint. Exact commit process start/end is preserved externally; the parent ACK refresh changes only temporal fields."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review launch group",
+        "utc": "2026-10-12T13:02:28.342288+00:00"
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 68,
+    "jsdomFiles": 0
+  },
+  "validation": {
+    "attempts": {
+      "knip": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "pid": 70792,
+        "pgid": 70792,
+        "startUtc": "2026-10-12T13:02:58.083316+00:00",
+        "endUtc": "2026-10-12T13:03:01.600460+00:00",
+        "wallSeconds": 3.517027750000125,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+      },
+      "original-comparator": {
+        "argv": [
+          "npm",
+          "exec",
+          "--",
+          "vitest",
+          "run",
+          "src/engine/view/determinize.test.ts",
+          "-t",
+          "floating-effect record fidelity"
+        ],
+        "pid": 18359,
+        "pgid": 18359,
+        "startUtc": "2026-10-12T13:00:46.639850+00:00",
+        "endUtc": "2026-10-12T13:00:48.678416+00:00",
+        "wallSeconds": 2.0384383749988046,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+      },
+      "focused": {
+        "argv": [
+          "npm",
+          "exec",
+          "--",
+          "vitest",
+          "run",
+          "src/engine/view/determinize.test.ts"
+        ],
+        "pid": 67240,
+        "pgid": 67240,
+        "startUtc": "2026-10-12T13:02:09.515790+00:00",
+        "endUtc": "2026-10-12T13:02:12.110146+00:00",
+        "wallSeconds": 2.5939836669931537,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+      },
+      "review": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "pid": 68825,
+        "pgid": 68825,
+        "startUtc": "2026-10-12T13:02:28.416713+00:00",
+        "endUtc": "2026-10-12T13:02:51.534771+00:00",
+        "wallSeconds": 23.117713334002474,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+      },
+      "original-comparator-departure": {
+        "argv": [
+          "npm",
+          "exec",
+          "--",
+          "vitest",
+          "run",
+          "src/engine/view/determinize.test.ts",
+          "-t",
+          "floating-effect record fidelity"
+        ],
+        "pid": 38461,
+        "pgid": 38461,
+        "startUtc": "2026-10-12T13:01:48.936641+00:00",
+        "endUtc": "2026-10-12T13:01:51.600415+00:00",
+        "wallSeconds": 2.6635451249967446,
+        "exit": 1,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+      },
+      "whitespace": {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "pid": 90694,
+        "pgid": 90694,
+        "startUtc": "2026-10-12T13:05:13.333619+00:00",
+        "endUtc": "2026-10-12T13:05:13.348494+00:00",
+        "wallSeconds": 0.014670291006041225,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+      },
+      "schema": {
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "pid": 90678,
+        "pgid": 90678,
+        "startUtc": "2026-10-12T13:05:13.155333+00:00",
+        "endUtc": "2026-10-12T13:05:13.258232+00:00",
+        "wallSeconds": 0.10270958299952326,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+      },
+      "full-outer": {
+        "argv": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/540-evidence/full-inner.py"
+        ],
+        "pid": 71158,
+        "pgid": 71158,
+        "startUtc": "2026-10-12T13:03:10.165413+00:00",
+        "endUtc": "2026-10-12T13:04:43.707719+00:00",
+        "wallSeconds": 93.54130249999434,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+      },
+      "full-inner": {
+        "argv": [
+          "npm",
+          "run",
+          "review:full"
+        ],
+        "pid": 71166,
+        "pgid": 71166,
+        "startUtc": "2026-10-12T13:03:10.213730+00:00",
+        "endUtc": "2026-10-12T13:04:43.699539+00:00",
+        "wallSeconds": 93.48474441599683,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+      }
+    },
+    "countedCostsSeconds": {
+      "focused": 7.295967166988703,
+      "review": 23.117713334002474,
+      "knip": 3.517027750000125,
+      "full": 93.54130249999434,
+      "schema": 0.10270958299952326,
+      "whitespace": 0.014670291006041225
+    },
+    "totalCountedSeconds": 127.58939062499121,
+    "focusedFinal": {
+      "passed": 38,
+      "files": 1,
+      "exit": 0
+    },
+    "reviewRelated": {
+      "passed": 1861,
+      "files": 17,
+      "exit": 0
+    },
+    "failureProvenance": [
+      {
+        "attempt": "original-comparator",
+        "exit": 0,
+        "cause": "Initial abandon-self activation-cost fixture created LKI before the captured cohort. All four cases passed against the original checker, so this is not a discriminating negative."
+      },
+      {
+        "attempt": "original-comparator-departure",
+        "exit": 1,
+        "cause": "Corrected public fixture creates delayed cohort before source dissolution. Both valid-controller fidelity cases fail only on object-key ordering; both deliberate corruption cases detect differences."
+      }
+    ],
+    "heavy": {
+      "outerCountedOnce": "full-outer",
+      "innerNotDoubleCounted": "full-inner",
+      "acquisition": {
+        "utc": "2026-10-12T13:03:10.190360+00:00",
+        "pid": 71159,
+        "pgid": 71158,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+      },
+      "launchToAcquisitionSeconds": 0.024947,
+      "launchToAcquisitionScope": "Includes process startup overhead and any contention; not a pure queue-time measurement.",
+      "workers": 2,
+      "exit": 0
+    },
+    "browserQA": "Not required: checker-only test infrastructure; no runtime or player-facing behavior change.",
+    "fullFinal": {
+      "passed": 5190,
+      "files": 347,
+      "exit": 0
+    },
+    "setup": {
+      "install": {
+        "argv": [
+          "npm",
+          "install"
+        ],
+        "pid": 76018,
+        "pgid": 76018,
+        "startUtc": "2026-10-12T12:57:58.550393+00:00",
+        "endUtc": "2026-10-12T12:58:01.086863+00:00",
+        "wallSeconds": 2.5363345829973696,
+        "exit": 0,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+      }
+    }
+  },
+  "counterfactuals": {
+    "originalComparator": "Exact old checker and corrected contract bytes retained with SHA-256 manifest externally.",
+    "capturedOrder": "Public determinize wrapper reverses the two captured members; each viewer reports a floating-effect divergence.",
+    "sourceLookBack": "Public determinize wrapper increments the retained source spark; each viewer reports a floating-effect divergence."
+  },
+  "runtime": "All validation commands terminal. No browser, server, reviewer or provider started; process settlement checked in the external freeze proof.",
+  "contextualInventory": {
+    "frictionTriggers": {
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "pid": 17426,
+      "pgid": 17426,
+      "startUtc": "2026-10-12T13:00:34.882790+00:00",
+      "endUtc": "2026-10-12T13:00:35.073133+00:00",
+      "wallSeconds": 0.1902310410005157,
+      "exit": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/floating-effect-fidelity"
+    },
+    "scope": "Parent dispatch-boundary native inventory; excluded from implementation validation costs."
+  },
+  "testDeltaScope": "Vitest entrypoint files: unchanged; new plain contract module plus additive registration count toward test lines. No new jsdom entrypoint."
+}

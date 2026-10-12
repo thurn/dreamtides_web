@@ -182,8 +182,7 @@ function effectDivergences(
       const sameSource = remembered ? canonicalHash(copy.source) === canonicalHash(effect.source)
         : JSON.stringify(copy.source) === JSON.stringify(effect.source);
       const sourced = seesSource(state, effect.source, side) && !sameSource;
-      const same = remembered ? canonicalHash(JSON.parse(record) as unknown) === canonicalHash(JSON.parse(copied) as unknown)
-        : record === copied;
+      const same = canonicalHash(JSON.parse(record) as unknown) === canonicalHash(JSON.parse(copied) as unknown);
       if (!same || sourced) problems.push(`${kind} effect ${effect.id} ${JSON.stringify(copy)} for ${record}`);
     }
   }

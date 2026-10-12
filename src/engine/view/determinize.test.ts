@@ -27,6 +27,7 @@ import { hiddenFrom } from "../testing/redaction";
 import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
 import { at, passUntil } from "../testing/trigger-harness";
 import { determinize, type Decklists } from "./determinize";
+import "./determinization-fidelity.contracts";
 
 const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
 
