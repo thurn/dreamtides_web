@@ -37,12 +37,32 @@ const EXCLUDED_FILES = [
  * Vitest's module mocks are not safe to share between test files in one
  * module runner: a module fetched while mocked keeps that mock in its cached
  * metadata. Every file that calls `vi.mock` or `vi.doMock` therefore runs in
- * the isolated project, and the shared project never registers a mock.
+ * the isolated project, and the shared projects never register a mock.
  */
 const MODULE_MOCK_CALL = /\bvi\.(?:do)?[mM]ock\(/;
-const moduleMockingFiles = globSync(TEST_FILES).filter((file) =>
-  MODULE_MOCK_CALL.test(readFileSync(file, "utf8")),
+const testFileSources = globSync(TEST_FILES).map(
+  (file) => [file, readFileSync(file, "utf8")] as const,
 );
+const moduleMockingFiles = testFileSources
+  .filter(([, source]) => MODULE_MOCK_CALL.test(source))
+  .map(([file]) => file);
+
+/**
+ * A worker thread is reused only while the next queued file belongs to the
+ * same project and environment; otherwise Vitest terminates it and starts a
+ * fresh worker, which re-imports its dependencies and builds a new jsdom
+ * window. Splitting the shared files by their environment pragma into two
+ * projects keeps each environment's files contiguous in the run order. The
+ * pragma still selects each file's environment.
+ */
+const DOM_ENVIRONMENT_PRAGMA = /@vitest-environment\s+jsdom\b/;
+const sharedDomFiles = testFileSources
+  .filter(
+    ([file, source]) =>
+      DOM_ENVIRONMENT_PRAGMA.test(source) &&
+      !moduleMockingFiles.includes(file),
+  )
+  .map(([file]) => file);
 
 export default defineConfig({
   test: {
@@ -66,10 +86,19 @@ export default defineConfig({
         test: {
           name: "shared",
           include: TEST_FILES,
-          exclude: [...EXCLUDED_FILES, ...moduleMockingFiles],
-          // Each worker reuses one module runner and jsdom window across
-          // files. The setup file resets the module registry, timers, stubs,
-          // and jsdom globals before every file.
+          exclude: [...EXCLUDED_FILES, ...moduleMockingFiles, ...sharedDomFiles],
+          // Each worker reuses one module runner across files. The setup file
+          // resets the module registry, timers, and stubs before every file.
+          isolate: false,
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "shared-dom",
+          include: sharedDomFiles,
+          // As `shared`, and each worker also reuses one jsdom window, whose
+          // globals the setup file restores before every file.
           isolate: false,
         },
       },

@@ -653,6 +653,25 @@ information only.
 | --- | --- | --- |
 | Test files over ~500 lines | 0 without a recorded reason | `wc -l` over test files; each survivor's reason is in its bead notes |
 
+### D19 suite reading (2026-10-12, hv-mwpi)
+
+hv-umm2.472 read the full suite at 70.75 s under host load 18.6–22.9. At
+comparable low load the suite meets the 60 s budget, so that reading was
+load, not a regression. Full tables:
+[measurements/hv-mwpi.json](measurements/hv-mwpi.json).
+
+| Suite (345 files, 4,827 tests, 2 workers) | Runs | Vitest duration | Host load |
+| --- | --- | --- | --- |
+| Before, `80916226c` | 6 | median 56.5 s (53.9–59.3 s) | 4.4–6.8 |
+| Shared files grouped by environment | 3 interleaved | median 46.8 s (45.9–49.5 s) | 3.5–7.5 |
+| `review:full` with the change | 1 | `[review] test finished in` 46.4 s | 6.3–7.0 |
+
+Vitest reuses a non-isolated worker only while the next queued file shares
+its project and environment. The shared project mixed `node` and `jsdom`
+files, so 31 of its 46 `jsdom` files built a fresh worker and jsdom window.
+`vitest.config.ts` now runs those files as the `shared-dom` project. Budget
+unchanged.
+
 ## Engine performance targets (2026-10-05, bead hv-7x4l.10)
 
 Measured against the
