@@ -1,3 +1,6 @@
+import { abandonSelfCost, activated, fromVoid } from "../../engine/dsl/builders";
+import { onDawn, sourceIn, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 23,
   art: { x: 1, y: 0.266, scale: 1.27 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    activated([abandonSelfCost()], p.returnFromVoid(fromVoid({ cardType: "character" }))),
+    triggered(onDawn(), p.erode(3), { zone: "void", condition: sourceIn("void") }),
+  ],
+  verifiedText: "27uwm0b5os6",
 });

@@ -1,3 +1,5 @@
+import { activated, characterYouControl, discardCostFilter, enemyCharacter, energy, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,9 @@ export default card({
   cardNumber: 328,
   art: { x: -0.1, y: -0.348, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([energy(2), discardCostFilter({ cardType: "character" })], p.dissolve(target(enemyCharacter({ sparkAtMost: variant.amplified ? 3 : 2 })))),
+    activated([energy(1)], p.returnToHand(target(characterYouControl()))),
+  ],
+  verifiedText: "2gj0vrw6yr0",
 });

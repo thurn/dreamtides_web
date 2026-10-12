@@ -1,3 +1,6 @@
+import { abandonSelfCost, activated, energy, everyIn, exhaustSelf } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 397,
   art: { x: 0, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(onMaterialized(), p.erode(3)),
+    activated([energy(5), exhaustSelf(), abandonSelfCost()], p.materialize(everyIn("void", { cardType: "character", costAtMost: 2 }))),
+  ],
+  verifiedText: "kczwups9h",
 });
