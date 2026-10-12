@@ -101,6 +101,8 @@ export function enginePromptHeading(input: EnginePromptHeadingInput): EngineProm
         return cards("abandon", "character", "characters");
       case "returnCost":
         return cards("return", "character", "characters", " to hand");
+      case "keep":
+        return "Choose a character to keep";
       case "discardCost":
       case "discard":
         return cards("discard");
@@ -409,6 +411,8 @@ function autoAnsweredChoice(kind: PromptKind, role: PromptRole): string {
       return "character you could abandon";
     case "returnCost":
       return "character you could return to hand";
+    case "keep":
+      return "character you could keep";
     case "revealCost":
       return "card you could reveal";
     case "banishAnyVoidCost":

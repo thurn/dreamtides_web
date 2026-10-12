@@ -104,6 +104,7 @@ describe("the optional-chain bound", () => {
     const cases: readonly { prompt: Prompt; value: unknown; declined: boolean }[] = [
       { prompt: { ...base("preventUnlessAbandons"), kind: "confirm" }, value: true, declined: false },
       { prompt: { ...base("abandon"), kind: "chooseCards", candidates: [valuable, least], min: 1, max: 1 }, value: [least], declined: false },
+      { prompt: { ...base("keep"), kind: "chooseCards", candidates: [least, valuable], min: 1, max: 1 }, value: [valuable], declined: false },
       { prompt: { ...base("preventUnlessPays"), kind: "payOrDecline", energy: 1, payable: true }, value: true, declined: false },
       { prompt: { ...base("youMay"), kind: "confirm" }, value: false, declined: true },
       { prompt: { ...base("optionalPayment"), kind: "payOrDecline", energy: 1, payable: true }, value: false, declined: true },

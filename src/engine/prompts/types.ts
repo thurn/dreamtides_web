@@ -36,6 +36,8 @@ export type PromptRole =
   | "abandonCost"
   /** The character its controller chooses to abandon as an effect resolves; not a target. */
   | "abandon"
+  /** The character its controller keeps in play as the rest of their characters return to hand; not a target. */
+  | "keep"
   /** The controlled characters returned to hand to pay a cost. */
   | "returnCost"
   /** The cards discarded to pay a cost. */

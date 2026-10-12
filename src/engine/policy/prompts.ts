@@ -206,6 +206,8 @@ const ROLE_STRATEGIES = {
   returnCost: { cards: "loss", number: "largest", chain: "loopable" },
   // Exactly one character, chosen after an effect or an accepted "unless" cost has committed to it.
   abandon: { cards: "loss", number: "largest", chain: "finite" },
+  // Exactly one character stays in play, so which and never how many: the most valuable.
+  keep: { cards: "gain", number: "largest", chain: "finite" },
   discardCost: { cards: "loss", number: "largest", chain: "loopable" },
   revealCost: { cards: "loss", number: "largest", chain: "loopable" },
   banishCost: { cards: "loss", number: "largest", chain: "loopable" },

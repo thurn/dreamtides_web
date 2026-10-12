@@ -1086,6 +1086,18 @@ same effect: a character you control that the opponent owns (see [Gain
 control](#keywords-and-effects)) goes to the opponent's hand. Only an
 instruction that names "your hand" puts the card into yours.
 
+"Return all but one character you control to hand" does not target. As it
+resolves, you choose one character you control to keep, which may be one that
+cannot be targeted by effects. Every other character you controlled as you
+chose then returns to its owner's hand, one after another: the back rank
+before the front rank, each left to right. With one character or none,
+nothing returns and you choose nothing. "Draw a card for each character
+returned" then draws once for each of those characters that reached a hand,
+including one the opponent owns that went to their hand. A character a
+replacement sent elsewhere instead (see [Zone Changes](#zone-changes)), such
+as a created character that ceased to exist or a reclaimed character that
+was banished, was not returned and draws nothing.
+
 **Materialize** — Put a character into play. This covers a character entering
 play from hand (played normally), from the void, from the deck, as a created
 figment, or returned "to play" by an effect. A materialized character enters the

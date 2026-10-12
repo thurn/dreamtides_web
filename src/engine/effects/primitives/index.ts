@@ -56,6 +56,7 @@ export * from "./rematerialize";
 export * from "./reclaim-not-banished";
 export * from "./repeat";
 export * from "./return-from-void";
+export * from "./return-all-but-one";
 export * from "./return-to-hand";
 export * from "./reveal";
 export * from "./sequence";

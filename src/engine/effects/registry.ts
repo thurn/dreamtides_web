@@ -72,6 +72,7 @@ import {
   rematerializePrimitive,
   reclaimNotBanishedPrimitive,
   repeatPrimitive,
+  returnAllButOnePrimitive,
   returnFromVoidPrimitive,
   returnToHandPrimitive,
   revealPrimitive,
@@ -270,6 +271,9 @@ const DEFINITIONS = {
   },
   get returnFromVoid() {
     return returnFromVoidPrimitive;
+  },
+  get returnAllButOne() {
+    return returnAllButOnePrimitive;
   },
   get returnToHand() {
     return returnToHandPrimitive;

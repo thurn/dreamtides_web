@@ -13,7 +13,7 @@ import { cardLabBattle } from "./card-lab";
 import { applyDebugOp, debugOpFromUnknown, withHistory, type DebugOp } from "../debug/debug-actions";
 import type { BattleSlice } from "../fold/slice";
 import { EVENT_DEFINITIONS } from "../events";
-import { PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLabFixture, promptLabPresentation } from "./prompt-lab";
+import { LAB, PROMPT_LAB_CARD_TEXT, PROMPT_LAB_DEFINITIONS, PROMPT_LAB_FIXTURES, promptLabBattle, promptLabFixture, promptLabPresentation } from "./prompt-lab";
 import { runNamedScenario, scenarioRegistryProblems } from "../../content/specs/runner";
 import { playFromHand, runScenario, type NamedScenario, type ScenarioSpec } from "./scenario";
 import { SYNTHETIC, syntheticId } from "./synthetic-cards";
@@ -120,6 +120,11 @@ describe("prompt lab", () => {
   it("keeps each lab card definition's UUID unique", () => {
     const ids = PROMPT_LAB_DEFINITIONS.cards.map(({ id }) => id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("gives every lab card display data, so its scenes name the source of each prompt", () => {
+    const missing = Object.entries(LAB).filter(([, definition]) => !(definition.id in PROMPT_LAB_CARD_TEXT)).map(([key]) => key);
+    expect(missing).toEqual([]);
   });
 
   it("builds every fixture deterministically", () => {

@@ -176,6 +176,8 @@ export const LAB = {
   chooseSubtype: labEvent(0x63, 1, p.chooseSubtype({ then: p.discover({ cardType: "character", subtype: p.CHOSEN_SUBTYPE }, {}, "deckTop") })),
   /** Choose one of your characters to abandon during resolution. */
   abandon: labEvent(0x62, 1, p.abandon()),
+  /** "Return all but one character you control to hand. Draw a card for each character returned." */
+  keep: labEvent(0x65, 1, p.returnAllButOne({ drawForEach: true })),
   /** "Dissolve up to one enemy." */
   dissolveUpToOne: labEvent(3, 1, p.dissolve(upTo(enemyCharacter(), 1))),
   /** A pending event (D36): it plays text-less and reports its pending ability. */
@@ -261,6 +263,18 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [LAB.choosePlayer.id]: { name: "Lab Rekindling", text: "Choose a player. That player discards a card, then draws a card." },
   [LAB.chooseSubtype.id]: { name: "Lab Calling", text: "Choose a character type. Discover a character of that type and put it on top of your deck." },
   [LAB.xCostTarget.id]: { name: "Lab Variable Blessing", text: "A character you control with cost X gains +1✦." },
+  [LAB.resolvingPayment.id]: { name: "Lab Bargain", text: "You may pay 2● and discard a card. If you do, draw 2 cards." },
+  [LAB.routeCharacter.id]: { name: "Lab Wayfarer", text: "As an additional cost to play this character, you may pay 1●. Reclaim 0●" },
+  [LAB.routeSetter.id]: { name: "Lab Summons", text: "Draw a ≤2● cost character from your deck. It costs 0●." },
+  [LAB.routeDiscarder.id]: { name: "Lab Sacrifice", text: "To play this card, discard a character. Gain 1⍟." },
+  [LAB.returnPayer.id]: { name: "Lab Recaller", text: "Return a character you control to hand: Gain 1⍟." },
+  [LAB.anyVoidPayer.id]: { name: "Lab Grave Robber", text: "Banish a card from the opponent's void: Gain 1⍟." },
+  [LAB.sparkVoidPermit.id]: { name: "Lab Warden", text: "You may play 1✦ to 2✦ cards from your void." },
+  [LAB.discardChosen.id]: { name: "Lab Inquisition", text: "Discard a chosen card from the opponent's hand." },
+  [LAB.banishChosen.id]: { name: "Lab Exile", text: "Banish a chosen character from the opponent's hand." },
+  [LAB.restrictChosen.id]: { name: "Lab Silence", text: "Choose a card in the opponent's hand. That card cannot be played this turn." },
+  [LAB.discoverCost.id]: { name: "Lab Seeking", text: "Choose a cost. Discover a character with that cost." },
+  [LAB.keep.id]: { name: "Lab Recall", text: "Return all but one character you control to hand. Draw a card for each character returned." },
   [SYNTHETIC.vanilla0.id]: { name: "Lab Squire", text: "" },
   [SYNTHETIC.vanilla1.id]: { name: "Lab Recruit", text: "" },
   [SYNTHETIC.vanilla2.id]: { name: "Lab Sentry", text: "" },
@@ -477,6 +491,16 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
       active: "player", phase: "day",
       player: { hand: [LAB.abandon.id], back: [vanillas[0], vanillas[0]], energy: 2, deck: deck(6) },
       enemy: { back: [vanillas[1]], hand: [vanillas[2]], deck: deck(6) },
+    },
+    script: [],
+  },
+  {
+    name: "keep",
+    description: "Choose one public battlefield character to keep as the rest return to hand, then draw for each return",
+    setup: {
+      active: "player", phase: "day",
+      player: { hand: [LAB.keep.id], back: [vanillas[0], vanillas[1]], front: [vanillas[2]], energy: 2, deck: deck(6) },
+      enemy: { back: [vanillas[1]], deck: deck(6) },
     },
     script: [],
   },
