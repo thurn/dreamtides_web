@@ -1,0 +1,51 @@
+{
+  "bead": "hv-umm2.219",
+  "phase": 5,
+  "implementMin": 41.17074193333334,
+  "implementWindow": {
+    "start": "2026-10-12T19:11:19.917000+00:00",
+    "end": "2026-10-12T19:52:30.161516+00:00"
+  },
+  "localValidationS": {
+    "browser": 64.35530495643616,
+    "focused": 4.248840093612671,
+    "full": 103.74540877342224,
+    "knip-final": 2.590319871902466,
+    "knip-source-final": 3.034538984298706,
+    "knip": 3.31990385055542,
+    "negative": 2.9226319789886475,
+    "prefix-focused": 3.56095290184021,
+    "prefix-full": 94.29921913146973,
+    "prefix-knip": 2.9566452503204346,
+    "prefix-negative": 3.779094934463501,
+    "prefix-review": 32.04424500465393,
+    "preflight-final": 1.139233112335205,
+    "preflight": 0.9922711849212646,
+    "review-corrected": 34.68628120422363,
+    "review-day-observation": 31.433177947998047,
+    "review-final": 32.04411196708679,
+    "review-source-final": 40.34870195388794,
+    "review": 33.1370689868927,
+    "sweep": 14.645341157913208,
+    "schema": 0.07200789451599121,
+    "friction": 0.06691312789916992
+  },
+  "hostLoad": 16.51708984375,
+  "testDelta": {
+    "files": 1,
+    "lines": 196,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "synthetic-lint-correction",
+      "minutes": 2.5140499999999997,
+      "note": "Two review failures were own synthetic JS annotation/any-valued observation typing. Related 411 tests passed during both failures; typed JSDoc and direct public route observation corrected them. Exact failed and corrected receipts retained."
+    },
+    {
+      "tag": "late-prefix-normalization",
+      "minutes": 3.0840957333333336,
+      "note": "Final diff inspection found admitted uppercase internal avatar prefix misclassification. Tightened public witness failed against original parser; same-bead two-path fix preserves original UUID/stage payload. Focused/review/Knip and required locked two-worker full passed on final source. Prior canonical browser QA retained with exact old fingerprint and explicit reuse qualification."
+    }
+  ]
+}

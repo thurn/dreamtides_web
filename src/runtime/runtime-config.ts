@@ -261,7 +261,9 @@ function parseGotoScene(params: URLSearchParams): QaSceneId | null {
   if (trimmed.toLowerCase() !== "card-lab") return parseQaSceneId(trimmed);
   const token = (name: string, fallback: string) => (params.get(name) ?? fallback).trim().toLowerCase().replace(/:/gu, "");
   const stage = params.get("labStage");
-  return parseQaSceneId(`card-lab:${token("card", "")}:${token("variant", "base")}:${token("as", "player")}${stage === null ? "" : `:${encodeURIComponent(stage)}`}`);
+  const avatar = params.has("avatar");
+  const prefix = avatar ? params.has("card") || params.getAll("avatar").length !== 1 ? "card-lab-avatar-ambiguous" : "card-lab-avatar" : "card-lab";
+  return parseQaSceneId(`${prefix}:${token(avatar ? "avatar" : "card", "")}:${token("variant", "base")}:${token("as", "player")}${stage === null ? "" : `:${encodeURIComponent(stage)}`}`);
 }
 
 function parseSeedOverride(rawSeed: string | null): number | null {

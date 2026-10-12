@@ -557,7 +557,7 @@ export async function createQa(page, config) {
     const key = () => {
       const query = new URLSearchParams(location.search);
       return query.get("game") === null ? null : JSON.stringify(
-        ["game", "goto", "card", "variant", "as", "seed", "labStage"].map((name) => query.get(name)),
+        ["game", "goto", "card", "avatar", "variant", "as", "seed", "labStage"].map((name) => query.get(name)),
       );
     };
     const storageKey = "dreamtides-qa-card-lab-report";

@@ -53,6 +53,34 @@ async function dreamwellScenario({ draw = null, refresh = null, next = 0, errors
   } finally { vi.unstubAllGlobals(); }
 }
 
+/** Synthetic avatar scenario host: only public report, probe and driver observations.
+ * @param {{ status?: string, wrong?: boolean, suspended?: boolean, errors?: string[], advanced?: boolean }} [options]
+ */
+async function avatarScenario({ status = "pending", wrong = false, suspended = false, errors = [], advanced = false } = {}) {
+  const uuid = "5e5e5e5e-0000-4000-8000-000000021900";
+  const lab = { card: "", avatar: uuid, side: "player", status: "ready", reason: null, detail: null, eligibleVariants: ["base"], entityKind: "avatar", cardStatus: status, cardType: "Avatar" };
+  vi.stubGlobal("window", { __cardLab: lab, __engineProbe: {
+    slice: { committed: { stack: [], result: null, turn: { active: "player", phase: advanced ? "dusk" : "day" }, sides: { player: { avatar: { id: wrong ? "other" : uuid } }, enemy: { avatar: null } } }, inFlight: suspended ? {} : null },
+    decision: { side: "player" }, pending: suspended ? { side: "player" } : null, events: advanced ? [{ event: { kind: "phaseChanged", active: "player", phase: "day" } }] : [],
+  } });
+  let observedRoute = "";
+  const open = (/** @type {string} */ route) => { observedRoute = route; return Promise.resolve(); };
+  try {
+    const qa = /** @type {import("./prelude.mjs").Qa} */ (/** @type {unknown} */ ({
+      args: { avatar: uuid, variant: "base", as: "player" }, viewport: { width: 1440, height: 900 },
+      open, waitVisible: () => Promise.resolve(),
+      waitFor: (/** @type {string} */ _label, /** @type {() => unknown} */ read) => Promise.resolve(read()),
+      read: (/** @type {(arg: unknown) => unknown} */ read, /** @type {unknown} */ arg) => Promise.resolve(read(arg)),
+      caps: () => Promise.resolve({ errors, rejections: [], consoleErrors: [] }), isTimeout: () => false,
+      battle: { playUntil: async (/** @type {(value: {canPass: boolean}) => Promise<boolean>} */ done) => {
+        if (!await done({ canPass: true })) throw new Error("Synthetic unsettled avatar");
+        return { answers: 0, passes: 0 };
+      } },
+    }));
+    return { result: await cardLabPlay(qa), route: observedRoute };
+  } finally { vi.unstubAllGlobals(); }
+}
+
 describe("sweep cell attempts", () => {
   it("preserves navigation evidence beside the original failed report and never retries an unknown abort", async () => {
     const navigation = { operation: 1, outcome: "failed", expectedUrl: "http://localhost:5174/fixture",
@@ -165,12 +193,24 @@ describe("sweep cell attempts", () => {
     const uuid = "5e5e5e5e-0000-4000-8000-000000000002";
     expect(parseSweepArgs(["--bead", "synthetic", "--cards", uuid, "--variants", "amplified",
       "--as", "enemy", "--timeout", "45", "--port", "5176", "--capture"])).toEqual({
-      bead: "synthetic", cards: [uuid], variants: ["base", "amplified"], sides: ["enemy"],
+      bead: "synthetic", cards: [uuid], entityKind: "card", variants: ["base", "amplified"], sides: ["enemy"],
       timeoutS: 45, port: 5176, capture: true,
     });
     for (const extra of [["--timeout"], ["--timeout", "0"], ["--timeout", "invalid"]]) {
       expect(() => parseSweepArgs(["--bead", "synthetic", "--cards", uuid, ...extra])).toThrow();
     }
+  });
+  it("retains pending initialization separately from observed avatar exercise and fails contradictory or unsettled evidence", async () => {
+    const pending = await avatarScenario();
+    expect(pending.route).toContain("&avatar=");
+    expect(pending.result).toMatchObject({ verdict: "pending", exercised: false });
+    expect((await avatarScenario({ advanced: true })).result).toMatchObject({ verdict: "pending", exercised: false });
+    for (const options of [{ wrong: true }, { suspended: true }, { errors: ["synthetic error"] }]) expect((await avatarScenario(options)).result.verdict).toBe("fail");
+  });
+  it("selects the avatar domain explicitly and rejects mixed domains", () => {
+    const uuid = "5e5e5e5e-0000-4000-8000-000000021901";
+    expect(parseSweepArgs(["--bead", "synthetic", "--avatars", uuid])).toMatchObject({ entityKind: "avatar", cards: [uuid] });
+    expect(() => parseSweepArgs(["--bead", "synthetic", "--cards", uuid, "--avatars", uuid])).toThrow();
   });
   it("retains a timeout failure and one successful retry with only the final cell effective", async () => {
     const first = report(["timeout"]);

@@ -853,6 +853,21 @@ node scripts/qa/card-sweep.mjs --bead <id> --cards <uuid,...|starter> \
   [--variants all|<v>,...] [--as player|enemy|both] [--timeout <s>] [--port <n>] [--capture]
 ```
 
+Avatar emblems use `?goto=card-lab&avatar=<uuid>&as=player|enemy` and the
+base variant. The requested side starts a normal battle with that exact
+emblem; the other side has no emblem. First-turn triggers and choices use
+the normal fold and persist with the battle. The selected portrait and
+ability presentation follow the same UUID. Explicit avatar requests reject
+unknown or cross-domain UUIDs, simultaneous `card` and `avatar` parameters,
+and `labStage` declarations. Other recognized variants are ineligible.
+
+Both the sweep and `npm run lab:preflight --` accept `--avatars <uuid,...>`
+in place of `--cards`. Avatar results prove initialization and settled
+first-turn progression; `exercised` separately reports observed source-scoped
+ability resolution. A pending definition reports `pending`, including when
+initialization succeeds. Content-specific trigger and activation workflows
+remain part of each avatar's authored QA.
+
 The sweep (workflow § Card QA) opens a runner session (its own dev server
 and MCP client, reopened at a card boundary where it yields its browser slot;
 see [Browser QA](#browser-qa)) and, for each card, side, and variant, runs

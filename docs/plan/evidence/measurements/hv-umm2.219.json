@@ -1,0 +1,1002 @@
+{
+  "bead": "hv-umm2.219",
+  "base": "b535719ec0f0059d30431befc63ee7000406aab3",
+  "implementWindow": {
+    "start": "2026-10-12T19:11:19.917000+00:00",
+    "end": "2026-10-12T19:52:30.161516+00:00"
+  },
+  "implementMin": 41.17074193333334,
+  "scope": {
+    "sourcePaths": [
+      "src/runtime/runtime-config.ts",
+      "src/runtime/runtime-config.test.ts",
+      "src/runtime/qa-scenes.ts",
+      "src/runtime/qa-scenes-battle.test.ts",
+      "src/engine/testing/avatar-lab.ts",
+      "src/engine/testing/avatar-lab.test.ts",
+      "scripts/qa/lab-preflight.ts",
+      "scripts/qa/scenarios/card-lab-play.mjs",
+      "scripts/qa/card-sweep.mjs",
+      "scripts/qa/card-sweep.test.mjs",
+      "scripts/qa/prelude.mjs",
+      "scripts/qa/prelude.test.mjs",
+      "README.md"
+    ],
+    "nonTestAdded": 227,
+    "nonTestRemoved": 26,
+    "testAdded": 198,
+    "testRemoved": 2,
+    "fallout": [],
+    "newPublicTestEntrypoints": [
+      "src/engine/testing/avatar-lab.test.ts"
+    ],
+    "sourceFreezeSHA256": {
+      "src/runtime/runtime-config.ts": "c302708b7aee1a4805818be4c891ef93a56d2726b97a4cf81c6386d4f495f17d",
+      "src/runtime/runtime-config.test.ts": "c9799941f311a4d6e440cdf5fad7003586da5bf6860e997009bebf20ec822eef",
+      "src/runtime/qa-scenes.ts": "3aef9108904e1ef6523c6e2931c869e4481d5c2ac132bf6351bf34f206e492d7",
+      "src/runtime/qa-scenes-battle.test.ts": "db443f4f453175a461b1e8a2c0b95661f9ebd63ed604082ff4d74249b0d70cd3",
+      "src/engine/testing/avatar-lab.ts": "072b13c906b94f8c26544da5a09833eea1c8f7e6cd5b15440d2e0bdb1b7d0ca5",
+      "src/engine/testing/avatar-lab.test.ts": "fd15680e5f22b49e32de8e5d275adbd9f202fd3716ac55277f3c2fef01296830",
+      "scripts/qa/lab-preflight.ts": "2d072e835675a8be7f451b86291aa99b7a45e46edb9e64306bb6960f895f13ba",
+      "scripts/qa/scenarios/card-lab-play.mjs": "0016f3e140a46e1d9b51e666ef7aa8d444eecd88a1abd6b3bbf0b638b804aa31",
+      "scripts/qa/card-sweep.mjs": "fc7c93027cbc7fa916847c4fbdf0a7ba1b125767ca81b67e6245b22e7810de46",
+      "scripts/qa/card-sweep.test.mjs": "6621e2bb9ed9686f3bd01e29362ccb464b6e693f571687f590e68c5b4f66be8a",
+      "scripts/qa/prelude.mjs": "0af36d6ce6b15b90dce8767b2f30aa1aa0a132bdceafa990de168313b596bb2e",
+      "scripts/qa/prelude.test.mjs": "31b1e61875083f45831cbe125fb30f2f0d90e5a3c8d63e79fbc87b83ba715e9d",
+      "README.md": "4587c7fef30b5ef02f7b7534bad13b694a75a6f20fb06ed0270c3872563095bf"
+    },
+    "qaSourceFreezeSHA256": {
+      "src/runtime/runtime-config.ts": "c302708b7aee1a4805818be4c891ef93a56d2726b97a4cf81c6386d4f495f17d",
+      "src/runtime/runtime-config.test.ts": "c9799941f311a4d6e440cdf5fad7003586da5bf6860e997009bebf20ec822eef",
+      "src/runtime/qa-scenes.ts": "164109673727db7b090bff7d80b7a8ccebd34b54184e20147041a1b85cfd8207",
+      "src/runtime/qa-scenes-battle.test.ts": "2303c491961e2379e2d6619e404a8b08733ecc07eb8a369671d7bbe3f55649b0",
+      "src/engine/testing/avatar-lab.ts": "072b13c906b94f8c26544da5a09833eea1c8f7e6cd5b15440d2e0bdb1b7d0ca5",
+      "src/engine/testing/avatar-lab.test.ts": "fd15680e5f22b49e32de8e5d275adbd9f202fd3716ac55277f3c2fef01296830",
+      "scripts/qa/lab-preflight.ts": "2d072e835675a8be7f451b86291aa99b7a45e46edb9e64306bb6960f895f13ba",
+      "scripts/qa/scenarios/card-lab-play.mjs": "0016f3e140a46e1d9b51e666ef7aa8d444eecd88a1abd6b3bbf0b638b804aa31",
+      "scripts/qa/card-sweep.mjs": "fc7c93027cbc7fa916847c4fbdf0a7ba1b125767ca81b67e6245b22e7810de46",
+      "scripts/qa/card-sweep.test.mjs": "6621e2bb9ed9686f3bd01e29362ccb464b6e693f571687f590e68c5b4f66be8a",
+      "scripts/qa/prelude.mjs": "0af36d6ce6b15b90dce8767b2f30aa1aa0a132bdceafa990de168313b596bb2e",
+      "scripts/qa/prelude.test.mjs": "31b1e61875083f45831cbe125fb30f2f0d90e5a3c8d63e79fbc87b83ba715e9d",
+      "README.md": "4587c7fef30b5ef02f7b7534bad13b694a75a6f20fb06ed0270c3872563095bf"
+    },
+    "qaFreezeVerifiedUnchanged": true,
+    "postQaChangedPaths": [
+      "src/runtime/qa-scenes.ts",
+      "src/runtime/qa-scenes-battle.test.ts"
+    ],
+    "postQaQualification": "Only internal scene-prefix comparisons use a lowercase copy; original UUID and encoded payload stay intact. The existing public route witness covers canonical and uppercase forms. Original browser receipts apply to the unchanged canonical parseGoto route and unchanged avatar constructor/scenario; final focused/review/Knip and two-worker full certify the final parser source."
+  },
+  "commands": {
+    "browser": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.219/avatar-route.mjs",
+        "--bead",
+        "hv-umm2.219",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ],
+      "start": "2026-10-12T19:41:30.034930+00:00",
+      "hostLoadStart": [
+        5.1865234375,
+        9.5703125,
+        11.95947265625
+      ],
+      "pid": 78605,
+      "processGroup": 78605,
+      "exit": 0,
+      "end": "2026-10-12T19:42:34.390194+00:00",
+      "elapsedS": 64.35530495643616,
+      "hostLoadEnd": [
+        5.45703125,
+        8.75390625,
+        11.47412109375
+      ]
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/avatar-lab.test.ts",
+        "src/runtime/runtime-config.test.ts",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "scripts/qa/card-sweep.test.mjs",
+        "scripts/qa/prelude.test.mjs"
+      ],
+      "start": "2026-10-12T19:29:48.244028+00:00",
+      "hostLoadStart": [
+        17.83740234375,
+        14.228515625,
+        15.16259765625
+      ],
+      "pid": 54941,
+      "processGroup": 54941,
+      "exit": 0,
+      "end": "2026-10-12T19:29:52.492826+00:00",
+      "elapsedS": 4.248840093612671,
+      "hostLoadEnd": [
+        17.36962890625,
+        14.19140625,
+        15.14404296875
+      ]
+    },
+    "full": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/avatar219-full-held.py"
+      ],
+      "start": "2026-10-12T19:37:29.915572+00:00",
+      "hostLoadStart": [
+        14.97607421875,
+        13.05859375,
+        13.57958984375
+      ],
+      "pid": 8636,
+      "processGroup": 8636,
+      "exit": 0,
+      "end": "2026-10-12T19:39:13.660953+00:00",
+      "elapsedS": 103.74540877342224,
+      "hostLoadEnd": [
+        9.4931640625,
+        11.6328125,
+        12.955078125
+      ],
+      "heldS": 103.71406507492065,
+      "queueAndLaunchS": 0.02715277671813965
+    },
+    "knip-final": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T19:34:35.777891+00:00",
+      "hostLoadStart": [
+        5.2783203125,
+        8.6103515625,
+        12.3076171875
+      ],
+      "pid": 68856,
+      "processGroup": 68856,
+      "exit": 0,
+      "end": "2026-10-12T19:34:38.368186+00:00",
+      "elapsedS": 2.590319871902466,
+      "hostLoadEnd": [
+        5.255859375,
+        8.55029296875,
+        12.2646484375
+      ]
+    },
+    "knip-source-final": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T19:36:26.284805+00:00",
+      "hostLoadStart": [
+        18.99755859375,
+        12.744140625,
+        13.4921875
+      ],
+      "pid": 52723,
+      "processGroup": 52723,
+      "exit": 0,
+      "end": "2026-10-12T19:36:29.319302+00:00",
+      "elapsedS": 3.034538984298706,
+      "hostLoadEnd": [
+        18.99755859375,
+        12.744140625,
+        13.4921875
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T19:33:20.259164+00:00",
+      "hostLoadStart": [
+        4.93896484375,
+        9.59130859375,
+        12.9716796875
+      ],
+      "pid": 42193,
+      "processGroup": 42193,
+      "exit": 0,
+      "end": "2026-10-12T19:33:23.579041+00:00",
+      "elapsedS": 3.31990385055542,
+      "hostLoadEnd": [
+        5.10400390625,
+        9.5478515625,
+        12.9365234375
+      ]
+    },
+    "negative": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/avatar-lab.test.ts"
+      ],
+      "start": "2026-10-12T19:32:45.265412+00:00",
+      "hostLoadStart": [
+        4.86474609375,
+        10.1484375,
+        13.30224609375
+      ],
+      "counterfactual": "omit selected AvatarId from BattleInit.avatars; restore exact source afterwards",
+      "pid": 16349,
+      "processGroup": 16349,
+      "exit": 1,
+      "end": "2026-10-12T19:32:48.188016+00:00",
+      "elapsedS": 2.9226319789886475,
+      "hostLoadEnd": [
+        4.71533203125,
+        10.029296875,
+        13.24169921875
+      ]
+    },
+    "prefix-focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "src/runtime/runtime-config.test.ts"
+      ],
+      "start": "2026-10-12T19:46:26.917660+00:00",
+      "hostLoadStart": [
+        3.52734375,
+        6.19580078125,
+        9.69970703125
+      ],
+      "pid": 86610,
+      "processGroup": 86610,
+      "exit": 0,
+      "end": "2026-10-12T19:46:30.478585+00:00",
+      "elapsedS": 3.56095290184021,
+      "hostLoadEnd": [
+        3.52734375,
+        6.19580078125,
+        9.69970703125
+      ]
+    },
+    "prefix-full": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/avatar219-prefix-full-held.py"
+      ],
+      "start": "2026-10-12T19:47:53.842940+00:00",
+      "hostLoadStart": [
+        4.30029296875,
+        5.87451171875,
+        9.24560546875
+      ],
+      "pid": 14270,
+      "processGroup": 14270,
+      "exit": 0,
+      "end": "2026-10-12T19:49:28.142131+00:00",
+      "elapsedS": 94.29921913146973,
+      "hostLoadEnd": [
+        8.3525390625,
+        6.63720703125,
+        9.17041015625
+      ],
+      "heldS": 94.27369379997253,
+      "queueAndLaunchS": 0.021975040435791016
+    },
+    "prefix-knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T19:47:02.524160+00:00",
+      "hostLoadStart": [
+        4.47021484375,
+        6.126953125,
+        9.53173828125
+      ],
+      "pid": 13219,
+      "processGroup": 13219,
+      "exit": 0,
+      "end": "2026-10-12T19:47:05.480765+00:00",
+      "elapsedS": 2.9566452503204346,
+      "hostLoadEnd": [
+        4.47021484375,
+        6.126953125,
+        9.53173828125
+      ]
+    },
+    "prefix-negative": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "-t",
+        "loads an exact avatar emblem"
+      ],
+      "start": "2026-10-12T19:46:23.096387+00:00",
+      "hostLoadStart": [
+        3.66064453125,
+        6.26708984375,
+        9.7451171875
+      ],
+      "expectation": "new uppercase admitted-prefix public witness fails against unchanged original parser",
+      "pid": 86489,
+      "processGroup": 86489,
+      "exit": 1,
+      "end": "2026-10-12T19:46:26.875448+00:00",
+      "elapsedS": 3.779094934463501,
+      "hostLoadEnd": [
+        3.52734375,
+        6.19580078125,
+        9.69970703125
+      ]
+    },
+    "prefix-review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:46:30.478985+00:00",
+      "hostLoadStart": [
+        3.52734375,
+        6.19580078125,
+        9.69970703125
+      ],
+      "pid": 86740,
+      "processGroup": 86740,
+      "exit": 0,
+      "end": "2026-10-12T19:47:02.523202+00:00",
+      "elapsedS": 32.04424500465393,
+      "hostLoadEnd": [
+        4.47021484375,
+        6.126953125,
+        9.53173828125
+      ]
+    },
+    "preflight-final": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--avatars",
+        "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+        "--as",
+        "both",
+        "--variants",
+        "all"
+      ],
+      "start": "2026-10-12T19:36:29.319852+00:00",
+      "hostLoadStart": [
+        18.99755859375,
+        12.744140625,
+        13.4921875
+      ],
+      "pid": 52972,
+      "processGroup": 52972,
+      "exit": 0,
+      "end": "2026-10-12T19:36:30.459037+00:00",
+      "elapsedS": 1.139233112335205,
+      "hostLoadEnd": [
+        18.99755859375,
+        12.744140625,
+        13.4921875
+      ]
+    },
+    "preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--avatars",
+        "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+        "--as",
+        "both",
+        "--variants",
+        "all"
+      ],
+      "start": "2026-10-12T19:33:23.579478+00:00",
+      "hostLoadStart": [
+        5.10400390625,
+        9.5478515625,
+        12.9365234375
+      ],
+      "pid": 42321,
+      "processGroup": 42321,
+      "exit": 0,
+      "end": "2026-10-12T19:33:24.571711+00:00",
+      "elapsedS": 0.9922711849212646,
+      "hostLoadEnd": [
+        5.10400390625,
+        9.5478515625,
+        12.9365234375
+      ]
+    },
+    "review-corrected": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:31:26.041043+00:00",
+      "hostLoadStart": [
+        7.52001953125,
+        11.7861328125,
+        14.11376953125
+      ],
+      "pid": 87079,
+      "processGroup": 87079,
+      "exit": 1,
+      "end": "2026-10-12T19:32:00.727297+00:00",
+      "elapsedS": 34.68628120422363,
+      "hostLoadEnd": [
+        7.20849609375,
+        11.263671875,
+        13.830078125
+      ]
+    },
+    "review-day-observation": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:34:04.344178+00:00",
+      "hostLoadStart": [
+        4.3271484375,
+        8.7880859375,
+        12.5009765625
+      ],
+      "pid": 43288,
+      "processGroup": 43288,
+      "exit": 0,
+      "end": "2026-10-12T19:34:35.777311+00:00",
+      "elapsedS": 31.433177947998047,
+      "hostLoadEnd": [
+        5.2783203125,
+        8.6103515625,
+        12.3076171875
+      ]
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:32:48.214322+00:00",
+      "hostLoadStart": [
+        4.71533203125,
+        10.029296875,
+        13.24169921875
+      ],
+      "pid": 16488,
+      "processGroup": 16488,
+      "exit": 0,
+      "end": "2026-10-12T19:33:20.258406+00:00",
+      "elapsedS": 32.04411196708679,
+      "hostLoadEnd": [
+        4.93896484375,
+        9.59130859375,
+        12.9716796875
+      ]
+    },
+    "review-source-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:35:45.935192+00:00",
+      "hostLoadStart": [
+        15.541015625,
+        11.57421875,
+        13.1494140625
+      ],
+      "pid": 25074,
+      "processGroup": 25074,
+      "exit": 0,
+      "end": "2026-10-12T19:36:26.283860+00:00",
+      "elapsedS": 40.34870195388794,
+      "hostLoadEnd": [
+        18.99755859375,
+        12.744140625,
+        13.4921875
+      ]
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T19:30:16.278370+00:00",
+      "hostLoadStart": [
+        13.27392578125,
+        13.48388671875,
+        14.8603515625
+      ],
+      "pid": 57504,
+      "processGroup": 57504,
+      "exit": 2,
+      "end": "2026-10-12T19:30:49.415406+00:00",
+      "elapsedS": 33.1370689868927,
+      "hostLoadEnd": [
+        10.94287109375,
+        12.92041015625,
+        14.60888671875
+      ]
+    },
+    "sweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.219",
+        "--avatars",
+        "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+        "--as",
+        "both",
+        "--variants",
+        "all",
+        "--timeout",
+        "90",
+        "--capture"
+      ],
+      "start": "2026-10-12T19:40:23.671937+00:00",
+      "hostLoadStart": [
+        8.365234375,
+        10.91064453125,
+        12.58056640625
+      ],
+      "pid": 76456,
+      "processGroup": 76456,
+      "exit": 0,
+      "end": "2026-10-12T19:40:38.317244+00:00",
+      "elapsedS": 14.645341157913208,
+      "hostLoadEnd": [
+        8.48193359375,
+        10.828125,
+        12.52294921875
+      ]
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T19:51:39.807140+00:00",
+      "hostLoadStart": [
+        16.51708984375,
+        9.3583984375,
+        9.80419921875
+      ],
+      "pid": 2053,
+      "processGroup": 2053,
+      "exit": 0,
+      "end": "2026-10-12T19:51:39.879115+00:00",
+      "elapsedS": 0.07200789451599121,
+      "hostLoadEnd": [
+        16.51708984375,
+        9.3583984375,
+        9.80419921875
+      ]
+    },
+    "friction": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs"
+      ],
+      "start": "2026-10-12T19:51:39.879521+00:00",
+      "hostLoadStart": [
+        16.51708984375,
+        9.3583984375,
+        9.80419921875
+      ],
+      "pid": 2057,
+      "processGroup": 2057,
+      "exit": 0,
+      "end": "2026-10-12T19:51:39.946407+00:00",
+      "elapsedS": 0.06691312789916992,
+      "hostLoadEnd": [
+        16.51708984375,
+        9.3583984375,
+        9.80419921875
+      ]
+    }
+  },
+  "finalFullSummary": [
+    "Test Files  352 passed (352)",
+    "Tests  5879 passed (5879)"
+  ],
+  "initialFocusedFailure": {
+    "testFiles": 5,
+    "passed": 94,
+    "failed": 3,
+    "suiteDurationS": 2.67,
+    "toolCallElapsedS": 6.661143416,
+    "toolCallIncludesEdits": true,
+    "commandWallS": null,
+    "evidence": "Native tool output f73356 retained by coordinator; initial expectations omitted an earlier triggerResolved publication and assumed pending initialization required a submitted intent. Corrected accumulated public evidence and used a genuine two-prompt budget witness. No acceptance waived."
+  },
+  "qa": {
+    "sweep": {
+      "invocation": "sweep-NfnG1u",
+      "session": "run-Z9QRVC",
+      "pending": 2,
+      "skip": 18,
+      "rawAttempts": 20,
+      "retries": 0,
+      "yields": 0,
+      "caps": [],
+      "error": null
+    },
+    "route": {
+      "invocation": "run-vZNF7c",
+      "cases": [
+        {
+          "viewport": "desktop",
+          "side": "player",
+          "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "verdict": "pending",
+          "exercised": false,
+          "observed": {
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&avatar=5e28154d-770a-4b84-8aac-9de44f5d7d02&variant=base&as=player&seed=1&debug=1&game=u69znh",
+            "game": "u69znh",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "initAvatar": {
+              "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "exhausted": false
+            },
+            "avatar": {
+              "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "exhausted": false
+            },
+            "other": null,
+            "rect": {
+              "x": 698,
+              "y": 617.8571166992188,
+              "width": 44,
+              "height": 44
+            },
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "popup": {
+            "x": 756,
+            "y": 617.84375,
+            "width": 248,
+            "height": 248,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "reloadPreserved": true,
+          "persistedLoadObservation": {
+            "gameId": "u69znh",
+            "card": "",
+            "avatar": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base"
+            ],
+            "entityKind": "avatar",
+            "cardStatus": "pending",
+            "cardType": "Avatar",
+            "timestamp": "2026-10-12T19:41:34.069Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        },
+        {
+          "viewport": "desktop",
+          "side": "enemy",
+          "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "verdict": "pending",
+          "exercised": false,
+          "observed": {
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&avatar=5e28154d-770a-4b84-8aac-9de44f5d7d02&variant=base&as=enemy&seed=1&debug=1&game=yopfng",
+            "game": "yopfng",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "initAvatar": {
+              "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "exhausted": false
+            },
+            "avatar": {
+              "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "exhausted": false
+            },
+            "other": null,
+            "rect": {
+              "x": 698,
+              "y": 94.12723541259766,
+              "width": 44,
+              "height": 43.99999237060547
+            },
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "popup": {
+            "x": 756,
+            "y": 94.125,
+            "width": 248,
+            "height": 248,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "reloadPreserved": true,
+          "persistedLoadObservation": {
+            "gameId": "yopfng",
+            "card": "",
+            "avatar": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+            "variant": "base",
+            "side": "enemy",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base"
+            ],
+            "entityKind": "avatar",
+            "cardStatus": "pending",
+            "cardType": "Avatar",
+            "timestamp": "2026-10-12T19:41:44.433Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        },
+        {
+          "viewport": "mobile",
+          "side": "player",
+          "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "verdict": "pending",
+          "exercised": false,
+          "observed": {
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&avatar=5e28154d-770a-4b84-8aac-9de44f5d7d02&variant=base&as=player&seed=1&debug=1&game=dqnp45",
+            "game": "dqnp45",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "initAvatar": {
+              "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "exhausted": false
+            },
+            "avatar": {
+              "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "exhausted": false
+            },
+            "other": null,
+            "rect": {
+              "x": 173,
+              "y": 606.109375,
+              "width": 44,
+              "height": 44
+            },
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "popup": {
+            "x": 13,
+            "y": 420.609375,
+            "width": 175.5,
+            "height": 175.5,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "reloadPreserved": true,
+          "persistedLoadObservation": {
+            "gameId": "dqnp45",
+            "card": "",
+            "avatar": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base"
+            ],
+            "entityKind": "avatar",
+            "cardStatus": "pending",
+            "cardType": "Avatar",
+            "timestamp": "2026-10-12T19:42:08.158Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        },
+        {
+          "viewport": "mobile",
+          "side": "enemy",
+          "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+          "verdict": "pending",
+          "exercised": false,
+          "observed": {
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&avatar=5e28154d-770a-4b84-8aac-9de44f5d7d02&variant=base&as=enemy&seed=1&debug=1&game=mccnwm",
+            "game": "mccnwm",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "initAvatar": {
+              "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "exhausted": false
+            },
+            "avatar": {
+              "id": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+              "exhausted": false
+            },
+            "other": null,
+            "rect": {
+              "x": 173,
+              "y": 104.578125,
+              "width": 44,
+              "height": 44
+            },
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "popup": {
+            "x": 13,
+            "y": 0,
+            "width": 175.5,
+            "height": 175.5,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "reloadPreserved": true,
+          "persistedLoadObservation": {
+            "gameId": "mccnwm",
+            "card": "",
+            "avatar": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+            "variant": "base",
+            "side": "enemy",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base"
+            ],
+            "entityKind": "avatar",
+            "cardStatus": "pending",
+            "cardType": "Avatar",
+            "timestamp": "2026-10-12T19:42:14.291Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          }
+        }
+      ],
+      "caps": [],
+      "error": null,
+      "captures": [
+        {
+          "filename": "avatar-infocard-enemy-desktop.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "bd771aa0a476a613c1f06108eca9e1290d191305ef81d7ef9e3d7a6fb4ca824a"
+        },
+        {
+          "filename": "avatar-infocard-enemy-mobile.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "ac6b9e4eb3942966e8e2e139a68803f3996f76a68f73b0f4ebed716b6c194be7"
+        },
+        {
+          "filename": "avatar-player-mobile.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "17184172aebf19cc313b25553aeb96921db8eb7cb276d749b0f4847f0f17d3cb"
+        },
+        {
+          "filename": "avatar-player-desktop.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "3b095979b8905c6da09f0fb7b9ce6ecdefaa4ad1acc7b57119d62011055b5c00"
+        },
+        {
+          "filename": "avatar-enemy-desktop.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "af9778be9871e0e98f98b43a6db0155e11b36bd1450ac694f6af1ebef98a1f9e"
+        },
+        {
+          "filename": "avatar-infocard-player-mobile.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "fd9be39c8cc872c7b203f170a5d6f28ef427561505877f410b9e8fb7fa97b097"
+        },
+        {
+          "filename": "avatar-enemy-mobile.png",
+          "width": 780,
+          "height": 1688,
+          "sha256": "6b9067f3bec9d1a2e6482418b5087b06d5c9fd090e2db745c15b64b00c4beb1d"
+        },
+        {
+          "filename": "avatar-infocard-player-desktop.png",
+          "width": 2880,
+          "height": 1800,
+          "sha256": "c285ebf2e6819320080cdf731b401c5970e43dbea45d26787bd5c39be28aa6ee"
+        }
+      ],
+      "fullExportQualification": "The native runner exported only the final selected enemy game for each viewport: yopfng desktop and mccnwm mobile, 52 rows each. All four cases retain their exact-game/UUID/controller persisted load observation in the raw report."
+    },
+    "resourceSettlement": {
+      "runnerPids": [
+        76456,
+        78605
+      ],
+      "serverGroups": [
+        76486,
+        78638
+      ],
+      "port": 5274,
+      "slot": 1,
+      "allPidsAbsent": true,
+      "ownerRecordAbsent": true,
+      "normalNativeCleanup": true,
+      "browserUsesHeavySlot": false
+    }
+  },
+  "failurePaths": {
+    "errorMidStep": "avatar-lab.test.ts: classifies unknown fixtures, guarded progress and engine errors without a successful verdict; a failing synthetic emblem ability throws during start and publishes no fixture callback events; a public engine decision failure cannot return success.",
+    "reloadRestart": "avatar-lab.test.ts: resumes a genuine suspended first-turn trigger after serialization and rejects stale actors; pays avatar exhaustion through a normal activation and preserves the suspended cost on reload. qa-scenes-battle.test.ts validates serialized LOAD_STATE. Four native route cases preserve committed snapshot and request after reload.",
+    "partialWrite": "Synthetic failed start callback remains empty. Runtime invalid avatar/stage/side/ambiguous requests retain fallback without lab history. Successful fixtures publish only after start succeeds.",
+    "invalidStaleInput": "Runtime UUID/cross-domain/side/variant/stage/ambiguous public cases, case-insensitive admitted-prefix witness, prelude complete request key including avatar, and wrong-side/duplicate prompt answer bounce.",
+    "concurrentActors": "Both controller fixtures reject the opposite side activation/answer and duplicate answer; no new shared mutable operation or persistence protocol."
+  },
+  "limitations": [
+    "Initialization/first-turn progress is distinct from ability exercise. Current production pending avatars remain pending with exercised=false. Content-specific avatar trigger and activation workflows remain their authored content QA.",
+    "Zero filed production entities: no weighted fuzz or D21 entity sample applies.",
+    "Existing battle hand bottoms meet the viewport crop; mobile counters retain existing tight spacing."
+  ],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "runtimeProcesses": "Every command receipt records the actual finite child PID/group and terminal exit. Native sweep and route contexts/servers completed normal cleanup; no owned live process or provider remains.",
+  "review": "Parent-owned fresh read-only gpt-5.6-sol exact-source review follows the one local commit under the temporary human-authorized routing.",
+  "commitMeasurementQualification": "The evidence cutoff immediately precedes final schema/staging/commit. Coordinator records the actual Git commit timestamp and terminal handoff tail separately, completing gross dispatch-to-commit accounting."
+}

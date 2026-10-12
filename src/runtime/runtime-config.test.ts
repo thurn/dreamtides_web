@@ -41,6 +41,14 @@ describe("runtime-config", () => {
       expect(parseRuntimeConfig(`?goto=card-lab&card=${card}&labStage=${encodeURIComponent(stage)}`).gotoScene).toBe(`card-lab:${card}:base:player:${encodeURIComponent(stage)}`);
     });
 
+    it("keeps explicit avatar requests separate from card UUIDs and preserves ambiguous requests", () => {
+      const uuid = "5e5e5e5e-0000-4000-8000-000000021901";
+      expect(parseRuntimeConfig(`?goto=card-lab&avatar=${uuid}`).gotoScene).toBe(`card-lab-avatar:${uuid}:base:player`);
+      expect(parseRuntimeConfig(`?goto=card-lab&avatar=${uuid}&as=enemy&variant=amplified`).gotoScene).toBe(`card-lab-avatar:${uuid}:amplified:enemy`);
+      for (const extra of [`&card=${uuid}`, `&avatar=${uuid}`]) expect(parseRuntimeConfig(`?goto=card-lab&avatar=${uuid}${extra}`).gotoScene).toBe(`card-lab-avatar-ambiguous:${uuid}:base:player`);
+      expect(parseRuntimeConfig(`?goto=card-lab&avatar=${uuid}&labStage=%7B%7D`).gotoScene).toBe(`card-lab-avatar:${uuid}:base:player:%7B%7D`);
+    });
+
     describe("gambleGameId", () => {
       it("forces any implemented Gamble game by its URL value", () => {
         expect(parseRuntimeConfig("?gambleGame=three-gate").gambleGameId).toBe(

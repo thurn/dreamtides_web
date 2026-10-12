@@ -316,7 +316,7 @@ describe("QA lab observation cache", () => {
       Object.assign(original.win, { __cardLab: report });
       original.events.get("pagehide")?.();
       expect(document(`?${query}`).win).toMatchObject({ __cardLab: report });
-      for (const field of ["game", "goto", "card", "variant", "as", "seed", "labStage"]) {
+      for (const field of ["game", "goto", "card", "avatar", "variant", "as", "seed", "labStage"]) {
         const stale = new URLSearchParams(query);
         stale.set(field, "different");
         expect(document(`?${stale}`).win).not.toHaveProperty("__cardLab");

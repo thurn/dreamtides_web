@@ -32,6 +32,48 @@ import {
 } from "./qa-scenes.fixtures";
 
 describe("the battle layer QA scenes", () => {
+  it("loads an exact avatar emblem and presentation for either controller and rejects invalid requests atomically", () => {
+    const content = battleSceneContent();
+    const avatar = content.avatars[0];
+    const build = (token: string) => {
+      const id = parseQaSceneId(token);
+      const journey = buildQaScene(id, content, SCENE_OPTIONS);
+      if (journey === null) throw new Error("Avatar scene did not build");
+      return { journey, battle: buildQaSceneBattle(id, content, journey) };
+    };
+    for (const side of ["player", "enemy"] as const) {
+      const { journey, battle } = build(`card-lab-avatar:${avatar.id}:base:${side}`);
+      expect((globalThis as { __cardLab?: unknown }).__cardLab).toMatchObject({ status: "ready", entityKind: "avatar", avatar: avatar.id, cardStatus: "pending", eligibleVariants: ["base"] });
+      expect(battle?.engine.init.avatars).toEqual({ [side]: avatar.id });
+      expect(battle?.engine.slice.committed.sides[side].avatar).toEqual({ id: avatar.id, exhausted: false });
+      expect(battle?.engine.slice.committed.sides[side === "player" ? "enemy" : "player"].avatar).toBeNull();
+      if (side === "player") expect(battle?.init.avatarSummary?.id).toBe(avatar.id);
+      else expect(battle?.init).toMatchObject({ opponentAbilityActive: true, enemyDescriptor: { avatarId: avatar.id, name: avatar.name, abilityText: avatar.renderedText } });
+      const snapshot = { snapshot: journey, battle };
+      const loaded = validateLoadedState({ ...initialFoldState(journey.seed, TEST_CONTENT_CONFIG), journey }, JSON.parse(JSON.stringify(snapshot)) as typeof snapshot);
+      expect(journeyBattleOf(loaded?.battle ?? null)?.engine.slice).toEqual(battle?.engine.slice);
+      const uppercase = build(`CARD-LAB-AVATAR:${avatar.id}:base:${side}`).battle;
+      expect((globalThis as { __cardLab?: unknown }).__cardLab).toMatchObject({ status: "ready", entityKind: "avatar", avatar: avatar.id });
+      expect(uppercase?.engine.init.avatars).toEqual({ [side]: avatar.id });
+    }
+    const errors = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    try {
+      for (const [prefix, uuid, suffix, reason] of [
+        ["card-lab-avatar", "bogus", "base:player", "unknownAvatar"],
+        ["card-lab-avatar", SYNTHETIC.vanilla1.id, "base:player", "unknownAvatar"],
+        ["card-lab-avatar", avatar.id, "base:other", "unknownSide"],
+        ["card-lab-avatar", avatar.id, "bogus:player", "unknownVariant"],
+        ["card-lab-avatar", avatar.id, "amplified:player", "ineligibleVariant"],
+        ["card-lab-avatar", avatar.id, "base:player:%7B%7D", "invalidStage"],
+        ["card-lab-avatar-ambiguous", avatar.id, "base:player", "ambiguousRequest"],
+      ]) {
+        const { battle } = build(`${prefix}:${uuid}:${suffix}`);
+        expect((globalThis as { __cardLab?: unknown }).__cardLab).toMatchObject({ status: "rejected", reason });
+        expect(battle?.engine.slice.history).toBeUndefined();
+      }
+    } finally { errors.mockRestore(); }
+  });
+
   it("loads a forced Dreamwell UUID for either side and validates requests before publishing it", () => {
     const content = battleSceneContent();
     const card = content.dreamwellCards[0];

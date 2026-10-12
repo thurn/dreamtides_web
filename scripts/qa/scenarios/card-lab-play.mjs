@@ -18,11 +18,11 @@
 // captures the settled board.
 
 /**
- * @typedef {{ card: string, status: string, reason: string | null, detail: string | null, eligibleVariants: string[], entityKind: "card" | "dreamwell" | null, cardStatus: string | null, cardType: string | null }} CardLabReport
+ * @typedef {{ card: string, avatar?: string, side?: string, status: string, reason: string | null, detail: string | null, eligibleVariants: string[], entityKind: "card" | "dreamwell" | "avatar" | null, cardStatus: string | null, cardType: string | null }} CardLabReport
  * @typedef {{ id: string, owner: string, zone: string, printing: { kind: string, cardId?: string } }} ProbeInstance
  * @typedef {{ kind: string, side: string, id: string, candidates?: string[] }} ProbePrompt
  * @typedef {{ seq: number, index: number, kind: string, instance: string | null, event: { kind: string, side?: string, card?: string, energyAdded?: number, active?: string, phase?: string, cause?: string, current?: number, max?: number, maxChange?: number } }} ProbeEvent
- * @typedef {{ slice: { committed: { instances: Record<string, ProbeInstance>, stack: unknown[], result: unknown, turn: { active: string, phase: string }, dreamwell: { next: number }, sides: Record<string, { currentEnergy: number, maxEnergy: number }> }, inFlight: unknown }, decision: { side: string } | null, pending: ProbePrompt | null, events: ProbeEvent[] }} EngineProbe
+ * @typedef {{ slice: { committed: { instances: Record<string, ProbeInstance>, stack: unknown[], result: unknown, turn: { active: string, phase: string }, dreamwell: { next: number }, sides: Record<string, { currentEnergy: number, maxEnergy: number, avatar?: { id: string, exhausted: boolean } | null }> }, inFlight: unknown }, decision: { side: string } | null, pending: ProbePrompt | null, events: ProbeEvent[] }} EngineProbe
  * @typedef {Window & { __cardLab?: CardLabReport, __engineProbe?: EngineProbe }} LabWindow
  * @typedef {{ verdict: "pass" | "fail" | "pending" | "skip", notes: string, failureKinds: ("timeout" | "product" | "unknown")[], lab?: CardLabReport, screens?: string[] }} CardLabPlayResult
  */
@@ -32,7 +32,7 @@
  * @returns {Promise<CardLabPlayResult>}
  */
 export default async function cardLabPlay(qa) {
-  const { card, variant, as: side } = qa.args;
+  const { card, avatar, variant, as: side } = qa.args;
   const deadline = Date.now() + Number(qa.args.timeoutMs ?? "60000");
   /** @type {string[]} */
   const failures = [];
@@ -55,7 +55,7 @@ export default async function cardLabPlay(qa) {
   };
 
   try {
-    await qa.open(`/?goto=card-lab&card=${card}&variant=${variant}&as=${side}&seed=1&debug=1`, qa.viewport, { allowErrors: true });
+    await qa.open(`/?goto=card-lab&${avatar === undefined ? `card=${card}` : `avatar=${avatar}`}&variant=${variant}&as=${side}&seed=1&debug=1`, qa.viewport, { allowErrors: true });
     const lab = await qa.waitFor("the card-lab report", () => /** @type {LabWindow} */ (window).__cardLab ?? null, null, { timeout: Math.max(1, deadline - Date.now()), allowErrors: true });
     if (lab.status !== "ready") {
       fail(`card-lab ${String(lab.reason)}${lab.detail === null ? "" : `: ${String(lab.detail)}`}`);
@@ -63,6 +63,51 @@ export default async function cardLabPlay(qa) {
     }
     await qa.waitFor("the engine probe", () => (/** @type {LabWindow} */ (window).__engineProbe === undefined ? null : true), null, { timeout: Math.max(1, deadline - Date.now()) });
     await qa.waitVisible("[data-battle-mobile]", { timeout: Math.max(1000, deadline - Date.now()) });
+
+    if (lab.entityKind === "avatar") {
+      const readAvatar = () => qa.read(({ uuid, owner }) => {
+        const probe = /** @type {LabWindow} */ (window).__engineProbe;
+        if (probe === undefined) throw new Error("the engine probe is gone");
+        const state = probe.slice.committed;
+        const other = owner === "player" ? "enemy" : "player";
+        const exercise = probe.events.filter(({ event }) => {
+          const source = "source" in event ? event.source : null;
+          return (event.kind === "abilityResolved" || event.kind === "triggerResolved") &&
+            typeof source === "object" && source !== null && "kind" in source && source.kind === "avatar" && "side" in source && source.side === owner;
+        });
+        return { avatar: state.sides[owner].avatar ?? null, otherAvatar: state.sides[other].avatar ?? null,
+          matches: state.sides[owner].avatar?.id === uuid, turn: state.turn, result: state.result,
+          day: state.turn.active === owner && state.turn.phase === "day" || probe.events.some(({ event }) => event.kind === "phaseChanged" && event.active === owner && event.phase === "day"),
+          stack: state.stack.length, pending: probe.pending, inFlight: probe.slice.inFlight !== null,
+          decision: probe.decision, exercised: exercise.length > 0, exercise };
+      }, { uuid: avatar, owner: side }, { timeout: Math.max(1, deadline - Date.now()) });
+      let last = await readAvatar();
+      let answered = 0;
+      let passes = 0;
+      try {
+        const run = await qa.battle.playUntil(async (battle) => {
+          last = await readAvatar();
+          const controls = last.decision?.side !== "player" || battle.canPass || last.result !== null;
+          return last.pending === null && !last.inFlight && last.stack === 0 && controls &&
+            (last.day || last.result !== null);
+        }, { label: "the requested avatar's first Day", timeout: Math.max(1000, deadline - Date.now()), pollMs: 200,
+          passWhen: () => !last.day || last.stack > 0 });
+        answered = run.answers; passes = run.passes;
+      } catch (error) {
+        fail(error instanceof Error ? error.message : String(error), qa.isTimeout(error) ? "timeout" : "unknown");
+        last = await readAvatar();
+      }
+      if (lab.avatar !== avatar || lab.side !== side || !last.matches || last.otherAvatar !== null) fail("the avatar UUID or controller differs from the requested emblem");
+      const errors = await caps();
+      if (errors.length > 0) fail(`__caps: ${errors.join(" | ")}`);
+      const screens = [];
+      if (qa.args.capture !== undefined && qa.args.capture !== "") {
+        await qa.capture(qa.args.capture); screens.push(`${qa.args.capture}.png`);
+      }
+      return outcome(failures.length > 0 ? "fail" : lab.cardStatus === "pending" ? "pending" : "pass", {
+        lab, avatar: last.avatar, turn: last.turn, exercised: last.exercised, exercise: last.exercise, answered, passes, screens,
+      });
+    }
 
     if (lab.entityKind === "dreamwell") {
       const readDraw = () => qa.read(({ uuid, owner }) => {
