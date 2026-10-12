@@ -1,0 +1,169 @@
+{
+  "bead": "hv-umm2.170",
+  "base": "fc15e846af294d373f6743343ceb6d32eb5257eb",
+  "entities": 3,
+  "newPrimitives": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "reviewPolicy": {
+    "coreReview": false,
+    "nonTestLinesChanged": 58,
+    "required": false,
+    "reason": "Composition-only modules below 100 non-test changed lines; no phase gate or new primitive."
+  },
+  "preflight": {
+    "pass": 32,
+    "skip": 28,
+    "fail": 0
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 140949,
+    "wallS": 122.4,
+    "cpuS": 133.6,
+    "failures": 0,
+    "exerciseCounts": [
+      224,
+      280,
+      217
+    ]
+  },
+  "sweep": {
+    "latestCells": {
+      "pass": 32,
+      "skip": 28,
+      "fail": 0
+    },
+    "summaries": [
+      {
+        "event": "cardSweepSummary",
+        "invocation": "invocations/sweep-MM7hpz",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.170/invocations/sweep-MM7hpz",
+        "counts": {
+          "pass": 30,
+          "skip": 28,
+          "fail": 2
+        },
+        "attemptCounts": {
+          "pass": 30,
+          "skip": 28,
+          "fail": 4
+        },
+        "hostLoad": 6.11767578125,
+        "sessions": 3,
+        "leaseYields": 2,
+        "wallMs": {
+          "browserLeaseWait": 42641,
+          "serve": 4643,
+          "scenario": 405051.408875,
+          "cleanup": 5183.39037600001,
+          "execution": 416003.445916,
+          "total": 458644.445916
+        }
+      },
+      {
+        "event": "cardSweepSummary",
+        "invocation": "invocations/sweep-JfUoDQ",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.170/invocations/sweep-JfUoDQ",
+        "counts": {
+          "pass": 2
+        },
+        "attemptCounts": {
+          "pass": 2
+        },
+        "hostLoad": 10.41845703125,
+        "sessions": 1,
+        "leaseYields": 0,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 1675,
+          "scenario": 12971.178333,
+          "cleanup": 556.224166,
+          "execution": 15291.701125000001,
+          "total": 15298.701125000001
+        }
+      },
+      {
+        "event": "cardSweepSummary",
+        "invocation": "invocations/sweep-sk3Tbu",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.170/invocations/sweep-sk3Tbu",
+        "counts": {
+          "pass": 2
+        },
+        "attemptCounts": {
+          "pass": 2
+        },
+        "hostLoad": 9.48583984375,
+        "sessions": 1,
+        "leaseYields": 0,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 1360,
+          "scenario": 13041.565708,
+          "cleanup": 552.6139579999999,
+          "execution": 15015.323708,
+          "total": 15022.323708
+        }
+      }
+    ],
+    "initialFailureDisposition": "Two navigation ERR_ABORTED failures have passing fresh filtered invocations; two timeout-only failures passed built-in fresh retries. All original attempts and raw reports retained. Cause undetermined, not attributed to card logic."
+  },
+  "judged": {
+    "cases": 8,
+    "invocation": "run-h7rrTM",
+    "wallMs": {
+      "browserLeaseWait": 6,
+      "serve": 1360,
+      "scenario": 42815,
+      "total": 44251
+    },
+    "caps": [],
+    "fixtureOnlyInvalidAttempts": [
+      "run-Wg5mEZ",
+      "run-0Tt8Ff"
+    ],
+    "correction": "Declare the requested variant in hand through the solver and play it; explicit rank UUIDs mint base cards."
+  },
+  "tests": {
+    "addedScenarios": 8,
+    "addedScenarioLines": 131,
+    "addedTestFiles": 0,
+    "jsdomDelta": 0
+  },
+  "runtimeLedger": {
+    "serverProcessGroups": [
+      47414,
+      48749,
+      51320,
+      54702,
+      57209,
+      20796,
+      36184,
+      43719
+    ],
+    "ports": [
+      5174,
+      5274
+    ],
+    "state": "All owned processes settled; each runner confirmed cleanup and free port. Browser provider sessions closed through runner."
+  },
+  "validation": {
+    "review": {
+      "wallS": 44.1,
+      "hostLoad": 18.45263671875,
+      "testFiles": 223,
+      "tests": 3588,
+      "start": "2026-10-12T13:40:48.273Z",
+      "scope": "full npm run review wrapper including preparation and asset restoration, measured from step timestamps"
+    },
+    "knip": {
+      "stepS": 1.7,
+      "passed": true
+    },
+    "focused": {
+      "scenarios": 8,
+      "passed": true
+    },
+    "coverageGate": "Included in passing review related suite"
+  }
+}

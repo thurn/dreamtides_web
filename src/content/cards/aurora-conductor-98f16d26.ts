@@ -1,3 +1,6 @@
+import { all, characterYouControl, controls } from "../../engine/dsl/builders";
+import { onNight, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,20 @@ export default card({
   cardNumber: 140,
   art: { x: 0.057, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(
+      onNight(),
+      p.gainSpark(
+        all(characterYouControl({ challenging: true })),
+        variant.amplified ? 4 : 3,
+      ),
+      {
+        condition: {
+          ...controls(characterYouControl({ challenging: true })),
+          atMost: 1,
+        },
+      },
+    ),
+  ],
+  verifiedText: "1jhel3grdfg",
 });

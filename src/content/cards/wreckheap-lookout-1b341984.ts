@@ -1,3 +1,10 @@
+import {
+  characterYouControl,
+  controls,
+  thisCardIn,
+} from "../../engine/dsl/builders";
+import { onNight, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +28,18 @@ export default card({
   cardNumber: 418,
   art: { x: 0, y: 1, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(
+      onNight(),
+      p.payTo(
+        { energy: 2 },
+        p.materialize(thisCardIn("void"), { awakened: variant.amplified }),
+      ),
+      {
+        zone: "void",
+        condition: controls(characterYouControl({ challenging: true })),
+      },
+    ),
+  ],
+  verifiedText: "2alwko8dyqm",
 });

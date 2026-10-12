@@ -1,3 +1,11 @@
+import {
+  abandonCost,
+  activated,
+  energy,
+  exhaustSelf,
+  self,
+} from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +29,11 @@ export default card({
   cardNumber: 226,
   art: { x: 0.3, y: 1, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated(
+      [energy(2), exhaustSelf(), abandonCost({ another: true }, 2)],
+      p.sequence(p.gainSpark(self(), variant.amplified ? 3 : 2), p.draw(2)),
+    ),
+  ],
+  verifiedText: "7on8rhopgj",
 });
