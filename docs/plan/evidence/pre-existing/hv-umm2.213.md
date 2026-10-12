@@ -1,0 +1,7 @@
+# hv-umm2.213 pre-existing issues
+
+Astral Interface UUID ee1ef770-29ea-4a63-a1f9-7e97b5b8870d offers the whole updated hand for discard. Actual resumed desktop/mobile offers show prior physical card i1 and bonus-drawn i2 with the same purple legal ring; selecting i1 adds orange emphasis. The just-drawn card has no distinct emphasis. Both candidate wrappers have no highlighted attribute. Actual image inspection plus the adapter ringCandidates mapping supplies visual proof, rather than highlighted=false alone.
+
+Physical behavior passes: i1 reaches the void, i2 remains in hand, public draw precedes discard, Caps is empty, and candidate/submit geometry supports the actual clicks. Four actual2x captures: astral-desktop-offer.png, astral-desktop-selected.png, astral-mobile-offer.png, astral-mobile-selected.png. The two judged ledger rows intentionally remain **fail**, linked to **hv-umm2.566** for the outside-Areas UI correction and rejudgment; they are not waived or passing visual judgments.
+
+Initial sampled attempts were fixture failures: the compact probe omits purpose, and the forced enemy pass resolved a sole-card bonus before post-load hand staging. Canonical569 supplies declarative initial hands;570 correctly classifies unknown declarations. Both prerequisites are landed, and this original bead's resumed declared-hand workflow now supplies its own actual functional evidence. Earlier checkpoint source/120sweep rows and failed receipts remain preserved; none was submitted as a candidate.

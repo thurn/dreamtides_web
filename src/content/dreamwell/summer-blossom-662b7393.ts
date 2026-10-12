@@ -11,5 +11,6 @@ export default dreamwellCard({
   artOwned: true,
   cardNumber: 13,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [],
+  verifiedText: "1gprrba4fn9",
 });

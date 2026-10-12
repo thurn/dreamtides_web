@@ -1,0 +1,574 @@
+{
+  "bead": "hv-umm2.213",
+  "base": "9caed7168332ce4f5977d953578fbf3a4d5b9d81",
+  "originalBase": "5f83560a65f77396f7b1582211222f8ff2ee6c8f",
+  "status": "LOCALLY VALIDATED CONTENT; outside-Areas sampled presentation failure hv-umm2.566 remains; parent certified delivery owed",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T17:25:24+00:00",
+    "endUtc": "2026-10-12T19:07:26.246460+00:00",
+    "provenance": "Gross interrupted elapsed first claim to precommit cutoff. Includes released prerequisite/wait intervals and overlaps569/570; explicitly NOT contiguous ownership, CPU, or additive work. Schema/commit tail excluded and qualified; Git retains actual final commit time.",
+    "actualOwnedWindows": [
+      {
+        "start": "2026-10-12T17:25:24Z",
+        "end": "2026-10-12T17:59:58Z",
+        "seconds": 2074.0
+      },
+      {
+        "start": "2026-10-12T18:32:00Z",
+        "end": "2026-10-12T18:35:38Z",
+        "seconds": 218.0
+      },
+      {
+        "start": "2026-10-12T18:53:02Z",
+        "end": "2026-10-12T19:07:26.246460+00:00",
+        "seconds": 864.24646
+      }
+    ],
+    "actualOwnedSeconds": 3156.24646,
+    "originalDispatch": {
+      "pre": "2026-10-12T17:26:46.472978Z",
+      "post": "2026-10-12T17:27:20.447432Z",
+      "helperFirst": "2026-10-12T17:27:30Z",
+      "exactDispatch": "unknown"
+    },
+    "thirdDispatch": {
+      "pre": "2026-10-12T18:57:20.930617Z",
+      "helperFirst": "2026-10-12T18:58:29Z",
+      "exactDispatch": "unknown"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementMin": {
+        "measuredFor": "Explicit gross interrupted elapsed, not contiguous ownership; disjoint owned windows/prerequisite overlaps separately recorded."
+      },
+      "hostLoad": {
+        "measuredFor": "First prepare load sample from parent updated review, not CPU utilization."
+      }
+    }
+  },
+  "scope": {
+    "entityUUIDs": [
+      "662b7393-751c-4aa9-8150-5f20b4d176a4",
+      "cf0f0a05-2a94-407c-8c22-e41b925f9c03",
+      "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
+      "fa8704fe-759f-408d-992d-d8f9d5ffd760",
+      "8f5f2e26-44b5-447b-90d0-eaf22ab29fed",
+      "f61431f3-33bd-42ff-a229-b4013582e86e"
+    ],
+    "sourcePaths": [
+      "src/content/dreamwell/summer-blossom-662b7393.ts",
+      "src/content/dreamwell/glimmering-horizon-cf0f0a05.ts",
+      "src/content/dreamwell/astral-interface-ee1ef770.ts",
+      "src/content/dreamwell/sunset-s-last-gaze-fa8704fe.ts",
+      "src/content/dreamwell/azure-cascade-8f5f2e26.ts",
+      "src/content/dreamwell/ringvale-f61431f3.ts"
+    ],
+    "finalProductionChangedLines": 27,
+    "originalProductionChangedLines": 34,
+    "inheritedCompanion": "Astral exact original bytes already landed with569; current final diff has five modules while original scope and verification cover all six.",
+    "testDelta": {
+      "netLines": 0,
+      "entrypoints": 0,
+      "cases": 0,
+      "jsdomFiles": 0
+    },
+    "printedFields": "Original accepted printed prefixes/energy/order unchanged; all six frozen SHA match after supported updates. Literal verifiedText hashes supplied by expectedVerifiedText mechanism.",
+    "verifiedText": [
+      {
+        "id": "662b7393-751c-4aa9-8150-5f20b4d176a4",
+        "hash": "1gprrba4fn9"
+      },
+      {
+        "id": "cf0f0a05-2a94-407c-8c22-e41b925f9c03",
+        "hash": "2apougg3cfx"
+      },
+      {
+        "id": "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
+        "hash": "73adwzu8jt"
+      },
+      {
+        "id": "fa8704fe-759f-408d-992d-d8f9d5ffd760",
+        "hash": "1kp4e858wcq"
+      },
+      {
+        "id": "8f5f2e26-44b5-447b-90d0-eaf22ab29fed",
+        "hash": "y491632w5m"
+      },
+      {
+        "id": "f61431f3-33bd-42ff-a229-b4013582e86e",
+        "hash": "1cwf85lyp03"
+      }
+    ],
+    "newApiExportsPrimitivesSchemasRoles": [],
+    "C16": "Existing primitive compositions implement legacy behavior. Summer authored empty abilities queues no bonus; Glimmer draws2-minus-hand while below2; Astral draw1 then whole-hand discard1; optional Sunset clamped discard2 then draw2 regardless; Azure character Discover; Ringvale any-kind Discover cost<=2.",
+    "D20": "No new scenario module: pure primitive compositions. Existing Dreamwell-bonus/contracts cover real Night pass, bonus-before-normal-draw, optional/card-flow and public fold contracts.",
+    "D21": "Only Astral sampled(firstByte18); actual desktop/mobile offered+selected 2x captures. Existing discard roles/visuals, no new kind/status. Two explicit judged fails566, not all judgments green.",
+    "coreReview": "Not core and below100 changed non-test lines. Prerequisites569/570 own core reviews settled by parent; no new core seam in213.",
+    "coreFailurePaths": "No new protocols. Existing Dreamwell-bonus public contracts cover failed-step rollback, JSON reload/restart, partial queued-record rejection, invalid/stale/foreign and concurrent duplicate answers; no new tests required for these unchanged compositions."
+  },
+  "sourceSHA256": {
+    "src/content/dreamwell/summer-blossom-662b7393.ts": "13d4345a0e3de8ab514d71edf89ea6ec9c82df327b38e9efc2a22a7b6930c5d3",
+    "src/content/dreamwell/glimmering-horizon-cf0f0a05.ts": "2cd2aa6962af062cab924c3f5f652c46f9ca5124fd9ad0dd3f066d7b236112b8",
+    "src/content/dreamwell/astral-interface-ee1ef770.ts": "180a72e289b18e0eabdbe578df75d0840d79434de8e4fcf8e0ee436d8315de66",
+    "src/content/dreamwell/sunset-s-last-gaze-fa8704fe.ts": "b4953131e7e34e716062a80ea3842427b3155e7d78291b916a64bf42e60ed394",
+    "src/content/dreamwell/azure-cascade-8f5f2e26.ts": "20d1bbb25af4e245ccb0aa7a87e10242f81965b18998ce660f10d42267a69b58",
+    "src/content/dreamwell/ringvale-f61431f3.ts": "d61540a64133240d1a2b2b9607701361ff29db4cdc5a2018bc9929ed8242e034"
+  },
+  "validation": [
+    {
+      "name": "focus",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/engine/rules/dreamwell.test.ts"
+      ],
+      "pid": 67422,
+      "observerPid": 67158,
+      "startUtc": "2026-10-12T17:34:45.738931+00:00",
+      "endUtc": "2026-10-12T17:34:55.022665+00:00",
+      "wallS": 9.284,
+      "exit": 0,
+      "log": "/tmp/hv-213-focus.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 8225,
+      "observerPid": 8200,
+      "startUtc": "2026-10-12T17:35:42.930561+00:00",
+      "endUtc": "2026-10-12T17:36:28.104001+00:00",
+      "wallS": 45.173,
+      "exit": 0,
+      "log": "/tmp/hv-213-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 64319,
+      "observerPid": 64305,
+      "startUtc": "2026-10-12T17:37:11.063382+00:00",
+      "endUtc": "2026-10-12T17:37:15.723625+00:00",
+      "wallS": 4.66,
+      "exit": 0,
+      "log": "/tmp/hv-213-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "fuzz",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "662b7393-751c-4aa9-8150-5f20b4d176a4,cf0f0a05-2a94-407c-8c22-e41b925f9c03,ee1ef770-29ea-4a63-a1f9-7e97b5b8870d,fa8704fe-759f-408d-992d-d8f9d5ffd760,8f5f2e26-44b5-447b-90d0-eaf22ab29fed,f61431f3-33bd-42ff-a229-b4013582e86e"
+      ],
+      "pid": 8223,
+      "observerPid": 8199,
+      "startUtc": "2026-10-12T17:35:42.930261+00:00",
+      "endUtc": "2026-10-12T17:38:26.494966+00:00",
+      "wallS": 163.563,
+      "exit": 0,
+      "log": "/tmp/hv-213-fuzz.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "662b7393-751c-4aa9-8150-5f20b4d176a4,cf0f0a05-2a94-407c-8c22-e41b925f9c03,ee1ef770-29ea-4a63-a1f9-7e97b5b8870d,fa8704fe-759f-408d-992d-d8f9d5ffd760,8f5f2e26-44b5-447b-90d0-eaf22ab29fed,f61431f3-33bd-42ff-a229-b4013582e86e",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 8224,
+      "observerPid": 8198,
+      "startUtc": "2026-10-12T17:35:42.930272+00:00",
+      "endUtc": "2026-10-12T17:35:44.142504+00:00",
+      "wallS": 1.212,
+      "exit": 0,
+      "log": "/tmp/hv-213-preflight.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.213",
+        "--cards",
+        "662b7393-751c-4aa9-8150-5f20b4d176a4,cf0f0a05-2a94-407c-8c22-e41b925f9c03,ee1ef770-29ea-4a63-a1f9-7e97b5b8870d,fa8704fe-759f-408d-992d-d8f9d5ffd760,8f5f2e26-44b5-447b-90d0-eaf22ab29fed,f61431f3-33bd-42ff-a229-b4013582e86e",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 93185,
+      "observerPid": 93175,
+      "startUtc": "2026-10-12T17:43:23.711475+00:00",
+      "endUtc": "2026-10-12T17:44:33.694111+00:00",
+      "wallS": 69.982,
+      "exit": 0,
+      "log": "/tmp/hv-213-sweep.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "judged",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.213",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 98656,
+      "observerPid": 98648,
+      "startUtc": "2026-10-12T17:44:43.624694+00:00",
+      "endUtc": "2026-10-12T17:45:27.672184+00:00",
+      "wallS": 44.047,
+      "exit": 130,
+      "log": "/tmp/hv-213-judged.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "judged-corrected",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.213",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 28891,
+      "observerPid": 28880,
+      "startUtc": "2026-10-12T17:45:43.040971+00:00",
+      "endUtc": "2026-10-12T17:46:39.880547+00:00",
+      "wallS": 56.839,
+      "exit": 1,
+      "log": "/tmp/hv-213-judged-corrected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "213-updated-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 45871,
+      "pid": 45898,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-cards01-213",
+      "startUtc": "2026-10-12T18:54:36.128004+00:00",
+      "endUtc": "2026-10-12T18:55:22.875959+00:00",
+      "wallS": 46.74777758399432,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/213-updated-review.log"
+    },
+    {
+      "name": "213-updated-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "observerPid": 45872,
+      "pid": 45899,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-cards01-213",
+      "startUtc": "2026-10-12T18:54:36.128015+00:00",
+      "endUtc": "2026-10-12T18:54:40.088549+00:00",
+      "wallS": 3.9605518340104027,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/213-updated-knip.log"
+    },
+    {
+      "name": "213-updated-preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "662b7393-751c-4aa9-8150-5f20b4d176a4,cf0f0a05-2a94-407c-8c22-e41b925f9c03,ee1ef770-29ea-4a63-a1f9-7e97b5b8870d,fa8704fe-759f-408d-992d-d8f9d5ffd760,8f5f2e26-44b5-447b-90d0-eaf22ab29fed,f61431f3-33bd-42ff-a229-b4013582e86e",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "observerPid": 45873,
+      "pid": 45900,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-cards01-213",
+      "startUtc": "2026-10-12T18:54:36.128014+00:00",
+      "endUtc": "2026-10-12T18:54:37.606746+00:00",
+      "wallS": 1.4787579589901725,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/213-updated-preflight.log"
+    },
+    {
+      "name": "judged-resumed",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged",
+        "--bead",
+        "hv-umm2.213",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 64039,
+      "observerPid": 64018,
+      "startUtc": "2026-10-12T18:58:29.668156+00:00",
+      "endUtc": "2026-10-12T18:58:54.903059+00:00",
+      "wallS": 25.234,
+      "exit": 0,
+      "log": "/tmp/hv-213-judged-resumed.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "content-gate-resumed",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 29909,
+      "observerPid": 29890,
+      "startUtc": "2026-10-12T19:03:15.467723+00:00",
+      "endUtc": "2026-10-12T19:03:20.220571+00:00",
+      "wallS": 4.753,
+      "exit": 0,
+      "log": "/tmp/hv-213-content-gate-resumed.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "coverageGate": {
+    "path": "src/engine/content-gates.test.ts",
+    "receipt": "/tmp/hv-213-content-gate-resumed.json",
+    "reason": "Updated review223files4177tests log does not enumerate filename selection; parent authorized only this cheap explicit owning gate, passed without aggregate rerun."
+  },
+  "originalFuzz": {
+    "games": 300,
+    "steps": 154337,
+    "prompts": 5983,
+    "failures": 0,
+    "wrapperWallS": 163.563,
+    "reportedEngineWallS": 162.4,
+    "reportedCpuS": 177.5,
+    "heavyAcquisition": "not captured; queue duration unknown, not inferred from differences"
+  },
+  "updates": "Parent supported updates preserve exact six module bytes; original focused/review/fuzz/preflight/sweep remain tied to original base and SHA manifest. Updated review/Knip/preflight and resumed exact-scene QA validate combined inherited prerequisite behavior. No redundant install/full/fuzz/default sweep.",
+  "prerequisites": {
+    "569": {
+      "claim": "2026-10-12T17:59:59Z",
+      "cutoff": "2026-10-12T18:27:04.119882Z",
+      "commit": "2026-10-12T18:27:54Z",
+      "evidence": "docs/plan/evidence/measurements/hv-umm2.569.json",
+      "qualification": "Its earlier functional witness is not original213 completed acceptance."
+    },
+    "570": {
+      "claim": "2026-10-12T18:35:51Z",
+      "cutoff": "2026-10-12T18:50:10.347117Z",
+      "commit": "2026-10-12T18:51:10Z",
+      "evidence": "docs/plan/evidence/measurements/hv-umm2.570.json"
+    },
+    "accounting": "Separate prerequisite records overlap gross213 elapsed; do not sum these as CPU or add to actual213 owned time."
+  },
+  "originalCheckpoints": {
+    "oids": "7fca\u2192dd4627b38b395a9f7c703a77c1981cd89f149231\u21928d2cad40af\u219262835b56baf27da8ecd7cb00422aff82dc0bb3d5; all unsubmitted intermediates",
+    "parentGitCommands": [
+      {
+        "pid": 60409,
+        "observerPid": 60407,
+        "start": "2026-10-12T17:55:15.856432Z",
+        "end": "2026-10-12T17:55:15.884690Z",
+        "wallS": 0.028291
+      },
+      {
+        "pid": 21558,
+        "observerPid": 21555,
+        "start": "2026-10-12T17:57:49.135957Z",
+        "end": "2026-10-12T17:57:49.189141Z",
+        "wallS": 0.053215
+      }
+    ],
+    "provenance": "Parent supplied actual native checkpoint/update receipts. No candidate submitted for them."
+  },
+  "originalSetup": {
+    "install": {
+      "pid": 19175,
+      "observerPid": 19165,
+      "start": "2026-10-12T17:25:33.652262Z",
+      "end": "2026-10-12T17:25:36.012981Z",
+      "wallS": 2.360726,
+      "exit": 0
+    },
+    "hashCommand": {
+      "pid": 47657,
+      "observerPid": 47647,
+      "start": "2026-10-12T17:33:59.178620Z",
+      "end": "2026-10-12T17:33:59.926083Z",
+      "wallS": 0.747,
+      "exit": 0,
+      "note": "Actual earlier observed wrapper; hash JSON array preserved separately, exact argv not repeated/invented."
+    }
+  },
+  "qa": {
+    "sweep": {
+      "rows": 120,
+      "pass": 12,
+      "skip": 108,
+      "fail": 0,
+      "all12RawReportsClear": "Original audit /tmp/hv-213-current-audit.json; original paths/120-row bytes retained.",
+      "commitBase": "5f83560a65f77396f7b1582211222f8ff2ee6c8f",
+      "prefixSHA256": "ed3e140ba9941e6956820499e72882812fd573d085899ec6a0b38d7b506ae86e"
+    },
+    "judged": {
+      "rows": 2,
+      "functional": "pass both viewports",
+      "verdict": "fail566 both, outside Areas with concrete fix/rejudgment home",
+      "rawReport": "invocations/run-nR1Ecn/judged.result.json",
+      "caps": [],
+      "captures": {
+        "astral-desktop-offer.png": [
+          2880,
+          1800
+        ],
+        "astral-desktop-selected.png": [
+          2880,
+          1800
+        ],
+        "astral-mobile-offer.png": [
+          780,
+          1688
+        ],
+        "astral-mobile-selected.png": [
+          780,
+          1688
+        ]
+      },
+      "actualDpr": 2,
+      "servedCleanCheckpoint": "62835b56baf27da8ecd7cb00422aff82dc0bb3d5",
+      "ledgerCommitBase": "9caed7168332ce4f5977d953578fbf3a4d5b9d81",
+      "sourceBinding": "Current six SHA manifest binds compiled body bytes. Ledger records task base, not future amendedOID."
+    },
+    "grossCorrection": {
+      "start": "2026-10-12T17:44:43.624694Z",
+      "end": "2026-10-12T18:58:54.903059+00:00",
+      "minutes": 74.18797275,
+      "qualification": "Interrupted span includes569/570/native/released waits; ends at actual original213 functional QA witness. Separate visual failure566 remains owed."
+    },
+    "failedOriginalAttempts": "Initial98656/98648 exit130/44.047s bad compact-purpose predicate; corrected28891/28880 exit1/56.839s proves automatic bonus discard before post-load labAddCard. Both fixture failures/Caps empty, normal cleanup, no provider quarantine. Original failed script preserved /tmp/hv-213-original-failed-judged-preserved.mjs.",
+    "currentLifetime": {
+      "owner": {
+        "token": "3b51d0fb-5ec4-4085-b1b4-385ac374ddff",
+        "pid": 64039,
+        "bead": "hv-umm2.213",
+        "label": "judged",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-cards01-213",
+        "slot": 0,
+        "port": 5174,
+        "startedAt": "2026-10-12T18:58:31.889Z",
+        "providerState": "active",
+        "mcpSessionId": "0b12b99b-456b-41ed-9934-d48ef4704921",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "server": {
+        "token": "ad16af5d-d558-4cba-b9ea-1df8a139e006",
+        "runner": {
+          "pid": 64039,
+          "group": 64018,
+          "started": "Mon Oct 12 11:58:29 2026",
+          "state": "S",
+          "command": "node scripts/qa/run-scenario.mjs judged --bead hv-umm2.213 --viewports desktop,mobile"
+        },
+        "server": {
+          "pid": 64084,
+          "group": 64084,
+          "started": "Mon Oct 12 11:58:29 2026",
+          "state": "Rs",
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/dreamwell-cards01-213/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json ad16af5d-d558-4cba-b9ea-1df8a139e006 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+        },
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell-cards01-213",
+        "port": 5174
+      }
+    },
+    "cleanup": "Actual resumed runner terminal0 and normal serverPG64084 port5174 cleanup/portfree at lifetime end. Own owners absent; shared MCP8931 and peer records untouched.",
+    "parentAudit": "/tmp/dreamtides-executor-01a12e91/213-resumed-parent-qa-audit.json"
+  },
+  "resources": {
+    "historical": "All21original identities absent17:55:22.186165Z; original normal cleanup proof retained, not reclassified by potential later PID reuse. Prerequisite runtime ledgers remain separate.",
+    "currentObservedUtc": "2026-10-12T19:07:26.246460+00:00",
+    "pids": {
+      "29890": "absent",
+      "29909": "absent",
+      "40811": "absent",
+      "40828": "absent",
+      "45871": "absent",
+      "45872": "absent",
+      "45873": "absent",
+      "45898": "absent",
+      "45899": "absent",
+      "45900": "absent",
+      "64018": "absent",
+      "64039": "absent",
+      "64084": "absent"
+    },
+    "slots": {
+      "0": "Owner file absent",
+      "1": "Own owner absent; peer record preserved"
+    },
+    "writers": "Finite evidence write now; final schema/amend tail follows then no further writes."
+  },
+  "retainedReadErrors": "Original guessed third dreamwell.test.ts selector did not exist: focused command actually executed TWO files2020tests, including existing contracts and content gates; no third-file coverage claimed. Earlier guessed artifact/config/legacy/glob paths corrected read-only, exact subprocess timing/PIDs unknown; elapsed in gross/owned windows. Parent sourceACK JS parse rejection invoked no nested action, corrected actual native ACK. Final readonly probe once misread hash JSON array as wrapper; corrected no source effects. Parent screenshot/runtime guessed path reads likewise had no source effect.",
+  "thirdEntryTriggers": {
+    "receipt": "/tmp/dreamtides-executor-01a12e91/213-third-triggers.json",
+    "pid": 40828,
+    "observerPid": 40811,
+    "exit": 0,
+    "wallS": 0.250258
+  },
+  "remaining": "Parent exact candidate/certified promotion/cleanup; outside-Areas566 presentation correction/rejudgment. No own additional source/test/browser work."
+}

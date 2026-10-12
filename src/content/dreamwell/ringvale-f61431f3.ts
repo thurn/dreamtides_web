@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import { discover } from "../../engine/effects/primitives/discover";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: false,
   cardNumber: 24,
   tags: [],
-  pending: true,
+  abilities: () => [event(discover({ costAtMost: 2 }))],
+  verifiedText: "1cwf85lyp03",
 });

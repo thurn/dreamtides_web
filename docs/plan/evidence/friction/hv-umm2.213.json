@@ -1,0 +1,37 @@
+{
+  "bead": "hv-umm2.213",
+  "phase": 5,
+  "implementMin": 102.037441,
+  "implementWindow": {
+    "start": "2026-10-12T17:25:24+00:00",
+    "end": "2026-10-12T19:07:26.246460+00:00"
+  },
+  "localValidationS": {
+    "focus": 9.284,
+    "review": 45.173,
+    "knip": 4.66,
+    "fuzz": 163.563,
+    "preflight": 1.212,
+    "sweep": 69.982,
+    "judged": 44.047,
+    "judged-corrected": 56.839,
+    "213-updated-review": 46.74777758399432,
+    "213-updated-knip": 3.9605518340104027,
+    "213-updated-preflight": 1.4787579589901725,
+    "judged-resumed": 25.234,
+    "content-gate-resumed": 4.753
+  },
+  "hostLoad": 15.07666015625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 74.187973,
+      "note": "Gross interrupted sampled-setup correction17:44:43.624694 through actual resumed213 functional QA18:58:54.903059. Includes initial compact-pending predicate error, missing initial hand staging, canonical569/570 repairs, released intervals/native waits. Not active editing or CPU; three actual ownership windows and overlapping prerequisite records are separate in measurements. Presentation fail566 remains, not claimed green."
+    }
+  ]
+}
