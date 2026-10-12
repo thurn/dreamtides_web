@@ -1130,7 +1130,10 @@ A card can **gain Reclaim** from an effect, as in "Choose a card in your void to
 gain reclaim" or "Erode 1. That card gains reclaim 0●." "Choose a card in your
 void" chooses that card as a target (see [Targeting](#targeting)); "that card"
 after Erode is the card the Erode put into your void, and names no card when
-Erode caused Fatigue instead. Gained Reclaim works exactly like printed Reclaim.
+Erode caused Fatigue instead. "When you discard a card, it gains reclaim" gives
+the discarded card Reclaim in the void it entered, its owner's, and gives
+nothing to a card that left the void before the ability resolves or ceased to
+exist instead of entering it. Gained Reclaim works exactly like printed Reclaim.
 With no stated duration it is permanent and travels with the card across zones
 (see [Zone Changes](#zone-changes)); "until end of turn" ends it then, wherever
 the card is. A grant to a group, as in "Until end of turn, events in

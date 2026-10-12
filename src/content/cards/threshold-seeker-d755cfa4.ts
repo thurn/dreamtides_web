@@ -1,3 +1,6 @@
+import { activated, discardCost, energy, exhaustSelf } from "../../engine/dsl/builders";
+import { triggered, triggeringCard, whenDiscard } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +23,9 @@ export default card({
   artOwned: false,
   cardNumber: 170,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([energy(2), exhaustSelf(), discardCost()], p.draw(variant.amplified ? 2 : 1)),
+    triggered(whenDiscard(), p.grantReclaim(triggeringCard())),
+  ],
+  verifiedText: "1pjx91pc4hk",
 });

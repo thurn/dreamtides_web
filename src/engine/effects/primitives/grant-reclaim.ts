@@ -1,5 +1,5 @@
 import { startContinuous } from "../../continuous/resolve";
-import type { Cost, Duration, ZoneCardSpec } from "../../dsl/types";
+import type { Cost, Duration, SubjectSpec, ZoneCardSpec } from "../../dsl/types";
 import type { InstanceId } from "../../state/ids";
 import type { ContinuousChange } from "../../state/types";
 import type { StepContext } from "../../steps/types";
@@ -16,14 +16,21 @@ export interface ReclaimMovedBy {
   readonly effect: EffectNode;
 }
 
-/** The void cards a grant names: a reference to cards in a void, or the cards a nested effect put there. */
-export type ReclaimCards = ZoneCardSpec | ReclaimMovedBy;
+/**
+ * The void cards a grant names: a reference to cards in a void, the cards a
+ * nested effect put there, or "it", the card a trigger concerns
+ * (`triggeringCard()`), as in "When you discard a card, it gains reclaim".
+ * The triggering card gains Reclaim only while it is in a void as the
+ * ability resolves (RD-hv-umm2.494-1).
+ */
+export type ReclaimCards = ZoneCardSpec | ReclaimMovedBy | SubjectSpec;
 
 /**
  * "Choose a card in your void to gain reclaim", "That card gains reclaim
- * 0●", "Until end of turn, cards in your void gain reclaim" (rules §
- * Keywords and Effects → Reclaim): each card `cards` names in a void as it
- * resolves gains Reclaim (layer 3) through a floating change announced by
+ * 0●", "Until end of turn, cards in your void gain reclaim", "When you
+ * discard a card, it gains reclaim" (rules § Keywords and Effects →
+ * Reclaim): each card `cards` names in a void as it resolves gains Reclaim
+ * (layer 3) through a floating change announced by
  * `effectStarted`, with `costs` when the text states a Reclaim cost. A card
  * with a granted cost is played from the void for those costs in place of a
  * printed or deck-entry Reclaim cost (rules/timing.ts `routeCosts`); plain
@@ -79,7 +86,7 @@ export function reclaimMovedBy(effect: EffectNode): ReclaimMovedBy {
 /**
  * "<cards> gain(s) reclaim", or "reclaim N●" with `costs`, for `duration`
  * (or the enclosing `forDuration`'s, else permanently). `cards` names cards
- * in a void only.
+ * in a void only; a triggering card gains it only while it is in a void.
  */
 export function grantReclaim(
   cards: ReclaimCards,
