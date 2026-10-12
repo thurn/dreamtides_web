@@ -4,7 +4,7 @@ import { publicEvent } from "../types";
 export interface ReturnedToHandEvent {
   readonly kind: "returnedToHand";
   readonly instance: InstanceId;
-  /** The owner, whose hand the card returns to. */
+  /** The player whose hand receives the returned card. */
   readonly side: Side;
 }
 

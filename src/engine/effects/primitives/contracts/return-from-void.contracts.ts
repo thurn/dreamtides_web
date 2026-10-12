@@ -52,7 +52,7 @@ const alreadyReturned = fixture(8, "character", () => [
   triggered(onDissolved(), returnFromVoid(self())),
   triggered(onDissolved(), returnFromVoid(self(), { pay: 1 })),
 ]);
-// A variable option is accepted structurally by the baseline builder, which ignores the new destination.
+// Shared synthetic options pay once and return the named cards to the resolving controller's hand.
 const namedOptions = { pay: 1, toYourHand: true } as const;
 const farewell = fixture(9, "event", () => [event(floating(whenDissolved(characterYouControl()), returnFromVoid(triggeringCard(), namedOptions)))]);
 const kill = fixture(10, "event", () => [event(dissolve(target(characterYouControl())))]);

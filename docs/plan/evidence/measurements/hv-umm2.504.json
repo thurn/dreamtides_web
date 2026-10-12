@@ -1,0 +1,110 @@
+{
+  "bead": "hv-umm2.504",
+  "base": "a0ee437970c4af74b64e6898f1fa6c2aa76f5261",
+  "dispatchWindow": {
+    "proxy": "2026-10-12T05:19:14.572355Z",
+    "firstTool": "2026-10-12T05:19:33Z",
+    "basis": "Parent pre-dispatch brief-write proxy; actual helper receipt unobserved.",
+    "proxyToFirstToolSApprox": 18.428,
+    "evidenceCompletedAt": "2026-10-12T05:22:22.612353+00:00",
+    "implementMin": 4.84,
+    "commitTail": "Final evidence/schema/commit immediately follow this observed UTC stamp; Git uses the same committer timestamp. Start remains an approximate pre-dispatch brief-write proxy, not observed receipt.",
+    "finalCommitStamp": "2026-10-12T05:24:05+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review prepare start 2026-10-12T05:20:14.573Z",
+        "oneMinute": 14.99560546875
+      }
+    }
+  },
+  "reviewBasis": {
+    "bead": "hv-umm2.498",
+    "source": "cf988444ea26cf307209457efd33e216edf7abac",
+    "landedBase": "a0ee437970c4af74b64e6898f1fa6c2aa76f5261",
+    "report": "review-hv-umm2.498.md",
+    "sha": "6a5b3e76154a7eb221aabc69c24e1b1191e90bdcd740391e6d7c3b229791d6b1",
+    "disposition": "Parent verified two P3 comment findings; runtime correctness was accepted and the provider/snapshot were settled. This bead addresses only those comments."
+  },
+  "source": {
+    "rows": [
+      {
+        "file": "src/engine/events/kinds/returned-to-hand.ts",
+        "beforeSha": "ca5b0fc8ca490921f073448e566734fd09079844993a026926b0b3ef59e8d59f",
+        "afterSha": "e7b350185d7d33d695f0b7eec4a52e5009eac27fc83b517716d78b03690a0206",
+        "tokenCount": 49,
+        "beforeTokenSha": "c4397f4371527abe385168315303389490f5097e4c0839e60806881a93a5207a",
+        "afterTokenSha": "c4397f4371527abe385168315303389490f5097e4c0839e60806881a93a5207a",
+        "equal": true
+      },
+      {
+        "file": "src/engine/effects/primitives/contracts/return-from-void.contracts.ts",
+        "beforeSha": "0a9a65d7ccf10ce8e0dbf9039fbcdf65b61b96540733cbfedee1c752a1b4fb9a",
+        "afterSha": "a1117d2ef1d2a59d764e7c9e626d4c9e9465e59899ee08d90eb95d1e22dbd5db",
+        "tokenCount": 4406,
+        "beforeTokenSha": "6fa02fdbc6a753b5631b749e6f45b9cc49014456c3dd7e5a7bc22c1eb29c5a61",
+        "afterTokenSha": "6fa02fdbc6a753b5631b749e6f45b9cc49014456c3dd7e5a7bc22c1eb29c5a61",
+        "equal": true
+      }
+    ],
+    "nonCommentTokensIdentical": true,
+    "scanner": "Existing TypeScript createScanner with skipTrivia=true; compare token kind/text streams from exact git show base versus final source.",
+    "proof": "token-proof.json",
+    "script": "token-proof.mjs",
+    "scriptSha": "82ae2271c966c6e5bf36715ef5067a28534fbfc7ad1b2d92a0e4b6e4effc191e",
+    "diff": "source.diff",
+    "scope": "Exactly two comment replacements; all types, executable fixture tokens and exported signatures are identical.",
+    "fallout": [],
+    "commentDiff": {
+      "added": 2,
+      "deleted": 2,
+      "netLines": 0
+    },
+    "nonCommentChangedTokens": 0
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 0,
+    "plainContractNetLines": 0,
+    "contractLines": 335
+  },
+  "checks": [
+    {
+      "name": "token proof",
+      "exit": 0,
+      "artifact": "token-proof.log",
+      "timing": "No isolated timer retained; included in dispatch wall."
+    },
+    {
+      "name": "review",
+      "observer": 94862,
+      "exit": 0,
+      "wallS": 37.44,
+      "files": 120,
+      "cases": 2740,
+      "artifact": "review.log"
+    },
+    {
+      "name": "Knip",
+      "observer": 44802,
+      "exit": 0,
+      "wallS": 3.72,
+      "artifact": "knip.log"
+    },
+    {
+      "name": "diff check",
+      "exit": 0
+    }
+  ],
+  "validationChoice": "Existing review/typecheck and Knip are required. No new focused cases for a reversible comment-only edit; no runtime/UI/schema/runner/infrastructure change warrants full, fuzz or browser QA. No new independent core review is required for this non-core comment-only scope.",
+  "runtimeLedger": {
+    "allObservers": "Completed; review94862 and Knip44802 exit 0. No detached writers remain.",
+    "serversProvidersHeavyJobs": "None created.",
+    "nativeDelivery": "Parent owns all native commands and final commit authorization."
+  },
+  "remainingLocalAcceptance": [],
+  "commitAck": "Parent verified every precommit artifact/source hash, token equality, comment-only diff, required checks and stopped resource state; COMMIT ACK received."
+}
