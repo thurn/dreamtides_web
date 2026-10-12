@@ -1,3 +1,5 @@
+import { triggered, whenScores } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 284,
   art: { x: 0, y: 1, scale: 1.1 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [p.phasing(), triggered(whenScores(), p.draw(variant.amplified ? 2 : 1))],
+  verifiedText: "26imvs8l9l6",
 });

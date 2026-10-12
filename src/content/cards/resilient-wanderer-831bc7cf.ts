@@ -1,3 +1,6 @@
+import { thisCardIn } from "../../engine/dsl/builders";
+import { onDawn, onDissolved, sourceIn, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 497,
   art: { x: 0.399, y: -0.678, scale: 1.87 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(onDissolved(), p.draw(1)),
+    triggered(onDawn(), p.returnFromVoid(thisCardIn("void"), { pay: 1 }), { zone: "void", condition: sourceIn("void") }),
+  ],
+  verifiedText: "rdi9gasq6x",
 });

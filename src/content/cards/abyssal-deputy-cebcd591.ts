@@ -1,3 +1,6 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenScores } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   artOwned: false,
   cardNumber: 75,
   isStarter: false,
-  pending: true,
+  abilities: () => [p.phasing(), triggered(whenScores(characterYouControl({ subtype: "Outsider" })), p.draw(1))],
+  verifiedText: "rq7i6qgnt9",
 });
