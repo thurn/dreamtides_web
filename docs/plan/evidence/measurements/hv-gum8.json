@@ -1,0 +1,142 @@
+{
+  "bead": "hv-gum8",
+  "base": "06dec3d4da3eaac662dba4a0ac4a054b54ab0fed",
+  "dispatchObservedBefore": "2026-10-12T08:43:21Z",
+  "dispatchObservedAfter": "2026-10-12T08:44:18Z",
+  "implementWindow": {
+    "start": "2026-10-12T08:44:18Z",
+    "end": "2026-10-12T08:57:18.204657+00:00",
+    "scope": "Lower-bound post-dispatch observation to final evidence immediately before commit; Git committer timestamp bounds the short evidence/commit tail. Actual spawn lies between retained native notes."
+  },
+  "historicalFormats": {
+    "pre472": "git show 4cfbbe5bc192d77067427e8da40d1c1f0ff8081c^:src/engine/prompts/fingerprint.ts: chooseMode options and optional subtypes, no payment metadata",
+    "472": "4cfbbe5bc192d77067427e8da40d1c1f0ff8081c: costOptions follows optional subtypes",
+    "fixture": "Independent historical field serialization in the synthetic contract; no new compatibility helper used to derive fixture hashes."
+  },
+  "commands": [
+    {
+      "receipt": "/tmp/hv-gum8-witness.log",
+      "exit": 1,
+      "scope": "Initial fixture mistake pointsCost(0), four selected cases rejected by builder, corrected to two legal zero-energy alternatives."
+    },
+    {
+      "receipt": "/tmp/hv-gum8-witness-corrected.log",
+      "exit": 1,
+      "testStageS": 2.1,
+      "scope": "Unchanged production: pre472 pending=null and loop changedChoice/0; both intermediate472 cases pass."
+    },
+    {
+      "receipt": "/tmp/hv-gum8-repaired.log",
+      "exit": 0,
+      "scope": "Initial repaired four historical cases."
+    },
+    {
+      "receipt": "/tmp/hv-gum8-expanded.log",
+      "exit": 0,
+      "testStageS": 1.9,
+      "cases": 9
+    },
+    {
+      "receipt": "/tmp/hv-gum8-contract-hub.log",
+      "exit": 0,
+      "testStageS": 4.6,
+      "vitestS": 4.11,
+      "cases": 1451
+    },
+    {
+      "receipt": "/tmp/hv-gum8-review.log",
+      "timingReceipt": "/tmp/hv-gum8-review-timing.json",
+      "exit": 2,
+      "wallS": 42.48099729199748,
+      "testStageS": 40.8,
+      "cases": 4032,
+      "files": 270,
+      "scope": "All tests passed; fixture readonly-index writes and nullable activation source rejected by typecheck. Immutable replacements and explicit source check repaired within authorized test scope."
+    },
+    {
+      "receipt": "/tmp/hv-gum8-final-focused.log",
+      "exit": 0,
+      "testStageS": 1.9,
+      "vitestS": 1.54,
+      "cases": 14
+    },
+    {
+      "receipt": "/tmp/hv-gum8-review-repaired.log",
+      "timingReceipt": "/tmp/hv-gum8-review-repaired-timing.json",
+      "exit": 0,
+      "wallS": 41.74278150000464,
+      "testStageS": 40.6,
+      "vitestS": 34.81,
+      "cases": 4035,
+      "files": 270
+    },
+    {
+      "receipt": "/tmp/hv-gum8-knip.log",
+      "timingReceipt": "/tmp/hv-gum8-knip-timing.json",
+      "exit": 0,
+      "wallS": 2.9087888340000063,
+      "knipStageS": 1.8
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Repaired required review parallel stages started 2026-10-12T08:54:44.735Z"
+      },
+      "testDelta.files": {
+        "definition": "Vitest runner entrypoint delta; one new plain contract module under the existing hub"
+      },
+      "testDelta.lines": {
+        "definition": "New plain contract lines"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "beforeReview": 5.72,
+    "repairedReviewStart": 4.5498046875
+  },
+  "runtime": {
+    "longLived": [],
+    "ports": [],
+    "processes": "Every finite test/check command completed, exit statuses above. No long-lived runtime, server, port or browser context started; shell PIDs were not returned by the command service.",
+    "terminalExecSessions": [
+      75087,
+      3877,
+      26661,
+      39135,
+      73002,
+      71296,
+      38567,
+      91510,
+      72795
+    ]
+  },
+  "testDelta": {
+    "runnerFiles": 0,
+    "contractModules": 1,
+    "lines": 234,
+    "cases": 14,
+    "jsdomFiles": 0
+  },
+  "productionDelta": {
+    "added": 30,
+    "deleted": 5,
+    "paths": [
+      "src/engine/prompts/fingerprint.ts",
+      "src/engine/steps/context.ts"
+    ],
+    "mechanicalFallout": []
+  },
+  "verificationScope": "Bounded internal fingerprint compatibility: focused synthetic/public fold/JSON loader/loop replay contracts, required review and Knip. No UI, test infrastructure, state schema or cross-cutting architecture edits; browser, fuzz and local review:full do not apply.",
+  "failurePaths": {
+    "errorMidStep": "cost choice compatibility safety > refuses illegal historical answers and malformed metadata without payment or partial commitment: IllegalAnswer/replay failure has no published events or committed hash change.",
+    "reloadRestart": "saved cost choice pre472 / 472 / current > cold-loads an answered cost choice followed by another prompt and pays the selected alternative once; resumes the discard alternative and saves its migrated choice before the next prompt; repeats a JSON-loaded loop containing an answered historical cost choice.",
+    "partialWrite": "saved cost choice pre472 / 472 / current > resumes the discard alternative and saves its migrated choice before the next prompt: committed state unchanged through both suspensions and choice metadata persisted before final payment. Engine compatibility runs in a private state copy; storage writes stay host-owned and are outside this edit.",
+    "invalidStale": "saved cost choice pre472 / 472 / current > cold-loads an answered cost choice followed by another prompt and pays the selected alternative once: illegal input, stale prompt after cancellation/reopen and duplicate answer after payment bounce. cost choice compatibility safety > rejects current records when amounts, original payment order, same-arity data, or legality differ; refuses illegal historical answers and malformed metadata without payment or partial commitment.",
+    "concurrentActors": "saved cost choice pre472 / 472 / current > cold-loads an answered cost choice followed by another prompt and pays the selected alternative once: foreign side receives notYourPrompt, simultaneous action stepInFlight, repeated completed answer noPendingPrompt.",
+    "interrupt": "Compatibility executes during replay before payment; ordinary cancellation is verified by the saved cost-choice cold-load contract. No interrupt window or timing mechanism is introduced."
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "preExistingIssues": []
+}

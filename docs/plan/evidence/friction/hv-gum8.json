@@ -1,0 +1,21 @@
+{
+  "bead": "hv-gum8",
+  "phase": 5,
+  "implementMin": 13.00341095,
+  "localValidationS": {
+    "witnessTestStage": 2.1,
+    "expandedTestStage": 1.9,
+    "contractHubTestStage": 4.6,
+    "finalFocusedTestStage": 1.9,
+    "failedReviewWrapper": 42.48099729199748,
+    "reviewWrapper": 41.74278150000464,
+    "knipWrapper": 2.9087888340000063
+  },
+  "hostLoad": 4.5498046875,
+  "testDelta": {
+    "files": 0,
+    "lines": 234,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

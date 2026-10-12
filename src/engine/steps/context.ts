@@ -1,7 +1,7 @@
 import type { EngineCatalog } from "../catalog";
 import { eventDefinition, type EngineEvent } from "../events";
 import { forcedAnswer, hasLegalAnswer, isLegalAnswer } from "../prompts/answers";
-import { promptFingerprint } from "../prompts/fingerprint";
+import { matchesPromptFingerprint, promptFingerprint } from "../prompts/fingerprint";
 import { isWellFormedPrompt, MalformedPrompt, promptCards } from "../prompts/structure";
 import type { AnswerFor, Prompt, PromptFingerprint, PromptSpec } from "../prompts/types";
 import type { EffectId, InstanceId, Side } from "../state/ids";
@@ -109,13 +109,13 @@ export class Context implements StepContext {
     const index = this.answers.length;
     const recorded = this.options.prefix?.[index];
     if (recorded !== undefined) {
-      if (recorded.fingerprint !== fingerprint) {
+      if (!matchesPromptFingerprint(prompt, recorded.fingerprint, fingerprint)) {
         throw new ReplayDivergence(index, recorded.fingerprint, fingerprint);
       }
       if (!isLegalAnswer(prompt, recorded.value)) {
         throw new IllegalAnswer(prompt);
       }
-      this.record(recorded, rawFingerprint, prompt.side, fullyVisible);
+      this.record({ ...recorded, fingerprint }, rawFingerprint, prompt.side, fullyVisible);
       if (recorded.auto === true) this.autoAnswered(prompt);
       return recorded.value as AnswerFor<P>;
     }
