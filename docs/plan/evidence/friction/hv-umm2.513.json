@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.513",
+  "phase": 5,
+  "implementMin": 62.692587083333336,
+  "localValidationS": {
+    "focused": 25.156757460004883,
+    "review": 105.4861070420011,
+    "knip": 5.895457541999349,
+    "full": 341.99767220900685,
+    "fuzz": 391.1523848759971,
+    "qa": 111.38651116599067,
+    "artifactAudit": 0.2845084589862381,
+    "schema": 0.09254883399989922
+  },
+  "hostLoad": 7.837890625,
+  "testDelta": {
+    "files": 1,
+    "lines": 199,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 6.6784954521164765,
+      "note": "Generic controller override guard and external fuzz-log serializer required follow-up validation/reconstruction; measured invocation costs only, edit/audit discussion time unmeasured."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 0.9893841687498934,
+      "note": "Retained failed owner-selector and chooser-route definitions; measured failed invocations only, script editing time unmeasured."
+    }
+  ]
+}

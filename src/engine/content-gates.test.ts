@@ -24,6 +24,7 @@ import {
   cardsMovedBy,
   characterYouControl,
   conditionCardCounts,
+  controls,
   costOf,
   energy,
   event,
@@ -152,6 +153,7 @@ function staticReferenceFailures(abilities: readonly Ability[]): string[] {
       for (const field of Object.values(value)) visit(field);
     };
     visit(ability.effect);
+    visit(ability.while);
     return kinds.map((kind) => `ability ${String(index)}: static ${ability.effect.op} holds a ${kind} reference`);
   });
 }
@@ -251,6 +253,22 @@ describe("content gates", () => {
     expect(staticReferenceFailures([staticAbility(sparkModifier(triggeringCard(), 1))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(createCopyInHand(fromVoid()))])).toHaveLength(1);
     expect(staticReferenceFailures([staticAbility(sparkModifier(all(characterYouControl()), thisCharacterSpark()))])).toHaveLength(1);
+  });
+
+  it("rejects resolving source-spark bounds nested in a static condition", () => {
+    const selectors = [
+      characterYouControl({ sparkAtMost: thisCharacterSpark() }),
+      characterYouControl({ sparkAtLeast: thisCharacterSpark() }),
+      characterYouControl({ costAtMost: thisCharacterSpark() }),
+      characterYouControl({ costAtLeast: thisCharacterSpark() }),
+    ];
+    for (const selector of selectors) {
+      const invalid = staticAbility(sparkModifier(all(characterYouControl()), 1), {
+        // @ts-expect-error A static condition has no resolving source-spark reader.
+        while: controls(selector),
+      });
+      expect(staticReferenceFailures([invalid])).toHaveLength(1);
+    }
   });
 
   it("rejects a static-only primitive anywhere but as a static ability's whole effect", () => {

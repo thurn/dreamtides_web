@@ -703,8 +703,10 @@ card's copiable cost.
   It is used as the play commits, even if the card is prevented or later
   returns to the void. It renews at the start of the next turn, and covers
   nothing while its source is outside the zone where the ability works.
-  Each copy of the ability has its own allowance. A source that leaves its
-  zone and returns is a new object with a fresh allowance.
+  Each copy of the ability has its own allowance. A conditional permission
+  covers cards only while its condition holds; the allowance stays spent
+  when that condition stops holding and holds again during the same turn.
+  A source that leaves its zone and returns is a new object with a fresh allowance.
 - A card's own ability, as in "You may play this character from your void,"
   works while that card is in your void and covers that card only, any number
   of times: played that way, it pays its normal costs, additional costs
@@ -1857,7 +1859,10 @@ from the void (see [Objective](#objective)).
 
 **Static abilities** — Always-on rule modifications that apply while their source
 is in play, such as cost reductions, spark bonuses for matching characters, or
-other rule changes. Avatar and dreamsign static abilities always apply.
+other rule changes. Avatar and dreamsign static abilities work throughout the
+battle. A conditional static ability applies only while its condition holds,
+read live as the game changes. A hand or deck count in such a condition
+counts every card there; a void count may count only matching public cards.
 
 **Where static abilities work:** A card's static ability that names another
 zone, such as "If this card is in your void, characters you control have
@@ -1892,9 +1897,8 @@ keyword and one that removes it, the one applied last wins. An effect
 that sets a character's type replaces all character types earlier effects
 gave it: after "has all character types" then "is a Mage", it is only a
 Mage. If "has all character types" applies after "is a Mage", it has every
-character type. A static ability decides which characters it changes, and
-by how much, from what the earlier
-steps produced: an ability that changes spark reads types, keywords, and base
+character type. A static ability decides whether its condition holds, which characters it
+changes, and by how much, from what the earlier steps produced: an ability that changes spark reads types, keywords, and base
 spark, but not other spark changes. A ✦ criterion on a card outside play is
 the exception: it reads that card's spark with every change applied, even in
 an ability of an earlier step, as "Cards in your hand with ≤2✦ have Offering"

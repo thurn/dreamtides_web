@@ -36,7 +36,8 @@ import { instanceCard, plainVariant, type EngineCatalog } from "../catalog";
 import type { CardSubtype } from "../../types/card-identity";
 import { worksInZone } from "../dsl/abilities";
 import { matchesCharacterWith, matchingCharactersWith, zoneCountWith, type CharacteristicsReader } from "../dsl/selectors";
-import type { Ability, CharacterRef, Keyword, StaticAbility } from "../dsl/types";
+import type { Ability, CharacterRef, Keyword, StaticAbility, StaticCondition } from "../dsl/types";
+import { conditionHoldsWith } from "../dsl/conditions";
 import { evaluateValue } from "../dsl/values";
 import { chosenSubtypeOf, mentionsChosenSubtype, withChosenSubtype } from "../effects/primitives/choose-subtype";
 import { primitiveDefinition } from "../effects/registry";
@@ -106,6 +107,7 @@ interface StaticEntry {
   readonly layer: Layer;
   readonly timestamp: number;
   readonly order: number;
+  readonly while?: StaticCondition;
 }
 
 function instanceNumber(id: InstanceId): number {
@@ -173,7 +175,8 @@ function collectStatics(state: BattleState, catalog: EngineCatalog): StaticEntry
       if (zone !== null && !worksInZone(ability.zone, zone)) continue;
       const continuous = primitiveDefinition(ability.effect.op).continuous;
       if (continuous === undefined) throw new Error(`A static ability holds ${ability.effect.op}, which is not continuous`);
-      entries.push({ ability: index, source, controller, node: ability.effect, layer: continuous.layer, timestamp, order: entries.length });
+      entries.push({ ability: index, source, controller, node: ability.effect, layer: continuous.layer, timestamp, order: entries.length,
+        ...(ability.while === undefined ? {} : { while: ability.while }) });
     }
   };
   for (const side of SIDES) {
@@ -350,13 +353,16 @@ export class Layers {
    */
   private expand(entry: StaticEntry): readonly ContinuousChange[] {
     const { state, catalog } = this;
+    const read = this.staticReader(entry.layer - 1);
+    if (entry.while !== undefined && !conditionHoldsWith(state, catalog, read, entry.while, {
+      controller: entry.controller, source: entry.source, optionalPaid: [],
+    })) return [];
     let node = entry.node;
     if (mentionsChosenSubtype(node)) {
       const chosen = chosenSubtypeOf(state, entry.source);
       if (chosen === null) return [];
       node = withChosenSubtype(node, chosen);
     }
-    const read = this.staticReader(entry.layer - 1);
     const self = sourceInstance(entry.source);
     const characters = (ref: CharacterRef): InstanceId[] => {
       switch (ref.kind) {

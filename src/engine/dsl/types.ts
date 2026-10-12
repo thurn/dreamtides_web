@@ -357,6 +357,29 @@ export type Condition =
 /** A player's zone whose cards a condition counts. */
 export type CountedZone = "deck" | "hand" | "void";
 
+/** A continuous condition's bounds read public counts and earlier-layer characteristics, never a resolving source. */
+export type StaticBoundValue = Exclude<BoundValue, SourceSparkValue>;
+
+/** A public character selector whose bounds can be read without a resolving effect. */
+export type StaticCharacterSelector = Omit<CharacterSelector, "sparkAtMost" | "sparkAtLeast" | "costAtMost" | "costAtLeast"> & {
+  readonly sparkAtMost?: StaticBoundValue;
+  readonly sparkAtLeast?: StaticBoundValue;
+  readonly costAtMost?: StaticBoundValue;
+  readonly costAtLeast?: StaticBoundValue;
+};
+
+/** Inclusive limits on a public zone count. */
+type StaticCountBounds =
+  | { readonly atLeast: number; readonly atMost?: number }
+  | { readonly atLeast?: number; readonly atMost: number };
+
+/** A live static condition uses public inputs; optional payments and hidden-card filters require a resolving effect. */
+export type StaticCondition =
+  | Exclude<Condition, { readonly cond: "controls" | "costPaid" | "cardsIn" }>
+  | { readonly cond: "controls"; readonly selector: StaticCharacterSelector; readonly atLeast: number; readonly atMost?: number }
+  | ({ readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: "void"; readonly filter?: CardFilter } & StaticCountBounds)
+  | ({ readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: "hand" | "deck"; readonly filter?: never } & StaticCountBounds);
+
 /**
  * Keywords a card has (layer 3). `reclaim` is plain Reclaim, played from the
  * void for its normal cost; "Reclaim N●" is a `reclaim` ability instead.
@@ -673,6 +696,8 @@ export interface StaticAbility {
   readonly effect: Effect;
   /** Where its card must be for it to apply: "If this card is in your void, …" works from "void" (RD-hv-umm2.53-1). */
   readonly zone: FunctionalZone;
+  /** Applies only while this public condition holds, read against the layers before its effect. */
+  readonly while?: StaticCondition;
 }
 
 /**

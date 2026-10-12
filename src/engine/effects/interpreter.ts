@@ -13,6 +13,7 @@ import {
   type SourceSparkReader,
 } from "../dsl/selectors";
 import { evaluateValue } from "../dsl/values";
+import { conditionHoldsWith, type ConditionScope } from "../dsl/conditions";
 import { cardMatchesFilter, characteristics, characteristicsOf, copiableCostOf } from "../continuous/characteristics";
 import { supportedBy } from "../continuous/support";
 import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, ValueExpr, ZoneCardSpec, ZoneTargetSpec } from "../dsl/types";
@@ -564,47 +565,18 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
   });
 }
 
-/** What a condition is checked against: the effect's controller and source, and the item's paid optional costs. */
-export interface ConditionScope {
-  readonly controller: Side;
-  readonly source: AbilitySource;
-  readonly optionalPaid: readonly boolean[];
-}
+/** What a condition is checked against: its controller, source, and paid optional costs. */
+export type { ConditionScope } from "../dsl/conditions";
 
-/** Whether a condition holds now, outside a resolving effect as well (intervening "if" conditions). */
+/** Whether a condition holds now, including intervening conditions outside a resolving effect. */
 export function conditionHolds(
   state: BattleState,
   catalog: EngineCatalog,
   condition: Condition,
   scope: ConditionScope,
 ): boolean {
-  switch (condition.cond) {
-    case "controls": {
-      const count = matchingCharacters(state, catalog, condition.selector, scope.controller, scope.source).length;
-      return count >= condition.atLeast && (condition.atMost === undefined || count <= condition.atMost);
-    }
-    case "energyAtLeast":
-      return state.sides[scope.controller].currentEnergy >= condition.amount;
-    case "costPaid":
-      return scope.optionalPaid[condition.optional] === true;
-    case "sourceWasReclaimed": {
-      const instance = sourceInstance(scope.source);
-      return instance !== null && state.instances[instance]?.status.playedViaReclaim === true;
-    }
-    case "sourceIn": {
-      const instance = sourceInstance(scope.source);
-      return instance === null ? condition.zone === "play" : state.instances[instance]?.zone === condition.zone;
-    }
-    case "cardsIn": {
-      const cards = state.sides[resolvePlayer(scope.controller, condition.player)][condition.zone];
-      const filter = condition.filter;
-      const count = filter === undefined
-        ? cards.length
-        : cards.filter((id) => cardMatchesFilter(state, catalog, id, filter)).length;
-      return (condition.atLeast === undefined || count >= condition.atLeast) &&
-        (condition.atMost === undefined || count <= condition.atMost);
-    }
-  }
+  let layers: ReturnType<typeof characteristics> | undefined;
+  return conditionHoldsWith(state, catalog, (id) => (layers ??= characteristics(state, catalog)).of(id), condition, scope);
 }
 
 export function checkCondition(ctx: StepContext, condition: Condition, env: EffectEnv): boolean {

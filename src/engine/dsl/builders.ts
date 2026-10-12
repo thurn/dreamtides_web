@@ -30,6 +30,7 @@ import type {
   Speed,
   StackItemSelector,
   StaticAbility,
+  StaticCondition,
   SupportedSpec,
   TargetSpec,
   ValueExpr,
@@ -51,8 +52,8 @@ export function event(effect: Effect): Ability {
  * have +1✦." Works in play unless `zone` names a functional zone: "If this
  * card is in your void, characters you control have +1✦" works from "void".
  */
-export function staticAbility(effect: Effect, options: { readonly zone?: FunctionalZone } = {}): StaticAbility {
-  return { kind: "static", effect, zone: options.zone ?? "play" };
+export function staticAbility(effect: Effect, options: { readonly zone?: FunctionalZone; readonly while?: StaticCondition } = {}): StaticAbility {
+  return { kind: "static", effect, zone: options.zone ?? "play", ...(options.while === undefined ? {} : { while: options.while }) };
 }
 
 /**
@@ -197,12 +198,12 @@ export function additionalCost(...costs: readonly AdditionalCost[]): AdditionalC
 }
 
 /** "If the additional cost was paid": the item's optional cost at `optional` (printed order) was paid. */
-export function costPaid(optional = 0): Condition {
+export function costPaid(optional = 0): Extract<Condition, { readonly cond: "costPaid" }> {
   return { cond: "costPaid", optional };
 }
 
 /** "If this card was reclaimed": its latest actual committed play used Reclaim, independent of its replacement status. */
-export function sourceWasReclaimed(): Condition {
+export function sourceWasReclaimed(): Extract<Condition, { readonly cond: "sourceWasReclaimed" }> {
   return { cond: "sourceWasReclaimed" };
 }
 
@@ -210,7 +211,7 @@ export function sourceWasReclaimed(): Condition {
  * "If you control a challenger": at least `atLeast` characters in play match
  * the selector, whose controller is relative to the effect's controller.
  */
-export function controls(selector: CharacterSelector, atLeast = 1): Condition {
+export function controls<S extends CharacterSelector>(selector: S, atLeast = 1): { readonly cond: "controls"; readonly selector: S; readonly atLeast: number } {
   return { cond: "controls", selector, atLeast };
 }
 
@@ -218,21 +219,36 @@ export function controls(selector: CharacterSelector, atLeast = 1): Condition {
  * "If you control no shadow figments": no character in play matches the
  * selector, whose controller is relative to the effect's controller.
  */
-export function controlsNone(selector: CharacterSelector): Condition {
+export function controlsNone<S extends CharacterSelector>(selector: S): { readonly cond: "controls"; readonly selector: S; readonly atLeast: number; readonly atMost: number } {
   return { cond: "controls", selector, atLeast: 0, atMost: 0 };
 }
 
 /** "If you have no cards in your deck": the player (you by default) has no cards in `zone`. */
-export function noCardsIn(zone: CountedZone, player: PlayerRef = "you"): Condition {
+export function noCardsIn<Z extends CountedZone>(zone: Z, player: PlayerRef = "you"): { readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: Z; readonly atMost: number } {
   return { cond: "cardsIn", player, zone, atMost: 0 };
 }
 
 /** "If there are N or more <cards> in your <zone>", counted when the condition is checked. */
+export function conditionCardCounts<Z extends CountedZone>(
+  zone: Z,
+  atLeast: number,
+  options?: { readonly player?: PlayerRef; readonly filter?: never; readonly atMost?: number },
+): { readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: Z; readonly atLeast: number; readonly atMost?: number; readonly filter?: never };
+export function conditionCardCounts(
+  zone: "void",
+  atLeast: number,
+  options: { readonly player?: PlayerRef; readonly filter?: CardFilter; readonly atMost?: number },
+): { readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: "void"; readonly atLeast: number; readonly atMost?: number; readonly filter?: CardFilter };
+export function conditionCardCounts(
+  zone: CountedZone,
+  atLeast: number,
+  options: { readonly player?: PlayerRef; readonly filter?: CardFilter; readonly atMost?: number },
+): Extract<Condition, { readonly cond: "cardsIn" }>;
 export function conditionCardCounts(
   zone: CountedZone,
   atLeast: number,
   options: { readonly player?: PlayerRef; readonly filter?: CardFilter; readonly atMost?: number } = {},
-): Condition {
+): Extract<Condition, { readonly cond: "cardsIn" }> {
   return { ...options, cond: "cardsIn", player: options.player ?? "you", zone, atLeast };
 }
 
@@ -362,16 +378,22 @@ export function thisCardIn(zone: CountedZone): ZoneSelfSpec {
   return { kind: "inZone", pick: "self", zone };
 }
 
+export function enemyCharacter(): { readonly controller: "opponent" };
+export function enemyCharacter<S extends Omit<CharacterSelector, "controller">>(extra: S & Record<Extract<keyof S, "controller">, never>): S & { readonly controller: "opponent" };
 export function enemyCharacter(extra: Omit<CharacterSelector, "controller"> = {}): CharacterSelector {
-  return { controller: "opponent", ...extra };
+  return { ...extra, controller: "opponent" };
 }
 
+export function characterYouControl(): { readonly controller: "you" };
+export function characterYouControl<S extends Omit<CharacterSelector, "controller">>(extra: S & Record<Extract<keyof S, "controller">, never>): S & { readonly controller: "you" };
 export function characterYouControl(extra: Omit<CharacterSelector, "controller"> = {}): CharacterSelector {
-  return { controller: "you", ...extra };
+  return { ...extra, controller: "you" };
 }
 
+export function anyCharacter(): { readonly controller: "any" };
+export function anyCharacter<S extends Omit<CharacterSelector, "controller">>(extra: S & Record<Extract<keyof S, "controller">, never>): S & { readonly controller: "any" };
 export function anyCharacter(extra: Omit<CharacterSelector, "controller"> = {}): CharacterSelector {
-  return { controller: "any", ...extra };
+  return { ...extra, controller: "any" };
 }
 
 export function ofSubtype(subtype: CardSubtype): Pick<CharacterSelector, "subtype"> {

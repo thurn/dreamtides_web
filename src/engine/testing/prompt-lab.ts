@@ -31,6 +31,7 @@ import { BACK_RANK_SIZE, battleSeed, SIDES, type AvatarId, type CardId, type Dre
 import type { BattleInit, BattleState, DeckEntry } from "../state/types";
 import type { EngineEvent } from "../events";
 import { boardState, type BoardSetup } from "./board";
+import { CONDITIONAL, CONDITIONAL_STATIC_CARDS } from "./conditional-static-cards";
 import { CONTINUOUS, CONTINUOUS_CARDS } from "./continuous-cards";
 import { DSL, DSL_CARDS } from "./dsl-cards";
 import { LOOP, LOOP_CARDS } from "./loop-cards";
@@ -237,6 +238,7 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
     ...LOOP_CARDS,
     ...TRIGGER_CARDS,
     ...CONTINUOUS_CARDS,
+    ...CONDITIONAL_STATIC_CARDS,
     ...ZONE_CARDS,
     ...CHOSEN_HAND_BANISH_CARDS,
     ...Object.values(LAB),
@@ -255,6 +257,8 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [HAND_BANISH.candidate.id]: { name: "Lab Return Witness", text: "▸Materialized: Gain 3 points." },
   [HAND_BANISH.absent.id]: { name: "Lab Departing Keeper", text: "▸Materialized: Return this character to hand, then banish a chosen card from the opponent's hand until this character leaves play." },
   [HAND_BANISH.timedCard.id]: { name: "Lab Ending Keeper", text: "▸Materialized: Banish a chosen card from the opponent's hand until end of turn." },
+  [CONDITIONAL.permit.id]: { name: "Lab Conditional Gatekeeper", text: "Once per turn, if you have one or fewer cards in hand, you may play an event from your void. 0●: Draw a card." },
+  [CONDITIONAL.freeEvent.id]: { name: "Lab Conditional Witness", text: "Gain 1⍟." },
   [LAB.extraTurn.id]: { name: "Lab Moment", text: "Take an extra turn after this one." },
   [LAB.abandon.id]: { name: "Lab Farewell", text: "Abandon a character." },
   [LAB.voidPermit.id]: { name: "Lab Gatekeeper", text: "You may play characters from your void." },
@@ -404,6 +408,16 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "conditional-static-permission",
+    description: "A conditional void permission whose allowance survives its hand-count condition toggling",
+    setup: { active: "player", phase: "day", player: {
+      back: [CONDITIONAL.permit.id], hand: [CONDITIONAL.freeEvent.id],
+      void: [CONDITIONAL.freeEvent.id, CONDITIONAL.freeEvent.id],
+      deck: Array.from({ length: 6 }, () => CONDITIONAL.freeEvent.id),
+    }, enemy: { deck: deck(6) } },
+    script: [],
+  },
   {
     name: "chosen-hand-banish-duration",
     description: "A paid chosen-hand banishment, a public duration and a return to the owner's hand",

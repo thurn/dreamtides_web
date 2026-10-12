@@ -1,0 +1,916 @@
+{
+  "bead": "hv-umm2.513",
+  "base": "8951e7e0cf99abb541c2e0211a5bdd4e145d1b6c",
+  "scratchRoot": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/513-run2-evidence",
+  "dispatchUtc": "2026-10-12T09:59:16.516605+00:00",
+  "implementWindow": {
+    "startUtc": "2026-10-12T09:59:16.516605+00:00",
+    "preCommitObservedUtc": "2026-10-12T11:01:58.071830+00:00",
+    "dispatchToObservationMin": 62.692587083333336,
+    "actualCommitReceipt": "commit.json in scratchRoot observes actual immutable commit end; full original-dispatch-to-commit endpoint is external, not predicted."
+  },
+  "priorUntouchedInterval": "Original source-free513 audit/install was released before501/486; that separate interval/receipts are preserved in513-implementation-evidence and are not reused/countedin this fresh run.",
+  "checks": {
+    "install": {
+      "pid": 48964,
+      "pgid": 48964,
+      "startUtc": "2026-10-12T10:00:44.036380+00:00",
+      "endUtc": "2026-10-12T10:00:46.602156+00:00",
+      "wallSeconds": 2.5656444170017494,
+      "exit": 0,
+      "rawReceipt": "install.json",
+      "rawReceiptSHA256": "c788b722ca50185c19ea26fa98222aa3abfc860c79c478d9f8f3221a856ae99d",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    "focused-initial": {
+      "pid": 61876,
+      "pgid": 61876,
+      "startUtc": "2026-10-12T10:15:42.380960+00:00",
+      "endUtc": "2026-10-12T10:15:49.279128+00:00",
+      "wallSeconds": 6.89813958400191,
+      "exit": 0,
+      "rawReceipt": "focused-initial.json",
+      "rawReceiptSHA256": "95a8b6519a433e257334c6d3c6c3e3829fa622b0439e75e46e7478c6bd28a132",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "022eae3d898d0e0ecbe2734df8b203aa840ed28051a2e7cb3d90be979ac414d1"
+    },
+    "negative-ignore-while": {
+      "pid": 85848,
+      "pgid": 85848,
+      "startUtc": "2026-10-12T10:17:26.190583+00:00",
+      "endUtc": "2026-10-12T10:17:30.439945+00:00",
+      "wallSeconds": 4.249362333997851,
+      "exit": 1,
+      "rawReceipt": "negative-ignore-while.json",
+      "rawReceiptSHA256": "60b9686621d1f8bdc33231982b1038e0e93f9a481f6b22e56a5c89f992561592",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "c6446f5b10508bdd654473cc1ac3ca8dc8683718a3e2ac7a4983b7f5b02a2074"
+    },
+    "review-initial": {
+      "pid": 87930,
+      "pgid": 87930,
+      "startUtc": "2026-10-12T10:17:58.313989+00:00",
+      "endUtc": "2026-10-12T10:18:48.714091+00:00",
+      "wallSeconds": 50.39953787500417,
+      "exit": 0,
+      "rawReceipt": "review-initial.json",
+      "rawReceiptSHA256": "d5ff31872ab5936cae079302ae0f0e559711f5081dfed95db5e3f1a50bb35734",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "8da0fbd92a310d2afcba7d7d0300142e40cec05aa7b970bb40b6fd42132db917"
+    },
+    "knip": {
+      "pid": 5046,
+      "pgid": 5046,
+      "startUtc": "2026-10-12T10:19:10.384619+00:00",
+      "endUtc": "2026-10-12T10:19:13.466710+00:00",
+      "wallSeconds": 3.0820949170010863,
+      "exit": 0,
+      "rawReceipt": "knip.json",
+      "rawReceiptSHA256": "b172516de31a730fb505473bf64d0807435b95a2a63f3706f4cb7cfc9229f95f",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "8da0fbd92a310d2afcba7d7d0300142e40cec05aa7b970bb40b6fd42132db917"
+    },
+    "full": {
+      "pid": 17849,
+      "pgid": 17849,
+      "startUtc": "2026-10-12T10:20:14.283752+00:00",
+      "endUtc": "2026-10-12T10:24:08.085040+00:00",
+      "wallSeconds": 233.79851912500453,
+      "exit": 0,
+      "rawReceipt": "full.json",
+      "rawReceiptSHA256": "ba94814210eae56e77cb82028f744820a0efa7bd619c3f211bbc11964bb64551",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "8da0fbd92a310d2afcba7d7d0300142e40cec05aa7b970bb40b6fd42132db917"
+    },
+    "focused-final": {
+      "pid": 8464,
+      "pgid": 8464,
+      "startUtc": "2026-10-12T10:26:50.762964+00:00",
+      "endUtc": "2026-10-12T10:26:58.241073+00:00",
+      "wallSeconds": 7.478069791999587,
+      "exit": 0,
+      "rawReceipt": "focused-final.json",
+      "rawReceiptSHA256": "fffcb469587bb71957f0765daf97fb88af59d4bf6ff8cdbf4a4fe86fa48ed8ca",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "40855dd9e1cf9ba1e207ef0eb5d78c66b2b825dee0d1cf4f3633968e3f53658b"
+    },
+    "focused-corrected-final": {
+      "pid": 32745,
+      "pgid": 32745,
+      "startUtc": "2026-10-12T10:28:42.346277+00:00",
+      "endUtc": "2026-10-12T10:28:48.877508+00:00",
+      "wallSeconds": 6.531185750005534,
+      "exit": 0,
+      "rawReceipt": "focused-corrected-final.json",
+      "rawReceiptSHA256": "5aa0957d0fd11fc6ad6ab280b3877ed6bfd3257717109afb06d79f8d4fa94d0f",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "review-final": {
+      "pid": 35276,
+      "pgid": 35276,
+      "startUtc": "2026-10-12T10:29:20.233147+00:00",
+      "endUtc": "2026-10-12T10:30:15.320325+00:00",
+      "wallSeconds": 55.086569166996924,
+      "exit": 0,
+      "rawReceipt": "review-final.json",
+      "rawReceiptSHA256": "7c2e8df6305039e58f485443b2c3f9180674f19c2edf6e8703f57b7b0aab6c31",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "qa-syntax": {
+      "pid": 58939,
+      "pgid": 58939,
+      "startUtc": "2026-10-12T10:30:43.977272+00:00",
+      "endUtc": "2026-10-12T10:30:44.016599+00:00",
+      "wallSeconds": 0.039363708994642366,
+      "exit": 0,
+      "rawReceipt": "qa-syntax.json",
+      "rawReceiptSHA256": "d853bfd7ccb38b82b823205ee6cb375cb1d07374935048240a84595c310edb83",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "knip-final": {
+      "pid": 59364,
+      "pgid": 59364,
+      "startUtc": "2026-10-12T10:30:49.509565+00:00",
+      "endUtc": "2026-10-12T10:30:52.322910+00:00",
+      "wallSeconds": 2.8133626249982626,
+      "exit": 0,
+      "rawReceipt": "knip-final.json",
+      "rawReceiptSHA256": "4cef97919f2a6209f2379add4e71993c2b7f9549797aa0a7b44aea292c6bfb8d",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "full-final": {
+      "pid": 78823,
+      "pgid": 78823,
+      "startUtc": "2026-10-12T10:31:35.989056+00:00",
+      "endUtc": "2026-10-12T10:33:24.189472+00:00",
+      "wallSeconds": 108.19915308400232,
+      "exit": 0,
+      "rawReceipt": "full-final.json",
+      "rawReceiptSHA256": "4265c01f57b67756a3bb7345eaf055003ed29ee372504f56b82784af2c81efc8",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "fuzz": {
+      "pid": 97899,
+      "pgid": 97899,
+      "startUtc": "2026-10-12T10:34:27.780303+00:00",
+      "endUtc": "2026-10-12T10:37:18.578462+00:00",
+      "wallSeconds": 170.79614291700273,
+      "exit": 0,
+      "rawReceipt": "fuzz.json",
+      "rawReceiptSHA256": "1df97e1831da7f5a987381fd51b0598e802a251727920483370078ce221697a1",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "judged-qa": {
+      "pid": 97900,
+      "pgid": 97900,
+      "startUtc": "2026-10-12T10:34:27.780335+00:00",
+      "endUtc": "2026-10-12T10:34:33.745747+00:00",
+      "wallSeconds": 5.965376749998541,
+      "exit": 1,
+      "rawReceipt": "judged-qa.json",
+      "rawReceiptSHA256": "8290af806271aa38ddb6460a925aae6cf24ae1a2c84999441b5888aec8a5f7c1",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "judged-qa-corrected": {
+      "pid": 21150,
+      "pgid": 21150,
+      "startUtc": "2026-10-12T10:36:24.381753+00:00",
+      "endUtc": "2026-10-12T10:37:17.780010+00:00",
+      "wallSeconds": 53.397673374995065,
+      "exit": 1,
+      "rawReceipt": "judged-qa-corrected.json",
+      "rawReceiptSHA256": "e7c469ee5c802e5d95021893594913697f8487783d4871335f6f26accffedf5e",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "judged-qa-final": {
+      "pid": 51891,
+      "pgid": 51891,
+      "startUtc": "2026-10-12T10:39:19.928854+00:00",
+      "endUtc": "2026-10-12T10:40:11.952900+00:00",
+      "wallSeconds": 52.02346104099706,
+      "exit": 0,
+      "rawReceipt": "judged-qa-final.json",
+      "rawReceiptSHA256": "f278156211948207cf4b3e98d01bd21eebf916a8fa25d61fe599746587a25b4a",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "fuzz-log-audit": {
+      "pid": 76114,
+      "pgid": 76114,
+      "startUtc": "2026-10-12T10:40:58.351047+00:00",
+      "endUtc": "2026-10-12T10:40:58.416508+00:00",
+      "wallSeconds": 0.06551899999612942,
+      "exit": 1,
+      "rawReceipt": "fuzz-log-audit.json",
+      "rawReceiptSHA256": "0853c513c6094b70d65c7be7629730c0773416a3edbe54ed922966fa74317aa0",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "fuzz-log-reconstruct": {
+      "pid": 83653,
+      "pgid": 83653,
+      "startUtc": "2026-10-12T10:43:28.732759+00:00",
+      "endUtc": "2026-10-12T10:47:09.089598+00:00",
+      "wallSeconds": 220.35624195899436,
+      "exit": 0,
+      "rawReceipt": "fuzz-log-reconstruct.json",
+      "rawReceiptSHA256": "624f84abae099cdfdadeb9fe966b754e7131a19cf95651b3907c13175ee4f24a",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "fuzz-log-audit-corrected": {
+      "pid": 3030,
+      "pgid": 3030,
+      "startUtc": "2026-10-12T10:49:17.997613+00:00",
+      "endUtc": "2026-10-12T10:49:18.177200+00:00",
+      "wallSeconds": 0.17962574999546632,
+      "exit": 0,
+      "rawReceipt": "fuzz-log-audit-corrected.json",
+      "rawReceiptSHA256": "13b3cdeac1cc06a6e639d0ef89636ebc7e91c6f7554e73331b6fa1bbf3e13444",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    },
+    "schema": {
+      "pid": 66652,
+      "pgid": 66652,
+      "startUtc": "2026-10-12T10:54:11.631088+00:00",
+      "endUtc": "2026-10-12T10:54:11.723599+00:00",
+      "wallSeconds": 0.09254883399989922,
+      "exit": 0,
+      "rawReceipt": "schema.json",
+      "rawReceiptSHA256": "faf11aa8e39f5d1c4e141c9dbe09d63a9410304edd0dcbec5054285bf4bd2a56",
+      "actualCommandAndSourceHashes": "argv/cwd/sourceSHA256 in the exact raw receipt",
+      "sourceManifestSHA256": "bae10104f1398c8cdefd06017b0b464c304216787cd63863cfdfc1b69c814b71"
+    }
+  },
+  "costAccounting": {
+    "localValidationS": {
+      "focused": 25.156757460004883,
+      "review": 105.4861070420011,
+      "knip": 5.895457541999349,
+      "full": 341.99767220900685,
+      "fuzz": 391.1523848759971,
+      "qa": 111.38651116599067,
+      "artifactAudit": 0.2845084589862381,
+      "schema": 0.09254883399989922
+    },
+    "totalValidationAttemptWallSeconds": 981.4519475879861,
+    "installPreparationSeparateSeconds": 2.5656444170017494,
+    "rule": "Every actual failed/passed invocation counted once; heavy outer includes its lease wait/launch. Nested inner timings are not added. Repair game reconstruction is separate from original acceptance. Friction entries explain subsets of those same costs, not added costs."
+  },
+  "heavyLeases": {
+    "full": {
+      "acquiredUtc": "2026-10-12T10:22:40.743156+00:00",
+      "pid": 53371,
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ]
+    },
+    "full-final": {
+      "acquiredUtc": "2026-10-12T10:32:06.210326+00:00",
+      "pid": 81387,
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ]
+    },
+    "fuzz": {
+      "acquiredUtc": "2026-10-12T10:34:27.797634+00:00",
+      "pid": 97901,
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/513-run2-evidence/weighted-fuzz.ts"
+      ]
+    },
+    "fuzz-log-reconstruct": {
+      "acquiredUtc": "2026-10-12T10:45:06.829700+00:00",
+      "pid": 85050,
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/513-run2-evidence/fuzz-log-regenerate.ts"
+      ]
+    }
+  },
+  "negativeWitness": {
+    "shaBefore": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d",
+    "shaMutated": "8d2bb1741faa3b78ffea1cc35e7c1cfe8ba6b32e511884fb3c6d9f5c8f981d32",
+    "mutation": "Ignore while in Layers.expand only",
+    "shaRestored": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d",
+    "restoredUtc": "2026-10-12T10:17:58.199587+00:00",
+    "actualNegativeExit": 1,
+    "failedContracts": 5
+  },
+  "sourceRepairs": [
+    {
+      "utc": "2026-10-12T10:26:50.649030+00:00",
+      "reason": "Parent strictTS +runtime witness confirmed extra.controller override accepted by new generic overloads; reject controller explicitly without valid-input runtime change.",
+      "before": {
+        "src/engine/dsl/builders.ts": "59afa5e8c08821f55b2662090bdf69d69de46020ccfdd3b42b17027d221d8c61",
+        "src/engine/effects/primitives/contracts/conditional-static.contracts.ts": "f4bae256ee1fec416229551991a5ab225e95cac96d564af7d90cb8a9fb02c48b"
+      },
+      "after": {
+        "src/engine/dsl/builders.ts": "6de6543b7790f1860322ded7a00eafa38314d266a014863ef7f8979a6fa997c0",
+        "src/engine/effects/primitives/contracts/conditional-static.contracts.ts": "2bdc730d4d8740af2c2afe7f2429f83bbf6fd32fe6ecd2fc88ad3fdbc2afa8f7"
+      },
+      "priorPassingFull": "full.json"
+    },
+    {
+      "utc": "2026-10-12T10:28:42.245929+00:00",
+      "reason": "With exactOptionalPropertyTypes unset, optionalnever admittedexplicitundefined. Forbid every suppliedcontroller key withmappednever and fixedcontroller-last spread robust against widenedstructural/untyped input; acceptedinput runtimeunchanged.",
+      "before": {
+        "src/engine/dsl/builders.ts": "6de6543b7790f1860322ded7a00eafa38314d266a014863ef7f8979a6fa997c0",
+        "src/engine/effects/primitives/contracts/conditional-static.contracts.ts": "2bdc730d4d8740af2c2afe7f2429f83bbf6fd32fe6ecd2fc88ad3fdbc2afa8f7"
+      },
+      "after": {
+        "src/engine/dsl/builders.ts": "5b530625ee3eda07927e1d172aabf550bcb2d210c4c723dfa2f210e3c4e8cd45",
+        "src/engine/effects/primitives/contracts/conditional-static.contracts.ts": "c83b391aba48aff22cb8dc092859f72d7ccd78935e450a7265d8de04841d6712"
+      },
+      "intermediateFocused": "focused-final.json"
+    }
+  ],
+  "sourceVersions": "Each receipt binds its actual sourceSHA256; initial passing checks precede controller-guard changes, finalreview/full/fuzz/QA and reconstruction bind identical final engine source. External scenario/harness corrections do not modify engine code.",
+  "ruling": "RD-hv-umm2.513-1 uses D10step4 CR611.3a/b/604.2, supported by604.7 and Dreamtides normative earlier-layer/allowance rules; actualverified correction retainedruling-verified.json.",
+  "fuzz": {
+    "original": {
+      "gamesRequested": 300,
+      "gamesCompleted": 300,
+      "steps": 119151,
+      "prompts": 2323,
+      "reruns": 223,
+      "bounded": {
+        "legality": 0,
+        "prompts": 0
+      },
+      "failures": 0,
+      "matchingPermissionWrites": 34,
+      "sourceOnObservations": 1360,
+      "sourceOffObservations": 21772,
+      "observedToggles": 169,
+      "targets": [
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000051301"
+          },
+          "included": 833,
+          "exercised": 344
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000051302"
+          },
+          "included": 839,
+          "exercised": 355
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000051303"
+          },
+          "included": 818,
+          "exercised": 325
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000051304"
+          },
+          "included": 836,
+          "exercised": 380
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000051305"
+          },
+          "included": 849,
+          "exercised": 359
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000051306"
+          },
+          "included": 856,
+          "exercised": 359
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000051307"
+          },
+          "included": 831,
+          "exercised": 363
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000051308"
+          },
+          "included": 806,
+          "exercised": 327
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-000000051309"
+          },
+          "included": 828,
+          "exercised": 365
+        },
+        {
+          "target": {
+            "kind": "card",
+            "uuid": "5e5e5e5e-0000-4000-8000-00000005130a"
+          },
+          "included": 850,
+          "exercised": 631
+        }
+      ],
+      "innerWallSeconds": 169.94536766699997,
+      "observations": "Only original public createBattle/apply outcomes, not replay. Key writes compare matching UUID source/ability0/zone-entry key before and after. On/off/toggle are committed hand-count observations of live matching sources, not causal per-clause coverage."
+    },
+    "explicitReplay": "300 inline final-hash checks and30interactive games; no independentserialized-JSONL replay claim.",
+    "originalSerialization": "300malformedobject-string files preservedexactly underfuzz-logs-malformed-original; originalharness preservedweighted-fuzz-original.ts. The original weighted acceptance/counters passed; its rawlogbytes are invalid.",
+    "reconstruction": {
+      "completed": 300,
+      "steps": 119151,
+      "prompts": 2323,
+      "rows": 64252,
+      "actions": 39917,
+      "errors": [],
+      "innerWallSeconds": 121.64901608299999,
+      "provenance": "Reconstructed by repeating the original300 seeds and exactpublicsynthetic weightedpool on unchangedsource after externalserializerlostrecordbytes. Does not retroactively turn originalmalformedfiles into original validJSONL; no source or statisticalcoverage change."
+    },
+    "reconstructedAudit": {
+      "files": 300,
+      "rows": 64252,
+      "battleStarts": 300,
+      "actions": 39917,
+      "engineErrors": [],
+      "provenance": "Reconstructed recordbytes with reconstructiontimestamps, not original raw game export or an independent serialized-log replay check."
+    },
+    "reconstructionHashesFile": "fuzz-log-reconstruction.json",
+    "currentCorrectedHarness": "weighted-fuzz.ts is corrected but not rerun asoriginal acceptance; reconstruction uses separatefuzz-log-regenerate.ts."
+  },
+  "qa": {
+    "ledgerRows": 4,
+    "effectivePasses": 2,
+    "retainedFailedDefinitions": 2,
+    "finalInvocation": "invocations/run-NZlC1H",
+    "finalReports": "conditional-static-qa.result.json",
+    "scenarioVersions": {
+      "utc": "2026-10-12T10:36:24.296667+00:00",
+      "originalSHA256": "398bb92b1bccf09242e7d2713a1e3e28f2f031b96006e30c534bfd435d66789f",
+      "correctedSHA256": "0b61a928ce39dbc95463587a7d9123a22fdaa7eb8130d0a31c7c605321f33560",
+      "reason": "Original externalQA incorrectly used viewer-battle-void. Actual MobileBattleOwner is player|enemy; SideZones testId uses owner; existing control contract selects player-battle-void. Fix external selector only; no product/source changes. Semantic changedscenario rerun, not timeoutretry.",
+      "failedInvocation": "run-6ypeKm",
+      "failedReceipt": "judged-qa.json",
+      "rawError": "conditional initial-on mismatch count1 selectionnull spent[]; caps[]",
+      "runtime": "server group97930 port5274 nativecleanup attempted portfree; runnerexit1 terminal",
+      "chooserCorrection": {
+        "utc": "2026-10-12T10:39:19.812670+00:00",
+        "previousSHA256": "0b61a928ce39dbc95463587a7d9123a22fdaa7eb8130d0a31c7c605321f33560",
+        "finalSHA256": "8962cea518a2a79bbdfc63caace0f26b7f7fe0efb18afeb797db6168fcc7026f",
+        "failedInvocation": "run-jMmwPo",
+        "receipt": "judged-qa-corrected.json",
+        "reason": "Playable void pile opens the normal ability chooser; explicitly click its Browse option before waiting for browser. EngineBattleScreen.onZoneOpen and withChooser void branch prove this route; source behavior unchanged. Changed-definition run, not unchanged timeoutretry.",
+        "passedPrefix": "initial-on / draw hand2 off / freehandplay hand1 on;3desktopcaptures and33rowJSONL retained",
+        "runtime": "server group21178 port5274 cleanup attempted portfree;runnerterminal1"
+      }
+    },
+    "viewportLogs": {
+      "desktop": {
+        "gameId": "kiapwm",
+        "rows": 53
+      },
+      "mobile": {
+        "gameId": "o6gnxq",
+        "rows": 51
+      }
+    },
+    "sourceUUID": "5e5e5e5e-0000-4000-8000-000000051301",
+    "source": "i1",
+    "sourceEntry": 0,
+    "staticAbility": 0,
+    "key": "i1#0@0",
+    "playedVoid": "i9",
+    "remainingVoid": "i10",
+    "eventUUID": "5e5e5e5e-0000-4000-8000-00000005130a",
+    "logs": "Actualpersistedengine.action activationability1 andphysicalhand/void playintents; keyobservedcommittedstate+intent replayprovenance; no standaloneallowanceevent/fullLOADSTATEsnapshotclaim.",
+    "captures": [
+      "conditional-initial-on-desktop.png",
+      "conditional-hand-two-off-desktop.png",
+      "conditional-hand-one-on-desktop.png",
+      "conditional-reenabled-spent-desktop.png",
+      "conditional-spent-browser-desktop.png",
+      "conditional-initial-on-mobile.png",
+      "conditional-hand-two-off-mobile.png",
+      "conditional-hand-one-on-mobile.png",
+      "conditional-reenabled-spent-mobile.png",
+      "conditional-spent-browser-mobile.png"
+    ]
+  },
+  "failurePaths": {
+    "errorMidStep": "New conditional evaluation is a pure derived read and adds no persistent transition. Existing once-per-turn contract preserves unused allowance on play-choice failure with exact pre-legal witness and retry; preserves committed allowance on later resolution error. Both pass in focused/full.",
+    "interrupt": "Existing once-per-turn contract keeps its allowance spent when opposing Interrupt prevents permitted card; conditions do not revalidate an already committed play.",
+    "reloadRestart": "New conditional contract serializes/reloads condition-off and spent states and checks publicview/permission/fidelity; existing route-choice fold contract resumes/cancels pending choice.",
+    "partialWrite": "No conditional state or event is stored. Derived read cannot partially commit; existing precommit and resolution failure contracts cover the unchanged allowance write boundary.",
+    "invalidStaleConcurrent": "New contract proves initiallylegal exactpermission play becomes illegal after real draw, throwsIllegalAction without statehash/key change, then same key canbe used afterhandplay. Existing fold contract rejects concurrent actors, staleprompt andwrongactor without spending."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final wrapper start, os.getloadavg()[0] 1minute kernelhostload"
+      },
+      "implementMin": {
+        "measuredFor": "original dispatch through explicitly labeled precommit observation; external commit.json supplies actual commit endpoint"
+      }
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 199,
+    "jsdomFiles": 0
+  },
+  "missingArtWarningsByInvocation": {
+    "install": 0,
+    "focused-initial": 259,
+    "negative-ignore-while": 259,
+    "review-initial": 259,
+    "knip": 259,
+    "full": 259,
+    "focused-final": 259,
+    "focused-corrected-final": 259,
+    "review-final": 259,
+    "qa-syntax": 0,
+    "knip-final": 259,
+    "full-final": 259,
+    "fuzz": 0,
+    "judged-qa": 0,
+    "judged-qa-corrected": 0,
+    "judged-qa-final": 0,
+    "fuzz-log-audit": 0,
+    "fuzz-log-reconstruct": 0,
+    "fuzz-log-audit-corrected": 0
+  },
+  "runtime": {
+    "utc": "2026-10-12T10:54:11.407487+00:00",
+    "receiptGroups": [
+      3030,
+      5046,
+      8464,
+      17849,
+      21150,
+      21178,
+      32745,
+      35276,
+      48964,
+      51891,
+      51929,
+      55648,
+      55912,
+      55941,
+      56325,
+      56464,
+      56905,
+      57087,
+      57640,
+      57729,
+      58307,
+      58609,
+      58700,
+      58939,
+      58948,
+      59364,
+      59514,
+      59624,
+      60066,
+      60125,
+      60289,
+      60693,
+      61071,
+      61177,
+      61310,
+      61871,
+      61876,
+      62414,
+      62948,
+      76114,
+      78823,
+      83132,
+      83381,
+      83425,
+      83653,
+      83866,
+      83917,
+      84375,
+      84557,
+      85149,
+      85253,
+      85811,
+      85848,
+      86114,
+      86203,
+      86424,
+      86939,
+      87118,
+      87466,
+      87585,
+      87806,
+      87930,
+      88126,
+      88551,
+      88716,
+      88761,
+      89267,
+      89812,
+      90382,
+      97899,
+      97900,
+      97930
+    ],
+    "remainingOwned": [],
+    "historicalIdentifiersNowUnrelated": [],
+    "qaServers": [
+      {
+        "group": 97930,
+        "port": 5274,
+        "nativeTerminalReceipt": "judged-qa.json"
+      },
+      {
+        "group": 21178,
+        "port": 5274,
+        "nativeTerminalReceipt": "judged-qa-corrected.json"
+      },
+      {
+        "group": 51929,
+        "port": 5274,
+        "nativeTerminalReceipt": "judged-qa-final.json"
+      }
+    ],
+    "cleanup": "Native scripts retain actual cleanup/port-free-at-closure facts; current port occupancy may belong to a peer. No historical PID was killed."
+  },
+  "rawManifest": {
+    "file": "raw-manifest.json",
+    "sha256": "da51c98938a63c1f9f7326b478948db8a955c367f74c9f66a7adc27f2e6362ba"
+  },
+  "qaManifest": {
+    "file": "qa-manifest.json",
+    "sha256": "c97d2a12b3d79f99a505bf0a7ddd507b0997d55615382e20f2307896a82cf62b"
+  },
+  "finalSourceSHA256": {
+    "src/engine/content-gates.test.ts": "e64e17cb747c13c9d90b76fd4971035eb5a00fd4845cccd4c13083293877a818",
+    "src/engine/continuous/layers.ts": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d",
+    "src/engine/dsl/builders.ts": "5b530625ee3eda07927e1d172aabf550bcb2d210c4c723dfa2f210e3c4e8cd45",
+    "src/engine/dsl/types.ts": "814100c0fdc95d9b449abdc98376421f0a6b005c9af847e58466661329537dd8",
+    "src/engine/effects/interpreter.ts": "aa9289da6dc89230b431b886588ee811f8c5b90fc8a62f25fb93e953aec42a66",
+    "src/engine/testing/prompt-lab.ts": "5e042f4180a51df98dd5fcada6826151b607ef818e8858b3e85cdb05f271c4b9",
+    "src/engine/dsl/conditions.ts": "5e2c63289bae2ac7cdd8f05aacdb5ada866d06449cff5edac316202dff6d58a6",
+    "src/engine/effects/primitives/contracts/conditional-static.contracts.ts": "c83b391aba48aff22cb8dc092859f72d7ccd78935e450a7265d8de04841d6712",
+    "src/engine/testing/conditional-static-cards.ts": "f332fec3c3bdb9fab5c9dda8399c95047460ed26fdc9ca3047b73f46cf9afd53"
+  },
+  "hostLoadSamples": {
+    "focused-initial": {
+      "start": [
+        14.748046875,
+        10.5537109375,
+        11.279296875
+      ],
+      "end": [
+        17.73095703125,
+        11.24169921875,
+        11.517578125
+      ]
+    },
+    "negative-ignore-while": {
+      "start": [
+        17.08154296875,
+        13.28564453125,
+        12.30322265625
+      ],
+      "end": [
+        16.43408203125,
+        13.21435546875,
+        12.28369140625
+      ]
+    },
+    "review-initial": {
+      "start": [
+        13.46826171875,
+        12.78955078125,
+        12.15771484375
+      ],
+      "end": [
+        10.5498046875,
+        12.13232421875,
+        11.951171875
+      ]
+    },
+    "knip": {
+      "start": [
+        9.24658203125,
+        11.68896484375,
+        11.794921875
+      ],
+      "end": [
+        9.24658203125,
+        11.68896484375,
+        11.794921875
+      ]
+    },
+    "full": {
+      "start": [
+        7.28173828125,
+        10.60888671875,
+        11.37744140625
+      ],
+      "end": [
+        12.0478515625,
+        13.302734375,
+        12.52880859375
+      ]
+    },
+    "focused-final": {
+      "start": [
+        15.244140625,
+        13.15478515625,
+        12.51220703125
+      ],
+      "end": [
+        14.26318359375,
+        12.98583984375,
+        12.4560546875
+      ]
+    },
+    "focused-corrected-final": {
+      "start": [
+        10.541015625,
+        13.17138671875,
+        12.67236328125
+      ],
+      "end": [
+        10.17724609375,
+        13.05224609375,
+        12.6328125
+      ]
+    },
+    "review-final": {
+      "start": [
+        7.837890625,
+        12.20263671875,
+        12.33837890625
+      ],
+      "end": [
+        22.63720703125,
+        15.5185546875,
+        13.5556640625
+      ]
+    },
+    "qa-syntax": {
+      "start": [
+        20.08349609375,
+        15.4658203125,
+        13.59130859375
+      ],
+      "end": [
+        20.08349609375,
+        15.4658203125,
+        13.59130859375
+      ]
+    },
+    "knip-final": {
+      "start": [
+        19.51611328125,
+        15.4248046875,
+        13.58740234375
+      ],
+      "end": [
+        20.35546875,
+        15.66650390625,
+        13.68310546875
+      ]
+    },
+    "full-final": {
+      "start": [
+        21.08984375,
+        16.71630859375,
+        14.1826171875
+      ],
+      "end": [
+        10.0029296875,
+        14.16845703125,
+        13.4833984375
+      ]
+    },
+    "fuzz": {
+      "start": [
+        6.294921875,
+        12.30078125,
+        12.83251953125
+      ],
+      "end": [
+        18.1748046875,
+        14.10302734375,
+        13.37060546875
+      ]
+    },
+    "judged-qa": {
+      "start": [
+        6.294921875,
+        12.30078125,
+        12.83251953125
+      ],
+      "end": [
+        5.95068359375,
+        12.12939453125,
+        12.76904296875
+      ]
+    },
+    "judged-qa-corrected": {
+      "start": [
+        13.01611328125,
+        12.40234375,
+        12.75390625
+      ],
+      "end": [
+        18.1748046875,
+        14.10302734375,
+        13.37060546875
+      ]
+    },
+    "judged-qa-final": {
+      "start": [
+        21.265625,
+        15.92138671875,
+        14.1201171875
+      ],
+      "end": [
+        26.087890625,
+        18.42041015625,
+        15.173828125
+      ]
+    },
+    "fuzz-log-audit": {
+      "start": [
+        16.021484375,
+        16.8720703125,
+        14.77197265625
+      ],
+      "end": [
+        16.021484375,
+        16.8720703125,
+        14.77197265625
+      ]
+    },
+    "fuzz-log-reconstruct": {
+      "start": [
+        6.0869140625,
+        12.3388671875,
+        13.2578125
+      ],
+      "end": [
+        5.90869140625,
+        8.80908203125,
+        11.48193359375
+      ]
+    },
+    "fuzz-log-audit-corrected": {
+      "start": [
+        3.6708984375,
+        7.02880859375,
+        10.39404296875
+      ],
+      "end": [
+        3.6708984375,
+        7.02880859375,
+        10.39404296875
+      ]
+    },
+    "schema": {
+      "start": [
+        5.6962890625,
+        8.56787109375,
+        10.42236328125
+      ],
+      "end": [
+        5.6962890625,
+        8.56787109375,
+        10.42236328125
+      ]
+    }
+  }
+}
