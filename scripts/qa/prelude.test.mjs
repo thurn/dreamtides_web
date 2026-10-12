@@ -111,6 +111,37 @@ describe("QA observations across navigation", () => {
     expect((await qa.finish(null, null)).caps).toEqual([]);
   });
 
+  it.each([
+    { viewport: { width: 1440, height: 900 }, clip: undefined, raster: { width: 2880, height: 1800 }, reportedClip: undefined },
+    { viewport: { width: 390, height: 844 }, clip: undefined, raster: { width: 780, height: 1688 }, reportedClip: undefined },
+    { viewport: { width: 1440, height: 900 }, clip: { x: -1.2, y: 12.2, width: 10.4, height: 9.1 }, raster: { width: 20, height: 20 }, reportedClip: { x: 0, y: 12, width: 10, height: 10 } },
+  ])("captures device pixels while reporting CSS geometry: $viewport / $clip", async ({ viewport, clip, raster, reportedClip }) => {
+    const { qa, evaluate, waitForFunction, screenshot } = await fixture();
+    const href = "http://localhost:5174/lab";
+    evaluate.mockResolvedValue({ href, ...viewport, caps: { errors: [], rejections: [], consoleErrors: [] } });
+    waitForFunction.mockResolvedValue({ jsonValue: () => Promise.resolve(true), dispose: () => Promise.resolve() });
+    /** @type {Map<string, { width: number, height: number, pixels: Uint8Array }>} */
+    const images = new Map();
+    // External page contract: screenshot rectangles are CSS pixels, while
+    // device output multiplies their raster size by this synthetic page's DPR.
+    screenshot.mockImplementation((/** @type {{ path: string, scale?: "css" | "device", clip?: import('./prelude.mjs').Rect }} */ options) => {
+      const density = options.scale === "css" ? 1 : 2;
+      const bounds = options.clip ?? viewport;
+      const width = bounds.width * density;
+      const height = bounds.height * density;
+      const pixels = new Uint8Array(width * height * 4);
+      images.set(options.path, { width, height, pixels });
+      return Promise.resolve(pixels);
+    });
+    const path = await qa.capture("density", { clip });
+    const image = images.get(path);
+    expect(image).toMatchObject(raster);
+    expect(image?.pixels.byteLength).toBe(raster.width * raster.height * 4);
+    expect((await qa.finish(null, null)).captures).toEqual([
+      { path, href, ...viewport, ...(reportedClip === undefined ? {} : { clip: reportedClip }) },
+    ]);
+  });
+
   it("waits for image completion before capturing, including failed images", async () => {
     const { qa, evaluate, waitForFunction, screenshot } = await fixture();
     evaluate.mockResolvedValue({ href: "http://localhost:5174/lab", width: 1440, height: 900, caps: { errors: [], rejections: [], consoleErrors: [] } });

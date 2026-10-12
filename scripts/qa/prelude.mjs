@@ -432,10 +432,11 @@
  * @property {BattleDriver} battle
  * @property {() => Promise<void>} rest Moves the pointer outside the viewport.
  * @property {(name: string, options?: { fullPage?: boolean, clip?: Rect, element?: string | Target, pad?: number, minOpacity?: number }) => Promise<string>} capture
- *   Writes `<captureDir>/<name>.png` at CSS scale, pointer at rest: the
+ *   Writes `<captureDir>/<name>.png` in device pixels, pointer at rest: the
  *   viewport, the full page (`fullPage`), a viewport rectangle (`clip`), or
  *   the box of the first rendered element of `element` (waited for like
- *   `waitVisible`), grown by `pad` CSS pixels. A clip is cut to the viewport.
+ *   `waitVisible`), grown by `pad` CSS pixels. Viewport and reported clip
+ *   geometry use CSS pixels. A clip is cut to the viewport.
  * @property {<T>(name: string, fn: () => Promise<T>, options?: { longTaskMs?: number, top?: number }) => Promise<TraceSummary & { value: T }>} trace
  *   Records a Chrome trace (CDP `Tracing`) around `fn`, bracketed by
  *   `performance.mark`s `qa-trace:<name>:start` and `:end` that put the
@@ -1406,7 +1407,7 @@ export async function createQa(page, config) {
         region = { x, y, width: right - x, height: bottom - y };
       }
       const path = `${config.captureDir}/${name}.png`;
-      await page.screenshot({ path, scale: "css", fullPage, ...(region === undefined ? {} : { clip: region }) });
+      await page.screenshot({ path, scale: "device", fullPage, ...(region === undefined ? {} : { clip: region }) });
       captures.push({ path, href: state.href, width: state.width, height: state.height, ...(region === undefined ? {} : { clip: region }) });
       return path;
     },

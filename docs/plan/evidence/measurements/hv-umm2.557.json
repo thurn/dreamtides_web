@@ -1,0 +1,541 @@
+{
+  "bead": "hv-umm2.557",
+  "base": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+  "sourceScope": {
+    "paths": [
+      "scripts/qa/prelude.mjs",
+      "scripts/qa/prelude.test.mjs"
+    ],
+    "nonTestLinesAdded": 4,
+    "nonTestLinesRemoved": 3,
+    "testLinesAdded": 31,
+    "behavior": "PNG capture uses device pixels. Capture viewport, clipping, rounding and reported geometry use CSS pixels.",
+    "existingImageReadinessContract": "preserved and passed"
+  },
+  "commands": {
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/prelude.test.mjs"
+      ],
+      "start": "2026-10-12T16:59:40.783468+00:00",
+      "pid": 58753,
+      "processGroup": 58753,
+      "hostLoadStart": [
+        19.76171875,
+        16.2216796875,
+        14.48779296875
+      ],
+      "exit": 0,
+      "end": "2026-10-12T16:59:44.009151+00:00",
+      "elapsedS": 3.2257111072540283,
+      "hostLoadEnd": [
+        19.76171875,
+        16.2216796875,
+        14.48779296875
+      ]
+    },
+    "negative": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/prelude.test.mjs",
+        "-t",
+        "captures device pixels"
+      ],
+      "start": "2026-10-12T16:59:53.778943+00:00",
+      "pid": 73894,
+      "processGroup": 73894,
+      "hostLoadStart": [
+        18.328125,
+        16.0322265625,
+        14.44091796875
+      ],
+      "exit": 1,
+      "end": "2026-10-12T16:59:56.450482+00:00",
+      "elapsedS": 2.671579360961914,
+      "hostLoadEnd": [
+        17.3408203125,
+        15.865234375,
+        14.39111328125
+      ]
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T17:00:06.431149+00:00",
+      "pid": 76564,
+      "processGroup": 76564,
+      "hostLoadStart": [
+        17.3359375,
+        15.91748046875,
+        14.4267578125
+      ],
+      "exit": 1,
+      "end": "2026-10-12T17:00:38.838379+00:00",
+      "elapsedS": 32.40725612640381,
+      "hostLoadEnd": [
+        13.6357421875,
+        15.158203125,
+        14.2021484375
+      ]
+    },
+    "review-corrected": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T17:00:50.481472+00:00",
+      "pid": 6129,
+      "processGroup": 6129,
+      "hostLoadStart": [
+        12.017578125,
+        14.72509765625,
+        14.06396484375
+      ],
+      "exit": 0,
+      "end": "2026-10-12T17:01:21.552513+00:00",
+      "elapsedS": 31.071080207824707,
+      "hostLoadEnd": [
+        10.96728515625,
+        14.234375,
+        13.9091796875
+      ]
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T17:01:35.464991+00:00",
+      "pid": 34352,
+      "processGroup": 34352,
+      "hostLoadStart": [
+        10.6298828125,
+        14.0078125,
+        13.83447265625
+      ],
+      "exit": 0,
+      "end": "2026-10-12T17:01:39.240721+00:00",
+      "elapsedS": 3.7757771015167236,
+      "hostLoadEnd": [
+        10.6298828125,
+        14.0078125,
+        13.83447265625
+      ]
+    },
+    "full": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/qa557-run.py",
+        "full-held",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T17:01:47.743146+00:00",
+      "pid": 35297,
+      "processGroup": 35297,
+      "hostLoadStart": [
+        10.875,
+        13.95556640625,
+        13.81787109375
+      ],
+      "exit": 0,
+      "end": "2026-10-12T17:03:21.324214+00:00",
+      "elapsedS": 93.58110427856445,
+      "hostLoadEnd": [
+        6.31494140625,
+        11.69091796875,
+        12.96044921875
+      ]
+    },
+    "full-held": {
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T17:01:47.765451+00:00",
+      "pid": 35300,
+      "processGroup": 35300,
+      "hostLoadStart": [
+        10.875,
+        13.95556640625,
+        13.81787109375
+      ],
+      "exit": 0,
+      "end": "2026-10-12T17:03:21.320144+00:00",
+      "elapsedS": 93.55473303794861,
+      "hostLoadEnd": [
+        6.31494140625,
+        11.69091796875,
+        12.96044921875
+      ]
+    },
+    "browser": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "card-lab-stage",
+        "--bead",
+        "hv-umm2.557",
+        "--arg",
+        "card=4cec92f2-9bac-4949-a602-cd0a44618aaf",
+        "--viewports",
+        "desktop,mobile",
+        "--port",
+        "5174"
+      ],
+      "start": "2026-10-12T17:03:31.382074+00:00",
+      "pid": 67826,
+      "processGroup": 67826,
+      "hostLoadStart": [
+        5.57763671875,
+        11.35498046875,
+        12.826171875
+      ],
+      "exit": 0,
+      "end": "2026-10-12T17:03:44.068048+00:00",
+      "elapsedS": 12.686010837554932,
+      "hostLoadEnd": [
+        6.14208984375,
+        11.2783203125,
+        12.78125
+      ]
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T17:05:18.257125+00:00",
+      "pid": 23607,
+      "processGroup": 23607,
+      "hostLoadStart": [
+        15.03125,
+        12.166015625,
+        12.908203125
+      ],
+      "exit": 0,
+      "end": "2026-10-12T17:05:18.321004+00:00",
+      "elapsedS": 0.06391096115112305,
+      "hostLoadEnd": [
+        15.03125,
+        12.166015625,
+        12.908203125
+      ]
+    },
+    "friction": {
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-12T17:05:24.141602+00:00",
+      "pid": 24162,
+      "processGroup": 24162,
+      "hostLoadStart": [
+        14.6279296875,
+        12.1298828125,
+        12.89111328125
+      ],
+      "exit": 0,
+      "end": "2026-10-12T17:05:24.308549+00:00",
+      "elapsedS": 0.166978120803833,
+      "hostLoadEnd": [
+        14.6279296875,
+        12.1298828125,
+        12.89111328125
+      ]
+    }
+  },
+  "focused": {
+    "files": 1,
+    "passed": 33
+  },
+  "counterfactual": {
+    "change": "Temporarily restore only screenshot scale to css.",
+    "failed": 3,
+    "filteredSkipped": 30,
+    "observedRasterPixels": [
+      "1440x900 instead of 2880x1800",
+      "390x844 instead of 780x1688",
+      "10x10 instead of 20x20"
+    ],
+    "restored": true,
+    "acceptance": "Corrected final review/full checks pass the restored device behavior."
+  },
+  "correctedReview": {
+    "files": 12,
+    "passed": 161
+  },
+  "fullReview": {
+    "files": 351,
+    "passed": 5672,
+    "workers": 2,
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "lockWaitS": 0.022305,
+    "heldS": 93.55473303794861,
+    "bundle": "production excludes development modules"
+  },
+  "browser": {
+    "invocation": "invocations/run-rfoct0",
+    "rawReport": "invocations/run-rfoct0/card-lab-stage.result.json",
+    "cardUuid": "4cec92f2-9bac-4949-a602-cd0a44618aaf",
+    "requestedPort": 5174,
+    "actualPort": 5274,
+    "wallMs": {
+      "browserLeaseWait": 5,
+      "serve": 1360,
+      "scenario": 10507,
+      "total": 11935
+    },
+    "caps": [],
+    "error": null,
+    "captures": [
+      {
+        "filename": "card-lab-stage-desktop.png",
+        "pngPixels": {
+          "width": 2880,
+          "height": 1800
+        },
+        "reportedCssViewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "clip": null
+      },
+      {
+        "filename": "card-lab-stage-mobile.png",
+        "pngPixels": {
+          "width": 780,
+          "height": 1688
+        },
+        "reportedCssViewport": {
+          "width": 390,
+          "height": 844
+        },
+        "clip": null
+      }
+    ],
+    "gameLogRows": [
+      {
+        "viewport": "desktop",
+        "rows": 24
+      },
+      {
+        "viewport": "mobile",
+        "rows": 24
+      }
+    ],
+    "visualInspection": {
+      "detail": "original",
+      "verdict": "Visible counters, buttons and card title are legible at both device resolutions. Both captures retain the existing hand-card viewport crop."
+    }
+  },
+  "cleanup": {
+    "checks": {
+      "groups": [
+        58753,
+        73894,
+        76564,
+        6129,
+        34352,
+        35297,
+        35300
+      ],
+      "remaining": []
+    },
+    "browser": {
+      "at": "2026-10-12T17:04:01.754772+00:00",
+      "groups": [
+        67826,
+        67854
+      ],
+      "remaining": [],
+      "ownSlotOwnerAndServerAbsent": true,
+      "peerRecords": []
+    },
+    "worktreeFrozenDuringBrowser": true
+  },
+  "historicalOrigin555": {
+    "invocation": "run-AbfPuO",
+    "files": [
+      {
+        "filename": "self-cost-hand-desktop.png",
+        "pixels": [
+          1440,
+          900
+        ]
+      },
+      {
+        "filename": "self-cost-hand-mobile.png",
+        "pixels": [
+          390,
+          844
+        ]
+      },
+      {
+        "filename": "self-cost-hand-desktop-2x.png",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "kind": "separate explicit density override"
+      }
+    ],
+    "acceptedAs557Evidence": false
+  },
+  "introspection": "One parent-admitted missing-primitive phase5 filing link to hv-ll78 included unchanged.",
+  "frictionReport": {
+    "exit": 0,
+    "records": 606,
+    "historicalUnknowns": 41,
+    "phase5Uncovered": 23,
+    "phase5Files": 402,
+    "cadence": 25,
+    "newDuty": "Missing-primitive phase5 trigger filed as hv-ll78 by parent; admitted introspection row included. Other triggers have recorded dispositions."
+  },
+  "sourceHashes": {
+    "scripts/qa/prelude.mjs": "6293761b10e97a93b8e4aa306df41d70d80cc89d7f1d0a19b21f9a22fcb423ed",
+    "scripts/qa/prelude.test.mjs": "1a3b934492f84d04fe57517df94fd4c50f0b52bf09a4a02240a25d2f830c5606"
+  },
+  "implementationWindow": {
+    "start": "2026-10-12T16:57:58.225Z",
+    "precommitFreeze": "2026-10-12T17:17:19.939922+00:00",
+    "scope": "Includes the original helper window plus parent native conflict recovery, clean checkpoint/update, current disposition audit, combined-base checks and final evidence preparation; original validation provenance remains in postConflict."
+  },
+  "postConflict": {
+    "originalValidatedSource": "b036c3658e0528d618c7dc0e19889a071ceb4744",
+    "originalValidatedBase": "733e4085118fa83aa29b45048d1518ea5e3dbaac",
+    "conflictedCandidate": "01a13115-b9d9-7420-a1e5-3ba79e13df4d",
+    "conflictSubmissionStart": "2026-10-12T17:07:47.391Z",
+    "conflictingPath": "docs/plan/evidence/introspection.jsonl",
+    "checkpointNeverSubmitted": "86a8028d74ee74373221d4a0053749da05cc05c4",
+    "updatedSourceBeforeFinalAmend": "316bd5b9dd33dd8dba7954e15be7461bb8622472",
+    "updatedBase": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+    "sourceCodeAndTestBlobHashesIdentical": true,
+    "preservedLandedIntrospectionExactly": true,
+    "disposition": "The landed missing-primitive reason is owned by completed hv-umm2.558. Concurrent duplicate hv-ll78 was cancelled by its assigned peer; its redundant own filing row is omitted. The final introspection file exactly matches the updated base.",
+    "priorFullAndBrowserEvidence": "Tied to original validated source/base and byte-identical final capture code and tests; evidence-only resolution changes no behavior. Combined-base review, Knip, schema and trigger report pass; no duplicate full or browser run.",
+    "checks": [
+      {
+        "name": "post-conflict-review",
+        "args": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "start": "2026-10-12T17:12:33.883289+00:00",
+        "end": "2026-10-12T17:13:04.537030+00:00",
+        "wallS": 30.64542479100055,
+        "hostLoad": [
+          17.2109375,
+          17.373046875,
+          15.49072265625
+        ],
+        "pid": 33176,
+        "exit": 0
+      },
+      {
+        "name": "post-conflict-knip",
+        "args": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "start": "2026-10-12T17:13:04.537708+00:00",
+        "end": "2026-10-12T17:13:07.487259+00:00",
+        "wallS": 2.949329666997073,
+        "hostLoad": [
+          13.63623046875,
+          16.4912109375,
+          15.2353515625
+        ],
+        "pid": 73588,
+        "exit": 0
+      },
+      {
+        "name": "post-conflict-schema",
+        "args": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "start": "2026-10-12T17:13:07.487580+00:00",
+        "end": "2026-10-12T17:13:07.582825+00:00",
+        "wallS": 0.09527583299495745,
+        "hostLoad": [
+          13.0244140625,
+          16.31689453125,
+          15.18115234375
+        ],
+        "pid": 73953,
+        "exit": 0
+      },
+      {
+        "name": "post-conflict-friction",
+        "args": [
+          "npm",
+          "run",
+          "friction:triggers"
+        ],
+        "start": "2026-10-12T17:13:07.583125+00:00",
+        "end": "2026-10-12T17:13:07.739922+00:00",
+        "wallS": 0.15682220800954383,
+        "hostLoad": [
+          13.0244140625,
+          16.31689453125,
+          15.18115234375
+        ],
+        "pid": 73959,
+        "exit": 0
+      }
+    ],
+    "retrospective": {
+      "sourceCadence": 27,
+      "sourceRecords": 406,
+      "since": "hv-umm2.548",
+      "assignedBead": "hv-umm2.561",
+      "assignee": "01a12e91-c2c5-7321-b306-fdf0cc7b4ac9"
+    },
+    "originalHelperImplementationWindow": {
+      "start": "2026-10-12T16:57:58.225Z",
+      "precommitFreeze": "2026-10-12T17:05:50.580953+00:00",
+      "scope": "Includes parent design acknowledgment, reading, edit/repair, all checks, resource admission, browser execution/cleanup and evidence preparation. Actual commit tail is reported by parent."
+    },
+    "originalHelperCommit": "2026-10-12T17:06:19Z",
+    "originalHelperDispatchToCommitMin": 8.346,
+    "finalFreezeAt": "2026-10-12T17:17:19.939922+00:00"
+  },
+  "originalValidationSource": {
+    "base": "733e4085118fa83aa29b45048d1518ea5e3dbaac",
+    "source": "b036c3658e0528d618c7dc0e19889a071ceb4744",
+    "scope": "All original helper commands, full-review, counterfactual and browser receipts. Post-conflict checks have the separately named updated base."
+  },
+  "finalSourceScope": [
+    "scripts/qa/prelude.mjs",
+    "scripts/qa/prelude.test.mjs",
+    "docs/plan/evidence/friction/hv-umm2.557.json",
+    "docs/plan/evidence/measurements/hv-umm2.557.json",
+    "docs/plan/evidence/pre-existing/hv-umm2.557.md",
+    "docs/plan/evidence/qa-ledger/hv-umm2.557.jsonl"
+  ]
+}
