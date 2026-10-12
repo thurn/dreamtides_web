@@ -1,3 +1,5 @@
+import { all, characterYouControl, count, ofSubtype, self, staticAbility } from "../../engine/dsl/builders";
+import { sparkModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,9 @@ export default card({
   cardNumber: 444,
   art: { x: 0, y: 0, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    staticAbility(sparkModifier(self(), count(characterYouControl(ofSubtype("Warrior"))))),
+    staticAbility(sparkModifier(all(characterYouControl({ ...ofSubtype("Warrior"), another: true })), variant.amplified ? 2 : 1)),
+  ],
+  verifiedText: "27fmmquoz3w",
 });

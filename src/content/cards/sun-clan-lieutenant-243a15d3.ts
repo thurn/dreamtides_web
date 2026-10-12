@@ -1,3 +1,5 @@
+import { ofSubtype, staticAbility } from "../../engine/dsl/builders";
+import { costModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 109,
   art: { x: -0.168, y: 0.839, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [staticAbility(costModifier("you", ofSubtype("Warrior"), -1))],
+  verifiedText: "heewn724xj",
 });

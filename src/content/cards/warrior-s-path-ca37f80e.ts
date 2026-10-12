@@ -1,3 +1,5 @@
+import { characterYouControl, count, event, ofSubtype, target } from "../../engine/dsl/builders";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 348,
   art: { x: -0.353, y: 0.805, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(gainSpark(target(characterYouControl()), count(characterYouControl(ofSubtype("Warrior")))))],
+  verifiedText: "1cmsa2dhvhp",
 });

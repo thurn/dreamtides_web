@@ -1,0 +1,733 @@
+{
+  "bead": "hv-umm2.203",
+  "phase": 5,
+  "base": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+  "dispatchReceipt": "/tmp/dreamtides-executor-01a1304d/203-validation/dispatch.json",
+  "scratch": "/tmp/dreamtides-executor-01a1304d/203-helper",
+  "filedEntities": [
+    "bbdc6ee7-e9b1-488b-90b9-19337b65fee6",
+    "243a15d3-a4eb-415c-b106-86d4a2b7ec6a",
+    "ca37f80e-8474-4d40-b793-7a900f6ca467",
+    "56411ed4-bda9-4fdf-82e5-b5492de67039",
+    "57bb1572-6075-4efd-a592-102b134132fd"
+  ],
+  "entityCount": 5,
+  "printedVariants": 6,
+  "newPrimitives": [],
+  "newPrompts": [],
+  "newStatuses": [],
+  "newVisualEffects": [],
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "falloutFiles": [],
+  "clauseAudit": [
+    {
+      "uuid": "bbdc6ee7-e9b1-488b-90b9-19337b65fee6",
+      "encoding": "staticAbility(selfCostReduction(count(characterYouControl(ofSubtype(\"Warrior\")))), { zone: \"any\" })",
+      "functionalZones": [
+        "play",
+        "hand",
+        "void",
+        "deck"
+      ],
+      "binding": "Only the physical source; live count of current controlled Warriors. Cost display, affordability and payment use the existing physical-source reduction.",
+      "rules": [
+        "RD-hv-umm2.53-1",
+        "RD-hv-umm2.53-2",
+        "docs/rules.md: Costs, Requirements, and X; Static abilities"
+      ],
+      "contractOwner": "hv-umm2.555: self-cost-reduction.contracts.ts / DSL.selfCostWarrior"
+    },
+    {
+      "uuid": "243a15d3-a4eb-415c-b106-86d4a2b7ec6a",
+      "encoding": "staticAbility(costModifier(\"you\", ofSubtype(\"Warrior\"), -1))",
+      "functionalZones": [
+        "play"
+      ],
+      "binding": "Source controller matching Warrior play costs; generic static defaults to play."
+    },
+    {
+      "uuid": "ca37f80e-8474-4d40-b793-7a900f6ca467",
+      "encoding": "event(gainSpark(target(characterYouControl()), count(characterYouControl(ofSubtype(\"Warrior\")))))",
+      "binding": "Existing friendly character target; count fixed at resolution and permanent gained spark."
+    },
+    {
+      "uuid": "56411ed4-bda9-4fdf-82e5-b5492de67039",
+      "encoding": "staticAbility(sparkModifier(supported(), count(characterYouControl(ofSubtype(\"Warrior\")))))",
+      "functionalZones": [
+        "play"
+      ],
+      "binding": "Existing physical back-rank adjacency determines recipients; live Warrior count. supported() directly supplies the Support benefit."
+    },
+    {
+      "uuid": "57bb1572-6075-4efd-a592-102b134132fd",
+      "encoding": "self live-count spark static and other controlled Warrior anthem (+1 base / +2 amplified)",
+      "functionalZones": [
+        "play"
+      ],
+      "binding": "Self count includes the source while it is a Warrior; another:true excludes the physical source from the second ability."
+    }
+  ],
+  "auditCorrection": "The initial source-free message referred to printed-text detection for Support. Read-only follow-up corrected that explanation before writes: supported() directly routes the existing physical adjacency. Parent admission retained the corrected explanation.",
+  "ambiguityAudit": {
+    "missingForm": false,
+    "inventoryApproximation": "Inventory costModifier label was audited against the printed physical-source clause; existing555 selfCostReduction supplies the exact form.",
+    "existingRulingReuse": [
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.53-1.md",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.53-2.md"
+    ],
+    "parentAdmission": "Five modules only, source zone:any explicitly acknowledged; generic statics default play. No new rules decision required."
+  },
+  "d20": {
+    "scenarioRequired": false,
+    "reason": "All five are composition of existing forms. Public synthetic primitive contracts own physical-source binding, functional zones, repeated UUID instances, both controllers, live/remapped types and figments, copies/gained abilities, cost routes, spark snapshots, source exclusions and Support adjacency. No primitive-composition mirror scenario added.",
+    "plainScenarioDelta": {
+      "files": 0,
+      "lines": 0,
+      "cases": 0
+    }
+  },
+  "d21": {
+    "samples": [
+      {
+        "uuid": "bbdc6ee7-e9b1-488b-90b9-19337b65fee6",
+        "firstByte": 169,
+        "sampled": false
+      },
+      {
+        "uuid": "243a15d3-a4eb-415c-b106-86d4a2b7ec6a",
+        "firstByte": 128,
+        "sampled": false
+      },
+      {
+        "uuid": "ca37f80e-8474-4d40-b793-7a900f6ca467",
+        "firstByte": 205,
+        "sampled": false
+      },
+      {
+        "uuid": "56411ed4-bda9-4fdf-82e5-b5492de67039",
+        "firstByte": 98,
+        "sampled": false
+      },
+      {
+        "uuid": "57bb1572-6075-4efd-a592-102b134132fd",
+        "firstByte": 211,
+        "sampled": false
+      }
+    ],
+    "actualNewSurface": false,
+    "judgedCells": 0,
+    "reason": "Existing chooseTargets:target, spark, Support and cost surfaces;555 previously exercised physical-source cost display through native QA. All entity hash samples false. Full default sweep remains required."
+  },
+  "validation": {
+    "workers": 2,
+    "receipts": {
+      "authoring-hashes": {
+        "label": "authoring-hashes",
+        "cmd": [
+          "node_modules/.bin/tsx",
+          "-e",
+          "import { expectedVerifiedText } from \"./src/engine/dsl/verified-text.ts\"; import { readFileSync, writeFileSync } from \"node:fs\"; void (async () => { const files=[\"revered-prince-bbdc6ee7\",\"sun-clan-lieutenant-243a15d3\",\"warrior-s-path-ca37f80e\",\"skyflame-commander-56411ed4\",\"inspiring-templar-57bb1572\"]; for (const name of files) { const path=`./src/content/cards/${name}.ts`; const card=(await import(path)).default; const hash=expectedVerifiedText(card.renderedText,card.amplifiedText); writeFileSync(path,readFileSync(path,\"utf8\").replace(\"HASH\",hash)); console.log(card.id,hash); } })();"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91",
+        "start": "2026-10-12T17:14:56.153415+00:00",
+        "startMonotonic": 70834.100596166,
+        "hostLoadRaw": "{ 12.56 15.07 14.81 }",
+        "pid": 32709,
+        "pgid": 32709,
+        "end": "2026-10-12T17:14:57.224968+00:00",
+        "wallS": 1.0713839170057327,
+        "exitCode": 0
+      },
+      "focused": {
+        "label": "focused",
+        "cmd": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/content-gates.test.ts",
+          "src/content/specs/specs.test.ts",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/continuous/support.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91",
+        "start": "2026-10-12T17:14:57.249354+00:00",
+        "startMonotonic": 70835.196481708,
+        "hostLoadRaw": "{ 12.56 15.07 14.81 }",
+        "pid": 32796,
+        "pgid": 32796,
+        "end": "2026-10-12T17:15:06.569934+00:00",
+        "wallS": 9.320366416999605,
+        "exitCode": 0
+      },
+      "review": {
+        "label": "review",
+        "cmd": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91",
+        "start": "2026-10-12T17:15:10.304260+00:00",
+        "startMonotonic": 70848.25124825,
+        "hostLoadRaw": "{ 12.24 14.92 14.76 }",
+        "pid": 33937,
+        "pgid": 33937,
+        "end": "2026-10-12T17:15:55.352701+00:00",
+        "wallS": 45.04780583300453,
+        "exitCode": 0
+      },
+      "knip": {
+        "label": "knip",
+        "cmd": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91",
+        "start": "2026-10-12T17:16:00.493017+00:00",
+        "startMonotonic": 70898.439392583,
+        "hostLoadRaw": "{ 10.35 14.09 14.47 }",
+        "pid": 37922,
+        "pgid": 37922,
+        "end": "2026-10-12T17:16:03.721075+00:00",
+        "wallS": 3.2279427500034217,
+        "exitCode": 0
+      },
+      "fuzz-outer": {
+        "label": "fuzz-outer",
+        "cmd": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/dreamtides-executor-01a1304d/203-helper/check.py",
+          "fuzz",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "bbdc6ee7-e9b1-488b-90b9-19337b65fee6,243a15d3-a4eb-415c-b106-86d4a2b7ec6a,ca37f80e-8474-4d40-b793-7a900f6ca467,56411ed4-bda9-4fdf-82e5-b5492de67039,57bb1572-6075-4efd-a592-102b134132fd"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91",
+        "start": "2026-10-12T17:16:17.440883+00:00",
+        "startMonotonic": 70915.387071958,
+        "hostLoadRaw": "{ 8.71 13.55 14.27 }",
+        "pid": 39119,
+        "pgid": 39119,
+        "end": "2026-10-12T17:18:41.330207+00:00",
+        "wallS": 143.88759470799414,
+        "exitCode": 0
+      },
+      "fuzz": {
+        "label": "fuzz",
+        "cmd": [
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "bbdc6ee7-e9b1-488b-90b9-19337b65fee6,243a15d3-a4eb-415c-b106-86d4a2b7ec6a,ca37f80e-8474-4d40-b793-7a900f6ca467,56411ed4-bda9-4fdf-82e5-b5492de67039,57bb1572-6075-4efd-a592-102b134132fd"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91",
+        "start": "2026-10-12T17:16:17.465996+00:00",
+        "startMonotonic": 70915.412181833,
+        "hostLoadRaw": "{ 8.71 13.55 14.27 }",
+        "pid": 39123,
+        "pgid": 39123,
+        "end": "2026-10-12T17:18:41.326778+00:00",
+        "wallS": 143.8590535830008,
+        "exitCode": 0
+      },
+      "preflight": {
+        "label": "preflight",
+        "cmd": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "bbdc6ee7-e9b1-488b-90b9-19337b65fee6,243a15d3-a4eb-415c-b106-86d4a2b7ec6a,ca37f80e-8474-4d40-b793-7a900f6ca467,56411ed4-bda9-4fdf-82e5-b5492de67039,57bb1572-6075-4efd-a592-102b134132fd"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91",
+        "start": "2026-10-12T17:19:07.402545+00:00",
+        "startMonotonic": 71085.346817958,
+        "hostLoadRaw": "{ 7.43 10.16 12.69 }",
+        "pid": 45075,
+        "pgid": 45075,
+        "end": "2026-10-12T17:19:08.549442+00:00",
+        "wallS": 1.1467673330043908,
+        "exitCode": 0
+      }
+    },
+    "focused": {
+      "files": 4,
+      "cases": 2218,
+      "coverageGatePassed": true
+    },
+    "review": {
+      "files": 223,
+      "cases": 4036,
+      "lint": true,
+      "importCycles": true,
+      "browserTypecheck": true,
+      "nodeTypecheck": true
+    },
+    "reviewFullRequired": false,
+    "reviewFullReason": "28 changed card-composition source lines; no test infrastructure, repository-wide configuration or cross-cutting architecture change.",
+    "heavy": {
+      "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "outerWallS": 143.88759470799414,
+      "innerWallS": 143.8590535830008,
+      "admissionAndWrapperStartupS": 0.025109875001362525,
+      "scope": "Outer-start to inner-start includes heavy admission and wrapper startup; not attributed solely to lock contention."
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 138880,
+      "failures": 0,
+      "prompts": 3662,
+      "interactiveReruns": 373,
+      "engineWallS": 143.1,
+      "engineCpuS": 156.0,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 3
+      },
+      "targets": [
+        {
+          "kind": "card",
+          "uuid": "bbdc6ee7-e9b1-488b-90b9-19337b65fee6",
+          "included": 615,
+          "exercised": 196
+        },
+        {
+          "kind": "card",
+          "uuid": "243a15d3-a4eb-415c-b106-86d4a2b7ec6a",
+          "included": 609,
+          "exercised": 178
+        },
+        {
+          "kind": "card",
+          "uuid": "ca37f80e-8474-4d40-b793-7a900f6ca467",
+          "included": 616,
+          "exercised": 371
+        },
+        {
+          "kind": "card",
+          "uuid": "56411ed4-bda9-4fdf-82e5-b5492de67039",
+          "included": 618,
+          "exercised": 239
+        },
+        {
+          "kind": "card",
+          "uuid": "57bb1572-6075-4efd-a592-102b134132fd",
+          "included": 618,
+          "exercised": 207
+        }
+      ]
+    },
+    "preflight": {
+      "defaultVariants": 10,
+      "controllers": [
+        "player",
+        "enemy"
+      ],
+      "cells": 100,
+      "pass": 44,
+      "skip": 56,
+      "pending": 0,
+      "fail": 0,
+      "engineWallMs": 33.19783399999994
+    }
+  },
+  "sourceDelta": {
+    "files": 5,
+    "additions": 23,
+    "deletions": 5,
+    "changedNonTestLines": 28,
+    "testsExcluded": true,
+    "documentationExcluded": true,
+    "testEntrypointDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "plainScenarioDelta": {
+      "files": 0,
+      "lines": 0,
+      "cases": 0
+    },
+    "coreReviewRequired": false,
+    "reason": "Small existing-form composition; bead unmarked core-review and no new prompt."
+  },
+  "qa": {
+    "defaultVariants": 10,
+    "defaultControllers": [
+      "player",
+      "enemy"
+    ],
+    "ledger": "docs/plan/evidence/qa-ledger/hv-umm2.203.jsonl",
+    "playerFieldConvention": "Absent as means player; enemy rows explicitly carry as:enemy.",
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-IItwSX",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.203/invocations/sweep-IItwSX",
+      "counts": {
+        "pass": 44,
+        "skip": 56
+      },
+      "attemptCounts": {
+        "pass": 44,
+        "skip": 56
+      },
+      "hostLoad": 13.26904296875,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1687,
+        "scenario": 369483.5730849999,
+        "cleanup": 625.1614579999587,
+        "execution": 371860.76712499995,
+        "total": 371866.76712499995
+      }
+    },
+    "uniqueCells": 100,
+    "controllers": {
+      "player": 50,
+      "enemy": 50
+    },
+    "rawReports": [
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-bbdc6ee7-e9b1-488b-90b9-19337b65fee6-base-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-bbdc6ee7-e9b1-488b-90b9-19337b65fee6-empowered-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-bbdc6ee7-e9b1-488b-90b9-19337b65fee6-kindled-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-bbdc6ee7-e9b1-488b-90b9-19337b65fee6-perfected-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-bbdc6ee7-e9b1-488b-90b9-19337b65fee6-base-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-bbdc6ee7-e9b1-488b-90b9-19337b65fee6-empowered-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-bbdc6ee7-e9b1-488b-90b9-19337b65fee6-kindled-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-bbdc6ee7-e9b1-488b-90b9-19337b65fee6-perfected-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-243a15d3-a4eb-415c-b106-86d4a2b7ec6a-base-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-243a15d3-a4eb-415c-b106-86d4a2b7ec6a-empowered-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-243a15d3-a4eb-415c-b106-86d4a2b7ec6a-kindled-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-243a15d3-a4eb-415c-b106-86d4a2b7ec6a-perfected-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-243a15d3-a4eb-415c-b106-86d4a2b7ec6a-base-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-243a15d3-a4eb-415c-b106-86d4a2b7ec6a-empowered-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-243a15d3-a4eb-415c-b106-86d4a2b7ec6a-kindled-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-243a15d3-a4eb-415c-b106-86d4a2b7ec6a-perfected-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-ca37f80e-8474-4d40-b793-7a900f6ca467-base-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-ca37f80e-8474-4d40-b793-7a900f6ca467-empowered-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-ca37f80e-8474-4d40-b793-7a900f6ca467-inspired-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-ca37f80e-8474-4d40-b793-7a900f6ca467-enduring-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-ca37f80e-8474-4d40-b793-7a900f6ca467-perfected-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-ca37f80e-8474-4d40-b793-7a900f6ca467-base-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-ca37f80e-8474-4d40-b793-7a900f6ca467-empowered-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-ca37f80e-8474-4d40-b793-7a900f6ca467-inspired-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-ca37f80e-8474-4d40-b793-7a900f6ca467-enduring-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-ca37f80e-8474-4d40-b793-7a900f6ca467-perfected-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-56411ed4-bda9-4fdf-82e5-b5492de67039-base-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-56411ed4-bda9-4fdf-82e5-b5492de67039-empowered-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-56411ed4-bda9-4fdf-82e5-b5492de67039-kindled-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-56411ed4-bda9-4fdf-82e5-b5492de67039-perfected-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-56411ed4-bda9-4fdf-82e5-b5492de67039-base-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-56411ed4-bda9-4fdf-82e5-b5492de67039-empowered-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-56411ed4-bda9-4fdf-82e5-b5492de67039-kindled-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-56411ed4-bda9-4fdf-82e5-b5492de67039-perfected-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-57bb1572-6075-4efd-a592-102b134132fd-base-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-57bb1572-6075-4efd-a592-102b134132fd-amplified-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-57bb1572-6075-4efd-a592-102b134132fd-empowered-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-57bb1572-6075-4efd-a592-102b134132fd-kindled-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-57bb1572-6075-4efd-a592-102b134132fd-perfected-player-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-57bb1572-6075-4efd-a592-102b134132fd-base-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-57bb1572-6075-4efd-a592-102b134132fd-amplified-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-57bb1572-6075-4efd-a592-102b134132fd-empowered-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-57bb1572-6075-4efd-a592-102b134132fd-kindled-enemy-attempt-1.result.json",
+      "invocations/sweep-IItwSX/run-JXwp99/sweep-57bb1572-6075-4efd-a592-102b134132fd-perfected-enemy-attempt-1.result.json"
+    ],
+    "rawReportCount": 44,
+    "allCapsEmpty": true,
+    "allReportErrorsNull": true,
+    "attempts": 100,
+    "retries": 0,
+    "judgedCells": 0,
+    "captures": [],
+    "rawArtifactsRoot": "artifacts/qa/hv-umm2.203/",
+    "sourceFreezeBefore": {
+      "time": "2026-10-12T17:19:28.328338+00:00",
+      "files": {
+        "src/content/cards/inspiring-templar-57bb1572.ts": "37da0dde21cd8ed4f6ab6ad05bd36c2124c4bbc20cc16d75b3a48f42766bb704",
+        "src/content/cards/revered-prince-bbdc6ee7.ts": "797dc28c1cad89bb54e852ac7f2888ca696b1195f6a01e06c1d8e274eea4fae0",
+        "src/content/cards/skyflame-commander-56411ed4.ts": "d7d8e60a11c8446353cabf9850056ad58d2752a0b362bda67850107ab0a9e5c6",
+        "src/content/cards/sun-clan-lieutenant-243a15d3.ts": "0346e65ac0b4c126e0f36694f15db564e3231dc4aa96672f318cfa8d2c9ae8b8",
+        "src/content/cards/warrior-s-path-ca37f80e.ts": "ef1d2a0d45a7194fc136e6fb166cd3bfe2202ed09ffed60b7985398ebd33c70c"
+      }
+    },
+    "sourceFreezeAfter": {
+      "src/content/cards/inspiring-templar-57bb1572.ts": "37da0dde21cd8ed4f6ab6ad05bd36c2124c4bbc20cc16d75b3a48f42766bb704",
+      "src/content/cards/revered-prince-bbdc6ee7.ts": "797dc28c1cad89bb54e852ac7f2888ca696b1195f6a01e06c1d8e274eea4fae0",
+      "src/content/cards/skyflame-commander-56411ed4.ts": "d7d8e60a11c8446353cabf9850056ad58d2752a0b362bda67850107ab0a9e5c6",
+      "src/content/cards/sun-clan-lieutenant-243a15d3.ts": "0346e65ac0b4c126e0f36694f15db564e3231dc4aa96672f318cfa8d2c9ae8b8",
+      "src/content/cards/warrior-s-path-ca37f80e.ts": "ef1d2a0d45a7194fc136e6fb166cd3bfe2202ed09ffed60b7985398ebd33c70c"
+    },
+    "sourceHashMatch": true,
+    "qaLedgerSha256": "a110978c5e8f3a8446f1643a48faaac1a134b15730e7b2b322354f52ac0d9a93"
+  },
+  "runtime": {
+    "wrapperToolSession": 20173,
+    "start": "2026-10-12T17:19:28.328631+00:00",
+    "end": "2026-10-12T17:25:40.868204+00:00",
+    "outerWallS": 372.5353331249935,
+    "exitCode": 0,
+    "observerPid": 67602,
+    "runnerPid": 67731,
+    "sampledTransientPsProcesses": 354,
+    "groups": [
+      67602,
+      67731,
+      68251,
+      68261,
+      68306,
+      68353
+    ],
+    "ownRecordsObserved": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "record": {
+          "token": "9f40741f-dcc3-4bb5-a21c-396f65511ca4",
+          "runner": {
+            "pid": 67731,
+            "group": 67731,
+            "started": "Mon Oct 12 10:19:28 2026",
+            "state": "Ss",
+            "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.203 --cards bbdc6ee7-e9b1-488b-90b9-19337b65fee6,243a15d3-a4eb-415c-b106-86d4a2b7ec6a,ca37f80e-8474-4d40-b793-7a900f6ca467,56411ed4-bda9-4fdf-82e5-b5492de67039,57bb1572-6075-4efd-a592-102b134132fd"
+          },
+          "server": {
+            "pid": 68353,
+            "group": 68353,
+            "started": "Mon Oct 12 10:19:28 2026",
+            "state": "Rs",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 9f40741f-dcc3-4bb5-a21c-396f65511ca4 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91",
+          "port": 5274
+        }
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "record": {
+          "token": "e5aa9c14-bc48-44be-bb84-10576b73f52a",
+          "pid": 67731,
+          "bead": "hv-umm2.203",
+          "label": "card-sweep",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T17:19:30.256Z",
+          "providerState": "active",
+          "mcpSessionId": "94ad1abb-211a-4384-ad1e-3bedb4ffcaf3",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        }
+      }
+    ],
+    "providerCompletionReceiptCaptured": false,
+    "completionEvidence": "Native successful cleanup confirms browser close; independent read verifies exact own provider/server records absent. Transient completion record was not captured.",
+    "cleanupVerifiedAt": "2026-10-12T17:26:21.249894+00:00",
+    "allKnownPidsAndGroupsAbsent": true,
+    "exactRecordsAfterCleanup": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "present": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "present": false
+      }
+    ],
+    "port5274ListenerAtVerification": "",
+    "portListenerExit": 1,
+    "noPeerResourcesChanged": true,
+    "externalSamples": "runtime-samples.jsonl",
+    "recordedProcessIdentities": [
+      {
+        "pid": 67731,
+        "ppid": 67602,
+        "pgid": 67731,
+        "start": "Mon Oct 12 10:19:28 2026",
+        "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.203 --cards bbdc6ee7-e9b1-488b-90b9-19337b65fee6,243a15d3-a4eb-415c-b106-86d4a2b7ec6a,ca37f80e-8474-4d40-b793-7a900f6ca467,56411ed4-bda9-4fdf-82e5-b5492de67039,57bb1572-6075-4efd-a592-102b134132fd"
+      },
+      {
+        "pid": 68251,
+        "ppid": 67731,
+        "pgid": 68251,
+        "start": "Mon Oct 12 10:19:28 2026",
+        "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.203/invocations/sweep-IItwSX/run-JXwp99/card-sweep.server.log /bin/sh -c echo ready; exec cat >/dev/null"
+      },
+      {
+        "pid": 68253,
+        "ppid": 68251,
+        "pgid": 68251,
+        "start": "Mon Oct 12 10:19:28 2026",
+        "command": "cat"
+      },
+      {
+        "pid": 68261,
+        "ppid": 67731,
+        "pgid": 68261,
+        "start": "Mon Oct 12 10:19:28 2026",
+        "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null"
+      },
+      {
+        "pid": 68262,
+        "ppid": 68261,
+        "pgid": 68261,
+        "start": "Mon Oct 12 10:19:28 2026",
+        "command": "cat"
+      },
+      {
+        "pid": 68306,
+        "ppid": 67731,
+        "pgid": 68306,
+        "start": "Mon Oct 12 10:19:28 2026",
+        "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-8f04d2b4601c4c1b.lock /bin/sh -c echo ready; exec cat >/dev/null"
+      },
+      {
+        "pid": 68307,
+        "ppid": 68306,
+        "pgid": 68306,
+        "start": "Mon Oct 12 10:19:28 2026",
+        "command": "cat"
+      },
+      {
+        "pid": 68353,
+        "ppid": 67731,
+        "pgid": 68353,
+        "start": "Mon Oct 12 10:19:28 2026",
+        "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 9f40741f-dcc3-4bb5-a21c-396f65511ca4 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+      },
+      {
+        "pid": 68580,
+        "ppid": 68353,
+        "pgid": 68353,
+        "start": "Mon Oct 12 10:19:28 2026",
+        "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+      },
+      {
+        "pid": 68729,
+        "ppid": 68580,
+        "pgid": 68353,
+        "start": "Mon Oct 12 10:19:28 2026",
+        "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs"
+      },
+      {
+        "pid": 68853,
+        "ppid": 68729,
+        "pgid": 68353,
+        "start": "Mon Oct 12 10:19:28 2026",
+        "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91/scripts/setup-assets.ts"
+      },
+      {
+        "pid": 70428,
+        "ppid": 68580,
+        "pgid": 68353,
+        "start": "Mon Oct 12 10:19:29 2026",
+        "command": "node /Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91/node_modules/.bin/vite --port 5274 --strictPort"
+      },
+      {
+        "pid": 71044,
+        "ppid": 70428,
+        "pgid": 68353,
+        "start": "Mon Oct 12 10:19:29 2026",
+        "command": "/Users/dthurn/dreamtides_web/.worktrees/type-synergy-cards91/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+      }
+    ],
+    "identityListScope": "Historical identities sampled during the native run, including startup materialization children; all are independently absent after cleanup.",
+    "parentIndependentVerification": "/tmp/dreamtides-executor-01a1304d/203-validation/parent-final-verification.json"
+  },
+  "authoringAttempts": [
+    {
+      "attempt": "verifiedText hash eval",
+      "wallS": 0.275712167,
+      "exitCode": 1,
+      "cause": "tsx -e compiles eval to CJS and rejects top-level await",
+      "repair": "wrap dynamic-import loop in async function",
+      "sourceBefore": "five abilities authored, hash placeholder present",
+      "primitiveFailure": false,
+      "timestamp": "not observed for this command; not inferred from dispatch",
+      "wallScope": "combined source authoring plus failed hash eval shell command",
+      "logScope": "observed error excerpt; complete tool output retained in conversation",
+      "log": "authoring-failure.log"
+    },
+    {
+      "attempt": "async-wrapper verifiedText hash evaluation",
+      "receipt": "authoring-hashes.receipt.json",
+      "exitCode": 0
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review outer wrapper startup, sysctl -n vm.loadavg 1-minute value",
+        "value": 12.24
+      },
+      "localValidationS": {
+        "measuredFor": "Focused/review/Knip/fuzz/preflight each complete command wrapper; fuzz excludes lock admission and sweep excludes browser lease wait. Detailed nested/native scopes retained."
+      },
+      "implementWindow": {
+        "startProvenance": "Exact post-claim parent dispatch2026-10-12T17:10:22.177254Z",
+        "endProvenance": "Measured precommit timestamp; actual Git timestamp and gap returned in external handoff receipt."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "authoring-hashes",
+      "time": "2026-10-12T17:14:56.153415+00:00",
+      "oneMinute": 12.56,
+      "raw": "{ 12.56 15.07 14.81 }"
+    },
+    {
+      "step": "focused",
+      "time": "2026-10-12T17:14:57.249354+00:00",
+      "oneMinute": 12.56,
+      "raw": "{ 12.56 15.07 14.81 }"
+    },
+    {
+      "step": "review",
+      "time": "2026-10-12T17:15:10.304260+00:00",
+      "oneMinute": 12.24,
+      "raw": "{ 12.24 14.92 14.76 }"
+    },
+    {
+      "step": "knip",
+      "time": "2026-10-12T17:16:00.493017+00:00",
+      "oneMinute": 10.35,
+      "raw": "{ 10.35 14.09 14.47 }"
+    },
+    {
+      "step": "fuzz-outer",
+      "time": "2026-10-12T17:16:17.440883+00:00",
+      "oneMinute": 8.71,
+      "raw": "{ 8.71 13.55 14.27 }"
+    },
+    {
+      "step": "fuzz",
+      "time": "2026-10-12T17:16:17.465996+00:00",
+      "oneMinute": 8.71,
+      "raw": "{ 8.71 13.55 14.27 }"
+    },
+    {
+      "step": "preflight",
+      "time": "2026-10-12T17:19:07.402545+00:00",
+      "oneMinute": 7.43,
+      "raw": "{ 7.43 10.16 12.69 }"
+    }
+  ],
+  "preExisting": "Parent first installation reports388packages and17audit vulnerabilities. Focused/review/Knip isolated local-asset preparation emits missing-art warnings, then restoration links existing assets. See own pre-existing evidence.",
+  "reviewRouting": "No independent review obligation for28 existing-form source lines. Temporary human-authorized gpt-5.6-sol Codex CLI routing applies if one is requested; no Claude review attempted."
+}
