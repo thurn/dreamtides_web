@@ -1,0 +1,730 @@
+{
+  "bead": "hv-umm2.550",
+  "base": "60ecedf564e05245d771bab38c79fa6da27c46b6",
+  "sourceFreeze": {
+    "frozenAt": "2026-10-12T15:16:36.911630+00:00",
+    "base": "60ecedf564e05245d771bab38c79fa6da27c46b6",
+    "sha256": {
+      "scripts/qa/prelude.mjs": "96c3e5be77877318ec36028290c8fac1a2c4ed029da4cc4d31f7d7d7dde3d931",
+      "scripts/qa/card-sweep.mjs": "f876a862e2e288ac0b1b96a8851f097a3ef63a173b79af8b20c9f301b5e4b228",
+      "scripts/qa/prelude-navigation.test.mjs": "3687b4f6516ecce14bb31c84fae0a00c3aefc54a598e19b6e696243571c8a2a7",
+      "scripts/qa/card-sweep.test.mjs": "d763c82242c8503c55ac93fc37a62cf0fb613289340879c1d646065c69c5304e"
+    }
+  },
+  "dispatch": {
+    "start": "2026-10-12T15:04:30.905Z",
+    "provenance": "Exact parent native spawn call_05c2035f06d449559bf94e85c67c991f, retained dispatch.json; actual first model instruction time is not substituted."
+  },
+  "negativeControl": {
+    "source": "unchanged base",
+    "command": "node unchanged-controls.mjs",
+    "externalEvidence": "/tmp/dreamtides-executor-01a1304d/550-validation/unchanged-controls.jsonl",
+    "observed": "Healthy transition retains expected return/Caps, abort preserves exact Error identity. Both logs empty, so lifecycle evidence missing."
+  },
+  "historicalAffected": {
+    "bead": "hv-umm2.174",
+    "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.174/invocations/sweep-IevYOh/run-EJr13j/sweep-fc0c6f10-8864-4660-904a-8e90d261c6ef-attuned-enemy-attempt-1.result.json",
+    "sha256": "858f85d2db65449d3d13ce0aa31c5c739e5f6cb99f710a3df57e3bd7021daf81",
+    "uuid": "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+    "variant": "attuned",
+    "controller": "enemy",
+    "verdict": "fail",
+    "failureKinds": [
+      "unknown"
+    ],
+    "reportError": null,
+    "caps": [],
+    "cause": "page.goto net::ERR_ABORTED; no actual competing navigation witnessed. Original evidence retained."
+  },
+  "validation": {
+    "knip": {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T15:16:01.075290+00:00",
+      "end": "2026-10-12T15:16:05.287009+00:00",
+      "wallS": 4.207885874995554,
+      "hostLoad": "{ 24.20 15.05 14.71 }",
+      "exit": 0
+    },
+    "focused": {
+      "name": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/prelude-navigation.test.mjs",
+        "scripts/qa/prelude.test.mjs",
+        "scripts/qa/card-sweep.test.mjs",
+        "scripts/qa/run-scenario-boundaries.test.mjs",
+        "scripts/qa/run-scenario-ownership.test.mjs",
+        "scripts/qa/browser-owner-record.test.mjs"
+      ],
+      "start": "2026-10-12T15:13:07.917938+00:00",
+      "end": "2026-10-12T15:13:24.280949+00:00",
+      "wallS": 16.35962354199728,
+      "hostLoad": "{ 6.13 11.29 13.77 }",
+      "exit": 0
+    },
+    "native": {
+      "name": "native",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.550",
+        "--cards",
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+        "--variants",
+        "base,attuned",
+        "--as",
+        "enemy",
+        "--timeout",
+        "60"
+      ],
+      "start": "2026-10-12T15:20:00.399281+00:00",
+      "end": "2026-10-12T15:21:22.568171+00:00",
+      "wallS": 82.17291241599742,
+      "exit": 0,
+      "runnerPid": 66274,
+      "ownedRecordObservations": 4,
+      "finalOwnedPaths": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false
+      }
+    },
+    "full": {
+      "name": "full",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T15:16:22.082956+00:00",
+      "end": "2026-10-12T15:19:48.761120+00:00",
+      "wallS": 206.67205183299666,
+      "hostLoad": "{ 26.75 16.26 15.16 }",
+      "exit": 0
+    },
+    "review": {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T15:13:45.182409+00:00",
+      "end": "2026-10-12T15:14:17.793299+00:00",
+      "wallS": 32.607610291997844,
+      "hostLoad": "{ 6.42 10.80 13.49 }",
+      "exit": 1
+    },
+    "review-second": {
+      "name": "review-second",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T15:15:09.019719+00:00",
+      "end": "2026-10-12T15:15:38.615542+00:00",
+      "wallS": 29.592467208000016,
+      "hostLoad": "{ 16.05 12.70 13.94 }",
+      "exit": 0
+    }
+  },
+  "fallout": [],
+  "testDelta": {
+    "files": 1,
+    "lines": 155,
+    "jsdomFiles": 0,
+    "scope": "145 lines in new Node test entrypoint plus10 added existing card-sweep test lines; zero jsdom/plain scenarios."
+  },
+  "failurePaths": {
+    "healthyAndReload": "prelude-navigation public document replacement control, existing prelude navigation/read controls",
+    "concurrentActor": "Two public qa.goto operations on one synthetic page; actual request failure/active-operation ordering, original Error retained",
+    "errorAndContext": "Public original ERR_ABORTED identity; persistent destroyed context retains existing QaTimeoutError cause; actual close/crash event controls",
+    "observerFailure": "Bounded event/error overflow, snapshot formatting failure, removal failure/uncertain outcome and inert residual callback",
+    "staleInputs": "Requested URL and cell args are observations, not new application admission; current card-lab metadata remains authoritative. No state/provenance injection or new state API. Existing card-sweep normal-turn UUID/controller contradiction controls retained.",
+    "partialWrite": "Existing raw-report save/ledger writer and lifecycle ownership bodies are unchanged; diagnostics contain serializable observations and raw report is saved before verdict/ledger. No new filesystem write or recovery authority requires synthetic ownership tests.",
+    "resourceAndCauseBoundaries": "Focused existing run-scenario-boundaries, run-scenario-ownership and browser-owner-record contracts plus full suite preserve545 startup/signal/close/transport/clear-phase actual causes."
+  },
+  "runtime": {
+    "nativePending": false,
+    "launcher": {
+      "pid": 66274,
+      "started": "2026-10-12T15:20:00.399281+00:00",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.550",
+        "--cards",
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+        "--variants",
+        "base,attuned",
+        "--as",
+        "enemy",
+        "--timeout",
+        "60"
+      ]
+    },
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-XtsTUV",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.550/invocations/sweep-XtsTUV",
+      "counts": {
+        "pass": 2
+      },
+      "attemptCounts": {
+        "pass": 2
+      },
+      "hostLoad": 25.31982421875,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 65765,
+        "serve": 1682,
+        "scenario": 13985.224708000009,
+        "cleanup": 486.3255000000063,
+        "execution": 16220.388583000007,
+        "total": 81985.388583
+      }
+    },
+    "ownedRecordObservations": [
+      {
+        "at": "2026-10-12T15:21:06.384126+00:00",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "record": {
+          "token": "848e766d-1343-4f32-aa25-792b83e45cc3",
+          "runner": {
+            "pid": 66274,
+            "group": 66264,
+            "started": "Mon Oct 12 08:20:00 2026",
+            "state": "S",
+            "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.550 --cards fc0c6f10-8864-4660-904a-8e90d261c6ef --variants base,attuned --as enemy --timeout 60"
+          },
+          "server": {
+            "pid": 29294,
+            "group": 29294,
+            "started": "Mon Oct 12 08:21:06 2026",
+            "state": "Rs",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 848e766d-1343-4f32-aa25-792b83e45cc3 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550",
+          "port": 5274
+        }
+      },
+      {
+        "at": "2026-10-12T15:21:08.067986+00:00",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "record": {
+          "token": "b6e0bd54-9c2e-424d-a052-59e116f40d24",
+          "pid": 66274,
+          "bead": "hv-umm2.550",
+          "label": "card-sweep",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T15:21:08.049Z",
+          "providerState": "startup-unconfirmed"
+        }
+      },
+      {
+        "at": "2026-10-12T15:21:08.090448+00:00",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "record": {
+          "token": "b6e0bd54-9c2e-424d-a052-59e116f40d24",
+          "pid": 66274,
+          "bead": "hv-umm2.550",
+          "label": "card-sweep",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T15:21:08.049Z",
+          "providerState": "active",
+          "mcpSessionId": "18ff3e31-c9c1-4fea-9386-7329517ecc67",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        }
+      },
+      {
+        "at": "2026-10-12T15:21:22.177689+00:00",
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "record": {
+          "token": "848e766d-1343-4f32-aa25-792b83e45cc3",
+          "runner": {
+            "pid": 66274,
+            "group": 66264,
+            "started": "Mon Oct 12 08:20:00 2026",
+            "state": "S",
+            "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.550 --cards fc0c6f10-8864-4660-904a-8e90d261c6ef --variants base,attuned --as enemy --timeout 60"
+          },
+          "server": {
+            "pid": 29294,
+            "group": 29294,
+            "started": "Mon Oct 12 08:21:06 2026",
+            "state": "Rs",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 848e766d-1343-4f32-aa25-792b83e45cc3 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550",
+          "port": 5274,
+          "members": [
+            {
+              "pid": 29294,
+              "group": 29294,
+              "started": "Mon Oct 12 08:21:06 2026",
+              "state": "Ss",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 848e766d-1343-4f32-aa25-792b83e45cc3 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 29312,
+              "group": 29294,
+              "started": "Mon Oct 12 08:21:06 2026",
+              "state": "S",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 29485,
+              "group": 29294,
+              "started": "Mon Oct 12 08:21:07 2026",
+              "state": "S",
+              "command": "node /Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550/node_modules/.bin/vite --port 5274 --strictPort"
+            },
+            {
+              "pid": 29543,
+              "group": 29294,
+              "started": "Mon Oct 12 08:21:07 2026",
+              "state": "S",
+              "command": "/Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+            }
+          ]
+        }
+      }
+    ],
+    "verification": {
+      "at": "2026-10-12T15:22:02.582810+00:00",
+      "sourceHashesMatch": true,
+      "cells": [
+        {
+          "uuid": "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+          "variant": "base",
+          "as": "enemy",
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.550/invocations/sweep-XtsTUV/run-ZZERMe/sweep-fc0c6f10-8864-4660-904a-8e90d261c6ef-base-enemy-attempt-1.result.json",
+          "sha256": "46f809a6b9bc1945845f0ea76fc932b3b77da4e37bd97c0d7d70dd99cf6713b2",
+          "verdict": "pass",
+          "error": null,
+          "caps": [],
+          "navigation": [
+            {
+              "operation": 1,
+              "expectedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+              "deadline": null,
+              "callDeadline": 1791818558317,
+              "waitUntil": "domcontentloaded",
+              "allowErrors": true,
+              "cell": {
+                "uuid": "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+                "variant": "base",
+                "controller": "enemy"
+              },
+              "clock": "node-wall",
+              "events": [
+                {
+                  "order": 1,
+                  "at": 1791818468320,
+                  "phase": "started",
+                  "observedUrl": "about:blank",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 2,
+                  "at": 1791818468320,
+                  "phase": "caps-before",
+                  "observedUrl": "about:blank",
+                  "activeOperations": [
+                    1
+                  ],
+                  "document": null
+                },
+                {
+                  "order": 3,
+                  "at": 1791818468320,
+                  "phase": "goto-started",
+                  "observedUrl": "about:blank",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 4,
+                  "at": 1791818468322,
+                  "phase": "request",
+                  "observedUrl": "about:blank",
+                  "activeOperations": [
+                    1
+                  ],
+                  "requestUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1"
+                },
+                {
+                  "order": 5,
+                  "at": 1791818468428,
+                  "phase": "framenavigated",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ],
+                  "frameUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1"
+                },
+                {
+                  "order": 6,
+                  "at": 1791818470224,
+                  "phase": "domcontentloaded",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 7,
+                  "at": 1791818470224,
+                  "phase": "goto-settled",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 8,
+                  "at": 1791818470224,
+                  "phase": "load",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 9,
+                  "at": 1791818470242,
+                  "phase": "document-after",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ],
+                  "document": {
+                    "href": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+                    "id": "bf029dd5-15ef-4fc2-b58f-acbb5deb70a3",
+                    "caps": {
+                      "errors": [],
+                      "rejections": [],
+                      "consoleErrors": []
+                    }
+                  }
+                },
+                {
+                  "order": 10,
+                  "at": 1791818470243,
+                  "phase": "succeeded",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 11,
+                  "at": 1791818470243,
+                  "phase": "listener-cleanup",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ],
+                  "outcome": "removed"
+                }
+              ],
+              "droppedEvents": 0,
+              "observationErrors": [],
+              "droppedObservationErrors": 0,
+              "outcome": "succeeded",
+              "failedPhase": null,
+              "error": null,
+              "contextDestroyed": false,
+              "errorCauses": [],
+              "listenerCleanup": "removed"
+            }
+          ]
+        },
+        {
+          "uuid": "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+          "variant": "attuned",
+          "as": "enemy",
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.550/invocations/sweep-XtsTUV/run-ZZERMe/sweep-fc0c6f10-8864-4660-904a-8e90d261c6ef-attuned-enemy-attempt-1.result.json",
+          "sha256": "8ce4ef2d058308cc2cc2e7cfc125919957938c194c79417778a17a8a2709f394",
+          "verdict": "pass",
+          "error": null,
+          "caps": [],
+          "navigation": [
+            {
+              "operation": 1,
+              "expectedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=attuned&as=enemy&seed=1&debug=1",
+              "deadline": null,
+              "callDeadline": 1791818566243,
+              "waitUntil": "domcontentloaded",
+              "allowErrors": true,
+              "cell": {
+                "uuid": "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+                "variant": "attuned",
+                "controller": "enemy"
+              },
+              "clock": "node-wall",
+              "events": [
+                {
+                  "order": 1,
+                  "at": 1791818476246,
+                  "phase": "started",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1&game=eahurn",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 2,
+                  "at": 1791818476247,
+                  "phase": "caps-before",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1&game=eahurn",
+                  "activeOperations": [
+                    1
+                  ],
+                  "document": {
+                    "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1&game=eahurn",
+                    "id": "bf029dd5-15ef-4fc2-b58f-acbb5deb70a3",
+                    "caps": {
+                      "errors": [],
+                      "rejections": [],
+                      "consoleErrors": []
+                    }
+                  }
+                },
+                {
+                  "order": 3,
+                  "at": 1791818476247,
+                  "phase": "goto-started",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1&game=eahurn",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 4,
+                  "at": 1791818476250,
+                  "phase": "request",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=base&as=enemy&seed=1&debug=1&game=eahurn",
+                  "activeOperations": [
+                    1
+                  ],
+                  "requestUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=attuned&as=enemy&seed=1&debug=1"
+                },
+                {
+                  "order": 5,
+                  "at": 1791818476270,
+                  "phase": "framenavigated",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=attuned&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ],
+                  "frameUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=attuned&as=enemy&seed=1&debug=1"
+                },
+                {
+                  "order": 6,
+                  "at": 1791818476640,
+                  "phase": "domcontentloaded",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=attuned&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 7,
+                  "at": 1791818476640,
+                  "phase": "goto-settled",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=attuned&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 8,
+                  "at": 1791818476643,
+                  "phase": "load",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=attuned&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 9,
+                  "at": 1791818476660,
+                  "phase": "document-after",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=attuned&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ],
+                  "document": {
+                    "href": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=attuned&as=enemy&seed=1&debug=1",
+                    "id": "806c3617-0333-40af-825b-9a8c04400a29",
+                    "caps": {
+                      "errors": [],
+                      "rejections": [],
+                      "consoleErrors": []
+                    }
+                  }
+                },
+                {
+                  "order": 10,
+                  "at": 1791818476665,
+                  "phase": "succeeded",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=attuned&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 11,
+                  "at": 1791818476665,
+                  "phase": "listener-cleanup",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=fc0c6f10-8864-4660-904a-8e90d261c6ef&variant=attuned&as=enemy&seed=1&debug=1",
+                  "activeOperations": [
+                    1
+                  ],
+                  "outcome": "removed"
+                }
+              ],
+              "droppedEvents": 0,
+              "observationErrors": [],
+              "droppedObservationErrors": 0,
+              "outcome": "succeeded",
+              "failedPhase": null,
+              "error": null,
+              "contextDestroyed": false,
+              "errorCauses": [],
+              "listenerCleanup": "removed"
+            }
+          ]
+        }
+      ],
+      "ps": "",
+      "portListeners": "COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME\nnode    32298 dthurn   16u  IPv4 0xf44309ccebeef270      0t0  TCP 127.0.0.1:5274 (LISTEN)\n",
+      "members": [
+        {
+          "identity": {
+            "pid": 29294,
+            "group": 29294,
+            "started": "Mon Oct 12 08:21:06 2026",
+            "state": "Ss",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 848e766d-1343-4f32-aa25-792b83e45cc3 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "observedNow": ""
+        },
+        {
+          "identity": {
+            "pid": 29312,
+            "group": 29294,
+            "started": "Mon Oct 12 08:21:06 2026",
+            "state": "S",
+            "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+          },
+          "observedNow": ""
+        },
+        {
+          "identity": {
+            "pid": 29485,
+            "group": 29294,
+            "started": "Mon Oct 12 08:21:07 2026",
+            "state": "S",
+            "command": "node /Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550/node_modules/.bin/vite --port 5274 --strictPort"
+          },
+          "observedNow": ""
+        },
+        {
+          "identity": {
+            "pid": 29543,
+            "group": 29294,
+            "started": "Mon Oct 12 08:21:07 2026",
+            "state": "S",
+            "command": "/Users/dthurn/dreamtides_web/.worktrees/navigation-abort-diagnostics550/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+          },
+          "observedNow": ""
+        }
+      ],
+      "portReuseObservation": {
+        "at": "2026-10-12T15:22:36.271483+00:00",
+        "currentOwnerPid": 15659,
+        "currentOwnerBead": "hv-umm2.187",
+        "ours": false,
+        "listenerIdentity": "32298 32224 Mon Oct 12 08:21:23 2026     node /Users/dthurn/dreamtides_web/.worktrees/cards-75-sol/node_modules/.bin/vite --port 5274 --strictPort\n",
+        "interpretation": "Own runner reported port free at cleanup and exited0; later port listener is a new peer owner, not an unsettled owned descendant. No peer process touched."
+      }
+    },
+    "providerCompletion": "Actual transient execution-completed owner state not captured by10ms observer. Native command exit0/normal cleanup, own record deletion and exact PID settlement support confirmed close under unchanged545 public contracts; no fabricated completion receipt.",
+    "noOwnedLiveRuntime": true
+  },
+  "limitations": [
+    "No causal reproduction of historical aborted navigation and no browser defect fixed claim.",
+    "Node event order and wall clock describe host observations, not browser-side causal timing.",
+    "Absent document/URL observations and observer/cleanup errors retain uncertainty; overflow is explicit."
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "start": "Exact parent dispatch above",
+        "end": "Measured precommit clock 2026-10-12T15:23:37.231815+00:00 after source checks/native settlement; Git commit-end observed separately by parent. Elapsed difference constrained within schema tolerance, not claimed exact Git/model end."
+      },
+      "hostLoad": {
+        "measuredFor": "Successful review-second prepare start at2026-10-12T15:15:09.234Z, exact one-minute load16.05419921875; wrapper command sysctl rounded16.05 separately recorded."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "knip",
+      "sample": "{ 24.20 15.05 14.71 }",
+      "measuredFor": "wrapper command start, includes lock wait where applicable"
+    },
+    {
+      "step": "focused",
+      "sample": "{ 6.13 11.29 13.77 }",
+      "measuredFor": "wrapper command start, includes lock wait where applicable"
+    },
+    {
+      "step": "full",
+      "sample": "{ 26.75 16.26 15.16 }",
+      "measuredFor": "wrapper command start, includes lock wait where applicable"
+    },
+    {
+      "step": "review",
+      "sample": "{ 6.42 10.80 13.49 }",
+      "measuredFor": "wrapper command start, includes lock wait where applicable"
+    },
+    {
+      "step": "review-second",
+      "sample": "{ 16.05 12.70 13.94 }",
+      "measuredFor": "wrapper command start, includes lock wait where applicable"
+    }
+  ],
+  "validationInterpretation": {
+    "focused": "113 tests/6files, before event type/lint correction; successful final review and full cover these public contracts on frozen final source.",
+    "review": "157 tests/12files; first failed lint iteration retained separately, final review-second passes.",
+    "full": "351 files5481 cases; Vitest75.65s; full command206.672s includes98.656s from wrapper start until child prepare. This gap contains heavy-slot wait and command startup, not isolated execution cost.",
+    "native": "Two source-frozen UUID base/attuned enemy cells pass. Current healthy affected-cell result is additional diagnostic evidence and does not establish the historical abort cause.",
+    "iteration": "First focused single-context-rejection fixture then success reached existing navigation deadline without a context cause; persistent negative control observes existing retained cause. Initial review unsafe event typing/async mocks corrected; no failure assertion dropped."
+  },
+  "sourceHashOutcome": "All frozen source/test hashes match after native smoke.",
+  "finalPrecommitAt": "2026-10-12T15:23:37.231815+00:00"
+}

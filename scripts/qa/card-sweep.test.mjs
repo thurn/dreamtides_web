@@ -54,6 +54,16 @@ async function dreamwellScenario({ draw = null, refresh = null, next = 0, errors
 }
 
 describe("sweep cell attempts", () => {
+  it("preserves navigation evidence beside the original failed report and never retries an unknown abort", async () => {
+    const navigation = { operation: 1, outcome: "failed", expectedUrl: "http://localhost:5174/fixture",
+      cell: { uuid: "5e5e5e5e-0000-4000-8000-000000000550", variant: "attuned", controller: "enemy" } };
+    const failure = { ...report(["unknown"]), log: [{ label: "qa.navigation", data: navigation }] };
+    const actual = await cell([failure, report([], "pass")]);
+    expect(actual.saved).toEqual([failure]);
+    expect(actual.records[0]).toMatchObject({ verdict: "fail", effective: true, failureKinds: ["unknown"],
+      navigation: [navigation], rawReport: "attempt-1.json" });
+  });
+
   it("retries an interrupted Dreamwell before its draw once, retaining both actual scenario reports", async () => {
     const timeout = await dreamwellScenario();
     expect(timeout.result).toMatchObject({ verdict: "fail", failureKinds: ["timeout"], drawn: null, refresh: null });

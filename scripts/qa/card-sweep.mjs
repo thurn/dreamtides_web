@@ -136,6 +136,7 @@ export async function runSweepCell({ run, closed, save, record }) {
       result.failureKinds.every((kind) => kind === "timeout");
     record({ verdict: result.verdict, notes: result.notes, screens: result.screens ?? [], attempt,
       effective: !retry, failureKinds: result.failureKinds ?? [], rawReport,
+      navigation: report.log.filter(({ label }) => label === "qa.navigation").map(({ data }) => data),
       ...(result.lab?.entityKind === undefined ? {} : { entityKind: result.lab.entityKind }) });
     if (!retry) return result;
   }

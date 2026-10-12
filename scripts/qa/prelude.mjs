@@ -68,6 +68,9 @@
  * @property {() => { newCDPSession(page: QaPage): Promise<CdpSession> }} context
  */
 
+/** A main-frame observation, without page mutation. @typedef {{ parentFrame(): QaFrame | null, url(): string }} QaFrame */
+/** @typedef {{ isNavigationRequest(): boolean, frame(): QaFrame, url(): string, failure(): { errorText: string } | null }} QaNavigationRequest */
+
 /**
  * The part of Playwright's `CDPSession` `qa.trace` uses.
  *
@@ -713,6 +716,7 @@ export async function createQa(page, config) {
     if (!onOrigin(page.url())) return;
     const state = await readState(timeout);
     mergeCaps(state);
+    return state;
   };
 
   const rest = () => page.mouse.move(-5, -5);
@@ -767,39 +771,132 @@ export async function createQa(page, config) {
     await poll(`waitVisible ${describe(target)}`, { kind: "rendered", target, minOpacity }, timeout);
   };
 
+  let navigationId = 0;
+  let navigationOrder = 0;
+  /** @type {Set<number>} */
+  const activeNavigations = new Set();
   /**
    * @param {string} route
    * @param {{allowErrors: boolean, waitUntil: "load" | "domcontentloaded" | "networkidle"}} options
    * @param {number | null} deadline
    */
   const navigate = async (route, { allowErrors, waitUntil }, deadline) => {
-    const remaining = () => {
-      if (deadline === null) return 15_000;
-      const budget = deadline - Date.now();
-      if (budget <= 0) throw timeoutError("qa.open/goto: navigation deadline expired");
-      return budget;
+    const operation = ++navigationId;
+    const expectedUrl = url(route);
+    /** @type {Array<Record<string, unknown>>} */
+    const events = [];
+    /** @type {string[]} */
+    const observationErrors = [];
+    const diagnostic = { operation, expectedUrl, deadline, callDeadline, waitUntil, allowErrors,
+      cell: { uuid: config.args.card ?? null, variant: config.args.variant ?? null, controller: config.args.as ?? null },
+      clock: "node-wall", events, droppedEvents: 0, observationErrors, droppedObservationErrors: 0,
+      outcome: "pending", failedPhase: /** @type {string | null} */ (null), error: /** @type {string | null} */ (null),
+      contextDestroyed: false, errorCauses: /** @type {string[]} */ ([]), listenerCleanup: "pending" };
+    log.push({ label: "qa.navigation", data: diagnostic });
+    activeNavigations.add(operation);
+    const describeError = (/** @type {unknown} */ error) => {
+      try { return error instanceof Error ? error.stack ?? error.message : String(error); }
+      catch { return "error description unavailable"; }
     };
-    await recordCaps(remaining());
-    // DOMContentLoaded settles the navigation without depending on resource
-    // load under host pressure; the helpers wait for their actual UI contracts.
-    await page.goto(url(route), { waitUntil, ...(deadline === null ? {} : { timeout: remaining() }) });
-    const state = await readState(remaining());
-    remaining();
-    if (!onOrigin(state.href)) throw new Error(`goto ${route}: landed on ${state.href}, not ${origin}`);
-    if (state.caps === null) throw new Error(`goto ${route}: the __caps init script did not run`);
-    if (allowErrors) {
-      observed.clear();
-      await read(() => {
-        const caps = /** @type {QaWindow} */ (window).__caps;
-        if (caps !== undefined) for (const values of Object.values(caps)) values.length = 0;
-      }, null, { timeout: remaining() });
+    const observationError = (/** @type {unknown} */ error) => {
+      if (observationErrors.length < 64) observationErrors.push(describeError(error));
+      else diagnostic.droppedObservationErrors++;
+    };
+    const observe = (/** @type {string} */ phase, /** @type {Record<string, unknown>} */ data = {}) => {
+      if (events.length >= 64) { diagnostic.droppedEvents++; return; }
+      let observedUrl = null;
+      try { observedUrl = page.url(); } catch (error) { observationError(error); }
+      events.push({ order: ++navigationOrder, at: Date.now(), phase, observedUrl,
+        activeOperations: [...activeNavigations], ...data });
+    };
+    const observeDocument = (/** @type {string} */ phase, /** @type {Awaited<ReturnType<typeof readState>> | undefined} */ state) => {
+      try { observe(phase, { document: state === undefined ? null : { href: state.href, id: state.documentId === state.href ? null : state.documentId ?? null,
+        caps: state.caps === null ? null : /** @type {Caps} */ (JSON.parse(JSON.stringify(state.caps))) } }); }
+      catch (error) { observationError(error); observe(phase, { document: null }); }
+    };
+    /** @type {Array<{ name: string, listener: (...args: any[]) => void }>} */
+    const listeners = [];
+    let settled = false;
+    /** @template T @param {string} name @param {(event: T) => Record<string, unknown> | null} readEvent */
+    const listen = (name, readEvent) => {
+      const listener = (/** @type {T} */ event) => {
+        if (settled) return;
+        try { const data = readEvent(event); if (data !== null) observe(name, data); }
+        catch (error) { observationError(error); }
+      };
+      listeners.push({ name, listener });
+      try { page.on(name, listener); } catch (error) { observationError(error); }
+    };
+    observe("started");
+    listen("framenavigated", (/** @type {QaFrame} */ frame) => frame.parentFrame() === null ? { frameUrl: frame.url() } : null);
+    for (const name of ["domcontentloaded", "load", "close", "crash"]) listen(name, () => ({}));
+    for (const name of ["request", "requestfailed"]) listen(name, (/** @type {QaNavigationRequest} */ request) =>
+      request.isNavigationRequest() && request.frame().parentFrame() === null
+        ? { requestUrl: request.url(), ...(name === "requestfailed" ? { failure: request.failure()?.errorText ?? null } : {}) } : null);
+    let phase = "caps-before";
+    try {
+      const remaining = () => {
+        if (deadline === null) return 15_000;
+        const budget = deadline - Date.now();
+        if (budget <= 0) throw timeoutError("qa.open/goto: navigation deadline expired");
+        return budget;
+      };
+      const before = await recordCaps(remaining());
+      observeDocument(phase, before);
+      phase = "goto";
+      observe("goto-started");
+      // DOMContentLoaded settles the navigation without depending on resource
+      // load under host pressure; the helpers wait for their actual UI contracts.
+      await page.goto(expectedUrl, { waitUntil, ...(deadline === null ? {} : { timeout: remaining() }) });
+      observe("goto-settled");
+      phase = "document-after";
+      const state = await readState(remaining());
+      observeDocument(phase, state);
+      phase = "validation";
       remaining();
+      if (!onOrigin(state.href)) throw new Error(`goto ${route}: landed on ${state.href}, not ${origin}`);
+      if (state.caps === null) throw new Error(`goto ${route}: the __caps init script did not run`);
+      if (allowErrors) {
+        observed.clear();
+        await read(() => {
+          const caps = /** @type {QaWindow} */ (window).__caps;
+          if (caps !== undefined) for (const values of Object.values(caps)) values.length = 0;
+        }, null, { timeout: remaining() });
+        remaining();
+      }
+      if (!allowErrors) assertObserved(`goto ${route}`);
+      if (!allowErrors && capsCount(state.caps) > 0) {
+        throw new Error(`goto ${route}: load-time errors ${JSON.stringify(state.caps)}`);
+      }
+      diagnostic.outcome = "succeeded";
+      observe("succeeded");
+      return { href: state.href, width: state.width, height: state.height };
+    } catch (error) {
+      diagnostic.outcome = "failed";
+      diagnostic.failedPhase = phase;
+      diagnostic.error = describeError(error);
+      const seen = new Set();
+      let cause = error;
+      while (cause !== null && typeof cause === "object" && !seen.has(cause) && seen.size < 8) {
+        seen.add(cause);
+        diagnostic.errorCauses.push(describeError(cause));
+        try { cause = "cause" in cause ? cause.cause : null; }
+        catch (failure) { observationError(failure); break; }
+      }
+      diagnostic.contextDestroyed = diagnostic.errorCauses.some((message) =>
+        /Execution context was destroyed|Cannot find context with specified id/i.test(message));
+      observe("failed", { failedPhase: phase, error: diagnostic.error, contextDestroyed: diagnostic.contextDestroyed });
+      throw error;
+    } finally {
+      settled = true;
+      let listenerCleanup = "removed";
+      for (const { name, listener } of listeners) {
+        try { page.off(name, listener); } catch (error) { listenerCleanup = "uncertain"; observationError(error); }
+      }
+      diagnostic.listenerCleanup = listenerCleanup;
+      observe("listener-cleanup", { outcome: listenerCleanup });
+      activeNavigations.delete(operation);
     }
-    if (!allowErrors) assertObserved(`goto ${route}`);
-    if (!allowErrors && capsCount(state.caps) > 0) {
-      throw new Error(`goto ${route}: load-time errors ${JSON.stringify(state.caps)}`);
-    }
-    return { href: state.href, width: state.width, height: state.height };
   };
 
 

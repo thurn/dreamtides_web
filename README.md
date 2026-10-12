@@ -875,6 +875,18 @@ subdirectory, with separate reports and captures per attempt. Summaries show
 effective cell counts and raw attempt counts separately, plus total wall
 time, browser slot wait, and execution excluding that wait.
 
+Navigation observations are retained as `qa.navigation` entries in the raw
+report log and copied into each sweep ledger attempt's `navigation` field.
+They identify the requested URL, observed URL and document IDs when readable,
+cell UUID/variant/controller, ordered main-frame requests and page lifecycle
+observations, overlapping helper operations, deadlines, and the actual failed
+phase. Event storage is bounded with explicit overflow counts; terminal
+outcome and diagnostic listener cleanup remain separate. Missing observations
+and failed observer cleanup retain uncertainty. These diagnostics preserve
+original errors, Caps, verdicts and the timeout-only retry policy. A manual
+fresh-session diagnostic pairs the exact affected cell with a healthy control;
+its result is additional evidence, and the original attempt remains retained.
+
 ## Architecture
 
 - **Event log and fold.** Game state is a fold of an event log. The client
