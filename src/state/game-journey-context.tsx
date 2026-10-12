@@ -327,8 +327,10 @@ export function GameJourneyProvider({
         ),
       chooseRandomSite: (siteId, siteType) =>
         dispatch(actions.chooseRandomSite(siteId, siteType)),
-      resolveExplorationChoice: (siteId, actionId, selection) =>
-        dispatch(actions.resolveExplorationChoice(siteId, actionId, selection)),
+      rerollExploration: (siteId, dreamsignId, expectedEncounterCardId, expectedRerollCount) =>
+        dispatch(actions.rerollExploration(siteId, dreamsignId, expectedEncounterCardId, expectedRerollCount)),
+      resolveExplorationChoice: (siteId, actionId, selection, expectedEncounterCardId, expectedRerollCount) =>
+        dispatch(actions.resolveExplorationChoice(siteId, actionId, selection, expectedEncounterCardId, expectedRerollCount)),
       placeGravokWager: (siteId, gateId) =>
         dispatch(actions.placeGravokWager(siteId, gateId)),
       settleGravokWager: (siteId, shuffleCommitment) =>

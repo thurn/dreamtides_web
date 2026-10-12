@@ -1,4 +1,7 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
+
+export const journeySitesEffect = { kind: "rerollExploration", rerollsPerSite: 1 } as const;
 
 export default dreamsign({
   id: "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
@@ -11,5 +14,7 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
   tags: ["J16", "Tag OK"],
-  pending: true,
+  journeySites: journeySitesEffect,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("You may reroll dream journey sites once to present new options."),
 });

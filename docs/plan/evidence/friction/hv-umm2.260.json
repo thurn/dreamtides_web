@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.260",
+  "phase": 5,
+  "implementMin": 147.92768338333332,
+  "implementWindow": {
+    "start": "2026-10-12T19:24:34.566Z",
+    "end": "2026-10-12T21:52:30.227003Z"
+  },
+  "localValidationS": {
+    "focused": 6.4894,
+    "review": 43.1614,
+    "knip": 2.9381,
+    "full": 122.8114
+  },
+  "hostLoad": 7.56494140625,
+  "testDelta": {
+    "files": 2,
+    "lines": 370,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "rules-ambiguity",
+      "minutes": 15.8,
+      "note": "Printed site term/lifetime/duplicate semantics required bounded D10 research and parent scope/ruling admission during original dispatch19:24:34.566Z\u2192nativeWRITEACK19:40:22.473142Z; elapsed coordination window, not productive editing."
+    },
+    {
+      "tag": "preview-card-serialization",
+      "minutes": 37.3,
+      "note": "Observed inactive checkpoint20:45:40Z\u2192parent native update21:22:58.364083Z while root repairs/certifies575 and577; original whole implementation window includes this recovery. Independent QA before checkpoint and all failed receipts retained separately."
+    }
+  ]
+}

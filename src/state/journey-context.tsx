@@ -63,10 +63,14 @@ export interface JourneyMutations {
     siteType: RandomSiteDestinationType,
   ) => void;
   /** Resolve one authored choice and its optional card-selection payload. */
+  /** Consume one held Dreamsign's permission to redraw this unresolved site. */
+  rerollExploration: (siteId: SiteId, dreamsignId: DreamsignId, expectedEncounterCardId: CardId, expectedRerollCount: number) => void;
   resolveExplorationChoice: (
     siteId: SiteId,
     actionId: ExplorationActionId,
     selection?: unknown,
+    expectedEncounterCardId?: CardId,
+    expectedRerollCount?: number,
   ) => void;
   /** Commit one gate choice; the reducer derives the draw, cost, and payout. */
   placeGravokWager: (siteId: SiteId, gateId: GravokGateId) => void;

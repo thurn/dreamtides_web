@@ -1,10 +1,13 @@
+import { explorationRerollAllowance, explorationRerollCount } from "../../rules/journey/journey-sites";
+import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
+import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 // Pure view-model construction for the Exploration encounter: the site view
 // and its action offers. The resolved-action reward comes from
 // exploration-resolution-view-model.ts.
 
 import { resolveDeckEntryCard } from "../../card-type-change";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
-import { glyph } from "../../cumulus/primitives/glyph";
+import { glyph, GLYPHS } from "../../cumulus/primitives/glyph";
 import type {
   ExplorationActionView,
   ExplorationCardSelectionOperation,
@@ -1555,7 +1558,9 @@ export function buildExplorationSiteView(params: {
   runtime: ExplorationSiteRuntime;
   state: JourneyState;
   content: JourneyContent;
+  modifierRegistry?: JourneyModifierRegistry;
 }): ExplorationSiteView | null {
+  const modifiers = params.modifierRegistry ?? journeyModifierRegistry;
   const exploration = params.content.exploration;
   const encounter = explorationEncounterForCard(
     exploration,
@@ -1600,6 +1605,19 @@ export function buildExplorationSiteView(params: {
         : (reward.deckModification?.kind ?? reward.semanticKind ?? "objects");
   return {
     siteId: params.site.id,
+    reroll: params.runtime.resolution === null
+      ? params.state.dreamsigns.flatMap(({ id }) => {
+          if (modifiers.lookup(id)?.journeySites?.kind !== "rerollExploration") return [];
+          return [{
+            dreamsignId: id,
+            label: JOURNEY_SITE_MESSAGES.reroll,
+            glyph: GLYPHS.refresh,
+            expectedEncounterCardId: params.runtime.encounterCardId,
+            expectedRerollCount: explorationRerollCount(params.runtime),
+            available: explorationRerollAllowance(params.state, params.runtime, id, modifiers) > 0,
+          }];
+        })[0]
+      : undefined,
     scene,
     fullArt: artRef.explorationCard(sourceCard.imageNumber),
     guide: projectGuideView(params.guide, params.guideLine),

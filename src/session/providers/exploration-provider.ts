@@ -1,3 +1,4 @@
+import { explorationRerollCount } from "../../rules/journey/journey-sites";
 import {
   mergeCardKeywordModification,
   resolveDeckEntryCard,
@@ -1420,9 +1421,11 @@ export function buildExplorationRuntime(
   content: JourneyContent,
   _rng: () => number,
   encounterCardId?: CardId | null,
+  options?: { excludedEncounterCardIds?: readonly CardId[]; rerollCount?: number },
 ): ExplorationSiteRuntime | null {
   const availableEncounters = content.exploration.encounters.filter(
-    (encounter) => idIndex(content).has(encounter.cardId),
+    (encounter) => idIndex(content).has(encounter.cardId) &&
+      !options?.excludedEncounterCardIds?.includes(encounter.cardId),
   );
   if (availableEncounters.length === 0) return null;
   const ordered = [...availableEncounters].sort((left, right) =>
@@ -1446,7 +1449,9 @@ export function buildExplorationRuntime(
     scope: {
       journeySeed: journey.seed,
       siteUuid: site.id,
-      selectionKey: parseSelectionKey("exploration-encounter"),
+      selectionKey: parseSelectionKey(options?.rerollCount === undefined
+        ? "exploration-encounter"
+        : `exploration-encounter:${String(options.rerollCount)}`),
     },
     count: 1,
   };
@@ -1800,6 +1805,10 @@ export function resolveExplorationChoice(input: {
     payload.selectionRulesVersion !== SELECTION_RULES_VERSION
   )
     return null;
+  const rerolls = explorationRerollCount(runtime);
+  if ((payload.expectedEncounterCardId !== undefined && payload.expectedEncounterCardId !== runtime.encounterCardId) ||
+    (payload.expectedRerollCount !== undefined && payload.expectedRerollCount !== rerolls) ||
+    (rerolls > 0 && (payload.expectedEncounterCardId === undefined || payload.expectedRerollCount === undefined))) return null;
   const actionId = stringValue(payload.actionId);
   if (actionId === null) return null;
   const encounter = explorationEncounterForCard(

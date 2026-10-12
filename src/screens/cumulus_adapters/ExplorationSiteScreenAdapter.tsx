@@ -1,3 +1,4 @@
+import { explorationRerollCount } from "../../rules/journey/journey-sites";
 import { useCallback, useEffect, useMemo } from "react";
 import { ExplorationSiteScreen } from "../../cumulus/screens/ExplorationSiteScreen";
 import { logEvent, logEventOnce } from "../../logging";
@@ -89,17 +90,18 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
       if (site === null || explorationRuntime === null || view === null) return;
       logEvent("exploration_choice_requested", {
         siteId: site.id,
-        ...buildExplorationActionLog(
-          view,
-          explorationRuntime,
-          actionId,
-          selection,
-        ),
+        ...buildExplorationActionLog(view, explorationRuntime, actionId, selection),
       });
-      mutations.resolveExplorationChoice(site.id, actionId, selection);
+      mutations.resolveExplorationChoice(site.id, actionId, selection, explorationRuntime.encounterCardId, explorationRerollCount(explorationRuntime));
     },
     [explorationRuntime, mutations, site, view],
   );
+
+  const handleReroll = useCallback(() => {
+    if (site === null || view?.reroll === undefined) return;
+    const reroll = view.reroll;
+    mutations.rerollExploration(site.id, reroll.dreamsignId, reroll.expectedEncounterCardId, reroll.expectedRerollCount);
+  }, [mutations, site, view]);
 
   const handleExit = useCallback(() => {
     if (site === null || explorationRuntime?.resolution == null || view === null) return;
@@ -114,5 +116,5 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   }, [explorationRuntime, mutations, site, view]);
 
   if (site === null || view === null) return null;
-  return <ExplorationSiteScreen view={view} onChannel={handleChannel} onResolve={handleResolve} onExit={handleExit} />;
+  return <ExplorationSiteScreen key={`${site.id}:${explorationRuntime?.encounterCardId}:${String(explorationRuntime === null ? 0 : explorationRerollCount(explorationRuntime))}`} view={view} onChannel={handleChannel} onResolve={handleResolve} onReroll={handleReroll} onExit={handleExit} />;
 }

@@ -210,7 +210,7 @@ describe("ScreenRouter site dispatch", () => {
 
     const choice = '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]';
     click(container.querySelector(choice));
-    expect(mutations.resolveExplorationChoice).toHaveBeenCalledWith(siteId, actionIds[0], undefined);
+    expect(mutations.resolveExplorationChoice).toHaveBeenCalledWith(siteId, actionIds[0], undefined, selected.id, 0);
     expect(logs("exploration_choice_requested")[0]).toMatchObject({
       siteId,
       presentedCardId: selected.id,

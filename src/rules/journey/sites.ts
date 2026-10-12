@@ -32,6 +32,7 @@ import {
 } from "../../reward-selection/types";
 import type {
   DeckEntry,
+  ExplorationSiteRuntime,
   AugurySiteRuntime,
   JourneyState,
   RuntimeShopSlot,
@@ -101,6 +102,13 @@ export interface SiteContentProvider {
    * Generate the runtime for `site` (of a content-coupled type) deterministically
    * from `(journey, site, rng)`, or `null` to bounce. Must not mutate `journey`.
    */
+  /** Redraw a usable unresolved Exploration without applying a reward. */
+  rerollExploration(input: {
+    journey: JourneyState;
+    site: SiteState;
+    runtime: ExplorationSiteRuntime;
+    selectionRulesVersion: SelectionRulesVersion;
+  }): ExplorationSiteRuntime | null;
   openSite(input: {
     journey: JourneyState;
     site: SiteState;

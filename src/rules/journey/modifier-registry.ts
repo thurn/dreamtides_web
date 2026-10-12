@@ -1,7 +1,11 @@
 import type { ReducerLogRecord } from "../../eventlog/types";
-import type { DreamsignId, SiteId } from "../../types/identifiers";
+import type { AtlasNodeId, DreamsignId, SiteId } from "../../types/identifiers";
 import { parseDreamsignId } from "../../types/identifiers";
-import type { JourneyState } from "../../types/journey";
+import type { CardId } from "../../types/card-identity";
+import rainbowMushroom, { journeySitesEffect as rainbowEffect } from "../../content/dreamsigns/rainbow-mushroom-58472ad2";
+import curledTail, { journeySitesEffect as curledEffect } from "../../content/dreamsigns/curled-tail-3c0ced1a";
+import { journeySites } from "./journey-sites";
+import type { JourneySitesEffect, JourneyState } from "../../types/journey";
 import type { GameplayEventType } from "../events";
 
 /**
@@ -10,6 +14,7 @@ import type { GameplayEventType } from "../events";
  */
 export interface JourneyModifierDefinition {
   readonly dreamsignId: DreamsignId;
+  readonly journeySites?: JourneySitesEffect;
   /**
    * Return null when this transition does not apply the effect. Hooks must be
    * deterministic, must not mutate either input, and must not perform IO.
@@ -19,11 +24,18 @@ export interface JourneyModifierDefinition {
     readonly before: Readonly<JourneyState>;
     readonly journey: Readonly<JourneyState>;
     readonly eventType: GameplayEventType;
+    readonly heldIndex: number;
   }) => {
     readonly journey: JourneyState;
     /** Numeric rule values only: catalog names and copy cannot enter diagnostics. */
     readonly before: Readonly<Record<string, number>>;
     readonly after: Readonly<Record<string, number>>;
+    readonly target?: {
+      readonly siteIds: readonly SiteId[];
+      readonly nodeId?: AtlasNodeId;
+      readonly beforeCardId?: CardId;
+      readonly afterCardId?: CardId;
+    };
   } | null;
 }
 
@@ -71,7 +83,7 @@ export function createJourneyModifierRegistry(
       // iteration.
       for (const [heldIndex, { id }] of journey.dreamsigns.entries()) {
         const definition = byId.get(id);
-        const applied = definition?.afterJourneyEvent({ before, journey: next, eventType });
+        const applied = definition?.afterJourneyEvent({ before, journey: next, eventType, heldIndex });
         if (applied == null) continue;
         logRecords.push({
           event: "journey_modifier_applied",
@@ -83,6 +95,7 @@ export function createJourneyModifierRegistry(
             heldIndex,
             before: snapshot(applied.before),
             after: snapshot(applied.after),
+            ...(applied.target === undefined ? {} : { target: applied.target }),
           },
         });
         next = applied.journey;
@@ -93,4 +106,7 @@ export function createJourneyModifierRegistry(
 }
 
 /** The production registry's fixed catalog registrations. */
-export const journeyModifierRegistry = createJourneyModifierRegistry([]);
+export const journeyModifierRegistry = createJourneyModifierRegistry([
+  journeySites(parseDreamsignId(rainbowMushroom.id), rainbowEffect),
+  journeySites(parseDreamsignId(curledTail.id), curledEffect),
+]);

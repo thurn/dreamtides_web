@@ -171,7 +171,16 @@ export interface EventPayloads {
       | "blackjack";
   };
   CHOOSE_RANDOM_SITE: { siteId: SiteId; siteType: RandomSiteDestinationType };
+  REROLL_EXPLORATION: {
+    siteId: SiteId;
+    dreamsignId: DreamsignId;
+    expectedEncounterCardId: CardId;
+    expectedRerollCount: number;
+    selectionRulesVersion: SelectionRulesVersion;
+  };
   RESOLVE_EXPLORATION_CHOICE: {
+    expectedEncounterCardId?: CardId;
+    expectedRerollCount?: number;
     siteId: SiteId;
     actionId: ExplorationActionId;
     selectionRulesVersion: SelectionRulesVersion;
@@ -427,6 +436,7 @@ const EVENT_INTENT_CLASSES = {
   ENTER_DRAFT_SITE: "gameplay",
   OPEN_SITE: "gameplay",
   CHOOSE_RANDOM_SITE: "gameplay",
+  REROLL_EXPLORATION: "gameplay",
   RESOLVE_EXPLORATION_CHOICE: "gameplay",
   COMPLETE_AUGURY: "gameplay",
   ACCEPT_REWARD: "gameplay",
@@ -563,6 +573,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   ENTER_DRAFT_SITE: true,
   OPEN_SITE: true,
   CHOOSE_RANDOM_SITE: true,
+  REROLL_EXPLORATION: true,
   RESOLVE_EXPLORATION_CHOICE: true,
   COMPLETE_AUGURY: true,
   ACCEPT_REWARD: true,

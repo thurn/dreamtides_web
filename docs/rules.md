@@ -130,6 +130,32 @@ Ending phase (see [Exhaust and Awaken](#exhaust-and-awaken)).
 of either player's deck. They produce energy and usually carry a bonus effect
 for the player who drew them.
 
+## Journey Site Effects
+
+Journey Dreamsign effects apply after validated gameplay changes, in held-copy
+order. A Dreamsign gained by the change applies immediately; one lost by it
+provides no new effect. Administrative state edits preserve their exact values.
+
+An additional enhanced site is an unvisited guide site in the current
+dreamscape whose runtime has not opened and which is not already enhanced.
+Battle, Draft, Essence, and Dreamsign Reward are ineligible. Starter and final
+dreamscapes can receive an additional enhancement when they contain an eligible
+site. Each held copy grants its printed number of additional enhancements;
+historical grants are recorded per source Dreamsign and dreamscape. Applied
+enhancements persist through loss, reacquisition, and reordering of Dreamsigns,
+and the same entitlement is consumed once. Existing enhanced sites use no
+additional Dreamsign entitlement.
+
+A permission to reroll dream journey sites applies to unresolved Exploration
+sites, including an Exploration reached through a Random Site. Each held copy
+permits its printed number of rerolls per site. Consumed uses persist for that
+site through reload, loss, and reacquisition. A successful reroll offers a
+different catalog-valid encounter with fully prepared choices; existing action
+requirements and costs determine which choices are available. It preserves the site,
+journey route, deck, and essence. If no different fully prepared encounter exists, the
+reroll consumes no use. A choice names the encounter and reroll generation it
+was offered in, so an earlier choice cannot resolve against a later reroll.
+
 ## Zones
 
 **Deck** — A player's shuffled draw pile. Cards are drawn from the top during

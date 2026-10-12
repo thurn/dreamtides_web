@@ -144,12 +144,15 @@ function captureAllDrafts(): EventDraft[] {
   void actions.enterDraftSite(parseSiteId("site-1"));
   void actions.openSite(parseSiteId("site-1"));
   void actions.chooseRandomSite(parseSiteId("site-1"), "Shop");
+  void actions.rerollExploration(parseSiteId("site-1"), testDreamsignId("source"), testCardId("encounter"), 0);
   void actions.resolveExplorationChoice(
     parseSiteId("site-1"),
     testExplorationActionId("action-1"),
     {
       entryIds: [parseDeckEntryId("entry-1")],
     },
+    testCardId("encounter"),
+    1,
   );
   void actions.completeAugury(parseSiteId("site-1"));
   void actions.acceptReward(parseSiteId("site-1"));

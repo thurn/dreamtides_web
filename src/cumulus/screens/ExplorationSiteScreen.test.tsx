@@ -1,3 +1,5 @@
+import { GLYPHS } from "../primitives/glyph";
+import { testDreamsignId } from "../../types/test-identities";
 // @vitest-environment jsdom
 
 // ExplorationSiteScreen: the card's travel, the frame break, direct
@@ -197,4 +199,25 @@ describe("ExplorationSiteScreen", () => {
     });
     expect(s.onExit).toHaveBeenCalledOnce();
   });
+});
+
+
+it("offers the optional reroll through one controlled button and disables consumed uses", () => {
+  vi.useFakeTimers();
+  const model = view();
+  const rendered = renderScreen({ ...model, reroll: {
+    dreamsignId: testDreamsignId("reroll-source"), label: "Synthetic action", glyph: GLYPHS.refresh,
+    expectedEncounterCardId: model.card.cardId, expectedRerollCount: 0, available: true,
+  } });
+  rendered.open();
+  rendered.click("cumulus-exploration-reroll");
+  expect(rendered.onReroll).toHaveBeenCalledTimes(1);
+  rendered.unmount();
+  const disabled = renderScreen({ ...model, reroll: {
+    dreamsignId: testDreamsignId("reroll-source"), label: "Synthetic action", glyph: GLYPHS.refresh,
+    expectedEncounterCardId: model.card.cardId, expectedRerollCount: 1, available: false,
+  } });
+  disabled.open();
+  disabled.click("cumulus-exploration-reroll");
+  expect(disabled.onReroll).not.toHaveBeenCalled();
 });

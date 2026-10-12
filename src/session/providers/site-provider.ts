@@ -1,3 +1,4 @@
+import { explorationRerollCount } from "../../rules/journey/journey-sites";
 // Real SiteContentProvider: generates the content-coupled site runtimes
 // (`OPEN_SITE`) and the shop restock (`REROLL_SHOP`) from the loaded journey
 // content, drawing ALL randomness from the reducer-supplied `ctx.rng` (adapted
@@ -880,6 +881,12 @@ export function createSiteContentProvider(
       }
     },
 
+    rerollExploration: ({ journey, site, runtime }) => buildExplorationRuntime(
+      journey, site, content, () => 0, undefined, {
+        excludedEncounterCardIds: [runtime.encounterCardId],
+        rerollCount: explorationRerollCount(runtime) + 1,
+      },
+    ),
     rerollShop: ({ journey, site, rng }): ShopRerollResult | null => {
       const stream = streamFromKeyed(rng);
       const isBazaar = site.type === "DreamsignBazaar";

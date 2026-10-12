@@ -180,6 +180,18 @@ export interface CardSourceDebugState {
   entries: CardSourceDebugEntry[];
 }
 
+/** Typed catalog clauses implemented by the journeySites primitive. */
+export type JourneySitesEffect =
+  | { readonly kind: "additionalEnhancedSite"; readonly count: number }
+  | { readonly kind: "rerollExploration"; readonly rerollsPerSite: number };
+
+/** An earned enhancement remains recorded when sites or holdings change. */
+export interface JourneySiteEnhancement {
+  readonly dreamsignId: DreamsignId;
+  readonly siteId: SiteId;
+  readonly entitlement: number;
+}
+
 /** A site within a dreamscape. */
 export interface SiteState {
   id: SiteId;
@@ -224,6 +236,8 @@ export interface DreamscapeNode {
   state: AtlasNodeState;
   /** The site type this dreamscape enhances, or `null` when none. */
   enhancedSiteType: SiteType | null;
+  /** Historical source entitlements consumed in this dreamscape. */
+  journeySiteEnhancements?: readonly JourneySiteEnhancement[];
   /** Node ids in the next layer this node connects forward to. */
   forwardIds: AtlasNodeId[];
   /** Node ids in the previous layer this node connects backward to. */
@@ -954,6 +968,8 @@ export interface ExplorationResolution {
 /** Shared, replayable runtime for one Exploration encounter. */
 export interface ExplorationSiteRuntime {
   kind: "exploration";
+  /** Consumed site-local uses by source UUID; absent means zero. */
+  journeySiteRerolls?: IdentityRecord<DreamsignId, number>;
   selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision?: SelectionContentRevision;
   encounterSignature?: StableDigest;

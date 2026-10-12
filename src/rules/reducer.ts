@@ -48,6 +48,7 @@ import * as lifecycle from "./journey/lifecycle";
 import * as gamble from "./journey/gamble";
 import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
+import * as journeySites from "./journey/journey-sites";
 import * as cardTutorial from "./card-tutorial-guidance";
 import { assertFoldInvariants } from "./invariants";
 import { siteIdFromUnknown } from "../types/identifiers";
@@ -124,7 +125,7 @@ export function reduceGameEvent(
     // containment.
     let result: ReduceResult;
     try {
-      result = routeDomain(state, event, ctx);
+      result = routeDomain(state, event, ctx, modifiers);
     } catch {
       result = {
         state: {
@@ -142,7 +143,7 @@ export function reduceGameEvent(
     // semantic programmer error must reach fold containment and diagnostics.
     return finishTransition(state, event, result, modifiers);
   }
-  return finishTransition(state, event, routeDomain(state, event, ctx), modifiers);
+  return finishTransition(state, event, routeDomain(state, event, ctx, modifiers), modifiers);
 }
 
 /**
@@ -317,6 +318,7 @@ export function routeDomain(
   state: FoldState,
   event: GameEvent,
   ctx: EventContext,
+  modifiers: JourneyModifierRegistry = journeyModifierRegistry,
 ): ReduceResult {
   if (!isKnownEventType(event.type)) {
     // Unrecognized type string — recorded no-op, never a throw.
@@ -458,6 +460,8 @@ export function routeDomain(
       return journeyCase(state, sites.openSite(journey, payload, ctx));
     case "CHOOSE_RANDOM_SITE":
       return journeyCase(state, sites.chooseRandomSite(journey, payload));
+    case "REROLL_EXPLORATION":
+      return journeyCase(state, journeySites.rerollExploration(journey, payload, modifiers));
     case "RESOLVE_EXPLORATION_CHOICE":
       return journeyCase(
         state,

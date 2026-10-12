@@ -24,6 +24,7 @@ export function testSiteContentProvider(
     gambleData: gambleFixture(),
     openSite: () => null,
     rerollShop: () => null,
+    rerollExploration: () => null,
     resolveAugury: () => null,
     resolveExploration: () => null,
     ...overrides,

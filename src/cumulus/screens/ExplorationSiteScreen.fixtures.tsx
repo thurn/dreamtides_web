@@ -84,8 +84,9 @@ export function renderScreen(screenView: ExplorationSiteView) {
   const onChannel = vi.fn();
   const onResolve = vi.fn();
   const onExit = vi.fn();
+  const onReroll = vi.fn();
   const rendered = renderInCumulus(
-    <ExplorationSiteScreen view={screenView} {...{ onChannel, onResolve, onExit }} />,
+    <ExplorationSiteScreen view={screenView} {...{ onChannel, onResolve, onExit, onReroll }} />,
   );
   const q = (selector: string) => rendered.container.querySelector<HTMLElement>(selector);
   const data = (selector: string) => q(selector)?.dataset;
@@ -104,7 +105,7 @@ export function renderScreen(screenView: ExplorationSiteView) {
     act(() => choice()?.click());
   };
   return {
-    ...{ ...rendered, onChannel, onResolve, onExit },
+    ...{ ...rendered, onChannel, onResolve, onExit, onReroll },
     ...{ q, data, byTestId, click, finish, choice, open },
   };
 }

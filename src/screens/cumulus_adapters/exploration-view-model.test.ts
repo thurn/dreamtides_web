@@ -1,3 +1,6 @@
+import { createJourneyModifierRegistry } from "../../rules/journey/modifier-registry";
+import { journeySites } from "../../rules/journey/journey-sites";
+import { makeAuguryTestContent } from "../../journey_v2/testing/fixtures";
 import { describe, expect, it } from "vitest";
 import { annotatedTextEquality } from "../../cumulus/testing/annotated-text";
 import type { JourneyContent } from "../../data/journey-content";
@@ -149,4 +152,26 @@ describe("exploration-view-model", () => {
       card: { cardId: source.id },
     });
   });
+});
+
+
+it("derives site-local permission and exact stale-intent context from synthetic registered holdings", () => {
+  const source = card(sourceId, 17);
+  const signId = testDreamsignId("synthetic-reroll-source");
+  const actionId = testExplorationActionId("synthetic-choice");
+  const modifierRegistry = createJourneyModifierRegistry([journeySites(signId, { kind: "rerollExploration", rerollsPerSite: 1 })]);
+  const base = makeAuguryTestContent({ cards: [source] });
+  const content = { ...base, exploration: { ...base.exploration, encounters: [{ cardId: source.id, prose: "Synthetic prose", actions: [{ id: actionId, label: "Synthetic choice", effectKind: "gain-card" as const, cardId: source.id }] }] } };
+  const runtime: ExplorationSiteRuntime = {
+    kind: "exploration", selectionRulesVersion: SELECTION_RULES_VERSION, encounterCardId: source.id,
+    actionOffers: [{ actionId, canonicalMechanicId: "gain-card", offeredCardIds: [], packCardIds: [], replacementCardIdByEntryId: {}, transfigurationByEntryId: {} }], resolution: null,
+  };
+  const sign = { id: signId, name: "Synthetic name", effectDescription: "Synthetic effect" };
+  const state = { ...testJourneyState(), dreamsigns: [sign] };
+  const build = (nextState = state, nextRuntime = runtime) => buildExplorationSiteView({ sceneNode: null, site: explorationSite, guide, guideLine: "Synthetic greeting", runtime: nextRuntime, state: nextState, content, modifierRegistry });
+  expect(build()?.reroll).toMatchObject({ dreamsignId: signId, expectedEncounterCardId: source.id, expectedRerollCount: 0, available: true });
+  expect(build({ ...state, dreamsigns: [] })?.reroll).toBeUndefined();
+  const used = { ...runtime, journeySiteRerolls: { [signId]: 1 } };
+  expect(build(state, used)?.reroll?.available).toBe(false);
+  expect(build({ ...state, dreamsigns: [sign, sign] }, used)?.reroll).toMatchObject({ expectedRerollCount: 1, available: true });
 });

@@ -1,3 +1,4 @@
+import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 // The pure view-model builder for the Cumulus dreamscape screen. Every mapping
 // rule between journey domain data and `DreamscapeScreen`'s view types lives here
 // as plain, unit-testable functions — no React, no state hooks, no effects.
@@ -168,7 +169,9 @@ export function buildSiteModels(
       isInteractive,
       label,
       lockedGuidance: LOCKED_BATTLE_GUIDANCE,
-      blurb: siteTypeDescription(sitesData, site.type),
+      blurb: site.isEnhanced
+        ? `${siteTypeDescription(sitesData, site.type)} ${JOURNEY_SITE_MESSAGES.enhanced}`
+        : siteTypeDescription(sitesData, site.type),
       icon: glyph(siteTypeIcon(sitesData, site.type)),
     };
   });

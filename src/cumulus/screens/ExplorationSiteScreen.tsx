@@ -1,3 +1,4 @@
+import type { Glyph } from "../primitives/glyph";
 import type { CardSubtype } from "../../types/card-identity";
 // ExplorationSiteScreen — Layaway draws one possibility from the player's
 // deck anchor, flips it face up, and holds it in the encounter panel.
@@ -96,6 +97,15 @@ import { mapAnnotations, type AnnotatedText } from "../../runtime/text";
 export interface ExplorationSiteView {
   /** Stable site id exposed to QA and logging. */
   siteId: SiteId;
+  /** Optional site-local Dreamsign permission, including the exact live encounter. */
+  reroll?: {
+    readonly dreamsignId: DreamsignId;
+    readonly expectedEncounterCardId: CardId;
+    readonly expectedRerollCount: number;
+    readonly label: string;
+    readonly glyph: Glyph;
+    readonly available: boolean;
+  };
   /** Current dreamscape scene art behind the encounter, when resolved. */
   scene: ArtRef | null;
   /** Resident Dream Guide art and greeting. */
@@ -669,6 +679,8 @@ export interface ExplorationSiteScreenProps {
   view: ExplorationSiteView;
   /** Record the start of this client's frame-break presentation. */
   onChannel: () => void;
+  /** Request the registered Dreamsign reroll while this encounter is unresolved. */
+  onReroll?: () => void;
   /** Resolve one authored action with its UUID-only selection payload. */
   onResolve: (actionId: ExplorationActionId, selection?: unknown) => void;
   /** Complete the site after the card has returned to the journey deck. */
@@ -2146,6 +2158,7 @@ function useCardTrajectory(
 export function ExplorationSiteScreen({
   view,
   onChannel,
+  onReroll,
   onResolve,
   onExit,
 }: ExplorationSiteScreenProps) {
@@ -6578,6 +6591,13 @@ export function ExplorationSiteScreen({
                   paddingTop: token("--space-m"),
                 }}
               >
+                {view.reroll !== undefined && (
+                  <div data-journey-site-reroll-source={view.reroll.dreamsignId}>
+                    <GlassButton label={view.reroll.label} glyph={view.reroll.glyph}
+                      placement="onGlass" disabled={!view.reroll.available}
+                      onPress={() => onReroll?.()} testId="cumulus-exploration-reroll" />
+                  </div>
+                )}
                 <ExplorationNarrativeChoices
                   narrative={view.narrative}
                   actions={view.actions}

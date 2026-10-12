@@ -1,4 +1,7 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
+
+export const journeySitesEffect = { kind: "additionalEnhancedSite", count: 1 } as const;
 
 export default dreamsign({
   id: "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
@@ -10,5 +13,7 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
   tags: ["J16", "Tag OK"],
-  pending: true,
+  journeySites: journeySitesEffect,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("In each dreamscape, 1 additional site is enhanced."),
 });

@@ -1,3 +1,4 @@
+import { validJourneySiteCounters } from "./journey-sites";
 // Pure journey-lifecycle, essence, and navigation reducer cases.
 //
 // Each exported case is a pure function of `(journey, payload[, ctx])`; the
@@ -39,6 +40,7 @@ import type { AvatarId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseAvatarId } from "../../types/identifiers";
+import { dreamsignIdFromUnknown, siteIdFromUnknown } from "../../types/identifiers";
 import { parseJourneyId } from "../../types/identifiers";
 import type { JourneySeed } from "../../types/journey-seed";
 
@@ -484,6 +486,18 @@ function hasValidAtlasSites(atlas: Record<string, unknown>): boolean {
   if (!isRecord(atlas.nodes)) return false;
   for (const node of Object.values(atlas.nodes)) {
     if (!isRecord(node) || !Array.isArray(node.sites)) return false;
+    if (node.journeySiteEnhancements !== undefined) {
+      if (!Array.isArray(node.journeySiteEnhancements)) return false;
+      const grants = new Set<string>();
+      for (const grant of node.journeySiteEnhancements) {
+        if (!isRecord(grant) || dreamsignIdFromUnknown(grant.dreamsignId) === null ||
+          siteIdFromUnknown(grant.siteId) === null || typeof grant.entitlement !== "number" ||
+          !Number.isSafeInteger(grant.entitlement) || grant.entitlement < 0) return false;
+        const key = `${String(grant.dreamsignId)}:${String(grant.entitlement)}`;
+        if (grants.has(key)) return false;
+        grants.add(key);
+      }
+    }
     for (const site of node.sites) {
       if (
         !isRecord(site) ||
@@ -545,6 +559,7 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
   if (!isRecord(value.screen)) return false;
   if (!isRecord(value.siteRuntime)) return false;
   for (const runtime of Object.values(value.siteRuntime)) {
+    if (isRecord(runtime) && runtime.kind === "exploration" && !validJourneySiteCounters(runtime.journeySiteRerolls)) return false;
     if (
       isRecord(runtime) &&
       runtime.kind === "shop" &&

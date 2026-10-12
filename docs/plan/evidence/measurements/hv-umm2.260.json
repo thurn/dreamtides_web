@@ -1,0 +1,4147 @@
+{
+  "bead": "hv-umm2.260",
+  "phase": 5,
+  "base": "40f9877ad7d8a2cf2b3897042199d7ab8d5b1bfd",
+  "implementationProvenance": {
+    "actualDispatch": "2026-10-12T19:24:34.566Z",
+    "dispatchReceipt": "260-dispatch-exact.json",
+    "modelStart": "unobserved",
+    "windowScope": "Gross original dispatch through actual commit, including research, admission waits, checks, QA retries and prerequisite recovery.",
+    "resumptionDispatch": "unobserved; parent native update receipt records source state transition, not model start or helper dispatch.",
+    "finalEndpointUTC": "2026-10-12T21:52:30.227003Z",
+    "implementMin": 147.92768338333332,
+    "endpointSemantics": "UTC sampled immediately before final metadata/schema/staging/amend. Actual commit UTC bracket and Git second-precision timestamp are retained outside worktree; original gross window includes all research, waits, checkpoint and prerequisite recovery.",
+    "implementationStatus": "Implementation and runtime acceptance complete; parent cold core review and delivery follow this final amend."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Resumed final review test-related start 2026-10-12T21:24:30.769Z, 1-minute vm.loadavg=7.56494140625."
+      },
+      "testDelta": {
+        "scope": "All test support lines:369 plain .test.ts/.test.tsx contract entrypoint lines plus1 existing mechanical .fixtures.tsx line; files2/jsdomFiles0."
+      },
+      "localValidationS": {
+        "scope": "Latest resumed validation command wall seconds including wrapper preparation/restore; prior source rounds retained separately. Review/full test substeps have their own clock/load scope."
+      }
+    }
+  },
+  "testEntrypointDelta": {
+    "files": 2,
+    "lines": 369,
+    "jsdomFiles": 0,
+    "newFiles": {
+      "src/rules/journey/journey-sites.test.ts": 233,
+      "src/session/providers/exploration-provider-sites.test.ts": 85
+    },
+    "existingContractNetLines": 51,
+    "fixtureNetLinesSeparate": 1,
+    "scenarioLinesCommitted": 0,
+    "scope": "All tracked .test.ts/.test.tsx plain contract lines; owning scenario wrappers are ignored and not committed."
+  },
+  "qa": {
+    "fixtureScope": "Admitted temporary12registrations based on real journey foundation, unopened target, essence2000. Actual UI ADD_DREAMSIGN gameplay grant then native provider/open/player actions; no substituted provider or modifier logic. Recipes6/7 battle fuzz/cardlab explicitly inapplicable to both journey-only UUIDs by native parent disposition.",
+    "attempts": [
+      {
+        "receipt": "260-qa-Shop.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-K7u72g",
+        "ok": false,
+        "error": "desktop#0: TimeoutError: locator.fill: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"journey-debug-dreamsign-search\"] input')\n",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1982,
+          "scenario": 34426,
+          "total": 36491
+        },
+        "hostLoad": 12.1025390625,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "3nwnam",
+            "rows": 22,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 55502 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:20:47.226Z"
+      },
+      {
+        "receipt": "260-qa-Shop-2.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-EJ81Ba",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 1370,
+          "scenario": 23891,
+          "total": 25325
+        },
+        "hostLoad": 10.1123046875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "ngijrr",
+            "rows": 40,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "b6idcz",
+            "rows": 40,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Shop-desktop-enhanced-reveal.png",
+          "rainbow-Shop-desktop-opened.png",
+          "rainbow-Shop-desktop-action.png",
+          "rainbow-Shop-mobile-enhanced-reveal.png",
+          "rainbow-Shop-mobile-opened.png",
+          "rainbow-Shop-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 59403 on port 5174 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:21:47.823Z"
+      },
+      {
+        "receipt": "260-qa-Purge.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-y2RVHZ",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2271,
+          "scenario": 21547,
+          "total": 23883
+        },
+        "hostLoad": 8.75439453125,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "jchpbr",
+            "rows": 40,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "forqow",
+            "rows": 42,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Purge-desktop-opened.png",
+          "rainbow-Purge-desktop-action.png",
+          "rainbow-Purge-mobile-opened.png",
+          "rainbow-Purge-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 60119 on port 5174 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:22:23.428Z"
+      },
+      {
+        "receipt": "260-qa-Duplication.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-28iTGk",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2287,
+          "scenario": 19444,
+          "total": 21792
+        },
+        "hostLoad": 8.35205078125,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "niqjve",
+            "rows": 38,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "4e98bt",
+            "rows": 38,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Duplication-desktop-opened.png",
+          "rainbow-Duplication-desktop-action.png",
+          "rainbow-Duplication-mobile-opened.png",
+          "rainbow-Duplication-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 60781 on port 5174 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:22:52.180Z"
+      },
+      {
+        "receipt": "260-qa-Transfiguration.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-h594qW",
+        "ok": false,
+        "error": "desktop#0: Error: enhanced site opened: __caps [{\"href\":\"http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=journey-sites-transfiguration&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=bmpmip\",\"caps\":{\"errors\":[],\"rejections\":[],\"consoleErrors\":[\"%o\\n\\n%s\\n\\n%s\\n | Error: assertJsonSafe: localLogState@seq4.journey.siteRuntime.site-1.transfigurationOffers[0].previewCard.abilities holds a function | The above error occurred in the <TransfigurationSiteScreenAdapter> component. | React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.\",\"%o\\n\\n%s\\n\\n%s\\n | Error: assertJsonSafe: localLogState@seq4.journey.siteRuntime.site-1.transfigurationOffers[0].previewCard.abilities holds a function | The above error occurred in the <TransfigurationSiteScreenAdapter> component. | React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.\"]}}]\n    at assertObserved (evalmachine.<anonymous>:190:34)\n    at Object.waitFor (evalmachine.<anonymous>:690:9)\n    at rainbowSites (evalmachine.<anonymous>:1680:36)\n    at async evalmachine.<anonymous>:1757:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1355,
+          "scenario": 4919,
+          "total": 6334
+        },
+        "hostLoad": 7.6279296875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "bmpmip",
+            "rows": 27,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "caps": [
+          {
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/transfiguration?goto=journey-sites-transfiguration&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=bmpmip",
+            "caps": {
+              "errors": [
+                {
+                  "msg": "[ErrorBoundary:screen:site] assertJsonSafe: localLogState@seq4.journey.siteRuntime.site-1.transfigurationOffers[0].previewCard.abilities holds a function",
+                  "src": "at TransfigurationSiteScreenAdapter (http://localhost:5274/src/screens/cumulus_adapters/TransfigurationSiteScreenAdapter.tsx:28:3)",
+                  "scope": "screen:site"
+                },
+                {
+                  "msg": "[ErrorBoundary:screen:site] assertJsonSafe: localLogState@seq4.journey.siteRuntime.site-1.transfigurationOffers[0].previewCard.abilities holds a function",
+                  "src": "at TransfigurationSiteScreenAdapter (http://localhost:5274/src/screens/cumulus_adapters/TransfigurationSiteScreenAdapter.tsx:28:3)",
+                  "scope": "screen:site"
+                }
+              ],
+              "rejections": [],
+              "consoleErrors": [
+                "%o\n\n%s\n\n%s\n | Error: assertJsonSafe: localLogState@seq4.journey.siteRuntime.site-1.transfigurationOffers[0].previewCard.abilities holds a function | The above error occurred in the <TransfigurationSiteScreenAdapter> component. | React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.",
+                "%o\n\n%s\n\n%s\n | Error: assertJsonSafe: localLogState@seq4.journey.siteRuntime.site-1.transfigurationOffers[0].previewCard.abilities holds a function | The above error occurred in the <TransfigurationSiteScreenAdapter> component. | React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
+              ]
+            }
+          }
+        ],
+        "cleanup": "[qa] runtime: server process group 61838 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:23:33.647Z"
+      },
+      {
+        "receipt": "260-qa-DreamsignBazaar.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-tN90mK",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1348,
+          "scenario": 16469,
+          "total": 17874
+        },
+        "hostLoad": 7.04052734375,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "tkqidu",
+            "rows": 36,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "t6q9gd",
+            "rows": 36,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-DreamsignBazaar-desktop-opened.png",
+          "rainbow-DreamsignBazaar-desktop-action.png",
+          "rainbow-DreamsignBazaar-mobile-opened.png",
+          "rainbow-DreamsignBazaar-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 62319 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:23:52.579Z"
+      },
+      {
+        "receipt": "260-qa-DreamsignRevelation.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-FJXhHQ",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1352,
+          "scenario": 18021,
+          "total": 19430
+        },
+        "hostLoad": 6.951171875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "ytrhju",
+            "rows": 40,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "bm3x5d",
+            "rows": 40,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-DreamsignRevelation-desktop-opened.png",
+          "rainbow-DreamsignRevelation-desktop-action.png",
+          "rainbow-DreamsignRevelation-mobile-opened.png",
+          "rainbow-DreamsignRevelation-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 63001 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:24:14.411Z"
+      },
+      {
+        "receipt": "260-qa-Gamble.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-bGAI5q",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1354,
+          "scenario": 18706,
+          "total": 20118
+        },
+        "hostLoad": 7.73193359375,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "tho8do",
+            "rows": 37,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "wcomff",
+            "rows": 37,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Gamble-desktop-opened.png",
+          "rainbow-Gamble-desktop-action.png",
+          "rainbow-Gamble-mobile-opened.png",
+          "rainbow-Gamble-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 63471 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:24:37.837Z"
+      },
+      {
+        "receipt": "260-qa-Augury.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-TVOlD5",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 1357,
+          "scenario": 16847,
+          "total": 18261
+        },
+        "hostLoad": 8.66552734375,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "r2iet7",
+            "rows": 47,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "fzeo7n",
+            "rows": 45,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Augury-desktop-opened.png",
+          "rainbow-Augury-desktop-action.png",
+          "rainbow-Augury-mobile-opened.png",
+          "rainbow-Augury-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 64276 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:25:02.040Z"
+      },
+      {
+        "receipt": "260-qa-Exploration.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-X6wqv3",
+        "ok": false,
+        "error": "desktop#0: Error: available simple Exploration action: TimeoutError: page.waitForFunction: Timeout 14993ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async rainbowSites (evalmachine.<anonymous>:1739:20)\n    at async evalmachine.<anonymous>:1757:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1354,
+          "scenario": 23949,
+          "total": 25362
+        },
+        "hostLoad": 9.3251953125,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "o6sbir",
+            "rows": 39,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Exploration-desktop-opened.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 64896 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:25:24.300Z"
+      },
+      {
+        "receipt": "260-qa-Exploration-2.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-ISKCLP",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1375,
+          "scenario": 22874,
+          "total": 24328
+        },
+        "hostLoad": 6.6611328125,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "bmnhcs",
+            "rows": 42,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "427qzj",
+            "rows": 42,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Exploration-desktop-opened.png",
+          "rainbow-Exploration-desktop-action.png",
+          "rainbow-Exploration-mobile-opened.png",
+          "rainbow-Exploration-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 66457 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:26:28.935Z"
+      },
+      {
+        "receipt": "260-qa-Curled-standard.txt",
+        "scenario": "curled-sites",
+        "invocation": "run-u9cqse",
+        "ok": false,
+        "error": "desktop#0: Error: available direct choice after reroll: TimeoutError: page.waitForFunction: Timeout 14997ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async curledSites (evalmachine.<anonymous>:1705:20)\n    at async evalmachine.<anonymous>:1724:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 1984,
+          "scenario": 34664,
+          "total": 36722
+        },
+        "hostLoad": 9.30810546875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "qi4xsx",
+            "rows": 44,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "curled-standard-desktop-before.png",
+          "curled-standard-desktop-rerolled.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 67352 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:27:01.134Z"
+      },
+      {
+        "receipt": "260-qa-Curled-standard-2.txt",
+        "scenario": "curled-sites",
+        "invocation": "run-iMfNKj",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 8,
+          "serve": 1986,
+          "scenario": 43070,
+          "total": 45123
+        },
+        "hostLoad": 8.21533203125,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "xzzkav",
+            "rows": 49,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "ntguyq",
+            "rows": 49,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "curled-standard-desktop-before.png",
+          "curled-standard-desktop-rerolled.png",
+          "curled-standard-desktop-resolved.png",
+          "curled-standard-mobile-before.png",
+          "curled-standard-mobile-rerolled.png",
+          "curled-standard-mobile-resolved.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 91444 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:27:57.235Z"
+      },
+      {
+        "receipt": "260-qa-Curled-enhanced.txt",
+        "scenario": "curled-sites",
+        "invocation": "run-QJe5Iw",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1669,
+          "scenario": 44092,
+          "total": 45824
+        },
+        "hostLoad": 8.79443359375,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "ggk4qq",
+            "rows": 49,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "2wosjz",
+            "rows": 49,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "curled-enhanced-desktop-before.png",
+          "curled-enhanced-desktop-rerolled.png",
+          "curled-enhanced-desktop-resolved.png",
+          "curled-enhanced-mobile-before.png",
+          "curled-enhanced-mobile-rerolled.png",
+          "curled-enhanced-mobile-resolved.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 98907 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:28:45.816Z"
+      },
+      {
+        "receipt": "260-qa-Curled-random.txt",
+        "scenario": "curled-sites",
+        "invocation": "run-gRgC2f",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 1373,
+          "scenario": 52097,
+          "total": 53542
+        },
+        "hostLoad": 7.28466796875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "d7chwm",
+            "rows": 51,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "ues5g7",
+            "rows": 51,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "curled-random-desktop-before.png",
+          "curled-random-desktop-rerolled.png",
+          "curled-random-desktop-resolved.png",
+          "curled-random-mobile-before.png",
+          "curled-random-mobile-rerolled.png",
+          "curled-random-mobile-resolved.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 100 on port 5174 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:29:38.467Z"
+      },
+      {
+        "receipt": "260-qa-Shop-3.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-qQMJqE",
+        "ok": false,
+        "error": "desktop#0: QaTimeoutError: waitVisible [data-cumulus-reveal-card=\"primary\"]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async rainbowSites (evalmachine.<anonymous>:1682:5)\n    at async evalmachine.<anonymous>:1767:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1352,
+          "scenario": 19769,
+          "total": 21182
+        },
+        "hostLoad": 5.697265625,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "p559rk",
+            "rows": 26,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 2898 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:31:28.425Z"
+      },
+      {
+        "receipt": "260-qa-Shop-4.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-aLBnns",
+        "ok": false,
+        "error": "desktop#0: TimeoutError: locator.hover: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-site-id=\"site-1\"][data-interactive=true]')\n    - locator resolved to <button type=\"button\" aria-disabled=\"false\" data-site-id=\"site-1\" data-site-type=\"Shop\" class=\"ds-node floaty\" aria-label=\"Card Shop\" data-interactive=\"true\" data-site-locked=\"false\" data-reveal-active=\"false\" data-reveal-entity-type=\"site\" data-reveal-feedback=\"measured\" data-reveal-secondary-titles=\"\" data-reveal-primary-variant=\"icon\" data-site-node-presentation=\"scene\" aria-describedby=\"cumulus-reveal-description-_r_2_\" data-reveal-entity-id=\"6e7364a4-8953-4585-9b5d-f24227cb080d\">\u2026</button>\n  - attempting hover action\n    2 \u00d7 waiting for element to be visible and stable\n      - element is not stable\n    - retrying hover action\n    - waiting 20ms\n    2 \u00d7 waiting for element to be visible and stable\n      - element is not stable\n    - retrying hover action\n      - waiting 100ms\n    41 \u00d7 waiting for element to be visible and stable\n       - element is not stable\n     - retrying hover action\n       - waiting 500ms\n",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2260,
+          "scenario": 35885,
+          "total": 38210
+        },
+        "hostLoad": 4.685546875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "vnpsta",
+            "rows": 24,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 4219 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:32:47.241Z"
+      },
+      {
+        "receipt": "260-qa-Shop-5.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-Bz38r4",
+        "ok": false,
+        "error": "desktop#0: Error: enhanced InfoCard blurb not rendered\n    at rainbowSites (evalmachine.<anonymous>:1683:61)\n    at async evalmachine.<anonymous>:1766:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 1350,
+          "scenario": 5732,
+          "total": 7142
+        },
+        "hostLoad": 5.45654296875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "zdt9i5",
+            "rows": 25,
+            "reason": null
+          }
+        ],
+        "captures": [],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 5272 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:33:33.060Z"
+      },
+      {
+        "receipt": "260-qa-Shop-6.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-7uvXsU",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1358,
+          "scenario": 59758,
+          "total": 61173
+        },
+        "hostLoad": 5.01416015625,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "99pgci",
+            "rows": 42,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "bcoviq",
+            "rows": 40,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Shop-desktop-enhanced-reveal.png",
+          "rainbow-Shop-desktop-opened.png",
+          "rainbow-Shop-desktop-action.png",
+          "rainbow-Shop-mobile-enhanced-reveal.png",
+          "rainbow-Shop-mobile-opened.png",
+          "rainbow-Shop-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 5826 on port 5274 cleanup attempted; port free",
+        "firstLogTimestamp": "2026-10-12T20:34:00.232Z"
+      }
+    ],
+    "currentCatalogObservations": {
+      "Shop": {
+        "invocation": "run-7uvXsU",
+        "providerObservation": {
+          "offeredEntryIds": [
+            "shop-slot-0-56411ed4-bda9-4fdf-82e5-b5492de67039",
+            "shop-slot-1-d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c",
+            "shop-slot-2-72debe2e-1f47-4a66-83c3-71bb72876663",
+            "shop-slot-3-243a15d3-a4eb-415c-b106-86d4a2b7ec6a",
+            "shop-slot-4-b977afaf-f583-45ec-8e34-99fbfa4e9190"
+          ],
+          "revelationOptions": 0,
+          "auguryOfferIds": [],
+          "wagerActions": [],
+          "essence": null,
+          "essenceBeforeRestock": "1990",
+          "restockBefore": {
+            "text": "Restock Offers",
+            "cost": null,
+            "disabled": null
+          },
+          "essenceAfterRestock": "1990",
+          "restockAfter": {
+            "text": "Restocked",
+            "disabled": "true"
+          }
+        },
+        "modifier": {
+          "dreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+          "hook": "after_journey_event",
+          "eventType": "ADD_DREAMSIGN",
+          "siteId": null,
+          "heldIndex": 0,
+          "before": {
+            "enhancementsEarned": 0
+          },
+          "after": {
+            "enhancementsEarned": 1
+          },
+          "target": {
+            "nodeId": "dreamscape-1",
+            "siteIds": [
+              "site-1"
+            ]
+          },
+          "event": "journey_modifier_applied",
+          "timestamp": "2026-10-12T20:34:11.081Z",
+          "gameId": "99pgci",
+          "seq": 2
+        },
+        "infoCard": {
+          "text": "Card ShopSpend essence () to buy cards. This site is enhanced.",
+          "x": 756.9375,
+          "y": 377.15625,
+          "width": 248,
+          "height": 130.59375
+        },
+        "resultObservations": [
+          {
+            "gameId": "99pgci",
+            "siteType": "Shop",
+            "eventSeq": 5,
+            "siteId": "site-1",
+            "slotIndex": 0,
+            "item": {
+              "kind": "card",
+              "cardId": "56411ed4-bda9-4fdf-82e5-b5492de67039",
+              "cardNumber": 56,
+              "gainedEntryId": "deck-5-0"
+            },
+            "priceBeforeFree": 10,
+            "chargedPrice": 10,
+            "essenceBefore": 2000,
+            "essenceAfter": 1990,
+            "freeNextShopSource": null,
+            "freePurchaseModifier": null,
+            "timestamp": "2026-10-12T20:34:34.218Z",
+            "event": "shop_item_purchased",
+            "seq": 34
+          }
+        ]
+      },
+      "Purge": {
+        "invocation": "run-y2RVHZ",
+        "providerObservation": {
+          "offeredEntryIds": [
+            "deck-1",
+            "deck-2",
+            "deck-3",
+            "deck-4",
+            "deck-5",
+            "deck-6",
+            "deck-7",
+            "deck-8",
+            "deck-9",
+            "deck-10"
+          ],
+          "revelationOptions": 0,
+          "auguryOfferIds": [],
+          "wagerActions": [],
+          "essence": null,
+          "purgeSelections": [
+            "deck-1",
+            "deck-2",
+            "deck-3"
+          ],
+          "purgeHeader": "Purge 3 \u00b7 133DeclinePurge 1 \u00b7 518Purge 2 \u00b7 518Purge 3 \u00b7 518Purge 4 \u00b7 518Purge 5 \u00b7 518Purge 6 \u00b7 518"
+        },
+        "modifier": {
+          "dreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+          "hook": "after_journey_event",
+          "eventType": "ADD_DREAMSIGN",
+          "siteId": null,
+          "heldIndex": 0,
+          "before": {
+            "enhancementsEarned": 0
+          },
+          "after": {
+            "enhancementsEarned": 1
+          },
+          "target": {
+            "nodeId": "dreamscape-1",
+            "siteIds": [
+              "site-4"
+            ]
+          },
+          "event": "journey_modifier_applied",
+          "timestamp": "2026-10-12T20:22:24.562Z",
+          "gameId": "jchpbr",
+          "seq": 2
+        },
+        "infoCard": null,
+        "resultObservations": [
+          {
+            "gameId": "jchpbr",
+            "purgedCardIds": [
+              "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+              "647f5150-b2e0-424b-9480-27557642524e",
+              "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
+            ],
+            "purgedEntryIds": [
+              "deck-1",
+              "deck-2",
+              "deck-3"
+            ],
+            "count": 3,
+            "totalCost": 133,
+            "nightmareCardsRemoved": 0,
+            "isEnhanced": true,
+            "essenceBefore": 2000,
+            "essenceAfter": 1867,
+            "completionLevel": 0,
+            "currentDreamscape": "dreamscape-1",
+            "timestamp": "2026-10-12T20:22:30.241Z",
+            "event": "purge_completed",
+            "seq": 34
+          }
+        ]
+      },
+      "Duplication": {
+        "invocation": "run-28iTGk",
+        "providerObservation": {
+          "offeredEntryIds": [
+            "deck-1",
+            "deck-2",
+            "deck-3",
+            "deck-4",
+            "deck-5",
+            "deck-6",
+            "deck-7",
+            "deck-8",
+            "deck-9",
+            "deck-10"
+          ],
+          "revelationOptions": 0,
+          "auguryOfferIds": [],
+          "wagerActions": [],
+          "essence": null
+        },
+        "modifier": {
+          "dreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+          "hook": "after_journey_event",
+          "eventType": "ADD_DREAMSIGN",
+          "siteId": null,
+          "heldIndex": 0,
+          "before": {
+            "enhancementsEarned": 0
+          },
+          "after": {
+            "enhancementsEarned": 1
+          },
+          "target": {
+            "nodeId": "dreamscape-1",
+            "siteIds": [
+              "site-1"
+            ]
+          },
+          "event": "journey_modifier_applied",
+          "timestamp": "2026-10-12T20:22:53.063Z",
+          "gameId": "niqjve",
+          "seq": 2
+        },
+        "infoCard": null,
+        "resultObservations": [
+          {
+            "siteType": "Duplication",
+            "isEnhanced": true,
+            "deckSize": 10,
+            "candidateCount": 10,
+            "offeredEntries": [
+              {
+                "entryId": "deck-1",
+                "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+              },
+              {
+                "entryId": "deck-2",
+                "cardId": "647f5150-b2e0-424b-9480-27557642524e"
+              },
+              {
+                "entryId": "deck-3",
+                "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
+              },
+              {
+                "entryId": "deck-4",
+                "cardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0"
+              },
+              {
+                "entryId": "deck-5",
+                "cardId": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+              },
+              {
+                "entryId": "deck-6",
+                "cardId": "5ab11bef-5dcd-49f5-be49-ae2ccde76e70"
+              },
+              {
+                "entryId": "deck-7",
+                "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5"
+              },
+              {
+                "entryId": "deck-8",
+                "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc"
+              },
+              {
+                "entryId": "deck-9",
+                "cardId": "910b4cf9-dec7-4e03-af4f-7d5ae342eeba"
+              },
+              {
+                "entryId": "deck-10",
+                "cardId": "944e15d2-d680-4ebe-8d18-36826f4b1535"
+              }
+            ],
+            "event": "site_entered"
+          },
+          {
+            "gameId": "niqjve",
+            "siteId": "site-1",
+            "entryId": "deck-1",
+            "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+            "copyCount": 1,
+            "isEnhanced": true,
+            "deckSizeBefore": 10,
+            "deckSizeAfter": 11,
+            "currentDreamscape": "dreamscape-1",
+            "completionLevel": 0,
+            "timestamp": "2026-10-12T20:22:58.622Z",
+            "event": "duplication_completed",
+            "seq": 31
+          }
+        ]
+      },
+      "DreamsignBazaar": {
+        "invocation": "run-tN90mK",
+        "providerObservation": {
+          "offeredEntryIds": [],
+          "revelationOptions": 0,
+          "auguryOfferIds": [],
+          "wagerActions": [],
+          "essence": null
+        },
+        "modifier": {
+          "dreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+          "hook": "after_journey_event",
+          "eventType": "ADD_DREAMSIGN",
+          "siteId": null,
+          "heldIndex": 0,
+          "before": {
+            "enhancementsEarned": 0
+          },
+          "after": {
+            "enhancementsEarned": 1
+          },
+          "target": {
+            "nodeId": "dreamscape-1",
+            "siteIds": [
+              "site-1"
+            ]
+          },
+          "event": "journey_modifier_applied",
+          "timestamp": "2026-10-12T20:23:53.412Z",
+          "gameId": "tkqidu",
+          "seq": 2
+        },
+        "infoCard": null,
+        "resultObservations": [
+          {
+            "siteId": "site-1",
+            "siteType": "DreamsignBazaar",
+            "isEnhanced": true,
+            "restockPrice": 0,
+            "event": "site_entered"
+          }
+        ]
+      },
+      "DreamsignRevelation": {
+        "invocation": "run-FJXhHQ",
+        "providerObservation": {
+          "offeredEntryIds": [],
+          "revelationOptions": 4,
+          "auguryOfferIds": [],
+          "wagerActions": [],
+          "essence": null
+        },
+        "modifier": {
+          "dreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+          "hook": "after_journey_event",
+          "eventType": "ADD_DREAMSIGN",
+          "siteId": null,
+          "heldIndex": 0,
+          "before": {
+            "enhancementsEarned": 0
+          },
+          "after": {
+            "enhancementsEarned": 1
+          },
+          "target": {
+            "nodeId": "dreamscape-1",
+            "siteIds": [
+              "site-3"
+            ]
+          },
+          "event": "journey_modifier_applied",
+          "timestamp": "2026-10-12T20:24:15.286Z",
+          "gameId": "ytrhju",
+          "seq": 2
+        },
+        "infoCard": null,
+        "resultObservations": [
+          {
+            "siteType": "DreamsignRevelation",
+            "isEnhanced": true,
+            "optionCount": 4,
+            "event": "site_entered"
+          }
+        ]
+      },
+      "Gamble": {
+        "invocation": "run-bGAI5q",
+        "providerObservation": {
+          "offeredEntryIds": [],
+          "revelationOptions": 0,
+          "auguryOfferIds": [],
+          "wagerActions": [
+            {
+              "id": "gamble-choose-six",
+              "text": "Bet \u00b7 45"
+            },
+            {
+              "id": "gamble-choose-nine",
+              "text": "Bet \u00b7 45"
+            },
+            {
+              "id": "gamble-choose-jack",
+              "text": "Bet \u00b7 45"
+            }
+          ],
+          "essence": null
+        },
+        "modifier": {
+          "dreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+          "hook": "after_journey_event",
+          "eventType": "ADD_DREAMSIGN",
+          "siteId": null,
+          "heldIndex": 0,
+          "before": {
+            "enhancementsEarned": 0
+          },
+          "after": {
+            "enhancementsEarned": 1
+          },
+          "target": {
+            "nodeId": "dreamscape-1",
+            "siteIds": [
+              "site-1"
+            ]
+          },
+          "event": "journey_modifier_applied",
+          "timestamp": "2026-10-12T20:24:38.680Z",
+          "gameId": "tho8do",
+          "seq": 2
+        },
+        "infoCard": null,
+        "resultObservations": [
+          {
+            "gameId": "gravok-three-gate-wager",
+            "siteId": "site-1",
+            "gambleFoldHash": "b57770d04b385596bff1a26c88cb00c68ef11a1f226d49346692f21bcc59d60c",
+            "gateId": "six",
+            "odds": "69.23%",
+            "oddsNumerator": 36,
+            "oddsDenominator": 52,
+            "payment": 45,
+            "revealedCard": {
+              "rank": "Q",
+              "suit": "spades"
+            },
+            "won": true,
+            "terminalReason": "won",
+            "essenceGained": 100,
+            "dreamsignId": "5a22f358-bc84-44b1-a201-5f9f57940c51",
+            "pendingDreamsignReplacement": false,
+            "timestamp": "2026-10-12T20:24:42.623Z",
+            "event": "gamble_wager_resolved",
+            "seq": 31
+          },
+          {
+            "gameId": "gravok-three-gate-wager",
+            "siteId": "site-1",
+            "gambleFoldHash": "b57770d04b385596bff1a26c88cb00c68ef11a1f226d49346692f21bcc59d60c",
+            "gateId": "six",
+            "payment": 45,
+            "essenceGained": 100,
+            "essenceChangeAtSettlement": 100,
+            "netEssenceChange": 55,
+            "timestamp": "2026-10-12T20:24:43.619Z",
+            "event": "gamble_wager_settled",
+            "seq": 32
+          }
+        ]
+      },
+      "Augury": {
+        "invocation": "run-TVOlD5",
+        "providerObservation": {
+          "offeredEntryIds": [],
+          "revelationOptions": 0,
+          "auguryOfferIds": [
+            "cumulus-augury-offer-A",
+            "cumulus-augury-offer-B"
+          ],
+          "wagerActions": [],
+          "essence": null
+        },
+        "modifier": {
+          "dreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+          "hook": "after_journey_event",
+          "eventType": "ADD_DREAMSIGN",
+          "siteId": null,
+          "heldIndex": 0,
+          "before": {
+            "enhancementsEarned": 0
+          },
+          "after": {
+            "enhancementsEarned": 1
+          },
+          "target": {
+            "nodeId": "dreamscape-1",
+            "siteIds": [
+              "site-1"
+            ]
+          },
+          "event": "journey_modifier_applied",
+          "timestamp": "2026-10-12T20:25:03.077Z",
+          "gameId": "r2iet7",
+          "seq": 2
+        },
+        "infoCard": null,
+        "resultObservations": [
+          {
+            "offerId": "A",
+            "archetypeId": "dreamsign",
+            "family": "dreamsign",
+            "targetKey": "1c505034-e405-495d-8418-6e3c06d974f0",
+            "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+            "selectionRulesVersion": "2",
+            "event": "augury_offer_built",
+            "band": 38,
+            "selectedKeys": [
+              "1c505034-e405-495d-8418-6e3c06d974f0"
+            ]
+          },
+          {
+            "offerId": "B",
+            "archetypeId": "purge",
+            "family": "remove",
+            "targetKey": "deck-1",
+            "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+            "selectionRulesVersion": "2",
+            "event": "augury_offer_built",
+            "band": 5,
+            "selectedKeys": [
+              "deck-1"
+            ]
+          },
+          {
+            "offerId": "A",
+            "archetypeId": "dreamsign",
+            "family": "dreamsign",
+            "targetKey": "8a2c7b32-26ea-40e2-845a-689da5673b4d",
+            "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+            "selectionRulesVersion": "2",
+            "event": "augury_offer_built",
+            "band": 38,
+            "selectedKeys": [
+              "8a2c7b32-26ea-40e2-845a-689da5673b4d"
+            ]
+          },
+          {
+            "offerId": "B",
+            "archetypeId": "purge",
+            "family": "remove",
+            "targetKey": "deck-1",
+            "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+            "selectionRulesVersion": "2",
+            "event": "augury_offer_built",
+            "band": 5,
+            "selectedKeys": [
+              "deck-1"
+            ]
+          }
+        ]
+      },
+      "Exploration": {
+        "invocation": "run-ISKCLP",
+        "providerObservation": {
+          "offeredEntryIds": [],
+          "revelationOptions": 0,
+          "auguryOfferIds": [],
+          "wagerActions": [],
+          "essence": null
+        },
+        "modifier": {
+          "dreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+          "hook": "after_journey_event",
+          "eventType": "ADD_DREAMSIGN",
+          "siteId": null,
+          "heldIndex": 0,
+          "before": {
+            "enhancementsEarned": 0
+          },
+          "after": {
+            "enhancementsEarned": 1
+          },
+          "target": {
+            "nodeId": "dreamscape-1",
+            "siteIds": [
+              "site-1"
+            ]
+          },
+          "event": "journey_modifier_applied",
+          "timestamp": "2026-10-12T20:26:29.850Z",
+          "gameId": "bmnhcs",
+          "seq": 2
+        },
+        "infoCard": null,
+        "resultObservations": [
+          {
+            "siteId": "site-1",
+            "siteType": "Exploration",
+            "isEnhanced": true,
+            "presentedCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+            "actionIds": [
+              "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+              "87efe01b-525e-41b4-80d4-db4c4bf3e656"
+            ],
+            "event": "site_entered"
+          }
+        ]
+      }
+    },
+    "restore": {
+      "restoredAtUTC": "2026-10-12T21:42:38.499464+00:00",
+      "base": "40f9877ad7d8a2cf2b3897042199d7ab8d5b1bfd",
+      "fileCount": 2224,
+      "differences": [],
+      "qaScenesSHA256": "af5c1159ee5fca7c8d0e8a5f5b055ec00636bf230bd3981d6ccdab7637dcb076",
+      "treeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504",
+      "nativeRunnerState": "All13 final attempts terminal, own server cleanup port-free; no runner can serve/reacquire."
+    },
+    "remaining": "All runtime acceptance complete. Parent cold core review and exact candidate delivery follow final amended commit.",
+    "finalAttempts": [
+      {
+        "receipt": "260-final-qa-Augury.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-BBSmZG",
+        "evidenceDir": "invocations/run-BBSmZG",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 2872,
+          "scenario": 27019,
+          "total": 29993
+        },
+        "hostLoad": 22.421875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "uhiqvv",
+            "rows": 52,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "ru8szx",
+            "rows": 52,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Augury-desktop-opened.png",
+          "rainbow-Augury-desktop-action.png",
+          "rainbow-Augury-mobile-opened.png",
+          "rainbow-Augury-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 65806 on port 5174 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-Exploration.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-tqVD6g",
+        "evidenceDir": "invocations/run-tqVD6g",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1976,
+          "scenario": 31264,
+          "total": 33315
+        },
+        "hostLoad": 15.97119140625,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "u2tkq9",
+            "rows": 46,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "7zfocb",
+            "rows": 46,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Exploration-desktop-opened.png",
+          "rainbow-Exploration-desktop-action.png",
+          "rainbow-Exploration-mobile-opened.png",
+          "rainbow-Exploration-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 76773 on port 5274 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-Curled-standard.txt",
+        "scenario": "curled-sites",
+        "invocation": "run-NBpEmN",
+        "evidenceDir": "invocations/run-NBpEmN",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 2571,
+          "scenario": 49108,
+          "total": 51745
+        },
+        "hostLoad": 12.20751953125,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "k6dj59",
+            "rows": 49,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "yz4ehm",
+            "rows": 49,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "curled-standard-desktop-before.png",
+          "curled-standard-desktop-rerolled.png",
+          "curled-standard-desktop-resolved.png",
+          "curled-standard-mobile-before.png",
+          "curled-standard-mobile-rerolled.png",
+          "curled-standard-mobile-resolved.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 80034 on port 5274 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-Gamble.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-2wbcnV",
+        "evidenceDir": "invocations/run-2wbcnV",
+        "ok": false,
+        "error": "desktop#0: QaTimeoutError: waitVisible [data-site-type=\"Gamble\"][data-interactive=true]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async rainbowSites (evalmachine.<anonymous>:1658:3)\n    at async evalmachine.<anonymous>:1778:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 1884,
+          "scenario": 23550,
+          "total": 27951
+        },
+        "hostLoad": 7.3076171875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": null,
+            "rows": 0,
+            "reason": "no local games database"
+          }
+        ],
+        "captures": [],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 59501 on port 5174 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-Duplication.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-M1UMun",
+        "evidenceDir": "invocations/run-M1UMun",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 2572,
+          "scenario": 25290,
+          "total": 27962
+        },
+        "hostLoad": 8.66064453125,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "vcxqpm",
+            "rows": 42,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "9d543f",
+            "rows": 42,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Duplication-desktop-opened.png",
+          "rainbow-Duplication-desktop-action.png",
+          "rainbow-Duplication-mobile-opened.png",
+          "rainbow-Duplication-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 51686 on port 5274 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-Curled-enhanced.txt",
+        "scenario": "curled-sites",
+        "invocation": "run-J7Y4jU",
+        "evidenceDir": "invocations/run-J7Y4jU",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1351,
+          "scenario": 50873,
+          "total": 52284
+        },
+        "hostLoad": 8.419921875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "az6i9h",
+            "rows": 49,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "3h9pgh",
+            "rows": 49,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "curled-enhanced-desktop-before.png",
+          "curled-enhanced-desktop-rerolled.png",
+          "curled-enhanced-desktop-resolved.png",
+          "curled-enhanced-mobile-before.png",
+          "curled-enhanced-mobile-rerolled.png",
+          "curled-enhanced-mobile-resolved.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 84392 on port 5174 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-Curled-random.txt",
+        "scenario": "curled-sites",
+        "invocation": "run-LuoUBi",
+        "evidenceDir": "invocations/run-LuoUBi",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 1452,
+          "scenario": 82299,
+          "total": 83829
+        },
+        "hostLoad": 5.92529296875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "z6nm89",
+            "rows": 51,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "y7d7tw",
+            "rows": 51,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "curled-random-desktop-before.png",
+          "curled-random-desktop-rerolled.png",
+          "curled-random-desktop-resolved.png",
+          "curled-random-mobile-before.png",
+          "curled-random-mobile-rerolled.png",
+          "curled-random-mobile-resolved.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 86662 on port 5274 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-Shop.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-8qmDd4",
+        "evidenceDir": "invocations/run-8qmDd4",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1664,
+          "scenario": 28680,
+          "total": 30431
+        },
+        "hostLoad": 11.66015625,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "j7irmi",
+            "rows": 44,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "jgjp8e",
+            "rows": 44,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Shop-desktop-enhanced-reveal.png",
+          "rainbow-Shop-desktop-opened.png",
+          "rainbow-Shop-desktop-action.png",
+          "rainbow-Shop-mobile-enhanced-reveal.png",
+          "rainbow-Shop-mobile-opened.png",
+          "rainbow-Shop-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 14240 on port 5274 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-DreamsignRevelation.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-unyLBm",
+        "evidenceDir": "invocations/run-unyLBm",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 31730,
+          "serve": 1413,
+          "scenario": 27693,
+          "total": 60925
+        },
+        "hostLoad": 9.119140625,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "tnd34w",
+            "rows": 45,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "4zaiwo",
+            "rows": 45,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-DreamsignRevelation-desktop-opened.png",
+          "rainbow-DreamsignRevelation-desktop-action.png",
+          "rainbow-DreamsignRevelation-mobile-opened.png",
+          "rainbow-DreamsignRevelation-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 58707 on port 5174 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-Gamble-2.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-uOtUak",
+        "evidenceDir": "invocations/run-uOtUak",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1348,
+          "scenario": 44379,
+          "total": 45818
+        },
+        "hostLoad": 14.87548828125,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "t4qmud",
+            "rows": 41,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "8crxyb",
+            "rows": 41,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Gamble-desktop-opened.png",
+          "rainbow-Gamble-desktop-action.png",
+          "rainbow-Gamble-mobile-opened.png",
+          "rainbow-Gamble-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 17046 on port 5174 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-Transfiguration.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-I8XYtP",
+        "evidenceDir": "invocations/run-I8XYtP",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1347,
+          "scenario": 32580,
+          "total": 33987
+        },
+        "hostLoad": 10.53857421875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "ustpkp",
+            "rows": 51,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "kb9nmz",
+            "rows": 51,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Transfiguration-desktop-opened.png",
+          "rainbow-Transfiguration-desktop-selected.png",
+          "rainbow-Transfiguration-desktop-action.png",
+          "rainbow-Transfiguration-mobile-opened.png",
+          "rainbow-Transfiguration-mobile-selected.png",
+          "rainbow-Transfiguration-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 36239 on port 5274 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-Purge.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-ClnLwF",
+        "evidenceDir": "invocations/run-ClnLwF",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5708,
+          "serve": 1349,
+          "scenario": 27415,
+          "total": 34524
+        },
+        "hostLoad": 11.40966796875,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "w27h76",
+            "rows": 45,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "h8wmx5",
+            "rows": 43,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-Purge-desktop-opened.png",
+          "rainbow-Purge-desktop-action.png",
+          "rainbow-Purge-mobile-opened.png",
+          "rainbow-Purge-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 50780 on port 5274 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      },
+      {
+        "receipt": "260-final-qa-DreamsignBazaar.txt",
+        "scenario": "rainbow-sites",
+        "invocation": "run-ZqIv0z",
+        "evidenceDir": "invocations/run-ZqIv0z",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 2268,
+          "scenario": 29442,
+          "total": 31780
+        },
+        "hostLoad": 8.640625,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "gameId": "u2x6cy",
+            "rows": 40,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "gameId": "fo7dbv",
+            "rows": 40,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "rainbow-DreamsignBazaar-desktop-opened.png",
+          "rainbow-DreamsignBazaar-desktop-action.png",
+          "rainbow-DreamsignBazaar-mobile-opened.png",
+          "rainbow-DreamsignBazaar-mobile-action.png"
+        ],
+        "caps": [],
+        "cleanup": "[qa] runtime: server process group 52703 on port 5174 cleanup attempted; port free",
+        "sourceTreeSHA256": "e42e553cc0f718ea8f708ebe721639c4e28bd4b9df10a6b1c34a9ff0ea190504"
+      }
+    ],
+    "priorRestore": {
+      "fileCount": 2211,
+      "differences": [],
+      "qaScenesSha256": "906b4d4d293450784e0d56fcd61995858ad35e549272bc854eb897b8ffbc780a",
+      "freezeTreeSHA256": "d89b0bf8b8808fdb67adde1b69ab29e3d7b79826e64da591ab9d0bae63c74e9e"
+    },
+    "priorCaptureQualification": "Initial Shop desktop run-7uvXsU capture lacks visible InfoCard despite DOM probe; final run-8qmDd4 desktop and mobile show it with keyboard focus. Prior Curled before/rerolled captures include typing; final NBP/J7/Luo captures wait all revealed choices and show settled workflow.",
+    "finalCurrentCatalogObservations": {
+      "Augury": {
+        "invocation": "run-BBSmZG",
+        "views": {
+          "desktop": {
+            "gameId": "uhiqvv",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "ACCEPT_AUGURY_OFFER",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 682.9375,
+              "y": 374.1637878417969,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=journey-sites-augury&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=uhiqvv"
+            },
+            "reloadGameIds": [
+              "uhiqvv",
+              "uhiqvv"
+            ],
+            "augurySelectionObservations": [
+              {
+                "offerId": "A",
+                "archetypeId": "dreamsign",
+                "targetKey": "1c505034-e405-495d-8418-6e3c06d974f0",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "1c505034-e405-495d-8418-6e3c06d974f0"
+                ]
+              },
+              {
+                "offerId": "B",
+                "archetypeId": "purge",
+                "targetKey": "deck-1",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "deck-1"
+                ]
+              },
+              {
+                "offerId": "A",
+                "archetypeId": "dreamsign",
+                "targetKey": "1c505034-e405-495d-8418-6e3c06d974f0",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "1c505034-e405-495d-8418-6e3c06d974f0"
+                ]
+              },
+              {
+                "offerId": "B",
+                "archetypeId": "purge",
+                "targetKey": "deck-1",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "deck-1"
+                ]
+              },
+              {
+                "offerId": "A",
+                "archetypeId": "dreamsign",
+                "targetKey": "8a2c7b32-26ea-40e2-845a-689da5673b4d",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "8a2c7b32-26ea-40e2-845a-689da5673b4d"
+                ]
+              },
+              {
+                "offerId": "B",
+                "archetypeId": "purge",
+                "targetKey": "deck-1",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "deck-1"
+                ]
+              }
+            ],
+            "provider": {
+              "auguryOfferIds": [
+                "cumulus-augury-offer-A",
+                "cumulus-augury-offer-B"
+              ]
+            }
+          },
+          "mobile": {
+            "gameId": "ru8szx",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "ACCEPT_AUGURY_OFFER",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.63275146484375,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=journey-sites-augury&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=ru8szx"
+            },
+            "reloadGameIds": [
+              "ru8szx",
+              "ru8szx"
+            ],
+            "augurySelectionObservations": [
+              {
+                "offerId": "A",
+                "archetypeId": "dreamsign",
+                "targetKey": "1c505034-e405-495d-8418-6e3c06d974f0",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "1c505034-e405-495d-8418-6e3c06d974f0"
+                ]
+              },
+              {
+                "offerId": "B",
+                "archetypeId": "purge",
+                "targetKey": "deck-1",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "deck-1"
+                ]
+              },
+              {
+                "offerId": "A",
+                "archetypeId": "dreamsign",
+                "targetKey": "1c505034-e405-495d-8418-6e3c06d974f0",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "1c505034-e405-495d-8418-6e3c06d974f0"
+                ]
+              },
+              {
+                "offerId": "B",
+                "archetypeId": "purge",
+                "targetKey": "deck-1",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "deck-1"
+                ]
+              },
+              {
+                "offerId": "A",
+                "archetypeId": "dreamsign",
+                "targetKey": "8a2c7b32-26ea-40e2-845a-689da5673b4d",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "8a2c7b32-26ea-40e2-845a-689da5673b4d"
+                ]
+              },
+              {
+                "offerId": "B",
+                "archetypeId": "purge",
+                "targetKey": "deck-1",
+                "deckHash": "5ff6f696916f7cddab4130640b56eeab7198162de60b3ab926c22bd6e52c1bcb",
+                "bandFraction": 0.25,
+                "selectedKeys": [
+                  "deck-1"
+                ]
+              }
+            ],
+            "provider": {
+              "auguryOfferIds": [
+                "cumulus-augury-offer-A",
+                "cumulus-augury-offer-B"
+              ]
+            }
+          }
+        }
+      },
+      "Exploration": {
+        "invocation": "run-tqVD6g",
+        "views": {
+          "desktop": {
+            "gameId": "u2tkq9",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "RESOLVE_EXPLORATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 682.9375,
+              "y": 376.8042907714844,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-sites-exploration&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=u2tkq9"
+            },
+            "reloadGameIds": [
+              "u2tkq9",
+              "u2tkq9"
+            ],
+            "provider": {}
+          },
+          "mobile": {
+            "gameId": "7zfocb",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "RESOLVE_EXPLORATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.8043518066406,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-sites-exploration&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=7zfocb"
+            },
+            "reloadGameIds": [
+              "7zfocb",
+              "7zfocb"
+            ],
+            "provider": {}
+          }
+        }
+      },
+      "Curled-standard": {
+        "invocation": "run-NBpEmN",
+        "views": {
+          "desktop": {
+            "gameId": "k6dj59",
+            "sourceDreamsignId": "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
+            "sourceCounterBefore": {
+              "rerollsUsed": 0
+            },
+            "sourceCounterAfter": {
+              "rerollsUsed": 1
+            },
+            "target": {
+              "siteIds": [
+                "site-1"
+              ],
+              "beforeCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "afterCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2"
+            },
+            "normalAction": {
+              "type": "RESOLVE_EXPLORATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "button": {
+                "x": 29,
+                "y": 498.6875,
+                "width": 196.640625,
+                "height": 42
+              },
+              "panel": {
+                "x": 12,
+                "y": 485.6875,
+                "width": 400,
+                "height": 290.3125
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/exploration?goto=journey-sites-curled-standard&seed=1&debug=1&game=k6dj59"
+            },
+            "reloadGameId": "k6dj59",
+            "resolutions": [
+              {
+                "siteId": "site-1",
+                "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                "selectionRulesVersion": "2",
+                "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                "effectKind": "next-battle-opening-hand",
+                "rawSelection": {},
+                "validatedSelection": {},
+                "terminalOutcome": {
+                  "kind": "battle-modifier",
+                  "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                  "encounterSignature": "772e9d1dc619afccb1e1b88f76b145b75371185676abd2a7f81ed11c8bb09a06",
+                  "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                  "effectKind": "next-battle-opening-hand",
+                  "authoredPredicate": null,
+                  "authoredNightmareCount": null,
+                  "authoredCount": 2,
+                  "authoredFixedDreamsignId": null,
+                  "authoredOfferCount": null,
+                  "authoredFixedTransfiguration": null,
+                  "authoredCardType": null,
+                  "authoredSiteType": null,
+                  "authoredFixedCardId": null,
+                  "authoredDeckTarget": null,
+                  "canonicalMechanicId": "next-battle-modifier",
+                  "selectionPolicyId": null,
+                  "selectionRulesVersion": "2",
+                  "selectionContentRevision": null,
+                  "selectionKey": null,
+                  "selectionSignature": null,
+                  "selectionTrace": null,
+                  "selectionTraces": null,
+                  "selectorSignatures": [],
+                  "multiCardReplacementPreparation": null,
+                  "randomDeckTargetPreparation": null,
+                  "disclosedDeckTargetPreparation": null,
+                  "compoundActionPreparation": null,
+                  "siteInsertionPreparation": null,
+                  "siteTypeChoicePreparation": null,
+                  "offeredSiteType": null,
+                  "offeredSiteTypes": [],
+                  "selectorSignature": null,
+                  "planSignature": null,
+                  "sourceSiteId": null,
+                  "preparedTargetNodeId": null,
+                  "preparedInsertionIndex": null,
+                  "preparedSiblingSiteIdsBefore": [],
+                  "multiCardTransfigurationPreparation": null,
+                  "rawSelection": {},
+                  "validatedSelection": {},
+                  "gainedCardIds": [],
+                  "gainedEntryIds": [],
+                  "mintedEntryIds": [],
+                  "gainedDreamsignIds": [],
+                  "purgedDreamsignIds": [],
+                  "dreamsignMutation": null,
+                  "purgedCardIds": [],
+                  "purgedEntryIds": [],
+                  "purgedEntrySnapshots": [],
+                  "starterCardReplacements": [],
+                  "starterCardTransfigurations": [],
+                  "cardTransfigurations": [],
+                  "cardReplacements": [],
+                  "cardCopies": [],
+                  "cardTypeChanges": [],
+                  "cardKeywordChanges": [],
+                  "nightmareGains": [],
+                  "affectedEntryIds": [],
+                  "resolvedPredicate": null,
+                  "resolvedCardType": null,
+                  "siteInsertion": null,
+                  "shopModifier": null,
+                  "essenceBefore": null,
+                  "essenceSpent": 0,
+                  "essenceAfter": null,
+                  "chosenSiteType": null
+                },
+                "event": "exploration_choice_resolved"
+              }
+            ],
+            "selected": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+            "encounter": {
+              "presentedCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "encounterSignature": "f07edbb915deb8efdc977c867531a41f51d984bc97bcb8ad34eb7239d7b22cbc",
+              "actionIds": [
+                "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                "87efe01b-525e-41b4-80d4-db4c4bf3e656"
+              ],
+              "actions": [
+                {
+                  "actionId": "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                  "effectKind": "transfigure-selected",
+                  "mechanics": {
+                    "effectKind": "transfigure-selected",
+                    "count": 1
+                  }
+                },
+                {
+                  "actionId": "87efe01b-525e-41b4-80d4-db4c4bf3e656",
+                  "effectKind": "next-battle-starting-energy",
+                  "mechanics": {
+                    "effectKind": "next-battle-starting-energy",
+                    "count": 2
+                  }
+                }
+              ]
+            }
+          },
+          "mobile": {
+            "gameId": "yz4ehm",
+            "sourceDreamsignId": "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
+            "sourceCounterBefore": {
+              "rerollsUsed": 0
+            },
+            "sourceCounterAfter": {
+              "rerollsUsed": 1
+            },
+            "target": {
+              "siteIds": [
+                "site-1"
+              ],
+              "beforeCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "afterCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2"
+            },
+            "normalAction": {
+              "type": "RESOLVE_EXPLORATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "button": {
+                "x": 29,
+                "y": 474.6875,
+                "width": 196.640625,
+                "height": 42
+              },
+              "panel": {
+                "x": 12,
+                "y": 461.6875,
+                "width": 366,
+                "height": 290.3125
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/exploration?goto=journey-sites-curled-standard&seed=1&debug=1&game=yz4ehm"
+            },
+            "reloadGameId": "yz4ehm",
+            "resolutions": [
+              {
+                "siteId": "site-1",
+                "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                "selectionRulesVersion": "2",
+                "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                "effectKind": "next-battle-opening-hand",
+                "rawSelection": {},
+                "validatedSelection": {},
+                "terminalOutcome": {
+                  "kind": "battle-modifier",
+                  "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                  "encounterSignature": "772e9d1dc619afccb1e1b88f76b145b75371185676abd2a7f81ed11c8bb09a06",
+                  "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                  "effectKind": "next-battle-opening-hand",
+                  "authoredPredicate": null,
+                  "authoredNightmareCount": null,
+                  "authoredCount": 2,
+                  "authoredFixedDreamsignId": null,
+                  "authoredOfferCount": null,
+                  "authoredFixedTransfiguration": null,
+                  "authoredCardType": null,
+                  "authoredSiteType": null,
+                  "authoredFixedCardId": null,
+                  "authoredDeckTarget": null,
+                  "canonicalMechanicId": "next-battle-modifier",
+                  "selectionPolicyId": null,
+                  "selectionRulesVersion": "2",
+                  "selectionContentRevision": null,
+                  "selectionKey": null,
+                  "selectionSignature": null,
+                  "selectionTrace": null,
+                  "selectionTraces": null,
+                  "selectorSignatures": [],
+                  "multiCardReplacementPreparation": null,
+                  "randomDeckTargetPreparation": null,
+                  "disclosedDeckTargetPreparation": null,
+                  "compoundActionPreparation": null,
+                  "siteInsertionPreparation": null,
+                  "siteTypeChoicePreparation": null,
+                  "offeredSiteType": null,
+                  "offeredSiteTypes": [],
+                  "selectorSignature": null,
+                  "planSignature": null,
+                  "sourceSiteId": null,
+                  "preparedTargetNodeId": null,
+                  "preparedInsertionIndex": null,
+                  "preparedSiblingSiteIdsBefore": [],
+                  "multiCardTransfigurationPreparation": null,
+                  "rawSelection": {},
+                  "validatedSelection": {},
+                  "gainedCardIds": [],
+                  "gainedEntryIds": [],
+                  "mintedEntryIds": [],
+                  "gainedDreamsignIds": [],
+                  "purgedDreamsignIds": [],
+                  "dreamsignMutation": null,
+                  "purgedCardIds": [],
+                  "purgedEntryIds": [],
+                  "purgedEntrySnapshots": [],
+                  "starterCardReplacements": [],
+                  "starterCardTransfigurations": [],
+                  "cardTransfigurations": [],
+                  "cardReplacements": [],
+                  "cardCopies": [],
+                  "cardTypeChanges": [],
+                  "cardKeywordChanges": [],
+                  "nightmareGains": [],
+                  "affectedEntryIds": [],
+                  "resolvedPredicate": null,
+                  "resolvedCardType": null,
+                  "siteInsertion": null,
+                  "shopModifier": null,
+                  "essenceBefore": null,
+                  "essenceSpent": 0,
+                  "essenceAfter": null,
+                  "chosenSiteType": null
+                },
+                "event": "exploration_choice_resolved"
+              }
+            ],
+            "selected": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+            "encounter": {
+              "presentedCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "encounterSignature": "f07edbb915deb8efdc977c867531a41f51d984bc97bcb8ad34eb7239d7b22cbc",
+              "actionIds": [
+                "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                "87efe01b-525e-41b4-80d4-db4c4bf3e656"
+              ],
+              "actions": [
+                {
+                  "actionId": "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                  "effectKind": "transfigure-selected",
+                  "mechanics": {
+                    "effectKind": "transfigure-selected",
+                    "count": 1
+                  }
+                },
+                {
+                  "actionId": "87efe01b-525e-41b4-80d4-db4c4bf3e656",
+                  "effectKind": "next-battle-starting-energy",
+                  "mechanics": {
+                    "effectKind": "next-battle-starting-energy",
+                    "count": 2
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Duplication": {
+        "invocation": "run-M1UMun",
+        "views": {
+          "desktop": {
+            "gameId": "vcxqpm",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "ACCEPT_DUPLICATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 682.9375,
+              "y": 376.6904602050781,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-sites-duplication&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=vcxqpm"
+            },
+            "reloadGameIds": [
+              "vcxqpm",
+              "vcxqpm"
+            ],
+            "numericResults": [
+              {
+                "event": "duplication_completed",
+                "siteId": "site-1",
+                "entryId": "deck-1",
+                "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+                "isEnhanced": true,
+                "copyCount": 1,
+                "deckSizeBefore": 10,
+                "deckSizeAfter": 11
+              }
+            ],
+            "provider": {
+              "offeredEntryIds": [
+                "deck-1",
+                "deck-2",
+                "deck-3",
+                "deck-4",
+                "deck-5",
+                "deck-6",
+                "deck-7",
+                "deck-8",
+                "deck-9",
+                "deck-10"
+              ]
+            }
+          },
+          "mobile": {
+            "gameId": "9d543f",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "ACCEPT_DUPLICATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.4872131347656,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-sites-duplication&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=9d543f"
+            },
+            "reloadGameIds": [
+              "9d543f",
+              "9d543f"
+            ],
+            "numericResults": [
+              {
+                "event": "duplication_completed",
+                "siteId": "site-1",
+                "entryId": "deck-1",
+                "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+                "isEnhanced": true,
+                "copyCount": 1,
+                "deckSizeBefore": 10,
+                "deckSizeAfter": 11
+              }
+            ],
+            "provider": {
+              "offeredEntryIds": [
+                "deck-1",
+                "deck-2",
+                "deck-3",
+                "deck-4",
+                "deck-5",
+                "deck-6",
+                "deck-7",
+                "deck-8",
+                "deck-9",
+                "deck-10"
+              ]
+            }
+          }
+        }
+      },
+      "Curled-enhanced": {
+        "invocation": "run-J7Y4jU",
+        "views": {
+          "desktop": {
+            "gameId": "az6i9h",
+            "sourceDreamsignId": "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
+            "sourceCounterBefore": {
+              "rerollsUsed": 0
+            },
+            "sourceCounterAfter": {
+              "rerollsUsed": 1
+            },
+            "target": {
+              "siteIds": [
+                "site-1"
+              ],
+              "beforeCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "afterCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2"
+            },
+            "normalAction": {
+              "type": "RESOLVE_EXPLORATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "button": {
+                "x": 29,
+                "y": 498.6875,
+                "width": 196.640625,
+                "height": 42
+              },
+              "panel": {
+                "x": 12,
+                "y": 485.6875,
+                "width": 400,
+                "height": 290.3125
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/exploration?goto=journey-sites-curled-enhanced&seed=1&debug=1&game=az6i9h"
+            },
+            "reloadGameId": "az6i9h",
+            "resolutions": [
+              {
+                "siteId": "site-1",
+                "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                "selectionRulesVersion": "2",
+                "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                "effectKind": "next-battle-opening-hand",
+                "rawSelection": {},
+                "validatedSelection": {},
+                "terminalOutcome": {
+                  "kind": "battle-modifier",
+                  "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                  "encounterSignature": "772e9d1dc619afccb1e1b88f76b145b75371185676abd2a7f81ed11c8bb09a06",
+                  "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                  "effectKind": "next-battle-opening-hand",
+                  "authoredPredicate": null,
+                  "authoredNightmareCount": null,
+                  "authoredCount": 2,
+                  "authoredFixedDreamsignId": null,
+                  "authoredOfferCount": null,
+                  "authoredFixedTransfiguration": null,
+                  "authoredCardType": null,
+                  "authoredSiteType": null,
+                  "authoredFixedCardId": null,
+                  "authoredDeckTarget": null,
+                  "canonicalMechanicId": "next-battle-modifier",
+                  "selectionPolicyId": null,
+                  "selectionRulesVersion": "2",
+                  "selectionContentRevision": null,
+                  "selectionKey": null,
+                  "selectionSignature": null,
+                  "selectionTrace": null,
+                  "selectionTraces": null,
+                  "selectorSignatures": [],
+                  "multiCardReplacementPreparation": null,
+                  "randomDeckTargetPreparation": null,
+                  "disclosedDeckTargetPreparation": null,
+                  "compoundActionPreparation": null,
+                  "siteInsertionPreparation": null,
+                  "siteTypeChoicePreparation": null,
+                  "offeredSiteType": null,
+                  "offeredSiteTypes": [],
+                  "selectorSignature": null,
+                  "planSignature": null,
+                  "sourceSiteId": null,
+                  "preparedTargetNodeId": null,
+                  "preparedInsertionIndex": null,
+                  "preparedSiblingSiteIdsBefore": [],
+                  "multiCardTransfigurationPreparation": null,
+                  "rawSelection": {},
+                  "validatedSelection": {},
+                  "gainedCardIds": [],
+                  "gainedEntryIds": [],
+                  "mintedEntryIds": [],
+                  "gainedDreamsignIds": [],
+                  "purgedDreamsignIds": [],
+                  "dreamsignMutation": null,
+                  "purgedCardIds": [],
+                  "purgedEntryIds": [],
+                  "purgedEntrySnapshots": [],
+                  "starterCardReplacements": [],
+                  "starterCardTransfigurations": [],
+                  "cardTransfigurations": [],
+                  "cardReplacements": [],
+                  "cardCopies": [],
+                  "cardTypeChanges": [],
+                  "cardKeywordChanges": [],
+                  "nightmareGains": [],
+                  "affectedEntryIds": [],
+                  "resolvedPredicate": null,
+                  "resolvedCardType": null,
+                  "siteInsertion": null,
+                  "shopModifier": null,
+                  "essenceBefore": null,
+                  "essenceSpent": 0,
+                  "essenceAfter": null,
+                  "chosenSiteType": null
+                },
+                "event": "exploration_choice_resolved"
+              }
+            ],
+            "selected": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+            "encounter": {
+              "presentedCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "encounterSignature": "f07edbb915deb8efdc977c867531a41f51d984bc97bcb8ad34eb7239d7b22cbc",
+              "actionIds": [
+                "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                "87efe01b-525e-41b4-80d4-db4c4bf3e656"
+              ],
+              "actions": [
+                {
+                  "actionId": "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                  "effectKind": "transfigure-selected",
+                  "mechanics": {
+                    "effectKind": "transfigure-selected",
+                    "count": 1
+                  }
+                },
+                {
+                  "actionId": "87efe01b-525e-41b4-80d4-db4c4bf3e656",
+                  "effectKind": "next-battle-starting-energy",
+                  "mechanics": {
+                    "effectKind": "next-battle-starting-energy",
+                    "count": 2
+                  }
+                }
+              ]
+            }
+          },
+          "mobile": {
+            "gameId": "3h9pgh",
+            "sourceDreamsignId": "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
+            "sourceCounterBefore": {
+              "rerollsUsed": 0
+            },
+            "sourceCounterAfter": {
+              "rerollsUsed": 1
+            },
+            "target": {
+              "siteIds": [
+                "site-1"
+              ],
+              "beforeCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "afterCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2"
+            },
+            "normalAction": {
+              "type": "RESOLVE_EXPLORATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "button": {
+                "x": 29,
+                "y": 474.6875,
+                "width": 196.640625,
+                "height": 42
+              },
+              "panel": {
+                "x": 12,
+                "y": 461.6875,
+                "width": 366,
+                "height": 290.3125
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/exploration?goto=journey-sites-curled-enhanced&seed=1&debug=1&game=3h9pgh"
+            },
+            "reloadGameId": "3h9pgh",
+            "resolutions": [
+              {
+                "siteId": "site-1",
+                "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                "selectionRulesVersion": "2",
+                "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                "effectKind": "next-battle-opening-hand",
+                "rawSelection": {},
+                "validatedSelection": {},
+                "terminalOutcome": {
+                  "kind": "battle-modifier",
+                  "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                  "encounterSignature": "772e9d1dc619afccb1e1b88f76b145b75371185676abd2a7f81ed11c8bb09a06",
+                  "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                  "effectKind": "next-battle-opening-hand",
+                  "authoredPredicate": null,
+                  "authoredNightmareCount": null,
+                  "authoredCount": 2,
+                  "authoredFixedDreamsignId": null,
+                  "authoredOfferCount": null,
+                  "authoredFixedTransfiguration": null,
+                  "authoredCardType": null,
+                  "authoredSiteType": null,
+                  "authoredFixedCardId": null,
+                  "authoredDeckTarget": null,
+                  "canonicalMechanicId": "next-battle-modifier",
+                  "selectionPolicyId": null,
+                  "selectionRulesVersion": "2",
+                  "selectionContentRevision": null,
+                  "selectionKey": null,
+                  "selectionSignature": null,
+                  "selectionTrace": null,
+                  "selectionTraces": null,
+                  "selectorSignatures": [],
+                  "multiCardReplacementPreparation": null,
+                  "randomDeckTargetPreparation": null,
+                  "disclosedDeckTargetPreparation": null,
+                  "compoundActionPreparation": null,
+                  "siteInsertionPreparation": null,
+                  "siteTypeChoicePreparation": null,
+                  "offeredSiteType": null,
+                  "offeredSiteTypes": [],
+                  "selectorSignature": null,
+                  "planSignature": null,
+                  "sourceSiteId": null,
+                  "preparedTargetNodeId": null,
+                  "preparedInsertionIndex": null,
+                  "preparedSiblingSiteIdsBefore": [],
+                  "multiCardTransfigurationPreparation": null,
+                  "rawSelection": {},
+                  "validatedSelection": {},
+                  "gainedCardIds": [],
+                  "gainedEntryIds": [],
+                  "mintedEntryIds": [],
+                  "gainedDreamsignIds": [],
+                  "purgedDreamsignIds": [],
+                  "dreamsignMutation": null,
+                  "purgedCardIds": [],
+                  "purgedEntryIds": [],
+                  "purgedEntrySnapshots": [],
+                  "starterCardReplacements": [],
+                  "starterCardTransfigurations": [],
+                  "cardTransfigurations": [],
+                  "cardReplacements": [],
+                  "cardCopies": [],
+                  "cardTypeChanges": [],
+                  "cardKeywordChanges": [],
+                  "nightmareGains": [],
+                  "affectedEntryIds": [],
+                  "resolvedPredicate": null,
+                  "resolvedCardType": null,
+                  "siteInsertion": null,
+                  "shopModifier": null,
+                  "essenceBefore": null,
+                  "essenceSpent": 0,
+                  "essenceAfter": null,
+                  "chosenSiteType": null
+                },
+                "event": "exploration_choice_resolved"
+              }
+            ],
+            "selected": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+            "encounter": {
+              "presentedCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "encounterSignature": "f07edbb915deb8efdc977c867531a41f51d984bc97bcb8ad34eb7239d7b22cbc",
+              "actionIds": [
+                "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                "87efe01b-525e-41b4-80d4-db4c4bf3e656"
+              ],
+              "actions": [
+                {
+                  "actionId": "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                  "effectKind": "transfigure-selected",
+                  "mechanics": {
+                    "effectKind": "transfigure-selected",
+                    "count": 1
+                  }
+                },
+                {
+                  "actionId": "87efe01b-525e-41b4-80d4-db4c4bf3e656",
+                  "effectKind": "next-battle-starting-energy",
+                  "mechanics": {
+                    "effectKind": "next-battle-starting-energy",
+                    "count": 2
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Curled-random": {
+        "invocation": "run-LuoUBi",
+        "views": {
+          "desktop": {
+            "gameId": "z6nm89",
+            "sourceDreamsignId": "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
+            "sourceCounterBefore": {
+              "rerollsUsed": 0
+            },
+            "sourceCounterAfter": {
+              "rerollsUsed": 1
+            },
+            "target": {
+              "siteIds": [
+                "site-1"
+              ],
+              "beforeCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "afterCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2"
+            },
+            "normalAction": {
+              "type": "RESOLVE_EXPLORATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "button": {
+                "x": 29,
+                "y": 498.6875,
+                "width": 196.640625,
+                "height": 42
+              },
+              "panel": {
+                "x": 12,
+                "y": 485.6875,
+                "width": 400,
+                "height": 290.3125
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/exploration?goto=journey-sites-curled-random&seed=1&debug=1&game=z6nm89"
+            },
+            "reloadGameId": "z6nm89",
+            "resolutions": [
+              {
+                "siteId": "site-1",
+                "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                "selectionRulesVersion": "2",
+                "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                "effectKind": "next-battle-opening-hand",
+                "rawSelection": {},
+                "validatedSelection": {},
+                "terminalOutcome": {
+                  "kind": "battle-modifier",
+                  "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                  "encounterSignature": "772e9d1dc619afccb1e1b88f76b145b75371185676abd2a7f81ed11c8bb09a06",
+                  "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                  "effectKind": "next-battle-opening-hand",
+                  "authoredPredicate": null,
+                  "authoredNightmareCount": null,
+                  "authoredCount": 2,
+                  "authoredFixedDreamsignId": null,
+                  "authoredOfferCount": null,
+                  "authoredFixedTransfiguration": null,
+                  "authoredCardType": null,
+                  "authoredSiteType": null,
+                  "authoredFixedCardId": null,
+                  "authoredDeckTarget": null,
+                  "canonicalMechanicId": "next-battle-modifier",
+                  "selectionPolicyId": null,
+                  "selectionRulesVersion": "2",
+                  "selectionContentRevision": null,
+                  "selectionKey": null,
+                  "selectionSignature": null,
+                  "selectionTrace": null,
+                  "selectionTraces": null,
+                  "selectorSignatures": [],
+                  "multiCardReplacementPreparation": null,
+                  "randomDeckTargetPreparation": null,
+                  "disclosedDeckTargetPreparation": null,
+                  "compoundActionPreparation": null,
+                  "siteInsertionPreparation": null,
+                  "siteTypeChoicePreparation": null,
+                  "offeredSiteType": null,
+                  "offeredSiteTypes": [],
+                  "selectorSignature": null,
+                  "planSignature": null,
+                  "sourceSiteId": null,
+                  "preparedTargetNodeId": null,
+                  "preparedInsertionIndex": null,
+                  "preparedSiblingSiteIdsBefore": [],
+                  "multiCardTransfigurationPreparation": null,
+                  "rawSelection": {},
+                  "validatedSelection": {},
+                  "gainedCardIds": [],
+                  "gainedEntryIds": [],
+                  "mintedEntryIds": [],
+                  "gainedDreamsignIds": [],
+                  "purgedDreamsignIds": [],
+                  "dreamsignMutation": null,
+                  "purgedCardIds": [],
+                  "purgedEntryIds": [],
+                  "purgedEntrySnapshots": [],
+                  "starterCardReplacements": [],
+                  "starterCardTransfigurations": [],
+                  "cardTransfigurations": [],
+                  "cardReplacements": [],
+                  "cardCopies": [],
+                  "cardTypeChanges": [],
+                  "cardKeywordChanges": [],
+                  "nightmareGains": [],
+                  "affectedEntryIds": [],
+                  "resolvedPredicate": null,
+                  "resolvedCardType": null,
+                  "siteInsertion": null,
+                  "shopModifier": null,
+                  "essenceBefore": null,
+                  "essenceSpent": 0,
+                  "essenceAfter": null,
+                  "chosenSiteType": null
+                },
+                "event": "exploration_choice_resolved"
+              }
+            ],
+            "selected": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+            "encounter": {
+              "presentedCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "encounterSignature": "f07edbb915deb8efdc977c867531a41f51d984bc97bcb8ad34eb7239d7b22cbc",
+              "actionIds": [
+                "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                "87efe01b-525e-41b4-80d4-db4c4bf3e656"
+              ],
+              "actions": [
+                {
+                  "actionId": "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                  "effectKind": "transfigure-selected",
+                  "mechanics": {
+                    "effectKind": "transfigure-selected",
+                    "count": 1
+                  }
+                },
+                {
+                  "actionId": "87efe01b-525e-41b4-80d4-db4c4bf3e656",
+                  "effectKind": "next-battle-starting-energy",
+                  "mechanics": {
+                    "effectKind": "next-battle-starting-energy",
+                    "count": 2
+                  }
+                }
+              ]
+            }
+          },
+          "mobile": {
+            "gameId": "y7d7tw",
+            "sourceDreamsignId": "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
+            "sourceCounterBefore": {
+              "rerollsUsed": 0
+            },
+            "sourceCounterAfter": {
+              "rerollsUsed": 1
+            },
+            "target": {
+              "siteIds": [
+                "site-1"
+              ],
+              "beforeCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "afterCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2"
+            },
+            "normalAction": {
+              "type": "RESOLVE_EXPLORATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "button": {
+                "x": 29,
+                "y": 474.6875,
+                "width": 196.640625,
+                "height": 42
+              },
+              "panel": {
+                "x": 12,
+                "y": 461.6875,
+                "width": 366,
+                "height": 290.3125
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/exploration?goto=journey-sites-curled-random&seed=1&debug=1&game=y7d7tw"
+            },
+            "reloadGameId": "y7d7tw",
+            "resolutions": [
+              {
+                "siteId": "site-1",
+                "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                "selectionRulesVersion": "2",
+                "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                "effectKind": "next-battle-opening-hand",
+                "rawSelection": {},
+                "validatedSelection": {},
+                "terminalOutcome": {
+                  "kind": "battle-modifier",
+                  "presentedCardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+                  "encounterSignature": "772e9d1dc619afccb1e1b88f76b145b75371185676abd2a7f81ed11c8bb09a06",
+                  "actionId": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+                  "effectKind": "next-battle-opening-hand",
+                  "authoredPredicate": null,
+                  "authoredNightmareCount": null,
+                  "authoredCount": 2,
+                  "authoredFixedDreamsignId": null,
+                  "authoredOfferCount": null,
+                  "authoredFixedTransfiguration": null,
+                  "authoredCardType": null,
+                  "authoredSiteType": null,
+                  "authoredFixedCardId": null,
+                  "authoredDeckTarget": null,
+                  "canonicalMechanicId": "next-battle-modifier",
+                  "selectionPolicyId": null,
+                  "selectionRulesVersion": "2",
+                  "selectionContentRevision": null,
+                  "selectionKey": null,
+                  "selectionSignature": null,
+                  "selectionTrace": null,
+                  "selectionTraces": null,
+                  "selectorSignatures": [],
+                  "multiCardReplacementPreparation": null,
+                  "randomDeckTargetPreparation": null,
+                  "disclosedDeckTargetPreparation": null,
+                  "compoundActionPreparation": null,
+                  "siteInsertionPreparation": null,
+                  "siteTypeChoicePreparation": null,
+                  "offeredSiteType": null,
+                  "offeredSiteTypes": [],
+                  "selectorSignature": null,
+                  "planSignature": null,
+                  "sourceSiteId": null,
+                  "preparedTargetNodeId": null,
+                  "preparedInsertionIndex": null,
+                  "preparedSiblingSiteIdsBefore": [],
+                  "multiCardTransfigurationPreparation": null,
+                  "rawSelection": {},
+                  "validatedSelection": {},
+                  "gainedCardIds": [],
+                  "gainedEntryIds": [],
+                  "mintedEntryIds": [],
+                  "gainedDreamsignIds": [],
+                  "purgedDreamsignIds": [],
+                  "dreamsignMutation": null,
+                  "purgedCardIds": [],
+                  "purgedEntryIds": [],
+                  "purgedEntrySnapshots": [],
+                  "starterCardReplacements": [],
+                  "starterCardTransfigurations": [],
+                  "cardTransfigurations": [],
+                  "cardReplacements": [],
+                  "cardCopies": [],
+                  "cardTypeChanges": [],
+                  "cardKeywordChanges": [],
+                  "nightmareGains": [],
+                  "affectedEntryIds": [],
+                  "resolvedPredicate": null,
+                  "resolvedCardType": null,
+                  "siteInsertion": null,
+                  "shopModifier": null,
+                  "essenceBefore": null,
+                  "essenceSpent": 0,
+                  "essenceAfter": null,
+                  "chosenSiteType": null
+                },
+                "event": "exploration_choice_resolved"
+              }
+            ],
+            "selected": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+            "encounter": {
+              "presentedCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+              "encounterSignature": "f07edbb915deb8efdc977c867531a41f51d984bc97bcb8ad34eb7239d7b22cbc",
+              "actionIds": [
+                "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                "87efe01b-525e-41b4-80d4-db4c4bf3e656"
+              ],
+              "actions": [
+                {
+                  "actionId": "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+                  "effectKind": "transfigure-selected",
+                  "mechanics": {
+                    "effectKind": "transfigure-selected",
+                    "count": 1
+                  }
+                },
+                {
+                  "actionId": "87efe01b-525e-41b4-80d4-db4c4bf3e656",
+                  "effectKind": "next-battle-starting-energy",
+                  "mechanics": {
+                    "effectKind": "next-battle-starting-energy",
+                    "count": 2
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Shop": {
+        "invocation": "run-8qmDd4",
+        "views": {
+          "desktop": {
+            "gameId": "j7irmi",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "BUY_SHOP_SLOT",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 682.9375,
+              "y": 376.0827941894531,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-sites-shop&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=j7irmi"
+            },
+            "reloadGameIds": [
+              "j7irmi",
+              "j7irmi"
+            ],
+            "revealObservation": {
+              "text": "Card ShopSpend essence () to buy cards. This site is enhanced.",
+              "x": 756.9375,
+              "y": 372.75,
+              "width": 248,
+              "height": 130.59375
+            },
+            "numericResults": [
+              {
+                "event": "shop_item_purchased",
+                "siteId": "site-1",
+                "chargedPrice": 10,
+                "essenceBefore": 2000,
+                "essenceAfter": 1990
+              }
+            ],
+            "provider": {
+              "offeredEntryIds": [
+                "shop-slot-0-56411ed4-bda9-4fdf-82e5-b5492de67039",
+                "shop-slot-1-d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c",
+                "shop-slot-2-72debe2e-1f47-4a66-83c3-71bb72876663",
+                "shop-slot-3-243a15d3-a4eb-415c-b106-86d4a2b7ec6a",
+                "shop-slot-4-b977afaf-f583-45ec-8e34-99fbfa4e9190"
+              ],
+              "essenceBeforeRestock": "1990",
+              "restockBefore": {
+                "text": "Restock Offers",
+                "cost": null,
+                "disabled": null
+              },
+              "essenceAfterRestock": "1990",
+              "restockAfter": {
+                "text": "Restocked",
+                "disabled": "true"
+              }
+            }
+          },
+          "mobile": {
+            "gameId": "jgjp8e",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "BUY_SHOP_SLOT",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.0496520996094,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-sites-shop&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=jgjp8e"
+            },
+            "reloadGameIds": [
+              "jgjp8e",
+              "jgjp8e"
+            ],
+            "revealObservation": {
+              "text": "Card ShopSpend essence () to buy cards. This site is enhanced.",
+              "x": 105.328125,
+              "y": 235.1875,
+              "width": 175.5,
+              "height": 102.65625
+            },
+            "numericResults": [
+              {
+                "event": "shop_item_purchased",
+                "siteId": "site-1",
+                "chargedPrice": 10,
+                "essenceBefore": 2000,
+                "essenceAfter": 1990
+              }
+            ],
+            "provider": {
+              "offeredEntryIds": [
+                "shop-slot-0-56411ed4-bda9-4fdf-82e5-b5492de67039",
+                "shop-slot-1-d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c",
+                "shop-slot-2-72debe2e-1f47-4a66-83c3-71bb72876663",
+                "shop-slot-3-243a15d3-a4eb-415c-b106-86d4a2b7ec6a",
+                "shop-slot-4-b977afaf-f583-45ec-8e34-99fbfa4e9190"
+              ],
+              "essenceBeforeRestock": "1990",
+              "restockBefore": {
+                "text": "Restock",
+                "cost": null,
+                "disabled": null
+              },
+              "essenceAfterRestock": "1990",
+              "restockAfter": {
+                "text": "Restocked",
+                "disabled": "true"
+              }
+            }
+          }
+        }
+      },
+      "DreamsignRevelation": {
+        "invocation": "run-unyLBm",
+        "views": {
+          "desktop": {
+            "gameId": "tnd34w",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-3"
+              ]
+            },
+            "normalAction": {
+              "type": "ACCEPT_DREAMSIGN_OFFER",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 436.4375,
+              "y": 682.0624389648438,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=journey-sites-dreamsignrevelation&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=tnd34w"
+            },
+            "reloadGameIds": [
+              "tnd34w",
+              "tnd34w"
+            ],
+            "provider": {
+              "revelationOptions": 4
+            }
+          },
+          "mobile": {
+            "gameId": "4zaiwo",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-3"
+              ]
+            },
+            "normalAction": {
+              "type": "ACCEPT_DREAMSIGN_OFFER",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 96.328125,
+              "y": 637.1318359375,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=journey-sites-dreamsignrevelation&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=4zaiwo"
+            },
+            "reloadGameIds": [
+              "4zaiwo",
+              "4zaiwo"
+            ],
+            "provider": {
+              "revelationOptions": 4
+            }
+          }
+        }
+      },
+      "Gamble": {
+        "invocation": "run-uOtUak",
+        "views": {
+          "desktop": {
+            "gameId": "t4qmud",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "SETTLE_GRAVOK_WAGER",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 682.9375,
+              "y": 371.0530090332031,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=journey-sites-gamble&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=t4qmud"
+            },
+            "reloadGameIds": [
+              "t4qmud",
+              "t4qmud"
+            ],
+            "numericResults": [
+              {
+                "event": "gamble_wager_resolved",
+                "siteId": "site-1",
+                "dreamsignId": "5a22f358-bc84-44b1-a201-5f9f57940c51",
+                "payment": 45,
+                "essenceGained": 100
+              },
+              {
+                "event": "gamble_wager_settled",
+                "siteId": "site-1",
+                "payment": 45,
+                "essenceGained": 100,
+                "netEssenceChange": 55
+              }
+            ],
+            "provider": {
+              "wagerActions": [
+                {
+                  "id": "gamble-choose-six",
+                  "text": "Bet \u00b7 45"
+                },
+                {
+                  "id": "gamble-choose-nine",
+                  "text": "Bet \u00b7 45"
+                },
+                {
+                  "id": "gamble-choose-jack",
+                  "text": "Bet \u00b7 45"
+                }
+              ]
+            }
+          },
+          "mobile": {
+            "gameId": "8crxyb",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "SETTLE_GRAVOK_WAGER",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.5870361328125,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=journey-sites-gamble&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=8crxyb"
+            },
+            "reloadGameIds": [
+              "8crxyb",
+              "8crxyb"
+            ],
+            "numericResults": [
+              {
+                "event": "gamble_wager_resolved",
+                "siteId": "site-1",
+                "dreamsignId": "5a22f358-bc84-44b1-a201-5f9f57940c51",
+                "payment": 45,
+                "essenceGained": 100
+              },
+              {
+                "event": "gamble_wager_settled",
+                "siteId": "site-1",
+                "payment": 45,
+                "essenceGained": 100,
+                "netEssenceChange": 55
+              }
+            ],
+            "provider": {
+              "wagerActions": [
+                {
+                  "id": "gamble-choose-six",
+                  "text": "Bet \u00b7 45"
+                },
+                {
+                  "id": "gamble-choose-nine",
+                  "text": "Bet \u00b7 45"
+                },
+                {
+                  "id": "gamble-choose-jack",
+                  "text": "Bet \u00b7 45"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Transfiguration": {
+        "invocation": "run-I8XYtP",
+        "views": {
+          "desktop": {
+            "gameId": "ustpkp",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "ACCEPT_TRANSFIGURATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 682.9375,
+              "y": 376.5653991699219,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-sites-transfiguration&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=ustpkp"
+            },
+            "reloadGameIds": [
+              "ustpkp",
+              "ustpkp"
+            ],
+            "numericResults": [
+              {
+                "event": "transfiguration_completed",
+                "siteId": "site-1",
+                "entryId": "deck-1",
+                "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+                "isEnhanced": true,
+                "essenceBefore": 2000,
+                "essenceAfter": 1990,
+                "transfigurationType": "Empowered"
+              }
+            ],
+            "provider": {
+              "offeredEntryIds": [
+                "deck-1",
+                "deck-2",
+                "deck-3",
+                "deck-4",
+                "deck-5",
+                "deck-6",
+                "deck-7",
+                "deck-8",
+                "deck-9",
+                "deck-10"
+              ],
+              "selectedForm": "cumulus-transfiguration-form-Empowered",
+              "formOptions": [
+                {
+                  "id": "cumulus-transfiguration-form-Empowered",
+                  "disabled": null
+                },
+                {
+                  "id": "cumulus-transfiguration-form-Kindled",
+                  "disabled": null
+                }
+              ],
+              "confirmGeometry": {
+                "x": 1214.8125,
+                "y": 648.46875,
+                "width": 176.1875,
+                "height": 42,
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                }
+              }
+            }
+          },
+          "mobile": {
+            "gameId": "kb9nmz",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "ACCEPT_TRANSFIGURATION_CHOICE",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.1886291503906,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-sites-transfiguration&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=kb9nmz"
+            },
+            "reloadGameIds": [
+              "kb9nmz",
+              "kb9nmz"
+            ],
+            "numericResults": [
+              {
+                "event": "transfiguration_completed",
+                "siteId": "site-1",
+                "entryId": "deck-1",
+                "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+                "isEnhanced": true,
+                "essenceBefore": 2000,
+                "essenceAfter": 1990,
+                "transfigurationType": "Empowered"
+              }
+            ],
+            "provider": {
+              "offeredEntryIds": [
+                "deck-1",
+                "deck-2",
+                "deck-3",
+                "deck-4",
+                "deck-5",
+                "deck-6",
+                "deck-7",
+                "deck-8",
+                "deck-9",
+                "deck-10"
+              ],
+              "selectedForm": "cumulus-transfiguration-form-Empowered",
+              "formOptions": [
+                {
+                  "id": "cumulus-transfiguration-form-Empowered",
+                  "disabled": null
+                },
+                {
+                  "id": "cumulus-transfiguration-form-Kindled",
+                  "disabled": null
+                }
+              ],
+              "confirmGeometry": {
+                "x": 182.390625,
+                "y": 701,
+                "width": 176.1875,
+                "height": 42,
+                "viewport": {
+                  "width": 390,
+                  "height": 844
+                }
+              }
+            }
+          }
+        }
+      },
+      "Purge": {
+        "invocation": "run-ClnLwF",
+        "views": {
+          "desktop": {
+            "gameId": "w27h76",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-4"
+              ]
+            },
+            "normalAction": {
+              "type": "PURGE_DECK_CARDS",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 361.453125,
+              "y": 339.7008972167969,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-sites-purge&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=w27h76"
+            },
+            "reloadGameIds": [
+              "w27h76",
+              "w27h76"
+            ],
+            "numericResults": [
+              {
+                "event": "purge_completed",
+                "isEnhanced": true,
+                "count": 3,
+                "totalCost": 133,
+                "essenceBefore": 2000,
+                "essenceAfter": 1867
+              }
+            ],
+            "provider": {
+              "offeredEntryIds": [
+                "deck-1",
+                "deck-2",
+                "deck-3",
+                "deck-4",
+                "deck-5",
+                "deck-6",
+                "deck-7",
+                "deck-8",
+                "deck-9",
+                "deck-10"
+              ],
+              "purgeSelections": [
+                "deck-1",
+                "deck-2",
+                "deck-3"
+              ],
+              "purgeHeader": "Purge 3 \u00b7 133DeclinePurge 1 \u00b7 518Purge 2 \u00b7 518Purge 3 \u00b7 518Purge 4 \u00b7 518Purge 5 \u00b7 518Purge 6 \u00b7 518"
+            }
+          },
+          "mobile": {
+            "gameId": "h8wmx5",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-4"
+              ]
+            },
+            "normalAction": {
+              "type": "PURGE_DECK_CARDS",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 76.015625,
+              "y": 315.4231872558594,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=journey-sites-purge&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=h8wmx5"
+            },
+            "reloadGameIds": [
+              "h8wmx5",
+              "h8wmx5"
+            ],
+            "numericResults": [
+              {
+                "event": "purge_completed",
+                "isEnhanced": true,
+                "count": 3,
+                "totalCost": 133,
+                "essenceBefore": 2000,
+                "essenceAfter": 1867
+              }
+            ],
+            "provider": {
+              "offeredEntryIds": [
+                "deck-1",
+                "deck-2",
+                "deck-3",
+                "deck-4",
+                "deck-5",
+                "deck-6",
+                "deck-7",
+                "deck-8",
+                "deck-9",
+                "deck-10"
+              ],
+              "purgeSelections": [
+                "deck-1",
+                "deck-2",
+                "deck-3"
+              ],
+              "purgeHeader": "Purge 3 \u00b7 133DeclinePurge 1 \u00b7 518Purge 2 \u00b7 518Purge 3 \u00b7 518Purge 4 \u00b7 518Purge 5 \u00b7 518Purge 6 \u00b7 518"
+            }
+          }
+        }
+      },
+      "DreamsignBazaar": {
+        "invocation": "run-ZqIv0z",
+        "views": {
+          "desktop": {
+            "gameId": "u2x6cy",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "REROLL_SHOP",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 682.9375,
+              "y": 376.7768859863281,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              },
+              "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=journey-sites-dreamsignbazaar&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=u2x6cy"
+            },
+            "reloadGameIds": [
+              "u2x6cy",
+              "u2x6cy"
+            ],
+            "numericResults": [
+              {
+                "event": "site_entered",
+                "siteId": "site-1",
+                "isEnhanced": true,
+                "restockPrice": 0
+              },
+              {
+                "event": "site_entered",
+                "siteId": "site-1",
+                "isEnhanced": true,
+                "restockPrice": 0
+              }
+            ],
+            "provider": {}
+          },
+          "mobile": {
+            "gameId": "fo7dbv",
+            "sourceDreamsignId": "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+            "sourceCounterBefore": {
+              "enhancementsEarned": 0
+            },
+            "sourceCounterAfter": {
+              "enhancementsEarned": 1
+            },
+            "target": {
+              "nodeId": "dreamscape-1",
+              "siteIds": [
+                "site-1"
+              ]
+            },
+            "normalAction": {
+              "type": "REROLL_SHOP",
+              "outcome": "applied"
+            },
+            "geometry": {
+              "x": 163.078125,
+              "y": 351.46044921875,
+              "width": 60,
+              "height": 60,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              },
+              "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=journey-sites-dreamsignbazaar&seed=1&debug=1&gambleGame=gravok-three-gate-wager&game=fo7dbv"
+            },
+            "reloadGameIds": [
+              "fo7dbv",
+              "fo7dbv"
+            ],
+            "numericResults": [
+              {
+                "event": "site_entered",
+                "siteId": "site-1",
+                "isEnhanced": true,
+                "restockPrice": 0
+              },
+              {
+                "event": "site_entered",
+                "siteId": "site-1",
+                "isEnhanced": true,
+                "restockPrice": 0
+              }
+            ],
+            "provider": {}
+          }
+        }
+      }
+    },
+    "rawEvidenceRoot": "artifacts/qa/hv-umm2.260",
+    "rawValidationDirectory": "artifacts/qa/hv-umm2.260/validation",
+    "expandedObservationReceipt": "validation/260-final-observation-expanded.json",
+    "finalAcceptance": "All twelve scenarios pass both viewports. Expanded raw records are retained under exact invocation/evidence paths; committed observations are UUID/numeric/counter/geometry contracts.",
+    "parentVisualObservations": {
+      "shop": "260-final-shop-parent-visual.json: actual final run-8qmDd4 desktop panel visible.",
+      "curled": "260-final-curled-parent-visual.json: run-NBpEmN desktop and run-J7Y4jU mobile settled two choices and consumed control fit above HUD."
+    }
+  },
+  "checkpoint": {
+    "status": "historical-inactive-checkpoint",
+    "prerequisite": "hv-umm2.575",
+    "nativeBlockingEdge": "hv-umm2.260 \u2192 hv-umm2.575",
+    "finalAcceptance": "Historical checkpoint awaited575/577. Final resumed all-site/reroll acceptance passes; final endpoint is implementationProvenance.finalEndpointUTC.",
+    "timeSemantics": "This historical checkpoint OID/time is not the final endpoint. Final original-dispatch window is recorded in implementationProvenance.",
+    "sourceFreeze": {
+      "fileCount": 2211,
+      "differences": [],
+      "qaScenesSha256": "906b4d4d293450784e0d56fcd61995858ad35e549272bc854eb897b8ffbc780a",
+      "freezeTreeSHA256": "d89b0bf8b8808fdb67adde1b69ab29e3d7b79826e64da591ab9d0bae63c74e9e"
+    }
+  },
+  "priorSourceValidation": {
+    "baseline": {
+      "files": 3,
+      "cases": 29
+    },
+    "featureNegative": {
+      "scratch": "260-feature-negative.test.ts",
+      "cases": 1,
+      "observed": "Existing public reducer gave zero extra enhancement; existing valid Exploration view had no reroll."
+    },
+    "focused": {
+      "receipt": "260-focused-router-fixed.txt",
+      "files": 6,
+      "cases": 48,
+      "vitestS": 6.56
+    },
+    "review": {
+      "receipt": "260-review-pass.txt",
+      "terminal": 64665,
+      "exit": 0,
+      "files": 226,
+      "cases": 4216,
+      "testStepS": 43.4,
+      "vitestS": 36.22,
+      "hostLoad": 15.1875
+    },
+    "knip": {
+      "receipt": "260-knip.txt",
+      "terminal": 26475,
+      "exit": 0
+    },
+    "full": {
+      "receipt": "260-full.txt",
+      "terminal": 19113,
+      "exit": 0,
+      "files": 353,
+      "cases": 5910,
+      "vitestS": 63.9,
+      "testStepS": 64.4,
+      "testStepLoad": 5.7724609375,
+      "workers": 2,
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "observation": "Single run over the60s test budget; no controlled baseline, sustained regression or causality claim."
+    },
+    "failedReviews": [
+      {
+        "receipt": "260-review.txt",
+        "cause": "Existing router callback expected two arguments; bounded admitted stale-context signature fallout."
+      },
+      {
+        "receipt": "260-review-final.txt",
+        "cause": "Tests4216passed; own lint flagged two unnecessary assertions and raw fixture seed parameter; corrected."
+      }
+    ]
+  },
+  "priorBase": "59ce7afe9147b5083e09e89ccebc7ac84f4d931c",
+  "testedCheckpoint": "4b381092ccda3a5d377b1e4503ff403d87a8cf65",
+  "verification": {
+    "focused": {
+      "name": "focused",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-sites.test.ts",
+        "src/session/providers/exploration-provider-sites.test.ts",
+        "src/screens/cumulus_adapters/exploration-view-model.test.ts",
+        "src/cumulus/screens/ExplorationSiteScreen.test.tsx",
+        "src/session/actions.test.ts",
+        "src/components/ScreenRouter-sites.test.tsx"
+      ],
+      "startUTC": "2026-10-12T21:24:10.262425+00:00",
+      "endUTC": "2026-10-12T21:24:16.755291+00:00",
+      "wallS": 6.489385041000787,
+      "startingLoad": "{ 7.59 11.77 12.77 }",
+      "exit": 0,
+      "receipt": "260-resumed-focused.txt",
+      "cases": 48,
+      "files": 6,
+      "testStepS": 4.5,
+      "vitestS": 3.93
+    },
+    "review": {
+      "name": "review",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUTC": "2026-10-12T21:24:29.874378+00:00",
+      "endUTC": "2026-10-12T21:25:13.038674+00:00",
+      "wallS": 43.16136162499606,
+      "startingLoad": "{ 7.56 11.52 12.66 }",
+      "exit": 0,
+      "receipt": "260-resumed-review.txt",
+      "cases": 4388,
+      "files": 229,
+      "testStepS": 41.5,
+      "vitestS": 34.64,
+      "testStepHostLoad": 7.56494140625
+    },
+    "knip": {
+      "name": "knip",
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUTC": "2026-10-12T21:25:19.935183+00:00",
+      "endUTC": "2026-10-12T21:25:22.876123+00:00",
+      "wallS": 2.93809087498812,
+      "startingLoad": "{ 9.46 11.42 12.56 }",
+      "exit": 0,
+      "receipt": "260-resumed-knip.txt"
+    },
+    "full": {
+      "name": "full",
+      "args": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "startUTC": "2026-10-12T21:25:45.700915+00:00",
+      "endUTC": "2026-10-12T21:27:48.517200+00:00",
+      "wallS": 122.81135012500454,
+      "startingLoad": "{ 13.35 12.12 12.77 }",
+      "exit": 0,
+      "receipt": "260-resumed-full.txt",
+      "cases": 6097,
+      "files": 357,
+      "testStepS": 85.7,
+      "vitestS": 85.01,
+      "testStepHostLoad": 16.6796875,
+      "workers": 2,
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "lockAcquiredObservedUTC": "2026-10-12T21:25:45.903Z",
+      "observation": "Single resumed test run over60s budget at recorded load; no controlled baseline, sustained regression or causal assertion. Synthetic QA runner unit fixtures within full are not production journey coverage."
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "focused",
+      "startingLoad": "{ 7.59 11.77 12.77 }",
+      "startUTC": "2026-10-12T21:24:10.262425+00:00"
+    },
+    {
+      "scope": "review",
+      "startingLoad": "{ 7.56 11.52 12.66 }",
+      "startUTC": "2026-10-12T21:24:29.874378+00:00"
+    },
+    {
+      "scope": "knip",
+      "startingLoad": "{ 9.46 11.42 12.56 }",
+      "startUTC": "2026-10-12T21:25:19.935183+00:00"
+    },
+    {
+      "scope": "full",
+      "startingLoad": "{ 13.35 12.12 12.77 }",
+      "startUTC": "2026-10-12T21:25:45.700915+00:00"
+    }
+  ],
+  "recovery": {
+    "prerequisites": [
+      "hv-umm2.575",
+      "hv-umm2.577"
+    ],
+    "disposition": "Parent directly repaired, reviewed and certified both; native update of same clean checkpoint precedes resumed validation. Repair source is in current base, outside authored260patch.",
+    "checkpoint": {
+      "kind": "inactive-checkpoint-not-final",
+      "bead": "hv-umm2.260",
+      "prerequisite": "hv-umm2.575",
+      "oid": "e88880374dc1b7c5dbf3ea4e81a8d5059ffe0256",
+      "gitCommitTime": "2026-10-12T13:45:40-07:00",
+      "gitTimestampPrecision": "one second",
+      "observedCommitInvocationStartUTC": "2026-10-12T20:45:40.245998+00:00",
+      "observedCommitInvocationEndUTC": "2026-10-12T20:45:40.304741+00:00",
+      "observationPrecision": "microsecond clock representation; git commit timestamp one-second precision",
+      "worktreeClean": true,
+      "finalEndpoint": "Historical inactive checkpoint, not final; final endpoint is implementationProvenance.finalEndpointUTC.",
+      "ownedRuntimeState": "all runner terminal cleanup receipts port-free before exact QA restore; no live provider/server/client owned",
+      "gitCommitUTC": "2026-10-12T20:45:40Z"
+    },
+    "nativeUpdate": {
+      "previousCheckpoint": "e88880374dc1b7c5dbf3ea4e81a8d5059ffe0256",
+      "previousBase": "59ce7afe9147b5083e09e89ccebc7ac84f4d931c",
+      "rebasedCheckpoint": "4b381092ccda3a5d377b1e4503ff403d87a8cf65",
+      "newBase": "40f9877ad7d8a2cf2b3897042199d7ab8d5b1bfd",
+      "at": "2026-10-12T21:22:58.364083+00:00",
+      "sourceWriter": "samehelper resumes only after nativeACK",
+      "originalDispatch": "2026-10-12T19:24:34.566Z"
+    },
+    "inactiveWindow": {
+      "start": "2026-10-12T20:45:40Z",
+      "end": "2026-10-12T21:22:58.364083Z",
+      "minutes": 37.30606805,
+      "scope": "Checkpoint commit through parent native worktree update. This is an observed inactive recovery subwindow, not a model-start or final implementation endpoint."
+    },
+    "rootRawEvidence": [
+      "artifacts/qa/hv-umm2.575/validation",
+      "artifacts/qa/hv-umm2.577/validation"
+    ]
+  },
+  "metadataStatus": "Complete final endpoint and friction; source/acceptance checks complete, parent review/delivery pending.",
+  "frictionDisposition": {
+    "entries": [
+      {
+        "tag": "rules-ambiguity",
+        "minutes": 15.8,
+        "note": "Printed site term/lifetime/duplicate semantics required bounded D10 research and parent scope/ruling admission during original dispatch19:24:34.566Z\u2192nativeWRITEACK19:40:22.473142Z; elapsed coordination window, not productive editing."
+      },
+      {
+        "tag": "preview-card-serialization",
+        "minutes": 37.3,
+        "note": "Observed inactive checkpoint20:45:40Z\u2192parent native update21:22:58.364083Z while root repairs/certifies575 and577; original whole implementation window includes this recovery. Independent QA before checkpoint and all failed receipts retained separately."
+      }
+    ],
+    "scope": "Observed compound ruling/admission and inactive repair elapsed windows; no productive editing, model-start or controlled performance attribution."
+  }
+}

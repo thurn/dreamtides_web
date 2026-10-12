@@ -191,10 +191,18 @@ export interface GameActions {
     siteId: SiteId,
     siteType: RandomSiteDestinationType,
   ) => Promise<number>;
+  rerollExploration: (
+    siteId: SiteId,
+    dreamsignId: DreamsignId,
+    expectedEncounterCardId: CardId,
+    expectedRerollCount: number,
+  ) => Promise<number>;
   resolveExplorationChoice: (
     siteId: SiteId,
     actionId: ExplorationActionId,
     selection?: unknown,
+    expectedEncounterCardId?: CardId,
+    expectedRerollCount?: number,
   ) => Promise<number>;
   completeAugury: (siteId: SiteId) => Promise<number>;
   acceptReward: (siteId: SiteId, purgeIndex?: number) => Promise<number>;
@@ -623,12 +631,16 @@ export function makeActions(append: AppendFn): GameActions {
       ),
     chooseRandomSite: (siteId, siteType) =>
       emit("CHOOSE_RANDOM_SITE", { siteId, siteType }),
-    resolveExplorationChoice: (siteId, actionId, selection) =>
+    rerollExploration: (siteId, dreamsignId, expectedEncounterCardId, expectedRerollCount) =>
+      emit("REROLL_EXPLORATION", { siteId, dreamsignId, expectedEncounterCardId, expectedRerollCount, selectionRulesVersion: SELECTION_RULES_VERSION }),
+    resolveExplorationChoice: (siteId, actionId, selection, expectedEncounterCardId, expectedRerollCount) =>
       emit("RESOLVE_EXPLORATION_CHOICE", {
         siteId,
         actionId,
         selectionRulesVersion: SELECTION_RULES_VERSION,
         ...(selection === undefined ? {} : { selection }),
+        ...(expectedEncounterCardId === undefined ? {} : { expectedEncounterCardId }),
+        ...(expectedRerollCount === undefined ? {} : { expectedRerollCount }),
       }),
     completeAugury: (siteId) => emit("COMPLETE_AUGURY", { siteId }),
     acceptReward: (siteId, purgeIndex) =>
