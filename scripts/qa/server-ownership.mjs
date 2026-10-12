@@ -205,7 +205,7 @@ async function settleServer(path, raw, record, updated) {
       if (invalid !== null) return { state: invalid, path };
     }
   }
-  if (!settled()) return { state: observeOnly ? "identity-mismatch" : "server-unsettled", path };
+  if (!settled()) return { state: observeOnly ? "server-observation-unsettled" : "server-unsettled", path };
   if (readFileSync(path, "utf8") !== raw) return { state: "record-changed", path };
   unlinkSync(path);
   return { state: "stopped", path, pid: expected.pid, port: record.port, ...(current === null ? { alreadyExited: true } : {}) };

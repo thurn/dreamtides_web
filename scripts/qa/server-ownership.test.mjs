@@ -13,7 +13,8 @@ import { processIdentity, reconcileServer, serverRecordPath, spawnOwnedServer } 
 const boundaries = vi.hoisted(() => ({ identities: /** @type {Map<number, string>} */ (new Map()),
   missingIdentity: false,
   fastDelay: false,
-  afterDelay: /** @type {(() => void) | null} */ (null),
+  observed: /** @type {((lines: string[]) => void) | null} */ (null),
+  advanceLifecycle: /** @type {(() => void) | null} */ (null),
   launched: /** @type {import("node:child_process").ChildProcess[]} */ ([]),
   children: /** @type {Map<number, import("node:child_process").ChildProcess>} */ (new Map()) }));
 vi.mock("node:child_process", async (original) => {
@@ -25,13 +26,17 @@ vi.mock("node:child_process", async (original) => {
       return child;
     },
     execFileSync: (/** @type {string} */ command, /** @type {string[]} */ args, /** @type {import("node:child_process").ExecFileSyncOptions} */ options) => {
-      if (command === "ps" && args[0] === "-A") return [...boundaries.identities].filter(([pid]) => {
+      if (command === "ps" && args[0] === "-A") {
+        const lines = [...boundaries.identities].filter(([pid]) => {
         const child = boundaries.children.get(pid); return child?.exitCode === null && child.signalCode === null;
       }).map(([, line]) => line).concat(boundaries.launched.flatMap((child) => {
         if (child.exitCode !== null || child.signalCode !== null) return [];
         const line = String(actual.execFileSync("ps", ["-p", String(child.pid), "-o", "pid=,pgid=,lstart=,stat=,command="], options));
         return [line.replace(/^(\s*)(\d+)\s+\d+/u, "$1$2 $2")];
-      })).join("\n");
+      }));
+        boundaries.observed?.(lines);
+        return lines.join("\n");
+      }
       const pid = command === "ps" ? Number(args[1]) : 0;
       if (boundaries.missingIdentity && boundaries.launched.some((child) => child.pid === pid)) return "";
       const line = boundaries.identities.get(pid);
@@ -50,7 +55,7 @@ vi.mock("node:timers/promises", async (original) => {
   const actual = /** @type {typeof import("node:timers/promises")} */ (await original());
   return { ...actual, setTimeout: async (/** @type {number} */ ms) => {
     if (!boundaries.fastDelay) await actual.setTimeout(ms);
-    boundaries.afterDelay?.();
+    boundaries.advanceLifecycle?.();
   } };
 });
 const directories = /** @type {string[]} */ ([]);
@@ -61,7 +66,7 @@ afterEach(async () => {
     if (child.exitCode !== null || child.signalCode !== null) continue;
     const exited = once(child, "exit"); child.kill("SIGKILL"); await exited;
   }
-  boundaries.missingIdentity = false; boundaries.fastDelay = false; boundaries.afterDelay = null; boundaries.launched.splice(0);
+  boundaries.missingIdentity = false; boundaries.fastDelay = false; boundaries.observed = null; boundaries.advanceLifecycle = null; boundaries.launched.splice(0);
   boundaries.identities.clear(); boundaries.children.clear();
   for (const dir of directories.splice(0)) rmSync(dir, { recursive: true, force: true });
 });
@@ -93,7 +98,6 @@ describe("identity-safe local orphan reconciliation", () => {
     record(f, { token: "11111111-1111-4111-8111-111111111111", runner: deadRunner, server: server.identity });
     const provider = readFileSync(f.owner, "utf8");
     boundaries.fastDelay = true;
-    let polls = 0;
     const actualKill = process.kill.bind(process);
     const signals = /** @type {NodeJS.Signals[]} */ ([]);
     vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
@@ -103,14 +107,19 @@ describe("identity-safe local orphan reconciliation", () => {
         `${String(server.identity.pid)} ${String(server.identity.group)} ${server.identity.started} S node ambiguous-command`);
       return true;
     });
-    boundaries.afterDelay = () => {
-      if (++polls === 2) {
+    const observed = /** @type {string[]} */ ([]);
+    boundaries.observed = (lines) => {
+      if (!lines.some((line) => line.endsWith("node ambiguous-command"))) return;
+      observed.push("ambiguous");
+      boundaries.advanceLifecycle = () => {
+        boundaries.advanceLifecycle = null;
         if (outcome === "settles") boundaries.identities.set(server.identity.pid, "");
         if (outcome === "restored-live") boundaries.identities.set(server.identity.pid,
           `${String(server.identity.pid)} ${String(server.identity.group)} ${server.identity.started} S ${server.identity.command}`);
-      }
+      };
     };
-    expect((await reconcileServer(f.slot)).state).toBe(outcome === "settles" ? "stopped" : "identity-mismatch");
+    expect((await reconcileServer(f.slot)).state).toBe(outcome === "settles" ? "stopped" : "server-observation-unsettled");
+    expect(observed).toContain("ambiguous");
     expect(signals).toEqual(["SIGTERM"]);
     expect(existsSync(f.record)).toBe(outcome !== "settles");
     expect(readFileSync(f.owner, "utf8")).toBe(provider);
@@ -138,7 +147,6 @@ describe("identity-safe local orphan reconciliation", () => {
     boundaries.fastDelay = true;
     if (alreadyExited) boundaries.identities.set(server.identity.pid,
       `${String(server.identity.pid)} ${String(server.identity.group)} ${server.identity.started} Z <defunct>`);
-    let polls = 0;
     const actualKill = process.kill.bind(process);
     const signals = /** @type {NodeJS.Signals[]} */ ([]);
     vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
@@ -148,14 +156,18 @@ describe("identity-safe local orphan reconciliation", () => {
         `${String(server.identity.pid)} ${String(server.identity.group)} ${server.identity.started} Z <defunct>`);
       return true;
     });
-    boundaries.afterDelay = () => {
-      if (++polls === 2) {
-        // Reaping follows zombie observation, deterministically rather than
-        // relying on a host timing threshold or an escaped child process.
+    let observedZombie = false;
+    boundaries.observed = (lines) => {
+      if (!lines.some((line) => line.endsWith("Z <defunct>"))) return;
+      observedZombie = true;
+      // Reaping follows an observed exited lifetime, independent of polls.
+      boundaries.advanceLifecycle = () => {
+        boundaries.advanceLifecycle = null;
         boundaries.identities.set(server.identity.pid, "");
-      }
+      };
     };
     expect((await reconcileServer(f.slot)).state).toBe("stopped");
+    expect(observedZombie).toBe(true);
     expect(signals).toEqual(alreadyExited ? [] : ["SIGTERM"]);
     expect(existsSync(f.record)).toBe(false);
   });

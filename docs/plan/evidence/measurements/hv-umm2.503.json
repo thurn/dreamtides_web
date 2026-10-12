@@ -1,0 +1,1164 @@
+{
+  "bead": "hv-umm2.503",
+  "base": "a0ee437970c4af74b64e6898f1fa6c2aa76f5261",
+  "measurementWindow": {
+    "dispatchInstant": "unknown; spawn not separately observed",
+    "dispatchBefore": "2026-10-12T05:15:25.534893+00:00",
+    "dispatchAfter": "2026-10-12T05:16:00.961185+00:00",
+    "startProxy": "2026-10-12T05:16:00.961185+00:00",
+    "startProxyMeaning": "completed parent dispatch note",
+    "end": "2026-10-12T05:42:43+00:00",
+    "endMeaning": "Exact amended Git committer clock; explicit UTC timestamp used for the sole unlanded503 commit and verified after amendment",
+    "implementMin": 26.700646916666667,
+    "possibleElapsedMin": [
+      26.700646916666667,
+      27.291085116666668
+    ]
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-resource-contained wrapper completion",
+        "source": "os.getloadavg()[0] recorded at terminal"
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 208,
+    "jsdomFiles": 0,
+    "gitNumstat": "204\t8\tscripts/qa/run-scenario-slots.test.mjs\n28\t16\tscripts/qa/server-ownership.test.mjs\n",
+    "newContracts": 1,
+    "existingTestFiles": 2
+  },
+  "validation": [
+    {
+      "name": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "pid": 2406,
+      "startedAt": "2026-10-12T05:18:47.113941+00:00",
+      "endedAt": "2026-10-12T05:18:58.783668+00:00",
+      "wallS": 11.66943029200047,
+      "hostLoad": 24.6943359375,
+      "exitCode": 1,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "c978f75ffe1325be69d6cab83d3cc0bc05e167ac6614a48227aa9814d302511a",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "093a6c002fcb3c700bd03985420bb05644b498918b4e7c62dd45c8c4d969124a"
+      }
+    },
+    {
+      "name": "focused-corrected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "pid": 10234,
+      "startedAt": "2026-10-12T05:19:12.528045+00:00",
+      "endedAt": "2026-10-12T05:19:22.353547+00:00",
+      "wallS": 9.825261374997353,
+      "hostLoad": 20.49267578125,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "13e3bd2311d4da5ade253e92ae7848897f00eeece2797bc751c3ba8195490ab1",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "093a6c002fcb3c700bd03985420bb05644b498918b4e7c62dd45c8c4d969124a"
+      }
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 21064,
+      "startedAt": "2026-10-12T05:20:21.972043+00:00",
+      "endedAt": "2026-10-12T05:20:41.521265+00:00",
+      "wallS": 19.5489364999994,
+      "hostLoad": 15.77783203125,
+      "exitCode": 1,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "5af0f0230eec6a089f5d5b6ad359d7125522f473bcf12e2b55ced11c1ab527db",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "093a6c002fcb3c700bd03985420bb05644b498918b4e7c62dd45c8c4d969124a"
+      }
+    },
+    {
+      "name": "focused-final",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--project",
+        "isolated",
+        "--silent=false",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "pid": 32348,
+      "startedAt": "2026-10-12T05:21:17.261123+00:00",
+      "endedAt": "2026-10-12T05:21:24.104506+00:00",
+      "wallS": 6.843061250001483,
+      "hostLoad": 11.3359375,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "a1c6b1941ae130ed1195fbfc15598a00a7dbd10250775b535abb0cc1212cd168",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "093a6c002fcb3c700bd03985420bb05644b498918b4e7c62dd45c8c4d969124a"
+      }
+    },
+    {
+      "name": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 35383,
+      "startedAt": "2026-10-12T05:21:45.052576+00:00",
+      "endedAt": "2026-10-12T05:22:04.466201+00:00",
+      "wallS": 19.413287374998617,
+      "hostLoad": 13.333984375,
+      "exitCode": 1,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "fcafb7f346a05ef503b55bab9a95f6ed67b71d5f1b71aa34b39ee04ecdff7d14",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "093a6c002fcb3c700bd03985420bb05644b498918b4e7c62dd45c8c4d969124a"
+      }
+    },
+    {
+      "name": "lint-corrected",
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "scripts/qa/server-ownership.mjs",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "pid": 66353,
+      "startedAt": "2026-10-12T05:22:35.815440+00:00",
+      "endedAt": "2026-10-12T05:22:38.639246+00:00",
+      "wallS": 2.8234390420002455,
+      "hostLoad": 18.751953125,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "01830285b04ebf0287c6a8c48e63a7c999fa5ddbc543565058205e73c73218e5",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "093a6c002fcb3c700bd03985420bb05644b498918b4e7c62dd45c8c4d969124a"
+      }
+    },
+    {
+      "name": "review-typed-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 84238,
+      "startedAt": "2026-10-12T05:22:56.630079+00:00",
+      "endedAt": "2026-10-12T05:23:17.733403+00:00",
+      "wallS": 21.102732583000034,
+      "hostLoad": 19.89111328125,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "43e5ea9740fa0c189ff8073ee6a59ec21028d26fe35339e132d14c4d7871f1ef",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "093a6c002fcb3c700bd03985420bb05644b498918b4e7c62dd45c8c4d969124a"
+      }
+    },
+    {
+      "name": "knip-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 95846,
+      "startedAt": "2026-10-12T05:23:21.694834+00:00",
+      "endedAt": "2026-10-12T05:23:26.511989+00:00",
+      "wallS": 4.816668291001406,
+      "hostLoad": 18.83740234375,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "43e5ea9740fa0c189ff8073ee6a59ec21028d26fe35339e132d14c4d7871f1ef",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "093a6c002fcb3c700bd03985420bb05644b498918b4e7c62dd45c8c4d969124a"
+      }
+    },
+    {
+      "name": "full-final",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 97394,
+      "startedAt": "2026-10-12T05:23:32.936971+00:00",
+      "endedAt": "2026-10-12T05:26:55.101894+00:00",
+      "wallS": 202.16304408299766,
+      "hostLoad": 16.78369140625,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "43e5ea9740fa0c189ff8073ee6a59ec21028d26fe35339e132d14c4d7871f1ef",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "093a6c002fcb3c700bd03985420bb05644b498918b4e7c62dd45c8c4d969124a"
+      }
+    },
+    {
+      "name": "evidence-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 56315,
+      "startedAt": "2026-10-12T05:27:10.599659+00:00",
+      "endedAt": "2026-10-12T05:27:10.668438+00:00",
+      "wallS": 0.0686573330021929,
+      "hostLoad": 16.115234375,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "43e5ea9740fa0c189ff8073ee6a59ec21028d26fe35339e132d14c4d7871f1ef",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "093a6c002fcb3c700bd03985420bb05644b498918b4e7c62dd45c8c4d969124a"
+      }
+    },
+    {
+      "name": "focused-contained",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "pid": 96321,
+      "startedAt": "2026-10-12T05:33:49.583959+00:00",
+      "endedAt": "2026-10-12T05:34:00.016366+00:00",
+      "wallS": 10.432135709001159,
+      "hostLoad": 12.1044921875,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "ee9008fb775051f8fa5a527e4cfb4cafd25eeaeba629cd185b2be16526588c84",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "543c4b8dd4e15cd92844def93dbb0c1366baac092130c7061650847df7d5bd24"
+      }
+    },
+    {
+      "name": "review-contained",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 20491,
+      "startedAt": "2026-10-12T05:34:26.528247+00:00",
+      "endedAt": "2026-10-12T05:34:43.527505+00:00",
+      "wallS": 16.998992000000726,
+      "hostLoad": 15.41796875,
+      "exitCode": 1,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "ee9008fb775051f8fa5a527e4cfb4cafd25eeaeba629cd185b2be16526588c84",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "543c4b8dd4e15cd92844def93dbb0c1366baac092130c7061650847df7d5bd24"
+      }
+    },
+    {
+      "name": "focused-resource-contained",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/qa/server-ownership.test.mjs",
+        "scripts/qa/run-scenario-slots.test.mjs"
+      ],
+      "pid": 74727,
+      "startedAt": "2026-10-12T05:37:15.510030+00:00",
+      "endedAt": "2026-10-12T05:37:26.028943+00:00",
+      "wallS": 10.518666125000891,
+      "hostLoad": 23.93505859375,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "e7e7071a34ec8f2664e0385972339b96b62ff51159c426cdea5c85be5cca0974",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "543c4b8dd4e15cd92844def93dbb0c1366baac092130c7061650847df7d5bd24"
+      }
+    },
+    {
+      "name": "review-resource-contained",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 87626,
+      "startedAt": "2026-10-12T05:37:57.819299+00:00",
+      "endedAt": "2026-10-12T05:38:13.966114+00:00",
+      "wallS": 16.146529999998165,
+      "hostLoad": 27.45654296875,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "e7e7071a34ec8f2664e0385972339b96b62ff51159c426cdea5c85be5cca0974",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "543c4b8dd4e15cd92844def93dbb0c1366baac092130c7061650847df7d5bd24"
+      }
+    },
+    {
+      "name": "knip-contained",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 99138,
+      "startedAt": "2026-10-12T05:38:22.169603+00:00",
+      "endedAt": "2026-10-12T05:38:24.671144+00:00",
+      "wallS": 2.501404457998433,
+      "hostLoad": 27.02392578125,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "e7e7071a34ec8f2664e0385972339b96b62ff51159c426cdea5c85be5cca0974",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "543c4b8dd4e15cd92844def93dbb0c1366baac092130c7061650847df7d5bd24"
+      }
+    },
+    {
+      "name": "full-contained",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 2445,
+      "startedAt": "2026-10-12T05:38:55.532202+00:00",
+      "endedAt": "2026-10-12T05:40:33.600514+00:00",
+      "wallS": 98.06736087499667,
+      "hostLoad": 22.3916015625,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "e7e7071a34ec8f2664e0385972339b96b62ff51159c426cdea5c85be5cca0974",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "543c4b8dd4e15cd92844def93dbb0c1366baac092130c7061650847df7d5bd24"
+      }
+    },
+    {
+      "name": "evidence-contained-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 36459,
+      "startedAt": "2026-10-12T05:40:50.679627+00:00",
+      "endedAt": "2026-10-12T05:40:50.753741+00:00",
+      "wallS": 0.07398974999887287,
+      "hostLoad": 20.255859375,
+      "exitCode": 0,
+      "manifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "e7e7071a34ec8f2664e0385972339b96b62ff51159c426cdea5c85be5cca0974",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "543c4b8dd4e15cd92844def93dbb0c1366baac092130c7061650847df7d5bd24"
+      }
+    }
+  ],
+  "finalPassingChecks": [
+    "focused-resource-contained",
+    "review-resource-contained",
+    "knip-contained",
+    "full-contained"
+  ],
+  "fullWindow": {
+    "wrapperStart": "2026-10-12T05:38:55.532202+00:00",
+    "prepareStart": "2026-10-12T05:38:55.721Z",
+    "heavyWaitAndStartupS": 0.188798,
+    "executionAndRestoreS": 97.87856287499666,
+    "wrapperWallS": 98.06736087499667,
+    "workers": 2,
+    "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock"
+  },
+  "failurePathCoverage": {
+    "retainedDiagnostic": "pre-signal mismatch is identity-mismatch; bounded post-signal observation-only outcome is server-observation-unsettled; ordinary verified nonsettlement remains server-unsettled",
+    "lifecycle": "observed ambiguity/zombie states drive explicit lifecycle advancement; no delay count",
+    "interrupt": "actual contained own runner SIGTERM, exit143; directly owned server child settles before injected stop rejection; production cleanup closes log/build and kernel leases while uncertain provider record remains",
+    "exceptionalFixtureCleanup": "early IPC server PID/lifetime/root command ledger, try/finally settles runner and protects exact attributable child identities on failure",
+    "containedLease": "actual nested native holders share runner pgid, close by normal native pipe/EOF release, and recorded holder PIDs are absent; production lease body exact, contained spawn boundary only detached false",
+    "resourceIdentity": "original log dev/inode before close must be released: afterward only EBADF or a different dev/inode passes; other fstat errors propagate; actual before/after identities retained"
+  },
+  "signalContracts": [
+    {
+      "check": "review-typed-final",
+      "signalContract": {
+        "identity": "85268 /opt/homebrew/Cellar/node@24/24.16.0/bin/node /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-4xfzPy/primary/entry.mjs",
+        "ready": {
+          "ready": true,
+          "ownerPath": "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-4xfzPy/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "slot": 1,
+          "serverPid": 85419
+        },
+        "terminal": [
+          143,
+          null
+        ],
+        "trace": [
+          {
+            "opened": 17
+          },
+          {
+            "build": "/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-9ngtkR"
+          },
+          {
+            "server": 85419
+          },
+          {
+            "serverStopped": 85419,
+            "signal": "SIGTERM"
+          },
+          {
+            "closed": 17
+          }
+        ],
+        "stderr": "[qa] holding browser slot 1 (/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-4xfzPy/primary/artifacts/qa/.browser-qa.slot-1.lock)\n[qa] signal-failure for synthetic-interruption: serving /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-4xfzPy/primary (production build) on port 5274; server log /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-4xfzPy/primary/artifacts/qa/synthetic-interruption/invocations/run-DAOE2q/signal-failure.server.log\n[qa] server pid 85419 (process group) serving http://localhost:5274\n[qa] SIGTERM: stopping\n[qa] server interruption requires reconciliation: Error: synthetic retained owned shutdown\n[qa] browser provider requires reconciliation; owner record retained at /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-4xfzPy/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json: Error: synthetic uncertain provider close\n[qa] runtime: server process group 85419 on port 5274 cleanup attempted; port free\n"
+      }
+    },
+    {
+      "check": "full-final",
+      "signalContract": {
+        "identity": "24920 /opt/homebrew/Cellar/node@24/24.16.0/bin/node /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-9Tazyv/primary/entry.mjs",
+        "ready": {
+          "ready": true,
+          "ownerPath": "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-9Tazyv/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "slot": 1,
+          "serverPid": 25080
+        },
+        "terminal": [
+          143,
+          null
+        ],
+        "trace": [
+          {
+            "opened": 17
+          },
+          {
+            "build": "/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-QfqoSQ"
+          },
+          {
+            "server": 25080
+          },
+          {
+            "serverStopped": 25080,
+            "signal": "SIGTERM"
+          },
+          {
+            "closed": 17
+          }
+        ],
+        "stderr": "[qa] holding browser slot 1 (/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-9Tazyv/primary/artifacts/qa/.browser-qa.slot-1.lock)\n[qa] signal-failure for synthetic-interruption: serving /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-9Tazyv/primary (production build) on port 5274; server log /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-9Tazyv/primary/artifacts/qa/synthetic-interruption/invocations/run-Ig2ry2/signal-failure.server.log\n[qa] server pid 25080 (process group) serving http://localhost:5274\n[qa] SIGTERM: stopping\n[qa] server interruption requires reconciliation: Error: synthetic retained owned shutdown\n[qa] browser provider requires reconciliation; owner record retained at /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-9Tazyv/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json: Error: synthetic uncertain provider close\n[qa] runtime: server process group 25080 on port 5274 cleanup attempted; port free\n"
+      }
+    },
+    {
+      "check": "focused-resource-contained",
+      "signalContract": {
+        "identity": "77915 /opt/homebrew/Cellar/node@24/24.16.0/bin/node /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary/entry.mjs",
+        "ready": {
+          "ready": true,
+          "ownerPath": "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "slot": 1,
+          "serverPid": 78408
+        },
+        "terminal": [
+          143,
+          null
+        ],
+        "trace": [
+          {
+            "leaseChild": 78085,
+            "group": 74604,
+            "runnerGroup": 74604
+          },
+          {
+            "leaseChild": 78155,
+            "group": 74604,
+            "runnerGroup": 74604
+          },
+          {
+            "opened": 18
+          },
+          {
+            "build": "/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-xf94Ad"
+          },
+          {
+            "leaseChild": 78200,
+            "group": 74604,
+            "runnerGroup": 74604
+          },
+          {
+            "server": 78408
+          },
+          {
+            "leaseClosed": 78200
+          },
+          {
+            "serverStopped": 78408,
+            "signal": "SIGTERM"
+          },
+          {
+            "closed": 18
+          },
+          {
+            "leaseClosed": 78155
+          },
+          {
+            "leaseClosed": 78085
+          }
+        ],
+        "stderr": "[qa] holding browser slot 1 (/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary/artifacts/qa/.browser-qa.slot-1.lock)\n[qa] signal-failure for synthetic-interruption: serving /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary (production build) on port 5274; server log /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary/artifacts/qa/synthetic-interruption/invocations/run-2ey5Ix/signal-failure.server.log\n[qa] server pid 78408 (process group) serving http://localhost:5274\n[qa] SIGTERM: stopping\n[qa] server interruption requires reconciliation: Error: synthetic retained owned shutdown\n[qa] browser provider requires reconciliation; owner record retained at /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json: Error: synthetic uncertain provider close\n[qa] runtime: server process group 78408 on port 5274 cleanup attempted; port free\n"
+      }
+    },
+    {
+      "check": "review-resource-contained",
+      "signalContract": {
+        "identity": "88455 /opt/homebrew/Cellar/node@24/24.16.0/bin/node /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary/entry.mjs",
+        "ready": {
+          "ready": true,
+          "ownerPath": "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "slot": 1,
+          "serverPid": 88696
+        },
+        "terminal": [
+          143,
+          null
+        ],
+        "trace": [
+          {
+            "leaseChild": 88494,
+            "group": 87612,
+            "runnerGroup": 87612
+          },
+          {
+            "leaseChild": 88536,
+            "group": 87612,
+            "runnerGroup": 87612
+          },
+          {
+            "opened": 18
+          },
+          {
+            "build": "/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-LcCqJl"
+          },
+          {
+            "leaseChild": 88584,
+            "group": 87612,
+            "runnerGroup": 87612
+          },
+          {
+            "server": 88696
+          },
+          {
+            "leaseClosed": 88584
+          },
+          {
+            "serverStopped": 88696,
+            "signal": "SIGTERM"
+          },
+          {
+            "closed": 18
+          },
+          {
+            "leaseClosed": 88536
+          },
+          {
+            "leaseClosed": 88494
+          }
+        ],
+        "stderr": "[qa] holding browser slot 1 (/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary/artifacts/qa/.browser-qa.slot-1.lock)\n[qa] signal-failure for synthetic-interruption: serving /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary (production build) on port 5274; server log /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary/artifacts/qa/synthetic-interruption/invocations/run-MxzAsw/signal-failure.server.log\n[qa] server pid 88696 (process group) serving http://localhost:5274\n[qa] SIGTERM: stopping\n[qa] server interruption requires reconciliation: Error: synthetic retained owned shutdown\n[qa] browser provider requires reconciliation; owner record retained at /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json: Error: synthetic uncertain provider close\n[qa] runtime: server process group 88696 on port 5274 cleanup attempted; port free\n"
+      }
+    },
+    {
+      "check": "full-contained",
+      "signalContract": {
+        "identity": "4382 /opt/homebrew/Cellar/node@24/24.16.0/bin/node /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary/entry.mjs",
+        "ready": {
+          "ready": true,
+          "ownerPath": "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "slot": 1,
+          "serverPid": 4626
+        },
+        "terminal": [
+          143,
+          null
+        ],
+        "trace": [
+          {
+            "leaseChild": 4458,
+            "group": 2435,
+            "runnerGroup": 2435
+          },
+          {
+            "leaseChild": 4502,
+            "group": 2435,
+            "runnerGroup": 2435
+          },
+          {
+            "opened": 18
+          },
+          {
+            "build": "/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-eMMAkO"
+          },
+          {
+            "leaseChild": 4545,
+            "group": 2435,
+            "runnerGroup": 2435
+          },
+          {
+            "server": 4626
+          },
+          {
+            "leaseClosed": 4545
+          },
+          {
+            "serverStopped": 4626,
+            "signal": "SIGTERM"
+          },
+          {
+            "closed": 18
+          },
+          {
+            "leaseClosed": 4502
+          },
+          {
+            "leaseClosed": 4458
+          }
+        ],
+        "stderr": "[qa] holding browser slot 1 (/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary/artifacts/qa/.browser-qa.slot-1.lock)\n[qa] signal-failure for synthetic-interruption: serving /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary (production build) on port 5274; server log /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary/artifacts/qa/synthetic-interruption/invocations/run-xSBSXv/signal-failure.server.log\n[qa] server pid 4626 (process group) serving http://localhost:5274\n[qa] SIGTERM: stopping\n[qa] server interruption requires reconciliation: Error: synthetic retained owned shutdown\n[qa] browser provider requires reconciliation; owner record retained at /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json: Error: synthetic uncertain provider close\n[qa] runtime: server process group 4626 on port 5274 cleanup attempted; port free\n"
+      }
+    }
+  ],
+  "resourceAudit": {
+    "4382": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "4458": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "4502": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "4545": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "4626": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "77915": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "78085": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "78155": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "78200": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "78408": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "88455": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "88494": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "88536": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "88584": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "88696": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    }
+  },
+  "fixtureSubstitutions": [
+    "production runner copy preserves exact openQaSession/SIGTERM/cleanup bodies",
+    "repoRoot set to unique temporary Git primary",
+    "relative imports resolved to unchanged repository modules",
+    "node:child_process/fs/net and ownership/runtime imports use named synthetic boundaries",
+    "build and server children ordinary/non-detached; server argv carries unique temporary root",
+    "HTTP/listener/readiness and MCP are synthetic; no shared provider/primary locks",
+    "browser-lease exact body copy resolves relative imports and redirects only named spawn import to contained-spawn boundary",
+    "each named runner/lease boundary replacement and repoRoot rewrite must match exactly once before child startup"
+  ],
+  "finalManifest": {
+    "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+    "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+    "scripts/qa/run-scenario-slots.test.mjs": "e7e7071a34ec8f2664e0385972339b96b62ff51159c426cdea5c85be5cca0974",
+    "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+    "README.md": "543c4b8dd4e15cd92844def93dbb0c1366baac092130c7061650847df7d5bd24"
+  },
+  "failures": [
+    {
+      "name": "focused",
+      "actualExit": 1,
+      "cause": "fixture trace labelled invocation mkdir as build; restricted observation to production build prefix; actual cleanup body unchanged"
+    },
+    {
+      "name": "review",
+      "actualExit": 1,
+      "relatedTestsPassed": 80,
+      "cause": "three test lint boundary errors; no passing aggregate claim"
+    },
+    {
+      "name": "review-final",
+      "actualExit": 1,
+      "relatedTestsPassed": 80,
+      "cause": "remaining JSON.parse unsafe-return annotation; declared unknown before typed narrowing"
+    },
+    {
+      "name": "review-contained",
+      "actualExit": 1,
+      "relatedTestsPassed": 79,
+      "relatedTestsTotal": 80,
+      "cause": "fstatSync of numeric descriptor did not reject after asynchronous cleanup; exact post-close dev/inode unknown, FD reuse plausible inference only; public contract now accepts only EBADF or different original log identity and propagates other OS errors"
+    }
+  ],
+  "notes": [
+    "Focused-final passed30 cases; its console receipt was suppressed by inherited project setting. Final review/full use stderr receipt and preserve actual PIDs/terminal/FD trace.",
+    "All production signal/identity/record/bounds/empty-group semantics remain exact; sole runtime diff is terminal diagnostic state.",
+    "No new real browser workflow was required for internal diagnostic/test scope; original491 passing normal QA remains closed-source evidence.",
+    "Full runs because test infrastructure, with all restoration settled; no additional ordinary aggregate or MCP repetition.",
+    "No new exports/files or importer fallout; source runner remains read-only.",
+    "Parent owns exact-source Opus cold review and native candidate/promotion after sole source commit.",
+    "Original full/source00381 passed locally but native candidate failed containment. Earlier hashes/proofs remain attributed to their own body and do not cover corrected containment fixture.",
+    "Corrected final full is justified by new concrete containment and public-resource contract repairs; no unchanged aggregate retry.",
+    "Original exact-source cold review was terminal0 with two advisory items; parent disposed them within this unlanded bead and schedules fresh corrected-source review.",
+    "Both actual recorded fstat outcomes from final passing checks are retained; no causal claim that descriptor reuse was observed in the failed check."
+  ],
+  "preExistingIssues": [
+    "Existing resource test asserted numeric descriptor EBADF after asynchronous cleanup; original failed post-close descriptor identity was not captured. This bead pins release of the original log dev/inode and records actual post-close identity."
+  ],
+  "rulesDecisions": [],
+  "originalSourceWindow": {
+    "dispatchInstant": "unknown; spawn not separately observed",
+    "dispatchBefore": "2026-10-12T05:15:25.534893+00:00",
+    "dispatchAfter": "2026-10-12T05:16:00.961185+00:00",
+    "startProxy": "2026-10-12T05:16:00.961185+00:00",
+    "startProxyMeaning": "completed parent dispatch note",
+    "end": "2026-10-12T05:28:36+00:00",
+    "endMeaning": "Exact Git committer clock; explicit UTC timestamp used for this sole commit and verified after creation",
+    "implementMin": 12.58398025,
+    "possibleElapsedMin": [
+      12.58398025,
+      13.17441845
+    ]
+  },
+  "fullWindows": [
+    {
+      "name": "full-final",
+      "sourceManifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "43e5ea9740fa0c189ff8073ee6a59ec21028d26fe35339e132d14c4d7871f1ef",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "093a6c002fcb3c700bd03985420bb05644b498918b4e7c62dd45c8c4d969124a"
+      },
+      "wrapperStart": "2026-10-12T05:23:32.936971+00:00",
+      "prepareStart": "2026-10-12T05:24:47.028Z",
+      "heavyWaitAndStartupS": 74.091029,
+      "executionAndRestoreS": 128.07201508299767,
+      "wrapperWallS": 202.16304408299766,
+      "workers": 2,
+      "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock"
+    },
+    {
+      "name": "full-contained",
+      "sourceManifest": {
+        "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+        "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+        "scripts/qa/run-scenario-slots.test.mjs": "e7e7071a34ec8f2664e0385972339b96b62ff51159c426cdea5c85be5cca0974",
+        "scripts/qa/run-scenario.mjs": "54d49902750027938ca1233d87dcf93249f7b6716088a81b3c8ddc018f15ca2c",
+        "README.md": "543c4b8dd4e15cd92844def93dbb0c1366baac092130c7061650847df7d5bd24"
+      },
+      "wrapperStart": "2026-10-12T05:38:55.532202+00:00",
+      "prepareStart": "2026-10-12T05:38:55.721Z",
+      "heavyWaitAndStartupS": 0.188798,
+      "executionAndRestoreS": 97.87856287499666,
+      "wrapperWallS": 98.06736087499667,
+      "workers": 2,
+      "lock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock"
+    }
+  ],
+  "originalResourceAudit": {
+    "24920": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "25080": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "85268": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    },
+    "85419": {
+      "exitCode": 1,
+      "currentIdentity": ""
+    }
+  },
+  "containedSignalContracts": [
+    {
+      "check": "focused-resource-contained",
+      "signalContract": {
+        "identity": "77915 /opt/homebrew/Cellar/node@24/24.16.0/bin/node /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary/entry.mjs",
+        "ready": {
+          "ready": true,
+          "ownerPath": "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "slot": 1,
+          "serverPid": 78408
+        },
+        "terminal": [
+          143,
+          null
+        ],
+        "trace": [
+          {
+            "leaseChild": 78085,
+            "group": 74604,
+            "runnerGroup": 74604
+          },
+          {
+            "leaseChild": 78155,
+            "group": 74604,
+            "runnerGroup": 74604
+          },
+          {
+            "opened": 18
+          },
+          {
+            "build": "/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-xf94Ad"
+          },
+          {
+            "leaseChild": 78200,
+            "group": 74604,
+            "runnerGroup": 74604
+          },
+          {
+            "server": 78408
+          },
+          {
+            "leaseClosed": 78200
+          },
+          {
+            "serverStopped": 78408,
+            "signal": "SIGTERM"
+          },
+          {
+            "closed": 18
+          },
+          {
+            "leaseClosed": 78155
+          },
+          {
+            "leaseClosed": 78085
+          }
+        ],
+        "stderr": "[qa] holding browser slot 1 (/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary/artifacts/qa/.browser-qa.slot-1.lock)\n[qa] signal-failure for synthetic-interruption: serving /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary (production build) on port 5274; server log /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary/artifacts/qa/synthetic-interruption/invocations/run-2ey5Ix/signal-failure.server.log\n[qa] server pid 78408 (process group) serving http://localhost:5274\n[qa] SIGTERM: stopping\n[qa] server interruption requires reconciliation: Error: synthetic retained owned shutdown\n[qa] browser provider requires reconciliation; owner record retained at /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-H2YH3x/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json: Error: synthetic uncertain provider close\n[qa] runtime: server process group 78408 on port 5274 cleanup attempted; port free\n"
+      }
+    },
+    {
+      "check": "review-resource-contained",
+      "signalContract": {
+        "identity": "88455 /opt/homebrew/Cellar/node@24/24.16.0/bin/node /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary/entry.mjs",
+        "ready": {
+          "ready": true,
+          "ownerPath": "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "slot": 1,
+          "serverPid": 88696
+        },
+        "terminal": [
+          143,
+          null
+        ],
+        "trace": [
+          {
+            "leaseChild": 88494,
+            "group": 87612,
+            "runnerGroup": 87612
+          },
+          {
+            "leaseChild": 88536,
+            "group": 87612,
+            "runnerGroup": 87612
+          },
+          {
+            "opened": 18
+          },
+          {
+            "build": "/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-LcCqJl"
+          },
+          {
+            "leaseChild": 88584,
+            "group": 87612,
+            "runnerGroup": 87612
+          },
+          {
+            "server": 88696
+          },
+          {
+            "leaseClosed": 88584
+          },
+          {
+            "serverStopped": 88696,
+            "signal": "SIGTERM"
+          },
+          {
+            "closed": 18
+          },
+          {
+            "leaseClosed": 88536
+          },
+          {
+            "leaseClosed": 88494
+          }
+        ],
+        "stderr": "[qa] holding browser slot 1 (/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary/artifacts/qa/.browser-qa.slot-1.lock)\n[qa] signal-failure for synthetic-interruption: serving /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary (production build) on port 5274; server log /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary/artifacts/qa/synthetic-interruption/invocations/run-MxzAsw/signal-failure.server.log\n[qa] server pid 88696 (process group) serving http://localhost:5274\n[qa] SIGTERM: stopping\n[qa] server interruption requires reconciliation: Error: synthetic retained owned shutdown\n[qa] browser provider requires reconciliation; owner record retained at /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-d0KbCW/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json: Error: synthetic uncertain provider close\n[qa] runtime: server process group 88696 on port 5274 cleanup attempted; port free\n"
+      }
+    },
+    {
+      "check": "full-contained",
+      "signalContract": {
+        "identity": "4382 /opt/homebrew/Cellar/node@24/24.16.0/bin/node /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary/entry.mjs",
+        "ready": {
+          "ready": true,
+          "ownerPath": "/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "slot": 1,
+          "serverPid": 4626
+        },
+        "terminal": [
+          143,
+          null
+        ],
+        "trace": [
+          {
+            "leaseChild": 4458,
+            "group": 2435,
+            "runnerGroup": 2435
+          },
+          {
+            "leaseChild": 4502,
+            "group": 2435,
+            "runnerGroup": 2435
+          },
+          {
+            "opened": 18
+          },
+          {
+            "build": "/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-eMMAkO"
+          },
+          {
+            "leaseChild": 4545,
+            "group": 2435,
+            "runnerGroup": 2435
+          },
+          {
+            "server": 4626
+          },
+          {
+            "leaseClosed": 4545
+          },
+          {
+            "serverStopped": 4626,
+            "signal": "SIGTERM"
+          },
+          {
+            "closed": 18
+          },
+          {
+            "leaseClosed": 4502
+          },
+          {
+            "leaseClosed": 4458
+          }
+        ],
+        "stderr": "[qa] holding browser slot 1 (/private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary/artifacts/qa/.browser-qa.slot-1.lock)\n[qa] signal-failure for synthetic-interruption: serving /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary (production build) on port 5274; server log /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary/artifacts/qa/synthetic-interruption/invocations/run-xSBSXv/signal-failure.server.log\n[qa] server pid 4626 (process group) serving http://localhost:5274\n[qa] SIGTERM: stopping\n[qa] server interruption requires reconciliation: Error: synthetic retained owned shutdown\n[qa] browser provider requires reconciliation; owner record retained at /private/var/folders/dw/rtc6lpnx293gdfl40kv4xt5m0000gn/T/dreamtides-qa-slots-QP1tql/primary/artifacts/qa/.browser-qa.slot-1.lock.owner.json: Error: synthetic uncertain provider close\n[qa] runtime: server process group 4626 on port 5274 cleanup attempted; port free\n"
+      }
+    }
+  ],
+  "logResourceIdentities": [
+    {
+      "check": "focused-resource-contained",
+      "logResource": {
+        "fd": 27,
+        "before": {
+          "dev": 16777229,
+          "ino": 575065505
+        },
+        "after": null
+      }
+    },
+    {
+      "check": "focused-resource-contained",
+      "logResource": {
+        "fd": 27,
+        "before": {
+          "dev": 16777229,
+          "ino": 575065594
+        },
+        "after": null
+      }
+    },
+    {
+      "check": "review-resource-contained",
+      "logResource": {
+        "fd": 33,
+        "before": {
+          "dev": 16777229,
+          "ino": 575069201
+        },
+        "after": null
+      }
+    },
+    {
+      "check": "review-resource-contained",
+      "logResource": {
+        "fd": 29,
+        "before": {
+          "dev": 16777229,
+          "ino": 575069360
+        },
+        "after": null
+      }
+    },
+    {
+      "check": "full-contained",
+      "logResource": {
+        "fd": 31,
+        "before": {
+          "dev": 16777229,
+          "ino": 575080004
+        },
+        "after": null
+      }
+    },
+    {
+      "check": "full-contained",
+      "logResource": {
+        "fd": 31,
+        "before": {
+          "dev": 16777229,
+          "ino": 575080144
+        },
+        "after": null
+      }
+    }
+  ],
+  "ciRepair": {
+    "originalSource": "00381d1724a50ee54fec80df3c00a46f5f931202",
+    "candidate": "01a12e95-c6f4-73b0-8f7b-262b64a15dfe",
+    "buildset": "01a12e95-cbea-7243-9dab-8a3e1031c83f",
+    "nativeDependencies": {
+      "exit": 0,
+      "elapsedS": 4.96
+    },
+    "nativeGate": {
+      "exit": 143,
+      "elapsedS": 11.295,
+      "diagnostic": "tollgate.containment-escape",
+      "origin": "candidate-introduced",
+      "kind": "infrastructure",
+      "descendantPid": 76266,
+      "identity": "not captured before process absence; no assumption of exact command"
+    },
+    "nativeFailureEnd": "2026-10-12T05:29:07.971840+00:00",
+    "repair": "generated child runner imports exact public lease copy with named actual-spawn boundary preserving native lockf argv/stdio/pipe/EOF and forcing detached false; outer Vitest module mocks do not propagate into a Node subprocess",
+    "rawStatus": "/tmp/dreamtides-server-503/candidate-failed-status.json",
+    "rawGateLogs": "/tmp/dreamtides-server-503/candidate-failed-gate-logs.json",
+    "measurementWindow": {
+      "start": "2026-10-12T05:29:07.971840+00:00",
+      "startMeaning": "observed native failed buildset terminal",
+      "end": "2026-10-12T05:42:43+00:00",
+      "endMeaning": "actual amended Git committer clock",
+      "elapsedMin": 13.583802666666665
+    }
+  },
+  "originalColdReview": {
+    "source": "00381d1724a50ee54fec80df3c00a46f5f931202",
+    "providerPid": 77368,
+    "observer": 95743,
+    "actualExit": 0,
+    "wallS": 119.666,
+    "output": "/tmp/dreamtides-server-503/review.md",
+    "advisories": "parent accepted diagnostic timing clarification and fail-closed named fixture rewrites within this unlanded503; both addressed; fresh final-source review remains parent delivery duty"
+  }
+}

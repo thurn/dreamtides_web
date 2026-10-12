@@ -226,8 +226,13 @@ same-lifetime zombies, which wait for reaping without another signal; live
 process commands still match exactly for signaling. After a verified own
 signal, a same-lifetime ambiguous command observation disables every further
 signal and permits only bounded observation until the leader is absent and
-the group is empty. Persistent ambiguity, changed records and unknown or
-reused lifetimes retain their evidence. Signal and normal-close cleanup share
+the group is empty. A bounded observation of known same-lifetime ambiguity
+after a verified signal reports `server-observation-unsettled` when it remains
+unsettled. An identity rejection before signaling, or an unknown or reused
+lifetime observed after signaling, reports `identity-mismatch`. An ordinary
+verified group that remains unsettled reports `server-unsettled`. Changed records and unknown or reused lifetimes
+retain their evidence. Unknown new members disable further signals and can
+leave a live server protected pending reconciliation. Signal and normal-close cleanup share
 one shutdown operation. Reconciliation checks descendant identities and
 whole-group settlement, preserving
 malformed, partial, reused, changed, or ambiguous records for inspection.

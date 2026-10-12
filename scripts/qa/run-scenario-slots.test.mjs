@@ -1,10 +1,11 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawn } from "node:child_process";
 import { once } from "node:events";
 import { fstatSync, appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { setTimeout as delay } from "node:timers/promises";
 import { browserLeasePath, browserLeaseWaiters, browserSlotPath } from "./browser-lease.mjs";
 import { lockHeld } from "./browser-lease-fixture.mjs";
@@ -166,7 +167,204 @@ function connectClients() {
 /** @param {number | null} pid */
 const serverRunning = (pid) => fixtureIo.children.some((child) => child.pid === pid && child.exitCode === null && child.signalCode === null);
 
+
+/** @param {string} source @param {string} from @param {string} to */
+function fixtureReplace(source, from, to) {
+  if (source.split(from).length !== 2) throw new Error(`fixture boundary drift: ${from}`);
+  return source.replace(from, to);
+}
+/**
+ * The production runner is copied verbatim except repoRoot and import
+ * boundaries. Its openQaSession, SIGTERM handler and cleanup body stay exact.
+ * Local OS/build/HTTP/MCP boundaries are synthetic; all children are ordinary
+ * contained processes and all signals name a directly owned child PID.
+ * @param {string} root
+ */
+function signalRunner(root) {
+  const original = new URL("./run-scenario.mjs", import.meta.url);
+  const contained = join(root, "contained-spawn.mjs");
+  writeFileSync(contained, `
+import { spawn as actualSpawn, execFileSync } from "node:child_process";
+import { appendFileSync } from "node:fs";
+const trace = (event) => appendFileSync(${JSON.stringify(join(root, "trace.jsonl"))}, JSON.stringify(event) + "\\n");
+export function spawn(command, args, options) {
+  const child = actualSpawn(command, args, { ...options, detached: false });
+  const group = (pid) => Number(execFileSync("ps", ["-p", String(pid), "-o", "pgid="], { encoding: "utf8" }).trim());
+  trace({ leaseChild: child.pid, group: group(child.pid), runnerGroup: group(process.pid) });
+  child.once("close", () => trace({ leaseClosed: child.pid }));
+  return child;
+}
+`);
+  const lease = join(root, "contained-lease.mjs");
+  const leaseOriginal = new URL("./browser-lease.mjs", original);
+  const absoluteImports = (/** @type {string} */ source, /** @type {URL} */ url) => source.replace(
+    /from "(\.\.?\/[^"]+)"/gu,
+    (/** @type {string} */ _whole, /** @type {string} */ relative) => `from ${JSON.stringify(new URL(relative, url).href)}`);
+  writeFileSync(lease, fixtureReplace(absoluteImports(readFileSync(leaseOriginal, "utf8"), leaseOriginal),
+    'from "node:child_process"', `from ${JSON.stringify(pathToFileURL(contained).href)}`));
+  const boundary = join(root, "boundaries.mjs");
+  writeFileSync(boundary, `
+import * as fs from "node:fs";
+import { spawn as actualSpawn, execFileSync } from "node:child_process";
+import { once, EventEmitter } from "node:events";
+import { setTimeout as delay } from "node:timers/promises";
+import { join } from "node:path";
+export * from "node:fs";
+export { execFileSync };
+const trace = (event) => fs.appendFileSync(join(${JSON.stringify(root)}, "trace.jsonl"), JSON.stringify(event) + "\\n");
+export function openSync(path, flags) { const fd = fs.openSync(path, flags); trace({ opened: fd }); return fd; }
+export function closeSync(fd) { fs.closeSync(fd); trace({ closed: fd }); }
+export function mkdtempSync(prefix) { const path = fs.mkdtempSync(prefix); if (prefix.endsWith("dreamtides-qa-")) trace({ build: path }); return path; }
+export function spawn(_command, _args, options) {
+  return actualSpawn(process.execPath, ["-e", ""], { ...options, detached: false });
+}
+export function createConnection() {
+  const socket = Object.assign(new EventEmitter(), { destroy() {} });
+  queueMicrotask(() => socket.emit("error", new Error("synthetic unused port"))); return socket;
+}
+export function createServer() {
+  const server = new EventEmitter();
+  return Object.assign(server, {
+    listen(_options, ready) { queueMicrotask(ready); return server; },
+    close(closed) { queueMicrotask(closed); },
+  });
+}
+export async function spawnOwnedServer(options) {
+  const child = actualSpawn(process.execPath, ["-e", 'process.stdout.write("ready"); setInterval(() => {}, 60000);', ${JSON.stringify(root)}],
+    { cwd: options.cwd, stdio: ["ignore", "pipe", "inherit"], detached: false });
+  process.send({ serverSpawn: child.pid });
+  await once(child.stdout, "data");
+  trace({ server: child.pid });
+  let stopping;
+  return { child, stop: () => stopping ??= (async () => {
+    const ended = once(child, "close"); child.kill("SIGTERM"); await ended;
+    trace({ serverStopped: child.pid, signal: child.signalCode });
+    throw new Error("synthetic retained owned shutdown");
+  })() };
+}
+export const listenerOwnedBy = () => true;
+export const sleep = delay;
+export class McpToolResponseError extends Error {}
+export const parseMcpResult = JSON.parse;
+export async function stopProcessTree(child) {
+  if (child === null || child.exitCode !== null || child.signalCode !== null) return;
+  const ended = once(child, "close"); child.kill("SIGTERM"); await ended;
+}
+export async function connectPlaywrightMcp() {
+  return { call: async () => ({ content: [] }), close: async () => { throw new Error("synthetic uncertain provider close"); } };
+}
+`);
+  let source = absoluteImports(readFileSync(original, "utf8"), original);
+  source = fixtureReplace(source, `from ${JSON.stringify(leaseOriginal.href)}`,
+    `from ${JSON.stringify(pathToFileURL(lease).href)}`);
+  // Only named dependency/OS boundaries are replaced; public runner bodies are exact.
+  for (const module of ["node:child_process", "node:fs", "node:net",
+    new URL("./server-ownership.mjs", original).href, new URL("../screenshot-runtime.mjs", original).href]) {
+    source = fixtureReplace(source, `from ${JSON.stringify(module)}`, `from ${JSON.stringify(pathToFileURL(boundary).href)}`);
+  }
+  source = fixtureReplace(source, 'const repoRoot = resolve(fileURLToPath(new URL("../..", import.meta.url)));',
+    `const repoRoot = ${JSON.stringify(root)};`);
+  const runner = join(root, "runner.mjs");
+  writeFileSync(runner, source);
+  const entry = join(root, "entry.mjs");
+  writeFileSync(entry, `
+import { openQaSession } from ${JSON.stringify(pathToFileURL(runner).href)};
+globalThis.fetch = async () => ({ status: 200 });
+const session = await openQaSession({ bead: "synthetic-interruption", label: "signal-failure", port: null,
+  prod: true, minify: false, cwd: ${JSON.stringify(root)} });
+process.send({ ready: true, ownerPath: session.ownerPath, slot: session.slot, serverPid: session.serverPid });
+setInterval(() => {}, 60000);
+`);
+  return entry;
+}
+/**
+ * @param {import("node:child_process").ChildProcess} runner
+ * @param {Map<number, string>} servers
+ * @param {string} root
+ */
+async function settleSignalFixture(runner, servers, root) {
+  if (runner.exitCode === null && runner.signalCode === null) {
+    const ended = once(runner, "close"); runner.kill("SIGTERM"); await ended;
+  }
+  // A failed runner cannot strand its recorded contained fixture server.
+  // Verify the exact lifetime and unique root command token before signaling.
+  for (const [pid, expected] of servers) {
+    let current;
+    try { current = execFileSync("ps", ["-p", String(pid), "-o", "pid=,lstart=,command="], { encoding: "utf8" }).trim(); }
+    catch { continue; }
+    if (current !== expected || !current.includes(root)) throw new Error("signal fixture child identity changed");
+    realKill(pid, "SIGTERM");
+    for (;;) {
+      try { realKill(pid, 0); } catch { break; }
+      await delay(20);
+    }
+  }
+}
+/** @param {number} fd */
+function descriptorIdentity(fd) {
+  try { const { dev, ino } = fstatSync(fd); return { dev, ino }; } catch (error) {
+    if (typeof error === "object" && error !== null && "code" in error && error.code === "EBADF") return null;
+    throw error;
+  }
+}
 describe("concurrent QA sessions", () => {
+  it("settles independent resources and retains uncertain provider evidence after owned-runner SIGTERM", async () => {
+    const { root, path } = primaryFixture();
+    const entry = signalRunner(root);
+    const runner = spawn(process.execPath, [entry], { cwd: root, stdio: ["ignore", "pipe", "pipe", "ipc"], detached: false });
+    fixtureIo.children.push(runner);
+    const output = /** @type {string[]} */ ([]);
+    runner.stderr?.on("data", (chunk) => output.push(String(chunk)));
+    const servers = /** @type {Map<number, string>} */ (new Map());
+    const readyPromise = new Promise((/** @type {(value: { ready: boolean, ownerPath: string, slot: number, serverPid: number }) => void} */ done, reject) => {
+      runner.on("message", (message) => {
+        const value = /** @type {{ serverSpawn?: number, ready?: boolean, ownerPath: string, slot: number, serverPid: number }} */ (message);
+        if (value.serverSpawn !== undefined) servers.set(value.serverSpawn,
+          execFileSync("ps", ["-p", String(value.serverSpawn), "-o", "pid=,lstart=,command="], { encoding: "utf8" }).trim());
+        if (value.ready === true) done({ ...value, ready: true });
+      });
+      runner.once("exit", (code, signal) => reject(new Error(`signal runner exited before readiness: ${String(code)} ${String(signal)}`)));
+    });
+    try {
+      const ready = await readyPromise;
+      expect(ready.ready).toBe(true);
+      const identity = execFileSync("ps", ["-p", String(runner.pid), "-o", "pid=,command="], { encoding: "utf8" });
+      expect(identity).toContain(entry);
+      const terminal = once(runner, "close");
+      runner.kill("SIGTERM"); // The exact owned contained runner, never the test's group.
+      const ended = await terminal;
+      expect(ended).toEqual([143, null]);
+      const trace = readFileSync(join(root, "trace.jsonl"), "utf8").trim().split("\n")
+        .map((line) => {
+          const value = /** @type {unknown} */ (JSON.parse(line));
+          return /** @type {{ opened?: number, closed?: number, build?: string, serverStopped?: number, signal?: string, leaseChild?: number, group?: number, runnerGroup?: number, leaseClosed?: number }} */ (value);
+        });
+      process.stderr.write(JSON.stringify({ signalContract: { identity: identity.trim(), ready, terminal: ended, trace, stderr: output.join("") } }) + "\n");
+      const holders = trace.filter((event) => event.leaseChild !== undefined);
+      expect(holders.length).toBeGreaterThan(0);
+      for (const holder of holders) {
+        expect(holder.group).toBe(holder.runnerGroup);
+        expect(trace).toContainEqual({ leaseClosed: holder.leaseChild });
+        expect(() => process.kill(Number(holder.leaseChild), 0)).toThrow();
+      }
+      const opened = trace.find((event) => event.opened !== undefined)?.opened;
+      expect(opened).toBeDefined();
+      expect(trace.some((event) => event.closed === opened)).toBe(true);
+      const build = trace.find((event) => event.build !== undefined)?.build;
+      if (build === undefined) throw new Error("signal fixture build missing");
+      expect(existsSync(build)).toBe(false);
+      expect(trace).toContainEqual({ serverStopped: ready.serverPid, signal: "SIGTERM" });
+      expect(() => process.kill(ready.serverPid, 0)).toThrow();
+      expect(lockHeld(browserSlotPath(path, ready.slot))).toBe(false);
+      expect(JSON.parse(readFileSync(ready.ownerPath, "utf8"))).toMatchObject({
+        pid: runner.pid, providerState: "close-unconfirmed", bead: "synthetic-interruption",
+      });
+      expect(output.join("")).toMatch(/server interruption requires reconciliation/);
+      expect(output.join("")).toMatch(/runtime: server process group .* port free/);
+    } finally {
+      await settleSignalFixture(runner, servers, root);
+    }
+  });
   it.each([false, true])("closes owned log/build resources after settlement failure (uncertain provider: %s)", async (uncertain) => {
     const { root, path } = primaryFixture();
     fixtureIo.prod = true;
@@ -187,21 +385,21 @@ describe("concurrent QA sessions", () => {
     const session = await openQaSession({ bead: "synthetic-slots", label: uncertain ? "failing-resources" : "resources", port: null,
       prod: true, minify: false, cwd: root });
     sessions.push(session);
-    const record = ownership.serverRecordPath(browserSlotPath(path, session.slot));
-    const bytes = readFileSync(record, "utf8");
     const fd = fixtureIo.logFds.at(-1); const build = fixtureIo.buildDirs.at(-1);
     if (fd === undefined || build === undefined) throw new Error("fixture resources missing");
     expect(existsSync(build)).toBe(true);
+    const before = descriptorIdentity(fd);
+    expect(before).not.toBeNull();
     await expect(session.close()).rejects.toThrow(/synthetic server unsettled/);
-    expect(() => fstatSync(fd)).toThrow();
+    const after = descriptorIdentity(fd);
+    process.stderr.write(JSON.stringify({ logResource: { fd, before, after } }) + "\n");
+    expect(after).not.toEqual(before);
     expect(existsSync(build)).toBe(false);
-    expect(readFileSync(record, "utf8")).toBe(bytes);
     expect(lockHeld(browserSlotPath(path, session.slot))).toBe(false);
     // The confirmed synthetic provider close is independent of server failure.
     expect(existsSync(session.ownerPath)).toBe(uncertain);
     if (uncertain) expect(readFileSync(session.ownerPath, "utf8")).toContain("close-unconfirmed");
   });
-
   it("runs two sessions on separate slots, ports, servers, and records, and queues a third for a released slot", async () => {
     const { root, path } = primaryFixture();
     connectClients();
@@ -226,7 +424,6 @@ describe("concurrent QA sessions", () => {
     expect(c.port).not.toBe(b.port);
     expect(c.ownerPath).toBe(a.ownerPath);
   });
-
   it("quarantines only the slot whose cleanup failed and leaves the other session live", async () => {
     const { root, path } = primaryFixture();
     connectClients();
@@ -250,7 +447,6 @@ describe("concurrent QA sessions", () => {
     expect(next.slot).toBe(healthy.slot);
     expect(existsSync(failing.ownerPath)).toBe(true);
   });
-
   it("keeps same-bead same-label runs in distinct evidence namespaces", async () => {
     const { root } = primaryFixture();
     connectClients();
