@@ -1,0 +1,365 @@
+{
+  "bead": "hv-umm2.187",
+  "base": "68827050aba85b4f1d12e7af28ace711726856ff",
+  "entities": [
+    "ce84b8af-b802-42d3-8a31-36827cff17b2",
+    "15b63630-d9f8-473b-9717-15ad91ff2f16",
+    "145f72b9-5ff7-4477-b7f5-55ca89a135ae",
+    "29088c75-c2c9-40dc-a77a-65360e464b45",
+    "1654d50f-815d-4172-b46b-8baa34a124db"
+  ],
+  "sourceScope": {
+    "modules": 5,
+    "nonTestLinesAdded": 21,
+    "nonTestLinesRemoved": 5,
+    "newPrimitives": [],
+    "fallout": [],
+    "unchanged": "All canonical text, costs, types, subtypes, rarity, spark, art, identifiers and default export signatures preserved."
+  },
+  "d20": {
+    "scenariosAdded": 0,
+    "reason": "All five entities compose existing Prevent, stackItem, Offering and Materialized forms. Existing synthetic primitive contracts pin payment, legal stack targets, recipient hand and ownership, and Offering route semantics."
+  },
+  "rulings": [
+    "RD-hv-7x4l.8-3",
+    "RD-hv-7x4l.16-1"
+  ],
+  "newRulesDecisions": [],
+  "cardIssues": [],
+  "d21": {
+    "newPromptKinds": [],
+    "newStatuses": [],
+    "newVisualEffects": [],
+    "judgedApplicable": false,
+    "sample": [
+      {
+        "uuid": "ce84b8af-b802-42d3-8a31-36827cff17b2",
+        "firstByte": 113,
+        "sampled": false
+      },
+      {
+        "uuid": "15b63630-d9f8-473b-9717-15ad91ff2f16",
+        "firstByte": 200,
+        "sampled": false
+      },
+      {
+        "uuid": "145f72b9-5ff7-4477-b7f5-55ca89a135ae",
+        "firstByte": 238,
+        "sampled": false
+      },
+      {
+        "uuid": "29088c75-c2c9-40dc-a77a-65360e464b45",
+        "firstByte": 44,
+        "sampled": false
+      },
+      {
+        "uuid": "1654d50f-815d-4172-b46b-8baa34a124db",
+        "firstByte": 197,
+        "sampled": false
+      }
+    ],
+    "reason": "Every entity is outside the deterministic 10% sample and introduces no prompt, status or visual effect; no judged verdict or capture is required."
+  },
+  "commands": {
+    "preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "ce84b8af-b802-42d3-8a31-36827cff17b2,15b63630-d9f8-473b-9717-15ad91ff2f16,145f72b9-5ff7-4477-b7f5-55ca89a135ae,29088c75-c2c9-40dc-a77a-65360e464b45,1654d50f-815d-4172-b46b-8baa34a124db"
+      ],
+      "start": "2026-10-12T15:12:13.191370+00:00",
+      "elapsedS": 1.602403163909912,
+      "exit": 0
+    },
+    "fuzz": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "ce84b8af-b802-42d3-8a31-36827cff17b2,15b63630-d9f8-473b-9717-15ad91ff2f16,145f72b9-5ff7-4477-b7f5-55ca89a135ae,29088c75-c2c9-40dc-a77a-65360e464b45,1654d50f-815d-4172-b46b-8baa34a124db"
+      ],
+      "start": "2026-10-12T15:12:28.569900+00:00",
+      "elapsedS": 156.3117380142212,
+      "exit": 0,
+      "pid": 90031
+    },
+    "sweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.187",
+        "--cards",
+        "ce84b8af-b802-42d3-8a31-36827cff17b2,15b63630-d9f8-473b-9717-15ad91ff2f16,145f72b9-5ff7-4477-b7f5-55ca89a135ae,29088c75-c2c9-40dc-a77a-65360e464b45,1654d50f-815d-4172-b46b-8baa34a124db",
+        "--port",
+        "5174"
+      ],
+      "start": "2026-10-12T15:15:51.586271+00:00",
+      "elapsedS": 581.2241899967194,
+      "exit": 0,
+      "pid": 15659
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T15:26:59.207873+00:00",
+      "elapsedS": 53.893914222717285,
+      "exit": 0,
+      "pid": 77491
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T15:27:38.180651+00:00",
+      "elapsedS": 4.7345006465911865,
+      "exit": 0
+    },
+    "friction": {
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-12T15:27:42.915921+00:00",
+      "elapsedS": 0.2517118453979492,
+      "exit": 0
+    }
+  },
+  "focused": {
+    "command": "JOURNEY_TEST_WORKERS=2 npm test -- src/engine/effects/primitives/contracts.test.ts src/engine/content-gates.test.ts -t prevent|cost composition|content",
+    "start": "2026-10-12T15:11:47.405Z",
+    "wallS": 6.1,
+    "exit": 0,
+    "passed": 478,
+    "filteredSkipped": 1387,
+    "files": 2,
+    "testRunnerS": 2.9,
+    "note": "Workspace preparation and local art restoration succeeded; warnings concerned the temporary isolated preparation asset root, followed by full local restoration."
+  },
+  "preflight": {
+    "counts": {
+      "pass": 52,
+      "skip": 48,
+      "fail": 0,
+      "pending": 0
+    },
+    "matrix": "all 10 variants; player and enemy",
+    "hostLoad": 5.779296875,
+    "engineMs": 51.78729099999987
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 157529,
+    "prompts": 4932,
+    "interactiveReplayReruns": 515,
+    "failures": 0,
+    "engineWallS": 155.1,
+    "cpuS": 169.4,
+    "included": [
+      613,
+      609,
+      615,
+      616,
+      612
+    ],
+    "exercised": [
+      309,
+      439,
+      377,
+      286,
+      291
+    ],
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock"
+  },
+  "sweep": {
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-8zqDli",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.187/invocations/sweep-8zqDli",
+      "counts": {
+        "pass": 52,
+        "skip": 48
+      },
+      "attemptCounts": {
+        "pass": 52,
+        "skip": 48,
+        "fail": 2
+      },
+      "hostLoad": 16.9033203125,
+      "sessions": 2,
+      "leaseYields": 1,
+      "wallMs": {
+        "browserLeaseWait": 16259,
+        "serve": 4280,
+        "scenario": 559203.661791,
+        "cleanup": 1073.6531250000116,
+        "execution": 564715.5675829999,
+        "total": 580974.5675829999
+      }
+    },
+    "rawRows": 102,
+    "effectiveRows": 100,
+    "retries": 2,
+    "unfixedFailures": 0,
+    "retainedTimeoutAttempts": [
+      {
+        "uuid": "1654d50f-815d-4172-b46b-8baa34a124db",
+        "variant": "inspired",
+        "as": "enemy",
+        "invocation": "invocations/sweep-8zqDli",
+        "evidenceDir": "invocations/sweep-8zqDli/run-Bo4FKo",
+        "verdict": "fail",
+        "notes": "the card-lab report: TimeoutError: page.waitForFunction: Timeout 59121ms exceeded.",
+        "screens": [],
+        "attempt": 1,
+        "effective": false,
+        "failureKinds": [
+          "timeout"
+        ],
+        "rawReport": "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-inspired-enemy-attempt-1.result.json",
+        "mode": "sweep",
+        "bead": "hv-umm2.187",
+        "commit": "68827050aba85b4f1d12e7af28ace711726856ff"
+      },
+      {
+        "uuid": "1654d50f-815d-4172-b46b-8baa34a124db",
+        "variant": "enduring",
+        "as": "enemy",
+        "invocation": "invocations/sweep-8zqDli",
+        "evidenceDir": "invocations/sweep-8zqDli/run-Bo4FKo",
+        "verdict": "fail",
+        "notes": "the card-lab report: TimeoutError: page.waitForFunction: Timeout 59597ms exceeded.",
+        "screens": [],
+        "attempt": 1,
+        "effective": false,
+        "failureKinds": [
+          "timeout"
+        ],
+        "rawReport": "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-enduring-enemy-attempt-1.result.json",
+        "mode": "sweep",
+        "bead": "hv-umm2.187",
+        "commit": "68827050aba85b4f1d12e7af28ace711726856ff"
+      }
+    ],
+    "caps": "Every executed attempt raw report has caps=[] and error=null; two first attempts report classified timeout only and each fresh second attempt passes.",
+    "rawReports": [
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-ce84b8af-b802-42d3-8a31-36827cff17b2-base-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-ce84b8af-b802-42d3-8a31-36827cff17b2-empowered-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-ce84b8af-b802-42d3-8a31-36827cff17b2-inspired-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-ce84b8af-b802-42d3-8a31-36827cff17b2-enduring-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-ce84b8af-b802-42d3-8a31-36827cff17b2-perfected-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-ce84b8af-b802-42d3-8a31-36827cff17b2-base-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-ce84b8af-b802-42d3-8a31-36827cff17b2-empowered-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-ce84b8af-b802-42d3-8a31-36827cff17b2-inspired-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-ce84b8af-b802-42d3-8a31-36827cff17b2-enduring-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-ce84b8af-b802-42d3-8a31-36827cff17b2-perfected-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-base-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-empowered-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-kindled-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-resonant-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-perfected-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-base-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-empowered-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-kindled-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-resonant-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-15b63630-d9f8-473b-9717-15ad91ff2f16-perfected-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-base-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-amplified-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-empowered-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-inspired-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-enduring-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-perfected-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-base-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-amplified-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-empowered-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-inspired-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-enduring-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-LCIXXf/sweep-145f72b9-5ff7-4477-b7f5-55ca89a135ae-perfected-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-29088c75-c2c9-40dc-a77a-65360e464b45-base-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-29088c75-c2c9-40dc-a77a-65360e464b45-empowered-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-29088c75-c2c9-40dc-a77a-65360e464b45-inspired-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-29088c75-c2c9-40dc-a77a-65360e464b45-enduring-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-29088c75-c2c9-40dc-a77a-65360e464b45-perfected-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-29088c75-c2c9-40dc-a77a-65360e464b45-base-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-29088c75-c2c9-40dc-a77a-65360e464b45-empowered-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-29088c75-c2c9-40dc-a77a-65360e464b45-inspired-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-29088c75-c2c9-40dc-a77a-65360e464b45-enduring-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-29088c75-c2c9-40dc-a77a-65360e464b45-perfected-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-base-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-empowered-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-inspired-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-enduring-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-perfected-player-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-base-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-empowered-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-inspired-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-inspired-enemy-attempt-2.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-enduring-enemy-attempt-1.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-enduring-enemy-attempt-2.result.json",
+      "invocations/sweep-8zqDli/run-Bo4FKo/sweep-1654d50f-815d-4172-b46b-8baa34a124db-perfected-enemy-attempt-1.result.json"
+    ],
+    "captures": []
+  },
+  "runtimeLedger": {
+    "fuzzWrapperPid": 90031,
+    "sweepRunnerPid": 15659,
+    "serverGroups": [
+      15709,
+      32224
+    ],
+    "port": 5274,
+    "browserSlot": 1,
+    "providerSessions": [
+      "06ee9e2b-2bbe-4c7f-9b7d-9ef90f7cfa05",
+      "28b7b954-f9f5-4f10-9966-65656af563e1"
+    ],
+    "cleanup": "Runner closed both owned MCP contexts and server groups and reported the port free. All recorded PIDs absent at terminal check; slot owner/server records had been replaced by a distinct peer and port was reused by peer PID 43290. No owned process or provider record remains. Review process exited successfully; no validation job retained.",
+    "reviewPid": 77491
+  },
+  "hostLoadSamples": {
+    "reviewStarting": 15.62255859375
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting sample"
+      }
+    }
+  },
+  "review": {
+    "tests": 3824,
+    "files": 223,
+    "vitestWallS": 42.88,
+    "relatedStepS": 51.6,
+    "hostLoad": 15.62255859375,
+    "exit": 0
+  },
+  "frictionTriggerReport": {
+    "exit": 0,
+    "undispositioned": 0,
+    "phase5SinceRetrospective": 8,
+    "lastRetrospective": "hv-umm2.548",
+    "note": "Existing recurring tags are dispositioned; no new duty filed."
+  },
+  "implementWindow": {
+    "start": "2026-10-12T15:08:50.648Z",
+    "end": "2026-10-12T15:28:44.062268+00:00"
+  },
+  "windowProvenance": "Exact parent dispatch timestamp to final evidence freeze immediately before schema validation and local commit; includes admission, checks and browser waits."
+}

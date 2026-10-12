@@ -1,3 +1,6 @@
+import { keyword, stackItem } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { prevent } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 252,
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("offering"), triggered(onMaterialized(), prevent(stackItem()))],
+  verifiedText: "15p6u7yvp32",
 });

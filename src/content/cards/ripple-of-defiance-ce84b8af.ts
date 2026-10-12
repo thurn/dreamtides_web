@@ -1,3 +1,5 @@
+import { event, keyword, stackItem } from "../../engine/dsl/builders";
+import { prevent } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +19,6 @@ export default card({
   artOwned: true,
   cardNumber: 132,
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("offering"), event(prevent(stackItem({ cardType: "event" })))],
+  verifiedText: "avm6i8xcam",
 });

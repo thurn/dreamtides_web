@@ -1,3 +1,5 @@
+import { event, stackItem } from "../../engine/dsl/builders";
+import { prevent } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 408,
   art: { x: 0, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(prevent(stackItem(), { destination: "yourHand" }))],
+  verifiedText: "10f2mdx3cvm",
 });
