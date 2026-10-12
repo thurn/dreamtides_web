@@ -1,3 +1,5 @@
+import { activated, discardCost, energy, exhaustSelf, fromVoid, keyword } from "../../engine/dsl/builders";
+import { returnFromVoid } from "../../engine/effects/primitives/return-from-void";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +22,12 @@ export default card({
   artOwned: true,
   cardNumber: 24,
   isStarter: false,
-  pending: true,
+  verifiedText: "odw9yfoc86",
+  abilities: (variant) => [
+    keyword("awakened"),
+    activated(
+      [energy(2), exhaustSelf(), discardCost()],
+      returnFromVoid(fromVoid({ cardType: "character", costAtMost: variant.amplified ? 3 : 2 }, { count: 2, upTo: true })),
+    ),
+  ],
 });
