@@ -1,0 +1,36 @@
+{
+  "bead": "hv-umm2.200",
+  "phase": 5,
+  "implementMin": 56.16909795,
+  "implementWindow": {
+    "start": "2026-10-12T15:52:50.279173+00:00",
+    "end": "2026-10-12T16:49:00.425050+00:00"
+  },
+  "localValidationS": {
+    "focused": 9.32739424999454,
+    "review": 54.40788458399766,
+    "knip": 4.0863777920021676,
+    "fuzz": 126.15987575000327,
+    "preflight": 1.2330259169975761,
+    "sweep-final": 739.158460916995,
+    "workflow-green": 226.33925174998876
+  },
+  "hostLoad": 29.34,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 20.003350783333335,
+      "note": "Disjoint observed initial retained-capacity interval plus native leased waits across the sweep and four workflow attempts; elapsed capacity time, not CPU. Component receipts are in measurements."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 18.766948033333332,
+      "note": "Observed first observer failure end through final green workflow, including diagnosis, coordination, queued time and renewed execution; not CPU. This interval overlaps capacity waiting and tags must not be summed."
+    }
+  ]
+}

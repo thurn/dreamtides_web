@@ -1,3 +1,6 @@
+import { activated, all, characterYouControl, energy, exhaustSelf, ofSubtype } from "../../engine/dsl/builders";
+import { untilEndOfTurn } from "../../engine/dsl/triggers";
+import { setBaseSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,8 @@ export default card({
   cardNumber: 248,
   art: { x: -0.071, y: 1, scale: 1.16 },
   isStarter: false,
-  pending: true,
+  verifiedText: "21mr2ujf1db",
+  abilities: (variant) => [
+    activated([energy(5), exhaustSelf()], setBaseSpark(all(characterYouControl(ofSubtype("Spirit Animal"))), variant.amplified ? 8 : 7, untilEndOfTurn())),
+  ],
 });

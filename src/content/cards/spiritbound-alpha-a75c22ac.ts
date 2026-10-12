@@ -1,3 +1,6 @@
+import { activated, all, characterYouControl, energy, ofSubtype } from "../../engine/dsl/builders";
+import { untilEndOfTurn } from "../../engine/dsl/triggers";
+import { gainSpark, grant, sequence } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,11 @@ export default card({
   cardNumber: 181,
   art: { x: 0.294, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  verifiedText: "j67uz9hrwd",
+  abilities: (variant) => [
+    activated([energy(5)], sequence(
+      gainSpark(all(characterYouControl(ofSubtype("Spirit Animal"))), variant.amplified ? 4 : 3, untilEndOfTurn()),
+      grant(all(characterYouControl(ofSubtype("Spirit Animal"))), "vengeful", untilEndOfTurn()),
+    ), { speed: "fast" }),
+  ],
 });

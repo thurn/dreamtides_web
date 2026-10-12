@@ -1,0 +1,1198 @@
+{
+  "bead": "hv-umm2.200",
+  "baseOid": "c6bd114b76709c26200e24908d671a69c12688e5",
+  "dispatch": {
+    "parentPostDispatchProxy": "2026-10-12T15:52:50.279173+00:00",
+    "actualHelperOrModelStart": "unknown",
+    "helper": "/root/type_synergy_cards88",
+    "parentInstallPredatesDispatch": true
+  },
+  "implementationClock": {
+    "start": "2026-10-12T15:52:50.279173+00:00",
+    "provisionalMetadataEnd": "2026-10-12T16:45:28.321786+00:00",
+    "actualHelperOrModelStart": "unknown",
+    "actualGitCommand": "Measured separately after the parent-approved metadata freeze.",
+    "parentApprovedMetadataEnd": "2026-10-12T16:49:00.425050+00:00",
+    "reportedImplementMin": 56.16909795,
+    "endpointScope": "Parent-approved commit metadata endpoint; actual Git invocation is observed separately after this metadata freeze."
+  },
+  "parentInstallPredatesDispatchProxy": true,
+  "sourceScope": [
+    {
+      "path": "src/content/cards/eternal-stag-4e3c04a9.ts",
+      "canonicalPropertiesByteIdentical": true,
+      "sha256": "3d92c9daa4d147d6db12649d34daa41b881cce9da5ed524bff8c134e364e5100"
+    },
+    {
+      "path": "src/content/cards/sunshadow-eagle-edb479be.ts",
+      "canonicalPropertiesByteIdentical": true,
+      "sha256": "9bcf5ead02b3f468ccb38b272a291019a22080441ecb7e635fe18ff4d9931e85"
+    },
+    {
+      "path": "src/content/cards/spiritbound-alpha-a75c22ac.ts",
+      "canonicalPropertiesByteIdentical": true,
+      "sha256": "b5d12aac843dc9368310f351db9bc8197f7f082e63255e74a67fa56f75dce3f6"
+    }
+  ],
+  "clauseAudit": {
+    "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6": "Dynamic supported Spirit Animal +1 spark; independent standard 2 energy and exhaust cost draws the first matching Spirit Animal in deck order.",
+    "edb479be-68a5-45bc-bd19-2602156edb57": "Standard 5 energy and exhaust cost sets the resolving group of own Spirit Animals base spark to 7 or amplified8 until Ending.",
+    "a75c22ac-e343-4757-964e-a0bb981b5a28": "Fast 5 energy grants the resolving group of own Spirit Animals +3 or amplified4 spark and vengeful until Ending."
+  },
+  "scope": {
+    "newPrimitives": [],
+    "newPromptKinds": [],
+    "newIndicators": [],
+    "newRulings": [],
+    "newCardIssues": [],
+    "D20Scenario": "No scenario required: existing primitive composition and independent abilities, supported by synthetic Support, duration/group, filtered draw and cost contracts.",
+    "D21": {
+      "firstBytes": [
+        195,
+        83,
+        2
+      ],
+      "sampledUuids": [
+        "a75c22ac-e343-4757-964e-a0bb981b5a28"
+      ],
+      "mandatoryJudgedPending": false,
+      "mandatoryJudgedPass": 4
+    },
+    "nonTestChangedLines": 27
+  },
+  "commands": {
+    "workflow-corrected": {
+      "label": "workflow-corrected",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.200/type-workflows.mjs",
+        "--bead",
+        "hv-umm2.200",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 2562,
+      "observerPgid": 2562,
+      "startUtc": "2026-10-12T16:27:14.664563+00:00",
+      "pid": 2578,
+      "pgid": 2578,
+      "exit": 1,
+      "endUtc": "2026-10-12T16:30:10.406505+00:00",
+      "elapsedS": 175.73948824999388
+    },
+    "preflight": {
+      "label": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6,edb479be-68a5-45bc-bd19-2602156edb57,a75c22ac-e343-4757-964e-a0bb981b5a28",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 72110,
+      "observerPgid": 72110,
+      "startUtc": "2026-10-12T15:58:36.204466+00:00",
+      "pid": 72112,
+      "pgid": 72112,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:58:37.437522+00:00",
+      "elapsedS": 1.2330259169975761
+    },
+    "workflow-final": {
+      "label": "workflow-final",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.200/type-workflows.mjs",
+        "--bead",
+        "hv-umm2.200",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 32885,
+      "observerPgid": 32885,
+      "startUtc": "2026-10-12T16:20:06.160514+00:00",
+      "pid": 32945,
+      "pgid": 32945,
+      "exit": 1,
+      "endUtc": "2026-10-12T16:24:02.387352+00:00",
+      "elapsedS": 236.22353000000294
+    },
+    "fuzz-wrapper": {
+      "label": "fuzz-wrapper",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-type-synergies-cards88-200/fuzz-acquired.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 10625,
+      "observerPgid": 10625,
+      "startUtc": "2026-10-12T15:56:08.333829+00:00",
+      "pid": 10627,
+      "pgid": 10627,
+      "exit": 0,
+      "endUtc": "2026-10-12T16:01:36.006915+00:00",
+      "elapsedS": 327.6611105000047
+    },
+    "workflow-final-verified": {
+      "label": "workflow-final-verified",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.200/type-workflows.mjs",
+        "--bead",
+        "hv-umm2.200",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 39805,
+      "observerPgid": 39805,
+      "startUtc": "2026-10-12T16:34:31.617094+00:00",
+      "pid": 39840,
+      "pgid": 39840,
+      "exit": 1,
+      "endUtc": "2026-10-12T16:36:27.176086+00:00",
+      "elapsedS": 115.58260308299214
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 8720,
+      "observerPgid": 8720,
+      "startUtc": "2026-10-12T15:55:48.410681+00:00",
+      "pid": 8725,
+      "pgid": 8725,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:55:52.497057+00:00",
+      "elapsedS": 4.0863777920021676
+    },
+    "sweep-final": {
+      "label": "sweep-final",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.200",
+        "--cards",
+        "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6,edb479be-68a5-45bc-bd19-2602156edb57,a75c22ac-e343-4757-964e-a0bb981b5a28",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 15940,
+      "observerPgid": 15940,
+      "startUtc": "2026-10-12T16:06:14.467666+00:00",
+      "pid": 15946,
+      "pgid": 15946,
+      "exit": 0,
+      "endUtc": "2026-10-12T16:18:33.636588+00:00",
+      "elapsedS": 739.158460916995
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 80079,
+      "observerPgid": 80079,
+      "startUtc": "2026-10-12T15:54:49.366407+00:00",
+      "pid": 80134,
+      "pgid": 80134,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:55:43.774826+00:00",
+      "elapsedS": 54.40788458399766
+    },
+    "focused": {
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/continuous/support.test.ts",
+        "src/engine/continuous/continuous.test.ts",
+        "src/engine/rules/zones.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 52197,
+      "observerPgid": 52197,
+      "startUtc": "2026-10-12T15:54:27.879057+00:00",
+      "pid": 52199,
+      "pgid": 52199,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:54:37.206511+00:00",
+      "elapsedS": 9.32739424999454
+    },
+    "workflow-green": {
+      "label": "workflow-green",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.200/type-workflows.mjs",
+        "--bead",
+        "hv-umm2.200",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 80123,
+      "observerPgid": 80123,
+      "startUtc": "2026-10-12T16:39:02.064050+00:00",
+      "pid": 80124,
+      "pgid": 80124,
+      "exit": 0,
+      "endUtc": "2026-10-12T16:42:48.404234+00:00",
+      "elapsedS": 226.33925174998876
+    },
+    "fuzz": {
+      "label": "fuzz",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6,edb479be-68a5-45bc-bd19-2602156edb57,a75c22ac-e343-4757-964e-a0bb981b5a28"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 76307,
+      "observerPgid": 10627,
+      "startUtc": "2026-10-12T15:59:29.837917+00:00",
+      "pid": 76308,
+      "pgid": 76308,
+      "exit": 0,
+      "endUtc": "2026-10-12T16:01:35.999572+00:00",
+      "elapsedS": 126.15987575000327
+    },
+    "install": {
+      "label": "install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 38476,
+      "observerPgid": 38476,
+      "startUtc": "2026-10-12T15:50:48.197496+00:00",
+      "pid": 38494,
+      "pgid": 38494,
+      "exit": 0,
+      "endUtc": "2026-10-12T15:50:51.023311+00:00",
+      "elapsedS": 2.8258231669897214
+    },
+    "sweep": {
+      "label": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.200",
+        "--cards",
+        "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6,edb479be-68a5-45bc-bd19-2602156edb57,a75c22ac-e343-4757-964e-a0bb981b5a28",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 73806,
+      "observerPgid": 73806,
+      "startUtc": "2026-10-12T15:58:56.530985+00:00",
+      "pid": 73813,
+      "pgid": 73813,
+      "exit": 2,
+      "endUtc": "2026-10-12T15:58:56.746983+00:00",
+      "elapsedS": 0.2160235420014942
+    },
+    "schema-provisional": {
+      "label": "schema-provisional",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 13979,
+      "observerPgid": 13979,
+      "startUtc": "2026-10-12T16:04:55.092495+00:00",
+      "pid": 13980,
+      "pgid": 13980,
+      "exit": 0,
+      "endUtc": "2026-10-12T16:04:55.204844+00:00",
+      "elapsedS": 0.11238741700071841
+    },
+    "schema-final-renewed": {
+      "label": "schema-final-renewed",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 9785,
+      "observerPgid": 9785,
+      "startUtc": "2026-10-12T16:46:07.349880+00:00",
+      "pid": 9796,
+      "pgid": 9796,
+      "exit": 0,
+      "endUtc": "2026-10-12T16:46:07.412519+00:00",
+      "elapsedS": 0.06267816599574871
+    }
+  },
+  "heavy": {
+    "acquired": {
+      "acquiredUtc": "2026-10-12T15:59:29.817518+00:00"
+    },
+    "observedEntryIntervalS": 201.483689,
+    "meaning": "Observer wrapper entry through acquired marker, not isolated kernel lock wait or a benchmark. Actual fuzz command is measured separately.",
+    "games": 300,
+    "steps": 148494,
+    "violations": 0,
+    "exercised": [
+      233,
+      241,
+      235
+    ]
+  },
+  "preflight": {
+    "variants": "all",
+    "as": "both",
+    "pass": 34,
+    "skip": 26,
+    "fail": 0
+  },
+  "nativeQa": {
+    "finalSweep": {
+      "effectiveCounts": {
+        "pass": 34,
+        "skip": 26,
+        "fail": 0
+      },
+      "attemptCounts": {
+        "pass": 34,
+        "skip": 26,
+        "fail": 1
+      },
+      "invocation": "sweep-mPSCtU",
+      "sessions": 3,
+      "leaseYields": 2,
+      "wallMs": {
+        "browserLeaseWait": 382113,
+        "serve": 4623,
+        "scenario": 350245.803209,
+        "cleanup": 1812.7060410000995,
+        "execution": 356867.385583,
+        "total": 738980.385583
+      },
+      "retry": {
+        "sweep-a75c22ac-e343-4757-964e-a0bb981b5a28-attuned-enemy-attempt-1.result.json": {
+          "keys": [
+            "result",
+            "error",
+            "log",
+            "captures",
+            "caps",
+            "traces"
+          ],
+          "error": null,
+          "result": {
+            "verdict": "fail",
+            "notes": "the card-lab report: TimeoutError: page.waitForFunction: Timeout 59154ms exceeded.",
+            "failureKinds": [
+              "timeout"
+            ]
+          },
+          "caps": [],
+          "calls": null,
+          "gameLogs": null
+        },
+        "sweep-a75c22ac-e343-4757-964e-a0bb981b5a28-attuned-enemy-attempt-2.result.json": {
+          "keys": [
+            "result",
+            "error",
+            "log",
+            "captures",
+            "caps",
+            "traces"
+          ],
+          "error": null,
+          "result": {
+            "verdict": "pass",
+            "notes": "",
+            "failureKinds": [],
+            "lab": {
+              "card": "a75c22ac-e343-4757-964e-a0bb981b5a28",
+              "variant": "attuned",
+              "side": "enemy",
+              "stage": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base",
+                "amplified",
+                "empowered",
+                "kindled",
+                "attuned",
+                "perfected"
+              ],
+              "entityKind": "card",
+              "cardStatus": "authored",
+              "cardType": "Character"
+            },
+            "zone": "play",
+            "answered": 0,
+            "passes": 2,
+            "events": [
+              "energyChanged",
+              "cardPlayed",
+              "resolved",
+              "materialized",
+              "abilityActivated",
+              "abilityResolved",
+              "effectStarted",
+              "sparkGained",
+              "challengersDesignated",
+              "phaseChanged"
+            ],
+            "screens": []
+          },
+          "caps": [],
+          "calls": null,
+          "gameLogs": null
+        }
+      },
+      "retryPolicy": "One fresh retry only for explicit timeout-only scenario failure, healthy settled session, error null and Caps empty; both raw attempts remain retained. Final actual ready/authored source resolved/materialized in play with ability/effect events."
+    },
+    "initialStartupRefusal": {
+      "label": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.200",
+        "--cards",
+        "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6,edb479be-68a5-45bc-bd19-2602156edb57,a75c22ac-e343-4757-964e-a0bb981b5a28",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 73806,
+      "observerPgid": 73806,
+      "startUtc": "2026-10-12T15:58:56.530985+00:00",
+      "pid": 73813,
+      "pgid": 73813,
+      "exit": 2,
+      "endUtc": "2026-10-12T15:58:56.746983+00:00",
+      "elapsedS": 0.2160235420014942
+    },
+    "retainedPeerReceipts": {
+      "utc": "2026-10-12T15:59:19.480093+00:00",
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": {
+          "token": "1f0f9127-57d7-4b22-8e8b-8eda0299ba35",
+          "pid": 46580,
+          "bead": "hv-umm2.195",
+          "label": "card-sweep",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/type-synergies-cards83-195",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-12T15:52:33.018Z",
+          "providerState": "call-and-close-unconfirmed",
+          "mcpSessionId": "2ed4dda9-ba36-477b-8281-21bfccba1ddf",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": {
+          "token": "2f61d9cb-30e0-4c10-9264-9a122f1c8f6b",
+          "pid": 51893,
+          "bead": "hv-umm2.189",
+          "label": "card-sweep",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+          "slot": 0,
+          "port": 5174,
+          "startedAt": "2026-10-12T15:54:26.051Z",
+          "providerState": "call-and-close-unconfirmed",
+          "mcpSessionId": "e0d5be8c-4d66-4a2d-8983-3151db516e12",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        }
+      }
+    },
+    "ownerRecovery": "Parent same-task justiciar checkpoint16:01:23.882713Z; peer189/195 retained records preserved and owners recovered their reservations. Slot1 availability was observed before the renewed sweep.",
+    "workflow": {
+      "invocation": "run-miv4EJ",
+      "rawReport": "invocations/run-miv4EJ/type-workflows.result.json",
+      "ok": true,
+      "caps": [],
+      "desktopChecks": 5,
+      "mobileChecks": 5,
+      "mandatoryJudgedPass": 4,
+      "supplementalJudgedPass": 6,
+      "wallMs": {
+        "browserLeaseWait": 19383,
+        "serve": 1374,
+        "scenario": 204816,
+        "total": 225634
+      },
+      "fullLastGameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.200/invocations/run-miv4EJ/type-workflows-desktop.jsonl",
+          "gameId": "r977w2",
+          "selectedBy": "url",
+          "rows": 74,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.200/invocations/run-miv4EJ/type-workflows-mobile.jsonl",
+          "gameId": "dhij3b",
+          "selectedBy": "url",
+          "rows": 74,
+          "reason": null
+        }
+      ],
+      "perCheckLogs": "Each completed check is immediately recorded with actual IDs, public effects, geometry, accepted source intent and full persisted game log before the next navigation.",
+      "sourceVariantAudit": "Actual base/amplified physical source flags are recorded before play and activation. Amplified source is the original catalog request hand entry, played through the native hand UI, readied through actual Ending and activated in its own Day."
+    },
+    "observerFailures": [
+      {
+        "invocation": "run-5wJofE",
+        "rawReport": "invocations/run-5wJofE/type-workflows.result.json",
+        "rawScript": "invocations/run-5wJofE/type-workflows.observer.mjs",
+        "scriptSha256": "fedecea6fd6c737231308b04b95b5efa1e6a23381941e21512e5fba46d276e03",
+        "caps": [],
+        "error": "desktop#0: Error: actual board geometry and displayed spark: TimeoutError: page.waitForFunction: Timeout 14999ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at async workflow (evalmachine.<anonymous>:1661:16)\n    at async evalmachine.<anonymous>:1694:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "wallMs": {
+          "browserLeaseWait": 214839,
+          "serve": 1669,
+          "scenario": 18897,
+          "total": 235463
+        },
+        "disposition": "Private QA observer or fixture error, not a product verdict. No source changed between attempts.",
+        "confirmedCauseAndRepair": "Fixed-size rank arrays include null slots; geometry observer spread them into the list of physical cards. The actual labStage report confirms these nulls; the corrected observer filters actual non-null IDs.",
+        "completedChecksRecorded": 0
+      },
+      {
+        "invocation": "run-Zrv4Qw",
+        "rawReport": "invocations/run-Zrv4Qw/type-workflows.result.json",
+        "rawScript": "invocations/run-Zrv4Qw/type-workflows.observer.mjs",
+        "scriptSha256": "e2d1aa00aec7b6afff6b94cec430163a2513e94fa7f5498d759eaba9b4f28cd0",
+        "caps": [],
+        "error": "desktop#0: Error: Eagle base setting mismatch\n    at workflow (evalmachine.<anonymous>:1679:85)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async evalmachine.<anonymous>:1694:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "wallMs": {
+          "browserLeaseWait": 126947,
+          "serve": 1658,
+          "scenario": 44547,
+          "total": 173206
+        },
+        "disposition": "Private QA observer or fixture error, not a product verdict. No source changed between attempts.",
+        "confirmedCauseAndRepair": "Declared ranks take base UUID cards. The URL variant applies to the original request entry retained in hand; the corrected observer preserves and plays that actual amplified hand entry and audits its variant.",
+        "completedChecksRecorded": 0
+      },
+      {
+        "invocation": "run-zC4fcx",
+        "rawReport": "invocations/run-zC4fcx/type-workflows.result.json",
+        "rawScript": "invocations/run-zC4fcx/type-workflows.observer.mjs",
+        "scriptSha256": "b91deb905505f22e75aa988b47ae6ee7dfc23cfd26c55305a1df070546674246",
+        "caps": [],
+        "error": "desktop#0: Error: qa.battle group ability resolves: stalled: no progress for 45000 ms; last action none; {\"at\":\"far:dusk\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":19}}; history far:dusk\n    at fail (evalmachine.<anonymous>:1346:7)\n    at Object.playUntil (evalmachine.<anonymous>:1373:54)\n    at async workflow (evalmachine.<anonymous>:1680:25)\n    at async evalmachine.<anonymous>:1700:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "wallMs": {
+          "browserLeaseWait": 32655,
+          "serve": 1656,
+          "scenario": 80424,
+          "total": 114795
+        },
+        "disposition": "Private QA observer or fixture error, not a product verdict. No source changed between attempts.",
+        "confirmedCauseAndRepair": "The main decision at Dusk does not authorize a standard activated ability. The corrected observer requires the actual own Day, readiness, the rendered activation role and an accepted source activation intent.",
+        "completedChecksRecorded": 2
+      }
+    ],
+    "captures": [
+      {
+        "filename": "alpha-amplified-2x-desktop.png",
+        "relativePath": "invocations/run-miv4EJ/alpha-amplified-2x-desktop.png",
+        "pngDimensions": [
+          2880,
+          1800
+        ],
+        "sha256": "37bdccff0d07ddff1275c46e3706a068d40f67e9179d6d6c4aa1532919fa1495",
+        "deviceScale": 2,
+        "visualInspection": "Crisp full viewport; actual source 7/base or8/amplified and ally6/base or7/amplified, neutral subtype1, enemy3, duration and keyword markers and phase controls readable. Normal hand preview in amplified state does not obscure the changed group."
+      },
+      {
+        "filename": "alpha-amplified-2x-mobile.png",
+        "relativePath": "invocations/run-miv4EJ/alpha-amplified-2x-mobile.png",
+        "pngDimensions": [
+          780,
+          1688
+        ],
+        "sha256": "ee1df6abc2c61ebd5f44dc6ace37741372ccabd78227668e78823b0c27f9d861",
+        "deviceScale": 2,
+        "visualInspection": "Crisp full viewport; actual source 7/base or8/amplified and ally6/base or7/amplified, neutral subtype1, enemy3, duration and keyword markers and phase controls readable. Normal hand preview in amplified state does not obscure the changed group."
+      },
+      {
+        "filename": "alpha-base-2x-desktop.png",
+        "relativePath": "invocations/run-miv4EJ/alpha-base-2x-desktop.png",
+        "pngDimensions": [
+          2880,
+          1800
+        ],
+        "sha256": "ae6ba9b585a1406f90f844ee82ca98e601b07dec09a8ee479a789975c01dcb6d",
+        "deviceScale": 2,
+        "visualInspection": "Crisp full viewport; actual source 7/base or8/amplified and ally6/base or7/amplified, neutral subtype1, enemy3, duration and keyword markers and phase controls readable. Normal hand preview in amplified state does not obscure the changed group."
+      },
+      {
+        "filename": "alpha-base-2x-mobile.png",
+        "relativePath": "invocations/run-miv4EJ/alpha-base-2x-mobile.png",
+        "pngDimensions": [
+          780,
+          1688
+        ],
+        "sha256": "0bf6d60fce264747ab315c3596884952b93d70162f6a07e2b259b0a2e8e42504",
+        "deviceScale": 2,
+        "visualInspection": "Crisp full viewport; actual source 7/base or8/amplified and ally6/base or7/amplified, neutral subtype1, enemy3, duration and keyword markers and phase controls readable. Normal hand preview in amplified state does not obscure the changed group."
+      }
+    ]
+  },
+  "resourceProofs": {
+    "afterFuzz": {
+      "utc": "2026-10-12T16:02:12.068565+00:00",
+      "pids": [
+        8720,
+        8725,
+        10625,
+        10627,
+        38476,
+        38494,
+        52197,
+        52199,
+        72110,
+        72112,
+        73806,
+        73813,
+        76307,
+        76308,
+        80079,
+        80134
+      ],
+      "groups": [
+        8720,
+        8725,
+        10625,
+        10627,
+        38476,
+        38494,
+        52197,
+        52199,
+        72110,
+        72112,
+        73806,
+        73813,
+        76308,
+        80079,
+        80134
+      ],
+      "live": []
+    },
+    "afterSweep": {
+      "utc": "2026-10-12T16:18:47.699070+00:00",
+      "groups": [
+        15940,
+        15946,
+        18903,
+        57949,
+        66376
+      ],
+      "actualPids": [
+        15940,
+        15946,
+        18903,
+        57949,
+        66376,
+        66418,
+        66552,
+        66583
+      ],
+      "live": [],
+      "ownProviderRecords": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false
+      },
+      "port5274Free": false,
+      "freshUtc": "2026-10-12T16:19:41.005895+00:00",
+      "portReusedByPeer": {
+        "token": "31d3a0c8-a4fc-41e0-ab8b-f8a9e21e4932",
+        "runner": {
+          "pid": 73850,
+          "group": 73826,
+          "started": "Mon Oct 12 09:12:25 2026",
+          "state": "S",
+          "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.189 --cards fc4b06d6-3b30-4769-af98-88fcea5b54dd,74e82d0d-e107-4207-ad2a-73d016ea54a9,4cec92f2-9bac-4949-a602-cd0a44618aaf,7d5672d2-c8fa-4837-9e98-8cccdd07ff56 --port 5274"
+        },
+        "server": {
+          "pid": 10841,
+          "group": 10841,
+          "started": "Mon Oct 12 09:18:33 2026",
+          "state": "Rs",
+          "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/cards-77-sol/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 31d3a0c8-a4fc-41e0-ab8b-f8a9e21e4932 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+        },
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+        "port": 5274
+      },
+      "ownPortFreeObservedByNativeClose": true,
+      "nativeCloseEvidence": "sweep-final.stderr: runtime server process group66376 onport5274cleanup attempted;portfree, commandexit0 16:18:33.636588Z"
+    },
+    "afterObserver1": {
+      "utc": "2026-10-12T16:24:31.142827+00:00",
+      "groups": [
+        32885,
+        32945,
+        71075
+      ],
+      "live": [],
+      "currentOwner": {
+        "token": "8d9f141b-c35d-4003-9ad7-8629b0431142",
+        "pid": 73850,
+        "bead": "hv-umm2.189",
+        "label": "card-sweep",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-12T16:24:04.110Z",
+        "providerState": "active",
+        "mcpSessionId": "3a0809cc-39d4-43ce-b6aa-00c0ffaf3d5f",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "ownProviderRetained": false,
+      "nativeClosePortFree": true,
+      "caps": [],
+      "error": "desktop#0: Error: actual board geometry and displayed spark: TimeoutError: page.waitForFunction: Timeout 14999ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at async workflow (evalmachine.<anonymous>:1661:16)\n    at async evalmachine.<anonymous>:1694:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+      "scriptSha256": "fedecea6fd6c737231308b04b95b5efa1e6a23381941e21512e5fba46d276e03"
+    },
+    "afterObserver2": {
+      "utc": "2026-10-12T16:32:04.405051+00:00",
+      "groups": [
+        2562,
+        2578,
+        38640
+      ],
+      "live": [],
+      "currentOwner": {
+        "token": "bd106192-41be-463b-b523-998c3584671e",
+        "pid": 79661,
+        "bead": "hv-umm2.188",
+        "label": "card-sweep",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/interrupt-copies76-root-v2",
+        "slot": 1,
+        "port": 5275,
+        "startedAt": "2026-10-12T16:30:12.055Z",
+        "providerState": "active",
+        "mcpSessionId": "333f5440-40e5-481a-8c05-c6167ac7a3e8",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "ownProviderRetained": false,
+      "nativeClosePortFree": true,
+      "caps": [],
+      "error": "desktop#0: Error: Eagle base setting mismatch\n    at workflow (evalmachine.<anonymous>:1679:85)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async evalmachine.<anonymous>:1694:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+      "scriptSha256": "e2d1aa00aec7b6afff6b94cec430163a2513e94fa7f5498d759eaba9b4f28cd0",
+      "actualWallMs": {
+        "browserLeaseWait": 126947,
+        "serve": 1658,
+        "scenario": 44547,
+        "total": 173206
+      }
+    },
+    "afterObserver3": {
+      "utc": "2026-10-12T16:37:09.263727+00:00",
+      "groups": [
+        39805,
+        39840,
+        49207
+      ],
+      "live": [],
+      "currentOwner": {
+        "token": "6eb9e8a6-5c27-4894-b2a9-709524cc65e9",
+        "pid": 79661,
+        "bead": "hv-umm2.188",
+        "label": "card-sweep",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/interrupt-copies76-root-v2",
+        "slot": 1,
+        "port": 5275,
+        "startedAt": "2026-10-12T16:36:28.889Z",
+        "providerState": "active",
+        "mcpSessionId": "fb688aae-fa6c-44b3-b49f-455665f3c7f9",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "ownProviderRetained": false,
+      "nativeClosePortFree": true,
+      "caps": [],
+      "error": "desktop#0: Error: qa.battle group ability resolves: stalled: no progress for 45000 ms; last action none; {\"at\":\"far:dusk\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":19}}; history far:dusk\n    at fail (evalmachine.<anonymous>:1346:7)\n    at Object.playUntil (evalmachine.<anonymous>:1373:54)\n    at async workflow (evalmachine.<anonymous>:1680:25)\n    at async evalmachine.<anonymous>:1700:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+      "scriptSha256": "b91deb905505f22e75aa988b47ae6ee7dfc23cfd26c55305a1df070546674246",
+      "actualWallMs": {
+        "browserLeaseWait": 32655,
+        "serve": 1656,
+        "scenario": 80424,
+        "total": 114795
+      }
+    },
+    "finalBeforeMetadataAck": {
+      "utc": "2026-10-12T16:43:33.600497+00:00",
+      "pids": [
+        2562,
+        2578,
+        8720,
+        8725,
+        10625,
+        10627,
+        13979,
+        13980,
+        15940,
+        15946,
+        18903,
+        32885,
+        32945,
+        38476,
+        38494,
+        38640,
+        38682,
+        39805,
+        39840,
+        40091,
+        40263,
+        49207,
+        49249,
+        49455,
+        49482,
+        52197,
+        52199,
+        57949,
+        66376,
+        66418,
+        66552,
+        66583,
+        71075,
+        72110,
+        72112,
+        73806,
+        73813,
+        76307,
+        76308,
+        80079,
+        80123,
+        80124,
+        80134,
+        85308,
+        85337,
+        85371,
+        85384
+      ],
+      "groups": [
+        2562,
+        2578,
+        8720,
+        8725,
+        10625,
+        10627,
+        13979,
+        13980,
+        15940,
+        15946,
+        18903,
+        32885,
+        32945,
+        38476,
+        38494,
+        38640,
+        39805,
+        39840,
+        49207,
+        52197,
+        52199,
+        57949,
+        66376,
+        71075,
+        72110,
+        72112,
+        73806,
+        73813,
+        76308,
+        80079,
+        80123,
+        80124,
+        80134,
+        85308
+      ],
+      "live": [],
+      "currentOwner": null,
+      "currentServer": null,
+      "ownProviderRetained": false,
+      "ownServerRetained": false,
+      "port5274FreeNow": true,
+      "ownNativeCloseReportedPortFree": true
+    },
+    "finalPreAck": {
+      "utc": "2026-10-12T16:46:42.701407+00:00",
+      "pids": [
+        2562,
+        2578,
+        8720,
+        8725,
+        9785,
+        9796,
+        10625,
+        10627,
+        13979,
+        13980,
+        15940,
+        15946,
+        18903,
+        32885,
+        32945,
+        38476,
+        38494,
+        38640,
+        38682,
+        39805,
+        39840,
+        40091,
+        40263,
+        49207,
+        49249,
+        49455,
+        49482,
+        52197,
+        52199,
+        57949,
+        66376,
+        66418,
+        66552,
+        66583,
+        71075,
+        72110,
+        72112,
+        73806,
+        73813,
+        76307,
+        76308,
+        80079,
+        80123,
+        80124,
+        80134,
+        85308,
+        85337,
+        85371,
+        85384,
+        89439,
+        89526
+      ],
+      "groups": [
+        2562,
+        2578,
+        8720,
+        8725,
+        9785,
+        9796,
+        10625,
+        10627,
+        13979,
+        13980,
+        15940,
+        15946,
+        18903,
+        32885,
+        32945,
+        38476,
+        38494,
+        38640,
+        39805,
+        39840,
+        49207,
+        52197,
+        52199,
+        57949,
+        66376,
+        71075,
+        72110,
+        72112,
+        73806,
+        73813,
+        76308,
+        80079,
+        80123,
+        80124,
+        80134,
+        85308,
+        89439,
+        89526
+      ],
+      "live": [],
+      "currentOwner": null,
+      "currentServer": null,
+      "ownProviderRetained": false,
+      "ownServerRetained": false,
+      "port5274FreeNow": true,
+      "ownNativeCloseReportedPortFree": true
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "sysctl vm.loadavg one-minute value at actual review command start, native display precision29.34. This observed load is not a benchmark qualifier."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "capacityWaiting": {
+    "initialRefusalStart": "2026-10-12T15:58:56.530985+00:00",
+    "observedSlot1Usable": "2026-10-12T16:06:00.795032+00:00",
+    "initialIntervalS": 424.264047,
+    "nativeLeaseWaitS": 775.937,
+    "aggregateMinutes": 20.003350783333335,
+    "componentsDoNotOverlap": true,
+    "meaning": "Initial unavailable-capacity interval precedes all successful admission wrappers; subsequent native leased waits are separated from runtime. Total is elapsed capacity time, not CPU."
+  },
+  "observerCorrectionWindow": {
+    "start": "2026-10-12T16:24:02.387352+00:00",
+    "end": "2026-10-12T16:42:48.404234+00:00",
+    "elapsedMin": 18.766948033333332,
+    "meaning": "Diagnosis, coordination, queue and renewed execution wall interval. Overlaps capacity waiting; these friction tags are not additive."
+  },
+  "readOnlyDiagnosticFailures": {
+    "incorrectCreateCatalogSignature": "First public Node Support probe supplied an object to the positional catalog API; tool output reported TypeError cards is not iterable. Corrected call used actual positional API and confirmed3/1/4/3/2. No separate process clock or stderr file was captured.",
+    "missingSyntheticCatalog": "First public Node variant-fixture probe omitted the lab synthetic catalog; tool output reported Unknown card5e5e5e5e-0000-4000-8000-000000000002. Corrected call added actual PROMPT_LAB_DEFINITIONS and confirmed staged sourcevariantfalse/value7. No source writes or separate process clock.",
+    "resourceAssertion": "A first post-sweep proof assumed shared port5274 would remain globally free; its assertion failed after peer189 legitimately reused the port. Corrected proof retained actual native own port-free close, all own groups absent, exact own record cleared and different peer identity. No peer mutation."
+  },
+  "diagnosticBaselineEvidence": {
+    "SupportValues": [
+      {
+        "id": "i1",
+        "spark": 3
+      },
+      {
+        "id": "i2",
+        "spark": 1
+      },
+      {
+        "id": "i3",
+        "spark": 4
+      },
+      {
+        "id": "i4",
+        "spark": 3
+      },
+      {
+        "id": "i5",
+        "spark": 2
+      }
+    ],
+    "declaredStageVariant": {
+      "source": "i1",
+      "variant": {
+        "amplified": false
+      },
+      "abilities": [
+        {
+          "kind": "activated",
+          "costs": [
+            {
+              "cost": "energy",
+              "amount": 5
+            },
+            {
+              "cost": "exhaustSelf"
+            }
+          ],
+          "effect": {
+            "op": "setBaseSpark",
+            "subject": {
+              "kind": "all",
+              "selector": {
+                "subtype": "Spirit Animal",
+                "controller": "you"
+              }
+            },
+            "value": 7,
+            "duration": "untilEndOfTurn"
+          },
+          "speed": "standard"
+        }
+      ]
+    }
+  },
+  "evidencePreparation": {
+    "privateGeneratorSyntaxFailure": "Initial private final-evidence generator had an unterminated f-string and failed before execution; no ledger append or final evidence write occurred. The corrected generator completed with actual71ledger rows.",
+    "schemaFirstFinalFailure": {
+      "label": "schema-final",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 89439,
+      "observerPgid": 89439,
+      "startUtc": "2026-10-12T16:45:47.041196+00:00",
+      "pid": 89526,
+      "pgid": 89526,
+      "exit": 2,
+      "endUtc": "2026-10-12T16:45:47.094511+00:00",
+      "elapsedS": 0.053351083988673054
+    },
+    "schemaCorrection": "Schema requires friction[].note singular; changed own records from notes to note, preserving actual minutes and their qualifications. No source changes.",
+    "schemaRenewedPass": {
+      "label": "schema-final-renewed",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-200-type-synergies88",
+      "observerPid": 9785,
+      "observerPgid": 9785,
+      "startUtc": "2026-10-12T16:46:07.349880+00:00",
+      "pid": 9796,
+      "pgid": 9796,
+      "exit": 0,
+      "endUtc": "2026-10-12T16:46:07.412519+00:00",
+      "elapsedS": 0.06267816599574871
+    }
+  }
+}
