@@ -1,0 +1,262 @@
+{
+  "bead": "hv-umm2.498",
+  "base": "4211e20fd4386940669f4b3d49d3af1afbf77467",
+  "dispatchWindow": {
+    "proxy": "2026-10-12T04:53:12.477418Z",
+    "firstTool": "2026-10-12T04:53:27Z",
+    "basis": "Parent pre-dispatch brief-write proxy; actual helper receipt unobserved.",
+    "proxyToFirstToolSApprox": 14.523,
+    "completedEvidenceAt": "2026-10-12T05:08:41.342501+00:00",
+    "implementMin": 17.409,
+    "commitTail": "Final evidence/schema/commit are issued together immediately after this observed UTC stamp; Git uses the same committer timestamp. Dispatch remains an approximate pre-dispatch brief-write proxy, not observed receipt.",
+    "finalCommitStamp": "2026-10-12T05:10:37+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review prepare start 2026-10-12T05:04:09.398Z",
+        "oneMinute": 22.619140625
+      }
+    }
+  },
+  "source": {
+    "baseline": {
+      "src/engine/effects/primitives/return-from-void.ts": "5eb5ea5e45737f8b7a0a3e501cb4f38f13f2037cbee497d535607b1ab1dead13",
+      "src/engine/effects/primitives/contracts/return-from-void.contracts.ts": "35ab004f211adc2b992642eb9d89ac7635575e2298f9c8f2e8c981730700b1c8"
+    },
+    "final": {
+      "src/engine/effects/primitives/return-from-void.ts": "67f02902098392eed7e52f22a696a3523050b1bd2003b0a6103c9674239833d1",
+      "src/engine/effects/primitives/contracts/return-from-void.contracts.ts": "0a9a65d7ccf10ce8e0dbf9039fbcdf65b61b96540733cbfedee1c752a1b4fb9a"
+    },
+    "productionChangedLines": 21,
+    "changes": "Only optional named-hand destination in primitive and existing synthetic contract. Absent option preserves node payload and default rules helper. No new state, prompt, UI or engine consumers.",
+    "fallout": {
+      "changedExport": "ReturnFromVoidNode and returnFromVoid options gain an optional literal-true field.",
+      "readOnlyConsumers": [
+        "effects/registry.ts inferred primitive getter",
+        "effects/primitives/index.ts export barrel",
+        "Existing returnFromVoid callers use the unchanged default/options shape."
+      ],
+      "requiredEdits": []
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 5,
+    "plainContractModulesAdded": 0,
+    "plainContractNetLines": 111,
+    "baselineContractLines": 224,
+    "finalContractLines": 335,
+    "baselineCases": 11,
+    "finalCases": 16,
+    "countCorrection": "Supplied brief said 217 lines; exact base Git contents establish 224. Entry-point file/line deltas are zero."
+  },
+  "checks": [
+    {
+      "name": "initial untouched negative",
+      "observer": 48233,
+      "exit": 1,
+      "wallS": 5.58,
+      "artifact": "unchanged-negative-attempt01.log",
+      "disposition": "Mixed semantic failures and ineffective fixture answer/ability-index diagnostics. Not final acceptance proof."
+    },
+    {
+      "name": "corrected untouched negative",
+      "observer": 20951,
+      "exit": 1,
+      "wallS": 3.71,
+      "failed": 5,
+      "passed": 11,
+      "artifact": "unchanged-negative.log",
+      "provenance": "unchanged-negative-provenance.json"
+    },
+    {
+      "name": "initial positive",
+      "observer": 59912,
+      "exit": 0,
+      "wallS": 3.28,
+      "cases": 16,
+      "artifact": "focused-positive.log"
+    },
+    {
+      "name": "knowledge-strengthened negative",
+      "observer": 66010,
+      "exit": 1,
+      "wallS": 3.488,
+      "failed": 5,
+      "passed": 11,
+      "artifact": "attempt01-exact-final-negative.log",
+      "provenance": "attempt01-exact-final-negative-provenance.json"
+    },
+    {
+      "name": "knowledge-strengthened positive",
+      "observer": 66010,
+      "exit": 0,
+      "wallS": 4.63,
+      "artifact": "earlier-focused-transcript-receipt.json",
+      "disposition": "Terminal transcript/parent receipt retained; redirected log overwritten by final run, explicitly disclosed."
+    },
+    {
+      "name": "first review",
+      "observer": 82854,
+      "exit": 2,
+      "wallS": 59.1,
+      "artifact": "attempt01-review.log",
+      "disposition": "Fixture readonly-owner assignment and unsafe nested matcher typing required local correction; production unchanged."
+    },
+    {
+      "name": "exact final negative",
+      "observer": 79755,
+      "exit": 1,
+      "wallS": 4.361,
+      "failed": 5,
+      "passed": 11,
+      "skipped": 1306,
+      "artifact": "exact-final-negative.log",
+      "provenance": "exact-final-negative-provenance.json"
+    },
+    {
+      "name": "final focused",
+      "observer": 79755,
+      "exit": 0,
+      "wallS": 3.99,
+      "files": 1,
+      "cases": 43,
+      "skipped": 1279,
+      "artifact": "focused-final.log",
+      "command": "npm test -- src/engine/effects/primitives/contracts.test.ts -t returnFromVoid|whenReturn|reclaimNotBanished"
+    },
+    {
+      "name": "final review",
+      "observer": 64579,
+      "exit": 0,
+      "wallS": 72.97,
+      "files": 266,
+      "cases": 3792,
+      "artifact": "review-final.log"
+    },
+    {
+      "name": "Knip",
+      "observer": 78793,
+      "exit": 0,
+      "wallS": 4.34,
+      "artifact": "knip.log"
+    },
+    {
+      "name": "first fuzz wrapper",
+      "observer": 84941,
+      "exit": 1,
+      "wallS": 1.69,
+      "artifact": "attempt01-fuzz.log",
+      "disposition": "Ignored observer assumed one choices object instead of the public CardStackItem choices array; no valid acceptance series."
+    },
+    {
+      "name": "corrected one-seed wrapper diagnostic",
+      "observer": 80025,
+      "exit": 0,
+      "wallS": 2.59,
+      "artifact": "fuzz-schema-diagnostic.log",
+      "disposition": "Thin diagnostic outside heavy lock; actual selected return observed."
+    },
+    {
+      "name": "final seeded fuzz",
+      "observer": 60099,
+      "exit": 0,
+      "wallS": 123.3,
+      "games": 200,
+      "artifact": "fuzz.log",
+      "summary": "fuzz-summary.json"
+    }
+  ],
+  "exactNegative": {
+    "at": "2026-10-12T05:03:39.682397+00:00",
+    "intendedSha": "67f02902098392eed7e52f22a696a3523050b1bd2003b0a6103c9674239833d1",
+    "fixtureSha": "0a9a65d7ccf10ce8e0dbf9039fbcdf65b61b96540733cbfedee1c752a1b4fb9a",
+    "hostLoad": 14.5595703125,
+    "baselineSha": "5eb5ea5e45737f8b7a0a3e501cb4f38f13f2037cbee497d535607b1ab1dead13",
+    "exit": 1,
+    "restoredSha": "67f02902098392eed7e52f22a696a3523050b1bd2003b0a6103c9674239833d1",
+    "restoredExact": true,
+    "wallS": 4.361
+  },
+  "fuzz": {
+    "seedPrefix": "holder498",
+    "games": 200,
+    "failures": 0,
+    "allGamesReplayed": true,
+    "interactiveReplays": 20,
+    "gameWallS": 122.18010525,
+    "gameCpuS": 125.359281,
+    "namedResolutions": 435,
+    "namedReturns": 435,
+    "foreignHolderReturns": 435,
+    "sourceUuid": "5e5e5e5e-0000-4000-8000-000000049801",
+    "firstWitness": {
+      "seed": "holder498-0",
+      "source": "i31",
+      "sourceUuid": "5e5e5e5e-0000-4000-8000-000000049801",
+      "targets": [
+        "i2"
+      ],
+      "returned": [
+        {
+          "event": {
+            "kind": "returnedToHand",
+            "instance": "i2",
+            "side": "enemy"
+          },
+          "owner": "player",
+          "printing": {
+            "kind": "card",
+            "cardId": "5e5e5e5e-0000-4000-8000-000000000c01"
+          }
+        }
+      ]
+    },
+    "limitation": "Foreign-holder return events were actually observed; stolen dissolve-controller semantics are demonstrated by deterministic floating contracts, not inferred from fuzz. CPU/wall figures describe this run and are not performance claims.",
+    "pool": "Existing SYNTHETIC_FUZZ_POOL plus one authored synthetic explicit-option event, reserved via weightedCardIds; fuzzEngineCatalog supplies the existing mixed fixtures.",
+    "wrapperSha": "97559000da53c60214d179fca1beac76a4c9a5829e91c66e7bc818c0aa525e8f",
+    "request": "fuzz-request.json",
+    "acquired": "fuzz-acquired.json",
+    "execution": "fuzz-execution.json",
+    "requestToAcquiredSApprox": 0.057114,
+    "queueQualification": "Includes wrapper/process launch; not isolated queue wait. Only the 200-game wrapper executes under the machine heavy lock.",
+    "pid": 60756
+  },
+  "failurePaths": {
+    "midStepError": "Named-hand failing synthetic effect throws after accepted payment/return; fold publishes no partial result and retains committed state.",
+    "reloadRestart": "Both owner-default and explicit-holder pending payments JSON-roundtrip; fresh adapter completes to the same state hash.",
+    "partialWrite": "Pending committed payment/card zones remain unchanged; failed steps publish no events.",
+    "invalidStaleForeignConcurrent": "Existing fold case runs for both modes and rejects wrong side, stale ID, illegal value, concurrent action and noncancellable cancellation; answer commits exactly once.",
+    "destinationReplacement": "Created source actually ceases before recovery; actual Reclaim play followed by abandonment is banished and does not trigger a void return. No invented created/reclaimed void reachability.",
+    "knowledge": "Both viewer public views identify the returned physical card and unchanged printing; returnedToHand is public and announced changes are complete.",
+    "noLongerVoid": "Existing interruption and double-return controls preserve void-only/no-extra-payment behavior."
+  },
+  "validationChoice": "Focused related contracts, review and Knip plus explicit seeded acceptance. No full because there is no test infrastructure/config/cross-cutting state architecture change. No browser because this bead adds no prompt/UI surface; production composition and browser workflow remain hv-umm2.156.",
+  "runtimeLedger": {
+    "observers": "All completed with exact exits in checks; no detached implementation writer remains.",
+    "heavyWrapper": {
+      "pid": 60756,
+      "exit": 0,
+      "request": "2026-10-12T05:03:53.512886Z",
+      "acquired": "2026-10-12T05:03:53.570Z",
+      "ended": "2026-10-12T05:05:56.822Z",
+      "executionMs": 123252
+    },
+    "browser": "None; no server, port, provider or browser lease created.",
+    "sourceMutations": "Exact baseline replacement runs restore intended primitive bytes in finally; final fixture and primitive hashes are frozen.",
+    "foreignOwnership": "No foreign services/worktrees modified."
+  },
+  "diagnostics": [
+    {
+      "issue": "An unintended command redirected an empty artifact to artifacts/qa/.unused; the exact path was removed immediately in the next command. No tracked source outside admitted Areas changed."
+    },
+    {
+      "issue": "One earlier focused redirected log was overwritten; terminal receipt retained explicitly, while the final exact raw focused log is retained."
+    }
+  ],
+  "remainingLocalAcceptance": [],
+  "commitAck": "Parent verified the exact precommit manifest and source, semantic fuzz witnesses, clean scope and stopped owned resources; local COMMIT ACK received. Independent other-family core review and native delivery are parent responsibilities."
+}

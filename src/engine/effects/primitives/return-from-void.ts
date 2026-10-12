@@ -1,15 +1,17 @@
 import type { PayOrDeclinePrompt } from "../../prompts/types";
 import { spendEnergy } from "../../rules/resources";
-import { instanceOf, returnToHand } from "../../rules/zones";
+import { instanceOf, moveToHand, returnToHand } from "../../rules/zones";
 import { resolveCards } from "../interpreter";
 import { cardTarget, definePrimitive, type CardRef } from "../types";
 
-/** Return the named cards from a void to their owners' hands, optionally paying energy as the effect resolves. */
+/** Return the named cards from a void to their owners' hands or the controller's named hand, optionally paying energy as the effect resolves. */
 export interface ReturnFromVoidNode {
   readonly op: "returnFromVoid";
   readonly subject: CardRef;
   /** The controller may pay this amount once to return the named cards; null means no payment. */
   readonly pay: number | null;
+  /** Explicit "your hand": the resolving controller receives the cards; otherwise their owners do. */
+  readonly toYourHand?: true;
 }
 
 export const returnFromVoidPrimitive = definePrimitive<ReturnFromVoidNode>({
@@ -26,14 +28,23 @@ export const returnFromVoidPrimitive = definePrimitive<ReturnFromVoidNode>({
       if (!paid) return;
       spendEnergy(ctx, env.controller, node.pay);
     }
-    for (const id of cards) returnToHand(ctx, id);
+    for (const id of cards) {
+      if (node.toYourHand !== true) {
+        returnToHand(ctx, id);
+        continue;
+      }
+      const previousController = instanceOf(ctx.state, id).controller;
+      const destination = moveToHand(ctx, id, env.controller);
+      if (destination === "hand") ctx.emit({ kind: "returnedToHand", instance: id, side: env.controller });
+      if (destination === "banished") ctx.emit({ kind: "banished", instance: id, side: previousController });
+    }
   },
 });
 
 /** Void targets are chosen before play/activation costs; self references are read at resolution. */
-export function returnFromVoid(subject: CardRef, options: { readonly pay?: number } = {}): ReturnFromVoidNode {
+export function returnFromVoid(subject: CardRef, options: { readonly pay?: number; readonly toYourHand?: true } = {}): ReturnFromVoidNode {
   if (options.pay !== undefined && (!Number.isFinite(options.pay) || options.pay < 0)) {
     throw new Error("returnFromVoid payment must be finite and non-negative");
   }
-  return { op: "returnFromVoid", subject, pay: options.pay ?? null };
+  return { op: "returnFromVoid", subject, pay: options.pay ?? null, ...(options.toYourHand === true ? { toYourHand: true } : {}) };
 }
