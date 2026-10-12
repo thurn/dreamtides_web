@@ -1,3 +1,5 @@
+import { event, randomIn } from "../../engine/dsl/builders";
+import { eachPlayer, materialize } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: false,
   cardNumber: 20,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [event(eachPlayer(materialize(randomIn("void", 1, { cardType: "character" }))))],
+  verifiedText: "1tzt4xreq7m",
 });

@@ -1,0 +1,616 @@
+{
+  "bead": "hv-umm2.217",
+  "phase": 5,
+  "base": "02a93167dbd091e35feb5da7ab0db4233ea47ffc",
+  "helperDispatch": {
+    "at": "2026-10-12T20:07:04.172Z",
+    "call": "call_EuKxFyUjI3o1y9zceIP6sN0S",
+    "receipt": "dispatch.json"
+  },
+  "implementationWindow": {
+    "start": "2026-10-12T20:07:04.172Z",
+    "end": "2026-10-12T20:33:19.803838Z",
+    "scope": "Helper post-claim dispatch through prospective commit endpoint; parent pre-dispatch source-free recovery/install/573 supplement excluded."
+  },
+  "classification": {
+    "D20": {
+      "scenarioModules": 0,
+      "rationale": "All five clauses compose existing independently tested DSL forms; eachPlayer preserves owner control with each own void, and the supplied playImmediately owns cost/timing/capacity."
+    },
+    "D21": {
+      "mandatoryJudged": 0,
+      "firstBytes": [
+        193,
+        152,
+        156,
+        215,
+        193
+      ],
+      "sampled": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "newPromptKinds": 0,
+      "newStatusKinds": 0,
+      "newVisualEffects": 0
+    },
+    "review": {
+      "nonTestCodeChangedLines": 25,
+      "coreReview": false,
+      "additionalColdReviewRequired": false,
+      "rationale": "Five existing primitive compositions below the 100-line threshold; no new shared form or body."
+    }
+  },
+  "recipes": {
+    "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5": "event(playImmediately(void, costAtMost 2)); RD-hv-umm2.568-1 paid stack play",
+    "14dec460-3ec6-40c1-978f-67e70cb0b227": "event(grantReclaim(fromVoid(), untilEndOfTurn)); plain normal costs",
+    "a3033051-8eb7-4fbf-93d6-f947ed68974d": "event(eachPlayer(materialize(randomIn(void, 1, character)))); C16 owner control",
+    "2ad68489-044a-40d1-9be6-e62497a4e1fd": "event(rematerialize(target(characterYouControl())))",
+    "2b23a60c-209c-4c75-b63c-b7f73b2e1a56": "event(returnFromVoid(fromVoid(), toYourHand))"
+  },
+  "commands": [
+    {
+      "label": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/content/specs/specs.test.ts",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/engine/testing/tooling-card-lab-script.test.ts",
+        "src/engine/testing/lab-preflight.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:12:44.317185Z",
+      "pid": 52307,
+      "pgid": 52307,
+      "hostLoad": "{ 2.84 5.21 8.80 }",
+      "endedAt": "2026-10-12T20:12:52.646320Z",
+      "wallS": 8.328978624995216,
+      "exitCode": 0
+    },
+    {
+      "label": "fuzz",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5,14dec460-3ec6-40c1-978f-67e70cb0b227,a3033051-8eb7-4fbf-93d6-f947ed68974d,2ad68489-044a-40d1-9be6-e62497a4e1fd,2b23a60c-209c-4c75-b63c-b7f73b2e1a56"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:13:04.888582Z",
+      "pid": 52834,
+      "pgid": 52834,
+      "hostLoad": "{ 3.52 5.22 8.72 }",
+      "endedAt": "2026-10-12T20:15:24.540504Z",
+      "wallS": 139.65052770900365,
+      "exitCode": 0
+    },
+    {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:16:32.119518Z",
+      "pid": 92097,
+      "pgid": 92097,
+      "hostLoad": "{ 12.43 6.74 8.49 }",
+      "endedAt": "2026-10-12T20:16:36.141615Z",
+      "wallS": 4.021958041004837,
+      "exitCode": 0
+    },
+    {
+      "label": "posthoc-replay",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamwell05-replay.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:26:33.953121Z",
+      "pid": 66726,
+      "pgid": 66726,
+      "hostLoad": "{ 7.54 9.01 9.59 }",
+      "endedAt": "2026-10-12T20:26:34.787877Z",
+      "wallS": 0.8346567500120727,
+      "exitCode": 0
+    },
+    {
+      "label": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5,14dec460-3ec6-40c1-978f-67e70cb0b227,a3033051-8eb7-4fbf-93d6-f947ed68974d,2ad68489-044a-40d1-9be6-e62497a4e1fd,2b23a60c-209c-4c75-b63c-b7f73b2e1a56"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:12:58.152238Z",
+      "pid": 52716,
+      "pgid": 52716,
+      "hostLoad": "{ 3.48 5.24 8.75 }",
+      "endedAt": "2026-10-12T20:12:59.117924Z",
+      "wallS": 0.9656205840001348,
+      "exitCode": 0
+    },
+    {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:15:39.066224Z",
+      "pid": 55864,
+      "pgid": 55864,
+      "hostLoad": "{ 4.06 4.78 7.96 }",
+      "endedAt": "2026-10-12T20:16:22.953420Z",
+      "wallS": 43.88670204200025,
+      "exitCode": 0
+    },
+    {
+      "label": "supplemental-mobile",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.217/recursion-workflows.mjs",
+        "--bead",
+        "hv-umm2.217",
+        "--viewports",
+        "mobile",
+        "--arg",
+        "start=2",
+        "--arg",
+        "end=2",
+        "--port",
+        "5174",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:26:39.192356Z",
+      "pid": 66822,
+      "pgid": 66822,
+      "hostLoad": "{ 8.06 9.09 9.62 }",
+      "endedAt": "2026-10-12T20:27:15.645207Z",
+      "wallS": 36.452481292013545,
+      "exitCode": 0
+    },
+    {
+      "label": "supplemental-remaining",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.217/recursion-workflows.mjs",
+        "--bead",
+        "hv-umm2.217",
+        "--arg",
+        "start=1",
+        "--port",
+        "5174",
+        "--timeout",
+        "600"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:21:30.955042Z",
+      "pid": 58800,
+      "pgid": 58800,
+      "hostLoad": "{ 10.40 11.52 10.47 }",
+      "endedAt": "2026-10-12T20:23:08.252456Z",
+      "wallS": 97.2966043750057,
+      "exitCode": 1
+    },
+    {
+      "label": "supplemental-ruin-player",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.217/recursion-workflows.mjs",
+        "--bead",
+        "hv-umm2.217",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "start=0",
+        "--arg",
+        "end=0",
+        "--port",
+        "5174",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:20:50.989864Z",
+      "pid": 56162,
+      "pgid": 56162,
+      "hostLoad": "{ 11.86 11.84 10.53 }",
+      "endedAt": "2026-10-12T20:21:10.452722Z",
+      "wallS": 19.462664625010802,
+      "exitCode": 1
+    },
+    {
+      "label": "supplemental-tail",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.217/recursion-workflows.mjs",
+        "--bead",
+        "hv-umm2.217",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "start=7",
+        "--port",
+        "5174",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:25:15.859682Z",
+      "pid": 64626,
+      "pgid": 64626,
+      "hostLoad": "{ 8.74 9.62 9.85 }",
+      "endedAt": "2026-10-12T20:25:46.561878Z",
+      "wallS": 30.70190245799313,
+      "exitCode": 0
+    },
+    {
+      "label": "sweep-remaining",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.217",
+        "--cards",
+        "a3033051-8eb7-4fbf-93d6-f947ed68974d,2ad68489-044a-40d1-9be6-e62497a4e1fd,2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:19:32.997434Z",
+      "pid": 26176,
+      "pgid": 26176,
+      "hostLoad": "{ 15.60 11.95 10.42 }",
+      "endedAt": "2026-10-12T20:20:26.707743Z",
+      "wallS": 53.71377079200465,
+      "exitCode": 0
+    },
+    {
+      "label": "sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.217",
+        "--cards",
+        "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5,14dec460-3ec6-40c1-978f-67e70cb0b227,a3033051-8eb7-4fbf-93d6-f947ed68974d,2ad68489-044a-40d1-9be6-e62497a4e1a56,2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:18:30.313673Z",
+      "pid": 69340,
+      "pgid": 69340,
+      "hostLoad": "{ 19.48 11.19 10.03 }",
+      "endedAt": "2026-10-12T20:19:12.906441Z",
+      "wallS": 42.592265874991426,
+      "exitCode": 130
+    },
+    {
+      "label": "final-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:29:06.483480Z",
+      "pid": 99519,
+      "pgid": 99519,
+      "hostLoad": "{ 8.28 8.94 9.48 }",
+      "endedAt": "2026-10-12T20:29:06.593283Z",
+      "wallS": 0.10971058301220182,
+      "exitCode": 0
+    },
+    {
+      "label": "qualified-ledger-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamwell05-root",
+      "startedAt": "2026-10-12T20:31:39.741665Z",
+      "pid": 3166,
+      "pgid": 3166,
+      "hostLoad": "{ 5.55 7.76 8.93 }",
+      "endedAt": "2026-10-12T20:31:39.806104Z",
+      "wallS": 0.06433812499744818,
+      "exitCode": 0
+    }
+  ],
+  "metadataReceipt": "helper-validation/metadata.json",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting 2026-10-12T20:15:39.066224Z; sysctl one-minute value4.06"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "focused",
+      "at": "2026-10-12T20:12:44.317185Z",
+      "sample": "{ 2.84 5.21 8.80 }"
+    },
+    {
+      "label": "fuzz",
+      "at": "2026-10-12T20:13:04.888582Z",
+      "sample": "{ 3.52 5.22 8.72 }"
+    },
+    {
+      "label": "knip",
+      "at": "2026-10-12T20:16:32.119518Z",
+      "sample": "{ 12.43 6.74 8.49 }"
+    },
+    {
+      "label": "posthoc-replay",
+      "at": "2026-10-12T20:26:33.953121Z",
+      "sample": "{ 7.54 9.01 9.59 }"
+    },
+    {
+      "label": "preflight",
+      "at": "2026-10-12T20:12:58.152238Z",
+      "sample": "{ 3.48 5.24 8.75 }"
+    },
+    {
+      "label": "review",
+      "at": "2026-10-12T20:15:39.066224Z",
+      "sample": "{ 4.06 4.78 7.96 }"
+    },
+    {
+      "label": "supplemental-mobile",
+      "at": "2026-10-12T20:26:39.192356Z",
+      "sample": "{ 8.06 9.09 9.62 }"
+    },
+    {
+      "label": "supplemental-remaining",
+      "at": "2026-10-12T20:21:30.955042Z",
+      "sample": "{ 10.40 11.52 10.47 }"
+    },
+    {
+      "label": "supplemental-ruin-player",
+      "at": "2026-10-12T20:20:50.989864Z",
+      "sample": "{ 11.86 11.84 10.53 }"
+    },
+    {
+      "label": "supplemental-tail",
+      "at": "2026-10-12T20:25:15.859682Z",
+      "sample": "{ 8.74 9.62 9.85 }"
+    },
+    {
+      "label": "sweep-remaining",
+      "at": "2026-10-12T20:19:32.997434Z",
+      "sample": "{ 15.60 11.95 10.42 }"
+    },
+    {
+      "label": "sweep",
+      "at": "2026-10-12T20:18:30.313673Z",
+      "sample": "{ 19.48 11.19 10.03 }"
+    },
+    {
+      "label": "final-schema",
+      "at": "2026-10-12T20:29:06.483480Z",
+      "sample": "{ 8.28 8.94 9.48 }"
+    },
+    {
+      "label": "qualified-ledger-schema",
+      "at": "2026-10-12T20:31:39.741665Z",
+      "sample": "{ 5.55 7.76 8.93 }"
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "validation": {
+    "focused": {
+      "files": 6,
+      "cases": 2507,
+      "vitestS": 5.33
+    },
+    "review": {
+      "files": 223,
+      "cases": 4289,
+      "vitestS": 34.56
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 141865,
+      "prompts": 6706,
+      "interactiveReruns": 706,
+      "failures": 0,
+      "targetIncludedEach": 1200,
+      "targetDraws": [
+        235,
+        292,
+        104,
+        243,
+        235
+      ],
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock"
+    },
+    "preflight": {
+      "pass": 10,
+      "skip": 90,
+      "fail": 0
+    },
+    "effectiveSweep": {
+      "cells": 100,
+      "pass": 10,
+      "skip": 90,
+      "fail": 0,
+      "rawRows": 101,
+      "attemptsQualified": "One retained Gateway player cancellation diagnostic has effective:false, preserves original fail verdict/rawError, and names the actual replacement passing rawReport. The exact100 effective native rows contain10passes and90ineligible skips."
+    }
+  },
+  "supplementalQa": {
+    "fullLivePasses": 9,
+    "qualifiedFunctionalPasses": 2,
+    "total": 11,
+    "fixture": "Existing public qa.labStage hand declaration verified against immutable history.base, then qa.labAddCard debug UI before first requested draw. Player forcing held a real opposing Night Fast stack response; enemy forcing held human Night. Debug setup is an explicit QA fixture, not ordinary play.",
+    "persistedLogs": "Passing cases wait for exact relevant UUID Dreamwell, effectEnded, RNG stream, returnedToHand or materialized trigger records; per-case filtered persisted rows retained in raw result. Two qualified proofs preserve exported exact action/answer/source logs and pure replay receipts.",
+    "browserResults": [
+      {
+        "invocation": "run-UQJiK6",
+        "raw": "invocations/run-UQJiK6/recursion-workflows.result.json"
+      },
+      {
+        "invocation": "run-0jb9ZO",
+        "raw": "invocations/run-0jb9ZO/recursion-workflows.result.json"
+      },
+      {
+        "invocation": "run-ZzlQFi",
+        "raw": "invocations/run-ZzlQFi/recursion-workflows.result.json"
+      },
+      {
+        "invocation": "run-OkZI5V",
+        "raw": "invocations/run-OkZI5V/recursion-workflows.result.json"
+      }
+    ],
+    "replay": "helper-validation/posthoc-pure-replay.json",
+    "caps": "Every retained raw browser report has an empty Caps buffer.",
+    "geometry": "Nine fully passed live workflows assert visible in-viewport controls and void geometry; two qualified partials omit post-error geometry."
+  },
+  "captures": [
+    {
+      "file": "mirror-choice-desktop.png",
+      "evidenceDir": "invocations/run-0jb9ZO",
+      "css": [
+        1440,
+        900
+      ],
+      "pixels": [
+        2880,
+        1800
+      ],
+      "judgment": "Two legal own-void choices and submit fit; stable synthetic fallback card faces."
+    },
+    {
+      "file": "mirror-reclaimed-desktop.png",
+      "evidenceDir": "invocations/run-0jb9ZO",
+      "css": [
+        1440,
+        900
+      ],
+      "pixels": [
+        2880,
+        1800
+      ],
+      "judgment": "Changed state shows exhausted Reclaimed character, retained duration marker and paid1/3energy; controls visible."
+    },
+    {
+      "file": "mirror-playable-mobile.png",
+      "evidenceDir": "invocations/run-OkZI5V",
+      "css": [
+        390,
+        844
+      ],
+      "pixels": [
+        780,
+        1688
+      ],
+      "judgment": "Playable granted-Reclaim void card has visible green affordance and duration marker; browser close and two cards fit."
+    }
+  ],
+  "failedAttempts": [
+    {
+      "label": "sweep",
+      "exitCode": 130,
+      "cause": "Helper transcribed malformed Echo UUID e1a56; owner SIGINT stopped exact runner69340 and server69726. Cancellation created a Gateway context-closed diagnostic; final correct replacement passed.",
+      "retained": "helper-validation/sweep.json"
+    },
+    {
+      "label": "supplemental-ruin-player",
+      "exitCode": 1,
+      "cause": "Private payment check used spend; actual cause is payment. Captured actual bonus exactly matches pure replay; source UUID and action/answer persisted.",
+      "retained": "invocations/run-UQJiK6/recursion-workflows.result.json"
+    },
+    {
+      "label": "supplemental-remaining",
+      "exitCode": 1,
+      "cause": "Actual Echo board target tap committed immediately; redundant submit wait found no control. Five preceding workflows passed; actual chosen drawBearer prompt answer and materialized trigger persisted. Exact frozen-state replay verifies final state; post-error live state/geometry/captures not claimed.",
+      "retained": "invocations/run-0jb9ZO/recursion-workflows.result.json"
+    }
+  ],
+  "resources": {
+    "at": "2026-10-12T20:31:53.896812+00:00",
+    "ownedPidsAndGroups": [
+      26176,
+      26213,
+      52307,
+      52716,
+      52834,
+      55864,
+      56162,
+      56228,
+      58800,
+      58830,
+      64626,
+      64669,
+      66726,
+      66822,
+      66859,
+      69340,
+      69726,
+      92097,
+      99519,
+      3166
+    ],
+    "livingOwnedPids": [],
+    "ports": {
+      "5174": {
+        "exitCode": 1,
+        "listeners": ""
+      },
+      "5274": {
+        "exitCode": 1,
+        "listeners": ""
+      }
+    },
+    "allWrappersTerminal": true,
+    "livingOwnedGroups": []
+  },
+  "parentOwnedHistoricalSupplement": {
+    "paths": [
+      "docs/plan/evidence/retrospectives/hv-umm2.573.md",
+      "docs/plan/evidence/measurements/hv-umm2.573.json"
+    ],
+    "qualification": "Parent authored these two admitted dated supplement appends before helper dispatch. Helper preserves their exact SHA256 blobs from metadata.json and includes them in the one commit."
+  },
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "preExistingIssues": [],
+  "commitClockProvenance": {
+    "prospectiveEndpoint": "2026-10-12T20:33:19.803838Z",
+    "actualReceipt": "helper-validation/commit-clock.json",
+    "method": "Immediate pre-commit process UTC clock; automatic Git committer timestamp is verified after commit, with full process start/end and one-minute window tolerance."
+  }
+}

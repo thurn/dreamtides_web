@@ -1436,5 +1436,1136 @@
   "precommitEndpoint": {
     "at": "2026-10-12T19:55:17.643837+00:00",
     "scope": "Observed evidence endpoint immediately before final schema and Git; actual Git committer/process clocks retained externally and compared semantically"
+  },
+  "postCommitGateLoadSupplement217": {
+    "source": "hv-umm2.573 late native closure and artifacts/qa/hv-umm2.573/audit/gate-load-supplement.json",
+    "actualPerStageStartLoads": [
+      {
+        "bead": "hv-umm2.197",
+        "candidate": "01a13166-3472-70b1-914d-46b2cd68a767",
+        "gateSeconds": 91.055,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T18:36:11.555Z",
+            "load": 18.03125
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T18:36:12.416Z",
+            "load": 18.03125
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T18:36:12.417Z",
+            "load": 18.03125
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T18:36:12.417Z",
+            "load": 18.03125
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T18:36:12.418Z",
+            "load": 18.03125
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T18:36:12.419Z",
+            "load": 18.03125
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T18:36:12.419Z",
+            "load": 18.03125
+          }
+        ],
+        "logFile": "gate-hv-umm2.197.jsonl"
+      },
+      {
+        "bead": "hv-umm2.203",
+        "candidate": "01a13129-ef13-7502-a535-dd11604df234",
+        "gateSeconds": 79.456,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T17:30:00.043Z",
+            "load": 5.7197265625
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T17:30:00.974Z",
+            "load": 5.7197265625
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T17:30:00.975Z",
+            "load": 5.7197265625
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T17:30:00.975Z",
+            "load": 5.7197265625
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T17:30:00.976Z",
+            "load": 5.7197265625
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T17:30:00.976Z",
+            "load": 5.7197265625
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T17:30:00.976Z",
+            "load": 5.7197265625
+          }
+        ],
+        "logFile": "gate-hv-umm2.203.jsonl"
+      },
+      {
+        "bead": "hv-umm2.204",
+        "candidate": "01a1318b-6eb3-7ec2-a7e4-f2418d80617a",
+        "gateSeconds": 93.639,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T19:16:30.745Z",
+            "load": 13.4482421875
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T19:16:31.906Z",
+            "load": 13.4482421875
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T19:16:31.907Z",
+            "load": 13.4482421875
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T19:16:31.907Z",
+            "load": 13.4482421875
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T19:16:31.908Z",
+            "load": 13.4482421875
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T19:16:31.908Z",
+            "load": 13.4482421875
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T19:16:31.909Z",
+            "load": 13.4482421875
+          }
+        ],
+        "logFile": "gate-hv-umm2.204.jsonl"
+      },
+      {
+        "bead": "hv-umm2.207",
+        "candidate": "01a13161-8ebb-7b51-b11a-907255640c8c",
+        "gateSeconds": 94.209,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T18:30:46.504Z",
+            "load": 21.0478515625
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T18:30:47.613Z",
+            "load": 21.0478515625
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T18:30:47.614Z",
+            "load": 21.0478515625
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T18:30:47.615Z",
+            "load": 21.0478515625
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T18:30:47.615Z",
+            "load": 21.0478515625
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T18:30:47.615Z",
+            "load": 21.0478515625
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T18:30:47.616Z",
+            "load": 21.0478515625
+          }
+        ],
+        "logFile": "gate-hv-umm2.207.jsonl"
+      },
+      {
+        "bead": "hv-umm2.208",
+        "candidate": "01a13178-09ab-72a0-819b-5c75236f6b5b",
+        "gateSeconds": 86.893,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T18:55:20.164Z",
+            "load": 16.2392578125
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T18:55:21.379Z",
+            "load": 16.2392578125
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T18:55:21.380Z",
+            "load": 16.2392578125
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T18:55:21.380Z",
+            "load": 16.2392578125
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T18:55:21.381Z",
+            "load": 16.2392578125
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T18:55:21.381Z",
+            "load": 16.2392578125
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T18:55:21.382Z",
+            "load": 16.2392578125
+          }
+        ],
+        "logFile": "gate-hv-umm2.208.jsonl"
+      },
+      {
+        "bead": "hv-umm2.212",
+        "candidate": "01a1312d-fd1e-75c0-9017-37c43c8819b9",
+        "gateSeconds": 87.604,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T17:34:25.985Z",
+            "load": 9.2451171875
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T17:34:27.027Z",
+            "load": 9.38525390625
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T17:34:27.027Z",
+            "load": 9.38525390625
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T17:34:27.028Z",
+            "load": 9.38525390625
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T17:34:27.028Z",
+            "load": 9.38525390625
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T17:34:27.028Z",
+            "load": 9.38525390625
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T17:34:27.029Z",
+            "load": 9.38525390625
+          }
+        ],
+        "logFile": "gate-hv-umm2.212.jsonl"
+      },
+      {
+        "bead": "hv-umm2.213",
+        "candidate": "01a13185-ecfb-7d80-acdb-d2e77585c07a",
+        "gateSeconds": 90.198,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T19:10:30.102Z",
+            "load": 25.16259765625
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T19:10:31.494Z",
+            "load": 25.16259765625
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T19:10:31.494Z",
+            "load": 25.16259765625
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T19:10:31.495Z",
+            "load": 25.16259765625
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T19:10:31.495Z",
+            "load": 25.16259765625
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T19:10:31.496Z",
+            "load": 25.16259765625
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T19:10:31.496Z",
+            "load": 25.16259765625
+          }
+        ],
+        "logFile": "gate-hv-umm2.213.jsonl"
+      },
+      {
+        "bead": "hv-umm2.214",
+        "candidate": "01a1316a-5444-71a3-9684-bfec9d4445b2",
+        "gateSeconds": 96.929,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T18:40:21.139Z",
+            "load": 12.6875
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T18:40:22.327Z",
+            "load": 12.6875
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T18:40:22.327Z",
+            "load": 12.6875
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T18:40:22.328Z",
+            "load": 12.6875
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T18:40:22.328Z",
+            "load": 12.6875
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T18:40:22.329Z",
+            "load": 12.6875
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T18:40:22.329Z",
+            "load": 12.6875
+          }
+        ],
+        "logFile": "gate-hv-umm2.214.jsonl"
+      },
+      {
+        "bead": "hv-umm2.215",
+        "candidate": "01a1318b-c36e-7da3-8ff0-671ddadbf3c0",
+        "gateSeconds": 95.305,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T19:18:11.599Z",
+            "load": 15.3642578125
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T19:18:13.301Z",
+            "load": 15.3642578125
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T19:18:13.302Z",
+            "load": 15.3642578125
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T19:18:13.302Z",
+            "load": 15.3642578125
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T19:18:13.303Z",
+            "load": 15.3642578125
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T19:18:13.303Z",
+            "load": 15.3642578125
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T19:18:13.303Z",
+            "load": 15.3642578125
+          }
+        ],
+        "logFile": "gate-hv-umm2.215.jsonl"
+      },
+      {
+        "bead": "hv-umm2.216",
+        "candidate": "01a1319c-1df5-7461-96c2-7736341f5e81",
+        "gateSeconds": 88.734,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T19:34:43.286Z",
+            "load": 6.9970703125
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T19:34:44.340Z",
+            "load": 6.9970703125
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T19:34:44.341Z",
+            "load": 6.9970703125
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T19:34:44.342Z",
+            "load": 6.9970703125
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T19:34:44.342Z",
+            "load": 6.9970703125
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T19:34:44.343Z",
+            "load": 6.9970703125
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T19:34:44.343Z",
+            "load": 6.9970703125
+          }
+        ],
+        "logFile": "gate-hv-umm2.216.jsonl"
+      },
+      {
+        "bead": "hv-umm2.218",
+        "candidate": "01a1317e-3c64-7d00-9fa5-e58799ce4fdd",
+        "gateSeconds": 92.046,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T19:02:07.101Z",
+            "load": 9.7919921875
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T19:02:08.424Z",
+            "load": 9.7919921875
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T19:02:08.424Z",
+            "load": 9.7919921875
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T19:02:08.425Z",
+            "load": 9.7919921875
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T19:02:08.425Z",
+            "load": 9.7919921875
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T19:02:08.426Z",
+            "load": 9.7919921875
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T19:02:08.426Z",
+            "load": 9.7919921875
+          }
+        ],
+        "logFile": "gate-hv-umm2.218.jsonl"
+      },
+      {
+        "bead": "hv-umm2.553",
+        "candidate": "01a13118-6112-7f20-a37b-628b0ebece9f",
+        "gateSeconds": 90.926,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T17:10:50.747Z",
+            "load": 20.02197265625
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T17:10:51.775Z",
+            "load": 20.02197265625
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T17:10:51.776Z",
+            "load": 20.02197265625
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T17:10:51.776Z",
+            "load": 20.02197265625
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T17:10:51.776Z",
+            "load": 20.02197265625
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T17:10:51.777Z",
+            "load": 20.02197265625
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T17:10:51.777Z",
+            "load": 20.02197265625
+          }
+        ],
+        "logFile": "gate-hv-umm2.553.jsonl"
+      },
+      {
+        "bead": "hv-umm2.556",
+        "candidate": "01a13165-045e-74d3-aab2-23e590ae7018",
+        "gateSeconds": 92.899,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T18:34:33.444Z",
+            "load": 13.7255859375
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T18:34:34.568Z",
+            "load": 13.66748046875
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T18:34:34.569Z",
+            "load": 13.66748046875
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T18:34:34.569Z",
+            "load": 13.66748046875
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T18:34:34.570Z",
+            "load": 13.66748046875
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T18:34:34.570Z",
+            "load": 13.66748046875
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T18:34:34.571Z",
+            "load": 13.66748046875
+          }
+        ],
+        "logFile": "gate-hv-umm2.556.jsonl"
+      },
+      {
+        "bead": "hv-umm2.557",
+        "candidate": "01a1311f-fe78-7da1-922c-8d952e2bb9e4",
+        "gateSeconds": 36.803,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T17:19:09.437Z",
+            "load": 7.43017578125
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T17:19:10.345Z",
+            "load": 7.43017578125
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T17:19:10.346Z",
+            "load": 7.43017578125
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T17:19:10.346Z",
+            "load": 7.43017578125
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T17:19:10.347Z",
+            "load": 7.43017578125
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T17:19:10.347Z",
+            "load": 7.43017578125
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T17:19:10.347Z",
+            "load": 7.43017578125
+          }
+        ],
+        "logFile": "gate-hv-umm2.557.jsonl"
+      },
+      {
+        "bead": "hv-umm2.561",
+        "candidate": "01a13121-f11e-73a2-a9d4-ab62b3fc5181",
+        "gateSeconds": 17.645,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T17:21:17.777Z",
+            "load": 23.09423828125
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T17:21:18.736Z",
+            "load": 23.09423828125
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T17:21:18.737Z",
+            "load": 23.09423828125
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T17:21:18.737Z",
+            "load": 23.09423828125
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T17:21:18.738Z",
+            "load": 23.09423828125
+          }
+        ],
+        "logFile": "gate-hv-umm2.561.jsonl"
+      },
+      {
+        "bead": "hv-umm2.562",
+        "candidate": "01a1314b-57b4-7371-afd6-07371dfaf5d8",
+        "gateSeconds": 98.074,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T18:09:19.056Z",
+            "load": 19.0751953125
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T18:09:20.620Z",
+            "load": 19.0751953125
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T18:09:20.621Z",
+            "load": 19.0751953125
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T18:09:20.622Z",
+            "load": 19.0751953125
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T18:09:20.622Z",
+            "load": 19.0751953125
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T18:09:20.622Z",
+            "load": 19.0751953125
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T18:09:20.623Z",
+            "load": 19.0751953125
+          }
+        ],
+        "logFile": "gate-hv-umm2.562.jsonl"
+      },
+      {
+        "bead": "hv-umm2.563",
+        "candidate": "01a1313d-4999-7df2-927a-6e11905f79b6",
+        "gateSeconds": 20.809,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T17:51:45.360Z",
+            "load": 14.2841796875
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T17:51:46.062Z",
+            "load": 14.2841796875
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T17:51:46.063Z",
+            "load": 14.2841796875
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T17:51:46.063Z",
+            "load": 14.2841796875
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T17:51:46.063Z",
+            "load": 14.2841796875
+          }
+        ],
+        "logFile": "gate-hv-umm2.563.jsonl"
+      },
+      {
+        "bead": "hv-umm2.564",
+        "candidate": "01a13132-660b-74b2-96cf-55824d8a8768",
+        "gateSeconds": 89.693,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T17:39:15.951Z",
+            "load": 10.4794921875
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T17:39:17.272Z",
+            "load": 11.00146484375
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T17:39:17.273Z",
+            "load": 11.00146484375
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T17:39:17.273Z",
+            "load": 11.00146484375
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T17:39:17.274Z",
+            "load": 11.00146484375
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T17:39:17.274Z",
+            "load": 11.00146484375
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T17:39:17.274Z",
+            "load": 11.00146484375
+          }
+        ],
+        "logFile": "gate-hv-umm2.564.jsonl"
+      },
+      {
+        "bead": "hv-umm2.565",
+        "candidate": "01a1313c-737d-7e63-8e5a-bad53bd489c7",
+        "gateSeconds": 81.424,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T17:50:13.841Z",
+            "load": 5.52197265625
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T17:50:14.901Z",
+            "load": 5.52197265625
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T17:50:14.902Z",
+            "load": 5.52197265625
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T17:50:14.902Z",
+            "load": 5.52197265625
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T17:50:14.903Z",
+            "load": 5.52197265625
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T17:50:14.903Z",
+            "load": 5.52197265625
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T17:50:14.904Z",
+            "load": 5.52197265625
+          }
+        ],
+        "logFile": "gate-hv-umm2.565.jsonl"
+      },
+      {
+        "bead": "hv-umm2.567",
+        "candidate": "01a1314c-081b-7142-92e5-983e91c2ec17",
+        "gateSeconds": 84.294,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T18:07:46.493Z",
+            "load": 20.60302734375
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T18:07:47.483Z",
+            "load": 20.60302734375
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T18:07:47.483Z",
+            "load": 20.60302734375
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T18:07:47.484Z",
+            "load": 20.60302734375
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T18:07:47.484Z",
+            "load": 20.60302734375
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T18:07:47.484Z",
+            "load": 20.60302734375
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T18:07:47.485Z",
+            "load": 20.60302734375
+          }
+        ],
+        "logFile": "gate-hv-umm2.567.jsonl"
+      },
+      {
+        "bead": "hv-umm2.568",
+        "candidate": "01a13195-2b39-7a40-a75c-273b46117e50",
+        "gateSeconds": 84.064,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T19:27:10.151Z",
+            "load": 7.9580078125
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T19:27:11.851Z",
+            "load": 7.80078125
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T19:27:11.852Z",
+            "load": 7.80078125
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T19:27:11.852Z",
+            "load": 7.80078125
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T19:27:11.853Z",
+            "load": 7.80078125
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T19:27:11.853Z",
+            "load": 7.80078125
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T19:27:11.854Z",
+            "load": 7.80078125
+          }
+        ],
+        "logFile": "gate-hv-umm2.568.jsonl"
+      },
+      {
+        "bead": "hv-umm2.569",
+        "candidate": "01a1315f-4d98-7862-92c8-83a41fa54b31",
+        "gateSeconds": 95.189,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T18:28:19.189Z",
+            "load": 14.5361328125
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T18:28:20.359Z",
+            "load": 14.5361328125
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T18:28:20.360Z",
+            "load": 14.5361328125
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T18:28:20.361Z",
+            "load": 14.5361328125
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T18:28:20.361Z",
+            "load": 14.5361328125
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T18:28:20.362Z",
+            "load": 14.5361328125
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T18:28:20.362Z",
+            "load": 14.5361328125
+          }
+        ],
+        "logFile": "gate-569-logs.json"
+      },
+      {
+        "bead": "hv-umm2.570",
+        "candidate": "01a13174-7062-7421-b855-b057ebc68d62",
+        "gateSeconds": 17.492,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T18:51:23.498Z",
+            "load": 6.2314453125
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T18:51:24.492Z",
+            "load": 8.294921875
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T18:51:24.493Z",
+            "load": 8.294921875
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T18:51:24.494Z",
+            "load": 8.294921875
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T18:51:24.494Z",
+            "load": 8.294921875
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T18:51:24.494Z",
+            "load": 8.294921875
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T18:51:24.495Z",
+            "load": 8.294921875
+          }
+        ],
+        "logFile": "gate-hv-umm2.570.jsonl"
+      },
+      {
+        "bead": "hv-umm2.571",
+        "candidate": "01a13182-3117-7282-bf24-59d1a1493457",
+        "gateSeconds": 83.798,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T19:06:24.377Z",
+            "load": 10.55517578125
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T19:06:25.409Z",
+            "load": 10.27001953125
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T19:06:25.409Z",
+            "load": 10.27001953125
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T19:06:25.410Z",
+            "load": 10.27001953125
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T19:06:25.410Z",
+            "load": 10.27001953125
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T19:06:25.410Z",
+            "load": 10.27001953125
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T19:06:25.411Z",
+            "load": 10.27001953125
+          }
+        ],
+        "logFile": "gate-hv-umm2.571.jsonl"
+      },
+      {
+        "bead": "hv-umm2.572",
+        "candidate": "01a13183-91d5-79a3-b6e4-23aff63ef236",
+        "gateSeconds": 32.572,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T19:08:00.233Z",
+            "load": 24.42138671875
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T19:08:01.965Z",
+            "load": 24.42138671875
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T19:08:01.965Z",
+            "load": 24.42138671875
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T19:08:01.966Z",
+            "load": 24.42138671875
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T19:08:01.966Z",
+            "load": 24.42138671875
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T19:08:01.966Z",
+            "load": 24.42138671875
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T19:08:01.967Z",
+            "load": 24.42138671875
+          }
+        ],
+        "logFile": "gate-hv-umm2.572.jsonl"
+      },
+      {
+        "bead": "hv-xms9",
+        "candidate": "01a1315b-cb1d-75c0-86b7-a7439ad2083f",
+        "gateSeconds": 82.603,
+        "loads": [
+          {
+            "step": "prepare",
+            "at": "2026-10-12T18:24:28.319Z",
+            "load": 9.53466796875
+          },
+          {
+            "step": "typecheck",
+            "at": "2026-10-12T18:24:29.342Z",
+            "load": 9.53466796875
+          },
+          {
+            "step": "typecheck-node",
+            "at": "2026-10-12T18:24:29.343Z",
+            "load": 9.53466796875
+          },
+          {
+            "step": "import-cycles",
+            "at": "2026-10-12T18:24:29.343Z",
+            "load": 9.53466796875
+          },
+          {
+            "step": "lint",
+            "at": "2026-10-12T18:24:29.343Z",
+            "load": 9.53466796875
+          },
+          {
+            "step": "friction-records",
+            "at": "2026-10-12T18:24:29.344Z",
+            "load": 9.53466796875
+          },
+          {
+            "step": "test-gate",
+            "at": "2026-10-12T18:24:29.344Z",
+            "load": 9.53466796875
+          }
+        ],
+        "logFile": "gate-hv-xms9.jsonl"
+      }
+    ],
+    "scope": "Observed after573sourcecommit; native framed JSONL, per-stage one-minute samples. Whole-stage trace/mean/dependencies-load remain UNKNOWN. This dated supplement qualifies original audit then-unread integration load.",
+    "wholeSuiteGateCount": 21,
+    "existingComparisonPractice": {
+      "bead": "hv-umm2.387",
+      "startAndMeanDifferenceMaximum": "max(2,20percent of lower load)",
+      "scope": "Existing paired experiment practice, reference for assessment rather than newly binding D42 threshold"
+    },
+    "judgment": "Five-run sequence every adjacent start-load pair fails existing comparison practice; three-run sequence first pair fails, second passes. No demonstrated three consecutive comparable-load overruns, no new distinct cause, budget revision or trigger disposition. Varying loads do not prove load caused overrun.",
+    "D19IntegratedObservations": [
+      {
+        "bead": "hv-umm2.203",
+        "vitestSeconds": 64.95,
+        "testStageStartLoad": 5.7197
+      },
+      {
+        "bead": "hv-umm2.565",
+        "vitestSeconds": 66.56,
+        "testStageStartLoad": 5.522
+      },
+      {
+        "bead": "hv-umm2.216",
+        "vitestSeconds": 74.09,
+        "testStageStartLoad": 6.9971
+      }
+    ],
+    "currentControlledLowLoadCompliance": null,
+    "remainingObligation": "Phase5gate46 measures current controlled low-load suite; confirmed controlled over-budget suite requires D19 test-cut response",
+    "readonlyHelper": "Existing Sage bounded supplemental judgment terminal; no writes/native mutations/runtime/tests/providers; one cleaned-WT read failed before process creation and corrected to retained inputs"
   }
 }

@@ -1,3 +1,5 @@
+import { characterYouControl, event, target } from "../../engine/dsl/builders";
+import { rematerialize } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: false,
   cardNumber: 32,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [event(rematerialize(target(characterYouControl())))],
+  verifiedText: "idumz8oitg",
 });

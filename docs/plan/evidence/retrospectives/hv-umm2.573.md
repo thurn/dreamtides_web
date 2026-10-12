@@ -123,3 +123,31 @@ Raw native records and source copies are retained under the bead's ignored
 `artifacts/qa/hv-umm2.573/audit/` directory. The read-only Sage ran no
 validators or providers; inspection errors and their corrections remain
 separate from author validation.
+
+## Dated gate-load supplement, carried by hv-umm2.217
+
+After the retrospective commit, supported native framed gate logs supplied
+actual per-stage one-minute start-load readings for all 26 selected gates.
+The original integration-load unknown records the evidence available in
+that audit. Twenty-one gates selected the 351-file whole suite. Static
+checks already run beside tests, consistent with .387. Whole-stage load
+traces, means, and dependency-step load remain unknown.
+
+The five consecutive readings above 90 seconds began their test stages at
+loads 14.536, 21.048, 13.667, 18.031, and 12.688; the later three began at
+25.163, 13.448, and 15.364. Existing .387 paired comparison practice uses
+a maximum difference of two or twenty percent of the lower load for both
+start and mean samples. This is an existing experimental reference. Every
+adjacent pair in the first sequence fails its start comparison; the second
+sequence's first pair fails and second pair passes. The supplement therefore
+establishes no three consecutive comparable-load overruns or distinct new
+cause. It does not attribute the overruns causally to host load. Budgets and
+existing dispositions remain unchanged.
+
+Integrated whole-suite Vitest observations include .203 at 64.95 seconds
+with start load 5.7197, .565 at 66.56 seconds with start load 5.5220, and
+.216 at 74.09 seconds with start load 6.9971. These include cold caches and
+concurrent checks. Current sustained low-load compliance remains
+unestablished; .46 retains the current measurement obligation. A confirmed
+controlled over-budget suite requires D19's test-cut response. This creator
+bead carries the dated evidence correction with original records preserved.

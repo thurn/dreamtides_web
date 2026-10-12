@@ -1,3 +1,5 @@
+import { event, fromVoid } from "../../engine/dsl/builders";
+import { grantReclaim } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: true,
   cardNumber: 11,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [event(grantReclaim(fromVoid(), { duration: "untilEndOfTurn" }))],
+  verifiedText: "10vge6yfg7g",
 });

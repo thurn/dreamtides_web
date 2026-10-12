@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import { playImmediately } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: true,
   cardNumber: 9,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [event(playImmediately("void", { costAtMost: 2 }))],
+  verifiedText: "vziuu2vqec",
 });
