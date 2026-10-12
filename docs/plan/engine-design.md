@@ -1989,8 +1989,10 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     Descriptor fidelity reads sampled raw cards and effects independently of the
     sample's remembered copies. Observation records are bookkeeping for both
     optional-loop signatures and mandatory-cycle positions.
-  - A static ability working from a hand or a deck shows in the view only
-    as what it changes (RD-hv-umm2.53-2), so after dealing, determinization
+  - A static ability working from a hand or a deck is observed through the
+    characteristics and costs it changes on cards the viewer can identify
+    (RD-hv-umm2.53-2). These observations constrain hidden-source sampling,
+    so after dealing, determinization
     reconciles the sample with the characteristics the view shows its cards
     having (`characteristicsView`, shared with `view`). Only when a hidden
     card has such an ability does it run: it descends on a distance (type,
@@ -2005,7 +2007,11 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
     that no deal explains, such as one whose floating effect from a source
     the viewer cannot see was left out, keeps the closest sample found. The
     reconciliation draws nothing, so a deal it leaves unchanged is the deal
-    of the same draws without it.
+    of the same draws without it. Static void-play permissions in
+    `staticPlayPermissions` are projected only from sources the viewer can
+    identify, with any named target also identifiable to that viewer. Their
+    originating source provenance stays internal to `Layers` and is not
+    included in the permission projection.
 
 ## Presentation
 

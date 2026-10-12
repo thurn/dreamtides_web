@@ -1,0 +1,109 @@
+{
+  "bead": "hv-umm2.466",
+  "base": "61be71f2e6f761740da551038c3d6ae3424d3648",
+  "window": {
+    "nativeClaimUtc": "2026-10-12T01:17:33Z",
+    "firstDraftEvidenceUtc": "2026-10-12T01:19:05.536819+00:00",
+    "helperDispatchUtc": "not separately timestamped; supplied native claim is an explicit elapsed-window proxy",
+    "commitPreparationUtc": "2026-10-12T01:20:44.201653+00:00",
+    "nativeClaimToCommitPreparationMin": 3.1866942166666665,
+    "implementMinBasis": "native claim to commit preparation as labelled dispatch proxy; no separate helper-dispatch timestamp"
+  },
+  "scope": "Only determinization bullet in docs/plan/engine-design.md and own friction/measurement records",
+  "readOnlyProvenance": [
+    "src/engine/view/view.ts staticPlayPermissions",
+    "src/engine/continuous/layers.ts OrderedChange.staticSource",
+    "src/engine/view/static-play-permissions.test.ts hidden alternatives/knowledge/sample contracts"
+  ],
+  "contract": "Observable characteristic/cost changes constrain hidden-source sampling; static permission presentation requires identifiable source and named target; originating metadata internal. Reconciliation procedure and RD-hv-umm2.53-2 preserved. Deck-any controls do not imply an applicability transition on a hand/deck swap.",
+  "checks": {
+    "review": {
+      "receipt": "artifacts/qa/hv-umm2.466/review.log",
+      "scope": "documentation/evidence quick review; validates friction records only, no tests selected",
+      "starts": [
+        {
+          "step": "friction-records",
+          "utc": "2026-10-12T01:19:28.688Z",
+          "oneMinuteLoad": 25.0751953125
+        }
+      ],
+      "stepElapsedSeconds": {
+        "friction-records": 0.1
+      },
+      "wallSeconds": 0.170421875,
+      "wallBasis": "direct exec observer wall time",
+      "exitCode": 0
+    },
+    "knip": {
+      "receipt": "artifacts/qa/hv-umm2.466/knip.log",
+      "scope": "whole repository unused files and exports; materialization prepare/restore",
+      "starts": [
+        {
+          "step": "prepare",
+          "utc": "2026-10-12T01:19:29.012Z",
+          "oneMinuteLoad": 25.0751953125
+        },
+        {
+          "step": "knip",
+          "utc": "2026-10-12T01:19:30.229Z",
+          "oneMinuteLoad": 27.15087890625
+        },
+        {
+          "step": "restore-local-assets",
+          "utc": "2026-10-12T01:19:32.205Z",
+          "oneMinuteLoad": 27.15087890625
+        }
+      ],
+      "stepElapsedSeconds": {
+        "prepare": 1.2,
+        "knip": 2.0,
+        "restore-local-assets": 0.5
+      },
+      "wallSeconds": 3.7,
+      "wallBasis": "sum of sequential preparation/check/restore step timings",
+      "exitCode": 0
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "draft before required validation",
+      "utc": "2026-10-12T01:19:05.536819+00:00",
+      "oneMinute": 22.73
+    },
+    {
+      "scope": "review:friction-records",
+      "utc": "2026-10-12T01:19:28.688Z",
+      "oneMinute": 25.0751953125
+    },
+    {
+      "scope": "knip:prepare",
+      "utc": "2026-10-12T01:19:29.012Z",
+      "oneMinute": 25.0751953125
+    },
+    {
+      "scope": "knip:knip",
+      "utc": "2026-10-12T01:19:30.229Z",
+      "oneMinute": 27.15087890625
+    },
+    {
+      "scope": "knip:restore-local-assets",
+      "utc": "2026-10-12T01:19:32.205Z",
+      "oneMinute": 27.15087890625
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "verificationChoice": "Documentation-only: required review and knip; no new tests/browser/full/fuzz checks",
+  "runtime": "Review/knip observers terminal exit0; no provider/browser/server processes or other writers created. Updated JSON records receive existing --validate-records check.",
+  "preExistingIssues": [],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "required npm run review friction-records step start"
+      }
+    }
+  }
+}
