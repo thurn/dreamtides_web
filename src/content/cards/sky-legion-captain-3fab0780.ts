@@ -1,4 +1,8 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
 import { card } from "../define";
+import legionnaire from "../figments/legionnaire-e757b306";
 
 export default card({
   name: "Sky Legion Captain",
@@ -28,5 +32,11 @@ export default card({
   cardNumber: 362,
   art: { x: 0.092, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [
+    triggered(
+      whenYouPlay({ subtype: "Warrior" }),
+      p.payTo({ energy: 2 }, p.materializeFigments(parseFigmentId(legionnaire.id), 1, v.amplified ? { spark: 2 } : {})),
+    ),
+  ],
+  verifiedText: "xohhd5z6iv",
 });

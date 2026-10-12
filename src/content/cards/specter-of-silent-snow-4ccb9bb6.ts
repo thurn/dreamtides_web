@@ -1,3 +1,6 @@
+import { self } from "../../engine/dsl/builders";
+import { onDawn, triggered, whenAbandon } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 350,
   art: { x: -0.105, y: -0.654, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(onDawn(), p.abandon()),
+    triggered(whenAbandon("you", { cardType: "character" }), p.sequence(p.draw(1), p.gainSpark(self(), 1))),
+  ],
+  verifiedText: "wodwrp45o9",
 });
