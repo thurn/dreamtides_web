@@ -1,3 +1,5 @@
+import { all, anyCharacter, event } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 416,
   art: { x: 0.084, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.dissolve(all(anyCharacter())))],
+  verifiedText: "1p83xh1bw5k",
 });

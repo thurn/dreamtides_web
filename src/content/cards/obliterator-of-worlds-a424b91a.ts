@@ -1,3 +1,6 @@
+import { enemyCharacter, keyword, target } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 476,
   art: { x: 0, y: 0.4, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("offering"), triggered(onMaterialized(), p.dissolve(target(enemyCharacter())))],
+  verifiedText: "u22m45oer9",
 });

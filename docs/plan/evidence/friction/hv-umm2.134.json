@@ -1,7 +1,7 @@
 {
   "bead": "hv-umm2.134",
   "phase": 5,
-  "implementMin": 23.5909203,
+  "implementMin": 23.95,
   "localValidationS": {
     "focused": 5.175837125,
     "preflight": 0.805263084,

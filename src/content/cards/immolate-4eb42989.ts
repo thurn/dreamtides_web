@@ -1,3 +1,5 @@
+import { enemyCharacter, event, keyword, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 167,
   art: { x: 0, y: 1, scale: 1.1 },
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("offering"), event(p.dissolve(target(enemyCharacter())))],
+  verifiedText: "213pikvx3rc",
 });

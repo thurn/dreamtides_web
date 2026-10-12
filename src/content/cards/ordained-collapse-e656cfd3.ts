@@ -1,3 +1,5 @@
+import { all, anyCharacter, event, x } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -7,6 +9,7 @@ export default card({
   renderedText: "Dissolve each character with cost X●.",
   energyCost: 3,
   energyCosts: ["3", "X"],
+  xMinimum: 0,
   cardType: "Event",
   subtype: "",
   rarity: "Common",
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 90,
   art: { x: -0.252, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.dissolve(all(anyCharacter({ costAtLeast: x(), costAtMost: x() }))))],
+  verifiedText: "2e7zq85v4ha",
 });

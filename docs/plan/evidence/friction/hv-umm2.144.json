@@ -1,0 +1,36 @@
+{
+  "bead": "hv-umm2.144",
+  "phase": 5,
+  "implementMin": 55.85,
+  "localValidationS": {
+    "focused": 7.597958083999401,
+    "preflight": 1.2096092499996303,
+    "review": 64.2001824580002,
+    "knip": 3.6778884579980513,
+    "fuzz": 229.4051021669984,
+    "sweep": 1303.8192455419994,
+    "routes": 492.41236562500126,
+    "zero-x-witness": 0.6466888340000878,
+    "zero-x-witness-final": 0.368194417002087,
+    "review-final": 42.83060687499892,
+    "knip-final": 2.0986999590022606,
+    "fuzz-final": 172.3526965830024,
+    "preflight-final": 0.9035867089987732,
+    "sweep-final": 102.58673345900024,
+    "mass-reverification": 384.14838820799923,
+    "mass-final": 48.6598477080006
+  },
+  "hostLoad": 11.1650390625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 23.049666666666667,
+      "note": "Measured shared FIFO wait across full sweep, initial routes, refreshed changed-card sweep and final mass. Cancelled interim mass total retained separately; wait partition unknown/excluded. Peer ownership progresses and yields normally; no queue/provider intervention."
+    }
+  ]
+}

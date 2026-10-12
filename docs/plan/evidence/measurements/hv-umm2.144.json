@@ -1,0 +1,999 @@
+{
+  "bead": "hv-umm2.144",
+  "phase": 5,
+  "base": "0d8c0a97c4307e3625e962bbffa752109445326a",
+  "measurementWindow": {
+    "start": "2026-10-12T02:32:19Z",
+    "startKind": "actual parent dispatch timestamp",
+    "end": "2026-10-12T03:28:10Z",
+    "endKind": "Actual sole source-commit metadata clock fixed from current UTC immediately before invocation; verified against resulting Git commit timestamp, not evidence freeze proxy.",
+    "dispatchToCommitMin": 55.85
+  },
+  "entities": [
+    "18979c10-39b8-42fb-ac1d-dd784da498d1",
+    "e656cfd3-7481-46e5-934d-4dd242b00031",
+    "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea",
+    "4eb42989-7498-4995-a3ab-89eb026b0c13",
+    "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5"
+  ],
+  "authoring": {
+    "newPrimitives": 0,
+    "newScenarios": 0,
+    "newTestEntrypoints": 0
+  },
+  "d20": {
+    "classification": "Independent existing target/all selectors, X bounds, Reclaim discard, Offering and Materialized composition; no unusual targeting or internal interaction requiring scenario specs."
+  },
+  "d21": {
+    "sampleRule": "first SHA-256 UUID byte < 26",
+    "firstBytes": {
+      "18979c10-39b8-42fb-ac1d-dd784da498d1": 213,
+      "e656cfd3-7481-46e5-934d-4dd242b00031": 148,
+      "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea": 228,
+      "4eb42989-7498-4995-a3ab-89eb026b0c13": 151,
+      "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5": 144
+    },
+    "judgedEntities": [],
+    "newPromptKinds": [],
+    "newStatusIndicators": [],
+    "newVisualKinds": [],
+    "classification": "Existing target, chooseX, playRoute, discardCost and offeringCost roles and Dissolve/Reclaim/Offering presentation; full default sweep remains required."
+  },
+  "validation": {
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": "2026-10-12T02:34:56.938138+00:00",
+      "elapsedS": 7.597958083999401,
+      "exitCode": 0,
+      "hostLoad": [
+        15.05908203125,
+        16.8486328125,
+        15.865234375
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/focused.log",
+      "files": 2,
+      "cases": 1286
+    },
+    "preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "18979c10-39b8-42fb-ac1d-dd784da498d1,e656cfd3-7481-46e5-934d-4dd242b00031,7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea,4eb42989-7498-4995-a3ab-89eb026b0c13,a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5"
+      ],
+      "start": "2026-10-12T02:34:58.097261+00:00",
+      "elapsedS": 1.2096092499996303,
+      "exitCode": 0,
+      "hostLoad": [
+        14.65380859375,
+        16.73486328125,
+        15.83056640625
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/preflight.log",
+      "counts": {
+        "pass": 58,
+        "skip": 42,
+        "fail": 0,
+        "pending": 0
+      }
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T02:35:29.871612+00:00",
+      "elapsedS": 64.2001824580002,
+      "exitCode": 0,
+      "hostLoad": [
+        23.75732421875,
+        18.6845703125,
+        16.564453125
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/review.log",
+      "files": 221,
+      "cases": 3085
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T02:37:00.651761+00:00",
+      "elapsedS": 3.6778884579980513,
+      "exitCode": 0,
+      "hostLoad": [
+        31.44921875,
+        21.53076171875,
+        17.81689453125
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/knip.log"
+    },
+    "fuzz": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "hv144-dissolve",
+        "--weight-uuids",
+        "18979c10-39b8-42fb-ac1d-dd784da498d1,e656cfd3-7481-46e5-934d-4dd242b00031,7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea,4eb42989-7498-4995-a3ab-89eb026b0c13,a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5"
+      ],
+      "start": "2026-10-12T02:34:59.253669+00:00",
+      "elapsedS": 229.4051021669984,
+      "exitCode": 0,
+      "hostLoad": [
+        14.65380859375,
+        16.73486328125,
+        15.83056640625
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/fuzz.log",
+      "games": 300,
+      "steps": 184511,
+      "prompts": 4673,
+      "interactiveReruns": 449,
+      "engineWallS": 228.8,
+      "cpuS": 239.0,
+      "failures": 0,
+      "targetCoverage": [
+        {
+          "kind": "card",
+          "uuid": "18979c10-39b8-42fb-ac1d-dd784da498d1",
+          "included": 617,
+          "exercised": 397
+        },
+        {
+          "kind": "card",
+          "uuid": "e656cfd3-7481-46e5-934d-4dd242b00031",
+          "included": 619,
+          "exercised": 290
+        },
+        {
+          "kind": "card",
+          "uuid": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea",
+          "included": 609,
+          "exercised": 258
+        },
+        {
+          "kind": "card",
+          "uuid": "4eb42989-7498-4995-a3ab-89eb026b0c13",
+          "included": 614,
+          "exercised": 464
+        },
+        {
+          "kind": "card",
+          "uuid": "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
+          "included": 617,
+          "exercised": 485
+        }
+      ]
+    },
+    "sweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.144",
+        "--cards",
+        "18979c10-39b8-42fb-ac1d-dd784da498d1,e656cfd3-7481-46e5-934d-4dd242b00031,7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea,4eb42989-7498-4995-a3ab-89eb026b0c13,a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
+        "--port",
+        "5174"
+      ],
+      "start": "2026-10-12T02:37:14.889571+00:00",
+      "elapsedS": 1303.8192455419994,
+      "exitCode": 0,
+      "hostLoad": [
+        32.009765625,
+        22.11474609375,
+        18.08837890625
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/sweep.log"
+    },
+    "routes": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "routes",
+        "--bead",
+        "hv-umm2.144",
+        "--port",
+        "5174",
+        "--timeout",
+        "300"
+      ],
+      "start": "2026-10-12T02:59:20.655891+00:00",
+      "elapsedS": 492.41236562500126,
+      "exitCode": 1,
+      "hostLoad": [
+        8.80908203125,
+        8.619140625,
+        11.98583984375
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/routes.log"
+    },
+    "zero-x-witness": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/hv144-dissolve-receipts/zero-x-witness.mts"
+      ],
+      "start": "2026-10-12T03:17:52.708209+00:00",
+      "elapsedS": 0.6466888340000878,
+      "exitCode": 0,
+      "hostLoad": [
+        11.52783203125,
+        16.7646484375,
+        15.30517578125
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/zero-x-witness.log"
+    },
+    "zero-x-witness-final": {
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/hv144-dissolve-receipts/zero-x-witness-final.mts"
+      ],
+      "start": "2026-10-12T03:20:23.164172+00:00",
+      "elapsedS": 0.368194417002087,
+      "exitCode": 0,
+      "hostLoad": [
+        7.5478515625,
+        13.33154296875,
+        14.158203125
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/zero-x-witness-final.log"
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T03:17:53.381865+00:00",
+      "elapsedS": 42.83060687499892,
+      "exitCode": 0,
+      "hostLoad": [
+        11.1650390625,
+        16.6025390625,
+        15.25634765625
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/review-final.log",
+      "files": 221,
+      "cases": 3085
+    },
+    "knip-final": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T03:18:57.063325+00:00",
+      "elapsedS": 2.0986999590022606,
+      "exitCode": 0,
+      "hostLoad": [
+        9.02880859375,
+        15.1455078125,
+        14.810546875
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/knip-final.log"
+    },
+    "fuzz-final": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "hv144-dissolve-zero-x",
+        "--weight-uuids",
+        "18979c10-39b8-42fb-ac1d-dd784da498d1,e656cfd3-7481-46e5-934d-4dd242b00031,7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea,4eb42989-7498-4995-a3ab-89eb026b0c13,a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5"
+      ],
+      "start": "2026-10-12T03:17:53.857214+00:00",
+      "elapsedS": 172.3526965830024,
+      "exitCode": 0,
+      "hostLoad": [
+        11.1650390625,
+        16.6025390625,
+        15.25634765625
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/fuzz-final.log",
+      "games": 300,
+      "steps": 178103,
+      "prompts": 4632,
+      "interactiveReruns": 510,
+      "failures": 0,
+      "engineWallS": 171.7,
+      "cpuS": 184.2,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 1
+      },
+      "targetCoverage": [
+        {
+          "kind": "card",
+          "uuid": "18979c10-39b8-42fb-ac1d-dd784da498d1",
+          "included": 616,
+          "exercised": 387
+        },
+        {
+          "kind": "card",
+          "uuid": "e656cfd3-7481-46e5-934d-4dd242b00031",
+          "included": 614,
+          "exercised": 277
+        },
+        {
+          "kind": "card",
+          "uuid": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea",
+          "included": 625,
+          "exercised": 249
+        },
+        {
+          "kind": "card",
+          "uuid": "4eb42989-7498-4995-a3ab-89eb026b0c13",
+          "included": 617,
+          "exercised": 450
+        },
+        {
+          "kind": "card",
+          "uuid": "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
+          "included": 616,
+          "exercised": 455
+        }
+      ]
+    },
+    "preflight-final": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "e656cfd3-7481-46e5-934d-4dd242b00031"
+      ],
+      "start": "2026-10-12T03:17:55.008079+00:00",
+      "elapsedS": 0.9035867089987732,
+      "exitCode": 0,
+      "hostLoad": [
+        11.1650390625,
+        16.6025390625,
+        15.25634765625
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/preflight-final.log",
+      "counts": {
+        "pass": 12,
+        "skip": 8,
+        "pending": 0,
+        "fail": 0
+      }
+    },
+    "sweep-final": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.144",
+        "--cards",
+        "e656cfd3-7481-46e5-934d-4dd242b00031",
+        "--port",
+        "5174"
+      ],
+      "start": "2026-10-12T03:19:22.473394+00:00",
+      "elapsedS": 102.58673345900024,
+      "exitCode": 0,
+      "hostLoad": [
+        9.9365234375,
+        14.89990234375,
+        14.7333984375
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/sweep-final.log"
+    },
+    "mass-reverification": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "mass-reverification",
+        "--bead",
+        "hv-umm2.144",
+        "--port",
+        "5174",
+        "--timeout",
+        "300"
+      ],
+      "start": "2026-10-12T03:09:06.743057+00:00",
+      "elapsedS": 384.14838820799923,
+      "exitCode": 143,
+      "hostLoad": [
+        5.71435546875,
+        8.7373046875,
+        11.45703125
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/mass-reverification.log"
+    },
+    "mass-final": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "mass-final",
+        "--bead",
+        "hv-umm2.144",
+        "--port",
+        "5174",
+        "--timeout",
+        "300"
+      ],
+      "start": "2026-10-12T03:21:37.272925+00:00",
+      "elapsedS": 48.6598477080006,
+      "exitCode": 0,
+      "hostLoad": [
+        8.02001953125,
+        12.310546875,
+        13.70458984375
+      ],
+      "log": "/tmp/hv144-dissolve-receipts/mass-final.log"
+    }
+  },
+  "sourceHashesSha256": {
+    "src/content/cards/fell-swoop-18979c10.ts": "b0de02e257294ec993838d56bd7d556aa907991c83019a5148675a6aaefb70ff",
+    "src/content/cards/obliterator-of-worlds-a424b91a.ts": "5b4e99a82d1edf8d116dfc9e9791adc6aefcb6587e293d08a0f0aaffd704846b",
+    "src/content/cards/immolate-4eb42989.ts": "c6f661f5439ecfa1b5f3b730011ce75eb31a0cdea49ba73610ad42904969adef",
+    "src/content/cards/apocalypse-7709ea42.ts": "fbbadadc18434148ac81bdcd9eb7553ebfac766691eb9c96b492e34da1ec30d4",
+    "src/content/cards/ordained-collapse-e656cfd3.ts": "9258727826a8b4f16bd110c4ad4568f9a144a070ade2f63990cf4e6fda77049a"
+  },
+  "historicalMeasurementCorrection": {
+    "bead": "hv-umm2.134",
+    "source": "e94ed1d17696edfdfe82310bca5f5741b7709111",
+    "sourceCommitAt": "2026-10-12T02:10:17Z",
+    "dispatchNoteProxyAt": "2026-10-12T01:46:20Z",
+    "implementMin": 23.95,
+    "preservedFreezeAt": "2026-10-12T02:09:55.455218+00:00",
+    "actualSpawn": "unknown; timestamp proxy retained"
+  },
+  "validationScope": {
+    "reviewFull": "not required: bounded content composition and scoped measurement correction, no infrastructure/config/architecture changes",
+    "runtimeBodies": "read-only audited; no repairs or engine body changes",
+    "sourceFrozenBeforeBrowser": true,
+    "lightPreparationFinishedBeforeSweep": true
+  },
+  "browserQa": {
+    "fullSweep": {
+      "event": "cardSweepSummary",
+      "counts": {
+        "pass": 58,
+        "skip": 42
+      },
+      "attemptCounts": {
+        "pass": 58,
+        "skip": 42
+      },
+      "hostLoad": 32.009765625,
+      "sessions": 4,
+      "leaseYields": 3,
+      "wallMs": {
+        "browserLeaseWait": 897869,
+        "serve": 5313,
+        "scenario": 394535.85420899984,
+        "cleanup": 949.3810419999936,
+        "execution": 400871.6730840001,
+        "total": 1298740.6730840001
+      }
+    },
+    "diagnostics": "Three original Reclaim/Offering routes passed; one initial probe observation failure retained; source xMinimum0 repaired, cancelled interim observation has no success claim; three final mass cases passed with bounded published-probe reader.",
+    "defaultFixtureLimitation": "Node base observations for Ordained Collapse and Apocalypse resolve without Dissolved events; bounded declared-board diagnostic covers authored mass-removal clauses.",
+    "initialDiagnostics": {
+      "report": "routes-initial-retained.result.json",
+      "verdict": "fail",
+      "wallMs": {
+        "browserLeaseWait": 455830,
+        "serve": 1554,
+        "scenario": 29704,
+        "total": 487113
+      },
+      "error": "desktop#1: Error: page.evaluate: Error: mass probe missing\n    at eval (eval at evaluate (:311:30), <anonymous>:1:37)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "caps": [],
+      "completedRouteCases": [
+        {
+          "uuid": "18979c10-39b8-42fb-ac1d-dd784da498d1",
+          "route": "reclaim",
+          "gameId": "3g8vb6",
+          "rows": 36,
+          "source": "i11",
+          "target": "i12",
+          "payment": "i1",
+          "sourceFinal": "banished",
+          "paymentFinal": "void",
+          "energy": 0,
+          "persistedPaymentAnswer": {
+            "gameId": "3g8vb6",
+            "version": 0,
+            "promptId": "0:1:1",
+            "side": "player",
+            "fingerprint": "1s7g5mjp9kw",
+            "value": [
+              "i1"
+            ],
+            "timestamp": "2026-10-12T03:07:04.259Z",
+            "event": "engine.promptAnswered",
+            "seq": 32
+          },
+          "persistedSourceAction": {
+            "gameId": "3g8vb6",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i11",
+              "from": "void"
+            },
+            "answers": [
+              {
+                "fingerprint": "x7e2fswl9y",
+                "value": [
+                  "i12"
+                ],
+                "auto": true
+              },
+              {
+                "fingerprint": "1s7g5mjp9kw",
+                "value": [
+                  "i1"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-12T03:07:04.259Z",
+            "event": "engine.action",
+            "seq": 33
+          }
+        },
+        {
+          "uuid": "4eb42989-7498-4995-a3ab-89eb026b0c13",
+          "route": "offering",
+          "gameId": "vpuiad",
+          "rows": 38,
+          "source": "i1",
+          "target": "i12",
+          "payment": "i2",
+          "sourceFinal": "void",
+          "paymentFinal": "banished",
+          "energy": 0,
+          "persistedPaymentAnswer": {
+            "gameId": "vpuiad",
+            "version": 0,
+            "promptId": "0:1:2",
+            "side": "player",
+            "fingerprint": "1pdszlio4hi",
+            "value": [
+              "i2"
+            ],
+            "timestamp": "2026-10-12T03:07:12.096Z",
+            "event": "engine.promptAnswered",
+            "seq": 34
+          },
+          "persistedSourceAction": {
+            "gameId": "vpuiad",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i1",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "1gt6n34447k",
+                "value": 1,
+                "auto": true
+              },
+              {
+                "fingerprint": "1uzhyfd30o7",
+                "value": [
+                  "i12"
+                ],
+                "auto": true
+              },
+              {
+                "fingerprint": "1pdszlio4hi",
+                "value": [
+                  "i2"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-12T03:07:12.097Z",
+            "event": "engine.action",
+            "seq": 35
+          }
+        },
+        {
+          "uuid": "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
+          "route": "offering",
+          "gameId": "quodj4",
+          "rows": 40,
+          "source": "i1",
+          "target": "i12",
+          "payment": "i3",
+          "sourceFinal": "play",
+          "paymentFinal": "banished",
+          "energy": 0,
+          "persistedPaymentAnswer": {
+            "gameId": "quodj4",
+            "version": 0,
+            "promptId": "0:1:1",
+            "side": "player",
+            "fingerprint": "eszb48bnno",
+            "value": [
+              "i3"
+            ],
+            "timestamp": "2026-10-12T03:07:19.858Z",
+            "event": "engine.promptAnswered",
+            "seq": 34
+          },
+          "persistedSourceAction": {
+            "gameId": "quodj4",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i1",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "1k9fmp30iit",
+                "value": 1,
+                "auto": true
+              },
+              {
+                "fingerprint": "eszb48bnno",
+                "value": [
+                  "i3"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-12T03:07:19.859Z",
+            "event": "engine.action",
+            "seq": 35
+          }
+        }
+      ],
+      "retentionLimit": "Step0 successful result is not preserved in final runner result because step1 failed. Source script assertions completed for all three routes; raw step logs/captures and per-game original dev logs retain evidence. No completed route was rerun.",
+      "failureBoundary": {
+        "card": "e656cfd3-7481-46e5-934d-4dd242b00031",
+        "gameId": "wtdh8z",
+        "xAnswer": 1,
+        "publishedActionAt": "2026-10-12T03:07:27.120Z",
+        "incomplete": "first committed resolution read threw missing probe",
+        "cause": "Unproved transient publication boundary; probe effect cleanup deletes its prior window probe during rerender; local assertion assumed permanent presence.",
+        "changedCondition": "Only local incomplete mass-case diagnostic reader changed from immediate throwing read to bounded published-probe wait. Exact content source remains frozen."
+      },
+      "initialScriptSha256": "7e0a0af83a7d8889383383f4d1627f0cc2f3034cce3c0299847bf6280d58aa19",
+      "paymentProvenance": "Each paid physical ID derived from its actual persisted cost prompt fingerprint/answer; Obliterator paid i3, distinct from Immolate i2."
+    },
+    "changedCardFinalSweep": {
+      "event": "cardSweepSummary",
+      "counts": {
+        "pass": 12,
+        "skip": 8
+      },
+      "attemptCounts": {
+        "pass": 12,
+        "skip": 8
+      },
+      "hostLoad": 9.9365234375,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 5612,
+        "serve": 949,
+        "scenario": 90675.53875,
+        "cleanup": 244.35208299999067,
+        "execution": 91894.24862500001,
+        "total": 97506.24862500001
+      }
+    },
+    "cancelledMassInvocation": {
+      "observer": 47884,
+      "exitCode": 143,
+      "receipt": "mass-reverification-cancellation.json",
+      "successClaim": false,
+      "leaseWaitPartition": "unknown: cancelled before final metrics export; total384.148s retained separately and excluded from measured lease-wait sum"
+    },
+    "finalMassDiagnostics": {
+      "report": "mass-final.result.json",
+      "verdict": "pass",
+      "wallMs": {
+        "browserLeaseWait": 23669,
+        "serve": 1257,
+        "scenario": 18414,
+        "total": 43367
+      },
+      "caps": [],
+      "cases": [
+        {
+          "uuid": "e656cfd3-7481-46e5-934d-4dd242b00031",
+          "chosenX": 0,
+          "source": "i4",
+          "victims": [
+            "i1",
+            "i13"
+          ],
+          "survivors": [
+            "i2",
+            "i3",
+            "i14",
+            "i15"
+          ],
+          "dissolved": [
+            "i1",
+            "i13"
+          ],
+          "payments": [
+            -3
+          ],
+          "currentEnergy": 2,
+          "logs": {
+            "gameId": "vq9a9p",
+            "rows": 33,
+            "action": {
+              "gameId": "vq9a9p",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i4",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "28683owcpiq",
+                  "value": 0
+                }
+              ],
+              "timestamp": "2026-10-12T03:22:06.443Z",
+              "event": "engine.action",
+              "seq": 31
+            },
+            "xAnswer": {
+              "gameId": "vq9a9p",
+              "version": 0,
+              "promptId": "0:1:0",
+              "side": "player",
+              "fingerprint": "28683owcpiq",
+              "value": 0,
+              "timestamp": "2026-10-12T03:22:06.443Z",
+              "event": "engine.promptAnswered",
+              "seq": 30
+            },
+            "exportedRows": 33
+          }
+        },
+        {
+          "uuid": "e656cfd3-7481-46e5-934d-4dd242b00031",
+          "chosenX": 1,
+          "source": "i4",
+          "victims": [
+            "i2",
+            "i14"
+          ],
+          "survivors": [
+            "i1",
+            "i3",
+            "i13",
+            "i15"
+          ],
+          "dissolved": [
+            "i2",
+            "i14"
+          ],
+          "payments": [
+            -3,
+            -1
+          ],
+          "currentEnergy": 1,
+          "logs": {
+            "gameId": "2kpzjc",
+            "rows": 33,
+            "action": {
+              "gameId": "2kpzjc",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i4",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "28683owcpiq",
+                  "value": 1
+                }
+              ],
+              "timestamp": "2026-10-12T03:22:11.530Z",
+              "event": "engine.action",
+              "seq": 31
+            },
+            "xAnswer": {
+              "gameId": "2kpzjc",
+              "version": 0,
+              "promptId": "0:1:0",
+              "side": "player",
+              "fingerprint": "28683owcpiq",
+              "value": 1,
+              "timestamp": "2026-10-12T03:22:11.530Z",
+              "event": "engine.promptAnswered",
+              "seq": 30
+            },
+            "exportedRows": 33
+          }
+        },
+        {
+          "uuid": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea",
+          "chosenX": null,
+          "source": "i4",
+          "victims": [
+            "i1",
+            "i2",
+            "i3",
+            "i13",
+            "i14",
+            "i15"
+          ],
+          "survivors": [],
+          "dissolved": [
+            "i1",
+            "i2",
+            "i3",
+            "i13",
+            "i14",
+            "i15"
+          ],
+          "payments": [
+            -4
+          ],
+          "currentEnergy": 1,
+          "logs": {
+            "gameId": "oxmve4",
+            "rows": 28,
+            "action": {
+              "gameId": "oxmve4",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i4",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-12T03:22:16.228Z",
+              "event": "engine.action",
+              "seq": 26
+            },
+            "xAnswer": null,
+            "exportedRows": 28
+          }
+        }
+      ]
+    },
+    "finalEffectiveSweep": {
+      "distinctCells": 100,
+      "pass": 58,
+      "skip": 42,
+      "fail": 0,
+      "retainedSupersededSweepRows": 20,
+      "rawSweepReports": 70,
+      "diagnosticPassRows": 6,
+      "retainedDiagnosticFailRows": 1,
+      "judgedRows": 0
+    },
+    "combinedMeasuredLeaseWaitS": 1382.98,
+    "leaseWaitScope": "Sum of completed metric exports only; cancelled interim invocation has no exported wait partition and is excluded, so this is a lower bound for all attempts.",
+    "ledgerActorProvenance": "All120 retained/final sweep rows carry explicit as player/enemy, each checked against its exact native sweep console line (log/line). Effective100 keys independently distinct by UUID/variant/as;20 superseded retained."
+  },
+  "runtimeAttributionCorrection": {
+    "earlierQueueOnlyClaim": "Diagnostic PID34888/ticket18 was initially attributed to this bead in progress messages.",
+    "verifiedActualOwner": {
+      "wrapper": 42136,
+      "runner": 42144,
+      "ticket": 19,
+      "command": "node scripts/qa/run-scenario.mjs routes --bead hv-umm2.144 --port 5174 --timeout 300",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-144-dissolve-removal"
+    },
+    "correction": "Read-only ps command verification established34888 belongs to peer hv-umm2.140 judged-remaining; it is excluded from all owned cleanup. Parent confirmed no wrong PID entered native checkpoint. No process/provider/queue mutation occurred."
+  },
+  "sourceHashesBeforeZeroXCorrection": {
+    "src/content/cards/fell-swoop-18979c10.ts": "b0de02e257294ec993838d56bd7d556aa907991c83019a5148675a6aaefb70ff",
+    "src/content/cards/obliterator-of-worlds-a424b91a.ts": "5b4e99a82d1edf8d116dfc9e9791adc6aefcb6587e293d08a0f0aaffd704846b",
+    "src/content/cards/immolate-4eb42989.ts": "c6f661f5439ecfa1b5f3b730011ce75eb31a0cdea49ba73610ad42904969adef",
+    "src/content/cards/apocalypse-7709ea42.ts": "fbbadadc18434148ac81bdcd9eb7553ebfac766691eb9c96b492e34da1ec30d4",
+    "src/content/cards/ordained-collapse-e656cfd3.ts": "265fc804df54005184694ccaf30bae2004b9d1846dab077228bc561565e35603"
+  },
+  "contextualZeroXCorrection": {
+    "authority": "native hv-umm2.144 zero-x-authority.json parent justiciar resolution",
+    "field": "existing authored xMinimum:0 on owned Ordained Collapse",
+    "printedFields": "unchanged energyCost3, energyCosts[3,X], text/UUID/art and remaining metadata",
+    "reason": "Rules contextual X0 is meaningful when cost0 characters exist; default1 omitted that legal choice",
+    "validation": "All required refreshed checks and final mass cases passed; final effective100 sweep cells reconciled with old20 retained as superseded.",
+    "onlyChangedCardSource": "src/content/cards/ordained-collapse-e656cfd3.ts"
+  },
+  "zeroXWitness": {
+    "initial": "zero-x-witness.log retained; zero-cost/zero-spark fixture risk is a parent assumption, not an established state-based bug",
+    "final": "zero-x-witness-final.log uses existing exposed LAB.anyVoidPayer UUID5e5e5e5e-0000-4000-8000-000000000392 cost0/spark1; unused activation/no triggers; oldmin1unplayable, finalmin0 legal fixed3+0 and both victims dissolved after source Resolved",
+    "persistentTests": false
+  },
+  "runtimeOwnership": {
+    "observers": {
+      "focused": 53016,
+      "preflight": 56373,
+      "fuzz": 53246,
+      "review": 56079,
+      "knip": 84096,
+      "fullSweep": 46388,
+      "initialRoutes": 23413,
+      "cancelledMass": 47884,
+      "reviewFinal": 18038,
+      "knipFinal": 98427,
+      "fuzzFinal": 55411,
+      "changedCardSweep": 56682,
+      "massFinal": 91330
+    },
+    "observerState": "All terminal; initial routes1 and cancelled interim mass143 retained, all required final checks0",
+    "ownedServerProcessGroups": [
+      72327,
+      44641,
+      80004,
+      29306,
+      1041,
+      79271,
+      17428,
+      36468
+    ],
+    "serverPort": 5174,
+    "cleanup": "Each owned runner confirmed server group stopped/port free; final ps process-group audit found no member of any owned group. Own browser/provider records removed; current peer owners/tickets untouched.",
+    "cancelledOwnWrapper": 13590,
+    "cancelledOwnRunner": 13606,
+    "initialRoutesOwnWrapper": 42136,
+    "initialRoutesOwnRunner": 42144,
+    "peerExcludedPid": 34888,
+    "heavyLease": "Both fuzz observers terminal, own heavy slot released",
+    "finalAuditAt": "2026-10-12T03:24:32.186061+00:00",
+    "ownedProcessGroupMembers": []
+  },
+  "sourceHashVerification": "All final hashes verified; only Ordained Collapse differs from first parent freeze by existing authored xMinimum0. Four unchanged source hashes preserve original sweep/routes evidence.",
+  "preExistingIssues": [],
+  "rulesDecisions": [
+    "RD-hv-7x4l.8-3",
+    "RD-hv-umm2.65-2"
+  ],
+  "cardIssues": [],
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "unfinishedWork": []
+}

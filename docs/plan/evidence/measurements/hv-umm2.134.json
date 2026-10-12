@@ -5,10 +5,11 @@
   "measurementWindow": {
     "start": "2026-10-12T01:46:20Z",
     "startKind": "native dispatched-helper note proxy; actual helper spawn slightly earlier",
-    "end": "2026-10-12T02:09:55.455218+00:00",
-    "endKind": "final evidence freeze immediately before schema check and commit",
+    "end": "2026-10-12T02:10:17Z",
+    "endKind": "actual source commit timestamp e94ed1d17696edfdfe82310bca5f5741b7709111; dispatch-to-commit uses native dispatch-note proxy and actual spawn remains unknown",
     "claimAt": "2026-10-12T01:34:20Z",
-    "claimToFreezeMin": 35.5909203
+    "claimToFreezeMin": 35.5909203,
+    "evidenceFreezeAt": "2026-10-12T02:09:55.455218+00:00"
   },
   "entities": [
     "76766584-a8fb-41cc-8c4b-09655f478703",
