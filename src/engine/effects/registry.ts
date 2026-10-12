@@ -38,6 +38,7 @@ import {
   doubleEnergyPrimitive,
   eachPlayerPrimitive,
   drawPrimitive,
+  drawDreamwellPrimitive,
   drawMatchingPrimitive,
   erodePrimitive,
   exhaustPrimitive,
@@ -172,6 +173,9 @@ const DEFINITIONS = {
   },
   get drawMatching() {
     return drawMatchingPrimitive;
+  },
+  get drawDreamwell() {
+    return drawDreamwellPrimitive;
   },
   get draw() {
     return drawPrimitive;

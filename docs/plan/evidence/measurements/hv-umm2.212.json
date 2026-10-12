@@ -1,0 +1,510 @@
+{
+  "bead": "hv-umm2.212",
+  "base": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+  "rawEvidenceRoot": "/tmp/draw212",
+  "status": "local acceptance complete; parent exact-source cold Sol review and native delivery pending",
+  "printedClause": {
+    "uuid": "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+    "text": "Draw an additional Dreamwell card.",
+    "implementation": "event(drawDreamwell())",
+    "verifiedText": "symw0vh366",
+    "ruling": "C16: additional card grants its catalog energyAdded and resolves its own bonus; no new ruling",
+    "preserved": [
+      "order 3",
+      "energyAdded 1",
+      "all other printed and catalog fields",
+      "existing tier construction"
+    ]
+  },
+  "scope": {
+    "api": "drawDreamwell(player:PlayerRef = you); one shared draw using existing rule",
+    "newPrimitiveLines": 21,
+    "newContractLines": 184,
+    "newStateFields": false,
+    "newEvents": false,
+    "newPrompts": false,
+    "newStatuses": false,
+    "newUi": false,
+    "engineBodyChanges": false,
+    "fallout": [
+      "automatic Effect union extension via additive primitive index; additive registry getter"
+    ],
+    "scenarioDecision": "D20: exact single primitive composition; no content scenario module",
+    "d21": {
+      "firstByte": 76,
+      "sampled": false,
+      "newPromptStatusVisual": false,
+      "judgment": "two proportional runtime cells additionally judged; all full variant cells swept"
+    }
+  },
+  "sourceManifest": {
+    "timestamp": "2026-10-12T17:19:02.290100+00:00",
+    "base": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+    "files": {
+      "src/content/dreamwell/lily-lake-558a1f1b.ts": "03e41bdcb83c82dbf732a0ec63582d5c464149af6b669e1e95437f664dbaf840",
+      "src/engine/effects/primitives/draw-dreamwell.ts": "838229921637f313dfc6c0090995e186ed0b46093e631fb884667f308c7dc9ca",
+      "src/engine/effects/primitives/contracts/draw-dreamwell.contracts.ts": "072d99e2a22b8dcee507f769647e6b2475ff56d1010a8da8fa68c4118fd083a0",
+      "src/engine/effects/primitives/index.ts": "2f692af748682d018b553fa5d510ccab8f94cc1dd2a0d578f0c201bbfe0c9cc9",
+      "src/engine/effects/registry.ts": "53296e6af29e5f83759753ea17d70a0387d7593794ada4cb000faffd9c33a30e"
+    }
+  },
+  "baselineNegative": {
+    "script": "negative.ts",
+    "log": "negative.log",
+    "exit": 1,
+    "actual": {
+      "next": 1,
+      "max": 3,
+      "score": 0
+    },
+    "expected": {
+      "next": 2,
+      "max": 5,
+      "score": 4
+    },
+    "scope": "public engine with synthetic no-op outer and scored next well; before capability writes"
+  },
+  "mutation": {
+    "start": "2026-10-12T17:16:07.065123+00:00",
+    "exit": 1,
+    "wallS": 3.8554305840079905,
+    "originalSHA256": "838229921637f313dfc6c0090995e186ed0b46093e631fb884667f308c7dc9ca",
+    "restoredSHA256": "838229921637f313dfc6c0090995e186ed0b46093e631fb884667f308c7dc9ca"
+  },
+  "corePaths": {
+    "failure": {
+      "module": "src/engine/effects/primitives/contracts/draw-dreamwell.contracts.ts",
+      "test": "rolls back a failing step's additional draw and retains the preceding committed draw"
+    },
+    "childFailure": {
+      "module": "src/engine/effects/primitives/contracts/draw-dreamwell.contracts.ts",
+      "test": "retains the additional draw when its separately queued child bonus fails"
+    },
+    "interrupt": {
+      "module": "src/engine/effects/primitives/contracts/draw-dreamwell.contracts.ts",
+      "test": "lets an actual Interrupt prevent an event before it draws a Dreamwell card"
+    },
+    "reload": {
+      "module": "src/engine/effects/primitives/contracts/draw-dreamwell.contracts.ts",
+      "test": "reconstructs a suspended child after reload, committing the additional draw once"
+    },
+    "partialApplication": {
+      "module": "src/engine/effects/primitives/contracts/draw-dreamwell.contracts.ts",
+      "test": "reconstructs a suspended child after reload, committing the additional draw once"
+    },
+    "staleConcurrent": {
+      "module": "src/engine/effects/primitives/contracts/draw-dreamwell.contracts.ts",
+      "test": "bounces foreign, stale, invalid, concurrent and repeated answers without drawing again"
+    }
+  },
+  "checks": {
+    "knip": {
+      "label": "knip",
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 37260,
+      "start": "2026-10-12T17:15:51.632626+00:00",
+      "end": "2026-10-12T17:15:55.193506+00:00",
+      "wallS": 3.5607710409967694,
+      "exit": 0
+    },
+    "mutation": {
+      "start": "2026-10-12T17:16:07.065123+00:00",
+      "exit": 1,
+      "wallS": 3.8554305840079905,
+      "originalSHA256": "838229921637f313dfc6c0090995e186ed0b46093e631fb884667f308c7dc9ca",
+      "restoredSHA256": "838229921637f313dfc6c0090995e186ed0b46093e631fb884667f308c7dc9ca"
+    },
+    "qa-mobile": {
+      "label": "qa-mobile",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.212/draw-dreamwell-native.mjs",
+        "--bead",
+        "hv-umm2.212",
+        "--arg",
+        "card=558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+        "--arg",
+        "variant=base",
+        "--arg",
+        "as=enemy",
+        "--viewports",
+        "mobile",
+        "--timeout",
+        "240",
+        "--port",
+        "5174"
+      ],
+      "pid": 56570,
+      "start": "2026-10-12T17:22:53.540011+00:00",
+      "end": "2026-10-12T17:23:10.005965+00:00",
+      "wallS": 16.465663709008368,
+      "exit": 0
+    },
+    "review": {
+      "label": "review",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 31773,
+      "start": "2026-10-12T17:14:45.193466+00:00",
+      "end": "2026-10-12T17:15:41.692923+00:00",
+      "wallS": 56.498721916999784,
+      "exit": 0
+    },
+    "qa-mobile-hud": {
+      "label": "qa-mobile-hud",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.212/draw-dreamwell-native.mjs",
+        "--bead",
+        "hv-umm2.212",
+        "--arg",
+        "card=558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+        "--arg",
+        "variant=base",
+        "--arg",
+        "as=enemy",
+        "--viewports",
+        "mobile",
+        "--timeout",
+        "240",
+        "--port",
+        "5174"
+      ],
+      "pid": 20994,
+      "start": "2026-10-12T17:26:00.066933+00:00",
+      "end": "2026-10-12T17:26:17.231060+00:00",
+      "wallS": 17.163838583001052,
+      "exit": 0
+    },
+    "preflight": {
+      "label": "preflight",
+      "args": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 40953,
+      "start": "2026-10-12T17:16:45.538001+00:00",
+      "end": "2026-10-12T17:16:47.089890+00:00",
+      "wallS": 1.5515696249931352,
+      "exit": 0
+    },
+    "fuzz": {
+      "label": "fuzz",
+      "args": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "558a1f1b-7dc1-4d83-9f00-c6af2187a954"
+      ],
+      "pid": 42195,
+      "start": "2026-10-12T17:17:04.178974+00:00",
+      "end": "2026-10-12T17:21:16.444525+00:00",
+      "wallS": 252.26240675000008,
+      "exit": 0
+    },
+    "coverage": {
+      "label": "coverage",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 43049,
+      "start": "2026-10-12T17:17:21.106144+00:00",
+      "end": "2026-10-12T17:17:24.530848+00:00",
+      "wallS": 3.4245686659996863,
+      "exit": 0
+    },
+    "sweep": {
+      "label": "sweep",
+      "args": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.212",
+        "--cards",
+        "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--timeout",
+        "240",
+        "--port",
+        "5174"
+      ],
+      "pid": 51427,
+      "start": "2026-10-12T17:21:50.416169+00:00",
+      "end": "2026-10-12T17:22:13.325925+00:00",
+      "wallS": 22.90939470801095,
+      "exit": 0
+    },
+    "qa-mobile-corrected": {
+      "label": "qa-mobile-corrected",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.212/draw-dreamwell-native.mjs",
+        "--bead",
+        "hv-umm2.212",
+        "--arg",
+        "card=558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+        "--arg",
+        "variant=base",
+        "--arg",
+        "as=enemy",
+        "--viewports",
+        "mobile",
+        "--timeout",
+        "240",
+        "--port",
+        "5174"
+      ],
+      "pid": 75584,
+      "start": "2026-10-12T17:24:17.249452+00:00",
+      "end": "2026-10-12T17:24:28.941390+00:00",
+      "wallS": 11.691724207994412,
+      "exit": 0
+    },
+    "qa-desktop": {
+      "label": "qa-desktop",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.212/draw-dreamwell-native.mjs",
+        "--bead",
+        "hv-umm2.212",
+        "--arg",
+        "card=558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+        "--arg",
+        "variant=base",
+        "--arg",
+        "as=player",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240",
+        "--port",
+        "5174"
+      ],
+      "pid": 54603,
+      "start": "2026-10-12T17:22:28.175138+00:00",
+      "end": "2026-10-12T17:22:45.299488+00:00",
+      "wallS": 17.123891208990244,
+      "exit": 0
+    }
+  },
+  "checkCounts": {
+    "focused": {
+      "passed": 12,
+      "testDurationS": 2.13
+    },
+    "review": {
+      "files": 268,
+      "tests": 4709,
+      "testDurationS": 47.41,
+      "relatedStepS": 54.8
+    },
+    "contentGate": {
+      "passed": 13
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 156923,
+      "wallS": 153.5,
+      "cpuS": 167.1,
+      "prompts": 4626,
+      "interactiveReruns": 493,
+      "failures": 0,
+      "included": 1200,
+      "exercised": 265,
+      "queueStartupUpperBoundS": 98.762
+    },
+    "sweep": {
+      "pass": 2,
+      "skip": 18,
+      "allVariants": true,
+      "bothControllers": true
+    }
+  },
+  "failedAttempts": [
+    {
+      "log": "focused.log",
+      "exit": 1,
+      "cause": "test observer expected gainEnergy before announced chooseOne; corrected display energy expectation from 7 to 5, accepted answer still applies bonus to 7",
+      "correction": "focused-corrected.log pass12"
+    },
+    {
+      "rawReport": "invocations/run-vvPnZ5/draw-dreamwell-native.result.json",
+      "runnerExit": 0,
+      "resultVerdict": "fail",
+      "cause": "strict current Day contradicted legitimate autonomous enemy advancement; corrected to witnessed Day ordering"
+    },
+    {
+      "rawReport": "invocations/run-YYPaVV/draw-dreamwell-native.result.json",
+      "runnerExit": 0,
+      "resultVerdict": "pass",
+      "limitation": "capture during turn announcement; final image uses HUD/live-probe wait"
+    }
+  ],
+  "runtimeLedger": [
+    {
+      "label": "sweep",
+      "runnerPid": 51427,
+      "serverProcessGroup": 51481,
+      "port": 5174,
+      "outcome": "native cleanup completed; owned groups absent, port reported free and no own provider/server records at final check"
+    },
+    {
+      "label": "qa-desktop",
+      "runnerPid": 54603,
+      "serverProcessGroup": 54650,
+      "port": 5174,
+      "outcome": "native cleanup completed; owned groups absent, port reported free and no own provider/server records at final check"
+    },
+    {
+      "label": "qa-mobile",
+      "runnerPid": 56570,
+      "serverProcessGroup": 56624,
+      "port": 5174,
+      "outcome": "native cleanup completed; owned groups absent, port reported free and no own provider/server records at final check"
+    },
+    {
+      "label": "qa-mobile-corrected",
+      "runnerPid": 75584,
+      "serverProcessGroup": 76182,
+      "port": 5174,
+      "outcome": "native cleanup completed; owned groups absent, port reported free and no own provider/server records at final check"
+    },
+    {
+      "label": "qa-mobile-hud",
+      "runnerPid": 20994,
+      "serverProcessGroup": 21028,
+      "port": 5274,
+      "outcome": "native cleanup completed; owned groups absent, port reported free and no own provider/server records at final check"
+    }
+  ],
+  "visualEvidence": [
+    {
+      "uuid": "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+      "variant": "base",
+      "as": "player",
+      "viewport": "desktop",
+      "mode": "judged",
+      "verdict": "pass",
+      "effective": true,
+      "entityKind": "dreamwell",
+      "bead": "hv-umm2.212",
+      "commit": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+      "d21Sample": false,
+      "invocation": "invocations/run-5UzNWE",
+      "evidenceDir": "invocations/run-5UzNWE",
+      "rawReport": "invocations/run-5UzNWE/draw-dreamwell-native.result.json",
+      "screens": [
+        "extra-player-desktop-2x.png"
+      ],
+      "notes": "Two actual UUID draws, ordered cumulative refill to 4/4, resolved source bonus, shared index 2, normal Day, unchanged opponent 2/2, 33 persisted rows and empty caps. Full viewport 2880\u00d71800 visually verified; energy and turn control legible."
+    },
+    {
+      "uuid": "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+      "variant": "base",
+      "as": "enemy",
+      "viewport": "mobile",
+      "mode": "judged",
+      "verdict": "fail",
+      "effective": false,
+      "entityKind": "dreamwell",
+      "bead": "hv-umm2.212",
+      "commit": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+      "d21Sample": false,
+      "invocation": "invocations/run-vvPnZ5",
+      "evidenceDir": "invocations/run-vvPnZ5",
+      "rawReport": "invocations/run-vvPnZ5/draw-dreamwell-native.result.json",
+      "screens": [],
+      "notes": "Observer expected current Day after the autonomous enemy already played and passed into Dusk. Both UUID draws and source bonus succeeded; raw failure retained. Superseded by witnessed-Day ordering and observable HUD presentation wait."
+    },
+    {
+      "uuid": "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+      "variant": "base",
+      "as": "enemy",
+      "viewport": "mobile",
+      "mode": "judged",
+      "verdict": "pass",
+      "effective": false,
+      "entityKind": "dreamwell",
+      "bead": "hv-umm2.212",
+      "commit": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+      "d21Sample": false,
+      "invocation": "invocations/run-YYPaVV",
+      "evidenceDir": "invocations/run-YYPaVV",
+      "rawReport": "invocations/run-YYPaVV/draw-dreamwell-native.result.json",
+      "screens": [
+        "extra-enemy-mobile-2x.png"
+      ],
+      "notes": "State and event-order assertions passed, but the 780\u00d71688 image shows the ordinary turn announcement before the HUD presented the committed energy. Retained as intermediate evidence, superseded by presentation-wait capture."
+    },
+    {
+      "uuid": "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+      "variant": "base",
+      "as": "enemy",
+      "viewport": "mobile",
+      "mode": "judged",
+      "verdict": "pass",
+      "effective": true,
+      "entityKind": "dreamwell",
+      "bead": "hv-umm2.212",
+      "commit": "23353bd06fa6aaef34bfe1ccdfd0d36f735f3954",
+      "d21Sample": false,
+      "invocation": "invocations/run-E6SBsT",
+      "evidenceDir": "invocations/run-E6SBsT",
+      "rawReport": "invocations/run-E6SBsT/draw-dreamwell-native.result.json",
+      "screens": [
+        "extra-enemy-mobile-2x.png"
+      ],
+      "notes": "Both UUID draws, extra draw event index 9 before Day 15, shared index 2 and actual cumulative refill to 4/4. Existing HUD data attributes match live probe at 3/4 after the enemy pays for a normal play; 390\u00d7844 board, no overflow and empty caps. Full viewport 780\u00d71688 visually verified with legible energy and turn controls."
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review test-related start 2026-10-12T17:14:46.066Z actual vm.loadavg one-minute sample"
+      },
+      "implementWindow": {
+        "measuredFor": "native claim17:09:30Z conservative dispatch proxy includes parent preparation; exact helper dispatch timestamp unavailable; end is helper commit"
+      }
+    }
+  },
+  "nativeExtraBonus": {
+    "uuid": "de98477c-e216-4618-bff1-0e24bd982fdb",
+    "module": "src/content/dreamwell/twilight-radiance-de98477c.ts",
+    "status": "pending",
+    "energyAdded": 1,
+    "abilities": null,
+    "nativeObservation": "extra UUID draw and catalog energy refill observed; no queued/resolved child bonus is claimed for this pending definition. Lily source trigger is queued/resolved. Synthetic authored next-well and nested-chain contracts prove bonus FIFO behavior."
+  }
+}
