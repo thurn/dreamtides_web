@@ -1,3 +1,7 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import warrior from "../figments/warrior-bb1a5acd";
 import { card } from "../define";
 
 export default card({
@@ -25,5 +29,13 @@ export default card({
   cardNumber: 233,
   art: { x: 0.042, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(
+      whenYouPlay({ cardType: "character" }),
+      p.materializeFigments(parseFigmentId(warrior.id), 1, {
+        spark: variant.amplified ? 2 : 1,
+      }),
+    ),
+  ],
+  verifiedText: "29w4yfzvi56",
 });
