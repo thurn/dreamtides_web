@@ -1,0 +1,312 @@
+{
+  "bead": "hv-umm2.487",
+  "base": "39c84fe7afd72362fbb4ca8b9bf62b6548aeed31",
+  "dispatchWindow": {
+    "proxy": "2026-10-12T04:01:15.855777Z",
+    "basis": "Parent brief-write timestamp immediately before dispatch; actual receipt unobserved.",
+    "firstHelperTool": "2026-10-12T04:01:55Z",
+    "proxyToFirstToolSApprox": 39.1,
+    "evidenceCompletedAt": "2026-10-12T04:31:10.487192+00:00",
+    "implementMin": 32.669,
+    "commitTail": "Final evidence/schema/commit are issued together immediately after this UTC stamp; Git commit uses this same observed committer timestamp. Approximate start remains the pre-dispatch brief-write proxy, not actual helper receipt.",
+    "finalCommitStamp": "2026-10-12T04:33:56+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review prepare start 2026-10-12T04:16:45.024Z",
+        "oneMinute": 10.33837890625
+      }
+    }
+  },
+  "source": {
+    "baseline": {
+      "scripts/qa/prelude.mjs": "5615d428aceb2fc80f871404a44ba3d9429fa6c971021d75ece76e993109f92a",
+      "scripts/qa/prelude-auto-answer.test.mjs": "847f4baccf731c1a91bae0bd1635fc02e2f5f3eb663dcc47d78d01b0d10817d4"
+    },
+    "final": {
+      "scripts/qa/prelude.mjs": "88c98226c4b94063424776f5dcff64e6b3f3ec62405784ea8e8b36520ece5d80",
+      "scripts/qa/prelude-auto-answer.test.mjs": "b44cbd0bff4f324609db8775357d387f3d098005a5f28ce2710449e5e3d85cdf"
+    },
+    "scope": "Every byte outside promptOrAutoAnswer, including shared observeEvents/observeOwed/state APIs, is identical to baseline. Signatures and callers unchanged.",
+    "productionChangedLines": 17,
+    "fallout": []
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 80,
+    "jsdomFiles": 0,
+    "cases": 6,
+    "existingCases": 5,
+    "finalCases": 11,
+    "finalLines": 222
+  },
+  "checks": [
+    {
+      "name": "initial negative",
+      "observer": 51936,
+      "exit": 1,
+      "wallS": 3.08,
+      "cases": 11,
+      "failed": 5,
+      "passed": 6,
+      "artifact": "unchanged-negative-attempt01.log",
+      "disposition": "Earlier fixture version; retained."
+    },
+    {
+      "name": "extended negative",
+      "observer": 22233,
+      "exit": 1,
+      "wallS": 2.21,
+      "failed": 5,
+      "passed": 6,
+      "artifact": "unchanged-source-negative.log",
+      "disposition": "Before runtime-invalid-role type cast; retained."
+    },
+    {
+      "name": "first positive",
+      "observer": 16120,
+      "exit": 0,
+      "wallS": 1.75,
+      "cases": 11,
+      "artifact": "focused-positive.log"
+    },
+    {
+      "name": "first review",
+      "observer": 71154,
+      "exit": 2,
+      "wallS": 13.09,
+      "artifact": "review-attempt01.log",
+      "disposition": "Local fixture type diagnostic: runtime invalid empty role required explicit boundary cast. Production unchanged."
+    },
+    {
+      "name": "exact final baseline negative",
+      "observer": 53742,
+      "exit": 1,
+      "wallS": 1.726,
+      "failed": 5,
+      "passed": 6,
+      "artifact": "exact-final-negative.log",
+      "provenance": "exact-final-negative-provenance.json"
+    },
+    {
+      "name": "final focused",
+      "observer": 53742,
+      "exit": 0,
+      "wallS": 1.63,
+      "cases": 11,
+      "artifact": "focused-final.log"
+    },
+    {
+      "name": "final review",
+      "observer": 11508,
+      "exit": 0,
+      "wallS": 12.33,
+      "files": 9,
+      "cases": 96,
+      "artifact": "review-final.log"
+    },
+    {
+      "name": "Knip",
+      "observer": 16094,
+      "exit": 0,
+      "wallS": 4.13,
+      "artifact": "knip.log"
+    },
+    {
+      "name": "review:full",
+      "observer": 15155,
+      "exit": 0,
+      "wallS": 91.88,
+      "executionS": 91.822010666,
+      "files": 342,
+      "cases": 4617,
+      "artifact": "full.log",
+      "request": "full-requested.json",
+      "acquired": "full-lock-acquired.json",
+      "execution": "full-execution.json"
+    }
+  ],
+  "negative": {
+    "startedAt": "2026-10-12T04:14:33.120511+00:00",
+    "intendedPreludeSha": "88c98226c4b94063424776f5dcff64e6b3f3ec62405784ea8e8b36520ece5d80",
+    "baselinePreludeSha": "5615d428aceb2fc80f871404a44ba3d9429fa6c971021d75ece76e993109f92a",
+    "finalTestSha": "b44cbd0bff4f324609db8775357d387f3d098005a5f28ce2710449e5e3d85cdf",
+    "hostLoad": 12.072265625,
+    "exit": 1,
+    "wallS": 1.726,
+    "restoredSha": "88c98226c4b94063424776f5dcff64e6b3f3ec62405784ea8e8b36520ece5d80",
+    "restoredExact": true
+  },
+  "heavyResource": {
+    "command": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock node <ignored full-command.mjs> executes npm run review:full only",
+    "workers": 2,
+    "requestToAcquisitionSApprox": 0.059,
+    "qualification": "Includes process launch/logging; not isolated queue time. Mandatory full because QA test infrastructure changed. No browser wait under heavy lock."
+  },
+  "qa": {
+    "attempts": [
+      {
+        "attempt": 1,
+        "observer": 95523,
+        "exit": 1,
+        "commandWallS": 15.66,
+        "serverProcessGroup": 47224,
+        "slot": 0,
+        "port": 5175,
+        "runtimeMs": {
+          "browserLeaseWait": 10,
+          "serve": 1981,
+          "scenario": 8388,
+          "total": 10421
+        },
+        "result": "attempt01-live-helper.result.json",
+        "log": "attempt01-live-helper.log",
+        "gameId": "34d8g7",
+        "disposition": "Ineffective setup: synthetic source is not a catalog URL anchor; helper not reached.",
+        "cleanup": "Runner reports owned server group stopped and port free; observer completed."
+      },
+      {
+        "attempt": 2,
+        "observer": 50810,
+        "exit": 1,
+        "commandWallS": 19.67,
+        "serverProcessGroup": 4939,
+        "slot": 0,
+        "port": 5175,
+        "runtimeMs": {
+          "browserLeaseWait": 8,
+          "serve": 1676,
+          "scenario": 7518,
+          "total": 14391
+        },
+        "result": "attempt02-live-helper.result.json",
+        "log": "attempt02-live-helper.log",
+        "gameId": "kjs4x3",
+        "disposition": "Ineffective setup: mapped synthetic printing also is not a catalog URL anchor; helper not reached.",
+        "cleanup": "Runner reports owned server group stopped and port free; observer completed.",
+        "leaseToken": "60a0b926-0f57-4140-b3e3-a1ec781ecbf0",
+        "leaseStartedAt": "2026-10-12T04:27:10.032Z"
+      },
+      {
+        "attempt": 3,
+        "observer": 57834,
+        "exit": 1,
+        "commandWallS": 13.2,
+        "serverProcessGroup": 10674,
+        "slot": 1,
+        "port": 5274,
+        "runtimeMs": {
+          "browserLeaseWait": 5,
+          "serve": 1045,
+          "scenario": 6925,
+          "total": 8015
+        },
+        "result": "attempt03-live-helper.result.json",
+        "log": "attempt03-live-helper.log",
+        "gameId": "qz87dk",
+        "disposition": "Partial rendered-helper success, followed by ignored assertion on wrong energy field. Actual currentEnergy was expected 2; caps empty.",
+        "cleanup": "Runner reports owned server group stopped and port free; observer completed."
+      },
+      {
+        "attempt": 4,
+        "observer": 8051,
+        "exit": 0,
+        "commandWallS": 14.87,
+        "serverProcessGroup": 14456,
+        "slot": 1,
+        "port": 5274,
+        "runtimeMs": {
+          "browserLeaseWait": 5,
+          "serve": 1045,
+          "scenario": 8591,
+          "total": 9679
+        },
+        "result": "live-helper.result.json",
+        "log": "live-helper.log",
+        "gameId": "fbmrv8",
+        "disposition": "Accepted complete desktop workflow: rendered and forced auto-answer helper results through normal controls.",
+        "cleanup": "Runner reports owned server group stopped and port free; observer completed.",
+        "leaseToken": "Not observed before short completed run removed owner record; slot/server/runner result are observed."
+      }
+    ],
+    "accepted": {
+      "gameId": "fbmrv8",
+      "rows": 44,
+      "sourceUuid": "5e5e5e5e-0000-4000-8000-0000000000d1",
+      "physicalSources": [
+        "i1",
+        "i2"
+      ],
+      "selectedTarget": "i12",
+      "forcedTarget": "i11",
+      "targetUuids": [
+        "5e5e5e5e-0000-4000-8000-000000000003",
+        "5e5e5e5e-0000-4000-8000-000000000002"
+      ],
+      "outcomes": [
+        "rendered",
+        "autoAnswered"
+      ],
+      "energy": [
+        4,
+        2,
+        0
+      ],
+      "geometry": {
+        "id": "i12",
+        "x": 348,
+        "y": 183,
+        "width": 89.5,
+        "height": 89.5,
+        "contained": true
+      },
+      "caps": [],
+      "capture": "probe-readiness-rendered-desktop.png",
+      "captureDimensions": [
+        1440,
+        900
+      ],
+      "captureScale": "CSS pixels per README qa.capture contract",
+      "startupAbsence": "Not observed or manufactured; deterministic synthetic cases provide absence-mechanism proof.",
+      "viewJudgment": "Rendered target banner and two highlighted targets are contained. No presentation change authored."
+    },
+    "sourceDefinitionAudit": "DSL.dissolveEnemy authored(9) uses syntheticId(209), cost 2 and enemyCharacter target. Catalog URL anchor uses tracked engine-events UUID f160fd01-b3c3-4904-b15f-339f6fcf5ca5; only the declared two synthetic spells/targets are played. resolveCardLab accepts catalog anchors, not synthetic printing mappings.",
+    "captureProvenance": {
+      "passed": "probe-readiness-rendered-desktop.png is the final passing run; attempt03-probe-readiness-rendered-desktop.png preserves the earlier partial run.",
+      "failure": "Generic probe-readiness-failure-desktop.png is the retained attempt03 failure capture and is byte-identical to its attempt03 archive. It is not final passing evidence. Attempts 01 and 02 produced no capture because their nonempty caps prevented capture.",
+      "parentProof": "parent-live-proof.json independently validates fbmrv8 live outcomes. Process settlement is separately observed by scoped ps/lsof and runner shutdown receipts."
+    },
+    "authoringWindow": {
+      "approximateStart": "2026-10-12T04:22:00Z",
+      "acceptedResultBefore": "2026-10-12T04:31:11Z",
+      "basis": "Approximate proportional QA scripting/diagnosis interval after full completion; raw runner timestamps give each executed sub-window. These setup/probe corrections are retained without a production regression claim."
+    }
+  },
+  "runtimeLedger": {
+    "allObservers": "Completed with exact exits above. No implementation writers or owned dev servers remain.",
+    "full": [
+      "lockf PID 6103",
+      "wrapper PID 6104",
+      "group 6090"
+    ],
+    "browser": [
+      "group 47224",
+      "group 4939",
+      "group 10674",
+      "group 14456"
+    ],
+    "provider": "Native runner closes its isolated MCP/browser context after each run. Final observer 8051 exit 0; scoped ps has no own runner/vite and lsof 5274 has no listener.",
+    "foreignProcesses": "Foreign browser QA/server ownership untouched."
+  },
+  "limitations": [
+    "No observed live startup absence; deterministic synthetic tests prove that transition.",
+    "No timing thresholds, screenshot text or default read schedules gate CI."
+  ],
+  "remainingLocalAcceptance": [],
+  "schemaValidation": {
+    "exit": 0,
+    "artifact": "schema-final.log"
+  },
+  "commitAck": "Parent independently verified manifest, canonical ledger, frozen source, local acceptance and stopped owned processes. COMMIT ACK received."
+}

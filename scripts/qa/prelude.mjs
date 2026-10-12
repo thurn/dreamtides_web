@@ -1949,6 +1949,7 @@ export function createBattleDriver(qa) {
     /** The player's auto-answered events after `cursor`, a page at a time. */
     const read = async (/** @type {EventCursor | null} */ cursor) => {
       const page = await qa.read(observeEvents, { cursor, match: { kind: "promptAutoAnswered", side: "player" }, limit: 500, count: 0 });
+      if (page?.error === "missing engine probe (use debug=1)") return null;
       if (page === null || page.error !== undefined) throw new Error(`${label}: ${page?.error ?? "no observation"}`);
       return page;
     };
@@ -1958,24 +1959,22 @@ export function createBattleDriver(qa) {
       const battle = await state();
       await failOnCaps(battle, label);
       let page = await read(since);
-      let found = pick(page);
-      while (found === null && page.more) {
+      let found = page === null ? null : pick(page);
+      while (found === null && page !== null && page.more) {
         page = await read(page.cursor);
-        found = pick(page);
+        found = page === null ? null : pick(page);
       }
-      const owed = await qa.read(observeOwed, { key: found === null ? null : { seq: found.seq, index: found.index } });
-      if (owed === null) throw new Error(`${label}: missing engine probe (use debug=1)`);
-      if (found !== null) {
+      const owed = page === null ? null : await qa.read(observeOwed, { key: found === null ? null : { seq: found.seq, index: found.index } });
+      if (found !== null && page !== null && owed !== null) {
         const cursor = { battleId: page.cursor.battleId, seq: found.seq, index: found.index };
         qa.note(label, { outcome: "autoAnswered", key: [found.seq, found.index], answer: owed.answer });
         return { outcome: "autoAnswered", event: found, answer: owed.answer, cursor };
       }
-      const cursor = page.cursor;
       const prompt = battle.prompt;
-      if (prompt !== null && prompt.answerable && owed.pending !== null && owed.pending.side === "player" &&
+      if (page !== null && owed !== null && prompt !== null && prompt.answerable && owed.pending !== null && owed.pending.side === "player" &&
           owed.pending.role === role && owed.pending.id === prompt.id) {
         qa.note(label, { outcome: "rendered", id: prompt.id, surface: prompt.surface });
-        return { outcome: "rendered", prompt, state: battle, cursor };
+        return { outcome: "rendered", prompt, state: battle, cursor: page.cursor };
       }
       if (Date.now() >= deadline) {
         throw qa.timeoutError(`${label}: timed out after ${String(timeout)} ms with neither a rendered ${String(role)} prompt nor its auto-answer; ${describe(battle)}`);
