@@ -519,12 +519,33 @@ export interface PlayedCard {
   readonly spark?: number | null;
 }
 
+/**
+ * A character one side materialized this turn, with the effective type,
+ * subtype, and "has all character types" it had as its `materialized` event
+ * announced it, so a later change, or its departure, does not alter the
+ * record.
+ */
+export interface MaterializedCard {
+  readonly instance: InstanceId;
+  readonly cardType: "character" | "event";
+  readonly subtype: CardSubtype;
+  /** "Has all character types" as it materialized: it matches every subtype a filter names. */
+  readonly allTypes: boolean;
+}
+
 /** Counters for the current turn, reset as each turn begins. */
 export interface TurnLog {
   /** Cards each side played this turn, in order. Copies are not played (D15). */
   played: Record<Side, PlayedCard[]>;
   /** Cards each side drew this turn. */
   drawn: Record<Side, number>;
+  /**
+   * Characters each side materialized this turn, in announcement order: every
+   * `materialized` event, figments and rematerializations included. A saved
+   * state may lack it; that turn's record then starts empty when the state
+   * loads (`materializedThisTurn`).
+   */
+  materialized?: Record<Side, MaterializedCard[]>;
 }
 
 export interface SideState {

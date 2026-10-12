@@ -115,7 +115,8 @@ interface BattleState {
                                        // keywords, types, costs), floating and delayed ("the next time…",
                                        // `once: true`) triggers, disabled triggers, banish-until returns,
                                        // temporary figment copies
-  turnLog: TurnLog;                    // cards each side played (with their characteristics) and drew this turn
+  turnLog: TurnLog;                    // cards each side played (with their characteristics) and drew, and
+                                       // characters it materialized (with their types), this turn
   nextEffect: number;                  // next effect number to mint (e1, e2, …)
   oncePerTurn: OncePerTurnKey[];       // `<source key>#<ability index>`, cleared as each turn begins
   dreamwell: DreamwellState;           // the prebuilt shared deck, the next index, and its catalog

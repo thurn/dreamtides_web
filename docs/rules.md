@@ -1943,9 +1943,10 @@ single main window of a turn (one player's Day, Dusk, or Night), a sequence of
 that player's actions returns the battle to an equivalent position — the stack
 empty, no triggered abilities waiting, and everything the same except victory
 points, current and maximum ●, counters, gained spark, the cards in each deck
-and void, and how many cards each player has played and drawn this turn — and
-those differences gained something for that player and nothing for the
-opponent, the player is offered a shortcut:
+and void, how many cards each player has played and drawn this turn, and the
+characters each player has materialized this turn — and those differences
+gained something for that player and nothing for the opponent, the player is
+offered a shortcut:
 
 - **Repeat ×N** performs the sequence N more times, for any N up to 10,000.
 - **Repeat until victory** performs it until the battle ends.
@@ -1953,10 +1954,10 @@ opponent, the player is offered a shortcut:
 A difference is a gain for a player when their victory points, current or
 maximum ●, counters on cards they control, gained spark on cards they control,
 or cards in their deck increase. A player's cards in their void may change in
-either direction, and the cards played and drawn this turn may grow, without
-counting as a gain or a loss. The sequence qualifies only if none of the
-player's own values fell, none of the opponent's rose, and at least one
-changed. A sequence in which the opponent had a decision — a legal response
+either direction, and the cards played and drawn and the characters
+materialized this turn may grow, without counting as a gain or a loss. The
+sequence qualifies only if none of the player's own values fell, none of the
+opponent's rose, and at least one changed. A sequence in which the opponent had a decision — a legal response
 other than passing, or a choice with more than one option — is never offered.
 
 Each repetition takes the same actions and makes the same choices as the

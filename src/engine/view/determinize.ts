@@ -219,11 +219,12 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
   let next = highest(view, "i") + 1;
   // Reserve anonymous history identities before minting hidden instances.
   // These facts name no current card and remain anonymous when viewed again.
-  const played = (side: Side) => view.turnLog.played[side].map((card) => {
+  const anonymous = <T extends { readonly instance: InstanceId | null }>(cards: readonly T[]) => cards.map((card) => {
     const instance: InstanceId = card.instance ?? `i${next++}`;
     return { ...card, instance };
   });
-  const playedCards = { player: played("player"), enemy: played("enemy") };
+  const playedCards = { player: anonymous(view.turnLog.played.player), enemy: anonymous(view.turnLog.played.enemy) };
+  const materializedCards = { player: anonymous(view.turnLog.materialized.player), enemy: anonymous(view.turnLog.materialized.enemy) };
   const mint = (owner: Side, holder: Side, zone: "deck" | "hand", entry: DeckEntry, created: boolean): InstanceId => {
     const id: InstanceId = `i${next}`;
     next += 1;
@@ -362,6 +363,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     turnLog: {
       played: playedCards,
       drawn: { ...view.turnLog.drawn },
+      materialized: materializedCards,
     },
     nextEffect: highest([view.payable, view.floating, descriptors], "e") + 1,
     oncePerTurn: [...view.oncePerTurn],

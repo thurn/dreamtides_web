@@ -31,6 +31,7 @@ import { conditionHolds } from "../effects/interpreter";
 import type { EngineEvent, EngineEventKind } from "../events";
 import { instanceOrigin, oncePerTurnKey, originAbilities } from "../rules/activation";
 import { endFloating, floatingTriggers } from "../rules/floating";
+import { recordMaterialized } from "../rules/turn-log";
 import { charactersInPlay, isFigment } from "../rules/zones";
 import type { EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { opponent, SIDES, sourceInstance } from "../state/ids";
@@ -571,12 +572,15 @@ function departure(state: BattleState, event: EngineEvent): Departure | null {
 /**
  * Matches one event against every triggered ability, in the fixed order:
  * the active side first, then the other; within a side, its listeners, then
- * its floating and delayed triggers in creation order. Nothing triggers
- * before the first turn begins or after the battle ends.
+ * its floating and delayed triggers in creation order. A `materialized`
+ * event first joins its side's turn log, so every match sees it counted.
+ * Nothing triggers, and nothing is recorded, before the first turn begins or
+ * after the battle ends.
  */
 export function matchEvent(ctx: StepContext, event: EngineEvent): void {
   const { state } = ctx;
   if (state.turn.turnNumber === 0 || state.result !== null || !TRIGGERING.includes(event.kind)) return;
+  if (event.kind === "materialized") recordMaterialized(state, ctx.catalog, event.side, event.instance);
   const departing = departure(state, event);
   const armed = event.kind === "dissolved" ? takeArmed(ctx, event.instance) : NOTHING_ARMED;
   for (const side of [state.turn.active, opponent(state.turn.active)]) {

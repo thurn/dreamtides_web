@@ -62,8 +62,9 @@ const STATE_FIELDS = {
   triggerQueue: "position",
   floating: "position",
   /**
-   * Cards played and drawn this turn grow with every play and draw, so a
-   * loop that plays or draws a card never repeats them (RD-hv-7x4l.36-1).
+   * Cards played and drawn and characters materialized this turn grow with
+   * every play, draw, and materialization, so a loop that plays, draws, or
+   * materializes never repeats them (RD-hv-7x4l.36-1).
    */
   turnLog: "resource",
   nextEffect: "resource",

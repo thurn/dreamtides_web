@@ -16,6 +16,7 @@ import type {
   Expiry,
   FloatingChange,
   FloatingEffect,
+  MaterializedCard,
   PlayedCard,
   Printing,
   SparkGain,
@@ -32,6 +33,7 @@ import type { CardSubtype } from "../../types/card-identity";
 import { carriesLegality, changedInstance } from "../rules/floating";
 import { banishedAsReclaimed } from "../rules/zones";
 import { playCosts } from "../rules/costs";
+import { materializedThisTurn } from "../rules/turn-log";
 import { knows, observedFixedEffect, seesSubject } from "./knowledge";
 
 /**
@@ -248,10 +250,16 @@ export interface PlayedCardView extends Omit<PlayedCard, "instance"> {
   readonly instance: InstanceId | null;
 }
 
-/** This turn's public plays and draw counts. */
+/** Public facts of a materialization, without linking an unidentified current card to it. */
+export interface MaterializedCardView extends Omit<MaterializedCard, "instance"> {
+  readonly instance: InstanceId | null;
+}
+
+/** This turn's public plays, draw counts, and materializations. */
 export interface TurnLogView {
   readonly played: Readonly<Record<Side, readonly PlayedCardView[]>>;
   readonly drawn: Readonly<Record<Side, number>>;
+  readonly materialized: Readonly<Record<Side, readonly MaterializedCardView[]>>;
 }
 
 /**
@@ -371,6 +379,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     const spark = card.spark !== undefined ? card.spark : known ? layers.of(card.instance).spark : undefined;
     return { ...card, instance: known ? card.instance : null, ...(cost === undefined ? {} : { cost }), ...(spark === undefined ? {} : { spark }) };
   };
+  const materializedView = (card: MaterializedCard): MaterializedCardView => ({ ...card, instance: visible(card.instance) ? card.instance : null });
   const visibleSource = (source: AbilitySource): boolean => typeof source !== "string" || visible(source);
   const visibleChoices = (choices: EffectChoices): EffectChoices => ({
     modes: [...choices.modes],
@@ -501,6 +510,10 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         enemy: state.turnLog.played.enemy.map(playedView),
       },
       drawn: { ...state.turnLog.drawn },
+      materialized: {
+        player: materializedThisTurn(state, "player").map(materializedView),
+        enemy: materializedThisTurn(state, "enemy").map(materializedView),
+      },
     },
     // A key names its source by instance ID or emblem: `i12#0`, `avatar:player#1`.
     oncePerTurn: state.oncePerTurn.filter((key) => {

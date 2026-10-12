@@ -1297,7 +1297,20 @@ function isTurnLog(value: unknown): boolean {
           optional(nullable(isIndex))(played.spark),
       ),
     )(value.played) &&
-    sideRecord(isIndex)(value.drawn)
+    sideRecord(isIndex)(value.drawn) &&
+    // A saved turn log may lack its materializations (TurnLog.materialized).
+    optional(
+      sideRecord(
+        arrayOf(
+          (materialized) =>
+            isPlainRecord(materialized) &&
+            isInstanceId(materialized.instance) &&
+            isCardKind(materialized.cardType) &&
+            isString(materialized.subtype) &&
+            isBoolean(materialized.allTypes),
+        ),
+      ),
+    )(value.materialized)
   );
 }
 
