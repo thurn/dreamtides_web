@@ -10,6 +10,7 @@ import { battleSeed, SIDES, type InstanceId, type Side } from "../../../state/id
 import type { BattleState } from "../../../state/types";
 import { NO_PROMPTS } from "../../../steps/sources";
 import { boardState, type BoardSetup } from "../../../testing/board";
+import { CONTINUOUS } from "../../../testing/continuous-cards";
 import { CONDITIONAL, CONDITIONAL_STATIC_CARDS } from "../../../testing/conditional-static-cards";
 import { comparableView, determinizationDivergences } from "../../../testing/determinization-fidelity";
 import { SYNTHETIC } from "../../../testing/synthetic-cards";
@@ -99,6 +100,22 @@ describe("conditional static abilities", () => {
     const { state, ids } = board({ active: "player", phase: "day", player: { back: [CONDITIONAL.selfBound.id], deck: filler } });
     expect(characteristicsOf(state, engine.catalog, ids.player.back[0]!).spark).toBe(3);
     expect(determinizationDivergences(engine, state, decklists(state), battleSeed("conditional-spark"), 0)).toEqual([]);
+    const raised = board({ active: "player", phase: "day", player: {
+      back: [CONDITIONAL.selfBound.id], hand: [CONTINUOUS.baseSevenThisTurn.id], energy: 1, deck: filler,
+    } });
+    const source = raised.ids.player.back[0]!;
+    const off = apply(raised.state, "player", { kind: "play", card: raised.ids.player.hand[0], from: "hand" });
+    expect(characteristicsOf(off, engine.catalog, source).spark).toBe(7);
+  });
+
+  it("reads a prior base-spark change rather than the printed spark for its condition", () => {
+    const { state, ids } = board({ active: "enemy", phase: "day", player: {
+      back: [CONDITIONAL.selfBoundTwo.id], deck: filler,
+    }, enemy: { hand: [CONTINUOUS.enemyBaseOnePermanently.id], energy: 2, deck: filler } });
+    const source = ids.player.back[0]!;
+    expect(characteristicsOf(state, engine.catalog, source).spark).toBe(2);
+    const lowered = apply(state, "enemy", { kind: "play", card: ids.enemy.hand[0], from: "hand" });
+    expect(characteristicsOf(lowered, engine.catalog, source).spark).toBe(3);
   });
 
   it("reads lower type layers for conditional keywords and applies costs live, preserving unconditional statics", () => {
@@ -126,6 +143,13 @@ describe("conditional static abilities", () => {
       expect(characteristicsOf(state, engine.catalog, ids.player.back[1]!).keywords).toContain("awakened");
       expect(determinizationDivergences(engine, state, decklists(state), battleSeed("conditional-void"), voidCards.length)).toEqual([]);
     }
+  });
+
+  it("suppresses its empty-deck keyword when the deck contains a card", () => {
+    const { state, ids } = board({ active: "player", phase: "day", player: {
+      back: [CONDITIONAL.emptyDeck.id], deck: [CONDITIONAL.freeEvent.id],
+    } });
+    expect(characteristicsOf(state, engine.catalog, ids.player.back[0]!).keywords).not.toContain("awakened");
   });
 
   it("uses the opponent's public hand count independently of hidden printings", () => {

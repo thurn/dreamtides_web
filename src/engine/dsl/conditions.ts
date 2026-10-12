@@ -4,7 +4,7 @@ import { filterSubjectOf, matchesFilter } from "../continuous/characteristics";
 import type { AbilitySource, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
 import type { BattleState } from "../state/types";
-import { matchingCharactersWith, resolvePlayer, type CharacteristicsReader } from "./selectors";
+import { matchingCharactersWith, resolvePlayer, zoneCountWith, type CharacteristicsReader } from "./selectors";
 import type { Condition } from "./types";
 
 /** The condition's controller, source, and optional costs paid by its stack item. */
@@ -40,11 +40,13 @@ export function conditionHoldsWith(
       return instance === null ? condition.zone === "play" : state.instances[instance]?.zone === condition.zone;
     }
     case "cardsIn": {
-      const cards = state.sides[resolvePlayer(scope.controller, condition.player)][condition.zone];
       const filter = condition.filter;
-      const count = filter === undefined
-        ? cards.length
-        : cards.filter((id) => matchesFilter(filterSubjectOf(state, catalog, id, read(id)), filter)).length;
+      const count = condition.zone === "void"
+        ? zoneCountWith(state, catalog, read, { value: "countCards", zone: "void", player: condition.player, filter: filter ?? {} }, scope.controller)
+        : filter === undefined
+          ? zoneCountWith(state, catalog, read, { value: "countCards", zone: condition.zone, player: condition.player }, scope.controller)
+          : state.sides[resolvePlayer(scope.controller, condition.player)][condition.zone]
+            .filter((id) => matchesFilter(filterSubjectOf(state, catalog, id, read(id)), filter)).length;
       return (condition.atLeast === undefined || count >= condition.atLeast) &&
         (condition.atMost === undefined || count <= condition.atMost);
     }

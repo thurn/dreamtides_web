@@ -996,9 +996,11 @@ Effective characteristics are computed, never stored
 reads it through `effectiveSpark`, `hasKeyword`, the selectors, the cost
 code, and the view. Changes come from two sources:
 
-- **Static abilities** (`staticAbility(effect, { zone })`), on emblems and
-  on cards in the zones they work from, read live. They change characters in
-  play and, through `grantCardKeyword`, cards in a hand, deck, or void.
+- **Static abilities** (`staticAbility(effect, { zone, while })`), on emblems and
+  on cards in the zones they work from, read live. An optional `while`
+  condition gates their changes and reads the layers before their effect.
+  They change characters in play and, through `grantCardKeyword`, cards in a
+  hand, deck, or void.
 - **Floating records** in `state.floating`, made by resolving effects. Their
   characters and values are fixed as they resolve, and each carries its
   `timestamp`.
@@ -1077,8 +1079,9 @@ Ordering within a layer:
 - Ties go to static abilities first, in source order (emblems, player first,
   then cards in any zone by instance number), then floating records in
   creation order (RD-hv-7x4l.7-2).
-- A static ability's selectors and values read the characteristics of the
-  layers before its own, so no layer depends on itself. The exception is the
+- A static ability's selectors, values, and `while` condition read the
+  characteristics of the layers before its own, so no layer depends on itself.
+  The exception is the
   base spark and spark of a card outside play, which its reader
   (`staticReader`) gives final (RD-hv-umm2.464-1): static abilities change
   those only for characters in play (`changes` throws on a static layer-4 or
@@ -1105,9 +1108,9 @@ another evaluation of the state. Except for the static-only
 floating records for their own duration, else the enclosing
 `forDuration`'s, else permanently.
 
-**Static abilities working outside play.** A `StaticAbility` carries a
-`zone: FunctionalZone`, the type triggered abilities use: `"play"` (the
-`staticAbility` default), `"void"`, `"hand"`, or `"any"` (play, void, hand,
+**Static abilities working outside play.** A `StaticAbility` carries an
+optional `while: StaticCondition` and a `zone: FunctionalZone`, the type
+triggered abilities use: `"play"` (the `staticAbility` default), `"void"`, `"hand"`, or `"any"` (play, void, hand,
 and deck). `collectStatics` in `layers.ts` gathers each emblem's static
 abilities, then each card's in play, a void, a hand, or a deck whose `zone`
 covers where the card is, with the card's `controller` (a hand's holder, else
@@ -1618,9 +1621,20 @@ deck beside its 8. It does not stage a lower bound by a count.
 
 `conditionCardCounts` counts the specified player’s cards in a deck, hand, or
 void when the condition is checked. Its optional typed filter reads effective
-card type and subtype; its lower and optional upper bounds are inclusive.
-The player defaults to the effect’s controller. `noCardsIn` checks an empty
-zone with the existing upper bound of zero.
+characteristics when resolving, and the layers before the effect in a static
+condition; its lower and optional upper bounds are inclusive. The player
+defaults to the effect’s controller. `noCardsIn` checks an empty zone with the
+existing upper bound of zero.
+
+`conditionHoldsWith` in `dsl/conditions.ts` shares condition evaluation with
+its caller's characteristics reader. The resolving `conditionHolds` wrapper
+in `effects/interpreter.ts` supplies effective characteristics; `Layers.expand`
+supplies the reader of the layers before the static effect. `StaticCondition`
+uses public information: controlled-character selectors and their static
+numeric bounds, energy, source zone and Reclaim status, unfiltered hand and
+deck sizes, and optionally filtered public void counts. It excludes optional
+cost-payment history, resolving-only source-spark reads, and hidden-printing
+filters. Omitting `while` makes the static ability unconditional.
 
 Dreamsigns and avatars use the same DSL as emblem abilities (P4). Dreamwell
 cards use event-like abilities; a drawn Dreamwell card applies only its

@@ -1,0 +1,285 @@
+{
+  "bead": "hv-w0ei",
+  "base": "0ff2a36fbda4191977e4fec53ae5f2e4e11f917a",
+  "scratchRoot": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/w0ei-evidence",
+  "dispatchUtc": "2026-10-12T11:18:00.000564+00:00",
+  "implementWindow": {
+    "startUtc": "2026-10-12T11:18:00.000564+00:00",
+    "preCommitObservedUtc": "2026-10-12T11:28:51.010417+00:00",
+    "dispatchToObservationMin": 10.850164216666666,
+    "actualCommitReceipt": "commit.receipt.json in scratchRoot records the actual immutable commit endpoint."
+  },
+  "checks": {
+    "focused-corrected-2": {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reads a self-matching spark|reads a prior base-spark|counts filtered public void"
+      ],
+      "pid": 81745,
+      "pgid": 81745,
+      "startUtc": "2026-10-12T11:23:20.301117+00:00",
+      "endUtc": "2026-10-12T11:23:23.057014+00:00",
+      "wallSeconds": 2.755619249997835,
+      "exit": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup"
+    },
+    "focused-corrected": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "pid": 80814,
+      "pgid": 80814,
+      "startUtc": "2026-10-12T11:22:32.202724+00:00",
+      "endUtc": "2026-10-12T11:22:38.672747+00:00",
+      "wallSeconds": 6.46984104099829,
+      "exit": 1,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup"
+    },
+    "focused-final": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "pid": 83691,
+      "pgid": 83691,
+      "startUtc": "2026-10-12T11:24:53.031661+00:00",
+      "endUtc": "2026-10-12T11:24:59.016800+00:00",
+      "wallSeconds": 5.984977166001045,
+      "exit": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup",
+      "sourceSHA256": {
+        "docs/plan/phase-5-content.md": "78dfe5ef3e5c9eeea680753307721004d603e8c013481b4f4c5753099fa435c7",
+        "docs/plan/engine-design.md": "c792a4a8dd05f16cc2ca83305bf6e8d89fc6eb0776bd1151d603afa12f907eb8",
+        "src/engine/dsl/conditions.ts": "154ac70f30a070992e1d8666d0a229e73d02f5d37667fc7d5ff3e8315e86c222",
+        "src/engine/effects/primitives/contracts/conditional-static.contracts.ts": "db559f736ed0d1f2b6b731b940ad234beafaa6f0064a775d5ef708b12a63a972",
+        "src/engine/testing/conditional-static-cards.ts": "85a8b0b7bace4ff91cd49700039c5bc5c22c72b2bc451ca6069996bb2cd435b4",
+        "src/engine/continuous/layers.ts": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d"
+      },
+      "hostLoadRaw": "{ 6.07 6.93 9.69 }"
+    },
+    "focused-initial": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "pid": 79959,
+      "pgid": 79959,
+      "startUtc": "2026-10-12T11:21:48.612099+00:00",
+      "endUtc": "2026-10-12T11:21:53.194677+00:00",
+      "wallSeconds": 4.582286332995864,
+      "exit": 1,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup"
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 86362,
+      "pgid": 86362,
+      "startUtc": "2026-10-12T11:26:44.378234+00:00",
+      "endUtc": "2026-10-12T11:26:48.287362+00:00",
+      "wallSeconds": 3.9089457079971908,
+      "exit": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup",
+      "sourceSHA256": {
+        "docs/plan/phase-5-content.md": "78dfe5ef3e5c9eeea680753307721004d603e8c013481b4f4c5753099fa435c7",
+        "docs/plan/engine-design.md": "927bbd627bc5765ba4ec982bd67eeab2a372264036c7913b874c2bcedcf2392e",
+        "src/engine/dsl/conditions.ts": "154ac70f30a070992e1d8666d0a229e73d02f5d37667fc7d5ff3e8315e86c222",
+        "src/engine/effects/primitives/contracts/conditional-static.contracts.ts": "db559f736ed0d1f2b6b731b940ad234beafaa6f0064a775d5ef708b12a63a972",
+        "src/engine/testing/conditional-static-cards.ts": "85a8b0b7bace4ff91cd49700039c5bc5c22c72b2bc451ca6069996bb2cd435b4",
+        "src/engine/continuous/layers.ts": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d"
+      },
+      "hostLoadRaw": "{ 7.33 7.05 9.38 }"
+    },
+    "negative-ignore-while-discriminating": {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reads a self-matching spark|reads a prior base-spark|suppresses its empty-deck"
+      ],
+      "pid": 82637,
+      "pgid": 82637,
+      "startUtc": "2026-10-12T11:24:07.934406+00:00",
+      "endUtc": "2026-10-12T11:24:10.098797+00:00",
+      "wallSeconds": 2.1642897499987157,
+      "exit": 1,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup"
+    },
+    "negative-ignore-while": {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reads a self-matching spark|reads a prior base-spark|counts filtered public void"
+      ],
+      "pid": 82103,
+      "pgid": 82103,
+      "startUtc": "2026-10-12T11:23:38.430897+00:00",
+      "endUtc": "2026-10-12T11:23:40.660337+00:00",
+      "wallSeconds": 2.229310583003098,
+      "exit": 1,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup"
+    },
+    "negative-wrong-reader-discriminating": {
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "reads a self-matching spark|reads a prior base-spark|suppresses its empty-deck"
+      ],
+      "pid": 83182,
+      "pgid": 83182,
+      "startUtc": "2026-10-12T11:24:27.490689+00:00",
+      "endUtc": "2026-10-12T11:24:29.988564+00:00",
+      "wallSeconds": 2.497709458002646,
+      "exit": 1,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup"
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 85036,
+      "pgid": 85036,
+      "startUtc": "2026-10-12T11:25:50.410089+00:00",
+      "endUtc": "2026-10-12T11:26:37.373639+00:00",
+      "wallSeconds": 46.9628778749975,
+      "exit": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup",
+      "sourceSHA256": {
+        "docs/plan/phase-5-content.md": "78dfe5ef3e5c9eeea680753307721004d603e8c013481b4f4c5753099fa435c7",
+        "docs/plan/engine-design.md": "927bbd627bc5765ba4ec982bd67eeab2a372264036c7913b874c2bcedcf2392e",
+        "src/engine/dsl/conditions.ts": "154ac70f30a070992e1d8666d0a229e73d02f5d37667fc7d5ff3e8315e86c222",
+        "src/engine/effects/primitives/contracts/conditional-static.contracts.ts": "db559f736ed0d1f2b6b731b940ad234beafaa6f0064a775d5ef708b12a63a972",
+        "src/engine/testing/conditional-static-cards.ts": "85a8b0b7bace4ff91cd49700039c5bc5c22c72b2bc451ca6069996bb2cd435b4",
+        "src/engine/continuous/layers.ts": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d"
+      },
+      "hostLoadRaw": "{ 5.86 6.69 9.41 }"
+    },
+    "schema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 86646,
+      "pgid": 86646,
+      "startUtc": "2026-10-12T11:26:52.794590+00:00",
+      "endUtc": "2026-10-12T11:26:52.901427+00:00",
+      "wallSeconds": 0.10670562500308733,
+      "exit": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup",
+      "sourceSHA256": {
+        "docs/plan/phase-5-content.md": "78dfe5ef3e5c9eeea680753307721004d603e8c013481b4f4c5753099fa435c7",
+        "docs/plan/engine-design.md": "927bbd627bc5765ba4ec982bd67eeab2a372264036c7913b874c2bcedcf2392e",
+        "src/engine/dsl/conditions.ts": "154ac70f30a070992e1d8666d0a229e73d02f5d37667fc7d5ff3e8315e86c222",
+        "src/engine/effects/primitives/contracts/conditional-static.contracts.ts": "db559f736ed0d1f2b6b731b940ad234beafaa6f0064a775d5ef708b12a63a972",
+        "src/engine/testing/conditional-static-cards.ts": "85a8b0b7bace4ff91cd49700039c5bc5c22c72b2bc451ca6069996bb2cd435b4",
+        "src/engine/continuous/layers.ts": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d"
+      },
+      "hostLoadRaw": "{ 7.70 7.14 9.39 }"
+    },
+    "whitespace": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "pid": 87278,
+      "pgid": 87278,
+      "startUtc": "2026-10-12T11:27:14.650909+00:00",
+      "endUtc": "2026-10-12T11:27:14.677605+00:00",
+      "wallSeconds": 0.026576374999422114,
+      "exit": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup",
+      "sourceSHA256": {
+        "docs/plan/phase-5-content.md": "78dfe5ef3e5c9eeea680753307721004d603e8c013481b4f4c5753099fa435c7",
+        "docs/plan/engine-design.md": "927bbd627bc5765ba4ec982bd67eeab2a372264036c7913b874c2bcedcf2392e",
+        "src/engine/dsl/conditions.ts": "154ac70f30a070992e1d8666d0a229e73d02f5d37667fc7d5ff3e8315e86c222",
+        "src/engine/effects/primitives/contracts/conditional-static.contracts.ts": "db559f736ed0d1f2b6b731b940ad234beafaa6f0064a775d5ef708b12a63a972",
+        "src/engine/testing/conditional-static-cards.ts": "85a8b0b7bace4ff91cd49700039c5bc5c22c72b2bc451ca6069996bb2cd435b4",
+        "src/engine/continuous/layers.ts": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d"
+      },
+      "hostLoadRaw": "{ 7.47 7.11 9.32 }"
+    },
+    "install": {
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "pid": 77348,
+      "pgid": 77348,
+      "startUtc": "2026-10-12T11:19:07.355274+00:00",
+      "endUtc": "2026-10-12T11:19:09.451657+00:00",
+      "wallSeconds": 2.0962541250046343,
+      "exit": 0,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/conditional-static-review-followup"
+    }
+  },
+  "setupCostS": 2.0962541250046343,
+  "validationTotalS": 77.6891391639947,
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review invocation start"
+      }
+    }
+  },
+  "scope": {
+    "productionChanges": "Public void and unfiltered hand/deck conditions delegate existing zoneCountWith; filtered hidden resolving conditions retain their existing reader-aware evaluation. No state/schema/event/UI/content change.",
+    "independentReview": "Follow-up of actual Claude Opus5.5 review of hv-umm2.513; bounded docs/tests/delegation does not require another core review.",
+    "validation": "Focused contracts, related aggregate review, sequential Knip; no cross-cutting infrastructure, runner or fuzz change; browser/full/fuzz repeats are unnecessary."
+  },
+  "negativeWitnesses": {
+    "ignoreWhile": "Original selected count case failed before nonempty-deck assertion; split off the deck case and retained a second changed witness. Both actual failures are counted. Discriminating run: self spark9 versus7, base2 falsecase4 versus2, nonempty-deck awakened absent assertion fails.",
+    "wrongReader": "Condition reader temporarily layer1 instead of previous layer: lowered printedbase2 tobase1 spark1 versus3; raised spark9 versus7.",
+    "restoration": {
+      "ignore-while-restoration.json": {
+        "before": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d",
+        "mutated": "c27b9722b23c267b389a5c5a0645eb610e8671f498504b2a5dd58680f9e64c93",
+        "after": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d",
+        "exactRestored": true
+      },
+      "wrong-reader-restoration.json": {
+        "before": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d",
+        "mutated": "70e1de5c549dc640b2679058f4df54e8971b134988578436f514721b7a7e8aab",
+        "after": "1229e6e85472b57552e926738297eff3e01c88fc3af675d48fe96d88f6d03d7d",
+        "exactRestored": true
+      }
+    }
+  },
+  "compatibility": "Existing materialize-deck-knowledge contracts use a filtered hidden hand Condition; full CardCountValue delegation would discard supported resolving semantics. Public subset delegates with typed objects and no cast.",
+  "failures": [
+    {
+      "label": "focused-initial",
+      "reason": "Duplicate reused continuous fixture registration; catalog already provides these UUIDs, failed before test execution."
+    },
+    {
+      "label": "focused-corrected",
+      "reason": "Two sole-target setter cases automatically choose the target; supplied ScriptedSource answers were unused. Restored public NO_PROMPTS helper, no product defect."
+    }
+  ],
+  "provenance": "Early receipts retain actual argv/cwd/PID/PGID/exit and wall times, but have no source hash manifest. Final focused/review/Knip and subsequent receipts capture source hashes. Negative mutation bytes and restoration hashes are retained. Final focused code matches freeze; later documentation line wrapping is covered by review."
+}

@@ -25,6 +25,9 @@ export const CONDITIONAL = {
   selfBound: card(4, () => [staticAbility(p.sparkModifier(self(), 2), {
     while: controls(characterYouControl({ subtype: "Mage", sparkAtMost: 1 })),
   })], "Mage"),
+  selfBoundTwo: { ...card(11, () => [staticAbility(p.sparkModifier(self(), 2), {
+    while: controls(characterYouControl({ subtype: "Mage", sparkAtMost: 1 })),
+  })], "Mage"), spark: 2 },
   layers: card(5, () => [
     staticAbility(p.giveAllTypes(self()), { while: smallHand }),
     staticAbility(p.grant(self(), "vengeful"), { while: controls(characterYouControl({ subtype: "Spirit Animal" })) }),

@@ -143,7 +143,7 @@ composition beads skip it.
    | A granted or changed cost, or a new way to play a card (from the void, a hand, the deck, for a different cost) | `src/engine/rules/timing.ts` (`routeCosts`, `playRoutes`), `src/engine/steps/kinds/play.ts`, `src/engine/rules/legality.ts` |
    | A card entering or leaving a zone, or the stack, with an announcement or a remembered move | `src/engine/rules/zones.ts` (`relocate`), `src/engine/rules/stack.ts` |
    | A number read from the board (counts, bounds on spark or cost, "for each") | `src/engine/dsl/selectors.ts`, `src/engine/dsl/values.ts`, `src/engine/effects/interpreter.ts`, `src/engine/continuous/layers.ts` |
-   | A condition ("if", "unless", "while", an intervening "if you control") | `src/engine/effects/interpreter.ts` (`conditionHolds`) |
+   | A condition ("if", "unless", "while", an intervening "if you control") | `src/engine/dsl/conditions.ts` (`conditionHoldsWith`); resolving wrapper: `src/engine/effects/interpreter.ts` (`conditionHolds`); static reader: `src/engine/continuous/layers.ts` |
    | A continuous grant or permission ("gains", "can", "until end of turn") | `src/engine/continuous/layers.ts`, `src/engine/rules/floating.ts`, `src/rules/battle/fold.ts` |
    | A void or pile card that shows a new status or play affordance | `src/cumulus/components/card/CardChoiceGrid.tsx`, `src/cumulus/components/battle/CardPile.tsx`, `src/cumulus/screens/MobileBattleScreen.tsx` (`SideZones`) |
 
