@@ -1,3 +1,5 @@
+import { event, noCardsIn } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 97,
   art: { x: -0.334, y: -0.438, scale: 1.27 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.ifThen(noCardsIn("deck"), p.winTheGame()))],
+  verifiedText: "crg8ub3c29",
 });
