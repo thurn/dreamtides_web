@@ -9,7 +9,6 @@ import { instanceOrigin } from "../../../rules/activation";
 import { instanceOf } from "../../../rules/zones";
 import { stateHash } from "../../../state/hash";
 import type { CardId, InstanceId } from "../../../state/ids";
-import type { BattleState } from "../../../state/types";
 import { ScriptedSource } from "../../../steps/sources";
 import type { AnswerSource } from "../../../steps/types";
 import { boardState, type BoardSetup } from "../../../testing/board";
@@ -63,9 +62,6 @@ class RecordingSource implements AnswerSource {
     return this.respond(prompt);
   }
 }
-
-/** `state` without the loop history's record of the answers as submitted. */
-const withoutAnswerLog = (state: BattleState): BattleState => ({ ...state, loops: { ...state.loops, actions: [] } });
 
 /** Accepts a "you may" and takes the chooseCards candidates at `picks`. */
 const acceptPicking = (...picks: readonly number[]) => (prompt: Prompt): Answer =>
@@ -123,8 +119,7 @@ describe("takeFromAmong with a count", () => {
     ] as const) {
       const inOrder = play(setup, new RecordingSource(acceptPicking(...forward)));
       const backward = play(setup, new RecordingSource(acceptPicking(...reversed)));
-      // The loop history keeps each answer as submitted, to replay it verbatim; everything else, loop signatures included, agrees.
-      expect(stateHash(withoutAnswerLog(backward.result.state))).toBe(stateHash(withoutAnswerLog(inOrder.result.state)));
+      expect(stateHash(backward.result.state)).toBe(stateHash(inOrder.result.state));
       expect(backward.result.state.loops.checkpoints).toEqual(inOrder.result.state.loops.checkpoints);
       expect(backward.result.events).toEqual(inOrder.result.events);
       expect(backward.result.state.sides.player.hand).toEqual(inOrder.result.state.sides.player.hand);

@@ -1,0 +1,341 @@
+{
+  "bead": "hv-umm2.508",
+  "base": "61469b1af93937d960f0ac44bf7620767d644788",
+  "implementationStartUtc": "2026-10-12T09:47:46Z",
+  "implementationStartProvenance": "First helper clock sample after parent native IMPLEMENT ACK; read-only research/ACK wait precede this window.",
+  "updatedUtc": "2026-10-12T09:58:46.513087+00:00",
+  "validation": [
+    {
+      "name": "corrected-witness",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "selection order contracts"
+      ],
+      "pid": 50045,
+      "startUtc": "2026-10-12T09:50:00.955414+00:00",
+      "endUtc": "2026-10-12T09:50:04.164273+00:00",
+      "wallS": 3.209,
+      "exit": 1,
+      "log": "/tmp/hv-umm2.508-corrected-witness.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "repaired-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "selection order contracts|takeFromAmong with a count"
+      ],
+      "pid": 64740,
+      "startUtc": "2026-10-12T09:50:47.700750+00:00",
+      "endUtc": "2026-10-12T09:50:51.684966+00:00",
+      "wallS": 3.984,
+      "exit": 0,
+      "log": "/tmp/hv-umm2.508-repaired-focused.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "cost-order",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "records top-level cost selections",
+        "--silent=false"
+      ],
+      "pid": 66094,
+      "startUtc": "2026-10-12T09:51:23.699442+00:00",
+      "endUtc": "2026-10-12T09:51:26.983342+00:00",
+      "wallS": 3.284,
+      "exit": 0,
+      "log": "/tmp/hv-umm2.508-cost-order.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "cost-confirm",
+      "command": [
+        "node_modules/.bin/tsx",
+        "-e",
+        "import { activated, discardCost } from \"./src/engine/dsl/builders\"; import { gainEnergy } from \"./src/engine/effects/primitives/gain-energy\"; import { createEngine } from \"./src/engine/engine\"; import { boardState } from \"./src/engine/testing/board\"; import { SYNTHETIC as v, syntheticId, testCatalog } from \"./src/engine/testing/synthetic-cards\"; import { ScriptedSource } from \"./src/engine/steps/sources\"; import { stateHash } from \"./src/engine/state/hash\"; const card={id:syntheticId(0x6506),cardType:\"character\",costs:[],spark:1,subtype:\"\",speed:\"standard\",status:\"authored\",abilities:()=>[activated([discardCost(2)],gainEnergy(1))]}; const engine=createEngine(testCatalog([card])); const deck=Array(4).fill(v.vanilla1.id); const {state,ids}=boardState(engine.catalog,{active:\"player\",phase:\"day\",player:{back:[card.id],hand:Array(3).fill(v.vanilla1.id),deck},enemy:{deck}}); const a=[ids.player.hand[0],ids.player.hand[2]]; const run=(answer)=>engine.apply(state,\"player\",{kind:\"activate\",source:ids.player.back[0],ability:0},new ScriptedSource([answer])); const forward=run(a),reverse=run([...a].reverse()); console.log(JSON.stringify({loopsEqual:JSON.stringify(forward.state.loops.actions)===JSON.stringify(reverse.state.loops.actions),forwardVoid:forward.state.sides.player.void,reverseVoid:reverse.state.sides.player.void,forwardDiscards:forward.events.filter(e=>e.kind===\"discarded\"),reverseDiscards:reverse.events.filter(e=>e.kind===\"discarded\"),forwardHash:stateHash(forward.state),reverseHash:stateHash(reverse.state)}));"
+      ],
+      "pid": 66888,
+      "startUtc": "2026-10-12T09:52:11.448851+00:00",
+      "endUtc": "2026-10-12T09:52:12.395666+00:00",
+      "wallS": 0.947,
+      "exit": 0,
+      "log": "/tmp/hv-umm2.508-cost-confirm.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "affected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts"
+      ],
+      "pid": 67857,
+      "startUtc": "2026-10-12T09:52:24.769059+00:00",
+      "endUtc": "2026-10-12T09:52:32.598866+00:00",
+      "wallS": 7.83,
+      "exit": 0,
+      "log": "/tmp/hv-umm2.508-affected.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 89713,
+      "startUtc": "2026-10-12T09:53:46.480219+00:00",
+      "endUtc": "2026-10-12T09:54:35.792175+00:00",
+      "wallS": 49.311,
+      "exit": 0,
+      "log": "/tmp/hv-umm2.508-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 11137,
+      "startUtc": "2026-10-12T09:54:49.014801+00:00",
+      "endUtc": "2026-10-12T09:54:52.267090+00:00",
+      "wallS": 3.252,
+      "exit": 0,
+      "log": "/tmp/hv-umm2.508-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "evidence-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records-only"
+      ],
+      "pid": 43849,
+      "startUtc": "2026-10-12T09:55:44.176684+00:00",
+      "endUtc": "2026-10-12T09:55:44.230070+00:00",
+      "wallS": 0.053,
+      "exit": 2,
+      "log": "/tmp/hv-umm2.508-evidence-schema.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "final-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "selection order contracts|takeFromAmong with a count"
+      ],
+      "pid": 53722,
+      "startUtc": "2026-10-12T09:56:07.469071+00:00",
+      "endUtc": "2026-10-12T09:56:11.446015+00:00",
+      "wallS": 3.977,
+      "exit": 0,
+      "log": "/tmp/hv-umm2.508-final-focused.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "final-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 58387,
+      "startUtc": "2026-10-12T09:56:31.408637+00:00",
+      "endUtc": "2026-10-12T09:57:24.101862+00:00",
+      "wallS": 52.692,
+      "exit": 0,
+      "log": "/tmp/hv-umm2.508-final-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "final-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 90135,
+      "startUtc": "2026-10-12T09:57:47.281206+00:00",
+      "endUtc": "2026-10-12T09:57:50.462965+00:00",
+      "wallS": 3.182,
+      "exit": 0,
+      "log": "/tmp/hv-umm2.508-final-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "schema-corrected",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 92870,
+      "startUtc": "2026-10-12T09:58:20.264990+00:00",
+      "endUtc": "2026-10-12T09:58:20.360321+00:00",
+      "wallS": 0.095,
+      "exit": 0,
+      "log": "/tmp/hv-umm2.508-schema-corrected.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "initialWitness": {
+    "observerSession": 57860,
+    "pid": "not captured before terminal; not invented",
+    "exit": 1,
+    "log": "/tmp/hv-umm2.508-witness.log",
+    "stageStartUtc": "2026-10-12T09:49:13.648Z",
+    "testStageWallS": 3.0,
+    "tests": {
+      "failed": 8,
+      "passed": 1,
+      "skipped": 1462
+    },
+    "fixtureCorrections": [
+      "Random discard control used offset3 with a guessed reverse order; explicit board seed stream offset1 selects physical hand3 then hand1. Offset/count fixed before source repair.",
+      "Saved committed base after top-level play is first.committed; the original pre-play state differs by committed cast step. Corrected before source repair."
+    ],
+    "terminal": true
+  },
+  "unchangedSourceWitness": {
+    "testsFailed": 7,
+    "testsPassed": 2,
+    "scope": "Both sides discard/shuffle state+events, both loop history branches, serialized prefix equivalence; ordered arrange and random stream controls pass."
+  },
+  "testDelta": {
+    "newPlainContractModules": 1,
+    "newRunnerFiles": 0,
+    "jsdomFiles": 0,
+    "newCases": 10,
+    "newContractLines": 195,
+    "existingContractLinesDeleted": 6,
+    "netContractLines": 190
+  },
+  "scope": {
+    "productionPaths": [
+      "src/engine/effects/primitives/discard.ts",
+      "src/engine/effects/primitives/shuffle-into.ts",
+      "src/engine/loops/tracker.ts"
+    ],
+    "fallout": [],
+    "exports": [],
+    "schemaChanges": false,
+    "productionDiff": {
+      "added": 22,
+      "removed": 7
+    }
+  },
+  "compatibility": {
+    "currentEngineJsonPrefix": "Reconstructs saved selection prefix at following confirmation, preserves committed step boundary, completes equivalent full states and rejects duplicate final answer. Raw values and fingerprints are retained.",
+    "historicalLoopRecords": "Accepted as ordinary unchanged RecordedAnswer schema; fingerprints/legal selection validation apply at replay. Existing historical records are not rewritten by this recording-only helper.",
+    "crossVersionLimit": "A saved operation may already have published events in the previous submitted selection order. Resuming recomputes the prefix with the current candidate-order behavior and skips its publishedEvents count. Existing presentation/log rows may retain that previous order while the resumed committed fold uses current order. No event-payload migration is claimed."
+  },
+  "checksNotRun": {
+    "full": "No architecture, repository configuration or test infrastructure change.",
+    "fuzz": "Entity-free bounded deterministic normalization; parent classification uses staged release fuzz.",
+    "browser": "No renderer, prompt surface or interaction changes; engine contract outcomes cover internal set equivalence."
+  },
+  "failurePaths": {
+    "errorMidStep": "Existing clone-and-commit runner/error recovery is unchanged; focused fold-intents suite checks recovery. No new partial-write protocol.",
+    "reload": "Named serialized selected-prefix contract checks reconstructed prompt and committed boundary.",
+    "invalidStaleConcurrentInput": "Existing fold-intents/fold-prompts contracts validate actor, prompt ID and answer legality; these bodies and schemas remain unchanged.",
+    "partialWrite": "Selected effect operations use existing move/event operations in the existing private work copy; no new persistence write.",
+    "duplicateInput": "Serialized prefix contract verifies final answer cannot commit twice."
+  },
+  "runtime": {
+    "servers": [],
+    "ports": [],
+    "browsers": [],
+    "providers": [],
+    "terminalProcesses": "All captured command PIDs terminal; initial observer57860 exit1 without captured PID. No servers/ports/browsers/providers.",
+    "auxiliaryTerminalCommands": [
+      {
+        "observerChunk": "ac5250",
+        "pid": 66888,
+        "kind": "Standalone cost evidence, captured in validation list",
+        "terminal": true
+      },
+      {
+        "observerChunk": "c7b320",
+        "kind": "Read-only10 RNG draw diagnostics",
+        "pid": "not captured",
+        "exit": 0,
+        "terminal": true
+      }
+    ]
+  },
+  "measurementWindow": {
+    "startUtc": "2026-10-12T09:47:18Z",
+    "startProvenance": "Parent-provided exact native IMPLEMENT ACK updated_at; narrow helper implementation window, excluding earlier read-only design and waiting. Native claim started09:32:37Z.",
+    "endUtc": "2026-10-12T09:58:46.513087+00:00",
+    "endProvenance": "Final precommit refresh; final schema observer and commit tail excluded, actual commit timestamp definitive."
+  },
+  "validationCounts": {
+    "affected": {
+      "files": 5,
+      "cases": 1514
+    },
+    "review": {
+      "files": 267,
+      "cases": 4016
+    },
+    "repairedFocused": {
+      "cases": 19
+    },
+    "newContracts": {
+      "cases": 10
+    },
+    "finalFocused": {
+      "cases": 20
+    },
+    "finalReview": {
+      "files": 267,
+      "cases": 4016
+    }
+  },
+  "finalAssertionRefinement": {
+    "reason": "Parent review found exact seed-derived chosen IDs and RNG offset coupled the random-control contract to default draw algorithm.",
+    "change": "No seeded expected identities or offsets: two distinct legal hand instances, two draw stream increments, no answer, unchanged unrelated stream, same-seed event equality, void agrees with emitted order.",
+    "productionChanges": false,
+    "baselineFailureAttribution": "Initial random expectations were fixture errors, not a product regression; the corrected failing baseline remains seven acceptance witnesses and two passing controls.",
+    "schemaFlagCorrection": "Initial --validate-records-only exit2 is retained; tool declares --validate-records."
+  },
+  "preExistingFollowUp": "hv-7d93"
+}

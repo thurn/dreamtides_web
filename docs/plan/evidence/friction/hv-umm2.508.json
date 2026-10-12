@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.508",
+  "phase": 5,
+  "implementMin": 11.48,
+  "localValidationS": {
+    "corrected-witness": 3.209,
+    "repaired-focused": 3.984,
+    "cost-order": 3.284,
+    "cost-confirm": 0.947,
+    "affected": 7.83,
+    "review": 49.311,
+    "knip": 3.252,
+    "evidence-schema": 0.053,
+    "final-focused": 3.977,
+    "final-review": 52.692,
+    "final-knip": 3.182,
+    "schema-corrected": 0.095
+  },
+  "hostLoad": 12.83203125,
+  "testDelta": {
+    "files": 0,
+    "lines": 190,
+    "jsdomFiles": 0,
+    "cases": 10
+  },
+  "friction": []
+}

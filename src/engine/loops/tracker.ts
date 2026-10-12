@@ -20,7 +20,8 @@
  */
 import { mainWindowSide } from "../rules/decision";
 import { endBattle } from "../rules/victory";
-import type { Side } from "../state/ids";
+import type { Answer } from "../prompts/types";
+import type { InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { Step } from "../steps/kinds";
 import type { RecordedAnswer, StepContext } from "../steps/types";
@@ -88,6 +89,18 @@ function contested(answers: readonly RecordedAnswer[], choosers: readonly Side[]
   return answers.some((answer, index) => answer.auto !== true && choosers[index] !== actor);
 }
 
+/** Only selection answers hold instance strings; arrangements hold destination entries. */
+function isSelection(value: Answer): value is readonly InstanceId[] {
+  return Array.isArray(value) && value.every(item => typeof item === "string");
+}
+
+/** Preserve replay metadata and ordered answers, copying selections into their canonical set order. */
+function recordedSelections(answers: readonly RecordedAnswer[]): readonly RecordedAnswer[] {
+  return answers.map(answer => isSelection(answer.value)
+    ? { ...answer, value: [...answer.value].sort() }
+    : answer);
+}
+
 /**
  * The loop candidate the latest checkpoint completes: from the latest earlier
  * checkpoint it repeats with a gain for `side`.
@@ -139,13 +152,13 @@ export function trackLoops(
     }
     if (loops.scope !== null) {
       if (contested(answers, choosers, loops.scope.side)) clearHistory(loops);
-      else loops.actions.push({ steps: [{ step, answers, promptsVisibleToActor }] });
+      else loops.actions.push({ steps: [{ step, answers: recordedSelections(answers), promptsVisibleToActor }] });
     }
   } else if (loops.scope !== null) {
     const last = loops.actions[loops.actions.length - 1];
     if (last !== undefined) {
       if (contested(answers, choosers, loops.scope.side)) clearHistory(loops);
-      else loops.actions[loops.actions.length - 1] = { steps: [...last.steps, { step, answers, promptsVisibleToActor }] };
+      else loops.actions[loops.actions.length - 1] = { steps: [...last.steps, { step, answers: recordedSelections(answers), promptsVisibleToActor }] };
     }
   }
   const side = checkpointSide(work);

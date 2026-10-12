@@ -42,7 +42,7 @@ export const shuffleIntoPrimitive = definePrimitive<ShuffleIntoNode>({
     const named = [...new Set(node.cards.flatMap((ref) => resolveCards(ctx, ref, env)))];
     const hand = ctx.state.sides[side].hand.filter((id) => id !== env.source && !named.includes(id));
     const count = Math.min(node.chooseFromHand, hand.length);
-    const chosen = count <= 0
+    const selected = count <= 0
       ? []
       : ctx.choose<ChooseCardsPrompt>({
           kind: "chooseCards",
@@ -56,7 +56,8 @@ export const shuffleIntoPrimitive = definePrimitive<ShuffleIntoNode>({
       player: { cards: [], from: [], seenBy: [] },
       enemy: { cards: [], from: [], seenBy: [] },
     };
-    for (const id of [...named, ...chosen]) {
+    const chosen = new Set(selected);
+    for (const id of [...named, ...hand.filter(id => chosen.has(id))]) {
       const instance = instanceOf(ctx.state, id);
       if (instance.zone === "deck") continue;
       const from = instance.zone;

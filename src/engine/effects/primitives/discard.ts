@@ -33,14 +33,15 @@ export const discardPrimitive = definePrimitive<DiscardNode>({
         return card;
       });
     } else {
-      chosen = ctx.choose<ChooseCardsPrompt>({
+      const selected = new Set(ctx.choose<ChooseCardsPrompt>({
         kind: "chooseCards",
         side,
         purpose: env.purpose("discard"),
         candidates: hand,
         min: count,
         max: count,
-      });
+      }));
+      chosen = hand.filter(card => selected.has(card));
     }
     for (const card of chosen) discardCard(ctx, side, card);
   },
