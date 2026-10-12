@@ -25,7 +25,9 @@
     "lab:preflight": "tsx scripts/qa/lab-preflight.ts",
     "perf:ab": "tsx scripts/perf-ab.ts",
     "friction:triggers": "node scripts/friction-triggers.mjs",
-    "regenerate-replay-fixtures": "tsx scripts/regenerate-replay-fixtures.mjs"
+    "regenerate-replay-fixtures": "tsx scripts/regenerate-replay-fixtures.mjs",
+    "tournament": "tsx scripts/tournament/run.ts",
+    "tournament:pool": "tsx scripts/tournament/generate-pool.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",

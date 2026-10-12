@@ -100,6 +100,59 @@ initialization" at page load, which the dev server hides. Registries that
 share a cycle with their entries, such as the effect primitives and the step
 kinds, therefore read each entry through a getter.
 
+## Policy tournaments
+
+The headless Node runner compares two existing engine policies on the frozen
+Atlas deck pool. Every seed/deck pairing is played twice: deck seats, dealt
+cards and the starting seat stay fixed, and the policies exchange seats.
+Both policies therefore pilot both decks and move first once per pair.
+
+```bash
+npm run tournament -- --a random --b greedy --games 200 --budget scale:1 --pool scripts/tournament/deck-pool.json --seed atlas-baseline --run-id atlas-baseline
+npm run tournament -- --a random --b greedy --games 200 --budget scale:1 --pool scripts/tournament/deck-pool.json --seed atlas-baseline --run-id atlas-baseline --resume
+```
+
+`--games` counts individual games and must be positive and even.
+`--budget iterations:64` (or `64`) gives every decision that iteration ceiling;
+`--budget scale:1/8` (or `scale:0.125`) scales the planning and response ceilings
+from the AI catalog, rounding down with a minimum of one iteration. Tournament
+budgets have no wall-clock decision cap. Policy randomness has a private stream
+separate from the battle's random streams.
+
+`--workers` defaults to two and supports one through four. `--batch-ms` sets a
+batch duration up to 30 minutes. A deadline or interrupt settles every worker;
+completed games are durable and in-flight games remain eligible for resume.
+Run heavy tournaments under the machine-wide heavy slot, size workers to idle
+capacity, and keep a local tournament separate from local heavy validation:
+
+```bash
+lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run tournament -- --a random --b greedy --games 200 --budget scale:1 --pool scripts/tournament/deck-pool.json --seed atlas-baseline --run-id atlas-baseline
+```
+
+A run writes ignored `logs/tournaments/<run-id>.jsonl` and a report under
+`docs/plan/evidence/ai/`. Logs retain UUID deck identities, the battle init,
+actions, recorded answers, engine events, policy seeds and traces, outcome
+hashes, timings and host load. Reports state completion/failures, win rates,
+Wilson 95% intervals with draws worth one half, relative Elo estimates across
+both policies, overlapping tide-archetype splits, layer splits and decision
+time. Compare reports' outcome hashes for identical per-game outcomes.
+
+A fresh run gets a new destination ID unless `--run-id` is supplied. The ID
+selects files; it does not affect gameplay. `--resume` requires the same ID and
+all original deterministic options, pool bytes, source bytes, dependency lock
+and Node runtime. It validates committed records before repairing an incomplete
+trailing JSONL write. Concurrent owners are rejected; `--recover` permits an
+explicit recovery of a dead lock owner on the same host. Ambiguous or foreign
+lock owners are retained for inspection.
+
+Regenerate the pool deliberately with
+`npm run tournament:pool -- --reason '<reason>'`. Its 56 decks use the real
+opponent generator, eight for each Atlas layer 0–6, retaining Avatar activation,
+Dreamsigns, affiliations and joined tide UUIDs. The generation JSONL records
+reconstruction details and the reason. Apollyon incarnation decks are appended
+by the dependent `hv-umm2.295` sanity task. Harness limits and statistical
+parameters live in `scripts/tournament/catalog.json`.
+
 ## Browser QA
 
 QA runs through the globally configured Playwright MCP service

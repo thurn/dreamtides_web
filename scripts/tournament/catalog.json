@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "maximumWorkers": 4,
+  "defaultWorkers": 2,
+  "maximumBatchMs": 1800000,
+  "maximumChoicesPerGame": 100000,
+  "workerBootMs": 30000,
+  "layers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "decksPerLayer": 8,
+  "poolSeed": "atlas-tournament-v1",
+  "confidenceZ": 1.959963984540054,
+  "eloCenter": 1500,
+  "eloScale": 400,
+  "eloPriorGames": 1,
+  "defaultBudget": "scale:1",
+  "defaultGames": 200
+}

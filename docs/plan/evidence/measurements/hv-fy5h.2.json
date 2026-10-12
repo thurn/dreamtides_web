@@ -1,0 +1,494 @@
+{
+  "bead": "hv-fy5h.2",
+  "status": "Implementation and required acceptance complete; exact helper commit pending parent cold review/delivery",
+  "dispatch": "2026-10-12T19:47:44.553Z",
+  "dispatchReceipt": "/tmp/codex-01a130c8-tournament/dispatch.json",
+  "modelStart": null,
+  "precommitCutoff": "2026-10-12T20:47:01.054627+00:00",
+  "base": "a7490317db77dbcc70eb9cd76bc778d923417493",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/tournament-harness7-1-sol",
+  "sourceSnapshot": {
+    "nonTestHarnessLines": 806,
+    "harnessFiles": [
+      {
+        "path": "scripts/tournament/batch.ts",
+        "sha256": "ccf4f2d8f74be6571a0ea2e61a80aa3d8b2f954a9117f70d738555a806175796"
+      },
+      {
+        "path": "scripts/tournament/catalog.json",
+        "sha256": "2b834579039eec9c3d481ff56d6e5b363c044719f2b615c9c5e00fb70d52f06b"
+      },
+      {
+        "path": "scripts/tournament/deck-pool.json",
+        "sha256": "5d484ac84fe58fd18e40fe32d55ddfad4f548fe1d29e88f8792108074cd2fa48"
+      },
+      {
+        "path": "scripts/tournament/game.ts",
+        "sha256": "1aa447a9f856563a4c6dad923e8c2e8be1e274d0a18e09ae5c0063e8575763ad"
+      },
+      {
+        "path": "scripts/tournament/generate-pool.ts",
+        "sha256": "bd5702027d551859589d4208e00fc3524384ddc0514cc8333f31d6649b5dd72c"
+      },
+      {
+        "path": "scripts/tournament/journal.ts",
+        "sha256": "38ec90672a5b779efa93675baa5f641f91b8e524d6caf127bb1bf4ee3b0bbd40"
+      },
+      {
+        "path": "scripts/tournament/options.ts",
+        "sha256": "e50f5918962b5a81be65319db258689502bffefacf7c42bd5f2860436787f40a"
+      },
+      {
+        "path": "scripts/tournament/pool.ts",
+        "sha256": "acbdf75e7f1719b3f8797d9b5dc129383dd3fb1938839b2d4231588035857194"
+      },
+      {
+        "path": "scripts/tournament/provenance.ts",
+        "sha256": "c9e98aa4fed1ed159a4c12fe2ae0dd5dd4042b54e16bfc1526135a1a6660bae5"
+      },
+      {
+        "path": "scripts/tournament/run.ts",
+        "sha256": "9d6bc0a7de56dc8067c762e9e2a2b922a620ba36b3007b1ffd99da2e9ba4c829"
+      },
+      {
+        "path": "scripts/tournament/schedule.ts",
+        "sha256": "512374cab23f4e8479ce70c8cb0f579eee8dcd9302460b1d92cce4c0a8f76fb6"
+      },
+      {
+        "path": "scripts/tournament/statistics.ts",
+        "sha256": "9af22341059df2acaa7ebef0ce565d289dff10055d7992a3689f213a6ecc3783"
+      },
+      {
+        "path": "scripts/tournament/types.ts",
+        "sha256": "ef3b629793a16de4a4b7179387b80fe358193aa0ab0a523105857c1ba52354db"
+      },
+      {
+        "path": "scripts/tournament/worker-bootstrap.mjs",
+        "sha256": "d33bc70e38897f1938fade8637a7a58c860604f9975cd6b1f9ed30ded0c2b731"
+      },
+      {
+        "path": "scripts/tournament/worker.ts",
+        "sha256": "99123955855d355c04254cb17c1d1ce3d5c6754414811c12f48cf1e8a7b47afa"
+      }
+    ],
+    "packageHash": "694d6eb9bad287573e135d920efcc16aa85e2cb1be53af02a3eb3f947790f6ed"
+  },
+  "runtimeSourceHash": "2487549ff3288e94cb2b4e0f1a1fb0c3f60076bc82c47ac8956c72ea2bac4b4f",
+  "poolByteHash": "5d484ac84fe58fd18e40fe32d55ddfad4f548fe1d29e88f8792108074cd2fa48",
+  "configFingerprint": "d4aaea88653045bec4d8a6e9dda6340d5dc8f7a8549f4baa616cf7eb9a0724e5",
+  "reproduction": {
+    "timestamp": "2026-10-12T20:39:12.003033+00:00",
+    "games": 200,
+    "identical": true,
+    "configFingerprint": "d4aaea88653045bec4d8a6e9dda6340d5dc8f7a8549f4baa616cf7eb9a0724e5",
+    "sourceHash": "2487549ff3288e94cb2b4e0f1a1fb0c3f60076bc82c47ac8956c72ea2bac4b4f",
+    "poolHash": "5d484ac84fe58fd18e40fe32d55ddfad4f548fe1d29e88f8792108074cd2fa48",
+    "mismatchedOrdinals": [],
+    "comparedFields": [
+      "spec",
+      "result",
+      "finalStateHash",
+      "startAnswers",
+      "actions",
+      "decisionCount",
+      "all engine logs and policy traces excluding measured milliseconds"
+    ],
+    "journalByteHashes": {
+      "baseline": "e365d1c146453e81e1d964ba36bd54d5b0469e6bb514aedd606af4d3a6855302",
+      "repeat": "eb84e0744369538c6b0a50895ddcf6fc1bcec81629eb373a8c94258e6124bc04"
+    },
+    "journalByteHashScope": "Observed at reproduction-proof timestamp, before completed CLI resume appended baseline batch metadata; final settled audit hashes recorded separately."
+  },
+  "setup": {
+    "session": 28050,
+    "exit": 0,
+    "npmReportedSeconds": 2,
+    "pid": null,
+    "start": null,
+    "auditVulnerabilities": 17
+  },
+  "checks": [
+    {
+      "label": "pool-generation-fixed",
+      "command": [
+        "npm",
+        "run",
+        "tournament:pool",
+        "--",
+        "--reason",
+        "hv-fy5h.2 final prompt-snapshot harness freeze; hv-umm2.295 appends Apollyon incarnation decks"
+      ],
+      "start": "2026-10-12T20:12:37.959899+00:00",
+      "end": "2026-10-12T20:12:39.894795+00:00",
+      "pid": 52178,
+      "pgid": 52178,
+      "exit": 0,
+      "elapsedSeconds": 1.9347101250023115,
+      "output": "/tmp/codex-01a130c8-tournament/pool-generation-fixed.output.log"
+    },
+    {
+      "label": "focused-refined",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/tournament/contracts.test.ts"
+      ],
+      "start": "2026-10-12T20:23:00.654962+00:00",
+      "end": "2026-10-12T20:23:07.378603+00:00",
+      "pid": 61087,
+      "pgid": 61087,
+      "exit": 0,
+      "elapsedSeconds": 6.723328249994665,
+      "output": "/tmp/codex-01a130c8-tournament/focused-refined.output.log"
+    },
+    {
+      "label": "review-refined",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T20:25:04.978156+00:00",
+      "end": "2026-10-12T20:25:16.460300+00:00",
+      "pid": 64408,
+      "pgid": 64408,
+      "exit": 0,
+      "elapsedSeconds": 11.481984875004855,
+      "output": "/tmp/codex-01a130c8-tournament/review-refined.output.log"
+    },
+    {
+      "label": "knip-refined",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T20:26:25.449600+00:00",
+      "end": "2026-10-12T20:26:29.033284+00:00",
+      "pid": 66488,
+      "pgid": 66488,
+      "exit": 0,
+      "elapsedSeconds": 3.583327708009165,
+      "output": "/tmp/codex-01a130c8-tournament/knip-refined.output.log"
+    },
+    {
+      "label": "full-final",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-12T20:14:06.745694+00:00",
+      "end": "2026-10-12T20:17:10.338343+00:00",
+      "pid": 54006,
+      "pgid": 54006,
+      "exit": 0,
+      "elapsedSeconds": 183.59084649999568,
+      "output": "/tmp/codex-01a130c8-tournament/full-final.output.log"
+    },
+    {
+      "label": "tournament-200",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "tournament",
+        "--",
+        "--a",
+        "random",
+        "--b",
+        "greedy",
+        "--games",
+        "200",
+        "--budget",
+        "scale:1",
+        "--pool",
+        "scripts/tournament/deck-pool.json",
+        "--seed",
+        "hv-fy5h.2-acceptance",
+        "--run-id",
+        "hv-fy5h-2-random-greedy",
+        "--workers",
+        "2"
+      ],
+      "start": "2026-10-12T20:17:32.966650+00:00",
+      "end": "2026-10-12T20:27:04.321490+00:00",
+      "pid": 41862,
+      "pgid": 41862,
+      "exit": 0,
+      "elapsedSeconds": 571.3545043340127,
+      "output": "/tmp/codex-01a130c8-tournament/tournament-200.output.log"
+    },
+    {
+      "label": "tournament-200-repeat",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "tournament",
+        "--",
+        "--a",
+        "random",
+        "--b",
+        "greedy",
+        "--games",
+        "200",
+        "--budget",
+        "scale:1",
+        "--pool",
+        "scripts/tournament/deck-pool.json",
+        "--seed",
+        "hv-fy5h.2-acceptance",
+        "--run-id",
+        "hv-fy5h-2-random-greedy-repeat",
+        "--workers",
+        "2"
+      ],
+      "start": "2026-10-12T20:28:01.112749+00:00",
+      "end": "2026-10-12T20:38:12.728125+00:00",
+      "pid": 97572,
+      "pgid": 97572,
+      "exit": 0,
+      "elapsedSeconds": 611.610664916996,
+      "output": "/tmp/codex-01a130c8-tournament/tournament-200-repeat.output.log"
+    },
+    {
+      "label": "completed-resume",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "tournament",
+        "--",
+        "--a",
+        "random",
+        "--b",
+        "greedy",
+        "--games",
+        "200",
+        "--budget",
+        "scale:1",
+        "--pool",
+        "scripts/tournament/deck-pool.json",
+        "--seed",
+        "hv-fy5h.2-acceptance",
+        "--run-id",
+        "hv-fy5h-2-random-greedy",
+        "--workers",
+        "2",
+        "--resume"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tournament-harness7-1-sol",
+      "start": "2026-10-12T20:39:15.830798+00:00",
+      "pid": 18043,
+      "pgid": 18043,
+      "end": "2026-10-12T20:41:34.322732+00:00",
+      "exit": 0,
+      "elapsedSeconds": 138.49078983301297,
+      "output": "/tmp/codex-01a130c8-tournament/completed-resume.output.log",
+      "scope": "Completed CLI resume validated committed records, appended only batch metadata, zero workers and zero new games; wrapper includes shared-slot wait."
+    }
+  ],
+  "validationScope": {
+    "fullFinal": "Final runtime source; 352 files / 5911 tests, Vitest 77.30 seconds. Afterwards only the synthetic fixture was refined to mandatory discard; focused/review/Knip all rerun on that revision.",
+    "fullFinalPreOutputSeconds": 77.965306,
+    "repeatPreBatchSeconds": 46.999251,
+    "earlyFull": "full-1 passed before the prompt snapshot fix; retained as historical validation, not final runtime evidence.",
+    "earlySmoke": "Two real CLI games on an earlier source/pool revision; its report states its actual hashes."
+  },
+  "parentAudits": [
+    {
+      "scope": "Read-only baseline checksums/spec/config/sourceFiles and seven layer replays; no policy execution and unchanged journal bytes",
+      "receipt": {
+        "label": "parent-baseline-audit",
+        "command": [
+          "node",
+          "node_modules/tsx/dist/cli.mjs",
+          "/tmp/codex-01a130c8-tournament/parent-baseline-audit.mts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tournament-harness7-1-sol",
+        "start": "2026-10-12T20:29:48.425386+00:00",
+        "pid": 797,
+        "pgid": 797,
+        "end": "2026-10-12T20:29:50.995515+00:00",
+        "exit": 0,
+        "elapsedSeconds": 2.5700066670106025
+      },
+      "resultPath": "/tmp/codex-01a130c8-tournament/parent-baseline-audit-result.json"
+    },
+    {
+      "scope": "Read-only frozen pool cardinality/identity query; no timing claim",
+      "result": {
+        "scope": "parent frozen pool acceptance read-only",
+        "deckCount": 56,
+        "perLayer": {
+          "0": 8,
+          "1": 8,
+          "2": 8,
+          "3": 8,
+          "4": 8,
+          "5": 8,
+          "6": 8
+        },
+        "uniqueDeckIds": true,
+        "sha256": "5d484ac84fe58fd18e40fe32d55ddfad4f548fe1d29e88f8792108074cd2fa48",
+        "apollyonAdditionBead": "hv-umm2.295",
+        "reason": "hv-fy5h.2 final prompt-snapshot harness freeze; hv-umm2.295 appends Apollyon incarnation decks"
+      }
+    },
+    {
+      "scope": "Read-only exact comparison of both 200-game datasets, excluding only measured trace milliseconds; journal byte hashes scoped to that audit before completed resume metadata",
+      "receipt": {
+        "label": "parent-repeat-audit",
+        "command": [
+          "python3",
+          "/tmp/codex-01a130c8-tournament/parent-repeat-audit.py"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/tournament-harness7-1-sol",
+        "start": "2026-10-12T20:40:22.845161+00:00",
+        "pid": 77272,
+        "pgid": 77272,
+        "end": "2026-10-12T20:40:27.784839+00:00",
+        "exit": 0,
+        "elapsedSeconds": 4.939535750003415
+      },
+      "resultPath": "/tmp/codex-01a130c8-tournament/parent-repeat-audit-result.json"
+    },
+    {
+      "scope": "Final settled journal checksum/run-lock/runtime snapshot audit after completed resume",
+      "result": {
+        "bead": "hv-fy5h.2",
+        "start": "2026-10-12T20:44:14.846461+00:00",
+        "end": "2026-10-12T20:44:16.044588+00:00",
+        "scope": "Parent final settled journal checksum/lock/source-snapshot audit after legitimate zero-game completed resume",
+        "runs": [
+          {
+            "runId": "hv-fy5h-2-random-greedy",
+            "records": 205,
+            "games": 200,
+            "allChecksumsValid": true,
+            "runLockAbsent": true,
+            "journalHash": "7bb2e9b8ca228019af53db53a6a809115e04bc812e31ed94d92a26b041d6698e"
+          },
+          {
+            "runId": "hv-fy5h-2-random-greedy-repeat",
+            "records": 203,
+            "games": 200,
+            "allChecksumsValid": true,
+            "runLockAbsent": true,
+            "journalHash": "eb84e0744369538c6b0a50895ddcf6fc1bcec81629eb373a8c94258e6124bc04"
+          }
+        ],
+        "allOriginalRuntimeHashesStillMatch": true
+      }
+    }
+  ],
+  "failures": [
+    {
+      "scope": "Initial new-code typecheck",
+      "session": 47905,
+      "exit": 2,
+      "diagnosis": "Unknown worker error type, optional tides catalog, and narrowed callback status types corrected before typecheck-2 passed."
+    },
+    {
+      "scope": "Historical optional-payment stale-view negative",
+      "receipt": "/tmp/codex-01a130c8-tournament/stale-view-diagnosis.receipt.json",
+      "exit": 1,
+      "intent": "Counterfactual original callback, not a claimed existing production failure."
+    },
+    {
+      "scope": "Refined mandatory-discard negative",
+      "receipt": "/tmp/codex-01a130c8-tournament/refined-negative.receipt.json",
+      "exit": 1,
+      "detail": "Scratch copy restored original mutable-work callback; visible=5, actual=4, side=player. Production runtime path unchanged.",
+      "sourceScope": {
+        "runtimePath": "/Users/dthurn/dreamtides_web/.worktrees/tournament-harness7-1-sol/scripts/tournament/game.ts",
+        "runtimeSHA256": "1aa447a9f856563a4c6dad923e8c2e8be1e274d0a18e09ae5c0063e8575763ad",
+        "scratchPath": "/tmp/codex-01a130c8-tournament/game-negative.mts",
+        "scratchSHA256": "f910dc6e8c937d711c2ddb9d3d460aca05443d3bfd57cf53dd387bbc858248ba",
+        "change": "snapshot = work; relative imports absolute; ongoing worker runtime source untouched"
+      }
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final evidence/friction schema validation immediately before commit; not attributed to earlier review timings",
+        "method": "sysctl -n vm.loadavg one-minute observation",
+        "timestamp": "2026-10-12T20:47:01.057339+00:00",
+        "raw": "{ 11.47 14.38 12.51 }"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "review-refined main group",
+      "timestamp": "2026-10-12T20:25:05.922Z",
+      "oneMinute": 8.4150390625
+    },
+    {
+      "scope": "full-final first group after shared-slot wait",
+      "timestamp": "2026-10-12T20:15:25.423Z",
+      "oneMinute": 3.5595703125
+    },
+    {
+      "scope": "Final evidence schema validation",
+      "method": "sysctl -n vm.loadavg",
+      "timestamp": "2026-10-12T20:47:01.057339+00:00",
+      "oneMinute": 11.47
+    }
+  ],
+  "lifecycle": {
+    "ownHeavyOverlap": false,
+    "workerCeiling": 4,
+    "acceptanceWorkers": 2,
+    "maximumBatchMs": 1800000,
+    "resources": "All terminated batch workers and timers are awaited; final owned-process check recorded before commit.",
+    "processGroupInspection": {
+      "timestamp": "2026-10-12T20:46:29.513612+00:00",
+      "recordedGroups": 23,
+      "nonemptyGroups": []
+    }
+  },
+  "coldReview": {
+    "owner": "parent",
+    "status": "Pending exact helper commit",
+    "model": "gpt-5.6-sol",
+    "route": "Temporary human-authorized Sol routing until 2026-10-14T01:00:00Z; reviewer is fresh and read-only"
+  },
+  "completedResume": {
+    "exit": 0,
+    "newGames": 0,
+    "workers": 0,
+    "actualBatchMs": 0.297583,
+    "sourceUnchanged": true,
+    "baselineJournalRecords": 205
+  },
+  "precommitCutoffScope": "Practical evidence freeze immediately before final schema validation, staging and normal-dated commit. Actual successful commit process receipt/tail retained outside this commit.",
+  "implementMin": 59.27502711666667,
+  "frictionTimingScope": "All localValidationS values are actual wrapper receipt durations, including preparation, restoration and any shared heavy-slot wait; detailed execution/queue scopes and load samples remain separate.",
+  "testRevision": {
+    "files": 1,
+    "lines": 179,
+    "nodeEnvironment": true,
+    "scope": "Final mandatory-discard fixture validated by focused-refined/review-refined/knip-refined; full-final pins identical runtime source before this test-only revision."
+  }
+}
