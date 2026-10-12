@@ -27,7 +27,7 @@ logs/
 artifacts/qa/
 artifacts/heavy.lock
 artifacts/browser-qa.lock
-artifacts/browser-qa.lock.owner.json
+artifacts/browser-qa.lock.*
 *.tsbuildinfo
 
 .vscode

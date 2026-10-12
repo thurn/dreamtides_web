@@ -46,6 +46,10 @@ export async function connectPlaywrightMcp({
   await client.connect(transport);
 
   return {
+    // Capture the originally negotiated transport identity, before any call.
+    sessionId: transport.sessionId,
+    url: new URL(url).href,
+    protocolVersion: transport.protocolVersion,
     /**
      * @param {string} name
      * @param {Record<string, unknown>} [args]
@@ -64,14 +68,16 @@ export async function connectPlaywrightMcp({
       }
       return result;
     },
-    /** @param {() => Promise<void>} [beforeTransportClose] */
+    /** @param {(browserCloseConfirmed: boolean) => Promise<void>} [beforeTransportClose] */
     async close(beforeTransportClose) {
+      let browserCloseConfirmed = false;
       try {
         const result = await client.callTool({ name: "browser_close", arguments: {} });
         if (result.isError) throw new McpToolResponseError("browser_close", result);
+        browserCloseConfirmed = true;
       } finally {
         try {
-          await beforeTransportClose?.();
+          await beforeTransportClose?.(browserCloseConfirmed);
         } finally {
           await client.close();
         }

@@ -1,0 +1,25 @@
+{
+  "bead": "hv-umm2.527",
+  "phase": 5,
+  "implementMin": 84.72005395,
+  "localValidationS": {
+    "focused": 14.54444694519043,
+    "review": 20.2010600566864,
+    "knip": 3.0881428718566895,
+    "full": 73.44332695007324,
+    "browser": 3.0222902297973633
+  },
+  "hostLoad": 18.1181640625,
+  "testDelta": {
+    "files": 1,
+    "lines": 294,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "provider-completion-proof",
+      "minutes": 19.132821266666667,
+      "note": "Observed lower-bound coordination/repair window10:28:20Z\u201310:47:27.969276Z: public session-map absence lacks a teardown-complete witness; installed-source verification and native Justiciar resolution selected a durable exact-runner completion receipt. This is not browser lease wait."
+    }
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "bead": "hv-umm2.527",
+  "implementationWindow": {
+    "startUtc": "2026-10-12T09:45:26.796763+00:00",
+    "startKind": "parent post-spawn proxy; actual helper/model start unknown",
+    "endUtc": "2026-10-12T11:10:10+00:00",
+    "endKind": "parent-approved amendment metadata precommit proxy; actual Git execution separately receipted",
+    "elapsedProxyMinutes": 84.72005395,
+    "actualHelperStartKnown": false
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementMin": {
+        "source": "implementationWindow; normalized post-spawn proxy, not invented actual helper start",
+        "actualGitReceipt": "/tmp/dreamtides-provider-reconcile-527/helper-receipts/amend.json"
+      },
+      "hostLoad": {
+        "measuredFor": "final npm run review (final-review) start"
+      }
+    }
+  },
+  "historicalCause": {
+    "sources": [
+      "docs/plan/evidence/measurements/hv-umm2.525.md",
+      "docs/plan/evidence/measurements/hv-umm2.161.json#browserLeaseWait"
+    ],
+    "retainedSlotMinutesApprox": [
+      22,
+      24
+    ],
+    "own161CompletedNativeWaitMs": 676194,
+    "claim": "measured historical friction motivates explicit guarded reconciliation; no speed comparison claimed"
+  },
+  "protocolEvidence": {
+    "publicTransport": "https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#session-management",
+    "publicProvider": "https://github.com/microsoft/playwright/blob/main/packages/playwright-core/src/tools/utils/mcp/http.ts",
+    "installedProvider": "@playwright/mcp 0.0.79; playwright-core coreBundle.js 71365-71391",
+    "installedBundleSHA256": "adf9246486a03bee08b2895db057ba470c62377911d291693fe783d91d6fec52",
+    "absenceWitness": "Strict Playwright HTTP404 / Session not found witnesses session-map absence only; archival also requires the exact durable completion receipt.",
+    "newOwnerFields": [
+      "mcpSessionId",
+      "mcpUrl",
+      "mcpProtocolVersion",
+      "mcpExecutionCompleted"
+    ],
+    "boundIdentity": "original negotiated SDK public getters, captured once before calls; canonical configured endpoint",
+    "installedSDKBundleSHA256": "580f571bf063e2256b51b3946a035bc452fc0e22808d5547b198baea39923a32",
+    "publicTeardown": [
+      "https://github.com/microsoft/playwright/blob/main/packages/playwright-core/src/tools/utils/mcp/server.ts",
+      "https://github.com/microsoft/playwright/blob/main/packages/playwright-core/src/tools/backend/browserBackend.ts"
+    ]
+  },
+  "validationReceipts": {
+    "heavy-acquired": {"event": "heavy kernel lease acquired (observed inside lockf command)", "observedUtc": "2026-10-12T10:01:59.872137+00:00", "pid": 81450, "pgid": 81449, "hostLoad": [19.984375, 15.994140625, 13.2138671875]},
+    "review-exact": {"command": ["npm", "run", "review"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 50379, "pgid": 50379, "startUtc": "2026-10-12T10:01:00.246368+00:00", "hostLoadStart": [19.5146484375, 14.669921875, 12.560546875], "exit": 0, "endUtc": "2026-10-12T10:01:21.865873+00:00", "elapsedS": 21.620911836624146, "hostLoadEnd": [21.07421875, 15.3125, 12.837890625]},
+    "lint-repair": {"command": ["npx", "eslint", "scripts/qa/provider-ownership.test.mjs", "scripts/qa/run-scenario-slots.test.mjs", "scripts/qa/browser-lease.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 17625, "pgid": 17625, "startUtc": "2026-10-12T09:59:39.166467+00:00", "hostLoadStart": [6.921875, 11.7265625, 11.4111328125], "exit": 0, "endUtc": "2026-10-12T09:59:41.196151+00:00", "elapsedS": 2.0313148498535156, "hostLoadEnd": [6.921875, 11.7265625, 11.4111328125]},
+    "knip": {"command": ["npm", "run", "knip"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 49551, "pgid": 49551, "startUtc": "2026-10-12T10:00:50.504051+00:00", "hostLoadStart": [19.9794921875, 14.591796875, 12.5087890625], "exit": 0, "endUtc": "2026-10-12T10:00:53.697595+00:00", "elapsedS": 3.194943904876709, "hostLoadEnd": [19.9794921875, 14.591796875, 12.5087890625]},
+    "focused-typed": {"command": ["npm", "test", "--", "scripts/qa/provider-ownership.test.mjs", "scripts/qa/browser-lease.test.mjs", "scripts/qa/run-scenario-slots.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 93012, "pgid": 93012, "startUtc": "2026-10-12T09:58:22.393753+00:00", "hostLoadStart": [12.83203125, 13.779296875, 12.037109375], "exit": 0, "endUtc": "2026-10-12T09:58:34.703791+00:00", "elapsedS": 12.312000036239624, "hostLoadEnd": [11.458984375, 13.4296875, 11.9423828125]},
+    "heavy-released": {"event": "heavy command settled; lockf releases after this exits", "observedUtc": "2026-10-12T10:03:25.701729+00:00", "exit": 0},
+    "focused": {"command": ["npm", "test", "--", "scripts/qa/provider-ownership.test.mjs", "scripts/qa/browser-lease.test.mjs", "scripts/qa/browser-lease-slots.test.mjs", "scripts/qa/browser-lease-order.test.mjs", "scripts/qa/run-scenario-slots.test.mjs", "scripts/qa/server-ownership.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 14739, "pgid": 14739, "startUtc": "2026-10-12T09:55:13.378651+00:00", "hostLoadStart": [18.68505859375, 11.552734375, 10.8193359375], "exit": 1, "endUtc": "2026-10-12T09:55:29.886469+00:00", "elapsedS": 16.509390115737915, "hostLoadEnd": [23.84619140625, 13.1982421875, 11.4267578125]},
+    "focused-final": {"command": ["npm", "test", "--", "scripts/qa/provider-ownership.test.mjs", "scripts/qa/browser-lease.test.mjs", "scripts/qa/browser-lease-slots.test.mjs", "scripts/qa/browser-lease-order.test.mjs", "scripts/qa/run-scenario-slots.test.mjs", "scripts/qa/server-ownership.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 45405, "pgid": 45405, "startUtc": "2026-10-12T09:55:59.183518+00:00", "hostLoadStart": [19.880859375, 13.32080078125, 11.53515625], "exit": 0, "endUtc": "2026-10-12T09:56:13.533735+00:00", "elapsedS": 14.35168194770813, "hostLoadEnd": [18.361328125, 13.2109375, 11.5166015625]},
+    "full": {"command": ["npm", "run", "review:full"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 81455, "pgid": 81455, "startUtc": "2026-10-12T10:01:59.894874+00:00", "hostLoadStart": [19.984375, 15.994140625, 13.2138671875], "exit": 0, "endUtc": "2026-10-12T10:03:25.697903+00:00", "elapsedS": 85.80435514450073, "hostLoadEnd": [11.650390625, 14.458984375, 12.90185546875]},
+    "native-smoke": {"command": ["node", "/tmp/dreamtides-provider-reconcile-527/helper-receipts/native-smoke.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 3142, "pgid": 3142, "startUtc": "2026-10-12T10:04:12.718967+00:00", "hostLoadStart": [7.70654296875, 13.04931640625, 12.462890625], "exit": 0, "endUtc": "2026-10-12T10:04:16.293286+00:00", "elapsedS": 3.57570219039917, "hostLoadEnd": [7.56982421875, 12.93212890625, 12.4248046875]},
+    "heavy-lock": {"command": ["lockf", "-k", "/Users/dthurn/dreamtides_web/artifacts/heavy.lock", "python3", "/tmp/dreamtides-provider-reconcile-527/helper-receipts/heavy.py"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 81449, "pgid": 81449, "startUtc": "2026-10-12T10:01:59.848954+00:00", "hostLoadStart": [19.984375, 15.994140625, 13.2138671875], "exit": 0, "endUtc": "2026-10-12T10:03:25.705642+00:00", "elapsedS": 85.85862803459167, "hostLoadEnd": [11.650390625, 14.458984375, 12.90185546875]},
+    "review-pass": {"command": ["npm", "run", "review"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 18340, "pgid": 18340, "startUtc": "2026-10-12T09:59:50.968020+00:00", "hostLoadStart": [6.93310546875, 11.5703125, 11.359375], "exit": 0, "endUtc": "2026-10-12T10:00:13.372116+00:00", "elapsedS": 22.405498027801514, "hostLoadEnd": [14.734375, 12.98974609375, 11.869140625]},
+    "review": {"command": ["npm", "run", "review"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 57926, "pgid": 57926, "startUtc": "2026-10-12T09:56:24.611263+00:00", "hostLoadStart": [15.22900390625, 12.7744140625, 11.39013671875], "exit": 2, "endUtc": "2026-10-12T09:56:47.080201+00:00", "elapsedS": 22.470219612121582, "hostLoadEnd": [17.51904296875, 13.40087890625, 11.64306640625]},
+    "review-final": {"command": ["npm", "run", "review"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 3623, "pgid": 3623, "startUtc": "2026-10-12T09:58:44.831103+00:00", "hostLoadStart": [10.3916015625, 13.13525390625, 11.85498046875], "exit": 1, "endUtc": "2026-10-12T09:59:04.316362+00:00", "elapsedS": 19.486600399017334, "hostLoadEnd": [9.18896484375, 12.6875, 11.7236328125]},
+    "install": {"command": "npm install", "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 44878, "pgid": 44878, "startUtc": "2026-10-12T09:45:31.531835+00:00", "hostLoadStart": [7.431640625, 9.59716796875, 11.7822265625], "exit": 0, "endUtc": "2026-10-12T09:45:33.771463+00:00", "elapsedS": 2.2408790588378906, "hostLoadEnd": [7.55712890625, 9.5869140625, 11.765625]},
+    "final-schema": {"command": ["node", "scripts/friction-triggers.mjs", "--validate-records"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 22463, "pgid": 22463, "startUtc": "2026-10-12T10:06:00.211693+00:00", "hostLoadStart": [19.66064453125, 14.9248046875, 13.19775390625], "exit": 0, "endUtc": "2026-10-12T10:06:00.275831+00:00", "elapsedS": 0.06593108177185059, "hostLoadEnd": [19.66064453125, 14.9248046875, 13.19775390625]},
+    "repair-focused": {"command": ["npm", "test", "--", "scripts/qa/provider-ownership.test.mjs", "scripts/qa/browser-lease.test.mjs", "scripts/qa/browser-lease-slots.test.mjs", "scripts/qa/browser-lease-order.test.mjs", "scripts/qa/run-scenario-slots.test.mjs", "scripts/qa/server-ownership.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 88310, "pgid": 88310, "startUtc": "2026-10-12T10:18:04.131539+00:00", "hostLoadStart": [13.3505859375, 12.7763671875, 12.15673828125], "exit": 0, "endUtc": "2026-10-12T10:18:19.156727+00:00", "elapsedS": 15.027214288711548, "hostLoadEnd": [12.564453125, 12.62451171875, 12.11279296875]},
+    "repair-review": {"command": ["npm", "run", "review"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 4763, "pgid": 4763, "startUtc": "2026-10-12T10:19:05.333419+00:00", "hostLoadStart": [9.00732421875, 11.68408203125, 11.7939453125], "exit": 0, "endUtc": "2026-10-12T10:19:23.004089+00:00", "elapsedS": 17.671906232833862, "hostLoadEnd": [8.359375, 11.41845703125, 11.69775390625]},
+    "repair-knip": {"command": ["npm", "run", "knip"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 16887, "pgid": 16887, "startUtc": "2026-10-12T10:19:38.075617+00:00", "hostLoadStart": [7.3505859375, 11.03955078125, 11.556640625], "exit": 0, "endUtc": "2026-10-12T10:19:40.337696+00:00", "elapsedS": 2.2633590698242188, "hostLoadEnd": [7.162109375, 10.93896484375, 11.51806640625]},
+    "repair-heavy-lock": {"command": ["lockf", "-k", "/Users/dthurn/dreamtides_web/artifacts/heavy.lock", "python3", "/tmp/dreamtides-provider-reconcile-527/helper-receipts/repair-heavy.py"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 17584, "pgid": 17584, "startUtc": "2026-10-12T10:19:59.910605+00:00", "hostLoadStart": [7.19140625, 10.76171875, 11.4443359375], "exit": 0, "endUtc": "2026-10-12T10:21:14.156333+00:00", "elapsedS": 74.24707984924316, "hostLoadEnd": [17.876953125, 12.47607421875, 11.986328125]},
+    "repair-heavy-acquired": {"event": "heavy kernel lease acquired (observed inside lockf command)", "observedUtc": "2026-10-12T10:19:59.929323+00:00", "pid": 17585, "pgid": 17584, "hostLoad": [7.19140625, 10.76171875, 11.4443359375]},
+    "repair-full": {"command": ["npm", "run", "review:full"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 17587, "pgid": 17587, "startUtc": "2026-10-12T10:19:59.949304+00:00", "hostLoadStart": [7.015625, 10.666015625, 11.40625], "exit": 0, "endUtc": "2026-10-12T10:21:14.149427+00:00", "elapsedS": 74.20133328437805, "hostLoadEnd": [17.876953125, 12.47607421875, 11.986328125]},
+    "repair-heavy-released": {"event": "heavy command settled; lockf releases after this exits", "observedUtc": "2026-10-12T10:21:14.152890+00:00", "exit": 0},
+    "receipt-focused": {"command": ["npm", "test", "--", "scripts/qa/provider-ownership.test.mjs", "scripts/qa/browser-lease.test.mjs", "scripts/qa/browser-lease-slots.test.mjs", "scripts/qa/browser-lease-order.test.mjs", "scripts/qa/run-scenario-slots.test.mjs", "scripts/qa/server-ownership.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 87740, "pgid": 87740, "startUtc": "2026-10-12T10:47:27.969276+00:00", "hostLoadStart": [5.67919921875, 8.5751953125, 11.3359375], "exit": 0, "endUtc": "2026-10-12T10:47:43.782660+00:00", "elapsedS": 15.81543779373169, "hostLoadEnd": [5.7001953125, 8.43359375, 11.23583984375]},
+    "receipt-review": {"command": ["npm", "run", "review"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 21403, "pgid": 21403, "startUtc": "2026-10-12T10:50:02.472519+00:00", "hostLoadStart": [13.05712890625, 8.88525390625, 10.892578125], "exit": 0, "endUtc": "2026-10-12T10:50:23.271750+00:00", "elapsedS": 20.800907135009766, "hostLoadEnd": [16.4140625, 9.86181640625, 11.19189453125]},
+    "final-focused": {"command": ["npm", "test", "--", "scripts/qa/provider-ownership.test.mjs", "scripts/qa/browser-lease.test.mjs", "scripts/qa/browser-lease-slots.test.mjs", "scripts/qa/browser-lease-order.test.mjs", "scripts/qa/run-scenario-slots.test.mjs", "scripts/qa/server-ownership.test.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 86660, "pgid": 86660, "startUtc": "2026-10-12T10:55:01.892939+00:00", "hostLoadStart": [15.556640625, 11.0009765625, 11.2275390625], "exit": 0, "endUtc": "2026-10-12T10:55:16.435888+00:00", "elapsedS": 14.54444694519043, "hostLoadEnd": [15.5634765625, 11.14892578125, 11.27734375]},
+    "final-review": {"command": ["npm", "run", "review"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 2716, "pgid": 2716, "startUtc": "2026-10-12T10:55:42.266869+00:00", "hostLoadStart": [18.1181640625, 12.05810546875, 11.59375], "exit": 0, "endUtc": "2026-10-12T10:56:02.465562+00:00", "elapsedS": 20.2010600566864, "hostLoadEnd": [17.57958984375, 12.30224609375, 11.68994140625]},
+    "final-knip": {"command": ["npm", "run", "knip"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 38531, "pgid": 38531, "startUtc": "2026-10-12T10:57:23.086473+00:00", "hostLoadStart": [9.73388671875, 11.33447265625, 11.39404296875], "exit": 0, "endUtc": "2026-10-12T10:57:26.173125+00:00", "elapsedS": 3.0881428718566895, "hostLoadEnd": [9.73388671875, 11.33447265625, 11.39404296875]},
+    "receipt-heavy-lock": {"command": ["lockf", "-k", "/Users/dthurn/dreamtides_web/artifacts/heavy.lock", "python3", "/tmp/dreamtides-provider-reconcile-527/helper-receipts/receipt-heavy.py"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 41725, "pgid": 41725, "startUtc": "2026-10-12T10:58:22.001305+00:00", "hostLoadStart": [6.33984375, 10.1552734375, 10.9521484375], "exit": 0, "endUtc": "2026-10-12T10:59:35.488541+00:00", "elapsedS": 73.48931193351746, "hostLoadEnd": [6.154296875, 9.2626953125, 10.5478515625]},
+    "receipt-heavy-acquired": {"event": "heavy kernel lease acquired (observed inside lockf command)", "observedUtc": "2026-10-12T10:58:22.020803+00:00", "pid": 41726, "pgid": 41725, "hostLoad": [6.33984375, 10.1552734375, 10.9521484375]},
+    "receipt-full": {"command": ["npm", "run", "review:full"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 41728, "pgid": 41728, "startUtc": "2026-10-12T10:58:22.039728+00:00", "hostLoadStart": [6.33984375, 10.1552734375, 10.9521484375], "exit": 0, "endUtc": "2026-10-12T10:59:35.481895+00:00", "elapsedS": 73.44332695007324, "hostLoadEnd": [6.154296875, 9.2626953125, 10.5478515625]},
+    "receipt-heavy-released": {"event": "heavy command settled; lockf releases after this exits", "observedUtc": "2026-10-12T10:59:35.485140+00:00", "exit": 0},
+    "native-receipt-smoke": {"command": ["node", "/tmp/dreamtides-provider-reconcile-527/helper-receipts/native-receipt-smoke.mjs"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 56989, "pgid": 56989, "startUtc": "2026-10-12T11:00:52.127225+00:00", "hostLoadStart": [5.7939453125, 8.2880859375, 10.05029296875], "exit": 0, "endUtc": "2026-10-12T11:00:55.148201+00:00", "elapsedS": 3.0222902297973633, "hostLoadEnd": [5.7939453125, 8.2880859375, 10.05029296875]},
+    "amendment-schema": {"command": ["node", "scripts/friction-triggers.mjs", "--validate-records"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 33372, "pgid": 33372, "startUtc": "2026-10-12T11:08:56.998302+00:00", "hostLoadStart": [19.03857421875, 14.95947265625, 12.3564453125], "exit": 0, "endUtc": "2026-10-12T11:08:57.112984+00:00", "elapsedS": 0.11692595481872559, "hostLoadEnd": [19.03857421875, 14.95947265625, 12.3564453125]}
+  },
+  "failurePaths": [
+    {"path": "probe error or malformed response", "witness": "retains an unknown %s observation", "terminal": "record retained; lock released; only tools/list sent"},
+    {"path": "restart after retirement", "witness": "retires confirmed absence through the public CLI with exact archived bytes and idempotent restart", "terminal": "exact archived bytes retained; absent owner; second invocation absent"},
+    {"path": "interruption during probe", "witness": "preserves quarantine and releases the native lock when interrupted during a probe", "terminal": "record retained; kernel lease recovered"},
+    {"path": "partial write, invalid or legacy metadata", "witness": "protects unverified %s metadata without contacting the provider", "terminal": "record retained without network"},
+    {"path": "live or reused runner PID", "witness": "protects any live or reused runner PID regardless of claimed old lifetime", "terminal": "record retained without probe"},
+    {"path": "present provider", "witness": "protects a present transport (%s) without closing or initializing it", "terminal": "record retained; read-only response confirms presence"},
+    {"path": "unsettled server", "witness": "protects an unsettled server %s without provider calls or signals", "terminal": "record retained; no signaling"},
+    {"path": "concurrent slot holder", "witness": "leaves a busy kernel lock and its record untouched", "terminal": "busy; no probe"},
+    {"path": "changed owner or server during probe", "witness": "rechecks %s changes during the absence probe", "terminal": "record retained; no archive"},
+    {"path": "terminal filesystem rename or crash", "witness": "atomic same-directory rename; exact archived bytes asserted by public CLI positive/restart contract", "reason": "OS rename is the single terminal write under the kernel lock; an interrupted or failed atomic rename leaves the owner or its identical archive. No multi-step evidence write exists."},
+    {"path": "producer metadata persistence and normal close", "witness": "runs two sessions on separate slots, ports, servers, and records, and queues a third for a released slot; native owned MCP smoke", "terminal": "exact originally bound metadata before first invocation; own records, server and lease settled"},
+    {"path": "existing signal and uncertain close lifecycle", "witness": "settles independent resources and retains uncertain provider evidence after owned-runner SIGTERM", "terminal": "existing isolated cleanup preserved; uncertain owner retained"},
+    {"path": "missing or contradictory completion receipt", "witness": "retains unconfirmed or contradictory completion receipt (%s)", "terminal": "no probe or archive"},
+    {"path": "browser_close rejection/isError", "witness": "quarantines browser_close %s without a completion receipt while closing the SDK transport", "terminal": "false callback, no receipt, owner retained"},
+    {"path": "delayed or uncertain call settlement during confirmed close", "witness": "closes before draining active RPC, preserving transport uncertainty=%s; drains semantic RPC settlement between browser close and SDK transport teardown", "terminal": "no early marker; unknown RPC never certifies; certain semantic settlement publishes before SDK close"},
+    {"path": "SDK transport-close failure after completed execution", "witness": "retains a durable completed receipt after SDK transport-close failure", "terminal": "receipt survives close-unconfirmed; kernel released"},
+    {"path": "CI job containment and interrupted CLI children", "witness": "retires confirmed absence through the public CLI with exact archived bytes and idempotent restart; preserves quarantine and releases the native lock when interrupted during a probe", "terminal": "real child PG matches parent, close receipt or exact PID absence and kernel recovery"},
+    {"path": "slot0/slot1 archive materialization", "witness": "keeps registered slot archives and server records ignored by actual Git", "terminal": "exact archives ignored"},
+    {"path": "dependent diagnostics while queued", "witness": "reports each retained record once, server before provider, while acquiring another slot", "terminal": "server first; no repetition; retained bytes preserved"}
+  ],
+  "nativeSmoke": {
+    "evidenceFile": "provider-receipt-smoke.result.json",
+    "completionEvidenceFile": "provider-execution-completed.owner.json",
+    "invocation": "run-lXAREk",
+    "owner": {
+      "token": "507b60c6-3c12-4f3b-a10c-a8236d1dc16e",
+      "pid": 56989,
+      "bead": "hv-umm2.527",
+      "label": "provider-receipt-smoke",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile",
+      "slot": 0,
+      "port": 5174,
+      "startedAt": "2026-10-12T11:00:53.301Z",
+      "providerState": "active",
+      "mcpSessionId": "86cffb4d-cfdb-4dc5-a1d8-844348ec88cb",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25"
+    },
+    "completionReceipt": {
+      "token": "507b60c6-3c12-4f3b-a10c-a8236d1dc16e",
+      "pid": 56989,
+      "bead": "hv-umm2.527",
+      "label": "provider-receipt-smoke",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile",
+      "slot": 0,
+      "port": 5174,
+      "startedAt": "2026-10-12T11:00:53.301Z",
+      "providerState": "execution-completed",
+      "mcpSessionId": "86cffb4d-cfdb-4dc5-a1d8-844348ec88cb",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25",
+      "mcpExecutionCompleted": true
+    },
+    "observation": "Transparent own-process writeFileSync instrumentation delegated real write first, then copied exact owned completed bytes before normal clearOwner. All provider calls/close/cleanup real; no forced failure.",
+    "recordedSessionConfirmedByToolsList": true,
+    "caps": [],
+    "wallMs": {
+      "browserLeaseWait": 6,
+      "serve": 1045
+    },
+    "cleanup": {
+      "providerClosed": true,
+      "ownerRecordAbsent": true,
+      "serverRecordAbsent": true,
+      "serverPidAbsent": true,
+      "portFree": true,
+      "kernelLockReleased": true
+    }
+  },
+  "runtimeCleanup": {
+    "observedUtc": "2026-10-12T11:06:09.002964+00:00",
+    "ownedReceiptGroups": [
+      2716,
+      4763,
+      16887,
+      17584,
+      17587,
+      21403,
+      38531,
+      41725,
+      41728,
+      56989,
+      57021,
+      86660,
+      87740,
+      88310
+    ],
+    "remainingGroupMembers": [],
+    "sourceFreezeUnchanged": true
+  },
+  "sourceFreeze": {
+    "observedUtc": "2026-10-12T11:00:51.934033+00:00",
+    "sha256": {
+      ".gitignore": "81226422664ec641d41e1205b74ef7ae1de94ec287ec3c457f49cd4a538a4b8b",
+      "scripts/qa/provider-ownership.mjs": "325a664834e5276cb7be332e69e4183ae772a018461ba0bf3b07a47e98dea77d",
+      "scripts/qa/provider-ownership.test.mjs": "0912c158795f8690c3877ff76c35b45a3308e39a4606e527205df71d7fababa0",
+      "scripts/qa/browser-lease.mjs": "da219b49b487e5c8767a68c17536b758b454306ec37cad302512af5ad9076068",
+      "scripts/qa/browser-lease.test.mjs": "5525dbf2bd57031aa3c0d89006fa17b1835c05fc44171f23b8bd184f5b1a948e",
+      "scripts/qa/run-scenario.mjs": "35604e652f53abad395bfee37cb04e01b9bdda6f0ab1c099e2424e124cba379f",
+      "scripts/qa/run-scenario-slots.test.mjs": "c78436cf4151c597462811f5837c40a13bc695c3d92f21f5b7d07b187ce479bb",
+      "scripts/screenshot-runtime.mjs": "dca03acdf6160d276f49c21fd207d15c2effc1524e2a3330a4556e345ff0bf5d",
+      "README.md": "4187c926a09228dfb591ed519b5d92badb3778f84dcb8228b14c865962377b82"
+    }
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 294,
+    "jsdomFiles": 0
+  },
+  "fullScope": {
+    "files": 346,
+    "cases": 4927,
+    "workers": 2
+  },
+  "scope": "QA tooling only; no product behavior or engine performance claim",
+  "remaining": "parent-owned independent core review and candidate delivery",
+  "initialCandidate": {"sourceOID": "d8fdb6e2d3dc160a35d02bc60754790d420380ac", "tree": "b13b55d703c98a2809615371806c1af1c4040aec", "metadataWindow": {"startUtc": "2026-10-12T09:45:26.796763+00:00", "startKind": "parent post-spawn proxy; actual helper/model start unknown", "endUtc": "2026-10-12T10:07:36+00:00", "endKind": "parent-approved metadata precommit proxy; actual Git execution separately receipted", "elapsedProxyMinutes": 22.153387283333334, "actualHelperStartKnown": false}, "testDelta": {"files": 1, "lines": 202, "jsdomFiles": 0}, "actualGitReceipt": {"command": ["git", "commit", "-F", "/tmp/dreamtides-provider-reconcile-527/helper-receipts/commit-message.txt"], "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "pid": 36104, "pgid": 36104, "startUtc": "2026-10-12T10:09:18.784956+00:00", "hostLoadStart": [5.751953125, 10.55859375, 11.71533203125], "exit": 0, "endUtc": "2026-10-12T10:09:18.808005+00:00", "elapsedS": 0.024394989013671875, "hostLoadEnd": [5.751953125, 10.55859375, 11.71533203125]}, "sourceFreezeReceipt": "/tmp/dreamtides-provider-reconcile-527/helper-receipts/source-freeze.json", "nativeSmoke": {"evidenceFile": "provider-record-smoke.result.json", "invocation": "run-3ly1n8", "owner": {"token": "8499728d-9f1c-43ae-bd7f-ade6af111892", "pid": 3142, "bead": "hv-umm2.527", "label": "provider-record-smoke", "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-527-provider-reconcile", "slot": 1, "port": 5274, "startedAt": "2026-10-12T10:04:14.193Z", "providerState": "active", "mcpSessionId": "fe3d802e-ec61-4b52-92e2-6e3ddf0dddae", "mcpUrl": "http://localhost:8931/mcp", "mcpProtocolVersion": "2025-11-25"}, "recordedSessionConfirmedByToolsList": true, "caps": [], "wallMs": {"browserLeaseWait": 5, "serve": 1345}, "cleanup": {"providerClosed": true, "ownerRecordAbsent": true, "serverRecordAbsent": true, "serverPidAbsent": true, "portFree": true, "kernelLockReleased": true}}, "runtimeCleanup": {"observedUtc": "2026-10-12T10:05:41.257500+00:00", "ownedReceiptGroups": [3142, 3189, 3623, 14739, 17625, 18340, 44878, 45405, 49551, 50379, 57926, 81449, 81455, 93012], "remainingGroupMembers": [], "sourceFreezeUnchanged": true}},
+  "ciRepair": {"sourceBeforeRepair": "d8fdb6e2d3dc160a35d02bc60754790d420380ac", "sourceBaseOID": "2f9decbc5345956f9bba656b9781c1d5524de756", "candidateID": "01a12f97-36ae-73c3-8a81-94697a340609", "testedOID": "8361fa51c81d10af225802bf00290fbe04ce044b", "testedBaseOID": "7c3877a8a4b54edf8358225e689bee135811a028", "promotionAuthorized": false, "failedGate": {"diagnostics": [{"code": "tollgate.containment-escape", "failure_kind": "infrastructure", "message": "Tollgate rejected an unsupported session escape by descendant PID 54628.", "paths": [], "repair": null}], "elapsed_ms": 17956, "exit_code": 143, "log_hash": "adbc16365cb74be868de1995016277e072c3c81af1deaa1b56823d17668761d1", "name": "review-gate", "result_class": "exit-failure", "reused_from_attempt_id": null, "signal": null, "stderr_end": 70046, "stdout_end": 1650}, "diagnosisOrigin": "candidate-introduced (parent diagnostic)", "sourceReceipts": {"/tmp/dreamtides-provider-reconcile-527/preapprove-status.json": "3582888d20aaaf1967a1f1a82124db90944f19b9550b315abc1caccbada551eb", "/tmp/dreamtides-provider-reconcile-527/failed-gate-logs.jsonl": "fd859581ce0ec0fa213c604e511488aef98e7a29cef69d0699854ab2748378d2"}, "repair": "Test-only spawn adapters keep actual native lock holders and real CLI children in their CI job process group; assertions prove PG containment, close/EOF cleanup, exact PID absence and interrupted native lock recovery. No production process-group or Tollgate policy change."},
+  "semanticResolution": {"authorityReceipt": "/tmp/dreamtides-provider-reconcile-527/justiciar-final-resolution.json", "authoritySHA256": "825de244a4928a2278e5fe367384d479863f24f3963c6b167e9c67f1e03874ff", "unsafeInitialAssumption": "Session-map absence alone was treated as completed backend teardown. This was an agent-filed assumption, not explicit user authority.", "installedOrdering": "coreBundle.js71392 deletes transport session; utilsBundle.js84751 wraps that callback before Protocol._onclose; coreBundle.js71460 schedules backend disposal asynchronously. Heartbeat71599 can close that session in the same provider process. Browser launch8956 uses detached groups.", "selectedPredicate": "Exact runner durably records mcpExecutionCompleted only after successful browser_close response and all tracked calls settle with uncertainCall false. The receipt precedes SDK transport close and survives its failure. CLI requires the receipt, completed/close-unconfirmed state and all existing slot/server/runner/byte/absence guards.", "successfulCloseContract": "Existing installed BrowserBackend.callTool65560 awaits dispose before returning its close result; dispose65519 awaits Context.dispose then callback73109 that closes the owned context. No stronger global browser-process claim.", "excluded": "Original timed-out, call-unconfirmed/call-and-close-unconfirmed, failed browser_close, legacy/missing/contradictory completion receipts remain quarantined. 404 or provider PID/PG alone never authorizes retirement."},
+  "reviewRepairs": {"ignore": "Narrow artifacts/browser-qa.lock.* ignores slot0 archives and adjacent server records. Actual Git contract exercises registered slot0/slot1 CLI archives. Older server-record omission noted in own pre-existing file.", "diagnostics": "Server command precedes dependent provider command once per record; lease ordering preserved. Runner uses this single actionable diagnostic.", "moduleLines": {"slots": {"base": 502, "beforeDeduplication": 508, "final": 500}, "lease": {"beforeReceiptContracts": 478, "final": 500}, "newProviderContract": 274}, "coherentCodeTestAddedLines": 470, "fixtureDeduplication": "Same-default typed connectClients result reused by legacy log test; all assertions and exact metadata proof preserved."},
+  "frictionWindow": {
+    "tag": "provider-completion-proof",
+    "startUtc": "2026-10-12T10:28:20Z",
+    "startKind": "actual clock observation while semantic guard decision pending; investigation started earlier at unknown exact time",
+    "endUtc": "2026-10-12T10:47:27.969276+00:00",
+    "endKind": "actual first completion-receipt focused command start, after source repair",
+    "minutesLowerBound": 19.132821266666667,
+    "scope": "coordination and repair elapsed, not test execution or native browser lease wait"
+  }
+}

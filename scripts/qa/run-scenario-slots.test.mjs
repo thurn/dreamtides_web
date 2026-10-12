@@ -156,17 +156,17 @@ async function open(root, label) {
   return session;
 }
 
-/** A synthetic MCP client per session; `failing` labels reject their browser close. */
-function connectClients() {
+/** @param {runtime.McpToolResult} [result] Per-client result; failing labels reject close. */
+function connectClients(result = { content: [{ type: "text", text: "### Result\n{}" }] }) {
   return vi.spyOn(runtime, "connectPlaywrightMcp").mockImplementation((options) => Promise.resolve({
-    call: vi.fn().mockResolvedValue({ content: [{ type: "text", text: "### Result\n{}" }] }),
+    sessionId: `synthetic-${options?.name ?? "client"}`, url: "http://localhost:8931/mcp", protocolVersion: "2025-11-25",
+    call: vi.fn().mockResolvedValue(result),
     close: options?.name?.includes("failing") === true ? vi.fn().mockRejectedValue(new Error("synthetic close failure")) : vi.fn().mockResolvedValue(undefined),
   }));
 }
 
 /** @param {number | null} pid */
 const serverRunning = (pid) => fixtureIo.children.some((child) => child.pid === pid && child.exitCode === null && child.signalCode === null);
-
 
 /** @param {string} source @param {string} from @param {string} to */
 function fixtureReplace(source, from, to) {
@@ -416,7 +416,8 @@ describe("concurrent QA sessions", () => {
     expect(fixtureIo.servers.map((event) => event.split(" ")[0])).toEqual(["spawn", "ready", "spawn", "ready"]);
     expect([a, b].every((session) => serverRunning(session.serverPid))).toBe(true);
     for (const session of [a, b]) {
-      expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).toMatchObject({ slot: session.slot, port: session.port, pid: process.pid });
+      expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).toMatchObject({ slot: session.slot, port: session.port, pid: process.pid,
+        mcpSessionId: `synthetic-qa-${session === a ? "a" : "b"}-${String(process.pid)}`, mcpUrl: "http://localhost:8931/mcp", mcpProtocolVersion: "2025-11-25" });
     }
     // Only slot 0's record is the one single-slot peers read.
     expect([a, b].filter((session) => session.ownerPath === `${path}.owner.json`).map((session) => session.slot)).toEqual([0]);
@@ -469,10 +470,7 @@ describe("concurrent QA sessions", () => {
     const { root } = primaryFixture();
     const report = { result: null, error: null, caps: [], log: [], captures: [], traces: [],
       gameLog: { gameId: "fixture-game", selectedBy: "url", reason: null, lines: ['{"event":"fixture"}'] } };
-    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({
-      call: vi.fn().mockResolvedValue({ content: [{ type: "text", text: `### Result\n${JSON.stringify(report)}` }] }),
-      close: vi.fn().mockResolvedValue(undefined),
-    });
+    connectClients({ content: [{ type: "text", text: `### Result\n${JSON.stringify(report)}` }] });
     const legacyDir = join(root, "artifacts", "qa", "synthetic-slots");
     mkdirSync(legacyDir, { recursive: true });
     const files = ["same.server.log", "same.result.json", "same-desktop.jsonl", "same.png"];

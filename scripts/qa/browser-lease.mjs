@@ -286,9 +286,10 @@ async function retainedRecords(slotPath) {
  * @param {string} path
  * @param {number} slots
  * @param {AbortSignal | undefined} signal
+ * @param {(records: string[]) => void} reportRetained
  * @returns {Promise<BrowserLease | null>}
  */
-async function takeSlot(path, slots, signal) {
+async function takeSlot(path, slots, signal, reportRetained) {
   /** @type {string[]} */
   const retained = [];
   let retainedSlots = 0;
@@ -297,7 +298,7 @@ async function takeSlot(path, slots, signal) {
     const ownerPath = browserOwnerPath(slotPath);
     if (slotRecords(slotPath).length > 0) {
       const records = await retainedRecords(slotPath);
-      if (records.length > 0) { retained.push(...records); retainedSlots++; }
+      if (records.length > 0) { reportRetained(records); retained.push(...records); retainedSlots++; }
       continue;
     }
     const lock = await tryBrowserLock(slotPath, signal);
@@ -306,6 +307,7 @@ async function takeSlot(path, slots, signal) {
     const records = slotRecords(slotPath);
     if (records.length === 0) return { slot, path: slotPath, ownerPath, quarantined: retained, release: lock.release };
     await lock.release();
+    reportRetained(records);
     retained.push(...records);
     retainedSlots++;
   }
@@ -335,13 +337,26 @@ export async function acquireBrowserLease(path, { signal, onWait, slots = BROWSE
   const queue = browserLeaseQueuePath(path);
   const ticket = enqueue(queue, slots);
   let reported = false;
+  const diagnosed = new Set();
+  const reportRetained = (/** @type {string[]} */ records) => {
+    // Diagnostic order follows reconciliation prerequisites, independently of
+    // the lease's retained-record and runtime ordering.
+    for (const record of [...records].sort((a, b) => Number(a.endsWith(".owner.json")) - Number(b.endsWith(".owner.json")))) {
+      if (diagnosed.has(record)) continue;
+      diagnosed.add(record);
+      const provider = record.endsWith(".owner.json");
+      const slotPath = record.slice(0, -(provider ? ".owner.json".length : ".server.json".length));
+      const quotedPath = `'${slotPath.replaceAll("'", "'\\''")}'`;
+      console.error(`browser slot retained at ${record}; reconcile with: node scripts/qa/${provider ? "provider" : "server"}-ownership.mjs ${quotedPath}`);
+    }
+  };
   try {
     for (;;) {
       refresh(queue, ticket);
       // The first ticket that is this one or a live waiter's; gone waiters
       // ahead of it are reaped on the way.
       if (tickets(queue).find((entry) => entry.name === ticket || waiting(queue, entry))?.name === ticket) {
-        const lease = await takeSlot(path, slots, signal);
+        const lease = await takeSlot(path, slots, signal, reportRetained);
         if (lease !== null) return lease;
       }
       if (!reported) { reported = true; onWait?.(); }

@@ -202,7 +202,24 @@ slot is retained. A live holder's locked slot remains ordinary contention.
 Yield checks use the same usable-slot rules as admission. Reconcile the
 recorded provider execution before clearing that record. Kernel release on
 pipe EOF proves local lock recovery; provider completion requires separate
-confirmation. The slots are separate from
+confirmation. To reconcile a retained provider record, run
+`node scripts/qa/provider-ownership.mjs <exact-slot-lock-path>`. New records
+carry the exact MCP transport session ID, endpoint and negotiated protocol.
+The runner durably records `mcpExecutionCompleted` after a successful
+`browser_close` response and settled, certain RPCs, before SDK transport close.
+The command holds that slot's kernel lock and requires that receipt, a dead
+runner, an absent server record and a free recorded QA port. It sends read-only `tools/list`
+with the recorded session header; only Playwright's exact missing-session
+response certifies absence. It rechecks the guards and unchanged record, then
+atomically archives its exact bytes beside the record. This reconciles a
+transport-close failure or crash following confirmed execution and teardown.
+Timed-out calls, uncertain browser close, missing completion receipts, live
+sessions, unknown responses and changed records remain protected: session-map
+absence alone cannot certify asynchronous provider teardown. Waiters print the
+exact reconciliation command once per retained record, with the server first.
+The [MCP session protocol](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#session-management)
+and [Playwright transport](https://github.com/microsoft/playwright/blob/main/packages/playwright-core/src/tools/utils/mcp/http.ts)
+define the absence response. The slots are separate from
 `artifacts/heavy.lock`: browser runs (`run-scenario`, `card-sweep`) take a
 browser slot only, never the heavy slot, and no command holds the heavy slot
 while it waits for a browser slot. `wallMs.browserLeaseWait` records slot

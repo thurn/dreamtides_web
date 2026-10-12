@@ -521,7 +521,7 @@ export async function openQaSession(options) {
   const leasePath = browserLeasePath(primaryCheckout);
   let ownerPath = "";
   let ownRecord = /** @type {string | null} */ (null);
-  let owner = /** @type {Record<string, string | number> | null} */ (null);
+  let owner = /** @type {Record<string, string | number | boolean> | null} */ (null);
   const retainOwner = (/** @type {string} */ providerState) => {
     if (ownRecord === null || owner === null) return;
     if (readFileSync(ownerPath, "utf8") !== ownRecord) throw new Error(`browser owner record changed: ${ownerPath}`);
@@ -562,7 +562,13 @@ export async function openQaSession(options) {
           // Closing the page interrupts pending unsafe execution. Join its
           // local RPC only afterwards; transport rejection cannot certify
           // whether the remote invocation completed.
-          if (mcp !== null) await mcp.close(async () => { await Promise.all(activeCalls); });
+          if (mcp !== null) await mcp.close(async (browserCloseConfirmed) => {
+            await Promise.all(activeCalls);
+            if (browserCloseConfirmed && !uncertainCall && owner !== null) {
+              owner.mcpExecutionCompleted = true;
+              retainOwner("execution-completed");
+            }
+          });
         } catch (error) {
           closeUnconfirmed = true;
           throw error;
@@ -625,7 +631,6 @@ export async function openQaSession(options) {
     lease = await acquireBrowserLease(leasePath, { signal, onWait: () => say(`waiting for a browser slot (${leasePath})`) });
     wallMs.browserLeaseWait = Date.now() - waitStart;
     ownerPath = lease.ownerPath;
-    for (const retained of lease.quarantined) say(`passed over a browser slot retained for reconciliation: ${retained}`);
     say(`holding browser slot ${String(lease.slot)} (${lease.path})`);
     signal.throwIfAborted();
     port = options.port ?? (await findFreePort(lease.slot));
@@ -673,6 +678,12 @@ export async function openQaSession(options) {
       name: `qa-${options.label}-${String(process.pid)}`,
       roots: [...new Set([primaryCheckout, repoRoot, checkout])],
     });
+    if (mcp.sessionId !== undefined && mcp.protocolVersion !== undefined) {
+      owner.mcpSessionId = mcp.sessionId;
+      owner.mcpUrl = mcp.url;
+      owner.mcpProtocolVersion = mcp.protocolVersion;
+      retainOwner("active");
+    }
     signal.throwIfAborted();
   })();
   try {

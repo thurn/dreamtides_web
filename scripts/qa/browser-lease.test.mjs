@@ -186,7 +186,7 @@ describe("repository browser lease", () => {
     const port = address.port;
     try {
       const { root, worktree, path } = sessionFixture();
-      vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ call: vi.fn(), close: vi.fn().mockResolvedValue(undefined) });
+      vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call: vi.fn(), close: vi.fn().mockResolvedValue(undefined) });
       const primary = await openQaSession({ bead: "synthetic-lease", label: "primary", port, prod: false, minify: false, cwd: root });
       expect(fixtureIo.children.map((child) => child.pid)).toContain(primary.serverPid);
       expect(primary.captureDir).toContain(join(root, "artifacts", "qa", "synthetic-lease", "invocations", "run-"));
@@ -276,7 +276,7 @@ describe("repository browser lease", () => {
       closeStarted.resolve();
       return /** @type {Promise<void>} */ (new Promise((_done, reject) => { finishClose = () => reject(new Error("synthetic close failure")); }));
     });
-    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ call: vi.fn(), close: browserClose });
+    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call: vi.fn(), close: browserClose });
     const beforeInt = process.listenerCount("SIGINT");
     const session = await openQaSession({ bead: "synthetic-lease", label: "close", port: null, prod: false, minify: false, cwd: root });
     try {
@@ -327,7 +327,7 @@ describe("repository browser lease", () => {
       // A lone session takes the highest slot.
       expect(existsSync(ownerOf(path, 1))).toBe(true);
       expect(lockHeld(browserSlotPath(path, 1))).toBe(true);
-      finishConnection({ call: vi.fn(), close: browserClose });
+      finishConnection({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call: vi.fn(), close: browserClose });
       await rejected;
       await exited.promise;
       expect(exit).toHaveBeenCalledWith(143);
@@ -337,7 +337,7 @@ describe("repository browser lease", () => {
       const next = await acquireBrowserLease(path);
       await next.release();
     } finally {
-      finishConnection({ call: vi.fn(), close: browserClose });
+      finishConnection({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call: vi.fn(), close: browserClose });
       const session = await opening.catch(() => null);
       await session?.close();
     }
@@ -354,16 +354,18 @@ describe("repository browser lease", () => {
   });
 });
 describe("MCP browser ownership confirmation", () => {
-  it("quarantines semantic browser_close errors while closing the SDK transport", async () => {
+  it.each(["isError", "rejection"])("quarantines browser_close %s without a completion receipt while closing the SDK transport", async (kind) => {
     const { root } = sessionFixture();
     vi.spyOn(Client.prototype, "connect").mockResolvedValue(undefined);
     const call = vi.spyOn(Client.prototype, "callTool").mockResolvedValue({ isError: true, content: [{ type: "text", text: "synthetic semantic close failure" }] });
+    if (kind === "rejection") call.mockRejectedValue(new Error("synthetic semantic close failure"));
     const sdkClose = vi.spyOn(Client.prototype, "close").mockResolvedValue(undefined);
     const session = await openQaSession({ bead: "synthetic-lease", label: "semantic-error", port: null, prod: false, minify: false, cwd: root });
     await expect(session.close()).rejects.toThrow(/synthetic semantic close failure/);
     expect(call).toHaveBeenCalledWith({ name: "browser_close", arguments: {} });
     expect(sdkClose).toHaveBeenCalledOnce();
     expect(existsSync(session.ownerPath)).toBe(true);
+    expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).not.toHaveProperty("mcpExecutionCompleted");
   });
   it.each([false, true])("closes before draining active RPC, preserving transport uncertainty=%s", async (transportRejects) => {
     const { root, path } = sessionFixture();
@@ -372,9 +374,11 @@ describe("MCP browser ownership confirmation", () => {
       finishCall = () => transportRejects ? reject(new Error("synthetic transport rejection")) : done({ content: [{ type: "text", text: '### Result\n{}' }] });
     }));
     const closeStarted = notification();
-    const browserClose = vi.fn(() => { closeStarted.resolve(); return Promise.resolve(); });
+    const browserClose = vi.fn(async (/** @type {Parameters<Awaited<ReturnType<typeof runtime.connectPlaywrightMcp>>["close"]>[0]} */ before) => {
+      closeStarted.resolve(); await before?.(true);
+    });
     const call = vi.fn(() => rpc);
-    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ call, close: browserClose });
+    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call, close: browserClose });
     const session = await openQaSession({ bead: "synthetic-lease", label: "active-call", port: null, prod: false, minify: false, cwd: root });
     const running = session.run("async () => null", {}, 1);
     const result = transportRejects ? expect(running).rejects.toThrow(/synthetic transport rejection/) : expect(running).resolves.toEqual({});
@@ -386,11 +390,15 @@ describe("MCP browser ownership confirmation", () => {
       // Browser close happened, but the outstanding RPC still owns the slot.
       expect(lockHeld(browserSlotPath(path, session.slot))).toBe(true);
       expect(existsSync(session.ownerPath)).toBe(true);
+      expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).not.toHaveProperty("mcpExecutionCompleted");
       finishCall();
       await result;
       await closed;
       expect(existsSync(session.ownerPath)).toBe(transportRejects);
-      if (transportRejects) expect(readFileSync(session.ownerPath, "utf8")).toContain('"providerState":"call-unconfirmed"');
+      if (transportRejects) {
+        expect(readFileSync(session.ownerPath, "utf8")).toContain('"providerState":"call-unconfirmed"');
+        expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).not.toHaveProperty("mcpExecutionCompleted");
+      }
     } finally {
       finishCall();
       await running.catch(() => {});
@@ -400,7 +408,7 @@ describe("MCP browser ownership confirmation", () => {
   it("stops a session after an uncertain RPC without issuing subsequent verdict calls", async () => {
     const { root } = sessionFixture();
     const call = vi.fn().mockRejectedValue(new Error("synthetic uncertain RPC"));
-    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ call, close: vi.fn().mockResolvedValue(undefined) });
+    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call, close: vi.fn().mockResolvedValue(undefined) });
     const session = await openQaSession({ bead: "synthetic-lease", label: "uncertain", port: null, prod: false, minify: false, cwd: root });
     await expect(session.run("async () => null", {}, 1)).rejects.toThrow(/synthetic uncertain RPC/);
     expect(session.closed()).toBe(true);
@@ -444,7 +452,11 @@ describe("MCP browser ownership confirmation", () => {
       closeStarted.resolve();
       return Promise.resolve({ content: [] });
     });
-    const sdkClose = vi.spyOn(Client.prototype, "close").mockImplementation(() => { events.push("transport-closed"); return Promise.resolve(); });
+    const sdkClose = vi.spyOn(Client.prototype, "close").mockImplementation(() => {
+      events.push("transport-closed");
+      expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).toMatchObject({ mcpExecutionCompleted: true, providerState: "execution-completed" });
+      return Promise.resolve();
+    });
     const session = await openQaSession({ bead: "synthetic-lease", label: "transport-order", port: null, prod: false, minify: false, cwd: root });
     const running = session.run("async () => null", {}, 1);
     const result = expect(running).rejects.toBeInstanceOf(runtime.McpToolResponseError);
@@ -464,10 +476,20 @@ describe("MCP browser ownership confirmation", () => {
       await closing;
     }
   });
+  it("retains a durable completed receipt after SDK transport-close failure", async () => {
+    const { root, path } = sessionFixture();
+    vi.spyOn(Client.prototype, "connect").mockResolvedValue(undefined);
+    vi.spyOn(Client.prototype, "callTool").mockResolvedValue({ content: [] });
+    vi.spyOn(Client.prototype, "close").mockRejectedValue(new Error("synthetic transport-close failure"));
+    const session = await openQaSession({ bead: "synthetic-lease", label: "transport-failure", port: null, prod: false, minify: false, cwd: root });
+    await expect(session.close()).rejects.toThrow(/synthetic transport-close failure/);
+    expect(JSON.parse(readFileSync(session.ownerPath, "utf8"))).toMatchObject({ mcpExecutionCompleted: true, providerState: "close-unconfirmed" });
+    expect(lockHeld(browserSlotPath(path, session.slot))).toBe(false);
+  });
   it("preserves a replacement ownership record after confirmed provider completion", async () => {
     const { root } = sessionFixture();
     const browserClose = vi.fn().mockResolvedValue(undefined);
-    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ call: vi.fn(), close: browserClose });
+    vi.spyOn(runtime, "connectPlaywrightMcp").mockResolvedValue({ sessionId: undefined, url: "http://localhost:8931/mcp", protocolVersion: undefined, call: vi.fn(), close: browserClose });
     const session = await openQaSession({ bead: "synthetic-lease", label: "replacement", port: null, prod: false, minify: false, cwd: root });
     const replacement = JSON.stringify({ token: "different-synthetic-owner" });
     writeFileSync(session.ownerPath, replacement);
