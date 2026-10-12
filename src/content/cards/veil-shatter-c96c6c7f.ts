@@ -1,3 +1,5 @@
+import { enemyCharacter, event, keyword, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,9 @@ export default card({
   artOwned: true,
   cardNumber: 398,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    keyword("offering"),
+    event(p.banish(target(enemyCharacter({ costAtMost: variant.amplified ? 4 : 3 })))),
+  ],
+  verifiedText: "2gnibtrjnyi",
 });

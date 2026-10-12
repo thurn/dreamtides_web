@@ -1,3 +1,5 @@
+import { enemyCharacter, event, target } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,8 @@ export default card({
   artOwned: true,
   cardNumber: 144,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    event(p.sequence(p.banish(target(enemyCharacter())), p.gainPoints(variant.amplified ? 4 : 5, "opponent"))),
+  ],
+  verifiedText: "2e1xb6x067l",
 });

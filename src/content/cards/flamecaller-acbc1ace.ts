@@ -1,3 +1,6 @@
+import { enemyCharacter, target } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,8 @@ export default card({
   artOwned: false,
   cardNumber: 366,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onMaterialized(), p.banish(target(enemyCharacter({ costAtMost: variant.amplified ? 3 : 2 })))),
+  ],
+  verifiedText: "1p9r9gomjmw",
 });
