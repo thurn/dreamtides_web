@@ -1403,12 +1403,20 @@ function isBattleResult(value: unknown): boolean {
 /**
  * Every instance a zone list, rank position, stack card, or knowledge list
  * names exists, and the zone lists, ranks, and stack name it in its own zone.
+ * Each stack-zone instance has exactly one card stack item; ability sources
+ * are independent of card stack membership.
  */
 function hasConsistentZones(value: Record<string, unknown>): boolean {
   const state = value as unknown as BattleState;
   const inZone = (id: InstanceId, zone: Zone): boolean =>
     Object.prototype.hasOwnProperty.call(state.instances, id) &&
     state.instances[id].zone === zone;
+  const stackedCards = new Set<InstanceId>();
+  for (const item of state.stack) {
+    if (item.kind !== "card") continue;
+    if (!inZone(item.instance, "stack") || stackedCards.has(item.instance)) return false;
+    stackedCards.add(item.instance);
+  }
   return (
     SIDES.every((side) => {
       const sideState = state.sides[side];
@@ -1431,8 +1439,8 @@ function hasConsistentZones(value: Record<string, unknown>): boolean {
         })()
       );
     }) &&
-    state.stack.every(
-      (item) => item.kind !== "card" || inZone(item.instance, "stack"),
+    Object.values(state.instances).every(
+      (instance) => instance.zone !== "stack" || stackedCards.has(instance.id),
     )
   );
 }

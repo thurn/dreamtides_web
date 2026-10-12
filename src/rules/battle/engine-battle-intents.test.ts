@@ -1,7 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { EventContext, GameEvent } from "../../eventlog/types";
 import { eventRng } from "../../eventlog/rng";
-import { type Engine } from "../../engine";
+import { createEngine, type Engine } from "../../engine";
+import type { BattleState } from "../../engine/state/types";
+import { runStep } from "../../engine/steps/runner";
+import { NO_PROMPTS } from "../../engine/steps/sources";
+import { boardState } from "../../engine/testing/board";
+import { STACK } from "../../engine/testing/stack-cards";
+import { SYNTHETIC, testCatalog } from "../../engine/testing/synthetic-cards";
 import { stateHash } from "../../engine/state/hash";
 import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 import { testEventActor } from "../../types/test-identities";
@@ -200,6 +206,59 @@ describe("stale and invalid intents", () => {
 
 
 describe("LOAD_STATE", () => {
+  it("loads card and ability stacks and rejects inconsistent card membership", () => {
+    const state = begun(), battle = journeyBattleOf(state.battle);
+    if (battle === null) throw new Error("no journey battle");
+    const engine = createEngine(testCatalog([STACK.oncePerTurnEnergy]));
+    const board = boardState(engine.catalog, { active: "player", phase: "day",
+      player: { back: [STACK.oncePerTurnEnergy.id], hand: [SYNTHETIC.event0.id] } });
+    const card = board.ids.player.hand[0], source = board.ids.player.back[0];
+    if (source === null) throw new Error("no ability source");
+    const playResult = runStep(board.state, { kind: "play", card, from: "hand" }, NO_PROMPTS, engine.catalog);
+    const activateResult = runStep(board.state, { kind: "activate", source, ability: 0 }, NO_PROMPTS, engine.catalog);
+    if (playResult.kind !== "done" || activateResult.kind !== "done") throw new Error("unexpected fixture prompt");
+    const played = playResult.state, activated = activateResult.state;
+    expect(played.stack).toEqual([expect.objectContaining({ kind: "card", instance: card })]);
+    expect(activated.stack).toEqual([expect.objectContaining({ kind: "ability", source })]);
+    const saved = (committed: BattleState) => ({ snapshot: state.journey, battle: {
+      ...battle, engine: { ...battle.engine, slice: { ...battle.engine.slice, committed } },
+    } });
+    const load = (committed: BattleState) => {
+      const payload = saved(committed);
+      return [validateLoadedState(state, payload),
+        validateLoadedState(state, JSON.parse(JSON.stringify(payload)) as Record<string, unknown>)];
+    };
+    const withoutRank = (committed: BattleState) => {
+      committed.sides.player.backRank = committed.sides.player.backRank.map((id) => id === source ? null : id);
+      return committed;
+    };
+    const withoutInstance = (committed: BattleState, instance: typeof card) => {
+      delete committed.instances[instance];
+      for (const side of ["player", "enemy"] as const) {
+        committed.knownTo[side] = committed.knownTo[side].filter((id) => id !== instance);
+        if (committed.rememberedCards) committed.rememberedCards[side] = committed.rememberedCards[side].filter((record) => record.instance !== instance);
+      }
+      return committed;
+    };
+    const voidSource = withoutRank(structuredClone(activated));
+    voidSource.instances[source] = { ...voidSource.instances[source], zone: "void" };
+    voidSource.sides.player.void.push(source);
+    const ceasedSource = withoutInstance(withoutRank(structuredClone(activated)), source);
+    for (const valid of [played, activated, voidSource, ceasedSource]) {
+      for (const loaded of load(valid)) expect(loaded?.battle).toEqual(saved(valid).battle);
+    }
+    const abilityOrphan = withoutRank(structuredClone(activated));
+    abilityOrphan.instances[source] = { ...abilityOrphan.instances[source], zone: "stack" };
+    const malformed = [
+      { label: "orphan", committed: { ...played, stack: [] } },
+      { label: "duplicate", committed: { ...played, stack: played.stack.map((item) => ({ ...item })).concat(played.stack.map((item) => ({ ...item }))) } },
+      { label: "wrong-zone", committed: { ...board.state, stack: played.stack } },
+      { label: "missing-instance", committed: withoutInstance(structuredClone(played), card) },
+      { label: "ability-only-orphan", committed: abilityOrphan },
+    ];
+    expect(malformed.filter(({ committed }) => load(committed).some((loaded) => loaded !== null)).map(({ label }) => label)).toEqual([]);
+  });
+
   /** A stable saved Ending snapshot at the pending-cleanup boundary. */
   function endingSnapshot(state: FoldState, marker: unknown, present = true) {
     const battle = journeyBattleOf(state.battle);
