@@ -1,3 +1,5 @@
+import { conditionCardCounts, self, staticAbility } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,10 @@ export default card({
   cardNumber: 66,
   art: { x: 0, y: 0.7, scale: 1.3 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    staticAbility(p.sparkModifier(self(), 4), {
+      while: conditionCardCounts("void", variant.amplified ? 2 : 3, { filter: { cardType: "character", costAtMost: 2 } }),
+    }),
+  ],
+  verifiedText: "hmu4xm3f7z",
 });

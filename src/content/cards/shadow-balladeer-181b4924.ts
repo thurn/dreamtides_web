@@ -1,3 +1,6 @@
+import { all, characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 17,
   art: { x: 0, y: 0.798, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "event" }), p.awaken(all(characterYouControl())))],
+  verifiedText: "1niva0b12id",
 });

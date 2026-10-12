@@ -1,3 +1,5 @@
+import { conditionCardCounts, self, staticAbility } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +22,10 @@ export default card({
   artOwned: false,
   cardNumber: 28,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => {
+    const events = conditionCardCounts("void", variant.amplified ? 2 : 3, { filter: { cardType: "event" } });
+    // Awakened acts only as it enters play: it enters ready if the condition holds then (RD-hv-umm2.169-1).
+    return [staticAbility(p.sparkModifier(self(), 4), { while: events }), staticAbility(p.grant(self(), "awakened"), { while: events })];
+  },
+  verifiedText: "1lxlsp0c00q",
 });

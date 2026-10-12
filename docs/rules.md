@@ -1154,7 +1154,13 @@ can put an exhausted character in the front rank; it happens only if this
 character is still in play and the position is open.
 
 **Awakened** — A character with this keyword enters play without the exhausted
-status. See [Exhaust and Awaken](#exhaust-and-awaken).
+status. See [Exhaust and Awaken](#exhaust-and-awaken). The keyword is checked
+once, as the character takes its position: gaining or losing Awakened while
+in play neither readies nor exhausts it. A character that gains awakened only
+while a condition holds, as in "If there are 3 or more events in your void,
+this character has +4✦ and gains awakened," enters play without the
+exhausted status if that condition holds as it enters, and otherwise enters
+exhausted and stays so until it is awakened or the exhausted status clears.
 
 **Support** — A back-rank character with Support provides a benefit to the
 front-rank characters in the positions it supports (up to two). Support has no

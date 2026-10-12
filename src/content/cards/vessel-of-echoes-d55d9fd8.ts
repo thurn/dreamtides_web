@@ -1,3 +1,5 @@
+import { conditionCardCounts, energy, reclaim, self, staticAbility } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +22,9 @@ export default card({
   artOwned: false,
   cardNumber: 421,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    staticAbility(p.sparkModifier(self(), 5), { while: conditionCardCounts("void", variant.amplified ? 5 : 6) }),
+    reclaim(energy(1)),
+  ],
+  verifiedText: "25rcefbj2cw",
 });
