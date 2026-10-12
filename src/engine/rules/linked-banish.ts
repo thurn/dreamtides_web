@@ -8,13 +8,19 @@ export function sourceAbilityGroups(state: BattleState, source: InstanceId): Eff
   return state.floating.flatMap((effect) => effect.change.kind === "abilities" && effect.change.instance === source ? [effect.id] : []);
 }
 
-/** A queued ability retains its contributing group's identity even after other groups expire. */
+/**
+ * A queued ability retains its contributing group's identity even after other groups expire.
+ * A departure snapshot of the source's current play visit wins over its live groups: a dissolved
+ * created card still says play when its ▸Dissolved abilities trigger, after its acquired groups
+ * have already ended. A later visit of the same card is a new object and reads its live groups.
+ */
 export function linkedSourceContext(ctx: StepContext, source: AbilitySource, origin: AbilityOrigin, ability: number): LinkedSourceContext | null {
   if (typeof source !== "string" || origin.kind !== "card") return null;
   const instance = ctx.state.instances[source];
-  const current = instance?.zone === "play"
-    ? { enteredPlayAt: instance.enteredZoneAt, gained: sourceAbilityGroups(ctx.state, source) }
-    : ctx.departedSourceObjects.get(source);
+  const departed = ctx.departedSourceObjects.get(source);
+  const current = instance?.zone !== "play" || departed?.enteredPlayAt === instance.enteredZoneAt
+    ? departed
+    : { enteredPlayAt: instance.enteredZoneAt, gained: sourceAbilityGroups(ctx.state, source) };
   if (current === undefined) return null;
   let base = ctx.catalog.card(origin.cardId).abilities(origin.variant).length;
   if (ability < base) return { source, enteredPlayAt: current.enteredPlayAt, ability };

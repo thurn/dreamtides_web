@@ -179,6 +179,54 @@ describe("linkedBanish", () => {
     expect(done.state.sides.player.hand).toEqual([ids.player.deck[4], ids.player.deck[2], ids.player.deck[1]]);
   });
 
+  it("returns a created copy's acquired-pair member to hand when the copy dissolves and ceases to exist", () => {
+    const { state, ids } = setup({ hand: [F.createGained.id, F.repeat.id, F.kill.id] });
+    let current = state;
+    for (const index of [0, 1]) current = play(current, ids.player.hand[index], picking).state;
+    expect(current.sides.player.banished).toEqual([ids.player.deck[3]]);
+    const done = play(current, ids.player.hand[2]);
+    expect(done.events.some((event) => event.kind === "ceasedToExist")).toBe(true);
+    expect(done.state.sides.player.hand).toEqual([ids.player.deck[3]]);
+    expect(done.state.sides.player.banished).toEqual([]);
+  });
+
+  it("resolves a created copy's acquired producer and consumer both queued before it ceases to exist", () => {
+    const { state, ids } = setup({ hand: [F.createGainedLookAndKill.id] });
+    const done = play(state, ids.player.hand[0], picking);
+    expect(done.events.some((event) => event.kind === "ceasedToExist")).toBe(true);
+    expect(done.state.sides.player.hand).toEqual([ids.player.deck[3]]);
+    expect(done.state.sides.player.banished).toEqual([]);
+  });
+
+  it("links a reentered source's newly acquired pair to the new object, not the departed one", () => {
+    const { state, ids } = setup({ back: [F.plain.id], hand: [F.gain.id, F.repeat.id, F.reenterGainedLook.id, F.kill.id] });
+    let current = state;
+    for (const index of [0, 1]) current = play(current, ids.player.hand[index], picking).state;
+    const reentered = play(current, ids.player.hand[2], picking).state;
+    expect(reentered.sides.player.hand).toContain(ids.player.deck[3]);
+    expect(reentered.sides.player.banished).toEqual([ids.player.deck[4]]);
+    const done = play(reentered, ids.player.hand[3]);
+    expect(done.state.sides.player.hand).toEqual([ids.player.deck[3], ids.player.deck[4]]);
+    expect(done.state.sides.player.banished).toEqual([]);
+  });
+
+  it("keeps a created copy's acquired-pair look private and its public link visible only while the copy exists", () => {
+    const { state, ids } = setup({ hand: [F.createGained.id, F.repeat.id, F.kill.id] });
+    const gained = play(state, ids.player.hand[0], picking).state;
+    const looked = play(gained, ids.player.hand[1], picking);
+    const chosen = ids.player.deck[3];
+    const look = looked.events.find((event) => event.kind === "lookedAtTop")!;
+    expect(eventSeenBy(look, "enemy", looked.state)).toMatchObject({ cards: [null, null, null, chosen] });
+    for (const side of ["player", "enemy"] as const) {
+      expect(engine.view(looked.state, side).linkedBanished?.flatMap((record) => record.cards.map((card) => card.instance))).toEqual([chosen]);
+    }
+    const done = play(looked.state, ids.player.hand[2]);
+    for (const side of ["player", "enemy"] as const) expect(engine.view(done.state, side).linkedBanished).toEqual([]);
+    for (const state of [looked.state, done.state]) {
+      expect(ids.player.deck.slice(0, 3).every((id) => !engine.view(state, "enemy").instances[id])).toBe(true);
+    }
+  });
+
   it("rejects a consumer offset outside an earlier ability, and requires a source object", () => {
     for (const value of [0, 1, -0.5, Number.NaN]) expect(() => putLinkedBanishedInHand(value)).toThrow();
     const { state, ids } = setup({ hand: [F.plain.id] });
