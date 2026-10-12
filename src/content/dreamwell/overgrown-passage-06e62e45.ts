@@ -1,3 +1,5 @@
+import { conditionCardCounts, countCards, event, plus, times } from "../../engine/dsl/builders";
+import { draw, eachPlayer, ifThen } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: false,
   cardNumber: 43,
   tags: [],
-  pending: true,
+  abilities: () => [event(eachPlayer(ifThen(conditionCardCounts("hand", 0, { atMost: 2 }), draw(plus(times(countCards("hand"), -1), 3)))))],
+  verifiedText: "ub8qxhsmxp",
 });

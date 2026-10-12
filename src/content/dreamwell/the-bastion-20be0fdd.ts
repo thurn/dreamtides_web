@@ -1,3 +1,5 @@
+import { controls, event } from "../../engine/dsl/builders";
+import { abandon, draw, ifThen, optional, sequence } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: true,
   cardNumber: 22,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [event(ifThen(controls({ controller: "you" }), optional(sequence(abandon(), draw(2)))))],
+  verifiedText: "stk1pjwa8d",
 });

@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import { optional, redrawHand } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -12,5 +14,6 @@ export default dreamwellCard({
   cardNumber: 46,
   tags: [],
   art: { x: 0, y: -1, scale: 1 },
-  pending: true,
+  abilities: () => [event(optional(redrawHand()))],
+  verifiedText: "1u0d6plmdxx",
 });

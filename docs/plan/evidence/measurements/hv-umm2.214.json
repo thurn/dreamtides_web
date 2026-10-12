@@ -1,0 +1,736 @@
+{
+  "bead": "hv-umm2.214",
+  "base": "2b79616c0c48b082a627ad94481ff55c481c9657",
+  "originalBase": "5f83560a65f77396f7b1582211222f8ff2ee6c8f",
+  "entities": [
+    "03e4e701-4720-4278-8198-9b7e0514d4cf",
+    "06e62e45-53f9-4264-9aa6-2575b445332a",
+    "20be0fdd-d691-40a9-b4f8-15689ea7ebaa",
+    "446095b1-ec4d-40d7-8eed-a8221d339ea2",
+    "5ec17498-9028-4a01-80a0-67c91b03d505",
+    "7171ff89-ebe4-42d0-8863-9b4b0531cad2"
+  ],
+  "sourceScope": {
+    "modules": 6,
+    "nonTestLinesAdded": 24,
+    "nonTestLinesRemoved": 6,
+    "newPrimitives": [],
+    "fallout": [],
+    "metadataPreserved": "Exact UUID, printed text, energyAdded, order, artwork fields and default export signatures preserved."
+  },
+  "source": {
+    "03e4e701-4720-4278-8198-9b7e0514d4cf": {
+      "module": "src/content/dreamwell/shadow-passage-03e4e701.ts",
+      "sha256": "a16b893fc415abe0bda8926348dd56f9ec308f8785f11323d72e6090b231cf9c",
+      "energyAdded": 1,
+      "order": 1
+    },
+    "06e62e45-53f9-4264-9aa6-2575b445332a": {
+      "module": "src/content/dreamwell/overgrown-passage-06e62e45.ts",
+      "sha256": "1272794a51495d109adc389a58a51191e52603ec940d343f72062d2b257d669d",
+      "energyAdded": 2,
+      "order": 3
+    },
+    "20be0fdd-d691-40a9-b4f8-15689ea7ebaa": {
+      "module": "src/content/dreamwell/the-bastion-20be0fdd.ts",
+      "sha256": "331665c0b88ef30157fe717cf94c53a8cec9eebfd0a93e9f53fd2bf66a7583f6",
+      "energyAdded": 0,
+      "order": 4
+    },
+    "446095b1-ec4d-40d7-8eed-a8221d339ea2": {
+      "module": "src/content/dreamwell/fortune-s-wheel-446095b1.ts",
+      "sha256": "965cf168bcc73fdcd71f4ecd9d673aa80d0d9d42ce79c9602f1b139471052474",
+      "energyAdded": 0,
+      "order": 4
+    },
+    "5ec17498-9028-4a01-80a0-67c91b03d505": {
+      "module": "src/content/dreamwell/meteor-meadow-5ec17498.ts",
+      "sha256": "8be0b2ba18246b27e34205d7d9786bf9551dd5551ff8b3b3ff0b8eca773bb266",
+      "energyAdded": 1,
+      "order": 2
+    },
+    "7171ff89-ebe4-42d0-8863-9b4b0531cad2": {
+      "module": "src/content/dreamwell/the-voltsurge-7171ff89.ts",
+      "sha256": "95d2066bbf2226920403cb4f8fbb4e93d74b7c0cfcfda4a4afe041ad421fd2fe",
+      "energyAdded": 1,
+      "order": 3
+    }
+  },
+  "d20": {
+    "scenariosAdded": 0,
+    "reason": "All six effects compose existing draw, erode, eachPlayer, conditionCardCounts, value arithmetic, optional, abandon and prerequisite redrawHand. Stable primitive contracts cover the constituent behavior; no entity exceeds composition."
+  },
+  "rulings": {
+    "existing": [
+      "RD-hv-umm2.62-1",
+      "RD-hv-umm2.75-1",
+      "RD-hv-umm2.98-1"
+    ],
+    "newRulesDecisions": [],
+    "cardIssues": [],
+    "eachPlayer": "Current rule and RD62-1 require active player first, each player as its own you; canonical settlement governs the legacy fixed-player-order observation.",
+    "bastion": "Current Costs while resolving requires payable abandonment before optional confirmation and benefit. controls gates eligibility; accept chooses its own non-targeting character, then abandonment and draw. RD75 standalone no-character continuation concerns ordinary instructions, not unpaid X to Y costs."
+  },
+  "prerequisiteRecovery": {
+    "bead": "hv-umm2.567",
+    "candidate": "01a1314c-081b-7142-92e5-983e91c2ec17",
+    "source": "d6ebcf0b87c0bc6d76835cd86b6e5ad2b3790c64",
+    "tested": "c699205d3f09550c65eb9870c2bc29e5f14083bf",
+    "certificate": "01a1314d-d254-7542-8ec4-a243ccfe6d46",
+    "disposition": "Certified promoted and closed completed prerequisite, present in resumed base; parent fresh read-only Sol CLI review found no actionable findings under temporary routing.",
+    "originalPublicNegativeObservations": {
+      "head": "5f83560a65f77396f7b1582211222f8ff2ee6c8f",
+      "rows": [
+        {
+          "side": "player",
+          "locked": false,
+          "before": [
+            "i2",
+            "i3"
+          ],
+          "after": [],
+          "discarded": 2,
+          "drawn": 0,
+          "expectedRedraw": 2
+        },
+        {
+          "side": "player",
+          "locked": true,
+          "before": [
+            "i2",
+            "i3"
+          ],
+          "after": [],
+          "discarded": 2,
+          "drawn": 0,
+          "expectedRedraw": 2
+        },
+        {
+          "side": "enemy",
+          "locked": false,
+          "before": [
+            "i2",
+            "i3"
+          ],
+          "after": [],
+          "discarded": 2,
+          "drawn": 0,
+          "expectedRedraw": 2
+        },
+        {
+          "side": "enemy",
+          "locked": true,
+          "before": [
+            "i2",
+            "i3"
+          ],
+          "after": [],
+          "discarded": 2,
+          "drawn": 0,
+          "expectedRedraw": 2
+        }
+      ]
+    },
+    "initialWorktree": "Source-free checkpoint; no edits, checks, runtimes, candidate or source commit. Parent removed unused checkout before fresh resumed assignment."
+  },
+  "d21": {
+    "sample": [
+      {
+        "uuid": "03e4e701-4720-4278-8198-9b7e0514d4cf",
+        "firstByte": 0,
+        "sampled": true
+      },
+      {
+        "uuid": "06e62e45-53f9-4264-9aa6-2575b445332a",
+        "firstByte": 96,
+        "sampled": false
+      },
+      {
+        "uuid": "20be0fdd-d691-40a9-b4f8-15689ea7ebaa",
+        "firstByte": 115,
+        "sampled": false
+      },
+      {
+        "uuid": "446095b1-ec4d-40d7-8eed-a8221d339ea2",
+        "firstByte": 41,
+        "sampled": false
+      },
+      {
+        "uuid": "5ec17498-9028-4a01-80a0-67c91b03d505",
+        "firstByte": 107,
+        "sampled": false
+      },
+      {
+        "uuid": "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+        "firstByte": 151,
+        "sampled": false
+      }
+    ],
+    "newPromptKinds": [],
+    "newStatuses": [],
+    "newVisualEffects": [],
+    "applicable": [
+      "03e4e701-4720-4278-8198-9b7e0514d4cf"
+    ],
+    "judgedCases": 4,
+    "screens": [
+      {
+        "file": "shadow-player-desktop.png",
+        "cssViewport": [
+          1440,
+          900
+        ],
+        "pngDimensions": [
+          2880,
+          1800
+        ],
+        "deviceScaleFactor": 2,
+        "originalResolutionInspected": true
+      },
+      {
+        "file": "shadow-enemy-desktop.png",
+        "cssViewport": [
+          1440,
+          900
+        ],
+        "pngDimensions": [
+          2880,
+          1800
+        ],
+        "deviceScaleFactor": 2,
+        "originalResolutionInspected": true
+      },
+      {
+        "file": "shadow-player-mobile.png",
+        "cssViewport": [
+          390,
+          844
+        ],
+        "pngDimensions": [
+          780,
+          1688
+        ],
+        "deviceScaleFactor": 2,
+        "originalResolutionInspected": true
+      },
+      {
+        "file": "shadow-enemy-mobile.png",
+        "cssViewport": [
+          390,
+          844
+        ],
+        "pngDimensions": [
+          780,
+          1688
+        ],
+        "deviceScaleFactor": 2,
+        "originalResolutionInspected": true
+      }
+    ],
+    "fixtureScope": "Both controllers and both desktop/mobile viewports, genuine native forced next Dreamwell draw. Full8-card initial self deck; self3 erosion, distinct4th normal draw, opponent deck unchanged, energy+1 and zero Fatigue. Browser depleted-deck Fatigue is inapplicable and unclaimed; existing erode/Fatigue synthetic contracts remain foundation.",
+    "gameLogScope": {
+      "perCaseSourceRecords": [
+        {
+          "viewport": "desktop",
+          "side": "player",
+          "gameId": "gjk2gj",
+          "observedRows": 31
+        },
+        {
+          "viewport": "desktop",
+          "side": "enemy",
+          "gameId": "8b9sv6",
+          "observedRows": 38
+        },
+        {
+          "viewport": "mobile",
+          "side": "player",
+          "gameId": "aokr4g",
+          "observedRows": 31
+        },
+        {
+          "viewport": "mobile",
+          "side": "enemy",
+          "gameId": "4xdqd6",
+          "observedRows": 38
+        }
+      ],
+      "fullNativeExports": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.214/invocations/run-rUvDW3/judged-shadow-desktop.jsonl",
+          "gameId": "8b9sv6",
+          "selectedBy": "url",
+          "rows": 38,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.214/invocations/run-rUvDW3/judged-shadow-mobile.jsonl",
+          "gameId": "4xdqd6",
+          "selectedBy": "url",
+          "rows": 38,
+          "reason": null
+        }
+      ],
+      "qualification": "Runner exports the last selected game once per viewport: enemy38rows each; four full-game exports are not claimed."
+    },
+    "failedAttempt": {
+      "invocation": "run-7W9dGU",
+      "exit": 1,
+      "caps": [],
+      "error": "desktop#0: Error: the rendered void pile must display three cards",
+      "rawSha256": "9aaca019854b6ab16d259a276d597b7123bf7aadecd2c1b8df998606de0d8c2b",
+      "disposition": "Parent justiciar corrected premature DOM observation with waitFor exact unchanged counts and viewport geometry, retaining all assertions. Repaired observation shows initialvoid0/layers0/deck8 then settledvoid3/layers3/deck4. No product/source/sharedQA change."
+    },
+    "acceptedAttempt": {
+      "proof": {
+        "invocation": "run-rUvDW3",
+        "sha256": "0750b497b37e8ea774018dd06251df07d7cd8f7a03c51fba5208756bdb609244",
+        "allPass": true,
+        "caps": [],
+        "error": null,
+        "runtime": {
+          "pid": 51245,
+          "serverPid": 51342,
+          "port": 5274,
+          "slot": 1,
+          "terminalExit": 0,
+          "absent": true
+        },
+        "geometryTransitions": [
+          [
+            "sampled Dreamwell initial rendered geometry",
+            {
+              "side": "player",
+              "initialGeometry": {
+                "x": 871.578125,
+                "y": 606.1383666992188,
+                "width": 94.421875,
+                "height": 67.4375,
+                "count": "0",
+                "layers": 0,
+                "deckCount": "8",
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                }
+              }
+            }
+          ],
+          [
+            "sampled Dreamwell settled rendered geometry",
+            {
+              "side": "player",
+              "geometry": {
+                "x": 871.578125,
+                "y": 606.1383666992188,
+                "width": 94.421875,
+                "height": 67.4375,
+                "count": "3",
+                "layers": 3,
+                "deckCount": "4",
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                }
+              }
+            }
+          ],
+          [
+            "sampled Dreamwell initial rendered geometry",
+            {
+              "side": "enemy",
+              "initialGeometry": {
+                "x": 871.578125,
+                "y": 82.40848541259766,
+                "width": 94.421875,
+                "height": 67.43749237060547,
+                "count": "0",
+                "layers": 0,
+                "deckCount": "8",
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                }
+              }
+            }
+          ],
+          [
+            "sampled Dreamwell settled rendered geometry",
+            {
+              "side": "enemy",
+              "geometry": {
+                "x": 871.578125,
+                "y": 82.40848541259766,
+                "width": 94.421875,
+                "height": 67.43749237060547,
+                "count": "3",
+                "layers": 3,
+                "deckCount": "4",
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                }
+              }
+            }
+          ],
+          [
+            "sampled Dreamwell initial rendered geometry",
+            {
+              "side": "player",
+              "initialGeometry": {
+                "x": 302.578125,
+                "y": 599.75,
+                "width": 79.421875,
+                "height": 56.71875,
+                "count": "0",
+                "layers": 0,
+                "deckCount": "8",
+                "viewport": {
+                  "width": 390,
+                  "height": 844
+                }
+              }
+            }
+          ],
+          [
+            "sampled Dreamwell settled rendered geometry",
+            {
+              "side": "player",
+              "geometry": {
+                "x": 302.578125,
+                "y": 599.75,
+                "width": 79.421875,
+                "height": 56.71875,
+                "count": "3",
+                "layers": 3,
+                "deckCount": "4",
+                "viewport": {
+                  "width": 390,
+                  "height": 844
+                }
+              }
+            }
+          ],
+          [
+            "sampled Dreamwell initial rendered geometry",
+            {
+              "side": "enemy",
+              "initialGeometry": {
+                "x": 302.578125,
+                "y": 98.21875,
+                "width": 79.421875,
+                "height": 56.71875,
+                "count": "0",
+                "layers": 0,
+                "deckCount": "8",
+                "viewport": {
+                  "width": 390,
+                  "height": 844
+                }
+              }
+            }
+          ],
+          [
+            "sampled Dreamwell settled rendered geometry",
+            {
+              "side": "enemy",
+              "geometry": {
+                "x": 302.578125,
+                "y": 98.21875,
+                "width": 79.421875,
+                "height": 56.71875,
+                "count": "3",
+                "layers": 3,
+                "deckCount": "4",
+                "viewport": {
+                  "width": 390,
+                  "height": 844
+                }
+              }
+            }
+          ]
+        ]
+      },
+      "receipt": {
+        "bead": "hv-umm2.214",
+        "role": "parent justiciar exact observable judgment repair",
+        "startedAt": "2026-10-12T18:31:28.287696+00:00",
+        "hostLoad": [
+          32.2958984375,
+          20.5791015625,
+          16.119140625
+        ],
+        "pid": 51245,
+        "exit": 0,
+        "wallS": 48.974947000009706,
+        "endedAt": "2026-10-12T18:32:17.263028+00:00"
+      }
+    },
+    "visualObservations": "All four original-resolution2x PNGs inspected: void pile and counters visible, stable and inside viewport. Existing partial hand-card crop recorded in own pre-existing evidence.",
+    "recoveryWindow": {
+      "start": "2026-10-12T18:27:33.130672+00:00",
+      "end": "2026-10-12T18:32:17.263028+00:00",
+      "elapsedS": 284.132356,
+      "qualification": "Failed-judgment terminal through corrected judgment terminal; includes parent investigation, explicit justiciar repair and one corrected attempt. Below ten-minute per-friction reporting threshold; original failed raw evidence retained."
+    }
+  },
+  "commands": {
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/turn.test.ts"
+      ],
+      "start": "2026-10-12T18:20:35.926958+00:00",
+      "end": "2026-10-12T18:20:42.822525+00:00",
+      "elapsedS": 6.895420834000106,
+      "exit": 0,
+      "hostLoad": 5.978515625
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T18:20:56.912072+00:00",
+      "end": "2026-10-12T18:21:34.125194+00:00",
+      "elapsedS": 37.21264749999682,
+      "exit": 0,
+      "hostLoad": 5.71875
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T18:21:47.494312+00:00",
+      "end": "2026-10-12T18:21:51.785898+00:00",
+      "elapsedS": 4.291460874999757,
+      "exit": 0,
+      "hostLoad": 5.70703125
+    },
+    "preflight": {
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "5ec17498-9028-4a01-80a0-67c91b03d505,7171ff89-ebe4-42d0-8863-9b4b0531cad2,06e62e45-53f9-4264-9aa6-2575b445332a,20be0fdd-d691-40a9-b4f8-15689ea7ebaa,446095b1-ec4d-40d7-8eed-a8221d339ea2,03e4e701-4720-4278-8198-9b7e0514d4cf"
+      ],
+      "start": "2026-10-12T18:21:48.651140+00:00",
+      "end": "2026-10-12T18:21:49.635186+00:00",
+      "elapsedS": 0.9839651670044987,
+      "exit": 0,
+      "hostLoad": 5.70703125
+    },
+    "fuzz": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "5ec17498-9028-4a01-80a0-67c91b03d505,7171ff89-ebe4-42d0-8863-9b4b0531cad2,06e62e45-53f9-4264-9aa6-2575b445332a,20be0fdd-d691-40a9-b4f8-15689ea7ebaa,446095b1-ec4d-40d7-8eed-a8221d339ea2,03e4e701-4720-4278-8198-9b7e0514d4cf"
+      ],
+      "start": "2026-10-12T18:22:01.119628+00:00",
+      "end": "2026-10-12T18:24:20.115515+00:00",
+      "elapsedS": 138.99430212499283,
+      "exit": 0,
+      "hostLoad": 7.0703125
+    },
+    "sweep": {
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.214",
+        "--cards",
+        "5ec17498-9028-4a01-80a0-67c91b03d505,7171ff89-ebe4-42d0-8863-9b4b0531cad2,06e62e45-53f9-4264-9aa6-2575b445332a,20be0fdd-d691-40a9-b4f8-15689ea7ebaa,446095b1-ec4d-40d7-8eed-a8221d339ea2,03e4e701-4720-4278-8198-9b7e0514d4cf",
+        "--port",
+        "5174"
+      ],
+      "start": "2026-10-12T18:24:56.304035+00:00",
+      "end": "2026-10-12T18:26:43.723459+00:00",
+      "elapsedS": 107.41819012499764,
+      "exit": 0,
+      "hostLoad": 21.48681640625
+    },
+    "judged": {
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "judged-shadow",
+        "--bead",
+        "hv-umm2.214",
+        "--viewports",
+        "desktop,mobile",
+        "--port",
+        "5174"
+      ],
+      "start": "2026-10-12T18:27:26.485718+00:00",
+      "end": "2026-10-12T18:27:33.130672+00:00",
+      "elapsedS": 6.6487847909884294,
+      "exit": 1,
+      "hostLoad": 14.2236328125
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T18:37:55.925603+00:00",
+      "end": "2026-10-12T18:37:56.003519+00:00",
+      "elapsedS": 0.07785454200347885,
+      "exit": 0,
+      "hostLoad": 24.92138671875
+    },
+    "friction": {
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-12T18:37:55.618795+00:00",
+      "end": "2026-10-12T18:37:55.875564+00:00",
+      "elapsedS": 0.2566925830033142,
+      "exit": 0,
+      "hostLoad": 24.92138671875
+    }
+  },
+  "validation": {
+    "focused": {
+      "files": 3,
+      "tests": 2118,
+      "contentCoverageGate": "Included src/engine/content-gates.test.ts and passed; no new primitive contracts duplicated."
+    },
+    "review": {
+      "files": 223,
+      "tests": 4137,
+      "exit": 0
+    },
+    "knipExit": 0,
+    "preflight": {
+      "pass": 12,
+      "skip": 108,
+      "pending": 0,
+      "fail": 0,
+      "defaultMatrix": "6exactUUIDs x2controllers x10variants; Dreamwellonlybase eligible"
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 141253,
+      "failures": 0,
+      "wallS": 137.4,
+      "cpuS": 149.7,
+      "prompts": 4572,
+      "interactiveReruns": 411,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 3
+      },
+      "targetExercised": [
+        291,
+        248,
+        248,
+        123,
+        130,
+        321
+      ],
+      "exclusiveHeavyLock": true,
+      "ownedProcessGroup": 31758,
+      "ownedPids": [
+        31769,
+        31791,
+        31793
+      ],
+      "terminalAndAbsentBeforeBrowser": true
+    },
+    "sweep": {
+      "invocation": "sweep-MNkLaR",
+      "pass": 12,
+      "skip": 108,
+      "fail": 0,
+      "pending": 0,
+      "attempts": 120,
+      "sessions": 1,
+      "leaseYields": 0,
+      "browserLeaseWaitMs": 5,
+      "nativeTotalMs": 107225.90333300001,
+      "ownedRunner": 66600,
+      "ownedProcessGroup": 66403,
+      "ownedServerGroup": 66994,
+      "slot": 1,
+      "port": 5274,
+      "terminalExit": 0,
+      "processesAbsent": true,
+      "ownProviderAndLeaseReleased": true,
+      "portReuse": "Native own cleanup reports port free; peer197 subsequently reused slot1/5274, untouched."
+    },
+    "friction": {
+      "exit": 0,
+      "cadencePhase5": {
+        "uncovered": 11,
+        "files": 416,
+        "retrospective": "hv-umm2.561",
+        "due": false
+      },
+      "allFiredTriggersDispositioned": true
+    }
+  },
+  "workflow": {
+    "firstHelperDispatch": "2026-10-12T17:34:25.592Z",
+    "resumedHelperDispatch": "2026-10-12T18:18:13.652Z",
+    "timingDefinition": "Same implementer gross elapsed from first dispatch through final freeze/commit; includes source-free research, coordination, prerequisite567 wait and parent justiciar recovery. Not productive editing time.",
+    "nativeOwnershipSnapshots": {
+      "originalStartedAt": "2026-10-12T17:26:20Z",
+      "resumeShowUpdatedAt": "2026-10-12T18:16:35Z",
+      "resumedAdmittedUpdatedAt": "2026-10-12T18:17:48Z",
+      "qualification": "started_at persists original native start and snapshots alone do not establish exact release/reclaim endpoints."
+    },
+    "noServingCheckoutWork": "All focused/review/Knip/preflight/fuzz/schema/triggers settled before full sweep. No checkout reads/edits/checks while own runner served or could reacquire. Parent corrected bead-local scenario after first judgment terminal cleanup; helper paused through parent runtime and resumed after terminal settlement.",
+    "runtimeSettlement": "All helper checks and own fuzz/sweep/failedjudgment processes settled; parent correctedrunner51245/server51342 terminal0 and absent, own provider/owner records released. No owned writer or runtime remains.",
+    "nativeOwnershipObservedClientBoundaries": {
+      "initialClaim": {
+        "at": "2026-10-12T17:26:20.158Z",
+        "call": "call_8fc7ac2506b948019dc52fd0dc35d2ce"
+      },
+      "releaseOrchestration": {
+        "at": "2026-10-12T17:48:45.981Z",
+        "call": "call_066903f42b8e416d8f377eb3bed7889e"
+      },
+      "atomicReclaim": {
+        "at": "2026-10-12T18:16:34.917Z",
+        "call": "call_899ea01cce3745df8530d05d67287cb2",
+        "nativeAckUpdatedAt": "2026-10-12T18:16:35Z"
+      },
+      "qualification": "Authoritative parent journal dispatch observations, not exact native database effect endpoints. Original release/reclaim interval preserved beside native snapshots."
+    },
+    "evidenceFreeze": "2026-10-12T18:38:58.331205+00:00",
+    "commitTailQualification": "End is measured immediately before final evidence schema and local commit; actual git commit timestamp is delivered with the exact source OID. Any tail remains part of gross elapsed and is less than the friction schema one-minute tolerance."
+  },
+  "coreReview": {
+    "required": false,
+    "reason": "Composition only, no new form; 30non-test source lines changed, no core-review label. Prerequisite567 independent review is separately complete."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "1-minute load at end of local review command wrapper, not its start; per-command end samples retained in command receipts."
+      }
+    }
+  }
+}

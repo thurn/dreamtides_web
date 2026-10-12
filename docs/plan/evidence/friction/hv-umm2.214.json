@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.214",
+  "phase": 5,
+  "implementMin": 64.54565341666667,
+  "implementWindow": {
+    "start": "2026-10-12T17:34:25.592Z",
+    "end": "2026-10-12T18:38:58.331205+00:00"
+  },
+  "localValidationS": {
+    "focused": 6.895420834,
+    "review": 37.2126475,
+    "knip": 4.291460875,
+    "preflight": 0.983965167,
+    "fuzz": 138.99430212499283,
+    "sweep": 107.41819012499764,
+    "judgedFailed": 6.6487847909884294,
+    "judged": 48.974947000009706,
+    "friction": 0.2566925830033142
+  },
+  "hostLoad": 5.71875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "missing-primitive",
+      "minutes": 43.801,
+      "note": "Original read-only audit found no captured pre-discard whole-hand count. Parent filed and delivered hv-umm2.567 redrawHand before same helper resumed in a fresh worktree. Gross first-dispatch-to-resumed-dispatch interval includes diagnosis, source-free release, prerequisite implementation/review/delivery and wait."
+    }
+  ]
+}

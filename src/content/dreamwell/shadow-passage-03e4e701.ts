@@ -1,3 +1,5 @@
+import { event } from "../../engine/dsl/builders";
+import { erode } from "../../engine/effects/primitives";
 import { dreamwellCard } from "../define";
 
 export default dreamwellCard({
@@ -11,5 +13,6 @@ export default dreamwellCard({
   artOwned: true,
   cardNumber: 12,
   tags: ["Art Owned"],
-  pending: true,
+  abilities: () => [event(erode(3))],
+  verifiedText: "1518zo7grfi",
 });
