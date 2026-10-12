@@ -42,6 +42,18 @@ export function sourceKey(source: AbilitySource): SourceKey {
 /** Names one ability of one source: `<source key>#<ability index>`, with an optional `@<zone timestamp>` for static play permissions. */
 export type OncePerTurnKey = `${SourceKey}#${number}` | `${SourceKey}#${number}@${number}`;
 
+/** Reads an ability record's source, index, and optional physical zone entry. */
+export function oncePerTurnParts(key: OncePerTurnKey): { source: SourceKey; ability: number; enteredZoneAt: number | null } {
+  const separator = key.indexOf("#");
+  const entry = key.indexOf("@", separator);
+  return {
+    // eslint-disable-next-line dreamtides/no-raw-string-identity -- decode the SourceKey already carried by the typed OncePerTurnKey
+    source: key.slice(0, separator) as SourceKey,
+    ability: Number(key.slice(separator + 1, entry === -1 ? undefined : entry)),
+    enteredZoneAt: entry === -1 ? null : Number(key.slice(entry + 1)),
+  };
+}
+
 /** The instance an ability source names, or `null` for an emblem. */
 export function sourceInstance(source: AbilitySource): InstanceId | null {
   return typeof source === "string" ? source : null;

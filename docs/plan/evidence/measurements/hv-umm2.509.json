@@ -1,0 +1,689 @@
+{
+  "bead": "hv-umm2.509",
+  "base": "7b9cd1d3529814a00e422aad53e1a575c5093b3d",
+  "scratchRoot": "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/509-implementation-evidence",
+  "dispatchUtc": "2026-10-12T06:29:26.898976+00:00",
+  "implementWindow": {
+    "startUtc": "2026-10-12T06:29:26.898976+00:00",
+    "preCommitObservedUtc": "2026-10-12T06:57:21.935871+00:00",
+    "actualCommitReceipt": "commit.json in scratchRoot; actual end is externally observed after the immutable commit",
+    "dispatchToObservationMin": 27.91728158333333
+  },
+  "checks": {
+    "install": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:31:35.471526+00:00",
+      "pid": 87400,
+      "pgid": 87400,
+      "hostLoadStart": [
+        5.01123046875,
+        10.43359375,
+        13.3115234375
+      ],
+      "end": "2026-10-12T06:31:37.915032+00:00",
+      "exit": 0,
+      "wallSeconds": 2.443278915998235,
+      "hostLoadEnd": [
+        5.17041015625,
+        10.37646484375,
+        13.2744140625
+      ],
+      "rawReceipt": "install.json",
+      "rawReceiptSHA256": "4864125aec8142d5751efe0b44d80df76280b8a0e82bedcfe79a260476919d87"
+    },
+    "old-regression": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "static allowance lifecycle consumers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:37:21.509674+00:00",
+      "pid": 3502,
+      "pgid": 3502,
+      "hostLoadStart": [
+        4.5029296875,
+        5.94140625,
+        10.12353515625
+      ],
+      "engineDiffSHA256": "de7b0635d2effd71eba2fa04d34fcbc1cf5fd2f616bfd44144852f49e6efc217",
+      "end": "2026-10-12T06:37:25.853317+00:00",
+      "exit": 1,
+      "wallSeconds": 4.343491750001704,
+      "hostLoadEnd": [
+        4.70263671875,
+        5.95849609375,
+        10.10498046875
+      ],
+      "cpuSeconds": 5.752642,
+      "maxRSS": 418889728,
+      "logSHA256": "3ef2e18e4cd072247c189535d65926b9680b79302792f35d3a4753af80f9a34a",
+      "rawReceipt": "old-regression.json",
+      "rawReceiptSHA256": "1b6b7ceee5899f4bd0d3b96cd2d61a12c2cab19684108f4038afe88d321cc957",
+      "sourceManifestSHA256": "31cff73292f3084d97355109310d79252ed456d5935aa3e7d4d424a9e3bf03fd"
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/mandatory.test.ts",
+        "src/engine/view/hidden-card-status.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:38:10.130067+00:00",
+      "pid": 4277,
+      "pgid": 4277,
+      "hostLoadStart": [
+        4.0078125,
+        5.62744140625,
+        9.77001953125
+      ],
+      "engineDiffSHA256": "d561fe766e354032606f7af37e5890e0ecb27e5e0a7321c27c33a3ab1a737648",
+      "end": "2026-10-12T06:38:15.410874+00:00",
+      "exit": 1,
+      "wallSeconds": 5.280634667000413,
+      "hostLoadEnd": [
+        3.9267578125,
+        5.58349609375,
+        9.72998046875
+      ],
+      "cpuSeconds": 7.72427,
+      "maxRSS": 585121792,
+      "logSHA256": "67c434e0c0b49ea4aac2fe54e4161f617a16a26f0712dfaa607eb94276cac424",
+      "rawReceipt": "focused.json",
+      "rawReceiptSHA256": "a8e49608963faf23ae452bfbbf190dce12ae39f5507d022e18744359f7e9bf99",
+      "sourceManifestSHA256": "66e86dce2445c31ed3fc95faf1d62ae4bae757a256fe828d560a83740906595d"
+    },
+    "affected": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/engine/view/hidden-card-status.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:39:07.071589+00:00",
+      "pid": 5244,
+      "pgid": 5244,
+      "hostLoadStart": [
+        2.9697265625,
+        5.06103515625,
+        9.2978515625
+      ],
+      "engineDiffSHA256": "d561fe766e354032606f7af37e5890e0ecb27e5e0a7321c27c33a3ab1a737648",
+      "end": "2026-10-12T06:39:12.473954+00:00",
+      "exit": 0,
+      "wallSeconds": 5.402191290999326,
+      "hostLoadEnd": [
+        2.9716796875,
+        5.0263671875,
+        9.2607421875
+      ],
+      "cpuSeconds": 8.224324,
+      "maxRSS": 860667904,
+      "logSHA256": "f5beb3f8ff21e9ab7460d27d7ddac0d474f3a086ee393e16833b0e94cc584510",
+      "rawReceipt": "affected.json",
+      "rawReceiptSHA256": "f767630480d069e902ae1c2dfc74c40432354c34aded6b799d16f3c89a1a465d",
+      "sourceManifestSHA256": "9c4d63cabd4ba15b652f04fcb8c62e9db439cb9e58bae10e06b4926bdd506770"
+    },
+    "cycle-negative": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "normalizes the clock of live"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:40:06.470987+00:00",
+      "pid": 6276,
+      "pgid": 6276,
+      "hostLoadStart": [
+        2.74365234375,
+        4.64404296875,
+        8.853515625
+      ],
+      "engineDiffSHA256": "7fd92428d794fd42ac0a0521f9af6482bd9588bb680e7d431849c51081c7d2cc",
+      "end": "2026-10-12T06:40:09.367085+00:00",
+      "exit": 1,
+      "wallSeconds": 2.895959875000699,
+      "hostLoadEnd": [
+        3.16455078125,
+        4.69970703125,
+        8.84814453125
+      ],
+      "cpuSeconds": 4.132566,
+      "maxRSS": 409157632,
+      "logSHA256": "b5195d5e94bddc8394bd36d45bfed32c3b36997cfd888932423d152feb525d03",
+      "rawReceipt": "cycle-negative.json",
+      "rawReceiptSHA256": "bbb2e2289a7b90db1b7aa544ee8a8c14f29450663ea47df6a9561dbf3052c853",
+      "sourceManifestSHA256": "2e50689e64e1b95dc27294b4a711ec9b73c70929fefe1404bf4cf5e15f9a5526"
+    },
+    "final-affected": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/engine/view/hidden-card-status.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:41:30.534119+00:00",
+      "pid": 7519,
+      "pgid": 7519,
+      "hostLoadStart": [
+        3.18798828125,
+        4.28125,
+        8.310546875
+      ],
+      "engineDiffSHA256": "d561fe766e354032606f7af37e5890e0ecb27e5e0a7321c27c33a3ab1a737648",
+      "end": "2026-10-12T06:41:36.869805+00:00",
+      "exit": 0,
+      "wallSeconds": 6.33537870800501,
+      "hostLoadEnd": [
+        3.0927734375,
+        4.2431640625,
+        8.2734375
+      ],
+      "cpuSeconds": 8.603983,
+      "maxRSS": 868253696,
+      "logSHA256": "9683c972967bc32d4b8b50f7054eef798b82cbad3c1401378fa00f84cbda4fc9",
+      "rawReceipt": "final-affected.json",
+      "rawReceiptSHA256": "0c225480f3e6fac5a6a7a392e2015e022c18944e9bb15c8122751474078107c3",
+      "sourceManifestSHA256": "9c4d63cabd4ba15b652f04fcb8c62e9db439cb9e58bae10e06b4926bdd506770"
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:41:54.550724+00:00",
+      "pid": 7943,
+      "pgid": 7943,
+      "hostLoadStart": [
+        2.74609375,
+        4.09521484375,
+        8.12646484375
+      ],
+      "engineDiffSHA256": "d561fe766e354032606f7af37e5890e0ecb27e5e0a7321c27c33a3ab1a737648",
+      "end": "2026-10-12T06:42:46.043238+00:00",
+      "exit": 2,
+      "wallSeconds": 51.49130704099662,
+      "hostLoadEnd": [
+        3.90625,
+        4.2255859375,
+        7.9443359375
+      ],
+      "cpuSeconds": 162.977676,
+      "maxRSS": 3461890048,
+      "logSHA256": "58d6c08aeb67a6e9b60e589c7cccc23eeda3b1aa102fdbf18fefad4634bc8fd5",
+      "rawReceipt": "review.json",
+      "rawReceiptSHA256": "334cdac4615aca9e98c9a8d585d1535d477093f73225fe61e4988e315c806fb3",
+      "sourceManifestSHA256": "93825369aa4691a178bf13b06bfd187224cd3522dc20a3012078aca09c44e774"
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:44:16.068623+00:00",
+      "pid": 10537,
+      "pgid": 10537,
+      "hostLoadStart": [
+        3.6044921875,
+        4.0361328125,
+        7.49462890625
+      ],
+      "engineDiffSHA256": "4b0f03499637fd90533d347deaa209e7410169d15d2401e8872034d7268ae4a8",
+      "end": "2026-10-12T06:45:01.999278+00:00",
+      "exit": 0,
+      "wallSeconds": 45.9298248749983,
+      "hostLoadEnd": [
+        4.47412109375,
+        4.2001953125,
+        7.37548828125
+      ],
+      "cpuSeconds": 138.06089699999998,
+      "maxRSS": 3585228800,
+      "logSHA256": "dc8705ae884b459c90d29fc8e4d8f3572fccc7292acace52e8425ef6181506fe",
+      "rawReceipt": "review-final.json",
+      "rawReceiptSHA256": "c9f27407820bdf867bdff2928a6f3ff9021e21adae50421b0b08fb7b173fba4f",
+      "sourceManifestSHA256": "6f59ed797724dd8a4cdabc99a7792f86bfd015087d2db79a606862554392ad86"
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:45:47.816859+00:00",
+      "pid": 12075,
+      "pgid": 12075,
+      "hostLoadStart": [
+        4.1796875,
+        4.216796875,
+        7.22021484375
+      ],
+      "engineDiffSHA256": "4b0f03499637fd90533d347deaa209e7410169d15d2401e8872034d7268ae4a8",
+      "end": "2026-10-12T06:45:51.507865+00:00",
+      "exit": 0,
+      "wallSeconds": 3.690632916004688,
+      "hostLoadEnd": [
+        4.0849609375,
+        4.1962890625,
+        7.1953125
+      ],
+      "cpuSeconds": 3.2231560000000004,
+      "maxRSS": 553893888,
+      "logSHA256": "4cff1fdd73d935af7fa68b0d11c452b74c0cec349c7c6e039987c4c44ec05c06",
+      "rawReceipt": "knip.json",
+      "rawReceiptSHA256": "b6856929a723ef14098ba8c0cf4fe1f53a70d9aef2beb41f91994e116ed7e1b0",
+      "sourceManifestSHA256": "6f59ed797724dd8a4cdabc99a7792f86bfd015087d2db79a606862554392ad86"
+    },
+    "full": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/509-implementation-evidence/heavy.py",
+        "full",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:46:12.422349+00:00",
+      "pid": 12544,
+      "pgid": 12544,
+      "hostLoadStart": [
+        3.80517578125,
+        4.119140625,
+        7.09716796875
+      ],
+      "engineDiffSHA256": "4b0f03499637fd90533d347deaa209e7410169d15d2401e8872034d7268ae4a8",
+      "end": "2026-10-12T06:47:32.186009+00:00",
+      "exit": 0,
+      "wallSeconds": 79.76230354199652,
+      "hostLoadEnd": [
+        4.2529296875,
+        4.3603515625,
+        6.93212890625
+      ],
+      "cpuSeconds": 213.557064,
+      "maxRSS": 6454771712,
+      "logSHA256": "1882a711eaa69d82d8ac04bdc6cf9df6c4481fd08a3cac57791128c24c2b81f3",
+      "rawReceipt": "full.json",
+      "rawReceiptSHA256": "428e814466a8ecf8a9bedaa17aa723c04dd396a09915d091e88abe6bddf68501",
+      "sourceManifestSHA256": "6f59ed797724dd8a4cdabc99a7792f86bfd015087d2db79a606862554392ad86"
+    },
+    "fuzz": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/509-implementation-evidence/heavy.py",
+        "fuzz",
+        "./node_modules/.bin/tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/509-implementation-evidence/fuzz.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:47:45.111801+00:00",
+      "pid": 23557,
+      "pgid": 23557,
+      "hostLoadStart": [
+        3.8828125,
+        4.27587890625,
+        6.8564453125
+      ],
+      "engineDiffSHA256": "4b0f03499637fd90533d347deaa209e7410169d15d2401e8872034d7268ae4a8",
+      "end": "2026-10-12T06:49:52.450934+00:00",
+      "exit": 0,
+      "wallSeconds": 127.33698274999915,
+      "hostLoadEnd": [
+        4.359375,
+        4.50244140625,
+        6.6044921875
+      ],
+      "cpuSeconds": 138.075042,
+      "maxRSS": 778174464,
+      "logSHA256": "c30cd04ffdb4d0a9be7f40f7189025ce01248aa927a0d2a35ad7b99978077f2d",
+      "rawReceipt": "fuzz.json",
+      "rawReceiptSHA256": "447329c8052a45ff43f1d6e9f29ae0ae4d7e3ca4f69810216879b79f1c4ef65f",
+      "sourceManifestSHA256": "6f59ed797724dd8a4cdabc99a7792f86bfd015087d2db79a606862554392ad86"
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/static-allowance-key-lifecycle",
+      "start": "2026-10-12T06:50:57.953978+00:00",
+      "pid": 26679,
+      "pgid": 26679,
+      "hostLoadStart": [
+        4.87939453125,
+        4.66455078125,
+        6.51025390625
+      ],
+      "engineDiffSHA256": "4b0f03499637fd90533d347deaa209e7410169d15d2401e8872034d7268ae4a8",
+      "end": "2026-10-12T06:50:58.128712+00:00",
+      "exit": 0,
+      "wallSeconds": 0.17463900000439025,
+      "hostLoadEnd": [
+        4.87939453125,
+        4.66455078125,
+        6.51025390625
+      ],
+      "cpuSeconds": 0.093196,
+      "maxRSS": 55607296,
+      "logSHA256": "34d19d1660de6a440d6900031df1e4379eaa61d6aa951ac2684133d440c40f4a",
+      "rawReceipt": "schema.json",
+      "rawReceiptSHA256": "83fc8cf51e3c3ddf7dba1deb6b1fd8df7fb52fb98d54788c083fd6c52c9e3864",
+      "sourceManifestSHA256": "6f59ed797724dd8a4cdabc99a7792f86bfd015087d2db79a606862554392ad86"
+    }
+  },
+  "negativeProof": {
+    "oldProduction": "old-regression: paid expiry and both optional clock cases failed; cycle assertions were not reached",
+    "mandatoryProjection": "cycle-negative: only cycleHash oncePerTurn projection restored to raw; both cycleHash assertions failed after optional assertions passed",
+    "restoration": {
+      "originalSHA256": "6507bf0ed56afc4a4a1b691ea51cbf6394bedad98cb135d8dc2f9e69d7838a6b",
+      "restoredSHA256": "6507bf0ed56afc4a4a1b691ea51cbf6394bedad98cb135d8dc2f9e69d7838a6b",
+      "exactRestoration": true
+    }
+  },
+  "failurePaths": {
+    "errorMidStep": "precommit synthetic play-choice failure leaves original state intact; valid subsequent play spends allowance",
+    "reloadRestart": "route-choice suspended fold JSON reload/replay and committed failed-resolution JSON reload",
+    "partialWrite": "No supported synchronous same-play post-allowance failure injection exists: public synthetic play hook is before commit/costs/allowance; remaining supported operations move/record/emit/set priority, observers swallow failures. Later resolution is a separate private step, tested with committed allowance preserved; pending response can recover by prevention. Malformed state/catalog mutation is not supported coverage.",
+    "interrupt": "real opponent prevention retains allowance; later failed-resolution recovery uses opposing prevention",
+    "invalidStaleInput": "existing public fold invalid mode/stale/concurrent actor contracts preserved",
+    "expiry": "synthetic public addFloating abilities paid expiry plus registerPayable/payToEnd; current gainAbilities sourceLeavesPlay lifetime itself does not create the remaining-source expiry witness"
+  },
+  "scope": {
+    "productionEntities": 0,
+    "browserQA": "not required for internal key consumer correction; public engine contracts cover interactions",
+    "newTestEntrypoints": 0,
+    "newPlainContracts": 1,
+    "normativeRulesChanges": 0
+  },
+  "knownUnknowns": [
+    "No performance speedup claim; timings include measured host load.",
+    "Heavy acquisition latency includes command launch and queue wait, not pure queue delay.",
+    "Actual commit end cannot be embedded inside its own immutable source; external commit receipt retains observed endpoint.",
+    "The post-step void observation counter does not distinguish a permission source already in void from a play source abandoned as an additional cost. Dedicated deterministic void-source contracts supply that causal proof."
+  ],
+  "heavyLeases": {
+    "full": {
+      "acquiredUtc": "2026-10-12T06:46:12.507841+00:00",
+      "acquiredMonotonic": 33110.78623825,
+      "pid": 12546,
+      "pgid": 12544,
+      "hostLoad": [
+        3.80517578125,
+        4.119140625,
+        7.09716796875
+      ],
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "outerStartToAcquisitionSeconds": 0.085492,
+      "rawSHA256": "c66d413d8a9c041fa457ecc0e23e6a664e1ca1bb8171a0c850458b530ab85f96"
+    },
+    "fuzz": {
+      "acquiredUtc": "2026-10-12T06:47:45.158359+00:00",
+      "acquiredMonotonic": 33203.435255958,
+      "pid": 23558,
+      "pgid": 23557,
+      "hostLoad": [
+        3.8828125,
+        4.27587890625,
+        6.8564453125
+      ],
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/Users/dthurn/.local/state/hive/scratch/01a127fb-1588-7921-aef0-f03b39a7b950/509-implementation-evidence/fuzz.ts"
+      ],
+      "outerStartToAcquisitionSeconds": 0.046558,
+      "rawSHA256": "7439f1ecc779b636abddb249bcdddb2afc4f8d71cff3a98810a384fb1f16f3ff"
+    }
+  },
+  "finalBodySHA256": {
+    "src/engine/state/ids.ts": "bb523c2c5bcdfbfe8f41437ab18b1f14c5680061d4d305d64b0dd23b5fa8a578",
+    "src/engine/rules/floating.ts": "571f03587198a68a08e5891735845aaa377a3546f39fa6d7185e5078050c87c2",
+    "src/engine/loops/signature.ts": "c58547e042825c985b24a218fc2942261ff5b2fbc3cece50c62c6064573b152d",
+    "src/engine/effects/primitives/contracts/play-from-zone.contracts.ts": "b25345ae4f04238a7b82c8eb6b04f5bd01922eaf275ddf9d171ddc440ed70636",
+    "src/engine/effects/primitives/contracts/once-per-turn-play-from-zone.contracts.ts": "2fb6a423be641efa69e7a40f0a2fbbf65dcc7d38b8515e520d51e4df021b5ec0"
+  },
+  "checkScopeNotes": {
+    "focused": "Initial 3-file execution included a misspelled nonexistent loops/mandatory.test.ts filter; actual mandatory suite coverage begins in affected/final-affected and final review/full. Failed resolution fixture had no legal opposing response and automatically resolved inside apply; corrected with a supported PREVENTER response window.",
+    "final-affected": "After exact negative restoration, 1433/4files passed. Later contextual types, decoder extraction annotation, equivalent instance lookup and unused import cleanup pass final review related269/3953 and full345/4809; no extra focused repeat.",
+    "review": "First review actual exit2 compile/lint issues retained; all269/3953 related tests passed. Final corrected review passes all checks.",
+    "testDelta": "Entrypoint count unchanged; one new eagerly loaded plain contract module; net testing/support lines measured by exact final files against base.",
+    "full": "Existing full-suite synthetic QA lease fixtures use temporary directories and mocked provider failures; no task browser or actual provider was created."
+  },
+  "targetedFuzz": {
+    "games": 200,
+    "failures": 0,
+    "steps": 98891,
+    "prompts": 2907,
+    "interactiveGames": 20,
+    "interactiveReruns": 278,
+    "logReplayGames": 200,
+    "logReplayErrors": 0,
+    "physicalAllowanceWrites": 1190,
+    "publicVoidAllowanceWrites": 408,
+    "targets": [
+      {
+        "kind": "card",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000050900",
+        "included": 408,
+        "exercised": 226
+      },
+      {
+        "kind": "card",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000050901",
+        "included": 409,
+        "exercised": 244
+      }
+    ],
+    "wallSeconds": 126.041867417,
+    "cpuSeconds": 136.042247,
+    "seedPrefix": "hv-umm2.509",
+    "ordinals": [
+      0,
+      199
+    ],
+    "fixtures": [
+      "5e5e5e5e-0000-4000-8000-000000050900",
+      "5e5e5e5e-0000-4000-8000-000000050901"
+    ],
+    "captureMeaning": "new @entry allowance records in actual forward-game committed step observers; replay passes excluded",
+    "rawScriptSHA256": "ed62eee847b786a2231745d1262bb6664e22b0270970a6ad1f1a17098ee42dae",
+    "rawLogReplayHashesSHA256": "9bc0bfc8c751be2424aaf887e95472d0c360c2a51446f3580137a854425b0cc8",
+    "publicVoidAllowanceWritesAttribution": "408 newly observed @entry records whose physical source is observed in the void AFTER the committed step. The wrapper does not check fixture UUID or match the source entry to the allowance suffix; this is not precise live void-source permission causality. Deterministic public void-source contracts prove live void-source normalization. Original raw run, summary, script hash and logs remain unchanged."
+  },
+  "resourceAudit": {
+    "observedUtc": "2026-10-12T06:50:57.919503+00:00",
+    "ownedValidationGroups": [
+      3502,
+      4277,
+      5244,
+      6276,
+      7519,
+      7943,
+      10537,
+      12075,
+      12544,
+      23557,
+      87400
+    ],
+    "fullSyntheticTestServerGroups": [
+      13283,
+      13524,
+      13581,
+      13990,
+      14050,
+      14490,
+      14667,
+      15233,
+      15322,
+      15882,
+      16167,
+      16279,
+      16464,
+      16955,
+      17129,
+      17448,
+      17630,
+      17789,
+      18053,
+      18518,
+      18647,
+      18717,
+      19197,
+      19424,
+      19708,
+      20029
+    ],
+    "remainingRows": [],
+    "taskBrowserOrServer": "none",
+    "meaning": "One final process-table observation of receipt groups and the full-suite temporary server fixture groups; no peer process actions.",
+    "rawSHA256": "dd3121a76529d24f1fa114e61397dd1ac9659bc69c7564a9d2452bb0eda3d24e"
+  },
+  "rawEvidenceSHA256": {
+    "affected-source.json": "9c4d63cabd4ba15b652f04fcb8c62e9db439cb9e58bae10e06b4926bdd506770",
+    "affected-start.json": "ce4f19ba54fb91a96549e08d0028effa3a45945ca1aaa51709a8bf18431c1999",
+    "affected.json": "f767630480d069e902ae1c2dfc74c40432354c34aded6b799d16f3c89a1a465d",
+    "affected.log": "f5beb3f8ff21e9ab7460d27d7ddac0d474f3a086ee393e16833b0e94cc584510",
+    "cycle-negative-restoration.json": "503c9f8e27efd50a650cc56707e3c6af32e6bf4f790aef6a820fff9f29ca03a4",
+    "cycle-negative-source.json": "2e50689e64e1b95dc27294b4a711ec9b73c70929fefe1404bf4cf5e15f9a5526",
+    "cycle-negative-start.json": "f48fb546491c9918a6024c9339fd70dee12205c7c408376ad8d188f4d3bf6a0f",
+    "cycle-negative.json": "bbb2e2289a7b90db1b7aa544ee8a8c14f29450663ea47df6a9561dbf3052c853",
+    "cycle-negative.log": "b5195d5e94bddc8394bd36d45bfed32c3b36997cfd888932423d152feb525d03",
+    "final-affected-source.json": "9c4d63cabd4ba15b652f04fcb8c62e9db439cb9e58bae10e06b4926bdd506770",
+    "final-affected-start.json": "cb79e0dcaa1aacdace75dbe2f7eb8192a61ecf9720563ce0ce35cd902235a2e4",
+    "final-affected.json": "0c225480f3e6fac5a6a7a392e2015e022c18944e9bb15c8122751474078107c3",
+    "final-affected.log": "9683c972967bc32d4b8b50f7054eef798b82cbad3c1401378fa00f84cbda4fc9",
+    "focused-source.json": "66e86dce2445c31ed3fc95faf1d62ae4bae757a256fe828d560a83740906595d",
+    "focused-start.json": "28c5862e4887a1460c8a13cfbe92ff6d6c08ec0fa5cc2d134e4e533bbad405f7",
+    "focused.json": "a8e49608963faf23ae452bfbbf190dce12ae39f5507d022e18744359f7e9bf99",
+    "focused.log": "67c434e0c0b49ea4aac2fe54e4161f617a16a26f0712dfaa607eb94276cac424",
+    "full-lease.json": "c66d413d8a9c041fa457ecc0e23e6a664e1ca1bb8171a0c850458b530ab85f96",
+    "full-source.json": "6f59ed797724dd8a4cdabc99a7792f86bfd015087d2db79a606862554392ad86",
+    "full-start.json": "439e704b02579935cdb9ae8d5a8cb2c74b7ae0c1bbd97ebbbb0f71c8cb25fd42",
+    "full.json": "428e814466a8ecf8a9bedaa17aa723c04dd396a09915d091e88abe6bddf68501",
+    "full.log": "1882a711eaa69d82d8ac04bdc6cf9df6c4481fd08a3cac57791128c24c2b81f3",
+    "fuzz-lease.json": "7439f1ecc779b636abddb249bcdddb2afc4f8d71cff3a98810a384fb1f16f3ff",
+    "fuzz-log-hashes.json": "9bc0bfc8c751be2424aaf887e95472d0c360c2a51446f3580137a854425b0cc8",
+    "fuzz-source.json": "6f59ed797724dd8a4cdabc99a7792f86bfd015087d2db79a606862554392ad86",
+    "fuzz-start.json": "5703748b2cab6e4de945d2265055beca283a672b99bb630406789eb7a1a1242d",
+    "fuzz-summary.json": "87d5c8f4be7940ed814cab10554afc5325227363b41e9555dc3bd450e0a59726",
+    "fuzz.json": "447329c8052a45ff43f1d6e9f29ae0ae4d7e3ca4f69810216879b79f1c4ef65f",
+    "fuzz.log": "c30cd04ffdb4d0a9be7f40f7189025ce01248aa927a0d2a35ad7b99978077f2d",
+    "fuzz.ts": "ed62eee847b786a2231745d1262bb6664e22b0270970a6ad1f1a17098ee42dae",
+    "heavy.py": "ff08ac30a5eddb5039d0bf00444bf126fc032f19e37b04f480de10e948d4ede6",
+    "install-start.json": "5acc088071cdc6b28404fcb953257a7ab3955f288319a4ec0d91a57bde94c3bd",
+    "install.json": "4864125aec8142d5751efe0b44d80df76280b8a0e82bedcfe79a260476919d87",
+    "install.log": "c52e4d018ce31ebeeed8f8e50ecc98705da1552b5f9f03a17813073b3272b789",
+    "knip-source.json": "6f59ed797724dd8a4cdabc99a7792f86bfd015087d2db79a606862554392ad86",
+    "knip-start.json": "d32e2e37d4ed20a9c88a20fba31b3562eada53840b5f7712a620805f7a146f9c",
+    "knip.json": "b6856929a723ef14098ba8c0cf4fe1f53a70d9aef2beb41f91994e116ed7e1b0",
+    "knip.log": "4cff1fdd73d935af7fa68b0d11c452b74c0cec349c7c6e039987c4c44ec05c06",
+    "old-regression-source.json": "31cff73292f3084d97355109310d79252ed456d5935aa3e7d4d424a9e3bf03fd",
+    "old-regression-start.json": "98cca5ced7f2c68ca28557dd7b35e3f1c97afa9a0808ac7a9d8b3414c7631d0e",
+    "old-regression.json": "1b6b7ceee5899f4bd0d3b96cd2d61a12c2cab19684108f4038afe88d321cc957",
+    "old-regression.log": "3ef2e18e4cd072247c189535d65926b9680b79302792f35d3a4753af80f9a34a",
+    "resource-audit.json": "dd3121a76529d24f1fa114e61397dd1ac9659bc69c7564a9d2452bb0eda3d24e",
+    "review-final-source.json": "6f59ed797724dd8a4cdabc99a7792f86bfd015087d2db79a606862554392ad86",
+    "review-final-start.json": "70911a597e3ce9c463160966aaa36762db669665fd683dbca0bcc0b59734d89d",
+    "review-final.json": "c9f27407820bdf867bdff2928a6f3ff9021e21adae50421b0b08fb7b173fba4f",
+    "review-final.log": "dc8705ae884b459c90d29fc8e4d8f3572fccc7292acace52e8425ef6181506fe",
+    "review-source.json": "93825369aa4691a178bf13b06bfd187224cd3522dc20a3012078aca09c44e774",
+    "review-start.json": "32335d2f0f5fe811b817f70c0052febb69b9afd0e7bc763ffa0d4dd6778e9fcd",
+    "review.json": "334cdac4615aca9e98c9a8d585d1535d477093f73225fe61e4988e315c806fb3",
+    "review.log": "58d6c08aeb67a6e9b60e589c7cccc23eeda3b1aa102fdbf18fefad4634bc8fd5",
+    "run.py": "1aa0b0a4127fbe06a39f4fce609112667ed239282da1d3eea51ecb9db9342a9e",
+    "schema.log": "34d19d1660de6a440d6900031df1e4379eaa61d6aa951ac2684133d440c40f4a",
+    "schema.json": "83fc8cf51e3c3ddf7dba1deb6b1fd8df7fb52fb98d54788c083fd6c52c9e3864",
+    "schema-start.json": "40f78f2b6f64ab3459234cb5bd811111f9b3d6ab5e545ce96ee1685504e97240",
+    "schema-source.json": "6f59ed797724dd8a4cdabc99a7792f86bfd015087d2db79a606862554392ad86"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final npm run review starting 1-minute host load"
+      },
+      "implementMin": {
+        "measuredFor": "original dispatch to immediate precommit observation; external actual commit receipt supplies endpoint"
+      }
+    },
+    "testDelta": {
+      "files": 0,
+      "plainContracts": 1,
+      "lines": 108,
+      "jsdomFiles": 0
+    }
+  },
+  "localValidationTotalsScope": {
+    "meaning": "Sum each actual outer attempt wall once within its category, including failed checks and negative proofs; individual receipts retain source, command, exit and load. Heavy outer durations include acquisition overhead/queue; do not add nested lease or tool step durations. Dependency installation remains a separate non-validation receipt.",
+    "categories": {
+      "focused": [
+        "old-regression",
+        "focused",
+        "affected",
+        "cycle-negative",
+        "final-affected"
+      ],
+      "review": [
+        "review",
+        "review-final"
+      ],
+      "knip": [
+        "knip"
+      ],
+      "full": [
+        "full"
+      ],
+      "fuzz": [
+        "fuzz"
+      ],
+      "schema": [
+        "schema"
+      ]
+    },
+    "seconds": {
+      "focused": 24.25765629100715,
+      "review": 97.42113191599492,
+      "knip": 3.690632916004688,
+      "full": 79.76230354199652,
+      "fuzz": 127.33698274999915,
+      "schema": 0.17463900000439025
+    }
+  }
+}

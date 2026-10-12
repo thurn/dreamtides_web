@@ -9,7 +9,7 @@
  */
 import { canonicalHash, type StateHash } from "../state/hash";
 import type { Side } from "../state/ids";
-import { opponent, SIDES } from "../state/ids";
+import { oncePerTurnParts, opponent, SIDES } from "../state/ids";
 import type { BattleState, CardInstance, FloatingEffect, SideState } from "../state/types";
 import type { LoopResources, LoopSignature, SideResources } from "./types";
 
@@ -121,6 +121,23 @@ function timestampRanks(instances: readonly CardInstance[], floating: readonly F
 }
 
 /**
+ * Static allowances name only the current physical zone object. Its source
+ * and ability identify a live allowance; the matching clock value is
+ * redundant. Read all instances here, including public void sources which
+ * the optional-loop position otherwise projects as resources. Ordinary
+ * activated, triggered, and emblem records retain their turn lifetimes.
+ */
+function liveAllowances(state: BattleState): unknown[] {
+  return state.oncePerTurn.flatMap((key): unknown[] => {
+    const { source, ability, enteredZoneAt } = oncePerTurnParts(key);
+    if (enteredZoneAt === null) return [key];
+    const instance = Object.values(state.instances).find((card) => card.id === source);
+    if (instance?.enteredZoneAt !== enteredZoneAt) return [];
+    return [["static", source, ability]];
+  });
+}
+
+/**
  * The loop signature of a checkpoint: the `position` fields of the state and
  * of each side (`STATE_FIELDS`, `SIDE_FIELDS`), with the instances outside
  * decks and voids, their counters and gained spark zeroed, and zone-entry
@@ -136,6 +153,7 @@ export function loopSignature(state: BattleState): LoopSignature {
       status: { ...instance.status, counters: 0, gainedSpark: 0 },
     })),
     floating: rankedFloating(state.floating, rank),
+    oncePerTurn: liveAllowances(state),
   } satisfies Partial<Record<PositionField<typeof STATE_FIELDS>, unknown>>;
   return canonicalHash<LoopSignature>({ ...pick(state, STATE_POSITION), ...projected });
 }
@@ -189,5 +207,6 @@ export function cycleHash(state: BattleState): StateHash {
     ...rest,
     instances: rankedInstances(instances, rank, (instance) => instance),
     floating: rankedFloating(state.floating, rank),
+    oncePerTurn: liveAllowances(state),
   });
 }

@@ -8,7 +8,7 @@
  * each begins and ends, so its ability list reads from the instance alone.
  */
 import type { EffectId, InstanceId, Side } from "../state/ids";
-import { sourceKey } from "../state/ids";
+import { oncePerTurnParts } from "../state/ids";
 import type { BattleState, Expiry, FloatingChange, FloatingEffect, GainedAbilities } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { floatingEnded } from "./zones";
@@ -86,8 +86,10 @@ function abilitiesEnded(ctx: StepContext, id: InstanceId): void {
   const instance = state.instances[id];
   if (instance === undefined || instance.printing.kind === "figment") return;
   const own = ctx.catalog.card(instance.printing.cardId).abilities(instance.variant).length;
-  const prefix = `${sourceKey(id)}#`;
-  state.oncePerTurn = state.oncePerTurn.filter((key) => !key.startsWith(prefix) || Number(key.slice(prefix.length)) < own);
+  state.oncePerTurn = state.oncePerTurn.filter((key) => {
+    const { source, ability } = oncePerTurnParts(key);
+    return source !== id || ability < own;
+  });
 }
 
 /** Ends the floating effects whose expiry is `at` this boundary. */
