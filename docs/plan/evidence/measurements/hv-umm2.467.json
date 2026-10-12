@@ -1,0 +1,885 @@
+{
+  "bead": "hv-umm2.467",
+  "phase": 5,
+  "outcome": {
+    "status": "Warning unreproduced at the authorized bound; cleanup owner unknown.",
+    "repair": null,
+    "speedClaim": null,
+    "lowLoadD19Assessment": "Unknown. Both current test runs start on a loaded shared host; these observations do not certify a controlled low-load budget.",
+    "boundedInvestigation": "One unchanged baseline and one admitted reporter diagnostic repeat. No further heavy run."
+  },
+  "measurementWindow": {
+    "dispatchUtc": "2026-10-12T01:33:18+00:00",
+    "dispatchSource": "Root fresh native claim acknowledgement /tmp/root467/dispatch.json, not inherited start metadata.",
+    "precommitEndpointUtc": "2026-10-12T01:51:01.099411+00:00",
+    "endpointStatus": "Actual endpoint refreshed after parent ACK, immediately before final numeric schema and the sole commit.",
+    "elapsedMin": 17.718323516666665
+  },
+  "areas": {
+    "committed": [
+      "docs/plan/evidence/friction/hv-umm2.467.json",
+      "docs/plan/evidence/measurements/hv-umm2.467.json",
+      "docs/plan/evidence/pre-existing/hv-umm2.467.md"
+    ],
+    "diagnosticOnly": [
+      "vitest.config.ts"
+    ],
+    "ignoredHarness": "run-owned.py",
+    "nativeAdmissionReceipt": "/tmp/root467/diagnostic-admission/admitted.json",
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "productionDeltaLines": 0,
+    "testInfrastructureDeltaLines": 0
+  },
+  "historicPassedReleaseProvenance": [
+    {
+      "run": "01a12d9b-eeb4-78c1-b93a-a34004530aec",
+      "log": "/tmp/phase5-retro442/release-logs/01a12d9b-eeb4-78c1-b93a-a34004530aec.jsonl",
+      "sha256": "b8aeee2d03cf75b6adcfa3a5d36a988db5b90ace75389dd1c07fe9e74eb50d62",
+      "testStartUtc": "2026-10-12T00:57:07.501Z",
+      "actualTestStartLoad": 25.5322265625,
+      "testStepWallS": 64.3,
+      "exitCode": 0,
+      "testFileCount": null,
+      "testCount": null,
+      "closeTimeoutWarning": true,
+      "timeoutMs": 10000,
+      "durableRawLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.465/audit-inputs/release-logs/01a12d9b-eeb4-78c1-b93a-a34004530aec.jsonl",
+      "completedTestsToExitS": null,
+      "intervalLimitation": "Retained output contains no precise completion-to-process-exit endpoints. Summary counts are absent for the two warning runs."
+    },
+    {
+      "run": "01a12d9d-d415-7cd1-b6fe-bd3d900c1c11",
+      "log": "/tmp/phase5-retro442/release-logs/01a12d9d-d415-7cd1-b6fe-bd3d900c1c11.jsonl",
+      "sha256": "94c6645666a8e8a583261b78c9ad35e2c4a4954adf756f134c79a43ab9bca36a",
+      "testStartUtc": "2026-10-12T01:00:28.475Z",
+      "actualTestStartLoad": 16.89306640625,
+      "testStepWallS": 67.0,
+      "exitCode": 0,
+      "testFileCount": null,
+      "testCount": null,
+      "closeTimeoutWarning": true,
+      "timeoutMs": 10000,
+      "durableRawLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.465/audit-inputs/release-logs/01a12d9d-d415-7cd1-b6fe-bd3d900c1c11.jsonl",
+      "completedTestsToExitS": null,
+      "intervalLimitation": "Retained output contains no precise completion-to-process-exit endpoints. Summary counts are absent for the two warning runs."
+    },
+    {
+      "run": "01a12da2-c69f-7d71-a05f-6e33f840aa7d",
+      "log": "/tmp/phase5-retro442/release-logs/01a12da2-c69f-7d71-a05f-6e33f840aa7d.jsonl",
+      "sha256": "adf1e8c8fb0c7ee4839b394579ae081bddf6c2aa1adf87235c50e33804423e77",
+      "testStartUtc": "2026-10-12T01:03:56.397Z",
+      "actualTestStartLoad": 23.99658203125,
+      "testStepWallS": 56.6,
+      "exitCode": 0,
+      "testFileCount": 338,
+      "testCount": 4371,
+      "closeTimeoutWarning": false,
+      "timeoutMs": null,
+      "durableRawLog": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.465/audit-inputs/release-logs/01a12da2-c69f-7d71-a05f-6e33f840aa7d.jsonl",
+      "completedTestsToExitS": null,
+      "intervalLimitation": "Retained output contains no precise completion-to-process-exit endpoints. Summary counts are absent for the two warning runs."
+    }
+  ],
+  "currentFrozenBoundary": {
+    "base": "d67df4698c4304847a01fbc20d093e3d1f107268",
+    "trackedSourceFreezeArtifact": "source-freeze-baseline.json",
+    "trackedSourceFreezeSha256": "848c0b4a97612baa1331d15540216f1c45b650573cd215da5f1118f8062e7868",
+    "trackedFileHashCount": 3302,
+    "sameTestScope": "339 files and 4,400 tests in both current runs. Historic no-warning sample has 338 files and 4,371 tests.",
+    "preDiagnosticSourceChanges": [
+      "vitest.config.ts"
+    ],
+    "diagnosticFreezeArtifact": "source-freeze-diagnostic.json",
+    "diagnosticFreezeSha256": "a7c1cc97e24f54fcf86e8e4529b214794d2e85a44bb54da7688dc10d702c13fb",
+    "restoration": {
+      "utc": "2026-10-12T01:45:08.008629+00:00",
+      "originalSha256": "9b4d94779222dc970bcba9c57750d199891f2ffb22d9ff95fafe86e978891d74",
+      "diagnosticSha256": "02b71445c59269d7f4d20db724688fa08281bea77ed70c4d1010804750380c39",
+      "restoredSha256": "9b4d94779222dc970bcba9c57750d199891f2ffb22d9ff95fafe86e978891d74",
+      "status": ""
+    },
+    "restorationArtifactSha256": "dd87b6f84d554907de0bf751c509114e2e8606b181f16ca8a679d15597c6ea48"
+  },
+  "commandDifference": {
+    "canonicalCommand": "lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run review:full",
+    "twoWorkerContract": "JOURNEY_TEST_WORKERS=2 in both commands; original threads/projects/test selection preserved.",
+    "baselineReporter": "Auto-selected agent reporter: installed Vitest resolveConfig uses std-env isAgent when reporters is empty. CODEX_THREAD_ID is present in this executor environment.",
+    "diagnosticReporter": "The sole temporary config line sets test.reporters to [\"default\", \"hanging-process\"]. This replaces the auto-selected agent reporter with default plus hanging-process; it does not merely append a reporter.",
+    "reporterOutputDifference": "Baseline stdout is 2,629 bytes; diagnostic stdout is 4,006,449 bytes. Neither external pipe drainage boundary exactly reproduces broker-retained release transport.",
+    "sourceChange": "Exact original configuration restored before evidence checks. No configuration or source change is committed."
+  },
+  "samples": [
+    {
+      "label": "baseline",
+      "reporterMode": "auto-selected agent",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "environmentOverrides": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "wrapperStartUtc": "2026-10-12T01:38:27.287061+00:00",
+      "endUtc": "2026-10-12T01:39:51.080739+00:00",
+      "wrapperWallS": 83.79329179200067,
+      "preFirstReviewStepUpperBoundS": 0.20813266699951782,
+      "preCommandMeaning": "Includes lock queue, npm and review startup plus external receipt latency; not a pure lock duration.",
+      "steps": [
+        {
+          "step": "prepare",
+          "wallS": 1.3,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:38:28.757011+00:00",
+          "elapsedS": 1.4699571250002919
+        },
+        {
+          "step": "friction-records",
+          "wallS": 0.1,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:38:28.880979+00:00",
+          "elapsedS": 1.5939220000000205
+        },
+        {
+          "step": "import-cycles",
+          "wallS": 1.5,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:38:30.277273+00:00",
+          "elapsedS": 2.9902731669990317
+        },
+        {
+          "step": "knip",
+          "wallS": 2.6,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:38:31.373138+00:00",
+          "elapsedS": 4.086065792000227
+        },
+        {
+          "step": "typecheck-node",
+          "wallS": 4.6,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:38:33.365622+00:00",
+          "elapsedS": 6.078550874999564
+        },
+        {
+          "step": "typecheck",
+          "wallS": 11.4,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:38:40.161284+00:00",
+          "elapsedS": 12.87417595899933
+        },
+        {
+          "step": "lint",
+          "wallS": 23.8,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:38:52.522995+00:00",
+          "elapsedS": 25.235865541999374
+        },
+        {
+          "step": "test",
+          "wallS": 55.4,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:39:47.951974+00:00",
+          "elapsedS": 80.66451141700054
+        },
+        {
+          "step": "bundle",
+          "wallS": 2.7,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:39:50.648655+00:00",
+          "elapsedS": 83.36117537499922
+        },
+        {
+          "step": "restore-local-assets",
+          "wallS": 0.4,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:39:51.047110+00:00",
+          "elapsedS": 83.75962345900007
+        }
+      ],
+      "testStart": {
+        "step": "test",
+        "startedUtc": "2026-10-12T01:38:52.522Z",
+        "hostLoad": 29.04052734375,
+        "externalReceiptUtc": "2026-10-12T01:38:52.523163+00:00",
+        "elapsedS": 25.23598095899979
+      },
+      "testFileCount": 339,
+      "testCount": 4400,
+      "exitCode": 0,
+      "closeTimeoutWarningCount": 0,
+      "hangingProcessHandleReportCount": 0,
+      "testFilesSummaryReceipt": {
+        "utc": "2026-10-12T01:39:47.909727+00:00",
+        "elapsedS": 80.62225729199963,
+        "stream": "stdout",
+        "line": " Test Files  339 passed (339)"
+      },
+      "summaryReceiptToReviewChildCloseMarkerS": 0.04225412500090897,
+      "summaryReceiptToSampledVitestDisappearanceS": {
+        "lowerBound": 0,
+        "upperBound": 0.14434795800116262,
+        "endpoint": "Sampled Vitest PID disappearance, not internal completion or precise process-exit notification."
+      },
+      "outputBytes": {
+        "stdout": 2629,
+        "stderr": 55048
+      },
+      "runtime": {
+        "toolSession": 20921,
+        "wrapperPid": 46712,
+        "vitestPid": 50955,
+        "observedPids": [
+          46712,
+          46714,
+          46738,
+          46798,
+          46803,
+          46840,
+          46922,
+          46923,
+          46924,
+          46925,
+          46927,
+          50955,
+          50983,
+          51030,
+          51191,
+          51192,
+          51195,
+          51253,
+          51254,
+          51257,
+          51602,
+          51603,
+          51606,
+          51729,
+          51730,
+          51914,
+          51915,
+          52018,
+          52019,
+          52022,
+          52187,
+          52188,
+          52192,
+          52337,
+          52338,
+          55005,
+          55039,
+          55095,
+          55120,
+          55147,
+          55194,
+          55221,
+          55248,
+          55279,
+          55346,
+          56117,
+          56133,
+          56134,
+          56137,
+          56154,
+          56158,
+          56219,
+          56234,
+          56236,
+          56313,
+          56314,
+          57305,
+          57313,
+          57487
+        ],
+        "ownedGroups": [
+          46712
+        ],
+        "finalGroupProcesses": [],
+        "exitCode": 0
+      },
+      "resultArtifact": "baseline-result.json",
+      "resultSha256": "b6219b40a8178daae469ef4b206f07efb1bd6b247e55a15b1d8aa04df6b56259",
+      "artifactsSha256": {
+        "stdout-baseline.log": "05c4e1de7bc527db953884910be1de926c0d812ba6ec8f032c23a71f8bb54b56",
+        "stderr-baseline.log": "d9c7b847fa730ad3914281fa3db776223dbbd841c339c1f43a1751595de799bd",
+        "baseline-timeline.jsonl": "f400a81eea1a6ddcf956049dfa87fc98fdbfa62f459858b6e552d99d39ab9ae3",
+        "baseline-processes.jsonl": "6ea5f37c5e851945a81ae65d922daa96ba6aeda9e19d9a525bca5d5de30d717b",
+        "source-freeze-baseline.json": "848c0b4a97612baa1331d15540216f1c45b650573cd215da5f1118f8062e7868"
+      },
+      "hostLoadSamples": [
+        {
+          "step": "prepare",
+          "startedUtc": "2026-10-12T01:38:27.495Z",
+          "hostLoad": 26.06591796875,
+          "externalReceiptUtc": "2026-10-12T01:38:27.495187+00:00",
+          "elapsedS": 0.20813266699951782
+        },
+        {
+          "step": "lint",
+          "startedUtc": "2026-10-12T01:38:28.757Z",
+          "hostLoad": 26.06591796875,
+          "externalReceiptUtc": "2026-10-12T01:38:28.757083+00:00",
+          "elapsedS": 1.4700218750003842
+        },
+        {
+          "step": "typecheck",
+          "startedUtc": "2026-10-12T01:38:28.758Z",
+          "hostLoad": 26.06591796875,
+          "externalReceiptUtc": "2026-10-12T01:38:28.758336+00:00",
+          "elapsedS": 1.4712779999990744
+        },
+        {
+          "step": "typecheck-node",
+          "startedUtc": "2026-10-12T01:38:28.759Z",
+          "hostLoad": 26.06591796875,
+          "externalReceiptUtc": "2026-10-12T01:38:28.759079+00:00",
+          "elapsedS": 1.4720197089991416
+        },
+        {
+          "step": "import-cycles",
+          "startedUtc": "2026-10-12T01:38:28.759Z",
+          "hostLoad": 26.06591796875,
+          "externalReceiptUtc": "2026-10-12T01:38:28.759873+00:00",
+          "elapsedS": 1.4728137090005475
+        },
+        {
+          "step": "knip",
+          "startedUtc": "2026-10-12T01:38:28.760Z",
+          "hostLoad": 26.06591796875,
+          "externalReceiptUtc": "2026-10-12T01:38:28.760690+00:00",
+          "elapsedS": 1.4736319999992702
+        },
+        {
+          "step": "friction-records",
+          "startedUtc": "2026-10-12T01:38:28.761Z",
+          "hostLoad": 26.06591796875,
+          "externalReceiptUtc": "2026-10-12T01:38:28.761532+00:00",
+          "elapsedS": 1.47447320900028
+        },
+        {
+          "step": "test",
+          "startedUtc": "2026-10-12T01:38:52.522Z",
+          "hostLoad": 29.04052734375,
+          "externalReceiptUtc": "2026-10-12T01:38:52.523163+00:00",
+          "elapsedS": 25.23598095899979
+        },
+        {
+          "step": "bundle",
+          "startedUtc": "2026-10-12T01:39:47.951Z",
+          "hostLoad": 17.6669921875,
+          "externalReceiptUtc": "2026-10-12T01:39:47.951974+00:00",
+          "elapsedS": 80.66451141700054
+        },
+        {
+          "step": "restore-local-assets",
+          "startedUtc": "2026-10-12T01:39:50.648Z",
+          "hostLoad": 16.732421875,
+          "externalReceiptUtc": "2026-10-12T01:39:50.648733+00:00",
+          "elapsedS": 83.36124625000048
+        }
+      ]
+    },
+    {
+      "label": "diagnostic",
+      "reporterMode": "explicit default and hanging-process",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "environmentOverrides": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "wrapperStartUtc": "2026-10-12T01:41:35.319008+00:00",
+      "endUtc": "2026-10-12T01:45:07.999970+00:00",
+      "wrapperWallS": 212.67988533300013,
+      "preFirstReviewStepUpperBoundS": 141.12537141699977,
+      "preCommandMeaning": "Includes lock queue, npm and review startup plus external receipt latency; not a pure lock duration.",
+      "steps": [
+        {
+          "step": "prepare",
+          "wallS": 0.6,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:43:57.009006+00:00",
+          "elapsedS": 141.68927170799907
+        },
+        {
+          "step": "friction-records",
+          "wallS": 0.1,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:43:57.155398+00:00",
+          "elapsedS": 141.83566583299944
+        },
+        {
+          "step": "typecheck-node",
+          "wallS": 1.2,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:43:58.238707+00:00",
+          "elapsedS": 142.91902129200025
+        },
+        {
+          "step": "import-cycles",
+          "wallS": 1.5,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:43:58.479244+00:00",
+          "elapsedS": 143.15951774999849
+        },
+        {
+          "step": "knip",
+          "wallS": 1.5,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:43:58.479455+00:00",
+          "elapsedS": 143.15971533299853
+        },
+        {
+          "step": "typecheck",
+          "wallS": 1.6,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:43:58.627641+00:00",
+          "elapsedS": 143.30791187499926
+        },
+        {
+          "step": "lint",
+          "wallS": 20.1,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:44:17.128304+00:00",
+          "elapsedS": 161.80850091699904
+        },
+        {
+          "step": "test",
+          "wallS": 47.8,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:45:04.898122+00:00",
+          "elapsedS": 209.57803929199872
+        },
+        {
+          "step": "bundle",
+          "wallS": 2.6,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:45:07.489387+00:00",
+          "elapsedS": 212.16928712499976
+        },
+        {
+          "step": "restore-local-assets",
+          "wallS": 0.4,
+          "exitCode": 0,
+          "externalReceiptUtc": "2026-10-12T01:45:07.850847+00:00",
+          "elapsedS": 212.5307506249992
+        }
+      ],
+      "testStart": {
+        "step": "test",
+        "startedUtc": "2026-10-12T01:44:17.128Z",
+        "hostLoad": 13.7841796875,
+        "externalReceiptUtc": "2026-10-12T01:44:17.128434+00:00",
+        "elapsedS": 161.80859537499964
+      },
+      "testFileCount": 339,
+      "testCount": 4400,
+      "exitCode": 0,
+      "closeTimeoutWarningCount": 0,
+      "hangingProcessHandleReportCount": 0,
+      "testFilesSummaryReceipt": {
+        "utc": "2026-10-12T01:45:04.822940+00:00",
+        "elapsedS": 209.50285183300002,
+        "stream": "stdout",
+        "line": " Test Files  339 passed (339)"
+      },
+      "summaryReceiptToReviewChildCloseMarkerS": 0.07518745899869828,
+      "summaryReceiptToSampledVitestDisappearanceS": {
+        "lowerBound": 0,
+        "upperBound": 0.27931024999998044,
+        "endpoint": "Sampled Vitest PID disappearance, not internal completion or precise process-exit notification."
+      },
+      "outputBytes": {
+        "stdout": 4006449,
+        "stderr": 84559
+      },
+      "runtime": {
+        "toolSession": 34551,
+        "wrapperPid": 70608,
+        "vitestPid": 86386,
+        "observedPids": [
+          70608,
+          83823,
+          83842,
+          83914,
+          83920,
+          83949,
+          83950,
+          83951,
+          83952,
+          83953,
+          86386,
+          86411,
+          86517,
+          86518,
+          86522,
+          86565,
+          86566,
+          86705,
+          86706,
+          86723,
+          86908,
+          87063,
+          87064,
+          87330,
+          87332,
+          87351,
+          87582,
+          87583,
+          87763,
+          87764,
+          87780,
+          87965,
+          87966,
+          88163,
+          88164,
+          88172,
+          91260,
+          91324,
+          91388,
+          91475,
+          91548,
+          91612,
+          91689,
+          91786,
+          91834,
+          92891,
+          92910,
+          92911,
+          92930,
+          92967,
+          93040,
+          93042,
+          93215,
+          93315,
+          93376,
+          93377,
+          96991,
+          97005,
+          97415
+        ],
+        "ownedGroups": [
+          70608
+        ],
+        "finalGroupProcesses": [],
+        "exitCode": 0
+      },
+      "resultArtifact": "diagnostic-result.json",
+      "resultSha256": "e7cc6d46a7f754da71e718a81fcf526aa622e2e2cc292c3ddece33220b9d0f73",
+      "artifactsSha256": {
+        "stdout-diagnostic.log": "4da38e9bb835ef1219957d748ee7295fd9d6aa88396a8fe3b826127ed6064ff2",
+        "stderr-diagnostic.log": "daef1044aaddb0027b7bf2987672c19345567662477270e2758c5e161a844aa5",
+        "diagnostic-timeline.jsonl": "24391f1084f267aab58ecd3523a4ea7c2e45e291477753ac6a2ce5b7a643e4c0",
+        "diagnostic-processes.jsonl": "1425796d5c8cdf90ef9448dd7042d2854689d01a26b3d6aa9e39fd6fda4674d4",
+        "source-freeze-diagnostic.json": "a7c1cc97e24f54fcf86e8e4529b214794d2e85a44bb54da7688dc10d702c13fb"
+      },
+      "hostLoadSamples": [
+        {
+          "step": "prepare",
+          "startedUtc": "2026-10-12T01:43:56.445Z",
+          "hostLoad": 15.21435546875,
+          "externalReceiptUtc": "2026-10-12T01:43:56.445102+00:00",
+          "elapsedS": 141.12537141699977
+        },
+        {
+          "step": "lint",
+          "startedUtc": "2026-10-12T01:43:57.009Z",
+          "hostLoad": 15.21435546875,
+          "externalReceiptUtc": "2026-10-12T01:43:57.009083+00:00",
+          "elapsedS": 141.68934875000014
+        },
+        {
+          "step": "typecheck",
+          "startedUtc": "2026-10-12T01:43:57.009Z",
+          "hostLoad": 15.21435546875,
+          "externalReceiptUtc": "2026-10-12T01:43:57.009984+00:00",
+          "elapsedS": 141.69025108299866
+        },
+        {
+          "step": "typecheck-node",
+          "startedUtc": "2026-10-12T01:43:57.010Z",
+          "hostLoad": 15.21435546875,
+          "externalReceiptUtc": "2026-10-12T01:43:57.010635+00:00",
+          "elapsedS": 141.6909023749995
+        },
+        {
+          "step": "import-cycles",
+          "startedUtc": "2026-10-12T01:43:57.011Z",
+          "hostLoad": 15.21435546875,
+          "externalReceiptUtc": "2026-10-12T01:43:57.011350+00:00",
+          "elapsedS": 141.69162112499907
+        },
+        {
+          "step": "knip",
+          "startedUtc": "2026-10-12T01:43:57.012Z",
+          "hostLoad": 15.21435546875,
+          "externalReceiptUtc": "2026-10-12T01:43:57.012214+00:00",
+          "elapsedS": 141.6924804169994
+        },
+        {
+          "step": "friction-records",
+          "startedUtc": "2026-10-12T01:43:57.012Z",
+          "hostLoad": 15.21435546875,
+          "externalReceiptUtc": "2026-10-12T01:43:57.013021+00:00",
+          "elapsedS": 141.69328741699974
+        },
+        {
+          "step": "test",
+          "startedUtc": "2026-10-12T01:44:17.128Z",
+          "hostLoad": 13.7841796875,
+          "externalReceiptUtc": "2026-10-12T01:44:17.128434+00:00",
+          "elapsedS": 161.80859537499964
+        },
+        {
+          "step": "bundle",
+          "startedUtc": "2026-10-12T01:45:04.898Z",
+          "hostLoad": 11.50927734375,
+          "externalReceiptUtc": "2026-10-12T01:45:04.898176+00:00",
+          "elapsedS": 209.5780863330001
+        },
+        {
+          "step": "restore-local-assets",
+          "startedUtc": "2026-10-12T01:45:07.486Z",
+          "hostLoad": 11.14794921875,
+          "externalReceiptUtc": "2026-10-12T01:45:07.489387+00:00",
+          "elapsedS": 212.16928712499976
+        }
+      ]
+    }
+  ],
+  "metricInterpretation": {
+    "stableObservations": [
+      "Close-timeout warning occurrence.",
+      "Externally observed Test Files summary receipt to review child-close marker and sampled Vitest disappearance bounds."
+    ],
+    "comparison": "No warning in either current run. No cleanup fix exists and no paired speed effect is measured. The 55.4 and 47.8 second test walls have different actual starting loads and reporter/output modes.",
+    "unknowns": [
+      "Internal test-completion-to-actual-process-exit interval.",
+      "Concrete resource owner of the historic shutdown warnings.",
+      "Whether 10 seconds is the warning runs net marginal wall cost.",
+      "Historic warning-run test counts and output reporter/transport identity."
+    ],
+    "annotations": "The immutable capture receipts originally describe the summary interval as a default reporter summary. Interpret the baseline endpoint as the observable Test Files summary receipt from the auto-selected agent reporter; diagnostic is default reporting."
+  },
+  "diagnosticInterface": {
+    "vitestVersion": "4.1.0",
+    "readSources": {
+      "scripts/review.mjs": "65b40ea7630867d3261ba442a65acdc98826de1256c31083155b5741e08fc5b3",
+      "scripts/review-execution.mjs": "79615e6cd20c1683b67bf05a499b94c650d291bff14b01f619035c82f72f4982",
+      "vitest.config.ts": "9b4d94779222dc970bcba9c57750d199891f2ffb22d9ff95fafe86e978891d74",
+      "node_modules/vitest/dist/chunks/index.DXMFO5MJ.js": "2bc817b0ec1a185faa8a547a937574ba0eddd9ae1975f5a7a71afe94413d3ccb",
+      "node_modules/vitest/dist/chunks/cli-api.DuT9iuvY.js": "724787b27a4e45a7d49c29767cb541f8574a7eb14aa7e04c088be4e210d73e69",
+      "node_modules/vitest/dist/chunks/coverage.Bri33R1t.js": "b3f0ee9b9d44b06e255f331439513637c5f43b0562d09936762ae6b4276e4e8a",
+      "node_modules/why-is-node-running/index.js": "0265aa66d2958faf3e9f022608abf3a5365b838dbaaf18c985db88c856fa4d5d"
+    },
+    "semantics": "HangingProcessReporter loads why-is-node-running at initialization and emits only onProcessTimeout. The existing 10,000 ms unreferenced exit timeout is unchanged.",
+    "limits": "The timeout hook did not fire. No handle report means no captured witness, not proof that the suite has zero active handles or that the historic owner is absent. The installed hook excludes promises, several resource types and unreferenced handles, and observes resources created after initialization.",
+    "readOnlyHypothesis": "Partial large journey JSON and absent summary in historic warning streams prompted a stream/backpressure hypothesis. No owner or causal link was established; no cleanup path is admitted or edited."
+  },
+  "validation": {
+    "install": {
+      "command": "npm install",
+      "exitCode": 0,
+      "reportedNpmWallS": 2,
+      "advisories": {
+        "moderate": 9,
+        "high": 7,
+        "critical": 1
+      },
+      "timingScope": "Npm reported package installation duration; precise wrapper start and PG were not captured for this foreground command."
+    },
+    "dispatchFrictionTriggers": {
+      "command": "npm run friction:triggers",
+      "exitCode": 0,
+      "undispositionedTriggers": 0,
+      "phase5UncoveredRecords": 9,
+      "historicalUnknownMeasurements": 41
+    },
+    "finalChecks": [
+      {
+        "label": "review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "startUtc": "2026-10-12T01:48:25.099547+00:00",
+        "endUtc": "2026-10-12T01:48:25.444406+00:00",
+        "wallS": 0.3448934169991844,
+        "exitCode": 0,
+        "pid": 23519,
+        "pgid": 23519,
+        "captureRunnerPid": 23510,
+        "captureRunnerPgid": 23510,
+        "finalGroupProcesses": [],
+        "stepLoads": [
+          [
+            "friction-records",
+            "2026-10-12T01:48:25.302Z",
+            "5.5927734375"
+          ]
+        ],
+        "stdoutSha256": "58d93bc70b6aba642d38a2f3c4357ca8b9724ca188da457a87dfda08767a7648",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "startUtc": "2026-10-12T01:48:25.444955+00:00",
+        "endUtc": "2026-10-12T01:48:28.257736+00:00",
+        "wallS": 2.8127925419994426,
+        "exitCode": 0,
+        "pid": 23608,
+        "pgid": 23608,
+        "captureRunnerPid": 23510,
+        "captureRunnerPgid": 23510,
+        "finalGroupProcesses": [],
+        "stepLoads": [
+          [
+            "prepare",
+            "2026-10-12T01:48:25.635Z",
+            "6.42578125"
+          ],
+          [
+            "knip",
+            "2026-10-12T01:48:26.317Z",
+            "6.42578125"
+          ],
+          [
+            "restore-local-assets",
+            "2026-10-12T01:48:27.815Z",
+            "6.42578125"
+          ]
+        ],
+        "stdoutSha256": "0ee81c7de2b39d3713d7023f80136beca5f32ded3d5d83cc455f8988c581f924",
+        "stderrSha256": "3e87cb08e3d26720de11764df42672b5fd4c294cbc969731e43cc689d6a795d5"
+      },
+      {
+        "label": "schema",
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "startUtc": "2026-10-12T01:48:28.258139+00:00",
+        "endUtc": "2026-10-12T01:48:28.360235+00:00",
+        "wallS": 0.10213654099970881,
+        "exitCode": 0,
+        "pid": 23895,
+        "pgid": 23895,
+        "captureRunnerPid": 23510,
+        "captureRunnerPgid": 23510,
+        "finalGroupProcesses": [],
+        "stepLoads": [],
+        "stdoutSha256": "15b2a3321c97958566fa8cfa289c6fb15a00e98bec517781bae852f871031085",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "friction-report",
+        "argv": [
+          "npm",
+          "run",
+          "friction:triggers"
+        ],
+        "startUtc": "2026-10-12T01:48:28.360598+00:00",
+        "endUtc": "2026-10-12T01:48:28.563986+00:00",
+        "wallS": 0.20342949999940174,
+        "exitCode": 0,
+        "pid": 23903,
+        "pgid": 23903,
+        "captureRunnerPid": 23510,
+        "captureRunnerPgid": 23510,
+        "finalGroupProcesses": [],
+        "stepLoads": [],
+        "stdoutSha256": "110b50b9ab5992177ce02d62d23e3e9f5e608d7f2716c6f80dba6eed90026f4d",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "finalCheckScope": "Final evidence-only npm run review selected the friction record schema for three changed evidence files. It ran no runtime suite or static source checks. Sequential Knip passed, followed by direct schema and dispositioned friction report.",
+    "focusedSourceVerification": {
+      "exitCode": 0,
+      "scope": "Both current source freezes differ only in the admitted config line; after exact restoration every tracked baseline hash matches. Raw warning log hashes match all three native references. Zero timeout warnings and zero handle reports in each complete current stream.",
+      "wallS": null,
+      "wallLimitation": "Read-only foreground verification wall was not instrumented as a validation command interval."
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "value": 5.5927734375,
+        "measuredFor": "Actual final evidence-only review friction-records step start at 2026-10-12T01:48:25.302Z."
+      }
+    }
+  },
+  "failurePaths": {
+    "midStepError": "No application transition is authored. Command exits and raw streams are retained; the diagnostic outer finally restores configuration on subprocess exit or exception. Both bounded commands passed.",
+    "restart": "No game or persistent runtime behavior changes. A rerun would exceed this bead boundary; no restart or retry was performed.",
+    "partialWrite": "Exact original config hash was verified after restoration and every tracked pre-baseline source hash matched. Evidence records original failures rather than claiming an unobserved cleanup fix.",
+    "invalidOrStaleInput": "Current fresh worktree base and native admission are explicit. No production input path changes.",
+    "concurrentActors": "Only owned process groups are observed and checked. Canonical heavy lock serialized both runs; no peer resource is terminated."
+  },
+  "runtimeLedger": {
+    "heavyGroups": [
+      46712,
+      70608
+    ],
+    "toolSessions": [
+      20921,
+      34551
+    ],
+    "finalOwnedGroupAbsence": "Both wrappers exited 0 and fresh receipts contain empty owned-group process lists. A final combined ps check follows final light checks.",
+    "captureRunnerLimit": "Baseline capture runner PID is available as wrapper parent in process ledger; its exact tool-shell PG was not recorded. Tool foreground session returned exit 0. Diagnostic capture and outer restoration runners also returned via the foreground tool session.",
+    "qa": "No bead browser QA, dev server or fuzz command was started. Canonical full-suite tests retain their own synthetic process fixtures in the owned runtime observations.",
+    "allObservedValidationGroups": [
+      46712,
+      70608,
+      23519,
+      23608,
+      23895,
+      23903,
+      23510
+    ],
+    "captureParentPidsWithoutInitialGroupSample": [
+      46709,
+      70581
+    ],
+    "installPid": null,
+    "installPidLimitation": "Initial npm install was a completed foreground tool command (session 49108, actual exit 0); its initial PID/PG was not recorded. No exact install-group cleanup proof is invented.",
+    "freshCombinedAbsence": {
+      "utc": "2026-10-12T01:49:06.867249+00:00",
+      "checkedGroups": [
+        46712,
+        70608,
+        23519,
+        23608,
+        23895,
+        23903,
+        23510
+      ],
+      "checkedCapturePids": [
+        46709,
+        70581
+      ],
+      "processes": []
+    },
+    "finalValidationReceipt": "final-validation.json",
+    "finalValidationReceiptSha256": "14db9b9cabdbdf94c32dea06eb42266fe6927bace2a9bc383b7c1f14221fc2ae"
+  },
+  "artifactDirectory": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.467",
+  "harnessSha256": "820940dc4d37cedd1fbf66b79304c9618386830a2df59588882dbd06fc10b7e2"
+}
