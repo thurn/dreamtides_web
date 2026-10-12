@@ -1,0 +1,503 @@
+{
+  "bead": "hv-umm2.571",
+  "base": "5be8538ba5c7bcd686a621ec8b7b60c58c9fe82a",
+  "status": "Required local acceptance passed; parent metadata-clock ACK received; cold Sol core review and native delivery belong to parent",
+  "dispatch": {
+    "timestamp": "2026-10-12T18:46:13.448Z",
+    "callId": "call_41275762ceae4794a3a5feb11842e490",
+    "receipt": "/tmp/hv-umm2.571-dispatch.json",
+    "scope": "Actual parent post-claim helper dispatch; source-free parent audit and filing predate this window"
+  },
+  "commands": [
+    {
+      "name": "focused-corrected",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "gainMaxEnergy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/max-energy571-root",
+      "start": "2026-10-12T18:52:58.682865+00:00",
+      "pid": 23614,
+      "pgid": 23614,
+      "hostLoad": [
+        31.99951171875,
+        18.07470703125,
+        16.08251953125
+      ],
+      "end": "2026-10-12T18:53:05.096475+00:00",
+      "exit": 0,
+      "wallSeconds": 6.4135041249974165
+    },
+    {
+      "name": "focused-final",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "gainMaxEnergy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/max-energy571-root",
+      "start": "2026-10-12T18:53:25.413905+00:00",
+      "pid": 40519,
+      "pgid": 40519,
+      "hostLoad": [
+        24.482421875,
+        17.587890625,
+        15.97412109375
+      ],
+      "end": "2026-10-12T18:53:31.344488+00:00",
+      "exit": 0,
+      "wallSeconds": 5.930445083999075
+    },
+    {
+      "name": "focused-own",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "gainMaxEnergy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/max-energy571-root",
+      "start": "2026-10-12T18:50:31.442542+00:00",
+      "pid": 80183,
+      "pgid": 80183,
+      "hostLoad": [
+        4.734375,
+        10.2431640625,
+        13.58349609375
+      ],
+      "end": "2026-10-12T18:50:35.123666+00:00",
+      "exit": 0,
+      "wallSeconds": 3.6810339579969877
+    },
+    {
+      "name": "focused-related",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/turn.test.ts",
+        "src/engine/core.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/state/clone.test.ts",
+        "src/engine/log.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/max-energy571-root",
+      "start": "2026-10-12T18:50:56.471420+00:00",
+      "pid": 80937,
+      "pgid": 80937,
+      "hostLoad": [
+        4.46533203125,
+        9.73974609375,
+        13.3046875
+      ],
+      "end": "2026-10-12T18:51:09.786111+00:00",
+      "exit": 0,
+      "wallSeconds": 13.31452095900022
+    },
+    {
+      "name": "fuzz-execution",
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/max-energy571-root",
+      "start": "2026-10-12T18:56:16.468423+00:00",
+      "pid": 5035,
+      "pgid": 5035,
+      "hostLoad": [
+        19.49365234375,
+        17.4775390625,
+        16.13720703125
+      ],
+      "end": "2026-10-12T18:57:59.061734+00:00",
+      "exit": 0,
+      "wallSeconds": 102.59272883299855
+    },
+    {
+      "name": "fuzz-outer",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.571/local-validation/run-check.py",
+        "fuzz-execution",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/max-energy571-root",
+      "start": "2026-10-12T18:54:58.303314+00:00",
+      "pid": 47590,
+      "pgid": 47590,
+      "hostLoad": [
+        14.99560546875,
+        16.14501953125,
+        15.57275390625
+      ],
+      "end": "2026-10-12T18:57:59.068529+00:00",
+      "exit": 0,
+      "wallSeconds": 180.7642339169979
+    },
+    {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/max-energy571-root",
+      "start": "2026-10-12T18:54:42.521504+00:00",
+      "pid": 46464,
+      "pgid": 46464,
+      "hostLoad": [
+        15.310546875,
+        16.24365234375,
+        15.59619140625
+      ],
+      "end": "2026-10-12T18:54:46.679711+00:00",
+      "exit": 0,
+      "wallSeconds": 4.158062375005102
+    },
+    {
+      "name": "old-branch",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "gainMaxEnergy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/max-energy571-root",
+      "start": "2026-10-12T18:49:56.520491+00:00",
+      "pid": 79205,
+      "pgid": 79205,
+      "hostLoad": [
+        5.34716796875,
+        10.99365234375,
+        13.9765625
+      ],
+      "end": "2026-10-12T18:50:01.668716+00:00",
+      "exit": 1,
+      "wallSeconds": 5.1481350410031155
+    },
+    {
+      "name": "review-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/max-energy571-root",
+      "start": "2026-10-12T18:53:43.415079+00:00",
+      "pid": 41857,
+      "pgid": 41857,
+      "hostLoad": [
+        21.4638671875,
+        17.26318359375,
+        15.88623046875
+      ],
+      "end": "2026-10-12T18:54:37.101305+00:00",
+      "exit": 0,
+      "wallSeconds": 53.68588666699361
+    },
+    {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/max-energy571-root",
+      "start": "2026-10-12T18:51:43.249959+00:00",
+      "pid": 82831,
+      "pgid": 82831,
+      "hostLoad": [
+        13.50634765625,
+        11.15673828125,
+        13.62646484375
+      ],
+      "end": "2026-10-12T18:52:47.826537+00:00",
+      "exit": 2,
+      "wallSeconds": 64.57620133299497
+    },
+    {
+      "name": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/max-energy571-root",
+      "start": "2026-10-12T18:59:18.318652+00:00",
+      "pid": 67516,
+      "pgid": 67516,
+      "hostLoad": [
+        12.3994140625,
+        16.97314453125,
+        16.3115234375
+      ],
+      "end": "2026-10-12T18:59:18.426443+00:00",
+      "exit": 0,
+      "wallSeconds": 0.10772075000568293
+    }
+  ],
+  "regression": {
+    "oldImplementation": {
+      "exit": 1,
+      "casesFailed": 5,
+      "casesPassed": 1,
+      "receipt": "old-branch.receipt.json"
+    },
+    "repair": {
+      "exit": 0,
+      "casesPassed": 6,
+      "receipt": "focused-own.receipt.json"
+    },
+    "changedHypothesis": "Maximum is independent production; current is unchanged by gainMaxEnergy. Only effectEnergy current argument changed from amount to zero. No alternate fixture or retry workaround.",
+    "restoration": "No old-source temporary replacement: owning tests were written first while the production primitive remained at the exact base. Primitive repair followed completed negative run."
+  },
+  "contracts": {
+    "newCases": 6,
+    "replacedCases": 1,
+    "testEntrypointsAdded": 0,
+    "jsdomEntrypointsAdded": 0,
+    "fixtures": "Existing rampOne plus local opponent/zero/negative synthetic definitions; shared fixtures unchanged",
+    "observableCoverage": [
+      "Both controllers and you/opponent recipients",
+      "Current zero and surplus above maximum",
+      "Exact current/max energyChanged deltas",
+      "Independent maximum floor and zero delta",
+      "Other recipient unchanged; public input state immutable",
+      "Own-recipient cost1 affordability unchanged until normal refresh",
+      "Separate next-turn refresh and synthetic Dreamwell energyAdded1 refill"
+    ]
+  },
+  "failurePaths": {
+    "error": "Existing fold-intents failed-attempt and fold divergence contracts verify committed rollback; primitive introduces no throwable validation or prompt path. New owning contracts verify original public input unchanged.",
+    "reload": "Existing fold mid-prompt reload, intent prompt-identity reload, and clone JSON/hash round-trip contracts run unchanged; no persisted shape or replay signature change.",
+    "partialWrite": "Existing fold corrupt in-flight prefix and cancellation/failed-attempt tests verify no partial commit; effect still emits through existing atomic step and energy event.",
+    "staleInput": "Existing fold-intents bounces stale, foreign, illegal, out-of-turn and old canceled/failed prompt IDs; this synchronous effect accepts no external answer.",
+    "concurrentActors": "Existing serialized fold ownership/in-flight guard remains unchanged. No asynchronous transport, shared mutable host operation, or concurrency state is introduced; no fabricated race test."
+  },
+  "validationScope": {
+    "full": "Not applicable: no infrastructure, config, or cross-cutting architecture change",
+    "browser": "No presentation/interaction surface change; parent216 owns subsequent real Dreamwell workflow QA",
+    "fuzz": "Mandatory default production catalog smoke200 under heavy lock; no production authored entities/weighted300 in571"
+  },
+  "sourceLookupFailures": [
+    "Initial source-free read guessed docs/plan/validation.md and resources.md; actual validation/resources are workflow sections. Initial rg guessed legacy-behavior path without evidence/; resolved correct path. Initial source reads guessed absent resources.test.ts, primitive manifest/index and engine/fold entrypoints; rg --files resolved exact current owning contracts/turn/core/fold/clone suites. These were inspection errors, not failed tests."
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "start": "Actual parent post-claim dispatch receipt",
+        "end": "Prospective precommit evidence endpoint, refreshed immediately before final schema/whitespace/hash checks and the one commit; actual Git committer timestamp and semantic delta retained outside committed artifact in primary ignored raw commit-clock.json"
+      },
+      "hostLoad": {
+        "measuredFor": "Final npm run review wrapper start 2026-10-12T18:53:43.415079+00:00; exact actual sample21.4638671875"
+      },
+      "testDelta": {
+        "files": 0,
+        "lines": 88,
+        "jsdomFiles": 0,
+        "basis": "Existing owning plain contract adds95/deletes7lines; no entrypoint/jsdom additions"
+      },
+      "localValidationS": {
+        "focused": "Final owning six-case run only, focused-final.receipt.json; all successful focused elapsed and related-suite scope retained in focusedScopes",
+        "review": "Final successful review only; first failed review receipt and cost separate",
+        "fuzz": "Execution after heavy slot acquisition; outer and slot queue recorded separately",
+        "knip": "Successful wrapper elapsed including its preparation/restoration"
+      }
+    }
+  },
+  "resources": {
+    "at": "2026-10-12T18:59:39.605734+00:00",
+    "ownChildProcessGroups": [
+      5035,
+      23614,
+      40519,
+      41857,
+      46464,
+      47590,
+      67516,
+      79205,
+      80183,
+      80937,
+      82831
+    ],
+    "remainingMembers": [],
+    "wrapperSessions": "Every exec session returned its terminal exit before next validator; heavy outer/inner nesting measures one locked execution",
+    "browserSessions": [],
+    "servers": [],
+    "heavyLock": "Released after outer lockf exited0; no shared process/config touched",
+    "rawDirectory": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.571/local-validation"
+  },
+  "implementationCorrections": [
+    {
+      "receipt": "review.receipt.json",
+      "exit": 2,
+      "cause": "Own test used Array.at absent from current TypeScript lib and an unnecessary non-null assertion",
+      "resolution": "After failed wrapper terminal, replaced Array.at with indexed access and removed unnecessary assertions; no semantic fixture or engine changes",
+      "firstCorrectedFocus": "focused-corrected passed before removing index assertion proactively; focused-final validates final body"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "name": "focused-corrected",
+      "start": "2026-10-12T18:52:58.682865+00:00",
+      "load": [
+        31.99951171875,
+        18.07470703125,
+        16.08251953125
+      ]
+    },
+    {
+      "name": "focused-final",
+      "start": "2026-10-12T18:53:25.413905+00:00",
+      "load": [
+        24.482421875,
+        17.587890625,
+        15.97412109375
+      ]
+    },
+    {
+      "name": "focused-own",
+      "start": "2026-10-12T18:50:31.442542+00:00",
+      "load": [
+        4.734375,
+        10.2431640625,
+        13.58349609375
+      ]
+    },
+    {
+      "name": "focused-related",
+      "start": "2026-10-12T18:50:56.471420+00:00",
+      "load": [
+        4.46533203125,
+        9.73974609375,
+        13.3046875
+      ]
+    },
+    {
+      "name": "fuzz-execution",
+      "start": "2026-10-12T18:56:16.468423+00:00",
+      "load": [
+        19.49365234375,
+        17.4775390625,
+        16.13720703125
+      ]
+    },
+    {
+      "name": "fuzz-outer",
+      "start": "2026-10-12T18:54:58.303314+00:00",
+      "load": [
+        14.99560546875,
+        16.14501953125,
+        15.57275390625
+      ]
+    },
+    {
+      "name": "knip",
+      "start": "2026-10-12T18:54:42.521504+00:00",
+      "load": [
+        15.310546875,
+        16.24365234375,
+        15.59619140625
+      ]
+    },
+    {
+      "name": "old-branch",
+      "start": "2026-10-12T18:49:56.520491+00:00",
+      "load": [
+        5.34716796875,
+        10.99365234375,
+        13.9765625
+      ]
+    },
+    {
+      "name": "review-final",
+      "start": "2026-10-12T18:53:43.415079+00:00",
+      "load": [
+        21.4638671875,
+        17.26318359375,
+        15.88623046875
+      ]
+    },
+    {
+      "name": "review",
+      "start": "2026-10-12T18:51:43.249959+00:00",
+      "load": [
+        13.50634765625,
+        11.15673828125,
+        13.62646484375
+      ]
+    }
+  ],
+  "fuzz": {
+    "games": 200,
+    "steps": 95425,
+    "failures": 0,
+    "interactiveReruns": 319,
+    "prompts": 3159,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 1
+    },
+    "catalog": "Default current catalog; seed prefix fuzz; no weight-uuids override",
+    "executionSeconds": 102.59272883299855,
+    "outerSeconds": 180.7642339169979,
+    "slotQueueSeconds": 78.165109,
+    "outerOverheadSeconds": 0.006396083999362645
+  },
+  "sourceManifest": {
+    "src/engine/effects/primitives/gain-max-energy.ts": "fd92f03441f9f121cef80a6cf30dab50c9c2d7fba6f27113ce11c7ab73e31371",
+    "src/engine/effects/primitives/contracts/gain-max-energy.contracts.ts": "23556d2fe4940b7ce339b9ecf75c1b57939ca5dc8f6fa313738e670a529608fe",
+    "docs/rules.md": "b65ef640e789646e92bb7aa79400aca0c9c2ffa95b1ebe5609bc7558af893db6",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.571-1.md": "8027a3c251fc6fa962afc68d9ab02e75914913a4cc8972cf79a220d265018c3d"
+  },
+  "preExistingIssues": "None discovered outside admitted scope",
+  "review": {
+    "parentOwns": "Fresh cold read-only gpt-5.6-sol CLI review after helper terminal, under temporary user-authorized same-family routing; no review waiver",
+    "localFinal": {
+      "receipt": "review-final.receipt.json",
+      "exit": 0,
+      "testFiles": 268,
+      "testCases": 4855
+    }
+  },
+  "schemaValidation": {
+    "receipt": "schema.receipt.json",
+    "exit": 0,
+    "wallSeconds": 0.10772075000568293
+  },
+  "focusedScopes": {
+    "finalOwningSeconds": 5.930445083999075,
+    "finalOwningReceipt": "focused-final.receipt.json",
+    "successfulRunTotalSeconds": 29.3395041259937,
+    "successfulRunTotalScope": "All four successful focused wrappers, including related suites and iteration after fixture compatibility correction",
+    "relatedSeconds": 13.31452095900022,
+    "relatedReceipt": "focused-related.receipt.json",
+    "expectedNegativeExcluded": "old-branch.receipt.json actual1/5.148135s"
+  },
+  "prospectiveCommitEndpoint": "2026-10-12T19:02:40.907535+00:00"
+}

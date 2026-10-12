@@ -254,6 +254,12 @@ such as "Gain 1 maximum ●". Current ● is the pool you spend right now; effec
 such as "Gain 2●" or "Double your current ●" change only the current pool for
 this turn.
 
+An effect that changes maximum ● changes only energy production; it does not
+change current ●. An effect that changes current ● does not change maximum ●.
+If an effect changes both, apply each change separately. The normal
+start-of-turn and Dreamwell refreshes set current ● to maximum ● as described
+above.
+
 **Dreamwell numbers and cycling:**
 
 - Dreamwell cards carry order numbers 1–4 that set their position in the deck:

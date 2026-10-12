@@ -4,7 +4,7 @@ import { effectEnergy } from "../../rules/resources";
 import { evaluate } from "../interpreter";
 import { definePrimitive } from "../types";
 
-/** "Gain N maximum ●": raises energy production permanently, and current ● with it. */
+/** "Gain N maximum ●": raises energy production permanently without changing current ●. */
 export interface GainMaxEnergyNode {
   readonly op: "gainMaxEnergy";
   readonly amount: ValueExpr;
@@ -16,7 +16,7 @@ export const gainMaxEnergyPrimitive = definePrimitive<GainMaxEnergyNode>({
   resolve(ctx, node, env) {
     const side = resolvePlayer(env.controller, node.player);
     const amount = evaluate(ctx, node.amount, env);
-    effectEnergy(ctx, side, amount, amount);
+    effectEnergy(ctx, side, 0, amount);
   },
 });
 
