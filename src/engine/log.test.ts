@@ -4,6 +4,7 @@ import { createEngine } from "./engine";
 import type { EngineEvent } from "./events";
 import { eventLogRecords, stepLogRecords, type EngineLogRecord } from "./log";
 import { battleSeed } from "./state/ids";
+import { parseDreamwellCardId } from "../types/identifiers";
 import { fuzzEngineCatalog, fuzzGameLog, playFuzzGame, replayInteractively, SYNTHETIC_FUZZ_POOL, type FuzzGame } from "./testing/fuzz";
 
 const engine = createEngine(fuzzEngineCatalog(SYNTHETIC_FUZZ_POOL));
@@ -26,6 +27,10 @@ function derived(records: readonly EngineLogRecord[]): EngineLogRecord[] {
 }
 
 describe("engine log records", () => {
+  it("records the public Dreamwell UUID, drawing side and catalog energy", () => {
+    const event: EngineEvent = { kind: "dreamwellDrawn", side: "enemy", card: parseDreamwellCardId("5e5e5e5e-0000-4000-8000-000000000e06"), energyAdded: 0 };
+    expect(eventLogRecords([event], 9)).toEqual([{ event: "engine.dreamwell", version: 9, detail: event }]);
+  });
   it("maps triggers, loops, and the battle's end, leaving other events to replay", () => {
     const events: EngineEvent[] = [
       { kind: "triggerQueued", source: "i3", controller: "player", ability: 0, node: null, subject: null },

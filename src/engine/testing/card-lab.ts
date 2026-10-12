@@ -10,7 +10,7 @@ import type { EngineCardDefinition } from "../catalog";
 import type { Engine } from "../engine";
 import type { EngineEvent } from "../events";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
-import { BACK_RANK_SIZE, FRONT_RANK_SIZE, SIDES, type CardId, type InstanceId, type Side } from "../state/ids";
+import { BACK_RANK_SIZE, FRONT_RANK_SIZE, SIDES, opponent, type CardId, type DreamwellCardId, type InstanceId, type Side } from "../state/ids";
 import type { BattleInit, DeckEntry } from "../state/types";
 import { logEvent } from "../../logging";
 import { cardIdFromUnknown } from "../../types/card-identity";
@@ -67,6 +67,38 @@ export interface CardLabRequest {
   readonly variant: CardLabVariant;
   readonly side: Side;
   readonly stage?: CardLabStage;
+}
+
+/** A catalog Dreamwell UUID drawn by the next normal turn of `side`. */
+export interface DreamwellLabRequest {
+  readonly cardId: DreamwellCardId;
+  readonly side: Side;
+}
+
+/**
+ * Parks the preceding Night with one forced next draw. The complete catalog
+ * remains available to normal recurring cycles; a normal pass enters the
+ * requested side's Dreamwell phase and applies its catalog energy.
+ */
+export function dreamwellLabBattle(
+  engine: Engine,
+  request: DreamwellLabRequest,
+  catalog: readonly DreamwellCardId[],
+): { init: BattleInit; slice: BattleSlice } {
+  engine.catalog.dreamwellCard(request.cardId);
+  if (!catalog.includes(request.cardId)) throw new Error("Dreamwell lab UUID is absent from its catalog");
+  for (const id of catalog) engine.catalog.dreamwellCard(id);
+  const deck = Array.from({ length: 8 }, () => SYNTHETIC.vanilla1.id);
+  const lab = promptLabBattle(engine, {
+    name: `dreamwell-lab:${request.cardId}:${request.side}`,
+    description: `The next Dreamwell draw of ${request.cardId} for ${request.side}`,
+    setup: { active: opponent(request.side), phase: "night", round: 2, player: { deck, energy: 2 }, enemy: { deck, energy: 2 } },
+    script: [],
+  });
+  return {
+    init: { ...lab.init, dreamwell: [...catalog] },
+    slice: { ...lab.slice, committed: { ...lab.slice.committed, dreamwell: { deck: [request.cardId], next: 0, catalog: [...catalog] } } },
+  };
 }
 
 /** Physical references name the initial enemy slot, never a printing or display name. */

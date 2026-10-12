@@ -11,7 +11,9 @@
 // docs/plan/evidence/qa-ledger/<bead>.jsonl. The defaults sweep every
 // variant on both sides. A card's base run reports the variants it can take;
 // the others are recorded as `skip` without a run. A run that hangs fails at
-// its timeout and the sweep goes on. `starter` names the catalog's Starter
+// its timeout and the sweep goes on. Dreamwell UUIDs use the same URL and
+// base variant, entering their requested side's next normal Dreamwell draw.
+// `starter` names the catalog's Starter
 // cards. Each ledger line's `commit` is the base OID the bead was built on,
 // `git merge-base HEAD staging`. Exits 1 when any effective cell verdict is `fail`.
 // At each card boundary where other processes queue for the browser lease,
@@ -131,7 +133,8 @@ export async function runSweepCell({ run, closed, save, record }) {
       result.verdict === "fail" && Array.isArray(result.failureKinds) && result.failureKinds.length > 0 &&
       result.failureKinds.every((kind) => kind === "timeout");
     record({ verdict: result.verdict, notes: result.notes, screens: result.screens ?? [], attempt,
-      effective: !retry, failureKinds: result.failureKinds ?? [], rawReport });
+      effective: !retry, failureKinds: result.failureKinds ?? [], rawReport,
+      ...(result.lab?.entityKind === undefined ? {} : { entityKind: result.lab.entityKind }) });
     if (!retry) return result;
   }
   throw new Error("sweep cell exhausted without an effective verdict");

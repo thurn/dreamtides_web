@@ -27,11 +27,13 @@ import type { BattleSlice } from "../engine/fold/slice";
 import {
   CARD_LAB_VARIANTS,
   cardLabBattle,
+  dreamwellLabBattle,
   cardLabStageFromUnknown,
   cardLabVariant,
   variantTransfiguration,
   type CardLabRequest,
   type CardLabVariant,
+  type DreamwellLabRequest,
 } from "../engine/testing/card-lab";
 import { engineDeckEntry } from "../battle/integration/engine-battle-init";
 import { logEvent } from "../logging";
@@ -45,7 +47,7 @@ import {
 } from "../engine/testing/prompt-lab";
 import { initializeDraftState } from "../draft/draft-engine";
 import { eligibleTransfigurations } from "../transfiguration/transfiguration-logic";
-import { parseSiteId } from "../types/identifiers";
+import { dreamwellCardIdFromUnknown, parseSiteId } from "../types/identifiers";
 import { parseBattleId } from "../types/identifiers";
 import { isCardId, parseCardId, parseCardName, type CardId } from "../types/card-identity";
 import { parseDeckEntryId } from "../types/identifiers";
@@ -465,7 +467,8 @@ interface CardLabTokens {
 const CARD_LAB_PREFIX = "card-lab:";
 
 type CardLabResolution =
-  | { readonly kind: "ok"; readonly request: CardLabRequest; readonly card: CardData; readonly eligible: readonly CardLabVariant[] }
+  | { readonly kind: "ok"; readonly entityKind: "card"; readonly request: CardLabRequest; readonly card: CardData; readonly eligible: readonly CardLabVariant[] }
+  | { readonly kind: "ok"; readonly entityKind: "dreamwell"; readonly request: DreamwellLabRequest; readonly eligible: readonly CardLabVariant[] }
   | {
       readonly kind: "rejected";
       readonly reason: "unknownCard" | "unknownVariant" | "unknownSide" | "ineligibleVariant" | "unplayable" | "invalidStage";
@@ -477,7 +480,17 @@ type CardLabResolution =
 function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens): CardLabResolution {
   const cardId = isCardId(tokens.card) ? parseCardId(tokens.card) : null;
   const card = [...journeyContent.cardDatabase.values()].find((candidate) => candidate.id === cardId);
-  if (card === undefined) return { kind: "rejected", reason: "unknownCard", eligible: [] };
+  if (card === undefined) {
+    const dreamwellId = dreamwellCardIdFromUnknown(tokens.card);
+    if (dreamwellId === null || !journeyContent.dreamwellCards.some((candidate) => candidate.id === dreamwellId)) return { kind: "rejected", reason: "unknownCard", eligible: [] };
+    const eligible = ["base"] as const;
+    const variant = cardLabVariant(tokens.variant);
+    if (variant === null) return { kind: "rejected", reason: "unknownVariant", eligible };
+    if (tokens.side !== "player" && tokens.side !== "enemy") return { kind: "rejected", reason: "unknownSide", eligible };
+    if (variant !== "base") return { kind: "rejected", reason: "ineligibleVariant", eligible };
+    if (tokens.stage !== undefined) return { kind: "rejected", reason: "invalidStage", eligible };
+    return { kind: "ok", entityKind: "dreamwell", request: { cardId: dreamwellId, side: tokens.side }, eligible };
+  }
   const eligible: CardLabVariant[] = [
     "base",
     ...CARD_LAB_VARIANTS.filter((variant) => {
@@ -492,7 +505,7 @@ function resolveCardLab(journeyContent: JourneyContent, tokens: CardLabTokens): 
   const entry = engineDeckEntry(cardLabDeckEntry(card, variant), card, journeyContent.transfigurationData);
   try {
     const stage = tokens.stage === undefined ? undefined : cardLabStageFromUnknown(JSON.parse(tokens.stage));
-    return { kind: "ok", request: { entry, variant, side: tokens.side, ...(stage === undefined ? {} : { stage }) }, card, eligible };
+    return { kind: "ok", entityKind: "card", request: { entry, variant, side: tokens.side, ...(stage === undefined ? {} : { stage }) }, card, eligible };
   } catch (error) {
     return { kind: "rejected", reason: "invalidStage", eligible, detail: error instanceof Error ? error.message : String(error) };
   }
@@ -531,7 +544,7 @@ function cardLabScene(id: QaSceneId): QaScene {
     build: (journeyContent, options) => {
       const state = battleLayerSceneState(1)(journeyContent, options);
       const resolved = resolveCardLab(journeyContent, tokens);
-      if (state === null || resolved.kind !== "ok") return state;
+      if (state === null || resolved.kind !== "ok" || resolved.entityKind === "dreamwell") return state;
       return { ...state, deck: [...state.deck, cardLabDeckEntry(resolved.card, resolved.request.variant)] };
     },
   };
@@ -542,7 +555,7 @@ function cardLabScene(id: QaSceneId): QaScene {
  * `window.__cardLab` for the card sweep. A rejection is also a console
  * error, so a QA run records it.
  */
-function publishCardLab(tokens: CardLabTokens, resolved: CardLabResolution): void {
+function publishCardLab(tokens: CardLabTokens, resolved: CardLabResolution, engine: Engine): void {
   const report = {
     card: tokens.card,
     variant: tokens.variant,
@@ -552,8 +565,9 @@ function publishCardLab(tokens: CardLabTokens, resolved: CardLabResolution): voi
     reason: resolved.kind === "ok" ? null : resolved.reason,
     detail: resolved.kind === "ok" ? null : (resolved.detail ?? null),
     eligibleVariants: resolved.eligible,
-    cardStatus: resolved.kind === "ok" ? cardLabContentStatus(resolved.request.entry.cardId) : null,
-    cardType: resolved.kind === "ok" ? resolved.card.cardType : null,
+    entityKind: resolved.kind === "ok" ? resolved.entityKind : null,
+    cardStatus: resolved.kind === "ok" ? resolved.entityKind === "card" ? cardLabContentStatus(resolved.request.entry.cardId) : engine.catalog.dreamwellCard(resolved.request.cardId).status : null,
+    cardType: resolved.kind === "ok" ? resolved.entityKind === "card" ? resolved.card.cardType : "Dreamwell" : null,
   };
   (globalThis as { __cardLab?: unknown }).__cardLab = report;
   logEvent(resolved.kind === "ok" ? "debug_card_lab_loaded" : "debug_card_lab_rejected", report);
@@ -572,12 +586,14 @@ function withCardLab(battle: JourneyBattleFoldState, tokens: CardLabTokens, jour
   const published: EngineEvent[] = [];
   if (resolved.kind === "ok") {
     try {
-      lab = cardLabBattle(engine, resolved.request, contentCardDefinitions(), (events) => published.push(...events));
+      lab = resolved.entityKind === "dreamwell"
+        ? dreamwellLabBattle(engine, resolved.request, journeyContent.dreamwellCards.map((card) => card.id))
+        : cardLabBattle(engine, resolved.request, contentCardDefinitions(), (events) => published.push(...events));
     } catch (error) {
       resolved = { kind: "rejected", reason: "unplayable", eligible: resolved.eligible, detail: error instanceof Error ? error.message : String(error) };
     }
   }
-  publishCardLab(tokens, resolved);
+  publishCardLab(tokens, resolved, engine);
   return lab === null ? battle : withLabBattle(battle, lab, published);
 }
 

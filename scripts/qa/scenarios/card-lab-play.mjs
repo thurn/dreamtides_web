@@ -18,11 +18,11 @@
 // captures the settled board.
 
 /**
- * @typedef {{ card: string, status: string, reason: string | null, detail: string | null, eligibleVariants: string[], cardStatus: string | null, cardType: string | null }} CardLabReport
+ * @typedef {{ card: string, status: string, reason: string | null, detail: string | null, eligibleVariants: string[], entityKind: "card" | "dreamwell" | null, cardStatus: string | null, cardType: string | null }} CardLabReport
  * @typedef {{ id: string, owner: string, zone: string, printing: { kind: string, cardId?: string } }} ProbeInstance
  * @typedef {{ kind: string, side: string, id: string, candidates?: string[] }} ProbePrompt
- * @typedef {{ seq: number, kind: string, instance: string | null }} ProbeEvent
- * @typedef {{ slice: { committed: { instances: Record<string, ProbeInstance>, stack: unknown[], result: unknown }, inFlight: unknown }, decision: { side: string } | null, pending: ProbePrompt | null, events: ProbeEvent[] }} EngineProbe
+ * @typedef {{ seq: number, index: number, kind: string, instance: string | null, event: { kind: string, side?: string, card?: string, energyAdded?: number, active?: string, phase?: string, cause?: string, current?: number, max?: number, maxChange?: number } }} ProbeEvent
+ * @typedef {{ slice: { committed: { instances: Record<string, ProbeInstance>, stack: unknown[], result: unknown, turn: { active: string, phase: string }, dreamwell: { next: number }, sides: Record<string, { currentEnergy: number, maxEnergy: number }> }, inFlight: unknown }, decision: { side: string } | null, pending: ProbePrompt | null, events: ProbeEvent[] }} EngineProbe
  * @typedef {Window & { __cardLab?: CardLabReport, __engineProbe?: EngineProbe }} LabWindow
  * @typedef {{ verdict: "pass" | "fail" | "pending" | "skip", notes: string, failureKinds: ("timeout" | "product" | "unknown")[], lab?: CardLabReport, screens?: string[] }} CardLabPlayResult
  */
@@ -63,6 +63,57 @@ export default async function cardLabPlay(qa) {
     }
     await qa.waitFor("the engine probe", () => (/** @type {LabWindow} */ (window).__engineProbe === undefined ? null : true), null, { timeout: Math.max(1, deadline - Date.now()) });
     await qa.waitVisible("[data-battle-mobile]", { timeout: Math.max(1000, deadline - Date.now()) });
+
+    if (lab.entityKind === "dreamwell") {
+      const readDraw = () => qa.read(({ uuid, owner }) => {
+        const probe = /** @type {LabWindow} */ (window).__engineProbe;
+        if (probe === undefined) throw new Error("the engine probe is gone");
+        const state = probe.slice.committed;
+        const draw = probe.events.find(({ event }) => event.kind === "dreamwellDrawn" && event.card === uuid && event.side === owner);
+        const afterDraw = probe.events.filter((record) => draw !== undefined &&
+          (record.seq > draw.seq || (record.seq === draw.seq && record.index > draw.index)));
+        return {
+          draw: draw?.event ?? null,
+          day: afterDraw.find(({ event }) => event.kind === "phaseChanged" && event.active === owner && event.phase === "day")?.event ?? null,
+          refresh: afterDraw.find(({ event }) => event.kind === "energyChanged" && event.side === owner && event.cause === "refresh")?.event ?? null,
+          stack: state.stack.length, pending: probe.pending, inFlight: probe.slice.inFlight !== null,
+          decision: probe.decision, result: state.result, turn: state.turn, energy: state.sides[owner], next: state.dreamwell.next,
+        };
+      }, { uuid: card, owner: side }, { timeout: Math.max(1, deadline - Date.now()) });
+      let last = await readDraw();
+      let answered = 0;
+      let passes = 0;
+      try {
+        const run = await qa.battle.playUntil(async (battle) => {
+          last = await readDraw();
+          const controls = last.decision?.side !== "player" || battle.canPass || last.result !== null;
+          const destination = last.day !== null || last.result !== null;
+          const settled = last.draw !== null && destination && last.stack === 0 && last.pending === null && !last.inFlight && controls;
+          return settled;
+        }, {
+          label: "the requested Dreamwell draw", timeout: Math.max(1000, deadline - Date.now()), pollMs: 200,
+          passWhen: (battle) => last.draw === null || (battle.probe?.stack ?? 0) > 0,
+        });
+        answered = run.answers;
+        passes = run.passes;
+      } catch (error) {
+        fail(error instanceof Error ? error.message : String(error), qa.isTimeout(error) ? "timeout" : "unknown");
+        last = await readDraw();
+      }
+      if (last.draw === null) fail("no requested UUID and side Dreamwell draw");
+      if (last.refresh === null || last.refresh.maxChange !== last.draw?.energyAdded) fail("no matching catalog energy refresh");
+      if (last.next < 1) fail("the shared Dreamwell did not advance");
+      const errors = await caps();
+      if (errors.length > 0) fail(`__caps: ${errors.join(" | ")}`);
+      const screens = [];
+      if (qa.args.capture !== undefined && qa.args.capture !== "") {
+        await qa.capture(qa.args.capture);
+        screens.push(`${qa.args.capture}.png`);
+      }
+      return outcome(failures.length > 0 ? "fail" : lab.cardStatus === "pending" ? "pending" : "pass", {
+        lab, drawn: last.draw, day: last.day, refresh: last.refresh, turn: last.turn, energy: last.energy, answered, passes, screens,
+      });
+    }
 
     /** The probe as plain data: the lab card's instance, zones, decision, prompt, and events. */
     const read = () =>

@@ -2,13 +2,13 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../catalog";
 import { createEngine } from "../engine";
-import { createFoldAdapter } from "../fold/slice";
-import { FRONT_RANK_SIZE } from "../state/ids";
-import { cardLabBattle, cardLabEnemyAction, cardLabStageFromUnknown, type CardLabStage } from "./card-lab";
+import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
+import { FRONT_RANK_SIZE, opponent } from "../state/ids";
+import { cardLabBattle, cardLabEnemyAction, cardLabStageFromUnknown, dreamwellLabBattle, type CardLabStage } from "./card-lab";
 import { aiDecision } from "../policy/decide";
 import { supportersOf } from "../continuous/support";
 import { applyDebugOp, withHistory } from "../debug/debug-actions";
-import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
+import { SYNTHETIC, SYNTHETIC_DREAMWELL, syntheticId, testCatalog } from "./synthetic-cards";
 import { activated, exhaustSelf, reclaim, energy } from "../dsl/builders";
 import { chooseOne } from "../effects/primitives/choose-one";
 import { gainPoints } from "../effects/primitives/gain-points";
@@ -16,6 +16,70 @@ import { abandon } from "../effects/primitives/abandon";
 import { getLogEntries } from "../../logging";
 import { DSL } from "./dsl-cards";
 import { engine } from "./tooling.fixtures";
+import { parsePromptId } from "../../types/identifiers";
+
+describe("forced Dreamwell lab", () => {
+  const catalog = SYNTHETIC_DREAMWELL.map((card) => card.id);
+  for (const side of ["player", "enemy"] as const) for (const definition of [SYNTHETIC_DREAMWELL[6], SYNTHETIC_DREAMWELL[8]]) {
+    it(`draws ${definition.energyAdded} energy for ${side} through a normal saved pass`, () => {
+      const lab = dreamwellLabBattle(engine, { cardId: definition.id, side }, catalog);
+      const base = withHistory(lab.slice);
+      const prior = opponent(side);
+      expect(lab.init.dreamwell).toEqual(catalog);
+      expect(base.committed.dreamwell).toEqual({ deck: [definition.id], next: 0, catalog });
+      const adapter = createFoldAdapter(engine);
+      const wrongSide = adapter.reduce(base, { kind: "battleAction", side, action: { kind: "pass" } });
+      expect(wrongSide).toMatchObject({ kind: "bounced", reason: "notYourDecision" });
+      expect(adapter.reduce(base, { kind: "answer", side: prior, promptId: parsePromptId("0:0:9"), value: [] })).toMatchObject({ kind: "bounced", reason: "noPendingPrompt" });
+      const intent: BattleIntent = { kind: "battleAction", side: prior, action: { kind: "pass" } };
+      const drawn = adapter.reduce(base, intent);
+      if (drawn.kind !== "applied") throw new Error(drawn.reason);
+      expect(drawn.error).toBeNull();
+      expect(drawn.published.filter((event) => event.kind === "dreamwellDrawn")).toEqual([
+        { kind: "dreamwellDrawn", side, card: definition.id, energyAdded: definition.energyAdded },
+      ]);
+      expect(drawn.slice.committed.turn).toMatchObject({ active: side, phase: "day" });
+      expect(drawn.slice.committed.sides[side]).toMatchObject({ currentEnergy: 2 + definition.energyAdded, maxEnergy: 2 + definition.energyAdded });
+      expect(drawn.slice.committed.dreamwell).toEqual({ deck: [definition.id], next: 1, catalog });
+      const saved = JSON.parse(JSON.stringify(base)) as typeof base;
+      expect(adapter.reduce(saved, intent)).toEqual(drawn);
+      const undo = applyDebugOp(engine, JSON.parse(JSON.stringify(drawn.slice)) as typeof drawn.slice, { kind: "undo", keep: 0 });
+      if (undo.kind !== "applied") throw new Error("saved draw cannot undo");
+      expect(undo.slice.committed.dreamwell.next).toBe(0);
+      const replay = adapter.reduce(undo.slice, intent);
+      expect(replay.kind === "applied" ? replay.published : []).toEqual(drawn.published);
+    });
+  }
+
+  it("rejects a requested UUID outside the supplied catalog before publishing a fixture", () => {
+    expect(() => dreamwellLabBattle(engine, { cardId: catalog[0], side: "player" }, catalog.slice(1))).toThrow();
+  });
+
+  it("builds the subsequent normal cycle from the complete catalog and configured tiers", () => {
+    const lab = dreamwellLabBattle(engine, { cardId: catalog[6], side: "player" }, catalog);
+    let slice: BattleSlice = { ...lab.slice, committed: { ...lab.slice.committed, config: { ...lab.slice.committed.config,
+      dreamwell: { recurringOrders: [4, 2], cardsPerRecurringOrder: 2, minimumConstructedLength: 1 },
+    } } };
+    const adapter = createFoldAdapter(engine);
+    const draws = [];
+    for (let intents = 0; draws.length < 2 && intents < 8; intents++) {
+      const decision = engine.decision(slice.committed);
+      if (decision === null) throw new Error("cycle fixture lost its decision");
+      const outcome = adapter.reduce(slice, { kind: "battleAction", side: decision.side, action: { kind: "pass" } });
+      if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("cycle fixture pass failed");
+      slice = outcome.slice;
+      draws.push(...outcome.published.filter((event) => event.kind === "dreamwellDrawn"));
+    }
+    expect(draws).toHaveLength(2);
+    expect(draws[0]).toMatchObject({ side: "player", card: catalog[6] });
+    expect(draws[1]).toMatchObject({ side: "enemy" });
+    const cycle = slice.committed.dreamwell.deck.slice(1);
+    expect(cycle.map((id) => engine.catalog.dreamwellCard(id).order)).toEqual([4, 4, 2, 2]);
+    expect(new Set(cycle).size).toBe(4);
+    expect(slice.committed.dreamwell.next).toBe(2);
+    expect(slice.committed.dreamwell.catalog).toEqual(catalog);
+  });
+});
 
 describe("card-lab battle", () => {
   it("deals the card's variant to the side playing it, and opens with the enemy's play as the enemy", () => {

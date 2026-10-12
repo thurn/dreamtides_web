@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { createSweepCounts, parseSweepArgs, runSweepCell, sweepCards } from "./card-sweep.mjs";
+import cardLabPlay from "./scenarios/card-lab-play.mjs";
 
 /** @param {string[]} failureKinds @param {string} verdict */
 const report = (failureKinds = [], verdict = "fail") => ({
@@ -25,6 +26,41 @@ async function cell(outcomes, closed = false) {
 }
 
 describe("sweep cell attempts", () => {
+  for (const invalid of [null, "splitBatch", "wrongDaySide", "missingDraw"]) it(`checks durable normal-turn draw evidence at Dusk (${String(invalid)})`, async () => {
+    const uuid = "5e5e5e5e-0000-4000-8000-000000000e06";
+    const lab = { card: uuid, status: "ready", reason: null, detail: null, eligibleVariants: ["base"], entityKind: "dreamwell", cardStatus: "pending", cardType: "Dreamwell" };
+    const draw = { kind: "dreamwellDrawn", side: "enemy", card: uuid, energyAdded: 0 };
+    const committed = { instances: {}, stack: [], result: null, turn: { active: "enemy", phase: "dusk" }, dreamwell: { next: 1 }, sides: { enemy: { currentEnergy: 2, maxEnergy: 2 } } };
+    const events = [
+      ...(invalid === "missingDraw" ? [] : [{ seq: 7, index: 2, event: draw }]),
+      { seq: invalid === "splitBatch" ? 8 : 7, index: 3, event: { kind: "energyChanged", side: "enemy", cause: "refresh", current: 2, max: 2, maxChange: 0 } },
+      { seq: invalid === "splitBatch" ? 8 : 7, index: 8, event: { kind: "phaseChanged", active: invalid === "wrongDaySide" ? "player" : "enemy", phase: "day" } },
+    ];
+    vi.stubGlobal("window", { __cardLab: lab, __engineProbe: { slice: { committed, inFlight: null }, decision: { side: "player" }, pending: null, events } });
+    try {
+      const qa = /** @type {import("./prelude.mjs").Qa} */ (/** @type {unknown} */ ({
+        args: { card: uuid, variant: "base", as: "enemy" }, viewport: { width: 1440, height: 900 },
+        open: async () => {}, waitVisible: async () => {},
+        waitFor: (/** @type {string} */ _label, /** @type {() => unknown} */ observe) => Promise.resolve(observe()),
+        read: (/** @type {(arg: unknown) => unknown} */ observe, /** @type {unknown} */ arg) => Promise.resolve(observe(arg)),
+        caps: () => Promise.resolve({ errors: [], rejections: [], consoleErrors: [] }),
+        isTimeout: () => false,
+        battle: { playUntil: async (/** @type {(state: { canPass: boolean }) => Promise<boolean>} */ settled) => {
+          if (!await settled({ canPass: true })) throw new Error("normal-turn evidence was not accepted");
+          return { answers: 0, passes: 0 };
+        } },
+      }));
+      expect(await cardLabPlay(qa)).toMatchObject(invalid === null || invalid === "splitBatch"
+        ? { verdict: "pending", drawn: draw, day: { active: "enemy", phase: "day" }, turn: { active: "enemy", phase: "dusk" } }
+        : { verdict: "fail" });
+    } finally { vi.unstubAllGlobals(); }
+  });
+  it("retains the Dreamwell entity kind from a successful base report", async () => {
+    const draw = { ...report([], "pending"), result: { ...report([], "pending").result, lab: { entityKind: "dreamwell", eligibleVariants: ["base"] } } };
+    const result = await cell([draw]);
+    expect(result.records[0]).toMatchObject({ entityKind: "dreamwell", verdict: "pending", effective: true });
+    expect(result.result.lab?.eligibleVariants).toEqual(["base"]);
+  });
   it("parses explicit cell selection and rejects malformed execution budgets", () => {
     const uuid = "5e5e5e5e-0000-4000-8000-000000000002";
     expect(parseSweepArgs(["--bead", "synthetic", "--cards", uuid, "--variants", "amplified",

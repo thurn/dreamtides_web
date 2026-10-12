@@ -32,6 +32,37 @@ import {
 } from "./qa-scenes.fixtures";
 
 describe("the battle layer QA scenes", () => {
+  it("loads a forced Dreamwell UUID for either side and validates requests before publishing it", () => {
+    const content = battleSceneContent();
+    const card = content.dreamwellCards[0];
+    const report = () => (globalThis as { __cardLab?: unknown }).__cardLab;
+    const labOf = (token: string) => {
+      const id = parseQaSceneId(token);
+      const journey = buildQaScene(id, content, SCENE_OPTIONS);
+      if (journey === null) throw new Error("scene did not build");
+      return { journey, battle: buildQaSceneBattle(id, content, journey) };
+    };
+    for (const side of ["player", "enemy"] as const) {
+      const { journey, battle } = labOf(`card-lab:${card.id}:base:${side}`);
+      expect(report()).toMatchObject({ status: "ready", entityKind: "dreamwell", cardStatus: "pending", eligibleVariants: ["base"] });
+      expect(battle?.engine?.init.dreamwell).toEqual(content.dreamwellCards.map((definition) => definition.id));
+      expect(battle?.engine?.slice.committed.dreamwell).toEqual({ deck: [card.id], next: 0, catalog: content.dreamwellCards.map((definition) => definition.id) });
+      expect(battle?.engine?.slice.committed.turn).toMatchObject({ active: side === "player" ? "enemy" : "player", phase: "night" });
+      const loaded = validateLoadedState({ ...initialFoldState(journey.seed, TEST_CONTENT_CONFIG), journey }, { snapshot: journey, battle });
+      expect(loaded).not.toBeNull();
+      expect(battle?.engine?.slice.history?.entries).toEqual([]);
+    }
+    const errors = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    try {
+      for (const [suffix, reason] of [["bogus:player", "unknownVariant"], ["base:nobody", "unknownSide"], ["amplified:player", "ineligibleVariant"], ["base:player:%7B%7D", "invalidStage"]]) {
+        const { battle } = labOf(`card-lab:${card.id}:${suffix}`);
+        expect(report()).toMatchObject({ status: "rejected", reason });
+        expect(battle?.engine?.slice.history).toBeUndefined();
+      }
+      labOf("card-lab:not-a-uuid:base:player");
+      expect(report()).toMatchObject({ status: "rejected", reason: "unknownCard" });
+    } finally { errors.mockRestore(); }
+  });
   const displayLayers = [1, 2, 3, 4, 5, 6, 7];
 
   const battleScenes = QA_SCENES.filter(

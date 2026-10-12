@@ -19,6 +19,7 @@
  * | a new loop on offer; `loopStarted`, `loopEnded` events | `engine.loop` |
  * | random-stream counters advanced by a step | `engine.rng`, one per stream |
  * | a `winConditionMet` event | `engine.winCondition` |
+ * | a `dreamwellDrawn` event | `engine.dreamwell`, with UUID, side and energy |
  * | an `effectStarted` event whose character gains another card's abilities | `engine.abilitiesGained` |
  * | a `battleEnded` event | `engine.battleEnded` |
  * | a `feasibilityBounded` event; a play or activation a decision leaves out because its legality search spent its budget (`ApplyResult.bounded`) | `engine.feasibility` |
@@ -88,6 +89,7 @@ export type EngineLogRecord =
       readonly draws: number;
     })
   | (RecordBase & { readonly event: "engine.extraTurn"; readonly detail: EventOf<"extraTurnGranted"> })
+  | (RecordBase & { readonly event: "engine.dreamwell"; readonly detail: EventOf<"dreamwellDrawn"> })
   | (RecordBase & { readonly event: "engine.winCondition"; readonly detail: EventOf<"winConditionMet"> })
   /** The character, the card whose abilities it gained (by UUID and variant), its source, and when the gain ends. */
   | (RecordBase & { readonly event: "engine.abilitiesGained"; readonly detail: EventOf<"effectStarted"> })
@@ -117,6 +119,8 @@ export function eventLogRecord(event: EngineEvent, version: number): EngineLogRe
       return { event: "engine.loop", version, detail: event };
     case "extraTurnGranted":
       return { event: "engine.extraTurn", version, detail: event };
+    case "dreamwellDrawn":
+      return { event: "engine.dreamwell", version, detail: event };
     case "winConditionMet":
       return { event: "engine.winCondition", version, detail: event };
     case "effectStarted":

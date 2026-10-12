@@ -8,11 +8,11 @@ import { contentAvatarDefinitions, contentCardDefinitions, contentDreamsignDefin
 import { createEngine } from "../../src/engine/engine";
 import { SIDES, type Side } from "../../src/engine/state/ids";
 import { CARD_LAB_VARIANTS, cardLabVariant, variantTransfiguration, type CardLabVariant } from "../../src/engine/testing/card-lab";
-import { runCardLabPreflight } from "../../src/engine/testing/lab-preflight";
+import { runCardLabPreflight, runDreamwellLabPreflight } from "../../src/engine/testing/lab-preflight";
 import { PROMPT_LAB_DEFINITIONS } from "../../src/engine/testing/prompt-lab";
 import { eligibleTransfigurations } from "../../src/transfiguration/transfiguration-logic";
 import { parseCardId, type CardId } from "../../src/types/card-identity";
-import { parseDeckEntryId } from "../../src/types/identifiers";
+import { parseDeckEntryId, parseDreamwellCardId } from "../../src/types/identifiers";
 
 function options(argv: readonly string[]) {
   let cards: CardId[] = [];
@@ -50,13 +50,15 @@ function main() {
   const cards = new Map([...loadCardsV2Database().values()].map((card) => [card.id, card]));
   const transfigurations = loadTransfigurationData();
   const pool = contentCardDefinitions();
+  const dreamwell = contentDreamwellDefinitions();
+  const dreamwellById = new Map(dreamwell.map((card) => [card.id, card]));
   // Content UUIDs have precedence; append only lab definitions not already present.
   const withLab = <Id, T extends { readonly id: Id }>(content: readonly T[], lab: readonly T[]): T[] => {
     const known = new Set(content.map((entry) => entry.id));
     return [...content, ...lab.filter((entry) => !known.has(entry.id))];
   };
   const engine = createEngine(createCatalog(
-    withLab(pool, PROMPT_LAB_DEFINITIONS.cards), contentDreamwellDefinitions(),
+    withLab(pool, PROMPT_LAB_DEFINITIONS.cards), dreamwell,
     {
       avatars: withLab(contentAvatarDefinitions(), PROMPT_LAB_DEFINITIONS.emblems.avatars ?? []),
       dreamsigns: withLab(contentDreamsignDefinitions(), PROMPT_LAB_DEFINITIONS.emblems.dreamsigns ?? []),
@@ -67,9 +69,14 @@ function main() {
   for (const uuid of requested.cards) for (const side of requested.sides) for (const variant of requested.variants) {
     const runStarted = performance.now();
     const card = cards.get(uuid);
+    const dreamwellCard = card === undefined ? dreamwellById.get(parseDreamwellCardId(uuid)) : undefined;
     const transfiguration = variantTransfiguration(variant);
     const eligible = card !== undefined && (transfiguration === null || eligibleTransfigurations(transfigurations, card).includes(transfiguration));
-    const row = card === undefined
+    const row = dreamwellCard !== undefined
+      ? variant !== "base"
+        ? { uuid: dreamwellCard.id, side, variant, verdict: "skip" as const, reason: "ineligibleVariant", detail: null }
+        : runDreamwellLabPreflight(engine, { cardId: dreamwellCard.id, side }, dreamwell.map((definition) => definition.id))
+      : card === undefined
       ? { uuid, side, variant, verdict: "fail" as const, reason: "unknownCard", detail: "UUID is absent from the content catalog" }
       : !eligible
         ? { uuid, side, variant, verdict: "skip" as const, reason: "ineligibleVariant", detail: null }

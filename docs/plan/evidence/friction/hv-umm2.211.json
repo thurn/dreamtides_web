@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.211",
+  "phase": 5,
+  "implementMin": 59.716865266666666,
+  "localValidationS": {
+    "focused": 2.6139342909991683,
+    "review": 22.03642466599922,
+    "knip": 2.109945250000237,
+    "full": 80.51711779099969,
+    "preflight": 1.0408239999997022,
+    "browser": 188.00388150000072,
+    "sweep": 172.32584991699878
+  },
+  "hostLoad": 6.3388671875,
+  "testDelta": {
+    "files": 0,
+    "lines": 155,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 13.64083685,
+      "note": "QA-repair elapsed window: visual pointer-hit and ephemeral live-Day/publication-batch assumptions refined to durable ordered observations; includes separately retained lease waits."
+    }
+  ]
+}

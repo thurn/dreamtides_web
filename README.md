@@ -690,6 +690,17 @@ helper.
 
 Run `npm run lab:preflight -- --cards <uuid,...> [--variants all|<v>,...] [--as player|enemy|both]` first for Node-only fixture and resolution checks; the browser sweep provides acceptance.
 
+Dreamwell UUIDs use the same `--cards` flag and
+`?goto=card-lab&card=<uuid>&variant=base&as=player|enemy` URL. Their lab parks
+on the preceding side's Night with that UUID as the next shared draw. A normal
+pass enters the requested side's turn, applies its catalog energy, and publishes
+`dreamwellDrawn`; the persisted `engine.dreamwell` log records UUID, side and
+energy. The complete Dreamwell catalog remains available for recurring cycles.
+Dreamwell cards accept the base variant and report other variants as ineligible;
+declared `labStage` is rejected. The preflight and browser sweep check the actual
+draw and settled prompts/stack, and classify a successful pending definition as
+`pending`. Ordinary card UUIDs use their played-instance and resolution checks.
+
 ```bash
 node scripts/qa/card-sweep.mjs --bead <id> --cards <uuid,...|starter> \
   [--variants all|<v>,...] [--as player|enemy|both] [--timeout <s>] [--port <n>] [--capture]

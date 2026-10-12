@@ -5,8 +5,8 @@ import type { Engine } from "../engine";
 import type { EngineEvent } from "../events";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
 import { firstLegalAnswer } from "../prompts/answers";
-import type { CardId, InstanceId, Side, Zone } from "../state/ids";
-import { cardLabBattle, type CardLabRequest, type CardLabVariant } from "./card-lab";
+import type { CardId, DreamwellCardId, InstanceId, Side, Zone } from "../state/ids";
+import { cardLabBattle, dreamwellLabBattle, type CardLabRequest, type CardLabVariant, type DreamwellLabRequest } from "./card-lab";
 
 type FailureReason = "fixtureFailed" | "unplayable" | "engineError" | "stalled" | "missingResolution" | "unexpectedZone";
 
@@ -28,6 +28,66 @@ export interface LabPreflightResult {
 
 class PreflightFailure extends Error {
   constructor(readonly reason: FailureReason, message: string) { super(message); }
+}
+
+/** Dreamwell cards are UUID sources without a physical card instance or zone. */
+export interface DreamwellLabPreflightResult {
+  readonly uuid: DreamwellCardId;
+  readonly side: Side;
+  readonly variant: "base";
+  readonly entityKind: "dreamwell";
+  readonly verdict: "pass" | "pending" | "fail";
+  readonly reason: "fixtureFailed" | "engineError" | "stalled" | "missingDraw" | null;
+  readonly detail: string | null;
+  readonly instance: null;
+  readonly zone: null;
+  readonly drawn: boolean;
+  readonly answers: number;
+  readonly passes: number;
+  readonly events: readonly EngineEvent[];
+}
+
+/** Enters the requested side's next turn through normal passes and answers. */
+export function runDreamwellLabPreflight(
+  engine: Engine,
+  request: DreamwellLabRequest,
+  catalog: readonly DreamwellCardId[],
+  maxIntents: number = BATTLE.labPreflight.maxIntents,
+): DreamwellLabPreflightResult {
+  const events: EngineEvent[] = [];
+  let answers = 0;
+  let passes = 0;
+  let fixture = true;
+  const drawn = () => events.some((event) => event.kind === "dreamwellDrawn" && event.side === request.side && event.card === request.cardId);
+  const result = (verdict: DreamwellLabPreflightResult["verdict"], reason: DreamwellLabPreflightResult["reason"] = null, detail: string | null = null): DreamwellLabPreflightResult => ({
+    uuid: request.cardId, side: request.side, variant: "base", entityKind: "dreamwell", verdict, reason, detail,
+    instance: null, zone: null, drawn: drawn(), answers, passes, events,
+  });
+  try {
+    if (!Number.isSafeInteger(maxIntents) || maxIntents < 1) return result("fail", "stalled", "Intent guard must be a positive safe integer");
+    let slice = dreamwellLabBattle(engine, request, catalog).slice;
+    fixture = false;
+    const adapter = createFoldAdapter(engine);
+    for (let intents = 0; ; intents++) {
+      const pending = adapter.pending(slice);
+      if (drawn() && pending === null && slice.inFlight === null && slice.committed.stack.length === 0) break;
+      if (intents >= maxIntents) return result("fail", "stalled", `Intent guard exhausted after ${maxIntents} intents`);
+      const decision = engine.decision(slice.committed);
+      if (pending === null && (slice.inFlight !== null || decision === null)) return result("fail", "missingDraw", "No decision reaches the requested draw");
+      const intent: BattleIntent = pending === null
+        ? { kind: "battleAction", side: decision!.side, action: { kind: "pass" } }
+        : { kind: "answer", side: pending.prompt.side, promptId: pending.prompt.id, value: firstLegalAnswer(pending.prompt) };
+      const outcome = adapter.reduce(slice, intent);
+      if (outcome.kind === "bounced") return result("fail", "engineError", `Intent rejected: ${outcome.reason}`);
+      events.push(...outcome.published);
+      slice = outcome.slice;
+      if (outcome.error !== null) return result("fail", "engineError", outcome.error.message);
+      if (pending === null) passes++; else answers++;
+    }
+    return result(engine.catalog.dreamwellCard(request.cardId).status === "pending" ? "pending" : "pass");
+  } catch (error) {
+    return result("fail", fixture ? "fixtureFailed" : "engineError", error instanceof Error ? error.message : String(error));
+  }
 }
 
 /**

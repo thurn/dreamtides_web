@@ -10,14 +10,33 @@ import { createCopyInHand } from "../effects/primitives/create-copy-in-hand";
 import { LAB, PROMPT_LAB_DEFINITIONS } from "./prompt-lab";
 import { parseCardSubtype } from "../../types/card-identity";
 import { cardLabBattle } from "./card-lab";
-import { runCardLabPreflight } from "./lab-preflight";
+import { runCardLabPreflight, runDreamwellLabPreflight } from "./lab-preflight";
 import { labBoard } from "./lab-solver";
 import { STACK } from "./stack-cards";
-import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
+import { SYNTHETIC, SYNTHETIC_DREAMWELL, syntheticId, testCatalog } from "./synthetic-cards";
 
 const definitions = PROMPT_LAB_DEFINITIONS;
 const engine = createEngine(createCatalog(definitions.cards, [], definitions.emblems, definitions.figments));
 const request = (card: EngineCardDefinition, side: "player" | "enemy" = "player") => ({ entry: { cardId: card.id }, variant: "base" as const, side });
+
+describe("node Dreamwell lab preflight", () => {
+  const labEngine = createEngine(testCatalog());
+  const catalog = SYNTHETIC_DREAMWELL.map((card) => card.id);
+  for (const side of ["player", "enemy"] as const) for (const definition of [SYNTHETIC_DREAMWELL[6], SYNTHETIC_DREAMWELL[8]]) {
+    it(`reports the actual ${side} draw for energy ${definition.energyAdded}`, () => {
+      const result = runDreamwellLabPreflight(labEngine, { cardId: definition.id, side }, catalog);
+      expect(result).toMatchObject({ uuid: definition.id, side, entityKind: "dreamwell", variant: "base", verdict: definition.status === "pending" ? "pending" : "pass", reason: null, drawn: true, instance: null, zone: null, passes: 1, answers: 0 });
+      expect(result.events.filter((event) => event.kind === "dreamwellDrawn")).toEqual([
+        { kind: "dreamwellDrawn", side, card: definition.id, energyAdded: definition.energyAdded },
+      ]);
+    });
+  }
+  it("classifies an unavailable fixture and an invalid intent budget", () => {
+    const source = { cardId: catalog[0], side: "player" as const };
+    expect(runDreamwellLabPreflight(labEngine, source, catalog.slice(1))).toMatchObject({ verdict: "fail", reason: "fixtureFailed", events: [], drawn: false });
+    expect(runDreamwellLabPreflight(labEngine, source, catalog, 0)).toMatchObject({ verdict: "fail", reason: "stalled", events: [], drawn: false });
+  });
+});
 
 describe("node card-lab preflight", () => {
   it("resolves synthetic lab cards through legal target, private-card, arrangement, and discard prompts on both sides", () => {
