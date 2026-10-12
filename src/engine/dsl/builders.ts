@@ -369,13 +369,14 @@ export function topOfDeck(count = 1, filter: CardFilter = {}, player: PlayerRef 
  * matching cards of `player`'s `zone`, picked at random as the effect
  * resolves; `costGreaterThan` keeps only cards whose copiable cost is above
  * that value ("with higher cost"); `costExactly` keeps only equal copiable
- * costs. Both resolving bounds apply together with the filter.
+ * costs; `costLessThan` keeps only strictly lower copiable costs. All
+ * resolving bounds apply together with the filter.
  */
 export function randomIn(
   zone: CountedZone,
   count: number,
   filter: CardFilter = {},
-  options: { readonly player?: PlayerRef; readonly costGreaterThan?: ValueExpr; readonly costExactly?: ValueExpr } = {},
+  options: { readonly player?: PlayerRef; readonly costGreaterThan?: ValueExpr; readonly costExactly?: ValueExpr; readonly costLessThan?: ValueExpr } = {},
 ): ZoneRandomSpec {
   if (!Number.isSafeInteger(count) || count < 1) throw new Error("randomIn count must be a positive safe integer");
   return {
@@ -387,6 +388,7 @@ export function randomIn(
     count,
     ...(options.costGreaterThan === undefined ? {} : { costGreaterThan: options.costGreaterThan }),
     ...(options.costExactly === undefined ? {} : { costExactly: options.costExactly }),
+    ...(options.costLessThan === undefined ? {} : { costLessThan: options.costLessThan }),
   };
 }
 

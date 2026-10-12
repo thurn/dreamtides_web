@@ -1,0 +1,953 @@
+{
+  "bead": "hv-umm2.585",
+  "base": "36c5e550e4e9e84be5c01cb0e1c88109cc4801db",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/strict-random-cost585-sol",
+  "dispatch": {
+    "first": "2026-10-12T23:23:08.759Z",
+    "call": "call_af6248f0f4fb4d7c9112ba7e2b90d1c8",
+    "modelStart": null,
+    "modelStartQualification": "Unknown; first dispatch is measured native receipt, not inferred model start."
+  },
+  "implementWindowObservation": {
+    "start": "actual first post-claim helper dispatch; includes source-first audit, parent coordination, queue, verification and endpoint wait",
+    "end": "2026-10-12T23:50:59.504537+00:00",
+    "endQualification": "Actual UTC sample immediately before final schema/triggers and normal Git commit; commit timestamps are not forced. Parent/helper delivery receipt retains actual Git author/committer timestamps and this sample, with wall seconds difference."
+  },
+  "setup": {
+    "helper": {
+      "command": "npm install",
+      "worktree": "/Users/dthurn/dreamtides_web/.worktrees/strict-random-cost585-sol",
+      "tool_wall_seconds": 0.67644125,
+      "exit": 0,
+      "npm_report": "up to date, audited 390 packages in 666ms",
+      "start_UTC": "unknown: prior tool result contains no timestamp",
+      "PID_PG": "unknown: prior direct tool call",
+      "lineage": "helper own install; parent install separately reported in dispatch notes"
+    },
+    "parent": {
+      "wallSeconds": 3.304316542,
+      "start": "2026-10-12T23:20:49.520350Z",
+      "end": "2026-10-12T23:20:52.824796Z",
+      "pid": 29799,
+      "pgid": 29799,
+      "exit": 0,
+      "provenance": "parent setup, reported in native dispatch-admission; distinct from helper install"
+    }
+  },
+  "sourceScope": "ZoneRandomSpec optional ValueExpr bound; randomIn option transport/JSDoc; resolving random case evaluate once and conjoin strict copiable comparison; own plain277-line eagerly discovered contracts. All captured-state/value/static/privacy/fold/sharedtest/catalog/production/UI bodies are read-only.",
+  "sourceSHA256": {
+    "src/engine/dsl/types.ts": "afbbb0ce2f3c330db8af34b2dec8fa1066361ae2fd5f08c172bb5ec56a5b76d5",
+    "src/engine/dsl/builders.ts": "46793e595d771f43bd32c9f0187b1ea3888b3ec9884d6f76507686dd7d9c4a3f",
+    "src/engine/effects/interpreter.ts": "e323db68cd03e1bca690427c929f84a30e3413a6fe5893e7c69f48cf541db692",
+    "src/engine/effects/primitives/contracts/random-less-cost.contracts.ts": "61d33da58947575d45024d77e8c826e06c9caf50b735a92be81060f867324143"
+  },
+  "parentEndpoint": {
+    "at": "2026-10-12T23:46:58.058453+00:00",
+    "verified": true,
+    "ack": "/tmp/codex-01a130c8-strict-random585/parent-endpoint-verification.json",
+    "sha256": "be9ff81afa1556c57c0fef24f58ac098287799cb1c55fb8eddb080717415cff8"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review typecheck/lint/import-cycles/related-test group starting at2026-10-12T23:36:42.304\u2013306Z; 1-minute load15.916015625 from review1 transcript",
+        "source": "review1.stdout"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "reviewStepStart": {
+      "at": "2026-10-12T23:36:42.304Z",
+      "oneMinute": 15.916015625
+    },
+    "receipts": "Per-command end loads in commandReceipts; start samples exist only where explicitly retained. Values are not low-load budget measurements."
+  },
+  "commandReceipts": {
+    "coverage": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": "2026-10-12T23:38:08.343729+00:00",
+      "end": "2026-10-12T23:38:12.918578+00:00",
+      "wall_seconds": 4.574739083007444,
+      "pid": 53557,
+      "pgid": 53557,
+      "exit": 0,
+      "load_end": [
+        9.8251953125,
+        12.69091796875,
+        12.947265625
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "eager": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "start": "2026-10-12T23:36:24.685275+00:00",
+      "end": "2026-10-12T23:36:33.049287+00:00",
+      "wall_seconds": 8.363845749991015,
+      "pid": 46050,
+      "pgid": 46050,
+      "exit": 0,
+      "load_end": [
+        16.3515625,
+        14.125,
+        13.41552734375
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "focused1": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "random strict lower|random lower bound"
+      ],
+      "start": "2026-10-12T23:33:39.267162+00:00",
+      "end": "2026-10-12T23:33:45.609801+00:00",
+      "wall_seconds": 6.34248279199528,
+      "pid": 86287,
+      "pgid": 86287,
+      "exit": 1,
+      "load_end": [
+        5.72509765625,
+        10.94677734375,
+        12.37353515625
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "focused2": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "random strict lower|random lower bound"
+      ],
+      "start": "2026-10-12T23:34:27.216031+00:00",
+      "end": "2026-10-12T23:34:33.654915+00:00",
+      "wall_seconds": 6.438727000000654,
+      "pid": 87495,
+      "pgid": 87495,
+      "exit": 1,
+      "load_end": [
+        6.9326171875,
+        10.33642578125,
+        12.0576171875
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "focused3": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "random strict lower|random lower bound"
+      ],
+      "start": "2026-10-12T23:35:12.888493+00:00",
+      "end": "2026-10-12T23:35:18.830193+00:00",
+      "wall_seconds": 5.941525583009934,
+      "pid": 90249,
+      "pgid": 90249,
+      "exit": 0,
+      "load_end": [
+        19.95068359375,
+        13.21630859375,
+        13.0224609375
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "fuzz-capability-probe-attempt1": {
+      "start": "2026-10-12T23:26:14.719998+00:00",
+      "end": "2026-10-12T23:26:15.661150+00:00",
+      "wall_seconds": 0.9410967500007246,
+      "pid": 27642,
+      "pgid": 27642,
+      "exit": 0,
+      "load_end": [
+        10.50732421875,
+        12.24365234375,
+        12.20361328125
+      ],
+      "outer_queue": "none",
+      "games": 1
+    },
+    "fuzz-capability-probe-attempt2": {
+      "start": "2026-10-12T23:26:26.861661+00:00",
+      "end": "2026-10-12T23:26:28.012995+00:00",
+      "wall_seconds": 1.1513333329930902,
+      "pid": 28738,
+      "pgid": 28738,
+      "exit": 0,
+      "load_end": [
+        12.80322265625,
+        12.64453125,
+        12.345703125
+      ],
+      "outer_queue": "none",
+      "games": 1,
+      "attempt1": "outside-module scratch.ts transformed CommonJS exposed import-cycle runtime; .mts enforces project ESM"
+    },
+    "fuzz-capability-probe": {
+      "start": "2026-10-12T23:26:53.176636+00:00",
+      "end": "2026-10-12T23:26:53.819931+00:00",
+      "wall_seconds": 0.6433209169917973,
+      "pid": 54740,
+      "pgid": 54740,
+      "exit": 0,
+      "load_end": [
+        27.00146484375,
+        15.95849609375,
+        13.5458984375
+      ],
+      "outer_queue": "none",
+      "games": 1,
+      "qualification": "attempt3 explicit interpreter import prelude; previous two kernel errors retained; not semantic strictness failure"
+    },
+    "fuzz-valid-one": {
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/codex-01a130c8-strict-random585/helper/fuzz-valid-capability.mts"
+      ],
+      "start": "2026-10-12T23:33:53.914066+00:00",
+      "end": "2026-10-12T23:33:55.357286+00:00",
+      "wall_seconds": 1.4431339580041822,
+      "pid": 86768,
+      "pgid": 86768,
+      "exit": 0,
+      "load_end": [
+        5.1455078125,
+        10.6513671875,
+        12.251953125
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "fuzz300-attempt1": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node_modules/.bin/tsx",
+        "/tmp/codex-01a130c8-strict-random585/helper/fuzz300.mts"
+      ],
+      "start": "2026-10-12T23:38:24.535386+00:00",
+      "end": "2026-10-12T23:39:46.886059+00:00",
+      "wall_seconds": 82.34978508400673,
+      "pid": 54578,
+      "pgid": 54578,
+      "exit": 1,
+      "load_end": [
+        7.3388671875,
+        11.10693359375,
+        12.30615234375
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "fuzz300": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node_modules/.bin/tsx",
+        "/tmp/codex-01a130c8-strict-random585/helper/fuzz300.mts"
+      ],
+      "start": "2026-10-12T23:42:18.918454+00:00",
+      "end": "2026-10-12T23:44:26.944834+00:00",
+      "wall_seconds": 128.02513329200156,
+      "pid": 90464,
+      "pgid": 90464,
+      "exit": 0,
+      "load_end": [
+        4.103515625,
+        6.7275390625,
+        9.92626953125
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-12T23:37:52.499847+00:00",
+      "end": "2026-10-12T23:37:57.483058+00:00",
+      "wall_seconds": 4.982734082994284,
+      "pid": 52375,
+      "pgid": 52375,
+      "exit": 0,
+      "load_end": [
+        10.7236328125,
+        13.00244140625,
+        13.0595703125
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "mutation": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "random strict lower|random lower bound"
+      ],
+      "start": "2026-10-12T23:35:53.980997+00:00",
+      "end": "2026-10-12T23:35:58.802749+00:00",
+      "wall_seconds": 4.821490000002086,
+      "pid": 26036,
+      "pgid": 26036,
+      "exit": 1,
+      "load_end": [
+        21.603515625,
+        14.57666015625,
+        13.5341796875
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "negative-probe-attempt1": {
+      "command": "own node_modules/.bin/tsx scratch/negative-probe.ts",
+      "start": "2026-10-12T23:24:32.205521+00:00",
+      "end": "2026-10-12T23:24:34.570126+00:00",
+      "wall_seconds": 2.3649144170049112,
+      "pid": 59867,
+      "pgid": 59867,
+      "exit": 1,
+      "load_end": [
+        24.533203125,
+        13.6572265625,
+        12.61376953125
+      ],
+      "stage": "source-first diagnostic",
+      "outer_queue": "none; direct subprocess execution",
+      "typed_api": "Reflect.set diagnostic, not typed public API"
+    },
+    "negative-probe": {
+      "start": "2026-10-12T23:24:43.552695+00:00",
+      "end": "2026-10-12T23:24:46.017648+00:00",
+      "wall_seconds": 2.467830584006151,
+      "pid": 71225,
+      "pgid": 71225,
+      "exit": 0,
+      "load_end": [
+        23.44384765625,
+        13.92431640625,
+        12.72509765625
+      ],
+      "outer_queue": "none",
+      "qualification": "reflection diagnostic only",
+      "attempt1": "fixture failure, forced target autoanswered and unused ScriptedSource answer; not semantic failure"
+    },
+    "review1": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-12T23:36:41.049579+00:00",
+      "end": "2026-10-12T23:37:46.105667+00:00",
+      "wall_seconds": 65.05539683300594,
+      "pid": 47305,
+      "pgid": 47305,
+      "exit": 0,
+      "load_end": [
+        12.54296875,
+        13.44970703125,
+        13.21533203125
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T23:38:20.581020+00:00",
+      "end": "2026-10-12T23:38:20.698503+00:00",
+      "wall_seconds": 0.11736091700731777,
+      "pid": 54343,
+      "pgid": 54343,
+      "exit": 0,
+      "load_end": [
+        9.9189453125,
+        12.66259765625,
+        12.935546875
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "scratch-typecheck-attempt1": {
+      "command": [
+        "node_modules/.bin/tsc",
+        "-p",
+        "/tmp/codex-01a130c8-strict-random585/helper/scratch-tsconfig.json"
+      ],
+      "start": "2026-10-12T23:41:49.492722+00:00",
+      "end": "2026-10-12T23:41:51.622831+00:00",
+      "wall_seconds": 2.1300154170021415,
+      "pid": 89776,
+      "pgid": 89776,
+      "exit": 2,
+      "load_end": [
+        3.72802734375,
+        8.3916015625,
+        11.0517578125
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "scratch-typecheck": {
+      "command": [
+        "node_modules/.bin/tsc",
+        "-p",
+        "/tmp/codex-01a130c8-strict-random585/helper/scratch-tsconfig.json"
+      ],
+      "start": "2026-10-12T23:42:10.462871+00:00",
+      "end": "2026-10-12T23:42:12.694291+00:00",
+      "wall_seconds": 2.231312457995955,
+      "pid": 90336,
+      "pgid": 90336,
+      "exit": 0,
+      "load_end": [
+        4.44580078125,
+        8.23876953125,
+        10.93359375
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "typecheck1": {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-10-12T23:34:28.355273+00:00",
+      "end": "2026-10-12T23:34:41.618468+00:00",
+      "wall_seconds": 13.262997416997678,
+      "pid": 87656,
+      "pgid": 87656,
+      "exit": 2,
+      "load_end": [
+        9.82861328125,
+        10.8369140625,
+        12.21435546875
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "evidence-schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-12T23:49:40.448895+00:00",
+      "end": "2026-10-12T23:49:40.589414+00:00",
+      "wall_seconds": 0.14038408300257288,
+      "pid": 56359,
+      "pgid": 56359,
+      "exit": 0,
+      "load_end": [
+        15.40673828125,
+        10.53857421875,
+        10.380859375
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "evidence-friction": {
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-12T23:50:00.172235+00:00",
+      "end": "2026-10-12T23:50:00.371884+00:00",
+      "wall_seconds": 0.19953608300420456,
+      "pid": 77904,
+      "pgid": 77904,
+      "exit": 0,
+      "load_end": [
+        19.1064453125,
+        11.69970703125,
+        10.80078125
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    }
+  },
+  "validationResults": {
+    "focused3": "16 pass before two additional cases and parent strengthening",
+    "primitiveEager": "2371 pass; separate eager run precedes two strengthened assertions; final review includes final eager contract module",
+    "review1": "277 files/5248 tests, both typechecks, lint and import-cycles pass against frozen final4source SHA",
+    "knip": "pass",
+    "contentCoverage": "20 content-gate contracts pass",
+    "schema": "664 valid records/41 accepted historical unknown measurements before own evidence",
+    "evidenceSchema": "665 valid records/41 accepted historical unknown measurements including own evidence",
+    "frictionTriggers": "Pass; existing triggers dispositioned; no new >approximately10minute measured cause."
+  },
+  "semanticNegative": {
+    "qualification": "Reflect.set adds untyped runtime option solely for diagnosis; typed randomIn currently cannot transport costLessThan",
+    "rows": [
+      {
+        "probe": "constant-engine",
+        "side": "player",
+        "cost": 0,
+        "expected": [
+          "i2"
+        ],
+        "actual": [
+          "i2"
+        ],
+        "semanticNegative": false
+      },
+      {
+        "probe": "constant-engine",
+        "side": "player",
+        "cost": 1,
+        "expected": [
+          "i2"
+        ],
+        "actual": [
+          "i2"
+        ],
+        "semanticNegative": false
+      },
+      {
+        "probe": "constant-engine",
+        "side": "player",
+        "cost": 3,
+        "expected": [],
+        "actual": [
+          "i2"
+        ],
+        "semanticNegative": true
+      },
+      {
+        "probe": "constant-engine",
+        "side": "player",
+        "cost": 5,
+        "expected": [],
+        "actual": [
+          "i2"
+        ],
+        "semanticNegative": true
+      },
+      {
+        "probe": "constant-engine",
+        "side": "enemy",
+        "cost": 0,
+        "expected": [
+          "i2"
+        ],
+        "actual": [
+          "i2"
+        ],
+        "semanticNegative": false
+      },
+      {
+        "probe": "constant-engine",
+        "side": "enemy",
+        "cost": 1,
+        "expected": [
+          "i2"
+        ],
+        "actual": [
+          "i2"
+        ],
+        "semanticNegative": false
+      },
+      {
+        "probe": "constant-engine",
+        "side": "enemy",
+        "cost": 3,
+        "expected": [],
+        "actual": [
+          "i2"
+        ],
+        "semanticNegative": true
+      },
+      {
+        "probe": "constant-engine",
+        "side": "enemy",
+        "cost": 5,
+        "expected": [],
+        "actual": [
+          "i2"
+        ],
+        "semanticNegative": true
+      },
+      {
+        "probe": "retained-dissolved-public-engine",
+        "side": "player",
+        "copied": false,
+        "subjectCost": 0,
+        "sourceKind": "dreamsign",
+        "liveSubjectX": 7,
+        "ceased": false,
+        "retainedRead": 0,
+        "expected": [],
+        "actual": [
+          "i3",
+          "i4",
+          "i5",
+          "i6"
+        ],
+        "semanticNegative": true
+      },
+      {
+        "probe": "retained-dissolved-public-engine",
+        "side": "player",
+        "copied": false,
+        "subjectCost": 3,
+        "sourceKind": "dreamsign",
+        "liveSubjectX": 7,
+        "ceased": false,
+        "retainedRead": 3,
+        "expected": [
+          "i3",
+          "i4"
+        ],
+        "actual": [
+          "i3",
+          "i4",
+          "i5",
+          "i6"
+        ],
+        "semanticNegative": true
+      },
+      {
+        "probe": "retained-dissolved-public-engine",
+        "side": "player",
+        "copied": true,
+        "subjectCost": 0,
+        "sourceKind": "dreamsign",
+        "liveSubjectX": 7,
+        "ceased": true,
+        "retainedRead": 0,
+        "expected": [],
+        "actual": [
+          "i3",
+          "i4",
+          "i5",
+          "i6"
+        ],
+        "semanticNegative": true
+      },
+      {
+        "probe": "retained-dissolved-public-engine",
+        "side": "player",
+        "copied": true,
+        "subjectCost": 3,
+        "sourceKind": "dreamsign",
+        "liveSubjectX": 7,
+        "ceased": true,
+        "retainedRead": 3,
+        "expected": [
+          "i3",
+          "i4"
+        ],
+        "actual": [
+          "i3",
+          "i4",
+          "i5",
+          "i6"
+        ],
+        "semanticNegative": true
+      },
+      {
+        "probe": "retained-dissolved-public-engine",
+        "side": "enemy",
+        "copied": false,
+        "subjectCost": 0,
+        "sourceKind": "dreamsign",
+        "liveSubjectX": 7,
+        "ceased": false,
+        "retainedRead": 0,
+        "expected": [],
+        "actual": [
+          "i3",
+          "i4",
+          "i5",
+          "i6"
+        ],
+        "semanticNegative": true
+      },
+      {
+        "probe": "retained-dissolved-public-engine",
+        "side": "enemy",
+        "copied": false,
+        "subjectCost": 3,
+        "sourceKind": "dreamsign",
+        "liveSubjectX": 7,
+        "ceased": false,
+        "retainedRead": 3,
+        "expected": [
+          "i3",
+          "i4"
+        ],
+        "actual": [
+          "i3",
+          "i4",
+          "i5",
+          "i6"
+        ],
+        "semanticNegative": true
+      },
+      {
+        "probe": "retained-dissolved-public-engine",
+        "side": "enemy",
+        "copied": true,
+        "subjectCost": 0,
+        "sourceKind": "dreamsign",
+        "liveSubjectX": 7,
+        "ceased": true,
+        "retainedRead": 0,
+        "expected": [],
+        "actual": [
+          "i3",
+          "i4",
+          "i5",
+          "i6"
+        ],
+        "semanticNegative": true
+      },
+      {
+        "probe": "retained-dissolved-public-engine",
+        "side": "enemy",
+        "copied": true,
+        "subjectCost": 3,
+        "sourceKind": "dreamsign",
+        "liveSubjectX": 7,
+        "ceased": true,
+        "retainedRead": 3,
+        "expected": [
+          "i3",
+          "i4"
+        ],
+        "actual": [
+          "i3",
+          "i4",
+          "i5",
+          "i6"
+        ],
+        "semanticNegative": true
+      }
+    ],
+    "failures": 12,
+    "passingControls": 4,
+    "receipt": "/tmp/codex-01a130c8-strict-random585/helper/negative-probe.stdout",
+    "sha256": "abeb599ba4eb1b8aebf71c6caec92f314f43f9c1798daa05793452718cce500c"
+  },
+  "counterfactual": {
+    "before_sha256": "e323db68cd03e1bca690427c929f84a30e3413a6fe5893e7c69f48cf541db692",
+    "restored_sha256": "e323db68cd03e1bca690427c929f84a30e3413a6fe5893e7c69f48cf541db692",
+    "restored": true,
+    "removed": "only cost<below resolving predicate",
+    "negative_exit": 1
+  },
+  "failureDispositions": [
+    {
+      "receipt": "negative-probe-attempt1",
+      "category": "fixture",
+      "cause": "Forced singleton target autoanswered; explicit ScriptedSource answer remained unused.",
+      "disposition": "Set autoAnswerForcedPrompts=false; corrected public negative probe passed invariants and demonstrated 12 semantic negatives plus 4 controls."
+    },
+    {
+      "receipt": "fuzz-capability-probe-attempt1",
+      "category": "fixture/API",
+      "cause": "materializeFigmentCopy accepts CardRef; all(character...) is CharacterRef kind=all and resolveCards returns undefined for it. CharacterSelector costExactly is unsupported.",
+      "disposition": "Ordinary exact3 materialization and dissolution with costAtLeast/costAtMost=3 provide valid typed FuzzPool fixture."
+    },
+    {
+      "receipt": "fuzz-capability-probe-attempt2",
+      "category": "fixture/API",
+      "cause": "Same invalid reference and selector; changing scratch extension did not repair fixture.",
+      "disposition": "Preserved; no passing game or engine defect claimed."
+    },
+    {
+      "receipt": "fuzz-capability-probe",
+      "category": "fixture/API",
+      "cause": "Same invalid reference and selector; interpreter import prelude did not repair fixture.",
+      "disposition": "Preserved; typed-reference correction establishes actual cause. Initial loader hypothesis is unproven."
+    },
+    {
+      "receipt": "focused1",
+      "category": "contract fixture/expectation",
+      "cause": "Three assertions assumed void insertion order, return order despite random selection, and a raw synthetic transfiguration cost transform.",
+      "disposition": "Observe sets/physical invariants and use real deck-entry modifications; avoid assuming an unimplemented synthetic variant transform."
+    },
+    {
+      "receipt": "focused2",
+      "category": "contract fixture/expectation",
+      "cause": "Synthetic candidate count assumed four back slots; fixture has room for six eligible original/copy characters.",
+      "disposition": "Expect the six actual matching instances; all pass final review."
+    },
+    {
+      "receipt": "typecheck1",
+      "category": "contract fixture/type",
+      "cause": "Direct assignment to readonly config/variant and unnarrowed CardCost.amount.",
+      "disposition": "Replace state/instance objects and read fixedEnergy costs. Final review typechecks pass."
+    },
+    {
+      "receipt": "fuzz300-attempt1",
+      "category": "scratch API",
+      "cause": "replayInteractively requires now() third argument; omitted at first interactive replay.",
+      "disposition": "Supply ()=>performance.now(), typecheck entire scratch runner, then run corrected locked 300. This wrapper exit1 is not FuzzGame.failure or a 300-game pass."
+    },
+    {
+      "receipt": "scratch-typecheck-attempt1",
+      "category": "scratch typecheck configuration/typing",
+      "cause": "External scratch config lacked own node typeRoots and vite-env, and optional AbilitySource.kind needed a string guard.",
+      "disposition": "Use own worktree Node types/vite-env and narrow source domain. Corrected scratch typecheck exit0."
+    },
+    {
+      "receipt": "mutation",
+      "category": "intentional counterfactual",
+      "cause": "Remove only resolving strict cost<below predicate.",
+      "disposition": "13 semantic failures and 3 controls pass; byte-exact SHA restored before ordinary validation."
+    },
+    {
+      "receipt": "parent bundled one-game diagnostic",
+      "category": "fixture/API",
+      "cause": "Same unsupported CharacterRef passed to materializeFigmentCopy.",
+      "disposition": "Parent report supplied in Stage2 WRITEACK; exact parent receipt remains parent-owned, not copied or described as a kernel defect."
+    }
+  ],
+  "failurePaths": {
+    "error": "contains an actual primitive error after selection, restoring RNG, movement and knowledge: a real missing-figment primitive fails after random materialization; fold contains error and publishes no partial materialized event.",
+    "replayReload": "uses current eligibility after an interrupt and reloads a paid X stack bound: serialized stack resolves exactly one eligible card with one RNG draw; direct/reloaded hashes match. %s reloads a deferred subject selection and rejects stale or competing answers: fresh fold resumes JSON slice, retains subject bound, and matches hash/events.",
+    "partialWrite": "Error contract preserves committed void, RNG and knowledge, original committed hash and cleared inFlight. New option uses existing pure step/fold boundaries; no new persistence protocol.",
+    "staleState": "Paid-X live interrupt mills eligible characters before resolution; selection is empty/no RNG. Fold rejects old target prompt, repeat answered prompt and actions while a step is in flight.",
+    "competingActor": "Deferred-fold contract rejects wrong-side and illegal answers. Competing-input applicability is sequential reducer rejection, with no async race/timing or true-concurrency claim.",
+    "delayed": "%s executes a delayed dissolved-subject random bound after serialization: delayed whenDissolved listener captures newly triggering subject cost3 and strictly returns only costs0/1.",
+    "privacy": "%s selects from an opponent hand and hides nonselected deck cards: owner retained, effect controller used, nonselected deck identities hidden for both viewers; resolve helper checks eventRedactionViolations and invariantViolations.",
+    "retainedCost": "%s reads a dissolved subject independently of the emblem and subject X: both sides, ordinary/copied ceased, cost0/3, X7; modified copied subject cost2 additionally excludes candidate cost2. Ordinary ceased figment cost0 also excludes zero candidate."
+  },
+  "fuzz": {
+    "started": "2026-10-12T23:42:20.291Z",
+    "ended": "2026-10-12T23:44:26.909Z",
+    "pid": 90466,
+    "wallSeconds": 126.61510395799999,
+    "load": [
+      4.103515625,
+      6.7275390625,
+      9.92626953125
+    ],
+    "games": 300,
+    "failures": 0,
+    "steps": 139581,
+    "prompts": 2556,
+    "included": 600,
+    "exercised": 1295,
+    "bound": {
+      "player": 349,
+      "enemy": 346
+    },
+    "retained": {
+      "player": 350,
+      "enemy": 347
+    },
+    "interactive": 30,
+    "replays": 300,
+    "fixture": "Typed own synthetic dreamsign firstturn exact3ordinary materialization+dissolution; ability1 strictless retainedsubject, realpublickernel fullmixed seededgames",
+    "sourceExerciseQualification": "1295 counts all applied own dreamsign abilities, including setup; only ability1 strict random subject-cost resolutions are new-form exercise: player349/enemy346 (695 total). Queued retained scalars player350/enemy347 are separate observations; not every queued trigger resolved.",
+    "perGameQualification": "Requested synthetic dreamsign included twice in each game. Applied strict-bound counts are recorded per game and controller in retained scratch result; no universal per-game/both-controller exercise claim.",
+    "fixtureSource": "/tmp/codex-01a130c8-strict-random585/helper/fuzz300.mts",
+    "fixtureSourceSHA256": "9e39b5330b52f7389dca6e5777c4aaf391f75d265def219e7d2e67b00f5c0307",
+    "resultSHA256": "4b0632fac1595012c4e12fbf6c5eba4c07f595582a22828e85817fd83ae0f9d5",
+    "resultReceipt": "/tmp/codex-01a130c8-strict-random585/helper/fuzz300-result.json",
+    "seedPrefix": "585-strict-random",
+    "ordinals": [
+      0,
+      299
+    ],
+    "syntheticDreamsignUUID": "5e5e5e5e-0000-4000-8000-000000058590",
+    "pool": "fuzzEngineCatalog with FuzzPool registering own unique reserved-prefix cards and targeted dreamsign; canonical synthetic mix retained; no repository catalog, fixture harness or production entity edits."
+  },
+  "heavyTiming": {
+    "successfulOuter": {
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node_modules/.bin/tsx",
+        "/tmp/codex-01a130c8-strict-random585/helper/fuzz300.mts"
+      ],
+      "start": "2026-10-12T23:42:18.918454+00:00",
+      "end": "2026-10-12T23:44:26.944834+00:00",
+      "wall_seconds": 128.02513329200156,
+      "pid": 90464,
+      "pgid": 90464,
+      "exit": 0,
+      "load_end": [
+        4.103515625,
+        6.7275390625,
+        9.92626953125
+      ],
+      "outer_queue": "none unless command itself lockf (inner queue unmeasured)"
+    },
+    "successfulInnerPID": 90466,
+    "innerPGID": null,
+    "innerPGIDQualification": "Not independently sampled; outer owned group90464 and parent known process identities were observed settled.",
+    "outerToInnerSeconds": 1.372546,
+    "qualification": "Outer-to-inner includes lock queue plus TSX/import startup; pure lock wait not separately sampled. Inner126.615103958s is kernel run; outer128.025133292s is entire locked command.",
+    "firstFailedAttempt": {
+      "outcome": "caller API error at first interactive replay; not FuzzGame.failure",
+      "cause": "missing required now() third argument to replayInteractively",
+      "corrected": "()=>performance.now()",
+      "completed_300": false,
+      "outer_wall_seconds": 82.34978508400673,
+      "outer_to_inner_seconds_including_queue_bootstrap": 81.902614,
+      "actual_inner_wall_seconds_to_outer_end_including_process_exit": 0.448059,
+      "no_engine_defect": true
+    }
+  },
+  "D21": {
+    "productionEntities": 0,
+    "sampledProductionEntities": 0,
+    "newBackendForm": true,
+    "newPromptStatusVisual": false,
+    "browser": false,
+    "reason": "Optional resolving backend comparison reuses existing untargeted random-zone engine path and standard zone events, with no production UUID, UI, renderer or presentation workflow authored. Genuine headless Engine/Fold contracts and seeded kernel games exercise the new form; original243 retains all four entities and full content/browser recipe."
+  },
+  "rules": [
+    "RD-hv-umm2.83-1",
+    "RD-hv-umm2.83-2",
+    "RD-hv-7x4l.7-1",
+    "rules.md Zones References to cards in a zone and Costs Cost changes",
+    "C5",
+    "C13"
+  ],
+  "D10": "No new interpretation: strict lower comparison follows existing copiable-cost/random-zone rules and landed560 retained trigger-subject binding.",
+  "testDelta": {
+    "files": 1,
+    "lines": 277,
+    "jsdomFiles": 0
+  },
+  "fullReview": "Proportionate review and required focused/eager/Knip/coverage/schema; review:full not required for the bounded optional three-body comparison without infrastructure or cross-cutting architecture edits.",
+  "reviewRouting": "Parent dispatches fresh cold read-only gpt-5.6-sol CLI core review of exact commit under user temporary override through2026-10-14T01:00:00Z; review outcome is not claimed here.",
+  "resources": {
+    "observedAt": "2026-10-12T23:45:03.144494+00:00",
+    "remainingOwnedProcessGroups": [],
+    "servers": 0,
+    "browserProviders": 0,
+    "leases": 0,
+    "qualification": "All finite owned diagnostic/check/fuzz processes terminal; parent endpoint confirms recorded identities absent. Heavy lock was released on command completion; no peer process or shared lockowner was signaled."
+  },
+  "frictionQualification": "No individual problem was measured above approximately10minutes. Routine fixture/API/type/expectation corrections and shared lock waiting are retained with actual receipts; elapsed implement window includes all coordination and verification, without inferring productive-edit time.",
+  "testDeltaQualification": {
+    "plainContractModulesAdded": 1,
+    "testEntrypointsAdded": 0,
+    "lines": 277,
+    "reason": "One new plain module contains the tests and eager contracts.test.ts discovers it; shared test entrypoint is unchanged."
+  }
+}
