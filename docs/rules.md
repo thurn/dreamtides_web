@@ -658,8 +658,9 @@ by effects that count cards played, and does not give either player priority.
 Its controller may choose new targets and modes for it: each choice is made
 again as the copy is created, a choice with only one legal option is made
 automatically, and a choice with no legal option keeps the original's. It uses
-the original's value of X and counts any additional costs paid for the original
-as paid. A copy can be Prevented like any other item, and it ceases to exist
+the original's value of X, its new targets included: a target bounded by X is
+chosen among the cards that match the original's X. It counts any additional
+costs paid for the original as paid. A copy can be Prevented like any other item, and it ceases to exist
 when it resolves or is Prevented. A copy of a character is not created while
 its controller's back rank would be full (see [Battlefield
 Capacity](#battlefield-capacity)).
@@ -851,7 +852,12 @@ no effect merely to increase a card count. An event that banishes an enemy with 
 "2 X", requires paying 2● first and then X●. X is picked before the card's
 targets, so a target bounded by X, as in "Return a character with cost X● to
 hand", is chosen among the characters that match the picked X; that card may
-be played for X = 0 to return a 0● character, such as a figment.
+be played for X = 0 to return a 0● character, such as a figment. A bound on
+void targets works the same way: "Choose up to two ≤X● cost events in your
+void to gain reclaim 0●" offers only events in your void whose copiable cost
+is at most the picked X, so X = 0 offers only 0● events. Like any bound, it
+is checked again as the effect resolves, and a chosen card whose copiable
+cost is then above X is no longer a legal target.
 
 A discard cost may restrict the card's current type or subtype. It chooses only
 cards held in the paying player's hand, excluding the card being played and

@@ -272,12 +272,19 @@ export function self(): SelfSpec {
 
 /**
  * "A character from your void": `count` void cards matching `filter`, chosen
- * as targets; "up to N" with `upTo`, "another" with `another`, and the
- * opponent's void with `player: "opponent"`.
+ * as targets; "up to N" with `upTo`, "another" with `another`, the
+ * opponent's void with `player: "opponent"`, and "≤X● cost" with
+ * `costAtMost`, a constant or the source's X (`x()`).
  */
 export function fromVoid(
   filter: CardFilter = {},
-  options: { readonly player?: PlayerRef; readonly count?: number; readonly upTo?: boolean; readonly another?: boolean } = {},
+  options: {
+    readonly player?: PlayerRef;
+    readonly count?: number;
+    readonly upTo?: boolean;
+    readonly another?: boolean;
+    readonly costAtMost?: ZoneTargetSpec["costAtMost"];
+  } = {},
 ): ZoneTargetSpec {
   return {
     kind: "inZone",
@@ -288,6 +295,7 @@ export function fromVoid(
     count: options.count ?? 1,
     ...(options.upTo === true ? { upTo: true } : {}),
     ...(options.another === true ? { another: true } : {}),
+    ...(options.costAtMost === undefined ? {} : { costAtMost: options.costAtMost }),
   };
 }
 

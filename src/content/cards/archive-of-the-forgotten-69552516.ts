@@ -1,3 +1,5 @@
+import { energy, event, fromVoid, x } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -8,6 +10,7 @@ export default card({
     "Choose up to two ≤X● cost events in your void to gain reclaim 0●.",
   energyCost: 2,
   energyCosts: ["2", "X"],
+  xMinimum: 0,
   cardType: "Event",
   subtype: "",
   rarity: "Common",
@@ -20,5 +23,8 @@ export default card({
   cardNumber: 453,
   art: { x: 0, y: -0.3, scale: 1.27 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(p.grantReclaim(fromVoid({ cardType: "event" }, { count: 2, upTo: true, costAtMost: x() }), { costs: [energy(0)] })),
+  ],
+  verifiedText: "24lhzklke2f",
 });

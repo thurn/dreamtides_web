@@ -27,7 +27,7 @@ export function resolvePlayer(controller: Side, ref: PlayerRef): Side {
  * The X paid for a source card (RD-hv-umm2.66-1): its stack item's X while
  * it is on the stack, the X it keeps while it is in play, and 0 otherwise.
  */
-function sourceX(state: BattleState, source: AbilitySource): number {
+export function sourceX(state: BattleState, source: AbilitySource): number {
   const id = sourceInstance(source);
   if (id === null) return 0;
   const instance = state.instances[id];

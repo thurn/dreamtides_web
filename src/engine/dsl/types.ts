@@ -190,7 +190,7 @@ interface ZoneCardsBase {
  * void cards chosen as targets (rules § Targeting), when the card is played
  * or, for a triggered ability, as it resolves. A chosen card is still a
  * legal target as the effect resolves only while it is in that void, matches
- * the filter, and can be targeted.
+ * the filter and the cost bound, and can be targeted.
  */
 export interface ZoneTargetSpec extends ZoneCardsBase {
   readonly pick: "target";
@@ -200,6 +200,14 @@ export interface ZoneTargetSpec extends ZoneCardsBase {
   readonly upTo?: boolean;
   /** Excludes the effect's source: "another warrior from your void". */
   readonly another?: boolean;
+  /**
+   * "≤X● cost events in your void": only cards whose copiable cost is at
+   * most this, a constant or X. X is the value picked as the card is played,
+   * before its targets (RD-hv-umm2.142-1), and otherwise the source card's X
+   * (`XValue`). Like a character selector's bound, it is read as targets are
+   * offered and again as the effect resolves (RD-hv-umm2.495-1).
+   */
+  readonly costAtMost?: number | XValue;
 }
 
 /**

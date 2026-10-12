@@ -10,7 +10,7 @@ import { mentionsChosenSubtype } from "../effects/primitives/choose-subtype";
 import { everyNode, everyTarget } from "../effects/interpreter";
 import type { Effect } from "../effects/registry";
 import { fixedEnergy, xCost } from "../dsl/energy";
-import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, PlayerRef, StackItemSelector, TriggeredAbility } from "../dsl/types";
+import type { Ability, AdditionalCost, BoundValue, CardCost, CardCountValue, CardFilter, CharacterSelector, PaymentCost, PlayerRef, StackItemSelector, TriggeredAbility, XValue } from "../dsl/types";
 import { additionalCosts } from "../rules/costs";
 import { opponent, type CardId, type InstanceId, type Side } from "../state/ids";
 import { variantOf } from "../state/create";
@@ -194,6 +194,15 @@ function discoveries(effect: Effect): CardFilter[] {
 }
 
 /**
+ * A void reference's filter narrowed by its cost bound, a constant or X, read
+ * for the least X the play can choose ("≤X● cost events in your void").
+ */
+function boundedFilter(filter: CardFilter, bound: number | XValue | undefined, xRange: XRange | null): CardFilter {
+  const atMost = bound === undefined ? undefined : typeof bound === "number" ? bound : xRange?.min ?? 0;
+  return { ...filter, ...(atMost === undefined ? {} : { costAtMost: Math.min(atMost, filter.costAtMost ?? atMost) }) };
+}
+
+/**
  * The void cards an effect materializes by "each … in your void"
  * (`materialize(everyIn("void", …))`): each needs one matching card in that
  * void, whose copiable cost meets the reference's cost bound for the least X
@@ -205,9 +214,7 @@ function voidMaterializations(effect: Effect, xRange: XRange | null): { player: 
     if (materialized.op !== "materialize" || "op" in materialized.from) return [];
     const { from } = materialized;
     if (from.kind !== "inZone" || from.pick !== "every" || from.zone !== "void") return [];
-    const bound = from.costAtMost;
-    const atMost = bound === undefined ? undefined : typeof bound === "number" ? bound : xRange?.min ?? 0;
-    return [{ player: from.player, filter: { ...from.filter, ...(atMost === undefined ? {} : { costAtMost: Math.min(atMost, from.filter.costAtMost ?? atMost) }) } }];
+    return [{ player: from.player, filter: boundedFilter(from.filter, from.costAtMost, xRange) }];
   });
 }
 
@@ -311,7 +318,8 @@ function costNeeds(costs: readonly (AdditionalCost | PaymentCost)[]): CostNeeds 
  * active in its Day with the card in hand and ample energy, and every
  * play-time target spec gets a matching character in play, or for a void
  * target a matching card in the void, on the side it selects, relative to
- * `side`, whose ✦ and cost admit an X the play can choose, with as many
+ * `side`, whose ✦ and cost admit an X the play can choose (a void target's
+ * cost bound read for the least X, `boundedFilter`), with as many
  * cards in the counted zone as an upper ✦ or cost bound by a zone count
  * needs (`countNeeds`): matching void cards, or cards in a hand beside the
  * played card, or in a deck beside its 8; a ▸Materialized trigger's void targets get their void cards too,
@@ -363,7 +371,7 @@ export function labBoard(
     }
     if (spec.kind !== "inZone") continue;
     const voidSide = spec.player === "you" ? side : opponent(side);
-    for (let index = 0; index < spec.count; index++) voids[voidSide].push(cardFor(engine, spec.filter, pool));
+    for (let index = 0; index < spec.count; index++) voids[voidSide].push(cardFor(engine, boundedFilter(spec.filter, spec.costAtMost, xRange), pool));
   }
   const played = [...abilities.flatMap((ability) => (ability.kind === "event" ? [ability.effect] : [])), ...materialized];
   for (const filter of played.flatMap(opponentHandChoices)) hands[opponent(side)].push(cardFor(engine, filter, pool));
@@ -383,7 +391,7 @@ export function labBoard(
       }
       if (spec.kind === "inZone") {
         const voidSide = spec.player === "you" ? side : opponent(side);
-        for (let index = 0; index < spec.count; index++) voids[voidSide].push(cardFor(engine, spec.filter, pool));
+        for (let index = 0; index < spec.count; index++) voids[voidSide].push(cardFor(engine, boundedFilter(spec.filter, spec.costAtMost, xRange), pool));
         continue;
       }
       const targetSide = spec.selector.controller === "you" ? side : opponent(side);

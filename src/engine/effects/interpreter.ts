@@ -6,6 +6,7 @@ import {
   matchingCharacters,
   matchingStackItems,
   resolvePlayer,
+  sourceX,
   zoneCount,
 } from "../dsl/selectors";
 import { evaluateValue } from "../dsl/values";
@@ -176,10 +177,39 @@ function inZoneMatching(
   return cardMatchesFilter(state, catalog, id, spec.filter);
 }
 
-/** The cards in a void a zone target may choose by its filter, in void order, targetable or not. */
-function matchingVoidCards(state: BattleState, catalog: EngineCatalog, spec: ZoneTargetSpec, controller: Side, source: AbilitySource): InstanceId[] {
+/**
+ * Whether a void card is one a zone target may name now: in that void,
+ * matching its filter, and within its cost bound, read now against the
+ * card's copiable cost (RD-hv-umm2.495-1). An X bound reads `selectorX`, the
+ * X picked as a card is being played, and otherwise the source card's X, as
+ * a character selector's X bound does.
+ */
+function voidTargetMatching(
+  state: BattleState,
+  catalog: EngineCatalog,
+  spec: ZoneTargetSpec,
+  side: Side,
+  source: AbilitySource,
+  id: InstanceId,
+  selectorX?: number,
+): boolean {
+  if (!inZoneMatching(state, catalog, spec, side, source, id)) return false;
+  const bound = spec.costAtMost;
+  if (bound === undefined) return true;
+  return copiableCostOf(state, catalog, id) <= (typeof bound === "number" ? bound : (selectorX ?? sourceX(state, source)));
+}
+
+/** The cards in a void a zone target may choose by its filter and cost bound, in void order, targetable or not. */
+function matchingVoidCards(
+  state: BattleState,
+  catalog: EngineCatalog,
+  spec: ZoneTargetSpec,
+  controller: Side,
+  source: AbilitySource,
+  selectorX?: number,
+): InstanceId[] {
   const side = resolvePlayer(controller, spec.player);
-  return state.sides[side].void.filter((id) => inZoneMatching(state, catalog, spec, side, source, id));
+  return state.sides[side].void.filter((id) => voidTargetMatching(state, catalog, spec, side, source, id, selectorX));
 }
 
 /** The characters, stack cards, or void cards a target spec may choose now: matching ones that can be targeted. */
@@ -195,7 +225,7 @@ export function targetCandidates(
     case "stackTarget":
       return targetable(state, catalog, matchingStackItems(state, catalog, spec.selector, controller, source));
     case "inZone":
-      return targetable(state, catalog, matchingVoidCards(state, catalog, spec, controller, source));
+      return targetable(state, catalog, matchingVoidCards(state, catalog, spec, controller, source, selectorX));
     case "target":
       return targetable(state, catalog, matchingCharacters(state, catalog, spec.selector, controller, source, selectorX));
   }
@@ -434,7 +464,8 @@ export function chooseOnResolution(
  * noLegalTarget. The result shares no arrays with `original`. Throws when
  * `original` lacks a choice the copy keeps, which legal play-time choices
  * never do: a choice reached only through a mode the copy chose anew always
- * has a legal option.
+ * has a legal option. `selectorX` is the copy's X, the original's, which
+ * X-bounded targets read before the copy's stack item exists.
  */
 export function chooseForCopy(
   ctx: StepContext,
@@ -443,6 +474,7 @@ export function chooseForCopy(
   source: AbilitySource,
   purpose: (role: PromptRole) => PromptPurpose,
   original: EffectChoices,
+  selectorX?: number,
 ): EffectChoices {
   let originalModes: ChosenModes | null = null;
   const originalModesNow = (): ChosenModes => (originalModes ??= chosenModes(effect, original.modes));
@@ -450,7 +482,7 @@ export function chooseForCopy(
   walkPlayTime(
     effect,
     (node, options) => {
-      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source));
+      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX));
       const kept = legal.includes(true) ? null : originalModesNow().get(node);
       if (kept === undefined) throw new Error(`The original made no choice for a ${node.op} node its copy keeps`);
       const mode = kept ?? promptMode(ctx, legal, controller, purpose("chooseOne"));
@@ -461,7 +493,7 @@ export function chooseForCopy(
   );
   let originalSpecs: PlayTimeTarget[] | null = null;
   const targets = collectTargets(effect, chosenModes(effect, modes)).map((spec) => {
-    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source);
+    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX);
     const bounds = targetBounds(spec);
     if (candidates.length >= bounds.min) return promptTargets(ctx, candidates, bounds, controller, purpose("target"));
     originalSpecs ??= collectTargets(effect, originalModesNow());
@@ -616,9 +648,9 @@ const RANDOM_SELECTION_STREAM = "random:selection";
 
 /**
  * The cards a zone reference names now (rules § Zones → References to cards
- * in a zone): the chosen void cards still in that void, matching, and
- * targetable, in the order chosen, reporting noLegalTarget when none remain;
- * every matching card in the zone, in zone order; those of the top cards of
+ * in a zone): the chosen void cards still in that void, matching, within
+ * their cost bound, and targetable, in the order chosen, reporting
+ * noLegalTarget when none remain; every matching card in the zone, in zone order; those of the top cards of
  * the deck that match, top first; up to `count` different matching cards
  * picked at random, in the order picked; or the source while it is in its
  * controller's zone. Naming a card reveals nothing and emits nothing but that
@@ -651,7 +683,7 @@ function resolveZoneCards(ctx: StepContext, ref: ZoneCardSpec, env: EffectEnv): 
     }
     case "target": {
       const chosen = env.targetsOf(ref) ?? [];
-      const legal = targetable(state, catalog, chosen.filter(matches));
+      const legal = targetable(state, catalog, chosen.filter((id) => voidTargetMatching(state, catalog, ref, side, env.source, id)));
       if (legal.length === 0 && chosen.length > 0) {
         ctx.emit({ kind: "noLegalTarget", source: env.source });
       }

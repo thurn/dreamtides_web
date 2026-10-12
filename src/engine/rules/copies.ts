@@ -48,6 +48,7 @@ export function copyOnStack(ctx: StepContext, original: InstanceId, controller: 
       copy.id,
       (role) => purposeOf(copy.id, instanceOrigin(copy), ability.ability, role),
       item.choices[position] ?? { modes: [], targets: [] },
+      item.x ?? 0,
     ),
   );
   state.stack.splice(index + 1, 0, {
