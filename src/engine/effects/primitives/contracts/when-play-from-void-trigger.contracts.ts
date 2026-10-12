@@ -9,8 +9,8 @@
  */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
-import { energy, event, everyIn, keyword, reclaim, self, thisCardIn } from "../../../dsl/builders";
-import { sourceIn, triggered, untilEndOfTurn, whenPlayFromVoid } from "../../../dsl/triggers";
+import { characterYouControl, energy, event, everyIn, keyword, reclaim, self, thisCardIn } from "../../../dsl/builders";
+import { triggered, untilEndOfTurn, whenMaterialize, whenPlayFromVoid } from "../../../dsl/triggers";
 import { createEngine } from "../../../engine";
 import { eventSeenBy, type EngineEvent } from "../../../events";
 import { createFoldAdapter, type BattleSlice } from "../../../fold/slice";
@@ -24,12 +24,10 @@ import { boardState, type BoardSetup } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { eventRedactionViolations } from "../../../testing/redaction";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
-import { awaken } from "../awaken";
 import { draw } from "../draw";
 import { gainEnergy } from "../gain-energy";
 import { gainAdditionalSpark } from "../gain-spark";
 import { gainPoints } from "../gain-points";
-import { ifThen } from "../if-then";
 import { materialize } from "../materialize";
 import { optional } from "../optional";
 import { playFromZone } from "../play-from-zone";
@@ -61,7 +59,7 @@ const D = {
   graywatch: card(0, "character", 3, () => [keyword("vengeful"), triggered(whenPlayFromVoid(), returnSelf, { zone: "void" })]),
   /** "… return this character to play with awakened." */
   awakeGraywatch: card(1, "character", 3, () => [
-    triggered(whenPlayFromVoid(), ifThen(sourceIn("void"), sequence(returnSelf, awaken(self()))), { zone: "void" }),
+    triggered(whenPlayFromVoid(), materialize(thisCardIn("void"), { awakened: true }), { zone: "void" }),
   ]),
   /** "When you play a card from your void, return this character to play. Reclaim 0●" */
   selfReclaimer: card(2, "character", 3, () => [triggered(whenPlayFromVoid(), returnSelf, { zone: "void" }), reclaim(energy(0))]),
@@ -79,6 +77,8 @@ const D = {
   thrower: card(8, "character", 5, () => [triggered(whenPlayFromVoid(), sequence(gainEnergy(1), gainAdditionalSpark(self(), 1)))]),
 } as const;
 const S = {
+  /** "When you materialize an exhausted character, gain 1⍟." */
+  exhaustedWatch: card(24, "character", 5, () => [triggered(whenMaterialize(characterYouControl({ exhausted: true })), gainPoints(1))]),
   /** "Gain 1⍟. Reclaim 0●" */
   reclaimEvent: card(20, "event", 0, () => [event(gainPoints(1)), reclaim(energy(0))]),
   /** A character with "Reclaim 0●". */
@@ -215,11 +215,14 @@ describe("whenPlayFromVoid", () => {
   });
 
   it("with awakened, returns its card ready, and awakens nothing when an earlier trigger returned it", () => {
-    const ready = setup({ player: { void: [D.awakeGraywatch.id, S.reclaimEvent.id], energy: 0, deck: filler }, enemy: { deck: filler } });
+    const ready = setup({ player: { back: [S.exhaustedWatch.id], void: [D.awakeGraywatch.id, S.reclaimEvent.id], energy: 0, deck: filler }, enemy: { deck: filler } });
     const [awake, reclaimEvent] = ready.ids.player.void;
     const returned = play(ready.state, "player", reclaimEvent, "void");
     expect(zone(returned.state, awake)).toBe("play");
     expect(returned.state.instances[awake]?.status.exhausted).toBe(false);
+    // It enters ready as it is announced: no exhausted-character trigger sees it, and nothing awakens it afterward.
+    expect(returned.events.some((entry) => entry.kind === "exhaustionChanged" && entry.instance === awake)).toBe(false);
+    expect(returned.state.sides.player.score - ready.state.sides.player.score).toBe(1);
 
     const raised = setup({ player: { back: [D.raiser.id], void: [D.awakeGraywatch.id, S.reclaimEvent.id], energy: 0, deck: filler }, enemy: { deck: filler } });
     const [raiser] = raised.ids.player.back;

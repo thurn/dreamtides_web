@@ -1022,8 +1022,9 @@ none is in play then, that part does nothing.
 
 "Return this character to play with awakened," and likewise "Materialize this
 character from your void with awakened," puts the character into play as an
-awakened character enters: without the exhausted status, so it can challenge,
-block, and pay ☾ costs that turn. It does not gain the Awakened keyword. Only
+awakened character enters: without the exhausted status from the moment it
+enters, so it can challenge, block, and pay ☾ costs that turn. It does not
+gain the Awakened keyword. Only
 a character that this effect puts into play is awakened: if the character is
 no longer in your void as the effect resolves, or the back rank is full, the
 effect does nothing, and it does not awaken that character when another

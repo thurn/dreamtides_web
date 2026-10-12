@@ -293,6 +293,7 @@ export function enterPlay(
   id: InstanceId,
   side: Side,
   slot: Slot,
+  awakened = false,
 ): void {
   const { state } = ctx;
   const instance = instanceOf(state, id);
@@ -305,7 +306,7 @@ export function enterPlay(
   instance.zone = "play";
   instance.enteredZoneAt = ++state.clock;
   setOccupant(state, side, slot, id);
-  instance.status.exhausted = !hasKeyword(state, ctx.catalog, id, "awakened");
+  instance.status.exhausted = !awakened && !hasKeyword(state, ctx.catalog, id, "awakened");
   ctx.emit({ kind: "materialized", instance: id, side, slot });
 }
 
@@ -321,9 +322,11 @@ export function placement(state: BattleState, side: Side, slot?: Slot): Slot | n
  * `slot` if it is open, else the leftmost open back-rank position (rules §
  * Materialize). With the back rank full it stays where it is (rules §
  * Battlefield Capacity), and a reclaimed card never leaves the Banished
- * zone. Returns whether it entered play.
+ * zone. `awakened` makes it enter as an Awakened character does, without
+ * the exhausted status, already as `materialized` announces it. Returns
+ * whether it entered play.
  */
-export function materialize(ctx: StepContext, id: InstanceId, side: Side, slot?: Slot): boolean {
+export function materialize(ctx: StepContext, id: InstanceId, side: Side, slot?: Slot, awakened = false): boolean {
   const instance = instanceOf(ctx.state, id);
   if (instance.status.reclaimed) return false;
   const position = placement(ctx.state, side, slot);
@@ -331,7 +334,7 @@ export function materialize(ctx: StepContext, id: InstanceId, side: Side, slot?:
     ctx.emit({ kind: "capacityReached", side, instance: id, missing: 1 });
     return false;
   }
-  enterPlay(ctx, id, side, position);
+  enterPlay(ctx, id, side, position, awakened);
   return true;
 }
 

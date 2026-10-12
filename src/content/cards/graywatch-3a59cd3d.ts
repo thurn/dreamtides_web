@@ -1,5 +1,5 @@
-import { keyword, self, thisCardIn } from "../../engine/dsl/builders";
-import { sourceIn, triggered, whenPlayFromVoid } from "../../engine/dsl/triggers";
+import { keyword, thisCardIn } from "../../engine/dsl/builders";
+import { triggered, whenPlayFromVoid } from "../../engine/dsl/triggers";
 import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
@@ -26,14 +26,8 @@ export default card({
   isStarter: false,
   abilities: (variant) => [
     keyword("vengeful"),
-    triggered(
-      whenPlayFromVoid(),
-      // "With awakened": it is awakened as it returns, and only if this effect returned it (RD-hv-umm2.93-2).
-      variant.amplified
-        ? p.ifThen(sourceIn("void"), p.sequence(p.materialize(thisCardIn("void")), p.awaken(self())))
-        : p.materialize(thisCardIn("void")),
-      { zone: "void" },
-    ),
+    // "With awakened": it enters ready, only when this effect returns it (RD-hv-umm2.93-2).
+    triggered(whenPlayFromVoid(), p.materialize(thisCardIn("void"), { awakened: variant.amplified }), { zone: "void" }),
   ],
   verifiedText: "p8yqonty0i",
 });

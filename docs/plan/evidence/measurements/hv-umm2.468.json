@@ -1,0 +1,16 @@
+{
+  "bead": "hv-umm2.468",
+  "base": "e07a11a6a9d2b73ef0ee2b349aa6b33af0a0b658",
+  "measurementWindow": { "scope": "Claim through commit preparation by the claiming Claude Code session acting as implementer." },
+  "schemaNormalization": { "fields": { "hostLoad": { "measuredFor": "npm run review starting one-minute host load (sysctl vm.loadavg)." } } },
+  "mutations": [
+    { "change": "enterPlay clears the exhausted status only after emitting materialized", "result": "the with-awakened contract fails: the exhausted-character materialize trigger fires" }
+  ],
+  "validation": {
+    "focusedContracts": "contracts.test.ts and specs.test.ts filtered to whenPlayFromVoid/materialize: 74 pass",
+    "review": { "seconds": 59, "exit": 0 },
+    "knip": { "exit": 0 },
+    "fuzzSmoke": "npm run fuzz:engine -- --games 120 --weight-uuids 3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1: 59900 steps, failures 0"
+  },
+  "hostLoadSamples": [{ "step": "review", "oneMinute": 21.37 }]
+}
