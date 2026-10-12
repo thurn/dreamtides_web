@@ -1,3 +1,6 @@
+import { staticAbility, supported } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { draw, sparkModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 338,
   art: { x: -0.084, y: -0.163, scale: 1.27 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onMaterialized(), draw(1)),
+    staticAbility(sparkModifier(supported(), variant.amplified ? 3 : 2)),
+  ],
+  verifiedText: "y3xs8svv8j",
 });

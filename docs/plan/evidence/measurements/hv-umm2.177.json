@@ -1,0 +1,386 @@
+{
+  "bead": "hv-umm2.177",
+  "base": "68827050aba85b4f1d12e7af28ace711726856ff",
+  "status": "LOCALLY VALIDATED; parent certified delivery/cleanup owed",
+  "measurementWindow": {
+    "startUtc": "2026-10-12T15:14:25+00:00",
+    "startProvenance": "Parent claim ACK used as explicitly authorized conservative ownership proxy including current parent installation/preparation, helper research/design/implementation/coordination/verification/waits. Exact dispatch boundary unknown.",
+    "parentPredispatchUtc": "2026-10-12T15:15:15.898178Z",
+    "parentPostdispatchUtc": "2026-10-12T15:16:00.168122Z",
+    "helperFirstObservedUtc": "2026-10-12T15:16:19Z",
+    "nativeSourceAckReceiptUpdatedUtc": "2026-10-12T15:19:32Z",
+    "endUtc": "2026-10-12T15:32:28.775316+00:00",
+    "endProvenance": "Actual precommit evidence cutoff after ordinary checks and own QA cleanup; final standalone schema/commit tail qualified and excluded. Git records actual commit timestamp."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Required review typecheck/cycles/lint/test-related start15:24:21.526\u201315:24:21.528Z"
+      }
+    }
+  },
+  "scope": {
+    "sourcePaths": [
+      "src/content/cards/symphonic-muse-41d0aa36.ts",
+      "src/content/cards/minstrel-of-falling-light-34ef6c0c.ts",
+      "src/content/cards/fiery-apparition-6d6ce556.ts",
+      "src/content/specs/cards-65.scenarios.ts"
+    ],
+    "productionChangedLines": 30,
+    "testDelta": {
+      "scenarioLines": 77,
+      "net": 77,
+      "entrypoints": 0,
+      "jsdomFiles": 0,
+      "newCases": 8
+    },
+    "immutablePrintedFields": "Three full immutable catalog prefixes compared byte-identical against base; pending replaced by exact abilities and literal verifiedText, plus imports.",
+    "verifiedText": [
+      {
+        "id": "41d0aa36-f15a-487d-b97c-7fd765973921",
+        "hash": "y3xs8svv8j"
+      },
+      {
+        "id": "34ef6c0c-1a23-4870-a52c-90d34e9769be",
+        "hash": "1oea08oelan"
+      },
+      {
+        "id": "6d6ce556-60df-486f-b2d8-5df168a6f75e",
+        "hash": "15bbhjwilnu"
+      }
+    ],
+    "newPrimitives": [],
+    "newExports": [],
+    "fallout": [],
+    "newKindsStatusesVisuals": [],
+    "newInfrastructureOrRuntimeApi": false,
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "D20": "One coupled family, eight rows: both controllers/baseamp/opposing Ember absentpresent. Public synthetic foreign nonfigment dissolution is ignored; own nonfigment abandonment creates ready Ember; compound driver creates harmless Warrior copy and dissolves figments; actual Ember deaths permanently grow source, copies give no extra gain/creation; selfdeparture creates ready Ember from armed retained listener. All physicalIDs from setup/public events, ancillary subjectcost/baseSpark derived, no generated-ID algorithm assumption or production helper."
+  },
+  "sourceSHA256": {
+    "src/content/cards/symphonic-muse-41d0aa36.ts": "05c4c86c300d2a0bca8a34d4a5f07916e342bc4639151cee8cb4623dfcfe7383",
+    "src/content/cards/minstrel-of-falling-light-34ef6c0c.ts": "3ef4041ad0a8106ed8497aff33211216ef7c6dff91d30d8154da14fb79556fa6",
+    "src/content/cards/fiery-apparition-6d6ce556.ts": "82f5c12499cbfd0685ffee99a9593131d96f99a3536eb30190f4ea8275796b45",
+    "src/content/specs/cards-65.scenarios.ts": "c1c7e8446721c42ceba568afdb1b35e8aeb4ca457a52bef1841f40e85a08645d"
+  },
+  "validation": [
+    {
+      "name": "focus",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-65"
+      ],
+      "pid": 35386,
+      "observerPid": 35376,
+      "startUtc": "2026-10-12T15:22:12.295797+00:00",
+      "endUtc": "2026-10-12T15:22:17.678596+00:00",
+      "wallS": 5.383,
+      "exit": 0,
+      "log": "/tmp/hv-177-focus.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "owning",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/engine/continuous/support.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 38877,
+      "observerPid": 38869,
+      "startUtc": "2026-10-12T15:23:14.598377+00:00",
+      "endUtc": "2026-10-12T15:23:22.137077+00:00",
+      "wallS": 7.538,
+      "exit": 0,
+      "log": "/tmp/hv-177-owning.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "41d0aa36-f15a-487d-b97c-7fd765973921,34ef6c0c-1a23-4870-a52c-90d34e9769be,6d6ce556-60df-486f-b2d8-5df168a6f75e",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 40642,
+      "observerPid": 40626,
+      "startUtc": "2026-10-12T15:24:20.425138+00:00",
+      "endUtc": "2026-10-12T15:24:21.630926+00:00",
+      "wallS": 1.206,
+      "exit": 0,
+      "log": "/tmp/hv-177-preflight.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 40643,
+      "observerPid": 40627,
+      "startUtc": "2026-10-12T15:24:20.425175+00:00",
+      "endUtc": "2026-10-12T15:25:01.608047+00:00",
+      "wallS": 41.182,
+      "exit": 0,
+      "log": "/tmp/hv-177-review.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 43122,
+      "observerPid": 43086,
+      "startUtc": "2026-10-12T15:25:45.411905+00:00",
+      "endUtc": "2026-10-12T15:25:49.019490+00:00",
+      "wallS": 3.607,
+      "exit": 0,
+      "log": "/tmp/hv-177-knip.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "fuzz",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "41d0aa36-f15a-487d-b97c-7fd765973921,34ef6c0c-1a23-4870-a52c-90d34e9769be,6d6ce556-60df-486f-b2d8-5df168a6f75e"
+      ],
+      "pid": 43123,
+      "observerPid": 43085,
+      "startUtc": "2026-10-12T15:25:45.411912+00:00",
+      "endUtc": "2026-10-12T15:28:26.405621+00:00",
+      "wallS": 160.992,
+      "exit": 0,
+      "log": "/tmp/hv-177-fuzz.log",
+      "terminal": true,
+      "ports": []
+    },
+    {
+      "name": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.177",
+        "--cards",
+        "41d0aa36-f15a-487d-b97c-7fd765973921,34ef6c0c-1a23-4870-a52c-90d34e9769be,6d6ce556-60df-486f-b2d8-5df168a6f75e",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "pid": 43124,
+      "observerPid": 43087,
+      "startUtc": "2026-10-12T15:25:45.411915+00:00",
+      "endUtc": "2026-10-12T15:30:34.574536+00:00",
+      "wallS": 289.159,
+      "exit": 0,
+      "log": "/tmp/hv-177-sweep.log",
+      "terminal": true,
+      "ports": []
+    }
+  ],
+  "parentInstall": {
+    "observerPid": 61484,
+    "pid": 66067,
+    "start": "2026-10-12T15:14:45.888562+00:00",
+    "command": [
+      "npm",
+      "install"
+    ],
+    "terminal": true,
+    "end": "2026-10-12T15:14:48.685784+00:00",
+    "wallS": 2.797044958002516,
+    "exit": 0
+  },
+  "history": {
+    "priorOwnerReference": "/tmp/dreamtides-executor-01a12e91/177-native-fresh.json",
+    "qualification": "Prior claimant performed read-only design/install in an earlier WT/base and released it untouched. Historical preparation remains in native notes, separate from current ownership window/resources; no historical PIDs are current owned runtimes.",
+    "EmberReadiness": "Current Ember catalog has authored Awakened. Fiery explicitly uses existing entry flag consistently with printed text; no missing Ember keyword/capability claim. Parent qualifies earlier overbroad native coordination history; no source/evidence churn needed."
+  },
+  "qa": {
+    "preflight": {
+      "pass": 32,
+      "skip": 28,
+      "pending": 0,
+      "fail": 0,
+      "variants": "all",
+      "as": "both"
+    },
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-i9Rj0Z",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.177/invocations/sweep-i9Rj0Z",
+      "counts": {
+        "pass": 32,
+        "skip": 28
+      },
+      "attemptCounts": {
+        "pass": 32,
+        "skip": 28
+      },
+      "hostLoad": 6.9853515625,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 2005,
+        "scenario": 286176.59033300006,
+        "cleanup": 719.6667500000331,
+        "execution": 288974.590084,
+        "total": 288979.590084
+      }
+    },
+    "rawAudit": "/tmp/hv-177-qa-final-audit.json",
+    "rawPassReports": 32,
+    "rawErrors": 0,
+    "rawCaps": 0,
+    "rawFailureKinds": 0,
+    "cellIdentityMatches": true,
+    "ledger": "docs/plan/evidence/qa-ledger/hv-umm2.177.jsonl",
+    "captures": [],
+    "judged": {
+      "count": 0,
+      "reason": "D21 bytes125/130/227 all unsampled; existing kinds/status/visual indicators only."
+    },
+    "recordedCommit": "68827050aba85b4f1d12e7af28ace711726856ff",
+    "provenance": "Sweep on dirty ownWT before commit, recorded HEAD is base, not committed-source claim. All four final source/scenario hashes equal the pre-validation manifest; no source/test changes after first focused pass.",
+    "contract": "Prescribed card-play/resolution sweep, Fiery coupling covered by D20 and primitive contracts; no blanket all-ability browser claim."
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 143381,
+    "failures": 0,
+    "engineWallS": 160.1,
+    "cpuS": 170.4,
+    "commandWallS": 160.992,
+    "targets": [
+      {
+        "kind": "card",
+        "uuid": "41d0aa36-f15a-487d-b97c-7fd765973921",
+        "included": 610,
+        "exercised": 365
+      },
+      {
+        "kind": "card",
+        "uuid": "34ef6c0c-1a23-4870-a52c-90d34e9769be",
+        "included": 607,
+        "exercised": 266
+      },
+      {
+        "kind": "card",
+        "uuid": "6d6ce556-60df-486f-b2d8-5df168a6f75e",
+        "included": 619,
+        "exercised": 214
+      }
+    ],
+    "heavyWaitS": null,
+    "waitProvenance": "Actual own43123 lock holder observed15:26:38; exact acquisition/queue time not separately sampled. Whole command wall includes any wait/startup/shutdown, not zero-wait claim."
+  },
+  "review": {
+    "files": 223,
+    "tests": 3832,
+    "wallS": 41.182,
+    "lint": "pass",
+    "typechecks": "pass",
+    "cycles": "pass",
+    "knipWallS": 3.607,
+    "full": "Not indicated: composition/plain scenario only, unchanged infrastructure/config/architecture.",
+    "independent": "No core-review label/new-kind/over100 non-test code trigger; production30changedlines. Any required review uses parent fresh read-only gpt-5.6-sol CodexCLI under human override until2026-10-14T01:00Z; no provider/Claude attempt."
+  },
+  "corrections": {
+    "validation": "All runtime/acceptance commands pass first attempt; no failed source/test/schema witness or repair cycle.",
+    "finiteReads": "Own and parent setup reads included guessed missing module paths/unmatched globs, corrected by actual discovery. Exact read subprocessPIDs/timing unknown, not invented; whole current ownership proxy includes these reads."
+  },
+  "runtime": {
+    "commandReceiptNames": [
+      "focus",
+      "owning",
+      "preflight",
+      "review",
+      "knip",
+      "fuzz",
+      "sweep"
+    ],
+    "commandReceiptPrefix": "/tmp/hv-177-",
+    "parentInstall": "/tmp/dreamtides-executor-01a12e91/177-install-receipt.json",
+    "qa": {
+      "runner": 43124,
+      "observer": 43087,
+      "serverPidAndGroup": 43255,
+      "slot": 1,
+      "port": 5274,
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpSessionId": "919d7998-28b5-4f10-9a74-524d12b3806d",
+      "protocol": "2025-11-25",
+      "ownerSnapshot": "/tmp/hv-177-qa-owner-snapshot.json",
+      "terminal": true,
+      "cleanupMs": 719.6667500000331,
+      "proof": "Actual terminal0 guarded runner closes its isolated browser/settles RPCs, stops ownserver group/client, clears exact ownrecords/releases lease. Raw audit checks own lifetime and shared/peer resources are untouched."
+    },
+    "resourceObservation": {
+      "observedUtc": "2026-10-12T15:32:28.775316+00:00",
+      "capturedPidIdentitiesChecked": [
+        35376,
+        35386,
+        38869,
+        38877,
+        40626,
+        40627,
+        40642,
+        40643,
+        43085,
+        43086,
+        43087,
+        43122,
+        43123,
+        43124,
+        43255,
+        61484,
+        66067
+      ],
+      "liveMatches": []
+    },
+    "remainingOwnedProviders": [],
+    "remainingOwnedBrowsers": [],
+    "remainingOwnedServers": [],
+    "remainingOwnedLeases": [],
+    "unknowns": "Finite inspection/hash/evidence wrapperPIDs not captured remain unknown; no fabricated descendant identities or exact dispatch/wait values.",
+    "writers": "Sole helper source/test frozen after first8focus; QAledger writer terminal before final evidence. Only own evidence/schema/commit tail remains.",
+    "finalSchemaTailReceipt": "/tmp/hv-177-schema-final.json"
+  }
+}

@@ -1,3 +1,6 @@
+import { all, characterYouControl } from "../../engine/dsl/builders";
+import { triggered, untilEndOfTurn, whenYouPlay } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +23,8 @@ export default card({
   artOwned: false,
   cardNumber: 18,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(whenYouPlay({ cardType: "event" }), gainSpark(all(characterYouControl()), variant.amplified ? 2 : 1, untilEndOfTurn())),
+  ],
+  verifiedText: "1oea08oelan",
 });

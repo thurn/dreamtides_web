@@ -1,3 +1,8 @@
+import { anyCharacter, characterYouControl, self } from "../../engine/dsl/builders";
+import { triggered, whenDissolved } from "../../engine/dsl/triggers";
+import { gainSpark, materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
+import ember from "../figments/ember-361b4942";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +26,11 @@ export default card({
   cardNumber: 154,
   art: { x: 0, y: 1, scale: 1.28 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    // The armed non-figment watcher includes this character as it leaves play.
+    triggered(whenDissolved(characterYouControl(), { figment: false }), materializeFigments(parseFigmentId(ember.id), 1, { spark: variant.amplified ? 2 : 1, awakened: true })),
+    // An Ember figment on either side gives the permanent gain.
+    triggered(whenDissolved(anyCharacter({ subtype: "Ember" }), { figment: true }), gainSpark(self(), 1)),
+  ],
+  verifiedText: "15bbhjwilnu",
 });
