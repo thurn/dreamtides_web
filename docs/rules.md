@@ -286,6 +286,10 @@ If an effect changes both, apply each change separately. The normal
 start-of-turn and Dreamwell refreshes set current ● to maximum ● as described
 above.
 
+An effect that says "Lose N●" reduces current ● by N, stopping at 0, and
+leaves maximum ● unchanged. This loss is not an energy payment; resolve the
+remaining instructions even if fewer than N● were available.
+
 **Dreamwell numbers and cycling:**
 
 - Dreamwell cards carry order numbers 1–4 that set their position in the deck:

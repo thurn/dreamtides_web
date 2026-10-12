@@ -1,0 +1,1163 @@
+{
+  "bead": "hv-umm2.231",
+  "base": "f4f062712ac61bb7bebc70477b6e640831349daa",
+  "implementWindow": {
+    "start": "2026-10-12T22:00:26.478Z",
+    "end": "2026-10-12T22:19:28.295343+00:00"
+  },
+  "implementMin": 19.03028905,
+  "endpointStatus": "Fresh current UTC prospective commit endpoint under parent clock ACK; Git clock remains automatic. Actual Git committer timestamp and endpoint delta are reported in the terminal handoff/ignored commit receipt, with a required delta below one minute.",
+  "dispatch": {
+    "time": "2026-10-12T22:00:26.478Z",
+    "call_id": "call_3f9df7de98ae4ac98162c6dca61adab3",
+    "receipt": "dispatch.json",
+    "scope": "Post-claim helper research, coordination, authoring, verification and cleanup. Parent setup/install excluded."
+  },
+  "parentSetup": {
+    "installStart": "2026-10-12T21:56:03.021481Z",
+    "installEnd": "2026-10-12T21:56:05.849491Z",
+    "pid": 82052,
+    "pgid": 82052,
+    "wallS": 2.82792,
+    "exit": 0,
+    "scope": "Parent-provided receipt preceding helper dispatch, not helper implementation or validation."
+  },
+  "scope": {
+    "source": [
+      "src/content/dreamsigns/broomstick-b7f8a4ea.ts",
+      "src/engine/effects/primitives/lose-energy.ts",
+      "src/engine/effects/primitives/contracts/lose-energy.contracts.ts",
+      "src/engine/effects/primitives/index.ts",
+      "src/engine/effects/registry.ts",
+      "docs/rules.md",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.231-1.md"
+    ],
+    "fallout": [],
+    "registration": "Only one primitive export and lazy registry getter/import. Existing resources, events, interpreter, fold, trigger and presentation bodies inspected read-only."
+  },
+  "commands": [
+    {
+      "name": "focused-loss",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "loseEnergy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 21001,
+      "wrapperPgid": 21001,
+      "pid": 21010,
+      "pgid": 21010,
+      "start": "2026-10-12T22:06:17.524265+00:00",
+      "loadStart": [
+        3.58447265625,
+        7.376953125,
+        11.783203125
+      ],
+      "state": "terminal",
+      "log": "focused-loss.log",
+      "end": "2026-10-12T22:06:20.546881+00:00",
+      "wallS": 3.022506291992613,
+      "exit": 1,
+      "loadEnd": [
+        3.58447265625,
+        7.376953125,
+        11.783203125
+      ],
+      "cpuUserS": 3.105954,
+      "cpuSystemS": 0.730622
+    },
+    {
+      "name": "focused-loss-corrected",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "loseEnergy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 21519,
+      "wrapperPgid": 21519,
+      "pid": 21527,
+      "pgid": 21527,
+      "start": "2026-10-12T22:06:37.683036+00:00",
+      "loadStart": [
+        3.28076171875,
+        7.060546875,
+        11.56689453125
+      ],
+      "state": "terminal",
+      "log": "focused-loss-corrected.log",
+      "end": "2026-10-12T22:06:40.108882+00:00",
+      "wallS": 2.425732582996716,
+      "exit": 0,
+      "loadEnd": [
+        3.28076171875,
+        7.060546875,
+        11.56689453125
+      ],
+      "cpuUserS": 3.044892,
+      "cpuSystemS": 0.675132
+    },
+    {
+      "name": "affected-contracts",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/content/specs/specs.test.ts",
+        "src/engine/rules/turn.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/triggers/triggers-redaction.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/fold/fold-intents.test.ts",
+        "src/engine/fold/fold-observation.test.ts",
+        "src/engine/testing/dreamsign-lab.test.ts",
+        "src/engine/testing/lab-preflight.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 22200,
+      "wrapperPgid": 22200,
+      "pid": 22208,
+      "pgid": 22208,
+      "start": "2026-10-12T22:06:56.678694+00:00",
+      "loadStart": [
+        3.5380859375,
+        6.92724609375,
+        11.43994140625
+      ],
+      "state": "terminal",
+      "log": "affected-contracts.log",
+      "end": "2026-10-12T22:07:09.343900+00:00",
+      "wallS": 12.664986042000237,
+      "exit": 0,
+      "loadEnd": [
+        4.7353515625,
+        7.04052734375,
+        11.40185546875
+      ],
+      "cpuUserS": 22.391803,
+      "cpuSystemS": 2.451033
+    },
+    {
+      "name": "weighted-fuzz",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "b7f8a4ea-c067-47ed-b251-2876b609108c"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 22677,
+      "wrapperPgid": 22677,
+      "pid": 22685,
+      "pgid": 22685,
+      "start": "2026-10-12T22:07:16.542556+00:00",
+      "loadStart": [
+        4.51611328125,
+        6.95654296875,
+        11.3466796875
+      ],
+      "state": "terminal",
+      "log": "weighted-fuzz.log",
+      "end": "2026-10-12T22:09:26.187497+00:00",
+      "wallS": 129.64339337499405,
+      "exit": 0,
+      "loadEnd": [
+        15.76171875,
+        8.9912109375,
+        11.4365234375
+      ],
+      "cpuUserS": 140.16772,
+      "cpuSystemS": 1.423453
+    },
+    {
+      "name": "lab-preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "b7f8a4ea-c067-47ed-b251-2876b609108c"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 29431,
+      "wrapperPgid": 29431,
+      "pid": 29441,
+      "pgid": 29441,
+      "start": "2026-10-12T22:09:52.830063+00:00",
+      "loadStart": [
+        19.61767578125,
+        10.45458984375,
+        11.8740234375
+      ],
+      "state": "terminal",
+      "log": "lab-preflight.log",
+      "end": "2026-10-12T22:09:54.088409+00:00",
+      "wallS": 1.2582380000094417,
+      "exit": 0,
+      "loadEnd": [
+        19.61767578125,
+        10.45458984375,
+        11.8740234375
+      ],
+      "cpuUserS": 0.983602,
+      "cpuSystemS": 0.38051799999999997
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 74945,
+      "wrapperPgid": 74945,
+      "pid": 74958,
+      "pgid": 74958,
+      "start": "2026-10-12T22:10:22.263850+00:00",
+      "loadStart": [
+        18.31494140625,
+        10.9208984375,
+        12.00244140625
+      ],
+      "state": "terminal",
+      "log": "review.log",
+      "end": "2026-10-12T22:11:20.512477+00:00",
+      "wallS": 58.24789108301047,
+      "exit": 0,
+      "loadEnd": [
+        13.08740234375,
+        10.7734375,
+        11.873046875
+      ],
+      "cpuUserS": 167.635105,
+      "cpuSystemS": 17.56594
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 87004,
+      "wrapperPgid": 87004,
+      "pid": 87014,
+      "pgid": 87014,
+      "start": "2026-10-12T22:11:36.579774+00:00",
+      "loadStart": [
+        12.681640625,
+        10.81201171875,
+        11.8681640625
+      ],
+      "state": "terminal",
+      "log": "knip.log",
+      "end": "2026-10-12T22:11:40.130674+00:00",
+      "wallS": 3.551185792006436,
+      "exit": 0,
+      "loadEnd": [
+        12.146484375,
+        10.73193359375,
+        11.83349609375
+      ],
+      "cpuUserS": 3.107422,
+      "cpuSystemS": 0.8548739999999999
+    },
+    {
+      "name": "schema-before-browser",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 89056,
+      "wrapperPgid": 89056,
+      "pid": 89069,
+      "pgid": 89069,
+      "start": "2026-10-12T22:12:05.978266+00:00",
+      "loadStart": [
+        9.25244140625,
+        10.1591796875,
+        11.59375
+      ],
+      "state": "terminal",
+      "log": "schema-before-browser.log",
+      "end": "2026-10-12T22:12:06.081285+00:00",
+      "wallS": 0.10292279200803023,
+      "exit": 0,
+      "loadEnd": [
+        9.25244140625,
+        10.1591796875,
+        11.59375
+      ],
+      "cpuUserS": 0.052742,
+      "cpuSystemS": 0.024685
+    },
+    {
+      "name": "schema-own-before-browser",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 89990,
+      "wrapperPgid": 89990,
+      "pid": 90003,
+      "pgid": 90003,
+      "start": "2026-10-12T22:12:21.114451+00:00",
+      "loadStart": [
+        8.3828125,
+        9.92236328125,
+        11.4833984375
+      ],
+      "state": "terminal",
+      "log": "schema-own-before-browser.log",
+      "end": "2026-10-12T22:12:21.216512+00:00",
+      "wallS": 0.10198104100709315,
+      "exit": 0,
+      "loadEnd": [
+        8.3828125,
+        9.92236328125,
+        11.4833984375
+      ],
+      "cpuUserS": 0.052145,
+      "cpuSystemS": 0.024406999999999998
+    },
+    {
+      "name": "native-sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.231",
+        "--dreamsigns",
+        "b7f8a4ea-c067-47ed-b251-2876b609108c",
+        "--port",
+        "5195",
+        "--capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 90203,
+      "wrapperPgid": 90203,
+      "pid": 90213,
+      "pgid": 90213,
+      "start": "2026-10-12T22:12:24.584970+00:00",
+      "loadStart": [
+        8.03173828125,
+        9.82373046875,
+        11.439453125
+      ],
+      "state": "terminal",
+      "log": "native-sweep.log",
+      "end": "2026-10-12T22:12:40.207268+00:00",
+      "wallS": 15.622109750009258,
+      "exit": 0,
+      "loadEnd": [
+        9.02880859375,
+        9.9736328125,
+        11.46533203125
+      ],
+      "cpuUserS": 5.134483,
+      "cpuSystemS": 2.960482
+    },
+    {
+      "name": "source-proof",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.231/source-proof.mjs",
+        "--bead",
+        "hv-umm2.231",
+        "--port",
+        "5195",
+        "--timeout",
+        "120"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 92873,
+      "wrapperPgid": 92873,
+      "pid": 92882,
+      "pgid": 92882,
+      "start": "2026-10-12T22:13:02.324950+00:00",
+      "loadStart": [
+        7.74365234375,
+        9.61767578125,
+        11.30224609375
+      ],
+      "state": "terminal",
+      "log": "source-proof.log",
+      "end": "2026-10-12T22:13:23.839515+00:00",
+      "wallS": 21.514252209002734,
+      "exit": 1,
+      "loadEnd": [
+        6.71533203125,
+        9.24169921875,
+        11.1181640625
+      ],
+      "cpuUserS": 4.35737,
+      "cpuSystemS": 2.171028
+    },
+    {
+      "name": "source-proof-corrected",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.231/source-proof.mjs",
+        "--bead",
+        "hv-umm2.231",
+        "--port",
+        "5195",
+        "--timeout",
+        "120"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 94612,
+      "wrapperPgid": 94612,
+      "pid": 94627,
+      "pgid": 94627,
+      "start": "2026-10-12T22:14:08.972956+00:00",
+      "loadStart": [
+        5.548828125,
+        8.6201171875,
+        10.7939453125
+      ],
+      "state": "terminal",
+      "log": "source-proof-corrected.log",
+      "end": "2026-10-12T22:14:36.254227+00:00",
+      "wallS": 27.280915499999537,
+      "exit": 0,
+      "loadEnd": [
+        5.09765625,
+        8.25146484375,
+        10.59619140625
+      ],
+      "cpuUserS": 4.7939169999999995,
+      "cpuSystemS": 2.132086
+    },
+    {
+      "name": "schema-evidence",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/lose-energy231-root",
+      "wrapperPid": 54534,
+      "wrapperPgid": 54534,
+      "pid": 54544,
+      "pgid": 54544,
+      "start": "2026-10-12T22:17:18.348184+00:00",
+      "loadStart": [
+        11.28466796875,
+        9.13134765625,
+        10.48828125
+      ],
+      "state": "terminal",
+      "log": "schema-evidence.log",
+      "end": "2026-10-12T22:17:18.475915+00:00",
+      "wallS": 0.12762716700672172,
+      "exit": 0,
+      "loadEnd": [
+        11.28466796875,
+        9.13134765625,
+        10.48828125
+      ],
+      "cpuUserS": 0.06286699999999999,
+      "cpuSystemS": 0.038178
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "name": "focused-loss",
+      "start": "2026-10-12T22:06:17.524265+00:00",
+      "loadStart": [
+        3.58447265625,
+        7.376953125,
+        11.783203125
+      ],
+      "end": "2026-10-12T22:06:20.546881+00:00",
+      "loadEnd": [
+        3.58447265625,
+        7.376953125,
+        11.783203125
+      ]
+    },
+    {
+      "name": "focused-loss-corrected",
+      "start": "2026-10-12T22:06:37.683036+00:00",
+      "loadStart": [
+        3.28076171875,
+        7.060546875,
+        11.56689453125
+      ],
+      "end": "2026-10-12T22:06:40.108882+00:00",
+      "loadEnd": [
+        3.28076171875,
+        7.060546875,
+        11.56689453125
+      ]
+    },
+    {
+      "name": "affected-contracts",
+      "start": "2026-10-12T22:06:56.678694+00:00",
+      "loadStart": [
+        3.5380859375,
+        6.92724609375,
+        11.43994140625
+      ],
+      "end": "2026-10-12T22:07:09.343900+00:00",
+      "loadEnd": [
+        4.7353515625,
+        7.04052734375,
+        11.40185546875
+      ]
+    },
+    {
+      "name": "weighted-fuzz",
+      "start": "2026-10-12T22:07:16.542556+00:00",
+      "loadStart": [
+        4.51611328125,
+        6.95654296875,
+        11.3466796875
+      ],
+      "end": "2026-10-12T22:09:26.187497+00:00",
+      "loadEnd": [
+        15.76171875,
+        8.9912109375,
+        11.4365234375
+      ]
+    },
+    {
+      "name": "lab-preflight",
+      "start": "2026-10-12T22:09:52.830063+00:00",
+      "loadStart": [
+        19.61767578125,
+        10.45458984375,
+        11.8740234375
+      ],
+      "end": "2026-10-12T22:09:54.088409+00:00",
+      "loadEnd": [
+        19.61767578125,
+        10.45458984375,
+        11.8740234375
+      ]
+    },
+    {
+      "name": "review",
+      "start": "2026-10-12T22:10:22.263850+00:00",
+      "loadStart": [
+        18.31494140625,
+        10.9208984375,
+        12.00244140625
+      ],
+      "end": "2026-10-12T22:11:20.512477+00:00",
+      "loadEnd": [
+        13.08740234375,
+        10.7734375,
+        11.873046875
+      ]
+    },
+    {
+      "name": "knip",
+      "start": "2026-10-12T22:11:36.579774+00:00",
+      "loadStart": [
+        12.681640625,
+        10.81201171875,
+        11.8681640625
+      ],
+      "end": "2026-10-12T22:11:40.130674+00:00",
+      "loadEnd": [
+        12.146484375,
+        10.73193359375,
+        11.83349609375
+      ]
+    },
+    {
+      "name": "schema-before-browser",
+      "start": "2026-10-12T22:12:05.978266+00:00",
+      "loadStart": [
+        9.25244140625,
+        10.1591796875,
+        11.59375
+      ],
+      "end": "2026-10-12T22:12:06.081285+00:00",
+      "loadEnd": [
+        9.25244140625,
+        10.1591796875,
+        11.59375
+      ]
+    },
+    {
+      "name": "schema-own-before-browser",
+      "start": "2026-10-12T22:12:21.114451+00:00",
+      "loadStart": [
+        8.3828125,
+        9.92236328125,
+        11.4833984375
+      ],
+      "end": "2026-10-12T22:12:21.216512+00:00",
+      "loadEnd": [
+        8.3828125,
+        9.92236328125,
+        11.4833984375
+      ]
+    },
+    {
+      "name": "native-sweep",
+      "start": "2026-10-12T22:12:24.584970+00:00",
+      "loadStart": [
+        8.03173828125,
+        9.82373046875,
+        11.439453125
+      ],
+      "end": "2026-10-12T22:12:40.207268+00:00",
+      "loadEnd": [
+        9.02880859375,
+        9.9736328125,
+        11.46533203125
+      ]
+    },
+    {
+      "name": "source-proof",
+      "start": "2026-10-12T22:13:02.324950+00:00",
+      "loadStart": [
+        7.74365234375,
+        9.61767578125,
+        11.30224609375
+      ],
+      "end": "2026-10-12T22:13:23.839515+00:00",
+      "loadEnd": [
+        6.71533203125,
+        9.24169921875,
+        11.1181640625
+      ]
+    },
+    {
+      "name": "source-proof-corrected",
+      "start": "2026-10-12T22:14:08.972956+00:00",
+      "loadStart": [
+        5.548828125,
+        8.6201171875,
+        10.7939453125
+      ],
+      "end": "2026-10-12T22:14:36.254227+00:00",
+      "loadEnd": [
+        5.09765625,
+        8.25146484375,
+        10.59619140625
+      ]
+    },
+    {
+      "name": "schema-evidence",
+      "start": "2026-10-12T22:17:18.348184+00:00",
+      "loadStart": [
+        11.28466796875,
+        9.13134765625,
+        10.48828125
+      ],
+      "end": "2026-10-12T22:17:18.475915+00:00",
+      "loadEnd": [
+        11.28466796875,
+        9.13134765625,
+        10.48828125
+      ]
+    }
+  ],
+  "testDelta": {
+    "files": 1,
+    "lines": 182,
+    "jsdomFiles": 0
+  },
+  "testMetricScope": {
+    "plainContractModules": {
+      "files": 1,
+      "lines": 182
+    },
+    "configuredTestEntrypoints": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "cases": 6,
+    "provisionalParentClarification": "Initial0/0 estimate treated only entrypoints; parent corrected using existing plain-contract ledger convention before final evidence. No source or test run changed."
+  },
+  "validationSummary": {
+    "affected": {
+      "files": 13,
+      "tests": 2631
+    },
+    "review": {
+      "files": 274,
+      "tests": 5097
+    },
+    "weightedFuzz": {
+      "games": 300,
+      "steps": 124092,
+      "workloadWallS": 128.7,
+      "workloadCpuS": 140.6,
+      "failures": 0,
+      "included": 600,
+      "exercised": 4601,
+      "scope": "Exact filed Dreamsign weighted smoke; wrapper wall includes invocation/lock overhead, not an A/B performance claim."
+    },
+    "preflight": {
+      "pass": 2,
+      "skip": 18,
+      "fail": 0,
+      "exercisedBoth": true
+    },
+    "sweep": {
+      "effective": {
+        "pass": 2,
+        "skip": 18
+      },
+      "rawAttempts": {
+        "pass": 2,
+        "skip": 18
+      },
+      "invocation": "invocations/sweep-JUIMP1",
+      "repeat": false
+    },
+    "fullReview": "Not warranted by a plugin primitive within the existing architecture; no test infrastructure/configuration/cross-cutting body change. Native release owns broader full validation."
+  },
+  "qa": {
+    "sourceProof": [
+      {
+        "uuid": "b7f8a4ea-c067-47ed-b251-2876b609108c",
+        "side": "player",
+        "trigger": {
+          "seq": 1,
+          "index": 18,
+          "kind": "triggerResolved",
+          "instance": null,
+          "event": {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          }
+        },
+        "loss": {
+          "seq": 1,
+          "index": 19,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 9,
+            "max": 10,
+            "change": -1,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "draw": {
+          "seq": 1,
+          "index": 20,
+          "kind": "cardDrawn",
+          "instance": "i5",
+          "event": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i5"
+          }
+        },
+        "drawnUuid": {
+          "kind": "card",
+          "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+        },
+        "energy": {
+          "current": 9,
+          "max": 10
+        },
+        "status": {
+          "x": 632.421875,
+          "y": 612.8571166992188,
+          "width": 175.15625,
+          "height": 54,
+          "text": "9/10"
+        },
+        "hand": {
+          "count": 6,
+          "visible": [
+            {
+              "x": 331.7868957519531,
+              "y": 731.552978515625,
+              "width": 141.18112182617188,
+              "height": 189.02117919921875
+            },
+            {
+              "x": 469.6242980957031,
+              "y": 730.7586669921875,
+              "width": 136.35043334960938,
+              "height": 185.70849609375
+            },
+            {
+              "x": 607.517822265625,
+              "y": 731.2620849609375,
+              "width": 131.41339111328125,
+              "height": 182.2509765625
+            },
+            {
+              "x": 742.9437866210938,
+              "y": 731.2620849609375,
+              "width": 131.41339111328125,
+              "height": 182.2509765625
+            },
+            {
+              "x": 875.9002685546875,
+              "y": 730.7586669921875,
+              "width": 136.3504638671875,
+              "height": 185.70849609375
+            },
+            {
+              "x": 1008.906982421875,
+              "y": 731.552978515625,
+              "width": 141.18115234375,
+              "height": 189.02117919921875
+            }
+          ]
+        },
+        "gameId": "zambdr",
+        "persistedScope": "Constructor source identity and applied initial state; actual Dawn effect events are in the paired public probe/history.",
+        "persistedRows": [
+          {
+            "gameId": "zambdr",
+            "card": "",
+            "dreamsign": "b7f8a4ea-c067-47ed-b251-2876b609108c",
+            "variant": "base",
+            "side": "player",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base"
+            ],
+            "entityKind": "dreamsign",
+            "cardStatus": "authored",
+            "cardType": "Dreamsign",
+            "timestamp": "2026-10-12T22:14:13.145Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          },
+          {
+            "event": "game_event",
+            "timestamp": "2026-10-12T22:14:13.148Z",
+            "gameId": "zambdr",
+            "seq": 1,
+            "type": "LOAD_STATE",
+            "actor": "eyrxp9tu59m24mjhut9k7aqk",
+            "outcome": "applied",
+            "intentKey": "qa-bootstrap:card-lab-dreamsign:b7f8a4ea-c067-47ed-b251-2876b609108c:base:player"
+          }
+        ]
+      },
+      {
+        "uuid": "b7f8a4ea-c067-47ed-b251-2876b609108c",
+        "side": "enemy",
+        "trigger": {
+          "seq": 1,
+          "index": 18,
+          "kind": "triggerResolved",
+          "instance": null,
+          "event": {
+            "kind": "triggerResolved",
+            "source": {
+              "kind": "dreamsign",
+              "side": "enemy",
+              "index": 0
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "applied": true
+          }
+        },
+        "loss": {
+          "seq": 1,
+          "index": 19,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "enemy",
+            "current": 9,
+            "max": 10,
+            "change": -1,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "draw": {
+          "seq": 1,
+          "index": 20,
+          "kind": "cardDrawn",
+          "instance": "i26",
+          "event": {
+            "kind": "cardDrawn",
+            "side": "enemy",
+            "instance": "i26"
+          }
+        },
+        "drawnUuid": {
+          "kind": "card",
+          "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+        },
+        "energy": {
+          "current": 3,
+          "max": 10
+        },
+        "status": {
+          "x": 632.421875,
+          "y": 89.12723541259766,
+          "width": 175.15625,
+          "height": 53.99999237060547,
+          "text": "3/10"
+        },
+        "hand": {
+          "count": 0,
+          "visible": []
+        },
+        "gameId": "bg6ry2",
+        "persistedScope": "Constructor source identity and applied initial state; actual Dawn effect events are in the paired public probe/history.",
+        "persistedRows": [
+          {
+            "gameId": "bg6ry2",
+            "card": "",
+            "dreamsign": "b7f8a4ea-c067-47ed-b251-2876b609108c",
+            "variant": "base",
+            "side": "enemy",
+            "stage": null,
+            "status": "ready",
+            "reason": null,
+            "detail": null,
+            "eligibleVariants": [
+              "base"
+            ],
+            "entityKind": "dreamsign",
+            "cardStatus": "authored",
+            "cardType": "Dreamsign",
+            "timestamp": "2026-10-12T22:14:18.154Z",
+            "event": "debug_card_lab_loaded",
+            "seq": 21
+          },
+          {
+            "event": "game_event",
+            "timestamp": "2026-10-12T22:14:18.155Z",
+            "gameId": "bg6ry2",
+            "seq": 1,
+            "type": "LOAD_STATE",
+            "actor": "mifeifkggqcm7o4n587tgbyg",
+            "outcome": "applied",
+            "intentKey": "qa-bootstrap:card-lab-dreamsign:b7f8a4ea-c067-47ed-b251-2876b609108c:base:enemy"
+          }
+        ]
+      }
+    ],
+    "report": "invocations/run-FWoph2/source-proof.result.json",
+    "screens": [
+      {
+        "file": "source-proof-player-desktop.png",
+        "artifactPath": "invocations/run-FWoph2/source-proof-player-desktop.png",
+        "viewport": [
+          1440,
+          900
+        ],
+        "imagePixels": [
+          2880,
+          1800
+        ]
+      },
+      {
+        "file": "source-proof-enemy-desktop.png",
+        "artifactPath": "invocations/run-FWoph2/source-proof-enemy-desktop.png",
+        "viewport": [
+          1440,
+          900
+        ],
+        "imagePixels": [
+          2880,
+          1800
+        ]
+      }
+    ],
+    "caps": [],
+    "D21": {
+      "sha256FirstByte": 78,
+      "sampled": false,
+      "newPrompt": false,
+      "newStatus": false,
+      "newVisual": false,
+      "judgmentRequired": false,
+      "scope": "Existing energy counter/status event and draw presentation; scripted full sweep plus source-specific desktop proof."
+    },
+    "initialFailure": {
+      "receipt": "source-proof.receipt.json",
+      "report": "invocations/run-ntUbDE/source-proof.result.json",
+      "error": "QaTimeoutError: persisted emblem trigger and UUID source: the persisted log of game khmtap (24 lines) did not satisfy the predicate within 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.waitFor (evalmachine.<anonymous>:695:17)\n    at async sourceProof (evalmachine.<anonymous>:1685:21)\n    at async evalmachine.<anonymous>:1699:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+      "productCaps": [],
+      "partialProof": "Player public first-Dawn/ordered effect/current9/max10/DOM checks reached; constructor engine.trigger persisted-row predicate failed before any capture. Enemy unrun. This attempt is retained, corrected ignored scenario covers only unsettled proof cells; passing sweep untouched.",
+      "supersededBy": {
+        "as": "player",
+        "attempt": 2,
+        "invocationAttempt": 2,
+        "rawReport": "invocations/run-FWoph2/source-proof.result.json"
+      }
+    },
+    "persistedLogQualification": "Constructor lab rows identify exact UUID/controller and applied LOAD_STATE; they are not live engine.trigger or energy effect records. Paired public constructor event history proves actual first Dawn. Existing live fold trigger mapping and applied intents support production replay; energyChanged has existing presentation/status and effect loss log text, and engine-log schema leaves resource deltas to replay.",
+    "sourceProofAttempts": [
+      {
+        "side": "player",
+        "attempt": 2,
+        "invocationAttempt": 2
+      },
+      {
+        "side": "enemy",
+        "attempt": 1,
+        "invocationAttempt": 2,
+        "earlierCell": "unattempted"
+      }
+    ]
+  },
+  "failures": [
+    {
+      "receipt": "focused-loss.receipt.json",
+      "kind": "own synthetic fixture/expectation",
+      "details": "Two signed-zero expectation mismatches and omitted required declared Dreamwell field; corrected delta expectations and fixture, then focused contracts passed."
+    },
+    {
+      "receipt": "evidence-build-error.json",
+      "kind": "own evidence builder",
+      "details": "Parent provenance receipt lacks helper name field; builder failed before writing own friction record. First schema covered655existing records; filtered receipts, wrote own record, next schema covered656."
+    }
+  ],
+  "D20": "Broomstick is ordinary triggered(onDawn(),sequence(loseEnergy(1),draw(1))) composition. No production scenario module required; synthetic primitive, source/replay contracts, content gates, weighted fuzz and native lab cover its binding.",
+  "inventory": "loseEnergy is an absence-derived primitive row, not an explicit InventoryCapabilityForm.pending marker. Recipe3 marker-retirement condition does not apply; inventory script and planning projection untouched.",
+  "coreFailurePaths": [
+    {
+      "path": "resource bounds/both controllers/PlayerRefs/current above max",
+      "contract": "floors current energy, preserves maximum, and reports actual effect loss for both PlayerRefs and controllers; treats zero and negative amounts as zero loss and allows current energy above maximum"
+    },
+    {
+      "path": "insufficient loss continues draw without payment",
+      "contract": "draws after an insufficient or zero loss without a payment or prompt"
+    },
+    {
+      "path": "resolution-time composition/reload/reapplication/input immutability",
+      "contract": "evaluates composed amounts after preceding instructions and replays serialized input identically"
+    },
+    {
+      "path": "Dreamsign source UUID through ordered emblem index/normal refresh",
+      "contract": "resolves ordered emblem Dawn sources and restores current energy at a normal subsequent refresh"
+    },
+    {
+      "path": "suspended prefix/restart/rejected stale,wrong-side,illegal answers and competing action/replay error rollback",
+      "contract": "reconstructs loss and draw at a suspended prefix, rejects competing inputs, and rolls back a failed replay"
+    },
+    {
+      "path": "external concurrency/partial persistent writes",
+      "applicability": "No loss-specific IO, asynchronous actor, prompt or persistence schema. Public fold committed/input immutability and competing-intent rejection are covered above; existing fold/intents/prompts/observations/redaction suites verify shared host behavior."
+    }
+  ],
+  "runtime": {
+    "checked": "2026-10-12T22:19:28.295343+00:00",
+    "observedAbsentPids": [
+      21001,
+      21010,
+      21519,
+      21527,
+      22200,
+      22208,
+      22677,
+      22685,
+      29431,
+      29441,
+      54534,
+      54544,
+      74945,
+      74958,
+      87004,
+      87014,
+      89056,
+      89069,
+      89990,
+      90003,
+      90203,
+      90213,
+      90282,
+      92873,
+      92882,
+      92910,
+      94612,
+      94627,
+      94655
+    ],
+    "stillPresentPids": [],
+    "servers": [
+      {
+        "pid": 90282,
+        "pgid": 90282,
+        "port": 5274,
+        "scope": "native-sweep",
+        "cleanup": "native runner terminal receipt reports port free"
+      },
+      {
+        "pid": 92910,
+        "pgid": 92910,
+        "port": 5274,
+        "scope": "source-proof initial",
+        "cleanup": "native runner terminal receipt reports port free"
+      },
+      {
+        "pid": 94655,
+        "pgid": 94655,
+        "port": 5274,
+        "scope": "source-proof corrected",
+        "cleanup": "native runner terminal receipt reports port free"
+      }
+    ],
+    "browser": "Three owned native invocations closed their MCP context/client and released browser slot1; no retained task runtime."
+  },
+  "rulesDecisions": [
+    "RD-hv-umm2.231-1"
+  ],
+  "cardIssues": [],
+  "reviewRouting": {
+    "required": true,
+    "owner": "Parent after helper commit/source freeze",
+    "model": "Fresh read-only Codex CLI gpt-5.6-sol",
+    "authority": "User temporary routing override through2026-10-14T01:00:00Z",
+    "status": "Not invoked by helper; no review finding or verdict claimed."
+  },
+  "friction": []
+}

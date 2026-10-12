@@ -62,6 +62,7 @@ import {
   lookAtTopPrimitive,
   linkedBanishPrimitive,
   loseAllAbilitiesPrimitive,
+  loseEnergyPrimitive,
   losePointsPrimitive,
   materializePrimitive,
   materializeFigmentCopyPrimitive,
@@ -247,6 +248,9 @@ const DEFINITIONS = {
   },
   get loseAllAbilities() {
     return loseAllAbilitiesPrimitive;
+  },
+  get loseEnergy() {
+    return loseEnergyPrimitive;
   },
   get losePoints() {
     return losePointsPrimitive;
