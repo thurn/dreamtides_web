@@ -1,0 +1,46 @@
+{
+  "bead": "hv-umm2.120",
+  "base": "a7dc2d52bdfd9e896277d0db23bb204d00dae88b",
+  "artifactRoot": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.120",
+  "dispatchWindow": {
+    "firstTimestamp": "2026-10-12T01:30:47Z",
+    "commitAt": "2026-10-12T01:50Z",
+    "elapsedMin": 24,
+    "basis": "The first recorded timestamp follows about four minutes of reading after dispatch; implementMin adds those minutes."
+  },
+  "entities": {
+    "16d2e85d-f940-43dd-9867-784b3a5ec5d7": "activated([abandonCost({ another: true })], foresee(1 | 2 amplified))",
+    "2d180bd7-4cc7-49fb-b76c-0990656cedc0": "activated([abandonCost()], erode(2 | 3 amplified))",
+    "acefcfcf-cba5-46ec-913e-32f1091afbda": "additionalCost(discardCost(2)), event(draw(3 | 4 amplified))",
+    "b977afaf-f583-45ec-8e34-99fbfa4e9190": "activated([energy(1), abandonCost({ subtype: Warrior }, 2)], draw(1 | 2 amplified))",
+    "dcaba429-6fbc-4ea5-b063-871134ccd03b": "additionalCost(discardCost()), event(draw(2))"
+  },
+  "scenarioSpecs": "none: every entity is a plain composition of existing primitives (D20)",
+  "commands": {
+    "focused": { "command": "npm test -- src/engine/content-gates.test.ts src/content/content-index.test.ts src/content/specs/specs.test.ts", "wallS": 3, "result": "3 files, 78 tests pass" },
+    "preflight": { "command": "npm run lab:preflight -- --cards <5 uuids>", "wallS": 1, "result": { "pass": 58, "skip": 42, "fail": 0, "pending": 0 }, "hostLoad": 28.95 },
+    "fuzz": { "command": "lockf -k artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids <5 uuids>", "lockWaitS": 6, "wallS": 157, "engineWallS": 155.2, "games": 300, "steps": 156795, "failures": 0, "hostLoadAtAcquire": 24.39, "targets": { "16d2e85d": { "included": 614, "exercised": 285 }, "2d180bd7": { "included": 618, "exercised": 249 }, "acefcfcf": { "included": 618, "exercised": 237 }, "b977afaf": { "included": 611, "exercised": 262 }, "dcaba429": { "included": 620, "exercised": 245 } } },
+    "sweep": { "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.120 --cards <5 uuids> --port 5175", "wallS": 904, "browserLeaseWaitS": 232.8, "executionS": 666.4, "sessions": 3, "leaseYields": 2, "hostLoad": 20.17, "cells": { "pass": 58, "skip": 42, "fail": 0 } },
+    "knip": { "command": "npm run knip", "wallS": 3, "result": "pass" },
+    "review": { "command": "npm run review", "wallS": 44, "hostLoadAtStart": 5.58, "result": "221 files, 2943 tests pass" }
+  },
+  "hostLoadSamples": { "preflight": 28.95, "fuzzAcquire": 24.39, "sweep": 20.17, "reviewStart": 5.58 },
+  "schemaNormalization": { "fields": { "hostLoad": { "measuredFor": "npm run review start (1-minute vm.loadavg)" } } },
+  "engineProbes": {
+    "basis": "Uncommitted runScenario probe in the session scratchpad, both controllers, base and amplified, on the content catalog plus synthetic Warrior vanillas.",
+    "results": [
+      "16d2e85d abandons the other character, then foresees 1/2; with no other character the activation is illegal",
+      "2d180bd7 may abandon itself and erodes 2/3",
+      "b977afaf pays 1 energy and abandons both Warriors, then draws 1/2; with one Warrior the activation is illegal",
+      "acefcfcf with one other hand card is unplayable; with three it discards the two chosen and draws 3",
+      "dcaba429 with no other hand card is unplayable"
+    ]
+  },
+  "judgedQa": {
+    "required": [],
+    "basis": "No entity introduces a new prompt kind, status indicator or visual effect (arrange:foresee, chooseCards:abandonCost and chooseCards:discardCost already exist), and no UUID's SHA-256 first byte is below 26 (196, 89, 48, 69, 145)."
+  },
+  "runtime": [
+    { "process": "card-sweep dev server", "pids": [5837, 37355, 1881], "port": 5175, "stopped": true, "note": "one process group per sweep session; each stopped by the sweep with the port verified free" }
+  ]
+}

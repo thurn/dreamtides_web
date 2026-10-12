@@ -1,3 +1,5 @@
+import { additionalCost, discardCost, event } from "../../engine/dsl/builders";
+import { draw } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 175,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [additionalCost(discardCost(2)), event(draw(variant.amplified ? 4 : 3))],
+  verifiedText: "1nmr0qgcyw8",
 });

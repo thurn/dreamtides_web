@@ -1,3 +1,5 @@
+import { abandonCost, activated, energy } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 81,
   art: { x: 0, y: 1, scale: 1.36 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [activated([energy(1), abandonCost({ subtype: "Warrior" }, 2)], p.draw(variant.amplified ? 2 : 1))],
+  verifiedText: "y471x7ct5l",
 });
