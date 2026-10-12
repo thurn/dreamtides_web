@@ -1,0 +1,22 @@
+{
+  "bead": "hv-by8q",
+  "phase": 5,
+  "implementMin": 34.67189526666667,
+  "implementWindow": {
+    "start": "2026-10-12T22:39:01.997000+00:00",
+    "end": "2026-10-12T23:13:42.310716+00:00"
+  },
+  "localValidationS": {
+    "focused": 11.492647166989627,
+    "review": 12.71742745800293,
+    "knip": 3.4571112080011517,
+    "full": 110.19715570900007
+  },
+  "hostLoad": 5.9462890625,
+  "testDelta": {
+    "files": 1,
+    "lines": 283,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

@@ -1,0 +1,3197 @@
+{
+  "bead": "hv-by8q",
+  "base": "e926449abd74f5d8c85beb62ebac2f58eb2d3ad6",
+  "dispatch": {
+    "eventTime": "2026-10-12T22:39:01.997Z",
+    "callId": "call_214d5b8a2f8a4a58b6a2d5ecf3e0cdbc",
+    "tool": "spawn_agent",
+    "task": "/root/karev_scene_contracts_by8q",
+    "source": "/Users/dthurn/.codex/sessions/2026/10/11/rollout-2026-10-11T15-36-17-01a12d1c-1239-79a0-aafa-20510f4f7525.jsonl",
+    "modelStart": "UNKNOWN"
+  },
+  "freshInstall": {
+    "label": "install",
+    "command": [
+      "npm",
+      "install"
+    ],
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+    "observerPid": 38521,
+    "observerPgid": 38521,
+    "startUtc": "2026-10-12T22:34:13.058863+00:00",
+    "pid": 38948,
+    "pgid": 38948,
+    "exit": 0,
+    "endUtc": "2026-10-12T22:34:15.995373+00:00",
+    "elapsedS": 2.9365202080080053
+  },
+  "observerNamespaceRecovery": {
+    "at": "2026-10-12T22:37:54.369474+00:00",
+    "cause": "Copied temporary parent observer retained hardcoded previous scratch output directory",
+    "newInstallActualReceipt": {
+      "label": "install",
+      "command": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+      "observerPid": 38521,
+      "observerPgid": 38521,
+      "startUtc": "2026-10-12T22:34:13.058863+00:00",
+      "pid": 38948,
+      "pgid": 38948,
+      "exit": 0,
+      "endUtc": "2026-10-12T22:34:15.995373+00:00",
+      "elapsedS": 2.9365202080080053
+    },
+    "recovery": "Moved actual new install receipts to by8q; observer output root now __file__.resolve().parent. Prior aq9d install metadata recovered from immutable source measurements to separately named file; original prior stdout/stderr overwritten in scratch, not claimed restored. No source/candidate/native effects changed; no reinstall. Brief-preparation FileNotFoundError preceded any brief/source write."
+  },
+  "writeAdmission": {
+    "at": "2026-10-12T22:47:22.343050Z",
+    "scope": "Tagged Karev guard/private nullable helpers/four build refs/dedicated synthetic Node contracts/own evidence only."
+  },
+  "implementationEndpoint": {
+    "status": "Fresh parent endpoint ACK received; source and all other evidence frozen. Only these two endpoint metadata files updated under exact ACK.",
+    "ackAt": "2026-10-12T23:13:42.310716+00:00",
+    "dispatchAt": "2026-10-12T22:39:01.997000+00:00",
+    "implementMin": 34.67189526666667,
+    "modelStart": "UNKNOWN",
+    "gitMetadataDate": "2026-10-12T23:13:42+00:00",
+    "gitActualReceipt": "External scratch git-actual-process.json records actual Git PID/PGID/start/end/CPU after execution; no future actual endpoint is invented inside this immutable evidence.",
+    "qualification": "Gross window is actual host dispatch through fresh parent ACK endpoint; installation predates dispatch. ACK clock supplies Git metadata; actual Git execution wall time is separate."
+  },
+  "validation": {
+    "focused": [
+      {
+        "label": "focused01",
+        "command": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "test",
+          "--",
+          "src/runtime/qa-scenes-karev.test.ts",
+          "src/runtime/qa-scenes.test.ts",
+          "src/runtime/qa-scenes-battle.test.ts",
+          "src/runtime/qa-scenes-dreamsign.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+        "observerPid": 42262,
+        "observerPgid": 42262,
+        "entryUtc": "2026-10-12T22:48:06.667633+00:00",
+        "pid": 42271,
+        "pgid": 42271,
+        "commandStartUtc": "2026-10-12T22:48:06.669351+00:00",
+        "exit": 0,
+        "commandEndUtc": "2026-10-12T22:48:14.106869+00:00",
+        "elapsedS": 7.439179041990428,
+        "cpu": {
+          "userS": 9.001209,
+          "systemS": 2.354889,
+          "scope": "wait4 child resource accounting; excludes time waiting to acquire the heavy slot from inner command timing"
+        },
+        "maxRssBytes": 846970880
+      },
+      {
+        "label": "focused02",
+        "command": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "test",
+          "--",
+          "src/runtime/qa-scenes-karev.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+        "observerPid": 43774,
+        "observerPgid": 43687,
+        "entryUtc": "2026-10-12T22:49:11.674274+00:00",
+        "pid": 43777,
+        "pgid": 43777,
+        "commandStartUtc": "2026-10-12T22:49:11.676024+00:00",
+        "exit": 0,
+        "commandEndUtc": "2026-10-12T22:49:15.727445+00:00",
+        "elapsedS": 4.053468124999199,
+        "cpu": {
+          "userS": 4.482206,
+          "systemS": 1.281726,
+          "scope": "wait4 child resource accounting; excludes time waiting to acquire the heavy slot from inner command timing"
+        },
+        "maxRssBytes": 542375936
+      }
+    ],
+    "review": {
+      "label": "review01",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+      "observerPid": 43687,
+      "observerPgid": 43687,
+      "entryUtc": "2026-10-12T22:49:15.752259+00:00",
+      "pid": 43976,
+      "pgid": 43976,
+      "commandStartUtc": "2026-10-12T22:49:15.753899+00:00",
+      "exit": 0,
+      "commandEndUtc": "2026-10-12T22:49:28.469182+00:00",
+      "elapsedS": 12.71742745800293,
+      "cpu": {
+        "userS": 56.354876,
+        "systemS": 7.313238,
+        "scope": "wait4 child resource accounting; excludes time waiting to acquire the heavy slot from inner command timing"
+      },
+      "maxRssBytes": 2247639040
+    },
+    "knip": {
+      "label": "knip01",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+      "observerPid": 45759,
+      "observerPgid": 45749,
+      "entryUtc": "2026-10-12T22:50:22.352748+00:00",
+      "pid": 45760,
+      "pgid": 45760,
+      "commandStartUtc": "2026-10-12T22:50:22.356115+00:00",
+      "exit": 0,
+      "commandEndUtc": "2026-10-12T22:50:25.809859+00:00",
+      "elapsedS": 3.4571112080011517,
+      "cpu": {
+        "userS": 3.147935,
+        "systemS": 0.8344239999999999,
+        "scope": "wait4 child resource accounting; excludes time waiting to acquire the heavy slot from inner command timing"
+      },
+      "maxRssBytes": 572358656
+    },
+    "full": {
+      "label": "full-command",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+      "observerPid": 45926,
+      "observerPgid": 45911,
+      "entryUtc": "2026-10-12T22:50:27.024263+00:00",
+      "lockAcquisitionObservedUtc": "2026-10-12T22:50:27.024367+00:00",
+      "pid": 45927,
+      "pgid": 45927,
+      "commandStartUtc": "2026-10-12T22:50:27.025767+00:00",
+      "exit": 0,
+      "commandEndUtc": "2026-10-12T22:52:17.222014+00:00",
+      "elapsedS": 110.19715570900007,
+      "cpu": {
+        "userS": 235.253228,
+        "systemS": 38.87521,
+        "scope": "wait4 child resource accounting; excludes time waiting to acquire the heavy slot from inner command timing"
+      },
+      "maxRssBytes": 6024216576
+    },
+    "fullOuter": {
+      "label": "full-outer",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-karev-scenes-by8q/command-observer.py",
+        "full-command",
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+      "observerPid": 45749,
+      "observerPgid": 45749,
+      "entryUtc": "2026-10-12T22:50:25.832959+00:00",
+      "pid": 45911,
+      "pgid": 45911,
+      "commandStartUtc": "2026-10-12T22:50:25.834551+00:00",
+      "exit": 0,
+      "commandEndUtc": "2026-10-12T22:52:17.227992+00:00",
+      "elapsedS": 111.39442737499485,
+      "cpu": {
+        "userS": 235.2704,
+        "systemS": 38.884567,
+        "scope": "wait4 child resource accounting; excludes time waiting to acquire the heavy slot from inner command timing"
+      },
+      "maxRssBytes": 6024216576
+    },
+    "preflight": {
+      "label": "preflight01",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--avatars",
+        "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+      "observerPid": 80287,
+      "observerPgid": 80277,
+      "entryUtc": "2026-10-12T22:53:18.489525+00:00",
+      "pid": 80288,
+      "pgid": 80288,
+      "commandStartUtc": "2026-10-12T22:53:18.491358+00:00",
+      "exit": 0,
+      "commandEndUtc": "2026-10-12T22:53:19.746247+00:00",
+      "elapsedS": 1.2567296249908395,
+      "cpu": {
+        "userS": 0.8935829999999999,
+        "systemS": 0.339174,
+        "scope": "wait4 child resource accounting; excludes time waiting to acquire the heavy slot from inner command timing"
+      },
+      "maxRssBytes": 341344256
+    }
+  },
+  "beforeFixWitness": [
+    {
+      "id": "karev-payment",
+      "retainedOtherAvatar": "2de807bb-a234-428b-9f29-d9ee7736c2d0",
+      "hasRequiredAvatar": false,
+      "journeyBuildReturnedNull": false,
+      "battleError": {
+        "name": "Error",
+        "message": "Karev payment fixture requires its exact Avatar UUID"
+      }
+    },
+    {
+      "id": "karev-unaffordable",
+      "retainedOtherAvatar": "2de807bb-a234-428b-9f29-d9ee7736c2d0",
+      "hasRequiredAvatar": false,
+      "journeyBuildReturnedNull": false,
+      "battleError": {
+        "name": "Error",
+        "message": "Karev payment fixture requires its exact Avatar UUID"
+      }
+    },
+    {
+      "id": "karev-controller-player",
+      "retainedOtherAvatar": "2de807bb-a234-428b-9f29-d9ee7736c2d0",
+      "hasRequiredAvatar": false,
+      "journeyBuildReturnedNull": false,
+      "battleError": {
+        "name": "Error",
+        "message": "Karev payment fixture requires its exact Avatar UUID"
+      }
+    },
+    {
+      "id": "karev-inactive",
+      "retainedOtherAvatar": "2de807bb-a234-428b-9f29-d9ee7736c2d0",
+      "hasRequiredAvatar": false,
+      "journeyBuildReturnedNull": false,
+      "battleError": {
+        "name": "Error",
+        "message": "Karev payment fixture requires its exact Avatar UUID"
+      }
+    }
+  ],
+  "genuineConstructorWitness": [
+    {
+      "controller": "enemy",
+      "events": [
+        {
+          "kind": "revealed",
+          "side": "enemy",
+          "zone": "deck",
+          "instances": [
+            "i15"
+          ]
+        }
+      ],
+      "sourceAvatar": {
+        "id": "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+        "exhausted": false
+      },
+      "otherAvatar": null
+    },
+    {
+      "controller": "player",
+      "events": [
+        {
+          "kind": "revealed",
+          "side": "player",
+          "zone": "deck",
+          "instances": [
+            "i1"
+          ]
+        }
+      ],
+      "sourceAvatar": {
+        "id": "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+        "exhausted": false
+      },
+      "otherAvatar": null
+    }
+  ],
+  "sourceScope": {
+    "observedUtc": "2026-10-12T22:50:22.321249+00:00",
+    "base": "e926449abd74f5d8c85beb62ebac2f58eb2d3ad6",
+    "existingTrackedSourceChanged": [
+      "src/runtime/qa-scenes.ts"
+    ],
+    "protectedDefaultAndOtherBodyBytesIdentical": true,
+    "normalizedQaScenesSha256": "5ab45eed59bb47d3ac1b3167dbd782d40b46eebd605e0346a1fb269554608ef5",
+    "baseQaScenesSha256": "5ab45eed59bb47d3ac1b3167dbd782d40b46eebd605e0346a1fb269554608ef5",
+    "finalSources": {
+      "src/runtime/qa-scenes.ts": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "src/runtime/qa-scenes-karev.test.ts": "80ffd9128d5afc16840e137936ad685a84f8f0b304f9deb7fa140a9c79f9347e"
+    },
+    "engineAndCatalogUnchangedFromOwnBase": true,
+    "fuzzApplicability": "NA: scene-build validation infrastructure authors no engine or production entity. Prior hv-aq9d weighted300 is historical only, not claimed as current dependency-hash reuse."
+  },
+  "mutations": [
+    {
+      "fault": "missing-build-guard",
+      "exit": 1,
+      "assertionFailureObserved": true,
+      "testSummary": [
+        " Test Files  1 failed (1)",
+        "      Tests  5 failed | 11 passed (16)"
+      ],
+      "beforeSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "restoredSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b"
+    },
+    {
+      "fault": "missing-stale-guard",
+      "exit": 1,
+      "assertionFailureObserved": true,
+      "testSummary": [
+        " Test Files  1 failed (1)",
+        "      Tests  4 failed | 12 passed (16)"
+      ],
+      "beforeSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "restoredSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b"
+    },
+    {
+      "fault": "wrong-controller",
+      "exit": 1,
+      "assertionFailureObserved": true,
+      "testSummary": [
+        " Test Files  1 failed (1)",
+        "      Tests  3 failed | 13 passed (16)"
+      ],
+      "beforeSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "restoredSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b"
+    },
+    {
+      "fault": "wrong-payer-energy",
+      "exit": 1,
+      "assertionFailureObserved": true,
+      "testSummary": [
+        " Test Files  1 failed (1)",
+        "      Tests  4 failed | 12 passed (16)"
+      ],
+      "beforeSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "restoredSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b"
+    },
+    {
+      "fault": "wrong-inactive-layer",
+      "exit": 1,
+      "assertionFailureObserved": true,
+      "testSummary": [
+        " Test Files  1 failed (1)",
+        "      Tests  2 failed | 14 passed (16)"
+      ],
+      "beforeSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "restoredSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b"
+    },
+    {
+      "fault": "wrong-native-activation",
+      "exit": 1,
+      "assertionFailureObserved": true,
+      "testSummary": [
+        " Test Files  1 failed (1)",
+        "      Tests  3 failed | 13 passed (16)"
+      ],
+      "beforeSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "restoredSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b"
+    },
+    {
+      "fault": "lost-observer",
+      "exit": 1,
+      "assertionFailureObserved": true,
+      "testSummary": [
+        " Test Files  1 failed (1)",
+        "      Tests  3 failed | 13 passed (16)"
+      ],
+      "beforeSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "restoredSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b"
+    },
+    {
+      "fault": "late-metadata",
+      "exit": 1,
+      "assertionFailureObserved": true,
+      "testSummary": [
+        " Test Files  1 failed (1)",
+        "      Tests  3 failed | 13 passed (16)"
+      ],
+      "beforeSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "restoredSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b"
+    }
+  ],
+  "failurePaths": {
+    "errorMidStep": "Public real-engine synthetic card catalog rejection propagates, inputs stay byte-equivalent, healthy retry succeeds; this is synchronous construction, not gameplay payment execution.",
+    "reloadRestart": "Actual LOAD_STATE reducer accepts original init identity and JSON roundtrip state/metadata, fresh observational history on clone. Native saved pending payment reload passed both desktop/mobile with accepted decline, exact UUID logs and retained probe events.",
+    "partialWrite": "Frozen partial content returns null at both public boundaries before provider construction; inputs unchanged; no storage write belongs to scene builder.",
+    "invalidStaleInput": "Required UUID absent despite another valid/same-name different UUID Avatar; stale full-content parked journey rejects before provider; restoring complete content rebuilds deterministically.",
+    "concurrentActors": "NA: synchronous scene constructors accept no actor and perform no asynchronous persistence; interleaved source-controller/seed builds prove init identity isolation. Gameplay actor/payment concurrency belongs to unchanged engine contracts."
+  },
+  "failuresAndCorrections": [
+    {
+      "kind": "research startup",
+      "receipt": "baseline-contracts-process.json",
+      "detail": "Scratch Vitest config absolute package export path could not resolve; changed to actual dist/config.js, no repository write."
+    },
+    {
+      "kind": "test author expectation",
+      "receipt": "baseline-contracts02-process.json",
+      "detail": "Ordinary battleN registrations intentionally park prebattle; corrected scratch control to actual public startJourneyBattle. No product defect claimed."
+    },
+    {
+      "kind": "distinguishing baseline",
+      "receipt": "baseline-contracts03-process.json",
+      "detail": "15 cases:11 passed/4 missingUUID-nullability assertion failures before source repair."
+    },
+    {
+      "kind": "mutation selector refusal",
+      "detail": "Late-metadata selector matched own and readonly CardLab body; script refused before mutation. Corrected selector to exact withKarevPayment slice, test killed and byte-exact restored."
+    },
+    {
+      "kind": "parent tooling",
+      "detail": "Parent WRITEACK preparation functions JavaScript SyntaxError occurred before command/native effects; corrected before native ACK."
+    },
+    {
+      "kind": "native observation failure",
+      "detail": "Ordinary mobile Layer2 begin control timed out15000ms in first boundary invocation after desktop both/mobile Layer1. Caps empty; current game export head0 one local_game_opened. Same routes fresh diagnostic context all4PASS; no cause assigned. Core exact-Karev matrix remains10PASS."
+    },
+    {
+      "kind": "QA namespace seed semantics",
+      "detail": "Copied textual route seed tags fail existing digits-only numeric override parser; fresh actual game seeds were observed, no same-seed retry or deterministic journey claim."
+    },
+    {
+      "kind": "scratch evidence path",
+      "detail": "Record helper used placeholder run-XX path and raised FileNotFoundError before ledger write. Correct actual run-BqgECE path recorded successful diagnostic verdicts."
+    },
+    {
+      "kind": "scratch output parser",
+      "detail": "Sweep stdout is empty; initial JSON load of stdout raised JSONDecodeError before any evidence write. Actual summary.json/native stderr/raw per-cell reports read next."
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "value": 5.9462890625,
+      "at": "2026-10-12T22:49:16.753Z",
+      "scope": "review01 typecheck/lint/test-related start"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review01 start"
+      }
+    }
+  },
+  "qa": {
+    "status": "Complete local source/public-contract/native acceptance; fresh parent endpoint ACK and cold review/delivery remain parent-owned.",
+    "early": {
+      "process": {
+        "label": "native-early",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/judged.mjs",
+          "--bead",
+          "hv-by8q",
+          "--viewports",
+          "mobile",
+          "--arg",
+          "mode=pay",
+          "--arg",
+          "early=1"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+        "observerPid": 81097,
+        "observerPgid": 81097,
+        "startUtc": "2026-10-12T22:53:30.887414+00:00",
+        "loadAverage": [
+          8.05517578125,
+          7.70361328125,
+          7.6240234375
+        ],
+        "pid": 81109,
+        "pgid": 81109,
+        "exit": 0,
+        "endUtc": "2026-10-12T22:55:15.060915+00:00",
+        "elapsedS": 104.17291595900315,
+        "cpuUserS": 5.602099,
+        "cpuSystemS": 3.54426,
+        "maxRss": 692011008
+      },
+      "wallMs": {
+        "browserLeaseWait": 63240,
+        "serve": 1389,
+        "scenario": 38801,
+        "total": 103485
+      }
+    },
+    "matrix": {
+      "process": {
+        "label": "native-matrix",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/matrix.mjs",
+          "--bead",
+          "hv-by8q",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+        "observerPid": 5378,
+        "observerPgid": 5378,
+        "startUtc": "2026-10-12T22:56:31.552798+00:00",
+        "loadAverage": [
+          9.12744140625,
+          7.67724609375,
+          7.57470703125
+        ],
+        "pid": 5400,
+        "pgid": 5400,
+        "exit": 0,
+        "endUtc": "2026-10-12T23:00:28.018088+00:00",
+        "elapsedS": 236.46394745800353,
+        "cpuUserS": 6.943576,
+        "cpuSystemS": 4.039682,
+        "maxRss": 648609792
+      },
+      "wallMs": {
+        "browserLeaseWait": 56602,
+        "serve": 2576,
+        "scenario": 176485,
+        "total": 235724
+      },
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 42455
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 20922
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 13651
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 13254
+        },
+        {
+          "viewport": "desktop",
+          "step": 4,
+          "ms": 3339
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 34595
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 18092
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 13367
+        },
+        {
+          "viewport": "mobile",
+          "step": 3,
+          "ms": 13524
+        },
+        {
+          "viewport": "mobile",
+          "step": 4,
+          "ms": 3286
+        }
+      ],
+      "summary": [
+        {
+          "viewport": "desktop",
+          "mode": "pay",
+          "score": 3,
+          "payerEnergy": 0,
+          "sourceEnergy": 4,
+          "triggers": 1,
+          "paymentDebits": 1,
+          "sourceDraws": 1,
+          "ordinaryDraws": 1,
+          "uuidLogGroups": [
+            "triggers",
+            "opened",
+            "answered"
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        {
+          "viewport": "desktop",
+          "mode": "decline",
+          "score": 3,
+          "payerEnergy": 1,
+          "sourceEnergy": 4,
+          "triggers": 1,
+          "paymentDebits": 0,
+          "sourceDraws": 2,
+          "ordinaryDraws": 1,
+          "uuidLogGroups": [
+            "triggers",
+            "opened",
+            "answered"
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        {
+          "viewport": "desktop",
+          "mode": "unaffordable",
+          "score": 3,
+          "payerEnergy": 0,
+          "sourceEnergy": 4,
+          "triggers": 1,
+          "paymentDebits": 0,
+          "sourceDraws": 2,
+          "ordinaryDraws": 1,
+          "uuidLogGroups": [
+            "triggers",
+            "opened",
+            "answered"
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        {
+          "viewport": "desktop",
+          "mode": "inactive",
+          "score": 3,
+          "payerEnergy": 1,
+          "sourceEnergy": 4,
+          "triggers": 0,
+          "paymentDebits": 0,
+          "sourceDraws": 1,
+          "ordinaryDraws": 1,
+          "uuidLogGroups": [
+            "triggers"
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        {
+          "viewport": "desktop",
+          "mode": "controller",
+          "score": 3,
+          "payerEnergy": 0,
+          "sourceEnergy": 4,
+          "triggers": 1,
+          "paymentDebits": 1,
+          "sourceDraws": 1,
+          "ordinaryDraws": 1,
+          "uuidLogGroups": [
+            "triggers",
+            "opened",
+            "answered"
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        {
+          "viewport": "mobile",
+          "mode": "pay",
+          "score": 3,
+          "payerEnergy": 0,
+          "sourceEnergy": 4,
+          "triggers": 1,
+          "paymentDebits": 1,
+          "sourceDraws": 1,
+          "ordinaryDraws": 1,
+          "uuidLogGroups": [
+            "triggers",
+            "opened",
+            "answered"
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        {
+          "viewport": "mobile",
+          "mode": "decline",
+          "score": 3,
+          "payerEnergy": 1,
+          "sourceEnergy": 4,
+          "triggers": 1,
+          "paymentDebits": 0,
+          "sourceDraws": 2,
+          "ordinaryDraws": 1,
+          "uuidLogGroups": [
+            "triggers",
+            "opened",
+            "answered"
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        {
+          "viewport": "mobile",
+          "mode": "unaffordable",
+          "score": 3,
+          "payerEnergy": 0,
+          "sourceEnergy": 4,
+          "triggers": 1,
+          "paymentDebits": 0,
+          "sourceDraws": 2,
+          "ordinaryDraws": 1,
+          "uuidLogGroups": [
+            "triggers",
+            "opened",
+            "answered"
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        {
+          "viewport": "mobile",
+          "mode": "inactive",
+          "score": 3,
+          "payerEnergy": 1,
+          "sourceEnergy": 4,
+          "triggers": 0,
+          "paymentDebits": 0,
+          "sourceDraws": 1,
+          "ordinaryDraws": 1,
+          "uuidLogGroups": [
+            "triggers"
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        {
+          "viewport": "mobile",
+          "mode": "controller",
+          "score": 3,
+          "payerEnergy": 0,
+          "sourceEnergy": 4,
+          "triggers": 1,
+          "paymentDebits": 1,
+          "sourceDraws": 1,
+          "ordinaryDraws": 1,
+          "uuidLogGroups": [
+            "triggers",
+            "opened",
+            "answered"
+          ],
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        }
+      ],
+      "collectors": {
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/invocations/run-yeoimV",
+        "collectors": [
+          {
+            "filename": "accepted-pay-desktop.json",
+            "mode": "pay",
+            "viewport": "desktop",
+            "sha256": "ef3fbb093450246c44f9e97258caf9a62e0e6470d15eb3d6e8fa9ff477bfbbff",
+            "source": "Exact accumulated native report value; accepted UUID log subset."
+          },
+          {
+            "filename": "accepted-decline-desktop.json",
+            "mode": "decline",
+            "viewport": "desktop",
+            "sha256": "21fe44969398698388ed52ca824b243f74bbdef2623e4f2afce3550092ae14d3",
+            "source": "Exact accumulated native report value; accepted UUID log subset."
+          },
+          {
+            "filename": "accepted-unaffordable-desktop.json",
+            "mode": "unaffordable",
+            "viewport": "desktop",
+            "sha256": "efee1237138fafbb6bdd597f686adc46dcff12dec2488b55d7dfed686d52b078",
+            "source": "Exact accumulated native report value; accepted UUID log subset."
+          },
+          {
+            "filename": "accepted-inactive-desktop.json",
+            "mode": "inactive",
+            "viewport": "desktop",
+            "sha256": "69e9e45badfa40f28fcfcd3910c2b4fbae60edc3f41bdfd062c08b5f584cabf7",
+            "source": "Exact accumulated native report value; accepted UUID log subset."
+          },
+          {
+            "filename": "accepted-controller-desktop.json",
+            "mode": "controller",
+            "viewport": "desktop",
+            "sha256": "ba2ac90ab5457ce5004f3490f8fd6e96534e578564707a45e30446f44407709e",
+            "source": "Exact accumulated native report value; accepted UUID log subset."
+          },
+          {
+            "filename": "accepted-pay-mobile.json",
+            "mode": "pay",
+            "viewport": "mobile",
+            "sha256": "d43b6eb692d287fea349bd8afc71b58ac75c19cc3dfba916eb914401246280f0",
+            "source": "Exact accumulated native report value; accepted UUID log subset."
+          },
+          {
+            "filename": "accepted-decline-mobile.json",
+            "mode": "decline",
+            "viewport": "mobile",
+            "sha256": "194c51f9f42f30d577c313585d688f1026c48a451871541a9afa24dc5f632b10",
+            "source": "Exact accumulated native report value; accepted UUID log subset."
+          },
+          {
+            "filename": "accepted-unaffordable-mobile.json",
+            "mode": "unaffordable",
+            "viewport": "mobile",
+            "sha256": "8058ddff91e0df9c62b21c80a0795d9a8fd07fbe989d27e1bf6b6b5d33d06ea5",
+            "source": "Exact accumulated native report value; accepted UUID log subset."
+          },
+          {
+            "filename": "accepted-inactive-mobile.json",
+            "mode": "inactive",
+            "viewport": "mobile",
+            "sha256": "f07fdeecdb26b30f8dcede36cb62e89280584ff9bebaa324b2f1fef54f4c1a0e",
+            "source": "Exact accumulated native report value; accepted UUID log subset."
+          },
+          {
+            "filename": "accepted-controller-mobile.json",
+            "mode": "controller",
+            "viewport": "mobile",
+            "sha256": "5567b9a78ecf4dee0774ff396645b6023ce82f259c9a898ae691096c691dd42e",
+            "source": "Exact accumulated native report value; accepted UUID log subset."
+          }
+        ],
+        "gameLogExportQualification": {
+          "entries": [
+            {
+              "viewport": "desktop",
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/invocations/run-yeoimV/matrix-desktop.jsonl",
+              "gameId": "re4w2j",
+              "selectedBy": "url",
+              "rows": 67,
+              "reason": null
+            },
+            {
+              "viewport": "mobile",
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/invocations/run-yeoimV/matrix-mobile.jsonl",
+              "gameId": "mb8oks",
+              "selectedBy": "url",
+              "rows": 62,
+              "reason": null
+            }
+          ],
+          "scope": "Native runner exports only the final current game at the last step per viewport (2 files/2 entries). The earlier 8 cases are retained as accepted UUID log subsets in all10 exact call collectors and the accumulated native report; complete raw per-game exports for those earlier cases were not requested or retained. No overwritten earlier export is inferred."
+        }
+      }
+    },
+    "parentEarlyVisual": {
+      "observedAt": "2026-10-12T22:56:06.473324+00:00",
+      "observer": "parent limited early visual judgment",
+      "path": "early-pay-mobile.png",
+      "viewport": "mobile",
+      "dimensions": [
+        780,
+        1688
+      ],
+      "verdict": "pass",
+      "effective": false,
+      "scope": "Readable full heading, clear Debug separation, visible unclipped separated payment/decline buttons, public enemy portrait/status. Gameplay conclusions are native runner proof, not image judgment. Known missing source caption hv-o3w0 outside this repair. Final matrix and cold review still required."
+    },
+    "parentFinalVisual": {
+      "observedAt": "2026-10-12T23:02:34.905374+00:00",
+      "observer": "parent final visual inspection; receipt time after actual image inspection",
+      "resourcePrerequisite": "native-matrix-settled.json 23:01:33.222055Z all own process/tokens absent",
+      "images": [
+        {
+          "filename": "karev-pay-prompt-desktop.png",
+          "dimensions": [
+            2880,
+            1800
+          ],
+          "sha256": "f1ec2624c795a75daf617d524fa9e5f2124f968259affea527f8c140a4c925d8",
+          "verdict": "pass",
+          "visualScope": "Readable header with Debug separation and clear payment/decline controls",
+          "qualification": "Image presentation only; accepted intents/gameplay conclusions belong to actual native report. Known missing public Avatar attribution canonicalhv-o3w0 outsidearea."
+        },
+        {
+          "filename": "karev-decline-prompt-mobile.png",
+          "dimensions": [
+            780,
+            1688
+          ],
+          "sha256": "ee8a0ba519a268a06313c904c7c73e5946a5a5346e673f64a6f838618671e39e",
+          "verdict": "pass",
+          "visualScope": "Readable header with Debug separation and clear payment/decline controls",
+          "qualification": "Image presentation only; accepted intents/gameplay conclusions belong to actual native report. Known missing public Avatar attribution canonicalhv-o3w0 outsidearea."
+        },
+        {
+          "filename": "karev-paid-next-turn-desktop.png",
+          "dimensions": [
+            2880,
+            1800
+          ],
+          "sha256": "78116650a85587455f27e4555d30d54de32a3adcf13ed4ffa488a817d3493d1a",
+          "verdict": "pass",
+          "visualScope": "Visible score6/energy0 status, scoring overlay and disabled Next Phase without clipping",
+          "qualification": "Image presentation only; accepted intents/gameplay conclusions belong to actual native report. Known missing public Avatar attribution canonicalhv-o3w0 outsidearea."
+        }
+      ],
+      "coldReviewer": false,
+      "displayQualification": "Desktop previews resized by view_image; original PNG dimensions/hash directly checked."
+    },
+    "sweep": {
+      "process": {
+        "label": "native-sweep",
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-by8q",
+          "--avatars",
+          "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+        "observerPid": 56585,
+        "observerPgid": 56585,
+        "startUtc": "2026-10-12T23:07:49.098183+00:00",
+        "loadAverage": [
+          17.8544921875,
+          17.04345703125,
+          12.61376953125
+        ],
+        "pid": 56802,
+        "pgid": 56802,
+        "exit": 0,
+        "endUtc": "2026-10-12T23:08:14.079041+00:00",
+        "elapsedS": 24.98073620899231,
+        "cpuUserS": 6.57083,
+        "cpuSystemS": 3.409649,
+        "maxRss": 747307008
+      },
+      "summary": {
+        "event": "cardSweepSummary",
+        "invocation": "invocations/sweep-HMa5WP",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/invocations/sweep-HMa5WP",
+        "counts": {
+          "pass": 2,
+          "skip": 18
+        },
+        "attemptCounts": {
+          "pass": 2,
+          "skip": 18
+        },
+        "hostLoad": 17.8544921875,
+        "sessions": 1,
+        "leaseYields": 0,
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 2304,
+          "scenario": 21640.780042,
+          "cleanup": 662.7669999999998,
+          "execution": 24672.914333,
+          "total": 24679.914333
+        }
+      },
+      "baseCells": [
+        {
+          "side": "player",
+          "result": {
+            "verdict": "pass",
+            "notes": "",
+            "failureKinds": [],
+            "lab": {
+              "card": "",
+              "avatar": "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+              "variant": "base",
+              "side": "player",
+              "stage": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base"
+              ],
+              "entityKind": "avatar",
+              "cardStatus": "authored",
+              "cardType": "Avatar"
+            },
+            "avatar": {
+              "id": "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+              "exhausted": false
+            },
+            "turn": {
+              "round": 1,
+              "turnNumber": 1,
+              "active": "player",
+              "phase": "day",
+              "sideTurns": {
+                "player": 1,
+                "enemy": 0
+              },
+              "extra": false,
+              "lastNormal": "player",
+              "extraTurns": [],
+              "challengeLane": null,
+              "beginning": false
+            },
+            "exercised": false,
+            "exercise": [],
+            "answered": 0,
+            "passes": 0,
+            "screens": []
+          },
+          "caps": [],
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/invocations/sweep-HMa5WP/run-4Teed1/sweep-9e4862fd-e18c-463e-9d5f-e5d73c29a66f-base-player-attempt-1.result.json",
+          "sha256": "e3e9c6e2d2a1db07b69a26f7068df09a7f5ef489ac16d5008e524a434b620212"
+        },
+        {
+          "side": "enemy",
+          "result": {
+            "verdict": "pass",
+            "notes": "",
+            "failureKinds": [],
+            "lab": {
+              "card": "",
+              "avatar": "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+              "variant": "base",
+              "side": "enemy",
+              "stage": null,
+              "status": "ready",
+              "reason": null,
+              "detail": null,
+              "eligibleVariants": [
+                "base"
+              ],
+              "entityKind": "avatar",
+              "cardStatus": "authored",
+              "cardType": "Avatar"
+            },
+            "avatar": {
+              "id": "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+              "exhausted": false
+            },
+            "turn": {
+              "round": 1,
+              "turnNumber": 1,
+              "active": "enemy",
+              "phase": "day",
+              "sideTurns": {
+                "player": 0,
+                "enemy": 1
+              },
+              "extra": false,
+              "lastNormal": "enemy",
+              "extraTurns": [],
+              "challengeLane": null,
+              "beginning": false
+            },
+            "exercised": false,
+            "exercise": [],
+            "answered": 0,
+            "passes": 0,
+            "screens": []
+          },
+          "caps": [],
+          "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/invocations/sweep-HMa5WP/run-4Teed1/sweep-9e4862fd-e18c-463e-9d5f-e5d73c29a66f-base-enemy-attempt-1.result.json",
+          "sha256": "5cbb62d75db11bda0a9031ceced24f5a4a1c62fc691f3ec27fe9b27f7e815a25"
+        }
+      ],
+      "qualification": "Initialization-only/exercised:false on both controllers;18 ineligible variants skip. No invented amplified Avatar behavior."
+    },
+    "preflightQualification": "2base passes/18 ineligible variant skips; initialization-only normal first-turn seam, no scoring/payment claim.",
+    "ordinaryBoundary": {
+      "first": {
+        "process": {
+          "label": "native-boundary",
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/boundary.mjs",
+            "--bead",
+            "hv-by8q",
+            "--viewports",
+            "desktop,mobile"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+          "observerPid": 5649,
+          "observerPgid": 5649,
+          "startUtc": "2026-10-12T23:03:09.149479+00:00",
+          "loadAverage": [
+            17.93896484375,
+            11.990234375,
+            9.31494140625
+          ],
+          "pid": 5662,
+          "pgid": 5662,
+          "exit": 1,
+          "endUtc": "2026-10-12T23:03:41.534513+00:00",
+          "elapsedS": 32.384869000001345,
+          "cpuUserS": 6.081972,
+          "cpuSystemS": 2.9548609999999997,
+          "maxRss": 702660608
+        },
+        "error": "mobile#0: QaTimeoutError: waitVisible [data-testid=cumulus-battle-start-begin]: timed out after 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at poll (evalmachine.<anonymous>:277:41)\n    at async Object.waitVisible (evalmachine.<anonymous>:285:5)\n    at async boundary (evalmachine.<anonymous>:1655:3)\n    at async evalmachine.<anonymous>:1673:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "caps": [],
+        "partialResults": {
+          "desktop": [
+            {
+              "uiLayer": 1,
+              "nativeCompletion": 0,
+              "enemyAvatar": null,
+              "actualEngineSeed": "2573366122",
+              "portraits": [
+                {
+                  "uuid": "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+                  "disabled": "true"
+                },
+                {
+                  "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+                  "disabled": null
+                }
+              ],
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=battle1&debug=1&seed=by8q-boundary-desktop&game=mdtbfs"
+            },
+            {
+              "uiLayer": 2,
+              "nativeCompletion": 1,
+              "enemyAvatar": {
+                "id": "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
+                "exhausted": false
+              },
+              "actualEngineSeed": "921166802",
+              "portraits": [
+                {
+                  "uuid": "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
+                  "disabled": null
+                },
+                {
+                  "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+                  "disabled": null
+                }
+              ],
+              "href": "http://localhost:5274/dreamscape/1-tsukiren/battle?goto=battle2&debug=1&seed=by8q-boundary-desktop&game=vynmwf"
+            }
+          ],
+          "mobile": null
+        },
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/invocations/run-zujwKb/boundary.result.json",
+        "qualification": "Desktop both layers completed; mobile Layer1 completed its assertions before Layer2 begin-control timeout. First failure retained; no actual failing screen capture was taken in that first invocation."
+      },
+      "diagnostic": {
+        "process": {
+          "label": "native-boundary02",
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/boundary-diagnostic.mjs",
+            "--bead",
+            "hv-by8q",
+            "--viewports",
+            "desktop,mobile"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+          "observerPid": 30988,
+          "observerPgid": 30988,
+          "startUtc": "2026-10-12T23:06:15.656223+00:00",
+          "loadAverage": [
+            20.1884765625,
+            17.5830078125,
+            12.3232421875
+          ],
+          "pid": 31006,
+          "pgid": 31006,
+          "exit": 0,
+          "endUtc": "2026-10-12T23:06:30.880376+00:00",
+          "elapsedS": 15.224089459006791,
+          "cpuUserS": 5.708975,
+          "cpuSystemS": 2.649204,
+          "maxRss": 653950976
+        },
+        "caps": [],
+        "results": {
+          "desktop": [
+            {
+              "uiLayer": 1,
+              "nativeCompletion": 0,
+              "enemyAvatar": null,
+              "actualEngineSeed": "2552603914",
+              "portraits": [
+                {
+                  "uuid": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+                  "disabled": "true"
+                },
+                {
+                  "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+                  "disabled": null
+                }
+              ],
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=battle1&debug=1&seed=by8q-boundary-desktop&game=yo2pci"
+            },
+            {
+              "uiLayer": 2,
+              "nativeCompletion": 1,
+              "enemyAvatar": {
+                "id": "f0f5449e-01c2-4635-bce1-76b179fc2108",
+                "exhausted": false
+              },
+              "actualEngineSeed": "3362383582",
+              "portraits": [
+                {
+                  "uuid": "f0f5449e-01c2-4635-bce1-76b179fc2108",
+                  "disabled": null
+                },
+                {
+                  "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+                  "disabled": null
+                }
+              ],
+              "href": "http://localhost:5274/dreamscape/1-pharaohs-gate/battle?goto=battle2&debug=1&seed=by8q-boundary-desktop&game=ga24ur"
+            }
+          ],
+          "mobile": [
+            {
+              "uiLayer": 1,
+              "nativeCompletion": 0,
+              "enemyAvatar": null,
+              "actualEngineSeed": "171371295",
+              "portraits": [
+                {
+                  "uuid": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+                  "disabled": "true"
+                },
+                {
+                  "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+                  "disabled": null
+                }
+              ],
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=battle1&debug=1&seed=by8q-boundary-mobile&game=boqamh"
+            },
+            {
+              "uiLayer": 2,
+              "nativeCompletion": 1,
+              "enemyAvatar": {
+                "id": "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
+                "exhausted": false
+              },
+              "actualEngineSeed": "1039836255",
+              "portraits": [
+                {
+                  "uuid": "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
+                  "disabled": null
+                },
+                {
+                  "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+                  "disabled": null
+                }
+              ],
+              "href": "http://localhost:5274/dreamscape/1-winterwake-fjords/battle?goto=battle2&debug=1&seed=by8q-boundary-mobile&game=v7iwfd"
+            }
+          ]
+        },
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/invocations/run-BqgECE/boundary-diagnostic.result.json",
+        "qualification": "Same routes in a fresh context passed all4 native boundaries; catch-and-capture timeout handler did not fire. Original cause remains unassigned, not called transient or repaired."
+      }
+    },
+    "seedQualification": {
+      "source": "src/runtime/runtime-config.ts parseSeedOverride",
+      "contract": "Missing/empty or nondigit seed returns null; digits parse to finite nonnegative integer. Copied textual by8q-* route tokens produce null numeric overrides; native journeys are fresh actual games, not asserted same-seed repeats.",
+      "declaredFixtureEngineSeed": "board (actual native committed fixture state)",
+      "ordinaryActualEngineSeeds": {
+        "desktop": [
+          {
+            "uiLayer": 1,
+            "nativeCompletion": 0,
+            "enemyAvatar": null,
+            "actualEngineSeed": "2552603914",
+            "portraits": [
+              {
+                "uuid": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+                "disabled": "true"
+              },
+              {
+                "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+                "disabled": null
+              }
+            ],
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=battle1&debug=1&seed=by8q-boundary-desktop&game=yo2pci"
+          },
+          {
+            "uiLayer": 2,
+            "nativeCompletion": 1,
+            "enemyAvatar": {
+              "id": "f0f5449e-01c2-4635-bce1-76b179fc2108",
+              "exhausted": false
+            },
+            "actualEngineSeed": "3362383582",
+            "portraits": [
+              {
+                "uuid": "f0f5449e-01c2-4635-bce1-76b179fc2108",
+                "disabled": null
+              },
+              {
+                "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+                "disabled": null
+              }
+            ],
+            "href": "http://localhost:5274/dreamscape/1-pharaohs-gate/battle?goto=battle2&debug=1&seed=by8q-boundary-desktop&game=ga24ur"
+          }
+        ],
+        "mobile": [
+          {
+            "uiLayer": 1,
+            "nativeCompletion": 0,
+            "enemyAvatar": null,
+            "actualEngineSeed": "171371295",
+            "portraits": [
+              {
+                "uuid": "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+                "disabled": "true"
+              },
+              {
+                "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+                "disabled": null
+              }
+            ],
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=battle1&debug=1&seed=by8q-boundary-mobile&game=boqamh"
+          },
+          {
+            "uiLayer": 2,
+            "nativeCompletion": 1,
+            "enemyAvatar": {
+              "id": "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
+              "exhausted": false
+            },
+            "actualEngineSeed": "1039836255",
+            "portraits": [
+              {
+                "uuid": "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
+                "disabled": null
+              },
+              {
+                "uuid": "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+                "disabled": null
+              }
+            ],
+            "href": "http://localhost:5274/dreamscape/1-winterwake-fjords/battle?goto=battle2&debug=1&seed=by8q-boundary-mobile&game=v7iwfd"
+          }
+        ]
+      },
+      "testSeeds": "Node contracts use explicit branded SCENE_OPTIONS and independent typed seed; no default algorithm choice is gated."
+    }
+  },
+  "runtime": {
+    "prewrite": {
+      "observedUtc": "2026-10-12T22:45:54.453681+00:00",
+      "observedGroups": [
+        3814,
+        7110,
+        8557,
+        8755,
+        9069,
+        38948
+      ],
+      "remainingRows": [],
+      "note": "Scratch SSR and Vitest receipts only; no browser/native provider started."
+    },
+    "nativeSettled": {
+      "native-early": {
+        "label": "native-early",
+        "observedUtc": "2026-10-12T22:55:23.446712+00:00",
+        "nativeProcess": {
+          "label": "native-early",
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/judged.mjs",
+            "--bead",
+            "hv-by8q",
+            "--viewports",
+            "mobile",
+            "--arg",
+            "mode=pay",
+            "--arg",
+            "early=1"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+          "observerPid": 81097,
+          "observerPgid": 81097,
+          "startUtc": "2026-10-12T22:53:30.887414+00:00",
+          "loadAverage": [
+            8.05517578125,
+            7.70361328125,
+            7.6240234375
+          ],
+          "pid": 81109,
+          "pgid": 81109,
+          "exit": 0,
+          "endUtc": "2026-10-12T22:55:15.060915+00:00",
+          "elapsedS": 104.17291595900315,
+          "cpuUserS": 5.602099,
+          "cpuSystemS": 3.54426,
+          "maxRss": 692011008
+        },
+        "owners": [
+          {
+            "token": "ff8b31ec-b6b2-4853-8780-2912fba068d5",
+            "pid": 81109,
+            "bead": "hv-by8q",
+            "label": "judged",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+            "slot": 0,
+            "port": 5174,
+            "startedAt": "2026-10-12T22:54:35.699Z",
+            "providerState": "active",
+            "mcpSessionId": "f86fd919-9afd-4bdf-a7ec-5006a21351f3",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "servers": [
+          {
+            "token": "a963e784-ee00-4849-b968-2b88f4143110",
+            "runner": {
+              "pid": 81109,
+              "group": 81109,
+              "started": "Mon Oct 12 15:53:30 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/judged.mjs --bead hv-by8q --viewports mobile --arg mode=pay --arg early=1"
+            },
+            "server": {
+              "pid": 90097,
+              "group": 90097,
+              "started": "Mon Oct 12 15:54:34 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json a963e784-ee00-4849-b968-2b88f4143110 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+            "port": 5174,
+            "members": [
+              {
+                "pid": 90097,
+                "group": 90097,
+                "started": "Mon Oct 12 15:54:34 2026",
+                "state": "Ss",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json a963e784-ee00-4849-b968-2b88f4143110 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+              },
+              {
+                "pid": 90130,
+                "group": 90097,
+                "started": "Mon Oct 12 15:54:34 2026",
+                "state": "S",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+              },
+              {
+                "pid": 90235,
+                "group": 90097,
+                "started": "Mon Oct 12 15:54:35 2026",
+                "state": "S",
+                "command": "node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/node_modules/.bin/vite --port 5174 --strictPort"
+              },
+              {
+                "pid": 90274,
+                "group": 90097,
+                "started": "Mon Oct 12 15:54:35 2026",
+                "state": "S",
+                "command": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+              }
+            ]
+          }
+        ],
+        "observedPids": [
+          81097,
+          81109,
+          90097,
+          90130,
+          90132,
+          90133,
+          90235,
+          90274
+        ],
+        "observedGroups": [
+          81109,
+          90097
+        ],
+        "remainingProcessRows": [],
+        "remainingOwnRecords": [],
+        "otherOwnersPreserved": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "token": "2fcf38c5-cfcc-4993-8c64-ed0d598dc6e1",
+            "pid": 81809,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+            "token": "7b0e7d7a-149f-4bd4-a116-152b9713329a",
+            "pid": 81809,
+            "preserved": true
+          }
+        ],
+        "nativeCleanupConfirmed": true,
+        "providerQualification": "Native browser_close response plus active RPC join and SDK disconnection confirmed by normal close path. Transport session deletion is not asserted.",
+        "runtimeImagesSha256": "d40013d119b5a913d5c5826a0a01985b61d5c466ebfee5844942b905b2d0a894"
+      },
+      "native-matrix": {
+        "label": "native-matrix",
+        "observedUtc": "2026-10-12T23:01:33.222055+00:00",
+        "nativeProcess": {
+          "label": "native-matrix",
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/matrix.mjs",
+            "--bead",
+            "hv-by8q",
+            "--viewports",
+            "desktop,mobile"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+          "observerPid": 5378,
+          "observerPgid": 5378,
+          "startUtc": "2026-10-12T22:56:31.552798+00:00",
+          "loadAverage": [
+            9.12744140625,
+            7.67724609375,
+            7.57470703125
+          ],
+          "pid": 5400,
+          "pgid": 5400,
+          "exit": 0,
+          "endUtc": "2026-10-12T23:00:28.018088+00:00",
+          "elapsedS": 236.46394745800353,
+          "cpuUserS": 6.943576,
+          "cpuSystemS": 4.039682,
+          "maxRss": 648609792
+        },
+        "owners": [
+          {
+            "token": "a2dc4e3f-4b80-42f3-a80b-ebf577fc7e9e",
+            "pid": 5400,
+            "bead": "hv-by8q",
+            "label": "matrix",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+            "slot": 0,
+            "port": 5174,
+            "startedAt": "2026-10-12T22:57:30.853Z",
+            "providerState": "active",
+            "mcpSessionId": "5f8aa3f8-3c14-48e0-bb97-06c4338f598e",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "servers": [
+          {
+            "token": "faca6b31-20a7-475c-95e8-13a209df718e",
+            "runner": {
+              "pid": 5400,
+              "group": 5400,
+              "started": "Mon Oct 12 15:56:31 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/matrix.mjs --bead hv-by8q --viewports desktop,mobile"
+            },
+            "server": {
+              "pid": 13062,
+              "group": 13062,
+              "started": "Mon Oct 12 15:57:28 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json faca6b31-20a7-475c-95e8-13a209df718e /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+            "port": 5174,
+            "members": [
+              {
+                "pid": 13062,
+                "group": 13062,
+                "started": "Mon Oct 12 15:57:28 2026",
+                "state": "Ss",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json faca6b31-20a7-475c-95e8-13a209df718e /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+              },
+              {
+                "pid": 13089,
+                "group": 13062,
+                "started": "Mon Oct 12 15:57:28 2026",
+                "state": "S",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5174 --strictPort"
+              },
+              {
+                "pid": 13389,
+                "group": 13062,
+                "started": "Mon Oct 12 15:57:30 2026",
+                "state": "S",
+                "command": "node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/node_modules/.bin/vite --port 5174 --strictPort"
+              },
+              {
+                "pid": 13390,
+                "group": 13062,
+                "started": "Mon Oct 12 15:57:30 2026",
+                "state": "S",
+                "command": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+              }
+            ]
+          }
+        ],
+        "observedPids": [
+          5378,
+          5400,
+          13062,
+          13089,
+          13091,
+          13092,
+          13389,
+          13390
+        ],
+        "observedGroups": [
+          5400,
+          13062
+        ],
+        "remainingProcessRows": [],
+        "remainingOwnRecords": [],
+        "otherOwnersPreserved": [],
+        "nativeCleanupConfirmed": true,
+        "providerQualification": "Native browser_close response plus active RPC join and SDK disconnection confirmed by normal close path. Transport session deletion is not asserted.",
+        "runtimeImagesSha256": "1a85fb43228fda259035291ae23a249cb28fc22eb0a9d23503a30480220d78d6"
+      },
+      "native-boundary": {
+        "label": "native-boundary",
+        "observedUtc": "2026-10-12T23:04:03.302114+00:00",
+        "nativeProcess": {
+          "label": "native-boundary",
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/boundary.mjs",
+            "--bead",
+            "hv-by8q",
+            "--viewports",
+            "desktop,mobile"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+          "observerPid": 5649,
+          "observerPgid": 5649,
+          "startUtc": "2026-10-12T23:03:09.149479+00:00",
+          "loadAverage": [
+            17.93896484375,
+            11.990234375,
+            9.31494140625
+          ],
+          "pid": 5662,
+          "pgid": 5662,
+          "exit": 1,
+          "endUtc": "2026-10-12T23:03:41.534513+00:00",
+          "elapsedS": 32.384869000001345,
+          "cpuUserS": 6.081972,
+          "cpuSystemS": 2.9548609999999997,
+          "maxRss": 702660608
+        },
+        "owners": [
+          {
+            "token": "40874f5c-6a3f-44a0-af2c-5d9393d797ab",
+            "pid": 5662,
+            "bead": "hv-by8q",
+            "label": "boundary",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-12T23:03:11.749Z",
+            "providerState": "active",
+            "mcpSessionId": "532e5f84-3596-4b65-877c-c9e031cfca9c",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "servers": [
+          {
+            "token": "3053c56c-7463-41fb-92b4-7c68b1a85793",
+            "runner": {
+              "pid": 5662,
+              "group": 5662,
+              "started": "Mon Oct 12 16:03:09 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/boundary.mjs --bead hv-by8q --viewports desktop,mobile"
+            },
+            "server": {
+              "pid": 5699,
+              "group": 5699,
+              "started": "Mon Oct 12 16:03:09 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 3053c56c-7463-41fb-92b4-7c68b1a85793 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+            "port": 5274,
+            "members": [
+              {
+                "pid": 5699,
+                "group": 5699,
+                "started": "Mon Oct 12 16:03:09 2026",
+                "state": "Ss",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 3053c56c-7463-41fb-92b4-7c68b1a85793 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              {
+                "pid": 5718,
+                "group": 5699,
+                "started": "Mon Oct 12 16:03:09 2026",
+                "state": "S",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              {
+                "pid": 5805,
+                "group": 5699,
+                "started": "Mon Oct 12 16:03:11 2026",
+                "state": "S",
+                "command": "node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/node_modules/.bin/vite --port 5274 --strictPort"
+              },
+              {
+                "pid": 5811,
+                "group": 5699,
+                "started": "Mon Oct 12 16:03:11 2026",
+                "state": "S",
+                "command": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+              }
+            ]
+          }
+        ],
+        "observedPids": [
+          5649,
+          5662,
+          5699,
+          5718,
+          5725,
+          5733,
+          5805,
+          5811
+        ],
+        "observedGroups": [
+          5662,
+          5699
+        ],
+        "remainingProcessRows": [],
+        "remainingOwnRecords": [],
+        "otherOwnersPreserved": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "token": "82706337-2c04-437b-927c-8a2330417017",
+            "pid": 77563,
+            "preserved": true
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "token": "27129a04-d2b4-4a82-a53a-a9dbd49439f0",
+            "pid": 77563,
+            "preserved": true
+          }
+        ],
+        "nativeCleanupConfirmed": true,
+        "providerQualification": "Native browser_close response plus active RPC join and SDK disconnection confirmed by normal close path. Transport session deletion is not asserted.",
+        "runtimeImagesSha256": "d8886b300c2b2d99d2115b6af05646aab418f74c586ffce49d1422a8b0d9dcad"
+      },
+      "native-boundary02": {
+        "label": "native-boundary02",
+        "observedUtc": "2026-10-12T23:07:21.078521+00:00",
+        "nativeProcess": {
+          "label": "native-boundary02",
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/boundary-diagnostic.mjs",
+            "--bead",
+            "hv-by8q",
+            "--viewports",
+            "desktop,mobile"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+          "observerPid": 30988,
+          "observerPgid": 30988,
+          "startUtc": "2026-10-12T23:06:15.656223+00:00",
+          "loadAverage": [
+            20.1884765625,
+            17.5830078125,
+            12.3232421875
+          ],
+          "pid": 31006,
+          "pgid": 31006,
+          "exit": 0,
+          "endUtc": "2026-10-12T23:06:30.880376+00:00",
+          "elapsedS": 15.224089459006791,
+          "cpuUserS": 5.708975,
+          "cpuSystemS": 2.649204,
+          "maxRss": 653950976
+        },
+        "owners": [
+          {
+            "token": "2b924a2d-bc67-4505-aa85-3b61f5b77c21",
+            "pid": 31006,
+            "bead": "hv-by8q",
+            "label": "boundary-diagnostic",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-12T23:06:17.874Z",
+            "providerState": "active",
+            "mcpSessionId": "08675932-753b-48fd-81d1-81d93994a4cc",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "servers": [
+          {
+            "token": "b6969463-3bbb-4f39-83a6-daf735518923",
+            "runner": {
+              "pid": 31006,
+              "group": 31006,
+              "started": "Mon Oct 12 16:06:15 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-by8q/boundary-diagnostic.mjs --bead hv-by8q --viewports desktop,mobile"
+            },
+            "server": {
+              "pid": 31048,
+              "group": 31048,
+              "started": "Mon Oct 12 16:06:15 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json b6969463-3bbb-4f39-83a6-daf735518923 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+            "port": 5274,
+            "members": [
+              {
+                "pid": 31048,
+                "group": 31048,
+                "started": "Mon Oct 12 16:06:15 2026",
+                "state": "Ss",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json b6969463-3bbb-4f39-83a6-daf735518923 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              {
+                "pid": 31068,
+                "group": 31048,
+                "started": "Mon Oct 12 16:06:15 2026",
+                "state": "S",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              {
+                "pid": 31257,
+                "group": 31048,
+                "started": "Mon Oct 12 16:06:17 2026",
+                "state": "S",
+                "command": "node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/node_modules/.bin/vite --port 5274 --strictPort"
+              },
+              {
+                "pid": 31279,
+                "group": 31048,
+                "started": "Mon Oct 12 16:06:17 2026",
+                "state": "S",
+                "command": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+              }
+            ]
+          }
+        ],
+        "observedPids": [
+          30988,
+          31006,
+          31048,
+          31068,
+          31073,
+          31076,
+          31257,
+          31279
+        ],
+        "observedGroups": [
+          31006,
+          31048
+        ],
+        "remainingProcessRows": [],
+        "remainingOwnRecords": [],
+        "otherOwnersPreserved": [],
+        "nativeCleanupConfirmed": true,
+        "providerQualification": "Native browser_close response plus active RPC join and SDK disconnection confirmed by normal close path. Transport session deletion is not asserted.",
+        "runtimeImagesSha256": "aaacc7c36732b773dac225220433fc11eccfe7ce6d1884026b0762f28e90f941"
+      },
+      "native-sweep": {
+        "label": "native-sweep",
+        "observedUtc": "2026-10-12T23:09:01.492857+00:00",
+        "nativeProcess": {
+          "label": "native-sweep",
+          "command": [
+            "node",
+            "scripts/qa/card-sweep.mjs",
+            "--bead",
+            "hv-by8q",
+            "--avatars",
+            "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+            "--variants",
+            "all",
+            "--as",
+            "both"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+          "observerPid": 56585,
+          "observerPgid": 56585,
+          "startUtc": "2026-10-12T23:07:49.098183+00:00",
+          "loadAverage": [
+            17.8544921875,
+            17.04345703125,
+            12.61376953125
+          ],
+          "pid": 56802,
+          "pgid": 56802,
+          "exit": 0,
+          "endUtc": "2026-10-12T23:08:14.079041+00:00",
+          "elapsedS": 24.98073620899231,
+          "cpuUserS": 6.57083,
+          "cpuSystemS": 3.409649,
+          "maxRss": 747307008
+        },
+        "owners": [
+          {
+            "token": "77384be3-9f14-41bb-8fd6-ee7a99376fdf",
+            "pid": 56802,
+            "bead": "hv-by8q",
+            "label": "card-sweep",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-12T23:07:51.690Z",
+            "providerState": "execution-completed",
+            "mcpSessionId": "9e752866-201a-4c98-80a5-bc3f94ad028f",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25",
+            "mcpExecutionCompleted": true
+          }
+        ],
+        "servers": [
+          {
+            "token": "39ab3f27-5731-4a2c-8ae7-baa875c14937",
+            "runner": {
+              "pid": 56802,
+              "group": 56802,
+              "started": "Mon Oct 12 16:07:49 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/card-sweep.mjs --bead hv-by8q --avatars 9e4862fd-e18c-463e-9d5f-e5d73c29a66f --variants all --as both"
+            },
+            "server": {
+              "pid": 57706,
+              "group": 57706,
+              "started": "Mon Oct 12 16:07:49 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 39ab3f27-5731-4a2c-8ae7-baa875c14937 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+            "port": 5274,
+            "members": [
+              {
+                "pid": 57706,
+                "group": 57706,
+                "started": "Mon Oct 12 16:07:49 2026",
+                "state": "Ss",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 39ab3f27-5731-4a2c-8ae7-baa875c14937 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              {
+                "pid": 57921,
+                "group": 57706,
+                "started": "Mon Oct 12 16:07:49 2026",
+                "state": "S",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              {
+                "pid": 62494,
+                "group": 57706,
+                "started": "Mon Oct 12 16:07:51 2026",
+                "state": "S",
+                "command": "node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/node_modules/.bin/vite --port 5274 --strictPort"
+              },
+              {
+                "pid": 62821,
+                "group": 57706,
+                "started": "Mon Oct 12 16:07:51 2026",
+                "state": "S",
+                "command": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+              }
+            ]
+          }
+        ],
+        "observedPids": [
+          56585,
+          56802,
+          57706,
+          57921,
+          58018,
+          58322,
+          62494,
+          62821
+        ],
+        "observedGroups": [
+          56802,
+          57706
+        ],
+        "remainingProcessRows": [],
+        "remainingOwnRecords": [],
+        "otherOwnersPreserved": [],
+        "nativeCleanupConfirmed": true,
+        "providerQualification": "Native browser_close response plus active RPC join and SDK disconnection confirmed by normal close path. Transport session deletion is not asserted.",
+        "runtimeImagesSha256": "f591a7f949a16a98d46651e5a8d0b3687e686518d453c2e7e1796fd9dfb6b364"
+      }
+    }
+  },
+  "heavyTiming": {
+    "outerStart": "2026-10-12T22:50:25.834551+00:00",
+    "acquisitionObserved": "2026-10-12T22:50:27.024367+00:00",
+    "actualCommandStart": "2026-10-12T22:50:27.025767+00:00",
+    "queueAndObserverSetupS": 1.189816,
+    "queueQualification": "Elapsed outer entry to inner acquisition observation includes observer startup; no queue time is asserted as CPU."
+  },
+  "sourceFreeze": {
+    "observedUtc": "2026-10-12T22:53:19.816350+00:00",
+    "sourceHashes": {
+      "src/runtime/qa-scenes.ts": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "src/runtime/qa-scenes-karev.test.ts": "80ffd9128d5afc16840e137936ad685a84f8f0b304f9deb7fa140a9c79f9347e"
+    },
+    "observedGroups": [
+      3814,
+      7110,
+      8557,
+      8755,
+      9069,
+      38948,
+      42271,
+      42928,
+      42980,
+      43046,
+      43122,
+      43171,
+      43220,
+      43300,
+      43701,
+      43777,
+      43976,
+      45760,
+      45911,
+      45927,
+      80288
+    ],
+    "remainingRows": [],
+    "writingGroupsSettled": true,
+    "heavyGroupsSettled": true,
+    "fullValidation": {
+      "label": "full-command",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+      "observerPid": 45926,
+      "observerPgid": 45911,
+      "entryUtc": "2026-10-12T22:50:27.024263+00:00",
+      "lockAcquisitionObservedUtc": "2026-10-12T22:50:27.024367+00:00",
+      "pid": 45927,
+      "pgid": 45927,
+      "commandStartUtc": "2026-10-12T22:50:27.025767+00:00",
+      "exit": 0,
+      "commandEndUtc": "2026-10-12T22:52:17.222014+00:00",
+      "elapsedS": 110.19715570900007,
+      "cpu": {
+        "userS": 235.253228,
+        "systemS": 38.87521,
+        "scope": "wait4 child resource accounting; excludes time waiting to acquire the heavy slot from inner command timing"
+      },
+      "maxRssBytes": 6024216576
+    },
+    "outerHeavyEntry": {
+      "label": "full-outer",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-karev-scenes-by8q/command-observer.py",
+        "full-command",
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-by8q-karev-scene-contracts",
+      "observerPid": 45749,
+      "observerPgid": 45749,
+      "entryUtc": "2026-10-12T22:50:25.832959+00:00",
+      "pid": 45911,
+      "pgid": 45911,
+      "commandStartUtc": "2026-10-12T22:50:25.834551+00:00",
+      "exit": 0,
+      "commandEndUtc": "2026-10-12T22:52:17.227992+00:00",
+      "elapsedS": 111.39442737499485,
+      "cpu": {
+        "userS": 235.2704,
+        "systemS": 38.884567,
+        "scope": "wait4 child resource accounting; excludes time waiting to acquire the heavy slot from inner command timing"
+      },
+      "maxRssBytes": 6024216576
+    },
+    "sourceFrozen": true
+  },
+  "scopeAndValidationQualification": {
+    "trackedSource": "Existingqa-scenes.ts bounded own body/guards only and new283line Node16contracts. All other tracked source/scripts/catalog/kernel unchanged at own base.",
+    "fullSuite": "6217tests/361files passed; actual test wall79.68s at starting load9.60986328125. No low-load budget or throughput normalization claimed.",
+    "fuzz": "NA for bounded scene validation infrastructure with engine/catalog unchanged from own e926base; predecessor weighted300 historical only."
+  },
+  "metadataEndpointAck": {
+    "ackAt": "2026-10-12T23:13:42.310716+00:00",
+    "nativeExit": 0,
+    "parentProof": {
+      "observedAt": "2026-10-12T23:13:22.668875+00:00",
+      "base": "e926449abd74f5d8c85beb62ebac2f58eb2d3ad6",
+      "tree": "628f41babd55cd46587bfa72e4740bcb5f74625a",
+      "diffSha256": "eec9e4f373374dcf22dd0d1ac491488935e2cc48d53f46de5dfbedb986364eb5",
+      "pathsVerified": 6,
+      "sourceFreezePathsVerified": 2,
+      "indexAndWorktreeEqual": true,
+      "unstagedAndUntrackedEmpty": true,
+      "groupsChecked": 31,
+      "pidsChecked": 82,
+      "liveRows": [],
+      "nativeOwnTokensAbsent": true,
+      "otherOwnersPreserved": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+          "token": "37ba90d5-1edc-4224-84f6-cd6c77aa88cf",
+          "preserved": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+          "token": "664783b7-9da3-4bed-a2f5-6230a2228cf3",
+          "preserved": true
+        }
+      ],
+      "schemaExit": 0,
+      "schemaSummary": "Friction evidence valid: 661 records, 41 historical unknown measurements\n"
+    }
+  }
+}

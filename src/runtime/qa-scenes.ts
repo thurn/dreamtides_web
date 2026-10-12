@@ -719,11 +719,25 @@ function withLabBattle(battle: JourneyBattleFoldState, lab: { init: EngineBattle
   return loaded;
 }
 
+const REQUIRED_KAREV_AVATAR_ID = parseAvatarId("9e4862fd-e18c-463e-9d5f-e5d73c29a66f");
+
+function requiredKarevAvatar(journeyContent: JourneyContent) {
+  return journeyContent.avatars.find(avatar => avatar.id === REQUIRED_KAREV_AVATAR_ID);
+}
+
+/** Requires the exact declared emblem before constructing a parked journey. */
+function karevPaymentSceneState(displayLayer: 1 | 2): QaScene["build"] {
+  const build = battleLayerSceneState(displayLayer);
+  return (journeyContent, options) => requiredKarevAvatar(journeyContent) === undefined
+    ? null
+    : build(journeyContent, options);
+}
+
 /** Exact companion workflow, constructed before play and retaining the native layer's enemy ability boundary. */
-function withKarevPayment(battle: JourneyBattleFoldState, request: NonNullable<QaScene["karevPayment"]>, journeyContent: JourneyContent, engine: Engine): JourneyBattleFoldState {
-  const avatarId = parseAvatarId("9e4862fd-e18c-463e-9d5f-e5d73c29a66f");
-  const avatar = journeyContent.avatars.find(candidate => candidate.id === avatarId);
-  if (avatar === undefined) throw new Error("Karev payment fixture requires its exact Avatar UUID");
+function withKarevPayment(battle: JourneyBattleFoldState, request: NonNullable<QaScene["karevPayment"]>, journeyContent: JourneyContent, engine: Engine): JourneyBattleFoldState | null {
+  const avatarId = REQUIRED_KAREV_AVATAR_ID;
+  const avatar = requiredKarevAvatar(journeyContent);
+  if (avatar === undefined) return null;
   engine.catalog.avatar(avatarId);
   const payer = opponent(request.controller);
   const active = request.controller === "player" || battle.init.opponentAbilityActive;
@@ -1511,19 +1525,19 @@ export const QA_SCENES: readonly QaScene[] = [
   battleLayerScene(7),
   {
     id: parseQaSceneId("karev-payment"), label: "Karev Payment", description: "An active opposing Karev offers its scoring payment",
-    loadsBattle: true, karevPayment: { controller: "enemy", payerEnergy: 1 }, build: battleLayerSceneState(2),
+    loadsBattle: true, karevPayment: { controller: "enemy", payerEnergy: 1 }, build: karevPaymentSceneState(2),
   },
   {
     id: parseQaSceneId("karev-unaffordable"), label: "Karev Unaffordable Payment", description: "An active opposing Karev draws when the scoring player has no energy",
-    loadsBattle: true, karevPayment: { controller: "enemy", payerEnergy: 0 }, build: battleLayerSceneState(2),
+    loadsBattle: true, karevPayment: { controller: "enemy", payerEnergy: 0 }, build: karevPaymentSceneState(2),
   },
   {
     id: parseQaSceneId("karev-controller-player"), label: "Karev Player Ability", description: "The player's Karev responds to the opposing scoring player",
-    loadsBattle: true, karevPayment: { controller: "player", payerEnergy: 1 }, build: battleLayerSceneState(2),
+    loadsBattle: true, karevPayment: { controller: "player", payerEnergy: 1 }, build: karevPaymentSceneState(2),
   },
   {
     id: parseQaSceneId("karev-inactive"), label: "Karev Inactive Ability", description: "The native opening layer holds Karev's opposing ability inactive",
-    loadsBattle: true, karevPayment: { controller: "enemy", payerEnergy: 1 }, build: battleLayerSceneState(1),
+    loadsBattle: true, karevPayment: { controller: "enemy", payerEnergy: 1 }, build: karevPaymentSceneState(1),
   },
   DREAMSCAPE_SCENE,
   DREAMSCAPE_WITH_ESSENCE_SCENE,
@@ -1621,6 +1635,7 @@ export function buildQaSceneBattle(
 ): JourneyBattleFoldState | null {
   const siteId = activeSiteIdOf(journey);
   if (siteId === null || !qaSceneLoadsBattle(id)) return null;
+  if (findQaScene(id)?.karevPayment !== undefined && requiredKarevAvatar(journeyContent) === undefined) return null;
   const provider = createBattleInitProvider(journeyContent);
   const battle = startJourneyBattle(provider, {
     journey,
