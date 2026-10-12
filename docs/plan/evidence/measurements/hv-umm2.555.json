@@ -1,0 +1,702 @@
+{
+  "bead": "hv-umm2.555",
+  "status": "local acceptance complete; parent exact-source cold review and native certified promotion pending",
+  "base": "a3416d8201ef23eaf4fe1dca11666b455251da80",
+  "frozenValidatedSource": "27428b72ffa7d83b87fdffc914d433e258191b7f",
+  "originalBaseForFailureReceipts": "37ae08c56dc078e218aeb2fe607db9727c16e0f5",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final review555-final check starts at2026-10-12T16:25:46Z; scripts/review.mjs real vm.loadavg one-minute sample"
+      }
+    }
+  },
+  "rawEvidenceRoot": "/tmp/codex-01a130c8-self-cost",
+  "sourceScope": {
+    "newPrimitive": "selfCostReduction(amount:ValueExpr), staticOnly, physical sourceInstance, existing layer6 cardCost reduce; literal/live nonnegative whole validation; noncard source emits no changes",
+    "savedStateChanges": false,
+    "engineBodyChanges": false,
+    "automaticFallout": [
+      "Effect union includes SelfCostReductionNode through primitive index; registry getter is additive"
+    ],
+    "nonTestSourceLinesAdded": 51,
+    "testFilesAdded": 1,
+    "testLinesAdded": 255,
+    "contractModuleLines": 229,
+    "costCompositionTotalLines": 461,
+    "syntheticFixtureUuid": "5e5e5e5e-0000-4000-8000-0000000000f8"
+  },
+  "baselineNegative": {
+    "source": "baseline555.ts",
+    "log": "baseline555.log",
+    "exit": 1,
+    "observation": "Existing broad-filter encoding makes both sourcei4 and unrelated Warriori5 playable; public unrelated-unplayable assertion fails. Own source-scoped contracts expect costs2,2,3 and exact payment2, so removing the live source contribution or broadening it breaks observed expectations."
+  },
+  "rawFailedChecks": [
+    {
+      "log": "focus555.log",
+      "exit": 1,
+      "reason": "own synthetic scene incorrectly referenced absent vanilla4; corrected to vanilla3"
+    },
+    {
+      "log": "focus555b.log",
+      "exit": 1,
+      "reason": "own test used abandon with a target in chooser position and expected gained abilities to be copied; corrected chooser and normative printed/gained copy expectations"
+    },
+    {
+      "log": "focus555c.log",
+      "exit": 1,
+      "reason": "own cost-display expectation omitted mandatory additional energy; corrected expected displayed total"
+    },
+    {
+      "log": "review555.log",
+      "exit": 2,
+      "reason": "nullable Answer ids and readonly synthetic variant assignment; corrected public Answer typing/non-null fixture slots and immutable replacement"
+    },
+    {
+      "log": "focus555d.log",
+      "exit": 1,
+      "reason": "plain character supplies no resolving response window; interruption contract uses a source-cost event with resolving effect"
+    },
+    {
+      "log": "focus555e.log",
+      "exit": 1,
+      "reason": "enemy fixture lacked energy for its one-energy Interrupt; corrected setup"
+    },
+    {
+      "log": "review555b.log",
+      "exit": 1,
+      "reason": "known unknown-loop sampled continuation boundary owned by completed hv-umm2.551"
+    },
+    {
+      "log": "full555.log",
+      "exit": 130,
+      "reason": "parent-directed SIGINT after known determinize failure; original source retained in checkpoint"
+    },
+    {
+      "log": "preflight555.log",
+      "exit": 1,
+      "failedCells": 20,
+      "reason": "production-only CLI lookup rejects lab synthetic UUID; explicit parent-approved native exported preflight driver plus native prompt-lab routing handles this primitive fixture"
+    },
+    {
+      "log": "qa555.log",
+      "exit": 1,
+      "invocation": "run-6zq97z",
+      "failedCells": 1,
+      "reason": "compact battlefield tile energy orb observer premise; real play/payment/materialization and Caps passed. Existing native reading-copy reveal used for cost after materialization"
+    },
+    {
+      "log": "qa555b.log",
+      "exit": 130,
+      "failedCells": 0,
+      "reason": "exact queued runner canceled before any browser/server admission to include native mobile touch-hold in corrected observer payload"
+    }
+  ],
+  "worktreeUpdate": {
+    "originalCheckpoint": "bd7d4cc9e05d81eb4025524b64587c1d52e09979",
+    "parkingCheckpoint": "7d038473ba0ac6b7c0c4161f381e447f3b00abb0",
+    "nativeUpdatedCheckpoint": "2661cc1c6481516014ec1fb82e26bbad13a879a7",
+    "updatedReappliedCheckpoint": "27428b72ffa7d83b87fdffc914d433e258191b7f",
+    "recovery": "Only additive prompt-lab rows conflicted with landed515. Parent retained full patch and original/base rows. Implementer parked only prompt-lab to captured base and amended; parent native update succeeded, implementer reapplied six exact owned additions preserving landed deck-top/Prevent rows. Parent added completed551 prerequisite; no raw rebase or loop/body edits."
+  },
+  "checks": {
+    "focused": {
+      "log": "updated-focused555.log",
+      "exit": 0,
+      "files": 2,
+      "passed": 35,
+      "ownPublicContracts": 34,
+      "additionalExactBoundaryContracts": 1,
+      "wallS": 2.54
+    },
+    "review": {
+      "exit": 0,
+      "files": 268,
+      "passed": 4668,
+      "rawLog": "review555-final.log",
+      "firstStart": "2026-10-12T16:25:45.374000+00:00",
+      "lastEndFromRoundedStep": "2026-10-12T16:26:33.697000+00:00",
+      "phaseWallS": 48.323,
+      "steps": [
+        {
+          "step": "prepare",
+          "wallS": 0.8,
+          "exit": 0
+        },
+        {
+          "step": "friction-records",
+          "wallS": 0.1,
+          "exit": 0
+        },
+        {
+          "step": "import-cycles",
+          "wallS": 1.7,
+          "exit": 0
+        },
+        {
+          "step": "lint",
+          "wallS": 3.5,
+          "exit": 0
+        },
+        {
+          "step": "typecheck-node",
+          "wallS": 4.4,
+          "exit": 0
+        },
+        {
+          "step": "typecheck",
+          "wallS": 10.7,
+          "exit": 0
+        },
+        {
+          "step": "test-related",
+          "wallS": 46.8,
+          "exit": 0
+        },
+        {
+          "step": "restore-local-assets",
+          "wallS": 0.7,
+          "exit": 0
+        }
+      ],
+      "hostLoadSamples": [
+        {
+          "step": "prepare",
+          "at": "2026-10-12T16:25:45.374Z",
+          "oneMinute": 9.36572265625
+        },
+        {
+          "step": "typecheck",
+          "at": "2026-10-12T16:25:46.202Z",
+          "oneMinute": 9.36572265625
+        },
+        {
+          "step": "typecheck-node",
+          "at": "2026-10-12T16:25:46.203Z",
+          "oneMinute": 9.36572265625
+        },
+        {
+          "step": "import-cycles",
+          "at": "2026-10-12T16:25:46.204Z",
+          "oneMinute": 9.36572265625
+        },
+        {
+          "step": "lint",
+          "at": "2026-10-12T16:25:46.204Z",
+          "oneMinute": 9.36572265625
+        },
+        {
+          "step": "test-related",
+          "at": "2026-10-12T16:25:46.204Z",
+          "oneMinute": 9.36572265625
+        },
+        {
+          "step": "friction-records",
+          "at": "2026-10-12T16:25:46.205Z",
+          "oneMinute": 9.36572265625
+        },
+        {
+          "step": "restore-local-assets",
+          "at": "2026-10-12T16:26:32.997Z",
+          "oneMinute": 8.70263671875
+        }
+      ],
+      "timingProvenance": "Elapsed first logged phase start to final logged start plus rounded duration; excludes shell startup and lock acquisition."
+    },
+    "knip": {
+      "exit": 0,
+      "rawLog": "knip555-final.log",
+      "firstStart": "2026-10-12T16:26:47.776000+00:00",
+      "lastEndFromRoundedStep": "2026-10-12T16:26:51.193000+00:00",
+      "phaseWallS": 3.417,
+      "steps": [
+        {
+          "step": "prepare",
+          "wallS": 1.4,
+          "exit": 0
+        },
+        {
+          "step": "knip",
+          "wallS": 1.3,
+          "exit": 0
+        },
+        {
+          "step": "restore-local-assets",
+          "wallS": 0.7,
+          "exit": 0
+        }
+      ],
+      "hostLoadSamples": [
+        {
+          "step": "prepare",
+          "at": "2026-10-12T16:26:47.776Z",
+          "oneMinute": 7.57373046875
+        },
+        {
+          "step": "knip",
+          "at": "2026-10-12T16:26:49.175Z",
+          "oneMinute": 7.20703125
+        },
+        {
+          "step": "restore-local-assets",
+          "at": "2026-10-12T16:26:50.493Z",
+          "oneMinute": 7.20703125
+        }
+      ],
+      "timingProvenance": "Elapsed first logged phase start to final logged start plus rounded duration; excludes shell startup and lock acquisition."
+    },
+    "full": {
+      "exit": 0,
+      "files": 351,
+      "passed": 5683,
+      "workers": 2,
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "rawLog": "full555-final.log",
+      "firstStart": "2026-10-12T16:28:52.521000+00:00",
+      "lastEndFromRoundedStep": "2026-10-12T16:30:29.971000+00:00",
+      "phaseWallS": 97.45,
+      "steps": [
+        {
+          "step": "prepare",
+          "wallS": 0.7,
+          "exit": 0
+        },
+        {
+          "step": "friction-records",
+          "wallS": 0.1,
+          "exit": 0
+        },
+        {
+          "step": "typecheck-node",
+          "wallS": 1.2,
+          "exit": 0
+        },
+        {
+          "step": "knip",
+          "wallS": 1.4,
+          "exit": 0
+        },
+        {
+          "step": "import-cycles",
+          "wallS": 1.5,
+          "exit": 0
+        },
+        {
+          "step": "typecheck",
+          "wallS": 1.7,
+          "exit": 0
+        },
+        {
+          "step": "lint",
+          "wallS": 20.7,
+          "exit": 0
+        },
+        {
+          "step": "test",
+          "wallS": 72.3,
+          "exit": 0
+        },
+        {
+          "step": "bundle",
+          "wallS": 3.0,
+          "exit": 0
+        },
+        {
+          "step": "restore-local-assets",
+          "wallS": 0.7,
+          "exit": 0
+        }
+      ],
+      "hostLoadSamples": [
+        {
+          "step": "prepare",
+          "at": "2026-10-12T16:28:52.521Z",
+          "oneMinute": 6.80078125
+        },
+        {
+          "step": "lint",
+          "at": "2026-10-12T16:28:53.263Z",
+          "oneMinute": 6.80078125
+        },
+        {
+          "step": "typecheck",
+          "at": "2026-10-12T16:28:53.264Z",
+          "oneMinute": 6.80078125
+        },
+        {
+          "step": "typecheck-node",
+          "at": "2026-10-12T16:28:53.264Z",
+          "oneMinute": 6.80078125
+        },
+        {
+          "step": "import-cycles",
+          "at": "2026-10-12T16:28:53.265Z",
+          "oneMinute": 6.80078125
+        },
+        {
+          "step": "knip",
+          "at": "2026-10-12T16:28:53.265Z",
+          "oneMinute": 6.80078125
+        },
+        {
+          "step": "friction-records",
+          "at": "2026-10-12T16:28:53.266Z",
+          "oneMinute": 6.80078125
+        },
+        {
+          "step": "test",
+          "at": "2026-10-12T16:29:13.933Z",
+          "oneMinute": 6.41259765625
+        },
+        {
+          "step": "bundle",
+          "at": "2026-10-12T16:30:26.230Z",
+          "oneMinute": 20.04052734375
+        },
+        {
+          "step": "restore-local-assets",
+          "at": "2026-10-12T16:30:29.271Z",
+          "oneMinute": 19.15625
+        }
+      ],
+      "timingProvenance": "Elapsed first logged phase start to final logged start plus rounded duration; excludes shell startup and lock acquisition."
+    },
+    "fuzz": {
+      "target": "5e5e5e5e-0000-4000-8000-000000055500",
+      "sourceFixture": "5e5e5e5e-0000-4000-8000-0000000000f8",
+      "games": 300,
+      "included": 1170,
+      "exercised": 472,
+      "failures": 0,
+      "steps": 156560,
+      "prompts": 3038,
+      "interactive": 30,
+      "wallS": 167.986,
+      "cpu": {
+        "user": 178742880,
+        "system": 1568467
+      },
+      "exit": 0,
+      "command": "JOURNEY_TEST_WORKERS=2 lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npx tsx /tmp/codex-01a130c8-self-cost/weighted555.ts",
+      "rawLog": "fuzz555.log",
+      "receipt": "fuzz555-receipt.json",
+      "provenance": "Distinct clone of authored DSL fixture in pool.cards, existing withFuzzCardWeights/fuzzEngineCatalog/playFuzzGame/replayFinalHash/replayInteractively; full synthetic support retained; no duplicate DSL UUID registration; each of300 game receipts retained."
+    },
+    "nativePreflight": {
+      "exit": 0,
+      "rawLog": "preflight555-native.log",
+      "receipt": "preflight555-native-receipt.json",
+      "cells": 2,
+      "passed": 2,
+      "variants": [
+        "base"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "wallMs": 9.076915999999983,
+      "provenance": "Approved scratch call to existing runCardLabPreflight on actual content+PROMPT_LAB_DEFINITIONS engine/pool; no runtime or QA infrastructure implementation"
+    }
+  },
+  "browser": {
+    "rawLog": "qa555c.log",
+    "invocation": "run-G4CLIJ",
+    "report": "self-cost-reduction.result.json",
+    "exit": 0,
+    "effectiveCells": 2,
+    "rawObserverFailedCells": 1,
+    "rawCliUnknownCells": 20,
+    "route": "?goto=prompt-lab-self-cost-reduction",
+    "slot": 1,
+    "port": 5274,
+    "wallMs": {
+      "browserLeaseWait": 91607,
+      "serve": 1664,
+      "scenario": 21968,
+      "total": 115293
+    },
+    "caps": [],
+    "captures": [
+      {
+        "file": "self-cost-hand-desktop.png",
+        "width": 1440,
+        "height": 900,
+        "provenance": "Original corrected observer run-G4CLIJ captures are CSS-scale1x; they establish semantic acceptance, with high-density representative acceptance captured separately in run-AbfPuO."
+      },
+      {
+        "file": "self-cost-played-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "file": "self-cost-reloaded-desktop.png",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "file": "self-cost-hand-mobile.png",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "file": "self-cost-played-mobile.png",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "file": "self-cost-reloaded-mobile.png",
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "geometry": {
+      "desktop": {
+        "sourceBefore": {
+          "id": "i4",
+          "role": "button",
+          "energy": "2",
+          "width": 141.18115234375,
+          "height": 189.02117919921875,
+          "x": 626.599365234375,
+          "y": 731.552978515625
+        },
+        "otherBefore": {
+          "id": "i5",
+          "role": "button",
+          "energy": "3",
+          "width": 141.18115234375,
+          "height": 189.02117919921875,
+          "x": 772.094482421875,
+          "y": 731.552978515625
+        },
+        "sourceAfter": {
+          "id": "i4",
+          "role": "button",
+          "width": 89.5,
+          "height": 89.5,
+          "x": 535,
+          "y": 483.5
+        },
+        "otherAfter": {
+          "id": "i5",
+          "role": "button",
+          "energy": "3",
+          "width": 128.90625,
+          "height": 180.46875,
+          "x": 705.484375,
+          "y": 732
+        },
+        "readingCopy": {
+          "cost": "1",
+          "width": 240,
+          "height": 336,
+          "interaction": "mouse-hover"
+        },
+        "reloadedReadingCopy": {
+          "cost": "1",
+          "width": 240,
+          "height": 336,
+          "interaction": "mouse-hover"
+        }
+      },
+      "mobile": {
+        "sourceBefore": {
+          "id": "i4",
+          "role": "button",
+          "energy": "2",
+          "width": 170.82589721679688,
+          "height": 224.12811279296875,
+          "x": 63.52015686035156,
+          "y": 666.8659057617188
+        },
+        "otherBefore": {
+          "id": "i5",
+          "role": "button",
+          "energy": "3",
+          "width": 170.82591247558594,
+          "height": 224.12811279296875,
+          "x": 155.63832092285156,
+          "y": 666.8659057617188
+        },
+        "sourceAfter": {
+          "id": "i4",
+          "role": "button",
+          "width": 53.859375,
+          "height": 53.859375,
+          "x": 196.984375,
+          "y": 415.890625
+        },
+        "otherAfter": {
+          "id": "i5",
+          "role": "button",
+          "energy": "3",
+          "width": 149.734375,
+          "height": 209.625,
+          "x": 120.1328125,
+          "y": 634.109375
+        },
+        "readingCopy": {
+          "cost": "1",
+          "width": 175.5,
+          "height": 245.6875,
+          "interaction": "native-touch-hold"
+        },
+        "reloadedReadingCopy": {
+          "cost": "1",
+          "width": 175.5,
+          "height": 245.6875,
+          "interaction": "native-touch-hold"
+        }
+      }
+    },
+    "observations": "Both viewports display physicalsource2 and unrelated3, refuse unrelated tap without state/energy change, charge2 exactly, materialize physicali4, read livecost1 in native reveal after count grows and after exact saved-battle reload. Persisted UUID/physical source logs read on both;38 exportedrows perviewport. Desktophover and actual mobiletouchhold use existing native reveal.",
+    "visualInspection": "Desktop hand and mobile played captures inspected; existing synthetic placeholder art and card layout, visible source energy2 versus unrelated3 before play and energy0/2 with four controlled character tiles after play.",
+    "gameLogs": [
+      {
+        "file": "self-cost-reduction-desktop.jsonl",
+        "gameId": "f3cu8f",
+        "rows": 38
+      },
+      {
+        "file": "self-cost-reduction-mobile.jsonl",
+        "gameId": "ursjut",
+        "rows": 38
+      }
+    ],
+    "syntheticCardLabSweep": "Not attempted: resolveCardLab production cardDatabase excludes synthetic UUID. Parent explicitly approved native prompt-lab route; original production consumers remain owned by their composition beads.",
+    "densityCorrection": {
+      "rawLog": "qa555-2x.log",
+      "invocation": "run-AbfPuO",
+      "report": "self-cost-reduction.result.json",
+      "exit": 0,
+      "effectiveCells": 2,
+      "slot": 0,
+      "port": 5174,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1665,
+        "scenario": 35460,
+        "total": 37557
+      },
+      "dprBefore": {
+        "desktop": {
+          "dpr": 2,
+          "width": 1440,
+          "height": 900
+        },
+        "mobile": {
+          "dpr": 2,
+          "width": 390,
+          "height": 844
+        }
+      },
+      "metricsOverrideUsed": false,
+      "captures": [
+        {
+          "file": "self-cost-hand-desktop-2x.png",
+          "viewport": "desktop",
+          "cssWidth": 1440,
+          "cssHeight": 900,
+          "dpr": 2,
+          "actualWidth": 2880,
+          "actualHeight": 1800
+        },
+        {
+          "file": "self-cost-reveal-desktop-2x.png",
+          "viewport": "desktop",
+          "cssWidth": 1440,
+          "cssHeight": 900,
+          "dpr": 2,
+          "actualWidth": 2880,
+          "actualHeight": 1800
+        },
+        {
+          "file": "self-cost-touch-mobile-2x.png",
+          "viewport": "mobile",
+          "cssWidth": 390,
+          "cssHeight": 844,
+          "dpr": 2,
+          "actualWidth": 780,
+          "actualHeight": 1688
+        }
+      ],
+      "provenance": "DPR2 was already present. Existing untracked native scenario uses owned page.screenshot(scale:device, fullPage:false), asserts origin/CSS viewport/DPR/Caps, and records receipts. Actual PNG IHDR dimensions read and all three images visually inspected at original resolution. Shared prelude stays read-only and its six CSS-scale images remain raw evidence.",
+      "representativeSubset": [
+        "self-cost-hand-desktop-2x.png",
+        "self-cost-reveal-desktop-2x.png",
+        "self-cost-touch-mobile-2x.png"
+      ],
+      "observations": "Both viewports retain cost2 source/cost3 unrelated, refused other tap, paid2, physical i4 materialized, native hover/touch cost1 with four Warriors, byte-identical committed state after ordinary reload, and empty error buffers. The reading-copy cost1 and rules text are visible in device-scale desktop hover/mobile touch detail captures.",
+      "gameLogs": [
+        {
+          "file": "self-cost-reduction-desktop.jsonl",
+          "gameId": "o9rt4k",
+          "rows": 38
+        },
+        {
+          "file": "self-cost-reduction-mobile.jsonl",
+          "gameId": "euz35f",
+          "rows": 38
+        }
+      ],
+      "caps": []
+    }
+  },
+  "failurePaths": [
+    {
+      "path": "Failure",
+      "evidence": "Literal and live negative/fraction/NaN/Infinity amounts rejected; malformed event and nested resolving use recover via public fold with no static record or gained energy."
+    },
+    {
+      "path": "Interrupt",
+      "evidence": "Actual payable enemy Interrupt removes a Warrior during source-event resolution; paid2 remains charged once while live source cost becomes3."
+    },
+    {
+      "path": "Restart/reload",
+      "evidence": "State round-trip preserves view/legality/payment; suspended route reconstructs after saved slice reload. Native desktop/mobile ordinary reload retains byte-identical committed state and revealed livecost1."
+    },
+    {
+      "path": "Partial application",
+      "status": "N/A for the new static primitive",
+      "evidence": "Static expansion reads state and emits only derived existing continuous changes, with no state writer/prompt/persisted record. Public nested misuse test also confirms enclosing step recovery publishes no partial gained energy/static record."
+    },
+    {
+      "path": "Stale/concurrent work",
+      "evidence": "Public route fold rejects foreign/stale/illegal/step-in-flight/double answers and charges once; physical sameUUID instances each retain their own one reduction and unrelated matching cards retain cost."
+    }
+  ],
+  "rulings": [],
+  "runtimeLedger": {
+    "firstFullPids": [
+      3574,
+      3586,
+      3725,
+      30950,
+      30995
+    ],
+    "firstFullStopped": true,
+    "failedObserverServerProcessGroup": 32241,
+    "failedObserverStopped": true,
+    "queuedCanceledRunnerPid": 55425,
+    "queuedCanceledRunnerStopped": true,
+    "successfulBrowserServerProcessGroup": 58054,
+    "port": 5174,
+    "portFreeAtOwnedCleanup": true,
+    "providerClose": "normal confirmed runner cleanup, no retained owned identity",
+    "allOwnedResourcesStopped": true,
+    "foreignRuntimeActions": "none; protected foreign slot0 record was inspected only; native fair admission used slot1",
+    "priorSuccessfulObserverServerProcessGroup": 80015,
+    "priorSuccessfulObserverStopped": true
+  },
+  "owed": [
+    "parent exact-final-source gpt-5.6-sol cold review under temporary routing",
+    "native candidate approval/certified promotion and cleanup"
+  ],
+  "implementerCommitWindow": {
+    "start": "2026-10-12T16:07:56Z",
+    "end": "2026-10-12T16:49:11Z",
+    "provenance": "Post-claim dispatch timestamp provided by parent; end sampled from real UTC wall clock immediately before final evidence-only schema/stage/amend and set as the exact Git committer timestamp."
+  }
+}

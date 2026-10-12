@@ -7,6 +7,7 @@ import type { EngineCardDefinition } from "../catalog";
 import {
   anyCharacter,
   characterYouControl,
+  count,
   enemyCharacter,
   energy,
   energyX,
@@ -128,6 +129,8 @@ export const DSL = {
   /** "Erode 4. You may put two of those cards into your hand." */
   erodeTakeTwo: authored(46, "event", 0, events(event(p.takeFromAmong(p.movedBy(p.erode(4)), { count: 2, optional: true })))),
   linkedBanish: authored(47, "character", 0, () => [triggered(onMaterialized(), p.lookAtTopBanish(4)), triggered(onDissolved(), p.putLinkedBanishedInHand())]),
+  /** A live reduction bound to this physical Warrior, in every zone. */
+  selfCostWarrior: authored(48, "character", 5, () => [staticAbility(p.selfCostReduction(count(characterYouControl({ subtype: "Warrior" }))), { zone: "any" })]),
 } as const;
 
 export const DSL_CARDS: readonly EngineCardDefinition[] = Object.values(DSL);

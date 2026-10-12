@@ -296,6 +296,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [SYNTHETIC.vanilla2.id]: { name: "Lab Sentry", text: "" },
   [SYNTHETIC.vanilla3.id]: { name: "Lab Veteran", text: "" },
   [SYNTHETIC.interruptEvent.id]: { name: "Lab Quickstep", text: "Interrupt. No effect." },
+  [DSL.selfCostWarrior.id]: { name: "Lab Warband Champion", text: "This character costs 1● less for each Warrior you control." },
   [DSL.drawTwo.id]: { name: "Lab Study", text: "Draw 2 cards." },
   [DSL.dissolveEnemy.id]: { name: "Lab Unmaking", text: "Fast. Dissolve an enemy." },
   [DSL.pumpPermanently.id]: { name: "Lab Blessing", text: "Up to 2 characters you control gain +1✦." },
@@ -421,6 +422,11 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "self-cost-reduction", description: "A physical source costs two energy while another Warrior remains unaffordable",
+    setup: { active: "player", phase: "day", player: { hand: [DSL.selfCostWarrior.id, SYNTHETIC.vanilla3.id], back: [vanillas[0], vanillas[0], vanillas[0]], energy: 2, deck: deck(6) }, enemy: { deck: deck(6) } },
+    script: [], presents: [playHand(0)],
+  },
   {
     name: "deck-top-play", description: "An identified playable top, cancellable payment, and hidden deeper deck layers",
     setup: { active: "player", phase: "day", player: { back: [DECK_TOP.keeper.id, ...vanillas.slice(0, 2)],

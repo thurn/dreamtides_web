@@ -73,3 +73,5 @@ export * from "./trigger-ability";
 export * from "./win-the-game";
 export * from "./with-materialized";
 export * from "./pay-to";
+
+export * from "./self-cost-reduction";

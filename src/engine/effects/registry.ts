@@ -27,6 +27,7 @@ import {
   chooseSubtypePrimitive,
   copyCardPrimitive,
   costModifierPrimitive,
+  selfCostReductionPrimitive,
   createCardPrimitive,
   createCopyInHandPrimitive,
   disableTriggersPrimitive,
@@ -135,6 +136,9 @@ const DEFINITIONS = {
   },
   get copyCard() {
     return copyCardPrimitive;
+  },
+  get selfCostReduction() {
+    return selfCostReductionPrimitive;
   },
   get costModifier() {
     return costModifierPrimitive;

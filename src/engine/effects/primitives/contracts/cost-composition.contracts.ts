@@ -22,6 +22,8 @@
 import { revealToBoth } from "../../../view/knowledge";
 import { describe, expect, it } from "vitest";
 import { draw } from "../draw";
+import { selfCostReduction } from "../self-cost-reduction";
+import { staticAbility } from "../../../dsl/builders";
 import { payTo } from "../pay-to";
 import { ScriptedSource } from "../../../steps/sources";
 import type { EngineCardDefinition } from "../../../catalog";
@@ -431,5 +433,29 @@ describe("fixed resolving-payment cost composition", () => {
     expect(result.state.sides.player.currentEnergy).toBe(0);
     expect(result.state.sides.player.hand).toEqual(ids.player.hand.slice(1));
     expect(result.state.sides.player.deck).toEqual(ids.player.deck);
+  });
+});
+
+
+/** The live physical-source primitive contributes the existing own reduction on every route. */
+describe("live physical-source cost composition", () => {
+  const rows = Object.entries(ROUTES).flatMap(([routeName, variants]) => variants.map((route) => ({ routeName, route })));
+  it.each(rows)("$route.name selects its base before live reduction, tax and extra energy", ({ route, routeName }) => {
+    const extra: Extra = "mandatory";
+    const printed = subjectFor(route.shape, extra);
+    const own: EngineCardDefinition = { ...printed, id: syntheticId(0x55560), abilities: (variant) => [...printed.abilities(variant), staticAbility(selfCostReduction(2), { zone: "any" })] };
+    const liveEngine = createEngine(testCatalog([own]));
+    const arrangedRow = arranged(route, extra, [step("cost.increase", 1)]);
+    const { id } = arrangedRow;
+    const state: BattleState = { ...arrangedRow.state, instances: { ...arrangedRow.state.instances, [id]: { ...arrangedRow.state.instances[id], printing: { kind: "card", cardId: own.id } } } };
+    const expected = Math.max(0, (route.replacement ?? PRINTED) + 1 + 1 - 2);
+    expect(liveEngine.view(state, PLAYER).instances[id].characteristics.cost).toBe(PRINTED + 1 + 1 - 2);
+    expect(liveEngine.legalActions(state, PLAYER)).toContainEqual({ kind: "play", card: id, from: route.from });
+    const result = liveEngine.apply(state, PLAYER, { kind: "play", card: id, from: route.from }, new RowAnswers(route, EXTRAS[extra]));
+    expect(ENERGY - result.state.sides.player.currentEnergy).toBe(expected);
+    expect(result.state.sides.player.score).toBe(SCORE - POINTS);
+    expect(result.state.instances[id].status.offering).toBe(routeName === "offering");
+    expect(result.state.instances[id].status.playedViaReclaim).toBe(routeName === "reclaim");
+    expect(invariantViolations(result.state, liveEngine.catalog)).toEqual([]);
   });
 });
