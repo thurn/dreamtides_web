@@ -1,3 +1,6 @@
+import { activated, discardCost, self } from "../../engine/dsl/builders";
+import { untilEndOfTurn } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 73,
   art: { x: 0, y: 0.424, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [activated([discardCost()], gainSpark(self(), variant.amplified ? 3 : 2, untilEndOfTurn()))],
+  verifiedText: "9zz4bv2ryv",
 });

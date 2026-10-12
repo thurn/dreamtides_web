@@ -1,0 +1,201 @@
+{
+  "bead": "hv-umm2.174",
+  "focused": {
+    "files": 2,
+    "tests": 113,
+    "elapsedS": 4.44
+  },
+  "review": {
+    "files": 223,
+    "tests": 3609,
+    "elapsedS": 52.8
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 158049,
+    "failures": 0,
+    "executionS": 161.9,
+    "cpuS": 173.3,
+    "totalS": 238.46,
+    "heavySlotWaitApproxS": 75.6,
+    "targetsExercised": [
+      240,
+      289,
+      285,
+      185
+    ]
+  },
+  "preflight": {
+    "passCount": 42,
+    "skipCount": 38,
+    "failCount": 0,
+    "elapsedS": 1.36
+  },
+  "judged": {
+    "finalReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.174/invocations/run-55xifh/judged.result.json",
+    "passedViewports": [
+      "desktop",
+      "mobile"
+    ],
+    "executionS": 15.142,
+    "totalS": 41.64,
+    "browserLeaseWaitS": 24.434,
+    "visualInspection": "Art, visible 3 spark, Battle Log plain-language activation/gain/dissolution/trigger/three draws inspected on desktop and mobile; dimensions 1440x900 and390x844."
+  },
+  "qaHarnessRepair": "First judged attempt used an incorrect hand selector; corrected to existing near-hand physical card selector. Second pass overlapped review hermetic asset materialization; final judged pass with restored local art. No product failure.",
+  "runtime": [
+    {
+      "pid": 41810,
+      "port": 5274,
+      "role": "sweep first server",
+      "stopped": true
+    },
+    {
+      "pid": 41993,
+      "port": 5174,
+      "role": "judged selector-repair attempt",
+      "stopped": true
+    },
+    {
+      "pid": 43840,
+      "port": 5174,
+      "role": "judged second pass",
+      "stopped": true
+    },
+    {
+      "pid": 93332,
+      "port": 5274,
+      "role": "final judged pass",
+      "stopped": true
+    },
+    {
+      "pid": 95815,
+      "port": 5274,
+      "role": "sweep resumed server",
+      "stopped": true
+    },
+    {
+      "pid": 10906,
+      "port": 5274,
+      "role": "replacement Duelist full sweep server",
+      "stopped": true
+    },
+    {
+      "pid": 61004,
+      "port": 5174,
+      "role": "focused attuned enemy server",
+      "stopped": true
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 45,
+    "jsdomFiles": 0,
+    "scenarioModules": 1,
+    "scenarioCases": 2,
+    "scenarioLines": 45
+  },
+  "dispatchStart": "2026-10-12T13:43:00Z parent-dispatch timestamp approximation, matching helper research start",
+  "hostLoadSamples": [
+    {
+      "step": "review initial",
+      "load": 8.0087890625
+    },
+    {
+      "step": "review final",
+      "load": 10.24951171875
+    }
+  ],
+  "providerRecovery": {
+    "bead": "hv-umm2.174",
+    "mode": "bounded-justiciar-incident",
+    "archive": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json.incident-hv-umm2.174-65995d10-9f99-464f-9beb-38c3f0846584.json",
+    "sha256": "39ab1c59793ddd0ffdea9cfdc207dda2d7f1260b824b70c6a5817a5e79bb9cd6",
+    "originalReceipt": false,
+    "providerProbe": {
+      "status": 404,
+      "body": "Session not found"
+    },
+    "contextEvidence": "invocations/run-1tTlu6/hv-umm2.174-provider-inspect.result.json",
+    "terminatedBrowserPid": 41985,
+    "deadRunner": 41778,
+    "deadServer": 95815,
+    "reason": "Exact obsolete transport absent; shared Chromium inspection showed only newly owned diagnostic context. That diagnostic closed normally and original shared Chromium PID exited. All former browser actions therefore have no live execution target; local processes/server settled. Original record preserved byte-for-byte without fabricated completion receipt.",
+    "recordArtifact": "provider-incident-recovery.json",
+    "implementedBy": "parent same-task justiciar, source unchanged"
+  },
+  "reviewFinal": {
+    "files": 223,
+    "tests": 3609,
+    "elapsedS": 40.42,
+    "hostLoad": 10.24951171875,
+    "localAssetsRestoredAt": "2026-10-12T14:00:04Z"
+  },
+  "sweepInterrupted": {
+    "totalS": 337.42,
+    "ledgerPasses": 36,
+    "ledgerSkips": 33,
+    "ledgerFails": 1,
+    "failedCell": {
+      "uuid": "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+      "side": "player",
+      "variant": "perfected"
+    },
+    "remaining": "perfected player and all enemy variants"
+  },
+  "sweepFinal": {
+    "cells": 80,
+    "latestCounts": {
+      "pass": 42,
+      "skip": 38
+    },
+    "rawAttemptCounts": {
+      "pass": 47,
+      "skip": 43,
+      "fail": 3
+    },
+    "judgedPasses": 2,
+    "ledgerSelection": "Latest verdict by UUID, variant and side across retained invocations; previous errors are preserved.",
+    "replacementFull": {
+      "invocation": "sweep-IevYOh",
+      "totalS": 162.06,
+      "executionS": 161.851462583,
+      "counts": {
+        "passCount": 9,
+        "skipCount": 10,
+        "failCount": 1
+      },
+      "notes": "Kindled enemy timeout-only attempt retried once automatically and passed; attuned enemy navigation aborted before lab report."
+    },
+    "focused": {
+      "invocation": "sweep-tQGNA8",
+      "preflightS": 1.22,
+      "totalS": 19.2,
+      "executionS": 18.932319625,
+      "passCount": 2,
+      "notes": "Parent-authorized one fresh-session resweep under aborted-navigation hypothesis after the preceding timeout/retry; base and attuned enemy passed. No source edit."
+    },
+    "evidenceRoots": [
+      "invocations/sweep-P18Xbs",
+      "invocations/sweep-IevYOh",
+      "invocations/sweep-tQGNA8"
+    ]
+  },
+  "runtimeSettlement": "Every own QA server process group stopped and provider context closed; interrupted original provider custody separately settled by parent justiciar with archived exact owner bytes. Shared Playwright service remains managed for peers.",
+  "knipFinalS": 4.32,
+  "finalResourceCheck": {
+    "at": "2026-10-12T14:08:43+00:00",
+    "absentPids": [
+      41810,
+      41993,
+      43840,
+      93332,
+      95815,
+      10906,
+      61004,
+      41538,
+      41778
+    ],
+    "result": "No listed owned process remains"
+  }
+}

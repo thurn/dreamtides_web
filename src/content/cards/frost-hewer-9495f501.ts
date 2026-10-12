@@ -1,3 +1,6 @@
+import { activated, discardCost, self } from "../../engine/dsl/builders";
+import { untilEndOfTurn } from "../../engine/dsl/triggers";
+import { grant } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 420,
   art: { x: 0.954, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([discardCost()], grant(self(), "vengeful", untilEndOfTurn()))],
+  verifiedText: "iajkq79w46",
 });

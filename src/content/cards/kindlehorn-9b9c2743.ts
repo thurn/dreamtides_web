@@ -1,3 +1,6 @@
+import { activated, energy, exhaustSelf, self } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { gainEnergy, gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 4,
   art: { x: -0.056, y: 1, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onDawn(), gainEnergy(variant.amplified ? 2 : 1)),
+    activated([energy(4), exhaustSelf()], gainSpark(self(), 1)),
+  ],
+  verifiedText: "e2dkdccgzw",
 });
