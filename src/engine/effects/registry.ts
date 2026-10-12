@@ -41,6 +41,7 @@ import {
   drawPrimitive,
   drawDreamwellPrimitive,
   drawMatchingPrimitive,
+  drawThenIfPrimitive,
   erodePrimitive,
   exhaustPrimitive,
   floatingTriggerPrimitive,
@@ -183,6 +184,9 @@ const DEFINITIONS = {
   },
   get draw() {
     return drawPrimitive;
+  },
+  get drawThenIf() {
+    return drawThenIfPrimitive;
   },
   get erode() {
     return erodePrimitive;

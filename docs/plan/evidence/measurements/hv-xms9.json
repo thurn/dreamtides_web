@@ -1,0 +1,804 @@
+{
+  "bead": "hv-xms9",
+  "phase": 5,
+  "base": "2b79616c0c48b082a627ad94481ff55c481c9657",
+  "dispatch": {
+    "bead": "hv-xms9",
+    "helper": "drawn_card_conditional",
+    "dispatchStart": "2026-10-12T17:41:50.681906Z",
+    "provenance": "Parent recorded native dispatch invocation start immediately before sole helper spawn",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/drawn-card-conditional",
+    "base": "c284ce775645f6f080597c32e5d5f849748b1ad3"
+  },
+  "scope": {
+    "newForm": "drawThenIf(filter: CardFilter, then: EffectNode, player: PlayerRef = you)",
+    "binding": "One ordinary top draw through drawCard; exact returned physical InstanceId is filtered immediately in hand; null or absent/mismatching card runs no child. Deferred branch resolves through resolveChosenEffect with retained original source, controller, root, X, payment and prompt purpose. Draw triggers retain ordinary queue timing.",
+    "sourcePaths": [
+      "src/engine/effects/primitives/draw-then-if.ts",
+      "src/engine/effects/primitives/contracts/draw-then-if.contracts.ts",
+      "src/engine/effects/primitives/index.ts",
+      "src/engine/effects/registry.ts",
+      "src/engine/testing/dsl-cards.ts"
+    ],
+    "existingReaderBodiesChanged": [],
+    "productionEntitiesAuthored": [],
+    "genericCaptureChanges": false,
+    "primitiveAndHubLines": 36,
+    "syntheticFixtureLines": 2,
+    "plainContracts": {
+      "files": 1,
+      "lines": 225,
+      "cases": 15
+    },
+    "testEntrypoints": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    }
+  },
+  "baseline": {
+    "freshDiagnostic": {
+      "start": "2026-10-12T17:46:53.657737+00:00",
+      "end": "2026-10-12T17:46:54.537501+00:00",
+      "wallS": 0.8795171249948908,
+      "exitCode": 0,
+      "scope": "source-free unchanged-engine public diagnostic; source c284ce775645f6f080597c32e5d5f849748b1ad3; diagnostic exit0 does not certify missing form",
+      "pid": null
+    },
+    "freshResults": {
+      "cells": 6,
+      "correctCharacterControls": 2,
+      "falsePositiveEventOrFatigueCells": 4
+    },
+    "interpretation": "Diagnostic exit0 means the source-free existing-form probe completed, not that the absent form passed a test. The closest whole-hand filtered condition cannot bind its actual draw.",
+    "original216Research": {
+      "scope": "Parent-owned untouched original six-UUID composition; external public probe only, no repository source/runtime/evidence writes for216 at original research time.",
+      "source": "fcd9a10a08e700f51b5de76edcca0022f48324a6",
+      "receipt": {
+        "start": "2026-10-12T17:36:21.568952+00:00",
+        "end": "2026-10-12T17:36:22.448863+00:00",
+        "exitCode": 0,
+        "purpose": "Retain complete source-free public diagnostic output after corrected external script quoting; no repository source change"
+      },
+      "raw": "closest-hand-condition-probe.ts / closest-hand-condition-probe.stdout.json / probe-receipt.json under216-validation; initial external quoting failure corrected before original diagnostic.",
+      "legacy": "Parent recorded the legacy Sunset stale-last-old-hand fallback as research debt; it is not a valid substitute for the printed actual-draw reference."
+    }
+  },
+  "rules": {
+    "ladder": "not invoked",
+    "anchors": [
+      "docs/rules.md: condition checked as that part resolves",
+      "docs/rules.md: current types, Draw a matching card and Fatigue",
+      "docs/plan/engine-design.md: filters read current characteristics and copiable cost"
+    ],
+    "timing": "After actual ordinary draw into hand, before child and queued draw-trigger resolution. Variant converted Events retain their normative zero spark.",
+    "rdFiles": [],
+    "cardIssueFiles": []
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "contract": "rolls back a mid-resolution failure's real draw and partial child writes without publishing them",
+      "evidence": "Real drawThenIf and gainEnergy child resolve through the existing synthetic resolver seam before a synthetic exception; committed deck, draw count, energy, knowledge and stack boundary checked."
+    },
+    {
+      "path": "partial write",
+      "contract": "same rollback contract",
+      "evidence": "Draw movement/count/knowledge and child energy change remain uncommitted and unpublished on failure."
+    },
+    {
+      "path": "reload or restart",
+      "contract": "offers only a matching child, after drawing, and resumes the same mode and target after reload",
+      "evidence": "JSON-saved in-flight mode/target answers resume through a fresh public fold and engine; final hash equals inline execution with exactly one draw."
+    },
+    {
+      "path": "invalid or stale input",
+      "contract": "same matching-child fold contract",
+      "evidence": "Invalid target, earlier mode prompt ID, post-completion answer and uncancellable-resolution cancel bounce; optional decline keeps the draw."
+    },
+    {
+      "path": "concurrent actors",
+      "contract": "same matching-child fold contract",
+      "evidence": "Wrong-side answer and competing answer after one accepted completion bounce in the existing single-writer fold protocol; no new concurrency mechanism."
+    }
+  ],
+  "counterfactual": {
+    "beforeSha256": "e55737471b5a262ed34ec04e1410acc285654b7f7fc3bd948138a6b36b3dd16e",
+    "mutatedSha256": "e71ef7d9d3f9a90ec4fc112a162aa37bf25f58db77121861d299be2d7246d1d5",
+    "restoredSha256": "e55737471b5a262ed34ec04e1410acc285654b7f7fc3bd948138a6b36b3dd16e",
+    "exactRestored": true,
+    "counterfactualExitCode": 1,
+    "restoredAt": "2026-10-12T17:53:48.278370+00:00",
+    "mutation": "Remove only conditional successful-draw/filter guard; existing draw and child resolver remain",
+    "selectedCases": 15,
+    "failedCases": 8,
+    "positiveControlsPassed": 7,
+    "restoredFocused": {
+      "start": "2026-10-12T17:53:48.304857+00:00",
+      "end": "2026-10-12T17:53:53.309044+00:00",
+      "wallS": 5.004010790988104,
+      "exitCode": 0,
+      "pid": 53972,
+      "pgid": 53972,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "drawThenIf|content gate"
+      ],
+      "hostLoadRaw": "{ 17.78 14.24 12.99 }"
+    },
+    "scope": "Behavioral repair removal: only the conditional successful-id/filter guard removed, with actual new-form public assertions failing; no missing-import or absent-form failure claimed."
+  },
+  "commands": {
+    "baseline": {
+      "start": "2026-10-12T17:46:53.657737+00:00",
+      "end": "2026-10-12T17:46:54.537501+00:00",
+      "wallS": 0.8795171249948908,
+      "exitCode": 0,
+      "scope": "source-free unchanged-engine public diagnostic; source c284ce775645f6f080597c32e5d5f849748b1ad3; diagnostic exit0 does not certify missing form",
+      "pid": null
+    },
+    "counterfactual": {
+      "start": "2026-10-12T17:53:44.316351+00:00",
+      "end": "2026-10-12T17:53:48.273901+00:00",
+      "wallS": 3.9574231669976143,
+      "exitCode": 1,
+      "pid": 53486,
+      "pgid": 53486,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "drawThenIf"
+      ],
+      "hostLoadRaw": "{ 18.81 14.38 13.03 }"
+    },
+    "fixture-lint-fix": {
+      "start": "2026-10-12T17:56:52.284347+00:00",
+      "end": "2026-10-12T17:56:55.558256+00:00",
+      "wallS": 3.273762207987602,
+      "exitCode": 0,
+      "pid": 17364,
+      "pgid": 17364,
+      "command": [
+        "node_modules/.bin/eslint",
+        "src/engine/effects/primitives/contracts/draw-then-if.contracts.ts",
+        "--fix"
+      ],
+      "hostLoadRaw": "{ 16.38 15.32 13.65 }"
+    },
+    "focused-fixed": {
+      "start": "2026-10-12T17:52:54.132950+00:00",
+      "end": "2026-10-12T17:52:58.259642+00:00",
+      "wallS": 4.126554792004754,
+      "exitCode": 0,
+      "pid": 48093,
+      "pgid": 48093,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "drawThenIf|content gate"
+      ],
+      "hostLoadRaw": "{ 24.24 14.23 12.90 }"
+    },
+    "focused": {
+      "start": "2026-10-12T17:51:27.280454+00:00",
+      "end": "2026-10-12T17:51:32.060257+00:00",
+      "wallS": 4.779643165995367,
+      "exitCode": 1,
+      "pid": 91190,
+      "pgid": 91190,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "drawThenIf|content gate"
+      ],
+      "hostLoadRaw": "{ 13.79 10.02 11.43 }"
+    },
+    "fuzz": {
+      "start": "2026-10-12T17:58:58.971287+00:00",
+      "end": "2026-10-12T18:03:00.966153+00:00",
+      "wallS": 241.99215966700285,
+      "exitCode": 0,
+      "pid": 26163,
+      "pgid": 26163,
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/xms9-helper/fuzz.ts"
+      ],
+      "hostLoadRaw": "{ 8.53 12.92 12.94 }"
+    },
+    "knip": {
+      "start": "2026-10-12T17:58:46.283856+00:00",
+      "end": "2026-10-12T17:58:49.731911+00:00",
+      "wallS": 3.4479160829941975,
+      "exitCode": 0,
+      "pid": 25290,
+      "pgid": 25290,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "hostLoadRaw": "{ 9.50 13.32 13.07 }"
+    },
+    "restored-focused": {
+      "start": "2026-10-12T17:53:48.304857+00:00",
+      "end": "2026-10-12T17:53:53.309044+00:00",
+      "wallS": 5.004010790988104,
+      "exitCode": 0,
+      "pid": 53972,
+      "pgid": 53972,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "drawThenIf|content gate"
+      ],
+      "hostLoadRaw": "{ 17.78 14.24 12.99 }"
+    },
+    "review-final": {
+      "start": "2026-10-12T17:57:27.978043+00:00",
+      "end": "2026-10-12T17:58:19.449584+00:00",
+      "wallS": 51.47068358400429,
+      "exitCode": 0,
+      "pid": 20086,
+      "pgid": 20086,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoadRaw": "{ 12.97 14.63 13.47 }"
+    },
+    "review-fixed": {
+      "start": "2026-10-12T17:55:20.074119+00:00",
+      "end": "2026-10-12T17:56:19.177691+00:00",
+      "wallS": 59.10280262499873,
+      "exitCode": 1,
+      "pid": 60639,
+      "pgid": 60639,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoadRaw": "{ 14.48 13.61 12.85 }"
+    },
+    "review": {
+      "start": "2026-10-12T17:54:11.092297+00:00",
+      "end": "2026-10-12T17:54:59.848927+00:00",
+      "wallS": 48.75601579199429,
+      "exitCode": 2,
+      "pid": 55789,
+      "pgid": 55789,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoadRaw": "{ 14.76 13.78 12.86 }"
+    }
+  },
+  "attemptDispositions": {
+    "focused": "exit1: six failures from three fixture assumptions (converted Event zero spark, public hand count/known shape, RecordedAnswer lacking prompt); diagnostic receipt retained. Fifteen new cases plus one existing DSL primitive contract matched drawThenIf in the shared runner, with13content gate cases,29total after repair.",
+    "review": "exit2:25 unnecessary fixture nonnull assertions plus subtype widening and unsupported Array.at; related268files4748tests passed, aggregate not accepted.",
+    "review-fixed": "exit1: types passed,25known lint assertions persisted; related268files4748tests passed, aggregate not accepted. Completed before fixture autofix.",
+    "fixture-lint-fix": "exit0: removed25unnecessary assertions only in the new plain contract module.",
+    "review-final": "exit0:lint,typecheck and268files4748relatedtests pass; final source validated.",
+    "knip": "exit0: no unused export/file fallout from the new form.",
+    "fuzz": "exit0: machine-wide heavy lock; two-worker environment;300seeded synthetic games, final hash replay each game and interactive replay every tenth game."
+  },
+  "fuzz": {
+    "stage": "complete",
+    "timestamp": "2026-10-12T18:03:00.925Z",
+    "games": 300,
+    "seedPrefix": "hv-xms9-draw-then-if",
+    "failures": 0,
+    "steps": 151079,
+    "prompts": 3086,
+    "interactiveReruns": 273,
+    "target": "5e5e5e5e-0000-4000-8000-0000000216c8",
+    "coverage": {
+      "included": 1190,
+      "exercised": 655
+    },
+    "wallS": 122.89661037500001,
+    "cpuS": 133.999885,
+    "branchCounts": "not instrumented; focused contracts prove both branches",
+    "recipe": "External retained fuzz.ts uses public SYNTHETIC_FUZZ_POOL and fuzzEngineCatalog(base), whose synthetic catalog already includes the new DSL definition; weighted pool.cards includes the reserved fixture once for public weight validation. Exact catalog object identity checked before games; no shipping runner/config change.",
+    "outerQueueAndStartupUpperBoundS": 119.055713,
+    "outerWallS": 241.99215966700285,
+    "innerWallS": 122.89661037500001,
+    "weighting": "Requested card UUID retained in targetCoverage; included counts count actual appearances, not just reserved deck entries; exercised counts actual game target exercises. Branch counts not instrumented."
+  },
+  "qa": {
+    "scope": "Public synthetic engine/fold observable contracts and weighted replay/invariant fuzz",
+    "browser": "No browser started: isolated new primitive uses existing prompt kinds and existing rendering/protocol; no production consumer, screen, status or presentation change.",
+    "d21": "Original216 owns subsequent real six-UUID preflight, weighted300 and both-side Dreamwell sweeps/judged QA. This bead claims no production Sunset acceptance.",
+    "ledger": "Own row refreshed to combined-base focused/review acceptance; original row and its SHA retained in originalValidatedRange. Original300fuzz remains c8 evidence.",
+    "captures": []
+  },
+  "validationSelection": {
+    "fullReview": "Not selected: standalone primitive, additive registry/export/fixture entries; no shared architecture/config/test runner body change. Required quick review and Knip passed."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "stage2-review prepare start2026-10-12T18:18:07.535Z; actual review.mjs observation8.11328125, outer sysctl rounds8.11"
+      },
+      "testDelta": {
+        "meaning": "Against2b79616c0c48b082a627ad94481ff55c481c9657:0testentrypoints/0jsdom;225new plain contract lines,1plainmodule/15new cases; synthetic fixture2lines separate."
+      },
+      "implementWindow": {
+        "endProvenance": "Final recovery precommit observation, compared against actual stage2 Git invocation start/end in retained stage2-commit.receipt.json; original precommit/Git check retained in originalValidatedRange."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "baseline": null,
+    "counterfactual": "{ 18.81 14.38 13.03 }",
+    "fixture-lint-fix": "{ 16.38 15.32 13.65 }",
+    "focused-fixed": "{ 24.24 14.23 12.90 }",
+    "focused": "{ 13.79 10.02 11.43 }",
+    "fuzz": "{ 8.53 12.92 12.94 }",
+    "knip": "{ 9.50 13.32 13.07 }",
+    "restored-focused": "{ 17.78 14.24 12.99 }",
+    "review-final": "{ 12.97 14.63 13.47 }",
+    "review-fixed": "{ 14.48 13.61 12.85 }",
+    "review": "{ 14.76 13.78 12.86 }",
+    "stage2": {
+      "focused": "{ 8.25 14.35 14.55 }",
+      "review": "{ 8.11 14.12 14.46 }",
+      "knip": "{ 7.71 12.72 13.90 }"
+    }
+  },
+  "sourceFreeze": {
+    "observedAt": "2026-10-12T18:00:09.959250+00:00",
+    "sha256": {
+      "src/engine/effects/primitives/draw-then-if.ts": "e55737471b5a262ed34ec04e1410acc285654b7f7fc3bd948138a6b36b3dd16e",
+      "src/engine/effects/primitives/contracts/draw-then-if.contracts.ts": "fb7c76b496be2d1dace8e2b8ad1cc967f097e6c8a3e3f2c6fd8b025187f90bac",
+      "src/engine/effects/primitives/index.ts": "e5098431a4b1c5ce8db630ece33285fc6564f998de20e29a4232793f1a39ec6d",
+      "src/engine/effects/registry.ts": "e852b86227fd2c60b8be54dc65d3801e86e03f8367fefc3644419c5b19861ab8",
+      "src/engine/testing/dsl-cards.ts": "b7c6cfb6d606025d8fab5e72e4fb76cc8d111dc36ccb8574a5526944df80c776"
+    }
+  },
+  "rawEvidence": {
+    "directory": "/tmp/dreamtides-executor-01a1304d/xms9-helper",
+    "sha256": {
+      "baseline.receipt.json": "5352468f475f089dd562fe2067148f7a36d51f7e0ddc2c75af28c53f7e5170a4",
+      "baseline.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baseline.stdout.json": "9fb100bea019a61ac278f40bb6cb4c0ed024df2b34af26586e5ebacf36526291",
+      "baseline.ts": "0f6b53e524da56d83ca261d414b6ebe1bbed04d11299d43cb401ad47593d26e3",
+      "counterfactual-restoration.json": "87090be9616056da74a08b1a6a2604ebcdbfe5edf609403f265b879e0202374a",
+      "counterfactual.receipt.json": "02f6cb3bf651a622a7ba4273d57ec123b17a56cf6db858ab11b51f181dc46f16",
+      "counterfactual.stderr.txt": "a15162d7e4a72bd7a5efb062a904dfcb057e935bb07f25b77525a73667a9a87e",
+      "counterfactual.stdout.txt": "a4846249bf2d767d34f213371f15040192338ebdba24f6b6a968b00ee345aa2e",
+      "fixture-lint-fix.receipt.json": "86dc6a6db0aa45a4ed0be0633a41c4668f89a2d928e23071cb09f784d3dd06af",
+      "fixture-lint-fix.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixture-lint-fix.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "focused-fixed.receipt.json": "e1081fd26b840de29f6ea14ee14877b6744ef83f2e73190385d3329fee53a9d6",
+      "focused-fixed.stderr.txt": "7c578d385550eefa90e7a1d5b56fff8cfda01f447a7a1df7d482c12bdd774f72",
+      "focused-fixed.stdout.txt": "ceec63f0ac2d6834e7b41c0ce58b634a3580bceaffa68c1b772b4a0e13fd1559",
+      "focused.receipt.json": "dcf927d6628a466c6bea9f1fdd869a9bdc41cf5265613b7481d422368a49765d",
+      "focused.stderr.txt": "5427648f51b1601bf1053652e6166d6ffe77dfd462634484526c710ea8439f35",
+      "focused.stdout.txt": "22a15a044ec250feee020d835acea39637350ce418931af2e1192fca052d55b1",
+      "fuzz-summary.json": "9501e6dace76b19ec8da3169bb3cabb581575915167d9edf41e5dcabbe468df7",
+      "fuzz.receipt.json": "7b661dfc2b66cb6cb130325a4de0439b82ee5279ecaf767eb6a3f7623db55866",
+      "fuzz.start.json": "c2c429ffa57f263f233ce6bb8ad998997730d4263ee5ea9874ef048775d9c3e9",
+      "fuzz.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fuzz.stdout.txt": "1d0ecd1ebda6eec92f4c980061bf035d310b829f4e4edf08be6f39896bc78991",
+      "fuzz.ts": "d4c8057f1da9f44681d5717a682a435d811b50c8b0d2eb85b215bc591fe1af3a",
+      "knip.receipt.json": "da68f7869b4ec7aaf4a4794554c9d3027d42b3c4c307b5fced619adbf4ba851e",
+      "knip.stderr.txt": "7c578d385550eefa90e7a1d5b56fff8cfda01f447a7a1df7d482c12bdd774f72",
+      "knip.stdout.txt": "8d6b34323c8ed926c0ba2cf7efbcac934ec1a4642097ab50bc12657d8a3db4a9",
+      "restored-focused.receipt.json": "dbc38ff4d50202d6277e02dd82ad8f2727064430550a3e507960447d47ccfe94",
+      "restored-focused.stderr.txt": "7c578d385550eefa90e7a1d5b56fff8cfda01f447a7a1df7d482c12bdd774f72",
+      "restored-focused.stdout.txt": "2782627d1a5565f07d8ca86deaea046340be27156cb3e75b212f2e08ab369bd9",
+      "review-final.receipt.json": "6bafcc8dba6dacafde84aabc4ae5c9cef6b54a5abb524e081ed83a9f12ec581f",
+      "review-final.stderr.txt": "7c578d385550eefa90e7a1d5b56fff8cfda01f447a7a1df7d482c12bdd774f72",
+      "review-final.stdout.txt": "f6c0798b526452cf0bbb1fc75df880ef4a12970994634a5f92ed5bbaf6265ceb",
+      "review-fixed.receipt.json": "a51e14608ae3164eb92087992c875855288301063acc6720cce4dd19e58bbaee",
+      "review-fixed.stderr.txt": "7c578d385550eefa90e7a1d5b56fff8cfda01f447a7a1df7d482c12bdd774f72",
+      "review-fixed.stdout.txt": "40179e16afe482546e5d83320ae666a4a1b4fb1714eba051921bf1be87dfeef6",
+      "review.receipt.json": "0436450f560f106f7e7e239810b954e58d5e86f44df4ff029e5e5bd3bfe0fd40",
+      "review.stderr.txt": "7c578d385550eefa90e7a1d5b56fff8cfda01f447a7a1df7d482c12bdd774f72",
+      "review.stdout.txt": "eefc878c8278d8554f01ba7f72035ab22f72602e5cc9c3cf3385221a1ffb1799",
+      "run.py": "5cef5eea827ce5d67cf5a9056f259bbce0587da43e8b1fb48c57f090441da68c",
+      "settlement-interim.json": "fb6b4b41720f876802e372c72ef985e772e85baabba8a051a9ea5f8d9de95d17",
+      "settlement.json": "a05710102fd05ee3101f2b3ed898e8753148aee34ebdb21112502e5f28a5036a",
+      "source-hashes.json": "bc84f4ad3aea113c1cb3ba5012b436ce47370a33a27351d0f855a5e8e8afccc3"
+    }
+  },
+  "processSettlement": {
+    "observedAt": "2026-10-12T18:03:15.690984+00:00",
+    "ownedCommandGroups": [
+      17364,
+      20086,
+      25290,
+      26163,
+      48093,
+      53486,
+      53972,
+      55789,
+      60639,
+      91190
+    ],
+    "remainingInOwnedGroups": [],
+    "longLivedRuntimeResources": [],
+    "browserContexts": [],
+    "servers": [],
+    "allSettled": true
+  },
+  "preExistingIssues": "No newly encountered unrelated source issue. Parent fresh install report:388packages and17existing vulnerabilities; no helper install/audit fix and no new vulnerability claim.",
+  "independentCoreReview": {
+    "owner": "parent executor after terminal helper handoff",
+    "routing": "Fresh read-only Codex CLI gpt-5.6-sol under temporary override; parent original c8 review found no actionable findings, fresh final-base/source review still parent-owned.",
+    "reviewedByHelper": false
+  },
+  "precommitObservedAt": "2026-10-12T18:22:11.622901+00:00",
+  "originalValidatedRange": {
+    "source": "c8b6486d0611fa5b77bb11d08e3ed8f1654f6526",
+    "base": "c284ce775645f6f080597c32e5d5f849748b1ad3",
+    "precommitObservedAt": "2026-10-12T18:04:50.760556+00:00",
+    "friction": {
+      "bead": "hv-xms9",
+      "phase": 5,
+      "implementMin": 39.3749757,
+      "implementWindow": {
+        "start": "2026-10-12T17:41:50.681906Z",
+        "end": "2026-10-12T18:21:13.180448+00:00"
+      },
+      "localValidationS": {
+        "focused": 4.904379667001194,
+        "review": 51.859441084001446,
+        "knip": 2.4604051659989636
+      },
+      "hostLoad": 8.11328125,
+      "testDelta": {
+        "files": 0,
+        "lines": 225,
+        "jsdomFiles": 0
+      },
+      "friction": []
+    },
+    "gitInvocation": {
+      "start": "2026-10-12T18:05:29.171756+00:00",
+      "end": "2026-10-12T18:05:29.214831+00:00",
+      "wallS": 0.04299237499071751,
+      "exitCode": 0,
+      "pid": 33710,
+      "pgid": 33710,
+      "command": [
+        "git",
+        "commit",
+        "--file",
+        "/tmp/dreamtides-executor-01a1304d/xms9-helper/commit-message.txt"
+      ],
+      "stdout": "[drawn-card-conditional c8b6486d0] feat(engine): bind conditional effects to the card just drawn\n 8 files changed, 741 insertions(+)\n create mode 100644 docs/plan/evidence/friction/hv-xms9.json\n create mode 100644 docs/plan/evidence/measurements/hv-xms9.json\n create mode 100644 docs/plan/evidence/qa-ledger/hv-xms9.jsonl\n create mode 100644 src/engine/effects/primitives/contracts/draw-then-if.contracts.ts\n create mode 100644 src/engine/effects/primitives/draw-then-if.ts\n",
+      "stderr": ""
+    },
+    "gitCheck": {
+      "source": "c8b6486d0611fa5b77bb11d08e3ed8f1654f6526",
+      "clean": true,
+      "status": "",
+      "precommitEndToActualCommitEndS": 38.454275,
+      "singleCommitCount": 1
+    },
+    "qaLedgerRow": {
+      "uuid": "5e5e5e5e-0000-4000-8000-0000000216c8",
+      "variant": "base",
+      "mode": "engine-contracts",
+      "verdict": "pass",
+      "notes": "Reserved synthetic fixture: both-controller ordinary draws, exact physical filtering, Fatigue, copies/replay, private views, UUID prompt source, deferred matching-only choices and fold recovery.300weighted synthetic games0failures,1190included/655exercised. No new presentation surface; original216 retains production D21 coverage.",
+      "bead": "hv-xms9",
+      "commit": "c284ce775645f6f080597c32e5d5f849748b1ad3",
+      "screens": []
+    },
+    "qaLedgerSha256": "1e7124a65f0b9f487e6dde0f2ed352757e4c992dc2b0860f5867cd5bac61ae99",
+    "measurementSnapshot": "/tmp/dreamtides-executor-01a1304d/xms9-validation/conflict-recovery/original-measurements-hv-xms9.json",
+    "measurementSnapshotSha256": "770fda8b2d472ec842729d0c09ebe34d82412c3789178a8a3416ea16389f678f",
+    "evidenceAssociation": "All original commands, attempts, counterfactual,300weighted fuzz and five-path proof remain tied to c8b6486d0611fa5b77bb11d08e3ed8f1654f6526/c284ce775645f6f080597c32e5d5f849748b1ad3. No fuzz rerun on new base is claimed.",
+    "parentCoreReviewReceipt": {
+      "start": "2026-10-12T18:07:45.101698+00:00",
+      "pid": 91097,
+      "pgid": 91097,
+      "model": "gpt-5.6-sol",
+      "routing": "temporary user-authorized same-family Sol review",
+      "snapshot": "/tmp/dreamtides-executor-01a1304d/review-snapshot-xms9",
+      "source": "c8b6486d0611fa5b77bb11d08e3ed8f1654f6526",
+      "base": "c284ce775645f6f080597c32e5d5f849748b1ad3",
+      "end": "2026-10-12T18:09:13.021892+00:00",
+      "wallS": 87.91916287499771,
+      "exitCode": 0
+    },
+    "parentCoreReviewFindingDisposition": "No actionable findings in retained parent review.md; parent requires fresh final-range review."
+  },
+  "combinedBaseRecovery": {
+    "sourceRange": "Final amended source is recorded by stage2-commit.receipt.json and stage2-delivery-manifest.json after invocation; current base is2b79616c0c48b082a627ad94481ff55c481c9657.",
+    "parentNativeFailure": {
+      "candidate": "01a1314c-a340-7640-a591-03151faa36e7",
+      "state": "merge-conflict-with-adopted-base before buildset",
+      "approveClientExitCode": 1,
+      "firstNativeUpdate": "Parent reported service error5 and clean rollback with healthy doctor; helper ran no native update or raw rebase.",
+      "sourceConflictPath": "src/engine/testing/dsl-cards.ts only; registry/index native merge retained both sides",
+      "statusReceipt": "/tmp/dreamtides-executor-01a1304d/xms9-validation/conflict-status.json"
+    },
+    "parkedCheckpoint": {
+      "checkpoint": "b3f0e98811c28775f60aa5a36d82e342fbfb8b77",
+      "base": "c284ce775645f6f080597c32e5d5f849748b1ad3",
+      "clean": true,
+      "source": "c8b6486d0611fa5b77bb11d08e3ed8f1654f6526",
+      "parkedPath": "src/engine/testing/dsl-cards.ts",
+      "parkedBaseSha256": "fa5a74e66804aef964ac728f80c523d6d5d4a5215a0158d9cdbd2f1c7816d41f",
+      "otherSevenHashesIdentical": true,
+      "validation": "explicitly unvalidated; no check/submission/approval/update/reapply performed",
+      "commitReceipt": {
+        "start": "2026-10-12T18:15:14.083474+00:00",
+        "end": "2026-10-12T18:15:14.112405+00:00",
+        "wallS": 0.028769875003490597,
+        "exitCode": 0,
+        "pid": 71352,
+        "pgid": 71352,
+        "stdout": "[drawn-card-conditional b3f0e9881] chore(engine): park conditional draw fixture for worktree update\n Date: Mon Oct 12 11:05:29 2026 -0700\n 7 files changed, 739 insertions(+)\n create mode 100644 docs/plan/evidence/friction/hv-xms9.json\n create mode 100644 docs/plan/evidence/measurements/hv-xms9.json\n create mode 100644 docs/plan/evidence/qa-ledger/hv-xms9.jsonl\n create mode 100644 src/engine/effects/primitives/contracts/draw-then-if.contracts.ts\n create mode 100644 src/engine/effects/primitives/draw-then-if.ts\n",
+        "stderr": "",
+        "operation": "Stage1 only: amend temporary unvalidated parked checkpoint"
+      }
+    },
+    "updatedCheckpoint": {
+      "head": "e66d0c00e44b3f756ac251b3e520aa911bc40a24",
+      "base": "2b79616c0c48b082a627ad94481ff55c481c9657",
+      "staging": "2b79616c0c48b082a627ad94481ff55c481c9657",
+      "clean": true,
+      "doctor": {
+        "checks": [
+          {
+            "detail": "Active",
+            "name": "Repository execution",
+            "recovery_action": null,
+            "status": "healthy"
+          },
+          {
+            "detail": "ok",
+            "name": "SQLite integrity",
+            "recovery_action": null,
+            "status": "healthy"
+          },
+          {
+            "detail": "observed 2b79616c0c \u00b7 recorded 2b79616c0c",
+            "name": "Authoritative staging",
+            "recovery_action": null,
+            "status": "healthy"
+          },
+          {
+            "detail": "observed c699205d3f \u00b7 recorded c699205d3f",
+            "name": "Authoritative release",
+            "recovery_action": null,
+            "status": "healthy"
+          },
+          {
+            "detail": "Recorded staging is reachable in the isolated execution mirror.",
+            "name": "Execution mirror",
+            "recovery_action": null,
+            "status": "healthy"
+          },
+          {
+            "detail": "disk 407f184944ea \u00b7 active 407f184944ea",
+            "name": "Trusted configuration",
+            "recovery_action": null,
+            "status": "healthy"
+          },
+          {
+            "detail": "/bin/sh",
+            "name": "Runner executable",
+            "recovery_action": null,
+            "status": "healthy"
+          },
+          {
+            "detail": "3 registered slot(s) passed ownership checks",
+            "name": "Persistent slots",
+            "recovery_action": null,
+            "status": "healthy"
+          },
+          {
+            "detail": "no retained artifact needs attention",
+            "name": "Retained artifacts",
+            "recovery_action": null,
+            "status": "healthy"
+          },
+          {
+            "detail": "force-clone probe succeeded",
+            "name": "APFS force-clone",
+            "recovery_action": null,
+            "status": "healthy"
+          },
+          {
+            "detail": "314582081536 bytes available",
+            "name": "Authoritative volume reserve",
+            "recovery_action": null,
+            "status": "healthy"
+          },
+          {
+            "detail": "observed c699205d3f",
+            "name": "Remote exact ref",
+            "recovery_action": null,
+            "status": "healthy"
+          }
+        ],
+        "generated_at": [
+          2026,
+          285,
+          18,
+          16,
+          1,
+          647419000,
+          0,
+          0,
+          0
+        ],
+        "healthy": true,
+        "repository_id": "01a1051d-f53b-7b51-83f8-cd4d1663ccf4"
+      }
+    },
+    "mergeProof": {
+      "observedAt": "2026-10-12T18:17:55.885974+00:00",
+      "originalSource": "c8b6486d0611fa5b77bb11d08e3ed8f1654f6526",
+      "updatedCheckpoint": "e66d0c00e44b3f756ac251b3e520aa911bc40a24",
+      "newBase": "2b79616c0c48b082a627ad94481ff55c481c9657",
+      "exactOwnedAddition": "  /** An ordinary top draw with a branch bound to that physical card. Reserved prerequisite fixture identity. */\n  drawThenIfCharacter: authored(0x21600, \"event\", 0, events(event(p.drawThenIf({ cardType: \"character\" }, p.gainEnergy(1))))),\n",
+      "additionLines": 2,
+      "fixtureUUID": "5e5e5e5e-0000-4000-8000-0000000216c8",
+      "fixtureOccurrences": 1,
+      "peerBaseSha256": "350562c48e868deffb14c330e6060cf5a333d784e10f725a6014b78df989f3e3",
+      "combinedDslSha256": "d1ca6bbf6efd537e06ebed4d0def936b2b6bb9fd5da28e532acdc7727746b098",
+      "removingExactOwnedAdditionRestoresPeerBytes": true,
+      "registryAndIndexRemovingOwnEntriesRestoresNewBase": true,
+      "primitiveAndContractMatchOriginalHashes": true,
+      "sourceHashes": {
+        "src/engine/effects/primitives/contracts/draw-then-if.contracts.ts": "fb7c76b496be2d1dace8e2b8ad1cc967f097e6c8a3e3f2c6fd8b025187f90bac",
+        "src/engine/effects/primitives/draw-then-if.ts": "e55737471b5a262ed34ec04e1410acc285654b7f7fc3bd948138a6b36b3dd16e",
+        "src/engine/effects/primitives/index.ts": "f84cb1d928c574cbcaf23a35d3adfecfb5f188a7f224299cb2765059343cf27f",
+        "src/engine/effects/registry.ts": "da7d5e6c4b94d1ce57cd8a7314fb68cb5a89bde33eb2fb82ecca2f2dbae22e3f",
+        "src/engine/testing/dsl-cards.ts": "d1ca6bbf6efd537e06ebed4d0def936b2b6bb9fd5da28e532acdc7727746b098"
+      }
+    },
+    "checks": {
+      "focused": {
+        "start": "2026-10-12T18:17:55.907077+00:00",
+        "end": "2026-10-12T18:18:00.811589+00:00",
+        "wallS": 4.904379667001194,
+        "exitCode": 0,
+        "pid": 7040,
+        "pgid": 7040,
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/content-gates.test.ts",
+          "-t",
+          "drawThenIf|content gate"
+        ],
+        "hostLoadRaw": "{ 8.25 14.35 14.55 }"
+      },
+      "review": {
+        "start": "2026-10-12T18:18:07.355519+00:00",
+        "end": "2026-10-12T18:18:59.215596+00:00",
+        "wallS": 51.859441084001446,
+        "exitCode": 0,
+        "pid": 18945,
+        "pgid": 18945,
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "hostLoadRaw": "{ 8.11 14.12 14.46 }"
+      },
+      "knip": {
+        "start": "2026-10-12T18:19:20.347206+00:00",
+        "end": "2026-10-12T18:19:22.807720+00:00",
+        "wallS": 2.4604051659989636,
+        "exitCode": 0,
+        "pid": 25284,
+        "pgid": 25284,
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "hostLoadRaw": "{ 7.71 12.72 13.90 }"
+      }
+    },
+    "relatedTests": {
+      "files": 268,
+      "cases": 4817,
+      "status": "pass"
+    },
+    "focused": {
+      "selectedCases": 29,
+      "newPlainCases": 15,
+      "otherMatchedHarnessOrContentCases": 14,
+      "status": "pass"
+    },
+    "reusedOriginalHeavyEvidence": {
+      "source": "c8b6486d0611fa5b77bb11d08e3ed8f1654f6526",
+      "games": 300,
+      "failures": 0,
+      "included": 1190,
+      "exercised": 655,
+      "unchangedOwnPrimitiveAndContract": true,
+      "reason": "Only exact2linefixture reapplication and native additive registration merge; removing own addition restores all peer bytes. New combined-base focused/review/Knip pass.",
+      "noNewFuzzRun": true
+    },
+    "toolingAttempt": "Initial orchestration JavaScript syntax error occurred before any shell invocation/file effect; corrected before source restoration and checks.",
+    "scope": "No behavior/refactor, no existing reader body edits, no new browser or production content.",
+    "finalWindowEndProvenance": "Precommit observation; final Git invocation recorded separately after amend, required within one minute.",
+    "finalSourceHashes": {
+      "src/engine/effects/primitives/contracts/draw-then-if.contracts.ts": "fb7c76b496be2d1dace8e2b8ad1cc967f097e6c8a3e3f2c6fd8b025187f90bac",
+      "src/engine/effects/primitives/draw-then-if.ts": "e55737471b5a262ed34ec04e1410acc285654b7f7fc3bd948138a6b36b3dd16e",
+      "src/engine/effects/primitives/index.ts": "f84cb1d928c574cbcaf23a35d3adfecfb5f188a7f224299cb2765059343cf27f",
+      "src/engine/effects/registry.ts": "da7d5e6c4b94d1ce57cd8a7314fb68cb5a89bde33eb2fb82ecca2f2dbae22e3f",
+      "src/engine/testing/dsl-cards.ts": "d1ca6bbf6efd537e06ebed4d0def936b2b6bb9fd5da28e532acdc7727746b098"
+    },
+    "schemaCheck": {
+      "start": "2026-10-12T18:21:13.205959+00:00",
+      "end": "2026-10-12T18:21:13.272732+00:00",
+      "wallS": 0.06667604199901689,
+      "exitCode": 0,
+      "pid": 30598,
+      "pgid": 30598,
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a1304d/xms9-validation/conflict-recovery/stage2-schema-check.mjs"
+      ],
+      "hostLoadRaw": "{ 5.95 10.48 12.86 }"
+    },
+    "processSettlement": {
+      "observedAt": "2026-10-12T18:22:11.621346+00:00",
+      "ownedGroups": [
+        7040,
+        17364,
+        18945,
+        20086,
+        25284,
+        25290,
+        26163,
+        30598,
+        33710,
+        48093,
+        53486,
+        53972,
+        55789,
+        60639,
+        71352,
+        91190
+      ],
+      "remainingOwnedProcesses": [],
+      "longLivedResources": [],
+      "servers": [],
+      "browserContexts": [],
+      "allSettled": true
+    }
+  }
+}

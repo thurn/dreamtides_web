@@ -24,6 +24,7 @@ export * from "./each-player";
 export * from "./draw";
 export * from "./draw-dreamwell";
 export * from "./draw-matching";
+export * from "./draw-then-if";
 export * from "./erode";
 export * from "./exhaust";
 export * from "./floating-trigger";

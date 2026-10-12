@@ -54,6 +54,8 @@ const events = (...list: Ability[]) => () => list;
 
 /** DSL fixtures by role. */
 export const DSL = {
+  /** An ordinary top draw with a branch bound to that physical card. Reserved prerequisite fixture identity. */
+  drawThenIfCharacter: authored(0x21600, "event", 0, events(event(p.drawThenIf({ cardType: "character" }, p.gainEnergy(1))))),
   /** Optional whole-hand discard, then the captured number of ordinary draws. */
   mayRedrawHand: authored(51, "event", 0, events(event(p.optional(p.redrawHand())))),
   drawTwo: authored(1, "event", 1, events(event(p.draw(2)))),
