@@ -1,3 +1,6 @@
+import { event, keyword } from "../../engine/dsl/builders";
+import { triggeringCard, whenYouPlay } from "../../engine/dsl/triggers";
+import { copyCard, delayed } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 255,
   art: { x: 0, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    keyword("offering"),
+    event(delayed(whenYouPlay({ cardType: "event" }), copyCard(triggeringCard()), "untilEndOfTurn")),
+  ],
+  verifiedText: "1nmd9wvodea",
 });

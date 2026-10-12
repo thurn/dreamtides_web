@@ -1,3 +1,5 @@
+import { energy, event, reclaim, self, sourceWasReclaimed } from "../../engine/dsl/builders";
+import { copyCard, draw, gainEnergy, ifThen, sequence } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,9 @@ export default card({
   cardNumber: 253,
   art: { x: -0.049, y: 1, scale: 1.07 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(sequence(gainEnergy(2), draw(1), ifThen(sourceWasReclaimed(), copyCard(self())))),
+    reclaim(energy(6)),
+  ],
+  verifiedText: "1lufyi14eg",
 });

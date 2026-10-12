@@ -1,3 +1,6 @@
+import { event } from "../../engine/dsl/builders";
+import { triggeringCard, whenYouPlay } from "../../engine/dsl/triggers";
+import { copyCard, floating } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 246,
   art: { x: 0.042, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(floating(whenYouPlay({ cardType: "event" }), copyCard(triggeringCard()), "untilEndOfTurn"))],
+  verifiedText: "1otq7959d0z",
 });

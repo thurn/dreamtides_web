@@ -1,0 +1,688 @@
+{
+  "bead": "hv-umm2.189",
+  "baseOid": "e0902fce2171a9993fd7b25db88e9f830c35f3db",
+  "scope": {
+    "entities": [
+      "fc4b06d6-3b30-4769-af98-88fcea5b54dd",
+      "74e82d0d-e107-4207-ad2a-73d016ea54a9",
+      "4cec92f2-9bac-4949-a602-cd0a44618aaf",
+      "7d5672d2-c8fa-4837-9e98-8cccdd07ff56"
+    ],
+    "cardModules": 4,
+    "scenarioModule": "src/content/specs/cards-77.scenarios.ts",
+    "scenarioCases": 4,
+    "scenarioSpecDelta": {
+      "modules": 1,
+      "lines": 50
+    },
+    "testDeltaConvention": "testDelta counts .test files; one plain autodiscovered scenario module adds four cases to the existing shared runner.",
+    "newPrimitives": [],
+    "newPromptKinds": [],
+    "publicApiFallout": [],
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "catalogData": "Printed characteristics, text, UUIDs and art preserved; no generated outputs committed.",
+    "coreReviewThreshold": {
+      "nonTestChangedLines": 34,
+      "nonTestAddedLines": 30,
+      "nonTestDeletedLines": 4,
+      "excludedD20Lines": 50,
+      "newEngineForm": false,
+      "newPromptKind": false,
+      "mandatoryReview": false
+    },
+    "finalFiles": [
+      "src/content/cards/cascade-of-reflections-fc4b06d6.ts",
+      "src/content/cards/prismatic-portal-74e82d0d.ts",
+      "src/content/cards/the-ringleader-4cec92f2.ts",
+      "src/content/cards/twice-lit-portal-7d5672d2.ts",
+      "src/content/specs/cards-77.scenarios.ts",
+      "docs/plan/evidence/friction/hv-umm2.189.json",
+      "docs/plan/evidence/measurements/hv-umm2.189.json",
+      "docs/plan/evidence/pre-existing/hv-umm2.189.md",
+      "docs/plan/evidence/qa-ledger/hv-umm2.189.jsonl"
+    ]
+  },
+  "implementWindow": {
+    "start": "2026-10-12T15:36:22.447Z",
+    "end": "2026-10-12T16:47:50+00:00",
+    "startProvenance": "Parent own rollout spawn_agent dispatch at 2026-10-12T15:36:22.447Z; includes design/admission, all lock/queue/QA/recovery waits and validation.",
+    "endProvenance": "Observed UTC final freeze instant and Git committer timestamp of the single local commit; task receipt records command completion separately."
+  },
+  "validationReceipts": [
+    {
+      "name": "focused",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T15:42:06.430504+00:00",
+      "end": "2026-10-12T15:42:15.101117+00:00",
+      "wallS": 8.670427957993525,
+      "hostLoad": [
+        4.90234375,
+        8.7158203125,
+        12.3515625
+      ],
+      "pid": 933,
+      "exit": 1,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-focused.log"
+    },
+    {
+      "name": "focused-pass",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T15:43:05.859055+00:00",
+      "end": "2026-10-12T15:43:13.093455+00:00",
+      "wallS": 7.2342248749991995,
+      "hostLoad": [
+        4.06396484375,
+        7.76611328125,
+        11.74658203125
+      ],
+      "pid": 3075,
+      "exit": 0,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-focused-pass.log"
+    },
+    {
+      "name": "preflight",
+      "args": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "fc4b06d6-3b30-4769-af98-88fcea5b54dd,74e82d0d-e107-4207-ad2a-73d016ea54a9,4cec92f2-9bac-4949-a602-cd0a44618aaf,7d5672d2-c8fa-4837-9e98-8cccdd07ff56"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T15:42:29.426118+00:00",
+      "end": "2026-10-12T15:42:30.365006+00:00",
+      "wallS": 0.9387607079988811,
+      "hostLoad": [
+        4.29638671875,
+        8.2705078125,
+        12.08544921875
+      ],
+      "pid": 1577,
+      "exit": 0,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-preflight.log"
+    },
+    {
+      "name": "fuzz",
+      "args": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "fc4b06d6-3b30-4769-af98-88fcea5b54dd,74e82d0d-e107-4207-ad2a-73d016ea54a9,4cec92f2-9bac-4949-a602-cd0a44618aaf,7d5672d2-c8fa-4837-9e98-8cccdd07ff56"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T15:43:19.868830+00:00",
+      "end": "2026-10-12T15:45:48.219641+00:00",
+      "wallS": 148.34907570899668,
+      "hostLoad": [
+        4.35009765625,
+        7.646484375,
+        11.6337890625
+      ],
+      "pid": 3530,
+      "exit": 0,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-fuzz.log"
+    },
+    {
+      "name": "fuzz-clean",
+      "args": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "fc4b06d6-3b30-4769-af98-88fcea5b54dd,74e82d0d-e107-4207-ad2a-73d016ea54a9,4cec92f2-9bac-4949-a602-cd0a44618aaf,7d5672d2-c8fa-4837-9e98-8cccdd07ff56"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T15:49:53.170710+00:00",
+      "end": "2026-10-12T15:53:24.017770+00:00",
+      "wallS": 210.84459920800873,
+      "hostLoad": [
+        17.64208984375,
+        16.353515625,
+        14.607421875
+      ],
+      "pid": 83855,
+      "exit": 0,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-fuzz-clean.log"
+    },
+    {
+      "name": "sweep",
+      "args": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.189",
+        "--cards",
+        "fc4b06d6-3b30-4769-af98-88fcea5b54dd,74e82d0d-e107-4207-ad2a-73d016ea54a9,4cec92f2-9bac-4949-a602-cd0a44618aaf,7d5672d2-c8fa-4837-9e98-8cccdd07ff56",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T15:43:33.615466+00:00",
+      "end": "2026-10-12T15:47:18.933075+00:00",
+      "wallS": 225.31499479099148,
+      "hostLoad": [
+        5.384765625,
+        7.71240234375,
+        11.5869140625
+      ],
+      "pid": 4019,
+      "exit": 130,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-sweep.log"
+    },
+    {
+      "name": "sweep-clean",
+      "args": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.189",
+        "--cards",
+        "fc4b06d6-3b30-4769-af98-88fcea5b54dd,74e82d0d-e107-4207-ad2a-73d016ea54a9,4cec92f2-9bac-4949-a602-cd0a44618aaf,7d5672d2-c8fa-4837-9e98-8cccdd07ff56",
+        "--port",
+        "5174"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T15:54:23.787435+00:00",
+      "end": "2026-10-12T15:56:53.699182+00:00",
+      "wallS": 149.90998287500406,
+      "hostLoad": [
+        16.2861328125,
+        15.0654296875,
+        14.54150390625
+      ],
+      "pid": 51893,
+      "exit": 2,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-sweep-clean.log"
+    },
+    {
+      "name": "sweep-diagnostic",
+      "args": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.189",
+        "--cards",
+        "fc4b06d6-3b30-4769-af98-88fcea5b54dd,74e82d0d-e107-4207-ad2a-73d016ea54a9,4cec92f2-9bac-4949-a602-cd0a44618aaf,7d5672d2-c8fa-4837-9e98-8cccdd07ff56",
+        "--port",
+        "5274"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T16:12:25.666867+00:00",
+      "end": "2026-10-12T16:33:18.443806+00:00",
+      "wallS": 1252.7589102079946,
+      "hostLoad": [
+        5.64208984375,
+        5.8134765625,
+        8.95263671875
+      ],
+      "pid": 73850,
+      "exit": 1,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-sweep-diagnostic.log"
+    },
+    {
+      "name": "review",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T16:42:01.235771+00:00",
+      "end": "2026-10-12T16:42:40.894469+00:00",
+      "wallS": 39.658249041996896,
+      "hostLoad": [
+        6.9130859375,
+        7.4287109375,
+        10.42919921875
+      ],
+      "hostLoadSysctl": "{ 6.91 7.43 10.43 }",
+      "pid": 93882,
+      "exit": 0,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-review.log"
+    },
+    {
+      "name": "knip",
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T16:42:51.180563+00:00",
+      "end": "2026-10-12T16:42:55.013394+00:00",
+      "wallS": 3.8327205000096,
+      "hostLoad": [
+        7.84423828125,
+        7.6533203125,
+        10.3427734375
+      ],
+      "hostLoadSysctl": "{ 7.84 7.65 10.34 }",
+      "pid": 96598,
+      "exit": 0,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-knip.log"
+    },
+    {
+      "name": "schema",
+      "args": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T16:45:23.540343+00:00",
+      "end": "2026-10-12T16:45:23.651483+00:00",
+      "wallS": 0.11100991700368468,
+      "hostLoad": [
+        16.9560546875,
+        10.552734375,
+        11.02001953125
+      ],
+      "hostLoadSysctl": "{ 16.96 10.55 11.02 }",
+      "pid": 56185,
+      "exit": 0,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-schema.log"
+    },
+    {
+      "name": "schema-final",
+      "args": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T16:46:31.388061+00:00",
+      "end": "2026-10-12T16:46:31.452812+00:00",
+      "wallS": 0.0646474999957718,
+      "hostLoad": [
+        14.49560546875,
+        11.7333984375,
+        11.466796875
+      ],
+      "hostLoadSysctl": "{ 14.50 11.73 11.47 }",
+      "pid": 11973,
+      "exit": 0,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-schema-final.log"
+    },
+    {
+      "name": "friction",
+      "args": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "start": "2026-10-12T16:46:31.475338+00:00",
+      "end": "2026-10-12T16:46:31.639456+00:00",
+      "wallS": 0.16397008299827576,
+      "hostLoad": [
+        14.49560546875,
+        11.7333984375,
+        11.466796875
+      ],
+      "hostLoadSysctl": "{ 14.50 11.73 11.47 }",
+      "pid": 11980,
+      "exit": 0,
+      "rawLog": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-friction.log"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final npm run review start at 2026-10-12T16:42:01.235771+00:00; sysctl -n vm.loadavg { 6.91 7.43 10.43 }.",
+        "source": "cards77-review.json hostLoadSysctl; kernel full-precision samples retained in receipts."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "focused",
+      "at": "2026-10-12T15:42:06.430504+00:00",
+      "load": [
+        4.90234375,
+        8.7158203125,
+        12.3515625
+      ],
+      "sysctl": null
+    },
+    {
+      "scope": "focused-pass",
+      "at": "2026-10-12T15:43:05.859055+00:00",
+      "load": [
+        4.06396484375,
+        7.76611328125,
+        11.74658203125
+      ],
+      "sysctl": null
+    },
+    {
+      "scope": "preflight",
+      "at": "2026-10-12T15:42:29.426118+00:00",
+      "load": [
+        4.29638671875,
+        8.2705078125,
+        12.08544921875
+      ],
+      "sysctl": null
+    },
+    {
+      "scope": "fuzz",
+      "at": "2026-10-12T15:43:19.868830+00:00",
+      "load": [
+        4.35009765625,
+        7.646484375,
+        11.6337890625
+      ],
+      "sysctl": null
+    },
+    {
+      "scope": "fuzz-clean",
+      "at": "2026-10-12T15:49:53.170710+00:00",
+      "load": [
+        17.64208984375,
+        16.353515625,
+        14.607421875
+      ],
+      "sysctl": null
+    },
+    {
+      "scope": "sweep",
+      "at": "2026-10-12T15:43:33.615466+00:00",
+      "load": [
+        5.384765625,
+        7.71240234375,
+        11.5869140625
+      ],
+      "sysctl": null
+    },
+    {
+      "scope": "sweep-clean",
+      "at": "2026-10-12T15:54:23.787435+00:00",
+      "load": [
+        16.2861328125,
+        15.0654296875,
+        14.54150390625
+      ],
+      "sysctl": null
+    },
+    {
+      "scope": "sweep-diagnostic",
+      "at": "2026-10-12T16:12:25.666867+00:00",
+      "load": [
+        5.64208984375,
+        5.8134765625,
+        8.95263671875
+      ],
+      "sysctl": null
+    },
+    {
+      "scope": "review",
+      "at": "2026-10-12T16:42:01.235771+00:00",
+      "load": [
+        6.9130859375,
+        7.4287109375,
+        10.42919921875
+      ],
+      "sysctl": "{ 6.91 7.43 10.43 }"
+    },
+    {
+      "scope": "knip",
+      "at": "2026-10-12T16:42:51.180563+00:00",
+      "load": [
+        7.84423828125,
+        7.6533203125,
+        10.3427734375
+      ],
+      "sysctl": "{ 7.84 7.65 10.34 }"
+    },
+    {
+      "scope": "schema",
+      "at": "2026-10-12T16:45:23.540343+00:00",
+      "load": [
+        16.9560546875,
+        10.552734375,
+        11.02001953125
+      ],
+      "sysctl": "{ 16.96 10.55 11.02 }"
+    },
+    {
+      "scope": "schema-final",
+      "at": "2026-10-12T16:46:31.388061+00:00",
+      "load": [
+        14.49560546875,
+        11.7333984375,
+        11.466796875
+      ],
+      "sysctl": "{ 14.50 11.73 11.47 }"
+    },
+    {
+      "scope": "friction",
+      "at": "2026-10-12T16:46:31.475338+00:00",
+      "load": [
+        14.49560546875,
+        11.7333984375,
+        11.466796875
+      ],
+      "sysctl": "{ 14.50 11.73 11.47 }"
+    }
+  ],
+  "authoringCorrections": [
+    {
+      "stage": "Initial verified-text import invocation",
+      "error": "SyntaxError: dsl/builders does not provide export triggeringCard",
+      "resolution": "Use existing dsl/triggers export; hash-generation invocation then passed for all four modules. Tool output retains original failure."
+    },
+    {
+      "stage": "Initial focused scenario run",
+      "receipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-focused.json",
+      "error": "Four own scenarios added illegal explicit passes after public engine.apply had already automatically resolved a no-response board.",
+      "resolution": "Use sole public play action; all four cases and 2068 existing checks passed on the corrected run."
+    },
+    {
+      "stage": "Evidence generation",
+      "errors": [
+        "Scratch generator quote typo caused SyntaxError before any write.",
+        "Aggregation initially assumed player rows have an as field; native player rows omit it."
+      ],
+      "resolution": "Corrected scratch generator and read the native player default without changing historical rows. Provisional schema invocation before evidence creation validates only existing records; own final schema invocation follows."
+    }
+  ],
+  "protocolIncident": {
+    "kind": "fuzz continued while worktree served",
+    "sourceChangedDuringServe": false,
+    "supersededFuzzReceipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-fuzz.json",
+    "supersededSweepReceipt": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards77-sweep.json",
+    "overlapApproxS": 134,
+    "fuzzTerminal": "2026-10-12T15:45:48.219641+00:00",
+    "serverStarted": "2026-10-12T15:43:33Z",
+    "parentSigint": "2026-10-12T15:47:18.403947Z",
+    "sweepTerminal": "2026-10-12T15:47:18.933075+00:00",
+    "disposition": "Historical receipts retained; parent supported SIGINT retired the partial run. Fresh weighted 300-game run completed before new sweep started. No remaining source/check/evidence commands occurred while subsequent sweeps served or could reacquire."
+  },
+  "qa": {
+    "preflight": {
+      "pass": 46,
+      "skip": 34,
+      "fail": 0,
+      "pending": 0
+    },
+    "completeInvocation": "invocations/sweep-4MPuhj",
+    "completeInvocationCounts": {
+      "pass": 45,
+      "skip": 34,
+      "fail": 1
+    },
+    "completeInvocationRawAttempts": {
+      "pass": 45,
+      "skip": 34,
+      "fail": 2
+    },
+    "causalWitness": "invocations/run-RTXnE2/navigation-witness.result.json",
+    "witnessCells": [
+      {
+        "uuid": "fc4b06d6-3b30-4769-af98-88fcea5b54dd",
+        "variant": "inspired",
+        "as": "player",
+        "verdict": "pass",
+        "zone": "void"
+      },
+      {
+        "uuid": "fc4b06d6-3b30-4769-af98-88fcea5b54dd",
+        "variant": "enduring",
+        "as": "player",
+        "verdict": "pass",
+        "zone": "void"
+      }
+    ],
+    "witnessCaps": [],
+    "witnessError": null,
+    "witnessObserverDrops": 0,
+    "witnessObserverErrors": [],
+    "latest80CellUnion": {
+      "pass": 46,
+      "skip": 34,
+      "fail": 0
+    },
+    "baseAndAmplifiedBothControllers": "All eight base cells passed; all eight amplified cells are legitimate ineligible skips because the printed modules have no amplified text.",
+    "judgedApplicability": [
+      {
+        "uuid": "fc4b06d6-3b30-4769-af98-88fcea5b54dd",
+        "sha256FirstByte": 223,
+        "sampled": false,
+        "newForm": false,
+        "verdict": "not-applicable"
+      },
+      {
+        "uuid": "74e82d0d-e107-4207-ad2a-73d016ea54a9",
+        "sha256FirstByte": 150,
+        "sampled": false,
+        "newForm": false,
+        "verdict": "not-applicable"
+      },
+      {
+        "uuid": "4cec92f2-9bac-4949-a602-cd0a44618aaf",
+        "sha256FirstByte": 238,
+        "sampled": false,
+        "newForm": false,
+        "verdict": "not-applicable"
+      },
+      {
+        "uuid": "7d5672d2-c8fa-4837-9e98-8cccdd07ff56",
+        "sha256FirstByte": 44,
+        "sampled": false,
+        "newForm": false,
+        "verdict": "not-applicable"
+      }
+    ],
+    "screens": [],
+    "browserLeaseWaitS": 785.563,
+    "diagnosticExecutionS": 467.016351833,
+    "historicalUnknowns": "Prior navigation transport failures and provider loss are retained; the causal witness establishes positive coverage of the failed enduring cell without identifying or fixing their cause."
+  },
+  "runtime": {
+    "ownedCheckPids": [
+      933,
+      3075,
+      1577,
+      3530,
+      83855,
+      4019,
+      51893,
+      73850,
+      93882,
+      96598,
+      56185,
+      11973,
+      11980
+    ],
+    "supersededServerGroups": [
+      4060,
+      51951
+    ],
+    "diagnosticServerGroups": [
+      10841,
+      75774,
+      11370,
+      11323
+    ],
+    "diagnosticPorts": [
+      5274
+    ],
+    "supersededPorts": [
+      5274,
+      5174
+    ],
+    "allHelperProcessesTerminal": true,
+    "parentWitnessServerGroup": 45418,
+    "providerRecoveryProof": "provider-incident-recovery.json",
+    "providerGuardArchiveSha256": "9b50fde7f514747c4566c78fa032911102c84b523ef8b7a4654d33e4c0e74404",
+    "providerDisposition": "Parent exceptional exact-byte archive under native lock after original browser generation exited and session freshly returned 404; old record preserved as history, no fabricated completion receipt. Shared provider and peer records untouched."
+  },
+  "recoveryMetadata": {
+    "parentAuthority": "Same-task justiciar bounded incident investigation under README Browser QA; exceptional exact-byte archival on independently exited browser generation, not ordinary automatic reconciliation.",
+    "originalOwner": {
+      "token": "2f61d9cb-30e0-4c10-9264-9a122f1c8f6b",
+      "pid": 51893,
+      "bead": "hv-umm2.189",
+      "label": "card-sweep",
+      "checkout": "/Users/dthurn/dreamtides_web/.worktrees/cards-77-sol",
+      "slot": 0,
+      "port": 5174,
+      "startedAt": "2026-10-12T15:54:26.051Z",
+      "providerState": "call-and-close-unconfirmed",
+      "mcpSessionId": "e0d5be8c-4d66-4a2d-8983-3151db516e12",
+      "mcpUrl": "http://localhost:8931/mcp",
+      "mcpProtocolVersion": "2025-11-25"
+    },
+    "archive": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json.incident-hv-umm2.189-fde9447b-f836-432e-83f5-ca7af9ab2ab0.json",
+    "archiveSha256": "9b50fde7f514747c4566c78fa032911102c84b523ef8b7a4654d33e4c0e74404",
+    "completedAt": "2026-10-12T16:40:20.436Z",
+    "transportProbe": {
+      "status": 404,
+      "body": "Session not found"
+    },
+    "providerServicePid": 2298,
+    "providerServiceUnchanged": true,
+    "mcpExecutionCompletedFabricated": false,
+    "restoredRole": "executor",
+    "restorationProvenance": "Parent reports recovery complete and restored executor after exact-byte archive. No invented role restoration timestamp.",
+    "parentWitnessTerminalAt": "2026-10-12T16:35:04.402338Z",
+    "parentWitnessWrapperS": 38.651
+  },
+  "finalFreezeAt": "2026-10-12T16:47:50.108411+00:00",
+  "gitCommitterTimestamp": "2026-10-12T16:47:50+00:00"
+}

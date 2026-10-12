@@ -1,3 +1,5 @@
+import { onMaterialized, triggered, triggeringCard, whenYouPlay } from "../../engine/dsl/triggers";
+import { createCopyInHand, delayed, modifyCardCost } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,12 @@ export default card({
   cardNumber: 261,
   art: { x: 0, y: -0.627, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    triggered(onMaterialized(), delayed(
+      whenYouPlay({ cardType: "event" }),
+      modifyCardCost(createCopyInHand(triggeringCard(), { ephemeral: true }), { set: 0 }),
+      "untilEndOfTurn",
+    )),
+  ],
+  verifiedText: "1di2qmv2mv1",
 });

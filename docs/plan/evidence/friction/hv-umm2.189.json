@@ -1,0 +1,37 @@
+{
+  "bead": "hv-umm2.189",
+  "phase": 5,
+  "implementMin": 71.45921666666666,
+  "implementWindow": {
+    "start": "2026-10-12T15:36:22.447Z",
+    "end": "2026-10-12T16:47:50+00:00"
+  },
+  "localValidationS": {
+    "focused": 15.904652832992724,
+    "review": 39.658249041996896,
+    "knip": 3.8327205000096,
+    "fuzz": 210.84459920800873,
+    "preflight": 0.9387607079988811,
+    "schema": 0.11100991700368468,
+    "schema-final": 0.0646474999957718,
+    "friction": 0.16397008299827576
+  },
+  "hostLoad": 6.91,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 13.092716666666666,
+      "note": "The complete diagnostic sweep waited for normal browser leases across four sessions while slot 0 was quarantined; no capacity or guard bypass."
+    },
+    {
+      "tag": "browser-navigation-transport",
+      "minutes": 45.943959416666665,
+      "note": "Observed incident wall window from clean sweep start through parent reconciliation, including the separately measured lease waits. ERR_ABORTED and provider Session not found remain historical unknowns; passive exact-transition witness passed without a source fix."
+    }
+  ]
+}
