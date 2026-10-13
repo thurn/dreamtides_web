@@ -1,0 +1,529 @@
+{
+  "bead": "hv-umm2.603",
+  "phase": 5,
+  "evidenceOnly": true,
+  "base": "677d00a827104cc6a0e821f05f9d2ab72cd0a3e0",
+  "observedStaging": "acc1e1579ef953decc15125a7fbf6651b5b1ebb2",
+  "scope": {
+    "authorizedPaths": [
+      "docs/plan/evidence/parallelism/hv-umm2.603.md",
+      "docs/plan/evidence/friction/hv-umm2.603.json",
+      "docs/plan/evidence/measurements/hv-umm2.603.json",
+      "docs/plan/evidence/pre-existing/hv-umm2.603.md"
+    ],
+    "distinctUUIDs": 98,
+    "dreamsigns": 85,
+    "avatars": 13,
+    "completePrimaryNativeScopes": 32,
+    "sourcePending": 98,
+    "abilitiesAbsent": 98,
+    "verifiedTextAbsent": 98,
+    "supportedCompositionOnlyRows": 39,
+    "plannedMissingUnresolvedRows": 59,
+    "unadoptedSingleFormProposals": 17,
+    "newNativeBeads": 0,
+    "productionAuthorshipTransfers": 0,
+    "entitySourcesByteIdenticalAtObservedStaging": true,
+    "changedAuditedStagingPaths": 19
+  },
+  "implementationProvenance": {
+    "exactHostDispatch": "2026-10-13T04:07:14.505Z",
+    "callId": "call_2d347ac1f744412191c0ed793bd1e1a1",
+    "provisionalEndpointUtc": "2026-10-13T05:06:27.072705+00:00",
+    "actualGitCompletionUtc": "UNKNOWN inside this precommit evidence; actual completion and fractional tail captured after Git in external handoff/parent native receipt",
+    "exactQueueSeconds": "UNKNOWN; audit/research/coordination/check interval remains inclusive",
+    "intervalQualification": "Measured dispatch-to-precommit cutoff inclusive audit/research/coordination/checks. Commit tail is not predicted; external actual completion must be <=60 seconds after cutoff.",
+    "preCommitCutoffUtc": "2026-10-13T05:06:27.072705+00:00"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final friction-records stage start 2026-10-13T05:03:36.686Z",
+        "rawLogLine": "friction-records started at 2026-10-13T05:03:36.686Z load=3.47021484375",
+        "value": 3.47021484375
+      }
+    }
+  },
+  "validation": [
+    {
+      "label": "scope-invariants",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/emblem603-check-scope.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T04:57:59.769170+00:00",
+      "endUtc": "2026-10-13T04:57:59.815657+00:00",
+      "load1": 10.3,
+      "hostLoadRaw": "{ 10.30 12.44 11.80 }",
+      "pid": 56537,
+      "pgid": 56537,
+      "exitCode": 1,
+      "elapsedS": 0.04638595800497569,
+      "cpuUserS": 0.028495,
+      "cpuSystemS": 0.009629,
+      "maxRssBytes": 25624576,
+      "outputReceipt": "emblem603-check-scope-invariants.log",
+      "outputSha256": "5a5c5d0b4967a206eab0242d24b1ecf19843924a8221e2de5ad43d87f9d810e3",
+      "disposition": "Scratch checker formatting defect: hybrid multiline printed text is rendered with HTML breaks in the complete matrix; corrected checker and successful scope-invariants-fixed receipt. No production failure or test run."
+    },
+    {
+      "label": "scope-invariants-fixed",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/emblem603-check-scope.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:01:53.527521+00:00",
+      "endUtc": "2026-10-13T05:01:54.055426+00:00",
+      "load1": 4.78,
+      "hostLoadRaw": "{ 4.78 8.42 10.18 }",
+      "pid": 70100,
+      "pgid": 70100,
+      "exitCode": 0,
+      "elapsedS": 0.5278288749977946,
+      "cpuUserS": 0.083083,
+      "cpuSystemS": 0.180078,
+      "maxRssBytes": 28147712,
+      "outputReceipt": "emblem603-check-scope-invariants-fixed.log",
+      "outputSha256": "6ad8f8d3d3a19b98231284b9119363eceb8d5ca2708595eb2c21fa246238df81"
+    },
+    {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:02:03.914637+00:00",
+      "endUtc": "2026-10-13T05:02:04.277575+00:00",
+      "load1": 4.81,
+      "hostLoadRaw": "{ 4.81 8.30 10.12 }",
+      "pid": 70383,
+      "pgid": 70383,
+      "exitCode": 0,
+      "elapsedS": 0.3624353329942096,
+      "cpuUserS": 0.20165699999999998,
+      "cpuSystemS": 0.15250999999999998,
+      "maxRssBytes": 68648960,
+      "outputReceipt": "emblem603-check-review.log",
+      "outputSha256": "56c183b020c0b7244aa26722e471d1a0ecf1f4f36d6592b799ec6aa9ac6e9f29"
+    },
+    {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:02:06.804207+00:00",
+      "endUtc": "2026-10-13T05:02:13.044223+00:00",
+      "load1": 4.74,
+      "hostLoadRaw": "{ 4.74 8.23 10.09 }",
+      "pid": 70512,
+      "pgid": 70512,
+      "exitCode": 0,
+      "elapsedS": 6.23987966599816,
+      "cpuUserS": 3.992842,
+      "cpuSystemS": 1.460799,
+      "maxRssBytes": 555728896,
+      "outputReceipt": "emblem603-check-knip.log",
+      "outputSha256": "1d041ee421a055645eeb39b986a2c6f4b7b78cb1f157c773706f642b6c40a0e4"
+    },
+    {
+      "label": "evidence-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:02:30.346875+00:00",
+      "endUtc": "2026-10-13T05:02:30.459833+00:00",
+      "load1": 4.19,
+      "hostLoadRaw": "{ 4.19 7.82 9.88 }",
+      "pid": 71130,
+      "pgid": 71130,
+      "exitCode": 0,
+      "elapsedS": 0.11281166700064205,
+      "cpuUserS": 0.055652,
+      "cpuSystemS": 0.026853,
+      "maxRssBytes": 56016896,
+      "outputReceipt": "emblem603-check-evidence-schema.log",
+      "outputSha256": "c68f20715d87a9512bd7d8802ea3a29916a09342ec55e6b295bef8388bdba9b0"
+    },
+    {
+      "label": "friction-triggers",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:02:30.346880+00:00",
+      "endUtc": "2026-10-13T05:02:30.542771+00:00",
+      "load1": 4.19,
+      "hostLoadRaw": "{ 4.19 7.82 9.88 }",
+      "pid": 71129,
+      "pgid": 71129,
+      "exitCode": 0,
+      "elapsedS": 0.19576812500599772,
+      "cpuUserS": 0.132347,
+      "cpuSystemS": 0.037096,
+      "maxRssBytes": 68272128,
+      "outputReceipt": "emblem603-check-friction-triggers.log",
+      "outputSha256": "030d4948b856912701db25b7e58fe8a7a7ded9051da02739ff7d4f0d233bdb92"
+    },
+    {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:03:36.497868+00:00",
+      "endUtc": "2026-10-13T05:03:36.755514+00:00",
+      "load1": 3.47,
+      "hostLoadRaw": "{ 3.47 6.91 9.39 }",
+      "pid": 72839,
+      "pgid": 72839,
+      "exitCode": 0,
+      "elapsedS": 0.2575521660037339,
+      "cpuUserS": 0.194102,
+      "cpuSystemS": 0.080563,
+      "maxRssBytes": 68812800,
+      "outputReceipt": "emblem603-check-review-final.log",
+      "outputSha256": "c9e557d3b47b7d5dd3aa476dbf6912da22fb6fd0b5114ded87f08cec5d24b205"
+    },
+    {
+      "label": "evidence-schema-final",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:03:58.033356+00:00",
+      "endUtc": "2026-10-13T05:03:58.096366+00:00",
+      "load1": 3.02,
+      "hostLoadRaw": "{ 3.02 6.59 9.21 }",
+      "pid": 73441,
+      "pgid": 73441,
+      "exitCode": 0,
+      "elapsedS": 0.06291537499055266,
+      "cpuUserS": 0.049927,
+      "cpuSystemS": 0.017290999999999997,
+      "maxRssBytes": 56115200,
+      "outputReceipt": "emblem603-check-evidence-schema-final.log",
+      "outputSha256": "c68f20715d87a9512bd7d8802ea3a29916a09342ec55e6b295bef8388bdba9b0"
+    },
+    {
+      "label": "friction-final",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:04:04.913837+00:00",
+      "endUtc": "2026-10-13T05:04:05.076948+00:00",
+      "load1": 2.63,
+      "hostLoadRaw": "{ 2.63 6.39 9.11 }",
+      "pid": 73652,
+      "pgid": 73652,
+      "exitCode": 0,
+      "elapsedS": 0.16296504199272022,
+      "cpuUserS": 0.1352,
+      "cpuSystemS": 0.034521,
+      "maxRssBytes": 68960256,
+      "outputReceipt": "emblem603-check-friction-final.log",
+      "outputSha256": "030d4948b856912701db25b7e58fe8a7a7ded9051da02739ff7d4f0d233bdb92"
+    },
+    {
+      "label": "final-scope",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/emblem603-final-scope.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:04:04.913853+00:00",
+      "endUtc": "2026-10-13T05:04:05.214556+00:00",
+      "load1": 2.63,
+      "hostLoadRaw": "{ 2.63 6.39 9.11 }",
+      "pid": 73653,
+      "pgid": 73653,
+      "exitCode": 1,
+      "elapsedS": 0.3005538750003325,
+      "cpuUserS": 0.104975,
+      "cpuSystemS": 0.119777,
+      "maxRssBytes": 27869184,
+      "outputReceipt": "emblem603-check-final-scope.log",
+      "outputSha256": "853b852e287d436dfd9363347460d0c648555b1f23ab064ee53a1eda11d8b07b",
+      "disposition": "Evidence whitespace check found trailing spaces introduced while factoring repeated prose; stripped spaces only, unchanged semantic report and source, successful final-scope-fixed confirms. No production failure."
+    },
+    {
+      "label": "final-scope-fixed",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/emblem603-final-scope.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:04:17.173402+00:00",
+      "endUtc": "2026-10-13T05:04:17.399870+00:00",
+      "load1": 2.54,
+      "hostLoadRaw": "{ 2.54 6.24 9.03 }",
+      "pid": 74133,
+      "pgid": 74133,
+      "exitCode": 0,
+      "elapsedS": 0.2263540409912821,
+      "cpuUserS": 0.108731,
+      "cpuSystemS": 0.128171,
+      "maxRssBytes": 28131328,
+      "outputReceipt": "emblem603-check-final-scope-fixed.log",
+      "outputSha256": "4462306d97f3dcea03d92b84d15301cc7b1f5ee368b19fc3069ceceb6668a09f"
+    },
+    {
+      "label": "handoff-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:04:39.632759+00:00",
+      "endUtc": "2026-10-13T05:04:39.694296+00:00",
+      "load1": 2.96,
+      "hostLoadRaw": "{ 2.96 6.04 8.88 }",
+      "pid": 74675,
+      "pgid": 74675,
+      "exitCode": 0,
+      "elapsedS": 0.06138933400507085,
+      "cpuUserS": 0.050515,
+      "cpuSystemS": 0.014988000000000001,
+      "maxRssBytes": 56328192,
+      "outputReceipt": "emblem603-check-handoff-schema.log",
+      "outputSha256": "c68f20715d87a9512bd7d8802ea3a29916a09342ec55e6b295bef8388bdba9b0"
+    },
+    {
+      "label": "normalized-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:05:46.241324+00:00",
+      "endUtc": "2026-10-13T05:05:46.305672+00:00",
+      "load1": 3.9,
+      "hostLoadRaw": "{ 3.90 5.74 8.55 }",
+      "pid": 76756,
+      "pgid": 76756,
+      "exitCode": 0,
+      "elapsedS": 0.06424962499295361,
+      "cpuUserS": 0.05290999999999999,
+      "cpuSystemS": 0.015337000000000002,
+      "maxRssBytes": 56311808,
+      "outputReceipt": "emblem603-check-normalized-schema.log",
+      "outputSha256": "c68f20715d87a9512bd7d8802ea3a29916a09342ec55e6b295bef8388bdba9b0"
+    },
+    {
+      "label": "commit-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:06:27.098777+00:00",
+      "endUtc": "2026-10-13T05:06:27.161862+00:00",
+      "load1": 3.02,
+      "hostLoadRaw": "{ 3.02 5.27 8.25 }",
+      "pid": 77863,
+      "pgid": 77863,
+      "exitCode": 0,
+      "elapsedS": 0.06299245900299866,
+      "cpuUserS": 0.050369,
+      "cpuSystemS": 0.01703,
+      "maxRssBytes": 56311808,
+      "outputReceipt": "emblem603-check-commit-schema.log",
+      "outputSha256": "c68f20715d87a9512bd7d8802ea3a29916a09342ec55e6b295bef8388bdba9b0"
+    },
+    {
+      "label": "commit-scope",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/emblem603-final-scope.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:06:30.205666+00:00",
+      "endUtc": "2026-10-13T05:06:30.411146+00:00",
+      "load1": 3.1,
+      "hostLoadRaw": "{ 3.10 5.25 8.22 }",
+      "pid": 77918,
+      "pgid": 77918,
+      "exitCode": 1,
+      "elapsedS": 0.20536354200157803,
+      "cpuUserS": 0.105711,
+      "cpuSystemS": 0.10886,
+      "maxRssBytes": 28180480,
+      "outputReceipt": "emblem603-check-commit-scope.log",
+      "outputSha256": "48f5a4da2fdcfadf323488ffe3e595168043e024fdb81f1fc9599d721b98575c",
+      "disposition": "Scratch process-receipt glob included external handoff object with no pgid; content/source/whitespace portion passed. Filter narrowed to process receipts; commit-scope-fixed terminal0. No production or evidence semantic failure."
+    },
+    {
+      "label": "commit-scope-fixed",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/emblem603-final-scope.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/emblem-capabilities-603-sol",
+      "startUtc": "2026-10-13T05:06:45.150216+00:00",
+      "endUtc": "2026-10-13T05:06:45.759728+00:00",
+      "load1": 3.15,
+      "hostLoadRaw": "{ 3.15 5.16 8.14 }",
+      "pid": 78577,
+      "pgid": 78577,
+      "exitCode": 0,
+      "elapsedS": 0.6093647079978837,
+      "cpuUserS": 0.128515,
+      "cpuSystemS": 0.236102,
+      "maxRssBytes": 27983872,
+      "outputReceipt": "emblem603-check-commit-scope-fixed.log",
+      "outputSha256": "4462306d97f3dcea03d92b84d15301cc7b1f5ee368b19fc3069ceceb6668a09f"
+    }
+  ],
+  "validationApplicability": {
+    "focusedSourceTests": "Not applicable: four evidence files only",
+    "fullReview": "Not applicable: no test infrastructure/configuration/cross-cutting runtime change",
+    "browserFuzzServerProvider": "Not applicable: source-only audit/evidence",
+    "coldReview": "606 fresh cold review required before adoption; no reviewer called by this helper"
+  },
+  "parentNativeDispositions": [
+    {
+      "subject": "hv-umm2.226 -> hv-umm2.104",
+      "status": "parent-reported native removal ACK",
+      "details": "Parent completed fresh scope/body/ownership audit:226 open/unassigned, only four UUID leaves/private D20 module/additive index, no engine-body overlap; all four clauses use existing APIs. Parent reports cycles0 and full four-UUID acceptance/dependencies/QA/reviews retained. Helper performed no native effect."
+    },
+    {
+      "subject": "hv-umm2.241 Hair Lock4e51f321-9089-4872-a0e2-ab909e242b33",
+      "status": "parent-reported unresolved-note ACK",
+      "details": "Hair timing requires D10/existing-first-turn compatibility audit; G08 is only completed-own-opening-hand and does not introduce a Hair/battle-start API."
+    },
+    {
+      "subject": "hv-umm2.252 Purple Potionfb87262c-5bde-409e-92f1-58cc7a4e5491",
+      "status": "parent-reported unresolved-note ACK",
+      "details": "G15 remains do-not-file; canonical104 delivered exact static-setter API must be audited before reuse/new capability decision."
+    },
+    {
+      "subject": "hv-umm2.251 Flash 3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+      "status": "parent native unresolved-note ACK 2026-10-13T04:52:19Z",
+      "details": "G02 gain-only excludes setter; settle D10 base/final, entry/play, lifetime/reentry before reuse or new bounded form;251 open/unassigned at parent check."
+    }
+  ],
+  "nativeProposalDisposition": "All17 unadopted standalone review inputs retained for606; no new filing/edges/admission in603",
+  "resources": {
+    "ownedValidationProcessesRemaining": 0,
+    "ownedServers": 0,
+    "browserSessions": 0
+  },
+  "sourceFreeze": {
+    "frozenBase": "677d00a827104cc6a0e821f05f9d2ab72cd0a3e0",
+    "observedStaging": "acc1e1579ef953decc15125a7fbf6651b5b1ebb2",
+    "reportSha256": "c26541cb93342dbaa8212872c507348e06868dbe2f89e81eeaf2893120c0c755",
+    "sourceInspectionQualification": "All19 changed audited paths read plus staged discardCards/discardBatch; all98 exact modules/hashes/pending status preserved; no executed behavior witness",
+    "protectedTrackedManifestSha256": "c3c8cb752aa4096a59a691e7f5c464ad6910a64fab4c9dbb18776f9c2e97c9d7",
+    "protectedTrackedFileCount": 4307,
+    "postCheckTrackedSourceVerification": "All 4307 protected tracked bytes match pre-write manifest after Knip preparation/restoration and again during final receipt metadata update.",
+    "ownPathsOnly": true,
+    "protectedTrackedVerificationEndUtc": "2026-10-13T05:04:17.399870+00:00"
+  },
+  "validationSummary": {
+    "review": {
+      "exitCode": 0,
+      "selected": "friction-records only;697 records valid,41 configured historical unknown measurements"
+    },
+    "knip": {
+      "exitCode": 0,
+      "missingArtWarnings": 259,
+      "qualification": "Review workspace preparation emitted missing-art warnings, Knip passed, then restored local card/avatar/dreamsign/journey/Exploration links; tracked-source byte invariants passed. No art files committed."
+    },
+    "evidenceSchema": {
+      "exitCode": 0,
+      "records": 697,
+      "configuredHistoricalUnknownMeasurements": 41
+    },
+    "frictionTriggers": {
+      "exitCode": 0,
+      "qualification": "All fired historical triggers dispositioned;own friction tags empty, no trigger raised by603. Retrospective cadence output remains report-only existing obligations."
+    },
+    "sourceBehaviorTestsRun": 0,
+    "reportFinalizationAfterReview": "Final report semantic qualifications covered by review-final; only trailing spaces removed and actual receipt/timing metadata populated afterward. Final-scope-fixed passes completeness/protected-source/whitespace and all recorded process groups terminal; schema-final/friction-final pass."
+  },
+  "dryProposalGraph": {
+    "candidateEdges": 72,
+    "cycles": [],
+    "nativeEffects": false,
+    "scope": "Dry graph candidate only on exact saved native899 + fresh128/17 overlay,17proposedforms/semantic/consumer/draftserialization plus exact conservative new-form overlap pair ledger; not complete older-writer ordering or approval/admission",
+    "parentReceiptSha256": "2c2cd67bbdea5327be6b58d6553f18e75195b18980770a07710524baca399921"
+  },
+  "unobservedMeasurements": [
+    "Exact model-start and queue duration; inclusive dispatch wall interval contains audit/coordination/checks",
+    "Actual commit completion until parent COMMITACK/commit"
+  ],
+  "handoff": {
+    "state": "Parent COMMITACK received after full report/source/body/receipt audit. Exactly four evidence files authorized for one local Conventional Commit with Bead trailer; parent handles native candidate/promotion/cleanup.",
+    "endUtc": "2026-10-13T05:04:39.605594+00:00",
+    "provisionalDurationIncludes": "Actual post-claim audit, research, source inspection, parent coordination, report preparation and terminal evidence checks; no queue subtraction",
+    "allRequiredChecksTerminal": true,
+    "ownedRecordedProcessGroupsRemaining": 0,
+    "schemaReceipt": "normalized-schema terminal0 after exact stage hostLoad normalization;697 valid/41 configured historical unknowns",
+    "cutoffUtc": "2026-10-13T05:06:27.072705+00:00",
+    "preCommitChecks": "commit-schema0 and commit-scope-fixed0; protected sources unchanged, exactly4 own paths, all recorded process groups terminal. Actual post-Git time/tail external only."
+  },
+  "hostLoadSamples": [
+    {
+      "value": 14.24,
+      "measuredFor": "Initial evidence preparation sysctl output recorded in actual evidence-builder tool result; earlier than checks",
+      "sampleInstantUtc": "UNKNOWN exact sampling instant; evidence preparation endpoint was2026-10-13T04:56:18.917377Z",
+      "qualification": "Historical preparation sample only, not normalized review hostLoad"
+    },
+    {
+      "value": 4.81,
+      "measuredFor": "Initial review outer sysctl start2026-10-13T05:02:03.914637+00:00",
+      "raw": "{ 4.81 8.30 10.12 }"
+    },
+    {
+      "value": 3.47,
+      "measuredFor": "review-final outer sysctl start2026-10-13T05:03:36.497868+00:00",
+      "raw": "{ 3.47 6.91 9.39 }"
+    },
+    {
+      "value": 3.47021484375,
+      "measuredFor": "review-final friction-records stage start 2026-10-13T05:03:36.686Z",
+      "source": "friction-records started at 2026-10-13T05:03:36.686Z load=3.47021484375"
+    }
+  ],
+  "workspaceMaterializations": {
+    "check": "git status --porcelain --ignored=matching --untracked-files=normal",
+    "ignoredStatus": [
+      "!! .generated/",
+      "!! node_modules/",
+      "!! public/atlas/",
+      "!! public/avatars/",
+      "!! public/card-frame/",
+      "!! public/cards/",
+      "!! public/dream-guides/",
+      "!! public/dreamscape-icons/",
+      "!! public/dreamscapes/",
+      "!! public/dreamsigns/",
+      "!! public/exploration/",
+      "!! public/journeys/",
+      "!! public/main-menu/",
+      "!! src/cumulus/primitives/tokens.ts"
+    ],
+    "qualification": "Existing ignored node_modules/cache/local art and generated workspace materializations remain local; only four evidence paths can enter commit. Knip prepared/restored ignored assets; no images or generated source in candidate. Protected tracked manifest checked after preparation. Initial ignored-inventory query used unsupported --untracked-files=no combination; corrected normal query below, read-only and no effect."
+  }
+}

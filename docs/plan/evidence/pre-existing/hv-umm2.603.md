@@ -1,0 +1,11 @@
+# hv-umm2.603 pre-existing capability and scope observations
+
+These are source/normative limitations of pending entities, not observed production behavior failures. The complete98 UUID matrix,32 native scope memberships, exact canonical references and17 bounded single-form draft scopes/contracts are preserved in [the audit](../parallelism/hv-umm2.603.md). No source repair or new native filing is performed by this helper.
+
+- Canonical580/582/583/584/587/588/589/590 and100/104/220/232–237 remain scoped causes; exact future delivered interfaces must be inspected before pending consumer authorship.17 additional missing single-form proposals are review inputs for606, each primitive-only with original production ownership unchanged; no admitted/global-independent claim.
+- Flash UUID3dd05e97-1af8-4ae9-8e1f-954eaa63e112 zero setter (251), Hair4e51f321-9089-4872-a0e2-ab909e242b33 battle-start timing (241), Purplefb87262c-5bde-409e-92f1-58cc7a4e5491 canonical static setter reuse (252), andG12 last-own versus preceding-global semantics require D10/exact API proof. Parent native unresolved notes on251/241/252 are acknowledged; no invented API/admission.
+- Inventory positional/snapshot candidate aliases are projections. Native primary UUIDs/Areas/acceptance and actual dependency edges govern; all32 primary scope UUID unions match the assigned98. Parent226->104 safe false-positive edge removal ACK retains full4-UUID recipe/QA/reviews;226 is now foreign claimed. All other proposed schedule changes need606 fresh cold review and body/ownership/cycle audit.
+-453 completed-discard source is observed on staging despite active native status. G09 reuses one existing discardCards completed occasion, preserves individual announcements/created replacements, and does not duplicate batching. No staging source execution was used as behavior proof.
+- Twisted Herbs andMushroom Caps require full journey+battle pending/hash acceptance underD36 and native274 ordering.604 owns journey audit; no partial pending abilities are authorized.
+
+No other bounded pre-existing issue was established by this source-only audit. Actual evidence checks and any findings are recorded in own measurements, with provisional timing clearly separated from commit completion.

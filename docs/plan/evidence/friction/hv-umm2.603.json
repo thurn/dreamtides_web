@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.603",
+  "phase": 5,
+  "implementMin": 59.209461749999996,
+  "implementWindow": {
+    "start": "2026-10-13T04:07:14.505Z",
+    "end": "2026-10-13T05:06:27.072705+00:00"
+  },
+  "localValidationS": {
+    "scope-invariants": 0.04638595800497569,
+    "scope-invariants-fixed": 0.5278288749977946,
+    "review": 0.3624353329942096,
+    "knip": 6.23987966599816,
+    "evidence-schema": 0.11281166700064205,
+    "friction-triggers": 0.19576812500599772,
+    "review-final": 0.2575521660037339,
+    "evidence-schema-final": 0.06291537499055266,
+    "friction-final": 0.16296504199272022,
+    "final-scope": 0.3005538750003325,
+    "final-scope-fixed": 0.2263540409912821,
+    "handoff-schema": 0.06138933400507085,
+    "normalized-schema": 0.06424962499295361,
+    "commit-schema": 0.06299245900299866,
+    "commit-scope": 0.20536354200157803,
+    "commit-scope-fixed": 0.6093647079978837
+  },
+  "hostLoad": 3.47021484375,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 0
+  },
+  "friction": []
+}
