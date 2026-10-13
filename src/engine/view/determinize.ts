@@ -48,7 +48,7 @@ import { Layers } from "../continuous/layers";
 import { matchesFilter } from "../continuous/characteristics";
 import { worksInZone } from "../dsl/abilities";
 import { fixedEnergy } from "../dsl/energy";
-import type { CardFilter, Trigger } from "../dsl/types";
+import type { CardFilter, Speed, Trigger } from "../dsl/types";
 import { triggerBody } from "../triggers/body";
 import { loopSignature } from "../loops/signature";
 import { emptyLoopTracker } from "../loops/types";
@@ -154,7 +154,7 @@ function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, decklis
   const assignedDraws = new Map<Side, Set<InstanceId>>();
   const layers = new Layers(state, catalog);
   const visibleQueue = view.triggerQueue.filter(trigger => trigger.source !== null && trigger.origin !== null);
-  const matches = (filter: CardFilter | undefined, card: Pick<CharacteristicsView, "cardType" | "subtype" | "allTypes" | "spark">, cost: number) =>
+  const matches = (filter: CardFilter | undefined, card: Pick<CharacteristicsView, "cardType" | "subtype" | "allTypes" | "spark"> & { readonly speed: Speed }, cost: number) =>
     filter === undefined || matchesFilter({ ...card, cost }, filter);
   for (const [index, shown] of visibleQueue.entries()) {
     if (shown.subjectCostHidden !== true || shown.source === null || shown.origin === null) continue;
@@ -173,7 +173,8 @@ function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, decklis
     const candidates = domains(body.trigger).flatMap<{ id: InstanceId | undefined; cost: number; key: string | undefined; side: Side }>(domain => {
       const compatible = Object.values(state.instances).filter(instance => {
         if (!domain.sides.includes(instance.controller)) return false;
-        return matches(domain.filter, layers.of(instance.id), fixedEnergy(instanceCard(catalog, instance).costs));
+        const printed = instanceCard(catalog, instance);
+        return matches(domain.filter, { ...layers.of(instance.id), speed: printed.speed }, fixedEnergy(printed.costs));
       });
       // Current hidden holdings constrain the latent subject; public records remain possible after it moved.
       const hidden = compatible.filter(instance => instance.zone === "hand" || instance.zone === "deck");

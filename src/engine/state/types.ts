@@ -1,6 +1,6 @@
 import type { CardSubtype } from "../../types/card-identity";
 import type { TransfigurationType } from "../../types/journey";
-import type { CardFilter, Condition, Cost, DeckMods, Keyword, Variant } from "../dsl/types";
+import type { CardFilter, Condition, Cost, DeckMods, Keyword, Speed, Variant } from "../dsl/types";
 import type { LoopTracker } from "../loops/types";
 import type {
   AbilitySource,
@@ -609,6 +609,8 @@ export interface PlayedCard {
   readonly subtype: CardSubtype;
   /** "Has all character types" as it was played: it matches every subtype a filter names. */
   readonly allTypes: boolean;
+  /** Copiable speed as played. Missing legacy speed is unknown and matches no Fast filter. */
+  readonly speed?: Speed;
   /**
    * Its copiable cost as it was played, which cost-bounded filters compare. A
    * record in a saved state that lacks it is matched by its instance's

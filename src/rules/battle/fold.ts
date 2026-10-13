@@ -527,6 +527,7 @@ function isVariant(value: unknown): boolean {
 }
 
 const CARD_FILTER_VALIDATORS = {
+  fast: optional((value) => value === true),
   cardType: optional(isCardKind),
   subtype: optional(isString),
   costAtMost: optional(isIndex),
@@ -1111,8 +1112,9 @@ function isTurnLog(value: unknown): boolean {
           isCardKind(played.cardType) &&
           isString(played.subtype) &&
           isBoolean(played.allTypes) &&
-          // A saved record may omit its cost and spark (PlayedCard.cost, PlayedCard.spark).
+          // A saved record may omit its captured cost, spark and speed.
           optional(isIndex)(played.cost) &&
+          optional(oneOf({ standard: true, fast: true, interrupt: true }))(played.speed) &&
           optional(nullable(isIndex))(played.spark),
       ),
     )(value.played) &&

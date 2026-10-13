@@ -1635,10 +1635,13 @@ Static-condition leaves retain public bound restrictions. The lab solver
 chooses one satisfiable leaf together with the outer predicates and a common
 X interval, then stages only those predicates’ count requirements.
 
-Filters read current characteristics and the copiable cost
+Filters read current characteristics and the copiable speed and cost
 (`cardMatchesFilter`; `matchesFilter` in `continuous/characteristics.ts` is
 the one predicate every filter user calls, a played card's turn-log record
-included). Resolving a
+included). `fast: true` matches Fast and Interrupt. Played records capture
+copiable speed before play triggers match; the scalar remains exact after
+departure or concealed re-identification. Saved records lacking speed retain
+unknown historical speed and match no Fast filter. Resolving a
 reference changes nothing but a random reference's own RNG stream and
 emits nothing but `noLegalTarget`, so a
 reference into a hidden hand or deck names no card in any view, event,

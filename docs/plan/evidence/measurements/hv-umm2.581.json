@@ -1,0 +1,706 @@
+{
+  "bead": "hv-umm2.581",
+  "base": "84d705bb69ae8b16802ccd5d8265c1e23b3e27c5",
+  "stage": "All required source checks green; source frozen for parent final audit/clock ACK; no commit yet",
+  "implementer": "/root/fast_filter581",
+  "dispatch": {
+    "time": "2026-10-13T00:27:31.160000+00:00",
+    "callId": "call_5f020a5674c740a692f701b606c7bda8",
+    "scope": "Continuous current helper interval, including Stage1 reads, 597 prerequisite coordination, sourcefree worktree refresh, parent admission, checks and waits. Parent-created/install predispatch costs separately owned."
+  },
+  "historicalPriorOwner": {
+    "dispatch": "2026-10-12T23:20:39.788Z",
+    "qualification": "Earlier sourcefree owner context, discovery and released prerequisite wait; not substituted for this helper dispatch."
+  },
+  "endpoint": {
+    "kind": "Prospective immediate automatic Git commit timestamp after parent final source/clock ACK",
+    "time": "2026-10-13T00:48:55.539232+00:00",
+    "qualification": "Whole-second automatic Git committer clock and actual commit process start/end/PID/exit are retained in ignored actual-git-clock.json. Prospective value is not a fabricated Git timestamp; postcommit source/evidence remains immutable. Parent inspected complete13-path source/evidence before this endpoint-only refresh."
+  },
+  "api": {
+    "filter": "CardFilter.fast?:true",
+    "subject": "FilterSubject.speed?:Speed",
+    "history": "PlayedCard.speed?:Speed",
+    "semantics": "Fast and Interrupt match. Current instance speed uses instanceCard copiable printing/deck mods. Played record captures before matching; legacy absent speed is unknown even if instance remains. Existing cost/spark fallback unchanged.",
+    "saved": "Absent/standard/fast/interrupt only; filter absent/true only. Atomic parser rejection."
+  },
+  "ownership": {
+    "sourcePaths": [
+      "docs/plan/engine-design.md",
+      "src/engine/continuous/characteristics.ts",
+      "src/engine/dsl/types.ts",
+      "src/engine/effects/primitives/draw-matching.ts",
+      "src/engine/rules/turn-log.ts",
+      "src/engine/state/types.ts",
+      "src/engine/view/determinize.ts",
+      "src/rules/battle/fold.ts",
+      "src/rules/replay/fixtures/adversarial.json",
+      "src/runtime/battle-cost-messages.ts",
+      "src/engine/effects/primitives/contracts/card-filter-fast.contracts.ts"
+    ],
+    "exhaustiveTables": [
+      "fold CARD_FILTER_VALIDATORS",
+      "draw-matching publicFilter equality",
+      "permissionFilterFields qualification/copy"
+    ],
+    "sampler": "Only local subject type/import and live instanceCard speed binding changed. All certified597 historical catalog/visible ordinary printing+variant/public dealt decklist tuples, domain allocation and concealment unchanged.",
+    "productionEntities": 0,
+    "inventoryEdits": 0,
+    "mechanicalFallout": {
+      "area": "PlayedCard / replay finalHash restamp",
+      "path": "src/rules/replay/fixtures/adversarial.json",
+      "change": "Unchanged existing generator changes finalHash only; other2 fixtures exact bytes. Native admission before regeneration."
+    }
+  },
+  "sourceSha256": {
+    "docs/plan/engine-design.md": "de2227e23ec7832a9cfe218b2bd9bfc92ed0e246264f07af3a381aa11630c1b6",
+    "src/engine/continuous/characteristics.ts": "b8add91c6dab4e9f19e1fac727c77917769ae561be091d2de2cb2b232a448d02",
+    "src/engine/dsl/types.ts": "88eb1f70b389bb747303dec45844c38d204d1e2aa761b2847f698079f301b5f2",
+    "src/engine/effects/primitives/draw-matching.ts": "89b9ef273a1d619561aabed2362ca396a779f3cabaf58cf6bd5527b734183315",
+    "src/engine/rules/turn-log.ts": "25947afd4656945ca9e134122c0f01bde45711987f1ed38d0d706716380a114d",
+    "src/engine/state/types.ts": "df4344a3e21a4c31e85c12405a7b16cdef470d9bfe826c8d52f99afa93cbdea2",
+    "src/engine/view/determinize.ts": "ea2475db97ae1ae3563c8888e0c8c70ed33bc1321307b9556969355556cdc79a",
+    "src/rules/battle/fold.ts": "15e4dcd1a6a603a890bca50c49b4790846e74689b374f9e302985c0b0e9d2678",
+    "src/rules/replay/fixtures/adversarial.json": "727e0905b68ce3bde5ca1c01cf8f7d37302d068ccf55026c28d16dd0dec81133",
+    "src/runtime/battle-cost-messages.ts": "98cab334ff9d134f34525120cc7b9181cdfcd3d14780c58e4ebfc127f54bbb99",
+    "src/engine/effects/primitives/contracts/card-filter-fast.contracts.ts": "0f473c846750b8e6186cb20317ae72e474f9ecc4e0a1808c55ccaeef0c6bffe6"
+  },
+  "testDelta": {
+    "plainContractModules": 1,
+    "plainContractLines": 280,
+    "configuredEntrypoints": 0,
+    "jsdomFiles": 0,
+    "cases": 17
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Corrected required review start; review-related load24.38 at end. No performance comparison."
+      },
+      "testDelta": {
+        "measuredFor": "New plain contract module; configured .test/.spec entrypoints remain unchanged."
+      }
+    }
+  },
+  "checks": {
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 45767,
+      "pgid": 45767,
+      "wrapperPid": 45642,
+      "start": "2026-10-13T00:42:46.329243+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:42:51.065175+00:00",
+      "wallS": 4.735776458008331,
+      "exitCode": 0
+    },
+    "replay-speed-proof": {
+      "label": "replay-speed-proof",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.581/replay-speed-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 35970,
+      "pgid": 35970,
+      "wrapperPid": 35955,
+      "start": "2026-10-13T00:40:46.456115+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:40:47.893079+00:00",
+      "wallS": 1.4368567920028,
+      "exitCode": 0
+    },
+    "review-1": {
+      "label": "review-1",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 78243,
+      "pgid": 78243,
+      "wrapperPid": 78234,
+      "start": "2026-10-13T00:38:21.206609+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:39:11.157649+00:00",
+      "wallS": 49.9504938750033,
+      "exitCode": 2
+    },
+    "replay-speed-proof-complete": {
+      "label": "replay-speed-proof-complete",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.581/replay-speed-proof.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 37824,
+      "pgid": 37824,
+      "wrapperPid": 37811,
+      "start": "2026-10-13T00:41:01.809035+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:41:02.744122+00:00",
+      "wallS": 0.9347252919978928,
+      "exitCode": 0
+    },
+    "focused-1": {
+      "label": "focused-1",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "Fast card filters"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 74834,
+      "pgid": 74834,
+      "wrapperPid": 74825,
+      "start": "2026-10-13T00:36:03.329761+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:36:08.762727+00:00",
+      "wallS": 5.4328349999996135,
+      "exitCode": 1
+    },
+    "schema-own-evidence": {
+      "label": "schema-own-evidence",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 50304,
+      "pgid": 50304,
+      "wrapperPid": 50292,
+      "start": "2026-10-13T00:44:15.131025+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:44:15.211013+00:00",
+      "wallS": 0.07989820800139569,
+      "exitCode": 0
+    },
+    "focused-replay": {
+      "label": "focused-replay",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/replay/replay.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "Fast card filters|replay fixtures"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 38687,
+      "pgid": 38687,
+      "wrapperPid": 38674,
+      "start": "2026-10-13T00:41:17.087253+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:41:22.101604+00:00",
+      "wallS": 5.0137210420070915,
+      "exitCode": 0
+    },
+    "replay-regenerate-2": {
+      "label": "replay-regenerate-2",
+      "command": [
+        "npm",
+        "run",
+        "regenerate-replay-fixtures"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 38609,
+      "pgid": 38609,
+      "wrapperPid": 38597,
+      "start": "2026-10-13T00:41:16.075849+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:41:17.015400+00:00",
+      "wallS": 0.9393114580016118,
+      "exitCode": 0
+    },
+    "full-outer": {
+      "label": "full-outer",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "python3",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.581/validate.py",
+        "full-inner",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 50999,
+      "pgid": 50999,
+      "wrapperPid": 50857,
+      "start": "2026-10-13T00:44:15.292925+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:46:15.680348+00:00",
+      "wallS": 120.38589404099912,
+      "exitCode": 0
+    },
+    "full-inner": {
+      "label": "full-inner",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 51007,
+      "pgid": 51007,
+      "wrapperPid": 51000,
+      "start": "2026-10-13T00:44:15.321908+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:46:15.674450+00:00",
+      "wallS": 120.35100941600103,
+      "exitCode": 0
+    },
+    "focused-2": {
+      "label": "focused-2",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "Fast card filters"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 75772,
+      "pgid": 75772,
+      "wrapperPid": 75763,
+      "start": "2026-10-13T00:36:49.128128+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:36:53.840666+00:00",
+      "wallS": 4.712434332992416,
+      "exitCode": 1
+    },
+    "replay-regenerate-1": {
+      "label": "replay-regenerate-1",
+      "command": [
+        "npm",
+        "run",
+        "regenerate-replay-fixtures"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 37887,
+      "pgid": 37887,
+      "wrapperPid": 37871,
+      "start": "2026-10-13T00:41:02.796643+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:41:03.869142+00:00",
+      "wallS": 1.0720987079985207,
+      "exitCode": 0
+    },
+    "focused-4": {
+      "label": "focused-4",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "Fast card filters"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 77553,
+      "pgid": 77553,
+      "wrapperPid": 77544,
+      "start": "2026-10-13T00:37:57.013531+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:38:02.278126+00:00",
+      "wallS": 5.264482625003438,
+      "exitCode": 0
+    },
+    "focused-3": {
+      "label": "focused-3",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "Fast card filters"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 76915,
+      "pgid": 76915,
+      "wrapperPid": 76904,
+      "start": "2026-10-13T00:37:35.003055+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:37:40.500586+00:00",
+      "wallS": 5.497405041009188,
+      "exitCode": 1
+    },
+    "schema-before-full": {
+      "label": "schema-before-full",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 14282,
+      "pgid": 14282,
+      "wrapperPid": 14128,
+      "start": "2026-10-13T00:43:57.920876+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:43:58.043313+00:00",
+      "wallS": 0.12232429199502803,
+      "exitCode": 0
+    },
+    "review-2": {
+      "label": "review-2",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 40343,
+      "pgid": 40343,
+      "wrapperPid": 40333,
+      "start": "2026-10-13T00:41:40.118673+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:42:42.777387+00:00",
+      "wallS": 62.65752912500466,
+      "exitCode": 0
+    }
+  },
+  "failureWindows": [
+    {
+      "start": "2026-10-13T00:36:03.329761+00:00",
+      "end": "2026-10-13T00:38:02.278126+00:00",
+      "cause": "Synthetic public witnesses corrected, not production predicate: forced single-card discard auto-answer; first draw witness had no ambiguous unknown position; historical Fast catalog possibilities required explicit synthetic domain separation. All three failed focus receipts/logs retained."
+    },
+    {
+      "start": "2026-10-13T00:38:21.206609+00:00",
+      "end": "2026-10-13T00:42:42.777387+00:00",
+      "cause": "Own readonly variant replacement/ES library indexed last record typing corrections; intentional captured-speed adversarial hash fallout. Review1aggregate2 was failure despite5270 other passing cases."
+    }
+  ],
+  "replay": {
+    "semanticProof": "replay-speed-proof.json",
+    "qualification": "Public replay of existing fixture events; remove exactly one standard played.speed from cloned finalState and public hash matches original expected. Not a full byte-for-byte base state comparison. Initial proof repeated once to retain full state and outcomes.",
+    "strippedPath": "finalState.battle.engine.slice.committed.turnLog.played.player[0].speed",
+    "oldHash": "3dbfd2eb32d5c8e907a3f870b720b63a3b650ad11ccebbc64e027b3a569c283f",
+    "newHash": "d55a69727602145cdd6ecc9ca44dbc184033f4d92a592a0f8607c6513ecf2983",
+    "byteGuards": [
+      "replay-byte-guard-first.json",
+      "replay-byte-guard-second.json"
+    ],
+    "providerGenesisEventsFormat": "Byte-preserved, both unchanged fixtures exact, both generator runs byte-identical."
+  },
+  "failurePaths": {
+    "midStep": "Synthetic failing Fast draw: public fold retains captured committed Fast play; no partial drawn count/deck movement/event and input hash exact.",
+    "reload": "Fast-filtered offer JSON/public saved parser restart matches uninterrupted offer/result; history roundtrip and determinization retain captured scalar.",
+    "partialWrite": "Malformed played scalar or Fast filter rejects whole saved battle and leaves raw input exact; no new storage/write protocol.",
+    "invalidStale": "Standard candidate, wrong side, stale prompt and duplicate accepted answer bounce without changing input; speed/filter scalar matrix rejects malformed records.",
+    "concurrent": "Foreign answer and accepted-answer duplication bounce; restarted same pending input reproduces identical committed result. Existing reducer CAS/intervening-event concurrency contracts passed in related/full checks; no new independent concurrency service or test suite."
+  },
+  "privacyHistory": {
+    "legacy": "No current physical/catalog speed fallback. Public view spreads captured speed while anonymizing hidden instance; sampler reconstructs from public tuples only.",
+    "tests": "Both controllers, actual modified created-copy play/cease, later fixture variant changes, hidden shuffle, anonymous history future nth result, sampler ceased modified deck copy with Standard9 decoy and either only historical3 or live Interrupt7. Eight sampled future-resolution controls across two fixed entropies plus four anonymous-history viewer/controller controls.",
+    "qualification": "Historical original cost is private and may differ from sampled latent cost. Exact expected costs are justified by singleton-compatible synthetic public domains. No actual hidden truth or alias is restored."
+  },
+  "validationApplicability": {
+    "full": "Required closed exported filter/state/saved/view changes: exclusive-heavy 2workers.",
+    "fuzz": "No fuzzer/step runner/production catalog/recipe changed. Proportionate targeted public sampler/history controls are in owning17cases; no additional unchanged weighted300 or sweep. Staged release supplies general smoke.",
+    "browser": "No production author uses newfilter in this bead, no new UI workflow/prompt/status/component/style/fixture. Existing conditional Fast copy row only, Cumulus read.",
+    "review": "Fresh read-only Sol core review owed by parent after automatic source commit; temporary human routing, no helper reviewer."
+  },
+  "preExisting": {
+    "metadataDiagnostics": "Initial evidence scratch composer found a parent receipt without wrapperPid and exited before writes; corrected to include only own structured receipts. Initial schema thus validated prior records, repeated after own evidence creation.",
+    "readDiagnostics": "Nonexistent guessed documentation/source paths corrected to actual workflow sections/owners; no execution failure.",
+    "artMaterializations": "Review hides local assets for checks, warns about missing temporary art and restores actual linked local assets at terminal; no committed image/generated output."
+  },
+  "runtimeLedger": [
+    {
+      "pid": 45767,
+      "pgid": 45767,
+      "wrapperPid": 45642,
+      "label": "knip",
+      "state": "terminal",
+      "exitCode": 0
+    },
+    {
+      "pid": 35970,
+      "pgid": 35970,
+      "wrapperPid": 35955,
+      "label": "replay-speed-proof",
+      "state": "terminal",
+      "exitCode": 0
+    },
+    {
+      "pid": 78243,
+      "pgid": 78243,
+      "wrapperPid": 78234,
+      "label": "review-1",
+      "state": "terminal",
+      "exitCode": 2
+    },
+    {
+      "pid": 37824,
+      "pgid": 37824,
+      "wrapperPid": 37811,
+      "label": "replay-speed-proof-complete",
+      "state": "terminal",
+      "exitCode": 0
+    },
+    {
+      "pid": 74834,
+      "pgid": 74834,
+      "wrapperPid": 74825,
+      "label": "focused-1",
+      "state": "terminal",
+      "exitCode": 1
+    },
+    {
+      "pid": 50304,
+      "pgid": 50304,
+      "wrapperPid": 50292,
+      "label": "schema-own-evidence",
+      "state": "terminal",
+      "exitCode": 0
+    },
+    {
+      "pid": 38687,
+      "pgid": 38687,
+      "wrapperPid": 38674,
+      "label": "focused-replay",
+      "state": "terminal",
+      "exitCode": 0
+    },
+    {
+      "pid": 38609,
+      "pgid": 38609,
+      "wrapperPid": 38597,
+      "label": "replay-regenerate-2",
+      "state": "terminal",
+      "exitCode": 0
+    },
+    {
+      "pid": 50999,
+      "pgid": 50999,
+      "wrapperPid": 50857,
+      "label": "full-outer",
+      "state": "terminal",
+      "exitCode": 0
+    },
+    {
+      "pid": 51007,
+      "pgid": 51007,
+      "wrapperPid": 51000,
+      "label": "full-inner",
+      "state": "terminal",
+      "exitCode": 0
+    },
+    {
+      "pid": 75772,
+      "pgid": 75772,
+      "wrapperPid": 75763,
+      "label": "focused-2",
+      "state": "terminal",
+      "exitCode": 1
+    },
+    {
+      "pid": 37887,
+      "pgid": 37887,
+      "wrapperPid": 37871,
+      "label": "replay-regenerate-1",
+      "state": "terminal",
+      "exitCode": 0
+    },
+    {
+      "pid": 77553,
+      "pgid": 77553,
+      "wrapperPid": 77544,
+      "label": "focused-4",
+      "state": "terminal",
+      "exitCode": 0
+    },
+    {
+      "pid": 76915,
+      "pgid": 76915,
+      "wrapperPid": 76904,
+      "label": "focused-3",
+      "state": "terminal",
+      "exitCode": 1
+    },
+    {
+      "pid": 14282,
+      "pgid": 14282,
+      "wrapperPid": 14128,
+      "label": "schema-before-full",
+      "state": "terminal",
+      "exitCode": 0
+    },
+    {
+      "pid": 40343,
+      "pgid": 40343,
+      "wrapperPid": 40333,
+      "label": "review-2",
+      "state": "terminal",
+      "exitCode": 0
+    }
+  ],
+  "resources": "Every local validator actual terminal, no remaining owned process/provider/browser/server/lease. Full suite internally exercises synthetic QA ownership lifecycle; those fixture servers are absent.",
+  "heavy": {
+    "inner": {
+      "label": "full-inner",
+      "command": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 51007,
+      "pgid": 51007,
+      "wrapperPid": 51000,
+      "start": "2026-10-13T00:44:15.321908+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:46:15.674450+00:00",
+      "wallS": 120.35100941600103,
+      "exitCode": 0
+    },
+    "outer": {
+      "label": "full-outer",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "python3",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.581/validate.py",
+        "full-inner",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/fast-filter581-root",
+      "pid": 50999,
+      "pgid": 50999,
+      "wrapperPid": 50857,
+      "start": "2026-10-13T00:44:15.292925+00:00",
+      "state": "terminal",
+      "end": "2026-10-13T00:46:15.680348+00:00",
+      "wallS": 120.38589404099912,
+      "exitCode": 0
+    },
+    "workers": 2,
+    "lock": "artifacts/heavy.lock",
+    "queuePlusLaunchS": 0.028983,
+    "qualification": "First inner observation minus outer start includes lock wait plus launch; not isolated queue timing. Full synthetic QA ownership fault-injection warnings are passing fixture tests, not a requested browser invocation.",
+    "scope": "361configured files/6273cases, full lint/typechecks/Knip/schema/cycles and production bundle pass. Suite85.01s at loaded host; no low-load budget/performance claim."
+  },
+  "localResourceAudit": {
+    "receipt": "final-resource-source-audit.json",
+    "knownProcessNumbers": [
+      14128,
+      14282,
+      35955,
+      35970,
+      37811,
+      37824,
+      37871,
+      37887,
+      38597,
+      38609,
+      38674,
+      38687,
+      40333,
+      40343,
+      45642,
+      45767,
+      50292,
+      50304,
+      50857,
+      50999,
+      51000,
+      51007,
+      59422,
+      59531,
+      59773,
+      60118,
+      60410,
+      60724,
+      61068,
+      61355,
+      61474,
+      61976,
+      62104,
+      62591,
+      63103,
+      63359,
+      63537,
+      63913,
+      64200,
+      64557,
+      65185,
+      65314,
+      65443,
+      65962,
+      66081,
+      67094,
+      67241,
+      67905,
+      69046,
+      69125,
+      69793,
+      70106,
+      70700,
+      70886,
+      71040,
+      71465,
+      71708,
+      72073,
+      72704,
+      72820,
+      72912,
+      73382,
+      73794,
+      74072,
+      74392,
+      74577,
+      74723,
+      74825,
+      74834,
+      75382,
+      75610,
+      75763,
+      75772,
+      76005,
+      76871,
+      76904,
+      76915,
+      77544,
+      77553,
+      77730,
+      78234,
+      78243,
+      78400,
+      81463,
+      81973,
+      83610,
+      84262,
+      84952,
+      86934,
+      87371
+    ],
+    "remaining": [],
+    "source11Unchanged": true,
+    "qualification": "All owned validator/wrapper PGIDs and full synthetic-server numbers absent. No signals or peer resource interference."
+  }
+}

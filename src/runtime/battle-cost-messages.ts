@@ -39,6 +39,7 @@ export function costPhrase(cost: Cost): string {
 export function permissionFilterFields(filter: CardFilter, many: boolean) {
   const { costAtLeast: lower, costAtMost: upper, sparkAtLeast: sparkLower, sparkAtMost: sparkUpper } = filter;
   return {
+    fast: { qualified: filter.fast === true, text: filter.fast === true ? "Fast" : "" },
     costAtLeast: {
       qualified: lower !== undefined,
       text: lower === undefined ? "" : upper === undefined ? `≥${String(lower)} energy cost`
@@ -62,7 +63,7 @@ export function permissionFilterFields(filter: CardFilter, many: boolean) {
   } satisfies Record<keyof CardFilter, { readonly qualified: boolean; readonly text: string | undefined }>;
 }
 
-/** The permission's effective type/subtype, copiable cost, and spark restrictions. */
+/** The permission's effective type/subtype, copiable speed/cost, and spark restrictions. */
 export function permittedCardKind(filter: CardFilter, many: boolean): string {
   return Object.values(permissionFilterFields(filter, many)).map((field) => field.text).filter(Boolean).join(" ");
 }

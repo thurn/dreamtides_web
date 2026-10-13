@@ -436,13 +436,15 @@ export type CardCost = EnergyCost | EnergyXCost;
 
 /**
  * Which cards a filter matches, wherever they are: by effective type and
- * subtype, by copiable cost (rules § Costs, Requirements, and X → Cost
+ * subtype, by copiable speed and cost (rules § Costs, Requirements, and X → Cost
  * changes), which a card keeps in every zone, and by effective spark in the
  * card's current zone (rules § Spark → Spark outside play). A filter is
  * plain data, kept as it is written wherever it is stored, so its bounds are
  * constants.
  */
 export interface CardFilter {
+  /** A Fast card, including an Interrupt (rules § Timing categories). */
+  readonly fast?: true;
   readonly cardType?: "character" | "event";
   readonly subtype?: CardSubtype;
   /** "A ≤2● cost character": copiable cost at most this. */
