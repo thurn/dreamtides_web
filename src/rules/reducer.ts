@@ -315,9 +315,11 @@ export function routeDomain(
     (state.battle !== null || !(journey.screen.type === "dreamscape" || journey.screen.type === "site" && journey.screen.siteId === preparationSiteId))) {
     return bounce(state);
   }
-  if (journey.screen.type === "journeyPurge" && isGameplayEventType(type) &&
-    type !== "RESOLVE_JOURNEY_PURGE" && type !== "ADD_DREAMSIGN" && type !== "REMOVE_DREAMSIGN" &&
-    !(type === "ACCEPT_ESSENCE" && journey.screen.choice.kind === "essenceSite" && payload.siteId === journey.screen.choice.siteId)) {
+  if ((journey.screen.type === "journeyPurge" || journey.screen.type === "journeyTransfiguration") && isGameplayEventType(type) &&
+    !(journey.screen.type === "journeyPurge" && type === "RESOLVE_JOURNEY_PURGE") &&
+    !(journey.screen.type === "journeyTransfiguration" && type === "RESOLVE_JOURNEY_TRANSFIGURATION") &&
+    type !== "ADD_DREAMSIGN" && type !== "REMOVE_DREAMSIGN" &&
+    !(journey.screen.type === "journeyPurge" && type === "ACCEPT_ESSENCE" && journey.screen.choice.kind === "essenceSite" && payload.siteId === journey.screen.choice.siteId)) {
     return bounce(state);
   }
   switch (type) {

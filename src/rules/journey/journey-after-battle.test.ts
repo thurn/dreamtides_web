@@ -21,7 +21,7 @@ import { registerBattleInitProvider } from "../battle/journey-battle";
 import { AVATAR_ID, BATTLE_SITE_ID, FIXTURE_ENGINE, FIXTURE_POINTS_MODE, registerReplayFixtureProviders, fixtureBattleInitProvider } from "../replay/fixture-providers";
 import { ctx, GENESIS } from "./lifecycle-fixtures";
 import { clearGameProviders } from "../../session/providers/register-game-providers";
-import { accepted, apply, choicePayload, entries, installProviders, SLIME, SLUG, TOME } from "./transfiguration-fixtures";
+import { accepted, apply, card, choicePayload, entries, installProviders, SLIME, SLUG, TOME } from "./transfiguration-fixtures";
 import { registerJourneyTransfigurationProvider } from "./journey-transfiguration";
 
 beforeEach(installProviders); afterEach(clearGameProviders);
@@ -148,5 +148,45 @@ describe("earned two-kind battle permissions through public engine/fold", () => 
     }
     expect(apply(s, "LOAD_STATE", { snapshot: s.journey, battle: lastBattleSlice }).state).toBe(s);
     const slug = battle([SLUG]); expect(accepted(slug, "LOAD_STATE", { snapshot: slug.journey }).journey.screen).toEqual(slug.journey.screen);
+  });
+});
+
+
+describe("earned choices suspend unrelated same-actor gameplay", () => {
+  const intents = () => [
+    { type: "ADJUST_ESSENCE", payload: { delta: 7 } },
+    { type: "ADD_CARD", payload: { cardId: card.id } },
+    { type: "REMOVE_DECK_ENTRY", payload: { entryId: "entry-1" } },
+  ] as const;
+
+  it.each([[SLIME], [SLIME, SLUG], [SLUG, SLIME]])("preserves the complete pending window for held sources %j", (...held) => {
+    const pending = battle(held);
+    const saved = JSON.parse(JSON.stringify(pending)) as FoldState;
+    for (const intent of intents()) {
+      const out = apply(pending, intent.type, intent.payload, ctx({ intervening: [] }));
+      expect.soft(out.outcome, intent.type).toBe("bounced");
+      expect.soft(out.state, intent.type).toBe(pending);
+      expect.soft(out.state, intent.type).toEqual(saved);
+      expect.soft(out.logRecords, intent.type).toBeUndefined();
+    }
+    const wrong = pending.journey.screen.type === "journeyTransfiguration"
+      ? "RESOLVE_JOURNEY_PURGE" : "RESOLVE_JOURNEY_TRANSFIGURATION";
+    const out = apply(pending, wrong, choicePayload(pending.journey));
+    expect(out.outcome).toBe("bounced");
+    expect(out.state).toBe(pending);
+    expect(out.logRecords).toBeUndefined();
+    const reloaded = accepted(pending, "LOAD_STATE", { snapshot: saved.journey });
+    expect(reloaded.journey.screen).toEqual(pending.journey.screen);
+    expect(resolve(reloaded).journey.screen.type).toBe(held.length === 1 ? "atlas"
+      : held[1] === SLIME ? "journeyTransfiguration" : "journeyPurge");
+  });
+
+  it("applies the same unrelated gameplay intents outside a pending window", () => {
+    const ordinary = battle([]);
+    const [essence, added, removed] = intents().map((intent) => apply(ordinary, intent.type, intent.payload));
+    for (const result of [essence, added, removed]) expect(result.outcome).toBe("applied");
+    expect(essence.state.journey.essence).toBe(ordinary.journey.essence + 7);
+    expect(added.state.journey.deck).toHaveLength(ordinary.journey.deck.length + 1);
+    expect(removed.state.journey.deck.map((entry) => entry.entryId)).toEqual(ordinary.journey.deck.slice(1).map((entry) => entry.entryId));
   });
 });
