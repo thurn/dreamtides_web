@@ -1011,7 +1011,14 @@ export function completeSite(
       site.id === siteId && site.type === "Essence") === true &&
     runtime?.kind === "reward" && !runtime.accepted &&
     runtime.journeyEssenceSource !== undefined && runtime.reward.rewardType === "dreamsign";
-  if ((!inlinePearl && (journey.screen.type !== "site" || journey.screen.siteId !== siteId)) ||
+  const inlineReward = journey.screen.type === "dreamscape" &&
+    journey.currentDreamscape !== null &&
+    journey.atlas.nodes[journey.currentDreamscape]?.sites.some((site) =>
+      site.id === siteId && site.type === "Reward") === true &&
+    runtime?.kind === "reward" && runtime.accepted === false &&
+    runtime.journeyEssenceSource === undefined && runtime.reward.rewardType === "dreamsign" &&
+    journey.dreamsigns.length >= journey.maxDreamsigns;
+  if ((!inlinePearl && !inlineReward && (journey.screen.type !== "site" || journey.screen.siteId !== siteId)) ||
     !canVisitSite(journey, siteId)) return null;
   if (runtime?.kind === "gamble") {
     if (

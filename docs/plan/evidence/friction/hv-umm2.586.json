@@ -1,0 +1,54 @@
+{
+  "bead": "hv-umm2.586",
+  "phase": 5,
+  "implementMin": 45.28488058333333,
+  "implementWindow": {
+    "start": "2026-10-13T00:10:25.436Z",
+    "end": "2026-10-13T00:55:42.528835+00:00"
+  },
+  "localValidationS": {
+    "baseline": 5.988685131072998,
+    "browser-desktop-final": 37.7677857875824,
+    "browser-mobile-final": 41.502849102020264,
+    "browser-mobile-repaired": 25.73159909248352,
+    "browser-repaired": 11.656378269195557,
+    "browser": 37.52734398841858,
+    "focused-corrected": 3.9098763465881348,
+    "focused-final": 3.9019951820373535,
+    "focused": 3.9819719791412354,
+    "friction-before-qa": 0.2679011821746826,
+    "friction-final": 0.16483616828918457,
+    "knip": 5.563986778259277,
+    "parent-focused-recovery": 7.544389963150024,
+    "parent-import-contract-repaired": 3.930022954940796,
+    "parent-import-null-container": 4.533659934997559,
+    "parent-import-valid-shape": 3.540058135986328,
+    "parent-owning-repaired": 5.28778076171875,
+    "parent-reload-isolated": 4.946603059768677,
+    "parent-reload-repaired": 3.7887778282165527,
+    "parent-valid-fixture-counterfactual": 6.170205116271973,
+    "review-corrected": 26.478092670440674,
+    "review": 22.470289707183838,
+    "schema-before-qa": 0.1396791934967041,
+    "schema-final": 0.1095280647277832,
+    "source-free": 2.4676830768585205
+  },
+  "hostLoad": 23.45947265625,
+  "testDelta": {
+    "files": 1,
+    "lines": 170,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 12.769979150000001,
+      "note": "Three helper fixture failures (node/current layer mismatch, ineffective currentLayer guess, completion/count mismatch) and four parent isolated recovery failures are retained. Parent justiciar corrected valid LayerOne/level0/runId fixtures, aligned LOAD_STATE import run identity and source-proven null-container rejection, verified a valid-fixture counterfactual, and passed49 affected tests. A later review found draft literal widening and untyped JSON values; public test type annotations corrected it. Duration includes diagnosis/coordination/recovery, not only typing edits."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 15.997079916666667,
+      "note": "Retain three failed native runs: premature async persisted-proof/bootstrap assumption, post-completion geometry assertion on a source-defined removed site, and mobile implicit30s navigation timeout. Parent justiciar repaired only ignored QA artifact/explicit60s client budget. Separate final desktop/mobile pass without desktop repeat; all semantic acceptance retained. Interval includes waits, browser-slot queue, diagnostics and successful completion."
+    }
+  ]
+}
