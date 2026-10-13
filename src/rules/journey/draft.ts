@@ -29,6 +29,8 @@ import {
 } from "../../draft/draft-engine";
 import { mintEntryId } from "./deck";
 import { findSite } from "./sites";
+import { draftOfferCount } from "./journey-draft";
+import type { JourneyModifierRegistry } from "./modifier-registry";
 import type { CardId } from "../../types/card-identity";
 import { cardIdFromUnknown } from "../../types/card-identity";
 import { siteIdFromUnknown } from "../../types/identifiers";
@@ -144,6 +146,7 @@ export function pickDraftCard(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  modifiers: JourneyModifierRegistry,
 ): JourneyState | null {
   const packIndex = integer(payload.packIndex);
   const cardId = cardIdFromUnknown(payload.cardId);
@@ -184,8 +187,11 @@ export function pickDraftCard(
   // Advance the draft on a clone so a bounce (from a thrown engine error, which
   // the root reducer catches) never leaves a half-mutated live state.
   const nextDraftState = structuredClone(draftState);
-  const config = provider.draftConfigFor(nextDraftState);
-  if (config === undefined) return null;
+  const baseConfig = provider.draftConfigFor(nextDraftState);
+  if (baseConfig === undefined) return null;
+  const config = { ...baseConfig, packSize: draftOfferCount(journey, baseConfig.packSize, modifiers) };
+  if (config.packSize < 1) return null;
+  nextDraftState.currentOfferCount = config.packSize;
   const stream = rngStream(ctx);
   processPlayerPickWithoutLogging(
     cardNumber,
@@ -227,6 +233,7 @@ export function enterDraftSite(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  modifiers: JourneyModifierRegistry,
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
@@ -243,8 +250,11 @@ export function enterDraftSite(
   if (draftState.activeSiteId === siteId) return null;
 
   const nextDraftState = structuredClone(draftState);
-  const config = provider.draftConfigFor(nextDraftState);
-  if (config === undefined) return null;
+  const baseConfig = provider.draftConfigFor(nextDraftState);
+  if (baseConfig === undefined) return null;
+  const config = { ...baseConfig, packSize: draftOfferCount(journey, baseConfig.packSize, modifiers) };
+  if (config.packSize < 1) return null;
+  nextDraftState.currentOfferCount = config.packSize;
   const stream = rngStream(ctx);
   engineEnterDraftSite(
     nextDraftState,
@@ -311,8 +321,10 @@ export function rerollDraftOffer(
   if (site === null || site.type !== "Draft") return null;
 
   const nextDraftState = structuredClone(draftState);
-  const config = provider.draftConfigFor(nextDraftState);
-  if (config === undefined) return null;
+  const baseConfig = provider.draftConfigFor(nextDraftState);
+  if (baseConfig === undefined) return null;
+  const config = { ...baseConfig, packSize: draftState.currentOfferCount ?? draftState.currentOffer.length };
+  nextDraftState.currentOfferCount = config.packSize;
   const stream = rngStream(ctx);
   const hasOffer = engineRerollDraftOffer(nextDraftState, config, stream);
   if (!hasOffer) return null;

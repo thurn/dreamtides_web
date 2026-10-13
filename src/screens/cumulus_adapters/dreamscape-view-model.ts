@@ -1,4 +1,5 @@
 import { isEnhancedDreamsignReward } from "../../rules/journey/sites";
+import { projectJourneySite } from "../../rules/journey/journey-sites";
 import { essenceSiteGain } from "../../rules/journey/journey-essence";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
@@ -327,7 +328,7 @@ export function buildDreamscapeView(
     scene,
     title,
     sites: buildSiteModels(
-      node,
+      { ...node, sites: node.sites.map((site) => projectJourneySite(state, site, modifiers)) },
       state.completionLevel,
       sitesData,
       draftPickCount,

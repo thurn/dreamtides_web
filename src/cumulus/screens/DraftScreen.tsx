@@ -3,8 +3,8 @@
 // The Cumulus version strips the screen to the offer itself: the dreamscape scene
 // fills the viewport (never darkened — legibility comes from the cards' own
 // opacity and the app chrome's outline dilation), and the pack sits as a 2x2
-// mobile grid, a narrow-desktop 2x2 grid, or a wide-desktop four-card row of
-// GameCards centered over it. The
+// mobile grid, a narrow-desktop two-column grid, or a wide-desktop four-column
+// grid of GameCards centered over it. The offer count determines extra rows. The
 // router-owned journey chrome provides the status bar and responsive utility
 // menu — the screen's only text is a
 // subtle pick counter riding under the pack; it renders no title, progress bar,
@@ -71,9 +71,9 @@ export interface DraftScreenProps {
 const TOP_GAP_OP = token("--space-l");
 // The band under the pack that holds the small pick counter (its gap above the
 // label plus the label's own line).
-const COUNTER_BAND_OP = token("--space-3xl");
+const COUNTER_BAND_OP = `${token("--space-l")} + ${token("--space-3xl")}`;
 // Bottom: clearance for the router-owned journey chrome and home-indicator inset.
-const HUD_CLEARANCE_OP = `${JOURNEY_STATUS_BAR_CLEARANCE_OP} + ${token("--space-3xl")}`;
+const HUD_CLEARANCE_OP = `${JOURNEY_STATUS_BAR_CLEARANCE_OP} + ${token("--space-3xl")} + ${token("--space-l")}`;
 const TOP_GAP = `calc(${TOP_GAP_OP})`;
 const HUD_CLEARANCE = `calc(${HUD_CLEARANCE_OP})`;
 const MOBILE_OFFER_GRID_GAP = token("--space-xs");
@@ -124,7 +124,8 @@ export function DraftScreen({
   const wideDraftRow = useIsDesktop(DRAFT_ROW_MIN_WIDTH_PX);
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const offerColumns = isDesktop && wideDraftRow ? 4 : 2;
-  const offerRows = isDesktop && wideDraftRow ? 1 : 2;
+  const baselineRows = isDesktop && wideDraftRow ? 1 : 2;
+  const offerRows = Math.max(baselineRows, Math.ceil(view.offer.length / offerColumns));
   const offerGridGap = isDesktop
     ? DESKTOP_OFFER_GRID_GAP
     : MOBILE_OFFER_GRID_GAP;

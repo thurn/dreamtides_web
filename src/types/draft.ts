@@ -75,6 +75,8 @@ export interface DraftState {
   mode: "tides4";
   /** Current offer presented to the player. */
   currentOffer: number[];
+  /** Requested card count quoted when this offer is prepared; retained by rerolls. */
+  currentOfferCount?: number;
   /** Site currently owning the in-progress or completed visit state. */
   activeSiteId: SiteId | null;
   /** 1-indexed pick counter across the entire journey (1..30). */

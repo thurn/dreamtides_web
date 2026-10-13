@@ -34,12 +34,44 @@ export function explorationRerollAllowance(
   return Math.max(0, copies * effect.rerollsPerSite - (runtime.journeySiteRerolls?.[dreamsignId] ?? 0));
 }
 
+/** Live targeted enhancement for an unprepared site; prepared and natural modes persist. */
+export function projectJourneySite(
+  journey: Pick<JourneyState, "dreamsigns" | "siteRuntime">,
+  site: SiteState,
+  registry: Pick<JourneyModifierRegistry, "lookup">,
+): SiteState {
+  if (site.isEnhanced || site.isVisited || journey.siteRuntime?.[site.id] !== undefined) return site;
+  const enhanced = journey.dreamsigns.some((sign) => {
+    const effect = registry.lookup(sign.id)?.journeySites;
+    return effect?.kind === "enhanceSiteTypes" && effect.siteTypes.some((type) => type === site.type);
+  });
+  return enhanced ? { ...site, isEnhanced: true } : site;
+}
+
 /** One catalog clause registered as a pure, post-event journey modifier. */
 export function journeySites(dreamsignId: DreamsignId, effect: JourneySitesEffect): JourneyModifierDefinition {
   return {
     dreamsignId,
     journeySites: effect,
-    afterJourneyEvent({ before, journey, eventType, heldIndex }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
+    afterJourneyEvent({ before, journey, eventType, heldIndex, siteId, lookup }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
+      if (effect.kind === "enhanceSiteTypes") {
+        if (eventType !== "OPEN_SITE" || siteId === null || before.siteRuntime[siteId] !== undefined ||
+          journey.siteRuntime[siteId] === undefined) return null;
+        const site = findSite(journey, siteId);
+        if (site === null || site.isVisited || site.isEnhanced ||
+          !effect.siteTypes.some((type) => type === site.type)) return null;
+        const node = Object.values(journey.atlas.nodes).find((candidate) => candidate.sites.some((s) => s.id === siteId));
+        if (node === undefined) return null;
+        // Persist only the mode of the successfully prepared site. Unopened
+        // targeted sites continue to use live holdings through the projection.
+        return {
+          journey: { ...journey, atlas: { ...journey.atlas, nodes: { ...journey.atlas.nodes, [node.id]: {
+            ...node, sites: node.sites.map((s) => s.id === siteId ? { ...s, isEnhanced: true } : s),
+          } } } },
+          before: { enhanced: 0 }, after: { enhanced: 1 },
+          target: { nodeId: node.id, siteIds: [siteId] },
+        };
+      }
       const copiesThroughThisHook = journey.dreamsigns.slice(0, heldIndex + 1)
         .filter((sign) => sign.id === dreamsignId).length;
       if (effect.kind === "rerollExploration") {
@@ -69,7 +101,7 @@ export function journeySites(dreamsignId: DreamsignId, effect: JourneySitesEffec
         .reduce((max, grant) => Math.max(max, grant.entitlement + 1), 0);
       const budget = copiesThroughThisHook * effect.count - earned;
       if (budget <= 0) return null;
-      const eligible = node.sites.filter((site) => !site.isVisited && !site.isEnhanced &&
+      const eligible = node.sites.filter((site) => !site.isVisited && !projectJourneySite(journey, site, { lookup }).isEnhanced &&
         journey.siteRuntime[site.id] === undefined &&
         !(journey.screen.type === "site" && journey.screen.siteId === site.id) &&
         provider.sitesData.guideAssignments[site.type] !== undefined)

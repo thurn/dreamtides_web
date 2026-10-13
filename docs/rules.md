@@ -146,6 +146,24 @@ enhancements persist through loss, reacquisition, and reordering of Dreamsigns,
 and the same entitlement is consumed once. Existing enhanced sites use no
 additional Dreamsign entitlement.
 
+Each new Draft offer quotes its card count from the catalog base and every
+qualifying held Dreamsign copy. An essence requirement is inclusive: the
+printed minimum qualifies. The prepared choices, requested count, and spent
+pool remain fixed through essence edits, Dreamsign gains or losses, and reload.
+A pick prepares its next offer using the holdings and essence at that change;
+a debug reroll retains the current offer's quoted count. Offers contain
+unique cards, and cards already shown at this site remain excluded. The final
+pick prepares no additional offer.
+
+A Dreamsign that enhances Dreamsign and Dreamsign draft sites applies to free
+Reward and Dreamsign Revelation sites. Holding it enhances an unvisited site
+whose runtime is unprepared. Losing it before preparation ends that targeted
+mode; naturally enhanced sites retain their enhancement. Successful preparation
+records the enhanced mode with its immutable choices. That prepared mode
+persists through source loss and reload, and duplicate sources share one mode.
+An additional random enhancement excludes sites already enhanced by a held
+targeted source, so its entitlement applies to another eligible guide site.
+
 A targeted enhancement of a free Dreamsign Reward prepares a choice of up to
 three distinct Dreamsigns, including the standard prepared reward. All shown
 UUIDs are spent from the shared Dreamsign pool when the Reward opens. You may

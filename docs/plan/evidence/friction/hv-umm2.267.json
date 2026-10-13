@@ -1,0 +1,45 @@
+{
+  "bead": "hv-umm2.267",
+  "phase": 5,
+  "implementMin": 605.6315562833333,
+  "implementWindow": {
+    "start": "2026-10-13T05:00:54.311000+00:00",
+    "end": "2026-10-13T15:06:32.204377+00:00"
+  },
+  "localValidationS": {
+    "focused": 7.072213582985569,
+    "review": 59.25808208400849,
+    "knip": 4.381932624994079,
+    "full": 208.93184999999357,
+    "fuzz": 0.9203004169976339,
+    "journey300": 1.307995374983875
+  },
+  "hostLoad": 6.63,
+  "testDelta": {
+    "files": 2,
+    "lines": 412,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "shared-body-coordination",
+      "minutes": 13.875826,
+      "note": "Actual05:02:06.637536\u201305:15:59.186545 shared journey lifecycle ownership coordination, including useful source/QA preparation; parent serialized261 after267."
+    },
+    {
+      "tag": "model-capacity-wait",
+      "minutes": 400.1777228,
+      "note": "Last saved terminal to parent resume clock; model-capacity interruption retained inside gross helper window. This is elapsed inactive recovery, not CPU time."
+    },
+    {
+      "tag": "pre-existing-layout-geometry",
+      "minutes": 27.21738155,
+      "note": "Actual failed five-card terminal13:18:38.410860 to final renderer runtimeACK13:45:51.453264. Includes source diagnosis, exact restoration, two token constants, serial checks and preparation; not isolated editing or wait."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 32.41278716666667,
+      "note": "Two bounded observer-repair windows: normal Save/MCP modal result and Reward dialog/editor access. Includes source audit, parent justiciar ACK and useful preparation; all failed artifacts retained. No product modal/tool fix."
+    }
+  ]
+}

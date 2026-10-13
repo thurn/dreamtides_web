@@ -47,6 +47,7 @@ import type {
   TransfiguredSiteOfferModifier,
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
+import { projectJourneySite } from "./journey-sites";
 import { essenceReplacementSource, essencePurgeSource } from "./journey-essence";
 import type { JourneyModifierRegistry } from "./modifier-registry";
 import { purgeVisitCost } from "../../purge/purge-pricing";
@@ -458,8 +459,9 @@ export function openSite(
 
   if (journey.siteRuntime[siteId] !== undefined) return null;
 
-  const site = findSite(journey, siteId);
-  if (site === null) return null;
+  const storedSite = findSite(journey, siteId);
+  if (storedSite === null) return null;
+  const site = modifiers === undefined ? storedSite : projectJourneySite(journey, storedSite, modifiers);
   const rawGambleGameId = payload.gambleGameId;
   const rawSelectionRulesVersion = asString(payload.selectionRulesVersion);
   if (rawSelectionRulesVersion === null || rawSelectionRulesVersion === "") {

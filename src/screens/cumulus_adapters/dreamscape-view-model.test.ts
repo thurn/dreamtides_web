@@ -1,3 +1,4 @@
+import { journeySites } from "../../rules/journey/journey-sites";
 import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import { makeTestAtlasNode } from "../../testing/atlas-fixtures";
 import { createJourneyModifierRegistry } from "../../rules/journey/modifier-registry";
@@ -388,4 +389,24 @@ it("projects a durable enhanced offer after reload without the first reward anim
   if (runtime?.kind !== "reward") throw new Error("expected Reward");
   runtime.accepted = true;
   expect(view().rewardChoice).toBeUndefined();
+});
+
+
+it("presents a held targeted enhancement like a natural mode while keeping prepared ordinary sites fixed", () => {
+  const source = testDreamsignId("view-targeted"), siteId = parseSiteId("view-targeted-site");
+  const registry = createJourneyModifierRegistry([journeySites(source, {
+    kind: "enhanceSiteTypes", siteTypes: ["Reward", "DreamsignRevelation"],
+  })]);
+  const node = makeTestAtlasNode(parseAtlasNodeId("view-targeted-node"), [{ id: siteId,
+    type: "DreamsignRevelation", isVisited: false, isEnhanced: false }]);
+  const state = { ...testJourneyState(), dreamsigns: [{ id: source, name: "Fixture", effectDescription: "" }] };
+  const view = (n: DreamscapeNode, s: JourneyState) => buildDreamscapeViewImpl(n, "Fixture", null, s,
+    MINIMAL_SITES_DATA, 5, null, undefined, registry);
+  const natural = { ...node, sites: node.sites.map((site) => ({ ...site, isEnhanced: true })) };
+  expect(view(node, state).sites).toEqual(view(natural, state).sites);
+  expect(node.sites[0].isEnhanced).toBe(false);
+  const lost = { ...state, dreamsigns: [] };
+  const prepared = { ...state, siteRuntime: { [siteId]: { kind: "dreamsignOffer" as const,
+    offeredDreamsigns: [], remainingDreamsignPool: [], accepted: false } } };
+  expect(view(node, prepared).sites).toEqual(view(node, lost).sites);
 });

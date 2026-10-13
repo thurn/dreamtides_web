@@ -13,7 +13,11 @@ import fruit, { journeyEssenceEffect as fruitEffect } from "../../content/dreams
 import slug, { journeyPurgeEffect as slugEffect } from "../../content/dreamsigns/slug-108841ce";
 import sickle, { journeyPurgeEffect as sickleEffect } from "../../content/dreamsigns/sickle-488bf436";
 import { journeyPurge } from "./journey-purge";
-import type { JourneyPurgeEffect, JourneyPurgeOccurrence, JourneyEssenceEffect, JourneySitesEffect, JourneyState } from "../../types/journey";
+import type { JourneyPurgeEffect, JourneyPurgeOccurrence, JourneyEssenceEffect, JourneySitesEffect, JourneyDraftEffect, JourneyState } from "../../types/journey";
+import clamShell, { journeyDraftEffect as clamEffect } from "../../content/dreamsigns/clam-shell-2dcf92bf";
+import seaUrchin, { journeyDraftEffect as urchinEffect } from "../../content/dreamsigns/sea-urchin-1c505034";
+import rosemary, { journeySitesEffect as rosemaryEffect } from "../../content/dreamsigns/rosemary-cd81a49d";
+import { journeyDraft } from "./journey-draft";
 import type { GameplayEventType } from "../events";
 
 /**
@@ -23,6 +27,7 @@ import type { GameplayEventType } from "../events";
 export interface JourneyModifierDefinition {
   readonly dreamsignId: DreamsignId;
   readonly journeySites?: JourneySitesEffect;
+  readonly journeyDraft?: JourneyDraftEffect;
   readonly journeyEssence?: JourneyEssenceEffect;
   readonly journeyPurge?: JourneyPurgeEffect;
   /**
@@ -31,6 +36,8 @@ export interface JourneyModifierDefinition {
    * Specific primitive hooks extend this registry as their rules are implemented.
    */
   readonly afterJourneyEvent: (input: {
+    /** The same fixed UUID registry supplied to this transition, with lookup only. */
+    readonly lookup: JourneyModifierRegistry["lookup"];
     readonly before: Readonly<JourneyState>;
     readonly journey: Readonly<JourneyState>;
     readonly eventType: GameplayEventType;
@@ -86,8 +93,9 @@ export function createJourneyModifierRegistry(
     }
     byId.set(dreamsignId, Object.freeze({ ...definition, dreamsignId }));
   }
+  const lookup = (dreamsignId: DreamsignId) => byId.get(dreamsignId);
   return Object.freeze({
-    lookup: (dreamsignId: DreamsignId) => byId.get(dreamsignId),
+    lookup,
     apply({ before, journey, eventType, siteId, purges }) {
       const logRecords: ReducerLogRecord[] = [];
       let next = journey;
@@ -98,7 +106,7 @@ export function createJourneyModifierRegistry(
       // iteration.
       for (const [heldIndex, { id }] of journey.dreamsigns.entries()) {
         const definition = byId.get(id);
-        const applied = definition?.afterJourneyEvent({ before, journey: next, eventType, heldIndex, siteId, ...(purges === undefined ? {} : { purges }) });
+        const applied = definition?.afterJourneyEvent({ lookup, before, journey: next, eventType, heldIndex, siteId, ...(purges === undefined ? {} : { purges }) });
         if (applied == null) continue;
         logRecords.push({
           event: "journey_modifier_applied",
@@ -130,4 +138,7 @@ export const journeyModifierRegistry = createJourneyModifierRegistry([
   journeyEssence(parseDreamsignId(fruit.id), fruitEffect),
   journeyPurge(parseDreamsignId(slug.id), slugEffect),
   journeyPurge(parseDreamsignId(sickle.id), sickleEffect),
+  journeyDraft(parseDreamsignId(clamShell.id), clamEffect),
+  journeyDraft(parseDreamsignId(seaUrchin.id), urchinEffect),
+  journeySites(parseDreamsignId(rosemary.id), rosemaryEffect),
 ]);

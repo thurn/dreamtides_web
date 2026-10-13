@@ -209,10 +209,18 @@ export type JourneyPurgeChoice =
   | { readonly kind: "essenceSite"; readonly siteId: SiteId;
       readonly dreamsignId: DreamsignId; readonly heldIndex: number; readonly count: number };
 
+/** Catalog clauses that increase each newly prepared Draft offer. */
+export interface JourneyDraftEffect {
+  readonly kind: "additionalDraftChoices";
+  readonly additionalCards: number;
+  readonly minimumEssence?: number;
+}
+
 /** Typed catalog clauses implemented by the journeySites primitive. */
 export type JourneySitesEffect =
   | { readonly kind: "additionalEnhancedSite"; readonly count: number }
-  | { readonly kind: "rerollExploration"; readonly rerollsPerSite: number };
+  | { readonly kind: "rerollExploration"; readonly rerollsPerSite: number }
+  | { readonly kind: "enhanceSiteTypes"; readonly siteTypes: readonly ("Reward" | "DreamsignRevelation")[] };
 
 /** Catalog clauses implemented by journeyEssence. */
 export type JourneyEssenceEffect =

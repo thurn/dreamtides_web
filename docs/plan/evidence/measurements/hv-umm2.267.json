@@ -1,0 +1,2690 @@
+{
+  "bead": "hv-umm2.267",
+  "phase": 5,
+  "base": "6d69c65acedd2dbaa8858e54d57afd2851eb8dd5",
+  "implementationWindow": {
+    "dispatch": "2026-10-13T05:00:54.311000+00:00",
+    "dispatchProvenance": "Actual parent native own-session spawn call_02759919492e4231adfab75294d226ae",
+    "modelStart": "unknown",
+    "prospectiveCommitEndpoint": "2026-10-13T15:06:32.204377+00:00",
+    "endpointQualification": "Actual prospective cutoff refreshed under native final AMEND ACK2026-10-13T15:05:21.957065Z immediately before exact staging and one automatic amend. Final whole-second Git clock is retained outside tracked tree; no forced date or postcommit tracked edit. Original dispatch includes entire clean-checkpoint/update/combined validation recovery."
+  },
+  "parentSetup": {
+    "npmInstallS": 2.453197,
+    "start": "2026-10-13T04:58:34.026258Z",
+    "end": "2026-10-13T04:58:36.479635Z",
+    "exitCode": 0,
+    "scope": "Parent predispatch installation separate from helper gross window"
+  },
+  "scope": {
+    "functionalPaths": [
+      "src/types/journey.ts",
+      "src/content/define.ts",
+      "src/types/draft.ts",
+      "src/content/dreamsigns/clam-shell-2dcf92bf.ts",
+      "src/content/dreamsigns/rosemary-cd81a49d.ts",
+      "src/content/dreamsigns/sea-urchin-1c505034.ts",
+      "src/rules/journey/journey-draft.ts",
+      "src/rules/journey/modifier-registry.ts",
+      "src/rules/journey/draft.ts",
+      "src/rules/journey/journey-sites.ts",
+      "src/rules/journey/sites.ts",
+      "src/rules/journey/lifecycle.ts",
+      "src/rules/reducer.ts",
+      "src/screens/cumulus_adapters/dreamscape-view-model.ts",
+      "src/cumulus/screens/DraftScreen.tsx",
+      "src/rules/journey/journey-draft.test.ts",
+      "src/rules/journey/journey-draft-sites.contracts.ts",
+      "src/screens/cumulus_adapters/dreamscape-view-model.test.ts"
+    ],
+    "productionPaths": 15,
+    "testPaths": 3,
+    "fallout": [],
+    "newPrimitive": "journeyDraft",
+    "existingPrimitive": "journeySites targeted descriptor",
+    "rulesDecision": "RD-hv-umm2.267-1",
+    "cardIssues": [],
+    "temporaryScenes": "Two773-byte rows restored to original67509bytes519a826c...; all2363 functional paths exact renderer-tested f2998e73..."
+  },
+  "testDelta": {
+    "files": 2,
+    "lines": 412,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 1,
+    "plainContractModules": 1,
+    "newJsdomEntrypoints": 0,
+    "owningFileLines": 209,
+    "plainContractLines": 182,
+    "existingAdapterTestLinesAdded": 21,
+    "newSyntheticCases": 32,
+    "qualification": "One new configured node owning entrypoint plus one plain contract module; D19 counts files without imposing a file budget."
+  },
+  "commands": [
+    {
+      "name": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/draft-sites.test.ts",
+        "src/rules/journey/journey-sites.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/rules/journey/modifier-registry.test.ts",
+        "src/rules/journey/sites-rewards.test.ts"
+      ],
+      "start": "2026-10-13T06:02:52.945538+00:00",
+      "end": "2026-10-13T06:02:59.579660+00:00",
+      "elapsedS": 6.633990625006845,
+      "exitCode": 1,
+      "pid": 79993,
+      "parentPid": 79983,
+      "hostLoadStart": "{ 4.73 5.36 7.07 }",
+      "receipt": "helper-validation/focused-final.receipt.json"
+    },
+    {
+      "name": "focused-final2",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/draft-sites.test.ts",
+        "src/rules/journey/journey-sites.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/rules/journey/modifier-registry.test.ts",
+        "src/rules/journey/sites-rewards.test.ts"
+      ],
+      "start": "2026-10-13T06:05:25.466965+00:00",
+      "end": "2026-10-13T06:05:29.336632+00:00",
+      "elapsedS": 3.869584332991508,
+      "exitCode": 0,
+      "pid": 82767,
+      "parentPid": 82757,
+      "hostLoadStart": "{ 3.98 5.06 6.70 }",
+      "receipt": "helper-validation/focused-final2.receipt.json"
+    },
+    {
+      "name": "focused-renderer",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/offer-screens.test.tsx",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/draft-sites.test.ts",
+        "src/rules/journey/journey-sites.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/rules/journey/modifier-registry.test.ts",
+        "src/rules/journey/sites-rewards.test.ts"
+      ],
+      "start": "2026-10-13T13:35:47.939609+00:00",
+      "end": "2026-10-13T13:35:58.160017+00:00",
+      "elapsedS": 10.220268875011243,
+      "exitCode": 0,
+      "pid": 2583,
+      "parentPid": 2571,
+      "hostLoadStart": "{ 2.99 3.26 3.73 }",
+      "receipt": "helper-validation/focused-renderer.receipt.json"
+    },
+    {
+      "name": "focused1",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/draft-sites.test.ts",
+        "src/rules/journey/journey-sites.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/rules/journey/modifier-registry.test.ts",
+        "src/rules/journey/sites-rewards.test.ts"
+      ],
+      "start": "2026-10-13T05:36:11.166765+00:00",
+      "end": "2026-10-13T05:36:16.354531+00:00",
+      "elapsedS": 5.187635499998578,
+      "exitCode": 1,
+      "pid": 32919,
+      "parentPid": 32904,
+      "hostLoadStart": "{ 9.31 15.21 13.39 }",
+      "receipt": "helper-validation/focused1.receipt.json"
+    },
+    {
+      "name": "focused2",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/draft-sites.test.ts",
+        "src/rules/journey/journey-sites.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/rules/journey/modifier-registry.test.ts",
+        "src/rules/journey/sites-rewards.test.ts"
+      ],
+      "start": "2026-10-13T05:37:15.804863+00:00",
+      "end": "2026-10-13T05:37:23.841113+00:00",
+      "elapsedS": 8.036165416007861,
+      "exitCode": 1,
+      "pid": 37296,
+      "parentPid": 37282,
+      "hostLoadStart": "{ 9.75 13.87 13.00 }",
+      "receipt": "helper-validation/focused2.receipt.json"
+    },
+    {
+      "name": "focused3",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/draft-sites.test.ts",
+        "src/rules/journey/journey-sites.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/rules/journey/modifier-registry.test.ts",
+        "src/rules/journey/sites-rewards.test.ts"
+      ],
+      "start": "2026-10-13T05:37:54.787715+00:00",
+      "end": "2026-10-13T05:38:00.136821+00:00",
+      "elapsedS": 5.348987790988758,
+      "exitCode": 0,
+      "pid": 79745,
+      "parentPid": 79683,
+      "hostLoadStart": "{ 13.33 14.27 13.18 }",
+      "receipt": "helper-validation/focused3.receipt.json"
+    },
+    {
+      "name": "full-final",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-13T12:51:24.077025+00:00",
+      "end": "2026-10-13T12:53:21.175513+00:00",
+      "elapsedS": 117.09833929099841,
+      "exitCode": 0,
+      "pid": 68594,
+      "parentPid": 68534,
+      "hostLoadStart": "{ 16.15 9.96 5.96 }",
+      "receipt": "helper-validation/full-final.receipt.json"
+    },
+    {
+      "name": "full1",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-13T05:55:26.520957+00:00",
+      "end": "2026-10-13T05:57:06.671765+00:00",
+      "elapsedS": 100.149782374996,
+      "exitCode": 0,
+      "pid": 42251,
+      "parentPid": 42242,
+      "hostLoadStart": "{ 5.81 5.39 8.19 }",
+      "receipt": "helper-validation/full1.receipt.json"
+    },
+    {
+      "name": "inventory1",
+      "command": [
+        "./node_modules/.bin/tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "start": "2026-10-13T05:39:02.278872+00:00",
+      "end": "2026-10-13T05:39:04.725906+00:00",
+      "elapsedS": 2.446911999999429,
+      "exitCode": 0,
+      "pid": 35240,
+      "parentPid": 35165,
+      "hostLoadStart": "{ 23.43 17.45 14.48 }",
+      "receipt": "helper-validation/inventory1.receipt.json"
+    },
+    {
+      "name": "journey300-repair",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "./node_modules/.bin/tsx",
+        "/tmp/root-267/helper/journey-300.mts"
+      ],
+      "start": "2026-10-13T05:52:17.657492+00:00",
+      "end": "2026-10-13T05:54:18.441474+00:00",
+      "elapsedS": 120.78244254199672,
+      "exitCode": 0,
+      "pid": 38342,
+      "parentPid": 38332,
+      "hostLoadStart": "{ 5.70 5.71 9.03 }",
+      "receipt": "helper-validation/journey300-repair.receipt.json"
+    },
+    {
+      "name": "journey300-strict",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "./node_modules/.bin/tsx",
+        "/tmp/root-267/helper/journey-300.mts"
+      ],
+      "start": "2026-10-13T12:51:01.166499+00:00",
+      "end": "2026-10-13T12:51:02.474580+00:00",
+      "elapsedS": 1.307995374983875,
+      "exitCode": 0,
+      "pid": 34806,
+      "parentPid": 34748,
+      "hostLoadStart": "{ 16.21 9.33 5.62 }",
+      "receipt": "helper-validation/journey300-strict.receipt.json"
+    },
+    {
+      "name": "journey300",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "./node_modules/.bin/tsx",
+        "/tmp/root-267/helper/journey-300.mts"
+      ],
+      "start": "2026-10-13T05:50:49.550900+00:00",
+      "end": "2026-10-13T05:50:50.384379+00:00",
+      "elapsedS": 0.8333898339915322,
+      "exitCode": 1,
+      "pid": 36046,
+      "parentPid": 36032,
+      "hostLoadStart": "{ 3.04 5.74 9.42 }",
+      "receipt": "helper-validation/journey300.receipt.json"
+    },
+    {
+      "name": "knip-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T12:50:47.450178+00:00",
+      "end": "2026-10-13T12:50:51.488506+00:00",
+      "elapsedS": 4.038200125010917,
+      "exitCode": 0,
+      "pid": 19748,
+      "parentPid": 19737,
+      "hostLoadStart": "{ 16.00 9.06 5.48 }",
+      "receipt": "helper-validation/knip-final.receipt.json"
+    },
+    {
+      "name": "knip-renderer",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T13:37:43.812352+00:00",
+      "end": "2026-10-13T13:37:48.080945+00:00",
+      "elapsedS": 4.268255709001096,
+      "exitCode": 0,
+      "pid": 60381,
+      "parentPid": 60370,
+      "hostLoadStart": "{ 10.83 7.60 5.49 }",
+      "receipt": "helper-validation/knip-renderer.receipt.json"
+    },
+    {
+      "name": "knip1",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T05:48:54.898994+00:00",
+      "end": "2026-10-13T05:48:59.811167+00:00",
+      "elapsedS": 4.912055249995319,
+      "exitCode": 0,
+      "pid": 33273,
+      "parentPid": 33264,
+      "hostLoadStart": "{ 3.03 7.06 10.37 }",
+      "receipt": "helper-validation/knip1.receipt.json"
+    },
+    {
+      "name": "lint-repair",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "start": "2026-10-13T05:42:43.907523+00:00",
+      "end": "2026-10-13T05:42:49.728264+00:00",
+      "elapsedS": 5.820599749989924,
+      "exitCode": 1,
+      "pid": 70824,
+      "parentPid": 70763,
+      "hostLoadStart": "{ 15.00 14.10 13.58 }",
+      "receipt": "helper-validation/lint-repair.receipt.json"
+    },
+    {
+      "name": "lint-repair2",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "start": "2026-10-13T05:43:51.432153+00:00",
+      "end": "2026-10-13T05:43:56.368842+00:00",
+      "elapsedS": 4.936554749991046,
+      "exitCode": 0,
+      "pid": 19823,
+      "parentPid": 19811,
+      "hostLoadStart": "{ 8.84 12.50 13.02 }",
+      "receipt": "helper-validation/lint-repair2.receipt.json"
+    },
+    {
+      "name": "preflight1",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "2dcf92bf-93b3-400c-ab97-69d3098f8868,cd81a49d-df58-4e0e-b1b2-33a82b386052,1c505034-e405-495d-8418-6e3c06d974f0",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "start": "2026-10-13T05:55:07.387836+00:00",
+      "end": "2026-10-13T05:55:08.353887+00:00",
+      "elapsedS": 0.9659694170113653,
+      "exitCode": 0,
+      "pid": 41937,
+      "parentPid": 41928,
+      "hostLoadStart": "{ 4.64 5.14 8.18 }",
+      "receipt": "helper-validation/preflight1.receipt.json"
+    },
+    {
+      "name": "qa-scenes-lint-renderer",
+      "command": [
+        "./node_modules/.bin/eslint",
+        "src/runtime/qa-scenes.ts"
+      ],
+      "start": "2026-10-13T13:43:51.792334+00:00",
+      "end": "2026-10-13T13:43:54.016605+00:00",
+      "elapsedS": 2.2241864159877878,
+      "exitCode": 0,
+      "pid": 30842,
+      "parentPid": 30833,
+      "hostLoadStart": "{ 4.51 6.79 6.04 }",
+      "receipt": "helper-validation/qa-scenes-lint-renderer.receipt.json"
+    },
+    {
+      "name": "qa-scenes-lint",
+      "command": [
+        "./node_modules/.bin/eslint",
+        "src/runtime/qa-scenes.ts"
+      ],
+      "start": "2026-10-13T12:56:52.563432+00:00",
+      "end": "2026-10-13T12:56:55.061584+00:00",
+      "elapsedS": 2.4980747080117,
+      "exitCode": 0,
+      "pid": 18907,
+      "parentPid": 18898,
+      "hostLoadStart": "{ 4.29 6.56 5.69 }",
+      "receipt": "helper-validation/qa-scenes-lint.receipt.json"
+    },
+    {
+      "name": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T12:49:30.999221+00:00",
+      "end": "2026-10-13T12:50:35.380962+00:00",
+      "elapsedS": 64.3816039589874,
+      "exitCode": 0,
+      "pid": 14457,
+      "parentPid": 14444,
+      "hostLoadStart": "{ 14.44 7.30 4.60 }",
+      "receipt": "helper-validation/review-final.receipt.json"
+    },
+    {
+      "name": "review-renderer",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T13:36:28.030587+00:00",
+      "end": "2026-10-13T13:37:27.957558+00:00",
+      "elapsedS": 59.92659820901463,
+      "exitCode": 0,
+      "pid": 47187,
+      "parentPid": 47171,
+      "hostLoadStart": "{ 16.02 6.58 4.93 }",
+      "receipt": "helper-validation/review-renderer.receipt.json"
+    },
+    {
+      "name": "review1",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T05:39:58.174986+00:00",
+      "end": "2026-10-13T05:40:49.391922+00:00",
+      "elapsedS": 51.21636745799333,
+      "exitCode": 2,
+      "pid": 53752,
+      "parentPid": 53741,
+      "hostLoadStart": "{ 14.04 15.97 14.12 }",
+      "receipt": "helper-validation/review1.receipt.json"
+    },
+    {
+      "name": "review2",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T05:46:01.392195+00:00",
+      "end": "2026-10-13T05:46:47.455550+00:00",
+      "elapsedS": 46.0628184590023,
+      "exitCode": 0,
+      "pid": 28868,
+      "parentPid": 28859,
+      "hostLoadStart": "{ 5.17 9.83 11.88 }",
+      "receipt": "helper-validation/review2.receipt.json"
+    },
+    {
+      "name": "typecheck-repair",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-10-13T05:41:31.141394+00:00",
+      "end": "2026-10-13T05:41:34.604861+00:00",
+      "elapsedS": 3.4633665419969475,
+      "exitCode": 0,
+      "pid": 59399,
+      "parentPid": 59386,
+      "hostLoadStart": "{ 8.71 13.69 13.44 }",
+      "receipt": "helper-validation/typecheck-repair.receipt.json"
+    },
+    {
+      "name": "weighted300",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "2dcf92bf-93b3-400c-ab97-69d3098f8868,cd81a49d-df58-4e0e-b1b2-33a82b386052,1c505034-e405-495d-8418-6e3c06d974f0"
+      ],
+      "start": "2026-10-13T05:50:19.105454+00:00",
+      "end": "2026-10-13T05:50:20.025881+00:00",
+      "elapsedS": 0.9203004169976339,
+      "exitCode": 1,
+      "pid": 35347,
+      "parentPid": 35338,
+      "hostLoadStart": "{ 3.14 6.03 9.65 }",
+      "receipt": "helper-validation/weighted300.receipt.json"
+    },
+    {
+      "start": "2026-10-13T05:05:03.618746+00:00",
+      "end": "2026-10-13T05:05:05.032552+00:00",
+      "elapsedS": 1.4136834999953862,
+      "exitCode": 1,
+      "command": "./node_modules/.bin/tsx /tmp/root-267/helper/before.mts",
+      "scope": "Identical public BEFORE witness, ESM extension handles existing top-level-await module. Initial CJS startup failure preserved.",
+      "receipt": "helper-validation/before-esm-receipt.json"
+    },
+    {
+      "start": "2026-10-13T05:05:11.671923+00:00",
+      "end": "2026-10-13T05:05:17.321539+00:00",
+      "elapsedS": 5.649450458004139,
+      "exitCode": 0,
+      "command": "./node_modules/.bin/tsx /tmp/root-267/helper/before-fixed.mts",
+      "scope": "Public BEFORE witness; required cards:[] fixture argument corrected. Initial startup and missing fixture argument failures preserved.",
+      "receipt": "helper-validation/before-fixed-receipt.json"
+    },
+    {
+      "start": "2026-10-13T05:04:53.430883+00:00",
+      "end": "2026-10-13T05:04:55.772992+00:00",
+      "elapsedS": 2.3419837500114227,
+      "exitCode": 1,
+      "command": "./node_modules/.bin/tsx /tmp/root-267/helper/before.ts",
+      "scope": "Headless public BEFORE witness; existing synthetic fixtures and registered public provider; all three production modifier UUID lookups.",
+      "receipt": "helper-validation/before-receipt.json"
+    },
+    {
+      "name": "schema-final",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-13T14:33:31.199617+00:00",
+      "end": "2026-10-13T14:33:31.314047+00:00",
+      "elapsedS": 0.11433445801958442,
+      "exitCode": 0,
+      "pid": 70520,
+      "parentPid": 70511,
+      "hostLoadStart": "{ 2.88 3.72 4.58 }",
+      "receipt": "helper-validation/schema-final.receipt.json"
+    },
+    {
+      "name": "review-evidence-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T14:33:38.636540+00:00",
+      "end": "2026-10-13T14:34:32.492254+00:00",
+      "elapsedS": 53.85545170897967,
+      "exitCode": 0,
+      "pid": 70759,
+      "parentPid": 70747,
+      "hostLoadStart": "{ 2.97 3.73 4.58 }",
+      "receipt": "helper-validation/review-evidence-final.receipt.json"
+    },
+    {
+      "name": "knip-evidence-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T14:34:42.837918+00:00",
+      "end": "2026-10-13T14:34:45.971639+00:00",
+      "elapsedS": 3.1336150420247577,
+      "exitCode": 0,
+      "pid": 72135,
+      "parentPid": 72126,
+      "hostLoadStart": "{ 5.16 4.32 4.74 }",
+      "receipt": "helper-validation/knip-evidence-final.receipt.json"
+    },
+    {
+      "name": "inventory-combined",
+      "command": [
+        "./node_modules/.bin/tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "start": "2026-10-13T14:52:39.696247+00:00",
+      "end": "2026-10-13T14:52:42.512709+00:00",
+      "elapsedS": 2.8162955409788992,
+      "exitCode": 0,
+      "pid": 86604,
+      "parentPid": 86593,
+      "hostLoadStart": "{ 17.97 15.72 11.81 }",
+      "receipt": "helper-validation/inventory-combined.receipt.json"
+    },
+    {
+      "name": "focused-combined",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/offer-screens.test.tsx",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/rules/journey/draft-sites.test.ts",
+        "src/rules/journey/journey-sites.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/rules/journey/modifier-registry.test.ts",
+        "src/rules/journey/sites-rewards.test.ts"
+      ],
+      "start": "2026-10-13T14:56:15.688837+00:00",
+      "end": "2026-10-13T14:56:22.761173+00:00",
+      "elapsedS": 7.072213582985569,
+      "exitCode": 0,
+      "pid": 97619,
+      "parentPid": 97610,
+      "hostLoadStart": "{ 7.56 11.59 10.91 }",
+      "receipt": "helper-validation/focused-combined.receipt.json"
+    },
+    {
+      "name": "review-combined",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T14:56:32.539995+00:00",
+      "end": "2026-10-13T14:57:31.798551+00:00",
+      "elapsedS": 59.25808208400849,
+      "exitCode": 0,
+      "pid": 98043,
+      "parentPid": 98034,
+      "hostLoadStart": "{ 6.63 11.11 10.75 }",
+      "receipt": "helper-validation/review-combined.receipt.json"
+    },
+    {
+      "name": "knip-combined",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T14:57:51.925053+00:00",
+      "end": "2026-10-13T14:57:56.307110+00:00",
+      "elapsedS": 4.381932624994079,
+      "exitCode": 0,
+      "pid": 1784,
+      "parentPid": 1775,
+      "hostLoadStart": "{ 7.39 10.42 10.52 }",
+      "receipt": "helper-validation/knip-combined.receipt.json"
+    },
+    {
+      "name": "schema-combined",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-13T14:58:11.323125+00:00",
+      "end": "2026-10-13T14:58:11.432111+00:00",
+      "elapsedS": 0.10886429200763814,
+      "exitCode": 0,
+      "pid": 3878,
+      "parentPid": 3868,
+      "hostLoadStart": "{ 7.55 10.30 10.48 }",
+      "receipt": "helper-validation/schema-combined.receipt.json"
+    },
+    {
+      "name": "full-combined",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-13T14:58:11.477726+00:00",
+      "end": "2026-10-13T15:01:40.411092+00:00",
+      "elapsedS": 208.93184999999357,
+      "exitCode": 0,
+      "pid": 3923,
+      "parentPid": 3896,
+      "hostLoadStart": "{ 7.55 10.30 10.48 }",
+      "receipt": "helper-validation/full-combined.receipt.json"
+    }
+  ],
+  "nativeCommands": [
+    {
+      "name": "control-draft-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-baseline.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "scene=draft"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:02:46.149400+00:00",
+      "pid": 27003,
+      "pgid": 26995,
+      "parentPid": 26995,
+      "wrapperPgid": 26995,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:02:57.235418+00:00",
+      "elapsedS": 11.085935582988895,
+      "exitCode": 2,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "control-draft-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-baseline.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "scene=draft"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:14:37.760687+00:00",
+      "pid": 72560,
+      "pgid": 72552,
+      "parentPid": 72552,
+      "wrapperPgid": 72552,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:14:49.158438+00:00",
+      "elapsedS": 11.397646458004601,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "control-dreamsign-revelation-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-baseline.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "scene=dreamsign-revelation"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:16:20.881144+00:00",
+      "pid": 75233,
+      "pgid": 75225,
+      "parentPid": 75225,
+      "wrapperPgid": 75225,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:16:31.545867+00:00",
+      "elapsedS": 10.664628874976188,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "control-reward-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-baseline.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "scene=reward"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:15:26.254043+00:00",
+      "pid": 73890,
+      "pgid": 73882,
+      "parentPid": 73882,
+      "wrapperPgid": 73882,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:15:36.602655+00:00",
+      "elapsedS": 10.348508708004374,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "draft4-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-draft.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "clams=0",
+        "--arg",
+        "urchins=0",
+        "--arg",
+        "threshold=false"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:17:16.104256+00:00",
+      "pid": 76883,
+      "pgid": 76868,
+      "parentPid": 76868,
+      "wrapperPgid": 76868,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:18:03.444084+00:00",
+      "elapsedS": 47.339728041988565,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "draft4-renderer-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-draft.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "clams=0",
+        "--arg",
+        "urchins=0",
+        "--arg",
+        "threshold=false"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:47:37.465926+00:00",
+      "pid": 36888,
+      "pgid": 36880,
+      "parentPid": 36880,
+      "wrapperPgid": 36880,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:48:22.601945+00:00",
+      "elapsedS": 45.135695834003855,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "draft5-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-draft.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "clams=1",
+        "--arg",
+        "urchins=0",
+        "--arg",
+        "threshold=false"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:18:24.237672+00:00",
+      "pid": 78411,
+      "pgid": 78403,
+      "parentPid": 78403,
+      "wrapperPgid": 78403,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:18:38.410860+00:00",
+      "elapsedS": 14.173100415995577,
+      "exitCode": 1,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "draft5-diagnostic-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-draft.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "clams=1",
+        "--arg",
+        "urchins=0",
+        "--arg",
+        "threshold=false"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:24:12.076715+00:00",
+      "pid": 85864,
+      "pgid": 85856,
+      "parentPid": 85856,
+      "wrapperPgid": 85856,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:24:28.449811+00:00",
+      "elapsedS": 16.37298883299809,
+      "exitCode": 1,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "draft5-renderer-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-draft.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "clams=1",
+        "--arg",
+        "urchins=0",
+        "--arg",
+        "threshold=false"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:46:14.967540+00:00",
+      "pid": 34578,
+      "pgid": 34564,
+      "parentPid": 34564,
+      "wrapperPgid": 34564,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:47:02.897405+00:00",
+      "elapsedS": 47.92953266701079,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "draft6-renderer-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-draft.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "clams=1",
+        "--arg",
+        "urchins=1",
+        "--arg",
+        "threshold=false"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:48:43.063471+00:00",
+      "pid": 38868,
+      "pgid": 38860,
+      "parentPid": 38860,
+      "wrapperPgid": 38860,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:49:37.524844+00:00",
+      "elapsedS": 54.46099225000944,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "draft8-renderer-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-draft.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "clams=2",
+        "--arg",
+        "urchins=2",
+        "--arg",
+        "threshold=false"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:50:22.623522+00:00",
+      "pid": 41957,
+      "pgid": 41947,
+      "parentPid": 41947,
+      "wrapperPgid": 41947,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:51:43.881135+00:00",
+      "elapsedS": 81.25709774999996,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-DreamsignRevelation-decline-modal-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=DreamsignRevelation",
+        "--arg",
+        "mode=decline"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:24:05.579527+00:00",
+      "pid": 59924,
+      "pgid": 59916,
+      "parentPid": 59916,
+      "wrapperPgid": 59916,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:24:33.291217+00:00",
+      "elapsedS": 27.711507832980715,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-DreamsignRevelation-duplicate-modal-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=DreamsignRevelation",
+        "--arg",
+        "mode=duplicate"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:23:34.241710+00:00",
+      "pid": 59043,
+      "pgid": 59031,
+      "parentPid": 59031,
+      "wrapperPgid": 59031,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:24:05.362702+00:00",
+      "elapsedS": 31.120790207991377,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-DreamsignRevelation-natural-modal-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=DreamsignRevelation",
+        "--arg",
+        "mode=natural"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:25:13.856674+00:00",
+      "pid": 61531,
+      "pgid": 61519,
+      "parentPid": 61519,
+      "wrapperPgid": 61519,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:25:40.590313+00:00",
+      "elapsedS": 26.733449916995596,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-DreamsignRevelation-prepared-loss-modal-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=DreamsignRevelation",
+        "--arg",
+        "mode=prepared-loss"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:22:13.433737+00:00",
+      "pid": 57281,
+      "pgid": 57273,
+      "parentPid": 57273,
+      "wrapperPgid": 57273,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:22:50.630629+00:00",
+      "elapsedS": 37.19664687500335,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-DreamsignRevelation-replace-modal-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=DreamsignRevelation",
+        "--arg",
+        "mode=replace"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:24:41.568854+00:00",
+      "pid": 60790,
+      "pgid": 60782,
+      "parentPid": 60782,
+      "wrapperPgid": 60782,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:25:13.641327+00:00",
+      "elapsedS": 32.072255457984284,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-DreamsignRevelation-unopened-loss-modal-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=DreamsignRevelation",
+        "--arg",
+        "mode=unopened-loss"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:22:50.858912+00:00",
+      "pid": 58116,
+      "pgid": 58106,
+      "parentPid": 58106,
+      "wrapperPgid": 58106,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:23:23.387030+00:00",
+      "elapsedS": 32.52789162500994,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-Reward-decline-modal-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=Reward",
+        "--arg",
+        "mode=decline"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:20:15.493422+00:00",
+      "pid": 25585,
+      "pgid": 25577,
+      "parentPid": 25577,
+      "wrapperPgid": 25577,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:20:35.926352+00:00",
+      "elapsedS": 20.432769999984885,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-Reward-duplicate-modal-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=Reward",
+        "--arg",
+        "mode=duplicate"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:19:51.985072+00:00",
+      "pid": 24322,
+      "pgid": 24313,
+      "parentPid": 24313,
+      "wrapperPgid": 24313,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:20:15.293712+00:00",
+      "elapsedS": 23.308474249992287,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-Reward-natural-modal-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=Reward",
+        "--arg",
+        "mode=natural"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:21:13.157996+00:00",
+      "pid": 53157,
+      "pgid": 53121,
+      "parentPid": 53121,
+      "wrapperPgid": 53121,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:21:39.339695+00:00",
+      "elapsedS": 26.18149008299224,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-Reward-prepared-loss-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=Reward",
+        "--arg",
+        "mode=prepared-loss"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:56:11.281586+00:00",
+      "pid": 67280,
+      "pgid": 67270,
+      "parentPid": 67270,
+      "wrapperPgid": 67270,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:56:36.147265+00:00",
+      "elapsedS": 24.865465250011766,
+      "exitCode": 1,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-Reward-prepared-reload-choice-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=Reward",
+        "--arg",
+        "mode=prepared-reload-choice"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:18:18.458903+00:00",
+      "pid": 19056,
+      "pgid": 19048,
+      "parentPid": 19048,
+      "wrapperPgid": 19048,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:18:40.373847+00:00",
+      "elapsedS": 21.914723000023514,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-Reward-replace-modal-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=Reward",
+        "--arg",
+        "mode=replace"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:20:47.475612+00:00",
+      "pid": 30713,
+      "pgid": 30677,
+      "parentPid": 30677,
+      "wrapperPgid": 30677,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:21:12.937584+00:00",
+      "elapsedS": 25.461771749978652,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "rosemary-Reward-unopened-loss-modal-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-rosemary.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "type=Reward",
+        "--arg",
+        "mode=unopened-loss"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T14:19:27.919459+00:00",
+      "pid": 21856,
+      "pgid": 21842,
+      "parentPid": 21842,
+      "wrapperPgid": 21842,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T14:19:51.773423+00:00",
+      "elapsedS": 23.85377395901014,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "sea299300-renderer-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/root-267/helper/qa-draft.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "900",
+        "--port",
+        "5174",
+        "--arg",
+        "clams=0",
+        "--arg",
+        "urchins=1",
+        "--arg",
+        "threshold=true"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:52:35.503612+00:00",
+      "pid": 15161,
+      "pgid": 14809,
+      "parentPid": 14809,
+      "wrapperPgid": 14809,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:53:39.401929+00:00",
+      "elapsedS": 63.89789412499522,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    },
+    {
+      "name": "sweep-1",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.267",
+        "--dreamsigns",
+        "2dcf92bf-93b3-400c-ab97-69d3098f8868,cd81a49d-df58-4e0e-b1b2-33a82b386052,1c505034-e405-495d-8418-6e3c06d974f0",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--timeout",
+        "90",
+        "--port",
+        "5174",
+        "--capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+      "start": "2026-10-13T13:01:25.793996+00:00",
+      "pid": 24936,
+      "pgid": 24924,
+      "parentPid": 24924,
+      "wrapperPgid": 24924,
+      "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+      "end": "2026-10-13T13:01:58.397213+00:00",
+      "elapsedS": 32.603070834011305,
+      "exitCode": 0,
+      "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "command": "focused-final",
+      "at": "2026-10-13T06:02:52.945538+00:00",
+      "sysctl": "{ 4.73 5.36 7.07 }"
+    },
+    {
+      "command": "focused-final2",
+      "at": "2026-10-13T06:05:25.466965+00:00",
+      "sysctl": "{ 3.98 5.06 6.70 }"
+    },
+    {
+      "command": "focused-renderer",
+      "at": "2026-10-13T13:35:47.939609+00:00",
+      "sysctl": "{ 2.99 3.26 3.73 }"
+    },
+    {
+      "command": "focused1",
+      "at": "2026-10-13T05:36:11.166765+00:00",
+      "sysctl": "{ 9.31 15.21 13.39 }"
+    },
+    {
+      "command": "focused2",
+      "at": "2026-10-13T05:37:15.804863+00:00",
+      "sysctl": "{ 9.75 13.87 13.00 }"
+    },
+    {
+      "command": "focused3",
+      "at": "2026-10-13T05:37:54.787715+00:00",
+      "sysctl": "{ 13.33 14.27 13.18 }"
+    },
+    {
+      "command": "full-final",
+      "at": "2026-10-13T12:51:24.077025+00:00",
+      "sysctl": "{ 16.15 9.96 5.96 }"
+    },
+    {
+      "command": "full1",
+      "at": "2026-10-13T05:55:26.520957+00:00",
+      "sysctl": "{ 5.81 5.39 8.19 }"
+    },
+    {
+      "command": "inventory1",
+      "at": "2026-10-13T05:39:02.278872+00:00",
+      "sysctl": "{ 23.43 17.45 14.48 }"
+    },
+    {
+      "command": "journey300-repair",
+      "at": "2026-10-13T05:52:17.657492+00:00",
+      "sysctl": "{ 5.70 5.71 9.03 }"
+    },
+    {
+      "command": "journey300-strict",
+      "at": "2026-10-13T12:51:01.166499+00:00",
+      "sysctl": "{ 16.21 9.33 5.62 }"
+    },
+    {
+      "command": "journey300",
+      "at": "2026-10-13T05:50:49.550900+00:00",
+      "sysctl": "{ 3.04 5.74 9.42 }"
+    },
+    {
+      "command": "knip-final",
+      "at": "2026-10-13T12:50:47.450178+00:00",
+      "sysctl": "{ 16.00 9.06 5.48 }"
+    },
+    {
+      "command": "knip-renderer",
+      "at": "2026-10-13T13:37:43.812352+00:00",
+      "sysctl": "{ 10.83 7.60 5.49 }"
+    },
+    {
+      "command": "knip1",
+      "at": "2026-10-13T05:48:54.898994+00:00",
+      "sysctl": "{ 3.03 7.06 10.37 }"
+    },
+    {
+      "command": "lint-repair",
+      "at": "2026-10-13T05:42:43.907523+00:00",
+      "sysctl": "{ 15.00 14.10 13.58 }"
+    },
+    {
+      "command": "lint-repair2",
+      "at": "2026-10-13T05:43:51.432153+00:00",
+      "sysctl": "{ 8.84 12.50 13.02 }"
+    },
+    {
+      "command": "preflight1",
+      "at": "2026-10-13T05:55:07.387836+00:00",
+      "sysctl": "{ 4.64 5.14 8.18 }"
+    },
+    {
+      "command": "qa-scenes-lint-renderer",
+      "at": "2026-10-13T13:43:51.792334+00:00",
+      "sysctl": "{ 4.51 6.79 6.04 }"
+    },
+    {
+      "command": "qa-scenes-lint",
+      "at": "2026-10-13T12:56:52.563432+00:00",
+      "sysctl": "{ 4.29 6.56 5.69 }"
+    },
+    {
+      "command": "review-final",
+      "at": "2026-10-13T12:49:30.999221+00:00",
+      "sysctl": "{ 14.44 7.30 4.60 }"
+    },
+    {
+      "command": "review-renderer",
+      "at": "2026-10-13T13:36:28.030587+00:00",
+      "sysctl": "{ 16.02 6.58 4.93 }"
+    },
+    {
+      "command": "review1",
+      "at": "2026-10-13T05:39:58.174986+00:00",
+      "sysctl": "{ 14.04 15.97 14.12 }"
+    },
+    {
+      "command": "review2",
+      "at": "2026-10-13T05:46:01.392195+00:00",
+      "sysctl": "{ 5.17 9.83 11.88 }"
+    },
+    {
+      "command": "typecheck-repair",
+      "at": "2026-10-13T05:41:31.141394+00:00",
+      "sysctl": "{ 8.71 13.69 13.44 }"
+    },
+    {
+      "command": "weighted300",
+      "at": "2026-10-13T05:50:19.105454+00:00",
+      "sysctl": "{ 3.14 6.03 9.65 }"
+    },
+    {
+      "command": "inventory-combined",
+      "at": "2026-10-13T14:52:39.696247+00:00",
+      "sysctl": "{ 17.97 15.72 11.81 }"
+    },
+    {
+      "command": "focused-combined",
+      "at": "2026-10-13T14:56:15.688837+00:00",
+      "sysctl": "{ 7.56 11.59 10.91 }"
+    },
+    {
+      "command": "review-combined",
+      "at": "2026-10-13T14:56:32.539995+00:00",
+      "sysctl": "{ 6.63 11.11 10.75 }"
+    },
+    {
+      "command": "knip-combined",
+      "at": "2026-10-13T14:57:51.925053+00:00",
+      "sysctl": "{ 7.39 10.42 10.52 }"
+    },
+    {
+      "command": "schema-combined",
+      "at": "2026-10-13T14:58:11.323125+00:00",
+      "sysctl": "{ 7.55 10.30 10.48 }"
+    },
+    {
+      "command": "full-combined",
+      "at": "2026-10-13T14:58:11.477726+00:00",
+      "sysctl": "{ 7.55 10.30 10.48 }"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Combined review starting one-minute sysctl load6.63 at14:56:32.539995Z."
+      }
+    }
+  },
+  "inventoryDelta": {
+    "statusChanges": [
+      {
+        "id": "c86c1364-6ac4-4c90-8053-4e49441a2c83",
+        "kind": "card",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/cards/key-sifter-c86c1364.ts"
+      },
+      {
+        "id": "108841ce-4feb-4c73-972e-0277c727c63e",
+        "kind": "dreamsign",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/dreamsigns/slug-108841ce.ts"
+      },
+      {
+        "id": "1c505034-e405-495d-8418-6e3c06d974f0",
+        "kind": "dreamsign",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/dreamsigns/sea-urchin-1c505034.ts"
+      },
+      {
+        "id": "2dcf92bf-93b3-400c-ab97-69d3098f8868",
+        "kind": "dreamsign",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/dreamsigns/clam-shell-2dcf92bf.ts"
+      },
+      {
+        "id": "488bf436-c6d5-4e38-8a19-e50041f53766",
+        "kind": "dreamsign",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/dreamsigns/sickle-488bf436.ts"
+      },
+      {
+        "id": "4bb408a8-7941-42dc-9ff6-dbc1400c99ed",
+        "kind": "dreamsign",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/dreamsigns/crystal-wand-4bb408a8.ts"
+      },
+      {
+        "id": "5a22f358-bc84-44b1-a201-5f9f57940c51",
+        "kind": "dreamsign",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/dreamsigns/tarot-card-5a22f358.ts"
+      },
+      {
+        "id": "a98f468b-5e76-4041-83ee-69c0871a6bf0",
+        "kind": "dreamsign",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/dreamsigns/bat-wing-a98f468b.ts"
+      },
+      {
+        "id": "bfec4f5d-9b0d-4ed2-b470-db73d852448f",
+        "kind": "dreamsign",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/dreamsigns/dead-rat-bfec4f5d.ts"
+      },
+      {
+        "id": "cd81a49d-df58-4e0e-b1b2-33a82b386052",
+        "kind": "dreamsign",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/dreamsigns/rosemary-cd81a49d.ts"
+      },
+      {
+        "id": "f4df5a74-7822-4552-a3ab-f50b00758593",
+        "kind": "dreamsign",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/dreamsigns/strange-fruit-f4df5a74.ts"
+      },
+      {
+        "id": "ff8d8d4a-fe7b-4511-8192-e6e2e7712daf",
+        "kind": "dreamsign",
+        "old": "pending",
+        "new": "authored",
+        "module": "src/content/dreamsigns/amber-eye-ff8d8d4a.ts"
+      }
+    ],
+    "capabilityChanges": [
+      {
+        "name": "journeyDraft",
+        "old": false,
+        "new": true
+      },
+      {
+        "name": "journeyPurge",
+        "old": false,
+        "new": true
+      }
+    ],
+    "fileStats": "165\t213\tdocs/plan/evidence/content-inventory.json",
+    "qualification": "Generator unchanged; current own-worktree source projection includes pre-existing stale status/capability evidence. Native original three UUIDs/Areas/graph govern scope."
+  },
+  "beforeWitness": {
+    "receipt": "helper-validation/before-fixed-receipt.json",
+    "actualExit": 0,
+    "qualification": "Actual source-first public registry/provider/fold before source writes. Three UUID registry entries absent, draft4 with qualifying holdings, standardReward1/Revelation3. Startup/missing-fixture failures retained. Browser controls are AFTER unmodified controls."
+  },
+  "journey300": {
+    "event": "journey300_summary",
+    "folds": 300,
+    "events": 4650,
+    "replays": 300,
+    "entities": {
+      "2dcf92bf-93b3-400c-ab97-69d3098f8868": {
+        "includedFolds": 300,
+        "modifierApplications": 2250
+      },
+      "1c505034-e405-495d-8418-6e3c06d974f0": {
+        "includedFolds": 300,
+        "modifierApplications": 500
+      },
+      "cd81a49d-df58-4e0e-b1b2-33a82b386052": {
+        "includedFolds": 300,
+        "modifierApplications": 600
+      }
+    },
+    "thresholds": {
+      "below": 100,
+      "at": 100,
+      "above": 100
+    },
+    "extraPicks": 300,
+    "rewardChoices": 300,
+    "revelationChoices": 300,
+    "scope": "Actual three catalog UUIDs and production journey registry; synthetic public providers and journeys. Qualified journey-layer fold/replay exercise, not battle weighted fuzz coverage or browser proof.",
+    "receipt": "helper-validation/journey300-strict.receipt.json",
+    "qualification": "Actual production threeUUID registry; stable synthetic public content/providers; strict JSON snapshots and full replay. Supplemental proper journey-layer run, not battleweighted coverage/browser proof. Reward post-preparation loss asserted each fold; full Revelation loss/import exercised by synthetic contracts and nativeQA."
+  },
+  "battleApplicability": {
+    "requiredWeightedGames": 300,
+    "actualExit": 1,
+    "actualGames": 0,
+    "cause": "Journey-only authored battle ability list empty; required exact command attempted, not waived or predetermined.",
+    "preflight": {
+      "exitCode": 0,
+      "basePresencePass": 6,
+      "ineligibleVariantsSkip": 54,
+      "journeyClauseExercised": false
+    },
+    "sweep": {
+      "exitCode": 0,
+      "basePresencePass": 6,
+      "ineligibleVariantsSkip": 54,
+      "journeyClauseExercised": false,
+      "invocation": "sweep-mg4hnp/run-z2Wl9X"
+    }
+  },
+  "validationQualification": "Locked full-final369files6569 passed on exact unchanged crosscutting rules/contracts; only later functional delta is admitted two DraftScreen token constants. Renderer-focused7files120, review244files4910 and Knip passed; five final Draft D/M and twelve final Rosemary D/M native workflows passed. No duplicate full solely two visual constants or byte-exact restoration. Final evidence review244files4910 passed53.855452s; Knip passed3.133615s. Only metadata mappings/timings follow these terminals; functional bytes unchanged. Parent owns certified gate/release and fresh core/cold visual review. Recovery combined source has now passed focused120, review5052, Knip/schema and one heavy-locked full369files6711/bundle. Own18 functional bytes equal ccc; combined2372 current-source manifest retained. Original native/300/cold visual source qualifications remain explicit; no repeats.",
+  "failurePaths": {
+    "midStepError": {
+      "description": "Public fold contains throwing Draft provider and targeted-site provider; state identity, pool and modifier logs stay atomic. Aggregate safe-integer overflow bounces before any offer/pool write.",
+      "tests": [
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "contains mid-preparation failure atomically in the public log and replay"
+        },
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "contains an aggregate count overflow before any offer or pool write"
+        },
+        {
+          "file": "src/rules/journey/journey-draft-sites.contracts.ts",
+          "name": "contains provider failure without a partial prepared mode or pool write"
+        }
+      ]
+    },
+    "reload": {
+      "description": "Public strict JSON LOAD and replay preserve quoted count, alternatives, pool and target mode; all17 final D/M cells reload exact persisted game/head through public repository checkpoint+tail observer.",
+      "tests": [
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "replays and reloads exact choices, requested counts and pool after administrative edits"
+        },
+        {
+          "file": "src/rules/journey/journey-draft-sites.contracts.ts",
+          "name": "uses live holdings before %s preparation and keeps prepared mode after loss"
+        },
+        {
+          "file": "src/rules/journey/journey-draft-sites.contracts.ts",
+          "name": "retains prepared mode and random history on loss and replay (%j)"
+        }
+      ]
+    },
+    "partialWrite": {
+      "description": "Offer/provider failure commits no pool/mode/log partial state; sequentially stale choices cannot grant twice. Existing preparation runtime retains independently quoted content.",
+      "tests": [
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "contains mid-preparation failure atomically in the public log and replay"
+        },
+        {
+          "file": "src/rules/journey/journey-draft-sites.contracts.ts",
+          "name": "contains provider failure without a partial prepared mode or pool write"
+        },
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "grants an additional offered card by UUID exactly once and excludes all shown cards on the next offer"
+        }
+      ],
+      "applicability": "Atomic domain/fold preparation is exercised. No new asynchronous repository write, cross-resource transaction or independently committed side effect is introduced; a crash midway through existing IndexedDB persistence is not a new bead-specific contract."
+    },
+    "invalidOrStale": {
+      "description": "Unknown/stale site/card and concurrent unknown choice windows bounced without pool spend; exact shown UUID grant once; target stale/visited/decline/replacement contracts pass.",
+      "tests": [
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "rejects invalid/stale entry or pick and concurrent unknown windows without spending the pool"
+        },
+        {
+          "file": "src/rules/journey/journey-draft-sites.contracts.ts",
+          "name": "accepts an exact shown %s UUID with replacement, rejects stale answers and supports decline"
+        },
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "replays and reloads exact choices, requested counts and pool after administrative edits"
+        }
+      ]
+    },
+    "concurrentActors": {
+      "description": "Public reducer rejects a simulated unknown intervening actor window without a pool/state write. The bead adds synchronous quote/projection rules, with no new CAS/storage protocol; actual simultaneous browser writers are not exercised. Normal sequential stale UUID answers and grant-once contracts are separate.",
+      "tests": [
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "rejects invalid/stale entry or pick and concurrent unknown windows without spending the pool"
+        }
+      ]
+    }
+  },
+  "failedAttempts": {
+    "headless": [
+      {
+        "name": "focused-final",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-draft.test.ts",
+          "src/rules/journey/draft-sites.test.ts",
+          "src/rules/journey/journey-sites.test.ts",
+          "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+          "src/rules/journey/modifier-registry.test.ts",
+          "src/rules/journey/sites-rewards.test.ts"
+        ],
+        "start": "2026-10-13T06:02:52.945538+00:00",
+        "end": "2026-10-13T06:02:59.579660+00:00",
+        "elapsedS": 6.633990625006845,
+        "exitCode": 1,
+        "pid": 79993,
+        "parentPid": 79983,
+        "hostLoadStart": "{ 4.73 5.36 7.07 }",
+        "receipt": "helper-validation/focused-final.receipt.json"
+      },
+      {
+        "name": "focused1",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-draft.test.ts",
+          "src/rules/journey/draft-sites.test.ts",
+          "src/rules/journey/journey-sites.test.ts",
+          "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+          "src/rules/journey/modifier-registry.test.ts",
+          "src/rules/journey/sites-rewards.test.ts"
+        ],
+        "start": "2026-10-13T05:36:11.166765+00:00",
+        "end": "2026-10-13T05:36:16.354531+00:00",
+        "elapsedS": 5.187635499998578,
+        "exitCode": 1,
+        "pid": 32919,
+        "parentPid": 32904,
+        "hostLoadStart": "{ 9.31 15.21 13.39 }",
+        "receipt": "helper-validation/focused1.receipt.json"
+      },
+      {
+        "name": "focused2",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/journey/journey-draft.test.ts",
+          "src/rules/journey/draft-sites.test.ts",
+          "src/rules/journey/journey-sites.test.ts",
+          "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+          "src/rules/journey/modifier-registry.test.ts",
+          "src/rules/journey/sites-rewards.test.ts"
+        ],
+        "start": "2026-10-13T05:37:15.804863+00:00",
+        "end": "2026-10-13T05:37:23.841113+00:00",
+        "elapsedS": 8.036165416007861,
+        "exitCode": 1,
+        "pid": 37296,
+        "parentPid": 37282,
+        "hostLoadStart": "{ 9.75 13.87 13.00 }",
+        "receipt": "helper-validation/focused2.receipt.json"
+      },
+      {
+        "name": "journey300",
+        "command": [
+          "/usr/bin/lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "./node_modules/.bin/tsx",
+          "/tmp/root-267/helper/journey-300.mts"
+        ],
+        "start": "2026-10-13T05:50:49.550900+00:00",
+        "end": "2026-10-13T05:50:50.384379+00:00",
+        "elapsedS": 0.8333898339915322,
+        "exitCode": 1,
+        "pid": 36046,
+        "parentPid": 36032,
+        "hostLoadStart": "{ 3.04 5.74 9.42 }",
+        "receipt": "helper-validation/journey300.receipt.json"
+      },
+      {
+        "name": "lint-repair",
+        "command": [
+          "npm",
+          "run",
+          "lint"
+        ],
+        "start": "2026-10-13T05:42:43.907523+00:00",
+        "end": "2026-10-13T05:42:49.728264+00:00",
+        "elapsedS": 5.820599749989924,
+        "exitCode": 1,
+        "pid": 70824,
+        "parentPid": 70763,
+        "hostLoadStart": "{ 15.00 14.10 13.58 }",
+        "receipt": "helper-validation/lint-repair.receipt.json"
+      },
+      {
+        "name": "review1",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "start": "2026-10-13T05:39:58.174986+00:00",
+        "end": "2026-10-13T05:40:49.391922+00:00",
+        "elapsedS": 51.21636745799333,
+        "exitCode": 2,
+        "pid": 53752,
+        "parentPid": 53741,
+        "hostLoadStart": "{ 14.04 15.97 14.12 }",
+        "receipt": "helper-validation/review1.receipt.json"
+      },
+      {
+        "name": "weighted300",
+        "command": [
+          "/usr/bin/lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "2dcf92bf-93b3-400c-ab97-69d3098f8868,cd81a49d-df58-4e0e-b1b2-33a82b386052,1c505034-e405-495d-8418-6e3c06d974f0"
+        ],
+        "start": "2026-10-13T05:50:19.105454+00:00",
+        "end": "2026-10-13T05:50:20.025881+00:00",
+        "elapsedS": 0.9203004169976339,
+        "exitCode": 1,
+        "pid": 35347,
+        "parentPid": 35338,
+        "hostLoadStart": "{ 3.14 6.03 9.65 }",
+        "receipt": "helper-validation/weighted300.receipt.json"
+      },
+      {
+        "start": "2026-10-13T05:05:03.618746+00:00",
+        "end": "2026-10-13T05:05:05.032552+00:00",
+        "elapsedS": 1.4136834999953862,
+        "exitCode": 1,
+        "command": "./node_modules/.bin/tsx /tmp/root-267/helper/before.mts",
+        "scope": "Identical public BEFORE witness, ESM extension handles existing top-level-await module. Initial CJS startup failure preserved.",
+        "receipt": "helper-validation/before-esm-receipt.json"
+      },
+      {
+        "start": "2026-10-13T05:04:53.430883+00:00",
+        "end": "2026-10-13T05:04:55.772992+00:00",
+        "elapsedS": 2.3419837500114227,
+        "exitCode": 1,
+        "command": "./node_modules/.bin/tsx /tmp/root-267/helper/before.ts",
+        "scope": "Headless public BEFORE witness; existing synthetic fixtures and registered public provider; all three production modifier UUID lookups.",
+        "receipt": "helper-validation/before-receipt.json"
+      }
+    ],
+    "native": [
+      {
+        "name": "control-draft-1",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root-267/helper/qa-baseline.mjs",
+          "--bead",
+          "hv-umm2.267",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "900",
+          "--port",
+          "5174",
+          "--arg",
+          "scene=draft"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+        "start": "2026-10-13T13:02:46.149400+00:00",
+        "pid": 27003,
+        "pgid": 26995,
+        "parentPid": 26995,
+        "wrapperPgid": 26995,
+        "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+        "end": "2026-10-13T13:02:57.235418+00:00",
+        "elapsedS": 11.085935582988895,
+        "exitCode": 2,
+        "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+      },
+      {
+        "name": "draft5-1",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root-267/helper/qa-draft.mjs",
+          "--bead",
+          "hv-umm2.267",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "900",
+          "--port",
+          "5174",
+          "--arg",
+          "clams=1",
+          "--arg",
+          "urchins=0",
+          "--arg",
+          "threshold=false"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+        "start": "2026-10-13T13:18:24.237672+00:00",
+        "pid": 78411,
+        "pgid": 78403,
+        "parentPid": 78403,
+        "wrapperPgid": 78403,
+        "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+        "end": "2026-10-13T13:18:38.410860+00:00",
+        "elapsedS": 14.173100415995577,
+        "exitCode": 1,
+        "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+      },
+      {
+        "name": "draft5-diagnostic-2",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root-267/helper/qa-draft.mjs",
+          "--bead",
+          "hv-umm2.267",
+          "--viewports",
+          "desktop",
+          "--timeout",
+          "900",
+          "--port",
+          "5174",
+          "--arg",
+          "clams=1",
+          "--arg",
+          "urchins=0",
+          "--arg",
+          "threshold=false"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+        "start": "2026-10-13T13:24:12.076715+00:00",
+        "pid": 85864,
+        "pgid": 85856,
+        "parentPid": 85856,
+        "wrapperPgid": 85856,
+        "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+        "end": "2026-10-13T13:24:28.449811+00:00",
+        "elapsedS": 16.37298883299809,
+        "exitCode": 1,
+        "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+      },
+      {
+        "name": "rosemary-Reward-prepared-loss-1",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/root-267/helper/qa-rosemary.mjs",
+          "--bead",
+          "hv-umm2.267",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "900",
+          "--port",
+          "5174",
+          "--arg",
+          "type=Reward",
+          "--arg",
+          "mode=prepared-loss"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-draft267-root",
+        "start": "2026-10-13T13:56:11.281586+00:00",
+        "pid": 67280,
+        "pgid": 67270,
+        "parentPid": 67270,
+        "wrapperPgid": 67270,
+        "resourcePolicy": "Native runner alone owns server group, MCP client/provider/session/context and browser slot. Actual metadata comes from its retained output/owner records; nothing guessed.",
+        "end": "2026-10-13T13:56:36.147265+00:00",
+        "elapsedS": 24.865465250011766,
+        "exitCode": 1,
+        "qualification": "CLI terminal only. Native cleanup output/owner records and scoped process/listener census must independently establish all resources settled."
+      }
+    ],
+    "qualification": "All failed raw receipts/stdout/stderr/sources retained. Initial own fixtures and .at/lib/lint corrections, routing completion, missing MCP result after completed desktop normal Save, five-card counter/HUD overlap, and intentional Reward dialog editor obstruction are distinct. Failed runs never counted as full passes; mobile cells of early-stopped runs unexecuted."
+  },
+  "qa": {
+    "finalDraftInvocations": [
+      "run-mjiRmt",
+      "run-8jFje6",
+      "run-DfawBa",
+      "run-Gv2f9S",
+      "run-3OZ24i"
+    ],
+    "finalRosemaryInvocations": [
+      "run-UFVFLY",
+      "run-GZwRy0",
+      "run-yuLfbH",
+      "run-OYhvlt",
+      "run-2rAbaY",
+      "run-C2cCDg",
+      "run-3TWtTy",
+      "run-ZuSCtS",
+      "run-M5xrnf",
+      "run-SnPdro",
+      "run-QdvAlL",
+      "run-Skjx51"
+    ],
+    "viewports": [
+      "desktop1440x900",
+      "mobile390x844"
+    ],
+    "capturesQualification": "Actual2x PNGs2880x1800 and780x1688; image filenames only in canonical ledger. Parent/author visual observations cover5/dense8 and Rosemary choices/replacement; Fresh parent cold visual completed separately, with three source-verified rejected findings and both invalid attempts retained.",
+    "observerQualification": "Observer-only adaptation reuses exact598-v3 public readGame/readEvents/foldEvents/GAME_ENGINE_CONFIG, all5allowed imports. Checkpoint plus committed tail folded.lastSeq equals stored summary.head; reread requires stable same head. Each labeled record retains state/gameId/head/checkpointSeq/eventTail via JSON carry and native result. No portable Save claim. URL extraction inside qa.read browser context. All original normalUI mutations/geometry/log/Caps assertions unchanged.",
+    "rewardBrowserAdministrativeHoldingLoss": false,
+    "rewardPreparedLossQualification": "Reward pending modal intentionally covers normal editor; X declines. Native prepared-reload-choice exercises preparation/reload/choice. Both-target synthetic public contracts and actual300 Reward loss/replay separately prove holding loss. Revelation native prepared-loss actually removed everyRosemary copy after preparation in both viewports.",
+    "rosemarySemanticReceipt": "native-receipts/rosemary-final-semantic-summary.json",
+    "geometry": "Positive actual card/choice/replacement hit ownership, counter/hud bounds and nonempty held UUID multiset. Final desktop5counter780.3125 andHUD790 clearance9.6875; mobilecounter717.71875/HUD774 clearance56.28125. Caps buffers empty in all finalcells.",
+    "logging": "Positive per-eligible-source UUID rows; Draft requested/quoted/actual counts; Rosemary once0\u21921; absent/natural modes zero logs; exact event heads/tails retained.",
+    "ledger": {
+      "nativeSweepRows": 60,
+      "supplementalRows": 39,
+      "judgedPassRows": 6,
+      "sampledEntities": 2,
+      "retainedSupersededFailedRows": 3,
+      "totalRows": 99
+    }
+  },
+  "resources": {
+    "nativeInvocations": 26,
+    "ownedProcessGroups": 52,
+    "groupMembers": [],
+    "receipt": "native-receipts/whole-group-audit-final-matrix.json",
+    "normalNativeCleanupAll": true,
+    "browserContextIdentity": "unknown when not published; actual MCP SID/provider/owner token/slot/port metadata retained per invocation",
+    "sharedMcpService": "Existing shared PID2298 service not owned/killed",
+    "restorationReceipt": "native-receipts/final-restoration-verification.json",
+    "functionalCount": 2363,
+    "testedAggregate": "f2998e73efc14639048b30c1fa821b997f3d72825548a00c0a6a8b7395f0aa28",
+    "headlessPids": "All saved checks terminal; final exact PID census retained before frozen handoff"
+  },
+  "coldReview": {
+    "required": true,
+    "owner": "Parent",
+    "routing": "Fresh read-only CodexCLI gpt-5.6-sol under temporary user override through2026-10-14T01:00Z; helper invokes no reviewer"
+  },
+  "finalFreeze": {
+    "at": "2026-10-13T15:02:43.935674+00:00",
+    "pending": false,
+    "functionalSourceFrozen": true,
+    "functionalCount": 2372,
+    "testedAggregate": "11aec71cfa048e1c63d36d482c6f15338c419695e140c76f8a3d21c4d0b38a72",
+    "sourcePaths": 18,
+    "evidenceAndRulesPaths": 7,
+    "commitPendingSeparateAck": false,
+    "recoveryHead": "2ec715e6c75a9544ac49d0893dbfe2f78285eff1",
+    "recoveryBase": "6d69c65acedd2dbaa8858e54d57afd2851eb8dd5",
+    "prospectiveEndpoint": "2026-10-13T15:06:32.204377+00:00",
+    "finalAmendAck": "2026-10-13T15:05:21.957065Z"
+  },
+  "parentVisualReview": {
+    "owner": "Parent",
+    "routing": "Fresh read-only CodexCLI gpt-5.6-sol; same-family route under temporary user override expires2026-10-14T01:00Z.",
+    "sessionId": "01a135ae-4d2e-7f83-92a8-f0df22ebafa8",
+    "successfulReceipt": {
+      "start": "2026-10-13T14:32:57.348618+00:00",
+      "end": "2026-10-13T14:34:22.382933+00:00",
+      "elapsedS": 85.03364729197347,
+      "exitCode": 0,
+      "pid": 69785,
+      "pgid": 69785,
+      "wrapperPid": 69784
+    },
+    "readOnly": true,
+    "images": [
+      {
+        "invocation": "run-mjiRmt",
+        "filename": "draft-modified5-desktop.png"
+      },
+      {
+        "invocation": "run-mjiRmt",
+        "filename": "draft-modified5-mobile.png"
+      },
+      {
+        "invocation": "run-Gv2f9S",
+        "filename": "draft-modified8-desktop.png"
+      },
+      {
+        "invocation": "run-Gv2f9S",
+        "filename": "draft-modified8-mobile.png"
+      },
+      {
+        "invocation": "run-2rAbaY",
+        "filename": "Reward-replace-prepared-desktop.png"
+      },
+      {
+        "invocation": "run-2rAbaY",
+        "filename": "Reward-replace-prepared-mobile.png"
+      },
+      {
+        "invocation": "run-2rAbaY",
+        "filename": "Reward-replace-replacement-desktop.png"
+      },
+      {
+        "invocation": "run-2rAbaY",
+        "filename": "Reward-replace-replacement-mobile.png"
+      }
+    ],
+    "invalidAttempts": [
+      {
+        "receipt": {
+          "start": "2026-10-13T14:29:23.931605+00:00",
+          "end": "2026-10-13T14:29:24.082266+00:00",
+          "elapsedS": 0.15060150000499561,
+          "exitCode": 1,
+          "pid": 65547,
+          "pgid": 65547,
+          "wrapperPid": 65543
+        },
+        "reason": "Initial argv parser failure before review; no findings accepted."
+      },
+      {
+        "receipt": {
+          "start": "2026-10-13T14:29:44.610334+00:00",
+          "end": "2026-10-13T14:32:37.744857+00:00",
+          "elapsedS": 173.13373983299243,
+          "exitCode": -15,
+          "pid": 66169,
+          "pgid": 66169,
+          "wrapperPid": 66168
+        },
+        "reason": "Parent invalidated review scope expansion into infrastructure/computer use, interrupted exact own group and verified drain. No findings accepted."
+      }
+    ],
+    "dispositions": [
+      {
+        "priority": "P1",
+        "finding": "Mobile eight-card thumbnail small text",
+        "disposition": "rejected",
+        "verifiedBy": "Parent source verification of complete existing reading contract",
+        "proof": [
+          "DraftScreen.tsx:292\u2013301 retains canonical GameCard",
+          "CardView.tsx:1768 full-UUID reading spec/onActivate binding",
+          "CumulusRoot.tsx:8 reading coordinator",
+          "reading context:884\u2013944 normal touch reveal / hold300ms suppresses pick",
+          "reading geometry:279/296 separates105px thumbnail from175.5px reading copy, not pressInPlace",
+          "Existing GameCardReveal.test quick/hold/drag contract executed in unchanged-component full suite"
+        ],
+        "qualification": "Native final grid/button/counter/HUD geometry passes. This disposition uses existing source/test reading contract; no added native hold-preview exercise or false readable-thumbnail claim."
+      },
+      {
+        "priority": "P2",
+        "finding": "Held replacement art lacks a separate current label",
+        "disposition": "rejected",
+        "reason": "Existing semantic title/incoming label/per-held Replace grouping; byte-equal baseline dialog. Visual preference outside changed behavior.",
+        "baselineReceipt": "visual-baseline-byte-guard.json"
+      },
+      {
+        "priority": "P2",
+        "finding": "Conspicuous underlying desktop HUD at transparent modal",
+        "disposition": "rejected",
+        "reason": "Existing transparent modal presentation; DreamscapeScreen/GlassDialog byte-equal baseline; normal modal shields interaction. Outside changed behavior.",
+        "baselineReceipt": "visual-baseline-byte-guard.json"
+      }
+    ],
+    "resources": "Parent exact69785/69784 and whole69785 group drained after actual exit0. Both invalid attempt groups drained; helper invokes no reviewer.",
+    "acceptedFindings": 0,
+    "coreReview": "Parent exact source-commit detached-snapshot Sol core review remains asynchronous after commit/candidate; no speculative OID."
+  },
+  "proposalProvenance": {
+    "stage1-proposal.md": "20c34affa17f18c74c3a8504086a196f2cf564fef0cb610f32817f7bb6f81247",
+    "stage1-composition-addendum.md": "aefd2f6ffe58aad565b3f17b271977105b096cb27277f06e433f80ca6d3dfa6e",
+    "renderer-proposal.md": "26360a9b6d7a0eb110d1a9cd2df37a347dee464667a58eb0f0bce272d9a4210a",
+    "rosemary-modal-observer-proposal.md": "9caa61331868513f7aa6d7c8887dc032d1df6db5260439dae89772508b6e9423"
+  },
+  "originalBase": "fd4ca1e47ea791a08803b1ac319b9acf69ab8fa3",
+  "recovery": {
+    "kind": "Generated inventory merge-conflict clean-checkpoint recovery in same owned worktree",
+    "originalSource": "ccc0cc1f8d535599fa1b8cf082e58c8e9d89ce2a",
+    "conflictedCandidate": "01a135b9-1717-79d2-a24d-f9de751d684f",
+    "conflictFiles": [
+      "docs/plan/evidence/content-inventory.json"
+    ],
+    "conflictTargetBase": "6d69c65acedd2dbaa8858e54d57afd2851eb8dd5",
+    "candidateQualification": "Terminal merge-conflict before any prepared attempt generation or buildset; not a check failure.",
+    "diagnose": {
+      "exitCode": 5,
+      "preparedGeneration": null,
+      "timing": "Not observed by helper; parent native result retained."
+    },
+    "firstUpdate": {
+      "start": "2026-10-13T14:45:33.134087+00:00",
+      "end": "2026-10-13T14:45:33.687497+00:00",
+      "elapsedS": 0.5533201670041308,
+      "exitCode": 5
+    },
+    "rollback": "Native exit5 rolled back exactly to clean ccc source, no rebase metadata/pendingintent, healthydoctor verified by parent.",
+    "temporaryCheckpoint": {
+      "bead": "hv-umm2.267",
+      "purpose": "Temporary clean checkpoint only; parent native update pending",
+      "sourceOid": "ccc0cc1f8d535599fa1b8cf082e58c8e9d89ce2a",
+      "checkpointOid": "f4169d8ac58e8d50485fff7cb35436a3d2ddeba2",
+      "baseInventorySha256": "0b0294772c86cab992b7c293635027aedde2217ad57a86a9812afa4788415f97",
+      "baseInventoryBytes": 1040804,
+      "otherPathCount": 24,
+      "unchanged24Hashes": {
+        "docs/plan/evidence/friction/hv-umm2.267.json": "cc99e558ddb48e91deb9f2f34723f9056777774636c5a30835134f7cae69922c",
+        "docs/plan/evidence/measurements/hv-umm2.267.json": "36050e65b3b48b47a116eae45dcb96260f093372c7eb48611cf617313bba6cd3",
+        "docs/plan/evidence/pre-existing/hv-umm2.267.md": "95d1f41e6cf93a3d5d9e07666a26e4af47888155d2515522b9d75b71a0739bc2",
+        "docs/plan/evidence/qa-ledger/hv-umm2.267.jsonl": "829c7ca71db4ed8f2f60140336dbc4a6326507767c4d7b340ea6c5f04d38aa6f",
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.267-1.md": "1e8d81ea7b7f9d5362fcda46e154f9a2439f0f1776e8952f2cce37add07e0eda",
+        "docs/rules.md": "49110ce22aca4b70f2402aae67ecf3c1217eb32d0031d12409f3a5305a86638b",
+        "src/content/define.ts": "639a1cd36a4f653b70fd377a156271ad9ee8b3894b1b909f3cd6cdfabf14de4a",
+        "src/content/dreamsigns/clam-shell-2dcf92bf.ts": "bc3bd5248fa7466ee11c8a204f30e399149734501d2f4b987a996bca2d202e62",
+        "src/content/dreamsigns/rosemary-cd81a49d.ts": "6ef4f4c54a5e811d5be4dfe5e4d0b8b763a135a7d7b650b8d55eaad875173c84",
+        "src/content/dreamsigns/sea-urchin-1c505034.ts": "1a1d652890b474f9920e46915d79311d7d314a0e284d68635c8ff8fa3180e031",
+        "src/cumulus/screens/DraftScreen.tsx": "6c61fd32d9036b836ec34988c3583994866b89e536c36768996e2bb765087521",
+        "src/rules/journey/draft.ts": "f1035e83010dcfffdb0d6f43adeed50b94234883df9624724e924edc60d28805",
+        "src/rules/journey/journey-draft-sites.contracts.ts": "e0db84582e2a7448f7ec61e4ecdb681082c9ad5c271dc422cefab63b2bb9f495",
+        "src/rules/journey/journey-draft.test.ts": "83d94536a8631d03fc95197b48385e363d3568782ec0054c5694002eb9ce13fc",
+        "src/rules/journey/journey-draft.ts": "95a4e5b08f09371fe251369280f9aa04b202796c497689cf8109507c82561848",
+        "src/rules/journey/journey-sites.ts": "ee55136a7aa48c616b150e2b7e56c2f192635b47a99d1e0d967519cd6be24754",
+        "src/rules/journey/lifecycle.ts": "c6d3873798a544195ac68655fc61c80d57ce853b197f1e22ae3ef0d82e2ff531",
+        "src/rules/journey/modifier-registry.ts": "5ec90af19ac6241684cc0fa34afb842eeb2b1eed0bee81025a3f67d296fe2979",
+        "src/rules/journey/sites.ts": "3e0b4b0d9f350286332d447d8ca3765e9bfe3b01094dcec5bb8358484939c4a2",
+        "src/rules/reducer.ts": "ac2e59daaa7e495b74947107f51aca89119bc79beca814a41a3e96b56676a3d2",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts": "2f73247d1031cf160123611ff45a17b3459f4f6e18912a5539005be2d44f9ad6",
+        "src/screens/cumulus_adapters/dreamscape-view-model.ts": "89895e6829bd36f830bd460850fce56b295fb171803b33d61a23badf0211e792",
+        "src/types/draft.ts": "a82bbad75ff10590b6216eeb125f78edca9d56dcb3d490214485c80463c82e81",
+        "src/types/journey.ts": "1dfaa029607cdbcae76cd1792d3b0fd653a15b48b45bfe51f9945c23543c8a2d"
+      },
+      "otherMismatches": [],
+      "start": "2026-10-13T14:47:46.362905+00:00",
+      "end": "2026-10-13T14:47:46.388140+00:00",
+      "elapsedS": 0.05473604198778048,
+      "amendPid": 66949,
+      "wrapperPid": 66918,
+      "exitCode": 0,
+      "cleanStatus": "",
+      "automaticGitMetadata": "f4169d8ac58e8d50485fff7cb35436a3d2ddeba2\n2026-10-13T07:47:46-07:00\n2026-10-13T07:43:54-07:00\n6a2d391a9d3ba5def57ad019408c946cf49cf984\nfeat(journey): quote expanded draft offers and targeted enhancements\n\nAuthor the three filed Dreamsign UUIDs with immutable catalog text and typed\njourneyDraft / journeySites descriptors. Each fresh Draft offer quotes the\ncatalog base count plus qualifying held copies, persists the requested count,\nand preserves choices and pool through administrative changes, reload and\nreroll. Safe-integer aggregate failure is atomic and logs carry source UUIDs.\n\nProject Rosemary onto unopened free Reward and Revelation sites, snapshot\nprepared enhanced mode, and exclude effective targeted enhancement from\nRainbow Mushroom random entitlement eligibility through the supplied registry.\nRetain natural modes, held-order composition and exact existing answer quotes.\nReserve Draft rows and counter/HUD token spacing for four through eight choices.\n\nVerify deterministic public contracts, strict 300-fold journey replay and the\nfull unchanged crosscutting suite; final focused/review/Knip and seventeen\nnative desktop/mobile workflows qualify the renderer and affected sites.\nRecord the required weighted battle fuzz applicability rejection, native\npresence sweep, D21 judgments, all failed attempts, prepared Reward browser\nloss limitation, exact temporary-scene restoration and cold visual dispositions.\n\nBead: hv-umm2.267\n\n",
+      "dateOverrides": false,
+      "stdout": "[wt/journey-draft267-root f4169d8ac] feat(journey): quote expanded draft offers and targeted enhancements\n Date: Tue Oct 13 07:43:54 2026 -0700\n 24 files changed, 3132 insertions(+), 26 deletions(-)\n create mode 100644 docs/plan/evidence/friction/hv-umm2.267.json\n create mode 100644 docs/plan/evidence/measurements/hv-umm2.267.json\n create mode 100644 docs/plan/evidence/pre-existing/hv-umm2.267.md\n create mode 100644 docs/plan/evidence/qa-ledger/hv-umm2.267.jsonl\n create mode 100644 docs/plan/evidence/rules-decisions/RD-hv-umm2.267-1.md\n create mode 100644 src/rules/journey/journey-draft-sites.contracts.ts\n create mode 100644 src/rules/journey/journey-draft.test.ts\n create mode 100644 src/rules/journey/journey-draft.ts\n",
+      "stderr": "",
+      "noNativeUpdateOrSubmission": true,
+      "noRegenerationOrEvidenceEditsOrChecks": true
+    },
+    "successfulParentUpdate": {
+      "start": "2026-10-13T14:48:14.496884+00:00",
+      "end": "2026-10-13T14:48:16.863226+00:00",
+      "elapsedS": 2.366190667002229,
+      "exitCode": 0
+    },
+    "updatedHead": "2ec715e6c75a9544ac49d0893dbfe2f78285eff1",
+    "updatedParentBase": "6d69c65acedd2dbaa8858e54d57afd2851eb8dd5",
+    "laterStagingAdvance": "Unrelated efb28a66 descendant does not require another native update; parent remains sole update/submission owner.",
+    "regeneration": {
+      "base": "6d69c65acedd2dbaa8858e54d57afd2851eb8dd5",
+      "head": "2ec715e6c75a9544ac49d0893dbfe2f78285eff1",
+      "statusChanges": [
+        {
+          "uuid": "0d848dc8-a1a2-410b-b19a-b5f65375e141",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "151b80b1-0a3f-48d4-9c85-99a9c274fd7f",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "3cc9253a-4db6-4b02-92d6-a37805d192fb",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "45e3d703-7efc-4dc2-b854-33211f8d4f11",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "58f96494-87ec-4145-9e1c-95951d0ab711",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "5931e388-1856-4e5a-85f8-a5aa34f867b1",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "747859fb-6fca-49fc-a653-08011a9bb44c",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "82749215-ed35-44e3-a745-72ca76036c7c",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "8367b757-c3d2-4c22-9043-8baadee1c5ba",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "84fd9c6e-79c6-4b65-878b-1534f3e4b220",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "8a6fc6ea-9a88-441e-bdc2-d40dfec37481",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "8c117d3f-09af-4312-9897-694a76bd23c6",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "cbabe603-1333-42bd-85c0-555c664b60b3",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "d6ec65a2-d61e-4617-bdd0-75d5573c063d",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "f7ffe999-685d-4ea2-85de-2e567eb2a042",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "16b579fe-c15b-4df6-8262-d45ce44732ae",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "6488452d-4e9e-466c-96df-716d4ec646b1",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "ba973428-6d90-4847-b779-cb7e25a5ac84",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "1a524712-ef7e-43d9-bd79-5dea5250bf08",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "1c505034-e405-495d-8418-6e3c06d974f0",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "2dcf92bf-93b3-400c-ab97-69d3098f8868",
+          "before": "pending",
+          "after": "authored"
+        },
+        {
+          "uuid": "cd81a49d-df58-4e0e-b1b2-33a82b386052",
+          "before": "pending",
+          "after": "authored"
+        }
+      ],
+      "authoredPeerStatusRegressions": [],
+      "ownFunctionalCount": 18,
+      "ownFunctionalMismatches": [],
+      "generatorUnchangedFromUpdatedBase": true,
+      "generatorUnchangedFromOriginalSource": false,
+      "newInventorySha256": "ba602dc9acaa778ebb1a4f36bf543501341a40aeab7b357b8783503633c4c705",
+      "diagnosticQualification": "First scratch parser assumed status on every entity and raised KeyError. Second wrongly asserted canonical generator equality to old ccc source; generator has a landed peer update. Fresh comparison proves generator byte-equal to updated base6d69c65, all18 own source hashes equal ccc and no peer authored-status regression. No generator/source edits."
+    },
+    "combinedManifest": {
+      "count": 2372,
+      "aggregateSha256": "11aec71cfa048e1c63d36d482c6f15338c419695e140c76f8a3d21c4d0b38a72",
+      "receipt": "helper-validation/functional-manifest-combined.json"
+    },
+    "sourcePreservation": "All18 own functional path bytes equal actual ccc source; other23 own paths preserved through parent update and exact18 own rules additions plus peer paragraphs retained. Changes after combined ACK are generated projection and own evidence only.",
+    "qaQualification": "All original native desktop/mobile, weighted applicability, proper public300 and successful visual evidence are tied to actual ccc source and its f299 manifest. Own journey/UI production bytes are unchanged in combined2372 tree. No browser or weighted diagnostic repeats authorized; one serial full combined check validates landed composition.",
+    "clockQualification": "Original dispatch2026-10-13T05:00:54.311Z remains gross start. Original ccc automatic committer14:43:54Z; temporary checkpoint committer14:47:46Z, originalauthor14:43:54 preserved; parent native rebase committer14:48:16Z. No forced dates; final automatic amend clock pending separate ACK. Final automatic amend authorized2026-10-13T15:05:21.957065Z; refreshed prospective cutoff 2026-10-13T15:06:32.204377+00:00. Actual final OID/committer metadata recorded outside tracked tree after terminal.",
+    "checksPending": [],
+    "combinedChecks": {
+      "focused": {
+        "exitCode": 0,
+        "files": 7,
+        "tests": 120,
+        "elapsedS": 7.072213582985569
+      },
+      "review": {
+        "exitCode": 0,
+        "files": 244,
+        "tests": 5052,
+        "elapsedS": 59.25808208400849
+      },
+      "knip": {
+        "exitCode": 0,
+        "elapsedS": 4.381932624994079
+      },
+      "schema": {
+        "exitCode": 0,
+        "elapsedS": 0.10886429200763814
+      },
+      "full": {
+        "exitCode": 0,
+        "files": 369,
+        "tests": 6711,
+        "outerElapsedS": 208.93184999999357,
+        "outerStart": "2026-10-13T14:58:11.477726+00:00",
+        "firstFramedStage": "2026-10-13T15:00:01.310Z",
+        "outerToFirstStageS": 109.832274,
+        "firstStageToTerminalS": 99.101092,
+        "testStageStart": "2026-10-13T15:00:23.685Z",
+        "testStageLoad": 6.65185546875,
+        "vitestDurationS": 72.26,
+        "testStageS": 72.8,
+        "qualification": "Outer elapsed includes heavy-lock acquisition plus launch. The first-stage interval does not isolate exclusive lock queue or CPU time. One actual locked combined run, two journey workers; bundle/types/lint/import cycles/Knip/schema all pass."
+      }
+    }
+  }
+}

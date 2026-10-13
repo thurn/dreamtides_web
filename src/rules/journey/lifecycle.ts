@@ -585,6 +585,9 @@ function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry):
     const field = value[key];
     if (field !== null && !isRecord(field)) return false;
   }
+  if (isRecord(value.draftState) && value.draftState.currentOfferCount !== undefined &&
+    (typeof value.draftState.currentOfferCount !== "number" ||
+      !Number.isSafeInteger(value.draftState.currentOfferCount) || value.draftState.currentOfferCount < 1)) return false;
   if (
     value.currentDreamscape !== null &&
     typeof value.currentDreamscape !== "string"

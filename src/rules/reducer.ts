@@ -576,11 +576,11 @@ export function routeDomain(
 
     // --- draft ---
     case "PICK_DRAFT_CARD":
-      return journeyCase(state, draft.pickDraftCard(journey, payload, ctx));
+      return journeyCase(state, draft.pickDraftCard(journey, payload, ctx, modifiers));
     case "REROLL_DRAFT_OFFER":
       return journeyCase(state, draft.rerollDraftOffer(journey, payload, ctx));
     case "ENTER_DRAFT_SITE":
-      return journeyCase(state, draft.enterDraftSite(journey, payload, ctx));
+      return journeyCase(state, draft.enterDraftSite(journey, payload, ctx, modifiers));
     case "SET_DRAFT_STATE":
       return journeyCase(state, draft.setDraftState(journey, payload));
 

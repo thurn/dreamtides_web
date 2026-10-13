@@ -1,4 +1,7 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
+
+export const journeySitesEffect = { kind: "enhanceSiteTypes", siteTypes: ["Reward", "DreamsignRevelation"] } as const;
 
 export default dreamsign({
   id: "cd81a49d-df58-4e0e-b1b2-33a82b386052",
@@ -9,5 +12,7 @@ export default dreamsign({
   rarity: "Common",
   tideIds: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
   tags: ["J16", "Tag OK"],
-  pending: true,
+  journeySites: journeySitesEffect,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("Dreamsign and dreamsign draft sites are enhanced."),
 });
