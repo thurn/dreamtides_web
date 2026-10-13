@@ -1,0 +1,340 @@
+{
+  "bead": "hv-umm2.594",
+  "phase": 5,
+  "implementationProvenance": {
+    "base": "80b47fa74c23daf006d4afcdf21424b48d6b57c8",
+    "conservativeStartUTC": "2026-10-13T00:10:34.333045Z",
+    "startScope": "Immediate parent-before-followup proxy; includes Stage1/research/admission/waits/checks/native QA through future final commit. Native claim00:09:01Z separately observed; exact tool dispatch/model start unobserved.",
+    "exactDispatch": "unobserved",
+    "modelStart": "unobserved",
+    "status": "acceptance-complete; final source commit prepared for parent-owned cold review/delivery",
+    "endpointUTC": "2026-10-13T00:55:25.059005+00:00",
+    "endpointScope": "Observed UTC immediately before final metadata/schema/staging/commit. Conservative gross window includes Stage1/admission/research/waits/QA through this packaging proxy. Exact actual commit invocation bracket and Git second-precision timestamp recorded outside WT at594-final-commit-receipt.json; no postcommit refinement/amendment.",
+    "implementMin": 44.84543266666667
+  },
+  "sourceScope": [
+    "src/cumulus/screens/DreamscapeScreen.tsx",
+    "src/cumulus/screens/dreamscape.test.tsx"
+  ],
+  "publicContract": {
+    "signatures": "unchanged",
+    "importers": [
+      "DreamscapeScreenAdapter.tsx",
+      "DreamscapeScreenAdapter.test.tsx",
+      "dreamscape.test.tsx",
+      "dreamscape-view-model.ts type-only imports"
+    ],
+    "semantics": "Pending selection is presentation intent only and never gates site activation. A present authoritative reward and still-present unvisited interactive selected site starts collection. Active model/reward loss cancels and releases timer/gating; successful visited-node continuation/current callback completes once.",
+    "domain": "Event/session/provider/fold unchanged. No guessed void/seq success; upstream append/error/CAS behavior is not repaired or suppressed."
+  },
+  "negative": {
+    "firstDirectAttempt": "594-negative-receipt.json failed import before tests: missing generated tokens; no behavior claim",
+    "preparedActualWitness": "594-negative-prepared-receipt.json:1 failed/5 passed; second site activation never called public callback before fix; final focused/review passes same case"
+  },
+  "failureAndRecoveryMap": [
+    {
+      "case": "no-effect/refused preparation, including no new projection after upstream failure/CAS",
+      "publicTests": "keeps site selection available after refused inline preparation; waits for authoritative preparation and permits retry before collecting once",
+      "native": "failure run-lpD4Xh both OPEN_SITE bounced invalid_action for site-1/site-2; retained exact source intentKeys/HUD107/held Pearl/interactive unvisited nodes/menu, no inline/modifier/completion; actual removal then same-UUID OPEN/ACCEPT once",
+      "qualification": "Raw private pool/runtime/reward snapshots not independently observed. Atomic bounced fold gives no applied mutation; documented source provenance and ordinary provider are unchanged."
+    },
+    {
+      "case": "delayed preparation",
+      "publicTests": "waits for authoritative preparation and permits retry before collecting once",
+      "qualification": "Synthetic controlled public view rerender; no elapsed provider guarantee"
+    },
+    {
+      "case": "pending request superseded/visited/removed",
+      "publicTests": "supersedes pending collection when selecting s-purge/s-reward; cancels a pending request when its site is visited/removed"
+    },
+    {
+      "case": "active reward/site disappears or component unmounts",
+      "publicTests": "cancels active collection when its reward/site/unmount disappears"
+    },
+    {
+      "case": "success/repeated activation/latest callback/cap choice",
+      "publicTests": "existing normal Essence latest-callback/visited continuation; completes a prepared Dreamsign once with replacement=false/true; existing UUID replacement/decline",
+      "native": "ordinary, Pearl free, cap replace/decline both viewports; one applied acceptance/completion + same-game reload each"
+    }
+  ],
+  "validations": [
+    {
+      "receipt": "594-focused-receipt.json",
+      "startUTC": "2026-10-13T00:26:42.104172+00:00",
+      "endUTC": "2026-10-13T00:26:50.729346+00:00",
+      "wallSeconds": 8.625131624998176,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 26.53955078125
+    },
+    {
+      "receipt": "594-knip-receipt.json",
+      "startUTC": "2026-10-13T00:28:38.460695+00:00",
+      "endUTC": "2026-10-13T00:28:44.749595+00:00",
+      "wallSeconds": 6.288875792000908,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 21.2255859375
+    },
+    {
+      "receipt": "594-negative-prepared-receipt.json",
+      "startUTC": "2026-10-13T00:25:04.041847+00:00",
+      "endUTC": "2026-10-13T00:25:10.305673+00:00",
+      "wallSeconds": 6.263699959003134,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 7.89697265625
+    },
+    {
+      "receipt": "594-negative-receipt.json",
+      "startUTC": "2026-10-13T00:24:53.912293+00:00",
+      "endUTC": "2026-10-13T00:24:55.918187+00:00",
+      "wallSeconds": 2.005791792005766,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 3.62109375
+    },
+    {
+      "receipt": "594-qa-cap-decline-nav60-receipt.json",
+      "startUTC": "2026-10-13T00:47:46.846986+00:00",
+      "endUTC": "2026-10-13T00:48:30.571750+00:00",
+      "wallSeconds": 43.724281832997804,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 17.3583984375
+    },
+    {
+      "receipt": "594-qa-cap-replace-nav60-receipt.json",
+      "startUTC": "2026-10-13T00:46:27.233368+00:00",
+      "endUTC": "2026-10-13T00:47:46.845878+00:00",
+      "wallSeconds": 79.61158920900198,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 18.33349609375
+    },
+    {
+      "receipt": "594-qa-control-diagnostic-receipt.json",
+      "startUTC": "2026-10-13T00:41:45.117087+00:00",
+      "endUTC": "2026-10-13T00:42:11.985562+00:00",
+      "wallSeconds": 26.867796999998973,
+      "exitCode": 0,
+      "diagnosticOnly": true,
+      "load1AtWrapperCompletion": 24.328125
+    },
+    {
+      "receipt": "594-qa-download-diagnostic-receipt.json",
+      "startUTC": "2026-10-13T00:34:11.552786+00:00",
+      "endUTC": "2026-10-13T00:34:57.394145+00:00",
+      "wallSeconds": 45.84060666699952,
+      "exitCode": 2,
+      "diagnosticOnly": true,
+      "load1AtWrapperCompletion": 6.7451171875
+    },
+    {
+      "receipt": "594-qa-failure-final-receipt.json",
+      "startUTC": "2026-10-13T00:38:02.532794+00:00",
+      "endUTC": "2026-10-13T00:38:37.067938+00:00",
+      "wallSeconds": 34.534742541000014,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 5.291015625
+    },
+    {
+      "receipt": "594-qa-failure-log-receipt.json",
+      "startUTC": "2026-10-13T00:36:47.435559+00:00",
+      "endUTC": "2026-10-13T00:37:13.130316+00:00",
+      "wallSeconds": 25.694467584005906,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 3.7490234375
+    },
+    {
+      "receipt": "594-qa-failure-path-receipt.json",
+      "startUTC": "2026-10-13T00:33:05.676019+00:00",
+      "endUTC": "2026-10-13T00:33:22.748765+00:00",
+      "wallSeconds": 17.07226354200975,
+      "exitCode": 2,
+      "load1AtWrapperCompletion": 11.67236328125
+    },
+    {
+      "receipt": "594-qa-failure-receipt.json",
+      "startUTC": "2026-10-13T00:31:31.336059+00:00",
+      "endUTC": "2026-10-13T00:32:00.218536+00:00",
+      "wallSeconds": 28.88163041700318,
+      "exitCode": 2,
+      "load1AtWrapperCompletion": 17.93310546875
+    },
+    {
+      "receipt": "594-qa-ordinary-final-receipt.json",
+      "startUTC": "2026-10-13T00:42:52.238605+00:00",
+      "endUTC": "2026-10-13T00:43:30.172402+00:00",
+      "wallSeconds": 37.93325004199869,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 26.91162109375
+    },
+    {
+      "receipt": "594-qa-ordinary-receipt.json",
+      "startUTC": "2026-10-13T00:39:15.453779+00:00",
+      "endUTC": "2026-10-13T00:39:43.087148+00:00",
+      "wallSeconds": 27.63298075000057,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 21.41162109375
+    },
+    {
+      "receipt": "594-qa-pearl-free-final-receipt.json",
+      "startUTC": "2026-10-13T00:43:30.176098+00:00",
+      "endUTC": "2026-10-13T00:44:11.301478+00:00",
+      "wallSeconds": 41.12492554199707,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 39.244140625
+    },
+    {
+      "receipt": "594-qa-pearl-free-nav60-receipt.json",
+      "startUTC": "2026-10-13T00:45:30.445992+00:00",
+      "endUTC": "2026-10-13T00:46:27.232514+00:00",
+      "wallSeconds": 56.78556562500307,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 23.39404296875
+    },
+    {
+      "receipt": "594-review-final-receipt.json",
+      "startUTC": "2026-10-13T00:27:47.503867+00:00",
+      "endUTC": "2026-10-13T00:28:07.727442+00:00",
+      "wallSeconds": 20.22341479199531,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 19.748046875
+    },
+    {
+      "receipt": "594-review-receipt.json",
+      "startUTC": "2026-10-13T00:27:06.445771+00:00",
+      "endUTC": "2026-10-13T00:27:23.795551+00:00",
+      "wallSeconds": 17.34965237499273,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 21.7138671875
+    }
+  ],
+  "validationSummary": {
+    "focused": {
+      "files": 4,
+      "cases": 32,
+      "wrapperSeconds": 8.625131624998176
+    },
+    "reviewFinal": {
+      "files": 6,
+      "cases": 58,
+      "wrapperSeconds": 20.22341479199531
+    },
+    "knip": {
+      "wrapperSeconds": 6.288875792000908
+    },
+    "full": "not applicable: private bounded UI presentation lifecycle; no public API/schema/config/test infrastructure/cross-cutting architecture change"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 116,
+    "jsdomFiles": 0
+  },
+  "testSupportScope": {
+    "touchedFiles": 1,
+    "addedLines": 116,
+    "deletedLines": 0,
+    "existingJsdomFilesTouched": 1,
+    "entrypointLines": 402,
+    "netDefinition": "Added minus deleted per binding workflow; no new file/jsdom entrypoint"
+  },
+  "hostLoadSamples": {
+    "scope": "1-minute load sampled at actual wrapper completion; listed per validation receipt. Raw receipt has all three averages. No starting-load or controlled performance claim.",
+    "primary": "594-review-final-receipt.json:19.748046875"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final npm review wrapper completion (1-minute load), not review-step start"
+      },
+      "localValidationS": {
+        "measuredFor": "actual prepared focused/review/Knip wrapper wall seconds; includes prepare and restore"
+      }
+    }
+  },
+  "nativeQA": {
+    "sourceFreeze": {
+      "UTC": "2026-10-13T00:31:11.232021+00:00",
+      "base": "80b47fa74c23daf006d4afcdf21424b48d6b57c8",
+      "functionalFileCount": 2408,
+      "treeSHA256": "b6dc717ef76250fa88e94bc34b6b39f42f1b516854c475a3add63b7815f44f87",
+      "qaBaseline": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "manifestReceipt": "artifacts/qa/hv-umm2.594/validation/594-freeze.json"
+    },
+    "temporarySceneBaselineSHA": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+    "temporarySceneSHA": "6f1b4411b2766a3e128bd0a5ab83f1c0055c2bc18c1df0368f5243af123677e0",
+    "originalAdmission": "594-write-ack.txt; revised public event-log/DOM observation594-observation-ack.txt",
+    "cases": {
+      "failure": "run-lpD4Xh",
+      "ordinary": "run-Q1YTKQ",
+      "pearl-free": "run-eamG6n",
+      "cap-replace": "run-XG3MQZ",
+      "cap-decline": "run-FWvGcT"
+    },
+    "diagnosticOnly": [
+      "run-H9kecK",
+      "run-3Ikqzx"
+    ],
+    "harnessFailures": [
+      "run-fIFBuv",
+      "run-53U5E7",
+      "run-H9kecK",
+      "run-1LBCez",
+      "run-uI2Esi",
+      "run-rw3pVD"
+    ],
+    "qualifications": [
+      "Three Save Journey attempts did not produce MCP result; no mechanic verdict. Download guarded/modal behavior is an inference, no shared runner repair.",
+      "Toast wrapper visibility timeout corrected only in driver; actual OPEN bounced row retained.",
+      "Creating Game diagnostic, ordinary startup readiness and Pearl goto deadline failures retained; 60s driver-only observation deadlines, no source timeout and no causal host-load claim.",
+      "Incorrect informal recovery322 report corrected from actual result:107+216=323 desktop/mobile; ordinary450+236=686; Pearl controls450 unchanged.",
+      "Raw captures/reports/logs under exact invocation directories; capture filenames only in ledger. No images or fixture code committed.",
+      "Battle/card-lab/fuzz are outside this bounded Dreamscape presentation repair; no hook/engine coverage invented."
+    ],
+    "attemptReceipts": "594-drain-proof.json enumerates all12 exact invocation/port/PID/raw paths; individual validation receipts preserve every clock/load/exit."
+  },
+  "restoration": {
+    "UTC": "2026-10-13T00:49:45.719133+00:00",
+    "qaTemporarySHA": "6f1b4411b2766a3e128bd0a5ab83f1c0055c2bc18c1df0368f5243af123677e0",
+    "qaRestoredSHA": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+    "functionalFileCount": 2408,
+    "functionalTreeSHA": "b6dc717ef76250fa88e94bc34b6b39f42f1b516854c475a3add63b7815f44f87",
+    "allFunctionalBytesRestored": true,
+    "priorDrainedProof": "/tmp/594-drain-proof.json"
+  },
+  "resourceSettlement": {
+    "UTC": "2026-10-13T00:49:32.826132+00:00",
+    "qualification": "All recorded runner subprocesses were awaited to terminal, including their finally-close/SDK/server cleanup path; individual raw receipts record portfree. Process-group/owner checks supplement that awaited settlement rather than substitute for it.",
+    "awaitedCloseContract": "Verified current runner finally awaits session.close at818; close drains startup, awaits mcp.close/browser_close confirmation and activeCalls, closes SDK transport, clears record only after confirmation, stops own server and releases leases. Terminal receipts plus process/ownership proof cover all12; not record absence alone.",
+    "attempts": 12,
+    "groups": [
+      75731,
+      40733,
+      40375,
+      39622,
+      72272,
+      58366,
+      96277,
+      91349,
+      90834,
+      77743,
+      98336,
+      80286
+    ],
+    "ownProcessGroupsRemaining": [],
+    "ownProviderOrLeaseOwnerRecordsRemaining": [],
+    "exactReceipt": "artifacts/qa/hv-umm2.594/validation/594-drain-proof.json"
+  },
+  "parentVisualReceipts": [
+    "594-parent-failure-visual.json",
+    "594-parent-ordinary-visual.json",
+    "594-parent-pearl-free-visual.json",
+    "594-parent-cap-replace-visual.json",
+    "594-parent-cap-decline-visual.json"
+  ],
+  "reviewRouting": "Parent owns fresh read-only Codex CLI gpt-5.6-sol cold core review/candidate/certified promotion under user temporary override until2026-10-14T01Z.",
+  "frictionDraftScope": "Empty friction accepted: no isolated observed problem >10min. The14.93min compound harness/control interval includes ordinary validation and rechecks; it is not isolated overhead.",
+  "coreReviewFivePaths": {
+    "errorMidStep": "No prepared projection leaves selection usable; existing upstream errors remain surfaced. Actual UI recovery is covered by the refused-render case and native bounced provider. No claim that provider/CAS errors are repaired.",
+    "reloadRestart": "Presentation state is per mount and unmount cancels its timer. Public active-unmount control plus all five settled native reload workflows preserve the authoritative committed game. An in-progress interrupted animation requires a new presentation click; no durable UI latch.",
+    "partialWrite": "N/A: presentation state/timer creates no persistent write. Existing completion callbacks/session facade/domain validation are unchanged and retain their existing atomic event semantics.",
+    "invalidStaleIntent": "Public switched/visited/removed pending targets and active model/reward disappearance cancel stale presentation and release gating. Branded site identities/public signatures stay unchanged.",
+    "concurrentActors": "A CAS/refusal/no-new projection cannot enable collection. Public authoritative visited/removal/active-loss controls exercise invalidated presentation. No upstream arbitration/CAS repair or multi-client behavior change claimed."
+  }
+}

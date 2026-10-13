@@ -30,7 +30,6 @@ import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
-import { parseSiteId } from "../../types/identifiers";
 import { formatNumber } from "../../runtime/format-number";
 
 /** A generated site reward ready to animate and grant on the dreamscape. */
@@ -99,14 +98,15 @@ export function DreamscapeScreen({
 }: DreamscapeScreenProps) {
 
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
-  const [collectingSiteId, setCollectingSiteId] = useState<string | null>(null);
+  const [pendingSiteId, setPendingSiteId] = useState<SiteId | null>(null);
+  const [collectingSiteId, setCollectingSiteId] = useState<SiteId | null>(null);
   const guideDialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
     view.guideDialogue?.id,
     view.guideDialogue === undefined
       ? undefined
       : (view.guideDialogue.delaySeconds ?? 0),
   );
-  const completionRequestedRef = useRef<string | null>(null);
+  const completionRequestedRef = useRef<SiteId | null>(null);
   const onInlineRewardAnimationCompleteRef = useRef(
     onInlineRewardAnimationComplete,
   );
@@ -123,34 +123,56 @@ export function DreamscapeScreen({
     collectingSiteId === null
       ? null
       : (view.inlineRewards[collectingSiteId] ?? null);
+  const activeCollectionSiteId =
+    collectingModel !== null && collectingReward !== null
+      ? collectingSiteId
+      : null;
+
+  useEffect(() => {
+    if (pendingSiteId === null) return;
+    const model = view.sites.find((candidate) => candidate.id === pendingSiteId);
+    if (model === undefined || model.isVisited || !model.isInteractive) {
+      setPendingSiteId(null);
+    } else if (view.inlineRewards[pendingSiteId] !== undefined) {
+      setPendingSiteId(null);
+      setCollectingSiteId(pendingSiteId);
+    }
+  }, [pendingSiteId, view.inlineRewards, view.sites]);
 
   const handleSelectSite = useCallback(
     (siteId: SiteId) => {
-      if (collectingSiteId !== null || view.replacement !== null) return;
+      if (activeCollectionSiteId !== null || view.replacement !== null) return;
       const model = view.sites.find(
         (candidate) => candidate.id === siteId,
       );
+      setPendingSiteId(null);
       if (model?.type === "Essence" || model?.type === "Reward") {
         completionRequestedRef.current = null;
-        setCollectingSiteId(siteId);
+        if (view.inlineRewards[siteId] === undefined) {
+          setPendingSiteId(siteId);
+        } else {
+          setCollectingSiteId(siteId);
+        }
       }
       onSelectSite(siteId);
     },
-    [collectingSiteId, onSelectSite, view.replacement, view.sites],
+    [activeCollectionSiteId, onSelectSite, view.inlineRewards, view.replacement, view.sites],
   );
 
   useEffect(() => {
-    if (collectingSiteId === null || collectingReward === null) {
+    if (collectingSiteId === null) return;
+    if (activeCollectionSiteId === null) {
+      setCollectingSiteId(null);
       return;
     }
     const timer = window.setTimeout(() => {
       if (completionRequestedRef.current === collectingSiteId) return;
       completionRequestedRef.current = collectingSiteId;
       setCollectingSiteId(null);
-      onInlineRewardAnimationCompleteRef.current(parseSiteId(collectingSiteId));
+      onInlineRewardAnimationCompleteRef.current(collectingSiteId);
     }, INLINE_REWARD_DURATION_SECONDS * 1000);
     return () => window.clearTimeout(timer);
-  }, [collectingSiteId, collectingReward]);
+  }, [activeCollectionSiteId, collectingSiteId, collectingReward]);
 
   useEffect(() => {
     if (guideDialogueVisible) onGuideDialogueShown?.();
@@ -218,12 +240,12 @@ export function DreamscapeScreen({
       {view.sites
         .filter(
           (model) =>
-            !model.isVisited || model.id === collectingSiteId,
+            !model.isVisited || model.id === activeCollectionSiteId,
         )
         .map((model) => {
-          const isCollecting = model.id === collectingSiteId;
+          const isCollecting = model.id === activeCollectionSiteId;
           const renderedModel =
-            collectingSiteId === null
+            activeCollectionSiteId === null
               ? model
               : { ...model, isInteractive: false };
           const isInlineRewardSite =

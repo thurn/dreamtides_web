@@ -211,6 +211,122 @@ describe("DreamscapeScreen", () => {
     ).not.toBeNull();
   });
 
+  it("keeps site selection available after refused inline preparation", () => {
+    vi.useFakeTimers();
+    const onSelectSite = vi.fn();
+    const onComplete = vi.fn();
+    const view: DreamscapeView = {
+      ...VIEW,
+      sites: [siteModel("s-essence", { type: "Essence" }), siteModel("s-purge")],
+    };
+    const { container } = renderInCumulus(
+      screen(view, { onSelectSite, onInlineRewardAnimationComplete: onComplete }),
+    );
+    act(() => container.querySelector<HTMLElement>('[data-site-id="s-essence"]')?.click());
+    expect(onSelectSite).toHaveBeenCalledWith(parseSiteId("s-essence"));
+    expect(container.querySelector("[data-essence-collection]")).toBeNull();
+    act(() => container.querySelector<HTMLElement>('[data-site-id="s-purge"]')?.click());
+    expect(onSelectSite).toHaveBeenCalledWith(parseSiteId("s-purge"));
+    act(() => { vi.runAllTimers(); });
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  it("waits for authoritative preparation and permits retry before collecting once", () => {
+    vi.useFakeTimers();
+    const onSelectSite = vi.fn();
+    const onComplete = vi.fn();
+    const view: DreamscapeView = {
+      ...VIEW,
+      sites: [siteModel("s-essence", { type: "Essence" }), siteModel("s-purge")],
+    };
+    const { container, rerender } = renderInCumulus(
+      screen(view, { onSelectSite, onInlineRewardAnimationComplete: onComplete }),
+    );
+    const select = () => container.querySelector<HTMLElement>('[data-site-id="s-essence"]')?.click();
+    act(select);
+    act(() => { vi.runAllTimers(); });
+    expect(onComplete).not.toHaveBeenCalled();
+    expect(container.querySelector('[data-site-id="s-purge"]')?.getAttribute("aria-disabled")).toBe("false");
+    act(select);
+    expect(onSelectSite).toHaveBeenCalledTimes(2);
+    rerender(screen({ ...view, inlineRewards: { "s-essence": { kind: "essence", amount: 17 } } },
+      { onSelectSite, onInlineRewardAnimationComplete: onComplete }));
+    expect(container.querySelector('[data-essence-collection="s-essence"]')).not.toBeNull();
+    act(select);
+    expect(onSelectSite).toHaveBeenCalledTimes(2);
+    act(() => { vi.runAllTimers(); });
+    expect(onComplete).toHaveBeenCalledExactlyOnceWith(parseSiteId("s-essence"));
+  });
+
+  it.each(["s-purge", "s-reward"])("supersedes pending collection when selecting %s", (nextSite) => {
+    vi.useFakeTimers();
+    const onComplete = vi.fn();
+    const view: DreamscapeView = {
+      ...VIEW,
+      sites: [siteModel("s-essence", { type: "Essence" }), siteModel("s-purge"), siteModel("s-reward", { type: "Reward" })],
+    };
+    const { container, rerender } = renderInCumulus(screen(view, { onInlineRewardAnimationComplete: onComplete }));
+    act(() => container.querySelector<HTMLElement>('[data-site-id="s-essence"]')?.click());
+    act(() => container.querySelector<HTMLElement>(`[data-site-id="${nextSite}"]`)?.click());
+    rerender(screen({ ...view, inlineRewards: { "s-essence": { kind: "essence", amount: 17 } } },
+      { onInlineRewardAnimationComplete: onComplete }));
+    act(() => { vi.runAllTimers(); });
+    expect(container.querySelector("[data-essence-collection]")).toBeNull();
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  it.each(["visited", "removed"])("cancels a pending request when its site is %s", (change) => {
+    vi.useFakeTimers();
+    const onComplete = vi.fn();
+    const view: DreamscapeView = { ...VIEW, sites: [siteModel("s-essence", { type: "Essence" })] };
+    const { container, rerender } = renderInCumulus(screen(view, { onInlineRewardAnimationComplete: onComplete }));
+    act(() => container.querySelector<HTMLElement>('[data-site-id="s-essence"]')?.click());
+    rerender(screen({ ...view, sites: change === "removed" ? [] : [siteModel("s-essence", { type: "Essence", isVisited: true })],
+      inlineRewards: { "s-essence": { kind: "essence", amount: 17 } } },
+      { onInlineRewardAnimationComplete: onComplete }));
+    act(() => { vi.runAllTimers(); });
+    expect(container.querySelector("[data-essence-collection]")).toBeNull();
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  it.each(["reward", "site", "unmount"])("cancels active collection when its %s disappears", (change) => {
+    vi.useFakeTimers();
+    const onComplete = vi.fn();
+    const onSelectSite = vi.fn();
+    const view: DreamscapeView = { ...VIEW,
+      sites: [siteModel("s-essence", { type: "Essence" }), siteModel("s-purge")],
+      inlineRewards: { "s-essence": { kind: "essence", amount: 17 } },
+    };
+    const { container, rerender, unmount } = renderInCumulus(screen(view, { onSelectSite, onInlineRewardAnimationComplete: onComplete }));
+    act(() => container.querySelector<HTMLElement>('[data-site-id="s-essence"]')?.click());
+    if (change === "unmount") unmount();
+    else {
+      rerender(screen({ ...view, ...(change === "reward" ? { inlineRewards: {} } : { sites: [siteModel("s-purge")] }) },
+        { onSelectSite, onInlineRewardAnimationComplete: onComplete }));
+      act(() => container.querySelector<HTMLElement>('[data-site-id="s-purge"]')?.click());
+      expect(onSelectSite).toHaveBeenCalledWith(parseSiteId("s-purge"));
+    }
+    act(() => { vi.runAllTimers(); });
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  it.each([false, true])("completes a prepared Dreamsign once with replacement=%s", (requiresReplacement) => {
+    vi.useFakeTimers();
+    const onSelectSite = vi.fn();
+    const onComplete = vi.fn();
+    const view: DreamscapeView = { ...VIEW,
+      sites: [siteModel("s-essence", { type: "Essence" })],
+      inlineRewards: { "s-essence": { kind: "dreamsign", dreamsign: dreamsign("incoming"), requiresReplacement } },
+    };
+    const { container, rerender } = renderInCumulus(screen(view, { onSelectSite, onInlineRewardAnimationComplete: onComplete }));
+    act(() => container.querySelector<HTMLElement>('[data-site-id="s-essence"]')?.click());
+    act(() => container.querySelector<HTMLElement>('[data-site-id="s-essence"]')?.click());
+    rerender(screen(view, { onSelectSite, onInlineRewardAnimationComplete: onComplete }));
+    expect(onSelectSite).toHaveBeenCalledTimes(1);
+    act(() => { vi.runAllTimers(); });
+    expect(onComplete).toHaveBeenCalledExactlyOnceWith(parseSiteId("s-essence"));
+  });
+
   it("resolves an at-cap Dreamsign replacement by UUID or declines it", () => {
     const onReplaceDreamsign = vi.fn();
     const onDeclineReward = vi.fn();
