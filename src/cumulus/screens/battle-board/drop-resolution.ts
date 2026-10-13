@@ -108,7 +108,11 @@ export function dropHandCardAtPoint(
     clientY < bounds.top || clientY > bounds.bottom ||
     !slotTargetIsEligible(interactions, target)
   ) {
-    interactions.onHandCardDropRejected?.(target);
+    try {
+      interactions.onHandCardDropRejected?.(target);
+    } catch {
+      // Best-effort denial observation cannot interrupt gesture completion.
+    }
     return;
   }
   interactions.onHandCardDrop?.(target);

@@ -379,13 +379,21 @@ describe("tutorial centred slot identity and gesture boundaries", () => {
     act(() => screenMocks.props?.interactions?.onCardDragEnd());
     expect(onPlayerCardPlay).toHaveBeenCalledExactlyOnceWith("real-slot-contract", TUTORIAL_PLAYER_CARD.id, TUTORIAL_PLAYER_CARD.model.cardId, "B1");
   });
-  it("clears a denied gesture before an observation error and permits a fresh legal drag", () => {
-    const onPlayerCardPlay = vi.fn(), onPlayerCardDropRejected = vi.fn(() => { throw new Error("synthetic observer failure"); });
+  it.each(["invalid", "unresolved"] as const)("controller %s denial contains observer errors, clears pending and permits fresh legal recovery", kind => {
+    const onPlayerCardPlay = vi.fn();
+    const onPlayerCardDropRejected = vi.fn(() => {
+      // Re-enter through the public callback: cleared pending identity prevents another observation.
+      screenMocks.props?.interactions?.onHandCardDropRejected?.(null);
+      throw new Error("synthetic observer failure");
+    });
     renderTutorialScreen(realCellView(), { onPlayerCardPlay, onPlayerCardDropRejected });
     startCardDrag();
-    expect(() => act(() => screenMocks.props?.interactions?.onHandCardDropRejected?.(null))).toThrow("synthetic observer failure");
-    act(() => screenMocks.props?.interactions?.onCardDragEnd());
-    expect(onPlayerCardDropRejected).toHaveBeenCalledTimes(1);
+    expect(() => act(() => {
+      if (kind === "invalid") screenMocks.props?.interactions?.onHandCardDropRejected?.(null);
+      else screenMocks.props?.interactions?.onCardDragEnd();
+    })).not.toThrow();
+    expect(screenMocks.props?.interactions).toMatchObject(clearedPending);
+    expect(onPlayerCardDropRejected).toHaveBeenCalledExactlyOnceWith({ runId: parseTutorialRunId("real-slot-contract"), battleId: screenMocks.props!.view.battleId, cardInstanceId: TUTORIAL_PLAYER_CARD.id, cardId: TUTORIAL_PLAYER_CARD.model.cardId, target: null, reason: kind === "invalid" ? "invalid-target" : "unresolved-drop" });
     expect(onPlayerCardPlay).not.toHaveBeenCalled();
     startCardDrag();
     act(() => screenMocks.props?.interactions?.onHandCardDrop?.({ owner: "player", rank: "back", slotId: parseBattleSlotViewId("B1") }));

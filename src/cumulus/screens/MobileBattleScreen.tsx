@@ -600,7 +600,10 @@ export interface MobileBattleInteractions {
   readonly onHandCardDrop?: (target?: MobileBattleSlotTarget) => void;
   /** Hand releases default to the nearest open back cell; exact-cell uses only the actual hit. */
   readonly handDropPolicy?: "nearest-open-back" | "exact-cell";
-  /** An exact-cell hand release rejected before producing a play intent. Null means no slot was hit. */
+  /**
+   * Best-effort synchronous observation of an exact-cell denial before any play intent.
+   * Null means no slot was hit; observer errors do not interrupt gesture completion.
+   */
   readonly onHandCardDropRejected?: (target: MobileBattleSlotTarget | null) => void;
   readonly onCardDebugActivate?: (
     battleCardId: BattleCardId,

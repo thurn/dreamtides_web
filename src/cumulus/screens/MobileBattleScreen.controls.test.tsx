@@ -243,6 +243,88 @@ describe("hand release policies through the rendered battlefield", () => {
       expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(2);
     } finally { if (prior === undefined) Reflect.deleteProperty(document, "elementFromPoint"); else Object.defineProperty(document, "elementFromPoint", prior); }
   });
+  it.each(["occupied", "background"] as const)("an actual source-card %s denial survives a throwing observer and ends once before fresh recovery", kind => {
+    const { container, interactions } = setup();
+    vi.mocked(interactions.onHandCardDropRejected!).mockImplementation(() => { throw new Error("synthetic rejection observer"); });
+    const handCard = query(container, '[data-battle-mobile-row="near-hand"] [data-battlefield-card]');
+    vi.spyOn(handCard, "getBoundingClientRect").mockReturnValue(new DOMRect(20, 400, 80, 100));
+    const setCapture = vi.fn(), releaseCapture = vi.fn();
+    Object.defineProperties(handCard, { setPointerCapture: { configurable: true, value: setCapture }, releasePointerCapture: { configurable: true, value: releaseCapture } });
+    const errors: unknown[] = [];
+    const observeError = (event: ErrorEvent) => { errors.push(event.error); event.preventDefault(); };
+    window.addEventListener("error", observeError);
+    const prior = Object.getOwnPropertyDescriptor(document, "elementFromPoint");
+    let hit = query(container, invalidSelectors[kind]);
+    Object.defineProperty(document, "elementFromPoint", { configurable: true, value: vi.fn(() => hit) });
+    const pointer = (type: string, x: number, y: number) => {
+      const event = new MouseEvent(type, { bubbles: true, cancelable: true, button: 0, clientX: x, clientY: y });
+      Object.defineProperties(event, { pointerId: { value: 7 }, pointerType: { value: "mouse" } });
+      act(() => void handCard.dispatchEvent(event));
+    };
+    const gesture = () => {
+      const point = center(hit);
+      pointer("pointerdown", 60, 450);
+      pointer("pointermove", point.x, point.y);
+      expect(handCard.dataset.battlePointerDragging).toBe("true");
+      pointer("pointerup", point.x, point.y);
+    };
+    const settled = () => {
+      act(() => { vi.runOnlyPendingTimers(); });
+      expect(handCard.dataset.battlePointerDrop).toBeUndefined();
+      expect(handCard.style.transform).toBe("");
+      expect(handCard.style.zIndex).toBe("");
+    };
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      gesture();
+      expect(interactions.onCardDragEnd).toHaveBeenCalledOnce();
+      expect(handCard.dataset.battlePointerDragging).toBe("false");
+      expect(handCard.style.pointerEvents).toBe("");
+      expect(setCapture).toHaveBeenCalledExactlyOnceWith(7);
+      expect(releaseCapture).toHaveBeenCalledExactlyOnceWith(7);
+      expect(errors).toEqual([]);
+      const denied = kind === "background" ? null : { owner: "player", rank: "back", slotId: parseBattleSlotViewId("player-back-filled") };
+      expect(interactions.onHandCardDropRejected).toHaveBeenCalledExactlyOnceWith(denied);
+      for (const callback of [interactions.onHandCardDrop, interactions.onSlotDrop, interactions.onHandCardActivate, interactions.onZoneDrop]) expect(callback).not.toHaveBeenCalled();
+      settled();
+      pointer("pointerup", 15, 15);
+      expect(interactions.onCardDragEnd).toHaveBeenCalledOnce();
+      expect(interactions.onHandCardDropRejected).toHaveBeenCalledOnce();
+      hit = query(container, `[data-battle-slot-id="${exact.slotId}"]`);
+      gesture();
+      expect(interactions.onHandCardDrop).toHaveBeenCalledExactlyOnceWith(exact);
+      expect(interactions.onCardDragStart).toHaveBeenCalledTimes(2);
+      expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(2);
+      expect(releaseCapture).toHaveBeenCalledTimes(2);
+      expect(handCard.dataset.battlePointerDragging).toBe("false");
+      expect(errors).toEqual([]);
+      settled();
+    } finally {
+      vi.useRealTimers();
+      window.removeEventListener("error", observeError);
+      if (prior === undefined) Reflect.deleteProperty(document, "elementFromPoint"); else Object.defineProperty(document, "elementFromPoint", prior);
+    }
+  });
+  it.each(["occupied", "background"] as const)("a native %s denial survives a throwing observer without substitution and recovers at the exact cell", kind => {
+    const { container, interactions } = setup();
+    vi.mocked(interactions.onHandCardDropRejected!).mockImplementation(() => { throw new Error("synthetic rejection observer"); });
+    const errors: unknown[] = [];
+    const observeError = (event: ErrorEvent) => { errors.push(event.error); event.preventDefault(); };
+    window.addEventListener("error", observeError);
+    try {
+      const hit = query(container, invalidSelectors[kind]), point = center(hit);
+      drop(hit, point.x, point.y);
+      expect(errors).toEqual([]);
+      expect(interactions.onHandCardDropRejected).toHaveBeenCalledOnce();
+      expect(interactions.onHandCardDrop).not.toHaveBeenCalled();
+      expect(interactions.onSlotDrop).not.toHaveBeenCalled();
+      const legal = query(container, `[data-battle-slot-id="${exact.slotId}"]`), destination = center(legal);
+      drop(legal, destination.x, destination.y);
+      expect(interactions.onHandCardDrop).toHaveBeenCalledExactlyOnceWith(exact);
+      expect(interactions.onHandCardActivate).not.toHaveBeenCalled();
+      expect(errors).toEqual([]);
+    } finally { window.removeEventListener("error", observeError); }
+  });
   it("exact pointer release without its source battlefield fails closed", () => {
     const { container, interactions } = setup();
     const legal = query(container, `[data-battle-slot-id="${exact.slotId}"]`), point = center(legal);

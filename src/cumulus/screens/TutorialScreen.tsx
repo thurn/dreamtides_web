@@ -201,6 +201,7 @@ export interface TutorialScreenProps {
     cardId: CardId,
     targetSlotId: BattleSlotViewId | null,
   ) => void;
+  /** Synchronous best-effort denial observation; observer errors do not interrupt gesture flow. */
   readonly onPlayerCardDropRejected?: (detail: TutorialCardDropRejection) => void;
   readonly onEndTurn?: (
     runId: TutorialRunId,
@@ -2475,7 +2476,13 @@ export function TutorialScreen({
     tutorialCardDropHandledRef.current = true;
     pendingTutorialCardIdRef.current = null;
     setPendingTutorialCardId(null);
-    if (detail !== null) onPlayerCardDropRejected?.(detail);
+    if (detail !== null) {
+      try {
+        onPlayerCardDropRejected?.(detail);
+      } catch {
+        // Best-effort observation follows cleanup and cannot gate gesture flow.
+      }
+    }
   }, [onPlayerCardDropRejected, tutorialPlayableCard, view.battle.battleId, view.playbackRunId]);
 
   const tutorialInteractions = useMemo<MobileBattleInteractions | undefined>(

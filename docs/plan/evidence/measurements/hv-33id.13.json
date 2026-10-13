@@ -1,0 +1,612 @@
+{
+  "bead": "hv-33id.13",
+  "base": "0c9453bde8feadf96ecfd4ca5088e65524319a87",
+  "stage": "Final precommit clock; actual Git start/end and stamp gap in additive ignored receipt",
+  "recordedAt": "2026-10-13T04:04:38.425711+00:00",
+  "implementationClock": {
+    "dispatchBracketStart": "2026-10-13T03:52:55.517896+00:00",
+    "dispatchBracketEnd": "2026-10-13T03:53:48.867569+00:00",
+    "exactProviderStart": "unknown; bounded by dispatch markers",
+    "nativeClaim": "2026-10-13T03:35:15Z",
+    "grossClaimMinutesAtStage2": 29.390428516666667,
+    "scope": "Gross elapsed research, coordination, validation and QA; not productive editing, CPU or quota. Root predispatch claim window separate.",
+    "grossClaimMinutesAtPrecommit": 32.75837513333333
+  },
+  "sourceHashes": {
+    "src/cumulus/screens/TutorialScreen.tsx": "e5d1d2c755e22e76b6bdb8fc31ff0fa74cfc33d3445f132498725d609cc6a2b0",
+    "src/cumulus/screens/MobileBattleScreen.tsx": "808ba29af23d1b05256dc4fe3a59d472518b533a796ced9ef93202937201a323",
+    "src/cumulus/screens/battle-board/drop-resolution.ts": "a988f0e6ad1bdd68f1bcc94c7043b7d97ae482534a67385ebb8c962441611687",
+    "src/state/use-tutorial-card-play.ts": "868ac8f61d878f3a583ee58bed0ae4ab7d5891336fac0b8083bb746c8f753d10",
+    "src/screens/cumulus_adapters/TutorialScreenAdapter.tsx": "7da88c58e06274ac4fa4969d3dd463de99207e1a52dd37012c95258204043a8d",
+    "src/cumulus/screens/MobileBattleScreen.controls.test.tsx": "491d4e9e6553d686729bcc8895d86d8cd67afd12c468c0994c2a62db1db783fc",
+    "src/cumulus/screens/TutorialScreen.player.test.tsx": "fe63fb1cda59fe148c8ab82f7a711e634485efd63e0a4e7b03e10b6bf02495e4",
+    "src/screens/cumulus_adapters/TutorialScreenAdapter.test.tsx": "e5acb099d354bbac6015d73eb7f8493daa7308c681b17cd3b7e054eed55da159",
+    "src/cumulus/components/battle/BattlefieldCard.tsx": "3814ddd140841f302f926624dcb08497723a47bdce8784cf02bb4f61a7f706f5"
+  },
+  "testDelta": {
+    "discoveryFiles": 0,
+    "netLines": 90,
+    "netJsdomFiles": 0,
+    "changedExistingJsdomModules": 2,
+    "lineCounts": {
+      "MobileBattleScreen.controls.test.tsx": 361,
+      "TutorialScreen.player.test.tsx": 408
+    }
+  },
+  "scope": "Two synchronous observer-only catches, two callback JSDoc sites and two existing tests. No intent/default/predicate/hit/geometry/shared drag/layout/timing changes. MobileBattleScreen JSDoc is sole admitted fallout. No rules decisions/card issues/pre-existing out-of-scope defects found.",
+  "validation": {
+    "focused": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-13-safe-drop-observation",
+      "start": "2026-10-13T04:02:34.895128+00:00",
+      "end": "2026-10-13T04:02:40.638799+00:00",
+      "exit": 0,
+      "wallSeconds": 5.743540625000605,
+      "pid": 45136,
+      "pgid": 45136,
+      "load": "{ 3.96 4.95 6.94 }",
+      "groupRemainingAtExit": []
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-13-safe-drop-observation",
+      "start": "2026-10-13T04:03:01.877231+00:00",
+      "end": "2026-10-13T04:03:20.552612+00:00",
+      "exit": 0,
+      "wallSeconds": 18.675084250004147,
+      "pid": 46037,
+      "pgid": 46037,
+      "load": "{ 3.57 4.79 6.82 }",
+      "groupRemainingAtExit": []
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-13-safe-drop-observation",
+      "start": "2026-10-13T03:58:22.274101+00:00",
+      "end": "2026-10-13T03:58:25.963052+00:00",
+      "exit": 0,
+      "wallSeconds": 3.6888393749977695,
+      "pid": 38063,
+      "pgid": 38063,
+      "load": "{ 5.35 6.07 7.91 }",
+      "groupRemainingAtExit": []
+    },
+    "counts": {
+      "focused": 36,
+      "focusedModules": 2,
+      "related": 117,
+      "relatedModules": 14
+    },
+    "beforeFix": "Six behavioral failures /30passes on unchanged production: pointer2 missing drag-end; native2 escaped observer errors; controller2 throw.",
+    "restoredControl": "Final deterministic tests with just the old observer boundaries restored:6 selected failures/30skipped; exact final production hashes restored. Subsequent timer-flush callback void block is lint-only, after all six failure assertions; finalfocused/review qualify its bytes.",
+    "priorChecks": "Initial focused/review/Knip passed. Deterministic correction required Review02;117cases/types/cycles passed but one floating-promises test lint error failed. Corrected void callback, finalfocused03/review03 passed; all earlier raw retained.",
+    "knipReuse": "Prior Knip remains valid: subsequent changes only existing test timer handling; no exports/files or runtime changes."
+  },
+  "qa": {
+    "invocation": "run-0yCsMT",
+    "report": "invocations/run-0yCsMT/settled-release-v01.result.json",
+    "reportSHA256": "6266b910b7410acac6b2e0de50041b9268c33e32b8d1cae7dacbe0fd94ce1f34",
+    "manifest": "runtime-source-script-manifest-v01.json",
+    "prelaunchReceipt": "preflight-receipt-78f8fcb4-24cf-4957-ac17-5a2b7d023e2b.json",
+    "finalFingerprint": "final-source-fingerprint-v03.json",
+    "wallMs": {
+      "browserLeaseWait": 6,
+      "serve": 1708,
+      "scenario": 98075,
+      "total": 99849
+    },
+    "wrapperReceipt": {
+      "argv": [
+        "python3",
+        "/tmp/root33id13-20261013/launch-qa-checked.py",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.13/runtime-source-script-manifest-v01.json",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.13/settled-release-v01.mjs",
+        "--bead",
+        "hv-33id.13",
+        "--timeout",
+        "400",
+        "--arg",
+        "settledDenialControl=1"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-13-safe-drop-observation",
+      "start": "2026-10-13T03:59:00.996347+00:00",
+      "end": "2026-10-13T04:00:41.644485+00:00",
+      "exit": 0,
+      "wallSeconds": 100.64728066600219,
+      "pid": 39229,
+      "pgid": 39229,
+      "load": "{ 5.12 5.93 7.78 }",
+      "groupRemainingAtExit": []
+    },
+    "caps": [],
+    "gameLogs": [
+      {
+        "viewport": "desktop",
+        "filename": "invocations/run-0yCsMT/settled-release-v01-desktop.jsonl",
+        "gameId": "a6yy98",
+        "rows": 60,
+        "sha256": "227a307289d0a85d9b4c53ed18484cdb1875d5ed01e3c55fd1f59304c6e9e70d"
+      },
+      {
+        "viewport": "mobile",
+        "filename": "invocations/run-0yCsMT/settled-release-v01-mobile.jsonl",
+        "gameId": "wpudq7",
+        "rows": 60,
+        "sha256": "5c5f0228fa8eab18814ac831b2a20b1695e623460c51ef089a51f5cb5a8fb749"
+      }
+    ],
+    "denials": [
+      {
+        "viewport": "desktop",
+        "kind": "occupied-enemy",
+        "denial": {
+          "gameId": "a6yy98",
+          "runId": "event:4",
+          "battleId": "tutorial-battle:event:4:0:prefix",
+          "cardInstanceId": "i1",
+          "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          "target": {
+            "owner": "enemy",
+            "rank": "back",
+            "slotId": "B0"
+          },
+          "reason": "invalid-target",
+          "timestamp": "2026-10-13T03:59:36.344Z",
+          "event": "tutorial_player_card_drop_rejected",
+          "seq": 39
+        },
+        "settledHand": {
+          "physical": "i1",
+          "zone": "near-hand",
+          "slot": null,
+          "returnMarker": null,
+          "rect": {
+            "x": 655.546875,
+            "y": 732,
+            "width": 128.90625,
+            "height": 180.46875
+          },
+          "viewportIntersection": {
+            "left": 655.546875,
+            "right": 784.453125,
+            "top": 732,
+            "bottom": 900
+          },
+          "opacity": 1,
+          "visibility": "visible",
+          "hitPoint": {
+            "x": 687.7734375,
+            "y": 774
+          },
+          "hitPhysical": "i1"
+        },
+        "intentCountsUnchanged": true
+      },
+      {
+        "viewport": "desktop",
+        "kind": "background",
+        "denial": {
+          "gameId": "a6yy98",
+          "runId": "event:4",
+          "battleId": "tutorial-battle:event:4:0:prefix",
+          "cardInstanceId": "i1",
+          "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          "target": null,
+          "reason": "invalid-target",
+          "timestamp": "2026-10-13T03:59:41.077Z",
+          "event": "tutorial_player_card_drop_rejected",
+          "seq": 42
+        },
+        "settledHand": {
+          "physical": "i1",
+          "zone": "near-hand",
+          "slot": null,
+          "returnMarker": null,
+          "rect": {
+            "x": 655.546875,
+            "y": 732,
+            "width": 128.90625,
+            "height": 180.46875
+          },
+          "viewportIntersection": {
+            "left": 655.546875,
+            "right": 784.453125,
+            "top": 732,
+            "bottom": 900
+          },
+          "opacity": 1,
+          "visibility": "visible",
+          "hitPoint": {
+            "x": 687.7734375,
+            "y": 774
+          },
+          "hitPhysical": "i1"
+        },
+        "intentCountsUnchanged": true
+      },
+      {
+        "viewport": "desktop",
+        "kind": "padding",
+        "denial": {
+          "gameId": "a6yy98",
+          "runId": "event:4",
+          "battleId": "tutorial-battle:event:4:0:prefix",
+          "cardInstanceId": "i1",
+          "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          "target": {
+            "owner": "player",
+            "rank": "back",
+            "slotId": "tutorial-padding:player:back:0"
+          },
+          "reason": "invalid-target",
+          "timestamp": "2026-10-13T03:59:46.043Z",
+          "event": "tutorial_player_card_drop_rejected",
+          "seq": 45
+        },
+        "settledHand": {
+          "physical": "i1",
+          "zone": "near-hand",
+          "slot": null,
+          "returnMarker": null,
+          "rect": {
+            "x": 655.546875,
+            "y": 732,
+            "width": 128.90625,
+            "height": 180.46875
+          },
+          "viewportIntersection": {
+            "left": 655.546875,
+            "right": 784.453125,
+            "top": 732,
+            "bottom": 900
+          },
+          "opacity": 1,
+          "visibility": "visible",
+          "hitPoint": {
+            "x": 687.7734375,
+            "y": 774
+          },
+          "hitPhysical": "i1"
+        },
+        "intentCountsUnchanged": true
+      },
+      {
+        "viewport": "mobile",
+        "kind": "occupied-enemy",
+        "denial": {
+          "gameId": "wpudq7",
+          "runId": "event:4",
+          "battleId": "tutorial-battle:event:4:0:prefix",
+          "cardInstanceId": "i1",
+          "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          "target": {
+            "owner": "enemy",
+            "rank": "back",
+            "slotId": "B0"
+          },
+          "reason": "invalid-target",
+          "timestamp": "2026-10-13T04:00:27.341Z",
+          "event": "tutorial_player_card_drop_rejected",
+          "seq": 39
+        },
+        "settledHand": {
+          "physical": "i1",
+          "zone": "near-hand",
+          "slot": null,
+          "returnMarker": null,
+          "rect": {
+            "x": 120.1328125,
+            "y": 664.109375,
+            "width": 149.734375,
+            "height": 209.625
+          },
+          "viewportIntersection": {
+            "left": 120.1328125,
+            "right": 269.8671875,
+            "top": 664.109375,
+            "bottom": 844
+          },
+          "opacity": 1,
+          "visibility": "visible",
+          "hitPoint": {
+            "x": 157.56640625,
+            "y": 709.08203125
+          },
+          "hitPhysical": "i1"
+        },
+        "intentCountsUnchanged": true
+      },
+      {
+        "viewport": "mobile",
+        "kind": "background",
+        "denial": {
+          "gameId": "wpudq7",
+          "runId": "event:4",
+          "battleId": "tutorial-battle:event:4:0:prefix",
+          "cardInstanceId": "i1",
+          "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          "target": null,
+          "reason": "invalid-target",
+          "timestamp": "2026-10-13T04:00:31.172Z",
+          "event": "tutorial_player_card_drop_rejected",
+          "seq": 42
+        },
+        "settledHand": {
+          "physical": "i1",
+          "zone": "near-hand",
+          "slot": null,
+          "returnMarker": null,
+          "rect": {
+            "x": 120.1328125,
+            "y": 664.109375,
+            "width": 149.734375,
+            "height": 209.625
+          },
+          "viewportIntersection": {
+            "left": 120.1328125,
+            "right": 269.8671875,
+            "top": 664.109375,
+            "bottom": 844
+          },
+          "opacity": 1,
+          "visibility": "visible",
+          "hitPoint": {
+            "x": 157.56640625,
+            "y": 709.08203125
+          },
+          "hitPhysical": "i1"
+        },
+        "intentCountsUnchanged": true
+      },
+      {
+        "viewport": "mobile",
+        "kind": "padding",
+        "denial": {
+          "gameId": "wpudq7",
+          "runId": "event:4",
+          "battleId": "tutorial-battle:event:4:0:prefix",
+          "cardInstanceId": "i1",
+          "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          "target": {
+            "owner": "player",
+            "rank": "back",
+            "slotId": "tutorial-padding:player:back:0"
+          },
+          "reason": "invalid-target",
+          "timestamp": "2026-10-13T04:00:34.688Z",
+          "event": "tutorial_player_card_drop_rejected",
+          "seq": 45
+        },
+        "settledHand": {
+          "physical": "i1",
+          "zone": "near-hand",
+          "slot": null,
+          "returnMarker": null,
+          "rect": {
+            "x": 120.1328125,
+            "y": 664.109375,
+            "width": 149.734375,
+            "height": 209.625
+          },
+          "viewportIntersection": {
+            "left": 120.1328125,
+            "right": 269.8671875,
+            "top": 664.109375,
+            "bottom": 844
+          },
+          "opacity": 1,
+          "visibility": "visible",
+          "hitPoint": {
+            "x": 157.56640625,
+            "y": 709.08203125
+          },
+          "hitPhysical": "i1"
+        },
+        "intentCountsUnchanged": true
+      }
+    ],
+    "placements": [
+      {
+        "viewport": "desktop",
+        "physicalGeometry": {
+          "x": 722,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5,
+          "opacity": 1,
+          "visibility": "visible"
+        },
+        "cardInstanceId": "i1",
+        "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "targetSlotId": "B1",
+        "requestSeq": 48,
+        "engineSeq": 49,
+        "engineIndex": 1
+      },
+      {
+        "viewport": "mobile",
+        "physicalGeometry": {
+          "x": 196.984375,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375,
+          "opacity": 1,
+          "visibility": "visible"
+        },
+        "cardInstanceId": "i1",
+        "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "targetSlotId": "B1",
+        "requestSeq": 48,
+        "engineSeq": 49,
+        "engineIndex": 1
+      }
+    ],
+    "captures": [
+      "invocations/run-0yCsMT/occupied-enemy-denied-desktop.png",
+      "invocations/run-0yCsMT/background-denied-desktop.png",
+      "invocations/run-0yCsMT/padding-denied-desktop.png",
+      "invocations/run-0yCsMT/drop-diagnostic-desktop.png",
+      "invocations/run-0yCsMT/08-player-card-played-desktop.png",
+      "invocations/run-0yCsMT/occupied-enemy-denied-mobile.png",
+      "invocations/run-0yCsMT/background-denied-mobile.png",
+      "invocations/run-0yCsMT/padding-denied-mobile.png",
+      "invocations/run-0yCsMT/drop-diagnostic-mobile.png",
+      "invocations/run-0yCsMT/08-player-card-played-mobile.png"
+    ],
+    "qualification": "Ordinary public desktop/mobile denial/recovery through beat08 on normal1/DPR2. Throwing observers exercised deterministically in actual source-card tests, not injected into browser. Actual prelaunch nine-path fingerprint retained; later test-only fake-timer/void-callback corrections captured by additive final fingerprint after QA. Runtime and scenarios remain exact; no retroactive prelaunch claim or fresh13 fullVictory/default claim.",
+    "visualInspection": "Helper inspected padding-denied-mobile and selected-desktop captures. Usable physical hand intersection/hit retained; cropped hand bottom matches source12 contract. Source13 introduces no geometry/styles. Final cold review remains parent-owned."
+  },
+  "historicalReuse": {
+    "audit": "validation-v01/historical-reuse-audit-v01.json",
+    "sha256": "7f32f6f850dd295c310d461e36ccccc1e9b11c4431aeffb8a6d8b4f1308f2c97",
+    "paths": 11,
+    "normal": "hv-33id.12/invocations/run-6246dk/normal-release-v01.result.json; fullVictory/Avatar historical, with original postlaunch-manifest limitation preserved.",
+    "default": "hv-33id.12/invocations/run-WRb9GO/default-release-v01.result.json; historical explicit null/B0, source-qualified current unchanged bodies.",
+    "proof": "All11 runtime/rules paths byte-equal to source12 after reversing only own catches/docs in memory. Altered whole-file hashes honestly differ."
+  },
+  "failurePaths": {
+    "errorMidStep": {
+      "tests": [
+        {
+          "file": "src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+          "name": "an actual source-card %s denial survives a throwing observer and ends once before fresh recovery",
+          "cases": [
+            "occupied",
+            "background"
+          ]
+        },
+        {
+          "file": "src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+          "name": "a native %s denial survives a throwing observer without substitution and recovers at the exact cell",
+          "cases": [
+            "occupied",
+            "background"
+          ]
+        },
+        {
+          "file": "src/cumulus/screens/TutorialScreen.player.test.tsx",
+          "name": "controller %s denial contains observer errors, clears pending and permits fresh legal recovery",
+          "cases": [
+            "invalid",
+            "unresolved"
+          ]
+        }
+      ],
+      "contract": "Synchronous observer throws; actual pointer ends/capture/return clear, no error/intent, fresh exact recovery."
+    },
+    "interrupt": {
+      "test": {
+        "file": "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "name": "controller %s denial contains observer errors, clears pending and permits fresh legal recovery",
+        "cases": [
+          "unresolved"
+        ]
+      },
+      "scope": "Unresolved public drag-end cleanup contains best-effort observer error. Generic physical pointer-cancel/return implementation is unchanged; no new interrupt transition."
+    },
+    "reloadRestart": {
+      "reason": "No new persisted transition, request or background task. Observer is synchronous best-effort; reload reconstructs unchanged log-backed state. No new reload/restart test applies."
+    },
+    "partialWrite": {
+      "test": {
+        "file": "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "name": "controller %s denial contains observer errors, clears pending and permits fresh legal recovery",
+        "cases": [
+          "invalid",
+          "unresolved"
+        ]
+      },
+      "reason": "No new storage write or gameplay intent. Pending identity clears before observation; public reentrancy proves no duplicate observation after cleanup."
+    },
+    "invalidStale": {
+      "tests": [
+        {
+          "file": "src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+          "name": "an actual source-card %s denial survives a throwing observer and ends once before fresh recovery",
+          "cases": [
+            "occupied",
+            "background"
+          ]
+        },
+        {
+          "file": "src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+          "name": "pointer release denies unavailable, foreign-root, nonfinite and out-of-bounds hits without choosing another cell"
+        },
+        {
+          "file": "src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+          "name": "%s release denies actual invalid cells/background and recovers at the exact legal cell",
+          "cases": [
+            "pointer",
+            "native"
+          ]
+        }
+      ],
+      "contract": "Actual source cases dispatch redundant pointer-up after completion and prove one end/observer before fresh recovery. Existing invalid/root/geometry/padding contracts retained."
+    },
+    "concurrentActors": {
+      "test": {
+        "file": "src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+        "name": "the actual source-card pointer route rejects another rendered board and recovers on its own board"
+      },
+      "reason": "Two rendered boards with identical typed cell IDs preserve independently qualified source-root denial/recovery. No new engine actor or concurrency authority."
+    }
+  },
+  "rawEvidenceManifest": {
+    "filename": "raw-evidence-manifest-v01.json",
+    "sha256": "c2dfe482667b793e54aae004dad3e15fe13c8d6c509ab9bb8ed00a606d55dede"
+  },
+  "runtimeSettlement": {
+    "at": "2026-10-13T04:04:38.425711+00:00",
+    "ownGroups": [
+      36254,
+      36995,
+      37422,
+      38063,
+      39078,
+      39229,
+      39300,
+      42686,
+      43187,
+      43999,
+      45136,
+      46037
+    ],
+    "survivors": [],
+    "port5274": {
+      "exit": 1,
+      "listeners": ""
+    },
+    "context": "Native scenario terminal PASS, contexts cleaned and browser slot1 released; owned server cleanup reported port free. Later peer port reuse does not authorize killing peers."
+  },
+  "parentDuties": "Stage3 nearcommit evidence/schema/cachedcheck/singlecommit ACK; fresh cold temporary-route read-only gpt-5.6-sol review/visual disposition, exactcandidate promotion and acceptance closure.",
+  "finalPrecommitClock": "2026-10-13T04:08:00.502508+00:00",
+  "stage3Acknowledgement": "2026-10-13T04:06:19.366063+00:00",
+  "preservedProvisionalEvidence": {
+    "docs/plan/evidence/friction/hv-33id.13.json": {
+      "filename": "stage3-provisional-evidence-v01/docs/plan/evidence/friction/hv-33id.13.json",
+      "sha256": "135e246d46d49a595617fef9328fb141994dac3f95ba29c0326489a4bfed7f06"
+    },
+    "docs/plan/evidence/measurements/hv-33id.13.json": {
+      "filename": "stage3-provisional-evidence-v01/docs/plan/evidence/measurements/hv-33id.13.json",
+      "sha256": "d1f61f431b26c20384b05c4a850f90e0ca040173c14c4aa60f708d2d6d57acf8"
+    },
+    "docs/plan/evidence/measurements/hv-33id.13.md": {
+      "filename": "stage3-provisional-evidence-v01/docs/plan/evidence/measurements/hv-33id.13.md",
+      "sha256": "294d40216b8abfdfda32ee55d45cb69db4752b80101f7c8d45296b8dd5996561"
+    }
+  }
+}
