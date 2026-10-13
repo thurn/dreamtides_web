@@ -1,0 +1,1390 @@
+{
+  "bead": "hv-umm2.162",
+  "base": "9fdaa25aab8b9a13f5b23c7e23fbb210a4a92eb7",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+  "dispatchProvenance": {
+    "hostDispatchUtc": "2026-10-13T05:44:34.696Z",
+    "callId": "call_L8sV1uygs9PZxSRsNxgNv4CB",
+    "rolloutOrdinal": 27426,
+    "modelSamplingStart": "UNKNOWN"
+  },
+  "implementWindow": {
+    "start": "2026-10-13T05:44:34.696Z",
+    "end": "2026-10-13T06:33:24.435110Z",
+    "endQualification": "Fresh parent endpoint ACK timestamp; Git author/committer metadata uses that endpoint at second precision. Actual later external Git process completion UNKNOWN until helper-commit-process.json receipt, retained outside the immutable commit."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "helper-review-final observer before process spawn at 2026-10-13T06:08:40.659274+00:00",
+        "source": "sysctl -n vm.loadavg",
+        "raw": "{ 6.02 5.01 6.29 }",
+        "oneMinute": 6.02
+      },
+      "implementWindow": {
+        "startSource": "Observed post-claim host dispatch, dispatch-provenance.json",
+        "endSource": "Fresh parent endpoint ACK at 2026-10-13T06:33:24.435110Z",
+        "gitMetadataDate": "2026-10-13T06:33:24Z",
+        "actualGitCompletionSource": "External helper-commit-process.json; future completion was UNKNOWN when this record was committed."
+      }
+    }
+  },
+  "scope": {
+    "entityCount": 4,
+    "productionLeaves": [
+      "151b80b1-0a3f-48d4-9c85-99a9c274fd7f",
+      "58f96494-87ec-4145-9e1c-95951d0ab711",
+      "cbabe603-1333-42bd-85c0-555c664b60b3",
+      "8c117d3f-09af-4312-9897-694a76bd23c6"
+    ],
+    "newPrimitives": 0,
+    "newPromptKinds": 0,
+    "engineChanges": false,
+    "uiChanges": false,
+    "sharedIndexChanges": false,
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "canonicalMetadata": {
+      "base": "9fdaa25aab8b9a13f5b23c7e23fbb210a4a92eb7",
+      "rows": [
+        {
+          "uuid": "151b80b1-0a3f-48d4-9c85-99a9c274fd7f",
+          "metadataEqual": true,
+          "verifiedText": "ldwqy3vsku",
+          "baseAbilities": 1,
+          "amplifiedAbilities": 1,
+          "costs": [
+            {
+              "cost": "energyX",
+              "min": 1
+            }
+          ],
+          "status": "authored"
+        },
+        {
+          "uuid": "58f96494-87ec-4145-9e1c-95951d0ab711",
+          "metadataEqual": true,
+          "verifiedText": "1eqjdgvs3os",
+          "baseAbilities": 1,
+          "amplifiedAbilities": 1,
+          "costs": [
+            {
+              "cost": "energy",
+              "amount": 1
+            },
+            {
+              "cost": "energyX",
+              "min": 1
+            }
+          ],
+          "status": "authored"
+        },
+        {
+          "uuid": "cbabe603-1333-42bd-85c0-555c664b60b3",
+          "metadataEqual": true,
+          "verifiedText": "154o9wjfvc7",
+          "baseAbilities": 2,
+          "amplifiedAbilities": 2,
+          "costs": [
+            {
+              "cost": "energy",
+              "amount": 3
+            }
+          ],
+          "status": "authored"
+        },
+        {
+          "uuid": "8c117d3f-09af-4312-9897-694a76bd23c6",
+          "metadataEqual": true,
+          "verifiedText": "1i0885fkgro",
+          "baseAbilities": 1,
+          "amplifiedAbilities": 1,
+          "costs": [
+            {
+              "cost": "energy",
+              "amount": 1
+            }
+          ],
+          "status": "authored"
+        }
+      ]
+    },
+    "fallout": [],
+    "reviewRouting": "D18 composition; no primitive, prompt kind or exported engine API change requires a per-bead independent review. Any required review during current temporary routing uses fresh read-only gpt-5.6-sol through Codex CLI; no Claude review attempted."
+  },
+  "publicContracts": {
+    "sanctum": "countDiscardedBy(DiscardNode,event), builders.ts453, discard.ts chosen physical cohort, interpreter.ts movedCardRecord captures effective predeparture types after successful resolution. filtered-discard-count.contracts proves fewer cards, created cessation, replacement, independent resolutions, copies, repetition, reload, stale/invalid/wrong-side answers and rollback.",
+    "world": "activated/exhaustSelf and materializeFigments public contracts; judged ordinary battlefield-tap proves payment and exact physical Warrior creation.",
+    "army": "energyCost:null canonical data lowers through content-catalog.ts cardCosts to energyX min1; docs/rules.md contextual X minima and existing materialize-figments capacity contracts govern. No data or minimum modification.",
+    "mourner": "whenDissolved(characterYouControl()) plus onMaterialized; triggers-dissolved.test.ts public contracts prove self, controlled Figments, last-known control and type, abandonment-as-dissolution, and exclusion of non-dissolving departures."
+  },
+  "d20": {
+    "module": "src/content/specs/cards-50.scenarios.ts",
+    "slug": "cards-50",
+    "cases": 4,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0,
+      "cases": 4,
+      "plainScenarioModules": 1,
+      "plainScenarioLines": 55
+    },
+    "discovery": "Existing import.meta.glob; no shared list edit.",
+    "initialFixtureLimitation": "Initial X2 paired opposite type conversions yielded one printed and one effective Event, so it distinguished local/Event counting from count-all and turn-wide counting but could not reject printed-type counting.",
+    "finalFixture": "Parent-approved X3: three printed synthetic Characters, exactly one converted effective Event and two effective Characters, with earlier unrelated Event discard. Draw three synthetic fillers retained. Counts differ: correct1, printedEvents0, Characters2, requested/all-effect3, wholeTurn4. Both controllers and base/amplified. No pricing/balance assertion; fixture energy20.",
+    "focusedFinal": {
+      "receipt": "helper-focused-final-process.json",
+      "exit": 0,
+      "cases": 4,
+      "skipped": 230
+    },
+    "counterfactual": {
+      "receipt": "helper-counterfactual-esm-process.json",
+      "exit": 0,
+      "correctRows": 4,
+      "rejectedWrongCountRows": 16,
+      "sourceMutation": false,
+      "output": "helper-counterfactual-esm.stdout",
+      "method": "Public engine and synthetic fixture; replace only the public materializeFigments count AST in a fresh local definition for X, effective Characters, printed cohort zero or whole-turn four. No engine mock or repository source mutation."
+    }
+  },
+  "validation": {
+    "helper-focused": {
+      "label": "helper-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 36233,
+      "observerPgid": 36233,
+      "startUtc": "2026-10-13T05:50:57.344180+00:00",
+      "pid": 36242,
+      "pgid": 36242,
+      "exit": 0,
+      "endUtc": "2026-10-13T05:51:05.974054+00:00",
+      "elapsedS": 8.629829416997381
+    },
+    "helper-review": {
+      "label": "helper-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 37091,
+      "observerPgid": 37091,
+      "startUtc": "2026-10-13T05:51:31.956424+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T05:51:31.956547+00:00",
+        "measuredFor": "helper-review observer before process spawn",
+        "raw": "{ 2.72 5.28 9.06 }"
+      },
+      "pid": 37100,
+      "pgid": 37100,
+      "cpuS": {
+        "user": 143.077706,
+        "system": 17.870845,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T05:52:22.255716+00:00",
+      "elapsedS": 50.29885604100127
+    },
+    "helper-knip": {
+      "label": "helper-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 38996,
+      "observerPgid": 38996,
+      "startUtc": "2026-10-13T05:52:45.113085+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T05:52:45.113201+00:00",
+        "measuredFor": "helper-knip observer before process spawn",
+        "raw": "{ 5.08 5.56 8.87 }"
+      },
+      "pid": 39013,
+      "pgid": 39013,
+      "cpuS": {
+        "user": 3.292792,
+        "system": 1.0735999999999999,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T05:52:49.149844+00:00",
+      "elapsedS": 4.03675841599761
+    },
+    "helper-fuzz-outer": {
+      "label": "helper-fuzz-outer",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-legionnaire-cards50-162/helper-observer.py",
+        "helper-fuzz-execution",
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "8c117d3f-09af-4312-9897-694a76bd23c6,58f96494-87ec-4145-9e1c-95951d0ab711,151b80b1-0a3f-48d4-9c85-99a9c274fd7f,cbabe603-1333-42bd-85c0-555c664b60b3"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 37050,
+      "observerPgid": 37050,
+      "startUtc": "2026-10-13T05:51:30.832638+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T05:51:30.832742+00:00",
+        "measuredFor": "helper-fuzz-outer observer before process spawn",
+        "raw": "{ 2.70 5.31 9.10 }"
+      },
+      "pid": 37060,
+      "pgid": 37060,
+      "cpuS": {
+        "user": 177.848827,
+        "system": 2.123281,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T05:54:16.979016+00:00",
+      "elapsedS": 166.14482941599272
+    },
+    "helper-fuzz-execution": {
+      "label": "helper-fuzz-execution",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "8c117d3f-09af-4312-9897-694a76bd23c6,58f96494-87ec-4145-9e1c-95951d0ab711,151b80b1-0a3f-48d4-9c85-99a9c274fd7f,cbabe603-1333-42bd-85c0-555c664b60b3"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 37061,
+      "observerPgid": 37060,
+      "startUtc": "2026-10-13T05:51:30.854954+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T05:51:30.855051+00:00",
+        "measuredFor": "helper-fuzz-execution observer before process spawn",
+        "raw": "{ 2.70 5.31 9.10 }"
+      },
+      "pid": 37063,
+      "pgid": 37063,
+      "cpuS": {
+        "user": 177.831918,
+        "system": 2.11548,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T05:54:16.975047+00:00",
+      "elapsedS": 166.11855100000685
+    },
+    "helper-preflight": {
+      "label": "helper-preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "8c117d3f-09af-4312-9897-694a76bd23c6,58f96494-87ec-4145-9e1c-95951d0ab711,151b80b1-0a3f-48d4-9c85-99a9c274fd7f,cbabe603-1333-42bd-85c0-555c664b60b3"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 38995,
+      "observerPgid": 38995,
+      "startUtc": "2026-10-13T05:52:45.113130+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T05:52:45.113227+00:00",
+        "measuredFor": "helper-preflight observer before process spawn",
+        "raw": "{ 5.08 5.56 8.87 }"
+      },
+      "pid": 39014,
+      "pgid": 39014,
+      "cpuS": {
+        "user": 1.128218,
+        "system": 0.427336,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T05:52:46.488120+00:00",
+      "elapsedS": 1.37502795898763
+    },
+    "helper-sweep": {
+      "label": "helper-sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.162",
+        "--cards",
+        "8c117d3f-09af-4312-9897-694a76bd23c6,58f96494-87ec-4145-9e1c-95951d0ab711,151b80b1-0a3f-48d4-9c85-99a9c274fd7f,cbabe603-1333-42bd-85c0-555c664b60b3"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 40998,
+      "observerPgid": 40998,
+      "startUtc": "2026-10-13T05:54:13.968718+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T05:54:13.968829+00:00",
+        "measuredFor": "helper-sweep observer before process spawn",
+        "raw": "{ 3.44 4.98 8.32 }"
+      },
+      "pid": 41008,
+      "pgid": 41008,
+      "cpuS": {
+        "user": 12.451895,
+        "system": 5.159177,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T06:00:51.525531+00:00",
+      "elapsedS": 397.5530770829937
+    },
+    "helper-judged-base": {
+      "label": "helper-judged-base",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-legionnaire-cards50-162/helper-world-judged.mjs",
+        "--bead",
+        "hv-umm2.162",
+        "--arg",
+        "variant=base",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 78277,
+      "observerPgid": 78277,
+      "startUtc": "2026-10-13T06:01:34.778524+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T06:01:34.778639+00:00",
+        "measuredFor": "helper-judged-base observer before process spawn",
+        "raw": "{ 5.12 5.61 7.33 }"
+      },
+      "pid": 78286,
+      "pgid": 78286,
+      "cpuS": {
+        "user": 4.449403,
+        "system": 2.235368,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 1,
+      "endUtc": "2026-10-13T06:01:56.451061+00:00",
+      "elapsedS": 21.67237345900503
+    },
+    "helper-judged-base-selector-corrected": {
+      "label": "helper-judged-base-selector-corrected",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-legionnaire-cards50-162/helper-world-judged.mjs",
+        "--bead",
+        "hv-umm2.162",
+        "--arg",
+        "variant=base",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 80272,
+      "observerPgid": 80272,
+      "startUtc": "2026-10-13T06:03:09.665430+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T06:03:09.665542+00:00",
+        "measuredFor": "helper-judged-base-selector-corrected observer before process spawn",
+        "raw": "{ 6.52 5.72 7.17 }"
+      },
+      "pid": 80288,
+      "pgid": 80288,
+      "cpuS": {
+        "user": 4.845855,
+        "system": 2.468397,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 1,
+      "endUtc": "2026-10-13T06:03:37.113472+00:00",
+      "elapsedS": 27.44782000000123
+    },
+    "helper-judged-base-event-corrected": {
+      "label": "helper-judged-base-event-corrected",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-legionnaire-cards50-162/helper-world-judged.mjs",
+        "--bead",
+        "hv-umm2.162",
+        "--arg",
+        "variant=base",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 81602,
+      "observerPgid": 81602,
+      "startUtc": "2026-10-13T06:04:26.413383+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T06:04:26.413482+00:00",
+        "measuredFor": "helper-judged-base-event-corrected observer before process spawn",
+        "raw": "{ 4.54 5.36 6.91 }"
+      },
+      "pid": 81613,
+      "pgid": 81613,
+      "cpuS": {
+        "user": 4.752569,
+        "system": 2.326746,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T06:05:18.808962+00:00",
+      "elapsedS": 52.395116667001275
+    },
+    "helper-judged-amplified": {
+      "label": "helper-judged-amplified",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-legionnaire-cards50-162/helper-world-judged.mjs",
+        "--bead",
+        "hv-umm2.162",
+        "--arg",
+        "variant=amplified",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 83542,
+      "observerPgid": 83542,
+      "startUtc": "2026-10-13T06:06:12.092783+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T06:06:12.092890+00:00",
+        "measuredFor": "helper-judged-amplified observer before process spawn",
+        "raw": "{ 3.12 4.67 6.46 }"
+      },
+      "pid": 83551,
+      "pgid": 83551,
+      "cpuS": {
+        "user": 4.8136,
+        "system": 2.2917009999999998,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T06:07:04.974449+00:00",
+      "elapsedS": 52.881208582999534
+    },
+    "helper-counterfactual": {
+      "label": "helper-counterfactual",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-legionnaire-cards50-162/helper-counterfactual.ts",
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 86619,
+      "observerPgid": 86619,
+      "startUtc": "2026-10-13T06:08:07.978845+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T06:08:07.978960+00:00",
+        "measuredFor": "helper-counterfactual observer before process spawn",
+        "raw": "{ 5.52 4.85 6.28 }"
+      },
+      "pid": 86628,
+      "pgid": 86628,
+      "cpuS": {
+        "user": 0.35046299999999997,
+        "system": 0.205115,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 1,
+      "endUtc": "2026-10-13T06:08:08.514676+00:00",
+      "elapsedS": 0.535856500006048
+    },
+    "helper-counterfactual-esm": {
+      "label": "helper-counterfactual-esm",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/dreamtides-legionnaire-cards50-162/helper-counterfactual.mts",
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 86927,
+      "observerPgid": 86927,
+      "startUtc": "2026-10-13T06:08:25.378747+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T06:08:25.378893+00:00",
+        "measuredFor": "helper-counterfactual-esm observer before process spawn",
+        "raw": "{ 4.99 4.76 6.22 }"
+      },
+      "pid": 86938,
+      "pgid": 86938,
+      "cpuS": {
+        "user": 0.7295889999999999,
+        "system": 0.28804399999999997,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T06:08:26.181460+00:00",
+      "elapsedS": 0.8027515419962583
+    },
+    "helper-focused-final": {
+      "label": "helper-focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-50"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 86633,
+      "observerPgid": 86633,
+      "startUtc": "2026-10-13T06:08:08.559507+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T06:08:08.559620+00:00",
+        "measuredFor": "helper-focused-final observer before process spawn",
+        "raw": "{ 5.52 4.85 6.28 }"
+      },
+      "pid": 86647,
+      "pgid": 86647,
+      "cpuS": {
+        "user": 3.789827,
+        "system": 1.370033,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T06:08:12.566325+00:00",
+      "elapsedS": 4.006813875006628
+    },
+    "helper-review-final": {
+      "label": "helper-review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 87178,
+      "observerPgid": 87178,
+      "startUtc": "2026-10-13T06:08:40.659156+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T06:08:40.659274+00:00",
+        "measuredFor": "helper-review-final observer before process spawn",
+        "raw": "{ 6.02 5.01 6.29 }"
+      },
+      "pid": 87189,
+      "pgid": 87189,
+      "cpuS": {
+        "user": 117.730188,
+        "system": 14.664212,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T06:09:26.908391+00:00",
+      "elapsedS": 46.24882645798789
+    },
+    "helper-knip-final": {
+      "label": "helper-knip-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 89841,
+      "observerPgid": 89841,
+      "startUtc": "2026-10-13T06:10:36.417716+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T06:10:36.417834+00:00",
+        "measuredFor": "helper-knip-final observer before process spawn",
+        "raw": "{ 6.70 5.89 6.49 }"
+      },
+      "pid": 89851,
+      "pgid": 89851,
+      "cpuS": {
+        "user": 3.039144,
+        "system": 0.897972,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T06:10:39.292493+00:00",
+      "elapsedS": 2.8748000420018798
+    },
+    "helper-schema": {
+      "label": "helper-schema",
+      "command": [
+        "node",
+        "/tmp/dreamtides-legionnaire-cards50-162/helper-schema.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+        "/tmp/dreamtides-legionnaire-cards50-162"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 98367,
+      "observerPgid": 98344,
+      "startUtc": "2026-10-13T06:14:30.554545+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T06:14:30.554645+00:00",
+        "measuredFor": "helper-schema observer before process spawn",
+        "raw": "{ 5.61 5.88 6.34 }"
+      },
+      "pid": 98370,
+      "pgid": 98370,
+      "cpuS": {
+        "user": 0.042452,
+        "system": 0.007631,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T06:14:30.606400+00:00",
+      "elapsedS": 0.05188195900700521
+    }
+  },
+  "weightedFuzz": {
+    "requestedGames": 300,
+    "weightUuids": [
+      "8c117d3f-09af-4312-9897-694a76bd23c6",
+      "58f96494-87ec-4145-9e1c-95951d0ab711",
+      "151b80b1-0a3f-48d4-9c85-99a9c274fd7f",
+      "cbabe603-1333-42bd-85c0-555c664b60b3"
+    ],
+    "games": 300,
+    "steps": 117637,
+    "prompts": 8004,
+    "interactiveReruns": 811,
+    "failures": 0,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 1
+    },
+    "results": {
+      "player": 150,
+      "enemy": 150,
+      "draw": 0
+    },
+    "includedInFiledOrder": [
+      611,
+      618,
+      612,
+      623
+    ],
+    "exercisedInFiledOrder": [
+      245,
+      430,
+      207,
+      132
+    ],
+    "reportedWallS": 165.2,
+    "reportedCpuS": 178.9,
+    "outerWallS": 166.14482941599272,
+    "executionOuterWallS": 166.11855100000685,
+    "queueLaunchDifferenceS": 0.026278415985871106,
+    "queueQualification": "Difference includes wrapper/launch/teardown overhead and is not a separately measured pure queue duration. Inner observer started only after lockf acquired the machine-wide heavy slot.",
+    "seeds": "Default fuzz0..299; actual request and source CLI retained.",
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "performanceClaim": false
+  },
+  "preflight": {
+    "event": "labPreflightSummary",
+    "cards": [
+      "8c117d3f-09af-4312-9897-694a76bd23c6",
+      "58f96494-87ec-4145-9e1c-95951d0ab711",
+      "151b80b1-0a3f-48d4-9c85-99a9c274fd7f",
+      "cbabe603-1333-42bd-85c0-555c664b60b3"
+    ],
+    "avatars": [],
+    "dreamsigns": [],
+    "variants": [
+      "base",
+      "amplified",
+      "empowered",
+      "kindled",
+      "resonant",
+      "inspired",
+      "enduring",
+      "hastened",
+      "attuned",
+      "perfected"
+    ],
+    "sides": [
+      "player",
+      "enemy"
+    ],
+    "counts": {
+      "pass": 46,
+      "pending": 0,
+      "skip": 34,
+      "fail": 0
+    },
+    "elapsedMs": 46.53987499999994,
+    "hostLoad": 5.07421875,
+    "enemyMode": "scripted-lab-play-first-legal-prompts"
+  },
+  "qa": {
+    "sweepSummary": "invocations/sweep-JdSyFa/summary.json",
+    "sweepCounts": {
+      "pass": 46,
+      "skip": 34,
+      "fail": 0
+    },
+    "sweepRequestedCells": 80,
+    "sweepScope": "Default all variants, both controllers; skipped variants are ineligible. Source play/resolution sweep for Worldbreacher supplemented by actual activation judgment.",
+    "sweepSummaryData": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-JdSyFa",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.162/invocations/sweep-JdSyFa",
+      "counts": {
+        "pass": 46,
+        "skip": 34
+      },
+      "attemptCounts": {
+        "pass": 46,
+        "skip": 34
+      },
+      "hostLoad": 3.43798828125,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1669,
+        "scenario": 394921.61724899994,
+        "cleanup": 751.9520829999819,
+        "execution": 397402.88845800003,
+        "total": 397407.88845800003
+      }
+    },
+    "d21SampleBytes": {
+      "8c117d3f-09af-4312-9897-694a76bd23c6": 15,
+      "58f96494-87ec-4145-9e1c-95951d0ab711": 63,
+      "151b80b1-0a3f-48d4-9c85-99a9c274fd7f": 63,
+      "cbabe603-1333-42bd-85c0-555c664b60b3": 118
+    },
+    "judgedOutcomes": 4,
+    "judgedDiagnosticFailures": 2,
+    "nonApplicableVariants": 6,
+    "rawLedgerCounts": {
+      "sweep:pass": 46,
+      "sweep:skip": 34,
+      "judged:fail": 2,
+      "judged:pass": 4,
+      "judged:skip": 6
+    },
+    "judgedReports": [
+      {
+        "report": "invocations/run-hIhkhZ/helper-world-judged.result.json",
+        "ok": false,
+        "error": "desktop#0: Error: source-scoped activation or Warrior event UUID mismatch",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1986,
+          "scenario": 24582,
+          "total": 26663
+        },
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.162/invocations/run-hIhkhZ/helper-world-judged-desktop.jsonl",
+            "gameId": "pczrks",
+            "selectedBy": "url",
+            "rows": 55,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "report": "invocations/run-2wFRqw/helper-world-judged.result.json",
+        "ok": false,
+        "error": "desktop#0: QaTimeoutError: waitVisible [data-battle-card-id=\"i1\"][data-battle-card-playable=\"true\"]: timed out after 15000 ms",
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1669,
+          "scenario": 19165,
+          "total": 20896
+        },
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.162/invocations/run-2wFRqw/helper-world-judged-desktop.jsonl",
+            "gameId": "vagqjo",
+            "selectedBy": "url",
+            "rows": 24,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "report": "invocations/run-5HrgQP/helper-world-judged.result.json",
+        "ok": true,
+        "error": "",
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 1351,
+          "scenario": 50264,
+          "total": 51669
+        },
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.162/invocations/run-5HrgQP/helper-world-judged-desktop.jsonl",
+            "gameId": "bgaje5",
+            "selectedBy": "url",
+            "rows": 55,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.162/invocations/run-5HrgQP/helper-world-judged-mobile.jsonl",
+            "gameId": "h3oqwv",
+            "selectedBy": "url",
+            "rows": 55,
+            "reason": null
+          }
+        ]
+      },
+      {
+        "report": "invocations/run-qqH8m3/helper-world-judged.result.json",
+        "ok": true,
+        "error": "",
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 1353,
+          "scenario": 50731,
+          "total": 52138
+        },
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.162/invocations/run-qqH8m3/helper-world-judged-desktop.jsonl",
+            "gameId": "paq6id",
+            "selectedBy": "url",
+            "rows": 55,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.162/invocations/run-qqH8m3/helper-world-judged-mobile.jsonl",
+            "gameId": "86kduo",
+            "selectedBy": "url",
+            "rows": 57,
+            "reason": null
+          }
+        ]
+      }
+    ],
+    "visualInspection": "Own source/created figment geometry and all four activated captures inspected: spark1 or2 and both exhaust markers are clear, cards and controls contained. Initial and final state captures retained. Native screenshot pixel dimensions are2x CSSviewport, confirmed by PNG headers rather than inferred from runner metadata.",
+    "captureDimensions": [
+      {
+        "invocation": "run-hIhkhZ",
+        "filename": "worldbreacher-base-desktop-playable.png",
+        "actualPixels": {
+          "width": 2880,
+          "height": 1800
+        },
+        "reportedCssViewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "sha256": "4597bcca52d2150a34a583feeea30aee483efe6436b19ddaf1d761d71a0622ca"
+      },
+      {
+        "invocation": "run-5HrgQP",
+        "filename": "worldbreacher-base-desktop-playable.png",
+        "actualPixels": {
+          "width": 2880,
+          "height": 1800
+        },
+        "reportedCssViewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "sha256": "4597bcca52d2150a34a583feeea30aee483efe6436b19ddaf1d761d71a0622ca"
+      },
+      {
+        "invocation": "run-5HrgQP",
+        "filename": "worldbreacher-base-desktop-activated.png",
+        "actualPixels": {
+          "width": 2880,
+          "height": 1800
+        },
+        "reportedCssViewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "sha256": "02e46b91f33548e8b42a42749f83ff2de3f286838eda36041baeb420ba0e70a7"
+      },
+      {
+        "invocation": "run-5HrgQP",
+        "filename": "worldbreacher-base-mobile-playable.png",
+        "actualPixels": {
+          "width": 780,
+          "height": 1688
+        },
+        "reportedCssViewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "46b1cf1fa6e413fb80dd94954f929fba17a5ab9fb72a4f53892edf1df672aeae"
+      },
+      {
+        "invocation": "run-5HrgQP",
+        "filename": "worldbreacher-base-mobile-activated.png",
+        "actualPixels": {
+          "width": 780,
+          "height": 1688
+        },
+        "reportedCssViewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "a9fb7374beaaa28687020d0f6cb0d2db78149ecc4399667ec1d4b45f6e09f19c"
+      },
+      {
+        "invocation": "run-qqH8m3",
+        "filename": "worldbreacher-amplified-desktop-playable.png",
+        "actualPixels": {
+          "width": 2880,
+          "height": 1800
+        },
+        "reportedCssViewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "sha256": "ab79a5f00ef5060d525d28abbdbe5c6f44d844af3cb84034e73208ef6d29f2a9"
+      },
+      {
+        "invocation": "run-qqH8m3",
+        "filename": "worldbreacher-amplified-desktop-activated.png",
+        "actualPixels": {
+          "width": 2880,
+          "height": 1800
+        },
+        "reportedCssViewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "sha256": "182ffbe22c0d957e71d965be2711f956aaeeb39748dac9940a70153a5d8b9d19"
+      },
+      {
+        "invocation": "run-qqH8m3",
+        "filename": "worldbreacher-amplified-mobile-playable.png",
+        "actualPixels": {
+          "width": 780,
+          "height": 1688
+        },
+        "reportedCssViewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "9f596a1da0cdf52495a0ced590fc4c0840ee2cb03a9b834d0075216c1657600d"
+      },
+      {
+        "invocation": "run-qqH8m3",
+        "filename": "worldbreacher-amplified-mobile-activated.png",
+        "actualPixels": {
+          "width": 780,
+          "height": 1688
+        },
+        "reportedCssViewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sha256": "41cfa5c39f033752c84c8a75bc3915443e4ca22e36fe2d29d01533c5d78f494f"
+      }
+    ],
+    "allAcceptedCapsEmpty": true,
+    "diagnosticDispositions": [
+      "run-2wFRqw incorrect same-node selector stopped before play; corrected to tracked near-hand control.",
+      "run-hIhkhZ actual activation/creation completed, but incorrect figment UUID expectation in CardId-only event map failed; corrected proof pairs materialized physical ID with committed printing.",
+      "Scratch .ts first launch selected CJS and rejected top-level await; .mts explicit ESM launch passes."
+    ],
+    "noAutomaticRetryUntilGreen": true
+  },
+  "runtimeLedger": [
+    {
+      "observation": "helper-sweep-runtime.json",
+      "records": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "record": {
+            "token": "f1ff0f6d-2cf2-40ea-a65f-f50c2ca7546c",
+            "pid": 41008,
+            "bead": "hv-umm2.162",
+            "label": "card-sweep",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-13T05:54:15.808Z",
+            "providerState": "active",
+            "mcpSessionId": "de339092-6780-4366-a40d-74943c10d9d5",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "record": {
+            "token": "524ab66c-6ece-4bfd-8a40-e5d59442bf64",
+            "runner": {
+              "pid": 41008,
+              "group": 41008,
+              "started": "Mon Oct 12 22:54:13 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.162 --cards 8c117d3f-09af-4312-9897-694a76bd23c6,58f96494-87ec-4145-9e1c-95951d0ab711,151b80b1-0a3f-48d4-9c85-99a9c274fd7f,cbabe603-1333-42bd-85c0-555c664b60b3"
+            },
+            "server": {
+              "pid": 41048,
+              "group": 41048,
+              "started": "Mon Oct 12 22:54:14 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 524ab66c-6ece-4bfd-8a40-e5d59442bf64 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+            "port": 5274
+          }
+        }
+      ]
+    },
+    {
+      "observation": "helper-judged-base-runtime.json",
+      "records": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "record": {
+            "token": "26f02da3-c5d5-42db-a6af-417db29254c9",
+            "pid": 78286,
+            "bead": "hv-umm2.162",
+            "label": "helper-world-judged",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-13T06:01:36.649Z",
+            "providerState": "active",
+            "mcpSessionId": "2f3b4d66-2e32-49aa-b0ba-81c89bb23d55",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "record": {
+            "token": "43910371-3a37-46bc-ac33-825635575c11",
+            "runner": {
+              "pid": 78286,
+              "group": 78286,
+              "started": "Mon Oct 12 23:01:34 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-legionnaire-cards50-162/helper-world-judged.mjs --bead hv-umm2.162 --arg variant=base --viewports desktop,mobile"
+            },
+            "server": {
+              "pid": 78316,
+              "group": 78316,
+              "started": "Mon Oct 12 23:01:34 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 43910371-3a37-46bc-ac33-825635575c11 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+            "port": 5274
+          }
+        }
+      ]
+    },
+    {
+      "observation": "helper-judged-base-event-corrected-runtime.json",
+      "records": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "record": {
+            "token": "4e694d21-6eb2-45c7-9544-2695eba10358",
+            "pid": 81613,
+            "bead": "hv-umm2.162",
+            "label": "helper-world-judged",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-13T06:04:27.888Z",
+            "providerState": "active",
+            "mcpSessionId": "1d4ed6c0-da30-433a-aede-24946d9650fb",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "record": {
+            "token": "86719630-876c-48f3-aad7-f5c20eada1df",
+            "runner": {
+              "pid": 81613,
+              "group": 81613,
+              "started": "Mon Oct 12 23:04:26 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-legionnaire-cards50-162/helper-world-judged.mjs --bead hv-umm2.162 --arg variant=base --viewports desktop,mobile"
+            },
+            "server": {
+              "pid": 81641,
+              "group": 81641,
+              "started": "Mon Oct 12 23:04:26 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 86719630-876c-48f3-aad7-f5c20eada1df /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+            "port": 5274
+          }
+        }
+      ]
+    },
+    {
+      "observation": "helper-judged-amplified-runtime.json",
+      "records": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "record": {
+            "token": "b2da68a4-6dfa-466c-9247-2622b3a685fa",
+            "pid": 83551,
+            "bead": "hv-umm2.162",
+            "label": "helper-world-judged",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-13T06:06:13.578Z",
+            "providerState": "active",
+            "mcpSessionId": "810d31c5-444c-43af-bb07-24852209b13c",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "record": {
+            "token": "60a3b3a2-8a8b-4f82-93d0-ac051834ed71",
+            "runner": {
+              "pid": 83551,
+              "group": 83551,
+              "started": "Mon Oct 12 23:06:12 2026",
+              "state": "Ss",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-legionnaire-cards50-162/helper-world-judged.mjs --bead hv-umm2.162 --arg variant=amplified --viewports desktop,mobile"
+            },
+            "server": {
+              "pid": 83579,
+              "group": 83579,
+              "started": "Mon Oct 12 23:06:12 2026",
+              "state": "Rs",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 60a3b3a2-8a8b-4f82-93d0-ac051834ed71 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+            "port": 5274
+          }
+        }
+      ]
+    }
+  ],
+  "resourceSettlement": {
+    "at": "2026-10-13T06:11:54.298782+00:00",
+    "ownedPids": [
+      36233,
+      36242,
+      37050,
+      37060,
+      37061,
+      37063,
+      37091,
+      37100,
+      38995,
+      38996,
+      39013,
+      39014,
+      40998,
+      41008,
+      41048,
+      78277,
+      78286,
+      78316,
+      80272,
+      80288,
+      80319,
+      81602,
+      81613,
+      81641,
+      83542,
+      83551,
+      83579,
+      86619,
+      86628,
+      86633,
+      86647,
+      86927,
+      86938,
+      87178,
+      87189,
+      89841,
+      89851
+    ],
+    "ownedGroups": [
+      36242,
+      37060,
+      37063,
+      37100,
+      39013,
+      39014,
+      41008,
+      41048,
+      78286,
+      78316,
+      80288,
+      80319,
+      81613,
+      81641,
+      83551,
+      83579,
+      86628,
+      86647,
+      86938,
+      87189,
+      89851
+    ],
+    "matchingProcesses": [],
+    "ownRecords": [],
+    "qaPort": 5274,
+    "lsofExit": 1,
+    "lsofStdout": "",
+    "allObserversTerminal": true,
+    "allOwnedObservedPidsAndGroupsAbsent": true,
+    "nativeReportsRetainCleanup": true,
+    "providerUnknown": "run-hIhkhZ MCP transport session ID was not observed before the short run closed; native slot1/port5274/runner80288/server80319 and successful local cleanup are retained. No invented session identity.",
+    "foreignProcessesTouched": false
+  },
+  "sourceFreeze": {
+    "at": "2026-10-13T06:11:54.298782+00:00",
+    "files": {
+      "src/content/cards/worldbreacher-8c117d3f.ts": "1af9755b053d3311e1235123301f34a07f8386deae5fe070c67d9aa46e63f52b",
+      "src/content/cards/sanctum-approach-58f96494.ts": "faf66fd2cdb870df68a8f566446cb97537a34f51fdc7fd91a244362caffdfa30",
+      "src/content/cards/ethereal-army-151b80b1.ts": "4bc8ec250558ac3beb8f1b410e748cc6c2bc3e1b6ba5b11b4958fb167c33ebf2",
+      "src/content/cards/silent-mourner-cbabe603.ts": "d790cd42c1951023068ca46dcc3447f384901f0888a7aee7f112461c845cfefb",
+      "src/content/specs/cards-50.scenarios.ts": "edd434ae28a91ac6cd9f106010f42c6e5f095dab54cb2fcc923cef469a40649c"
+    },
+    "productionFourEqualToBrowserAndFuzzFreeze": true,
+    "scenarioChange": "Parent-approved stronger X3 semantic cohort after all browser sessions closed."
+  },
+  "productionQaFuzzFreeze": {
+    "at": "2026-10-13T05:53:44.466225+00:00",
+    "files": {
+      "src/content/cards/worldbreacher-8c117d3f.ts": "1af9755b053d3311e1235123301f34a07f8386deae5fe070c67d9aa46e63f52b",
+      "src/content/cards/sanctum-approach-58f96494.ts": "faf66fd2cdb870df68a8f566446cb97537a34f51fdc7fd91a244362caffdfa30",
+      "src/content/cards/ethereal-army-151b80b1.ts": "4bc8ec250558ac3beb8f1b410e748cc6c2bc3e1b6ba5b11b4958fb167c33ebf2",
+      "src/content/cards/silent-mourner-cbabe603.ts": "d790cd42c1951023068ca46dcc3447f384901f0888a7aee7f112461c845cfefb",
+      "src/content/specs/cards-50.scenarios.ts": "b337395435064274826c987066ef926e663d5b02ccb99e2621f8409162147437"
+    }
+  },
+  "unknowns": [
+    "Actual model sampling start UNKNOWN; dispatch host timestamp/callID/ordinal observed by parent.",
+    "run-hIhkhZ MCP session ID UNKNOWN; bounded parent archived report/log search found none. Known runner/server/port/slot, normal finally receipts and gone groups retained without borrowing another session ID.",
+    "Future Git process start/end/exit UNKNOWN until external helper-commit receipt."
+  ],
+  "frictionThreshold": "No discrete issue cost more than approximately10minutes; retain all shorter diagnostic failures and corrections as validation/QA observations. No speedup or independent host-load claim.",
+  "validationSummaries": {
+    "focusedInitial": {
+      "files": 3,
+      "cases": 2829,
+      "exit": 0
+    },
+    "reviewInitial": {
+      "files": 241,
+      "cases": 4940,
+      "exit": 0
+    },
+    "focusedFinal": {
+      "files": 1,
+      "cases": 4,
+      "skipped": 230,
+      "exit": 0
+    },
+    "reviewFinal": {
+      "files": 241,
+      "cases": 4940,
+      "exit": 0
+    },
+    "knipFinal": {
+      "exit": 0
+    },
+    "ownSchema": {
+      "exit": 0,
+      "source": "helper-schema.stdout"
+    }
+  },
+  "endpointFinalization": {
+    "ackUtc": "2026-10-13T06:33:24.435110Z",
+    "parentReceipt": "endpoint-ack.json",
+    "preEndpointTree": "5566c230ec37bb3b51fe1d87ed0311e1b1d859b7",
+    "permittedMetadataPaths": [
+      "docs/plan/evidence/friction/hv-umm2.162.json",
+      "docs/plan/evidence/measurements/hv-umm2.162.json"
+    ],
+    "otherSevenFrozenHashesPreserved": true,
+    "gitAuthorAndCommitterDate": "2026-10-13T06:33:24Z",
+    "actualGitProcessReceipt": "helper-commit-process.json",
+    "actualFutureGitProcessStartEndExit": "UNKNOWN until external receipt",
+    "implementWindowIncludesParentAuditHold": true,
+    "schemaReceipt": {
+      "label": "helper-schema-endpoint",
+      "command": [
+        "node",
+        "/tmp/dreamtides-legionnaire-cards50-162/helper-schema.mjs",
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+        "/tmp/dreamtides-legionnaire-cards50-162"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-162-legionnaire-synergies",
+      "observerPid": 26540,
+      "observerPgid": 26540,
+      "startUtc": "2026-10-13T06:34:31.323897+00:00",
+      "hostLoad": {
+        "source": "sysctl -n vm.loadavg",
+        "observedUtc": "2026-10-13T06:34:31.324003+00:00",
+        "measuredFor": "helper-schema-endpoint observer before process spawn",
+        "raw": "{ 3.07 3.77 4.68 }"
+      },
+      "pid": 26550,
+      "pgid": 26550,
+      "cpuS": {
+        "user": 0.040042,
+        "system": 0.007996999999999999,
+        "scope": "waited command and its reaped descendants"
+      },
+      "exit": 0,
+      "endUtc": "2026-10-13T06:34:31.377006+00:00",
+      "elapsedS": 0.05313649999152403
+    }
+  }
+}

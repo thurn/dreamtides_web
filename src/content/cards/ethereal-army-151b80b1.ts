@@ -1,4 +1,8 @@
+import { event, x } from "../../engine/dsl/builders";
+import { materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
 import { card } from "../define";
+import ethereal from "../figments/ethereal-3eddb1b8";
 
 export default card({
   name: "Ethereal Army",
@@ -18,5 +22,8 @@ export default card({
   artOwned: false,
   cardNumber: 287,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    event(materializeFigments(parseFigmentId(ethereal.id), x(), { spark: variant.amplified ? 2 : 1 })),
+  ],
+  verifiedText: "ldwqy3vsku",
 });

@@ -1,4 +1,8 @@
+import { activated, exhaustSelf } from "../../engine/dsl/builders";
+import { materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
 import { card } from "../define";
+import warrior from "../figments/warrior-bb1a5acd";
 
 export default card({
   name: "Worldbreacher",
@@ -19,5 +23,8 @@ export default card({
   cardNumber: 108,
   art: { x: 0, y: -0.346, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([exhaustSelf()], materializeFigments(parseFigmentId(warrior.id), 1, { spark: variant.amplified ? 2 : 1 })),
+  ],
+  verifiedText: "1i0885fkgro",
 });

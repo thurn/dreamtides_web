@@ -1,4 +1,8 @@
+import { countDiscardedBy, event, x } from "../../engine/dsl/builders";
+import * as p from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
 import { card } from "../define";
+import ethereal from "../figments/ethereal-3eddb1b8";
 
 export default card({
   name: "Sanctum Approach",
@@ -22,5 +26,13 @@ export default card({
   cardNumber: 206,
   art: { x: 0, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => {
+    const instruction = p.discard(x());
+    return [event(p.sequence(
+      p.draw(x()),
+      instruction,
+      p.materializeFigments(parseFigmentId(ethereal.id), countDiscardedBy(instruction, "event"), { spark: variant.amplified ? 2 : 1 }),
+    ))];
+  },
+  verifiedText: "1eqjdgvs3os",
 });

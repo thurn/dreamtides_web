@@ -1,0 +1,37 @@
+{
+  "bead": "hv-umm2.162",
+  "phase": 5,
+  "implementMin": 48.82898516666667,
+  "implementWindow": {
+    "start": "2026-10-13T05:44:34.696Z",
+    "end": "2026-10-13T06:33:24.435110Z"
+  },
+  "localValidationS": {
+    "focused": 8.629829,
+    "review": 50.298856,
+    "knip": 4.036758,
+    "fuzz-outer": 166.144829,
+    "fuzz-execution": 166.118551,
+    "preflight": 1.375028,
+    "sweep": 397.553077,
+    "judged-base": 21.672373,
+    "judged-base-selector-corrected": 27.44782,
+    "judged-base-event-corrected": 52.395117,
+    "judged-amplified": 52.881209,
+    "counterfactual": 0.535857,
+    "counterfactual-esm": 0.802752,
+    "focused-final": 4.006814,
+    "review-final": 46.248826,
+    "knip-final": 2.8748
+  },
+  "hostLoad": 6.02,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "cases": 4,
+    "plainScenarioModules": 1,
+    "plainScenarioLines": 55
+  },
+  "friction": []
+}
