@@ -1,3 +1,6 @@
+import { countCards, event } from "../../engine/dsl/builders";
+import { discard, gainEnergy, sequence } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 347,
   art: { x: -0.294, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(sequence(discard(countCards("hand")), gainEnergy(variant.amplified ? 4 : 3)))],
+  verifiedText: expectedVerifiedText("Discard your hand. Gain 3●.", "Discard your hand. Gain 4●."),
 });

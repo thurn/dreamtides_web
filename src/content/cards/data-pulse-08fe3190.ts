@@ -1,3 +1,6 @@
+import { event } from "../../engine/dsl/builders";
+import { draw, gainEnergy, sequence } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 285,
   art: { x: -0.168, y: 0.032, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(sequence(gainEnergy(variant.amplified ? 3 : 2), draw(1)))],
+  verifiedText: expectedVerifiedText("Gain 2●. Draw a card.", "Gain 3●. Draw a card."),
 });

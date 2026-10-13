@@ -1,0 +1,5226 @@
+{
+  "bead": "hv-umm2.132",
+  "phase": 5,
+  "sourceBase": "d9ed987e2bf68a4ec7da47cdbd2126140aedc55c",
+  "scope": {
+    "uuids": [
+      "f7b135ea-4894-46ab-b41d-ba2f74b070a1",
+      "1434440c-c86f-4b7d-83e7-3bd1f7dde63e",
+      "08fe3190-f559-4152-941d-33ec4180f509",
+      "b4838d67-f055-4fd3-a64d-0a4d2b6678cc"
+    ],
+    "sourceOnly": true,
+    "productionChurn": 24,
+    "newPrimitiveOrPromptKind": false,
+    "coreReviewRequired": false,
+    "rulesLadder": "not invoked; normative rules settle complete BASE/AMP clauses",
+    "scenarioCases": 4,
+    "scenarioPhysicalLines": 63,
+    "scenarioNewTestEntrypoint": false,
+    "d21": {
+      "sha256FirstBytes": [
+        98,
+        121,
+        208,
+        100
+      ],
+      "sampled": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "newVisualForm": false,
+      "extraProportionalRuntimeCells": 18
+    }
+  },
+  "ownership": {
+    "actualRootClaimStart": "2026-10-13T16:01:58.893835+00:00",
+    "actualRootClaimAck": "2026-10-13T16:01:59.056658+00:00",
+    "dispatchLowerBound": "2026-10-13T16:04:01+00:00",
+    "dispatchUpperBound": "2026-10-13T16:04:59+00:00",
+    "exactSpawnAndFirstHelperToolUtc": "unknown",
+    "implementWindowBasis": "Native parent PREspawn entryACKupdated lower-bound proxy; actual dispatch lies in the retained58-second bracket. Every read, staging, finite/runtime check, coordination, correction, cleanup and wait through evidence endpoint included. Current evidence endpoint is a proxy awaiting measured precommit refresh; not commit timestamp or CPU. Whole root claim includes setup before dispatch.",
+    "evidenceEndpointUtc": "2026-10-13T16:34:38.033759+00:00",
+    "grossClaimToEvidenceEndpointMin": 32.652332066666666,
+    "setupReceipts": {
+      "worktree": {
+        "start": "2026-10-13T16:02:10.007468Z",
+        "end": "2026-10-13T16:02:25.772606Z"
+      },
+      "install": {
+        "start": "2026-10-13T16:02:50.442583Z",
+        "end": "2026-10-13T16:02:53.988426Z"
+      },
+      "entities": {
+        "start": "2026-10-13T16:03:09.404695Z",
+        "end": "2026-10-13T16:03:10.519102Z"
+      }
+    },
+    "writeAckUtc": "2026-10-13T16:09:17.838562Z",
+    "runtimeAckUtc": "2026-10-13T16:12:38.716850Z",
+    "evidenceAckUtc": "2026-10-13T16:31:32.809371Z",
+    "preCommitMarkerUtc": "2026-10-13T16:40:59.348841+00:00",
+    "preCommitMarkerBasis": "Actual UTC sampled immediately before the authorized timestamp-only refresh, lightweight schema/source/diff/stage checks and single source commit. Proxy for implementWindow end, not the actual Git commit end. Original evidence endpoint preserved; observed marker-to-commit tail and exact Git PID/start/end retained in external final commit packet. Every read, coordination, check, evidence compaction and wait remains included in the gross elapsed interval; not CPU."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "FIRST review inner step start16:10:52.021Z, logged load5.9990234375; not whole-stage mean nor current host load"
+      },
+      "implementWindow": {
+        "measuredFor": "Qualified native pre-dispatch lower bound to current actual evidence endpoint; final marker proxy refresh pending"
+      }
+    }
+  },
+  "finite": {
+    "stage": "finite-terminal",
+    "observedUtc": "2026-10-13T16:12:07.056267+00:00",
+    "checks": [
+      {
+        "name": "132-focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "src/engine/triggers/triggers-patterns.test.ts",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/content-gates.test.ts"
+        ],
+        "observerPid": 9110,
+        "pid": 9120,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+        "startUtc": "2026-10-13T16:10:21.847593+00:00",
+        "endUtc": "2026-10-13T16:10:32.389128+00:00",
+        "wallS": 10.541436208004598,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/132-focused.log"
+      },
+      {
+        "name": "132-review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "observerPid": 10873,
+        "pid": 10903,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+        "startUtc": "2026-10-13T16:10:51.815522+00:00",
+        "endUtc": "2026-10-13T16:11:39.166052+00:00",
+        "wallS": 47.34993891601334,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/132-review.log"
+      },
+      {
+        "name": "132-knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "observerPid": 10874,
+        "pid": 10901,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+        "startUtc": "2026-10-13T16:10:51.815215+00:00",
+        "endUtc": "2026-10-13T16:10:56.819771+00:00",
+        "wallS": 5.004524749994744,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/132-knip.log"
+      },
+      {
+        "name": "132-immutable",
+        "command": [
+          "node",
+          "/tmp/dreamtides-executor-01a12e91/132-audit/finite/immutable.cjs"
+        ],
+        "observerPid": 10875,
+        "pid": 10902,
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+        "startUtc": "2026-10-13T16:10:51.815364+00:00",
+        "endUtc": "2026-10-13T16:10:51.983465+00:00",
+        "wallS": 0.1681327499973122,
+        "exit": 0,
+        "terminal": true,
+        "log": "/tmp/dreamtides-executor-01a12e91/132-immutable.log"
+      }
+    ],
+    "fileSha256": {
+      "src/content/cards/a-new-adventure-f7b135ea.ts": "7c634392829a921bf05668770e61fa827f39648519842b9c8254f15944fa8a1e",
+      "src/content/cards/data-pulse-08fe3190.ts": "b111b1b27fee069a46cec42eaaaffdcb7197e12b642e5c5980623e80ac57499a",
+      "src/content/cards/pulse-of-sacrifice-1434440c.ts": "bf0b6db924b0fb55729824c981b641d3b52f58119e0c12abefb9f98bd34fa950",
+      "src/content/cards/thought-augury-b4838d67.ts": "63302e1bcfb37d657638e653cb447a55755bbeb6860b32319df51dc0f75e6e1a",
+      "src/content/specs/cards-20.scenarios.ts": "b512cf6f8f856c6fc5fe353c9015ff20698977b9e0e4ff089791f759c792f3ca"
+    },
+    "productionNumstat": "5\t1\tsrc/content/cards/a-new-adventure-f7b135ea.ts\n5\t1\tsrc/content/cards/data-pulse-08fe3190.ts\n5\t1\tsrc/content/cards/pulse-of-sacrifice-1434440c.ts\n5\t1\tsrc/content/cards/thought-augury-b4838d67.ts\n",
+    "scenario": {
+      "path": "src/content/specs/cards-20.scenarios.ts",
+      "physicalLines": 63,
+      "cases": 4,
+      "newTestEntry": false,
+      "jsdom": 0
+    },
+    "verificationCounts": {
+      "132-focused": [
+        "started at 2026-10-13T16:10:22.029Z load=6.8759765625",
+        "started at 2026-10-13T16:10:23.955Z load=6.8759765625",
+        "Test Files  4 passed (4)",
+        "Tests  3060 passed (3060)",
+        "started at 2026-10-13T16:10:31.476Z load=6.88818359375"
+      ],
+      "132-review": [
+        "started at 2026-10-13T16:10:52.021Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.264Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.265Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.266Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.266Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.266Z load=5.9990234375",
+        "Test Files  242 passed (242)",
+        "Tests  5190 passed (5190)",
+        "started at 2026-10-13T16:11:38.354Z load=6.4091796875"
+      ],
+      "132-knip": [
+        "started at 2026-10-13T16:10:52.021Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.257Z load=5.9990234375",
+        "started at 2026-10-13T16:10:55.585Z load=8.0009765625"
+      ],
+      "132-immutable": []
+    },
+    "resources": {
+      "processes": [
+        {
+          "label": "132-focused",
+          "role": "observerPid",
+          "pid": 9110,
+          "observed": null,
+          "psExit": 1
+        },
+        {
+          "label": "132-focused",
+          "role": "pid",
+          "pid": 9120,
+          "observed": null,
+          "psExit": 1
+        },
+        {
+          "label": "132-review",
+          "role": "observerPid",
+          "pid": 10873,
+          "observed": null,
+          "psExit": 1
+        },
+        {
+          "label": "132-review",
+          "role": "pid",
+          "pid": 10903,
+          "observed": null,
+          "psExit": 1
+        },
+        {
+          "label": "132-knip",
+          "role": "observerPid",
+          "pid": 10874,
+          "observed": null,
+          "psExit": 1
+        },
+        {
+          "label": "132-knip",
+          "role": "pid",
+          "pid": 10901,
+          "observed": null,
+          "psExit": 1
+        },
+        {
+          "label": "132-immutable",
+          "role": "observerPid",
+          "pid": 10875,
+          "observed": null,
+          "psExit": 1
+        },
+        {
+          "label": "132-immutable",
+          "role": "pid",
+          "pid": 10902,
+          "observed": null,
+          "psExit": 1
+        }
+      ],
+      "activeHelpers": 1,
+      "server": null,
+      "browser": null,
+      "provider": null,
+      "qualification": "Own four wrapper/child PIDs observed absent. Shell limits/load snapshot retained; test worker configuration clamps default2, actual worker concurrency not independently sampled."
+    },
+    "correctionWindows": [],
+    "readObservations": [
+      "Two avoided further guesses after missing matcher.test.ts and content verification/gate candidate paths. All actual finite checks first-green. Gross read/coordination time retained via qualified parent dispatch lower-bound clock, not CPU."
+    ],
+    "runtimeAuthorized": false
+  },
+  "runtime": {
+    "stage": "runtime-terminal",
+    "checks": [
+      {
+        "label": "weighted-fuzz-1",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/heavy-inner.py",
+          "f7b135ea-4894-46ab-b41d-ba2f74b070a1,1434440c-c86f-4b7d-83e7-3bd1f7dde63e,08fe3190-f559-4152-941d-33ec4180f509,b4838d67-f055-4fd3-a64d-0a4d2b6678cc"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+        "pid": 13610,
+        "processGroup": 13610,
+        "startUtc": "2026-10-13T16:13:24.850882+00:00",
+        "startLoadAverage": [
+          3.5126953125,
+          9.2373046875,
+          11.2265625
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/weighted-fuzz-1.log",
+        "endUtc": "2026-10-13T16:16:57.927931+00:00",
+        "wallSeconds": 213.07409666699823,
+        "exitCode": 0,
+        "endLoadAverage": [
+          22.2412109375,
+          15.115234375,
+          13.20263671875
+        ],
+        "terminated": true
+      },
+      {
+        "label": "preflight-1",
+        "command": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "f7b135ea-4894-46ab-b41d-ba2f74b070a1,1434440c-c86f-4b7d-83e7-3bd1f7dde63e,08fe3190-f559-4152-941d-33ec4180f509,b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+        "pid": 13609,
+        "processGroup": 13609,
+        "startUtc": "2026-10-13T16:13:24.850829+00:00",
+        "startLoadAverage": [
+          3.5126953125,
+          9.2373046875,
+          11.2265625
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/preflight-1.log",
+        "endUtc": "2026-10-13T16:13:27.455988+00:00",
+        "wallSeconds": 2.60504475000198,
+        "exitCode": 0,
+        "endLoadAverage": [
+          3.5126953125,
+          9.2373046875,
+          11.2265625
+        ],
+        "terminated": true
+      },
+      {
+        "label": "sweep-1",
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.132",
+          "--cards",
+          "f7b135ea-4894-46ab-b41d-ba2f74b070a1,1434440c-c86f-4b7d-83e7-3bd1f7dde63e,08fe3190-f559-4152-941d-33ec4180f509,b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
+          "--variants",
+          "all",
+          "--as",
+          "both",
+          "--capture"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+        "pid": 14217,
+        "processGroup": 14217,
+        "startUtc": "2026-10-13T16:13:44.701404+00:00",
+        "startLoadAverage": [
+          3.423828125,
+          8.84765625,
+          11.04052734375
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/sweep-1.log",
+        "endUtc": "2026-10-13T16:23:07.012046+00:00",
+        "wallSeconds": 562.3031669579796,
+        "exitCode": 0,
+        "endLoadAverage": [
+          8.95849609375,
+          10.841796875,
+          11.8349609375
+        ],
+        "terminated": true
+      },
+      {
+        "label": "algorithms-1",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/algorithms.mjs",
+          "--bead",
+          "hv-umm2.132",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+        "pid": 53735,
+        "processGroup": 53735,
+        "startUtc": "2026-10-13T16:23:17.808406+00:00",
+        "startLoadAverage": [
+          8.0419921875,
+          10.5830078125,
+          11.73095703125
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/algorithms-1.log",
+        "endUtc": "2026-10-13T16:23:46.243255+00:00",
+        "wallSeconds": 28.43442612499348,
+        "exitCode": 1,
+        "endLoadAverage": [
+          6.73583984375,
+          10.017578125,
+          11.4853515625
+        ],
+        "terminated": true
+      },
+      {
+        "label": "algorithms-2",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/algorithms.mjs",
+          "--bead",
+          "hv-umm2.132",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+        "pid": 55244,
+        "processGroup": 55244,
+        "startUtc": "2026-10-13T16:24:37.690915+00:00",
+        "startLoadAverage": [
+          4.166015625,
+          8.81005859375,
+          10.953125
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/algorithms-2.log",
+        "endUtc": "2026-10-13T16:28:19.625094+00:00",
+        "wallSeconds": 221.9311984590022,
+        "exitCode": 0,
+        "endLoadAverage": [
+          8.2548828125,
+          8.21142578125,
+          10.1640625
+        ],
+        "terminated": true
+      }
+    ],
+    "fuzz": {
+      "summary": "fuzz:engine 300 games, 122129 steps, 210.5 s wall, 225.5 s CPU (1.4 games/s wall, 1.3 games/s CPU); prompts 7433; interactive re-runs 775 (2.504 ms each); feasibility bounded {\"legality\":0,\"prompts\":11}; results {\"player\":168,\"enemy\":132,\"draw\":0}; failures 0",
+      "targets": [
+        {
+          "kind": "card",
+          "uuid": "f7b135ea-4894-46ab-b41d-ba2f74b070a1",
+          "included": 615,
+          "exercised": 116
+        },
+        {
+          "kind": "card",
+          "uuid": "1434440c-c86f-4b7d-83e7-3bd1f7dde63e",
+          "included": 611,
+          "exercised": 355
+        },
+        {
+          "kind": "card",
+          "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+          "included": 616,
+          "exercised": 176
+        },
+        {
+          "kind": "card",
+          "uuid": "b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
+          "included": 613,
+          "exercised": 139
+        }
+      ],
+      "concurrency": 1,
+      "basis": "synchronous source loop, not JOURNEY_TEST_WORKERS; reported process aggregate CPU separate from ownership wall"
+    },
+    "preflight": {
+      "event": "labPreflightSummary",
+      "cards": [
+        "f7b135ea-4894-46ab-b41d-ba2f74b070a1",
+        "1434440c-c86f-4b7d-83e7-3bd1f7dde63e",
+        "08fe3190-f559-4152-941d-33ec4180f509",
+        "b4838d67-f055-4fd3-a64d-0a4d2b6678cc"
+      ],
+      "avatars": [],
+      "dreamsigns": [],
+      "variants": [
+        "base",
+        "amplified",
+        "empowered",
+        "kindled",
+        "resonant",
+        "inspired",
+        "enduring",
+        "hastened",
+        "attuned",
+        "perfected"
+      ],
+      "sides": [
+        "player",
+        "enemy"
+      ],
+      "counts": {
+        "pass": 52,
+        "pending": 0,
+        "skip": 28,
+        "fail": 0
+      },
+      "elapsedMs": 34.833458000000064,
+      "hostLoad": 3.5126953125,
+      "enemyMode": "scripted-lab-play-first-legal-prompts"
+    },
+    "sweep": {
+      "counts": {
+        "pass": 52,
+        "skip": 28,
+        "fail": 0
+      },
+      "invocation": "invocations/sweep-7iAwh1",
+      "rawLedgerRows": 80,
+      "oneBrowserSession": true,
+      "browserLeaseWaitMs": 6
+    },
+    "algorithms": {
+      "effectivePasses": 18,
+      "mandatoryPasses": 16,
+      "extraEmptyPulseBasePasses": 2,
+      "rawObserverFailures": 1,
+      "rawAcceptedPasses": 18,
+      "invocation": "invocations/run-KU08gY",
+      "witnesses": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/algorithm-witnesses.json",
+      "completePayloads": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads",
+      "finalReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.132/invocations/run-KU08gY/algorithms.result.json",
+      "captureCount": 44,
+      "allCapsEmpty": true,
+      "all18CompleteLogsArchived": true,
+      "all18CurrentURLGamePrintingVariantVerified": true
+    },
+    "correctionWindows": [
+      {
+        "startUtc": "2026-10-13T16:23:17.808406+00:00",
+        "endUtc": "2026-10-13T16:28:19.625094+00:00",
+        "basis": "conservative full first failing invocation start until actual last corrected green endpoint; includes diagnosis/reads/cleanup/restart/coordination/capture/runtime/waits, not CPU",
+        "cause": "qa.labAddCard leaves public debug rail open; own observer forgot to close it before asserting physically uncovered phase control; witnessed enabled Next Phase and visible Close button, emptyCaps; no engine/tool change",
+        "elapsedSeconds": 301.816688,
+        "firstFailureInstant": "not independently sampled; conservative first failed command start includes its initial setup",
+        "causeQualification": "Open debug rail + enabled Next Phase + canPassfalse observed, phase-centre elementFromPoint at original failure not sampled. Rail occlusion is inferred; public Close correction yielded all18green cells. No product/shared-tool defect established."
+      }
+    ],
+    "sourceHashes": {
+      "src/content/cards/a-new-adventure-f7b135ea.ts": "7c634392829a921bf05668770e61fa827f39648519842b9c8254f15944fa8a1e",
+      "src/content/cards/data-pulse-08fe3190.ts": "b111b1b27fee069a46cec42eaaaffdcb7197e12b642e5c5980623e80ac57499a",
+      "src/content/cards/pulse-of-sacrifice-1434440c.ts": "bf0b6db924b0fb55729824c981b641d3b52f58119e0c12abefb9f98bd34fa950",
+      "src/content/cards/thought-augury-b4838d67.ts": "63302e1bcfb37d657638e653cb447a55755bbeb6860b32319df51dc0f75e6e1a",
+      "src/content/specs/cards-20.scenarios.ts": "b512cf6f8f856c6fc5fe353c9015ff20698977b9e0e4ff089791f759c792f3ca"
+    },
+    "resources": {
+      "allOwnedProcessesTerminal": true,
+      "browserOverlaps": [],
+      "providerRecords": [
+        "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/sweep-provider-owner.json",
+        "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/algorithm1-provider-owner.json",
+        "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/algorithm2-provider-owner.json"
+      ],
+      "cleanup": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/cleanup-observation.json"
+    },
+    "geometry": {
+      "count": 68,
+      "positiveEnabled": 68,
+      "centreHits": 66,
+      "centresInViewport": 68,
+      "fullRectsExtendOutsideViewport": 30
+    },
+    "limitations": [
+      "Final resourceHUD/event state checked; final capture does not assert all phase affordances settled",
+      "No whole hand/printed text visibility assertion; compact presentation/partly cropped lower hand rectangles",
+      "Own actual algorithm allplayer; bothactor normalplay coveredpreflight/sweep plus four synthetic finite Thoughtcases; no policy-selected/foreign-owner test claim",
+      "First failure phasecentre occlusion inference qualified; allrawprefix/payload/log retained",
+      "Manual QA/friction/measurement/preexisting evidence not yet authorized; parent finalvisualjudge pending"
+    ]
+  },
+  "hostLoadSamples": {
+    "finiteLoggedStarts": {
+      "132-focused": [
+        "started at 2026-10-13T16:10:22.029Z load=6.8759765625",
+        "started at 2026-10-13T16:10:23.955Z load=6.8759765625",
+        "Test Files  4 passed (4)",
+        "Tests  3060 passed (3060)",
+        "started at 2026-10-13T16:10:31.476Z load=6.88818359375"
+      ],
+      "132-review": [
+        "started at 2026-10-13T16:10:52.021Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.264Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.265Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.266Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.266Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.266Z load=5.9990234375",
+        "Test Files  242 passed (242)",
+        "Tests  5190 passed (5190)",
+        "started at 2026-10-13T16:11:38.354Z load=6.4091796875"
+      ],
+      "132-knip": [
+        "started at 2026-10-13T16:10:52.021Z load=5.9990234375",
+        "started at 2026-10-13T16:10:53.257Z load=5.9990234375",
+        "started at 2026-10-13T16:10:55.585Z load=8.0009765625"
+      ],
+      "132-immutable": []
+    },
+    "finiteShellObservation": {
+      "utc": "2026-10-13T16:10:32.457372+00:00",
+      "pid": 9725,
+      "pgid": 9725,
+      "load": [
+        6.88818359375,
+        13.2060546875,
+        12.78466796875
+      ],
+      "limits": {
+        "0": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "8": [
+          1048575,
+          9223372036854775807
+        ],
+        "7": [
+          10666,
+          16000
+        ]
+      },
+      "JOURNEY_TEST_WORKERS": null,
+      "workerCountBasis": "config default 2; actual count not independently sampled"
+    },
+    "finiteLiveProcessSnapshot": {
+      "utc": "2026-10-13T16:11:13.608661+00:00",
+      "observerPid": 11624,
+      "pgid": 11624,
+      "load": [
+        7.11376953125,
+        12.4609375,
+        12.529296875
+      ],
+      "rows": [
+        "10873  1772 10873 /opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/dreamtides-executor-01a12e91/run-check.py 132-review npm run review",
+        "10933 10903 10873 node scripts/review.mjs quick",
+        "11134 10933 10873 /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-132/node_modules/vitest/vitest.mjs related --run --passWithNoTests src/content/cards/a-new-adventure-f7b135ea.ts src/content/cards/data-pulse-08fe3190.ts src/content/cards/pulse-of-sacrifice-1434440c.ts src/content/cards/thought-augury-b4838d67.ts src/content/specs/cards-20.scenarios.ts",
+        "11146 11134 10873 /Users/dthurn/dreamtides_web/.worktrees/energy-points-132/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+      ],
+      "qualification": "snapshot matching own command/cwd strings; no actual Vitest worker execution count claimed"
+    },
+    "runtimeActualStartsAndEnds": [
+      {
+        "label": "weighted-fuzz-1",
+        "pid": 13610,
+        "processGroup": 13610,
+        "startUtc": "2026-10-13T16:13:24.850882+00:00",
+        "endUtc": "2026-10-13T16:16:57.927931+00:00",
+        "startLoadAverage": [
+          3.5126953125,
+          9.2373046875,
+          11.2265625
+        ],
+        "endLoadAverage": [
+          22.2412109375,
+          15.115234375,
+          13.20263671875
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "exitCode": 0,
+        "terminated": true
+      },
+      {
+        "label": "preflight-1",
+        "pid": 13609,
+        "processGroup": 13609,
+        "startUtc": "2026-10-13T16:13:24.850829+00:00",
+        "endUtc": "2026-10-13T16:13:27.455988+00:00",
+        "startLoadAverage": [
+          3.5126953125,
+          9.2373046875,
+          11.2265625
+        ],
+        "endLoadAverage": [
+          3.5126953125,
+          9.2373046875,
+          11.2265625
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "exitCode": 0,
+        "terminated": true
+      },
+      {
+        "label": "sweep-1",
+        "pid": 14217,
+        "processGroup": 14217,
+        "startUtc": "2026-10-13T16:13:44.701404+00:00",
+        "endUtc": "2026-10-13T16:23:07.012046+00:00",
+        "startLoadAverage": [
+          3.423828125,
+          8.84765625,
+          11.04052734375
+        ],
+        "endLoadAverage": [
+          8.95849609375,
+          10.841796875,
+          11.8349609375
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "exitCode": 0,
+        "terminated": true
+      },
+      {
+        "label": "algorithms-1",
+        "pid": 53735,
+        "processGroup": 53735,
+        "startUtc": "2026-10-13T16:23:17.808406+00:00",
+        "endUtc": "2026-10-13T16:23:46.243255+00:00",
+        "startLoadAverage": [
+          8.0419921875,
+          10.5830078125,
+          11.73095703125
+        ],
+        "endLoadAverage": [
+          6.73583984375,
+          10.017578125,
+          11.4853515625
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "exitCode": 1,
+        "terminated": true
+      },
+      {
+        "label": "algorithms-2",
+        "pid": 55244,
+        "processGroup": 55244,
+        "startUtc": "2026-10-13T16:24:37.690915+00:00",
+        "endUtc": "2026-10-13T16:28:19.625094+00:00",
+        "startLoadAverage": [
+          4.166015625,
+          8.81005859375,
+          10.953125
+        ],
+        "endLoadAverage": [
+          8.2548828125,
+          8.21142578125,
+          10.1640625
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "exitCode": 0,
+        "terminated": true
+      }
+    ]
+  },
+  "runtimeConcurrency": {
+    "configuredVitestWorkerCap": 2,
+    "actualVitestExecutionCount": "not independently sampled",
+    "actualFuzzGameConcurrency": 1,
+    "fuzzBasis": "Existing synchronous full-game loop in one process; JOURNEY_TEST_WORKERS affects Vitest configuration, not fuzzer workers. Reported225.5process CPU seconds are separate from213.074097wrapperwall and whole ownership.",
+    "heavyAdmission": {
+      "acquiredUtc": "2026-10-13T16:13:24.872651+00:00",
+      "acquiredLoadAverage": [
+        3.5126953125,
+        9.2373046875,
+        11.2265625
+      ],
+      "innerPid": 13611,
+      "requestedWorkers": 2,
+      "effectiveImplementation": "Source scripts/fuzz-engine.ts:80 is one synchronous for loop in one process; no worker option/dispatch, actual engine game execution concurrency1",
+      "requestedWeights": "f7b135ea-4894-46ab-b41d-ba2f74b070a1,1434440c-c86f-4b7d-83e7-3bd1f7dde63e,08fe3190-f559-4152-941d-33ec4180f509,b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+      "fuzzPid": 13613,
+      "endUtc": "2026-10-13T16:16:57.923256+00:00",
+      "wallSeconds": 213.04773775002104,
+      "exitCode": 0,
+      "endLoadAverage": [
+        22.2412109375,
+        15.115234375,
+        13.20263671875
+      ]
+    },
+    "browserOverlap": false,
+    "allOwnGroupsAbsent": true,
+    "globalProviderAndPeerPortsUntouched": true,
+    "providerRecords": [
+      {
+        "observedUtc": "2026-10-13T16:14:03.399179+00:00",
+        "records": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "fa7891de-3d0f-4681-bdf9-c98b77eb6e92",
+              "pid": 14217,
+              "bead": "hv-umm2.132",
+              "label": "card-sweep",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T16:13:46.897Z",
+              "providerState": "active",
+              "mcpSessionId": "e155d27e-71e5-4a74-8f78-52d06f19c608",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "record": {
+              "token": "5208ee0a-eb2d-429f-8fe1-c55371f20d46",
+              "runner": {
+                "pid": 14217,
+                "group": 14217,
+                "started": "Tue Oct 13 09:13:44 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/card-sweep.mjs --bead hv-umm2.132 --cards f7b135ea-4894-46ab-b41d-ba2f74b070a1,1434440c-c86f-4b7d-83e7-3bd1f7dde63e,08fe3190-f559-4152-941d-33ec4180f509,b4838d67-f055-4fd3-a64d-0a4d2b6678cc --variants all --as both --capture"
+              },
+              "server": {
+                "pid": 14249,
+                "group": 14249,
+                "started": "Tue Oct 13 09:13:44 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-132/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 5208ee0a-eb2d-429f-8fe1-c55371f20d46 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+              "port": 5274
+            }
+          }
+        ]
+      },
+      {
+        "observedUtc": "2026-10-13T16:23:35.195667+00:00",
+        "records": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "9323d87a-6ac0-4a2d-bbb5-8e0f8fcecc68",
+              "pid": 53735,
+              "bead": "hv-umm2.132",
+              "label": "algorithms",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T16:23:20.574Z",
+              "providerState": "active",
+              "mcpSessionId": "19914eb5-6a1a-441c-847e-d119f4be3964",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "record": {
+              "token": "8c2c5ff5-f69e-4da5-8355-b0dd3a814e43",
+              "runner": {
+                "pid": 53735,
+                "group": 53735,
+                "started": "Tue Oct 13 09:23:17 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-executor-01a12e91/132-audit/runtime/algorithms.mjs --bead hv-umm2.132 --viewports desktop,mobile"
+              },
+              "server": {
+                "pid": 53763,
+                "group": 53763,
+                "started": "Tue Oct 13 09:23:18 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-132/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 8c2c5ff5-f69e-4da5-8355-b0dd3a814e43 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+              "port": 5274
+            }
+          }
+        ]
+      },
+      {
+        "observedUtc": "2026-10-13T16:25:03.003268+00:00",
+        "records": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "48618fe5-bd5b-44b2-95d2-5f4fecd15209",
+              "pid": 55244,
+              "bead": "hv-umm2.132",
+              "label": "algorithms",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T16:24:39.165Z",
+              "providerState": "active",
+              "mcpSessionId": "7f96d084-7f8f-4a4b-acd5-208c69fe7ce7",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "record": {
+              "token": "24f4d98b-36d6-4f8e-b95b-da5f9b6fb25c",
+              "runner": {
+                "pid": 55244,
+                "group": 55244,
+                "started": "Tue Oct 13 09:24:37 2026",
+                "state": "Ss",
+                "command": "node scripts/qa/run-scenario.mjs /tmp/dreamtides-executor-01a12e91/132-audit/runtime/algorithms.mjs --bead hv-umm2.132 --viewports desktop,mobile"
+              },
+              "server": {
+                "pid": 55272,
+                "group": 55272,
+                "started": "Tue Oct 13 09:24:37 2026",
+                "state": "Rs",
+                "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/energy-points-132/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 24f4d98b-36d6-4f8e-b95b-da5f9b6fb25c /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+              },
+              "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+              "port": 5274
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "sourceHashes": {
+    "src/content/cards/a-new-adventure-f7b135ea.ts": "7c634392829a921bf05668770e61fa827f39648519842b9c8254f15944fa8a1e",
+    "src/content/cards/data-pulse-08fe3190.ts": "b111b1b27fee069a46cec42eaaaffdcb7197e12b642e5c5980623e80ac57499a",
+    "src/content/cards/pulse-of-sacrifice-1434440c.ts": "bf0b6db924b0fb55729824c981b641d3b52f58119e0c12abefb9f98bd34fa950",
+    "src/content/cards/thought-augury-b4838d67.ts": "63302e1bcfb37d657638e653cb447a55755bbeb6860b32319df51dc0f75e6e1a",
+    "src/content/specs/cards-20.scenarios.ts": "b512cf6f8f856c6fc5fe353c9015ff20698977b9e0e4ff089791f759c792f3ca"
+  },
+  "algorithmWitnesses": [
+    {
+      "mode": "adventure",
+      "uuid": "f7b135ea-4894-46ab-b41d-ba2f74b070a1",
+      "variant": "base",
+      "viewport": "desktop",
+      "gameId": "ymng8m",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 10,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [
+          "i19",
+          "i18"
+        ],
+        "void": [
+          "i1",
+          "i3",
+          "i2"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/adventure-base-desktop.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/adventure-base-desktop.jsonl",
+      "logRows": 45,
+      "screens": [
+        "132-adventure-base-desktop-ready.png",
+        "132-adventure-base-desktop-discard-offered.png",
+        "132-adventure-base-desktop-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": [
+        "i19",
+        "i18",
+        "i2",
+        "i3"
+      ],
+      "functionalProof": {
+        "drawn": [
+          "i2",
+          "i3"
+        ],
+        "count": 2,
+        "discards": [
+          {
+            "seq": 5,
+            "index": 1,
+            "kind": "discarded",
+            "instance": "i2",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i2"
+            }
+          },
+          {
+            "seq": 5,
+            "index": 3,
+            "kind": "discarded",
+            "instance": "i3",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i3"
+            }
+          }
+        ],
+        "energy": {
+          "seq": 5,
+          "index": 5,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 10,
+            "max": 10,
+            "change": 3,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        }
+      },
+      "renderedFinal": {
+        "text": "10/100/25",
+        "wanted": {
+          "current": 10,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=f7b135ea-4894-46ab-b41d-ba2f74b070a1&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=ymng8m",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=f7b135ea-4894-46ab-b41d-ba2f74b070a1&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=ymng8m",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/adventure-base-desktop.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/adventure-base-desktop.jsonl"
+    },
+    {
+      "mode": "adventure",
+      "uuid": "f7b135ea-4894-46ab-b41d-ba2f74b070a1",
+      "variant": "amplified",
+      "viewport": "desktop",
+      "gameId": "i5may3",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 10,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [
+          "i19",
+          "i18",
+          "i3"
+        ],
+        "void": [
+          "i1",
+          "i2"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/adventure-amplified-desktop.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/adventure-amplified-desktop.jsonl",
+      "logRows": 43,
+      "screens": [
+        "132-adventure-amplified-desktop-ready.png",
+        "132-adventure-amplified-desktop-discard-offered.png",
+        "132-adventure-amplified-desktop-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": [
+        "i19",
+        "i18",
+        "i2",
+        "i3"
+      ],
+      "functionalProof": {
+        "drawn": [
+          "i2",
+          "i3"
+        ],
+        "count": 1,
+        "discards": [
+          {
+            "seq": 5,
+            "index": 1,
+            "kind": "discarded",
+            "instance": "i2",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i2"
+            }
+          }
+        ],
+        "energy": {
+          "seq": 5,
+          "index": 3,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 10,
+            "max": 10,
+            "change": 3,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        }
+      },
+      "renderedFinal": {
+        "text": "10/100/25",
+        "wanted": {
+          "current": 10,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=f7b135ea-4894-46ab-b41d-ba2f74b070a1&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=i5may3",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=f7b135ea-4894-46ab-b41d-ba2f74b070a1&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=i5may3",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/adventure-amplified-desktop.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/adventure-amplified-desktop.jsonl"
+    },
+    {
+      "mode": "pulse",
+      "uuid": "1434440c-c86f-4b7d-83e7-3bd1f7dde63e",
+      "variant": "base",
+      "viewport": "desktop",
+      "gameId": "q3nwb5",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 13,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i2",
+          "i3",
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [],
+        "void": [
+          "i1",
+          "i18",
+          "i19"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/pulse-base-desktop.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/pulse-base-desktop.jsonl",
+      "logRows": 33,
+      "screens": [
+        "132-pulse-base-desktop-ready.png",
+        "132-pulse-base-desktop-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": null,
+      "functionalProof": {
+        "energy": {
+          "seq": 4,
+          "index": 8,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 13,
+            "max": 10,
+            "change": 3,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "expected": [
+          "i19",
+          "i18"
+        ],
+        "discards": [
+          {
+            "seq": 4,
+            "index": 4,
+            "kind": "discarded",
+            "instance": "i19",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i19"
+            }
+          },
+          {
+            "seq": 4,
+            "index": 6,
+            "kind": "discarded",
+            "instance": "i18",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i18"
+            }
+          }
+        ],
+        "gain": 3
+      },
+      "renderedFinal": {
+        "text": "13/100/25",
+        "wanted": {
+          "current": 13,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=q3nwb5",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=q3nwb5",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/pulse-base-desktop.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/pulse-base-desktop.jsonl"
+    },
+    {
+      "mode": "pulse",
+      "uuid": "1434440c-c86f-4b7d-83e7-3bd1f7dde63e",
+      "variant": "amplified",
+      "viewport": "desktop",
+      "gameId": "k24xp4",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 14,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i2",
+          "i3",
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [],
+        "void": [
+          "i1",
+          "i18",
+          "i19"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/pulse-amplified-desktop.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/pulse-amplified-desktop.jsonl",
+      "logRows": 33,
+      "screens": [
+        "132-pulse-amplified-desktop-ready.png",
+        "132-pulse-amplified-desktop-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": null,
+      "functionalProof": {
+        "energy": {
+          "seq": 4,
+          "index": 8,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 14,
+            "max": 10,
+            "change": 4,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "expected": [
+          "i19",
+          "i18"
+        ],
+        "discards": [
+          {
+            "seq": 4,
+            "index": 4,
+            "kind": "discarded",
+            "instance": "i19",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i19"
+            }
+          },
+          {
+            "seq": 4,
+            "index": 6,
+            "kind": "discarded",
+            "instance": "i18",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i18"
+            }
+          }
+        ],
+        "gain": 4
+      },
+      "renderedFinal": {
+        "text": "14/100/25",
+        "wanted": {
+          "current": 14,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=k24xp4",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=k24xp4",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/pulse-amplified-desktop.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/pulse-amplified-desktop.jsonl"
+    },
+    {
+      "mode": "data",
+      "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+      "variant": "base",
+      "viewport": "desktop",
+      "gameId": "o8tsey",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 10,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i3",
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [
+          "i19",
+          "i18",
+          "i2"
+        ],
+        "void": [
+          "i1"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/data-base-desktop.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/data-base-desktop.jsonl",
+      "logRows": 32,
+      "screens": [
+        "132-data-base-desktop-ready.png",
+        "132-data-base-desktop-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": null,
+      "functionalProof": {
+        "energy": {
+          "seq": 4,
+          "index": 3,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 10,
+            "max": 10,
+            "change": 2,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "draw": {
+          "seq": 4,
+          "index": 4,
+          "kind": "cardDrawn",
+          "instance": "i2",
+          "event": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i2"
+          }
+        },
+        "gain": 2
+      },
+      "renderedFinal": {
+        "text": "10/100/25",
+        "wanted": {
+          "current": 10,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=08fe3190-f559-4152-941d-33ec4180f509&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=o8tsey",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=08fe3190-f559-4152-941d-33ec4180f509&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=o8tsey",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/data-base-desktop.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/data-base-desktop.jsonl"
+    },
+    {
+      "mode": "data",
+      "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+      "variant": "amplified",
+      "viewport": "desktop",
+      "gameId": "3ncrwh",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 11,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i3",
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [
+          "i19",
+          "i18",
+          "i2"
+        ],
+        "void": [
+          "i1"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/data-amplified-desktop.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/data-amplified-desktop.jsonl",
+      "logRows": 32,
+      "screens": [
+        "132-data-amplified-desktop-ready.png",
+        "132-data-amplified-desktop-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": null,
+      "functionalProof": {
+        "energy": {
+          "seq": 4,
+          "index": 3,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 11,
+            "max": 10,
+            "change": 3,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "draw": {
+          "seq": 4,
+          "index": 4,
+          "kind": "cardDrawn",
+          "instance": "i2",
+          "event": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i2"
+          }
+        },
+        "gain": 3
+      },
+      "renderedFinal": {
+        "text": "11/100/25",
+        "wanted": {
+          "current": 11,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=08fe3190-f559-4152-941d-33ec4180f509&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=3ncrwh",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=08fe3190-f559-4152-941d-33ec4180f509&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=3ncrwh",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/data-amplified-desktop.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/data-amplified-desktop.jsonl"
+    },
+    {
+      "mode": "augury",
+      "uuid": "b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
+      "variant": "base",
+      "viewport": "desktop",
+      "gameId": "c4swb9",
+      "source": "i2",
+      "sourceZone": "play",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 8,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9",
+          "i10"
+        ],
+        "hand": [
+          "i20"
+        ],
+        "void": [
+          "i3",
+          "i19"
+        ],
+        "banished": [],
+        "backRank": [
+          "i1",
+          "i2",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/augury-base-desktop.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/augury-base-desktop.jsonl",
+      "logRows": 64,
+      "screens": [
+        "132-augury-base-desktop-ready.png",
+        "132-augury-base-desktop-first-discard-offered.png",
+        "132-augury-base-desktop-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": [
+        "i20",
+        "i19"
+      ],
+      "functionalProof": {
+        "drawn": "i3",
+        "queued": [
+          {
+            "seq": 6,
+            "index": 2,
+            "kind": "triggerQueued",
+            "instance": null,
+            "event": {
+              "kind": "triggerQueued",
+              "source": "i2",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "subject": "i19"
+            }
+          }
+        ],
+        "resolved": [
+          {
+            "seq": 6,
+            "index": 5,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": "i2",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          }
+        ],
+        "allDraws": [
+          {
+            "seq": 6,
+            "index": 6,
+            "kind": "cardDrawn",
+            "instance": "i3",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i3"
+            }
+          }
+        ],
+        "energy": [
+          {
+            "seq": 6,
+            "index": 7,
+            "kind": "energyChanged",
+            "instance": null,
+            "event": {
+              "kind": "energyChanged",
+              "side": "player",
+              "current": 8,
+              "max": 10,
+              "change": 1,
+              "maxChange": 0,
+              "cause": "effect"
+            }
+          }
+        ],
+        "gain": 1
+      },
+      "renderedFinal": {
+        "text": "8/100/25",
+        "wanted": {
+          "current": 8,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=b4838d67-f055-4fd3-a64d-0a4d2b6678cc&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000013%22%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=c4swb9",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=b4838d67-f055-4fd3-a64d-0a4d2b6678cc&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000013%22%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=c4swb9",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/augury-base-desktop.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/augury-base-desktop.jsonl"
+    },
+    {
+      "mode": "augury",
+      "uuid": "b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
+      "variant": "amplified",
+      "viewport": "desktop",
+      "gameId": "wud4yy",
+      "source": "i2",
+      "sourceZone": "play",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 9,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9",
+          "i10"
+        ],
+        "hand": [
+          "i20"
+        ],
+        "void": [
+          "i3",
+          "i19"
+        ],
+        "banished": [],
+        "backRank": [
+          "i1",
+          "i2",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/augury-amplified-desktop.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/augury-amplified-desktop.jsonl",
+      "logRows": 62,
+      "screens": [
+        "132-augury-amplified-desktop-ready.png",
+        "132-augury-amplified-desktop-first-discard-offered.png",
+        "132-augury-amplified-desktop-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": [
+        "i20",
+        "i19"
+      ],
+      "functionalProof": {
+        "drawn": "i3",
+        "queued": [
+          {
+            "seq": 6,
+            "index": 2,
+            "kind": "triggerQueued",
+            "instance": null,
+            "event": {
+              "kind": "triggerQueued",
+              "source": "i2",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "subject": "i19"
+            }
+          }
+        ],
+        "resolved": [
+          {
+            "seq": 6,
+            "index": 5,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": "i2",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          }
+        ],
+        "allDraws": [
+          {
+            "seq": 6,
+            "index": 6,
+            "kind": "cardDrawn",
+            "instance": "i3",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i3"
+            }
+          }
+        ],
+        "energy": [
+          {
+            "seq": 6,
+            "index": 7,
+            "kind": "energyChanged",
+            "instance": null,
+            "event": {
+              "kind": "energyChanged",
+              "side": "player",
+              "current": 9,
+              "max": 10,
+              "change": 2,
+              "maxChange": 0,
+              "cause": "effect"
+            }
+          }
+        ],
+        "gain": 2
+      },
+      "renderedFinal": {
+        "text": "9/100/25",
+        "wanted": {
+          "current": 9,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=b4838d67-f055-4fd3-a64d-0a4d2b6678cc&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000013%22%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=wud4yy",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=b4838d67-f055-4fd3-a64d-0a4d2b6678cc&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000013%22%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=wud4yy",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/augury-amplified-desktop.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/augury-amplified-desktop.jsonl"
+    },
+    {
+      "mode": "emptyPulse",
+      "uuid": "1434440c-c86f-4b7d-83e7-3bd1f7dde63e",
+      "variant": "base",
+      "viewport": "desktop",
+      "gameId": "o5h42q",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 13,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i2",
+          "i3",
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [],
+        "void": [
+          "i1"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/emptyPulse-base-desktop.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/emptyPulse-base-desktop.jsonl",
+      "logRows": 28,
+      "screens": [
+        "132-emptyPulse-base-desktop-ready.png",
+        "132-emptyPulse-base-desktop-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": null,
+      "functionalProof": {
+        "energy": {
+          "seq": 2,
+          "index": 2,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 13,
+            "max": 10,
+            "change": 3,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "expected": [],
+        "discards": [],
+        "gain": 3
+      },
+      "renderedFinal": {
+        "text": "13/100/25",
+        "wanted": {
+          "current": 13,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%2C%22hand%22%3A%5B%221434440c-c86f-4b7d-83e7-3bd1f7dde63e%22%5D%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=o5h42q",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%2C%22hand%22%3A%5B%221434440c-c86f-4b7d-83e7-3bd1f7dde63e%22%5D%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=o5h42q",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/emptyPulse-base-desktop.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/emptyPulse-base-desktop.jsonl"
+    },
+    {
+      "mode": "adventure",
+      "uuid": "f7b135ea-4894-46ab-b41d-ba2f74b070a1",
+      "variant": "base",
+      "viewport": "mobile",
+      "gameId": "88eefu",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 10,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [
+          "i19",
+          "i18"
+        ],
+        "void": [
+          "i1",
+          "i3",
+          "i2"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/adventure-base-mobile.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/adventure-base-mobile.jsonl",
+      "logRows": 45,
+      "screens": [
+        "132-adventure-base-mobile-ready.png",
+        "132-adventure-base-mobile-discard-offered.png",
+        "132-adventure-base-mobile-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 390,
+        "height": 844,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": [
+        "i19",
+        "i18",
+        "i2",
+        "i3"
+      ],
+      "functionalProof": {
+        "drawn": [
+          "i2",
+          "i3"
+        ],
+        "count": 2,
+        "discards": [
+          {
+            "seq": 5,
+            "index": 1,
+            "kind": "discarded",
+            "instance": "i2",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i2"
+            }
+          },
+          {
+            "seq": 5,
+            "index": 3,
+            "kind": "discarded",
+            "instance": "i3",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i3"
+            }
+          }
+        ],
+        "energy": {
+          "seq": 5,
+          "index": 5,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 10,
+            "max": 10,
+            "change": 3,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        }
+      },
+      "renderedFinal": {
+        "text": "10/100/25",
+        "wanted": {
+          "current": 10,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=f7b135ea-4894-46ab-b41d-ba2f74b070a1&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=88eefu",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=f7b135ea-4894-46ab-b41d-ba2f74b070a1&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=88eefu",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/adventure-base-mobile.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/adventure-base-mobile.jsonl"
+    },
+    {
+      "mode": "adventure",
+      "uuid": "f7b135ea-4894-46ab-b41d-ba2f74b070a1",
+      "variant": "amplified",
+      "viewport": "mobile",
+      "gameId": "2qcp3c",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 10,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [
+          "i19",
+          "i18",
+          "i3"
+        ],
+        "void": [
+          "i1",
+          "i2"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/adventure-amplified-mobile.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/adventure-amplified-mobile.jsonl",
+      "logRows": 43,
+      "screens": [
+        "132-adventure-amplified-mobile-ready.png",
+        "132-adventure-amplified-mobile-discard-offered.png",
+        "132-adventure-amplified-mobile-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 390,
+        "height": 844,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": [
+        "i19",
+        "i18",
+        "i2",
+        "i3"
+      ],
+      "functionalProof": {
+        "drawn": [
+          "i2",
+          "i3"
+        ],
+        "count": 1,
+        "discards": [
+          {
+            "seq": 5,
+            "index": 1,
+            "kind": "discarded",
+            "instance": "i2",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i2"
+            }
+          }
+        ],
+        "energy": {
+          "seq": 5,
+          "index": 3,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 10,
+            "max": 10,
+            "change": 3,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        }
+      },
+      "renderedFinal": {
+        "text": "10/100/25",
+        "wanted": {
+          "current": 10,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=f7b135ea-4894-46ab-b41d-ba2f74b070a1&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=2qcp3c",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=f7b135ea-4894-46ab-b41d-ba2f74b070a1&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=2qcp3c",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/adventure-amplified-mobile.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/adventure-amplified-mobile.jsonl"
+    },
+    {
+      "mode": "pulse",
+      "uuid": "1434440c-c86f-4b7d-83e7-3bd1f7dde63e",
+      "variant": "base",
+      "viewport": "mobile",
+      "gameId": "2qo4f5",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 13,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i2",
+          "i3",
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [],
+        "void": [
+          "i1",
+          "i18",
+          "i19"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/pulse-base-mobile.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/pulse-base-mobile.jsonl",
+      "logRows": 33,
+      "screens": [
+        "132-pulse-base-mobile-ready.png",
+        "132-pulse-base-mobile-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 390,
+        "height": 844,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": null,
+      "functionalProof": {
+        "energy": {
+          "seq": 4,
+          "index": 8,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 13,
+            "max": 10,
+            "change": 3,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "expected": [
+          "i19",
+          "i18"
+        ],
+        "discards": [
+          {
+            "seq": 4,
+            "index": 4,
+            "kind": "discarded",
+            "instance": "i19",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i19"
+            }
+          },
+          {
+            "seq": 4,
+            "index": 6,
+            "kind": "discarded",
+            "instance": "i18",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i18"
+            }
+          }
+        ],
+        "gain": 3
+      },
+      "renderedFinal": {
+        "text": "13/100/25",
+        "wanted": {
+          "current": 13,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=2qo4f5",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=2qo4f5",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/pulse-base-mobile.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/pulse-base-mobile.jsonl"
+    },
+    {
+      "mode": "pulse",
+      "uuid": "1434440c-c86f-4b7d-83e7-3bd1f7dde63e",
+      "variant": "amplified",
+      "viewport": "mobile",
+      "gameId": "bnat4x",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 14,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i2",
+          "i3",
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [],
+        "void": [
+          "i1",
+          "i18",
+          "i19"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/pulse-amplified-mobile.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/pulse-amplified-mobile.jsonl",
+      "logRows": 33,
+      "screens": [
+        "132-pulse-amplified-mobile-ready.png",
+        "132-pulse-amplified-mobile-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 390,
+        "height": 844,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": null,
+      "functionalProof": {
+        "energy": {
+          "seq": 4,
+          "index": 8,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 14,
+            "max": 10,
+            "change": 4,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "expected": [
+          "i19",
+          "i18"
+        ],
+        "discards": [
+          {
+            "seq": 4,
+            "index": 4,
+            "kind": "discarded",
+            "instance": "i19",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i19"
+            }
+          },
+          {
+            "seq": 4,
+            "index": 6,
+            "kind": "discarded",
+            "instance": "i18",
+            "event": {
+              "kind": "discarded",
+              "side": "player",
+              "instance": "i18"
+            }
+          }
+        ],
+        "gain": 4
+      },
+      "renderedFinal": {
+        "text": "14/100/25",
+        "wanted": {
+          "current": 14,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=bnat4x",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=bnat4x",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/pulse-amplified-mobile.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/pulse-amplified-mobile.jsonl"
+    },
+    {
+      "mode": "data",
+      "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+      "variant": "base",
+      "viewport": "mobile",
+      "gameId": "trgmip",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 10,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i3",
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [
+          "i19",
+          "i18",
+          "i2"
+        ],
+        "void": [
+          "i1"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/data-base-mobile.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/data-base-mobile.jsonl",
+      "logRows": 32,
+      "screens": [
+        "132-data-base-mobile-ready.png",
+        "132-data-base-mobile-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 390,
+        "height": 844,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": null,
+      "functionalProof": {
+        "energy": {
+          "seq": 4,
+          "index": 3,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 10,
+            "max": 10,
+            "change": 2,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "draw": {
+          "seq": 4,
+          "index": 4,
+          "kind": "cardDrawn",
+          "instance": "i2",
+          "event": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i2"
+          }
+        },
+        "gain": 2
+      },
+      "renderedFinal": {
+        "text": "10/100/25",
+        "wanted": {
+          "current": 10,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=08fe3190-f559-4152-941d-33ec4180f509&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=trgmip",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=08fe3190-f559-4152-941d-33ec4180f509&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=trgmip",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/data-base-mobile.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/data-base-mobile.jsonl"
+    },
+    {
+      "mode": "data",
+      "uuid": "08fe3190-f559-4152-941d-33ec4180f509",
+      "variant": "amplified",
+      "viewport": "mobile",
+      "gameId": "kbkzon",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 11,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i3",
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [
+          "i19",
+          "i18",
+          "i2"
+        ],
+        "void": [
+          "i1"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/data-amplified-mobile.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/data-amplified-mobile.jsonl",
+      "logRows": 32,
+      "screens": [
+        "132-data-amplified-mobile-ready.png",
+        "132-data-amplified-mobile-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 390,
+        "height": 844,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": null,
+      "functionalProof": {
+        "energy": {
+          "seq": 4,
+          "index": 3,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 11,
+            "max": 10,
+            "change": 3,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "draw": {
+          "seq": 4,
+          "index": 4,
+          "kind": "cardDrawn",
+          "instance": "i2",
+          "event": {
+            "kind": "cardDrawn",
+            "side": "player",
+            "instance": "i2"
+          }
+        },
+        "gain": 3
+      },
+      "renderedFinal": {
+        "text": "11/100/25",
+        "wanted": {
+          "current": 11,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=08fe3190-f559-4152-941d-33ec4180f509&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=kbkzon",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=08fe3190-f559-4152-941d-33ec4180f509&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=kbkzon",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/data-amplified-mobile.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/data-amplified-mobile.jsonl"
+    },
+    {
+      "mode": "augury",
+      "uuid": "b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
+      "variant": "base",
+      "viewport": "mobile",
+      "gameId": "5gexs4",
+      "source": "i2",
+      "sourceZone": "play",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 8,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9",
+          "i10"
+        ],
+        "hand": [
+          "i20"
+        ],
+        "void": [
+          "i3",
+          "i19"
+        ],
+        "banished": [],
+        "backRank": [
+          "i1",
+          "i2",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/augury-base-mobile.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/augury-base-mobile.jsonl",
+      "logRows": 62,
+      "screens": [
+        "132-augury-base-mobile-ready.png",
+        "132-augury-base-mobile-first-discard-offered.png",
+        "132-augury-base-mobile-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 390,
+        "height": 844,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": [
+        "i20",
+        "i19"
+      ],
+      "functionalProof": {
+        "drawn": "i3",
+        "queued": [
+          {
+            "seq": 6,
+            "index": 2,
+            "kind": "triggerQueued",
+            "instance": null,
+            "event": {
+              "kind": "triggerQueued",
+              "source": "i2",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "subject": "i19"
+            }
+          }
+        ],
+        "resolved": [
+          {
+            "seq": 6,
+            "index": 5,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": "i2",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          }
+        ],
+        "allDraws": [
+          {
+            "seq": 6,
+            "index": 6,
+            "kind": "cardDrawn",
+            "instance": "i3",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i3"
+            }
+          }
+        ],
+        "energy": [
+          {
+            "seq": 6,
+            "index": 7,
+            "kind": "energyChanged",
+            "instance": null,
+            "event": {
+              "kind": "energyChanged",
+              "side": "player",
+              "current": 8,
+              "max": 10,
+              "change": 1,
+              "maxChange": 0,
+              "cause": "effect"
+            }
+          }
+        ],
+        "gain": 1
+      },
+      "renderedFinal": {
+        "text": "8/100/25",
+        "wanted": {
+          "current": 8,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=b4838d67-f055-4fd3-a64d-0a4d2b6678cc&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000013%22%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=5gexs4",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=b4838d67-f055-4fd3-a64d-0a4d2b6678cc&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000013%22%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=5gexs4",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/augury-base-mobile.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/augury-base-mobile.jsonl"
+    },
+    {
+      "mode": "augury",
+      "uuid": "b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
+      "variant": "amplified",
+      "viewport": "mobile",
+      "gameId": "h9v7qb",
+      "source": "i2",
+      "sourceZone": "play",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 9,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9",
+          "i10"
+        ],
+        "hand": [
+          "i20"
+        ],
+        "void": [
+          "i3",
+          "i19"
+        ],
+        "banished": [],
+        "backRank": [
+          "i1",
+          "i2",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/augury-amplified-mobile.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/augury-amplified-mobile.jsonl",
+      "logRows": 60,
+      "screens": [
+        "132-augury-amplified-mobile-ready.png",
+        "132-augury-amplified-mobile-first-discard-offered.png",
+        "132-augury-amplified-mobile-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 390,
+        "height": 844,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": [
+        "i20",
+        "i19"
+      ],
+      "functionalProof": {
+        "drawn": "i3",
+        "queued": [
+          {
+            "seq": 6,
+            "index": 2,
+            "kind": "triggerQueued",
+            "instance": null,
+            "event": {
+              "kind": "triggerQueued",
+              "source": "i2",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "subject": "i19"
+            }
+          }
+        ],
+        "resolved": [
+          {
+            "seq": 6,
+            "index": 5,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": "i2",
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          }
+        ],
+        "allDraws": [
+          {
+            "seq": 6,
+            "index": 6,
+            "kind": "cardDrawn",
+            "instance": "i3",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i3"
+            }
+          }
+        ],
+        "energy": [
+          {
+            "seq": 6,
+            "index": 7,
+            "kind": "energyChanged",
+            "instance": null,
+            "event": {
+              "kind": "energyChanged",
+              "side": "player",
+              "current": 9,
+              "max": 10,
+              "change": 2,
+              "maxChange": 0,
+              "cause": "effect"
+            }
+          }
+        ],
+        "gain": 2
+      },
+      "renderedFinal": {
+        "text": "9/100/25",
+        "wanted": {
+          "current": 9,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=b4838d67-f055-4fd3-a64d-0a4d2b6678cc&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000013%22%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=h9v7qb",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=b4838d67-f055-4fd3-a64d-0a4d2b6678cc&variant=amplified&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%225e5e5e5e-0000-4000-8000-000000000013%22%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=h9v7qb",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/augury-amplified-mobile.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/augury-amplified-mobile.jsonl"
+    },
+    {
+      "mode": "emptyPulse",
+      "uuid": "1434440c-c86f-4b7d-83e7-3bd1f7dde63e",
+      "variant": "base",
+      "viewport": "mobile",
+      "gameId": "qxtbru",
+      "source": "i1",
+      "sourceZone": "void",
+      "resources": {
+        "score": 0,
+        "currentEnergy": 13,
+        "maxEnergy": 10,
+        "fatigueCount": 0,
+        "deck": [
+          "i2",
+          "i3",
+          "i4",
+          "i5",
+          "i6",
+          "i7",
+          "i8",
+          "i9"
+        ],
+        "hand": [],
+        "void": [
+          "i1"
+        ],
+        "banished": [],
+        "backRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "frontRank": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "avatar": null,
+        "dreamsigns": []
+      },
+      "wholePayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/emptyPulse-base-mobile.json",
+      "wholeJSONL": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/complete-payloads/emptyPulse-base-mobile.jsonl",
+      "logRows": 28,
+      "screens": [
+        "132-emptyPulse-base-mobile-ready.png",
+        "132-emptyPulse-base-mobile-result-settled.png"
+      ],
+      "renderedViewport": {
+        "width": 390,
+        "height": 844,
+        "devicePixelRatio": 2
+      },
+      "promptCandidates": null,
+      "functionalProof": {
+        "energy": {
+          "seq": 2,
+          "index": 2,
+          "kind": "energyChanged",
+          "instance": null,
+          "event": {
+            "kind": "energyChanged",
+            "side": "player",
+            "current": 13,
+            "max": 10,
+            "change": 3,
+            "maxChange": 0,
+            "cause": "effect"
+          }
+        },
+        "expected": [],
+        "discards": [],
+        "gain": 3
+      },
+      "renderedFinal": {
+        "text": "13/100/25",
+        "wanted": {
+          "current": 13,
+          "max": 10
+        }
+      },
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%2C%22hand%22%3A%5B%221434440c-c86f-4b7d-83e7-3bd1f7dde63e%22%5D%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=qxtbru",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=1434440c-c86f-4b7d-83e7-3bd1f7dde63e&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%2C%22hand%22%3A%5B%221434440c-c86f-4b7d-83e7-3bd1f7dde63e%22%5D%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=qxtbru",
+      "wholePrimaryPayload": "artifacts/qa/hv-umm2.132/complete-payloads/emptyPulse-base-mobile.json",
+      "wholePrimaryJSONL": "artifacts/qa/hv-umm2.132/complete-payloads/emptyPulse-base-mobile.jsonl"
+    }
+  ],
+  "captureDimensions": [
+    {
+      "file": "132-adventure-base-desktop-ready.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-adventure-base-desktop-discard-offered.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-adventure-base-desktop-result-settled.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-adventure-amplified-desktop-ready.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-adventure-amplified-desktop-discard-offered.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-adventure-amplified-desktop-result-settled.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-pulse-base-desktop-ready.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-pulse-base-desktop-result-settled.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-pulse-amplified-desktop-ready.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-pulse-amplified-desktop-result-settled.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-data-base-desktop-ready.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-data-base-desktop-result-settled.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-data-amplified-desktop-ready.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-data-amplified-desktop-result-settled.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-base-desktop-ready.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-base-desktop-first-discard-offered.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-base-desktop-result-settled.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-amplified-desktop-ready.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-amplified-desktop-first-discard-offered.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-amplified-desktop-result-settled.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-emptyPulse-base-desktop-ready.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-emptyPulse-base-desktop-result-settled.png",
+      "declaredViewport": [
+        1440,
+        900
+      ],
+      "actualPng": [
+        2880,
+        1800
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-adventure-base-mobile-ready.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-adventure-base-mobile-discard-offered.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-adventure-base-mobile-result-settled.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-adventure-amplified-mobile-ready.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-adventure-amplified-mobile-discard-offered.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-adventure-amplified-mobile-result-settled.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-pulse-base-mobile-ready.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-pulse-base-mobile-result-settled.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-pulse-amplified-mobile-ready.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-pulse-amplified-mobile-result-settled.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-data-base-mobile-ready.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-data-base-mobile-result-settled.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-data-amplified-mobile-ready.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-data-amplified-mobile-result-settled.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-base-mobile-ready.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-base-mobile-first-discard-offered.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-base-mobile-result-settled.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-amplified-mobile-ready.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-amplified-mobile-first-discard-offered.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-augury-amplified-mobile-result-settled.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-emptyPulse-base-mobile-ready.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    },
+    {
+      "file": "132-emptyPulse-base-mobile-result-settled.png",
+      "declaredViewport": [
+        390,
+        844
+      ],
+      "actualPng": [
+        780,
+        1688
+      ],
+      "basis": "PNG header independently read; actual final DOM devicePixelRatio2 observed for every cell"
+    }
+  ],
+  "geometry": {
+    "count": 68,
+    "positiveEnabled": 68,
+    "centreHits": 66,
+    "centresInViewport": 68,
+    "fullRectsExtendOutsideViewport": 30,
+    "rows": [
+      {
+        "cell": "adventure-base-desktop.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 1387,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-base-desktop.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 838.547607421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-base-desktop.json",
+        "selector": "[data-battle-card-id=\"i2\"]",
+        "rect": {
+          "x": 771.9549560546875,
+          "y": 730.9501342773438,
+          "width": 133.0706787109375,
+          "height": 183.41943359375
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-base-desktop.json",
+        "selector": "[data-battle-card-id=\"i3\"]",
+        "rect": {
+          "x": 905.000732421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-base-desktop.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 1151.171875,
+          "y": 597,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-amplified-desktop.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 1387,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-amplified-desktop.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 838.547607421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-amplified-desktop.json",
+        "selector": "[data-battle-card-id=\"i2\"]",
+        "rect": {
+          "x": 771.9549560546875,
+          "y": 730.9501342773438,
+          "width": 133.0706787109375,
+          "height": 183.41943359375
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-amplified-desktop.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 1151.171875,
+          "y": 597,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "pulse-base-desktop.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 1387,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "pulse-base-desktop.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 838.547607421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "pulse-amplified-desktop.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 1387,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "pulse-amplified-desktop.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 838.547607421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "data-base-desktop.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 1387,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "data-base-desktop.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 838.547607421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "data-amplified-desktop.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 1387,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "data-amplified-desktop.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 838.547607421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-desktop.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 1387,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-desktop.json",
+        "selector": "[data-battle-card-id=\"i2\"]",
+        "rect": {
+          "x": 838.547607421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-desktop.json",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 254.5,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-desktop.json",
+        "selector": "[data-battle-card-id=\"i19\"]",
+        "rect": {
+          "x": 772.094482421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-desktop.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 1151.171875,
+          "y": 597,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-desktop.json",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 254.5,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-desktop.json",
+        "selector": "[data-battle-card-id=\"i3\"]",
+        "rect": {
+          "x": 772.094482421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-desktop.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 1151.171875,
+          "y": 597,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-desktop.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 1387,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-desktop.json",
+        "selector": "[data-battle-card-id=\"i2\"]",
+        "rect": {
+          "x": 838.547607421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-desktop.json",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 254.5,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-desktop.json",
+        "selector": "[data-battle-card-id=\"i19\"]",
+        "rect": {
+          "x": 772.094482421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-desktop.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 1151.171875,
+          "y": 597,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-desktop.json",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 254.5,
+          "y": 483.5,
+          "width": 89.5,
+          "height": 89.5
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-desktop.json",
+        "selector": "[data-battle-card-id=\"i3\"]",
+        "rect": {
+          "x": 772.094482421875,
+          "y": 731.552978515625,
+          "width": 141.18115234375,
+          "height": 189.02117919921875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-desktop.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 1151.171875,
+          "y": 597,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "emptyPulse-base-desktop.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 705.484375,
+          "y": 732,
+          "width": 128.90625,
+          "height": 180.46875
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-base-mobile.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 337,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-base-mobile.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 190.73207092285156,
+          "y": 666.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-base-mobile.json",
+        "selector": "[data-battle-card-id=\"i2\"]",
+        "rect": {
+          "x": 152.67897033691406,
+          "y": 662.6724853515625,
+          "width": 156.95896911621094,
+          "height": 214.722900390625
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": false
+      },
+      {
+        "cell": "adventure-base-mobile.json",
+        "selector": "[data-battle-card-id=\"i3\"]",
+        "rect": {
+          "x": 218.04457092285156,
+          "y": 633.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-base-mobile.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 292.671875,
+          "y": 522.828125,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-amplified-mobile.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 337,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-amplified-mobile.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 190.73207092285156,
+          "y": 666.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "adventure-amplified-mobile.json",
+        "selector": "[data-battle-card-id=\"i2\"]",
+        "rect": {
+          "x": 152.67897033691406,
+          "y": 662.6724853515625,
+          "width": 156.95896911621094,
+          "height": 214.722900390625
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": false
+      },
+      {
+        "cell": "adventure-amplified-mobile.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 292.671875,
+          "y": 522.828125,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "pulse-base-mobile.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 337,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "pulse-base-mobile.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 190.73207092285156,
+          "y": 666.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "pulse-amplified-mobile.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 337,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "pulse-amplified-mobile.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 190.73207092285156,
+          "y": 666.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "data-base-mobile.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 337,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "data-base-mobile.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 190.73207092285156,
+          "y": 666.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "data-amplified-mobile.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 337,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "data-amplified-mobile.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 190.73207092285156,
+          "y": 666.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-mobile.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 337,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-mobile.json",
+        "selector": "[data-battle-card-id=\"i2\"]",
+        "rect": {
+          "x": 190.73207092285156,
+          "y": 666.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-mobile.json",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 23.40625,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-mobile.json",
+        "selector": "[data-battle-card-id=\"i19\"]",
+        "rect": {
+          "x": 155.63832092285156,
+          "y": 619.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-mobile.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 292.671875,
+          "y": 522.828125,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-mobile.json",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 23.40625,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-mobile.json",
+        "selector": "[data-battle-card-id=\"i3\"]",
+        "rect": {
+          "x": 155.63832092285156,
+          "y": 636.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-base-mobile.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 292.671875,
+          "y": 522.828125,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-mobile.json",
+        "selector": "button[aria-label=\"Close engine debug panel\"]",
+        "rect": {
+          "x": 337,
+          "y": 36.21875,
+          "width": 40,
+          "height": 40
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-mobile.json",
+        "selector": "[data-battle-card-id=\"i2\"]",
+        "rect": {
+          "x": 190.73207092285156,
+          "y": 666.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-mobile.json",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 23.40625,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-mobile.json",
+        "selector": "[data-battle-card-id=\"i19\"]",
+        "rect": {
+          "x": 155.63832092285156,
+          "y": 619.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-mobile.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 292.671875,
+          "y": 522.828125,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-mobile.json",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 23.40625,
+          "y": 415.890625,
+          "width": 53.859375,
+          "height": 53.859375
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-mobile.json",
+        "selector": "[data-battle-card-id=\"i3\"]",
+        "rect": {
+          "x": 155.63832092285156,
+          "y": 636.8659057617188,
+          "width": 170.82591247558594,
+          "height": 224.12811279296875
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "augury-amplified-mobile.json",
+        "selector": "[data-testid=\"battle-card-picker-submit\"]",
+        "rect": {
+          "x": 292.671875,
+          "y": 522.828125,
+          "width": 89.328125,
+          "height": 42
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      },
+      {
+        "cell": "emptyPulse-base-mobile.json",
+        "selector": "[data-battle-card-id=\"i1\"]",
+        "rect": {
+          "x": 120.1328125,
+          "y": 664.109375,
+          "width": 149.734375,
+          "height": 209.625
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "enabled": true,
+        "centerHits": true
+      }
+    ]
+  },
+  "completePayloadAndJSONLRetention": {
+    "cells": 18,
+    "files": 36,
+    "primaryIgnoredDir": "artifacts/qa/hv-umm2.132/complete-payloads/",
+    "rawFailureFile": "algorithm1-failure-payload.json",
+    "allCompletePayloadsEmittedBeforeEachLaterActionOrFailure": true
+  },
+  "parentRuntimeVerification": {
+    "verifiedUtc": "2026-10-13T16:31:32.809371+00:00",
+    "effectiveCells": 18,
+    "allCompleteGameLogsAndPayloads": true,
+    "capturesDimensionsVerified": 44,
+    "actualDprSampled": 2,
+    "geometryPositiveEnabledCentresWithinViewport": 68,
+    "centreHits": 66,
+    "literalSourceHashesUnchanged": true,
+    "actualParentViews": 14,
+    "rasterLimitations": [
+      "AMP event resource HUDs actual10/10 adventure14/10pulse11/10data; augury9/10sourcepresent/exhausted",
+      "synthetic faces intentional; lower handcards cropped; fullhand/fullprintedtext visibility not established",
+      "AuguryresultNextPhase visuallydisabled duringcapture: visibleHUDsettled proof only, no allcontrolsready claim",
+      "Mobile AdventureAMP raised hand partially covers player resourceHUD; Mobile DataAMP raised hand mostly covers playerHUD: DOMcountermatch is not rasterreadability proof. PulseAMP14/10 clear with emptyhand. No claimallHUDpixels/handfullyvisible; no source-ownedUIregression established.",
+      "AdventureBASE mobile fullsourceeventpreview and0/2Submit visible; highlightedphysicalhandcandidates extend/overlap. PlayerHUD also partly covered in this promptcapture.",
+      "Mobile ThoughtAMP sourcepresent/exhausted,9/10HUDpartlycoveredraisedhand; firstcostpromptCancelrightedge partlyoverlappedbydebugbadge, requiredselection/Submitvisible0/1; no Cancelinteractionclaim forThoughtbrowsercase",
+      "EmptyPulseBASEmobile13/10clearlyreadablewithnohand; sourcevoidpilevisible. Final judgement refers14actualparentviews, not full44imageinspection."
+    ]
+  },
+  "parentVisualJudgment": {
+    "actualViewedUtc": "2026-10-13T16:31:32.809371+00:00",
+    "invocation": "run-KU08gY",
+    "captures": [
+      "132-adventure-amplified-desktop-result-settled.png",
+      "132-pulse-amplified-desktop-result-settled.png",
+      "132-data-amplified-desktop-result-settled.png",
+      "132-augury-amplified-desktop-result-settled.png",
+      "132-adventure-base-desktop-discard-offered.png",
+      "132-augury-amplified-desktop-first-discard-offered.png",
+      "132-emptyPulse-base-desktop-result-settled.png",
+      "132-adventure-amplified-mobile-result-settled.png",
+      "132-pulse-amplified-mobile-result-settled.png",
+      "132-data-amplified-mobile-result-settled.png",
+      "132-adventure-base-mobile-discard-offered.png",
+      "132-augury-amplified-mobile-result-settled.png",
+      "132-augury-amplified-mobile-first-discard-offered.png",
+      "132-emptyPulse-base-mobile-result-settled.png"
+    ],
+    "basis": "parent actual view_image inspection; desktop images resized from2880x1800 to1996x1248 fordisplay; originaldimensions retained",
+    "observations": [
+      "AMP event resource HUDs actual10/10 adventure14/10pulse11/10data; augury9/10sourcepresent/exhausted",
+      "synthetic faces intentional; lower handcards cropped; fullhand/fullprintedtext visibility not established",
+      "AuguryresultNextPhase visuallydisabled duringcapture: visibleHUDsettled proof only, no allcontrolsready claim",
+      "Mobile AdventureAMP raised hand partially covers player resourceHUD; Mobile DataAMP raised hand mostly covers playerHUD: DOMcountermatch is not rasterreadability proof. PulseAMP14/10 clear with emptyhand. No claimallHUDpixels/handfullyvisible; no source-ownedUIregression established.",
+      "AdventureBASE mobile fullsourceeventpreview and0/2Submit visible; highlightedphysicalhandcandidates extend/overlap. PlayerHUD also partly covered in this promptcapture.",
+      "Mobile ThoughtAMP sourcepresent/exhausted,9/10HUDpartlycoveredraisedhand; firstcostpromptCancelrightedge partlyoverlappedbydebugbadge, requiredselection/Submitvisible0/1; no Cancelinteractionclaim forThoughtbrowsercase",
+      "EmptyPulseBASEmobile13/10clearlyreadablewithnohand; sourcevoidpilevisible. Final judgement refers14actualparentviews, not full44imageinspection."
+    ]
+  },
+  "rawFailure": {
+    "report": "invocations/run-4fAVrc/algorithms.result.json",
+    "payload": {
+      "label": "failed complete algorithm witness",
+      "error": "QaTimeoutError: qa.battle physical playable control and phase affordance ready: timed out after 20000 ms; {\"at\":\"near:day\",\"prompt\":null,\"window\":\"main\",\"canPass\":false,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":0}}\n    at Object.timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.waitFor (evalmachine.<anonymous>:1410:43)\n    at async witness (evalmachine.<anonymous>:1677:96)\n    at async evalmachine.<anonymous>:1706:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+      "gameId": "vbxftn",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "contextUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=f7b135ea-4894-46ab-b41d-ba2f74b070a1&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=vbxftn",
+      "currentUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=f7b135ea-4894-46ab-b41d-ba2f74b070a1&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22front%22%3A%5B%5D%2C%22back%22%3A%5B%5D%2C%22hand%22%3A%5B%5D%2C%22void%22%3A%5B%5D%2C%22energy%22%3A0%7D%7D&game=vbxftn",
+      "source": "i1",
+      "uuid": "f7b135ea-4894-46ab-b41d-ba2f74b070a1",
+      "variant": "base",
+      "sourceInstance": {
+        "printing": {
+          "kind": "card",
+          "cardId": "f7b135ea-4894-46ab-b41d-ba2f74b070a1"
+        },
+        "zone": "hand",
+        "owner": "player",
+        "controller": "player",
+        "variant": {
+          "amplified": false
+        },
+        "status": {
+          "exhausted": false,
+          "gainedSpark": 0,
+          "counters": 0,
+          "created": false,
+          "reclaimed": false,
+          "playedViaReclaim": false,
+          "offering": false,
+          "ephemeral": false,
+          "x": null
+        }
+      },
+      "turn": {
+        "round": 2,
+        "turnNumber": 4,
+        "active": "player",
+        "phase": "day",
+        "sideTurns": {
+          "player": 2,
+          "enemy": 2
+        },
+        "extra": false,
+        "lastNormal": "player",
+        "extraTurns": [],
+        "challengeLane": null,
+        "beginning": false
+      },
+      "pending": null,
+      "decision": {
+        "kind": "main",
+        "side": "player"
+      },
+      "inFlight": null,
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 2
+      },
+      "gameLog": {
+        "gameId": "vbxftn",
+        "selectedBy": "url",
+        "reason": null,
+        "rows": 28
+      },
+      "observedUi": {
+        "debugRailCloseButtonPresent": true,
+        "nextPhaseEnabled": true,
+        "phaseCentreHitGeometry": "not sampled",
+        "driverCanPass": false,
+        "inference": "open rail occlusion inferred, not a sampled phase-centre hit result"
+      },
+      "fullPrimaryIgnoredPayload": "artifacts/qa/hv-umm2.132/complete-payloads/algorithm1-failure-payload.json",
+      "fullExternalPayload": "/tmp/dreamtides-executor-01a12e91/132-audit/runtime/algorithm1-failure-payload.json",
+      "fullRawReport": "artifacts/qa/hv-umm2.132/invocations/run-4fAVrc/algorithms.result.json",
+      "fullRawJSONL": "artifacts/qa/hv-umm2.132/invocations/run-4fAVrc/algorithms-desktop.jsonl"
+    },
+    "qualification": "No product defect established. Open debug rail and enabled Next Phase/canPassfalse observed; original phase-centre hit geometry not measured, so occlusion inference qualified. Exact first failing read instant unknown. Corrected public Close click then all18cells passed."
+  },
+  "fullCorrectionWindows": [
+    {
+      "startUtc": "2026-10-13T16:23:17.808406+00:00",
+      "endUtc": "2026-10-13T16:28:19.625094+00:00",
+      "basis": "conservative full first failing invocation start until actual last corrected green endpoint; includes diagnosis/reads/cleanup/restart/coordination/capture/runtime/waits, not CPU",
+      "cause": "qa.labAddCard leaves public debug rail open; own observer forgot to close it before asserting physically uncovered phase control; witnessed enabled Next Phase and visible Close button, emptyCaps; no engine/tool change",
+      "elapsedSeconds": 301.816688,
+      "firstFailureInstant": "not independently sampled; conservative first failed command start includes its initial setup",
+      "causeQualification": "Open debug rail + enabled Next Phase + canPassfalse observed, phase-centre elementFromPoint at original failure not sampled. Rail occlusion is inferred; public Close correction yielded all18green cells. No product/shared-tool defect established."
+    }
+  ],
+  "frictionDisposition": {
+    "tag": "browser-qa-scripting",
+    "recordedMinutes": 0,
+    "observedFullCorrectionMinutes": 5.030278133333334,
+    "reason": "Full conservative5.030278minute observer correction below approximately10minute ledger threshold; no new recurring/tool capability cause established; existing hv-umm2.308 disposition retained, no duplicate improvement bead"
+  },
+  "readAndCoordinationObservations": [
+    "Helper absent guessed matcher.test.ts and guessed content verification/gates paths corrected through source inventory before any dependent mutation; broad display-truncated queries re-read decisive snippets. Exact tiny durations not independently sampled, all gross elapsed counted.",
+    "Parent mixed warning-plus-JSON reader and dependency_type assumptions corrected before ACK; tiny exact durations unknown, no tested product bug inferred.",
+    "Original failure-payload compact reader initially assumed optional testId present; KeyError corrected using optional access, complete raw payload retained before restart, no dependent mutation occurred.",
+    "Scenario line estimate68 corrected to actual63 before final record; no test failure or extra source change."
+  ],
+  "prior129OwnershipCorrection": {
+    "bead": "hv-umm2.129",
+    "actualClaimStartUtc": "2026-10-13T15:04:54.891507Z",
+    "actualCloseUtc": "2026-10-13T16:01:26.799484Z",
+    "wholeOwnershipMin": 56.5317996167,
+    "actualSourceCommit": "0db5f084f106fd0464733ec89c5393e4cbd3d0dc",
+    "actualCommitStartUtc": "2026-10-13T15:52:52.237982Z",
+    "actualCommitEndUtc": "2026-10-13T15:52:52.288793Z",
+    "actualCommitWallSeconds": 0.05082958401180804,
+    "preCommitMarkerUtc": "2026-10-13T15:52:52.078322Z",
+    "markerToCommitEndSeconds": 0.210471,
+    "originalEvidenceEndpointToCommitEndSeconds": 275.745517,
+    "qualification": "Additive correction in next own bead; original closed129 files untouched. Whole ownership includes parent/helper research, setup, runtime, coordination, waiting, final checks and certified delivery, not CPU. Measured precommit marker is a proxy with observed tail, not invented actual commit UTC.",
+    "actualCommitPid": 36644,
+    "actualCommitObserverPid": 36620
+  },
+  "finalChecks": [
+    {
+      "name": "132-final-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 38596,
+      "pid": 38621,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+      "startUtc": "2026-10-13T16:35:04.070243+00:00",
+      "endUtc": "2026-10-13T16:35:54.462546+00:00",
+      "wallS": 50.39179895800771,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/132-final-review.log"
+    },
+    {
+      "name": "132-final-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "observerPid": 38595,
+      "pid": 38622,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+      "startUtc": "2026-10-13T16:35:04.070329+00:00",
+      "endUtc": "2026-10-13T16:35:09.319367+00:00",
+      "wallS": 5.249024082993856,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/132-final-knip.log"
+    },
+    {
+      "name": "132-final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "observerPid": 38597,
+      "pid": 38623,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-132",
+      "startUtc": "2026-10-13T16:35:04.070340+00:00",
+      "endUtc": "2026-10-13T16:35:04.196024+00:00",
+      "wallS": 0.12571658301749267,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/132-final-schema.log"
+    }
+  ],
+  "evidenceCompaction": {
+    "actualUtc": "2026-10-13T16:37:36.001051+00:00",
+    "basis": "After final review+Knip+schema terminal0, remove duplicate geometry/rendered HUD HTML and replace duplicate117KB raw payload with observed compact fields and complete ignored artifact references. Full source/raw payload/JSONL archives remain intact; numbers, events, geometry, 18witnesses and qualifications preserved. Measurement-only provenance/compaction; no source/test/QA/friction semantics change."
+  }
+}

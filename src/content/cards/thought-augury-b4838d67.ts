@@ -1,3 +1,6 @@
+import { triggered, whenDiscard } from "../../engine/dsl/triggers";
+import { draw, gainEnergy, sequence } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,6 @@ export default card({
   cardNumber: 256,
   art: { x: -0.002, y: 1, scale: 1.11 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(whenDiscard(), sequence(draw(1), gainEnergy(variant.amplified ? 2 : 1)), { oncePerTurn: true })],
+  verifiedText: expectedVerifiedText("Once per turn, when you discard a card, draw a card and gain 1●.", "Once per turn, when you discard a card, draw a card and gain 2●."),
 });

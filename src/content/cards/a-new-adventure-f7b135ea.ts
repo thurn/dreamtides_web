@@ -1,3 +1,6 @@
+import { event } from "../../engine/dsl/builders";
+import { discard, draw, gainEnergy, sequence } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   artOwned: false,
   cardNumber: 447,
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [event(sequence(draw(2), discard(variant.amplified ? 1 : 2), gainEnergy(3)))],
+  verifiedText: expectedVerifiedText("Draw two cards, then discard two cards. Gain 3●.", "Draw two cards, then discard one card. Gain 3●."),
 });
