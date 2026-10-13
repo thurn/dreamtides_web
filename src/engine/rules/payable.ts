@@ -4,6 +4,8 @@
  * duration registers here, and its floating effects end with it.
  */
 import type { AbilitySource, EffectId, InstanceId, Side } from "../state/ids";
+import { SIDES } from "../state/ids";
+import { identifies } from "../view/knowledge";
 import type { BattleState, PayableEffect } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { expireAt, mintEffectId } from "./floating";
@@ -24,7 +26,9 @@ export function registerPayable(
   id: EffectId = mintEffectId(ctx.state),
 ): EffectId {
   ctx.state.payable.push({ id, payer, cost, source, affects: [...affects] });
-  ctx.emit({ kind: "payableEffectRegistered", effect: id, payer, cost, source, affects: [...affects] });
+  const affectsSeenBy = affects.map((instance) => SIDES.filter((viewer) => identifies(ctx.state, instance, viewer)));
+  ctx.emit({ kind: "payableEffectRegistered", effect: id, payer, cost, source, affects: [...affects],
+    ...(affectsSeenBy.every((viewers) => viewers.length === SIDES.length) ? {} : { affectsSeenBy }) });
   return id;
 }
 

@@ -17,6 +17,8 @@ export interface EffectStartedEvent {
   readonly source: AbilitySource | null;
   readonly expiry: Expiry;
   readonly change: FloatingChange;
+  /** Complete emission-time observers of a physical triggering-card spark announcement. */
+  readonly sparkSeenBy?: readonly Side[];
 }
 
 /**
@@ -51,8 +53,12 @@ function keptPublicCard(event: EffectStartedEvent, state: BattleState): Instance
  */
 export const effectStarted: EventDefinition<EffectStartedEvent> = {
   kind: "effectStarted",
-  privateTo: (event, state) => (keptPublicCard(event, state) === null ? sourcePrivacy(event.source, state) : null),
+  privateTo: (event, state) => event.change.kind === "spark" && event.sparkSeenBy !== undefined
+    ? null : (keptPublicCard(event, state) === null ? sourcePrivacy(event.source, state) : null),
   redact: (event, viewer, state) => {
+    if (event.change.kind === "spark" && event.sparkSeenBy !== undefined) {
+      return event.sparkSeenBy.includes(viewer) ? event : null;
+    }
     const changed = changedInstance(event.change);
     if (changed !== null && !identifies(state, changed, viewer)) return null;
     const combined = event.change.kind === "disableTriggers" && event.change.mode === "triggeredAndActivated";

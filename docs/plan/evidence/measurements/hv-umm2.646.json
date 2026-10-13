@@ -1,0 +1,473 @@
+{
+  "bead": "hv-umm2.646",
+  "phase": 5,
+  "base": "04620bd69e8ecec9f80d7a3059add40dab0d63bf",
+  "evidenceEndpointUtc": "2026-10-13T18:00:29.006262+00:00",
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "startMeaning": "Conservative dispatch lowerbound at parent install start; exact helper dispatch not sampled, bracket ends first helper hash17:49:02.724573Z (43.563616s including setup/prebrief). End precommit marker proxy; actual commit receipt retained outside committed records.",
+        "includes": "research/setup/parent-helper coordination/checks/corrections/waits, initial helper stop while parent ran cold review/canceled source candidate, same-worktree recovery and final validation; full elapsed wall, not CPU"
+      },
+      "hostLoad": {
+        "measuredFor": "Final R2 review parallel operation start18:19:24.243Z from log, 1-minute hostload3.1904296875; R1 samples retained separately."
+      }
+    }
+  },
+  "source": {
+    "nonTestDelta": {
+      "added": 33,
+      "deleted": 9
+    },
+    "plainContractLines": 256,
+    "newTestEntryPoints": 0,
+    "readonlyBaselineTracked": 4519,
+    "modifiedBaselinePaths": [
+      "src/engine/effects/primitives/gain-triggering-card-spark.ts",
+      "src/engine/events/kinds/effect-started.ts",
+      "src/engine/events/kinds/payable-effect-registered.ts",
+      "src/engine/events/kinds/spark-gained.ts",
+      "src/engine/rules/floating.ts",
+      "src/engine/rules/payable.ts"
+    ],
+    "publicProducers": "Old gainSpark/additionalSpark emit only in-play CharacterRef gains; absence of seenBy preserves exact public event shape. New triggering-card gains capture observers only when not public. Payable affects observation captured at registration, authoritative lifecycle subjects untouched.",
+    "transport": "Safe side-only arrays serialize as plain JSON. Payable projected payload strips its observer transport entirely and filters affects, avoiding hidden identities in fields or keys. Spark visible raw event keeps safe side-only seenBy to preserve existing611 equality. Physical-trigger temporary effectStarted also records complete source+subject authority in event-only sparkSeenBy via an optional third addFloating argument; flags are absent from authoritative FloatingEffect. Only explicit Spark metadata branches override final-state privacy; legacy and non-Spark event paths retain their existing logic.",
+    "knowledgeOrdering": "Gain/register do not mutate locations/knowledge or enter random-deck-removal settler scopes; preceding movement is settled before subsequent gain. addFloating announcement can reveal a known deck top before spark capture. Source privacy/redaction remains existing behavior."
+  },
+  "validation": {
+    "646-focused": {
+      "startUtc": "2026-10-13T17:53:23.135413+00:00",
+      "endUtc": "2026-10-13T17:53:30.530516+00:00",
+      "wallS": 7.395076249988051,
+      "exit": 1,
+      "pid": 16681,
+      "observerPid": 16670
+    },
+    "646-focused-corrected": {
+      "startUtc": "2026-10-13T17:54:10.502775+00:00",
+      "endUtc": "2026-10-13T17:54:15.064289+00:00",
+      "wallS": 4.561500291980337,
+      "exit": 0,
+      "pid": 18162,
+      "observerPid": 18153
+    },
+    "646-review": {
+      "startUtc": "2026-10-13T17:54:43.951895+00:00",
+      "endUtc": "2026-10-13T17:55:37.786176+00:00",
+      "wallS": 53.83379095798591,
+      "exit": 0,
+      "pid": 18722,
+      "observerPid": 18711
+    },
+    "646-knip": {
+      "startUtc": "2026-10-13T17:55:46.887712+00:00",
+      "endUtc": "2026-10-13T17:55:50.684152+00:00",
+      "wallS": 3.7964364999788813,
+      "exit": 0,
+      "pid": 20414,
+      "observerPid": 20401
+    },
+    "646-full-lock": {
+      "startUtc": "2026-10-13T17:56:07.737049+00:00",
+      "endUtc": "2026-10-13T17:57:50.417580+00:00",
+      "wallS": 102.67957266699523,
+      "exit": 0,
+      "pid": 20873,
+      "observerPid": 20864
+    },
+    "646-full": {
+      "startUtc": "2026-10-13T17:56:07.758884+00:00",
+      "endUtc": "2026-10-13T17:57:50.413087+00:00",
+      "wallS": 102.6532484999916,
+      "exit": 0,
+      "pid": 20877,
+      "observerPid": 20874
+    },
+    "646-r2-focused": {
+      "startUtc": "2026-10-13T18:18:57.456694+00:00",
+      "endUtc": "2026-10-13T18:19:02.715439+00:00",
+      "wallS": 5.2587263339955825,
+      "exit": 0,
+      "pid": 52396,
+      "observerPid": 52386
+    },
+    "646-r2-review": {
+      "startUtc": "2026-10-13T18:19:23.237459+00:00",
+      "endUtc": "2026-10-13T18:20:16.630433+00:00",
+      "wallS": 53.39249091601232,
+      "exit": 0,
+      "pid": 52883,
+      "observerPid": 52869
+    },
+    "646-r2-knip": {
+      "startUtc": "2026-10-13T18:20:32.557905+00:00",
+      "endUtc": "2026-10-13T18:20:35.487271+00:00",
+      "wallS": 2.9293666660087183,
+      "exit": 0,
+      "pid": 54212,
+      "observerPid": 54204
+    },
+    "646-r2-full-lock": {
+      "startUtc": "2026-10-13T18:20:52.992814+00:00",
+      "endUtc": "2026-10-13T18:22:32.722190+00:00",
+      "wallS": 99.72843987500528,
+      "exit": 0,
+      "pid": 54700,
+      "observerPid": 54692
+    },
+    "646-r2-full": {
+      "startUtc": "2026-10-13T18:20:53.015031+00:00",
+      "endUtc": "2026-10-13T18:22:32.718128+00:00",
+      "wallS": 99.70216437499039,
+      "exit": 0,
+      "pid": 54702,
+      "observerPid": 54701
+    }
+  },
+  "testCounts": {
+    "focusedInitial": {
+      "passed": 54,
+      "failed": 2,
+      "cause": "Invalid fixture everyIn(play); ZoneCardSpec supports hidden-zone arrays, actual corrected subject putInDeck then shuffle used. Production source unchanged."
+    },
+    "focusedCorrected": {
+      "passed": 58,
+      "original611": 38,
+      "new": 20,
+      "qualification": "predates final2public payable-after-shuffle witnesses"
+    },
+    "r1FinalReview": {
+      "files": 292,
+      "tests": 6113,
+      "original611": 38,
+      "new": 22
+    },
+    "r1FullPrivacy": {
+      "files": 373,
+      "tests": 7114,
+      "includes": "typechecks/full lint/cycles/Knip/friction schema/bundle plus all tests"
+    },
+    "r2Focused": {
+      "passed": 161,
+      "includes": "38 immutable original611,28 own new,95 combined/disabling collateral; final concealed-deck fixture changed from permanent to temporary after focus and validated in final review/full"
+    },
+    "finalReview": {
+      "files": 292,
+      "tests": 6119,
+      "original611": 38,
+      "new": 28
+    },
+    "fullPrivacy": {
+      "files": 373,
+      "tests": 7120,
+      "includes": "typechecks/full lint/cycles/Knip/friction schema/bundle plus all tests"
+    }
+  },
+  "corrections": {
+    "fixture": {
+      "start": "2026-10-13T17:53:23.135413+00:00",
+      "end": "2026-10-13T17:54:15.064289+00:00",
+      "grossWallS": 51.928876,
+      "scope": "includes failed run, reading/fixture corrections, corrected validation; not CPU; no new product defect, below ~10min tag threshold"
+    },
+    "readObservers": "Initial guessed redaction/contract/additional/worker/resource paths produced readonly failures, then actual paths discovered with rg. Broad first documentation output truncated, relevant portions reread. Retained tool failures; no source effect, all gross elapsed included.",
+    "parentObservers": {
+      "wholeBlobEqualityFailure": "shared rules included legitimate peer additive Avatar intrinsic-variant paragraph; nine own blobs equal and exact own rules subsection preserved",
+      "headingLookupFailure": "parent looked for guessed markdown heading, actual bold subsection discovered and verified; no source effect",
+      "stderrMergedJSONFailure": "runner log prefixes bd role warning; native stdout decoded separately, real commands allsuccessful"
+    },
+    "r2ReadObserver": "A readonly wc command omitted its worktree cwd and failed to find the owned contract; corrected in the owned WT. No source effect, full elapsed retained."
+  },
+  "failureMatrix": {
+    "normal": "Both controllers hidden0/-1/2 gain then reveal stays private; revealed/informed gain then shuffle stays public; concealed deck gain has no observers. Public ordinary/additional gains remain projected after shuffle or created subject cease.",
+    "payable": "Both controllers raw state retains exact source/payer/cost/physical affects; blind projected JSON/log does not name subject; owner observes it. Payment after state JSON restart deducts energy and removes duration; created subject cessation ends unpaid and removes floating/payable. Public payable subject survives later shuffle in event projection.",
+    "restartConcurrency": "suspendAFTER actualgain beforeoptionalreveal, JSONprefix includespayable/effectStarted/SparkGained withobservations, actualparseJourneyBattleFoldState accepts saved slice, freshpendingdisplay/cursor/publishedsuffix/projectedprefix+suffix/hash match; wrongactor/stale rejected. Persistence usesstep/answers/cursor, not event array; prefixseparateJSONtransport and deterministic reconstruction tested",
+    "partialWrite": "No persistence writer/schema added; plain event JSON transport and deterministic fold reconstruction only. Existing aggregate saved-state/privacy tests run unchanged.",
+    "presentation": "battleLogEntries real entry point discriminates projected payloads. presentationItems source calls same eventSeenBy but status gains/payables intentionally queue no item; no empty-item mirror test or visual claim. No new UI workflow, manual browser/provider/server, screenshots or QA ledger. Full suite runs existing synthetic tooling process tests.",
+    "allAnnouncements": "both controllers hiddenpaid/temporary\u2192reveal includes every related raw/projected/logged event; only authorized reveal discloses physical subject, blind gain+companion excluded, payablesubjectsfiltered",
+    "completeAuthority": "public temporary source/subject subsequently shuffled preserves companion; hand source privatelyheld at emission subsequentlymaterialized staysprivate despite physicalsource/subjectknown; newpubliccompanion aftercreatedsubjectcease staysobserved",
+    "lifecycleCompanion": "paid deduction/unpaidcreatedcease/floating removed and full authoritative subjects preserved; eventmetadata absent from state. Original38 immutable contracts cover failure/refusal/no partial mutation. Combined/legacy/nonSpark unchanged through focused collateral and full aggregate."
+  },
+  "resources": {
+    "pidsGone": [
+      16670,
+      16681,
+      18153,
+      18162,
+      18711,
+      18722,
+      20401,
+      20414,
+      20864,
+      20873,
+      20874,
+      20877,
+      52386,
+      52396,
+      52869,
+      52883,
+      54204,
+      54212,
+      54692,
+      54700,
+      54701,
+      54702
+    ],
+    "groupsGone": [
+      18153,
+      18711,
+      20401,
+      20864,
+      52386,
+      52869,
+      54204,
+      54692
+    ],
+    "manualBrowserServerProvider": "none created",
+    "vitestWorkers": "configured2; actual worker execution count not independently sampled",
+    "sampledLimits": "corrected focus/review/Knip/full outer+inner inherit NPROC10666/16000 NOFILE1048575/9223372036854775807 CPU unlimited (9223372036854775807 sentinel); first failed focus caps unsampled",
+    "heavyLock": {
+      "path": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "outerToInnerStartS": 0.021835,
+      "qualification": "includes process spawn overhead; not exact contention or CPU",
+      "r2OuterToInnerStartS": 0.022217
+    }
+  },
+  "hostLoadSamples": {
+    "646-focused": {},
+    "646-focused-corrected": {
+      "loadStart": [
+        3.95751953125,
+        8.95751953125,
+        10.685546875
+      ],
+      "loadEnd": [
+        3.72021484375,
+        8.8251953125,
+        10.62841796875
+      ]
+    },
+    "646-review": {
+      "loadStart": [
+        4.31982421875,
+        8.55029296875,
+        10.4755859375
+      ],
+      "loadEnd": [
+        5.2109375,
+        8.0517578125,
+        10.166015625
+      ]
+    },
+    "646-knip": {
+      "loadStart": [
+        5.037109375,
+        7.91845703125,
+        10.09375
+      ],
+      "loadEnd": [
+        5.43408203125,
+        7.95263671875,
+        10.0927734375
+      ]
+    },
+    "646-full-lock": {
+      "loadStart": [
+        6.24267578125,
+        8.00439453125,
+        10.07275390625
+      ],
+      "loadEnd": [
+        5.21484375,
+        7.25830078125,
+        9.54931640625
+      ]
+    },
+    "646-full": {
+      "loadStart": [
+        6.24267578125,
+        8.00439453125,
+        10.07275390625
+      ],
+      "loadEnd": [
+        5.21484375,
+        7.25830078125,
+        9.54931640625
+      ]
+    },
+    "646-r2-focused": {
+      "loadStart": [
+        3.48388671875,
+        4.14306640625,
+        6.1416015625
+      ],
+      "loadEnd": [
+        3.28466796875,
+        4.0908203125,
+        6.111328125
+      ]
+    },
+    "646-r2-review": {
+      "loadStart": [
+        3.1904296875,
+        4.0185546875,
+        6.0380859375
+      ],
+      "loadEnd": [
+        4.09716796875,
+        4.1591796875,
+        5.96337890625
+      ]
+    },
+    "646-r2-knip": {
+      "loadStart": [
+        4.18505859375,
+        4.181640625,
+        5.93994140625
+      ],
+      "loadEnd": [
+        4.18505859375,
+        4.181640625,
+        5.93994140625
+      ]
+    },
+    "646-r2-full-lock": {
+      "loadStart": [
+        3.82470703125,
+        4.10302734375,
+        5.87060546875
+      ],
+      "loadEnd": [
+        4.32861328125,
+        4.20751953125,
+        5.71337890625
+      ]
+    },
+    "646-r2-full": {
+      "loadStart": [
+        3.82470703125,
+        4.10302734375,
+        5.87060546875
+      ],
+      "loadEnd": [
+        4.32861328125,
+        4.20751953125,
+        5.71337890625
+      ]
+    }
+  },
+  "reviewRepair": {
+    "startUtc": "2026-10-13T17:25:41.673816+00:00",
+    "throughMarkerUtc": "2026-10-13T18:31:33.997903+00:00",
+    "grossMin": 65.87206811666667,
+    "tag": "review-repair",
+    "meaning": "gross accepted-findings recovery including parent verification/native filing/coordination/helper/check/wait, not full original implementation or active CPU"
+  },
+  "carryForward611": {
+    "source": "0e05e614db82992c4964c8328803e3abed242324",
+    "wholeOwnershipUpperBoundMin": 63.31812505,
+    "claimStart": "2026-10-13T16:44:49.391019+00:00",
+    "safeReleaseUpperBound": "2026-10-13T17:48:08.478522Z",
+    "exactReleaseUtc": "unobserved individual mutation; retained receipt",
+    "meaning": "includes parent/helper research/setup/coordination/checks/review/corrections/delivery/repair filing; not CPU; original acceptance remains open behind646",
+    "review": {
+      "model": "gpt-5.6-sol",
+      "sandbox": "read-only",
+      "routing": "temporary same-family user override",
+      "startUtc": "2026-10-13T17:23:05.735526+00:00",
+      "endUtc": "2026-10-13T17:25:41.673816+00:00",
+      "wallS": 155.9366506249935,
+      "exit": 0,
+      "retries": 0
+    },
+    "acceptedP1s": [
+      "hidden payable affects leak",
+      "final-state suppression/retroactive exposure of spark observation"
+    ],
+    "checkpoint": {
+      "candidate": "01a1364a-15b1-75d3-a413-61ec2e6d22b2",
+      "tested": "74e796350a4530e7870aeb35ce0869932e2bd34c",
+      "certificate": "01a1364b-9132-74d0-920c-2167a650a350",
+      "promoted": true,
+      "cleanupCompleted": true,
+      "rulesDiff": "peer Avatar-pool intrinsic-variant paragraph only; own triggering-card paragraph preserved",
+      "acceptance": "unresolved until fix-forward repair"
+    },
+    "approvalObserver": {
+      "wrongID": "definitive not-found/no effect, parent transcription mistake",
+      "failedWallS": 0.36480633297469467,
+      "correctExactWallS": 5.018870083993534,
+      "fullCorrectionWallS": 63.456814,
+      "exactCandidate": "parsed from actual immutable candidate receipt, authorized once"
+    },
+    "priorCommit": {
+      "startUtc": "2026-10-13T17:21:36.365789+00:00",
+      "endUtc": "2026-10-13T17:21:36.403424+00:00",
+      "wallS": 0.03766558400820941,
+      "exit": 0
+    }
+  },
+  "coreReview": {
+    "required": true,
+    "status": "Required fresh parent readonly CLI of originalbase\u2192finalamended source pending. R1 actual outer CLI completed with accepted P1 addressed in this admitted source.",
+    "routing": "temporary gpt-5.6-sol same-family user override until2026-10-14T01:00Z, normal cross-family afterward; no helper review or review debt invented"
+  },
+  "evidence": "Full native/check/CLI receipts retained outside WT under /tmp/dreamtides-executor-01a12e91; own closed611 files untouched.",
+  "preCommitMarkerUtc": "2026-10-13T18:31:33.997903+00:00",
+  "priorLocalValidationS": {
+    "focused": 4.561500291980337,
+    "review": 53.83379095798591,
+    "knip": 3.7964364999788813,
+    "full": 102.6532484999916
+  },
+  "r2EvidenceEndpointUtc": "2026-10-13T18:27:30.227732+00:00",
+  "firstUnpromotedSource": {
+    "oid": "74a11282131ec55a4bb46bc1075a828cb98e294c",
+    "actualCommit": {
+      "pid": 56801,
+      "startUtc": "2026-10-13T18:01:54.275420+00:00",
+      "endUtc": "2026-10-13T18:01:54.309108+00:00",
+      "wallS": 0.03372387500712648,
+      "exit": 0
+    },
+    "markerToActualEndS": 10.886402,
+    "firstEvidenceEndpointToActualEndS": 85.302846,
+    "candidate": "01a1366e-5d44-78f3-813d-0d64073c318e",
+    "cancel": {
+      "pid": 31545,
+      "startUtc": "2026-10-13T18:09:23.556493+00:00",
+      "endUtc": "2026-10-13T18:09:23.780535+00:00",
+      "wallS": 0.2240858750010375,
+      "exit": 0
+    },
+    "outcome": "Definitive unpromoted candidate cancellation before same-worktree source repair; original OID and all receipts retained externally, one final amended unpublished source commit authorized by parent."
+  },
+  "r1ColdReview": {
+    "model": "gpt-5.6-sol",
+    "sandbox": "read-only",
+    "routing": "temporary same-family user override",
+    "pid": 57784,
+    "startUtc": "2026-10-13T18:02:44.565936+00:00",
+    "endUtc": "2026-10-13T18:08:29.246712+00:00",
+    "wallS": 344.67737537500216,
+    "exit": 0,
+    "retries": 0,
+    "disposition": "Accepted P1: temporary/payable physical triggering-card gain companion effectStarted leaked after later reveal or lost earlier public observation after shuffle. Initial narrow four-file scope/selected announcement assertions omitted this companion; parent admitted exact effect-started/addFloating emission-only paths before repair.",
+    "limits": "Actual mandated outer fresh read-only Sol CLI completed0 and reported valid finding. Reviewer report nested CLI and tool/test attempts failed in read-only snapshot; those do not establish missing mandated review or debt. Final exact-range cold review remains required after amended source."
+  },
+  "legacyCompatibility": "Existing CharacterRef/additional callers omit new addFloating metadata parameter; non-Spark changes and combined-disabling sourceObservedBy/state/lifecycle preserve baseline. Their legacy temporary effectStarted projection still uses baseline final-state identity rules; this repair does not claim to fix that separately audited pre-existing behavior.",
+  "legacyCompanionFollowup": {
+    "bead": "hv-umm2.648",
+    "reviewOf": "hv-umm2.646",
+    "confirmed": "Both controllers: baseline ordinary gainSpark untilEndOfTurn then return-to-hand then shuffle suppresses effectStarted while SparkGained stays visible. Existing final-state companion redactor affects the old gain producer, whose source compatibility this646 repair preserves.",
+    "witness": {
+      "startUtc": "2026-10-13T18:26:33.080727+00:00",
+      "endUtc": "2026-10-13T18:26:34.054497+00:00",
+      "wallS": 0.9738083749834914,
+      "exit": 0,
+      "pid": 45210
+    },
+    "nativeAdmission": "646-legacy-admitted.json",
+    "scope": "Separate applyGain-only thirdannouncementargument capture and new plain contract with eventflag documentation; no generic floating overhaul. Exact prerequisite648\u2192646, gate46 waits648, future104 follows648; no active foreign body writer, cycles empty. Root owns native followup execution, no acceptance waiver."
+  }
+}

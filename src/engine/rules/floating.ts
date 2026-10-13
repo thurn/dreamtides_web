@@ -26,6 +26,7 @@ export function mintEffectId(state: BattleState): EffectId {
 export function addFloating(
   ctx: StepContext,
   effect: Omit<FloatingEffect, "id" | "timestamp">,
+  sparkSeenBy?: readonly Side[],
 ): EffectId {
   const id = mintEffectId(ctx.state);
   // Every new combined effect acquires its own publication facts, independent of supplied metadata.
@@ -40,6 +41,7 @@ export function addFloating(
     source: effect.source,
     expiry: effect.expiry,
     change: effect.change,
+    ...(effect.change.kind === "spark" && sparkSeenBy !== undefined ? { sparkSeenBy } : {}),
   });
   return id;
 }

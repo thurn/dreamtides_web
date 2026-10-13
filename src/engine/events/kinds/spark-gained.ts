@@ -1,6 +1,5 @@
-import type { InstanceId } from "../../state/ids";
+import type { InstanceId, Side } from "../../state/ids";
 import type { Expiry } from "../../state/types";
-import { identifies } from "../../view/knowledge";
 import type { EventDefinition } from "../types";
 
 /**
@@ -15,11 +14,13 @@ export interface SparkGainedEvent {
   readonly amount: number;
   readonly expiry: Expiry;
   readonly additional: boolean;
+  /** Sides identifying a hidden subject at emission; absent for a public gain. */
+  readonly seenBy?: readonly Side[];
 }
 
-/** A hidden card's identity and gain details are visible only to sides identifying it. */
+/** Observation is fixed at emission, including when later movement hides or reveals the card. */
 export const sparkGained: EventDefinition<SparkGainedEvent> = {
   kind: "sparkGained",
   privateTo: () => null,
-  redact: (event, viewer, state) => identifies(state, event.instance, viewer) ? event : null,
+  redact: (event, viewer) => event.seenBy === undefined || event.seenBy.includes(viewer) ? event : null,
 };

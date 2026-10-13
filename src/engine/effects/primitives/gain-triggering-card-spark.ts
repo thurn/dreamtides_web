@@ -2,6 +2,8 @@ import { instanceCard } from "../../catalog";
 import type { Duration, SubjectSpec, ValueExpr } from "../../dsl/types";
 import { startDuration } from "../../rules/durations";
 import { addFloating } from "../../rules/floating";
+import { SIDES } from "../../state/ids";
+import { combinedSourceObservers, identifies } from "../../view/knowledge";
 import { evaluate, resolveCards } from "../interpreter";
 import { definePrimitive } from "../types";
 
@@ -26,8 +28,11 @@ export const gainTriggeringCardSparkPrimitive = definePrimitive<GainTriggeringCa
     if (expiry === null) return;
     for (const instance of ids) {
       if (expiry.at === "never") ctx.state.instances[instance].status.gainedSpark += amount;
-      else addFloating(ctx, { controller: env.controller, source: env.source, expiry, change: { kind: "spark", instance, amount } });
-      ctx.emit({ kind: "sparkGained", instance, amount, expiry, additional: false });
+      else addFloating(ctx, { controller: env.controller, source: env.source, expiry, change: { kind: "spark", instance, amount } },
+        combinedSourceObservers(ctx.state, env.source, instance));
+      const seenBy = SIDES.filter((viewer) => identifies(ctx.state, instance, viewer));
+      ctx.emit({ kind: "sparkGained", instance, amount, expiry, additional: false,
+        ...(seenBy.length === SIDES.length ? {} : { seenBy }) });
     }
   },
 });

@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.646",
+  "phase": 5,
+  "implementMin": 43.24728243333333,
+  "implementWindow": {
+    "start": "2026-10-13T17:48:19.160957+00:00",
+    "end": "2026-10-13T18:31:33.997903+00:00"
+  },
+  "localValidationS": {
+    "focused": 5.2587263339955825,
+    "review": 53.39249091601232,
+    "knip": 2.9293666660087183,
+    "full": 99.70216437499039
+  },
+  "hostLoad": 3.1904296875,
+  "testDelta": {
+    "files": 1,
+    "lines": 256,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "review-repair",
+      "minutes": 65.87206811666667,
+      "note": "Gross fix-forward recovery from original611 cold-review terminal through this final precommit marker: accepted P1s, parent verification/native filing/coordination, two implementation/validation passes and required cold review with canceled unpromoted first candidate. Elapsed wall, not CPU or sampled editing; actual amended commit end retained in external receipt."
+    }
+  ]
+}

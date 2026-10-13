@@ -12,6 +12,8 @@ export interface PayableEffectRegisteredEvent {
   readonly source: AbilitySource | null;
   /** The characters whose changes from the effect end with it. */
   readonly affects: readonly InstanceId[];
+  /** Emission-time observers, parallel to affects; absent when every subject is public. */
+  readonly affectsSeenBy?: readonly (readonly Side[])[];
 }
 
 /**
@@ -23,5 +25,9 @@ export interface PayableEffectRegisteredEvent {
 export const payableEffectRegistered: EventDefinition<PayableEffectRegisteredEvent> = {
   kind: "payableEffectRegistered",
   privateTo: (event, state) => sourcePrivacy(event.source, state),
-  redact: redactSource,
+  redact: (event, viewer, state) => {
+    const { affectsSeenBy, ...announcement } = event;
+    const affects = event.affects.filter((_, index) => affectsSeenBy === undefined || affectsSeenBy[index]?.includes(viewer) === true);
+    return redactSource({ ...announcement, affects }, viewer, state);
+  },
 };
