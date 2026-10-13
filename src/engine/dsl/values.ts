@@ -52,7 +52,7 @@ export function evaluateValue(state: BattleState, value: ValueExpr, scope: Value
     case "plus":
       return evaluateValue(state, value.of, scope) + value.amount;
     case "count":
-      return scope.count(value.of);
+      return value.groupSize === undefined ? scope.count(value.of) : Math.floor(scope.count(value.of) / value.groupSize);
     case "countCards":
       return scope.countCards(value);
     case "handSize":

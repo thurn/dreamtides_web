@@ -325,7 +325,7 @@ export type ValueExpr =
   | { readonly value: "costOf"; readonly of: MovedCardRef }
   /** A fixed amount added to a value, such as a discarded card’s cost plus one. */
   | { readonly value: "plus"; readonly of: ValueExpr; readonly amount: number }
-  | { readonly value: "count"; readonly of: CharacterSelector }
+  | { readonly value: "count"; readonly of: CharacterSelector; readonly groupSize?: number }
   | { readonly value: "handSize"; readonly player: PlayerRef }
   | CardCountValue
   /** The characters supporting the source (C9): 0–2 while it is in the front rank, 0 elsewhere. */

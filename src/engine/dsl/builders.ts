@@ -458,6 +458,14 @@ export function count(of: CharacterSelector): ValueExpr {
   return { value: "count", of };
 }
 
+/** The number of complete groups of `groupSize` matching characters, read whenever the value is evaluated. */
+export function countGroups(of: CharacterSelector, groupSize: number): ValueExpr {
+  if (!Number.isFinite(groupSize) || !Number.isInteger(groupSize) || groupSize <= 0) {
+    throw new Error("A character count group size must be a positive finite integer");
+  }
+  return { value: "count", of, groupSize };
+}
+
 /**
  * "The number of cards in your void", "for each ≤2● cost character in your
  * void": how many cards are in the player's zone as the value is read, in a

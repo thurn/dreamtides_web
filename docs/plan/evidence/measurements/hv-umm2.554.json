@@ -1,0 +1,660 @@
+{
+  "bead": "hv-umm2.554",
+  "phase": 5,
+  "base": "712edbdf85966637bbd76cbe195ec14907278262",
+  "sourceManifest": {
+    "src/engine/dsl/types.ts": "25d3f64f6b00f301fe8d8be16af1e414301c230c6c936b0c264048eb27cf8424",
+    "src/engine/dsl/builders.ts": "bf92b8340609d139546ef0f42b33b946ef25af3b7dc0a0545370093243c41616",
+    "src/engine/dsl/values.ts": "c03bf1a07c30c45d1b680f2424c01c18ab1f04539275e45fcef3be7e8926426a",
+    "src/engine/effects/primitives/contracts/count-groups.contracts.ts": "fc743ccf2b4c2f9a51abc80b85b3f085a55f5a9880221f96f4d32672ea63cb58"
+  },
+  "implementationProvenance": {
+    "exactHostDispatch": "2026-10-13T01:01:36.434Z",
+    "dispatchToolCall": "call_O1tdvAzX3r0N8A9GHePDxaWl",
+    "modelSamplingStart": "UNKNOWN",
+    "sourceWriteAdmission": "2026-10-13T01:05:12.303013Z",
+    "provisionalEndpointUtc": "2026-10-13T01:16:31.841867+00:00",
+    "actualGitCompletionUtc": "UNKNOWN",
+    "actualGitReceipt": "External commit-process.json after execution; immutable evidence cannot embed future completion",
+    "parentEndpointAckUtc": "2026-10-13T01:20:11.201853Z",
+    "authorizedGitMetadataDate": "2026-10-13T01:20:11Z",
+    "finalMetadataEndpointUtc": "2026-10-13T01:20:11Z",
+    "qualifiedMetadataImplementMin": 18.5761,
+    "provisionalFreezeUtc": "2026-10-13T01:17:31.089857+00:00",
+    "endpointAckReceipt": "endpoint-ack.json"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow.end": {
+        "original": "2026-10-13T01:16:31.841867+00:00",
+        "normalized": "2026-10-13T01:20:11Z",
+        "measuredFor": "Parent-authorized Git metadata date following fresh endpoint acknowledgment 2026-10-13T01:20:11.201853Z. Metadata endpoint, not observed Git process completion; actual execution receipt retained externally."
+      },
+      "implementMin": {
+        "original": 14.92346445,
+        "normalized": 18.5761,
+        "measuredFor": "Gross wall minutes from exact host dispatch 2026-10-13T01:01:36.434Z to authorized Git metadata endpoint 2026-10-13T01:20:11Z. Includes research, admission, checks, queue and endpoint coordination; actual process duration reported externally after Git executes."
+      },
+      "hostLoad": {
+        "original": 5.6,
+        "normalized": 5.6,
+        "measuredFor": "Observed sysctl one-minute host load at npm run review outer command start 2026-10-13T01:09:31.190387+00:00"
+      }
+    }
+  },
+  "validation": {
+    "mutation-count": {
+      "label": "mutation-count",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "countGroups public contracts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:08:37.033677+00:00",
+      "startLoad1": 7.23,
+      "pid": 84204,
+      "pgid": 84204,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 1,
+      "endUtc": "2026-10-13T01:08:41.655674+00:00",
+      "elapsedS": 4.621828666000511,
+      "cpuUserS": 5.115607,
+      "cpuSystemS": 1.4605970000000001,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "focused-complete": {
+      "label": "focused-complete",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "countGroups public contracts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:08:14.632218+00:00",
+      "startLoad1": 7.65,
+      "pid": 82723,
+      "pgid": 82723,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 0,
+      "endUtc": "2026-10-13T01:08:19.217253+00:00",
+      "elapsedS": 4.584867375000613,
+      "cpuUserS": 5.073100999999999,
+      "cpuSystemS": 1.400064,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "full-inner": {
+      "label": "full-inner",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:10:55.994029+00:00",
+      "startLoad1": 18.99,
+      "pid": 8343,
+      "pgid": 8343,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 0,
+      "endUtc": "2026-10-13T01:12:44.526091+00:00",
+      "elapsedS": 108.53061529200932,
+      "cpuUserS": 232.010639,
+      "cpuSystemS": 40.343182999999996,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "full-outer": {
+      "label": "full-outer",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-count-groups-554/locked-inner.py",
+        "full",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:10:46.502063+00:00",
+      "startLoad1": 16.57,
+      "pid": 89708,
+      "pgid": 89708,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 0,
+      "endUtc": "2026-10-13T01:12:44.537201+00:00",
+      "elapsedS": 118.03358512499835,
+      "cpuUserS": 232.044476,
+      "cpuSystemS": 40.36166,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:10:36.158593+00:00",
+      "startLoad1": 15.85,
+      "pid": 89041,
+      "pgid": 89041,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 0,
+      "endUtc": "2026-10-13T01:10:40.287726+00:00",
+      "elapsedS": 4.128879584008246,
+      "cpuUserS": 3.596051,
+      "cpuSystemS": 1.1133799999999998,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "focused-pass": {
+      "label": "focused-pass",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "countGroups public contracts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:07:45.391384+00:00",
+      "startLoad1": 8.8,
+      "pid": 80944,
+      "pgid": 80944,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 0,
+      "endUtc": "2026-10-13T01:07:51.592576+00:00",
+      "elapsedS": 6.200942499999655,
+      "cpuUserS": 5.88688,
+      "cpuSystemS": 2.0846139999999997,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:09:31.190387+00:00",
+      "startLoad1": 5.6,
+      "pid": 85834,
+      "pgid": 85834,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 0,
+      "endUtc": "2026-10-13T01:10:30.508551+00:00",
+      "elapsedS": 59.317362583999056,
+      "cpuUserS": 167.178124,
+      "cpuSystemS": 18.556063,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "focused": {
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "countGroups public contracts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:07:03.260706+00:00",
+      "startLoad1": 9.62,
+      "pid": 78160,
+      "pgid": 78160,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 1,
+      "endUtc": "2026-10-13T01:07:10.109450+00:00",
+      "elapsedS": 6.8485760830080835,
+      "cpuUserS": 6.181985,
+      "cpuSystemS": 2.12038,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "focused-final": {
+      "label": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "countGroups public contracts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:07:17.639239+00:00",
+      "startLoad1": 9.95,
+      "pid": 79213,
+      "pgid": 79213,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 1,
+      "endUtc": "2026-10-13T01:07:24.402472+00:00",
+      "elapsedS": 6.762768166998285,
+      "cpuUserS": 5.719640999999999,
+      "cpuSystemS": 2.103771,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "evidence-schema": {
+      "label": "evidence-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:16:23.303554+00:00",
+      "startLoad1": 8.67,
+      "pid": 40993,
+      "pgid": 40993,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 0,
+      "endUtc": "2026-10-13T01:16:23.409994+00:00",
+      "elapsedS": 0.1063428329944145,
+      "cpuUserS": 0.053995999999999995,
+      "cpuSystemS": 0.022449,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "fuzz-inner": {
+      "label": "fuzz-inner",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-count-groups-554/fuzz.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:12:51.250458+00:00",
+      "startLoad1": 20.12,
+      "pid": 77153,
+      "pgid": 77153,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 1,
+      "endUtc": "2026-10-13T01:12:52.554335+00:00",
+      "elapsedS": 1.3036905839981046,
+      "cpuUserS": 1.021113,
+      "cpuSystemS": 0.49912300000000004,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "fuzz-outer": {
+      "label": "fuzz-outer",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-count-groups-554/locked-inner.py",
+        "fuzz",
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-count-groups-554/fuzz.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:12:51.191557+00:00",
+      "startLoad1": 20.12,
+      "pid": 77146,
+      "pgid": 77146,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 1,
+      "endUtc": "2026-10-13T01:12:52.561543+00:00",
+      "elapsedS": 1.3697716250026133,
+      "cpuUserS": 1.0580610000000001,
+      "cpuSystemS": 0.522666,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "fuzz-final-outer": {
+      "label": "fuzz-final-outer",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-count-groups-554/locked-inner.py",
+        "fuzz-final",
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-count-groups-554/fuzz.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:13:24.514190+00:00",
+      "startLoad1": 23.01,
+      "pid": 2152,
+      "pgid": 2152,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 0,
+      "endUtc": "2026-10-13T01:15:37.198092+00:00",
+      "elapsedS": 132.6821940410009,
+      "cpuUserS": 143.498087,
+      "cpuSystemS": 1.797159,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "fuzz-final-inner": {
+      "label": "fuzz-final-inner",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-count-groups-554/fuzz.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:13:24.571706+00:00",
+      "startLoad1": 23.01,
+      "pid": 2238,
+      "pgid": 2238,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 0,
+      "endUtc": "2026-10-13T01:15:37.190130+00:00",
+      "elapsedS": 132.6166436670028,
+      "cpuUserS": 143.460805,
+      "cpuSystemS": 1.772127,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    },
+    "evidence-schema-final": {
+      "label": "evidence-schema-final",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-554-count-groups",
+      "startUtc": "2026-10-13T01:16:31.868799+00:00",
+      "startLoad1": 8.63,
+      "pid": 41459,
+      "pgid": 41459,
+      "hostLoadScope": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present",
+      "exit": 0,
+      "endUtc": "2026-10-13T01:16:31.932768+00:00",
+      "elapsedS": 0.06385558300826233,
+      "cpuUserS": 0.052266,
+      "cpuSystemS": 0.016006,
+      "cpuScope": "OS waited outer command and descendants; includes lock client CPU, not other lock owners"
+    }
+  },
+  "lockScopes": {
+    "full": {
+      "innerLockAcquiredUtc": "2026-10-13T01:10:55.969878+00:00",
+      "innerLoad1": 18.99,
+      "pid": 8285,
+      "pgid": 89708,
+      "scope": "inner observer begins only after outer lockf acquires heavy lock",
+      "outerStartToInnerObserverS": 9.467815,
+      "qualification": "Observed outer spawn to inner observer start includes lock queue and small launch overhead; pure blocked-lock duration UNKNOWN",
+      "pureLockQueueS": "UNKNOWN",
+      "innerCommandElapsedS": 108.53061529200932
+    },
+    "fuzz": {
+      "innerLockAcquiredUtc": "2026-10-13T01:12:51.220136+00:00",
+      "innerLoad1": 20.12,
+      "pid": 77147,
+      "pgid": 77146,
+      "scope": "inner observer begins only after outer lockf acquires heavy lock",
+      "outerStartToInnerObserverS": 0.028579,
+      "qualification": "Observed outer spawn to inner observer start includes lock queue and small launch overhead; pure blocked-lock duration UNKNOWN",
+      "pureLockQueueS": "UNKNOWN",
+      "innerCommandElapsedS": 1.3036905839981046
+    },
+    "fuzz-final": {
+      "innerLockAcquiredUtc": "2026-10-13T01:13:24.539680+00:00",
+      "innerLoad1": 23.01,
+      "pid": 2181,
+      "pgid": 2152,
+      "scope": "inner observer begins only after outer lockf acquires heavy lock",
+      "outerStartToInnerObserverS": 0.02549,
+      "qualification": "Observed outer spawn to inner observer start includes lock queue and small launch overhead; pure blocked-lock duration UNKNOWN",
+      "pureLockQueueS": "UNKNOWN",
+      "innerCommandElapsedS": 132.6166436670028
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "mutation-count",
+      "startUtc": "2026-10-13T01:08:37.033677+00:00",
+      "load1": 7.23,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "focused-complete",
+      "startUtc": "2026-10-13T01:08:14.632218+00:00",
+      "load1": 7.65,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "full-inner",
+      "startUtc": "2026-10-13T01:10:55.994029+00:00",
+      "load1": 18.99,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "full-outer",
+      "startUtc": "2026-10-13T01:10:46.502063+00:00",
+      "load1": 16.57,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "knip",
+      "startUtc": "2026-10-13T01:10:36.158593+00:00",
+      "load1": 15.85,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "focused-pass",
+      "startUtc": "2026-10-13T01:07:45.391384+00:00",
+      "load1": 8.8,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "review",
+      "startUtc": "2026-10-13T01:09:31.190387+00:00",
+      "load1": 5.6,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "focused",
+      "startUtc": "2026-10-13T01:07:03.260706+00:00",
+      "load1": 9.62,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "focused-final",
+      "startUtc": "2026-10-13T01:07:17.639239+00:00",
+      "load1": 9.95,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "evidence-schema",
+      "startUtc": "2026-10-13T01:16:23.303554+00:00",
+      "load1": 8.67,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "fuzz-inner",
+      "startUtc": "2026-10-13T01:12:51.250458+00:00",
+      "load1": 20.12,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "fuzz-outer",
+      "startUtc": "2026-10-13T01:12:51.191557+00:00",
+      "load1": 20.12,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "fuzz-final-outer",
+      "startUtc": "2026-10-13T01:13:24.514190+00:00",
+      "load1": 23.01,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    },
+    {
+      "step": "fuzz-final-inner",
+      "startUtc": "2026-10-13T01:13:24.571706+00:00",
+      "load1": 23.01,
+      "measuredFor": "Observed sysctl one-minute load at outer command start; inner lock acquisition samples recorded separately when present"
+    }
+  ],
+  "baseline": {
+    "runnerSha256": "0896ef6ccda76425ffce9dd60107b5d8d1c61a6b644bdf27462460a29c8a0ea4",
+    "resultSha256": "b5e8cf06b92c56ec2092db0eaebb25580a06dc4ed4f25db7c84a0f5483f93bb3",
+    "actualExit": 0,
+    "pid": "UNKNOWN",
+    "startUtc": "UNKNOWN",
+    "elapsedS": "UNKNOWN",
+    "qualification": "Original tool exposed exit0/wall1.830193375s for composite read/probe command, not isolated baseline process duration",
+    "publicWitness": "Public createEngine/apply synthetic group3 draws0..9 instead of0,0,0,1,1,1,2,2,2,3; plain/fractional existing contracts preserved",
+    "exitScope": "Observed composite tool command exit0; isolated probe exit not separately exposed",
+    "isolatedProcessExit": "UNKNOWN"
+  },
+  "mutation": {
+    "originalSha256": "c03bf1a07c30c45d1b680f2424c01c18ab1f04539275e45fcef3be7e8926426a",
+    "mutation": "restore ungrouped count evaluation only",
+    "mutatedSha256": "9a5238c5df8cdc82497578894a08ebb72200986dc46c92f1cda396a201ebd3d9",
+    "exit": 1,
+    "restoredSha256": "c03bf1a07c30c45d1b680f2424c01c18ab1f04539275e45fcef3be7e8926426a",
+    "exactRestored": true
+  },
+  "failureMap": {
+    "errorMidStep": "Recovered grouped draw+abandon synthetic throw preserves pre-resolution committed deck/characters and clears inFlight",
+    "reload": "JSON persisted pending slice replays same grouped draw display; serializeState/deserializeState retains actual locked floating amount",
+    "partialWrite": "Suspended grouped draw changes display only; atomic committed state remains before resolveTop; failure restores that boundary",
+    "invalidStaleInput": "Builder invaliddivisor guards and real fold foreign/stale/noncandidate rejection",
+    "concurrentActors": "Real fold competing battleAction rejected stepInFlight, completed answer cannot apply twice"
+  },
+  "apiFallout": {
+    "export": "countGroups(CharacterSelector,number):ValueExpr",
+    "type": "Existing count variant optional readonly groupSize:number",
+    "consumers": [
+      "effects/interpreter.ts:evaluate",
+      "continuous/layers.ts:StaticEnv.value"
+    ],
+    "otherBodyChanges": [],
+    "chosenSubtype": "Existing recursive reconstruction preserves grouping field; genuine public chooseSubtype test",
+    "journeyTypeRemap": "N/A: current src has no implemented journey typeRemap runtime; C12 planned journey work retains its owning scope"
+  },
+  "logging": "Existing engine.action UUID/instance intents and recorded answers replay count through event fold; actual cardDrawn and energyChanged events expose outcomes; resolved events trace genuine fuzz count consumer executions; no new event/state field",
+  "browser": "N/A: additive capability has no production consumer in this bead and no new prompt/status/presentation. Original201 owns production authoring/browser acceptance.",
+  "wholeSuite": {
+    "files": 362,
+    "tests": 6321,
+    "vitestDurationS": 79.31,
+    "actualTestStartUtc": "2026-10-13T01:11:20.254Z",
+    "testStartLoad1": 18.1826171875,
+    "D19Qualification": "Two workers, observed high host load; this is no low-load 60-second budget-compliance observation. No unchanged aggregate rerun."
+  },
+  "runtimeLedger": {
+    "browserContexts": [],
+    "manuallyStartedServers": [],
+    "longLivedProcesses": [],
+    "suiteOwnedSyntheticRuntimes": "Full-suite synthetic browser lease/slot tests start ephemeral servers and record process groups and cleanup in full-inner.log; these are test harness resources, not player-workflow QA",
+    "checks": "Child PID/PGID and terminal exit in own process receipts; all task runners settle before freeze"
+  },
+  "attempts": "focused/ focused-final originally failed due test assumptions about existing stack commit boundary and same-location disclosure retention; corrected tests without engine behavior changes; original logs retained; first scratch fuzz setup rejected duplicate stock synthetic UUID before games, corrected to unique cloned Warrior fixture without repo changes, original runner and receipt retained",
+  "fuzz": {
+    "games": 300,
+    "steps": 130084,
+    "prompts": 2509,
+    "reruns": 279,
+    "wallS": 131.026566583,
+    "cpuS": 143.466051,
+    "failures": 0,
+    "coverage": [
+      {
+        "kind": "card",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000055400",
+        "included": 3328,
+        "exercised": 1820
+      },
+      {
+        "kind": "card",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000055404",
+        "included": 3393,
+        "exercised": 1817
+      }
+    ],
+    "actualResolvedCountConsumers": [
+      {
+        "uuid": "5e5e5e5e-0000-4000-8000-000000055400",
+        "resolved": 1671,
+        "zeroGroups": 1170,
+        "positiveGroups": 501,
+        "matchingCounts": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ]
+      },
+      {
+        "uuid": "5e5e5e5e-0000-4000-8000-000000055404",
+        "resolved": 1660,
+        "zeroGroups": 1174,
+        "positiveGroups": 486,
+        "matchingCounts": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      }
+    ],
+    "traceScope": "resolved events observed during playFuzzGame committed steps only, public wrapper combines existing observer; replay and legality dry-runs excluded"
+  },
+  "scratchRunnerSha256": "e92e0aa7bec06b423057b67b775e4c988c69abfeb197102f21f580ab628536de",
+  "fuzzSamplesSha256": "14aa0c2fc500133734aa353423a8e3bbd1f3af55b2864633b26d655b725f3153",
+  "failedFuzzRunnerSha256": "b4757d6628053ce78df9f0d27ed80f6a73bd769924c4a62bb6c277b7f71c62a4",
+  "fuzzObserverBoundary": "matchingCharacters reconstructed at public committed post-resolution observer boundary; draw-only fixtures leave board subtype/controller/positions fixed during their effects. resolved events, observed draw events, and inferred complete-group counts remain separate; no direct scalar-evaluator instrumentation claim. Dryruns/replays excluded.",
+  "evidenceGenerationAttempt": {
+    "failure": "KeyError:startLoad1 while glob included parent setup receipts lacking load; before any repository file write",
+    "outerCompositeCommandExit": 0,
+    "isolatedGeneratorExit": "UNKNOWN",
+    "repair": "Filtered own observer receipts with startLoad1/label fields; final own-record schema passed"
+  },
+  "sourceRanges": {
+    "src/engine/dsl/types.ts": "Existing ValueExpr count variant at line328",
+    "src/engine/dsl/builders.ts": "countGroups additive builder at lines461-468",
+    "src/engine/dsl/values.ts": "Existing count evaluation at lines54-55",
+    "src/engine/effects/primitives/contracts/count-groups.contracts.ts": "Own public contract module,197lines"
+  },
+  "failureMapTestNames": {
+    "errorMidStep": [
+      "rolls back a failed step after a grouped draw and published prompt"
+    ],
+    "reload": [
+      "reads static groups live and persists a nested locked result across a saved-state round trip",
+      "suspends after a grouped draw without a partial commit, reloads, rejects stale/concurrent input and commits once"
+    ],
+    "partialWrite": [
+      "suspends after a grouped draw without a partial commit, reloads, rejects stale/concurrent input and commits once",
+      "rolls back a failed step after a grouped draw and published prompt"
+    ],
+    "invalidStaleInput": [
+      "rejects invalid authored group size %s",
+      "suspends after a grouped draw without a partial commit, reloads, rejects stale/concurrent input and commits once"
+    ],
+    "concurrentActors": [
+      "suspends after a grouped draw without a partial commit, reloads, rejects stale/concurrent input and commits once"
+    ]
+  }
+}
