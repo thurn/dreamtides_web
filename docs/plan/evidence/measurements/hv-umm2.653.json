@@ -1,0 +1,202 @@
+{
+  "bead": "hv-umm2.653",
+  "phase": 5,
+  "baseOid": "9258bdb90f8c61d6d1004b2e398ff3b76f02b279",
+  "implementation": {
+    "firstHelperDispatchUtc": "2026-10-13T23:11:11.797Z",
+    "nativeCall": "call_27f90bf37fd547b5bbfbc28411aa3880",
+    "modelSamplingStart": "UNKNOWN",
+    "provisionalEndpointUtc": "2026-10-13T23:20:30.902958+00:00",
+    "scope": "Inclusive read-only research, coordination and acknowledgment waits, authoring, local verification, parent-owned browser QA and eventual commit. Endpoint refresh follows resource settlement and separate commit acknowledgment.",
+    "predispatch": "Parent setup is separately qualified: fresh npm install passed in 2.057006833 seconds at starting load 3.01; a local list named all raised TypeError before native/worktree creation and was corrected without native or worktree effect. Parent friction audit passed in 0.281486625 seconds (Phase 5: 4 of 537 records since hv-umm2.649).",
+    "prospectiveImmediateAutomaticGitMarkerUtc": "2026-10-13T23:20:30.902958+00:00",
+    "prospectiveGrossMinutes": 9.318432633333334,
+    "commitAck": "Explicit parent acknowledgment received after final scope, checks, source hashes, resource settlement and judged QA audit.",
+    "eventualGitEndpoint": "Actual ordinary Git execution bracket and marker tail are retained externally after commit; no forced Git timestamps, amend or postcommit tracked edit."
+  },
+  "scope": {
+    "productionPaths": [
+      "src/cumulus/components/controls/OfferTile.tsx"
+    ],
+    "supportPaths": [
+      "src/cumulus/components/controls/choices.test.tsx"
+    ],
+    "runtimeGrossChangedLines": 4,
+    "testAddedLines": 27,
+    "testFileLines": 489,
+    "fallout": [],
+    "independentReview": "The bounded key-only UI fix is not a core-review bead or a phase gate; no independent code review is required by the current scope."
+  },
+  "localChecks": {
+    "oldRegression": {
+      "command": "npm test -- src/cumulus/components/controls/choices.test.tsx -t preserves repeated card preview occurrences across rerenders and reordering",
+      "start": "2026-10-13T23:12:56.724595+00:00",
+      "startingLoad": "{ 11.68 8.00 5.59 }",
+      "wallSeconds": 7.363236709003104,
+      "exitCode": 1
+    },
+    "focused": {
+      "command": "npm test -- src/cumulus/components/controls/choices.test.tsx",
+      "start": "2026-10-13T23:13:15.584057+00:00",
+      "startingLoad": "{ 10.26 7.91 5.61 }",
+      "wallSeconds": 6.6594754999969155,
+      "exitCode": 0
+    },
+    "review": {
+      "command": "npm run review",
+      "start": "2026-10-13T23:14:06.517865+00:00",
+      "startingLoad": "{ 8.68 7.90 5.74 }",
+      "wallSeconds": 16.48289079099777,
+      "exitCode": 0
+    },
+    "knip": {
+      "command": "npm run knip",
+      "start": "2026-10-13T23:14:38.401043+00:00",
+      "startingLoad": "{ 8.44 7.98 5.85 }",
+      "wallSeconds": 3.908190916001331,
+      "exitCode": 0
+    },
+    "schema": {
+      "command": "node scripts/friction-triggers.mjs --validate-records",
+      "start": "2026-10-13T23:14:42.312543+00:00",
+      "startingLoad": "{ 8.44 7.98 5.85 }",
+      "wallSeconds": 0.06639658301719464,
+      "exitCode": 0
+    },
+    "finalSchema": {
+      "command": "node scripts/friction-triggers.mjs --validate-records",
+      "start": "2026-10-13T23:18:35.245600+00:00",
+      "startingLoad": "{ 3.86 5.89 5.46 }",
+      "wallSeconds": 0.12006520899012685,
+      "exitCode": 0
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "oldRegression",
+      "start": "2026-10-13T23:12:56.724595+00:00",
+      "sample": "{ 11.68 8.00 5.59 }"
+    },
+    {
+      "step": "focused",
+      "start": "2026-10-13T23:13:15.584057+00:00",
+      "sample": "{ 10.26 7.91 5.61 }"
+    },
+    {
+      "step": "review",
+      "start": "2026-10-13T23:14:06.517865+00:00",
+      "sample": "{ 8.68 7.90 5.74 }"
+    },
+    {
+      "step": "knip",
+      "start": "2026-10-13T23:14:38.401043+00:00",
+      "sample": "{ 8.44 7.98 5.85 }"
+    },
+    {
+      "step": "schema",
+      "start": "2026-10-13T23:14:42.312543+00:00",
+      "sample": "{ 8.44 7.98 5.85 }"
+    },
+    {
+      "step": "parent-owned actual browser QA",
+      "start": "2026-10-13T23:16:05.989344+00:00",
+      "sample": [
+        5.33447265625,
+        7.13232421875,
+        5.73291015625
+      ]
+    },
+    {
+      "step": "finalSchema",
+      "start": "2026-10-13T23:18:35.245600+00:00",
+      "sample": "{ 3.86 5.89 5.46 }"
+    }
+  ],
+  "oldBehaviorProof": {
+    "exitCode": 1,
+    "wallSeconds": 7.363236709003104,
+    "receipt": "/tmp/codex-653/old-regression.json",
+    "observation": "Public repeated-preview contract failed with four React duplicate-child-key console errors for synthetic printing UUID 7be2e6d7-abff-4c44-a0c3-35460da1693c. Panel count and UUID order assertions passed."
+  },
+  "browserQa": {
+    "status": "PASS: actual desktop and mobile duplicate-preview acceptance and same-game reload; parent independently viewed six native captures.",
+    "invocation": "run-WT3f4G",
+    "rawReport": "invocations/run-WT3f4G/augury-preview.result.json",
+    "actualWrapperWindow": {
+      "start": "2026-10-13T23:16:05.989344+00:00",
+      "end": "2026-10-13T23:17:00.251693+00:00",
+      "wallSeconds": 54.26181291701505,
+      "startingLoad": [
+        5.33447265625,
+        7.13232421875,
+        5.73291015625
+      ],
+      "exit": 0
+    },
+    "nativeWallMs": {
+      "browserLeaseWait": 4,
+      "serve": 2592,
+      "scenario": 50799,
+      "total": 53459
+    },
+    "sourceFreezeSHA256": "69a0c15d3ed11e99f7f2fb315feb4586c9881122e895bb19842bcdcc46b0b237",
+    "allFrozenEntriesStable": 6166,
+    "driverSHA256": "cd325d181acb5bd714644ce46495a81404d84a33defac294dd6bbdf51218c12c",
+    "parentProof": {
+      "path": "/tmp/codex-653/parent-qa-proof.json",
+      "sha256": "5c3859e7460ec3e9cf35013cb2779120e689c0afd6808aebd014011fe76931dd"
+    },
+    "parentVisualJudgment": {
+      "at": "2026-10-13T23:17:46.004958+00:00",
+      "capturesViewed": 6,
+      "result": "PASS",
+      "reason": "Desktop and mobile repeated preview show all three ordered art panels, actual choice state and confirmation stay usable, reloaded Atlas state is coherent; no new layout changes in key-only scope."
+    },
+    "captureScale": "Desktop PNGs 2880x1800 for CSS viewport 1440x900; mobile PNGs 780x1688 for CSS viewport 390x844, each at 2x device scale."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review start, paired with 16.48289079099777 seconds wall time."
+      }
+    }
+  },
+  "runtimeLedger": {
+    "browserServerStartedByHelper": false,
+    "observedReviewProcesses": {
+      "processGroup": 65867,
+      "pids": [
+        65877,
+        65896,
+        66084,
+        66088,
+        66097
+      ]
+    },
+    "knipAndSchemaTerminalSession": 84927,
+    "status": "All own verification commands completed. Resource observation retained in /tmp/codex-653/stage2-resources.json.",
+    "parentQa": {
+      "runnerPid": 74026,
+      "runnerProcessGroup": 74026,
+      "serverPid": 74110,
+      "serverProcessGroup": 74110,
+      "port": 5274,
+      "ownProcessesAndGroupsAbsent": true,
+      "ownOwnershipRecordAbsent": true,
+      "portAfterSettlement": "none",
+      "nativeCleanupQualification": "Proved by unchanged native runner cleanup guards and successful owner clear; direct callback receipt not separately printed",
+      "providerProbe": "Not needed: normal cleanup is confirmed; no uncertain RPC",
+      "osServerIdentity": "74110 74110 Tue Oct 13 16:16:06 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-augury653-preview-identity/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 2cf1dc5e-1ff3-4f34-95c9-2d2c0630daca /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+      "negotiatedOwnershipProof": "Original MCP session ID, URL, protocol and owner token are retained in the parent-owned external proof. No uncertain RPC or shared-service cleanup was required."
+    }
+  },
+  "parentFinalAudit": {
+    "path": "/tmp/codex-653/parent-precommit-audit.json",
+    "standingDutyFriction": {
+      "exitCode": 0,
+      "wallSeconds": 0.159505875,
+      "phase5Uncovered": "5 of 538 since hv-umm2.649"
+    },
+    "nativeCommitAck": "/tmp/codex-653/commit-ack-native.json"
+  }
+}

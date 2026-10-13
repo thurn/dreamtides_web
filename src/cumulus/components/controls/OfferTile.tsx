@@ -584,9 +584,9 @@ function CardArtMosaic({
         pointerEvents: "none",
       }}
     >
-      {cards.map((card) => (
+      {cards.map((card, index) => (
         <span
-          key={card.id}
+          key={`${card.id}:${String(index)}`}
           data-offer-tile-card-art-panel=""
           style={{
             minWidth: 0,

@@ -210,6 +210,33 @@ describe("OfferTile", () => {
     expect(Number(translation?.[2])).toBeLessThan(0);
   });
 
+  it("preserves repeated card preview occurrences across rerenders and reordering", () => {
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    const model: OfferTileModel = {
+      id: testOfferTileId("repeated-preview"),
+      kind: "card-bundle",
+      cards: [CARDS[0], CARDS[0], CARDS[1]],
+    };
+    const { container, rerender } = renderInCumulus(offerTile("repeated", model));
+    for (const cards of [
+      model.cards,
+      [CARDS[0], CARDS[1], CARDS[0]],
+      model.cards,
+    ] as const) {
+      rerender(offerTile("repeated", { ...model, cards }));
+      expect(
+        container.querySelectorAll("[data-offer-tile-card-art-panel]"),
+      ).toHaveLength(cards.length);
+      expect(
+        Array.from(
+          container.querySelectorAll<HTMLElement>("[data-offer-tile-card-art]"),
+          (element) => element.dataset.offerTileCardArt,
+        ),
+      ).toEqual(cards.map((card) => card.id));
+    }
+    expect(errors).not.toHaveBeenCalled();
+  });
+
   it("is the single interaction and reveal source and reports its offer id", () => {
     const onPress = vi.fn();
     const { container } = renderInCumulus(
