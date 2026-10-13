@@ -1109,6 +1109,17 @@ function isLinkedBanishedCards(value: unknown): boolean {
     isPlainRecord(card) && isInstanceId(card.instance) && isIndex(card.enteredBanishedAt));
 }
 
+/** Exact captured hand-copy data carries no live-original existence requirement. */
+function isHandCopyContext(value: unknown): boolean {
+  return isPlainRecord(value) && Object.keys(value).every(key => ["printing", "variant", "ephemeral", "copier", "originalHiddenFrom"].includes(key)) &&
+    isPlainRecord(value.printing) && Object.keys(value.printing).every(key => key === "kind" || key === "cardId") && value.printing.kind === "card" && parses(parseCardId)(value.printing.cardId) &&
+    isVariant(value.variant) && isPlainRecord(value.variant) && Object.keys(value.variant).every(key => ["amplified", "transfigurations", "deckMods"].includes(key)) &&
+    (value.variant.deckMods === undefined || isPlainRecord(value.variant.deckMods) && Object.keys(value.variant.deckMods).every(key => ["sparkBonus", "costReduction", "fast", "reclaim", "typeChange"].includes(key)) &&
+      (value.variant.deckMods.typeChange === null || isPlainRecord(value.variant.deckMods.typeChange) && Object.keys(value.variant.deckMods.typeChange).every(key => key === "cardType" || key === "subtype"))) &&
+    isBoolean(value.ephemeral) && isSide(value.copier) && isArrayOf(value.originalHiddenFrom, isSide) &&
+    new Set(value.originalHiddenFrom).size === value.originalHiddenFrom.length;
+}
+
 function isQueuedTrigger(value: unknown): boolean {
   if (!isPlainRecord(value)) return false;
   if (value.kind !== undefined && value.kind !== "dreamwellBonus") return false;
@@ -1119,7 +1130,7 @@ function isQueuedTrigger(value: unknown): boolean {
     value.source.id !== value.origin.id || value.source.side !== value.controller ||
     value.node !== null || value.subject !== null ||
     value.captured !== undefined || value.gain !== undefined || value.scored !== undefined || value.discardedCount !== undefined ||
-    value.lastKnownSourceSpark !== undefined || value.lastKnownSubjectCost !== undefined || value.subjectHiddenFrom !== undefined
+    value.lastKnownSourceSpark !== undefined || value.lastKnownSubjectCost !== undefined || value.subjectHiddenFrom !== undefined || value.handCopy !== undefined
   )) return false;
   return (
     isPlainRecord(value) &&
@@ -1130,6 +1141,8 @@ function isQueuedTrigger(value: unknown): boolean {
     optional((context) => isLinkedSource(context) && (context as Record<string, unknown>).source === value.source)(value.linkedSource) &&
     nullable(isIndex)(value.node) &&
     nullable(isInstanceId)(value.subject) &&
+    optional(isHandCopyContext)(value.handCopy) &&
+    (value.handCopy === undefined || value.subject !== null && value.gain === undefined && value.scored === undefined && value.discardedCount === undefined && value.captured === undefined) &&
     optional(arrayOf(isSide))(value.subjectHiddenFrom) &&
     optional(arrayOf(isInstanceId))(value.captured) &&
     optional((spark) => isFiniteNumber(spark) && spark >= 0)(value.lastKnownSourceSpark) &&

@@ -1,13 +1,14 @@
 import type { LinkedSourceContext } from "../../state/types";
 import type { AbilitySource, InstanceId, Side } from "../../state/ids";
 import type { SparkGain } from "../../state/types";
-import { seesSubject } from "../../view/knowledge";
+import { seesHandCopySubject, seesSubject } from "../../view/knowledge";
 import { redactSource, sourcePrivacy } from "../sources";
 import type { EventDefinition } from "../types";
 
 /** A triggered ability or drawn Dreamwell event bonus joined the resolution FIFO (D14). */
 export interface TriggerQueuedEvent {
   readonly linkedSource?: LinkedSourceContext;
+  readonly handCopy?: import("../../state/types").HandCopyContext;
   readonly kind: "triggerQueued";
   /** The engine names it; it is `null` as a side that cannot identify it sees the event (`eventSeenBy`). */
   readonly source: AbilitySource | null;
@@ -46,6 +47,8 @@ export const triggerQueued: EventDefinition<TriggerQueuedEvent> = {
     const costSeen = redacted.source !== null && redacted.subjectHiddenFrom?.includes(viewer) !== true ? redacted : withoutCost;
     const { lastKnownSourceSpark, linkedSource, ...anonymous } = costSeen;
     const seen = costSeen.source === null && (lastKnownSourceSpark !== undefined || linkedSource !== undefined) ? anonymous : costSeen;
-    return seen.subject === null || seesSubject(state, seen, viewer) ? seen : { ...seen, subject: null };
+    const { handCopy, ...withoutCopy } = seen;
+    const projected = handCopy === undefined || seen.source !== null && handCopy.copier === viewer ? seen : withoutCopy;
+    return projected.subject === null || seesSubject(state, seen, viewer) || seesHandCopySubject(state, seen, viewer) ? projected : { ...projected, subject: null };
   },
 };

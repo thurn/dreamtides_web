@@ -9,7 +9,8 @@ import { eventAbilities } from "../effects/abilities";
 import { chooseForCopy, purposeOf } from "../effects/interpreter";
 import { instanceOrigin } from "./activation";
 import type { InstanceId, Side } from "../state/ids";
-import type { Printing } from "../state/types";
+import type { HandCopyContext, Printing } from "../state/types";
+import { sidesBlindTo } from "../view/knowledge";
 import type { StepContext } from "../steps/types";
 import { createFigments } from "./figments";
 import { addFloating } from "./floating";
@@ -103,8 +104,14 @@ export function createFigmentCopy(ctx: StepContext, of: InstanceId, side: Side, 
 export function createCopyInHand(ctx: StepContext, of: InstanceId, side: Side, ephemeral: boolean): InstanceId | null {
   const source = instanceOf(ctx.state, of);
   if (source.printing.kind !== "card") return null;
-  const copy = createInstance(ctx, source.printing, side, source.variant, "hand");
-  copy.status.ephemeral = ephemeral;
+  return createCapturedHandCopy(ctx, of, { printing: source.printing, variant: source.variant, ephemeral, copier: side, originalHiddenFrom: sidesBlindTo(ctx.state, of) }, side);
+}
+
+/** Repeats a hand-copy action even after its created original has ceased. */
+export function createCapturedHandCopy(ctx: StepContext, original: InstanceId, captured: HandCopyContext, side: Side): InstanceId {
+  const copy = createInstance(ctx, captured.printing, side, captured.variant, "hand");
+  copy.status.ephemeral = captured.ephemeral;
   ctx.state.sides[side].hand.push(copy.id);
+  ctx.emit({ kind: "cardCopied", side, original, copy: copy.id, zone: "hand", originalHiddenFrom: [...captured.originalHiddenFrom] });
   return copy.id;
 }

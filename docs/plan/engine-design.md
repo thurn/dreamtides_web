@@ -929,6 +929,16 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   source moves or ceases to exist. A "when … gains ✦" trigger also records
   `gain`, the matched gain's amount and expiry, which the trigger's effect
   reads as `env.gain`, the view shows, and `triggerQueued` logs.
+- **Copy occasions.** `whenCopyTrigger(player, filter)` matches successful
+  stack and hand copies by their copiable values at creation. The original
+  physical card is the queued subject. Bodies that copy that subject retain
+  a `HandCopyContext` for hand copies: printing, variant, Ephemeral flag,
+  copier and original visibility. This captured action survives a created
+  original's cessation; separately addressed floating changes stay with their
+  addressed copy. The copier sees its known tuple independently of the
+  original alias. Other views carry an opaque context marker and any observed
+  original tuple, which determinization preserves while sampling unknowns.
+  Saved contexts use an exact data-only shape validator.
 - **Discard occasions.** `discardCards(ctx, side, cards)` validates distinct
   current-hand members before moving any, preserves each `discarded` event,
   then emits public `discardBatch { side, count }` for a positive occasion.
@@ -2088,18 +2098,32 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 
 - An exact repeat ends the battle in a draw (`mandatoryLoop`).
 - A closed copy continuation also draws (`mandatoryLoop`) at that threshold.
-  The tracker universally checks a conservative grammar of event-only stack
-  or hand copies, sequences, modes and explicit named self-renewal. Every
-  queued and reachable named body must renew, every possible copy target
-  must retain its eligibility, and all relevant sources and victory
-  predicates must remain stable. Conditions, once-per-turn limits, live
-  win conditions, static/gained/floating/payable modifiers, unsupported
-  references and possible interfering listeners prevent this proof. The
-  finite proof is computed from the actual state and catalog, never saved or
-  exposed in a view. Copies keep their physical identities and independent
-  recorded choices; the full-state hash remains exact. The tracker owns an
-  exhaustive renewal classification for every trigger kind, so a new kind
-  requires its own reviewed semantic case and typed emission-time context.
+  The named-renewal proof universally checks event-only stack or hand
+  copies, sequences, modes and explicit named self-renewal. Every queued
+  and reachable named body must renew, and every copy target must remain
+  eligible. Conditions, once-per-turn limits, win conditions, modifiers,
+  unsupported references and interfering listeners prevent that proof.
+  The copy-event proof instead identifies an unconditional permanent emblem
+  whose subject-copy instruction renews its own occurrence in every mode,
+  using the actual stack item or retained hand-copy action. Other FIFO
+  entries may be finite empty instructions or literal energy gains. Every
+  current and prospective listener is audited, including dormant conditions.
+  Explicit passive characteristic, keyword, play-permission and visibility
+  backgrounds are admitted. A temporary live character whose physical source
+  is itself and whose expiry is end of turn is also passive: the renewing
+  FIFO cannot move it or reach that turn boundary. A captured banished-card
+  hand return is passive only while its matching physical character source
+  remains in play, its expiry is that source leaving play, and the card remains
+  in its captured banished visit. The FIFO cannot move either card to retire
+  that obligation. Unknown operations, interfering floating
+  callbacks, stopping modes and changing or unsupported victory predicates
+  prevent this proof. An exact empty-deck victory condition is admitted only
+  while its addressed deck is nonempty: the audited instructions and listeners
+  cannot change that unfiltered count. Both proofs use the actual state and catalog, never saved or view
+  metadata. Copies retain physical identities and independent recorded
+  choices, and full-state hashing remains exact. The tracker classifies
+  every trigger kind exhaustively, with copy occasions proved by their
+  typed emission-time context (RD-hv-umm2.233-1, RD-hv-umm2.647-1).
 - A non-repeating run beyond the resolution cap (default 100,000 steps) also
   ends it in a draw (`resolutionCap`).
 - A genuine choice preserves the count only when both the committed start

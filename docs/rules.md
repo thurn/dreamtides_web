@@ -1733,6 +1733,16 @@ character in play and copying the next card played. Copies of cards on the stack
 follow [Copies on the stack](#playing-cards-and-the-stack); figment copies of
 characters follow [Figment Copies](#figment-copies).
 
+"When you copy an event" triggers for each successful copy on the stack or
+created in a hand, by the copied card's copiable values as the copy is made.
+"It" names the original physical card. "Copy it an additional time" makes
+another copy in the same destination. A hand copy keeps that copy action's
+Ephemeral flag and the original's captured copiable printing and variant,
+even if a created original has ceased to exist. Separately addressed changes,
+such as making one created copy cost 0●, affect only that copy. Additional
+copies trigger copy abilities, including the ability making them; see
+[Mandatory Loops](#mandatory-loops).
+
 **Gain control** — Move an opponent's character to the leftmost open back
 position on the receiving side. It preserves its state and is exhausted through
 this turn's Ending, even if Awakened; this is not materialization. If the rank

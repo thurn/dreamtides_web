@@ -117,6 +117,11 @@ export function whenDraw(player: PlayerRef = "you", nth?: number): Trigger {
   return { on: "draw", player, ...(nth === undefined ? {} : { nth }) };
 }
 
+/** "When you copy a card matching `filter`, in a hand or on the stack. */
+export function whenCopyTrigger(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {
+  return { on: "copy", player, filter };
+}
+
 /** "When you foresee": once after each completed positive Foresee operation. */
 export function whenForesee(player: PlayerRef = "you"): Trigger {
   return { on: "foresee", player };

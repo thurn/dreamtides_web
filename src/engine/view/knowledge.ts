@@ -246,6 +246,16 @@ export function sidesBlindTo(state: BattleState, id: InstanceId): Side[] {
  * trigger's subject even once it is public, so a trigger never tells which
  * card a hidden draw or discard concerned.
  */
+/** A known hand-copy original remains a historical subject after it ceases. */
+export function seesHandCopySubject(
+  state: BattleState,
+  trigger: { readonly subject: InstanceId | null; readonly subjectHiddenFrom?: readonly Side[]; readonly handCopy?: import("../state/types").HandCopyContext },
+  viewer: Side,
+): boolean {
+  return trigger.subject !== null && state.instances[trigger.subject] === undefined && trigger.handCopy !== undefined &&
+    trigger.subjectHiddenFrom?.includes(viewer) !== true && !trigger.handCopy.originalHiddenFrom.includes(viewer);
+}
+
 export function seesSubject(
   state: BattleState,
   trigger: { readonly subject: InstanceId | null; readonly subjectHiddenFrom?: readonly Side[] },

@@ -817,6 +817,7 @@ export interface ResolveOptions {
   readonly root?: EffectNode;
   /** The card the triggering event concerns, for a trigger. */
   readonly subject?: InstanceId | null;
+  readonly handCopy?: import("../state/types").HandCopyContext;
   readonly lastKnownSubjectCost?: number;
   /** The gain a "when … gains ✦" trigger matched. */
   readonly gain?: SparkGain | null;
@@ -1021,6 +1022,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     ability: options.ability,
     root: options.root ?? effect,
     subject: options.subject ?? null,
+    ...(options.handCopy === undefined ? {} : { handCopy: options.handCopy }),
     lastKnownSubjectCost: options.lastKnownSubjectCost ?? null,
     gain: options.gain ?? null,
     scored: options.scored ?? null,

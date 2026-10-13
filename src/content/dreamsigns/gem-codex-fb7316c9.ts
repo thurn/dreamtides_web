@@ -1,3 +1,6 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { triggered, triggeringCard, whenCopyTrigger } from "../../engine/dsl/triggers";
+import { copyCard } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +16,6 @@ export default dreamsign({
     "87d5e3fa-192e-482b-a75c-a0921e5699e2",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenCopyTrigger("you", { cardType: "event" }), copyCard(triggeringCard()))],
+  verifiedText: expectedVerifiedText("When you copy an event, copy it an additional time."),
 });

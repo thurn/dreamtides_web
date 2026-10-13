@@ -37,7 +37,7 @@ import { abilitiesDisabled } from "../rules/ability-disabling";
 import { banishedAsReclaimed } from "../rules/zones";
 import { playCosts } from "../rules/costs";
 import { materializedThisTurn } from "../rules/turn-log";
-import { combinedSourceObservers, knows, observedFixedEffect, seesSubject } from "./knowledge";
+import { combinedSourceObservers, knows, observedFixedEffect, seesHandCopySubject, seesSubject } from "./knowledge";
 
 /**
  * A card's effective characteristics, after every continuous effect (the
@@ -191,6 +191,11 @@ export interface FloatingEffectView {
  * (`seesSubject`).
  */
 export interface QueuedTriggerView {
+  readonly handCopy?: import("../state/types").HandCopyContext;
+  /** A private hand-copy action whose flags remain unknown. */
+  readonly handCopyHidden?: true;
+  /** Copiable values of an original this viewer observed, without its hidden alias. */
+  readonly handCopyOriginal?: Pick<import("../state/types").HandCopyContext, "printing" | "variant">;
   readonly kind?: "dreamwellBonus";
   readonly linkedSource?: LinkedSourceContext;
   readonly controller: Side;
@@ -489,7 +494,11 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     origin: visibleSource(trigger.source) ? copy(trigger.origin) : null,
     ability: trigger.ability,
     node: trigger.node,
-    subject: seesSubject(state, trigger, viewer) ? trigger.subject : null,
+    subject: seesSubject(state, trigger, viewer) || seesHandCopySubject(state, trigger, viewer) ? trigger.subject : null,
+    ...(trigger.handCopy === undefined || !visibleSource(trigger.source) ? {} : trigger.handCopy.copier === viewer
+      ? { handCopy: copy(trigger.handCopy) }
+      : { handCopyHidden: true, ...(!trigger.handCopy.originalHiddenFrom.includes(viewer)
+          ? { handCopyOriginal: { printing: copy(trigger.handCopy.printing), variant: copy(trigger.handCopy.variant) } } : {}) }),
     ...(trigger.lastKnownSubjectCost === undefined || !visibleSource(trigger.source) || trigger.subjectHiddenFrom?.includes(viewer) === true ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
     ...(trigger.lastKnownSubjectCost !== undefined && visibleSource(trigger.source) && trigger.subjectHiddenFrom?.includes(viewer) === true ? { subjectCostHidden: true } : {}),
     ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),

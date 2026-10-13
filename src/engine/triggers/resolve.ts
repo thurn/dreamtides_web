@@ -37,6 +37,7 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
     ability,
     root: body.root,
     subject,
+    ...(trigger.handCopy === undefined ? {} : { handCopy: trigger.handCopy }),
     ...(lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost }),
     gain: gain ?? null,
     scored: scored ?? null,

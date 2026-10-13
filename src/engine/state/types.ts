@@ -557,10 +557,21 @@ export interface LinkedBanishedCards extends LinkedSourceContext {
   readonly cards: readonly { readonly instance: InstanceId; readonly enteredBanishedAt: number }[];
 }
 
+export interface HandCopyContext {
+  readonly printing: Extract<Printing, { readonly kind: "card" }>;
+  readonly variant: Variant;
+  readonly ephemeral: boolean;
+  readonly copier: Side;
+  /** Captured at the first copy occasion; historical originals can cease. */
+  readonly originalHiddenFrom: readonly Side[];
+}
+
 interface QueuedAbility {
   /** Copiable subject cost captured for a body that reads it. */
   readonly lastKnownSubjectCost?: number;
   readonly linkedSource?: LinkedSourceContext;
+  /** Captured hand-copy action, only for a body copying its subject. */
+  readonly handCopy?: HandCopyContext;
   /** Effective spark just before the source last left play, while this trigger waited. */
   readonly lastKnownSourceSpark?: number;
   readonly source: AbilitySource;

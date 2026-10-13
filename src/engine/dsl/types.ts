@@ -639,6 +639,8 @@ export type Trigger =
    */
   | { readonly on: "materialize"; readonly subject: MaterializedSelector; readonly nth: MaterializeNth }
   | { readonly on: "draw"; readonly player: PlayerRef; readonly nth?: number }
+  /** Each successful copy, matched by the copied card's copiable values. */
+  | { readonly on: "copy"; readonly player: PlayerRef; readonly filter: CardFilter }
   | { readonly on: "foresee"; readonly player: PlayerRef }
   /** Once per completed positive discard instruction, payment descriptor, or hand-limit choice. */
   | { readonly on: "discardBatch"; readonly player: PlayerRef }

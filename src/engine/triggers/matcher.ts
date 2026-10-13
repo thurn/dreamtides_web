@@ -27,14 +27,18 @@ import { linkedSourceContext, sourceAbilityGroups } from "../rules/linked-banish
  * event confirms the abandon, so a character sees its own abandon
  * (RD-hv-umm2.532-1).
  */
+import { instanceCard } from "../catalog";
+import { fixedEnergy } from "../dsl/energy";
 import type { EngineCatalog } from "../catalog";
-import { cardMatchesFilter, copiableCostOf, playedMatchesFilter } from "../continuous/characteristics";
+import { cardMatchesFilter, copiableCostOf, matchesFilter, playedMatchesFilter } from "../continuous/characteristics";
 import { worksInZone } from "../dsl/abilities";
 import { matchesCharacter, resolvePlayer } from "../dsl/selectors";
-import type { CardFilter, MaterializedSelector, MaterializeNth, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
+import type { CardFilter, Variant, MaterializedSelector, MaterializeNth, NamedTrigger, Trigger, TriggeredAbility, TriggerSubject } from "../dsl/types";
 import type { CardPlayedEvent } from "../events/kinds/card-played";
 import type { LeftPlayEvent } from "../events/kinds/left-play";
 import type { MaterializedEvent } from "../events/kinds/materialized";
+import { primitiveDefinition } from "../effects/registry";
+import type { EffectNode } from "../effects/types";
 import { conditionHolds, everyNode } from "../effects/interpreter";
 import type { EngineEvent, EngineEventKind } from "../events";
 import { abilitiesDisabled } from "../rules/ability-disabling";
@@ -44,7 +48,7 @@ import { materializedThisTurn, recordMaterialized } from "../rules/turn-log";
 import { charactersInPlay, isFigment } from "../rules/zones";
 import type { AbilitySource, EffectId, InstanceId, OncePerTurnKey, Side, Zone } from "../state/ids";
 import { opponent, SIDES, sourceInstance } from "../state/ids";
-import type { BattleState, FloatingEffect, GainedAbilities, MaterializedCard, QueuedTrigger, SparkGain } from "../state/types";
+import type { BattleState, FloatingEffect, GainedAbilities, HandCopyContext, MaterializedCard, Printing, QueuedTrigger, SparkGain } from "../state/types";
 import type { ArmedAbility, ArmedTriggers, LookbackEventKind, StepContext, TriggerBlocks, TriggerListener } from "../steps/types";
 import { sidesBlindTo } from "../view/knowledge";
 import { triggerBody } from "./body";
@@ -68,6 +72,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   materialize: ["materialized"],
   draw: ["cardDrawn"],
   foresee: ["foresaw"],
+  copy: ["cardCopied"],
   discard: ["discarded"],
   discardBatch: ["discardBatch"],
   erode: ["eroded"],
@@ -87,6 +92,18 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   startOfFirstTurn: ["turnStarted"],
   endOfTurn: ["phaseChanged"],
 };
+
+/** Copiable values observed by a successful copy, shared with the renewal proof. */
+export function copiedCardMatchesFilter(
+  catalog: EngineCatalog,
+  copied: { readonly printing: Printing; readonly variant: Variant },
+  x: number,
+  filter: CardFilter,
+): boolean {
+  const card = instanceCard(catalog, copied);
+  return matchesFilter({ cardType: card.cardType, subtype: card.subtype, allTypes: false,
+    cost: fixedEnergy(card.costs), speed: card.speed, spark: card.spark === "x" ? x : card.spark }, filter);
+}
 
 /** Every event kind a trigger can inspect, including all combined branches. */
 export function triggerEventKinds(trigger: Trigger): readonly EngineEventKind[] {
@@ -185,6 +202,7 @@ function subjectMatches(
 
 /** A match, the card its event concerns, and the gain a "when … gains ✦" trigger matched. */
 interface Match {
+  readonly handCopy?: HandCopyContext;
   readonly subject: InstanceId | null;
   /** Visibility captured at a confirmed public departure, even when the subject has since ceased to exist. */
   readonly subjectHiddenFrom?: readonly Side[];
@@ -329,6 +347,18 @@ function matchKind(
       const played = state.turnLog.played[event.side].filter((card) => playedMatchesFilter(state, catalog, card, trigger.filter));
       if (played[played.length - 1]?.instance !== event.instance) return null;
       return trigger.nth === undefined || played.length === trigger.nth ? { subject: event.instance } : null;
+    }
+    case "copy": {
+      if (event.kind !== "cardCopied" || event.original === null || event.side !== resolvePlayer(you, trigger.player)) return null;
+      const copied = state.instances[event.copy];
+      if (copied === undefined) return null;
+      const card = instanceCard(catalog, copied);
+      const item = state.stack.find(item => item.kind === "card" && item.instance === event.copy);
+      if (!copiedCardMatchesFilter(catalog, copied, item?.kind === "card" ? item.x ?? 0 : 0, trigger.filter)) return null;
+      const hidden = event.originalHiddenFrom ?? sidesBlindTo(state, event.original);
+      return { subject: event.original, subjectHiddenFrom: hidden, lastKnownSubjectCost: fixedEnergy(card.costs),
+        ...(event.zone === "hand" && copied.printing.kind === "card" ? { handCopy: { printing: { ...copied.printing }, variant: structuredClone(copied.variant), ephemeral: copied.status.ephemeral, copier: event.side, originalHiddenFrom: [...hidden] } } : {}),
+      };
     }
     case "materialize":
       return event.kind === "materialized" &&
@@ -512,6 +542,15 @@ function enqueueAbility(
   enqueue(ctx, { source: listener.source, controller: listener.controller, origin: listener.origin, ability: index, node: null, ...match });
 }
 
+/** A delayed/floating body binds its own future subject, outside this copy occasion. */
+function readsSubjectCopy(node: EffectNode, seen = new Set<EffectNode>()): boolean {
+  if (seen.has(node) || node.op === "floatingTrigger") return false;
+  seen.add(node);
+  if ((node.op === "copyCard" || node.op === "copyCardTimes") && (node as import("../effects/primitives/copy-card").CopyCardNode).card.kind === "subject") return true;
+  const definition = primitiveDefinition(node.op);
+  return [...definition.children?.(node) ?? [], ...definition.deferred?.(node) ?? []].some(child => readsSubjectCopy(child, seen));
+}
+
 /** Whether this body reads the retained subject value, including nested value and target fields. */
 function readsSubjectCost(value: unknown, seen = new Set<object>()): boolean {
   if (value === null || typeof value !== "object" || seen.has(value)) return false;
@@ -530,10 +569,12 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
   const effect = triggerBody(ctx.catalog, matched.origin, matched.ability, matched.node).effect;
   const linkedSource = everyNode(effect).some((node) => node.op === "linkedBanish")
     ? linkedSourceContext(ctx, matched.source, matched.origin, matched.ability) : null;
-  const { lastKnownSubjectCost: armedCost, ...record } = matched;
+  const { lastKnownSubjectCost: armedCost, handCopy, ...record } = matched;
+  const readsCopy = readsSubjectCopy(effect);
   const subjectCost = readsSubjectCost(effect) ? armedCost ?? (matched.subject !== null && ctx.state.instances[matched.subject] !== undefined
     ? copiableCostOf(ctx.state, ctx.catalog, matched.subject) : undefined) : undefined;
   const retained = { ...record,
+    ...(handCopy === undefined || !readsCopy ? {} : { handCopy }),
     ...(subjectCost === undefined ? {} : { lastKnownSubjectCost: subjectCost }),
     ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     ...(linkedSource === null ? {} : { linkedSource }),
@@ -548,6 +589,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
     ability: trigger.ability,
     node: trigger.node,
     subject: trigger.subject,
+    ...(trigger.handCopy === undefined ? {} : { handCopy: trigger.handCopy }),
     ...(trigger.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
     ...(trigger.subjectHiddenFrom === undefined ? {} : { subjectHiddenFrom: [...trigger.subjectHiddenFrom] }),
     ...(trigger.gain === undefined ? {} : { gain: trigger.gain }),

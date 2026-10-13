@@ -1,12 +1,23 @@
 import type { TargetSpec, ZoneCardSpec } from "../../dsl/types";
-import { copyOnStack } from "../../rules/copies";
+import { createCapturedHandCopy, copyOnStack } from "../../rules/copies";
 import { resolveCards } from "../interpreter";
-import { type CardRef, cardTarget, definePrimitive } from "../types";
+import { type CardRef, type EffectEnv, cardTarget, definePrimitive } from "../types";
+
+import type { StepContext } from "../../steps/types";
+
+function copyReference(ctx: StepContext, card: CopyCardNode["card"], env: EffectEnv): void {
+  if (card.kind === "subject" && env.handCopy !== undefined && env.subject !== null) {
+    createCapturedHandCopy(ctx, env.subject, env.handCopy, env.controller);
+    return;
+  }
+  for (const id of resolveCards(ctx, card, env)) copyOnStack(ctx, id, env.controller);
+}
 
 /**
  * "Copy it" or "Copy a card on the stack": a copy directly above the card,
  * controlled by the effect's controller, who may choose new modes and
- * targets (D15). It never names a character in play or a card in a zone.
+ * targets (D15). A hand-copy trigger repeats its captured hand-copy action;
+ * other references name only cards on the stack.
  */
 export interface CopyCardNode {
   readonly op: "copyCard";
@@ -17,7 +28,7 @@ export const copyCardPrimitive = definePrimitive<CopyCardNode>({
   op: "copyCard",
   targets: (node) => cardTarget(node.card),
   resolve(ctx, node, env) {
-    for (const id of resolveCards(ctx, node.card, env)) copyOnStack(ctx, id, env.controller);
+    copyReference(ctx, node.card, env);
   },
 });
 
@@ -43,6 +54,10 @@ export const copyCardTimesPrimitive = definePrimitive<CopyCardTimesNode>({
   targets: (node) => cardTarget(node.card),
   resolve(ctx, node, env) {
     checkTimes(node.times);
+    if (node.card.kind === "subject" && env.handCopy !== undefined) {
+      for (let index = 0; index < node.times; index++) copyReference(ctx, node.card, env);
+      return;
+    }
     for (const id of resolveCards(ctx, node.card, env)) {
       for (let index = 0; index < node.times; index++) copyOnStack(ctx, id, env.controller);
     }

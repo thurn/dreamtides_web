@@ -41,6 +41,7 @@ import type { RecordedAnswer, StepContext } from "../steps/types";
 import { cycleHash, gainsFor, loopResources, loopSignature } from "./signature";
 import type { LoopCandidate, LoopCheckpoint, LoopId, LoopScope, LoopTracker } from "./types";
 import { triggerEventKinds } from "../triggers/matcher";
+import { isClosedCopyEventContinuation } from "./event-copy-continuation";
 
 /** Exhaustive semantic classification: new trigger kinds require a reviewed renewal case. */
 function namedRenewals(trigger: Trigger): readonly NamedTrigger[] {
@@ -48,6 +49,8 @@ function namedRenewals(trigger: Trigger): readonly NamedTrigger[] {
     case "materialized": case "dawn": case "dusk": case "night": case "challenge": case "dissolved":
       return [trigger.on];
     case "either": return trigger.triggers.flatMap(namedRenewals);
+    // Copy occasions renew through the independently proved event-copy kernel below.
+    case "copy": return [];
     case "play": case "materialize": case "draw": case "foresee": case "discardBatch":
     case "discard": case "erode": case "reclaim": case "abandon": case "leavesPlay":
     case "returnToHand": case "dissolve": case "gainsSpark": case "scores": case "opponentScores":
@@ -159,6 +162,7 @@ function copyBody(node: EffectNode, source: FixedSource, state: BattleState, cat
  * case and typed emission-time context when that trigger is implemented.
  */
 export function isUnbreakableCopyContinuation(state: BattleState, catalog: EngineCatalog): boolean {
+  if (isClosedCopyEventContinuation(state, catalog)) return true;
   if (state.result !== null || state.triggerQueue.length === 0 || state.loops.run !== null) return false;
   const sources = fixedCopySources(state, catalog);
   if (sources === null) return false;

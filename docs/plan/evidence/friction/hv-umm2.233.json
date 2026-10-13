@@ -1,0 +1,44 @@
+{
+  "bead": "hv-umm2.233",
+  "phase": 5,
+  "implementMin": 434.61434485,
+  "implementWindow": {
+    "start": "2026-10-13T16:36:15.091588+00:00",
+    "end": "2026-10-13T23:50:51.952279+00:00"
+  },
+  "localValidationS": {
+    "focused-banish-restored": 6.488721625006292,
+    "primitive-foundation-banish": 11.04221920800046,
+    "review-banish": 61.292657249985496,
+    "knip-banish": 3.1564018329954706,
+    "coverage-banish": 3.489935083023738,
+    "schema-banish": 0.15030120901064947,
+    "review-full-banish": 107.27716450000298,
+    "weighted-300-banish": 203.94211987499148,
+    "preflight-final": 2.0921989170019515,
+    "qa-sweep-final": 27.178681707999203,
+    "qa-gem-player-stack-predicate": 225.50574570900062,
+    "qa-gem-player-hand-predicate": 62.580785750004,
+    "qa-flame-player-final": 110.2660547499836,
+    "qa-enemy-flame-response": 171.64058483298868,
+    "qa-enemy-gem-response": 97.8087864589761
+  },
+  "hostLoad": 3.3876953125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 23.998604466666666,
+      "note": "Measured inclusive two QA recovery windows: firstfailedstack start\u2192correctedstack terminal and firstfailedenemy start\u2192correctedenemyFlame terminal. Includes sourceinspection/supportauthoring/syntax/rootACK waits/native policyidentityrepair/passing rerun, not productiveedit time. Rawwrongpromptsource/missinglegalresponse assumptions retained; actualcorrected publicdesktop/mobile pass with no production/API/policy override."
+    },
+    {
+      "tag": "mandatory-copy-continuation",
+      "minutes": 54.85042891041667,
+      "note": "Observed incomplete opaque batch wall, not pure repair time or totalengineCPU. Original180s deadline too short; later unknowncounts/controlledinterruptions retained. Certified647 plus admitted exact eventcopy/passive temporary/deck/banish guards and publicdiscriminators; final unchangedacceptance weighted300 passes. Canonical647 certified; freshnative649 is CLOSED(completedmetadata), phase5/since645. Parent owns newdue disposition against latestcertified introspection; no duplicate filing."
+    }
+  ]
+}

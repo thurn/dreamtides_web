@@ -48,6 +48,7 @@ import { Layers } from "../continuous/layers";
 import { matchesFilter } from "../continuous/characteristics";
 import { worksInZone } from "../dsl/abilities";
 import { fixedEnergy } from "../dsl/energy";
+import { resolvePlayer } from "../dsl/selectors";
 import type { CardFilter, Speed, Trigger } from "../dsl/types";
 import { triggerBody } from "../triggers/body";
 import { loopSignature } from "../loops/signature";
@@ -507,7 +508,9 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
           origin: copy(trigger.origin),
           ability: trigger.ability,
           node: trigger.node,
-          subject: trigger.subject,
+          subject: trigger.subject ?? (trigger.handCopy !== undefined || trigger.handCopyHidden === true ? `i${next++}` : null),
+          ...(trigger.subject === null && (trigger.handCopy !== undefined || trigger.handCopyHidden === true) ? { subjectHiddenFrom: [view.viewer] } : {}),
+          ...(trigger.handCopy === undefined ? {} : { handCopy: copy(trigger.handCopy) }),
           ...(trigger.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
           ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
           ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
@@ -567,6 +570,32 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     loops: emptyLoopTracker(),
     result: copy(view.result),
   };
+  for (const [index, shown] of view.triggerQueue.filter(trigger => trigger.source !== null && trigger.origin !== null).entries()) {
+    const restored = state.triggerQueue[index];
+    if (shown.handCopy !== undefined && (shown.handCopyHidden !== undefined || shown.handCopyOriginal !== undefined || shown.handCopy.copier !== view.viewer)) throw new Error("Cannot determinize conflicting hand-copy context");
+    if (shown.handCopyHidden === undefined) {
+      if (shown.handCopyOriginal !== undefined) throw new Error("Cannot determinize unbound hand-copy original");
+      continue;
+    }
+    if (shown.handCopyHidden !== true || shown.handCopy !== undefined || restored.kind === "dreamwellBonus") throw new Error("Cannot determinize invalid hidden hand-copy context");
+    const body = triggerBody(catalog, restored.origin, restored.ability, restored.node);
+    const branches = (trigger: Trigger): Extract<Trigger, { on: "copy" }>[] => trigger.on === "either" ? trigger.triggers.flatMap(branches) : trigger.on === "copy" ? [trigger] : [];
+    const copier = opponent(view.viewer);
+    const filters = branches(body.trigger).filter(trigger => resolvePlayer(restored.controller, trigger.player) === copier).map(trigger => trigger.filter);
+    if (filters.length === 0) throw new Error("Cannot determinize an impossible hidden copier");
+    const known = shown.handCopyOriginal ?? (shown.subject === null ? undefined : view.instances[shown.subject]);
+    const candidates = known === undefined
+      ? [...Object.values(state.instances).filter(card => card.printing.kind === "card"), ...catalog.cardDefinitions.map(card => ({ printing: { kind: "card" as const, cardId: card.id }, variant: { amplified: false } }))]
+      : [known];
+    const compatible = candidates.filter(candidate => {
+      const card = instanceCard(catalog, candidate);
+      return filters.some(filter => matchesFilter({ cardType: card.cardType, subtype: card.subtype, allTypes: false, cost: fixedEnergy(card.costs), spark: card.spark === "x" ? 0 : card.spark, speed: card.speed }, filter));
+    });
+    const tuple = compatible[Math.floor(random() * compatible.length)];
+    if (tuple === undefined || tuple.printing.kind !== "card") throw new Error("Cannot determinize a hand-copy tuple without a compatible original");
+    state.triggerQueue[index] = { ...restored, handCopy: { printing: copy(tuple.printing), variant: copy(tuple.variant), ephemeral: false, copier,
+      originalHiddenFrom: shown.handCopyOriginal !== undefined || shown.subject !== null ? [] : [view.viewer] } };
+  }
   state.nextInstance = next;
   for (const trigger of state.triggerQueue) {
     if (trigger.discardedCount !== undefined) state.nextInstance = Math.max(state.nextInstance, trigger.discardedCount + 1);
