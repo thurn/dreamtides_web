@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.606",
+  "phase": 5,
+  "implementMin": 566.1227417333333,
+  "implementWindow": {
+    "start": "2026-10-13T05:14:10.986000+00:00",
+    "end": "2026-10-13T14:40:18.350504+00:00"
+  },
+  "localValidationS": {
+    "review": 0.2900464999838732,
+    "knip": 6.512563124997541,
+    "integrity": 0.4965679579763673,
+    "schema": 0.11561258402070962,
+    "final-schema-whitespace": 0.1437782910070382
+  },
+  "hostLoad": 2.87939453125,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "design-review-repair",
+      "minutes": 31.820229938867122,
+      "note": "Measured31.8min total three required cold reviewer subprocess windows; verified authority/protocol defects repaired before effects. Repair/coordination duration unobserved separately and included in gross elapsed. This is review wall time, not CPU."
+    }
+  ]
+}

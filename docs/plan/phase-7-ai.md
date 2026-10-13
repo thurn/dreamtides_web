@@ -19,17 +19,43 @@ The phase ends with the run's final acceptance and report.
 
 ## Earliest start and task graph
 
-Each task depends on the tasks listed after its arrow:
+The original task acceptance joins follow these arrows; functional build
+children use the adopted native lanes below:
 
 - 7.1 ← Phase 4.5. The harness and deck pool are built during Phase 5,
   because they need only the policy interface.
 - 7.2 ← 7.1, the Phase 5 gate. Tuning against incomplete content is wasted.
-- 7.3 ← 7.2; 7.4 ← 7.3 (its rollouts and its report use the Expert)
-- 7.5 ← 7.3, 7.4; 7.6 ← 7.5
+- Original 7.3 integration/reference/strength ← 7.2 and its four delivered
+  functional children.
+- Original 7.4 baseline report ← completed Expert 7.3 and delivered ISMCTS/
+  calibration; original 7.5 full Planner strength ← 7.3, 7.4 and delivered
+  Planner/calibration. ISMCTS and Planner builds `.17`/`.18` run independently
+  after completed Expert `.4`; the baseline report does not serialize their
+  implementation.
+- 7.6 live acceptance ← 7.5
 - 7.7 iterations run in sequence ← 7.6
 - 7.8 ← 7.7; 7.9 ← 7.8
 - 7.10 ← 7.9, the Phase 6 gate, and the Track T gate
 - 7.11 ← 7.10
+
+The adopted functional build lanes and original acceptance joins are recorded
+in [hv-umm2.606](evidence/parallelism/hv-umm2.606.md). All actual AI build or
+tuning waits for the Phase 5 gate (`hv-umm2.46`), including every child below.
+
+| Build owner | Delivered work | Required consumer/join |
+| --- | --- | --- |
+| `hv-fy5h.13` | AST extraction and its real typed evaluation contract | `.14` Dusk, `.16` prompts, `.15` valuation; original `.4` |
+| `hv-fy5h.14`, `.16` | Exact Dusk assignment and prompt choices in separate modules | `.15` consumes delivered Dusk/AST; original `.4` integrates all four |
+| `hv-fy5h.15` | Day/response/placement valuation | Original `.4` Expert report, strength and frozen reference |
+| `hv-fy5h.17`, `.18` | Independent ISMCTS and Planner builds after completed Expert `.4` | `.19` registration/calibration, then originals `.5`/`.6` |
+| `hv-fy5h.19` | Real registration and per-policy calibrated budgets through the existing harness | Original `.5` baseline report, `.6` full Planner strength/core join, `.7` live integration |
+
+These are functional modules with observable public synthetic contracts and
+actual consumers. Shared contracts belong to the first real functional owner;
+unused type-only packages, placeholder registries and entry/Knip waivers do
+not establish a lane. Native Areas name the exact primary/read-only/conditional
+bodies and their serialization. Original acceptance quantities and all final
+joins below remain binding; independent builds do not imply early tuning.
 
 Tournament runs are heavy. Run them as background processes, only under the
 D17 soak conditions. While one runs, the current bead may implement, but not
@@ -94,6 +120,12 @@ upgraded to use the evaluation.
 - Snapshot it as the frozen reference policy `greedy@7.2` (D25). Later edits
   to the evaluation never change the snapshot.
 
+The frozen `greedy@7.2` reference includes its complete policy-owned
+evaluation, weights, simulation ordering and prompt dependencies, with hashes,
+a manifest and public decision characterization. The old comparison policy is
+preserved before the upgrade; mutable evaluation/config imports cannot stand
+in for a frozen reference.
+
 ### 7.3 Expert bot (D27)
 
 **Valuation.** Valuation comes from the ability AST. The DSL exposes feature
@@ -123,6 +155,12 @@ misplays, each with a note.
 - Snapshot it as the frozen reference policy `expert@7.3` (D25). Later edits
   to the Expert rules never change the snapshot.
 
+Original `hv-fy5h.4` owns Expert registration, current catalog weights and
+observed-misplay overrides while consuming `.13`–`.16` read-only. Its 400-game
+strength report and `expert@7.3` snapshot retain the whole policy-owned
+AST/Dusk/Day/prompt/evaluation/config closure with immutable catalog reference
+data, hashes and decision characterization (D22–D25).
+
 ### 7.4 ISMCTS baseline
 
 Root-parallel UCT with a fresh determinization per iteration, as in the Rust
@@ -151,6 +189,16 @@ sequences, through its pass. It works like this:
 
 **Acceptance:** the Planner beats Expert (CI lower bound > 50%, 400 games) at
 the calibrated budget.
+
+`hv-fy5h.19` performs the build-side calibration and real registration after
+both search modules land. Its bounded extension of the existing tournament
+options/game/report transport binds budgets to the acting policy across
+paired seat swaps and preserves legacy common-pair and resume behavior.
+Configuration/source/calibration identities remain fixed across the `.5`/`.6`
+reports; an algorithm or tuning change invalidates affected reports and needs
+recalibration. Original `.7` proves live caps, logs, worker behavior and UI
+responsiveness. All D23 proxy/caps, D24 full-strength presets and D25 frozen
+reference/champion rules below remain.
 
 ### 7.6 Live integration and calibration
 

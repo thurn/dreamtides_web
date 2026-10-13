@@ -157,6 +157,19 @@ new_bead=hv-xxx
 hbd update "$new_bead" --append-notes "Prefiling primary file $primary_file: $file_matches; $match_key=$match_value: $metadata_matches. Scope/cause disposition: <why this is distinct; required serialization or duty check>." || exit 1
 ```
 
+The adopted preparation/acceptance decomposition in
+[hv-umm2.606](evidence/parallelism/hv-umm2.606.md) uses intended-only child
+filing: resolve actual IDs, acknowledge every semantic/shared-body/final-join
+edge, and verify the complete original writer partition before admitting a
+child to `hive_project`. Record a fresh project baseline plus acknowledged
+creations and attribute peer changes by exact ID. Couple each original scope
+amendment to its own audited body-edge removals: verify the complete canonical
+Areas first, then remove and verify only that target's listed serialization
+edges. Preserve every semantic/final-acceptance and other serialization edge.
+A claim/version/authority race retains the affected edges and skips that
+amendment/child admission. Refresh graph/readiness/ownership before selection
+and after each one-at-a-time admission; uncertain effects require inspection.
+
 ### Filing a phase
 
 Filing a phase is a [shared-duty bead](#shared-duty-beads) (label `filing`,
@@ -616,6 +629,15 @@ A gate bead closes only when all of these hold:
 ### Implementation brief
 
 Paste `npm run bead:entities -- <filed UUIDs>` output into content briefs for the inventory facts and D21 sample.
+
+For the adopted children, include the native
+[606 scope/edge ledger](evidence/parallelism/hv-umm2.606.md) and distinguish
+primary writer bodies, read-only consumers, non-writable conditional
+candidates and the original full acceptance join. A real functional module or
+contract has a named production/public consumer. Conditional source fallout
+requires exact fresh native admission and shared-body ordering before writing;
+an additive declaration/registration seam grants no broader behavior edit.
+All original validation UUIDs, recipes and D17 capacity remain in the brief.
 
 Every brief contains, verbatim or by exact path:
 

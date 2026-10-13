@@ -37,6 +37,24 @@ positional keys do not determine its entities, Areas, or prerequisites.
 Regeneration refreshes planning data; scope changes follow the native filing
 and Areas procedures in [workflow](workflow.md#filing-a-phase).
 
+The adopted native decomposition in [hv-umm2.606](evidence/parallelism/hv-umm2.606.md)
+separates a semantic capability prerequisite, serialization for an exact shared
+body, and the original task's full acceptance join. Preparation children
+`hv-umm2.629`–`hv-umm2.644` deliver real mapping, cost, contract or Aspect
+modules; the original tasks retain every filed UUID, recipe and final check.
+Their complete native Areas govern each writer. Bare engine/fold hubs carry
+full authority unless their native scope explicitly limits them to additive
+entries or read-only inspection. Conditional candidates grant no current
+write permission.
+
+The capability tasks `hv-umm2.610`–`hv-umm2.628` have bounded public forms and
+explicit consumer joins. The source-only cohorts `hv-umm2.124`, `.126`–`.129`,
+`.132`, `.133` and `.179` retain all 37 original authoring UUIDs, private
+scenarios and complete recipes; their engine/UI/shared QA/config consumers
+are read-only. A proven missing capability becomes a separate prerequisite.
+Native status and current claims determine dispatch, with D17 capacity applied
+separately from dependency readiness.
+
 The planning projection carries these edges:
 
 - **Primitive edges.** A bead depends on the primitive bead that introduces
@@ -45,18 +63,22 @@ The planning projection carries these edges:
   Contemplation, plus the one primitive they need) validate the recipe. Every
   bead outside 5.6 that has no other planning edge depends on them; Phase 3.4,
   the Phase 2 gate, Phase 4.6, and Phase 4.7 precede the pilot.
-- **Fixed task edges:**
+- **Original full-acceptance joins:**
   - 5.3 Dreamwell beads also wait for Phase 4.7.
   - 5.6 journey beads wait only for 5.1 and Phase 4.1. Journey effects use
     their own registry (P8), so they run alongside the end of Phase 4.
   - 5.7a beads wait for the 5.6 bead that builds the transfiguration hook,
     and for the Phase 3 gate.
-  - The **card checkpoint** waits for every 5.2 bead. 5.7 (sweep sample) and
-    the 5.7b foundation wait for it and for every 5.7a bead; each 5.7b
-    modification bead waits for the foundation.
-  - The 5.8 design bead has no Phase 5 prerequisite. Each 5.8 implementation
-    bead waits for the design, the card checkpoint, and every 5.4 and 5.5
-    bead; the sanity bead waits for the implementation beads and Phase 7.1
+  - The **card checkpoint** waits for every 5.2 bead. Original 5.7 sweep
+    acceptance and 5.7b foundation acceptance wait for it and every 5.7a
+    bead; each original modification acceptance joins the full foundation.
+    Preparation `.629` and contract children `.631`–`.639` use their own
+    delivered APIs/body orders below, before those final validation joins.
+  - The 5.8 design bead has no Phase 5 prerequisite. Each original 5.8 full
+    implementation/acceptance joins the design, the card checkpoint and all
+    5.4/5.5 beads. Aspect pair preparations `.640`–`.644` have their exact
+    source prerequisites before those full joins. The sanity bead waits for
+    the original implementation beads and Phase 7.1
     (its matrix uses the tournament runner). 5.8 adds the Apollyon decks to
     the frozen deck pool, and logs why.
   - 5.9 waits for every bead above; 5.10 waits for 5.9 and the Phase 4 gate.
@@ -137,6 +159,13 @@ composition beads skip it.
    non-additively, in which case the bead waits behind that one. Record the
    check, matches or none, in the bead notes. These files stay out of
    `engine hubs` because their edits change logic, not registration entries.
+
+   This routing is an inspection/admission audit. The adopted source-only
+   cohorts' excluded engine/UI bodies remain read-only; the table grants no
+   permission to reacquire them. A proven capability gap is a separately
+   bounded native prerequisite with exact Areas and serialization before any
+   source write. Other proposed behavioral additions require fresh explicit
+   native admission; a foreign active owner is preserved.
 
    | Mechanic family in the printed text | Files it routes through |
    | --- | --- |
@@ -451,6 +480,17 @@ modifier plus composition beads for the nine transforms. It runs as soon as
 the engine and the 5.6 transfiguration hook are complete, ahead of most card
 beads.
 
+`hv-umm2.630` prepares the activated-cost implementation after its actual
+cost/source prerequisites. Original `hv-umm2.275` owns Attuned
+(`22adf539-d2c9-4f33-9416-159d03a220ad`) and Perfected
+(`980d283a-9558-4b66-84a0-fcb91fdf4ceb`) composition and complete acceptance.
+`hv-umm2.276` owns the shared transform dispatcher, catalog/loader and fuzz
+bodies for its six exact glossary UUIDs. `hv-umm2.277` owns the unique
+Resonant module (`f40df441-0e44-4122-b4d4-cdc4085a9ffb`) and additive
+registration after that foundation. Perfected follows both 276 and 277;
+Kindled belongs to 276 (`f0ff63b4-424b-4ae9-81d5-a4f6546afa3f`). All original
+journey, eligibility, text, transform-contract and sweep joins remain.
+
 ### 5.7 Transfigurations
 
 5.7a builds:
@@ -478,10 +518,24 @@ Prove [D39](decisions.md#d39-deck-entry-modifications-and-next-battle-effects)
 end to end. Phase 4.1 built the plumbing; this task proves behavior on real
 content.
 
-The `deck-mods-foundation` bead builds the exhaustive mapping, the card-lab
-`&mods` parameter, and the fuzz deck modifications. Then one bead per
-modification kind, each waiting for the foundation, adds that kind's
-contract tests, rules decisions, sweep sample, and journey QA.
+Preparation `hv-umm2.629` owns the exhaustive mapping, real card-lab `&mods`
+transport and random-mod fuzz preparation. Its production consumer is
+`qa-scenes.ts::resolveCardLab`/`cardLabDeckEntry`: existing journey `DeckEntry`
+fields pass through `engineDeckEntry` into `CardLabRequest.entry` and the real
+fixture. A mapping used only by tests does not satisfy acceptance. Its
+`lab-solver.ts` candidate is non-writable; an actual need requires precise
+native admission and serialization after `hv-umm2.484`/`.471` before writes.
+The existing shared-body orders apply; preparation does not inherit the
+card checkpoint as a semantic prerequisite.
+
+Original foundation `hv-umm2.279` retains every original prerequisite,
+including `hv-umm2.210` and `.275`–`.277`, and its full stacking, real-content,
+fuzz and lab acceptance. The card checkpoint `.210` follows `.629` solely for
+the shared sweep-option bodies, retaining all of its full card checks.
+`hv-umm2.631`–`.639` author nine unique public synthetic contract modules,
+joined respectively by originals `.280`–`.288`. Those originals retain their
+complete UUID/recipe/rules/sweep/journey acceptance and read delivered modules;
+substantive repairs require their own precise writer authority and ordering.
 
 - **Exhaustive mapping.** Every exploration effect kind that changes a deck
   entry or the next battle maps to an engine `Variant` field or a
@@ -503,12 +557,30 @@ contract tests, rules decisions, sweep sample, and journey QA.
   encounter through `?goto=exploration&card=<encounter card UUID>`, then confirm the
   battle starts with the effect applied. `__caps` is empty.
 
+For next-battle effects (`hv-umm2.286`–`.288`), the 20 eligible UUID sample on
+**each** controller is mapped through the specific opening-hand, starting-energy
+or smaller-hand DTO into controlled real battle initialization. Verify deal,
+payment, lifetime and consumption on those physical entries. This sample is
+additional to the genuine encounter-to-battle workflow and one judgment per
+kind; a globally applied DTO does not replace either controller's sample.
+
 ### 5.8 Apollyon incarnations (D6)
 
 The `apollyon-design` bead does steps 1, 3, and 4 and designs all ten
 incarnations together, so the set stays coherent. Five implementation
 beads each author two incarnations (step 2). The `apollyon-sanity` bead
 does step 5.
+
+Aspect preparations `hv-umm2.640`–`.644` own five separate AbilityList pair
+modules and their public synthetic contracts. Originals `hv-umm2.290`–`.294`
+consume them through exact map-entry values/additive imports, retain all ten
+original incarnation UUIDs, and author their recipes/Dreamsign choices and
+complete acceptance. Pair `.644` waits for physical triggering-card spark
+`hv-umm2.611`; source signatures alone do not certify emblem behavior.
+All card-checkpoint, full Avatar/Dreamsign, random-fill and Starter barriers
+remain, including 20 Greedy games **per incarnation**. `hv-umm2.295` keeps
+50 games per incarnation, the frozen pool, `hv-fy5h.2` and the Phase 7 champion
+rerun. The audited pool union is an overapproximation of reachability.
 
 1. **Extend the content type.** Extend the `ApollyonIncarnation` type in
    `src/content/apollyon/` with:
