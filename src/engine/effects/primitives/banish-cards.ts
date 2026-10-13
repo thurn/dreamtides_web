@@ -51,7 +51,7 @@ export const banishCardsPrimitive = definePrimitive<BanishCardsNode>({
   resolve(ctx, node, env) {
     if (node.from === "cards") {
       const named = [...new Set(node.cards.flatMap((ref) => resolveCards(ctx, ref, env)))];
-      for (const id of named) banish(ctx, id);
+      for (const id of named) banish(ctx, id, env.controller);
       return;
     }
     const expiry = node.duration === undefined ? undefined : startDuration(ctx, node.duration, env.controller, env.source, []);
@@ -69,7 +69,7 @@ export const banishCardsPrimitive = definePrimitive<BanishCardsNode>({
       max: 1,
     });
     if (chosen === undefined) throw new Error("banishChosen answered with no card");
-    banish(ctx, chosen);
+    banish(ctx, chosen, env.controller);
     const instance = ctx.state.instances[chosen];
     if (expiry !== undefined && instance?.zone === "banished") {
       addFloating(ctx, { controller: env.controller, source: env.source, expiry,

@@ -137,6 +137,7 @@ const completeAuthoringFixtures = new Map<string, string>([
   ["src/engine/dsl/triggers.ts", `
     export function whenDissolved() {} export function whenDiscardSelf() {}
     export function whenPutIntoVoid() {} export function atEndOfTurn() {}
+    export function whenRemovesEnemy() {} export function whenDissolvesEnemyInChallenge() {}
   `],
   ["src/engine/dsl/types.ts", `
     export type PaymentCost = { tag: "banishFromHand"; count: number } | { tag: "discard"; count: "x"; min?: number };
@@ -249,6 +250,8 @@ for (const [capability, intendedModule, source] of minimalApiFixtures) {
     minimalSources.set(scopedModule(capability, module), module === intendedModule ? source : "export {};");
   }
 }
+minimalSources.set(scopedModule("whenRemovesEnemyTrigger", triggersModule),
+  "export function whenRemovesEnemy() {} export function whenDissolvesEnemyInChallenge() {}");
 const minimalResolver = inventoryCapabilityResolver(minimalSources);
 
 const intendedResolver = inventoryCapabilityResolver(completeAuthoringFixtures);

@@ -1,5 +1,5 @@
 import type { InstanceId, Side, Zone } from "../../state/ids";
-import type { EventDefinition } from "../types";
+import type { EventDefinition, RemovalProvenance } from "../types";
 
 /** A created card ceased to exist: it is gone from the battle and in no zone. */
 export interface CeasedToExistEvent {
@@ -9,6 +9,8 @@ export interface CeasedToExistEvent {
   readonly side: Side;
   /** The zone it left. */
   readonly from: Zone;
+  /** Explicit banishment of a created enemy from play; other cessation carries no removal cause. */
+  readonly banishedBy?: RemovalProvenance;
 }
 
 /**

@@ -27,7 +27,7 @@ export const phasePrimitive = definePrimitive<PhaseNode>({
     for (const id of resolveCharacters(ctx, node.subject, env)) {
       const side = state.instances[id]?.controller;
       const to = slotOf(state, id);
-      returnToHand(ctx, id);
+      returnToHand(ctx, id, env.controller);
       const mover = self === null ? undefined : state.instances[self];
       if (self === null || mover?.zone !== "play" || mover.controller !== side || to === null || side === undefined) continue;
       const from = slotOf(state, self);

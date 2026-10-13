@@ -54,7 +54,7 @@ function scenario(side: Side, amplified: boolean, enemyEmber: boolean): NamedSce
       }
       if (enemyEmber) {
         const foreignEmber = ids[other].back[1]!;
-        expect(events).toContainEqual({ kind: "dissolved", instance: foreignEmber, side: other });
+        expect(events).toContainEqual(expect.objectContaining({ kind: "dissolved", instance: foreignEmber, side: other }));
         expect(state.instances[foreignEmber]).toBeUndefined();
       }
       const copies = events.flatMap(e => e.kind === "cardCreated" && e.printing.kind === "figmentCopy" && e.printing.cardId === SYNTHETIC_ABANDONER.id ? [e.instance] : []);

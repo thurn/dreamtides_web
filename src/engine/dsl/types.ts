@@ -677,6 +677,8 @@ export type Trigger =
   | { readonly on: "scores"; readonly subject: TriggerSubject }
   /** "When the opponent scores ⍟": a character the opponent controls scores. */
   | { readonly on: "opponentScores" }
+  /** "When you dissolve or banish an enemy", or a character you control dissolves one in a challenge. */
+  | { readonly on: "removesEnemy"; readonly inChallenge?: true }
   | { readonly on: "leavesVoid"; readonly player: PlayerRef; readonly filter: CardFilter }
   /**
    * "When a … is put into your void": each card matching `filter` that

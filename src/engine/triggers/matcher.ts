@@ -77,6 +77,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   gainsSpark: ["sparkGained"],
   scores: ["laneResolved"],
   opponentScores: ["laneResolved"],
+  removesEnemy: ["dissolved", "banished", "ceasedToExist"],
   leavesVoid: ["leftVoid"],
   putIntoVoid: ["enteredVoid"],
   challengeWith: ["challengersDesignated"],
@@ -178,6 +179,8 @@ function subjectMatches(
 /** A match, the card its event concerns, and the gain a "when … gains ✦" trigger matched. */
 interface Match {
   readonly subject: InstanceId | null;
+  /** Visibility captured at a confirmed public departure, even when the subject has since ceased to exist. */
+  readonly subjectHiddenFrom?: readonly Side[];
   readonly lastKnownSubjectCost?: number;
   readonly gain?: SparkGain;
   readonly scored?: number;
@@ -378,6 +381,18 @@ function matchKind(
       return event.kind === "laneResolved" && event.scored > 0 && state.turn.active === opponent(you)
         ? { subject: event.challenger, scored: event.scored }
         : null;
+    case "removesEnemy": {
+      if (event.kind !== "dissolved" && event.kind !== "banished" && event.kind !== "ceasedToExist") return null;
+      const removal = event.kind === "dissolved" || event.kind === "banished" ? event.removal
+        : event.kind === "ceasedToExist" ? event.banishedBy : undefined;
+      if (removal === undefined || removal.controller !== you) return null;
+      if (trigger.inChallenge === true) {
+        return event.kind === "dissolved" && removal.kind === "challenge"
+          ? { subject: removal.character, lastKnownSubjectCost: removal.characterCost, subjectHiddenFrom: [] }
+          : null;
+      }
+      return { subject: event.instance, lastKnownSubjectCost: removal.victimCost, subjectHiddenFrom: [] };
+    }
     case "leavesVoid":
       return event.kind === "leftVoid" &&
         event.side === resolvePlayer(you, trigger.player) &&
@@ -510,7 +525,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
     ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     ...(linkedSource === null ? {} : { linkedSource }),
   };
-  const hidden = matched.subject === null ? [] : sidesBlindTo(ctx.state, matched.subject);
+  const hidden = matched.subjectHiddenFrom ?? (matched.subject === null ? [] : sidesBlindTo(ctx.state, matched.subject));
   const trigger: QueuedTrigger = hidden.length === 0 ? retained : { ...retained, subjectHiddenFrom: hidden };
   ctx.state.triggerQueue.push(trigger);
   ctx.emit({
@@ -554,7 +569,9 @@ function matchListener(ctx: StepContext, side: Side, listener: Listener, event: 
     if (matching.controller !== side) return;
     const inZone = matching.emblem || worksInZone(ability.zone, matching.zone);
     const match = matchTrigger(ctx.state, ctx.catalog, ability.trigger, event, matching, inZone, armedAbility !== undefined);
-    if (match !== null) enqueueAbility(ctx, matching, ability, index, { ...match, ...(armed.subjectCost === undefined ? {} : { lastKnownSubjectCost: armed.subjectCost }) }, armedAbility ?? null);
+    if (match !== null) enqueueAbility(ctx, matching, ability, index, { ...match,
+      ...(armed.subjectCost === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectCost: armed.subjectCost }),
+    }, armedAbility ?? null);
   });
 }
 
@@ -600,7 +617,7 @@ function matchFloating(ctx: StepContext, side: Side, event: EngineEvent, armed: 
       ability: ref.ability,
       node: ref.node,
       ...match,
-      ...(armed.subjectCost === undefined ? {} : { lastKnownSubjectCost: armed.subjectCost }),
+      ...(armed.subjectCost === undefined || !isLookbackEvent(event) || match.subject !== event.instance ? {} : { lastKnownSubjectCost: armed.subjectCost }),
       ...(captured === undefined ? {} : { captured: [...captured] }),
       ...(lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark }),
     });

@@ -527,6 +527,14 @@ of points that challenge awarded, captured when the character scored. A later
 change to the character's spark does not change that quantity. Losing those
 points follows the floor of 0 in [Objective](#objective).
 
+**Additional challenge points:** "When a character you control scores ⍟ in a
+challenge, it scores 1 additional ⍟" awards its controller 1⍟ as that ability
+resolves, once for each positive challenge-scoring occasion. Each source adds
+its own point. This supplementary award creates no new character-scoring
+occasion and does not change the challenge award captured by other scoring
+abilities. An unpaired 0✦ character, a flat point gain, and Fatigue do not
+trigger it.
+
 **Challenge phase resolution:** Each front-rank lane is resolved in turn, left to
 right:
 
@@ -2190,6 +2198,27 @@ the earlier ones left it:
 
 So a figment with Veil that the opponent dissolves only loses Veil, while a
 reclaimed character with Veil that the opponent dissolves is banished.
+
+**Causing an enemy's removal:** "When you dissolve or banish an enemy" fires
+once for each opposing character in play actually dissolved or banished by
+an effect you control or by a character you control in a challenge. The
+character's controller is read immediately before departure. A Reclaim
+replacement of an effect's dissolve, return, or deck movement is a banishment
+by that effect's controller. A delayed printed banishment belongs to the
+controller who created that delayed ability, with opposition read when it
+resolves. A created character dissolved or explicitly banished counts even
+though it ceases to exist. Veil preventing a dissolve, an ordinary return or
+deck movement, pile-card banishment, abandon, Offering or Ephemeral cleanup,
+and unrelated cessation do not count.
+
+"When a character you control dissolves an enemy in a challenge" names the
+opposing character in that lane as the cause of each actual dissolve, ties
+and Vengeful included. Both lane participants and their controllers are
+captured before either leaves. "It" names the removing character; if it is
+absent from play when a spark gain resolves, it gains nothing. A replacement
+banishment is not a challenge dissolve. The removed character's copiable
+cost is captured immediately before its departure; the removing character's
+cost is captured before either lane participant departs.
 
 Gained spark and persistent statuses (such as reclaimed and Offering) travel
 with the card across zones, while spark or keywords a card merely _has_ from a static

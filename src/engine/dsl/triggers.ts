@@ -215,6 +215,16 @@ export function whenOpponentScores(): Trigger {
   return { on: "opponentScores" };
 }
 
+/** "When you dissolve or banish an enemy": the removed character is the subject. */
+export function whenRemovesEnemy(): Trigger {
+  return { on: "removesEnemy" };
+}
+
+/** "When a character you control dissolves an enemy in a challenge": the removing character is the subject. */
+export function whenDissolvesEnemyInChallenge(): Trigger {
+  return { on: "removesEnemy", inChallenge: true };
+}
+
 export function whenLeavesVoid(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {
   return { on: "leavesVoid", player, filter };
 }

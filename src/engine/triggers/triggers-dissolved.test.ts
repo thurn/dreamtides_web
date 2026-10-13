@@ -191,7 +191,7 @@ describe("when a character is dissolved", () => {
         const action = { kind: "play", card, from: "hand" } as const;
         const committed: BattleState[] = [];
         const result = E.apply(ready, caster, action, new ScriptedSource([[stolen], true]), (next) => committed.push(next));
-        expect(result.events).toContainEqual({ kind: "dissolved", instance: stolen, side: controller });
+        expect(result.events).toContainEqual(expect.objectContaining({ kind: "dissolved", instance: stolen, side: controller }));
         expect(result.state.instances[stolen]).toMatchObject({ owner, controller: owner, zone: "void" });
         expect(result.state.sides[owner].void).toContain(stolen);
         // Departure first; on dissolve the survivor is in play, then the stolen source in the void slot.

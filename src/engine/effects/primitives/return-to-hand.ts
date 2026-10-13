@@ -13,7 +13,7 @@ export const returnToHandPrimitive = definePrimitive<ReturnToHandNode>({
   op: "returnToHand",
   targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
-    for (const id of resolveCharacters(ctx, node.subject, env)) returnCharacter(ctx, id);
+    for (const id of resolveCharacters(ctx, node.subject, env)) returnCharacter(ctx, id, env.controller);
   },
 });
 

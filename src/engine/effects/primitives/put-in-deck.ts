@@ -1,6 +1,6 @@
 import type { ValueExpr } from "../../dsl/types";
 import type { ArrangeDestination, ArrangePrompt, ArrangeSlot } from "../../prompts/types";
-import { charactersInPlay, instanceOf, moveInstance, moveToHand } from "../../rules/zones";
+import { captureEnemyRemoval, charactersInPlay, instanceOf, moveInstance, moveToHand } from "../../rules/zones";
 import type { InstanceId, Side, Zone } from "../../state/ids";
 import { SIDES } from "../../state/ids";
 import type { StepContext } from "../../steps/types";
@@ -72,7 +72,7 @@ export const putInDeckPrimitive = definePrimitive<PutInDeckNode>({
       const seers = new Map(ordered.map((id) => [id, SIDES.filter((viewer) => identifies(ctx.state, id, viewer))]));
       const exactPrefix = node.cards.every((ref) => ref.kind === "inZone" && ref.pick === "top" && Object.keys(ref.filter).length === 0);
       if (!exactPrefix) forgetDeckPositions(ctx.state, ordered);
-      placeAll(ctx, ordered, node.at === "top" ? "deckTop" : "deckBottom", seers);
+      placeAll(ctx, ordered, node.at === "top" ? "deckTop" : "deckBottom", env.controller, seers);
       return;
     }
     const side = env.controller;
@@ -95,7 +95,7 @@ export const putInDeckPrimitive = definePrimitive<PutInDeckNode>({
           if (moveToHand(ctx, id, side) === "hand") ctx.emit({ kind: "cardTaken", side, instance: id, from: "deck", holder: side });
         }
       } else {
-        placeAll(ctx, placed, to === "top" ? "deckTop" : to === "bottom" ? "deckBottom" : "void");
+        placeAll(ctx, placed, to === "top" ? "deckTop" : to === "bottom" ? "deckBottom" : "void", env.controller);
       }
     }
   },
@@ -142,7 +142,7 @@ type Place = "deckTop" | "deckBottom" | "void";
  * void a card entered. A card already in that place is put there again (a
  * looked-at card kept on top).
  */
-function placeAll(ctx: StepContext, ids: readonly InstanceId[], place: Place, seers?: ReadonlyMap<InstanceId, readonly Side[]>): void {
+function placeAll(ctx: StepContext, ids: readonly InstanceId[], place: Place, by: Side, seers?: ReadonlyMap<InstanceId, readonly Side[]>): void {
   const entered: Record<Side, { cards: InstanceId[]; from: Zone[]; seenBy: Side[][] }> = {
     player: { cards: [], from: [], seenBy: [] },
     enemy: { cards: [], from: [], seenBy: [] },
@@ -152,10 +152,11 @@ function placeAll(ctx: StepContext, ids: readonly InstanceId[], place: Place, se
   for (const id of order) {
     const instance = instanceOf(ctx.state, id);
     const from = instance.zone;
+    const removal = captureEnemyRemoval(ctx, id, by);
     const went = moveInstance(ctx, id, place === "void" ? "void" : "deck", place === "deckBottom" ? "bottom" : "top");
     if (went === "banished") {
       // A reclaimed card is banished instead (rules § Zone Changes).
-      ctx.emit({ kind: "banished", instance: id, side: instance.owner });
+      ctx.emit({ kind: "banished", instance: id, side: instance.owner, ...(removal === undefined ? {} : { removal }) });
     } else if (went !== null) {
       const into = entered[instance.owner];
       into.cards.push(id);

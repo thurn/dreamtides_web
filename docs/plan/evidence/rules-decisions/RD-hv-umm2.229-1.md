@@ -1,0 +1,7 @@
+# RD-hv-umm2.229-1: Supplementary challenge points award once without another character-scoring occasion
+
+- Ladder: 5, the simplest reading consistent with the printed triggered clause and settled challenge-scoring contracts, after steps 1–4. C17 supplies an additional-spark analogy, not a binding additional-points rule. The prototype's pending entry supplies no actual rule; Rust's Judgment-era unblocked-attacker text and scoring differ. The official MTG Comprehensive Rules effective 2026-09-25, CR 603.1 and 603.2c, support separating a trigger's occasion from its effect and firing once per occasion; they do not directly define Dreamtides additional ⍟.
+- rules.md: § Challengers, Blockers, and Scoring → Additional challenge points; existing positive-scoring and captured-equivalent-quantity rules; RD-hv-7x4l.6-3.
+- Affects: dreamsign 6b51e477-352c-489b-8d5f-049bc378fde9.
+- Why: the printed "When …" clause resolves an independent supplementary award for each positive challenge conversion. Independent sources stack. Its award is not another spark-to-points conversion, so it creates no further scoring occasion and does not alter the original award captured by other abilities. Zero-point lanes, flat point gains, and Fatigue do not qualify. The encoding is `triggered(whenScores(characterYouControl()), gainPoints(1))`; immutable text is preserved.
+- Source: https://media.wizards.com/2026/downloads/MagicCompRules%2020260925.txt, official current rules verified by the parent on 2026-10-13.

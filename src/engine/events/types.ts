@@ -1,6 +1,18 @@
 import type { BattleState } from "../state/types";
-import type { Side } from "../state/ids";
+import type { InstanceId, Side } from "../state/ids";
 import type { EngineEvent } from ".";
+
+/** The opposing character that causes a challenge removal, captured before either lane participant leaves. */
+export interface ChallengeRemovalCause {
+  readonly controller: Side;
+  readonly character: InstanceId;
+  readonly characterCost: number;
+}
+
+/** A confirmed dissolve or banishment of a character opposing its cause immediately before departure. */
+export type RemovalProvenance =
+  | { readonly kind: "effect"; readonly controller: Side; readonly victimCost: number }
+  | ({ readonly kind: "challenge"; readonly victimCost: number } & ChallengeRemovalCause);
 
 /** Registry entry for one engine event kind. */
 export interface EventDefinition<E extends EngineEvent> {

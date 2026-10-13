@@ -27,7 +27,7 @@ export const banishUntilPrimitive = definePrimitive<BanishUntilNode>({
       const expiry = startDuration(ctx, node.duration, env.controller, env.source, [id]);
       if (expiry === null) return;
       const side = instanceOf(ctx.state, id).controller;
-      banish(ctx, id);
+      banish(ctx, id, env.controller);
       if (ctx.state.instances[id]?.zone === "banished") {
         addFloating(ctx, { controller: env.controller, source: env.source, expiry, change: { kind: "banishedUntil", instance: id, side } });
       }

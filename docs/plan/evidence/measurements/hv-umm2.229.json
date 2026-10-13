@@ -1,0 +1,1386 @@
+{
+  "bead": "hv-umm2.229",
+  "base": "712edbdf85966637bbd76cbe195ec14907278262",
+  "dispatchObservation": {
+    "start": "2026-10-13T01:04:57.422800Z",
+    "scope": "Conservative parent before-dispatch gross observation; exact tool dispatch/model start unobserved. Includes source audit, scope admission, fixture corrections, checks, runtime waits and QA."
+  },
+  "commands": {
+    "focused03": {
+      "name": "focused03",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenRemovesEnemy|whenDissolvesEnemyInChallenge"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791855412.140372,
+      "endUnix": 1791855417.461545,
+      "wallSeconds": 5.321131542004878,
+      "exitCode": 0,
+      "loadBefore": [
+        5.49267578125,
+        10.59765625,
+        12.63818359375
+      ],
+      "loadAfter": [
+        5.693359375,
+        10.55419921875,
+        12.61083984375
+      ],
+      "log": "/tmp/229-focused03.log"
+    },
+    "review02": {
+      "name": "review02",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791856115.2540958,
+      "endUnix": 1791856178.0656471,
+      "wallSeconds": 62.81105262499477,
+      "exitCode": 0,
+      "loadBefore": [
+        16.59912109375,
+        11.26123046875,
+        10.732421875
+      ],
+      "loadAfter": [
+        18.908203125,
+        13.177734375,
+        11.501953125
+      ],
+      "log": "/tmp/229-review02.log"
+    },
+    "preflight01": {
+      "name": "preflight01",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "6b51e477-352c-489b-8d5f-049bc378fde9",
+        "--as",
+        "both",
+        "--variants",
+        "all"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791856003.354683,
+      "endUnix": 1791856004.8292952,
+      "wallSeconds": 1.474602624992258,
+      "exitCode": 0,
+      "loadBefore": [
+        11.49951171875,
+        7.5830078125,
+        9.45751953125
+      ],
+      "loadAfter": [
+        11.49951171875,
+        7.5830078125,
+        9.45751953125
+      ],
+      "log": "/tmp/229-preflight01.log"
+    },
+    "challenge-player04": {
+      "name": "challenge-player04",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": null
+      },
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.229/piranha-challenge.mjs",
+        "--bead",
+        "hv-umm2.229",
+        "--arg",
+        "as=player",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791857663.856686,
+      "endUnix": 1791857720.870326,
+      "wallSeconds": 57.01334558299277,
+      "exitCode": 0,
+      "loadBefore": [
+        3.18701171875,
+        5.1689453125,
+        8.12744140625
+      ],
+      "loadAfter": [
+        15.5263671875,
+        8.48779296875,
+        9.1865234375
+      ],
+      "log": "/tmp/229-challenge-player04.log"
+    },
+    "challenge-enemy02": {
+      "name": "challenge-enemy02",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": null
+      },
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.229/piranha-challenge.mjs",
+        "--bead",
+        "hv-umm2.229",
+        "--arg",
+        "as=enemy",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791857727.6822212,
+      "endUnix": 1791857757.3184252,
+      "wallSeconds": 29.636051499997848,
+      "exitCode": 1,
+      "loadBefore": [
+        15.56396484375,
+        8.6123046875,
+        9.22607421875
+      ],
+      "loadAfter": [
+        26.830078125,
+        12.06005859375,
+        10.45654296875
+      ],
+      "log": "/tmp/229-challenge-enemy02.log"
+    },
+    "challenge-enemy03": {
+      "name": "challenge-enemy03",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": null
+      },
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.229/piranha-challenge.mjs",
+        "--bead",
+        "hv-umm2.229",
+        "--arg",
+        "as=enemy",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791857791.553542,
+      "endUnix": 1791857811.832014,
+      "wallSeconds": 20.27836812500027,
+      "exitCode": 0,
+      "loadBefore": [
+        19.43603515625,
+        11.8212890625,
+        10.431640625
+      ],
+      "loadAfter": [
+        17.33447265625,
+        11.8583984375,
+        10.47802734375
+      ],
+      "log": "/tmp/229-challenge-enemy03.log"
+    },
+    "knip01": {
+      "name": "knip01",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791855786.8386009,
+      "endUnix": 1791855791.332969,
+      "wallSeconds": 4.494333624999854,
+      "exitCode": 0,
+      "loadBefore": [
+        5.45263671875,
+        6.4765625,
+        9.826171875
+      ],
+      "loadAfter": [
+        5.45263671875,
+        6.4765625,
+        9.826171875
+      ],
+      "log": "/tmp/229-knip01.log"
+    },
+    "focused02": {
+      "name": "focused02",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenRemovesEnemy|whenDissolvesEnemyInChallenge"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791855355.715338,
+      "endUnix": 1791855360.0244732,
+      "wallSeconds": 4.30910149999545,
+      "exitCode": 1,
+      "loadBefore": [
+        6.7666015625,
+        11.9326171875,
+        13.228515625
+      ],
+      "loadAfter": [
+        6.705078125,
+        11.833984375,
+        13.18603515625
+      ],
+      "log": "/tmp/229-focused02.log"
+    },
+    "challenge-player02": {
+      "name": "challenge-player02",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": null
+      },
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.229/piranha-challenge.mjs",
+        "--bead",
+        "hv-umm2.229",
+        "--arg",
+        "as=player",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791857348.212638,
+      "endUnix": 1791857400.095573,
+      "wallSeconds": 51.88266650000878,
+      "exitCode": 1,
+      "loadBefore": [
+        4.234375,
+        6.9990234375,
+        9.81103515625
+      ],
+      "loadAfter": [
+        4.56787109375,
+        6.69677734375,
+        9.53857421875
+      ],
+      "log": "/tmp/229-challenge-player02.log"
+    },
+    "full01": {
+      "name": "full01",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791856218.17222,
+      "endUnix": 1791856330.3887591,
+      "wallSeconds": 112.21563179101213,
+      "exitCode": 0,
+      "loadBefore": [
+        17.40087890625,
+        13.373046875,
+        11.6416015625
+      ],
+      "loadAfter": [
+        19.93896484375,
+        15.49072265625,
+        12.7021484375
+      ],
+      "log": "/tmp/229-full01.log"
+    },
+    "focused04": {
+      "name": "focused04",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenRemovesEnemy|whenDissolvesEnemyInChallenge|triggering subject copiable cost|scoredAmount"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791855516.709752,
+      "endUnix": 1791855521.264759,
+      "wallSeconds": 4.5549716250097845,
+      "exitCode": 0,
+      "loadBefore": [
+        4.71728515625,
+        8.90380859375,
+        11.74267578125
+      ],
+      "loadAfter": [
+        4.71728515625,
+        8.90380859375,
+        11.74267578125
+      ],
+      "log": "/tmp/229-focused04.log"
+    },
+    "sweep01": {
+      "name": "sweep01",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": null
+      },
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.229",
+        "--dreamsigns",
+        "6b51e477-352c-489b-8d5f-049bc378fde9"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791857050.33707,
+      "endUnix": 1791857060.097236,
+      "wallSeconds": 9.760118042002432,
+      "exitCode": 0,
+      "loadBefore": [
+        7.25390625,
+        11.84423828125,
+        12.19921875
+      ],
+      "loadAfter": [
+        6.9677734375,
+        11.63427734375,
+        12.1201171875
+      ],
+      "log": "/tmp/229-sweep01.log"
+    },
+    "challenge-player03": {
+      "name": "challenge-player03",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": null
+      },
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.229/piranha-challenge.mjs",
+        "--bead",
+        "hv-umm2.229",
+        "--arg",
+        "as=player",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791857451.747993,
+      "endUnix": 1791857490.558806,
+      "wallSeconds": 38.81061274999229,
+      "exitCode": 0,
+      "loadBefore": [
+        4.96337890625,
+        6.515625,
+        9.3095703125
+      ],
+      "loadAfter": [
+        5.099609375,
+        6.380859375,
+        9.13232421875
+      ],
+      "log": "/tmp/229-challenge-player03.log"
+    },
+    "matcher-negative01": {
+      "name": "matcher-negative01",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenRemovesEnemy|whenDissolvesEnemyInChallenge"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791855568.112719,
+      "endUnix": 1791855572.154067,
+      "wallSeconds": 4.0413168749946635,
+      "exitCode": 1,
+      "loadBefore": [
+        4.13525390625,
+        8.099609375,
+        11.28125
+      ],
+      "loadAfter": [
+        4.2041015625,
+        8.0478515625,
+        11.244140625
+      ],
+      "log": "/tmp/229-matcher-negative01.log"
+    },
+    "piranha-fuzz01": {
+      "name": "piranha-fuzz01",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "hv-umm2.229-piranha",
+        "--weight-uuids",
+        "6b51e477-352c-489b-8d5f-049bc378fde9"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791855786.838521,
+      "endUnix": 1791855955.003526,
+      "wallSeconds": 168.16364537499612,
+      "exitCode": 0,
+      "loadBefore": [
+        5.45263671875,
+        6.4765625,
+        9.826171875
+      ],
+      "loadAfter": [
+        7.16845703125,
+        6.56494140625,
+        9.25
+      ],
+      "log": "/tmp/229-piranha-fuzz01.log"
+    },
+    "challenge-player01": {
+      "name": "challenge-player01",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": null
+      },
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.229/piranha-challenge.mjs",
+        "--bead",
+        "hv-umm2.229",
+        "--arg",
+        "as=player",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791857113.111841,
+      "endUnix": 1791857131.780697,
+      "wallSeconds": 18.66876025000238,
+      "exitCode": 1,
+      "loadBefore": [
+        4.79052734375,
+        10.23876953125,
+        11.5693359375
+      ],
+      "loadAfter": [
+        5.49609375,
+        10.14111328125,
+        11.51171875
+      ],
+      "log": "/tmp/229-challenge-player01.log"
+    },
+    "removal-fuzz01": {
+      "name": "removal-fuzz01",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node",
+        "--import",
+        "tsx",
+        "/tmp/229-removal-fuzz.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791856418.235138,
+      "endUnix": 1791856679.414585,
+      "wallSeconds": 261.18458912499773,
+      "exitCode": 0,
+      "loadBefore": [
+        13.12109375,
+        14.64794921875,
+        12.67724609375
+      ],
+      "loadAfter": [
+        13.0908203125,
+        11.8076171875,
+        11.76513671875
+      ],
+      "log": "/tmp/229-removal-fuzz01.log"
+    },
+    "focused01": {
+      "name": "focused01",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenRemovesEnemy|whenDissolvesEnemyInChallenge"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791855287.195922,
+      "endUnix": 1791855292.484677,
+      "wallSeconds": 5.288713415997336,
+      "exitCode": 1,
+      "loadBefore": [
+        11.17822265625,
+        13.66162109375,
+        13.8935546875
+      ],
+      "loadAfter": [
+        10.84326171875,
+        13.55078125,
+        13.85302734375
+      ],
+      "log": "/tmp/229-focused01.log"
+    },
+    "typecheck01": {
+      "name": "typecheck01",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791855494.590166,
+      "endUnix": 1791855505.08215,
+      "wallSeconds": 10.491900875000283,
+      "exitCode": 2,
+      "loadBefore": [
+        4.64990234375,
+        9.23486328125,
+        11.939453125
+      ],
+      "loadAfter": [
+        5.40478515625,
+        9.24365234375,
+        11.91064453125
+      ],
+      "log": "/tmp/229-typecheck01.log"
+    },
+    "inventory01": {
+      "name": "inventory01",
+      "command": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791855597.927008,
+      "endUnix": 1791855599.8119628,
+      "wallSeconds": 1.8849417089950293,
+      "exitCode": 0,
+      "loadBefore": [
+        4.25390625,
+        7.7529296875,
+        11.044921875
+      ],
+      "loadAfter": [
+        4.25390625,
+        7.7529296875,
+        11.044921875
+      ],
+      "log": "/tmp/229-inventory01.log"
+    },
+    "knip02": {
+      "name": "knip02",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791856190.995906,
+      "endUnix": 1791856194.2670789,
+      "wallSeconds": 3.2711487500055227,
+      "exitCode": 0,
+      "loadBefore": [
+        17.45849609375,
+        13.0556640625,
+        11.47802734375
+      ],
+      "loadAfter": [
+        16.94091796875,
+        13.021484375,
+        11.47509765625
+      ],
+      "log": "/tmp/229-knip02.log"
+    },
+    "challenge-enemy01": {
+      "name": "challenge-enemy01",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": null
+      },
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.229/piranha-challenge.mjs",
+        "--bead",
+        "hv-umm2.229",
+        "--arg",
+        "as=enemy",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791857508.162293,
+      "endUnix": 1791857528.6289668,
+      "wallSeconds": 20.466569416996208,
+      "exitCode": 0,
+      "loadBefore": [
+        4.5595703125,
+        6.1982421875,
+        9.0185546875
+      ],
+      "loadAfter": [
+        5.80810546875,
+        6.3583984375,
+        8.99365234375
+      ],
+      "log": "/tmp/229-challenge-enemy01.log"
+    },
+    "affected05": {
+      "name": "affected05",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/content/specs/specs.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791856051.954488,
+      "endUnix": 1791856064.485448,
+      "wallSeconds": 12.530861541003105,
+      "exitCode": 0,
+      "loadBefore": [
+        20.88818359375,
+        10.74609375,
+        10.5322265625
+      ],
+      "loadAfter": [
+        20.11474609375,
+        11.0947265625,
+        10.66162109375
+      ],
+      "log": "/tmp/229-affected05.log"
+    },
+    "review01": {
+      "name": "review01",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791855697.705707,
+      "endUnix": 1791855751.998825,
+      "wallSeconds": 54.29268174999743,
+      "exitCode": 1,
+      "loadBefore": [
+        3.837890625,
+        6.73095703125,
+        10.28759765625
+      ],
+      "loadAfter": [
+        5.31494140625,
+        6.58984375,
+        10.0068359375
+      ],
+      "log": "/tmp/229-review01.log"
+    },
+    "schema-final01": {
+      "name": "schema-final01",
+      "environment": {
+        "JOURNEY_TEST_WORKERS": null
+      },
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/enemy-removal229-sol",
+      "startUnix": 1791858179.8289971,
+      "endUnix": 1791858179.9364429,
+      "wallSeconds": 0.10744733299361542,
+      "exitCode": 0,
+      "loadBefore": [
+        13.96923828125,
+        13.76025390625,
+        11.84130859375
+      ],
+      "loadAfter": [
+        13.96923828125,
+        13.76025390625,
+        11.84130859375
+      ],
+      "log": "/tmp/229-schema-final01.log"
+    }
+  },
+  "baselineWitness": {
+    "result": "intended failure: actual enemy i2 reached void and dissolved event lacked expected controller/victimCost",
+    "sourceBase": "712edbdf85966637bbd76cbe195ec14907278262",
+    "contractPath": "src/engine/effects/primitives/contracts/when-removes-enemy-trigger.contracts.ts",
+    "wrapperSeconds": null,
+    "qualification": "Entire wrapper before/after unobserved; test phase3.2s, restore phase1.0s and Vitest2.51s are separate clocks, not summed into invented aggregate. Baseline source in initial contract-first tool input; expanded final contract supersedes it.",
+    "log": "/tmp/229-baseline-witness.log",
+    "sourceRange": {
+      "file": "src/engine/effects/primitives/contracts/when-removes-enemy-trigger.contracts.ts",
+      "lines": "23\u201327; assertion25",
+      "scope": "Exact baseline assertion/context printed in unchanged-source failure log. Whole initial source bytes were expanded in place and not separately snapshotted; do not claim a retained whole baseline file."
+    },
+    "observedWitnessExcerpt": "     \u00d7 records the resolving controller and pre-departure victim cost on an actual enemy dissolve 9ms\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  |shared| src/engine/effects/primitives/contracts.test.ts > causal enemy-removal events > records the resolving controller and pre-departure victim cost on an actual enemy dissolve\nAssertionError: expected [ { kind: 'resolved', \u2026(1) }, \u2026(4) ] to deep equally contain ObjectContaining{\u2026}\n\n- Expected:\nObjectContaining {\n  \"instance\": \"i2\",\n  \"kind\": \"dissolved\",\n  \"removal\": {\n    \"controller\": \"player\",\n    \"kind\": \"effect\",\n    \"victimCost\": 5,\n  },\n}\n\n+ Received:\n[\n  {\n    \"instance\": \"i1\",\n    \"kind\": \"resolved\",\n  },\n  {\n    \"instance\": \"i2\",\n    \"kind\": \"leftPlay\",\n    \"side\": \"enemy\",\n    \"spark\": 5,\n    \"to\": \"void\",\n  },\n  {\n    \"from\": \"play\",\n    \"instance\": \"i2\",\n    \"kind\": \"enteredVoid\",\n    \"side\": \"enemy\",\n  },\n  {\n    \"instance\": \"i2\",\n    \"kind\": \"dissolved\",\n    \"side\": \"enemy\",\n  },\n  {\n    \"from\": \"stack\",\n    \"instance\": \"i1\",\n    \"kind\": \"enteredVoid\",\n    \"side\": \"player\",\n  },\n]\n\n \u276f src/engine/effects/primitives/contracts/when-removes-enemy-trigger.contracts.ts:25:27\n     23|     if (result.kind !== \"done\") throw new Error(\"resolution suspended\"\u2026\n     24|     expect(result.state.instances[ids.enemy.back[0]!].zone).toBe(\"void\u2026\n     25|     expect(result.events).toContainEqual(expect.objectContaining({\n       |                           ^\n     26|       kind: \"dissolved\", instance: ids.enemy.back[0],\n     27|       removal: { kind: \"effect\", controller: \"player\", victimCost: 5 },\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af"
+  },
+  "failureDisposition": {
+    "focused01": "6 synthetic fixture failures; opponent proactive action, fold pass and exhausted actor fixtures corrected",
+    "focused02": "3 synthetic fixture failures; unresolved neutral stack and Vengeful on winning instead of losing lane corrected",
+    "typecheck01": "Own readonly fixture config/owner assignments corrected via immutable reconstruction",
+    "review01": "types/lint/cycles passed;10 tests failed/5308 passed. Exact optional event assertions in3 existing paths and classifier callable stubs in1 existing fixture admitted and corrected; partial result is not an aggregate pass",
+    "matcher-negative01": "12 failures/6 passes with only removal matcher disabled; source restored byte-exact",
+    "challenge-player01": "Staged fixture rejected before gameplay: public setup conflicts with nextBattle startingEnergy; turn4 also requires active second side. Narrow fixture amendment requested before further write.",
+    "challenge-player02": "Actual Challenge/source/1+1=2/geometry/caps/log/capture passed before reload; whole flow failed because driver expected transient probe event history after reload. Corrected only ignored observer to validate saved game/battle/membership/score and persisted trigger count.",
+    "challenge-enemy02": "Initial lab readiness timeout before gameplay at actual load15.56\u219226.83; unchanged rerun enemy03 passed. No feature verdict from failed bootstrap."
+  },
+  "matcherRestoration": {
+    "originalSHA256": "439c2aa566b9e40e095cb03cecf0b9121ba266977876e2c4bed5b30373f6cdaf",
+    "mutantSHA256": "b9f5a20829d9b2cd64bc9ddb925cfb4450c4ba187f1c48cbd9fbcff2c2426602",
+    "restoredSHA256": "439c2aa566b9e40e095cb03cecf0b9121ba266977876e2c4bed5b30373f6cdaf",
+    "equal": true
+  },
+  "functionalFreeze": {
+    "observedAfterFirstStagedRunner": true,
+    "paths": 2310,
+    "initialObservedChangedSubset": 23,
+    "untouchedTrackedBaseMatches": 2287,
+    "untouchedTrackedBaseMismatches": [],
+    "qualification": "Whole-tree observation after first failed staged runner; initial pre-QA observation covered only23 modified/untracked functional paths. Untouched tracked paths compared separately to immutable base.",
+    "manifestDigests": {
+      "229-functional-before-qa.json": "48f4cd5bfbfedb71d4e9bc8b84cdcd1450df611133bc9b07d7002c15c4ffd3b9",
+      "229-functional-whole-before-next-qa.json": "4633109302ab289007f0a46edea7c851f0e28983be9ae04f460aca863536cc54",
+      "229-functional-served-qa.json": "9a50cee3fcb11a4b65907322ca7de872e388795d34ce0658ffac3311f4ef44df"
+    },
+    "modifiedSourceHashes": {
+      "scripts/content-inventory.test.ts": "6ae072702bc7bad4e0535c4def0a459100590114e6a2b47e88b0cb4e599f0a16",
+      "scripts/content-inventory.ts": "c9a06da340ce5a1c025af451bc192562e17d76705608b050aa9afba411ba95d5",
+      "src/content/dreamsigns/piranha-6b51e477.ts": "3fd679b666bbad8c9267ae817bb810faea0f881e4721dcaae8656b735c16adb8",
+      "src/content/specs/cards-65.scenarios.ts": "5a8613be8f23f3041fe55fb3a7007820992c3ded7f2b69f3809e21ff720130b3",
+      "src/engine/dsl/triggers.ts": "2f8798ca037001728764b6a21d2a5d558a28487a032f9368b97cd9a7978e3f4a",
+      "src/engine/dsl/types.ts": "4171c765b204141c714e8ef0333d2dcf21d69a1026e18dc0f2629cb7c3894440",
+      "src/engine/effects/primitives/banish-cards.ts": "e324099c0eeb5f81a11e94fccf513ae5cb8a6b7e7928a7854116bd081ded7a05",
+      "src/engine/effects/primitives/banish-until.ts": "8b52b474411c2341955828230c6754afc98d8998b498630256c0bf98eeed1875",
+      "src/engine/effects/primitives/banish.ts": "c0331f768269fa8dee2cb0cd61768e177a1a38729bb7b71c3c5f70bf698a504e",
+      "src/engine/effects/primitives/contracts/resolving-activation-x.contracts.ts": "08a554a3d08c769c9b79d6cba171850d487d1e2d0509e79afe8e1c9d62272c7d",
+      "src/engine/effects/primitives/contracts/when-removes-enemy-trigger.contracts.ts": "571bc7afe9f4475113e0b9bc6b74cea39bff57dc1786fd80bc8a7198de4d91af",
+      "src/engine/effects/primitives/phase.ts": "5fa72169e6c10c155827595ebc56c8a104635b40f48e964c81de78350ac22c8f",
+      "src/engine/effects/primitives/put-in-deck.ts": "1b2940eca78ce53b0b1bb15aeaf03a797583700a94fe32dc44dcfb35d8421ad2",
+      "src/engine/effects/primitives/return-to-hand.ts": "b4175ad197d8853523ffa5f748f897dfe66baf79e3c779945a6be3fd8357a0d3",
+      "src/engine/events/kinds/banished.ts": "126f3d32550df718be47e586d42a0e648950b36ea9e89dd56ec880289fe63b3c",
+      "src/engine/events/kinds/ceased-to-exist.ts": "88368c0be6c07f8b953ca1c7db257670be6dfad79a5bd967da8f9ab58829f9ac",
+      "src/engine/events/kinds/dissolved.ts": "b1b5e757c2bdfc70f497da8ecb0d6c0922d1a31ca467a0aa07cc433fdbd41191",
+      "src/engine/events/types.ts": "052b1dff979cae0c8d7c2da520c23b20b1abfa9042a6e4d322ac1496e7c0f0a1",
+      "src/engine/rules/challenge.ts": "86a4bf1ca7a03c9affb18a50ff4c326ae4a06067dc41568b1a86e39a0855e273",
+      "src/engine/rules/zones.ts": "1da0713ec28cab60bfa1a3609e368fdb50b82e41c08d858d601895badc73c2a5",
+      "src/engine/testing/emblem-lab.ts": "df2890dec6bf5b67e174b3efcb9b617cd28763f84c0652be15031e7288662da2",
+      "src/engine/triggers/matcher.ts": "439c2aa566b9e40e095cb03cecf0b9121ba266977876e2c4bed5b30373f6cdaf",
+      "src/engine/triggers/triggers-dissolved.test.ts": "5fa9137dba2c6ae754122778c232d64139b31cdd94c71319e7208b0d8d8bcb53"
+    }
+  },
+  "fuzz": {
+    "productionPiranha": {
+      "games": 300,
+      "failures": 0,
+      "steps": 130490,
+      "prompts": 6420,
+      "interactiveReruns": 731,
+      "included": 600,
+      "exercised": 2439,
+      "innerWallSeconds": 166.9,
+      "cpuSeconds": 181.4,
+      "environmentQualification": "Actual tool invocation prefixed JOURNEY_TEST_WORKERS=2; older wrapper receipt did not capture environment. Do not infer env from argv alone.",
+      "legalityBounds": {
+        "steps": 0,
+        "prompts": 2
+      }
+    },
+    "syntheticRemoval": {
+      "start": "2026-10-13T01:53:40.351Z",
+      "end": "2026-10-13T01:57:59.304Z",
+      "executionSeconds": 258.956759417,
+      "games": 300,
+      "steps": 134442,
+      "prompts": 6848,
+      "failures": 0,
+      "finalReplays": 300,
+      "interactiveGames": 30,
+      "reruns": 709,
+      "totals": [
+        {
+          "uuid": "5e5e5e5e-0000-4000-8000-000000229201",
+          "included": 600,
+          "exercised": 956,
+          "queued": 959,
+          "resolved": 956,
+          "applied": 956,
+          "controllers": {
+            "player": 482,
+            "enemy": 474
+          }
+        },
+        {
+          "uuid": "5e5e5e5e-0000-4000-8000-000000229202",
+          "included": 600,
+          "exercised": 287,
+          "queued": 296,
+          "resolved": 287,
+          "applied": 287,
+          "controllers": {
+            "player": 155,
+            "enemy": 132
+          }
+        }
+      ],
+      "environment": {
+        "JOURNEY_TEST_WORKERS": "2"
+      },
+      "scope": "Full production pool with two additional authored synthetic Dreamsigns through existing public weighted fuzz API; separate from production Piranha run"
+    },
+    "syntheticCounterQualification": "exercised/resolved count actual triggerResolved events of exact source/member/controller. applied count is event.detail.applied intervening-condition flag, not independently observed numeric points/spark mutation. Created absent actors can resolve without spark; deterministic contracts establish exact rewards. 300 final replays and30 every-tenth interactive games are separate scopes."
+  },
+  "successfulValidation": {
+    "focused04": {
+      "tests": 83,
+      "scope": "18 new removal/scoring contract cases plus existing subject-cost/scoredAmount controls"
+    },
+    "affected05": {
+      "tests": 2766,
+      "files": 4
+    },
+    "review02": {
+      "result": "pass",
+      "innerRelatedSeconds": 59.2,
+      "vitestSeconds": 49.36
+    },
+    "full01": {
+      "result": "pass",
+      "tests": 6319,
+      "files": 362,
+      "innerTestSeconds": 80.2,
+      "vitestSeconds": 79.61,
+      "bundleCheck": "pass; development modules absent",
+      "scope": "Exclusive heavy lock and actual env JOURNEY_TEST_WORKERS=2; outer112.2156s includes acquisition+launch+execution, not isolated queue wait. Host load17.40\u219219.94, not a low-load performance benchmark."
+    }
+  },
+  "qa": {
+    "permanentPreflight": {
+      "pass": 2,
+      "skip": 18,
+      "exercised": false,
+      "scope": "initialization/first-Day progression, not positive scoring witness"
+    },
+    "permanentSweep": {
+      "pass": 2,
+      "skip": 18,
+      "invocation": "invocations/sweep-oFIBP5",
+      "port": 5274,
+      "serverGroup": 86268,
+      "nativeWallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1969,
+        "scenario": 6976.265625,
+        "cleanup": 568.264167,
+        "execution": 9579.916625,
+        "total": 9584.916625
+      }
+    },
+    "stagedFixture": "Only exact Piranha UUID public BattleInit.setup, selected ready1-spark F0, Dayround2turn4, cap energies, empty opposing board. Production decks/catalog/provider/controller preserved. Fixture bytes never committed; restore exact saved permanent bytes before evidence readiness.",
+    "D21": {
+      "byte": 242,
+      "selected": false,
+      "judgedRequired": false,
+      "basis": "No new prompt/status/visual kind. Changed workflow still requires real challenge, caps, state, persisted UUID logs, reload and DOM geometry."
+    },
+    "temporaryServedHashes": {
+      "paths": 2310,
+      "temporaryServedEmblemHash": "2cd8ab73482a8bb060f1a1213d5f687331a81880ba909e5e0ace1867b731ab4c",
+      "originalRestoreEmblemHash": "df2890dec6bf5b67e174b3efcb9b617cd28763f84c0652be15031e7288662da2"
+    },
+    "restoration": {
+      "restoredEmblemHash": "df2890dec6bf5b67e174b3efcb9b617cd28763f84c0652be15031e7288662da2",
+      "wholeFunctionalPaths": 2310,
+      "wholeMismatches": [],
+      "initialChangedSubsetPaths": 23,
+      "initialSubsetMismatches": [],
+      "finalRunnersTerminal": {
+        "player04": 0,
+        "enemy03": 0
+      },
+      "sourceFreeze": "All runtimes terminal and native close drains awaited before this source restoration"
+    },
+    "runtimeDrain": {
+      "result": "All own runners reached terminal; awaited native close completes provider/browser/client and ownership clear, builder/server group stop, log descriptor/handlers/startup/browser/evidence locks release. No cleanup errors; own server ports free before source commands.",
+      "servers": {
+        "sweep01": {
+          "group": 86268,
+          "port": 5274
+        },
+        "challenge-player01": {
+          "group": 89207,
+          "port": 5274
+        },
+        "challenge-player02": {
+          "group": 96537,
+          "port": 5174
+        },
+        "challenge-player03": {
+          "group": 98240,
+          "port": 5174
+        },
+        "challenge-enemy01": {
+          "group": 99517,
+          "port": 5274
+        },
+        "challenge-player04": {
+          "group": 3064,
+          "port": 5274
+        },
+        "challenge-enemy02": {
+          "group": 57012,
+          "port": 5274
+        },
+        "challenge-enemy03": {
+          "group": 12701,
+          "port": 5274
+        }
+      }
+    },
+    "finalNativeFlows": [
+      {
+        "invocation": "run-X384M5",
+        "ok": true,
+        "hostLoad": 3.18701171875,
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 1667,
+          "scenario": 54508,
+          "total": 56234
+        },
+        "cells": {
+          "desktop": {
+            "side": "player",
+            "sourceUUID": "6b51e477-352c-489b-8d5f-049bc378fde9",
+            "instance": "i1",
+            "gameId": "3yapnn",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "laneScore": 1,
+            "effectAmount": 1,
+            "score": 2,
+            "queued": 1,
+            "resolved": 1,
+            "geometry": {
+              "id": "i1",
+              "slot": "F0",
+              "rank": "player-front",
+              "x": 301.25,
+              "y": 390,
+              "width": 89.5,
+              "height": 89.5,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              }
+            },
+            "rendered": {
+              "points": 2,
+              "owner": "player",
+              "announcements": 0
+            },
+            "reloaded": {
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "uuid": "6b51e477-352c-489b-8d5f-049bc378fde9",
+              "side": "player",
+              "score": 2,
+              "resolved": [],
+              "queued": [],
+              "lanes": [],
+              "points": [],
+              "inFlight": false,
+              "pending": null,
+              "stack": 0,
+              "triggerQueue": 0
+            },
+            "reloadedLog": {
+              "gameId": "3yapnn",
+              "triggers": 1,
+              "rows": 47
+            },
+            "caps": 0
+          },
+          "mobile": {
+            "side": "player",
+            "sourceUUID": "6b51e477-352c-489b-8d5f-049bc378fde9",
+            "instance": "i1",
+            "gameId": "e9s2tw",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "laneScore": 1,
+            "effectAmount": 1,
+            "score": 2,
+            "queued": 1,
+            "resolved": 1,
+            "geometry": {
+              "id": "i1",
+              "slot": "F0",
+              "rank": "player-front",
+              "x": 52.328125,
+              "y": 358.03125,
+              "width": 53.859375,
+              "height": 53.859375,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              }
+            },
+            "rendered": {
+              "points": 2,
+              "owner": "player",
+              "announcements": 0
+            },
+            "reloaded": {
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "uuid": "6b51e477-352c-489b-8d5f-049bc378fde9",
+              "side": "player",
+              "score": 2,
+              "resolved": [],
+              "queued": [],
+              "lanes": [],
+              "points": [],
+              "inFlight": false,
+              "pending": null,
+              "stack": 0,
+              "triggerQueue": 0
+            },
+            "reloadedLog": {
+              "gameId": "e9s2tw",
+              "triggers": 1,
+              "rows": 46
+            },
+            "caps": 0
+          }
+        },
+        "captures": [
+          {
+            "filename": "piranha-player-desktop.png",
+            "invocation": "run-X384M5",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "filename": "piranha-player-mobile.png",
+            "invocation": "run-X384M5",
+            "width": 390,
+            "height": 844
+          }
+        ]
+      },
+      {
+        "invocation": "run-GTtTfR",
+        "ok": true,
+        "hostLoad": 19.43603515625,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1366,
+          "scenario": 18077,
+          "total": 19506
+        },
+        "cells": {
+          "desktop": {
+            "side": "enemy",
+            "sourceUUID": "6b51e477-352c-489b-8d5f-049bc378fde9",
+            "instance": "i26",
+            "gameId": "7jivvk",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "laneScore": 1,
+            "effectAmount": 1,
+            "score": 2,
+            "queued": 1,
+            "resolved": 1,
+            "geometry": {
+              "id": "i26",
+              "slot": "F0",
+              "rank": "enemy-front",
+              "x": 301.25,
+              "y": 276.5,
+              "width": 89.5,
+              "height": 89.5,
+              "hit": true,
+              "viewport": {
+                "width": 1440,
+                "height": 900
+              }
+            },
+            "rendered": {
+              "points": 2,
+              "owner": "enemy",
+              "announcements": 0
+            },
+            "reloaded": {
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "uuid": "6b51e477-352c-489b-8d5f-049bc378fde9",
+              "side": "enemy",
+              "score": 2,
+              "resolved": [],
+              "queued": [],
+              "lanes": [],
+              "points": [],
+              "inFlight": false,
+              "pending": null,
+              "stack": 0,
+              "triggerQueue": 0
+            },
+            "reloadedLog": {
+              "gameId": "7jivvk",
+              "triggers": 1,
+              "rows": 39
+            },
+            "caps": 0
+          },
+          "mobile": {
+            "side": "enemy",
+            "sourceUUID": "6b51e477-352c-489b-8d5f-049bc378fde9",
+            "instance": "i26",
+            "gameId": "cdt9kq",
+            "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+            "laneScore": 1,
+            "effectAmount": 1,
+            "score": 2,
+            "queued": 1,
+            "resolved": 1,
+            "geometry": {
+              "id": "i26",
+              "slot": "F0",
+              "rank": "enemy-front",
+              "x": 52.328125,
+              "y": 280.171875,
+              "width": 53.859375,
+              "height": 53.859375,
+              "hit": true,
+              "viewport": {
+                "width": 390,
+                "height": 844
+              }
+            },
+            "rendered": {
+              "points": 2,
+              "owner": "enemy",
+              "announcements": 0
+            },
+            "reloaded": {
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "uuid": "6b51e477-352c-489b-8d5f-049bc378fde9",
+              "side": "enemy",
+              "score": 2,
+              "resolved": [],
+              "queued": [],
+              "lanes": [],
+              "points": [],
+              "inFlight": false,
+              "pending": null,
+              "stack": 0,
+              "triggerQueue": 0
+            },
+            "reloadedLog": {
+              "gameId": "cdt9kq",
+              "triggers": 1,
+              "rows": 39
+            },
+            "caps": 0
+          }
+        },
+        "captures": [
+          {
+            "filename": "piranha-enemy-desktop.png",
+            "invocation": "run-GTtTfR",
+            "width": 1440,
+            "height": 900
+          },
+          {
+            "filename": "piranha-enemy-mobile.png",
+            "invocation": "run-GTtTfR",
+            "width": 390,
+            "height": 844
+          }
+        ]
+      }
+    ],
+    "visualScope": "Four final captures visibly show selected side2/10 and scorer F0 geometry. Existing hover/circular overlays are visible; no-radial-announcement is a specific DOM observation, not a claim that all visual animation is absent. No layout redesign.",
+    "parentRestoration": {
+      "at": "2026-10-13T02:19:03.541549+00:00",
+      "scope": "Parent observed whole functional manifest after final runtime drain and restoration",
+      "paths": 2310,
+      "mismatches": []
+    },
+    "parentVisualInspection": {
+      "bead": "hv-umm2.229",
+      "observedAt": "2026-10-13T02:18:33.262742+00:00",
+      "capturesActuallyInspected": [
+        {
+          "filename": "piranha-player-desktop.png",
+          "invocation": "run-X384M5"
+        },
+        {
+          "filename": "piranha-player-mobile.png",
+          "invocation": "run-X384M5"
+        },
+        {
+          "filename": "piranha-enemy-desktop.png",
+          "invocation": "run-GTtTfR"
+        },
+        {
+          "filename": "piranha-enemy-mobile.png",
+          "invocation": "run-GTtTfR"
+        }
+      ],
+      "observation": "Both selected controllers visibly show 2/10 on desktop and mobile after an actual Challenge. F0 card and changed interaction state are visible. Player mobile includes an existing hover card overlay; enemy mobile includes an existing empty circular presentation overlay. The screenshots do not independently prove no remaining animation. Native receipts separately prove DOM geometry, Caps empty, game/battle UUID membership and score2 after reload and one retained trigger resolution. No UI source was changed."
+    }
+  },
+  "contracts": {
+    "publicOutcomes": "Default victim vs challenge actor cost; cost-modified actor3 vs victim5 distinct payment2; actual copies/tie/Vengeful/created cessation; Reclaim dissolve/return/deck outcome; delayed banish/controller transfer; Veil/ally/cleanup/pile/plain-return negatives; both viewers/private-source privacy; reload/fair-view/determinization; once/turn, rollback, suspended prompt, duplicate/stale answer, stale target, source-copy scoring composition.",
+    "serialization": "Provenance transient departure event metadata; queued subject/captured cost existing validators/save/fairview/determinization unchanged; confirmed public IDs only, view subject null after cease retains public scalar; engine.trigger already records source/controller/subject/captured cost."
+  },
+  "rulesDecisions": [
+    "RD-hv-umm2.229-1",
+    "RD-hv-umm2.229-2"
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review02 wrapper start one-minute os.getloadavg value"
+      },
+      "implementWindow": {
+        "qualification": "Conservative original before-dispatch gross start; endpoint sampled only after final staged readiness admission."
+      }
+    }
+  },
+  "timingQualification": "Actual wrapper clocks use time.time before/after and monotonic duration. Outer heavy scopes include lock acquisition+launch+execution; no invented queue timing or aggregate. All unsuccessful attempts retained.",
+  "testDelta": {
+    "files": 1,
+    "lines": 339,
+    "jsdomFiles": 0
+  },
+  "testChangeScope": {
+    "touchedFiles": 5,
+    "grossAddedLines": 342,
+    "grossDeletedLines": 3,
+    "grossChangedLines": 345,
+    "newPlainContractLines": 336,
+    "caseCount": 18,
+    "newJsdomFiles": 0
+  },
+  "frictionQualification": {
+    "tag": "plan-brief-mismatch",
+    "minutes": 21.66803348333333,
+    "scope": "Conservative original start to first ParentWRITEACK elapsed Stage1 window; includes source/rules audit, refinements and admission, not isolated productive time or proof that all time was caused by mismatch. Filed removal primitive scope and actual Piranha scoring text required classifier/ruling/causal-route audit."
+  },
+  "ownWarnings": "Synthetic test asset cache emits missing local art warnings in review preparation; successful checks/native QA use their documented materializations. No unresolved in-scope defect identified.",
+  "finalPaths": [
+    "docs/plan/evidence/content-inventory.json",
+    "docs/plan/evidence/friction/hv-umm2.229.json",
+    "docs/plan/evidence/measurements/hv-umm2.229.json",
+    "docs/plan/evidence/qa-ledger/hv-umm2.229.jsonl",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.229-1.md",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.229-2.md",
+    "docs/rules.md",
+    "scripts/content-inventory.test.ts",
+    "scripts/content-inventory.ts",
+    "src/content/dreamsigns/piranha-6b51e477.ts",
+    "src/content/specs/cards-65.scenarios.ts",
+    "src/engine/dsl/triggers.ts",
+    "src/engine/dsl/types.ts",
+    "src/engine/effects/primitives/banish-cards.ts",
+    "src/engine/effects/primitives/banish-until.ts",
+    "src/engine/effects/primitives/banish.ts",
+    "src/engine/effects/primitives/contracts/resolving-activation-x.contracts.ts",
+    "src/engine/effects/primitives/contracts/when-removes-enemy-trigger.contracts.ts",
+    "src/engine/effects/primitives/phase.ts",
+    "src/engine/effects/primitives/put-in-deck.ts",
+    "src/engine/effects/primitives/return-to-hand.ts",
+    "src/engine/events/kinds/banished.ts",
+    "src/engine/events/kinds/ceased-to-exist.ts",
+    "src/engine/events/kinds/dissolved.ts",
+    "src/engine/events/types.ts",
+    "src/engine/rules/challenge.ts",
+    "src/engine/rules/zones.ts",
+    "src/engine/triggers/matcher.ts",
+    "src/engine/triggers/triggers-dissolved.test.ts"
+  ],
+  "coreReviewFivePaths": [
+    {
+      "path": "error response",
+      "contractFile": "src/engine/effects/primitives/contracts/when-removes-enemy-trigger.contracts.ts",
+      "test": "rolls back an error after removal and safely replays a suspended partial resolution with stale competing answers rejected",
+      "line": 247,
+      "observable": "A real resolveTop removes the enemy then raises gainAdditionalSpark definition error. Original input state hash remains identical and victim stays in play, proving rollback rather than partially published removal/reward.",
+      "inapplicable": "External request/error response is not part of this synchronous engine trigger; public engine error path is applicable."
+    },
+    {
+      "path": "timeout or partial completion",
+      "contractFile": "src/engine/effects/primitives/contracts/when-removes-enemy-trigger.contracts.ts",
+      "test": "rolls back an error after removal and safely replays a suspended partial resolution with stale competing answers rejected",
+      "line": 247,
+      "observable": "Actual dissolve then discard suspends with INTERACTIVE; original state hash remains unchanged. Fold creates real pending target/discard prompts and retains inFlight through JSON cold load until authorized answer completes exactly one reward.",
+      "inapplicable": "No timer/network/worker budget is introduced in synchronous matching or effect execution, so time-based timeout subcase is inapplicable. Real partial prompt completion is covered."
+    },
+    {
+      "path": "replay or reload",
+      "contractFile": "src/engine/effects/primitives/contracts/when-removes-enemy-trigger.contracts.ts",
+      "test": "retains a delayed captured banishment's creating controller after control changes and cold reload",
+      "line": 224,
+      "observable": "serializeState/deserializeState then public passUntil produces exactly equal events and stateHash to uninterrupted execution, awards one point to captured creating controller after control changes.",
+      "additionalTests": [
+        "captures victim 5\u25cf and deck-modified actor 3\u25cf separately across tie/Vengeful cessation and reload for %s",
+        "rolls back an error after removal and safely replays a suspended partial resolution with stale competing answers rejected"
+      ],
+      "additionalObservable": "Created/ceased actor-victim cost snapshots, both public viewers and deterministic state equivalence survive cold reload; suspended fold prompt cold load finishes once. Native both-side/viewport saved game reload retains membership/score2/trigger record1."
+    },
+    {
+      "path": "invalid or stale input",
+      "contractFile": "src/engine/effects/primitives/contracts/when-removes-enemy-trigger.contracts.ts",
+      "test": "rejects a target that left play in response without attributing the stale attempted dissolve",
+      "line": 272,
+      "observable": "Actual opposing response returns target before original effect; original resolve reports noLegalTarget and no removal trigger/score.",
+      "additionalTest": "rolls back an error after removal and safely replays a suspended partial resolution with stale competing answers rejected",
+      "additionalObservable": "Foreign-side prompt answer bounces notYourPrompt; duplicate already-completed answer bounces noPendingPrompt without a second reward."
+    },
+    {
+      "path": "concurrent actors",
+      "contractFile": "src/engine/effects/primitives/contracts/when-removes-enemy-trigger.contracts.ts",
+      "test": "rolls back an error after removal and safely replays a suspended partial resolution with stale competing answers rejected",
+      "line": 247,
+      "observable": "Two sides submit against the same actual suspended prompt: enemy answer bounces notYourPrompt, authorized player completion commits one removal/reward, and replayed competing stale completion bounces noPendingPrompt. Fold serializes authoritative intents; no shared async writer added.",
+      "additionalTest": "uses once-per-turn allowances for each source and renews them at the next turn",
+      "additionalObservable": "Two independent emblems observe two enemies in same resolving sweep, enqueue once per source and award2; ally does not consume allowances, next turn renews.",
+      "inapplicable": "Parallel threads mutating a shared BattleState are outside this synchronous fold API; public competing-intent serialization is the applicable concurrency contract."
+    }
+  ],
+  "implementWindow": {
+    "start": "2026-10-13T01:04:57.422800Z",
+    "end": "2026-10-13T02:22:59.795654+00:00"
+  },
+  "implementMin": 78.03954756666667,
+  "endpointObservation": {
+    "at": "2026-10-13T02:22:59.795654+00:00",
+    "scope": "Final metadata endpoint sampled after parent staged-readiness ACK immediately before own schema/staged checks and one commit; actual commit before/after clock receipt retained outside worktree. Conservative before-dispatch start retained; no model-start/CPU attribution."
+  }
+}

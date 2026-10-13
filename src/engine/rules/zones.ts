@@ -18,7 +18,8 @@ import { effectiveSpark } from "./spark";
 import type { BattleState, CardInstance, EffectChoices, FloatingEffect, Printing } from "../state/types";
 import type { Variant } from "../dsl/types";
 import type { EngineCatalog } from "../catalog";
-import { characteristics } from "../continuous/characteristics";
+import { characteristics, copiableCostOf } from "../continuous/characteristics";
+import type { ChallengeRemovalCause, RemovalProvenance } from "../events/types";
 import type { Layers } from "../continuous/layers";
 import { freshStatus } from "../state/create";
 import type { StepContext } from "../steps/types";
@@ -404,7 +405,7 @@ export function createInPlay(ctx: StepContext, printing: Printing, side: Side, v
 export function ceaseToExist(
   ctx: StepContext,
   id: InstanceId,
-  options: { readonly dissolved?: boolean; readonly abandoned?: boolean; readonly silent?: boolean } = {},
+  options: { readonly dissolved?: boolean; readonly abandoned?: boolean; readonly silent?: boolean; readonly removal?: RemovalProvenance; readonly banishedBy?: RemovalProvenance } = {},
 ): void {
   const { state } = ctx;
   const instance = instanceOf(state, id);
@@ -419,14 +420,29 @@ export function ceaseToExist(
     depart(ctx, instance, null);
   }
   if (options.abandoned === true) ctx.emit({ kind: "abandoned", instance: id, side });
-  if (options.dissolved === true) ctx.emit({ kind: "dissolved", instance: id, side });
+  if (options.dissolved === true) ctx.emit({ kind: "dissolved", instance: id, side, ...(options.removal === undefined ? {} : { removal: options.removal }) });
   detach(state, instance);
   state.instances = Object.fromEntries(
     Object.entries(state.instances).filter(([key]) => key !== id),
   );
   endChangesTo(ctx, id);
   forgetCeased(ctx, id);
-  ctx.emit({ kind: "ceasedToExist", instance: id, side, from });
+  ctx.emit({ kind: "ceasedToExist", instance: id, side, from, ...(options.banishedBy === undefined ? {} : { banishedBy: options.banishedBy }) });
+}
+
+/** Captures an opposing in-play character before movement; callers announce this only for a confirmed dissolve or banishment. */
+export function captureEnemyRemoval(
+  ctx: StepContext,
+  id: InstanceId,
+  by: Side | null,
+  challenge?: ChallengeRemovalCause,
+): RemovalProvenance | undefined {
+  const instance = instanceOf(ctx.state, id);
+  const controller = challenge?.controller ?? by;
+  if (instance.zone !== "play" || controller === null || instance.controller === controller) return undefined;
+  const victimCost = copiableCostOf(ctx.state, ctx.catalog, id);
+  return challenge === undefined ? { kind: "effect", controller, victimCost }
+    : { kind: "challenge", ...challenge, victimCost };
 }
 
 /**
@@ -440,12 +456,12 @@ export function ceaseToExist(
  * character is announced as abandoned once it has left play, before
  * `dissolved` (rules § Abandon).
  */
-export function dissolve(ctx: StepContext, id: InstanceId, by: Side | null, abandoned = false): void {
+export function dissolve(ctx: StepContext, id: InstanceId, by: Side | null, abandoned = false, challenge?: ChallengeRemovalCause): void {
   const { state, catalog } = ctx;
   const instance = instanceOf(state, id);
   const side = instance.controller;
   if (banishedAsReclaimed(state, catalog, instance)) {
-    banish(ctx, id);
+    banish(ctx, id, abandoned ? null : by, abandoned ? undefined : challenge);
     if (abandoned) ctx.emit({ kind: "abandoned", instance: id, side });
     return;
   }
@@ -454,30 +470,37 @@ export function dissolve(ctx: StepContext, id: InstanceId, by: Side | null, aban
     addFloating(ctx, { controller: by, source, expiry: { at: "never" }, change: { kind: "keyword", instance: id, keyword: "veil", gains: false } });
     return;
   }
+  const removal = abandoned ? undefined : captureEnemyRemoval(ctx, id, by, challenge);
   if (instance.status.created) {
-    ceaseToExist(ctx, id, { dissolved: true, abandoned });
+    ceaseToExist(ctx, id, { dissolved: true, abandoned, ...(removal === undefined ? {} : { removal }) });
     return;
   }
   moveInstance(ctx, id, "void");
   if (abandoned) ctx.emit({ kind: "abandoned", instance: id, side });
-  ctx.emit({ kind: "dissolved", instance: id, side });
+  ctx.emit({ kind: "dissolved", instance: id, side, ...(removal === undefined ? {} : { removal }) });
 }
 
 /** Banishes a card, from play or another zone, to its owner's Banished zone; a created card ceases to exist instead. */
-export function banish(ctx: StepContext, id: InstanceId): void {
+export function banish(ctx: StepContext, id: InstanceId, by: Side | null = null, challenge?: ChallengeRemovalCause): void {
   const side = instanceOf(ctx.state, id).controller;
+  const removal = captureEnemyRemoval(ctx, id, by, challenge);
+  if (instanceOf(ctx.state, id).status.created && removal !== undefined) {
+    ceaseToExist(ctx, id, { banishedBy: removal });
+    return;
+  }
   if (moveInstance(ctx, id, "banished") === "banished") {
-    ctx.emit({ kind: "banished", instance: id, side });
+    ctx.emit({ kind: "banished", instance: id, side, ...(removal === undefined ? {} : { removal }) });
   }
 }
 
 /** Returns a card in play to its owner's hand; a created card ceases to exist instead, a reclaimed one is banished. */
-export function returnToHand(ctx: StepContext, id: InstanceId): void {
+export function returnToHand(ctx: StepContext, id: InstanceId, by: Side | null = null): void {
   const instance = instanceOf(ctx.state, id);
   const side = instance.controller;
+  const removal = captureEnemyRemoval(ctx, id, by);
   const went = moveInstance(ctx, id, "hand", "bottom");
   if (went === "hand") ctx.emit({ kind: "returnedToHand", instance: id, side: instance.owner });
-  if (went === "banished") ctx.emit({ kind: "banished", instance: id, side });
+  if (went === "banished") ctx.emit({ kind: "banished", instance: id, side, ...(removal === undefined ? {} : { removal }) });
 }
 
 /**

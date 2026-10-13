@@ -2,6 +2,7 @@ import type { InstanceId, Side } from "../state/ids";
 import { FRONT_RANK_SIZE, opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
+import { copiableCostOf } from "../continuous/characteristics";
 import { gainPoints } from "./resources";
 import { hasKeyword } from "./keywords";
 import { effectiveSpark } from "./spark";
@@ -122,6 +123,8 @@ export function resolveLane(ctx: StepContext, lane: number): void {
     return;
   }
   const blockerSpark = effectiveSpark(state, catalog, blocker);
+  const challengerCause = { controller: instanceOf(state, challenger).controller, character: challenger, characterCost: copiableCostOf(state, catalog, challenger) };
+  const blockerCause = { controller: instanceOf(state, blocker).controller, character: blocker, characterCost: copiableCostOf(state, catalog, blocker) };
   let challengerDissolves = challengerSpark <= blockerSpark;
   let blockerDissolves = blockerSpark <= challengerSpark;
   // Vengeful: a character that loses its challenge dissolves its opponent too.
@@ -151,9 +154,9 @@ export function resolveLane(ctx: StepContext, lane: number): void {
     scored,
   });
   if (challengerDissolves) {
-    dissolve(ctx, challenger, null);
+    dissolve(ctx, challenger, null, false, blockerCause);
   }
   if (blockerDissolves) {
-    dissolve(ctx, blocker, null);
+    dissolve(ctx, blocker, null, false, challengerCause);
   }
 }

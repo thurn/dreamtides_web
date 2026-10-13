@@ -13,7 +13,7 @@ export const banishPrimitive = definePrimitive<BanishNode>({
   op: "banish",
   targets: (node) => characterTarget(node.subject),
   resolve(ctx, node, env) {
-    for (const id of resolveCharacters(ctx, node.subject, env)) banishCharacter(ctx, id);
+    for (const id of resolveCharacters(ctx, node.subject, env)) banishCharacter(ctx, id, env.controller);
   },
 });
 

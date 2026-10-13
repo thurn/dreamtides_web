@@ -258,7 +258,7 @@ describe("resolving activation X contracts", () => {
     expect(result.state.sides[side].currentEnergy).toBe(2);
     expect(result.events).toContainEqual(expect.objectContaining({ kind: "banished", instance: source }));
     expect(result.events).toContainEqual({ kind: "abandoned", instance: own, side });
-    expect(result.events).toContainEqual({ kind: "dissolved", instance: selected, side: other });
+    expect(result.events).toContainEqual(expect.objectContaining({ kind: "dissolved", instance: selected, side: other }));
     expect(result.state.instances[own].zone).toBe("void");
     expect(result.state.instances[selected].zone).toBe("void");
     for (const owner of [side, other]) for (const id of ids[owner].back.slice(1)) expect(result.state.instances[instance(id)].zone).toBe("play");
