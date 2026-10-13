@@ -1582,7 +1582,10 @@ through `resolveCards` (`resolveZoneCards` in `effects/interpreter.ts`):
   `subjectCostHidden: true` without a numeric value or subject alias. A sample
   binds it to compatible sampled card costs and retains viewer concealment.
   When a ceased subject has no compatible sampled record, public compatible
-  printed definitions supply scalar possibilities without a physical alias.
+  printed definitions, visible ordinary-card copiable tuples across both
+  controllers, and publicly dealt deck variants supply scalar possibilities
+  without a physical alias. These tuples use printing and deck modifications,
+  with fresh X at 0, independently of current layers, counters, and auras.
   Opaque-capable branches are draws and non-self created discards in another
   side's hand: board, stack, void, and self occasions expose their subjects at
   matching. Public draw counters exclude

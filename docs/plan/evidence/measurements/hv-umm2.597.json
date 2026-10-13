@@ -1,0 +1,197 @@
+{
+  "bead": "hv-umm2.597",
+  "base": "80b47fa74c23daf006d4afcdf21424b48d6b57c8",
+  "status": "ordinary checks passed; endpoint authorized; final schema and commit receipts follow this metadata",
+  "implementationWindow": {
+    "start": "2026-10-13T00:12:39Z",
+    "end": "2026-10-13T00:23:43.046295Z",
+    "minutes": 11.06743825,
+    "basis": "Conservative whole claim-to-parent-endpoint elapsed proxy including parent setup, research, Stage1, admission/design delays, coordination, expected negatives, checks and waits; not CPU or editing-only time.",
+    "firstHelperObservation": "2026-10-13T00:13:20Z",
+    "parentDispatchPre": "2026-10-13T00:12:53.592840Z",
+    "parentDispatchPost": "2026-10-13T00:13:25.323702Z",
+    "dispatch": "Exact dispatch unknown; these are actual observations.",
+    "writeACK": "2026-10-13T00:19:41.869176Z",
+    "endpointReceipt": "/tmp/dreamtides-executor-01a12e91/597-endpoint-ack.json",
+    "tail": "Endpoint-to-commit tail is measured in597-commit.json and final handoff, separate from this window."
+  },
+  "sourceManifest": {
+    "src/engine/view/determinize.ts": "ef51b9b47e92e26e46d17a1a819d04495a747bc39aa9920937643c1aaac1eab8",
+    "src/engine/effects/primitives/contracts/trigger-subject-cost.contracts.ts": "52d833331c10fca9d0a3b373b6a2a114cd5126a6587db730e3491fa46c053904",
+    "docs/plan/engine-design.md": "d10a240d7c6fea2c7bbec929805b36fe7a9721d466a3282d988b22981fc78ef4",
+    "docs/plan/evidence/pre-existing/hv-umm2.597.md": "09d01018d85138539833ef876f220a1ee833228bf16884dde8e61703dc8879d4"
+  },
+  "footprint": {
+    "productionChurn": 13,
+    "docChurn": 5,
+    "testNetLines": 6,
+    "moduleLines": 435,
+    "newCases": 6,
+    "entrypoints": 0,
+    "jsdom": 0
+  },
+  "apiFallout": "Private restoreHiddenSubjectCosts gains existing Decklists argument; sole determinize caller. No exported API/import additions or lookup definition edits. Existing live holder preference remains, scalar-only historical copiable tuples use catalog definitions, visible ordinary-card records and public dealt variants.",
+  "fiveFailurePaths": {
+    "error": "Existing malformed marker and no-compatible-candidate rejection retained; pure caller view unchanged.",
+    "partialWrite": "New contract clone/roundtrip asserts unchanged input; only newly allocated sampled output changes and no partial output publishes.",
+    "reload": "Existing saved/replayed binding cases and sample-view equality pass; no saved field changes.",
+    "invalidStale": "Existing marker validation remains; no prompt, intent or stale actor protocol added.",
+    "concurrent": "Synchronous local sampling; no shared actor/resource mutation."
+  },
+  "commands": {
+    "stage1": {
+      "pid": 23764,
+      "observer": 23755,
+      "start": "2026-10-13T00:15:04.345127+00:00",
+      "end": "2026-10-13T00:15:05.184035+00:00",
+      "seconds": 0.8388028339977609,
+      "exit": 0,
+      "cmd": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/dreamtides-executor-01a12e91/597-stage1.mts"
+      ]
+    },
+    "focused": {
+      "pid": 33183,
+      "observer": 33174,
+      "start": "2026-10-13T00:20:38.090212+00:00",
+      "end": "2026-10-13T00:20:43.570044+00:00",
+      "seconds": 5.479678833988146,
+      "exit": 0,
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "triggering subject copiable cost"
+      ]
+    },
+    "affected": {
+      "pid": 35279,
+      "observer": 35271,
+      "start": "2026-10-13T00:21:13.472047+00:00",
+      "end": "2026-10-13T00:21:21.411845+00:00",
+      "seconds": 7.939650083004381,
+      "exit": 0,
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/policy/policy.test.ts",
+        "src/engine/policy/catalog-manifest.test.ts"
+      ]
+    },
+    "review": {
+      "pid": 36472,
+      "observer": 36464,
+      "start": "2026-10-13T00:21:33.016886+00:00",
+      "end": "2026-10-13T00:22:12.768037+00:00",
+      "seconds": 39.750688707994414,
+      "exit": 0,
+      "cmd": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    "knip": {
+      "pid": 37751,
+      "observer": 37743,
+      "start": "2026-10-13T00:22:16.696524+00:00",
+      "end": "2026-10-13T00:22:20.778171+00:00",
+      "seconds": 4.081379625000409,
+      "exit": 0,
+      "cmd": [
+        "npm",
+        "run",
+        "knip"
+      ]
+    }
+  },
+  "parentIndependentProof": {
+    "receipt": "/tmp/dreamtides-executor-01a12e91/597-parent-final-probe.json",
+    "pid": 39006,
+    "observer": 38992,
+    "start": "2026-10-13T00:23:17.495744Z",
+    "end": "2026-10-13T00:23:18.027508Z",
+    "seconds": 0.531797,
+    "exit": 0,
+    "outcomes": "Both controllers sampled3/future3; no historical subject alias; opaque marker and public projection retained; input unchanged; no defects or fixture errors."
+  },
+  "baseline": {
+    "receipt": "/tmp/dreamtides-executor-01a12e91/597-stage1.json",
+    "classification": "Diagnostic exit0 confirms two actual modified-copy failures plus two base controls, no fixture errors; not a runtime acceptance pass.",
+    "parentPriorFinding": "592-review-variant-probe.json:14650/14648 exit0/2.579449s00:10:08.826224\u219211.405664; original future3, sampling rejected modified tuple. This precedes the597 claim and is retained as review context."
+  },
+  "correctionWindows": [
+    {
+      "cause": "Parent unsupported friction --phase5 --json invocation, then supported no-argument invocation.",
+      "start": "2026-10-13T00:13:25.345456Z",
+      "end": "2026-10-13T00:13:34.210788Z",
+      "seconds": 8.865332,
+      "failedPid": 20926,
+      "failedObserver": 20897,
+      "failedExit": 2,
+      "failedSeconds": 0.14228,
+      "correctedPid": 21158,
+      "correctedObserver": 21150,
+      "correctedExit": 0,
+      "correctedSeconds": 0.153381
+    }
+  ],
+  "repairWindow": {
+    "start": "2026-10-13T00:15:04.345127+00:00",
+    "functionalEnd": "2026-10-13T00:20:43.570044+00:00",
+    "ordinaryChecksEnd": "2026-10-13T00:22:20.778171+00:00",
+    "basis": "Current-base intended negative through repaired owning focus and required ordinary checks, including parent coordination/admission. No fixture/type/runtime correction failures occurred during implementation."
+  },
+  "observations": [
+    "Stage1 two intended modified failures/two base controls/zero fixture errors.",
+    "No runtime/test/type failures during repair.",
+    "Parent unsupported friction invocation complete8.865332s; other missing paths PID/time unknown.",
+    "Helper metadata glob had no matches; corrected literal read. No product/source effect, command PID/start/end unknown; toolwall0.1s."
+  ],
+  "setup": {
+    "claimPid": 19576,
+    "claimObserver": 19547,
+    "claimSeconds": 0.125562,
+    "claimExit": 0,
+    "worktreePid": 19586,
+    "worktreeObserver": 19583,
+    "worktreeSeconds": 0.644686,
+    "worktreeExit": 0,
+    "installPid": 20008,
+    "installObserver": 19998,
+    "installStart": "2026-10-13T00:12:52.421693Z",
+    "installEnd": "2026-10-13T00:12:54.647908Z",
+    "installSeconds": 2.226227,
+    "installExit": 0,
+    "historicalReviewer": "592 reviewer23986/23981 completed0/565.824268s; prior task, not current owned runtime."
+  },
+  "validation": {
+    "focused": "61 passed/2336 skipped in owning module",
+    "affected": "4files2436tests passed",
+    "review": "94files3901tests plus typecheck/typecheck-node/lint/cycles passed",
+    "knip": "exit0",
+    "scope": "No browser/fuzz/full: bounded private scalar-domain repair; original592 full is prior baseline only. Parent cold Sol and promotion remain pending.",
+    "coverage": "Modified hand/deck copies and unmodified copy controls on both controllers; direct-created historical scalar control preserved; copied tuple uses cost/type/subtype/spark DeckMods plus amplified variant. Existing marker/category/counter/shared-ordinal/multiplicity/legacy/malformed/saved/replay contracts retained. Currenthandcopy cannot produce hand figments; no hypothetical illegal handcopy domain."
+  },
+  "resources": {
+    "proof": "/tmp/dreamtides-executor-01a12e91/597-resources.json",
+    "all10HelperIdsAbsent": true,
+    "serversProvidersLeases": [],
+    "parentProbeTerminal": true
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review parallel validation start at00:21:34.332Z"
+      }
+    }
+  },
+  "cadence": "Current Phase5 six since closed593, not due; native parent corrected an inherited earlier assessment."
+}

@@ -143,13 +143,13 @@ export function determinize(view: BattleView, decklists: Decklists, random: () =
   const state = deal(view, decklists, random, catalog);
   reconcile(state, view, catalog);
   reconcileDisabling(state, view, catalog, random);
-  restoreHiddenSubjectCosts(state, view, catalog, random);
+  restoreHiddenSubjectCosts(state, view, decklists, catalog, random);
   restoreLoop(state, view);
   return state;
 }
 
 /** Samples opaque values, keeping the viewer's original concealment rather than acquiring observations. */
-function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, catalog: EngineCatalog, random: () => number): void {
+function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, decklists: Decklists, catalog: EngineCatalog, random: () => number): void {
   const sharedDraws = new Map<string, number>();
   const assignedDraws = new Map<Side, Set<InstanceId>>();
   const layers = new Layers(state, catalog);
@@ -179,8 +179,13 @@ function restoreHiddenSubjectCosts(state: BattleState, view: BattleView, catalog
       const hidden = compatible.filter(instance => instance.zone === "hand" || instance.zone === "deck");
       const live = (hidden.length === 0 ? compatible : hidden).map(instance => ({ id: instance.id, cost: fixedEnergy(instanceCard(catalog, instance).costs), key: domain.key, side: domain.sides[0] }));
       if (live.length > 0) return live;
-      // A ceased created subject has no sampled physical record. Public compatible printings supply scalar possibilities only.
-      return catalog.cardDefinitions.filter(card => matches(domain.filter, { ...card, allTypes: false, spark: card.spark === "x" ? 0 : card.spark }, fixedEnergy(card.costs)))
+      // Public copiable tuples constrain a ceased copy without identifying its historical original.
+      const historical = [
+        ...catalog.cardDefinitions,
+        ...Object.values(view.instances).filter(instance => instance.printing.kind === "card").map(instance => instanceCard(catalog, instance)),
+        ...SIDES.flatMap(side => decklists[side].map(entry => instanceCard(catalog, { printing: { kind: "card", cardId: entry.cardId }, variant: variantOf(entry) }))),
+      ];
+      return historical.filter(card => matches(domain.filter, { ...card, allTypes: false, spark: card.spark === "x" ? 0 : card.spark }, fixedEnergy(card.costs)))
         .map(card => ({ id: undefined, cost: fixedEnergy(card.costs), key: domain.key, side: domain.sides[0] }));
     });
     const existing = candidates.find(candidate => candidate.key !== undefined && sharedDraws.has(candidate.key));

@@ -1,0 +1,7 @@
+# hv-umm2.597 observations
+
+This bead owns the copied-variant sampling finding from the independent hv-umm2.592 review. Its current-base public Engine probe confirms both controllers: a hidden created copy carries a copiable cost reduction, type change and spark bonus, then ceases on discard; the retained cost resolves correctly in the original game, while historical sampling rejects the compatible copied tuple. Two unmodified-copy controls pass. These intended baseline negatives are separate from setup or invocation errors.
+
+Historical scalar possibilities use compatible public definitions, visible ordinary-card printing/variant tuples and public dealt-deck variants. They establish possible costs without reconstructing an actual historical subject, private alias, printing or observation. Current aura, counter and layer changes are independent of the copied printing and deck modifications. Existing hand-copy creation accepts ordinary card printings; generated figment and figment-copy records do not supply hypothetical hand copies.
+
+No additional confirmed product issue outside this bead's Areas was encountered. Parent entry friction used unsupported flags before the supported invocation; the full correction interval is retained in measurements. One helper metadata read used a shell glob with no matches; the corrected literal search reads the existing schema documentation. These are command invocation observations, with no product or source effect.

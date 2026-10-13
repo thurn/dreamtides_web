@@ -244,15 +244,19 @@ describe("triggering subject copiable cost", () => {
     expect(step(engine, legacy, { kind: "resolveTrigger" }).state.sides[viewer].score).toBe(0);
   });
 
-  it.each(SIDES)("samples compatible historical cost after a hidden created discard for %s", viewer => {
-    const holder = opponent(viewer);
-    const subject: EngineCardDefinition = { ...v.vanilla3, id: syntheticId(0x592001), subtype: "Mage", spark: 2 };
-    const decoy: EngineCardDefinition = { ...subject, id: syntheticId(0x592002), costs: [energy(5)] };
-    const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x592003), abilities: () => [triggered(whenDiscard("opponent", { cardType: "character", subtype: "Mage", costAtLeast: 3, costAtMost: 3, sparkAtLeast: 2, sparkAtMost: 2 }), p.gainPoints(triggerSubjectCost()))] };
-    const create: EngineCardDefinition = { ...v.event0, id: syntheticId(0x592004), abilities: () => [event(p.createCard(subject.id))] };
+  it.each(SIDES.flatMap(viewer => ["created", "handCopy", "modifiedHandCopy", "modifiedDeckCopy"].map(mode => ({ viewer, mode }))))("samples compatible historical cost after $mode for $viewer", ({ viewer, mode }) => {
+    const holder = opponent(viewer), copy = mode !== "created", modified = mode.startsWith("modified"), deckCopy = mode === "modifiedDeckCopy";
+    const cost = copy && !modified ? 5 : 3, subtype = copy && !modified ? "Warrior" : "Mage", spark = copy && !modified ? 1 : 2;
+    const subject: EngineCardDefinition = { ...v.vanilla3, id: syntheticId(0x592001), costs: [energy(copy ? 5 : 3)], subtype: copy ? "Warrior" : "Mage", spark: copy ? 1 : 2 };
+    const decoy: EngineCardDefinition = { ...subject, id: syntheticId(0x592002), costs: [energy(7)] };
+    const mods = { ...NO_DECK_MODS, costReduction: 2, sparkBonus: 1, typeChange: { cardType: "character" as const, subtype: "Mage" as const } };
+    const original = { cardId: subject.id, ...(modified ? { deckMods: mods, amplified: true } : {}) };
+    const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x592003), abilities: () => [triggered(whenDiscard("opponent", { cardType: "character", subtype, costAtLeast: cost, costAtMost: cost, sparkAtLeast: spark, sparkAtMost: spark }), p.gainPoints(triggerSubjectCost()))] };
+    const copied = p.createCopyInHand(everyIn(deckCopy ? "deck" : "hand", {}, { player: "opponent" }));
+    const create: EngineCardDefinition = { ...v.event0, id: syntheticId(0x592004), abilities: () => [event(copy ? (deckCopy ? p.sequence(p.shuffleInto([everyIn("hand", {}, { player: "opponent" })]), copied) : copied) : p.createCard(subject.id))] };
     const discard: EngineCardDefinition = { ...v.event0, id: syntheticId(0x592005), abilities: () => [event(p.discard(1))] };
     const engine = createEngine(testCatalog([subject, decoy, watcher, create, discard]));
-    const initial = boardState(engine.catalog, { active: holder, phase: "day", [viewer]: { back: [watcher.id] }, [holder]: { hand: [create.id, discard.id] } });
+    const initial = boardState(engine.catalog, { active: holder, phase: "day", [viewer]: { back: [watcher.id], hand: copy ? [original] : [] }, [holder]: { hand: [create.id, discard.id] } });
     const state = { ...initial.state, config: { ...initial.state.config, autoAnswerForcedPrompts: false } };
     const cast = step(engine, state, { kind: "play", card: initial.ids[holder].hand[0], from: "hand" });
     const made = step(engine, cast.state, { kind: "resolveTop" });
@@ -262,14 +266,16 @@ describe("triggering subject copiable cost", () => {
     const discarded = step(engine, cast2.state, { kind: "resolveTop" }, [[created.instance]]);
     expect(discarded.state.instances[created.instance]).toBeUndefined();
     const view = engine.view(discarded.state, viewer), before = structuredClone(view);
+    if (deckCopy) expect(view.instances[initial.ids[viewer].hand[0]]).toBeUndefined();
     expect(view.triggerQueue[0]).toMatchObject({ subject: null, subjectCostHidden: true });
     expect(view.triggerQueue[0]).not.toHaveProperty("lastKnownSubjectCost");
-    const lists = { [viewer]: [{ cardId: watcher.id }], [holder]: [create.id, discard.id].map(cardId => ({ cardId })) };
+    expect(step(engine, discarded.state, { kind: "resolveTrigger" }).state.sides[viewer].score).toBe(cost);
+    const lists = { [viewer]: [{ cardId: watcher.id }, ...(copy ? [original] : [])], [holder]: [create.id, discard.id].map(cardId => ({ cardId })) };
     const sample = engine.determinize(view, { player: lists.player, enemy: lists.enemy }, () => 0.99);
     expect(view).toEqual(before);
     expect(comparableView(engine.view(sample, viewer))).toEqual(comparableView(view));
     expect(sample.triggerQueue[0].subject).toBeNull();
-    expect(step(engine, sample, { kind: "resolveTrigger" }).state.sides[viewer].score).toBe(3);
+    expect(step(engine, sample, { kind: "resolveTrigger" }).state.sides[viewer].score).toBe(cost);
   });
 
   it.each(SIDES.flatMap(viewer => [false, true].map(bothDrawn => ({ viewer, bothDrawn }))))("excludes an identified either draw branch for $viewer/bothDrawn=$bothDrawn", ({ viewer, bothDrawn }) => {
