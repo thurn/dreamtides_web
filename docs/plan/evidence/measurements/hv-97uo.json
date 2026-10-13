@@ -1,0 +1,652 @@
+{
+  "bead": "hv-97uo",
+  "base": "57a6d26ddb1d86630822bcf2194ef6c65c05dec9",
+  "dispatch": {
+    "actualNativeSpawn": "2026-10-13T15:46:34.736000+00:00",
+    "modelStart": "unknown"
+  },
+  "endpoint": {
+    "status": "Final precommit source/evidence stamp immediately before schema validation, exact staging, cached diff check and one commit. Actual Git argv/interval/exit/process group and stamp-to-Git gap are retained in the separate immutable terminal handoff; this timestamp is not the Git endpoint. Whole dispatch window includes admission, validation, heavy-slot wait, QA and parent audit waits. Model start unknown.",
+    "at": "2026-10-13T16:27:49.500802+00:00"
+  },
+  "testDelta": {
+    "newTestFiles": 1,
+    "newConfiguredEntrypoints": 1,
+    "newJsdomFiles": 0,
+    "newTestLines": 263,
+    "newCases": 30
+  },
+  "counterfactual": {
+    "originalBodySHA256": "494c4ac6a91517e4d6565d5fced6305b4637aee7adb8b24d7b09b23415b738b7",
+    "testSHA256": "0c8e9360e8b0609dc33e2829bb765ccc6c16a8ff3132e7b7850b8671af0b74d3",
+    "originalActualFailures": 14,
+    "originalActualPasses": 16,
+    "qualification": "Final test source differs only in the secondary Avatar source assertion and an added stale-prompt guard; failing capacity predicates are identical. No identical whole-matrix repetition.",
+    "raw": "focused-original-capacity-v01.stdout/stderr/receipt.json"
+  },
+  "validationReceipts": {
+    "focused-new-capacity-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/figments-stack-capacity.test.ts",
+        "src/engine/rules/figments.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/fold/fold.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-97uo-figment-stack-reservations",
+      "start": "2026-10-13T15:57:34.995768+00:00",
+      "end": "2026-10-13T15:57:46.204224+00:00",
+      "exit": 0,
+      "wallSeconds": 11.208114542008843,
+      "pid": 59567,
+      "pgid": 59567,
+      "load": "{ 11.49 12.53 10.38 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-capacity-stale-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/figments-stack-capacity.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-97uo-figment-stack-reservations",
+      "start": "2026-10-13T15:59:47.976729+00:00",
+      "end": "2026-10-13T15:59:50.968987+00:00",
+      "exit": 0,
+      "wallSeconds": 2.9921387920039706,
+      "pid": 67586,
+      "pgid": 67586,
+      "load": "{ 7.20 10.84 10.03 }",
+      "groupRemainingAtExit": []
+    },
+    "fuzz-v01.receipt.json": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200",
+        "--seed",
+        "hv-97uo"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-97uo-figment-stack-reservations",
+      "start": "2026-10-13T16:04:12.377026+00:00",
+      "end": "2026-10-13T16:08:44.652737+00:00",
+      "exit": 0,
+      "wallSeconds": 272.27202037500683,
+      "pid": 57110,
+      "pgid": 57110,
+      "load": "{ 36.09 18.27 12.92 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-97uo-figment-stack-reservations",
+      "start": "2026-10-13T16:00:22.068549+00:00",
+      "end": "2026-10-13T16:00:25.828956+00:00",
+      "exit": 0,
+      "wallSeconds": 3.760289500001818,
+      "pid": 68718,
+      "pgid": 68718,
+      "load": "{ 5.53 10.03 9.77 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-original-capacity-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/figments-stack-capacity.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-97uo-figment-stack-reservations",
+      "start": "2026-10-13T15:56:20.796712+00:00",
+      "end": "2026-10-13T15:56:25.226822+00:00",
+      "exit": 1,
+      "wallSeconds": 4.4299561670050025,
+      "pid": 17737,
+      "pgid": 17737,
+      "load": "{ 19.36 13.60 10.52 }",
+      "groupRemainingAtExit": []
+    },
+    "full-v01.receipt.json": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-97uo-figment-stack-reservations",
+      "start": "2026-10-13T16:01:40.390761+00:00",
+      "end": "2026-10-13T16:03:37.969413+00:00",
+      "exit": 0,
+      "wallSeconds": 117.57703124999534,
+      "pid": 70431,
+      "pgid": 70431,
+      "load": "{ 3.63 8.40 9.16 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-97uo-figment-stack-reservations",
+      "start": "2026-10-13T15:57:55.625567+00:00",
+      "end": "2026-10-13T15:58:55.785970+00:00",
+      "exit": 0,
+      "wallSeconds": 60.15950133398292,
+      "pid": 60965,
+      "pgid": 60965,
+      "load": "{ 10.44 12.23 10.32 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-new-capacity-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/figments-stack-capacity.test.ts",
+        "src/engine/rules/figments.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/fold/fold.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-97uo-figment-stack-reservations",
+      "start": "2026-10-13T15:56:43.274674+00:00",
+      "end": "2026-10-13T15:56:52.224738+00:00",
+      "exit": 1,
+      "wallSeconds": 8.949870750016998,
+      "pid": 51328,
+      "pgid": 51328,
+      "load": "{ 16.11 13.25 10.46 }",
+      "groupRemainingAtExit": []
+    },
+    "coverage-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-97uo-figment-stack-reservations",
+      "start": "2026-10-13T16:09:17.585308+00:00",
+      "end": "2026-10-13T16:09:22.731256+00:00",
+      "exit": 0,
+      "wallSeconds": 5.145793584000785,
+      "pid": 5381,
+      "pgid": 5381,
+      "load": "{ 9.22 15.32 13.43 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-pre-qa-v01.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-97uo-figment-stack-reservations",
+      "start": "2026-10-13T16:09:45.602190+00:00",
+      "end": "2026-10-13T16:09:45.702696+00:00",
+      "exit": 0,
+      "wallSeconds": 0.10041766602080315,
+      "pid": 7067,
+      "pgid": 7067,
+      "load": "{ 7.61 14.34 13.14 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-controls-v01.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker97uo-20261013/qa-source-guard-v01.py",
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-97uo/figment-capacity.mjs",
+        "--bead",
+        "hv-97uo",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-97uo-figment-stack-reservations",
+      "start": "2026-10-13T16:13:53.743099+00:00",
+      "end": "2026-10-13T16:15:46.220689+00:00",
+      "exit": 0,
+      "wallSeconds": 112.47602883400396,
+      "pid": 14467,
+      "pgid": 14467,
+      "load": "{ 3.63 8.80 11.01 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "heavyQualification": "Command wall time includes lockf capacity wait; retained actual owned process snapshot shows wrapper and descendant elapsed/CPU. No performance claim or model-time inference.",
+  "fuzzQualification": "Canonical200-game run targets existing catalog; new local synthetic fixture inclusion/exercise counts unmeasured, no sampled-form coverage or full pool readiness claim.",
+  "browser": {
+    "status": "PASS; all owned effects settled",
+    "nativeAdmission": "qa-native-ack-v01.stdout",
+    "admissionProof": "qa-admission-proof-v01.json",
+    "sourceGuardManifestSHA256": "7788be407c71a8dbd430926c67db8430692d15d25545c4c60b2e2de6eddea68b",
+    "sourceFilesVerifiedBeforeAndAfter": 4436,
+    "script": "figment-capacity.mjs",
+    "scriptSHA256": "9d868be68372de21f467e4502ebad8c015e76adda32727c8394fbace1990712d",
+    "invocation": "run-82Q0BP",
+    "rawReport": "figment-capacity.result.json",
+    "workflows": [
+      {
+        "viewport": "desktop",
+        "side": "player",
+        "occupied": 9,
+        "created": 0,
+        "capacity": [
+          {
+            "kind": "capacityReached",
+            "side": "player",
+            "instance": null,
+            "missing": 1
+          }
+        ],
+        "played": {
+          "instance": "i10",
+          "card": "90a6a7a0-b739-475e-8379-647741aab423",
+          "zone": "play"
+        },
+        "source": {
+          "instance": "i1",
+          "card": "0a19c54c-7a2e-4614-99c9-2c9142729ebb"
+        },
+        "logGameId": "f2rfyk",
+        "logRows": 35
+      },
+      {
+        "viewport": "desktop",
+        "side": "enemy",
+        "occupied": 9,
+        "created": 0,
+        "capacity": [
+          {
+            "kind": "capacityReached",
+            "side": "enemy",
+            "instance": null,
+            "missing": 1
+          }
+        ],
+        "played": {
+          "instance": "i19",
+          "card": "90a6a7a0-b739-475e-8379-647741aab423",
+          "zone": "play"
+        },
+        "source": {
+          "instance": "i10",
+          "card": "0a19c54c-7a2e-4614-99c9-2c9142729ebb"
+        },
+        "logGameId": "sowi2k",
+        "logRows": 37
+      },
+      {
+        "viewport": "desktop",
+        "side": "player",
+        "occupied": 8,
+        "created": 1,
+        "capacity": [],
+        "played": {
+          "instance": "i9",
+          "card": "90a6a7a0-b739-475e-8379-647741aab423",
+          "zone": "play"
+        },
+        "source": {
+          "instance": "i1",
+          "card": "0a19c54c-7a2e-4614-99c9-2c9142729ebb"
+        },
+        "logGameId": "jufhes",
+        "logRows": 34
+      },
+      {
+        "viewport": "desktop",
+        "side": "enemy",
+        "occupied": 8,
+        "created": 1,
+        "capacity": [],
+        "played": {
+          "instance": "i18",
+          "card": "90a6a7a0-b739-475e-8379-647741aab423",
+          "zone": "play"
+        },
+        "source": {
+          "instance": "i10",
+          "card": "0a19c54c-7a2e-4614-99c9-2c9142729ebb"
+        },
+        "logGameId": "sx7nvu",
+        "logRows": 37
+      },
+      {
+        "viewport": "mobile",
+        "side": "player",
+        "occupied": 9,
+        "created": 0,
+        "capacity": [
+          {
+            "kind": "capacityReached",
+            "side": "player",
+            "instance": null,
+            "missing": 1
+          }
+        ],
+        "played": {
+          "instance": "i10",
+          "card": "90a6a7a0-b739-475e-8379-647741aab423",
+          "zone": "play"
+        },
+        "source": {
+          "instance": "i1",
+          "card": "0a19c54c-7a2e-4614-99c9-2c9142729ebb"
+        },
+        "logGameId": "gums4d",
+        "logRows": 35
+      },
+      {
+        "viewport": "mobile",
+        "side": "enemy",
+        "occupied": 9,
+        "created": 0,
+        "capacity": [
+          {
+            "kind": "capacityReached",
+            "side": "enemy",
+            "instance": null,
+            "missing": 1
+          }
+        ],
+        "played": {
+          "instance": "i19",
+          "card": "90a6a7a0-b739-475e-8379-647741aab423",
+          "zone": "play"
+        },
+        "source": {
+          "instance": "i10",
+          "card": "0a19c54c-7a2e-4614-99c9-2c9142729ebb"
+        },
+        "logGameId": "q5eszh",
+        "logRows": 37
+      },
+      {
+        "viewport": "mobile",
+        "side": "player",
+        "occupied": 8,
+        "created": 1,
+        "capacity": [],
+        "played": {
+          "instance": "i9",
+          "card": "90a6a7a0-b739-475e-8379-647741aab423",
+          "zone": "play"
+        },
+        "source": {
+          "instance": "i1",
+          "card": "0a19c54c-7a2e-4614-99c9-2c9142729ebb"
+        },
+        "logGameId": "8dbe8r",
+        "logRows": 34
+      },
+      {
+        "viewport": "mobile",
+        "side": "enemy",
+        "occupied": 8,
+        "created": 1,
+        "capacity": [],
+        "played": {
+          "instance": "i18",
+          "card": "90a6a7a0-b739-475e-8379-647741aab423",
+          "zone": "play"
+        },
+        "source": {
+          "instance": "i10",
+          "card": "0a19c54c-7a2e-4614-99c9-2c9142729ebb"
+        },
+        "logGameId": "29vgae",
+        "logRows": 37
+      }
+    ],
+    "captures": [
+      {
+        "file": "figment-capacity-enemy-8-desktop.png",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "sha256": "537298822ffdddca27a25d2c7b5eaea9f15738104e551a18824fe258302bcec5"
+      },
+      {
+        "file": "figment-capacity-enemy-8-mobile.png",
+        "pixels": [
+          780,
+          1688
+        ],
+        "sha256": "39a8c34320a866e51cd5b0403daa8c159370bc7e84f6d86bcbf6253fa16d8549"
+      },
+      {
+        "file": "figment-capacity-enemy-9-desktop.png",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "sha256": "8e705dc64f764a8da52692ba8bf930c67232f37f70658468b0f44fe06f9d2d2f"
+      },
+      {
+        "file": "figment-capacity-enemy-9-mobile.png",
+        "pixels": [
+          780,
+          1688
+        ],
+        "sha256": "c35749624fc95aeabaa54f78c6242e34a7324adc0bfd1d90d4fc09a025b5d8dd"
+      },
+      {
+        "file": "figment-capacity-initial-desktop.png",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "sha256": "28e7ee34e86796409c9b5243a2290fecbaa00a482b29e728ddb2818f362550cb"
+      },
+      {
+        "file": "figment-capacity-initial-mobile.png",
+        "pixels": [
+          780,
+          1688
+        ],
+        "sha256": "4d49f6a489a3c5d08b0b4949d506168e50381596ac428c315c1bb87202f3e464"
+      },
+      {
+        "file": "figment-capacity-player-8-desktop.png",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "sha256": "12afc09ee11177edf4422fba1d7b755386fe5b248775f3ee7484f83ce12ed74e"
+      },
+      {
+        "file": "figment-capacity-player-8-mobile.png",
+        "pixels": [
+          780,
+          1688
+        ],
+        "sha256": "6a9cdeb8e5a4667611321f54471f6eec0586f5cfbd17ee5174b2f57f6b97b4dc"
+      },
+      {
+        "file": "figment-capacity-player-9-desktop.png",
+        "pixels": [
+          2880,
+          1800
+        ],
+        "sha256": "6c0c6996fc72a110de01ce2f940ec3523af3b56f78efd6e9bfdd42cf4d24feec"
+      },
+      {
+        "file": "figment-capacity-player-9-mobile.png",
+        "pixels": [
+          780,
+          1688
+        ],
+        "sha256": "9e06898be39d532078d922d50e7e712f6ee12e3480a961d51ee343585879f89f"
+      }
+    ],
+    "completeJSONLExports": {
+      "files": [
+        "figment-capacity-desktop.jsonl",
+        "figment-capacity-mobile.jsonl"
+      ],
+      "rowsEach": 37,
+      "scope": "Only final workflow of each viewport; all eight workflow persisted action/trigger excerpts and observed row counts are retained separately in the result."
+    },
+    "caps": [],
+    "sourceChanges": [],
+    "ownedGroupsLive": [],
+    "rootColdProof": "root-qa-cold-proof-v01.json",
+    "rootColdCaptures": [
+      "figment-capacity-player-9-desktop.png",
+      "figment-capacity-player-9-mobile.png",
+      "figment-capacity-enemy-8-desktop.png"
+    ],
+    "rootColdOutcome": "No actionable presentation issues",
+    "cleanupQualification": "Own runner reported port free during cleanup and both owned groups are gone. Current slot0/server/5174 metadata belongs to foreign hv-umm2.139, admitted after own terminal. Generic global-free assertion in v01 failed because of legitimate foreign reuse; no own resource persists and no foreign resource is touched.",
+    "terminalProof": "qa-terminal-proof-v02.json",
+    "failedGenericAssertionProof": "qa-cleanup-proof-v01.json"
+  },
+  "fuzzObserved": {
+    "games": 200,
+    "steps": 80514,
+    "wallSecondsReported": 162.2,
+    "cpuSecondsReported": 174.3,
+    "prompts": 5476,
+    "interactiveReruns": 561,
+    "bounded": {
+      "legality": 0,
+      "prompts": 7
+    },
+    "failures": 0
+  },
+  "review": {
+    "status": "Required independent core review dispatched by parent after helper terminal/source commit; no self-review success claimed",
+    "temporaryRouting": "Fresh cold read-only gpt-5.6-sol CLI while before2026-10-14T01:00:00Z; normal cross-family route thereafter"
+  },
+  "finalPending": [
+    "One local Conventional Commit with actual terminal receipt",
+    "Parent required independent cold core review and exact Tollgate delivery/closure"
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v01 start 2026-10-13T15:57:55.625567+00:00; outer recorder sysctl launch sample, first load average10.44",
+        "source": "review-v01.receipt.json",
+        "fuzzStartupQualification": "Actual first load average36.09 is retained in fuzz-v01 receipt and hostLoadSamples; it is not the review-start hostLoad field"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "focused-original-capacity-v01",
+      "at": "2026-10-13T15:56:20.796712+00:00",
+      "loadAverage": [
+        19.36,
+        13.6,
+        10.52
+      ],
+      "measuredFor": "Outer recorder startup before launching exact argv; fuzz wall includes heavy-slot wait",
+      "source": "focused-original-capacity-v01.receipt.json"
+    },
+    {
+      "command": "focused-new-capacity-v02",
+      "at": "2026-10-13T15:57:34.995768+00:00",
+      "loadAverage": [
+        11.49,
+        12.53,
+        10.38
+      ],
+      "measuredFor": "Outer recorder startup before launching exact argv; fuzz wall includes heavy-slot wait",
+      "source": "focused-new-capacity-v02.receipt.json"
+    },
+    {
+      "command": "review-v01",
+      "at": "2026-10-13T15:57:55.625567+00:00",
+      "loadAverage": [
+        10.44,
+        12.23,
+        10.32
+      ],
+      "measuredFor": "Outer recorder startup before launching exact argv; fuzz wall includes heavy-slot wait",
+      "source": "review-v01.receipt.json"
+    },
+    {
+      "command": "knip-v01",
+      "at": "2026-10-13T16:00:22.068549+00:00",
+      "loadAverage": [
+        5.53,
+        10.03,
+        9.77
+      ],
+      "measuredFor": "Outer recorder startup before launching exact argv; fuzz wall includes heavy-slot wait",
+      "source": "knip-v01.receipt.json"
+    },
+    {
+      "command": "full-v01",
+      "at": "2026-10-13T16:01:40.390761+00:00",
+      "loadAverage": [
+        3.63,
+        8.4,
+        9.16
+      ],
+      "measuredFor": "Outer recorder startup before launching exact argv; fuzz wall includes heavy-slot wait",
+      "source": "full-v01.receipt.json"
+    },
+    {
+      "command": "fuzz-v01",
+      "at": "2026-10-13T16:04:12.377026+00:00",
+      "loadAverage": [
+        36.09,
+        18.27,
+        12.92
+      ],
+      "measuredFor": "Outer recorder startup before launching exact argv; fuzz wall includes heavy-slot wait",
+      "source": "fuzz-v01.receipt.json"
+    },
+    {
+      "command": "coverage-v01",
+      "at": "2026-10-13T16:09:17.585308+00:00",
+      "loadAverage": [
+        9.22,
+        15.32,
+        13.43
+      ],
+      "measuredFor": "Outer recorder startup before launching exact argv; fuzz wall includes heavy-slot wait",
+      "source": "coverage-v01.receipt.json"
+    },
+    {
+      "command": "qa-controls-v01",
+      "at": "2026-10-13T16:13:53.743099+00:00",
+      "loadAverage": [
+        3.63,
+        8.8,
+        11.01
+      ],
+      "measuredFor": "Outer recorder startup before launching exact argv; fuzz wall includes heavy-slot wait",
+      "source": "qa-controls-v01.receipt.json"
+    }
+  ],
+  "stage3Authority": {
+    "nativeAck": "stage3-native-ack-v01.stdout",
+    "parentAudit": "root-audit-v01.json",
+    "runtimeSourceSHA256": "147c62502412376520d47daef263ff3e6aeb0bca10b11e01d13f979f2f94c2b5",
+    "testSHA256": "a04ba95b9e824f91b5c20e958a0d3c067ce82b1cb38eba086936047a48e9c98d",
+    "qualification": "Parent verified baseline capacity predicates identical and full QA evidence/resource settlement; final changes are measurement normalization and endpoint only."
+  }
+}

@@ -9,7 +9,8 @@ import type { Variant } from "../dsl/types";
 import type { InstanceId, Side } from "../state/ids";
 import type { BattleState, CardInstance, Printing } from "../state/types";
 import type { StepContext } from "../steps/types";
-import { ceaseToExist, createInPlay, instanceOf, isFigment, leftmostOpenBackSlot, openBackSlots } from "./zones";
+import { freeBackSlotsAfterStack } from "./timing";
+import { ceaseToExist, createInPlay, instanceOf, isFigment, leftmostOpenBackSlot } from "./zones";
 
 /** A figment printing's base spark: the spark its text gave it, or a figment copy's copied base spark. */
 function baseSparkOf(catalog: EngineCatalog, printing: Printing): number {
@@ -27,15 +28,16 @@ function withSpark(printing: Printing, spark: number): Printing {
 /**
  * Materializes `count` figments of one identity under `side`, one group of an
  * effect's output (rules § Creating Figments at Capacity). They fill the open
- * back-rank positions left to right. If all fit, each keeps its spark;
+ * back-rank positions left to right, preserving positions reserved by its
+ * pending played characters. If all fit, each keeps its spark;
  * otherwise the group's total spark is divided as evenly as possible among
  * those that fit, the remainder going left to right. Figments already in play
- * are never merged into. With no open position, none is created. Returns the
+ * are never merged into. With no unreserved position, none is created. Returns the
  * created figments. `awakened` makes those figments ready as they enter.
  */
 export function createFigments(ctx: StepContext, side: Side, printing: Printing, variant: Variant, count: number, awakened = false): InstanceId[] {
   if (count <= 0) return [];
-  const fit = Math.min(count, openBackSlots(ctx.state, side));
+  const fit = Math.min(count, Math.max(0, freeBackSlotsAfterStack(ctx.state, ctx.catalog, side)));
   if (fit < count) ctx.emit({ kind: "capacityReached", side, instance: null, missing: count - fit });
   const total = baseSparkOf(ctx.catalog, printing) * count;
   const created: InstanceId[] = [];

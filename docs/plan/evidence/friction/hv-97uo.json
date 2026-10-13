@@ -1,0 +1,36 @@
+{
+  "bead": "hv-97uo",
+  "phase": 5,
+  "implementMin": 41.246080033333335,
+  "implementWindow": {
+    "start": "2026-10-13T15:46:34.736000+00:00",
+    "end": "2026-10-13T16:27:49.500802+00:00"
+  },
+  "localValidationS": {
+    "focused": 11.208114542008843,
+    "review": 60.15950133398292,
+    "knip": 3.760289500001818,
+    "full": 117.57703124999534,
+    "fuzz": 272.27202037500683,
+    "coverage": 5.145793584000785,
+    "browser": 112.47602883400396
+  },
+  "hostLoad": 10.44,
+  "testDelta": {
+    "files": 1,
+    "lines": 263,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "test-fixture-setup",
+      "minutes": 0.8996581,
+      "note": "An own secondary Avatar trigger source assertion included an id that the public AbilitySource stores in the side Avatar instead. Corrected the assertion after actual API/body/output inspection. Normative capacity predicates unchanged; all raw failures retained."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 1.06949475,
+      "note": "A post-success generic global port-free assertion encountered a later foreign peer that legitimately reused the settled slot and port. Replaced that claim with actual owned-group, token, timestamp and source-hash proof; no own QA, provider or cleanup failure and no foreign resource mutation. Raw failed assertion retained."
+    }
+  ]
+}
