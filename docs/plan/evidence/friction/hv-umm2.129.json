@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.129",
+  "phase": 5,
+  "implementMin": 45.61883705,
+  "implementWindow": {
+    "start": "2026-10-13T15:07:14.948099+00:00",
+    "end": "2026-10-13T15:52:52.078322+00:00"
+  },
+  "localValidationS": {
+    "focused": 6.680273665988352,
+    "review": 48.540444332989864,
+    "knip": 4.8279619999811985,
+    "fuzz": 278.4366656669881
+  },
+  "hostLoad": 7.05517578125,
+  "testDelta": {
+    "files": 1,
+    "lines": 67,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 14.681178083333332,
+      "note": "Two observerfailures: unknownnullprobe (failureinstantURLunobserved) and mobiletapduringpresentationwithno activationintent. Exactcontextreadiness andrenderedplayableaffordance waits repaired externalrecipe only; completewindow includes initialruns, diagnosis, sweepwait, cleanup andremaining9cellcontinuation. Existingtag disposition hv-umm2.308; no sharedtooldefect established."
+    }
+  ]
+}

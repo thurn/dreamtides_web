@@ -1,3 +1,6 @@
+import { abandonCost, activated } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainPoints } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 199,
   art: { x: 0, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [activated([abandonCost({ costAtMost: 2 })], gainPoints(variant.amplified ? 2 : 1))],
+  verifiedText: expectedVerifiedText("Abandon a ≤2● cost character: Gain 1⍟.", "Abandon a ≤2● cost character: Gain 2⍟."),
 });

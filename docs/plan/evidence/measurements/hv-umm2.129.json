@@ -1,0 +1,2341 @@
+{
+  "bead": "hv-umm2.129",
+  "base": "efb28a66c3bce24d3b13bf9f7fab93b0ebbed623",
+  "observedUtc": "2026-10-13T15:48:16.543276+00:00",
+  "ownership": {
+    "actualClaimStart": "2026-10-13T15:04:54.891507Z",
+    "endpointProxy": "2026-10-13T15:48:16.543276+00:00",
+    "grossClaimToEndpointSeconds": 2601.651769,
+    "basis": "Fullparent/helper ownership includessetup/source/research/observererrors/ACK/coordination/finite/runtime/failedobservations/sweepwait/cleanup/evidence, notmodeldispatch/taskCPU",
+    "dispatch": {
+      "parentPre": "2026-10-13T15:07:14.948099+00:00",
+      "actualDispatch": "UNKNOWN pre/post bracket only",
+      "claimActualStartUtc": "2026-10-13T15:04:54.891507Z",
+      "parentPost": "2026-10-13T15:08:21.495143+00:00",
+      "helper": "/root/energy_points_cards_129"
+    },
+    "commit": "Actualcommit andfullownershipclosure retainednative; finalcommitACK will refreshown evidence timestamp marker beforelight schema check/onecommit, withactualtail qualified.",
+    "preCommitMarkerUtc": "2026-10-13T15:52:52.078322+00:00",
+    "markerBasis": "Actual helper UTC marker immediately before timestamp-only schema validation and one local commit; not an inferred commit time. endpointProxy and historical measurements remain unchanged; actual marker-to-commit and original endpoint-to-commit tails are retained in external final-commit-packet.json."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "basis": "Dispatchactualpre-observation lowerbound toparentendpointproxy. Exactmodeldispatch unknown pre/postbracket. Finalcommitmarker mayrefreshboundedtimestamp fields; actualcommittail reportednative/nextownbead."
+      },
+      "hostLoad": {
+        "measuredFor": "Actualinnerfirstreviewtypecheck/lint/related-test startingload at2026-10-13T15:17:39.525Z"
+      }
+    }
+  },
+  "source": {
+    "productionChurn": 34,
+    "scenarioLines": 67,
+    "scenarioCases": 4,
+    "sourceHashes": {
+      "src/content/cards/blood-reaver-6a3bb4ae.ts": "9573f8482ff43dab9461a330464b5f95f710a1522a55610b6c1f296865d6be4b",
+      "src/content/cards/infernal-ascendant-fbf725ca.ts": "c6978d4781dd822251e02816bdd4e4905cee1592a8226d268b9a07ca88590d2f",
+      "src/content/cards/iron-pharaoh-0458658d.ts": "f71a46e039cb08e3007dcef019fa9711ff42af366693cc257b29eded14e7efe3",
+      "src/content/cards/shadowbinder-448abb34.ts": "4a41f73a899565f13a21c0f6919b64720eb847ac1559730a094b2805113c6d61",
+      "src/content/cards/the-forsaker-aba40bc6.ts": "bbd738e0de04c879a30f9721c4b6b4106f73011f78f763723a9c26bf9d807fe6",
+      "src/content/specs/cards-17.scenarios.ts": "26ca22fd4f8645e463f98b8752a8456702fa4da42d9a2bb6b01eabced509004b"
+    },
+    "immutableMetadata": "FiveimmutableAST initializers verified; printedbase+amplified text/metadata unchanged",
+    "scope": "Fiveleaves+oneplainmodule only; engine/UI/tooling/API/schema/indices read-only, no mechanicalfallout, newkind orrule ambiguity. No core/>100non-test/crosscutting review/fullcheck requirement."
+  },
+  "finiteChecks": [
+    {
+      "name": "129-targeted-1",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "observerPid": 8248,
+      "pid": 8259,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "startUtc": "2026-10-13T15:17:23.071832+00:00",
+      "endUtc": "2026-10-13T15:17:29.752118+00:00",
+      "wallS": 6.680273665988352,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/129-targeted-1.log"
+    },
+    {
+      "name": "129-review-1",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 9290,
+      "pid": 9300,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "startUtc": "2026-10-13T15:17:38.393408+00:00",
+      "endUtc": "2026-10-13T15:18:26.934142+00:00",
+      "wallS": 48.540444332989864,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/129-review-1.log"
+    },
+    {
+      "name": "129-knip-1",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "observerPid": 9448,
+      "pid": 9463,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "startUtc": "2026-10-13T15:17:39.547382+00:00",
+      "endUtc": "2026-10-13T15:17:44.375339+00:00",
+      "wallS": 4.8279619999811985,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/129-knip-1.log"
+    },
+    {
+      "name": "129-immutable-1",
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a12e91/129-audit/finite/immutable.mjs"
+      ],
+      "observerPid": 11261,
+      "pid": 11271,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "startUtc": "2026-10-13T15:18:11.590649+00:00",
+      "endUtc": "2026-10-13T15:18:11.764669+00:00",
+      "wallS": 0.17406170902540907,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/129-immutable-1.log"
+    }
+  ],
+  "finiteCounts": {
+    "targeted": {
+      "files": 4,
+      "tests": 326
+    },
+    "review": {
+      "files": 241,
+      "tests": 5096
+    }
+  },
+  "finiteResources": {
+    "requestedTestWorkers": 2,
+    "effectiveTestWorkerConcurrency": "not independently sampled; vitest threads config uses min(requested 2, availableParallelism())",
+    "reviewProcessGroup": 9290,
+    "otherProcessGroups": "not independently captured while live; observer/child PIDs retained in receipts",
+    "shellLimits": {
+      "cpu": "unlimited",
+      "fileSize": "unlimited",
+      "data": "unlimited",
+      "stackKiB": 8176,
+      "core": 0,
+      "virtualMemory": "unlimited",
+      "lockedMemory": "unlimited",
+      "processes": 10666,
+      "openFiles": 1048575
+    },
+    "loadObservations": {
+      "129-targeted-1": [
+        "prepare started at 2026-10-13T15:17:23.339Z load=7.4833984375",
+        "test started at 2026-10-13T15:17:26.258Z load=7.4833984375",
+        "restore-local-assets started at 2026-10-13T15:17:28.691Z load=7.4443359375"
+      ],
+      "129-review-1": [
+        "prepare started at 2026-10-13T15:17:38.582Z load=7.05517578125",
+        "typecheck started at 2026-10-13T15:17:39.523Z load=7.05517578125",
+        "typecheck-node started at 2026-10-13T15:17:39.524Z load=7.05517578125",
+        "import-cycles started at 2026-10-13T15:17:39.525Z load=7.05517578125",
+        "lint started at 2026-10-13T15:17:39.525Z load=7.05517578125",
+        "test-related started at 2026-10-13T15:17:39.525Z load=7.05517578125",
+        "restore-local-assets started at 2026-10-13T15:18:26.145Z load=6.59814453125"
+      ],
+      "129-knip-1": [
+        "prepare started at 2026-10-13T15:17:39.783Z load=7.05517578125",
+        "knip started at 2026-10-13T15:17:41.042Z load=7.05517578125",
+        "restore-local-assets started at 2026-10-13T15:17:43.296Z load=7.45068359375"
+      ],
+      "129-immutable-1": []
+    },
+    "runtimeStarted": false,
+    "ownedCheckProcessesTerminal": true,
+    "heavySlotUsed": false
+  },
+  "finiteFailures": [],
+  "runtimeChecks": [
+    {
+      "label": "weighted-fuzz-1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/heavy-inner.py",
+        "aba40bc6-3e9e-4874-be8a-6984cbf13146,0458658d-7e02-4286-9249-93674d16620b,448abb34-d77d-40ac-8292-58db03176247,6a3bb4ae-a537-4b79-8bdd-5093f05ec07a,fbf725ca-8837-46d4-970c-922153e27b6e"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "pid": 25636,
+      "processGroup": 25636,
+      "startUtc": "2026-10-13T15:21:43.599886+00:00",
+      "startLoadAverage": [
+        11.13623046875,
+        12.32861328125,
+        12.1708984375
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/weighted-fuzz-1.log",
+      "endUtc": "2026-10-13T15:26:22.038580+00:00",
+      "wallSeconds": 278.4366656669881,
+      "exitCode": 0,
+      "endLoadAverage": [
+        27.37841796875,
+        18.197265625,
+        14.59765625
+      ],
+      "terminated": true
+    },
+    {
+      "label": "preflight-1",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "aba40bc6-3e9e-4874-be8a-6984cbf13146,0458658d-7e02-4286-9249-93674d16620b,448abb34-d77d-40ac-8292-58db03176247,6a3bb4ae-a537-4b79-8bdd-5093f05ec07a,fbf725ca-8837-46d4-970c-922153e27b6e",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "pid": 25726,
+      "processGroup": 25726,
+      "startUtc": "2026-10-13T15:21:44.733210+00:00",
+      "startLoadAverage": [
+        11.13623046875,
+        12.32861328125,
+        12.1708984375
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/preflight-1.log",
+      "endUtc": "2026-10-13T15:21:46.176879+00:00",
+      "wallSeconds": 1.4435853750037495,
+      "exitCode": 0,
+      "endLoadAverage": [
+        11.13623046875,
+        12.32861328125,
+        12.1708984375
+      ],
+      "terminated": true
+    },
+    {
+      "label": "sweep-1",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.129",
+        "--cards",
+        "aba40bc6-3e9e-4874-be8a-6984cbf13146,0458658d-7e02-4286-9249-93674d16620b,448abb34-d77d-40ac-8292-58db03176247,6a3bb4ae-a537-4b79-8bdd-5093f05ec07a,fbf725ca-8837-46d4-970c-922153e27b6e",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "pid": 28043,
+      "processGroup": 28043,
+      "startUtc": "2026-10-13T15:22:09.594854+00:00",
+      "startLoadAverage": [
+        10.54443359375,
+        12.0927734375,
+        12.08935546875
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/sweep-1.log",
+      "endUtc": "2026-10-13T15:30:16.516678+00:00",
+      "wallSeconds": 486.93506212500506,
+      "exitCode": 0,
+      "endLoadAverage": [
+        10.09423828125,
+        13.3388671875,
+        13.279296875
+      ],
+      "terminated": true
+    },
+    {
+      "label": "algorithms-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/algorithms.mjs",
+        "--bead",
+        "hv-umm2.129",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "pid": 91312,
+      "processGroup": 91312,
+      "startUtc": "2026-10-13T15:24:42.223485+00:00",
+      "startLoadAverage": [
+        16.3515625,
+        14.0771484375,
+        12.88623046875
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/algorithms-1.log",
+      "endUtc": "2026-10-13T15:26:24.358521+00:00",
+      "wallSeconds": 102.13357512498624,
+      "exitCode": 1,
+      "endLoadAverage": [
+        25.90625,
+        18.04443359375,
+        14.564453125
+      ],
+      "terminated": true
+    },
+    {
+      "label": "algorithms-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/algorithms.mjs",
+        "--bead",
+        "hv-umm2.129",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "pid": 93682,
+      "processGroup": 93682,
+      "startUtc": "2026-10-13T15:30:46.713114+00:00",
+      "startLoadAverage": [
+        7.8720703125,
+        12.5048828125,
+        12.97900390625
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/algorithms-2.log",
+      "endUtc": "2026-10-13T15:34:04.539575+00:00",
+      "wallSeconds": 197.8261827909737,
+      "exitCode": 1,
+      "endLoadAverage": [
+        6.29296875,
+        9.82177734375,
+        11.73876953125
+      ],
+      "terminated": true
+    },
+    {
+      "label": "algorithms-3",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/algorithms.mjs",
+        "--bead",
+        "hv-umm2.129",
+        "--viewports",
+        "mobile",
+        "--arg",
+        "offset=1"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "pid": 2941,
+      "processGroup": 2941,
+      "startUtc": "2026-10-13T15:37:02.160493+00:00",
+      "startLoadAverage": [
+        4.109375,
+        7.216796875,
+        10.28564453125
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/algorithms-3.log",
+      "endUtc": "2026-10-13T15:39:23.094170+00:00",
+      "wallSeconds": 140.93313629098702,
+      "exitCode": 0,
+      "endLoadAverage": [
+        6.85986328125,
+        6.99951171875,
+        9.69287109375
+      ],
+      "terminated": true
+    }
+  ],
+  "fuzz": {
+    "games": 300,
+    "steps": 128437,
+    "prompts": 8462,
+    "interactiveReruns": 845,
+    "failures": 0,
+    "reportedWallSeconds": 276.9,
+    "reportedProcessCpuSeconds": 291.1,
+    "cpuQualification": "Fuzzer aggregate process CPU only, not parent/model/ownership CPU",
+    "targets": [
+      {
+        "kind": "card",
+        "uuid": "aba40bc6-3e9e-4874-be8a-6984cbf13146",
+        "included": 619,
+        "exercised": 119
+      },
+      {
+        "kind": "card",
+        "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+        "included": 619,
+        "exercised": 246
+      },
+      {
+        "kind": "card",
+        "uuid": "448abb34-d77d-40ac-8292-58db03176247",
+        "included": 620,
+        "exercised": 169
+      },
+      {
+        "kind": "card",
+        "uuid": "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
+        "included": 613,
+        "exercised": 113
+      },
+      {
+        "kind": "card",
+        "uuid": "fbf725ca-8837-46d4-970c-922153e27b6e",
+        "included": 621,
+        "exercised": 130
+      }
+    ],
+    "actualExecutionConcurrency": 1,
+    "admissionReceipt": "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/heavy-acquired.json"
+  },
+  "fuzzAdmission": {
+    "acquiredUtc": "2026-10-13T15:21:43.625586+00:00",
+    "acquiredLoadAverage": [
+      11.13623046875,
+      12.32861328125,
+      12.1708984375
+    ],
+    "innerPid": 25638,
+    "requestedWorkers": 2,
+    "effectiveImplementation": "Source scripts/fuzz-engine.ts:80 is one synchronous for loop in one process; no worker option/dispatch, actual engine game execution concurrency1",
+    "requestedWeights": "aba40bc6-3e9e-4874-be8a-6984cbf13146,0458658d-7e02-4286-9249-93674d16620b,448abb34-d77d-40ac-8292-58db03176247,6a3bb4ae-a537-4b79-8bdd-5093f05ec07a,fbf725ca-8837-46d4-970c-922153e27b6e",
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+    "fuzzPid": 25639,
+    "endUtc": "2026-10-13T15:26:22.032984+00:00",
+    "wallSeconds": 278.4054034999863,
+    "exitCode": 0,
+    "endLoadAverage": [
+      27.37841796875,
+      18.197265625,
+      14.59765625
+    ]
+  },
+  "preflight": {
+    "event": "labPreflightSummary",
+    "cards": [
+      "aba40bc6-3e9e-4874-be8a-6984cbf13146",
+      "0458658d-7e02-4286-9249-93674d16620b",
+      "448abb34-d77d-40ac-8292-58db03176247",
+      "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
+      "fbf725ca-8837-46d4-970c-922153e27b6e"
+    ],
+    "avatars": [],
+    "dreamsigns": [],
+    "variants": [
+      "base",
+      "amplified",
+      "empowered",
+      "kindled",
+      "resonant",
+      "inspired",
+      "enduring",
+      "hastened",
+      "attuned",
+      "perfected"
+    ],
+    "sides": [
+      "player",
+      "enemy"
+    ],
+    "counts": {
+      "pass": 54,
+      "pending": 0,
+      "skip": 46,
+      "fail": 0
+    },
+    "elapsedMs": 41.91033300000004,
+    "hostLoad": 11.13623046875,
+    "enemyMode": "scripted-lab-play-first-legal-prompts"
+  },
+  "sweep": {
+    "event": "cardSweepSummary",
+    "invocation": "invocations/sweep-JnPLiK",
+    "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.129/invocations/sweep-JnPLiK",
+    "counts": {
+      "pass": 54,
+      "skip": 46
+    },
+    "attemptCounts": {
+      "pass": 54,
+      "skip": 46
+    },
+    "hostLoad": 10.54443359375,
+    "sessions": 1,
+    "leaseYields": 0,
+    "wallMs": {
+      "browserLeaseWait": 8,
+      "serve": 2619,
+      "scenario": 483486.9416240001,
+      "cleanup": 514.2036249999655,
+      "execution": 486701.152917,
+      "total": 486709.152917
+    }
+  },
+  "algorithms": {
+    "effectiveCells": 20,
+    "rawPasses": 22,
+    "rawFailures": 2,
+    "witnesses": "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/algorithm-witnesses.json",
+    "fullPayloadDirectory": "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/complete-payloads",
+    "rawReports": {
+      "algorithms-1": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.129/invocations/run-HQKrWg/algorithms.result.json",
+      "algorithms-2": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.129/invocations/run-CR2hNJ/algorithms.result.json",
+      "algorithms-3": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.129/invocations/run-jd6VkR/algorithms.result.json"
+    },
+    "failures": [
+      {
+        "attempt": "algorithms-1",
+        "mode": "iron",
+        "variant": "base",
+        "viewport": "desktop",
+        "error": "TypeError: Cannot read properties of null (reading 'state')\n    at witness (evalmachine.<anonymous>:1686:16)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async evalmachine.<anonymous>:1710:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)"
+      },
+      {
+        "attempt": "algorithms-2",
+        "mode": "forsaker",
+        "variant": "amplified",
+        "viewport": "mobile",
+        "error": "QaTimeoutError: qa.battle forsaker exact physical cost prompt: timed out after 20000 ms; {\"at\":\"near:day\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":4}}\n    at Object.timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.waitFor (evalmachine.<anonymous>:1410:43)\n    at async prompt (evalmachine.<anonymous>:1668:25)\n    at async witness (evalmachine.<anonymous>:1687:11)\n    at async evalmachine.<anonymous>:1710:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)"
+      }
+    ],
+    "finalCaps": [],
+    "sourceChangesForCorrections": 0,
+    "qualifications": [
+      "Attempt1 nullable read lost live probe; final URL at failure unknown, no source/card defect inferred. Owned last known Iron game/phase/result/pending retained separately.",
+      "Attempt2 mobile amplified source tap preceded actual UI affordances; actual own game/source/variant/committed state retained, no activation intent. Wait canPass and rendered playable source before tapping; only remaining nine mobile cells repeated.",
+      "Desktop10 + base Forsaker mobile accepted from attempt2; remaining9 mobile from attempt3. No claim that failed call top-level final results survived; every prior passing payload and full game JSONL was retained through qa.note before later failure.",
+      "All five D21 samples unsampled; actual algorithm QA covers state/interaction/current resource/cancellation/reload, not complete compact-card rules-copy visibility.",
+      "No independent full visual verdict claimed by helper. Parent actual image inspection remains final evidence responsibility."
+    ]
+  },
+  "effectiveWitnesses": [
+    {
+      "mode": "blood",
+      "variant": "amplified",
+      "viewport": "desktop",
+      "uuid": "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
+      "source": "i3",
+      "paid": "i3",
+      "attempt": "algorithms-2",
+      "payloadPath": "complete-payloads/blood-amplified-desktop.json",
+      "gameId": "m3sitg",
+      "gameLogLines": 57,
+      "screens": [
+        "129-blood-amplified-desktop-ready.png",
+        "129-blood-amplified-desktop-payment-offered.png",
+        "129-blood-amplified-desktop-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-CR2hNJ",
+      "energyBefore": 6,
+      "energyAfter": 9,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "blood",
+      "variant": "amplified",
+      "viewport": "mobile",
+      "uuid": "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
+      "source": "i3",
+      "paid": "i3",
+      "attempt": "algorithms-3",
+      "payloadPath": "complete-payloads/blood-amplified-mobile.json",
+      "gameId": "reov44",
+      "gameLogLines": 53,
+      "screens": [
+        "129-blood-amplified-mobile-ready.png",
+        "129-blood-amplified-mobile-payment-offered.png",
+        "129-blood-amplified-mobile-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-jd6VkR",
+      "energyBefore": 6,
+      "energyAfter": 9,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "blood",
+      "variant": "base",
+      "viewport": "desktop",
+      "uuid": "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
+      "source": "i1",
+      "paid": "i1",
+      "attempt": "algorithms-2",
+      "payloadPath": "complete-payloads/blood-base-desktop.json",
+      "gameId": "jhb2k5",
+      "gameLogLines": 47,
+      "screens": [
+        "129-blood-base-desktop-ready.png",
+        "129-blood-base-desktop-payment-offered.png",
+        "129-blood-base-desktop-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-CR2hNJ",
+      "energyBefore": 10,
+      "energyAfter": 12,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "blood",
+      "variant": "base",
+      "viewport": "mobile",
+      "uuid": "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
+      "source": "i1",
+      "paid": "i1",
+      "attempt": "algorithms-3",
+      "payloadPath": "complete-payloads/blood-base-mobile.json",
+      "gameId": "rpfa33",
+      "gameLogLines": 47,
+      "screens": [
+        "129-blood-base-mobile-ready.png",
+        "129-blood-base-mobile-payment-offered.png",
+        "129-blood-base-mobile-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-jd6VkR",
+      "energyBefore": 10,
+      "energyAfter": 12,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "forsaker",
+      "variant": "amplified",
+      "viewport": "desktop",
+      "uuid": "aba40bc6-3e9e-4874-be8a-6984cbf13146",
+      "source": "i4",
+      "paid": "i2",
+      "attempt": "algorithms-2",
+      "payloadPath": "complete-payloads/forsaker-amplified-desktop.json",
+      "gameId": "bg8qvz",
+      "gameLogLines": 53,
+      "screens": [
+        "129-forsaker-amplified-desktop-ready.png",
+        "129-forsaker-amplified-desktop-payment-offered.png",
+        "129-forsaker-amplified-desktop-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-CR2hNJ",
+      "energyBefore": 7,
+      "energyAfter": 7,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 2,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "forsaker",
+      "variant": "amplified",
+      "viewport": "mobile",
+      "uuid": "aba40bc6-3e9e-4874-be8a-6984cbf13146",
+      "source": "i4",
+      "paid": "i2",
+      "attempt": "algorithms-3",
+      "payloadPath": "complete-payloads/forsaker-amplified-mobile.json",
+      "gameId": "si862a",
+      "gameLogLines": 53,
+      "screens": [
+        "129-forsaker-amplified-mobile-ready.png",
+        "129-forsaker-amplified-mobile-payment-offered.png",
+        "129-forsaker-amplified-mobile-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-jd6VkR",
+      "energyBefore": 7,
+      "energyAfter": 7,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 2,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "forsaker",
+      "variant": "base",
+      "viewport": "desktop",
+      "uuid": "aba40bc6-3e9e-4874-be8a-6984cbf13146",
+      "source": "i1",
+      "paid": "i3",
+      "attempt": "algorithms-2",
+      "payloadPath": "complete-payloads/forsaker-base-desktop.json",
+      "gameId": "fyue7e",
+      "gameLogLines": 47,
+      "screens": [
+        "129-forsaker-base-desktop-ready.png",
+        "129-forsaker-base-desktop-payment-offered.png",
+        "129-forsaker-base-desktop-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-CR2hNJ",
+      "energyBefore": 10,
+      "energyAfter": 10,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 1,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "forsaker",
+      "variant": "base",
+      "viewport": "mobile",
+      "uuid": "aba40bc6-3e9e-4874-be8a-6984cbf13146",
+      "source": "i1",
+      "paid": "i3",
+      "attempt": "algorithms-2",
+      "payloadPath": "complete-payloads/forsaker-base-mobile.json",
+      "gameId": "ybzgqd",
+      "gameLogLines": 51,
+      "screens": [
+        "129-forsaker-base-mobile-ready.png",
+        "129-forsaker-base-mobile-payment-offered.png",
+        "129-forsaker-base-mobile-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-CR2hNJ",
+      "energyBefore": 10,
+      "energyAfter": 10,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 1,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "infernal",
+      "variant": "amplified",
+      "viewport": "desktop",
+      "uuid": "fbf725ca-8837-46d4-970c-922153e27b6e",
+      "source": "i4",
+      "paid": "i1",
+      "attempt": "algorithms-2",
+      "payloadPath": "complete-payloads/infernal-amplified-desktop.json",
+      "gameId": "zs6j4z",
+      "gameLogLines": 53,
+      "screens": [
+        "129-infernal-amplified-desktop-ready.png",
+        "129-infernal-amplified-desktop-payment-offered.png",
+        "129-infernal-amplified-desktop-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-CR2hNJ",
+      "energyBefore": 7,
+      "energyAfter": 9,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "infernal",
+      "variant": "amplified",
+      "viewport": "mobile",
+      "uuid": "fbf725ca-8837-46d4-970c-922153e27b6e",
+      "source": "i4",
+      "paid": "i1",
+      "attempt": "algorithms-3",
+      "payloadPath": "complete-payloads/infernal-amplified-mobile.json",
+      "gameId": "mw9nr9",
+      "gameLogLines": 53,
+      "screens": [
+        "129-infernal-amplified-mobile-ready.png",
+        "129-infernal-amplified-mobile-payment-offered.png",
+        "129-infernal-amplified-mobile-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-jd6VkR",
+      "energyBefore": 7,
+      "energyAfter": 9,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "infernal",
+      "variant": "base",
+      "viewport": "desktop",
+      "uuid": "fbf725ca-8837-46d4-970c-922153e27b6e",
+      "source": "i1",
+      "paid": "i2",
+      "attempt": "algorithms-2",
+      "payloadPath": "complete-payloads/infernal-base-desktop.json",
+      "gameId": "pr554x",
+      "gameLogLines": 47,
+      "screens": [
+        "129-infernal-base-desktop-ready.png",
+        "129-infernal-base-desktop-payment-offered.png",
+        "129-infernal-base-desktop-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-CR2hNJ",
+      "energyBefore": 10,
+      "energyAfter": 11,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "infernal",
+      "variant": "base",
+      "viewport": "mobile",
+      "uuid": "fbf725ca-8837-46d4-970c-922153e27b6e",
+      "source": "i1",
+      "paid": "i2",
+      "attempt": "algorithms-3",
+      "payloadPath": "complete-payloads/infernal-base-mobile.json",
+      "gameId": "hph9mu",
+      "gameLogLines": 47,
+      "screens": [
+        "129-infernal-base-mobile-ready.png",
+        "129-infernal-base-mobile-payment-offered.png",
+        "129-infernal-base-mobile-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-jd6VkR",
+      "energyBefore": 10,
+      "energyAfter": 11,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "iron",
+      "variant": "amplified",
+      "viewport": "desktop",
+      "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+      "source": "i3",
+      "paid": "i3",
+      "attempt": "algorithms-2",
+      "payloadPath": "complete-payloads/iron-amplified-desktop.json",
+      "gameId": "6zqak8",
+      "gameLogLines": 76,
+      "screens": [
+        "129-iron-amplified-desktop-dawn-ready.png",
+        "129-iron-amplified-desktop-ready.png",
+        "129-iron-amplified-desktop-payment-offered.png",
+        "129-iron-amplified-desktop-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-CR2hNJ",
+      "energyBefore": 12,
+      "energyAfter": 14,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": true,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "iron",
+      "variant": "amplified",
+      "viewport": "mobile",
+      "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+      "source": "i3",
+      "paid": "i3",
+      "attempt": "algorithms-3",
+      "payloadPath": "complete-payloads/iron-amplified-mobile.json",
+      "gameId": "7aovdr",
+      "gameLogLines": 80,
+      "screens": [
+        "129-iron-amplified-mobile-dawn-ready.png",
+        "129-iron-amplified-mobile-ready.png",
+        "129-iron-amplified-mobile-payment-offered.png",
+        "129-iron-amplified-mobile-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-jd6VkR",
+      "energyBefore": 12,
+      "energyAfter": 14,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": true,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "iron",
+      "variant": "base",
+      "viewport": "desktop",
+      "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+      "source": "i1",
+      "paid": "i1",
+      "attempt": "algorithms-2",
+      "payloadPath": "complete-payloads/iron-base-desktop.json",
+      "gameId": "44gu9t",
+      "gameLogLines": 70,
+      "screens": [
+        "129-iron-base-desktop-dawn-ready.png",
+        "129-iron-base-desktop-ready.png",
+        "129-iron-base-desktop-payment-offered.png",
+        "129-iron-base-desktop-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-CR2hNJ",
+      "energyBefore": 11,
+      "energyAfter": 12,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": true,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "iron",
+      "variant": "base",
+      "viewport": "mobile",
+      "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+      "source": "i1",
+      "paid": "i1",
+      "attempt": "algorithms-3",
+      "payloadPath": "complete-payloads/iron-base-mobile.json",
+      "gameId": "geukm8",
+      "gameLogLines": 70,
+      "screens": [
+        "129-iron-base-mobile-dawn-ready.png",
+        "129-iron-base-mobile-ready.png",
+        "129-iron-base-mobile-payment-offered.png",
+        "129-iron-base-mobile-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-jd6VkR",
+      "energyBefore": 11,
+      "energyAfter": 12,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": true,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "shadow",
+      "variant": "amplified",
+      "viewport": "desktop",
+      "uuid": "448abb34-d77d-40ac-8292-58db03176247",
+      "source": "i4",
+      "paid": "i1",
+      "attempt": "algorithms-2",
+      "payloadPath": "complete-payloads/shadow-amplified-desktop.json",
+      "gameId": "tgtqxg",
+      "gameLogLines": 53,
+      "screens": [
+        "129-shadow-amplified-desktop-ready.png",
+        "129-shadow-amplified-desktop-payment-offered.png",
+        "129-shadow-amplified-desktop-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-CR2hNJ",
+      "energyBefore": 7,
+      "energyAfter": 10,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "shadow",
+      "variant": "amplified",
+      "viewport": "mobile",
+      "uuid": "448abb34-d77d-40ac-8292-58db03176247",
+      "source": "i4",
+      "paid": "i1",
+      "attempt": "algorithms-3",
+      "payloadPath": "complete-payloads/shadow-amplified-mobile.json",
+      "gameId": "zykdh7",
+      "gameLogLines": 55,
+      "screens": [
+        "129-shadow-amplified-mobile-ready.png",
+        "129-shadow-amplified-mobile-payment-offered.png",
+        "129-shadow-amplified-mobile-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-jd6VkR",
+      "energyBefore": 7,
+      "energyAfter": 10,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "shadow",
+      "variant": "base",
+      "viewport": "desktop",
+      "uuid": "448abb34-d77d-40ac-8292-58db03176247",
+      "source": "i1",
+      "paid": "i2",
+      "attempt": "algorithms-2",
+      "payloadPath": "complete-payloads/shadow-base-desktop.json",
+      "gameId": "resjgv",
+      "gameLogLines": 47,
+      "screens": [
+        "129-shadow-base-desktop-ready.png",
+        "129-shadow-base-desktop-payment-offered.png",
+        "129-shadow-base-desktop-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-CR2hNJ",
+      "energyBefore": 10,
+      "energyAfter": 12,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    },
+    {
+      "mode": "shadow",
+      "variant": "base",
+      "viewport": "mobile",
+      "uuid": "448abb34-d77d-40ac-8292-58db03176247",
+      "source": "i1",
+      "paid": "i2",
+      "attempt": "algorithms-3",
+      "payloadPath": "complete-payloads/shadow-base-mobile.json",
+      "gameId": "ij4nfx",
+      "gameLogLines": 47,
+      "screens": [
+        "129-shadow-base-mobile-ready.png",
+        "129-shadow-base-mobile-payment-offered.png",
+        "129-shadow-base-mobile-ability-result-settled.png"
+      ],
+      "captureDirectory": "invocations/run-jd6VkR",
+      "energyBefore": 10,
+      "energyAfter": 12,
+      "maxBefore": 10,
+      "maxAfter": 10,
+      "pointsBefore": 0,
+      "pointsAfter": 0,
+      "dawn": false,
+      "verdict": "pass",
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      }
+    }
+  ],
+  "geometry": {
+    "measuredControls": 110,
+    "allCentreHits": true,
+    "allCentresInViewport": true,
+    "partialBoundingBoxes": [
+      {
+        "uuid": "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
+        "variant": "amplified",
+        "viewport": "desktop",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+        "rect": {
+          "x": 705.484375,
+          "y": 732,
+          "width": 128.90625,
+          "height": 180.46875
+        },
+        "viewportSize": {
+          "width": 1440,
+          "height": 900
+        }
+      },
+      {
+        "uuid": "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
+        "variant": "amplified",
+        "viewport": "mobile",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+        "rect": {
+          "x": 120.1328125,
+          "y": 664.109375,
+          "width": 149.734375,
+          "height": 209.625
+        },
+        "viewportSize": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      {
+        "uuid": "aba40bc6-3e9e-4874-be8a-6984cbf13146",
+        "variant": "amplified",
+        "viewport": "desktop",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+        "rect": {
+          "x": 705.484375,
+          "y": 732,
+          "width": 128.90625,
+          "height": 180.46875
+        },
+        "viewportSize": {
+          "width": 1440,
+          "height": 900
+        }
+      },
+      {
+        "uuid": "aba40bc6-3e9e-4874-be8a-6984cbf13146",
+        "variant": "amplified",
+        "viewport": "mobile",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+        "rect": {
+          "x": 120.1328125,
+          "y": 664.109375,
+          "width": 149.734375,
+          "height": 209.625
+        },
+        "viewportSize": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      {
+        "uuid": "fbf725ca-8837-46d4-970c-922153e27b6e",
+        "variant": "amplified",
+        "viewport": "desktop",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+        "rect": {
+          "x": 705.484375,
+          "y": 732,
+          "width": 128.90625,
+          "height": 180.46875
+        },
+        "viewportSize": {
+          "width": 1440,
+          "height": 900
+        }
+      },
+      {
+        "uuid": "fbf725ca-8837-46d4-970c-922153e27b6e",
+        "variant": "amplified",
+        "viewport": "mobile",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+        "rect": {
+          "x": 120.1328125,
+          "y": 664.109375,
+          "width": 149.734375,
+          "height": 209.625
+        },
+        "viewportSize": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      {
+        "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+        "variant": "amplified",
+        "viewport": "desktop",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+        "rect": {
+          "x": 705.484375,
+          "y": 732,
+          "width": 128.90625,
+          "height": 180.46875
+        },
+        "viewportSize": {
+          "width": 1440,
+          "height": 900
+        }
+      },
+      {
+        "uuid": "0458658d-7e02-4286-9249-93674d16620b",
+        "variant": "amplified",
+        "viewport": "mobile",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+        "rect": {
+          "x": 120.1328125,
+          "y": 664.109375,
+          "width": 149.734375,
+          "height": 209.625
+        },
+        "viewportSize": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      {
+        "uuid": "448abb34-d77d-40ac-8292-58db03176247",
+        "variant": "amplified",
+        "viewport": "desktop",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+        "rect": {
+          "x": 705.484375,
+          "y": 732,
+          "width": 128.90625,
+          "height": 180.46875
+        },
+        "viewportSize": {
+          "width": 1440,
+          "height": 900
+        }
+      },
+      {
+        "uuid": "448abb34-d77d-40ac-8292-58db03176247",
+        "variant": "amplified",
+        "viewport": "mobile",
+        "selector": "[data-battlefield-card][data-battle-card-id=\"i4\"]",
+        "rect": {
+          "x": 120.1328125,
+          "y": 664.109375,
+          "width": 149.734375,
+          "height": 209.625
+        },
+        "viewportSize": {
+          "width": 390,
+          "height": 844
+        }
+      }
+    ],
+    "qualification": "Ten initialamplified handcard rectangles extendbelowviewport whiletapcentres areinsideandhitverified; fullhand/rulesvisibility not asserted. Notallfullrectanglesinsideviewport."
+  },
+  "captureDimensions": [
+    {
+      "filename": "invocations/run-CR2hNJ/129-blood-amplified-desktop-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-blood-amplified-desktop-payment-offered.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-blood-amplified-desktop-ability-result-settled.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-blood-amplified-mobile-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-blood-amplified-mobile-payment-offered.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-blood-amplified-mobile-ability-result-settled.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-blood-base-desktop-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-blood-base-desktop-payment-offered.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-blood-base-desktop-ability-result-settled.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-blood-base-mobile-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-blood-base-mobile-payment-offered.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-blood-base-mobile-ability-result-settled.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-forsaker-amplified-desktop-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-forsaker-amplified-desktop-payment-offered.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-forsaker-amplified-desktop-ability-result-settled.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-forsaker-amplified-mobile-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-forsaker-amplified-mobile-payment-offered.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-forsaker-amplified-mobile-ability-result-settled.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-forsaker-base-desktop-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-forsaker-base-desktop-payment-offered.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-forsaker-base-desktop-ability-result-settled.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-forsaker-base-mobile-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-forsaker-base-mobile-payment-offered.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-forsaker-base-mobile-ability-result-settled.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-infernal-amplified-desktop-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-infernal-amplified-desktop-payment-offered.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-infernal-amplified-desktop-ability-result-settled.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-infernal-amplified-mobile-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-infernal-amplified-mobile-payment-offered.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-infernal-amplified-mobile-ability-result-settled.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-infernal-base-desktop-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-infernal-base-desktop-payment-offered.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-infernal-base-desktop-ability-result-settled.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-infernal-base-mobile-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-infernal-base-mobile-payment-offered.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-infernal-base-mobile-ability-result-settled.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-iron-amplified-desktop-dawn-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-iron-amplified-desktop-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-iron-amplified-desktop-payment-offered.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-iron-amplified-desktop-ability-result-settled.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-iron-amplified-mobile-dawn-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-iron-amplified-mobile-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-iron-amplified-mobile-payment-offered.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-iron-amplified-mobile-ability-result-settled.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-iron-base-desktop-dawn-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-iron-base-desktop-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-iron-base-desktop-payment-offered.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-iron-base-desktop-ability-result-settled.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-iron-base-mobile-dawn-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-iron-base-mobile-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-iron-base-mobile-payment-offered.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-iron-base-mobile-ability-result-settled.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-shadow-amplified-desktop-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-shadow-amplified-desktop-payment-offered.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-shadow-amplified-desktop-ability-result-settled.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-shadow-amplified-mobile-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-shadow-amplified-mobile-payment-offered.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-shadow-amplified-mobile-ability-result-settled.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-shadow-base-desktop-ready.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-shadow-base-desktop-payment-offered.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-CR2hNJ/129-shadow-base-desktop-ability-result-settled.png",
+      "pngPixels": [
+        2880,
+        1800
+      ],
+      "cssViewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-shadow-base-mobile-ready.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-shadow-base-mobile-payment-offered.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "filename": "invocations/run-jd6VkR/129-shadow-base-mobile-ability-result-settled.png",
+      "pngPixels": [
+        780,
+        1688
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    }
+  ],
+  "dprQualification": "PNGpixels twiceactualdeclaredCSSdimensions; actualdevicePixelRatio notindependentlysampled. Viewer mayresizedisplay.",
+  "visual": {
+    "observedUtc": "2026-10-13T15:48:16.543276+00:00",
+    "actuallyViewed": [
+      "invocations/run-CR2hNJ/129-forsaker-amplified-desktop-ability-result-settled.png",
+      "invocations/run-CR2hNJ/129-iron-base-desktop-payment-offered.png",
+      "invocations/run-CR2hNJ/129-iron-base-desktop-ability-result-settled.png",
+      "invocations/run-CR2hNJ/129-iron-amplified-desktop-ability-result-settled.png",
+      "invocations/run-CR2hNJ/129-shadow-amplified-desktop-ability-result-settled.png",
+      "invocations/run-CR2hNJ/129-blood-amplified-desktop-ability-result-settled.png",
+      "invocations/run-CR2hNJ/129-infernal-amplified-desktop-ability-result-settled.png",
+      "invocations/run-jd6VkR/129-forsaker-amplified-mobile-ability-result-settled.png",
+      "invocations/run-jd6VkR/129-iron-amplified-mobile-ability-result-settled.png",
+      "invocations/run-jd6VkR/129-shadow-amplified-mobile-ability-result-settled.png",
+      "invocations/run-jd6VkR/129-blood-amplified-mobile-ability-result-settled.png",
+      "invocations/run-jd6VkR/129-infernal-amplified-mobile-ability-result-settled.png",
+      "invocations/run-jd6VkR/129-shadow-amplified-mobile-payment-offered.png"
+    ],
+    "reviewer": "Parent Codex actual image inspection",
+    "observations": [
+      "Forsaker amplified settledHUDpoints2/25 visible; energy7/10, source stillplay/exhausted.",
+      "Ironbasepaymentoffered threephysicalboardcandidates +Cancel/Submit, energy11/10 afterownDawn; zero selection Submitdisabledexpected.",
+      "Ironbasefinalsourceabsent fromboard, voidpilevisible, HUD12/10; IronAMPfinalsourceabsent, HUD14/10. NextPhase controls visible.",
+      "Shadow AMP current10/10 sourcepresent; Blood AMP current9/10 sourceabsent, voidpile; InfernalAMP current9/10 sourcepresent/voidpile. VisibleNextPhase/HUD fit allthree; fullrules/handcopyvisibility notasserted.",
+      "MobileForsakerAMP HUDpoints2/25 energy7/10/sourcepresent; mobileIronAMP sourceabsent andenergy14/10; mobileShadowAMP sourcepresent/energy10/10. NextPhase/HUDvisible; fullprintedrules andcompletehandvisibilitynotasserted.",
+      "MobileBloodAMP sourceabsent/current9/10, MobileInfernalAMP sourcepresent/current9/10. MobileShadowAMP payment excludes exhaustedsource and highlights anothercopy+two syntheticallies, Submitdisabledat0/1 expected.",
+      "MobileQAdebugbadge partlyoverlapsCancelrightedge in paymentcapture; actualcancel/publicinteraction passed andcentre hitverified. No completeunobscuredCancelcopy orfullhandface claim."
+    ],
+    "limits": "Compactboardtiles/fullprintedrules andcompletehandfacevisibility not asserted. DesktopIronhandLabRecruit face extendsbelowviewport; visibleHUD/costcontrol workflow proof only. Syntheticblackfaces intentional. Original PNG2880x1800 DPR2 CSS1440x900; image viewer may resize display. Raw missingprobe failure cause unknown/failureinstantURL notrecorded, notclaimedproduct defect orsettledvisualacceptance. MobileIronhandfacealso extendsbelowviewport. PNGpixels2xdeclaredCSS viewport verified64captures; actualdevicePixelRatio notindependentlysampled."
+  },
+  "correctionWindows": [
+    {
+      "startUtc": "2026-10-13T15:24:42.223485+00:00",
+      "endUtc": "2026-10-13T15:39:23.094170+00:00",
+      "wallSeconds": 880.870685,
+      "startQualification": "Conservative first failed command start, includes both failed runs, reads/recipe repairs, sweep wait, cleanup, parent communication and restarts; exact instant of first failed read unknown.",
+      "unionSeconds": 880.870685
+    }
+  ],
+  "correctionUnionSeconds": 880.870685,
+  "runtimeResources": {
+    "allOwnedProcessesTerminal": true,
+    "browserOverlaps": [
+      "algorithms1 overlapped sweep1 and weighted fuzz; both managed capacity slots owned same worktree, faithfully retained",
+      "algorithms2 and3 sequential after sweep1 terminal cleanup"
+    ],
+    "providerRecords": [
+      "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/algorithm2-provider-owner.json",
+      "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/algorithm3-provider-owner.json"
+    ],
+    "priorAttemptProviderDetail": "Actual per-client session ids for sweep1/algorithms1 not independently archived; runner validates stateful identity before tools and raw reports retain owned server/slot/port. No fabricated identity.",
+    "cleanup": "/tmp/dreamtides-executor-01a12e91/129-audit/runtime/cleanup-observation.json",
+    "portQualification": "Managed own server PGs91381/93710/2974 and sweepPG28081 all gone; port5274 was reported free at runner cleanup and subsequently reused by unrelated PID11448/PG11415. No current global port-free claim or foreign action."
+  },
+  "cleanup": {
+    "utc": "2026-10-13T15:40:44.379082+00:00",
+    "processObservations": {
+      "25636": "  PID  PGID  PPID COMMAND\n",
+      "25638": "  PID  PGID  PPID COMMAND\n",
+      "25639": "  PID  PGID  PPID COMMAND\n",
+      "25726": "  PID  PGID  PPID COMMAND\n",
+      "28043": "  PID  PGID  PPID COMMAND\n",
+      "28081": "  PID  PGID  PPID COMMAND\n",
+      "91312": "  PID  PGID  PPID COMMAND\n",
+      "91381": "  PID  PGID  PPID COMMAND\n",
+      "93682": "  PID  PGID  PPID COMMAND\n",
+      "93710": "  PID  PGID  PPID COMMAND\n",
+      "2941": "  PID  PGID  PPID COMMAND\n",
+      "2974": "  PID  PGID  PPID COMMAND\n"
+    },
+    "portObservations": {
+      "5174": "",
+      "5274": "COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME\nnode    11448 dthurn   16u  IPv4 0x706879f4b106010c      0t0  TCP 127.0.0.1:5274 (LISTEN)\n"
+    },
+    "currentOwnStatus": " M src/content/cards/blood-reaver-6a3bb4ae.ts\n M src/content/cards/infernal-ascendant-fbf725ca.ts\n M src/content/cards/iron-pharaoh-0458658d.ts\n M src/content/cards/shadowbinder-448abb34.ts\n M src/content/cards/the-forsaker-aba40bc6.ts\n?? docs/plan/evidence/qa-ledger/hv-umm2.129.jsonl\n?? src/content/specs/cards-17.scenarios.ts\n",
+    "postCleanupPort5274ListenerIdentity": "  PID  PGID  PPID\n11448 11415 11430\n",
+    "qualification": "All owned wrapper/inner/server PIDs are absent. Runner reported own port free at cleanup; later 5274 listener PID11448 belongs to a different process group, so current global port-free status is not claimed and no foreign listener is killed."
+  },
+  "D21": {
+    "firstBytes": [
+      91,
+      81,
+      146,
+      30,
+      76
+    ],
+    "allUnsampled": true,
+    "newPromptStatusVisualKind": false,
+    "actualPlayerWorkflowCells": 20,
+    "enemyCoverage": "Preflight/sweepbothroles andIroncontrollercases; humanopponentpolicy/fullUInegativeforeignowner/alltypes/costdiscount notclaimed."
+  },
+  "priorMeasurementCorrections": [
+    {
+      "subjectBead": "hv-umm2.172",
+      "sourceCommit": "51a20f12d1adbb884d43cf989fce74b753303d50",
+      "tested": "b96690c83e1d5207a96f283cd140805b8d1ee954",
+      "originalEvidenceWindowEnd": "2026-10-13T14:33:20.173661Z",
+      "actualCommitEnd": "2026-10-13T14:36:31.080404Z",
+      "endpointToCommitTailSeconds": 190.906743,
+      "wholeNativeOwnershipClock": {
+        "actualClaimStart": "2026-10-13T13:43:10.894644Z",
+        "actualCommitEnd": "2026-10-13T14:36:31.080404Z",
+        "actualCloseEnd": "2026-10-13T14:40:17.572630+00:00",
+        "endpointToCommitTailSeconds": 190.906743,
+        "grossClaimToCloseMinutes": 57.11129976666667,
+        "basis": "Entire parent/helper held ownership, not CPU or model activity; committed endpointproxy correction next own bead/retrospective"
+      },
+      "basis": "Additive actualcommit/tail/grossownership correction in next own bead; keep prior172committedbytes. Endpointproxy190.906743s short ofactualcommit, allparentsetup/checks/waits/corrections/delivery included, no CPU/model inference.",
+      "correctedImplementWindow": {
+        "start": "2026-10-13T13:47:41.813198+00:00",
+        "end": "2026-10-13T14:36:31.080404+00:00"
+      },
+      "correctedImplementMinProxy": 48.8211201,
+      "windowBasis": "Start remains actual parent dispatch lower-bound observation; exactdispatch unknown within originalpre/post bracket. End is actualhelpercommit end, replaces190.906743s-earlier evidenceendpoint. Fullheldownership57.11129977min remains separate fromthis implementerwindow proxy."
+    },
+    {
+      "subjectBead": "hv-umm2.127",
+      "status": "checkpointed OPENunassigned ordinaryprerequisite hv-fwpx",
+      "wholeNativeOwnershipClock": {
+        "actualClaimStart": "2026-10-13T14:41:33.413667Z",
+        "actualReleaseEnd": "2026-10-13T15:04:04.459738+00:00",
+        "grossOwnershipMinutes": 22.517434516666665,
+        "basis": "Allheldparent/helper setup/source/research/observercorrections/finite/weightedruntime/preflightfailure/justiciarfiling/serialization/cleanup/waits, notCPU",
+        "checkpoint": "127-audit/checkpoint/manifest.json",
+        "openCorrectionWindowSince": "2026-10-13T14:56:43.663823Z",
+        "lastGreen": null
+      },
+      "sourceCheckpoint": "127-audit/checkpoint/manifest.json",
+      "partialRuntimePacket": "127-audit/runtime/partial-terminal-packet.json",
+      "claimSegmentMinutes": 22.517434516666665,
+      "correctionWindow": "Firstfailedpreflight14:56:43.663823Z toactualrelease15:04:04.459738Z remainsOPEN; raw8fixturefails notclosedbyfuzzgreen, futurefwpx+127preflight required. Unowned dependencywait not129 productiveCPU or owned127execution.",
+      "remaining": "FreshWTsource/ownershipaudit+alloriginalfinite/fuzz/preflight/sweep/actualQA afterfwpxcertifies, no acceptancewaiver."
+    }
+  ],
+  "parentObserverErrors": "Earlier127parserexpectedreceiptmappingactualLIST, guessedpath/globreads correctedbeforedependentwrites; prior127wholeownedsegmentpreserves alltime. Currentfirstfrictionendpoint isproxy; noinventedCPU/dispatch values.",
+  "finalChecks": "Parentordinaryreview52.430666s/Knip4.393104s/schema.120973s terminalgreen; exact10ownedpaths/frozen6sources/full20logs/110hitcentres/64captures guard verified. Finaltimestamprefresh is limitedto own evidence UTC/elapsed fields pluslightschema beforeonecommit, no further source changes.",
+  "finalParentChecks": [
+    {
+      "name": "129-final-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 21550,
+      "pid": 21584,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "startUtc": "2026-10-13T15:48:56.942571+00:00",
+      "endUtc": "2026-10-13T15:49:49.373252+00:00",
+      "wallS": 52.43066587499925,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/129-final-review.log"
+    },
+    {
+      "name": "129-final-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "observerPid": 21549,
+      "pid": 21585,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "startUtc": "2026-10-13T15:48:56.942572+00:00",
+      "endUtc": "2026-10-13T15:49:01.335634+00:00",
+      "wallS": 4.393103624985088,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/129-final-knip.log"
+    },
+    {
+      "name": "129-final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "observerPid": 21551,
+      "pid": 21583,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/energy-points-129",
+      "startUtc": "2026-10-13T15:48:56.942549+00:00",
+      "endUtc": "2026-10-13T15:48:57.063485+00:00",
+      "wallS": 0.12097250000806525,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/129-final-schema.log"
+    }
+  ]
+}

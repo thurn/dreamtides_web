@@ -1,3 +1,7 @@
+import { abandonCost, activated, exhaustSelf } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainEnergy } from "../../engine/effects/primitives";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +23,9 @@ export default card({
   cardNumber: 153,
   art: { x: 0, y: 1, scale: 1 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onDawn(), gainEnergy(variant.amplified ? 2 : 1)),
+    activated([exhaustSelf(), abandonCost()], gainEnergy(variant.amplified ? 2 : 1)),
+  ],
+  verifiedText: expectedVerifiedText("▸Dawn: Gain 1●.\n\n☾, Abandon a character: Gain 1●.", "▸Dawn: Gain 2●.\n\n☾, Abandon a character: Gain 2●."),
 });
