@@ -461,6 +461,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
           ...(trigger.lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost: trigger.lastKnownSubjectCost }),
           ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
           ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
+          ...(trigger.discardedCount === undefined ? {} : { discardedCount: trigger.discardedCount }),
           ...(trigger.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),
           ...(trigger.captured === undefined ? {} : { captured: captured(trigger.captured) }),
         }],

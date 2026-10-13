@@ -584,6 +584,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     source: env.source,
     x: env.x ?? sourceX(ctx.state, env.source),
     scored: env.scored,
+    discardedCount: env.discardedCount,
     subjectCost: env.lastKnownSubjectCost,
     count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env)).length,
     countCards: (count) => zoneCount(ctx.state, ctx.catalog, count, env.controller),
@@ -789,6 +790,7 @@ export interface ResolveOptions {
   readonly gain?: SparkGain | null;
   /** The positive challenge award the scoring trigger matched. */
   readonly scored?: number | null;
+  readonly discardedCount?: number | null;
   /** The cards a floating or delayed trigger kept from its `withMaterialized` binding. */
   readonly captured?: readonly InstanceId[] | null;
   readonly controller: Side;
@@ -978,6 +980,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
     lastKnownSubjectCost: options.lastKnownSubjectCost ?? null,
     gain: options.gain ?? null,
     scored: options.scored ?? null,
+    discardedCount: options.discardedCount ?? null,
     controller: options.controller,
     variant: options.origin.kind === "card" ? options.origin.variant : BASE_VARIANT,
     x: options.x,

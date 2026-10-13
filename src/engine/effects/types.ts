@@ -101,6 +101,8 @@ export interface EffectEnv {
   readonly gain: SparkGain | null;
   /** The positive challenge award the scoring trigger matched; otherwise `null`. */
   readonly scored: number | null;
+  /** Actual cards discarded in the triggering occasion, or null outside a batch trigger. */
+  readonly discardedCount: number | null;
   readonly controller: Side;
   readonly variant: Variant;
   /** The value chosen for X, or `null`. */

@@ -352,24 +352,30 @@ describe("LOAD_STATE", () => {
     expect(malformed.filter((scored) => load(withScore(scored)) !== null)).toEqual([]);
   });
 
-  it("preserves finite queued subject costs and rejects malformed values and bonus contexts", () => {
+  it("preserves queued subject costs and discard counts and rejects malformed or bonus values", () => {
     const state = begun(), battle = journeyBattleOf(state.battle);
     if (battle === null) throw new Error("no journey battle");
     const instance = battle.engine.slice.committed.instances[firstCard(state)];
     if (instance.printing.kind !== "card") throw new Error("no fixture card printing");
     const trigger = { source: instance.id, controller: instance.controller, origin: { kind: "card", cardId: instance.printing.cardId, variant: instance.variant }, ability: 0, node: null, subject: instance.id };
-    const payload = (cost: unknown, bonus = false) => {
+    const payload = (cost: unknown, bonus = false, field = "lastKnownSubjectCost") => {
       const id = SYNTHETIC_DREAMWELL[0].id;
       const record = bonus ? { kind: "dreamwellBonus", source: { kind: "dreamwell", id, side: instance.controller }, controller: instance.controller, origin: { kind: "dreamwell", id }, ability: 0, node: null, subject: null } : trigger;
       return { ...battle, engine: { ...battle.engine, slice: { ...battle.engine.slice, committed: { ...battle.engine.slice.committed,
-        triggerQueue: [{ ...record, ...(cost === undefined ? {} : { lastKnownSubjectCost: cost }) }],
+        triggerQueue: [{ ...record, ...(cost === undefined ? {} : { [field]: cost }) }],
       } } } };
     };
-    const load = (cost: unknown, bonus = false) => validateLoadedState(state, { snapshot: state.journey, battle: payload(cost, bonus) });
+    const load = (cost: unknown, bonus = false, field = "lastKnownSubjectCost") => validateLoadedState(state, { snapshot: state.journey, battle: payload(cost, bonus, field) });
     for (const cost of [undefined, 0, 2, 1.5]) expect(load(cost)?.battle).toEqual(payload(cost));
     for (const cost of [null, -1, NaN, Infinity, "2", {}, [], true]) expect(load(cost)).toBeNull();
     expect(load(undefined, true)?.battle).toEqual(payload(undefined, true));
     expect(load(0, true)).toBeNull();
+    for (const count of [undefined, 1, 3, Number.MAX_SAFE_INTEGER]) {
+      const saved = JSON.parse(JSON.stringify(payload(count, false, "discardedCount"))) as unknown;
+      expect(validateLoadedState(state, { snapshot: state.journey, battle: saved })?.battle).toEqual(saved);
+    }
+    for (const count of [null, 0, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1, "2", {}, [], true]) expect(load(count, false, "discardedCount")).toBeNull();
+    expect(load(1, true, "discardedCount")).toBeNull();
   });
 
   it("loads loop prompt visibility conservatively and rejects malformed or partial metadata", () => {

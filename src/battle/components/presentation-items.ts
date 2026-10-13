@@ -73,6 +73,7 @@ export const EVENT_PRESENTATION = {
   controlChanged: "travel",
   countersChanged: "status",
   discarded: "travel",
+  discardBatch: "none",
   dissolved: "travel",
   dreamwellDrawn: "dreamwell",
   effectEnded: "status",

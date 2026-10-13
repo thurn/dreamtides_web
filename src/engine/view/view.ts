@@ -206,6 +206,8 @@ export interface QueuedTriggerView {
   readonly gain?: SparkGain;
   /** The positive challenge award a scoring trigger matched; absent for other triggers. */
   readonly scored?: number;
+  /** Public positive count captured from one completed discard occasion. */
+  readonly discardedCount?: number;
   /** Retained only while the viewer can identify this trigger's source. */
   readonly lastKnownSourceSpark?: number;
   /**
@@ -479,6 +481,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     ...(trigger.lastKnownSubjectCost !== undefined && visibleSource(trigger.source) && trigger.subjectHiddenFrom?.includes(viewer) === true ? { subjectCostHidden: true } : {}),
     ...(trigger.gain === undefined ? {} : { gain: copy(trigger.gain) }),
     ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
+    ...(trigger.discardedCount === undefined ? {} : { discardedCount: trigger.discardedCount }),
     ...(trigger.lastKnownSourceSpark === undefined || !visibleSource(trigger.source) ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),
     ...(trigger.captured === undefined || !visibleSource(trigger.source) ? {} : { captured: capturedView(trigger.captured) }),
   }));

@@ -24,6 +24,8 @@ export interface TriggerQueuedEvent {
   readonly gain?: SparkGain;
   /** The positive challenge award a scoring trigger matched; absent for other triggers. */
   readonly scored?: number;
+  /** Public positive count captured from one completed discard occasion. */
+  readonly discardedCount?: number;
   readonly lastKnownSourceSpark?: number;
 }
 

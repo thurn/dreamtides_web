@@ -1,3 +1,6 @@
+import { discardedCount } from "../../engine/dsl/builders";
+import { triggered, whenDiscardBatch } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives/draw";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 95,
   art: { x: 0, y: 0, scale: 1.77 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenDiscardBatch(), draw(discardedCount()), { oncePerTurn: true })],
+  verifiedText: "16qv44kn35o",
 });

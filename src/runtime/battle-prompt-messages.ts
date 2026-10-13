@@ -754,6 +754,8 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
       return `${who(event.to)} gained control of ${named(event.instance)}.`;
     case "countersChanged":
       return `${card(event.instance)} has ${plural(event.counters, "memory counter", "memory counters")}.`;
+    case "discardBatch":
+      return `${who(event.side)} discarded ${String(event.count)} ${event.count === 1 ? "card" : "cards"}.`;
     case "discarded":
       return `${who(event.side)} discarded ${named(event.instance)}.`;
     case "dissolved":

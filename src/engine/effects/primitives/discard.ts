@@ -1,7 +1,7 @@
 import { resolvePlayer } from "../../dsl/selectors";
 import type { PlayerRef, ValueExpr } from "../../dsl/types";
 import type { ChooseCardsPrompt } from "../../prompts/types";
-import { discardCard } from "../../rules/resources";
+import { discardCards } from "../../rules/resources";
 import { evaluate } from "../interpreter";
 import { definePrimitive } from "../types";
 
@@ -43,7 +43,7 @@ export const discardPrimitive = definePrimitive<DiscardNode>({
       }));
       chosen = hand.filter(card => selected.has(card));
     }
-    for (const card of chosen) discardCard(ctx, side, card);
+    discardCards(ctx, side, chosen);
   },
 });
 

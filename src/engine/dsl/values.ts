@@ -19,6 +19,8 @@ export interface ValueScope {
   readonly x: number | null;
   /** The scoring trigger's captured challenge award, absent outside its resolution. */
   readonly scored?: number | null;
+  /** The discard trigger's captured occasion count; absent outside its resolution. */
+  readonly discardedCount?: number | null;
   /** Present only in a resolving context; null means no captured subject. */
   readonly subjectCost?: number | null;
   count(selector: CharacterSelector): number;
@@ -45,6 +47,8 @@ export function evaluateValue(state: BattleState, value: ValueExpr, scope: Value
       return scope.subjectCost ?? 0;
     case "scored":
       return scope.scored ?? 0;
+    case "discardedCount":
+      return scope.discardedCount ?? 0;
     case "x":
       return scope.x ?? 0;
     case "costOf":

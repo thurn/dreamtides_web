@@ -501,6 +501,11 @@ export function lockedAtResolution(of: ValueExpr): ValueExpr {
   return { value: "locked", of };
 }
 
+/** The number of cards actually discarded in this trigger's occasion. */
+export function discardedCount(): ValueExpr {
+  return { value: "discardedCount" };
+}
+
 /** The points awarded by the challenge that triggered this ability, captured at scoring. */
 export function scoredAmount(): ValueExpr {
   return { value: "scored" };

@@ -179,6 +179,8 @@ export const LAB = {
   optionalReturn: labEvent(0x70, 0, p.returnFromVoid(everyIn("void"), { pay: 1 })),
   /** "Draw 2 cards, then discard a card." */
   drawTwoThenDiscard: labEvent(1, 1, p.sequence(p.draw(2), p.discard(1))),
+  /** "Discard two cards": one public count after the individual travels. */
+  discardPair: labEvent(0x45300, 0, p.discard(2)),
   /** "Each player discards a card." */
   eachPlayerDiscards: labEvent(2, 1, p.sequence(p.discard(1), p.discard(1, "opponent"))),
   /** Privately choose a card from the opponent's hand to discard. */
@@ -376,6 +378,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [LAB.transferMover.id]: { name: "Lab Transfer", text: "Interrupt. Gain control of an enemy." },
   [LAB.mover.id]: { name: "Lab Mover", text: "❖ – 1●: Move this character to an unoccupied position." },
   [LAB.drawTwoThenDiscard.id]: { name: "Lab Sifting", text: "Draw 2 cards, then discard a card." },
+  [LAB.discardPair.id]: { name: "Lab Discard", text: "Discard two cards." },
   [LAB.eachPlayerDiscards.id]: { name: "Lab Tithe", text: "Each player discards a card." },
   [LAB.dissolveUpToOne.id]: { name: "Lab Mercy", text: "Dissolve up to one enemy." },
   [LAB.shuffleInto.id]: {
@@ -973,6 +976,11 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
         ],
       },
     ],
+  },
+  {
+    name: "discard-batch", description: "A two-card discard completes one count-only occasion",
+    setup: { active: "player", phase: "day", player: { hand: [LAB.discardPair.id, ...vanillas.slice(0, 3)], deck: deck(6) }, enemy: { deck: deck(6) } },
+    script: [], presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.player.hand, 1), at(ids.player.hand, 2)] }],
   },
   {
     name: "draw-discard",

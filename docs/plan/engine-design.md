@@ -928,6 +928,20 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   source moves or ceases to exist. A "when … gains ✦" trigger also records
   `gain`, the matched gain's amount and expiry, which the trigger's effect
   reads as `env.gain`, the view shows, and `triggerQueued` logs.
+- **Discard occasions.** `discardCards(ctx, side, cards)` validates distinct
+  current-hand members before moving any, preserves each `discarded` event,
+  then emits public `discardBatch { side, count }` for a positive occasion.
+  Each discard instruction, payment descriptor, hand-limit choice, and
+  whole-hand redraw calls it once; `discardCard` calls it for a singleton.
+  `whenDiscardBatch(player)` matches the count event with a null subject.
+  Its `discardedCount` scalar is captured in `Match`, `QueuedTrigger`,
+  `triggerQueued`, and `QueuedTriggerView`, copied by determinization and
+  serialization, and forwarded through `EffectEnv` to `discardedCount()`.
+  The value is zero outside a captured batch trigger. Counts name no cards
+  and remain public independently of subject redaction; queued event source
+  privacy retains its usual contract. Saved queues accept an absent scalar
+  or a positive safe integer, and Dreamwell bonuses carry no discard scalar.
+  See RD-hv-umm2.453-1 and rules § Zones → Discarding one or more cards.
 - **Ordering.** Matches enqueue in event order. Simultaneous matches use the
   fixed order: the active side first; within a side, avatar → dreamsigns →
   characters, B0→B9 then F0→F8. Cards in other zones follow, ordered by zone

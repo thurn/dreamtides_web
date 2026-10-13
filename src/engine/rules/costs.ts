@@ -22,7 +22,7 @@ import type {
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
-import { discardCard, gainPoints, spendEnergy } from "./resources";
+import { discardCards, gainPoints, spendEnergy } from "./resources";
 import { banish, charactersInPlay, dissolve, instanceOf, returnToHand, slotOf } from "./zones";
 import { revealToBoth } from "../view/knowledge";
 import { Infeasible } from "../steps/errors";
@@ -586,7 +586,7 @@ export function payCosts(ctx: StepContext, side: Side, source: AbilitySource, pl
         }
         break;
       case "discard":
-        for (const id of cards) discardCard(ctx, side, id);
+        discardCards(ctx, side, cards);
         break;
       case "banishFromAnyVoid":
       case "banishFromVoid":

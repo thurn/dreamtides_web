@@ -18,7 +18,7 @@ export function resolveQueuedTrigger(ctx: StepContext, trigger: QueuedTrigger): 
 }
 
 function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
-  const { source, controller, origin, ability, node, subject, gain, scored, captured, lastKnownSourceSpark, lastKnownSubjectCost, linkedSource } = trigger;
+  const { source, controller, origin, ability, node, subject, gain, scored, discardedCount, captured, lastKnownSourceSpark, lastKnownSubjectCost, linkedSource } = trigger;
   const body = trigger.kind === "dreamwellBonus"
     ? dreamwellBody(ctx, trigger)
     : triggerBody(ctx.catalog, origin, ability, node);
@@ -40,6 +40,7 @@ function resolveBody(ctx: StepContext, trigger: QueuedTrigger): void {
     ...(lastKnownSubjectCost === undefined ? {} : { lastKnownSubjectCost }),
     gain: gain ?? null,
     scored: scored ?? null,
+    discardedCount: discardedCount ?? null,
     captured: captured ?? null,
     controller,
     x: null,

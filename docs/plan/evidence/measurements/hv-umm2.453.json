@@ -1,0 +1,792 @@
+{
+  "bead": "hv-umm2.453",
+  "base": "958b39cff833b2d6d5fda4a5aaa7767002fc8763",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol",
+  "currentGrossWindow": {
+    "start": "2026-10-13T03:21:04Z",
+    "end": "2026-10-13T04:39:33.773505+00:00",
+    "scope": "Parent claim acknowledgement through final commit preparation, including setup, admission, revalidation, all source-free coordination, implementation, queue waits, checks, QA and packaging; exact model dispatch start unobserved.",
+    "endpointStatus": "Final endpoint immediately before schema/staged checks and the single commit; actual commit timestamp is retained separately in terminal handoff."
+  },
+  "priorOwnedSourceFreeSegment": {
+    "bead": "hv-umm2.453",
+    "currentClaimStart": "2026-10-13T02:28:52Z",
+    "releaseBefore": "2026-10-13T02:42:37.406243+00:00",
+    "releaseAfter": "2026-10-13T02:42:37.498530+00:00",
+    "releaseNativeUpdatedAt": "2026-10-13T02:42:37Z",
+    "releaseWrapperSeconds": 0.09247074999439064,
+    "exitCode": 0,
+    "status": "open",
+    "assignee": null,
+    "sourceFree": true,
+    "residualWriters": false,
+    "worktreeRemoved": true,
+    "segmentScope": "Current root source-free claimed elapsed only; historical peer claims/started_at and future released gap excluded. Exact release/tool effect instant unobserved; before/after bracket retained.",
+    "elapsedSourceFreeMinutesSecondPrecision": 13.75
+  },
+  "excluded": "Released gap and all other peers historical clocks; prior segment remains separate and is not folded into this compact window.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final source review-after-cohort supervisor invocation starting one-minute os.getloadavg sample; inner review samples are retained in its raw output."
+      },
+      "localValidationS": {
+        "measuredFor": "Final passing command outer invocations, including launch/acquire/execution/cleanup. Every failed and passing attempt remains in validationReceipts; nested Vitest/test-stage/fuzz/native lease times are separate."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 3,
+    "lines": 412,
+    "jsdomFiles": 0,
+    "fixtureIncluded": "src/engine/effects/primitives/contracts/discard-batch-support.ts, 98 lines, counted as a new test fixture file; no new discovery entrypoint."
+  },
+  "testFiles": {
+    "src/engine/effects/primitives/contracts/at-end-of-turn-trigger.contracts.ts": {
+      "beforeLines": 256,
+      "afterLines": 256,
+      "jsdom": false,
+      "new": false
+    },
+    "src/engine/rules/costs.test.ts": {
+      "beforeLines": 230,
+      "afterLines": 230,
+      "jsdom": false,
+      "new": false
+    },
+    "src/rules/battle/engine-battle-intents.test.ts": {
+      "beforeLines": 492,
+      "afterLines": 498,
+      "jsdom": false,
+      "new": false
+    },
+    "src/engine/effects/primitives/contracts/discard-batch-replay.contracts.ts": {
+      "beforeLines": 0,
+      "afterLines": 113,
+      "jsdom": false,
+      "new": true
+    },
+    "src/engine/effects/primitives/contracts/discard-batch-support.ts": {
+      "beforeLines": 0,
+      "afterLines": 98,
+      "jsdom": false,
+      "new": true
+    },
+    "src/engine/effects/primitives/contracts/discard-batch.contracts.ts": {
+      "beforeLines": 0,
+      "afterLines": 195,
+      "jsdom": false,
+      "new": true
+    }
+  },
+  "diffBeforeQa": {
+    "rows": [
+      {
+        "path": "docs/plan/engine-design.md",
+        "added": 14,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "docs/rules.md",
+        "added": 12,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/battle/components/presentation-items.ts",
+        "added": 1,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/content/cards/key-sifter-c86c1364.ts",
+        "added": 5,
+        "deleted": 1,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/dsl/builders.ts",
+        "added": 5,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/dsl/triggers.ts",
+        "added": 5,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/dsl/types.ts",
+        "added": 4,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/dsl/values.ts",
+        "added": 4,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/effects/interpreter.ts",
+        "added": 3,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/at-end-of-turn-trigger.contracts.ts",
+        "added": 1,
+        "deleted": 1,
+        "testOrFixture": true
+      },
+      {
+        "path": "src/engine/effects/primitives/discard.ts",
+        "added": 2,
+        "deleted": 2,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/effects/primitives/redraw-hand.ts",
+        "added": 2,
+        "deleted": 2,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/effects/types.ts",
+        "added": 2,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/events/index.ts",
+        "added": 3,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/events/kinds/trigger-queued.ts",
+        "added": 2,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/rules/costs.test.ts",
+        "added": 1,
+        "deleted": 1,
+        "testOrFixture": true
+      },
+      {
+        "path": "src/engine/rules/costs.ts",
+        "added": 2,
+        "deleted": 2,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/rules/resources.ts",
+        "added": 24,
+        "deleted": 1,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/rules/turn.ts",
+        "added": 2,
+        "deleted": 4,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/state/types.ts",
+        "added": 2,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/testing/prompt-lab.ts",
+        "added": 8,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/triggers/matcher.ts",
+        "added": 6,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/triggers/resolve.ts",
+        "added": 2,
+        "deleted": 1,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/view/determinize.ts",
+        "added": 1,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/view/view.ts",
+        "added": 3,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/rules/battle/engine-battle-intents.test.ts",
+        "added": 10,
+        "deleted": 4,
+        "testOrFixture": true
+      },
+      {
+        "path": "src/rules/battle/fold.ts",
+        "added": 2,
+        "deleted": 1,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/runtime/battle-prompt-messages.ts",
+        "added": 2,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "docs/plan/evidence/pre-existing/hv-umm2.453.md",
+        "added": 9,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "docs/plan/evidence/rules-decisions/RD-hv-umm2.453-1.md",
+        "added": 6,
+        "deleted": 0,
+        "testOrFixture": false
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/discard-batch-replay.contracts.ts",
+        "added": 113,
+        "deleted": 0,
+        "testOrFixture": true
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/discard-batch-support.ts",
+        "added": 98,
+        "deleted": 0,
+        "testOrFixture": true
+      },
+      {
+        "path": "src/engine/effects/primitives/contracts/discard-batch.contracts.ts",
+        "added": 195,
+        "deleted": 0,
+        "testOrFixture": true
+      },
+      {
+        "path": "src/engine/events/kinds/discard-batch.ts",
+        "added": 11,
+        "deleted": 0,
+        "testOrFixture": false
+      }
+    ],
+    "gross": {
+      "touched": 34,
+      "added": 562,
+      "deleted": 20
+    },
+    "testGross": {
+      "touched": 6,
+      "added": 418,
+      "deleted": 6
+    }
+  },
+  "validationScopes": {
+    "review": {
+      "outerS": 59.706520875,
+      "vitestS": 48.58,
+      "enclosingRelatedTestStageS": 55.9,
+      "files": 287,
+      "tests": 5498
+    },
+    "full": {
+      "outerS": 104.154739,
+      "vitestS": 74.73,
+      "enclosingTestStageS": 75.3,
+      "files": 368,
+      "tests": 6499,
+      "workers": 2,
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "queueObservation": "Prompt acquisition observed; exact acquire-only duration was not isolated.",
+      "performance": "Reported 60-second target exceeded under measured load; not a CI assertion. Canonical retrospective is separately peer-owned."
+    },
+    "productionCli": {
+      "games": 300,
+      "steps": 123291,
+      "prompts": 7738,
+      "included": 614,
+      "played": 186,
+      "failures": 0,
+      "boundedLegality": 0,
+      "boundedPrompts": 0,
+      "interactiveGames": 30,
+      "interactiveReruns": 768,
+      "outerS": 183.034975208,
+      "reportedFuzzWallS": 181.7,
+      "reportedCpuS": 196.3
+    },
+    "productionObserver": {
+      "uuid": "c86c1364-6ac4-4c90-8053-4e49441a2c83",
+      "prefix": "discard-batch453",
+      "first": 0,
+      "games": 300,
+      "total": {
+        "games": 300,
+        "included": 614,
+        "cardPlayed": 186,
+        "queued": 138,
+        "resolved": 135,
+        "multiQueued": 59,
+        "draws": 190,
+        "fatigue": 92,
+        "captured": 297,
+        "inline": 300,
+        "interactive": 30,
+        "checkpoints": 138,
+        "endedQueued": 3,
+        "endedCaptured": 15
+      },
+      "bySide": {
+        "player": {
+          "queued": 66,
+          "resolved": 65,
+          "captured": 135,
+          "draws": 100,
+          "fatigue": 34
+        },
+        "enemy": {
+          "queued": 72,
+          "resolved": 70,
+          "captured": 162,
+          "draws": 90,
+          "fatigue": 58
+        }
+      },
+      "representativeSaved": true,
+      "publicApisOnly": true,
+      "resolvedMulti": 58,
+      "skippedOrInapplicable": 0
+    },
+    "preflight": {
+      "pass": 10,
+      "skip": 10,
+      "fail": 0,
+      "pending": 0
+    }
+  },
+  "sourceFreeze": {
+    "baselineAttempt1": "/tmp/453-resume-witness-attempt1.before.json -> after.json, all 4295 tracked files unchanged",
+    "baselineAttempt2": "/tmp/453-resume-witness.before.json -> after.json, all 4295 tracked files unchanged",
+    "matcherNegativeRestore": "/tmp/453-negative-restore.receipt.json, full 4300-file byte restore",
+    "observer": "/tmp/453-production-before.json -> /tmp/453-production-after.json, all 4302 files byte identical",
+    "runtime": {
+      "at": "2026-10-13T04:32:11.767140+00:00",
+      "before": "/tmp/453-production-before.json",
+      "after": "/tmp/453-runtime-after.json",
+      "functionalFilesUnchanged": 4302,
+      "changedOnly": [
+        "docs/plan/evidence/qa-ledger/hv-umm2.453.jsonl"
+      ],
+      "allowedSweepEvidenceAppend": true,
+      "drain": "/tmp/453-runtime-drain.json"
+    }
+  },
+  "baselineWitness": {
+    "attempt1": {
+      "fixtureSetupFailure": "Required Dreamwell argument missing from external createCatalog call",
+      "behavioralCases": 0,
+      "source": "/tmp/453-resume-witness-attempt1.mts",
+      "receipt": "/tmp/453-resume-witness-attempt1.receipt.json"
+    },
+    "attempt2": {
+      "expectedMissingBehaviorAssertions": 10,
+      "passingControls": 6,
+      "fixtureErrors": 0,
+      "controllers": [
+        "player",
+        "enemy"
+      ],
+      "source": "/tmp/453-resume-witness.mts",
+      "receipt": "/tmp/453-resume-witness.receipt.json"
+    }
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "tests": [
+        "a public mid-resolution error preserves the original cards, resources, queue and once use"
+      ],
+      "module": "discard-batch.contracts.ts"
+    },
+    {
+      "path": "reload/restart mid-operation",
+      "tests": [
+        "restarts a paused instruction with its published prefix, captured count and once use for %s",
+        "reloads a genuinely queued trigger interrupted at its own confirmation"
+      ],
+      "module": "discard-batch-replay.contracts.ts"
+    },
+    {
+      "path": "partial payment write",
+      "tests": [
+        "rejects an invalid later payment choice without partial energy, discard or trigger mutation",
+        "validates a whole resource cohort before any member moves"
+      ],
+      "module": "discard-batch.contracts.ts"
+    },
+    {
+      "path": "invalid/stale input and saved scalar",
+      "tests": [
+        "rejects duplicate, nonmember, wrong-side and stale answers before consuming a batch",
+        "preserves queued subject costs and discard counts and rejects malformed or bonus values"
+      ],
+      "modules": [
+        "discard-batch-replay.contracts.ts",
+        "engine-battle-intents.test.ts"
+      ]
+    },
+    {
+      "path": "concurrent actor answers",
+      "test": "rejects duplicate, nonmember, wrong-side and stale answers before consuming a batch",
+      "detail": "First accepted answer commits once; a competing later answer bounces noPendingPrompt with unchanged final JSON and one draw/cohort result. Foreign actor bounces notYourPrompt.",
+      "module": "discard-batch-replay.contracts.ts"
+    },
+    {
+      "path": "once-use rejection/zero/reset",
+      "tests": [
+        "zero leaves the once-per-turn use available and a new real turn resets it",
+        "validates a whole resource cohort before any member moves"
+      ],
+      "module": "discard-batch.contracts.ts"
+    }
+  ],
+  "failedAttempts": [
+    {
+      "receipt": "focused",
+      "failure": "Own unsupported parseInstanceId import and exact Ending event assertion fallout",
+      "disposition": "Public existing deck instance nonmember fixture correction; parent exact Ending ACK applied."
+    },
+    {
+      "receipt": "own-contracts-refined",
+      "failure": "Fixture expected returned hand source to be unidentifiable despite retained knowledge",
+      "disposition": "Synthetic ordinary shuffle hides its source; production knowledge untouched."
+    },
+    {
+      "receipt": "negative-batch-arm",
+      "failure": "All 23 selected capture/privacy contracts fail when only new matcher arm returns null",
+      "disposition": "Authorized negative control, byte-exact restore verified."
+    },
+    {
+      "receipt": "review",
+      "failure": "Own lint and exact cost expectation fallout",
+      "disposition": "Own lint fixes and parent exact costs ACK applied."
+    },
+    {
+      "receipt": "review-corrected",
+      "failure": "TS2345 inferred turnLimit:null in own public replay fixture",
+      "disposition": "Explicit public BattleState annotation; production types untouched."
+    },
+    {
+      "receipt": "cohort-alias-negative",
+      "failure": "Live hand list narrowed while moving, actual count 2 vs expected 4",
+      "disposition": "Snapshot admitted resource cohort; positive 27 own tests and final review/Knip/full pass."
+    },
+    {
+      "receipt": "production-observer",
+      "failure": "External diagnostic assumed every queued trigger resolves before battle end",
+      "completedGameRows": 18,
+      "failedOrdinal": 18,
+      "disposition": "Account still-queued terminal battle triggers separately; same 300-seed corrected public observer passes."
+    },
+    {
+      "receipt": "player-native",
+      "failure": "Premature geometry observation before actual rendered discard controls",
+      "classification": "Ignored-driver setup/targeting assumption, no established production defect",
+      "rawReport": "invocations/run-jmMUGd/judged.result.json",
+      "sourceCopy": "judged-attempt1.mjs",
+      "disposition": "Final player desktop/mobile pass with actual accepted physical IDs, mode value1 and trigger count/draw/reload proof."
+    },
+    {
+      "receipt": "player-native-refined",
+      "failure": "Submit wait after taps before actual answerable prompt; no accepted answer",
+      "classification": "Ignored-driver setup/targeting assumption, no established production defect",
+      "rawReport": "invocations/run-V2athn/judged.result.json",
+      "sourceCopy": "judged-attempt2.mjs",
+      "disposition": "Final player desktop/mobile pass with actual accepted physical IDs, mode value1 and trigger count/draw/reload proof."
+    },
+    {
+      "receipt": "player-native-ready",
+      "failure": "Gallery candidate selector does not identify the actual board hand-fan surface",
+      "classification": "Ignored-driver setup/targeting assumption, no established production defect",
+      "rawReport": "invocations/run-91gAge/judged.result.json",
+      "sourceCopy": "judged-attempt3.mjs",
+      "disposition": "Final player desktop/mobile pass with actual accepted physical IDs, mode value1 and trigger count/draw/reload proof."
+    },
+    {
+      "receipt": "player-native-physical",
+      "failure": "First count-2 trigger works; second tap before restored main controls accepted no action",
+      "classification": "Ignored-driver setup/targeting assumption, no established production defect",
+      "rawReport": "invocations/run-dMc1AM/judged.result.json",
+      "sourceCopy": "judged-attempt4.mjs",
+      "disposition": "Final player desktop/mobile pass with actual accepted physical IDs, mode value1 and trigger count/draw/reload proof."
+    },
+    {
+      "receipt": "player-native-settled",
+      "failure": "Second play chose actual return mode value2/chooseTargets from filtered UI options instead of draw/discard value1",
+      "classification": "Ignored-driver setup/targeting assumption, no established production defect",
+      "rawReport": "invocations/run-N7MvKo/judged.result.json",
+      "sourceCopy": "judged-attempt5.mjs",
+      "disposition": "Final player desktop/mobile pass with actual accepted physical IDs, mode value1 and trigger count/draw/reload proof."
+    }
+  ],
+  "unclockedAttempt": {
+    "command": "Initial direct typecheck before workspace materialization",
+    "outcome": "Missing disposable Cumulus token mirror; tool terminal failure observed, exact UTC/wall/full raw output unobserved (tool output truncated). npm prepare then prepared typecheck passed.",
+    "fabricatedTiming": false
+  },
+  "excludedOwnership": [
+    "scripts/content-inventory.ts and generated inventory JSON",
+    "All other 125 scoped leaves/catalogs",
+    "Peer Foresee fixture/existing log case",
+    "Canonical g3gu retrospective"
+  ],
+  "runtimeLedger": {
+    "at": "2026-10-13T04:32:11.319803+00:00",
+    "allCheckReceiptsTerminal": true,
+    "ownedPids": [
+      20185,
+      20203,
+      26654,
+      26677,
+      29944,
+      29954,
+      29988,
+      32161,
+      32175,
+      34967,
+      34976,
+      35719,
+      35729,
+      35762,
+      36044,
+      36053,
+      38382,
+      38391,
+      40824,
+      40838,
+      40869,
+      42885,
+      42893,
+      43253,
+      43261,
+      43289,
+      44801,
+      44810,
+      45594,
+      45602,
+      45630,
+      46013,
+      46022,
+      46536,
+      46545,
+      47463,
+      47518,
+      54290,
+      54308,
+      54710,
+      54719,
+      56764,
+      56773,
+      59929,
+      59939,
+      59978,
+      59986,
+      67104,
+      67112,
+      67149,
+      68222,
+      68234,
+      70092,
+      70102,
+      70138,
+      80901,
+      80909,
+      87028,
+      87039,
+      88091,
+      88102,
+      91481,
+      91482,
+      94456,
+      94467,
+      96511,
+      96595,
+      97169,
+      99623,
+      99638
+    ],
+    "ownedGroups": [
+      20203,
+      26677,
+      29954,
+      29988,
+      32175,
+      34976,
+      35729,
+      35762,
+      36053,
+      38391,
+      40838,
+      40869,
+      42893,
+      43261,
+      43289,
+      44810,
+      45602,
+      45630,
+      46022,
+      46545,
+      47518,
+      54308,
+      54719,
+      56773,
+      59939,
+      59986,
+      67112,
+      67149,
+      68234,
+      70102,
+      70138,
+      80909,
+      87039,
+      88102,
+      91482,
+      94467,
+      96595,
+      97169,
+      99638
+    ],
+    "ownedServers": [
+      67149,
+      70138,
+      97169,
+      29988,
+      35762,
+      40869,
+      43289,
+      45630
+    ],
+    "residualProcesses": [],
+    "ownOwnersAbsent": true,
+    "awaitedDrain": "Each actual runner terminal receipt follows its awaited finally: all active MCP calls, browser context/client, server process group, log fd, owner clear, browser lease and evidence lock release. No ignored failure before this drain permits a source edit. Shared MCP service and any foreign owner remain untouched.",
+    "ports": "Owned server cleanup logs report 5174/5275 free; no own listener process remains.",
+    "foreignOwnersUntouched": true
+  },
+  "visualInspection": {
+    "helper": "Player mobile choice/log and desktop engine-settled board; enemy mobile log inspected. Count lines, selected state and Submit are readable; hit/geometry and 2x capture dimensions asserted. Existing hand fan extends below viewport with visible reachable header bands. The pre-reload engine-settled board may include presentation travel; post-reload count logs are final stable captures.",
+    "parent": "Final player mobile choice/desktop log, enemy mobile log/desktop settled reviewed; no changed presentation issue observed. These are QA visual observations, not a cold source review."
+  },
+  "coldReview": {
+    "owner": "parent",
+    "routing": "Fresh read-only configured gpt-5.6-sol Codex CLI under user temporary review override",
+    "status": "Required, unresolved until parent runs exact-head review and verifies/disposes findings; not claimed complete."
+  },
+  "finalStagedDiff": {
+    "scope": "Staged readiness, including all own evidence; final endpoint changes preserve this line shape.",
+    "gross": {
+      "touched": 37,
+      "added": 1412,
+      "deleted": 20
+    },
+    "testGross": {
+      "touched": 6,
+      "added": 418,
+      "deleted": 6
+    },
+    "testNet": {
+      "files": 3,
+      "lines": 412,
+      "jsdomFiles": 0
+    },
+    "savedIntentsPhysicalLines": 498,
+    "newTestDiscoveryEntrypoints": 0
+  },
+  "validationReceipts": [
+    {"label":"prepare","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["node","scripts/prepare-workspace.mjs"],"pid":56773,"observerPid":56764,"processGroup":56773,"start":"2026-10-13T03:41:31.701329+00:00","end":"2026-10-13T03:41:32.897436+00:00","wallS":1.1959252079977887,"exit":0,"loadBefore":[5.779296875,7.560546875,9.04296875],"loadAfter":[5.779296875,7.560546875,9.04296875],"childCpuS":1.33,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-prepare.receipt.json","stdoutPath":"/tmp/453-check-prepare.stdout.txt","stderrPath":"/tmp/453-check-prepare.stderr.txt"},
+    {"label":"typecheck","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["./node_modules/.bin/tsc","--noEmit","--pretty","false","-p","tsconfig.json"],"pid":59939,"observerPid":59929,"processGroup":59939,"start":"2026-10-13T03:43:16.685292+00:00","end":"2026-10-13T03:43:25.869069+00:00","wallS":9.183512250005151,"exit":0,"loadBefore":[3.43408203125,6.22265625,8.345703125],"loadAfter":[4.03955078125,6.3017578125,8.36083984375],"childCpuS":14.25,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-typecheck.receipt.json","stdoutPath":"/tmp/453-check-typecheck.stdout.txt","stderrPath":"/tmp/453-check-typecheck.stderr.txt"},
+    {"label":"focused","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["npm","test","--","src/engine/effects/primitives/contracts.test.ts","src/rules/battle/engine-battle-intents.test.ts"],"pid":20203,"observerPid":20185,"processGroup":20203,"start":"2026-10-13T03:45:39.076020+00:00","end":"2026-10-13T03:45:49.302839+00:00","wallS":10.232889874998364,"exit":1,"loadBefore":[11.02734375,9.4931640625,9.431640625],"loadAfter":[10.7216796875,9.47705078125,9.42578125],"childCpuS":14.870000000000001,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-focused.receipt.json","stdoutPath":"/tmp/453-check-focused.stdout.txt","stderrPath":"/tmp/453-check-focused.stderr.txt"},
+    {"label":"own-contracts","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["./node_modules/.bin/vitest","run","src/engine/effects/primitives/contracts.test.ts","-t","discard batch|discard captured count"],"pid":26677,"observerPid":26654,"processGroup":26677,"start":"2026-10-13T03:47:06.065237+00:00","end":"2026-10-13T03:47:09.408230+00:00","wallS":3.3427709999959916,"exit":0,"loadBefore":[7.875,8.80517578125,9.16796875],"loadAfter":[7.8046875,8.77490234375,9.15478515625],"childCpuS":4.49,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-own-contracts.receipt.json","stdoutPath":"/tmp/453-check-own-contracts.stdout.txt","stderrPath":"/tmp/453-check-own-contracts.stderr.txt"},
+    {"label":"own-contracts-refined","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["./node_modules/.bin/vitest","run","src/engine/effects/primitives/contracts.test.ts","-t","discard batch|discard captured count"],"pid":68234,"observerPid":68222,"processGroup":68234,"start":"2026-10-13T03:48:52.628984+00:00","end":"2026-10-13T03:48:56.031486+00:00","wallS":3.402352666002116,"exit":1,"loadBefore":[19.11962890625,12.5439453125,10.58251953125],"loadAfter":[19.11962890625,12.5439453125,10.58251953125],"childCpuS":4.74,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-own-contracts-refined.receipt.json","stdoutPath":"/tmp/453-check-own-contracts-refined.stdout.txt","stderrPath":"/tmp/453-check-own-contracts-refined.stderr.txt"},
+    {"label":"own-contracts-final","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["./node_modules/.bin/vitest","run","src/engine/effects/primitives/contracts.test.ts","-t","discard batch|discard captured count"],"pid":88102,"observerPid":88091,"processGroup":88102,"start":"2026-10-13T03:49:32.739072+00:00","end":"2026-10-13T03:49:35.889706+00:00","wallS":3.150477333998424,"exit":0,"loadBefore":[14.05322265625,12.1513671875,10.53369140625],"loadAfter":[14.05322265625,12.1513671875,10.53369140625],"childCpuS":4.79,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-own-contracts-final.receipt.json","stdoutPath":"/tmp/453-check-own-contracts-final.stdout.txt","stderrPath":"/tmp/453-check-own-contracts-final.stderr.txt"},
+    {"label":"negative-batch-arm","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["./node_modules/.bin/vitest","run","src/engine/effects/primitives/contracts.test.ts","-t","discard batch|discard captured count"],"pid":91482,"observerPid":91481,"processGroup":91482,"start":"2026-10-13T03:50:14.742476+00:00","end":"2026-10-13T03:50:17.520997+00:00","wallS":2.778394708002452,"exit":1,"loadBefore":[9.8212890625,11.30029296875,10.29541015625],"loadAfter":[9.35498046875,11.1787109375,10.25830078125],"childCpuS":4.279999999999999,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-negative-batch-arm.receipt.json","stdoutPath":"/tmp/453-check-negative-batch-arm.stdout.txt","stderrPath":"/tmp/453-check-negative-batch-arm.stderr.txt"},
+    {"label":"affected","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["npm","test","--","src/engine/rules/costs-discard.test.ts","src/engine/rules/costs-discard-hand.test.ts","src/engine/rules/costs-discard-x-min.test.ts","src/engine/rules/turn.test.ts","src/engine/triggers/triggers-redaction.test.ts","src/engine/testing/tooling.test.ts","src/screens/cumulus_adapters/engine-battle-presentation.test.ts","src/rules/battle/engine-battle-intents.test.ts"],"pid":94467,"observerPid":94456,"processGroup":94467,"start":"2026-10-13T03:50:58.712753+00:00","end":"2026-10-13T03:51:07.249525+00:00","wallS":8.536510124991764,"exit":0,"loadBefore":[7.34765625,10.42041015625,10.02099609375],"loadAfter":[7.1396484375,10.2744140625,9.9736328125],"childCpuS":13.350000000000001,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-affected.receipt.json","stdoutPath":"/tmp/453-check-affected.stdout.txt","stderrPath":"/tmp/453-check-affected.stderr.txt"},
+    {"label":"focused-restored","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["npm","test","--","src/engine/effects/primitives/contracts.test.ts","src/rules/battle/engine-battle-intents.test.ts"],"pid":99638,"observerPid":99623,"processGroup":99638,"start":"2026-10-13T03:52:35.297027+00:00","end":"2026-10-13T03:52:44.833638+00:00","wallS":9.536399042000994,"exit":0,"loadBefore":[6.4453125,9.31787109375,9.63525390625],"loadAfter":[6.44970703125,9.224609375,9.59814453125],"childCpuS":14.379999999999999,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-focused-restored.receipt.json","stdoutPath":"/tmp/453-check-focused-restored.stdout.txt","stderrPath":"/tmp/453-check-focused-restored.stderr.txt"},
+    {"label":"review","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["npm","run","review"],"pid":32175,"observerPid":32161,"processGroup":32175,"start":"2026-10-13T03:54:34.842199+00:00","end":"2026-10-13T03:55:29.045311+00:00","wallS":54.20259783399524,"exit":1,"loadBefore":[3.92333984375,7.55810546875,8.89990234375],"loadAfter":[5.0400390625,7.3095703125,8.7255859375],"childCpuS":176.31,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-review.receipt.json","stdoutPath":"/tmp/453-check-review.stdout.txt","stderrPath":"/tmp/453-check-review.stderr.txt"},
+    {"label":"lint-own-fix","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["./node_modules/.bin/eslint","--fix","src/engine/effects/primitives/contracts/discard-batch.contracts.ts","src/engine/effects/primitives/contracts/discard-batch-replay.contracts.ts","src/engine/effects/primitives/contracts/discard-batch-support.ts"],"pid":34976,"observerPid":34967,"processGroup":34976,"start":"2026-10-13T03:56:34.011549+00:00","end":"2026-10-13T03:56:36.676404+00:00","wallS":2.6647181249863934,"exit":0,"loadBefore":[3.49169921875,6.4033203125,8.279296875],"loadAfter":[3.49169921875,6.4033203125,8.279296875],"childCpuS":4.4399999999999995,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-lint-own-fix.receipt.json","stdoutPath":"/tmp/453-check-lint-own-fix.stdout.txt","stderrPath":"/tmp/453-check-lint-own-fix.stderr.txt"},
+    {"label":"review-corrected","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["npm","run","review"],"pid":36053,"observerPid":36044,"processGroup":36053,"start":"2026-10-13T03:57:12.960896+00:00","end":"2026-10-13T03:58:13.049157+00:00","wallS":60.08768270800647,"exit":2,"loadBefore":[3.65283203125,6.083984375,8.0751953125],"loadAfter":[5.77880859375,6.17431640625,7.96728515625],"childCpuS":164.57999999999998,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-review-corrected.receipt.json","stdoutPath":"/tmp/453-check-review-corrected.stdout.txt","stderrPath":"/tmp/453-check-review-corrected.stderr.txt"},
+    {"label":"review-final","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["env","JOURNEY_TEST_WORKERS=2","npm","run","review"],"pid":38391,"observerPid":38382,"processGroup":38391,"start":"2026-10-13T03:58:32.599761+00:00","end":"2026-10-13T03:59:29.343174+00:00","wallS":56.74286320799729,"exit":0,"loadBefore":[4.83544921875,5.9345703125,7.83935546875],"loadAfter":[4.947265625,5.82373046875,7.6796875],"childCpuS":161.26000000000002,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-review-final.receipt.json","stdoutPath":"/tmp/453-check-review-final.stdout.txt","stderrPath":"/tmp/453-check-review-final.stderr.txt"},
+    {"label":"knip","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["npm","run","knip"],"pid":42893,"observerPid":42885,"processGroup":42893,"start":"2026-10-13T04:01:15.939470+00:00","end":"2026-10-13T04:01:20.122491+00:00","wallS":4.18285441599437,"exit":0,"loadBefore":[3.8037109375,5.1669921875,7.20361328125],"loadAfter":[3.8193359375,5.1474609375,7.1845703125],"childCpuS":4.54,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-knip.receipt.json","stdoutPath":"/tmp/453-check-knip.stdout.txt","stderrPath":"/tmp/453-check-knip.stderr.txt"},
+    {"label":"cohort-alias-negative","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["./node_modules/.bin/vitest","run","src/engine/effects/primitives/contracts.test.ts","-t","captures a whole-hand resource cohort"],"pid":44810,"observerPid":44801,"processGroup":44810,"start":"2026-10-13T04:02:17.166478+00:00","end":"2026-10-13T04:02:20.028418+00:00","wallS":2.861781207990134,"exit":1,"loadBefore":[4.3564453125,5.0703125,7.0166015625],"loadAfter":[4.3564453125,5.0703125,7.0166015625],"childCpuS":3.96,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-cohort-alias-negative.receipt.json","stdoutPath":"/tmp/453-check-cohort-alias-negative.stdout.txt","stderrPath":"/tmp/453-check-cohort-alias-negative.stderr.txt"},
+    {"label":"own-final-cohort","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["./node_modules/.bin/vitest","run","src/engine/effects/primitives/contracts.test.ts","-t","discard batch|discard captured count|discard rejection"],"pid":46022,"observerPid":46013,"processGroup":46022,"start":"2026-10-13T04:03:00.967014+00:00","end":"2026-10-13T04:03:04.203896+00:00","wallS":3.236727665993385,"exit":0,"loadBefore":[3.57080078125,4.78955078125,6.82373046875],"loadAfter":[4.24560546875,4.9091796875,6.85400390625],"childCpuS":4.8,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-own-final-cohort.receipt.json","stdoutPath":"/tmp/453-check-own-final-cohort.stdout.txt","stderrPath":"/tmp/453-check-own-final-cohort.stderr.txt"},
+    {"label":"full","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["lockf","-k","/Users/dthurn/dreamtides_web/artifacts/heavy.lock","env","JOURNEY_TEST_WORKERS=2","npm","run","review:full"],"pid":46545,"observerPid":46536,"processGroup":46545,"start":"2026-10-13T04:03:14.188035+00:00","end":"2026-10-13T04:04:58.343681+00:00","wallS":104.15473937500792,"exit":0,"loadBefore":[4.4345703125,4.92822265625,6.83740234375],"loadAfter":[5.18115234375,5.12890625,6.69775390625],"childCpuS":270.4,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-full.receipt.json","stdoutPath":"/tmp/453-check-full.stdout.txt","stderrPath":"/tmp/453-check-full.stderr.txt"},
+    {"label":"review-after-cohort","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["env","JOURNEY_TEST_WORKERS=2","npm","run","review"],"pid":80909,"observerPid":80901,"processGroup":80909,"start":"2026-10-13T04:06:21.215665+00:00","end":"2026-10-13T04:07:20.922763+00:00","wallS":59.706520874999114,"exit":0,"loadBefore":[3.341796875,4.587890625,6.35009765625],"loadAfter":[5.35400390625,4.92333984375,6.35205078125],"childCpuS":161.22,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-review-after-cohort.receipt.json","stdoutPath":"/tmp/453-check-review-after-cohort.stdout.txt","stderrPath":"/tmp/453-check-review-after-cohort.stderr.txt"},
+    {"label":"knip-after-cohort","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["npm","run","knip"],"pid":87039,"observerPid":87028,"processGroup":87039,"start":"2026-10-13T04:09:16.162666+00:00","end":"2026-10-13T04:09:20.017509+00:00","wallS":3.8546694999968167,"exit":0,"loadBefore":[9.626953125,5.75244140625,6.44384765625],"loadAfter":[11.17822265625,6.13818359375,6.57568359375],"childCpuS":4.72,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-knip-after-cohort.receipt.json","stdoutPath":"/tmp/453-check-knip-after-cohort.stdout.txt","stderrPath":"/tmp/453-check-knip-after-cohort.stderr.txt"},
+    {"label":"fuzz","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["lockf","-k","/Users/dthurn/dreamtides_web/artifacts/heavy.lock","npm","run","fuzz:engine","--","--games","300","--seed","discard-batch453","--weight-uuids","c86c1364-6ac4-4c90-8053-4e49441a2c83","--interactive-every","10"],"pid":47518,"observerPid":47463,"processGroup":47518,"start":"2026-10-13T04:11:27.190339+00:00","end":"2026-10-13T04:14:30.226791+00:00","wallS":183.03497520799283,"exit":0,"loadBefore":[12.328125,9.24267578125,7.81787109375],"loadAfter":[6.443359375,8.26708984375,7.7197265625],"childCpuS":197.65,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-fuzz.receipt.json","stdoutPath":"/tmp/453-check-fuzz.stdout.txt","stderrPath":"/tmp/453-check-fuzz.stderr.txt"},
+    {"label":"preflight","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["npm","run","lab:preflight","--","--cards","c86c1364-6ac4-4c90-8053-4e49441a2c83","--variants","all","--as","both"],"pid":54308,"observerPid":54290,"processGroup":54308,"start":"2026-10-13T04:13:06.812721+00:00","end":"2026-10-13T04:13:08.056151+00:00","wallS":1.2432883750007022,"exit":0,"loadBefore":[8.95556640625,9.12109375,7.93701171875],"loadAfter":[8.71875,9.06884765625,7.92529296875],"childCpuS":1.42,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-preflight.receipt.json","stdoutPath":"/tmp/453-check-preflight.stdout.txt","stderrPath":"/tmp/453-check-preflight.stderr.txt"},
+    {"label":"production-observer","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["lockf","-k","/Users/dthurn/dreamtides_web/artifacts/heavy.lock","node_modules/.bin/tsx","/tmp/453-production-observer.mts"],"pid":54719,"observerPid":54710,"processGroup":54719,"start":"2026-10-13T04:13:13.801124+00:00","end":"2026-10-13T04:14:44.052475+00:00","wallS":90.25054762499349,"exit":1,"loadBefore":[8.5810546875,9.0341796875,7.91943359375],"loadAfter":[5.81005859375,8.0400390625,7.64794921875],"childCpuS":16.62,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-production-observer.receipt.json","stdoutPath":"/tmp/453-check-production-observer.stdout.txt","stderrPath":"/tmp/453-check-production-observer.stderr.txt"},
+    {"label":"production-observer-corrected","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["lockf","-k","/Users/dthurn/dreamtides_web/artifacts/heavy.lock","node_modules/.bin/tsx","/tmp/453-production-observer.mts"],"pid":59986,"observerPid":59978,"processGroup":59986,"start":"2026-10-13T04:15:39.295892+00:00","end":"2026-10-13T04:19:19.399517+00:00","wallS":220.10184287499578,"exit":0,"loadBefore":[4.34814453125,7.263671875,7.38232421875],"loadAfter":[4.9365234375,5.8125,6.708984375],"childCpuS":236.65,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-production-observer-corrected.receipt.json","stdoutPath":"/tmp/453-check-production-observer-corrected.stdout.txt","stderrPath":"/tmp/453-check-production-observer-corrected.stderr.txt"},
+    {"label":"sweep","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["node","scripts/qa/card-sweep.mjs","--bead","hv-umm2.453","--cards","c86c1364-6ac4-4c90-8053-4e49441a2c83","--variants","all","--as","both","--port","5275","--capture"],"pid":67112,"observerPid":67104,"processGroup":67112,"start":"2026-10-13T04:20:39.588588+00:00","end":"2026-10-13T04:22:04.762443+00:00","wallS":85.1731257079955,"exit":0,"loadBefore":[4.00927734375,5.32177734375,6.43994140625],"loadAfter":[5.5078125,5.51025390625,6.4052734375],"childCpuS":9.81,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-sweep.receipt.json","stdoutPath":"/tmp/453-check-sweep.stdout.txt","stderrPath":"/tmp/453-check-sweep.stderr.txt"},
+    {"label":"player-native","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["node","scripts/qa/run-scenario.mjs","judged","--bead","hv-umm2.453","--port","5275","--arg","as=player","--viewports","desktop,mobile"],"pid":70102,"observerPid":70092,"processGroup":70102,"start":"2026-10-13T04:22:14.213576+00:00","end":"2026-10-13T04:22:53.983765+00:00","wallS":39.76363341700926,"exit":1,"loadBefore":[9.52587890625,6.3662109375,6.6982421875],"loadAfter":[20.42919921875,9.86474609375,7.98095703125],"childCpuS":7.65,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-player-native.receipt.json","stdoutPath":"/tmp/453-check-player-native.stdout.txt","stderrPath":"/tmp/453-check-player-native.stderr.txt"},
+    {"label":"player-native-refined","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["node","scripts/qa/run-scenario.mjs","judged","--bead","hv-umm2.453","--port","5275","--arg","as=player","--viewports","desktop,mobile"],"pid":96595,"observerPid":96511,"processGroup":96595,"start":"2026-10-13T04:23:18.293736+00:00","end":"2026-10-13T04:23:43.361051+00:00","wallS":25.066246625006897,"exit":1,"loadBefore":[22.82958984375,11.32373046875,8.5634765625],"loadAfter":[16.919921875,10.861328125,8.4765625],"childCpuS":7.24,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-player-native-refined.receipt.json","stdoutPath":"/tmp/453-check-player-native-refined.stdout.txt","stderrPath":"/tmp/453-check-player-native-refined.stderr.txt"},
+    {"label":"player-native-ready","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["node","scripts/qa/run-scenario.mjs","judged","--bead","hv-umm2.453","--port","5275","--arg","as=player","--viewports","desktop,mobile"],"pid":29954,"observerPid":29944,"processGroup":29954,"start":"2026-10-13T04:24:21.657735+00:00","end":"2026-10-13T04:24:47.787809+00:00","wallS":26.129629417002434,"exit":1,"loadBefore":[11.9814453125,10.29150390625,8.36376953125],"loadAfter":[9.62158203125,9.89208984375,8.28564453125],"childCpuS":7.18,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-player-native-ready.receipt.json","stdoutPath":"/tmp/453-check-player-native-ready.stdout.txt","stderrPath":"/tmp/453-check-player-native-ready.stderr.txt"},
+    {"label":"player-native-physical","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["node","scripts/qa/run-scenario.mjs","judged","--bead","hv-umm2.453","--port","5275","--arg","as=player","--viewports","desktop,mobile"],"pid":35729,"observerPid":35719,"processGroup":35729,"start":"2026-10-13T04:25:39.260982+00:00","end":"2026-10-13T04:26:41.585097+00:00","wallS":62.32327883299149,"exit":1,"loadBefore":[6.6806640625,9.0322265625,8.056640625],"loadAfter":[4.79296875,8.09033203125,7.7705078125],"childCpuS":7.07,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-player-native-physical.receipt.json","stdoutPath":"/tmp/453-check-player-native-physical.stdout.txt","stderrPath":"/tmp/453-check-player-native-physical.stderr.txt"},
+    {"label":"player-native-settled","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["node","scripts/qa/run-scenario.mjs","judged","--bead","hv-umm2.453","--port","5275","--arg","as=player","--viewports","desktop,mobile"],"pid":40838,"observerPid":40824,"processGroup":40838,"start":"2026-10-13T04:27:20.657661+00:00","end":"2026-10-13T04:28:26.285241+00:00","wallS":65.62671887499164,"exit":1,"loadBefore":[3.4736328125,7.33984375,7.50927734375],"loadAfter":[3.2021484375,6.51513671875,7.185546875],"childCpuS":6.87,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-player-native-settled.receipt.json","stdoutPath":"/tmp/453-check-player-native-settled.stdout.txt","stderrPath":"/tmp/453-check-player-native-settled.stderr.txt"},
+    {"label":"player-native-modes","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["node","scripts/qa/run-scenario.mjs","judged","--bead","hv-umm2.453","--port","5275","--arg","as=player","--viewports","desktop,mobile"],"pid":43261,"observerPid":43253,"processGroup":43261,"start":"2026-10-13T04:29:02.952285+00:00","end":"2026-10-13T04:29:47.311782+00:00","wallS":44.35886316699907,"exit":0,"loadBefore":[2.79052734375,6.04541015625,6.986328125],"loadAfter":[3.66259765625,5.80712890625,6.84814453125],"childCpuS":7.4,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-player-native-modes.receipt.json","stdoutPath":"/tmp/453-check-player-native-modes.stdout.txt","stderrPath":"/tmp/453-check-player-native-modes.stderr.txt"},
+    {"label":"enemy-native","cwd":"/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol","argv":["node","scripts/qa/run-scenario.mjs","judged","--bead","hv-umm2.453","--port","5275","--arg","as=enemy","--viewports","desktop,mobile"],"pid":45602,"observerPid":45594,"processGroup":45602,"start":"2026-10-13T04:30:43.212580+00:00","end":"2026-10-13T04:31:12.302302+00:00","wallS":29.08926987501036,"exit":0,"loadBefore":[3.9287109375,5.42919921875,6.630859375],"loadAfter":[3.7421875,5.251953125,6.53076171875],"childCpuS":7.6,"scope":"outer invocation including acquire/launch/execution; inner command times only when reported","terminal":true,"receiptPath":"/tmp/453-check-enemy-native.receipt.json","stdoutPath":"/tmp/453-check-enemy-native.stdout.txt","stderrPath":"/tmp/453-check-enemy-native.stderr.txt"}
+  ],
+  "qa": [
+    {"side":"player","viewport":"desktop","report":"invocations/run-XY1BPn/judged.result.json","gameId":"wtpvn9","source":"i1","uuid":"c86c1364-6ac4-4c90-8053-4e49441a2c83","queued":[{"kind":"triggerQueued","source":"i1","controller":"player","ability":0,"node":null,"subject":null,"discardedCount":2}],"batchCounts":[2,2],"resolved":1,"triggerDraws":2,"fatigue":0,"outletDraws":[2,2],"retainedReload":true,"acceptedAnswers":[{"kind":"answer","side":"player","promptId":"1:2:0","value":["i4","i5"]},{"kind":"answer","side":"player","promptId":"3:4:0","value":1},{"kind":"answer","side":"player","promptId":"4:5:0","value":["i6","i7"]}],"actualMode1Answers":[{"gameId":"wtpvn9","version":3,"promptId":"3:4:0","side":"player","fingerprint":"2365d0xz7v2","value":1,"timestamp":"2026-10-13T04:29:19.070Z","event":"engine.promptAnswered","seq":49}],"sourceGeometry":{"selector":"[data-battlefield-card][data-battle-card-id=\"i1\"]","x":254.5,"y":483.5,"width":89.5,"height":89.5,"hit":{"x":258.5,"y":546.15},"viewport":{"width":1440,"height":900},"dpr":2},"logGeometry":{"selector":"[data-battle-event-log]","x":283,"y":313.328125,"width":874,"height":355.84375,"hit":{"x":287,"y":562.41875},"viewport":{"width":1440,"height":900},"dpr":2},"caps":[],"captures":[{"filename":"invocations/run-XY1BPn/discard-prompt-player-desktop.png","css":[1440,900],"png":[2880,1800]},{"filename":"invocations/run-XY1BPn/discard-choice-diagnostic-player-desktop.png","css":[1440,900],"png":[2880,1800]},{"filename":"invocations/run-XY1BPn/discard-choice-player-desktop.png","css":[1440,900],"png":[2880,1800]},{"filename":"invocations/run-XY1BPn/discard-settled-player-desktop.png","css":[1440,900],"png":[2880,1800]},{"filename":"invocations/run-XY1BPn/discard-log-player-desktop.png","css":[1440,900],"png":[2880,1800]}]},
+    {"side":"player","viewport":"mobile","report":"invocations/run-XY1BPn/judged.result.json","gameId":"nexxg9","source":"i1","uuid":"c86c1364-6ac4-4c90-8053-4e49441a2c83","queued":[{"kind":"triggerQueued","source":"i1","controller":"player","ability":0,"node":null,"subject":null,"discardedCount":2}],"batchCounts":[2,2],"resolved":1,"triggerDraws":2,"fatigue":0,"outletDraws":[2,2],"retainedReload":true,"acceptedAnswers":[{"kind":"answer","side":"player","promptId":"1:2:0","value":["i4","i5"]},{"kind":"answer","side":"player","promptId":"3:4:0","value":1},{"kind":"answer","side":"player","promptId":"4:5:0","value":["i6","i7"]}],"actualMode1Answers":[{"gameId":"nexxg9","version":3,"promptId":"3:4:0","side":"player","fingerprint":"2365d0xz7v2","value":1,"timestamp":"2026-10-13T04:29:39.267Z","event":"engine.promptAnswered","seq":47}],"sourceGeometry":{"selector":"[data-battlefield-card][data-battle-card-id=\"i1\"]","x":23.40625,"y":415.890625,"width":53.859375,"height":53.859375,"hit":{"x":27.40625,"y":453.5921875},"viewport":{"width":390,"height":844},"dpr":2},"logGeometry":{"selector":"[data-battle-event-log]","x":12,"y":112.25,"width":366,"height":355.84375,"hit":{"x":16,"y":361.340625},"viewport":{"width":390,"height":844},"dpr":2},"caps":[],"captures":[{"filename":"invocations/run-XY1BPn/discard-prompt-player-mobile.png","css":[390,844],"png":[780,1688]},{"filename":"invocations/run-XY1BPn/discard-choice-diagnostic-player-mobile.png","css":[390,844],"png":[780,1688]},{"filename":"invocations/run-XY1BPn/discard-choice-player-mobile.png","css":[390,844],"png":[780,1688]},{"filename":"invocations/run-XY1BPn/discard-settled-player-mobile.png","css":[390,844],"png":[780,1688]},{"filename":"invocations/run-XY1BPn/discard-log-player-mobile.png","css":[390,844],"png":[780,1688]}]},
+    {"side":"enemy","viewport":"desktop","report":"invocations/run-avmTJK/judged.result.json","gameId":"zgxgi4","source":"i9","uuid":"c86c1364-6ac4-4c90-8053-4e49441a2c83","queued":[{"kind":"triggerQueued","source":"i9","controller":"enemy","ability":0,"node":null,"subject":null,"discardedCount":2}],"batchCounts":[2],"resolved":1,"triggerDraws":2,"fatigue":0,"outletDraws":[2],"retainedReload":true,"acceptedAnswers":[{"kind":"answer","side":"enemy","promptId":"1:2:0","value":["i11","i12"]}],"actualMode1Answers":[],"sourceGeometry":{"selector":"[data-battlefield-card][data-battle-card-id=\"i9\"]","x":254.5,"y":183,"width":89.5,"height":89.5,"hit":{"x":258.5,"y":245.65},"viewport":{"width":1440,"height":900},"dpr":2},"logGeometry":{"selector":"[data-battle-event-log]","x":283,"y":346.421875,"width":874,"height":289.65625,"hit":{"x":287,"y":549.18125},"viewport":{"width":1440,"height":900},"dpr":2},"caps":[],"captures":[{"filename":"invocations/run-avmTJK/discard-settled-enemy-desktop.png","css":[1440,900],"png":[2880,1800]},{"filename":"invocations/run-avmTJK/discard-log-enemy-desktop.png","css":[1440,900],"png":[2880,1800]}]},
+    {"side":"enemy","viewport":"mobile","report":"invocations/run-avmTJK/judged.result.json","gameId":"8ymyyr","source":"i9","uuid":"c86c1364-6ac4-4c90-8053-4e49441a2c83","queued":[{"kind":"triggerQueued","source":"i9","controller":"enemy","ability":0,"node":null,"subject":null,"discardedCount":2}],"batchCounts":[2],"resolved":1,"triggerDraws":2,"fatigue":0,"outletDraws":[2],"retainedReload":true,"acceptedAnswers":[{"kind":"answer","side":"enemy","promptId":"1:2:0","value":["i11","i12"]}],"actualMode1Answers":[],"sourceGeometry":{"selector":"[data-battlefield-card][data-battle-card-id=\"i9\"]","x":23.40625,"y":222.3125,"width":53.859375,"height":53.859375,"hit":{"x":27.40625,"y":260.0140625},"viewport":{"width":390,"height":844},"dpr":2},"logGeometry":{"selector":"[data-battle-event-log]","x":12,"y":112.25,"width":366,"height":289.65625,"hit":{"x":16,"y":315.009375},"viewport":{"width":390,"height":844},"dpr":2},"caps":[],"captures":[{"filename":"invocations/run-avmTJK/discard-settled-enemy-mobile.png","css":[390,844],"png":[780,1688]},{"filename":"invocations/run-avmTJK/discard-log-enemy-mobile.png","css":[390,844],"png":[780,1688]}]}
+  ],
+  "hostLoadSamples": [
+    {"step":"prepare","start":"2026-10-13T03:41:31.701329+00:00","end":"2026-10-13T03:41:32.897436+00:00","before":[5.779296875,7.560546875,9.04296875],"after":[5.779296875,7.560546875,9.04296875],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"typecheck","start":"2026-10-13T03:43:16.685292+00:00","end":"2026-10-13T03:43:25.869069+00:00","before":[3.43408203125,6.22265625,8.345703125],"after":[4.03955078125,6.3017578125,8.36083984375],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"focused","start":"2026-10-13T03:45:39.076020+00:00","end":"2026-10-13T03:45:49.302839+00:00","before":[11.02734375,9.4931640625,9.431640625],"after":[10.7216796875,9.47705078125,9.42578125],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"own-contracts","start":"2026-10-13T03:47:06.065237+00:00","end":"2026-10-13T03:47:09.408230+00:00","before":[7.875,8.80517578125,9.16796875],"after":[7.8046875,8.77490234375,9.15478515625],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"own-contracts-refined","start":"2026-10-13T03:48:52.628984+00:00","end":"2026-10-13T03:48:56.031486+00:00","before":[19.11962890625,12.5439453125,10.58251953125],"after":[19.11962890625,12.5439453125,10.58251953125],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"own-contracts-final","start":"2026-10-13T03:49:32.739072+00:00","end":"2026-10-13T03:49:35.889706+00:00","before":[14.05322265625,12.1513671875,10.53369140625],"after":[14.05322265625,12.1513671875,10.53369140625],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"negative-batch-arm","start":"2026-10-13T03:50:14.742476+00:00","end":"2026-10-13T03:50:17.520997+00:00","before":[9.8212890625,11.30029296875,10.29541015625],"after":[9.35498046875,11.1787109375,10.25830078125],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"affected","start":"2026-10-13T03:50:58.712753+00:00","end":"2026-10-13T03:51:07.249525+00:00","before":[7.34765625,10.42041015625,10.02099609375],"after":[7.1396484375,10.2744140625,9.9736328125],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"focused-restored","start":"2026-10-13T03:52:35.297027+00:00","end":"2026-10-13T03:52:44.833638+00:00","before":[6.4453125,9.31787109375,9.63525390625],"after":[6.44970703125,9.224609375,9.59814453125],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"review","start":"2026-10-13T03:54:34.842199+00:00","end":"2026-10-13T03:55:29.045311+00:00","before":[3.92333984375,7.55810546875,8.89990234375],"after":[5.0400390625,7.3095703125,8.7255859375],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"lint-own-fix","start":"2026-10-13T03:56:34.011549+00:00","end":"2026-10-13T03:56:36.676404+00:00","before":[3.49169921875,6.4033203125,8.279296875],"after":[3.49169921875,6.4033203125,8.279296875],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"review-corrected","start":"2026-10-13T03:57:12.960896+00:00","end":"2026-10-13T03:58:13.049157+00:00","before":[3.65283203125,6.083984375,8.0751953125],"after":[5.77880859375,6.17431640625,7.96728515625],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"review-final","start":"2026-10-13T03:58:32.599761+00:00","end":"2026-10-13T03:59:29.343174+00:00","before":[4.83544921875,5.9345703125,7.83935546875],"after":[4.947265625,5.82373046875,7.6796875],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"knip","start":"2026-10-13T04:01:15.939470+00:00","end":"2026-10-13T04:01:20.122491+00:00","before":[3.8037109375,5.1669921875,7.20361328125],"after":[3.8193359375,5.1474609375,7.1845703125],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"cohort-alias-negative","start":"2026-10-13T04:02:17.166478+00:00","end":"2026-10-13T04:02:20.028418+00:00","before":[4.3564453125,5.0703125,7.0166015625],"after":[4.3564453125,5.0703125,7.0166015625],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"own-final-cohort","start":"2026-10-13T04:03:00.967014+00:00","end":"2026-10-13T04:03:04.203896+00:00","before":[3.57080078125,4.78955078125,6.82373046875],"after":[4.24560546875,4.9091796875,6.85400390625],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"full","start":"2026-10-13T04:03:14.188035+00:00","end":"2026-10-13T04:04:58.343681+00:00","before":[4.4345703125,4.92822265625,6.83740234375],"after":[5.18115234375,5.12890625,6.69775390625],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"review-after-cohort","start":"2026-10-13T04:06:21.215665+00:00","end":"2026-10-13T04:07:20.922763+00:00","before":[3.341796875,4.587890625,6.35009765625],"after":[5.35400390625,4.92333984375,6.35205078125],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"knip-after-cohort","start":"2026-10-13T04:09:16.162666+00:00","end":"2026-10-13T04:09:20.017509+00:00","before":[9.626953125,5.75244140625,6.44384765625],"after":[11.17822265625,6.13818359375,6.57568359375],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"fuzz","start":"2026-10-13T04:11:27.190339+00:00","end":"2026-10-13T04:14:30.226791+00:00","before":[12.328125,9.24267578125,7.81787109375],"after":[6.443359375,8.26708984375,7.7197265625],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"preflight","start":"2026-10-13T04:13:06.812721+00:00","end":"2026-10-13T04:13:08.056151+00:00","before":[8.95556640625,9.12109375,7.93701171875],"after":[8.71875,9.06884765625,7.92529296875],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"production-observer","start":"2026-10-13T04:13:13.801124+00:00","end":"2026-10-13T04:14:44.052475+00:00","before":[8.5810546875,9.0341796875,7.91943359375],"after":[5.81005859375,8.0400390625,7.64794921875],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"production-observer-corrected","start":"2026-10-13T04:15:39.295892+00:00","end":"2026-10-13T04:19:19.399517+00:00","before":[4.34814453125,7.263671875,7.38232421875],"after":[4.9365234375,5.8125,6.708984375],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"sweep","start":"2026-10-13T04:20:39.588588+00:00","end":"2026-10-13T04:22:04.762443+00:00","before":[4.00927734375,5.32177734375,6.43994140625],"after":[5.5078125,5.51025390625,6.4052734375],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"player-native","start":"2026-10-13T04:22:14.213576+00:00","end":"2026-10-13T04:22:53.983765+00:00","before":[9.52587890625,6.3662109375,6.6982421875],"after":[20.42919921875,9.86474609375,7.98095703125],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"player-native-refined","start":"2026-10-13T04:23:18.293736+00:00","end":"2026-10-13T04:23:43.361051+00:00","before":[22.82958984375,11.32373046875,8.5634765625],"after":[16.919921875,10.861328125,8.4765625],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"player-native-ready","start":"2026-10-13T04:24:21.657735+00:00","end":"2026-10-13T04:24:47.787809+00:00","before":[11.9814453125,10.29150390625,8.36376953125],"after":[9.62158203125,9.89208984375,8.28564453125],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"player-native-physical","start":"2026-10-13T04:25:39.260982+00:00","end":"2026-10-13T04:26:41.585097+00:00","before":[6.6806640625,9.0322265625,8.056640625],"after":[4.79296875,8.09033203125,7.7705078125],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"player-native-settled","start":"2026-10-13T04:27:20.657661+00:00","end":"2026-10-13T04:28:26.285241+00:00","before":[3.4736328125,7.33984375,7.50927734375],"after":[3.2021484375,6.51513671875,7.185546875],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"player-native-modes","start":"2026-10-13T04:29:02.952285+00:00","end":"2026-10-13T04:29:47.311782+00:00","before":[2.79052734375,6.04541015625,6.986328125],"after":[3.66259765625,5.80712890625,6.84814453125],"scope":"outer supervisor start/end, os.getloadavg"},
+    {"step":"enemy-native","start":"2026-10-13T04:30:43.212580+00:00","end":"2026-10-13T04:31:12.302302+00:00","before":[3.9287109375,5.42919921875,6.630859375],"after":[3.7421875,5.251953125,6.53076171875],"scope":"outer supervisor start/end, os.getloadavg"}
+  ]
+}

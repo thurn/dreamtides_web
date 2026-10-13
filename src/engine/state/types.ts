@@ -579,6 +579,8 @@ interface QueuedAbility {
   readonly gain?: SparkGain;
   /** The positive challenge award a scoring trigger matched; absent for other triggers. */
   readonly scored?: number;
+  /** Public positive count captured from one completed discard occasion. */
+  readonly discardedCount?: number;
   /** The cards its floating or delayed trigger kept from a `withMaterialized` binding; absent otherwise. */
   readonly captured?: readonly InstanceId[];
 }

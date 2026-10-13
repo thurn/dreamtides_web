@@ -122,6 +122,11 @@ export function whenForesee(player: PlayerRef = "you"): Trigger {
   return { on: "foresee", player };
 }
 
+/** "When you discard one or more cards": one completed discard occasion. */
+export function whenDiscardBatch(player: PlayerRef = "you"): Trigger {
+  return { on: "discardBatch", player };
+}
+
 export function whenDiscard(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {
   return { on: "discard", player, filter };
 }

@@ -90,7 +90,7 @@ describe("atEndOfTurn", () => {
     expect(ended.steps.filter((step) => step.state.turn.phase === "ending")).toHaveLength(1);
     // Ending's documented order: hand-limit discard, Ephemeral banish, then "until end of turn" expiry.
     expect(ended.steps[entering].events.map((entry) => entry.kind)).toEqual([
-      "phaseChanged", "enteredVoid", "discarded", "enteredVoid", "discarded", "banished", "effectEnded",
+      "phaseChanged", "enteredVoid", "discarded", "enteredVoid", "discarded", "discardBatch", "banished", "effectEnded",
     ]);
     expect(ended.steps[entering + 1].events[0]?.kind).toBe("turnStarted");
   });

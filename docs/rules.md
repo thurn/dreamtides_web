@@ -193,6 +193,18 @@ Discard a card", or the hand-limit discard during the Ending phase. A created
 card that is discarded triggers it too, though it ceases to exist instead of
 entering the void.
 
+**Discarding one or more cards** — An ability that triggers when you discard
+one or more cards triggers once for a completed discard occasion. Each discard
+instruction, each separate discard payment, and the hand-limit choice is one
+occasion for the player whose hand the cards leave. Separate instructions or
+payments in the same effect stay separate. Discarding a whole hand is one
+occasion. The number actually discarded includes created cards that cease to
+exist and cards banished by Reclaim's replacement. Discarding zero cards does
+not trigger the ability or use its once-per-turn limit. The ability keeps its
+occasion's count as it triggers; later draws or zone changes do not change it.
+The count is public, and it identifies no hidden card. Individual discarded
+cards and subjects of other triggered abilities keep their visibility rules.
+
 A card leaving a hand is shown to the opponent as it enters a zone they can
 see, so a discarded card is shown to both players as it enters its owner's void.
 A created card that ceases to exist instead (see [Created

@@ -5,7 +5,7 @@ import { designateBlockers, designateChallengers } from "./challenge";
 import { drawDreamwell } from "./dreamwell";
 import type { ChooseCardsPrompt } from "../prompts/types";
 import { expireAt } from "./floating";
-import { discardCard, drawCard, setEnergy } from "./resources";
+import { discardCards, drawCard, setEnergy } from "./resources";
 import { emptyTurnLog } from "./turn-log";
 import { endBattle } from "./victory";
 import type { BattleSetup } from "../state/types";
@@ -92,9 +92,7 @@ function discardToHandLimit(ctx: StepContext): void {
     min: excess,
     max: excess,
   });
-  for (const card of chosen) {
-    discardCard(ctx, side, card);
-  }
+  discardCards(ctx, side, chosen);
 }
 
 /**

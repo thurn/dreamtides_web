@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.453",
+  "phase": 5,
+  "implementMin": 78.49622508333333,
+  "implementWindow": {
+    "start": "2026-10-13T03:21:04Z",
+    "end": "2026-10-13T04:39:33.773505+00:00"
+  },
+  "localValidationS": {
+    "affected": 8.536510124991764,
+    "own-final": 3.236727665993385,
+    "review": 59.706520874999114,
+    "knip": 3.8546694999968167,
+    "full": 104.15473937500792,
+    "production-fuzz": 183.03497520799283,
+    "production-observer": 220.10184287499578,
+    "preflight": 1.2432883750007022,
+    "sweep": 85.1731257079955,
+    "player-native": 44.35886316699907,
+    "enemy-native": 29.08926987501036
+  },
+  "hostLoad": 3.341796875,
+  "testDelta": {
+    "files": 3,
+    "lines": 412,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

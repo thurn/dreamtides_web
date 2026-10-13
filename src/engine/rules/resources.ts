@@ -113,9 +113,32 @@ export function drawCard(ctx: StepContext, side: Side, ephemeral = false): Insta
  * ceases to exist instead, is announced while it is still in hand, so
  * "when you discard" abilities still see it.
  */
-export function discardCard(ctx: StepContext, side: Side, card: InstanceId): void {
+function discardOne(ctx: StepContext, side: Side, card: InstanceId): void {
   const created = instanceOf(ctx.state, card).status.created;
   if (created) ctx.emit({ kind: "discarded", side, instance: card });
   moveInstance(ctx, card, "void");
   if (!created) ctx.emit({ kind: "discarded", side, instance: card });
+}
+
+/**
+ * One discard instruction, payment descriptor, or hand-limit choice. All
+ * distinct current-hand members are validated before any card moves; per-card
+ * announcements keep their order, then the public count completes the occasion.
+ */
+export function discardCards(ctx: StepContext, side: Side, cards: readonly InstanceId[]): number {
+  if (cards.length === 0) return 0;
+  const cohort = [...cards];
+  const hand = ctx.state.sides[side].hand;
+  const unique = new Set(cohort);
+  if (unique.size !== cohort.length || cohort.some((id) => !hand.includes(id) || ctx.state.instances[id]?.zone !== "hand")) {
+    throw new Error("Discard requires distinct current-hand cards of the discarding side");
+  }
+  for (const card of cohort) discardOne(ctx, side, card);
+  ctx.emit({ kind: "discardBatch", side, count: cohort.length });
+  return cohort.length;
+}
+
+/** A single-card discard is one occasion, preserving its per-card announcement. */
+export function discardCard(ctx: StepContext, side: Side, card: InstanceId): void {
+  discardCards(ctx, side, [card]);
 }

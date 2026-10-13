@@ -22,6 +22,7 @@ import { ceasedToExist, type CeasedToExistEvent } from "./kinds/ceased-to-exist"
 import { challengersDesignated, type ChallengersDesignatedEvent } from "./kinds/challengers-designated";
 import { controlChanged, type ControlChangedEvent } from "./kinds/control-changed";
 import { countersChanged, type CountersChangedEvent } from "./kinds/counters-changed";
+import { discardBatch, type DiscardBatchEvent } from "./kinds/discard-batch";
 import { discarded, type DiscardedEvent } from "./kinds/discarded";
 import { dissolved, type DissolvedEvent } from "./kinds/dissolved";
 import { dreamwellDrawn, type DreamwellDrawnEvent } from "./kinds/dreamwell-drawn";
@@ -87,6 +88,7 @@ export type EngineEvent =
   | ControlChangedEvent
   | CountersChangedEvent
   | DiscardedEvent
+  | DiscardBatchEvent
   | DissolvedEvent
   | DreamwellDrawnEvent
   | EffectEndedEvent
@@ -152,6 +154,7 @@ export const EVENT_DEFINITIONS = {
   controlChanged,
   countersChanged,
   discarded,
+  discardBatch,
   dissolved,
   dreamwellDrawn,
   effectEnded,

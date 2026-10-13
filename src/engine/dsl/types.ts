@@ -316,6 +316,8 @@ export type ValueExpr =
   | XValue
   /** The positive points awarded by the challenge that triggered this ability; 0 outside a scoring trigger. */
   | { readonly value: "scored" }
+  /** The positive discard occasion captured by this trigger; 0 outside a batch trigger. */
+  | { readonly value: "discardedCount" }
   | TriggerSubjectCostValue
   /**
    * "That card's cost": the copiable cost of the cards `of` names, captured
@@ -618,6 +620,8 @@ export type Trigger =
   | { readonly on: "materialize"; readonly subject: MaterializedSelector; readonly nth: MaterializeNth }
   | { readonly on: "draw"; readonly player: PlayerRef; readonly nth?: number }
   | { readonly on: "foresee"; readonly player: PlayerRef }
+  /** Once per completed positive discard instruction, payment descriptor, or hand-limit choice. */
+  | { readonly on: "discardBatch"; readonly player: PlayerRef }
   /**
    * "When you discard a card": each card matching `filter` discarded from
    * `player`'s hand, whatever caused the discard (rules § Zones → Hand). With

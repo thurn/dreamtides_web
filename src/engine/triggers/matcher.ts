@@ -69,6 +69,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   draw: ["cardDrawn"],
   foresee: ["foresaw"],
   discard: ["discarded"],
+  discardBatch: ["discardBatch"],
   erode: ["eroded"],
   reclaim: ["cardPlayed"],
   abandon: ["abandoned"],
@@ -185,6 +186,7 @@ interface Match {
   readonly lastKnownSubjectCost?: number;
   readonly gain?: SparkGain;
   readonly scored?: number;
+  readonly discardedCount?: number;
 }
 
 const NO_SUBJECT: Match = { subject: null };
@@ -337,6 +339,9 @@ function matchKind(
         : null;
     case "foresee":
       return event.kind === "foresaw" && event.side === resolvePlayer(you, trigger.player) ? NO_SUBJECT : null;
+    case "discardBatch":
+      return event.kind === "discardBatch" && event.count > 0 && event.side === resolvePlayer(you, trigger.player)
+        ? { subject: null, discardedCount: event.count } : null;
     case "discard":
       // "When you discard this card" matches only its own card, which `discarded` announces once it is in the void (RD-hv-umm2.82-1).
       return event.kind === "discarded" &&
@@ -542,6 +547,7 @@ function enqueue(ctx: StepContext, matched: QueuedTrigger): void {
     ...(trigger.subjectHiddenFrom === undefined ? {} : { subjectHiddenFrom: [...trigger.subjectHiddenFrom] }),
     ...(trigger.gain === undefined ? {} : { gain: trigger.gain }),
     ...(trigger.scored === undefined ? {} : { scored: trigger.scored }),
+    ...(trigger.discardedCount === undefined ? {} : { discardedCount: trigger.discardedCount }),
     ...(trigger.lastKnownSourceSpark === undefined ? {} : { lastKnownSourceSpark: trigger.lastKnownSourceSpark }),
     ...(trigger.linkedSource === undefined ? {} : { linkedSource: trigger.linkedSource }),
   });
