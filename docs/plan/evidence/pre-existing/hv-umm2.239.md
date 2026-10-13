@@ -1,0 +1,9 @@
+# Pre-existing observations for hv-umm2.239
+
+No additional product issue was confirmed in the admitted five-leaf scope. The original missing Fast-filter/captured-speed capability is supplied by completed prerequisite hv-umm2.581 after hv-umm2.592 sampler work; the original source-free unfiltered diagnostic and prerequisite/recovery interval remain in evidence.
+
+The scratch parser-import and bounced-outcome shape errors, old tautological immutability assertion, output/receipt filename collision, and ignored artifact duplicate-variable syntax error were authored evidence errors. The original failed command receipt was explicitly reconstructed from its original running record and actually observed output after a result filename collision; its failed log remains unchanged. The final corrected 86-case witness supplies the actual before-and-after input-hash proof.
+
+An isolated sweep navigation aborted before a request or cell proof. Parent justiciar admitted one fresh isolated provider/server Egg cell which passed; the original unknown navigation fail is retained without asserting a product cause. Two populated attempts failed authored premises: Draw follows the trigger-resolution marker, and Parchment may match an existing controlled character. Parent DIRECT artifact-only corrections preserved acceptance; three complete desktop cases from the second failed aggregate are retained separately from its failed partial case.
+
+Canonical reload creates a fresh mounted probe observation history. Exact persisted committed state, initial/history snapshot, physical identity and unchanged lab-load count establish reload preservation. Final desktop/mobile captures retain the existing lower-hand crop and tight mobile counter spacing recorded in prior lab work; no presentation body changed or new actionable visual issue was observed.

@@ -1,3 +1,5 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +15,6 @@ export default dreamsign({
     "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5",
   ],
   tags: ["J11", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "character", subtype: "Spirit Animal" }), draw(1), { oncePerTurn: true })],
+  verifiedText: "o3fvkd3fi1",
 });

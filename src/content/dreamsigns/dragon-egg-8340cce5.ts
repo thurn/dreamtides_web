@@ -1,3 +1,5 @@
+import { triggered, whenPlayFromVoid } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +17,6 @@ export default dreamsign({
     "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
   ],
   tags: ["J11", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenPlayFromVoid(), draw(1), { oncePerTurn: true })],
+  verifiedText: "hl8rkd6hfh",
 });

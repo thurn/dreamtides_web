@@ -1,3 +1,5 @@
+import { triggered, whenDissolved } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -10,5 +12,6 @@ export default dreamsign({
   rarity: "Rare",
   tideIds: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
   tags: ["J12", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(whenDissolved(), draw(1), { oncePerTurn: true })],
+  verifiedText: "fapi9gwxft",
 });

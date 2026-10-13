@@ -1,3 +1,6 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenDissolved } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,6 @@ export default dreamsign({
     "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
   ],
   tags: ["Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(whenDissolved(characterYouControl({ subtype: "Spirit Animal" })), draw(1), { oncePerTurn: true })],
+  verifiedText: "11r7kl2qnm",
 });

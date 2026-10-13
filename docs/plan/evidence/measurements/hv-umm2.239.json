@@ -1,0 +1,3232 @@
+{
+  "bead": "hv-umm2.239",
+  "base": "0cf63105ddac4603654e90db980d037f2c9993e2",
+  "implementWindow": {
+    "start": "2026-10-12T21:57:20.968Z",
+    "end": "2026-10-13T01:56:48.775019+00:00"
+  },
+  "implementMin": 239.46345031666667,
+  "windowQualification": "Whole earliest239 dispatch through firstsource-free proposal/prerequisite581/592/justiciar/release/recovery waits and independent authorized assignments, resumed01:06:52.366 authoring/check/queue/native recovery/evidence; this is elapsed wall, not continuous active239 authoring. Evidence cutoff precedes Git commit; actual command-end/microsecond receipt and cutoff tail reported at terminal handoff.",
+  "scope": {
+    "sourcePaths": [
+      "src/content/dreamsigns/sealed-scroll-6b5c0f18.ts",
+      "src/content/dreamsigns/parchment-fdfbd522.ts",
+      "src/content/dreamsigns/magic-fish-3a22a33f.ts",
+      "src/content/dreamsigns/steel-wand-64a28f37.ts",
+      "src/content/dreamsigns/dragon-egg-8340cce5.ts"
+    ],
+    "evidencePaths": [
+      "docs/plan/evidence/friction/hv-umm2.239.json",
+      "docs/plan/evidence/measurements/hv-umm2.239.json",
+      "docs/plan/evidence/pre-existing/hv-umm2.239.md",
+      "docs/plan/evidence/qa-ledger/hv-umm2.239.jsonl"
+    ],
+    "nonTestAdded": 21,
+    "nonTestRemoved": 5,
+    "nonTestGross": 26,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "productionEntities": 5,
+    "weight": 7.8,
+    "newPrimitives": 0,
+    "scenarioModules": 0,
+    "RD": [],
+    "cardIssues": [],
+    "APIChanges": [],
+    "fallout": [],
+    "sourceBeforeQA_SHA256": {
+      "src/content/dreamsigns/sealed-scroll-6b5c0f18.ts": "09e40c37812ca2362cfc9c158f8f7c01bfcd72e6667a96eebe8653a99de4dba6",
+      "src/content/dreamsigns/parchment-fdfbd522.ts": "c414d6aacf1600c6d6b10600e1f319283c1e09cc51b7c8a45f53f2398f921c6a",
+      "src/content/dreamsigns/magic-fish-3a22a33f.ts": "77ad1fe185ef800af96f8cc2f252c9f49e5bfeaa912caa2bd2f9bebc02d81b64",
+      "src/content/dreamsigns/steel-wand-64a28f37.ts": "5c895ac29f96de419fa074338b42d9dab80c1f2665377ca04efb3231f053ef51",
+      "src/content/dreamsigns/dragon-egg-8340cce5.ts": "401cc9214433a73ae9a19c15a896d4dc5b7419efac115b3368040c3dca40e77f"
+    },
+    "sourceAfterQA_SHA256": {
+      "src/content/dreamsigns/sealed-scroll-6b5c0f18.ts": "09e40c37812ca2362cfc9c158f8f7c01bfcd72e6667a96eebe8653a99de4dba6",
+      "src/content/dreamsigns/parchment-fdfbd522.ts": "c414d6aacf1600c6d6b10600e1f319283c1e09cc51b7c8a45f53f2398f921c6a",
+      "src/content/dreamsigns/magic-fish-3a22a33f.ts": "77ad1fe185ef800af96f8cc2f252c9f49e5bfeaa912caa2bd2f9bebc02d81b64",
+      "src/content/dreamsigns/steel-wand-64a28f37.ts": "5c895ac29f96de419fa074338b42d9dab80c1f2665377ca04efb3231f053ef51",
+      "src/content/dreamsigns/dragon-egg-8340cce5.ts": "401cc9214433a73ae9a19c15a896d4dc5b7419efac115b3368040c3dca40e77f"
+    }
+  },
+  "recipe": "Five single mandatory existing triggers with draw(1), each oncePerTurn:true; Scroll controlled SpiritAnimal dissolution, Parchment controlled character dissolution, Fish own SpiritAnimal play, Wand own Fast play including Interrupt, Egg own void play byReclaim or permission. All battle-only; pending cleared and verifiedText set from unchanged immutable clauses. No new costs/optional/prompt/nth/duration/status/route or journey implementation.",
+  "APIAndImporters": "All5 leaves already imported/listed in content/dreamsigns/index.ts; normal contentDreamsignDefinitions brands IDs and supplies existing catalog/listeners/fuzzer/lab/readers. No signature/export/importer/shape edits. Source{kind:dreamsign,side,index} resolves initial/current ordered UUID; never source.id or names. Landed581 captured copiable as-played Fast includesInterrupt and unknownlegacy safe nonmatch, shared592 sampler matchesFilter reused without edits.",
+  "validation": {
+    "receipts": {
+      "browser-desktop-remaining": {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.239/dreamsign-card-flow-desktop-remaining.mjs",
+          "--bead",
+          "hv-umm2.239",
+          "--port",
+          "5174",
+          "--viewports",
+          "desktop",
+          "--timeout",
+          "1200"
+        ],
+        "start": "2026-10-13T01:37:52.582699+00:00",
+        "hostLoadStart": [
+          5.22607421875,
+          9.6513671875,
+          12.14697265625
+        ],
+        "pid": 74409,
+        "processGroup": 74409,
+        "exit": 0,
+        "end": "2026-10-13T01:40:52.732403+00:00",
+        "elapsedS": 180.14973211288452,
+        "hostLoadEnd": [
+          4.84375,
+          7.35693359375,
+          10.69189453125
+        ]
+      },
+      "browser-mobile-final": {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.239/dreamsign-card-flow.mjs",
+          "--bead",
+          "hv-umm2.239",
+          "--port",
+          "5174",
+          "--viewports",
+          "mobile",
+          "--timeout",
+          "1500"
+        ],
+        "start": "2026-10-13T01:42:21.967312+00:00",
+        "hostLoadStart": [
+          3.95751953125,
+          6.37353515625,
+          9.97216796875
+        ],
+        "pid": 79777,
+        "processGroup": 79777,
+        "exit": 0,
+        "end": "2026-10-13T01:46:15.252585+00:00",
+        "elapsedS": 233.2853388786316,
+        "hostLoadEnd": [
+          7.9443359375,
+          6.759765625,
+          9.25537109375
+        ]
+      },
+      "browser-populated-repaired": {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.239/dreamsign-card-flow.mjs",
+          "--bead",
+          "hv-umm2.239",
+          "--port",
+          "5174",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "1800"
+        ],
+        "start": "2026-10-13T01:33:01.085207+00:00",
+        "hostLoadStart": [
+          13.685546875,
+          14.015625,
+          13.9921875
+        ],
+        "pid": 7123,
+        "processGroup": 7123,
+        "exit": 1,
+        "end": "2026-10-13T01:34:37.432842+00:00",
+        "elapsedS": 96.34766793251038,
+        "hostLoadEnd": [
+          12.66455078125,
+          14.02490234375,
+          14.02294921875
+        ]
+      },
+      "browser-populated": {
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.239/dreamsign-card-flow.mjs",
+          "--bead",
+          "hv-umm2.239",
+          "--port",
+          "5174",
+          "--viewports",
+          "desktop,mobile",
+          "--timeout",
+          "1800"
+        ],
+        "start": "2026-10-13T01:29:35.326008+00:00",
+        "hostLoadStart": [
+          6.2568359375,
+          10.97265625,
+          12.97509765625
+        ],
+        "pid": 81004,
+        "processGroup": 81004,
+        "exit": 1,
+        "end": "2026-10-13T01:29:48.851483+00:00",
+        "elapsedS": 13.525506019592285,
+        "hostLoadEnd": [
+          8.1640625,
+          11.12841796875,
+          12.99365234375
+        ]
+      },
+      "focused": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/content-gates.test.ts",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/triggers/triggers-dissolved.test.ts",
+          "src/engine/triggers/triggers-patterns.test.ts",
+          "src/engine/triggers/triggers.test.ts",
+          "src/engine/triggers/triggers-redaction.test.ts"
+        ],
+        "start": "2026-10-13T01:14:25.890474+00:00",
+        "hostLoadStart": [
+          15.45556640625,
+          16.7841796875,
+          17.701171875
+        ],
+        "pid": 33329,
+        "processGroup": 33329,
+        "exit": 0,
+        "end": "2026-10-13T01:14:35.649941+00:00",
+        "elapsedS": 9.75949740409851,
+        "hostLoadEnd": [
+          14.462890625,
+          16.52734375,
+          17.59912109375
+        ]
+      },
+      "friction-before-qa": {
+        "command": [
+          "npm",
+          "run",
+          "friction:triggers"
+        ],
+        "start": "2026-10-13T01:23:31.385375+00:00",
+        "hostLoadStart": [
+          16.0712890625,
+          11.29296875,
+          13.53125
+        ],
+        "pid": 5706,
+        "processGroup": 5706,
+        "exit": 0,
+        "end": "2026-10-13T01:23:31.565133+00:00",
+        "elapsedS": 0.17978906631469727,
+        "hostLoadEnd": [
+          16.0712890625,
+          11.29296875,
+          13.53125
+        ]
+      },
+      "friction-final": {
+        "command": [
+          "npm",
+          "run",
+          "friction:triggers"
+        ],
+        "start": "2026-10-13T01:52:27.232741+00:00",
+        "hostLoadStart": [
+          19.76123046875,
+          15.798828125,
+          12.880859375
+        ],
+        "pid": 30842,
+        "processGroup": 30842,
+        "exit": 0,
+        "end": "2026-10-13T01:52:27.443069+00:00",
+        "elapsedS": 0.21035504341125488,
+        "hostLoadEnd": [
+          19.76123046875,
+          15.798828125,
+          12.880859375
+        ]
+      },
+      "fuzz-held": {
+        "command": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "6b5c0f18-198c-44e7-92e8-d639298b8cf6,fdfbd522-c2be-4b77-a63f-e9a64ca3de3b,3a22a33f-5682-4d00-b0ec-86e43b6ed9df,64a28f37-54a4-4152-8c72-2ebc61e19aac,8340cce5-8e27-4940-ab79-34e09fdbcae1"
+        ],
+        "start": "2026-10-13T01:17:47.105860+00:00",
+        "hostLoadStart": [
+          6.509765625,
+          12.1591796875,
+          15.556640625
+        ],
+        "pid": 43931,
+        "processGroup": 43931,
+        "exit": 0,
+        "end": "2026-10-13T01:20:37.809248+00:00",
+        "elapsedS": 170.70341873168945,
+        "hostLoadEnd": [
+          3.09423828125,
+          8.16796875,
+          13.2763671875
+        ]
+      },
+      "fuzz": {
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsign239-run.py",
+          "fuzz-held",
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "6b5c0f18-198c-44e7-92e8-d639298b8cf6,fdfbd522-c2be-4b77-a63f-e9a64ca3de3b,3a22a33f-5682-4d00-b0ec-86e43b6ed9df,64a28f37-54a4-4152-8c72-2ebc61e19aac,8340cce5-8e27-4940-ab79-34e09fdbcae1"
+        ],
+        "start": "2026-10-13T01:17:47.083016+00:00",
+        "hostLoadStart": [
+          6.509765625,
+          12.1591796875,
+          15.556640625
+        ],
+        "pid": 43927,
+        "processGroup": 43927,
+        "exit": 0,
+        "end": "2026-10-13T01:20:37.812578+00:00",
+        "elapsedS": 170.7295880317688,
+        "hostLoadEnd": [
+          3.09423828125,
+          8.16796875,
+          13.2763671875
+        ]
+      },
+      "knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "start": "2026-10-13T01:16:34.435193+00:00",
+        "hostLoadStart": [
+          8.62841796875,
+          13.80615234375,
+          16.39306640625
+        ],
+        "pid": 41632,
+        "processGroup": 41632,
+        "exit": 0,
+        "end": "2026-10-13T01:16:39.017345+00:00",
+        "elapsedS": 4.582188844680786,
+        "hostLoadEnd": [
+          8.49755859375,
+          13.69287109375,
+          16.337890625
+        ]
+      },
+      "parent-fresh-egg-cell": {
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.239",
+          "--dreamsigns",
+          "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+          "--variants",
+          "base",
+          "--as",
+          "player",
+          "--capture",
+          "--port",
+          "5174"
+        ],
+        "start": "2026-10-13T01:28:05.891531+00:00",
+        "hostLoadStart": [
+          12.255859375,
+          13.13134765625,
+          13.87939453125
+        ],
+        "pid": 75288,
+        "processGroup": 75288,
+        "exit": 0,
+        "end": "2026-10-13T01:28:16.768746+00:00",
+        "elapsedS": 10.877246856689453,
+        "hostLoadEnd": [
+          11.51025390625,
+          12.92724609375,
+          13.79345703125
+        ]
+      },
+      "preflight": {
+        "command": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--dreamsigns",
+          "6b5c0f18-198c-44e7-92e8-d639298b8cf6,fdfbd522-c2be-4b77-a63f-e9a64ca3de3b,3a22a33f-5682-4d00-b0ec-86e43b6ed9df,64a28f37-54a4-4152-8c72-2ebc61e19aac,8340cce5-8e27-4940-ab79-34e09fdbcae1",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "start": "2026-10-13T01:21:40.672729+00:00",
+        "hostLoadStart": [
+          2.64208984375,
+          7.130859375,
+          12.5390625
+        ],
+        "pid": 48294,
+        "processGroup": 48294,
+        "exit": 0,
+        "end": "2026-10-13T01:21:41.675709+00:00",
+        "elapsedS": 1.0030088424682617,
+        "hostLoadEnd": [
+          2.75048828125,
+          7.07861328125,
+          12.48876953125
+        ]
+      },
+      "review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "start": "2026-10-13T01:16:34.435085+00:00",
+        "hostLoadStart": [
+          8.62841796875,
+          13.80615234375,
+          16.39306640625
+        ],
+        "pid": 41631,
+        "processGroup": 41631,
+        "exit": 0,
+        "end": "2026-10-13T01:17:21.782022+00:00",
+        "elapsedS": 47.34696698188782,
+        "hostLoadEnd": [
+          8.10546875,
+          12.9248046875,
+          15.9208984375
+        ]
+      },
+      "schema-before-qa": {
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "start": "2026-10-13T01:23:31.385365+00:00",
+        "hostLoadStart": [
+          16.0712890625,
+          11.29296875,
+          13.53125
+        ],
+        "pid": 5705,
+        "processGroup": 5705,
+        "exit": 0,
+        "end": "2026-10-13T01:23:31.517530+00:00",
+        "elapsedS": 0.13219404220581055,
+        "hostLoadEnd": [
+          16.0712890625,
+          11.29296875,
+          13.53125
+        ]
+      },
+      "schema-final": {
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "start": "2026-10-13T01:52:27.232741+00:00",
+        "hostLoadStart": [
+          19.76123046875,
+          15.798828125,
+          12.880859375
+        ],
+        "pid": 30843,
+        "processGroup": 30843,
+        "exit": 0,
+        "end": "2026-10-13T01:52:27.351472+00:00",
+        "elapsedS": 0.11876416206359863,
+        "hostLoadEnd": [
+          19.76123046875,
+          15.798828125,
+          12.880859375
+        ]
+      },
+      "sweep": {
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.239",
+          "--dreamsigns",
+          "6b5c0f18-198c-44e7-92e8-d639298b8cf6,fdfbd522-c2be-4b77-a63f-e9a64ca3de3b,3a22a33f-5682-4d00-b0ec-86e43b6ed9df,64a28f37-54a4-4152-8c72-2ebc61e19aac,8340cce5-8e27-4940-ab79-34e09fdbcae1",
+          "--variants",
+          "all",
+          "--as",
+          "both",
+          "--capture",
+          "--port",
+          "5174"
+        ],
+        "start": "2026-10-13T01:24:03.431769+00:00",
+        "hostLoadStart": [
+          21.73828125,
+          13.166015625,
+          14.1337890625
+        ],
+        "pid": 43124,
+        "processGroup": 43124,
+        "exit": 1,
+        "end": "2026-10-13T01:25:36.844808+00:00",
+        "elapsedS": 93.4130711555481,
+        "hostLoadEnd": [
+          15.169921875,
+          13.1689453125,
+          14.02685546875
+        ]
+      },
+      "unfiltered-negative": {
+        "command": [
+          "node",
+          "--import",
+          "tsx",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsign239-unfiltered-negative.mjs"
+        ],
+        "start": "2026-10-12T22:00:23.700218+00:00",
+        "end": "2026-10-12T22:00:24.732580+00:00",
+        "pid": 6771,
+        "processGroup": 6771,
+        "exit": 0,
+        "elapsedS": 1.0322721004486084,
+        "hostLoad": 11.8837890625,
+        "readOnly": true,
+        "repoMutation": false
+      },
+      "witness-final": {
+        "command": [
+          "node_modules/.bin/tsx",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsign239-witness.ts"
+        ],
+        "start": "2026-10-13T01:18:52.072524+00:00",
+        "hostLoadStart": [
+          4.74462890625,
+          10.5322265625,
+          14.69287109375
+        ],
+        "pid": 45326,
+        "processGroup": 45326,
+        "exit": 0,
+        "end": "2026-10-13T01:18:53.409540+00:00",
+        "elapsedS": 1.3370449542999268,
+        "hostLoadEnd": [
+          4.74462890625,
+          10.5322265625,
+          14.69287109375
+        ]
+      },
+      "witness-import-corrected": {
+        "command": [
+          "node_modules/.bin/tsx",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsign239-witness.ts"
+        ],
+        "start": "2026-10-13T01:16:22.891793+00:00",
+        "hostLoadStart": [
+          8.67138671875,
+          13.98779296875,
+          16.48681640625
+        ],
+        "pid": 40953,
+        "processGroup": 40953,
+        "exit": 1,
+        "end": "2026-10-13T01:16:27.972312+00:00",
+        "elapsedS": 5.080548048019409,
+        "hostLoadEnd": [
+          8.857421875,
+          13.93798828125,
+          16.45458984375
+        ]
+      },
+      "witness-shape-corrected": {
+        "command": [
+          "node_modules/.bin/tsx",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsign239-witness.ts"
+        ],
+        "start": "2026-10-13T01:17:13.550489+00:00",
+        "hostLoadStart": [
+          8.48876953125,
+          13.1611328125,
+          16.03857421875
+        ],
+        "pid": 43375,
+        "processGroup": 43375,
+        "exit": 0,
+        "end": "2026-10-13T01:17:18.985036+00:00",
+        "elapsedS": 5.434583902359009,
+        "hostLoadEnd": [
+          8.2890625,
+          13.0419921875,
+          15.9794921875
+        ]
+      },
+      "witness": {
+        "command": [
+          "node_modules/.bin/tsx",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/dreamsign239-witness.ts"
+        ],
+        "start": "2026-10-13T01:15:55.564939+00:00",
+        "hostLoadStart": [
+          9.99853515625,
+          14.68408203125,
+          16.7998046875
+        ],
+        "pid": 39386,
+        "processGroup": 39386,
+        "exit": 1,
+        "end": "2026-10-13T01:15:57.266433+00:00",
+        "elapsedS": 1.7015230655670166,
+        "hostLoadEnd": [
+          9.99853515625,
+          14.68408203125,
+          16.7998046875
+        ],
+        "reconstruction": "Original result filename was overwritten by authored diagnostic output. Reconstructed from original running receipt and actual first exec/write_stdin result independently observed by parent; original failed log retained unchanged."
+      }
+    },
+    "focused": {
+      "files": 6,
+      "tests": 2509,
+      "exit": 0
+    },
+    "review": {
+      "files": 236,
+      "tests": 4643,
+      "exit": 0
+    },
+    "knip": 0,
+    "coverage": "Explicit content-gates.test.ts passed in focused and related review; immutable verifiedText and primitive registration gates green.",
+    "authoredWitness": {
+      "cases": 86,
+      "result": "dreamsign239-authored-witness-final-result.json",
+      "receipt": "dreamsign239-witness-final.json",
+      "qualification": "FinalbeforeForeign captured before reduction, correct public rejected shape. Prior86historical result is retained with untrusted old tautological assertion; no new CI entrypoint. Per-emblem next-turn rows Fish/Wand/Egg only; Scroll/Parchment multiple-once plus shared owning turn-reset contracts. Bothside/index1 real authored source and synthetic public cards, no copied recipes."
+    },
+    "full": "N/A26-gross leaf composition/noncore, no infrastructure or crosscut/API edit.",
+    "cold": "N/A actual26source/noncore policy; parentconfirmed no review provider needed."
+  },
+  "fuzz": {
+    "games": 300,
+    "failures": 0,
+    "steps": 125043,
+    "prompts": 6501,
+    "interactiveReruns": 598,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 4
+    },
+    "targets": [
+      {
+        "kind": "dreamsign",
+        "uuid": "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+        "included": 600,
+        "exercised": 74
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+        "included": 600,
+        "exercised": 878
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
+        "included": 600,
+        "exercised": 255
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+        "included": 600,
+        "exercised": 1272
+      },
+      {
+        "kind": "dreamsign",
+        "uuid": "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+        "included": 600,
+        "exercised": 528
+      }
+    ],
+    "outerS": 170.7295880317688,
+    "heldS": 170.70341873168945,
+    "queueS": 0.022844,
+    "workerQualification": "JOURNEY_TEST_WORKERS=2 environment only; one sequential fuzz engine game loop, not two engine fuzz workers. Inclusion600each/applied indexed trigger exercise is actual, not full clause proof.",
+    "rawLog": "dreamsign239-fuzz-held.log"
+  },
+  "failureContracts": [
+    {
+      "path": "error mid-step",
+      "proof": "Existing owning contracts: failed effect after dissolve leaves committed state; Fast failing draw rollback; void play queued triggers retained after earlier failure. Focused contract/trigger suites passed. New compositions add no IO/throw/provider/async boundary or artificial fault primitive."
+    },
+    {
+      "path": "reload/restart",
+      "proof": "Authored86 serialized state once record and public fold restart; owning dissolve/void/trigger replay contracts; all20 native exact same-game committed state/history/initial snapshot reload and stable load-log count."
+    },
+    {
+      "path": "partial write",
+      "proof": "Public beforeForeign hash captured before bounced reducer; unchanged input verified; owning atomic failure/fold contracts. No new persistence writer. Final actual draw observation bounded to source resolution and distinct from setup."
+    },
+    {
+      "path": "invalid/stale",
+      "proof": "Bothside wrongcontroller/type/speed/route/direct-materialize negatives; captured-speed/legacyunknown; owning Fast foreign/stale/duplicate answer contracts and debug action guards. No new chooser or widened input schema."
+    },
+    {
+      "path": "concurrent actors",
+      "proof": "Public normal foreign fold rejection without input adoption, same-turn once retained across restart; owning intent-key/fold stale actor and duplicate answer contracts. No new concurrency protocol or mutable production assertion."
+    }
+  ],
+  "nativeQA": {
+    "defaultPreflight": {
+      "pass": 10,
+      "skip": 90,
+      "fail": 0,
+      "exercised": false
+    },
+    "sweep": {
+      "originalInvocation": "invocations/sweep-4eAokH/run-I8r1wC",
+      "originalCounts": {
+        "pass": 9,
+        "skip": 90,
+        "fail": 1
+      },
+      "recovery": "Root same-task justiciar NEW isolated Egg/base/player invocation sweep-5nNCQh/run-YKo7kM, actual1initpass/exercisedfalse. Original navigation UNKNOWN ERR_ABORTED retained; no product cause asserted.",
+      "effectiveUnique": {
+        "pass": 10,
+        "skip": 90,
+        "fail": 0
+      },
+      "rawRows": 101,
+      "qualification": "Initialization-only/exercisedfalse for eligible bases; ineligible variants skip, including expected ineligible console diagnostic in historical amplifiedPlayer report. All eligible base passes Caps empty; no blanket rawskip Caps[] claim."
+    },
+    "populated": {
+      "uniqueCases": 20,
+      "retainedCompleteDesktop": 3,
+      "newRemainingDesktop": 7,
+      "newMobile": 10,
+      "cases": [
+        {
+          "uuid": "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+          "side": "player",
+          "viewport": "desktop",
+          "game": "browey",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "6b5c0f18-198c-44e7-92e8-d639298b8cf6"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "282dc5080ddfbb3afb3950a0ca109d8cb981e6e30f94418ac02d0be01a4fbb91"
+          },
+          "physical": {
+            "supporting": "i54",
+            "printing": {
+              "kind": "card",
+              "cardId": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 6,
+            "index": 14,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 6,
+            "index": 15,
+            "kind": "cardDrawn",
+            "instance": "i17",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i17"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "control": {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+            "side": "player",
+            "gameId": "browey"
+          },
+          "persistedRowsObserved": 38,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-F7cTTf/dreamsign-card-flow.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+          "side": "enemy",
+          "viewport": "desktop",
+          "game": "ctu5im",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "6b5c0f18-198c-44e7-92e8-d639298b8cf6"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "bed0b729d402149e69a6ecf9cbb2f1f678acd451d25053718c3b93ca8360f54c"
+          },
+          "physical": {
+            "supporting": "i54",
+            "printing": {
+              "kind": "card",
+              "cardId": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 14,
+            "index": 29,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 14,
+            "index": 30,
+            "kind": "cardDrawn",
+            "instance": "i35",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i35"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "control": {
+            "x": 1115.97216796875,
+            "y": 596.3699951171875,
+            "width": 126.3681640625,
+            "height": 43.260009765625,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+            "side": "enemy",
+            "gameId": "ctu5im"
+          },
+          "persistedRowsObserved": 68,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-F7cTTf/dreamsign-card-flow.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+          "side": "player",
+          "viewport": "desktop",
+          "game": "gk5vci",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "dcfa90f92a4b0409757c67723e5d5cc9d1f0acc275db270e82b48bbbb143ac7f"
+          },
+          "physical": {
+            "supporting": "i54",
+            "printing": {
+              "kind": "card",
+              "cardId": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 6,
+            "index": 14,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 6,
+            "index": 15,
+            "kind": "cardDrawn",
+            "instance": "i20",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i20"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "control": {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+            "side": "player",
+            "gameId": "gk5vci"
+          },
+          "persistedRowsObserved": 38,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-F7cTTf/dreamsign-card-flow.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+          "side": "enemy",
+          "viewport": "desktop",
+          "game": "vifkr6",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "59353c61acccdb728c2791df213bcf45261112de003d654cb1c25884d53aa77e"
+          },
+          "physical": {
+            "supporting": "i54",
+            "printing": {
+              "kind": "card",
+              "cardId": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i39"
+          },
+          "resolved": {
+            "seq": 14,
+            "index": 29,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 14,
+            "index": 30,
+            "kind": "cardDrawn",
+            "instance": "i33",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i33"
+            }
+          },
+          "controlledDissolveSubject": {
+            "subject": "i39",
+            "physical": {
+              "id": "i39",
+              "printing": {
+                "kind": "card",
+                "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+              },
+              "owner": "enemy",
+              "controller": "enemy",
+              "zone": "play",
+              "variant": {
+                "amplified": false
+              },
+              "status": {
+                "exhausted": false,
+                "gainedSpark": 0,
+                "counters": 0,
+                "created": false,
+                "reclaimed": false,
+                "playedViaReclaim": false,
+                "offering": false,
+                "ephemeral": false,
+                "x": null
+              },
+              "enteredZoneAt": 12
+            },
+            "rankIds": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              "i39",
+              "i31",
+              "i26",
+              "i45",
+              "i38",
+              "i51",
+              "i52",
+              null,
+              null,
+              null
+            ]
+          },
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "control": {
+            "x": 1115.97216796875,
+            "y": 596.3699951171875,
+            "width": 126.3681640625,
+            "height": 43.260009765625,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+            "side": "enemy",
+            "gameId": "vifkr6"
+          },
+          "persistedRowsObserved": 68,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-CJFihw/dreamsign-card-flow-desktop-remaining.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
+          "side": "player",
+          "viewport": "desktop",
+          "game": "ofak4j",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "d57585d755348ceb40987eec6be9efc24cbb59e40441bf1f286b13b3465b36a9"
+          },
+          "physical": {
+            "supporting": "i51",
+            "printing": {
+              "kind": "card",
+              "cardId": "b5fbff03-f850-4627-94eb-12ed4dc15334"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i51",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 3,
+            "index": 3,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 3,
+            "index": 4,
+            "kind": "cardDrawn",
+            "instance": "i21",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i21"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "control": {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
+            "side": "player",
+            "gameId": "ofak4j"
+          },
+          "persistedRowsObserved": 32,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-CJFihw/dreamsign-card-flow-desktop-remaining.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
+          "side": "enemy",
+          "viewport": "desktop",
+          "game": "okyqz4",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "ba6cf79c48ded80354ed4fc012e92ab365b2c9cc8927af240141e38948c63f08"
+          },
+          "physical": {
+            "supporting": "i51",
+            "printing": {
+              "kind": "card",
+              "cardId": "b5fbff03-f850-4627-94eb-12ed4dc15334"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i51",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 14,
+            "index": 3,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 14,
+            "index": 4,
+            "kind": "cardDrawn",
+            "instance": "i32",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i32"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "control": {
+            "x": 1115.9788818359375,
+            "y": 596.372314453125,
+            "width": 126.354736328125,
+            "height": 43.25537109375,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
+            "side": "enemy",
+            "gameId": "okyqz4"
+          },
+          "persistedRowsObserved": 90,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-CJFihw/dreamsign-card-flow-desktop-remaining.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+          "side": "player",
+          "viewport": "desktop",
+          "game": "yjz23g",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "64a28f37-54a4-4152-8c72-2ebc61e19aac"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "689f8cc1ba4e00dac43d7422d9dee9c8d7c4d562f4b160b2653d719cd2bed8d6"
+          },
+          "physical": {
+            "supporting": "i52",
+            "printing": {
+              "kind": "card",
+              "cardId": "44ae8838-4714-43a5-a7bd-e9f806f35ca9"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i52",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i52"
+          },
+          "resolved": {
+            "seq": 4,
+            "index": 3,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 4,
+            "index": 4,
+            "kind": "cardDrawn",
+            "instance": "i8",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i8"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "control": {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+            "side": "player",
+            "gameId": "yjz23g"
+          },
+          "persistedRowsObserved": 42,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-CJFihw/dreamsign-card-flow-desktop-remaining.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+          "side": "enemy",
+          "viewport": "desktop",
+          "game": "q6eank",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "64a28f37-54a4-4152-8c72-2ebc61e19aac"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "9e3e07688546ab61fbce20c4f23767b23f1d71ae91b6d85d36ca90a97cc9fb07"
+          },
+          "physical": {
+            "supporting": "i52",
+            "printing": {
+              "kind": "card",
+              "cardId": "44ae8838-4714-43a5-a7bd-e9f806f35ca9"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i52",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i52"
+          },
+          "resolved": {
+            "seq": 13,
+            "index": 3,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 13,
+            "index": 4,
+            "kind": "cardDrawn",
+            "instance": "i41",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i41"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "control": {
+            "x": 1115.97216796875,
+            "y": 596.3699951171875,
+            "width": 126.3681640625,
+            "height": 43.260009765625,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+            "side": "enemy",
+            "gameId": "q6eank"
+          },
+          "persistedRowsObserved": 104,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-CJFihw/dreamsign-card-flow-desktop-remaining.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+          "side": "player",
+          "viewport": "desktop",
+          "game": "a3aze6",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "8340cce5-8e27-4940-ab79-34e09fdbcae1"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "cf3cd36a784b652a0a0f226527d01e88fd350596fa2ab4dcc6ff919411dbdbb6"
+          },
+          "physical": {
+            "supporting": "i51",
+            "printing": {
+              "kind": "card",
+              "cardId": "fa7dadd8-c72f-42e7-b203-3d22aa36122f"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i51",
+                "from": "void"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 3,
+            "index": 4,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 3,
+            "index": 5,
+            "kind": "cardDrawn",
+            "instance": "i15",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i15"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "control": {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "voidAffordance": {
+            "x": 264,
+            "y": 414.046875,
+            "width": 176,
+            "height": 246.390625,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "persistedLoad": {
+            "uuid": "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+            "side": "player",
+            "gameId": "a3aze6"
+          },
+          "persistedRowsObserved": 34,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-CJFihw/dreamsign-card-flow-desktop-remaining.result.json",
+          "screens": [
+            "invocations/run-CJFihw/dragon-egg-desktop-void-reclaim.png",
+            "invocations/run-CJFihw/dragon-egg-desktop-drawn-hand.png"
+          ]
+        },
+        {
+          "uuid": "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+          "side": "enemy",
+          "viewport": "desktop",
+          "game": "wjwab4",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "8340cce5-8e27-4940-ab79-34e09fdbcae1"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "8f4940b4a3ba0f057eafdf999af1e3ec924f90433a8dc3e0e51d30141ab8f3a1"
+          },
+          "physical": {
+            "supporting": "i51",
+            "printing": {
+              "kind": "card",
+              "cardId": "fa7dadd8-c72f-42e7-b203-3d22aa36122f"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i51",
+                "from": "void"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 14,
+            "index": 4,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 14,
+            "index": 5,
+            "kind": "cardDrawn",
+            "instance": "i47",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i47"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "control": {
+            "x": 1115.97216796875,
+            "y": 596.3699951171875,
+            "width": 126.3681640625,
+            "height": 43.260009765625,
+            "hit": true,
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+            "side": "enemy",
+            "gameId": "wjwab4"
+          },
+          "persistedRowsObserved": 92,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-CJFihw/dreamsign-card-flow-desktop-remaining.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+          "side": "player",
+          "viewport": "mobile",
+          "game": "dizdw7",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "6b5c0f18-198c-44e7-92e8-d639298b8cf6"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "282dc5080ddfbb3afb3950a0ca109d8cb981e6e30f94418ac02d0be01a4fbb91"
+          },
+          "physical": {
+            "supporting": "i54",
+            "printing": {
+              "kind": "card",
+              "cardId": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 6,
+            "index": 14,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 6,
+            "index": 15,
+            "kind": "cardDrawn",
+            "instance": "i17",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i17"
+            }
+          },
+          "controlledDissolveSubject": {
+            "subject": "i51",
+            "physical": {
+              "id": "i51",
+              "printing": {
+                "kind": "card",
+                "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
+              },
+              "owner": "player",
+              "controller": "player",
+              "zone": "play",
+              "variant": {
+                "amplified": false
+              },
+              "status": {
+                "exhausted": false,
+                "gainedSpark": 0,
+                "counters": 0,
+                "created": false,
+                "reclaimed": false,
+                "playedViaReclaim": false,
+                "offering": false,
+                "ephemeral": false,
+                "x": null
+              },
+              "enteredZoneAt": 11
+            },
+            "rankIds": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              "i51",
+              "i52",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "control": {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+            "side": "player",
+            "gameId": "dizdw7"
+          },
+          "persistedRowsObserved": 38,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-astNdY/dreamsign-card-flow.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+          "side": "enemy",
+          "viewport": "mobile",
+          "game": "quowik",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "6b5c0f18-198c-44e7-92e8-d639298b8cf6"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "bed0b729d402149e69a6ecf9cbb2f1f678acd451d25053718c3b93ca8360f54c"
+          },
+          "physical": {
+            "supporting": "i54",
+            "printing": {
+              "kind": "card",
+              "cardId": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 14,
+            "index": 29,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 14,
+            "index": 30,
+            "kind": "cardDrawn",
+            "instance": "i35",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i35"
+            }
+          },
+          "controlledDissolveSubject": {
+            "subject": "i51",
+            "physical": {
+              "id": "i51",
+              "printing": {
+                "kind": "card",
+                "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
+              },
+              "owner": "enemy",
+              "controller": "enemy",
+              "zone": "play",
+              "variant": {
+                "amplified": false
+              },
+              "status": {
+                "exhausted": false,
+                "gainedSpark": 0,
+                "counters": 0,
+                "created": false,
+                "reclaimed": false,
+                "playedViaReclaim": false,
+                "offering": false,
+                "ephemeral": false,
+                "x": null
+              },
+              "enteredZoneAt": 22
+            },
+            "rankIds": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              "i26",
+              "i41",
+              "i47",
+              "i45",
+              "i28",
+              "i51",
+              "i52",
+              null,
+              null,
+              null
+            ]
+          },
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "control": {
+            "x": 257.4721984863281,
+            "y": 522.1981201171875,
+            "width": 126.36810302734375,
+            "height": 43.260009765625,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+            "side": "enemy",
+            "gameId": "quowik"
+          },
+          "persistedRowsObserved": 68,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-astNdY/dreamsign-card-flow.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+          "side": "player",
+          "viewport": "mobile",
+          "game": "7ot2f6",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "dcfa90f92a4b0409757c67723e5d5cc9d1f0acc275db270e82b48bbbb143ac7f"
+          },
+          "physical": {
+            "supporting": "i54",
+            "printing": {
+              "kind": "card",
+              "cardId": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 6,
+            "index": 14,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 6,
+            "index": 15,
+            "kind": "cardDrawn",
+            "instance": "i20",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i20"
+            }
+          },
+          "controlledDissolveSubject": {
+            "subject": "i51",
+            "physical": {
+              "id": "i51",
+              "printing": {
+                "kind": "card",
+                "cardId": "5e5e5e5e-0000-4000-8000-000000000004"
+              },
+              "owner": "player",
+              "controller": "player",
+              "zone": "play",
+              "variant": {
+                "amplified": false
+              },
+              "status": {
+                "exhausted": false,
+                "gainedSpark": 0,
+                "counters": 0,
+                "created": false,
+                "reclaimed": false,
+                "playedViaReclaim": false,
+                "offering": false,
+                "ephemeral": false,
+                "x": null
+              },
+              "enteredZoneAt": 11
+            },
+            "rankIds": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              "i51",
+              "i52",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "control": {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+            "side": "player",
+            "gameId": "7ot2f6"
+          },
+          "persistedRowsObserved": 38,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-astNdY/dreamsign-card-flow.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+          "side": "enemy",
+          "viewport": "mobile",
+          "game": "tozsdu",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "59353c61acccdb728c2791df213bcf45261112de003d654cb1c25884d53aa77e"
+          },
+          "physical": {
+            "supporting": "i54",
+            "printing": {
+              "kind": "card",
+              "cardId": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i54",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i39"
+          },
+          "resolved": {
+            "seq": 14,
+            "index": 29,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 14,
+            "index": 30,
+            "kind": "cardDrawn",
+            "instance": "i33",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i33"
+            }
+          },
+          "controlledDissolveSubject": {
+            "subject": "i39",
+            "physical": {
+              "id": "i39",
+              "printing": {
+                "kind": "card",
+                "cardId": "5e5e5e5e-0000-4000-8000-000000000002"
+              },
+              "owner": "enemy",
+              "controller": "enemy",
+              "zone": "play",
+              "variant": {
+                "amplified": false
+              },
+              "status": {
+                "exhausted": false,
+                "gainedSpark": 0,
+                "counters": 0,
+                "created": false,
+                "reclaimed": false,
+                "playedViaReclaim": false,
+                "offering": false,
+                "ephemeral": false,
+                "x": null
+              },
+              "enteredZoneAt": 12
+            },
+            "rankIds": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              "i39",
+              "i31",
+              "i26",
+              "i45",
+              "i38",
+              "i51",
+              "i52",
+              null,
+              null,
+              null
+            ]
+          },
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "control": {
+            "x": 257.4721984863281,
+            "y": 522.1981201171875,
+            "width": 126.36810302734375,
+            "height": 43.260009765625,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+            "side": "enemy",
+            "gameId": "tozsdu"
+          },
+          "persistedRowsObserved": 68,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-astNdY/dreamsign-card-flow.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
+          "side": "player",
+          "viewport": "mobile",
+          "game": "utcbn4",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "d57585d755348ceb40987eec6be9efc24cbb59e40441bf1f286b13b3465b36a9"
+          },
+          "physical": {
+            "supporting": "i51",
+            "printing": {
+              "kind": "card",
+              "cardId": "b5fbff03-f850-4627-94eb-12ed4dc15334"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i51",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 3,
+            "index": 3,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 3,
+            "index": 4,
+            "kind": "cardDrawn",
+            "instance": "i21",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i21"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "control": {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
+            "side": "player",
+            "gameId": "utcbn4"
+          },
+          "persistedRowsObserved": 32,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-astNdY/dreamsign-card-flow.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
+          "side": "enemy",
+          "viewport": "mobile",
+          "game": "8ubgsm",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "ba6cf79c48ded80354ed4fc012e92ab365b2c9cc8927af240141e38948c63f08"
+          },
+          "physical": {
+            "supporting": "i51",
+            "printing": {
+              "kind": "card",
+              "cardId": "b5fbff03-f850-4627-94eb-12ed4dc15334"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i51",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 14,
+            "index": 3,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 14,
+            "index": 4,
+            "kind": "cardDrawn",
+            "instance": "i32",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i32"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "control": {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
+            "side": "enemy",
+            "gameId": "8ubgsm"
+          },
+          "persistedRowsObserved": 91,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-astNdY/dreamsign-card-flow.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+          "side": "player",
+          "viewport": "mobile",
+          "game": "7egtyh",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "64a28f37-54a4-4152-8c72-2ebc61e19aac"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "689f8cc1ba4e00dac43d7422d9dee9c8d7c4d562f4b160b2653d719cd2bed8d6"
+          },
+          "physical": {
+            "supporting": "i52",
+            "printing": {
+              "kind": "card",
+              "cardId": "44ae8838-4714-43a5-a7bd-e9f806f35ca9"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i52",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i52"
+          },
+          "resolved": {
+            "seq": 4,
+            "index": 3,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 4,
+            "index": 4,
+            "kind": "cardDrawn",
+            "instance": "i8",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i8"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "control": {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+            "side": "player",
+            "gameId": "7egtyh"
+          },
+          "persistedRowsObserved": 42,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-astNdY/dreamsign-card-flow.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+          "side": "enemy",
+          "viewport": "mobile",
+          "game": "phicqk",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "64a28f37-54a4-4152-8c72-2ebc61e19aac"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "9e3e07688546ab61fbce20c4f23767b23f1d71ae91b6d85d36ca90a97cc9fb07"
+          },
+          "physical": {
+            "supporting": "i52",
+            "printing": {
+              "kind": "card",
+              "cardId": "44ae8838-4714-43a5-a7bd-e9f806f35ca9"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i52",
+                "from": "hand"
+              }
+            },
+            "queuedSubject": "i52"
+          },
+          "resolved": {
+            "seq": 13,
+            "index": 3,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 13,
+            "index": 4,
+            "kind": "cardDrawn",
+            "instance": "i41",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i41"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "control": {
+            "x": 257.4721984863281,
+            "y": 522.1981201171875,
+            "width": 126.36810302734375,
+            "height": 43.260009765625,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+            "side": "enemy",
+            "gameId": "phicqk"
+          },
+          "persistedRowsObserved": 104,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-astNdY/dreamsign-card-flow.result.json",
+          "screens": []
+        },
+        {
+          "uuid": "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+          "side": "player",
+          "viewport": "mobile",
+          "game": "4ph7g2",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "8340cce5-8e27-4940-ab79-34e09fdbcae1"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "cf3cd36a784b652a0a0f226527d01e88fd350596fa2ab4dcc6ff919411dbdbb6"
+          },
+          "physical": {
+            "supporting": "i51",
+            "printing": {
+              "kind": "card",
+              "cardId": "fa7dadd8-c72f-42e7-b203-3d22aa36122f"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i51",
+                "from": "void"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 3,
+            "index": 4,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "player",
+                "index": 0
+              },
+              "controller": "player",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 3,
+            "index": 5,
+            "kind": "cardDrawn",
+            "instance": "i15",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "player",
+              "instance": "i15"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "control": {
+            "x": 259.3125,
+            "y": 522.828125,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "voidAffordance": {
+            "x": 9,
+            "y": 142.5,
+            "width": 90,
+            "height": 126,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "persistedLoad": {
+            "uuid": "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+            "side": "player",
+            "gameId": "4ph7g2"
+          },
+          "persistedRowsObserved": 34,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-astNdY/dreamsign-card-flow.result.json",
+          "screens": [
+            "invocations/run-astNdY/dragon-egg-mobile-drawn-hand.png"
+          ]
+        },
+        {
+          "uuid": "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+          "side": "enemy",
+          "viewport": "mobile",
+          "game": "pqzhs5",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialEmblem": [
+            {
+              "id": "8340cce5-8e27-4940-ab79-34e09fdbcae1"
+            }
+          ],
+          "constructor": {
+            "count": 18,
+            "seqs": [
+              1
+            ],
+            "indexRange": [
+              0,
+              17
+            ],
+            "sha256": "8f4940b4a3ba0f057eafdf999af1e3ec924f90433a8dc3e0e51d30141ab8f3a1"
+          },
+          "physical": {
+            "supporting": "i51",
+            "printing": {
+              "kind": "card",
+              "cardId": "fa7dadd8-c72f-42e7-b203-3d22aa36122f"
+            },
+            "intent": {
+              "kind": "battleAction",
+              "side": "enemy",
+              "action": {
+                "kind": "play",
+                "card": "i51",
+                "from": "void"
+              }
+            },
+            "queuedSubject": "i51"
+          },
+          "resolved": {
+            "seq": 14,
+            "index": 4,
+            "kind": "triggerResolved",
+            "instance": null,
+            "event": {
+              "kind": "triggerResolved",
+              "source": {
+                "kind": "dreamsign",
+                "side": "enemy",
+                "index": 0
+              },
+              "controller": "enemy",
+              "ability": 0,
+              "node": null,
+              "applied": true
+            }
+          },
+          "draw": {
+            "seq": 14,
+            "index": 5,
+            "kind": "cardDrawn",
+            "instance": "i47",
+            "event": {
+              "kind": "cardDrawn",
+              "side": "enemy",
+              "instance": "i47"
+            }
+          },
+          "controlledDissolveSubject": null,
+          "board": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "control": {
+            "x": 257.4721984863281,
+            "y": 522.1981201171875,
+            "width": 126.36810302734375,
+            "height": 43.260009765625,
+            "hit": true,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "voidAffordance": null,
+          "persistedLoad": {
+            "uuid": "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+            "side": "enemy",
+            "gameId": "pqzhs5"
+          },
+          "persistedRowsObserved": 92,
+          "reloadPreserved": true,
+          "sourceExercised": true,
+          "reloadProbeObservationCount": 0,
+          "rawReport": "invocations/run-astNdY/dreamsign-card-flow.result.json",
+          "screens": []
+        }
+      ],
+      "qualification": "3completeF7cTTf+7completeCJFihw+10completeastNdY. Each exact requested UUID/index0/controller, real physical hand/void play or controlled dissolution, one queued+applied trigger, one same-seq following marker draw before next trigger marker, normalcontrols/geometry, canonical reload. New mounted probe observation history can be empty after reload; persistent exact state/initial/history and stable load-log count prove preservation. No initialization-as-exercise pass."
+    },
+    "historicalFailures": [
+      {
+        "uuid": "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+        "side": "player",
+        "run": "run-Rt2OKg",
+        "reason": "Own artifact required draw before resolution marker; actual engine emits marker before effect. Partial38-row log, no full case pass."
+      },
+      {
+        "uuid": "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+        "side": "enemy",
+        "run": "run-F7cTTf",
+        "reason": "Own artifact restricted subject to two newly staged cards; actual baseline-controlledi39 legitimately queued/resolved/drew. Partial68-row last-game log, no full failed-case pass; three other full cases retained."
+      }
+    ],
+    "gameExports": {
+      "finalFullViewportCount": 2,
+      "finalRows": [
+        96,
+        96
+      ],
+      "finalLastGames": [
+        "wjwab4",
+        "pqzhs5"
+      ],
+      "historicalPartialRows": [
+        38,
+        68
+      ],
+      "qualification": "Per-case persisted load observations for20cases differ from only2final full last-game viewport exports; historicalpartial exports preserved separately."
+    },
+    "screens": [
+      "invocations/run-CJFihw/dragon-egg-desktop-void-reclaim.png",
+      "invocations/run-CJFihw/dragon-egg-desktop-drawn-hand.png",
+      "invocations/run-astNdY/dragon-egg-mobile-drawn-hand.png"
+    ],
+    "visual": "Helper and parent inspected all3final captures: real Reclaimtile/modal, reclaimed/exhaustedconstruct and6vs5drawnhand; controls/board/overlay inbounds. Inherited bottomhandcrop/tightmobilecounter retained, no new actionable presentation issue; no UIbody edit.",
+    "D21": {
+      "firstBytes": [
+        232,
+        110,
+        94,
+        200,
+        48
+      ],
+      "sampled": [],
+      "newPromptStatusVisualKinds": [],
+      "judgedExtraUnique": 20
+    },
+    "ledgerRows": 123,
+    "caps": "All20 completed populated cases and final successful invocations Caps[]. Historicalfailures retained."
+  },
+  "processLedger": {
+    "allNativeTerminal": {
+      "at": "2026-10-13T01:47:33.019160+00:00",
+      "allGroups": {
+        "43124": "absent",
+        "43599": "absent",
+        "75288": "absent",
+        "75336": "absent",
+        "81004": "absent",
+        "81040": "absent",
+        "7123": "absent",
+        "7163": "absent",
+        "74409": "absent",
+        "74437": "absent",
+        "79777": "absent",
+        "79805": "absent"
+      },
+      "port": 5274,
+      "portFree": false,
+      "ownerMetadata": "{\"token\":\"1ac14609-4a45-4c28-88bf-213750ecd4e9\",\"pid\":93985,\"bead\":\"hv-umm2.201\",\"label\":\"card-sweep\",\"checkout\":\"/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy\",\"slot\":1,\"port\":5274,\"startedAt\":\"2026-10-13T01:46:56.831Z\",\"providerState\":\"active\",\"mcpSessionId\":\"d9c37a7b-1a38-410b-bf3c-77831e5e14e8\",\"mcpUrl\":\"http://localhost:8931/mcp\",\"mcpProtocolVersion\":\"2025-11-25\"}\n",
+      "invocation": "run-astNdY",
+      "exit": 0,
+      "uniqueCaseCount": 20,
+      "freezeEnded": true,
+      "resourceQualification": "Own resources only; kernel slot may be acquired by a peer after closure, no peer mutation or broad cleanup."
+    },
+    "sourceChecksTerminal": {
+      "time": "2026-10-13T01:23:31.261069+00:00",
+      "allTerminal": true,
+      "groups": {
+        "unfiltered-negative": true,
+        "preflight": true,
+        "fuzz": true,
+        "witness-import-corrected": true,
+        "witness-shape-corrected": true,
+        "witness-final": true,
+        "review": true,
+        "knip": true,
+        "witness": true,
+        "fuzz-held": true,
+        "focused": true
+      }
+    },
+    "settlementFiles": [
+      "dreamsign239-browser-desktop-remaining-settled.json",
+      "dreamsign239-all-native-final-settled.json",
+      "dreamsign239-browser-populated-repaired-failed-settled.json",
+      "dreamsign239-sweep-settled.json",
+      "dreamsign239-browser-populated-failed-settled.json"
+    ],
+    "parentProofFiles": [
+      "dreamsign239-helper-final-qa-proof.json",
+      "dreamsign239-parent-witness-proof.json",
+      "dreamsign239-parent-fresh-egg-cell-proof.json",
+      "dreamsign239-parent-final-qa-proof.json",
+      "dreamsign239-parent-desktop-proof.json"
+    ],
+    "qualification": "No checkout actions while any own native runtime could serve/reacquire. All own12knownPGs gone, own lease settled before evidence. Peer201 legitimately reacquired slot1/5274; no interference/broadcleanup. No helper reviewer/candidate/nativeadmin launched."
+  },
+  "retainedAuthorErrors": "Two scratch import/shape failures, old tautological assertion corrected, receipt/result collision reconstructed with exact observed original timing+log, ignoredartifact duplicate-variable syntax error, two populated artifact premises corrected DIRECTLY by parent justiciar. Original unknownnavigation failure separately preserved. Allsourcechecks reused unchanged, no extraaggregate repeats.",
+  "friction": [
+    {
+      "tag": "prerequisite-wait",
+      "minutes": 178.28943333333333,
+      "note": "Observed native release/open updated22:08:35 after missing Fast capability confirmed; fresh resumed dispatch01:06:52.366 after581/592 completed. Wall interval includes independent own authorized assignments and peer/prerequisite/recovery work, not exclusive active239 authorship. Earliest21:57:20.968 dispatch is retained separately across entire window."
+    },
+    {
+      "tag": "local-edit-correction",
+      "minutes": 2.9640766833333334,
+      "note": "Scratch-only parser import and bounced-outcome shape errors, an initially tautological immutability assertion, and result/receipt filename collision corrected using actual public APIs. Final86-case public witness passes; first failed receipt explicitly reconstructed from original running record and observed output, original failed log retained. No production correction or CI test added."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 8.287611516666667,
+      "note": "Two failed populated runs retained: own wrong event-order premise (draw follows triggerResolved marker) and own two-new-target restriction (Parchment can match any controlled character). Parent DIRECT justiciar artifact-only corrections preserve exact source/draw/physical/reload/geometry conditions. Interval includes3complete retained desktop cases, diagnosis/coordination/recovery, not only wasted execution."
+    },
+    {
+      "tag": "browser-navigation-failure",
+      "minutes": 2.6653989666666664,
+      "note": "Isolated DragonEgg player/base ERR_ABORTED remains unknown navigation fail. Parent justiciar admitted one fresh isolated provider/server cell, which passed initialization; no product cause asserted/no full aggregate repeat. Actual failure aborted before request/cell proof; all historical raw evidence preserved."
+    }
+  ],
+  "preExisting": "No additional product failure confirmed; completed581/592 prerequisites and observed inherited visuals documented, authored evidence errors not called product issues.",
+  "finalTimingRepair": {
+    "authority": "Workflow Friction ledger: firstdispatch throughcommit implementMin within1minute. Originalcutoff tail75.012084sec exceeded tolerance, rootdirectsame-taskjusticiar correctedONLY2ownrecords beforecandidate; allsourcechecks/nativeacceptance unchanged.",
+    "originalAuthorSource": "34aaa122cba609b39ddfb4b38d770100da615256",
+    "originalAuthorCommitEnd": "2026-10-13T01:53:55.605988+00:00",
+    "originalEvidenceCutoff": "2026-10-13T01:52:40.593904+00:00",
+    "originalCutoffTailSeconds": 75.012084,
+    "finalEvidenceCutoff": "2026-10-13T01:56:48.775019+00:00",
+    "exactFinalCommitEnd": "Recorded in parent finalhandoff after immediate amend; notknowable inside its owncommit.",
+    "retainedHelperHandoff": "dreamsign239-handoff.json",
+    "qualifications": "Originalearliestwindow includesreleasedprerequisite/otherauthorizedbead/recovery intervals, elapsedwall notexclusiveactiveauthorship; originalallrawvalidation/failures/QA preserved."
+  }
+}
