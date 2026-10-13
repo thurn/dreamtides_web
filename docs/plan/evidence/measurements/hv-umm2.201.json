@@ -1,0 +1,1715 @@
+{
+  "bead": "hv-umm2.201",
+  "baseOid": "0a494d0e2e236e7523b6e26ab7853ae91a3eb51a",
+  "dispatch": {
+    "actualHostDispatch": "2026-10-13T01:36:23.581Z",
+    "callId": "call_SYyyLUeh4bIeFfcR127up8J8",
+    "ordinal": 24741,
+    "modelSamplingStart": "UNKNOWN",
+    "source": "/Users/dthurn/.codex/sessions/2026/10/11/rollout-2026-10-11T15-36-17-01a12d1c-1239-79a0-aafa-20510f4f7525.jsonl"
+  },
+  "parentInstall": {
+    "label": "install",
+    "command": [
+      "npm",
+      "install"
+    ],
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+    "observerPid": 49409,
+    "observerPgid": 49409,
+    "startUtc": "2026-10-13T01:31:20.559722+00:00",
+    "pid": 49414,
+    "pgid": 49414,
+    "exit": 0,
+    "endUtc": "2026-10-13T01:31:23.121979+00:00",
+    "elapsedS": 2.5622784169972874
+  },
+  "nativeWriteAck": "2026-10-13T01:42:12.167280+00:00",
+  "implementationClock": {
+    "start": "2026-10-13T01:36:23.581Z",
+    "provisionalMetadataEnd": "2026-10-13T02:15:37.312545+00:00",
+    "modelSamplingStart": "UNKNOWN",
+    "endpointScope": "Fresh parent-authorized precommit endpoint and chosen Git date are qualified proxies for the implementation window, not actual Git process completion. External actual invocation start/end/PID/exit receipt follows Git.",
+    "actualGitCompletion": "UNKNOWN; future actual Git invocation end is observed in an external post-Git receipt.",
+    "parentApprovedMetadataEnd": "2026-10-13T02:17:08.091647+00:00",
+    "gitAuthorAndCommitterMetadataDate": "2026-10-13T02:17:08Z",
+    "reportedImplementMin": 40.74184411666667
+  },
+  "sourceScope": [
+    {
+      "path": "src/content/cards/duneguard-captain-16f4962d.ts",
+      "canonicalPropertiesByteIdentical": true,
+      "sha256": "30b3134410bd43862e57a268c8a66411f7e2fe7c3ddd1766ace89df3354f66fb"
+    },
+    {
+      "path": "src/content/cards/vanguard-charger-d6e8842f.ts",
+      "canonicalPropertiesByteIdentical": true,
+      "sha256": "f8fcb02560a044a7ce91410ecc4b832bbac28fe639f996792d3b4430359ae65a"
+    },
+    {
+      "path": "src/content/cards/wolfbond-chieftain-be6a2712.ts",
+      "canonicalPropertiesByteIdentical": true,
+      "sha256": "b524db8d01cda048a01658cc1785c8d3d095e71749d544502c1d41ca08d94be4"
+    },
+    {
+      "path": "src/content/specs/cards-89.scenarios.ts",
+      "sha256": "a7ef3a24fa061b4af5c21c351b43817cfc2214e4e8396b4ca8b1be4fd5b79614"
+    }
+  ],
+  "mechanicConsumers": "Existing public builders/primitives/selectors/numeric resolution/duration/activation/save validators read-only; exact CountGroups prerequisite 554 is on this base. No engine/UI/SDK/infra/catalog-hub/rules/index writes.",
+  "clauseAudit": {
+    "16f4962d-2950-4360-8f55-bc47428480ef": "Two standard exhaust activations: create catalog Survivor figment 5256888f-c4d6-41b2-baf0-420dbf30d269 at base1/amplified2 spark; draw complete groups of three controlled effective Survivors, including source and figments.",
+    "d6e8842f-c0a4-4b4c-93bd-377cfae60894": "Fast exhaust activation targets one controlled character and grants its resolution-time controlled Warrior count as numeric spark until Ending, or amplified until next turn start of the ability controller. Card isFast remains false.",
+    "be6a2712-cfe3-4d61-b62c-fab8990786a1": "Awakened keyword; standard exhaust activation gains one energy per controlled effective Warrior. Visitor source is not itself a default Warrior."
+  },
+  "scope": {
+    "newPrimitives": [],
+    "newPromptKinds": [],
+    "newIndicators": [],
+    "newRulings": [],
+    "newCardIssues": [],
+    "D20": "One plain cards-89 scenario module with four actor/variant cases: two controlled Survivors draw zero, its later own-created figment completes three and draws one. Nonmatching Warrior and four opponent Survivors distinguish controller/type/group-count errors; normal turn draws are accounted separately.",
+    "D21": "Mandatory judgment NA: SHA-256 first bytes232/128/164 unsampled; all prompts, status and visuals use established presentation. Four supplemental Captain actual activation workflow passes retained separately.",
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "plainScenarioLines": 62
+  },
+  "commands": {
+    "focused": {
+      "label": "focused",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 81218,
+      "observerPgid": 81218,
+      "startUtc": "2026-10-13T01:43:27.254005+00:00",
+      "pid": 81226,
+      "pgid": 81226,
+      "exit": 1,
+      "endUtc": "2026-10-13T01:43:31.576468+00:00",
+      "elapsedS": 4.322461916992324
+    },
+    "focused-corrected": {
+      "label": "focused-corrected",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 81934,
+      "observerPgid": 81934,
+      "startUtc": "2026-10-13T01:44:07.064769+00:00",
+      "pid": 81943,
+      "pgid": 81943,
+      "exit": 1,
+      "endUtc": "2026-10-13T01:44:10.733395+00:00",
+      "elapsedS": 3.6686312499950873
+    },
+    "focused-final": {
+      "label": "focused-final",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 82398,
+      "observerPgid": 82398,
+      "startUtc": "2026-10-13T01:44:30.389056+00:00",
+      "pid": 82408,
+      "pgid": 82408,
+      "exit": 0,
+      "endUtc": "2026-10-13T01:44:34.085648+00:00",
+      "elapsedS": 3.6965986669965787
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 82976,
+      "observerPgid": 82976,
+      "startUtc": "2026-10-13T01:45:01.016681+00:00",
+      "hostLoadStart": "{ 5.39 6.17 9.30 }",
+      "hostLoadMeasuredFor": "review actual command start",
+      "pid": 82991,
+      "pgid": 82991,
+      "exit": 0,
+      "endUtc": "2026-10-13T01:45:45.028075+00:00",
+      "elapsedS": 44.01356104199658,
+      "childCpuS": 146.809926
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 84319,
+      "observerPgid": 84319,
+      "startUtc": "2026-10-13T01:46:25.602866+00:00",
+      "hostLoadStart": "{ 7.10 6.62 9.18 }",
+      "hostLoadMeasuredFor": "knip actual command start",
+      "pid": 84329,
+      "pgid": 84329,
+      "exit": 0,
+      "endUtc": "2026-10-13T01:46:29.237375+00:00",
+      "elapsedS": 3.6372682090004673,
+      "childCpuS": 3.896083
+    },
+    "fuzz-admission": {
+      "label": "fuzz-admission",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-type-synergy-cards89-201/observe.py",
+        "fuzz",
+        "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "16f4962d-2950-4360-8f55-bc47428480ef,d6e8842f-c0a4-4b4c-93bd-377cfae60894,be6a2712-cfe3-4d61-b62c-fab8990786a1"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 85587,
+      "observerPgid": 85587,
+      "startUtc": "2026-10-13T01:46:48.055568+00:00",
+      "hostLoadStart": "{ 13.54 8.07 9.62 }",
+      "hostLoadMeasuredFor": "fuzz-admission actual command start",
+      "pid": 85598,
+      "pgid": 85598,
+      "exit": 0,
+      "endUtc": "2026-10-13T01:50:21.148819+00:00",
+      "elapsedS": 213.09472954100056,
+      "childCpuS": 229.471512
+    },
+    "fuzz": {
+      "label": "fuzz",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "16f4962d-2950-4360-8f55-bc47428480ef,d6e8842f-c0a4-4b4c-93bd-377cfae60894,be6a2712-cfe3-4d61-b62c-fab8990786a1"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 85599,
+      "observerPgid": 85598,
+      "startUtc": "2026-10-13T01:46:48.082894+00:00",
+      "hostLoadStart": "{ 13.54 8.07 9.62 }",
+      "hostLoadMeasuredFor": "fuzz actual command start",
+      "pid": 85602,
+      "pgid": 85602,
+      "exit": 0,
+      "endUtc": "2026-10-13T01:50:21.143911+00:00",
+      "elapsedS": 213.0617473750026,
+      "childCpuS": 229.441507
+    },
+    "preflight": {
+      "label": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "16f4962d-2950-4360-8f55-bc47428480ef,d6e8842f-c0a4-4b4c-93bd-377cfae60894,be6a2712-cfe3-4d61-b62c-fab8990786a1"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 84722,
+      "observerPgid": 84722,
+      "startUtc": "2026-10-13T01:46:36.178329+00:00",
+      "hostLoadStart": "{ 6.86 6.58 9.13 }",
+      "hostLoadMeasuredFor": "preflight actual command start",
+      "pid": 84738,
+      "pgid": 84738,
+      "exit": 0,
+      "endUtc": "2026-10-13T01:46:37.391491+00:00",
+      "elapsedS": 1.2159526670002379,
+      "childCpuS": 1.490789
+    },
+    "sweep": {
+      "label": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.201",
+        "--cards",
+        "16f4962d-2950-4360-8f55-bc47428480ef,d6e8842f-c0a4-4b4c-93bd-377cfae60894,be6a2712-cfe3-4d61-b62c-fab8990786a1"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 93973,
+      "observerPgid": 93973,
+      "startUtc": "2026-10-13T01:46:54.946940+00:00",
+      "hostLoadStart": "{ 15.02 8.47 9.75 }",
+      "hostLoadMeasuredFor": "sweep actual command start",
+      "pid": 93985,
+      "pgid": 93985,
+      "exit": 1,
+      "endUtc": "2026-10-13T01:55:04.927839+00:00",
+      "elapsedS": 489.9796416249883,
+      "childCpuS": 28.176235
+    },
+    "captain-base": {
+      "label": "captain-base",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-type-synergy-cards89-201/captain-workflow.mjs",
+        "--bead",
+        "hv-umm2.201",
+        "--arg",
+        "variant=base",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 16217,
+      "observerPgid": 16217,
+      "startUtc": "2026-10-13T01:47:05.827700+00:00",
+      "hostLoadStart": "{ 18.81 9.50 10.10 }",
+      "hostLoadMeasuredFor": "captain-base actual command start",
+      "pid": 16254,
+      "pgid": 16254,
+      "exit": 0,
+      "endUtc": "2026-10-13T01:50:12.181468+00:00",
+      "elapsedS": 186.3553850830067,
+      "childCpuS": 9.904160999999998
+    },
+    "captain-amplified": {
+      "label": "captain-amplified",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-type-synergy-cards89-201/captain-workflow.mjs",
+        "--bead",
+        "hv-umm2.201",
+        "--arg",
+        "variant=amplified",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 23257,
+      "observerPgid": 23257,
+      "startUtc": "2026-10-13T01:50:26.873495+00:00",
+      "hostLoadStart": "{ 19.53 13.88 11.83 }",
+      "hostLoadMeasuredFor": "captain-amplified actual command start",
+      "pid": 23313,
+      "pgid": 23313,
+      "exit": 0,
+      "endUtc": "2026-10-13T01:53:27.722870+00:00",
+      "elapsedS": 180.85200283300946,
+      "childCpuS": 11.698257
+    },
+    "friction": {
+      "label": "friction",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 88204,
+      "observerPgid": 88204,
+      "startUtc": "2026-10-13T01:56:50.551234+00:00",
+      "hostLoadStart": "{ 6.08 10.67 11.40 }",
+      "hostLoadMeasuredFor": "friction actual command start",
+      "pid": 88226,
+      "pgid": 88226,
+      "exit": 0,
+      "endUtc": "2026-10-13T01:56:50.804704+00:00",
+      "elapsedS": 0.25744445800955873,
+      "childCpuS": 0.20571699999999998
+    },
+    "acceptance-sweep": {
+      "label": "acceptance-sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.201",
+        "--cards",
+        "16f4962d-2950-4360-8f55-bc47428480ef,d6e8842f-c0a4-4b4c-93bd-377cfae60894,be6a2712-cfe3-4d61-b62c-fab8990786a1",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 94946,
+      "observerPgid": 94946,
+      "startUtc": "2026-10-13T02:07:46.206474+00:00",
+      "pid": 94947,
+      "pgid": 94947,
+      "exit": 0,
+      "endUtc": "2026-10-13T02:10:55.467276+00:00",
+      "elapsedS": 189.25985095799842
+    },
+    "diag-kindled-player": {
+      "label": "diag-kindled-player",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "card-lab-play",
+        "--bead",
+        "hv-umm2.201",
+        "--arg",
+        "card=d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+        "--arg",
+        "variant=kindled",
+        "--arg",
+        "as=player",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 52830,
+      "observerPgid": 52830,
+      "startUtc": "2026-10-13T02:01:31.532865+00:00",
+      "pid": 52953,
+      "pgid": 52953,
+      "exit": 0,
+      "endUtc": "2026-10-13T02:01:43.068211+00:00",
+      "elapsedS": 11.535323750009411
+    },
+    "diag-base-enemy": {
+      "label": "diag-base-enemy",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "card-lab-play",
+        "--bead",
+        "hv-umm2.201",
+        "--arg",
+        "card=d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+        "--arg",
+        "variant=base",
+        "--arg",
+        "as=enemy",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 89996,
+      "observerPgid": 89996,
+      "startUtc": "2026-10-13T02:05:49.527583+00:00",
+      "pid": 89997,
+      "pgid": 89997,
+      "exit": 0,
+      "endUtc": "2026-10-13T02:05:59.098313+00:00",
+      "elapsedS": 9.57071183300286
+    },
+    "diag-control-base-player": {
+      "label": "diag-control-base-player",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "card-lab-play",
+        "--bead",
+        "hv-umm2.201",
+        "--arg",
+        "card=d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+        "--arg",
+        "variant=base",
+        "--arg",
+        "as=player",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 90648,
+      "observerPgid": 90648,
+      "startUtc": "2026-10-13T02:06:08.344616+00:00",
+      "pid": 90650,
+      "pgid": 90650,
+      "exit": 0,
+      "endUtc": "2026-10-13T02:06:17.769848+00:00",
+      "elapsedS": 9.425214083996252
+    },
+    "evidence-schema": {
+      "label": "evidence-schema",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-type-synergy-cards89-201/validate-evidence.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 4268,
+      "observerPgid": 4268,
+      "startUtc": "2026-10-13T02:14:46.072517+00:00",
+      "hostLoadStart": "{ 10.95 6.77 8.63 }",
+      "hostLoadMeasuredFor": "evidence-schema actual command start",
+      "pid": 4274,
+      "pgid": 4274,
+      "exit": 0,
+      "endUtc": "2026-10-13T02:14:46.179219+00:00",
+      "elapsedS": 0.10966954099421855,
+      "childCpuS": 0.168107
+    },
+    "friction-final": {
+      "label": "friction-final",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 4269,
+      "observerPgid": 4269,
+      "startUtc": "2026-10-13T02:14:46.072484+00:00",
+      "hostLoadStart": "{ 10.95 6.77 8.63 }",
+      "hostLoadMeasuredFor": "friction-final actual command start",
+      "pid": 4275,
+      "pgid": 4275,
+      "exit": 0,
+      "endUtc": "2026-10-13T02:14:46.291887+00:00",
+      "elapsedS": 0.22230395799851976,
+      "childCpuS": 0.19991199999999998
+    },
+    "endpoint-schema": {
+      "label": "endpoint-schema",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-type-synergy-cards89-201/validate-evidence.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 72238,
+      "observerPgid": 72238,
+      "startUtc": "2026-10-13T02:18:32.087090+00:00",
+      "hostLoadStart": "{ 11.40 11.86 10.67 }",
+      "hostLoadMeasuredFor": "endpoint-schema actual command start",
+      "pid": 72242,
+      "pgid": 72242,
+      "exit": 0,
+      "endUtc": "2026-10-13T02:18:32.188873+00:00",
+      "elapsedS": 0.10566241599735804,
+      "childCpuS": 0.172495
+    },
+    "endpoint-friction": {
+      "label": "endpoint-friction",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+      "observerPid": 72239,
+      "observerPgid": 72239,
+      "startUtc": "2026-10-13T02:18:32.087112+00:00",
+      "hostLoadStart": "{ 11.40 11.86 10.67 }",
+      "hostLoadMeasuredFor": "endpoint-friction actual command start",
+      "pid": 72243,
+      "pgid": 72243,
+      "exit": 0,
+      "endUtc": "2026-10-13T02:18:32.363744+00:00",
+      "elapsedS": 0.2805110839981353,
+      "childCpuS": 0.19799
+    }
+  },
+  "commandReceiptsDirectory": "/tmp/dreamtides-type-synergy-cards89-201",
+  "hostLoadSamples": [
+    {
+      "label": "review",
+      "startUtc": "2026-10-13T01:45:01.016681+00:00",
+      "hostLoadStart": "{ 5.39 6.17 9.30 }",
+      "hostLoadMeasuredFor": "review actual command start"
+    },
+    {
+      "label": "knip",
+      "startUtc": "2026-10-13T01:46:25.602866+00:00",
+      "hostLoadStart": "{ 7.10 6.62 9.18 }",
+      "hostLoadMeasuredFor": "knip actual command start"
+    },
+    {
+      "label": "fuzz-admission",
+      "startUtc": "2026-10-13T01:46:48.055568+00:00",
+      "hostLoadStart": "{ 13.54 8.07 9.62 }",
+      "hostLoadMeasuredFor": "fuzz-admission actual command start"
+    },
+    {
+      "label": "fuzz",
+      "startUtc": "2026-10-13T01:46:48.082894+00:00",
+      "hostLoadStart": "{ 13.54 8.07 9.62 }",
+      "hostLoadMeasuredFor": "fuzz actual command start"
+    },
+    {
+      "label": "preflight",
+      "startUtc": "2026-10-13T01:46:36.178329+00:00",
+      "hostLoadStart": "{ 6.86 6.58 9.13 }",
+      "hostLoadMeasuredFor": "preflight actual command start"
+    },
+    {
+      "label": "sweep",
+      "startUtc": "2026-10-13T01:46:54.946940+00:00",
+      "hostLoadStart": "{ 15.02 8.47 9.75 }",
+      "hostLoadMeasuredFor": "sweep actual command start"
+    },
+    {
+      "label": "captain-base",
+      "startUtc": "2026-10-13T01:47:05.827700+00:00",
+      "hostLoadStart": "{ 18.81 9.50 10.10 }",
+      "hostLoadMeasuredFor": "captain-base actual command start"
+    },
+    {
+      "label": "captain-amplified",
+      "startUtc": "2026-10-13T01:50:26.873495+00:00",
+      "hostLoadStart": "{ 19.53 13.88 11.83 }",
+      "hostLoadMeasuredFor": "captain-amplified actual command start"
+    },
+    {
+      "label": "friction",
+      "startUtc": "2026-10-13T01:56:50.551234+00:00",
+      "hostLoadStart": "{ 6.08 10.67 11.40 }",
+      "hostLoadMeasuredFor": "friction actual command start"
+    },
+    {
+      "label": "diag-kindled-player",
+      "hostLoad": 19.771484375,
+      "measuredFor": "Parent native diagnostic runner report host load",
+      "startUtc": "2026-10-13T02:01:31.532865+00:00"
+    },
+    {
+      "label": "diag-base-enemy",
+      "hostLoad": 5.1767578125,
+      "measuredFor": "Parent native diagnostic runner report host load",
+      "startUtc": "2026-10-13T02:05:49.527583+00:00"
+    },
+    {
+      "label": "diag-control-base-player",
+      "hostLoad": 4.18408203125,
+      "measuredFor": "Parent native diagnostic runner report host load",
+      "startUtc": "2026-10-13T02:06:08.344616+00:00"
+    },
+    {
+      "label": "acceptance-sweep",
+      "hostLoad": 3.2568359375,
+      "measuredFor": "Parent native acceptance sweep report host load",
+      "startUtc": "2026-10-13T02:07:46.206474+00:00"
+    },
+    {
+      "label": "evidence-schema",
+      "startUtc": "2026-10-13T02:14:46.072517+00:00",
+      "hostLoadStart": "{ 10.95 6.77 8.63 }",
+      "hostLoadMeasuredFor": "evidence-schema actual command start"
+    },
+    {
+      "label": "friction-final",
+      "startUtc": "2026-10-13T02:14:46.072484+00:00",
+      "hostLoadStart": "{ 10.95 6.77 8.63 }",
+      "hostLoadMeasuredFor": "friction-final actual command start"
+    },
+    {
+      "label": "endpoint-schema",
+      "startUtc": "2026-10-13T02:18:32.087090+00:00",
+      "hostLoadStart": "{ 11.40 11.86 10.67 }",
+      "hostLoadMeasuredFor": "endpoint-schema actual command start"
+    },
+    {
+      "label": "endpoint-friction",
+      "startUtc": "2026-10-13T02:18:32.087112+00:00",
+      "hostLoadStart": "{ 11.40 11.86 10.67 }",
+      "hostLoadMeasuredFor": "endpoint-friction actual command start"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review actual command start via sysctl -n vm.loadavg",
+        "value": 5.39
+      },
+      "implementWindow": {
+        "measuredFor": "Actual host dispatch to fresh parent-authorized precommit metadata endpoint; qualified proxy, not actual Git completion",
+        "start": "2026-10-13T01:36:23.581Z",
+        "end": "2026-10-13T02:17:08.091647+00:00",
+        "actualFutureGitCompletion": "UNKNOWN"
+      }
+    }
+  },
+  "validation": {
+    "focused": {
+      "passedTests": 244,
+      "files": 2,
+      "captainActorVariantCases": 4
+    },
+    "review": {
+      "passedTests": 4682,
+      "passedFiles": 237,
+      "exit": 0
+    },
+    "knip": {
+      "exit": 0
+    },
+    "reviewFull": "NA: bounded leaf content composition and plain content scenario; no test infrastructure, repository configuration or cross-cutting architecture change.",
+    "fuzz": {
+      "seedPrefix": "fuzz",
+      "first": 0,
+      "games": 300,
+      "interactiveEvery": 10,
+      "steps": 141968,
+      "prompts": 7681,
+      "interactiveReruns": 761,
+      "reportedWallS": 212.0,
+      "reportedCpuS": 228.2,
+      "failures": 0,
+      "targets": [
+        {
+          "uuid": "16f4962d-2950-4360-8f55-bc47428480ef",
+          "included": 614,
+          "exercised": 316
+        },
+        {
+          "uuid": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+          "included": 619,
+          "exercised": 196
+        },
+        {
+          "uuid": "be6a2712-cfe3-4d61-b62c-fab8990786a1",
+          "included": 625,
+          "exercised": 281
+        }
+      ],
+      "sourceFiles": [
+        {
+          "path": "src/content/cards/duneguard-captain-16f4962d.ts",
+          "canonicalPropertiesByteIdentical": true,
+          "sha256": "30b3134410bd43862e57a268c8a66411f7e2fe7c3ddd1766ace89df3354f66fb"
+        },
+        {
+          "path": "src/content/cards/vanguard-charger-d6e8842f.ts",
+          "canonicalPropertiesByteIdentical": true,
+          "sha256": "f8fcb02560a044a7ce91410ecc4b832bbac28fe639f996792d3b4430359ae65a"
+        },
+        {
+          "path": "src/content/cards/wolfbond-chieftain-be6a2712.ts",
+          "canonicalPropertiesByteIdentical": true,
+          "sha256": "b524db8d01cda048a01658cc1785c8d3d095e71749d544502c1d41ca08d94be4"
+        }
+      ],
+      "scope": "Fresh production catalog run; native exercise counts do not prove each ability independently. Passing fuzzer games write no per-game logs. Outer lock admission and inner fuzz process receipts are separate; model sampling and unobserved pure waits UNKNOWN."
+    },
+    "preflight": {
+      "pass": 28,
+      "skip": 32,
+      "fail": 0,
+      "variants": "all",
+      "actors": [
+        "player",
+        "enemy"
+      ],
+      "scope": "Node normal card play and settled fixture resolution; source activations checked separately."
+    },
+    "sweep": {
+      "exit": 0,
+      "effectiveCounts": {
+        "pass": 28,
+        "skip": 32,
+        "fail": 0
+      },
+      "rawAttemptCounts": {
+        "pass": 28,
+        "skip": 32,
+        "fail": 0
+      },
+      "variants": "all",
+      "actors": [
+        "player",
+        "enemy"
+      ],
+      "summary": {
+        "event": "cardSweepSummary",
+        "invocation": "invocations/sweep-qr9Y1H",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.201/invocations/sweep-qr9Y1H",
+        "counts": {
+          "pass": 28,
+          "skip": 32
+        },
+        "attemptCounts": {
+          "pass": 28,
+          "skip": 32
+        },
+        "hostLoad": 3.2568359375,
+        "sessions": 1,
+        "leaseYields": 0,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2577,
+          "scenario": 185883.142542,
+          "cleanup": 541.048375000013,
+          "execution": 189071.937,
+          "total": 189077.937
+        }
+      },
+      "process": {
+        "label": "acceptance-sweep",
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.201",
+          "--cards",
+          "16f4962d-2950-4360-8f55-bc47428480ef,d6e8842f-c0a4-4b4c-93bd-377cfae60894,be6a2712-cfe3-4d61-b62c-fab8990786a1",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+        "observerPid": 94946,
+        "observerPgid": 94946,
+        "startUtc": "2026-10-13T02:07:46.206474+00:00",
+        "pid": 94947,
+        "pgid": 94947,
+        "exit": 0,
+        "endUtc": "2026-10-13T02:10:55.467276+00:00",
+        "elapsedS": 189.25985095799842
+      },
+      "scope": "Current new native UI card-play/settled-resolution acceptance; source hashes unchanged. Historical failed attempts are preserved separately and are not retroactively passing."
+    },
+    "captainWorkflows": {
+      "pass": 4,
+      "variants": [
+        "base",
+        "amplified"
+      ],
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "gameIds": [
+        "rznqgd",
+        "j2xpyn",
+        "unybnv",
+        "36mjna"
+      ],
+      "persistedRows": [
+        84,
+        84,
+        84,
+        82
+      ],
+      "checks": [
+        "normal play and amplified physical variant",
+        "actual visible ability chooser selects0 and1",
+        "typed catalog Survivor printing and correct1or2spark",
+        "next-own-Day readiness",
+        "exactone grouped-draw hand/deck change",
+        "source-bound abilityActivated/abilityResolved events",
+        "normal accepted intent history",
+        "persisted UUID logs",
+        "positive DOM geometry",
+        "empty __caps",
+        "2x screenshot dimensions and visual inspection"
+      ]
+    },
+    "friction": {
+      "exit": 0,
+      "receipt": "friction-process.json"
+    },
+    "historicalSweep": {
+      "exit": 1,
+      "effectiveCounts": {
+        "pass": 26,
+        "skip": 32,
+        "fail": 2
+      },
+      "rawAttemptCounts": {
+        "pass": 26,
+        "skip": 32,
+        "fail": 4
+      },
+      "variants": "all",
+      "actors": [
+        "player",
+        "enemy"
+      ],
+      "browserLeaseWaitMs": 112875,
+      "executionMs": 376924.803125,
+      "totalMs": 489799.803125,
+      "sessions": 2,
+      "leaseYields": 1,
+      "failedCells": [
+        {
+          "uuid": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+          "variant": "kindled",
+          "invocation": "invocations/sweep-YQrZTr",
+          "evidenceDir": "invocations/sweep-YQrZTr/run-OxPpdz",
+          "verdict": "fail",
+          "notes": "Error: page.goto: net::ERR_ABORTED at http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=kindled&as=player&seed=1&debug=1\nCall log:\n  - navigating to \"http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=kindled&as=player&seed=1&debug=1\", waiting until \"domcontentloaded\"\n",
+          "screens": [],
+          "attempt": 1,
+          "effective": true,
+          "failureKinds": [
+            "unknown"
+          ],
+          "rawReport": "invocations/sweep-YQrZTr/run-OxPpdz/sweep-d6e8842f-c0a4-4b4c-93bd-377cfae60894-kindled-player-attempt-1.result.json",
+          "navigation": [
+            {
+              "operation": 1,
+              "expectedUrl": "http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=kindled&as=player&seed=1&debug=1",
+              "deadline": null,
+              "callDeadline": 1791856353588,
+              "waitUntil": "domcontentloaded",
+              "allowErrors": true,
+              "cell": {
+                "uuid": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+                "variant": "kindled",
+                "controller": "player"
+              },
+              "clock": "node-wall",
+              "events": [
+                {
+                  "order": 1,
+                  "at": 1791856263602,
+                  "phase": "started",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=empowered&as=player&seed=1&debug=1&game=qpkkzi",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 2,
+                  "at": 1791856263603,
+                  "phase": "caps-before",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=empowered&as=player&seed=1&debug=1&game=qpkkzi",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ],
+                  "document": {
+                    "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=empowered&as=player&seed=1&debug=1&game=qpkkzi",
+                    "id": "8dec5ffe-8e9a-4e99-b0cd-45d7b34f037a",
+                    "caps": {
+                      "errors": [],
+                      "rejections": [],
+                      "consoleErrors": []
+                    }
+                  }
+                },
+                {
+                  "order": 3,
+                  "at": 1791856263603,
+                  "phase": "goto-started",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=empowered&as=player&seed=1&debug=1&game=qpkkzi",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 4,
+                  "at": 1791856263627,
+                  "phase": "request",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=empowered&as=player&seed=1&debug=1&game=qpkkzi",
+                  "scope": "page",
+                  "initiatingOperation": null,
+                  "activeOperations": [
+                    1
+                  ],
+                  "requestUrl": "http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=kindled&as=player&seed=1&debug=1"
+                },
+                {
+                  "order": 5,
+                  "at": 1791856263628,
+                  "phase": "failed",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=empowered&as=player&seed=1&debug=1&game=qpkkzi",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ],
+                  "failedPhase": "goto",
+                  "error": "Error: page.goto: net::ERR_ABORTED at http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=kindled&as=player&seed=1&debug=1\nCall log:\n  - navigating to \"http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=kindled&as=player&seed=1&debug=1\", waiting until \"domcontentloaded\"\n",
+                  "contextDestroyed": false
+                },
+                {
+                  "order": 6,
+                  "at": 1791856263628,
+                  "phase": "listener-cleanup",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=empowered&as=player&seed=1&debug=1&game=qpkkzi",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ],
+                  "outcome": "removed"
+                }
+              ],
+              "droppedEvents": 0,
+              "observationErrors": [],
+              "droppedObservationErrors": 0,
+              "outcome": "failed",
+              "failedPhase": "goto",
+              "error": "Error: page.goto: net::ERR_ABORTED at http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=kindled&as=player&seed=1&debug=1\nCall log:\n  - navigating to \"http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=kindled&as=player&seed=1&debug=1\", waiting until \"domcontentloaded\"\n",
+              "contextDestroyed": false,
+              "errorCauses": [
+                "Error: page.goto: net::ERR_ABORTED at http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=kindled&as=player&seed=1&debug=1\nCall log:\n  - navigating to \"http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=kindled&as=player&seed=1&debug=1\", waiting until \"domcontentloaded\"\n"
+              ],
+              "listenerCleanup": "removed"
+            }
+          ],
+          "mode": "sweep",
+          "bead": "hv-umm2.201",
+          "commit": "0a494d0e2e236e7523b6e26ab7853ae91a3eb51a"
+        },
+        {
+          "uuid": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+          "variant": "base",
+          "as": "enemy",
+          "invocation": "invocations/sweep-YQrZTr",
+          "evidenceDir": "invocations/sweep-YQrZTr/run-OxPpdz",
+          "verdict": "fail",
+          "notes": "the card-lab report: TimeoutError: page.waitForFunction: Timeout 58223ms exceeded.",
+          "screens": [],
+          "attempt": 2,
+          "effective": true,
+          "failureKinds": [
+            "timeout"
+          ],
+          "rawReport": "invocations/sweep-YQrZTr/run-OxPpdz/sweep-d6e8842f-c0a4-4b4c-93bd-377cfae60894-base-enemy-attempt-2.result.json",
+          "navigation": [
+            {
+              "operation": 1,
+              "expectedUrl": "http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=base&as=enemy&seed=1&debug=1",
+              "deadline": null,
+              "callDeadline": 1791856454598,
+              "waitUntil": "domcontentloaded",
+              "allowErrors": true,
+              "cell": {
+                "uuid": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+                "variant": "base",
+                "controller": "enemy"
+              },
+              "clock": "node-wall",
+              "events": [
+                {
+                  "order": 1,
+                  "at": 1791856364599,
+                  "phase": "started",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 2,
+                  "at": 1791856364600,
+                  "phase": "caps-before",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ],
+                  "document": {
+                    "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                    "id": "ae2da791-ffe9-40de-aa6c-83c65be12082",
+                    "caps": {
+                      "errors": [],
+                      "rejections": [],
+                      "consoleErrors": []
+                    }
+                  }
+                },
+                {
+                  "order": 3,
+                  "at": 1791856364600,
+                  "phase": "goto-started",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 4,
+                  "at": 1791856364609,
+                  "phase": "request",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "page",
+                  "initiatingOperation": null,
+                  "activeOperations": [
+                    1
+                  ],
+                  "requestUrl": "http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=base&as=enemy&seed=1&debug=1"
+                },
+                {
+                  "order": 5,
+                  "at": 1791856364643,
+                  "phase": "request",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "page",
+                  "initiatingOperation": null,
+                  "activeOperations": [
+                    1
+                  ],
+                  "requestUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe"
+                },
+                {
+                  "order": 6,
+                  "at": 1791856364658,
+                  "phase": "framenavigated",
+                  "observedUrl": "http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=base&as=enemy&seed=1&debug=1",
+                  "scope": "page",
+                  "initiatingOperation": null,
+                  "activeOperations": [
+                    1
+                  ],
+                  "frameUrl": "http://localhost:5274/?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=base&as=enemy&seed=1&debug=1"
+                },
+                {
+                  "order": 7,
+                  "at": 1791856364703,
+                  "phase": "framenavigated",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "page",
+                  "initiatingOperation": null,
+                  "activeOperations": [
+                    1
+                  ],
+                  "frameUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe"
+                },
+                {
+                  "order": 8,
+                  "at": 1791856366304,
+                  "phase": "domcontentloaded",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "page",
+                  "initiatingOperation": null,
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 9,
+                  "at": 1791856366304,
+                  "phase": "goto-settled",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 10,
+                  "at": 1791856366312,
+                  "phase": "load",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "page",
+                  "initiatingOperation": null,
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 11,
+                  "at": 1791856366364,
+                  "phase": "document-after",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ],
+                  "document": {
+                    "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                    "id": "597d3f8c-960d-4bfb-929a-ec8025822e3a",
+                    "caps": {
+                      "errors": [],
+                      "rejections": [],
+                      "consoleErrors": []
+                    }
+                  }
+                },
+                {
+                  "order": 12,
+                  "at": 1791856366376,
+                  "phase": "succeeded",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ]
+                },
+                {
+                  "order": 13,
+                  "at": 1791856366376,
+                  "phase": "listener-cleanup",
+                  "observedUrl": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=d6e8842f-c0a4-4b4c-93bd-377cfae60894&variant=perfected&as=player&seed=1&debug=1&game=yougxe",
+                  "scope": "operation",
+                  "initiatingOperation": 1,
+                  "activeOperations": [
+                    1
+                  ],
+                  "outcome": "removed"
+                }
+              ],
+              "droppedEvents": 0,
+              "observationErrors": [],
+              "droppedObservationErrors": 0,
+              "outcome": "succeeded",
+              "failedPhase": null,
+              "error": null,
+              "contextDestroyed": false,
+              "errorCauses": [],
+              "listenerCleanup": "removed"
+            }
+          ],
+          "mode": "sweep",
+          "bead": "hv-umm2.201",
+          "commit": "0a494d0e2e236e7523b6e26ab7853ae91a3eb51a"
+        }
+      ],
+      "outsideAreaDisposition": "Historical navigation/report observations retained. Same-task operational recovery completed with fresh diagnostics and a new passing all-variant/both-actor sweep. Causal initiation UNKNOWN; no confirmed source or tooling defect and no source fix.",
+      "scope": "Actual UI card play/initialization and settled resolution. Does not substitute for the Captain ability interplay workflow."
+    },
+    "evidenceSchema": {
+      "exit": 0,
+      "receipt": "evidence-schema-process.json",
+      "result": {
+        "ok": true,
+        "source4HashesUnchanged": true,
+        "original69RowsBytePreserved": true,
+        "currentSweepCounts": {
+          "pass": 28,
+          "skip": 32,
+          "fail": 0
+        },
+        "ledgerRows": 133,
+        "historicalFailuresRetained": 4,
+        "qualifiedD21NA": 3,
+        "supplementalWorkflows": 4,
+        "diagnostics": 3,
+        "ownedProcessesAndGroupsAbsent": true
+      }
+    },
+    "frictionFinal": {
+      "exit": 0,
+      "receipt": "friction-final-process.json"
+    },
+    "endpointSchema": {
+      "exit": 0,
+      "receipt": "endpoint-schema-process.json",
+      "result": {
+        "ok": true,
+        "source4HashesUnchanged": true,
+        "original69RowsBytePreserved": true,
+        "currentSweepCounts": {
+          "pass": 28,
+          "skip": 32,
+          "fail": 0
+        },
+        "ledgerRows": 133,
+        "historicalFailuresRetained": 4,
+        "qualifiedD21NA": 3,
+        "supplementalWorkflows": 4,
+        "diagnostics": 3,
+        "ownedProcessesAndGroupsAbsent": true
+      }
+    },
+    "endpointFriction": {
+      "exit": 0,
+      "receipt": "endpoint-friction-process.json"
+    }
+  },
+  "corrections": [
+    {
+      "step": "focused",
+      "reason": "Initial scenario assertion included normal turn draws from readiness cycling; corrected to ability effect boundaries."
+    },
+    {
+      "step": "focused-corrected",
+      "reason": "abilityResolved precedes its effect in the public event stream; corrected observation interval. Production abilities unchanged."
+    }
+  ],
+  "runtimeLedger": {
+    "ownership": "Native runner SDK transport to global Playwright MCP; runner leases separate isolated clients, server process groups and ports. Shared service and peer resources untouched.",
+    "completedProcesses": [
+      {
+        "label": "focused",
+        "pid": 81226,
+        "pgid": 81226,
+        "exit": 1
+      },
+      {
+        "label": "focused-corrected",
+        "pid": 81943,
+        "pgid": 81943,
+        "exit": 1
+      },
+      {
+        "label": "focused-final",
+        "pid": 82408,
+        "pgid": 82408,
+        "exit": 0
+      },
+      {
+        "label": "review",
+        "pid": 82991,
+        "pgid": 82991,
+        "exit": 0
+      },
+      {
+        "label": "knip",
+        "pid": 84329,
+        "pgid": 84329,
+        "exit": 0
+      },
+      {
+        "label": "fuzz-admission",
+        "pid": 85598,
+        "pgid": 85598,
+        "exit": 0
+      },
+      {
+        "label": "fuzz",
+        "pid": 85602,
+        "pgid": 85602,
+        "exit": 0
+      },
+      {
+        "label": "preflight",
+        "pid": 84738,
+        "pgid": 84738,
+        "exit": 0
+      },
+      {
+        "label": "sweep",
+        "pid": 93985,
+        "pgid": 93985,
+        "exit": 1
+      },
+      {
+        "label": "captain-base",
+        "pid": 16254,
+        "pgid": 16254,
+        "exit": 0
+      },
+      {
+        "label": "captain-amplified",
+        "pid": 23313,
+        "pgid": 23313,
+        "exit": 0
+      }
+    ],
+    "qaServers": [
+      {
+        "pid": 94274,
+        "port": 5274,
+        "cleanup": "Native sweep first session yielded and reported port free."
+      },
+      {
+        "pid": 50284,
+        "port": 5274,
+        "cleanup": "Native base workflow reported port free and context cleanup."
+      },
+      {
+        "pid": 14906,
+        "port": 5174,
+        "cleanup": "Native amplified workflow reported port free and context cleanup."
+      },
+      {
+        "pid": 20866,
+        "port": 5274,
+        "cleanup": "Native sweep final session reported port free and context cleanup."
+      }
+    ],
+    "finalProcessCheck": {
+      "exactOwnedPidsChecked": [
+        81226,
+        81943,
+        82408,
+        82991,
+        84329,
+        85598,
+        85602,
+        84738,
+        93985,
+        16254,
+        23313,
+        94274,
+        50284,
+        14906,
+        20866
+      ],
+      "remaining": [],
+      "method": "ps PID presence; every observed owned command and QA server root is absent. Native runner reports port-free cleanup and closes its own MCP client/context.",
+      "exactOwnedProcessGroupsChecked": [
+        14906,
+        16254,
+        20866,
+        23313,
+        50284,
+        81226,
+        81943,
+        82408,
+        82991,
+        84329,
+        84738,
+        85598,
+        85602,
+        93985,
+        94274
+      ],
+      "remainingGroupMembers": []
+    },
+    "parentRecoveryResources": {
+      "diagnosticRootsAndServersAbsent": [
+        52953,
+        52830,
+        53347,
+        89997,
+        89996,
+        90067,
+        90650,
+        90648,
+        90725
+      ],
+      "acceptanceTerminalRootsAndGroupsAbsent": [
+        94947,
+        94946,
+        95026
+      ],
+      "acceptanceServer": 95026,
+      "port": 5274,
+      "cleanup": "Parent native proofs report each distinct diagnostic context settled, final acceptance server/group absent, and port5274 free."
+    }
+  },
+  "handoffState": "Parent-authorized single local commit step; current full acceptance passes and all historical failures remain recorded. Actual future Git completion UNKNOWN until external process receipt.",
+  "operationalRecovery": {
+    "entry": "2026-10-13T02:01:31.364324+00:00",
+    "resolvedAt": "2026-10-13T02:11:31.123566+00:00",
+    "diagnostics": [
+      {
+        "label": "diag-kindled-player",
+        "process": {
+          "label": "diag-kindled-player",
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "card-lab-play",
+            "--bead",
+            "hv-umm2.201",
+            "--arg",
+            "card=d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+            "--arg",
+            "variant=kindled",
+            "--arg",
+            "as=player",
+            "--viewports",
+            "desktop",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+          "observerPid": 52830,
+          "observerPgid": 52830,
+          "startUtc": "2026-10-13T02:01:31.532865+00:00",
+          "pid": 52953,
+          "pgid": 52953,
+          "exit": 0,
+          "endUtc": "2026-10-13T02:01:43.068211+00:00",
+          "elapsedS": 11.535323750009411
+        },
+        "invocation": "run-Bz4qMf",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.201/invocations/run-Bz4qMf",
+        "lab": {
+          "card": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+          "variant": "kindled",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base",
+            "amplified",
+            "empowered",
+            "kindled",
+            "perfected"
+          ],
+          "entityKind": "card",
+          "cardStatus": "authored",
+          "cardType": "Character"
+        },
+        "events": [
+          "energyChanged",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ],
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.201/invocations/run-Bz4qMf/card-lab-play-desktop.jsonl",
+            "gameId": "ubige2",
+            "selectedBy": "url",
+            "rows": 28,
+            "reason": null
+          }
+        ],
+        "terminalRootsAbsent": [
+          52953,
+          52830,
+          53347
+        ],
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1670,
+          "scenario": 9015,
+          "total": 10740
+        }
+      },
+      {
+        "label": "diag-base-enemy",
+        "process": {
+          "label": "diag-base-enemy",
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "card-lab-play",
+            "--bead",
+            "hv-umm2.201",
+            "--arg",
+            "card=d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+            "--arg",
+            "variant=base",
+            "--arg",
+            "as=enemy",
+            "--viewports",
+            "desktop",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+          "observerPid": 89996,
+          "observerPgid": 89996,
+          "startUtc": "2026-10-13T02:05:49.527583+00:00",
+          "pid": 89997,
+          "pgid": 89997,
+          "exit": 0,
+          "endUtc": "2026-10-13T02:05:59.098313+00:00",
+          "elapsedS": 9.57071183300286
+        },
+        "invocation": "run-EsHuue",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.201/invocations/run-EsHuue",
+        "lab": {
+          "card": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+          "variant": "base",
+          "side": "enemy",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base",
+            "amplified",
+            "empowered",
+            "kindled",
+            "perfected"
+          ],
+          "entityKind": "card",
+          "cardStatus": "authored",
+          "cardType": "Character"
+        },
+        "events": [
+          "energyChanged",
+          "cardPlayed",
+          "resolved",
+          "materialized",
+          "challengersDesignated",
+          "phaseChanged"
+        ],
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.201/invocations/run-EsHuue/card-lab-play-desktop.jsonl",
+            "gameId": "nsbnj6",
+            "selectedBy": "url",
+            "rows": 31,
+            "reason": null
+          }
+        ],
+        "terminalRootsAbsent": [
+          89997,
+          89996,
+          90067
+        ],
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 1655,
+          "scenario": 7095,
+          "total": 8830
+        }
+      },
+      {
+        "label": "diag-control-base-player",
+        "process": {
+          "label": "diag-control-base-player",
+          "command": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "card-lab-play",
+            "--bead",
+            "hv-umm2.201",
+            "--arg",
+            "card=d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+            "--arg",
+            "variant=base",
+            "--arg",
+            "as=player",
+            "--viewports",
+            "desktop",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-201-type-synergy",
+          "observerPid": 90648,
+          "observerPgid": 90648,
+          "startUtc": "2026-10-13T02:06:08.344616+00:00",
+          "pid": 90650,
+          "pgid": 90650,
+          "exit": 0,
+          "endUtc": "2026-10-13T02:06:17.769848+00:00",
+          "elapsedS": 9.425214083996252
+        },
+        "invocation": "run-dkMjYo",
+        "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.201/invocations/run-dkMjYo",
+        "lab": {
+          "card": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+          "variant": "base",
+          "side": "player",
+          "stage": null,
+          "status": "ready",
+          "reason": null,
+          "detail": null,
+          "eligibleVariants": [
+            "base",
+            "amplified",
+            "empowered",
+            "kindled",
+            "perfected"
+          ],
+          "entityKind": "card",
+          "cardStatus": "authored",
+          "cardType": "Character"
+        },
+        "events": [
+          "energyChanged",
+          "cardPlayed",
+          "resolved",
+          "materialized"
+        ],
+        "caps": [],
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.201/invocations/run-dkMjYo/card-lab-play-desktop.jsonl",
+            "gameId": "u2gqvc",
+            "selectedBy": "url",
+            "rows": 28,
+            "reason": null
+          }
+        ],
+        "terminalRootsAbsent": [
+          90650,
+          90648,
+          90725
+        ],
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1347,
+          "scenario": 7364,
+          "total": 8777
+        }
+      }
+    ],
+    "cause": "UNKNOWN; no causal source or tooling defect established",
+    "sourceFix": false,
+    "original69RowsBytePreserved": true,
+    "currentAcceptanceAdditionalNativeRows": 60,
+    "additionalDiagnosticAndResolutionRows": 4,
+    "nativeDispositionFile": "justiciar-resolution-native.json",
+    "coreReview": "Parent native D18 determination: no per-bead review for this composition; prerequisite554 review fulfilled."
+  },
+  "parentVisualInspection": {
+    "observedAt": "2026-10-13T02:10:21.636801+00:00",
+    "parentVisualInspection": [
+      "run-wrNheq/captain-created-base-desktop.png",
+      "run-ukb5Mb/captain-created-amplified-mobile.png",
+      "run-ukb5Mb/captain-drawn-amplified-desktop.png"
+    ],
+    "observed": "Created actual Survivor with spark1/base and spark2/amplified alongside exhausted Captain; later draw hand expansion visible, player controls/board fit captures. Native workflow geometry/state/Caps[] assertions retained. No new visual defect observed. Synthetic fixtures use established text-only mock art.",
+    "source4HashesUnchanged": true,
+    "coreReview": "Not required: native201 composition no new primitive/prompt and phase5/D18 no per-bead warden; prior554 core review already fulfilled."
+  },
+  "endpointAck": {
+    "utc": "2026-10-13T02:17:08.091647+00:00",
+    "gitMetadataDate": "2026-10-13T02:17:08Z",
+    "bead": "hv-umm2.201",
+    "baseOid": "0a494d0e2e236e7523b6e26ab7853ae91a3eb51a",
+    "approvedTree": "53c3f2927ad2b62695b7d38b902d24809f3f6523",
+    "approvedDiffSha256": "6e74b524de710af45dbfb443188212e3ab75eac8e68cdc63b042b5c692fbc77c",
+    "sourceFrozen": true,
+    "allowedWrites": [
+      "docs/plan/evidence/friction/hv-umm2.201.json",
+      "docs/plan/evidence/measurements/hv-umm2.201.json"
+    ],
+    "actualFutureGitCompletion": "UNKNOWN; final process receipt external after Git; chosen commit metadata date/precommit endpoint are qualified proxies, not future process clocks",
+    "scope": "Final own2metadata endpoint/schema/stage then one detailed ConventionalCommit with Bead201, exactother6filesunchanged, actualprocessreceipt/finalcleanSTOP; no source/test/QA/browser/review/nativeBD/TG writes"
+  }
+}

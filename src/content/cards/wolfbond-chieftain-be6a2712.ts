@@ -1,3 +1,5 @@
+import { activated, characterYouControl, count, exhaustSelf, keyword, ofSubtype } from "../../engine/dsl/builders";
+import { gainEnergy } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,9 @@ export default card({
   cardNumber: 486,
   art: { x: -0.126, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    keyword("awakened"),
+    activated([exhaustSelf()], gainEnergy(count(characterYouControl(ofSubtype("Warrior"))))),
+  ],
+  verifiedText: "uwndyt1hie",
 });

@@ -1,0 +1,42 @@
+{
+  "bead": "hv-umm2.201",
+  "phase": 5,
+  "implementMin": 40.74184411666667,
+  "implementWindow": {
+    "start": "2026-10-13T01:36:23.581Z",
+    "end": "2026-10-13T02:17:08.091647+00:00"
+  },
+  "localValidationS": {
+    "focused": 4.322461916992324,
+    "focused-corrected": 3.6686312499950873,
+    "focused-final": 3.6965986669965787,
+    "review": 44.01356104199658,
+    "knip": 3.6372682090004673,
+    "fuzz": 213.0617473750026,
+    "preflight": 1.2159526670002379,
+    "sweep": 489.9796416249883,
+    "captain-base": 186.3553850830067,
+    "captain-amplified": 180.85200283300946,
+    "acceptance-sweep": 189.25985095799842,
+    "diag-kindled-player": 11.535323750009411,
+    "diag-base-enemy": 9.57071183300286,
+    "diag-control-base-player": 9.425214083996252,
+    "evidence-schema": 0.10966954099421855,
+    "friction-final": 0.22230395799851976,
+    "endpoint-schema": 0.10566241599735804,
+    "endpoint-friction": 0.2805110839981353
+  },
+  "hostLoad": 5.39,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 16.436595450000002,
+      "note": "Observed failed-acceptance terminal 2026-10-13T01:55:04.927839+00:00 through native resolution 2026-10-13T02:11:31.123566+00:00: compound inspection, coordination, three fresh-session diagnostics and post-restoration full acceptance. Narrower recorded diagnostic entry 2026-10-13T02:01:31.364324+00:00. Elapsed wall interval includes coordination and other work, not isolated productive editing or a confirmed causal defect. Current sweep28PASS32SKIP0FAIL; original2effective/4raw failures retained, initiating cause UNKNOWN, no source fix."
+    }
+  ]
+}

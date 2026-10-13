@@ -1,4 +1,8 @@
+import { activated, characterYouControl, countGroups, exhaustSelf, ofSubtype } from "../../engine/dsl/builders";
+import { draw, materializeFigments } from "../../engine/effects/primitives";
+import { parseFigmentId } from "../../engine/state/ids";
 import { card } from "../define";
+import survivor from "../figments/survivor-5256888f";
 
 export default card({
   name: "Duneguard Captain",
@@ -28,5 +32,9 @@ export default card({
   cardNumber: 134,
   art: { x: 0.446, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([exhaustSelf()], materializeFigments(parseFigmentId(survivor.id), 1, { spark: variant.amplified ? 2 : 1 })),
+    activated([exhaustSelf()], draw(countGroups(characterYouControl(ofSubtype("Survivor")), 3))),
+  ],
+  verifiedText: "1lgepy83bld",
 });

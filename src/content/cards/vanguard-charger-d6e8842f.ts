@@ -1,3 +1,6 @@
+import { activated, characterYouControl, count, exhaustSelf, ofSubtype, target } from "../../engine/dsl/builders";
+import { untilEndOfTurn, untilYourNextTurn } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,12 @@ export default card({
   cardNumber: 202,
   art: { x: 0, y: -0.345, scale: 1.81 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    activated([exhaustSelf()], gainSpark(
+      target(characterYouControl()),
+      count(characterYouControl(ofSubtype("Warrior"))),
+      variant.amplified ? untilYourNextTurn() : untilEndOfTurn(),
+    ), { speed: "fast" }),
+  ],
+  verifiedText: "2lcbt5sim4",
 });
