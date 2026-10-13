@@ -1,5 +1,5 @@
 import type { EngineCatalog } from "../catalog";
-import { checkMandatoryCycle, checkpointSide, trackLoops } from "../loops/tracker";
+import { checkMandatoryCycle, checkpointSide, isUnbreakableCopyContinuation, trackLoops } from "../loops/tracker";
 import { checkVictory, endBattle } from "../rules/victory";
 import { cloneState } from "../state/clone";
 import type { BattleState } from "../state/types";
@@ -16,7 +16,8 @@ export interface RunOptions {
   readonly dryRun?: boolean;
   /**
    * An automatic step counts toward the resolution cap unless a player made a
-   * choice in it; a top-level action resets the count.
+   * stopping choice in it; a proved closed copy continuation keeps counting
+   * its independent copy choices. A top-level action resets the count.
    */
   readonly automatic?: boolean;
   /**
@@ -84,13 +85,15 @@ export function runStep(
   }
   ctx.completeDeckTopReveals();
   checkVictory(ctx, ctx.events);
-  // A run of automatic steps nobody can stop ends in a draw when it repeats a
-  // state exactly or passes the cap (rules § Mandatory Loops). A step whose
-  // prompt a player answered by choice, and a loop iteration, which replays
-  // its player's decisions, start a new run; a forced answer does not.
-  const decisionFree = options.automatic === true && step.kind !== "loopIteration" && !madeChoice(ctx.answers);
+  // Independent copy choices preserve a run only when both boundary states
+  // prove it closed. Choosing to enter one starts a fresh run at that boundary.
+  const choice = madeChoice(ctx.answers);
+  const automatic = options.automatic === true && step.kind !== "loopIteration";
+  const closedAcrossChoice = automatic && choice &&
+    isUnbreakableCopyContinuation(start, catalog) && isUnbreakableCopyContinuation(work, catalog);
+  const decisionFree = automatic && (!choice || closedAcrossChoice);
   work.automaticSteps = decisionFree ? start.automaticSteps + 1 : 0;
-  if (options.automatic === true && madeChoice(ctx.answers)) work.automaticChoices += 1;
+  if (options.automatic === true && choice) work.automaticChoices += 1;
   if (options.replay !== true) {
     checkMandatoryCycle(ctx, decisionFree);
   }

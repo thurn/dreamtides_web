@@ -2066,7 +2066,8 @@ cap (`iterationCap`, default 10,000), and the loop stays on offer then. The
 `loopStarted` and `loopEnded` events log each repetition.
 
 **Mandatory cycles.** While automatic steps run with no decision offered, the
-engine checks for an exact repeat with Brent's cycle detection: from the
+engine proves supported closed copy continuations and checks for an exact
+repeat with Brent's cycle detection: from the
 `mandatoryLoopCheckFrom`th consecutive automatic step on (default 64), it
 hashes the full state after each step, ignoring bookkeeping, and compares the
 hash with one saved mark (`LoopTracker.cycle`). The first checked state is
@@ -2078,12 +2079,27 @@ run; a longer one ends at the resolution cap. Memory is constant, and short
 runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
 
 - An exact repeat ends the battle in a draw (`mandatoryLoop`).
+- A closed copy continuation also draws (`mandatoryLoop`) at that threshold.
+  The tracker universally checks a conservative grammar of event-only stack
+  or hand copies, sequences, modes and explicit named self-renewal. Every
+  queued and reachable named body must renew, every possible copy target
+  must retain its eligibility, and all relevant sources and victory
+  predicates must remain stable. Conditions, once-per-turn limits, live
+  win conditions, static/gained/floating/payable modifiers, unsupported
+  references and possible interfering listeners prevent this proof. The
+  finite proof is computed from the actual state and catalog, never saved or
+  exposed in a view. Copies keep their physical identities and independent
+  recorded choices; the full-state hash remains exact. The tracker owns an
+  exhaustive renewal classification for every trigger kind, so a new kind
+  requires its own reviewed semantic case and typed emission-time context.
 - A non-repeating run beyond the resolution cap (default 100,000 steps) also
   ends it in a draw (`resolutionCap`).
-- A step in which a player gave an answer that was not forced resets the
-  count of consecutive automatic steps and the mark, so a sequence a player
-  keeps choosing to continue never ends in either draw; forced answers leave
-  the run going (RD-hv-7x4l.20-1).
+- A genuine choice preserves the count only when both the committed start
+  and completed state prove a closed copy continuation. A stopping or
+  unproven choice resets the count and mark; choosing to enter a closed
+  continuation starts at zero. Forced answers leave the run going.
+  Genuine choices retain their answer metadata and automatic-choice policy
+  count (RD-hv-7x4l.20-1, RD-hv-umm2.647-1).
 - A loop iteration replays its player's decisions: it resets the count of
   consecutive automatic steps, so repeating an optional loop never ends in
   either draw.

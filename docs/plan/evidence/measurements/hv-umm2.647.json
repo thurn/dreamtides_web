@@ -1,0 +1,853 @@
+{
+  "bead": "hv-umm2.647",
+  "phase": 5,
+  "base": "749b635dd8f59d3407f05e18e5f73d7c08f5861a",
+  "branch": "wt/mandatory-copy647-root",
+  "dispatch": {
+    "timestamp": "2026-10-13T17:58:45.763Z",
+    "callId": "call_c959a2ec0e624e9abc1a64c8751cd868",
+    "tool": "spawn_agent",
+    "source": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-43-09-01a1305a-56c7-7f63-bcb4-bfed10880d6d.jsonl"
+  },
+  "modelStart": null,
+  "implementationWindowStatus": "Inclusive actual helper dispatch through prospective immediate automatic Git endpoint; final actual Git clock is recorded externally without a postcommit tracked write. Model sampling start unknown.",
+  "checks": [
+    {
+      "label": "focused-initial",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/fold/fold.test.ts"
+      ],
+      "startedAt": "2026-10-13T18:36:18.822894+00:00",
+      "wrapperPid": 2488,
+      "pid": 2496,
+      "processGroup": 2496,
+      "hostLoadAtStart": 6.1591796875,
+      "endedAt": "2026-10-13T18:36:27.724988+00:00",
+      "elapsedSeconds": 8.901983291987563,
+      "exitCode": 0,
+      "childUserCpuSeconds": 12.452381,
+      "childSystemCpuSeconds": 1.508762
+    },
+    {
+      "label": "focused-expanded",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/fold/fold.test.ts"
+      ],
+      "startedAt": "2026-10-13T18:37:59.263774+00:00",
+      "wrapperPid": 5563,
+      "pid": 5572,
+      "processGroup": 5572,
+      "hostLoadAtStart": 9.17333984375,
+      "endedAt": "2026-10-13T18:38:09.083599+00:00",
+      "elapsedSeconds": 9.819694083998911,
+      "exitCode": 0,
+      "childUserCpuSeconds": 13.966092,
+      "childSystemCpuSeconds": 1.655548
+    },
+    {
+      "label": "focused-reordered",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/fold/fold.test.ts"
+      ],
+      "startedAt": "2026-10-13T18:40:36.058135+00:00",
+      "wrapperPid": 66404,
+      "pid": 66414,
+      "processGroup": 66414,
+      "hostLoadAtStart": 6.29736328125,
+      "endedAt": "2026-10-13T18:40:45.348487+00:00",
+      "elapsedSeconds": 9.290240166999865,
+      "exitCode": 0,
+      "childUserCpuSeconds": 17.679774,
+      "childSystemCpuSeconds": 1.343502
+    },
+    {
+      "label": "review-initial",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-13T18:42:07.501784+00:00",
+      "wrapperPid": 72554,
+      "pid": 72562,
+      "processGroup": 72562,
+      "hostLoadAtStart": 4.37841796875,
+      "endedAt": "2026-10-13T18:43:15.361386+00:00",
+      "elapsedSeconds": 67.85922862499137,
+      "exitCode": 2,
+      "childUserCpuSeconds": 178.007487,
+      "childSystemCpuSeconds": 22.696149
+    },
+    {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-13T18:43:44.028861+00:00",
+      "wrapperPid": 74487,
+      "pid": 74495,
+      "processGroup": 74495,
+      "hostLoadAtStart": 5.49951171875,
+      "endedAt": "2026-10-13T18:44:41.178772+00:00",
+      "elapsedSeconds": 57.149589874985395,
+      "exitCode": 2,
+      "childUserCpuSeconds": 143.107379,
+      "childSystemCpuSeconds": 15.213328
+    },
+    {
+      "label": "review-corrected",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-13T18:45:37.648828+00:00",
+      "wrapperPid": 76799,
+      "pid": 76807,
+      "processGroup": 76807,
+      "hostLoadAtStart": 4.533203125,
+      "endedAt": "2026-10-13T18:46:34.121128+00:00",
+      "elapsedSeconds": 56.47196874997462,
+      "exitCode": 0,
+      "childUserCpuSeconds": 143.933836,
+      "childSystemCpuSeconds": 14.989524
+    },
+    {
+      "label": "counterfactual",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "-t",
+        "draws real copies"
+      ],
+      "startedAt": "2026-10-13T18:47:43.381948+00:00",
+      "wrapperPid": 79338,
+      "pid": 79339,
+      "processGroup": 79339,
+      "hostLoadAtStart": 5.3408203125,
+      "endedAt": "2026-10-13T18:47:49.182656+00:00",
+      "elapsedSeconds": 5.800578041991685,
+      "exitCode": 1,
+      "childUserCpuSeconds": 4.2627559999999995,
+      "childSystemCpuSeconds": 1.527171
+    },
+    {
+      "label": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/fold/fold.test.ts"
+      ],
+      "startedAt": "2026-10-13T18:48:38.287744+00:00",
+      "wrapperPid": 80309,
+      "pid": 80317,
+      "processGroup": 80317,
+      "hostLoadAtStart": 5.1474609375,
+      "endedAt": "2026-10-13T18:48:47.689821+00:00",
+      "elapsedSeconds": 9.401945207995595,
+      "exitCode": 0,
+      "childUserCpuSeconds": 17.572528,
+      "childSystemCpuSeconds": 1.482696
+    },
+    {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startedAt": "2026-10-13T18:49:20.777825+00:00",
+      "wrapperPid": 80989,
+      "pid": 81034,
+      "processGroup": 81034,
+      "hostLoadAtStart": 5.30224609375,
+      "endedAt": "2026-10-13T18:49:25.155438+00:00",
+      "elapsedSeconds": 4.377509042009478,
+      "exitCode": 0,
+      "childUserCpuSeconds": 3.725091,
+      "childSystemCpuSeconds": 1.15689
+    },
+    {
+      "label": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startedAt": "2026-10-13T18:50:47.808704+00:00",
+      "wrapperPid": 12086,
+      "pid": 12097,
+      "processGroup": 12097,
+      "hostLoadAtStart": 4.73828125,
+      "endedAt": "2026-10-13T18:50:47.923293+00:00",
+      "elapsedSeconds": 0.11450583298574202,
+      "exitCode": 0,
+      "childUserCpuSeconds": 0.055208,
+      "childSystemCpuSeconds": 0.024579999999999998
+    },
+    {
+      "label": "full",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "startedAt": "2026-10-13T18:50:54.638404+00:00",
+      "wrapperPid": 12223,
+      "pid": 12231,
+      "processGroup": 12231,
+      "hostLoadAtStart": 4.85791015625,
+      "endedAt": "2026-10-13T18:52:51.858915+00:00",
+      "elapsedSeconds": 117.21975258298335,
+      "exitCode": 0,
+      "childUserCpuSeconds": 229.824722,
+      "childSystemCpuSeconds": 39.452855
+    },
+    {
+      "label": "fuzz",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "hv-umm2-647-20261013",
+        "--interactive-every",
+        "10"
+      ],
+      "startedAt": "2026-10-13T18:53:51.979312+00:00",
+      "wrapperPid": 44318,
+      "pid": 44335,
+      "processGroup": 44335,
+      "hostLoadAtStart": 7.12255859375,
+      "endedAt": "2026-10-13T18:57:59.463429+00:00",
+      "elapsedSeconds": 247.48296616697917,
+      "exitCode": 0,
+      "childUserCpuSeconds": 262.129973,
+      "childSystemCpuSeconds": 2.6917
+    },
+    {
+      "label": "focused-empty-red",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "-t",
+        "draws an unavoidable"
+      ],
+      "startedAt": "2026-10-13T18:59:27.777027+00:00",
+      "wrapperPid": 67730,
+      "pid": 67740,
+      "processGroup": 67740,
+      "hostLoadAtStart": 5.88720703125,
+      "endedAt": "2026-10-13T18:59:31.231022+00:00",
+      "elapsedSeconds": 3.453880625020247,
+      "exitCode": 1,
+      "childUserCpuSeconds": 3.048099,
+      "childSystemCpuSeconds": 1.107015
+    },
+    {
+      "label": "focused-final-empty",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/fold/fold.test.ts"
+      ],
+      "startedAt": "2026-10-13T19:01:52.507437+00:00",
+      "wrapperPid": 71965,
+      "pid": 71973,
+      "processGroup": 71973,
+      "hostLoadAtStart": 3.34375,
+      "endedAt": "2026-10-13T19:02:00.631607+00:00",
+      "elapsedSeconds": 8.123993416986195,
+      "exitCode": 0,
+      "childUserCpuSeconds": 15.828804,
+      "childSystemCpuSeconds": 1.094637
+    },
+    {
+      "label": "counterfactual-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "-t",
+        "draws real copies|draws an unavoidable"
+      ],
+      "startedAt": "2026-10-13T19:04:07.009251+00:00",
+      "wrapperPid": 75837,
+      "pid": 75841,
+      "processGroup": 75841,
+      "hostLoadAtStart": 15.30712890625,
+      "endedAt": "2026-10-13T19:04:12.932655+00:00",
+      "elapsedSeconds": 5.923237625014735,
+      "exitCode": 1,
+      "childUserCpuSeconds": 4.644307,
+      "childSystemCpuSeconds": 1.911362
+    },
+    {
+      "label": "focused-restored-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/loops/loops-mandatory.test.ts",
+        "src/engine/loops/loops.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/fold/fold.test.ts"
+      ],
+      "startedAt": "2026-10-13T19:06:02.009537+00:00",
+      "wrapperPid": 34393,
+      "pid": 34403,
+      "processGroup": 34403,
+      "hostLoadAtStart": 11.15087890625,
+      "endedAt": "2026-10-13T19:06:10.881336+00:00",
+      "elapsedSeconds": 8.8716219580092,
+      "exitCode": 0,
+      "childUserCpuSeconds": 17.542114,
+      "childSystemCpuSeconds": 1.219663
+    },
+    {
+      "label": "review-final-empty",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-13T19:07:25.506173+00:00",
+      "wrapperPid": 39456,
+      "pid": 39466,
+      "processGroup": 39466,
+      "hostLoadAtStart": 6.4765625,
+      "endedAt": "2026-10-13T19:08:32.519350+00:00",
+      "elapsedSeconds": 67.01242187499884,
+      "exitCode": 0,
+      "childUserCpuSeconds": 179.194231,
+      "childSystemCpuSeconds": 20.779052
+    },
+    {
+      "label": "knip-final",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startedAt": "2026-10-13T19:09:21.058959+00:00",
+      "wrapperPid": 44371,
+      "pid": 44386,
+      "processGroup": 44386,
+      "hostLoadAtStart": 5.078125,
+      "endedAt": "2026-10-13T19:09:24.184107+00:00",
+      "elapsedSeconds": 3.1250443330209237,
+      "exitCode": 0,
+      "childUserCpuSeconds": 3.080386,
+      "childSystemCpuSeconds": 0.9808779999999999
+    },
+    {
+      "label": "schema-final-source",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startedAt": "2026-10-13T19:11:42.539942+00:00",
+      "wrapperPid": 47040,
+      "pid": 47048,
+      "processGroup": 47048,
+      "hostLoadAtStart": 3.59423828125,
+      "endedAt": "2026-10-13T19:11:42.636058+00:00",
+      "elapsedSeconds": 0.09604954201495275,
+      "exitCode": 0,
+      "childUserCpuSeconds": 0.048895,
+      "childSystemCpuSeconds": 0.020551999999999997
+    },
+    {
+      "label": "full-final",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "startedAt": "2026-10-13T19:11:42.700444+00:00",
+      "wrapperPid": 47052,
+      "pid": 47064,
+      "processGroup": 47064,
+      "hostLoadAtStart": 3.59423828125,
+      "endedAt": "2026-10-13T19:13:28.166634+00:00",
+      "elapsedSeconds": 105.46506358301849,
+      "exitCode": 0,
+      "childUserCpuSeconds": 225.566032,
+      "childSystemCpuSeconds": 36.3342
+    },
+    {
+      "label": "fuzz-final",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "hv-umm2-647-20261013",
+        "--interactive-every",
+        "10"
+      ],
+      "startedAt": "2026-10-13T19:13:28.236252+00:00",
+      "wrapperPid": 77834,
+      "pid": 77844,
+      "processGroup": 77844,
+      "hostLoadAtStart": 5.72119140625,
+      "endedAt": "2026-10-13T19:17:06.563564+00:00",
+      "elapsedSeconds": 218.32479658297962,
+      "exitCode": 0,
+      "childUserCpuSeconds": 232.336581,
+      "childSystemCpuSeconds": 1.66868
+    },
+    {
+      "label": "schema-ready",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startedAt": "2026-10-13T19:17:06.770733+00:00",
+      "wrapperPid": 81674,
+      "pid": 81682,
+      "processGroup": 81682,
+      "hostLoadAtStart": 3.48193359375,
+      "endedAt": "2026-10-13T19:17:06.837867+00:00",
+      "elapsedSeconds": 0.06705158299882896,
+      "exitCode": 0,
+      "childUserCpuSeconds": 0.049907,
+      "childSystemCpuSeconds": 0.019913999999999998
+    },
+    {
+      "label": "schema-evidence-final",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startedAt": "2026-10-13T19:23:26.228624+00:00",
+      "wrapperPid": 87873,
+      "pid": 87887,
+      "processGroup": 87887,
+      "hostLoadAtStart": 2.912109375,
+      "endedAt": "2026-10-13T19:23:26.327215+00:00",
+      "elapsedSeconds": 0.09852254198631272,
+      "exitCode": 0,
+      "childUserCpuSeconds": 0.047975,
+      "childSystemCpuSeconds": 0.021429999999999998
+    }
+  ],
+  "beforeDiagnostic": {
+    "receipt": {
+      "startedAt": "2026-10-13T18:20:53.569925+00:00",
+      "wrapperPid": 54775,
+      "pid": 54783,
+      "processGroup": 54783,
+      "sourceBefore": "ce935e683af7b39c0b9856987c928b40971b073538c9a0a50c28fb8421f5d59b",
+      "endedAt": "2026-10-13T18:20:55.929214+00:00",
+      "elapsedSeconds": 2.359169292001752,
+      "exitCode": 0,
+      "sourceAfter": "ce935e683af7b39c0b9856987c928b40971b073538c9a0a50c28fb8421f5d59b",
+      "sourceUnchanged": true,
+      "sourceFiles": 520
+    },
+    "remainingProcessGroupMembers": [],
+    "proposalSha256": "ce714b678ee7e867b28e12e08ce3d58b7f521649081ce6cc84260cc6dcadb767",
+    "cases": [
+      {
+        "side": "player",
+        "destination": "stack",
+        "completedSteps": 64,
+        "distinctCreatedIds": 62,
+        "automaticSteps": 0,
+        "automaticChoices": 62,
+        "result": null,
+        "nextAutomaticStepPending": true,
+        "stackCardCount": 63,
+        "handCount": 0,
+        "ephemeralHandCopies": 0,
+        "nonAutoAnswerCount": 187
+      },
+      {
+        "side": "player",
+        "destination": "hand",
+        "completedSteps": 64,
+        "distinctCreatedIds": 62,
+        "automaticSteps": 0,
+        "automaticChoices": 62,
+        "result": null,
+        "nextAutomaticStepPending": true,
+        "stackCardCount": 1,
+        "handCount": 62,
+        "ephemeralHandCopies": 31,
+        "nonAutoAnswerCount": 64
+      },
+      {
+        "side": "enemy",
+        "destination": "stack",
+        "completedSteps": 64,
+        "distinctCreatedIds": 62,
+        "automaticSteps": 0,
+        "automaticChoices": 62,
+        "result": null,
+        "nextAutomaticStepPending": true,
+        "stackCardCount": 63,
+        "handCount": 0,
+        "ephemeralHandCopies": 0,
+        "nonAutoAnswerCount": 187
+      },
+      {
+        "side": "enemy",
+        "destination": "hand",
+        "completedSteps": 64,
+        "distinctCreatedIds": 62,
+        "automaticSteps": 0,
+        "automaticChoices": 62,
+        "result": null,
+        "nextAutomaticStepPending": true,
+        "stackCardCount": 1,
+        "handCount": 62,
+        "ephemeralHandCopies": 31,
+        "nonAutoAnswerCount": 64
+      }
+    ],
+    "interpretation": "Bounded before/source-recurrence witness only. No game termination, repair or original233 acceptance claimed."
+  },
+  "designReview": {
+    "start": "2026-10-13T18:09:03.040701+00:00",
+    "end": "2026-10-13T18:12:16.292176+00:00",
+    "elapsedS": 193.24952854198636,
+    "exitCode": 0,
+    "pid": 28635,
+    "pgid": 28635,
+    "wrapper": 28632,
+    "proposalSha": "95828ffef6d0a79d3a03201f400a0f57c0fcb11f764c764654d810a8e15f6ee0"
+  },
+  "designDispositions": {
+    "time": "2026-10-13T18:14:51.137066+00:00",
+    "review": {
+      "start": "2026-10-13T18:09:03.040701+00:00",
+      "end": "2026-10-13T18:12:16.292176+00:00",
+      "elapsedS": 193.24952854198636,
+      "exitCode": 0,
+      "pid": 28635,
+      "pgid": 28635,
+      "wrapper": 28632,
+      "proposalSha": "95828ffef6d0a79d3a03201f400a0f57c0fcb11f764c764654d810a8e15f6ee0"
+    },
+    "remainingOwnedGroups": [],
+    "snapshotCreated": false,
+    "ownWorktreeUnchanged": true,
+    "findings": [
+      "F1 accept pre/post universal closure and fresh boundary counter",
+      "F2 accept victory stability plus dormant winCondition discriminator",
+      "F3 accept tracker exhaustive semantic classification forcing newkind case",
+      "F4 qualify current cardCreated emission fact; actual future233 copy-hook emission/context uninspected, mandatory actual API witness; do not assert unlanded defect"
+    ]
+  },
+  "sourceAdmission": {
+    "at": "2026-10-13T18:28:20.878762+00:00",
+    "proposalSha": "dc8b5c6a2c453264bd54f5ce5227e0ccb6c998692cb78ffb4d407c70daafe873",
+    "completeNativeItems": 1302,
+    "activeMatches": [
+      {
+        "id": "hv-umm2.233",
+        "hits": [
+          "src/engine/triggers/matcher.ts"
+        ],
+        "owner": "01a1304d-597d-7431-997b-ddf86f33ec10"
+      }
+    ],
+    "base": "749b635dd8f59d3407f05e18e5f73d7c08f5861a",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/mandatory-copy647-root",
+    "sourceWriteAck": true,
+    "admittedPaths": [
+      "src/engine/steps/runner.ts",
+      "src/engine/loops/tracker.ts",
+      "src/engine/loops/loops-mandatory.test.ts",
+      "src/engine/triggers/matcher.ts",
+      "docs/rules.md",
+      "docs/plan/engine-design.md",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.647-1.md",
+      "docs/plan/evidence/friction/hv-umm2.647.json",
+      "docs/plan/evidence/measurements/hv-umm2.647.json",
+      "docs/plan/evidence/pre-existing/hv-umm2.647.md"
+    ]
+  },
+  "scopeLimits": [
+    "Original233 creation trigger and actual emission-time retained hand context require exhaustive semantic integration and its original acceptance; current named witnesses do not prove that consumer.",
+    "No browser/UI modification or QA resources. No persistent/view/signature schema or tunable changes.",
+    "Concurrent witness is deterministic local stale-answer ordering, not a multi-client storage stress test."
+  ],
+  "failurePaths": {
+    "error": "Injected AnswerSource throw after copied instance creation leaves committed hash unchanged; correct retry creates once.",
+    "restart": "Public fold with every-prompt serialization/reload and reordered origin/variant keys matches actual Draw, events and final hash.",
+    "partialWrite": "Suspended copied-instance display exists privately; committed state unchanged; completion creates once.",
+    "malformed": "Public illegal/wrong-side answers bounce without changing slice.",
+    "concurrent": "One observed prompt answer applies; same prompt duplicate bounces stale, preserving next prompt."
+  },
+  "counterfactual": {
+    "startedAt": "2026-10-13T18:47:43.339028+00:00",
+    "base": "749b635dd8f59d3407f05e18e5f73d7c08f5861a",
+    "paths": [
+      "src/engine/steps/runner.ts",
+      "src/engine/loops/tracker.ts",
+      "src/engine/triggers/matcher.ts"
+    ],
+    "finalBodyHashes": {
+      "src/engine/steps/runner.ts": "c315e9bc2f7e1e7d69d8441883645c6d34acfcb5b21d040ea4ec4962077bde0a",
+      "src/engine/loops/tracker.ts": "ce214f6e7d2dfeb408bc1d601b313f0747df46d9dc8bd1b722d83a56d9ea202a",
+      "src/engine/triggers/matcher.ts": "211a5bc554f86604bdeec6625412ccaec31809ddca9d8a54b6e40c342a0cea2e"
+    },
+    "restoredBaseHashes": {
+      "src/engine/steps/runner.ts": "c12111b9372969b9c73bb05a9b2b2c28acf2dc482e8cc30a9815947977f2f47d",
+      "src/engine/loops/tracker.ts": "927de6731c9baac4d56ca231ccf060b00dee61ed032b5b3c7b855f500921dc4e",
+      "src/engine/triggers/matcher.ts": "5de0120d595144d23fa9bbf72dd5e6aedaf1a9a727c62790b5067ef667eb2c31"
+    },
+    "endedAt": "2026-10-13T18:47:49.208135+00:00",
+    "elapsedSeconds": 5.868887749995338,
+    "negativeTestExitCode": 1,
+    "restoredFinalHashes": {
+      "src/engine/steps/runner.ts": "c315e9bc2f7e1e7d69d8441883645c6d34acfcb5b21d040ea4ec4962077bde0a",
+      "src/engine/loops/tracker.ts": "ce214f6e7d2dfeb408bc1d601b313f0747df46d9dc8bd1b722d83a56d9ea202a",
+      "src/engine/triggers/matcher.ts": "211a5bc554f86604bdeec6625412ccaec31809ddca9d8a54b6e40c342a0cea2e"
+    },
+    "allEngineSourceRestoredExactly": true,
+    "engineSourceFiles": 520,
+    "interpretation": "A failing deterministic watchdog disproves the expected Draw on base bodies. The watchdog does not terminate the game.",
+    "expectedFailures": "All four selected actor/stack-hand cases failed specifically at the deterministic watchdog,4failed/16skipped; no observer result substituted for Draw."
+  },
+  "validationObserved": {
+    "focusedFinal": {
+      "files": 4,
+      "tests": 76,
+      "label": "focused-restored-final"
+    },
+    "reviewCorrected": {
+      "files": 293,
+      "tests": 6120,
+      "exitCode": 0
+    },
+    "failures": [
+      {
+        "label": "review-initial",
+        "cause": "Readonly variant assignment in synthetic reload fixture; typecheck exit2;6118 related tests passed."
+      },
+      {
+        "label": "review-final",
+        "cause": "Raw Object.entries string key used against branded InstanceId table; typecheck exit2;6120 related tests passed."
+      }
+    ],
+    "sourceLineCounts": {
+      "tracker": 383,
+      "mandatoryTest": 392
+    },
+    "testDelta": {
+      "files": 0,
+      "lines": 246,
+      "jsdomFiles": 0
+    },
+    "reviewFinal": {
+      "files": 293,
+      "tests": 6121,
+      "label": "review-final-empty",
+      "exitCode": 0
+    },
+    "testNumstat": {
+      "additions": 248,
+      "deletions": 2,
+      "net": 246,
+      "baseLines": 146
+    },
+    "fullFinal": {
+      "files": 374,
+      "tests": 7122,
+      "label": "full-final",
+      "exitCode": 0
+    },
+    "fuzzFinal": {
+      "label": "fuzz-final",
+      "exitCode": 0,
+      "battles": 300,
+      "steps": 124543,
+      "prompts": 8443,
+      "interactiveReruns": 836,
+      "interactiveEvery": 10,
+      "seed": "hv-umm2-647-20261013",
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 8
+      },
+      "results": {
+        "player": 156,
+        "enemy": 143,
+        "draw": 1
+      },
+      "failures": 0,
+      "nativeSummary": "fuzz:engine 300 games, 124543 steps, 217.3 s wall, 233.0 s CPU (1.4 games/s wall, 1.3 games/s CPU); prompts 8443; interactive re-runs 836 (2.579 ms each); feasibility bounded {\"legality\":0,\"prompts\":8}; results {\"player\":156,\"enemy\":143,\"draw\":1}; failures 0",
+      "poolQualification": "Native unweighted pool does not contain the local named-renewal copy fixtures; focused public contracts cover the new closure branch. Original233 weighted consumer acceptance is not claimed."
+    }
+  },
+  "preExistingQualification": "Interpreter publicAbilityEffect uses string-order origin/effect attribution equality for deck-knowledge windows. No effect suppression or unrelated privacy failure proven; body unchanged.",
+  "counterfactualFinal": {
+    "startedAt": "2026-10-13T19:04:06.952191+00:00",
+    "base": "749b635dd8f59d3407f05e18e5f73d7c08f5861a",
+    "paths": [
+      "src/engine/steps/runner.ts",
+      "src/engine/loops/tracker.ts",
+      "src/engine/triggers/matcher.ts"
+    ],
+    "finalBodyHashes": {
+      "src/engine/steps/runner.ts": "c315e9bc2f7e1e7d69d8441883645c6d34acfcb5b21d040ea4ec4962077bde0a",
+      "src/engine/loops/tracker.ts": "ff4152c2abfa9d790667a5a7e59fc97673d524b75fb3e523b028ccdac9b1a662",
+      "src/engine/triggers/matcher.ts": "211a5bc554f86604bdeec6625412ccaec31809ddca9d8a54b6e40c342a0cea2e"
+    },
+    "restoredBaseHashes": {
+      "src/engine/steps/runner.ts": "c12111b9372969b9c73bb05a9b2b2c28acf2dc482e8cc30a9815947977f2f47d",
+      "src/engine/loops/tracker.ts": "927de6731c9baac4d56ca231ccf060b00dee61ed032b5b3c7b855f500921dc4e",
+      "src/engine/triggers/matcher.ts": "5de0120d595144d23fa9bbf72dd5e6aedaf1a9a727c62790b5067ef667eb2c31"
+    },
+    "endedAt": "2026-10-13T19:04:12.955212+00:00",
+    "elapsedSeconds": 6.002774499997031,
+    "negativeTestExitCode": 1,
+    "restoredFinalHashes": {
+      "src/engine/steps/runner.ts": "c315e9bc2f7e1e7d69d8441883645c6d34acfcb5b21d040ea4ec4962077bde0a",
+      "src/engine/loops/tracker.ts": "ff4152c2abfa9d790667a5a7e59fc97673d524b75fb3e523b028ccdac9b1a662",
+      "src/engine/triggers/matcher.ts": "211a5bc554f86604bdeec6625412ccaec31809ddca9d8a54b6e40c342a0cea2e"
+    },
+    "allEngineSourceRestoredExactly": true,
+    "engineSourceFiles": 520,
+    "interpretation": "A failing deterministic watchdog disproves the expected Draw on base bodies. The watchdog does not terminate the game."
+  },
+  "finalReceiptLabels": {
+    "focused": "focused-restored-final",
+    "review": "review-final-empty",
+    "knip": "knip-final",
+    "counterfactual": "counterfactual-final",
+    "schema": "schema-evidence-final",
+    "full": "full-final",
+    "fuzz": "fuzz-final"
+  },
+  "historicalFullFuzz": {
+    "sourceManifestSha256": "4daffc834a62437f6403fccfe2e7d04ac58f1d3c7f718d42d952c7f2c95fd486",
+    "fullLabel": "full",
+    "fullTests": 7121,
+    "fullFiles": 374,
+    "fuzzLabel": "fuzz",
+    "battles": 300,
+    "status": "Passed before the empty-sequence correction; historical, not final corrected-source validation."
+  },
+  "reviewNamingQualification": {
+    "review-final": "Historical second fixture typing failure,exit2; retained unchanged.",
+    "review-corrected": "Historical passing pre-empty review,exit0,6120tests.",
+    "review-final-empty": "Final corrected-source review,exit0,6121tests."
+  },
+  "emptySequenceCorrection": {
+    "red": "focused-empty-red",
+    "redOutcome": "Expected single watchdog failure on own prior implementation;20skipped, not a game result.",
+    "fix": "Empty sequence is a safe nonrenewing no-op; zero-mode chooseOne remains unproven. Positive empty mode before unconditional renewal draws; actual empty stopping branch retains optional exit.",
+    "rejectedPatch": "One apply_patch invocation rejected duplicate operations for the same path before any write; corrected single-operation patch then applied."
+  },
+  "finalFunctionalManifest": {
+    "count": 2406,
+    "aggregateSha256": "e3c5e1e6bc1576e56bbdc4aca2d1852136a7e70e8dfb8ad3d01afd64ee832761",
+    "unchangedAfterFullFuzzAndAtEvidenceWrite": true
+  },
+  "supportFailure": {
+    "operation": "final evidence parser after full/fuzz",
+    "cause": "Native fuzz stdout is text with embedded JSON; parsing from the first brace raised JSONDecodeError Extra data before evidence writes. Corrected parser reads each embedded object.",
+    "effects": "No source or evidence writes from failed parser; schema-ready validated the preceding provisional records."
+  },
+  "resourceDrain": {
+    "checkedAt": "2026-10-13T19:23:26.103226+00:00",
+    "checkReceiptCount": 23,
+    "remainingGroups": {
+      "2496": [],
+      "5572": [],
+      "66414": [],
+      "72562": [],
+      "74495": [],
+      "76807": [],
+      "79339": [],
+      "80317": [],
+      "81034": [],
+      "12097": [],
+      "12231": [],
+      "44335": [],
+      "67740": [],
+      "71973": [],
+      "75841": [],
+      "34403": [],
+      "39466": [],
+      "44386": [],
+      "47048": [],
+      "47064": [],
+      "77844": [],
+      "81682": [],
+      "87887": []
+    },
+    "browserOrServerResources": [],
+    "finalSchemaActualTerminal": "2026-10-13T19:23:26.327215+00:00"
+  },
+  "automaticCommitWindow": {
+    "actualDispatch": "2026-10-13T17:58:45.763Z",
+    "prospectiveAutomaticGitEndpoint": "2026-10-13T19:24:42.772760+00:00",
+    "prospectiveGrossMinutes": 85.95016266666667,
+    "ack": "2026-10-13T19:23:56.107194+00:00",
+    "actualGitReceipt": "/tmp/root-647/helper/automatic-git.receipt.json",
+    "qualification": "Prospective endpoint chosen five seconds before immediate schema, staging and automatic Git; actual Git follows within60seconds. No date override or postcommit tracked writes."
+  }
+}

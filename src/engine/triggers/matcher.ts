@@ -88,6 +88,11 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   endOfTurn: ["phaseChanged"],
 };
 
+/** Every event kind a trigger can inspect, including all combined branches. */
+export function triggerEventKinds(trigger: Trigger): readonly EngineEventKind[] {
+  return trigger.on === "either" ? trigger.triggers.flatMap(triggerEventKinds) : TRIGGER_EVENTS[trigger.on];
+}
+
 /** Event kinds some trigger can match; other events skip the matcher. */
 const TRIGGERING: readonly EngineEventKind[] = Object.values(TRIGGER_EVENTS)
   .flat()

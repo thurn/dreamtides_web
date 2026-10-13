@@ -10,8 +10,9 @@
  *   checkpoint's signature equals an earlier one's and the resources between
  *   them gained something for the actor and nothing for the opponent, the
  *   actions between them become the loop on offer.
- * - **Mandatory cycles.** Once a run of automatic steps with no decision
- *   offered reaches the battle's check threshold, the full state is hashed
+ * - **Mandatory cycles.** A proved closed copy continuation draws at the
+ *   battle's check threshold. Other automatic runs with no stopping choice
+ *   check exact repeats: the full state is hashed
  *   after each step and compared with one saved mark (Brent's cycle
  *   detection). The mark moves to the current state after 1, 2, 4, … steps,
  *   counted from the threshold, and then every `mandatoryLoopWindow` steps.
@@ -19,14 +20,183 @@
  *   window of entering it, however late in the run, with constant memory.
  */
 import { mainWindowSide } from "../rules/decision";
+import { instanceCard, type EngineCatalog } from "../catalog";
+import { worksInZone } from "../dsl/abilities";
+import { matchingStackItems } from "../dsl/selectors";
+import type { Ability, NamedTrigger, Trigger } from "../dsl/types";
+import type { EngineEventKind } from "../events";
+import type { ChooseOneNode } from "../effects/primitives/choose-one";
+import type { CopyCardNode, CopyCardTimesNode } from "../effects/primitives/copy-card";
+import type { CreateCopyInHandNode } from "../effects/primitives/create-copy-in-hand";
+import type { SequenceNode } from "../effects/primitives/sequence";
+import type { TriggerAbilityNode } from "../effects/primitives/trigger-ability";
+import type { CardRef, EffectNode } from "../effects/types";
+import { abilityOrigin, instanceOrigin, inPlaySources, oncePerTurnKey, originAbilities } from "../rules/activation";
 import { endBattle } from "../rules/victory";
 import type { Answer } from "../prompts/types";
-import type { InstanceId, Side } from "../state/ids";
-import type { BattleState } from "../state/types";
+import { SIDES, sourceKey, type AbilitySource, type InstanceId, type Side, type Zone } from "../state/ids";
+import type { AbilityOrigin, BattleState } from "../state/types";
 import type { Step } from "../steps/kinds";
 import type { RecordedAnswer, StepContext } from "../steps/types";
 import { cycleHash, gainsFor, loopResources, loopSignature } from "./signature";
 import type { LoopCandidate, LoopCheckpoint, LoopId, LoopScope, LoopTracker } from "./types";
+import { triggerEventKinds } from "../triggers/matcher";
+
+/** Exhaustive semantic classification: new trigger kinds require a reviewed renewal case. */
+function namedRenewals(trigger: Trigger): readonly NamedTrigger[] {
+  switch (trigger.on) {
+    case "materialized": case "dawn": case "dusk": case "night": case "challenge": case "dissolved":
+      return [trigger.on];
+    case "either": return trigger.triggers.flatMap(namedRenewals);
+    case "play": case "materialize": case "draw": case "foresee": case "discardBatch":
+    case "discard": case "erode": case "reclaim": case "abandon": case "leavesPlay":
+    case "returnToHand": case "dissolve": case "gainsSpark": case "scores": case "opponentScores":
+    case "removesEnemy": case "leavesVoid": case "putIntoVoid": case "challengeWith":
+    case "startOfTurn": case "startOfFirstTurn": case "endOfTurn": return [];
+  }
+  const exhaustive: never = trigger;
+  return exhaustive;
+}
+
+interface FixedSource {
+  readonly source: AbilitySource;
+  readonly controller: Side;
+  readonly origin: AbilityOrigin;
+  readonly zone: Zone;
+  readonly abilities: readonly Ability[];
+}
+
+interface CopyBody {
+  readonly renews: boolean;
+  readonly copies: boolean;
+  readonly calls: readonly NamedTrigger[];
+}
+
+/** Exact equality of an origin's JSON data, independent of object key order. */
+function sameOriginData(left: unknown, right: unknown): boolean {
+  if (left === right) return true;
+  if (left === null || right === null || typeof left !== "object" || typeof right !== "object") return false;
+  if (Array.isArray(left) || Array.isArray(right)) {
+    return Array.isArray(left) && Array.isArray(right) && left.length === right.length &&
+      left.every((value: unknown, index: number) => sameOriginData(value, right[index]));
+  }
+  const a = left as Readonly<Record<string, unknown>>;
+  const b = right as Readonly<Record<string, unknown>>;
+  const keys = Object.keys(a).filter((key) => a[key] !== undefined);
+  return keys.length === Object.keys(b).filter((key) => b[key] !== undefined).length && keys.every((key) =>
+    Object.prototype.hasOwnProperty.call(b, key) && sameOriginData(a[key], b[key]));
+}
+
+/** Supported instructions cannot mutate these sources or introduce new functional abilities. */
+function fixedCopySources(state: BattleState, catalog: EngineCatalog): FixedSource[] | null {
+  if (state.floating.length > 0 || state.payable.length > 0 || (state.linkedBanished?.length ?? 0) > 0) return null;
+  const sources: FixedSource[] = [];
+  for (const card of Object.values(state.instances)) {
+    if ((card.status.gainedAbilities?.length ?? 0) > 0 || card.status.lostAbilities !== undefined) return null;
+    const origin = instanceOrigin(card);
+    sources.push({ source: card.id, controller: card.controller, origin, zone: card.zone, abilities: originAbilities(catalog, origin) });
+  }
+  for (const side of SIDES) {
+    for (const source of inPlaySources(state, side)) {
+      if (typeof source === "string") continue;
+      const origin = abilityOrigin(state, source);
+      if (origin === null) return null;
+      sources.push({ source, controller: side, origin, zone: "play", abilities: originAbilities(catalog, origin) });
+    }
+  }
+  if (sources.some(({ abilities, zone }) => abilities.some((ability) =>
+    ability.kind === "static" || (zone === "play" && ability.kind === "winCondition")))) return null;
+  return sources;
+}
+
+/** A stable, nonempty domain; every possible target copies an event with only unresolved event effects. */
+function eventCopyDomain(state: BattleState, catalog: EngineCatalog, ref: CardRef, source: FixedSource): boolean {
+  if (ref.kind !== "stackTarget" || ref.selector.cardType !== "event" || ref.selector.preventable !== undefined) return false;
+  const cards = matchingStackItems(state, catalog, ref.selector, source.controller, source.source);
+  return cards.length > 0 && cards.every((id) => {
+    const card = state.instances[id];
+    const definition = instanceCard(catalog, card);
+    return definition.cardType === "event" && definition.synthetic === undefined &&
+      originAbilities(catalog, instanceOrigin(card)).every((ability) => ability.kind === "event");
+  });
+}
+
+/** All syntactic branches must be safe, including modes which are currently unavailable. */
+function copyBody(node: EffectNode, source: FixedSource, state: BattleState, catalog: EngineCatalog, visiting = new Set<EffectNode>()): CopyBody | null {
+  if (visiting.has(node)) return null;
+  visiting.add(node);
+  const walk = (child: EffectNode) => copyBody(child, source, state, catalog, visiting);
+  let body: CopyBody | null = null;
+  if (node.op === "sequence" || node.op === "chooseOne") {
+    const children = node.op === "sequence" ? (node as SequenceNode).effects : (node as ChooseOneNode).modes;
+    const parts = children.map(walk);
+    if ((node.op === "sequence" || children.length > 0) && parts.every((part): part is CopyBody => part !== null)) body = {
+      renews: node.op === "sequence" ? parts.some((part) => part.renews) : parts.every((part) => part.renews),
+      copies: parts.some((part) => part.copies), calls: parts.flatMap((part) => part.calls),
+    };
+  } else if (node.op === "copyCard" || node.op === "copyCardTimes" || node.op === "createCopyInHand") {
+    const ref = node.op === "createCopyInHand" ? (node as CreateCopyInHandNode).of : (node as CopyCardNode).card;
+    const times = node.op === "copyCardTimes" ? (node as CopyCardTimesNode).times : 1;
+    if (Number.isSafeInteger(times) && times >= 0 && eventCopyDomain(state, catalog, ref, source)) {
+      body = { renews: false, copies: times > 0, calls: [] };
+    }
+  } else if (node.op === "triggerAbility") {
+    const call = node as TriggerAbilityNode;
+    if (call.subject.kind === "self" && typeof source.source === "string" && source.zone === "play") {
+      body = { renews: true, copies: false, calls: [call.trigger] };
+    }
+  }
+  visiting.delete(node);
+  return body;
+}
+
+/**
+ * Proves copy-only queued continuations closed under every answer. Physical
+ * copies keep their identities and choices; their effects cannot resolve
+ * while every FIFO instruction necessarily renews that FIFO. Unsupported
+ * conditions, victory predicates, modifiers or interfering listeners fail
+ * certification. Creation-trigger renewal needs its own exhaustive semantic
+ * case and typed emission-time context when that trigger is implemented.
+ */
+export function isUnbreakableCopyContinuation(state: BattleState, catalog: EngineCatalog): boolean {
+  if (state.result !== null || state.triggerQueue.length === 0 || state.loops.run !== null) return false;
+  const sources = fixedCopySources(state, catalog);
+  if (sources === null) return false;
+  const emitted: readonly EngineEventKind[] = ["cardCreated", "cardCopied", "triggerQueued", "triggerResolved", "promptAutoAnswered", "revealed"];
+  // A dormant condition can become true as copies grow: reject every possible interference.
+  if (sources.some(({ abilities, source, zone }) => abilities.some((ability) => ability.kind === "triggered" &&
+    (typeof source !== "string" || worksInZone(ability.zone, zone)) &&
+    triggerEventKinds(ability.trigger).some((event) => emitted.includes(event))))) return false;
+  const pending: { source: FixedSource; ability: number }[] = [];
+  for (const trigger of state.triggerQueue) {
+    const source = sources.find((candidate) => sourceKey(candidate.source) === sourceKey(trigger.source));
+    if (source === undefined || source.zone !== "play" || source.controller !== trigger.controller ||
+      !sameOriginData(source.origin, trigger.origin) || trigger.node !== null || trigger.kind !== undefined) return false;
+    pending.push({ source, ability: trigger.ability });
+  }
+  const visited = new Set<ReturnType<typeof oncePerTurnKey>>();
+  let copies = false;
+  while (pending.length > 0) {
+    const next = pending.pop();
+    if (next === undefined) return false;
+    const { source, ability: index } = next;
+    const key = oncePerTurnKey(source.source, index);
+    if (visited.has(key)) continue;
+    visited.add(key);
+    const ability = source.abilities[index];
+    if (ability?.kind !== "triggered" || ability.condition !== undefined || ability.oncePerTurn === true) return false;
+    const body = copyBody(ability.effect, source, state, catalog);
+    if (body === null || !body.renews) return false;
+    copies ||= body.copies;
+    for (const named of body.calls) {
+      const matches = source.abilities.flatMap((candidate, at) => candidate.kind === "triggered" &&
+        namedRenewals(candidate.trigger).includes(named) && (named === "dissolved" || worksInZone(candidate.zone, source.zone)) ? [at] : []);
+      if (matches.length === 0) return false;
+      for (const at of matches) pending.push({ source, ability: at });
+    }
+  }
+  return copies;
+}
 
 /** The side deciding at a checkpoint, or `null` when `state` is not one. */
 export function checkpointSide(state: BattleState): Side | null {
@@ -180,11 +350,10 @@ export function trackLoops(
 }
 
 /**
- * Ends the battle in a draw when automatic steps return it to exactly a
- * state they passed through (rules § Mandatory Loops), checked from the
- * battle's `mandatoryLoopCheckFrom` step of a run on. `automatic` is false
- * for a step that follows or replays a decision, or in which a player made
- * a choice, which starts a new run.
+ * Ends a proved closed copy continuation or an exact automatic-state repeat
+ * in a draw (rules § Mandatory Loops), checked from `mandatoryLoopCheckFrom`
+ * on. A stopping or unproven choice, a top-level decision and an optional
+ * loop iteration start a new run; proved independent copy choices preserve it.
  */
 export function checkMandatoryCycle(ctx: StepContext, automatic: boolean): void {
   const { state } = ctx;
@@ -194,6 +363,10 @@ export function checkMandatoryCycle(ctx: StepContext, automatic: boolean): void 
     return;
   }
   if (state.result !== null || state.automaticSteps < config.mandatoryLoopCheckFrom) return;
+  if (isUnbreakableCopyContinuation(state, ctx.catalog)) {
+    endBattle(ctx, { kind: "draw", reason: "mandatoryLoop" });
+    return;
+  }
   const hash = cycleHash(state);
   const mark = loops.cycle;
   if (mark === null) {

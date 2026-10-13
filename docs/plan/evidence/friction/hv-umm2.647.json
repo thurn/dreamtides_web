@@ -1,0 +1,47 @@
+{
+  "bead": "hv-umm2.647",
+  "phase": 5,
+  "implementMin": 85.95016266666667,
+  "implementWindow": {
+    "start": "2026-10-13T17:58:45.763Z",
+    "end": "2026-10-13T19:24:42.772760+00:00"
+  },
+  "localValidationS": {
+    "focused-initial": 8.901983291987563,
+    "focused-expanded": 9.819694083998911,
+    "focused-reordered": 9.290240166999865,
+    "review-initial": 67.85922862499137,
+    "review-final": 57.149589874985395,
+    "review-corrected": 56.47196874997462,
+    "counterfactual": 5.800578041991685,
+    "focused-final": 9.401945207995595,
+    "knip": 4.377509042009478,
+    "schema": 0.11450583298574202,
+    "full": 117.21975258298335,
+    "fuzz": 247.48296616697917,
+    "focused-empty-red": 3.453880625020247,
+    "focused-final-empty": 8.123993416986195,
+    "counterfactual-final": 5.923237625014735,
+    "focused-restored-final": 8.8716219580092,
+    "review-final-empty": 67.01242187499884,
+    "knip-final": 3.1250443330209237,
+    "schema-final-source": 0.09604954201495275,
+    "full-final": 105.46506358301849,
+    "fuzz-final": 218.32479658297962,
+    "schema-ready": 0.06705158299882896,
+    "schema-evidence-final": 0.09852254198631272
+  },
+  "hostLoad": 6.4765625,
+  "testDelta": {
+    "files": 0,
+    "lines": 246,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 2.083480308332946,
+      "note": "Two own synthetic fixture typing errors (readonly variant assignment, then raw Object.entries key for branded instance table) caused failed review attempts; related tests6118/6120 passed in those attempts. Measured total failed outer-review wall time, not pure edit time. Corrected fixture uses immutable replacement at its existing branded ID; subsequent review passes."
+    }
+  ]
+}

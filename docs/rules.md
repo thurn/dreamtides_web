@@ -2510,9 +2510,10 @@ repeats.
 ### Mandatory Loops
 
 A mandatory loop is one that repeats while no player has the opportunity to
-play a card, activate an ability, reposition, or pass, and no player makes a
-choice with more than one option — for example, triggered abilities that keep
-triggering each other. Nobody can stop it, so:
+leave the sequence by playing a card, activating an ability, repositioning,
+passing, or choosing a legal prompt answer. Independent choices of a copy's
+targets or modes can leave every continuation unavoidable. Nobody can stop
+such a loop, so:
 
 - If the battle returns to exactly the same state during such a sequence, the
   battle ends in a draw. The order in which cards entered their zones is part
@@ -2521,13 +2522,20 @@ triggering each other. Nobody can stop it, so:
   ended by the limit below instead; the result is the same.
 - If such a sequence runs for more than 100,000 consecutive automatic game
   actions without repeating, the battle also ends in a draw.
+- A proved closed copy continuation ends in a draw at the mandatory-check
+  threshold (64 consecutive automatic actions). Every legal answer must
+  preserve its continuing trigger queue, its relevant characteristics and
+  its victory conditions. Growing physical copies remain distinct cards,
+  with every creation and triggered occasion recorded before the draw.
 
-A choice with more than one option, such as accepting or declining a "you
-may" effect, could stop the sequence, so the game actions before it never
-make a mandatory loop with the ones after it, and the count of consecutive
-automatic game actions starts again after it. A choice with only one option
-does not. Repetitions of an optional loop are the player's own actions, so
-they never make a mandatory loop either.
+A legal stopping choice, such as declining a "you may" effect, starts a new
+run of consecutive automatic actions. Independent copy choices preserve a
+run only when both the state before the choice and its completed state prove
+the continuation unavoidable; choosing to enter such a continuation starts
+its count at zero. Choices whose continuations the engine cannot prove
+unavoidable also start a new run. A forced choice preserves the count.
+Repetitions of an optional loop are the player's own actions, so they never
+make a mandatory loop either.
 
 ## Journey Transfiguration Effects
 

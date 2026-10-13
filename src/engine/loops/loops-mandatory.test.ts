@@ -6,14 +6,109 @@
 import { describe, expect, it } from "vitest";
 import { createFoldAdapter, type BattleSlice } from "../fold/slice";
 import { deserializeState, serializeState, stateHash } from "../state/hash";
-import type { InstanceId } from "../state/ids";
+import type { InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { nextAutomaticStep } from "../steps/driver";
 import { runStep } from "../steps/runner";
-import { NO_PROMPTS, ScriptedSource } from "../steps/sources";
+import { INTERACTIVE, NO_PROMPTS, ScriptedSource } from "../steps/sources";
 import type { AnswerSource } from "../steps/types";
 import { CYCLE, LOOP } from "../testing/loop-cards";
 import { toggleEcho, engine, deck, board, sourceOf, activate, repeat, ended } from "./loops.fixtures";
+import { createEngine, type Engine } from "../engine";
+import type { EngineCardDefinition } from "../catalog";
+import { all, enemyCharacter, energy, event, self, staticAbility, target, characterYouControl, winCondition } from "../dsl/builders";
+import { onMaterialized, triggered, whenYouPlay } from "../dsl/triggers";
+import type { Ability, Condition } from "../dsl/types";
+import type { Effect } from "../effects/registry";
+import * as p from "../effects/primitives";
+import { randomLegalAnswer } from "../prompts/answers";
+import type { Answer, Prompt } from "../prompts/types";
+import { boardState } from "../testing/board";
+import { SYNTHETIC, syntheticId, testCatalog } from "../testing/synthetic-cards";
+import { eventRedactionViolations, promptRedactionViolations, redactionViolations } from "../testing/redaction";
+import type { EngineEvent } from "../events";
+
+function copyChain(side: Side, hand: boolean, options: {
+  readonly body?: (effect: Effect) => Effect;
+  readonly starter?: (effect: Effect) => Effect;
+  readonly extra?: readonly Ability[];
+  readonly once?: boolean;
+  readonly condition?: Condition;
+} = {}) {
+  const ref = { kind: "stackTarget", selector: { kind: "stackItem", controller: "you", cardType: "event" } } as const;
+  const copy = hand ? p.chooseOne(p.createCopyInHand(ref), p.createCopyInHand(ref, { ephemeral: true })) : p.copyCard(ref);
+  const renewal = p.triggerAbility(self(), "materialized");
+  const source: EngineCardDefinition = {
+    id: syntheticId(0xfe001), cardType: "character", costs: [energy(0)], spark: 1,
+    subtype: "Warrior", speed: "standard", status: "authored",
+    abilities: () => [
+      triggered(whenYouPlay({ cardType: "event" }), options.starter?.(renewal) ?? renewal),
+      triggered(onMaterialized(), options.body?.(p.sequence(copy, renewal)) ?? p.sequence(copy, renewal),
+        { ...(options.once ? { oncePerTurn: true } : {}), ...(options.condition === undefined ? {} : { condition: options.condition }) }),
+      ...(options.extra ?? []),
+    ],
+  };
+  const copied: EngineCardDefinition = {
+    id: syntheticId(0xfe002), cardType: "event", costs: [energy(0)], spark: null,
+    subtype: "", speed: "standard", status: "authored",
+    abilities: () => [event(p.chooseOne(p.gainSpark(target(enemyCharacter()), 1), p.gainSpark(target(enemyCharacter()), 2)))],
+  };
+  const local = createEngine(testCatalog([source, copied]));
+  const other = side === "player" ? "enemy" : "player";
+  const setup = boardState(local.catalog, { active: side, phase: "day",
+    [side]: { back: [source.id, SYNTHETIC.vanilla0.id], hand: [copied.id], energy: 1, deck },
+    [other]: { back: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id], deck } });
+  for (const instance of Object.values(setup.state.instances)) {
+    setup.state.instances[instance.id] = { ...instance, variant: { ...instance.variant, transfigurations: [] } };
+  }
+  const card = setup.ids[side].hand[0];
+  if (card === undefined) throw new Error("missing card");
+  return { ...setup, local, side, action: { kind: "play", card, from: "hand" } as const };
+}
+
+/** A deterministic strategy, with a watchdog which fails rather than ending a game. */
+type CopyDecision = (prompt: Prompt, state: BattleState) => Answer | undefined;
+function copyAnswers(limit: number, answer?: CopyDecision): AnswerSource {
+  let ordinal = 0;
+  return { answer(prompt, state) {
+    if (ordinal > limit) throw new Error("copy continuation did not terminate within the witness budget");
+    const value = answer?.(prompt, state) ?? randomLegalAnswer(prompt, () => ordinal % 2 === 0 ? 0 : 0.999999);
+    ordinal += 1;
+    return value;
+  } };
+}
+
+function foldCopies(local: Engine, state: BattleState, side: Side, action: ReturnType<typeof copyChain>["action"], reload: boolean | "reordered") {
+  let fold = createFoldAdapter(local, { checkEventPrefix: true });
+  let slice: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+  const answers = copyAnswers(state.config.mandatoryLoopCheckFrom * 4 + 20);
+  const events: EngineEvent[] = [];
+  const fingerprints: Prompt[] = [];
+  const apply = (intent: Parameters<typeof fold.reduce>[1]) => {
+    const outcome = fold.reduce(slice, intent);
+    if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("fold failed");
+    slice = outcome.slice;
+    events.push(...outcome.published);
+  };
+  apply({ kind: "battleAction", side, action });
+  for (;;) {
+    const pending = fold.pending(slice);
+    if (pending === null) break;
+    expect(promptRedactionViolations(pending.prompt, pending.display, local.catalog)).toEqual([]);
+    fingerprints.push(pending.prompt);
+    if (reload) {
+      const restored = JSON.parse(JSON.stringify(slice), (_key, value: unknown) =>
+        reload === "reordered" && value !== null && typeof value === "object" && !Array.isArray(value)
+          ? Object.fromEntries(Object.entries(value).reverse()) : value) as BattleSlice;
+      expect(stateHash(restored.committed)).toBe(stateHash(slice.committed));
+      slice = { ...restored, committed: deserializeState(serializeState(restored.committed)) };
+      fold = createFoldAdapter(local, { checkEventPrefix: true });
+      expect(fold.pending(slice)?.prompt).toEqual(pending.prompt);
+    }
+    apply({ kind: "answer", side: pending.prompt.side, promptId: pending.prompt.id, value: answers.answer(pending.prompt, pending.display) });
+  }
+  return { slice, events, fingerprints };
+}
 
 /** Plays the only card in the player's hand from `state`, answering prompts from `answers`. */
 function playOnly(state: BattleState, hand: readonly InstanceId[], answers: AnswerSource = NO_PROMPTS) {
@@ -142,5 +237,156 @@ describe("mandatory loops", () => {
     expect(result.answers.length).toBeGreaterThan(0);
     expect(result.answers.every((answer) => answer.auto === true)).toBe(true);
     expect(result.state.result).toEqual({ kind: "draw", reason: "mandatoryLoop" });
+  });
+});
+
+describe("closed mandatory copy continuations", () => {
+  it.each([
+    ["player", false], ["player", true], ["enemy", false], ["enemy", true],
+  ] as const)("draws real copies for %s hand=%s with independent genuine choices and deterministic reload", (side, hand) => {
+      const { local, state, action } = copyChain(side, hand);
+      let before = state;
+      const whole = local.apply(state, side, action, copyAnswers(state.config.mandatoryLoopCheckFrom * 4 + 20), (next, _step, events) => {
+        expect(eventRedactionViolations(events, before, next)).toEqual([]);
+        expect(redactionViolations(next, local.catalog)).toEqual([]);
+        before = next;
+      });
+      expect(whole.state.result).toEqual({ kind: "draw", reason: "mandatoryLoop" });
+      expect(local.decision(whole.state)).toBeNull();
+      expect(whole.answers.some(answer => answer.auto !== true)).toBe(true);
+      expect(whole.state.automaticChoices).toBeGreaterThan(0);
+      const created = whole.events.flatMap(e => e.kind === "cardCreated" ? [e.instance] : []);
+      expect(new Set(created).size).toBe(created.length);
+      expect(created.length).toBeGreaterThan(1);
+      if (hand) {
+        const copies = whole.state.sides[side].hand.map(id => whole.state.instances[id]);
+        expect(copies.some(card => card.status.ephemeral)).toBe(true);
+        expect(copies.some(card => !card.status.ephemeral)).toBe(true);
+        expect(copies.map(card => card.id)).toEqual(created);
+      } else {
+        const copies = whole.state.stack.flatMap(item => item.kind === "card" && created.includes(item.instance) ? [item] : []);
+        expect(new Set(copies.map(item => item.choices[0]?.modes[0])).size).toBeGreaterThan(1);
+        expect(new Set(copies.map(item => item.choices[0]?.targets[0]?.[0])).size).toBeGreaterThan(1);
+        expect(new Set(whole.events.flatMap(e => e.kind === "cardCopied" ? [e.original] : [])).size).toBeGreaterThan(1);
+      }
+      const queued = whole.events.filter(e => e.kind === "triggerQueued");
+      const resolved = whole.events.filter(e => e.kind === "triggerResolved");
+      expect(resolved.map(e => e.ability)).toEqual(queued.slice(0, resolved.length).map(e => e.ability));
+      for (const reload of [false, true, "reordered"] as const) {
+        const folded = foldCopies(local, state, side, action, reload);
+        expect(folded.slice.inFlight).toBeNull();
+        expect(stateHash(folded.slice.committed)).toBe(stateHash(whole.state));
+        expect(folded.events).toEqual(whole.events);
+        if (reload) expect(folded.fingerprints).toEqual(foldCopies(local, state, side, action, false).fingerprints);
+      }
+  });
+
+  it("draws an unavoidable copy continuation with harmless empty modal instructions", () => {
+    const { state, local, action } = copyChain("player", true, {
+      body: effect => p.sequence(p.chooseOne(p.sequence(), p.sequence()), effect),
+    });
+    const result = local.apply(state, "player", action, copyAnswers(state.config.mandatoryLoopCheckFrom * 6 + 20));
+    expect(result.state.result).toEqual({ kind: "draw", reason: "mandatoryLoop" });
+    expect(result.answers.some(answer => answer.auto !== true)).toBe(true);
+    expect(result.state.sides.player.hand.length).toBeGreaterThan(1);
+  });
+
+  it("starts a new mandatory run when a stopping choice enters a closed continuation", () => {
+    const { state, local, action } = copyChain("player", true, { starter: renewal => p.chooseOne(p.sequence(), renewal) });
+    const played = runStep(state, action, copyAnswers(20), local.catalog);
+    if (played.kind !== "done") throw new Error("play suspended");
+    const start = { ...played.state, automaticSteps: state.config.mandatoryLoopCheckFrom - 1 };
+    const entered = runStep(start, { kind: "resolveTrigger" }, new ScriptedSource([1]), local.catalog, { automatic: true });
+    if (entered.kind !== "done") throw new Error("entry suspended");
+    expect(entered.state.result).toBeNull();
+    expect(entered.state.automaticSteps).toBe(0);
+    const continued = runStep(entered.state, { kind: "resolveTrigger" }, copyAnswers(20), local.catalog, { automatic: true });
+    if (continued.kind !== "done") throw new Error("copy suspended");
+    expect(continued.state.result).toBeNull();
+    expect(continued.state.automaticSteps).toBe(1);
+    expect(continued.state.sides.player.hand).toHaveLength(1);
+  });
+
+  it("preserves optional, stopping-mode, target, once-per-turn and count-bounded continuations", () => {
+    const limit = board({ player: { deck }, enemy: { deck } }).state.config.mandatoryLoopCheckFrom + 5;
+    const handBound = { cond: "cardsIn", player: "you", zone: "hand", atMost: limit } as const;
+    const cases: (NonNullable<Parameters<typeof copyChain>[2]> & { readonly choose?: CopyDecision })[] = [
+      { body: (effect: Effect) => p.optional(effect), choose: (prompt: Prompt, state: BattleState) => prompt.kind === "confirm" ? state.sides.player.hand.length <= limit : undefined },
+      { body: (effect: Effect) => p.chooseOne(effect, p.sequence()), choose: (prompt: Prompt, state: BattleState) => prompt.kind === "chooseMode" && prompt.purpose.source === state.sides.player.backRank[0] ? (state.sides.player.hand.length <= limit ? 0 : 1) : undefined },
+      { body: (effect: Effect) => p.ifThen(handBound, effect) },
+      { condition: handBound },
+      { once: true },
+      { starter: renewal => p.sequence(p.disableTriggers(self(), "permanent", { cond: "cardsIn", player: "you", zone: "hand", atLeast: limit }), renewal) },
+      { body: (_effect: Effect) => p.sequence(p.createCopyInHand({ kind: "stackTarget", selector: { kind: "stackItem", controller: "you", cardType: "event" } }), p.triggerAbility(target(characterYouControl()), "materialized")),
+        choose: (prompt: Prompt, state: BattleState) => prompt.kind === "chooseTargets" && prompt.purpose.source === state.sides.player.backRank[0] && prompt.candidates.includes(state.sides.player.backRank[0]!) ? [state.sides.player.backRank[state.sides.player.hand.length <= limit ? 0 : 1]!] : undefined },
+      { body: (effect: Effect) => p.ifThen(handBound, effect), extra: [triggered(onMaterialized(), p.gainSpark(self(), 1))] },
+      { body: () => p.sequence(p.createCopyInHand({ kind: "stackTarget", selector: { kind: "stackItem", controller: "you", cardType: "event" } }), p.triggerAbility(target(characterYouControl()), "materialized")),
+        extra: [staticAbility(p.grant(all(characterYouControl()), "cannotBeTargeted"), { while: { cond: "cardsIn", player: "you", zone: "hand", atLeast: limit } })],
+        choose: (prompt, state) => prompt.kind === "chooseTargets" && prompt.purpose.source === state.sides.player.backRank[0] && prompt.candidates.includes(state.sides.player.backRank[0]!) ? [state.sides.player.backRank[0]!] : undefined },
+    ];
+    for (const options of cases) {
+      const { state, local, action } = copyChain("player", true, options);
+      const result = local.apply(state, "player", action, copyAnswers(limit * 8 + 30, options.choose));
+      expect(result.state.result).toBeNull();
+      expect(result.state.triggerQueue).toEqual([]);
+      if (!options.once) expect(result.state.sides.player.hand.length).toBeGreaterThan(state.config.mandatoryLoopCheckFrom);
+    }
+  });
+
+  it("completes a fixed copy count without a renewing trigger", () => {
+    const { state, local, action } = copyChain("player", false, { body: () => p.copyCardTimes({ kind: "stackTarget", selector: { kind: "stackItem", controller: "you", cardType: "event" } }, 2) });
+    const result = local.apply(state, "player", action, copyAnswers(20));
+    expect(result.state.result).toBeNull();
+    expect(result.state.triggerQueue).toEqual([]);
+    expect(result.events.filter(e => e.kind === "cardCopied")).toHaveLength(2);
+  });
+
+  it.each(["player", "enemy"] as const)("allows a dormant hand-count victory beyond the mandatory threshold for %s", side => {
+    const limit = board({ player: { deck }, enemy: { deck } }).state.config.mandatoryLoopCheckFrom + 5;
+    const { state, local, action } = copyChain(side, true, { extra: [winCondition({ cond: "cardsIn", player: "you", zone: "hand", atLeast: limit })] });
+    const result = local.apply(state, side, action, copyAnswers(limit * 4 + 20));
+    expect(result.state.result).toEqual({ kind: "victory", winner: side, reason: "winCondition" });
+    expect(result.state.sides[side].hand).toHaveLength(limit);
+  });
+
+  it("keeps committed copies and mandatory accounting untouched on suspension or answer-source error", () => {
+    const { state, local, action } = copyChain("player", false);
+    const played = runStep(state, action, copyAnswers(20), local.catalog);
+    if (played.kind !== "done") throw new Error("play suspended");
+    const started = runStep(played.state, { kind: "resolveTrigger" }, NO_PROMPTS, local.catalog, { automatic: true });
+    if (started.kind !== "done") throw new Error("starter suspended");
+    const hash = stateHash(started.state);
+    const suspended = runStep(started.state, { kind: "resolveTrigger" }, INTERACTIVE, local.catalog, { automatic: true });
+    expect(suspended.kind).toBe("suspended");
+    if (suspended.kind !== "suspended") throw new Error("missing suspension");
+    expect(suspended.events.some(e => e.kind === "cardCreated")).toBe(true);
+    expect(stateHash(started.state)).toBe(hash);
+    expect(() => runStep(started.state, { kind: "resolveTrigger" }, { answer() { throw new Error("injected answer failure"); } }, local.catalog, { automatic: true })).toThrow("injected answer failure");
+    expect(stateHash(started.state)).toBe(hash);
+    const completed = runStep(started.state, { kind: "resolveTrigger" }, copyAnswers(20), local.catalog, { automatic: true });
+    if (completed.kind !== "done") throw new Error("retry suspended");
+    expect(completed.events.filter(e => e.kind === "cardCreated")).toHaveLength(1);
+  });
+
+  it("bounces malformed, wrong-side and competing stale answers without committing partial copies", () => {
+    const { state, local, action } = copyChain("player", false);
+    const fold = createFoldAdapter(local, { checkEventPrefix: true });
+    const start: BattleSlice = { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 };
+    const opened = fold.reduce(start, { kind: "battleAction", side: "player", action });
+    if (opened.kind !== "applied") throw new Error("play bounced");
+    const slice = opened.slice;
+    const pending = fold.pending(slice);
+    if (pending === null) throw new Error("missing prompt");
+    const before = JSON.stringify(slice);
+    const intent = { kind: "answer", side: "player", promptId: pending.prompt.id, value: 0 } as const;
+    expect(fold.reduce(slice, { ...intent, value: -1 })).toEqual({ kind: "bounced", reason: "illegalAnswer" });
+    expect(fold.reduce(slice, { ...intent, side: "enemy" })).toEqual({ kind: "bounced", reason: "notYourPrompt" });
+    expect(JSON.stringify(slice)).toBe(before);
+    const applied = fold.reduce(slice, intent);
+    if (applied.kind !== "applied" || applied.error !== null) throw new Error("answer failed");
+    const next = fold.pending(applied.slice);
+    expect(next).not.toBeNull();
+    expect(fold.reduce(applied.slice, intent)).toEqual({ kind: "bounced", reason: "stalePrompt" });
+    expect(fold.pending(applied.slice)).toEqual(next);
   });
 });
