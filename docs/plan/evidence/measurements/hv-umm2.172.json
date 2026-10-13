@@ -1,0 +1,2080 @@
+{
+  "bead": "hv-umm2.172",
+  "base": "f003abaa164cc42ab2121775a96df54e96d9a01b",
+  "observedUtc": "2026-10-13T14:33:20.173661+00:00",
+  "ownership": {
+    "actualClaimStart": "2026-10-13T13:43:10.894644Z",
+    "endpoint": "2026-10-13T14:33:20.173661+00:00",
+    "grossClaimToEndpointSeconds": 3009.279017,
+    "basis": "Includes root setup/source research/native admission, helper authoring, failures, corrections, reads, waits, server startup, browser slot admission, screenshots, coordination and cleanup; elapsed proxy, not model dispatch or task CPU.",
+    "helperDispatch": {
+      "parentPre": "2026-10-13T13:47:41.813198+00:00",
+      "actualDispatch": "UNKNOWN; pre/post bracket only",
+      "claimActualStartUtc": "2026-10-13T13:43:10.894644+00:00",
+      "claimActualEndUtc": "2026-10-13T13:43:11.009342+00:00",
+      "rootSetupCost": "All parentclaim/setup/install/native/brief preparation included wholecurrent ownership, no helperCPU claim.",
+      "parentPost": "2026-10-13T13:48:54.357805+00:00",
+      "helper": "/root/spark_support_cards_172"
+    },
+    "commitTail": "Actual commit terminal and complete delivery/ownership clocks recorded in native handoff; this committed endpoint is a proxy, not exact commit."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "basis": "Dispatch lower-bound observation to parent evidence endpoint; exact dispatch unknown within retained pre/post bracket and exact commit occurs after endpoint. Additive actual commit correction recorded next own bead."
+      },
+      "hostLoad": {
+        "measuredFor": "First ordinary review actual starting one-minute load"
+      }
+    }
+  },
+  "source": {
+    "productionChurn": 31,
+    "scenarioLines": 152,
+    "scenarioCases": 14,
+    "sourceHashes": {
+      "src/content/cards/ruthless-conqueror-d6ec65a2.ts": "197657c37a6e121fd487f00b8904c4d29dfef5289174e1692fb74be38b531b7e",
+      "src/content/cards/ashen-remnant-5639053e.ts": "544ed1ff2a68c625db0b087cf4d0a772ad96398d16e758dbed5906f603c70b75",
+      "src/content/cards/forsworn-champion-747859fb.ts": "d4cc2bc9bb20e3f9d02e5e7e8d01ee27212fa1ddaaa82a8e66b0163e0af890c4",
+      "src/content/cards/dreadmount-sovereign-82749215.ts": "0126d569a56ca70bfa024fd0634a4131dee4ba30985ccf43030d108371601974",
+      "src/content/specs/cards-60.scenarios.ts": "0c9614d393d2cc7ae26395113550dad72483404b21e1f2d22a216cac5793d5d3"
+    },
+    "immutable": "ACK base SHA256 matched before authoring; TypeScript AST immutable property sets and exact initializer texts preserved; final immutable verification exit0.",
+    "scope": "Four exact UUID leaves and one plain scenario; engine/UI/API/schema/registration read-only; no new rules ruling, prompt/status/visual kind. No cold code review required:31 non-test changed lines and no core-review label. No cross-cutting/full check required."
+  },
+  "finiteReceipts": {
+    "targeted-1": {
+      "label": "targeted-1",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/activation.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/content/specs/specs.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 76858,
+      "processGroup": 76858,
+      "startUtc": "2026-10-13T14:02:52.673017+00:00",
+      "startLoadAverage": [
+        2.84521484375,
+        4.47412109375,
+        5.63916015625
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/finite/targeted-1.log",
+      "endUtc": "2026-10-13T14:03:03.740421+00:00",
+      "wallSeconds": 11.067261250020238,
+      "exitCode": 1,
+      "endLoadAverage": [
+        3.2626953125,
+        4.5078125,
+        5.63720703125
+      ],
+      "terminated": true
+    },
+    "targeted-2": {
+      "label": "targeted-2",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/activation.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/content/specs/specs.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 78189,
+      "processGroup": 78189,
+      "startUtc": "2026-10-13T14:03:53.429172+00:00",
+      "startLoadAverage": [
+        3.216796875,
+        4.27978515625,
+        5.484375
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/finite/targeted-2.log",
+      "endUtc": "2026-10-13T14:04:01.710159+00:00",
+      "wallSeconds": 8.280857791978633,
+      "exitCode": 0,
+      "endLoadAverage": [
+        2.94921875,
+        4.1875,
+        5.4375
+      ],
+      "terminated": true
+    },
+    "review-1": {
+      "label": "review-1",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 78763,
+      "processGroup": 78763,
+      "startUtc": "2026-10-13T14:04:13.992507+00:00",
+      "startLoadAverage": [
+        3.03662109375,
+        4.16455078125,
+        5.4140625
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/finite/review-1.log",
+      "endUtc": "2026-10-13T14:04:59.786581+00:00",
+      "wallSeconds": 45.793757000006735,
+      "exitCode": 0,
+      "endLoadAverage": [
+        4.013671875,
+        4.25927734375,
+        5.37744140625
+      ],
+      "terminated": true
+    },
+    "knip-1": {
+      "label": "knip-1",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 80207,
+      "processGroup": 80207,
+      "startUtc": "2026-10-13T14:05:18.922446+00:00",
+      "startLoadAverage": [
+        3.955078125,
+        4.23046875,
+        5.3466796875
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/finite/knip-1.log",
+      "endUtc": "2026-10-13T14:05:22.547547+00:00",
+      "wallSeconds": 3.6249906250159256,
+      "exitCode": 0,
+      "endLoadAverage": [
+        3.87841796875,
+        4.2099609375,
+        5.33251953125
+      ],
+      "terminated": true
+    },
+    "content-gates-1": {
+      "label": "content-gates-1",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 80811,
+      "processGroup": 80811,
+      "startUtc": "2026-10-13T14:05:39.743479+00:00",
+      "startLoadAverage": [
+        3.73291015625,
+        4.1484375,
+        5.28369140625
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/finite/content-gates-1.log",
+      "endUtc": "2026-10-13T14:05:43.251468+00:00",
+      "wallSeconds": 3.5078945830173325,
+      "exitCode": 0,
+      "endLoadAverage": [
+        3.73291015625,
+        4.1484375,
+        5.28369140625
+      ],
+      "terminated": true
+    },
+    "immutable-final": {
+      "label": "immutable-final",
+      "command": [
+        "node",
+        "/tmp/dreamtides-executor-01a12e91/172-audit/finite/immutable.mjs",
+        "verify"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 80928,
+      "processGroup": 80928,
+      "startUtc": "2026-10-13T14:05:40.898425+00:00",
+      "startLoadAverage": [
+        3.73291015625,
+        4.1484375,
+        5.28369140625
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/finite/immutable-final.log",
+      "endUtc": "2026-10-13T14:05:41.031911+00:00",
+      "wallSeconds": 0.13338120799744502,
+      "exitCode": 0,
+      "endLoadAverage": [
+        3.73291015625,
+        4.1484375,
+        5.28369140625
+      ],
+      "terminated": true
+    }
+  },
+  "finiteCounts": {
+    "targeted": {
+      "files": 5,
+      "tests": 2911
+    },
+    "reviewRelated": {
+      "files": 241,
+      "tests": 4996
+    },
+    "contentGates": {
+      "files": 1,
+      "tests": 20
+    }
+  },
+  "workerConfiguration": "vitest.config.ts:5-11 defaults JOURNEY_TEST_WORKERS to2; :81 clamps by availableParallelism. Effective process worker count unobserved; not claimed.",
+  "scenarioLineCountCorrection": "Earlier collaboration message estimated169lines; actual measured count is152. Current file is152 lines.",
+  "runtimeReceipts": {
+    "weighted-fuzz-1": {
+      "label": "weighted-fuzz-1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/heavy-inner.py",
+        "d6ec65a2-d61e-4617-bdd0-75d5573c063d,5639053e-1fe3-4a42-b9c3-3fdf894bfab6,747859fb-6fca-49fc-a653-08011a9bb44c,82749215-ed35-44e3-a745-72ca76036c7c"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 90523,
+      "processGroup": 90523,
+      "startUtc": "2026-10-13T14:10:36.885961+00:00",
+      "startLoadAverage": [
+        3.12744140625,
+        3.56640625,
+        4.67529296875
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/weighted-fuzz-1.log",
+      "endUtc": "2026-10-13T14:13:39.266877+00:00",
+      "wallSeconds": 182.38009208400035,
+      "exitCode": 0,
+      "endLoadAverage": [
+        7.04833984375,
+        4.82275390625,
+        4.955078125
+      ],
+      "terminated": true
+    },
+    "preflight-1": {
+      "label": "preflight-1",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "d6ec65a2-d61e-4617-bdd0-75d5573c063d,5639053e-1fe3-4a42-b9c3-3fdf894bfab6,747859fb-6fca-49fc-a653-08011a9bb44c,82749215-ed35-44e3-a745-72ca76036c7c",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 91134,
+      "processGroup": 91134,
+      "startUtc": "2026-10-13T14:11:02.723840+00:00",
+      "startLoadAverage": [
+        3.3623046875,
+        3.583984375,
+        4.64892578125
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/preflight-1.log",
+      "endUtc": "2026-10-13T14:11:03.986563+00:00",
+      "wallSeconds": 1.2626319580012932,
+      "exitCode": 0,
+      "endLoadAverage": [
+        3.3623046875,
+        3.583984375,
+        4.64892578125
+      ],
+      "terminated": true
+    },
+    "sweep-1": {
+      "label": "sweep-1",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.172",
+        "--cards",
+        "d6ec65a2-d61e-4617-bdd0-75d5573c063d,5639053e-1fe3-4a42-b9c3-3fdf894bfab6,747859fb-6fca-49fc-a653-08011a9bb44c,82749215-ed35-44e3-a745-72ca76036c7c",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 96607,
+      "processGroup": 96607,
+      "startUtc": "2026-10-13T14:12:30.131260+00:00",
+      "startLoadAverage": [
+        5.2509765625,
+        4.0732421875,
+        4.72314453125
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/sweep-1.log",
+      "endUtc": "2026-10-13T14:16:27.852421+00:00",
+      "wallSeconds": 237.71998691602494,
+      "exitCode": 0,
+      "endLoadAverage": [
+        6.14599609375,
+        5.49462890625,
+        5.21484375
+      ],
+      "terminated": true
+    },
+    "algorithms-1": {
+      "label": "algorithms-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/algorithms.mjs",
+        "--bead",
+        "hv-umm2.172",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 13886,
+      "processGroup": 13886,
+      "startUtc": "2026-10-13T14:16:39.335281+00:00",
+      "startLoadAverage": [
+        7.29541015625,
+        5.77197265625,
+        5.31689453125
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/algorithms-1.log",
+      "endUtc": "2026-10-13T14:17:04.537804+00:00",
+      "wallSeconds": 25.202330917003565,
+      "exitCode": 1,
+      "endLoadAverage": [
+        6.2412109375,
+        5.63134765625,
+        5.27783203125
+      ],
+      "terminated": true
+    },
+    "algorithms-2": {
+      "label": "algorithms-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/algorithms.mjs",
+        "--bead",
+        "hv-umm2.172",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 20004,
+      "processGroup": 20004,
+      "startUtc": "2026-10-13T14:18:49.741458+00:00",
+      "startLoadAverage": [
+        5.4208984375,
+        5.76708984375,
+        5.38818359375
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/algorithms-2.log",
+      "endUtc": "2026-10-13T14:20:24.255631+00:00",
+      "wallSeconds": 94.51372083299793,
+      "exitCode": 0,
+      "endLoadAverage": [
+        6.47021484375,
+        5.9814453125,
+        5.5029296875
+      ],
+      "terminated": true
+    },
+    "algorithms-3": {
+      "label": "algorithms-3",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/algorithms.mjs",
+        "--bead",
+        "hv-umm2.172",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "600"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 55912,
+      "processGroup": 55912,
+      "startUtc": "2026-10-13T14:21:27.122586+00:00",
+      "startLoadAverage": [
+        7.2802734375,
+        6.29150390625,
+        5.650390625
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/algorithms-3.log",
+      "endUtc": "2026-10-13T14:23:25.615795+00:00",
+      "wallSeconds": 118.49263374999282,
+      "exitCode": 0,
+      "endLoadAverage": [
+        6.94091796875,
+        6.583984375,
+        5.85107421875
+      ],
+      "terminated": true
+    },
+    "ruthless-self-1": {
+      "label": "ruthless-self-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/ruthless-self.mjs",
+        "--bead",
+        "hv-umm2.172",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 59379,
+      "processGroup": 59379,
+      "startUtc": "2026-10-13T14:23:50.274197+00:00",
+      "startLoadAverage": [
+        6.556640625,
+        6.5078125,
+        5.8427734375
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/ruthless-self-1.log",
+      "endUtc": "2026-10-13T14:24:22.344923+00:00",
+      "wallSeconds": 32.070516500010854,
+      "exitCode": 0,
+      "endLoadAverage": [
+        5.1591796875,
+        6.17138671875,
+        5.74267578125
+      ],
+      "terminated": true
+    }
+  },
+  "fuzz": {
+    "observedUtc": "2026-10-13T14:16:31.500104+00:00",
+    "summary": "fuzz:engine 300 games, 125510 steps, 180.2 s wall, 194.4 s CPU (1.7 games/s wall, 1.5 games/s CPU); prompts 8416; interactive re-runs 898 (2.127 ms each); feasibility bounded {\"legality\":0,\"prompts\":2}; results {\"player\":153,\"enemy\":146,\"draw\":1}; failures 0",
+    "effectiveTargets": [
+      {
+        "kind": "card",
+        "uuid": "d6ec65a2-d61e-4617-bdd0-75d5573c063d",
+        "included": 608,
+        "exercised": 174
+      },
+      {
+        "kind": "card",
+        "uuid": "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
+        "included": 607,
+        "exercised": 192
+      },
+      {
+        "kind": "card",
+        "uuid": "747859fb-6fca-49fc-a653-08011a9bb44c",
+        "included": 625,
+        "exercised": 204
+      },
+      {
+        "kind": "card",
+        "uuid": "82749215-ed35-44e3-a745-72ca76036c7c",
+        "included": 611,
+        "exercised": 133
+      }
+    ],
+    "heavyReceipt": {
+      "acquiredUtc": "2026-10-13T14:10:36.907926+00:00",
+      "acquiredLoadAverage": [
+        3.12744140625,
+        3.56640625,
+        4.67529296875
+      ],
+      "innerPid": 90524,
+      "requestedWorkers": 2,
+      "effectiveImplementation": "Source scripts/fuzz-engine.ts:80 is one synchronous for loop in one process; no worker option/dispatch, actual engine game execution concurrency1",
+      "requestedWeights": "d6ec65a2-d61e-4617-bdd0-75d5573c063d,5639053e-1fe3-4a42-b9c3-3fdf894bfab6,747859fb-6fca-49fc-a653-08011a9bb44c,82749215-ed35-44e3-a745-72ca76036c7c",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "fuzzPid": 90525,
+      "endUtc": "2026-10-13T14:13:39.262602+00:00",
+      "wallSeconds": 182.3538588329975,
+      "exitCode": 0,
+      "endLoadAverage": [
+        7.04833984375,
+        4.82275390625,
+        4.955078125
+      ]
+    },
+    "wrapperReceipt": {
+      "label": "weighted-fuzz-1",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/heavy-inner.py",
+        "d6ec65a2-d61e-4617-bdd0-75d5573c063d,5639053e-1fe3-4a42-b9c3-3fdf894bfab6,747859fb-6fca-49fc-a653-08011a9bb44c,82749215-ed35-44e3-a745-72ca76036c7c"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/spark-support-172",
+      "pid": 90523,
+      "processGroup": 90523,
+      "startUtc": "2026-10-13T14:10:36.885961+00:00",
+      "startLoadAverage": [
+        3.12744140625,
+        3.56640625,
+        4.67529296875
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Effective worker count unobserved; configured source recorded separately",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/172-audit/runtime/weighted-fuzz-1.log",
+      "endUtc": "2026-10-13T14:13:39.266877+00:00",
+      "wallSeconds": 182.38009208400035,
+      "exitCode": 0,
+      "endLoadAverage": [
+        7.04833984375,
+        4.82275390625,
+        4.955078125
+      ],
+      "terminated": true
+    }
+  },
+  "preflight": {
+    "event": "labPreflightSummary",
+    "cards": [
+      "d6ec65a2-d61e-4617-bdd0-75d5573c063d",
+      "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
+      "747859fb-6fca-49fc-a653-08011a9bb44c",
+      "82749215-ed35-44e3-a745-72ca76036c7c"
+    ],
+    "avatars": [],
+    "dreamsigns": [],
+    "variants": [
+      "base",
+      "amplified",
+      "empowered",
+      "kindled",
+      "resonant",
+      "inspired",
+      "enduring",
+      "hastened",
+      "attuned",
+      "perfected"
+    ],
+    "sides": [
+      "player",
+      "enemy"
+    ],
+    "counts": {
+      "pass": 32,
+      "pending": 0,
+      "skip": 48,
+      "fail": 0
+    },
+    "elapsedMs": 24.92162499999995,
+    "hostLoad": 3.3623046875,
+    "enemyMode": "scripted-lab-play-first-legal-prompts"
+  },
+  "sweep": {
+    "generatedOwnLedger": "docs/plan/evidence/qa-ledger/hv-umm2.172.jsonl",
+    "rowCount": 80,
+    "rawAttemptCounts": {
+      "pass": 32,
+      "skip": 48
+    },
+    "effectiveCounts": {
+      "pass": 32,
+      "skip": 48
+    },
+    "invocation": "invocations/sweep-5BoOpP",
+    "sessions": 1,
+    "retryCount": 0,
+    "slot": 1,
+    "port": 5274,
+    "serverPid": 96644,
+    "browserLeaseWaitMs": 6,
+    "qualification": "Generic lab play/resolution coverage; actual abilities proven separately in complete runtime witness payloads. Existing-tool generated own ledger side effect admitted by parent; helper authored no repository evidence."
+  },
+  "corrections": [
+    {
+      "precedingFailureEndUtc": "2026-10-13T14:03:03.740421+00:00",
+      "repairWriteStartUtc": "2026-10-13T14:03:53.358655+00:00",
+      "repairWriteEndUtc": "2026-10-13T14:03:53.358913+00:00",
+      "cause": "Forced one-candidate cost prompts auto-answer; scripted input unused",
+      "repair": "Own scenario only: add existing synthetic Survivor eligible payment alternative to Ashen and Dread self-payer rows; no production or shared fixture change",
+      "fullWindowStart": "2026-10-13T14:02:52.673017+00:00",
+      "fullWindowEnd": "2026-10-13T14:04:01.710159+00:00",
+      "fullWindowSeconds": 69.037142,
+      "result": "targeted-2 exit0; five files/2911 tests passed",
+      "terminalFailureToGreenStartUtc": "2026-10-13T14:03:03.740421+00:00",
+      "terminalFailureToGreenEndUtc": "2026-10-13T14:04:01.710159+00:00",
+      "terminalFailureToGreenSeconds": 57.969738,
+      "fullWindowMeaning": "Conservative complete failed-check/correction window from targeted-1 actual start through targeted-2 terminal green, including failed check, diagnosis, correction, waits and rerun. Exact first failing-test instant unknown."
+    },
+    {
+      "fullWindowStartUtc": "2026-10-13T14:16:39.335281+00:00",
+      "firstCommandTerminalUtc": "2026-10-13T14:17:04.537804+00:00",
+      "correctionWriteUtc": "2026-10-13T14:18:49.670493+00:00",
+      "cause": "External QA read outer accessibility text instead of measured nested numeric spark and did not await final erode presentation",
+      "scope": "Only external algorithms.mjs; source manifest unchanged",
+      "fullWindowEndUtc": "2026-10-13T14:23:25.615795+00:00",
+      "functionalGreenUtc": "2026-10-13T14:20:24.255631+00:00",
+      "remainingConcern": "Parent observed Ruthless result screenshot before point/spark presentation; explicit final numeric stat/HUD waits added for all four before settled captures",
+      "renderWaitCorrectionUtc": "2026-10-13T14:21:27.048188+00:00",
+      "fullWindowSeconds": 406.280514,
+      "result": "algorithms-3 terminalgreen; exactfinalDOMsparkandRuthlessHUDpoints observed bothviewports"
+    }
+  ],
+  "correctionUnionSeconds": 475.317656,
+  "correctionQualification": "Disjoint69.037142s finite +406.280514s browser correction windows, including failure execution/diagnosis/reads/waits/rechecks; exact first failing-test instant unknown. No individual problem exceeded ~10minutes, friction array empty. Not CPU/model time.",
+  "visual": {
+    "observedUtc": "2026-10-13T14:33:20.173661+00:00",
+    "reviewer": "parent Codex actual visual inspection",
+    "actuallyViewed": [
+      "invocations/run-TydpvQ/172-ruthless-desktop-ability-result-settled.png",
+      "invocations/run-TydpvQ/172-ruthless-mobile-ability-result-settled.png",
+      "invocations/run-TydpvQ/172-ashen-desktop-ability-result-settled.png",
+      "invocations/run-TydpvQ/172-ashen-mobile-ability-result-settled.png",
+      "invocations/run-TydpvQ/172-forsworn-desktop-ability-result-settled.png",
+      "invocations/run-TydpvQ/172-forsworn-mobile-ability-result-settled.png",
+      "invocations/run-TydpvQ/172-dreadmount-desktop-ability-result-settled.png",
+      "invocations/run-TydpvQ/172-dreadmount-mobile-ability-result-settled.png",
+      "invocations/run-FKOuWq/172-ruthless-desktop-payment-offered.png",
+      "invocations/run-FKOuWq/172-ruthless-desktop-ability-result.png",
+      "invocations/run-ojqA84/172-ruthless-self-mobile-payment-offered.png",
+      "invocations/run-ojqA84/172-ruthless-self-mobile-ability-result-settled.png"
+    ],
+    "judgment": "Final visible stats/HUD match retained state; payment and response controls visible, no control clipping or overlap observed in reviewed captures. Synthetic black card faces intentional.",
+    "limits": "Compact board tiles do not show full printed rules; full card text visibility not asserted. Earlier Ruthless result was an interim frame with spark1/points0, not final acceptance. Final settled captures show spark2/points1. Self-payment mobile shows source absent and points1.",
+    "dimensionQualification": "PNG pixels equal CSS viewport times independently observed DPR2; initial packet match:false compares physical pixels directly to CSS and is not a dimension defect."
+  },
+  "actualWitnesses": [
+    {
+      "label": "algorithms-3",
+      "mode": "ruthless",
+      "viewport": "desktop",
+      "uuid": "d6ec65a2-d61e-4617-bdd0-75d5573c063d",
+      "source": "i1",
+      "paid": "i2",
+      "target": "i1",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "fullPayload": "complete-payloads/algorithms-3-ruthless-desktop.json",
+      "gameId": "7avzjb",
+      "gameLogLines": 40,
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "renderedFinal": {
+        "spark": "2",
+        "points": "1"
+      },
+      "geometry": [
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+          "rect": {
+            "x": 348,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-testid=\"battle-card-picker-submit\"]",
+          "rect": {
+            "x": 1151.171875,
+            "y": 597,
+            "width": 89.328125,
+            "height": 42
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        }
+      ],
+      "screens": [
+        "172-ruthless-desktop-ready.png",
+        "172-ruthless-desktop-payment-offered.png",
+        "172-ruthless-desktop-ability-result-settled.png"
+      ]
+    },
+    {
+      "label": "algorithms-3",
+      "mode": "ashen",
+      "viewport": "desktop",
+      "uuid": "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
+      "source": "i1",
+      "paid": "i2",
+      "target": "i1",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "fullPayload": "complete-payloads/algorithms-3-ashen-desktop.json",
+      "gameId": "uy8qkj",
+      "gameLogLines": 38,
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "renderedFinal": {
+        "spark": "5",
+        "points": "0"
+      },
+      "geometry": [
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+          "rect": {
+            "x": 348,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-testid=\"battle-card-picker-submit\"]",
+          "rect": {
+            "x": 1151.171875,
+            "y": 597,
+            "width": 89.328125,
+            "height": 42
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        }
+      ],
+      "screens": [
+        "172-ashen-desktop-ready.png",
+        "172-ashen-desktop-payment-offered.png",
+        "172-ashen-desktop-ability-result-settled.png"
+      ]
+    },
+    {
+      "label": "algorithms-3",
+      "mode": "forsworn",
+      "viewport": "desktop",
+      "uuid": "747859fb-6fca-49fc-a653-08011a9bb44c",
+      "source": "i1",
+      "paid": "i2",
+      "target": "i1",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "fullPayload": "complete-payloads/algorithms-3-forsworn-desktop.json",
+      "gameId": "w7yivz",
+      "gameLogLines": 42,
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "renderedFinal": {
+        "spark": "2",
+        "points": "0"
+      },
+      "geometry": [
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+          "rect": {
+            "x": 348,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-testid=\"battle-card-picker-submit\"]",
+          "rect": {
+            "x": 1151.171875,
+            "y": 597,
+            "width": 89.328125,
+            "height": 42
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        }
+      ],
+      "screens": [
+        "172-forsworn-desktop-interrupt-response.png",
+        "172-forsworn-desktop-payment-offered.png",
+        "172-forsworn-desktop-ability-result-settled.png"
+      ]
+    },
+    {
+      "label": "algorithms-3",
+      "mode": "dreadmount",
+      "viewport": "desktop",
+      "uuid": "82749215-ed35-44e3-a745-72ca76036c7c",
+      "source": "i1",
+      "paid": "i3",
+      "target": "i2",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "fullPayload": "complete-payloads/algorithms-3-dreadmount-desktop.json",
+      "gameId": "kezwgf",
+      "gameLogLines": 49,
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "renderedFinal": {
+        "spark": "5",
+        "points": "0"
+      },
+      "geometry": [
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+          "rect": {
+            "x": 348,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+          "rect": {
+            "x": 441.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-testid=\"battle-card-picker-submit\"]",
+          "rect": {
+            "x": 1151.171875,
+            "y": 597,
+            "width": 89.328125,
+            "height": 42
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        }
+      ],
+      "screens": [
+        "172-dreadmount-desktop-interrupt-response.png",
+        "172-dreadmount-desktop-payment-offered.png",
+        "172-dreadmount-desktop-ability-result-settled.png"
+      ]
+    },
+    {
+      "label": "algorithms-3",
+      "mode": "ruthless",
+      "viewport": "mobile",
+      "uuid": "d6ec65a2-d61e-4617-bdd0-75d5573c063d",
+      "source": "i1",
+      "paid": "i2",
+      "target": "i1",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "fullPayload": "complete-payloads/algorithms-3-ruthless-mobile.json",
+      "gameId": "iusihd",
+      "gameLogLines": 40,
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "renderedFinal": {
+        "spark": "2",
+        "points": "1"
+      },
+      "geometry": [
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+          "rect": {
+            "x": 81.265625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-testid=\"battle-card-picker-submit\"]",
+          "rect": {
+            "x": 292.671875,
+            "y": 522.828125,
+            "width": 89.328125,
+            "height": 42
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        }
+      ],
+      "screens": [
+        "172-ruthless-mobile-ready.png",
+        "172-ruthless-mobile-payment-offered.png",
+        "172-ruthless-mobile-ability-result-settled.png"
+      ]
+    },
+    {
+      "label": "algorithms-3",
+      "mode": "ashen",
+      "viewport": "mobile",
+      "uuid": "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
+      "source": "i1",
+      "paid": "i2",
+      "target": "i1",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "fullPayload": "complete-payloads/algorithms-3-ashen-mobile.json",
+      "gameId": "wruvzj",
+      "gameLogLines": 38,
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "renderedFinal": {
+        "spark": "5",
+        "points": "0"
+      },
+      "geometry": [
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+          "rect": {
+            "x": 81.265625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-testid=\"battle-card-picker-submit\"]",
+          "rect": {
+            "x": 292.671875,
+            "y": 522.828125,
+            "width": 89.328125,
+            "height": 42
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        }
+      ],
+      "screens": [
+        "172-ashen-mobile-ready.png",
+        "172-ashen-mobile-payment-offered.png",
+        "172-ashen-mobile-ability-result-settled.png"
+      ]
+    },
+    {
+      "label": "algorithms-3",
+      "mode": "forsworn",
+      "viewport": "mobile",
+      "uuid": "747859fb-6fca-49fc-a653-08011a9bb44c",
+      "source": "i1",
+      "paid": "i2",
+      "target": "i1",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "fullPayload": "complete-payloads/algorithms-3-forsworn-mobile.json",
+      "gameId": "6e7na7",
+      "gameLogLines": 42,
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "renderedFinal": {
+        "spark": "2",
+        "points": "0"
+      },
+      "geometry": [
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+          "rect": {
+            "x": 81.265625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-testid=\"battle-card-picker-submit\"]",
+          "rect": {
+            "x": 292.671875,
+            "y": 522.828125,
+            "width": 89.328125,
+            "height": 42
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        }
+      ],
+      "screens": [
+        "172-forsworn-mobile-interrupt-response.png",
+        "172-forsworn-mobile-payment-offered.png",
+        "172-forsworn-mobile-ability-result-settled.png"
+      ]
+    },
+    {
+      "label": "algorithms-3",
+      "mode": "dreadmount",
+      "viewport": "mobile",
+      "uuid": "82749215-ed35-44e3-a745-72ca76036c7c",
+      "source": "i1",
+      "paid": "i3",
+      "target": "i2",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "fullPayload": "complete-payloads/algorithms-3-dreadmount-mobile.json",
+      "gameId": "i4ivyn",
+      "gameLogLines": 49,
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "renderedFinal": {
+        "spark": "5",
+        "points": "0"
+      },
+      "geometry": [
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i2\"]",
+          "rect": {
+            "x": 81.265625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i3\"]",
+          "rect": {
+            "x": 139.125,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-testid=\"battle-card-picker-submit\"]",
+          "rect": {
+            "x": 292.671875,
+            "y": 522.828125,
+            "width": 89.328125,
+            "height": 42
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        }
+      ],
+      "screens": [
+        "172-dreadmount-mobile-interrupt-response.png",
+        "172-dreadmount-mobile-payment-offered.png",
+        "172-dreadmount-mobile-ability-result-settled.png"
+      ]
+    },
+    {
+      "label": "ruthless-self-1",
+      "mode": "ruthless",
+      "viewport": "desktop",
+      "uuid": "d6ec65a2-d61e-4617-bdd0-75d5573c063d",
+      "source": "i1",
+      "paid": "i1",
+      "target": "i1",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "fullPayload": "complete-payloads/ruthless-self-1-ruthless-desktop.json",
+      "gameId": "du8xrw",
+      "gameLogLines": 40,
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "renderedFinal": {
+        "spark": null,
+        "points": "1",
+        "departedSourceAbsent": true
+      },
+      "geometry": [
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 254.5,
+            "y": 483.5,
+            "width": 89.5,
+            "height": 89.5
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-testid=\"battle-card-picker-submit\"]",
+          "rect": {
+            "x": 1151.171875,
+            "y": 597,
+            "width": 89.328125,
+            "height": 42
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 900,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        }
+      ],
+      "screens": [
+        "172-ruthless-self-desktop-ready.png",
+        "172-ruthless-self-desktop-payment-offered.png",
+        "172-ruthless-self-desktop-ability-result-settled.png"
+      ]
+    },
+    {
+      "label": "ruthless-self-1",
+      "mode": "ruthless",
+      "viewport": "mobile",
+      "uuid": "d6ec65a2-d61e-4617-bdd0-75d5573c063d",
+      "source": "i1",
+      "paid": "i1",
+      "target": "i1",
+      "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+      "fullPayload": "complete-payloads/ruthless-self-1-ruthless-mobile.json",
+      "gameId": "d8m4hu",
+      "gameLogLines": 40,
+      "caps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "renderedFinal": {
+        "spark": null,
+        "points": "1",
+        "departedSourceAbsent": true
+      },
+      "geometry": [
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+          "rect": {
+            "x": 23.40625,
+            "y": 415.890625,
+            "width": 53.859375,
+            "height": 53.859375
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        },
+        {
+          "selector": "[data-testid=\"battle-card-picker-submit\"]",
+          "rect": {
+            "x": 292.671875,
+            "y": 522.828125,
+            "width": 89.328125,
+            "height": 42
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "dpr": 2
+          },
+          "enabled": true,
+          "centerHits": true
+        }
+      ],
+      "screens": [
+        "172-ruthless-self-mobile-ready.png",
+        "172-ruthless-self-mobile-payment-offered.png",
+        "172-ruthless-self-mobile-ability-result-settled.png"
+      ]
+    }
+  ],
+  "geometry": {
+    "measuredControls": 32,
+    "centerMisses": [],
+    "outsideViewport": [],
+    "notDpr2": []
+  },
+  "captureDimensionsQualification": "PNG pixels equal CSS viewport times independently observed DPR2; initial packet match:false compares physical pixels directly to CSS and is not a dimension defect.",
+  "D21": "Four supplied SHA bytes109/191/199/233 unsampled; no new prompt/status/visual type. All four actual abilities nevertheless witnessed on desktop1440x900/mobile390x844, plus Ruthless self-payment bothviewports. Captures are at runner CSS pixel scale, browserDPR2; 30 final captures dimensions independently verified.",
+  "runtimeProofLimits": "Actual interactive algorithm sources are player-controlled. Opponent-stack events are live enemy-script normal intents for Forsworn/Dreadmount; generic sweep/preflight bothcontrollerroles and source-scenario14 cases mirror bothcontrollers. BrowserDreadmount payment uses live Ashen spark3 retained after departure, targeting another physical ally; self-Dreadmount case is deterministic public scenario evidence, not a separate browser witness. Earlier interim screenshots retained/qualified; final settled screenshots wait numericstat/HUD. Source audit is distinguished from actualbehavior.",
+  "rawBrowserReports": [
+    {
+      "label": "algorithms-1",
+      "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.172/invocations/run-FKOuWq/algorithms.result.json",
+      "ok": false,
+      "error": "desktop#1: Error: ashen: live displayed spark did not follow own void character cohort\n    at check (evalmachine.<anonymous>:1657:39)\n    at witness (evalmachine.<anonymous>:1690:915)\n    at async evalmachine.<anonymous>:1702:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+      "slot": 1,
+      "port": 5274,
+      "serverPid": 13916,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1653,
+        "scenario": 22726,
+        "total": 24457
+      },
+      "caps": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 13479
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 9247
+        }
+      ],
+      "fullPayloadNoteCount": 30,
+      "finalFullPayloads": 1,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.172/invocations/run-FKOuWq/algorithms-desktop.jsonl",
+          "gameId": "kddqwm",
+          "selectedBy": "url",
+          "rows": 38,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "label": "algorithms-2",
+      "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.172/invocations/run-BcDiqT/algorithms.result.json",
+      "ok": true,
+      "error": null,
+      "slot": 1,
+      "port": 5274,
+      "serverPid": 20037,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 2879,
+        "scenario": 90646,
+        "total": 93589
+      },
+      "caps": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 12670
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 12909
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 11678
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 12955
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 8282
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 10525
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 10059
+        },
+        {
+          "viewport": "mobile",
+          "step": 3,
+          "ms": 11567
+        }
+      ],
+      "fullPayloadNoteCount": 144,
+      "finalFullPayloads": 8,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.172/invocations/run-BcDiqT/algorithms-desktop.jsonl",
+          "gameId": "aazbw2",
+          "selectedBy": "url",
+          "rows": 49,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.172/invocations/run-BcDiqT/algorithms-mobile.jsonl",
+          "gameId": "6t23ne",
+          "selectedBy": "url",
+          "rows": 49,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "label": "algorithms-3",
+      "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.172/invocations/run-TydpvQ/algorithms.result.json",
+      "ok": true,
+      "error": null,
+      "slot": 0,
+      "port": 5174,
+      "serverPid": 55946,
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 1677,
+        "scenario": 115856,
+        "total": 117599
+      },
+      "caps": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 15898
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 13596
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 15802
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 19413
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 12168
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 10366
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 15748
+        },
+        {
+          "viewport": "mobile",
+          "step": 3,
+          "ms": 12863
+        }
+      ],
+      "fullPayloadNoteCount": 152,
+      "finalFullPayloads": 8,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.172/invocations/run-TydpvQ/algorithms-desktop.jsonl",
+          "gameId": "kezwgf",
+          "selectedBy": "url",
+          "rows": 49,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.172/invocations/run-TydpvQ/algorithms-mobile.jsonl",
+          "gameId": "i4ivyn",
+          "selectedBy": "url",
+          "rows": 49,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "label": "ruthless-self-1",
+      "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.172/invocations/run-ojqA84/ruthless-self.result.json",
+      "ok": true,
+      "error": null,
+      "slot": 0,
+      "port": 5174,
+      "serverPid": 59418,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1654,
+        "scenario": 29607,
+        "total": 31328
+      },
+      "caps": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 15701
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 13906
+        }
+      ],
+      "fullPayloadNoteCount": 36,
+      "finalFullPayloads": 2,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.172/invocations/run-ojqA84/ruthless-self-desktop.jsonl",
+          "gameId": "du8xrw",
+          "selectedBy": "url",
+          "rows": 40,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.172/invocations/run-ojqA84/ruthless-self-mobile.jsonl",
+          "gameId": "d8m4hu",
+          "selectedBy": "url",
+          "rows": 40,
+          "reason": null
+        }
+      ]
+    }
+  ],
+  "cleanup": {
+    "observedUtc": "2026-10-13T14:25:37.120455+00:00",
+    "processes": [
+      {
+        "ownedServerPid": 96644,
+        "pidAlive": false,
+        "ownedProcessGroupAlive": false
+      },
+      {
+        "ownedServerPid": 13916,
+        "pidAlive": false,
+        "ownedProcessGroupAlive": false
+      },
+      {
+        "ownedServerPid": 20037,
+        "pidAlive": false,
+        "ownedProcessGroupAlive": false
+      },
+      {
+        "ownedServerPid": 55946,
+        "pidAlive": false,
+        "ownedProcessGroupAlive": false
+      },
+      {
+        "ownedServerPid": 59418,
+        "pidAlive": false,
+        "ownedProcessGroupAlive": false
+      }
+    ],
+    "ports": {
+      "5174": {
+        "connectAccepted": false,
+        "scope": "Own managed server port; read-only observation"
+      },
+      "5274": {
+        "connectAccepted": true,
+        "scope": "Own managed server port; read-only observation"
+      },
+      "8931": {
+        "connectAccepted": true,
+        "scope": "Global existing MCP left running"
+      }
+    }
+  },
+  "resourceRecords": {
+    "observedUtc": "2026-10-13T14:27:35.646565+00:00",
+    "records": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+        "exists": false,
+        "belongsToOwnBead": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+        "exists": false,
+        "belongsToOwnBead": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+        "exists": false,
+        "belongsToOwnBead": false
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+        "exists": false,
+        "belongsToOwnBead": false
+      }
+    ]
+  },
+  "cleanupInterpretation": "All five owned server PIDs/process groups observed dead. Each managed invocation reports its port free at cleanup; no retained own provider/server ownership record. Port5274 subsequently accepts connections from another owner; own server group96644/13916/20037 are dead and other owner record left untouched. Global8931 service accepts connections and was left running. Managedclose path requires browser_close confirmation + active-call join before clearing own provider record; no reconciliation diagnostic or retained own record observed.",
+  "priorMeasurementCorrections": [
+    {
+      "subjectBead": "hv-umm2.156",
+      "sourceCommit": "c0134588da90993bd0226a485bdbcbefbbcd3393",
+      "tested": "7f06d35cbda6559d1e5f792243b7ee9dd7423648",
+      "originalEvidenceWindowEnd": "2026-10-13T06:44:54.300715+00:00",
+      "actualCommitEnd": "2026-10-13T06:46:59.790837+00:00",
+      "endpointToCommitTailSeconds": 125.490122,
+      "actualClaimToCommitElapsedMinutesProxy": 67.4647005,
+      "wholeNativeOwnershipClock": {
+        "actualClaimStart": "2026-10-13T05:39:31.908807+00:00",
+        "actualCloseEnd": "2026-10-13T12:52:40.265936+00:00",
+        "wholeOwnershipWallMinutes": 433.1392854833333,
+        "basis": "Entire held ownership includes root/helper active work, check/QA/queue/delivery and unobserved commit-to-continue interval. Not CPU/model execution.",
+        "actualClaimToCommitMinutesProxy": 67.4647005,
+        "commitToResumeGapSeconds": 21563.709917,
+        "gapActivity": "UNKNOWN, preserved independently; not discarded from grossownership",
+        "deliveryProof": "/tmp/dreamtides-executor-01a12e91/156-delivery-proof.json"
+      },
+      "basis": "Additive correction/provenance in current own bead; preserve prior committed bytes. Entire held ownership includes unobserved21563.709917s commit-to-usercontinue gap, no CPU/activity attribution. Correct native arithmetic withdrew35963.709917s. Source/QA acceptance andclosure settled; no deferred feature/review/provider debt."
+    }
+  ],
+  "finalCheckTail": "Parent ordinary review/Knip/friction schema and source artifact guard performed after evidence authoring; exact receipts retained externally and in native handoff."
+}

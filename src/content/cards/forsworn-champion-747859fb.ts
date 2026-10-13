@@ -1,3 +1,6 @@
+import { abandonCost, activated, ofSubtype, self } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 217,
   art: { x: -0.032, y: -0.445, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([abandonCost(ofSubtype("Warrior"))], gainSpark(self(), 1), { speed: "interrupt" })],
+  verifiedText: expectedVerifiedText("❖❖ – Abandon a warrior: This character gains +1✦."),
 });

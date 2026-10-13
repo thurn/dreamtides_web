@@ -1,3 +1,6 @@
+import { abandonSparkCapture, activated, characterYouControl, target, x } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 216,
   art: { x: 0, y: 1, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [activated([abandonSparkCapture()], gainSpark(target(characterYouControl()), x()), { speed: "interrupt" })],
+  verifiedText: expectedVerifiedText("❖❖ – Abandon a character: Give a character you control +X✦ where X is the abandoned character's ✦."),
 });

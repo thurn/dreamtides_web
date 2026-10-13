@@ -1,3 +1,6 @@
+import { abandonCost, activated, countCards, self, staticAbility } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { erode, sparkModifier } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,9 @@ export default card({
   cardNumber: 51,
   art: { x: 0.4, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    staticAbility(sparkModifier(self(), countCards("void", { cardType: "character" }))),
+    activated([abandonCost({ another: true })], erode(1)),
+  ],
+  verifiedText: expectedVerifiedText("This character has +1✦ for each character in your void.\n\nAbandon another character: Erode 1."),
 });
