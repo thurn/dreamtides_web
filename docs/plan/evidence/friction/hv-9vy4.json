@@ -1,10 +1,10 @@
 {
   "bead": "hv-9vy4",
   "phase": 5,
-  "implementMin": 115.72535025,
+  "implementMin": 117.50490661666666,
   "implementWindow": {
     "start": "2026-10-13T14:02:04.705603Z",
-    "end": "2026-10-13T15:57:48.226618+00:00"
+    "end": "2026-10-13T15:59:35Z"
   },
   "localValidationS": {
     "focused-public-contracts": 13.956965874996968,

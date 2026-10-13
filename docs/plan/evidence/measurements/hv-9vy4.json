@@ -1112,5 +1112,32 @@
     "sourceFirstElapsedMin": 61.04992785,
     "remainingElapsedMin": 54.6754224,
     "scope": "Measured acknowledgement-to-WRITEACK61.049928min covers useful read-only source audit, proposals, finite diagnostics and native admission. Remaining elapsed window covers implementation, corrections, validations, QA/resource drain, packaging and reported capacity interruption. All stay in original gross; exact active model/CPU intervals and capacity duration are unknown. This is elapsed ownership context, not a continuous-activity or approval-wait claim."
+  },
+  "retrospective649TimingCorrection": {
+    "retrospective": "hv-umm2.649",
+    "authorWriteAckUtc": "2026-10-13T19:53:01.978520+00:00",
+    "originalSource": "d9d93d743d0330281d237a5730bb2495a307ad40",
+    "originalFrictionSHA256": "5bc42016da73114d6485289327d41792dabf9db14deb946446b501e906a03e7b",
+    "originalImplementWindow": {
+      "start": "2026-10-13T14:02:04.705603Z",
+      "end": "2026-10-13T15:57:48.226618+00:00"
+    },
+    "originalImplementMin": 115.72535025,
+    "correctedImplementWindowEnd": "2026-10-13T15:59:35Z",
+    "correctedImplementMin": 117.50490661666666,
+    "immutableAuthorAndCommitterGitMetadata": "2026-10-13T08:59:35-07:00",
+    "metadataPrecision": "Whole seconds with explicit -07:00 offset, equivalent to 2026-10-13T15:59:35Z; metadata does not independently prove process execution endpoints.",
+    "startQualification": "Conservative original parent claim-ACK observation 2026-10-13T14:02:04.705603Z retained, not a model sampling/dispatch timestamp.",
+    "tailSecondsAtWholeSecondPrecision": 106.773382,
+    "nativeReportedExecutionBracket": {
+      "start": "2026-10-13T15:59:35.788498Z",
+      "end": "2026-10-13T15:59:35.812680Z",
+      "reportedTailSeconds": 107.586062,
+      "source": "Post-freeze native comments-hv-9vy4.json FINAL comment created 2026-10-13T16:03:07Z",
+      "qualification": "Reported native observation only; independent raw fractional process receipt is absent from retained inputs. No claim that immutable Git metadata establishes this bracket."
+    },
+    "preservation": "Every prior measurement field, currentGrossWindow and original values remain intact. Validation/load/friction/QA/test delta and conservative start are unchanged.",
+    "modelSamplingStart": "UNKNOWN",
+    "productiveEditingOrCPU": "UNKNOWN"
   }
 }

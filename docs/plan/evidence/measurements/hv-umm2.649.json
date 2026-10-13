@@ -1,0 +1,710 @@
+{
+  "bead": "hv-umm2.649",
+  "phase": 5,
+  "baseOid": "be2c43e829402666fddcd5ee0bcf3e56e7cf860e",
+  "branch": "phase5-retrospective649-root",
+  "implementation": {
+    "firstHelperDispatchUtc": "2026-10-13T19:35:41.996Z",
+    "nativeCall": "call_b52810150a7d4b3b9599dd74e7e3614a",
+    "modelSamplingStart": "UNKNOWN",
+    "provisionalEndpointUtc": "2026-10-13T19:58:43.689110+00:00",
+    "scope": "Inclusive first read-only Sage dispatch through audit/research/supplement/admission/parent waits/authoring/checks and eventual automatic Git; provisional endpoint refresh only after separate COMMITACK.",
+    "predispatch": "Claim, installation and source/evidence freeze are separate setup observations, not included as a guessed earlier dispatch.",
+    "authorWriteAckUtc": "2026-10-13T19:53:01.978520+00:00",
+    "readOnlyAuditSealed": {
+      "path": "/tmp/root-retro-after645/sage/report.md",
+      "sha256": "c914d5cbac5eff87ed5c8f17c094586c42f860cf4f87dfd8e39b96e4135149e0",
+      "qualification": "Audit stage is sealed; later authoring is a separate expressly authorized stage, preserving report/input bytes."
+    },
+    "eventualGitEndpoint": "Actual automatic Git execution bracket, endpoint and marker tail are retained externally after commit; no postcommit tracked edit or date override.",
+    "commitAckUtc": "2026-10-13T19:57:51.292394Z",
+    "prospectiveImmediateAutomaticGitMarkerUtc": "2026-10-13T19:58:43.689110+00:00",
+    "prospectiveGrossMinutes": 23.028218499999998
+  },
+  "inputs": {
+    "freezeUtc": "2026-10-13T19:34:43.945425Z",
+    "previousRetrospective": "hv-umm2.645",
+    "phaseRecordCount": 533,
+    "coveredIds": [
+      "hv-97uo",
+      "hv-9vy4",
+      "hv-gy8c",
+      "hv-o73j",
+      "hv-r3hy",
+      "hv-umm2.128",
+      "hv-umm2.129",
+      "hv-umm2.132",
+      "hv-umm2.133",
+      "hv-umm2.139",
+      "hv-umm2.179",
+      "hv-umm2.261",
+      "hv-umm2.611",
+      "hv-umm2.612",
+      "hv-umm2.619",
+      "hv-umm2.640",
+      "hv-umm2.641",
+      "hv-umm2.642",
+      "hv-umm2.643",
+      "hv-umm2.644",
+      "hv-umm2.645",
+      "hv-umm2.646",
+      "hv-umm2.647",
+      "hv-umm2.648",
+      "hv-umm2.99"
+    ],
+    "manifests": {
+      "freeze-manifest.json": {
+        "sha256": "1498c0a6f432fb3f9c6d511b672ba8f95113c697eabedb3924d04a55a7968265",
+        "entries": 2682
+      },
+      "supplement-manifest-v2.json": {
+        "sha256": "8a2de8397cc54aee3fb5a783899af5dca3fe1adb2253943920ab02c0d008fcd3",
+        "entries": 702
+      },
+      "external-supplement-manifest-v3.json": {
+        "sha256": "4d50d017c23c486cb00518e5c1ae43b42ec34b740d15ced6965c722d00c67566",
+        "entries": 547
+      }
+    },
+    "freezeSummarySHA256": "44ea6499a7e4f71a6c4d1e64c52768ed9620d0312ddc7626f413840c4e981805",
+    "sourceTestCountsSHA256": "3f6ac143709f6eb625393121e83fd9302ab0156e7ba8de92b4194c030e023cfc",
+    "nativeUnionSHA256": "edfd77ec5ea6dead6fc887b363a4337339f0105526e807f0cbdfeb1ac9bde401",
+    "selectedNativeSHA256": "5f0bf37239bb2cfefad2b42bca08b044772123a0eb2f069006db2f3dd44e751f",
+    "scopeQualification": "Membership/source freeze fixed; native/external supplements are later observations, including 261 outcome/650 filing, not changed retrospective membership."
+  },
+  "nativeVectorAudit": {
+    "count": 25,
+    "allFinalCandidatesPromoted": true,
+    "allBuildsetsPassed": true,
+    "allCertificateCheckoutVerified": true,
+    "allFrozenFrictionMatchesSource": true,
+    "finalReusedSteps": 0,
+    "automaticCleanupCompleted": 24,
+    "manualCleanupQualified": [
+      "hv-97uo"
+    ],
+    "vectorFile": {
+      "path": "/tmp/root-retro-after645/sage/certified-gates.json",
+      "sha256": "c232e3fee25bc161e92686b2229b57cf7622ea01758754675d914595ff716c4a"
+    },
+    "vectors": [
+      {
+        "bead": "hv-97uo",
+        "source": "8c32fb0b1971452420da5ed0497eae9055935265",
+        "candidate": "01a13618-238b-7e33-9409-84e521c1cfd1",
+        "tested": "6e46ee1412ec0d174c2fc79dd648b01ad22b65fb",
+        "generation": "01a13619-8342-7cd2-af86-38995c7eb484",
+        "buildset": "01a13619-864b-76d3-adb9-6e12b7cdcb26",
+        "certificate": "01a1361c-d55f-7f33-b49a-b893a068e6a0",
+        "gateS": 117.463,
+        "cleanup": "not-eligible",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-9vy4",
+        "source": "d9d93d743d0330281d237a5730bb2495a307ad40",
+        "candidate": "01a13600-3884-7c22-9a72-44d243252eb6",
+        "tested": "b7daf0466103d3c1606dc98d22e60123330533f0",
+        "generation": "01a13601-15cc-7ba2-8828-c7e88ccc33f2",
+        "buildset": "01a13601-192c-7552-9486-16ec0c506835",
+        "certificate": "01a13603-679f-7153-ad30-12b47c578434",
+        "gateS": 111.488,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-gy8c",
+        "source": "62f875b3738273acdee43d1f468099087c63c71e",
+        "candidate": "01a13634-bd9f-7cb2-aa30-23df6bc39edd",
+        "tested": "1702fcf5857116c21d55a5bbae45a1e656fd0f94",
+        "generation": "01a13634-c48a-79c0-9d28-1f5f4899bf81",
+        "buildset": "01a13634-c4fe-7161-899b-c194d28393f8",
+        "certificate": "01a13636-2c86-7661-84ef-5623f8f256f7",
+        "gateS": 91.815,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-o73j",
+        "source": "4b2b76be4a77fe74d4a0d89cb0769ad2969d7248",
+        "candidate": "01a13658-39b0-7e01-b1a4-db73e6b87df9",
+        "tested": "87f218684cec39b3ef87f5e86a6cf4a6ac5bbfde",
+        "generation": "01a13658-3dcf-77d1-9fd1-3fefba030891",
+        "buildset": "01a13658-3e41-7930-8a4b-50875221065e",
+        "certificate": "01a13659-ac53-7753-9a0a-3a79ba22b002",
+        "gateS": 91.364,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-r3hy",
+        "source": "7dd1d16364057c2db197dd507ca08ffbc7728d8a",
+        "candidate": "01a135f4-597e-7d13-b832-fab5ae110fde",
+        "tested": "a0eae162c9be34e3ecceb3bc05c8e1e88e5cb83b",
+        "generation": "01a135f4-5fc0-7ca2-8858-270630279da1",
+        "buildset": "01a135f4-6047-7e21-901e-60d739f39eb3",
+        "certificate": "01a135f5-c80e-74c2-bc5c-ca08a8965b98",
+        "gateS": 91.753,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.128",
+        "source": "792d4631884705a0bf7640508b28f4fb4c7c819b",
+        "candidate": "01a135dc-4449-7661-9afb-ce15511e34f8",
+        "tested": "57a6d26ddb1d86630822bcf2194ef6c65c05dec9",
+        "generation": "01a135dc-491e-7e20-92bd-dfe5d1741523",
+        "buildset": "01a135dc-49a4-7332-82d5-d16f78a51151",
+        "certificate": "01a135de-1598-7753-b3fd-6444d654cbc4",
+        "gateS": 117.453,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.132",
+        "source": "a6ff6b0fc9dadcacbb3b5f018871de6a2b454fcf",
+        "candidate": "01a13624-0b60-7500-ab60-5b4ec082b095",
+        "tested": "ed7a661c53c8166ae5fbe303389620f26212a927",
+        "generation": "01a13624-10f5-7891-9509-9bf6871d44f3",
+        "buildset": "01a13624-117f-7982-b0e9-35eab0a2f424",
+        "certificate": "01a13625-953a-77d3-b9f2-8fc3170444ee",
+        "gateS": 96.166,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.133",
+        "source": "1aaeade0ea9e9d8f2b779d8180dbd4a544cfcdfe",
+        "candidate": "01a1362e-2979-7b01-a637-d4b2f2b51bca",
+        "tested": "9ef896ff3bed042cf557204d2a15af19481c1176",
+        "generation": "01a1362e-328c-7a51-83e8-ed6e72eaba32",
+        "buildset": "01a1362e-3477-7510-8115-256bda14f68a",
+        "certificate": "01a1362f-aef0-7902-a636-207ae91ea1cc",
+        "gateS": 96.189,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.139",
+        "source": "2e2f040bd841c8cb594dbf01cbe32bfa4eb8ca6f",
+        "candidate": "01a13619-0653-7f51-96df-c44843a34d43",
+        "tested": "cd66fb26f7652185d3ad70230464e4979414876c",
+        "generation": "01a13619-833a-7e20-b8dc-6c2581c26265",
+        "buildset": "01a13619-833b-7cb3-93e9-8260cdf44af5",
+        "certificate": "01a1361a-f352-7f42-b34d-971eb163838e",
+        "gateS": 93.201,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.179",
+        "source": "da3ddf544805a20e9ff3da171a1fb8a82082a691",
+        "candidate": "01a1363a-a4d5-75e3-921c-97e1eedb5e2f",
+        "tested": "54c648e549c982224150d1cb13f95c4077e32c90",
+        "generation": "01a1363a-abb5-76c2-86df-d22ded0ba164",
+        "buildset": "01a1363a-ac4e-7432-b367-bc6fdfc556c8",
+        "certificate": "01a1363c-31f3-7293-b950-33a7fde35420",
+        "gateS": 99.431,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.261",
+        "source": "5c8f62590dbf2d9591b2d26217765ee49d72444e",
+        "candidate": "01a136b8-be6d-7602-84d8-2c3285d54371",
+        "tested": "a22b4a66dfb4f65dd40e650f67c920c206b30b2d",
+        "generation": "01a136b8-c4c8-76e2-944b-4e731c8ea00e",
+        "buildset": "01a136b8-c54b-74e0-9738-52e8b45ebc68",
+        "certificate": "01a136ba-3110-7d93-90ab-e90c430f5268",
+        "gateS": 92.908,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.611",
+        "source": "0e05e614db82992c4964c8328803e3abed242324",
+        "candidate": "01a1364a-15b1-75d3-a413-61ec2e6d22b2",
+        "tested": "74e796350a4530e7870aeb35ce0869932e2bd34c",
+        "generation": "01a1364a-1dd4-7011-8f02-a0014a2349af",
+        "buildset": "01a1364a-1fc3-7f21-9125-34c104dacc6b",
+        "certificate": "01a1364b-9132-74d0-920c-2167a650a350",
+        "gateS": 93.856,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.612",
+        "source": "9261001229e66dd6f7fd0b8d048db1190f8a4778",
+        "candidate": "01a1364e-9dcc-7ea2-a07f-cac30ec58220",
+        "tested": "843a2036074307083a62d65c650aa85373bafc6b",
+        "generation": "01a1364e-a393-7eb3-82e0-50e22c57b269",
+        "buildset": "01a1364e-a415-7e61-a250-a4832df6e6f9",
+        "certificate": "01a13650-7685-7591-a60a-66048faed7c2",
+        "gateS": 119.008,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.619",
+        "source": "0c9e411926295a81e23b26c5992a0323f706ce0f",
+        "candidate": "01a13682-8495-7273-89e7-275d97b14651",
+        "tested": "951de46e90fef0826ff629041556e690f6020a19",
+        "generation": "01a13682-8a3f-72e1-896b-0c6890eca760",
+        "buildset": "01a13682-8ac0-78d2-ae2d-b2e904830cc4",
+        "certificate": "01a13683-f98d-78f2-b06c-ad295f59fa06",
+        "gateS": 93.659,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.640",
+        "source": "b171107523662a36d708ef550775756dd9a8c337",
+        "candidate": "01a13640-7e75-7381-91b4-a9fc0a8a0132",
+        "tested": "8053b79f0d5c52c276e3c795a58b12e6c720e4cd",
+        "generation": "01a13640-846a-7d11-8926-0b22d7d78c70",
+        "buildset": "01a13640-87fb-77b2-9d47-f6bc9a4bd30e",
+        "certificate": "01a13640-f510-7c60-a1ed-768704556c47",
+        "gateS": 18.776,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.641",
+        "source": "d5646b7533321123cfbcabc04010f0563a81b910",
+        "candidate": "01a1364e-f423-7e71-80a6-07b55dac878c",
+        "tested": "138ccc567d3b99b2b55c3977d6e0af71d006b11e",
+        "generation": "01a1364e-fbeb-7191-8f99-d45b55022aa4",
+        "buildset": "01a1364e-fcb2-79e3-9ce7-c990a0dc6faa",
+        "certificate": "01a13650-d662-7923-a29a-a715939fd47c",
+        "gateS": 18.968,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.642",
+        "source": "0cdbcf02a80d7bcb3b7c18851d304f1983ca22a8",
+        "candidate": "01a13661-58a4-73f1-aeb6-78b1a583f609",
+        "tested": "749b635dd8f59d3407f05e18e5f73d7c08f5861a",
+        "generation": "01a13661-5dae-7a03-aa51-5d981af17e79",
+        "buildset": "01a13661-5e29-7f80-8c06-f01d9fbc2172",
+        "certificate": "01a13661-ad46-7042-b910-45d2eef27ded",
+        "gateS": 19.985,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.643",
+        "source": "12cbdc27ea7ca1d06c1638d87048a23e51ebffec",
+        "candidate": "01a13659-cf86-74d0-9039-dcbd7cc6a45f",
+        "tested": "04620bd69e8ecec9f80d7a3059add40dab0d63bf",
+        "generation": "01a13659-d46e-72a2-a72d-07bc9180a8bf",
+        "buildset": "01a13659-d4f6-74f2-9719-06ed7ea130af",
+        "certificate": "01a1365a-2e7f-7a70-881e-163eaf56fff6",
+        "gateS": 21.599,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.644",
+        "source": "1f3cd734798e5c2851393958e1e8e98bcce41abb",
+        "candidate": "01a136a5-ee9e-74f1-b4b5-40fda0ebbcd2",
+        "tested": "e359cdc4b845fe533792e00adb69ed0fd61f0d4d",
+        "generation": "01a136a5-f4a6-7811-b377-4730d02a8c16",
+        "buildset": "01a136a5-f519-7b61-92b4-450657c73f71",
+        "certificate": "01a136a6-3e17-7371-a721-af5a2600ce47",
+        "gateS": 18.474,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.645",
+        "source": "1370f9a0e18e0f2eddd6fda54714729f38de44aa",
+        "candidate": "01a135ff-c25b-71e0-b9aa-fddbc1da779e",
+        "tested": "0555b2f9fa95469ec4bbca6061bd56cfb14f60b3",
+        "generation": "01a13601-15d6-7e23-8ac8-db829b612dad",
+        "buildset": "01a13601-175f-73b0-810f-47442ff1f459",
+        "certificate": "01a13601-7518-7d51-986f-8d15f1c8e59a",
+        "gateS": 18.726,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.646",
+        "source": "81caf54956b61f3a6c2982e3400b793b4bc52b2a",
+        "candidate": "01a1368a-4599-7532-9689-d97a3c8dc347",
+        "tested": "34dfc2499e43dc252e00e50e465d27f5f40ac952",
+        "generation": "01a1368a-4a91-7173-bd6a-c8d0785b65eb",
+        "buildset": "01a1368a-4b11-7f11-9d40-b1893900fe2d",
+        "certificate": "01a1368b-d4fa-7b20-8725-d60078ced9a5",
+        "gateS": 100.541,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.647",
+        "source": "8a70e971d72dacc622b88c733a902eaa8a0f5219",
+        "candidate": "01a136b9-83b0-7771-8592-f7d9d06ac4b0",
+        "tested": "be2c43e829402666fddcd5ee0bcf3e56e7cf860e",
+        "generation": "01a136b9-88ee-7663-aac0-559601aeede6",
+        "buildset": "01a136b9-896c-70a0-bc7a-81d7456512b8",
+        "certificate": "01a136bb-f74a-7f71-83b5-c90b45458fba",
+        "gateS": 109.563,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.648",
+        "source": "a19ee7774c6208965a69242db86301b01bdd271f",
+        "candidate": "01a1369d-0c21-7332-9937-ba2493d6f100",
+        "tested": "a19ee7774c6208965a69242db86301b01bdd271f",
+        "generation": "01a1369d-130a-7fb0-a9d3-0a3940056995",
+        "buildset": "01a1369d-1351-70a3-9bd5-fc4b5bfffe32",
+        "certificate": "01a1369e-8935-7751-b02c-245eb499c76f",
+        "gateS": 95.353,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.99",
+        "source": "84c671be1b16f34a17add1acf2e2dbcfb1736823",
+        "candidate": "01a1360b-8384-77a0-aeff-97946c574b9b",
+        "tested": "88d0317a1c95c9dbaf83be2d8e13512407553e14",
+        "generation": "01a1360b-8945-75e2-9a5b-ef83e7f40d72",
+        "buildset": "01a1360b-89ba-7b02-9bac-056d9b13b6ff",
+        "certificate": "01a1360c-f93f-7c33-a384-ba2a849dfec0",
+        "gateS": 93.713,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      },
+      {
+        "bead": "hv-umm2.129",
+        "source": "0db5f084f106fd0464733ec89c5393e4cbd3d0dc",
+        "candidate": "01a135f8-2829-7470-848f-ee41e1cb104e",
+        "tested": "d9ed987e2bf68a4ec7da47cdbd2126140aedc55c",
+        "generation": "01a135f8-2ece-71e3-8dc2-f103cf77f056",
+        "buildset": "01a135f8-2f55-7a40-9fc8-3513e4507aff",
+        "certificate": "01a135f9-b1d6-7bb1-a46e-9c7f9f0a512d",
+        "gateS": 98.597,
+        "cleanup": "completed",
+        "sourceFriction": true,
+        "errors": []
+      }
+    ],
+    "sharedFileQualification": "Exact owned bodies/exclusive blobs retain additive peer changes; source equality is not a false whole-file claim for shared rules/registry/index."
+  },
+  "outcomes": {
+    "newImprovement": {
+      "bead": "hv-umm2.651",
+      "improvement": "failed-claim-setup-sequencing/phase-5",
+      "foundBy": "hv-umm2.649",
+      "dependencies": [
+        "hv-umm2.651 -> hv-umm2.649",
+        "hv-umm2.46 -> hv-umm2.651"
+      ],
+      "scope": "Docs-only checked native claim outcome before setup, including safe sequential guarded orchestration; no extra tool round trip requirement or native retention bypass.",
+      "observerScopesS": {
+        "o73jReleaseObserver": 180.181078,
+        "619ReleaseObserver": 29.366498
+      },
+      "observerQualification": "Actual release-client observations only, not full incident durations or CPU."
+    },
+    "newTriggerDispositionLines": 0,
+    "budgetChanges": 0,
+    "timingCorrection": {
+      "bead": "hv-9vy4",
+      "fields": [
+        "implementWindow.end",
+        "implementMin"
+      ],
+      "provenanceKey": "retrospective649TimingCorrection",
+      "admissionSHA256": "d0760c8fb7248462b5d5a43922d670434b17c4c7ef2ff7c1548784c1fa5842ee"
+    },
+    "pendingAcceptance": [
+      "hv-umm2.650 pending transfiguration gameplay guard after post-freeze261review",
+      "hv-umm2.233 actual consumer integration/weighted300/browser/core review",
+      "Original257 and290\u2013295 production/full-pool/20/50-games EACH/champion joins"
+    ],
+    "reviewRouting": "Temporary user-authorized fresh read-only gpt-5.6-sol same-family CLI; outer successful reviews distinct from nested initialization failures. No authoring reviewer launched."
+  },
+  "costs": {
+    "gateStepSumS": {
+      "count": 25,
+      "median": 93.713,
+      "range": [
+        18.474,
+        119.008
+      ],
+      "over90Count": 19
+    },
+    "releaseStepSumS": {
+      "count": 23,
+      "median": 271.787,
+      "range": [
+        256.906,
+        300.573
+      ]
+    },
+    "release200FuzzStepS": {
+      "count": 23,
+      "median": 150.775,
+      "range": [
+        143.962,
+        182.276
+      ]
+    },
+    "limits": "Whole stage/test-only/focused/weighted/default/queue/model scopes differ. Unknown loads/means/queue splits do not establish comparable-load D42 speed claims. Existing526/gate46 D19 reading and budget obligation retained."
+  },
+  "validation": {
+    "focused": {
+      "exitCode": 0,
+      "wallS": 8.551990083011333,
+      "scope": "Existing deterministic friction CLI/evidence contract suite",
+      "executedFiles": 1,
+      "passedTests": 109
+    },
+    "schema": {
+      "exitCode": 0,
+      "wallS": 0.11879779200535268,
+      "scope": "Whole retained record schema",
+      "records": 748,
+      "historicalUnknownMeasurements": 41
+    },
+    "review": {
+      "exitCode": 0,
+      "wallS": 0.2545844580163248,
+      "scope": "Staged seven-path evidence-only aggregate review"
+    },
+    "knip": {
+      "exitCode": 0,
+      "wallS": 4.282714208995458,
+      "scope": "Existing deadcode check with configured exclusions"
+    },
+    "readyFinalSchema": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "observerPid": 77504,
+      "pid": 77576,
+      "pgid": 77576,
+      "startUtc": "2026-10-13T19:56:37.950814+00:00",
+      "endUtc": "2026-10-13T19:56:38.014959+00:00",
+      "wallS": 0.0641516670002602,
+      "exitCode": 0,
+      "waited": true,
+      "wholeGroupAbsent": true,
+      "stdout": "/tmp/root-retro-after645/sage/author-checks/schema-final.stdout"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual required review start 2026-10-13T19:55:42.781312+00:00",
+        "source": "/tmp/root-retro-after645/sage/author-checks/review.stdout",
+        "oneMinuteLoad": 16.2,
+        "qualification": "Start sample only, not mean load. Focused/schema/Knip starting samples retained per receipt."
+      },
+      "implementWindow": {
+        "measuredFor": "Original actual first Sage host dispatch through provisional authoring endpoint; final near-Git marker/actual execution receipt required, model start unknown."
+      }
+    }
+  },
+  "resources": {
+    "runtimeBrowserServerReviewerLaunched": false,
+    "checkReceipts": [
+      {
+        "label": "focused",
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "scripts/friction-triggers.test.mjs"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retrospective649-root",
+        "observerPid": 66360,
+        "pid": 66372,
+        "pgid": 66372,
+        "startUtc": "2026-10-13T19:55:34.104408+00:00",
+        "endUtc": "2026-10-13T19:55:42.658995+00:00",
+        "wallS": 8.551990083011333,
+        "exitCode": 0,
+        "waited": true,
+        "terminal": true,
+        "hostLoadStart": 17.99,
+        "hostLoadRaw": "{ 17.99 9.90 7.25 }",
+        "wholeGroupAbsentAfterWait": true,
+        "stdout": "/tmp/root-retro-after645/sage/author-checks/focused.stdout",
+        "stderr": "/tmp/root-retro-after645/sage/author-checks/focused.stderr"
+      },
+      {
+        "label": "schema",
+        "argv": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retrospective649-root",
+        "observerPid": 66360,
+        "pid": 73452,
+        "pgid": 73452,
+        "startUtc": "2026-10-13T19:55:42.659267+00:00",
+        "endUtc": "2026-10-13T19:55:42.781070+00:00",
+        "wallS": 0.11879779200535268,
+        "exitCode": 0,
+        "waited": true,
+        "terminal": true,
+        "hostLoadStart": 16.2,
+        "hostLoadRaw": "{ 16.20 9.78 7.24 }",
+        "wholeGroupAbsentAfterWait": true,
+        "stdout": "/tmp/root-retro-after645/sage/author-checks/schema.stdout",
+        "stderr": "/tmp/root-retro-after645/sage/author-checks/schema.stderr"
+      },
+      {
+        "label": "review",
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retrospective649-root",
+        "observerPid": 66360,
+        "pid": 73467,
+        "pgid": 73467,
+        "startUtc": "2026-10-13T19:55:42.781312+00:00",
+        "endUtc": "2026-10-13T19:55:43.038693+00:00",
+        "wallS": 0.2545844580163248,
+        "exitCode": 0,
+        "waited": true,
+        "terminal": true,
+        "hostLoadStart": 16.2,
+        "hostLoadRaw": "{ 16.20 9.78 7.24 }",
+        "wholeGroupAbsentAfterWait": true,
+        "stdout": "/tmp/root-retro-after645/sage/author-checks/review.stdout",
+        "stderr": "/tmp/root-retro-after645/sage/author-checks/review.stderr"
+      },
+      {
+        "label": "knip",
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/phase5-retrospective649-root",
+        "observerPid": 66360,
+        "pid": 73548,
+        "pgid": 73548,
+        "startUtc": "2026-10-13T19:55:43.038949+00:00",
+        "endUtc": "2026-10-13T19:55:47.324289+00:00",
+        "wallS": 4.282714208995458,
+        "exitCode": 0,
+        "waited": true,
+        "terminal": true,
+        "hostLoadStart": 16.2,
+        "hostLoadRaw": "{ 16.20 9.78 7.24 }",
+        "wholeGroupAbsentAfterWait": true,
+        "stdout": "/tmp/root-retro-after645/sage/author-checks/knip.stdout",
+        "stderr": "/tmp/root-retro-after645/sage/author-checks/knip.stderr"
+      }
+    ],
+    "parentNativeReadReceipts": {
+      "path": "/tmp/root-retro-after645/inputs/supplement/native-read-receipts.json",
+      "sha256": "9f9fd6d1c951108affdc0553c55dc8ba78cc93c3ed3ee6aacd154e86f2e92816",
+      "qualification": "Actual argv/start/end/exit retained; process identity not sampled and remains UNKNOWN. No fabricated census."
+    },
+    "modelPIDs": "UNKNOWN; host model sampling is not a child process census.",
+    "readyGroupAbsence": {
+      "66372": "absent",
+      "73452": "absent",
+      "73467": "absent",
+      "73548": "absent"
+    },
+    "earlierCheckObserverAbsence": {
+      "66360": "absent"
+    },
+    "precommitParentVerifiedAbsence": {
+      "at": "2026-10-13T19:57:51.292394Z",
+      "groups": [
+        66372,
+        73452,
+        73467,
+        73548,
+        77576
+      ],
+      "observers": [
+        66360,
+        77504
+      ],
+      "allAbsent": true,
+      "qualification": "Actual parent and author observations before separate COMMITACK; parent-native unrelated process identities remain UNKNOWN."
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "authoringChecksCompletedUtc": "2026-10-13T19:55:47.324876+00:00",
+  "authoringScopeProof": {
+    "at": "2026-10-13T19:56:37.230918+00:00",
+    "base": "be2c43e829402666fddcd5ee0bcf3e56e7cf860e",
+    "branch": "phase5-retrospective649-root",
+    "unchangedReportSHA256": "c914d5cbac5eff87ed5c8f17c094586c42f860cf4f87dfd8e39b96e4135149e0",
+    "ledger": {
+      "originalPrefixSHA256": "cfd9ef8ef62ed932494818a769cacbb470e260467e1ee4135921abc45a70acf6",
+      "exactAppendedSuffixSHA256": "373fe17c033221029540477ff72f430e101c477bd59cdbb6fb375af2dbb2aece",
+      "appendedLines": 1,
+      "newTriggerDispositions": 0
+    },
+    "oldFrictionOnlyTwoFieldsChanged": true,
+    "oldMeasurementAllPriorFieldsPreserved": true,
+    "freeze-manifest.json": {
+      "entries": 2682,
+      "mismatches": [],
+      "manifestSHA256": "1498c0a6f432fb3f9c6d511b672ba8f95113c697eabedb3924d04a55a7968265"
+    },
+    "supplement-manifest-v2.json": {
+      "entries": 702,
+      "mismatches": [],
+      "manifestSHA256": "8a2de8397cc54aee3fb5a783899af5dca3fe1adb2253943920ab02c0d008fcd3"
+    },
+    "external-supplement-manifest-v3.json": {
+      "entries": 547,
+      "mismatches": [],
+      "manifestSHA256": "4d50d017c23c486cb00518e5c1ae43b42ec34b740d15ced6965c722d00c67566"
+    },
+    "checkGroups": {
+      "66372": "absent",
+      "73452": "absent",
+      "73467": "absent",
+      "73548": "absent"
+    },
+    "earlierCheckObservers": {
+      "66360": "absent"
+    }
+  }
+}
