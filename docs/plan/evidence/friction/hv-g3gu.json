@@ -1,0 +1,22 @@
+{
+  "bead": "hv-g3gu",
+  "phase": 5,
+  "implementMin": 21.37080375,
+  "implementWindow": {
+    "start": "2026-10-13T03:24:42+00:00",
+    "end": "2026-10-13T03:46:04.248225+00:00"
+  },
+  "localValidationS": {
+    "focused": 8.678623832995072,
+    "review": 0.3467127089970745,
+    "knip": 5.474927417002618,
+    "schema": 0.11537662500631995
+  },
+  "hostLoad": 9.4228515625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}
