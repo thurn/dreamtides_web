@@ -1,0 +1,53 @@
+{
+  "bead": "hv-umm2.588",
+  "phase": 5,
+  "implementMin": 55.5832323,
+  "implementWindow": {
+    "start": "2026-10-13T23:15:07.519Z",
+    "end": "2026-10-14T00:10:42.512938+00:00"
+  },
+  "localValidationS": {
+    "focused-initial": 6.9720187920029275,
+    "focused-corrected": 6.334996292018332,
+    "focused-public": 4.916185042005964,
+    "review": 62.74468225002056,
+    "review-final": 76.01770254201256,
+    "focused-final": 8.075103542010766,
+    "focused-counter": 5.664612208987819,
+    "focused-frozen": 5.213160458981292,
+    "fuzz-one": 2.4437745839823037,
+    "counterfactual-lower": 7.594010500004515,
+    "counterfactual-all-tied": 6.020370707992697,
+    "focused-restored": 6.34237425000174,
+    "review-corrected": 73.2860710840032,
+    "knip": 4.560979208006756,
+    "coverage": 4.757165000017267,
+    "fuzz-300": 136.27388229197823,
+    "schema": 0.132791250012815,
+    "schema-commit": 0.12667812497238629,
+    "combined-focused": 5.7771448330022395,
+    "combined-review": 65.52597912499914,
+    "combined-knip": 3.4250073750154115,
+    "combined-coverage": 4.1195584580127615,
+    "combined-fuzz-300": 350.8438109999988,
+    "combined-schema": 0.1324511670100037
+  },
+  "hostLoad": 9.10546875,
+  "testDelta": {
+    "files": 1,
+    "lines": 228,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 2.62890020141737,
+      "note": "Own fixture/API assumptions caused initial illegal-pass/static-setup failures, two publication-prefix assertions, a createFigments argument-order type failure, and a stale warmed legality fixture after direct mutation; one unnecessary source assertion failed lint. Actual failed-check wall duration, not pure editing time. All receipts retained; final source passes."
+    },
+    {
+      "tag": "integration-conflict",
+      "minutes": 11.5910326,
+      "note": "Gross recovery through parking/update/reapply/combined validation and shared lock wait, not pure editing time. Independent shared-file additions preserved; original candidate never approved and temporary checkpoint never candidate."
+    }
+  ]
+}

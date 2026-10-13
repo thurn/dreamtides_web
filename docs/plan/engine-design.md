@@ -1290,6 +1290,14 @@ invariants compare the memoized evaluation with a fresh one.
 characters". `supporting()` counts the characters behind a front-rank
 character (C9).
 
+`highestSpark()` is a resolving, non-target `CharacterRef`: it names one
+character on the retained effect controller's current battlefield by maximum
+effective spark, then earliest current play entry. It reads all candidates
+before deciding, and rejects ambiguous earliest chronology among the final
+maxima. A unique maximum is independent of other candidates' ages. Static
+abilities reject this reference; resolving steps retain ordinary atomicity,
+UUID gain events, replay and public views.
+
 ## Zones and zone changes
 
 `rules/zones.ts` owns every zone change. `moveInstance(ctx, id, to)` (and

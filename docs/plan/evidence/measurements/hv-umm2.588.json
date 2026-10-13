@@ -1,0 +1,1156 @@
+{
+  "bead": "hv-umm2.588",
+  "phase": 5,
+  "base": "67f4456be1caa7d6ad7da0551adab9904382b947",
+  "branch": "highest-spark588-root",
+  "dispatch": {
+    "timestamp": "2026-10-13T23:15:07.519Z",
+    "callId": "call_a1850f6f17644a9097c95bb59ebb491a"
+  },
+  "modelStart": null,
+  "implementationWindowStatus": "Inclusive original actual dispatch through implementation, originalGit, ordinary integration recovery/update/reapply, combined validation/shared-capacity waits and final parent wait to prospective immediate amended automaticGit. Actual final Git clock is external, no postcommit tracked writes.",
+  "checks": [
+    {
+      "label": "focused-initial",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "highest-spark reference|rejects a static ability"
+      ],
+      "startedAt": "2026-10-13T23:37:02.233671+00:00",
+      "wrapperPid": 54611,
+      "pid": 54623,
+      "processGroup": 54623,
+      "hostLoadAtStart": 8.5283203125,
+      "endedAt": "2026-10-13T23:37:09.205628+00:00",
+      "elapsedSeconds": 6.9720187920029275,
+      "exitCode": 1,
+      "childUserCpuSeconds": 7.155287,
+      "childSystemCpuSeconds": 2.46998
+    },
+    {
+      "label": "focused-corrected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "highest-spark reference|rejects a static ability"
+      ],
+      "startedAt": "2026-10-13T23:38:11.758424+00:00",
+      "wrapperPid": 57735,
+      "pid": 57744,
+      "processGroup": 57744,
+      "hostLoadAtStart": 6.1865234375,
+      "endedAt": "2026-10-13T23:38:18.093365+00:00",
+      "elapsedSeconds": 6.334996292018332,
+      "exitCode": 1,
+      "childUserCpuSeconds": 5.728749,
+      "childSystemCpuSeconds": 1.796187
+    },
+    {
+      "label": "focused-public",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "highest-spark reference|rejects a static ability"
+      ],
+      "startedAt": "2026-10-13T23:38:51.704863+00:00",
+      "wrapperPid": 58468,
+      "pid": 58477,
+      "processGroup": 58477,
+      "hostLoadAtStart": 4.50830078125,
+      "endedAt": "2026-10-13T23:38:56.620999+00:00",
+      "elapsedSeconds": 4.916185042005964,
+      "exitCode": 0,
+      "childUserCpuSeconds": 5.732716,
+      "childSystemCpuSeconds": 1.594735
+    },
+    {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-13T23:40:12.921266+00:00",
+      "wrapperPid": 60564,
+      "pid": 60572,
+      "processGroup": 60572,
+      "hostLoadAtStart": 3.29541015625,
+      "endedAt": "2026-10-13T23:41:15.665695+00:00",
+      "elapsedSeconds": 62.74468225002056,
+      "exitCode": 1,
+      "childUserCpuSeconds": 176.076963,
+      "childSystemCpuSeconds": 18.172666
+    },
+    {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-13T23:41:58.716547+00:00",
+      "wrapperPid": 63726,
+      "pid": 63742,
+      "processGroup": 63742,
+      "hostLoadAtStart": 22.85546875,
+      "endedAt": "2026-10-13T23:43:14.733934+00:00",
+      "elapsedSeconds": 76.01770254201256,
+      "exitCode": 2,
+      "childUserCpuSeconds": 184.363472,
+      "childSystemCpuSeconds": 22.668913
+    },
+    {
+      "label": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "highest-spark reference|rejects a static ability"
+      ],
+      "startedAt": "2026-10-13T23:43:40.924737+00:00",
+      "wrapperPid": 48593,
+      "pid": 48659,
+      "processGroup": 48659,
+      "hostLoadAtStart": 19.6787109375,
+      "endedAt": "2026-10-13T23:43:48.999756+00:00",
+      "elapsedSeconds": 8.075103542010766,
+      "exitCode": 0,
+      "childUserCpuSeconds": 7.329492,
+      "childSystemCpuSeconds": 2.453745
+    },
+    {
+      "label": "focused-counter",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "highest-spark reference|rejects a static ability"
+      ],
+      "startedAt": "2026-10-13T23:45:01.413777+00:00",
+      "wrapperPid": 54151,
+      "pid": 54163,
+      "processGroup": 54163,
+      "hostLoadAtStart": 13.16357421875,
+      "endedAt": "2026-10-13T23:45:07.078336+00:00",
+      "elapsedSeconds": 5.664612208987819,
+      "exitCode": 1,
+      "childUserCpuSeconds": 6.263728,
+      "childSystemCpuSeconds": 1.820381
+    },
+    {
+      "label": "focused-frozen",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "highest-spark reference|rejects a static ability"
+      ],
+      "startedAt": "2026-10-13T23:45:41.720482+00:00",
+      "wrapperPid": 56519,
+      "pid": 56530,
+      "processGroup": 56530,
+      "hostLoadAtStart": 9.94580078125,
+      "endedAt": "2026-10-13T23:45:46.933593+00:00",
+      "elapsedSeconds": 5.213160458981292,
+      "exitCode": 0,
+      "childUserCpuSeconds": 6.242412,
+      "childSystemCpuSeconds": 1.668463
+    },
+    {
+      "label": "fuzz-one",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/root-588/helper/targeted-fuzz.ts",
+        "1"
+      ],
+      "startedAt": "2026-10-13T23:46:08.265484+00:00",
+      "wrapperPid": 58115,
+      "pid": 58117,
+      "processGroup": 58117,
+      "hostLoadAtStart": 8.87255859375,
+      "endedAt": "2026-10-13T23:46:10.709202+00:00",
+      "elapsedSeconds": 2.4437745839823037,
+      "exitCode": 0,
+      "childUserCpuSeconds": 2.582713,
+      "childSystemCpuSeconds": 0.708733
+    },
+    {
+      "label": "counterfactual-lower",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "highest-spark reference.*(selects the unique maximum|resolves equal maxima)"
+      ],
+      "startedAt": "2026-10-13T23:47:22.099875+00:00",
+      "wrapperPid": 62839,
+      "pid": 62841,
+      "processGroup": 62841,
+      "hostLoadAtStart": 10.9775390625,
+      "endedAt": "2026-10-13T23:47:29.693820+00:00",
+      "elapsedSeconds": 7.594010500004515,
+      "exitCode": 1,
+      "childUserCpuSeconds": 6.639366,
+      "childSystemCpuSeconds": 2.257461
+    },
+    {
+      "label": "counterfactual-all-tied",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "highest-spark reference.*(selects the unique maximum|resolves equal maxima)"
+      ],
+      "startedAt": "2026-10-13T23:47:29.723048+00:00",
+      "wrapperPid": 69964,
+      "pid": 69967,
+      "processGroup": 69967,
+      "hostLoadAtStart": 14.26220703125,
+      "endedAt": "2026-10-13T23:47:35.743363+00:00",
+      "elapsedSeconds": 6.020370707992697,
+      "exitCode": 1,
+      "childUserCpuSeconds": 6.34928,
+      "childSystemCpuSeconds": 1.9351639999999999
+    },
+    {
+      "label": "focused-restored",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "highest-spark reference|rejects a static ability"
+      ],
+      "startedAt": "2026-10-13T23:47:35.772152+00:00",
+      "wrapperPid": 80189,
+      "pid": 80210,
+      "processGroup": 80210,
+      "hostLoadAtStart": 18.19287109375,
+      "endedAt": "2026-10-13T23:47:42.114470+00:00",
+      "elapsedSeconds": 6.34237425000174,
+      "exitCode": 0,
+      "childUserCpuSeconds": 6.960899,
+      "childSystemCpuSeconds": 2.122893
+    },
+    {
+      "label": "review-corrected",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-13T23:47:42.142208+00:00",
+      "wrapperPid": 92883,
+      "pid": 92886,
+      "processGroup": 92886,
+      "hostLoadAtStart": 17.53662109375,
+      "endedAt": "2026-10-13T23:48:55.427983+00:00",
+      "elapsedSeconds": 73.2860710840032,
+      "exitCode": 0,
+      "childUserCpuSeconds": 170.174899,
+      "childSystemCpuSeconds": 22.488546
+    },
+    {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startedAt": "2026-10-13T23:48:55.462741+00:00",
+      "wrapperPid": 20030,
+      "pid": 20032,
+      "processGroup": 20032,
+      "hostLoadAtStart": 11.48046875,
+      "endedAt": "2026-10-13T23:49:00.023674+00:00",
+      "elapsedSeconds": 4.560979208006756,
+      "exitCode": 0,
+      "childUserCpuSeconds": 3.456114,
+      "childSystemCpuSeconds": 1.412826
+    },
+    {
+      "label": "coverage",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "startedAt": "2026-10-13T23:49:00.047785+00:00",
+      "wrapperPid": 20485,
+      "pid": 20486,
+      "processGroup": 20486,
+      "hostLoadAtStart": 10.96142578125,
+      "endedAt": "2026-10-13T23:49:04.804875+00:00",
+      "elapsedSeconds": 4.757165000017267,
+      "exitCode": 0,
+      "childUserCpuSeconds": 3.919972,
+      "childSystemCpuSeconds": 1.907098
+    },
+    {
+      "label": "fuzz-300",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node_modules/.bin/tsx",
+        "/tmp/root-588/helper/targeted-fuzz.ts",
+        "300"
+      ],
+      "startedAt": "2026-10-13T23:49:05.019234+00:00",
+      "wrapperPid": 20782,
+      "pid": 20787,
+      "processGroup": 20787,
+      "hostLoadAtStart": 11.60498046875,
+      "endedAt": "2026-10-13T23:51:21.292609+00:00",
+      "elapsedSeconds": 136.27388229197823,
+      "exitCode": 0,
+      "childUserCpuSeconds": 147.673492,
+      "childSystemCpuSeconds": 2.347222
+    },
+    {
+      "label": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startedAt": "2026-10-13T23:52:47.012489+00:00",
+      "wrapperPid": 37762,
+      "pid": 37794,
+      "processGroup": 37794,
+      "hostLoadAtStart": 19.26025390625,
+      "endedAt": "2026-10-13T23:52:47.145240+00:00",
+      "elapsedSeconds": 0.132791250012815,
+      "exitCode": 0,
+      "childUserCpuSeconds": 0.061915,
+      "childSystemCpuSeconds": 0.032707
+    },
+    {
+      "label": "schema-commit",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startedAt": "2026-10-13T23:54:40.343000+00:00",
+      "wrapperPid": 72453,
+      "pid": 72456,
+      "processGroup": 72456,
+      "hostLoadAtStart": 19.048828125,
+      "endedAt": "2026-10-13T23:54:40.469639+00:00",
+      "elapsedSeconds": 0.12667812497238629,
+      "exitCode": 0,
+      "childUserCpuSeconds": 0.055248,
+      "childSystemCpuSeconds": 0.027500999999999998
+    },
+    {
+      "label": "combined-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "-t",
+        "highest-spark reference|random battlefield character|rejects a static ability"
+      ],
+      "startedAt": "2026-10-14T00:00:40.708711+00:00",
+      "wrapperPid": 22500,
+      "pid": 22502,
+      "processGroup": 22502,
+      "hostLoadAtStart": 9.2021484375,
+      "endedAt": "2026-10-14T00:00:46.485887+00:00",
+      "elapsedSeconds": 5.7771448330022395,
+      "exitCode": 0,
+      "childUserCpuSeconds": 6.619678,
+      "childSystemCpuSeconds": 1.7929819999999999
+    },
+    {
+      "label": "combined-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-14T00:00:46.600711+00:00",
+      "wrapperPid": 22985,
+      "pid": 22987,
+      "processGroup": 22987,
+      "hostLoadAtStart": 9.10546875,
+      "endedAt": "2026-10-14T00:01:52.127363+00:00",
+      "elapsedSeconds": 65.52597912499914,
+      "exitCode": 0,
+      "childUserCpuSeconds": 185.27739,
+      "childSystemCpuSeconds": 17.180408
+    },
+    {
+      "label": "combined-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startedAt": "2026-10-14T00:01:52.245229+00:00",
+      "wrapperPid": 26769,
+      "pid": 26771,
+      "processGroup": 26771,
+      "hostLoadAtStart": 8.328125,
+      "endedAt": "2026-10-14T00:01:55.670241+00:00",
+      "elapsedSeconds": 3.4250073750154115,
+      "exitCode": 0,
+      "childUserCpuSeconds": 3.701138,
+      "childSystemCpuSeconds": 1.070467
+    },
+    {
+      "label": "combined-coverage",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "startedAt": "2026-10-14T00:01:55.790970+00:00",
+      "wrapperPid": 27035,
+      "pid": 27041,
+      "processGroup": 27041,
+      "hostLoadAtStart": 8.3017578125,
+      "endedAt": "2026-10-14T00:01:59.910539+00:00",
+      "elapsedSeconds": 4.1195584580127615,
+      "exitCode": 0,
+      "childUserCpuSeconds": 4.224316,
+      "childSystemCpuSeconds": 1.367873
+    },
+    {
+      "label": "combined-fuzz-300",
+      "command": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node_modules/.bin/tsx",
+        "/tmp/root-588/helper/targeted-fuzz.ts",
+        "300"
+      ],
+      "startedAt": "2026-10-14T00:02:00.030689+00:00",
+      "wrapperPid": 27350,
+      "pid": 27352,
+      "processGroup": 27352,
+      "hostLoadAtStart": 8.3017578125,
+      "endedAt": "2026-10-14T00:07:50.878247+00:00",
+      "elapsedSeconds": 350.8438109999988,
+      "exitCode": 0,
+      "childUserCpuSeconds": 145.041454,
+      "childSystemCpuSeconds": 1.886797
+    },
+    {
+      "label": "combined-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startedAt": "2026-10-14T00:08:35.824057+00:00",
+      "wrapperPid": 4699,
+      "pid": 4726,
+      "processGroup": 4726,
+      "hostLoadAtStart": 9.29150390625,
+      "endedAt": "2026-10-14T00:08:35.956475+00:00",
+      "elapsedSeconds": 0.1324511670100037,
+      "exitCode": 0,
+      "childUserCpuSeconds": 0.059697,
+      "childSystemCpuSeconds": 0.032721
+    }
+  ],
+  "sourceAdmission": {
+    "at": "2026-10-13T23:32:40.235835+00:00",
+    "base": "871c15a5e4ef4c9f4556f9acb834912d9dab9a0d",
+    "paths": [
+      "src/engine/dsl/types.ts",
+      "src/engine/dsl/builders.ts",
+      "src/engine/effects/interpreter.ts",
+      "src/engine/continuous/layers.ts",
+      "src/engine/content-gates.test.ts",
+      "src/engine/effects/primitives/contracts/highest-spark-reference.contracts.ts",
+      "docs/rules.md",
+      "docs/plan/engine-design.md",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.588-1.md",
+      "docs/plan/evidence/friction/hv-umm2.588.json",
+      "docs/plan/evidence/measurements/hv-umm2.588.json",
+      "docs/plan/evidence/pre-existing/hv-umm2.588.md"
+    ],
+    "activePathMatches": [
+      {
+        "id": "hv-umm2.588",
+        "title": "Select a highest-spark controlled character (core-review)",
+        "assignee": "01a1305a-56c7-7f63-bcb4-bfed10880d6d",
+        "status": "in_progress"
+      },
+      {
+        "id": "hv-umm2.583",
+        "title": "5.5 Select a random battlefield character without targeting (core-review)",
+        "assignee": "01a13046-4c66-7813-9606-9913f0743415",
+        "status": "in_progress"
+      },
+      {
+        "id": "hv-umm2.514",
+        "title": "5.2 primitive: condition on the top card of a deck (core-review)",
+        "assignee": "01a128ef-4fc7-7a52-8a19-816921410323",
+        "status": "in_progress"
+      },
+      {
+        "id": "hv-umm2.263",
+        "title": "5.6 [prim-journey-on-gain] primitive journeyOnGain (Dreamsigns: journey effects (P8)) (core-review)",
+        "assignee": "01a13063-cf1f-7e21-8cfa-6027541a59e2",
+        "status": "in_progress"
+      },
+      {
+        "id": "hv-umm2.232",
+        "title": "5.5 [prim-selector-has-ability] primitive selectorHasAbility (Dreamsigns: battle effects: spark, Support, anthems, and base spark) (core-review)",
+        "assignee": "01a13331-4b79-7b33-8595-0ff593a6b8b1",
+        "status": "in_progress"
+      },
+      {
+        "id": "hv-umm2.233",
+        "title": "5.5 [prim-when-copy-trigger] primitive whenCopyTrigger (Dreamsigns: battle effects: copies (D15)) (core-review)",
+        "assignee": "01a1304d-597d-7431-997b-ddf86f33ec10",
+        "status": "in_progress"
+      },
+      {
+        "id": "hv-umm2.97",
+        "title": "5.2 [prim-stack-selector-bounds] primitive stackSelectorBounds (cards: Prevent and other Interrupts) (core-review)",
+        "assignee": "01a12e91-c2c5-7321-b306-fdf0cc7b4ac9",
+        "status": "in_progress"
+      }
+    ],
+    "note": "WRITE ACK for revised oldest design, after source-free D10 ruling and fresh complete admitted/intended native body audit. Exactly twelve paths: DSL types/builders highestSpark form; interpreter distinct private resolver and resolveCharacters case; continuous layers resolving-only static rejection case; existing content-gates static classification/rejection; one own plain highest-spark-reference.contracts module under500 lines; additive Spark rules paragraph and resolving CharacterRef design paragraph; own RD/friction/measurements/pre-existing. Detailed exact paths and bodies are retained in /tmp/root-588/write-ack.json and revised proposal. All role/policy/copy/lab/adapter/UI paths are withdrawn. No state/schema/fixture/helper/harness/catalog/other-owner body edits.\n\nExplicitly admit local ambiguous-chronology error guard ONLY when the FINAL equal-maximum cohort has multiple candidates sharing the MINIMUM enteredZoneAt. Provisional lower maxima, duplicate ages among lower-spark or newer candidates, or one unique maximum must not fail; decide after the complete cohort is evaluated. No arbitrary board-slot/UUID fallback. Authentic game materialization gives distinct chronology; direct board fixtures and decoder-admitted arbitrary saves may omit useful ordering. Preserve that support limitation in own pre-existing/RD/measurement evidence, test atomic unchanged state on ambiguity and valid retry. Do not claim a global uniqueness validator or repair fixture/save infrastructure. Original245 retains its complete production/lab/browser acceptance and must use genuine chronology or file any concrete lab integration blocker. Reposition/control/rematerialize preserve entry age; actual leaving/reentry resets it, as verified.\n\nFresh active 583/514/97/233 edits are independent switch cases/helpers/fields under landed z9d1 policy; no common dispatcher rewrite or file-wide ordering edge. Any actual incompatibility or extra body returns before its effect. Meaningful public synthetic contracts and exact lower/all-tied counterfactual, focused checks/review/Knip/content coverage/schema are authorized serially. No new surface/browser scope here; existing presentation is unchanged and original245 retains consumer browser/weighted/sweep acceptance. A separate source/runner/coverage proof ACK is required before the external targeted300 fuzz; no source edit during live checks or resources. No blanket full suite: reconsider on actual cross-cutting or testing infrastructure change. Record five failure paths and exact limitations, all failures and actual process endpoints. First helper dispatch23:15:07.519Z remains inclusive gross-window start through all research/admission/parent waits/checks/Git, model start UNKNOWN. Return READY; one automatic Conventional Commit remains withheld until COMMITACK."
+  },
+  "d10Ruling": {
+    "at": "2026-10-13T23:24:22.264296+00:00",
+    "note": "D10 normative ruling before WRITE ACK: use one highest effective-spark character controlled by the retained resolving effect controller; break equal maxima by earliest current entry into play (oldest materialized), and treat this reference as non-targeting. Rank when the instruction resolves; empty controlled battlefield does nothing. Repositioning and control changes do not create a new materialization; leaving and re-entering play does. No new tie prompt, role, policy row or UI/lab surface is needed.\n\nEvidence and ladder precision: current docs/rules.md Spark requires effective values, including current static/Support/duration changes and clamping. Prototype sandbox/AI preferences are excluded. Rust docs/battle_rules/battle_rules.md lines279\u2013280 define Kindle N as adding N spark to your highest-spark character, ties oldest/earliest materialized; current Candle UUID89c83d7e-5617-49b4-b6cd-214680fe0627 expands that same singular highest-own-spark instruction. Rust target_predicates.rs line76 actually classifies Kindle as non-target. No actual Rust Kindle resolver or Candle UUID implementation was found, so do not claim executed or implemented Rust tie selection. D10 step3 supplies the actual non-target classification and a directly relevant normative precedent; the tie gap is settled under step5's simplest consistent reading informed by that explicit predecessor rule. Generic Magic608.2d requires announcing choices an effect offers; it supplies no more-specific highest-spark tie rule here and does not require inventing a choice surface for this identified recipient. Record this distinction and exact source hashes in the RD, rather than labelling the absent resolver as behavior.\n\nParent inspected current enterPlay age assignment and reposition slot-only updates. Use existing enteredZoneAt only after the helper verifies control-change/re-entry behavior and unique valid order; no persisted schema/age field or unrelated zone-rule edit is admitted. If any actual age semantics conflict is discovered, return a precise source proposal before writes. Original245 retains all five production UUIDs and full acceptance. Preserve the original controller-choice proposal immutable; produce a revised concise oldest design with the role/policy/copy/lab/adapter/UI paths withdrawn. Headless foundation checks/targeted fuzz and any actual runtime QA applicability must be freshly stated, with original245's production/browser acceptance retained. No source or runtime effect is authorized yet."
+  },
+  "before": "Static certified source fact only: CharacterRef lacks a maximum form; no old runtime witness for nonexistent typed API claimed.",
+  "validationObserved": {
+    "focused": {
+      "label": "focused-restored",
+      "selected": 19,
+      "files": 2,
+      "skipped": 2934
+    },
+    "review": {
+      "label": "review-corrected",
+      "files": 299,
+      "tests": 6319,
+      "exitCode": 0
+    },
+    "knip": {
+      "label": "knip",
+      "exitCode": 0
+    },
+    "coverage": {
+      "label": "coverage",
+      "files": 1,
+      "tests": 20,
+      "exitCode": 0
+    },
+    "contractLines": 226,
+    "testDelta": {
+      "files": 1,
+      "lines": 228,
+      "jsdomFiles": 0
+    },
+    "full": "Not applicable: no state/schema/test-infrastructure/config/cross-cutting architecture change.",
+    "browser": "No new prompt/UI/status; admitted headless foundation QA. Original245 retains production weighted/sweep/browser acceptance."
+  },
+  "counterfactuals": [
+    {
+      "label": "counterfactual-lower",
+      "expectedTestExit": 1,
+      "restoredInterpreterSha256": "cf34d3295eb890a4ca9ab198605749aa9c158ddd0c5fdcd80ccf192280a936c0",
+      "checkedAt": "2026-10-13T23:47:29.698526+00:00"
+    },
+    {
+      "label": "counterfactual-all-tied",
+      "expectedTestExit": 1,
+      "restoredInterpreterSha256": "cf34d3295eb890a4ca9ab198605749aa9c158ddd0c5fdcd80ccf192280a936c0",
+      "checkedAt": "2026-10-13T23:47:35.748182+00:00"
+    }
+  ],
+  "counterfactualObserved": {
+    "lower": "4 semantic recipient failures",
+    "allTied": "2 semantic cardinality failures and2 unique controls passed",
+    "restoration": "Exact interpreter bytes/SHA restored before final focused/review/coverage/fuzz."
+  },
+  "ownFailures": [
+    {
+      "label": "focused-initial",
+      "cause": "14 own fixture failures: event auto-resolved without response option; static misuse threw during materialization logging before intended assertion."
+    },
+    {
+      "label": "focused-corrected",
+      "cause": "2 own assertions expected gain in completion publication, but suspended display prefix already published it; combined prefix/completion now proves exactly once."
+    },
+    {
+      "label": "review",
+      "cause": "Own unnecessary non-null assertion lint; related299files/6317tests passed."
+    },
+    {
+      "label": "review-final",
+      "cause": "Own ordinaryfigment createFigments wrong argument order; typecheck exit2. Corrected to actual public signature."
+    },
+    {
+      "label": "focused-counter",
+      "cause": "Own direct fixture mutation after legalActions warmed an immutable-state legality memo. Zero-counter control and funded state are now separate fresh fixtures."
+    }
+  ],
+  "fuzzOne": {
+    "games": 1,
+    "steps": 478,
+    "prompts": 12,
+    "reruns": 12,
+    "included": 3,
+    "exercised": 1,
+    "counts": {
+      "player": {
+        "resolved": 1,
+        "gain": 1,
+        "empty": 0,
+        "tied": 0
+      },
+      "enemy": {
+        "resolved": 0,
+        "gain": 0,
+        "empty": 0,
+        "tied": 0
+      }
+    },
+    "outputs": [
+      {
+        "ordinal": 0,
+        "result": {
+          "kind": "victory",
+          "winner": "player",
+          "reason": "score"
+        },
+        "steps": 478,
+        "targetCoverage": [
+          {
+            "target": {
+              "kind": "card",
+              "uuid": "5e5e5e5e-0000-4000-8000-000000588f00"
+            },
+            "included": 3,
+            "exercised": 1
+          }
+        ]
+      }
+    ]
+  },
+  "fuzz300": {
+    "games": 300,
+    "steps": 147384,
+    "prompts": 3002,
+    "reruns": 304,
+    "included": 1180,
+    "exercised": 599,
+    "counts": {
+      "player": {
+        "resolved": 273,
+        "gain": 185,
+        "empty": 88,
+        "tied": 43
+      },
+      "enemy": {
+        "resolved": 291,
+        "gain": 188,
+        "empty": 103,
+        "tied": 34
+      }
+    },
+    "seedPrefix": "hv-umm2-588",
+    "interactiveEvery": 10,
+    "coverageQualification": "Included and exercised are native deck inclusion and played counts. Actual resolved/gain/empty/tied counts come from the public committed-step observer. Replay recording is disabled for coverage; every game hash and every tenth interactive replay passed. Synthetic foundation only; no production245 acceptance."
+  },
+  "fuzzGuards": {
+    "one": {
+      "checkedAt": "2026-10-13T23:46:10.756316+00:00",
+      "files": 2430,
+      "unchanged": true,
+      "runnerSha256": "d82de313ec8b1666ec247c89ade1dc201a86561e852e31e1acf0e47f236b83b6",
+      "exitCode": 0
+    },
+    "300": {
+      "checkedAt": "2026-10-13T23:51:21.418312+00:00",
+      "files": 2430,
+      "unchanged": true,
+      "runnerSha256": "d82de313ec8b1666ec247c89ade1dc201a86561e852e31e1acf0e47f236b83b6",
+      "exitCode": 0
+    }
+  },
+  "failurePaths": {
+    "error": "Static misuse and final-max ambiguous chronology produce atomic error; committed state hash unchanged, valid retry applies one gain. Existing optional-source throw after private gain leaves input unchanged.",
+    "restart": "Public fold checkEventPrefix, JSON slice reload and inline serialize/replay yield matching final hash and both public views.",
+    "partialWrite": "Highest gain in an existing optional sequence appears in suspended display and published prefix while committed hash remains unchanged; completion does not publish/apply a duplicate gain.",
+    "malformed": "Wrong-side/wrong-shape answers rejected through existing optional protocol; highest selection has no external answer. Invalid equal-oldest chronology rejected locally; no global save validator claimed.",
+    "concurrent": "Ordinary battleAction while existing prompt pending bounces with unchanged committed hash, valid answer completes once, duplicate competing stale answer bounces. Deterministic local ordering, not storage/multi-client stress."
+  },
+  "counterQualification": "Current DSL has no direct stored-counter numerical spark reader. Contract distinguishes irrelevant stored counters from actual existing countersCost(2) activation causing a4spark gain, both controllers and zero-counter illegal control. No invented expression.",
+  "chronologyQualification": "Authentic entries increment global clock. Reposition/control/rematerialize preserve current age; actual reentry resets. Direct fixture/save chronology gap recorded separately.",
+  "resourceDrain": {
+    "checkedAt": "2026-10-14T00:08:35.477242+00:00",
+    "remainingGroups": {
+      "54623": [],
+      "57744": [],
+      "58477": [],
+      "60572": [],
+      "63742": [],
+      "48659": [],
+      "54163": [],
+      "56530": [],
+      "58117": [],
+      "62841": [],
+      "69967": [],
+      "80210": [],
+      "92886": [],
+      "20032": [],
+      "20486": [],
+      "20787": [],
+      "37794": [],
+      "72456": [],
+      "22502": [],
+      "22987": [],
+      "26771": [],
+      "27041": [],
+      "27352": [],
+      "4726": []
+    },
+    "browserServersProviders": [],
+    "finalSchemaActualTerminal": "2026-10-14T00:08:35.956475+00:00"
+  },
+  "coreReview": "Parent owes fresh cold exact-source review under current authorized routing; local review is not independent core review.",
+  "originalSourceValidation": {
+    "source": "252909247eb86d46797b0df87a41bb12fc4cf41b",
+    "base": "871c15a5e4ef4c9f4556f9acb834912d9dab9a0d",
+    "validationObserved": {
+      "focused": {
+        "label": "focused-restored",
+        "selected": 19,
+        "files": 2,
+        "skipped": 2934
+      },
+      "review": {
+        "label": "review-corrected",
+        "files": 299,
+        "tests": 6319,
+        "exitCode": 0
+      },
+      "knip": {
+        "label": "knip",
+        "exitCode": 0
+      },
+      "coverage": {
+        "label": "coverage",
+        "files": 1,
+        "tests": 20,
+        "exitCode": 0
+      },
+      "contractLines": 226,
+      "testDelta": {
+        "files": 1,
+        "lines": 228,
+        "jsdomFiles": 0
+      },
+      "full": "Not applicable: no state/schema/test-infrastructure/config/cross-cutting architecture change.",
+      "browser": "No new prompt/UI/status; admitted headless foundation QA. Original245 retains production weighted/sweep/browser acceptance."
+    },
+    "fuzzOne": {
+      "games": 1,
+      "steps": 478,
+      "prompts": 12,
+      "reruns": 12,
+      "included": 3,
+      "exercised": 1,
+      "counts": {
+        "player": {
+          "resolved": 1,
+          "gain": 1,
+          "empty": 0,
+          "tied": 0
+        },
+        "enemy": {
+          "resolved": 0,
+          "gain": 0,
+          "empty": 0,
+          "tied": 0
+        }
+      },
+      "outputs": [
+        {
+          "ordinal": 0,
+          "result": {
+            "kind": "victory",
+            "winner": "player",
+            "reason": "score"
+          },
+          "steps": 478,
+          "targetCoverage": [
+            {
+              "target": {
+                "kind": "card",
+                "uuid": "5e5e5e5e-0000-4000-8000-000000588f00"
+              },
+              "included": 3,
+              "exercised": 1
+            }
+          ]
+        }
+      ]
+    },
+    "fuzz300": {
+      "games": 300,
+      "steps": 147384,
+      "prompts": 3002,
+      "reruns": 304,
+      "included": 1180,
+      "exercised": 599,
+      "counts": {
+        "player": {
+          "resolved": 273,
+          "gain": 185,
+          "empty": 88,
+          "tied": 43
+        },
+        "enemy": {
+          "resolved": 291,
+          "gain": 188,
+          "empty": 103,
+          "tied": 34
+        }
+      },
+      "seedPrefix": "hv-umm2-588",
+      "interactiveEvery": 10,
+      "coverageQualification": "Included and exercised are native deck inclusion and played counts. Actual resolved/gain/empty/tied counts come from the public committed-step observer. Replay recording is disabled for coverage; every game hash and every tenth interactive replay passed. Synthetic foundation only; no production245 acceptance."
+    },
+    "fuzzGuards": {
+      "one": {
+        "checkedAt": "2026-10-13T23:46:10.756316+00:00",
+        "files": 2430,
+        "unchanged": true,
+        "runnerSha256": "d82de313ec8b1666ec247c89ade1dc201a86561e852e31e1acf0e47f236b83b6",
+        "exitCode": 0
+      },
+      "300": {
+        "checkedAt": "2026-10-13T23:51:21.418312+00:00",
+        "files": 2430,
+        "unchanged": true,
+        "runnerSha256": "d82de313ec8b1666ec247c89ade1dc201a86561e852e31e1acf0e47f236b83b6",
+        "exitCode": 0
+      }
+    },
+    "counterfactuals": [
+      {
+        "label": "counterfactual-lower",
+        "expectedTestExit": 1,
+        "restoredInterpreterSha256": "cf34d3295eb890a4ca9ab198605749aa9c158ddd0c5fdcd80ccf192280a936c0",
+        "checkedAt": "2026-10-13T23:47:29.698526+00:00"
+      },
+      {
+        "label": "counterfactual-all-tied",
+        "expectedTestExit": 1,
+        "restoredInterpreterSha256": "cf34d3295eb890a4ca9ab198605749aa9c158ddd0c5fdcd80ccf192280a936c0",
+        "checkedAt": "2026-10-13T23:47:35.748182+00:00"
+      }
+    ],
+    "counterfactualObserved": {
+      "lower": "4 semantic recipient failures",
+      "allTied": "2 semantic cardinality failures and2 unique controls passed",
+      "restoration": "Exact interpreter bytes/SHA restored before final focused/review/coverage/fuzz."
+    },
+    "automaticCommitWindow": {
+      "actualDispatch": "2026-10-13T23:15:07.519Z",
+      "prospectiveAutomaticGitEndpoint": "2026-10-13T23:54:45.319836+00:00",
+      "prospectiveGrossMinutes": 39.63001393333333,
+      "parentAck": "2026-10-13T23:53:49.236877+00:00",
+      "actualGitReceipt": "/tmp/root-588/helper/automatic-git.receipt.json",
+      "qualification": "Prospective endpoint five seconds ahead of immediate schema/staging/Git. Actual clock recorded externally within60seconds, no dateoverride or postcommit tracked writes."
+    },
+    "implementationWindow": {
+      "start": "2026-10-13T23:15:07.519Z",
+      "end": "2026-10-13T23:54:45.319836+00:00"
+    },
+    "actualGitReceipt": "/tmp/root-588/helper/automatic-git.receipt.json",
+    "qualification": "All original receipts unchanged and bound to252909/base871. Counterfactuals remain valid for byte-identical own helper/interface, not claimed rerun on combined source."
+  },
+  "recovery": {
+    "parentAck": {
+      "at": "2026-10-13T23:57:00.015286+00:00",
+      "note": "Ordinary integration conflict recovery under landed z9d1 policy and workflow Updating a worktree: first immutable candidate01a137b0-b61f-7913-84dd-aba4208f6c87 is merge-conflict, never authorized. Native parent tg update failed with clean rollback to252909247eb86d46797b0df87a41bb12fc4cf41b/base871c15a5; Doctor healthy/no pending update, clean state. Conflicts only DSL types and interpreter alongside certified peer randomCharacter/topOfDeck/copy additions on staging67f4456be1caa7d6ad7da0551adab9904382b947. They are independent cases/helpers and must be combined, no file-wide edge or behavior waiver. No cold review launched; unused immutable snapshot removed. Sole existing implementation helper may save the complete original source delta and both conflicting path base/source bytes in scratch, restore ONLY those two files to captured original base and amend a temporary checkpoint preserving every other owned change. Never submit/approve checkpoint. Return exact checkpoint/clean/parked SHA then parent alone native-updates. After ACK, reapply exact own helper/type/case delta over updated peer files, combined validation and final evidence/one amended task commit. Original checks/fuzz remain tied to original source; final combined source gets focused/review/Knip/coverage/weighted300/schema and final core review. All original timing starts preserved; recovery window separately recorded and inclusive final timing honest."
+    },
+    "parking": {
+      "operation": "temporary parking checkpoint amend, never a candidate",
+      "source": "252909247eb86d46797b0df87a41bb12fc4cf41b",
+      "base": "871c15a5e4ef4c9f4556f9acb834912d9dab9a0d",
+      "startedAt": "2026-10-13T23:57:48.386982+00:00",
+      "endedAt": "2026-10-13T23:57:48.422779+00:00",
+      "elapsedSeconds": 0.03564358298899606,
+      "wrapperPid": 11005,
+      "pid": 11027,
+      "processGroup": 11027,
+      "exitCode": 0,
+      "childUserCpuSeconds": 0.010334000000000003,
+      "childSystemCpuSeconds": 0.03137199999999998,
+      "stdout": "[highest-spark588-root a4e6110e1] feat(engine): resolve highest-spark controlled characters\n Date: Tue Oct 13 16:54:40 2026 -0700\n 10 files changed, 936 insertions(+), 1 deletion(-)\n create mode 100644 docs/plan/evidence/friction/hv-umm2.588.json\n create mode 100644 docs/plan/evidence/measurements/hv-umm2.588.json\n create mode 100644 docs/plan/evidence/pre-existing/hv-umm2.588.md\n create mode 100644 docs/plan/evidence/rules-decisions/RD-hv-umm2.588-1.md\n create mode 100644 src/engine/effects/primitives/contracts/highest-spark-reference.contracts.ts\n",
+      "stderr": "",
+      "dateOverride": false,
+      "oid": "a4e6110e138b92cad524225c4b43e4280cca63b6",
+      "gitClock": "2026-10-13T16:57:48-07:00",
+      "status": "",
+      "parkedHashes": {
+        "src/engine/dsl/types.ts": "b68ad2459842c8c743821e4deb5dca162c93e379635a9bde1001a8b709885590",
+        "src/engine/effects/interpreter.ts": "f95b4d89ec51aa1adb533dc9de75b901458f736ab575064b70acd785577fe5ba"
+      },
+      "otherTenUnchanged": true,
+      "messageUnchanged": true,
+      "backupVerified": true
+    },
+    "reapply": {
+      "at": "2026-10-13T23:58:30.081153+00:00",
+      "head": "7ab2e8a5a6648201cee43a064331fb70fa578a73",
+      "base": "67f4456be1caa7d6ad7da0551adab9904382b947",
+      "note": "Combined-source REAPPLY ACK after parent-only native update succeeded: temporary checkpointa4e6110e138b92cad524225c4b43e4280cca63b6 updated to7ab2e8a5a6648201cee43a064331fb70fa578a73, HEAD parent exactly current certified staging67f4456be1caa7d6ad7da0551adab9904382b947, clean/no rebase and Doctor healthy/no update block. Sole helper may reapply saved exact own highestSpark type/interface/union member and distinct interpreter helper/case/import ONLY on those two updated files, preserving every landed randomCharacter/topOfDeck/copy body. Compare exact combined files against saved own source and certified base; no common dispatcher redesign or other source edits. Run focused highest and existing random-reference cases, review, Knip, content gate, same admitted exact scratch weighted300 via heavy.lock, all serial and unchanged source guards. No new one-game proof needed: same runner/API validated; prior proof/fuzz/counterfactual remain source252909247-bound, new combined checks separately labelled. Update own evidence with exact original/recovery source/check/timing binding and retained original actual Git clock, include original first dispatch23:15:07.519Z through final amended Git; final nearGit endpoint and separate final commit ACK still required. No extra paths/catalog/schema/UI/foreign/native effects; no final amend until READY and separate parent ACK."
+    },
+    "comparison": {
+      "at": "2026-10-14T00:00:08.524383+00:00",
+      "updatedCheckpoint": "7ab2e8a5a6648201cee43a064331fb70fa578a73",
+      "combinedBase": "67f4456be1caa7d6ad7da0551adab9904382b947",
+      "exactOwnInterfaceAndHelperReused": true,
+      "peerBodiesBytePreservedByRemovalOfOwnAdditions": true,
+      "otherTenUnchangedFromUpdatedInputs": true,
+      "initialExtractionFailure": "Wrong punctuation in scratch anchor raised ValueError before any write; corrected source anchor.",
+      "inputs": {
+        "src/engine/dsl/types.ts": "90fee384cc64c0f4ddd93c8e6f8f41db41570ec349dc8f547830dab12eef8722",
+        "src/engine/effects/interpreter.ts": "62642d3321b047c0acd3874e9b63683f091be72556e02c8b5378fb6dfbec62a9"
+      },
+      "outputs": {
+        "src/engine/dsl/types.ts": "0187342bbc12a894b4683c8e4975efb864ad9a2e6984d5e1bea2ea162d82bdb3",
+        "src/engine/effects/interpreter.ts": "0b7910ee7d7cbf03cb18b03ffb84e0ecb3eec833fd141b140a93752f0893e586"
+      }
+    },
+    "capacity": {
+      "at": "2026-10-14T00:06:54.158693+00:00",
+      "receiptStart": "2026-10-14T00:02:00.030689Z",
+      "priorObservation": "2026-10-14T00:04:45Z only lockf observed",
+      "ownGroup": 27352,
+      "processBirthUtcWholeSecondEvidence": "93647 27352 27352 Wed Oct 14 00:05:38 2026       0:00.07 S    node node_modules/.bin/tsx /tmp/root-588/helper/targeted-fuzz.ts 300\n93652 93647 27352 Wed Oct 14 00:05:38 2026       1:24.85 R    /opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/highest-spark588-root/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/highest-spark588-root/node_modules/tsx/dist/loader.mjs /tmp/root-588/helper/targeted-fuzz.ts 300\n",
+      "qualification": "OS process birth is whole-second precision; it supports a bounded heavy acquisition interval, not exact monotonic fork/acquisition time. Full wrapper receipt remains wait-inclusive."
+    },
+    "ownCapacity": {
+      "parentObservationAt": "2026-10-14T00:04:45Z",
+      "parentObservation": "Only lockf in PG27352, etime2:47/CPU0:00, no tsx/node child; waiting shared heavy lock, not executing fuzz at that observation.",
+      "ownObservationAt": "2026-10-14T00:06:00.617079+00:00",
+      "ownGroupMembers": [
+        "27352 27350 27352       04:00   0:00.00 /usr/bin/lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock node_modules/.bin/tsx /tmp/root-588/helper/targeted-fuzz.ts 300",
+        "93647 27352 27352       00:22   0:00.07 node node_modules/.bin/tsx /tmp/root-588/helper/targeted-fuzz.ts 300",
+        "93652 93647 27352       00:22   0:25.68 /opt/homebrew/Cellar/node@24/24.16.0/bin/node --require /Users/dthurn/dreamtides_web/.worktrees/highest-spark588-root/node_modules/tsx/dist/preflight.cjs --import file:///Users/dthurn/dreamtides_web/.worktrees/highest-spark588-root/node_modules/tsx/dist/loader.mjs /tmp/root-588/helper/targeted-fuzz.ts 300",
+        "93713 93652 27352       00:20   0:00.06 /Users/dthurn/dreamtides_web/.worktrees/highest-spark588-root/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.28.1 --ping"
+      ],
+      "timingQualification": "Outer receipt is acquisition/execution inclusive; isolated acquisition and execution durations UNKNOWN."
+    },
+    "timingQualification": "Combined fuzz elapsed350.8438109999988s is lock acquisition/bootstrap/execution inclusive. Whole-second OS node birth00:05:38 supports about217.969311s before node birth, not exact monotonic lock acquisition. Isolated acquisition/execution timing UNKNOWN. Child CPU145.041454user/1.886797system is actual receipt.",
+    "temporaryCheckpoint": "7ab2e8a5a6648201cee43a064331fb70fa578a73",
+    "temporaryCheckpointCandidate": false,
+    "originalActualGitReceiptImmutable": true
+  },
+  "combinedValidation": {
+    "base": "67f4456be1caa7d6ad7da0551adab9904382b947",
+    "manifest": {
+      "count": 2434,
+      "aggregateSha256": "a1a7a59cbb5cfd6f7a99736169e3cb5e66afc83b71f593663537c3c65f75d82f"
+    },
+    "guard": {
+      "at": "2026-10-14T00:07:51.149893+00:00",
+      "count": 2434,
+      "aggregateSha256": "a1a7a59cbb5cfd6f7a99736169e3cb5e66afc83b71f593663537c3c65f75d82f",
+      "unchanged": true,
+      "runnerSha256": "d82de313ec8b1666ec247c89ade1dc201a86561e852e31e1acf0e47f236b83b6"
+    },
+    "focused": {
+      "files": 2,
+      "selected": 31,
+      "skipped": 3027
+    },
+    "review": {
+      "files": 299,
+      "tests": 6438
+    },
+    "coverage": {
+      "files": 1,
+      "tests": 20
+    },
+    "checks": [
+      {
+        "label": "combined-focused",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/content-gates.test.ts",
+          "-t",
+          "highest-spark reference|random battlefield character|rejects a static ability"
+        ],
+        "startedAt": "2026-10-14T00:00:40.708711+00:00",
+        "wrapperPid": 22500,
+        "pid": 22502,
+        "processGroup": 22502,
+        "hostLoadAtStart": 9.2021484375,
+        "endedAt": "2026-10-14T00:00:46.485887+00:00",
+        "elapsedSeconds": 5.7771448330022395,
+        "exitCode": 0,
+        "childUserCpuSeconds": 6.619678,
+        "childSystemCpuSeconds": 1.7929819999999999
+      },
+      {
+        "label": "combined-review",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "startedAt": "2026-10-14T00:00:46.600711+00:00",
+        "wrapperPid": 22985,
+        "pid": 22987,
+        "processGroup": 22987,
+        "hostLoadAtStart": 9.10546875,
+        "endedAt": "2026-10-14T00:01:52.127363+00:00",
+        "elapsedSeconds": 65.52597912499914,
+        "exitCode": 0,
+        "childUserCpuSeconds": 185.27739,
+        "childSystemCpuSeconds": 17.180408
+      },
+      {
+        "label": "combined-knip",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "startedAt": "2026-10-14T00:01:52.245229+00:00",
+        "wrapperPid": 26769,
+        "pid": 26771,
+        "processGroup": 26771,
+        "hostLoadAtStart": 8.328125,
+        "endedAt": "2026-10-14T00:01:55.670241+00:00",
+        "elapsedSeconds": 3.4250073750154115,
+        "exitCode": 0,
+        "childUserCpuSeconds": 3.701138,
+        "childSystemCpuSeconds": 1.070467
+      },
+      {
+        "label": "combined-coverage",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/content-gates.test.ts"
+        ],
+        "startedAt": "2026-10-14T00:01:55.790970+00:00",
+        "wrapperPid": 27035,
+        "pid": 27041,
+        "processGroup": 27041,
+        "hostLoadAtStart": 8.3017578125,
+        "endedAt": "2026-10-14T00:01:59.910539+00:00",
+        "elapsedSeconds": 4.1195584580127615,
+        "exitCode": 0,
+        "childUserCpuSeconds": 4.224316,
+        "childSystemCpuSeconds": 1.367873
+      },
+      {
+        "label": "combined-fuzz-300",
+        "command": [
+          "/usr/bin/lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "node_modules/.bin/tsx",
+          "/tmp/root-588/helper/targeted-fuzz.ts",
+          "300"
+        ],
+        "startedAt": "2026-10-14T00:02:00.030689+00:00",
+        "wrapperPid": 27350,
+        "pid": 27352,
+        "processGroup": 27352,
+        "hostLoadAtStart": 8.3017578125,
+        "endedAt": "2026-10-14T00:07:50.878247+00:00",
+        "elapsedSeconds": 350.8438109999988,
+        "exitCode": 0,
+        "childUserCpuSeconds": 145.041454,
+        "childSystemCpuSeconds": 1.886797
+      }
+    ],
+    "fuzz300": {
+      "games": 300,
+      "steps": 147384,
+      "prompts": 3002,
+      "reruns": 304,
+      "included": 1180,
+      "exercised": 599,
+      "counts": {
+        "player": {
+          "resolved": 273,
+          "gain": 185,
+          "empty": 88,
+          "tied": 43
+        },
+        "enemy": {
+          "resolved": 291,
+          "gain": 188,
+          "empty": 103,
+          "tied": 34
+        }
+      },
+      "seedPrefix": "hv-umm2-588",
+      "interactiveEvery": 10,
+      "qualification": "Synthetic foundation with native inclusion/played counts separated from observer actual resolved/gain/empty/tied counts. Every hash and every tenth interactive replay passed; no production245 acceptance."
+    },
+    "ownHelperInterfaceExact": true,
+    "peerBodiesPreserved": true,
+    "counterfactualRerun": false,
+    "fullAndBrowser": "No new cross-cutting/state/schema/UI/infrastructure scope; original245 consumer acceptance preserved."
+  },
+  "automaticCommitWindow": {
+    "actualDispatch": "2026-10-13T23:15:07.519Z",
+    "prospectiveAutomaticGitEndpoint": "2026-10-14T00:10:42.512938+00:00",
+    "prospectiveGrossMinutes": 55.5832323,
+    "parentAck": "2026-10-14T00:09:45.972792+00:00",
+    "actualGitReceipt": "/tmp/root-588/helper/final-amended-git.receipt.json",
+    "originalActualGitReceiptImmutableSha256": "f6534ed2951e32d3be73d2161c794bd77eeff75d2c52c60b6066413b2fa74ece",
+    "qualification": "Prospective endpoint five seconds ahead of immediate schema/staging/automaticamend; actual gap recorded externally within60seconds, no dateoverride/postcommit tracked writes."
+  }
+}

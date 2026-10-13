@@ -415,6 +415,8 @@ export class Layers {
         case "target":
         case "subject":
           return [];
+        case "highestSpark":
+          throw new Error("A static ability cannot select a resolving highest-spark character");
       }
     };
     const env: StaticEnv = {

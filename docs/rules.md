@@ -694,6 +694,17 @@ ability chooses its targets as it resolves: if its source left play after it
 triggered, both the targets offered and the check read the spark immediately
 before that departure.
 
+**Highest spark:** An instruction naming the character you control with the
+highest spark reads the current effective spark of your characters in play
+when that instruction resolves, in either rank and including figments. It
+names exactly one character: among equal maxima, the one that entered play
+earliest during its current stay. Repositioning, gaining control and firing
+its materialization again preserve that age; leaving and entering play again
+starts a new age. The instruction uses the resolving ability's controller,
+even if its source has left play or changed controller. This is not a target,
+so target protection does not exclude a character. With no controlled
+character in play, that instruction does nothing.
+
 **Additional spark:** An ability such as "When a character you control gains
 ✦, it gains 1 additional ✦" applies to each gain, and the additional ✦ has
 the same duration as the gain that caused it. The additional ✦ triggers no

@@ -1,0 +1,3 @@
+# hv-umm2.588 pre-existing observations
+
+`testing/board.ts` direct character placements and `placeFigment` assign `enteredZoneAt:0`. `rules/battle/fold.ts` validates an instance's age as an index but does not establish global current play-entry uniqueness. Those support states can therefore contain equal oldest ages without meaningful materialization order. Authentic `enterPlay` increments the global clock; control changes/reposition/rematerialize preserve that age and actual reentry replaces it. No production failure or chronology corruption was observed. Fixture/save infrastructure is outside this bead's admitted scope. Highest-spark selection rejects ambiguous earliest age only among final equal maxima; production245 keeps genuine-chronology integration acceptance.

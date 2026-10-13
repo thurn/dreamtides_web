@@ -26,6 +26,7 @@ import type { StepContext } from "../steps/types";
 import { randomDeckRemovalSettler, seesSource, type DeckRemovalBounds, type UnorderedDeckRemovals } from "../view/knowledge";
 import { abilityOrigin, originAbilities } from "../rules/activation";
 import { effectiveSpark } from "../rules/spark";
+import { charactersInPlay } from "../rules/zones";
 import type { BanishCardsNode, BanishNamedCardsNode } from "./primitives/banish-cards";
 import type { MaterializeNode } from "./primitives/materialize";
 import { primitiveDefinition } from "./registry";
@@ -662,6 +663,8 @@ function resolveRandomCharacters(ctx: StepContext, ref: RandomCharacterSpec, env
  */
 export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: EffectEnv): InstanceId[] {
   switch (ref.kind) {
+    case "highestSpark":
+      return resolveHighestSpark(ctx, env);
     case "randomCharacter":
       return resolveRandomCharacters(ctx, ref, env);
     case "self": {
@@ -695,6 +698,23 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
       return legal;
     }
   }
+}
+
+/** Current effective maximum, with actual play-entry chronology deciding equal maxima. */
+function resolveHighestSpark(ctx: StepContext, env: EffectEnv): InstanceId[] {
+  const candidates = charactersInPlay(ctx.state, env.controller).flatMap((id) => {
+    const instance = ctx.state.instances[id];
+    if (instance?.zone !== "play" || instance.controller !== env.controller) return [];
+    const card = characteristicsOf(ctx.state, ctx.catalog, id);
+    return card.cardType === "character" && card.spark !== null ? [{ id, spark: card.spark, entered: instance.enteredZoneAt }] : [];
+  });
+  if (candidates.length === 0) return [];
+  const maximum = Math.max(...candidates.map((candidate) => candidate.spark));
+  const leaders = candidates.filter((candidate) => candidate.spark === maximum);
+  const oldest = Math.min(...leaders.map((candidate) => candidate.entered));
+  const first = leaders.filter((candidate) => candidate.entered === oldest);
+  if (first.length !== 1) throw new Error("Highest-spark characters have ambiguous play-entry chronology");
+  return [first[0].id];
 }
 
 /**

@@ -5,6 +5,7 @@ import type { EffectNode } from "../effects/types";
 import type { DiscardNode } from "../effects/primitives/discard";
 import type {
   Ability,
+  HighestSparkSpec,
   AbandonXCost,
   ActivatedAbility,
   ActivationZone,
@@ -309,6 +310,11 @@ export function targetWhen(condition: Condition, then: CharacterSelector, otherw
 
 export function upTo(selector: CharacterSelector, count: number): TargetSpec {
   return { kind: "target", selector, count, upTo: true };
+}
+
+/** The highest-spark character you control as this instruction resolves; oldest play entry breaks ties. Not a target. */
+export function highestSpark(): HighestSparkSpec {
+  return { kind: "highestSpark" };
 }
 
 export function all(selector: CharacterSelector): AllSpec {

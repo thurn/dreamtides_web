@@ -203,8 +203,13 @@ export interface RandomCharacterSpec {
   readonly selector: CharacterSelector;
 }
 
+/** The controlled character with highest current spark, oldest current play entry on ties; resolving, not targeted. */
+export interface HighestSparkSpec {
+  readonly kind: "highestSpark";
+}
+
 /** The characters a character effect applies to. */
-export type CharacterRef = TargetSpec | AllSpec | SelfSpec | SubjectSpec | SupportedSpec | RandomCharacterSpec;
+export type CharacterRef = TargetSpec | AllSpec | SelfSpec | SubjectSpec | SupportedSpec | RandomCharacterSpec | HighestSparkSpec;
 
 /**
  * Cards in one of a player's decks, hands, or voids that an effect names
