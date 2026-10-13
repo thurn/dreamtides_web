@@ -1,0 +1,4933 @@
+{
+  "bead": "hv-umm2.601",
+  "title": "Verify Strange Fruit across Exploration, Augury and Gamble sites",
+  "source": {
+    "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-601",
+    "productionAndTestDelta": 0,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "functional2340HashesUnchanged": true,
+    "nativeMode": "development scene/debug surfaces exercising unchanged real production journey providers/reducer/UI; this evidence makes no release bundle/build claim",
+    "fruitSourceUuid": "f4df5a74-7822-4552-a3ab-f50b00758593",
+    "fruitAmount": 50
+  },
+  "dispatch": {
+    "timestamp": "2026-10-13T03:49:09.627Z",
+    "callId": "call_5542cdb772134ee6879bb649f1620131",
+    "source": "own rollout spawn_agent function_call timestamp",
+    "measuredFor": "initial sole helper post-claim dispatch request",
+    "qualification": "Actual logged post-claim dispatch request, not model sampling. Original post-dispatch clock proxy retained independently.",
+    "observedAfterProxy": "2026-10-13T03:50:01.809380+00:00",
+    "childSamplingStart": "UNKNOWN"
+  },
+  "draftEvidenceCutoff": "2026-10-13T04:26:49.101797+00:00",
+  "finalCommitWindowPending": false,
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "immediately before own npm run review launch",
+        "source": "sysctl -n vm.loadavg",
+        "rawSample": "{ 3.73 5.44 6.65 }",
+        "observedUtc": "2026-10-13T04:30:37.631141+00:00",
+        "oneMinute": 3.73,
+        "qualification": "Directsysctl rounded one-minute sample; exact wrapper start/end three-window load and review frictionrecord step sample retained separately."
+      },
+      "implementWindow": {
+        "measuredFor": "actual logged sole-helperdispatch request to actual precommit cutoff",
+        "startSource": "dispatch-actual.json",
+        "endSource": "preCommitCutoffUtc",
+        "samplingStart": "UNKNOWN",
+        "commitTailReceipt": "final-handoff-receipt.json"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "atUtc": "2026-10-13T04:26:49.101797+00:00",
+      "measuredFor": "draft evidence authoring",
+      "oneMinute": 4.44,
+      "raw": "{ 4.44 7.91 7.71 }"
+    },
+    {
+      "callStartUtc": "2026-10-13T04:30:37.628156+00:00",
+      "observedUtc": "2026-10-13T04:30:37.631141+00:00",
+      "raw": "{ 3.73 5.44 6.65 }",
+      "oneMinute": 3.73,
+      "measuredFor": "immediately before own npm run review launch",
+      "source": "sysctl -n vm.loadavg"
+    }
+  ],
+  "localValidation": {
+    "review": {
+      "command": "npm run review",
+      "exitCode": 0,
+      "wallSeconds": 0.3355460419988958,
+      "scope": "4 changed evidence records; friction schema only,696records/41 historicalUNKNOWN; no source tests required"
+    },
+    "knip": {
+      "command": "npm run knip",
+      "exitCode": 0,
+      "wallSeconds": 3.8689565829990897,
+      "scope": "prepare/unused-code check/restore-local-assets; final564card images/32avatars/153dreamsigns restored, unchanged token source"
+    },
+    "recordSchema": {
+      "command": "node scripts/friction-triggers.mjs --validate-records",
+      "exitCode": 0,
+      "wallSeconds": 0.06355137500213459,
+      "scope": "696records/41historicalUNKNOWN"
+    },
+    "finalRecordSchemaReceipt": "check-schema-final.receipt.json",
+    "focusedTests": "N/A evidence-only; no source/testchanges",
+    "fullReview": "N/A no testinfra/configuration/cross-cutting architecture change",
+    "weightedBattleFuzz": "N/A P8journey-only hook;0weightedbattle games claimed",
+    "freshCodeReview": "N/A code-zero evidence; actual parent independent endpoint inspection retained"
+  },
+  "acceptance": {
+    "definitiveCells": 6,
+    "invocations": 13,
+    "wholeInvocationPasses": 3,
+    "qualifiedDefinitiveDesktopInFailedInvocation": "run-CVthrx overall FAIL; one independently verified desktop cell, failed mobile excluded",
+    "publicDebugGrant": "Only visible UUID search/add source controls; no private intent/event/provider/state/outcome writes",
+    "publicProbes": "Existing Save Journey download stream and persisted UUID diagnostic/log exports, current PRESENT DOM/frame/control geometries",
+    "boundedDiscovery": "Declared seeds1..40; all six definitive cells select seed1; each discovery observation retained and excluded from effective-cell count",
+    "d21": "Supplemental judged journey-site coverage of original265 affected production paths, not card-lab sweep/weighted battle coverage",
+    "meaningfulFailurePaths": {
+      "newTransitionCount": 0,
+      "errorMidStep": "N/A new tests: no new operation/code. Raw external caller failures preserved; normal native interactions and empty Caps cover actual workflows. Existing .265 implementation owns atomic fault contracts.",
+      "reloadRestart": "Actual samegame closedsite reload all6; Gamble settledround reload; before/reselection original states retained.",
+      "partialWrite": "N/A fault injection outside evidence-only normal control scope; no new write/schema/transaction. Existing event-log/persistence contracts unchanged.",
+      "invalidStaleInput": "Actual normal reselection, consumed-site control absence, same-game priorURL navigation; stale prepared affinity replacement attempt invalid_action retained separately. No private stale intent injection.",
+      "concurrentActors": "N/A actor injection outside scope; isolated own context/game WebLock identities observed and closed. Existing CAS contracts unchanged."
+    }
+  },
+  "cells": [
+    {
+      "site": "exploration",
+      "viewport": "desktop",
+      "invocation": "run-GEVvzf",
+      "rawReport": "invocations/run-GEVvzf/fruit-sites-v5.result.json",
+      "wholeInvocationPass": true,
+      "target": "deck-8",
+      "original": "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+      "seed": 1,
+      "gameId": "owko3e",
+      "deckBefore": 23,
+      "deckAfter": 22,
+      "essenceBefore": 200,
+      "essenceAfter": 250,
+      "receipt": {
+        "dreamsignId": "f4df5a74-7822-4552-a3ab-f50b00758593",
+        "hook": "after_journey_event",
+        "eventType": "RESOLVE_EXPLORATION_CHOICE",
+        "siteId": "site-1",
+        "heldIndex": 0,
+        "before": {
+          "essence": 200
+        },
+        "after": {
+          "essence": 250,
+          "gained": 50,
+          "purged": 1
+        },
+        "target": {
+          "siteIds": [
+            "site-1"
+          ],
+          "purges": [
+            {
+              "entryId": "deck-8",
+              "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc"
+            }
+          ]
+        },
+        "event": "journey_modifier_applied",
+        "timestamp": "2026-10-13T04:06:37.847Z",
+        "gameId": "owko3e",
+        "seq": 3
+      },
+      "geometry": [
+        {
+          "label": "choice",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/exploration?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=owko3e",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "essenceText": "200",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": {
+            "x": 29,
+            "y": 634.4375,
+            "width": 366,
+            "height": 52.1875
+          },
+          "locks": {
+            "held": [
+              {
+                "clientId": "B6E3E43C03202CB622DC946EEB14606C",
+                "mode": "exclusive",
+                "name": "dreamtides-game:owko3e"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [],
+          "purgeVisible": false,
+          "screens": [
+            "cumulus-exploration-site-screen"
+          ]
+        },
+        {
+          "label": "closed",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=owko3e",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "essenceText": "250",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "B6E3E43C03202CB622DC946EEB14606C",
+                "mode": "exclusive",
+                "name": "dreamtides-game:owko3e"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": []
+        },
+        {
+          "label": "closed-reloaded",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=owko3e",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "essenceText": "250",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "8B2E9F904CFFB424DD163A0F4B4EDAE7",
+                "mode": "exclusive",
+                "name": "dreamtides-game:owko3e"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": []
+        },
+        {
+          "label": "repeat-safe",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=owko3e",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "essenceText": "250",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "3F512D68062ACD037136A5F61E6A7E67",
+                "mode": "exclusive",
+                "name": "dreamtides-game:owko3e"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": []
+        }
+      ],
+      "logSha256": "3a6ef83426817f88f81696c883f91b0d89c29db965257cc3417414cf9330f1e1",
+      "exports": [
+        {
+          "label": "discovery-1",
+          "path": "invocations/run-GEVvzf/fruit601-exploration-desktop-discovery-1.save.json",
+          "fileName": "dreamtides-journey-fruit601-exploration-desktop-discovery-1.json"
+        },
+        {
+          "label": "before",
+          "path": "invocations/run-GEVvzf/fruit601-exploration-desktop-before.save.json",
+          "fileName": "dreamtides-journey-fruit601-exploration-desktop-before.json"
+        },
+        {
+          "label": "closed",
+          "path": "invocations/run-GEVvzf/fruit601-exploration-desktop-closed.save.json",
+          "fileName": "dreamtides-journey-fruit601-exploration-desktop-closed.json"
+        },
+        {
+          "label": "closed-reloaded",
+          "path": "invocations/run-GEVvzf/fruit601-exploration-desktop-closed-reloaded.save.json",
+          "fileName": "dreamtides-journey-fruit601-exploration-desktop-closed-reloaded.json"
+        },
+        {
+          "label": "normal-repeat-navigation",
+          "path": "invocations/run-GEVvzf/fruit601-exploration-desktop-normal-repeat-navigation.save.json",
+          "fileName": "dreamtides-journey-fruit601-exploration-desktop-normal-repeat-navigation.json"
+        }
+      ],
+      "captures": [
+        {
+          "filename": "fruit601-exploration-desktop-choice.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/exploration?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=owko3e",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "filename": "fruit601-exploration-desktop-closed.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=owko3e",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "filename": "fruit601-exploration-desktop-reloaded.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=owko3e",
+          "width": 1440,
+          "height": 900
+        }
+      ]
+    },
+    {
+      "site": "exploration",
+      "viewport": "mobile",
+      "invocation": "run-GEVvzf",
+      "rawReport": "invocations/run-GEVvzf/fruit-sites-v5.result.json",
+      "wholeInvocationPass": true,
+      "target": "deck-8",
+      "original": "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+      "seed": 1,
+      "gameId": "km57wj",
+      "deckBefore": 23,
+      "deckAfter": 22,
+      "essenceBefore": 200,
+      "essenceAfter": 250,
+      "receipt": {
+        "dreamsignId": "f4df5a74-7822-4552-a3ab-f50b00758593",
+        "hook": "after_journey_event",
+        "eventType": "RESOLVE_EXPLORATION_CHOICE",
+        "siteId": "site-1",
+        "heldIndex": 0,
+        "before": {
+          "essence": 200
+        },
+        "after": {
+          "essence": 250,
+          "gained": 50,
+          "purged": 1
+        },
+        "target": {
+          "siteIds": [
+            "site-1"
+          ],
+          "purges": [
+            {
+              "entryId": "deck-8",
+              "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc"
+            }
+          ]
+        },
+        "event": "journey_modifier_applied",
+        "timestamp": "2026-10-13T04:06:58.593Z",
+        "gameId": "km57wj",
+        "seq": 3
+      },
+      "geometry": [
+        {
+          "label": "choice",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/exploration?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=km57wj",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "essenceText": "200",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": {
+            "x": 29,
+            "y": 610.445068359375,
+            "width": 332,
+            "height": 52.1875
+          },
+          "locks": {
+            "held": [
+              {
+                "clientId": "12608D4CFF6B65FC73F308C7321F686C",
+                "mode": "exclusive",
+                "name": "dreamtides-game:km57wj"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [],
+          "purgeVisible": false,
+          "screens": [
+            "cumulus-exploration-site-screen"
+          ]
+        },
+        {
+          "label": "closed",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=km57wj",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "essenceText": "250",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "12608D4CFF6B65FC73F308C7321F686C",
+                "mode": "exclusive",
+                "name": "dreamtides-game:km57wj"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": []
+        },
+        {
+          "label": "closed-reloaded",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=km57wj",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "essenceText": "250",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "33F817386C6E7266254F85DE68A0AA4F",
+                "mode": "exclusive",
+                "name": "dreamtides-game:km57wj"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": []
+        },
+        {
+          "label": "repeat-safe",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=km57wj",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "essenceText": "250",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "2D2A041E0F8FE6EB9149D557DA696708",
+                "mode": "exclusive",
+                "name": "dreamtides-game:km57wj"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": []
+        }
+      ],
+      "logSha256": "486f204103ca55c5ac5580e81c73caad9035bb1a8cdae1475b445e84b7e1f692",
+      "exports": [
+        {
+          "label": "discovery-1",
+          "path": "invocations/run-GEVvzf/fruit601-exploration-mobile-discovery-1.save.json",
+          "fileName": "dreamtides-journey-fruit601-exploration-mobile-discovery-1.json"
+        },
+        {
+          "label": "before",
+          "path": "invocations/run-GEVvzf/fruit601-exploration-mobile-before.save.json",
+          "fileName": "dreamtides-journey-fruit601-exploration-mobile-before.json"
+        },
+        {
+          "label": "closed",
+          "path": "invocations/run-GEVvzf/fruit601-exploration-mobile-closed.save.json",
+          "fileName": "dreamtides-journey-fruit601-exploration-mobile-closed.json"
+        },
+        {
+          "label": "closed-reloaded",
+          "path": "invocations/run-GEVvzf/fruit601-exploration-mobile-closed-reloaded.save.json",
+          "fileName": "dreamtides-journey-fruit601-exploration-mobile-closed-reloaded.json"
+        },
+        {
+          "label": "normal-repeat-navigation",
+          "path": "invocations/run-GEVvzf/fruit601-exploration-mobile-normal-repeat-navigation.save.json",
+          "fileName": "dreamtides-journey-fruit601-exploration-mobile-normal-repeat-navigation.json"
+        }
+      ],
+      "captures": [
+        {
+          "filename": "fruit601-exploration-mobile-choice.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/exploration?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=km57wj",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "filename": "fruit601-exploration-mobile-closed.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=km57wj",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "filename": "fruit601-exploration-mobile-reloaded.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=exploration&seed=1&card=b957466e-f748-4a95-89b2-8509dc762223&dreamsignCount=0&game=km57wj",
+          "width": 390,
+          "height": 844
+        }
+      ]
+    },
+    {
+      "site": "augury",
+      "viewport": "desktop",
+      "invocation": "run-CVthrx",
+      "rawReport": "invocations/run-CVthrx/fruit-sites-v9.result.json",
+      "wholeInvocationPass": false,
+      "target": "deck-1",
+      "original": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "seed": 1,
+      "gameId": "qf8ic5",
+      "deckBefore": 10,
+      "deckAfter": 9,
+      "essenceBefore": 200,
+      "essenceAfter": 250,
+      "receipt": {
+        "dreamsignId": "f4df5a74-7822-4552-a3ab-f50b00758593",
+        "hook": "after_journey_event",
+        "eventType": "ACCEPT_AUGURY_OFFER",
+        "siteId": "site-1",
+        "heldIndex": 0,
+        "before": {
+          "essence": 200
+        },
+        "after": {
+          "essence": 250,
+          "gained": 50,
+          "purged": 1
+        },
+        "target": {
+          "siteIds": [
+            "site-1"
+          ],
+          "purges": [
+            {
+              "entryId": "deck-1",
+              "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+            }
+          ]
+        },
+        "event": "journey_modifier_applied",
+        "timestamp": "2026-10-13T04:13:58.669Z",
+        "gameId": "qf8ic5",
+        "seq": 3
+      },
+      "geometry": [
+        {
+          "label": "confirm",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/augury?goto=augury&seed=1&game=qf8ic5",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "activeFrame": {
+            "type": "site",
+            "inert": false
+          },
+          "menu": {
+            "x": 1370,
+            "y": 22,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "200",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": {
+            "x": 1109.3125,
+            "y": 570.5,
+            "width": 97.6875,
+            "height": 42
+          },
+          "locks": {
+            "held": [
+              {
+                "clientId": "E147A914C7C5D4F211A6C02FCED8C26D",
+                "mode": "exclusive",
+                "name": "dreamtides-game:qf8ic5"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [],
+          "purgeVisible": false,
+          "screens": [
+            "cumulus-augury-site-screen"
+          ]
+        },
+        {
+          "label": "closed",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=augury&seed=1&game=qf8ic5",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 1370,
+            "y": 22,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "250",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "E147A914C7C5D4F211A6C02FCED8C26D",
+                "mode": "exclusive",
+                "name": "dreamtides-game:qf8ic5"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": [
+            "cumulus-augury-site-screen"
+          ]
+        },
+        {
+          "label": "closed-reloaded",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=augury&seed=1&game=qf8ic5",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 1370,
+            "y": 22,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "250",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "25DD5508BBB3E771D08BECF5959FF9DB",
+                "mode": "exclusive",
+                "name": "dreamtides-game:qf8ic5"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": []
+        },
+        {
+          "label": "repeat-safe",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=augury&seed=1&game=qf8ic5",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 1370,
+            "y": 22,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "250",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "9E516D80585A3D7B49B9B4ABB77AFBC9",
+                "mode": "exclusive",
+                "name": "dreamtides-game:qf8ic5"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": []
+        }
+      ],
+      "logSha256": "f2efbe1f2f2672989a349c2a3f4dfc8ff9a51b7fc4b634b3acf81118bec7a9f3",
+      "exports": [
+        {
+          "label": "discovery-1",
+          "path": "invocations/run-CVthrx/fruit601-augury-desktop-discovery-1.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-desktop-discovery-1.json"
+        },
+        {
+          "label": "before",
+          "path": "invocations/run-CVthrx/fruit601-augury-desktop-before.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-desktop-before.json"
+        },
+        {
+          "label": "reselection",
+          "path": "invocations/run-CVthrx/fruit601-augury-desktop-reselection.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-desktop-reselection.json"
+        },
+        {
+          "label": "closed",
+          "path": "invocations/run-CVthrx/fruit601-augury-desktop-closed.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-desktop-closed.json"
+        },
+        {
+          "label": "closed-reloaded",
+          "path": "invocations/run-CVthrx/fruit601-augury-desktop-closed-reloaded.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-desktop-closed-reloaded.json"
+        },
+        {
+          "label": "normal-repeat-navigation",
+          "path": "invocations/run-CVthrx/fruit601-augury-desktop-normal-repeat-navigation.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-desktop-normal-repeat-navigation.json"
+        }
+      ],
+      "captures": [
+        {
+          "filename": "fruit601-augury-desktop-choice.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/augury?goto=augury&seed=1&game=qf8ic5",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "filename": "fruit601-augury-desktop-closed.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=augury&seed=1&game=qf8ic5",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "filename": "fruit601-augury-desktop-reloaded.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=augury&seed=1&game=qf8ic5",
+          "width": 1440,
+          "height": 900
+        }
+      ]
+    },
+    {
+      "site": "augury",
+      "viewport": "mobile",
+      "invocation": "run-aagYaz",
+      "rawReport": "invocations/run-aagYaz/fruit-sites-v10.result.json",
+      "wholeInvocationPass": true,
+      "target": "deck-1",
+      "original": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "seed": 1,
+      "gameId": "j6ppm4",
+      "deckBefore": 10,
+      "deckAfter": 9,
+      "essenceBefore": 200,
+      "essenceAfter": 250,
+      "receipt": {
+        "dreamsignId": "f4df5a74-7822-4552-a3ab-f50b00758593",
+        "hook": "after_journey_event",
+        "eventType": "ACCEPT_AUGURY_OFFER",
+        "siteId": "site-1",
+        "heldIndex": 0,
+        "before": {
+          "essence": 200
+        },
+        "after": {
+          "essence": 250,
+          "gained": 50,
+          "purged": 1
+        },
+        "target": {
+          "siteIds": [
+            "site-1"
+          ],
+          "purges": [
+            {
+              "entryId": "deck-1",
+              "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+            }
+          ]
+        },
+        "event": "journey_modifier_applied",
+        "timestamp": "2026-10-13T04:16:22.337Z",
+        "gameId": "j6ppm4",
+        "seq": 3
+      },
+      "geometry": [
+        {
+          "label": "offer-scrolled",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/augury?goto=augury&seed=1&game=j6ppm4",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "activeFrame": {
+            "type": "site",
+            "inert": false
+          },
+          "menu": {
+            "x": 18,
+            "y": 18,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "200",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": {
+            "x": 75,
+            "y": 441.171875,
+            "width": 240,
+            "height": 240
+          },
+          "locks": {
+            "held": [
+              {
+                "clientId": "773A62BD50F3F457CE69A7B874D32439",
+                "mode": "exclusive",
+                "name": "dreamtides-game:j6ppm4"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [],
+          "purgeVisible": false,
+          "screens": [
+            "cumulus-augury-site-screen"
+          ]
+        },
+        {
+          "label": "offer-scrolled",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/augury?goto=augury&seed=1&game=j6ppm4",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "activeFrame": {
+            "type": "site",
+            "inert": false
+          },
+          "menu": {
+            "x": 18,
+            "y": 18,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "200",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": {
+            "x": 75,
+            "y": 441.171875,
+            "width": 240,
+            "height": 240
+          },
+          "locks": {
+            "held": [
+              {
+                "clientId": "773A62BD50F3F457CE69A7B874D32439",
+                "mode": "exclusive",
+                "name": "dreamtides-game:j6ppm4"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [],
+          "purgeVisible": false,
+          "screens": [
+            "cumulus-augury-site-screen"
+          ]
+        },
+        {
+          "label": "confirm",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/augury?goto=augury&seed=1&game=j6ppm4",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "activeFrame": {
+            "type": "site",
+            "inert": false
+          },
+          "menu": {
+            "x": 18,
+            "y": 18,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "200",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": {
+            "x": 221.640625,
+            "y": 709,
+            "width": 97.6875,
+            "height": 42
+          },
+          "locks": {
+            "held": [
+              {
+                "clientId": "773A62BD50F3F457CE69A7B874D32439",
+                "mode": "exclusive",
+                "name": "dreamtides-game:j6ppm4"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [],
+          "purgeVisible": false,
+          "screens": [
+            "cumulus-augury-site-screen"
+          ]
+        },
+        {
+          "label": "closed",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=augury&seed=1&game=j6ppm4",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 18,
+            "y": 18,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "250",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "773A62BD50F3F457CE69A7B874D32439",
+                "mode": "exclusive",
+                "name": "dreamtides-game:j6ppm4"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": [
+            "cumulus-augury-site-screen"
+          ]
+        },
+        {
+          "label": "closed-reloaded",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=augury&seed=1&game=j6ppm4",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 18,
+            "y": 18,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "250",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "C37F91EA8A9633511219A92F2A5D277B",
+                "mode": "exclusive",
+                "name": "dreamtides-game:j6ppm4"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": []
+        },
+        {
+          "label": "repeat-safe",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=augury&seed=1&game=j6ppm4",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 18,
+            "y": 18,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "250",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "B3BDE688E7978BBAF9484EC69079F991",
+                "mode": "exclusive",
+                "name": "dreamtides-game:j6ppm4"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "screens": []
+        }
+      ],
+      "logSha256": "8f7847ab84391292a0624bfc48d4d7c922ca43fde8786032330589796e5e5e82",
+      "exports": [
+        {
+          "label": "discovery-1",
+          "path": "invocations/run-aagYaz/fruit601-augury-mobile-discovery-1.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-mobile-discovery-1.json"
+        },
+        {
+          "label": "before",
+          "path": "invocations/run-aagYaz/fruit601-augury-mobile-before.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-mobile-before.json"
+        },
+        {
+          "label": "reselection",
+          "path": "invocations/run-aagYaz/fruit601-augury-mobile-reselection.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-mobile-reselection.json"
+        },
+        {
+          "label": "closed",
+          "path": "invocations/run-aagYaz/fruit601-augury-mobile-closed.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-mobile-closed.json"
+        },
+        {
+          "label": "closed-reloaded",
+          "path": "invocations/run-aagYaz/fruit601-augury-mobile-closed-reloaded.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-mobile-closed-reloaded.json"
+        },
+        {
+          "label": "normal-repeat-navigation",
+          "path": "invocations/run-aagYaz/fruit601-augury-mobile-normal-repeat-navigation.save.json",
+          "fileName": "dreamtides-journey-fruit601-augury-mobile-normal-repeat-navigation.json"
+        }
+      ],
+      "captures": [
+        {
+          "filename": "fruit601-augury-mobile-choice.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/augury?goto=augury&seed=1&game=j6ppm4",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "filename": "fruit601-augury-mobile-closed.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=augury&seed=1&game=j6ppm4",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "filename": "fruit601-augury-mobile-reloaded.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=augury&seed=1&game=j6ppm4",
+          "width": 390,
+          "height": 844
+        }
+      ]
+    },
+    {
+      "site": "gamble",
+      "viewport": "desktop",
+      "invocation": "run-SZy3Lw",
+      "rawReport": "invocations/run-SZy3Lw/fruit-sites-v13.result.json",
+      "wholeInvocationPass": true,
+      "target": "deck-1",
+      "original": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "seed": 1,
+      "gameId": "632aws",
+      "deckBefore": 10,
+      "deckAfter": 9,
+      "essenceBefore": 200,
+      "essenceAfter": 225,
+      "receipt": {
+        "dreamsignId": "f4df5a74-7822-4552-a3ab-f50b00758593",
+        "hook": "after_journey_event",
+        "eventType": "SETTLE_FOUR_SUIT_REPRISE",
+        "siteId": "site-1",
+        "heldIndex": 0,
+        "before": {
+          "essence": 175
+        },
+        "after": {
+          "essence": 225,
+          "gained": 50,
+          "purged": 1
+        },
+        "target": {
+          "siteIds": [
+            "site-1"
+          ],
+          "purges": [
+            {
+              "entryId": "deck-1",
+              "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+            }
+          ]
+        },
+        "event": "journey_modifier_applied",
+        "timestamp": "2026-10-13T04:20:53.550Z",
+        "gameId": "632aws",
+        "seq": 5
+      },
+      "geometry": [
+        {
+          "label": "draw",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=632aws",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "activeFrame": {
+            "type": "site",
+            "inert": false
+          },
+          "menu": {
+            "x": 1370,
+            "y": 22,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "200",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": {
+            "x": 1034.59375,
+            "y": 539.296875,
+            "width": 124.578125,
+            "height": 42
+          },
+          "locks": {
+            "held": [
+              {
+                "clientId": "53BFBFC499F456D4A646D6B92FF6A083",
+                "mode": "exclusive",
+                "name": "dreamtides-game:632aws"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [],
+          "purgeVisible": false,
+          "drawCard": {
+            "value": "four-suit",
+            "face": "reverse",
+            "rect": {
+              "x": 917.1875,
+              "y": 297.5,
+              "width": 188,
+              "height": 188
+            }
+          },
+          "targetSlot": {
+            "x": 713.1875,
+            "y": 276.703125,
+            "width": 164,
+            "height": 229.59375
+          },
+          "targetEntryId": "deck-1",
+          "screens": [
+            "cumulus-gamble-site-screen"
+          ]
+        },
+        {
+          "label": "round-settled",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=632aws",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "activeFrame": {
+            "type": "site",
+            "inert": false
+          },
+          "menu": {
+            "x": 1370,
+            "y": 22,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "225",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": {
+            "x": 1163.09375,
+            "y": 539.296875,
+            "width": 80.59375,
+            "height": 42
+          },
+          "locks": {
+            "held": [
+              {
+                "clientId": "53BFBFC499F456D4A646D6B92FF6A083",
+                "mode": "exclusive",
+                "name": "dreamtides-game:632aws"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [],
+          "purgeVisible": false,
+          "drawCard": {
+            "value": "K-clubs",
+            "face": "front",
+            "rect": {
+              "x": 917.1875,
+              "y": 297.5,
+              "width": 188,
+              "height": 188
+            }
+          },
+          "targetSlot": {
+            "x": 713.1875,
+            "y": 276.703125,
+            "width": 164,
+            "height": 229.59375
+          },
+          "targetEntryId": null,
+          "screens": [
+            "cumulus-gamble-site-screen"
+          ]
+        },
+        {
+          "label": "closed",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=632aws",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 1370,
+            "y": 22,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "225",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "F5E77FC33CAC5DA8681C176B2BEBB16D",
+                "mode": "exclusive",
+                "name": "dreamtides-game:632aws"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "drawCard": {
+            "rect": null
+          },
+          "targetSlot": null,
+          "targetEntryId": null,
+          "screens": []
+        },
+        {
+          "label": "closed-reloaded",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=632aws",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 1370,
+            "y": 22,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "225",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "7139DF51F5377B9E526A80BB1A64FF70",
+                "mode": "exclusive",
+                "name": "dreamtides-game:632aws"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "drawCard": {
+            "rect": null
+          },
+          "targetSlot": null,
+          "targetEntryId": null,
+          "screens": []
+        },
+        {
+          "label": "repeat-safe",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=632aws",
+          "width": 1440,
+          "height": 900,
+          "scrollWidth": 1440,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 1370,
+            "y": 22,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "225",
+          "essence": {
+            "x": 144.375,
+            "y": 839,
+            "width": 99.875,
+            "height": 35
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "0536965F6ADE7E8110B23B4A4F7D3FEF",
+                "mode": "exclusive",
+                "name": "dreamtides-game:632aws"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "drawCard": {
+            "rect": null
+          },
+          "targetSlot": null,
+          "targetEntryId": null,
+          "screens": []
+        }
+      ],
+      "logSha256": "579776eb7efef770be4fa02c3e1b45fcfdf2bde129f3515f3de1c0ceb683e203",
+      "exports": [
+        {
+          "label": "discovery-1",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-desktop-discovery-1.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-desktop-discovery-1.json"
+        },
+        {
+          "label": "before",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-desktop-before.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-desktop-before.json"
+        },
+        {
+          "label": "reselection",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-desktop-reselection.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-desktop-reselection.json"
+        },
+        {
+          "label": "settled-round",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-desktop-settled-round.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-desktop-settled-round.json"
+        },
+        {
+          "label": "round-reloaded",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-desktop-round-reloaded.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-desktop-round-reloaded.json"
+        },
+        {
+          "label": "closed",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-desktop-closed.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-desktop-closed.json"
+        },
+        {
+          "label": "closed-reloaded",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-desktop-closed-reloaded.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-desktop-closed-reloaded.json"
+        },
+        {
+          "label": "normal-repeat-navigation",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-desktop-normal-repeat-navigation.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-desktop-normal-repeat-navigation.json"
+        }
+      ],
+      "captures": [
+        {
+          "filename": "fruit601-gamble-desktop-choice.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=632aws",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "filename": "fruit601-gamble-desktop-round-settled.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=632aws",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "filename": "fruit601-gamble-desktop-closed.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=632aws",
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "filename": "fruit601-gamble-desktop-reloaded.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=632aws",
+          "width": 1440,
+          "height": 900
+        }
+      ]
+    },
+    {
+      "site": "gamble",
+      "viewport": "mobile",
+      "invocation": "run-SZy3Lw",
+      "rawReport": "invocations/run-SZy3Lw/fruit-sites-v13.result.json",
+      "wholeInvocationPass": true,
+      "target": "deck-1",
+      "original": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "seed": 1,
+      "gameId": "x9t68x",
+      "deckBefore": 10,
+      "deckAfter": 9,
+      "essenceBefore": 200,
+      "essenceAfter": 225,
+      "receipt": {
+        "dreamsignId": "f4df5a74-7822-4552-a3ab-f50b00758593",
+        "hook": "after_journey_event",
+        "eventType": "SETTLE_FOUR_SUIT_REPRISE",
+        "siteId": "site-1",
+        "heldIndex": 0,
+        "before": {
+          "essence": 175
+        },
+        "after": {
+          "essence": 225,
+          "gained": 50,
+          "purged": 1
+        },
+        "target": {
+          "siteIds": [
+            "site-1"
+          ],
+          "purges": [
+            {
+              "entryId": "deck-1",
+              "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+            }
+          ]
+        },
+        "event": "journey_modifier_applied",
+        "timestamp": "2026-10-13T04:21:26.098Z",
+        "gameId": "x9t68x",
+        "seq": 5
+      },
+      "geometry": [
+        {
+          "label": "draw",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=x9t68x",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "activeFrame": {
+            "type": "site",
+            "inert": false
+          },
+          "menu": {
+            "x": 18,
+            "y": 18,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "200",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": {
+            "x": 201,
+            "y": 701.5625,
+            "width": 97.765625,
+            "height": 42
+          },
+          "locks": {
+            "held": [
+              {
+                "clientId": "BED35D6F022F15893F4234EB983ABB60",
+                "mode": "exclusive",
+                "name": "dreamtides-game:x9t68x"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [],
+          "purgeVisible": false,
+          "drawCard": {
+            "value": "four-suit",
+            "face": "reverse",
+            "rect": {
+              "x": 201,
+              "y": 368.171875,
+              "width": 116,
+              "height": 116
+            }
+          },
+          "targetSlot": {
+            "x": 73,
+            "y": 353.375,
+            "width": 104,
+            "height": 145.59375
+          },
+          "targetEntryId": "deck-1",
+          "screens": [
+            "cumulus-gamble-site-screen"
+          ]
+        },
+        {
+          "label": "round-settled",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=x9t68x",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "activeFrame": {
+            "type": "site",
+            "inert": false
+          },
+          "menu": {
+            "x": 18,
+            "y": 18,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "225",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": {
+            "x": 299.125,
+            "y": 701.5625,
+            "width": 58.765625,
+            "height": 42
+          },
+          "locks": {
+            "held": [
+              {
+                "clientId": "BED35D6F022F15893F4234EB983ABB60",
+                "mode": "exclusive",
+                "name": "dreamtides-game:x9t68x"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [],
+          "purgeVisible": false,
+          "drawCard": {
+            "value": "K-clubs",
+            "face": "front",
+            "rect": {
+              "x": 201,
+              "y": 368.171875,
+              "width": 116,
+              "height": 116
+            }
+          },
+          "targetSlot": {
+            "x": 73,
+            "y": 353.375,
+            "width": 104,
+            "height": 145.59375
+          },
+          "targetEntryId": null,
+          "screens": [
+            "cumulus-gamble-site-screen"
+          ]
+        },
+        {
+          "label": "closed",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=x9t68x",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 18,
+            "y": 18,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "225",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "8646135D8E839B0F9022347D11FFF7D7",
+                "mode": "exclusive",
+                "name": "dreamtides-game:x9t68x"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "drawCard": {
+            "rect": null
+          },
+          "targetSlot": null,
+          "targetEntryId": null,
+          "screens": []
+        },
+        {
+          "label": "closed-reloaded",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=x9t68x",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 18,
+            "y": 18,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "225",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "E226FA30F226E096AAC6207973B67A65",
+                "mode": "exclusive",
+                "name": "dreamtides-game:x9t68x"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "drawCard": {
+            "rect": null
+          },
+          "targetSlot": null,
+          "targetEntryId": null,
+          "screens": []
+        },
+        {
+          "label": "repeat-safe",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=x9t68x",
+          "width": 390,
+          "height": 844,
+          "scrollWidth": 390,
+          "activeFrame": {
+            "type": "dreamscape",
+            "inert": false
+          },
+          "menu": {
+            "x": 18,
+            "y": 18,
+            "width": 48,
+            "height": 48
+          },
+          "essenceText": "225",
+          "essence": {
+            "x": 90,
+            "y": 804,
+            "width": 62.671875,
+            "height": 22
+          },
+          "action": null,
+          "locks": {
+            "held": [
+              {
+                "clientId": "E387C92528EB4B7C48EC0FBD0C53D7F0",
+                "mode": "exclusive",
+                "name": "dreamtides-game:x9t68x"
+              }
+            ],
+            "pending": []
+          },
+          "sites": [
+            {
+              "id": "site-2",
+              "type": "Draft"
+            },
+            {
+              "id": "site-3",
+              "type": "DreamsignRevelation"
+            },
+            {
+              "id": "site-4",
+              "type": "Purge"
+            },
+            {
+              "id": "site-5",
+              "type": "Battle"
+            }
+          ],
+          "purgeVisible": false,
+          "drawCard": {
+            "rect": null
+          },
+          "targetSlot": null,
+          "targetEntryId": null,
+          "screens": []
+        }
+      ],
+      "logSha256": "cc8719ff744b3c0d31fc3873666a86f2d22559815d330e3b9ebdcfdc2ea87f57",
+      "exports": [
+        {
+          "label": "discovery-1",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-mobile-discovery-1.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-mobile-discovery-1.json"
+        },
+        {
+          "label": "before",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-mobile-before.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-mobile-before.json"
+        },
+        {
+          "label": "reselection",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-mobile-reselection.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-mobile-reselection.json"
+        },
+        {
+          "label": "settled-round",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-mobile-settled-round.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-mobile-settled-round.json"
+        },
+        {
+          "label": "round-reloaded",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-mobile-round-reloaded.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-mobile-round-reloaded.json"
+        },
+        {
+          "label": "closed",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-mobile-closed.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-mobile-closed.json"
+        },
+        {
+          "label": "closed-reloaded",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-mobile-closed-reloaded.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-mobile-closed-reloaded.json"
+        },
+        {
+          "label": "normal-repeat-navigation",
+          "path": "invocations/run-SZy3Lw/fruit601-gamble-mobile-normal-repeat-navigation.save.json",
+          "fileName": "dreamtides-journey-fruit601-gamble-mobile-normal-repeat-navigation.json"
+        }
+      ],
+      "captures": [
+        {
+          "filename": "fruit601-gamble-mobile-choice.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=x9t68x",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "filename": "fruit601-gamble-mobile-round-settled.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=x9t68x",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "filename": "fruit601-gamble-mobile-closed.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=x9t68x",
+          "width": 390,
+          "height": 844
+        },
+        {
+          "filename": "fruit601-gamble-mobile-reloaded.png",
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=x9t68x",
+          "width": 390,
+          "height": 844
+        }
+      ]
+    }
+  ],
+  "captures": [
+    {
+      "invocation": "run-GEVvzf",
+      "filename": "fruit601-exploration-desktop-choice.png",
+      "sha256": "27edb0fa2db992495202cc3de2f5dd3c839ab524d0c2132b5baf30be135efc28",
+      "pixelWidth": 2880,
+      "pixelHeight": 1800,
+      "cssViewport": "desktop"
+    },
+    {
+      "invocation": "run-GEVvzf",
+      "filename": "fruit601-exploration-desktop-closed.png",
+      "sha256": "7d8e826272dfb1b9b3f3c1f78ed30b632fe2bc5bb8b023c19d3ed3c5cbc7076b",
+      "pixelWidth": 2880,
+      "pixelHeight": 1800,
+      "cssViewport": "desktop"
+    },
+    {
+      "invocation": "run-GEVvzf",
+      "filename": "fruit601-exploration-desktop-reloaded.png",
+      "sha256": "2a3ee01040e45c32d49b898ca27378b84f38680f872d949ab4077da55b5b4791",
+      "pixelWidth": 2880,
+      "pixelHeight": 1800,
+      "cssViewport": "desktop"
+    },
+    {
+      "invocation": "run-GEVvzf",
+      "filename": "fruit601-exploration-mobile-choice.png",
+      "sha256": "c01cf985fe5350f036e79a1d896936e03dd5c11eb801f09253528835f67cc7bf",
+      "pixelWidth": 780,
+      "pixelHeight": 1688,
+      "cssViewport": "mobile"
+    },
+    {
+      "invocation": "run-GEVvzf",
+      "filename": "fruit601-exploration-mobile-closed.png",
+      "sha256": "d3a3df66377ac962d8bcde2ee425bf2c1d11c08041e53be8d27e1efe18beae1d",
+      "pixelWidth": 780,
+      "pixelHeight": 1688,
+      "cssViewport": "mobile"
+    },
+    {
+      "invocation": "run-GEVvzf",
+      "filename": "fruit601-exploration-mobile-reloaded.png",
+      "sha256": "1feecd68edbcce39c92cb002d88a96a40f558fea6a684cfc206c8c98db1bc9d5",
+      "pixelWidth": 780,
+      "pixelHeight": 1688,
+      "cssViewport": "mobile"
+    },
+    {
+      "invocation": "run-CVthrx",
+      "filename": "fruit601-augury-desktop-choice.png",
+      "sha256": "92aae6ac22ec5af52c70788956d01ee0090af27c1ca99e1476e873c33164da3b",
+      "pixelWidth": 2880,
+      "pixelHeight": 1800,
+      "cssViewport": "desktop"
+    },
+    {
+      "invocation": "run-CVthrx",
+      "filename": "fruit601-augury-desktop-closed.png",
+      "sha256": "700c680cec2cb76937b902741ff2bab4b46b330726bfcae97bbc45439824c70f",
+      "pixelWidth": 2880,
+      "pixelHeight": 1800,
+      "cssViewport": "desktop"
+    },
+    {
+      "invocation": "run-CVthrx",
+      "filename": "fruit601-augury-desktop-reloaded.png",
+      "sha256": "74fa467e0d4d93d7285be2a36bcc7e68463df3f6e8af581f023283fb9fd8aa99",
+      "pixelWidth": 2880,
+      "pixelHeight": 1800,
+      "cssViewport": "desktop"
+    },
+    {
+      "invocation": "run-aagYaz",
+      "filename": "fruit601-augury-mobile-choice.png",
+      "sha256": "d432235dfbd1ac4221f3d12ba2f0547a8830fef6a4ee8d38bdfb48504c367052",
+      "pixelWidth": 780,
+      "pixelHeight": 1688,
+      "cssViewport": "mobile"
+    },
+    {
+      "invocation": "run-aagYaz",
+      "filename": "fruit601-augury-mobile-closed.png",
+      "sha256": "2c3eaa524c9cde0caaff0e0d9e06c7c2e6afe2d354caa68ab1975252bfa98093",
+      "pixelWidth": 780,
+      "pixelHeight": 1688,
+      "cssViewport": "mobile"
+    },
+    {
+      "invocation": "run-aagYaz",
+      "filename": "fruit601-augury-mobile-reloaded.png",
+      "sha256": "0ca6c00957c94eddddd642b6289b81d645a205906ae2aaf0512018cb98ade059",
+      "pixelWidth": 780,
+      "pixelHeight": 1688,
+      "cssViewport": "mobile"
+    },
+    {
+      "invocation": "run-SZy3Lw",
+      "filename": "fruit601-gamble-desktop-choice.png",
+      "sha256": "d854d5c78cad3b3ada105e88585cbc98cedaa8f7a16c87fe0827825d98c97d11",
+      "pixelWidth": 2880,
+      "pixelHeight": 1800,
+      "cssViewport": "desktop"
+    },
+    {
+      "invocation": "run-SZy3Lw",
+      "filename": "fruit601-gamble-desktop-round-settled.png",
+      "sha256": "caea7b27ba088cb3100cfbc008a6290cbe4cae2976e793c5257b8d3b8b7d4e8f",
+      "pixelWidth": 2880,
+      "pixelHeight": 1800,
+      "cssViewport": "desktop"
+    },
+    {
+      "invocation": "run-SZy3Lw",
+      "filename": "fruit601-gamble-desktop-closed.png",
+      "sha256": "4a2e7545918fbead777a06f82f7e66845c84962085ede908f2dd9a0723494593",
+      "pixelWidth": 2880,
+      "pixelHeight": 1800,
+      "cssViewport": "desktop"
+    },
+    {
+      "invocation": "run-SZy3Lw",
+      "filename": "fruit601-gamble-desktop-reloaded.png",
+      "sha256": "e94d92643ca9f2e31d0002df3037915457e1c6eb214dc7c51a6988b292ffb548",
+      "pixelWidth": 2880,
+      "pixelHeight": 1800,
+      "cssViewport": "desktop"
+    },
+    {
+      "invocation": "run-SZy3Lw",
+      "filename": "fruit601-gamble-mobile-choice.png",
+      "sha256": "c2d99f86b3bc1ed8698a41348c2603a71cef4435920b5733803f23e93abe3e8e",
+      "pixelWidth": 780,
+      "pixelHeight": 1688,
+      "cssViewport": "mobile"
+    },
+    {
+      "invocation": "run-SZy3Lw",
+      "filename": "fruit601-gamble-mobile-round-settled.png",
+      "sha256": "6a8dee317b412ec8c5f98dd1903f8ecb08984bc7ae6b68843d85af9d6abfb79d",
+      "pixelWidth": 780,
+      "pixelHeight": 1688,
+      "cssViewport": "mobile"
+    },
+    {
+      "invocation": "run-SZy3Lw",
+      "filename": "fruit601-gamble-mobile-closed.png",
+      "sha256": "26dda161e3fe1231bb0d54b12b57a94f05b7c2b641e0e07e178c0381e531e907",
+      "pixelWidth": 780,
+      "pixelHeight": 1688,
+      "cssViewport": "mobile"
+    },
+    {
+      "invocation": "run-SZy3Lw",
+      "filename": "fruit601-gamble-mobile-reloaded.png",
+      "sha256": "694284bba3d1ab9a7ecd16688ee456868b9f8dbb10c90ceb8601c9d9dd1e1b14",
+      "pixelWidth": 780,
+      "pixelHeight": 1688,
+      "cssViewport": "mobile"
+    }
+  ],
+  "parentEndpointInspection": {
+    "parent-exploration-verification.json": {
+      "sha256": "f6216cc2c6dd1b9aad2ba5ce21c61ec8f2c913dd9df591946b89161b74897844",
+      "record": {
+        "atUtc": "2026-10-13T04:10:15.946425+00:00",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.601/invocations/run-GEVvzf/fruit-sites-v5.result.json",
+        "cells": [
+          {
+            "site": "exploration",
+            "viewport": "desktop",
+            "gameId": "owko3e",
+            "originalPair": {
+              "entryId": "deck-8",
+              "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc"
+            },
+            "deckCounts": [
+              23,
+              22
+            ],
+            "essence": [
+              200,
+              250
+            ],
+            "receiptCount": 1,
+            "reloadAndRepeat": true
+          },
+          {
+            "site": "exploration",
+            "viewport": "mobile",
+            "gameId": "km57wj",
+            "originalPair": {
+              "entryId": "deck-8",
+              "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc"
+            },
+            "deckCounts": [
+              23,
+              22
+            ],
+            "essence": [
+              200,
+              250
+            ],
+            "receiptCount": 1,
+            "reloadAndRepeat": true
+          }
+        ],
+        "emptyCaps": true,
+        "freezeQualification": "All2353 hashes matched at initial parent check; later only2340 functional hashes rechecked after authorized external Augury v8 correction",
+        "functionalHashCount": 2340,
+        "viewedImages": [
+          "fruit601-exploration-mobile-choice.png",
+          "fruit601-exploration-desktop-closed.png"
+        ],
+        "parentCallerCorrection": "First receipt-save probe wrongly required mutable external v7 support hashes after authorized v8 caller correction; functional-only check corrected; original initial full-hash verification retained in tool output."
+      }
+    },
+    "parent-augury-desktop-verification.json": {
+      "sha256": "4f0bfcba54934630b7d0312d4cb91ab5d76cca965d7dea6022f5b254f3fe068b",
+      "record": {
+        "atUtc": "2026-10-13T04:15:32.721427+00:00",
+        "cell": "augury-desktop",
+        "gameId": "qf8ic5",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.601/invocations/run-CVthrx/fruit-sites-v9.result.json",
+        "overallInvocation": "FAIL mobile offscreen caller click; independently completed desktop cell",
+        "contractsVerified": true,
+        "receipt": {
+          "dreamsignId": "f4df5a74-7822-4552-a3ab-f50b00758593",
+          "hook": "after_journey_event",
+          "eventType": "ACCEPT_AUGURY_OFFER",
+          "siteId": "site-1",
+          "heldIndex": 0,
+          "before": {
+            "essence": 200
+          },
+          "after": {
+            "essence": 250,
+            "gained": 50,
+            "purged": 1
+          },
+          "target": {
+            "siteIds": [
+              "site-1"
+            ],
+            "purges": [
+              {
+                "entryId": "deck-1",
+                "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+              }
+            ]
+          },
+          "event": "journey_modifier_applied",
+          "timestamp": "2026-10-13T04:13:58.669Z",
+          "gameId": "qf8ic5",
+          "seq": 3
+        },
+        "deckCounts": [
+          10,
+          9
+        ],
+        "essence": [
+          200,
+          250
+        ],
+        "capsEmpty": true
+      }
+    },
+    "parent-augury-mobile-verification.json": {
+      "sha256": "6fb9fa31e2b6f6f8c1b20ca9ea56d2a1790829cf7a9a7e00c9b1d49a72d7e96c",
+      "record": {
+        "atUtc": "2026-10-13T04:16:49.933040+00:00",
+        "cell": "augury-mobile",
+        "gameId": "j6ppm4",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.601/invocations/run-aagYaz/fruit-sites-v10.result.json",
+        "contractsVerified": true,
+        "receipt": {
+          "dreamsignId": "f4df5a74-7822-4552-a3ab-f50b00758593",
+          "hook": "after_journey_event",
+          "eventType": "ACCEPT_AUGURY_OFFER",
+          "siteId": "site-1",
+          "heldIndex": 0,
+          "before": {
+            "essence": 200
+          },
+          "after": {
+            "essence": 250,
+            "gained": 50,
+            "purged": 1
+          },
+          "target": {
+            "siteIds": [
+              "site-1"
+            ],
+            "purges": [
+              {
+                "entryId": "deck-1",
+                "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+              }
+            ]
+          },
+          "event": "journey_modifier_applied",
+          "timestamp": "2026-10-13T04:16:22.337Z",
+          "gameId": "j6ppm4",
+          "seq": 3
+        },
+        "deckCounts": [
+          10,
+          9
+        ],
+        "essence": [
+          200,
+          250
+        ],
+        "capsEmpty": true,
+        "scrolledOfferGeometry": [
+          {
+            "label": "offer-scrolled",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/augury?goto=augury&seed=1&game=j6ppm4",
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "activeFrame": {
+              "type": "site",
+              "inert": false
+            },
+            "menu": {
+              "x": 18,
+              "y": 18,
+              "width": 48,
+              "height": 48
+            },
+            "essenceText": "200",
+            "essence": {
+              "x": 90,
+              "y": 804,
+              "width": 62.671875,
+              "height": 22
+            },
+            "action": {
+              "x": 75,
+              "y": 441.171875,
+              "width": 240,
+              "height": 240
+            },
+            "locks": {
+              "held": [
+                {
+                  "clientId": "773A62BD50F3F457CE69A7B874D32439",
+                  "mode": "exclusive",
+                  "name": "dreamtides-game:j6ppm4"
+                }
+              ],
+              "pending": []
+            },
+            "sites": [],
+            "purgeVisible": false,
+            "screens": [
+              "cumulus-augury-site-screen"
+            ]
+          },
+          {
+            "label": "offer-scrolled",
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/augury?goto=augury&seed=1&game=j6ppm4",
+            "width": 390,
+            "height": 844,
+            "scrollWidth": 390,
+            "activeFrame": {
+              "type": "site",
+              "inert": false
+            },
+            "menu": {
+              "x": 18,
+              "y": 18,
+              "width": 48,
+              "height": 48
+            },
+            "essenceText": "200",
+            "essence": {
+              "x": 90,
+              "y": 804,
+              "width": 62.671875,
+              "height": 22
+            },
+            "action": {
+              "x": 75,
+              "y": 441.171875,
+              "width": 240,
+              "height": 240
+            },
+            "locks": {
+              "held": [
+                {
+                  "clientId": "773A62BD50F3F457CE69A7B874D32439",
+                  "mode": "exclusive",
+                  "name": "dreamtides-game:j6ppm4"
+                }
+              ],
+              "pending": []
+            },
+            "sites": [],
+            "purgeVisible": false,
+            "screens": [
+              "cumulus-augury-site-screen"
+            ]
+          }
+        ],
+        "captures": [
+          "fruit601-augury-mobile-choice.png",
+          "fruit601-augury-mobile-closed.png",
+          "fruit601-augury-mobile-reloaded.png"
+        ]
+      }
+    },
+    "parent-gamble-verification.json": {
+      "sha256": "3c8b4c289d8ca5179e4612f2fd1e71939e1bccc57e7b032f918ba5fb92420409",
+      "record": {
+        "atUtc": "2026-10-13T04:22:52.942440+00:00",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.601/invocations/run-SZy3Lw/fruit-sites-v13.result.json",
+        "cells": [
+          {
+            "site": "gamble",
+            "viewport": "desktop",
+            "gameId": "632aws",
+            "target": "deck-1",
+            "original": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+            "deckCounts": [
+              10,
+              9
+            ],
+            "essence": [
+              200,
+              225
+            ],
+            "cost": 25,
+            "fruitGain": 50,
+            "receipt": {
+              "dreamsignId": "f4df5a74-7822-4552-a3ab-f50b00758593",
+              "hook": "after_journey_event",
+              "eventType": "SETTLE_FOUR_SUIT_REPRISE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "essence": 175
+              },
+              "after": {
+                "essence": 225,
+                "gained": 50,
+                "purged": 1
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "purges": [
+                  {
+                    "entryId": "deck-1",
+                    "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T04:20:53.550Z",
+              "gameId": "632aws",
+              "seq": 5
+            },
+            "round": {
+              "roundNumber": 1,
+              "shuffleCommitment": "73cd7a779959f7a8",
+              "card": {
+                "rank": "K",
+                "suit": "clubs"
+              },
+              "targetEntryId": "deck-1",
+              "targetCardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+              "costPaid": 25,
+              "outcome": "purge",
+              "resultRevealed": true,
+              "resultSettled": true,
+              "essenceGained": 0
+            },
+            "stablePresentation": {
+              "label": "round-settled",
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=632aws",
+              "width": 1440,
+              "height": 900,
+              "scrollWidth": 1440,
+              "activeFrame": {
+                "type": "site",
+                "inert": false
+              },
+              "menu": {
+                "x": 1370,
+                "y": 22,
+                "width": 48,
+                "height": 48
+              },
+              "essenceText": "225",
+              "essence": {
+                "x": 144.375,
+                "y": 839,
+                "width": 99.875,
+                "height": 35
+              },
+              "action": {
+                "x": 1163.09375,
+                "y": 539.296875,
+                "width": 80.59375,
+                "height": 42
+              },
+              "locks": {
+                "held": [
+                  {
+                    "clientId": "53BFBFC499F456D4A646D6B92FF6A083",
+                    "mode": "exclusive",
+                    "name": "dreamtides-game:632aws"
+                  }
+                ],
+                "pending": []
+              },
+              "sites": [],
+              "purgeVisible": false,
+              "drawCard": {
+                "value": "K-clubs",
+                "face": "front",
+                "rect": {
+                  "x": 917.1875,
+                  "y": 297.5,
+                  "width": 188,
+                  "height": 188
+                }
+              },
+              "targetSlot": {
+                "x": 713.1875,
+                "y": 276.703125,
+                "width": 164,
+                "height": 229.59375
+              },
+              "targetEntryId": null,
+              "screens": [
+                "cumulus-gamble-site-screen"
+              ]
+            },
+            "reloadAndRepeat": true
+          },
+          {
+            "site": "gamble",
+            "viewport": "mobile",
+            "gameId": "x9t68x",
+            "target": "deck-1",
+            "original": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+            "deckCounts": [
+              10,
+              9
+            ],
+            "essence": [
+              200,
+              225
+            ],
+            "cost": 25,
+            "fruitGain": 50,
+            "receipt": {
+              "dreamsignId": "f4df5a74-7822-4552-a3ab-f50b00758593",
+              "hook": "after_journey_event",
+              "eventType": "SETTLE_FOUR_SUIT_REPRISE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "essence": 175
+              },
+              "after": {
+                "essence": 225,
+                "gained": 50,
+                "purged": 1
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "purges": [
+                  {
+                    "entryId": "deck-1",
+                    "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T04:21:26.098Z",
+              "gameId": "x9t68x",
+              "seq": 5
+            },
+            "round": {
+              "roundNumber": 1,
+              "shuffleCommitment": "73cd7a779959f7a8",
+              "card": {
+                "rank": "K",
+                "suit": "clubs"
+              },
+              "targetEntryId": "deck-1",
+              "targetCardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+              "costPaid": 25,
+              "outcome": "purge",
+              "resultRevealed": true,
+              "resultSettled": true,
+              "essenceGained": 0
+            },
+            "stablePresentation": {
+              "label": "round-settled",
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/gamble?goto=gamble&seed=1&gambleGame=four-suit-reprise&game=x9t68x",
+              "width": 390,
+              "height": 844,
+              "scrollWidth": 390,
+              "activeFrame": {
+                "type": "site",
+                "inert": false
+              },
+              "menu": {
+                "x": 18,
+                "y": 18,
+                "width": 48,
+                "height": 48
+              },
+              "essenceText": "225",
+              "essence": {
+                "x": 90,
+                "y": 804,
+                "width": 62.671875,
+                "height": 22
+              },
+              "action": {
+                "x": 299.125,
+                "y": 701.5625,
+                "width": 58.765625,
+                "height": 42
+              },
+              "locks": {
+                "held": [
+                  {
+                    "clientId": "BED35D6F022F15893F4234EB983ABB60",
+                    "mode": "exclusive",
+                    "name": "dreamtides-game:x9t68x"
+                  }
+                ],
+                "pending": []
+              },
+              "sites": [],
+              "purgeVisible": false,
+              "drawCard": {
+                "value": "K-clubs",
+                "face": "front",
+                "rect": {
+                  "x": 201,
+                  "y": 368.171875,
+                  "width": 116,
+                  "height": 116
+                }
+              },
+              "targetSlot": {
+                "x": 73,
+                "y": 353.375,
+                "width": 104,
+                "height": 145.59375
+              },
+              "targetEntryId": null,
+              "screens": [
+                "cumulus-gamble-site-screen"
+              ]
+            },
+            "reloadAndRepeat": true
+          }
+        ],
+        "emptyCaps": true,
+        "allFreezeHashesMatch": 2361,
+        "captures": [
+          "fruit601-gamble-desktop-choice.png",
+          "fruit601-gamble-desktop-round-settled.png",
+          "fruit601-gamble-desktop-closed.png",
+          "fruit601-gamble-desktop-reloaded.png",
+          "fruit601-gamble-mobile-choice.png",
+          "fruit601-gamble-mobile-round-settled.png",
+          "fruit601-gamble-mobile-closed.png",
+          "fruit601-gamble-mobile-reloaded.png"
+        ]
+      }
+    },
+    "parent-closure-verification.json": {
+      "sha256": "4f4c949a3124e341267b99ce150680157c8aa1555a154cf3c101faf57d70c278",
+      "record": {
+        "atUtc": "2026-10-13T04:23:23.072341+00:00",
+        "invocations": 13,
+        "directExecutionCompletedSamples": 10,
+        "unsampled": [
+          "qa-augury-v6.receipt.json",
+          "qa-exploration-v1.receipt.json",
+          "qa-exploration-v3.receipt.json"
+        ],
+        "closureQualification": "Unsampled provider transitions remain UNKNOWN as direct observations; normal awaited cleanup success inferred from frozen runner MCP close/clear guards and preserved stdout/terminal receipts",
+        "receiptHashesVerified": true,
+        "ownKnownProcessesStillPresent": [],
+        "ownOwnerServerRecords": [],
+        "foreignObservedRecords": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "bead": "hv-umm2.453",
+            "pid": 96595,
+            "port": 5275,
+            "sha256": "8324da6dc6c930dc18190e7015c5f380f604d9f588aff9a071770c61679dec3e"
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+            "bead": null,
+            "pid": 96595,
+            "port": 5275,
+            "sha256": "67e3c536902b84abc19c6e117cad2ccdff5aafac2500f2e9a28165eafd13e035"
+          }
+        ],
+        "peerPolicy": "Read-only foreign identities, never stopped/reconciled"
+      }
+    }
+  },
+  "helperViewedImageFilenames": [
+    "fruit601-gamble-desktop-round-settled.png",
+    "fruit601-gamble-mobile-round-settled.png"
+  ],
+  "freezeProvenance": [
+    {
+      "filename": "freeze-v1.json",
+      "sha256": "548d34daabcc125d3d763ee6f07e04b22495e59749e2af0f6456fc838d183341",
+      "utc": "2026-10-13T03:55:05.440793+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2345,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "712401fc31ddc9d79707b39ec69249cc89fb14bd7ada13fa1f8478fab8663e8a"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v10.json",
+      "sha256": "45fec78f4b17a5b567cbde3aeb2a758602d9a9c5d91e3b4350b81e2398c27c18",
+      "utc": "2026-10-13T04:12:14.972317+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2356,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "fruit-sites-v8.mjs",
+          "sha256": "584f67a0757371932634a1a11418f0ac215fe3b56c4b1fb1ec49bb4b1660503f"
+        },
+        {
+          "filename": "observe-source-v3.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "fruit-sites-v6.mjs",
+          "sha256": "cfb091a1f0ea28a3c00b49a944572deaea1395b4b0762829da902dd3a4e70e87"
+        },
+        {
+          "filename": "fruit-sites-v7.mjs",
+          "sha256": "55c7073c55621bf64fa8f33689e6836e939821ede225a5a3d11d8e3b7d78bf21"
+        },
+        {
+          "filename": "fruit-sites-v5.mjs",
+          "sha256": "2b1363410814836bb005953a2e0cbf3acd5e70508e4131f03b9de22b9b1a606e"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "3e54ef5f58ba3591da4918c2a346c7458e2d32fc560e10f383b3458eba5405f4"
+        },
+        {
+          "filename": "fruit-sites-v4.mjs",
+          "sha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "fruit-sites-v3.mjs",
+          "sha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v11.json",
+      "sha256": "0dfd2c05adbd22b9e8e43d3a6062c1b470041e057423a523835f97e382a4a4a9",
+      "utc": "2026-10-13T04:13:26.986060+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2357,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "fruit-sites-v9.mjs",
+          "sha256": "38b71dcd88dc7d7568ff4c8b04f24e10563ee0f31ab992cf20f58f20eaf77dd9"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "fruit-sites-v8.mjs",
+          "sha256": "584f67a0757371932634a1a11418f0ac215fe3b56c4b1fb1ec49bb4b1660503f"
+        },
+        {
+          "filename": "observe-source-v3.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "fruit-sites-v6.mjs",
+          "sha256": "cfb091a1f0ea28a3c00b49a944572deaea1395b4b0762829da902dd3a4e70e87"
+        },
+        {
+          "filename": "fruit-sites-v7.mjs",
+          "sha256": "55c7073c55621bf64fa8f33689e6836e939821ede225a5a3d11d8e3b7d78bf21"
+        },
+        {
+          "filename": "fruit-sites-v5.mjs",
+          "sha256": "2b1363410814836bb005953a2e0cbf3acd5e70508e4131f03b9de22b9b1a606e"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "20aed565bcc332316134e7d99cfdd7ee5d80716821828554df62489089d63740"
+        },
+        {
+          "filename": "fruit-sites-v4.mjs",
+          "sha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "fruit-sites-v3.mjs",
+          "sha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v12.json",
+      "sha256": "c9351bd8c50499aa6825051cd04fdf8a6869e265befbf2b094ebe8330a078590",
+      "utc": "2026-10-13T04:15:26.985725+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2358,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "fruit-sites-v9.mjs",
+          "sha256": "38b71dcd88dc7d7568ff4c8b04f24e10563ee0f31ab992cf20f58f20eaf77dd9"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "fruit-sites-v8.mjs",
+          "sha256": "584f67a0757371932634a1a11418f0ac215fe3b56c4b1fb1ec49bb4b1660503f"
+        },
+        {
+          "filename": "observe-source-v3.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "fruit-sites-v6.mjs",
+          "sha256": "cfb091a1f0ea28a3c00b49a944572deaea1395b4b0762829da902dd3a4e70e87"
+        },
+        {
+          "filename": "fruit-sites-v7.mjs",
+          "sha256": "55c7073c55621bf64fa8f33689e6836e939821ede225a5a3d11d8e3b7d78bf21"
+        },
+        {
+          "filename": "fruit-sites-v5.mjs",
+          "sha256": "2b1363410814836bb005953a2e0cbf3acd5e70508e4131f03b9de22b9b1a606e"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "066e6d18ce911c647473025690550631aff35d7de332a61f6c0ac6998fb02222"
+        },
+        {
+          "filename": "fruit-sites-v4.mjs",
+          "sha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "fruit-sites-v3.mjs",
+          "sha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v10.mjs",
+          "sha256": "a5fc4565ab4765d3620634e104101efc7da4ddb4fc95adfcbdda6e90deb8dc1a"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v13.json",
+      "sha256": "e4ae3dd2250b54d1942c06bb29b93c609cbe38da4197bec601cc31f8aa5cf88d",
+      "utc": "2026-10-13T04:17:01.608727+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2359,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "fruit-sites-v9.mjs",
+          "sha256": "38b71dcd88dc7d7568ff4c8b04f24e10563ee0f31ab992cf20f58f20eaf77dd9"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "fruit-sites-v8.mjs",
+          "sha256": "584f67a0757371932634a1a11418f0ac215fe3b56c4b1fb1ec49bb4b1660503f"
+        },
+        {
+          "filename": "observe-source-v3.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "fruit-sites-v6.mjs",
+          "sha256": "cfb091a1f0ea28a3c00b49a944572deaea1395b4b0762829da902dd3a4e70e87"
+        },
+        {
+          "filename": "fruit-sites-v7.mjs",
+          "sha256": "55c7073c55621bf64fa8f33689e6836e939821ede225a5a3d11d8e3b7d78bf21"
+        },
+        {
+          "filename": "fruit-sites-v5.mjs",
+          "sha256": "2b1363410814836bb005953a2e0cbf3acd5e70508e4131f03b9de22b9b1a606e"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "41ecd14cc460565c8fac4d97541c9061cf010d990d3b06e8031b3b392318e082"
+        },
+        {
+          "filename": "fruit-sites-v4.mjs",
+          "sha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "fruit-sites-v11.mjs",
+          "sha256": "8b97cb74c39b18fb9053252713501c145c4ed145d19a16b16313f4b1a5070b95"
+        },
+        {
+          "filename": "fruit-sites-v3.mjs",
+          "sha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v10.mjs",
+          "sha256": "a5fc4565ab4765d3620634e104101efc7da4ddb4fc95adfcbdda6e90deb8dc1a"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v14.json",
+      "sha256": "aa38198e4068ab2acaacb6679217372686a2dc788d25849edb1ad38f8596733a",
+      "utc": "2026-10-13T04:18:16.917907+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2360,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "fruit-sites-v9.mjs",
+          "sha256": "38b71dcd88dc7d7568ff4c8b04f24e10563ee0f31ab992cf20f58f20eaf77dd9"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "fruit-sites-v8.mjs",
+          "sha256": "584f67a0757371932634a1a11418f0ac215fe3b56c4b1fb1ec49bb4b1660503f"
+        },
+        {
+          "filename": "observe-source-v3.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "fruit-sites-v6.mjs",
+          "sha256": "cfb091a1f0ea28a3c00b49a944572deaea1395b4b0762829da902dd3a4e70e87"
+        },
+        {
+          "filename": "fruit-sites-v7.mjs",
+          "sha256": "55c7073c55621bf64fa8f33689e6836e939821ede225a5a3d11d8e3b7d78bf21"
+        },
+        {
+          "filename": "fruit-sites-v5.mjs",
+          "sha256": "2b1363410814836bb005953a2e0cbf3acd5e70508e4131f03b9de22b9b1a606e"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "48045aa09979927be45a53c5434f57733d08ded977e7c0b9dda5e774932bb25d"
+        },
+        {
+          "filename": "fruit-sites-v4.mjs",
+          "sha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8"
+        },
+        {
+          "filename": "fruit-sites-v12.mjs",
+          "sha256": "b759496c9ad8bfc3b58f7429c8f24d42b8c8f4d99b6e5ca24c3ce8f8300f6672"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "fruit-sites-v11.mjs",
+          "sha256": "8b97cb74c39b18fb9053252713501c145c4ed145d19a16b16313f4b1a5070b95"
+        },
+        {
+          "filename": "fruit-sites-v3.mjs",
+          "sha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v10.mjs",
+          "sha256": "a5fc4565ab4765d3620634e104101efc7da4ddb4fc95adfcbdda6e90deb8dc1a"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v15.json",
+      "sha256": "8c7839100a455ecd82a37bae0a9cd2152ff3fb7c330a8afb688db737aeec0f0a",
+      "utc": "2026-10-13T04:19:56.781338+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2361,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "fruit-sites-v9.mjs",
+          "sha256": "38b71dcd88dc7d7568ff4c8b04f24e10563ee0f31ab992cf20f58f20eaf77dd9"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "fruit-sites-v8.mjs",
+          "sha256": "584f67a0757371932634a1a11418f0ac215fe3b56c4b1fb1ec49bb4b1660503f"
+        },
+        {
+          "filename": "observe-source-v3.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "fruit-sites-v6.mjs",
+          "sha256": "cfb091a1f0ea28a3c00b49a944572deaea1395b4b0762829da902dd3a4e70e87"
+        },
+        {
+          "filename": "fruit-sites-v7.mjs",
+          "sha256": "55c7073c55621bf64fa8f33689e6836e939821ede225a5a3d11d8e3b7d78bf21"
+        },
+        {
+          "filename": "fruit-sites-v5.mjs",
+          "sha256": "2b1363410814836bb005953a2e0cbf3acd5e70508e4131f03b9de22b9b1a606e"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "2ff1c5fea0335f60c620e211ef05b8e9f4fd426ae9605114063f7892ea20115c"
+        },
+        {
+          "filename": "fruit-sites-v4.mjs",
+          "sha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8"
+        },
+        {
+          "filename": "fruit-sites-v12.mjs",
+          "sha256": "b759496c9ad8bfc3b58f7429c8f24d42b8c8f4d99b6e5ca24c3ce8f8300f6672"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "fruit-sites-v13.mjs",
+          "sha256": "9741177a27d27af140a39d52495f093a6e33843fbe5865752d21abb5e104491e"
+        },
+        {
+          "filename": "fruit-sites-v11.mjs",
+          "sha256": "8b97cb74c39b18fb9053252713501c145c4ed145d19a16b16313f4b1a5070b95"
+        },
+        {
+          "filename": "fruit-sites-v3.mjs",
+          "sha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v10.mjs",
+          "sha256": "a5fc4565ab4765d3620634e104101efc7da4ddb4fc95adfcbdda6e90deb8dc1a"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v2.json",
+      "sha256": "0bd9afe52f443c7857910a31def155f727c3ff4d982bb0b551a07e5283d7f63a",
+      "utc": "2026-10-13T03:55:44.063194+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2346,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "a8f1cd89ee26d7a6b19125a11a66b9a1e58aa070a0f73e62bf12442a62e94ce3"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v3.json",
+      "sha256": "5f164a9a44eb949f836105893c505a691b10b361526461ec4bc2c7ce33b03dbd",
+      "utc": "2026-10-13T03:58:16.124950+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2347,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "703f807f53933033a745e7a65f38976a501842d5a1d3d46f2b49db519e0e080d"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v4.json",
+      "sha256": "f199b77f4de8143d36d02134661d03800a3bd1b812fb4a34118eb0289b451791",
+      "utc": "2026-10-13T04:01:44.720717+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2349,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "3bd326e9072401c139b757562805e62d59bf0c3d52962d6532e0b5f18276f6d8"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v5.json",
+      "sha256": "1d2dda729ff866bd63d4b639fb8bf13d42eb654816046ff027015eef24ce6905",
+      "utc": "2026-10-13T04:02:58.282955+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2351,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "observe-source-v3.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "88ae3cbc3f8ad720b6a07dddc4af0a23f0d7ec0e0e7e8ea6ec1a9eae5fba8825"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "fruit-sites-v3.mjs",
+          "sha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v6.json",
+      "sha256": "4d702be4818f7ca83ec122410acbbb1e0dedfab9f7e351a7bdda8c916e4584d1",
+      "utc": "2026-10-13T04:03:40.584736+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2352,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "observe-source-v3.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "9591a772d3863095cd791664f1b2ea79b87ab41b71f0933a7ec29f2b686ee168"
+        },
+        {
+          "filename": "fruit-sites-v4.mjs",
+          "sha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "fruit-sites-v3.mjs",
+          "sha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v7.json",
+      "sha256": "77195f72bc213a312e05c094646375278a8e8508f5ead3f16bea335a8bd93d9e",
+      "utc": "2026-10-13T04:06:25.283986+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2353,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "observe-source-v3.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "fruit-sites-v5.mjs",
+          "sha256": "2b1363410814836bb005953a2e0cbf3acd5e70508e4131f03b9de22b9b1a606e"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "b09c13966f716d5ecb505898cb7c93787b2a716cbb5f500d754ef32e16dc897a"
+        },
+        {
+          "filename": "fruit-sites-v4.mjs",
+          "sha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "fruit-sites-v3.mjs",
+          "sha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v8.json",
+      "sha256": "72f18cd2f088a7f614b05ad2d57f57bb955d8a8ac752576deae85919709406f9",
+      "utc": "2026-10-13T04:09:11.517728+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2354,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "observe-source-v3.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "fruit-sites-v6.mjs",
+          "sha256": "cfb091a1f0ea28a3c00b49a944572deaea1395b4b0762829da902dd3a4e70e87"
+        },
+        {
+          "filename": "fruit-sites-v5.mjs",
+          "sha256": "2b1363410814836bb005953a2e0cbf3acd5e70508e4131f03b9de22b9b1a606e"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "436f540174303650419ba64bc8ccf08fd06efd3161498943a45cbf551b6c3bc9"
+        },
+        {
+          "filename": "fruit-sites-v4.mjs",
+          "sha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "fruit-sites-v3.mjs",
+          "sha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    },
+    {
+      "filename": "freeze-v9.json",
+      "sha256": "4f56c6016fb9f61d35aa7f923bb6c0711952d15420ed9da3f55c3db869738da0",
+      "utc": "2026-10-13T04:11:06.228642+00:00",
+      "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+      "totalFiles": 2355,
+      "functionalCount": 2340,
+      "helperFiles": [
+        {
+          "filename": "observe-source-v2.py",
+          "sha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753"
+        },
+        {
+          "filename": "finalize.py",
+          "sha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36"
+        },
+        {
+          "filename": "observe-source-v3.py",
+          "sha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229"
+        },
+        {
+          "filename": "fruit-sites-v6.mjs",
+          "sha256": "cfb091a1f0ea28a3c00b49a944572deaea1395b4b0762829da902dd3a4e70e87"
+        },
+        {
+          "filename": "fruit-sites-v7.mjs",
+          "sha256": "55c7073c55621bf64fa8f33689e6836e939821ede225a5a3d11d8e3b7d78bf21"
+        },
+        {
+          "filename": "fruit-sites-v5.mjs",
+          "sha256": "2b1363410814836bb005953a2e0cbf3acd5e70508e4131f03b9de22b9b1a606e"
+        },
+        {
+          "filename": "observe.py",
+          "sha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8"
+        },
+        {
+          "filename": "stage1.md",
+          "sha256": "9710d92021fa14b9b598e6ff8c96d70505a5f99a30150326269c641fab46ccdc"
+        },
+        {
+          "filename": "fruit-sites-v4.mjs",
+          "sha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8"
+        },
+        {
+          "filename": "observe-source-v1.py",
+          "sha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c"
+        },
+        {
+          "filename": "fruit-sites-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        },
+        {
+          "filename": "fruit-sites-v3.mjs",
+          "sha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d"
+        },
+        {
+          "filename": "freeze.py",
+          "sha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120"
+        },
+        {
+          "filename": "fruit-sites-v2.mjs",
+          "sha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8"
+        },
+        {
+          "filename": "fruit-sites-failed-v1.mjs",
+          "sha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce"
+        }
+      ]
+    }
+  ],
+  "runtime": {
+    "attempts": [
+      {
+        "receipt": "qa-augury-mobile-v10.receipt.json",
+        "startUtc": "2026-10-13T04:16:14.197917+00:00",
+        "endUtc": "2026-10-13T04:16:29.749215+00:00",
+        "elapsedSeconds": 15.551202167000156,
+        "exitCode": 0,
+        "runnerPid": 60735,
+        "observerPid": 60727,
+        "serverPid": 60763,
+        "serverGroup": 60763,
+        "serverToken": "e449003b-2073-4830-8954-59ba437cf260",
+        "providerSession": "caf8da90-c4d4-4160-b9fe-46e037550887",
+        "providerToken": "665e618d-8137-4b46-80e9-fe0b5f404600",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": true,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "2146c32883c7386bc2a356162386a653c92841c57e3ee638b63a0d09be13706e"
+      },
+      {
+        "receipt": "qa-augury-v5.receipt.json",
+        "startUtc": "2026-10-13T04:07:49.669608+00:00",
+        "endUtc": "2026-10-13T04:07:56.851874+00:00",
+        "elapsedSeconds": 7.182243083996582,
+        "exitCode": 1,
+        "runnerPid": 83498,
+        "observerPid": 83487,
+        "serverPid": 83539,
+        "serverGroup": 83539,
+        "serverToken": "6fa7f26a-5592-4cdb-a9ff-968a45868921",
+        "providerSession": "a8747010-caa3-46df-bb27-bbce94def5b1",
+        "providerToken": "20a6a8fd-20a7-4370-8d99-574789aeb22d",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": true,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "5da9a0c69c57b9c5668d135b6ea4e7661aafb1c8a308c2f455249b8f75e58106"
+      },
+      {
+        "receipt": "qa-augury-v6.receipt.json",
+        "startUtc": "2026-10-13T04:09:11.558335+00:00",
+        "endUtc": "2026-10-13T04:10:00.365696+00:00",
+        "elapsedSeconds": 48.8070609169954,
+        "exitCode": 1,
+        "runnerPid": 86595,
+        "observerPid": 86576,
+        "serverPid": 86633,
+        "serverGroup": 86633,
+        "serverToken": "72fb4fef-a19e-43d8-96f4-cce357bcdc44",
+        "providerSession": "23f27902-f25a-41ba-9c21-d2ea3a179f09",
+        "providerToken": "be248fd2-5512-4986-80a9-2a9752a404b0",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": false,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "6c2338ccd3511e7b7e41f8ec79f214963a0f2c8afd04a07545267bd8c700f898"
+      },
+      {
+        "receipt": "qa-augury-v7.receipt.json",
+        "startUtc": "2026-10-13T04:11:06.262103+00:00",
+        "endUtc": "2026-10-13T04:11:34.117683+00:00",
+        "elapsedSeconds": 27.855423749992042,
+        "exitCode": 1,
+        "runnerPid": 45811,
+        "observerPid": 45787,
+        "serverPid": 45854,
+        "serverGroup": 45854,
+        "serverToken": "aed7754f-671a-4422-9b12-797655746880",
+        "providerSession": "41fe67fd-f1a1-4986-a1ef-f68746293fe2",
+        "providerToken": "7b80a11b-7fec-4203-bfd4-d60dd5fa0b2f",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": true,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "2bd1dfa8810e698efd7c63249276c4da519992aedc6f7b9411c02377b11db8d5"
+      },
+      {
+        "receipt": "qa-augury-v8.receipt.json",
+        "startUtc": "2026-10-13T04:12:15.005791+00:00",
+        "endUtc": "2026-10-13T04:12:22.795957+00:00",
+        "elapsedSeconds": 7.790129375003744,
+        "exitCode": 130,
+        "runnerPid": 50928,
+        "observerPid": 50903,
+        "serverPid": 50976,
+        "serverGroup": 50976,
+        "serverToken": "a3fa1947-dbbe-4543-bf6a-0f89a82799ac",
+        "providerSession": "8c8573ba-d258-4786-96ee-9117e89bc216",
+        "providerToken": "58c41713-920f-4b36-b0be-c2452ed95a2c",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": true,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "f2893371f1d5fc6f6c45d53754095b37e97a07cf063584bf41008a08e88e288f"
+      },
+      {
+        "receipt": "qa-augury-v9.receipt.json",
+        "startUtc": "2026-10-13T04:13:48.722128+00:00",
+        "endUtc": "2026-10-13T04:14:27.501185+00:00",
+        "elapsedSeconds": 38.7787969159981,
+        "exitCode": 1,
+        "runnerPid": 57114,
+        "observerPid": 57104,
+        "serverPid": 57148,
+        "serverGroup": 57148,
+        "serverToken": "280c1bf4-ba33-4dcd-86c0-850d009c1124",
+        "providerSession": "170c2df1-706e-4983-86b0-6cd2a8769547",
+        "providerToken": "34d0f72e-f9cc-4e87-9cb6-aef46a2fa53e",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": true,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "3212aa3ad1fc6444046a22209dd85c454265de14e27e54928e4499bbb03cc424"
+      },
+      {
+        "receipt": "qa-exploration-v1.receipt.json",
+        "startUtc": "2026-10-13T04:00:47.005726+00:00",
+        "endUtc": "2026-10-13T04:00:56.252725+00:00",
+        "elapsedSeconds": 9.246957749986905,
+        "exitCode": 2,
+        "runnerPid": 41855,
+        "observerPid": 41847,
+        "serverPid": 41892,
+        "serverGroup": 41892,
+        "serverToken": "10bb0db6-9ac5-4b53-995b-8051379938a2",
+        "providerSession": "56c76c37-7d8d-4230-b23b-027e2cc13f03",
+        "providerToken": "c3785abe-bf0b-4b93-9d1b-3eabd16d53f3",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": false,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "6cf862717ab0fdc37647eca5000717c1529944756548653ce5f51da8fbc5fd29"
+      },
+      {
+        "receipt": "qa-exploration-v2.receipt.json",
+        "startUtc": "2026-10-13T04:01:44.755344+00:00",
+        "endUtc": "2026-10-13T04:02:15.506188+00:00",
+        "elapsedSeconds": 30.75064970800304,
+        "exitCode": 130,
+        "runnerPid": 43777,
+        "observerPid": 43763,
+        "serverPid": 43811,
+        "serverGroup": 43811,
+        "serverToken": "849c9167-8c51-4da2-b5bc-b7f5c404fedb",
+        "providerSession": "292bd766-e339-48f3-a3fb-b82030471adc",
+        "providerToken": "85b456a2-923d-4811-a183-33f9f46b0cae",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": true,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "fca16093bfe872c415fd8aa01008ffc8c1e9524827aa17f5c0580cfbd2796514"
+      },
+      {
+        "receipt": "qa-exploration-v3.receipt.json",
+        "startUtc": "2026-10-13T04:02:58.313687+00:00",
+        "endUtc": "2026-10-13T04:03:05.337928+00:00",
+        "elapsedSeconds": 7.0242103329946985,
+        "exitCode": 1,
+        "runnerPid": 45869,
+        "observerPid": 45855,
+        "serverPid": 45914,
+        "serverGroup": 45914,
+        "serverToken": "cdb6f130-4e8a-4ba0-bbe1-65e2baa9e022",
+        "providerSession": "48c390bd-ccfd-4a39-b734-f54fd24c9a5d",
+        "providerToken": "5e56c9f0-018d-4a65-aa7c-a5ffc5042ac4",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": false,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "80752ca141f7f72bdc0c8f00158943251ddfa015c58a73c641c2c43d1b18fe1d"
+      },
+      {
+        "receipt": "qa-exploration-v4.receipt.json",
+        "startUtc": "2026-10-13T04:03:40.625006+00:00",
+        "endUtc": "2026-10-13T04:04:09.145718+00:00",
+        "elapsedSeconds": 28.520526209002128,
+        "exitCode": 1,
+        "runnerPid": 47960,
+        "observerPid": 47530,
+        "serverPid": 48191,
+        "serverGroup": 48191,
+        "serverToken": "802ec3db-bf76-4002-b505-763ca5f6499c",
+        "providerSession": "9b0a513d-9c09-4d8d-9a74-3fb1e18ba2d6",
+        "providerToken": "a5f01277-58fb-403a-9810-ed91cd0794ab",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": true,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "c3b4eacd577eb9de6aef8b4d3aca3d6e0d634bea78c772d50d890a942d11aba7"
+      },
+      {
+        "receipt": "qa-exploration-v5.receipt.json",
+        "startUtc": "2026-10-13T04:06:25.321329+00:00",
+        "endUtc": "2026-10-13T04:07:18.618904+00:00",
+        "elapsedSeconds": 53.29720629200165,
+        "exitCode": 0,
+        "runnerPid": 81063,
+        "observerPid": 81045,
+        "serverPid": 81099,
+        "serverGroup": 81099,
+        "serverToken": "4929adf2-35ca-454a-976d-a16819b2bf15",
+        "providerSession": "f60e13bb-735a-480a-bb88-4ca9bdaecdbd",
+        "providerToken": "02c7533a-e41c-4898-981b-9a4e483ef5a0",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": true,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "5c66fc702291ba8c67499837c2be1646130b66b424368366622f3b55d8036d74"
+      },
+      {
+        "receipt": "qa-gamble-v12.receipt.json",
+        "startUtc": "2026-10-13T04:18:44.902157+00:00",
+        "endUtc": "2026-10-13T04:19:05.679582+00:00",
+        "elapsedSeconds": 20.777293916995404,
+        "exitCode": 1,
+        "runnerPid": 64154,
+        "observerPid": 64146,
+        "serverPid": 64182,
+        "serverGroup": 64182,
+        "serverToken": "6b7e0b2f-5c30-41c5-b337-1f6793e04dcd",
+        "providerSession": "46c315b8-4517-4a36-b065-f691914bcba3",
+        "providerToken": "c5b4de23-3797-456d-bf82-6221fd5f3b5e",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": true,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "8f33872fa5924d78fd481acf87f04e05c8876441cf6459519b56cac6f2cc2cdf"
+      },
+      {
+        "receipt": "qa-gamble-v13.receipt.json",
+        "startUtc": "2026-10-13T04:20:38.275201+00:00",
+        "endUtc": "2026-10-13T04:21:45.786884+00:00",
+        "elapsedSeconds": 67.51120587500918,
+        "exitCode": 0,
+        "runnerPid": 67010,
+        "observerPid": 67002,
+        "serverPid": 67039,
+        "serverGroup": 67039,
+        "serverToken": "c85046ce-b222-4b36-92e0-8d0272e8a455",
+        "providerSession": "186f29de-dbb4-4008-826d-98a2389f25f3",
+        "providerToken": "475f7adb-3284-4ab0-ac20-c995acd7f4c5",
+        "slot": 1,
+        "port": 5274,
+        "directExecutionCompletedSampled": true,
+        "finalOwnRecordsAbsent": true,
+        "sha256": "dc6568d3e8b419e48be479f9915ed4b93e729f22b8d0ab51a28d3619e3bbfde1"
+      }
+    ],
+    "ownedProcessFinalGuard": {
+      "utc": "2026-10-13T04:23:17.631796+00:00",
+      "knownOwnedPidCount": 39,
+      "psExitCode": 1,
+      "remainingIdentityRows": [],
+      "helperViewed": [
+        "fruit601-gamble-desktop-round-settled.png",
+        "fruit601-gamble-mobile-round-settled.png"
+      ],
+      "helperVisualVerdict": "pass: stable K-Clubs front, original target consumed, HUD225 and readable enabled Leave in both viewports."
+    },
+    "providerClosureQualification": "All13 source-backed successful awaited browser_close/drained activeRPC/SDKtransport cleanup and exactown recordclear. Direct execution-completed publication sampled10; unsampled3 UNKNOWN direct bytes: exploration-v1/exploration-v3/augury-v6. Absence alone is not provider ACK; frozen runner/screenshot-runtime source and no cleanupfailure support closure inference.",
+    "webLocks": "Exact dreamtides-game:<GameId> names/clientIds observed per cell; owned isolated context closes release its game locks. No invented separate global .provider.json or journey-log filelock. Runner evidence/serve/browser kernel locks are actual identities.",
+    "peerReuse": "Parent observed peer453 slot1/5275 after own cleanup; unchanged/untouched, safe identity-only final foreign observations retained in parent closure receipt."
+  },
+  "rawAttemptQualifications": {
+    "qa-exploration-v1": "Native prompt yielded MCP text without Result block; current saved export and departing UUID log retained; Caps/direct publication UNKNOWN; source-backed successful awaited cleanup.",
+    "qa-exploration-v2": "Direct TextField was incorrectly queried as parent+input. Exact own SIGINT stopped before gameplay; no result/log/Caps, UNKNOWN preserved.",
+    "qa-exploration-v3": "Unsafe VM dynamic import callback unsupported; public download stream reader correction; no gameplay, Caps[].",
+    "qa-exploration-v4": "Concrete purge-and-gain prepared before debug grant became stale under changed affinity reward plan; ordinary intent invalid_action guard, no Fruit receipt. Expected setup qualification; no product defect established.",
+    "qa-exploration-v5": "Both Exploration cells definitive PASS after accepted uniform starter-purge choice.",
+    "qa-augury-v5": "Public saved Augury scene legitimately has no runtime; caller runtime dereference failed before gameplay. Read current signature-matched public offer diagnostics.",
+    "qa-augury-v6": "Actual purge/Fruit50 applied; broad all-DOM completion absence failed on retained exiting frame; final deck/HUD/reload incomplete, zero effective cells.",
+    "qa-augury-v7": "Actual purge/Fruit50 applied; visibility check on layout-neutral route parent failed; final proofs incomplete, zero effective cells.",
+    "qa-augury-v8": "Explicit parent pause arrived just after authorized source-correction launch; immediate own SIGINT, zero effective cells, result/Caps UNKNOWN.",
+    "qa-augury-v9": "Overall invocation FAIL on mobile offscreen second carousel offer. Parent independently verified desktop definitive; exactly one effective desktop cell retained, no invocation PASS claim.",
+    "qa-augury-mobile-v10": "Mobile-only rerun uses ordinary horizontal carousel scrolling then geometry/hit checks; definitive PASS.",
+    "qa-gamble-v12": "Layout-neutral FourSuit root visibility waiter failed before discovery/gameplay although normal OPEN_SITE applied; Caps[], zero effective cells.",
+    "qa-gamble-v13": "Both Gamble cells definitive PASS, stable K-Clubs front and consumed target slot; no transient timing proof."
+  },
+  "parentCallerCorrections": [
+    "Initial read guessed nonexistent modifiers subdirectory, corrected via actual paths before mutation; duration UNKNOWN.",
+    "Parent artifact-saving probe compared old v7 mutable external support after admittedv8 updates; corrected to2340immutablefunctional hashes, original full2353v7check retained. Duration UNKNOWN.",
+    "Helper first git check-ignore used own worktree against primary absolute capture artifact and returned outside-repository128; corrected primary metadata-only ignore query succeeded. No repository/source mutation; audit copies byte-identical."
+  ],
+  "cardIssues": [],
+  "rulesDecisions": [],
+  "preExistingProductIssues": [],
+  "durableAuditArtifacts": {
+    "context": "artifacts/qa/hv-umm2.601/audit",
+    "manifestFilename": "audit-artifact-manifest.json",
+    "manifestSha256": "02d12f11bab1ac243b3f970f9f924d3be669b419d0c01f8dfe30c3f214127c60",
+    "exactCopyManifest": {
+      "atUtc": "2026-10-13T04:27:15.823097+00:00",
+      "artifactContext": "artifacts/qa/hv-umm2.601/audit",
+      "inertEvidenceOnly": true,
+      "files": [
+        {
+          "source": "/tmp/codex-601/dispatch-actual.json",
+          "destinationFilename": "dispatch-actual.json",
+          "sourceSha256": "7f7828048fa58706d1e7b9a15fa58ee7e66649b9703f7b1a89d564191faefefa",
+          "destinationSha256": "7f7828048fa58706d1e7b9a15fa58ee7e66649b9703f7b1a89d564191faefefa",
+          "bytes": 363
+        },
+        {
+          "source": "/tmp/codex-601/helper/endpoint-closure-inventory.json",
+          "destinationFilename": "endpoint-closure-inventory.json",
+          "sourceSha256": "fdfb238fc9a29582cd15ba4a7f786b563bf52845e2f8103d36045f4ec7068ef2",
+          "destinationSha256": "fdfb238fc9a29582cd15ba4a7f786b563bf52845e2f8103d36045f4ec7068ef2",
+          "bytes": 10231
+        },
+        {
+          "source": "/tmp/codex-601/helper/endpoint-final-guard.json",
+          "destinationFilename": "endpoint-final-guard.json",
+          "sourceSha256": "6c55f6f8654574aa10039b4d61ebf7e116b0bce2d676b421deeb1bfde6412e74",
+          "destinationSha256": "6c55f6f8654574aa10039b4d61ebf7e116b0bce2d676b421deeb1bfde6412e74",
+          "bytes": 5848
+        },
+        {
+          "source": "/tmp/codex-601/helper/endpoint-six-cells.json",
+          "destinationFilename": "endpoint-six-cells.json",
+          "sourceSha256": "5d9ff98c16596c0fcb534ba7e6ba8330ea9496603a357308cbdc138740b04ea4",
+          "destinationSha256": "5d9ff98c16596c0fcb534ba7e6ba8330ea9496603a357308cbdc138740b04ea4",
+          "bytes": 65231
+        },
+        {
+          "source": "/tmp/codex-601/helper/finalize.py",
+          "destinationFilename": "finalize.py",
+          "sourceSha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36",
+          "destinationSha256": "564c8268802117544cc7d47ac306eb4f0a67eca10aa29798372dd623f4900c36",
+          "bytes": 568
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v1.json",
+          "destinationFilename": "freeze-v1.json",
+          "sourceSha256": "548d34daabcc125d3d763ee6f07e04b22495e59749e2af0f6456fc838d183341",
+          "destinationSha256": "548d34daabcc125d3d763ee6f07e04b22495e59749e2af0f6456fc838d183341",
+          "bytes": 413853
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v10.json",
+          "destinationFilename": "freeze-v10.json",
+          "sourceSha256": "45fec78f4b17a5b567cbde3aeb2a758602d9a9c5d91e3b4350b81e2398c27c18",
+          "destinationSha256": "45fec78f4b17a5b567cbde3aeb2a758602d9a9c5d91e3b4350b81e2398c27c18",
+          "bytes": 415683
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v11.json",
+          "destinationFilename": "freeze-v11.json",
+          "sourceSha256": "0dfd2c05adbd22b9e8e43d3a6062c1b470041e057423a523835f97e382a4a4a9",
+          "destinationSha256": "0dfd2c05adbd22b9e8e43d3a6062c1b470041e057423a523835f97e382a4a4a9",
+          "bytes": 415847
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v12.json",
+          "destinationFilename": "freeze-v12.json",
+          "sourceSha256": "c9351bd8c50499aa6825051cd04fdf8a6869e265befbf2b094ebe8330a078590",
+          "destinationSha256": "c9351bd8c50499aa6825051cd04fdf8a6869e265befbf2b094ebe8330a078590",
+          "bytes": 416013
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v13.json",
+          "destinationFilename": "freeze-v13.json",
+          "sourceSha256": "e4ae3dd2250b54d1942c06bb29b93c609cbe38da4197bec601cc31f8aa5cf88d",
+          "destinationSha256": "e4ae3dd2250b54d1942c06bb29b93c609cbe38da4197bec601cc31f8aa5cf88d",
+          "bytes": 416179
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v14.json",
+          "destinationFilename": "freeze-v14.json",
+          "sourceSha256": "aa38198e4068ab2acaacb6679217372686a2dc788d25849edb1ad38f8596733a",
+          "destinationSha256": "aa38198e4068ab2acaacb6679217372686a2dc788d25849edb1ad38f8596733a",
+          "bytes": 416345
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v15.json",
+          "destinationFilename": "freeze-v15.json",
+          "sourceSha256": "8c7839100a455ecd82a37bae0a9cd2152ff3fb7c330a8afb688db737aeec0f0a",
+          "destinationSha256": "8c7839100a455ecd82a37bae0a9cd2152ff3fb7c330a8afb688db737aeec0f0a",
+          "bytes": 416511
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v2.json",
+          "destinationFilename": "freeze-v2.json",
+          "sourceSha256": "0bd9afe52f443c7857910a31def155f727c3ff4d982bb0b551a07e5283d7f63a",
+          "destinationSha256": "0bd9afe52f443c7857910a31def155f727c3ff4d982bb0b551a07e5283d7f63a",
+          "bytes": 414021
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v3.json",
+          "destinationFilename": "freeze-v3.json",
+          "sourceSha256": "5f164a9a44eb949f836105893c505a691b10b361526461ec4bc2c7ce33b03dbd",
+          "destinationSha256": "5f164a9a44eb949f836105893c505a691b10b361526461ec4bc2c7ce33b03dbd",
+          "bytes": 414189
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v4.json",
+          "destinationFilename": "freeze-v4.json",
+          "sourceSha256": "f199b77f4de8143d36d02134661d03800a3bd1b812fb4a34118eb0289b451791",
+          "destinationSha256": "f199b77f4de8143d36d02134661d03800a3bd1b812fb4a34118eb0289b451791",
+          "bytes": 414531
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v5.json",
+          "destinationFilename": "freeze-v5.json",
+          "sourceSha256": "1d2dda729ff866bd63d4b639fb8bf13d42eb654816046ff027015eef24ce6905",
+          "destinationSha256": "1d2dda729ff866bd63d4b639fb8bf13d42eb654816046ff027015eef24ce6905",
+          "bytes": 414863
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v6.json",
+          "destinationFilename": "freeze-v6.json",
+          "sourceSha256": "4d702be4818f7ca83ec122410acbbb1e0dedfab9f7e351a7bdda8c916e4584d1",
+          "destinationSha256": "4d702be4818f7ca83ec122410acbbb1e0dedfab9f7e351a7bdda8c916e4584d1",
+          "bytes": 415027
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v7.json",
+          "destinationFilename": "freeze-v7.json",
+          "sourceSha256": "77195f72bc213a312e05c094646375278a8e8508f5ead3f16bea335a8bd93d9e",
+          "destinationSha256": "77195f72bc213a312e05c094646375278a8e8508f5ead3f16bea335a8bd93d9e",
+          "bytes": 415191
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v8.json",
+          "destinationFilename": "freeze-v8.json",
+          "sourceSha256": "72f18cd2f088a7f614b05ad2d57f57bb955d8a8ac752576deae85919709406f9",
+          "destinationSha256": "72f18cd2f088a7f614b05ad2d57f57bb955d8a8ac752576deae85919709406f9",
+          "bytes": 415355
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze-v9.json",
+          "destinationFilename": "freeze-v9.json",
+          "sourceSha256": "4f56c6016fb9f61d35aa7f923bb6c0711952d15420ed9da3f55c3db869738da0",
+          "destinationSha256": "4f56c6016fb9f61d35aa7f923bb6c0711952d15420ed9da3f55c3db869738da0",
+          "bytes": 415519
+        },
+        {
+          "source": "/tmp/codex-601/helper/freeze.py",
+          "destinationFilename": "freeze.py",
+          "sourceSha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120",
+          "destinationSha256": "1611752b58cb2fa0a1ffcdd3adceb9f4ccd1b264919cb6251282d1702ccc7120",
+          "bytes": 1192
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-failed-v1.mjs",
+          "destinationFilename": "fruit-sites-failed-v1.mjs",
+          "sourceSha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce",
+          "destinationSha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce",
+          "bytes": 13657
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v1.mjs",
+          "destinationFilename": "fruit-sites-v1.mjs",
+          "sourceSha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce",
+          "destinationSha256": "5854e8ff4760d88dcbab99c7628ba972a4bf11d949d3993fd9bfda05c6f32dce",
+          "bytes": 13657
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v10.mjs",
+          "destinationFilename": "fruit-sites-v10.mjs",
+          "sourceSha256": "a5fc4565ab4765d3620634e104101efc7da4ddb4fc95adfcbdda6e90deb8dc1a",
+          "destinationSha256": "a5fc4565ab4765d3620634e104101efc7da4ddb4fc95adfcbdda6e90deb8dc1a",
+          "bytes": 15688
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v11.mjs",
+          "destinationFilename": "fruit-sites-v11.mjs",
+          "sourceSha256": "8b97cb74c39b18fb9053252713501c145c4ed145d19a16b16313f4b1a5070b95",
+          "destinationSha256": "8b97cb74c39b18fb9053252713501c145c4ed145d19a16b16313f4b1a5070b95",
+          "bytes": 16419
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v12.mjs",
+          "destinationFilename": "fruit-sites-v12.mjs",
+          "sourceSha256": "b759496c9ad8bfc3b58f7429c8f24d42b8c8f4d99b6e5ca24c3ce8f8300f6672",
+          "destinationSha256": "b759496c9ad8bfc3b58f7429c8f24d42b8c8f4d99b6e5ca24c3ce8f8300f6672",
+          "bytes": 17095
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v13.mjs",
+          "destinationFilename": "fruit-sites-v13.mjs",
+          "sourceSha256": "9741177a27d27af140a39d52495f093a6e33843fbe5865752d21abb5e104491e",
+          "destinationSha256": "9741177a27d27af140a39d52495f093a6e33843fbe5865752d21abb5e104491e",
+          "bytes": 17208
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v2.mjs",
+          "destinationFilename": "fruit-sites-v2.mjs",
+          "sourceSha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8",
+          "destinationSha256": "60109862d36f26a2714006a9c1b90f234d3a879807baff47dc6fc0dc5ceefeb8",
+          "bytes": 13783
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v3.mjs",
+          "destinationFilename": "fruit-sites-v3.mjs",
+          "sourceSha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d",
+          "destinationSha256": "26ca72d3d47350717daebbe1f27996ad52737e20cb51a0666e49f686a1793f7d",
+          "bytes": 13771
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v4.mjs",
+          "destinationFilename": "fruit-sites-v4.mjs",
+          "sourceSha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8",
+          "destinationSha256": "c5511bf775408972a45f0dea2d4076ad6faaa017e028fd54b53a89084b19c9c8",
+          "bytes": 13860
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v5.mjs",
+          "destinationFilename": "fruit-sites-v5.mjs",
+          "sourceSha256": "2b1363410814836bb005953a2e0cbf3acd5e70508e4131f03b9de22b9b1a606e",
+          "destinationSha256": "2b1363410814836bb005953a2e0cbf3acd5e70508e4131f03b9de22b9b1a606e",
+          "bytes": 13778
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v6.mjs",
+          "destinationFilename": "fruit-sites-v6.mjs",
+          "sourceSha256": "cfb091a1f0ea28a3c00b49a944572deaea1395b4b0762829da902dd3a4e70e87",
+          "destinationSha256": "cfb091a1f0ea28a3c00b49a944572deaea1395b4b0762829da902dd3a4e70e87",
+          "bytes": 14347
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v7.mjs",
+          "destinationFilename": "fruit-sites-v7.mjs",
+          "sourceSha256": "55c7073c55621bf64fa8f33689e6836e939821ede225a5a3d11d8e3b7d78bf21",
+          "destinationSha256": "55c7073c55621bf64fa8f33689e6836e939821ede225a5a3d11d8e3b7d78bf21",
+          "bytes": 14695
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v8.mjs",
+          "destinationFilename": "fruit-sites-v8.mjs",
+          "sourceSha256": "584f67a0757371932634a1a11418f0ac215fe3b56c4b1fb1ec49bb4b1660503f",
+          "destinationSha256": "584f67a0757371932634a1a11418f0ac215fe3b56c4b1fb1ec49bb4b1660503f",
+          "bytes": 14838
+        },
+        {
+          "source": "/tmp/codex-601/helper/fruit-sites-v9.mjs",
+          "destinationFilename": "fruit-sites-v9.mjs",
+          "sourceSha256": "38b71dcd88dc7d7568ff4c8b04f24e10563ee0f31ab992cf20f58f20eaf77dd9",
+          "destinationSha256": "38b71dcd88dc7d7568ff4c8b04f24e10563ee0f31ab992cf20f58f20eaf77dd9",
+          "bytes": 15482
+        },
+        {
+          "source": "/tmp/codex-601/helper/observe-source-v1.py",
+          "destinationFilename": "observe-source-v1.py",
+          "sourceSha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c",
+          "destinationSha256": "f1836b5ec8d09d3ac3e07dd91175780f6dd5bcdade97719ab40d255dcca1887c",
+          "bytes": 2251
+        },
+        {
+          "source": "/tmp/codex-601/helper/observe-source-v2.py",
+          "destinationFilename": "observe-source-v2.py",
+          "sourceSha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753",
+          "destinationSha256": "ada0bb9f1f235e4d0fa2a807c871dfb0091da800425965ab2b0123aefcb0b753",
+          "bytes": 2424
+        },
+        {
+          "source": "/tmp/codex-601/helper/observe-source-v3.py",
+          "destinationFilename": "observe-source-v3.py",
+          "sourceSha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229",
+          "destinationSha256": "b06a359fc8f763938807e769bf9f8b3434d8b2bb055d2cee71f2dfad8cc85229",
+          "bytes": 3463
+        },
+        {
+          "source": "/tmp/codex-601/helper/observe.py",
+          "destinationFilename": "observe.py",
+          "sourceSha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8",
+          "destinationSha256": "4bf2d4595096f5e24432df18efb98d1768537540cc822039757cbca797aa16f8",
+          "bytes": 3465
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-mobile-v10.receipt.json",
+          "destinationFilename": "qa-augury-mobile-v10.receipt.json",
+          "sourceSha256": "2146c32883c7386bc2a356162386a653c92841c57e3ee638b63a0d09be13706e",
+          "destinationSha256": "2146c32883c7386bc2a356162386a653c92841c57e3ee638b63a0d09be13706e",
+          "bytes": 24697
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-mobile-v10.stdout",
+          "destinationFilename": "qa-augury-mobile-v10.stdout",
+          "sourceSha256": "f08aed2e0ced450429b0451f87aa08e2777ec833eea8bd5e4b10a5d30d046ce1",
+          "destinationSha256": "f08aed2e0ced450429b0451f87aa08e2777ec833eea8bd5e4b10a5d30d046ce1",
+          "bytes": 1196784
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-v5.receipt.json",
+          "destinationFilename": "qa-augury-v5.receipt.json",
+          "sourceSha256": "5da9a0c69c57b9c5668d135b6ea4e7661aafb1c8a308c2f455249b8f75e58106",
+          "destinationSha256": "5da9a0c69c57b9c5668d135b6ea4e7661aafb1c8a308c2f455249b8f75e58106",
+          "bytes": 24517
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-v5.stdout",
+          "destinationFilename": "qa-augury-v5.stdout",
+          "sourceSha256": "e5fe83bd06ee8425881557d08a315a61feca54df1960f876e10568b3e500bd66",
+          "destinationSha256": "e5fe83bd06ee8425881557d08a315a61feca54df1960f876e10568b3e500bd66",
+          "bytes": 54717
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-v6.receipt.json",
+          "destinationFilename": "qa-augury-v6.receipt.json",
+          "sourceSha256": "6c2338ccd3511e7b7e41f8ec79f214963a0f2c8afd04a07545267bd8c700f898",
+          "destinationSha256": "6c2338ccd3511e7b7e41f8ec79f214963a0f2c8afd04a07545267bd8c700f898",
+          "bytes": 20543
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-v6.stdout",
+          "destinationFilename": "qa-augury-v6.stdout",
+          "sourceSha256": "4912ac944c643581f7e5c0c341e2083231af9a5be4446900e5f19a875d55bb07",
+          "destinationSha256": "4912ac944c643581f7e5c0c341e2083231af9a5be4446900e5f19a875d55bb07",
+          "bytes": 334320
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-v7.receipt.json",
+          "destinationFilename": "qa-augury-v7.receipt.json",
+          "sourceSha256": "2bd1dfa8810e698efd7c63249276c4da519992aedc6f7b9411c02377b11db8d5",
+          "destinationSha256": "2bd1dfa8810e698efd7c63249276c4da519992aedc6f7b9411c02377b11db8d5",
+          "bytes": 24516
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-v7.stdout",
+          "destinationFilename": "qa-augury-v7.stdout",
+          "sourceSha256": "2374bf2d7fece7f1ff55283cc80c11e058aff6bfc72b851c4debbadcf38b7001",
+          "destinationSha256": "2374bf2d7fece7f1ff55283cc80c11e058aff6bfc72b851c4debbadcf38b7001",
+          "bytes": 334354
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-v8.receipt.json",
+          "destinationFilename": "qa-augury-v8.receipt.json",
+          "sourceSha256": "f2893371f1d5fc6f6c45d53754095b37e97a07cf063584bf41008a08e88e288f",
+          "destinationSha256": "f2893371f1d5fc6f6c45d53754095b37e97a07cf063584bf41008a08e88e288f",
+          "bytes": 22989
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-v8.stdout",
+          "destinationFilename": "qa-augury-v8.stdout",
+          "sourceSha256": "a559a25ae5536e8812af0717e054f76a5139b9803d384d915765b2b8b5361eff",
+          "destinationSha256": "a559a25ae5536e8812af0717e054f76a5139b9803d384d915765b2b8b5361eff",
+          "bytes": 602
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-v9.receipt.json",
+          "destinationFilename": "qa-augury-v9.receipt.json",
+          "sourceSha256": "3212aa3ad1fc6444046a22209dd85c454265de14e27e54928e4499bbb03cc424",
+          "destinationSha256": "3212aa3ad1fc6444046a22209dd85c454265de14e27e54928e4499bbb03cc424",
+          "bytes": 24723
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-augury-v9.stdout",
+          "destinationFilename": "qa-augury-v9.stdout",
+          "sourceSha256": "22a125a80512c81acf4bdd7c1746667be202ce912384beb50e0f039372190fb7",
+          "destinationSha256": "22a125a80512c81acf4bdd7c1746667be202ce912384beb50e0f039372190fb7",
+          "bytes": 1481487
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-exploration-v1.receipt.json",
+          "destinationFilename": "qa-exploration-v1.receipt.json",
+          "sourceSha256": "6cf862717ab0fdc37647eca5000717c1529944756548653ce5f51da8fbc5fd29",
+          "destinationSha256": "6cf862717ab0fdc37647eca5000717c1529944756548653ce5f51da8fbc5fd29",
+          "bytes": 16887
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-exploration-v1.stdout",
+          "destinationFilename": "qa-exploration-v1.stdout",
+          "sourceSha256": "1fbbada2cad85a8a5f1daab95f41dbc2a404815b67dc8dfb8440378321a82e60",
+          "destinationSha256": "1fbbada2cad85a8a5f1daab95f41dbc2a404815b67dc8dfb8440378321a82e60",
+          "bytes": 1553
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-exploration-v2.receipt.json",
+          "destinationFilename": "qa-exploration-v2.receipt.json",
+          "sourceSha256": "fca16093bfe872c415fd8aa01008ffc8c1e9524827aa17f5c0580cfbd2796514",
+          "destinationSha256": "fca16093bfe872c415fd8aa01008ffc8c1e9524827aa17f5c0580cfbd2796514",
+          "bytes": 19556
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-exploration-v2.stdout",
+          "destinationFilename": "qa-exploration-v2.stdout",
+          "sourceSha256": "7130d3d924debce11ca5ab73849310027833c9fb1c2d7b15e5e47f73b386da24",
+          "destinationSha256": "7130d3d924debce11ca5ab73849310027833c9fb1c2d7b15e5e47f73b386da24",
+          "bytes": 602
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-exploration-v3.receipt.json",
+          "destinationFilename": "qa-exploration-v3.receipt.json",
+          "sourceSha256": "80752ca141f7f72bdc0c8f00158943251ddfa015c58a73c641c2c43d1b18fe1d",
+          "destinationSha256": "80752ca141f7f72bdc0c8f00158943251ddfa015c58a73c641c2c43d1b18fe1d",
+          "bytes": 20647
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-exploration-v3.stdout",
+          "destinationFilename": "qa-exploration-v3.stdout",
+          "sourceSha256": "07debd55164b0c6b1d63ada074102d77d50dfc732b7ebdd56d7b401dee7f4a47",
+          "destinationSha256": "07debd55164b0c6b1d63ada074102d77d50dfc732b7ebdd56d7b401dee7f4a47",
+          "bytes": 7343
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-exploration-v4.receipt.json",
+          "destinationFilename": "qa-exploration-v4.receipt.json",
+          "sourceSha256": "c3b4eacd577eb9de6aef8b4d3aca3d6e0d634bea78c772d50d890a942d11aba7",
+          "destinationSha256": "c3b4eacd577eb9de6aef8b4d3aca3d6e0d634bea78c772d50d890a942d11aba7",
+          "bytes": 24613
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-exploration-v4.stdout",
+          "destinationFilename": "qa-exploration-v4.stdout",
+          "sourceSha256": "673c0586aae933c6143dce13eda76425c07c4b43f646e413b957ae03d4d9ab38",
+          "destinationSha256": "673c0586aae933c6143dce13eda76425c07c4b43f646e413b957ae03d4d9ab38",
+          "bytes": 575113
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-exploration-v5.receipt.json",
+          "destinationFilename": "qa-exploration-v5.receipt.json",
+          "sourceSha256": "5c66fc702291ba8c67499837c2be1646130b66b424368366622f3b55d8036d74",
+          "destinationSha256": "5c66fc702291ba8c67499837c2be1646130b66b424368366622f3b55d8036d74",
+          "bytes": 24619
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-exploration-v5.stdout",
+          "destinationFilename": "qa-exploration-v5.stdout",
+          "sourceSha256": "765dddde74b4e3fbd6f1571947ca848ea13d664713a79ea91db8f329fab4fe02",
+          "destinationSha256": "765dddde74b4e3fbd6f1571947ca848ea13d664713a79ea91db8f329fab4fe02",
+          "bytes": 2323570
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-gamble-v12.receipt.json",
+          "destinationFilename": "qa-gamble-v12.receipt.json",
+          "sourceSha256": "8f33872fa5924d78fd481acf87f04e05c8876441cf6459519b56cac6f2cc2cdf",
+          "destinationSha256": "8f33872fa5924d78fd481acf87f04e05c8876441cf6459519b56cac6f2cc2cdf",
+          "bytes": 24753
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-gamble-v12.stdout",
+          "destinationFilename": "qa-gamble-v12.stdout",
+          "sourceSha256": "1406ad57c8d125885a987d93e785543142349c59b320f047d155dec9785403b1",
+          "destinationSha256": "1406ad57c8d125885a987d93e785543142349c59b320f047d155dec9785403b1",
+          "bytes": 8675
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-gamble-v13.receipt.json",
+          "destinationFilename": "qa-gamble-v13.receipt.json",
+          "sourceSha256": "dc6568d3e8b419e48be479f9915ed4b93e729f22b8d0ab51a28d3619e3bbfde1",
+          "destinationSha256": "dc6568d3e8b419e48be479f9915ed4b93e729f22b8d0ab51a28d3619e3bbfde1",
+          "bytes": 25315
+        },
+        {
+          "source": "/tmp/codex-601/helper/qa-gamble-v13.stdout",
+          "destinationFilename": "qa-gamble-v13.stdout",
+          "sourceSha256": "0f11504e5bda1e5715d312a88a4a621a4d6c57bf0d66a3a89312b2fbac6b512f",
+          "destinationSha256": "0f11504e5bda1e5715d312a88a4a621a4d6c57bf0d66a3a89312b2fbac6b512f",
+          "bytes": 2335453
+        },
+        {
+          "source": "/tmp/codex-601/helper/stage1.md",
+          "destinationFilename": "stage1.md",
+          "sourceSha256": "2ff1c5fea0335f60c620e211ef05b8e9f4fd426ae9605114063f7892ea20115c",
+          "destinationSha256": "2ff1c5fea0335f60c620e211ef05b8e9f4fd426ae9605114063f7892ea20115c",
+          "bytes": 17069
+        },
+        {
+          "source": "/tmp/codex-601/helper/v1-cleanup-source-supported.json",
+          "destinationFilename": "v1-cleanup-source-supported.json",
+          "sourceSha256": "a007e19ed362e9bae946857949bb40167ba5124e73760d5be2cded153ef9e1ca",
+          "destinationSha256": "a007e19ed362e9bae946857949bb40167ba5124e73760d5be2cded153ef9e1ca",
+          "bytes": 1664
+        },
+        {
+          "source": "/tmp/codex-601/intake.json",
+          "destinationFilename": "intake.json",
+          "sourceSha256": "26c51258c86723a26fb60e11e75991dcfae16d341fd4941b491ab6b11527c12c",
+          "destinationSha256": "26c51258c86723a26fb60e11e75991dcfae16d341fd4941b491ab6b11527c12c",
+          "bytes": 75963
+        },
+        {
+          "source": "/tmp/codex-601/parent-augury-desktop-verification.json",
+          "destinationFilename": "parent-augury-desktop-verification.json",
+          "sourceSha256": "4f0bfcba54934630b7d0312d4cb91ab5d76cca965d7dea6022f5b254f3fe068b",
+          "destinationSha256": "4f0bfcba54934630b7d0312d4cb91ab5d76cca965d7dea6022f5b254f3fe068b",
+          "bytes": 1096
+        },
+        {
+          "source": "/tmp/codex-601/parent-augury-mobile-verification.json",
+          "destinationFilename": "parent-augury-mobile-verification.json",
+          "sourceSha256": "6fb9fa31e2b6f6f8c1b20ca9ea56d2a1790829cf7a9a7e00c9b1d49a72d7e96c",
+          "destinationSha256": "6fb9fa31e2b6f6f8c1b20ca9ea56d2a1790829cf7a9a7e00c9b1d49a72d7e96c",
+          "bytes": 3416
+        },
+        {
+          "source": "/tmp/codex-601/parent-closure-verification.json",
+          "destinationFilename": "parent-closure-verification.json",
+          "sourceSha256": "4f4c949a3124e341267b99ce150680157c8aa1555a154cf3c101faf57d70c278",
+          "destinationSha256": "4f4c949a3124e341267b99ce150680157c8aa1555a154cf3c101faf57d70c278",
+          "bytes": 1183
+        },
+        {
+          "source": "/tmp/codex-601/parent-exploration-verification.json",
+          "destinationFilename": "parent-exploration-verification.json",
+          "sourceSha256": "f6216cc2c6dd1b9aad2ba5ce21c61ec8f2c913dd9df591946b89161b74897844",
+          "destinationSha256": "f6216cc2c6dd1b9aad2ba5ce21c61ec8f2c913dd9df591946b89161b74897844",
+          "bytes": 1524
+        },
+        {
+          "source": "/tmp/codex-601/parent-gamble-verification.json",
+          "destinationFilename": "parent-gamble-verification.json",
+          "sourceSha256": "3c8b4c289d8ca5179e4612f2fd1e71939e1bccc57e7b032f918ba5fb92420409",
+          "destinationSha256": "3c8b4c289d8ca5179e4612f2fd1e71939e1bccc57e7b032f918ba5fb92420409",
+          "bytes": 7427
+        }
+      ]
+    },
+    "gitIgnored": true,
+    "additionalValidationManifestFilename": "audit-validation-manifest.json",
+    "additionalValidationArtifactFilenames": [
+      "check-review.stdout",
+      "check-review.receipt.json",
+      "check-knip.stdout",
+      "check-knip.receipt.json",
+      "check-schema.stdout",
+      "check-schema.receipt.json",
+      "check-schema-final.stdout",
+      "check-schema-final.receipt.json",
+      "review-start-sysctl.json",
+      "final-handoff-receipt.json"
+    ]
+  },
+  "parentEndpointImageReferenceNormalization": "Image references in embedded parent receipts use filenames only. Recorded SHA256s cover exact original copied raw JSON bytes, not this display normalization.",
+  "preCommitCutoffUtc": "2026-10-13T04:33:16.539456+00:00",
+  "commitWindowQualification": "Observed cutoff immediately before final record schema and normal commit; exact actual commit-return tail is retained in the external final handoff receipt, bounded below60s. This cutoff is not a fabricated Git timestamp.",
+  "checkReceipts": {
+    "review": {
+      "label": "check-review",
+      "startUtc": "2026-10-13T04:30:37.655660+00:00",
+      "loadStart": [
+        3.73486328125,
+        5.4443359375,
+        6.650390625
+      ],
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-601",
+      "observerPid": 45293,
+      "observerProcessGroup": 45293,
+      "observations": [],
+      "pid": 45307,
+      "processGroup": 45307,
+      "endUtc": "2026-10-13T04:30:37.991192+00:00",
+      "elapsedSeconds": 0.3355460419988958,
+      "exitCode": 0,
+      "loadEnd": [
+        3.73486328125,
+        5.4443359375,
+        6.650390625
+      ],
+      "finalProcesses": [
+        {
+          "pid": 45293,
+          "ppid": 1772,
+          "group": 45293,
+          "started": "Mon Oct 12 21:30:37 2026",
+          "command": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/codex-601/helper/observe.py check-review npm run review"
+        },
+        {
+          "pid": 45389,
+          "ppid": 45293,
+          "group": 45293,
+          "started": "Mon Oct 12 21:30:37 2026",
+          "command": "ps -axo pid=,ppid=,pgid=,lstart=,command="
+        }
+      ],
+      "finalSlots": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+          "absent": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+          "absent": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "absent": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "absent": true
+        }
+      ]
+    },
+    "knip": {
+      "label": "check-knip",
+      "startUtc": "2026-10-13T04:30:42.367926+00:00",
+      "loadStart": [
+        3.8359375,
+        5.4365234375,
+        6.640625
+      ],
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-601",
+      "observerPid": 45494,
+      "observerProcessGroup": 45494,
+      "observations": [],
+      "pid": 45507,
+      "processGroup": 45507,
+      "endUtc": "2026-10-13T04:30:46.236908+00:00",
+      "elapsedSeconds": 3.8689565829990897,
+      "exitCode": 0,
+      "loadEnd": [
+        3.9287109375,
+        5.42919921875,
+        6.630859375
+      ],
+      "finalProcesses": [
+        {
+          "pid": 45494,
+          "ppid": 1772,
+          "group": 45494,
+          "started": "Mon Oct 12 21:30:42 2026",
+          "command": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/codex-601/helper/observe.py check-knip npm run knip"
+        },
+        {
+          "pid": 45764,
+          "ppid": 45494,
+          "group": 45494,
+          "started": "Mon Oct 12 21:30:46 2026",
+          "command": "ps -axo pid=,ppid=,pgid=,lstart=,command="
+        }
+      ],
+      "finalSlots": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+          "absent": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+          "absent": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "sha256": "18400b85ec807646bfa92c53b9a365f3ccd994273193c14d7bd60e56393a7f55",
+          "own": false,
+          "data": {
+            "pid": 45602,
+            "bead": "hv-umm2.453",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol",
+            "port": 5275,
+            "slot": 1,
+            "label": "judged"
+          }
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "sha256": "10e6080fb25c11ef1f065d1d39317ae22da5b484c7603db6710c793f840eca70",
+          "own": false,
+          "data": {
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol",
+            "port": 5275,
+            "runnerPid": 45602
+          }
+        }
+      ]
+    },
+    "schema": {
+      "label": "check-schema",
+      "startUtc": "2026-10-13T04:31:02.590380+00:00",
+      "loadStart": [
+        3.5068359375,
+        5.2607421875,
+        6.54931640625
+      ],
+      "args": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-phase5-601",
+      "observerPid": 46108,
+      "observerProcessGroup": 46108,
+      "observations": [],
+      "pid": 46121,
+      "processGroup": 46121,
+      "endUtc": "2026-10-13T04:31:02.653908+00:00",
+      "elapsedSeconds": 0.06355137500213459,
+      "exitCode": 0,
+      "loadEnd": [
+        3.5068359375,
+        5.2607421875,
+        6.54931640625
+      ],
+      "finalProcesses": [
+        {
+          "pid": 46108,
+          "ppid": 1772,
+          "group": 46108,
+          "started": "Mon Oct 12 21:31:02 2026",
+          "command": "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python /tmp/codex-601/helper/observe.py check-schema node scripts/friction-triggers.mjs --validate-records"
+        },
+        {
+          "pid": 46126,
+          "ppid": 46108,
+          "group": 46108,
+          "started": "Mon Oct 12 21:31:02 2026",
+          "command": "ps -axo pid=,ppid=,pgid=,lstart=,command="
+        }
+      ],
+      "finalSlots": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+          "absent": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+          "absent": true
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+          "sha256": "18400b85ec807646bfa92c53b9a365f3ccd994273193c14d7bd60e56393a7f55",
+          "own": false,
+          "data": {
+            "pid": 45602,
+            "bead": "hv-umm2.453",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol",
+            "port": 5275,
+            "slot": 1,
+            "label": "judged"
+          }
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+          "sha256": "10e6080fb25c11ef1f065d1d39317ae22da5b484c7603db6710c793f840eca70",
+          "own": false,
+          "data": {
+            "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-batch453-resume-sol",
+            "port": 5275,
+            "runnerPid": 45602
+          }
+        }
+      ]
+    }
+  },
+  "postValidationFunctionalHashGuard": {
+    "atUtc": "2026-10-13T04:33:16.539456+00:00",
+    "count": 2340,
+    "allMatch": true,
+    "base": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4"
+  }
+}

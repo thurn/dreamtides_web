@@ -1,0 +1,27 @@
+{
+  "bead": "hv-umm2.601",
+  "phase": 5,
+  "implementMin": 44.1152076,
+  "implementWindow": {
+    "start": "2026-10-13T03:49:09.627000+00:00",
+    "end": "2026-10-13T04:33:16.539456+00:00"
+  },
+  "localValidationS": {
+    "review": 0.3355460419988958,
+    "knip": 3.8689565829990897,
+    "schema": 0.06355137500213459
+  },
+  "hostLoad": 3.73,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 19.7003746,
+      "note": "Measured first-caller-failure to final corrected native invocation start window; includes source audits, support freezing, parent coordination and successful intermediate cells, not pure wasted/CPU time. Public save/VM/input selectors, absent Augury runtime, active/exiting frame and mobile carousel/layout-neutral waiter assumptions corrected externally; all raw attempts retained. Existing canonical retrospective hv-g3gu is peer-owned; no duplicate filing."
+    }
+  ]
+}
