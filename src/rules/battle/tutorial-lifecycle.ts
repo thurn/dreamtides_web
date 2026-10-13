@@ -41,7 +41,9 @@ function build(state: FoldState, tutorialRunId: import("../../types/identifiers"
 export function exitTutorialBattle(state: FoldState, payload: Record<string, unknown>, ctx: EventContext): FoldState | null {
     const battle = tutorialBattleOf(state.battle);
     const avatar = configuredTutorialJourneyAvatarId();
-    if (battle === null || payload.battleId !== battle.init.battleId || avatar === null)
+    if (battle === null || payload.battleId !== battle.init.battleId || avatar === null ||
+        battle.engine.slice.committed.result?.kind !== "victory" || battle.engine.slice.committed.result.winner !== "player" ||
+        battle.engine.slice.inFlight !== null || battle.checkpoints.length !== 0 || battle.tutorialPresentation !== null)
         return null;
     const reset = resetJourney(state, ctx);
     return { ...reset, frontDoor: { phase: "journey", journeyId: null, tutorial: null }, journey: { ...reset.journey, screen: { type: "journeyStart", tutorialAvatarId: avatar } } };

@@ -1,0 +1,1071 @@
+{
+  "bead": "hv-33id.10",
+  "base": "3f57bdd663d53d723a4116a66935b2a20bcf283c",
+  "stage": "Final precommit source endpoint under native Stage3 ACK; exact Git receipt, cold review and certified delivery are additive ignored/native evidence",
+  "clock": {
+    "outerImplementationStart": "2026-10-13T00:37:45+00:00",
+    "outerStartMeaning": "Root initially owned implementation; original native claim, including trigger parking/re-entry and later delegated research/QA. Gross assignment window, not CPU/productive/quota. Stage3 stamps final commit end.",
+    "freshHelperDispatchBracket": [
+      "2026-10-13T00:49:36.860509Z",
+      "2026-10-13T00:50:13.820104Z"
+    ],
+    "exactProviderStartKnown": false,
+    "sourceWriteAck": "2026-10-13T00:54:23.730934Z",
+    "uiWriteAck": "2026-10-13T01:27:05.939663Z",
+    "opponentFixtureWriteAck": "2026-10-13T01:39:12.985695Z",
+    "stage2End": "2026-10-13T02:04:09.639182+00:00",
+    "stage3CommitAck": "2026-10-13T02:06:54.192304Z",
+    "finalPreCommitStamp": "2026-10-13T02:13:26.451382+00:00",
+    "finalStampMeaning": "Measured immediately before final schema/staged commit; exact Git start/end is captured separately with no post-handoff source amendment"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "sysctl -n vm.loadavg at local-review-03 outer wrapper start; ordinary review was incorrectly wrapped in heavy.lock, so timing includes any unisolated lock wait",
+        "sourceReceipt": "local-review-03.receipt.json"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "name": "ui-focused-02",
+      "at": "2026-10-13T01:31:21.376049+00:00",
+      "oneMinute": 16.84,
+      "raw": "{ 16.84 14.23 14.05 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/cumulus/screens/TutorialScreen.scene.test.tsx",
+        "src/cumulus/screens/TutorialScreen.how-to-play.test.tsx",
+        "src/cumulus/screens/TutorialScreen.opponent-cards.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ]
+    },
+    {
+      "name": "mutant-exit-01",
+      "at": "2026-10-13T01:00:37.780734+00:00",
+      "oneMinute": 16.77,
+      "raw": "{ 16.77 24.04 20.46 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ]
+    },
+    {
+      "name": "ui-mutant-fallback-01",
+      "at": "2026-10-13T01:32:56.033079+00:00",
+      "oneMinute": 13.57,
+      "raw": "{ 13.57 14.00 13.99 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts"
+      ]
+    },
+    {
+      "name": "focused-01",
+      "at": "2026-10-13T00:56:41.028766+00:00",
+      "oneMinute": 24.93,
+      "raw": "{ 24.93 21.54 18.13 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+        "src/rules/reducer.test.ts",
+        "src/rules/reducer-routing.test.ts",
+        "src/rules/reducer-containment.test.ts"
+      ]
+    },
+    {
+      "name": "before-fix-01",
+      "at": "2026-10-13T00:55:44.983688+00:00",
+      "oneMinute": 25.82,
+      "raw": "{ 25.82 20.70 17.61 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ]
+    },
+    {
+      "name": "ui-focused-04",
+      "at": "2026-10-13T01:40:56.633986+00:00",
+      "oneMinute": 4.78,
+      "raw": "{ 4.78 7.30 10.65 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/cumulus/screens/TutorialScreen.scene.test.tsx",
+        "src/cumulus/screens/TutorialScreen.how-to-play.test.tsx",
+        "src/cumulus/screens/TutorialScreen.opponent-cards.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ]
+    },
+    {
+      "name": "ui-focused-03",
+      "at": "2026-10-13T01:39:59.196009+00:00",
+      "oneMinute": 4.25,
+      "raw": "{ 4.25 7.75 11.04 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/cumulus/screens/TutorialScreen.scene.test.tsx",
+        "src/cumulus/screens/TutorialScreen.how-to-play.test.tsx",
+        "src/cumulus/screens/TutorialScreen.opponent-cards.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ]
+    },
+    {
+      "name": "ui-mutant-compact-01",
+      "at": "2026-10-13T01:32:51.054283+00:00",
+      "oneMinute": 14.06,
+      "raw": "{ 14.06 14.10 14.02 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts"
+      ]
+    },
+    {
+      "name": "qa-normal-01",
+      "at": "2026-10-13T01:03:14.981924+00:00",
+      "oneMinute": 19.18,
+      "raw": "{ 19.18 22.79 20.58 }",
+      "measuredFor": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/normal-boundaries-v01.mjs",
+        "--bead",
+        "hv-33id.10",
+        "--port",
+        "5274",
+        "--timeout",
+        "900"
+      ]
+    },
+    {
+      "name": "mutant-drop-01",
+      "at": "2026-10-13T01:00:33.565620+00:00",
+      "oneMinute": 17.36,
+      "raw": "{ 17.36 24.28 20.52 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ]
+    },
+    {
+      "name": "local-review-03",
+      "at": "2026-10-13T01:42:22.429783+00:00",
+      "oneMinute": 3.96,
+      "raw": "{ 3.96 6.37 9.97 }",
+      "measuredFor": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    {
+      "name": "local-knip-01",
+      "at": "2026-10-13T01:03:05.318597+00:00",
+      "oneMinute": 17.64,
+      "raw": "{ 17.64 22.64 20.50 }",
+      "measuredFor": [
+        "npm",
+        "run",
+        "knip"
+      ]
+    },
+    {
+      "name": "local-review-02",
+      "at": "2026-10-13T01:01:44.945357+00:00",
+      "oneMinute": 24.52,
+      "raw": "{ 24.52 24.27 20.78 }",
+      "measuredFor": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    {
+      "name": "qa-normal-02",
+      "at": "2026-10-13T01:06:18.662606+00:00",
+      "oneMinute": 12.83,
+      "raw": "{ 12.83 19.41 19.66 }",
+      "measuredFor": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/normal-boundaries-v02.mjs",
+        "--bead",
+        "hv-33id.10",
+        "--port",
+        "5274",
+        "--timeout",
+        "900"
+      ]
+    },
+    {
+      "name": "local-knip-02",
+      "at": "2026-10-13T01:43:11.430623+00:00",
+      "oneMinute": 5.45,
+      "raw": "{ 5.45 6.48 9.83 }",
+      "measuredFor": [
+        "npm",
+        "run",
+        "knip"
+      ]
+    },
+    {
+      "name": "qa-normal-03",
+      "at": "2026-10-13T01:44:14.232333+00:00",
+      "oneMinute": 5.26,
+      "raw": "{ 5.26 6.26 9.50 }",
+      "measuredFor": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/normal-boundaries-v03.mjs",
+        "--bead",
+        "hv-33id.10",
+        "--port",
+        "5274",
+        "--timeout",
+        "900"
+      ]
+    },
+    {
+      "name": "ui-before-fix-01",
+      "at": "2026-10-13T01:28:42.521208+00:00",
+      "oneMinute": 9.04,
+      "raw": "{ 9.04 12.23 13.51 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts"
+      ]
+    },
+    {
+      "name": "qa-default-01",
+      "at": "2026-10-13T01:52:33.755424+00:00",
+      "oneMinute": 18.82,
+      "raw": "{ 18.82 15.67 12.85 }",
+      "measuredFor": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/default-boundaries-v03.mjs",
+        "--bead",
+        "hv-33id.10",
+        "--port",
+        "5274",
+        "--timeout",
+        "400",
+        "--arg",
+        "defaultControl=1"
+      ]
+    },
+    {
+      "name": "local-review-01",
+      "at": "2026-10-13T01:01:05.292667+00:00",
+      "oneMinute": 12.38,
+      "raw": "{ 12.38 22.27 19.94 }",
+      "measuredFor": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    {
+      "name": "ui-focused-01",
+      "at": "2026-10-13T01:30:04.360781+00:00",
+      "oneMinute": 13.38,
+      "raw": "{ 13.38 12.13 13.32 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/cumulus/screens/TutorialScreen.test.tsx",
+        "src/cumulus/screens/TutorialScreen.timing.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ]
+    },
+    {
+      "name": "ui-mutant-centre-01",
+      "at": "2026-10-13T01:32:46.001186+00:00",
+      "oneMinute": 14.41,
+      "raw": "{ 14.41 14.17 14.05 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts"
+      ]
+    },
+    {
+      "name": "qa-preview-01",
+      "at": "2026-10-13T01:58:23.218846+00:00",
+      "oneMinute": 17.62,
+      "raw": "{ 17.62 13.03 12.21 }",
+      "measuredFor": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/preview-boundaries-v02.mjs",
+        "--bead",
+        "hv-33id.10",
+        "--port",
+        "5274",
+        "--timeout",
+        "200"
+      ]
+    },
+    {
+      "name": "before-fix-02",
+      "at": "2026-10-13T00:56:16.096059+00:00",
+      "oneMinute": 27.76,
+      "raw": "{ 27.76 21.64 18.06 }",
+      "measuredFor": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ]
+    }
+  ],
+  "receipts": {
+    "ui-focused-02": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/cumulus/screens/TutorialScreen.scene.test.tsx",
+        "src/cumulus/screens/TutorialScreen.how-to-play.test.tsx",
+        "src/cumulus/screens/TutorialScreen.opponent-cards.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:31:21.376049+00:00",
+      "end": "2026-10-13T01:31:28.753178+00:00",
+      "exit": 1,
+      "wallSeconds": 7.376913457992487,
+      "pid": 49464,
+      "pgid": 49464,
+      "load": "{ 16.84 14.23 14.05 }",
+      "groupRemainingAtExit": []
+    },
+    "mutant-exit-01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:00:37.780734+00:00",
+      "end": "2026-10-13T01:00:41.621971+00:00",
+      "exit": 1,
+      "wallSeconds": 3.8410884170007193,
+      "pid": 95974,
+      "pgid": 95974,
+      "load": "{ 16.77 24.04 20.46 }",
+      "groupRemainingAtExit": []
+    },
+    "ui-mutant-fallback-01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:32:56.033079+00:00",
+      "end": "2026-10-13T01:33:01.092050+00:00",
+      "exit": 1,
+      "wallSeconds": 5.058798124999157,
+      "pid": 6766,
+      "pgid": 6766,
+      "load": "{ 13.57 14.00 13.99 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+        "src/rules/reducer.test.ts",
+        "src/rules/reducer-routing.test.ts",
+        "src/rules/reducer-containment.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T00:56:41.028766+00:00",
+      "end": "2026-10-13T00:56:46.634639+00:00",
+      "exit": 0,
+      "wallSeconds": 5.605726624999079,
+      "pid": 73830,
+      "pgid": 73830,
+      "load": "{ 24.93 21.54 18.13 }",
+      "groupRemainingAtExit": []
+    },
+    "before-fix-01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T00:55:44.983688+00:00",
+      "end": "2026-10-13T00:55:51.801989+00:00",
+      "exit": 0,
+      "wallSeconds": 6.8180864169989945,
+      "pid": 18644,
+      "pgid": 18644,
+      "load": "{ 25.82 20.70 17.61 }",
+      "groupRemainingAtExit": []
+    },
+    "ui-focused-04": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/cumulus/screens/TutorialScreen.scene.test.tsx",
+        "src/cumulus/screens/TutorialScreen.how-to-play.test.tsx",
+        "src/cumulus/screens/TutorialScreen.opponent-cards.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:40:56.633986+00:00",
+      "end": "2026-10-13T01:41:02.388636+00:00",
+      "exit": 0,
+      "wallSeconds": 5.754536624997854,
+      "pid": 78308,
+      "pgid": 78308,
+      "load": "{ 4.78 7.30 10.65 }",
+      "groupRemainingAtExit": []
+    },
+    "ui-focused-03": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/cumulus/screens/TutorialScreen.scene.test.tsx",
+        "src/cumulus/screens/TutorialScreen.how-to-play.test.tsx",
+        "src/cumulus/screens/TutorialScreen.opponent-cards.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:39:59.196009+00:00",
+      "end": "2026-10-13T01:40:05.637334+00:00",
+      "exit": 1,
+      "wallSeconds": 6.441166375007015,
+      "pid": 77106,
+      "pgid": 77106,
+      "load": "{ 4.25 7.75 11.04 }",
+      "groupRemainingAtExit": []
+    },
+    "ui-mutant-compact-01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:32:51.054283+00:00",
+      "end": "2026-10-13T01:32:55.960204+00:00",
+      "exit": 1,
+      "wallSeconds": 4.905792083998676,
+      "pid": 6387,
+      "pgid": 6387,
+      "load": "{ 14.06 14.10 14.02 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-normal-01": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/normal-boundaries-v01.mjs",
+        "--bead",
+        "hv-33id.10",
+        "--port",
+        "5274",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:03:14.981924+00:00",
+      "end": "2026-10-13T01:04:22.558179+00:00",
+      "exit": 1,
+      "wallSeconds": 67.57528745799209,
+      "pid": 61916,
+      "pgid": 61916,
+      "load": "{ 19.18 22.79 20.58 }",
+      "groupRemainingAtExit": []
+    },
+    "mutant-drop-01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:00:33.565620+00:00",
+      "end": "2026-10-13T01:00:37.709652+00:00",
+      "exit": 1,
+      "wallSeconds": 4.143898167007137,
+      "pid": 95638,
+      "pgid": 95638,
+      "load": "{ 17.36 24.28 20.52 }",
+      "groupRemainingAtExit": []
+    },
+    "local-review-03": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:42:22.429783+00:00",
+      "end": "2026-10-13T01:42:42.855410+00:00",
+      "exit": 0,
+      "wallSeconds": 20.42539437500818,
+      "pid": 79850,
+      "pgid": 79850,
+      "load": "{ 3.96 6.37 9.97 }",
+      "groupRemainingAtExit": []
+    },
+    "local-knip-01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:03:05.318597+00:00",
+      "end": "2026-10-13T01:03:10.285205+00:00",
+      "exit": 0,
+      "wallSeconds": 4.966484500007937,
+      "pid": 61156,
+      "pgid": 61156,
+      "load": "{ 17.64 22.64 20.50 }",
+      "groupRemainingAtExit": []
+    },
+    "local-review-02": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:01:44.945357+00:00",
+      "end": "2026-10-13T01:02:03.441143+00:00",
+      "exit": 0,
+      "wallSeconds": 18.495458000004874,
+      "pid": 4762,
+      "pgid": 4762,
+      "load": "{ 24.52 24.27 20.78 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-normal-02": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/normal-boundaries-v02.mjs",
+        "--bead",
+        "hv-33id.10",
+        "--port",
+        "5274",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:06:18.662606+00:00",
+      "end": "2026-10-13T01:07:09.206551+00:00",
+      "exit": 1,
+      "wallSeconds": 50.54323454199766,
+      "pid": 75283,
+      "pgid": 75283,
+      "load": "{ 12.83 19.41 19.66 }",
+      "groupRemainingAtExit": []
+    },
+    "local-knip-02": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:43:11.430623+00:00",
+      "end": "2026-10-13T01:43:14.756563+00:00",
+      "exit": 0,
+      "wallSeconds": 3.3258167500025593,
+      "pid": 80942,
+      "pgid": 80942,
+      "load": "{ 5.45 6.48 9.83 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-normal-03": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/normal-boundaries-v03.mjs",
+        "--bead",
+        "hv-33id.10",
+        "--port",
+        "5274",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:44:14.232333+00:00",
+      "end": "2026-10-13T01:51:43.614592+00:00",
+      "exit": 0,
+      "wallSeconds": 449.3785707500065,
+      "pid": 82110,
+      "pgid": 82110,
+      "load": "{ 5.26 6.26 9.50 }",
+      "groupRemainingAtExit": []
+    },
+    "ui-before-fix-01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:28:42.521208+00:00",
+      "end": "2026-10-13T01:28:47.629705+00:00",
+      "exit": 1,
+      "wallSeconds": 5.1083887919958215,
+      "pid": 77776,
+      "pgid": 77776,
+      "load": "{ 9.04 12.23 13.51 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-default-01": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/default-boundaries-v03.mjs",
+        "--bead",
+        "hv-33id.10",
+        "--port",
+        "5274",
+        "--timeout",
+        "400",
+        "--arg",
+        "defaultControl=1"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:52:33.755424+00:00",
+      "end": "2026-10-13T01:54:41.687340+00:00",
+      "exit": 0,
+      "wallSeconds": 127.93081254199205,
+      "pid": 45570,
+      "pgid": 45570,
+      "load": "{ 18.82 15.67 12.85 }",
+      "groupRemainingAtExit": []
+    },
+    "local-review-01": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:01:05.292667+00:00",
+      "end": "2026-10-13T01:01:27.196637+00:00",
+      "exit": 1,
+      "wallSeconds": 21.90363954201166,
+      "pid": 97805,
+      "pgid": 97805,
+      "load": "{ 12.38 22.27 19.94 }",
+      "groupRemainingAtExit": []
+    },
+    "ui-focused-01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/cumulus/screens/TutorialScreen.test.tsx",
+        "src/cumulus/screens/TutorialScreen.timing.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:30:04.360781+00:00",
+      "end": "2026-10-13T01:30:10.124916+00:00",
+      "exit": 1,
+      "wallSeconds": 5.763976417001686,
+      "pid": 83604,
+      "pgid": 83604,
+      "load": "{ 13.38 12.13 13.32 }",
+      "groupRemainingAtExit": []
+    },
+    "ui-mutant-centre-01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/screens/cumulus_adapters/tutorial-view-model.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:32:46.001186+00:00",
+      "end": "2026-10-13T01:32:50.983129+00:00",
+      "exit": 1,
+      "wallSeconds": 4.981797333006398,
+      "pid": 6027,
+      "pgid": 6027,
+      "load": "{ 14.41 14.17 14.05 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-preview-01": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/preview-boundaries-v02.mjs",
+        "--bead",
+        "hv-33id.10",
+        "--port",
+        "5274",
+        "--timeout",
+        "200"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T01:58:23.218846+00:00",
+      "end": "2026-10-13T01:58:48.577987+00:00",
+      "exit": 0,
+      "wallSeconds": 25.35893054200278,
+      "pid": 51940,
+      "pgid": 51940,
+      "load": "{ 17.62 13.03 12.21 }",
+      "groupRemainingAtExit": []
+    },
+    "before-fix-02": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T00:56:16.096059+00:00",
+      "end": "2026-10-13T00:56:20.603375+00:00",
+      "exit": 1,
+      "wallSeconds": 4.507166499999585,
+      "pid": 58243,
+      "pgid": 58243,
+      "load": "{ 27.76 21.64 18.06 }",
+      "groupRemainingAtExit": []
+    },
+    "final-schema-01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-10-tutorial-boundaries",
+      "start": "2026-10-13T02:10:32.770330+00:00",
+      "end": "2026-10-13T02:10:32.867930+00:00",
+      "exit": 0,
+      "wallSeconds": 0.09752429100626614,
+      "pid": 97783,
+      "pgid": 97783,
+      "load": "{ 5.33 6.68 9.43 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 224,
+    "jsdomFiles": 0,
+    "scope": "Five existing test/contract modules; no added/deleted discovery modules or jsdom files. Net line diff against base; no new tests assert UI copy or mutable data/default policy.",
+    "modules": [
+      {
+        "path": "src/cumulus/screens/TutorialScreen.opponent-cards.test.tsx",
+        "added": 2,
+        "deleted": 3,
+        "finalLines": 407,
+        "newDiscoveryFiles": 0
+      },
+      {
+        "path": "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "added": 74,
+        "deleted": 1,
+        "finalLines": 386,
+        "newDiscoveryFiles": 0
+      },
+      {
+        "path": "src/rules/battle/tutorial-host.contracts.ts",
+        "added": 64,
+        "deleted": 3,
+        "finalLines": 307,
+        "newDiscoveryFiles": 0
+      },
+      {
+        "path": "src/rules/battle/tutorial-prefix.contracts.ts",
+        "added": 74,
+        "deleted": 2,
+        "finalLines": 136,
+        "newDiscoveryFiles": 0
+      },
+      {
+        "path": "src/screens/cumulus_adapters/tutorial-view-model.test.ts",
+        "added": 19,
+        "deleted": 0,
+        "finalLines": 64,
+        "newDiscoveryFiles": 0
+      }
+    ],
+    "derivedNewCases": 19,
+    "existingChangedJsdomFiles": 2
+  },
+  "sourceCode": {
+    "src/cumulus/screens/TutorialScreen.opponent-cards.test.tsx": "f5b5aeb922578729c78b8196365afdd17ed8f1a1797a71777886fbeff2773eaf",
+    "src/cumulus/screens/TutorialScreen.player.test.tsx": "1e398bd031b7b7f14422aa8b3a1c77c6fefbef7bc459370bd9cb540b4dfb679d",
+    "src/cumulus/screens/TutorialScreen.tsx": "00c14f5145804fdf372dce4935805b757d8d51b5d3656bb71dd0550a832c9ca7",
+    "src/rules/battle/tutorial-host.contracts.ts": "5b796d002bb10e653e3e29a17477ef27511efd5ff8354a7f2b290f556b721d12",
+    "src/rules/battle/tutorial-lifecycle.ts": "c19536f008cd5919c4299f4f9813a01d027c8db7faa62e94bfa65408ed49ce9e",
+    "src/rules/battle/tutorial-prefix.contracts.ts": "d8c129c8a3645b498e870662828fe1b1ec7552c00d03bcd894c13f72969d446a",
+    "src/rules/battle/tutorial-prefix.ts": "cd206c636ecb9914c91158989a51c9023347891e1d51905a439fdf37d8cf1916",
+    "src/rules/front-door.ts": "adb007333767098e7151cecf912c11c4da599e9c200df031ca7ffb0dfd5054c5",
+    "src/screens/cumulus_adapters/tutorial-view-model.test.ts": "c9a57205c9ec65f5043f7eb4a76c93e5f0f12478be868345e476e4e8a49f70d2",
+    "src/screens/cumulus_adapters/tutorial-view-model.ts": "6d10c4e9c5871d85e9dc859898761b32534bc361d54176b91d6debeec5450bcd"
+  },
+  "runtimeReports": [
+    {
+      "invocation": "run-3ki8qn",
+      "filename": "normal-boundaries-v03.result.json",
+      "sha256": "ed026897b5c7032cee8a6d7333ed23490436e17e401e55f434706be1fefe0a9b",
+      "ok": true,
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 1372,
+        "scenario": 447272,
+        "total": 448703
+      },
+      "serverPid": 82146,
+      "port": 5174,
+      "slot": 0,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/invocations/run-3ki8qn/normal-boundaries-v03-desktop.jsonl",
+          "gameId": "85b8ks",
+          "selectedBy": "url",
+          "rows": 225,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/invocations/run-3ki8qn/normal-boundaries-v03-mobile.jsonl",
+          "gameId": "v3e268",
+          "selectedBy": "url",
+          "rows": 223,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "invocation": "run-BZnPN6",
+      "filename": "preview-boundaries-v02.result.json",
+      "sha256": "8a0b73a11d2b96e03087af873515a92ca822e3c50758bfd5aadd0ee22d140486",
+      "ok": true,
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 1661,
+        "scenario": 22883,
+        "total": 24601
+      },
+      "serverPid": 52536,
+      "port": 5274,
+      "slot": 1,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/invocations/run-BZnPN6/preview-boundaries-v02-desktop.jsonl",
+          "gameId": "gkkryv",
+          "selectedBy": "url",
+          "rows": 9,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/invocations/run-BZnPN6/preview-boundaries-v02-mobile.jsonl",
+          "gameId": "aznjhn",
+          "selectedBy": "url",
+          "rows": 9,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "invocation": "run-RdOERg",
+      "filename": "default-boundaries-v03.result.json",
+      "sha256": "1182ab2780c685f49cd11cacb52bd0c0e9fea92227465f69ade857fbd7c16a8c",
+      "ok": true,
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 53842,
+        "serve": 2590,
+        "scenario": 70753,
+        "total": 127242
+      },
+      "serverPid": 77532,
+      "port": 5174,
+      "slot": 0,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/invocations/run-RdOERg/default-boundaries-v03-desktop.jsonl",
+          "gameId": "yy5g4v",
+          "selectedBy": "url",
+          "rows": 51,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/invocations/run-RdOERg/default-boundaries-v03-mobile.jsonl",
+          "gameId": "7dck3h",
+          "selectedBy": "url",
+          "rows": 51,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "invocation": "run-k5J21S",
+      "filename": "normal-boundaries-v01.result.json",
+      "sha256": "d496dcb53d5c66e4e38b9d2984fa13477069d504f2a8e22d3b0df482a810b13e",
+      "ok": false,
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 7,
+        "serve": 1993,
+        "scenario": 64668,
+        "total": 66787
+      },
+      "serverPid": 61955,
+      "port": 5274,
+      "slot": 1,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/invocations/run-k5J21S/normal-boundaries-v01-desktop.jsonl",
+          "gameId": "inu3wx",
+          "selectedBy": "url",
+          "rows": 51,
+          "reason": null
+        }
+      ]
+    },
+    {
+      "invocation": "run-zLk1fw",
+      "filename": "normal-boundaries-v02.result.json",
+      "sha256": "fde58e001138235a33141509f750f86e8a8ce5dc15cdf19dd84be45cf8c5b380",
+      "ok": false,
+      "caps": [],
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1663,
+        "scenario": 47959,
+        "total": 49684
+      },
+      "serverPid": 75320,
+      "port": 5274,
+      "slot": 1,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.10/invocations/run-zLk1fw/normal-boundaries-v02-desktop.jsonl",
+          "gameId": "ymgrou",
+          "selectedBy": "url",
+          "rows": 51,
+          "reason": null
+        }
+      ]
+    }
+  ],
+  "captureManifest": {
+    "filename": "capture-manifest-v01.json",
+    "sha256": "5d2e5a45d85fc07c502d51fda01ba268b4d7f9104e534643978d4957b4d7a8d4"
+  },
+  "gameLogManifest": {
+    "filename": "game-log-manifest-v01.json",
+    "sha256": "d56b6327274d7c04145fef3acda8ee7dccab8a518f79415c7d37ad38158dc284"
+  },
+  "rawReceiptManifest": {
+    "filename": "raw-receipt-manifest-v01.json",
+    "sha256": "4d572e202ab3ad05127cdb4a94d320e3f07725368e3c355a217975c30b3ea137"
+  },
+  "qualifications": [
+    "before-fix-01 is invalid as a new-test witness: append command omitted cwd and wrote two exact suffixes in primary. Full bytes preserved and original+suffix equality independently verified; only own suffixes restored. Root justiciar audit confirms primary immutable originals. Corrected before-fix-02 is the actual six-failure witness on unchanged production source.",
+    "ui-focused-01 actual selection is three existing files/44 tests; TutorialScreen.test.tsx and TutorialScreen.timing.test.tsx argv names do not exist and were not exercised. Future focused paths were enumerated and corrected.",
+    "local-review-01/02/03 incorrectly acquired heavy.lock for ordinary aggregate review. Preserve exact argv and elapsed including any unisolated wait; no isolated CPU/lockwait/quota claim and no rerun to erase the mistake. Other focused/Knip/browser commands hold no heavy lock.",
+    "Failed normal v01/v02 are immutable source-qualified diagnostics. v02 actual DOM shows i1 at player-back-5, B1 empty; this is a verified presentation defect, not a harness-only artifact. v03 corrects whole-slot mapping and retains occupied canonical cells.",
+    "TutorialScreen player guided fixture had zero rectangles; opponent fixture derived screen coordinates from semantic IDs and targeted a destination alias. Admitted synthetic geometry/selector corrections preserve existing numerical/timing assertions and unchanged opponent/guided production behavior. Occupied predicate fixture initially omitted its required onPlayerCardPlay callback; corrected fixture supplies the real playable adapter contract.",
+    "Normal v03 passing wait predicate asserts actual centre hit-test, opacity and exact physical-slot ancestry. Numeric hit result was not retained separately in geometry notes; the assertion itself and raw scenario are evidence.",
+    "Default desktop compares current B0 rectangle to retained v02 display-index4 rectangle. Mobile default uses unchanged source formation/index conservation plus fresh observed geometry; no unavailable numeric before-mobile witness or pixel-equivalence claim.",
+    "Tutorial preview mounts no generic engine debug probe. Actual persisted ordinary init/log, below-threshold rendered scores, same game/battle and exact bounced EXIT prove active rendering-only preview; no fabricated result or private state/provider mutation.",
+    "Final review was source-qualified before own documentation endpoints. Schema and staged/commit clocks are separate additive Stage3 checks; no runtime source code mutation since manifest-v03.",
+    "Initial Stage3 snapshot preservation used two identical evidence basenames; its exclusive-copy assertion stopped before any tracked clock/evidence edit. The first friction snapshot is retained. Schema01 passed unchanged Stage2 records, not refreshed final source. Full relative-path snapshot identities preserve all four old evidence files; dependent schema/staging/commit steps stop on any failure. Post-refresh schema02, cached check and Git receipts are additive ignored final evidence."
+  ],
+  "pending": [
+    "Fresh cold read-only gpt-5.6-sol code/visual review under temporary override; verified findings/dispositions",
+    "Exact candidate certified promotion, cleanup and native acceptance closure"
+  ]
+}

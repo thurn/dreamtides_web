@@ -43,8 +43,11 @@ import {
   type MobileBattleCardView,
   type MobileBattleInteractions,
   type MobileBattleSideView,
+  type MobileBattleSlotTarget,
   type MobileBattleView,
 } from "./MobileBattleScreen";
+import { mobileBattlefieldWindow } from "./battle-board/layout";
+import { logEvent } from "../../logging";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import {
   DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS,
@@ -558,38 +561,25 @@ function expandedTutorialSide(
   backRankCount: number,
   frontRankCount: number,
 ): MobileBattleSideView {
-  const pad = (
+  const centre = (
     slots: MobileBattleSideView["backRank"],
     count: number,
     rank: "back" | "front",
-  ) => [
-    ...slots,
-    ...Array.from(
-      { length: Math.max(0, count - slots.length) },
-      (_, offset) => ({
-        id: parseBattleSlotViewId(
-          `${owner}-${rank}-${String(slots.length + offset)}`,
-        ),
-        card: null,
-      }),
-    ),
-  ];
-  const backRank = pad(side.backRank, backRankCount, "back");
-  const backRankStart = tutorialOpponentBackRankIndex(backRank.length);
-  const centeredBackRank = backRank.map((slot, index) => ({
-    ...slot,
-    card: side.backRank[index - backRankStart]?.card ?? null,
-  }));
-  const frontRank = pad(side.frontRank, frontRankCount, "front");
-  const frontRankStart = tutorialOpponentFrontRankIndex(frontRank.length);
-  const centeredFrontRank = frontRank.map((slot, index) => ({
-    ...slot,
-    card: side.frontRank[index - frontRankStart]?.card ?? null,
-  }));
+  ) => {
+    const length = Math.max(count, slots.length);
+    const authoredStart = rank === "back"
+      ? tutorialOpponentBackRankIndex(length)
+      : tutorialOpponentFrontRankIndex(length);
+    const start = Math.min(authoredStart, length - slots.length);
+    return Array.from({ length }, (_, index) => slots[index - start] ?? {
+      id: parseBattleSlotViewId(`tutorial-padding:${owner}:${rank}:${String(index)}`),
+      card: null,
+    });
+  };
   return {
     ...side,
-    backRank: centeredBackRank,
-    frontRank: centeredFrontRank,
+    backRank: centre(side.backRank, backRankCount, "back"),
+    frontRank: centre(side.frontRank, frontRankCount, "front"),
   };
 }
 
@@ -1866,17 +1856,18 @@ export function TutorialScreen({
   );
 
   const battleView = useMemo<MobileBattleView>(() => {
-    const backRankCount = desktop
-      ? DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS
-      : MOBILE_BATTLE_MIN_BACK_RANK_SLOTS;
-    const frontRankCount = desktop
-      ? DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS - 1
-      : MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS;
     const hasCompleteRanks =
       Array.isArray(view.battle.far?.backRank) &&
       Array.isArray(view.battle.far.frontRank) &&
       Array.isArray(view.battle.near?.backRank) &&
       Array.isArray(view.battle.near.frontRank);
+    const mobileWindow = !desktop && hasCompleteRanks ? mobileBattlefieldWindow(view.battle) : null;
+    const backRankCount = desktop
+      ? DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS
+      : mobileWindow?.backSlotCount ?? MOBILE_BATTLE_MIN_BACK_RANK_SLOTS;
+    const frontRankCount = desktop
+      ? DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS - 1
+      : mobileWindow?.frontSlotCount ?? MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS;
     const sourceBattle = hasCompleteRanks
       ? {
           ...view.battle,
@@ -2456,6 +2447,27 @@ export function TutorialScreen({
     [onPlayerCardPlay, tutorialPlayableCard, view.playbackRunId],
   );
 
+  const isTutorialPlayTarget = useCallback((target: MobileBattleSlotTarget | undefined): boolean =>
+    target?.owner === "player" && target.rank === "back" &&
+    view.battle.near.backRank.some(slot => slot.id === target.slotId && slot.card === null),
+  [view.battle.near.backRank]);
+  const rejectTutorialCardDrop = useCallback((target: MobileBattleSlotTarget | undefined, reason: "invalid-target" | "unresolved-drop"): void => {
+    const instance = pendingTutorialCardIdRef.current;
+    if (instance !== null && tutorialPlayableCard !== null && view.playbackRunId !== null) {
+      logEvent("tutorial_player_card_drop_rejected", {
+        runId: view.playbackRunId,
+        battleId: view.battle.battleId,
+        cardInstanceId: instance,
+        cardId: tutorialPlayableCard.model.cardId,
+        target: target ?? null,
+        reason,
+      });
+    }
+    tutorialCardDropHandledRef.current = true;
+    pendingTutorialCardIdRef.current = null;
+    setPendingTutorialCardId(null);
+  }, [tutorialPlayableCard, view.battle.battleId, view.playbackRunId]);
+
   const tutorialInteractions = useMemo<MobileBattleInteractions | undefined>(
     () =>
       (!canPlayTutorialCard || tutorialPlayableCard === null) &&
@@ -2473,6 +2485,9 @@ export function TutorialScreen({
                   ? "battlefield"
                   : "near-hand",
             pendingCardOwner: pendingTutorialCardId === null ? null : "player",
+            isSlotDropEligible: (target) => canRepositionTutorialCard
+              ? target.owner === "player" && target.rank === "front" && target.slotId === repositionTargetSlotId
+              : canPlayTutorialCard && isTutorialPlayTarget(target),
             onHandCardActivate: (battleCardId) => {
               if (!canPlayTutorialCard || tutorialPlayableCard === null) return;
               if (battleCardId !== tutorialPlayableCard.id) return;
@@ -2482,11 +2497,11 @@ export function TutorialScreen({
             },
             onHandCardDrop: (target) => {
               if (!canPlayTutorialCard) return;
-              playTutorialCard(
-                target?.owner === "player" && target.rank === "back"
-                  ? target.slotId
-                  : null,
-              );
+              if (target === undefined || !isTutorialPlayTarget(target)) {
+                rejectTutorialCardDrop(target, "invalid-target");
+                return;
+              }
+              playTutorialCard(target.slotId);
             },
             onCardDragStart: (battleCardId, source) => {
               if (
@@ -2512,19 +2527,8 @@ export function TutorialScreen({
               setPendingTutorialCardId(battleCardId);
             },
             onCardDragEnd: () => {
-              if (canRepositionTutorialCard) {
-                tutorialCardDropHandledRef.current = false;
-                pendingTutorialCardIdRef.current = null;
-                setPendingTutorialCardId(null);
-                return;
-              }
-              if (!canPlayTutorialCard || tutorialPlayableCard === null) return;
-              if (
-                !tutorialCardDropHandledRef.current &&
-                pendingTutorialCardIdRef.current === tutorialPlayableCard.id
-              ) {
-                playTutorialCard(null);
-                return;
+              if (canPlayTutorialCard && !tutorialCardDropHandledRef.current && pendingTutorialCardIdRef.current !== null) {
+                rejectTutorialCardDrop(undefined, "unresolved-drop");
               }
               tutorialCardDropHandledRef.current = false;
               pendingTutorialCardIdRef.current = null;
@@ -2558,13 +2562,14 @@ export function TutorialScreen({
                 return;
               }
               if (!canPlayTutorialCard) return;
-              playTutorialCard(
-                target.owner === "player" && target.rank === "back"
-                  ? target.slotId
-                  : null,
-              );
+              if (!isTutorialPlayTarget(target)) {
+                rejectTutorialCardDrop(target, "invalid-target");
+                return;
+              }
+              playTutorialCard(target.slotId);
             },
-            onZoneDrop: () => {},
+            onBattlefieldDropRejected: () => rejectTutorialCardDrop(undefined, "invalid-target"),
+            onZoneDrop: () => rejectTutorialCardDrop(undefined, "invalid-target"),
             onPreviousPhase: () => {},
             onNextPhase: () => {
               if (
@@ -2588,6 +2593,8 @@ export function TutorialScreen({
       onPlayerCharacterReposition,
       pendingTutorialCardId,
       playTutorialCard,
+      isTutorialPlayTarget,
+      rejectTutorialCardDrop,
       playerReposition,
       repositionTargetSlotId,
       tutorialPlayableCard,

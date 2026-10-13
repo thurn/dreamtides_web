@@ -80,7 +80,7 @@ export function buildTutorialView(avatars: readonly AvatarContent[], configurati
                 return null;
             return { id: parseBattleCardId(id), model: models(visible), exhausted: visible.status.exhausted, figment: visible.printing.kind !== "card", storedTime: visible.status.counters, showPlayableOutline: owner === "player" && built.affordances.plays.has(parseBattleCardId(id)) };
         };
-        const compact = (side: MobileBattleSideView) => ({ ...side, backRank: side.backRank.slice(0, 3), frontRank: side.frontRank.slice(0, 2), status: { ...side.status, avatar: null, avatarProfile: undefined } });
+        const compact = (side: MobileBattleSideView) => ({ ...side, backRank: side.backRank.filter((slot, index) => index < 3 || slot.card !== null), frontRank: side.frontRank.filter((slot, index) => index < 2 || slot.card !== null), status: { ...side.status, avatar: null, avatarProfile: undefined } });
         const knownDraws = (side: "player" | "enemy") => prefix.events.filter(entry => entry.event.kind === "cardDrawn" && entry.event.side === side);
         const shownDraws = prefix.draws.filter(draw => actions.findIndex(cue => cue.id === draw.actionId) < completed);
         const firstPlayer = knownDraws("player")[0];

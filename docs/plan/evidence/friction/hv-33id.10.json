@@ -1,0 +1,32 @@
+{
+  "bead": "hv-33id.10",
+  "phase": 6,
+  "implementMin": 95.69085636666667,
+  "implementWindow": {
+    "start": "2026-10-13T00:37:45+00:00",
+    "end": "2026-10-13T02:13:26.451382+00:00"
+  },
+  "localValidationS": {
+    "focused": 5.754536624997854,
+    "review": 20.42539437500818,
+    "knip": 3.3258167500025593
+  },
+  "hostLoad": 3.96,
+  "testDelta": {
+    "files": 0,
+    "lines": 224,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "trigger-prerequisite",
+      "minutes": 10.528438,
+      "note": "Native trigger/re-entry recovery gross interval 00:38:07.002135Z\u201300:48:38.708418Z: trigger11 filing/audit/delivery, zero-source update rejection, native remove/recreate, install and dispatch check. Not isolated CPU/quota/productive time."
+    },
+    {
+      "tag": "tutorial-slot-projection",
+      "minutes": 38.338287183333335,
+      "note": "First failed placement assertion through final UI validation, including diagnosis of real card/slot remapping, read-only proposals/native scope ACKs, occupied-cell projection and geometry-fixture corrections. Gross elapsed, not isolated editing/CPU or a harness-only defect."
+    }
+  ]
+}

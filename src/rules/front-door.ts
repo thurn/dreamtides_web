@@ -96,7 +96,7 @@ export function frontDoorAction(
     const provider = getTutorialBattleInitProvider();
     const instance = tutorial.prefix === undefined ? null : prefixPlayerInstance(tutorial.prefix, configuredPlayerCardId);
     if (provider === null || tutorial.prefix === undefined || instance === null) return null;
-    const prefix = playPrefixPlayer(provider.engine, tutorial.prefix, instance, ctx.seq, tutorial.actions);
+    const prefix = playPrefixPlayer(provider.engine, tutorial.prefix, instance, ctx.seq, tutorial.actions, targetSlotId);
     if (prefix === null) return null;
     return {
       ...state,
@@ -195,7 +195,7 @@ function beginTutorialPlayback(state: FrontDoorState,payload: Record<string,unkn
     if (action.action === "end-turn") {
       const card = prefixPlayerInstance(prefix,configuredPlayerCardId);
       if (card === null) return null;
-      prefix = playPrefixPlayer(provider.engine,prefix,card,ctx.seq,actions);
+      prefix = playPrefixPlayer(provider.engine,prefix,card,ctx.seq,actions,null);
       if (prefix === null) return null;
       playerCardPlay = {cardInstanceId:parseBattleCardId(card),cardId:configuredPlayerCardId,targetSlotId:null};
     }

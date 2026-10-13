@@ -43,3 +43,22 @@ it("reveals only the bound physical draw from its actual public producer frame",
  expect(completePrefixAction(engine,completed,draw,cues,5)).not.toBeNull();
  expect(completed.events.filter(entry=>entry.event.kind === "cardDrawn" && entry.event.instance === bound.instance)).toHaveLength(1);
 });
+
+import { prefixSetup, prefixActions } from "../../rules/battle/tutorial-contracts-fixture";
+import { playPrefixPlayer } from "../../rules/battle/tutorial-prefix";
+import { parseBattleSlotViewId, parseBattleCardId } from "../../types/identifiers";
+it.each([4, 9])("retains ordinary occupied B%s outside the compact initial empty cells", index => {
+ const initial=startTutorialPrefix(engine,prefixSetup(),prefixActions,20)!;
+ const drawn=completePrefixAction(engine,initial,prefixActions[1],prefixActions,21)!;
+ const instance=drawn.engine.slice.committed.sides.player.hand[0],slot=parseBattleSlotViewId(`B${index}`);
+ const played=playPrefixPlayer(engine,drawn,instance,22,prefixActions,slot)!;
+ const playback={runId:parseTutorialRunId("occupied-projection"),actions:prefixActions,currentActionIndex:2,playerCardPlay:{cardInstanceId:parseBattleCardId(instance),cardId:CARDS.strong,targetSlotId:slot},prefix:played};
+ const saved=JSON.parse(JSON.stringify(played)) as typeof played;
+ const view=buildTutorialView(avatars,configuration,playback,[],[],engine);
+ expect(view.battle.near.backRank.find(cell=>cell.id === slot)?.card?.id).toBe(instance);
+ expect(view.battle.near.backRank.find(cell=>cell.id === slot)?.card?.model.cardId).toBe(CARDS.strong);
+ expect(view.battle.near.backRank.map(cell=>cell.id)).toEqual(["B0","B1","B2",slot]);
+ expect(played).toEqual(saved);
+ expect(buildTutorialView(avatars,configuration,{...playback,prefix:saved},[],[],engine)).toEqual(view);
+ expect(playPrefixPlayer(engine,drawn,instance,22,prefixActions,slot)).toEqual(played);
+});

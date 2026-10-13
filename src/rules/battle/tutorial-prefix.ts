@@ -1,7 +1,7 @@
 import { BATTLE } from "../../content/battle";
 import type { Engine, EngineEvent, InstanceId, Action, BattleState } from "../../engine";
 import type { TutorialAction } from "../../types/tutorial";
-import type { TutorialActionId } from "../../types/identifiers";
+import type { BattleSlotViewId, TutorialActionId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import type { TutorialBattleDisplayInit, EngineBattleFold } from "./fold";
 import { applyEngineBattleIntent, batchStates, collectEngineWork, foldAdapterFor, startEngineBattle } from "./engine-battle";
@@ -93,8 +93,16 @@ function passes(engine: Engine, prefix: TutorialPrefixState, seq: number, action
     }
     return current;
 }
-export function playPrefixPlayer(engine: Engine, prefix: TutorialPrefixState, card: InstanceId, seq: number, actions: readonly TutorialAction[]): TutorialPrefixState | null {
-    return collectEngineWork(seq, () => act(engine, prefix, { kind: "play", card, from: "hand", slot: { rank: "back", index: 0 } }, seq, actions));
+export function playPrefixPlayer(engine: Engine, prefix: TutorialPrefixState, card: InstanceId, seq: number, actions: readonly TutorialAction[], targetSlotId: BattleSlotViewId | null): TutorialPrefixState | null {
+    let slot: import("../../engine").Slot | undefined;
+    if (targetSlotId !== null) {
+        const match = /^(?:B|player-back-)(\d+)$/.exec(targetSlotId);
+        if (match === null) return null;
+        const index = Number(match[1]);
+        if (!Number.isSafeInteger(index)) return null;
+        slot = { rank: "back", index };
+    }
+    return collectEngineWork(seq, () => act(engine, prefix, { kind: "play", card, from: "hand", ...(slot === undefined ? {} : { slot }) }, seq, actions));
 }
 /** Advance the authored beat; draws bind published events and never execute a second draw. */
 export function completePrefixAction(engine: Engine, prefix: TutorialPrefixState, action: TutorialAction, actions: readonly TutorialAction[], seq: number): TutorialPrefixState | null {

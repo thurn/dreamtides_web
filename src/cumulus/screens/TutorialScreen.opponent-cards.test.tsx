@@ -142,8 +142,7 @@ describe("TutorialScreen opponent cards", () => {
         if (slotId === undefined || rank === undefined) {
           return DOMRect.fromRect();
         }
-        const slotParts = slotId.split("-");
-        const index = Number(slotParts[slotParts.length - 1]);
+        const index = Array.from(this.parentElement?.children ?? []).indexOf(this);
         if (rank === "enemy-back") {
           return DOMRect.fromRect({
             x: 335.98 + index * 125.2,
@@ -347,7 +346,7 @@ describe("TutorialScreen opponent cards", () => {
 
     setRect(
       container.querySelector(
-        '[data-battle-rank="enemy-back"] [data-battle-slot-id="enemy-back-4"]',
+        '[data-battle-rank="enemy-back"] [data-battle-slot-id="enemy-back-0"]',
       ),
       { x: 100, y: 120, width: 80, height: 120 },
     );

@@ -121,9 +121,8 @@ describe("tutorial lifecycle identities and explicit reset", () => {
             throw Error("restart refused");
         expect(battle(restarted).mode.restartNumber).toBe(1);
         expect(battle(restarted).init.battleId).not.toBe(battle(opened).init.battleId);
-        const exited = exitTutorialBattle(restarted, { battleId: battle(restarted).init.battleId }, context(23));
-        expect(exited?.battle).toBeNull();
-        expect(exited?.journey.screen).toMatchObject({ type: "journeyStart", tutorialAvatarId: testAvatarId("tutorial-contract-avatar") });
+        expect(exitTutorialBattle(restarted, { battleId: battle(restarted).init.battleId }, context(23))).toBeNull();
+        expect(exitTutorialBattle(restarted, { battleId: battle(opened).init.battleId }, context(23))).toBeNull();
     });
     it("rejects missing providers, wrong runs, and stale or duplicate authored completion", () => {
         const initial = root();
@@ -243,4 +242,66 @@ describe("refusal guidance cost boundary",()=>{
    expect(tutorialCardAttempt(initial,{battleId:battle(initial).init.battleId,instance},context())).toBeNull();
    expect(board).toEqual(battle(initial).engine.slice.committed);
  });
+});
+
+function winning(side: "player" | "enemy") {
+    const base = init(side, CARDS.strong);
+    let current = host(side, CARDS.strong, [], { ...base, scoreToWin: 3, victorySides: ["player", "enemy"], setup: { ...base.setup!, placements: [{ side, deckIndex: 0, zone: "play", slot: { rank: "front", index: 0 } }] } });
+    const other = side === "player" ? "enemy" : "player";
+    for (const [index, actor] of [side, other, side].entries()) {
+        const next = reduceEngineIntent(current, "BATTLE_ACTION", { side: actor, action: { kind: "pass" } }, context(500 + index), engine);
+        if (next === null) throw Error("winning pass refused");
+        current = next;
+    }
+    expect(battle(current).engine.slice.committed.result).toMatchObject({ kind: "victory", winner: side });
+    expect(battle(current).engine.slice.committed.sides[side].score).toBeGreaterThanOrEqual(3);
+    return current;
+}
+function settle(state: ReturnType<typeof host>) {
+    let current = state;
+    for (const checkpoint of battle(state).checkpoints) {
+        const presentation = checkpoint.presentation;
+        const count = presentation.kind === "tutorial-guidance" ? presentation.messages.length : 1;
+        for (let messageIndex = 0; messageIndex < count; messageIndex++) {
+            const next = completeTutorialCheckpoint(current, { presentationId: presentation.id, messageIndex });
+            if (next === null) throw Error("winning checkpoint refused");
+            current = next;
+        }
+    }
+    return current;
+}
+describe("tutorial authoritative settled victory handoff", () => {
+    it("rejects active and suspended battles without changing their engine or pending choice", () => {
+        provider();
+        for (const current of [host("player", CARDS.strong), start(host()).next]) {
+            const saved = roundTrip(current);
+            expect(exitTutorialBattle(current, { battleId: battle(current).init.battleId }, context(510))).toBeNull();
+            expect(current).toEqual(saved);
+        }
+    });
+    it("requires actual player victory and all committed presentation checkpoints before one Avatar handoff", () => {
+        provider();
+        const won = winning("player"), saved = roundTrip(won), id = battle(won).init.battleId;
+        expect(battle(won).checkpoints.length).toBeGreaterThan(0);
+        expect(exitTutorialBattle(won, { battleId: id }, context(511))).toBeNull();
+        expect(won).toEqual(saved);
+        const settled = settle(won);
+        expect(battle(settled).checkpoints).toEqual([]);
+        expect(battle(settled).tutorialPresentation).toBeNull();
+        expect(battle(settled).engine.slice.inFlight).toBeNull();
+        expect(exitTutorialBattle(settled, { battleId: "foreign" }, context(512))).toBeNull();
+        const exited = exitTutorialBattle(settled, { battleId: id }, context(513));
+        expect(exited?.battle).toBeNull();
+        expect(exited?.journey.screen).toMatchObject({ type: "journeyStart", tutorialAvatarId: testAvatarId("tutorial-contract-avatar") });
+        if (exited === null) throw Error("settled player handoff refused");
+        expect(exitTutorialBattle(exited, { battleId: id }, context(514))).toBeNull();
+        expect(exitTutorialBattle(roundTrip(settled), { battleId: id }, context(513))).toEqual(exited);
+        expect(settle(winning("player"))).toEqual(settled);
+    });
+    it("rejects a genuine enemy victory even after its presentations settle", () => {
+        provider();
+        const lost = settle(winning("enemy")), saved = roundTrip(lost);
+        expect(exitTutorialBattle(lost, { battleId: battle(lost).init.battleId }, context(515))).toBeNull();
+        expect(lost).toEqual(saved);
+    });
 });

@@ -11,6 +11,7 @@ import {
   installTutorialScreenHarness,
   renderTutorialScreen,
   setDesktopViewport,
+  setRect,
   tutorialView,
 } from "./__test-helpers__/tutorial-screen-fixtures";
 import type { TutorialView } from "./TutorialScreen";
@@ -77,6 +78,7 @@ describe("TutorialScreen player actions", () => {
     renderTutorialScreen(
       endTurnView(parseTutorialRunId("event:player-turn"), false, {
         nearHand: { owner:"player",position:"near", cards: [TUTORIAL_PLAYER_CARD], cardIds: ([TUTORIAL_PLAYER_CARD]).map(card => card.id) },
+        near: { backRank: [{ id: parseBattleSlotViewId("B4"), card: null }], frontRank: [] },
       }),
       { onPlayerCardPlay },
     );
@@ -134,12 +136,13 @@ describe("TutorialScreen player actions", () => {
     expect(backRank?.[4]?.card?.model.cardId).toBe(
       TUTORIAL_PLAYER_CARD.model.cardId,
     );
+    expect(backRank?.[4]?.id).toBe("player-back-0");
     expect(backRank?.[5]?.card).toBeNull();
   });
 
   it("highlights the opposing lane and bridges the guided player block", () => {
     const onPlayerCharacterReposition = vi.fn();
-    renderTutorialScreen(
+    const { container } = renderTutorialScreen(
       tutorialView(parseTutorialRunId("event:block"), {
         currentAction: {
           id: testTutorialActionId("block-opponent"),
@@ -173,6 +176,9 @@ describe("TutorialScreen player actions", () => {
       { onPlayerCharacterReposition },
     );
 
+    for (const rank of ["enemy-front", "player-front"]) {
+      container.querySelectorAll(`[data-battle-rank="${rank}"] [data-battle-slot-id]`).forEach((slot, index) => setRect(slot, { x: index * 50, width: 40, height: 40 }));
+    }
     act(() => screenMocks.sceneAnimationComplete?.());
     act(() => ResizeObserverStub.flush());
 
@@ -309,5 +315,72 @@ describe("TutorialScreen player actions", () => {
       "event:player-turn",
       testTutorialActionId("end-turn"),
     );
+  });
+});
+
+function realCellView(ready = false, selected = -1): TutorialView {
+  return endTurnView(parseTutorialRunId("real-slot-contract"), ready, {
+    nearHand: { owner: "player", position: "near", cards: ready ? [] : [TUTORIAL_PLAYER_CARD], cardIds: ready ? [] : [TUTORIAL_PLAYER_CARD.id] },
+    near: { backRank: [0, 1, 2].map(index => ({ id: parseBattleSlotViewId(`B${index}`), card: index === selected ? TUTORIAL_PLAYER_CARD : null })), frontRank: [] },
+  });
+}
+function startCardDrag() {
+  act(() => screenMocks.props?.interactions?.onCardDragStart(TUTORIAL_PLAYER_CARD.id, "near-hand"));
+}
+describe("tutorial centred slot identity and gesture boundaries", () => {
+  it.each([true, false])("centres whole source IDs with their physical cards, desktop=%s", desktop => {
+    setDesktopViewport(desktop);
+    const { container } = renderTutorialScreen(realCellView(true, 1));
+    const back = screenMocks.props!.view.near.backRank;
+    const position = desktop ? 5 : 3;
+    expect(back[position]?.id).toBe("B1");
+    expect(back[position]?.card?.id).toBe(TUTORIAL_PLAYER_CARD.id);
+    expect(container.querySelector(`[data-battle-card-id="${TUTORIAL_PLAYER_CARD.id}"]`)?.closest("[data-battle-slot-id]")?.getAttribute("data-battle-slot-id")).toBe("B1");
+    expect(new Set(back.map(slot => slot.id)).size).toBe(back.length);
+    expect(back.filter(slot => slot.id !== "B1").every(slot => slot.card === null)).toBe(true);
+  });
+  it.each([true, false])("preserves a high occupied canonical ID without duplicate padding, desktop=%s", desktop => {
+    setDesktopViewport(desktop);
+    const view = realCellView(true);
+    renderTutorialScreen({ ...view, battle: { ...view.battle, near: { ...view.battle.near, backRank: [...view.battle.near.backRank, { id: parseBattleSlotViewId("B9"), card: TUTORIAL_PLAYER_CARD }] } } });
+    const back = screenMocks.props!.view.near.backRank;
+    expect(back).toHaveLength(10);
+    expect(back.find(slot => slot.card?.id === TUTORIAL_PLAYER_CARD.id)?.id).toBe("B9");
+    expect(new Set(back.map(slot => slot.id)).size).toBe(back.length);
+  });
+  it("accepts real empty source cells and denies decorative, occupied and foreign targets", () => {
+    renderTutorialScreen(realCellView(), { onPlayerCardPlay: vi.fn() });
+    const current = screenMocks.props!, predicate = current.interactions?.isSlotDropEligible;
+    const padding = current.view.near.backRank.find(slot => !["B0", "B1", "B2"].includes(slot.id))!;
+    expect(predicate?.({ owner: "player", rank: "back", slotId: parseBattleSlotViewId("B1") })).toBe(true);
+    for (const target of [{ owner: "player", rank: "back", slotId: padding.id }, { owner: "enemy", rank: "back", slotId: parseBattleSlotViewId("B1") }, { owner: "player", rank: "front", slotId: parseBattleSlotViewId("B1") }, { owner: "player", rank: "back", slotId: parseBattleSlotViewId("absent") }] as const) expect(predicate?.(target)).toBe(false);
+  });
+  it("denies an occupied real cell while other empty cells remain eligible", () => {
+    const view = realCellView();
+    const occupied = { ...TUTORIAL_PLAYER_CARD, id: TUTORIAL_OPPONENT_CARD.id };
+    renderTutorialScreen({ ...view, battle: { ...view.battle, near: { ...view.battle.near, backRank: view.battle.near.backRank.map(slot => slot.id === "B1" ? { ...slot, card: occupied } : slot) } } }, { onPlayerCardPlay: vi.fn() });
+    const predicate = screenMocks.props!.interactions?.isSlotDropEligible;
+    expect(predicate?.({ owner: "player", rank: "back", slotId: parseBattleSlotViewId("B1") })).toBe(false);
+    expect(predicate?.({ owner: "player", rank: "back", slotId: parseBattleSlotViewId("B0") })).toBe(true);
+  });
+  it.each(["padding", "missing", "unhandled"] as const)("a %s drag cannot silently auto-play, and a fresh real B1 drag still commits once", kind => {
+    const onPlayerCardPlay = vi.fn();
+    renderTutorialScreen(realCellView(), { onPlayerCardPlay });
+    const padding = screenMocks.props!.view.near.backRank.find(slot => !["B0", "B1", "B2"].includes(slot.id))!;
+    startCardDrag();
+    if (kind !== "unhandled") act(() => screenMocks.props?.interactions?.onHandCardDrop?.(kind === "missing" ? undefined : { owner: "player", rank: "back", slotId: padding.id }));
+    act(() => screenMocks.props?.interactions?.onCardDragEnd());
+    expect(onPlayerCardPlay).not.toHaveBeenCalled();
+    expect(screenMocks.props?.interactions).toMatchObject(clearedPending);
+    startCardDrag();
+    act(() => screenMocks.props?.interactions?.onHandCardDrop?.({ owner: "player", rank: "back", slotId: parseBattleSlotViewId("B1") }));
+    act(() => screenMocks.props?.interactions?.onCardDragEnd());
+    expect(onPlayerCardPlay).toHaveBeenCalledExactlyOnceWith("real-slot-contract", TUTORIAL_PLAYER_CARD.id, TUTORIAL_PLAYER_CARD.model.cardId, "B1");
+  });
+  it("explicit activation preserves null automatic placement", () => {
+    const onPlayerCardPlay = vi.fn();
+    renderTutorialScreen(realCellView(), { onPlayerCardPlay });
+    act(() => screenMocks.props?.interactions?.onHandCardActivate(TUTORIAL_PLAYER_CARD.id));
+    expect(onPlayerCardPlay).toHaveBeenCalledExactlyOnceWith("real-slot-contract", TUTORIAL_PLAYER_CARD.id, TUTORIAL_PLAYER_CARD.model.cardId, null);
   });
 });
