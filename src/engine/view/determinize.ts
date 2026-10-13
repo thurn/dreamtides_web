@@ -517,6 +517,9 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     result: copy(view.result),
   };
   state.nextInstance = next;
+  for (const trigger of state.triggerQueue) {
+    if (trigger.discardedCount !== undefined) state.nextInstance = Math.max(state.nextInstance, trigger.discardedCount + 1);
+  }
   if (descriptors.length > 0) {
     state.rememberedCards = { player: [], enemy: [] };
     state.rememberedCards[viewer] = descriptors.map((descriptor: HiddenCardDescriptor) => {

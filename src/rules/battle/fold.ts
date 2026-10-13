@@ -717,7 +717,11 @@ function isBattleState(value: unknown): boolean {
     nullable(isBattleResult)(value.result) &&
     hasConsistentZones(value) &&
     hasMirroredGainedAbilities(value) &&
-    hasConsistentLinkedBanish(value)
+    hasConsistentLinkedBanish(value) &&
+    (() => {
+      const state = value as unknown as BattleState;
+      return state.triggerQueue.every(({ discardedCount }) => discardedCount === undefined || discardedCount < state.nextInstance);
+    })()
   );
 }
 
@@ -1093,6 +1097,7 @@ function isQueuedTrigger(value: unknown): boolean {
     optional((cost) => isFiniteNumber(cost) && cost >= 0)(value.lastKnownSubjectCost) &&
     optional((scored) => isFiniteNumber(scored) && scored >= 0)(value.scored) &&
     optional((count) => typeof count === "number" && Number.isSafeInteger(count) && count > 0)(value.discardedCount) &&
+    (value.discardedCount === undefined || value.subject === null) &&
     optional(
       (gain) =>
         isPlainRecord(gain) &&

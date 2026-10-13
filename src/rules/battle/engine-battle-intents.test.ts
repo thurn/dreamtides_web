@@ -353,14 +353,14 @@ describe("LOAD_STATE", () => {
   });
 
   it("preserves queued subject costs and discard counts and rejects malformed or bonus values", () => {
-    const state = begun(), battle = journeyBattleOf(state.battle);
+    const state = begun(), battle = journeyBattleOf(state.battle), before = JSON.stringify(state);
     if (battle === null) throw new Error("no journey battle");
     const instance = battle.engine.slice.committed.instances[firstCard(state)];
     if (instance.printing.kind !== "card") throw new Error("no fixture card printing");
     const trigger = { source: instance.id, controller: instance.controller, origin: { kind: "card", cardId: instance.printing.cardId, variant: instance.variant }, ability: 0, node: null, subject: instance.id };
-    const payload = (cost: unknown, bonus = false, field = "lastKnownSubjectCost") => {
+    const payload = (cost: unknown, bonus = false, field = "lastKnownSubjectCost", subject = field === "discardedCount" ? null : instance.id) => {
       const id = SYNTHETIC_DREAMWELL[0].id;
-      const record = bonus ? { kind: "dreamwellBonus", source: { kind: "dreamwell", id, side: instance.controller }, controller: instance.controller, origin: { kind: "dreamwell", id }, ability: 0, node: null, subject: null } : trigger;
+      const record = bonus ? { kind: "dreamwellBonus", source: { kind: "dreamwell", id, side: instance.controller }, controller: instance.controller, origin: { kind: "dreamwell", id }, ability: 0, node: null, subject: null } : { ...trigger, subject };
       return { ...battle, engine: { ...battle.engine, slice: { ...battle.engine.slice, committed: { ...battle.engine.slice.committed,
         triggerQueue: [{ ...record, ...(cost === undefined ? {} : { [field]: cost }) }],
       } } } };
@@ -370,12 +370,14 @@ describe("LOAD_STATE", () => {
     for (const cost of [null, -1, NaN, Infinity, "2", {}, [], true]) expect(load(cost)).toBeNull();
     expect(load(undefined, true)?.battle).toEqual(payload(undefined, true));
     expect(load(0, true)).toBeNull();
-    for (const count of [undefined, 1, 3, Number.MAX_SAFE_INTEGER]) {
+    for (const count of [undefined, 1, 3, battle.engine.slice.committed.nextInstance - 1]) {
       const saved = JSON.parse(JSON.stringify(payload(count, false, "discardedCount"))) as unknown;
       expect(validateLoadedState(state, { snapshot: state.journey, battle: saved })?.battle).toEqual(saved);
     }
-    for (const count of [null, 0, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1, "2", {}, [], true]) expect(load(count, false, "discardedCount")).toBeNull();
+    for (const count of [null, 0, -1, 1.5, NaN, Infinity, battle.engine.slice.committed.nextInstance, Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER + 1, "2", {}, [], true]) expect(load(count, false, "discardedCount")).toBeNull();
     expect(load(1, true, "discardedCount")).toBeNull();
+    expect(validateLoadedState(state, { snapshot: state.journey, battle: payload(1, false, "discardedCount", instance.id) })).toBeNull();
+    expect(JSON.stringify(state)).toBe(before);
   });
 
   it("loads loop prompt visibility conservatively and rejects malformed or partial metadata", () => {

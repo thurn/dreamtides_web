@@ -1,12 +1,18 @@
 /** Discard counts survive public prompt suspension, save/replay, views and competing answers. */
 import { describe, expect, it } from "vitest";
 import { parsePromptId } from "../../../../types/identifiers";
+import { parseEngineBattleFold } from "../../../../rules/battle/fold";
+import { createEngine } from "../../../engine";
+import { event } from "../../../dsl/builders";
 import { eventSeenBy } from "../../../events";
 import { createFoldAdapter } from "../../../fold/slice";
 import { deserializeState, serializeState, stateHash } from "../../../state/hash";
 import type { Decklists } from "../../../view/determinize";
 import { eventRedactionViolations } from "../../../testing/redaction";
-import { D, applied, engine, run, setup, slice } from "./discard-batch-support";
+import { boardState } from "../../../testing/board";
+import { syntheticId, testCatalog } from "../../../testing/synthetic-cards";
+import { createCard, discard, sequence } from "../index";
+import { D, applied, engine, run, setup, slice, v } from "./discard-batch-support";
 
 function decklists(state: ReturnType<typeof setup>["state"]): Decklists {
   const entries = (side: "player" | "enemy") => Object.values(state.instances).filter((c) => c.owner === side && !c.status.created).flatMap((c) => c.printing.kind === "card" ? [{ cardId: c.printing.cardId, ...c.variant }] : []);
@@ -15,6 +21,47 @@ function decklists(state: ReturnType<typeof setup>["state"]): Decklists {
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
 describe("discard captured count replay and privacy", () => {
+  it.each(["player", "enemy"] as const)("reloads created-card batch history through public views and sampled saved continuations for %s", (side) => {
+    const other = side === "player" ? "enemy" : "player";
+    const producer = { ...D.three, id: syntheticId(0xc6200), abilities: () => [event(sequence(createCard(v.vanilla1.id, 3), discard(3)))] };
+    const local = createEngine(testCatalog([producer, D.pausedWatch]));
+    const b = boardState(local.catalog, { active: side, phase: "day", scoreToWin: 100,
+      [side]: { back: [D.pausedWatch.id], hand: [producer.id], deck: [] }, [other]: { deck: [] } });
+    const fold = createFoldAdapter(local);
+    const outcome = fold.reduce(slice(b.state), { kind: "battleAction", side, action: { kind: "play", card: b.ids[side].hand[0], from: "hand" } });
+    const queued = applied(outcome), pending = fold.pending(queued)!;
+    expect(pending.prompt.kind).toBe("confirm");
+    expect(queued.committed.triggerQueue).toMatchObject([{ subject: null, discardedCount: 3 }]);
+    if (outcome.kind !== "applied") throw new Error("created batch bounced");
+    const created = outcome.published.filter((e) => e.kind === "cardCreated").map((e) => e.instance);
+    expect(created).toHaveLength(3);
+    expect(outcome.published.filter((e) => e.kind === "ceasedToExist").map((e) => e.instance)).toEqual(created);
+    expect(Object.keys(queued.committed.instances)).toHaveLength(2);
+    for (const id of created) expect(queued.committed.instances[id]).toBeUndefined();
+    const init = { seed: b.state.seed, scoreToWin: 100, startingSide: side, decks: { player: [], enemy: [] }, dreamwell: [] };
+    const restore = (saved: typeof queued) => {
+      const loaded = parseEngineBattleFold(copy({ init, slice: saved }));
+      if (loaded === null) throw new Error("valid created batch was rejected");
+      const cold = createFoldAdapter(local), prompt = cold.pending(loaded.slice)!.prompt;
+      const completed = cold.reduce(loaded.slice, { kind: "answer", side, promptId: prompt.id, value: true });
+      const done = applied(completed);
+      if (completed.kind !== "applied") throw new Error("reloaded batch bounced");
+      expect(completed.published.filter((e) => e.kind === "fatigue")).toEqual([1, 2, 4].map((points) => ({ kind: "fatigue", side, points })));
+      expect(done.committed.sides[other].score).toBe(7);
+      expect(done.committed.triggerQueue).toEqual([]);
+      expect(done.committed.sides[side].hand).toEqual([]);
+      return loaded.slice;
+    };
+    expect(stateHash(restore(queued).committed)).toBe(stateHash(queued.committed));
+    for (const viewer of ["player", "enemy"] as const) {
+      const visible = local.view(queued.committed, viewer);
+      expect(visible.triggerQueue).toMatchObject([{ subject: null, discardedCount: 3 }]);
+      const sampled = local.determinize(visible, decklists(queued.committed), () => 0.5);
+      expect(sampled.triggerQueue).toMatchObject([{ subject: null, discardedCount: 3 }]);
+      restore({ ...copy(queued), committed: sampled });
+    }
+  });
+
   it.each(["player", "enemy"] as const)("restarts a paused instruction with its published prefix, captured count and once use for %s", (side) => {
     const b = setup(side, D.pause), fold = createFoldAdapter(engine, { checkEventPrefix: true });
     const opened = applied(fold.reduce(slice(b.state), { kind: "battleAction", side, action: b.action }));

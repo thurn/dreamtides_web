@@ -1,0 +1,1378 @@
+{
+  "bead": "hv-cw62",
+  "phase": 5,
+  "base": "fd4ca1e47ea791a08803b1ac319b9acf69ab8fa3",
+  "branch": "wt/discard-load-cw62-sol",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/discard-load-cw62-sol",
+  "currentGrossWindow": {
+    "start": "2026-10-13T04:59:44.585272Z",
+    "end": "2026-10-13T05:35:10.950921+00:00",
+    "scope": "Conservative parent claim acknowledgement observation through final commit preparation, including all owned setup, audit, coordination, waits, implementation, validation and packaging without reset.",
+    "endpointStatus": "Actual endpoint immediately before final schema/index checks and the single commit. Actual commit bracket/OID/timestamp is retained in external terminal handoff; exact model dispatch was not observed."
+  },
+  "claimObservations": {
+    "acknowledgementObservedAt": "2026-10-13T04:59:44.585272Z",
+    "nativeStartedAtSecondPrecision": "2026-10-13T04:59:45Z",
+    "qualification": "About0.415s clock/second-precision difference; exact model dispatch instant not observed. Original453 windows and other peers clocks are excluded."
+  },
+  "nativeAdmission": {
+    "parentWriteAck": "2026-10-13T05:22:35.999427Z",
+    "receipt": "/tmp/cw62-parent-write-ack.txt",
+    "scope": "Two private fold guards; sampled allocator final assignment plus safe retained-public-count loop; existing three test modules; current engine-design paragraph and own evidence.",
+    "unfinishedUnion": 127,
+    "qualification": "Earlier128 snapshot retained by parent and explicitly corrected natively; audit/count are parent observations, no helper native effects.",
+    "serialization": "Six exact future fold/determinize writers and phase5 gate wait cw62; parent freshly found no active owner conflict or equivalent."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Review1 outer supervisor start, one-minute os.getloadavg[0]; inner prepare/typecheck/test/cleanup loads are preserved in raw review output. Separate actual sysctl observation was after review terminal, not its start."
+      },
+      "localValidationS": {
+        "measuredFor": "Final passing outer command launch/execution/cleanup wall seconds. Nested Vitest and enclosing test stage are distinct; baseline/setup and every attempt remain in validationReceipts."
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 84,
+    "jsdomFiles": 0
+  },
+  "testFiles": {
+    "src/engine/effects/primitives/contracts/discard-batch-replay.contracts.ts": {
+      "beforeLines": 113,
+      "afterLines": 160,
+      "new": false,
+      "jsdom": false
+    },
+    "src/engine/effects/primitives/contracts/discard-chosen.contracts.ts": {
+      "beforeLines": 201,
+      "afterLines": 236,
+      "new": false,
+      "jsdom": false
+    },
+    "src/rules/battle/engine-battle-intents.test.ts": {
+      "beforeLines": 498,
+      "afterLines": 500,
+      "new": false,
+      "jsdom": false
+    }
+  },
+  "grossTestChurn": {
+    "touchedFiles": 3,
+    "addedLines": 93,
+    "deletedLines": 9,
+    "classification": "All three modified existing tests/contracts; no new test fixture file, discovery entrypoint or jsdom file."
+  },
+  "functionalPathChanges": [
+    "docs/plan/engine-design.md",
+    "src/engine/effects/primitives/contracts/discard-batch-replay.contracts.ts",
+    "src/engine/effects/primitives/contracts/discard-chosen.contracts.ts",
+    "src/engine/view/determinize.ts",
+    "src/rules/battle/engine-battle-intents.test.ts",
+    "src/rules/battle/fold.ts"
+  ],
+  "functionalChurn": {
+    "touchedFiles": 6,
+    "addedLines": 105,
+    "deletedLines": 11,
+    "scope": "Exact six functional/doc/test paths before the two own evidence files."
+  },
+  "guardBehavior": {
+    "count": "Absent count accepted; present count positive safe integer and strictly below historical nextInstance. No current-live-map ceiling or numeric tunable.",
+    "subject": "Present count requires null subject; absent legacy context retains non-null subjects and subject-cost/scored semantics. Existing visibility masking remains.",
+    "sampler": "Retained public captured count reserves conservative minimum allocator history. No global historical counter exposed, public type/API changed, scalar recalculated or private formula asserted by tests. This is validity rather than forged-history authentication."
+  },
+  "reviewFollowupDispositions": [
+    {
+      "finding": "Impossible saved count accepted",
+      "disposition": "Source-changing fix: allocated-history relational guard plus actual public rejected-load matrix."
+    },
+    {
+      "finding": "Positive count with non-null subject accepted",
+      "disposition": "Source-changing fix: local null-subject guard, actual public rejection and legacy context controls. Stronger hidden-visibility bypass claim remains qualified."
+    },
+    {
+      "finding": "Chosen discard singleton batch lacks watcher coverage",
+      "disposition": "Both actor public fold contracts cover actual holder public count1, null-subject trigger, one draw/once use and private chooser/candidate view."
+    }
+  ],
+  "failurePaths": [
+    {
+      "path": "error-mid-step",
+      "module": "src/engine/effects/primitives/contracts/discard-chosen.contracts.ts",
+      "test": "rolls back the discard but keeps the prompt's private knowledge on an error after selection without partial event publication",
+      "contract": "Empty published prefix and restored zones also exclude partial singleton discardBatch. Pure guards introduce no mutating step."
+    },
+    {
+      "path": "reload-restart",
+      "module": "src/engine/effects/primitives/contracts/discard-batch-replay.contracts.ts",
+      "test": "reloads created-card batch history through public views and sampled saved continuations for %s",
+      "contract": "Both actors and both viewers strictly load a genuinely created/ceased queued count greater than current live IDs; cold confirmation resolves exactly three Fatigue events."
+    },
+    {
+      "path": "partial-write",
+      "module": "src/rules/battle/engine-battle-intents.test.ts",
+      "test": "preserves queued subject costs and discard counts and rejects malformed or bonus values",
+      "contract": "Invalid complete saved context returns null and leaves input FoldState unchanged. This validator has no asynchronous persistence writer; partial publication is separately guarded by the mid-step error contract."
+    },
+    {
+      "path": "invalid-stale-input",
+      "module": "src/rules/battle/engine-battle-intents.test.ts",
+      "test": "preserves queued subject costs and discard counts and rejects malformed or bonus values",
+      "contract": "Rejects count equal to historical nextInstance, MAX_SAFE, malformed values, bonus counts and positive count with a non-null subject; preserves legacy cost0/fraction/scored and absent count. Existing chosen reload test below covers actual stale prompt/attempt."
+    },
+    {
+      "path": "concurrent-actors",
+      "module": "src/engine/effects/primitives/contracts/discard-chosen.contracts.ts",
+      "test": "reconstructs an identical private prompt on reload, rejects illegal, foreign, stale and concurrent inputs, and commits once",
+      "contract": "Foreign actor, stale attempt, step in flight and repeated answer bounce. New both-actor singleton test publishes one holder batch, only holder trigger/draw and one once-use."
+    },
+    {
+      "path": "empty-unmatched",
+      "module": "src/engine/effects/primitives/contracts/discard-chosen.contracts.ts",
+      "test": "filters effective event types and does nothing for empty or unmatched hands",
+      "contract": "Zero discarded and discardBatch events; hand unchanged and no private answer. Positive singleton matrix confirms normal batch path."
+    }
+  ],
+  "validationReceipts": {
+    "prepare": {
+      "label": "prepare",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-load-cw62-sol",
+      "argv": [
+        "node",
+        "scripts/prepare-workspace.mjs"
+      ],
+      "pid": 80624,
+      "observerPid": 80615,
+      "processGroup": 80624,
+      "start": "2026-10-13T05:08:02.587755+00:00",
+      "end": "2026-10-13T05:08:05.419682+00:00",
+      "wallS": 2.831850791000761,
+      "exit": 0,
+      "loadBefore": [
+        5.75537109375,
+        5.49560546875,
+        8.01123046875
+      ],
+      "loadAfter": [
+        5.53466796875,
+        5.4541015625,
+        7.9814453125
+      ],
+      "childCpuS": 2.44,
+      "scope": "actual outer launch/execution/cleanup; nested command scopes separate when reported",
+      "terminal": true
+    },
+    "baseline1": {
+      "label": "baseline1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-load-cw62-sol",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/cw62-baseline.mts"
+      ],
+      "pid": 54258,
+      "observerPid": 54250,
+      "processGroup": 54258,
+      "start": "2026-10-13T05:15:05.431001+00:00",
+      "end": "2026-10-13T05:15:06.446033+00:00",
+      "wallS": 1.0149743750080233,
+      "exit": 1,
+      "loadBefore": [
+        5.720703125,
+        8.5166015625,
+        9.18701171875
+      ],
+      "loadAfter": [
+        5.720703125,
+        8.5166015625,
+        9.18701171875
+      ],
+      "childCpuS": 0.89,
+      "scope": "actual outer launch/execution/cleanup; nested command scopes separate when reported",
+      "terminal": true
+    },
+    "baseline2": {
+      "label": "baseline2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-load-cw62-sol",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/cw62-baseline-sampled-replay.mts"
+      ],
+      "pid": 56160,
+      "observerPid": 56152,
+      "processGroup": 56160,
+      "start": "2026-10-13T05:16:09.094490+00:00",
+      "end": "2026-10-13T05:16:09.762643+00:00",
+      "wallS": 0.6681130409997422,
+      "exit": 1,
+      "loadBefore": [
+        4.4130859375,
+        7.619140625,
+        8.802734375
+      ],
+      "loadAfter": [
+        4.4130859375,
+        7.619140625,
+        8.802734375
+      ],
+      "childCpuS": 0.77,
+      "scope": "actual outer launch/execution/cleanup; nested command scopes separate when reported",
+      "terminal": true
+    },
+    "focused1": {
+      "label": "focused1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-load-cw62-sol",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "pid": 29855,
+      "observerPid": 29841,
+      "processGroup": 29855,
+      "start": "2026-10-13T05:25:38.514334+00:00",
+      "end": "2026-10-13T05:25:48.685534+00:00",
+      "wallS": 10.17108866700437,
+      "exit": 0,
+      "loadBefore": [
+        17.8291015625,
+        11.5986328125,
+        9.86572265625
+      ],
+      "loadAfter": [
+        19.9208984375,
+        12.2529296875,
+        10.11767578125
+      ],
+      "childCpuS": 14.94,
+      "scope": "actual outer launch/execution/cleanup; nested command scopes separate when reported",
+      "terminal": true
+    },
+    "review1": {
+      "label": "review1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-load-cw62-sol",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 31656,
+      "observerPid": 31643,
+      "processGroup": 31656,
+      "start": "2026-10-13T05:25:59.004587+00:00",
+      "end": "2026-10-13T05:26:37.056072+00:00",
+      "wallS": 38.05104766601289,
+      "exit": 0,
+      "loadBefore": [
+        17.76708984375,
+        12.0458984375,
+        10.06884765625
+      ],
+      "loadAfter": [
+        12.92431640625,
+        11.58251953125,
+        9.9931640625
+      ],
+      "childCpuS": 131.51,
+      "scope": "actual outer launch/execution/cleanup; nested command scopes separate when reported",
+      "terminal": true
+    },
+    "knip1": {
+      "label": "knip1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-load-cw62-sol",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 34967,
+      "observerPid": 34959,
+      "processGroup": 34967,
+      "start": "2026-10-13T05:27:03.633337+00:00",
+      "end": "2026-10-13T05:27:09.940713+00:00",
+      "wallS": 6.3071826249943115,
+      "exit": 0,
+      "loadBefore": [
+        10.185546875,
+        11.03857421875,
+        9.841796875
+      ],
+      "loadAfter": [
+        9.60986328125,
+        10.90478515625,
+        9.80126953125
+      ],
+      "childCpuS": 5.12,
+      "scope": "actual outer launch/execution/cleanup; nested command scopes separate when reported",
+      "terminal": true
+    },
+    "baseline-final": {
+      "label": "baseline-final",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-load-cw62-sol",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/cw62-baseline-sampled-replay.mts"
+      ],
+      "pid": 38219,
+      "observerPid": 38211,
+      "processGroup": 38219,
+      "start": "2026-10-13T05:28:12.020333+00:00",
+      "end": "2026-10-13T05:28:13.114575+00:00",
+      "wallS": 1.0942110000032699,
+      "exit": 0,
+      "loadBefore": [
+        14.11083984375,
+        12.40869140625,
+        10.47216796875
+      ],
+      "loadAfter": [
+        14.11083984375,
+        12.40869140625,
+        10.47216796875
+      ],
+      "childCpuS": 0.8900000000000001,
+      "scope": "actual outer launch/execution/cleanup; nested command scopes separate when reported",
+      "terminal": true
+    },
+    "evidence-schema": {
+      "label": "evidence-schema",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-load-cw62-sol",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "pid": 9985,
+      "observerPid": 9966,
+      "processGroup": 9985,
+      "start": "2026-10-13T05:31:54.547380+00:00",
+      "end": "2026-10-13T05:31:54.702940+00:00",
+      "wallS": 0.15543912499560975,
+      "exit": 0,
+      "loadBefore": [
+        21.017578125,
+        17.36572265625,
+        13.00537109375
+      ],
+      "loadAfter": [
+        21.017578125,
+        17.36572265625,
+        13.00537109375
+      ],
+      "childCpuS": 0.1,
+      "scope": "actual outer launch/execution/cleanup; nested command scopes separate when reported",
+      "terminal": true
+    }
+  },
+  "validationScopes": {
+    "focused1": {
+      "testFiles": 2,
+      "tests": 2539,
+      "vitestS": 7.1,
+      "enclosingTestStageS": 7.8,
+      "outerS": 10.17108866700437
+    },
+    "review1": {
+      "testFiles": 139,
+      "tests": 4397,
+      "vitestS": 27.94,
+      "enclosingRelatedTestStageS": 36.0,
+      "outerS": 38.05104766601289,
+      "otherStages": "Both typechecks, import-cycle and lint checks terminal0."
+    },
+    "knip1": {
+      "innerKnipS": 2.3,
+      "outerS": 6.3071826249943115
+    },
+    "workers": 2,
+    "workerEvidence": "vitest.config.ts defaults to2; review/Knip explicitly set JOURNEY_TEST_WORKERS=2.",
+    "heavySlot": "No command from D17 heavy list ran; focused/review/Knip/short diagnostics require no heavy slot."
+  },
+  "publicBaselines": {
+    "baseline1": {
+      "sourcePath": "/tmp/cw62-baseline.mts",
+      "sourceSha256": "39f4d096d2b4d773c5cb125f6e42b70437113c8f2f98a56358c3fd4b3e702193",
+      "results": [
+        {
+          "name": "genuine-created-ceased-control",
+          "detail": {
+            "side": "player",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 6,
+            "hash": "14984509eb7bbd",
+            "accepted": true
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "player",
+            "name": "allocation-bound",
+            "count": 6,
+            "subject": null,
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "player",
+            "name": "max-safe",
+            "count": 9007199254740991,
+            "subject": null,
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "player",
+            "name": "nonnull-subject",
+            "count": 1,
+            "subject": "i1",
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "legacy-and-existing-malformed-controls",
+          "detail": {
+            "side": "player",
+            "absentCountNonnullSubjectCost0": true,
+            "subjectCostFraction": true,
+            "scoredFraction": true,
+            "malformedCountRejections": 6
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "player",
+            "viewer": "player",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 3,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": false
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "player",
+            "viewer": "enemy",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 3,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": false
+          }
+        },
+        {
+          "name": "finite-positive-replay",
+          "detail": {
+            "side": "player",
+            "drawAttempts": 3,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0,
+            "nextInstance": 6
+          }
+        },
+        {
+          "name": "genuine-created-ceased-control",
+          "detail": {
+            "side": "enemy",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 6,
+            "hash": "1e4f47187cdae1",
+            "accepted": true
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "enemy",
+            "name": "allocation-bound",
+            "count": 6,
+            "subject": null,
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "enemy",
+            "name": "max-safe",
+            "count": 9007199254740991,
+            "subject": null,
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "enemy",
+            "name": "nonnull-subject",
+            "count": 1,
+            "subject": "i1",
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "legacy-and-existing-malformed-controls",
+          "detail": {
+            "side": "enemy",
+            "absentCountNonnullSubjectCost0": true,
+            "subjectCostFraction": true,
+            "scoredFraction": true,
+            "malformedCountRejections": 6
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "enemy",
+            "viewer": "player",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 3,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": false
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "enemy",
+            "viewer": "enemy",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 3,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": false
+          }
+        },
+        {
+          "name": "finite-positive-replay",
+          "detail": {
+            "side": "enemy",
+            "drawAttempts": 3,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0,
+            "nextInstance": 6
+          }
+        },
+        {
+          "name": "summary",
+          "detail": {
+            "behavioralCases": 30,
+            "expectedMissingBehavior": [
+              "player:allocation-bound",
+              "player:max-safe",
+              "player:nonnull-subject",
+              "enemy:allocation-bound",
+              "enemy:max-safe",
+              "enemy:nonnull-subject"
+            ],
+            "fixtureErrors": 0
+          }
+        }
+      ],
+      "classification": "expected missing-behavior negatives; no fixture failure",
+      "rawStdout": "/tmp/cw62-check-baseline1.stdout.txt",
+      "rawStderr": "/tmp/cw62-check-baseline1.stderr.txt",
+      "resolutionLimit": "Only genuine three-draw positive queues were resolved; impossible large scalars were parsed only."
+    },
+    "baseline2": {
+      "sourcePath": "/tmp/cw62-baseline-sampled-replay.mts",
+      "sourceSha256": "f228a7ae45ea4133cd51fac6e1c20b8a28ac208570a1ac6e48ca3fa4e3dedfe4",
+      "results": [
+        {
+          "name": "genuine-created-ceased-control",
+          "detail": {
+            "side": "player",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 6,
+            "hash": "14984509eb7bbd",
+            "accepted": true
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "player",
+            "name": "allocation-bound",
+            "count": 6,
+            "subject": null,
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "player",
+            "name": "max-safe",
+            "count": 9007199254740991,
+            "subject": null,
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "player",
+            "name": "nonnull-subject",
+            "count": 1,
+            "subject": "i1",
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "legacy-and-existing-malformed-controls",
+          "detail": {
+            "side": "player",
+            "absentCountNonnullSubjectCost0": true,
+            "subjectCostFraction": true,
+            "scoredFraction": true,
+            "malformedCountRejections": 6
+          }
+        },
+        {
+          "name": "sampled-finite-positive-replay",
+          "detail": {
+            "side": "player",
+            "viewer": "player",
+            "accepted": true,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "player",
+            "viewer": "player",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 3,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": false
+          }
+        },
+        {
+          "name": "sampled-finite-positive-replay",
+          "detail": {
+            "side": "player",
+            "viewer": "enemy",
+            "accepted": true,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "player",
+            "viewer": "enemy",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 3,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": false
+          }
+        },
+        {
+          "name": "finite-positive-replay",
+          "detail": {
+            "side": "player",
+            "drawAttempts": 3,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0,
+            "nextInstance": 6
+          }
+        },
+        {
+          "name": "genuine-created-ceased-control",
+          "detail": {
+            "side": "enemy",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 6,
+            "hash": "1e4f47187cdae1",
+            "accepted": true
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "enemy",
+            "name": "allocation-bound",
+            "count": 6,
+            "subject": null,
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "enemy",
+            "name": "max-safe",
+            "count": 9007199254740991,
+            "subject": null,
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "enemy",
+            "name": "nonnull-subject",
+            "count": 1,
+            "subject": "i1",
+            "accepted": true,
+            "rejectedAsExpected": false,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "legacy-and-existing-malformed-controls",
+          "detail": {
+            "side": "enemy",
+            "absentCountNonnullSubjectCost0": true,
+            "subjectCostFraction": true,
+            "scoredFraction": true,
+            "malformedCountRejections": 6
+          }
+        },
+        {
+          "name": "sampled-finite-positive-replay",
+          "detail": {
+            "side": "enemy",
+            "viewer": "player",
+            "accepted": true,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "enemy",
+            "viewer": "player",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 3,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": false
+          }
+        },
+        {
+          "name": "sampled-finite-positive-replay",
+          "detail": {
+            "side": "enemy",
+            "viewer": "enemy",
+            "accepted": true,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "enemy",
+            "viewer": "enemy",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 3,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": false
+          }
+        },
+        {
+          "name": "finite-positive-replay",
+          "detail": {
+            "side": "enemy",
+            "drawAttempts": 3,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0,
+            "nextInstance": 6
+          }
+        },
+        {
+          "name": "summary",
+          "detail": {
+            "behavioralCases": 34,
+            "expectedMissingBehavior": [
+              "player:allocation-bound",
+              "player:max-safe",
+              "player:nonnull-subject",
+              "enemy:allocation-bound",
+              "enemy:max-safe",
+              "enemy:nonnull-subject"
+            ],
+            "fixtureErrors": 0
+          }
+        }
+      ],
+      "classification": "expected missing-behavior negatives; no fixture failure",
+      "rawStdout": "/tmp/cw62-check-baseline2.stdout.txt",
+      "rawStderr": "/tmp/cw62-check-baseline2.stderr.txt",
+      "resolutionLimit": "Only genuine three-draw positive queues were resolved; impossible large scalars were parsed only."
+    },
+    "baseline-final": {
+      "sourcePath": "/tmp/cw62-baseline-sampled-replay.mts",
+      "sourceSha256": "f228a7ae45ea4133cd51fac6e1c20b8a28ac208570a1ac6e48ca3fa4e3dedfe4",
+      "results": [
+        {
+          "name": "genuine-created-ceased-control",
+          "detail": {
+            "side": "player",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 6,
+            "hash": "14984509eb7bbd",
+            "accepted": true
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "player",
+            "name": "allocation-bound",
+            "count": 6,
+            "subject": null,
+            "accepted": false,
+            "rejectedAsExpected": true,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "player",
+            "name": "max-safe",
+            "count": 9007199254740991,
+            "subject": null,
+            "accepted": false,
+            "rejectedAsExpected": true,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "player",
+            "name": "nonnull-subject",
+            "count": 1,
+            "subject": "i1",
+            "accepted": false,
+            "rejectedAsExpected": true,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "legacy-and-existing-malformed-controls",
+          "detail": {
+            "side": "player",
+            "absentCountNonnullSubjectCost0": true,
+            "subjectCostFraction": true,
+            "scoredFraction": true,
+            "malformedCountRejections": 6
+          }
+        },
+        {
+          "name": "sampled-finite-positive-replay",
+          "detail": {
+            "side": "player",
+            "viewer": "player",
+            "accepted": true,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "player",
+            "viewer": "player",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 4,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": true
+          }
+        },
+        {
+          "name": "sampled-finite-positive-replay",
+          "detail": {
+            "side": "player",
+            "viewer": "enemy",
+            "accepted": true,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "player",
+            "viewer": "enemy",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 4,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": true
+          }
+        },
+        {
+          "name": "finite-positive-replay",
+          "detail": {
+            "side": "player",
+            "drawAttempts": 3,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0,
+            "nextInstance": 6
+          }
+        },
+        {
+          "name": "genuine-created-ceased-control",
+          "detail": {
+            "side": "enemy",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 6,
+            "hash": "1e4f47187cdae1",
+            "accepted": true
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "enemy",
+            "name": "allocation-bound",
+            "count": 6,
+            "subject": null,
+            "accepted": false,
+            "rejectedAsExpected": true,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "enemy",
+            "name": "max-safe",
+            "count": 9007199254740991,
+            "subject": null,
+            "accepted": false,
+            "rejectedAsExpected": true,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "expected-negative",
+          "detail": {
+            "side": "enemy",
+            "name": "nonnull-subject",
+            "count": 1,
+            "subject": "i1",
+            "accepted": false,
+            "rejectedAsExpected": true,
+            "inputUnchanged": true,
+            "resolutionAttempted": false
+          }
+        },
+        {
+          "name": "legacy-and-existing-malformed-controls",
+          "detail": {
+            "side": "enemy",
+            "absentCountNonnullSubjectCost0": true,
+            "subjectCostFraction": true,
+            "scoredFraction": true,
+            "malformedCountRejections": 6
+          }
+        },
+        {
+          "name": "sampled-finite-positive-replay",
+          "detail": {
+            "side": "enemy",
+            "viewer": "player",
+            "accepted": true,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "enemy",
+            "viewer": "player",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 4,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": true
+          }
+        },
+        {
+          "name": "sampled-finite-positive-replay",
+          "detail": {
+            "side": "enemy",
+            "viewer": "enemy",
+            "accepted": true,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0
+          }
+        },
+        {
+          "name": "sampler-current-versus-proposed-bound",
+          "detail": {
+            "side": "enemy",
+            "viewer": "enemy",
+            "count": 3,
+            "live": 2,
+            "nextInstance": 4,
+            "currentParserAccepts": true,
+            "proposedStrictAllocationBoundWouldAccept": true
+          }
+        },
+        {
+          "name": "finite-positive-replay",
+          "detail": {
+            "side": "enemy",
+            "drawAttempts": 3,
+            "opponentFatigueScore": 7,
+            "queuedRemaining": 0,
+            "nextInstance": 6
+          }
+        },
+        {
+          "name": "summary",
+          "detail": {
+            "behavioralCases": 34,
+            "expectedMissingBehavior": [],
+            "fixtureErrors": 0
+          }
+        }
+      ],
+      "classification": "all expected negative and finite positive controls passed",
+      "rawStdout": "/tmp/cw62-check-baseline-final.stdout.txt",
+      "rawStderr": "/tmp/cw62-check-baseline-final.stderr.txt",
+      "resolutionLimit": "Only genuine three-draw positive queues were resolved; impossible large scalars were parsed only."
+    }
+  },
+  "sourceFreeze": {
+    "before": "/tmp/cw62-functional-before.json",
+    "afterStage1": [
+      "/tmp/cw62-functional-after-baseline1.json",
+      "/tmp/cw62-functional-after-baseline2.json"
+    ],
+    "stage1Proofs": [
+      "/tmp/cw62-baseline1-freeze-proof.json",
+      "/tmp/cw62-baseline2-freeze-proof.json"
+    ],
+    "paths": 4350,
+    "stage1Changes": 0,
+    "afterFunctionalChecks": "/tmp/cw62-final-functional.json",
+    "finalProof": "/tmp/cw62-final-functional-proof.json",
+    "finalSourcePatch": "/tmp/cw62-final-source.patch",
+    "finalChangedPaths": [
+      "docs/plan/engine-design.md",
+      "src/engine/effects/primitives/contracts/discard-batch-replay.contracts.ts",
+      "src/engine/effects/primitives/contracts/discard-chosen.contracts.ts",
+      "src/engine/view/determinize.ts",
+      "src/rules/battle/engine-battle-intents.test.ts",
+      "src/rules/battle/fold.ts"
+    ],
+    "qualification": "The final manifest is explicitly an after-terminal snapshot; no pre-final-witness snapshot is invented. No functional source edits occurred during focused/review/Knip/final diagnostic. Exact six admitted paths account for every base-to-final difference; all other frozen paths unchanged.",
+    "finalSourcePatchSha256": "969975994e25e00a4ca04a94319104b2c3e3f4a97b1be3e30993d6cdc7ff4ff8"
+  },
+  "sourceAudit": {
+    "proposal": "/tmp/cw62-stage1-proposal.md",
+    "census": [
+      "/tmp/cw62-reader-census.json",
+      "/tmp/cw62-reader-census-sampler.json"
+    ],
+    "qualification": "Exact relative import/reexport census plus conservative cyclic/type-only routed closure is reader evidence, not write ownership. Shared contracts are dynamically discovered by existing eager glob."
+  },
+  "hostLoadSamples": [
+    {
+      "label": "prepare",
+      "start": "2026-10-13T05:08:02.587755+00:00",
+      "end": "2026-10-13T05:08:05.419682+00:00",
+      "before": [
+        5.75537109375,
+        5.49560546875,
+        8.01123046875
+      ],
+      "after": [
+        5.53466796875,
+        5.4541015625,
+        7.9814453125
+      ]
+    },
+    {
+      "label": "baseline1",
+      "start": "2026-10-13T05:15:05.431001+00:00",
+      "end": "2026-10-13T05:15:06.446033+00:00",
+      "before": [
+        5.720703125,
+        8.5166015625,
+        9.18701171875
+      ],
+      "after": [
+        5.720703125,
+        8.5166015625,
+        9.18701171875
+      ]
+    },
+    {
+      "label": "baseline2",
+      "start": "2026-10-13T05:16:09.094490+00:00",
+      "end": "2026-10-13T05:16:09.762643+00:00",
+      "before": [
+        4.4130859375,
+        7.619140625,
+        8.802734375
+      ],
+      "after": [
+        4.4130859375,
+        7.619140625,
+        8.802734375
+      ]
+    },
+    {
+      "label": "focused1",
+      "start": "2026-10-13T05:25:38.514334+00:00",
+      "end": "2026-10-13T05:25:48.685534+00:00",
+      "before": [
+        17.8291015625,
+        11.5986328125,
+        9.86572265625
+      ],
+      "after": [
+        19.9208984375,
+        12.2529296875,
+        10.11767578125
+      ]
+    },
+    {
+      "label": "review1",
+      "start": "2026-10-13T05:25:59.004587+00:00",
+      "end": "2026-10-13T05:26:37.056072+00:00",
+      "before": [
+        17.76708984375,
+        12.0458984375,
+        10.06884765625
+      ],
+      "after": [
+        12.92431640625,
+        11.58251953125,
+        9.9931640625
+      ]
+    },
+    {
+      "label": "knip1",
+      "start": "2026-10-13T05:27:03.633337+00:00",
+      "end": "2026-10-13T05:27:09.940713+00:00",
+      "before": [
+        10.185546875,
+        11.03857421875,
+        9.841796875
+      ],
+      "after": [
+        9.60986328125,
+        10.90478515625,
+        9.80126953125
+      ]
+    },
+    {
+      "label": "baseline-final",
+      "start": "2026-10-13T05:28:12.020333+00:00",
+      "end": "2026-10-13T05:28:13.114575+00:00",
+      "before": [
+        14.11083984375,
+        12.40869140625,
+        10.47216796875
+      ],
+      "after": [
+        14.11083984375,
+        12.40869140625,
+        10.47216796875
+      ]
+    },
+    {
+      "at": "2026-10-13T05:26:48.147013+00:00",
+      "provider": "sysctl -n vm.loadavg",
+      "raw": "{ 11.56 11.33 9.92 }",
+      "oneMinute": 11.56,
+      "measuredFor": "post-review1 observation: actual review1 terminal05:26:37.056072Z preceded this05:26:48.147013Z sample; terminal result not yet polled at sample time"
+    }
+  ],
+  "browserQA": {
+    "performed": false,
+    "reason": "Bounded pure saved-state validation and sampled allocator compatibility, with public synthetic replay/chosen coverage; no UI, routing or presentation change. No server/capture runtime was admitted or started."
+  },
+  "broaderChecks": {
+    "full": false,
+    "fuzz": false,
+    "reason": "Exact private guards plus necessary narrow compatibility site and existing contracts; no infrastructure/API/cross-cutting rewrite or failed focused check requiring broader run."
+  },
+  "preExistingIssues": {
+    "fileCreated": false,
+    "reason": "No unrelated production issue discovered. Disposable review asset preparation warnings remain raw receipts; normal assets were restored by each terminal wrapper."
+  },
+  "reviewRouting": {
+    "required": true,
+    "provider": "Fresh read-only Codex CLI configured gpt-5.6-sol",
+    "authority": "Temporary user review override through2026-10-14T01:00Z",
+    "owner": "Parent owns exact-source cold review, finding verification/native certification/close; not falsely claimed complete by implementation checks."
+  },
+  "runtimeDrain": {
+    "ownedCommandsTerminal": true,
+    "serversStarted": 0,
+    "residualOwnedWriter": false,
+    "foreignOwnersTouched": false,
+    "observation": {
+      "at": "2026-10-13T05:32:55.617830+00:00",
+      "providers": [
+        {
+          "label": "prepare",
+          "processGroup": 80624,
+          "providerTerminal": true,
+          "groupExistsAtObservation": false
+        },
+        {
+          "label": "baseline1",
+          "processGroup": 54258,
+          "providerTerminal": true,
+          "groupExistsAtObservation": false
+        },
+        {
+          "label": "baseline2",
+          "processGroup": 56160,
+          "providerTerminal": true,
+          "groupExistsAtObservation": false
+        },
+        {
+          "label": "focused1",
+          "processGroup": 29855,
+          "providerTerminal": true,
+          "groupExistsAtObservation": false
+        },
+        {
+          "label": "review1",
+          "processGroup": 31656,
+          "providerTerminal": true,
+          "groupExistsAtObservation": false
+        },
+        {
+          "label": "knip1",
+          "processGroup": 34967,
+          "providerTerminal": true,
+          "groupExistsAtObservation": false
+        },
+        {
+          "label": "baseline-final",
+          "processGroup": 38219,
+          "providerTerminal": true,
+          "groupExistsAtObservation": false
+        },
+        {
+          "label": "evidence-schema",
+          "processGroup": 9985,
+          "providerTerminal": true,
+          "groupExistsAtObservation": false
+        }
+      ],
+      "serversStarted": 0,
+      "scope": "Only actual own supervisor process groups checked; no foreign process was signalled or killed."
+    }
+  },
+  "dispatchDuty": {
+    "phase5Uncovered": 10,
+    "phase5Total": 491,
+    "belowCadence": 25,
+    "g3gu": "Landed/closed per parent fresh correction; no due retrospective duplicated.",
+    "raw": "/tmp/cw62-dispatch-friction.txt"
+  },
+  "packaging": {
+    "parentStagedAck": "2026-10-13T05:34:03.003759Z",
+    "parentStagedAckReceipt": "/tmp/cw62-parent-staged-ack.txt",
+    "finalEndpoint": "2026-10-13T05:35:10.950921+00:00",
+    "oneCommitRequired": true,
+    "noAmend": true,
+    "commitObservation": "Parent terminal handoff outside immutable source records exact commit bracket, OID, timestamp and clean drain."
+  },
+  "evidenceValidation": {
+    "records": 706,
+    "historicalUnknownMeasurements": 41,
+    "exit": 0,
+    "receipt": "/tmp/cw62-check-evidence-schema.receipt.json"
+  },
+  "parentIndependentManifestVerification": {
+    "proof": "/tmp/cw62-parent-manifest-proof.json",
+    "result": {
+      "paths": 4350,
+      "changed": [
+        "docs/plan/engine-design.md",
+        "src/engine/effects/primitives/contracts/discard-batch-replay.contracts.ts",
+        "src/engine/effects/primitives/contracts/discard-chosen.contracts.ts",
+        "src/engine/view/determinize.ts",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "src/rules/battle/fold.ts"
+      ],
+      "currentHashesMatch": true
+    },
+    "attempt1Classification": "Parent verification setup error: compared SHA strings to manifest record objects; assertion failed without source mutation. Corrected by extracting sha256/symlink fields; not a product or required check failure.",
+    "source": "Parent message after staged preparation, before final endpoint."
+  }
+}

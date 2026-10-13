@@ -1,0 +1,22 @@
+{
+  "bead": "hv-cw62",
+  "phase": 5,
+  "implementMin": 35.43942748333333,
+  "implementWindow": {
+    "start": "2026-10-13T04:59:44.585272Z",
+    "end": "2026-10-13T05:35:10.950921+00:00"
+  },
+  "localValidationS": {
+    "focused": 10.17108866700437,
+    "review": 38.05104766601289,
+    "knip": 6.3071826249943115,
+    "public-witness": 1.0942110000032699
+  },
+  "hostLoad": 17.76708984375,
+  "testDelta": {
+    "files": 0,
+    "lines": 84,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

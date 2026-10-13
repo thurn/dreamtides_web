@@ -940,7 +940,9 @@ This follows [D14](decisions.md#d14-trigger-timing-and-order).
   The value is zero outside a captured batch trigger. Counts name no cards
   and remain public independently of subject redaction; queued event source
   privacy retains its usual contract. Saved queues accept an absent scalar
-  or a positive safe integer, and Dreamwell bonuses carry no discard scalar.
+  or a positive safe integer within the battle's allocated instance history
+  with a null subject. Sampled states reserve the minimum allocation history
+  required by their retained public counts. Dreamwell bonuses carry no discard scalar.
   See RD-hv-umm2.453-1 and rules § Zones → Discarding one or more cards.
 - **Ordering.** Matches enqueue in event order. Simultaneous matches use the
   fixed order: the active side first; within a side, avatar → dreamsigns →

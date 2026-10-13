@@ -3,7 +3,9 @@ import type { EngineCardDefinition } from "../../../catalog";
 import { createEngine } from "../../../engine";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
 import type { ChooseCardsPrompt } from "../../../prompts/types";
-import { energy, event, reclaim } from "../../../dsl/builders";
+import { discardedCount, energy, event, reclaim } from "../../../dsl/builders";
+import { triggered, whenDiscardBatch } from "../../../dsl/triggers";
+import { eventSeenBy } from "../../../events";
 import { NO_DECK_MODS } from "../../../dsl/types";
 import { instanceOrigin } from "../../../rules/activation";
 import { instanceOf } from "../../../rules/zones";
@@ -17,6 +19,7 @@ import { syntheticId, testCatalog } from "../../../testing/synthetic-cards";
 import { promptView, view } from "../../../view/view";
 import { resolveEffect } from "../../interpreter";
 import { discardChosen } from "../discard-chosen";
+import { draw } from "../draw";
 import { v, deck, knowing } from "./cards-support";
 
 /** Synthetic chosen-hand effects, independent of catalog text and printed defaults. */
@@ -46,8 +49,13 @@ const chosenDiscardThenFail: EngineCardDefinition = {
   },
 };
 
+const chosenBatchWatcher: EngineCardDefinition = {
+  ...v.vanilla1, id: syntheticId(0xc6201),
+  abilities: () => [triggered(whenDiscardBatch(), draw(discardedCount()), { oncePerTurn: true })],
+};
+
 describe("discardChosen", () => {
-  const chosenEngine = createEngine(testCatalog([chosenDiscard, chosenEventDiscard, reclaimChosenDiscard, chosenDiscardThenFail]));
+  const chosenEngine = createEngine(testCatalog([chosenDiscard, chosenEventDiscard, reclaimChosenDiscard, chosenDiscardThenFail, chosenBatchWatcher]));
   const setup = (card = chosenDiscard.id, hand: readonly CardId[] = [v.event1.id, v.vanilla1.id, v.event1.id]): BoardSetup => ({
     active: "player", phase: "day", player: { hand: [card], deck, energy: 3 }, enemy: { hand, deck },
   });
@@ -83,13 +91,40 @@ describe("discardChosen", () => {
     expect(invariantViolations(done.committed, chosenEngine.catalog)).toEqual([]);
   });
 
+  it.each(["player", "enemy"] as const)("publishes one holder batch and resolves their watcher after a private chosen discard for %s", (side) => {
+    const holder = side === "player" ? "enemy" : "player";
+    const board: BoardSetup = { active: side, phase: "day",
+      [side]: { back: [chosenBatchWatcher.id], hand: [chosenDiscard.id], deck },
+      [holder]: { back: [chosenBatchWatcher.id], hand: [v.vanilla1.id, v.event1.id], deck } };
+    const { fold, slice, pending, ids } = suspend(board);
+    expect(pending.prompt).toMatchObject({ side, privateTo: side, min: 1, max: 1, candidates: ids[holder].hand });
+    expect((promptView(pending.prompt, holder, pending.display) as ChooseCardsPrompt).candidates).toEqual(ids[holder].hand);
+    expect(view(pending.display, side, chosenEngine.catalog).instances[ids[holder].hand[0]]).toBeDefined();
+    expect(view(pending.display, side, chosenEngine.catalog).instances[ids[holder].deck[0]]).toBeUndefined();
+    const chosen = ids[holder].hand[0];
+    const outcome = fold.reduce(slice, { kind: "answer", side, promptId: pending.prompt.id, value: [chosen] });
+    const done = applied(outcome);
+    if (outcome.kind !== "applied") throw new Error("chosen batch bounced");
+    expect(outcome.published.filter((e) => e.kind === "discarded")).toEqual([{ kind: "discarded", side: holder, instance: chosen }]);
+    const batches = outcome.published.filter((e) => e.kind === "discardBatch");
+    expect(batches).toEqual([{ kind: "discardBatch", side: holder, count: 1 }]);
+    for (const viewer of ["player", "enemy"] as const) expect(eventSeenBy(batches[0], viewer, done.committed)).toEqual(batches[0]);
+    expect(outcome.published.filter((e) => e.kind === "triggerQueued")).toEqual([expect.objectContaining({ source: ids[holder].back[0], controller: holder, subject: null, discardedCount: 1 })]);
+    expect(outcome.published.filter((e) => e.kind === "triggerResolved")).toEqual([expect.objectContaining({ source: ids[holder].back[0], controller: holder, applied: true })]);
+    expect(outcome.published.filter((e) => e.kind === "cardDrawn")).toEqual([{ kind: "cardDrawn", side: holder, instance: ids[holder].deck[0] }]);
+    expect(done.committed.sides[holder].hand).toEqual([ids[holder].hand[1], ids[holder].deck[0]]);
+    expect(done.committed.oncePerTurn).toHaveLength(1);
+    expect(done.committed.triggerQueue).toEqual([]);
+    expect(invariantViolations(done.committed, chosenEngine.catalog)).toEqual([]);
+  });
+
   it("filters effective event types and does nothing for empty or unmatched hands", () => {
     const { pending, ids } = suspend(setup(chosenEventDiscard.id));
     expect((pending.prompt as ChooseCardsPrompt).candidates).toEqual([ids.enemy.hand[0], ids.enemy.hand[2]]);
     for (const hand of [[], [v.vanilla1.id, v.vanilla2.id]]) {
       const result = runScenario(chosenEngine, { board: setup(chosenEventDiscard.id, hand), steps: (ids) => [playFromHand(ids, "player")] });
       expect(result.answers).toEqual([]);
-      expect(result.events.filter((e) => e.kind === "discarded")).toEqual([]);
+      expect(result.events.filter((e) => e.kind === "discarded" || e.kind === "discardBatch")).toEqual([]);
       expect(result.state.sides.enemy.hand).toEqual(result.ids.enemy.hand);
     }
     const lone = runScenario(chosenEngine, { board: setup(chosenEventDiscard.id, [v.vanilla1.id, v.event1.id]), steps: (ids) => [playFromHand(ids, "player")] });
