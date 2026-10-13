@@ -558,8 +558,62 @@ draining](#starting-scaling-and-draining) says.
 ### Claiming and working
 
 - **Claim on dispatch,** never before: `hbd update <id> --claim --json`, by
-  the session. Proceed only on acknowledgement. Per D43, a session holds one
-  claimed bead, plus any bead checkpointed behind a prerequisite.
+  the session. Proceed only after the command terminates successfully and its
+  native reply identifies exactly the intended bead, this session's assignee
+  and `in_progress` status. Per D43, a session holds one claimed bead, plus
+  any bead checkpointed behind a prerequisite.
+
+**Guard every setup effect with that result.** Capture the native command's
+terminal exit and reply before retitling, creating a worktree, installing
+packages or launching the sole implementation helper. With the routing prefix
+above defined in this shell, one attempt's guard is:
+
+```sh
+(
+  bead=hv-xxx
+  slug=replace-with-task-slug
+  actor="${CLAUDE_CODE_SESSION_ID:?}"
+  claim_dir=$(mktemp -d "${TMPDIR:-/tmp}/dreamtides-claim.XXXXXX") || exit 1
+  if hbd update "$bead" --claim --json \
+    > "$claim_dir/claim.json" 2> "$claim_dir/claim.stderr"; then
+    claim_exit=0
+  else
+    claim_exit=$?
+  fi
+  printf '%s\n' "$claim_exit" > "$claim_dir/claim.exit" || exit 1
+  if [ "$claim_exit" -ne 0 ] || ! jq -e -s \
+    --arg bead "$bead" --arg actor "$actor" '
+    length == 1 and (.[0] | type == "array" and length == 1
+      and .[0].id == $bead and .[0].assignee == $actor
+      and .[0].status == "in_progress")
+    ' "$claim_dir/claim.json" > "$claim_dir/verified.json"; then
+    # Read-only inspection; this attempt ends before every setup effect.
+    hbd show "$bead" --json > "$claim_dir/current.json" \
+      2> "$claim_dir/current.stderr" || exit 1
+    exit 1
+  fi
+  # Exact ownership verified. Dependent setup may proceed in this branch.
+  tg --no-launch worktree create "wt/$slug" || exit 1
+) || exit 1
+```
+
+The guard requires one JSON document containing one native bead record;
+missing, malformed, multiple-document, foreign-owner, wrong-ID or wrong-status
+replies all reject setup. Retain the claim exit, stdout and stderr with the
+attempt's evidence. On rejection inspect the current winner, then select other
+eligible work or recover through the native workflow. Never overwrite the
+winning peer's claim or bypass Tollgate's source-retention protection. Invoke
+justiciar before a blocked stop, as [recovery](#failure-and-recovery) requires.
+
+The surrounding tool orchestration must await and check the actual child
+command's terminal result before any dependent host/API action. A child shell
+exit or tool error alone does not abort subsequent calls in an outer caller.
+Put native retitling, worktree creation, installation in the returned own
+worktree and helper dispatch behind the same verified success branch. One
+guarded sequential orchestration may do all of this; a separate tool round
+trip or additional ownership query is not required for a conclusive claim
+acknowledgement.
+
 - **Retitle the session** with the host's native title tool:
   `set_session_title` on session `self` in the Claude desktop app, or
   `set_thread_title` in Codex. Use `⚒️ [<id>] <phase summary>`. A failed
@@ -608,9 +662,12 @@ A gate bead closes only when all of these hold:
 
 ### Dispatch a bead
 
-1. **Create the worktree** (the session):
+1. **Verify the native claim before setup** with the
+   [claim guard](#claiming-and-working), including any surrounding tool
+   orchestration. Then **create the worktree** (the session):
    `tg --no-launch worktree create wt/<slug>`. In staged mode it is based on
-   `staging`, which holds every landed bead. Record its path.
+   `staging`, which holds every landed bead. Record its returned path and run
+   `npm install` in that own worktree before launching its helper.
 2. **List the fallout** in the worktree
    ([Listing fallout before dispatch](#listing-fallout-before-dispatch)).
    Add the fallout, hub, or wider areas the listing calls for to the bead's

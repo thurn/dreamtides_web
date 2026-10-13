@@ -1,0 +1,378 @@
+{
+  "bead": "hv-umm2.651",
+  "base": "98547f03120293f8f8a9eb57ca78b53d897e56e5",
+  "dispatch": {
+    "actualUTC": "2026-10-13T20:09:42.558Z",
+    "call": "call_b4bbb7f2caab4c20baabdb5b1f7ac47c",
+    "agent": "/root/claim651",
+    "modelStart": "UNKNOWN"
+  },
+  "scope": "Workflow claiming/dispatch setup recipe and own friction/measurements only; source, tests, binaries, configuration and runtime behavior unchanged.",
+  "elapsedQualification": "Inclusive dispatch through current precommit marker includes Stage1 research, parent WRITE/COMMIT acknowledgement waits, editing and verification. Elapsed wall time, not CPU or productive editing time. Final clock refresh requires parent COMMIT ACK.",
+  "evidence": {
+    "references": {
+      "docs/plan/evidence/retrospectives/hv-umm2.649.md": "c914d5cbac5eff87ed5c8f17c094586c42f860cf4f87dfd8e39b96e4135149e0",
+      "docs/plan/evidence/measurements/hv-umm2.649.json": "8477cfeed413471f7bc14f0de7c8c675e1f787800159c45baebcd5bc2a220d4b",
+      "/tmp/codex-651/native-649.json": "58d2bc20b9dbd9c8a291e002e62a83fda143c2efb22a59ddfa94646e7247230a",
+      "/tmp/codex-651/native-644.json": "3cebee9b87bcbe6753c750c04e1ca44c625026d3ffc12c22d375111d96c59c36",
+      "/tmp/codex-651/claim-ack.json": "675c6251cba270af2284804fd730dbcf0c9a165e885dd32f0ffd94b966d69ce4"
+    },
+    "negative": "Retrospective hv-umm2.649 R1 and retained native hv-umm2.649: hv-o73j / hv-umm2.261 and hv-umm2.619 / hv-umm2.648 failed or lost native claims followed by own unused worktrees. Earlier hv-umm2.573 and hv-umm2.524 record the same pattern. Native ownership enforcement worked. Observer durations 180.181078 s and 29.366498 s are portions inside incidents, not complete costs.",
+    "positive": "Retained native hv-umm2.644 notes report a stopped dependent pipeline and subsequent actual hv-umm2.644 owner acknowledgement before title and worktree creation.",
+    "parent650": "Parent session reported its hv-umm2.650 readiness assertion failed before any actual native claim. Outer functions.exec continued into an independent worktree effect. This illustrates child failure not aborting outer orchestration; it is not a native claim-command failure. Own clean unused worktree was settled under justiciar and peer ownership preserved.",
+    "speedClaim": "No timing speedup inferred or promised; this is a guard against repeated caller sequencing errors.",
+    "triggerDisposition": "Canonical finding hv-umm2.651 is not a fired friction tag; no disposition ledger line required."
+  },
+  "guardDiagnostic": {
+    "documentedGuardSHA256": "0ea04c725c93a43d4862cb128255a9e5c6274845cee2bc21ed0381d9c739c0a4",
+    "syntaxExit": 0,
+    "cases": [
+      {
+        "case": "actual-native-ack",
+        "nativeExit": 0,
+        "branchExit": 0,
+        "expectedAllowed": true,
+        "setupEffects": [
+          "worktree",
+          "title",
+          "install",
+          "helper"
+        ],
+        "rawDirectory": "/tmp/codex-651/helper/guard-actual-native-ack"
+      },
+      {
+        "case": "nonzero-native-exit",
+        "nativeExit": 3,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-nonzero-native-exit"
+      },
+      {
+        "case": "malformed",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-malformed"
+      },
+      {
+        "case": "empty-reply",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-empty-reply"
+      },
+      {
+        "case": "null-document",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-null-document"
+      },
+      {
+        "case": "foreign-owner",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-foreign-owner"
+      },
+      {
+        "case": "wrong-bead",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-wrong-bead"
+      },
+      {
+        "case": "open-status",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-open-status"
+      },
+      {
+        "case": "closed-status",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-closed-status"
+      },
+      {
+        "case": "missing-owner",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-missing-owner"
+      },
+      {
+        "case": "multiple-records",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-multiple-records"
+      },
+      {
+        "case": "object-reply",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-object-reply"
+      },
+      {
+        "case": "multiple-docs-final-valid",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-multiple-docs-final-valid"
+      },
+      {
+        "case": "multiple-docs-both-valid",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-multiple-docs-both-valid"
+      },
+      {
+        "case": "multiple-docs-final-invalid",
+        "nativeExit": 0,
+        "branchExit": 1,
+        "expectedAllowed": false,
+        "setupEffects": [],
+        "rawDirectory": "/tmp/codex-651/helper/guard-multiple-docs-final-invalid"
+      }
+    ],
+    "qualification": "External deterministic diagnostic only: actual retained native hv-umm2.651 payload plus synthetic rejected replies, local hbd and tg stand-ins, simulated outer dependent host/API setup. No native mutation, worktree creation, install, title or helper dispatch executed."
+  },
+  "validationReceipts": {
+    "guard-v01": {
+      "argv": [
+        "python3",
+        "/tmp/codex-651/helper/guard-diagnostic.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-claim651-setup-guard",
+      "start": "2026-10-13T20:15:47.797792+00:00",
+      "end": "2026-10-13T20:15:47.830062+00:00",
+      "exit": 1,
+      "wallSeconds": 0.03218808301608078,
+      "pid": 99840,
+      "pgid": 99840,
+      "load": "{ 3.85 4.47 5.73 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-claim651-setup-guard",
+      "start": "2026-10-13T20:16:19.802588+00:00",
+      "end": "2026-10-13T20:16:20.090428+00:00",
+      "exit": 0,
+      "wallSeconds": 0.28775537500041537,
+      "pid": 887,
+      "pgid": 887,
+      "load": "{ 3.43 4.30 5.62 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-claim651-setup-guard",
+      "start": "2026-10-13T20:16:29.533037+00:00",
+      "end": "2026-10-13T20:16:34.693169+00:00",
+      "exit": 0,
+      "wallSeconds": 5.159976458991878,
+      "pid": 1213,
+      "pgid": 1213,
+      "load": "{ 3.14 4.21 5.57 }",
+      "groupRemainingAtExit": []
+    },
+    "guard-v02": {
+      "argv": [
+        "python3",
+        "/tmp/codex-651/helper/guard-diagnostic.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-claim651-setup-guard",
+      "start": "2026-10-13T20:15:53.301618+00:00",
+      "end": "2026-10-13T20:15:53.471690+00:00",
+      "exit": 0,
+      "wallSeconds": 0.1699971670168452,
+      "pid": 99939,
+      "pgid": 99939,
+      "load": "{ 3.79 4.44 5.72 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-v01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-claim651-setup-guard",
+      "start": "2026-10-13T20:16:51.761757+00:00",
+      "end": "2026-10-13T20:16:51.828774+00:00",
+      "exit": 0,
+      "wallSeconds": 0.06693145897588693,
+      "pid": 1805,
+      "pgid": 1805,
+      "load": "{ 3.32 4.18 5.53 }",
+      "groupRemainingAtExit": []
+    },
+    "diffcheck-v01": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-claim651-setup-guard",
+      "start": "2026-10-13T20:16:51.915024+00:00",
+      "end": "2026-10-13T20:16:51.926084+00:00",
+      "exit": 0,
+      "wallSeconds": 0.010979624988976866,
+      "pid": 1833,
+      "pgid": 1833,
+      "load": "{ 3.32 4.18 5.53 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-final-v01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-claim651-setup-guard",
+      "start": "2026-10-13T20:17:30.403996+00:00",
+      "end": "2026-10-13T20:17:30.522652+00:00",
+      "exit": 0,
+      "wallSeconds": 0.11856283401721157,
+      "pid": 2550,
+      "pgid": 2550,
+      "load": "{ 3.63 4.17 5.46 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "failedAttempts": [
+    {
+      "receipt": "guard-v01",
+      "cause": "External diagnostic Python quoting syntax error before any guard or native operation; retained source, stdout and stderr. Corrected external diagnostic passes v02; repository recipe unchanged."
+    }
+  ],
+  "validationScope": {
+    "focused": "Extracted documented shell parses; 15 external guard cases, actual retained payload and 14 rejected cases; local stand-ins and setup sentinels only.",
+    "reviewFull": "Not applicable: bounded documentation and evidence only.",
+    "independentReview": "No core-review label or non-test runtime source change; cold code review not required for actual scope.",
+    "browser": "Not applicable: no runtime or presentation change.",
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    }
+  },
+  "runtime": {
+    "browser": null,
+    "server": null,
+    "provider": null,
+    "reviewer": null,
+    "processes": "Only awaited external diagnostic/check groups; record every PID/PGID and verify absent at freeze.",
+    "finalResourceCheck": {
+      "at": "2026-10-13T20:17:30.380722+00:00",
+      "knownGroups": [
+        99840,
+        887,
+        1213,
+        99939,
+        1805,
+        1833,
+        60646
+      ],
+      "remaining": [],
+      "qualification": "Awaited check groups had no members at terminal exit; final numeric group scan finds none. No browser, server, provider or reviewer launched. Install group belongs to parent and is observed absent only."
+    }
+  },
+  "stage2": {
+    "endpoint": "2026-10-13T20:17:30.380722+00:00",
+    "commit": "Parent COMMIT ACK granted after exact Stage2 audit; final metadata refresh and one normal-date commit follow this marker. Actual commit and timing receipt retained externally."
+  },
+  "hostLoadSamples": [
+    {
+      "command": "guard-v01",
+      "start": "2026-10-13T20:15:47.797792+00:00",
+      "raw": "{ 3.85 4.47 5.73 }",
+      "wallSeconds": 0.03218808301608078
+    },
+    {
+      "command": "review-v01",
+      "start": "2026-10-13T20:16:19.802588+00:00",
+      "raw": "{ 3.43 4.30 5.62 }",
+      "wallSeconds": 0.28775537500041537
+    },
+    {
+      "command": "knip-v01",
+      "start": "2026-10-13T20:16:29.533037+00:00",
+      "raw": "{ 3.14 4.21 5.57 }",
+      "wallSeconds": 5.159976458991878
+    },
+    {
+      "command": "guard-v02",
+      "start": "2026-10-13T20:15:53.301618+00:00",
+      "raw": "{ 3.79 4.44 5.72 }",
+      "wallSeconds": 0.1699971670168452
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v01 actual wrapper start 2026-10-13T20:16:19.802588+00:00",
+        "internalReviewLoad": 3.43212890625
+      }
+    }
+  },
+  "validationQualifications": {
+    "review": "Ordinary docs-only review evaluates affected friction schema (750 records); no test or source checks selected. Wrapper duration 0.287755375 s at starting load 3.43; actual internal review load 3.43212890625 is a separate sample.",
+    "knip": "Ordinary Knip passed. Its prepare/restore materializations emit missing-art warnings for temporary local-assets paths; no tracked generated/source change or runtime validation requested. Retained full stdout/stderr qualifies these as warning output, not failed checks.",
+    "guard": "External v02 diagnostic passes 15 cases after v01 external Python quoting error before execution. Actual documented guard retained and shell syntax checked; local stand-ins, no native effects."
+  },
+  "setupReceipt": {
+    "path": "/tmp/codex-651/install.json",
+    "receipt": {
+      "name": "install",
+      "pid": 60646,
+      "pgid": 60646,
+      "identity": "60646 60646 Tue Oct 13 13:06:04 2026     node /opt/homebrew/bin/npm install",
+      "startedAt": "2026-10-13T20:06:04.076702+00:00",
+      "endedAt": "2026-10-13T20:06:09.470827+00:00",
+      "wallSeconds": 5.394079541991232,
+      "exitCode": 0,
+      "load": [
+        3.318359375,
+        6.8232421875,
+        7.390625
+      ]
+    },
+    "qualification": "Parent-owned npm install before helper dispatch, exit 0 in 5.394079541991232 s. Load array was sampled only after completion; starting load is UNKNOWN and is not paired with review or used for duration comparisons."
+  },
+  "stage3": {
+    "ack": "/tmp/codex-651/commit-ack-native.json",
+    "audit": "/tmp/codex-651/parent-precommit-audit.json",
+    "parentStandingFrictionReceipt": "/tmp/codex-651/parent-friction.json",
+    "action": "Parent audited exact Stage2 scope and hashes, check exits and process groups, then authorized final clock, exact three-path staging and one Conventional Commit.",
+    "clockQualification": "Endpoint is the immediate precommit marker. Actual Git start/end and marker tail retained externally in final commit receipt; no forced Git dates or postcommit tracked writes. Whole elapsed window includes parent waits."
+  },
+  "finalPrecommitMarker": "2026-10-13T20:18:50.142027+00:00"
+}
