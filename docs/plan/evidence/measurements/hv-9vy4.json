@@ -1,0 +1,1116 @@
+{
+  "bead": "hv-9vy4",
+  "phase": 5,
+  "base": "245dae134c46a2d0980b68a4cce00eb3b08c1ddb",
+  "branch": "wt/pool-fidelity-9vy4-sol",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+  "currentGrossWindow": {
+    "start": "2026-10-13T14:02:04.705603Z",
+    "end": "2026-10-13T15:57:48.226618+00:00",
+    "scope": "Conservative parent claim acknowledgement observation through all owned preparation/audit/admission/implementation/checks/QA/interruption/packaging without reset. Prior beads excluded.",
+    "endpointStatus": "Actual parent-approved endpoint before final schema/index checks and the single commit. Actual commit bracket/OID and endpoint-to-commit packaging tail are recorded externally in terminal handoff; no amendment."
+  },
+  "claimObservations": {
+    "acknowledgementObservedAt": "2026-10-13T14:02:04.705603Z",
+    "nativeStartedAtSecondPrecision": "2026-10-13T14:02:05Z",
+    "qualification": "Second-precision difference0.294397s; exact model dispatch instant not observed."
+  },
+  "capacityInterruption": {
+    "observed": "Parent reported model-capacity interruption after source-resume ACK; resumed packaging only.",
+    "duration": "Not separately observed; included in original gross window. No CPU/model time or approval-wait attribution.",
+    "parentNativeObservation": {
+      "observedAt": "2026-10-13T15:52:12.152667Z",
+      "receipt": "/tmp/9vy4-capacity-observation-native.json"
+    }
+  },
+  "sourceAdmission": {
+    "initialAck": "2026-10-13T15:03:07.701274Z",
+    "memberGuardAmendment": "2026-10-13T15:20:57.348403Z",
+    "proposalSha256": "ac444a1cb3dacfcc208ebee20e32621244f540eb1f6f88b043bfa3b68284e260",
+    "scope": "15 exact code/test/current documentation/RD paths plus own evidence. Draft type/state-create/loop-signature/knowledge/policy/UI/sharedQA/config remain read-only.",
+    "sourceFirstElapsedMin": 61.04992785,
+    "qualification": "Elapsed acknowledgement-to-WRITEACK includes setup/audit/proposals/native coordination. Exact CPU/model active intervals and reasons for every wall interval are unknown."
+  },
+  "schemaNormalization": {
+    "hostLoad": "Review2 supervisor prelaunch one-minute os.getloadavg[0]; all individual loads retained.",
+    "localValidationS": "Actual outer supervisor command execution/cleanup/manifest scope. public-postfix-witnesses is the sum of four command walls, not their enclosing calendar interval. Vitest durations and enclosing review stages are separate."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 190,
+    "jsdomFiles": 0
+  },
+  "testFiles": {
+    "src/session/providers/battle-init-provider.test.ts": {
+      "beforeLines": 435,
+      "afterLines": 468,
+      "addedLines": 38,
+      "deletedLines": 5,
+      "new": false,
+      "jsdom": false,
+      "classification": "Existing public synthetic test/contract including its inline fixture support; no new module or entrypoint."
+    },
+    "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts": {
+      "beforeLines": 214,
+      "afterLines": 371,
+      "addedLines": 160,
+      "deletedLines": 3,
+      "new": false,
+      "jsdom": false,
+      "classification": "Existing public synthetic test/contract including its inline fixture support; no new module or entrypoint."
+    }
+  },
+  "grossTestChurn": {
+    "touchedFiles": 2,
+    "addedLines": 198,
+    "deletedLines": 8,
+    "classification": "Two existing synthetic modules, inline fixture support counted; no new test/fixture module or jsdom entrypoint."
+  },
+  "functionalPathChanges": [
+    "docs/plan/engine-design.md",
+    "docs/plan/evidence/rules-decisions/RD-hv-9vy4-1.md",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.580-1.md",
+    "docs/rules.md",
+    "src/battle/integration/create-battle-init.ts",
+    "src/battle/integration/engine-battle-init.ts",
+    "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+    "src/engine/effects/primitives/create-random-from-pool.ts",
+    "src/engine/state/clone.ts",
+    "src/engine/state/hash.ts",
+    "src/engine/state/types.ts",
+    "src/engine/view/determinize.ts",
+    "src/engine/view/view.ts",
+    "src/rules/battle/fold.ts",
+    "src/session/providers/battle-init-provider.test.ts"
+  ],
+  "evidencePaths": [
+    "docs/plan/evidence/friction/hv-9vy4.json",
+    "docs/plan/evidence/measurements/hv-9vy4.json",
+    "docs/plan/evidence/pre-existing/hv-9vy4.md",
+    "docs/plan/evidence/qa-ledger/hv-9vy4.jsonl"
+  ],
+  "sixFailureMappings": [
+    {
+      "failure": "error",
+      "test": "rolls back creation and RNG on a mid-step error without partial publication",
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "exists": true,
+      "observableContract": "Public mid-step failure publishes no partial creation/domain/RNG and leaves original committed slice unchanged.",
+      "applicability": "Synchronous in-memory captured assignment has no separate mid-write network timeout; the genuine public failing-effect contract exercises rollback after creation."
+    },
+    {
+      "failure": "partial",
+      "test": "uses the retained package after a real capped pick and rejects incomplete fixed sources",
+      "module": "src/session/providers/battle-init-provider.test.ts",
+      "exists": true,
+      "observableContract": "A present incomplete resolved package is rejected; the real capped pick followed by battle entry preserves the retained complete multiset.",
+      "applicability": "Partial effect/fold publication is covered by the error rollback contract; genuine paused/reload creation retains its recorded prefix. Synchronous assignment makes an asynchronous mid-write timeout inapplicable."
+    },
+    {
+      "failure": "reload",
+      "test": "preserves current created domains through sampled cold-save continuation",
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "exists": true,
+      "observableContract": "Strict cold loading retains the current sampled eligible printing/full base variant and captured choices, then public play/cessation and future Dawn continue correctly.",
+      "applicability": "Checks the existing current card and subsequent engine behavior, not only the next random output."
+    },
+    {
+      "failure": "invalid",
+      "test": "rejects malformed captured creation domains without mutation",
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "exists": true,
+      "observableContract": "Malformed/contradictory captured domains, impossible surviving zones and conflicting immutable remembered facts reject without input mutation; malformed anonymous view bags also fail.",
+      "applicability": "Absent captured fields retain explicitly qualified legacy compatibility; no historical filter authentication or stale mutable-fact rejection."
+    },
+    {
+      "failure": "concurrent",
+      "test": "replays a paused creation with the same RNG prefix and rejects stale or concurrent answers",
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "exists": true,
+      "observableContract": "Foreign-side and stale-epoch answers bounce; accepted replay is identical and duplicate answers cannot publish another creation.",
+      "applicability": "Real paused public intent/reload/stale/foreign answers are exercised; this is not a claimed multithreaded race or network timeout test."
+    },
+    {
+      "failure": "empty",
+      "test": "does nothing for missing, empty or unmatched pools without a catalog fallback or RNG draw",
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "exists": true,
+      "observableContract": "Missing, empty or unmatched pools publish no card/domain and consume no random:dreamsign draw, with no catalog fallback.",
+      "applicability": "These legal empty forms require no prompt; holder-specific matching and no-op behavior remain public contracts."
+    }
+  ],
+  "validationReceipts": {
+    "domain-baseline1": {
+      "label": "domain-baseline1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/9vy4-domain-baseline.mts"
+      ],
+      "pid": 65017,
+      "observerPid": 65006,
+      "processGroup": 65017,
+      "start": "2026-10-13T14:28:52.838023+00:00",
+      "end": "2026-10-13T14:28:55.053155+00:00",
+      "wallS": 2.2150674170115963,
+      "exit": 1,
+      "loadBefore": [
+        2.6962890625,
+        4.390625,
+        5.068359375
+      ],
+      "loadAfter": [
+        2.6962890625,
+        4.390625,
+        5.068359375
+      ],
+      "childCpuS": 0.92,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-domain-baseline1.before.json",
+      "afterManifest": "/tmp/9vy4-check-domain-baseline1.after.json",
+      "beforePaths": 4398,
+      "afterPaths": 4398,
+      "changedPaths": []
+    },
+    "domain-postfix": {
+      "label": "domain-postfix",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/9vy4-domain-postfix.mts"
+      ],
+      "pid": 27940,
+      "observerPid": 27896,
+      "processGroup": 27940,
+      "start": "2026-10-13T15:22:07.671418+00:00",
+      "end": "2026-10-13T15:22:10.381776+00:00",
+      "wallS": 2.710199291992467,
+      "exit": 0,
+      "loadBefore": [
+        10.54443359375,
+        12.0927734375,
+        12.08935546875
+      ],
+      "loadAfter": [
+        10.54443359375,
+        12.0927734375,
+        12.08935546875
+      ],
+      "childCpuS": 1.31,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-domain-postfix.before.json",
+      "afterManifest": "/tmp/9vy4-check-domain-postfix.after.json",
+      "beforePaths": 4400,
+      "afterPaths": 4400,
+      "changedPaths": []
+    },
+    "zone-baseline1": {
+      "label": "zone-baseline1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/9vy4-zone-baseline.mts"
+      ],
+      "pid": 82218,
+      "observerPid": 82176,
+      "processGroup": 82218,
+      "start": "2026-10-13T14:51:28.587951+00:00",
+      "end": "2026-10-13T14:51:30.085154+00:00",
+      "wallS": 1.4970832910039462,
+      "exit": 1,
+      "loadBefore": [
+        15.26171875,
+        15.181640625,
+        11.32177734375
+      ],
+      "loadAfter": [
+        15.26171875,
+        15.181640625,
+        11.32177734375
+      ],
+      "childCpuS": 1.0499999999999998,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-zone-baseline1.before.json",
+      "afterManifest": "/tmp/9vy4-check-zone-baseline1.after.json",
+      "beforePaths": 4398,
+      "afterPaths": 4398,
+      "changedPaths": []
+    },
+    "preflight1": {
+      "label": "preflight1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "1a524712-ef7e-43d9-bd79-5dea5250bf08",
+        "--variants",
+        "base",
+        "--as",
+        "both"
+      ],
+      "pid": 97641,
+      "observerPid": 97622,
+      "processGroup": 97641,
+      "start": "2026-10-13T15:33:36.704158+00:00",
+      "end": "2026-10-13T15:33:39.474356+00:00",
+      "wallS": 2.770130999997491,
+      "exit": 0,
+      "loadBefore": [
+        8.421875,
+        10.5439453125,
+        12.0537109375
+      ],
+      "loadAfter": [
+        7.8271484375,
+        10.38525390625,
+        11.98876953125
+      ],
+      "childCpuS": 1.46,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-preflight1.before.json",
+      "afterManifest": "/tmp/9vy4-check-preflight1.after.json",
+      "beforePaths": 4400,
+      "afterPaths": 4400,
+      "changedPaths": []
+    },
+    "contracts1": {
+      "label": "contracts1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "pid": 39408,
+      "observerPid": 39365,
+      "processGroup": 39408,
+      "start": "2026-10-13T15:12:51.013988+00:00",
+      "end": "2026-10-13T15:13:02.934784+00:00",
+      "wallS": 11.92065037501743,
+      "exit": 0,
+      "loadBefore": [
+        11.32275390625,
+        15.1025390625,
+        12.59228515625
+      ],
+      "loadAfter": [
+        10.01416015625,
+        14.6240234375,
+        12.46484375
+      ],
+      "childCpuS": 14.389999999999999,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-contracts1.before.json",
+      "afterManifest": "/tmp/9vy4-check-contracts1.after.json",
+      "beforePaths": 4399,
+      "afterPaths": 4399,
+      "changedPaths": []
+    },
+    "focused1": {
+      "label": "focused1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/rules/journey/draft.test.ts",
+        "src/engine/state/clone.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/engine/view/hidden-card-status.test.ts",
+        "src/engine/view/determinization-fidelity.contracts.ts"
+      ],
+      "pid": 34794,
+      "observerPid": 34763,
+      "processGroup": 34794,
+      "start": "2026-10-13T15:11:39.980697+00:00",
+      "end": "2026-10-13T15:11:46.329504+00:00",
+      "wallS": 6.348682874988299,
+      "exit": 0,
+      "loadBefore": [
+        15.73876953125,
+        16.58544921875,
+        12.8603515625
+      ],
+      "loadAfter": [
+        15.11865234375,
+        16.44287109375,
+        12.83154296875
+      ],
+      "childCpuS": 10.27,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-focused1.before.json",
+      "afterManifest": "/tmp/9vy4-check-focused1.after.json",
+      "beforePaths": 4399,
+      "afterPaths": 4399,
+      "changedPaths": []
+    },
+    "legacy-hash-before": {
+      "label": "legacy-hash-before",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/9vy4-legacy-hash-before.mts"
+      ],
+      "pid": 46810,
+      "observerPid": 46788,
+      "processGroup": 46810,
+      "start": "2026-10-13T15:04:17.327495+00:00",
+      "end": "2026-10-13T15:04:19.527848+00:00",
+      "wallS": 2.2002652500232216,
+      "exit": 0,
+      "loadBefore": [
+        6.47705078125,
+        7.86181640625,
+        9.25
+      ],
+      "loadAfter": [
+        6.47705078125,
+        7.86181640625,
+        9.25
+      ],
+      "childCpuS": 1.0,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-legacy-hash-before.before.json",
+      "afterManifest": "/tmp/9vy4-check-legacy-hash-before.after.json",
+      "beforePaths": 4398,
+      "afterPaths": 4398,
+      "changedPaths": []
+    },
+    "baseline1": {
+      "label": "baseline1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/9vy4-public-baseline.mts"
+      ],
+      "pid": 55750,
+      "observerPid": 55728,
+      "processGroup": 55750,
+      "start": "2026-10-13T14:21:17.774465+00:00",
+      "end": "2026-10-13T14:21:19.725553+00:00",
+      "wallS": 1.9509954579989426,
+      "exit": 1,
+      "loadBefore": [
+        7.7822265625,
+        6.35302734375,
+        5.6640625
+      ],
+      "loadAfter": [
+        7.7822265625,
+        6.35302734375,
+        5.6640625
+      ],
+      "childCpuS": 1.47,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-baseline1.before.json",
+      "afterManifest": "/tmp/9vy4-check-baseline1.after.json",
+      "beforePaths": 4398,
+      "afterPaths": 4398,
+      "changedPaths": []
+    },
+    "review2": {
+      "label": "review2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 90638,
+      "observerPid": 90573,
+      "processGroup": 90638,
+      "start": "2026-10-13T15:24:35.145809+00:00",
+      "end": "2026-10-13T15:26:01.683378+00:00",
+      "wallS": 86.53694858399103,
+      "exit": 0,
+      "loadBefore": [
+        15.51171875,
+        13.8759765625,
+        12.80908203125
+      ],
+      "loadAfter": [
+        23.98388671875,
+        16.92431640625,
+        14.0732421875
+      ],
+      "childCpuS": 220.26,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-review2.before.json",
+      "afterManifest": "/tmp/9vy4-check-review2.after.json",
+      "beforePaths": 4400,
+      "afterPaths": 4400,
+      "changedPaths": []
+    },
+    "knip1": {
+      "label": "knip1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 53146,
+      "observerPid": 53103,
+      "processGroup": 53146,
+      "start": "2026-10-13T15:27:16.023570+00:00",
+      "end": "2026-10-13T15:27:23.688588+00:00",
+      "wallS": 7.664788291993318,
+      "exit": 0,
+      "loadBefore": [
+        16.49169921875,
+        16.64501953125,
+        14.24072265625
+      ],
+      "loadAfter": [
+        14.78515625,
+        16.27685546875,
+        14.13818359375
+      ],
+      "childCpuS": 5.37,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-knip1.before.json",
+      "afterManifest": "/tmp/9vy4-check-knip1.after.json",
+      "beforePaths": 4400,
+      "afterPaths": 4400,
+      "changedPaths": []
+    },
+    "public-postfix": {
+      "label": "public-postfix",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/9vy4-public-postfix.mts"
+      ],
+      "pid": 27407,
+      "observerPid": 27380,
+      "processGroup": 27407,
+      "start": "2026-10-13T15:21:58.945364+00:00",
+      "end": "2026-10-13T15:22:00.473617+00:00",
+      "wallS": 1.52813024999341,
+      "exit": 0,
+      "loadBefore": [
+        10.67431640625,
+        12.16552734375,
+        12.11474609375
+      ],
+      "loadAfter": [
+        10.67431640625,
+        12.16552734375,
+        12.11474609375
+      ],
+      "childCpuS": 1.43,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-public-postfix.before.json",
+      "afterManifest": "/tmp/9vy4-check-public-postfix.after.json",
+      "beforePaths": 4400,
+      "afterPaths": 4400,
+      "changedPaths": []
+    },
+    "contracts2": {
+      "label": "contracts2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "pid": 32108,
+      "observerPid": 32070,
+      "processGroup": 32108,
+      "start": "2026-10-13T15:23:13.516949+00:00",
+      "end": "2026-10-13T15:23:27.474141+00:00",
+      "wallS": 13.956965874996968,
+      "exit": 0,
+      "loadBefore": [
+        13.26513671875,
+        12.3359375,
+        12.16552734375
+      ],
+      "loadAfter": [
+        19.0322265625,
+        13.630859375,
+        12.62890625
+      ],
+      "childCpuS": 17.38,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-contracts2.before.json",
+      "afterManifest": "/tmp/9vy4-check-contracts2.after.json",
+      "beforePaths": 4400,
+      "afterPaths": 4400,
+      "changedPaths": []
+    },
+    "full1": {
+      "label": "full1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 55693,
+      "observerPid": 55653,
+      "processGroup": 55693,
+      "start": "2026-10-13T15:27:54.978118+00:00",
+      "end": "2026-10-13T15:29:46.954503+00:00",
+      "wallS": 111.98867054199218,
+      "exit": 0,
+      "loadBefore": [
+        12.1875,
+        15.48779296875,
+        13.92431640625
+      ],
+      "loadAfter": [
+        10.3369140625,
+        13.685546875,
+        13.3935546875
+      ],
+      "childCpuS": 280.68,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-full1.before.json",
+      "afterManifest": "/tmp/9vy4-check-full1.after.json",
+      "beforePaths": 4400,
+      "afterPaths": 4400,
+      "changedPaths": []
+    },
+    "legacy-hash-after": {
+      "label": "legacy-hash-after",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/9vy4-legacy-hash-after.mts"
+      ],
+      "pid": 55579,
+      "observerPid": 54775,
+      "processGroup": 55579,
+      "start": "2026-10-13T15:19:12.046868+00:00",
+      "end": "2026-10-13T15:19:13.488278+00:00",
+      "wallS": 1.441319959005341,
+      "exit": 0,
+      "loadBefore": [
+        14.8984375,
+        12.66943359375,
+        12.2265625
+      ],
+      "loadAfter": [
+        14.986328125,
+        12.724609375,
+        12.24853515625
+      ],
+      "childCpuS": 1.01,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-legacy-hash-after.before.json",
+      "afterManifest": "/tmp/9vy4-check-legacy-hash-after.after.json",
+      "beforePaths": 4399,
+      "afterPaths": 4399,
+      "changedPaths": []
+    },
+    "judged-player1": {
+      "label": "judged-player1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-9vy4/pool-fidelity.mjs",
+        "--bead",
+        "hv-9vy4",
+        "--arg",
+        "as=player",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 11377,
+      "observerPid": 11363,
+      "processGroup": 11377,
+      "start": "2026-10-13T15:40:12.298274+00:00",
+      "end": "2026-10-13T15:41:32.929973+00:00",
+      "wallS": 80.63155533300596,
+      "exit": 0,
+      "loadBefore": [
+        5.15966796875,
+        6.5185546875,
+        9.37451171875
+      ],
+      "loadAfter": [
+        5.05224609375,
+        6.19921875,
+        8.99462890625
+      ],
+      "childCpuS": 7.81,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-judged-player1.before.json",
+      "afterManifest": "/tmp/9vy4-check-judged-player1.after.json",
+      "beforePaths": 4401,
+      "afterPaths": 4401,
+      "changedPaths": []
+    },
+    "production-observer1": {
+      "label": "production-observer1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/9vy4-production-observer.mts"
+      ],
+      "pid": 95323,
+      "observerPid": 95304,
+      "processGroup": 95323,
+      "start": "2026-10-13T15:31:44.460572+00:00",
+      "end": "2026-10-13T15:31:46.843415+00:00",
+      "wallS": 2.382762458000798,
+      "exit": 0,
+      "loadBefore": [
+        6.62451171875,
+        11.33642578125,
+        12.5107421875
+      ],
+      "loadAfter": [
+        6.62451171875,
+        11.33642578125,
+        12.5107421875
+      ],
+      "childCpuS": 1.58,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-production-observer1.before.json",
+      "afterManifest": "/tmp/9vy4-check-production-observer1.after.json",
+      "beforePaths": 4400,
+      "afterPaths": 4400,
+      "changedPaths": []
+    },
+    "member-baseline1": {
+      "label": "member-baseline1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/9vy4-member-baseline.mts"
+      ],
+      "pid": 5609,
+      "observerPid": 5590,
+      "processGroup": 5609,
+      "start": "2026-10-13T15:16:41.870448+00:00",
+      "end": "2026-10-13T15:16:42.823133+00:00",
+      "wallS": 0.9526020830089692,
+      "exit": 1,
+      "loadBefore": [
+        9.10205078125,
+        13.21240234375,
+        12.4140625
+      ],
+      "loadAfter": [
+        8.61328125,
+        13.04248046875,
+        12.35888671875
+      ],
+      "childCpuS": 0.91,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-member-baseline1.before.json",
+      "afterManifest": "/tmp/9vy4-check-member-baseline1.after.json",
+      "beforePaths": 4399,
+      "afterPaths": 4399,
+      "changedPaths": []
+    },
+    "judged-enemy1": {
+      "label": "judged-enemy1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-9vy4/pool-fidelity.mjs",
+        "--bead",
+        "hv-9vy4",
+        "--arg",
+        "as=enemy",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 14800,
+      "observerPid": 14777,
+      "processGroup": 14800,
+      "start": "2026-10-13T15:42:39.412058+00:00",
+      "end": "2026-10-13T15:44:13.900222+00:00",
+      "wallS": 94.48785725000198,
+      "exit": 0,
+      "loadBefore": [
+        3.875,
+        5.54248046875,
+        8.5205078125
+      ],
+      "loadAfter": [
+        4.74365234375,
+        5.474609375,
+        8.18115234375
+      ],
+      "childCpuS": 8.01,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-judged-enemy1.before.json",
+      "afterManifest": "/tmp/9vy4-check-judged-enemy1.after.json",
+      "beforePaths": 4401,
+      "afterPaths": 4401,
+      "changedPaths": []
+    },
+    "sweep1": {
+      "label": "sweep1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-9vy4",
+        "--dreamsigns",
+        "1a524712-ef7e-43d9-bd79-5dea5250bf08",
+        "--variants",
+        "base",
+        "--as",
+        "both",
+        "--capture"
+      ],
+      "pid": 4250,
+      "observerPid": 4222,
+      "processGroup": 4250,
+      "start": "2026-10-13T15:37:54.056993+00:00",
+      "end": "2026-10-13T15:38:39.766821+00:00",
+      "wallS": 45.70973075000802,
+      "exit": 0,
+      "loadBefore": [
+        3.8046875,
+        6.5986328125,
+        9.861328125
+      ],
+      "loadAfter": [
+        7.0126953125,
+        7.08251953125,
+        9.87060546875
+      ],
+      "childCpuS": 9.67,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-sweep1.before.json",
+      "afterManifest": "/tmp/9vy4-check-sweep1.after.json",
+      "beforePaths": 4400,
+      "afterPaths": 4401,
+      "changedPaths": [
+        "docs/plan/evidence/qa-ledger/hv-9vy4.jsonl"
+      ]
+    },
+    "review1": {
+      "label": "review1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 92473,
+      "observerPid": 92308,
+      "processGroup": 92473,
+      "start": "2026-10-13T15:14:31.909958+00:00",
+      "end": "2026-10-13T15:15:36.778777+00:00",
+      "wallS": 64.86828454199713,
+      "exit": 2,
+      "loadBefore": [
+        13.4609375,
+        14.47705078125,
+        12.59765625
+      ],
+      "loadAfter": [
+        15.9599609375,
+        14.9873046875,
+        12.92822265625
+      ],
+      "childCpuS": 201.60000000000002,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-review1.before.json",
+      "afterManifest": "/tmp/9vy4-check-review1.after.json",
+      "beforePaths": 4399,
+      "afterPaths": 4399,
+      "changedPaths": []
+    },
+    "member-postfix": {
+      "label": "member-postfix",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/9vy4-member-postfix.mts"
+      ],
+      "pid": 25933,
+      "observerPid": 25881,
+      "processGroup": 25933,
+      "start": "2026-10-13T15:21:47.512307+00:00",
+      "end": "2026-10-13T15:21:48.966828+00:00",
+      "wallS": 1.4544459590106271,
+      "exit": 0,
+      "loadBefore": [
+        10.884765625,
+        12.25634765625,
+        12.14599609375
+      ],
+      "loadAfter": [
+        10.884765625,
+        12.25634765625,
+        12.14599609375
+      ],
+      "childCpuS": 1.05,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-member-postfix.before.json",
+      "afterManifest": "/tmp/9vy4-check-member-postfix.after.json",
+      "beforePaths": 4400,
+      "afterPaths": 4400,
+      "changedPaths": []
+    },
+    "prepare": {
+      "label": "prepare",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node",
+        "scripts/prepare-workspace.mjs"
+      ],
+      "pid": 11336,
+      "observerPid": 11270,
+      "processGroup": 11336,
+      "start": "2026-10-13T14:15:41.940743+00:00",
+      "end": "2026-10-13T14:15:44.606955+00:00",
+      "wallS": 2.666109708021395,
+      "exit": 0,
+      "loadBefore": [
+        6.3701171875,
+        5.345703125,
+        5.14697265625
+      ],
+      "loadAfter": [
+        6.3701171875,
+        5.345703125,
+        5.14697265625
+      ],
+      "childCpuS": 2.64,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-prepare.before.json",
+      "afterManifest": "/tmp/9vy4-check-prepare.after.json",
+      "beforePaths": 4397,
+      "afterPaths": 4398,
+      "changedPaths": [
+        "src/cumulus/primitives/tokens.ts"
+      ]
+    },
+    "zone-postfix": {
+      "label": "zone-postfix",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-fidelity-9vy4-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/9vy4-zone-postfix.mts"
+      ],
+      "pid": 29919,
+      "observerPid": 29868,
+      "processGroup": 29919,
+      "start": "2026-10-13T15:22:38.995885+00:00",
+      "end": "2026-10-13T15:22:41.476879+00:00",
+      "wallS": 2.480909417005023,
+      "exit": 0,
+      "loadBefore": [
+        10.95947265625,
+        12.03564453125,
+        12.0673828125
+      ],
+      "loadAfter": [
+        10.95947265625,
+        12.03564453125,
+        12.0673828125
+      ],
+      "childCpuS": 1.22,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/9vy4-check-zone-postfix.before.json",
+      "afterManifest": "/tmp/9vy4-check-zone-postfix.after.json",
+      "beforePaths": 4400,
+      "afterPaths": 4400,
+      "changedPaths": []
+    }
+  },
+  "validationSummary": {
+    "focusedInitial": {
+      "exit": 0,
+      "files": 6,
+      "tests": 101,
+      "qualification": "The eight arguments included two contracts module paths, which are not test entrypoints; this run did not execute own contract. Existing aggregator did."
+    },
+    "contracts1": {
+      "exit": 0,
+      "files": 1,
+      "tests": 2612
+    },
+    "contracts2": {
+      "exit": 0,
+      "files": 1,
+      "tests": 2612,
+      "whyRepeated": "Verified member guard and invalid saved matrix changed after first passing aggregator."
+    },
+    "review1": {
+      "exit": 2,
+      "filesPassed": 288,
+      "testsPassed": 5686,
+      "failures": [
+        "own lint Array.isArray candidate narrowing",
+        "own readonly history fixture assignment types"
+      ]
+    },
+    "review2": {
+      "exit": 0,
+      "files": 288,
+      "tests": 5686,
+      "vitestDurationS": 67.69,
+      "enclosingTestStageS": 82.5,
+      "outerS": 86.53694858399103
+    },
+    "knip": {
+      "exit": 0,
+      "outerS": 7.664788291993318
+    },
+    "full": {
+      "exit": 0,
+      "files": 368,
+      "tests": 6672,
+      "workers": 2,
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "outerS": 111.98867054199218,
+      "vitestDurationS": 81.39,
+      "qualification": "Pure heavy-lock wait was not separately measured; initial prepare timestamp0.594882s after outer launch includes startup/manifest/lock overhead. Synthetic QA fault-fixture messages are full unit tests, not judged real QA.",
+      "enclosingTestStageS": 81.9
+    },
+    "postfixWitnesses": {
+      "cases": 106,
+      "expectedMissing": 0,
+      "fixtureErrors": 0,
+      "controlFailures": 0,
+      "split": [
+        36,
+        38,
+        20,
+        12
+      ]
+    },
+    "baselines": {
+      "cases": 106,
+      "split": [
+        36,
+        38,
+        20,
+        12
+      ],
+      "expectedMissing": [
+        11,
+        18,
+        12,
+        6
+      ],
+      "fixtureErrors": 0,
+      "controlFailures": 0,
+      "qualification": "Original94 cases plus12 verified own member-guard gap cases after initial implementation. Prospective malformed saved relocations/remembered records are explicit invalid inputs, not genuine produced bad states."
+    },
+    "productionObserver": {
+      "cases": 12,
+      "eligibleCopies": {
+        "player": 65,
+        "enemy": 66
+      },
+      "currentPrintingBaseAndStrictCold": true,
+      "qualification": "Actual run package/configured opponent generated pool through public APIs. Diagnostic prepared location/Dawn/isolation does not claim natural Horn acquisition/travel or full policy coverage."
+    },
+    "preflight": {
+      "pass": 2,
+      "exercised": 2
+    },
+    "legacyHash": {
+      "player": {
+        "before": "11223c46ecd40c",
+        "after": "11223c46ecd40c"
+      },
+      "enemy": {
+        "before": "17aaa33a92a6f5",
+        "after": "17aaa33a92a6f5"
+      },
+      "qualification": "External actual absent-field hash and cold next-creation witness only, no numeric/formula CI gate; hash source unchanged through later member guard correction."
+    }
+  },
+  "runtime": {
+    "freezeAck": "2026-10-13T15:37:11.923343Z",
+    "resumeAck": "2026-10-13T15:47:43.396776Z",
+    "frozenCount": 4400,
+    "finalCount": 4401,
+    "frozenMismatches": [],
+    "soleExtra": "docs/plan/evidence/qa-ledger/hv-9vy4.jsonl",
+    "proof": "artifacts/qa/hv-9vy4/validation/runtime-drain-proof.json",
+    "knownOwnEnemySessionAfterCleanup": "404 Session not found",
+    "qualification": "Successful native awaited cleanup primary; own group/owner/logFD/port absence supplemental. Earlier opaque sweep/player IDs have no fabricated direct session probe. No foreign session/service touched.",
+    "sweep": {
+      "pass": 2,
+      "leaseWaitS": 31.053,
+      "executionS": 13.979402958000007,
+      "cleanupS": 0.5493911660000012,
+      "captures": 2
+    },
+    "workflow": {
+      "actors": [
+        "player",
+        "enemy"
+      ],
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "calls": 4,
+      "caps": [],
+      "coldBeforeEqualsAfter": true,
+      "playerAliveCapturedPerViewport": 1,
+      "playerHandPerViewport": 7,
+      "enemyAliveCapturedPerViewport": 2,
+      "enemyHandPerViewport": 2,
+      "namedRng": 2,
+      "captures": 16
+    },
+    "driverSha256": "8e40f07f69b978c007755f01a46853335eb3ad837ed53734473a40b1d435a928",
+    "parentVisualAssessment": "artifacts/qa/hv-9vy4/validation/parent-visual-inspection.json",
+    "visualQualification": "Parent selected captures show no new presentation defect; private far hand backs/log masking observed. No literal UI copy gate. Lab initialization is a preconstructed persisted slice; later Dawn log is qualified.",
+    "totalCaptures": 18
+  },
+  "artifactDirectory": "artifacts/qa/hv-9vy4/validation",
+  "readerCensus": "artifacts/qa/hv-9vy4/validation/9vy4-reader-census.json",
+  "censusQualification": "Routed2093 is static barrel/cycle reachability, not runtime callers. All target SHA/direct arrays and binding lines retained.",
+  "reviewRouting": "Parent handles fresh cold Sol CLI review under temporary human override through2026-10-14T01:00Z, checking actual clock; no helper native/review/delivery effects.",
+  "notRepeated": "No weighted300, aggregate/QA rerun after unchanged successful final checks. Own packaging/schema/index checks only.",
+  "grossWallContext": {
+    "sourceFirstElapsedMin": 61.04992785,
+    "remainingElapsedMin": 54.6754224,
+    "scope": "Measured acknowledgement-to-WRITEACK61.049928min covers useful read-only source audit, proposals, finite diagnostics and native admission. Remaining elapsed window covers implementation, corrections, validations, QA/resource drain, packaging and reported capacity interruption. All stay in original gross; exact active model/CPU intervals and capacity duration are unknown. This is elapsed ownership context, not a continuous-activity or approval-wait claim."
+  }
+}

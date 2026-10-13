@@ -31,7 +31,7 @@ import { adjustedEnergy, costModifier } from "../continuous/costs";
 import type { Layers } from "../continuous/layers";
 import { fixedEnergy } from "../dsl/energy";
 import type { Keyword, Variant } from "../dsl/types";
-import type { CardSubtype } from "../../types/card-identity";
+import type { CardId, CardSubtype } from "../../types/card-identity";
 import { changedInstance, keptWithoutSource } from "../rules/floating";
 import { abilitiesDisabled } from "../rules/ability-disabling";
 import { banishedAsReclaimed } from "../rules/zones";
@@ -65,6 +65,7 @@ export interface InstanceView {
   readonly controller: Side;
   readonly zone: Zone;
   readonly variant: Readonly<Variant>;
+  readonly poolCandidates?: readonly CardId[];
   /** Persisted status flags, including Reclaim's departure replacement. */
   readonly status: Readonly<CardStatus>;
   /** The card's reclaimed departure replacement is covered by its owner's current ability in play or on the stack. */
@@ -283,6 +284,13 @@ export interface TurnLogView {
  * the opponent owns), and hidden cards the viewer knows (view/knowledge.ts).
  * Every deck and the opponent's hand appear as counts plus the known cards.
  */
+interface PoolCreatedHandView {
+  readonly owner: Side;
+  readonly candidates: readonly CardId[];
+  /** An existing observed member, without a physical identity or position. */
+  readonly member?: number;
+}
+
 export interface BattleView {
   /** Public non-zone source multisets, without any link to hidden physical cards. */
   readonly draftPools?: BattleState["draftPools"];
@@ -297,6 +305,8 @@ export interface BattleView {
   readonly instances: Readonly<Record<InstanceId, InstanceView>>;
   /** Anonymous observed records in first-observation order, grouped by ownership. */
   readonly hiddenCards?: Readonly<Record<Side, readonly HiddenCardDescriptor[]>>;
+  /** Anonymous immutable creation choices for unknown hand cards, grouped by holder. */
+  readonly poolCreatedHands?: Readonly<Record<Side, readonly PoolCreatedHandView[]>>;
   /** The last element is the top. Targets the viewer cannot see are omitted. */
   readonly stack: readonly StackItem[];
   readonly priority: Side | null;
@@ -380,6 +390,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
         controller: instance.controller,
         zone: instance.zone,
         variant: copy(instance.variant),
+        ...(instance.poolCandidates === undefined ? {} : { poolCandidates: copy(instance.poolCandidates) }),
         status: copy(instance.status),
         reclaimCovered: instance.status.reclaimed && !banishedAsReclaimed(state, catalog, instance, layers),
         enteredZoneAt: instance.enteredZoneAt,
@@ -505,6 +516,20 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
   }
   hiddenCards.player.sort((a, b) => a.member - b.member);
   hiddenCards.enemy.sort((a, b) => a.member - b.member);
+  const poolCreatedHands: Record<Side, PoolCreatedHandView[]> = { player: [], enemy: [] };
+  for (const holder of ["player", "enemy"] as const) {
+    for (const id of state.sides[holder].hand) {
+      const instance = state.instances[id];
+      if (visible(id) || instance.poolCandidates === undefined) continue;
+      poolCreatedHands[holder].push({ owner: instance.owner, candidates: copy(instance.poolCandidates),
+        ...(remembered.has(id) ? { member: memberFor(id) } : {}) });
+    }
+    poolCreatedHands[holder].sort((a, b) => {
+      const left = JSON.stringify([a.owner, a.candidates, a.member ?? null]);
+      const right = JSON.stringify([b.owner, b.candidates, b.member ?? null]);
+      return left < right ? -1 : left > right ? 1 : 0;
+    });
+  }
   const side = (which: Side): SideView => {
     const source = state.sides[which];
     return {
@@ -531,6 +556,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     sides: { player: side("player"), enemy: side("enemy") },
     instances,
     ...(hiddenCards.player.length + hiddenCards.enemy.length === 0 ? {} : { hiddenCards }),
+    ...(poolCreatedHands.player.length + poolCreatedHands.enemy.length === 0 ? {} : { poolCreatedHands }),
     stack: state.stack.map((item) =>
       item.kind === "card"
         ? { ...copy(item), choices: item.choices.map(visibleChoices) }

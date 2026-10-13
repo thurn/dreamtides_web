@@ -81,7 +81,7 @@ export interface CreateBattleInitInput {
     | "avatar"
     | "dreamsigns"
     | "seed"
-  > & Partial<Pick<JourneyState, "draftState">>;
+  > & Partial<Pick<JourneyState, "draftState" | "resolvedPackage">>;
   cardDatabase: ReadonlyMap<number, CardData>;
   avatars: readonly AvatarContent[];
   /** The run's boss catalog and the explicit compatibility default. */

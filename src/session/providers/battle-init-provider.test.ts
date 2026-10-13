@@ -3,6 +3,10 @@
 // next-battle effect and deck-entry modification (D39), checked against the
 // engine's computed characteristics after the battle starts.
 import { beforeEach, describe, expect, it } from "vitest";
+import { createInitialDraftState, enterDraftSite } from "../../draft/draft-engine";
+import { registerDraftContentProvider } from "../../rules/journey/draft";
+import { testDraftContentProvider } from "../../rules/journey/test-content-providers";
+import { stateWithDraftSites, reduce, ctx } from "../../rules/journey/draft-fixtures";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
@@ -91,11 +95,11 @@ function makeJourney(overrides: Partial<JourneyState> = {}): JourneyState {
   };
 }
 
-function begin(content: JourneyContent, journey: JourneyState, seq = 17) {
+function begin(content: JourneyContent, journey: JourneyState, seq = 17, siteId = SITE_ID) {
   const provider = createBattleInitProvider(content);
   const start = provider.beginBattle({
     journey,
-    siteId: SITE_ID,
+    siteId,
     seedOverride: 4242,
     seq,
     rng: () => 0,
@@ -159,7 +163,7 @@ describe("battle init provider", () => {
 
   it("carries the fixed draft multiset by UUID independently of spent copies and selected deck", () => {
     const content = makeContent();
-    const journey = makeJourney({ draftState: {
+    const journey = makeJourney({ resolvedPackage: { ...makeBattleTestState().resolvedPackage!, draftPoolCopiesByCard: { "101": 2, "102": 1 } }, draftState: {
       mode: "tides4", currentOffer: [], activeSiteId: null, pickNumber: 4, sitePicksCompleted: 0,
       draftPoolCopiesByCard: { "101": 2, "102": 1 }, remainingCopiesByCard: { "101": 0, "102": 0 },
     } });
@@ -171,9 +175,38 @@ describe("battle init provider", () => {
     const serializedPools: unknown = JSON.parse(JSON.stringify(start.engineInit.draftPools));
     expect(serializedPools).toEqual(start.engineInit.draftPools);
     expect(journey).toEqual(before);
-    expect(begin(content, makeJourney()).start.engineInit.draftPools?.player).toEqual([]);
-    journey.draftState!.draftPoolCopiesByCard = { "999999": 1 };
+    expect(begin(content, makeJourney({ resolvedPackage: null })).start.engineInit.draftPools?.player).toEqual([]);
+    journey.resolvedPackage!.draftPoolCopiesByCard = { "999999": 1 };
     expect(() => begin(content, journey)).toThrow();
+  });
+
+  it("uses the retained package after a real capped pick and rejects incomplete fixed sources", () => {
+    const db = makeBattleTestCardDatabase();
+    for (const number of [106, 205]) db.set(number, { ...db.get(number)!, rarity: "Legendary" });
+    const content = makeContent([...db.values()]), fixed = { "101": 2, "106": 2, "205": 1 };
+    const pkg = { ...makeBattleTestState().resolvedPackage!, draftPoolCopiesByCard: fixed, openingDraftOffers: { "1": [106] } };
+    const config = { packSize: 1, sitePickCount: 1, rarityCaps: [{ rarity: "Legendary" as const, poolCopyCap: 2, maxPicksPerRun: 1 }] };
+    const draft = createInitialDraftState(db, pkg);
+    enterDraftSite(draft, parseSiteId("site-a"), db, config, () => 0);
+    const numbers = new Map([...db.values()].map((card) => [card.id, card.cardNumber]));
+    registerDraftContentProvider(testDraftContentProvider({ resolveCardNumber: (id) => numbers.get(id) ?? null, cardDatabase: () => db, draftConfigFor: () => config }));
+    try {
+      const initial = stateWithDraftSites(draft, { resolvedPackage: pkg, deck: [], avatar: pkg.avatar, dreamsigns: [], battleModifiers: [] }), before = JSON.stringify(initial);
+      const picked = reduce(initial, "PICK_DRAFT_CARD", { cardId: db.get(106)!.id, packIndex: 0 }, ctx({ seq: 43 }));
+      expect(picked.outcome).toBe("applied");
+      expect(picked.state.journey.draftState!.draftPoolCopiesByCard).toEqual({ "101": 2 });
+      expect(picked.state.journey.resolvedPackage!.draftPoolCopiesByCard).toEqual(fixed);
+      expect(JSON.stringify(initial)).toBe(before);
+      const journey = picked.state.journey, site = parseSiteId("site-battle");
+      const expected = Object.entries(fixed).flatMap(([number, copies]) => Array.from({ length: copies }, () => db.get(Number(number))!.id)).sort();
+      expect(begin(content, journey, 44, site).start.engineInit.draftPools?.player).toEqual(expected);
+      expect(begin(content, { ...journey, draftState: null }, 44, site).start.engineInit.draftPools?.player).toEqual(expected);
+      for (const copies of [undefined, null, [], { "0106": 1 }, { "106": 1.5 }, { "999999": 1 }]) {
+        const malformed = { ...journey, resolvedPackage: { ...pkg, draftPoolCopiesByCard: copies } } as unknown as JourneyState;
+        expect(() => begin(content, malformed, 44, site)).toThrow();
+      }
+      expect(begin(content, { ...journey, resolvedPackage: null }, 44, site).start.engineInit.draftPools?.player).toEqual([]);
+    } finally { registerDraftContentProvider(null); }
   });
 
   it("names the opponent Avatar by UUID on the enemy descriptor", () => {

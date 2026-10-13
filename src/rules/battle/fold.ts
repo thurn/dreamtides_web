@@ -732,6 +732,7 @@ function isBattleState(value: unknown): boolean {
     hasConsistentZones(value) &&
     hasMirroredGainedAbilities(value) &&
     hasConsistentLinkedBanish(value) &&
+    hasConsistentPoolCandidates(value) &&
     (() => {
       const state = value as unknown as BattleState;
       return state.triggerQueue.every(({ discardedCount }) => discardedCount === undefined || discardedCount < state.nextInstance);
@@ -841,9 +842,31 @@ function isCardInstance(value: unknown): boolean {
     isSide(value.controller) &&
     oneOf(ZONES)(value.zone) &&
     isVariant(value.variant) &&
+    optional((domain) => Array.isArray(domain) && domain.length > 0 && domain.every(parses(parseCardId)))(value.poolCandidates) &&
     isCardStatus(value.status) &&
     isIndex(value.enteredZoneAt)
   );
+}
+
+/** Captured pool domains belong to created cards in surviving zones and preserve source copy bounds. */
+function hasConsistentPoolCandidates(value: Record<string, unknown>): boolean {
+  const state = value as unknown as BattleState;
+  return Object.values(state.instances).every((instance) => {
+    const candidates = instance.poolCandidates;
+    if (candidates === undefined) return true;
+    if (!instance.status.created || instance.printing.kind !== "card" ||
+      !candidates.includes(instance.printing.cardId) || !["hand", "stack", "play"].includes(instance.zone)) return false;
+    const available = [...(state.draftPools?.[instance.owner] ?? [])];
+    for (const cardId of candidates) {
+      const index = available.indexOf(cardId);
+      if (index < 0) return false;
+      available.splice(index, 1);
+    }
+    const cardId = instance.printing.cardId;
+    return SIDES.every((side) => (state.rememberedCards?.[side] ?? []).every((record) =>
+      record.instance !== instance.id || (record.owner === instance.owner && record.status.created &&
+        record.printing.kind === "card" && record.printing.cardId === cardId)));
+  });
 }
 
 function isPrinting(value: unknown): boolean {

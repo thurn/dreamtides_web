@@ -8,7 +8,8 @@
  * fields are all required, so the compiler flags a field added to one; an
  * interface with optional fields or union members goes through `copyJson`,
  * except `CardStatus`, whose optional fields, `gainedAbilities` (copied with
- * `copyJson`) and `lostAbilities`, are copied when present.
+ * `copyJson`) and `lostAbilities`, are copied when present. `CardInstance`'s
+ * optional `poolCandidates` array is also copied when present.
  */
 import type {
   AvatarEmblem,
@@ -111,6 +112,7 @@ function copyInstance(instance: CardInstance): CardInstance {
     controller: instance.controller,
     zone: instance.zone,
     variant: copyVariant(instance.variant),
+    ...(instance.poolCandidates === undefined ? {} : { poolCandidates: [...instance.poolCandidates] }),
     status: copyStatus(instance.status),
     enteredZoneAt: instance.enteredZoneAt,
   };

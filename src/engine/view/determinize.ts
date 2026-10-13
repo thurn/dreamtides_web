@@ -284,6 +284,38 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     player: shuffled(remaining(decklists.player, visible.filter((instance) => instance.owner === "player")), random),
     enemy: shuffled(remaining(decklists.enemy, visible.filter((instance) => instance.owner === "enemy")), random),
   };
+  const descriptors = SIDES.flatMap((owner) => view.hiddenCards?.[owner] ?? []).sort((a, b) => a.member - b.member);
+  const assigned = new Map<number, InstanceId>();
+  const domainSlots: Record<Side, Map<number, NonNullable<BattleView["poolCreatedHands"]>[Side][number]>> = { player: new Map(), enemy: new Map() };
+  const domainMembers = new Set<number>();
+  if (view.poolCreatedHands !== undefined) {
+    if (!SIDES.every((side) => Array.isArray(view.poolCreatedHands?.[side]))) throw new Error("Cannot determinize partial pool-created hands");
+    for (const holder of SIDES) {
+      const domains = view.poolCreatedHands[holder];
+      if (domains.length === 0) continue;
+      const unknown = slots(view.sides[holder].hand).flatMap((id, index) => id === null ? [index] : []);
+      if (domains.length > unknown.length) throw new Error("Cannot determinize excess pool-created hands");
+      const positions = shuffled(unknown, random);
+      for (const [index, domain] of domains.entries()) {
+        const candidates = domain.candidates;
+        if (!SIDES.includes(domain.owner) || !Array.isArray(domain.candidates) || domain.candidates.length === 0) throw new Error("Cannot determinize invalid pool-created domain");
+        const available = [...(view.draftPools?.[domain.owner] ?? [])];
+        for (const cardId of candidates) {
+          const at = available.indexOf(cardId);
+          if (at < 0) throw new Error("Cannot determinize pool-created copies outside their source");
+          available.splice(at, 1);
+        }
+        if (domain.member !== undefined) {
+          const observed = descriptors.find((descriptor) => descriptor.member === domain.member);
+          if (!Number.isSafeInteger(domain.member) || domain.member < 0 || domainMembers.has(domain.member) ||
+            observed === undefined || observed.owner !== domain.owner || !observed.status.created ||
+            observed.printing.kind !== "card" || !domain.candidates.includes(observed.printing.cardId)) throw new Error("Cannot determinize inconsistent pool-created member");
+          domainMembers.add(domain.member);
+        }
+        domainSlots[holder].set(positions[index], domain);
+      }
+    }
+  }
   let next = highest(view, "i") + 1;
   // Reserve anonymous history identities before minting hidden instances.
   // These facts name no current card and remain anonymous when viewed again.
@@ -293,7 +325,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
   });
   const playedCards = { player: anonymous(view.turnLog.played.player), enemy: anonymous(view.turnLog.played.enemy) };
   const materializedCards = { player: anonymous(view.turnLog.materialized.player), enemy: anonymous(view.turnLog.materialized.enemy) };
-  const mint = (owner: Side, holder: Side, zone: "deck" | "hand", entry: DeckEntry, created: boolean): InstanceId => {
+  const mint = (owner: Side, holder: Side, zone: "deck" | "hand", entry: DeckEntry, created: boolean, poolCandidates?: CardInstance["poolCandidates"]): InstanceId => {
     const id: InstanceId = `i${next}`;
     next += 1;
     instances[id] = {
@@ -303,6 +335,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       controller: holder,
       zone,
       variant: variantOf(entry),
+      ...(poolCandidates === undefined ? {} : { poolCandidates: copy(poolCandidates) }),
       status: freshStatus(created),
       enteredZoneAt: 0,
     };
@@ -317,8 +350,20 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     return entry;
   };
   const fill = (side: Side, zone: "deck" | "hand"): InstanceId[] =>
-    slots(view.sides[side][zone]).map((known) => {
+    slots(view.sides[side][zone]).map((known, index) => {
       if (known !== null) return known;
+      const domain = zone === "hand" ? domainSlots[side].get(index) : undefined;
+      if (domain !== undefined) {
+        const observed = domain.member === undefined ? undefined : descriptors.find((descriptor) => descriptor.member === domain.member);
+        const cardId = observed?.printing.kind === "card" ? observed.printing.cardId : domain.candidates[Math.floor(random() * domain.candidates.length)];
+        if (cardId === undefined) throw new Error("Cannot determinize invalid pool-created selection");
+        const id = mint(domain.owner, side, "hand", { cardId }, true, domain.candidates);
+        if (observed !== undefined) {
+          instances[id] = { ...instances[id], variant: copy(observed.variant), status: copy(observed.status) };
+          assigned.set(observed.member, id);
+        }
+        return id;
+      }
       const own = pools[side].pop();
       if (own !== undefined) return mint(side, side, zone, own, false);
       if (zone === "hand") {
@@ -357,12 +402,12 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     }
   }
   const seed = battleSeed(`determinized|${String(Math.floor(random() * 2 ** 53))}`);
-  const descriptors = SIDES.flatMap((owner) => view.hiddenCards?.[owner] ?? []).sort((a, b) => a.member - b.member);
-  const assigned = new Map<number, InstanceId>();
+
   const hidden = SIDES.flatMap((holder) => [...sides[holder].deck, ...sides[holder].hand]).filter((id) => !(id in view.instances));
   for (const descriptor of descriptors) {
+    if (assigned.has(descriptor.member)) continue;
     const fromPool = descriptor.status.created && descriptor.printing.kind === "card" && view.draftPools?.[descriptor.owner].includes(descriptor.printing.cardId) === true;
-    const available = hidden.filter((id) => ![...assigned.values()].includes(id) && instances[id].owner === descriptor.owner);
+    const available = hidden.filter((id) => ![...assigned.values()].includes(id) && instances[id].poolCandidates === undefined && instances[id].owner === descriptor.owner);
     const exact = available.filter((id) => (!fromPool || instances[id].status.created) &&
       canonicalHash(instances[id].printing) === canonicalHash(descriptor.printing) &&
       canonicalHash(instances[id].variant) === canonicalHash(descriptor.variant));

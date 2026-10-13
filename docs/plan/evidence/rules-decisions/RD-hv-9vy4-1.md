@@ -1,0 +1,7 @@
+# RD-hv-9vy4-1: Captured pool choices and anonymous hand sampling
+
+- Ladder: 1 for C11's fixed run/opponent multiset, generic matching and created lifecycle; 5 for minimal anonymous possible-printing transport. The existing cost/X-zero rule is unchanged. Magic supplies no direct Dreamtides pool-publicity or sampling mandate.
+- rules.md: § Created Cards → Creating from the card pool.
+- Affects: Rainbow Horn UUID1a524712-ef7e-43d9-bd79-5dea5250bf08 and the generic createRandomFromPool primitive.
+- Reading: The retained resolved Avatar package supplies the player's fixed UUID copy multiset. Creation captures its resolved eligible copies independently of the selected printing. Unknown hand cards expose a sorted anonymous bag of those choices without physical identity, position or selected printing. A previously observed anonymous member can retain immutable choices available when that card was observed; created lifecycle makes its surviving hidden location inferable. Sampling reserves these slots before ordinary inventory and preserves observed member facts. Singleton choices allow deductions from the public pool/condition, not a new physical association.
+- Compatibility: Optional captured fields are copied and strictly validated against their fixed source and surviving hand/stack/play lifecycle. Valid public variants survive. Uncaptured legacy cards remain parseable with qualified approximate sampling because their past filter cannot be recovered without guessing. Absent-field structural hashes retain their existing value.

@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { createEngine } from "../../../engine";
-import { energy, energyX, event, x } from "../../../dsl/builders";
+import { activated, energy, energyX, event, self, x } from "../../../dsl/builders";
 import { onDawn, triggered } from "../../../dsl/triggers";
 import { eventSeenBy } from "../../../events";
 import { createFoldAdapter, type IntentOutcome } from "../../../fold/slice";
@@ -11,8 +11,8 @@ import { instanceOrigin } from "../../../rules/activation";
 import { instanceOf } from "../../../rules/zones";
 import { cloneState } from "../../../state/clone";
 import { serializeState, deserializeState, stateHash } from "../../../state/hash";
-import { battleSeed, opponent, type Side } from "../../../state/ids";
-import type { BattleInit, BattleState } from "../../../state/types";
+import { battleSeed, opponent, parseFigmentId, type Side } from "../../../state/ids";
+import type { BattleInit, BattleState, CardInstance } from "../../../state/types";
 import { InlineSource } from "../../../steps/sources";
 import { invariantViolations } from "../../../testing/invariants";
 import { eventRedactionViolations } from "../../../testing/redaction";
@@ -21,6 +21,8 @@ import { passUntil } from "../../../testing/trigger-harness";
 import { parseEngineBattleFold } from "../../../../rules/battle/fold";
 import { testDreamsignId } from "../../../../types/test-identities";
 import { resolveEffect } from "../../interpreter";
+import { createCard } from "../create-card";
+import { returnToHand } from "../return-to-hand";
 import { createRandomFromPool } from "../create-random-from-pool";
 import { gainPoints } from "../gain-points";
 import { optional } from "../optional";
@@ -58,6 +60,23 @@ function init(side: Side, draftPools: BattleInit["draftPools"] = pools(), phase:
       turn: { active: side, phase, round: 1, turnNumber: 1, sideTurns: { [side]: 1, [other]: 0 } as Record<Side, number>, lastNormal: side },
       dreamwell: { deck: [], next: 0 } } };
 }
+
+const returning: EngineCardDefinition = { ...v.vanilla1, status: "authored", id: syntheticId(0x9f004), abilities: () => [activated([], returnToHand(self()))] };
+function domainScene(side: Side, mixed = false, multiple = false, player: "you" | "opponent" = "you") {
+  const holder = player === "you" ? side : opponent(side);
+  const effect = multiple ? sequence(createRandomFromPool(filter, player), createRandomFromPool({ cardType: "event", costAtMost: 1 }, player),
+    createRandomFromPool({ cardType: "character", costAtMost: 1 }, player), createCard(v.vanilla1.id, 1, player)) : createRandomFromPool(filter, player);
+  const custom = createEngine(testCatalog([cheap, otherCheap, expensive, returning], {
+    dreamsigns: [{ id: sign, status: "authored", abilities: () => [triggered(onDawn(), effect)] }],
+  }));
+  const declared = { player: [cheap.id, cheap.id, otherCheap.id, expensive.id, returning.id], enemy: [cheap.id, otherCheap.id, otherCheap.id, expensive.id, returning.id] };
+  const input: BattleInit = { ...init(side, declared), decks: { player: [], enemy: [], ...(mixed ? { [holder]: [{ cardId: v.vanilla1.id }, { cardId: v.vanilla3.id, amplified: true }] } : {}) },
+    setup: { ...init(side).setup!, placements: mixed ? [{ side: holder, deckIndex: 0, zone: "hand" }] : [] } };
+  return { engine: custom, input, holder, started: applied(createFoldAdapter(custom).start(input)) };
+}
+const constrained = (state: BattleState): CardInstance[] => Object.values(state.instances).filter((card) => card.poolCandidates !== undefined);
+const ordinary = (state: BattleState) => Object.values(state.instances).filter((card) => !card.status.created)
+  .map(({ owner, printing, variant }) => ({ owner, printing, variant })).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
 
 describe("createRandomFromPool", () => {
   it.each(["player", "enemy"] as const)("creates one private base card from the resolved side's eligible multiset using random:dreamsign for %s", (side) => {
@@ -134,6 +153,7 @@ describe("createRandomFromPool", () => {
       expect(visible.draftPools).toEqual(input.draftPools);
       const sampled = engine.determinize(visible, input.decks, () => 0.9);
       expect(sampled.sides[side].hand).toHaveLength(1);
+      expect(sampled.instances[sampled.sides[side].hand[0]]).toMatchObject({ printing: { kind: "card", cardId: side === "player" ? cheap.id : otherCheap.id }, variant: { amplified: false }, poolCandidates: side === "player" ? [cheap.id, cheap.id] : [otherCheap.id] });
       expect(sampled.draftPools).toEqual(input.draftPools);
       const saved = parseEngineBattleFold(copy({ init: input, slice: { ...started.slice, committed: sampled } }));
       if (saved === null) throw new Error("sampled pool snapshot rejected");
@@ -211,4 +231,141 @@ describe("createRandomFromPool", () => {
     const unknown = { ...input, draftPools: { player: [syntheticId(0x580fff)], enemy: [] } };
     expect(() => createFoldAdapter(engine).start(unknown)).toThrow();
   });
+
+  it("samples each created hand domain as base while retaining original inventory for both viewers", () => {
+    for (const side of ["player", "enemy"] as const) for (const mixed of [false, true]) for (const player of ["you", "opponent"] as const) {
+      const scene = domainScene(side, mixed, true, player), state = scene.started.slice.committed;
+      expect(constrained(state)).toHaveLength(3);
+      for (const viewer of ["player", "enemy"] as const) for (const draw of [0.1, 0.9]) {
+        const visible = scene.engine.view(state, viewer), before = copy(visible);
+        const sampled = scene.engine.determinize(visible, scene.input.decks, () => draw);
+        expect(visible).toEqual(before);
+        expect(ordinary(sampled)).toEqual(ordinary(state));
+        expect(constrained(sampled)).toHaveLength(3);
+        expect(Object.values(sampled.instances).filter((card) => card.status.created)).toHaveLength(4);
+        for (const card of constrained(sampled)) {
+          if (card.printing.kind !== "card") throw new Error("pool card has no card printing");
+          expect(card.poolCandidates).toContain(card.printing.cardId);
+          expect(card.variant).toEqual({ amplified: false });
+          expect(card).toMatchObject({ owner: scene.holder, controller: scene.holder, zone: "hand", status: { created: true } });
+        }
+        expect(scene.engine.view(sampled, viewer).poolCreatedHands).toEqual(visible.poolCreatedHands);
+        expect(invariantViolations(sampled, scene.engine.catalog)).toEqual([]);
+      }
+    }
+  });
+
+  it("keeps unobserved pool choices anonymous across different printing and physical identities", () => {
+    const scene = domainScene("player"), state = scene.started.slice.committed;
+    const actual = constrained(state)[0], otherId = "i99" as const;
+    const changed: BattleState = { ...copy(state), nextInstance: 100, instances: { [otherId]: { ...copy(actual), id: otherId, printing: { kind: "card", cardId: actual.printing.kind === "card" && actual.printing.cardId === cheap.id ? otherCheap.id : cheap.id } } },
+      sides: { ...copy(state.sides), player: { ...copy(state.sides.player), hand: [otherId] } }, rememberedCards: { player: [], enemy: [] } };
+    const anonymous = { ...state, rememberedCards: { player: [], enemy: [] } };
+    const visible = scene.engine.view(anonymous, "enemy");
+    expect(scene.engine.view(changed, "enemy")).toEqual(visible);
+    expect(visible.instances[actual.id]).toBeUndefined();
+    expect(visible.poolCreatedHands?.player).toEqual([{ owner: "player", candidates: [cheap.id, cheap.id, otherCheap.id].sort() }]);
+    const cloned = cloneState(state), shown = scene.engine.view(state, "player");
+    expect(cloned.instances[actual.id].poolCandidates).not.toBe(actual.poolCandidates);
+    expect(shown.instances[actual.id].poolCandidates).not.toBe(actual.poolCandidates);
+    const narrower: BattleState = { ...state, instances: { ...state.instances, [actual.id]: { ...actual, poolCandidates: [actual.printing.kind === "card" ? actual.printing.cardId : cheap.id] } } };
+    expect(stateHash(narrower)).not.toBe(stateHash(state));
+  });
+
+  it("preserves current created domains through sampled cold-save continuation", () => {
+    for (const side of ["player", "enemy"] as const) {
+      const scene = domainScene(side, true), state = scene.started.slice.committed;
+      const sampled = scene.engine.determinize(scene.engine.view(state, opponent(side)), scene.input.decks, () => 0.9);
+      const loaded = parseEngineBattleFold(copy({ init: scene.input, slice: { ...scene.started.slice, committed: sampled } }));
+      if (loaded === null) throw new Error("sampled domain rejected");
+      expect(stateHash(loaded.slice.committed)).toBe(stateHash(cloneState(sampled)));
+      const card = constrained(loaded.slice.committed)[0];
+      expect(card.variant).toEqual({ amplified: false });
+      expect(card.poolCandidates).toContain(card.printing.kind === "card" ? card.printing.cardId : null);
+      const played = scene.engine.apply(loaded.slice.committed, side, { kind: "play", card: card.id, from: "hand" }, answers());
+      const done = passUntil(scene.engine, played.state, (next) => next.stack.length === 0, answers());
+      expect(done.state.instances[card.id]).toBeUndefined();
+      expect([...played.events, ...done.events]).toContainEqual({ kind: "ceasedToExist", instance: card.id, side, from: "stack" });
+      const later = passUntil(scene.engine, done.state, (next) => next.turn.active === side && next.turn.phase === "day" && next.turn.sideTurns[side] > 1);
+      expect(constrained(later.state)).toHaveLength(1);
+      expect(later.state.draftPools).toEqual(scene.input.draftPools);
+    }
+  });
+
+  it("binds overlapping domains to their genuine derived anonymous observations", () => {
+    const scene = domainScene("player", true, true), state = scene.started.slice.committed;
+    const cards = constrained(state), observed: BattleState = { ...state, rememberedCards: { player: [], enemy: cards.map((card) => ({ instance: card.id, owner: card.owner, printing: card.printing, variant: card.variant, status: card.status, effects: [] })) } };
+    // These declared snapshots derive from genuine outputs; no interactive reveal/forget workflow is claimed.
+    const visible = scene.engine.view(observed, "enemy"), sampled = scene.engine.determinize(visible, scene.input.decks, () => 0.9);
+    expect(scene.engine.view(sampled, "enemy").hiddenCards).toEqual(visible.hiddenCards);
+    expect(scene.engine.view(sampled, "enemy").poolCreatedHands).toEqual(visible.poolCreatedHands);
+    expect(ordinary(sampled)).toEqual(ordinary(state));
+    for (const card of constrained(sampled)) expect(card.poolCandidates).toContain(card.printing.kind === "card" ? card.printing.cardId : null);
+  });
+
+  it("preserves a public created character through play and ceases it on return", () => {
+    const custom = createEngine(testCatalog([returning], { dreamsigns: [{ id: sign, status: "authored", abilities: () => [triggered(onDawn(), createRandomFromPool({ cardType: "character", costAtMost: 1 }))] }] }));
+    const input = init("player", { player: [returning.id], enemy: [] }), started = applied(createFoldAdapter(custom).start(input));
+    const card = constrained(started.slice.committed)[0];
+    const played = custom.apply(started.slice.committed, "player", { kind: "play", card: card.id, from: "hand" }, answers());
+    const settled = passUntil(custom, played.state, (next) => next.stack.length === 0, answers()).state;
+    expect(settled.instances[card.id]).toMatchObject({ zone: "play", poolCandidates: [returning.id] });
+    expect(parseEngineBattleFold(copy({ init: input, slice: { ...started.slice, committed: settled } }))).not.toBeNull();
+    // A declared amplified public snapshot tests load compatibility, not a claimed amplification effect.
+    const amplified = cloneState(settled); amplified.instances[card.id] = { ...amplified.instances[card.id], variant: { amplified: true } };
+    expect(parseEngineBattleFold(copy({ init: input, slice: { ...started.slice, committed: amplified } }))).not.toBeNull();
+    const activated = custom.apply(settled, "player", { kind: "activate", source: card.id, ability: 0 }, answers());
+    const returned = passUntil(custom, activated.state, (next) => next.stack.length === 0, answers());
+    expect(returned.state.instances[card.id]).toBeUndefined();
+    expect([...activated.events, ...returned.events]).toContainEqual({ kind: "ceasedToExist", instance: card.id, side: "player", from: "play" });
+  });
+
+  it("rejects malformed captured creation domains without mutation", () => {
+    const scene = domainScene("player"), state = scene.started.slice.committed, card = constrained(state)[0];
+    const saved = copy({ init: scene.input, slice: scene.started.slice });
+    for (const domain of [null, [], ["bad"], [expensive.id], [cheap.id, cheap.id, cheap.id]]) for (const where of ["committed", "history"] as const) {
+      const bad = copy(saved);
+      if (where === "history") { const { history: _history, ...base } = bad.slice; bad.slice = { ...bad.slice, history: { base, entries: [] } }; }
+      const target = where === "committed" ? bad.slice.committed : bad.slice.history!.base.committed;
+      (target.instances[card.id] as unknown as Record<string, unknown>).poolCandidates = domain;
+      const before = copy(bad); expect(parseEngineBattleFold(bad)).toBeNull(); expect(bad).toEqual(before);
+    }
+    for (const zone of ["deck", "void", "banished"] as const) for (const where of ["committed", "history"] as const) {
+      const bad = copy(saved);
+      if (where === "history") { const { history: _history, ...base } = bad.slice; bad.slice = { ...bad.slice, history: { base, entries: [] } }; }
+      const target = where === "committed" ? bad.slice.committed : bad.slice.history!.base.committed;
+      target.sides.player.hand = []; target.sides.player[zone].push(card.id); target.instances[card.id].zone = zone;
+      const before = copy(bad); expect(parseEngineBattleFold(bad)).toBeNull(); expect(bad).toEqual(before);
+      delete (target.instances[card.id] as { poolCandidates?: readonly unknown[] }).poolCandidates;
+      expect(parseEngineBattleFold(bad)).not.toBeNull();
+    }
+    for (const change of [{ status: { ...card.status, created: false } }, { printing: { kind: "figment", figment: parseFigmentId(syntheticId(0x9f005)), spark: 1 } }]) {
+      const bad = copy(saved); Object.assign(bad.slice.committed.instances[card.id], change);
+      const before = copy(bad); expect(parseEngineBattleFold(bad)).toBeNull(); expect(bad).toEqual(before);
+    }
+    const missingSource = copy(saved);
+    delete (missingSource.init as { draftPools?: BattleInit["draftPools"] }).draftPools;
+    delete (missingSource.slice.committed as { draftPools?: BattleState["draftPools"] }).draftPools;
+    expect(parseEngineBattleFold(missingSource)).toBeNull();
+    const legacy = copy(saved); delete (legacy.slice.committed.instances[card.id] as { poolCandidates?: readonly unknown[] }).poolCandidates;
+    expect(parseEngineBattleFold(legacy)).not.toBeNull();
+    const record = { instance: card.id, owner: card.owner, printing: card.printing, variant: card.variant, status: card.status, effects: [] };
+    for (const change of [{ owner: "enemy" as const }, { status: { ...card.status, created: false } },
+      { printing: { kind: "card" as const, cardId: expensive.id } },
+      { printing: { kind: "card" as const, cardId: card.printing.kind === "card" && card.printing.cardId === cheap.id ? otherCheap.id : cheap.id } }]) {
+      const bad = copy(saved); bad.slice.committed.rememberedCards = { player: [], enemy: [{ ...record, ...change }] };
+      const before = copy(bad); expect(parseEngineBattleFold(bad)).toBeNull(); expect(bad).toEqual(before);
+    }
+    const stale = copy(saved); stale.slice.committed.rememberedCards = { player: [], enemy: [{ ...record, variant: { amplified: true }, status: { ...record.status, exhausted: true }, effects: [] }] };
+    expect(parseEngineBattleFold(stale)).not.toBeNull();
+    const legacyRecord = copy(saved); delete (legacyRecord.slice.committed.instances[card.id] as { poolCandidates?: readonly unknown[] }).poolCandidates;
+    legacyRecord.slice.committed.rememberedCards = { player: [], enemy: [{ ...record, status: { ...record.status, created: false } }] };
+    expect(parseEngineBattleFold(legacyRecord)).not.toBeNull();
+    const visible = scene.engine.view(state, "enemy");
+    for (const domains of [[{ owner: "player", candidates: [] }], [{ owner: "player", candidates: [expensive.id], member: 0 }], [{ owner: "enemy", candidates: [cheap.id, cheap.id] }], [{ owner: "player", candidates: [cheap.id], member: 999 }]]) {
+      const bad = { ...visible, poolCreatedHands: { player: domains, enemy: [] } } as unknown as typeof visible, before = copy(bad);
+      expect(() => scene.engine.determinize(bad, scene.input.decks, () => 0.9)).toThrow(); expect(bad).toEqual(before);
+    }
+  });
+
 });

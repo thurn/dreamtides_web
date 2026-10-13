@@ -241,6 +241,8 @@ export interface CardInstance {
   controller: Side;
   zone: Zone;
   readonly variant: Variant;
+  /** Immutable eligible UUID copies captured by this pool creation, independent of its selected printing. */
+  readonly poolCandidates?: readonly CardId[];
   status: CardStatus;
   /** Monotonic timestamp of the last zone entry, for layer ordering. */
   enteredZoneAt: number;

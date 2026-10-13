@@ -75,6 +75,7 @@ const INSTANCE_FIELDS = {
   variant: true,
   status: true,
   enteredZoneAt: true,
+  poolCandidates: true,
 } as const satisfies Record<keyof CardInstance, true>;
 
 const STATUS_FIELDS = {
@@ -99,7 +100,7 @@ const VARIANT_FIELDS = { amplified: true, transfigurations: true, deckMods: true
 /** The values `StructuralHasher.instance` feeds, the variant and status expanded, mixed into its seed. */
 const INSTANCE_ARITY =
   Object.keys(INSTANCE_FIELDS).length -
-  2 +
+  3 + // Variant/status expand below; the optional domain contributes only when present.
   Object.keys(VARIANT_FIELDS).length +
   Object.keys(STATUS_FIELDS).length;
 
@@ -263,8 +264,9 @@ class StructuralHasher {
 
   private instance(instance: CardInstance): void {
     const { status } = instance;
-    this.seqA = TAG_INSTANCE ^ INSTANCE_ARITY;
-    this.seqB = Math.imul(TAG_INSTANCE, 0x9e3779b1) ^ INSTANCE_ARITY;
+    const arity = INSTANCE_ARITY + (instance.poolCandidates === undefined ? 0 : 1);
+    this.seqA = TAG_INSTANCE ^ arity;
+    this.seqB = Math.imul(TAG_INSTANCE, 0x9e3779b1) ^ arity;
     this.feed(instance.id);
     this.feedPrinting(instance.printing);
     this.feed(instance.owner);
@@ -285,6 +287,7 @@ class StructuralHasher {
     this.feed(status.gainedAbilities);
     this.feed(status.lostAbilities);
     this.feed(instance.enteredZoneAt);
+    if (instance.poolCandidates !== undefined) this.feed(instance.poolCandidates);
     this.closeSequence(this.seqA, this.seqB);
   }
 }

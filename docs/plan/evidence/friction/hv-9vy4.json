@@ -1,0 +1,41 @@
+{
+  "bead": "hv-9vy4",
+  "phase": 5,
+  "implementMin": 115.72535025,
+  "implementWindow": {
+    "start": "2026-10-13T14:02:04.705603Z",
+    "end": "2026-10-13T15:57:48.226618+00:00"
+  },
+  "localValidationS": {
+    "focused-public-contracts": 13.956965874996968,
+    "provider-draft-clone-view": 6.348682874988299,
+    "review": 86.53694858399103,
+    "knip": 7.664788291993318,
+    "full": 111.98867054199218,
+    "public-postfix-witnesses": 8.173684918001527,
+    "legacy-hash-after": 1.441319959005341,
+    "production-observer": 2.382762458000798,
+    "preflight": 2.770130999997491,
+    "sweep": 45.70973075000802,
+    "player-workflow": 80.63155533300596,
+    "enemy-workflow": 94.48785725000198
+  },
+  "hostLoad": 15.51171875,
+  "testDelta": {
+    "files": 0,
+    "lines": 190,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-lease-wait",
+      "minutes": 0.5175500000000001,
+      "note": "Actual native sweep browser lease wait31.053s, included in45.709731s outer. No approval/model waiting inference."
+    },
+    {
+      "tag": "local-edit-correction",
+      "minutes": 1.081138075699952,
+      "note": "Actual failed review1 outer scope:5686 related tests pass; own candidate-array lint and readonly-history fixture typing fail. Includes useful passing stages; correction interval is not separately measured. Gross ownership includes measured61.049928min source-first audit/proposals/diagnostics/admission, then implementation/checks/QA/packaging and capacity interruption; exact model/CPU intervals and capacity duration are unknown. These two measured friction commands do not represent the whole gross window."
+    }
+  ]
+}

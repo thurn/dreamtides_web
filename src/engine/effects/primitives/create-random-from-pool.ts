@@ -25,6 +25,7 @@ export const createRandomFromPoolPrimitive = definePrimitive<CreateRandomFromPoo
     const cardId = candidates[Math.floor(ctx.random("random:dreamsign") * candidates.length)];
     if (cardId === undefined) throw new Error("Invalid random draft-pool selection");
     const created = createInstance(ctx, { kind: "card", cardId }, side, BASE_VARIANT, "hand");
+    ctx.state.instances[created.id] = { ...created, poolCandidates: [...candidates].sort() };
     ctx.state.sides[side].hand.push(created.id);
   },
 });

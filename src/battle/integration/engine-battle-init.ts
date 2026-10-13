@@ -26,7 +26,7 @@ export interface EngineBattleInitInput {
   readonly seed: number;
   readonly scoreToWin: number;
   readonly startingSide: NonNullable<EngineBattleInit["startingSide"]>;
-  readonly journey: Pick<JourneyState, "deck" | "avatar" | "dreamsigns" | "battleModifiers"> & Partial<Pick<JourneyState, "draftState">>;
+  readonly journey: Pick<JourneyState, "deck" | "avatar" | "dreamsigns" | "battleModifiers"> & Partial<Pick<JourneyState, "draftState" | "resolvedPackage">>;
   /** The opponent `createBattleInit` built for this battle. */
   readonly enemy: EngineBattleOpponent;
   readonly cardDatabase: ReadonlyMap<number, CardData>;
@@ -119,7 +119,11 @@ function cardOf(cardDatabase: ReadonlyMap<number, CardData>, cardNumber: number)
 
 /** Canonical fixed run copies, resolved by UUID; spent offer stock and journey deck variants are unrelated. */
 function fixedDraftPool(input: EngineBattleInitInput): CardId[] {
-  return Object.entries(input.journey.draftState?.draftPoolCopiesByCard ?? {}).flatMap(([key, copies]) => {
+  const pkg = input.journey.resolvedPackage;
+  if (pkg == null) return [];
+  const copiesByCard = pkg.draftPoolCopiesByCard;
+  if (typeof copiesByCard !== "object" || copiesByCard === null || Array.isArray(copiesByCard)) throw new Error("Invalid fixed draft-pool copies");
+  return Object.entries(copiesByCard).flatMap(([key, copies]) => {
     const cardNumber = Number(key);
     if (!Number.isSafeInteger(cardNumber) || String(cardNumber) !== key || !Number.isSafeInteger(copies) || copies < 0) throw new Error("Invalid fixed draft-pool copies");
     const card = input.cardDatabase.get(cardNumber);

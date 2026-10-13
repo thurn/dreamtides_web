@@ -148,6 +148,7 @@ interface CardInstance {
   controller: Side;                    // in a hand, the side holding it; in a deck, void, or Banished, its owner
   zone: Zone;                          // "deck" | "hand" | "stack" | "play" | "void" | "banished"
   readonly variant: Variant;           // { amplified }; Phases 4.1 and 5 add the rest (D39, below)
+  readonly poolCandidates?: readonly CardId[]; // immutable eligible copies captured by pool creation
   status: { exhausted: boolean; gainedSpark: number; counters: number; created: boolean;
             reclaimed: boolean; playedViaReclaim: boolean; offering: boolean; ephemeral: boolean;
             x: number | null;          // X paid to play it, kept while in play (variable spark)
@@ -2203,6 +2204,17 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   numbers relate captured cohorts and remembered hidden sources using observable
   history. Later private changes supply no facts for this view. Saved battles
   without the optional records have conservative anonymous knowledge.
+- **Captured pool creation choices** are immutable optional instance
+  `poolCandidates`, copied by clone, visible-instance projection and saved
+  loading. They preserve the eligible UUID multiset, including copies, from
+  the retained resolved run package or generated opponent pool. Unknown hand
+  cards project anonymous `poolCreatedHands` bags by holder, independently of
+  hand position and selected printing. Existing observed member links retain
+  only choices available when that card was observed. The sampler reserves
+  these created slots before ordinary inventory, deals eligible base cards,
+  and restores linked observed facts. Created lifecycle permits captured
+  instances only in hand, stack or play; public variants remain valid. Saves
+  without captured choices retain their qualified pool/deck approximation.
 - **`promptView(prompt, side, display)`** is a pending prompt as `side` sees
   it: its purpose names a source card only when `side` can identify it
   (`purposeView`), even for the side answering, which otherwise sees it
