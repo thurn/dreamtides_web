@@ -1,3 +1,6 @@
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { discover } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 250,
   art: { x: 0.11, y: -0.1, scale: 1.67 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onMaterialized(), discover({ cardType: "event", costAtMost: 2 }))],
+  verifiedText: expectedVerifiedText("▸Materialized: Discover a ≤2● cost event."),
 });

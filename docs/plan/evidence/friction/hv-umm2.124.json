@@ -1,0 +1,36 @@
+{
+  "bead": "hv-umm2.124",
+  "phase": 5,
+  "implementMin": 48.93335011666667,
+  "implementWindow": {
+    "start": "2026-10-13T14:29:28.717000+00:00",
+    "end": "2026-10-13T15:18:24.718007+00:00"
+  },
+  "localValidationS": {
+    "focused": 11.207296375010628,
+    "review": 53.258968457987066,
+    "knip": 3.4174289160000626,
+    "preflight": 2.2806116249994375,
+    "fuzz-outer": 178.32324274998973,
+    "reverie-probe-v3": 7.4948599159833975,
+    "schema": 0.11989245898439549
+  },
+  "hostLoad": 15.09326171875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 1.0559781604165133,
+      "note": "Two retained caller failures: pre-reload publication cursor reused after reload, and hand-fan center hit assumed actionable. Corrected versioned collectors; actual product unchanged; definitive 12 cells pass. Measured failed invocation wall only; author correction time UNKNOWN and excluded. Canonical hv-umm2.308 owns general browser scripting friction."
+    },
+    {
+      "tag": "supplemental-probe-scripting",
+      "minutes": 0.15143633471646656,
+      "note": "Two source-only external witness attempts assumed Fast could respond in the opposing turn, then started its observation after the own-character draw already resolved. Version3 uses a genuine Interrupt response and correct observation boundary; both real factory/controller cells pass. No product change or committed test added; measured failed probe wall only."
+    }
+  ]
+}

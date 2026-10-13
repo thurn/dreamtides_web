@@ -1,3 +1,7 @@
+import { event } from "../../engine/dsl/builders";
+import { untilEndOfTurn, whenYouPlay } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { draw, floating } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +21,6 @@ export default card({
   artOwned: false,
   cardNumber: 209,
   isStarter: false,
-  pending: true,
+  abilities: () => [event(floating(whenYouPlay({ cardType: "character" }), draw(1), untilEndOfTurn()))],
+  verifiedText: expectedVerifiedText("Until end of turn, when you play a character, draw a card."),
 });

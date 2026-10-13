@@ -1,0 +1,3414 @@
+{
+  "bead": "hv-umm2.124",
+  "baseOid": "245dae134c46a2d0980b68a4cce00eb3b08c1ddb",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+  "implementation": {
+    "helper": "/root/card_flow124",
+    "dispatchRequestAt": "2026-10-13T14:29:28.717000+00:00",
+    "dispatchCallId": "call_be8b7012861141f9bb43774d7381787b",
+    "childSamplingStart": "UNKNOWN",
+    "window": "Actual helper dispatch request through precommit cutoff. Helper supplied source-free Stage1 then terminated on model capacity before writes or checks. Direct same-task justiciar verified clean own checkout and resource absence; root authored the exact accepted six-leaf proposal under the same brief. No alternative model, writer, acceptance waiver or review claimed.",
+    "authoredEntities": [
+      "69d9e550-eacc-49f2-8cc5-30b8940c9eed",
+      "a031eada-2c47-49c6-8c19-d2fe85f8ce97",
+      "4fac8060-2644-409f-806b-c6a845ef6f31",
+      "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83",
+      "caaee8a9-0c22-41b4-950f-4c1131b98221",
+      "5c5e316f-c499-4991-9733-bb6e3d826d7e"
+    ],
+    "amplifiedEntities": 0,
+    "newPrimitives": 0,
+    "newPromptStatusVisualKinds": 0,
+    "functionalFiles": 6,
+    "grossNonTestLines": 37,
+    "fallout": [],
+    "d10": "Current Discover, payment/X, floating-character trigger/Ending, draw/erode and ordered sequence rules settle all clauses. No normative rewrite, RD or card issue.",
+    "d20": {
+      "privateModule": null,
+      "cases": 0,
+      "lines": 0,
+      "newTestEntrypoints": 0,
+      "jsdomFiles": 0,
+      "contracts": "Pure existing primitive compositions. Inherited filter/private-choice/reload, cost-X, sequence/resource, floating repetition/expiry and intent contracts own behavior. Production-factory composition witnessed in actual desktop/mobile games; supplemental real Reverie factory on synthetic boards proves both controller/type/opponent/expiry boundaries outside CI."
+    },
+    "coldCodeReview": {
+      "required": false,
+      "reason": "Native labels browser/heavy only; not phase gate, core-review, new primitive or prompt kind.37 gross non-test lines below default100 threshold. Parent independently checked clauses, immutable catalog bytes, outcomes, logs, actual geometry, frozen inputs and resource settlement.",
+      "temporaryRouting": "If required before 2026-10-14T01:00:00Z: fresh read-only Codex CLI gpt-5.6-sol; no Claude invoked."
+    },
+    "precommitCutoff": "2026-10-13T15:18:24.718007+00:00",
+    "precommitTailEvidence": "audit/precommit-return-receipt.json"
+  },
+  "validation": {
+    "focused": {
+      "exitCode": 0,
+      "files": 7,
+      "cases": 2690,
+      "wallSeconds": 11.207296375010628
+    },
+    "review": {
+      "exitCode": 0,
+      "files": 241,
+      "cases": 4998,
+      "wallSeconds": 55.0328401250008,
+      "scope": "Actual diff-aware npm run review, not review:full; no infrastructure/config/architecture write."
+    },
+    "knip": {
+      "exitCode": 0,
+      "wallSeconds": 7.685868458996993
+    },
+    "preflight": {
+      "exitCode": 0,
+      "counts": {
+        "pass": 62,
+        "pending": 0,
+        "skip": 58,
+        "fail": 0
+      },
+      "wallSeconds": 2.2806116249994375,
+      "scope": "Six exact UUIDs, all supported variants, both controllers; actual default enemy scripted play and first legal answers."
+    },
+    "supplementalReverie": {
+      "exitCode": 0,
+      "cells": 2,
+      "wallSeconds": 7.4948599159833975,
+      "receipt": "audit/reverie-probe-v3.stdout",
+      "failedVersionsRetained": [
+        "audit/reverie-probe.ts",
+        "audit/reverie-probe.stdout",
+        "audit/reverie-probe-v2.ts",
+        "audit/reverie-probe-v2.stdout"
+      ],
+      "opponentResponse": "Actual opposing Interrupt character while floating listener active; no additional controller draw. Repeated own characters/type-negative event and normal expiry/post-expiry checked for both controllers."
+    },
+    "fuzz": {
+      "exitCode": 0,
+      "games": 300,
+      "steps": 97824,
+      "prompts": 6041,
+      "interactiveReruns": 571,
+      "failures": 0,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 1
+      },
+      "outerWallSeconds": 178.32324274998973,
+      "bodyWallSeconds": 178.29662616702262,
+      "targets": [
+        {
+          "kind": "card",
+          "uuid": "69d9e550-eacc-49f2-8cc5-30b8940c9eed",
+          "included": 620,
+          "exercised": 94
+        },
+        {
+          "kind": "card",
+          "uuid": "a031eada-2c47-49c6-8c19-d2fe85f8ce97",
+          "included": 620,
+          "exercised": 321
+        },
+        {
+          "kind": "card",
+          "uuid": "4fac8060-2644-409f-806b-c6a845ef6f31",
+          "included": 614,
+          "exercised": 288
+        },
+        {
+          "kind": "card",
+          "uuid": "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83",
+          "included": 616,
+          "exercised": 448
+        },
+        {
+          "kind": "card",
+          "uuid": "caaee8a9-0c22-41b4-950f-4c1131b98221",
+          "included": 615,
+          "exercised": 157
+        },
+        {
+          "kind": "card",
+          "uuid": "5c5e316f-c499-4991-9733-bb6e3d826d7e",
+          "included": 618,
+          "exercised": 432
+        }
+      ],
+      "reportedSummary": "fuzz:engine 300 games, 97824 steps, 175.6 s wall, 189.7 s CPU (1.7 games/s wall, 1.6 games/s CPU); prompts 6041; interactive re-runs 571 (2.600 ms each); feasibility bounded {\"legality\":0,\"prompts\":1}; results {\"player\":141,\"enemy\":158,\"draw\":1}; failures 0",
+      "heavySlot": "lockf -k machine-wide heavy.lock; workers2; exact outer/body process clocks and terminal receipts retained. Included and exercised are reported counts, not asserted distinct-game coverage."
+    },
+    "finalReview": {
+      "exitCode": 0,
+      "wallSeconds": 53.258968457987066,
+      "files": 241,
+      "cases": 4998
+    },
+    "finalKnip": {
+      "exitCode": 0,
+      "wallSeconds": 3.4174289160000626
+    },
+    "recordSchema": {
+      "exitCode": 0,
+      "wallSeconds": 0.15348541698767804
+    },
+    "precommitSchema": {
+      "exitCode": 0,
+      "wallSeconds": 0.11989245898439549,
+      "historicalUnknowns": 41
+    }
+  },
+  "qa": {
+    "nativeSweep": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-e30KEy",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/sweep-e30KEy",
+      "counts": {
+        "pass": 62,
+        "skip": 58
+      },
+      "attemptCounts": {
+        "pass": 62,
+        "skip": 58
+      },
+      "hostLoad": 6.93310546875,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1346,
+        "scenario": 581935.043208,
+        "cleanup": 538.3027920000022,
+        "execution": 583876.315041,
+        "total": 583881.315041
+      }
+    },
+    "mandatoryD21NewKind": 0,
+    "mandatoryD21Sampled": 0,
+    "sampleBytes": [
+      {
+        "uuid": "69d9e550-eacc-49f2-8cc5-30b8940c9eed",
+        "byte": 53
+      },
+      {
+        "uuid": "a031eada-2c47-49c6-8c19-d2fe85f8ce97",
+        "byte": 121
+      },
+      {
+        "uuid": "4fac8060-2644-409f-806b-c6a845ef6f31",
+        "byte": 122
+      },
+      {
+        "uuid": "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83",
+        "byte": 170
+      },
+      {
+        "uuid": "caaee8a9-0c22-41b4-950f-4c1131b98221",
+        "byte": 159
+      },
+      {
+        "uuid": "5c5e316f-c499-4991-9733-bb6e3d826d7e",
+        "byte": 131
+      }
+    ],
+    "workflowCells": [
+      {
+        "uuid": "4fac8060-2644-409f-806b-c6a845ef6f31",
+        "viewport": "desktop",
+        "key": "x",
+        "invocation": "run-GipLhi",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-GipLhi/card-flow-v3.result.json",
+        "source": "i1",
+        "gameId": "znhtf9",
+        "payment": 4,
+        "outcome": {
+          "chosenX": 2,
+          "fixedCost": 2,
+          "drawn": [
+            "i2",
+            "i3"
+          ],
+          "cancelPreservedCommittedState": true
+        },
+        "screens": [
+          "x-initial-desktop.png",
+          "x-cancellable-desktop.png",
+          "x-prompt-desktop.png",
+          "x-resolved-desktop.png"
+        ],
+        "persistedRows": 48
+      },
+      {
+        "uuid": "4fac8060-2644-409f-806b-c6a845ef6f31",
+        "viewport": "mobile",
+        "key": "x",
+        "invocation": "run-GipLhi",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-GipLhi/card-flow-v3.result.json",
+        "source": "i1",
+        "gameId": "6s5wp5",
+        "payment": 4,
+        "outcome": {
+          "chosenX": 2,
+          "fixedCost": 2,
+          "drawn": [
+            "i2",
+            "i3"
+          ],
+          "cancelPreservedCommittedState": true
+        },
+        "screens": [
+          "x-initial-mobile.png",
+          "x-cancellable-mobile.png",
+          "x-prompt-mobile.png",
+          "x-resolved-mobile.png"
+        ],
+        "persistedRows": 50
+      },
+      {
+        "uuid": "5c5e316f-c499-4991-9733-bb6e3d826d7e",
+        "viewport": "desktop",
+        "key": "harvest",
+        "invocation": "run-25T1Ua",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-25T1Ua/card-flow-v3.result.json",
+        "source": "i1",
+        "gameId": "ftceev",
+        "payment": 1,
+        "outcome": {
+          "eroded": [
+            "i2",
+            "i3",
+            "i4"
+          ],
+          "drawn": "i5",
+          "ordered": true
+        },
+        "screens": [
+          "harvest-initial-desktop.png",
+          "harvest-resolved-desktop.png"
+        ],
+        "persistedRows": 31
+      },
+      {
+        "uuid": "5c5e316f-c499-4991-9733-bb6e3d826d7e",
+        "viewport": "mobile",
+        "key": "harvest",
+        "invocation": "run-25T1Ua",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-25T1Ua/card-flow-v3.result.json",
+        "source": "i1",
+        "gameId": "unighj",
+        "payment": 1,
+        "outcome": {
+          "eroded": [
+            "i2",
+            "i3",
+            "i4"
+          ],
+          "drawn": "i5",
+          "ordered": true
+        },
+        "screens": [
+          "harvest-initial-mobile.png",
+          "harvest-resolved-mobile.png"
+        ],
+        "persistedRows": 31
+      },
+      {
+        "uuid": "69d9e550-eacc-49f2-8cc5-30b8940c9eed",
+        "viewport": "desktop",
+        "key": "boatman",
+        "invocation": "run-62dWJt",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-62dWJt/card-flow-v2.result.json",
+        "source": "i1",
+        "gameId": "ougqwu",
+        "payment": 3,
+        "outcome": {
+          "discovered": "i3",
+          "printing": "5e5e5e5e-0000-4000-8000-000000000002",
+          "type": "character",
+          "copiableCost": 1,
+          "remainingDeckPermutationChanged": true,
+          "humanPrompt": true
+        },
+        "screens": [
+          "boatman-initial-desktop.png",
+          "boatman-prompt-desktop.png",
+          "boatman-resolved-desktop.png"
+        ],
+        "persistedRows": 44
+      },
+      {
+        "uuid": "69d9e550-eacc-49f2-8cc5-30b8940c9eed",
+        "viewport": "mobile",
+        "key": "boatman",
+        "invocation": "run-62dWJt",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-62dWJt/card-flow-v2.result.json",
+        "source": "i1",
+        "gameId": "7a8udq",
+        "payment": 3,
+        "outcome": {
+          "discovered": "i3",
+          "printing": "5e5e5e5e-0000-4000-8000-000000000002",
+          "type": "character",
+          "copiableCost": 1,
+          "remainingDeckPermutationChanged": true,
+          "humanPrompt": true
+        },
+        "screens": [
+          "boatman-initial-mobile.png",
+          "boatman-prompt-mobile.png",
+          "boatman-resolved-mobile.png"
+        ],
+        "persistedRows": 44
+      },
+      {
+        "uuid": "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83",
+        "viewport": "desktop",
+        "key": "epiphany",
+        "invocation": "run-zzZWll",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-zzZWll/card-flow-v3.result.json",
+        "source": "i1",
+        "gameId": "2zapkg",
+        "payment": 1,
+        "outcome": {
+          "drawn": [
+            "i2",
+            "i3",
+            "i4"
+          ]
+        },
+        "screens": [
+          "epiphany-initial-desktop.png",
+          "epiphany-resolved-desktop.png"
+        ],
+        "persistedRows": 31
+      },
+      {
+        "uuid": "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83",
+        "viewport": "mobile",
+        "key": "epiphany",
+        "invocation": "run-zzZWll",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-zzZWll/card-flow-v3.result.json",
+        "source": "i1",
+        "gameId": "7qtdpf",
+        "payment": 1,
+        "outcome": {
+          "drawn": [
+            "i2",
+            "i3",
+            "i4"
+          ]
+        },
+        "screens": [
+          "epiphany-initial-mobile.png",
+          "epiphany-resolved-mobile.png"
+        ],
+        "persistedRows": 31
+      },
+      {
+        "uuid": "a031eada-2c47-49c6-8c19-d2fe85f8ce97",
+        "viewport": "desktop",
+        "key": "explorer",
+        "invocation": "run-LO49C5",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-LO49C5/card-flow-v2.result.json",
+        "source": "i1",
+        "gameId": "sk3zx7",
+        "payment": 2,
+        "outcome": {
+          "discovered": "i10",
+          "printing": "5e5e5e5e-0000-4000-8000-000000000012",
+          "type": "event",
+          "copiableCost": 0,
+          "remainingDeckPermutationChanged": true,
+          "humanPrompt": false
+        },
+        "screens": [
+          "explorer-initial-desktop.png",
+          "explorer-resolved-desktop.png"
+        ],
+        "persistedRows": 36
+      },
+      {
+        "uuid": "a031eada-2c47-49c6-8c19-d2fe85f8ce97",
+        "viewport": "mobile",
+        "key": "explorer",
+        "invocation": "run-LO49C5",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-LO49C5/card-flow-v2.result.json",
+        "source": "i1",
+        "gameId": "wo8hat",
+        "payment": 2,
+        "outcome": {
+          "discovered": "i10",
+          "printing": "5e5e5e5e-0000-4000-8000-000000000012",
+          "type": "event",
+          "copiableCost": 0,
+          "remainingDeckPermutationChanged": true,
+          "humanPrompt": false
+        },
+        "screens": [
+          "explorer-initial-mobile.png",
+          "explorer-resolved-mobile.png"
+        ],
+        "persistedRows": 36
+      },
+      {
+        "uuid": "caaee8a9-0c22-41b4-950f-4c1131b98221",
+        "viewport": "desktop",
+        "key": "reverie",
+        "invocation": "run-Y2JLBr",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-Y2JLBr/card-flow-v3.result.json",
+        "source": "i1",
+        "gameId": "6mqkve",
+        "payment": 1,
+        "outcome": {
+          "effect": "e1",
+          "sourceZone": "void",
+          "perPlayDraws": [
+            1,
+            0,
+            1,
+            0
+          ],
+          "normalExpiry": true
+        },
+        "screens": [
+          "reverie-initial-desktop.png",
+          "reverie-repeat-desktop.png",
+          "reverie-resolved-desktop.png"
+        ],
+        "persistedRows": 85
+      },
+      {
+        "uuid": "caaee8a9-0c22-41b4-950f-4c1131b98221",
+        "viewport": "mobile",
+        "key": "reverie",
+        "invocation": "run-WTp6WG",
+        "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-WTp6WG/card-flow-v4.result.json",
+        "source": "i1",
+        "gameId": "bija9y",
+        "payment": 1,
+        "outcome": {
+          "effect": "e1",
+          "sourceZone": "void",
+          "perPlayDraws": [
+            1,
+            0,
+            1,
+            0
+          ],
+          "normalExpiry": true
+        },
+        "screens": [
+          "reverie-initial-mobile.png",
+          "reverie-repeat-mobile.png",
+          "reverie-resolved-mobile.png"
+        ],
+        "persistedRows": 85
+      }
+    ],
+    "definitiveWorkflowCount": 12,
+    "returnedWorkflowCells": 14,
+    "rawWorkflowInvocations": 9,
+    "overallPassInvocations": 7,
+    "overallFailedInvocations": 2,
+    "nativeSweepCells": 120,
+    "resourceInvocations": 10,
+    "inputFreeze": "audit/freeze-v5.json",
+    "frozenFiles": 2406,
+    "changedFrozenFiles": [],
+    "audit": "audit/parent-audit.json",
+    "notes": [
+      "D21 mandatory count zero; all six changed player workflows independently exercised on desktop and mobile. Native sweep proves actual eligible variant resolution for both actors.",
+      "Pending-choice reload starts a fresh public-observation cursor; retained prior publications are kept separately before joining concrete source-effect evidence.",
+      "Discover offers use own-deck physical instances, matching type and copiablecost<=2; chosen move and remaining deck permutation verified. Explorer single candidate is an automatic private answer; no human gallery claimed.",
+      "Paid X=2 debit4/draw2, cancellable intent preserves exact committed state, pending choice and final game replay verified.",
+      "Harvest original top3 erode then original fourth draw. Reverie void source captures controller, repeated own characters, type-negative event, ordinary Ending and post-expiry negative; supplemental Node witnesses opposing Interrupt and both controllers.",
+      "Reload proof binds game and source outcome. Whole committed-state identity claimed only for cancellation, not final reload after autonomous host continuation.",
+      "A partial hand fan exposes usable edge points; center or full-rectangle exposure is not its contract. No confirmed pre-existing defect."
+    ],
+    "freezeChainAudit": {
+      "manifests": 5,
+      "commonInputsUnchanged": 2402,
+      "changed": []
+    },
+    "ledgerRows": 147
+  },
+  "resources": {
+    "ledgers": [
+      {
+        "receipt": "audit/native-sweep.observer.jsonl",
+        "launch": {
+          "at": "2026-10-13T15:01:44.875407+00:00",
+          "state": "launched",
+          "argv": [
+            "node",
+            "scripts/qa/card-sweep.mjs",
+            "--bead",
+            "hv-umm2.124",
+            "--cards",
+            "69d9e550-eacc-49f2-8cc5-30b8940c9eed,a031eada-2c47-49c6-8c19-d2fe85f8ce97,4fac8060-2644-409f-806b-c6a845ef6f31,97bc4b48-9ea1-40e9-94bb-a88ae4f55d83,caaee8a9-0c22-41b4-950f-4c1131b98221,5c5e316f-c499-4991-9733-bb6e3d826d7e",
+            "--variants",
+            "all",
+            "--as",
+            "both",
+            "--timeout",
+            "60"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+          "pid": 40754,
+          "pgid": 40754,
+          "startedAt": "2026-10-13T15:01:44.873786+00:00",
+          "load": [
+            6.93310546875,
+            8.76171875,
+            9.79443359375
+          ]
+        },
+        "terminal": {
+          "at": "2026-10-13T15:11:29.067213+00:00",
+          "state": "terminal",
+          "exitCode": 0,
+          "wallSeconds": 584.1891623339907,
+          "startedAt": "2026-10-13T15:01:44.873786+00:00",
+          "endedAt": "2026-10-13T15:11:29.067120+00:00",
+          "pid": 40754,
+          "knownProcesses": [
+            {
+              "pid": 40754,
+              "ppid": 40744,
+              "pgid": 40754,
+              "lstart": "Tue Oct 13 08:01:44 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 40759,
+              "ppid": 40754,
+              "pgid": 40754,
+              "lstart": "Tue Oct 13 08:01:44 2026",
+              "command": "(git)"
+            },
+            {
+              "pid": 40771,
+              "ppid": 40754,
+              "pgid": 40771,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 40772,
+              "ppid": 40771,
+              "pgid": 40771,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 40778,
+              "ppid": 40754,
+              "pgid": 40778,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 40779,
+              "ppid": 40778,
+              "pgid": 40778,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 40786,
+              "ppid": 40754,
+              "pgid": 40786,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 40787,
+              "ppid": 40786,
+              "pgid": 40786,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 40788,
+              "ppid": 40754,
+              "pgid": 40788,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "<defunct>"
+            },
+            {
+              "pid": 40804,
+              "ppid": 40788,
+              "pgid": 40788,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 40806,
+              "ppid": 40804,
+              "pgid": 40788,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 40811,
+              "ppid": 40806,
+              "pgid": 40788,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 40829,
+              "ppid": 40806,
+              "pgid": 40788,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 40836,
+              "ppid": 40804,
+              "pgid": 40788,
+              "lstart": "Tue Oct 13 08:01:45 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 40842,
+              "ppid": 40836,
+              "pgid": 40788,
+              "lstart": "Tue Oct 13 08:01:46 2026",
+              "command": "(esbuild)"
+            },
+            {
+              "pid": 40867,
+              "ppid": 40754,
+              "pgid": 40754,
+              "lstart": "Tue Oct 13 08:01:46 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 40870,
+              "ppid": 40867,
+              "pgid": 40754,
+              "lstart": "Tue Oct 13 08:01:46 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 40878,
+              "ppid": 40754,
+              "pgid": 40754,
+              "lstart": "Tue Oct 13 08:01:46 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 33903,
+              "ppid": 40754,
+              "pgid": 40754,
+              "lstart": "Tue Oct 13 08:11:28 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 33925,
+              "ppid": 40754,
+              "pgid": 40754,
+              "lstart": "Tue Oct 13 08:11:28 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 33942,
+              "ppid": 40754,
+              "pgid": 40754,
+              "lstart": "Tue Oct 13 08:11:28 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 33964,
+              "ppid": 40754,
+              "pgid": 40754,
+              "lstart": "Tue Oct 13 08:11:28 2026",
+              "command": "ps -A -o pid=,pgid=,lstart=,stat=,command="
+            },
+            {
+              "pid": 33987,
+              "ppid": 40754,
+              "pgid": 40754,
+              "lstart": "Tue Oct 13 08:11:28 2026",
+              "command": "(ps)"
+            }
+          ],
+          "liveSameIdentity": [],
+          "ports": {
+            "5274": {
+              "exit": 1,
+              "pids": []
+            }
+          },
+          "groups": [
+            40754,
+            40771,
+            40778,
+            40786,
+            40788
+          ],
+          "finalSlots": [
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "present": false
+            }
+          ]
+        },
+        "owners": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "76ffcf3a-f23d-4553-84a1-bae6fff33724",
+              "pid": 40754,
+              "bead": "hv-umm2.124",
+              "label": "card-sweep",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T15:01:46.366Z",
+              "providerState": "active",
+              "mcpSessionId": "218079f2-7ac5-450f-b633-68bcf2fe85eb",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "providerCompletionEvidence": "source-backed normal browser_close, drained calls, awaited transport close and exact owner cleanup; direct ACK transition not sampled"
+      },
+      {
+        "receipt": "audit/qa-boatman-v1.observer.jsonl",
+        "launch": {
+          "at": "2026-10-13T14:53:20.744986+00:00",
+          "state": "launched",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/codex-124/helper/card-flow-v1.mjs",
+            "--bead",
+            "hv-umm2.124",
+            "--arg",
+            "card=69d9e550-eacc-49f2-8cc5-30b8940c9eed",
+            "--arg",
+            "key=boatman",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+          "pid": 89001,
+          "pgid": 89001,
+          "startedAt": "2026-10-13T14:53:20.743129+00:00",
+          "load": [
+            13.47314453125,
+            14.84130859375,
+            11.6640625
+          ]
+        },
+        "terminal": {
+          "at": "2026-10-13T14:53:35.517889+00:00",
+          "state": "terminal",
+          "exitCode": 1,
+          "wallSeconds": 14.774368082988076,
+          "startedAt": "2026-10-13T14:53:20.743129+00:00",
+          "endedAt": "2026-10-13T14:53:35.517773+00:00",
+          "pid": 89001,
+          "knownProcesses": [
+            {
+              "pid": 89001,
+              "ppid": 88991,
+              "pgid": 89001,
+              "lstart": "Tue Oct 13 07:53:20 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 89025,
+              "ppid": 89001,
+              "pgid": 89025,
+              "lstart": "Tue Oct 13 07:53:20 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 89026,
+              "ppid": 89025,
+              "pgid": 89025,
+              "lstart": "Tue Oct 13 07:53:20 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 89033,
+              "ppid": 89001,
+              "pgid": 89033,
+              "lstart": "Tue Oct 13 07:53:20 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 89034,
+              "ppid": 89033,
+              "pgid": 89033,
+              "lstart": "Tue Oct 13 07:53:20 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 89040,
+              "ppid": 89001,
+              "pgid": 89040,
+              "lstart": "Tue Oct 13 07:53:20 2026",
+              "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-c5895a4131e45fde.lock /bin/sh -c echo ready; exec cat >/dev/null"
+            },
+            {
+              "pid": 89041,
+              "ppid": 89040,
+              "pgid": 89040,
+              "lstart": "Tue Oct 13 07:53:20 2026",
+              "command": "cat"
+            },
+            {
+              "pid": 89042,
+              "ppid": 89001,
+              "pgid": 89042,
+              "lstart": "Tue Oct 13 07:53:20 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 89060,
+              "ppid": 89042,
+              "pgid": 89042,
+              "lstart": "Tue Oct 13 07:53:21 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 89064,
+              "ppid": 89060,
+              "pgid": 89042,
+              "lstart": "Tue Oct 13 07:53:21 2026",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs"
+            },
+            {
+              "pid": 89068,
+              "ppid": 89064,
+              "pgid": 89042,
+              "lstart": "Tue Oct 13 07:53:21 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 89160,
+              "ppid": 89060,
+              "pgid": 89042,
+              "lstart": "Tue Oct 13 07:53:22 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 89186,
+              "ppid": 89160,
+              "pgid": 89042,
+              "lstart": "Tue Oct 13 07:53:22 2026",
+              "command": "(esbuild)"
+            },
+            {
+              "pid": 89218,
+              "ppid": 89001,
+              "pgid": 89001,
+              "lstart": "Tue Oct 13 07:53:23 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 89220,
+              "ppid": 89218,
+              "pgid": 89001,
+              "lstart": "Tue Oct 13 07:53:23 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 90058,
+              "ppid": 89001,
+              "pgid": 89001,
+              "lstart": "Tue Oct 13 07:53:34 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 90080,
+              "ppid": 89001,
+              "pgid": 89001,
+              "lstart": "Tue Oct 13 07:53:34 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 90103,
+              "ppid": 89001,
+              "pgid": 89001,
+              "lstart": "Tue Oct 13 07:53:34 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 90153,
+              "ppid": 89001,
+              "pgid": 89001,
+              "lstart": "Tue Oct 13 07:53:35 2026",
+              "command": "(ps)"
+            }
+          ],
+          "liveSameIdentity": [],
+          "ports": {
+            "5274": {
+              "exit": 1,
+              "pids": []
+            }
+          },
+          "groups": [
+            89001,
+            89025,
+            89033,
+            89040,
+            89042
+          ],
+          "finalSlots": [
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "present": false
+            }
+          ]
+        },
+        "owners": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "541e3e3f-4797-4cf7-9f08-985640832a1b",
+              "pid": 89001,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v1",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:53:23.283Z",
+              "providerState": "active",
+              "mcpSessionId": "758e8317-9286-46a5-ae3c-bc51009794fb",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "providerCompletionEvidence": "source-backed normal browser_close, drained calls, awaited transport close and exact owner cleanup; direct ACK transition not sampled"
+      },
+      {
+        "receipt": "audit/qa-boatman-v2.observer.jsonl",
+        "launch": {
+          "at": "2026-10-13T14:54:29.449263+00:00",
+          "state": "launched",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/codex-124/helper/card-flow-v2.mjs",
+            "--bead",
+            "hv-umm2.124",
+            "--arg",
+            "card=69d9e550-eacc-49f2-8cc5-30b8940c9eed",
+            "--arg",
+            "key=boatman",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+          "pid": 93383,
+          "pgid": 93383,
+          "startedAt": "2026-10-13T14:54:29.447752+00:00",
+          "load": [
+            9.03125,
+            13.3505859375,
+            11.359375
+          ]
+        },
+        "terminal": {
+          "at": "2026-10-13T14:54:58.136067+00:00",
+          "state": "terminal",
+          "exitCode": 0,
+          "wallSeconds": 28.6878929999948,
+          "startedAt": "2026-10-13T14:54:29.447752+00:00",
+          "endedAt": "2026-10-13T14:54:58.135951+00:00",
+          "pid": 93383,
+          "knownProcesses": [
+            {
+              "pid": 93383,
+              "ppid": 93370,
+              "pgid": 93383,
+              "lstart": "Tue Oct 13 07:54:29 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 93408,
+              "ppid": 93407,
+              "pgid": 93407,
+              "lstart": "Tue Oct 13 07:54:29 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 93400,
+              "ppid": 93383,
+              "pgid": 93400,
+              "lstart": "Tue Oct 13 07:54:29 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 93401,
+              "ppid": 93400,
+              "pgid": 93400,
+              "lstart": "Tue Oct 13 07:54:29 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 93407,
+              "ppid": 93383,
+              "pgid": 93407,
+              "lstart": "Tue Oct 13 07:54:29 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 93415,
+              "ppid": 93383,
+              "pgid": 93415,
+              "lstart": "Tue Oct 13 07:54:29 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 93416,
+              "ppid": 93415,
+              "pgid": 93415,
+              "lstart": "Tue Oct 13 07:54:29 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 93417,
+              "ppid": 93383,
+              "pgid": 93417,
+              "lstart": "Tue Oct 13 07:54:29 2026",
+              "command": "<defunct>"
+            },
+            {
+              "pid": 93433,
+              "ppid": 93417,
+              "pgid": 93417,
+              "lstart": "Tue Oct 13 07:54:29 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 93434,
+              "ppid": 93433,
+              "pgid": 93417,
+              "lstart": "Tue Oct 13 07:54:29 2026",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs"
+            },
+            {
+              "pid": 93436,
+              "ppid": 93434,
+              "pgid": 93417,
+              "lstart": "Tue Oct 13 07:54:29 2026",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node --import tsx /Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow/scripts/setup-assets.ts"
+            },
+            {
+              "pid": 93478,
+              "ppid": 93433,
+              "pgid": 93417,
+              "lstart": "Tue Oct 13 07:54:30 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 93481,
+              "ppid": 93478,
+              "pgid": 93417,
+              "lstart": "Tue Oct 13 07:54:30 2026",
+              "command": "(esbuild)"
+            },
+            {
+              "pid": 93494,
+              "ppid": 93383,
+              "pgid": 93383,
+              "lstart": "Tue Oct 13 07:54:30 2026",
+              "command": "lsof -nP -a -iTCP:5274 -sTCP:LISTEN -t"
+            },
+            {
+              "pid": 93504,
+              "ppid": 93383,
+              "pgid": 93383,
+              "lstart": "Tue Oct 13 07:54:30 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 94583,
+              "ppid": 93383,
+              "pgid": 93383,
+              "lstart": "Tue Oct 13 07:54:57 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 94612,
+              "ppid": 93383,
+              "pgid": 93383,
+              "lstart": "Tue Oct 13 07:54:57 2026",
+              "command": "ps -A -o pid=,pgid=,lstart=,stat=,command="
+            },
+            {
+              "pid": 94629,
+              "ppid": 93383,
+              "pgid": 93383,
+              "lstart": "Tue Oct 13 07:54:57 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 94668,
+              "ppid": 93383,
+              "pgid": 93383,
+              "lstart": "Tue Oct 13 07:54:57 2026",
+              "command": "(ps)"
+            }
+          ],
+          "liveSameIdentity": [],
+          "ports": {
+            "5274": {
+              "exit": 1,
+              "pids": []
+            }
+          },
+          "groups": [
+            93383,
+            93400,
+            93407,
+            93415,
+            93417
+          ],
+          "finalSlots": [
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "present": false
+            }
+          ]
+        },
+        "owners": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "c724f896-75bb-419b-b281-dc2ac2119e1d",
+              "pid": 93383,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v2",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:54:30.976Z",
+              "providerState": "startup-unconfirmed"
+            }
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "c724f896-75bb-419b-b281-dc2ac2119e1d",
+              "pid": 93383,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v2",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:54:30.976Z",
+              "providerState": "active",
+              "mcpSessionId": "3f6a5af3-8c77-4f97-aae4-132e9ff24b9b",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "providerCompletionEvidence": "source-backed normal browser_close, drained calls, awaited transport close and exact owner cleanup; direct ACK transition not sampled"
+      },
+      {
+        "receipt": "audit/qa-epiphany-v3.observer.jsonl",
+        "launch": {
+          "at": "2026-10-13T14:57:56.871181+00:00",
+          "state": "launched",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/codex-124/helper/card-flow-v3.mjs",
+            "--bead",
+            "hv-umm2.124",
+            "--arg",
+            "card=97bc4b48-9ea1-40e9-94bb-a88ae4f55d83",
+            "--arg",
+            "key=epiphany",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+          "pid": 1989,
+          "pgid": 1989,
+          "startedAt": "2026-10-13T14:57:56.869007+00:00",
+          "load": [
+            7.27392578125,
+            10.34716796875,
+            10.49755859375
+          ]
+        },
+        "terminal": {
+          "at": "2026-10-13T14:58:23.287533+00:00",
+          "state": "terminal",
+          "exitCode": 0,
+          "wallSeconds": 26.418003416998545,
+          "startedAt": "2026-10-13T14:57:56.869007+00:00",
+          "endedAt": "2026-10-13T14:58:23.287331+00:00",
+          "pid": 1989,
+          "knownProcesses": [
+            {
+              "pid": 1989,
+              "ppid": 1976,
+              "pgid": 1989,
+              "lstart": "Tue Oct 13 07:57:56 2026",
+              "command": "node scripts/qa/run-scenario.mjs /tmp/codex-124/helper/card-flow-v3.mjs --bead hv-umm2.124 --arg card=97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 --arg key=epiphany --timeout 180"
+            },
+            {
+              "pid": 2048,
+              "ppid": 1989,
+              "pgid": 2048,
+              "lstart": "Tue Oct 13 07:57:57 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 2049,
+              "ppid": 2048,
+              "pgid": 2048,
+              "lstart": "Tue Oct 13 07:57:57 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 2051,
+              "ppid": 1989,
+              "pgid": 2051,
+              "lstart": "Tue Oct 13 07:57:57 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 2031,
+              "ppid": 1989,
+              "pgid": 2031,
+              "lstart": "Tue Oct 13 07:57:57 2026",
+              "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.124/invocations/run-zzZWll/card-flow-v3.server.log /bin/sh -c echo ready; exec cat >/dev/null"
+            },
+            {
+              "pid": 2032,
+              "ppid": 2031,
+              "pgid": 2031,
+              "lstart": "Tue Oct 13 07:57:57 2026",
+              "command": "cat"
+            },
+            {
+              "pid": 2039,
+              "ppid": 1989,
+              "pgid": 2039,
+              "lstart": "Tue Oct 13 07:57:57 2026",
+              "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock /bin/sh -c echo ready; exec cat >/dev/null"
+            },
+            {
+              "pid": 2041,
+              "ppid": 2039,
+              "pgid": 2039,
+              "lstart": "Tue Oct 13 07:57:57 2026",
+              "command": "cat"
+            },
+            {
+              "pid": 2067,
+              "ppid": 2051,
+              "pgid": 2051,
+              "lstart": "Tue Oct 13 07:57:57 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 2069,
+              "ppid": 2067,
+              "pgid": 2051,
+              "lstart": "Tue Oct 13 07:57:57 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 2071,
+              "ppid": 2069,
+              "pgid": 2051,
+              "lstart": "Tue Oct 13 07:57:57 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 2126,
+              "ppid": 2069,
+              "pgid": 2051,
+              "lstart": "Tue Oct 13 07:57:58 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 2128,
+              "ppid": 2067,
+              "pgid": 2051,
+              "lstart": "Tue Oct 13 07:57:58 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 2131,
+              "ppid": 2128,
+              "pgid": 2051,
+              "lstart": "Tue Oct 13 07:57:58 2026",
+              "command": "(esbuild)"
+            },
+            {
+              "pid": 2155,
+              "ppid": 1989,
+              "pgid": 1989,
+              "lstart": "Tue Oct 13 07:57:58 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 2156,
+              "ppid": 2155,
+              "pgid": 1989,
+              "lstart": "Tue Oct 13 07:57:58 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 2167,
+              "ppid": 1989,
+              "pgid": 1989,
+              "lstart": "Tue Oct 13 07:57:59 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 5830,
+              "ppid": 1989,
+              "pgid": 1989,
+              "lstart": "Tue Oct 13 07:58:22 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 5871,
+              "ppid": 1989,
+              "pgid": 1989,
+              "lstart": "Tue Oct 13 07:58:22 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 5889,
+              "ppid": 1989,
+              "pgid": 1989,
+              "lstart": "Tue Oct 13 07:58:22 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 5963,
+              "ppid": 1989,
+              "pgid": 1989,
+              "lstart": "Tue Oct 13 07:58:23 2026",
+              "command": "ps -A -o pid=,pgid=,lstart=,stat=,command="
+            }
+          ],
+          "liveSameIdentity": [],
+          "ports": {
+            "5274": {
+              "exit": 1,
+              "pids": []
+            }
+          },
+          "groups": [
+            1989,
+            2031,
+            2039,
+            2048,
+            2051
+          ],
+          "finalSlots": [
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+              "present": true,
+              "own": false,
+              "pid": 96869,
+              "port": 5174,
+              "tokenHash": "9a92f622016d92a1385e8fb247b841c0c827e541f3ad65f15b4ce7d9512f6aef"
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "present": false
+            }
+          ]
+        },
+        "owners": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "5a2edb1c-85c8-4f78-a882-97cb4bc8a37e",
+              "pid": 1989,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v3",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:57:59.050Z",
+              "providerState": "startup-unconfirmed"
+            }
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "5a2edb1c-85c8-4f78-a882-97cb4bc8a37e",
+              "pid": 1989,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v3",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:57:59.050Z",
+              "providerState": "active",
+              "mcpSessionId": "4dd0c917-ed3e-4e26-aeac-3eed01eb4bb8",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "providerCompletionEvidence": "source-backed normal browser_close, drained calls, awaited transport close and exact owner cleanup; direct ACK transition not sampled"
+      },
+      {
+        "receipt": "audit/qa-explorer-v2.observer.jsonl",
+        "launch": {
+          "at": "2026-10-13T14:55:17.469198+00:00",
+          "state": "launched",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/codex-124/helper/card-flow-v2.mjs",
+            "--bead",
+            "hv-umm2.124",
+            "--arg",
+            "card=a031eada-2c47-49c6-8c19-d2fe85f8ce97",
+            "--arg",
+            "key=explorer",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+          "pid": 95050,
+          "pgid": 95050,
+          "startedAt": "2026-10-13T14:55:17.467403+00:00",
+          "load": [
+            8.7265625,
+            12.64990234375,
+            11.21533203125
+          ]
+        },
+        "terminal": {
+          "at": "2026-10-13T14:55:40.086977+00:00",
+          "state": "terminal",
+          "exitCode": 0,
+          "wallSeconds": 22.619183790986426,
+          "startedAt": "2026-10-13T14:55:17.467403+00:00",
+          "endedAt": "2026-10-13T14:55:40.086871+00:00",
+          "pid": 95050,
+          "knownProcesses": [
+            {
+              "pid": 95050,
+              "ppid": 95042,
+              "pgid": 95050,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 95058,
+              "ppid": 95050,
+              "pgid": 95050,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "(git)"
+            },
+            {
+              "pid": 95074,
+              "ppid": 95050,
+              "pgid": 95074,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 95076,
+              "ppid": 95074,
+              "pgid": 95074,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 95083,
+              "ppid": 95050,
+              "pgid": 95083,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-c5895a4131e45fde.lock /bin/sh -c echo ready; exec cat >/dev/null"
+            },
+            {
+              "pid": 95084,
+              "ppid": 95083,
+              "pgid": 95083,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "cat"
+            },
+            {
+              "pid": 95085,
+              "ppid": 95050,
+              "pgid": 95085,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "<defunct>"
+            },
+            {
+              "pid": 95067,
+              "ppid": 95050,
+              "pgid": 95067,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 95068,
+              "ppid": 95067,
+              "pgid": 95067,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 95107,
+              "ppid": 95085,
+              "pgid": 95085,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 95110,
+              "ppid": 95107,
+              "pgid": 95085,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 95112,
+              "ppid": 95110,
+              "pgid": 95085,
+              "lstart": "Tue Oct 13 07:55:17 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 95129,
+              "ppid": 95110,
+              "pgid": 95085,
+              "lstart": "Tue Oct 13 07:55:18 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 95131,
+              "ppid": 95107,
+              "pgid": 95085,
+              "lstart": "Tue Oct 13 07:55:18 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 95143,
+              "ppid": 95131,
+              "pgid": 95085,
+              "lstart": "Tue Oct 13 07:55:18 2026",
+              "command": "(esbuild)"
+            },
+            {
+              "pid": 95149,
+              "ppid": 95131,
+              "pgid": 95085,
+              "lstart": "Tue Oct 13 07:55:18 2026",
+              "command": "(git)"
+            },
+            {
+              "pid": 95158,
+              "ppid": 95050,
+              "pgid": 95050,
+              "lstart": "Tue Oct 13 07:55:18 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 95159,
+              "ppid": 95158,
+              "pgid": 95050,
+              "lstart": "Tue Oct 13 07:55:18 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 95894,
+              "ppid": 95050,
+              "pgid": 95050,
+              "lstart": "Tue Oct 13 07:55:39 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 95909,
+              "ppid": 95050,
+              "pgid": 95050,
+              "lstart": "Tue Oct 13 07:55:39 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 95924,
+              "ppid": 95050,
+              "pgid": 95050,
+              "lstart": "Tue Oct 13 07:55:39 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 95941,
+              "ppid": 95050,
+              "pgid": 95050,
+              "lstart": "Tue Oct 13 07:55:39 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 95969,
+              "ppid": 95050,
+              "pgid": 95050,
+              "lstart": "Tue Oct 13 07:55:39 2026",
+              "command": "(ps)"
+            }
+          ],
+          "liveSameIdentity": [],
+          "ports": {
+            "5274": {
+              "exit": 1,
+              "pids": []
+            }
+          },
+          "groups": [
+            95050,
+            95067,
+            95074,
+            95083,
+            95085
+          ],
+          "finalSlots": [
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "present": false
+            }
+          ]
+        },
+        "owners": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "239161a7-16a2-410c-9ae2-a2ddd1842f93",
+              "pid": 95050,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v2",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:55:18.961Z",
+              "providerState": "active",
+              "mcpSessionId": "7d13265d-3e0d-4c54-b1f1-7f004962f89c",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "providerCompletionEvidence": "source-backed normal browser_close, drained calls, awaited transport close and exact owner cleanup; direct ACK transition not sampled"
+      },
+      {
+        "receipt": "audit/qa-harvest-v3.observer.jsonl",
+        "launch": {
+          "at": "2026-10-13T14:58:36.809666+00:00",
+          "state": "launched",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/codex-124/helper/card-flow-v3.mjs",
+            "--bead",
+            "hv-umm2.124",
+            "--arg",
+            "card=5c5e316f-c499-4991-9733-bb6e3d826d7e",
+            "--arg",
+            "key=harvest",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+          "pid": 6279,
+          "pgid": 6279,
+          "startedAt": "2026-10-13T14:58:36.808188+00:00",
+          "load": [
+            8.1796875,
+            10.21826171875,
+            10.44384765625
+          ]
+        },
+        "terminal": {
+          "at": "2026-10-13T14:59:04.476330+00:00",
+          "state": "terminal",
+          "exitCode": 0,
+          "wallSeconds": 27.66773041599663,
+          "startedAt": "2026-10-13T14:58:36.808188+00:00",
+          "endedAt": "2026-10-13T14:59:04.476221+00:00",
+          "pid": 6279,
+          "knownProcesses": [
+            {
+              "pid": 6279,
+              "ppid": 6266,
+              "pgid": 6279,
+              "lstart": "Tue Oct 13 07:58:36 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 6289,
+              "ppid": 6279,
+              "pgid": 6279,
+              "lstart": "Tue Oct 13 07:58:36 2026",
+              "command": "(git)"
+            },
+            {
+              "pid": 6309,
+              "ppid": 6279,
+              "pgid": 6309,
+              "lstart": "Tue Oct 13 07:58:36 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 6310,
+              "ppid": 6309,
+              "pgid": 6309,
+              "lstart": "Tue Oct 13 07:58:36 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 6311,
+              "ppid": 6279,
+              "pgid": 6311,
+              "lstart": "Tue Oct 13 07:58:36 2026",
+              "command": "<defunct>"
+            },
+            {
+              "pid": 6295,
+              "ppid": 6279,
+              "pgid": 6295,
+              "lstart": "Tue Oct 13 07:58:36 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 6296,
+              "ppid": 6295,
+              "pgid": 6295,
+              "lstart": "Tue Oct 13 07:58:36 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 6302,
+              "ppid": 6279,
+              "pgid": 6302,
+              "lstart": "Tue Oct 13 07:58:36 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 6303,
+              "ppid": 6302,
+              "pgid": 6302,
+              "lstart": "Tue Oct 13 07:58:36 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 6327,
+              "ppid": 6311,
+              "pgid": 6311,
+              "lstart": "Tue Oct 13 07:58:36 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 6331,
+              "ppid": 6327,
+              "pgid": 6311,
+              "lstart": "Tue Oct 13 07:58:37 2026",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs"
+            },
+            {
+              "pid": 6332,
+              "ppid": 6331,
+              "pgid": 6311,
+              "lstart": "Tue Oct 13 07:58:37 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 6366,
+              "ppid": 6327,
+              "pgid": 6311,
+              "lstart": "Tue Oct 13 07:58:37 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 6368,
+              "ppid": 6366,
+              "pgid": 6311,
+              "lstart": "Tue Oct 13 07:58:38 2026",
+              "command": "(esbuild)"
+            },
+            {
+              "pid": 6383,
+              "ppid": 6279,
+              "pgid": 6279,
+              "lstart": "Tue Oct 13 07:58:38 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 6386,
+              "ppid": 6383,
+              "pgid": 6279,
+              "lstart": "Tue Oct 13 07:58:38 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 6393,
+              "ppid": 6279,
+              "pgid": 6279,
+              "lstart": "Tue Oct 13 07:58:38 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 7292,
+              "ppid": 6279,
+              "pgid": 6279,
+              "lstart": "Tue Oct 13 07:59:03 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 7322,
+              "ppid": 6279,
+              "pgid": 6279,
+              "lstart": "Tue Oct 13 07:59:03 2026",
+              "command": "ps -A -o pid=,pgid=,lstart=,stat=,command="
+            },
+            {
+              "pid": 7341,
+              "ppid": 6279,
+              "pgid": 6279,
+              "lstart": "Tue Oct 13 07:59:03 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 7359,
+              "ppid": 6279,
+              "pgid": 6279,
+              "lstart": "Tue Oct 13 07:59:04 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 7376,
+              "ppid": 6279,
+              "pgid": 6279,
+              "lstart": "Tue Oct 13 07:59:04 2026",
+              "command": "(ps)"
+            }
+          ],
+          "liveSameIdentity": [],
+          "ports": {
+            "5274": {
+              "exit": 1,
+              "pids": []
+            }
+          },
+          "groups": [
+            6279,
+            6295,
+            6302,
+            6309,
+            6311
+          ],
+          "finalSlots": [
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+              "present": true,
+              "own": false,
+              "pid": 96869,
+              "port": 5174,
+              "tokenHash": "89fabc6d6e7d35ed03b0398e8c6919d9fecd5a5d4ce83f7904e551d324a14f44"
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+              "present": true,
+              "own": false,
+              "pid": 96869,
+              "port": 5174,
+              "tokenHash": "9a92f622016d92a1385e8fb247b841c0c827e541f3ad65f15b4ce7d9512f6aef"
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "present": false
+            }
+          ]
+        },
+        "owners": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "4acdf309-b1c3-4072-a1bb-f3ac206b27b4",
+              "pid": 6279,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v3",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:58:38.290Z",
+              "providerState": "startup-unconfirmed"
+            }
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "4acdf309-b1c3-4072-a1bb-f3ac206b27b4",
+              "pid": 6279,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v3",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:58:38.290Z",
+              "providerState": "active",
+              "mcpSessionId": "f7a9c1ec-e946-41ec-9bf1-b79a12ab7c82",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "4acdf309-b1c3-4072-a1bb-f3ac206b27b4",
+              "pid": 6279,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v3",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:58:38.290Z",
+              "providerState": "execution-completed",
+              "mcpSessionId": "f7a9c1ec-e946-41ec-9bf1-b79a12ab7c82",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25",
+              "mcpExecutionCompleted": true
+            }
+          }
+        ],
+        "providerCompletionEvidence": "direct observed execution-completed"
+      },
+      {
+        "receipt": "audit/qa-reverie-mobile-v4.observer.jsonl",
+        "launch": {
+          "at": "2026-10-13T15:00:50.686362+00:00",
+          "state": "launched",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/codex-124/helper/card-flow-v4.mjs",
+            "--bead",
+            "hv-umm2.124",
+            "--arg",
+            "card=caaee8a9-0c22-41b4-950f-4c1131b98221",
+            "--arg",
+            "key=reverie",
+            "--viewports",
+            "mobile",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+          "pid": 38375,
+          "pgid": 38375,
+          "startedAt": "2026-10-13T15:00:50.684687+00:00",
+          "load": [
+            6.1865234375,
+            8.99853515625,
+            9.9423828125
+          ]
+        },
+        "terminal": {
+          "at": "2026-10-13T15:01:31.233268+00:00",
+          "state": "terminal",
+          "exitCode": 0,
+          "wallSeconds": 40.54806637499132,
+          "startedAt": "2026-10-13T15:00:50.684687+00:00",
+          "endedAt": "2026-10-13T15:01:31.233165+00:00",
+          "pid": 38375,
+          "knownProcesses": [
+            {
+              "pid": 38375,
+              "ppid": 38367,
+              "pgid": 38375,
+              "lstart": "Tue Oct 13 08:00:50 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 38405,
+              "ppid": 38375,
+              "pgid": 38405,
+              "lstart": "Tue Oct 13 08:00:50 2026",
+              "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-c5895a4131e45fde.lock /bin/sh -c echo ready; exec cat >/dev/null"
+            },
+            {
+              "pid": 38406,
+              "ppid": 38405,
+              "pgid": 38405,
+              "lstart": "Tue Oct 13 08:00:50 2026",
+              "command": "cat"
+            },
+            {
+              "pid": 38407,
+              "ppid": 38375,
+              "pgid": 38407,
+              "lstart": "Tue Oct 13 08:00:50 2026",
+              "command": "<defunct>"
+            },
+            {
+              "pid": 38391,
+              "ppid": 38375,
+              "pgid": 38391,
+              "lstart": "Tue Oct 13 08:00:50 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 38392,
+              "ppid": 38391,
+              "pgid": 38391,
+              "lstart": "Tue Oct 13 08:00:50 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 38398,
+              "ppid": 38375,
+              "pgid": 38398,
+              "lstart": "Tue Oct 13 08:00:50 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 38399,
+              "ppid": 38398,
+              "pgid": 38398,
+              "lstart": "Tue Oct 13 08:00:50 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 38425,
+              "ppid": 38407,
+              "pgid": 38407,
+              "lstart": "Tue Oct 13 08:00:50 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 38437,
+              "ppid": 38431,
+              "pgid": 38407,
+              "lstart": "Tue Oct 13 08:00:51 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 38431,
+              "ppid": 38425,
+              "pgid": 38407,
+              "lstart": "Tue Oct 13 08:00:50 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 38460,
+              "ppid": 38431,
+              "pgid": 38407,
+              "lstart": "Tue Oct 13 08:00:52 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 38464,
+              "ppid": 38425,
+              "pgid": 38407,
+              "lstart": "Tue Oct 13 08:00:52 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 38478,
+              "ppid": 38464,
+              "pgid": 38407,
+              "lstart": "Tue Oct 13 08:00:52 2026",
+              "command": "(esbuild)"
+            },
+            {
+              "pid": 38501,
+              "ppid": 38375,
+              "pgid": 38375,
+              "lstart": "Tue Oct 13 08:00:52 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 38503,
+              "ppid": 38501,
+              "pgid": 38375,
+              "lstart": "Tue Oct 13 08:00:52 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 40239,
+              "ppid": 38375,
+              "pgid": 38375,
+              "lstart": "Tue Oct 13 08:01:30 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 40265,
+              "ppid": 38375,
+              "pgid": 38375,
+              "lstart": "Tue Oct 13 08:01:30 2026",
+              "command": "ps -A -o pid=,pgid=,lstart=,stat=,command="
+            },
+            {
+              "pid": 40282,
+              "ppid": 38375,
+              "pgid": 38375,
+              "lstart": "Tue Oct 13 08:01:30 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 40299,
+              "ppid": 38375,
+              "pgid": 38375,
+              "lstart": "Tue Oct 13 08:01:30 2026",
+              "command": "(ps)"
+            }
+          ],
+          "liveSameIdentity": [],
+          "ports": {
+            "5274": {
+              "exit": 1,
+              "pids": []
+            }
+          },
+          "groups": [
+            38375,
+            38391,
+            38398,
+            38405,
+            38407
+          ],
+          "finalSlots": [
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+              "present": true,
+              "own": false,
+              "pid": 96869,
+              "port": 5174,
+              "tokenHash": "89fabc6d6e7d35ed03b0398e8c6919d9fecd5a5d4ce83f7904e551d324a14f44"
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+              "present": true,
+              "own": false,
+              "pid": 96869,
+              "port": 5174,
+              "tokenHash": "9a92f622016d92a1385e8fb247b841c0c827e541f3ad65f15b4ce7d9512f6aef"
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "present": false
+            }
+          ]
+        },
+        "owners": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "ed00898d-2adc-4aae-ba5b-5e50a7ae4bd3",
+              "pid": 38375,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v4",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T15:00:52.535Z",
+              "providerState": "active",
+              "mcpSessionId": "7d092d89-acf4-4640-9d1b-0d54bd9159bc",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "ed00898d-2adc-4aae-ba5b-5e50a7ae4bd3",
+              "pid": 38375,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v4",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T15:00:52.535Z",
+              "providerState": "execution-completed",
+              "mcpSessionId": "7d092d89-acf4-4640-9d1b-0d54bd9159bc",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25",
+              "mcpExecutionCompleted": true
+            }
+          }
+        ],
+        "providerCompletionEvidence": "direct observed execution-completed"
+      },
+      {
+        "receipt": "audit/qa-reverie-v3.observer.jsonl",
+        "launch": {
+          "at": "2026-10-13T14:59:12.414035+00:00",
+          "state": "launched",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/codex-124/helper/card-flow-v3.mjs",
+            "--bead",
+            "hv-umm2.124",
+            "--arg",
+            "card=caaee8a9-0c22-41b4-950f-4c1131b98221",
+            "--arg",
+            "key=reverie",
+            "--timeout",
+            "240"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+          "pid": 7518,
+          "pgid": 7518,
+          "startedAt": "2026-10-13T14:59:12.412519+00:00",
+          "load": [
+            9.193359375,
+            10.25390625,
+            10.44677734375
+          ]
+        },
+        "terminal": {
+          "at": "2026-10-13T15:00:00.997399+00:00",
+          "state": "terminal",
+          "exitCode": 1,
+          "wallSeconds": 48.584321542002726,
+          "startedAt": "2026-10-13T14:59:12.412519+00:00",
+          "endedAt": "2026-10-13T15:00:00.997300+00:00",
+          "pid": 7518,
+          "knownProcesses": [
+            {
+              "pid": 7518,
+              "ppid": 7510,
+              "pgid": 7518,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 7525,
+              "ppid": 7518,
+              "pgid": 7518,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "(git)"
+            },
+            {
+              "pid": 7550,
+              "ppid": 7518,
+              "pgid": 7550,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "<defunct>"
+            },
+            {
+              "pid": 7534,
+              "ppid": 7518,
+              "pgid": 7534,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 7535,
+              "ppid": 7534,
+              "pgid": 7534,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 7541,
+              "ppid": 7518,
+              "pgid": 7541,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 7542,
+              "ppid": 7541,
+              "pgid": 7541,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 7548,
+              "ppid": 7518,
+              "pgid": 7548,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-c5895a4131e45fde.lock /bin/sh -c echo ready; exec cat >/dev/null"
+            },
+            {
+              "pid": 7549,
+              "ppid": 7548,
+              "pgid": 7548,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "cat"
+            },
+            {
+              "pid": 7566,
+              "ppid": 7550,
+              "pgid": 7550,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 7573,
+              "ppid": 7566,
+              "pgid": 7550,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/prepare-workspace.mjs"
+            },
+            {
+              "pid": 7576,
+              "ppid": 7573,
+              "pgid": 7550,
+              "lstart": "Tue Oct 13 07:59:12 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 7624,
+              "ppid": 7566,
+              "pgid": 7550,
+              "lstart": "Tue Oct 13 07:59:13 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 7629,
+              "ppid": 7624,
+              "pgid": 7550,
+              "lstart": "Tue Oct 13 07:59:13 2026",
+              "command": "(esbuild)"
+            },
+            {
+              "pid": 7645,
+              "ppid": 7644,
+              "pgid": 7518,
+              "lstart": "Tue Oct 13 07:59:13 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 7644,
+              "ppid": 7518,
+              "pgid": 7518,
+              "lstart": "Tue Oct 13 07:59:13 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 9215,
+              "ppid": 7518,
+              "pgid": 7518,
+              "lstart": "Tue Oct 13 08:00:00 2026",
+              "command": "ps -A -o pid=,pgid=,lstart=,stat=,command="
+            },
+            {
+              "pid": 9230,
+              "ppid": 7518,
+              "pgid": 7518,
+              "lstart": "Tue Oct 13 08:00:00 2026",
+              "command": "ps -A -o pid=,pgid=,lstart=,stat=,command="
+            },
+            {
+              "pid": 9245,
+              "ppid": 7518,
+              "pgid": 7518,
+              "lstart": "Tue Oct 13 08:00:00 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 9263,
+              "ppid": 7518,
+              "pgid": 7518,
+              "lstart": "Tue Oct 13 08:00:00 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 9282,
+              "ppid": 7518,
+              "pgid": 7518,
+              "lstart": "Tue Oct 13 08:00:00 2026",
+              "command": "(ps)"
+            }
+          ],
+          "liveSameIdentity": [],
+          "ports": {
+            "5274": {
+              "exit": 1,
+              "pids": []
+            }
+          },
+          "groups": [
+            7518,
+            7534,
+            7541,
+            7548,
+            7550
+          ],
+          "finalSlots": [
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+              "present": true,
+              "own": false,
+              "pid": 96869,
+              "port": 5174,
+              "tokenHash": "89fabc6d6e7d35ed03b0398e8c6919d9fecd5a5d4ce83f7904e551d324a14f44"
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+              "present": true,
+              "own": false,
+              "pid": 96869,
+              "port": 5174,
+              "tokenHash": "9a92f622016d92a1385e8fb247b841c0c827e541f3ad65f15b4ce7d9512f6aef"
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "present": false
+            }
+          ]
+        },
+        "owners": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "b11317ae-897e-4cf1-8fe8-0b10b56a5e6f",
+              "pid": 7518,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v3",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:59:13.897Z",
+              "providerState": "active",
+              "mcpSessionId": "bd49d163-4fa9-4d3c-9273-19c956931ba8",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "providerCompletionEvidence": "source-backed normal browser_close, drained calls, awaited transport close and exact owner cleanup; direct ACK transition not sampled"
+      },
+      {
+        "receipt": "audit/qa-x-v2.observer.jsonl",
+        "launch": {
+          "at": "2026-10-13T14:55:45.428811+00:00",
+          "state": "launched",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/codex-124/helper/card-flow-v2.mjs",
+            "--bead",
+            "hv-umm2.124",
+            "--arg",
+            "card=4fac8060-2644-409f-806b-c6a845ef6f31",
+            "--arg",
+            "key=x",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+          "pid": 96122,
+          "pgid": 96122,
+          "startedAt": "2026-10-13T14:55:45.427102+00:00",
+          "load": [
+            7.36767578125,
+            12.01708984375,
+            11.0283203125
+          ]
+        },
+        "terminal": {
+          "at": "2026-10-13T14:56:13.071912+00:00",
+          "state": "terminal",
+          "exitCode": 0,
+          "wallSeconds": 27.644378624972887,
+          "startedAt": "2026-10-13T14:55:45.427102+00:00",
+          "endedAt": "2026-10-13T14:56:13.071793+00:00",
+          "pid": 96122,
+          "knownProcesses": [
+            {
+              "pid": 96122,
+              "ppid": 96114,
+              "pgid": 96122,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 96129,
+              "ppid": 96122,
+              "pgid": 96122,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "(git)"
+            },
+            {
+              "pid": 96137,
+              "ppid": 96122,
+              "pgid": 96137,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 96138,
+              "ppid": 96137,
+              "pgid": 96137,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 96144,
+              "ppid": 96122,
+              "pgid": 96144,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 96145,
+              "ppid": 96144,
+              "pgid": 96144,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 96151,
+              "ppid": 96122,
+              "pgid": 96151,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 96152,
+              "ppid": 96151,
+              "pgid": 96151,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 96153,
+              "ppid": 96122,
+              "pgid": 96153,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "<defunct>"
+            },
+            {
+              "pid": 96169,
+              "ppid": 96153,
+              "pgid": 96153,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 96171,
+              "ppid": 96169,
+              "pgid": 96153,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 96173,
+              "ppid": 96171,
+              "pgid": 96153,
+              "lstart": "Tue Oct 13 07:55:45 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 96202,
+              "ppid": 96171,
+              "pgid": 96153,
+              "lstart": "Tue Oct 13 07:55:46 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 96204,
+              "ppid": 96169,
+              "pgid": 96153,
+              "lstart": "Tue Oct 13 07:55:46 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 96207,
+              "ppid": 96204,
+              "pgid": 96153,
+              "lstart": "Tue Oct 13 07:55:46 2026",
+              "command": "(esbuild)"
+            },
+            {
+              "pid": 96225,
+              "ppid": 96122,
+              "pgid": 96122,
+              "lstart": "Tue Oct 13 07:55:46 2026",
+              "command": "lsof -nP -a -iTCP:5274 -sTCP:LISTEN -t"
+            },
+            {
+              "pid": 96241,
+              "ppid": 96122,
+              "pgid": 96122,
+              "lstart": "Tue Oct 13 07:55:46 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 97477,
+              "ppid": 96122,
+              "pgid": 96122,
+              "lstart": "Tue Oct 13 07:56:12 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 97503,
+              "ppid": 96122,
+              "pgid": 96122,
+              "lstart": "Tue Oct 13 07:56:12 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 97520,
+              "ppid": 96122,
+              "pgid": 96122,
+              "lstart": "Tue Oct 13 07:56:12 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 97537,
+              "ppid": 96122,
+              "pgid": 96122,
+              "lstart": "Tue Oct 13 07:56:12 2026",
+              "command": "(ps)"
+            }
+          ],
+          "liveSameIdentity": [],
+          "ports": {
+            "5274": {
+              "exit": 1,
+              "pids": []
+            }
+          },
+          "groups": [
+            96122,
+            96137,
+            96144,
+            96151,
+            96153
+          ],
+          "finalSlots": [
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+              "present": true,
+              "own": false,
+              "pid": 96869,
+              "port": 5174,
+              "tokenHash": "f9a91f11e8df0ce8980142645f0880a1b3132e59ff2d926c50ebd1ca09a4afca"
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+              "present": true,
+              "own": false,
+              "pid": 96869,
+              "port": 5174,
+              "tokenHash": "3171a54f04039df8cb97203dec0284f0e057fbc0cb54d39876f53ddc0af6eb45"
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "present": false
+            }
+          ]
+        },
+        "owners": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "f1f5ce31-6767-4b80-aae8-4b36d75402d0",
+              "pid": 96122,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v2",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:55:46.911Z",
+              "providerState": "startup-unconfirmed"
+            }
+          },
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "f1f5ce31-6767-4b80-aae8-4b36d75402d0",
+              "pid": 96122,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v2",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:55:46.911Z",
+              "providerState": "active",
+              "mcpSessionId": "c8beed64-947c-4223-90ea-e753887cf083",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "providerCompletionEvidence": "source-backed normal browser_close, drained calls, awaited transport close and exact owner cleanup; direct ACK transition not sampled"
+      },
+      {
+        "receipt": "audit/qa-x-v3.observer.jsonl",
+        "launch": {
+          "at": "2026-10-13T14:56:42.847224+00:00",
+          "state": "launched",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/codex-124/helper/card-flow-v3.mjs",
+            "--bead",
+            "hv-umm2.124",
+            "--arg",
+            "card=4fac8060-2644-409f-806b-c6a845ef6f31",
+            "--arg",
+            "key=x",
+            "--timeout",
+            "180"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+          "pid": 98381,
+          "pgid": 98381,
+          "startedAt": "2026-10-13T14:56:42.845161+00:00",
+          "load": [
+            7.501953125,
+            11.15869140625,
+            10.7705078125
+          ]
+        },
+        "terminal": {
+          "at": "2026-10-13T14:57:41.889112+00:00",
+          "state": "terminal",
+          "exitCode": 0,
+          "wallSeconds": 59.043285291001666,
+          "startedAt": "2026-10-13T14:56:42.845161+00:00",
+          "endedAt": "2026-10-13T14:57:41.889013+00:00",
+          "pid": 98381,
+          "knownProcesses": [
+            {
+              "pid": 98381,
+              "ppid": 98372,
+              "pgid": 98381,
+              "lstart": "Tue Oct 13 07:56:42 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 98407,
+              "ppid": 98381,
+              "pgid": 98407,
+              "lstart": "Tue Oct 13 07:56:43 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 98408,
+              "ppid": 98407,
+              "pgid": 98407,
+              "lstart": "Tue Oct 13 07:56:43 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 98416,
+              "ppid": 98381,
+              "pgid": 98416,
+              "lstart": "Tue Oct 13 07:56:43 2026",
+              "command": "(lockf)"
+            },
+            {
+              "pid": 98417,
+              "ppid": 98416,
+              "pgid": 98416,
+              "lstart": "Tue Oct 13 07:56:43 2026",
+              "command": "(cat)"
+            },
+            {
+              "pid": 98423,
+              "ppid": 98381,
+              "pgid": 98423,
+              "lstart": "Tue Oct 13 07:56:43 2026",
+              "command": "lockf -k -t 0 /Users/dthurn/dreamtides_web/artifacts/qa/.serve-c5895a4131e45fde.lock /bin/sh -c echo ready; exec cat >/dev/null"
+            },
+            {
+              "pid": 98424,
+              "ppid": 98423,
+              "pgid": 98423,
+              "lstart": "Tue Oct 13 07:56:43 2026",
+              "command": "cat"
+            },
+            {
+              "pid": 98425,
+              "ppid": 98381,
+              "pgid": 98425,
+              "lstart": "Tue Oct 13 07:56:43 2026",
+              "command": "<defunct>"
+            },
+            {
+              "pid": 98441,
+              "ppid": 98425,
+              "pgid": 98425,
+              "lstart": "Tue Oct 13 07:56:43 2026",
+              "command": "/opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort"
+            },
+            {
+              "pid": 98443,
+              "ppid": 98441,
+              "pgid": 98425,
+              "lstart": "Tue Oct 13 07:56:43 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 98446,
+              "ppid": 98443,
+              "pgid": 98425,
+              "lstart": "Tue Oct 13 07:56:43 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 98511,
+              "ppid": 98443,
+              "pgid": 98425,
+              "lstart": "Tue Oct 13 07:56:44 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 98513,
+              "ppid": 98441,
+              "pgid": 98425,
+              "lstart": "Tue Oct 13 07:56:44 2026",
+              "command": "(node)"
+            },
+            {
+              "pid": 98519,
+              "ppid": 98513,
+              "pgid": 98425,
+              "lstart": "Tue Oct 13 07:56:44 2026",
+              "command": "(esbuild)"
+            },
+            {
+              "pid": 98544,
+              "ppid": 98381,
+              "pgid": 98381,
+              "lstart": "Tue Oct 13 07:56:44 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 98545,
+              "ppid": 98544,
+              "pgid": 98381,
+              "lstart": "Tue Oct 13 07:56:44 2026",
+              "command": "(lsof)"
+            },
+            {
+              "pid": 1400,
+              "ppid": 98381,
+              "pgid": 98381,
+              "lstart": "Tue Oct 13 07:57:41 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 1415,
+              "ppid": 98381,
+              "pgid": 98381,
+              "lstart": "Tue Oct 13 07:57:41 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 1431,
+              "ppid": 98381,
+              "pgid": 98381,
+              "lstart": "Tue Oct 13 07:57:41 2026",
+              "command": "(ps)"
+            },
+            {
+              "pid": 1447,
+              "ppid": 98381,
+              "pgid": 98381,
+              "lstart": "Tue Oct 13 07:57:41 2026",
+              "command": "ps -A -o pid=,pgid=,lstart=,stat=,command="
+            },
+            {
+              "pid": 1476,
+              "ppid": 98381,
+              "pgid": 98381,
+              "lstart": "Tue Oct 13 07:57:41 2026",
+              "command": "(ps)"
+            }
+          ],
+          "liveSameIdentity": [],
+          "ports": {
+            "5274": {
+              "exit": 1,
+              "pids": []
+            }
+          },
+          "groups": [
+            98381,
+            98407,
+            98416,
+            98423,
+            98425
+          ],
+          "finalSlots": [
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+              "present": true,
+              "own": false,
+              "pid": 96869,
+              "port": 5174,
+              "tokenHash": "f9a91f11e8df0ce8980142645f0880a1b3132e59ff2d926c50ebd1ca09a4afca"
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+              "present": true,
+              "own": false,
+              "pid": 96869,
+              "port": 5174,
+              "tokenHash": "3171a54f04039df8cb97203dec0284f0e057fbc0cb54d39876f53ddc0af6eb45"
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+              "present": false
+            },
+            {
+              "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json",
+              "present": false
+            }
+          ]
+        },
+        "owners": [
+          {
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "record": {
+              "token": "7d4a2fad-304a-4afb-a0af-19697ff99730",
+              "pid": 98381,
+              "bead": "hv-umm2.124",
+              "label": "card-flow-v3",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T14:56:45.063Z",
+              "providerState": "active",
+              "mcpSessionId": "e5056649-412a-4f7b-a22c-c1f12fe18d1f",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            }
+          }
+        ],
+        "providerCompletionEvidence": "source-backed normal browser_close, drained calls, awaited transport close and exact owner cleanup; direct ACK transition not sampled"
+      }
+    ],
+    "allOwnProcessesSettled": true,
+    "allOwnRecordsRemoved": true,
+    "directCompletionInvocations": 2,
+    "guardedCompletionInvocations": 8,
+    "guard": "Native normal close path confirms browser_close, drains active RPCs, marks execution completed only without uncertainty, awaits transport close, clears exact token/owner and stops exact server group. If transition was not sampled, this is source-backed inference, not direct ACK.",
+    "foreignResources": "Retained foreign slot0/port5174 snapshots never imply ownership and were not touched. All actual own runs used slot1/port5274. PID/start and token-qualified records are retained.",
+    "collectorAttempt": "First collector was called prematurely while native sweep remained active; terminal assertion failed without source/evidence mutation. After full settlement identical frozen collector passed. Tool result retained as diagnostic; no discarded product failure."
+  },
+  "catalogImmutability": [
+    {
+      "uuid": "69d9e550-eacc-49f2-8cc5-30b8940c9eed",
+      "path": "src/content/cards/mystic-boatman-69d9e550.ts",
+      "catalogBytesPreservedExceptAuthoredFactoryAndVerification": true
+    },
+    {
+      "uuid": "a031eada-2c47-49c6-8c19-d2fe85f8ce97",
+      "path": "src/content/cards/revelation-explorer-a031eada.ts",
+      "catalogBytesPreservedExceptAuthoredFactoryAndVerification": true
+    },
+    {
+      "uuid": "4fac8060-2644-409f-806b-c6a845ef6f31",
+      "path": "src/content/cards/dreamscatter-4fac8060.ts",
+      "catalogBytesPreservedExceptAuthoredFactoryAndVerification": true
+    },
+    {
+      "uuid": "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83",
+      "path": "src/content/cards/epiphany-unfolded-97bc4b48.ts",
+      "catalogBytesPreservedExceptAuthoredFactoryAndVerification": true
+    },
+    {
+      "uuid": "caaee8a9-0c22-41b4-950f-4c1131b98221",
+      "path": "src/content/cards/celestial-reverie-caaee8a9.ts",
+      "catalogBytesPreservedExceptAuthoredFactoryAndVerification": true
+    },
+    {
+      "uuid": "5c5e316f-c499-4991-9733-bb6e3d826d7e",
+      "path": "src/content/cards/harvest-the-forgotten-5c5e316f.ts",
+      "catalogBytesPreservedExceptAuthoredFactoryAndVerification": true
+    }
+  ],
+  "commands": [
+    {
+      "name": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/rules/costs-search.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/fold/fold-intents.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 91615,
+      "pgid": 91615,
+      "identity": "91615 91615 Tue Oct 13 07:41:12 2026     node /opt/homebrew/bin/npm test -- src/engine/effects/primitives/contracts.test.ts src/engine/content-gates.test.ts src/engine/triggers/triggers.test.ts src/engine/rules/costs-play-x.test.ts src/engine/rules/costs-search.test.ts src/engine/fold/fold.test.ts src/engine/fold/fold-intents.test.ts",
+      "startedAt": "2026-10-13T14:41:12.350289+00:00",
+      "load": [
+        15.802734375,
+        10.48876953125,
+        7.35546875
+      ],
+      "stdout": "/tmp/codex-124/focused.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 11.207296375010628,
+      "endedAt": "2026-10-13T14:41:23.557776+00:00"
+    },
+    {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 1976,
+      "pgid": 1976,
+      "identity": "1976  1976 Tue Oct 13 07:43:42 2026     node /opt/homebrew/bin/npm run review",
+      "startedAt": "2026-10-13T14:43:42.970881+00:00",
+      "load": [
+        15.09326171875,
+        11.58349609375,
+        8.2822265625
+      ],
+      "stdout": "/tmp/codex-124/review.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 55.0328401250008,
+      "endedAt": "2026-10-13T14:44:38.005029+00:00"
+    },
+    {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 67018,
+      "pgid": 67018,
+      "identity": "67018 67018 Tue Oct 13 07:47:48 2026     /usr/bin/env node /opt/homebrew/bin/npm run knip",
+      "startedAt": "2026-10-13T14:47:48.314119+00:00",
+      "load": [
+        9.18017578125,
+        10.26611328125,
+        8.5966796875
+      ],
+      "stdout": "/tmp/codex-124/knip.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 7.685868458996993,
+      "endedAt": "2026-10-13T14:47:56.000161+00:00"
+    },
+    {
+      "name": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "69d9e550-eacc-49f2-8cc5-30b8940c9eed,a031eada-2c47-49c6-8c19-d2fe85f8ce97,4fac8060-2644-409f-806b-c6a845ef6f31,97bc4b48-9ea1-40e9-94bb-a88ae4f55d83,caaee8a9-0c22-41b4-950f-4c1131b98221,5c5e316f-c499-4991-9733-bb6e3d826d7e",
+        "--as",
+        "both",
+        "--variants",
+        "all"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 71004,
+      "pgid": 71004,
+      "identity": "71004 71004 Tue Oct 13 07:48:11 2026     node /opt/homebrew/bin/npm run lab:preflight -- --cards 69d9e550-eacc-49f2-8cc5-30b8940c9eed,a031eada-2c47-49c6-8c19-d2fe85f8ce97,4fac8060-2644-409f-806b-c6a845ef6f31,97bc4b48-9ea1-40e9-94bb-a88ae4f55d83,caaee8a9-0c22-41b4-950f-4c1131b98221,5c5e316f-c499-4991-9733-bb6e3d826d7e --as both --variants all",
+      "startedAt": "2026-10-13T14:48:11.855300+00:00",
+      "load": [
+        21.8916015625,
+        13.2314453125,
+        9.716796875
+      ],
+      "stdout": "/tmp/codex-124/preflight.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 2.2806116249994375,
+      "endedAt": "2026-10-13T14:48:14.136058+00:00"
+    },
+    {
+      "name": "fuzz-body",
+      "argv": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "cards124",
+        "--weight-uuids",
+        "69d9e550-eacc-49f2-8cc5-30b8940c9eed,a031eada-2c47-49c6-8c19-d2fe85f8ce97,4fac8060-2644-409f-806b-c6a845ef6f31,97bc4b48-9ea1-40e9-94bb-a88ae4f55d83,caaee8a9-0c22-41b4-950f-4c1131b98221,5c5e316f-c499-4991-9733-bb6e3d826d7e"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 17588,
+      "pgid": 17588,
+      "identity": "17588 17588 Tue Oct 13 07:48:33 2026     node /opt/homebrew/bin/npm run fuzz:engine -- --games 300 --seed cards124 --weight-uuids 69d9e550-eacc-49f2-8cc5-30b8940c9eed,a031eada-2c47-49c6-8c19-d2fe85f8ce97,4fac8060-2644-409f-806b-c6a845ef6f31,97bc4b48-9ea1-40e9-94bb-a88ae4f55d83,caaee8a9-0c22-41b4-950f-4c1131b98221,5c5e316f-c499-4991-9733-bb6e3d826d7e",
+      "startedAt": "2026-10-13T14:48:33.531636+00:00",
+      "load": [
+        24.88818359375,
+        14.4521484375,
+        10.234375
+      ],
+      "stdout": "/tmp/codex-124/fuzz-body.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 178.29662616702262,
+      "endedAt": "2026-10-13T14:51:31.829626+00:00"
+    },
+    {
+      "name": "fuzz-outer",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/codex-124/run.py",
+        "fuzz-body",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "cards124",
+        "--weight-uuids",
+        "69d9e550-eacc-49f2-8cc5-30b8940c9eed,a031eada-2c47-49c6-8c19-d2fe85f8ce97,4fac8060-2644-409f-806b-c6a845ef6f31,97bc4b48-9ea1-40e9-94bb-a88ae4f55d83,caaee8a9-0c22-41b4-950f-4c1131b98221,5c5e316f-c499-4991-9733-bb6e3d826d7e"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 17584,
+      "pgid": 17584,
+      "identity": "17584 17584 Tue Oct 13 07:48:33 2026     lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock python3 /tmp/codex-124/run.py fuzz-body npm run fuzz:engine -- --games 300 --seed cards124 --weight-uuids 69d9e550-eacc-49f2-8cc5-30b8940c9eed,a031eada-2c47-49c6-8c19-d2fe85f8ce97,4fac8060-2644-409f-806b-c6a845ef6f31,97bc4b48-9ea1-40e9-94bb-a88ae4f55d83,caaee8a9-0c22-41b4-950f-4c1131b98221,5c5e316f-c499-4991-9733-bb6e3d826d7e",
+      "startedAt": "2026-10-13T14:48:33.509594+00:00",
+      "load": [
+        24.88818359375,
+        14.4521484375,
+        10.234375
+      ],
+      "stdout": "/tmp/codex-124/fuzz-outer.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 178.32324274998973,
+      "endedAt": "2026-10-13T14:51:31.834289+00:00"
+    },
+    {
+      "name": "reverie-probe",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/codex-124/helper/reverie-probe.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 83524,
+      "pgid": 83524,
+      "identity": "83524 83524 Tue Oct 13 07:51:50 2026     /usr/bin/env node ./node_modules/.bin/tsx /tmp/codex-124/helper/reverie-probe.ts",
+      "startedAt": "2026-10-13T14:51:50.052816+00:00",
+      "load": [
+        14.21484375,
+        14.9560546875,
+        11.33056640625
+      ],
+      "stdout": "/tmp/codex-124/reverie-probe.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 2.1831962500000373,
+      "endedAt": "2026-10-13T14:51:52.236180+00:00"
+    },
+    {
+      "name": "reverie-probe-v2",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/codex-124/helper/reverie-probe-v2.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 86861,
+      "pgid": 86861,
+      "identity": "86861 86861 Tue Oct 13 07:52:43 2026     (env)",
+      "startedAt": "2026-10-13T14:52:43.949358+00:00",
+      "load": [
+        17.17431640625,
+        15.58740234375,
+        11.7841796875
+      ],
+      "stdout": "/tmp/codex-124/reverie-probe-v2.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 6.902983832987957,
+      "endedAt": "2026-10-13T14:52:50.852565+00:00"
+    },
+    {
+      "name": "reverie-probe-v3",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/codex-124/helper/reverie-probe-v3.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 88041,
+      "pgid": 88041,
+      "identity": "88041 88041 Tue Oct 13 07:53:03 2026     node ./node_modules/.bin/tsx /tmp/codex-124/helper/reverie-probe-v3.ts",
+      "startedAt": "2026-10-13T14:53:03.835280+00:00",
+      "load": [
+        14.84130859375,
+        15.15966796875,
+        11.71826171875
+      ],
+      "stdout": "/tmp/codex-124/reverie-probe-v3.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 7.4948599159833975,
+      "endedAt": "2026-10-13T14:53:11.330360+00:00"
+    },
+    {
+      "name": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 95902,
+      "pgid": 95902,
+      "identity": "95902 95902 Tue Oct 13 08:14:36 2026     node scripts/friction-triggers.mjs --validate-records",
+      "startedAt": "2026-10-13T15:14:36.010521+00:00",
+      "load": [
+        16.466796875,
+        15.0830078125,
+        12.822265625
+      ],
+      "stdout": "/tmp/codex-124/schema.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 0.15348541698767804,
+      "endedAt": "2026-10-13T15:14:36.164173+00:00"
+    },
+    {
+      "name": "final-review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 99965,
+      "pgid": 99965,
+      "identity": "99965 99965 Tue Oct 13 08:15:25 2026     node /opt/homebrew/bin/npm run review",
+      "startedAt": "2026-10-13T15:15:25.583427+00:00",
+      "load": [
+        12.53564453125,
+        14.2939453125,
+        12.662109375
+      ],
+      "stdout": "/tmp/codex-124/final-review.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 53.258968457987066,
+      "endedAt": "2026-10-13T15:16:18.842921+00:00"
+    },
+    {
+      "name": "final-knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-cards124-flow",
+      "pid": 6351,
+      "pgid": 6351,
+      "identity": "6351  6351 Tue Oct 13 08:16:51 2026     node /opt/homebrew/bin/npm run knip",
+      "startedAt": "2026-10-13T15:16:51.915864+00:00",
+      "load": [
+        9.20458984375,
+        13.09130859375,
+        12.3798828125
+      ],
+      "stdout": "/tmp/codex-124/final-knip.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 3.4174289160000626,
+      "endedAt": "2026-10-13T15:16:55.333421+00:00"
+    }
+  ],
+  "preExisting": null
+}

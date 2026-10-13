@@ -1,3 +1,6 @@
+import { event } from "../../engine/dsl/builders";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { draw } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 76,
   art: { x: 0, y: 0, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [event(draw(3))],
+  verifiedText: expectedVerifiedText("Draw 3 cards."),
 });
