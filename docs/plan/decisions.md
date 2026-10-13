@@ -621,17 +621,20 @@ else depends on the count.
   audits, sage retrospectives, browser QA and screenshots, judged card QA)
   run as subagents of the session that needs them, one at a time within it.
 - **Readiness is the concurrency check.** A session claims only from
-  `bd ready`. Beads that would change the same code non-additively carry a
-  serialization edge, so two ready beads collide at most on additive edits to
-  shared registries
-  ([workflow § Serialization edges](workflow.md#serialization-edges)).
+  `bd ready`. Serialization limits costly conflicts while preserving useful
+  parallel work. Semantic dependency edges retain real implementation
+  prerequisites; serialization edges order incompatible changes to the same
+  behavior. Independent functions or cases in a shared
+  file can proceed together; ordinary textual conflicts are resolved during
+  integration ([workflow § Serialization edges](workflow.md#serialization-edges)).
   Tollgate validates concurrent candidates in its speculative queue. A
   candidate that collides with a bead that landed first is rebased by its own
   session with `tg update`.
 - **Areas.** Every bead's description has an `Areas:` line listing the
   directories and files it may change. Areas bound the subagent's scope: a
   change outside them stops the subagent for its session's decision. Areas
-  also decide the bead's serialization edges.
+  identify possible overlap; exact incompatible behavior determines whether
+  the bead needs a serialization edge.
 - **Shared duties are beads.** Filing a phase, a retrospective, and the fix
   for a red release run are beads, so exactly one session claims each.
 - **Every bead starts from landed code.** A session waits for its candidate

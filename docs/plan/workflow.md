@@ -31,7 +31,7 @@ Where they differ, the [decisions](decisions.md) win, then AGENTS.md.
   [Dispatch](#dispatch).
 - **Sessions coordinate only through Beads and Tollgate.** Claims keep them
   off each other's beads, and [serialization
-  edges](#serialization-edges) keep ready beads from conflicting. A session
+  edges](#serialization-edges) limit costly integration conflicts. A session
   never touches another session's bead, worktree, candidate, or processes.
 - **The Hive project is `dreamtides_web`.** Track T beads are filed in it,
   even though they change `~/tollgate` ([D45](decisions.md#d45-tollgate-track)).
@@ -206,7 +206,8 @@ that claims a filing bead files the phase as below and closes it.
    - The gate task depends on the mason task and on the previous phase's
      gate task.
    - Then add [serialization edges](#serialization-edges) between beads the
-     graph leaves unordered that would change the same code, against this
+     graph leaves unordered that would make incompatible changes to the same
+     behavior, against this
      phase's beads and every other unfinished bead.
 
    Inspect the edges with `hbd show <id> --json`, and run `hbd dep cycles`.
@@ -490,21 +491,30 @@ hbd dep cycles || exit 1
 
 ### Serialization edges
 
-Several sessions claim ready beads at once, so `bd ready` must never offer two
-beads that conflict. A **serialization edge** is an ordinary blocking edge
-that orders two beads the task graph leaves unordered because both would
-change the same code.
+Serialization limits costly merge conflicts while preserving independent
+progress. Ordinary textual conflicts are an accepted integration cost. A
+**serialization edge** orders unfinished tasks whose proposed changes are
+incompatible in the same behavior, such as competing rewrites of a cost
+calculation, the same trigger branch, or the same component state flow.
+Record the exact function/case and the incompatibility; a common filename,
+broad Areas grant, or possible textual collision alone does not justify an
+edge. This project rule takes precedence over generic skill advice to order
+substantive edits anywhere in the same logic file.
 
-**Add an edge** when two unfinished beads would change the same code
-non-additively:
+**Keep real implementation prerequisites.** A consumer waits for the API or
+runtime semantics it actually needs through a semantic dependency edge.
+These task-graph dependencies are distinct from serialization edges and stay
+until the prerequisite is completed or an explicit scope/design change
+establishes that the consumer does not require it. Final acceptance joins, phase gates,
+frozen pools and strength requirements retain their full prerequisites.
+When independent preparation can finish earlier, give it a bounded scope
+and keep full acceptance at its original join.
 
-- the same function, component, or entity module;
-- a substantive edit to the same logic file, such as
-  `src/engine/effects/interpreter.ts`, `src/engine/triggers/matcher.ts`, or
-  `src/engine/rules/costs.ts`;
-- the same screen, view model, or journey site.
-
-**Add no edge** for additive edits to shared registries and hub files:
+**Allow independent work in shared files**, including separate predicates,
+switch cases, fields and named helpers, when their behavior composes. This
+applies to `interpreter.ts`, `matcher.ts`, selectors, state/view/save plumbing
+and UI files as well as registries. Preserve sibling behavior and public
+interfaces when integrating. Typical independent additions include:
 
 - a new union member in `src/engine/dsl/types.ts` or a new builder;
 - an entry in `src/engine/effects/primitives/index.ts` or another
@@ -514,9 +524,15 @@ non-additively:
 - hub areas (`engine hubs`, `fold hubs`) taken only for such additions, and
   `registration hubs`, which grants only such additions.
 
-When two sessions collide there, Tollgate reports a merge conflict on the
+When two sessions collide textually, Tollgate reports a merge conflict on the
 later candidate, and its session rebases with `tg update`
-([Updating a worktree](#updating-a-worktree)). When unsure, add the edge.
+([Updating a worktree](#updating-a-worktree)), preserving both changes and
+running checks for their combined behavior. When overlap is uncertain,
+inspect the proposed behaviors and narrow their writable scopes. Add an
+edge only for an identified prerequisite or incompatible edit; do not trade
+an entire execution lane for an unspecified conflict risk. If later research
+finds a genuine incompatibility, coordinate the affected owners and order
+that bounded work before editing it.
 
 **How to add one:**
 
@@ -537,6 +553,13 @@ progress.
 or superseded, remove the edge (`hbd dep remove`) and add it to the
 replacement bead where the overlap remains. A cancelled task-graph
 prerequisite still means repair.
+
+**Maintain the current graph.** Reassess ordering when scopes narrow, source
+lands, or a task moves into QA/review. Remove an obsolete ordering edge only
+after inspecting both current scopes and freshly confirming that the
+dependent is open and unassigned. Record the rationale and retained semantic
+and acceptance edges; inspect cycles and readiness afterward. Coordinate
+with an active dependent's owner before changing its scope or prerequisites.
 
 ### Selection order
 
@@ -812,8 +835,9 @@ When a subagent returns:
 - **Conflicted** with the queue prefix or with a bead another session
   landed first: the session updates the worktree
   ([Updating a worktree](#updating-a-worktree)), then resubmits. Repeated
-  conflicts on the same file with the same bead mean a missing
-  [serialization edge](#serialization-edges); add it for later beads.
+  conflicts require a bounded cause check. Order later beads only when the
+  failures show incompatible edits to the same behavior; independent textual
+  collisions are handled by the ordinary update and validation procedure.
 
 **Every bead starts from landed code.** Never base a worktree on an
 unpromoted commit.

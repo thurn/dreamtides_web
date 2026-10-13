@@ -32,6 +32,15 @@ their worktrees with `tg --no-launch update` (docs/plan/workflow.md
   implementation subagent at a time; sessions run side by side as far as the
   bead graph's serialization edges allow (docs/plan/workflow.md). Tollgate
   owns regeneration, certified promotion, and the leased remote push.
+- Serialization aims to limit costly merge conflicts, not prevent every merge
+  conflict. Keep independent work runnable, including bounded changes in
+  different functions or independent cases of a shared file. Add ordering for
+  a real implementation prerequisite or incompatible changes to the same
+  behavior; a shared filename or possible textual conflict alone is insufficient.
+  Record the precise overlap. Owners resolve ordinary integration conflicts
+  with `tg --no-launch update` and validate the combined behavior. Preserve
+  semantic prerequisites and final acceptance joins. Project-specific rules in
+  docs/plan/workflow.md govern this tradeoff over generic skill guidance.
 - Tollgate's local gate is the only CI. Never add GitHub Actions workflows.
 - Request independent review from the other model family than the session
   that implemented the work (the Codex CLI for Claude Code sessions, the

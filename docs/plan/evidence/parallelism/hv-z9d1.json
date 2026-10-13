@@ -1,0 +1,514 @@
+{
+  "bead": "hv-z9d1",
+  "base": "9258bdb90f8c61d6d1004b2e398ff3b76f02b279",
+  "proposal_at": "2026-10-13T23:04:39.764234+00:00",
+  "targets": [
+    {
+      "id": "hv-umm2.235",
+      "title": "5.5 [prim-draw-trigger-filter] primitive drawTriggerFilter (Dreamsigns: battle effects: cost modifiers and nth-in-turn) (core-review)",
+      "remove": [
+        "hv-umm2.233"
+      ],
+      "rationale": "Draw filtering adds an optional predicate to the draw trigger and its existing builder/matchKind draw branch; 233 owns copy matching and hand-copy context. These separate trigger branches compose.",
+      "scope": "Limit matcher behavior changes to the draw case and its named predicate. DSL/builder additions and exhaustive new-union handling are additive; preserve copy handling, counters, existing draw ordering and all other trigger branches.",
+      "before": {
+        "description": "docs/plan/phase-5-content.md \u00a7 5.5 bead prim-draw-trigger-filter (primitive). Inventory: docs/plan/evidence/content-inventory.json entity records selected by the exact UUIDs filed in this bead. This native bead's entity scope, Areas, acceptance and dependency graph govern execution; generated beads are the current planning projection. The phase5_key metadata preserves this bead's filing/scenario key. Follow \u00a7 Bead recipe steps 1\u20139 exactly. Battle dreamsign abilities run as emblem abilities; dreamsigns named in C2\u2013C4, C10, C11 and C17 follow those entries. Entities (1, weight 2.3): 49990864-1db0-4c08-91ae-40a1f04223e4 (dreamsign). Introduces drawTriggerFilter (dsl, src/engine/dsl/types.ts). Scenario module, only if specs are needed: src/content/specs/prim-draw-trigger-filter.scenarios.ts (slug prim-draw-trigger-filter), registered in src/content/specs/index.ts. Fallout hints: Trigger.\nAreas: src/engine/effects/primitives/contracts/draw-trigger-filter.contracts.ts, src/content/dreamsigns/algae-49990864.ts, src/engine/dsl/triggers.ts, src/engine/dsl/types.ts, src/engine/triggers/matcher.ts, engine hubs, fallout: Trigger, src/content/specs/prim-draw-trigger-filter.scenarios.ts, src/content/specs/index.ts, docs/rules.md, docs/plan/evidence/rules-decisions/, docs/plan/evidence/card-issues/, docs/plan/evidence/qa-ledger/<this bead>.jsonl, docs/plan/evidence/friction/<this bead>.json, docs/plan/evidence/pre-existing/<this bead>.md",
+        "acceptance_criteria": "Every battle effect in scope is an emblem ability; a dreamsign with journey text clears pending and sets verifiedText only once its 5.6 bead has landed, and otherwise here; drawTriggerFilter is registered with primitive tests on synthetic cards in its plain contract module; ambiguities resolved via the ladder with docs/rules.md text and RD files, card problems logged as card issues; scenario specs only where behavior exceeds primitive composition (D20), all in src/content/specs/prim-draw-trigger-filter.scenarios.ts; npm run fuzz:engine -- --games 300 --weight-uuids <bead entities> passes; card-lab sweep through ?goto=card-lab&dreamsign=<uuid> (as=player and as=enemy) has no unfixed fail; judged QA per D21 (every entity introducing a new prompt kind, status indicator or visual effect, plus the per-entity SHA-256 10% sample) recorded in docs/plan/evidence/qa-ledger/<bead-id>.jsonl; npm run review passes; coverage gate passes.",
+        "blocks": [
+          "hv-umm2.229",
+          "hv-umm2.581",
+          "hv-umm2.460",
+          "hv-umm2.392",
+          "hv-umm2.233",
+          "hv-umm2.228",
+          "hv-umm2.560",
+          "hv-umm2.230",
+          "hv-umm2.450",
+          "hv-umm2.556",
+          "hv-umm2.536",
+          "hv-umm2.534",
+          "hv-umm2.101",
+          "hv-umm2.72",
+          "hv-umm2.573",
+          "hv-umm2.474",
+          "hv-umm2.532",
+          "hv-umm2.562"
+        ],
+        "status": "open",
+        "assignee": null
+      },
+      "after_description": "docs/plan/phase-5-content.md \u00a7 5.5 bead prim-draw-trigger-filter (primitive). Inventory: docs/plan/evidence/content-inventory.json entity records selected by the exact UUIDs filed in this bead. This native bead's entity scope, Areas, acceptance and dependency graph govern execution; generated beads are the current planning projection. The phase5_key metadata preserves this bead's filing/scenario key. Follow \u00a7 Bead recipe steps 1\u20139 exactly. Battle dreamsign abilities run as emblem abilities; dreamsigns named in C2\u2013C4, C10, C11 and C17 follow those entries. Entities (1, weight 2.3): 49990864-1db0-4c08-91ae-40a1f04223e4 (dreamsign). Introduces drawTriggerFilter (dsl, src/engine/dsl/types.ts). Scenario module, only if specs are needed: src/content/specs/prim-draw-trigger-filter.scenarios.ts (slug prim-draw-trigger-filter), registered in src/content/specs/index.ts. Fallout hints: Trigger.\nAreas: src/engine/effects/primitives/contracts/draw-trigger-filter.contracts.ts, src/content/dreamsigns/algae-49990864.ts, src/engine/dsl/triggers.ts, src/engine/dsl/types.ts, src/engine/triggers/matcher.ts, engine hubs, fallout: Trigger, src/content/specs/prim-draw-trigger-filter.scenarios.ts, src/content/specs/index.ts, docs/rules.md, docs/plan/evidence/rules-decisions/, docs/plan/evidence/card-issues/, docs/plan/evidence/qa-ledger/<this bead>.jsonl, docs/plan/evidence/friction/<this bead>.json, docs/plan/evidence/pre-existing/<this bead>.md\n\nExecution scope under human-authorized hv-z9d1 conflict policy (supersedes file-wide serialization and one-session ordering text above): Limit matcher behavior changes to the draw case and its named predicate. DSL/builder additions and exhaustive new-union handling are additive; preserve copy handling, counters, existing draw ordering and all other trigger branches. No semantic prerequisite, UUID ownership or original acceptance is waived. Ordinary independent textual conflicts use parent-only tg update and combined validation. An actual incompatible rewrite discovered later requires owner coordination before that rewrite, rather than a blanket file edge."
+    },
+    {
+      "id": "hv-umm2.514",
+      "title": "5.2 primitive: condition on the top card of a deck (core-review)",
+      "remove": [
+        "hv-umm2.233",
+        "hv-umm2.588"
+      ],
+      "rationale": "A top-of-deck condition reads deck[0] through the existing condition evaluator. It neither copies cards nor ranks battlefield characters. Interpreter filename overlap is not an API dependency.",
+      "scope": "Own only the topOfDeck Condition member, builder and matching condition branch (current owning source src/engine/dsl/conditions.ts), plus exact empty-deck-safe draw composition already in original acceptance. Other condition/interpreter branches and existing read interfaces are preserved. The original stale conditionHolds location in interpreter.ts is a read-only consumer except necessary additive new-case fallout.",
+      "before": {
+        "description": "docs/plan/phase-5-content.md \u00a7 5.2 primitive bead, discovered by cards-38 (hv-umm2.150). Prism Caller (1521c06c): '\u25b8Materialized: If the top card of your deck is a \u22642\u25cf cost character, materialize it. Otherwise, draw that card.' No condition tests the top card (cardsIn counts the whole zone), and a plain draw(1) as the otherwise branch would cause Fatigue on an empty deck, which RD-hv-umm2.59-2 rules out. Add a Condition { cond: 'topOfDeck', player, filter } holding when the deck is non-empty and its top card matches (emitting nothing), with a builder and conditionHolds support; check what it reveals (the following effect shows the card either way) and keep hidden information hidden in views/determinization; provide or document the empty-deck-safe draw for the otherwise branch. Ladder decision + rules.md/RD. Entities: none. Areas: src/engine/dsl/types.ts (Condition member), src/engine/dsl/builders.ts or triggers.ts (builder), src/engine/effects/interpreter.ts (conditionHolds case only), src/engine/effects/primitives/contracts/top-of-deck-condition.contracts.ts (new), engine hubs, docs/rules.md, docs/plan/evidence/rules-decisions/, own friction/measurements/pre-existing.",
+        "acceptance_criteria": "The condition holds exactly when the deck is non-empty and its top card matches the filter as read on resolution; the otherwise branch draws without Fatigue on an empty deck; nothing hidden leaks in views or determinizations; contracts fail when the check is wrong; rules.md and RD; focused contracts, review, knip and a bounded fuzz pass; Codex core review; one Conventional Commit landed.",
+        "blocks": [
+          "hv-umm2.553",
+          "hv-roz5",
+          "hv-umm2.233",
+          "hv-umm2.588",
+          "hv-umm2.585",
+          "hv-umm2.513",
+          "hv-umm2.460",
+          "hv-umm2.560",
+          "hv-07c9",
+          "hv-umm2.576",
+          "hv-myhi",
+          "hv-umm2.556",
+          "hv-vnue",
+          "hv-adeo",
+          "hv-umm2.573"
+        ],
+        "status": "open",
+        "assignee": null
+      },
+      "after_description": "docs/plan/phase-5-content.md \u00a7 5.2 primitive bead, discovered by cards-38 (hv-umm2.150). Prism Caller (1521c06c): '\u25b8Materialized: If the top card of your deck is a \u22642\u25cf cost character, materialize it. Otherwise, draw that card.' No condition tests the top card (cardsIn counts the whole zone), and a plain draw(1) as the otherwise branch would cause Fatigue on an empty deck, which RD-hv-umm2.59-2 rules out. Add a Condition { cond: 'topOfDeck', player, filter } holding when the deck is non-empty and its top card matches (emitting nothing), with a builder and conditionHolds support; check what it reveals (the following effect shows the card either way) and keep hidden information hidden in views/determinization; provide or document the empty-deck-safe draw for the otherwise branch. Ladder decision + rules.md/RD. Entities: none. Areas: src/engine/dsl/types.ts (Condition member), src/engine/dsl/builders.ts or triggers.ts (builder), src/engine/effects/interpreter.ts (conditionHolds case only), src/engine/effects/primitives/contracts/top-of-deck-condition.contracts.ts (new), engine hubs, docs/rules.md, docs/plan/evidence/rules-decisions/, own friction/measurements/pre-existing.\n\nExecution scope under human-authorized hv-z9d1 conflict policy (supersedes file-wide serialization and one-session ordering text above): Own only the topOfDeck Condition member, builder and matching condition branch (current owning source src/engine/dsl/conditions.ts), plus exact empty-deck-safe draw composition already in original acceptance. Other condition/interpreter branches and existing read interfaces are preserved. The original stale conditionHolds location in interpreter.ts is a read-only consumer except necessary additive new-case fallout. No semantic prerequisite, UUID ownership or original acceptance is waived. Ordinary independent textual conflicts use parent-only tg update and combined validation. An actual incompatible rewrite discovered later requires owner coordination before that rewrite, rather than a blanket file edge."
+    },
+    {
+      "id": "hv-umm2.583",
+      "title": "5.5 Select a random battlefield character without targeting (core-review)",
+      "remove": [
+        "hv-umm2.236",
+        "hv-umm2.233"
+      ],
+      "rationale": "Non-target random battlefield resolution is a separate CharacterRef case/helper. Rule modifiers add player rules/continuous changes; copy-trigger transport handles copy events. No API from either task is needed.",
+      "scope": "Implement one non-target random CharacterRef alternative and its named resolver. Any continuous classification change handles only this new alternative; preserve rule-modifier interpretation, copy context and all existing reference cases. Generic resolver/layer rewrites require a new overlap audit.",
+      "before": {
+        "description": "Intended project dreamtides_web. Source-first prerequisite from owned hv-umm2.244, clean basee09219304f98ffb35832a7de7052ceb35487e09a. Sole helper returned terminal source-free audit; no source/evidence edit, heavy/browser run, candidate or live provider. Proof /tmp/codex-01a130c8-dreamsign244/source-free-checkpoint.json. Follow Phase5 recipe, UUID/branded identities, event-fold intents and reconstructible UUID logs, data tunables, UI copy modules, synthetic observable contracts/D19, at most oneD20module and D21. Core cold independent gpt-5.6-sol Codex CLI under temporary routing through2026-10-14T01:00Z. Exact native scope/serialization precedes behavior edits. No deployment/image commits/shared configuration/other project work. Introduce exactly one resolution-time CharacterRef/subject form and public builder selecting uniformly from live matching battlefield physical characters. Consumer396da354-9f4d-4ae7-a9dc-02d1330a2678 Crow: when you play an event, a random character gains1spark untilEndOfTurn. Unqualified character includes either side and figments; non-targeted random choice includes target-protected characters. Current CharacterRef onlytarget/all/self/subject/supported; randomIn onlydeck/hand/void. Use existing named selection RNG with recorded draw event, no player prompt; no candidates means no random draw/effect. Preserve runtime snapshots and RNG replay/idempotent refusal. Reject unsupported static random use explicitly instead of consuming RNG in views/layers. Audit every actual CharacterRef consumer/fallout first. Author only Crow leaf. Prospective245 Gold/Black Feather consumers can reuse this form; their ownership is not transferred.\nAreas: src/engine/dsl/types.ts and builders.ts (new reference/builder only), src/engine/effects/interpreter.ts (non-target random resolution only), src/engine/continuous/layers.ts and resolve.ts (reference classification/static rejection only as required), src/engine/effects/types.ts and primitives/gain-spark.ts (typed resolving ref plumbing only), src/engine/effects/primitives/contracts/random-character-reference.contracts.ts, src/content/dreamsigns/crow-396da354.ts, engine hubs and registration hubs (additive or precise mechanical new-shape fallout only beyond named bodies), optional one src/content/specs/random-character-reference.scenarios.ts, docs/rules.md and additive own RD/cardissues, own friction/measurements/pre-existing/QA-ledger. No unrelated engine/policy/UI/QA runner/inventory edits without exact widening/serialization.",
+        "acceptance_criteria": "Public non-targeted uniform random live-character form covers exactselector/controller/figment rules, includes target-protected characters, draws namedRNG only at resolution, has stable replay and no candidate/no draw behavior. Both-seat synthetic contracts with duplicate names/distinct physicalIDs, empty/single/multi pools and scripted RNG picks, resolution-time board changes, invalid static use, rollback/reload/RNG replay/stale/concurrent/double-intent paths, meaningful wrong-side/non-target/no-op mutation witnesses. Crow event-only trigger including copied-not-played exclusion and matching temporary gain expiry authored/verified. Weighted300 Crow smoke, preflight/sweep both seats, proportional desktop/mobile live workflow with persisted UUIDlogs/geometry/emptyCaps; focused/review/Knip and full only actual cross-cutting admission. Cold Sol core review required; no statistical thresholds/default-policy/private data gates.",
+        "blocks": [
+          "hv-umm2.585",
+          "hv-umm2.236",
+          "hv-umm2.453",
+          "hv-umm2.560",
+          "hv-adeo",
+          "hv-umm2.233"
+        ],
+        "status": "open",
+        "assignee": null
+      },
+      "after_description": "Intended project dreamtides_web. Source-first prerequisite from owned hv-umm2.244, clean basee09219304f98ffb35832a7de7052ceb35487e09a. Sole helper returned terminal source-free audit; no source/evidence edit, heavy/browser run, candidate or live provider. Proof /tmp/codex-01a130c8-dreamsign244/source-free-checkpoint.json. Follow Phase5 recipe, UUID/branded identities, event-fold intents and reconstructible UUID logs, data tunables, UI copy modules, synthetic observable contracts/D19, at most oneD20module and D21. Core cold independent gpt-5.6-sol Codex CLI under temporary routing through2026-10-14T01:00Z. Exact native scope/serialization precedes behavior edits. No deployment/image commits/shared configuration/other project work. Introduce exactly one resolution-time CharacterRef/subject form and public builder selecting uniformly from live matching battlefield physical characters. Consumer396da354-9f4d-4ae7-a9dc-02d1330a2678 Crow: when you play an event, a random character gains1spark untilEndOfTurn. Unqualified character includes either side and figments; non-targeted random choice includes target-protected characters. Current CharacterRef onlytarget/all/self/subject/supported; randomIn onlydeck/hand/void. Use existing named selection RNG with recorded draw event, no player prompt; no candidates means no random draw/effect. Preserve runtime snapshots and RNG replay/idempotent refusal. Reject unsupported static random use explicitly instead of consuming RNG in views/layers. Audit every actual CharacterRef consumer/fallout first. Author only Crow leaf. Prospective245 Gold/Black Feather consumers can reuse this form; their ownership is not transferred.\nAreas: src/engine/dsl/types.ts and builders.ts (new reference/builder only), src/engine/effects/interpreter.ts (non-target random resolution only), src/engine/continuous/layers.ts and resolve.ts (reference classification/static rejection only as required), src/engine/effects/types.ts and primitives/gain-spark.ts (typed resolving ref plumbing only), src/engine/effects/primitives/contracts/random-character-reference.contracts.ts, src/content/dreamsigns/crow-396da354.ts, engine hubs and registration hubs (additive or precise mechanical new-shape fallout only beyond named bodies), optional one src/content/specs/random-character-reference.scenarios.ts, docs/rules.md and additive own RD/cardissues, own friction/measurements/pre-existing/QA-ledger. No unrelated engine/policy/UI/QA runner/inventory edits without exact widening/serialization.\n\nExecution scope under human-authorized hv-z9d1 conflict policy (supersedes file-wide serialization and one-session ordering text above): Implement one non-target random CharacterRef alternative and its named resolver. Any continuous classification change handles only this new alternative; preserve rule-modifier interpretation, copy context and all existing reference cases. Generic resolver/layer rewrites require a new overlap audit. No semantic prerequisite, UUID ownership or original acceptance is waived. Ordinary independent textual conflicts use parent-only tg update and combined validation. An actual incompatible rewrite discovered later requires owner coordination before that rewrite, rather than a blanket file edge."
+    },
+    {
+      "id": "hv-umm2.588",
+      "title": "Select a highest-spark controlled character (core-review)",
+      "remove": [
+        "hv-umm2.587"
+      ],
+      "rationale": "Highest-spark selection reads current effective battlefield spark; abandoned-subject spark retains a scalar after departure. The former does not consume the latter. Separate resolving forms/helpers compose, including with random reference 583.",
+      "scope": "Implement one highest-spark reference/bound with a distinct named predicate/resolver; preserve random-reference and captured-subject-spark cases. Original D10 selection/tie/targeting audit and any required prompt protocol remain mandatory. No common CharacterRef/ValueExpr dispatcher redesign.",
+      "before": {
+        "description": "Missing selection required by Candle UUID89c83d7e-5617-49b4-b6cd-214680fe0627: when an event is played, the controlled character with highest effective spark gains1. Current CharacterRef only target/all/self/subject/supported; CharacterSelector has absolute spark bounds but no live maximum comparator, and there is no maximum-spark ValueExpr/reference. A fixed threshold, first rank slot, all characters or all tied leaders changes the printed singular instruction. Existing583 supplies uniform non-target random characters, not highest-spark semantics. Introduce exactly the smallest supported highest-spark controlled-character form or resolving bound after full source/prototype/normative/D10 audit. BEFORE implementation, settle when ranking is read, effective spark incl figments/modifiers/counters, empty board, controller changes and all ties, and whether selection targets; docs/rules.md currently provides no highest/tie clause in the source audit. Do not silently invent tie selection or target-protection semantics. Reuse existing choice/RNG/target protocol only when justified by D10; any new prompt/surface gets precise registration and D21 QA. No generic sorting/query framework. Original245 authors Candle after this capability.\nAreas provisionally: src/engine/dsl/types.ts/builders.ts (one reference/bound), selectors.ts only a live maximum predicate if that chosen design requires it, effects/interpreter.ts (owning resolution/preparation only), effects/types.ts and primitives/gain-spark.ts (precise typed plumbing); continuous/layers.ts and resolve.ts only static-use classification/rejection as required; new contracts/highest-spark-reference.contracts.ts under500lines; exact mechanical CharacterRef consumers/importers and additive registration hubs only after listing and fresh admission; docs/rules.md additive settled maximum/tie/selection normative contract and own RD, additive engine-design row if needed, own friction/measurements/pre-existing/QA ledger. No unrelated engine/state/payment/privacy/UI/harness/catalog/inventory/config/body edits. Architecture/fixture/copy/role paths require actual proposal/serialization first. Source-free parent245 at e926449abd74f5d8c85beb62ebac2f58eb2d3ad6 has all five original Dreamsigns pending, no helper, source/tests/evidence/QA/commit/candidate. Fresh admitted142/intended18 unfinished audit found no equivalent capability. Canonical data/UUIDs remain immutable and original245 retains every entity and full acceptance. Stage1 actual API/importer/fallout/failure/QA proposal before writes; parent native admission and serialized owning bodies precede effects. One helper/own fresh Tollgate worktree/one detailed Conventional Commit. Core fresh cold read-only gpt-5.6-sol CLI under temporary user routing through2026-10-14T01Z, then normal routing. Focused/review/Knip/coverage/schema and meaningful targeted synthetic or entity fuzz/QA evidence as admitted; full under two-worker heavy lock when actual cross-cutting state/schema scope requires. Exact certification/promotion/cleanup/Doctor/release state owed. No deployment/images/config/generator/other project edits or invented successful witnesses.",
+        "acceptance_criteria": "D10 source/prototype/rules-backed current contract for highest effective spark, ties, selection/targetability and timing documented and implemented exactly once; public synthetic tests pin both controllers, unique and multiple leaders, all rank positions, modifiers/counters/gains/figments, empty board, ranking changes before resolution, source/controller changes and any chosen target/recheck behavior, replay/error/rollback/stale/sequential competing cases as applicable. Reject unsupported static use; no arbitrary/default-algorithm/timing/UI-string assertions. A counterfactual choosing a lower or all tied characters fails. All required actual checks/QA/new-surface registration and cold core review dispositions complete; native exact promotion/cleanup verified. Original245 five UUIDs remain intact.",
+        "blocks": [
+          "hv-umm2.587",
+          "hv-umm2.585"
+        ],
+        "status": "open",
+        "assignee": null
+      },
+      "after_description": "Missing selection required by Candle UUID89c83d7e-5617-49b4-b6cd-214680fe0627: when an event is played, the controlled character with highest effective spark gains1. Current CharacterRef only target/all/self/subject/supported; CharacterSelector has absolute spark bounds but no live maximum comparator, and there is no maximum-spark ValueExpr/reference. A fixed threshold, first rank slot, all characters or all tied leaders changes the printed singular instruction. Existing583 supplies uniform non-target random characters, not highest-spark semantics. Introduce exactly the smallest supported highest-spark controlled-character form or resolving bound after full source/prototype/normative/D10 audit. BEFORE implementation, settle when ranking is read, effective spark incl figments/modifiers/counters, empty board, controller changes and all ties, and whether selection targets; docs/rules.md currently provides no highest/tie clause in the source audit. Do not silently invent tie selection or target-protection semantics. Reuse existing choice/RNG/target protocol only when justified by D10; any new prompt/surface gets precise registration and D21 QA. No generic sorting/query framework. Original245 authors Candle after this capability.\nAreas provisionally: src/engine/dsl/types.ts/builders.ts (one reference/bound), selectors.ts only a live maximum predicate if that chosen design requires it, effects/interpreter.ts (owning resolution/preparation only), effects/types.ts and primitives/gain-spark.ts (precise typed plumbing); continuous/layers.ts and resolve.ts only static-use classification/rejection as required; new contracts/highest-spark-reference.contracts.ts under500lines; exact mechanical CharacterRef consumers/importers and additive registration hubs only after listing and fresh admission; docs/rules.md additive settled maximum/tie/selection normative contract and own RD, additive engine-design row if needed, own friction/measurements/pre-existing/QA ledger. No unrelated engine/state/payment/privacy/UI/harness/catalog/inventory/config/body edits. Architecture/fixture/copy/role paths require actual proposal/serialization first. Source-free parent245 at e926449abd74f5d8c85beb62ebac2f58eb2d3ad6 has all five original Dreamsigns pending, no helper, source/tests/evidence/QA/commit/candidate. Fresh admitted142/intended18 unfinished audit found no equivalent capability. Canonical data/UUIDs remain immutable and original245 retains every entity and full acceptance. Stage1 actual API/importer/fallout/failure/QA proposal before writes; parent native admission and serialized owning bodies precede effects. One helper/own fresh Tollgate worktree/one detailed Conventional Commit. Core fresh cold read-only gpt-5.6-sol CLI under temporary user routing through2026-10-14T01Z, then normal routing. Focused/review/Knip/coverage/schema and meaningful targeted synthetic or entity fuzz/QA evidence as admitted; full under two-worker heavy lock when actual cross-cutting state/schema scope requires. Exact certification/promotion/cleanup/Doctor/release state owed. No deployment/images/config/generator/other project edits or invented successful witnesses.\n\nExecution scope under human-authorized hv-z9d1 conflict policy (supersedes file-wide serialization and one-session ordering text above): Implement one highest-spark reference/bound with a distinct named predicate/resolver; preserve random-reference and captured-subject-spark cases. Original D10 selection/tie/targeting audit and any required prompt protocol remain mandatory. No common CharacterRef/ValueExpr dispatcher redesign. No semantic prerequisite, UUID ownership or original acceptance is waived. Ordinary independent textual conflicts use parent-only tg update and combined validation. An actual incompatible rewrite discovered later requires owner coordination before that rewrite, rather than a blanket file edge."
+    },
+    {
+      "id": "hv-umm2.97",
+      "title": "5.2 [prim-stack-selector-bounds] primitive stackSelectorBounds (cards: Prevent and other Interrupts) (core-review)",
+      "remove": [
+        "hv-umm2.104"
+      ],
+      "rationale": "Stack selector bounds extend matchesStackItem; nth-cost modifiers change cost/history qualification. Existing bound readers can be used without the nth-cost API. Shared selectors.ts does not imply common behavior.",
+      "scope": "Limit selector behavior to stack-item bounds and the existing bound reader interface; preserve character/CardFilter predicates and cost/history calculation. DSL/builder additions and new-member exhaustion fallout are additive. No generic selector/condition/cost refactor.",
+      "before": {
+        "description": "docs/plan/phase-5-content.md \u00a7 5.2 bead prim-stack-selector-bounds (primitive). Inventory: docs/plan/evidence/content-inventory.json entity records selected by the exact UUIDs filed in this bead. This native bead's entity scope, Areas, acceptance and dependency graph govern execution; generated beads are the current planning projection. The phase5_key metadata preserves this bead's filing/scenario key. Follow \u00a7 Bead recipe steps 1\u20139 exactly. Entities (3, weight 6): 0fde04ac-8552-45ce-83a3-5ab2384b36da (card), 6196d53d-a226-490d-a3bb-159a78d1b2b7 (card), 99101fce-f2b4-4032-b999-317ce3e4a6dd (card). Introduces stackSelectorBounds (dsl, src/engine/dsl/types.ts). Scenario module, only if specs are needed: src/content/specs/prim-stack-selector-bounds.scenarios.ts (slug prim-stack-selector-bounds), registered in src/content/specs/index.ts. Fallout hints: StackItemSelector.\nAreas: src/engine/effects/primitives/contracts/stack-selector-bounds.contracts.ts, src/content/cards/dune-interceptor-99101fce.ts, src/content/cards/null-sphere-6196d53d.ts, src/content/cards/toll-of-passage-0fde04ac.ts, src/engine/dsl/builders.ts, src/engine/dsl/selectors.ts, src/engine/dsl/types.ts, engine hubs, fallout: StackItemSelector, src/content/specs/prim-stack-selector-bounds.scenarios.ts, src/content/specs/index.ts, docs/rules.md, docs/plan/evidence/rules-decisions/, docs/plan/evidence/card-issues/, docs/plan/evidence/qa-ledger/<this bead>.jsonl, docs/plan/evidence/friction/<this bead>.json, docs/plan/evidence/pre-existing/<this bead>.md",
+        "acceptance_criteria": "Every entity in scope has abilities (base and amplified where amplifiedText exists) and verifiedText, none pending; stackSelectorBounds is registered with primitive tests on synthetic cards in its plain contract module; ambiguities resolved via the ladder with docs/rules.md text and RD files, card problems logged as card issues; scenario specs only where behavior exceeds primitive composition (D20), all in src/content/specs/prim-stack-selector-bounds.scenarios.ts; npm run fuzz:engine -- --games 300 --weight-uuids <bead entities> passes; card-lab sweep of the bead's cards (base and amplified, as=player and as=enemy) has no unfixed fail; judged QA per D21 (every entity introducing a new prompt kind, status indicator or visual effect, plus the per-entity SHA-256 10% sample) recorded in docs/plan/evidence/qa-ledger/<bead-id>.jsonl; npm run review passes; coverage gate passes.",
+        "blocks": [
+          "hv-umm2.91",
+          "hv-umm2.104",
+          "hv-umm2.485",
+          "hv-umm2.495",
+          "hv-umm2.96",
+          "hv-umm2.88",
+          "hv-umm2.501",
+          "hv-umm2.336",
+          "hv-umm2.107",
+          "hv-umm2.556",
+          "hv-umm2.453",
+          "hv-umm2.452",
+          "hv-umm2.573",
+          "hv-umm2.581",
+          "hv-umm2.99",
+          "hv-umm2.76",
+          "hv-umm2.108",
+          "hv-umm2.560"
+        ],
+        "status": "open",
+        "assignee": null
+      },
+      "after_description": "docs/plan/phase-5-content.md \u00a7 5.2 bead prim-stack-selector-bounds (primitive). Inventory: docs/plan/evidence/content-inventory.json entity records selected by the exact UUIDs filed in this bead. This native bead's entity scope, Areas, acceptance and dependency graph govern execution; generated beads are the current planning projection. The phase5_key metadata preserves this bead's filing/scenario key. Follow \u00a7 Bead recipe steps 1\u20139 exactly. Entities (3, weight 6): 0fde04ac-8552-45ce-83a3-5ab2384b36da (card), 6196d53d-a226-490d-a3bb-159a78d1b2b7 (card), 99101fce-f2b4-4032-b999-317ce3e4a6dd (card). Introduces stackSelectorBounds (dsl, src/engine/dsl/types.ts). Scenario module, only if specs are needed: src/content/specs/prim-stack-selector-bounds.scenarios.ts (slug prim-stack-selector-bounds), registered in src/content/specs/index.ts. Fallout hints: StackItemSelector.\nAreas: src/engine/effects/primitives/contracts/stack-selector-bounds.contracts.ts, src/content/cards/dune-interceptor-99101fce.ts, src/content/cards/null-sphere-6196d53d.ts, src/content/cards/toll-of-passage-0fde04ac.ts, src/engine/dsl/builders.ts, src/engine/dsl/selectors.ts, src/engine/dsl/types.ts, engine hubs, fallout: StackItemSelector, src/content/specs/prim-stack-selector-bounds.scenarios.ts, src/content/specs/index.ts, docs/rules.md, docs/plan/evidence/rules-decisions/, docs/plan/evidence/card-issues/, docs/plan/evidence/qa-ledger/<this bead>.jsonl, docs/plan/evidence/friction/<this bead>.json, docs/plan/evidence/pre-existing/<this bead>.md\n\nExecution scope under human-authorized hv-z9d1 conflict policy (supersedes file-wide serialization and one-session ordering text above): Limit selector behavior to stack-item bounds and the existing bound reader interface; preserve character/CardFilter predicates and cost/history calculation. DSL/builder additions and new-member exhaustion fallout are additive. No generic selector/condition/cost refactor. No semantic prerequisite, UUID ownership or original acceptance is waived. Ordinary independent textual conflicts use parent-only tg update and combined validation. An actual incompatible rewrite discovered later requires owner coordination before that rewrite, rather than a blanket file edge."
+    },
+    {
+      "id": "hv-umm2.232",
+      "title": "5.5 [prim-selector-has-ability] primitive selectorHasAbility (Dreamsigns: battle effects: spark, Support, anthems, and base spark) (core-review)",
+      "remove": [
+        "hv-umm2.97"
+      ],
+      "rationale": "Ability filtering extends card/character predicates; stack bounds extend matchesStackItem. These are separate functions/branches in selectors.ts and require no new API from each other.",
+      "scope": "Limit behavior to ability-presence CardFilter/CharacterSelector predicates and named helpers, preserving stack matching and all existing selector cases. Shared type/builder registrations and independent predicate additions compose; no selector architecture rewrite.",
+      "before": {
+        "description": "docs/plan/phase-5-content.md \u00a7 5.5 bead prim-selector-has-ability (primitive). Inventory: docs/plan/evidence/content-inventory.json entity records selected by the exact UUIDs filed in this bead. This native bead's entity scope, Areas, acceptance and dependency graph govern execution; generated beads are the current planning projection. The phase5_key metadata preserves this bead's filing/scenario key. Follow \u00a7 Bead recipe steps 1\u20139 exactly. Battle dreamsign abilities run as emblem abilities; dreamsigns named in C2\u2013C4, C10, C11 and C17 follow those entries. Entities (1, weight 1.4): b3403800-7004-4775-915b-a19840e416b0 (dreamsign). Introduces selectorHasAbility (dsl, src/engine/dsl/types.ts). Scenario module, only if specs are needed: src/content/specs/prim-selector-has-ability.scenarios.ts (slug prim-selector-has-ability), registered in src/content/specs/index.ts. Fallout hints: CardFilter, CharacterSelector.\nAreas: src/engine/effects/primitives/contracts/selector-has-ability.contracts.ts, src/content/dreamsigns/sea-tome-b3403800.ts, src/engine/dsl/builders.ts, src/engine/dsl/selectors.ts, src/engine/dsl/types.ts, engine hubs, fallout: CardFilter, fallout: CharacterSelector, src/content/specs/prim-selector-has-ability.scenarios.ts, src/content/specs/index.ts, docs/rules.md, docs/plan/evidence/rules-decisions/, docs/plan/evidence/card-issues/, docs/plan/evidence/qa-ledger/<this bead>.jsonl, docs/plan/evidence/friction/<this bead>.json, docs/plan/evidence/pre-existing/<this bead>.md",
+        "acceptance_criteria": "Every battle effect in scope is an emblem ability; a dreamsign with journey text clears pending and sets verifiedText only once its 5.6 bead has landed, and otherwise here; selectorHasAbility is registered with primitive tests on synthetic cards in its plain contract module; ambiguities resolved via the ladder with docs/rules.md text and RD files, card problems logged as card issues; scenario specs only where behavior exceeds primitive composition (D20), all in src/content/specs/prim-selector-has-ability.scenarios.ts; npm run fuzz:engine -- --games 300 --weight-uuids <bead entities> passes; card-lab sweep through ?goto=card-lab&dreamsign=<uuid> (as=player and as=enemy) has no unfixed fail; judged QA per D21 (every entity introducing a new prompt kind, status indicator or visual effect, plus the per-entity SHA-256 10% sample) recorded in docs/plan/evidence/qa-ledger/<bead-id>.jsonl; npm run review passes; coverage gate passes.",
+        "blocks": [
+          "hv-umm2.453",
+          "hv-umm2.501",
+          "hv-umm2.485",
+          "hv-umm2.336",
+          "hv-umm2.573",
+          "hv-umm2.91",
+          "hv-umm2.452",
+          "hv-umm2.495",
+          "hv-umm2.99",
+          "hv-umm2.97",
+          "hv-umm2.76",
+          "hv-umm2.556",
+          "hv-umm2.228",
+          "hv-umm2.108",
+          "hv-umm2.581",
+          "hv-umm2.560",
+          "hv-umm2.107"
+        ],
+        "status": "open",
+        "assignee": null
+      },
+      "after_description": "docs/plan/phase-5-content.md \u00a7 5.5 bead prim-selector-has-ability (primitive). Inventory: docs/plan/evidence/content-inventory.json entity records selected by the exact UUIDs filed in this bead. This native bead's entity scope, Areas, acceptance and dependency graph govern execution; generated beads are the current planning projection. The phase5_key metadata preserves this bead's filing/scenario key. Follow \u00a7 Bead recipe steps 1\u20139 exactly. Battle dreamsign abilities run as emblem abilities; dreamsigns named in C2\u2013C4, C10, C11 and C17 follow those entries. Entities (1, weight 1.4): b3403800-7004-4775-915b-a19840e416b0 (dreamsign). Introduces selectorHasAbility (dsl, src/engine/dsl/types.ts). Scenario module, only if specs are needed: src/content/specs/prim-selector-has-ability.scenarios.ts (slug prim-selector-has-ability), registered in src/content/specs/index.ts. Fallout hints: CardFilter, CharacterSelector.\nAreas: src/engine/effects/primitives/contracts/selector-has-ability.contracts.ts, src/content/dreamsigns/sea-tome-b3403800.ts, src/engine/dsl/builders.ts, src/engine/dsl/selectors.ts, src/engine/dsl/types.ts, engine hubs, fallout: CardFilter, fallout: CharacterSelector, src/content/specs/prim-selector-has-ability.scenarios.ts, src/content/specs/index.ts, docs/rules.md, docs/plan/evidence/rules-decisions/, docs/plan/evidence/card-issues/, docs/plan/evidence/qa-ledger/<this bead>.jsonl, docs/plan/evidence/friction/<this bead>.json, docs/plan/evidence/pre-existing/<this bead>.md\n\nExecution scope under human-authorized hv-z9d1 conflict policy (supersedes file-wide serialization and one-session ordering text above): Limit behavior to ability-presence CardFilter/CharacterSelector predicates and named helpers, preserving stack matching and all existing selector cases. Shared type/builder registrations and independent predicate additions compose; no selector architecture rewrite. No semantic prerequisite, UUID ownership or original acceptance is waived. Ordinary independent textual conflicts use parent-only tg update and combined validation. An actual incompatible rewrite discovered later requires owner coordination before that rewrite, rather than a blanket file edge."
+    },
+    {
+      "id": "hv-umm2.653",
+      "title": "Give repeated Augury card-art previews distinct rendering identities",
+      "remove": [
+        "hv-umm2.652"
+      ],
+      "rationale": "CardArtMosaic occurrence keys are in OfferTile.tsx; 652 edits journey gain receipts and Four-Suit projection in other files. The edge records one-session delivery preference, not an implementation dependency. Landed 264 already supplies the Augury workflow.",
+      "scope": "Keep the exact CardArtMosaic key-only fix, additive choices.test.tsx contract and original actual Augury QA. Source is independent of 652 receipts/projection; original 264 final acceptance still waits for both 652 and 653. Preserve all original failed QA evidence and do not claim 652 completion.",
+      "before": {
+        "description": "Actual ordinary Augury duplicate-offer acceptance in hv-umm2.652 run-8WdqjZ produced React duplicate-child-key console errors for printing UUID1ce0f0f2-4b1a-483d-b93b-74c36e946a08. Earlier repeated native ADD_CARD padding run-3MvAOn reproduces UUID7be2e6d7-abff-4c44-a0c3-35460da1693c. Both actual Caps failures preserved; neither accepted as passing QA. Source cause verified readonly after all9providers/resources drained and all2445regular/1572link source hashes matched parentRESUME: src/cumulus/components/controls/OfferTile.tsx CardArtMosaic maps repeated card-art preview occurrences with key={card.id} at589; a printing UUID can repeat in a multi-card preview. It is a noninteractive ordered art panel, not a physical game-card choice.\n\nBounded fix only CardArtMosaic child key construction: identify each rendered preview occurrence using canonical branded card UUID plus its ordered occurrence position or another existing stable occurrence identity. Preserve card lookup, authored offer identity, source selection, game state, rules, balance, costs, art/layout/style and all other component bodies. No names equality/maps, raw domain identity or generated output. One synthetic public OfferTile rendering regression exercising repeated printing UUIDs, distinct UUIDs and stable panel count without duplicate-key console errors, through renderInCumulus; no specific UI-copy/private implementation/golden assertions. Exact selected existing/new test path audited before WRITEACK; keep bounded support under500lines.\n\nFresh complete admitted+intended unfinished audit beforefiling found140union and only current652 plus immutable landed264 literal body references; foreignactive233 enginehandcopy body disjoint, own263 source-free checkpoint. Serialize this followup after current652 for one-session delivery then preempt readyqueue; ordinary edge, no deferral. No activeforeignedges or claims altered. Reconfirm fresh source/native/body census atdispatch.\n\nChecks: freshnativeTollgateWT,npminstall, meaningful public regression failsold, focused tests/review/Knip/schema. Actual Augury duplicate-offer accept desktop/mobile repeated printing workflow, public state/reload/geometry/captures/Caps[] and native resource/hash settlement; original failures stay source-qualified. Core review freshreadonly current routing if required by final scope; localConventionalCommit/Bead,candidateexactOID,promotion/cleanup/certifiedsource proof. Own friction/measurements/pre-existing/QA evidence; no deploy/imagecommit/otherproject/config/provider/directpush.\n\nAreas: src/cumulus/components/controls/OfferTile.tsx (CardArtMosaic repeated-card art panel key construction only); src/cumulus/components/controls/choices.test.tsx (one additive public OfferTile repeated-card preview contract under500lines); own evidence files/ignored native QA driver only.\n\nRead-only exact test selection: existing choices.test.tsx462lines; one20\u201330line public synthetic duplicate/card-bundle occurrence case through renderInCumulus, panelcount and empty React duplicate-key diagnostics acrossrerender/reorder; no new test file/prop/export/framework. Source function actualCardArtMosaic557\u2013600, correct earlier filedlabelCardArtStage.",
+        "acceptance_criteria": "Ordinary Augury duplicate-card acceptance and repeated printing previews render every ordered occurrence with Caps[] on desktop/mobile and survive same-game reload; regression public/synthetic; focused/review/Knip and proportional nativeQA/resources pass; exactcertifiedpromotion/cleanup verified. Existing rule/content/offer identity/layout preserved.",
+        "blocks": [
+          "hv-umm2.652"
+        ],
+        "status": "open",
+        "assignee": null
+      },
+      "after_description": "Actual ordinary Augury duplicate-offer acceptance in hv-umm2.652 run-8WdqjZ produced React duplicate-child-key console errors for printing UUID1ce0f0f2-4b1a-483d-b93b-74c36e946a08. Earlier repeated native ADD_CARD padding run-3MvAOn reproduces UUID7be2e6d7-abff-4c44-a0c3-35460da1693c. Both actual Caps failures preserved; neither accepted as passing QA. Source cause verified readonly after all9providers/resources drained and all2445regular/1572link source hashes matched parentRESUME: src/cumulus/components/controls/OfferTile.tsx CardArtMosaic maps repeated card-art preview occurrences with key={card.id} at589; a printing UUID can repeat in a multi-card preview. It is a noninteractive ordered art panel, not a physical game-card choice.\n\nBounded fix only CardArtMosaic child key construction: identify each rendered preview occurrence using canonical branded card UUID plus its ordered occurrence position or another existing stable occurrence identity. Preserve card lookup, authored offer identity, source selection, game state, rules, balance, costs, art/layout/style and all other component bodies. No names equality/maps, raw domain identity or generated output. One synthetic public OfferTile rendering regression exercising repeated printing UUIDs, distinct UUIDs and stable panel count without duplicate-key console errors, through renderInCumulus; no specific UI-copy/private implementation/golden assertions. Exact selected existing/new test path audited before WRITEACK; keep bounded support under500lines.\n\nFresh complete admitted+intended unfinished audit beforefiling found140union and only current652 plus immutable landed264 literal body references; foreignactive233 enginehandcopy body disjoint, own263 source-free checkpoint. Serialize this followup after current652 for one-session delivery then preempt readyqueue; ordinary edge, no deferral. No activeforeignedges or claims altered. Reconfirm fresh source/native/body census atdispatch.\n\nChecks: freshnativeTollgateWT,npminstall, meaningful public regression failsold, focused tests/review/Knip/schema. Actual Augury duplicate-offer accept desktop/mobile repeated printing workflow, public state/reload/geometry/captures/Caps[] and native resource/hash settlement; original failures stay source-qualified. Core review freshreadonly current routing if required by final scope; localConventionalCommit/Bead,candidateexactOID,promotion/cleanup/certifiedsource proof. Own friction/measurements/pre-existing/QA evidence; no deploy/imagecommit/otherproject/config/provider/directpush.\n\nAreas: src/cumulus/components/controls/OfferTile.tsx (CardArtMosaic repeated-card art panel key construction only); src/cumulus/components/controls/choices.test.tsx (one additive public OfferTile repeated-card preview contract under500lines); own evidence files/ignored native QA driver only.\n\nRead-only exact test selection: existing choices.test.tsx462lines; one20\u201330line public synthetic duplicate/card-bundle occurrence case through renderInCumulus, panelcount and empty React duplicate-key diagnostics acrossrerender/reorder; no new test file/prop/export/framework. Source function actualCardArtMosaic557\u2013600, correct earlier filedlabelCardArtStage.\n\nExecution scope under human-authorized hv-z9d1 conflict policy (supersedes file-wide serialization and one-session ordering text above): Keep the exact CardArtMosaic key-only fix, additive choices.test.tsx contract and original actual Augury QA. Source is independent of 652 receipts/projection; original 264 final acceptance still waits for both 652 and 653. Preserve all original failed QA evidence and do not claim 652 completion. No semantic prerequisite, UUID ownership or original acceptance is waived. Ordinary independent textual conflicts use parent-only tg update and combined validation. An actual incompatible rewrite discovered later requires owner coordination before that rewrite, rather than a blanket file edge."
+    }
+  ],
+  "preservation": "Only the listed nine serialization edges may be removed. Every other edge, all original acceptance and UUID scopes remain. No active dependent changes. Five Apollyon completion joins, Phase 5 gate and AI barriers retained. 233, 652, checkpointed 263 and new 654 prerequisites/source are not modified.",
+  "effects": {
+    "at": "2026-10-13T23:09:50.370973+00:00",
+    "results": [
+      {
+        "id": "hv-umm2.235",
+        "removed": [
+          "hv-umm2.233"
+        ],
+        "outcome": "applied",
+        "remaining_blocks": [
+          "hv-umm2.101",
+          "hv-umm2.228",
+          "hv-umm2.229",
+          "hv-umm2.230",
+          "hv-umm2.392",
+          "hv-umm2.450",
+          "hv-umm2.460",
+          "hv-umm2.474",
+          "hv-umm2.532",
+          "hv-umm2.534",
+          "hv-umm2.536",
+          "hv-umm2.556",
+          "hv-umm2.560",
+          "hv-umm2.562",
+          "hv-umm2.573",
+          "hv-umm2.581",
+          "hv-umm2.72"
+        ],
+        "status_after": "open",
+        "assignee_after": null,
+        "at": "2026-10-13T23:09:47.418669+00:00"
+      },
+      {
+        "id": "hv-umm2.514",
+        "removed": [
+          "hv-umm2.233",
+          "hv-umm2.588"
+        ],
+        "outcome": "applied",
+        "remaining_blocks": [
+          "hv-07c9",
+          "hv-adeo",
+          "hv-myhi",
+          "hv-roz5",
+          "hv-umm2.460",
+          "hv-umm2.513",
+          "hv-umm2.553",
+          "hv-umm2.556",
+          "hv-umm2.560",
+          "hv-umm2.573",
+          "hv-umm2.576",
+          "hv-umm2.585",
+          "hv-vnue"
+        ],
+        "status_after": "open",
+        "assignee_after": null,
+        "at": "2026-10-13T23:09:48.036567+00:00"
+      },
+      {
+        "id": "hv-umm2.583",
+        "removed": [
+          "hv-umm2.236",
+          "hv-umm2.233"
+        ],
+        "outcome": "applied",
+        "remaining_blocks": [
+          "hv-adeo",
+          "hv-umm2.453",
+          "hv-umm2.560",
+          "hv-umm2.585"
+        ],
+        "status_after": "open",
+        "assignee_after": null,
+        "at": "2026-10-13T23:09:48.649793+00:00"
+      },
+      {
+        "id": "hv-umm2.588",
+        "removed": [
+          "hv-umm2.587"
+        ],
+        "outcome": "applied",
+        "remaining_blocks": [
+          "hv-umm2.585"
+        ],
+        "status_after": "open",
+        "assignee_after": null,
+        "at": "2026-10-13T23:09:49.082448+00:00"
+      },
+      {
+        "id": "hv-umm2.97",
+        "removed": [
+          "hv-umm2.104"
+        ],
+        "outcome": "applied",
+        "remaining_blocks": [
+          "hv-umm2.107",
+          "hv-umm2.108",
+          "hv-umm2.336",
+          "hv-umm2.452",
+          "hv-umm2.453",
+          "hv-umm2.485",
+          "hv-umm2.495",
+          "hv-umm2.501",
+          "hv-umm2.556",
+          "hv-umm2.560",
+          "hv-umm2.573",
+          "hv-umm2.581",
+          "hv-umm2.76",
+          "hv-umm2.88",
+          "hv-umm2.91",
+          "hv-umm2.96",
+          "hv-umm2.99"
+        ],
+        "status_after": "open",
+        "assignee_after": null,
+        "at": "2026-10-13T23:09:49.517938+00:00"
+      },
+      {
+        "id": "hv-umm2.232",
+        "removed": [
+          "hv-umm2.97"
+        ],
+        "outcome": "applied",
+        "remaining_blocks": [
+          "hv-umm2.107",
+          "hv-umm2.108",
+          "hv-umm2.228",
+          "hv-umm2.336",
+          "hv-umm2.452",
+          "hv-umm2.453",
+          "hv-umm2.485",
+          "hv-umm2.495",
+          "hv-umm2.501",
+          "hv-umm2.556",
+          "hv-umm2.560",
+          "hv-umm2.573",
+          "hv-umm2.581",
+          "hv-umm2.76",
+          "hv-umm2.91",
+          "hv-umm2.99"
+        ],
+        "status_after": "open",
+        "assignee_after": null,
+        "at": "2026-10-13T23:09:49.944439+00:00"
+      },
+      {
+        "id": "hv-umm2.653",
+        "removed": [
+          "hv-umm2.652"
+        ],
+        "outcome": "applied",
+        "remaining_blocks": [],
+        "status_after": "open",
+        "assignee_after": null,
+        "at": "2026-10-13T23:09:50.370970+00:00"
+      }
+    ],
+    "cycles_raw": "[]\n",
+    "ready_snapshot": [
+      {
+        "id": "hv-umm2.588",
+        "title": "Select a highest-spark controlled character (core-review)",
+        "status": "open",
+        "assignee": null,
+        "issue_type": "task"
+      },
+      {
+        "id": "hv-umm2.583",
+        "title": "5.5 Select a random battlefield character without targeting (core-review)",
+        "status": "open",
+        "assignee": null,
+        "issue_type": "task"
+      },
+      {
+        "id": "hv-umm2.514",
+        "title": "5.2 primitive: condition on the top card of a deck (core-review)",
+        "status": "open",
+        "assignee": null,
+        "issue_type": "task"
+      },
+      {
+        "id": "hv-umm2.235",
+        "title": "5.5 [prim-draw-trigger-filter] primitive drawTriggerFilter (Dreamsigns: battle effects: cost modifiers and nth-in-turn) (core-review)",
+        "status": "open",
+        "assignee": null,
+        "issue_type": "task"
+      },
+      {
+        "id": "hv-umm2.232",
+        "title": "5.5 [prim-selector-has-ability] primitive selectorHasAbility (Dreamsigns: battle effects: spark, Support, anthems, and base spark) (core-review)",
+        "status": "open",
+        "assignee": null,
+        "issue_type": "task"
+      },
+      {
+        "id": "hv-umm2.97",
+        "title": "5.2 [prim-stack-selector-bounds] primitive stackSelectorBounds (cards: Prevent and other Interrupts) (core-review)",
+        "status": "open",
+        "assignee": null,
+        "issue_type": "task"
+      },
+      {
+        "id": "hv-umm2.653",
+        "title": "Give repeated Augury card-art previews distinct rendering identities",
+        "status": "open",
+        "assignee": null,
+        "issue_type": "bug"
+      }
+    ]
+  },
+  "verification": {
+    "target_retained_edges_and_acceptance": [
+      {
+        "id": "hv-umm2.235",
+        "retained_original_edges": 17,
+        "new_peer_edges": [],
+        "status": "open",
+        "assignee": null
+      },
+      {
+        "id": "hv-umm2.514",
+        "retained_original_edges": 13,
+        "new_peer_edges": [],
+        "status": "open",
+        "assignee": null
+      },
+      {
+        "id": "hv-umm2.583",
+        "retained_original_edges": 4,
+        "new_peer_edges": [],
+        "status": "open",
+        "assignee": null
+      },
+      {
+        "id": "hv-umm2.588",
+        "retained_original_edges": 1,
+        "new_peer_edges": [],
+        "status": "open",
+        "assignee": null
+      },
+      {
+        "id": "hv-umm2.97",
+        "retained_original_edges": 17,
+        "new_peer_edges": [],
+        "status": "open",
+        "assignee": null
+      },
+      {
+        "id": "hv-umm2.232",
+        "retained_original_edges": 16,
+        "new_peer_edges": [],
+        "status": "open",
+        "assignee": null
+      },
+      {
+        "id": "hv-umm2.653",
+        "retained_original_edges": 0,
+        "new_peer_edges": [],
+        "status": "open",
+        "assignee": null
+      }
+    ],
+    "active_tasks": [
+      {
+        "id": "hv-z9d1",
+        "title": "Limit conflict serialization and repair execution bottlenecks",
+        "assignee": "01a13775-d863-7ff2-b03f-de9ee78b3b09"
+      },
+      {
+        "id": "hv-umm2.652",
+        "title": "Correct journey gain receipts and complete missing site checks (core-review)",
+        "assignee": "01a13063-cf1f-7e21-8cfa-6027541a59e2"
+      },
+      {
+        "id": "hv-umm2.263",
+        "title": "5.6 [prim-journey-on-gain] primitive journeyOnGain (Dreamsigns: journey effects (P8)) (core-review)",
+        "assignee": "01a13063-cf1f-7e21-8cfa-6027541a59e2"
+      },
+      {
+        "id": "hv-umm2.233",
+        "title": "5.5 [prim-when-copy-trigger] primitive whenCopyTrigger (Dreamsigns: battle effects: copies (D15)) (core-review)",
+        "assignee": "01a1304d-597d-7431-997b-ddf86f33ec10"
+      }
+    ]
+  },
+  "review": {
+    "model": "gpt-5.6-sol",
+    "route": "fresh read-only Codex CLI, temporary human-authorized same-family routing",
+    "report_sha256": "7e1a8c647750f2b2709ad701af6ccbd2cc538e34132aaa92c1bb55dd5ddde3b6",
+    "edge_findings": "No actionable finding in nine proposed edge removals or retained acceptance joins.",
+    "dispositions": [
+      {
+        "finding": "P1 separate semantic prerequisites from serialization terminology",
+        "outcome": "accepted; README/D43 explicitly distinguish edge kinds and workflow states semantic dependency retention; parent verified exact changed prose"
+      },
+      {
+        "finding": "P2 Areas decide serialization",
+        "outcome": "accepted; D43 says Areas identify possible overlap and exact incompatible behavior determines serialization; parent verified exact changed prose"
+      }
+    ]
+  }
+}

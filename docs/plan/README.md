@@ -163,10 +163,11 @@ Shared design references:
   its Beads calls, Tollgate queue actions, worktree, review, and ledger lines,
   and lands it before claiming the next. The operator starts and stops
   sessions to set capacity; one session is sequential execution.
-- **Concurrency is in the graph.** Beads that would change the same code
-  non-additively carry a
-  [serialization edge](workflow.md#serialization-edges), so `bd ready` only
-  offers beads that can run side by side. Shared duties (phase filing,
+- **Concurrency is in the graph.** Semantic dependency edges retain real
+  implementation prerequisites. Incompatible changes to the same behavior
+  carry a [serialization edge](workflow.md#serialization-edges). Independent changes
+  within shared files can run side by side, with textual conflicts resolved
+  during integration. Shared duties (phase filing,
   retrospectives, release fixes) are beads too.
 - **Delivery.** Each bead is one Conventional Commit in a Tollgate worktree.
   Its session submits it with `tg candidate <oid>`, authorizes it with
