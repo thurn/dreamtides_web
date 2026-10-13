@@ -1426,6 +1426,13 @@ Gaining plain Reclaim keeps the cost the card already had: a card with
 "Reclaim 2●" that gains reclaim is still played from the void for 2●. A card
 that loses Reclaim loses every Reclaim cost it gained before.
 
+When a play trigger says the played card gains Reclaim, it names that physical
+card wherever it exists as the trigger resolves. The card gains the stated
+Reclaim cost on the stack and keeps it as it changes zones. If an earlier
+trigger moved it to another zone, it still gains Reclaim there; a card that
+ceased to exist gains nothing. Only a card in its owner’s void can be played
+by Reclaim.
+
 **Was reclaimed:** An effect that checks whether its source card was reclaimed
 checks whether that card's latest actual committed play used Reclaim. Removing
 the reclaimed status does not change how the card was played. Playing the card

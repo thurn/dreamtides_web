@@ -1,0 +1,261 @@
+{
+  "bead": "hv-umm2.612",
+  "sourceBase": "9ef896ff3bed042cf557204d2a15af19481c1176",
+  "dispatch": {
+    "start": "2026-10-13T17:03:58.606000+00:00",
+    "callId": "call_i1WtgokOeyRSz4JxkVucfEP0",
+    "hostOrdinal": 18664,
+    "source": "root verified host dispatch receipt",
+    "modelSamplingCpu": "UNKNOWN"
+  },
+  "nativeClaim": "2026-10-13T16:59:56Z",
+  "sourceAudit": {
+    "bead": "hv-umm2.612",
+    "time": "2026-10-13T17:19:52.390364+00:00",
+    "sha256": {
+      "src/engine/effects/primitives/grant-triggering-card-reclaim.ts": "f1e3baf89c05ee66700b0d9748ac479391fa3d40037b1db41a959c5725906359",
+      "src/engine/effects/primitives/contracts/grant-triggering-card-reclaim.contracts.ts": "a7b343c4962986e6ff3fa572542ddf433d9560103e0f451c499720a7e06f3048",
+      "src/engine/effects/primitives/index.ts": "a29be689feb021476094230726339c576b6cd7ddd4886ecf406610bbafed2d2a",
+      "src/engine/effects/registry.ts": "8c3609bb7bcbf51c463f01d0f6370cf06f3ae33de6cf9a7f64d0948b14917440",
+      "docs/rules.md": "e445497e150c6a30ce64dbea9d2fe3e9e1c998a6dcddb2771164a07bedef550e",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.612-1.md": "b5e01ff6e5a9838ffe60f8a79ea9ce1d1d897de142e65ceb49c3a418154831de",
+      "docs/plan/evidence/pre-existing/hv-umm2.612.md": "956ea4785f1dc52fa91af93e96803a7e61e00bc1a02501b320bff4a452142826"
+    },
+    "sourcePaths": [
+      "src/engine/effects/primitives/grant-triggering-card-reclaim.ts",
+      "src/engine/effects/primitives/contracts/grant-triggering-card-reclaim.contracts.ts",
+      "src/engine/effects/primitives/index.ts",
+      "src/engine/effects/registry.ts",
+      "docs/rules.md",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.612-1.md",
+      "docs/plan/evidence/pre-existing/hv-umm2.612.md"
+    ],
+    "contractLines": 277,
+    "nonTestTsGrossLines": 34,
+    "sourceGate": "no production authoring, state, privacy, UI, duration API or broad zone scan"
+  },
+  "beforePublicWitness": {
+    "rows": [
+      {
+        "side": "player",
+        "firstTriggerCount": 0,
+        "secondPhysicalSubject": "i2",
+        "secondSubjectZone": "stack",
+        "secondTriggered": [
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "player",
+              "index": 0
+            },
+            "controller": "player",
+            "ability": 0,
+            "node": null,
+            "subject": "i2"
+          }
+        ],
+        "stackGrantEvents": [],
+        "stackHasReclaim": false,
+        "resolvedHasReclaim": false,
+        "ordinaryVoidControl": true,
+        "controlCosts": [
+          {
+            "cost": "energy",
+            "amount": 0
+          }
+        ],
+        "voidControlEvents": 3,
+        "thirdTriggerCount": 0
+      },
+      {
+        "side": "enemy",
+        "firstTriggerCount": 0,
+        "secondPhysicalSubject": "i2",
+        "secondSubjectZone": "stack",
+        "secondTriggered": [
+          {
+            "kind": "triggerQueued",
+            "source": {
+              "kind": "dreamsign",
+              "side": "enemy",
+              "index": 0
+            },
+            "controller": "enemy",
+            "ability": 0,
+            "node": null,
+            "subject": "i2"
+          }
+        ],
+        "stackGrantEvents": [],
+        "stackHasReclaim": false,
+        "resolvedHasReclaim": false,
+        "ordinaryVoidControl": true,
+        "controlCosts": [
+          {
+            "cost": "energy",
+            "amount": 0
+          }
+        ],
+        "voidControlEvents": 3,
+        "thirdTriggerCount": 0
+      }
+    ]
+  },
+  "validation": {
+    "focused": {
+      "label": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/triggers/triggers-redaction.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/engine/fold/fold-intents.test.ts"
+      ],
+      "start": "2026-10-13T17:17:56.209272+00:00",
+      "end": "2026-10-13T17:18:07.200868+00:00",
+      "wallS": 10.991236416972242,
+      "exitCode": 0,
+      "loadStartUnknown": true,
+      "processTerminal": true
+    },
+    "review": {
+      "label": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T17:18:28.206700+00:00",
+      "end": "2026-10-13T17:19:23.281252+00:00",
+      "wallS": 55.0739517500042,
+      "exitCode": 2,
+      "loadStart": 5.798828125,
+      "processTerminal": true
+    },
+    "review-final": {
+      "label": "review-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T17:19:29.706931+00:00",
+      "end": "2026-10-13T17:20:23.545342+00:00",
+      "wallS": 53.83779808401596,
+      "exitCode": 0,
+      "loadStart": 6.00244140625,
+      "processTerminal": true
+    },
+    "knip": {
+      "label": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T17:20:59.349443+00:00",
+      "end": "2026-10-13T17:21:03.020177+00:00",
+      "wallS": 3.6706212499993853,
+      "exitCode": 0,
+      "loadStart": 4.8837890625,
+      "processTerminal": true
+    },
+    "schema": {
+      "label": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-13T17:21:59.409412+00:00",
+      "end": "2026-10-13T17:21:59.520605+00:00",
+      "wallS": 0.11110266600735486,
+      "exitCode": 0,
+      "loadStart": 3.61767578125,
+      "processTerminal": true
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "measuredFor": "focused",
+      "load": "UNKNOWN",
+      "start": "2026-10-13T17:17:56.209272+00:00"
+    },
+    {
+      "measuredFor": "review",
+      "load": 5.798828125,
+      "start": "2026-10-13T17:18:28.206700+00:00"
+    },
+    {
+      "measuredFor": "review-final",
+      "load": 6.00244140625,
+      "start": "2026-10-13T17:19:29.706931+00:00"
+    },
+    {
+      "measuredFor": "knip",
+      "load": 4.8837890625,
+      "start": "2026-10-13T17:20:59.349443+00:00"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final npm run review start, native log confirms6.00244140625"
+      },
+      "testDelta.files": {
+        "measuredFor": "new .test/.spec entry files0; one eagerly discovered plain contract module277 test lines"
+      },
+      "implementWindow": {
+        "measuredFor": "actual helper dispatch through latest evidence cutoff, including source audit and parent ACK waits; Git endpoint UNKNOWN until commit returns"
+      }
+    }
+  },
+  "acceptance": {
+    "counterfactuals": {
+      "voidFilterDropsStack": "second real event receives effectStarted on STACK before resolution",
+      "delayedVoidWrongOccurrence": "bound second physical subject gains whileSTACK and after earlier hand/deck/void/Banished movement, unrelated cards untouched",
+      "lostOnVoidResolution": "grant persists into VOID/save and actual zeroenergy Reclaim",
+      "wrongRouteCosts": "latest explicit gain overrides printed costs and pays only required additional points/optionalenergy",
+      "broadGrantOrChangedOldApi": "unrelated hand/void/opponent/copies not granted and original VOID-only subject grant stays no-op onSTACK"
+    },
+    "tests": 26,
+    "bothControllers": true,
+    "publicSourceWitness": "runStep play/cardPlayed\u2192actual triggerQueued(subject,emblem)\u2192resolveTrigger\u2192effectStarted\u2192resolveTop\u2192actual play fromVOID",
+    "failureWitness": "synthetic resolution hook invokes actual public resolveEffect with physical subject, then throws after grant; fold commits no failed float/event and subsequent resolve succeeds",
+    "scopeQualifiers": "created materialize-then-dissolve fixture supplies actual ceased trigger subject; no fabricated queue",
+    "D10": "RD-hv-umm2.612-1, step5 narrowly play-trigger physical retention; old discard/VOID-only grants preserved",
+    "productionAuthoring": "none; original UUID2cbcbebb-fb79-4833-a770-2216873147c4 and all full original254 recipe retained",
+    "browserQA": "not applicable: no UI/schema/producer authored; synthetic engine capability only",
+    "weighted300": "original254 recipe retained, not claimed here",
+    "reviewFull": "not applicable: no cross-cutting state/privacy/setup/architecture/infrastructure",
+    "D21": "no production entity authored or new presentation; no mandatory judged scenario"
+  },
+  "iterationReceipts": {
+    "directContractFilter": "first-test.log exit1 no test files; corrected to existing contracts.test.ts eager entry",
+    "firstFixtures": "iteration-test.log two mandatorypoints payment fixture failures correctedscore4",
+    "routeAssertion": "iteration2.log two routeCosts assertion failures corrected to retain mandatorypoints",
+    "typedSelector": "review exit2 raw StackItemSelector fixture inputs corrected with existing stackItem builder; finalreview0"
+  },
+  "resources": {
+    "browserProvider": "none",
+    "server": "none",
+    "lease": "none",
+    "validationProcesses": "terminal once corresponding receipt says processTerminal",
+    "GitCommitEndpoint": "UNKNOWN",
+    "futureColdCoreReview": "parent owns exactcommit snapshot review; not performed by helper"
+  },
+  "finalEvidenceCutoff": "2026-10-13T17:27:30.050624+00:00",
+  "GitCommitEndpoint": "UNKNOWN before commit return",
+  "baselineExecution": {
+    "toolMeasuredWallS": 1.813672791,
+    "exitCode": 0,
+    "startEndUtc": "UNKNOWN",
+    "processTerminal": true,
+    "rawReceipt": "scratch baseline.ts/.json retained by parent"
+  }
+}

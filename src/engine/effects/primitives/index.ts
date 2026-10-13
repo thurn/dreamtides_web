@@ -42,6 +42,7 @@ export * from "./give-all-types";
 export * from "./grant";
 export * from "./grant-card-keyword";
 export * from "./grant-reclaim";
+export * from "./grant-triggering-card-reclaim";
 export * from "./if-then";
 export * from "./look-at-top";
 export * from "./linked-banish";

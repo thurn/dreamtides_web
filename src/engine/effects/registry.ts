@@ -61,6 +61,7 @@ import {
   grantCardKeywordPrimitive,
   grantPrimitive,
   grantReclaimPrimitive,
+  grantTriggeringCardReclaimPrimitive,
   ifThenPrimitive,
   lookAtTopPrimitive,
   linkedBanishPrimitive,
@@ -250,6 +251,9 @@ const DEFINITIONS = {
   },
   get grantReclaim() {
     return grantReclaimPrimitive;
+  },
+  get grantTriggeringCardReclaim() {
+    return grantTriggeringCardReclaimPrimitive;
   },
   get ifThen() {
     return ifThenPrimitive;
