@@ -718,6 +718,7 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
     loopOffer: affordances.loop === null ? null : { maxCount: affordances.loop.maxCount },
     cardView: (instance) => cardView(instance),
     dreamwellCard: input.dreamwellCard,
+    avatars: input.avatars,
   });
   const revealed = visual?.kind === "reveal" ? (input.revealedCard ?? undefined) : undefined;
   const dreamwell = visual?.kind === "dreamwell" ? (input.dreamwellCard?.(visual.card) ?? null) : null;

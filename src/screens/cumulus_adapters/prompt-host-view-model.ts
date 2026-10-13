@@ -41,6 +41,7 @@ import type {
   MobileBattleCardView,
   MobileBattlePromptKey,
   MobileBattlePromptNoticeView,
+  MobileBattleStatusView,
   MobileBattleView,
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { Action, BattleView, Decision, InstanceId, InstanceView, Prompt, Side } from "../../engine";
@@ -82,6 +83,8 @@ export interface PromptHostInput {
   readonly cardView: EngineCardViewBuilder;
   /** Resolves the pinned public source UUID immediately before its prompt is shown. */
   readonly dreamwellCard?: (id: DreamwellCardId) => DreamwellCardModel | null;
+  /** Public portrait metadata, identified by the Avatar source's side and exact UUID. */
+  readonly avatars?: Readonly<Record<Side, Pick<MobileBattleStatusView, "avatar" | "avatarProfile">>>;
 }
 
 /** What one choice button of the control row does when chosen. */
@@ -246,8 +249,13 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
   const dreamwellSource = origin !== null && typeof origin !== "string" && origin.kind === "dreamwell"
     ? input.dreamwellCard?.(origin.id) ?? null
     : null;
-  const sourceName = dreamwellSource?.displaySnapshot.name ?? sourceCard?.model.displaySnapshot.name ?? null;
-  const sourceText = dreamwellSource?.displaySnapshot.renderedText ?? sourceCard?.model.displaySnapshot.renderedText ?? null;
+  const avatarOrigin = origin !== null && typeof origin !== "string" && origin.kind === "avatar" ? origin : null;
+  const avatar = avatarOrigin === null ? undefined : input.avatars?.[avatarOrigin.side];
+  const avatarSource = avatar?.avatar !== null && avatar?.avatarProfile !== undefined &&
+    avatar.avatarProfile.id === avatarOrigin?.id &&
+    avatar.avatarProfile.unavailable !== true ? avatar : null;
+  const sourceName = dreamwellSource?.displaySnapshot.name ?? sourceCard?.model.displaySnapshot.name ?? avatarSource?.avatar?.name ?? null;
+  const sourceText = dreamwellSource?.displaySnapshot.renderedText ?? sourceCard?.model.displaySnapshot.renderedText ?? avatarSource?.avatarProfile?.ability ?? null;
   if (prompt.side !== human) {
     // The opponent answers; a private prompt's cards never reach this view,
     // and the human learns only that the opponent is choosing.
