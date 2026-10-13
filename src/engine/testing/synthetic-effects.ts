@@ -149,7 +149,10 @@ export const PROMPTING = {
     resolve: (ctx, item) => {
       const deck = ctx.state.sides[item.controller].deck;
       const cards = deck.slice(0, 2);
-      if (cards.length === 0) return;
+      if (cards.length === 0) {
+        ctx.emit({ kind: "foresaw", side: item.controller, kept: [], voided: [] });
+        return;
+      }
       const arrangement = ctx.choose<ArrangePrompt>({
         kind: "arrange",
         side: item.controller,

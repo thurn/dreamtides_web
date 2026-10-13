@@ -787,7 +787,7 @@ export function engineBattleLogText(event: EngineEvent, words: EngineBattleLogWo
         ...(event.voided.length > 0 ? [`put ${list(event.voided)} into ${whose(event.side)} void`] : []),
         ...(event.kept.length > 0 ? [`kept ${list(event.kept)} on top`] : []),
       ];
-      return `${who(event.side)} foresaw ${plural(event.kept.length + event.voided.length, "card", "cards")}: ${moves.join(" and ")}.`;
+      return `${who(event.side)} foresaw ${plural(event.kept.length + event.voided.length, "card", "cards")}${moves.length === 0 ? "" : `: ${moves.join(" and ")}`}.`;
     }
     case "laneResolved": {
       if (event.blocker === null) {

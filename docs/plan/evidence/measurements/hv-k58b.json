@@ -1,0 +1,1336 @@
+{
+  "bead": "hv-k58b",
+  "baseOID": "958b39cff833b2d6d5fda4a5aaa7767002fc8763",
+  "sourceFreeze": {
+    "at": "2026-10-13T03:27:03.664582+00:00",
+    "sourceHashes": {
+      "src/engine/testing/synthetic-effects.ts": "4992f1edea4af07d31aeadc7bd8ce1ddaa9a2766e089b908c9fd8eeddf9aa048",
+      "src/engine/effects/primitives/contracts/when-foresee-trigger.contracts.ts": "ac74d7edeb50b1138a12578e51a6871e122fb4820113f672ce1b7b2656abf9c0",
+      "src/runtime/battle-prompt-messages.ts": "73faebc9e1064a463a641070dd75c84b6023468c66f9f1389b679b5c6476b310"
+    },
+    "aggregate": "a0a74f0a03e4a7ec9cacb6a8a541680592c06da8dd3a4459f207d9c90fed4eea"
+  },
+  "implementationClock": {
+    "dispatchAfterProxy": {
+      "helper": "/root/empty_foresee_k58b",
+      "observedAfter": "2026-10-13T03:22:46.162696+00:00",
+      "qualification": "Parent clock sample after dispatch; exact model start unknown."
+    },
+    "firstOwnTimestampedReceipt": {
+      "at": "2026-10-13T03:24:59.838651+00:00",
+      "scope": "First instrumented checker wrapper; source-free reads and public diagnostics preceded this sample. Exact first tool/model time unavailable."
+    },
+    "evidenceCutoff": "2026-10-13T03:31:11.789917+00:00",
+    "endQualification": "Actual current precommit evidence cutoff after parent endpoint ACK; subsequent schema/trigger checks and normal commit tail are unmeasured in this record. No future commit time is assigned.",
+    "model": "Inherited parent model; exact provider/model identifier not exposed to the helper."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "startSource": "Parent observedAfter post-dispatch proxy in /tmp/codex-k58b/dispatch.json",
+        "endSource": "Actual precommit evidence cutoff"
+      },
+      "hostLoad": {
+        "measuredFor": "Successful npm run review wrapper start OS 1-minute load average; uncontrolled loaded host"
+      },
+      "testDelta": {
+        "files": "No new test file/entrypoint; existing plain contract module grows by 16 lines",
+        "cases": 1,
+        "jsdomFiles": 0
+      },
+      "localValidationS": {
+        "focused": "Successful prepared five-file focused wrapper plus restored boundary case; failed caller and intentional counterfactual kept separately",
+        "review": "Required diff-aware review wrapper",
+        "knip": "Required unused-code checker wrapper"
+      }
+    }
+  },
+  "checks": {
+    "knip": {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T03:26:44.099222+00:00",
+      "pid": 26760,
+      "processGroup": 26760,
+      "hostLoadStart": [
+        5.79345703125,
+        6.41357421875,
+        8.69970703125
+      ],
+      "exit": 0,
+      "end": "2026-10-13T03:26:49.014277+00:00",
+      "elapsedS": 4.9148955840064446,
+      "hostLoadEnd": [
+        6.3701171875,
+        6.5224609375,
+        8.724609375
+      ]
+    },
+    "browser-selfcontained": {
+      "name": "browser-selfcontained",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-k58b/empty-foresee.mjs",
+        "--bead",
+        "hv-k58b",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "420"
+      ],
+      "start": "2026-10-13T03:27:40.335775+00:00",
+      "pid": 30977,
+      "processGroup": 30977,
+      "hostLoadStart": [
+        22.029296875,
+        10.91796875,
+        10.234375
+      ],
+      "exit": 0,
+      "end": "2026-10-13T03:28:21.341757+00:00",
+      "elapsedS": 41.005252458999166,
+      "hostLoadEnd": [
+        17.97314453125,
+        11.5419921875,
+        10.5078125
+      ]
+    },
+    "counterfactual": {
+      "name": "counterfactual",
+      "command": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "completes the synthetic Foresee fixture"
+      ],
+      "start": "2026-10-13T03:25:25.894298+00:00",
+      "pid": 24374,
+      "processGroup": 24374,
+      "hostLoadStart": [
+        4.251953125,
+        6.73193359375,
+        9.0302734375
+      ],
+      "exit": 1,
+      "end": "2026-10-13T03:25:28.234684+00:00",
+      "elapsedS": 2.3402619589905953,
+      "hostLoadEnd": [
+        4.251953125,
+        6.73193359375,
+        9.0302734375
+      ]
+    },
+    "focused": {
+      "name": "focused",
+      "command": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/primitives.test.ts",
+        "src/engine/fold/fold.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model-display.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation-log.test.ts"
+      ],
+      "start": "2026-10-13T03:24:59.838651+00:00",
+      "pid": 23759,
+      "processGroup": 23759,
+      "hostLoadStart": [
+        3.560546875,
+        6.9091796875,
+        9.17578125
+      ],
+      "exit": 1,
+      "end": "2026-10-13T03:25:07.033184+00:00",
+      "elapsedS": 7.194349790996057,
+      "hostLoadEnd": [
+        3.240234375,
+        6.73046875,
+        9.08544921875
+      ]
+    },
+    "review": {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T03:25:41.275852+00:00",
+      "pid": 24737,
+      "processGroup": 24737,
+      "hostLoadStart": [
+        3.75830078125,
+        6.5,
+        8.90673828125
+      ],
+      "exit": 0,
+      "end": "2026-10-13T03:26:08.993926+00:00",
+      "elapsedS": 27.71758545799821,
+      "hostLoadEnd": [
+        3.89013671875,
+        6.3134765625,
+        8.76953125
+      ]
+    },
+    "browser": {
+      "name": "browser",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-k58b/empty-foresee.mjs",
+        "--bead",
+        "hv-k58b",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "420"
+      ],
+      "start": "2026-10-13T03:26:57.433835+00:00",
+      "pid": 28052,
+      "processGroup": 28052,
+      "hostLoadStart": [
+        11.42822265625,
+        7.6064453125,
+        9.08349609375
+      ],
+      "exit": 1,
+      "end": "2026-10-13T03:27:18.759567+00:00",
+      "elapsedS": 21.325328167004045,
+      "hostLoadEnd": [
+        19.677734375,
+        9.72314453125,
+        9.806640625
+      ]
+    },
+    "focused-prepared": {
+      "name": "focused-prepared",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/fold/fold-prompts.test.ts",
+        "src/engine/view/view-knowledge.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model-display.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation-log.test.ts"
+      ],
+      "start": "2026-10-13T03:25:11.972320+00:00",
+      "pid": 23995,
+      "processGroup": 23995,
+      "hostLoadStart": [
+        3.060546875,
+        6.63525390625,
+        9.03759765625
+      ],
+      "exit": 0,
+      "end": "2026-10-13T03:25:20.911146+00:00",
+      "elapsedS": 8.93860950000817,
+      "hostLoadEnd": [
+        4.2744140625,
+        6.7783203125,
+        9.06005859375
+      ]
+    },
+    "boundary-restored": {
+      "name": "boundary-restored",
+      "command": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "completes the synthetic Foresee fixture"
+      ],
+      "start": "2026-10-13T03:25:34.732918+00:00",
+      "pid": 24541,
+      "processGroup": 24541,
+      "hostLoadStart": [
+        3.9912109375,
+        6.63671875,
+        8.98291015625
+      ],
+      "exit": 0,
+      "end": "2026-10-13T03:25:37.101646+00:00",
+      "elapsedS": 2.3686108340043575,
+      "hostLoadEnd": [
+        3.91162109375,
+        6.576171875,
+        8.94775390625
+      ]
+    },
+    "evidence-schema": {
+      "name": "evidence-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-13T03:31:11.813203+00:00",
+      "pid": 95242,
+      "processGroup": 95242,
+      "hostLoadStart": [
+        5.29345703125,
+        8.62890625,
+        9.48876953125
+      ],
+      "exit": 0,
+      "end": "2026-10-13T03:31:11.877358+00:00",
+      "elapsedS": 0.06407404199126177,
+      "hostLoadEnd": [
+        5.29345703125,
+        8.62890625,
+        9.48876953125
+      ]
+    },
+    "evidence-triggers": {
+      "name": "evidence-triggers",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-13T03:31:11.897984+00:00",
+      "pid": 95243,
+      "processGroup": 95243,
+      "hostLoadStart": [
+        5.29345703125,
+        8.62890625,
+        9.48876953125
+      ],
+      "exit": 0,
+      "end": "2026-10-13T03:31:12.047688+00:00",
+      "elapsedS": 0.14960970799438655,
+      "hostLoadEnd": [
+        5.29345703125,
+        8.62890625,
+        9.48876953125
+      ]
+    }
+  },
+  "validationClassification": {
+    "localReviewFull": "Not required: existing fixture leaf and UI copy change, one contract in existing module; no test infrastructure, repository-wide configuration, fuzzer/step-runner or cross-cutting architecture changes. Parent accepted classification.",
+    "weightedContentFuzz": "No new content entity scope. Original hv-umm2.230 weighted 300-game receipt remains original acceptance; this follow-up runs the relevant contracts and native UI workflow.",
+    "focusedResult": {
+      "files": 5,
+      "tests": 2522
+    },
+    "reviewResult": {
+      "files": 45,
+      "tests": 2914
+    }
+  },
+  "publicBaseline": {
+    "method": "Real createEngine/testCatalog/boardState followed by E.apply with current triggered(whenForesee(), gainEnergy(1)) synthetic listener; NO_PROMPTS for empty decks. Production DSL.foreseeTwo is a valid control; formatter consumes its actual resulting foresaw event. No private matcher, mocks or fabricated event.",
+    "sourceFreeLog": "/tmp/codex-k58b/helper/baseline-fixed.log",
+    "syntheticObserved": {
+      "completionCount": 0,
+      "queuedCount": 0,
+      "energy": 0,
+      "deck": [],
+      "voidPreserved": true,
+      "fatigue": false
+    },
+    "productionObserved": {
+      "completion": {
+        "kind": "foresaw",
+        "side": "player",
+        "kept": [],
+        "voided": []
+      },
+      "queuedCount": 1,
+      "energy": 1,
+      "deck": [],
+      "voidPreserved": true,
+      "fatigue": false,
+      "formatter": "You foresaw 0 cards: ."
+    },
+    "fixedLog": "/tmp/codex-k58b/helper/repaired-public.log",
+    "fixedObserved": {
+      "syntheticAndProductionCompletionCount": 1,
+      "queuedCount": 1,
+      "energy": 1,
+      "formatter": "You foresaw 0 cards."
+    },
+    "nonemptySyntheticControl": {
+      "kept": [
+        "i3"
+      ],
+      "voided": [
+        "i2"
+      ],
+      "queuedCount": 1,
+      "energy": 1,
+      "deck": [
+        "i3",
+        "i4"
+      ]
+    },
+    "counterfactual": {
+      "restoredBehavior": "Existing fixture early return on empty cards, exact fixed bytes backed up then restored",
+      "expectedFailure": "New public boundary case expected one empty foresaw event; received [].",
+      "failedReceipt": {
+        "name": "counterfactual",
+        "command": [
+          "./node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "completes the synthetic Foresee fixture"
+        ],
+        "start": "2026-10-13T03:25:25.894298+00:00",
+        "pid": 24374,
+        "processGroup": 24374,
+        "hostLoadStart": [
+          4.251953125,
+          6.73193359375,
+          9.0302734375
+        ],
+        "exit": 1,
+        "end": "2026-10-13T03:25:28.234684+00:00",
+        "elapsedS": 2.3402619589905953,
+        "hostLoadEnd": [
+          4.251953125,
+          6.73193359375,
+          9.0302734375
+        ]
+      },
+      "restoredPassReceipt": {
+        "name": "boundary-restored",
+        "command": [
+          "./node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "completes the synthetic Foresee fixture"
+        ],
+        "start": "2026-10-13T03:25:34.732918+00:00",
+        "pid": 24541,
+        "processGroup": 24541,
+        "hostLoadStart": [
+          3.9912109375,
+          6.63671875,
+          8.98291015625
+        ],
+        "exit": 0,
+        "end": "2026-10-13T03:25:37.101646+00:00",
+        "elapsedS": 2.3686108340043575,
+        "hostLoadEnd": [
+          3.91162109375,
+          6.576171875,
+          8.94775390625
+        ]
+      }
+    }
+  },
+  "consumerAudit": {
+    "syntheticFixtureConsumers": [
+      "src/engine/testing/fuzz.ts",
+      "src/engine/fold/fold.fixtures.ts",
+      "src/engine/view/view.fixtures.ts",
+      "src/engine/rules/costs.fixtures.ts",
+      "src/engine/rules/costs-search.test.ts",
+      "src/engine/effects/primitives/contracts/play-time-targets.contracts.ts"
+    ],
+    "runtimeFormatter": "src/screens/cumulus_adapters/engine-battle-log-view-model.ts battleLogTurns resolves player-visible event names immediately before display using engineBattleLogText. Existing display/log caller contracts are focused checks; UI strings are observed in native browser QA, without unit copy assertions.",
+    "primitiveReuseDecision": "Direct foreseePrimitive resolve requires full EffectEnv; resolveEffect requires source/origin/ability/controller/X/optionalPaid/choices wiring. Parent approved the minimal completion branch to retain current synthetic prompt-purpose/nonempty semantics."
+  },
+  "callerCorrections": [
+    {
+      "scope": "Source-free lab constructor",
+      "failure": "testCatalog default synthetic cards duplicated UUIDs already included in PROMPT_LAB_DEFINITIONS.cards; duplicate rejected",
+      "correction": "createCatalog with the inclusive lab card list; source-free actual parked scene audit then passed",
+      "receipt": "/tmp/codex-k58b/helper/baseline.log",
+      "productDefect": false
+    },
+    {
+      "scope": "First direct Vitest invocation",
+      "failure": "Wrong primitives.test.ts filter and missing disposable generated Cumulus token mirror in direct vitest. Presentation suite import failed; 28 other tests passed.",
+      "correction": "Existing npm test wrapper prepares workspace; correct eager contracts.test.ts runner, five affected modules pass",
+      "receipt": {
+        "name": "focused",
+        "command": [
+          "./node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/primitives.test.ts",
+          "src/engine/fold/fold.test.ts",
+          "src/engine/view/view-knowledge.test.ts",
+          "src/screens/cumulus_adapters/engine-battle-view-model-display.test.ts",
+          "src/screens/cumulus_adapters/engine-battle-presentation-log.test.ts"
+        ],
+        "start": "2026-10-13T03:24:59.838651+00:00",
+        "pid": 23759,
+        "processGroup": 23759,
+        "hostLoadStart": [
+          3.560546875,
+          6.9091796875,
+          9.17578125
+        ],
+        "exit": 1,
+        "end": "2026-10-13T03:25:07.033184+00:00",
+        "elapsedS": 7.194349790996057,
+        "hostLoadEnd": [
+          3.240234375,
+          6.73046875,
+          9.08544921875
+        ]
+      },
+      "productDefect": false
+    },
+    {
+      "scope": "Initial QA scenario",
+      "failure": "desktop#0: ReferenceError: read is not defined\n    at empty (evalmachine.<anonymous>:1655:20)\n    at async evalmachine.<anonymous>:1676:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "correction": "Ignored scenario self-contained exported function, as runner serialization requires; final four UI cells pass",
+      "initialReport": "invocations/run-staVt2/empty-foresee.result.json",
+      "finalReport": "invocations/run-zZFRrh/empty-foresee.result.json",
+      "resolved": true,
+      "effective": false,
+      "productDefect": false
+    },
+    {
+      "scope": "Read-only path/glob callers",
+      "failure": "Three guessed files (effects/primitives/types.ts, runtime/development-lab.ts, QA/presentation helper modules) were absent; unmatched zsh log-component glob stopped only the bounded read.",
+      "correction": "Read actual effects/types.ts, prompt-lab/qa-scenes and tracked scenario paths via rg inventory. No source effects.",
+      "productDefect": false
+    }
+  ],
+  "qa": {
+    "invocation": "run-zZFRrh",
+    "evidenceDir": "invocations/run-zZFRrh",
+    "rawReport": "empty-foresee.result.json",
+    "reportSHA256": "a633004c4a369550c4262f3813b2c9db3601d0ed5d63f2a403d2396f9a1d3974",
+    "initialCallerReportSHA256": "10603dcb675973525a0a6c7a48f0766668fcff27fda1b0d76b04e4c5f83f4efa",
+    "runner": {
+      "serverPid": 31033,
+      "port": 5274,
+      "slot": 1,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1675,
+        "scenario": 38519,
+        "total": 40264
+      },
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 25855
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 12664
+        }
+      ]
+    },
+    "viewports": {
+      "desktop": {
+        "empty": {
+          "mode": "empty",
+          "id": "i11",
+          "uuid": "5e5e5e5e-0000-4000-8000-0000000000cf",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialDeck": [],
+          "stagedDeck": [],
+          "finalDeck": [],
+          "outcome": {
+            "cursor": {
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "seq": -1,
+              "index": -1
+            },
+            "completed": {
+              "seq": 3,
+              "index": 2,
+              "kind": "foresaw",
+              "instance": null,
+              "event": {
+                "kind": "foresaw",
+                "side": "player",
+                "kept": [],
+                "voided": []
+              },
+              "cards": {}
+            },
+            "played": {
+              "seq": 3,
+              "index": 0,
+              "kind": "cardPlayed",
+              "instance": "i11",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i11"
+              },
+              "cards": {
+                "i11": "5e5e5e5e-0000-4000-8000-0000000000cf"
+              }
+            },
+            "events": [
+              {
+                "seq": 3,
+                "index": 0,
+                "kind": "cardPlayed",
+                "instance": "i11",
+                "event": {
+                  "kind": "cardPlayed",
+                  "side": "player",
+                  "instance": "i11"
+                },
+                "cards": {
+                  "i11": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              },
+              {
+                "seq": 3,
+                "index": 1,
+                "kind": "resolved",
+                "instance": "i11",
+                "event": {
+                  "kind": "resolved",
+                  "instance": "i11"
+                },
+                "cards": {
+                  "i11": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              },
+              {
+                "seq": 3,
+                "index": 2,
+                "kind": "foresaw",
+                "instance": null,
+                "event": {
+                  "kind": "foresaw",
+                  "side": "player",
+                  "kept": [],
+                  "voided": []
+                },
+                "cards": {}
+              },
+              {
+                "seq": 3,
+                "index": 3,
+                "kind": "enteredVoid",
+                "instance": "i11",
+                "event": {
+                  "kind": "enteredVoid",
+                  "instance": "i11",
+                  "side": "player",
+                  "from": "stack"
+                },
+                "cards": {
+                  "i11": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              }
+            ]
+          },
+          "persisted": {
+            "printed": [
+              {
+                "gameId": "rhfc42",
+                "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+                "op": {
+                  "kind": "addCard",
+                  "side": "player",
+                  "card": "5e5e5e5e-0000-4000-8000-0000000000cf",
+                  "zone": "hand"
+                },
+                "timestamp": "2026-10-13T03:27:49.959Z",
+                "event": "battle_engine_debug_requested",
+                "seq": 25
+              }
+            ],
+            "playRows": [
+              {
+                "gameId": "rhfc42",
+                "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+                "intent": "battleAction",
+                "action": {
+                  "kind": "play",
+                  "card": "i11",
+                  "from": "hand"
+                },
+                "decisionKey": "1:0:decision",
+                "surface": "hand-tap",
+                "timestamp": "2026-10-13T03:27:50.117Z",
+                "event": "battle_engine_intent_requested",
+                "seq": 26
+              },
+              {
+                "gameId": "rhfc42",
+                "version": 1,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i11",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-13T03:27:50.190Z",
+                "event": "engine.action",
+                "seq": 27
+              }
+            ]
+          },
+          "visible": {
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=prompt-lab-present-ending&seed=1&debug=1&game=rhfc42",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "text": "You foresaw 0 cards.",
+            "box": {
+              "x": 283,
+              "y": 501.84375,
+              "width": 874,
+              "height": 18.84375,
+              "right": 1157,
+              "bottom": 520.6875
+            },
+            "log": {
+              "x": 283,
+              "y": 461.8125,
+              "width": 874,
+              "height": 58.875,
+              "right": 1157,
+              "bottom": 520.6875
+            },
+            "lines": [
+              "You played Lab Scrying.",
+              "You foresaw 0 cards."
+            ]
+          },
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        "nonempty": {
+          "id": "i1",
+          "uuid": "5e5e5e5e-0000-4000-8000-0000000000cf",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialDeck": [
+            "i2",
+            "i3",
+            "i4",
+            "i5",
+            "i6",
+            "i7",
+            "i8"
+          ],
+          "finalDeck": [
+            "i3",
+            "i4",
+            "i5",
+            "i6",
+            "i7",
+            "i8"
+          ],
+          "outcome": {
+            "cursor": {
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "seq": -1,
+              "index": -1
+            },
+            "completed": {
+              "seq": 3,
+              "index": 1,
+              "kind": "foresaw",
+              "instance": null,
+              "event": {
+                "kind": "foresaw",
+                "side": "player",
+                "kept": [
+                  "i3"
+                ],
+                "voided": [
+                  "i2"
+                ]
+              },
+              "cards": {
+                "i3": "5e5e5e5e-0000-4000-8000-000000000003",
+                "i2": "5e5e5e5e-0000-4000-8000-000000000002"
+              }
+            },
+            "played": {
+              "seq": 2,
+              "index": 0,
+              "kind": "cardPlayed",
+              "instance": "i1",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i1"
+              },
+              "cards": {
+                "i1": "5e5e5e5e-0000-4000-8000-0000000000cf"
+              }
+            },
+            "events": [
+              {
+                "seq": 2,
+                "index": 0,
+                "kind": "cardPlayed",
+                "instance": "i1",
+                "event": {
+                  "kind": "cardPlayed",
+                  "side": "player",
+                  "instance": "i1"
+                },
+                "cards": {
+                  "i1": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              },
+              {
+                "seq": 2,
+                "index": 1,
+                "kind": "resolved",
+                "instance": "i1",
+                "event": {
+                  "kind": "resolved",
+                  "instance": "i1"
+                },
+                "cards": {
+                  "i1": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              },
+              {
+                "seq": 3,
+                "index": 0,
+                "kind": "enteredVoid",
+                "instance": "i2",
+                "event": {
+                  "kind": "enteredVoid",
+                  "instance": "i2",
+                  "side": "player",
+                  "from": "deck"
+                },
+                "cards": {
+                  "i2": "5e5e5e5e-0000-4000-8000-000000000002"
+                }
+              },
+              {
+                "seq": 3,
+                "index": 1,
+                "kind": "foresaw",
+                "instance": null,
+                "event": {
+                  "kind": "foresaw",
+                  "side": "player",
+                  "kept": [
+                    "i3"
+                  ],
+                  "voided": [
+                    "i2"
+                  ]
+                },
+                "cards": {
+                  "i3": "5e5e5e5e-0000-4000-8000-000000000003",
+                  "i2": "5e5e5e5e-0000-4000-8000-000000000002"
+                }
+              },
+              {
+                "seq": 3,
+                "index": 2,
+                "kind": "enteredVoid",
+                "instance": "i1",
+                "event": {
+                  "kind": "enteredVoid",
+                  "instance": "i1",
+                  "side": "player",
+                  "from": "stack"
+                },
+                "cards": {
+                  "i1": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              }
+            ]
+          },
+          "visible": {
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=prompt-lab-foresee&seed=1&debug=1&game=sy7dr8",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "text": "You foresaw 2 cards: put Lab Recruit into your void and kept Lab Sentry on top.",
+            "box": {
+              "x": 283,
+              "y": 501.84375,
+              "width": 874,
+              "height": 18.84375,
+              "right": 1157,
+              "bottom": 520.6875
+            },
+            "log": {
+              "x": 283,
+              "y": 461.8125,
+              "width": 874,
+              "height": 58.875,
+              "right": 1157,
+              "bottom": 520.6875
+            },
+            "lines": [
+              "You played Lab Scrying.",
+              "You foresaw 2 cards: put Lab Recruit into your void and kept Lab Sentry on top."
+            ]
+          },
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        }
+      },
+      "mobile": {
+        "empty": {
+          "mode": "empty",
+          "id": "i11",
+          "uuid": "5e5e5e5e-0000-4000-8000-0000000000cf",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialDeck": [],
+          "stagedDeck": [],
+          "finalDeck": [],
+          "outcome": {
+            "cursor": {
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "seq": -1,
+              "index": -1
+            },
+            "completed": {
+              "seq": 3,
+              "index": 2,
+              "kind": "foresaw",
+              "instance": null,
+              "event": {
+                "kind": "foresaw",
+                "side": "player",
+                "kept": [],
+                "voided": []
+              },
+              "cards": {}
+            },
+            "played": {
+              "seq": 3,
+              "index": 0,
+              "kind": "cardPlayed",
+              "instance": "i11",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i11"
+              },
+              "cards": {
+                "i11": "5e5e5e5e-0000-4000-8000-0000000000cf"
+              }
+            },
+            "events": [
+              {
+                "seq": 3,
+                "index": 0,
+                "kind": "cardPlayed",
+                "instance": "i11",
+                "event": {
+                  "kind": "cardPlayed",
+                  "side": "player",
+                  "instance": "i11"
+                },
+                "cards": {
+                  "i11": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              },
+              {
+                "seq": 3,
+                "index": 1,
+                "kind": "resolved",
+                "instance": "i11",
+                "event": {
+                  "kind": "resolved",
+                  "instance": "i11"
+                },
+                "cards": {
+                  "i11": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              },
+              {
+                "seq": 3,
+                "index": 2,
+                "kind": "foresaw",
+                "instance": null,
+                "event": {
+                  "kind": "foresaw",
+                  "side": "player",
+                  "kept": [],
+                  "voided": []
+                },
+                "cards": {}
+              },
+              {
+                "seq": 3,
+                "index": 3,
+                "kind": "enteredVoid",
+                "instance": "i11",
+                "event": {
+                  "kind": "enteredVoid",
+                  "instance": "i11",
+                  "side": "player",
+                  "from": "stack"
+                },
+                "cards": {
+                  "i11": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              }
+            ]
+          },
+          "persisted": {
+            "printed": [
+              {
+                "gameId": "vkb3n2",
+                "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+                "op": {
+                  "kind": "addCard",
+                  "side": "player",
+                  "card": "5e5e5e5e-0000-4000-8000-0000000000cf",
+                  "zone": "hand"
+                },
+                "timestamp": "2026-10-13T03:28:11.996Z",
+                "event": "battle_engine_debug_requested",
+                "seq": 25
+              }
+            ],
+            "playRows": [
+              {
+                "gameId": "vkb3n2",
+                "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+                "intent": "battleAction",
+                "action": {
+                  "kind": "play",
+                  "card": "i11",
+                  "from": "hand"
+                },
+                "decisionKey": "1:0:decision",
+                "surface": "hand-tap",
+                "timestamp": "2026-10-13T03:28:13.107Z",
+                "event": "battle_engine_intent_requested",
+                "seq": 26
+              },
+              {
+                "gameId": "vkb3n2",
+                "version": 1,
+                "side": "player",
+                "action": {
+                  "kind": "play",
+                  "card": "i11",
+                  "from": "hand"
+                },
+                "answers": [],
+                "timestamp": "2026-10-13T03:28:13.112Z",
+                "event": "engine.action",
+                "seq": 27
+              }
+            ]
+          },
+          "visible": {
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=prompt-lab-present-ending&seed=1&debug=1&game=vkb3n2",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "text": "You foresaw 0 cards.",
+            "box": {
+              "x": 12,
+              "y": 152.28125,
+              "width": 366,
+              "height": 18.84375,
+              "right": 378,
+              "bottom": 171.125
+            },
+            "log": {
+              "x": 12,
+              "y": 112.25,
+              "width": 366,
+              "height": 58.875,
+              "right": 378,
+              "bottom": 171.125
+            },
+            "lines": [
+              "You played Lab Scrying.",
+              "You foresaw 0 cards."
+            ]
+          },
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        "nonempty": {
+          "id": "i1",
+          "uuid": "5e5e5e5e-0000-4000-8000-0000000000cf",
+          "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+          "initialDeck": [
+            "i2",
+            "i3",
+            "i4",
+            "i5",
+            "i6",
+            "i7",
+            "i8"
+          ],
+          "finalDeck": [
+            "i3",
+            "i4",
+            "i5",
+            "i6",
+            "i7",
+            "i8"
+          ],
+          "outcome": {
+            "cursor": {
+              "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+              "seq": -1,
+              "index": -1
+            },
+            "completed": {
+              "seq": 3,
+              "index": 1,
+              "kind": "foresaw",
+              "instance": null,
+              "event": {
+                "kind": "foresaw",
+                "side": "player",
+                "kept": [
+                  "i3"
+                ],
+                "voided": [
+                  "i2"
+                ]
+              },
+              "cards": {
+                "i3": "5e5e5e5e-0000-4000-8000-000000000003",
+                "i2": "5e5e5e5e-0000-4000-8000-000000000002"
+              }
+            },
+            "played": {
+              "seq": 2,
+              "index": 0,
+              "kind": "cardPlayed",
+              "instance": "i1",
+              "event": {
+                "kind": "cardPlayed",
+                "side": "player",
+                "instance": "i1"
+              },
+              "cards": {
+                "i1": "5e5e5e5e-0000-4000-8000-0000000000cf"
+              }
+            },
+            "events": [
+              {
+                "seq": 2,
+                "index": 0,
+                "kind": "cardPlayed",
+                "instance": "i1",
+                "event": {
+                  "kind": "cardPlayed",
+                  "side": "player",
+                  "instance": "i1"
+                },
+                "cards": {
+                  "i1": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              },
+              {
+                "seq": 2,
+                "index": 1,
+                "kind": "resolved",
+                "instance": "i1",
+                "event": {
+                  "kind": "resolved",
+                  "instance": "i1"
+                },
+                "cards": {
+                  "i1": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              },
+              {
+                "seq": 3,
+                "index": 0,
+                "kind": "enteredVoid",
+                "instance": "i2",
+                "event": {
+                  "kind": "enteredVoid",
+                  "instance": "i2",
+                  "side": "player",
+                  "from": "deck"
+                },
+                "cards": {
+                  "i2": "5e5e5e5e-0000-4000-8000-000000000002"
+                }
+              },
+              {
+                "seq": 3,
+                "index": 1,
+                "kind": "foresaw",
+                "instance": null,
+                "event": {
+                  "kind": "foresaw",
+                  "side": "player",
+                  "kept": [
+                    "i3"
+                  ],
+                  "voided": [
+                    "i2"
+                  ]
+                },
+                "cards": {
+                  "i3": "5e5e5e5e-0000-4000-8000-000000000003",
+                  "i2": "5e5e5e5e-0000-4000-8000-000000000002"
+                }
+              },
+              {
+                "seq": 3,
+                "index": 2,
+                "kind": "enteredVoid",
+                "instance": "i1",
+                "event": {
+                  "kind": "enteredVoid",
+                  "instance": "i1",
+                  "side": "player",
+                  "from": "stack"
+                },
+                "cards": {
+                  "i1": "5e5e5e5e-0000-4000-8000-0000000000cf"
+                }
+              }
+            ]
+          },
+          "visible": {
+            "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=prompt-lab-foresee&seed=1&debug=1&game=bstrtn",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "text": "You foresaw 2 cards: put Lab Recruit into your void and kept Lab Sentry on top.",
+            "box": {
+              "x": 12,
+              "y": 152.28125,
+              "width": 366,
+              "height": 37.6875,
+              "right": 378,
+              "bottom": 189.96875
+            },
+            "log": {
+              "x": 12,
+              "y": 112.25,
+              "width": 366,
+              "height": 77.71875,
+              "right": 378,
+              "bottom": 189.96875
+            },
+            "lines": [
+              "You played Lab Scrying.",
+              "You foresaw 2 cards: put Lab Recruit into your void and kept Lab Sentry on top."
+            ]
+          },
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        }
+      }
+    },
+    "caps": [],
+    "sourceScenario": "Ignored primary artifacts/qa/hv-k58b/empty-foresee.mjs; no tracked QA/framework/scene change",
+    "captures": {
+      "desktop": [
+        "empty-foresee-log-desktop.png",
+        "nonempty-foresee-log-desktop.png",
+        "foresee-prompt-desktop.png"
+      ],
+      "mobile": [
+        "empty-foresee-log-mobile.png",
+        "nonempty-foresee-log-mobile.png",
+        "foresee-prompt-mobile.png"
+      ]
+    },
+    "visualReview": "Helper inspected both empty logs, mobile nonempty log and desktop prompt. Parent inspected both empty logs and desktop prompt at endpoint ACK; no new visual finding. Six PNG signatures verified."
+  },
+  "failurePaths": [
+    {
+      "path": "error mid-step",
+      "contract": "rolls back the Foresee completion and trigger queue when the same resolution fails after arrangement",
+      "file": "src/engine/effects/primitives/contracts/when-foresee-trigger.contracts.ts",
+      "line": 208,
+      "coverage": "Existing public fold reduction fails on unknown figment after arrangement and preserves the committed deck, trigger queue and once-per-turn state."
+    },
+    {
+      "path": "reload or restart mid-operation",
+      "contract": "preserves a subject-null queued trigger across reload, views and determinization, with identical resumed events",
+      "file": "src/engine/effects/primitives/contracts/when-foresee-trigger.contracts.ts",
+      "line": 173,
+      "coverage": "Existing JSON reload/fresh fold adapter matches inline event stream and final state hash. Positive-empty fixture completes synchronously without a prompt or suspended answer."
+    },
+    {
+      "path": "partial write",
+      "contract": "rolls back the Foresee completion and trigger queue when the same resolution fails after arrangement",
+      "file": "src/engine/effects/primitives/contracts/when-foresee-trigger.contracts.ts",
+      "line": 208,
+      "coverage": "Existing failed resolution publishes neither foresaw nor triggerQueued and preserves committed queue/deck/once state. Fixture uses the existing synchronous ctx.emit; formatter returns a string and performs no durable write."
+    },
+    {
+      "path": "invalid or stale input",
+      "contract": "preserves a subject-null queued trigger across reload, views and determinization, with identical resumed events",
+      "file": "src/engine/effects/primitives/contracts/when-foresee-trigger.contracts.ts",
+      "line": 173,
+      "coverage": "Existing public fold contract bounces stalePrompt, notYourPrompt, illegalAnswer and noPendingPrompt. Empty Foresee raises no input prompt."
+    },
+    {
+      "path": "concurrent actors",
+      "contract": "preserves a subject-null queued trigger across reload, views and determinization, with identical resumed events",
+      "file": "src/engine/effects/primitives/contracts/when-foresee-trigger.contracts.ts",
+      "line": 173,
+      "coverage": "Existing public fold contract bounces the enemy battleAction as stepInFlight while the human trigger answer is pending. Empty completion introduces no concurrent actor or async mutation."
+    }
+  ],
+  "runtimeSettlement": {
+    "at": "2026-10-13T03:28:40.940201+00:00",
+    "pids": {
+      "26760": "absent",
+      "30977": "absent",
+      "24374": "absent",
+      "23759": "absent",
+      "24737": "absent",
+      "28052": "absent",
+      "23995": "absent",
+      "24541": "absent",
+      "28088": "absent",
+      "31033": "absent"
+    },
+    "groupMembers": [],
+    "listener5274": "",
+    "ownSlotRecords": {
+      "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": "absent",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.provider.json": "absent"
+    },
+    "finalEvidenceCheckers": {
+      "evidence-schema": 95242,
+      "evidence-triggers": 95243,
+      "status": "Both terminal receipts exit0; both PIDs absent before normal commit."
+    }
+  },
+  "runtimeQualification": "Instrumented checker/runner PIDs and groups are terminal; earlier short read/public-diagnostic tool commands returned terminal, their child PIDs were not exposed. No separate reviewer, server or browser context launched. Both native runner-owned servers/clients settled.",
+  "rulesAndReview": {
+    "rulesDecision": "Existing RD-hv-umm2.230-1 governs positive-empty completion and zero instructions; no new rule/card issue file.",
+    "acceptedOriginalReview": "Both findings in /tmp/codex-takeover230/review.md independently reproduced; current follow-up repairs their exact admitted paths.",
+    "routing": "Parent owns fresh read-only temporary gpt-5.6-sol review of final source/base and exact candidate promotion. No Claude review attempted by helper. Required review pending at author commit.",
+    "endpointACK": "Parent verified three source hashes, actual four QA cells, saved provenance, geometry/Caps and all ten recorded PIDs/groups before authorizing evidence and normal commit."
+  },
+  "preExistingIssues": "No additional product issue observed within bounded admitted audit; no pre-existing file created."
+}

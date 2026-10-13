@@ -16,6 +16,7 @@ import { boardState, type BoardSetup } from "../../../testing/board";
 import { invariantViolations } from "../../../testing/invariants";
 import { eventRedactionViolations } from "../../../testing/redaction";
 import { SYNTHETIC as v, syntheticId, testCatalog } from "../../../testing/synthetic-cards";
+import { PROMPTING } from "../../../testing/synthetic-effects";
 import { at, passUntil } from "../../../testing/trigger-harness";
 import { parseDreamsignId } from "../../../../types/identifiers";
 import { discover } from "../discover";
@@ -70,6 +71,21 @@ function applied(outcome: IntentOutcome) {
 }
 
 describe("whenForesee", () => {
+  it("completes the synthetic Foresee fixture on an empty deck and resolves its listener", () => {
+    const listener = emblem(parseDreamsignId("00000000-0000-4000-8000-000000023005"), () => [triggered(whenForesee(), gainEnergy(1))]);
+    const engine = createEngine(testCatalog([PROMPTING.foresee], { dreamsigns: [listener] }));
+    const { state, ids } = boardState(engine.catalog, { active: "player", phase: "day",
+      player: { hand: [PROMPTING.foresee.id], dreamsigns: [listener.id], deck: [], void: [v.vanilla1.id] }, enemy: { deck: filler } });
+    const result = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, NO_PROMPTS);
+    expect(foresaw(result.events)).toEqual([{ kind: "foresaw", side: "player", kept: [], voided: [] }]);
+    expect(queued(result.events)).toMatchObject([{ source: { kind: "dreamsign", side: "player", index: 0 }, controller: "player", subject: null }]);
+    expect(result.state.sides.player.currentEnergy).toBe(1);
+    expect(result.state.sides.player.deck).toEqual([]);
+    expect(result.state.sides.player.void).toContain(ids.player.void[0]);
+    expect(result.events.some((entry) => entry.kind === "fatigue" || entry.kind === "shuffledIntoDeck")).toBe(false);
+    expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
+  });
+
   for (const side of ["player", "enemy"] as const) {
     for (const arrangement of ["unchanged", "reversed", "mixed", "void"] as const) {
       it(`matches one completed ${arrangement} operation for ${side}, with the player relative to each listener`, () => {
