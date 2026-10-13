@@ -27,6 +27,8 @@ import { banish } from "../banish";
 import { copyCard } from "../copy-card";
 import { sequence } from "../sequence";
 import { chooseOne } from "../choose-one";
+import { choosePlayer } from "../choose-player";
+import { at, passUntil } from "../../../testing/trigger-harness";
 import { costModifier } from "../cost-modifier";
 import { dissolve } from "../dissolve";
 import { gainPoints } from "../gain-points";
@@ -55,13 +57,13 @@ function applied(outcome: IntentOutcome) {
   return outcome.slice;
 }
 function slice(committed: BattleState): BattleSlice { return { committed, inFlight: null, publishedEvents: 0, attempt: 0 }; }
-function fixture(form: Form, side: Side = "player", options: { energy?: number; extraHand?: boolean; onlyWide?: boolean; response?: boolean; definition?: EngineCardDefinition; own?: boolean; echo?: EngineCardDefinition } = {}) {
+function fixture(form: Form, side: Side = "player", options: { energy?: number; extraHand?: boolean; onlyWide?: boolean; definition?: EngineCardDefinition; own?: boolean; echo?: EngineCardDefinition } = {}) {
   const card = options.definition ?? definitions[form];
   const engine = createEngine(testCatalog([card, ...(options.echo ? [options.echo] : [])]));
   const other = opponent(side);
   const placed = boardState(engine.catalog, { active: side, phase: "day",
     [side]: { hand: [card.id, ...(options.extraHand === false ? [] : [v.event0.id])], back: options.echo ? [options.echo.id] : options.own ? [v.vanilla1.id, v.vanilla2.id] : [], energy: options.energy ?? 6, deck },
-    [other]: { hand: options.response ? [v.interruptEvent.id] : [], back: options.onlyWide ? [v.vanilla5.id] : [v.vanilla1.id, v.vanilla2.id, v.vanilla5.id], deck } });
+    [other]: { hand: [], back: options.onlyWide ? [v.vanilla5.id] : [v.vanilla1.id, v.vanilla2.id, v.vanilla5.id], deck } });
   const state = { ...placed.state, config: { ...placed.state.config, autoAnswerForcedPrompts: false } };
   const action = { kind: "play", card: placed.ids[side].hand[0], from: "hand" } as const;
   return { engine, state, ids: placed.ids, side, other, action, card, wide: placed.ids[other].back[options.onlyWide ? 0 : 2]!, narrow: placed.ids[other].back[0]!, payer: placed.ids[side].hand[1] };
@@ -251,22 +253,48 @@ describe("prepared payment/target composition", () => {
     expect(played.state.instances[f.payer].zone).toBe("banished");
   });
 
-  for (const side of ["player", "enemy"] as const) for (const speed of ["fast", "interrupt"] as const) it(`${side} uses ${speed} in the applicable windows`, () => {
-    const card: EngineCardDefinition = { ...definitions.energy, id: syntheticId(0x47123), speed };
-    const f = fixture("energy", side, { definition: card, response: true });
-    expect(f.engine.legalActions(f.state, side)).toContainEqual(f.action);
-    const response = cloneState(f.state); response.priority = side; response.turn.active = f.other;
-    const opener = f.ids[f.other].hand[0]; response.instances[opener].zone = "stack"; response.sides[f.other].hand = [];
-    response.stack.push({ kind: "card", instance: opener, controller: f.other, choices: [], x: null, optionalPaid: [] });
-    expect(f.engine.legalActions(response, side).some(a => a.kind === "play" && a.card === f.action.card)).toBe(speed === "interrupt");
-    if (speed === "interrupt") {
-      const played = done(runStep(response, f.action, new ScriptedSource([true, [f.wide]]), f.engine.catalog));
-      expect(played.state.stack).toHaveLength(2);
-      expect(played.state.sides[side].currentEnergy).toBe(2);
-    }
-    const dusk = cloneState(f.state); dusk.turn.active = f.other; dusk.turn.phase = "dusk"; dusk.priority = side;
-    expect(f.engine.legalActions(dusk, side)).toContainEqual(f.action);
-  });
+  for (const side of ["player", "enemy"] as const) for (const form of ["energy", "discard"] as const) for (const speed of ["fast", "interrupt"] as const) {
+    const card: EngineCardDefinition = { ...definitions[form], speed };
+    it(`${side} ${form} ${speed} uses normal Fast windows`, () => {
+      const f = fixture(form, side, { definition: card });
+      expect(f.engine.legalActions(f.state, side)).toContainEqual(f.action);
+      const night = passUntil(f.engine, f.state, at(f.engine, side, "night")).state;
+      expect(f.engine.legalActions(night, side)).toContainEqual(f.action);
+      const dusk = passUntil(f.engine, night, at(f.engine, f.other, "dusk")).state;
+      expect(f.engine.legalActions(dusk, side)).toContainEqual(f.action);
+    });
+    for (const pays of [true, false]) it(`${side} ${form} ${speed} paid=${pays} answers an actual opponent play`, () => {
+      const engine = createEngine(testCatalog([card])); const other = opponent(side);
+      const f = boardState(engine.catalog, { active: other, phase: "day",
+        [side]: { hand: [card.id, v.event0.id, v.interruptEvent.id], energy: 6, deck },
+        [other]: { hand: [v.event1.id, v.interruptEvent.id], back: [v.vanilla1.id, v.vanilla2.id, v.vanilla5.id], energy: 6, deck } });
+      const start = { ...f.state, config: { ...f.state.config, autoAnswerForcedPrompts: false } };
+      const opened = engine.apply(start, other, { kind: "play", card: f.ids[other].hand[0], from: "hand" }, NO_PROMPTS);
+      expect(opened.events.filter(e => e.kind === "cardPlayed")).toMatchObject([{ instance: f.ids[other].hand[0], side: other }]);
+      expect(opened.state.stack).toMatchObject([{ kind: "card", instance: f.ids[other].hand[0], controller: other }]);
+      expect(engine.decision(opened.state)?.side).toBe(side);
+      const action = { kind: "play", card: f.ids[side].hand[0], from: "hand" } as const;
+      if (speed === "fast") {
+        const before = stateHash(opened.state);
+        expect(engine.legalActions(opened.state, side)).not.toContainEqual(action);
+        expect(() => engine.apply(opened.state, side, action, NO_PROMPTS)).toThrow();
+        expect(stateHash(opened.state)).toBe(before); return;
+      }
+      expect(engine.legalActions(opened.state, side)).toContainEqual(action);
+      const target = f.ids[other].back[pays ? 2 : 0]!;
+      const answers = new Answers([pays, ...(pays && form === "discard" ? [[f.ids[side].hand[1]]] : []), [target]]);
+      const response = engine.apply(opened.state, side, action, answers); answers.exhausted();
+      expect(response.state.stack).toHaveLength(2);
+      expect(response.state.stack[1]).toMatchObject({ instance: action.card, optionalPaid: [pays], choices: [{ targets: [[target]] }] });
+      expect(answers.prompts[answers.prompts.length - 1]).toMatchObject({ candidates: pays ? f.ids[other].back : f.ids[other].back.slice(0, 2) });
+      expect(response.state.sides[side].currentEnergy).toBe(form === "energy" && pays ? 2 : 5);
+      expect(response.events.filter(e => e.kind === "discarded")).toHaveLength(form === "discard" && pays ? 1 : 0);
+      const resolved = passUntil(engine, response.state, state => state.stack.length === 0).state;
+      expect(resolved.instances[target].zone).toBe("void");
+      expect(resolved.instances[f.ids[other].hand[0]].zone).toBe("void");
+      expect(invariantViolations(resolved, engine.catalog)).toEqual([]);
+    });
+  }
 
   for (const side of ["player", "enemy"] as const) for (const form of ["energy", "discard"] as const) for (const pays of [true, false]) it(`${side} activation ${form} paid=${pays} selects before debit`, () => {
     const optional = form === "energy" ? energy(3) : discardCost();
@@ -347,3 +375,71 @@ it("rolls back partial payment writes after a prepared optional decision commits
   expect(outcome.error).not.toBeNull(); expect(outcome.slice.committed).toEqual(f.state);
   expect(outcome.published.some(e => e.kind === "energyChanged" || e.kind === "discarded")).toBe(false);
 });
+
+function deferred(form: Form) {
+  return custom(form === "energy" ? 3 : 4, [optionalCost(form === "energy" ? energy(3) : discardCost())], choosePlayer(() => dissolve(
+    targetWhen(costPaid(), enemyCharacter(), enemyCharacter(form === "energy" ? { sparkAtMost: 2 } : { costAtMost: 2 })),
+  )));
+}
+for (const side of ["player", "enemy"] as const) for (const form of ["energy", "discard"] as const) for (const pays of [true, false]) {
+  it(`${side} deferred ${form} paid=${pays} chooses its payment-dependent target only during resolution`, () => {
+    const f = fixture(form, side, { definition: deferred(form) });
+    const payment = new Answers(values(f, form, pays).slice(0, -1));
+    const played = done(runStep(f.state, f.action, payment, f.engine.catalog)); payment.exhausted();
+    expect(payment.prompts.some(p => p.kind === "chooseTargets" || p.purpose.role === "choosePlayer")).toBe(false);
+    expect(playedItem(played.state)).toMatchObject({ optionalPaid: [pays], choices: [{ targets: [] }] });
+    const target = pays ? f.wide : f.narrow; const answers = new Answers([0, [target]]);
+    const resolved = done(runStep(played.state, { kind: "resolveTop" }, answers, f.engine.catalog)); answers.exhausted();
+    expect(answers.prompts.map(p => p.purpose.role)).toEqual(["choosePlayer", "target"]);
+    expect(answers.prompts[1]).toMatchObject({ candidates: pays ? f.ids[f.other].back : f.ids[f.other].back.slice(0, 2), min: 1, max: 1, cancellable: false });
+    expect(resolved.state.instances[target].zone).toBe("void");
+    expect(resolved.state.sides[side].currentEnergy).toBe(form === "energy" && pays ? 2 : 5);
+    expect(resolved.events.some(e => e.kind === "energyChanged" || e.kind === "discarded")).toBe(false);
+    expect(invariantViolations(resolved.state, f.engine.catalog)).toEqual([]);
+  });
+
+  it(`${side} deferred ${form} paid=${pays} replays resolution prefixes and contains invalid, competing and failed answers`, () => {
+    const f = fixture(form, side, { definition: deferred(form) }); let fold = createFoldAdapter(f.engine, { checkEventPrefix: true });
+    let current = applied(fold.reduce(slice(f.state), { kind: "battleAction", side, action: f.action }));
+    let previous: PromptId | null = null;
+    for (const value of [...values(f, form, pays).slice(0, -1), 0, [pays ? f.wide : f.narrow]] as Answer[]) {
+      const saved = JSON.parse(JSON.stringify(current)) as BattleSlice;
+      fold = createFoldAdapter(createEngine(f.engine.catalog), { checkEventPrefix: true });
+      const pending = fold.pending(saved)!;
+      expect(pending).toEqual(createFoldAdapter(f.engine).pending(current));
+      expect(fold.reduce(saved, { kind: "battleAction", side, action: f.action })).toEqual({ kind: "bounced", reason: "stepInFlight" });
+      expect(fold.reduce(saved, { kind: "answer", side: f.other, promptId: pending.prompt.id, value })).toEqual({ kind: "bounced", reason: "notYourPrompt" });
+      expect(fold.reduce(saved, { kind: "answer", side, promptId: pending.prompt.id, value: [f.action.card] })).toEqual({ kind: "bounced", reason: "illegalAnswer" });
+      if (previous !== null) expect(fold.reduce(saved, { kind: "answer", side, promptId: previous, value })).toEqual({ kind: "bounced", reason: "stalePrompt" });
+      if (pending.prompt.purpose.role === "choosePlayer" || pending.prompt.purpose.role === "target") {
+        expect(playedItem(saved.committed).optionalPaid).toEqual([pays]);
+        expect(saved.committed.sides[side].currentEnergy).toBe(form === "energy" && pays ? 2 : 5);
+        expect(fold.reduce(saved, { kind: "cancel", side, promptId: pending.prompt.id })).toEqual({ kind: "bounced", reason: "notCancellable" });
+      }
+      current = applied(fold.reduce(saved, { kind: "answer", side, promptId: pending.prompt.id, value })); previous = pending.prompt.id;
+    }
+    const inline = f.engine.apply(f.state, side, f.action, new ScriptedSource([...values(f, form, pays).slice(0, -1), 0, [pays ? f.wide : f.narrow]]));
+    expect(stateHash(current.committed)).toBe(stateHash(inline.state)); expect(current.inFlight).toBeNull();
+    const played = done(runStep(f.state, f.action, new ScriptedSource(values(f, form, pays).slice(0, -1)), f.engine.catalog));
+    const before = stateHash(played.state); let count = 0;
+    expect(() => runStep(played.state, { kind: "resolveTop" }, { answer() { if (count++ === 0) return 0; throw new Error("synthetic deferred target failure"); } }, f.engine.catalog)).toThrow("synthetic deferred target failure");
+    expect(stateHash(played.state)).toBe(before); expect(played.state.instances[pays ? f.wide : f.narrow].zone).toBe("play");
+  });
+
+  it(`${side} triggered ${form} source paid=${pays} uses the trigger's empty optional payment context`, () => {
+    const watcher: EngineCardDefinition = { ...v.vanilla1, id: syntheticId(0x47115), status: "authored", abilities: () => [triggered(whenYouPlay({ cardType: "event" }), choosePlayer(() => dissolve(
+      targetWhen(costPaid(), enemyCharacter(), enemyCharacter(form === "energy" ? { sparkAtMost: 2 } : { costAtMost: 2 })),
+    )))] };
+    const f = fixture(form, side, { echo: watcher });
+    const played = done(runStep(f.state, f.action, new ScriptedSource(values(f, form, pays)), f.engine.catalog));
+    expect(playedItem(played.state).optionalPaid).toEqual([pays]); expect(played.state.triggerQueue).toHaveLength(1);
+    const chosen = f.ids[f.other].back[1]!; const answers = new Answers([0, [chosen]]);
+    const resolved = done(runStep(played.state, { kind: "resolveTrigger" }, answers, f.engine.catalog)); answers.exhausted();
+    expect(answers.prompts.map(p => p.purpose.role)).toEqual(["choosePlayer", "target"]);
+    expect(answers.prompts[1]).toMatchObject({ candidates: f.ids[f.other].back.slice(0, 2) });
+    expect(resolved.state.instances[chosen].zone).toBe("void"); expect(resolved.state.instances[f.wide].zone).toBe("play");
+    expect(resolved.events.filter(e => e.kind === "triggerResolved")).toMatchObject([{ applied: true, controller: side }]);
+    expect(playedItem(resolved.state).optionalPaid).toEqual([pays]);
+    expect(resolved.events.some(e => e.kind === "energyChanged" || e.kind === "discarded")).toBe(false);
+  });
+}

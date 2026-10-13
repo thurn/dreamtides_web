@@ -1,0 +1,813 @@
+{
+  "bead": "hv-r3hy",
+  "base": "d9b44a5543b598ae1215b2d75e675ad6592d22f0",
+  "modelStartUTC": null,
+  "firstActualToolUTC": "2026-10-13T15:13:27Z",
+  "identityAudit": {
+    "sourceFilesScanned": 2317,
+    "sourceIdentityLines": 781,
+    "nativeProjectRows": 948,
+    "nativeIntendedRows": 240,
+    "deduplicatedNativeIds": 950,
+    "nativeSyntheticUUIDReferences": 17,
+    "newIds": [
+      "5e5e5e5e-0000-4000-8000-000000473f00",
+      "5e5e5e5e-0000-4000-8000-000000473f01"
+    ],
+    "before": {
+      "extractedOldSourceSha256": "7928c1a458c452f7a39d7702071292cf7ad7bb61082bf8f87221bd4245ecec39",
+      "oldDefinitions": [
+        "5e5e5e5e-0000-4000-8000-000000047100",
+        "5e5e5e5e-0000-4000-8000-000000047101",
+        "5e5e5e5e-0000-4000-8000-000000047102",
+        "5e5e5e5e-0000-4000-8000-000000047103",
+        "5e5e5e5e-0000-4000-8000-000000047104",
+        "5e5e5e5e-0000-4000-8000-000000047105"
+      ],
+      "newDefinitions": [
+        "5e5e5e5e-0000-4000-8000-000000047100",
+        "5e5e5e5e-0000-4000-8000-000000047101"
+      ],
+      "results": [
+        {
+          "role": "energy",
+          "accepted": false,
+          "error": "Error: Duplicate card UUID 5e5e5e5e-0000-4000-8000-000000047100"
+        },
+        {
+          "role": "discard",
+          "accepted": false,
+          "error": "Error: Duplicate card UUID 5e5e5e5e-0000-4000-8000-000000047101"
+        },
+        {
+          "role": "allDSL+oldBoundSource",
+          "accepted": false,
+          "error": "Error: Duplicate card UUID 5e5e5e5e-0000-4000-8000-000000047100"
+        }
+      ]
+    },
+    "after": {
+      "extractedOldSourceSha256": "7928c1a458c452f7a39d7702071292cf7ad7bb61082bf8f87221bd4245ecec39",
+      "oldDefinitions": [
+        "5e5e5e5e-0000-4000-8000-000000047100",
+        "5e5e5e5e-0000-4000-8000-000000047101",
+        "5e5e5e5e-0000-4000-8000-000000047102",
+        "5e5e5e5e-0000-4000-8000-000000047103",
+        "5e5e5e5e-0000-4000-8000-000000047104",
+        "5e5e5e5e-0000-4000-8000-000000047105"
+      ],
+      "newDefinitions": [
+        "5e5e5e5e-0000-4000-8000-000000473f00",
+        "5e5e5e5e-0000-4000-8000-000000473f01"
+      ],
+      "results": [
+        {
+          "role": "energy",
+          "accepted": true,
+          "count": 2
+        },
+        {
+          "role": "discard",
+          "accepted": true,
+          "count": 2
+        },
+        {
+          "role": "allDSL+oldBoundSource",
+          "accepted": true,
+          "count": 69
+        }
+      ]
+    },
+    "diagnosticTiming": {
+      "beforeToolWallSeconds": 2.13038375,
+      "afterToolWallSeconds": 1.624580167,
+      "UTCAndPID": "Unknown; diagnostics ran before structured process capture"
+    },
+    "correction": "The audit examines all src/scripts fixture definitions, bounded dynamic ranges and native UUID proposals. The original loaded-DSL-only audit and captures are immutable source provenance; new UUID QA requires fresh observations.",
+    "privateFixtureIds": [
+      "5e5e5e5e-0000-4000-8000-000000047113",
+      "5e5e5e5e-0000-4000-8000-000000047114",
+      "5e5e5e5e-0000-4000-8000-000000047115"
+    ],
+    "privateIdsAudit": "No exact native reservation; old bound-source range047100..105 and047181..186 is disjoint; owning custom factory extends existing047110..112 to047113..114 and trigger047115. No additional source definition or dynamic range reaches these three values."
+  },
+  "sourceHashes": {
+    "src/engine/testing/dsl-cards.ts": "9af068811ac961e84583a3d02d605ff03e38e2b7d544c9385a77bcb8a8d88ae6",
+    "src/engine/effects/primitives/contracts/optional-cost-targets.contracts.ts": "9283e9c5a8fe145c977590f522f7838287c985a7edf735420a2b8c029cd78d38",
+    "src/engine/effects/interpreter.ts": "f95b4d89ec51aa1adb533dc9de75b901458f736ab575064b70acd785577fe5ba",
+    "src/engine/testing/prompt-lab.ts": "092c5e4ac6691630b1930d585e9eaec63f0891e5bd2d78f2c00240cf995d8bd2",
+    "src/engine/testing/lab-cost-staging.test.ts": "ffb0f8bdcb5fed57e43498b6418d7f36c8865d579113593a0c05cb0a79057e28",
+    "src/engine/effects/primitives/contracts/bound-source-spark.contracts.ts": "7928c1a458c452f7a39d7702071292cf7ad7bb61082bf8f87221bd4245ecec39",
+    "scripts/qa/prelude.mjs": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+    "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+    "/tmp/dreamtides-executor-01a1304d/r3hy-helper/optional-targets-r3hy.mjs": "e9b852409933e402c8c754e58c69f44dfc1031e9e993d7e4f02789e9e6e2325f",
+    "/tmp/dreamtides-executor-01a1304d/r3hy-helper/qa-public-history-replay.ts": "5e84366aa5a072eae152bd47e057dbe422cb95a3d88542f5ef6add020609ea55"
+  },
+  "contractLines": 445,
+  "testDelta": {
+    "files": 1,
+    "lines": 96,
+    "cases": 44,
+    "jsdomFiles": 0
+  },
+  "checks": [
+    {
+      "label": "negative-deferred-paid",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "deferred .*paid=true chooses its payment-dependent target only during resolution"
+      ],
+      "pid": 83576,
+      "pgid": 83559,
+      "startUTC": "2026-10-13T15:28:45.850098+00:00",
+      "endUTC": "2026-10-13T15:28:53.338376+00:00",
+      "wallSeconds": 7.4883249170088675,
+      "exit": 1,
+      "userCPUSeconds": 6.095303,
+      "systemCPUSeconds": 2.308878,
+      "maximumRSS": 518225920,
+      "load": [
+        10.3359375,
+        14.302734375,
+        13.58203125
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/negative-deferred-paid.out"
+    },
+    {
+      "label": "restored-owning-contracts-lab",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/lab-cost-staging.test.ts"
+      ],
+      "pid": 91754,
+      "pgid": 91745,
+      "startUTC": "2026-10-13T15:29:46.397029+00:00",
+      "endUTC": "2026-10-13T15:29:55.447599+00:00",
+      "wallSeconds": 9.050473665993195,
+      "exit": 0,
+      "userCPUSeconds": 11.605629,
+      "systemCPUSeconds": 1.605898,
+      "maximumRSS": 820903936,
+      "load": [
+        10.54052734375,
+        13.62744140625,
+        13.37646484375
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/restored-owning-contracts-lab.out"
+    },
+    {
+      "label": "review-positive",
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 90793,
+      "pgid": 90778,
+      "startUTC": "2026-10-13T15:24:36.427909+00:00",
+      "endUTC": "2026-10-13T15:25:32.420585+00:00",
+      "wallSeconds": 55.99222249997547,
+      "exit": 0,
+      "userCPUSeconds": 146.656186,
+      "systemCPUSeconds": 16.211117,
+      "maximumRSS": 2458238976,
+      "load": [
+        23.30859375,
+        16.32861328125,
+        13.79296875
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/review-positive.out"
+    },
+    {
+      "label": "restored-deferred-paid",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "deferred .*paid=true chooses its payment-dependent target only during resolution"
+      ],
+      "pid": 88395,
+      "pgid": 88383,
+      "startUTC": "2026-10-13T15:29:03.030539+00:00",
+      "endUTC": "2026-10-13T15:29:09.328525+00:00",
+      "wallSeconds": 6.297538874991005,
+      "exit": 0,
+      "userCPUSeconds": 6.094124,
+      "systemCPUSeconds": 2.097406,
+      "maximumRSS": 521273344,
+      "load": [
+        9.96533203125,
+        14.02587890625,
+        13.49560546875
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/restored-deferred-paid.out"
+    },
+    {
+      "label": "new-focused",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "actual opponent play|normal Fast windows|deferred .*paid=|triggered .*source paid="
+      ],
+      "pid": 56523,
+      "pgid": 56478,
+      "startUTC": "2026-10-13T15:23:43.966124+00:00",
+      "endUTC": "2026-10-13T15:23:51.362407+00:00",
+      "wallSeconds": 7.396117416996276,
+      "exit": 0,
+      "userCPUSeconds": 7.747776,
+      "systemCPUSeconds": 2.434715,
+      "maximumRSS": 532250624,
+      "load": [
+        19.33935546875,
+        14.09521484375,
+        12.8212890625
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/new-focused.out"
+    },
+    {
+      "label": "canonical-coverage-replay-schema",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts",
+        "src/rules/battle/engine-battle-replay.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts"
+      ],
+      "pid": 44991,
+      "pgid": 44982,
+      "startUTC": "2026-10-13T15:26:27.866361+00:00",
+      "endUTC": "2026-10-13T15:26:32.469033+00:00",
+      "wallSeconds": 4.602552249998553,
+      "exit": 0,
+      "userCPUSeconds": 5.461176,
+      "systemCPUSeconds": 1.531503,
+      "maximumRSS": 738394112,
+      "load": [
+        22.92529296875,
+        17.6640625,
+        14.4697265625
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/canonical-coverage-replay-schema.out"
+    },
+    {
+      "label": "knip-positive",
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 15984,
+      "pgid": 15772,
+      "startUTC": "2026-10-13T15:26:06.054853+00:00",
+      "endUTC": "2026-10-13T15:26:10.866201+00:00",
+      "wallSeconds": 4.8112259169865865,
+      "exit": 0,
+      "userCPUSeconds": 3.846481,
+      "systemCPUSeconds": 1.225466,
+      "maximumRSS": 565477376,
+      "load": [
+        27.03173828125,
+        17.80078125,
+        14.4169921875
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/knip-positive.out"
+    },
+    {
+      "label": "owning-contracts-lab",
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/lab-cost-staging.test.ts"
+      ],
+      "pid": 89389,
+      "pgid": 89377,
+      "startUTC": "2026-10-13T15:24:23.957180+00:00",
+      "endUTC": "2026-10-13T15:24:36.342313+00:00",
+      "wallSeconds": 12.384953166998457,
+      "exit": 0,
+      "userCPUSeconds": 14.813731,
+      "systemCPUSeconds": 2.216783,
+      "maximumRSS": 814415872,
+      "load": [
+        15.51171875,
+        13.8759765625,
+        12.80908203125
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/owning-contracts-lab.out"
+    },
+    {
+      "label": "fresh-uuid-native-qa",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/r3hy-helper/optional-targets-r3hy.mjs",
+        "--bead",
+        "hv-r3hy",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "pid": 3976,
+      "pgid": 3968,
+      "startUTC": "2026-10-13T15:37:46.705400+00:00",
+      "endUTC": "2026-10-13T15:38:25.653278+00:00",
+      "wallSeconds": 38.94775383401429,
+      "exit": 0,
+      "userCPUSeconds": 6.024229,
+      "systemCPUSeconds": 3.092678,
+      "maximumRSS": 663535616,
+      "load": [
+        6.23388671875,
+        6.921875,
+        9.8642578125
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/fresh-uuid-native-qa.out"
+    },
+    {
+      "label": "qa-public-history-replay",
+      "args": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/r3hy-helper/qa-public-history-replay.ts",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-r3hy/invocations/run-kggomR/optional-targets-r3hy.result.json"
+      ],
+      "pid": 12524,
+      "pgid": 12515,
+      "startUTC": "2026-10-13T15:40:53.959330+00:00",
+      "endUTC": "2026-10-13T15:40:55.411135+00:00",
+      "wallSeconds": 1.451705082989065,
+      "exit": 0,
+      "userCPUSeconds": 1.022478,
+      "systemCPUSeconds": 0.6631,
+      "maximumRSS": 446103552,
+      "load": [
+        5.99169921875,
+        6.46337890625,
+        9.201171875
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/qa-public-history-replay.out"
+    }
+  ],
+  "negative": {
+    "faultStartUTC": "2026-10-13T15:28:45.824333+00:00",
+    "restoreUTC": "2026-10-13T15:28:53.343767+00:00",
+    "originalSHA256": "f95b4d89ec51aa1adb533dc9de75b901458f736ab575064b70acd785577fe5ba",
+    "faultSHA256": "240c86070bbae56cbe748accba17fd76c3548c0ecd73d3490c7a3b9ba44d2853",
+    "restoredSHA256": "f95b4d89ec51aa1adb533dc9de75b901458f736ab575064b70acd785577fe5ba",
+    "exactBytesRestored": true,
+    "negativeExit": 1,
+    "wrapperPID": 83559,
+    "wrapperPGID": 83559
+  },
+  "resources": [
+    {
+      "label": "negative-deferred-paid",
+      "pid": 83576,
+      "pgid": 83559,
+      "alive": false,
+      "terminal": true
+    },
+    {
+      "label": "restored-owning-contracts-lab",
+      "pid": 91754,
+      "pgid": 91745,
+      "alive": false,
+      "terminal": true
+    },
+    {
+      "label": "review-positive",
+      "pid": 90793,
+      "pgid": 90778,
+      "alive": false,
+      "terminal": true
+    },
+    {
+      "label": "restored-deferred-paid",
+      "pid": 88395,
+      "pgid": 88383,
+      "alive": false,
+      "terminal": true
+    },
+    {
+      "label": "new-focused",
+      "pid": 56523,
+      "pgid": 56478,
+      "alive": false,
+      "terminal": true
+    },
+    {
+      "label": "canonical-coverage-replay-schema",
+      "pid": 44991,
+      "pgid": 44982,
+      "alive": false,
+      "terminal": true
+    },
+    {
+      "label": "knip-positive",
+      "pid": 15984,
+      "pgid": 15772,
+      "alive": false,
+      "terminal": true
+    },
+    {
+      "label": "owning-contracts-lab",
+      "pid": 89389,
+      "pgid": 89377,
+      "alive": false,
+      "terminal": true
+    }
+  ],
+  "publicContracts": {
+    "response": "Public opponent engine.apply play produces real stack and priority; Fast rejects without mutation; Interrupt paid/unpaid energy/discard selects and pays once, both actors. Public passes reach Day, Night, opponent Dusk and resolve response stacks.",
+    "deferred": "Normal play commits optionalPaid item bits with empty target bindings. choosePlayer resolution offers the payment-dependent candidates and one physical target, both actors/forms/payment decisions.",
+    "trigger": "An actual whenYouPlay queued trigger resolves choosePlayer with empty optional payment context even when the source play paid its optional cost.",
+    "error": "New deferred target answer failure preserves already committed payment and played item; existing synthetic payment failure contract verifies rollback of partial payment writes.",
+    "reload": "Every new deferred prefix serializes/recreates the fold with event-prefix checks and reaches the same final state hash as inline public apply.",
+    "invalidStaleConcurrent": "Each deferred prefix rejects invalid/foreign/stale/competing input; resolution prompts reject cancellation. Original prepayment cancellable contracts remain."
+  },
+  "logging": "Existing engine.action.answers, promptOpened UUID/physical source and promptAnswered value records reconstruct costs and chosen target from game init printing UUIDs. No new schema/event is needed.",
+  "rulesDecisions": [],
+  "cardIssues": [],
+  "preExistingIssues": [],
+  "validationScope": "Fixture identities and bounded public contracts; focused owning suite, review, Knip and canonical content/schema/replay checks. Repository architecture/test infrastructure unchanged; no local full or fuzz run required. Original139 retains its full entities/recipe.",
+  "qa": {
+    "UTC": "2026-10-13T15:41:34.470350+00:00",
+    "nativeReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-r3hy/invocations/run-kggomR/optional-targets-r3hy.result.json",
+    "nativeSha256": "7c502464e9188c321531e2b7dee0bb85b49b2e9f1c7efe37f01860cd8d5b2333",
+    "eightCells": [
+      {
+        "viewport": "desktop",
+        "form": "energy",
+        "pays": true,
+        "uuid": "5e5e5e5e-0000-4000-8000-000000473f00",
+        "source": "i1",
+        "selected": "i12",
+        "optionalPaid": [
+          true
+        ],
+        "targets": [
+          [
+            "i12"
+          ]
+        ],
+        "energy": 2,
+        "hash": "0e157514d3091d"
+      },
+      {
+        "viewport": "desktop",
+        "form": "energy",
+        "pays": false,
+        "uuid": "5e5e5e5e-0000-4000-8000-000000473f00",
+        "source": "i1",
+        "selected": "i10",
+        "optionalPaid": [
+          false
+        ],
+        "targets": [
+          [
+            "i10"
+          ]
+        ],
+        "energy": 5,
+        "hash": "086a0bb198b1ca"
+      },
+      {
+        "viewport": "desktop",
+        "form": "discard",
+        "pays": true,
+        "uuid": "5e5e5e5e-0000-4000-8000-000000473f01",
+        "source": "i2",
+        "selected": "i12",
+        "optionalPaid": [
+          true
+        ],
+        "targets": [
+          [
+            "i12"
+          ]
+        ],
+        "energy": 5,
+        "hash": "00cb5c9dac7afd"
+      },
+      {
+        "viewport": "desktop",
+        "form": "discard",
+        "pays": false,
+        "uuid": "5e5e5e5e-0000-4000-8000-000000473f01",
+        "source": "i2",
+        "selected": "i10",
+        "optionalPaid": [
+          false
+        ],
+        "targets": [
+          [
+            "i10"
+          ]
+        ],
+        "energy": 5,
+        "hash": "012f6da66392db"
+      },
+      {
+        "viewport": "mobile",
+        "form": "energy",
+        "pays": true,
+        "uuid": "5e5e5e5e-0000-4000-8000-000000473f00",
+        "source": "i1",
+        "selected": "i12",
+        "optionalPaid": [
+          true
+        ],
+        "targets": [
+          [
+            "i12"
+          ]
+        ],
+        "energy": 2,
+        "hash": "0e157514d3091d"
+      },
+      {
+        "viewport": "mobile",
+        "form": "energy",
+        "pays": false,
+        "uuid": "5e5e5e5e-0000-4000-8000-000000473f00",
+        "source": "i1",
+        "selected": "i10",
+        "optionalPaid": [
+          false
+        ],
+        "targets": [
+          [
+            "i10"
+          ]
+        ],
+        "energy": 5,
+        "hash": "086a0bb198b1ca"
+      },
+      {
+        "viewport": "mobile",
+        "form": "discard",
+        "pays": true,
+        "uuid": "5e5e5e5e-0000-4000-8000-000000473f01",
+        "source": "i2",
+        "selected": "i12",
+        "optionalPaid": [
+          true
+        ],
+        "targets": [
+          [
+            "i12"
+          ]
+        ],
+        "energy": 5,
+        "hash": "00cb5c9dac7afd"
+      },
+      {
+        "viewport": "mobile",
+        "form": "discard",
+        "pays": false,
+        "uuid": "5e5e5e5e-0000-4000-8000-000000473f01",
+        "source": "i2",
+        "selected": "i10",
+        "optionalPaid": [
+          false
+        ],
+        "targets": [
+          [
+            "i10"
+          ]
+        ],
+        "energy": 5,
+        "hash": "012f6da66392db"
+      }
+    ],
+    "loadedCatalogDefinitions": 265,
+    "screens": [
+      {
+        "filename": "r3hy-energy-decision-desktop.png",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800,
+        "viewportWidth": 1440,
+        "viewportHeight": 900,
+        "DPR": 2.0,
+        "sha256": "408974271bfd32289cb411cade60399e898137e9e49d4f7ef16421280d284611"
+      },
+      {
+        "filename": "r3hy-expanded-target-desktop.png",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800,
+        "viewportWidth": 1440,
+        "viewportHeight": 900,
+        "DPR": 2.0,
+        "sha256": "799ba5301d83b4c187709fb02eccb4bee2eb9f75881658371c5e92d9b65e123c"
+      },
+      {
+        "filename": "r3hy-energy-resolved-desktop.png",
+        "pixelWidth": 2880,
+        "pixelHeight": 1800,
+        "viewportWidth": 1440,
+        "viewportHeight": 900,
+        "DPR": 2.0,
+        "sha256": "3a6458933d4f8f6876e723a22ea0b9187211206f710c4fcca6bed1da6a321a3c"
+      },
+      {
+        "filename": "r3hy-restricted-target-mobile.png",
+        "pixelWidth": 780,
+        "pixelHeight": 1688,
+        "viewportWidth": 390,
+        "viewportHeight": 844,
+        "DPR": 2.0,
+        "sha256": "a7d076b07826d09b0ab5a4ee636aea14eb6e6fd70b0b4128e2bfeccf58bef0f0"
+      },
+      {
+        "filename": "r3hy-discard-payment-mobile.png",
+        "pixelWidth": 780,
+        "pixelHeight": 1688,
+        "viewportWidth": 390,
+        "viewportHeight": 844,
+        "DPR": 2.0,
+        "sha256": "0989b28c2513cff528ebdcab50e814d08f98822bec472c7ce18bd6c397ee7329"
+      },
+      {
+        "filename": "r3hy-discard-resolved-mobile.png",
+        "pixelWidth": 780,
+        "pixelHeight": 1688,
+        "viewportWidth": 390,
+        "viewportHeight": 844,
+        "DPR": 2.0,
+        "sha256": "a8e8307da5535ca81afa61768717d2acfbd07eef22c85f9ef5d066f677fb78df"
+      }
+    ],
+    "replayPID": 12524,
+    "replayPIDAbsent": true,
+    "sourceGuard": {
+      "UTC": "2026-10-13T15:40:53.936681+00:00",
+      "count": 2332,
+      "changed": []
+    },
+    "nativeCloseout": {
+      "UTC": "2026-10-13T15:40:53.881814+00:00",
+      "nativeInvocation": "run-kggomR",
+      "ownerRecordInventory": [
+        "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+        "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json"
+      ],
+      "records": [
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+          "exists": false
+        },
+        {
+          "path": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.server.json",
+          "exists": false
+        }
+      ],
+      "recordedProcesses": [
+        {
+          "pid": 3976,
+          "exit": 1,
+          "output": ""
+        },
+        {
+          "pid": 3968,
+          "exit": 1,
+          "output": ""
+        },
+        {
+          "pid": 4011,
+          "exit": 1,
+          "output": ""
+        }
+      ],
+      "port": {
+        "number": 5174,
+        "exit": 1,
+        "output": ""
+      },
+      "MCPContextTokenProviderBirthIDs": "Unknown; not observed live",
+      "nativeProducer": "Runner exit0; native PASS and normal finally reported own server cleanup/port free. Parent independently verified producer waits confirmed browser_close, zero active calls, no uncertain call before clearing owner. No own retained owner record plus actual process/port absence confirms normal closure.",
+      "firstLedgerRead": "Initial inventory also read unrelated native incident/slot1 metadata; no peer record or process was modified or signalled. Exact slot0 current record absence is the closure evidence."
+    },
+    "status": "Passed eight fresh UUID ordinary workflows and post-terminal public history replay",
+    "nativeReceipt": {
+      "label": "fresh-uuid-native-qa",
+      "args": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/r3hy-helper/optional-targets-r3hy.mjs",
+        "--bead",
+        "hv-r3hy",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "180"
+      ],
+      "pid": 3976,
+      "pgid": 3968,
+      "startUTC": "2026-10-13T15:37:46.705400+00:00",
+      "endUTC": "2026-10-13T15:38:25.653278+00:00",
+      "wallSeconds": 38.94775383401429,
+      "exit": 0,
+      "userCPUSeconds": 6.024229,
+      "systemCPUSeconds": 3.092678,
+      "maximumRSS": 663535616,
+      "load": [
+        6.23388671875,
+        6.921875,
+        9.8642578125
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/fresh-uuid-native-qa.out"
+    },
+    "nativeWallMs": {
+      "browserLeaseWait": 7,
+      "serve": 2919,
+      "scenario": 35189,
+      "total": 38179
+    },
+    "hostLoad": 3.77734375,
+    "nativeCaps": [],
+    "replayReceipt": {
+      "label": "qa-public-history-replay",
+      "args": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/r3hy-helper/qa-public-history-replay.ts",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-r3hy/invocations/run-kggomR/optional-targets-r3hy.result.json"
+      ],
+      "pid": 12524,
+      "pgid": 12515,
+      "startUTC": "2026-10-13T15:40:53.959330+00:00",
+      "endUTC": "2026-10-13T15:40:55.411135+00:00",
+      "wallSeconds": 1.451705082989065,
+      "exit": 0,
+      "userCPUSeconds": 1.022478,
+      "systemCPUSeconds": 0.6631,
+      "maximumRSS": 446103552,
+      "load": [
+        5.99169921875,
+        6.46337890625,
+        9.201171875
+      ],
+      "terminal": true,
+      "output": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/qa-public-history-replay.out"
+    },
+    "geometry": "Normal source, optional confirmation, discard payer/submit and target controls passed positive dimensions and uncovered usable hit-point checks; exact captured geometry remains in native report. Cancel was not exercised or measured.",
+    "publicReplayQualification": "Retained stack payment bits and single physical target are observed during public fold replay of actual accepted browser intent history after native runtime closure; replay final hashes equal actual browser final hashes. No live board state was modified.",
+    "visualReview": {
+      "parentViewed": [
+        "r3hy-energy-decision-desktop.png",
+        "r3hy-restricted-target-mobile.png",
+        "r3hy-discard-payment-mobile.png"
+      ],
+      "parentObservation": "Decision, target and payer controls/source are clear. Mobile debug opener partly overlaps the Cancel header label in two captures; Cancel usability/hit was not measured.",
+      "helperImageChecks": "Six PNG headers verified exactly2x viewport pixel dimensions and recorded SHA256; helper made no visual-review claim."
+    },
+    "preExistingObservation": "docs/plan/evidence/pre-existing/hv-r3hy.md",
+    "captureProvenance": "Current freshUUID script/run-kggomR; original471 script, audits and captures are immutable distinct provenance."
+  },
+  "independentReview": {
+    "status": "Required parent fresh Sol CLI review after helper terminal handoff; not performed or claimed by implementation helper",
+    "model": "gpt-5.6-sol",
+    "routing": "User temporary same-family routing through2026-10-14T01:00:00Z"
+  },
+  "sourceFreeze": {
+    "before": "/tmp/dreamtides-executor-01a1304d/r3hy-helper/qa-full-source-guard-v02.json",
+    "after": {
+      "UTC": "2026-10-13T15:40:53.936681+00:00",
+      "count": 2332,
+      "changed": []
+    },
+    "manualReadWriteFreeze": "Every source/support/evidence/Git/check/prepare read and write was frozen from runtime admission to producer closure. Only native receipts/captures and bounded runtime coordination were inspected.",
+    "laterAccounting": "Only this bead evidence is updated after closure and accepted full2332-file guard."
+  },
+  "endpoint": {
+    "completedUTC": "2026-10-13T15:48:49.838851+00:00",
+    "basis": "Actual final commit tool endpoint. The immediate Git invocation uses the actual system clock; its Git timestamp and invocation timing are retained in terminal handoff.",
+    "sourceWriterStatus": "Implementation and source validation complete; parent owns candidate, required fresh Sol review and promotion."
+  }
+}

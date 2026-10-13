@@ -1,0 +1,37 @@
+{
+  "bead": "hv-r3hy",
+  "phase": 5,
+  "implementMin": 35.38064751666666,
+  "implementWindow": {
+    "start": "2026-10-13T15:13:27+00:00",
+    "end": "2026-10-13T15:48:49.838851+00:00",
+    "startBasis": "First actual tool UTC proxy; internal model start unknown",
+    "endBasis": "Actual final commit tool endpoint; Git invocation follows within60seconds, with its unmodified timestamp retained in terminal handoff."
+  },
+  "localValidationS": {
+    "negative-deferred-paid": 7.4883249170088675,
+    "restored-owning-contracts-lab": 9.050473665993195,
+    "review-positive": 55.99222249997547,
+    "restored-deferred-paid": 6.297538874991005,
+    "new-focused": 7.396117416996276,
+    "canonical-coverage-replay-schema": 4.602552249998553,
+    "knip-positive": 4.8112259169865865,
+    "owning-contracts-lab": 12.384953166998457,
+    "fresh-uuid-native-qa": 38.94775383401429,
+    "qa-public-history-replay": 1.451705082989065
+  },
+  "hostLoad": 3.77734375,
+  "testDelta": {
+    "files": 1,
+    "lines": 96,
+    "cases": 44,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "bounded-native-ledger-read",
+      "minutes": 0,
+      "note": "Initial closure inventory read unrelated incident/slot1 native metadata; peer records and processes were untouched. The retained corrected proof uses exact current slot0 record absence, own numeric process absence, own port free and the verified producer cleanup contract. Live MCP/token/provider/server-birth identifiers were not observed and remain unknown."
+    }
+  ]
+}

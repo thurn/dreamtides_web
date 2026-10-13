@@ -63,12 +63,12 @@ const events = (...list: Ability[]) => () => list;
 /** DSL fixtures by role. */
 export const DSL = {
   /** One enemy target whose spark restriction follows an optional energy payment. */
-  optionalEnergyTarget: authored(0x47100 - 200, "event", 1, events(
+  optionalEnergyTarget: authored(0x473f00 - 200, "event", 1, events(
     additionalCost(optionalCost(energy(3))),
     event(p.dissolve(targetWhen(costPaid(), enemyCharacter(), enemyCharacter({ sparkAtMost: 2 })))),
   ), { speed: "fast" }),
   /** One enemy target whose copiable-cost restriction follows an optional discard. */
-  optionalDiscardTarget: authored(0x47101 - 200, "event", 1, events(
+  optionalDiscardTarget: authored(0x473f01 - 200, "event", 1, events(
     additionalCost(optionalCost(discardCost())),
     event(p.dissolve(targetWhen(costPaid(), enemyCharacter(), enemyCharacter({ costAtMost: 2 })))),
   ), { speed: "interrupt" }),
