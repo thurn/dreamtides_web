@@ -265,7 +265,12 @@ export function isEnhancedDreamsignReward(value: unknown): value is RewardSiteRu
     if (id === null || offeredIds.has(id)) return false;
     offeredIds.add(id);
   }
-  if (!offeredIds.has(quote.standardDreamsignId)) return false;
+  const standard = runtime.reward.dreamsign;
+  const offeredStandard = (alternatives as readonly Dreamsign[]).find((sign) => sign.id === quote.standardDreamsignId);
+  // UUID selects the content; duplicated stored fields must describe the same prepared reward.
+  if (offeredStandard === undefined || offeredStandard.name !== standard.name ||
+    offeredStandard.effectDescription !== standard.effectDescription ||
+    offeredStandard.imageName !== standard.imageName || offeredStandard.imageAlt !== standard.imageAlt) return false;
   const remaining = new Set<DreamsignId>();
   for (const id of runtime.remainingDreamsignPoolIds) {
     if (dreamsignIdFromUnknown(id) === null || offeredIds.has(id) || remaining.has(id)) return false;

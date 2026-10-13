@@ -13,7 +13,7 @@ import { testCardId, testDreamscapeId, testEventActor } from "../../types/test-i
 import { LayerName } from "../../types/layer-name";
 import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
 import { SELECTION_RULES_VERSION } from "../../reward-selection";
-import type { JourneyState, RewardSiteRuntime } from "../../types/journey";
+import type { Dreamsign, JourneyState, RewardSiteRuntime } from "../../types/journey";
 import { initialFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 import { GAME_ENGINE_CONFIG } from "../replay/replay";
@@ -272,6 +272,75 @@ export function registerEnhancedRewardContracts() {
       }
       const ordinary = pending(fixture(false));
       expect(apply(ordinary, "LOAD_STATE", { snapshot: structuredClone(ordinary.journey) }).outcome).toBe("applied");
+    });
+
+    it("rejects incoherent standard duplicates at load, online decisions and provider adoption", () => {
+      const source = fixture(), opened = pending(source), prepared = quoted(opened);
+      if (prepared.reward.rewardType !== "dreamsign") throw new Error("expected standard Dreamsign");
+      for (const sign of [prepared.reward.dreamsign, ...prepared.enhancedDreamsignOffer.offeredDreamsigns]) {
+        Object.assign(sign, { imageName: "synthetic-art", imageAlt: "synthetic-alt" });
+      }
+      const corruptions: ((standard: Dreamsign, offered: Dreamsign) => void)[] = [
+        (_standard, offered) => { offered.name += " altered"; },
+        (_standard, offered) => { offered.effectDescription += " altered"; },
+        (_standard, offered) => { offered.imageName += " altered"; },
+        (_standard, offered) => { offered.imageAlt += " altered"; },
+        (_standard, offered) => { delete offered.imageName; },
+        (_standard, offered) => { delete offered.imageAlt; },
+        (standard) => { delete standard.imageName; },
+        (standard) => { delete standard.imageAlt; },
+      ];
+      for (const corrupt of corruptions) {
+        // JSON persistence gives the two stored representations independent objects.
+        const malformed = JSON.parse(JSON.stringify(opened)) as FoldState, runtime = quoted(malformed);
+        if (runtime.reward.rewardType !== "dreamsign") throw new Error("expected standard Dreamsign");
+        const standard = runtime.reward.dreamsign;
+        const offered = runtime.enhancedDreamsignOffer.offeredDreamsigns.find((sign) => sign.id === standard.id)!;
+        expect(offered).not.toBe(standard); corrupt(standard, offered);
+        const saved = JSON.stringify(malformed);
+        const load = apply(source, "LOAD_STATE", { snapshot: malformed.journey });
+        expect(load.outcome).toBe("bounced"); expect(load.state).toBe(source);
+        for (const type of ["ACCEPT_DREAMSIGN_OFFER", "ACCEPT_REWARD", "REJECT_DREAMSIGN_OFFER"] as const) {
+          const decision = apply(malformed, type, { dreamsignId: standard.id });
+          expect(decision.outcome).toBe("bounced"); expect(decision.state).toBe(malformed);
+        }
+        const replay = foldEvents(config(malformed), genesis(malformed), { seq: 0, state: malformed }, [
+          { seq: 1, event: event("ACCEPT_DREAMSIGN_OFFER", { dreamsignId: standard.id }) },
+        ]);
+        expect(replay.outcomes[0].outcome).toBe("bounced"); expect(replay.state).toBe(malformed);
+        registerSiteContentProvider({ ...provider(), openSite: () => ({ runtime,
+          remainingDreamsignPool: [...runtime.remainingDreamsignPoolIds] }) });
+        const adoption = opening(source);
+        expect(adoption.outcome).toBe("bounced"); expect(adoption.state).toBe(source);
+        expect(JSON.stringify(malformed)).toBe(saved);
+      }
+    });
+
+    it("loads coherent independent standard duplicates at any index and selects by UUID", () => {
+      for (const hasArt of [false, true]) {
+        const source = fixture(), opened = pending(source), runtime = quoted(opened);
+        if (runtime.reward.rewardType !== "dreamsign") throw new Error("expected standard Dreamsign");
+        if (hasArt) {
+          for (const sign of [runtime.reward.dreamsign, ...runtime.enhancedDreamsignOffer.offeredDreamsigns]) {
+            Object.assign(sign, { imageName: "synthetic-art", imageAlt: "synthetic-alt" });
+          }
+        }
+        const snapshot = JSON.parse(JSON.stringify(opened.journey)) as JourneyState;
+        const stored = snapshot.siteRuntime[SITE] as RewardSiteRuntime;
+        if (stored.reward.rewardType !== "dreamsign") throw new Error("expected standard Dreamsign");
+        const quote = stored.enhancedDreamsignOffer!, standard = stored.reward.dreamsign;
+        const offered = quote.offeredDreamsigns.find((sign) => sign.id === standard.id)!;
+        expect(offered).not.toBe(standard);
+        const reordered = [...quote.offeredDreamsigns.filter((sign) => sign.id !== standard.id), offered];
+        stored.enhancedDreamsignOffer = { ...quote, offeredDreamsigns: reordered };
+        const loaded = apply(source, "LOAD_STATE", { snapshot });
+        expect(loaded.outcome).toBe("applied");
+        for (const selected of [standard, reordered[0]]) {
+          const accepted = apply(loaded.state, "ACCEPT_DREAMSIGN_OFFER", { dreamsignId: selected.id });
+          expect(accepted.outcome).toBe("applied"); expect(accepted.state.journey.dreamsigns).toEqual([selected]);
+          expect(visited(accepted.state)).toBe(true);
+        }
+      }
     });
 
     it("reloads strict historical quotes after public regeneration without granting orphaned pending offers", () => {

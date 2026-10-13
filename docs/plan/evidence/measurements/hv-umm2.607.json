@@ -1,0 +1,265 @@
+{
+  "bead": "hv-umm2.607",
+  "phase": 5,
+  "base": "db2810d97307dd639d7af514a7bd533f991ed32c",
+  "scope": {
+    "production": [
+      "src/rules/journey/sites.ts:isEnhancedDreamsignReward"
+    ],
+    "tests": [
+      "src/rules/journey/enhanced-reward.contracts.ts"
+    ],
+    "fallout": [],
+    "unchanged": "Provider, lifecycle, reducer, UI, types and catalogs are read-only. Existing hub registration applies."
+  },
+  "implementationWindow": {
+    "dispatch": "2026-10-13T04:47:35.468Z",
+    "dispatchProvenance": "Actual native own-session response_item spawn_agent timestamp; model-start unobserved",
+    "modelStart": "Unknown",
+    "prospectiveCommitEndpoint": "2026-10-13T04:54:25.997548+00:00",
+    "endpointQualification": "Refreshed immediately before the single automatic commit under separate parent ACK; Git timestamp precision is one second."
+  },
+  "parentSetup": {
+    "npmInstallS": 2.937648,
+    "exitCode": 0,
+    "scope": "Parent setup completed before helper dispatch; excluded from helper window."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 69,
+    "jsdomFiles": 0,
+    "owningModuleLines": 431,
+    "newCases": 2,
+    "configuredEntrypoints": 0
+  },
+  "commands": [
+    {
+      "name": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/sites-rewards.test.ts",
+        "src/rules/journey/lifecycle-state.test.ts"
+      ],
+      "startedAt": "2026-10-13T04:50:00.370539+00:00",
+      "finishedAt": "2026-10-13T04:50:04.999124+00:00",
+      "elapsedS": 4.628446999995504,
+      "hostLoad": "{ 16.16 14.96 12.01 }",
+      "wrapperPid": 74763,
+      "childPid": 74776,
+      "exitCode": 0,
+      "terminal": true,
+      "log": "focused.log"
+    },
+    {
+      "name": "after-witness",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/root-607/helper/after-witness.mts"
+      ],
+      "startedAt": "2026-10-13T04:50:17.574433+00:00",
+      "finishedAt": "2026-10-13T04:50:18.572734+00:00",
+      "elapsedS": 0.9982152090087766,
+      "hostLoad": "{ 18.78 15.60 12.29 }",
+      "wrapperPid": 7230,
+      "childPid": 7321,
+      "exitCode": 0,
+      "terminal": true,
+      "log": "after-witness.log"
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-13T04:50:47.339348+00:00",
+      "finishedAt": "2026-10-13T04:51:12.421940+00:00",
+      "elapsedS": 25.082227833991055,
+      "hostLoad": "{ 14.80 14.96 12.17 }",
+      "wrapperPid": 28696,
+      "childPid": 28711,
+      "exitCode": 2,
+      "terminal": true,
+      "log": "review.log"
+    },
+    {
+      "name": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/sites-rewards.test.ts",
+        "src/rules/journey/lifecycle-state.test.ts"
+      ],
+      "startedAt": "2026-10-13T04:51:24.170435+00:00",
+      "finishedAt": "2026-10-13T04:51:28.322279+00:00",
+      "elapsedS": 4.15167016700434,
+      "hostLoad": "{ 11.61 14.19 12.02 }",
+      "wrapperPid": 31623,
+      "childPid": 31633,
+      "exitCode": 0,
+      "terminal": true,
+      "log": "focused-final.log"
+    },
+    {
+      "name": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startedAt": "2026-10-13T04:51:40.736519+00:00",
+      "finishedAt": "2026-10-13T04:52:07.614524+00:00",
+      "elapsedS": 26.877598416991532,
+      "hostLoad": "{ 10.00 13.71 11.89 }",
+      "wrapperPid": 32784,
+      "childPid": 32795,
+      "exitCode": 0,
+      "terminal": true,
+      "log": "review-final.log"
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startedAt": "2026-10-13T04:52:11.925379+00:00",
+      "finishedAt": "2026-10-13T04:52:16.236742+00:00",
+      "elapsedS": 4.310952041996643,
+      "hostLoad": "{ 10.25 13.49 11.88 }",
+      "wrapperPid": 34796,
+      "childPid": 34807,
+      "exitCode": 0,
+      "terminal": true,
+      "log": "knip.log"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review starting sysctl 1-minute load"
+      }
+    }
+  },
+  "witnesses": {
+    "before": {
+      "source": "db2810d97307dd639d7af514a7bd533f991ed32c",
+      "loaded": "applied",
+      "accepted": "applied",
+      "standardId": "5e5e5e5e-0598-4000-8000-000000000002",
+      "storedStandardText": "",
+      "quotedText": "altered synthetic standard text",
+      "grantedText": "altered synthetic standard text"
+    },
+    "after": {
+      "source": "db2810d97307dd639d7af514a7bd533f991ed32c",
+      "loaded": "bounced",
+      "accepted": "bounced",
+      "standardId": "5e5e5e5e-0598-4000-8000-000000000002",
+      "storedStandardText": "",
+      "quotedText": "altered synthetic standard text",
+      "sourceQualification": "Report source field names base revision; script executed against changed worktree guard before lint-only typed lookup correction. Final owning tests execute corrected guard."
+    },
+    "beforeQualification": "Actual public provider/open + real JSON split + LOAD_STATE snapshot + normal standard UUID selection applied and granted divergent effect text. Corrected diagnostic command grouped with small evidence reads; no isolated witness duration claimed.",
+    "afterQualification": "Same malformed persisted content now bounces LOAD and subsequent normal selection with no grant; owning contracts also reject online forged decisions and provider adoption."
+  },
+  "failedAttempts": [
+    {
+      "source": "db2810d97307dd639d7af514a7bd533f991ed32c",
+      "exitCode": 1,
+      "script": "before-witness-wrong-load-payload.mts",
+      "actualToolDurationS": 1.8962068749999998,
+      "reported": {
+        "loaded": "bounced",
+        "accepted": "bounced",
+        "storedStandardText": "",
+        "quotedText": "altered synthetic standard text"
+      },
+      "cause": "Scratch used payload.state instead of public LOAD_STATE payload.snapshot; assertion expected applied failed. This attempt proves no product semantics."
+    },
+    {
+      "command": "review",
+      "exitCode": 2,
+      "cause": "Own guard lookup used Array.isArray-narrowed any[] instead of validated readonly Dreamsign[]; six ESLint unsafe-any errors. Own positive fixture assigned readonly offeredDreamsigns; TS2540. Parent independently spotted readonly problem while first review was live.",
+      "repair": "Typed lookup after shape validation; replace stored quote object with reordered list. Final focused/review/Knip required for these source corrections and pass.",
+      "relatedTests": "94 files/898 tests passed in failed review; that is qualified, not aggregate success.",
+      "retained": "validation/review.json and review.log"
+    }
+  ],
+  "failurePaths": {
+    "midStepError": "No new transition or asynchronous step; existing throwing-provider fold contract covers atomic failure.",
+    "reload": "New JSON-independent incoherence rejected by LOAD_STATE; coherent absent/present art and nonfirst standard reload accepted.",
+    "partialWrite": "Either duplicate missing optional art rejected at load and online/provider boundaries; no partial adoption or grant.",
+    "invalidOrStale": "Four changed sameUUID fields and either missing optional field rejected by three normal decision intents and fold; existing stale/visited/accepted contracts apply.",
+    "concurrentActors": "No concurrency semantics change; existing stale-partner CAS/fold contracts execute in owning focused suite."
+  },
+  "validationScope": "Tiny strict optional stored-quote guard, unchanged shape and normal presentation: focused owning Reward/load suites, review and Knip; no full/browser per parent ACK.",
+  "coldReview": {
+    "required": true,
+    "owner": "Parent",
+    "routing": "Fresh read-only CodexCLI gpt-5.6-sol under temporary user override through 2026-10-14T01:00Z; helper does not invoke reviewer."
+  },
+  "resources": {
+    "browserOrServerLaunched": false,
+    "checks": "Each command observed actual terminal before next started; final PID settlement retained outside tracked tree.",
+    "observedPids": [
+      74763,
+      74776,
+      7230,
+      7321,
+      28696,
+      28711,
+      31623,
+      31633,
+      32784,
+      32795,
+      34796,
+      34807
+    ],
+    "receipt": "validation/final-resources.json"
+  },
+  "hostLoadSamples": [
+    {
+      "command": "focused",
+      "at": "2026-10-13T04:50:00.370539+00:00",
+      "sysctl": "{ 16.16 14.96 12.01 }"
+    },
+    {
+      "command": "after-witness",
+      "at": "2026-10-13T04:50:17.574433+00:00",
+      "sysctl": "{ 18.78 15.60 12.29 }"
+    },
+    {
+      "command": "review",
+      "at": "2026-10-13T04:50:47.339348+00:00",
+      "sysctl": "{ 14.80 14.96 12.17 }"
+    },
+    {
+      "command": "focused-final",
+      "at": "2026-10-13T04:51:24.170435+00:00",
+      "sysctl": "{ 11.61 14.19 12.02 }"
+    },
+    {
+      "command": "review-final",
+      "at": "2026-10-13T04:51:40.736519+00:00",
+      "sysctl": "{ 10.00 13.71 11.89 }"
+    },
+    {
+      "command": "knip",
+      "at": "2026-10-13T04:52:11.925379+00:00",
+      "sysctl": "{ 10.25 13.49 11.88 }"
+    }
+  ],
+  "finalFreeze": {
+    "at": "2026-10-13T04:52:51.914848+00:00",
+    "prospectiveEndpoint": "2026-10-13T04:54:25.997548+00:00",
+    "commitPendingSeparateAck": true,
+    "sourcePaths": 2,
+    "evidencePaths": 3
+  }
+}
