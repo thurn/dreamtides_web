@@ -1,0 +1,340 @@
+{
+  "bead": "hv-umm2.641",
+  "base": "8053b79f0d5c52c276e3c795a58b12e6c720e4cd",
+  "dispatch": {
+    "actualNativeSpawn": "2026-10-13T17:16:22.137000+00:00",
+    "modelStart": "unknown",
+    "journal": "aspect_pair_641-actual-dispatch-journal.json"
+  },
+  "endpoint": {
+    "at": "2026-10-13T17:28:00.260253+00:00",
+    "status": "Final precommit evidence stamp before schema, exact seven-path staging/cached check and single validated commit. Actual Git interval and endpoint gap are retained separately in stage3-terminal-v01.json."
+  },
+  "elapsedQualification": "Gross elapsed from actual native dispatch includes admission, research, fixture corrections, checks, Stage 2 terminal freeze and parent audit/coordination wait. It is not editing CPU or model processing time. Model start unknown.",
+  "validationReceipts": {
+    "review-worker-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:23:04.566803+00:00",
+      "end": "2026-10-13T17:23:21.674531+00:00",
+      "exit": 2,
+      "wallSeconds": 17.107370165991597,
+      "pid": 67652,
+      "pgid": 67652,
+      "load": "{ 4.38 6.45 8.90 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-warrior-worker-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-291.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:22:48.560667+00:00",
+      "end": "2026-10-13T17:22:51.658656+00:00",
+      "exit": 1,
+      "wallSeconds": 3.097876833024202,
+      "pid": 67202,
+      "pgid": 67202,
+      "load": "{ 3.80 6.45 8.94 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-worker-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:23:04.566801+00:00",
+      "end": "2026-10-13T17:23:11.128483+00:00",
+      "exit": 0,
+      "wallSeconds": 6.5614875000028405,
+      "pid": 67653,
+      "pgid": 67653,
+      "load": "{ 4.38 6.45 8.90 }",
+      "groupRemainingAtExit": []
+    },
+    "coverage-worker-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:25:19.699486+00:00",
+      "end": "2026-10-13T17:25:23.771715+00:00",
+      "exit": 0,
+      "wallSeconds": 4.072087499982445,
+      "pid": 26230,
+      "pgid": 26230,
+      "load": "{ 8.65 8.22 9.31 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-dawn-worker-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-291.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:22:44.125446+00:00",
+      "end": "2026-10-13T17:22:48.495287+00:00",
+      "exit": 1,
+      "wallSeconds": 4.369719167007133,
+      "pid": 67053,
+      "pgid": 67053,
+      "load": "{ 3.78 6.50 8.97 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-worker-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-291.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:22:17.126449+00:00",
+      "end": "2026-10-13T17:22:20.459198+00:00",
+      "exit": 0,
+      "wallSeconds": 3.332645791990217,
+      "pid": 66596,
+      "pgid": 66596,
+      "load": "{ 3.82 6.78 9.16 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-worker-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:25:07.655575+00:00",
+      "end": "2026-10-13T17:25:12.315432+00:00",
+      "exit": 0,
+      "wallSeconds": 4.659740875009447,
+      "pid": 25749,
+      "pgid": 25749,
+      "load": "{ 7.98 8.07 9.28 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-worker-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-291.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:21:30.725245+00:00",
+      "end": "2026-10-13T17:21:34.645903+00:00",
+      "exit": 1,
+      "wallSeconds": 3.920536291989265,
+      "pid": 65661,
+      "pgid": 65661,
+      "load": "{ 4.74 7.41 9.50 }",
+      "groupRemainingAtExit": []
+    },
+    "review-worker-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:25:07.655757+00:00",
+      "end": "2026-10-13T17:25:19.599955+00:00",
+      "exit": 0,
+      "wallSeconds": 11.943919707991881,
+      "pid": 25750,
+      "pgid": 25750,
+      "load": "{ 7.98 8.07 9.28 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-empty-worker-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-291.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:22:51.727360+00:00",
+      "end": "2026-10-13T17:22:54.774836+00:00",
+      "exit": 1,
+      "wallSeconds": 3.0473629999905825,
+      "pid": 67316,
+      "pgid": 67316,
+      "load": "{ 3.80 6.45 8.94 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-worker-v01.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:25:46.976516+00:00",
+      "end": "2026-10-13T17:25:47.055337+00:00",
+      "exit": 0,
+      "wallSeconds": 0.07869983301497996,
+      "pid": 26955,
+      "pgid": 26955,
+      "load": "{ 7.77 8.04 9.21 }",
+      "groupRemainingAtExit": []
+    },
+    "diffcheck-worker-v01.receipt.json": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-641-aspect-pair291",
+      "start": "2026-10-13T17:25:47.129498+00:00",
+      "end": "2026-10-13T17:25:47.141693+00:00",
+      "exit": 0,
+      "wallSeconds": 0.012056416017003357,
+      "pid": 26976,
+      "pgid": 26976,
+      "load": "{ 7.77 8.04 9.21 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "sourceSHA256": {
+    "src/content/apollyon/aspects/aspect-57c65dfd-a125-440e-a410-c8c4a314b1d1.ts": "25377404618328103a5c7775c43f648be7912c174dcdd577f2c95d305e0dc6db",
+    "src/content/apollyon/aspects/aspect-80b6296d-840e-4ed7-b684-5aadc0981bf4.ts": "fa0f373aa52502c40338b80afb973e43ecb7fd51218cff7e53155f49f6cf3de0",
+    "src/battle/integration/apollyon-aspects/pair-291.test.ts": "75cb2538a483d0312e677cdf65984bdcdfaa4bb92060e2016ceceb0e7057627f"
+  },
+  "testDeltaDetail": {
+    "newActualEntrypoints": 1,
+    "newCases": 14,
+    "newTestLines": 226,
+    "newJsdomFiles": 0,
+    "nonTestAssemblyLines": 17
+  },
+  "sourceAudit": {
+    "design": "src/content/apollyon/design.ts:35,53 exact settled builders",
+    "genuineConsumers": [
+      "src/engine/rules/activation.ts:107 avatar AbilityList BASE_VARIANT",
+      "src/engine/triggers/matcher.ts:144 permanent avatar listener;307 own Dawn/null subject",
+      "src/engine/continuous/layers.ts:174,196 permanent avatar live statics",
+      "src/engine/effects/interpreter.ts:192 effective filter;710\u2013750 random:selection nonempty draws",
+      "src/engine/effects/primitives/return-from-void.ts:19\u201338 actual return",
+      "src/engine/effects/primitives/spark-modifier.ts:26\u201336 live layer5"
+    ]
+  },
+  "identities": {
+    "expression": "syntheticId(0x64100 + index), index0..8",
+    "reservedRange": "0x64100..0x6410f",
+    "actualUUIDRange": "5e5e5e5e-0000-4000-8000-000000064100..5e5e5e5e-0000-4000-8000-00000006410f",
+    "aspectIds": [
+      "e4261c6a-af79-4b94-adbb-91e69b9de0dc",
+      "61ade662-2bfe-474a-860c-5f8aa586babc"
+    ],
+    "runtimeInstances": "Existing boardState minting only",
+    "absentPromptId": "parsePromptId(999999:0:0) existing numeric format"
+  },
+  "counterfactuals": {
+    "runs": [
+      {
+        "name": "negative-dawn-worker-v01",
+        "exit": 1
+      },
+      {
+        "name": "negative-warrior-worker-v01",
+        "exit": 1
+      },
+      {
+        "name": "negative-empty-worker-v01",
+        "exit": 1
+      }
+    ],
+    "restored": {
+      "src/content/apollyon/aspects/aspect-57c65dfd-a125-440e-a410-c8c4a314b1d1.ts": "25377404618328103a5c7775c43f648be7912c174dcdd577f2c95d305e0dc6db",
+      "src/content/apollyon/aspects/aspect-80b6296d-840e-4ed7-b684-5aadc0981bf4.ts": "fa0f373aa52502c40338b80afb973e43ecb7fd51218cff7e53155f49f6cf3de0"
+    },
+    "exactRestored": true,
+    "caseResults": {
+      "negative-dawn-worker-v01": "6 fail /8 pass",
+      "negative-warrior-worker-v01": "4 fail /10 pass",
+      "negative-empty-worker-v01": "14 fail /0 pass"
+    }
+  },
+  "initialFailures": [
+    {
+      "receipt": "focused-worker-v01.receipt.json",
+      "verdict": "8 pass / 6 fail",
+      "cause": "Own singleton-target scripted answer and automatic fault-resolution assumptions; test-only corrections, causal requirements retained."
+    },
+    {
+      "receipt": "review-worker-v01.receipt.json",
+      "verdict": "14 runtime tests pass; typecheck exit2",
+      "cause": "Own failed-effect assertion used pointsGained; corrected to actual pointsScored."
+    }
+  ],
+  "fiveFailureMapping": {
+    "1": "All14 cases consume real permanent EngineAvatarDefinition emblems; empty AbilityLists fail all14.",
+    "2": "BOTH actors own Dawn/null subject and own void only, cost2/effective types, opposing Dawn isolation; cost<=1 mutant fails6.",
+    "3": "Empty/ineligible pool consumes no random draw; full battlefield permits hand return; real later failed resolution rolls back points/event but retains committed Dawn and valid play step.",
+    "4": "Synthetic-only QA ledger and RD retain original291/295 random-fill/full-pool/strength acceptance.",
+    "5": "Only three new source paths, own evidence; registration/design/catalog/status/recipes untouched and original twenty/fifty per-incarnation joins retained."
+  },
+  "failurePaths": {
+    "error": "Real fault card is played after committed Dawn; existing synthetic hook resolves gainPoints then throws. Score mutation and pointsScored publication rollback; valid played stack state and Dawn return survive. BOTH actors.",
+    "reloadReplay": "Serialized initial state reproduces Dawn hash/events/RNG; static public views identical after roundtrip; fold published outcomes replay identically.",
+    "partialPublication": "Fold records actual observed states at published events; actual returned card is present in hand in at least one snapshot. Failed resolution emits no committed pointsScored/returned event.",
+    "cancelStaleForeign": "Pure Aspects produce no prompt. BOTH actor answer/cancel against numeric absent PromptID bounce noPendingPrompt, unchanged committed hash.",
+    "concurrency": "Opposing competing action after settled fold Day bounces notYourDecision. inFlight/stale fingerprint N/A: no interactive suspended step is created."
+  },
+  "validationScope": {
+    "focused": "14 synthetic public contracts",
+    "coverage": "Existing content gates; does not register Aspects or establish pool readiness.",
+    "browser": "N/A: unregistered assemblies, no runtime player workflow/presentation changed.",
+    "fullFuzz": "N/A: 17 assembly lines, existing delivered primitives, no engine/setup/privacy architecture change.",
+    "independentReview": "Not core-review; below100 non-test-line threshold, parent confirms final scope."
+  },
+  "runtime": {
+    "workers": 2,
+    "providerReviewer": "none",
+    "QAserver": "none",
+    "browserLease": "none",
+    "processGroups": "All receipt groupRemainingAtExit empty; final fresh parent/worker audit required."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual review-worker-v02 start at 2026-10-13T17:25:07.655757+00:00; one-minute host load7.98 from raw {7.98 8.07 9.28}.",
+        "value": 7.98
+      }
+    }
+  },
+  "acceptanceBoundary": "Original291 production authoring, pending/status, decks/Dreamsigns/design/twenty games EACH/alljoins;295 fifty EACH/champion remain separate mandatory work.",
+  "validationQualifications": [
+    "focused-worker-v02 and three negative controls ran before own failed-effect assertion spelling changed pointsGained to actual pointsScored. Final review-worker-v02 passes exact final14 cases including discriminating actual pointsScored rollback. Module bytes and mutant-sensitive predicates are unchanged.",
+    "Content gates check the existing registered catalog. These unregistered Aspect contracts make no full-pool, production-readiness, boss-strength or original acceptance claim."
+  ],
+  "hostLoadSamples": {
+    "review-worker-v01.receipt.json": "{ 4.38 6.45 8.90 }",
+    "negative-warrior-worker-v01.receipt.json": "{ 3.80 6.45 8.94 }",
+    "knip-worker-v01.receipt.json": "{ 4.38 6.45 8.90 }",
+    "coverage-worker-v01.receipt.json": "{ 8.65 8.22 9.31 }",
+    "negative-dawn-worker-v01.receipt.json": "{ 3.78 6.50 8.97 }",
+    "focused-worker-v02.receipt.json": "{ 3.82 6.78 9.16 }",
+    "knip-worker-v02.receipt.json": "{ 7.98 8.07 9.28 }",
+    "focused-worker-v01.receipt.json": "{ 4.74 7.41 9.50 }",
+    "review-worker-v02.receipt.json": "{ 7.98 8.07 9.28 }",
+    "negative-empty-worker-v01.receipt.json": "{ 3.80 6.45 8.94 }"
+  },
+  "stage3Authority": "Parent exact seven-file final audit and native Stage3 ACK stage3-native-ack-v04.stdout; source checks complete, only evidence clock and receipts updated."
+}
