@@ -56,6 +56,7 @@ import {
   gainMaxEnergyPrimitive,
   gainPointsPrimitive,
   gainSparkPrimitive,
+  gainTriggeringCardSparkPrimitive,
   giveAllTypesPrimitive,
   grantCardKeywordPrimitive,
   grantPrimitive,
@@ -234,6 +235,9 @@ const DEFINITIONS = {
   },
   get gainSpark() {
     return gainSparkPrimitive;
+  },
+  get gainTriggeringCardSpark() {
+    return gainTriggeringCardSparkPrimitive;
   },
   get giveAllTypes() {
     return giveAllTypesPrimitive;

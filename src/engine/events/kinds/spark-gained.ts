@@ -1,6 +1,7 @@
 import type { InstanceId } from "../../state/ids";
 import type { Expiry } from "../../state/types";
-import { publicEvent } from "../types";
+import { identifies } from "../../view/knowledge";
+import type { EventDefinition } from "../types";
 
 /**
  * A character gained N✦ (rules § Spark): permanently (`expiry` never) or
@@ -16,4 +17,9 @@ export interface SparkGainedEvent {
   readonly additional: boolean;
 }
 
-export const sparkGained = publicEvent<SparkGainedEvent>("sparkGained");
+/** A hidden card's identity and gain details are visible only to sides identifying it. */
+export const sparkGained: EventDefinition<SparkGainedEvent> = {
+  kind: "sparkGained",
+  privateTo: () => null,
+  redact: (event, viewer, state) => identifies(state, event.instance, viewer) ? event : null,
+};

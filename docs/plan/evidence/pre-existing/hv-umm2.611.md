@@ -1,0 +1,11 @@
+# Pre-existing observations for hv-umm2.611
+
+The existing SubjectSpec comment in src/engine/dsl/types.ts describes an in-play subject, while the existing CardRef documentation and resolveCards subject branch already resolve physical cards in every zone. The type and interpreter remain read-only; the new primitive documents its physical character-card scope. This documentation contradiction is not an API prerequisite or an engine failure.
+
+Read-only discovery tried several nonexistent module names before the actual catalog, modify-card-cost, matcher and log files were selected from the file inventory. Some broad search output was truncated and later bounded reads supplied the relied-upon witnesses. Exact individual read subprocess clocks were not independently sampled. All research and diagnosis costs remain in gross ownership wall time; no CPU timing is inferred. Parent read-only metadata/parser corrections concern observation, not new engine failures.
+
+The isolated worktree reported missing local placeholder art while preparing validation and completed its ordinary asset restoration successfully. No product asset defect is established and no generated image or token materialization is committed.
+
+The first focused invocation passed 21 existing tests but did not select the new plain contract module. The configured shared wrapper then ran 30 new cases, with two assertions overreaching: a next-turn draw caused a distinct new gain after the original gain expired. The assertions now check expiry on the original physical subject. A corrected 32-case run and final 38-case matrix passed. These are observer/test corrections, not production rule changes. All overlapping full correction windows are retained in the own measurement and are not summed as serial elapsed or CPU.
+
+Original authoring beads .246, .252, .253 and .255 retain their four UUIDs, full recipes and consumer QA, and .644 retains its Aspects work. This headless capability records no production card authoring, browser, weighted-game, preflight or sweep proof. Existing in-play gain and additional-spark contracts retain their semantics. The required independent core review is owed after the exact source commit; its outcome is not yet known.

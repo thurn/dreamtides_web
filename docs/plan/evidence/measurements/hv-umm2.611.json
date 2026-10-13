@@ -1,0 +1,452 @@
+{
+  "bead": "hv-umm2.611",
+  "base": "ed7a661c53c8166ae5fbe303389620f26212a927",
+  "ownership": {
+    "claimStartUtc": "2026-10-13T16:44:49.391019+00:00",
+    "claimEndUtc": "2026-10-13T16:44:49.512064+00:00",
+    "worktreeStartUtc": "2026-10-13T16:45:28.394796+00:00",
+    "worktreeEndUtc": "2026-10-13T16:45:29.155363+00:00",
+    "installStartUtc": "2026-10-13T16:45:56.463004+00:00",
+    "installEndUtc": "2026-10-13T16:45:58.924797+00:00",
+    "dispatchLowerBoundUtc": "2026-10-13T16:47:52.420398+00:00",
+    "dispatchPostMarkerUtc": "2026-10-13T16:49:11.369076+00:00",
+    "actualDispatchInstant": "not independently observed; 78.948678s pre/post bracket",
+    "evidenceEndpointUtc": "2026-10-13T17:16:07.491290+00:00",
+    "implementWindowBasis": "Measured pre-dispatch lower bound includes prebrief/native coordination; endpoint is the current evidence-writing proxy. Actual precommit marker and marker-to-commit tail are retained separately by final delivery. Whole claim includes all setup, research, coordination, validation, admissions, waits, evidence, review and delivery; wall time is not CPU.",
+    "claimToCurrentEndpointS": 1878.100271,
+    "reviewAndDelivery": "still owed after exact source commit; parent retains claim through actual provider/review/promotion/cleanup acceptance",
+    "preCommitMarkerUtc": "2026-10-13T17:21:36.209351+00:00",
+    "preCommitMarkerBasis": "Actual measured marker immediately before light friction validation, exact source/staging guards and one Git commit. implementWindow.end uses this proxy, not a guessed commit timestamp; external actual Git start/end and both marker/original-evidence-endpoint tails are retained by final delivery."
+  },
+  "sourceHashes": {
+    "docs/rules.md": "f11e8b6617e36ec2a9ca3858d8ed133123cab74bc4ef70d238afaca27025aa39",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.611-1.md": "cf00c2be144cb6715fd3debc5527e3862b05db7f665a8eb76ff8c0589edb4e8b",
+    "src/engine/effects/primitives/gain-triggering-card-spark.ts": "4dede0654ac2470fd7952aa9044b94e2f20e2ffaa77e2db5b30a000c82412ed4",
+    "src/engine/effects/primitives/contracts/gain-triggering-card-spark.contracts.ts": "e663539fc1ca5d3b490147c239ae138ce223079a5bb1d2d544c28e8cf8309144",
+    "src/engine/effects/primitives/index.ts": "c2e4ef1c77c1f8911f03700b120b79f3fd6571e9ac373fda8d3b3de4f8e47f80",
+    "src/engine/effects/registry.ts": "b64608515aa898e182d3920c8215834a98f927359fbf7ad235e1f3e6293b28ac",
+    "src/engine/events/kinds/spark-gained.ts": "530cf05a29a860fbeb415b32e6f60746aa9645c1a09e1d19fb33687095d9bc8d"
+  },
+  "counts": {
+    "newSemanticCases": 38,
+    "newPlainContractFiles": 1,
+    "newPlainContractLines": 285,
+    "newConfiguredEntries": 0,
+    "newJsdom": 0,
+    "initialExistingOnly": {
+      "files": 2,
+      "tests": 21
+    },
+    "review": {
+      "files": 289,
+      "tests": 5975
+    },
+    "full": {
+      "files": 370,
+      "tests": 6976
+    }
+  },
+  "checks": {
+    "611-focused-first": {
+      "name": "611-focused-first",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts/gain-triggering-card-spark.contracts.ts",
+        "src/engine/effects/primitives/contracts/gain-spark.contracts.ts",
+        "src/engine/triggers/triggers-additional-spark.test.ts",
+        "src/engine/triggers/triggers-redaction.test.ts",
+        "src/engine/effects/primitives/contracts/primitive-registry.contracts.ts"
+      ],
+      "observerPid": 69226,
+      "pid": 69238,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/triggering-card-spark-611",
+      "startUtc": "2026-10-13T17:01:35.508946+00:00",
+      "endUtc": "2026-10-13T17:01:40.625674+00:00",
+      "wallS": 5.116712999995798,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/611-focused-first.log"
+    },
+    "611-focused-contract": {
+      "name": "611-focused-contract",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "physical triggering-card spark"
+      ],
+      "observerPid": 81623,
+      "pid": 81657,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/triggering-card-spark-611",
+      "startUtc": "2026-10-13T17:02:01.294216+00:00",
+      "endUtc": "2026-10-13T17:02:06.405968+00:00",
+      "wallS": 5.111730375007028,
+      "exit": 1,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/611-focused-contract.log"
+    },
+    "611-focused-corrected": {
+      "name": "611-focused-corrected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "physical triggering-card spark"
+      ],
+      "observerPid": 24605,
+      "pid": 24618,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/triggering-card-spark-611",
+      "startUtc": "2026-10-13T17:02:53.002243+00:00",
+      "endUtc": "2026-10-13T17:02:58.960632+00:00",
+      "wallS": 5.958359250013018,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/611-focused-corrected.log"
+    },
+    "611-focused-final": {
+      "name": "611-focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "physical triggering-card spark"
+      ],
+      "observerPid": 32005,
+      "pid": 32015,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/triggering-card-spark-611",
+      "startUtc": "2026-10-13T17:04:31.987885+00:00",
+      "endUtc": "2026-10-13T17:04:37.130566+00:00",
+      "wallS": 5.142659416975221,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/611-focused-final.log"
+    },
+    "611-focused-final-matrix": {
+      "name": "611-focused-final-matrix",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "physical triggering-card spark"
+      ],
+      "startUtc": "2026-10-13T17:05:53.680468+00:00",
+      "observerPid": 37046,
+      "observerPgid": 37046,
+      "loadStart": [
+        4.87890625,
+        9.248046875,
+        10.7578125
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 37055,
+      "pgid": 37046,
+      "exit": 0,
+      "endUtc": "2026-10-13T17:05:58.135841+00:00",
+      "wallS": 4.455388458009111,
+      "terminal": true,
+      "loadEnd": [
+        4.96826171875,
+        9.19384765625,
+        10.7294921875
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/611-focused-final-matrix.log"
+    },
+    "611-review": {
+      "name": "611-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-13T17:06:12.619161+00:00",
+      "observerPid": 37443,
+      "observerPgid": 37443,
+      "loadStart": [
+        4.3720703125,
+        8.8564453125,
+        10.58203125
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 37451,
+      "pgid": 37443,
+      "exit": 0,
+      "endUtc": "2026-10-13T17:07:17.433709+00:00",
+      "wallS": 64.81388733399217,
+      "terminal": true,
+      "loadEnd": [
+        12.009765625,
+        10.36328125,
+        11.0283203125
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/611-review.log"
+    },
+    "611-knip": {
+      "name": "611-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUtc": "2026-10-13T17:07:17.493417+00:00",
+      "observerPid": 91024,
+      "observerPgid": 91024,
+      "loadStart": [
+        12.009765625,
+        10.36328125,
+        11.0283203125
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 91035,
+      "pgid": 91024,
+      "exit": 0,
+      "endUtc": "2026-10-13T17:07:22.464962+00:00",
+      "wallS": 4.971529083006317,
+      "terminal": true,
+      "loadEnd": [
+        11.6083984375,
+        10.30712890625,
+        11.00439453125
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/611-knip.log"
+    },
+    "611-full-lock": {
+      "name": "611-full-lock",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a12e91/611-audit/check-with-resources.py",
+        "611-full",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "observerPid": 92685,
+      "pid": 92696,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/triggering-card-spark-611",
+      "startUtc": "2026-10-13T17:07:35.355724+00:00",
+      "endUtc": "2026-10-13T17:09:32.464484+00:00",
+      "wallS": 117.10952316600014,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/611-full-lock.log"
+    },
+    "611-full": {
+      "name": "611-full",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "startUtc": "2026-10-13T17:07:35.381933+00:00",
+      "observerPid": 92697,
+      "observerPgid": 92685,
+      "loadStart": [
+        10.67236328125,
+        10.1484375,
+        10.939453125
+      ],
+      "limits": {
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "configuredVitestWorkers": "2",
+      "actualExecutedWorkerCount": "not independently sampled",
+      "pid": 92699,
+      "pgid": 92685,
+      "exit": 0,
+      "endUtc": "2026-10-13T17:09:32.458805+00:00",
+      "wallS": 117.07763183300267,
+      "terminal": true,
+      "loadEnd": [
+        14.14794921875,
+        12.28955078125,
+        11.7119140625
+      ],
+      "log": "/tmp/dreamtides-executor-01a12e91/611-full.log"
+    }
+  },
+  "correctionWindows": [
+    {
+      "kind": "focused-invocation-observer",
+      "startUtc": "2026-10-13T17:01:35.508946+00:00",
+      "endUtc": "2026-10-13T17:02:58.960632+00:00",
+      "wallS": 83.451686,
+      "basis": "first direct-plain-contract invocation passed only21existing cases; actual shared wrapper and own-contract assertion correction through first actual corrected32case green"
+    },
+    {
+      "kind": "own-temporary-expiry-contract-overassertion",
+      "startUtc": "2026-10-13T17:02:01.294216+00:00",
+      "endUtc": "2026-10-13T17:02:58.960632+00:00",
+      "wallS": 57.666416,
+      "basis": "2of30cases expected no floating atnextownDay despite newordinarydraw independently gaining; corrected to originalphysical subject; production behavior unchanged"
+    },
+    {
+      "kind": "final-matrix-admission-completion",
+      "startUtc": "2026-10-13T17:01:35.508946+00:00",
+      "endUtc": "2026-10-13T17:05:58.135841+00:00",
+      "wallS": 262.626895,
+      "basis": "conservative whole first focused command through final38case matrix inclparent gap review/additional bounded witnesses; overlaps above windows; do not sum asserialelapsed/CPU"
+    }
+  ],
+  "hostLoad": {
+    "value": 4.3720703125,
+    "observedUtc": "2026-10-13T17:06:13.652+00:00",
+    "scope": "first npm run review inner related-test start; shell wrapper/load end and other step loads have their own scopes"
+  },
+  "heavyAdmission": {
+    "requestUtc": "2026-10-13T17:07:35.355724+00:00",
+    "acquiredInnerMarkerUtc": "2026-10-13T17:07:35.381933+00:00",
+    "requestToInnerMarkerS": 0.026209,
+    "scope": "measured outer launcher to acquired inner wrapper; includes spawn/start overhead, not exact contention time",
+    "configuredVitestWorkers": 2,
+    "actualExecutedWorkerCount": "not independently sampled"
+  },
+  "counterfactuals": {
+    "inPlayOnly": "stack+draw+return originalnewmodule38actualcases",
+    "wrongSourceOrCohort": "distinctemblem+two sibling physical IDs and distinct card-source draw",
+    "gainResetOnZone": "same physical card hand/deck/play/void/banished; actual temporarymovesdeckexpiry",
+    "hiddenEventLeak": "handowner/opponent and concealeddeckbothnull; revealedhandbothpreserved; BattleView/fullsave",
+    "oldGainWidened": "own oldstack/handnegative and actual existing triggers-additional-spark.test21firstjoint total inclredaction; fullactualolddeparture/expiry/reload controls"
+  },
+  "recovery": {
+    "errorMidStep": "public synthetic resolve hook gain then throw; fold committed hasnogain and published hasnosparkGained",
+    "reloadRestart": "pendingfold JSONtrue/false samehash+actualpublishedarrays+publicationcursor, existing savedstate parser accepted",
+    "partialWrite": "step atomic rollback tested; nofilesystem/storagewrite authored",
+    "staleInputConcurrentActor": "opposinganswer notYourPrompt and replayedanswer bounced, no actual threadedtiming claims",
+    "cancelRefusal": "optionaltrigger prompt noncancellable; cancel bouncesnotCancellable, false answer makesnogain"
+  },
+  "resources": {
+    "sampledAtUtc": "2026-10-13T17:10:51.835684+00:00",
+    "ownedPids": [
+      24605,
+      24618,
+      32005,
+      32015,
+      37046,
+      37055,
+      37443,
+      37451,
+      69226,
+      69238,
+      81623,
+      81657,
+      91024,
+      91035,
+      92685,
+      92696,
+      92697,
+      92699
+    ],
+    "ownedPgids": [
+      37046,
+      37443,
+      91024,
+      92685
+    ],
+    "liveMatches": [],
+    "servers": [],
+    "providers": [],
+    "reviewers": [],
+    "candidate": null,
+    "commit": null,
+    "qualifications": "no unrelated processes or ports killed; no browser/helper reviewer started; shelllimits loads actual frominner resource receipts; early focusedperprocesslimits not sampled"
+  },
+  "privacyQualification": "subject identifies redactor only, no expiry-source guard ornullableeventschema; public identifiable inplay event includingexpiry unchanged. No new UI workflow/production UUID authoring/browser/fuzz300claim.",
+  "testDeltaQualification": "One auto-discovered plain semantic contract module, 285 lines and 38 cases, zero configured .test.ts entries and zero jsdom files. Existing additional-spark/public-gain/departure/reload controls were actually run in existing files and aggregate full suite; these are not all authored in the new module.",
+  "normative": "Existing Spark, Spark outside play, Durations and Zone Changes settle the physical gain; own RD records Ladder not invoked. Conditional exact seven-path native admission precedes writes; normative subsection/RD were written before implementation.",
+  "scope": "One SubjectSpec physical-card gain node, current printing.card and instanceCard character type, existing gainedSpark/floating/ordinary sparkGained. Exact additive export/getter and subject-identity redaction only. Original four production UUID authors and later .644 Aspects retain complete authoring/recipes/weighted300/preflight/sweep/D21/final QA; no production UUID, fixture catalog, engine/view/fold/schema/UI body transfer.",
+  "qa": "Headless capability adds no UI workflow/presentation kind. No browser/server/QA ledger/weighted300/preflight/sweep result is claimed.",
+  "coreReview": {
+    "required": true,
+    "status": "owed after exact source commit; outcome unknown",
+    "routing": "parent fresh read-only Codex CLI gpt-5.6-sol under user temporary same-family override until 2026-10-14T01:00:00Z; normal cross-family routing afterward",
+    "helperReviewerStarted": false
+  },
+  "prior132ClockCorrection": {
+    "bead": "hv-umm2.132",
+    "claimStartUtc": "2026-10-13T16:01:58.893835+00:00",
+    "closeEndUtc": "2026-10-13T16:44:15.130218+00:00",
+    "actualWholeOwnershipMin": 42.2706063833,
+    "commitObserverPid": 23734,
+    "commitPid": 23791,
+    "commitStartUtc": "2026-10-13T16:40:59.502818+00:00",
+    "commitEndUtc": "2026-10-13T16:40:59.538043+00:00",
+    "commitWallS": 0.035265,
+    "preCommitMarkerUtc": "2026-10-13T16:40:59.348841+00:00",
+    "markerToCommitEndS": 0.189202,
+    "originalEvidenceEndpointUtc": "2026-10-13T16:34:38.033759+00:00",
+    "originalEndpointToCommitEndS": 381.504284,
+    "qualification": "Additive timing carry in this own record only; closed .132 files unchanged. Full ownership wall includes postcommit review/delivery/cleanup, not model or process CPU."
+  }
+}

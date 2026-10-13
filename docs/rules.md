@@ -634,6 +634,15 @@ criterion with a ✦ bound reads the spark the card had as it was played, like
 its types: a later change to its spark, or its move to a deck, does not
 change which of these abilities its play matched or counted toward.
 
+**Gains on the triggering card:** An effect that says a character you play,
+draw, or return to hand gains ✦ changes that same physical character card
+wherever it is as the effect resolves. It can gain ✦ on the stack or outside
+play. The amount is fixed as the effect resolves. With no stated duration,
+the gained ✦ travels with the card across zones; a stated duration ends
+wherever the card is. If that card has ceased to exist or is an event as the
+effect resolves, it gains nothing. An effect that gives ✦ to characters in
+play applies to those characters in play.
+
 **Values fixed as an effect resolves:** When a resolving effect gives
 characters spark, a keyword, a new base spark, or another change for a while,
 as in "Until end of turn, characters you control have +X✦, where X is the

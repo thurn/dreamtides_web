@@ -37,6 +37,7 @@ export * from "./gain-energy";
 export * from "./gain-max-energy";
 export * from "./gain-points";
 export * from "./gain-spark";
+export * from "./gain-triggering-card-spark";
 export * from "./give-all-types";
 export * from "./grant";
 export * from "./grant-card-keyword";
