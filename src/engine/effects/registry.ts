@@ -34,6 +34,7 @@ import {
   createCopyInHandPrimitive,
   disableTriggersPrimitive,
   redrawHandPrimitive,
+  redrawChosenHandPrimitive,
   discardPrimitive,
   discardChosenPrimitive,
   discoverPrimitive,
@@ -170,6 +171,9 @@ const DEFINITIONS = {
   },
   get redrawHand() {
     return redrawHandPrimitive;
+  },
+  get redrawChosenHand() {
+    return redrawChosenHandPrimitive;
   },
   get discard() {
     return discardPrimitive;

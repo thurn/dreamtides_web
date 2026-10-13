@@ -191,6 +191,10 @@ export const LAB = {
   drawTwoThenDiscard: labEvent(1, 1, p.sequence(p.draw(2), p.discard(1))),
   /** "Discard two cards": one public count after the individual travels. */
   discardPair: labEvent(0x45300, 0, p.discard(2)),
+  /** The holder chooses any hand subset during resolution. */
+  partialRedraw: labEvent(0x61900, 0, p.redrawChosenHand()),
+  /** The opposing holder chooses during this controller's resolution. */
+  partialRedrawOpponent: labEvent(0x61901, 0, p.redrawChosenHand("opponent")),
   /** "Each player discards a card." */
   eachPlayerDiscards: labEvent(2, 1, p.sequence(p.discard(1), p.discard(1, "opponent"))),
   /** Privately choose a card from the opponent's hand to discard. */
@@ -393,6 +397,8 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [LAB.mover.id]: { name: "Lab Mover", text: "❖ – 1●: Move this character to an unoccupied position." },
   [LAB.drawTwoThenDiscard.id]: { name: "Lab Sifting", text: "Draw 2 cards, then discard a card." },
   [LAB.discardPair.id]: { name: "Lab Discard", text: "Discard two cards." },
+  [LAB.partialRedraw.id]: { name: "Lab Partial Redraw", text: "Discard any number of cards from your hand, then draw that many cards." },
+  [LAB.partialRedrawOpponent.id]: { name: "Lab Opponent Redraw", text: "The opponent discards any number of cards from their hand, then draws that many cards." },
   [LAB.eachPlayerDiscards.id]: { name: "Lab Tithe", text: "Each player discards a card." },
   [LAB.dissolveUpToOne.id]: { name: "Lab Mercy", text: "Dissolve up to one enemy." },
   [LAB.shuffleInto.id]: {
@@ -1009,6 +1015,17 @@ export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
     name: "discard-batch", description: "A two-card discard completes one count-only occasion",
     setup: { active: "player", phase: "day", player: { hand: [LAB.discardPair.id, ...vanillas.slice(0, 3)], deck: deck(6) }, enemy: { deck: deck(6) } },
     script: [], presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.player.hand, 1), at(ids.player.hand, 2)] }],
+  },
+  {
+    name: "partial-redraw", description: "The holder discards a chosen subset, then draws its completed count",
+    setup: { active: "player", phase: "day", player: { hand: [LAB.partialRedraw.id, ...vanillas], deck: deck(6) }, enemy: { hand: vanillas, deck: deck(6) } },
+    script: [], presents: [playHand(0), { side: "player", answer: (ids) => [at(ids.player.hand, 1), at(ids.player.hand, 3)] }],
+  },
+  {
+    name: "partial-redraw-opponent", description: "The human holder chooses a subset during the enemy's resolving redraw",
+    setup: { active: "enemy", phase: "day", enemy: { hand: [LAB.partialRedrawOpponent.id, ...vanillas], deck: deck(6) }, player: { hand: vanillas, deck: deck(6) } },
+    script: [play("enemy", (ids) => at(ids.enemy.hand, 0))],
+    presents: [{ side: "player", answer: (ids) => [at(ids.player.hand, 0), at(ids.player.hand, 2)] }],
   },
   {
     name: "draw-discard",

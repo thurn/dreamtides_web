@@ -1,0 +1,2396 @@
+{
+  "bead": "hv-umm2.619",
+  "phase": 5,
+  "base": "1702fcf5857116c21d55a5bbae45a1e656fd0f94",
+  "branch": "wt/partial-redraw-619-sol",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+  "grossWindow": {
+    "start": "2026-10-13T17:04:20.132367Z",
+    "end": "2026-10-13T18:22:36.088430Z",
+    "minutes": 78.26593438333333,
+    "endpointStatus": "Actual parent-acknowledged final endpoint before final schema/index checks and ONE prepared commit. Actual commit bracket/packaging tail retained externally without amendment; gross through actual commit may exceed this authored endpoint.",
+    "scope": "Original conservative parent claim acknowledgement through all owned setup/audit/admission/implementation/checks/QA/coordination/packaging; no reset. Exact model/dispatch/CPU instant unknown."
+  },
+  "claimObservation": {
+    "bead": "hv-umm2.619",
+    "ackObservation": "2026-10-13T17:04:20.132367+00:00",
+    "claimNative": "2026-10-13T17:04:20Z",
+    "scope": "Conservative gross start acknowledged after native claim; seconds-native precision distinct."
+  },
+  "install": {
+    "argv": [
+      "npm",
+      "install"
+    ],
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+    "start": "2026-10-13T17:04:42.426160+00:00",
+    "end": "2026-10-13T17:04:44.829801+00:00",
+    "wallS": 2.4036340419843327,
+    "exit": 0,
+    "terminal": true
+  },
+  "sourceAdmission": {
+    "ack": "2026-10-13T17:21:07.452887Z",
+    "proposalSHA256": "4da623890c4b678169df30a3a2fffe4c19b04a583a1a17c90b6d344d4887e96c",
+    "sourceFirstElapsedMin": 16.788667,
+    "scope": "Five exact primitive/contract/additive registration/lab paths and four own evidence paths. No prompt role/copy/route/resources/wholehand/type/schema/productionleaf/sharedQA/config changes."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Review2 supervisor prelaunch one-minute os.getloadavg[0] observation; no independent sysctl sample. All per-step samples retained."
+      },
+      "localValidationS": {
+        "measuredFor": "Actual enclosing outer finite supervisor or native invocation/awaited-finally scope. Native postclose SDK probes are separate records; no fabricated combined CPU/model timing. Vitest/enclosing stages distinct."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "public-baseline1": [
+      8.40283203125,
+      10.94384765625,
+      11.25244140625
+    ],
+    "public-baseline2": [
+      6.56494140625,
+      10.16259765625,
+      10.95166015625
+    ],
+    "missing-op1": [
+      14.31689453125,
+      10.92626953125,
+      11.10986328125
+    ],
+    "focused1": [
+      13.78857421875,
+      9.42041015625,
+      9.67626953125
+    ],
+    "focused2": [
+      10.41845703125,
+      9.921875,
+      9.87890625
+    ],
+    "review1": [
+      28.0166015625,
+      15.2060546875,
+      11.86328125
+    ],
+    "review2": [
+      21.3046875,
+      16.15380859375,
+      12.60400390625
+    ],
+    "knip1": [
+      19.29296875,
+      15.119140625,
+      12.08740234375
+    ],
+    "knip2": [
+      24.92626953125,
+      18.39453125,
+      13.73486328125
+    ],
+    "lab-preflight1": [
+      6.4736328125,
+      12.57666015625,
+      12.23583984375
+    ],
+    "lab-preflight2": [
+      4.34814453125,
+      9.74853515625,
+      11.15625
+    ]
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 222,
+    "jsdomFiles": 0
+  },
+  "grossTestChurn": {
+    "touchedFiles": 2,
+    "addedLines": 222,
+    "deletedLines": 0,
+    "contractModuleLines": 205,
+    "existingPromptLabSupportAddedLines": 17,
+    "classification": "One new synthetic contract module; existing prompt-lab inline synthetic fixtures/labels count as test support. Existing dynamic aggregator unchanged, no new configured entrypoint or jsdom file."
+  },
+  "functionalPaths": [
+    "src/engine/effects/primitives/partial-redraw-hand.ts",
+    "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts",
+    "src/engine/effects/primitives/index.ts",
+    "src/engine/effects/registry.ts",
+    "src/engine/testing/prompt-lab.ts"
+  ],
+  "evidencePaths": [
+    "docs/plan/evidence/friction/hv-umm2.619.json",
+    "docs/plan/evidence/measurements/hv-umm2.619.json",
+    "docs/plan/evidence/pre-existing/hv-umm2.619.md",
+    "docs/plan/evidence/qa-ledger/hv-umm2.619.jsonl"
+  ],
+  "stage1": {
+    "manifestCount": 4478,
+    "census": "619-reader-census.json",
+    "censusQualification": "Direct imports/registration and static routed barrel/cycle reachability are distinguished from runtime callers; no existing exported signature/schema changed. No authority inferred from census.",
+    "results": "Existing14publiccontrols passed;4unknown-op initial-legality throws were initially misclassified by scratch wrapper, then separately asserted honestly. New form absent in landed base; no invented old-feature execution."
+  },
+  "validationReceipts": {
+    "public-baseline1": {
+      "label": "public-baseline1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/619-public-baseline.mts"
+      ],
+      "pid": 85172,
+      "observerPid": 85114,
+      "processGroup": 85172,
+      "start": "2026-10-13T17:10:58.386850+00:00",
+      "end": "2026-10-13T17:11:00.377815+00:00",
+      "wallS": 1.990874833019916,
+      "exit": 1,
+      "loadBefore": [
+        8.40283203125,
+        10.94384765625,
+        11.25244140625
+      ],
+      "loadAfter": [
+        8.40283203125,
+        10.94384765625,
+        11.25244140625
+      ],
+      "childCpuS": 1.0899999999999999,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/619-check-public-baseline1.before.json",
+      "afterManifest": "/tmp/619-check-public-baseline1.after.json",
+      "beforePaths": 4478,
+      "afterPaths": 4478,
+      "changedPaths": []
+    },
+    "public-baseline2": {
+      "label": "public-baseline2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/619-public-baseline.mts"
+      ],
+      "pid": 87549,
+      "observerPid": 87529,
+      "processGroup": 87549,
+      "start": "2026-10-13T17:11:37.664075+00:00",
+      "end": "2026-10-13T17:11:39.889289+00:00",
+      "wallS": 2.2251091249927413,
+      "exit": 1,
+      "loadBefore": [
+        6.56494140625,
+        10.16259765625,
+        10.95166015625
+      ],
+      "loadAfter": [
+        6.56494140625,
+        10.16259765625,
+        10.95166015625
+      ],
+      "childCpuS": 2.4499999999999997,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/619-check-public-baseline2.before.json",
+      "afterManifest": "/tmp/619-check-public-baseline2.after.json",
+      "beforePaths": 4478,
+      "afterPaths": 4478,
+      "changedPaths": []
+    },
+    "missing-op1": {
+      "label": "missing-op1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/619-missing-op-control.mts"
+      ],
+      "pid": 92384,
+      "observerPid": 92370,
+      "processGroup": 92384,
+      "start": "2026-10-13T17:13:10.337734+00:00",
+      "end": "2026-10-13T17:13:11.450408+00:00",
+      "wallS": 1.112581166002201,
+      "exit": 0,
+      "loadBefore": [
+        14.31689453125,
+        10.92626953125,
+        11.10986328125
+      ],
+      "loadAfter": [
+        14.31689453125,
+        10.92626953125,
+        11.10986328125
+      ],
+      "childCpuS": 0.8,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/619-check-missing-op1.before.json",
+      "afterManifest": "/tmp/619-check-missing-op1.after.json",
+      "beforePaths": 4478,
+      "afterPaths": 4478,
+      "changedPaths": []
+    },
+    "focused1": {
+      "label": "focused1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/tooling.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts"
+      ],
+      "pid": 28423,
+      "observerPid": 28391,
+      "processGroup": 28423,
+      "start": "2026-10-13T17:26:09.900822+00:00",
+      "end": "2026-10-13T17:26:22.297796+00:00",
+      "wallS": 12.396750833984697,
+      "exit": 0,
+      "loadBefore": [
+        13.78857421875,
+        9.42041015625,
+        9.67626953125
+      ],
+      "loadAfter": [
+        17.3212890625,
+        10.3134765625,
+        9.9892578125
+      ],
+      "childCpuS": 23.31,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/619-check-focused1.before.json",
+      "afterManifest": "/tmp/619-check-focused1.after.json",
+      "beforePaths": 4480,
+      "afterPaths": 4481,
+      "changedPaths": [
+        "src/cumulus/primitives/tokens.ts"
+      ]
+    },
+    "focused2": {
+      "label": "focused2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/tooling.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-presentation.test.ts"
+      ],
+      "pid": 84465,
+      "observerPid": 84434,
+      "processGroup": 84465,
+      "start": "2026-10-13T17:27:41.926691+00:00",
+      "end": "2026-10-13T17:27:53.838983+00:00",
+      "wallS": 11.912076041975524,
+      "exit": 0,
+      "loadBefore": [
+        10.41845703125,
+        9.921875,
+        9.87890625
+      ],
+      "loadAfter": [
+        9.56787109375,
+        9.7607421875,
+        9.82177734375
+      ],
+      "childCpuS": 20.220000000000002,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/619-check-focused2.before.json",
+      "afterManifest": "/tmp/619-check-focused2.after.json",
+      "beforePaths": 4481,
+      "afterPaths": 4481,
+      "changedPaths": []
+    },
+    "review1": {
+      "label": "review1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 42155,
+      "observerPid": 42093,
+      "processGroup": 42155,
+      "start": "2026-10-13T17:29:07.411241+00:00",
+      "end": "2026-10-13T17:30:18.066785+00:00",
+      "wallS": 70.65451854097773,
+      "exit": 1,
+      "loadBefore": [
+        28.0166015625,
+        15.2060546875,
+        11.86328125
+      ],
+      "loadAfter": [
+        19.29296875,
+        15.119140625,
+        12.08740234375
+      ],
+      "childCpuS": 214.78,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/619-check-review1.before.json",
+      "afterManifest": "/tmp/619-check-review1.after.json",
+      "beforePaths": 4481,
+      "afterPaths": 4481,
+      "changedPaths": []
+    },
+    "review2": {
+      "label": "review2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 52003,
+      "observerPid": 51989,
+      "processGroup": 52003,
+      "start": "2026-10-13T17:30:54.892278+00:00",
+      "end": "2026-10-13T17:32:03.633617+00:00",
+      "wallS": 68.74045100001968,
+      "exit": 0,
+      "loadBefore": [
+        21.3046875,
+        16.15380859375,
+        12.60400390625
+      ],
+      "loadAfter": [
+        24.92626953125,
+        18.39453125,
+        13.73486328125
+      ],
+      "childCpuS": 182.54,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/619-check-review2.before.json",
+      "afterManifest": "/tmp/619-check-review2.after.json",
+      "beforePaths": 4481,
+      "afterPaths": 4481,
+      "changedPaths": []
+    },
+    "knip1": {
+      "label": "knip1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 49058,
+      "observerPid": 42080,
+      "processGroup": 49058,
+      "start": "2026-10-13T17:30:18.119862+00:00",
+      "end": "2026-10-13T17:30:23.428732+00:00",
+      "wallS": 5.308673125022324,
+      "exit": 0,
+      "loadBefore": [
+        19.29296875,
+        15.119140625,
+        12.08740234375
+      ],
+      "loadAfter": [
+        19.05517578125,
+        15.21142578125,
+        12.15576171875
+      ],
+      "childCpuS": 5.69,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/619-check-knip1.before.json",
+      "afterManifest": "/tmp/619-check-knip1.after.json",
+      "beforePaths": 4481,
+      "afterPaths": 4481,
+      "changedPaths": []
+    },
+    "knip2": {
+      "label": "knip2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 31513,
+      "observerPid": 51980,
+      "processGroup": 31513,
+      "start": "2026-10-13T17:32:03.680914+00:00",
+      "end": "2026-10-13T17:32:08.146178+00:00",
+      "wallS": 4.465112749981927,
+      "exit": 0,
+      "loadBefore": [
+        24.92626953125,
+        18.39453125,
+        13.73486328125
+      ],
+      "loadAfter": [
+        24.92626953125,
+        18.39453125,
+        13.73486328125
+      ],
+      "childCpuS": 5.2,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/619-check-knip2.before.json",
+      "afterManifest": "/tmp/619-check-knip2.after.json",
+      "beforePaths": 4481,
+      "afterPaths": 4481,
+      "changedPaths": []
+    },
+    "lab-preflight1": {
+      "label": "lab-preflight1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/619-lab-preflight.mts"
+      ],
+      "pid": 48642,
+      "observerPid": 48606,
+      "processGroup": 48642,
+      "start": "2026-10-13T17:35:22.875070+00:00",
+      "end": "2026-10-13T17:35:24.200850+00:00",
+      "wallS": 1.3256942910084035,
+      "exit": 1,
+      "loadBefore": [
+        6.4736328125,
+        12.57666015625,
+        12.23583984375
+      ],
+      "loadAfter": [
+        6.515625,
+        12.48388671875,
+        12.205078125
+      ],
+      "childCpuS": 0.8799999999999999,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/619-check-lab-preflight1.before.json",
+      "afterManifest": "/tmp/619-check-lab-preflight1.after.json",
+      "beforePaths": 4481,
+      "afterPaths": 4481,
+      "changedPaths": []
+    },
+    "lab-preflight2": {
+      "label": "lab-preflight2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/619-lab-preflight.mts"
+      ],
+      "pid": 51216,
+      "observerPid": 51204,
+      "processGroup": 51216,
+      "start": "2026-10-13T17:37:25.284210+00:00",
+      "end": "2026-10-13T17:37:27.736523+00:00",
+      "wallS": 2.4521308749972377,
+      "exit": 0,
+      "loadBefore": [
+        4.34814453125,
+        9.74853515625,
+        11.15625
+      ],
+      "loadAfter": [
+        4.34814453125,
+        9.74853515625,
+        11.15625
+      ],
+      "childCpuS": 1.13,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/619-check-lab-preflight2.before.json",
+      "afterManifest": "/tmp/619-check-lab-preflight2.after.json",
+      "beforePaths": 4481,
+      "afterPaths": 4481,
+      "changedPaths": []
+    }
+  },
+  "rawReceiptPaths": {
+    "public-baseline1": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/619-check-public-baseline1.receipt.json",
+    "public-baseline2": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/619-check-public-baseline2.receipt.json",
+    "missing-op1": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/619-check-missing-op1.receipt.json",
+    "focused1": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/619-check-focused1.receipt.json",
+    "focused2": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/619-check-focused2.receipt.json",
+    "review1": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/619-check-review1.receipt.json",
+    "review2": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/619-check-review2.receipt.json",
+    "knip1": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/619-check-knip1.receipt.json",
+    "knip2": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/619-check-knip2.receipt.json",
+    "lab-preflight1": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/619-check-lab-preflight1.receipt.json",
+    "lab-preflight2": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/619-check-lab-preflight2.receipt.json"
+  },
+  "validationSummary": {
+    "focused1": "2812tests/3files passed before genuinely held-source contract addition; new ignored token materialization accounts4480\u21924481.",
+    "focused2": "2814tests/3files; Vitest7.27s/teststage7.8s/outer11.912076s. Ownmodule9itdefinitions/10executedcases includingbothheldsourceactors.",
+    "review1": "Terminal1/outer70.654519s;5951tests/289files+TS/cycles passed, onlyownfixturelint cast failed; assertion/import-only correction then requiredfinalreview.",
+    "review2": "Terminal0;5951tests/289files;Vitest56.49s/testrelatedstage65.5s/outer68.740451s. Loadedhoststart21.3046875, no separate observedlockwait.",
+    "knip2": "Terminal0/4.465113s.",
+    "labPreflight2": "6genuinepublicsynthetic cases zero/proper/all bothfixtures, strictpending/completedload+coldreplayequal; notproductionpreflight orbrowserclaim.",
+    "notRepeated": "No full/fuzz/productionpreflight/sweep/D21datajoin repeated for this additive primitive without state/schema/architecture change. Production257 owns originalUUID authoring and required production300/preflight/sweep/D21coverage."
+  },
+  "failedAttempts": [
+    {
+      "label": "public-baseline1",
+      "exit": 1,
+      "outcome": "Wrong scratch public import location; zero behavioral cases."
+    },
+    {
+      "label": "public-baseline2",
+      "exit": 1,
+      "outcome": "14controls passed;4actualunknown-op throws misclassified expectingfold error events; separatemissing-op1 terminal0 preserved actual observation."
+    },
+    {
+      "label": "review1",
+      "exit": 1,
+      "outcome": "Own fixture lint only; passedTS/cycles/5951tests retained."
+    },
+    {
+      "label": "lab-preflight1",
+      "exit": 1,
+      "outcome": "Wrong scratch createCatalog object argument, cards not iterable; zero behavioral cases."
+    },
+    {
+      "label": "initial-packaging-read",
+      "exit": 2,
+      "outcome": "Read-only search referenced nonexistent validate-friction/friction-report/gy8cQAledger paths; corrected actualfriction-triggers and workflow schema. No state/source mutation."
+    },
+    {
+      "label": "termination-all-setup",
+      "exit": 1,
+      "outcome": "First owner record was startup without session metadata; guard failed before any SDK/HTTP request. Exactactive-record selection corrected; no uncertain retry.",
+      "raw": "terminate-all-attempt1-qualification.json"
+    },
+    {
+      "label": "drain-proof-setup",
+      "exit": 1,
+      "outcome": "Actualallruntimechecks/source hashes passed; wrapper incorrectly required automaticQAledgerextra. This custom scenario has no automaticledger; optionalextraabsence accepted, zero source mutation.",
+      "raw": "runtime-drain-attempt1-qualification.json"
+    },
+    {
+      "label": "staged-audit-syntax",
+      "exit": 1,
+      "outcome": "Own external staging audit had a missing list delimiter; Python rejected it before any audit/action. Corrected scratch syntax; source/index unchanged.",
+      "raw": "stage-audit-attempt1.py",
+      "observedRawToolReceipt": {
+        "chunkId": "f41be4",
+        "exit": 1,
+        "wallS": 6.542e-06,
+        "error": "SyntaxError: invalid syntax at expected-path list line4"
+      },
+      "qualification": "Tool receipt scope, no separately observed command CPU/launch UTC."
+    }
+  ],
+  "sixFailureMappings": [
+    {
+      "path": "error",
+      "test": "rolls back a redraw error through the existing fold boundary",
+      "contract": "A synthetic subsequent error produces the existing error outcome, preserves the committed hand and deck, and publishes no discard, discardBatch or draw effects. The contract does not assert full-state or all-event equality.",
+      "module": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts"
+    },
+    {
+      "path": "partial",
+      "test": "reloads pending and partially presented redraws without duplicate publication",
+      "contract": "A genuine unresolved subset prompt exposes no completed discard/draw; strict cold loading and prefix replay preserve the pause and complete once. Presentation prefixes can replay without duplicating publication. Synchronous discardCards and ordinary draw calls have no separately cancellable mid-write timeout; their effect/fold rollback boundary is the applicable atomicity contract.",
+      "module": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts"
+    },
+    {
+      "path": "reload",
+      "test": "reloads pending and partially presented redraws without duplicate publication",
+      "contract": "Pending and completed strict saved-state loading and replay produce equal committed hash/events. Browser pending/settled game reloads also preserve exact engine slice.",
+      "module": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts"
+    },
+    {
+      "path": "invalid-or-stale",
+      "test": "refuses invalid stale foreign and competing subset answers without partial redraw",
+      "contract": "Malformed/duplicate/foreign physical IDs and stale prompt answers reject before publishing discards or replacements; whole offered cohort is validated by existing engine/resources.",
+      "module": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts"
+    },
+    {
+      "path": "concurrent",
+      "test": "refuses invalid stale foreign and competing subset answers without partial redraw",
+      "contract": "Foreign actor and competing second answers cannot consume the first actor\u2019s current prompt or redraw twice. This is existing synchronous intent serialization, not a network race/timing test.",
+      "module": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts"
+    },
+    {
+      "path": "empty",
+      "test": "uses existing optional decline and empty-hand semantics with normal Fatigue",
+      "contract": "Zero/empty accepted choice emits no batch/discard/draw; normal Fatigue is observed when positive replacement draw count exceeds the deck. Precommit cancellation preserves state; postcommit resolving subset cancellation remains refused.",
+      "module": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts"
+    }
+  ],
+  "fiveCounterfactualMappings": [
+    {
+      "test": "redraws only the chosen physical subset and retains held order",
+      "module": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts"
+    },
+    {
+      "test": "counts completed selected discards across created replacements and earlier payments",
+      "module": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts"
+    },
+    {
+      "test": "completes one batch after ordered selected discards and none for zero",
+      "module": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts"
+    },
+    {
+      "test": "keeps unselected and replacement draws private while exposing the completed count",
+      "module": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts"
+    },
+    {
+      "test": "refuses invalid stale foreign and competing subset answers without partial redraw",
+      "module": "src/engine/effects/primitives/contracts/partial-redraw-hand.contracts.ts"
+    }
+  ],
+  "sixDisciplines": {
+    "holderAndSource": "you/opponent holder chooses complete physical hand, including a genuinely held trigger source; no env.source exclusion.",
+    "orderedCompletedCount": "Canonical offered-hand order, one existing discardCards call returned successfulcount, created cessation included, earlierpayment separate.",
+    "privacy": "Rules/publicview contracts conceal retained/replacement printings and actual held IDs from opponent; count event public. Browsernonemptyfarhand anonymous/down/no printingbindings, publiclyplayed source outside hand. Fullprobe diagnostics notplayer-visible privacy proof.",
+    "replayAndSave": "Genuine pausedprompt and replayprefix/load tests; browserpending/completedcoldgame rehydration and actual persistedprompt answer; no new schema/hash golden.",
+    "rollbackAndRefusal": "Effecterror at existingfoldboundary and invalid/stale/foreign/competing answers do not publish partial redraw; resolvingcancel refused.",
+    "zeroAndFatigue": "Zero emits nobatch/draw; positive count uses ordinarydraw/Fatigue semantics."
+  },
+  "qa": {
+    "providers": [
+      {
+        "label": "native-none-1",
+        "receipt": {
+          "mode": "none",
+          "attempt": "1",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/partial-redraw.mjs",
+            "--bead",
+            "hv-umm2.619",
+            "--arg",
+            "mode=none",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "240"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+          "pid": 72352,
+          "processGroup": 72352,
+          "start": "2026-10-13T17:43:00.267390+00:00",
+          "end": "2026-10-13T17:43:10.611447+00:00",
+          "wallS": 10.34355995801161,
+          "exit": 1,
+          "loadBefore": [
+            11.375,
+            12.4765625,
+            11.98486328125
+          ],
+          "loadAfter": [
+            10.46142578125,
+            12.24560546875,
+            11.90869140625
+          ],
+          "childCpuS": 8.629999999999999,
+          "driverSHA256": "f3e51b280f3b9bd3312aa5ba32e1a0cde5bad032b61aa9bbe4ad4c0045bbf9e0",
+          "terminal": true,
+          "scope": "Actual enclosing native runner invocation and its awaited finally cleanup. No source file read/hash/check/evidence polish while runtime live. Frozen manifest retained separately; complete actual resource metadata/drain must be independently inspected before source resume."
+        },
+        "rawPrefix": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/native-none-1",
+        "invocation": "run-QcL9vA",
+        "ok": false,
+        "error": "desktop#0: Error: enabled subset Submit has a usable hit-tested viewport target\n    at check (evalmachine.<anonymous>:1653:38)\n    at assertGeometry (evalmachine.<anonymous>:1662:223)\n    at partialRedraw (evalmachine.<anonymous>:1663:2)\n    at async evalmachine.<anonymous>:1686:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 3234,
+          "scenario": 6248,
+          "total": 9559
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 6247
+          }
+        ],
+        "caps": [],
+        "captures": [],
+        "results": {}
+      },
+      {
+        "label": "native-none-2",
+        "receipt": {
+          "mode": "none",
+          "attempt": "2",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/partial-redraw.mjs",
+            "--bead",
+            "hv-umm2.619",
+            "--arg",
+            "mode=none",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "240"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+          "pid": 80532,
+          "processGroup": 80532,
+          "start": "2026-10-13T17:45:01.521844+00:00",
+          "end": "2026-10-13T17:45:29.638902+00:00",
+          "wallS": 28.116696708020754,
+          "exit": 1,
+          "loadBefore": [
+            12.2724609375,
+            11.68115234375,
+            11.68994140625
+          ],
+          "loadAfter": [
+            16.96142578125,
+            13.00048828125,
+            12.17431640625
+          ],
+          "childCpuS": 8.2,
+          "driverSHA256": "47531c9085b1c0b914565ba8f3e0e22dd474b56c9c86ec5a513f7062d5f1939a",
+          "terminal": true,
+          "scope": "Actual enclosing native runner invocation and its awaited finally cleanup. No source file read/hash/check/evidence polish while runtime live. Frozen manifest retained separately; complete actual resource metadata/drain must be independently inspected before source resume."
+        },
+        "rawPrefix": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/native-none-2",
+        "invocation": "run-Q1YdsR",
+        "ok": false,
+        "error": "desktop#0: Error: remaining unobserved far-hand cards must render backs\n    at check (evalmachine.<anonymous>:1653:38)\n    at partialRedraw (evalmachine.<anonymous>:1676:580)\n    at async evalmachine.<anonymous>:1686:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "wallMs": {
+          "browserLeaseWait": 7,
+          "serve": 2286,
+          "scenario": 24961,
+          "total": 27320
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 24960
+          }
+        ],
+        "caps": [],
+        "captures": [
+          "redraw-none-pending-desktop.png",
+          "redraw-none-changed-desktop.png"
+        ],
+        "results": {}
+      },
+      {
+        "label": "native-none-3",
+        "receipt": {
+          "mode": "none",
+          "attempt": "3",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/partial-redraw.mjs",
+            "--bead",
+            "hv-umm2.619",
+            "--arg",
+            "mode=none",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "240"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+          "pid": 19447,
+          "processGroup": 19447,
+          "start": "2026-10-13T17:55:15.234196+00:00",
+          "end": "2026-10-13T17:55:37.928093+00:00",
+          "wallS": 22.693568874994526,
+          "exit": 0,
+          "loadBefore": [
+            4.29833984375,
+            8.07666015625,
+            10.224609375
+          ],
+          "loadAfter": [
+            5.2109375,
+            8.0517578125,
+            10.166015625
+          ],
+          "childCpuS": 7.529999999999999,
+          "driverSHA256": "9d4eae716a74637dcc2f90b51f61889fee6b57e63f6d2a59c8028b9962c68cba",
+          "terminal": true,
+          "scope": "Actual enclosing native runner invocation and its awaited finally cleanup. No source file read/hash/check/evidence polish while runtime live. Frozen manifest retained separately; complete actual resource metadata/drain must be independently inspected before source resume."
+        },
+        "rawPrefix": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/native-none-3",
+        "invocation": "run-SfOkni",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1987,
+          "scenario": 19872,
+          "total": 21923
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 12847
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 7024
+          }
+        ],
+        "caps": [],
+        "captures": [
+          "redraw-none-pending-desktop.png",
+          "redraw-none-changed-desktop.png",
+          "redraw-none-settled-desktop.png",
+          "redraw-none-pending-mobile.png",
+          "redraw-none-changed-mobile.png",
+          "redraw-none-settled-mobile.png"
+        ],
+        "results": {
+          "desktop": {
+            "selected": [],
+            "canonical": [],
+            "batch": null,
+            "hand": [
+              "i2",
+              "i3",
+              "i4"
+            ],
+            "privacy": {
+              "bindings": [
+                {
+                  "id": "enemy-hand-0",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-1",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-2",
+                  "face": "down"
+                }
+              ],
+              "printing": [],
+              "stillHidden": [
+                "i11",
+                "i12",
+                "i13"
+              ]
+            },
+            "notes": [
+              {
+                "label": "rendered-private-hand",
+                "data": {
+                  "bindings": [
+                    {
+                      "id": "enemy-hand-0",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-1",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-2",
+                      "face": "down"
+                    }
+                  ],
+                  "printing": [],
+                  "stillHidden": [
+                    "i11",
+                    "i12",
+                    "i13"
+                  ],
+                  "qualification": "Full probe is diagnostic; anonymous rendered far hand does not associate hidden physical IDs. The publicly played source is outside the far hand; every remaining far-hand card in these exact scenes is unobserved."
+                },
+                "at": "desktop#0"
+              },
+              {
+                "label": "persisted-subset",
+                "data": {
+                  "gameId": "t2exng",
+                  "answer": {
+                    "gameId": "t2exng",
+                    "version": 1,
+                    "promptId": "1:2:0",
+                    "side": "player",
+                    "fingerprint": "1shc1upqgkg",
+                    "value": [],
+                    "timestamp": "2026-10-13T17:55:27.383Z",
+                    "event": "engine.promptAnswered",
+                    "seq": 31
+                  }
+                },
+                "at": "desktop#0"
+              }
+            ]
+          },
+          "mobile": {
+            "selected": [],
+            "canonical": [],
+            "batch": null,
+            "hand": [
+              "i2",
+              "i3",
+              "i4"
+            ],
+            "privacy": {
+              "bindings": [
+                {
+                  "id": "enemy-hand-0",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-1",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-2",
+                  "face": "down"
+                }
+              ],
+              "printing": [],
+              "stillHidden": [
+                "i11",
+                "i12",
+                "i13"
+              ]
+            },
+            "notes": [
+              {
+                "label": "rendered-private-hand",
+                "data": {
+                  "bindings": [
+                    {
+                      "id": "enemy-hand-0",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-1",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-2",
+                      "face": "down"
+                    }
+                  ],
+                  "printing": [],
+                  "stillHidden": [
+                    "i11",
+                    "i12",
+                    "i13"
+                  ],
+                  "qualification": "Full probe is diagnostic; anonymous rendered far hand does not associate hidden physical IDs. The publicly played source is outside the far hand; every remaining far-hand card in these exact scenes is unobserved."
+                },
+                "at": "mobile#0"
+              },
+              {
+                "label": "persisted-subset",
+                "data": {
+                  "gameId": "nusuvn",
+                  "answer": {
+                    "gameId": "nusuvn",
+                    "version": 1,
+                    "promptId": "1:2:0",
+                    "side": "player",
+                    "fingerprint": "1shc1upqgkg",
+                    "value": [],
+                    "timestamp": "2026-10-13T17:55:35.897Z",
+                    "event": "engine.promptAnswered",
+                    "seq": 22
+                  }
+                },
+                "at": "mobile#0"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "label": "native-subset-1",
+        "receipt": {
+          "mode": "subset",
+          "attempt": "1",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/partial-redraw.mjs",
+            "--bead",
+            "hv-umm2.619",
+            "--arg",
+            "mode=subset",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "240"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+          "pid": 20216,
+          "processGroup": 20216,
+          "start": "2026-10-13T17:55:45.045985+00:00",
+          "end": "2026-10-13T17:56:21.692332+00:00",
+          "wallS": 36.64589608300594,
+          "exit": 0,
+          "loadBefore": [
+            5.037109375,
+            7.91845703125,
+            10.09375
+          ],
+          "loadAfter": [
+            7.66650390625,
+            8.2314453125,
+            10.1171875
+          ],
+          "childCpuS": 7.86,
+          "driverSHA256": "9d4eae716a74637dcc2f90b51f61889fee6b57e63f6d2a59c8028b9962c68cba",
+          "terminal": true,
+          "scope": "Actual enclosing native runner invocation and its awaited finally cleanup. No source file read/hash/check/evidence polish while runtime live. Frozen manifest retained separately; complete actual resource metadata/drain must be independently inspected before source resume."
+        },
+        "rawPrefix": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/native-subset-1",
+        "invocation": "run-La4jsv",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 4,
+          "serve": 1347,
+          "scenario": 34497,
+          "total": 35903
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 20773
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 13724
+          }
+        ],
+        "caps": [],
+        "captures": [
+          "redraw-subset-pending-desktop.png",
+          "redraw-subset-changed-desktop.png",
+          "redraw-subset-settled-desktop.png",
+          "redraw-subset-reload-desktop.png",
+          "redraw-subset-pending-mobile.png",
+          "redraw-subset-changed-mobile.png",
+          "redraw-subset-settled-mobile.png",
+          "redraw-subset-reload-mobile.png"
+        ],
+        "results": {
+          "desktop": {
+            "selected": [
+              "i2",
+              "i4"
+            ],
+            "canonical": [
+              "i2",
+              "i4"
+            ],
+            "batch": {
+              "kind": "discardBatch",
+              "side": "player",
+              "count": 2
+            },
+            "hand": [
+              "i3",
+              "i5",
+              "i6"
+            ],
+            "privacy": {
+              "bindings": [
+                {
+                  "id": "enemy-hand-0",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-1",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-2",
+                  "face": "down"
+                }
+              ],
+              "printing": [],
+              "stillHidden": [
+                "i11",
+                "i12",
+                "i13"
+              ]
+            },
+            "notes": [
+              {
+                "label": "redraw-intent-scope",
+                "data": {
+                  "seq": 3,
+                  "completedDraws": [
+                    "i5",
+                    "i6"
+                  ],
+                  "otherActualDraws": [],
+                  "qualification": "Only the completed batch intent contributes redraw draws; later ordinary turn draws are separately accounted."
+                },
+                "at": "desktop#0"
+              },
+              {
+                "label": "rendered-private-hand",
+                "data": {
+                  "bindings": [
+                    {
+                      "id": "enemy-hand-0",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-1",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-2",
+                      "face": "down"
+                    }
+                  ],
+                  "printing": [],
+                  "stillHidden": [
+                    "i11",
+                    "i12",
+                    "i13"
+                  ],
+                  "qualification": "Full probe is diagnostic; anonymous rendered far hand does not associate hidden physical IDs. The publicly played source is outside the far hand; every remaining far-hand card in these exact scenes is unobserved."
+                },
+                "at": "desktop#0"
+              },
+              {
+                "label": "persisted-subset",
+                "data": {
+                  "gameId": "endtbn",
+                  "answer": {
+                    "gameId": "endtbn",
+                    "version": 1,
+                    "promptId": "1:2:0",
+                    "side": "player",
+                    "fingerprint": "1shc1upqgkg",
+                    "value": [
+                      "i2",
+                      "i4"
+                    ],
+                    "timestamp": "2026-10-13T17:55:59.429Z",
+                    "event": "engine.promptAnswered",
+                    "seq": 16
+                  }
+                },
+                "at": "desktop#0"
+              }
+            ]
+          },
+          "mobile": {
+            "selected": [
+              "i2",
+              "i4"
+            ],
+            "canonical": [
+              "i2",
+              "i4"
+            ],
+            "batch": {
+              "kind": "discardBatch",
+              "side": "player",
+              "count": 2
+            },
+            "hand": [
+              "i3",
+              "i5",
+              "i6"
+            ],
+            "privacy": {
+              "bindings": [
+                {
+                  "id": "enemy-hand-0",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-1",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-2",
+                  "face": "down"
+                }
+              ],
+              "printing": [],
+              "stillHidden": [
+                "i11",
+                "i12",
+                "i13"
+              ]
+            },
+            "notes": [
+              {
+                "label": "redraw-intent-scope",
+                "data": {
+                  "seq": 3,
+                  "completedDraws": [
+                    "i5",
+                    "i6"
+                  ],
+                  "otherActualDraws": [],
+                  "qualification": "Only the completed batch intent contributes redraw draws; later ordinary turn draws are separately accounted."
+                },
+                "at": "mobile#0"
+              },
+              {
+                "label": "rendered-private-hand",
+                "data": {
+                  "bindings": [
+                    {
+                      "id": "enemy-hand-0",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-1",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-2",
+                      "face": "down"
+                    }
+                  ],
+                  "printing": [],
+                  "stillHidden": [
+                    "i11",
+                    "i12",
+                    "i13"
+                  ],
+                  "qualification": "Full probe is diagnostic; anonymous rendered far hand does not associate hidden physical IDs. The publicly played source is outside the far hand; every remaining far-hand card in these exact scenes is unobserved."
+                },
+                "at": "mobile#0"
+              },
+              {
+                "label": "persisted-subset",
+                "data": {
+                  "gameId": "95m5ro",
+                  "answer": {
+                    "gameId": "95m5ro",
+                    "version": 1,
+                    "promptId": "1:2:0",
+                    "side": "player",
+                    "fingerprint": "1shc1upqgkg",
+                    "value": [
+                      "i2",
+                      "i4"
+                    ],
+                    "timestamp": "2026-10-13T17:56:15.857Z",
+                    "event": "engine.promptAnswered",
+                    "seq": 16
+                  }
+                },
+                "at": "mobile#0"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "label": "native-all-1",
+        "receipt": {
+          "mode": "all",
+          "attempt": "1",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/partial-redraw.mjs",
+            "--bead",
+            "hv-umm2.619",
+            "--arg",
+            "mode=all",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "240"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+          "pid": 56338,
+          "processGroup": 56338,
+          "start": "2026-10-13T18:01:42.573205+00:00",
+          "end": "2026-10-13T18:02:07.772880+00:00",
+          "wallS": 25.199339334008982,
+          "exit": 0,
+          "loadBefore": [
+            2.923828125,
+            4.77685546875,
+            7.89453125
+          ],
+          "loadAfter": [
+            3.36962890625,
+            4.7294921875,
+            7.78662109375
+          ],
+          "childCpuS": 7.17,
+          "driverSHA256": "9d4eae716a74637dcc2f90b51f61889fee6b57e63f6d2a59c8028b9962c68cba",
+          "terminal": true,
+          "scope": "Actual enclosing native runner invocation and its awaited finally cleanup. No source file read/hash/check/evidence polish while runtime live. Frozen manifest retained separately; complete actual resource metadata/drain must be independently inspected before source resume."
+        },
+        "rawPrefix": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/native-all-1",
+        "invocation": "run-rEsSwL",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 2883,
+          "scenario": 21445,
+          "total": 24392
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 13642
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 7802
+          }
+        ],
+        "caps": [],
+        "captures": [
+          "redraw-all-pending-desktop.png",
+          "redraw-all-changed-desktop.png",
+          "redraw-all-settled-desktop.png",
+          "redraw-all-pending-mobile.png",
+          "redraw-all-changed-mobile.png",
+          "redraw-all-settled-mobile.png"
+        ],
+        "results": {
+          "desktop": {
+            "selected": [
+              "i2",
+              "i3",
+              "i4"
+            ],
+            "canonical": [
+              "i2",
+              "i3",
+              "i4"
+            ],
+            "batch": {
+              "kind": "discardBatch",
+              "side": "player",
+              "count": 3
+            },
+            "hand": [
+              "i5",
+              "i6",
+              "i7"
+            ],
+            "privacy": {
+              "bindings": [
+                {
+                  "id": "enemy-hand-0",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-1",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-2",
+                  "face": "down"
+                }
+              ],
+              "printing": [],
+              "stillHidden": [
+                "i11",
+                "i12",
+                "i13"
+              ]
+            },
+            "notes": [
+              {
+                "label": "redraw-intent-scope",
+                "data": {
+                  "seq": 3,
+                  "completedDraws": [
+                    "i5",
+                    "i6",
+                    "i7"
+                  ],
+                  "otherActualDraws": [],
+                  "qualification": "Only the completed batch intent contributes redraw draws; later ordinary turn draws are separately accounted."
+                },
+                "at": "desktop#0"
+              },
+              {
+                "label": "rendered-private-hand",
+                "data": {
+                  "bindings": [
+                    {
+                      "id": "enemy-hand-0",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-1",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-2",
+                      "face": "down"
+                    }
+                  ],
+                  "printing": [],
+                  "stillHidden": [
+                    "i11",
+                    "i12",
+                    "i13"
+                  ],
+                  "qualification": "Full probe is diagnostic; anonymous rendered far hand does not associate hidden physical IDs. The publicly played source is outside the far hand; every remaining far-hand card in these exact scenes is unobserved."
+                },
+                "at": "desktop#0"
+              },
+              {
+                "label": "persisted-subset",
+                "data": {
+                  "gameId": "3y2ish",
+                  "answer": {
+                    "gameId": "3y2ish",
+                    "version": 1,
+                    "promptId": "1:2:0",
+                    "side": "player",
+                    "fingerprint": "1shc1upqgkg",
+                    "value": [
+                      "i2",
+                      "i3",
+                      "i4"
+                    ],
+                    "timestamp": "2026-10-13T18:01:55.469Z",
+                    "event": "engine.promptAnswered",
+                    "seq": 31
+                  }
+                },
+                "at": "desktop#0"
+              }
+            ]
+          },
+          "mobile": {
+            "selected": [
+              "i2",
+              "i3",
+              "i4"
+            ],
+            "canonical": [
+              "i2",
+              "i3",
+              "i4"
+            ],
+            "batch": {
+              "kind": "discardBatch",
+              "side": "player",
+              "count": 3
+            },
+            "hand": [
+              "i5",
+              "i6",
+              "i7"
+            ],
+            "privacy": {
+              "bindings": [
+                {
+                  "id": "enemy-hand-0",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-1",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-2",
+                  "face": "down"
+                }
+              ],
+              "printing": [],
+              "stillHidden": [
+                "i11",
+                "i12",
+                "i13"
+              ]
+            },
+            "notes": [
+              {
+                "label": "redraw-intent-scope",
+                "data": {
+                  "seq": 3,
+                  "completedDraws": [
+                    "i5",
+                    "i6",
+                    "i7"
+                  ],
+                  "otherActualDraws": [],
+                  "qualification": "Only the completed batch intent contributes redraw draws; later ordinary turn draws are separately accounted."
+                },
+                "at": "mobile#0"
+              },
+              {
+                "label": "rendered-private-hand",
+                "data": {
+                  "bindings": [
+                    {
+                      "id": "enemy-hand-0",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-1",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-2",
+                      "face": "down"
+                    }
+                  ],
+                  "printing": [],
+                  "stillHidden": [
+                    "i11",
+                    "i12",
+                    "i13"
+                  ],
+                  "qualification": "Full probe is diagnostic; anonymous rendered far hand does not associate hidden physical IDs. The publicly played source is outside the far hand; every remaining far-hand card in these exact scenes is unobserved."
+                },
+                "at": "mobile#0"
+              },
+              {
+                "label": "persisted-subset",
+                "data": {
+                  "gameId": "mvtaer",
+                  "answer": {
+                    "gameId": "mvtaer",
+                    "version": 1,
+                    "promptId": "1:2:0",
+                    "side": "player",
+                    "fingerprint": "1shc1upqgkg",
+                    "value": [
+                      "i2",
+                      "i3",
+                      "i4"
+                    ],
+                    "timestamp": "2026-10-13T18:02:05.200Z",
+                    "event": "engine.promptAnswered",
+                    "seq": 29
+                  }
+                },
+                "at": "mobile#0"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "label": "native-opponent-1",
+        "receipt": {
+          "mode": "opponent",
+          "attempt": "1",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/partial-redraw.mjs",
+            "--bead",
+            "hv-umm2.619",
+            "--arg",
+            "mode=opponent",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "240"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+          "pid": 58660,
+          "processGroup": 58660,
+          "start": "2026-10-13T18:02:52.241613+00:00",
+          "end": "2026-10-13T18:04:20.515793+00:00",
+          "wallS": 88.27324079201207,
+          "exit": 1,
+          "loadBefore": [
+            6.3505859375,
+            5.18603515625,
+            7.7880859375
+          ],
+          "loadAfter": [
+            13.64990234375,
+            9.27490234375,
+            9.19677734375
+          ],
+          "childCpuS": 8.27,
+          "driverSHA256": "9d4eae716a74637dcc2f90b51f61889fee6b57e63f6d2a59c8028b9962c68cba",
+          "terminal": true,
+          "scope": "Actual enclosing native runner invocation and its awaited finally cleanup. No source file read/hash/check/evidence polish while runtime live. Frozen manifest retained separately; complete actual resource metadata/drain must be independently inspected before source resume."
+        },
+        "rawPrefix": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/native-opponent-1",
+        "invocation": "run-0oVWHY",
+        "ok": false,
+        "error": "desktop#0: Error: qa.battle enemy resolution and ordinary turn finish at stable human Day: stalled: no progress for 45000 ms; last action none; {\"at\":\"far:dusk\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":10}}; history far:day > far:dusk\n    at fail (evalmachine.<anonymous>:1346:7)\n    at Object.playUntil (evalmachine.<anonymous>:1373:54)\n    at async partialRedraw (evalmachine.<anonymous>:1672:15)\n    at async evalmachine.<anonymous>:1686:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2301,
+          "scenario": 85093,
+          "total": 87460
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 85092
+          }
+        ],
+        "caps": [],
+        "captures": [
+          "redraw-opponent-pending-desktop.png",
+          "redraw-opponent-changed-desktop.png"
+        ],
+        "results": {}
+      },
+      {
+        "label": "native-opponent-2",
+        "receipt": {
+          "mode": "opponent",
+          "attempt": "2",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/partial-redraw.mjs",
+            "--bead",
+            "hv-umm2.619",
+            "--arg",
+            "mode=opponent",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "240"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+          "pid": 17378,
+          "processGroup": 17378,
+          "start": "2026-10-13T18:05:26.950741+00:00",
+          "end": "2026-10-13T18:06:09.175357+00:00",
+          "wallS": 42.22411383301369,
+          "exit": 0,
+          "loadBefore": [
+            8.10791015625,
+            8.333984375,
+            8.83837890625
+          ],
+          "loadAfter": [
+            7.49462890625,
+            8.123046875,
+            8.73583984375
+          ],
+          "childCpuS": 7.46,
+          "driverSHA256": "cb6715a2a2346b45b58b79980e810e1190a1e75f61894695cb45005b5a0e5ce2",
+          "terminal": true,
+          "scope": "Actual enclosing native runner invocation and its awaited finally cleanup. No source file read/hash/check/evidence polish while runtime live. Frozen manifest retained separately; complete actual resource metadata/drain must be independently inspected before source resume."
+        },
+        "rawPrefix": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/native-opponent-2",
+        "invocation": "run-vkwvVZ",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1662,
+          "scenario": 39734,
+          "total": 41458
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 23123
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 16611
+          }
+        ],
+        "caps": [],
+        "captures": [
+          "redraw-opponent-pending-desktop.png",
+          "redraw-opponent-changed-desktop.png",
+          "redraw-opponent-settled-desktop.png",
+          "redraw-opponent-reload-desktop.png",
+          "redraw-opponent-pending-mobile.png",
+          "redraw-opponent-changed-mobile.png",
+          "redraw-opponent-settled-mobile.png",
+          "redraw-opponent-reload-mobile.png"
+        ],
+        "results": {
+          "desktop": {
+            "selected": [
+              "i1",
+              "i3"
+            ],
+            "canonical": [
+              "i1",
+              "i3"
+            ],
+            "batch": {
+              "kind": "discardBatch",
+              "side": "player",
+              "count": 2
+            },
+            "hand": [
+              "i2",
+              "i4",
+              "i5",
+              "i6"
+            ],
+            "privacy": {
+              "bindings": [
+                {
+                  "id": "enemy-hand-0",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-1",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-2",
+                  "face": "down"
+                }
+              ],
+              "printing": [],
+              "stillHidden": [
+                "i11",
+                "i12",
+                "i13"
+              ]
+            },
+            "notes": [
+              {
+                "label": "redraw-intent-scope",
+                "data": {
+                  "seq": 2,
+                  "completedDraws": [
+                    "i4",
+                    "i5"
+                  ],
+                  "otherActualDraws": [
+                    "i6"
+                  ],
+                  "qualification": "Only the completed batch intent contributes redraw draws; later ordinary turn draws are separately accounted."
+                },
+                "at": "desktop#0"
+              },
+              {
+                "label": "rendered-private-hand",
+                "data": {
+                  "bindings": [
+                    {
+                      "id": "enemy-hand-0",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-1",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-2",
+                      "face": "down"
+                    }
+                  ],
+                  "printing": [],
+                  "stillHidden": [
+                    "i11",
+                    "i12",
+                    "i13"
+                  ],
+                  "qualification": "Full probe is diagnostic; anonymous rendered far hand does not associate hidden physical IDs. The publicly played source is outside the far hand; every remaining far-hand card in these exact scenes is unobserved."
+                },
+                "at": "desktop#0"
+              },
+              {
+                "label": "persisted-subset",
+                "data": {
+                  "gameId": "nv43nm",
+                  "answer": {
+                    "gameId": "nv43nm",
+                    "version": 1,
+                    "promptId": "1:2:0",
+                    "side": "player",
+                    "fingerprint": "27e4a3lqb82",
+                    "value": [
+                      "i1",
+                      "i3"
+                    ],
+                    "timestamp": "2026-10-13T18:05:39.462Z",
+                    "event": "engine.promptAnswered",
+                    "seq": 14
+                  }
+                },
+                "at": "desktop#0"
+              }
+            ]
+          },
+          "mobile": {
+            "selected": [
+              "i1",
+              "i3"
+            ],
+            "canonical": [
+              "i1",
+              "i3"
+            ],
+            "batch": {
+              "kind": "discardBatch",
+              "side": "player",
+              "count": 2
+            },
+            "hand": [
+              "i2",
+              "i4",
+              "i5",
+              "i6"
+            ],
+            "privacy": {
+              "bindings": [
+                {
+                  "id": "enemy-hand-0",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-1",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-2",
+                  "face": "down"
+                }
+              ],
+              "printing": [],
+              "stillHidden": [
+                "i11",
+                "i12",
+                "i13"
+              ]
+            },
+            "notes": [
+              {
+                "label": "redraw-intent-scope",
+                "data": {
+                  "seq": 2,
+                  "completedDraws": [
+                    "i4",
+                    "i5"
+                  ],
+                  "otherActualDraws": [
+                    "i6"
+                  ],
+                  "qualification": "Only the completed batch intent contributes redraw draws; later ordinary turn draws are separately accounted."
+                },
+                "at": "mobile#0"
+              },
+              {
+                "label": "rendered-private-hand",
+                "data": {
+                  "bindings": [
+                    {
+                      "id": "enemy-hand-0",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-1",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-2",
+                      "face": "down"
+                    }
+                  ],
+                  "printing": [],
+                  "stillHidden": [
+                    "i11",
+                    "i12",
+                    "i13"
+                  ],
+                  "qualification": "Full probe is diagnostic; anonymous rendered far hand does not associate hidden physical IDs. The publicly played source is outside the far hand; every remaining far-hand card in these exact scenes is unobserved."
+                },
+                "at": "mobile#0"
+              },
+              {
+                "label": "persisted-subset",
+                "data": {
+                  "gameId": "8ydtf5",
+                  "answer": {
+                    "gameId": "8ydtf5",
+                    "version": 1,
+                    "promptId": "1:2:0",
+                    "side": "player",
+                    "fingerprint": "27e4a3lqb82",
+                    "value": [
+                      "i1",
+                      "i3"
+                    ],
+                    "timestamp": "2026-10-13T18:05:58.796Z",
+                    "event": "engine.promptAnswered",
+                    "seq": 14
+                  }
+                },
+                "at": "mobile#0"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "label": "native-subset-2",
+        "receipt": {
+          "mode": "subset",
+          "attempt": "2",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/partial-redraw.mjs",
+            "--bead",
+            "hv-umm2.619",
+            "--arg",
+            "mode=subset",
+            "--viewports",
+            "desktop,mobile",
+            "--timeout",
+            "240"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/partial-redraw-619-sol",
+          "pid": 33296,
+          "processGroup": 33296,
+          "start": "2026-10-13T18:09:36.709852+00:00",
+          "end": "2026-10-13T18:10:16.198726+00:00",
+          "wallS": 39.48836558300536,
+          "exit": 0,
+          "loadBefore": [
+            8.27490234375,
+            7.81787109375,
+            8.4033203125
+          ],
+          "loadAfter": [
+            8.37548828125,
+            7.93798828125,
+            8.42138671875
+          ],
+          "childCpuS": 9.030000000000001,
+          "driverSHA256": "faa90ecc3dcc7710f005d5d58b289b05f483d3b9a0f50ad97da27ce732e1a4cf",
+          "terminal": true,
+          "scope": "Actual enclosing native runner invocation and its awaited finally cleanup. No source file read/hash/check/evidence polish while runtime live. Frozen manifest retained separately; complete actual resource metadata/drain must be independently inspected before source resume."
+        },
+        "rawPrefix": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.619/validation/native-subset-2",
+        "invocation": "run-5BtgEC",
+        "ok": true,
+        "error": null,
+        "wallMs": {
+          "browserLeaseWait": 9,
+          "serve": 2340,
+          "scenario": 36220,
+          "total": 38625
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 21784
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 14434
+          }
+        ],
+        "caps": [],
+        "captures": [
+          "redraw-subset-pending-desktop.png",
+          "redraw-subset-changed-desktop.png",
+          "redraw-subset-settled-desktop.png",
+          "redraw-subset-reload-desktop.png",
+          "redraw-subset-pending-mobile.png",
+          "redraw-subset-changed-mobile.png",
+          "redraw-subset-settled-mobile.png",
+          "redraw-subset-reload-mobile.png"
+        ],
+        "results": {
+          "desktop": {
+            "selected": [
+              "i2",
+              "i4"
+            ],
+            "canonical": [
+              "i2",
+              "i4"
+            ],
+            "batch": {
+              "kind": "discardBatch",
+              "side": "player",
+              "count": 2
+            },
+            "hand": [
+              "i3",
+              "i5",
+              "i6"
+            ],
+            "privacy": {
+              "bindings": [
+                {
+                  "id": "enemy-hand-0",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-1",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-2",
+                  "face": "down"
+                }
+              ],
+              "printing": [],
+              "stillHidden": [
+                "i11",
+                "i12",
+                "i13"
+              ]
+            },
+            "notes": [
+              {
+                "label": "redraw-intent-scope",
+                "data": {
+                  "seq": 3,
+                  "completedDraws": [
+                    "i5",
+                    "i6"
+                  ],
+                  "otherActualDraws": [],
+                  "qualification": "Only the completed batch intent contributes redraw draws; later ordinary turn draws are separately accounted."
+                },
+                "at": "desktop#0"
+              },
+              {
+                "label": "rendered-private-hand",
+                "data": {
+                  "bindings": [
+                    {
+                      "id": "enemy-hand-0",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-1",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-2",
+                      "face": "down"
+                    }
+                  ],
+                  "printing": [],
+                  "stillHidden": [
+                    "i11",
+                    "i12",
+                    "i13"
+                  ],
+                  "qualification": "Full probe is diagnostic; anonymous rendered far hand does not associate hidden physical IDs. The publicly played source is outside the far hand; every remaining far-hand card in these exact scenes is unobserved."
+                },
+                "at": "desktop#0"
+              },
+              {
+                "label": "rendered-settled-hand-and-control",
+                "data": {
+                  "ids": [
+                    "i3",
+                    "i5",
+                    "i6"
+                  ],
+                  "control": {
+                    "disabled": false,
+                    "x": 1179.15625,
+                    "y": 618,
+                    "width": 122.6875,
+                    "height": 42,
+                    "intersects": true,
+                    "hit": true
+                  }
+                },
+                "at": "desktop#0"
+              },
+              {
+                "label": "persisted-subset",
+                "data": {
+                  "gameId": "yewkkj",
+                  "answer": {
+                    "gameId": "yewkkj",
+                    "version": 1,
+                    "promptId": "1:2:0",
+                    "side": "player",
+                    "fingerprint": "1shc1upqgkg",
+                    "value": [
+                      "i2",
+                      "i4"
+                    ],
+                    "timestamp": "2026-10-13T18:09:51.669Z",
+                    "event": "engine.promptAnswered",
+                    "seq": 14
+                  }
+                },
+                "at": "desktop#0"
+              }
+            ]
+          },
+          "mobile": {
+            "selected": [
+              "i2",
+              "i4"
+            ],
+            "canonical": [
+              "i2",
+              "i4"
+            ],
+            "batch": {
+              "kind": "discardBatch",
+              "side": "player",
+              "count": 2
+            },
+            "hand": [
+              "i3",
+              "i5",
+              "i6"
+            ],
+            "privacy": {
+              "bindings": [
+                {
+                  "id": "enemy-hand-0",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-1",
+                  "face": "down"
+                },
+                {
+                  "id": "enemy-hand-2",
+                  "face": "down"
+                }
+              ],
+              "printing": [],
+              "stillHidden": [
+                "i11",
+                "i12",
+                "i13"
+              ]
+            },
+            "notes": [
+              {
+                "label": "redraw-intent-scope",
+                "data": {
+                  "seq": 3,
+                  "completedDraws": [
+                    "i5",
+                    "i6"
+                  ],
+                  "otherActualDraws": [],
+                  "qualification": "Only the completed batch intent contributes redraw draws; later ordinary turn draws are separately accounted."
+                },
+                "at": "mobile#0"
+              },
+              {
+                "label": "rendered-private-hand",
+                "data": {
+                  "bindings": [
+                    {
+                      "id": "enemy-hand-0",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-1",
+                      "face": "down"
+                    },
+                    {
+                      "id": "enemy-hand-2",
+                      "face": "down"
+                    }
+                  ],
+                  "printing": [],
+                  "stillHidden": [
+                    "i11",
+                    "i12",
+                    "i13"
+                  ],
+                  "qualification": "Full probe is diagnostic; anonymous rendered far hand does not associate hidden physical IDs. The publicly played source is outside the far hand; every remaining far-hand card in these exact scenes is unobserved."
+                },
+                "at": "mobile#0"
+              },
+              {
+                "label": "rendered-settled-hand-and-control",
+                "data": {
+                  "ids": [
+                    "i3",
+                    "i5",
+                    "i6"
+                  ],
+                  "control": {
+                    "disabled": false,
+                    "x": 320.65625,
+                    "y": 543.828125,
+                    "width": 122.6875,
+                    "height": 42,
+                    "intersects": true,
+                    "hit": true
+                  }
+                },
+                "at": "mobile#0"
+              },
+              {
+                "label": "persisted-subset",
+                "data": {
+                  "gameId": "nw3v2h",
+                  "answer": {
+                    "gameId": "nw3v2h",
+                    "version": 1,
+                    "promptId": "1:2:0",
+                    "side": "player",
+                    "fingerprint": "1shc1upqgkg",
+                    "value": [
+                      "i2",
+                      "i4"
+                    ],
+                    "timestamp": "2026-10-13T18:10:09.087Z",
+                    "event": "engine.promptAnswered",
+                    "seq": 16
+                  }
+                },
+                "at": "mobile#0"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "counts": {
+      "workflowEffective": 8,
+      "extraPresentationObservations": 2,
+      "scenarioResponses": 13,
+      "successfulCaptures": 36,
+      "failedCaptures": 4,
+      "totalCaptures": 40
+    },
+    "coreModeViewports": 8,
+    "extraPresentationViewports": 2,
+    "successfulNativeProviders": 5,
+    "failedNativeProviders": 3,
+    "capturesQualification": "36successfulworkflow captures and4failedattempt captures. Earlier settled-named files prove logical commit only where drawpresentation remainedinprogress; subset2 actualDOM-ID+enabledhitPhase evidence establishes livepresentationcompletion. No literalUIcopy/defaultAIchoice oracle.",
+    "syntheticOnly": "Two admitted syntheticlab UUIDs only; no production entity coverage transfer to619.",
+    "driverVersions": {
+      "initial": "f3e51b280f3b9bd3312aa5ba32e1a0cde5bad032b61aa9bbe4ad4c0045bbf9e0",
+      "zeroControl": "47531c9085b1c0b914565ba8f3e0e22dd474b56c9c86ec5a513f7062d5f1939a",
+      "downFace": "9d4eae716a74637dcc2f90b51f61889fee6b57e63f6d2a59c8028b9962c68cba",
+      "humanPriorityPass": "cb6715a2a2346b45b58b79980e810e1190a1e75f61894695cb45005b5a0e5ce2",
+      "livePresentation": "faa90ecc3dcc7710f005d5d58b289b05f483d3b9a0f50ad97da27ce732e1a4cf"
+    },
+    "driverBytes": "Primary ignoredvalidation/driver-attempt1.mjs,driver-attempt2.mjs,driver-opponent-attempt1.mjs,driver-opponent-attempt2.mjs,live ignoredpartial-redraw.mjs; actual bytes preserved, no backdated reconstruction.",
+    "opponentTurnQualification": "Actual enemyAIpass then human Duskpriority Pass advancedtohumanDay. Redrawintent2draws distinguishedfromnormalnextturndraw.",
+    "ledgerVerdicts": 13,
+    "parentVisualProof": "/tmp/619-parent-visual-proof.json",
+    "parentVisualQualification": "Parent inspected final subset2 live mobile hand/usable phase control and opponent cold mobile four-card hand/anonymous backs; no new visual defect observed. Image assessment is distinct from the recorded DOM physical-ID and hit-test assertions. Earlier settled-named logical commit capture remains qualified."
+  },
+  "runtimeProtocol": {
+    "freezeAck": "2026-10-13T17:42:31.834297Z",
+    "resumeAck": "2026-10-13T18:13:16.140637Z",
+    "frozenCount": 4481,
+    "beforeAndAfterManifestSHA256": "fd5844774bc89e4174c7dedd6a0c5468f90ce6a1a8a584ebf4162b00a76b41a0",
+    "drainProof": "runtime-drain-proof.json",
+    "parentIndependentProof": "/tmp/619-parent-source-resume-ack.json",
+    "nativeCleanupResolution": {
+      "bead": "hv-umm2.619",
+      "resolvedAt": "2026-10-13T17:54:46.732448+00:00",
+      "resolution": "Parent verified exact frozen native cleanup finalizers, not just process disappearance. Both scene failures return complete browser results; main finally awaits session.close. session.close awaits browser_close response, all active calls, then client.close; owner clear follows confirmed browser close/no uncertain call; all server/logFD/lease cleanup stages await and any failure propagates/records quarantine diagnostic. Actual none1/none2 stderr contains no cleanup/unconfirmed/reconciliation failure; exact owner/server records absent and own process/port/logFD absence supplements those awaited native finalizers. Earlier direct session IDs remain opaque; no invented historical direct404/context IDs.",
+      "oldAgentRequirement": "Independent direct session-ID probe for every past failed attempt before reacquisition.",
+      "replacement": "Actual native awaitable cleanup verified at frozen script bytes plus terminal receipts and absence of retained ownership/quarantine, qualified opaque direct IDs. Future attempts capture exact own active record metadata and probe recorded transport with read-only tools/list after awaited close.",
+      "scopeConsequence": "No user/project acceptance or invariant waived; no source edits/config/restart/service kill/manual cleanup/state mutation. Only bounded read-only native cleanup/metadata implementation inspection while no runtime/provider active was admitted by same-task justiciar; ordinary production reads/checks remain paused under source freeze.",
+      "frozenNativeHashes": {
+        "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+        "scripts/screenshot-runtime.mjs": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8",
+        "scripts/qa/provider-ownership.mjs": "d25d666043d8797814bd5f66333934065188f27a8ab774e3e49b82597c5b7d33",
+        "scripts/qa/provider-identity.mjs": "e93e7b1608af202363a7c4deaa6eab173ced4a0abf9da7a4484ce5903c65d52e"
+      },
+      "directProbeProtocol": "POST exact recorded mcpUrl, headers Content-Type application/json, Accept application/json,text/event-stream, Mcp-Session-Id exact own id, Mcp-Protocol-Version recorded value; JSONRPC2.0 random id/method tools/list/params{}, no initialize/browser tool. Absence only if exact404 body Session not found, not arbitrary HTTP error. This supplements native close and does not certify teardown alone.",
+      "checksStillOwed": "Four final modesdesktop/mobile privacy/geometry/state/persistence/replay/Caps; allattempt resource metadata/drain; full4481frozen hashes with sole ownQAledger addition; parent source resume ACK; packaging/onecommit/freshcoldreview/certified promotion/cleanup."
+    },
+    "transportResolution": {
+      "bead": "hv-umm2.619",
+      "resolvedAt": "2026-10-13T18:01:21.424170+00:00",
+      "incident": "Immediate post-native-close tools/list200 for exact owned none3/subset1 transport registrations. All providers/calls/browser/client/server/lease finalizers were already terminal; addressable metadata itself is not proof of live serving browser state.",
+      "nativeSupportedAction": "Installed official MCP SDK StreamableHTTPClientTransport publicly supports sessionId option, setProtocolVersion and terminateSession (DELETE recorded URL); read-only inspection of protocol method only, no app/shared QA change or server restart. Parent verified exact captured own bead/WT/runner/session metadata and invoked SDK termination once per already terminal own session, then tools/list probe.",
+      "actualResults": [
+        {
+          "label": "native-none-3",
+          "session": "7814041c-ea4b-4232-b6ea-135e1635123d",
+          "runner": 19447,
+          "at": "2026-10-13T17:59:53.068Z",
+          "nativeProviderTerminal": true,
+          "request": {
+            "method": "DELETE",
+            "url": "http://localhost:8931/mcp",
+            "status": 404
+          },
+          "probe": {
+            "status": 404,
+            "body": "Session not found",
+            "absent": true
+          },
+          "terminationError": "Error: Streamable HTTP error: Failed to terminate session: Not Found"
+        },
+        {
+          "label": "native-subset-1",
+          "session": "144d6a3f-c352-4c53-9f54-ccc356e2b277",
+          "runner": 20216,
+          "at": "2026-10-13T17:59:53.099Z",
+          "nativeProviderTerminal": true,
+          "request": {
+            "method": "DELETE",
+            "url": "http://localhost:8931/mcp",
+            "status": 404
+          },
+          "probe": {
+            "status": 404,
+            "body": "Session not found",
+            "absent": true
+          },
+          "terminationError": "Error: Streamable HTTP error: Failed to terminate session: Not Found"
+        }
+      ],
+      "qualification": "Both termination DELETE requests returned404/SDK Not Found error and subsequent tools/list exact404 Session not found. Sessions were absent at these requests; do not claim termination caused removal or that earlier200 was false. Earlier none1/2 IDs opaque, qualified native awaited cleanup remains, no invented direct probe.",
+      "futureGrant": "After actual native runner finally settles and exact captured own ownership/identity verified, source-free wrapper may invoke public SDK terminateSession once for that own captured transport if still addressable, then supported read-only tools/list absence probe. No initialize, browser tools, foreign session termination, manual record edits, shared service kill/restart or production source operation. On uncertain effect inspect actual state without blind effect retry.",
+      "preserved": "Source4481fd584 frozen, completefailedrawbytes, QAall/opponent and finalallattempt resource drain/hash/parentresume/review/delivery still owed."
+    },
+    "knownSessionsAbsent": 6,
+    "earlyOpaqueSessions": 2,
+    "scenarioResponses": 13,
+    "qualification": "Direct transportcountsnotinferredfromscenarioresponses. Immediatepostclosetools/list200 retained; laterexactownSDKDELETE404+POST404 confirmsabsenceatrequesttime, notcleanupcausation. Parentboundedread-only native/installedSDKmetadata inspections occurredwithnoactiveprovider under same-task justiciar; no project/useracceptancewaived/source/config/provider/service/foreignresourcechanges. Nativeawaited browser/allcalls/client close primary; process/port/FDabsence supplemental."
+  },
+  "budgetQualification": "Elapsed >10min includes useful16.788667min sourcefirst setup/audit/proposal/admission plusimplementation/checks/QA/cleanupverification/presentationobservation/packaging. Per-commandactualwall/childCPU/scopesretained; exactmodelCPU, dispatchinstant andcausesforallinterveningwallintervals unknown, no blanketapproval-wait attribution.",
+  "dispatchDuty": {
+    "phase5": "11/25 belowcadence",
+    "phase6": "9/10 belowcadence",
+    "raw": "619-dispatch-friction.txt",
+    "nativeOwnership": "Parentsole native audit/admission/edges/review/delivery; helpersneverbd/TG/branch/push."
+  },
+  "packaging": {
+    "preparedMessage": "/tmp/619-commit-message.txt",
+    "finalParentEndpointAck": "2026-10-13T18:22:36.088430Z",
+    "oneCommit": true,
+    "noAmend": true,
+    "finalActualCommitBracket": "Externalterminalhandoff, notpreclaimed.",
+    "allFunctionalProvidersTerminal": true,
+    "remainingContext": "Only final own evidence schema/index checks and the single prepared commit. No functional source edit, test/QA rerun or amendment."
+  }
+}
