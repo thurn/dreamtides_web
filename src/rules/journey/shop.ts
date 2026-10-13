@@ -1,3 +1,4 @@
+import type { JourneyPurgeTransition } from "../../types/journey";
 // Pure shop / augury / modifier reducer cases.
 //
 // This module owns the journey events that spend at a shop, resolve a Dream
@@ -473,7 +474,7 @@ export function acceptAuguryOffer(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-): JourneyState | null {
+): JourneyPurgeTransition | null {
   return resolveAugury(journey, payload, ctx, "accept");
 }
 
@@ -487,7 +488,7 @@ export function declineAugury(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-): JourneyState | null {
+): JourneyPurgeTransition | null {
   return resolveAugury(journey, payload, ctx, "decline");
 }
 
@@ -496,7 +497,7 @@ function resolveAugury(
   payload: Record<string, unknown>,
   ctx: EventContext,
   action: "accept" | "decline",
-): JourneyState | null {
+): JourneyPurgeTransition | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   const site = findSite(journey, siteId);

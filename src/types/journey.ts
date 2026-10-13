@@ -180,6 +180,35 @@ export interface CardSourceDebugState {
   entries: CardSourceDebugEntry[];
 }
 
+/** Printed journey purge permissions and validated domain occurrences. */
+export type JourneyPurgeEffect =
+  | { readonly kind: "afterBattlePurge"; readonly maxCount: number }
+  | { readonly kind: "replaceEssenceWithPurge"; readonly count: number };
+
+export interface JourneyPurgeOccurrence {
+  readonly entryId: DeckEntryId;
+  /** Original catalog identity when supplied by the validated content domain. */
+  readonly cardId?: CardId;
+}
+
+export interface JourneyPurgeTransition {
+  readonly journey: JourneyState;
+  readonly purges: readonly JourneyPurgeOccurrence[];
+}
+
+export interface AfterBattlePurgeSource {
+  readonly dreamsignId: DreamsignId;
+  readonly heldIndex: number;
+  readonly maxCount: number;
+}
+
+export type JourneyPurgeChoice =
+  | { readonly kind: "afterBattle"; readonly siteId: SiteId;
+      readonly sources: readonly AfterBattlePurgeSource[]; readonly index: number;
+      readonly returnTo: "atlas" | "journeyComplete" | "journeyFailed" }
+  | { readonly kind: "essenceSite"; readonly siteId: SiteId;
+      readonly dreamsignId: DreamsignId; readonly heldIndex: number; readonly count: number };
+
 /** Typed catalog clauses implemented by the journeySites primitive. */
 export type JourneySitesEffect =
   | { readonly kind: "additionalEnhancedSite"; readonly count: number }
@@ -187,6 +216,7 @@ export type JourneySitesEffect =
 
 /** Catalog clauses implemented by journeyEssence. */
 export type JourneyEssenceEffect =
+  | { readonly kind: "purgedCardEssence"; readonly amount: number }
   | { readonly kind: "multiplyEssenceSiteGain"; readonly factor: number }
   | { readonly kind: "replaceEssenceSiteReward"; readonly offerCount: 1 }
   | { readonly kind: "newDreamscapeEssence"; readonly numerator: number; readonly denominator: number };
@@ -1166,6 +1196,7 @@ export type Screen =
        */
       tutorialAvatarId?: AvatarId;
     }
+  | { type: "journeyPurge"; readonly choice: JourneyPurgeChoice }
   | { type: "atlas" }
   | { type: "dreamscape" }
   | { type: "site"; siteId: SiteId }

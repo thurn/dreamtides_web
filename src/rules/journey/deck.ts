@@ -1,3 +1,4 @@
+import type { JourneyPurgeTransition } from "../../types/journey";
 // Pure deck, transfiguration, and dreamsign reducer cases.
 //
 // Each exported case is a pure function of `(journey, payload[, ctx])`; the
@@ -456,9 +457,10 @@ export function transfigureCard(
 /** `PURGE_ALL_NIGHTMARE_CARDS { }` removes every Nightmare. */
 export function purgeAllNightmareCards(
   journey: JourneyState,
-): JourneyState | null {
+): JourneyPurgeTransition | null {
   if (!journey.deck.some((entry) => entry.isBane)) return null;
-  return { ...journey, deck: journey.deck.filter((entry) => !entry.isBane) };
+  return { journey: { ...journey, deck: journey.deck.filter((entry) => !entry.isBane) },
+    purges: journey.deck.filter((entry) => entry.isBane).map(({ entryId }) => ({ entryId })) };
 }
 
 /**
@@ -470,7 +472,7 @@ export function purgeRandomNightmareCards(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-): JourneyState | null {
+): JourneyPurgeTransition | null {
   const count = finiteNumber(payload.count);
   if (count === null || count <= 0) return null;
   const nightmareEntryIds = journey.deck
@@ -487,12 +489,11 @@ export function purgeRandomNightmareCards(
     shuffled[j] = temp;
   }
   const selected = new Set(shuffled.slice(0, target));
-  return {
+  return { journey: {
     ...journey,
-    deck: journey.deck.filter(
-      (entry) => !(entry.isBane && selected.has(entry.entryId)),
-    ),
-  };
+    deck: journey.deck.filter((entry) => !(entry.isBane && selected.has(entry.entryId))),
+  }, purges: journey.deck.filter((entry) => entry.isBane && selected.has(entry.entryId))
+    .map(({ entryId }) => ({ entryId })) };
 }
 
 // ---------------------------------------------------------------------------

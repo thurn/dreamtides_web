@@ -1,3 +1,5 @@
+import { validJourneyPurgeScreen } from "./journey/journey-purge";
+import { journeyModifierRegistry, type JourneyModifierRegistry } from "./journey/modifier-registry";
 import { layerOrdinal } from "../types/layer-name";
 import type { FoldState } from "./fold-state";
 import { journeyBattleOf } from "./battle/fold";
@@ -30,9 +32,15 @@ export class FoldInvariantError extends Error {
  */
 export function foldInvariantViolations(
   state: FoldState,
+  registry: JourneyModifierRegistry = journeyModifierRegistry,
 ): FoldInvariantViolation[] {
-  const journey = state.journey;
+  const pending = state.journey.screen.type === "journeyPurge" ? state.journey.screen : null;
+  const journey = pending?.choice.kind === "afterBattle"
+    ? { ...state.journey, screen: { type: pending.choice.returnTo } } : state.journey;
   const violations: FoldInvariantViolation[] = [];
+  if (pending !== null && (state.battle !== null || !validJourneyPurgeScreen(pending, state.journey, registry))) {
+    violations.push({ code: "journey_purge_choice_inconsistent", detail: pending.choice.siteId });
+  }
   if (journey.essence < 0) {
     violations.push({
       code: "essence_out_of_bounds",
@@ -172,7 +180,7 @@ export function foldInvariantViolations(
   return violations;
 }
 
-export function assertFoldInvariants(state: FoldState): void {
-  const violations = foldInvariantViolations(state);
+export function assertFoldInvariants(state: FoldState, registry: JourneyModifierRegistry = journeyModifierRegistry): void {
+  const violations = foldInvariantViolations(state, registry);
   if (violations.length > 0) throw new FoldInvariantError(violations);
 }

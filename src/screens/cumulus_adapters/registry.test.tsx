@@ -1,3 +1,5 @@
+import { parseSiteId } from "../../types/identifiers";
+import { testDreamsignId } from "../../types/test-identities";
 import { isValidElement } from "react";
 import { describe, expect, it } from "vitest";
 import type { SiteState, SiteType } from "../../types/journey";
@@ -7,6 +9,7 @@ import { GambleSiteScreenAdapter } from "./GambleSiteScreenAdapter";
 
 describe("screenFor", () => {
   it.each<NonSiteScreen>([
+    { type: "journeyPurge", choice: { kind: "essenceSite", siteId: parseSiteId("essence"), dreamsignId: testDreamsignId("source"), heldIndex: 0, count: 2 } },
     { type: "journeyStart" },
     { type: "dreamscape" },
     { type: "atlas" },

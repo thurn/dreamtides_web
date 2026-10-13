@@ -130,6 +130,7 @@ export interface GameActions {
     source?: unknown;
   }) => Promise<number>;
   removeDeckEntry: (entryId: DeckEntryId) => Promise<number>;
+  resolveJourneyPurge: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => Promise<number>;
   purgeDeckCards: (
     siteId: SiteId,
     entryIds: readonly DeckEntryId[],
@@ -522,6 +523,8 @@ export function makeActions(append: AppendFn): GameActions {
     // --- deck & transfiguration ---
     addCard: (options) => emit("ADD_CARD", { ...options }),
     removeDeckEntry: (entryId) => emit("REMOVE_DECK_ENTRY", { entryId }),
+    resolveJourneyPurge: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>
+      emit("RESOLVE_JOURNEY_PURGE", { siteId, dreamsignId, heldIndex, choiceIndex, entryIds: [...entryIds] }),
     purgeDeckCards: (siteId, entryIds) =>
       emit("PURGE_DECK_CARDS", {
         siteId,

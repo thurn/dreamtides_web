@@ -206,7 +206,7 @@ describe("augury offers", () => {
   it("ACCEPT_AUGURY_OFFER delegates to the provider and applies its state", () => {
     const provider = testSiteContentProvider({
       resolveAugury({ journey, action }) {
-        return action === "accept" ? { ...journey, essence: 499 } : null;
+        return action === "accept" ? { journey: { ...journey, essence: 499 }, purges: [] } : null;
       },
     });
     registerSiteContentProvider(provider);
@@ -222,7 +222,7 @@ describe("augury offers", () => {
     const provider = testSiteContentProvider({
       resolveAugury({ journey, action }) {
         return action === "decline"
-          ? completeJourneySite(journey, SITE_ID)
+          ? { journey: completeJourneySite(journey, SITE_ID), purges: [] }
           : null;
       },
     });

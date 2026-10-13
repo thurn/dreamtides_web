@@ -1,0 +1,36 @@
+{
+  "bead": "hv-umm2.265",
+  "phase": 5,
+  "implementMin": 157.39934541666668,
+  "implementWindow": {
+    "start": "2026-10-13T00:28:20.286118+00:00",
+    "end": "2026-10-13T03:05:44.246843+00:00"
+  },
+  "localValidationS": {
+    "focused": 50.071440708998125,
+    "review": 180.11076774899266,
+    "typecheck": 22.61970700000529,
+    "knip": 4.809889958996791,
+    "coverage": 3.708797750005033,
+    "journeyBatch": 2.829657626003609,
+    "weightedApplicability": 0.8276302919985028,
+    "full": 118.29316158298752,
+    "schema": 0.6196816259907791,
+    "qa": 434.30041003998485,
+    "originalDiagnostic": 6.8709578740090365,
+    "install": 5.472209625004325
+  },
+  "hostLoad": 3.99,
+  "testDelta": {
+    "files": 4,
+    "lines": 484,
+    "jsdomFiles": 1
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 10.733066666666668,
+      "note": "Observed no-owned-runtime observer-audit blocked-progress wall proxy02:29:52.285\u219202:40:36.269. Parent interruption/resume bounded the stall. Model sampling, active editing and isolated queue time UNKNOWN. Successful workflow execution is not charged as correction time; all raw failures and qualified repeats remain in detailed measurements."
+    }
+  ]
+}

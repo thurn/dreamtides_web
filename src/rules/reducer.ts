@@ -1,3 +1,4 @@
+import { essencePurgeSource, essenceReplacementSource } from "./journey/journey-essence";
 // The root fold and CAS (compare-and-swap) policy for the event-sourcing rules
 // layer.
 //
@@ -30,7 +31,7 @@ import {
   type GameEventType,
 } from "./events";
 import type { FoldState } from "./fold-state";
-import type { JourneyState } from "../types/journey";
+import type { JourneyPurgeOccurrence, JourneyPurgeTransition, JourneyState } from "../types/journey";
 import * as frontDoor from "./front-door";
 import * as battleEvents from "./battle/tutorial-lifecycle";
 import * as journeyBattle from "./battle/journey-battle";
@@ -47,6 +48,7 @@ import * as lifecycle from "./journey/lifecycle";
 import * as gamble from "./journey/gamble";
 import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
+import { resolveJourneyPurge } from "./journey/journey-purge";
 import * as journeySites from "./journey/journey-sites";
 import * as cardTutorial from "./card-tutorial-guidance";
 import { assertFoldInvariants } from "./invariants";
@@ -58,7 +60,7 @@ import {
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
 export type ReduceResult =
-  | { state: FoldState; outcome: "applied"; bounceReason?: never; logRecords?: readonly ReducerLogRecord[] }
+  | { state: FoldState; outcome: "applied"; bounceReason?: never; logRecords?: readonly ReducerLogRecord[]; purges?: readonly JourneyPurgeOccurrence[] }
   | {
       state: FoldState;
       outcome: "bounced";
@@ -135,6 +137,7 @@ function finishTransition(
       journey: result.state.journey,
       eventType: event.type,
       siteId,
+      ...(result.purges === undefined ? {} : { purges: result.purges }),
     });
     result = {
       ...result,
@@ -146,15 +149,16 @@ function finishTransition(
         : { logRecords: [...(result.logRecords ?? []), ...applied.logRecords] }),
     };
   }
-  return enforceInvariants(event, result);
+  return enforceInvariants(event, result, modifiers);
 }
 
 function enforceInvariants(
   event: GameEvent,
   result: ReduceResult,
+  registry: JourneyModifierRegistry,
 ): ReduceResult {
   if (result.outcome === "applied" && event.type !== "LOAD_STATE") {
-    assertFoldInvariants(result.state);
+    assertFoldInvariants(result.state, registry);
   }
   return result;
 }
@@ -274,6 +278,18 @@ export function routeDomain(
   ) {
     return bounce(state);
   }
+  const preparationSiteId = siteIdFromUnknown(payload.siteId);
+  if ((type === "OPEN_SITE" || type === "ACCEPT_ESSENCE") && preparationSiteId !== null &&
+    journey.siteRuntime[preparationSiteId] === undefined && sites.findSite(journey, preparationSiteId)?.type === "Essence" &&
+    essenceReplacementSource(journey, modifiers) === null && essencePurgeSource(journey, modifiers) !== null &&
+    (state.battle !== null || !(journey.screen.type === "dreamscape" || journey.screen.type === "site" && journey.screen.siteId === preparationSiteId))) {
+    return bounce(state);
+  }
+  if (journey.screen.type === "journeyPurge" && isGameplayEventType(type) &&
+    type !== "RESOLVE_JOURNEY_PURGE" && type !== "ADD_DREAMSIGN" && type !== "REMOVE_DREAMSIGN" &&
+    !(type === "ACCEPT_ESSENCE" && journey.screen.choice.kind === "essenceSite" && payload.siteId === journey.screen.choice.siteId)) {
+    return bounce(state);
+  }
   switch (type) {
     // --- standalone front door ---
     case "FRONT_DOOR_ACTION":
@@ -355,8 +371,14 @@ export function routeDomain(
       return journeyCase(state, deck.addCard(journey, payload, ctx));
     case "REMOVE_DECK_ENTRY":
       return journeyCase(state, deck.removeDeckEntry(journey, payload));
+    case "RESOLVE_JOURNEY_PURGE": {
+      const result = journeyPurgeCase(state, resolveJourneyPurge(journey, payload, modifiers));
+      return result.outcome === "bounced" ? result : { ...result, logRecords: [{ event: "journey_purge_resolved",
+        fields: { siteId: payload.siteId, dreamsignId: payload.dreamsignId, heldIndex: payload.heldIndex,
+          choiceIndex: payload.choiceIndex, purges: result.purges ?? [] } }] };
+    }
     case "PURGE_DECK_CARDS":
-      return journeyCase(state, sites.purgeDeckCards(journey, payload));
+      return journeyPurgeCase(state, sites.purgeDeckCards(journey, payload));
     case "DUPLICATE_DECK_ENTRY":
       return journeyCase(state, deck.duplicateDeckEntry(journey, payload, ctx));
     case "SET_DECK_ENTRY_STAT_OVERRIDE":
@@ -371,9 +393,9 @@ export function routeDomain(
     case "TRANSFIGURE_CARD":
       return journeyCase(state, deck.transfigureCard(journey, payload));
     case "PURGE_ALL_NIGHTMARE_CARDS":
-      return journeyCase(state, deck.purgeAllNightmareCards(journey));
+      return journeyPurgeCase(state, deck.purgeAllNightmareCards(journey));
     case "PURGE_RANDOM_NIGHTMARE_CARDS":
-      return journeyCase(
+      return journeyPurgeCase(
         state,
         deck.purgeRandomNightmareCards(journey, payload, ctx),
       );
@@ -397,7 +419,7 @@ export function routeDomain(
     case "REROLL_EXPLORATION":
       return journeyCase(state, journeySites.rerollExploration(journey, payload, modifiers));
     case "RESOLVE_EXPLORATION_CHOICE":
-      return journeyCase(
+      return journeyPurgeCase(
         state,
         sites.resolveExplorationChoice(journey, payload, ctx),
       );
@@ -460,7 +482,7 @@ export function routeDomain(
     case "DRAW_FOUR_SUIT_REPRISE":
       return journeyCase(state, gamble.drawFourSuitReprise(journey, payload));
     case "SETTLE_FOUR_SUIT_REPRISE":
-      return journeyCase(
+      return journeyPurgeCase(
         state,
         gamble.settleFourSuitReprise(journey, payload, ctx),
       );
@@ -498,12 +520,12 @@ export function routeDomain(
     case "APPLY_SHOP_DISCOUNT":
       return journeyCase(state, shop.applyShopDiscount(journey, payload));
     case "ACCEPT_AUGURY_OFFER":
-      return journeyCase(
+      return journeyPurgeCase(
         state,
         shop.acceptAuguryOffer(journey, payload, ctx),
       );
     case "DECLINE_AUGURY":
-      return journeyCase(state, shop.declineAugury(journey, payload, ctx));
+      return journeyPurgeCase(state, shop.declineAugury(journey, payload, ctx));
     case "PUSH_BATTLE_MODIFIER":
       return journeyCase(state, shop.pushBattleModifier(journey, payload));
     case "PUSH_TEMPORARY_NIGHTMARE_GRANT":
@@ -567,7 +589,7 @@ export function routeDomain(
     case "RESET_JOURNEY":
       return foldCase(state, lifecycle.resetJourney(state, ctx));
     case "LOAD_STATE":
-      return foldCase(state, lifecycle.loadState(state, payload, ctx));
+      return foldCase(state, lifecycle.loadState(state, payload, ctx, modifiers));
 
     default: {
       // Compile-time exhaustiveness: if this still typechecks, `type` is
@@ -595,6 +617,13 @@ function journeyCase(
     }),
     outcome: "applied",
   };
+}
+
+/** Preserve validated purge occurrences across the existing journey reconciliation. */
+function journeyPurgeCase(state: FoldState, transition: JourneyPurgeTransition | null): ReduceResult {
+  if (transition === null) return bounce(state);
+  const result = journeyCase(state, transition.journey);
+  return { ...result, ...(result.outcome === "applied" ? { purges: transition.purges } : {}) };
 }
 
 function frontDoorCase(

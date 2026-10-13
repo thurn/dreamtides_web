@@ -1,3 +1,4 @@
+import type { JourneyPurgeTransition } from "../../../types/journey";
 // Pure reducer cases for Four-Suit Reprise.
 
 import {
@@ -115,7 +116,7 @@ export function settleFourSuitReprise(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-): JourneyState | null {
+): JourneyPurgeTransition | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   const shuffleCommitment = shuffleCommitmentFromUnknown(
     payload.shuffleCommitment,
@@ -186,12 +187,13 @@ export function settleFourSuitReprise(
     nextRound = { ...nextRound, resultSettled: true };
   }
 
-  return withRuntime(nextJourney, siteId, {
+  return { journey: withRuntime(nextJourney, siteId, {
     ...runtime,
     rounds: runtime.rounds.map((candidate, index) =>
       index === runtime.rounds.length - 1 ? nextRound : candidate,
     ),
-  });
+  }), purges: round.outcome === "purge"
+    ? [{ entryId: round.targetEntryId, cardId: round.targetCardId }] : [] };
 }
 
 /** Apply the player's free chosen form after a Spades reveal. */

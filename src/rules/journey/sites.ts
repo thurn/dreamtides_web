@@ -31,6 +31,7 @@ import {
   type SelectionRulesVersion,
 } from "../../reward-selection/types";
 import type {
+  JourneyPurgeTransition,
   DeckEntry,
   ExplorationSiteRuntime,
   AugurySiteRuntime,
@@ -43,7 +44,7 @@ import type {
   TransfiguredSiteOfferModifier,
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
-import { essenceReplacementSource } from "./journey-essence";
+import { essenceReplacementSource, essencePurgeSource } from "./journey-essence";
 import type { JourneyModifierRegistry } from "./modifier-registry";
 import { purgeVisitCost } from "../../purge/purge-pricing";
 import {
@@ -162,7 +163,7 @@ export interface SiteContentProvider {
     rng: (drawIndex: number) => number;
     /** This event's seq — the same value `mintEntryId` keys new ids off of. */
     seq: number;
-  }): JourneyState | null;
+  }): JourneyPurgeTransition | null;
 
   /** Resolve one Exploration action against its persisted deterministic offer. */
   resolveExploration(input: {
@@ -170,7 +171,7 @@ export interface SiteContentProvider {
     site: SiteState;
     payload: Record<string, unknown>;
     seq: number;
-  }): JourneyState | null;
+  }): JourneyPurgeTransition | null;
 }
 
 /**
@@ -443,6 +444,7 @@ export function openSite(
       if (site.isVisited) return null;
       const source = modifiers === undefined ? null : essenceReplacementSource(journey, modifiers);
       if (source !== null) return prepareEssenceReplacement(journey, site, ctx, source);
+      if (modifiers !== undefined && essencePurgeSource(journey, modifiers) !== null && !canVisitSite(journey, siteId)) return null;
       const economy = contentProvider?.economyData.siteRewards.essence;
       if (economy === undefined) return null;
       const rewardRange = site.isEnhanced ? economy.enhanced : economy.standard;
@@ -568,7 +570,7 @@ export function resolveExplorationChoice(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-): JourneyState | null {
+): JourneyPurgeTransition | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   const site = findSite(journey, siteId);
@@ -681,6 +683,9 @@ export function acceptEssence(
       amount: randomIntInRange(ctx.rng, 0, rewardRange.min, rewardRange.max),
       accepted: false,
     } satisfies SiteRuntimeState);
+  if (existing === undefined && modifiers !== undefined && essencePurgeSource(journey, modifiers) !== null) {
+    return canVisitSite(journey, siteId) ? withRuntime(journey, siteId, runtime) : null;
+  }
   const next = withRuntime(
     {
       ...journey,
@@ -1075,7 +1080,7 @@ export function completeSite(
 export function purgeDeckCards(
   journey: JourneyState,
   payload: Record<string, unknown>,
-): JourneyState | null {
+): JourneyPurgeTransition | null {
   const raw = payload.entryIds;
   if (!Array.isArray(raw) || raw.length === 0) return null;
   const entryIds: DeckEntryId[] = [];
@@ -1111,5 +1116,6 @@ export function purgeDeckCards(
   if (journey.essence < cost) return null;
   const essence = clampEssence(journey.essence - cost);
 
-  return completeAndReturn({ ...journey, deck, essence }, siteId);
+  return { journey: completeAndReturn({ ...journey, deck, essence }, siteId),
+    purges: removed.map(({ entryId }) => ({ entryId })) };
 }

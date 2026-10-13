@@ -2422,6 +2422,41 @@ automatic game actions starts again after it. A choice with only one option
 does not. Repetitions of an optional loop are the player's own actions, so
 they never make a mandatory loop either.
 
+## Journey Purge Effects
+
+A journey card purge is an authored purge operation on a concrete deck entry.
+Bane cards are eligible unless the effect restricts them. Purging multiple
+entries with the same card UUID counts once for each entry. A purge inside a
+compound effect counts even when that effect subsequently grants another card;
+its original entry and card identity determine the purge. Replacing a card
+without a purge clause, removing a card through the debug editor, replacing a
+Dreamsign, and expiry of temporary deck grants are distinct operations.
+
+A gain of Essence when a card is purged applies after the validated purge and
+its costs, once per purged entry for each source copy held after that change.
+The prospective gain cannot pay the purge's upfront cost. A rejected intent
+purges nothing and provides no gain.
+
+An optional purge after each battle is earned for each held source copy in
+held order, including after a victory, final victory, defeat, or draw. Each
+copy offers zero through its printed maximum of distinct current deck entries
+without an Essence cost. The earned permission persists through loss of its
+source and reload. A source gained after that battle grants no additional
+permission. Finishing the windows restores the battle's exact Atlas, completed,
+or failed route and preserves its committed reward and failure summary.
+
+An option to forgo an Essence site's reward is prepared with that site's
+initial Essence quote. It exchanges the whole collection for exactly its
+printed number of distinct current deck entries, without an Essence cost.
+With too few entries, collection remains available and the exchange is
+unavailable. Multiple copies offer one exchange of that collection, attributed
+to the first held source. The prepared option persists through source loss;
+acquiring a source after preparation does not change the quote. A mandatory
+Dreamsign replacement is prepared first and supplies its ordinary Dreamsign
+reward instead of this Essence exchange. Collecting a prepared Essence quote
+uses the collection-time Essence multipliers. Essence earned from a purge is
+an independent gain.
+
 ## Journey Essence Effects
 
 An Essence-site multiplier applies to the positive Essence collected from that

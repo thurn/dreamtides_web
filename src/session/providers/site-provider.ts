@@ -1,3 +1,6 @@
+import type { JourneyPurgeTransition } from "../../types/journey";
+import { explorationEncounterForCard } from "../../data/exploration";
+import { auguryPurgeReceipts, explorationPurgeReceipts } from "./journey-purge-receipts";
 import { explorationRerollCount } from "../../rules/journey/journey-sites";
 // Real SiteContentProvider: generates the content-coupled site runtimes
 // (`OPEN_SITE`) and the shop restock (`REROLL_SHOP`) from the loaded journey
@@ -952,7 +955,7 @@ export function createSiteContentProvider(
       action,
       payload,
       seq,
-    }): JourneyState | null => {
+    }): JourneyPurgeTransition | null => {
       const encounterSignature = isStableDigest(payload.encounterSignature)
         ? payload.encounterSignature
         : null;
@@ -978,7 +981,7 @@ export function createSiteContentProvider(
             ...(choice ? { choice } : {}),
           },
         });
-        return result.ok ? result.state : null;
+        return result.ok ? { journey: result.state, purges: [] } : null;
       }
 
       const archetypeId = auguryArchetypeIdFromUnknown(payload.archetypeId);
@@ -998,10 +1001,18 @@ export function createSiteContentProvider(
         // other minting reducer case uses.
         mintEntryId: (deck, index) => mintEntryId(deck, seq, index),
       });
-      return result.ok ? result.state : null;
+      return result.ok ? { journey: result.state, purges: auguryPurgeReceipts(result.appliedPayload) } : null;
     },
 
-    resolveExploration: ({ journey, site, payload, seq }) =>
-      resolveExplorationChoice({ journey, site, payload, seq, content }),
+    resolveExploration: ({ journey, site, payload, seq }) => {
+      const next = resolveExplorationChoice({ journey, site, payload, seq, content });
+      if (next === null) return null;
+      const runtime = next.siteRuntime[site.id];
+      if (runtime?.kind !== "exploration" || runtime.resolution === null) return null;
+      const action = explorationEncounterForCard(content.exploration, runtime.encounterCardId)?.actions.find(
+        (candidate) => candidate.id === runtime.resolution?.actionId);
+      if (action === undefined) return null;
+      return { journey: next, purges: explorationPurgeReceipts(action.effectKind, runtime.resolution) };
+    },
   };
 }

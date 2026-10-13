@@ -1,3 +1,5 @@
+import { journeyModifierRegistry, type JourneyModifierRegistry } from "./modifier-registry";
+import { validJourneyPurgeScreen } from "./journey-purge";
 import { validJourneySiteCounters } from "./journey-sites";
 // Pure journey-lifecycle, essence, and navigation reducer cases.
 //
@@ -408,8 +410,9 @@ export function loadState(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  registry: JourneyModifierRegistry = journeyModifierRegistry,
 ): FoldState | null {
-  const loaded = validateLoadedState(state, payload);
+  const loaded = validateLoadedState(state, payload, registry);
   return loaded === null
     ? null
     : {
@@ -446,9 +449,10 @@ export function loadState(
 export function validateLoadedState(
   state: FoldState,
   payload: Record<string, unknown>,
+  registry: JourneyModifierRegistry = journeyModifierRegistry,
 ): FoldState | null {
   const snapshot = payload.snapshot;
-  if (!isJourneyStateShape(snapshot)) return null;
+  if (!isJourneyStateShape(snapshot, registry)) return null;
   if (snapshot.seed !== state.journey.seed) return null;
 
   const before = state.journey;
@@ -457,6 +461,7 @@ export function validateLoadedState(
     return null;
   if (before.draftState != null && snapshot.draftState == null) return null;
 
+  if (snapshot.screen.type === "journeyPurge" && payload.battle != null) return null;
   let battle: BattleFoldState | null = null;
   if ("battle" in payload && payload.battle != null) {
     battle = asValidBattleFoldState(payload.battle);
@@ -521,7 +526,7 @@ function hasValidAtlasSites(atlas: Record<string, unknown>): boolean {
  * relies on, each with the correct primitive/container type. Nullable fields are
  * checked as `null`-or-of-type; content is never inspected.
  */
-function isJourneyStateShape(value: unknown): value is JourneyState {
+function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry): value is JourneyState {
   if (!isRecord(value)) return false;
   const numberKeys = ["essence", "maxDreamsigns", "completionLevel"];
   for (const key of numberKeys) {
@@ -584,6 +589,7 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
   ) {
     return false;
   }
+  if (value.screen.type === "journeyPurge" && !validJourneyPurgeScreen(value.screen, value as unknown as JourneyState, registry)) return false;
   return true;
 }
 

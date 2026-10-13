@@ -367,6 +367,7 @@ export interface JourneyMutations {
    * Purge the given deck entries at a Purge site. The reducer derives the
    * authoritative price from the selected entries, site, and folded modifiers.
    */
+  resolveJourneyPurge: (siteId: SiteId, dreamsignId: DreamsignId, heldIndex: number, choiceIndex: number, entryIds: readonly DeckEntryId[]) => void;
   purgeDeckCards: (
     siteId: SiteId,
     entryIds: readonly DeckEntryId[],

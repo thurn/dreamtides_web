@@ -28,10 +28,22 @@ export function essenceReplacementSource(
   return null;
 }
 
+/** A single Essence collection can be exchanged once, using its first source. */
+export function essencePurgeSource(journey: Pick<JourneyState, "dreamsigns">, registry: JourneyModifierRegistry) {
+  for (const [heldIndex, sign] of journey.dreamsigns.entries()) {
+    const effect = registry.lookup(sign.id)?.journeyPurge;
+    if (effect?.kind === "replaceEssenceWithPurge") {
+      return { dreamsignId: sign.id, heldIndex, count: effect.count };
+    }
+  }
+  return null;
+}
+
 /** Register one validated catalog clause as a deterministic post-event hook. */
 export function journeyEssence(dreamsignId: DreamsignId, descriptor: JourneyEssenceEffect): JourneyModifierDefinition {
   const effect = Object.freeze({ ...descriptor });
-  if (effect.kind === "multiplyEssenceSiteGain" && (!Number.isFinite(effect.factor) || effect.factor <= 0) ||
+  if (effect.kind === "purgedCardEssence" && (!Number.isFinite(effect.amount) || effect.amount <= 0) ||
+    effect.kind === "multiplyEssenceSiteGain" && (!Number.isFinite(effect.factor) || effect.factor <= 0) ||
     effect.kind === "replaceEssenceSiteReward" && effect.offerCount !== 1 ||
     effect.kind === "newDreamscapeEssence" && (!Number.isFinite(effect.numerator) || effect.numerator < 0 ||
       !Number.isFinite(effect.denominator) || effect.denominator <= 0)) {
@@ -40,7 +52,15 @@ export function journeyEssence(dreamsignId: DreamsignId, descriptor: JourneyEsse
   return {
     dreamsignId,
     journeyEssence: effect,
-    afterJourneyEvent({ before, journey, eventType, siteId, heldIndex }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
+    afterJourneyEvent({ before, journey, eventType, siteId, heldIndex, purges }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
+      if (effect.kind === "purgedCardEssence") {
+        if (purges === undefined || purges.length === 0) return null;
+        const gained = purges.length * effect.amount;
+        const essence = journey.essence + gained;
+        return { journey: { ...journey, essence }, before: { essence: journey.essence },
+          after: { essence, gained, purged: purges.length },
+          target: { siteIds: siteId === null ? [] : [siteId], purges } };
+      }
       if (effect.kind === "newDreamscapeEssence") {
         const nodeId = journey.currentDreamscape;
         if ((eventType !== "START_JOURNEY" && eventType !== "TRAVEL_TO_DREAMSCAPE") ||

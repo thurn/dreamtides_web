@@ -9,7 +9,11 @@ import type { CardId } from "../../types/card-identity";
 import rainbowMushroom, { journeySitesEffect as rainbowEffect } from "../../content/dreamsigns/rainbow-mushroom-58472ad2";
 import curledTail, { journeySitesEffect as curledEffect } from "../../content/dreamsigns/curled-tail-3c0ced1a";
 import { journeySites } from "./journey-sites";
-import type { JourneyEssenceEffect, JourneySitesEffect, JourneyState } from "../../types/journey";
+import fruit, { journeyEssenceEffect as fruitEffect } from "../../content/dreamsigns/strange-fruit-f4df5a74";
+import slug, { journeyPurgeEffect as slugEffect } from "../../content/dreamsigns/slug-108841ce";
+import sickle, { journeyPurgeEffect as sickleEffect } from "../../content/dreamsigns/sickle-488bf436";
+import { journeyPurge } from "./journey-purge";
+import type { JourneyPurgeEffect, JourneyPurgeOccurrence, JourneyEssenceEffect, JourneySitesEffect, JourneyState } from "../../types/journey";
 import type { GameplayEventType } from "../events";
 
 /**
@@ -20,6 +24,7 @@ export interface JourneyModifierDefinition {
   readonly dreamsignId: DreamsignId;
   readonly journeySites?: JourneySitesEffect;
   readonly journeyEssence?: JourneyEssenceEffect;
+  readonly journeyPurge?: JourneyPurgeEffect;
   /**
    * Return null when this transition does not apply the effect. Hooks must be
    * deterministic, must not mutate either input, and must not perform IO.
@@ -31,6 +36,7 @@ export interface JourneyModifierDefinition {
     readonly eventType: GameplayEventType;
     readonly heldIndex: number;
     readonly siteId: SiteId | null;
+    readonly purges?: readonly JourneyPurgeOccurrence[];
   }) => {
     readonly journey: JourneyState;
     /** Numeric rule values only: catalog names and copy cannot enter diagnostics. */
@@ -42,6 +48,7 @@ export interface JourneyModifierDefinition {
       readonly beforeCardId?: CardId;
       readonly afterCardId?: CardId;
       readonly incomingDreamsignId?: DreamsignId;
+      readonly purges?: readonly JourneyPurgeOccurrence[];
     };
   } | null;
 }
@@ -53,6 +60,7 @@ export interface JourneyModifierRegistry {
     journey: JourneyState;
     eventType: GameplayEventType;
     siteId: SiteId | null;
+    purges?: readonly JourneyPurgeOccurrence[];
   }): { journey: JourneyState; logRecords: readonly ReducerLogRecord[] };
 }
 
@@ -80,7 +88,7 @@ export function createJourneyModifierRegistry(
   }
   return Object.freeze({
     lookup: (dreamsignId: DreamsignId) => byId.get(dreamsignId),
-    apply({ before, journey, eventType, siteId }) {
+    apply({ before, journey, eventType, siteId, purges }) {
       const logRecords: ReducerLogRecord[] = [];
       let next = journey;
       // Snapshot the post-domain holdings: hooks run in held order, once per
@@ -90,7 +98,7 @@ export function createJourneyModifierRegistry(
       // iteration.
       for (const [heldIndex, { id }] of journey.dreamsigns.entries()) {
         const definition = byId.get(id);
-        const applied = definition?.afterJourneyEvent({ before, journey: next, eventType, heldIndex, siteId });
+        const applied = definition?.afterJourneyEvent({ before, journey: next, eventType, heldIndex, siteId, ...(purges === undefined ? {} : { purges }) });
         if (applied == null) continue;
         logRecords.push({
           event: "journey_modifier_applied",
@@ -119,4 +127,7 @@ export const journeyModifierRegistry = createJourneyModifierRegistry([
   journeyEssence(parseDreamsignId(bandedWorm.id), wormEffect),
   journeySites(parseDreamsignId(rainbowMushroom.id), rainbowEffect),
   journeySites(parseDreamsignId(curledTail.id), curledEffect),
+  journeyEssence(parseDreamsignId(fruit.id), fruitEffect),
+  journeyPurge(parseDreamsignId(slug.id), slugEffect),
+  journeyPurge(parseDreamsignId(sickle.id), sickleEffect),
 ]);

@@ -217,6 +217,8 @@ export function GameJourneyProvider({
         dispatch(actions.setDeckEntryType(entryId, typeChange)),
       changeDeckEntryType: (entryId, typeChange) =>
         dispatch(actions.setDeckEntryType(entryId, typeChange)),
+      resolveJourneyPurge: (siteId, dreamsignId, heldIndex, choiceIndex, entryIds) =>
+        dispatch(actions.resolveJourneyPurge(siteId, dreamsignId, heldIndex, choiceIndex, entryIds)),
       purgeDeckCards: (siteId, entryIds) =>
         dispatch(actions.purgeDeckCards(siteId, entryIds)),
       purgeRandomNightmareCards: (count) =>

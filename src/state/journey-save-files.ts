@@ -28,6 +28,7 @@ export interface ImportedJourneySave {
 }
 
 const JOURNEY_SCREEN_TYPES = [
+  "journeyPurge",
   "journeyStart",
   "atlas",
   "dreamscape",
