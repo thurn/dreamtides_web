@@ -1,3 +1,6 @@
+import { triggered, whenAbandon } from "../../engine/dsl/triggers";
+import { costModifier } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { avatar } from "../define";
 
 export default avatar({
@@ -43,5 +46,10 @@ export default avatar({
     "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b",
     "85251f03-c873-46d8-81be-ab421c901a53",
   ],
-  pending: true,
+  abilities: () => [triggered(
+    whenAbandon("you", { cardType: "character" }),
+    costModifier("you", { cardType: "character" }, -2, { next: true, duration: "untilEndOfTurn" }),
+    { oncePerTurn: true },
+  )],
+  verifiedText: expectedVerifiedText("Once per turn, when you abandon a character, the next character you play this turn costs 2● less."),
 });

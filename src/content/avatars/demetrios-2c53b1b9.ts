@@ -1,3 +1,6 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { avatar } from "../define";
 
 export default avatar({
@@ -42,5 +45,6 @@ export default avatar({
     "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277",
     "d30bd488-f921-49cb-a44f-353c54cb6548",
   ],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "character" }, 2), draw(1, "you", { ephemeral: true }))],
+  verifiedText: expectedVerifiedText("When you play your second character in a turn, draw a card with ephemeral."),
 });

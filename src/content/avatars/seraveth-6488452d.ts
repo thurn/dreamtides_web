@@ -1,3 +1,7 @@
+import { energy, fromVoid } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { grantReclaim } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { avatar } from "../define";
 
 export default avatar({
@@ -43,5 +47,9 @@ export default avatar({
     "c36e67ab-fbee-4d83-b57b-34d34f60e17c",
     "f95cae7b-6502-4dbe-ae26-16853959d9a3",
   ],
-  pending: true,
+  abilities: () => [triggered(
+    whenYouPlay({ cardType: "character" }, 2),
+    grantReclaim(fromVoid({ cardType: "character" }), { costs: [energy(2)], duration: "untilEndOfTurn" }),
+  )],
+  verifiedText: expectedVerifiedText("When you play your second character in a turn, a character in your void gains reclaim 2● until end of turn."),
 });

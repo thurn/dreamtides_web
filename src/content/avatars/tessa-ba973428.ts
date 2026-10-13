@@ -1,3 +1,6 @@
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { discard, draw, sequence } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { avatar } from "../define";
 
 export default avatar({
@@ -58,5 +61,6 @@ export default avatar({
       "7343b376-88d2-45fe-8b5e-79763480ee7e",
     ],
   },
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({}, 2), sequence(draw(1), discard(1)))],
+  verifiedText: expectedVerifiedText("When you play your second card in a turn, draw a card, then discard a card."),
 });

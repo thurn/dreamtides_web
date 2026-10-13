@@ -1,0 +1,398 @@
+{
+  "bead": "hv-umm2.226",
+  "baseOid": "0b027852e9ac354f46bc39d909702d4566231b47",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-avatar226-resumed",
+  "implementation": {
+    "helper": "/root/avatars226",
+    "dispatchRequestAt": "2026-10-13T05:45:45.161000+00:00",
+    "dispatchCallId": "call_5abadd947bca4cd6969c0fa2e9b8e1a8",
+    "childSamplingStart": "UNKNOWN",
+    "window": "Actual helper dispatch request through precommit evidence cutoff; two helper turns interrupted by model capacity. Root completed evidence/delivery under same brief and native ownership. Commit-return tail retained externally.",
+    "authoredEntities": [
+      "16b579fe-c15b-4df6-8262-d45ce44732ae",
+      "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
+      "6488452d-4e9e-466c-96df-716d4ec646b1",
+      "ba973428-6d90-4847-b779-cb7e25a5ac84"
+    ],
+    "amplifiedEntities": 0,
+    "newPrimitives": 0,
+    "newPromptStatusVisualKinds": 0,
+    "functionalFiles": 5,
+    "grossNonTestLines": 32,
+    "fallout": [],
+    "d10": "Current cost-next/payment, ordinal history, once-per-turn, Ephemeral and void-only granted Reclaim rulings settle all four exact clauses; no new RD/card issue or normative rewrite.",
+    "d20": {
+      "privateModule": "src/content/specs/avatars-06.scenarios.ts",
+      "cases": 14,
+      "lines": 179,
+      "newTestEntrypoints": 0,
+      "jsdomFiles": 0,
+      "contracts": "Real four Avatar factories with synthetic fixtures on both controllers: matching nth/reset, draw-discard order, next-use/consumption/expiry, once-per-turn and chosen temporary Reclaim route."
+    },
+    "coldCodeReview": {
+      "required": false,
+      "reason": "No native core-review label, phase gate, new primitive or new prompt kind;32gross non-test lines below default100 threshold. Private scenario code is test code. Parent clause/source/scenario and endpoint audit completed; no cold reviewer claimed.",
+      "temporaryRouting": "If required during current temporary window, fresh read-only Codex CLI gpt-5.6-sol; no Claude invoked."
+    },
+    "precommitTailEvidence": "audit/precommit-return-receipt.json",
+    "precommitCutoff": "2026-10-13T06:46:36.670414+00:00"
+  },
+  "validation": {
+    "focused": {
+      "exitCode": 0,
+      "files": 7,
+      "cases": 2887,
+      "wallSeconds": 8.096632041997509
+    },
+    "counterfactual": {
+      "exitCode": 1,
+      "expectedFailure": true,
+      "casesFailed": 14,
+      "wallSeconds": 3.5236997079919092,
+      "restoration": "All four original leaf files restored before review/fuzz/freeze."
+    },
+    "review": {
+      "exitCode": 0,
+      "files": 241,
+      "cases": 4946,
+      "wallSeconds": 44.03684758399322,
+      "scope": "Actual diff-aware npm run review, not review:full."
+    },
+    "knip": {
+      "exitCode": 0,
+      "wallSeconds": 3.55879945900233
+    },
+    "preflight": {
+      "exitCode": 0,
+      "eligiblePass": 8,
+      "ineligibleSkip": 72,
+      "fail": 0,
+      "wallSeconds": 0.9980072090111207
+    },
+    "constructor": {
+      "exitCode": 0,
+      "cells": 8,
+      "wallSeconds": 1.838632332990528,
+      "selectedUuidOppositeNull": true,
+      "actualInputReturnCaptured": true,
+      "eventsPerCell": 18,
+      "initialCardsPerSide": 5,
+      "nativeFinalInit": "Existing owning final-init identity contract plus genuine native startup batch; no direct browser object-pointer observation claimed."
+    },
+    "fuzz": {
+      "exitCode": 0,
+      "games": 300,
+      "steps": 121058,
+      "prompts": 8021,
+      "interactiveReruns": 815,
+      "failures": 0,
+      "outerWallSeconds": 163.87273341701075,
+      "bodyWallSeconds": 163.84914054200635,
+      "includedPerUuid": 150,
+      "exerciseEventCounts": [
+        {
+          "uuid": "16b579fe-c15b-4df6-8262-d45ce44732ae",
+          "count": 155
+        },
+        {
+          "uuid": "ba973428-6d90-4847-b779-cb7e25a5ac84",
+          "count": 467
+        },
+        {
+          "uuid": "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
+          "count": 231
+        },
+        {
+          "uuid": "6488452d-4e9e-466c-96df-716d4ec646b1",
+          "count": 220
+        }
+      ],
+      "heavySlot": "lockf -k machine-wide heavy.lock; workers2; outer/body clocks retained, both terminal."
+    },
+    "finalReview": {
+      "exitCode": 0,
+      "files": 241,
+      "cases": 4946,
+      "wallSeconds": 46.0937464160088
+    },
+    "finalKnip": {
+      "exitCode": 0,
+      "wallSeconds": 2.836648915996193
+    },
+    "recordSchema": {
+      "exitCode": 0,
+      "wallSeconds": 0.0664547080086777,
+      "historicalUnknowns": 41
+    },
+    "standingFriction": {
+      "exitCode": 0,
+      "wallSeconds": 0.1488227910012938
+    }
+  },
+  "qa": {
+    "workflowCells": [
+      {
+        "uuid": "16b579fe-c15b-4df6-8262-d45ce44732ae",
+        "viewport": "desktop",
+        "gameId": "2eod95",
+        "invocation": "run-5i6Gj7",
+        "persistedRows": 88,
+        "sourceCorrelatedResolutions": 1,
+        "initialMembershipAnd18BatchEachSeat": true,
+        "specificOutcomeAndReload": true,
+        "capsEmpty": true
+      },
+      {
+        "uuid": "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
+        "viewport": "desktop",
+        "gameId": "gaactt",
+        "invocation": "run-fCObXq",
+        "persistedRows": 97,
+        "sourceCorrelatedResolutions": 1,
+        "initialMembershipAnd18BatchEachSeat": true,
+        "specificOutcomeAndReload": true,
+        "capsEmpty": true
+      },
+      {
+        "uuid": "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
+        "viewport": "mobile",
+        "gameId": "qgw2m3",
+        "invocation": "run-fCObXq",
+        "persistedRows": 101,
+        "sourceCorrelatedResolutions": 1,
+        "initialMembershipAnd18BatchEachSeat": true,
+        "specificOutcomeAndReload": true,
+        "capsEmpty": true
+      },
+      {
+        "uuid": "6488452d-4e9e-466c-96df-716d4ec646b1",
+        "viewport": "desktop",
+        "gameId": "q8n528",
+        "invocation": "run-hMg5RV",
+        "persistedRows": 111,
+        "sourceCorrelatedResolutions": 1,
+        "initialMembershipAnd18BatchEachSeat": true,
+        "specificOutcomeAndReload": true,
+        "capsEmpty": true
+      },
+      {
+        "uuid": "6488452d-4e9e-466c-96df-716d4ec646b1",
+        "viewport": "mobile",
+        "gameId": "t29y9q",
+        "invocation": "run-hMg5RV",
+        "persistedRows": 115,
+        "sourceCorrelatedResolutions": 1,
+        "initialMembershipAnd18BatchEachSeat": true,
+        "specificOutcomeAndReload": true,
+        "capsEmpty": true
+      },
+      {
+        "uuid": "16b579fe-c15b-4df6-8262-d45ce44732ae",
+        "viewport": "mobile",
+        "gameId": "fqkirm",
+        "invocation": "run-ia3RbU",
+        "persistedRows": 88,
+        "sourceCorrelatedResolutions": 1,
+        "initialMembershipAnd18BatchEachSeat": true,
+        "specificOutcomeAndReload": true,
+        "capsEmpty": true
+      },
+      {
+        "uuid": "ba973428-6d90-4847-b779-cb7e25a5ac84",
+        "viewport": "desktop",
+        "gameId": "f55u5y",
+        "invocation": "run-shvygj",
+        "persistedRows": 67,
+        "sourceCorrelatedResolutions": 1,
+        "initialMembershipAnd18BatchEachSeat": true,
+        "specificOutcomeAndReload": true,
+        "capsEmpty": true
+      },
+      {
+        "uuid": "ba973428-6d90-4847-b779-cb7e25a5ac84",
+        "viewport": "mobile",
+        "gameId": "tbe7eq",
+        "invocation": "run-shvygj",
+        "persistedRows": 69,
+        "sourceCorrelatedResolutions": 1,
+        "initialMembershipAnd18BatchEachSeat": true,
+        "specificOutcomeAndReload": true,
+        "capsEmpty": true
+      }
+    ],
+    "workflowCount": 8,
+    "initPresentationCount": 16,
+    "nativeSweep": {
+      "ledgerRows": 80,
+      "pass": 8,
+      "skip": 72,
+      "fail": 0
+    },
+    "rawWorkflowInvocations": 9,
+    "overallPassInvocations": 4,
+    "overallFailedInvocations": 5,
+    "partialInvocationWithDefinitiveDesktop": "run-5i6Gj7",
+    "d21Mandatory": 0,
+    "d21Reason": "All four UUID SHA first bytes >=26 and all used prompts/status/visual kinds exist; actual changed player workflows judged independently.",
+    "ledgerRows": 101,
+    "sourceFreeze": {
+      "files": 2404,
+      "version": 8,
+      "changed": [],
+      "externalSourceVersions": 8,
+      "unusedFrozenVersion": 6,
+      "scope": "All functional source and native/external QA support frozen before admission; caller versions retained, original functional5 files unchanged."
+    },
+    "reload": "Specific outcomes persist in all8 cells. Kragg/Tessa whole committed state matches; Demetrios/Seraveth normal AI continuation changes the wider state, with banished Ephemeral/grant expiry/Reclaim provenance still verified.",
+    "qualifications": [
+      "Actual constructor/runtime initial hands are5per side; source-free empty-hand assumption corrected.",
+      "Trigger logs correlate controller-only source to exact same-game UUID; no UUID field invented.",
+      "Demetrios/Seraveth reload permits normal AI continuation; specific outcomes verified, whole state equality not claimed.",
+      "Nine provider completions source-backed confirmed-close/awaited-RPC/transport-shutdown guards; one direct execution-completed publication; no direct ACK fabricated.",
+      "Native partial fan exposure alone does not establish an unintended issue."
+    ],
+    "enemyExercise": "Enemy cells prove selected/opposite initialization/presentation and first-Day settlement; no guaranteed enemy ability exercise is claimed.",
+    "visualInspection": [
+      "kragg-discount-desktop.png",
+      "tessa-prompt-1-mobile.png",
+      "demetrios-ephemeral-mobile.png",
+      "seraveth-prompt-1-mobile.png",
+      "seraveth-reclaim-mobile.png"
+    ],
+    "captureCount": 58
+  },
+  "resources": {
+    "runtimeLedgers": [
+      {
+        "label": "qa-demetrios-v7.observer",
+        "rootPid": 10511,
+        "exitCode": 0,
+        "wallSeconds": 72.33178829100507,
+        "knownPids": 21,
+        "liveSameIdentityNow": [],
+        "providerCompletion": "source-backed inference from normal confirmed close path and terminal runner cleanup; no direct transition sampled",
+        "negotiatedIdentityCaptured": true
+      },
+      {
+        "label": "qa-kragg-mobile-v5.observer",
+        "rootPid": 955,
+        "exitCode": 0,
+        "wallSeconds": 30.255628667000565,
+        "knownPids": 22,
+        "liveSameIdentityNow": [],
+        "providerCompletion": "source-backed inference from normal confirmed close path and terminal runner cleanup; no direct transition sampled",
+        "negotiatedIdentityCaptured": true
+      },
+      {
+        "label": "qa-kragg-v1.observer",
+        "rootPid": 84805,
+        "exitCode": 1,
+        "wallSeconds": 35.938187791005475,
+        "knownPids": 21,
+        "liveSameIdentityNow": [],
+        "providerCompletion": "direct observed execution-completed",
+        "negotiatedIdentityCaptured": true
+      },
+      {
+        "label": "qa-kragg-v2.observer",
+        "rootPid": 88285,
+        "exitCode": 1,
+        "wallSeconds": 32.91394629099523,
+        "knownPids": 19,
+        "liveSameIdentityNow": [],
+        "providerCompletion": "source-backed inference from normal confirmed close path and terminal runner cleanup; no direct transition sampled",
+        "negotiatedIdentityCaptured": true
+      },
+      {
+        "label": "qa-kragg-v3.observer",
+        "rootPid": 90478,
+        "exitCode": 1,
+        "wallSeconds": 22.178493750005146,
+        "knownPids": 21,
+        "liveSameIdentityNow": [],
+        "providerCompletion": "source-backed inference from normal confirmed close path and terminal runner cleanup; no direct transition sampled",
+        "negotiatedIdentityCaptured": true
+      },
+      {
+        "label": "qa-kragg-v4.observer",
+        "rootPid": 93267,
+        "exitCode": 1,
+        "wallSeconds": 67.3259032920032,
+        "knownPids": 26,
+        "liveSameIdentityNow": [],
+        "providerCompletion": "source-backed inference from normal confirmed close path and terminal runner cleanup; no direct transition sampled",
+        "negotiatedIdentityCaptured": true
+      },
+      {
+        "label": "qa-seraveth-v7.observer",
+        "rootPid": 13764,
+        "exitCode": 0,
+        "wallSeconds": 79.5196477080026,
+        "knownPids": 21,
+        "liveSameIdentityNow": [],
+        "providerCompletion": "source-backed inference from normal confirmed close path and terminal runner cleanup; no direct transition sampled",
+        "negotiatedIdentityCaptured": true
+      },
+      {
+        "label": "qa-tessa-v5.observer",
+        "rootPid": 2867,
+        "exitCode": 1,
+        "wallSeconds": 15.83964470900537,
+        "knownPids": 21,
+        "liveSameIdentityNow": [],
+        "providerCompletion": "source-backed inference from normal confirmed close path and terminal runner cleanup; no direct transition sampled",
+        "negotiatedIdentityCaptured": true
+      },
+      {
+        "label": "qa-tessa-v7.observer",
+        "rootPid": 7673,
+        "exitCode": 0,
+        "wallSeconds": 51.96929416699277,
+        "knownPids": 20,
+        "liveSameIdentityNow": [],
+        "providerCompletion": "source-backed inference from normal confirmed close path and terminal runner cleanup; no direct transition sampled",
+        "negotiatedIdentityCaptured": true
+      },
+      {
+        "label": "sweep-v8.observer",
+        "rootPid": 20162,
+        "exitCode": 0,
+        "wallSeconds": 45.469163832996855,
+        "knownPids": 21,
+        "liveSameIdentityNow": [],
+        "providerCompletion": "source-backed inference from normal confirmed close path and terminal runner cleanup; no direct transition sampled",
+        "negotiatedIdentityCaptured": true
+      }
+    ],
+    "directCompletionPublications": 1,
+    "sourceBackedCompletions": 9,
+    "closureGuard": "scripts/qa/run-scenario.mjs awaits startup, confirms browser_close, joins active RPCs and clears exact owner only without uncertainty; scripts/screenshot-runtime.mjs checks isError, awaits receipt callback then client.close. Actual terminal cleanup/absent own records and negotiated identities support qualified inference.",
+    "currentOwnProcesses": 0,
+    "peerReuse": "Peer slot/port/PID/token reuse retained as foreign; never touched.",
+    "nonRuntimeCommands": "Recorded exact PIDs and terminal waits; early PG/start identities not observed remain UNKNOWN rather than fabricated."
+  },
+  "failurePaths": {
+    "newTransitions": 0,
+    "midStepRollback": "Inherited grant-Reclaim/trigger rollback contracts; focused owning checks passed.",
+    "reloadPartialPublication": "Existing fold/final-init identity and saved prompt contracts plus native same-game reload.",
+    "invalidStaleWrongSide": "Existing avatar-lab/prompt/fold owning contracts passed; no manufactured browser intent.",
+    "duplicateConcurrentWrites": "Inherited session/fold contract; no duplicate native submission."
+  },
+  "retainedAttempts": {
+    "initialScenarioAssumptions": "First run8pass/6fail: turn Draw quantity and RecordedAnswer shape; corrected fixtures/prompt observation. Raw retained; early precise wall UNKNOWN.",
+    "focusedTransform": "One duplicate local identifier transform failure, corrected before final2887pass.",
+    "callerFailures": "Five overall failed runtime invocations and all source versions retained with completed partial cells qualified.",
+    "parentAudit": "First audit assumed split viewport result for scalar mobile-only invocation, corrected; exact source/failed tool receipt retained. One recovery-source lookup used function_call instead of custom_tool_call then attempted missing script; corrected with actual custom-tool source; no product side effect.",
+    "modelCapacity": "Two failed helper turns; first resumed once after same-task justiciar, second after all QA led root to complete same bead. No model switch, release, deferral or acceptance waiver.",
+    "preExisting": "Partial hand-fan viewport exposure alone establishes no unintended presentation defect; no product issue filed."
+  },
+  "evidence": {
+    "root": "artifacts/qa/hv-umm2.226",
+    "audit": "audit/retained-scratch-manifest.json",
+    "parentEndpoint": "audit/parent-parent-endpoint-audit.json",
+    "helperEndpoints": "audit/helper-endpoints.json",
+    "nativeSweep": "invocations/sweep-oQvO60/run-xPrsXN",
+    "checks": "audit/helper-commands.jsonl",
+    "finalCommands": "audit/helper-commands.jsonl"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "bead": "hv-umm2.226",
+  "phase": 5,
+  "implementMin": 60.858490233333335,
+  "implementWindow": {
+    "start": "2026-10-13T05:45:45.161000+00:00",
+    "end": "2026-10-13T06:46:36.670414+00:00"
+  },
+  "localValidationS": {
+    "focused": 8.096632041997509,
+    "review": 46.0937464160088,
+    "knip": 2.836648915996193,
+    "constructor": 1.838632332990528,
+    "preflight": 0.9980072090111207,
+    "fuzz": 163.87273341701075,
+    "schema": 0.0664547080086777
+  },
+  "hostLoad": 4.3447265625,
+  "testDelta": {
+    "files": 1,
+    "lines": 179,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 2.903269597216907,
+      "note": "Actual outer wall of five overall incomplete caller invocations; includes independently usable Kragg desktop evidence in one failed invocation. Rail closure, persistent-source choice, board/gallery surface, mobile marker/transition and optional wrapper assumptions were corrected with versioned caller-only freezes. Author correction/research time is UNKNOWN and excluded; existing canonical browser scripting disposition hv-umm2.308 applies."
+    }
+  ]
+}
