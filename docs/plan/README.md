@@ -221,7 +221,12 @@ without pausing for approval. Promotion of in-scope plan work is authorized.
 
 (In Codex, invoke the `executor` skill with the same text.) A new session
 claims the next ready bead. When nothing is ready while other sessions still
-hold work, it waits for them with `hive executor await`.
+hold work, it retains a silent 65-minute `hive executor await` using Hive's
+shared waiting guidance at `/Users/dthurn/hive/skills/shared/waiting.md` and
+[the host instructions](workflow.md#starting-scaling-and-draining). Process-output
+collection stays inside the tool runtime; the agent resumes on work, disarming,
+a drained queue or the long timeout, without minute-level checks or unchanged
+updates.
 
 To **scale down**, tell a session to stop after its current bead. It lands
 that bead, claims nothing new, and stops; the remaining sessions continue. One

@@ -55,8 +55,14 @@ Where they differ, the [decisions](decisions.md) win, then AGENTS.md.
 - **Wait instead of stopping.** When `bd ready` has nothing for a session but
   other sessions still hold beads that open beads wait on, the session runs
   `/Users/dthurn/hive/bin/hive executor await --session <its ID> --json`:
-  in Claude Code as a background command, ending the turn until it reports;
-  in Codex in the foreground, repeated on `ExecutorAwaitTimeout`. It resumes
+  retain its default 65-minute wait using Hive's host-specific
+  waiting guidance at `/Users/dthurn/hive/skills/shared/waiting.md`. Claude Code
+  ends the turn on a background shell task; Codex keeps process-output collection inside one
+  long-yield tool cell. Stay silent while unchanged; do not shorten the native
+  timeout to 60 seconds, poll the queue from the agent, or sweep standing duties
+  beside a pending idle wait. Repeat only after the long native wait returns
+  `ExecutorAwaitTimeout`; resume standing-duty checks when it returns or new
+  user input arrives. It resumes
   on `ExecutorWorkReady` or `ExecutorWorkAssigned`. `ExecutorQueueDrained`
   means no other session holds work that open beads wait on, and the session
   stops with kind `drained`.

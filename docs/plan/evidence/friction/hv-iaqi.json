@@ -1,0 +1,20 @@
+{
+  "bead": "hv-iaqi",
+  "phase": 5,
+  "implementMin": 2.7976177000000004,
+  "implementWindow": {
+    "start": "2026-10-13T03:06:24+00:00",
+    "end": "2026-10-13T03:09:11.857062+00:00"
+  },
+  "localValidationS": {
+    "review": 0.42933124999399297,
+    "knip": 7.543028125001001
+  },
+  "hostLoad": 16.15,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

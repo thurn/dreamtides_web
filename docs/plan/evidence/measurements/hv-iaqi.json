@@ -1,0 +1,36 @@
+{
+  "bead": "hv-iaqi",
+  "base": "290333343b9fbb3ecde0283ede305527c9602ca4",
+  "scope": "Two copied executor-wait paragraphs and own evidence only; Hive runtime fix hv-n2ye already promoted and accepted on Linux.",
+  "implementationStart": "native claim started_at, seconds precision; this session implements directly without a helper",
+  "reviewQualification": "Five staged documentation paths: review parsed friction records only; no app checks applicable. Knip passed. No full review, runtime/browser/fuzz/new tests or independent core/phase review claimed; this is a non-core docs-only follow-up.",
+  "checks": {
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T03:08:09.710723+00:00",
+      "end": "2026-10-13T03:08:10.140336+00:00",
+      "wallSeconds": 0.42933124999399297,
+      "exit": 0,
+      "hostLoad": "{ 16.15 9.11 7.38 }"
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T03:08:10.144196+00:00",
+      "end": "2026-10-13T03:08:17.687221+00:00",
+      "wallSeconds": 7.543028125001001,
+      "exit": 0,
+      "hostLoad": "{ 16.15 9.11 7.38 }"
+    }
+  },
+  "endpointScope": "Final evidence capture immediately before actual natural-dated Conventional Commit; sub-second capture-to-commit time not isolated CPU.",
+  "hostLoadScope": "review wrapper start sysctl vm.loadavg one-minute load; not CPU or queue attribution.",
+  "endpointCaptureUtc": "2026-10-13T03:09:11.857062+00:00"
+}
