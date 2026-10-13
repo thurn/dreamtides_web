@@ -19,8 +19,13 @@ export const foreseePrimitive = definePrimitive<ForeseeNode>({
   op: "foresee",
   resolve(ctx, node, env) {
     const side = env.controller;
-    const cards = ctx.state.sides[side].deck.slice(0, evaluate(ctx, node.count, env));
-    if (cards.length === 0) return;
+    const count = evaluate(ctx, node.count, env);
+    if (count <= 0) return;
+    const cards = ctx.state.sides[side].deck.slice(0, count);
+    if (cards.length === 0) {
+      ctx.emit({ kind: "foresaw", side, kept: [], voided: [] });
+      return;
+    }
     const arrangement = ctx.choose<ArrangePrompt>({
       kind: "arrange",
       side,

@@ -617,6 +617,7 @@ export type Trigger =
    */
   | { readonly on: "materialize"; readonly subject: MaterializedSelector; readonly nth: MaterializeNth }
   | { readonly on: "draw"; readonly player: PlayerRef; readonly nth?: number }
+  | { readonly on: "foresee"; readonly player: PlayerRef }
   /**
    * "When you discard a card": each card matching `filter` discarded from
    * `player`'s hand, whatever caused the discard (rules § Zones → Hand). With

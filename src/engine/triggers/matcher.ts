@@ -67,6 +67,7 @@ const TRIGGER_EVENTS: { readonly [K in TriggerKind]: readonly EngineEventKind[] 
   play: ["cardPlayed"],
   materialize: ["materialized"],
   draw: ["cardDrawn"],
+  foresee: ["foresaw"],
   discard: ["discarded"],
   erode: ["eroded"],
   reclaim: ["cardPlayed"],
@@ -334,6 +335,8 @@ function matchKind(
         (trigger.nth === undefined || state.turnLog.drawn[event.side] === trigger.nth)
         ? { subject: event.instance }
         : null;
+    case "foresee":
+      return event.kind === "foresaw" && event.side === resolvePlayer(you, trigger.player) ? NO_SUBJECT : null;
     case "discard":
       // "When you discard this card" matches only its own card, which `discarded` announces once it is in the void (RD-hv-umm2.82-1).
       return event.kind === "discarded" &&

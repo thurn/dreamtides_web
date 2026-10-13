@@ -117,6 +117,11 @@ export function whenDraw(player: PlayerRef = "you", nth?: number): Trigger {
   return { on: "draw", player, ...(nth === undefined ? {} : { nth }) };
 }
 
+/** "When you foresee": once after each completed positive Foresee operation. */
+export function whenForesee(player: PlayerRef = "you"): Trigger {
+  return { on: "foresee", player };
+}
+
 export function whenDiscard(player: PlayerRef = "you", filter: CardFilter = {}): Trigger {
   return { on: "discard", player, filter };
 }

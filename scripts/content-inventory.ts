@@ -454,7 +454,7 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
   dsl("whenReclaimTrigger", [registered(DSL_TYPES, "Trigger", { member: "reclaim" })], ["Trigger"]),
   dsl("whenReturnTrigger", [registered(DSL_TYPES, "Trigger", { member: "returnToHand" })], ["Trigger"]),
   dsl("whenErodeTrigger", [registered(DSL_TYPES, "Trigger", { member: "erode" })], ["Trigger"]),
-  dsl("whenForeseeTrigger", [registered(DSL_TYPES, "Trigger", { member: "foresee", pending: "member" })], ["Trigger"]),
+  dsl("whenForeseeTrigger", [registered(DSL_TYPES, "Trigger", { member: "foresee" }), callable(DSL_TRIGGERS, "whenForesee")], ["Trigger"]),
   dsl("whenCopyTrigger", [registered(DSL_TYPES, "Trigger", { member: "copy", pending: "member" })], ["Trigger"], { note: `"when you copy" (${GAP_38})` }),
   dsl("whenRemovesEnemyTrigger", [registered(DSL_TYPES, "Trigger", { member: "removesEnemy" }), callable(DSL_TRIGGERS, "whenRemovesEnemy"), callable(DSL_TRIGGERS, "whenDissolvesEnemyInChallenge")], ["Trigger"], { note: "\"when you dissolve or banish an enemy\"" }),
   dsl("whenPutIntoVoidTrigger", [callable(DSL_TRIGGERS, "whenPutIntoVoid")], ["Trigger"]),

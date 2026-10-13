@@ -1,0 +1,797 @@
+{
+  "bead": "hv-umm2.230",
+  "baseOID": "290333343b9fbb3ecde0283ede305527c9602ca4",
+  "sourceFreeze": {
+    "base": "290333343b9fbb3ecde0283ede305527c9602ca4",
+    "observedFreeze": "2026-10-13T03:08:02.848694+00:00",
+    "files": {
+      "docs/plan/evidence/content-inventory.json": "0b0294772c86cab992b7c293635027aedde2217ad57a86a9812afa4788415f97",
+      "docs/rules.md": "8245bfaa21017d196a5ddf8bef068a02ad1e79c995765cc2801d109d5e42db72",
+      "scripts/content-inventory.test.ts": "c6677dcd32a41f51335064843cbb633090d6c864793c571d30cf943b8cdce438",
+      "scripts/content-inventory.ts": "fa55b154d06f40a687b195382d398117402206904edf7fb4dd296fe4123eeeb7",
+      "src/content/dreamsigns/ginger-root-39260dd5.ts": "43c2184bb855b9ceb1eb0b75c9c33fab96478cd1a801a768a40f083da240f0a8",
+      "src/engine/dsl/triggers.ts": "e1acd7f767783ccc4965b6cce93381dd3831a3708dbef07ad4c87b514bf29821",
+      "src/engine/dsl/types.ts": "4c684552bfe2a57275535520c90dc6fdb16adf0205e6722d22949317df3a61ae",
+      "src/engine/effects/primitives/contracts/foresee.contracts.ts": "68ea896fd54da8075438fd81a2a43bbb9b42e91073a852c667a5028a7f796efa",
+      "src/engine/effects/primitives/contracts/when-foresee-trigger.contracts.ts": "04d1daa5e30221bcbb5ce695cbc30e24d963119a5f798f0b6febac94e4af52c0",
+      "src/engine/effects/primitives/foresee.ts": "e047b2f4dbc000539499bbb1514a8ee67134d30f10d5b98d01cf90518dba4f92",
+      "src/engine/triggers/matcher.ts": "94ec540cb50e2a0aae149ee113b6b94fe24bc07b1e79d7f0f2873b6fdd0abc3e"
+    },
+    "aggregateSHA256": "9519243757d3b8b34ea599723be65abb3e67952f9367fb22f1dfb001b727e4f4"
+  },
+  "implementationClock": {
+    "start": "2026-10-13T03:00:00.432646+00:00",
+    "startQualification": "Clock sampled after helper dispatch; exact model start unknown.",
+    "helperFirstObservedClock": {
+      "observedStart": "2026-10-13T03:00:43.512451+00:00",
+      "exactModelStart": "unknown",
+      "base": "290333343b9fbb3ecde0283ede305527c9602ca4"
+    },
+    "evidenceCutoff": "2026-10-13T03:14:39.221464+00:00",
+    "endQualification": "Observed precommit evidence cutoff after parent endpoint ACK. Exact subsequent commit and final schema-check tail are unmeasured; no future timestamp was assigned.",
+    "model": "Inherited parent model; exact helper provider/model identifier and model start were not exposed.",
+    "priorAudit": "Read-only prior-session stage1 audit; its earlier clocks are excluded."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow": {
+        "startSource": "Parent post-dispatch clock sample in dispatch.json",
+        "endSource": "Actual precommit evidence cutoff"
+      },
+      "hostLoad": {
+        "measuredFor": "Successful npm run review wrapper start, using OS 1-minute load average; not a controlled benchmark"
+      },
+      "testDelta": {
+        "files": "One new plain contract module; zero new runner/test entrypoints",
+        "lines": "205-line plain module +1 line in existing Foresee contract +2 synthetic inventory fixture lines",
+        "cases": 14,
+        "jsdomFiles": 0
+      }
+    }
+  },
+  "checks": {
+    "affected": {
+      "name": "affected",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "scripts/content-inventory.test.ts",
+        "src/content/specs/specs.test.ts",
+        "src/content/coverage.test.ts"
+      ],
+      "start": "2026-10-13T03:03:19.813172+00:00",
+      "wrapperPid": 35423,
+      "wrapperPgid": 35423,
+      "loadStart": 3.34521484375,
+      "heavy": false,
+      "childPid": 35434,
+      "exitCode": 0,
+      "end": "2026-10-13T03:03:29.000405+00:00",
+      "wallS": 9.187273025512695,
+      "loadEnd": 3.4453125
+    },
+    "content-gates": {
+      "name": "content-gates",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "start": "2026-10-13T03:03:41.946465+00:00",
+      "wrapperPid": 36074,
+      "wrapperPgid": 36065,
+      "loadStart": 3.48046875,
+      "heavy": false,
+      "childPid": 36076,
+      "exitCode": 0,
+      "end": "2026-10-13T03:03:45.401253+00:00",
+      "wallS": 3.4548192024230957,
+      "loadEnd": 3.36181640625
+    },
+    "review-first": {
+      "name": "review-first",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T03:03:45.425270+00:00",
+      "wrapperPid": 36065,
+      "wrapperPgid": 36065,
+      "loadStart": 3.36181640625,
+      "heavy": false,
+      "childPid": 36260,
+      "exitCode": 2,
+      "end": "2026-10-13T03:04:40.029361+00:00",
+      "wallS": 54.60413312911987,
+      "loadEnd": 4.8203125
+    },
+    "review": {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T03:04:56.561287+00:00",
+      "wrapperPid": 38033,
+      "wrapperPgid": 38033,
+      "loadStart": 4.63818359375,
+      "heavy": false,
+      "childPid": 38042,
+      "exitCode": 0,
+      "end": "2026-10-13T03:05:55.542521+00:00",
+      "wallS": 58.981297969818115,
+      "loadEnd": 5.66796875
+    },
+    "side-filter": {
+      "name": "side-filter",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenForesee"
+      ],
+      "start": "2026-10-13T03:06:18.382244+00:00",
+      "wrapperPid": 40644,
+      "wrapperPgid": 40633,
+      "loadStart": 5.51904296875,
+      "heavy": false,
+      "childPid": 40645,
+      "exitCode": 1,
+      "end": "2026-10-13T03:06:23.026394+00:00",
+      "wallS": 4.6442413330078125,
+      "loadEnd": 5.39697265625
+    },
+    "nonpositive": {
+      "name": "nonpositive",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenForesee"
+      ],
+      "start": "2026-10-13T03:06:23.055615+00:00",
+      "wrapperPid": 40812,
+      "wrapperPgid": 40633,
+      "loadStart": 5.39697265625,
+      "heavy": false,
+      "childPid": 40815,
+      "exitCode": 1,
+      "end": "2026-10-13T03:06:28.152437+00:00",
+      "wallS": 5.096840858459473,
+      "loadEnd": 5.52490234375
+    },
+    "knip": {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T03:06:28.186418+00:00",
+      "wrapperPid": 41161,
+      "wrapperPgid": 40633,
+      "loadStart": 5.52490234375,
+      "heavy": false,
+      "childPid": 41165,
+      "exitCode": 0,
+      "end": "2026-10-13T03:06:33.259022+00:00",
+      "wallS": 5.0726399421691895,
+      "loadEnd": 5.482421875
+    },
+    "focused-final": {
+      "name": "focused-final",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenForesee|foresee"
+      ],
+      "start": "2026-10-13T03:06:33.298645+00:00",
+      "wrapperPid": 40633,
+      "wrapperPgid": 40633,
+      "loadStart": 5.482421875,
+      "heavy": false,
+      "childPid": 41593,
+      "exitCode": 0,
+      "end": "2026-10-13T03:06:39.292059+00:00",
+      "wallS": 5.9934608936309814,
+      "loadEnd": 5.5234375
+    },
+    "preflight": {
+      "name": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "39260dd5-cb43-47d5-a007-effbe13d6417",
+        "--as",
+        "both",
+        "--variants",
+        "all"
+      ],
+      "start": "2026-10-13T03:07:32.006002+00:00",
+      "wrapperPid": 95357,
+      "wrapperPgid": 95357,
+      "loadStart": 15.03271484375,
+      "heavy": false,
+      "childPid": 95376,
+      "exitCode": 0,
+      "end": "2026-10-13T03:07:33.468968+00:00",
+      "wallS": 1.4630401134490967,
+      "loadEnd": 15.03271484375
+    },
+    "sweep": {
+      "name": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.230",
+        "--dreamsigns",
+        "39260dd5-cb43-47d5-a007-effbe13d6417",
+        "--as",
+        "both",
+        "--variants",
+        "all",
+        "--port",
+        "5175"
+      ],
+      "start": "2026-10-13T03:07:52.256761+00:00",
+      "wrapperPid": 97394,
+      "wrapperPgid": 97394,
+      "loadStart": 15.744140625,
+      "heavy": false,
+      "childPid": 97461,
+      "exitCode": 0,
+      "end": "2026-10-13T03:08:07.605869+00:00",
+      "wallS": 15.349174976348877,
+      "loadEnd": 16.15283203125
+    },
+    "player-native": {
+      "name": "player-native",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/codex-takeover230/helper/foresee-player.mjs",
+        "--bead",
+        "hv-umm2.230",
+        "--port",
+        "5175",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "start": "2026-10-13T03:08:14.361766+00:00",
+      "wrapperPid": 99757,
+      "wrapperPgid": 99757,
+      "loadStart": 15.57958984375,
+      "heavy": false,
+      "childPid": 99771,
+      "exitCode": 0,
+      "end": "2026-10-13T03:09:11.131958+00:00",
+      "wallS": 56.770280838012695,
+      "loadEnd": 27.9658203125
+    },
+    "production-fuzz": {
+      "name": "production-fuzz",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "39260dd5-cb43-47d5-a007-effbe13d6417"
+      ],
+      "start": "2026-10-13T03:07:27.563638+00:00",
+      "wrapperPid": 95016,
+      "wrapperPgid": 95016,
+      "loadStart": 14.86181640625,
+      "heavy": true,
+      "childPid": 95032,
+      "exitCode": 0,
+      "end": "2026-10-13T03:11:43.198814+00:00",
+      "wallS": 255.6352469921112,
+      "loadEnd": 24.5087890625
+    },
+    "production-fuzz-inner": {
+      "name": "production-fuzz-inner",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "39260dd5-cb43-47d5-a007-effbe13d6417"
+      ],
+      "start": "2026-10-13T03:07:27.641024+00:00",
+      "wrapperPid": 95033,
+      "wrapperPgid": 95016,
+      "loadStart": 14.86181640625,
+      "heavy": false,
+      "childPid": 95043,
+      "exitCode": 0,
+      "end": "2026-10-13T03:11:43.194160+00:00",
+      "wallS": 255.55330085754395,
+      "loadEnd": 24.5087890625
+    },
+    "entity-facts": {
+      "name": "entity-facts",
+      "command": [
+        "npm",
+        "run",
+        "bead:entities",
+        "--",
+        "39260dd5-cb43-47d5-a007-effbe13d6417"
+      ],
+      "start": "2026-10-13T03:13:10.706707+00:00",
+      "wrapperPid": 28038,
+      "wrapperPgid": 28038,
+      "loadStart": 10.125,
+      "heavy": false,
+      "childPid": 28048,
+      "exitCode": 0,
+      "end": "2026-10-13T03:13:12.344820+00:00",
+      "wallS": 1.6381568908691406,
+      "loadEnd": 10.125
+    }
+  },
+  "hostLoadSamples": {
+    "affected": {
+      "wrapperStart": 3.34521484375,
+      "wrapperEnd": 3.4453125
+    },
+    "content-gates": {
+      "wrapperStart": 3.48046875,
+      "wrapperEnd": 3.36181640625
+    },
+    "review-first": {
+      "wrapperStart": 3.36181640625,
+      "wrapperEnd": 4.8203125
+    },
+    "review": {
+      "wrapperStart": 4.63818359375,
+      "wrapperEnd": 5.66796875
+    },
+    "side-filter": {
+      "wrapperStart": 5.51904296875,
+      "wrapperEnd": 5.39697265625
+    },
+    "nonpositive": {
+      "wrapperStart": 5.39697265625,
+      "wrapperEnd": 5.52490234375
+    },
+    "knip": {
+      "wrapperStart": 5.52490234375,
+      "wrapperEnd": 5.482421875
+    },
+    "focused-final": {
+      "wrapperStart": 5.482421875,
+      "wrapperEnd": 5.5234375
+    },
+    "preflight": {
+      "wrapperStart": 15.03271484375,
+      "wrapperEnd": 15.03271484375
+    },
+    "sweep": {
+      "wrapperStart": 15.744140625,
+      "wrapperEnd": 16.15283203125
+    },
+    "player-native": {
+      "wrapperStart": 15.57958984375,
+      "wrapperEnd": 27.9658203125
+    },
+    "production-fuzz": {
+      "wrapperStart": 14.86181640625,
+      "wrapperEnd": 24.5087890625
+    },
+    "production-fuzz-inner": {
+      "wrapperStart": 14.86181640625,
+      "wrapperEnd": 24.5087890625
+    },
+    "entity-facts": {
+      "wrapperStart": 10.125,
+      "wrapperEnd": 10.125
+    }
+  },
+  "earlyChecks": {
+    "focused1": {
+      "toolSession": 74305,
+      "exit": 1,
+      "wallS": null,
+      "note": "Wrong Figment parser import in new contract; corrected."
+    },
+    "focused2": {
+      "toolSession": 79530,
+      "exit": 1,
+      "wallS": null,
+      "note": "New contract expected player-first instead of active-player-first order and used an invalid stale prompt identity; corrected."
+    },
+    "focused3": {
+      "toolSession": 75873,
+      "exit": 0,
+      "cases": 18,
+      "wallS": null
+    },
+    "qualification": "Early focused outer wall times/PIDs were not instrumented; tool sessions completed. Successful timed final focused check includes the final rollback arrangement and all corrections."
+  },
+  "callerErrors": [
+    "Initial affected invocation also named nonexistent src/content/coverage.test.ts; actual3files/2806cases passed. The actual coverage gate src/engine/content-gates.test.ts was then run separately,20cases passed.",
+    "Some read-only guessed file paths/globs failed and were replaced with actual paths; no repository defect.",
+    "First review failed new-contract lint/type authoring errors; related283files/5425cases passed. All corrected without production changes; required review and Knip passed subsequently.",
+    "Parent initial exact-scope assertion omitted admitted RD and generated own QA ledger; corrected proof script without source mutation."
+  ],
+  "counterfactuals": [
+    {
+      "name": "side-filter",
+      "file": "src/engine/triggers/matcher.ts",
+      "exitCode": 1,
+      "originalSHA256": "94ec540cb50e2a0aae149ee113b6b94fe24bc07b1e79d7f0f2873b6fdd0abc3e",
+      "restoredSHA256": "94ec540cb50e2a0aae149ee113b6b94fe24bc07b1e79d7f0f2873b6fdd0abc3e"
+    },
+    {
+      "name": "nonpositive",
+      "file": "src/engine/effects/primitives/foresee.ts",
+      "exitCode": 1,
+      "originalSHA256": "e047b2f4dbc000539499bbb1514a8ee67134d30f10d5b98d01cf90518dba4f92",
+      "restoredSHA256": "e047b2f4dbc000539499bbb1514a8ee67134d30f10d5b98d01cf90518dba4f92"
+    }
+  ],
+  "weightedFuzz": {
+    "outer": {
+      "name": "production-fuzz",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "39260dd5-cb43-47d5-a007-effbe13d6417"
+      ],
+      "start": "2026-10-13T03:07:27.563638+00:00",
+      "wrapperPid": 95016,
+      "wrapperPgid": 95016,
+      "loadStart": 14.86181640625,
+      "heavy": true,
+      "childPid": 95032,
+      "exitCode": 0,
+      "end": "2026-10-13T03:11:43.198814+00:00",
+      "wallS": 255.6352469921112,
+      "loadEnd": 24.5087890625
+    },
+    "inner": {
+      "name": "production-fuzz-inner",
+      "command": [
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "39260dd5-cb43-47d5-a007-effbe13d6417"
+      ],
+      "start": "2026-10-13T03:07:27.641024+00:00",
+      "wrapperPid": 95033,
+      "wrapperPgid": 95016,
+      "loadStart": 14.86181640625,
+      "heavy": false,
+      "childPid": 95043,
+      "exitCode": 0,
+      "end": "2026-10-13T03:11:43.194160+00:00",
+      "wallS": 255.55330085754395,
+      "loadEnd": 24.5087890625
+    },
+    "result": {
+      "games": 300,
+      "steps": 127985,
+      "prompts": 6693,
+      "interactiveReruns": 659,
+      "failures": 0,
+      "included": 600,
+      "exercised": 424
+    },
+    "lockWaitAndBootstrapS": 0.08194613456726074,
+    "qualification": "outer minus inner is bootstrap-inclusive; pure lock wait unknown"
+  },
+  "failurePaths": {
+    "errorMidStep": "rolls back the Foresee completion and trigger queue when the same resolution fails after arrangement",
+    "reloadRestart": "preserves a subject-null queued trigger across reload, views and determinization, with identical resumed events",
+    "partialWrite": "same rollback contract: mixed arrangement physically moves a card then later real unknown-figment effect fails; deck/queue/once allowance unchanged at committed boundary",
+    "invalidStale": "same reload contract checks stale prior arrangement id, malformed optional answer, wrong side, then duplicate completed prompt",
+    "concurrentActors": "same reload contract checks competing battleAction during optional-trigger step and duplicate answer after settlement"
+  },
+  "qa": {
+    "d21": {
+      "firstByte": 250,
+      "sampled": false,
+      "newPromptKinds": [],
+      "newStatusIndicators": false,
+      "newVisualEffects": false,
+      "judgedRequired": false,
+      "supplementalPlayerWorkflowJudged": true
+    },
+    "preflight": {
+      "pass": 2,
+      "skip": 18,
+      "fail": 0,
+      "baseBothSeatsExercised": false
+    },
+    "sweep": {
+      "pass": 2,
+      "skip": 18,
+      "fail": 0,
+      "evidenceDirectory": "invocations/sweep-WmFAHE/run-dSxide",
+      "baseBothSeatsExercised": false,
+      "qualification": "Initialization and first Day proof; vanilla fixture decks do not produce Foresee. Actual trigger exercise is separately proved by synthetic contracts, weighted fuzz and supplemental normal player plays."
+    },
+    "native": {
+      "evidenceDirectory": "invocations/run-uqYekb",
+      "report": "foresee-player.result.json",
+      "reportSHA256": "d842c578711a963c31e78d3c6b71f039cd95f16f957173705fc65a591a45367c",
+      "viewports": {
+        "desktop": {
+          "firstDraws": 2,
+          "secondDraws": 1,
+          "firstTriggers": 1,
+          "secondTriggers": 0,
+          "physicalGlipses": [
+            "i51",
+            "i52"
+          ],
+          "privateForesee": "Player-only arrange prompt with exact Glimpse UUID; kept physical card drawn by first trigger",
+          "geometry": [
+            {
+              "x": 671.15625,
+              "y": 618.375,
+              "width": 97.6875,
+              "height": 42,
+              "viewport": [
+                1440,
+                900
+              ],
+              "hit": true,
+              "scrollWidth": 1440
+            },
+            {
+              "x": 671.15625,
+              "y": 618.375,
+              "width": 97.6875,
+              "height": 42,
+              "viewport": [
+                1440,
+                900
+              ],
+              "hit": true,
+              "scrollWidth": 1440
+            }
+          ],
+          "logGeometry": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "viewport": [
+              1440,
+              900
+            ]
+          },
+          "persisted": {
+            "gameId": "wrkyov",
+            "totalRows": 53,
+            "triggers": 2,
+            "foreseePrompts": 2
+          },
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        },
+        "mobile": {
+          "firstDraws": 2,
+          "secondDraws": 1,
+          "firstTriggers": 1,
+          "secondTriggers": 0,
+          "physicalGlipses": [
+            "i51",
+            "i52"
+          ],
+          "privateForesee": "Player-only arrange prompt with exact Glimpse UUID; kept physical card drawn by first trigger",
+          "geometry": [
+            {
+              "x": 146.15625,
+              "y": 280.75,
+              "width": 97.6875,
+              "height": 42,
+              "viewport": [
+                390,
+                844
+              ],
+              "hit": true,
+              "scrollWidth": 390
+            },
+            {
+              "x": 146.15625,
+              "y": 280.75,
+              "width": 97.6875,
+              "height": 42,
+              "viewport": [
+                390,
+                844
+              ],
+              "hit": true,
+              "scrollWidth": 390
+            }
+          ],
+          "logGeometry": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 844,
+            "viewport": [
+              390,
+              844
+            ]
+          },
+          "persisted": {
+            "gameId": "ncyj6a",
+            "totalRows": 53,
+            "triggers": 2,
+            "foreseePrompts": 2
+          },
+          "caps": {
+            "errors": [],
+            "rejections": [],
+            "consoleErrors": []
+          }
+        }
+      },
+      "setup": "Exactly two public qa.labAddCard hand placements per viewport, Glimpse UUID2162742c-09d0-4e62-ae49-0f8f79b45adc. Initial energy10; no energy changes performed. Normal hand taps/Foresee confirms are effect proof.",
+      "captures": [
+        {
+          "filename": "desktop-foresee-prompt.png",
+          "pixels": [
+            2880,
+            1800
+          ],
+          "css": [
+            1440,
+            900
+          ]
+        },
+        {
+          "filename": "desktop-once-after.png",
+          "pixels": [
+            2880,
+            1800
+          ],
+          "css": [
+            1440,
+            900
+          ]
+        },
+        {
+          "filename": "mobile-once-after.png",
+          "pixels": [
+            780,
+            1688
+          ],
+          "css": [
+            390,
+            844
+          ]
+        }
+      ],
+      "captureVerification": "All3 file dimensions verified at2x and visually inspected. Desktop prompt captured; mobile capture is settled-after, without a mobile prompt capture. No new visual finding.",
+      "logs": [
+        "foresee-player-desktop.jsonl",
+        "foresee-player-mobile.jsonl"
+      ]
+    }
+  },
+  "runtime": {
+    "checks": "All timed check wrapper/child PIDs are in checks and absent at endpoint; early tool sessions completed with PIDs unobserved. Parent npm install/doctor were setup receipts, not helper processes.",
+    "browser": {
+      "slot": 1,
+      "requestedPort": 5175,
+      "actualPort": 5274,
+      "sweep": {
+        "wrapper": 97394,
+        "runner": 97461,
+        "serverProcessGroup": 97691,
+        "isolatedMcpClient": "Own sweep client, confirmed close; one session/no yield"
+      },
+      "playerNative": {
+        "wrapper": 99757,
+        "runner": 99771,
+        "serverProcessGroup": 99808,
+        "isolatedMcpClient": "Own run-scenario client, confirmed close after both viewports"
+      },
+      "settled": true,
+      "qualification": "Both own server groups and browser contexts closed; native cleanup reported port5274 free, own records absent. A peer subsequently leased5274; current listener/slot records belong hv-33id.12 and are untouched."
+    },
+    "settlement": {
+      "command": [
+        "ps",
+        "-o",
+        "pid,ppid,pgid,command",
+        "-p",
+        "35423,35434,36065,36074,36076,36260,38033,38042,40633,40644,40645,40812,40815,41161,41165,41593,95016,95032,95033,95043,95067,95072,95170,95357,95376,97394,97461,97691,99757,99771,99808"
+      ],
+      "observedAt": "2026-10-13T03:12:17.969518+00:00",
+      "psExit": 1,
+      "psOutput": "  PID  PPID  PGID COMMAND\n",
+      "lsof5274": "COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME\nnode    21636 dthurn   16u  IPv4 0x319742cae5010912      0t0  TCP 127.0.0.1:5274 (LISTEN)\n",
+      "mcpOwnerRecordExists": true,
+      "serverRecordExists": true,
+      "qualification": "All recorded own process PIDs absent. Own cleanup observed port5274 free after each runner. Port5274 has since been leased by a peer; current slot records are that peer's, retained untouched.",
+      "ownerCurrentIdentity": {
+        "pid": 21357,
+        "bead": "hv-33id.12",
+        "label": "settled-release-v02",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-12-exact-tutorial-drops",
+        "port": 5274,
+        "startedAt": "2026-10-13T03:11:40.679Z",
+        "runnerPid": null,
+        "launcherPid": null
+      },
+      "serverCurrentIdentity": {
+        "pid": null,
+        "bead": null,
+        "label": null,
+        "checkout": null,
+        "port": 5274,
+        "startedAt": null,
+        "runnerPid": null,
+        "launcherPid": null
+      }
+    },
+    "entityFacts": {
+      "name": "entity-facts",
+      "command": [
+        "npm",
+        "run",
+        "bead:entities",
+        "--",
+        "39260dd5-cb43-47d5-a007-effbe13d6417"
+      ],
+      "start": "2026-10-13T03:13:10.706707+00:00",
+      "wrapperPid": 28038,
+      "wrapperPgid": 28038,
+      "loadStart": 10.125,
+      "heavy": false,
+      "childPid": 28048,
+      "exitCode": 0,
+      "end": "2026-10-13T03:13:12.344820+00:00",
+      "wallS": 1.6381568908691406,
+      "loadEnd": 10.125
+    }
+  },
+  "fallout": [],
+  "newEngineEventsPromptsStatuses": [],
+  "compositionSpecs": "D20: one generic whenForesee + existing oncePerTurn + draw1; no card-specific targeting/replacement/ability interaction. No scenario module needed.",
+  "rulesDecision": "RD-hv-umm2.230-1",
+  "cardIssues": [],
+  "preexistingProductIssues": [],
+  "fullReview": "Not required: additive Trigger leaf and narrow Foresee completion guard; no shared context/representation/interpreter body, configuration or test-infrastructure change.",
+  "reviewRouting": "Parent owns fresh read-only gpt-5.6-sol Codex CLI review under temporary user-authorized same-family routing; helper performs no independent reviewer call.",
+  "leftToParent": "Native candidate submission/promotion and required cold review."
+}

@@ -31,12 +31,13 @@ describe("card primitives", () => {
     expect(eventSeenBy(foresaw[0], "player", shuffled)).toEqual({ ...foresaw[0], kept: [null] });
   });
 
-  it("foresee publishes nothing from an empty deck", () => {
+  it("positive foresee completes from an empty deck without a prompt", () => {
     const { events, answers } = runScenario(engine, {
       board: { active: "player", phase: "day", player: { hand: [DSL.foreseeTwo.id], deck: [] }, enemy: { deck } },
       steps: (ids) => [playFromHand(ids, "player")],
     });
     expect(answers).toEqual([]);
-    expect(events.some((event) => event.kind === "foresaw")).toBe(false);
+    expect(events.filter((event) => event.kind === "foresaw")).toEqual([{ kind: "foresaw", side: "player", kept: [], voided: [] }]);
+    expect(events.some((event) => event.kind === "fatigue" || event.kind === "shuffledIntoDeck")).toBe(false);
   });
 });

@@ -1483,6 +1483,13 @@ and optionally send any of them to the void. Only you see the cards you look
 at; your opponent sees how many you looked at, how many you put back on top,
 and which cards you sent to the void.
 
+A positive Foresee instruction is one Foresee operation, completed after you
+choose where the cards go, even if you keep every card in the same order or
+your deck is empty. "When you foresee" triggers once when that operation
+completes, regardless of how many cards you looked at or sent to the void.
+Foresee 0 does nothing and does not trigger "when you foresee". Foresee itself
+does not cause Fatigue or shuffle cards from the void into an empty deck.
+
 **Discover** — Look at 3 cards chosen at random from the cards in your deck
 that match a stated criterion, put one of them into your hand, then shuffle your
 deck. Only you see the cards you look at; your opponent sees that you put a
