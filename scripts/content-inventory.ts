@@ -27,8 +27,9 @@
  * - **Primitives** in `PRIMITIVES` are probed against src/engine: a primitive
  *   module exists when its file is listed in effects/primitives/index.ts, a
  *   builder when src/engine/dsl exports it, and a DSL addition when its named
- *   exported builder or registered form is present. Only primitives that do not exist yet create bead
- *   edges: a bead depends on the bead that introduces each new primitive
+ *   exported builder or registered form is present. Journey capabilities require
+ *   a callable factory in src/rules/journey and its production registry binding.
+ *   Only primitives that do not exist yet create bead edges: a bead depends on the bead that introduces each new primitive
  *   its entities need.
  * - **Families.** Each card joins the latest family (in the § 5.1 order)
  *   among its tags, and a keyword card that needs no new primitive joins the
@@ -83,6 +84,8 @@ export interface InventoryCapabilityForm {
   readonly module: string;
   readonly symbol: string;
   readonly kind: "builder" | "form";
+  /** A callable factory used by the exported production registry. */
+  readonly registration?: { readonly module: string; readonly symbol: string; readonly constructor: string };
   readonly member?: string;
   readonly option?: string;
   readonly optionLiteral?: string;
@@ -124,7 +127,28 @@ export function inventoryCapabilityResolver(sources: ReadonlyMap<string, string>
     form.optionLiteral === undefined ? undefined : `value=${form.optionLiteral}`,
     form.literal === undefined ? undefined : `literal=${form.literal}`,
   ].filter(value => value !== undefined).join(" ");
-  type Failure = "module" | "export" | "form" | "member" | "option" | "literal" | "optionLiteral" | "value";
+  const unalias = (symbol: ts.Symbol | undefined): ts.Symbol | undefined =>
+    symbol !== undefined && symbol.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(symbol) : symbol;
+  const exportedSymbol = (source: ts.SourceFile, name: string): ts.Symbol | undefined => {
+    const module = checker.getSymbolAtLocation(source);
+    return unalias(module === undefined ? undefined : checker.getExportsOfModule(module).find(symbol => symbol.name === name));
+  };
+  const factoryRegistered = (form: InventoryCapabilityForm, factory: ts.Symbol): boolean => {
+    const registration = form.registration;
+    if (registration === undefined) return true;
+    const source = program.getSourceFile(resolve(ROOT, registration.module));
+    if (source === undefined) return false;
+    const registry = exportedSymbol(source, registration.symbol)?.valueDeclaration;
+    const constructor = exportedSymbol(source, registration.constructor);
+    if (registry === undefined || !ts.isVariableDeclaration(registry) || registry.initializer === undefined ||
+      !ts.isCallExpression(registry.initializer) || constructor === undefined ||
+      checker.getTypeOfSymbolAtLocation(constructor, source).getCallSignatures().length === 0 ||
+      unalias(checker.getSymbolAtLocation(registry.initializer.expression)) !== constructor) return false;
+    const definitions = registry.initializer.arguments[0];
+    return definitions !== undefined && ts.isArrayLiteralExpression(definitions) && definitions.elements.some(element =>
+      ts.isCallExpression(element) && unalias(checker.getSymbolAtLocation(element.expression)) === factory);
+  };
+  type Failure = "registration" | "module" | "export" | "form" | "member" | "option" | "literal" | "optionLiteral" | "value";
   const failure = (form: InventoryCapabilityForm): Failure | null => {
     const source = program.getSourceFile(resolve(ROOT, form.module));
     if (source === undefined) return "module";
@@ -132,7 +156,11 @@ export function inventoryCapabilityResolver(sources: ReadonlyMap<string, string>
     const exported = module === undefined ? undefined : checker.getExportsOfModule(module).find((symbol) => symbol.name === form.symbol);
     if (exported === undefined) return "export";
     const symbol = exported.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(exported) : exported;
-    if (form.kind === "builder") return checker.getTypeOfSymbolAtLocation(symbol, source).getCallSignatures().length > 0 ? null : "form";
+    if (form.kind === "builder") {
+      if (checker.getTypeOfSymbolAtLocation(symbol, source).getCallSignatures().length === 0) return "form";
+      return factoryRegistered(form, symbol) ? null : "registration";
+    }
+    if (form.registration !== undefined) return "registration";
     if (!(symbol.flags & ts.SymbolFlags.Type)) return "form";
     const type = checker.getDeclaredTypeOfSymbol(symbol);
     if (type.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown | ts.TypeFlags.Never)) return "form";
@@ -268,7 +296,13 @@ const ext = (name: string, file: string, probe: RegExp, extra: PrimitiveExtra = 
   contract: contractPath(name),
   ...extra,
 });
-const journey = (name: string, note: string): PrimitiveEntry => ({ name, kind: "journey", note });
+const JOURNEY_REGISTRY = "src/rules/journey/modifier-registry.ts";
+const journey = (name: string, note: string): PrimitiveEntry => {
+  const module = `src/rules/journey/${kebab(name)}.ts`;
+  return { name, kind: "journey", module, note, forms: [{ ...callable(module, name),
+    registration: { module: JOURNEY_REGISTRY, symbol: "journeyModifierRegistry", constructor: "createJourneyModifierRegistry" },
+  }] };
+};
 
 const GAP_38 = "engine gap noted by hv-7x4l.8 (3.8)";
 const GAP_37 = "engine gap noted by 3.7";
@@ -445,6 +479,10 @@ const PRIMITIVES: readonly PrimitiveEntry[] = [
 
 /** Intended public DSL bindings, including their explicitly pending feature stages. */
 export const inventoryDslCapabilities = PRIMITIVES.filter((entry) => entry.kind === "dsl")
+  .map((entry) => ({ name: entry.name, forms: entry.forms ?? [] }));
+
+/** Public journey factory bindings and their production registry seams. */
+export const inventoryJourneyCapabilities = PRIMITIVES.filter((entry) => entry.kind === "journey")
   .map((entry) => ({ name: entry.name, forms: entry.forms ?? [] }));
 
 // ---------------------------------------------------------------------------
@@ -886,7 +924,7 @@ const dslFiles = readdirSync(join(ROOT, "src/engine/dsl"))
   .filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"))
   .map((file) => `src/engine/dsl/${file}`);
 const dslSource = dslFiles.map(read).join("\n");
-const capabilityModules = [...new Set([...dslFiles, ...PRIMITIVES.flatMap((entry) => entry.forms?.map((form) => form.module) ?? [])])];
+const capabilityModules = [...new Set([...dslFiles, ...PRIMITIVES.flatMap((entry) => entry.forms?.flatMap((form) => [form.module, ...(form.registration === undefined ? [] : [form.registration.module])]) ?? [])])];
 const capabilityExists = inventoryCapabilityResolver(new Map(capabilityModules.filter((module) => existsSync(join(ROOT, module))).map((module) => [module, read(module)])));
 const promptTypes = read("src/engine/prompts/types.ts");
 
@@ -905,7 +943,7 @@ function primitiveExists(entry: PrimitiveEntry): boolean {
     case "extension":
       return existsSync(join(ROOT, module)) && (entry.probe?.test(read(module)) ?? false);
     case "journey":
-      return false;
+      return capabilityExists(entry.forms ?? []);
   }
 }
 
@@ -1687,7 +1725,7 @@ function main(): void {
       newPrimitives: [...PRIMITIVE_BY_NAME.values()].filter((entry) => !entry.exists && usage.has(entry.name)).length,
       notes: [
         "The beads list is the current planning projection; filed native Entities, Areas, acceptance criteria and dependency graph govern execution. Read entities by filed UUIDs; a filed key identifies its original filing and scenario slug, not a current projection scope. Bead dependsOn lists planning edges: the bead that introduces each new primitive the bead needs, the pilot beads for a bead with no other edge, and the fixed task edges of the phase page. Serialization edges (workflow.md § Serialization edges) are added at filing, from sharedAreas and entity modules.",
-        "Primitive and prompt existence is probed against src/engine when the script runs; DSL capabilities name callable exports or registered forms with required semantic options. Filed native UUID scopes remain authoritative.",
+        "Primitive and prompt existence is probed against src/engine and journey factories against their production registry in src/rules/journey when the script runs; DSL capabilities name callable exports or registered forms with required semantic options. Filed native UUID scopes remain authoritative.",
         "Tags come from regex rules and manual corrections in scripts/content-inventory.ts; an implementing session reads the printed text clause by clause (recipe step 2) and may need primitives the tags miss.",
       ],
     },

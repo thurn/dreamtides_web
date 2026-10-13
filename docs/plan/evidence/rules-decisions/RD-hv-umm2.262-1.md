@@ -44,5 +44,8 @@ inert battle emblems but its first battleDay does not exercise journey clauses.
 The fuzz pool rejects journey-only empty battle abilities. Parent accepted P8
 public synthetic journey contracts, real-provider contracts and judged native
 Essence/travel workflows instead; no weighted battle300 or lab journey coverage
-is claimed. scripts/content-inventory.ts treats all journey primitives as false,
-so there is no discrete capability marker to regenerate or retire in this scope.
+is claimed. The inventory resolves journey capabilities from callable public factories
+registered in the production journey-modifier registry. The current
+journeyEssence and journeySites bindings satisfy those probes; their inventory
+requirements are existing capabilities. The generated beads remain a planning
+projection, and filed native UUID scopes and acceptance govern execution.
