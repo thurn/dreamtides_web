@@ -6,6 +6,7 @@ import { instanceOf } from "../../rules/zones";
 import type { InstanceId } from "../../state/ids";
 import type { BattleState, Expiry } from "../../state/types";
 import type { StepContext } from "../../steps/types";
+import { combinedSourceObservers } from "../../view/knowledge";
 import { evaluate, resolveCharacters } from "../interpreter";
 import type { EffectEnv } from "../types";
 import { characterTarget, definePrimitive } from "../types";
@@ -33,7 +34,8 @@ function applyGain(ctx: StepContext, env: EffectEnv, ids: readonly InstanceId[],
     for (const id of ids) instanceOf(ctx.state, id).status.gainedSpark += amount;
   } else {
     for (const instance of ids) {
-      addFloating(ctx, { controller: env.controller, source: env.source, expiry, change: { kind: "spark", instance, amount } });
+      addFloating(ctx, { controller: env.controller, source: env.source, expiry, change: { kind: "spark", instance, amount } },
+        combinedSourceObservers(ctx.state, env.source, instance));
     }
   }
   for (const id of ids) ctx.emit({ kind: "sparkGained", instance: id, amount, expiry, additional });

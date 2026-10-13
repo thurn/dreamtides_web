@@ -1,0 +1,345 @@
+{
+  "bead": "hv-umm2.648",
+  "sourceBase": "34dfc2499e43dc252e00e50e465d27f5f40ac952",
+  "dispatch": {
+    "start": "2026-10-13T18:40:49.142000+00:00",
+    "callId": "call_H0mdYwQhEEcr2KYwRBBCQEWg",
+    "hostOrdinal": 19212,
+    "source": "parent actual host dispatch receipt",
+    "modelSamplingCpu": "UNKNOWN"
+  },
+  "sourceWriteAck": "2026-10-13T18:42:05.693602Z",
+  "sourceScope": {
+    "sha256": {
+      "src/engine/effects/primitives/gain-spark.ts": "ccbf72d8b610de084b4a0fec7cafae0bf0716d69b430d1056f774f8dfa8b4d46",
+      "src/engine/events/kinds/effect-started.ts": "81967118fba34be45685d37eb281fbd2f5b0a496c2f9ccde813fa3abac0d8a93",
+      "src/engine/effects/primitives/contracts/temporary-spark-observers.contracts.ts": "dfa88a36647eeb89d9c7ceb08b37596157b7e83a6c7941791a790d569dffd1cc"
+    },
+    "nonTestTsGrossLines": 6,
+    "contractModulesAdded": 1,
+    "contractLines": 244,
+    "testEntrypointsAdded": 0,
+    "fallout": [],
+    "change": "The temporary addFloating call supplies complete source/subject observers using the existing pure predicate. The effectStarted field comment describes its ordinary, additional and physical triggering-card callers. Authoritative state mutation, gain amounts, expiry, CharacterRef targeting, trigger semantics, other producers and schemas retain their current behavior."
+  },
+  "validation": {
+    "focused-first": {
+      "label": "focused-first",
+      "pid": 76373,
+      "pgid": 76373,
+      "start": "2026-10-13T18:45:19.415398+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "ordinary and additional temporary spark observations"
+      ],
+      "hostLoad": "{ 4.76 6.48 7.21 }",
+      "status": "terminal",
+      "end": "2026-10-13T18:45:25.139360+00:00",
+      "wallSeconds": 5.723859958990943,
+      "exitCode": 1,
+      "port": null
+    },
+    "focused-second": {
+      "label": "focused-second",
+      "pid": 76923,
+      "pgid": 76923,
+      "start": "2026-10-13T18:45:38.927496+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "ordinary and additional temporary spark observations"
+      ],
+      "hostLoad": "{ 4.73 6.35 7.15 }",
+      "status": "terminal",
+      "end": "2026-10-13T18:45:44.513010+00:00",
+      "wallSeconds": 5.585340749996249,
+      "exitCode": 0,
+      "port": null
+    },
+    "focused-final": {
+      "label": "focused-final",
+      "pid": 77480,
+      "pgid": 77480,
+      "start": "2026-10-13T18:46:09.676261+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "ordinary and additional temporary spark observations|physical triggering-card spark|triggering-card spark emission observers|character primitives|resolving source spark"
+      ],
+      "hostLoad": "{ 5.22 6.30 7.10 }",
+      "status": "terminal",
+      "end": "2026-10-13T18:46:15.132074+00:00",
+      "wallSeconds": 5.455702290986665,
+      "exitCode": 0,
+      "port": null
+    },
+    "counterfactual-old-call": {
+      "label": "counterfactual-old-call",
+      "pid": 77910,
+      "pgid": 77910,
+      "start": "2026-10-13T18:46:34.720916+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "ordinary and additional temporary spark observations"
+      ],
+      "hostLoad": "{ 5.22 6.21 7.04 }",
+      "status": "terminal",
+      "end": "2026-10-13T18:46:39.463528+00:00",
+      "wallSeconds": 4.742517125006998,
+      "exitCode": 1,
+      "port": null
+    },
+    "review": {
+      "label": "review",
+      "pid": 78370,
+      "pgid": 78370,
+      "start": "2026-10-13T18:46:53.453635+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoad": "{ 4.72 6.04 6.96 }",
+      "status": "terminal",
+      "end": "2026-10-13T18:47:50.784698+00:00",
+      "wallSeconds": 57.330739917000756,
+      "exitCode": 2,
+      "port": null
+    },
+    "review-final": {
+      "label": "review-final",
+      "pid": 79749,
+      "pgid": 79749,
+      "start": "2026-10-13T18:48:04.293634+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "hostLoad": "{ 4.69 5.84 6.81 }",
+      "status": "terminal",
+      "end": "2026-10-13T18:49:00.133460+00:00",
+      "wallSeconds": 55.83943520800676,
+      "exitCode": 0,
+      "port": null
+    },
+    "knip": {
+      "label": "knip",
+      "pid": 78369,
+      "pgid": 78369,
+      "start": "2026-10-13T18:46:53.453713+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "hostLoad": "{ 4.72 6.04 6.96 }",
+      "status": "terminal",
+      "end": "2026-10-13T18:46:58.344925+00:00",
+      "wallSeconds": 4.891051457991125,
+      "exitCode": 0,
+      "port": null
+    },
+    "full-inner": {
+      "label": "full-inner",
+      "pid": 80956,
+      "pgid": 80956,
+      "start": "2026-10-13T18:49:20.600893+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "hostLoad": "{ 5.30 5.79 6.71 }",
+      "status": "terminal",
+      "end": "2026-10-13T18:51:01.520487+00:00",
+      "wallSeconds": 100.91907808298129,
+      "exitCode": 0,
+      "port": null
+    },
+    "full-heavy": {
+      "label": "full-heavy",
+      "pid": 80953,
+      "pgid": 80953,
+      "start": "2026-10-13T18:49:20.573307+00:00",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "python3",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark648/run-check.py",
+        "full-inner",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "hostLoad": "{ 5.30 5.79 6.71 }",
+      "status": "terminal",
+      "end": "2026-10-13T18:51:01.524321+00:00",
+      "wallSeconds": 100.95049000001745,
+      "exitCode": 0,
+      "port": null
+    }
+  },
+  "checksSummary": {
+    "ownCases": 36,
+    "focusedCases": 131,
+    "focusedExistingCases": 95,
+    "reviewFiles": 293,
+    "reviewCases": 6185,
+    "fullSummary": {
+      "files": [
+        "374"
+      ],
+      "tests": [
+        "7186"
+      ],
+      "allStagesExit0": true
+    },
+    "counterfactualOldCall": {
+      "failed": 18,
+      "passed": 18,
+      "sourceRestoredReceipt": {
+        "timestamp": "2026-10-13T18:46:39.467248+00:00",
+        "beforeSHA256": "ccbf72d8b610de084b4a0fec7cafae0bf0716d69b430d1056f774f8dfa8b4d46",
+        "restoredSHA256": "ccbf72d8b610de084b4a0fec7cafae0bf0716d69b430d1056f774f8dfa8b4d46",
+        "restored": true
+      }
+    },
+    "retainedFailures": {
+      "focused-first": "8 fixture failures: zero/negative ordinary gains do not trigger, duplicate synthetic UUID, resolveTop recovery instead of pass after atomic error",
+      "review": "lint call layout and event union narrowing; 6185 tests passed but aggregate exit2; corrected test-only and final review0"
+    }
+  },
+  "heavySlot": {
+    "configuredWorkers": 2,
+    "actualWorkerSampling": "UNKNOWN",
+    "outerCommand": [
+      "lockf",
+      "-k",
+      "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "env",
+      "JOURNEY_TEST_WORKERS=2",
+      "python3",
+      "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/spark648/run-check.py",
+      "full-inner",
+      "npm",
+      "run",
+      "review:full"
+    ],
+    "outerSeconds": 100.95049000001745,
+    "innerExecutionSeconds": 100.91907808298129,
+    "acquisitionPlusSpawnBracketSeconds": 0.027586,
+    "exactLockWaitSeconds": "UNKNOWN",
+    "note": "Inner receipt starts after lockf grants the slot. The bracket includes wrapper spawn as well as acquisition; wall time is not CPU."
+  },
+  "hostLoadSamples": [
+    {
+      "measuredFor": "focused-first",
+      "start": "2026-10-13T18:45:19.415398+00:00",
+      "loadText": "{ 4.76 6.48 7.21 }"
+    },
+    {
+      "measuredFor": "focused-second",
+      "start": "2026-10-13T18:45:38.927496+00:00",
+      "loadText": "{ 4.73 6.35 7.15 }"
+    },
+    {
+      "measuredFor": "focused-final",
+      "start": "2026-10-13T18:46:09.676261+00:00",
+      "loadText": "{ 5.22 6.30 7.10 }"
+    },
+    {
+      "measuredFor": "counterfactual-old-call",
+      "start": "2026-10-13T18:46:34.720916+00:00",
+      "loadText": "{ 5.22 6.21 7.04 }"
+    },
+    {
+      "measuredFor": "review",
+      "start": "2026-10-13T18:46:53.453635+00:00",
+      "loadText": "{ 4.72 6.04 6.96 }"
+    },
+    {
+      "measuredFor": "review-final",
+      "start": "2026-10-13T18:48:04.293634+00:00",
+      "loadText": "{ 4.69 5.84 6.81 }"
+    },
+    {
+      "measuredFor": "knip",
+      "start": "2026-10-13T18:46:53.453713+00:00",
+      "loadText": "{ 4.72 6.04 6.96 }"
+    },
+    {
+      "measuredFor": "full-inner",
+      "start": "2026-10-13T18:49:20.600893+00:00",
+      "loadText": "{ 5.30 5.79 6.71 }"
+    },
+    {
+      "measuredFor": "full-heavy",
+      "start": "2026-10-13T18:49:20.573307+00:00",
+      "loadText": "{ 5.30 5.79 6.71 }"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final review typecheck starting sample from native log"
+      },
+      "testDelta.files": {
+        "measuredFor": ".test/.spec entrypoints zero; one eagerly discovered plain contract module"
+      },
+      "implementWindow": {
+        "measuredFor": "actual helper dispatch through this evidence cutoff includes research, parent ACK waits, checks and coordination; future exact Git endpoint UNKNOWN until returned; external actual post-Git receipt retained by parent"
+      }
+    }
+  },
+  "acceptance": {
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "publicConsumers": [
+      "createEngine/apply",
+      "eventSeenBy",
+      "battleLogEntries",
+      "createFoldAdapter/reduce",
+      "parseJourneyBattleFoldState",
+      "serializeState/deserializeState"
+    ],
+    "publication": "Ordinary and additional temporary companions keep captured observers after subject/source shuffles or created cessation. A hand source cannot retroauthorize its causal announcement after later revelation/materialization. Raw legacy sparkGained remains exact, public and free of new metadata; Spark observer metadata exists only on events, absent from floating state.",
+    "rules": "Positive ordinary gains trigger once; zero/negative ordinary gains do not. Additional gains retain amounts and inherited expiry and trigger no further gain ability. Permanent gainedSpark storage, source-duration null/departure and CharacterRef exclusion remain covered.",
+    "stateTransitions": "No new state transition: capture occurs in the existing temporary gain announcement. Existing gain mutation, expiry, target evaluation and counters remain unchanged.",
+    "browserQA": "No manual browser/provider, UI change, capture or synthetic UI recipe. Public projection/log contracts verify actual announcement payloads. The required full suite executes existing hermetic QA infrastructure subprocess contracts.",
+    "productionRecipes": "No production UUID authoring; original611 and646 acceptance and consumers remain unchanged.",
+    "coreReview": "Required final cold review is a parent duty after immutable source commit; not claimed completed by implementer."
+  },
+  "failurePaths": {
+    "errorMidStep": "Both-controller injected public synthetic resolver executes real gain then throws; fold publishes no failed gain/start, floating remains empty, subsequent public resolveTop succeeds.",
+    "partialWrite": "Same atomic error witness covers both floating append and companion event before throw; no separate persistent write or new transition.",
+    "reloadRestart": "Both-controller post-gain optional prompt, JSON slice plus published prefix, actual saved-fold parser and fresh fold; deterministic state hash, regenerated suffix and publication cursor.",
+    "invalidStaleInput": "Both-controller wrong actor, illegal answer, shifted attempt/stale prompt, duplicate answer and non-cancellable optional resolve.",
+    "concurrentActors": "Both-controller action while gain step awaits optional answer bounces stepInFlight; wrong actor answer bounces notYourPrompt.",
+    "interrupt": "No new response boundary: temporary gain runs synchronously within existing resolving step. Optional post-gain boundary and existing source/departure contracts cover suspension; source targeting and speed APIs unchanged."
+  },
+  "runtime": "All finite command receipts and owned PID/PG absence proof retained externally. No manually launched browser/native provider, development server, lease, or QA port.",
+  "precommitCutoff": "2026-10-13T18:53:30.154737+00:00",
+  "actualGitEnd": "UNKNOWN",
+  "inclusiveDispatchToCutoffMinutes": 12.683545616666667,
+  "cutoffToGitSeconds": "UNKNOWN until actual external Git receipt"
+}

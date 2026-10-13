@@ -17,7 +17,7 @@ export interface EffectStartedEvent {
   readonly source: AbilitySource | null;
   readonly expiry: Expiry;
   readonly change: FloatingChange;
-  /** Complete emission-time observers of a physical triggering-card spark announcement. */
+  /** Complete emission-time observers of ordinary, additional, and physical triggering-card spark announcements. */
   readonly sparkSeenBy?: readonly Side[];
 }
 
