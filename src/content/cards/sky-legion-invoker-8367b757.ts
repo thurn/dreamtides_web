@@ -1,3 +1,6 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenMaterialize } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   cardNumber: 407,
   art: { x: 0.252, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenMaterialize(characterYouControl({ subtype: "Warrior" })), p.draw(1), { oncePerTurn: true })],
+  verifiedText: "c7s11tzsxm",
 });
