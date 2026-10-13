@@ -1,3 +1,5 @@
+import { onDissolved, triggered } from "../../engine/dsl/triggers";
+import { chooseOne, gainEnergy, gainMaxEnergy } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 450,
   art: { x: -1, y: 0, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(onDissolved(), chooseOne(gainEnergy(variant.amplified ? 2 : 1), gainMaxEnergy(1)))],
+  verifiedText: "1tb5jcyh7t3",
 });

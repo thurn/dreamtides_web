@@ -1,0 +1,737 @@
+{
+  "bead": "hv-umm2.128",
+  "base": "6d69c65acedd2dbaa8858e54d57afd2851eb8dd5",
+  "dispatch": {
+    "actualHostDispatch": "2026-10-13T14:46:24.776Z",
+    "nativeClaim": "2026-10-13T14:43:49Z",
+    "preCallClockSample": "2026-10-13T14:45:38Z",
+    "qualification": "Actual host dispatch starts gross implementation window. Native claim/setup precede it. Model sampling, model queue and productive CPU are UNKNOWN."
+  },
+  "cutoff": "2026-10-13T15:22:55.225848+00:00",
+  "windowQualification": "Actual host dispatch through final precommit cutoff includes all setup, audit, authoring, validation, capacity waits, coordination and parent justiciar recovery. Actual Git start/end and fractional cutoff-to-end tail are retained externally in cards16-final-commit-receipt.json; commit tail must remain under60seconds. Model queue/productive CPU UNKNOWN.",
+  "commands": {
+    "install": {
+      "command": "npm install",
+      "start": "2026-10-13T14:46:42.099628+00:00",
+      "end": "2026-10-13T14:46:44.593539+00:00",
+      "elapsed_seconds": 2.493911027908325,
+      "exit": 0,
+      "output": "\nadded 388 packages, and audited 390 packages in 2s\n\n107 packages are looking for funding\n  run `npm fund` for details\n\n17 vulnerabilities (9 moderate, 7 high, 1 critical)\n\nTo address issues that do not require attention, run:\n  npm audit fix\n\nTo address all issues, run:\n  npm audit fix --force\n\nRun `npm audit` for details.\n"
+    },
+    "focused": {
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/rules/costs-discard.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/content/specs/specs.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "start": "2026-10-13T14:49:58.315968+00:00",
+      "end": "2026-10-13T14:50:10.201816+00:00",
+      "elapsed_seconds": 11.885848045349121,
+      "host_load_start": "{ 23.01 15.40 10.93 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards16-focused.log"
+    },
+    "preflight": {
+      "label": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "f860e815-3ed9-463d-ac4d-ed8d2778f8ad,bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea,6b739127-1a23-4c5d-877a-8829dd7a8b8c,a952f833-825a-435f-82b1-8d85f872d274"
+      ],
+      "start": "2026-10-13T14:49:59.474396+00:00",
+      "end": "2026-10-13T14:50:01.446365+00:00",
+      "elapsed_seconds": 1.9719688892364502,
+      "host_load_start": "{ 23.01 15.40 10.93 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards16-preflight.log"
+    },
+    "fuzz": {
+      "label": "fuzz",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "f860e815-3ed9-463d-ac4d-ed8d2778f8ad,bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea,6b739127-1a23-4c5d-877a-8829dd7a8b8c,a952f833-825a-435f-82b1-8d85f872d274"
+      ],
+      "start": "2026-10-13T14:50:14.804697+00:00",
+      "end": "2026-10-13T14:55:30.230890+00:00",
+      "elapsed_seconds": 315.4261929988861,
+      "host_load_start": "{ 22.12 15.58 11.07 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards16-fuzz.log"
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T14:50:24.669326+00:00",
+      "end": "2026-10-13T14:51:19.197208+00:00",
+      "elapsed_seconds": 54.52788209915161,
+      "host_load_start": "{ 24.03 16.20 11.35 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards16-review.log"
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T14:51:30.740460+00:00",
+      "end": "2026-10-13T14:51:35.209978+00:00",
+      "elapsed_seconds": 4.469518184661865,
+      "host_load_start": "{ 15.26 15.18 11.32 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards16-knip.log"
+    },
+    "sweep": {
+      "label": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.128",
+        "--cards",
+        "f860e815-3ed9-463d-ac4d-ed8d2778f8ad,bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea,6b739127-1a23-4c5d-877a-8829dd7a8b8c,a952f833-825a-435f-82b1-8d85f872d274",
+        "--port",
+        "5174"
+      ],
+      "start": "2026-10-13T14:55:58.971068+00:00",
+      "end": "2026-10-13T15:01:42.683689+00:00",
+      "elapsed_seconds": 343.71262097358704,
+      "host_load_start": "{ 6.66 11.64 10.91 }",
+      "exit": 1,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards16-sweep.log"
+    },
+    "evidence-schema": {
+      "label": "evidence-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "start": "2026-10-13T15:19:14.541112+00:00",
+      "end": "2026-10-13T15:19:14.615466+00:00",
+      "elapsed_seconds": 0.07435393333435059,
+      "host_load_start": "{ 14.99 12.72 12.25 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards16-evidence-schema.log"
+    },
+    "friction-triggers": {
+      "label": "friction-triggers",
+      "command": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "start": "2026-10-13T15:19:14.640551+00:00",
+      "end": "2026-10-13T15:19:14.812939+00:00",
+      "elapsed_seconds": 0.17238807678222656,
+      "host_load_start": "{ 14.99 12.72 12.25 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards16-friction-triggers.log"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review wrapper start sysctl vm.loadavg (two-decimal output)",
+        "value": 24.03
+      },
+      "implementMin": {
+        "scope": "actual host implementation dispatch through recorded cutoff; elapsed wall time"
+      }
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "sourceThreshold": {
+    "nonTestTypeScriptAdded": 24,
+    "nonTestTypeScriptDeleted": 4,
+    "gross": 28,
+    "newForm": false,
+    "mandatoryCoreReview": false
+  },
+  "sourceSHA256": {
+    "src/content/cards/cloudstrider-bbf316f6.ts": "9a9b09508a267960c9c7fa505a217a26a488680cf6aafaa6a5e2fc2e0d1238b9",
+    "src/content/cards/entropy-spike-6b739127.ts": "102d13ae82fad85a85c9d4c50ba8184b5b2dcb3a5a2c37a05b3e4d7e8d5b4de1",
+    "src/content/cards/essence-devourer-a952f833.ts": "ffb66f177174be53ad79bce5586dc3e30b0d5b417c31643f2dcc1212913b020a",
+    "src/content/cards/night-stalker-f860e815.ts": "bcc218bf422cab32e8341fa62b815221498e571d842b1b44d6b2e8eb07df08be"
+  },
+  "content": {
+    "cards": 4,
+    "amplifiedDefinitions": 3,
+    "newPrimitives": 0,
+    "rulesDecisions": [],
+    "cardIssues": [],
+    "fallout": [],
+    "D20": "No scenario module: independent compositions of tested additional filtered discard payment, combined Materialized/Dawn trigger, bounded played-character filter and Veil, dissolved modal current/max energy gain, controlled bounded abandon activation. Existing synthetic contracts cover each form and its payment/selector/trigger semantics.",
+    "D21": {
+      "judgedCount": 0,
+      "newPromptStatusOrVisualForm": false,
+      "entities": [
+        {
+          "uuid": "f860e815-3ed9-463d-ac4d-ed8d2778f8ad",
+          "sha256FirstByte": 69,
+          "sampled": false,
+          "requiredPrimitivesNew": []
+        },
+        {
+          "uuid": "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea",
+          "sha256FirstByte": 239,
+          "sampled": false,
+          "requiredPrimitivesNew": []
+        },
+        {
+          "uuid": "6b739127-1a23-4c5d-877a-8829dd7a8b8c",
+          "sha256FirstByte": 110,
+          "sampled": false,
+          "requiredPrimitivesNew": []
+        },
+        {
+          "uuid": "a952f833-825a-435f-82b1-8d85f872d274",
+          "sha256FirstByte": 120,
+          "sampled": false,
+          "requiredPrimitivesNew": []
+        }
+      ]
+    }
+  },
+  "validation": {
+    "focused": {
+      "files": 7,
+      "cases": 2968,
+      "coverageAndVerifiedText": "pass",
+      "scenarioDiscovery": "pass",
+      "primitiveContracts": "pass"
+    },
+    "review": {
+      "files": 241,
+      "cases": 5012,
+      "typesLintCycles": "pass"
+    },
+    "knip": "pass",
+    "preflight": {
+      "cells": 80,
+      "pass": 38,
+      "skip": 42,
+      "pending": 0,
+      "fail": 0,
+      "actors": [
+        "player",
+        "enemy"
+      ],
+      "variants": "all native default variants",
+      "engineElapsedMs": 42.76133299999992
+    },
+    "weightedFuzz": {
+      "games": 300,
+      "steps": 124346,
+      "failures": 0,
+      "engineWallSeconds": 237.2,
+      "engineCPUSeconds": 254.0,
+      "wrapperIncludesLockWaitSeconds": 315.4261929988861,
+      "lockAcquisition": "UNKNOWN exact; own tsx process start observed at 2026-10-13T14:51:31Z with one-second ps precision; wrapper started14:50:14.804697Z",
+      "workerLimit": 2,
+      "targets": [
+        {
+          "uuid": "f860e815-3ed9-463d-ac4d-ed8d2778f8ad",
+          "included": 620,
+          "exercised": 314
+        },
+        {
+          "uuid": "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea",
+          "included": 612,
+          "exercised": 241
+        },
+        {
+          "uuid": "6b739127-1a23-4c5d-877a-8829dd7a8b8c",
+          "included": 615,
+          "exercised": 255
+        },
+        {
+          "uuid": "a952f833-825a-435f-82b1-8d85f872d274",
+          "included": 619,
+          "exercised": 155
+        }
+      ],
+      "performanceClaim": false
+    }
+  },
+  "QA": {
+    "originalSweep": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-CVghi6",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.128/invocations/sweep-CVghi6",
+      "counts": {
+        "pass": 36,
+        "skip": 42,
+        "fail": 2
+      },
+      "attemptCounts": {
+        "pass": 36,
+        "skip": 42,
+        "fail": 3
+      },
+      "hostLoad": 6.66357421875,
+      "sessions": 2,
+      "leaseYields": 1,
+      "wallMs": {
+        "browserLeaseWait": 10259,
+        "serve": 3620,
+        "scenario": 328456.35825000005,
+        "cleanup": 1065.4059580000176,
+        "execution": 333243.3625,
+        "total": 343502.3625
+      }
+    },
+    "originalSweepExit": 1,
+    "originalSweepQualification": "36 pass,42 skip,2 fail remains unchanged. Raw81 attempts include one deadline-only Essence Kindled player failure with sanctioned fresh retry pass. Two Kindled enemy ERR_ABORTED failures retain unknown cause and empty Caps.",
+    "justiciar": {
+      "at": "2026-10-13T15:16:47.131565+00:00",
+      "sameTaskJusticiar": true,
+      "sourceHashesUnchanged": {
+        "src/content/cards/cloudstrider-bbf316f6.ts": "9a9b09508a267960c9c7fa505a217a26a488680cf6aafaa6a5e2fc2e0d1238b9",
+        "src/content/cards/entropy-spike-6b739127.ts": "102d13ae82fad85a85c9d4c50ba8184b5b2dcb3a5a2c37a05b3e4d7e8d5b4de1",
+        "src/content/cards/essence-devourer-a952f833.ts": "ffb66f177174be53ad79bce5586dc3e30b0d5b417c31643f2dcc1212913b020a",
+        "src/content/cards/night-stalker-f860e815.ts": "bcc218bf422cab32e8341fa62b815221498e571d842b1b44d6b2e8eb07df08be"
+      },
+      "originalNativeSweep": "80 cells36pass42skip2fail; raw81attempts36pass42skip3fail, one sanctioneddeadline retrypass",
+      "currentQualifiedCoverage": {
+        "eligiblePass": 38,
+        "ineligibleSkip": 42,
+        "distinctCells": 80,
+        "newIsolatedPass": 2
+      },
+      "originalFailuresPreserved": true,
+      "abortedNavigationCause": "UNKNOWN. Player timeout proves actual return to preceding Empowered URL; twoenemygotoabort requests lackednewdocumentattribution. No productcard defect claimed.",
+      "repair": "Use fresh native provider contexts for the two failed observations, with unchanged actual native cardLabPlay validation plus exact query/physical UUID/owner/Kindled variant/settled/noerrors witness. This repaired QAcontext state; original fullsweep exit1 retained and not relabeled. Automaticretrypolicy unchanged.",
+      "initialScratchVerifierFailure": "NativeEntropyplaypass; secondextra verification failed URLundefined outsidebrowserVM; corrected URLread insidebrowser; receipt retained. No sourcebug/CItest failure.",
+      "providerQualification": "InitialandverifiedEntropy exact404 +ownPGgone. EssenceCLIexit0 confirms nativefinally awaited session.close (mcp.close acknowledgedbrowserclose andactiveCalls thenowner.clear); ownrunner36683/server36723gone/slot1ownerabsent. Observermissedactualslot1ownerpath, providerIDUNKNOWN; exactHTTPprobe notclaimed. Successfulnativeclosure is authoritative, no unresolved remoteinvocation.",
+      "isolatedWitnesses": [
+        {
+          "at": "2026-10-13T15:12:03.072423+00:00",
+          "tag": "entropy-verified",
+          "provider": "7cc6ce58-d250-4fbb-a3cf-5a52280b397d",
+          "operations": [
+            {
+              "method": "DELETE",
+              "status": 404,
+              "body": "Session not found",
+              "at": "2026-10-13T15:12:03.064883+00:00"
+            },
+            {
+              "method": "POST",
+              "status": 404,
+              "body": "Session not found",
+              "at": "2026-10-13T15:12:03.065625+00:00"
+            }
+          ],
+          "processes": [
+            {
+              "pid": 30227,
+              "exit": 1,
+              "rows": ""
+            },
+            {
+              "pid": 30292,
+              "exit": 1,
+              "rows": ""
+            }
+          ],
+          "ownProviderTerminal404": true,
+          "result": {
+            "verdict": "pass",
+            "originalNativeSweepResult": {
+              "verdict": "pass",
+              "notes": "",
+              "failureKinds": [],
+              "lab": {
+                "card": "6b739127-1a23-4c5d-877a-8829dd7a8b8c",
+                "variant": "kindled",
+                "side": "enemy",
+                "stage": null,
+                "status": "ready",
+                "reason": null,
+                "detail": null,
+                "eligibleVariants": [
+                  "base",
+                  "amplified",
+                  "empowered",
+                  "kindled",
+                  "perfected"
+                ],
+                "entityKind": "card",
+                "cardStatus": "authored",
+                "cardType": "Character"
+              },
+              "zone": "play",
+              "answered": 0,
+              "passes": 1,
+              "events": [
+                "energyChanged",
+                "cardPlayed",
+                "resolved",
+                "materialized",
+                "challengersDesignated",
+                "phaseChanged"
+              ],
+              "screens": []
+            },
+            "exactKindledPhysicalObservation": {
+              "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=6b739127-1a23-4c5d-877a-8829dd7a8b8c&variant=kindled&as=enemy&seed=1&debug=1&game=cbkcaf",
+              "query": {
+                "card": "6b739127-1a23-4c5d-877a-8829dd7a8b8c",
+                "variant": "kindled",
+                "as": "enemy"
+              },
+              "cards": [
+                {
+                  "id": "i10",
+                  "owner": "enemy",
+                  "zone": "play",
+                  "printing": {
+                    "kind": "card",
+                    "cardId": "6b739127-1a23-4c5d-877a-8829dd7a8b8c"
+                  },
+                  "variant": {
+                    "amplified": false,
+                    "transfigurations": [
+                      "Kindled"
+                    ],
+                    "deckMods": {
+                      "sparkBonus": 0,
+                      "costReduction": 0,
+                      "fast": false,
+                      "reclaim": null,
+                      "typeChange": null
+                    }
+                  }
+                }
+              ],
+              "pending": null,
+              "inFlight": false,
+              "stack": 0
+            },
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            },
+            "qualification": "Fresh isolated native provider; prior sweep failures remain retained, stale-navigation cause is unproven."
+          },
+          "error": null,
+          "caps": [],
+          "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.128/invocations/run-v5gR9X/cards16-kindled-isolated.result.json",
+          "reportSHA256": "a1e5ba78e3389618d13c3d35b89b641dd5552f0c39897a7e847ca3a2e054a300",
+          "port": 5174,
+          "slot": 0,
+          "totalWallMs": {
+            "browserLeaseWait": 8,
+            "serve": 1975,
+            "scenario": 12105,
+            "total": 14153
+          },
+          "qualification": "All CLI/native page calls terminal; own exact DELETE and subsequent404 verified; old failures remain. No product source changed."
+        },
+        {
+          "at": "2026-10-13T15:14:59.961062+00:00",
+          "tag": "essence-verified",
+          "processes": [
+            {
+              "pid": 36683,
+              "exit": 1,
+              "rows": ""
+            },
+            {
+              "pid": 36723,
+              "exit": 1,
+              "rows": ""
+            }
+          ],
+          "nativeRunMainExit": 0,
+          "nativeFinallyCloseCompleted": true,
+          "slot1OwnerAbsentOrForeign": true,
+          "result": {
+            "verdict": "pass",
+            "originalNativeSweepResult": {
+              "verdict": "pass",
+              "notes": "",
+              "failureKinds": [],
+              "lab": {
+                "card": "a952f833-825a-435f-82b1-8d85f872d274",
+                "variant": "kindled",
+                "side": "enemy",
+                "stage": null,
+                "status": "ready",
+                "reason": null,
+                "detail": null,
+                "eligibleVariants": [
+                  "base",
+                  "amplified",
+                  "empowered",
+                  "kindled",
+                  "attuned",
+                  "perfected"
+                ],
+                "entityKind": "card",
+                "cardStatus": "authored",
+                "cardType": "Character"
+              },
+              "zone": "play",
+              "answered": 0,
+              "passes": 1,
+              "events": [
+                "energyChanged",
+                "cardPlayed",
+                "resolved",
+                "materialized",
+                "challengersDesignated",
+                "phaseChanged"
+              ],
+              "screens": []
+            },
+            "exactKindledPhysicalObservation": {
+              "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/battle?goto=card-lab&card=a952f833-825a-435f-82b1-8d85f872d274&variant=kindled&as=enemy&seed=1&debug=1&game=jdce54",
+              "query": {
+                "card": "a952f833-825a-435f-82b1-8d85f872d274",
+                "variant": "kindled",
+                "as": "enemy"
+              },
+              "cards": [
+                {
+                  "id": "i10",
+                  "owner": "enemy",
+                  "zone": "play",
+                  "printing": {
+                    "kind": "card",
+                    "cardId": "a952f833-825a-435f-82b1-8d85f872d274"
+                  },
+                  "variant": {
+                    "amplified": false,
+                    "transfigurations": [
+                      "Kindled"
+                    ],
+                    "deckMods": {
+                      "sparkBonus": 0,
+                      "costReduction": 0,
+                      "fast": false,
+                      "reclaim": null,
+                      "typeChange": null
+                    }
+                  }
+                }
+              ],
+              "pending": null,
+              "inFlight": false,
+              "stack": 0
+            },
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": []
+            },
+            "qualification": "Fresh isolated native provider; prior sweep failures remain retained, stale-navigation cause is unproven."
+          },
+          "error": null,
+          "caps": [],
+          "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.128/invocations/run-PC1m2W/cards16-kindled-isolated.result.json",
+          "reportSHA256": "d3fb21b1bbfc2f5dde39bb3cbd54b4a32a1c701d628730bd33bee151299a39dc",
+          "port": 5274,
+          "slot": 1,
+          "totalWallMs": {
+            "browserLeaseWait": 6,
+            "serve": 2890,
+            "scenario": 7881,
+            "total": 10836
+          },
+          "providerSessionID": "UNKNOWN: scratch observer covered incorrect slot1 owner path; exactHTTPprobe not claimed. Successful native CLI finally awaited session.close; browser/transport cleanup returned without error, own runner/server absent and lease owner cleared.",
+          "qualification": "Native closure acknowledgement is authoritative; no unknown pending call, blind context deletion or unrelated owner mutation. Original failed observations retained; no source change."
+        }
+      ],
+      "pendingOwnResources": []
+    },
+    "currentCoverageQualification": "80 distinct cells:38 eligible passes and42 valid skips, with two separate fresh isolated native corroborations. Original full sweep is not green. No shared QA or product source changed.",
+    "initialParentScratchVerificationFailure": {
+      "receipt": "cards16-isolated-entropy-receipt.json",
+      "qualification": "NativeEntropyplaypass; secondextra verification failed URLundefined outsidebrowserVM; corrected URLread insidebrowser; receipt retained. No sourcebug/CItest failure."
+    },
+    "parentDiagnosticCommands": [
+      {
+        "receipt": "cards16-isolated-entropy-receipt.json",
+        "start": "2026-10-13T15:07:41.515737+00:00",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards16-kindled-isolated.mjs",
+          "--bead",
+          "hv-umm2.128",
+          "--arg",
+          "card=6b739127-1a23-4c5d-877a-8829dd7a8b8c",
+          "--arg",
+          "variant=kindled",
+          "--arg",
+          "as=enemy",
+          "--viewports",
+          "desktop",
+          "--timeout",
+          "120"
+        ],
+        "pid": 7741,
+        "pgid": 7741,
+        "sourceFrozen": true,
+        "end": "2026-10-13T15:07:55.112312+00:00",
+        "exit": 1
+      },
+      {
+        "receipt": "cards16-isolated-entropy-verified-receipt.json",
+        "start": "2026-10-13T15:10:47.101695+00:00",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards16-kindled-isolated.mjs",
+          "--bead",
+          "hv-umm2.128",
+          "--arg",
+          "card=6b739127-1a23-4c5d-877a-8829dd7a8b8c",
+          "--arg",
+          "variant=kindled",
+          "--arg",
+          "as=enemy",
+          "--viewports",
+          "desktop",
+          "--timeout",
+          "120"
+        ],
+        "pid": 30227,
+        "pgid": 30227,
+        "sourceFrozen": true,
+        "end": "2026-10-13T15:11:02.220078+00:00",
+        "exit": 0
+      },
+      {
+        "receipt": "cards16-isolated-essence-verified-receipt.json",
+        "start": "2026-10-13T15:12:10.145468+00:00",
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards16-kindled-isolated.mjs",
+          "--bead",
+          "hv-umm2.128",
+          "--arg",
+          "card=a952f833-825a-435f-82b1-8d85f872d274",
+          "--arg",
+          "variant=kindled",
+          "--arg",
+          "as=enemy",
+          "--viewports",
+          "desktop",
+          "--timeout",
+          "120"
+        ],
+        "pid": 36683,
+        "pgid": 36683,
+        "sourceFrozen": true,
+        "end": "2026-10-13T15:12:21.767877+00:00",
+        "exit": 0
+      }
+    ],
+    "captures": []
+  },
+  "runtime": {
+    "pendingOwnedResources": [],
+    "helperSweep": {
+      "at": "2026-10-13T15:01:56.380501+00:00",
+      "providers": [
+        {
+          "session": "34d270a3-ca1e-4e9d-9c78-262e2ff2b276",
+          "status": 404,
+          "body": "Session not found"
+        },
+        {
+          "session": "debc9618-055e-497d-aa15-2d1748c601e3",
+          "status": 404,
+          "body": "Session not found"
+        }
+      ],
+      "ownedLiveProcessRows": [],
+      "port5174": "",
+      "browser-qa.lock.owner.json": {
+        "exists": false,
+        "owned": false
+      },
+      "browser-qa.lock.server.json": {
+        "exists": false,
+        "owned": false
+      }
+    },
+    "parentClosureQualification": "InitialandverifiedEntropy exact404 +ownPGgone. EssenceCLIexit0 confirms nativefinally awaited session.close (mcp.close acknowledgedbrowserclose andactiveCalls thenowner.clear); ownrunner36683/server36723gone/slot1ownerabsent. Observermissedactualslot1ownerpath, providerIDUNKNOWN; exactHTTPprobe notclaimed. Successfulnativeclosure is authoritative, no unresolved remoteinvocation.",
+    "sourceFrozenThroughoutLiveQA": true,
+    "ownSweepServerGroups": [
+      96929,
+      5914
+    ],
+    "ownSweepRunner": 96869,
+    "ownSweepWrapperGroup": 96851,
+    "fuzzGroup": 41207
+  },
+  "environment": {
+    "npmInstallReportedVulnerabilities": {
+      "total": 17,
+      "moderate": 9,
+      "high": 7,
+      "critical": 1,
+      "qualification": "npm install report for existing lockfile; advisory causes not audited and no dependency source changed."
+    },
+    "isolatedPreparationArtWarnings": "Hermetic prepare reports missing local assets and links0 card images during checks. Restore phase confirms564/564 card images,32 portrait/cutout pairs,153 Dreamsigns,226 journey and521 exploration images; browser served restored materializations. No image files committed.",
+    "memoryFreePercentObserved": 61
+  },
+  "scope": "Only four filed card modules and own friction, measurements, QA ledger and pre-existing record; no engine/UI/config/shared QA/registration/scenario changes.",
+  "readiness": {
+    "at": "2026-10-13T15:20:08.915089+00:00",
+    "schemaPassed": true,
+    "frictionTriggersExit": 0,
+    "ledgerRows": 83,
+    "originalRawFailuresRetained": 3,
+    "latestDistinctCoverage": {
+      "pass": 38,
+      "skip": 42
+    },
+    "latestDistinctCells": 80,
+    "sourceHashesUnchanged": true,
+    "printedDataPreserved": "Exact production diff changes imports, abilities and verifiedText and replaces pending only.",
+    "scopeFileCount": 8,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "ownedResources": [],
+    "localReadinessCorrection": "First scratch aggregate assumed every native ledger row stores as; default player rows omit it. KeyError occurred before repository writes; aggregate now reads omitted as as player. No product/check result changed."
+  }
+}

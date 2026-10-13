@@ -1,0 +1,5 @@
+# Validation environment observations for hv-umm2.128
+
+- Existing dependency setup: `npm install` reports 17 vulnerabilities (9 moderate, 7 high, 1 critical). This is the install report for the existing lockfile; advisory causes are not audited by this card composition bead. Dependency files are read-only.
+- Shared browser navigation: the full sweep records two Kindled enemy `ERR_ABORTED` observations with empty Caps and unknown abort initiators, plus a deadline-only Kindled player observation that returns to the prior Empowered URL and passes its sanctioned retry. Separate fresh isolated native contexts verify both failed enemy cells with unchanged card source. The original failures and complete navigation reports remain recorded in the QA ledger; the navigation cause is UNKNOWN.
+- Hermetic validation preparation reports absent local art while it isolates checks. Its restore step reports all 564 card images, 32 avatar portraits/cutouts, 153 Dreamsign images, 226 journey images and 521 exploration images linked. Browser QA uses restored workspace materializations; these warnings do not establish a product defect.

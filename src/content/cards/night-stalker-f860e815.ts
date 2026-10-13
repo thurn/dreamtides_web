@@ -1,3 +1,6 @@
+import { additionalCost, discardCostFilter } from "../../engine/dsl/builders";
+import { either, onDawn, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { gainEnergy } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 351,
   art: { x: -0.042, y: 1, scale: 1.1 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    additionalCost(discardCostFilter({ cardType: "character" })),
+    triggered(either(onMaterialized(), onDawn()), gainEnergy(variant.amplified ? 2 : 1)),
+  ],
+  verifiedText: "yy2a6kugb8",
 });

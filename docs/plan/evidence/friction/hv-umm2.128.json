@@ -1,0 +1,32 @@
+{
+  "bead": "hv-umm2.128",
+  "phase": 5,
+  "implementMin": 36.50749746666667,
+  "implementWindow": {
+    "start": "2026-10-13T14:46:24.776Z",
+    "end": "2026-10-13T15:22:55.225848+00:00"
+  },
+  "localValidationS": {
+    "focused": 11.885848045349121,
+    "preflight": 1.9719688892364502,
+    "fuzz": 315.4261929988861,
+    "review": 54.52788209915161,
+    "knip": 4.469518184661865,
+    "sweep": 343.71262097358704,
+    "evidence-schema": 0.07435393333435059,
+    "friction-triggers": 0.17238807678222656
+  },
+  "hostLoad": 24.03,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 17.4353427529335,
+      "note": "Observed gross window from first navigation abort through parent same-task justiciar resolution, including coordination, diagnostics and cleanup. Two original ERR_ABORTED failures retained; isolated native contexts passed. Abort initiator/cause and productive editing/CPU split UNKNOWN. This is elapsed recovery time, not execution or a proven card defect."
+    }
+  ]
+}

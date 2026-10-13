@@ -1,3 +1,6 @@
+import { keyword } from "../../engine/dsl/builders";
+import { triggered, whenYouPlay } from "../../engine/dsl/triggers";
+import { gainEnergy } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,9 @@ export default card({
   cardNumber: 32,
   art: { x: -0.084, y: 0.242, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    keyword("veil"),
+    triggered(whenYouPlay({ cardType: "character", costAtMost: 2 }), gainEnergy(1)),
+  ],
+  verifiedText: "h37yi9oxw4",
 });

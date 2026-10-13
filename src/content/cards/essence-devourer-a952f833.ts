@@ -1,3 +1,5 @@
+import { abandonCost, activated } from "../../engine/dsl/builders";
+import { gainEnergy } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 150,
   art: { x: 0, y: 1, scale: 1 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [activated([abandonCost({ costAtMost: 2 })], gainEnergy(variant.amplified ? 2 : 1))],
+  verifiedText: "6wscrfw752",
 });
