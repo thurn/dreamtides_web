@@ -2,7 +2,8 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { createEngine } from "../../../engine";
-import { activated, energy, energyX, event, self, x } from "../../../dsl/builders";
+import { activated, energy, energyX, event, fromVoid, self, x } from "../../../dsl/builders";
+import type { Variant } from "../../../dsl/types";
 import { onDawn, triggered } from "../../../dsl/triggers";
 import { eventSeenBy } from "../../../events";
 import { createFoldAdapter, type IntentOutcome } from "../../../fold/slice";
@@ -22,6 +23,9 @@ import { parseEngineBattleFold } from "../../../../rules/battle/fold";
 import { testDreamsignId } from "../../../../types/test-identities";
 import { resolveEffect } from "../../interpreter";
 import { createCard } from "../create-card";
+import { createCopyInHand } from "../create-copy-in-hand";
+import { banishCards } from "../banish-cards";
+import { gainAbilities } from "../gain-abilities";
 import { returnToHand } from "../return-to-hand";
 import { createRandomFromPool } from "../create-random-from-pool";
 import { gainPoints } from "../gain-points";
@@ -311,9 +315,9 @@ describe("createRandomFromPool", () => {
     const settled = passUntil(custom, played.state, (next) => next.stack.length === 0, answers()).state;
     expect(settled.instances[card.id]).toMatchObject({ zone: "play", poolCandidates: [returning.id] });
     expect(parseEngineBattleFold(copy({ init: input, slice: { ...started.slice, committed: settled } }))).not.toBeNull();
-    // A declared amplified public snapshot tests load compatibility, not a claimed amplification effect.
+    // A captured card's immutable intrinsic variant is base, including after public play.
     const amplified = cloneState(settled); amplified.instances[card.id] = { ...amplified.instances[card.id], variant: { amplified: true } };
-    expect(parseEngineBattleFold(copy({ init: input, slice: { ...started.slice, committed: amplified } }))).not.toBeNull();
+    expect(parseEngineBattleFold(copy({ init: input, slice: { ...started.slice, committed: amplified } }))).toBeNull();
     const activated = custom.apply(settled, "player", { kind: "activate", source: card.id, ability: 0 }, answers());
     const returned = passUntil(custom, activated.state, (next) => next.stack.length === 0, answers());
     expect(returned.state.instances[card.id]).toBeUndefined();
@@ -356,7 +360,7 @@ describe("createRandomFromPool", () => {
       const bad = copy(saved); bad.slice.committed.rememberedCards = { player: [], enemy: [{ ...record, ...change }] };
       const before = copy(bad); expect(parseEngineBattleFold(bad)).toBeNull(); expect(bad).toEqual(before);
     }
-    const stale = copy(saved); stale.slice.committed.rememberedCards = { player: [], enemy: [{ ...record, variant: { amplified: true }, status: { ...record.status, exhausted: true }, effects: [] }] };
+    const stale = copy(saved); stale.slice.committed.rememberedCards = { player: [], enemy: [{ ...record, status: { ...record.status, exhausted: true }, effects: [] }] };
     expect(parseEngineBattleFold(stale)).not.toBeNull();
     const legacyRecord = copy(saved); delete (legacyRecord.slice.committed.instances[card.id] as { poolCandidates?: readonly unknown[] }).poolCandidates;
     legacyRecord.slice.committed.rememberedCards = { player: [], enemy: [{ ...record, status: { ...record.status, created: false } }] };
@@ -365,6 +369,85 @@ describe("createRandomFromPool", () => {
     for (const domains of [[{ owner: "player", candidates: [] }], [{ owner: "player", candidates: [expensive.id], member: 0 }], [{ owner: "enemy", candidates: [cheap.id, cheap.id] }], [{ owner: "player", candidates: [cheap.id], member: 999 }]]) {
       const bad = { ...visible, poolCreatedHands: { player: domains, enemy: [] } } as unknown as typeof visible, before = copy(bad);
       expect(() => scene.engine.determinize(bad, scene.input.decks, () => 0.9)).toThrow(); expect(bad).toEqual(before);
+    }
+  });
+
+  it("rejects non-base intrinsic variants of captured cards and observations", () => {
+    const variants: readonly Variant[] = [{ amplified: true }, { amplified: false, transfigurations: ["Inspired"] },
+      { amplified: false, transfigurations: [] }, ...[0, 1].map((costReduction) => ({ amplified: false,
+        deckMods: { sparkBonus: 0, costReduction, fast: false, reclaim: null, typeChange: null } }))];
+    for (const side of ["player", "enemy"] as const) {
+      const custom = createEngine(testCatalog([returning], { dreamsigns: [{ id: sign, status: "authored",
+        abilities: () => [triggered(onDawn(), createRandomFromPool({ cardType: "character", costAtMost: 1 }))] }] }));
+      const input = init(side, { player: [returning.id], enemy: [returning.id] }), started = applied(createFoldAdapter(custom).start(input));
+      const state = started.slice.committed, card = constrained(state)[0], frames: BattleState[] = [state];
+      const played = custom.apply(state, side, { kind: "play", card: card.id, from: "hand" }, answers(), (next) => {
+        if (frames.length === 1 && next.instances[card.id]?.zone === "stack") frames.push(next);
+      });
+      frames.push(passUntil(custom, played.state, (next) => next.stack.length === 0, answers()).state);
+      expect(frames.map((frame) => frame.instances[card.id].zone)).toEqual(["hand", "stack", "play"]);
+      for (const frame of frames) for (const where of ["committed", "history"] as const) {
+        // All categories cover hidden current/observed records; one representative covers public zones.
+        for (const variant of frame.instances[card.id].zone === "hand" ? variants : variants.slice(0, 1)) {
+          for (const observed of [false, true]) {
+            const saved = copy({ init: input, slice: { ...started.slice, committed: frame } });
+            if (where === "history") { const { history: _history, ...base } = saved.slice; saved.slice.history = { base, entries: [] }; }
+            const target = where === "history" ? saved.slice.history!.base.committed : saved.slice.committed;
+            if (observed) target.rememberedCards = { player: [], enemy: [], [opponent(side)]: [{ instance: card.id,
+              owner: side, printing: card.printing, variant, status: card.status, effects: [] }] };
+            else target.instances[card.id] = { ...target.instances[card.id], variant };
+            const before = copy(saved); expect(parseEngineBattleFold(saved)).toBeNull(); expect(saved).toEqual(before);
+          }
+        }
+      }
+      const legacy = copy({ init: input, slice: started.slice });
+      delete (legacy.slice.committed.instances[card.id] as { poolCandidates?: readonly unknown[] }).poolCandidates;
+      legacy.slice.committed.instances[card.id] = { ...legacy.slice.committed.instances[card.id], variant: { amplified: true } };
+      legacy.slice.committed.rememberedCards = { player: [], enemy: [], [opponent(side)]: [{ instance: card.id,
+        owner: side, printing: card.printing, variant: { amplified: true }, status: { ...card.status, created: false }, effects: [] }] };
+      expect(parseEngineBattleFold(legacy)).not.toBeNull();
+    }
+  });
+
+  it("preserves ordinary modified copies and mutable captured-card facts", () => {
+    const copier: EngineCardDefinition = { ...otherCheap, id: syntheticId(0x9f104), abilities: (variant) => [event(sequence(
+      gainPoints(variant.amplified || variant.transfigurations?.length || variant.deckMods !== undefined ? 10 : 1), createCopyInHand(self())))] };
+    const donor: EngineCardDefinition = { ...v.vanilla1, status: "authored", id: syntheticId(0x9f103), abilities: () => [activated([energy(0)], gainPoints(3))] };
+    const collector: EngineCardDefinition = { ...returning, id: syntheticId(0x9f102), abilities: () => [activated([energy(0)],
+      gainAbilities(banishCards([fromVoid({ cardType: "character" }, { player: "opponent" })])))] };
+    const custom = createEngine(testCatalog([copier, donor, collector], { dreamsigns: [{ id: sign, status: "authored",
+      abilities: () => [triggered(onDawn(), createRandomFromPool({ cardType: "character", costAtMost: 1 }))] }] }));
+    const variants: readonly Variant[] = [{ amplified: true }, { amplified: false, transfigurations: ["Inspired"] },
+      { amplified: false, deckMods: { sparkBonus: 0, costReduction: 1, fast: false, reclaim: null, typeChange: null } }];
+    for (const side of ["player", "enemy"] as const) {
+      for (const variant of variants) {
+        const input = { ...init(side, { player: [collector.id], enemy: [collector.id] }, "day", copier),
+          decks: { player: [], enemy: [], [side]: [{ cardId: copier.id, ...variant }] } };
+        const started = applied(createFoldAdapter(custom).start(input)), state = started.slice.committed, source = state.sides[side].hand[0];
+        expect(parseEngineBattleFold(copy({ init: input, slice: started.slice }))).not.toBeNull();
+        const played = custom.apply(state, side, { kind: "play", card: source, from: "hand" }, answers());
+        const done = passUntil(custom, played.state, (next) => next.stack.length === 0, answers()).state, created = done.instances[done.sides[side].hand[0]];
+        expect(created).toMatchObject({ variant: state.instances[source].variant, status: { created: true } });
+        expect(created.poolCandidates).toBeUndefined(); expect(done.sides[side].score).toBe(10);
+        const loaded = parseEngineBattleFold(copy({ init: input, slice: { ...started.slice, committed: done } }));
+        if (loaded === null) throw new Error("modified public copy rejected");
+        expect(custom.determinize(custom.view(loaded.slice.committed, side), input.decks, () => 0.9).instances[created.id].variant).toEqual(created.variant);
+      }
+      const other = opponent(side), base = init(side, { player: [collector.id], enemy: [collector.id] });
+      const input: BattleInit = { ...base, decks: { player: [], enemy: [], [other]: [{ cardId: donor.id, amplified: true }] },
+        setup: { ...base.setup!, placements: [{ side: other, deckIndex: 0, zone: "void" }] } };
+      const started = applied(createFoldAdapter(custom).start(input)), card = constrained(started.slice.committed)[0];
+      const played = custom.apply(started.slice.committed, side, { kind: "play", card: card.id, from: "hand" }, answers());
+      const settled = passUntil(custom, played.state, (next) => next.stack.length === 0, answers()).state;
+      const activated = custom.apply(settled, side, { kind: "activate", source: card.id, ability: 0 }, answers());
+      const done = passUntil(custom, activated.state, (next) => next.stack.length === 0, answers()).state;
+      expect(done.instances[card.id]).toMatchObject({ variant: { amplified: false }, status: { exhausted: true } });
+      expect(done.instances[card.id].status.gainedAbilities).toHaveLength(1); expect(done.floating).toHaveLength(1);
+      const saved = copy({ init: input, slice: { ...started.slice, committed: done } });
+      // This declared observation derives from an earlier genuine output; no interactive reveal is claimed.
+      saved.slice.committed.rememberedCards = { player: [], enemy: [], [other]: [{ instance: card.id,
+        owner: side, printing: card.printing, variant: card.variant, status: card.status, effects: [] }] };
+      expect(parseEngineBattleFold(saved)).not.toBeNull();
     }
   });
 

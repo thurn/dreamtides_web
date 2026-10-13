@@ -2213,7 +2213,10 @@ runs cost nothing (RD-hv-7x4l.9-2, RD-hv-7x4l.20-2).
   only choices available when that card was observed. The sampler reserves
   these created slots before ordinary inventory, deals eligible base cards,
   and restores linked observed facts. Created lifecycle permits captured
-  instances only in hand, stack or play; public variants remain valid. Saves
+  instances only in hand, stack or play. Their intrinsic variants and matching
+  remembered intrinsic variants are canonical base; mutable statuses, floating
+  effects and gained abilities retain their rules. Ordinary and nonpool created
+  modified variants remain valid. Saves
   without captured choices retain their qualified pool/deck approximation.
 - **`promptView(prompt, side, display)`** is a pending prompt as `side` sees
   it: its purpose names a source card only when `side` can identify it

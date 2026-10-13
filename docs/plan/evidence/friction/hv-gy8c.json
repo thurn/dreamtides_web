@@ -1,0 +1,28 @@
+{
+  "bead": "hv-gy8c",
+  "phase": 5,
+  "implementMin": 38.5826895,
+  "implementWindow": {
+    "start": "2026-10-13T16:19:56.232386Z",
+    "end": "2026-10-13T16:58:31.193756Z"
+  },
+  "localValidationS": {
+    "focused": 8.53020245800144,
+    "public-postfix": 3.109224333020393,
+    "review": 23.16331704100594,
+    "knip": 3.923116082994966
+  },
+  "hostLoad": 3.36328125,
+  "testDelta": {
+    "files": 0,
+    "lines": 83,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 0.16780176111691011,
+      "note": "Actual focused1 outer10.068106s:2798 tests passed,1 own fixture failed because pool UUID was absent from its custom catalog; corrected registered fixture pool. Three scratch setup failures are separately retained. Gross >10min includes measured 22.796609min source-first setup/audit/public diagnostics/proposal/native admission and useful work, then implementation/checks/packaging. Exact model/CPU active intervals and wall gap causes are unknown; not approval waiting."
+    }
+  ]
+}

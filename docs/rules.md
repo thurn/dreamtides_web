@@ -2331,8 +2331,9 @@ that created it, but no card in that hand is revealed to them.
 hand" creates one matching card from the fixed run multiset retained in the
 resolved Avatar package. An opponent uses their generated fixed pool. Each eligible copy in that multiset is
 equally likely, and creation does not spend it. A missing, empty, or unmatched
-pool adds nothing. The created card has its printed base characteristics;
-cost conditions count X as 0. Both players may know the non-zone pool's UUIDs
+pool adds nothing. The created card has its printed base characteristics.
+Its intrinsic variant is base; statuses and continuous effects still apply normally.
+Cost conditions count X as 0. Both players may know the non-zone pool's UUIDs
 and copy counts, but the created card's physical identity in a hand remains
 private to its holder. Sampling retains the eligible-copy choices captured
 at creation as anonymous hand constraints, without revealing the selected

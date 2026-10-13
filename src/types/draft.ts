@@ -102,9 +102,9 @@ export interface DraftState {
     actionId: ExplorationActionId;
   };
   /**
-   * The full fixed run multiset, keyed by card number. Immutable for the run:
-   * when `remainingCopiesByCard` is exhausted the multiset is recreated from
-   * this snapshot.
+   * Recreatable Draft offer stock keyed by card number. Rarity caps prune this
+   * map; exhausted `remainingCopiesByCard` is replenished from its current
+   * contents. The resolved Avatar package retains the fixed run multiset.
    */
   draftPoolCopiesByCard: DraftPoolCopiesByCard;
   /**
@@ -116,5 +116,5 @@ export interface DraftState {
   remainingCopiesByCard: DraftPoolCopiesByCard;
 }
 
-/** Explicit alias for code that consumes the fixed tides4 pool multiset. */
+/** Explicit alias for the mutable tides4 Draft offer and replenishment state. */
 export type PoolDraftState = DraftState;

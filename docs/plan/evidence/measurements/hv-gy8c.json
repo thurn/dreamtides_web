@@ -1,0 +1,782 @@
+{
+  "bead": "hv-gy8c",
+  "phase": 5,
+  "base": "88d0317a1c95c9dbaf83be2d8e13512407553e14",
+  "branch": "wt/pool-variant-gy8c-sol",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+  "currentGrossWindow": {
+    "start": "2026-10-13T16:19:56.232386Z",
+    "end": "2026-10-13T16:58:31.193756Z",
+    "scope": "Conservative parent claim ACK observation through all owned setup/source-first audit/proposal/admission/implementation/checks/packaging without reset; exact model dispatch/CPU unknown.",
+    "endpointStatus": "Actual parent-approved endpoint before final evidence schema/index checks and the single commit. Actual commit bracket/OID and endpoint-to-commit packaging tail are externally recorded in terminal handoff; no amendment."
+  },
+  "claimObservations": {
+    "acknowledgementObservedAt": "2026-10-13T16:19:56.232386Z",
+    "nativeStartedAtSecondPrecision": "2026-10-13T16:19:56Z",
+    "qualification": "Second-precision native timestamp; exact model dispatch/CPU was not observed."
+  },
+  "sourceAdmission": {
+    "parentWriteAck": "2026-10-13T16:42:44.028903Z",
+    "proposalSha256": "43fb578d603f8e1e73f4ae4e16aada1420ee09b89131cc10e228dec6752eef10",
+    "sourceFirstElapsedMin": 22.796608616666667,
+    "unfinishedUnionAtParentAck": 153,
+    "scope": "Exact six functional paths plus four own evidence files, no new import/helper/schema/producer/sampler/hash body."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 83,
+    "jsdomFiles": 0
+  },
+  "testFiles": {
+    "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts": {
+      "beforeLines": 371,
+      "afterLines": 454,
+      "addedLines": 87,
+      "deletedLines": 4,
+      "new": false,
+      "jsdom": false,
+      "classification": "Existing public synthetic contract including all inline fixture support; no new test/fixture module or entrypoint."
+    }
+  },
+  "grossTestChurn": {
+    "touchedFiles": 1,
+    "addedLines": 87,
+    "deletedLines": 4,
+    "classification": "Inline synthetic copying/gaining fixtures counted with the existing contract module."
+  },
+  "functionalPaths": [
+    "docs/plan/engine-design.md",
+    "docs/plan/evidence/rules-decisions/RD-hv-9vy4-1.md",
+    "docs/rules.md",
+    "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+    "src/rules/battle/fold.ts",
+    "src/types/draft.ts"
+  ],
+  "validationReceipts": [
+    {
+      "label": "variant-baseline1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/gy8c-variant-baseline.mts"
+      ],
+      "pid": 87956,
+      "observerPid": 87868,
+      "processGroup": 87956,
+      "start": "2026-10-13T16:26:30.287910+00:00",
+      "end": "2026-10-13T16:26:32.229261+00:00",
+      "wallS": 1.9412028749939054,
+      "exit": 0,
+      "loadBefore": [
+        6.4072265625,
+        8.10888671875,
+        10.39599609375
+      ],
+      "loadAfter": [
+        6.4072265625,
+        8.10888671875,
+        10.39599609375
+      ],
+      "childCpuS": 1.32,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-variant-baseline1.before.json",
+      "afterManifest": "/tmp/gy8c-check-variant-baseline1.after.json",
+      "beforePaths": 4456,
+      "afterPaths": 4456,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-variant-baseline1.receipt.json"
+    },
+    {
+      "label": "variant-matrix1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/gy8c-variant-matrix.mts"
+      ],
+      "pid": 15521,
+      "observerPid": 15491,
+      "processGroup": 15521,
+      "start": "2026-10-13T16:30:49.743887+00:00",
+      "end": "2026-10-13T16:30:50.844143+00:00",
+      "wallS": 1.1005160000058822,
+      "exit": 1,
+      "loadBefore": [
+        23.5087890625,
+        14.09375,
+        12.19140625
+      ],
+      "loadAfter": [
+        23.1474609375,
+        14.1748046875,
+        12.23095703125
+      ],
+      "childCpuS": 0.8999999999999999,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-variant-matrix1.before.json",
+      "afterManifest": "/tmp/gy8c-check-variant-matrix1.after.json",
+      "beforePaths": 4456,
+      "afterPaths": 4456,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-variant-matrix1.receipt.json"
+    },
+    {
+      "label": "variant-matrix2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/gy8c-variant-matrix.mts"
+      ],
+      "pid": 18962,
+      "observerPid": 18941,
+      "processGroup": 18962,
+      "start": "2026-10-13T16:31:27.909684+00:00",
+      "end": "2026-10-13T16:31:28.923772+00:00",
+      "wallS": 1.0139997500227764,
+      "exit": 1,
+      "loadBefore": [
+        17.22021484375,
+        13.71826171875,
+        12.1435546875
+      ],
+      "loadAfter": [
+        17.22021484375,
+        13.71826171875,
+        12.1435546875
+      ],
+      "childCpuS": 0.98,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-variant-matrix2.before.json",
+      "afterManifest": "/tmp/gy8c-check-variant-matrix2.after.json",
+      "beforePaths": 4456,
+      "afterPaths": 4456,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-variant-matrix2.receipt.json"
+    },
+    {
+      "label": "variant-matrix3",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/gy8c-variant-matrix.mts"
+      ],
+      "pid": 20558,
+      "observerPid": 20499,
+      "processGroup": 20558,
+      "start": "2026-10-13T16:31:48.713383+00:00",
+      "end": "2026-10-13T16:31:49.897511+00:00",
+      "wallS": 1.1839864589856006,
+      "exit": 0,
+      "loadBefore": [
+        16.53857421875,
+        13.78515625,
+        12.20361328125
+      ],
+      "loadAfter": [
+        16.53857421875,
+        13.78515625,
+        12.20361328125
+      ],
+      "childCpuS": 1.0699999999999998,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-variant-matrix3.before.json",
+      "afterManifest": "/tmp/gy8c-check-variant-matrix3.after.json",
+      "beforePaths": 4456,
+      "afterPaths": 4456,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-variant-matrix3.receipt.json"
+    },
+    {
+      "label": "legacy-controls1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/gy8c-legacy-controls.mts"
+      ],
+      "pid": 32019,
+      "observerPid": 31955,
+      "processGroup": 32019,
+      "start": "2026-10-13T16:33:40.961769+00:00",
+      "end": "2026-10-13T16:33:42.585466+00:00",
+      "wallS": 1.623578250000719,
+      "exit": 1,
+      "loadBefore": [
+        26.9189453125,
+        20.8759765625,
+        15.3642578125
+      ],
+      "loadAfter": [
+        26.9189453125,
+        20.8759765625,
+        15.3642578125
+      ],
+      "childCpuS": 0.99,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-legacy-controls1.before.json",
+      "afterManifest": "/tmp/gy8c-check-legacy-controls1.after.json",
+      "beforePaths": 4456,
+      "afterPaths": 4456,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-legacy-controls1.receipt.json"
+    },
+    {
+      "label": "legacy-controls2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/gy8c-legacy-controls.mts"
+      ],
+      "pid": 35799,
+      "observerPid": 35767,
+      "processGroup": 35799,
+      "start": "2026-10-13T16:34:18.566551+00:00",
+      "end": "2026-10-13T16:34:20.841256+00:00",
+      "wallS": 2.2746041670034174,
+      "exit": 0,
+      "loadBefore": [
+        20.33056640625,
+        19.91943359375,
+        15.23779296875
+      ],
+      "loadAfter": [
+        19.3427734375,
+        19.72119140625,
+        15.1953125
+      ],
+      "childCpuS": 1.05,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-legacy-controls2.before.json",
+      "afterManifest": "/tmp/gy8c-check-legacy-controls2.after.json",
+      "beforePaths": 4456,
+      "afterPaths": 4456,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-legacy-controls2.receipt.json"
+    },
+    {
+      "label": "variant-postfix1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/gy8c-variant-postfix.mts"
+      ],
+      "pid": 70275,
+      "observerPid": 70254,
+      "processGroup": 70275,
+      "start": "2026-10-13T16:45:32.600076+00:00",
+      "end": "2026-10-13T16:45:33.853301+00:00",
+      "wallS": 1.2531221660028677,
+      "exit": 0,
+      "loadBefore": [
+        12.29248046875,
+        15.58642578125,
+        14.58935546875
+      ],
+      "loadAfter": [
+        12.29248046875,
+        15.58642578125,
+        14.58935546875
+      ],
+      "childCpuS": 0.9099999999999999,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-variant-postfix1.before.json",
+      "afterManifest": "/tmp/gy8c-check-variant-postfix1.after.json",
+      "beforePaths": 4456,
+      "afterPaths": 4456,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-variant-postfix1.receipt.json"
+    },
+    {
+      "label": "variant-matrix-postfix1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/gy8c-variant-matrix-postfix.mts"
+      ],
+      "pid": 70338,
+      "observerPid": 70330,
+      "processGroup": 70338,
+      "start": "2026-10-13T16:45:33.882403+00:00",
+      "end": "2026-10-13T16:45:34.819728+00:00",
+      "wallS": 0.9372337500099093,
+      "exit": 0,
+      "loadBefore": [
+        12.29248046875,
+        15.58642578125,
+        14.58935546875
+      ],
+      "loadAfter": [
+        12.29248046875,
+        15.58642578125,
+        14.58935546875
+      ],
+      "childCpuS": 0.92,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-variant-matrix-postfix1.before.json",
+      "afterManifest": "/tmp/gy8c-check-variant-matrix-postfix1.after.json",
+      "beforePaths": 4456,
+      "afterPaths": 4456,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-variant-matrix-postfix1.receipt.json"
+    },
+    {
+      "label": "legacy-postfix1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/gy8c-legacy-controls-postfix.mts"
+      ],
+      "pid": 70407,
+      "observerPid": 70242,
+      "processGroup": 70407,
+      "start": "2026-10-13T16:45:34.847764+00:00",
+      "end": "2026-10-13T16:45:35.766720+00:00",
+      "wallS": 0.9188684170076158,
+      "exit": 0,
+      "loadBefore": [
+        12.29248046875,
+        15.58642578125,
+        14.58935546875
+      ],
+      "loadAfter": [
+        12.29248046875,
+        15.58642578125,
+        14.58935546875
+      ],
+      "childCpuS": 0.87,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-legacy-postfix1.before.json",
+      "afterManifest": "/tmp/gy8c-check-legacy-postfix1.after.json",
+      "beforePaths": 4456,
+      "afterPaths": 4456,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-legacy-postfix1.receipt.json"
+    },
+    {
+      "label": "focused1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts"
+      ],
+      "pid": 71076,
+      "observerPid": 71059,
+      "processGroup": 71076,
+      "start": "2026-10-13T16:45:45.232614+00:00",
+      "end": "2026-10-13T16:45:55.300892+00:00",
+      "wallS": 10.068105667014606,
+      "exit": 1,
+      "loadBefore": [
+        10.86376953125,
+        15.171875,
+        14.453125
+      ],
+      "loadAfter": [
+        10.04833984375,
+        14.853515625,
+        14.34814453125
+      ],
+      "childCpuS": 15.04,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-focused1.before.json",
+      "afterManifest": "/tmp/gy8c-check-focused1.after.json",
+      "beforePaths": 4456,
+      "afterPaths": 4457,
+      "changedPaths": [
+        "src/cumulus/primitives/tokens.ts"
+      ],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-focused1.receipt.json"
+    },
+    {
+      "label": "focused2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts"
+      ],
+      "pid": 73020,
+      "observerPid": 73002,
+      "processGroup": 73020,
+      "start": "2026-10-13T16:46:17.201782+00:00",
+      "end": "2026-10-13T16:46:26.344006+00:00",
+      "wallS": 9.142044459003955,
+      "exit": 0,
+      "loadBefore": [
+        8.8798828125,
+        14.1767578125,
+        14.1171875
+      ],
+      "loadAfter": [
+        8.44287109375,
+        13.9072265625,
+        14.02197265625
+      ],
+      "childCpuS": 13.9,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-focused2.before.json",
+      "afterManifest": "/tmp/gy8c-check-focused2.after.json",
+      "beforePaths": 4457,
+      "afterPaths": 4457,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-focused2.receipt.json"
+    },
+    {
+      "label": "review1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 79473,
+      "observerPid": 79418,
+      "processGroup": 79473,
+      "start": "2026-10-13T16:48:43.041116+00:00",
+      "end": "2026-10-13T16:49:08.878702+00:00",
+      "wallS": 25.837085332983406,
+      "exit": 0,
+      "loadBefore": [
+        3.59130859375,
+        10.1298828125,
+        12.48974609375
+      ],
+      "loadAfter": [
+        4.1103515625,
+        9.744140625,
+        12.28271484375
+      ],
+      "childCpuS": 92.30000000000001,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-review1.before.json",
+      "afterManifest": "/tmp/gy8c-check-review1.after.json",
+      "beforePaths": 4461,
+      "afterPaths": 4461,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-review1.receipt.json"
+    },
+    {
+      "label": "focused3",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts"
+      ],
+      "pid": 80288,
+      "observerPid": 80284,
+      "processGroup": 80288,
+      "start": "2026-10-13T16:49:32.313611+00:00",
+      "end": "2026-10-13T16:49:40.843986+00:00",
+      "wallS": 8.53020245800144,
+      "exit": 0,
+      "loadBefore": [
+        3.1337890625,
+        9.05712890625,
+        11.9609375
+      ],
+      "loadAfter": [
+        3.36328125,
+        9.00634765625,
+        11.92578125
+      ],
+      "childCpuS": 12.9,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-focused3.before.json",
+      "afterManifest": "/tmp/gy8c-check-focused3.after.json",
+      "beforePaths": 4461,
+      "afterPaths": 4461,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-focused3.receipt.json"
+    },
+    {
+      "label": "review2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 80513,
+      "observerPid": 80508,
+      "processGroup": 80513,
+      "start": "2026-10-13T16:49:40.872041+00:00",
+      "end": "2026-10-13T16:50:04.035710+00:00",
+      "wallS": 23.16331704100594,
+      "exit": 0,
+      "loadBefore": [
+        3.36328125,
+        9.00634765625,
+        11.92578125
+      ],
+      "loadAfter": [
+        3.6005859375,
+        8.60400390625,
+        11.6953125
+      ],
+      "childCpuS": 71.23,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-review2.before.json",
+      "afterManifest": "/tmp/gy8c-check-review2.after.json",
+      "beforePaths": 4461,
+      "afterPaths": 4461,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-review2.receipt.json"
+    },
+    {
+      "label": "knip1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/pool-variant-gy8c-sol",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 80932,
+      "observerPid": 80276,
+      "processGroup": 80932,
+      "start": "2026-10-13T16:50:04.064048+00:00",
+      "end": "2026-10-13T16:50:07.987273+00:00",
+      "wallS": 3.923116082994966,
+      "exit": 0,
+      "loadBefore": [
+        3.6005859375,
+        8.60400390625,
+        11.6953125
+      ],
+      "loadAfter": [
+        4.19287109375,
+        8.6435546875,
+        11.69091796875
+      ],
+      "childCpuS": 4.14,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/gy8c-check-knip1.before.json",
+      "afterManifest": "/tmp/gy8c-check-knip1.after.json",
+      "beforePaths": 4461,
+      "afterPaths": 4461,
+      "changedPaths": [],
+      "archivedReceipt": "artifacts/qa/hv-gy8c/validation/gy8c-check-knip1.receipt.json"
+    }
+  ],
+  "baseline": {
+    "variantObservations": {
+      "actors": 2,
+      "qualification": "One intrinsic variant defect; actual public saved amplified score1\u219210 and linked remembered sampling amplified, not a counted12-case suite."
+    },
+    "matrix": {
+      "cases": 130,
+      "expectedRejectionGaps": 120,
+      "passingPositiveControls": 10,
+      "errors": 0,
+      "qualification": "120 prospective declarations demonstrate one missing intrinsic variant contract, not120 bugs."
+    },
+    "legacyControls": {
+      "cases": 6,
+      "qualification": "Present absent-domain records and stale BASE statuses accepted; genuinely ceased records already rejected by existing present-owner constraint."
+    }
+  },
+  "postfix": {
+    "actors": 2,
+    "baseScore": 1,
+    "currentAndRememberedNonbaseRejected": true,
+    "matrix": {
+      "cases": 130,
+      "rejected": 120,
+      "passingPositiveControls": 10,
+      "errors": 0
+    },
+    "legacyControls": 6,
+    "actualLegacyHashStatesUnchanged": 2,
+    "qualification": "No numeric golden or private formula CI gate. Public modified ordinary\u2192self-copy and genuine captured character gainAbilities controls; stale observation explicitly declared, not interactive reveal."
+  },
+  "focused": {
+    "attempt1": {
+      "exit": 1,
+      "passed": 2798,
+      "failed": 1,
+      "total": 2799,
+      "files": 2,
+      "qualification": "Own fixture catalog mismatch, no production failure; ignored tokens materialized4456\u21924457 only."
+    },
+    "final": {
+      "label": "focused3",
+      "exit": 0,
+      "tests": 2799,
+      "files": 2,
+      "vitestDurationS": 6.08,
+      "enclosingTestStageS": 6.5,
+      "outerS": 8.53020245800144
+    }
+  },
+  "sourceFreeze": {
+    "stage1Paths": 4456,
+    "allSixAttemptsBeforeAfterCurrentEqual": true,
+    "postfixPaths": 4456,
+    "threePostfixCommandsUnchanged": true,
+    "runnerPreparedTokenPath": "src/cumulus/primitives/tokens.ts",
+    "afterPreparationPaths": 4457,
+    "focused2Unchanged": true,
+    "qualification": "Initial focused preparation added only ignored tokens, all functional source hashes otherwise equal during owned commands. Final production guard equals passing postfix witnesses; later own fixture/first-stack edits rechecked final focused/review. Four own evidence files account for4457\u21924461.",
+    "finalValidationPaths": 4461,
+    "focused3Review1Review2KnipUnchanged": true
+  },
+  "sixFailureMappings": [
+    {
+      "kind": "invalid",
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "test": "rejects non-base intrinsic variants of captured cards and observations",
+      "observableContract": "Malformed current/remembered/history captured intrinsic variants reject without mutating payload before sampled or public ability use.",
+      "nameExists": true
+    },
+    {
+      "kind": "error",
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "test": "rolls back creation and RNG on a mid-step error without partial publication",
+      "observableContract": "Existing public fold rollback preserves committed state, publication and RNG; no new effect error mechanism.",
+      "nameExists": true
+    },
+    {
+      "kind": "partial",
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "test": "rejects malformed, partial and inconsistent saved pool fields without mutation",
+      "observableContract": "Incomplete declared pool and malformed captured variant reject atomically. Mid-step rollback and paused replay cover actual partial operation boundaries; synchronous read-only guard has no mid-assignment timeout surface.",
+      "nameExists": true
+    },
+    {
+      "kind": "reload",
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "test": "preserves current created domains through sampled cold-save continuation",
+      "observableContract": "Genuine base sampled cold states continue to play/cease; new positive mutable/copy contract preserves valid intrinsic/effect semantics.",
+      "nameExists": true
+    },
+    {
+      "kind": "concurrent",
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "test": "replays a paused creation with the same RNG prefix and rejects stale or concurrent answers",
+      "observableContract": "Stale prompt, foreign side and completed duplicate answers bounce; guard introduces no asynchronous writer or prompt.",
+      "nameExists": true
+    },
+    {
+      "kind": "empty",
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "test": "does nothing for missing, empty or unmatched pools without a catalog fallback or RNG draw",
+      "observableContract": "No captured instance means no new variant check, no RNG draw or fallback; ordinary/legacy formats remain valid.",
+      "nameExists": true
+    }
+  ],
+  "census": {
+    "currentTargetCensus": "artifacts/qa/hv-gy8c/validation/gy8c-reader-census.json",
+    "foldDirectImporters": 75,
+    "draftDirectImporters": 31,
+    "modulesScannedForDirect": 2325,
+    "historicalStaticBarrelCycleReachability": 2093,
+    "qualification": "Historical transitive reachability reused with12 causal blob continuity and fresh exact target/direct/binding checks; not runtime callers."
+  },
+  "proportionalValidation": {
+    "required": "Existing contract aggregator and strict saved-intents file, final review/Knip/schema/index; parent fresh cold review and certified native delivery afterward.",
+    "fullFuzzBrowser": "Not run or requested: bounded private guard/docs repair, no new field/schema/architecture/producer/sampler/UI mechanism.",
+    "runtimeResources": "No server, browser context, MCP QA client, owner, lease or runtime fixture launched."
+  },
+  "temporaryReviewRouting": "Parent fresh read-only gpt-5.6-sol review under user override until2026-10-14T01:00Z; not performed by helper.",
+  "review": {
+    "finalLabel": "review2",
+    "exit": 0,
+    "relatedTests": 3795,
+    "files": 104,
+    "vitestDurationS": 14.71,
+    "enclosingRelatedTestStageS": 21.1,
+    "outerS": 23.16331704100594,
+    "lintTypecheckCyclesSchema": "passing",
+    "earlierPassingReview1": {
+      "outerS": 25.837085332983406,
+      "reasonForFinalRerun": "Parent warm review requested selecting only first genuine public stack frame in test, avoiding future duplicate checkpoint coupling; changed own contract after review1 terminal."
+    }
+  },
+  "knip": {
+    "label": "knip1",
+    "exit": 0,
+    "outerS": 3.923116082994966
+  },
+  "ownEvidencePaths": [
+    "docs/plan/evidence/friction/hv-gy8c.json",
+    "docs/plan/evidence/measurements/hv-gy8c.json",
+    "docs/plan/evidence/pre-existing/hv-gy8c.md",
+    "docs/plan/evidence/rules-decisions/RD-hv-gy8c-1.md"
+  ],
+  "commitMessagePrepared": {
+    "path": "/tmp/gy8c-commit-message.txt",
+    "sha256": "98110947c822281eaeeb8ffa423b1380c1605b8e472e212bf0aefa6062802330",
+    "commitStatus": "Prepared exact message authorized for one commit after endpoint evidence/schema/index checks; actual terminal OID/bracket/tail externally recorded."
+  },
+  "wallContext": {
+    "sourceFirstElapsedMin": 22.796608616666667,
+    "reasonForOver10min": "Measured22.796609min source-first setup, audit, genuine diagnostics, failed fixture corrections, finite proposal and parent native admission, then implementation, required checks and evidence/staging. Useful wall work and command scopes are measured; exact active model/CPU intervals and every wall gap cause unknown. No attribution to approval waiting.",
+    "commitTail": "Actual endpoint-to-commit bracket remains externally recorded after parent endpoint ACK, never amended."
+  },
+  "witnessSourceFreezeProofs": [
+    {
+      "label": "variant-postfix1",
+      "beforeAfterEqual": true,
+      "manifestPaths": 4456
+    },
+    {
+      "label": "variant-matrix-postfix1",
+      "beforeAfterEqual": true,
+      "manifestPaths": 4456
+    },
+    {
+      "label": "legacy-postfix1",
+      "beforeAfterEqual": true,
+      "manifestPaths": 4456
+    },
+    {
+      "label": "focused2",
+      "beforeAfterEqual": true,
+      "manifestPaths": 4457
+    },
+    {
+      "label": "focused3",
+      "beforeAfterEqual": true,
+      "manifestPaths": 4461
+    },
+    {
+      "label": "review1",
+      "beforeAfterEqual": true,
+      "manifestPaths": 4461
+    },
+    {
+      "label": "review2",
+      "beforeAfterEqual": true,
+      "manifestPaths": 4461
+    },
+    {
+      "label": "knip1",
+      "beforeAfterEqual": true,
+      "manifestPaths": 4461
+    }
+  ],
+  "endpointAck": {
+    "path": "/tmp/gy8c-final-endpoint.json",
+    "observedEndpoint": "2026-10-13T16:58:31.193756Z"
+  }
+}

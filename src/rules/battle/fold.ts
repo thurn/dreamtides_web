@@ -854,7 +854,8 @@ function hasConsistentPoolCandidates(value: Record<string, unknown>): boolean {
   return Object.values(state.instances).every((instance) => {
     const candidates = instance.poolCandidates;
     if (candidates === undefined) return true;
-    if (!instance.status.created || instance.printing.kind !== "card" ||
+    if (!instance.status.created || instance.printing.kind !== "card" || instance.variant.amplified ||
+      instance.variant.transfigurations !== undefined || instance.variant.deckMods !== undefined ||
       !candidates.includes(instance.printing.cardId) || !["hand", "stack", "play"].includes(instance.zone)) return false;
     const available = [...(state.draftPools?.[instance.owner] ?? [])];
     for (const cardId of candidates) {
@@ -865,7 +866,8 @@ function hasConsistentPoolCandidates(value: Record<string, unknown>): boolean {
     const cardId = instance.printing.cardId;
     return SIDES.every((side) => (state.rememberedCards?.[side] ?? []).every((record) =>
       record.instance !== instance.id || (record.owner === instance.owner && record.status.created &&
-        record.printing.kind === "card" && record.printing.cardId === cardId)));
+        record.printing.kind === "card" && record.printing.cardId === cardId && !record.variant.amplified &&
+        record.variant.transfigurations === undefined && record.variant.deckMods === undefined)));
   });
 }
 
