@@ -1,0 +1,21 @@
+{
+  "bead": "hv-33id.11",
+  "phase": 6,
+  "implementMin": 2.9157265,
+  "implementWindow": {
+    "start": "2026-10-13T00:39:57+00:00",
+    "end": "2026-10-13T00:42:51.943590+00:00"
+  },
+  "localValidationS": {
+    "review-01": 0.3548212910100119,
+    "knip-01": 7.156008582998766,
+    "friction-01": 0.3137861669965787
+  },
+  "hostLoad": 25.62,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

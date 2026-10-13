@@ -1,0 +1,169 @@
+{
+  "bead": "hv-33id.11",
+  "base": "84d705bb69ae8b16802ccd5d8265c1e23b3e27c5",
+  "scope": "Read-only cause/provenance audit and one additive trigger reason disposition; no source/runtime/QA/test/config/metrics changes.",
+  "implementationStart": "2026-10-13T00:39:57Z native claim started_at, seconds precision; root as implementer, no helper",
+  "sources": [
+    {
+      "path": "docs/plan/evidence/friction/hv-33id.1.json",
+      "sha256": "995ace493468f1f787650bbf46b2f9b4366674a2fa51573e5dddf34cef3d8f3d"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-33id.2.json",
+      "sha256": "cdbad96121da1de432f2855821801f59b0b233e0973cd757421fdfc76544853f"
+    },
+    {
+      "path": "docs/plan/evidence/friction/hv-33id.6.json",
+      "sha256": "25a1afd2b6250e50dfdd2d150fb9ce33eb8d1668277db5c283037d614d79d9d4"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-33id.1.md",
+      "sha256": "3864786a664e5fb58f2e9474d8418899420482a66e01d9c3c75a0238d471ea7f"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-33id.2.md",
+      "sha256": "3d0706030692ce9015cfb2e1516ec372cdda9b0e2113c682919d102b79e36396"
+    },
+    {
+      "path": "docs/plan/evidence/measurements/hv-33id.6.md",
+      "sha256": "77ee6d569923e6686d5eb9e96c61485ed6cf44b4882ad87aac1588d40abd3d3e"
+    },
+    {
+      "path": "docs/plan/evidence/friction-tags.json",
+      "sha256": "0edbf5483483c7ea443f0316c98970b5c8f1f2ed3afbf557f1d2b4f8349cb266"
+    }
+  ],
+  "artifacts": [
+    {
+      "filename": "baseline-tutorial.js",
+      "sha256": "06f8c7181606450ea772d746b24c2a1a6d4208c6dd58c5e964202744bf250c21",
+      "directory": "hv-33id.1"
+    },
+    {
+      "filename": "baseline-journey.js",
+      "sha256": "bd10104330a9542a59558f664d09136462864bf10b0907e9e760c66c86a1d368",
+      "directory": "hv-33id.1"
+    },
+    {
+      "filename": "baseline.mjs",
+      "sha256": "43dcf1f92d39230fd2a4fc2e49ce63871a08bb3ad21ec20d1ec42f4d8575b68d",
+      "directory": "hv-33id.1"
+    },
+    {
+      "filename": "baseline.result.json",
+      "sha256": "3089696dbfd81af95ba68b1efde8ed4d4fe82990e6bb6ce752ef68da5ea4ecb0",
+      "directory": "hv-33id.1"
+    },
+    {
+      "filename": "acceptance-tutorial-engine-v02.mjs",
+      "sha256": "112c45a241ecee77f2e2fbbea2e3df1269142cd8c1a4a2c3e589bbacd70ee1fe",
+      "directory": "hv-33id.2"
+    },
+    {
+      "filename": "acceptance-tutorial-v02.js",
+      "sha256": "610ffe557cb7ecfef0af58b51edbd4d9ff372ef401ea154a66ad7cc750bcdf84",
+      "directory": "hv-33id.2"
+    },
+    {
+      "filename": "pointer-scroll-reload-probe-v03.mjs",
+      "sha256": "489001126b626f01c9b6e5919587e8af928c61ea76e93cde096100e0c184bc01",
+      "directory": "hv-33id.2"
+    }
+  ],
+  "observations": [
+    {
+      "bead": "hv-33id.1",
+      "aliasedFriction": [
+        "speech-text-before-visible 25min",
+        "mobile-hover-rest-point 10min"
+      ],
+      "otherObservation": "dreamscape-site-click-ignored15min is not aliased to this trigger; historical DOM click/route-check adaptation is qualified to historical source, not current pointer acceptance.",
+      "qualification": "Original66min/browsers3000s are historical reports, not independently remeasured; intervals are not summed."
+    },
+    {
+      "bead": "hv-33id.6",
+      "frictionMinutes": 20.012,
+      "qualification": "Conservative failed/diagnostic execution only, excludes authoring/queue/cleanup/accepted fourthmatrix. Accepted84/42 perviewport exact2f7ef3f2e, source manifests retain2084 paths; CSS1x historical captures; scenario478.192s; no throughput speedup claim."
+    },
+    {
+      "bead": "hv-33id.2",
+      "frictionMinutes": 11.162880783333332,
+      "qualification": "Gross failed literal11 check terminal to corrected matrix launch includes replay/authority audit/script adaptation; not isolatedCPU. Actual public replay10/3 threshold10; accepted62/31 perviewport2x; supplemental pointer identifies harness-scroll geometry, no product symptom suppression. Genuine draw-producer visibility repair is separately tagged, not this trigger cause."
+    }
+  ],
+  "disposition": "Audit hv-33id.11: hv-33id.1 and hv-33id.6 cover historical tutorial speech/flip/Victory readiness, inactive draft controls, mobile pointer rest and Inspector scrolling; retained source-exact baseline walks encode those observations and accepted84 captures. hv-33id.2 records a distinct historical literal11 score expectation: public replay proves actual player Victory10 against declared threshold10; corrected scenario verifies actual engine.battleEnded winner and threshold, accepted62 captures plus normal-pointer/reload/refusal probe. Corrected immutable scripts and source qualifications are retained; no common unresolved runner defect is established. D9 authored timing remains required, historical source is exact, current journey acceptance remains6.2, and no score/gameplay/AI/acceptance waiver is authorized. Existing separate product guards follow hv-33id.10.",
+  "newTests": 0,
+  "newRuntime": 0,
+  "unknowns": [
+    "individual authoring/CPU/queue attribution for historical records",
+    "common performance improvement measurement: none claimed"
+  ],
+  "checks": {
+    "install-01": {
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-11-qa-friction-audit",
+      "start": "2026-10-13T00:40:04.561890+00:00",
+      "end": "2026-10-13T00:40:08.559943+00:00",
+      "exit": 0,
+      "wallSeconds": 3.9979158749920316,
+      "pid": 83098,
+      "pgid": 83098,
+      "load": "{ 18.44 11.49 10.64 }",
+      "groupRemainingAtExit": []
+    },
+    "review-01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-11-qa-friction-audit",
+      "start": "2026-10-13T00:42:03.857056+00:00",
+      "end": "2026-10-13T00:42:04.211984+00:00",
+      "exit": 0,
+      "wallSeconds": 0.3548212910100119,
+      "pid": 41572,
+      "pgid": 41572,
+      "load": "{ 25.62 15.26 12.18 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-11-qa-friction-audit",
+      "start": "2026-10-13T00:42:18.634054+00:00",
+      "end": "2026-10-13T00:42:25.790801+00:00",
+      "exit": 0,
+      "wallSeconds": 7.156008582998766,
+      "pid": 42684,
+      "pgid": 42684,
+      "load": "{ 25.42 15.70 12.39 }",
+      "groupRemainingAtExit": []
+    },
+    "friction-01": {
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-11-qa-friction-audit",
+      "start": "2026-10-13T00:42:18.632008+00:00",
+      "end": "2026-10-13T00:42:18.946674+00:00",
+      "exit": 0,
+      "wallSeconds": 0.3137861669965787,
+      "pid": 42683,
+      "pgid": 42683,
+      "load": "{ 25.42 15.70 12.39 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "endpointUtc": "2026-10-13T00:42:51.943590+00:00",
+  "hostLoadScope": "review-01 wrapper start sysctl vm.loadavg rounded one-minute load25.62; not historical CPU/queue/productive work",
+  "reviewQualification": "Five staged docs paths; npm run review reports no code checks applicable. No test execution/full/browser/fuzz claimed."
+}
