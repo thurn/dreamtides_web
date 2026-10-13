@@ -1,0 +1,1318 @@
+{
+  "bead": "hv-umm2.643",
+  "baseOid": "54c648e549c982224150d1cb13f95c4077e32c90",
+  "dispatch": {
+    "at": "2026-10-13T17:13:20.072000+00:00",
+    "callId": "call_pGZr3PoFrqA9DM0RLZzyASBj",
+    "modelSampling": "UNKNOWN"
+  },
+  "implementationCutoff": "2026-10-13T17:39:54.879558+00:00",
+  "functionalFreeze": {
+    "pathsSHA256": {
+      "src/content/apollyon/aspects/aspect-9ae35d68-a432-45f6-ab8c-07572a25ad6b.ts": "f135d9f1ef55cb1ef010beaeda421636b359d2446ef1ed4e047ccbf3c10ebc7a",
+      "src/content/apollyon/aspects/aspect-ac116276-5569-491b-85c9-e192823bddae.ts": "aba77953e106e7313c92429c54744ef7ad7c6aa7168cf3adb83991ac27761a3b",
+      "src/battle/integration/apollyon-aspects/pair-293.test.ts": "b5a41da9e5344e36b38f4a9206b84d50f858dedf2dcc94e37c5448c65b1b53e9"
+    },
+    "allCounterfactualsRestored": true
+  },
+  "readOnlySources": {
+    "beforeSHA256": {
+      "src/content/apollyon/design.ts": "234d4063445c9ca0202a5691597c21df4d47b0426d0b88dc1ebcb5f01b1ff6df",
+      "src/content/apollyon/types.ts": "8792a2b2fe9640a387568083bae3d05a8cbb9986a085a42d80f21067a6f8f885",
+      "src/content/apollyon.ts": "905f416e5407f730e83e49fc47a825e2ea4d87209cf1ca7b84986f5ad0c41bc0",
+      "src/battle/integration/create-battle-init.ts": "7eda4bc59586bea406dfca27ca14743a96de67c0bfe64cba0c86bf51437435a4",
+      "src/battle/integration/tide-opponent-deck.ts": "7cb7a6e60e7e768f01b3d38a476078af7811f10c8d7f850b686482405d43cd45",
+      "src/engine/rules/activation.ts": "fa6d8b78098a3443fbc294ce38f168b3d045b522d1e26b5e0e1c035d3bcaf409",
+      "src/engine/triggers/matcher.ts": "5de0120d595144d23fa9bbf72dd5e6aedaf1a9a727c62790b5067ef667eb2c31",
+      "src/engine/effects/primitives/grant-reclaim.ts": "ae08bc31160173e9db2460a2cc7138ee13f6ebd54f48bf485ceb5c8310b5ff05",
+      "src/engine/testing/board.ts": "8ab478503d468dfe510138fd7dc86c497f779042fc00eed241b4d59ae46ac246",
+      "src/engine/testing/synthetic-cards.ts": "45e5009ad88c05ccba2308a1de2c2837b356a31ac973c61caf9aa016eac07d1f",
+      "src/engine/catalog.ts": "cf0b03f472be9e75af4316d83da6a39fa36359207527ae709604499e14e5e63e"
+    },
+    "afterSHA256": {
+      "src/content/apollyon/design.ts": "234d4063445c9ca0202a5691597c21df4d47b0426d0b88dc1ebcb5f01b1ff6df",
+      "src/content/apollyon/types.ts": "8792a2b2fe9640a387568083bae3d05a8cbb9986a085a42d80f21067a6f8f885",
+      "src/content/apollyon.ts": "905f416e5407f730e83e49fc47a825e2ea4d87209cf1ca7b84986f5ad0c41bc0",
+      "src/battle/integration/create-battle-init.ts": "7eda4bc59586bea406dfca27ca14743a96de67c0bfe64cba0c86bf51437435a4",
+      "src/battle/integration/tide-opponent-deck.ts": "7cb7a6e60e7e768f01b3d38a476078af7811f10c8d7f850b686482405d43cd45",
+      "src/engine/rules/activation.ts": "fa6d8b78098a3443fbc294ce38f168b3d045b522d1e26b5e0e1c035d3bcaf409",
+      "src/engine/triggers/matcher.ts": "5de0120d595144d23fa9bbf72dd5e6aedaf1a9a727c62790b5067ef667eb2c31",
+      "src/engine/effects/primitives/grant-reclaim.ts": "ae08bc31160173e9db2460a2cc7138ee13f6ebd54f48bf485ceb5c8310b5ff05",
+      "src/engine/testing/board.ts": "8ab478503d468dfe510138fd7dc86c497f779042fc00eed241b4d59ae46ac246",
+      "src/engine/testing/synthetic-cards.ts": "45e5009ad88c05ccba2308a1de2c2837b356a31ac973c61caf9aa016eac07d1f",
+      "src/engine/catalog.ts": "cf0b03f472be9e75af4316d83da6a39fa36359207527ae709604499e14e5e63e"
+    },
+    "unchanged": true
+  },
+  "nativeAcceptance": {
+    "briefSHA256": "4be3c024ecf8cca36dcf71dc30573f3d324a0c214a26d4942b2b01d9e7ce31cd",
+    "original293JoinProofSHA256": "e6f105fe3583921603c26d787ef6e0b22cb19e176fdc192372df4079001e568a",
+    "original293Status": "open",
+    "unchangedFinalJoins": "643 preparation -> original293 full UUID/D6/D20/weighted300/sweep/D21/20 clean Greedy EACH; original210/full emblems/randomfill/Starter;29550 EACH/frozen pool/champion rerun",
+    "authoredProductionUUIDs": []
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-final command starting 1-minute load paired with its wallSeconds"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "name": "install",
+      "startedAt": "2026-10-13T17:13:32.683376+00:00",
+      "wallSeconds": 2.830348374991445,
+      "load": [
+        16.6806640625,
+        11.73828125,
+        11.39599609375
+      ]
+    },
+    {
+      "name": "focused-draft",
+      "startedAt": "2026-10-13T17:22:09.437425+00:00",
+      "wallSeconds": 5.2735818339861,
+      "load": [
+        3.89697265625,
+        6.8447265625,
+        9.1953125
+      ]
+    },
+    {
+      "name": "focused-draft2",
+      "startedAt": "2026-10-13T17:23:21.511538+00:00",
+      "wallSeconds": 4.117568082991056,
+      "load": [
+        8.3818359375,
+        7.22705078125,
+        9.130859375
+      ]
+    },
+    {
+      "name": "focused-draft3",
+      "startedAt": "2026-10-13T17:23:40.534113+00:00",
+      "wallSeconds": 3.3243768750107847,
+      "load": [
+        11.45166015625,
+        7.9658203125,
+        9.34912109375
+      ]
+    },
+    {
+      "name": "focused-draft4",
+      "startedAt": "2026-10-13T17:24:58.516408+00:00",
+      "wallSeconds": 2.8759508339862805,
+      "load": [
+        8.49951171875,
+        8.17626953125,
+        9.32421875
+      ]
+    },
+    {
+      "name": "counterfact-keeper-controller",
+      "startedAt": "2026-10-13T17:25:44.238312+00:00",
+      "wallSeconds": 1.3280848749855068,
+      "load": [
+        7.7685546875,
+        8.0390625,
+        9.2138671875
+      ]
+    },
+    {
+      "name": "counterfact-keeper-batch",
+      "startedAt": "2026-10-13T17:25:45.591657+00:00",
+      "wallSeconds": 1.3366572090017144,
+      "load": [
+        7.7685546875,
+        8.0390625,
+        9.2138671875
+      ]
+    },
+    {
+      "name": "counterfact-keeper-subject",
+      "startedAt": "2026-10-13T17:25:46.955590+00:00",
+      "wallSeconds": 1.1898029170115478,
+      "load": [
+        7.7685546875,
+        8.0390625,
+        9.2138671875
+      ]
+    },
+    {
+      "name": "counterfact-keeper-once",
+      "startedAt": "2026-10-13T17:25:48.169556+00:00",
+      "wallSeconds": 1.3153087079990655,
+      "load": [
+        7.62646484375,
+        8.0048828125,
+        9.19482421875
+      ]
+    },
+    {
+      "name": "counterfact-keeper-expiry",
+      "startedAt": "2026-10-13T17:25:49.512015+00:00",
+      "wallSeconds": 1.353028416982852,
+      "load": [
+        7.62646484375,
+        8.0048828125,
+        9.19482421875
+      ]
+    },
+    {
+      "name": "counterfact-keeper-empty-list",
+      "startedAt": "2026-10-13T17:25:50.894327+00:00",
+      "wallSeconds": 1.648610541014932,
+      "load": [
+        7.62646484375,
+        8.0048828125,
+        9.19482421875
+      ]
+    },
+    {
+      "name": "counterfact-butcher-controller",
+      "startedAt": "2026-10-13T17:25:52.572430+00:00",
+      "wallSeconds": 1.6472925830166787,
+      "load": [
+        7.62646484375,
+        8.0048828125,
+        9.19482421875
+      ]
+    },
+    {
+      "name": "counterfact-butcher-filter",
+      "startedAt": "2026-10-13T17:25:54.249025+00:00",
+      "wallSeconds": 1.3094054579851218,
+      "load": [
+        9.578125,
+        8.40283203125,
+        9.328125
+      ]
+    },
+    {
+      "name": "counterfact-butcher-once",
+      "startedAt": "2026-10-13T17:25:55.584963+00:00",
+      "wallSeconds": 1.3992282079998404,
+      "load": [
+        9.578125,
+        8.40283203125,
+        9.328125
+      ]
+    },
+    {
+      "name": "counterfact-butcher-count",
+      "startedAt": "2026-10-13T17:25:57.012324+00:00",
+      "wallSeconds": 1.8123086669947952,
+      "load": [
+        9.578125,
+        8.40283203125,
+        9.328125
+      ]
+    },
+    {
+      "name": "focused-final",
+      "startedAt": "2026-10-13T17:26:34.408236+00:00",
+      "wallSeconds": 3.1608542920148466,
+      "load": [
+        16.64697265625,
+        10.53515625,
+        10.0751953125
+      ]
+    },
+    {
+      "name": "affected-contracts",
+      "startedAt": "2026-10-13T17:26:40.994907+00:00",
+      "wallSeconds": 3.2230471249786206,
+      "load": [
+        16.2744140625,
+        10.55908203125,
+        10.08642578125
+      ]
+    },
+    {
+      "name": "review-final",
+      "startedAt": "2026-10-13T17:28:54.466319+00:00",
+      "wallSeconds": 19.113764292007545,
+      "load": [
+        24.1298828125,
+        13.99853515625,
+        11.40234375
+      ]
+    },
+    {
+      "name": "review-final2",
+      "startedAt": "2026-10-13T17:29:38.005676+00:00",
+      "wallSeconds": 11.69224704199587,
+      "load": [
+        22.40283203125,
+        15.09765625,
+        11.9404296875
+      ]
+    },
+    {
+      "name": "knip-final",
+      "startedAt": "2026-10-13T17:30:00.754994+00:00",
+      "wallSeconds": 4.532541833992582,
+      "load": [
+        18.81982421875,
+        14.85888671875,
+        11.9462890625
+      ]
+    },
+    {
+      "name": "schema-final",
+      "startedAt": "2026-10-13T17:30:35.479779+00:00",
+      "wallSeconds": 0.06665125000290573,
+      "load": [
+        19.52978515625,
+        15.4482421875,
+        12.27587890625
+      ]
+    },
+    {
+      "name": "focused-final2",
+      "startedAt": "2026-10-13T17:31:08.076918+00:00",
+      "wallSeconds": 1.8615645829995628,
+      "load": [
+        24.22998046875,
+        16.966796875,
+        12.9345703125
+      ]
+    }
+  ],
+  "validationResults": {
+    "focused": {
+      "name": "focused-final2",
+      "exitCode": 0,
+      "wallSeconds": 1.8615645829995628,
+      "startedAt": "2026-10-13T17:31:08.076918+00:00",
+      "load": [
+        24.22998046875,
+        16.966796875,
+        12.9345703125
+      ]
+    },
+    "affected": {
+      "name": "affected-contracts",
+      "exitCode": 0,
+      "wallSeconds": 3.2230471249786206,
+      "startedAt": "2026-10-13T17:26:40.994907+00:00",
+      "load": [
+        16.2744140625,
+        10.55908203125,
+        10.08642578125
+      ]
+    },
+    "review": {
+      "name": "review-final2",
+      "exitCode": 0,
+      "wallSeconds": 11.69224704199587,
+      "startedAt": "2026-10-13T17:29:38.005676+00:00",
+      "load": [
+        22.40283203125,
+        15.09765625,
+        11.9404296875
+      ],
+      "innerStepLoad": 21.6494140625
+    },
+    "knip": {
+      "name": "knip-final",
+      "exitCode": 0,
+      "wallSeconds": 4.532541833992582,
+      "startedAt": "2026-10-13T17:30:00.754994+00:00",
+      "load": [
+        18.81982421875,
+        14.85888671875,
+        11.9462890625
+      ]
+    },
+    "schema": {
+      "name": "schema-precommit",
+      "exitCode": 0,
+      "wallSeconds": 0.11841070899390616,
+      "startedAt": "2026-10-13T17:39:54.902509+00:00",
+      "load": [
+        11.43603515625,
+        10.41357421875,
+        11.14892578125
+      ]
+    }
+  },
+  "commands": [
+    {
+      "name": "install",
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 93941,
+      "pgid": 93941,
+      "identity": "93941 93941 Tue Oct 13 10:13:32 2026     node /opt/homebrew/bin/npm install",
+      "startedAt": "2026-10-13T17:13:32.683376+00:00",
+      "load": [
+        16.6806640625,
+        11.73828125,
+        11.39599609375
+      ],
+      "stdout": "/tmp/codex-643/install.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 2.830348374991445,
+      "endedAt": "2026-10-13T17:13:35.513924+00:00"
+    },
+    {
+      "name": "focused-draft",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 66427,
+      "pgid": 66427,
+      "identity": "66427 66427 Tue Oct 13 10:22:09 2026     node /opt/homebrew/bin/npm test -- src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:22:09.437425+00:00",
+      "load": [
+        3.89697265625,
+        6.8447265625,
+        9.1953125
+      ],
+      "stdout": "/tmp/codex-643/focused-draft.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 5.2735818339861,
+      "endedAt": "2026-10-13T17:22:14.711205+00:00"
+    },
+    {
+      "name": "focused-draft2",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 68967,
+      "pgid": 68967,
+      "identity": "68967 68967 Tue Oct 13 10:23:21 2026     node /opt/homebrew/bin/npm test -- src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:23:21.511538+00:00",
+      "load": [
+        8.3818359375,
+        7.22705078125,
+        9.130859375
+      ],
+      "stdout": "/tmp/codex-643/focused-draft2.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 4.117568082991056,
+      "endedAt": "2026-10-13T17:23:25.629304+00:00"
+    },
+    {
+      "name": "focused-draft3",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 85086,
+      "pgid": 85086,
+      "identity": "85086 85086 Tue Oct 13 10:23:40 2026     node /opt/homebrew/bin/npm test -- src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:23:40.534113+00:00",
+      "load": [
+        11.45166015625,
+        7.9658203125,
+        9.34912109375
+      ],
+      "stdout": "/tmp/codex-643/focused-draft3.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 3.3243768750107847,
+      "endedAt": "2026-10-13T17:23:43.858638+00:00"
+    },
+    {
+      "name": "focused-draft4",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 25542,
+      "pgid": 25542,
+      "identity": "25542 25542 Tue Oct 13 10:24:58 2026     node /opt/homebrew/bin/npm test -- src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:24:58.516408+00:00",
+      "load": [
+        8.49951171875,
+        8.17626953125,
+        9.32421875
+      ],
+      "stdout": "/tmp/codex-643/focused-draft4.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 2.8759508339862805,
+      "endedAt": "2026-10-13T17:25:01.392502+00:00"
+    },
+    {
+      "name": "counterfact-keeper-controller",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 26656,
+      "pgid": 26656,
+      "identity": "26656 26656 Tue Oct 13 10:25:44 2026     node /opt/homebrew/bin/npx vitest run src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:25:44.238312+00:00",
+      "load": [
+        7.7685546875,
+        8.0390625,
+        9.2138671875
+      ],
+      "stdout": "/tmp/codex-643/counterfact-keeper-controller.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 1.3280848749855068,
+      "endedAt": "2026-10-13T17:25:45.566538+00:00"
+    },
+    {
+      "name": "counterfact-keeper-batch",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 26710,
+      "pgid": 26710,
+      "identity": "26710 26710 Tue Oct 13 10:25:45 2026     node /opt/homebrew/bin/npx vitest run src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:25:45.591657+00:00",
+      "load": [
+        7.7685546875,
+        8.0390625,
+        9.2138671875
+      ],
+      "stdout": "/tmp/codex-643/counterfact-keeper-batch.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 1.3366572090017144,
+      "endedAt": "2026-10-13T17:25:46.928453+00:00"
+    },
+    {
+      "name": "counterfact-keeper-subject",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 26950,
+      "pgid": 26950,
+      "identity": "26950 26950 Tue Oct 13 10:25:46 2026     node /opt/homebrew/bin/npx vitest run src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:25:46.955590+00:00",
+      "load": [
+        7.7685546875,
+        8.0390625,
+        9.2138671875
+      ],
+      "stdout": "/tmp/codex-643/counterfact-keeper-subject.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 1.1898029170115478,
+      "endedAt": "2026-10-13T17:25:48.145544+00:00"
+    },
+    {
+      "name": "counterfact-keeper-once",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 27019,
+      "pgid": 27019,
+      "identity": "27019 27019 Tue Oct 13 10:25:48 2026     node /opt/homebrew/bin/npx vitest run src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:25:48.169556+00:00",
+      "load": [
+        7.62646484375,
+        8.0048828125,
+        9.19482421875
+      ],
+      "stdout": "/tmp/codex-643/counterfact-keeper-once.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 1.3153087079990655,
+      "endedAt": "2026-10-13T17:25:49.484999+00:00"
+    },
+    {
+      "name": "counterfact-keeper-expiry",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 27065,
+      "pgid": 27065,
+      "identity": "27065 27065 Tue Oct 13 10:25:49 2026     node /opt/homebrew/bin/npx vitest run src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:25:49.512015+00:00",
+      "load": [
+        7.62646484375,
+        8.0048828125,
+        9.19482421875
+      ],
+      "stdout": "/tmp/codex-643/counterfact-keeper-expiry.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 1.353028416982852,
+      "endedAt": "2026-10-13T17:25:50.865209+00:00"
+    },
+    {
+      "name": "counterfact-keeper-empty-list",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 27160,
+      "pgid": 27160,
+      "identity": "27160 27160 Tue Oct 13 10:25:50 2026     node /opt/homebrew/bin/npx vitest run src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:25:50.894327+00:00",
+      "load": [
+        7.62646484375,
+        8.0048828125,
+        9.19482421875
+      ],
+      "stdout": "/tmp/codex-643/counterfact-keeper-empty-list.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 1.648610541014932,
+      "endedAt": "2026-10-13T17:25:52.543117+00:00"
+    },
+    {
+      "name": "counterfact-butcher-controller",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 27248,
+      "pgid": 27248,
+      "identity": "27248 27248 Tue Oct 13 10:25:52 2026     node /opt/homebrew/bin/npx vitest run src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:25:52.572430+00:00",
+      "load": [
+        7.62646484375,
+        8.0048828125,
+        9.19482421875
+      ],
+      "stdout": "/tmp/codex-643/counterfact-butcher-controller.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 1.6472925830166787,
+      "endedAt": "2026-10-13T17:25:54.219944+00:00"
+    },
+    {
+      "name": "counterfact-butcher-filter",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 27378,
+      "pgid": 27378,
+      "identity": "27378 27378 Tue Oct 13 10:25:54 2026     node /opt/homebrew/bin/npx vitest run src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:25:54.249025+00:00",
+      "load": [
+        9.578125,
+        8.40283203125,
+        9.328125
+      ],
+      "stdout": "/tmp/codex-643/counterfact-butcher-filter.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 1.3094054579851218,
+      "endedAt": "2026-10-13T17:25:55.558572+00:00"
+    },
+    {
+      "name": "counterfact-butcher-once",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 27466,
+      "pgid": 27466,
+      "identity": "27466 27466 Tue Oct 13 10:25:55 2026     node /opt/homebrew/bin/npx vitest run src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:25:55.584963+00:00",
+      "load": [
+        9.578125,
+        8.40283203125,
+        9.328125
+      ],
+      "stdout": "/tmp/codex-643/counterfact-butcher-once.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 1.3992282079998404,
+      "endedAt": "2026-10-13T17:25:56.984342+00:00"
+    },
+    {
+      "name": "counterfact-butcher-count",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 27689,
+      "pgid": 27689,
+      "identity": "27689 27689 Tue Oct 13 10:25:57 2026     node /opt/homebrew/bin/npx vitest run src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:25:57.012324+00:00",
+      "load": [
+        9.578125,
+        8.40283203125,
+        9.328125
+      ],
+      "stdout": "/tmp/codex-643/counterfact-butcher-count.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 1.8123086669947952,
+      "endedAt": "2026-10-13T17:25:58.824806+00:00"
+    },
+    {
+      "name": "focused-final",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 50745,
+      "pgid": 50745,
+      "identity": "50745 50745 Tue Oct 13 10:26:34 2026     node /opt/homebrew/bin/npm test -- src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:26:34.408236+00:00",
+      "load": [
+        16.64697265625,
+        10.53515625,
+        10.0751953125
+      ],
+      "stdout": "/tmp/codex-643/focused-final.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 3.1608542920148466,
+      "endedAt": "2026-10-13T17:26:37.569243+00:00"
+    },
+    {
+      "name": "affected-contracts",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "grantReclaim|abandon.*look-back|discard batch occasions|discard captured count replay|discard rejection and rollback"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 63267,
+      "pgid": 63267,
+      "identity": "63267 63267 Tue Oct 13 10:26:40 2026     node /opt/homebrew/bin/npx vitest run src/engine/effects/primitives/contracts.test.ts -t grantReclaim|abandon.*look-back|discard batch occasions|discard captured count replay|discard rejection and rollback",
+      "startedAt": "2026-10-13T17:26:40.994907+00:00",
+      "load": [
+        16.2744140625,
+        10.55908203125,
+        10.08642578125
+      ],
+      "stdout": "/tmp/codex-643/affected-contracts.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 3.2230471249786206,
+      "endedAt": "2026-10-13T17:26:44.218088+00:00"
+    },
+    {
+      "name": "review-final",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 30382,
+      "pgid": 30382,
+      "identity": "30382 30382 Tue Oct 13 10:28:54 2026     node /opt/homebrew/bin/npm run review",
+      "startedAt": "2026-10-13T17:28:54.466319+00:00",
+      "load": [
+        24.1298828125,
+        13.99853515625,
+        11.40234375
+      ],
+      "stdout": "/tmp/codex-643/review-final.stdout",
+      "state": "terminal",
+      "exitCode": 2,
+      "wallSeconds": 19.113764292007545,
+      "endedAt": "2026-10-13T17:29:13.580441+00:00"
+    },
+    {
+      "name": "review-final2",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 45448,
+      "pgid": 45448,
+      "identity": "45448 45448 Tue Oct 13 10:29:38 2026     node /opt/homebrew/bin/npm run review",
+      "startedAt": "2026-10-13T17:29:38.005676+00:00",
+      "load": [
+        22.40283203125,
+        15.09765625,
+        11.9404296875
+      ],
+      "stdout": "/tmp/codex-643/review-final2.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 11.69224704199587,
+      "endedAt": "2026-10-13T17:29:49.698237+00:00"
+    },
+    {
+      "name": "knip-final",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 47333,
+      "pgid": 47333,
+      "identity": "47333 47333 Tue Oct 13 10:30:00 2026     node /opt/homebrew/bin/npm run knip",
+      "startedAt": "2026-10-13T17:30:00.754994+00:00",
+      "load": [
+        18.81982421875,
+        14.85888671875,
+        11.9462890625
+      ],
+      "stdout": "/tmp/codex-643/knip-final.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 4.532541833992582,
+      "endedAt": "2026-10-13T17:30:05.287761+00:00"
+    },
+    {
+      "name": "schema-final",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 50361,
+      "pgid": 50361,
+      "identity": "50361 50361 Tue Oct 13 10:30:35 2026     node scripts/friction-triggers.mjs --validate-records",
+      "startedAt": "2026-10-13T17:30:35.479779+00:00",
+      "load": [
+        19.52978515625,
+        15.4482421875,
+        12.27587890625
+      ],
+      "stdout": "/tmp/codex-643/schema-final.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 0.06665125000290573,
+      "endedAt": "2026-10-13T17:30:35.546563+00:00"
+    },
+    {
+      "name": "focused-final2",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 53118,
+      "pgid": 53118,
+      "identity": "53118 53118 Tue Oct 13 10:31:08 2026     node /opt/homebrew/bin/npx vitest run src/battle/integration/apollyon-aspects/pair-293.test.ts",
+      "startedAt": "2026-10-13T17:31:08.076918+00:00",
+      "load": [
+        24.22998046875,
+        16.966796875,
+        12.9345703125
+      ],
+      "stdout": "/tmp/codex-643/focused-final2.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 1.8615645829995628,
+      "endedAt": "2026-10-13T17:31:09.938659+00:00"
+    },
+    {
+      "name": "schema-final2",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 57998,
+      "pgid": 57998,
+      "identity": "57998 57998 Tue Oct 13 10:31:27 2026     node scripts/friction-triggers.mjs --validate-records",
+      "startedAt": "2026-10-13T17:31:27.589081+00:00",
+      "load": [
+        21.94921875,
+        16.9189453125,
+        13.01025390625
+      ],
+      "stdout": "/tmp/codex-643/schema-final2.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 0.14283891700324602,
+      "endedAt": "2026-10-13T17:31:27.732099+00:00"
+    },
+    {
+      "name": "schema-evidence-correction",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 47207,
+      "pgid": 47207,
+      "identity": "47207 47207 Tue Oct 13 10:34:59 2026     node scripts/friction-triggers.mjs --validate-records",
+      "startedAt": "2026-10-13T17:34:59.071239+00:00",
+      "load": [
+        6.107421875,
+        12.9306640625,
+        12.35009765625
+      ],
+      "stdout": "/tmp/codex-643/schema-evidence-correction.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 0.11542200000258163,
+      "endedAt": "2026-10-13T17:34:59.186790+00:00"
+    },
+    {
+      "name": "schema-precommit",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-aspects643-pair293",
+      "pid": 8718,
+      "pgid": 8718,
+      "identity": "8718  8718 Tue Oct 13 10:39:54 2026     node scripts/friction-triggers.mjs --validate-records",
+      "startedAt": "2026-10-13T17:39:54.902509+00:00",
+      "load": [
+        11.43603515625,
+        10.41357421875,
+        11.14892578125
+      ],
+      "stdout": "/tmp/codex-643/schema-precommit.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 0.11841070899390616,
+      "endedAt": "2026-10-13T17:39:55.021024+00:00"
+    }
+  ],
+  "runtime": {
+    "terminalCommandCount": 25,
+    "ownedGroupsRemaining": [],
+    "browserMCPContexts": [],
+    "servers": [],
+    "providers": [],
+    "heavyLeases": [],
+    "allOwnedGroupsAbsentAt": "2026-10-13T17:39:55.074295+00:00"
+  },
+  "counterfactuals": [
+    {
+      "name": "keeper-controller",
+      "leaf": "src/content/apollyon/aspects/aspect-9ae35d68-a432-45f6-ab8c-07572a25ad6b.ts",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "observableFailures": [
+        "\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 14 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper resets on the actual next turn and pays normal Reclaim cost for an event",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper uses the discarding controller's emblem when an opponent forces the discard",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper grants nothing to a ceased created card or a subject moved out of void before resolution",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > saves, cancels and retries the 00974abd-19d8-4d83-8af9-6a34e67f11a0 cost prompt without spending its emblem use",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > reloads the committed 00974abd-19d8-4d83-8af9-6a34e67f11a0 effect prompt, refuses cancellation, and replays one emblem reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > rolls back a failed 00974abd-19d8-4d83-8af9-6a34e67f11a0 causal step and recovers with one reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper resets on the actual next turn and pays normal Reclaim cost for an event",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper uses the discarding controller's emblem when an opponent forces the discard",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper grants nothing to a ceased created card or a subject moved out of void before resolution",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > saves, cancels and retries the 00974abd-19d8-4d83-8af9-6a34e67f11a0 cost prompt without spending its emblem use",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > reloads the committed 00974abd-19d8-4d83-8af9-6a34e67f11a0 effect prompt, refuses cancellation, and replays one emblem reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > rolls back a failed 00974abd-19d8-4d83-8af9-6a34e67f11a0 causal step and recovers with one reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "Tests  14 failed | 22 passed (36)"
+      ],
+      "restoredSHA256": "f135d9f1ef55cb1ef010beaeda421636b359d2446ef1ed4e047ccbf3c10ebc7a"
+    },
+    {
+      "name": "keeper-batch",
+      "leaf": "src/content/apollyon/aspects/aspect-9ae35d68-a432-45f6-ab8c-07572a25ad6b.ts",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "observableFailures": [
+        "\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 16 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper resets on the actual next turn and pays normal Reclaim cost for an event",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper uses the discarding controller's emblem when an opponent forces the discard",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper grants nothing to a ceased created card or a subject moved out of void before resolution",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper's character Reclaim respects battlefield capacity and retains the grant across save/replay",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper's character Reclaim respects battlefield capacity and retains the grant across save/replay",
+        "AssertionError: expected false to be true // Object.is equality",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > saves, cancels and retries the 00974abd-19d8-4d83-8af9-6a34e67f11a0 cost prompt without spending its emblem use",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > reloads the committed 00974abd-19d8-4d83-8af9-6a34e67f11a0 effect prompt, refuses cancellation, and replays one emblem reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > rolls back a failed 00974abd-19d8-4d83-8af9-6a34e67f11a0 causal step and recovers with one reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper resets on the actual next turn and pays normal Reclaim cost for an event",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper uses the discarding controller's emblem when an opponent forces the discard",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper grants nothing to a ceased created card or a subject moved out of void before resolution",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > saves, cancels and retries the 00974abd-19d8-4d83-8af9-6a34e67f11a0 cost prompt without spending its emblem use",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > reloads the committed 00974abd-19d8-4d83-8af9-6a34e67f11a0 effect prompt, refuses cancellation, and replays one emblem reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > rolls back a failed 00974abd-19d8-4d83-8af9-6a34e67f11a0 causal step and recovers with one reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(6) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "Tests  16 failed | 20 passed (36)"
+      ],
+      "restoredSHA256": "f135d9f1ef55cb1ef010beaeda421636b359d2446ef1ed4e047ccbf3c10ebc7a"
+    },
+    {
+      "name": "keeper-subject",
+      "leaf": "src/content/apollyon/aspects/aspect-9ae35d68-a432-45f6-ab8c-07572a25ad6b.ts",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "observableFailures": [
+        "\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 4 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "AssertionError: expected [ 'i1', 'i3', 'i2', 'i14' ] to deeply equal [ 'i2' ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper grants nothing to a ceased created card or a subject moved out of void before resolution",
+        "AssertionError: expected [ 'i1' ] to deeply equal []",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "AssertionError: expected [ 'i9', 'i11', 'i10', 'i22' ] to deeply equal [ 'i10' ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper grants nothing to a ceased created card or a subject moved out of void before resolution",
+        "AssertionError: expected [ 'i9' ] to deeply equal []",
+        "Tests  4 failed | 32 passed (36)"
+      ],
+      "restoredSHA256": "f135d9f1ef55cb1ef010beaeda421636b359d2446ef1ed4e047ccbf3c10ebc7a"
+    },
+    {
+      "name": "keeper-once",
+      "leaf": "src/content/apollyon/aspects/aspect-9ae35d68-a432-45f6-ab8c-07572a25ad6b.ts",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "observableFailures": [
+        "\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 2 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "AssertionError: expected [ \u2026(2) ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "AssertionError: expected [ \u2026(2) ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "Tests  2 failed | 34 passed (36)"
+      ],
+      "restoredSHA256": "f135d9f1ef55cb1ef010beaeda421636b359d2446ef1ed4e047ccbf3c10ebc7a"
+    },
+    {
+      "name": "keeper-expiry",
+      "leaf": "src/content/apollyon/aspects/aspect-9ae35d68-a432-45f6-ab8c-07572a25ad6b.ts",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "observableFailures": [
+        "\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 2 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "AssertionError: expected true to be false // Object.is equality",
+        "Tests  2 failed | 34 passed (36)"
+      ],
+      "restoredSHA256": "f135d9f1ef55cb1ef010beaeda421636b359d2446ef1ed4e047ccbf3c10ebc7a"
+    },
+    {
+      "name": "keeper-empty-list",
+      "leaf": "src/content/apollyon/aspects/aspect-9ae35d68-a432-45f6-ab8c-07572a25ad6b.ts",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "observableFailures": [
+        "\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 16 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper resets on the actual next turn and pays normal Reclaim cost for an event",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper uses the discarding controller's emblem when an opponent forces the discard",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper grants nothing to a ceased created card or a subject moved out of void before resolution",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Keeper's character Reclaim respects battlefield capacity and retains the grant across save/replay",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper's character Reclaim respects battlefield capacity and retains the grant across save/replay",
+        "AssertionError: expected false to be true // Object.is equality",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > saves, cancels and retries the 00974abd-19d8-4d83-8af9-6a34e67f11a0 cost prompt without spending its emblem use",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > reloads the committed 00974abd-19d8-4d83-8af9-6a34e67f11a0 effect prompt, refuses cancellation, and replays one emblem reward",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > rolls back a failed 00974abd-19d8-4d83-8af9-6a34e67f11a0 causal step and recovers with one reward",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper grants only the first individual discard subject, preserves copiable characteristics, and expires at turn end",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper resets on the actual next turn and pays normal Reclaim cost for an event",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper uses the discarding controller's emblem when an opponent forces the discard",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Keeper grants nothing to a ceased created card or a subject moved out of void before resolution",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > saves, cancels and retries the 00974abd-19d8-4d83-8af9-6a34e67f11a0 cost prompt without spending its emblem use",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > reloads the committed 00974abd-19d8-4d83-8af9-6a34e67f11a0 effect prompt, refuses cancellation, and replays one emblem reward",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > rolls back a failed 00974abd-19d8-4d83-8af9-6a34e67f11a0 causal step and recovers with one reward",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "Tests  16 failed | 20 passed (36)"
+      ],
+      "restoredSHA256": "f135d9f1ef55cb1ef010beaeda421636b359d2446ef1ed4e047ccbf3c10ebc7a"
+    },
+    {
+      "name": "butcher-controller",
+      "leaf": "src/content/apollyon/aspects/aspect-ac116276-5569-491b-85c9-e192823bddae.ts",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "observableFailures": [
+        "\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 18 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher draws once for the first of multiple abandoned characters and resets next turn",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher rewards the abandoning controller, preserves draw privacy, and not a mere dissolve or discard",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher sees reclaimed and ceased characters, and an empty deck applies ordinary Fatigue",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher matches a ceased figment copy and an opponent-owned subject controlled by the abandoning side",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher draws with a full battlefield and grants nothing when there is no abandon candidate",
+        "AssertionError: expected [] to include 'i11'",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher sees an event played as an effective character without changing its copiable cost or spark",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > saves, cancels and retries the e9fa35a7-fe02-4046-b10b-78e1abcc557a cost prompt without spending its emblem use",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > reloads the committed e9fa35a7-fe02-4046-b10b-78e1abcc557a effect prompt, refuses cancellation, and replays one emblem reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > rolls back a failed e9fa35a7-fe02-4046-b10b-78e1abcc557a causal step and recovers with one reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher draws once for the first of multiple abandoned characters and resets next turn",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher rewards the abandoning controller, preserves draw privacy, and not a mere dissolve or discard",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher sees reclaimed and ceased characters, and an empty deck applies ordinary Fatigue",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher matches a ceased figment copy and an opponent-owned subject controlled by the abandoning side",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher draws with a full battlefield and grants nothing when there is no abandon candidate",
+        "AssertionError: expected [] to include 'i19'",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher sees an event played as an effective character without changing its copiable cost or spark",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > saves, cancels and retries the e9fa35a7-fe02-4046-b10b-78e1abcc557a cost prompt without spending its emblem use",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > reloads the committed e9fa35a7-fe02-4046-b10b-78e1abcc557a effect prompt, refuses cancellation, and replays one emblem reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > rolls back a failed e9fa35a7-fe02-4046-b10b-78e1abcc557a causal step and recovers with one reward",
+        "AssertionError: expected [ { kind: 'triggerQueued', \u2026(5) } ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "Tests  18 failed | 18 passed (36)"
+      ],
+      "restoredSHA256": "aba77953e106e7313c92429c54744ef7ad7c6aa7168cf3adb83991ac27761a3b"
+    },
+    {
+      "name": "butcher-filter",
+      "leaf": "src/content/apollyon/aspects/aspect-ac116276-5569-491b-85c9-e192823bddae.ts",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "observableFailures": [
+        "\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 18 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher draws once for the first of multiple abandoned characters and resets next turn",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher rewards the abandoning controller, preserves draw privacy, and not a mere dissolve or discard",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher sees reclaimed and ceased characters, and an empty deck applies ordinary Fatigue",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher matches a ceased figment copy and an opponent-owned subject controlled by the abandoning side",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher draws with a full battlefield and grants nothing when there is no abandon candidate",
+        "AssertionError: expected [] to include 'i11'",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher sees an event played as an effective character without changing its copiable cost or spark",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > saves, cancels and retries the e9fa35a7-fe02-4046-b10b-78e1abcc557a cost prompt without spending its emblem use",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > reloads the committed e9fa35a7-fe02-4046-b10b-78e1abcc557a effect prompt, refuses cancellation, and replays one emblem reward",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > rolls back a failed e9fa35a7-fe02-4046-b10b-78e1abcc557a causal step and recovers with one reward",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher draws once for the first of multiple abandoned characters and resets next turn",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher rewards the abandoning controller, preserves draw privacy, and not a mere dissolve or discard",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher sees reclaimed and ceased characters, and an empty deck applies ordinary Fatigue",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher matches a ceased figment copy and an opponent-owned subject controlled by the abandoning side",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher draws with a full battlefield and grants nothing when there is no abandon candidate",
+        "AssertionError: expected [] to include 'i19'",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher sees an event played as an effective character without changing its copiable cost or spark",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > saves, cancels and retries the e9fa35a7-fe02-4046-b10b-78e1abcc557a cost prompt without spending its emblem use",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > reloads the committed e9fa35a7-fe02-4046-b10b-78e1abcc557a effect prompt, refuses cancellation, and replays one emblem reward",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > rolls back a failed e9fa35a7-fe02-4046-b10b-78e1abcc557a causal step and recovers with one reward",
+        "AssertionError: expected [] to deeply equal [ ObjectContaining{\u2026} ]",
+        "Tests  18 failed | 18 passed (36)"
+      ],
+      "restoredSHA256": "aba77953e106e7313c92429c54744ef7ad7c6aa7168cf3adb83991ac27761a3b"
+    },
+    {
+      "name": "butcher-once",
+      "leaf": "src/content/apollyon/aspects/aspect-ac116276-5569-491b-85c9-e192823bddae.ts",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "observableFailures": [
+        "\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 2 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher draws once for the first of multiple abandoned characters and resets next turn",
+        "AssertionError: expected [ \u2026(2) ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher draws once for the first of multiple abandoned characters and resets next turn",
+        "AssertionError: expected [ \u2026(2) ] to deeply equal [ ObjectContaining{\u2026} ]",
+        "Tests  2 failed | 34 passed (36)"
+      ],
+      "restoredSHA256": "aba77953e106e7313c92429c54744ef7ad7c6aa7168cf3adb83991ac27761a3b"
+    },
+    {
+      "name": "butcher-count",
+      "leaf": "src/content/apollyon/aspects/aspect-ac116276-5569-491b-85c9-e192823bddae.ts",
+      "exitCode": 1,
+      "expectedFailure": true,
+      "observableFailures": [
+        "\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 10 \u23af\u23af\u23af\u23af\u23af\u23af\u23af",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher draws once for the first of multiple abandoned characters and resets next turn",
+        "AssertionError: expected [ { kind: 'cardDrawn', \u2026(2) }, \u2026(1) ] to deeply equal [ { kind: 'cardDrawn', \u2026(2) } ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher rewards the abandoning controller, preserves draw privacy, and not a mere dissolve or discard",
+        "AssertionError: expected [ 'i15', 'i16' ] to deeply equal [ 'i15' ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher sees reclaimed and ceased characters, and an empty deck applies ordinary Fatigue",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher sees reclaimed and ceased characters, and an empty deck applies ordinary Fatigue",
+        "AssertionError: expected 2 to be 1 // Object.is equality",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher matches a ceased figment copy and an opponent-owned subject controlled by the abandoning side",
+        "AssertionError: expected [ 'i3', 'i4' ] to deeply equal [ 'i3' ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for player > Butcher sees an event played as an effective character without changing its copiable cost or spark",
+        "AssertionError: expected [ 'i3', 'i4' ] to deeply equal [ 'i3' ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher draws once for the first of multiple abandoned characters and resets next turn",
+        "AssertionError: expected [ { kind: 'cardDrawn', \u2026(2) }, \u2026(1) ] to deeply equal [ { kind: 'cardDrawn', \u2026(2) } ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher rewards the abandoning controller, preserves draw privacy, and not a mere dissolve or discard",
+        "AssertionError: expected [ 'i3', 'i4' ] to deeply equal [ 'i3' ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher matches a ceased figment copy and an opponent-owned subject controlled by the abandoning side",
+        "AssertionError: expected [ 'i11', 'i12' ] to deeply equal [ 'i11' ]",
+        "FAIL  |shared| src/battle/integration/apollyon-aspects/pair-293.test.ts > pair 293 permanent Aspects for enemy > Butcher sees an event played as an effective character without changing its copiable cost or spark",
+        "AssertionError: expected [ 'i11', 'i12' ] to deeply equal [ 'i11' ]",
+        "Tests  10 failed | 26 passed (36)"
+      ],
+      "restoredSHA256": "aba77953e106e7313c92429c54744ef7ad7c6aa7168cf3adb83991ac27761a3b"
+    }
+  ],
+  "testDelta": {
+    "files": 1,
+    "lines": 326,
+    "jsdomFiles": 0
+  },
+  "newTestEntrypoints": [
+    "src/battle/integration/apollyon-aspects/pair-293.test.ts"
+  ],
+  "qa": {
+    "browser": "not applicable: leaf modules are directly registered only in synthetic contracts; original pending production map/init/UI untouched",
+    "weightedFuzzAndRealContent": "original293 retains; not executed or claimed here",
+    "fullReview": "not applicable: no infrastructure/config/shared engine or cross-cutting architecture changes",
+    "coreReview": "not labeled; existing primitive compositions, no new primitive/prompt, 20 non-test source lines; parent determines final applicability/routing"
+  },
+  "rules": {
+    "newAmbiguities": [],
+    "D6": "289 provisional Keeper one immediate discarded-card opportunity; Butcher one sacrifice-fed survivor without an automatic sacrifice loop; original293 owns production design adoption and recipes",
+    "precedents": [
+      "RD-hv-umm2.494-1",
+      "RD-hv-7x4l.6-4",
+      "RD-hv-umm2.532-1"
+    ]
+  },
+  "preExistingIssues": [
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.643.md",
+      "source": "initial successful npm install existing dependency advisory report",
+      "total": 17,
+      "moderate": 9,
+      "high": 7,
+      "critical": 1,
+      "remediation": "outside Aspect preparation scope",
+      "engineProductDefectProved": false
+    }
+  ],
+  "delivery": {
+    "commitAuthorization": "parent COMMIT ACK received",
+    "normalGitDates": true,
+    "actualPrecommitCutoff": "2026-10-13T17:39:54.879558+00:00",
+    "cutoffIncludes": "dispatch/research/coordination/parent wait and all validation completed before this cutoff",
+    "finalSchemaAndCommit": "immediate normal-date tail; actual receipt retained under primary ignored audit directory"
+  },
+  "testCount": {
+    "total": 36,
+    "perController": 18,
+    "controllers": [
+      "player",
+      "enemy"
+    ]
+  },
+  "parentPrecommitAudit": {
+    "at": "2026-10-13T17:38:14.266114+00:00",
+    "sha256": "7afb0beb12009149f7396ea4054ef526b21c3e55518194ef32e1597342585ca6",
+    "allChecksAccepted": true
+  },
+  "receiptCopies": [
+    "artifacts/qa/hv-umm2.643/audit/parent-precommit-audit.json",
+    "artifacts/qa/hv-umm2.643/audit/native-brief.json",
+    "artifacts/qa/hv-umm2.643/audit/original293-join-proof.json",
+    "artifacts/qa/hv-umm2.643/audit/commands.jsonl",
+    "artifacts/qa/hv-umm2.643/audit/handoff.json",
+    "artifacts/qa/hv-umm2.643/audit/frozen-source-hashes.json",
+    "artifacts/qa/hv-umm2.643/audit/stage1-source-hashes.json",
+    "artifacts/qa/hv-umm2.643/audit/counterfacts.json"
+  ]
+}
