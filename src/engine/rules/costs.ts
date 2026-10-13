@@ -26,6 +26,7 @@ import { discardCards, gainPoints, spendEnergy } from "./resources";
 import { banish, charactersInPlay, dissolve, instanceOf, returnToHand, slotOf } from "./zones";
 import { revealToBoth } from "../view/knowledge";
 import { Infeasible } from "../steps/errors";
+import { effectiveSpark } from "./spark";
 
 /** A payment cost other than energy, which a plan pays as one total. */
 export type NonEnergyCost = Exclude<PaymentCost | AbandonXCost, { readonly cost: "energy" }>;
@@ -38,7 +39,7 @@ export interface PlannedCost {
 
 /** How a list of costs will be paid, settled by play-time prompts before the commit point. */
 export interface CostPlan {
-  /** Shared X chosen for energy or abandonment, or captured from a discarded or banished count, or a discarded or abandoned card's cost. */
+  /** Shared X chosen for energy or abandonment, or captured from a payment count, a card's copiable cost, or an abandoned character's effective spark. */
   readonly x: number | null;
   /**
    * The whole energy cost — the fixed energy (top-level, and each chosen
@@ -247,7 +248,7 @@ export interface PreparedCostX {
 /**
  * Prepares mandatory cost-captured X only when the activation's immediate
  * modes or targets read it. Count costs choose a number before targeting;
- * copiable-cost captures choose their actual payment card. These selections
+ * copiable-cost and effective-spark captures choose their actual payment card. These selections
  * are replay-local and planCosts validates them against every other payment
  * and target before the commit point. Targetless activation protocols retain
  * their printed-order card choices. Energy-X and abandon-X preparation use
@@ -266,14 +267,15 @@ export function prepareCostX(
   if (!targetsNeedX) return { x, payments };
   for (const cost of costs) {
     if (cost.cost !== "discard" && cost.cost !== "abandon") continue;
-    if (cost.captureCost !== true) continue;
+    const capturesSpark = cost.cost === "abandon" && cost.captureSpark === true;
+    if (cost.captureCost !== true && !capturesSpark) continue;
     const candidates = cardCandidates(ctx.state, ctx.catalog, side, source, cost, x ?? undefined)
       .filter(id => !payments.some(payment => payment.cards.includes(id)));
     const selected = ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards", side, purpose: purpose(CARD_ROLE[cost.cost]), candidates, min: 1, max: 1,
     });
     const cards = candidates.filter(id => selected.includes(id));
-    const value = copiableCostOf(ctx.state, ctx.catalog, cards[0]);
+    const value = capturesSpark ? effectiveSpark(ctx.state, ctx.catalog, cards[0]) : copiableCostOf(ctx.state, ctx.catalog, cards[0]);
     if (x !== null && x !== value) throw new Infeasible("Captured card payment disagrees with X");
     x = value;
     payments.push({ cost, cards });
@@ -315,7 +317,7 @@ export function prepareCostX(
  * `selectorX` supplies prepared X to character-cost selectors during play or
  * activation. Callers with no explicit binding, including manual planning,
  * use the source card's stored X. `preparedPayments` carries mandatory
- * copiable-cost captures selected before activation targeting; these cards
+ * copiable-cost or effective-spark captures selected before activation targeting; these cards
  * must still be available and distinct from targets and earlier payments.
  */
 export function planCosts(
@@ -436,12 +438,13 @@ export function planCosts(
     }, allAnswersPayable ? { allAnswersPayable: true } : undefined);
     const selectedIds = new Set(selected);
     const chosen = remaining.filter((id) => selectedIds.has(id));
-    // A captured card cost (a discarded or abandoned card's) is read now,
-    // before payment, so it holds even for a figment that then ceases to exist.
-    const captures = "captureCost" in cost && cost.captureCost === true;
+    // Capture against the whole prepayment board, before any payment removes
+    // a Support or static source, including for a figment that then ceases.
+    const capturesSpark = cost.cost === "abandon" && cost.captureSpark === true;
+    const captures = capturesSpark || ("captureCost" in cost && cost.captureCost === true);
     if (captures || variable) {
       if (captures && chosen.length !== 1) throw new Error("A captured cost value requires exactly one card");
-      const value = captures ? copiableCostOf(state, catalog, chosen[0]) : chosen.length;
+      const value = capturesSpark ? effectiveSpark(state, catalog, chosen[0]) : captures ? copiableCostOf(state, catalog, chosen[0]) : chosen.length;
       if (capturedX !== null && capturedX !== value) throw new Infeasible("Card payment disagrees with X");
       capturedX = value;
     }

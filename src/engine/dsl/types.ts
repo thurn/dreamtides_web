@@ -476,6 +476,7 @@ export interface AbandonXCost {
   readonly count: "x";
   readonly min: number;
   readonly captureCost?: never;
+  readonly captureSpark?: never;
 }
 
 /** One payment, including a discard or banish count determined by X, with no choice between costs. */
@@ -484,8 +485,10 @@ export type PaymentCost =
   /** ☾: exhausts the source, a ready back-rank character or the avatar. */
   | { readonly cost: "exhaustSelf" }
   /** Abandon characters you control that match the selector; captureCost captures one character’s copiable cost as X. */
-  | { readonly cost: "abandon"; readonly selector: CharacterSelector | SelfSpec; readonly count: number; readonly captureCost?: never }
-  | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: 1; readonly captureCost: true }
+  | { readonly cost: "abandon"; readonly selector: CharacterSelector | SelfSpec; readonly count: number; readonly captureCost?: never; readonly captureSpark?: never }
+  | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: 1; readonly captureCost: true; readonly captureSpark?: never }
+  /** Abandon one matching character and capture its effective spark before payment as X. */
+  | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: 1; readonly captureCost?: never; readonly captureSpark: true }
   /** Return matching characters you control to hand, applying ordinary zone replacements. */
   | { readonly cost: "return"; readonly selector: CharacterSelector; readonly count: number }
   /** Discard a fixed number of matching hand cards. */

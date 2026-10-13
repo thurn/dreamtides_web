@@ -1,0 +1,405 @@
+{
+  "bead": "hv-umm2.543",
+  "base": "fd4ca1e47ea791a08803b1ac319b9acf69ab8fa3",
+  "endpointStatus": "Final parent-authorized precommit endpoint observation; actual unforced Git start/end receipt retained separately.",
+  "implementationStart": {
+    "dispatchProxy": "2026-10-13T05:04:11.235054Z",
+    "actualInternalModelStart": "unknown",
+    "currentOwnedClaimClock": {
+      "start": "2026-10-13T05:00:40.594540Z",
+      "end": "2026-10-13T05:00:40.692242Z",
+      "source": "parent claim-clock.json; independently verified by parent"
+    },
+    "setup": "parent-installed dependencies; parent setup settlement retained separately"
+  },
+  "scope": {
+    "source": [
+      "src/engine/dsl/types.ts",
+      "src/engine/dsl/builders.ts",
+      "src/engine/rules/costs.ts"
+    ],
+    "contracts": [
+      "src/engine/effects/primitives/contracts/abandon-spark-cost.contracts.ts",
+      "src/engine/effects/primitives/contracts/cost-composition.contracts.ts"
+    ],
+    "fallout": [],
+    "productionEntities": []
+  },
+  "recipe": {
+    "contracts": "39 synthetic new-form cases and additive cost-composition extra across existing modes/routes",
+    "browser": "not applicable: existing payment prompt; no player workflow or presentation change",
+    "productionFuzz": "not applicable: entity-free form, no new-form generated fuzz coverage; original172 owns four-UUID acceptance",
+    "full": "not applicable: local capture branches plus additive DSL form; no infrastructure or cross-cutting architecture edits"
+  },
+  "baseline": {
+    "reader": "existing abandonCostCapture, qualified old behavior",
+    "cost": 4,
+    "baseSpark": 7,
+    "effectiveSpark": 12,
+    "capturedXGain": 4,
+    "paidZone": "void"
+  },
+  "iterations": {
+    "focused-initial": "31 passed, 5 fixture failures: exact ceased event fields, preserved stored-source-X fallback and synthetic empty determinization decklists; corrected within new contract",
+    "focused-restored": "2551 tests, 280 composition failures due to forced max-one prompt bypassing recording source; new row now explicitly disables forced prompt auto-answer, preserving existing rows",
+    "focused-pass": "535 passed, 2016 skipped",
+    "negative-reader": "36 failed, 2 passed, 2513 skipped; both effective readers replaced with cost readers; exit1 expected",
+    "focused-final": "9 files, 2680 tests passed; complete contracts, existing cost suites, saved intents, content gates",
+    "review": "Related suite passed; app typecheck reported four new-contract fixture errors (readonly config/variant writes and broad PaymentCost count access), corrected only in the new contract with immutable fixture assembly and discriminator narrowing.",
+    "review-final": "App/node types, lint, import cycles, friction schema and 287 related test files / 5575 tests passed.",
+    "knip": "passed"
+  },
+  "negativeRestoration": {
+    "writerPid": 55847,
+    "start": "2026-10-13T05:15:59.981226+00:00",
+    "end": "2026-10-13T05:16:04.474838+00:00",
+    "originalSha256": "3b3e5cb0064fad02f7c091b8b9fcefabb5c7521f046e3e5482846282d6504325",
+    "faultSha256": "b78df85259a390369b72c9d7c3add0fe53b68886a9a1e1cd07fdbc001f1f757a",
+    "restoredSha256": "3b3e5cb0064fad02f7c091b8b9fcefabb5c7521f046e3e5482846282d6504325",
+    "exactRestoration": true,
+    "faultReader": "copiableCostOf substituted for effectiveSpark in both captureSpark branches",
+    "testExit": 1
+  },
+  "commands": {
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-spark543",
+      "start": "2026-10-13T05:20:16.086221+00:00",
+      "end": "2026-10-13T05:20:19.752547+00:00",
+      "pid": 62430,
+      "processGroup": 62430,
+      "wallS": 3.6635702080093324,
+      "cpuUserS": 3.19719,
+      "cpuSystemS": 0.9389949999999999,
+      "load": "{ 5.91 6.48 7.94 }",
+      "exitCode": 0,
+      "processGroupAlive": false,
+      "stdout": "/tmp/dreamtides-executor-01a1304d/543-helper/knip.stdout",
+      "stderr": "/tmp/dreamtides-executor-01a1304d/543-helper/knip.stderr"
+    },
+    "focused-pass": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "abandon spark capture|cost composition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-spark543",
+      "start": "2026-10-13T05:15:31.062396+00:00",
+      "end": "2026-10-13T05:15:37.182837+00:00",
+      "pid": 55008,
+      "processGroup": 55008,
+      "wallS": 6.117656332993647,
+      "cpuUserS": 6.988208,
+      "cpuSystemS": 1.493235,
+      "load": "{ 4.87 8.09 9.01 }",
+      "exitCode": 0,
+      "processGroupAlive": false,
+      "stdout": "/tmp/dreamtides-executor-01a1304d/543-helper/focused-pass.stdout",
+      "stderr": "/tmp/dreamtides-executor-01a1304d/543-helper/focused-pass.stderr"
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-spark543",
+      "start": "2026-10-13T05:17:28.300982+00:00",
+      "end": "2026-10-13T05:18:26.888138+00:00",
+      "pid": 58140,
+      "processGroup": 58140,
+      "wallS": 58.58366041700356,
+      "cpuUserS": 166.054461,
+      "cpuSystemS": 16.938256,
+      "load": "{ 3.70 6.59 8.30 }",
+      "exitCode": 2,
+      "processGroupAlive": false,
+      "stdout": "/tmp/dreamtides-executor-01a1304d/543-helper/review.stdout",
+      "stderr": "/tmp/dreamtides-executor-01a1304d/543-helper/review.stderr"
+    },
+    "baseline": {
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/543-helper/baseline.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-spark543",
+      "start": "2026-10-13T05:11:32.792232+00:00",
+      "end": "2026-10-13T05:11:34.873799+00:00",
+      "pid": 44684,
+      "processGroup": 44684,
+      "wallS": 2.078410250003799,
+      "cpuUserS": 1.338404,
+      "cpuSystemS": 0.665334,
+      "load": "{ 12.54 11.31 10.11 }",
+      "exitCode": 0,
+      "processGroupAlive": false,
+      "stdout": "/tmp/dreamtides-executor-01a1304d/543-helper/baseline.stdout",
+      "stderr": "/tmp/dreamtides-executor-01a1304d/543-helper/baseline.stderr"
+    },
+    "review-final": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-spark543",
+      "start": "2026-10-13T05:18:45.260906+00:00",
+      "end": "2026-10-13T05:19:44.834657+00:00",
+      "pid": 60005,
+      "processGroup": 60005,
+      "wallS": 59.56972133400268,
+      "cpuUserS": 151.701413,
+      "cpuSystemS": 16.302691,
+      "load": "{ 5.22 6.45 8.09 }",
+      "exitCode": 0,
+      "processGroupAlive": false,
+      "stdout": "/tmp/dreamtides-executor-01a1304d/543-helper/review-final.stdout",
+      "stderr": "/tmp/dreamtides-executor-01a1304d/543-helper/review-final.stderr"
+    },
+    "negative-reader": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "abandon spark capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-spark543",
+      "start": "2026-10-13T05:16:00.004058+00:00",
+      "end": "2026-10-13T05:16:04.470490+00:00",
+      "pid": 55873,
+      "processGroup": 55873,
+      "wallS": 4.463730250005028,
+      "cpuUserS": 4.7972790000000005,
+      "cpuSystemS": 1.424484,
+      "load": "{ 4.28 7.65 8.82 }",
+      "exitCode": 1,
+      "processGroupAlive": false,
+      "stdout": "/tmp/dreamtides-executor-01a1304d/543-helper/negative-reader.stdout",
+      "stderr": "/tmp/dreamtides-executor-01a1304d/543-helper/negative-reader.stderr"
+    },
+    "focused-initial": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "abandon spark capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-spark543",
+      "start": "2026-10-13T05:14:18.122614+00:00",
+      "end": "2026-10-13T05:14:23.564684+00:00",
+      "pid": 53036,
+      "processGroup": 53036,
+      "wallS": 5.439263334003044,
+      "cpuUserS": 5.705697,
+      "cpuSystemS": 1.8104390000000001,
+      "load": "{ 5.41 8.99 9.39 }",
+      "exitCode": 1,
+      "processGroupAlive": false,
+      "stdout": "/tmp/dreamtides-executor-01a1304d/543-helper/focused-initial.stdout",
+      "stderr": "/tmp/dreamtides-executor-01a1304d/543-helper/focused-initial.stderr"
+    },
+    "focused-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/costs-discard-hand.test.ts",
+        "src/engine/rules/costs-discard-x-min.test.ts",
+        "src/engine/rules/costs-discard.test.ts",
+        "src/engine/rules/costs-play-x.test.ts",
+        "src/engine/rules/costs-search.test.ts",
+        "src/engine/rules/costs.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-spark543",
+      "start": "2026-10-13T05:16:35.244880+00:00",
+      "end": "2026-10-13T05:16:45.492238+00:00",
+      "pid": 56684,
+      "processGroup": 56684,
+      "wallS": 10.24456162500428,
+      "cpuUserS": 12.558250999999998,
+      "cpuSystemS": 1.966966,
+      "load": "{ 3.44 7.08 8.57 }",
+      "exitCode": 0,
+      "processGroupAlive": false,
+      "stdout": "/tmp/dreamtides-executor-01a1304d/543-helper/focused-final.stdout",
+      "stderr": "/tmp/dreamtides-executor-01a1304d/543-helper/focused-final.stderr"
+    },
+    "focused-restored": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "abandon spark capture|cost composition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-spark543",
+      "start": "2026-10-13T05:15:12.991516+00:00",
+      "end": "2026-10-13T05:15:18.110883+00:00",
+      "pid": 54542,
+      "processGroup": 54542,
+      "wallS": 5.11688137499732,
+      "cpuUserS": 6.033498,
+      "cpuSystemS": 1.531544,
+      "load": "{ 5.42 8.41 9.14 }",
+      "exitCode": 1,
+      "processGroupAlive": false,
+      "stdout": "/tmp/dreamtides-executor-01a1304d/543-helper/focused-restored.stdout",
+      "stderr": "/tmp/dreamtides-executor-01a1304d/543-helper/focused-restored.stderr"
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-spark543",
+      "start": "2026-10-13T05:20:57.073057+00:00",
+      "end": "2026-10-13T05:20:57.202535+00:00",
+      "pid": 74748,
+      "processGroup": 74748,
+      "wallS": 0.12608225000440143,
+      "cpuUserS": 0.06082799999999999,
+      "cpuSystemS": 0.032811,
+      "load": "{ 12.50 8.01 8.43 }",
+      "exitCode": 0,
+      "processGroupAlive": false,
+      "stdout": "/tmp/dreamtides-executor-01a1304d/543-helper/schema.stdout",
+      "stderr": "/tmp/dreamtides-executor-01a1304d/543-helper/schema.stderr"
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "command": "knip",
+      "start": "2026-10-13T05:20:16.086221+00:00",
+      "load": "{ 5.91 6.48 7.94 }"
+    },
+    {
+      "command": "focused-pass",
+      "start": "2026-10-13T05:15:31.062396+00:00",
+      "load": "{ 4.87 8.09 9.01 }"
+    },
+    {
+      "command": "review",
+      "start": "2026-10-13T05:17:28.300982+00:00",
+      "load": "{ 3.70 6.59 8.30 }"
+    },
+    {
+      "command": "baseline",
+      "start": "2026-10-13T05:11:32.792232+00:00",
+      "load": "{ 12.54 11.31 10.11 }"
+    },
+    {
+      "command": "review-final",
+      "start": "2026-10-13T05:18:45.260906+00:00",
+      "load": "{ 5.22 6.45 8.09 }"
+    },
+    {
+      "command": "negative-reader",
+      "start": "2026-10-13T05:16:00.004058+00:00",
+      "load": "{ 4.28 7.65 8.82 }"
+    },
+    {
+      "command": "focused-initial",
+      "start": "2026-10-13T05:14:18.122614+00:00",
+      "load": "{ 5.41 8.99 9.39 }"
+    },
+    {
+      "command": "focused-final",
+      "start": "2026-10-13T05:16:35.244880+00:00",
+      "load": "{ 3.44 7.08 8.57 }"
+    },
+    {
+      "command": "focused-restored",
+      "start": "2026-10-13T05:15:12.991516+00:00",
+      "load": "{ 5.42 8.41 9.14 }"
+    },
+    {
+      "command": "schema",
+      "start": "2026-10-13T05:20:57.073057+00:00",
+      "load": "{ 12.50 8.01 8.43 }"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final review starting load"
+      }
+    }
+  },
+  "resources": {
+    "browser": [],
+    "servers": [],
+    "providers": [],
+    "longLived": [],
+    "commands": "Every retained command terminal; every measured process group absent. No server, browser, provider or new long-lived resource."
+  },
+  "warnings": "Review preparation emits temporary missing-art warnings in its local asset isolation; final restore reports complete local links. No image committed.",
+  "reviewRouting": "parent-owned fresh read-only gpt-5.6-sol CLI review under temporary user-authorized same-family routing through2026-10-14T01:00:00Z; not yet performed",
+  "testDelta": {
+    "files": 1,
+    "lines": 316,
+    "jsdomFiles": 0
+  },
+  "validationEvidenceScope": "No source mutation after final review; this measurements/friction update records terminal receipts and requires focused evidence schema validation. Endpoint remains provisional until parent final ACK.",
+  "validationTotals": {
+    "newContractCases": 39,
+    "newContractPhysicalLines": 306,
+    "focused": {
+      "files": 9,
+      "tests": 2680
+    },
+    "related": {
+      "files": 287,
+      "tests": 5575
+    },
+    "nonTestCodeAddedPlusDeleted": 33
+  },
+  "remaining": [
+    "Parent cold Sol core review and native delivery"
+  ],
+  "loggingAudit": {
+    "scope": "read-only source proof requested by parent after READY; no additional runtime/check requested or run",
+    "reconstruction": "The existing engine.battleStarted init plus engine.action action and all ordered RecordedAnswer values (automatic answers included) replay the battle. The abandonCost answer names the paid physical InstanceId. The init/catalog UUID/variant and earlier actions reconstruct the exact prepayment effective layers and the pure capture result. Captured numeric X is retained in existing stack/saved state rather than a new dedicated logging event. Production engine.action host path is engine-battle collector to LocalGameProvider log subscriber to logEvent, which serializes unchanged action/answers fields into development and per-game capture. abilityActivated itself carries no new X scalar.",
+    "pointers": {
+      "src/engine/log.ts:14-16,34-36,50-84": "Existing replay record schema: init, action/answers, source/catalog UUID prompt metadata and physical card answer values; identifiers, no display names",
+      "src/engine/fold/slice.ts:588,603,620,667": "Logs prompt-open metadata, completed action with every answer, battle init and exact prompt answer",
+      "src/session/game-log.ts:87-94": "Mirrors every applied engine diagnostic with game ID/seq/timestamp",
+      "src/logging.ts:64-80,147-160,182-194": "Transport sends every record to per-game capture in every build and development /api/log sink",
+      "vite.config.ts:48": "Development sink appends logs/journey-log.jsonl",
+      "src/session/game-log-capture.ts:1-6,229-236;src/session/browser-repository.ts:22-25;src/session/game-controls.ts:22": "Per-game stored JSONL, IndexedDB repository and export",
+      "src/engine/steps/kinds/activate.ts:69-85;src/engine/steps/kinds/play.ts:83": "Existing preparation/planning persist plan.x, with no new saved field",
+      "src/rules/battle/fold.ts:602-609,915-938": "Existing saved recorded-answer and stack integer-X validation",
+      "src/engine/view/view.ts:531-534;src/engine/view/determinize.ts:488;src/engine/rules/copies.ts:59": "Existing stack X view/determinization/copy transport",
+      "src/rules/battle/engine-battle.ts:110-114,146-156,171-175": "Production fold collector records FoldAdapter engine.action/answers, retains records by actual event seq and hands them to the host once",
+      "src/session/hooks.ts:95-103": "Production LocalGameProvider subscribes to committed local log; takes engine records for seq and calls logEvent(event, fields) for every applied record, including full engine.action answers",
+      "src/logging.ts:111-133": "logEvent retains arbitrary action/answers fields, stamps game context/time/sequence, serializes JSON and calls all-build capture transport",
+      "src/session/use-local-game.ts:409-412": "Opening a local game attaches its actual logCapture.capture to the all-build journey logger"
+    },
+    "evidenceQualification": "Source audit proves existing logging path and schema. New public contracts prove chosen-card prefix cold replay, cancellation and preserved numeric stack/view/determinization/copy X; no dedicated new-form production-log runtime was captured. No existing log schema/event/framework body changed."
+  },
+  "endpointProvenance": {
+    "sample": "2026-10-13T05:27:27.949956+00:00",
+    "meaning": "Fresh UTC wall observation immediately before schema/staged diff and Git; includes research/setup admission/verification/ACK waits, not productive CPU time",
+    "parentNativeAckId": "01a133ba-03f3-70fa-a8ba-85b6ea4ddc68",
+    "parentNativeAckCreatedAt": "2026-10-13T05:26:31.15401Z",
+    "parentAckObservedAt": "2026-10-13T05:26:31.197522+00:00",
+    "actualGitReceipt": "/tmp/dreamtides-executor-01a1304d/543-helper/commit.receipt.json",
+    "actualGitStartEnd": "External receipt captures actual process; commit timestamp is Git default, not forced",
+    "maximumObservedEndpointToGitStartS": 60
+  }
+}

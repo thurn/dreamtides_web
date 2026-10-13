@@ -115,6 +115,11 @@ export function abandonCostCapture(extra: Omit<CharacterSelector, "controller"> 
   return { cost: "abandon", selector: { controller: "you", ...extra }, count: 1, captureCost: true };
 }
 
+/** "Abandon a character: …, where X is that character's spark": capture its effective spark before payment. */
+export function abandonSparkCapture(extra: Omit<CharacterSelector, "controller"> = {}): PaymentCost {
+  return { cost: "abandon", selector: { controller: "you", ...extra }, count: 1, captureSpark: true };
+}
+
 /** "Abandon this character": only the ability's source pays. */
 export function abandonSelfCost(): PaymentCost {
   return { cost: "abandon", selector: self(), count: 1 };

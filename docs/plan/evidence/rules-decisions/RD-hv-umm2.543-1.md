@@ -1,0 +1,8 @@
+# RD-hv-umm2.543-1: An abandon cost captures effective prepayment spark as X
+
+- Ladder: not invoked; the normative Spark and Costs, Requirements, and X rules settle the value, capture timing, shared X and stack retention.
+- rules.md: Spark (effective spark, base-setting, zero clamp, spark outside play and predeparture source spark); Costs, Requirements, and X (abandon capture and shared energy/count X).
+- Affects: the entity-free `abandonSparkCapture` payment form; downstream 82749215-ed35-44e3-a745-72ca76036c7c is authored by hv-umm2.172.
+- Why: a character's spark in play is its effective spark, including current layers, gains, duration changes, Support and variant modifications. An abandon cost's named scalar is captured before payment and persists with the stack item. Capturing all payments against the prepayment board preserves contributions from a provider another payment abandons. Every binding of the same X agrees, and only printed energy costs spend energy.
+
+The one-character form retains the abandon payment discriminant and carries exclusive `captureSpark: true`, with `count: 1`. Mandatory captures needed by immediate activation choices bind before those choices; targetless, alternative and optional costs follow their ordinary planning protocol. Planning records the number in existing `CostPlan.x`; activation or play persists it in the existing stack X field, which resolution, views, saved replay, determinization and card copies retain. The selected physical card remains distinct from targets and other payments. Existing cost captures read copiable cost, and count captures read the chosen number of cards.

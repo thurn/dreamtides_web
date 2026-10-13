@@ -28,7 +28,7 @@ import { staticAbility } from "../../../dsl/builders";
 import { payTo } from "../pay-to";
 import { ScriptedSource } from "../../../steps/sources";
 import type { EngineCardDefinition } from "../../../catalog";
-import { abandonXCost, enemyCharacter, target, additionalCost, choiceCost, energy, energyX, event, discardCostFilter, x, keyword, optionalCost, pointsCost, reclaim } from "../../../dsl/builders";
+import { abandonSparkCapture, abandonXCost, enemyCharacter, target, additionalCost, choiceCost, energy, energyX, event, discardCostFilter, x, keyword, optionalCost, pointsCost, reclaim } from "../../../dsl/builders";
 import type { Ability, CardCost } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
 import type { Answer, Prompt } from "../../../prompts/types";
@@ -169,7 +169,7 @@ const ROUTES: { readonly [R in PlayRoute]: readonly [RouteVariant, ...RouteVaria
 };
 
 /** The subject's additional energy shapes. */
-type Extra = "none" | "mandatory" | "optionalPaid" | "optionalDeclined" | "choice" | "x" | "discardMin" | "abandonCount";
+type Extra = "none" | "mandatory" | "optionalPaid" | "optionalDeclined" | "choice" | "x" | "discardMin" | "abandonCount" | "abandonSpark";
 interface ExtraSetup {
   readonly abilities: readonly Ability[];
   /** Energy the extra adds as paid in the row; X's is `X` where the route includes X. */
@@ -179,6 +179,7 @@ interface ExtraSetup {
   readonly accept?: boolean;
 }
 const EXTRAS: { readonly [E in Extra]: ExtraSetup } = {
+  abandonSpark: { abilities: [additionalCost(abandonSparkCapture()), event(draw(x()))], paid: 0, least: 0 },
   abandonCount: { abilities: [additionalCost(abandonXCost({ min: 1, selector: { figment: true } })), event(dissolve(target(enemyCharacter({ sparkAtLeast: x(), sparkAtMost: x() }))))], paid: 0, least: 0 },
   none: { abilities: [], paid: 0, least: 0 },
   /** "To play this card, pay 1●." */
@@ -228,7 +229,7 @@ class RowAnswers implements AnswerSource {
     if (role === "target" && prompt.kind === "chooseTargets") return [prompt.candidates[0]];
     if (role === "chooseCost") return 1;
     if (role === "optionalCost" && this.extra.accept !== undefined) return this.extra.accept;
-    if (role === "abandonCost" && prompt.kind === "chooseCards") return prompt.candidates.slice(0, X);
+    if (role === "abandonCost" && prompt.kind === "chooseCards") return prompt.candidates.slice(0, prompt.max);
     if (role === "discardCost" && prompt.kind === "chooseCards") {
       expect(prompt).toMatchObject({ min: X, max: X });
       return prompt.candidates.slice(0, X);
@@ -272,7 +273,7 @@ function arranged(route: RouteVariant, extra: Extra, steps: readonly Step[], ava
     id: `e${state.nextEffect + index}`, controller: side(by), source: sources[by], timestamp: index + 1, expiry: { at: "endOfTurn" }, change,
   }));
   const nextIds = floating.slice(floating.length - steps.length).filter((_, index) => NEXT_MODES.includes(steps[index].mode) && steps[index].who === "self").map((effect) => effect.id);
-  const prepared: BattleState = { ...state, ...(extra === "abandonCount" ? { config: { ...state.config, autoAnswerForcedPrompts: false } } : {}), floating: [...state.floating, ...floating], nextEffect: state.nextEffect + floating.length };
+  const prepared: BattleState = { ...state, ...(extra === "abandonCount" || extra === "abandonSpark" ? { config: { ...state.config, autoAnswerForcedPrompts: false } } : {}), floating: [...state.floating, ...floating], nextEffect: state.nextEffect + floating.length };
   return { state: prepared, id, nextIds };
 }
 
@@ -313,6 +314,13 @@ function observed(route: RouteVariant, extra: Extra, steps: readonly Step[]): Ou
     expect(result.events.filter(event => event.kind === "abandoned")).toHaveLength(X);
     expect(result.events.some(event => event.kind === "noLegalTarget")).toBe(false);
   }
+  if (extra === "abandonSpark") {
+    const payment = answers.prompts.find(prompt => prompt.purpose.role === "abandonCost");
+    expect(payment).toMatchObject({ kind: "chooseCards", min: 1, max: 1 });
+    expect(result.events.filter(event => event.kind === "abandoned")).toHaveLength(1);
+    expect(result.state.sides[PLAYER].backRank[0]).toBeNull();
+    expect(result.state.turnLog.drawn[PLAYER] - state.turnLog.drawn[PLAYER]).toBe(1);
+  }
   if (extra === "discardMin") {
     const discarded = result.events.flatMap((event) => event.kind === "discarded" ? [event.instance] : []);
     expect([...discarded].sort()).toEqual(state.sides[PLAYER].hand.filter((card) => card !== id).sort());
@@ -321,6 +329,7 @@ function observed(route: RouteVariant, extra: Extra, steps: readonly Step[]): Ou
   }
   return {
     extra,
+    ...(extra === "abandonSpark" ? { drawn: result.state.turnLog.drawn[PLAYER] - state.turnLog.drawn[PLAYER] } : {}),
     ...(extra === "discardMin" ? {
       discarded: result.events.filter((event) => event.kind === "discarded").length,
       drawn: result.state.turnLog.drawn[PLAYER] - state.turnLog.drawn[PLAYER],
@@ -338,6 +347,7 @@ function ruled(route: RouteVariant, extra: Extra, steps: readonly Step[], routeN
   return {
     extra,
     ...(extra === "discardMin" ? { discarded: X, drawn: X } : {}),
+    ...(extra === "abandonSpark" ? { drawn: 1 } : {}),
     energy: ruledEnergy(steps, route, EXTRAS[extra].paid, extra === "x" || extra === "discardMin" ? X : 0),
     points: POINTS,
     opponentPoints: 0,

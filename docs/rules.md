@@ -1041,6 +1041,18 @@ when abandoned, has a cost of 0●, and a figment copy has the cost it copied.
 Any character the player controls can pay the cost, including the character
 whose ability it is.
 
+An abandon cost may name the paid character's spark. That value is captured
+as its effective spark in play before any cost is paid: its current base
+after variant and deck-entry changes, gained spark, unexpired changes, static
+abilities and Support, with the result clamped at 0. A contribution from a
+character used for another payment still counts in this snapshot. The value
+persists with the stack item, including when the paid character ceases to
+exist or its in-play contributions end. This capture spends no energy beyond
+the separately printed energy costs; any other payment binding X, including
+X● or a payment count, must use the same number. When immediate activation
+targets or modes read that X, choose the paid character before those choices,
+reserving it separately from all targets and other payments.
+
 **Abandon X characters:** Choose X before the ability's targets, then choose
 exactly X distinct matching characters you control to pay. A target or a
 character used for another cost cannot also pay this cost. The chosen count
