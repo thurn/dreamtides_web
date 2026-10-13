@@ -3106,5 +3106,213 @@
       "allRecordedCommandsTerminal": true
     }
   },
-  "endpointStatus": "Final endpoint metadata authorized and frozen before one local commit. Parent owns cold review, candidate, promotion and cleanup; actual Git execution receipt is retained outside immutable commit."
+  "endpointStatus": "Final endpoint metadata authorized and frozen before one local commit. Parent owns cold review, candidate, promotion and cleanup; actual Git execution receipt is retained outside immutable commit.",
+  "schemaNormalization": {
+    "normalizingBead": "hv-umm2.599",
+    "sourceBase": "3f57bdd663d53d723a4116a66935b2a20bcf283c",
+    "originalSourceOid": "8f2c401fa3154f3365a8781c9455fc5496f46672",
+    "originalEvidence": {
+      "docs/plan/evidence/friction/hv-umm2.595.json": {
+        "sourceOid": "8f2c401fa3154f3365a8781c9455fc5496f46672",
+        "sha256": "286f8e5dbc75e096134af378fbf4b55d60a993f14965f7f4eb7836277a25accd"
+      },
+      "docs/plan/evidence/measurements/hv-umm2.595.json": {
+        "sourceOid": "8f2c401fa3154f3365a8781c9455fc5496f46672",
+        "sha256": "43a02d2b2fb3d09d49d2a9f9efd86cd3290e34c1aa957d7b323c6623dae634b6"
+      }
+    },
+    "originalSnapshots": {
+      "friction": {
+        "bead": "hv-umm2.595",
+        "phase": 5,
+        "implementMin": 22.534529766666665,
+        "implementWindow": {
+          "start": "2026-10-13T00:15:09.072Z",
+          "end": "2026-10-13T00:37:41.143786+00:00"
+        },
+        "localValidationS": {
+          "focused": 11.14787262500613,
+          "restored-focused": 5.2906169580091955,
+          "final-focused": 8.428723582997918,
+          "generate": 1.9182631660078187,
+          "final-generate": 1.6575259170058416,
+          "generator-check": 3.7474251659878064,
+          "review": 17.960061916004634,
+          "knip": 5.542856667001615,
+          "full-outer": 105.33428650000133
+        },
+        "hostLoad": 4.45654296875,
+        "testDelta": {
+          "files": 1,
+          "lines": 113,
+          "jsdomFiles": 0,
+          "cases": 18
+        },
+        "friction": []
+      },
+      "implementationProvenance": {
+        "exactHostDispatch": "2026-10-13T00:15:09.072Z",
+        "modelSamplingStart": "UNKNOWN",
+        "sourceWriteAdmission": "2026-10-13T00:27:24.102946Z",
+        "sourceFirstAdmissionElapsedS": 735.030946,
+        "admissionQualification": "Required source-first research, public synthetic witnesses and parent scope review; parent review delay, not a tooling defect or user approval wait. Install predates dispatch; gross window starts at recovered host dispatch and includes research/admission/checks/queue/evidence.",
+        "provisionalEndpointUTC": "2026-10-13T00:36:00.843211+00:00",
+        "endpointSemantics": "UTC sampled immediately before final allowed endpoint metadata/schema/staging/commit. Parent endpoint ACK verifies staged7 paths, source freeze4, schema/whitespace and all31 observed PID/groups absent. Git metadata date is parent-authorized ACK second precision; actual Git invocation start/end/exit receipt stays outside immutable commit. Model sampling start UNKNOWN, precision does not assert clock accuracy.",
+        "finalEndpointUTC": "2026-10-13T00:37:41.143786+00:00",
+        "implementMin": 22.534529766666665,
+        "parentEndpointACKUTC": "2026-10-13T00:36:57.747476Z",
+        "authorizedGitMetadataDate": "2026-10-13T00:36:57Z"
+      }
+    },
+    "fields": {
+      "implementWindow.end": {
+        "original": "2026-10-13T00:37:41.143786+00:00",
+        "normalized": "2026-10-13T00:38:07.763888+00:00",
+        "measuredFor": "Actual implementer Git commit completion: external commit-process.json endUtc; authorized Git metadata date and precommit endpoint are separate clocks."
+      },
+      "implementMin": {
+        "original": 22.534529766666665,
+        "normalized": 22.978198133333333,
+        "measuredFor": "Gross elapsed wall minutes from recovered host dispatch 2026-10-13T00:15:09.072Z through actual Git commit completion 2026-10-13T00:38:07.763888+00:00; includes research, coordination, waits, validation and evidence."
+      },
+      "hostLoad": {
+        "original": 4.45654296875,
+        "normalized": 17.21728515625,
+        "measuredFor": "npm run review start 2026-10-13T00:32:05.537545+00:00; retained review-process.json startLoad1 (one-minute host load)."
+      }
+    },
+    "clockQualification": {
+      "authorizedGitMetadataDate": "2026-10-13T00:36:57Z",
+      "actualGitStartUtc": "2026-10-13T00:38:07.732837+00:00",
+      "actualGitCompletionUtc": "2026-10-13T00:38:07.763888+00:00",
+      "modelSamplingStart": "UNKNOWN",
+      "exactQueueSeconds": "UNKNOWN",
+      "originalEndpointStatus": "Preserved original endpointStatus and implementationProvenance are historical metadata snapshots. Normalized fields above identify observed dispatch-to-commit elapsed wall and validation-start load."
+    },
+    "reviewProvenance": {
+      "findings": 2,
+      "reviewFile": "review-sol.md",
+      "settlementFile": "review-settlement.json",
+      "model": "gpt-5.6-sol",
+      "actualSession": "01a132b3-47c3-7dd0-a99a-1a79814e3f95",
+      "routing": "Fresh read-only Sol review under the user-authorized temporary Claude weekly-cap routing; parent owns finding disposition and delivery."
+    }
+  },
+  "actualGitCommitReceipt": {
+    "filename": "commit-process.json",
+    "sha256": "7cffc2885410893cef6d4425da3f1f0bb1cbc20d9f198d990f7f43fd9158612e",
+    "receipt": {
+      "label": "commit",
+      "command": [
+        "env",
+        "GIT_AUTHOR_DATE=2026-10-13T00:36:57Z",
+        "GIT_COMMITTER_DATE=2026-10-13T00:36:57Z",
+        "git",
+        "commit",
+        "-F",
+        "/tmp/dreamtides-journey-inventory-595/commit-message.txt"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-595-journey-inventory",
+      "observerPid": 77935,
+      "observerPgid": 77935,
+      "startUtc": "2026-10-13T00:38:07.732837+00:00",
+      "startLoad1": 3.79736328125,
+      "pid": 77960,
+      "pgid": 77960,
+      "exit": 0,
+      "endUtc": "2026-10-13T00:38:07.763888+00:00",
+      "elapsedS": 0.031084957998245955,
+      "cpuUserS": 0.010249999999999999,
+      "cpuSystemS": 0.026109,
+      "maximumRss": 14974976,
+      "cpuScope": "waited command and descendant processes, separate from elapsed wall and queue"
+    },
+    "qualification": "Retained external actual process receipt. Explicit GIT_AUTHOR_DATE and GIT_COMMITTER_DATE in its command are metadata dates, separate from process startUtc/endUtc."
+  },
+  "hostLoadSamples": [
+    {
+      "step": "focused",
+      "startUtc": "2026-10-13T00:28:41.766618+00:00",
+      "load1": 21.94189453125,
+      "measuredFor": "focused command start; retained validation.focused.startLoad1",
+      "receiptPointer": "validation.focused"
+    },
+    {
+      "step": "negative-registration",
+      "startUtc": "2026-10-13T00:29:14.948187+00:00",
+      "load1": 18.64013671875,
+      "measuredFor": "negative-registration command start; retained validation.negative-registration.startLoad1",
+      "receiptPointer": "validation.negative-registration"
+    },
+    {
+      "step": "restored-focused",
+      "startUtc": "2026-10-13T00:29:25.826913+00:00",
+      "load1": 18.10595703125,
+      "measuredFor": "restored-focused command start; retained validation.restored-focused.startLoad1",
+      "receiptPointer": "validation.restored-focused"
+    },
+    {
+      "step": "final-focused",
+      "startUtc": "2026-10-13T00:30:14.099977+00:00",
+      "load1": 19.255859375,
+      "measuredFor": "final-focused command start; retained validation.final-focused.startLoad1",
+      "receiptPointer": "validation.final-focused"
+    },
+    {
+      "step": "generate",
+      "startUtc": "2026-10-13T00:29:52.675604+00:00",
+      "load1": 19.443359375,
+      "measuredFor": "generate command start; retained validation.generate.startLoad1",
+      "receiptPointer": "validation.generate"
+    },
+    {
+      "step": "final-generate",
+      "startUtc": "2026-10-13T00:30:58.071345+00:00",
+      "load1": 13.49951171875,
+      "measuredFor": "final-generate command start; retained validation.final-generate.startLoad1",
+      "receiptPointer": "validation.final-generate"
+    },
+    {
+      "step": "generator-check",
+      "startUtc": "2026-10-13T00:31:31.607176+00:00",
+      "load1": 18.2138671875,
+      "measuredFor": "generator-check command start; retained validation.generator-check.startLoad1",
+      "receiptPointer": "validation.generator-check"
+    },
+    {
+      "step": "review",
+      "startUtc": "2026-10-13T00:32:05.537545+00:00",
+      "load1": 17.21728515625,
+      "measuredFor": "review command start; retained validation.review.startLoad1",
+      "receiptPointer": "validation.review"
+    },
+    {
+      "step": "knip",
+      "startUtc": "2026-10-13T00:32:44.733186+00:00",
+      "load1": 15.6396484375,
+      "measuredFor": "knip command start; retained validation.knip.startLoad1",
+      "receiptPointer": "validation.knip"
+    },
+    {
+      "step": "full-outer",
+      "startUtc": "2026-10-13T00:33:12.654876+00:00",
+      "load1": 12.30224609375,
+      "measuredFor": "full-outer command start; retained validation.full-outer.startLoad1",
+      "receiptPointer": "validation.full-outer"
+    },
+    {
+      "step": "full-execution",
+      "startUtc": "2026-10-13T00:33:12.678749+00:00",
+      "load1": 12.30224609375,
+      "measuredFor": "full-execution command start; retained validation.full-execution.startLoad1",
+      "receiptPointer": "validation.full-execution"
+    },
+    {
+      "step": "evidence-schema",
+      "startUtc": "2026-10-13T00:34:30.996080+00:00",
+      "load1": 7.23828125,
+      "measuredFor": "evidence-schema command start; retained validation.evidence-schema.startLoad1",
+      "receiptPointer": "validation.evidence-schema"
+    }
+  ]
 }

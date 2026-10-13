@@ -1,0 +1,244 @@
+{
+  "bead": "hv-umm2.599",
+  "phase": 5,
+  "base": "3f57bdd663d53d723a4116a66935b2a20bcf283c",
+  "scope": {
+    "paths": [
+      "docs/plan/evidence/friction/hv-umm2.595.json",
+      "docs/plan/evidence/measurements/hv-umm2.595.json",
+      "docs/plan/evidence/friction/hv-umm2.599.json",
+      "docs/plan/evidence/measurements/hv-umm2.599.json",
+      "docs/plan/evidence/pre-existing/hv-umm2.599.md"
+    ],
+    "historicalFrictionFields": [
+      "implementWindow.end",
+      "implementMin",
+      "hostLoad"
+    ],
+    "measurements595": "Additive schemaNormalization, actualGitCommitReceipt and hostLoadSamples; original fields and bytes retained.",
+    "functionalSourceTestInventoryRD": "Protected 4208 tracked paths remain byte exact."
+  },
+  "implementationProvenance": {
+    "exactHostDispatch": "2026-10-13T00:47:48.374Z",
+    "dispatchReceipt": "dispatch-provenance.json",
+    "modelSamplingStart": "UNKNOWN",
+    "sourceWriteAdmission": "2026-10-13T00:49:53.302767Z",
+    "sourceFirstAdmissionElapsedS": 124.928767,
+    "admissionQualification": "Required source-first research and parent scope acknowledgment; elapsed wall, no productive-editing or user-approval wait claim.",
+    "provisionalEndpointUtc": "2026-10-13T00:50:50.989100+00:00",
+    "actualGitCompletionUtc": "UNKNOWN",
+    "actualGitReceipt": "commit-process.json retained externally after execution; immutable evidence cannot embed its future process completion.",
+    "exactQueueSeconds": "UNKNOWN",
+    "parentEndpointAckUtc": "2026-10-13T00:53:37.433553Z",
+    "authorizedGitMetadataDate": "2026-10-13T00:53:37Z",
+    "finalMetadataEndpointUtc": "2026-10-13T00:53:37Z",
+    "qualifiedMetadataImplementMin": 5.810433333333333,
+    "endpointAckReceipt": "endpoint-ack.json",
+    "provisionalFreezeReceipt": "provisional-freeze.json"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow.end": {
+        "original": "2026-10-13T00:50:50.989100+00:00",
+        "normalized": "2026-10-13T00:53:37Z",
+        "measuredFor": "Parent-authorized Git metadata date 2026-10-13T00:53:37Z following fresh endpoint acknowledgment at 2026-10-13T00:53:37.433553Z. Metadata endpoint, not an observed Git process completion; actual execution receipt is retained externally and in native final handoff."
+      },
+      "implementMin": {
+        "original": 3.043585,
+        "normalized": 5.810433333333333,
+        "measuredFor": "Gross elapsed wall minutes from exact host dispatch 2026-10-13T00:47:48.374Z to parent-authorized Git metadata endpoint 2026-10-13T00:53:37Z. This qualified metadata interval includes research, coordination, validation and evidence; actual dispatch-to-process-completion duration is reported separately after Git executes."
+      },
+      "hostLoad": {
+        "original": 18.57,
+        "normalized": 22.08,
+        "measuredFor": "npm run review command start 2026-10-13T00:51:19.622562+00:00; sysctl -n vm.loadavg one-minute host sample. Internal friction-records started 2026-10-13T00:51:19.853Z with load 22.0751953125 recorded separately."
+      }
+    }
+  },
+  "protectedSourceManifest": {
+    "trackedPaths": 4208,
+    "sha256": "c403145dd43e57ea9711886b97d03e185467836d892fa4223265bd505aaebbef",
+    "algorithm": "SHA256 of newline-joined sorted path NUL SHA256(content), symlink target bytes; excludes exactly the five admitted evidence paths.",
+    "scratchFilename": "protected-source-manifest.json"
+  },
+  "validation": {
+    "scope-invariants": {
+      "label": "scope-invariants",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-inventory-evidence-599/check-evidence.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-599-inventory-evidence",
+      "observerPid": 53547,
+      "observerPgid": 53339,
+      "startUtc": "2026-10-13T00:51:19.001929+00:00",
+      "startLoad1": 21.12,
+      "hostLoadScope": "sysctl -n vm.loadavg one-minute host load at command start",
+      "pid": 53765,
+      "pgid": 53765,
+      "exit": 0,
+      "endUtc": "2026-10-13T00:51:19.498870+00:00",
+      "elapsedS": 0.49997895800333936,
+      "cpuUserS": 0.06469,
+      "cpuSystemS": 0.147637,
+      "maximumRss": 25788416,
+      "cpuScope": "OS waited child command and descendants; elapsed wall and queue are separate quantities"
+    },
+    "evidence-schema": {
+      "label": "evidence-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-599-inventory-evidence",
+      "observerPid": 55283,
+      "observerPgid": 53339,
+      "startUtc": "2026-10-13T00:51:19.525378+00:00",
+      "startLoad1": 22.08,
+      "hostLoadScope": "sysctl -n vm.loadavg one-minute host load at command start",
+      "pid": 55403,
+      "pgid": 55403,
+      "exit": 0,
+      "endUtc": "2026-10-13T00:51:19.596656+00:00",
+      "elapsedS": 0.07400412499555387,
+      "cpuUserS": 0.05511,
+      "cpuSystemS": 0.02073,
+      "maximumRss": 56197120,
+      "cpuScope": "OS waited child command and descendants; elapsed wall and queue are separate quantities"
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-599-inventory-evidence",
+      "observerPid": 53339,
+      "observerPgid": 53339,
+      "startUtc": "2026-10-13T00:51:19.622562+00:00",
+      "startLoad1": 22.08,
+      "hostLoadScope": "sysctl -n vm.loadavg one-minute host load at command start",
+      "pid": 55793,
+      "pgid": 55793,
+      "exit": 0,
+      "endUtc": "2026-10-13T00:51:19.926110+00:00",
+      "elapsedS": 0.3062255419936264,
+      "cpuUserS": 0.209425,
+      "cpuSystemS": 0.08410999999999999,
+      "maximumRss": 68599808,
+      "cpuScope": "OS waited child command and descendants; elapsed wall and queue are separate quantities"
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-hv-umm2-599-inventory-evidence",
+      "observerPid": 75899,
+      "observerPgid": 75832,
+      "startUtc": "2026-10-13T00:51:25.672239+00:00",
+      "startLoad1": 23.59,
+      "hostLoadScope": "sysctl -n vm.loadavg one-minute host load at command start",
+      "pid": 76007,
+      "pgid": 76007,
+      "exit": 0,
+      "endUtc": "2026-10-13T00:51:30.903232+00:00",
+      "elapsedS": 5.2331751250021625,
+      "cpuUserS": 4.395356,
+      "cpuSystemS": 1.428154,
+      "maximumRss": 505675776,
+      "cpuScope": "OS waited child command and descendants; elapsed wall and queue are separate quantities"
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "scope-invariants",
+      "startUtc": "2026-10-13T00:51:19.001929+00:00",
+      "load1": 21.12,
+      "measuredFor": "sysctl -n vm.loadavg one-minute host load at command start",
+      "receiptFilename": "scope-invariants-process.json"
+    },
+    {
+      "step": "evidence-schema",
+      "startUtc": "2026-10-13T00:51:19.525378+00:00",
+      "load1": 22.08,
+      "measuredFor": "sysctl -n vm.loadavg one-minute host load at command start",
+      "receiptFilename": "evidence-schema-process.json"
+    },
+    {
+      "step": "review",
+      "startUtc": "2026-10-13T00:51:19.622562+00:00",
+      "load1": 22.08,
+      "measuredFor": "sysctl -n vm.loadavg one-minute host load at command start",
+      "receiptFilename": "review-process.json"
+    },
+    {
+      "step": "knip",
+      "startUtc": "2026-10-13T00:51:25.672239+00:00",
+      "load1": 23.59,
+      "measuredFor": "sysctl -n vm.loadavg one-minute host load at command start",
+      "receiptFilename": "knip-process.json"
+    },
+    {
+      "step": "review/friction-records",
+      "startUtc": "2026-10-13T00:51:19.853Z",
+      "load1": 22.0751953125,
+      "measuredFor": "Internal public review friction-records validation start; os.getloadavg sample in retained review.stdout.",
+      "receiptFilename": "review.stdout"
+    }
+  ],
+  "validationApplicability": {
+    "focused": "Public friction schema and one-off scratch JSON/byte-scope assertions.",
+    "full": "NA: evidence-only fields and additions; no source, test infrastructure, repository configuration or cross-cutting architecture changes.",
+    "browser": "NA: metadata-only correction changes no runtime behavior or presentation.",
+    "fuzz": "NA: no game semantics or source changes.",
+    "newColdReview": "NA: evidence-only correction, no core-review/source threshold; parent owns the original two finding dispositions."
+  },
+  "failurePaths": {
+    "success": "Historical endpoint and load values agree with retained actual process receipts; preserved snapshots support interpretation.",
+    "missingOrMalformedReceipt": "Stop rather than estimate process times or host load. All required retained receipts were present and parsed.",
+    "staleSource": "Original evidence SHA256 and exact base were checked before write; protected tracked manifest checked at freeze.",
+    "disabledCancelReloadPersistenceConcurrency": "NA: metadata-only evidence correction; parent serializes sole writer, no runtime or concurrent-writer contract added."
+  },
+  "resources": {
+    "browser": [],
+    "server": [],
+    "fuzz": [],
+    "nativeLifecycle": "parent only",
+    "allRecordedCommandsTerminal": true,
+    "proof": {
+      "utc": "2026-10-13T00:52:16.290270+00:00",
+      "observedPids": [
+        53339,
+        53547,
+        53765,
+        55283,
+        55403,
+        55793,
+        75899,
+        76007
+      ],
+      "observedPgids": [
+        53339,
+        53765,
+        55403,
+        55793,
+        75832,
+        76007
+      ],
+      "remainingOwnedProcessRows": [],
+      "allRecordedCommandsTerminal": true,
+      "scope": "Only helper-owned validation observers and child process groups. Parent install, native lifecycle and other sessions excluded."
+    }
+  },
+  "endpointStatus": "Fresh parent acknowledgment authorizes the qualified Git metadata endpoint above and one local commit. Actual Git process start/completion/exit are unobserved at immutable evidence freeze and are retained externally/native afterward. Parent owns exact candidate delivery, review dispositions and cleanup.",
+  "validationScope": "npm run review selected only friction-records for the five metadata paths; no functional tests are claimed. Knip ran prepare, knip and restore-local-assets and returned 0.",
+  "validationWarnings": {
+    "knip": "Isolated prepare emitted missing-art warnings, then restored 564 card, 32 avatar portrait/cutout, 153 dreamsign, 226 journey and 521 Exploration links. Command returned 0; local materializations are disposable and excluded from the five-path candidate. No runtime/image coverage is claimed.",
+    "receiptFilename": "knip.stderr"
+  }
+}
