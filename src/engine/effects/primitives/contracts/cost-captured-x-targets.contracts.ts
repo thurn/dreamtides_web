@@ -1,8 +1,8 @@
-/** Mandatory cost-captured X binds immediate activation choices before payment. */
+/** Mandatory cost-captured X binds immediate play and activation choices before payment. */
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
-import { abandonCost, abandonCostCapture, activated, characterYouControl, banishXCost, discardCost, discardCostFilter, energy, energyX, enemyCharacter, fromVoid, target, x } from "../../../dsl/builders";
-import type { Cost } from "../../../dsl/types";
+import { abandonCost, abandonCostCapture, abandonSparkCapture, additionalCost, event, keyword, activated, characterYouControl, banishXCost, discardCost, discardCostFilter, energy, energyX, enemyCharacter, fromVoid, target, x } from "../../../dsl/builders";
+import type { AdditionalCost, Cost } from "../../../dsl/types";
 import type { Effect } from "../../registry";
 import { createEngine } from "../../../engine";
 import { createFoldAdapter, type BattleSlice, type IntentOutcome } from "../../../fold/slice";
@@ -327,5 +327,115 @@ describe("cost-captured X replay and atomic payment", () => {
     expect(outcome.error).not.toBeNull();
     expect(outcome.slice.committed).toEqual(state);
     expect(outcome.published.some(event => event.kind === "energyChanged" || event.kind === "discarded")).toBe(false);
+  });
+});
+
+/** Played events use the same preparation while reserving their own physical card. */
+function played(side: Side, options: { cost?: AdditionalCost; effect?: Effect; priced?: boolean; offering?: boolean; zero?: boolean; ownTarget?: boolean } = {}) {
+  const effect = options.effect ?? dissolve(target(options.ownTarget ? characterYouControl({ sparkAtLeast: x(), sparkAtMost: x() }) : exact));
+  const card: EngineCardDefinition = { ...v.event0, id: syntheticId(0x60902), status: "authored", costs: [energy(1), ...(options.priced ? [energyX(0)] : [])],
+    abilities: () => [event(effect), ...(options.offering ? [keyword("offering")] : []), additionalCost(options.cost ?? abandonSparkCapture())] };
+  const engine = createEngine(testCatalog([card]));
+  const other = opponent(side);
+  const { state: placed, ids } = boardState(engine.catalog, { active: side, phase: "day",
+    [side]: { hand: [card.id, v.vanilla2.id, v.event0.id], back: [options.zero ? v.vanilla0.id : v.vanilla2.id, v.vanilla2.id], void: [v.vanilla2.id, v.vanilla1.id], energy: 5, deck },
+    [other]: { back: [v.vanilla0.id, v.vanilla2.id], deck } });
+  const state = { ...placed, config: { ...placed.config, autoAnswerForcedPrompts: false } };
+  const action = { kind: "play", card: ids[side].hand[0], from: "hand" } as const;
+  return { engine, state, ids, side, other, action, payer: ids[side].back[0]!, selected: ids[other].back[options.zero ? 0 : 1]! };
+}
+
+describe("mandatory captured-X played-card choices", () => {
+  for (const side of ["player", "enemy"] as const) {
+    for (const [name, cost, payment, prefix] of [
+      ["spark", abandonSparkCapture(), "back", false], ["copiable abandon", abandonCostCapture(), "back", false],
+      ["copiable discard", forms.discardCapture, "hand", false], ["discard count", forms.discardCount, "hand", true],
+    ] as const) it(`${side} prepares ${name} before exact targets and reserves its source`, () => {
+      const f = played(side, { cost });
+      const payers = payment === "back" ? [f.payer] : prefix ? f.ids[side].hand.slice(1) : [f.ids[side].hand[1]];
+      expect(f.engine.legalActions(f.state, side)).toContainEqual(f.action);
+      const answers = new Answers([...(prefix ? [2] : [payers]), [f.selected], ...(prefix ? [payers] : [])]);
+      const result = f.engine.apply(f.state, side, f.action, answers);
+      answers.exhausted();
+      expect(answers.prompts[1]).toMatchObject({ kind: "chooseTargets", candidates: [f.selected] });
+      expect(result.events.some(e => e.kind === "noLegalTarget")).toBe(false);
+      expect(result.state.instances[f.selected].zone).toBe("void");
+      expect(result.state.sides[side].currentEnergy).toBe(4);
+      expect(result.events.filter(e => e.kind === "abandoned" || e.kind === "discarded")).toHaveLength(payers.length);
+      expect(invariantViolations(result.state, f.engine.catalog)).toEqual([]);
+    });
+    it(`${side} uses effective spark and offers immediate modes after its payer`, () => {
+      const f = played(side, { effect: chooseOne(dissolve(target(exact)), gainPoints(x())) });
+      f.state.instances[f.payer].status.gainedSpark = 1;
+      const answers = new Answers([[f.payer], 1]);
+      const result = f.engine.apply(f.state, side, f.action, answers);
+      answers.exhausted();
+      expect(answers.prompts.map(p => p.kind)).toEqual(["chooseCards", "chooseMode"]);
+      expect(answers.prompts[1]).toMatchObject({ options: [{ mode: 0, legal: false }, { mode: 1, legal: true }] });
+      expect(result.state.sides[side].score).toBe(3);
+    });
+    it(`${side} offers alternate physical payers but reserves one separately from its own target`, () => {
+      const f = played(side, { ownTarget: true });
+      const other = f.ids[side].back[1]!;
+      const answers = new Answers([[other], [f.payer]]);
+      const result = f.engine.apply(f.state, side, f.action, answers);
+      expect(isLegalAnswer(answers.prompts[0], [f.payer])).toBe(true);
+      expect(isLegalAnswer(answers.prompts[1], [other])).toBe(false);
+      expect(result.events.filter(e => e.kind === "abandoned").map(e => e.instance)).toEqual([other]);
+      expect(result.state.instances[f.payer].zone).toBe("void");
+    });
+    it(`${side} reloads/cancels every played prefix, rejects stale or competing actors, and pays once`, () => {
+      const f = played(side);
+      let fold = createFoldAdapter(f.engine, { checkEventPrefix: true });
+      let current = applied(fold.reduce(slice(f.state), { kind: "battleAction", side, action: f.action }));
+      let previous: PromptId | null = null;
+      for (const value of [[f.payer], [f.selected]]) {
+        fold = createFoldAdapter(createEngine(f.engine.catalog), { checkEventPrefix: true });
+        current = JSON.parse(JSON.stringify(current)) as BattleSlice;
+        const prompt = fold.pending(current)!.prompt;
+        expect(current.committed).toEqual(f.state);
+        expect(fold.reduce(current, { kind: "battleAction", side, action: f.action })).toEqual({ kind: "bounced", reason: "stepInFlight" });
+        expect(fold.reduce(current, { kind: "answer", side: f.other, promptId: prompt.id, value })).toEqual({ kind: "bounced", reason: "notYourPrompt" });
+        expect(fold.reduce(current, { kind: "answer", side, promptId: prompt.id, value: [] })).toEqual({ kind: "bounced", reason: "illegalAnswer" });
+        if (previous !== null) expect(fold.reduce(current, { kind: "answer", side, promptId: previous, value })).toEqual({ kind: "bounced", reason: "stalePrompt" });
+        const cancelled = applied(fold.reduce(current, { kind: "cancel", side, promptId: prompt.id }));
+        expect(cancelled.committed).toEqual(f.state);
+        const reopened = applied(fold.reduce(cancelled, { kind: "battleAction", side, action: f.action }));
+        expect(fold.reduce(reopened, { kind: "answer", side, promptId: prompt.id, value })).toEqual({ kind: "bounced", reason: "stalePrompt" });
+        current = applied(fold.reduce(current, { kind: "answer", side, promptId: prompt.id, value }));
+        previous = prompt.id;
+      }
+      const direct = f.engine.apply(f.state, side, f.action, new ScriptedSource([[f.payer], [f.selected]]));
+      expect(stateHash(current.committed)).toBe(stateHash(direct.state));
+      expect(direct.events.filter(e => e.kind === "abandoned")).toHaveLength(1);
+      expect(current.inFlight).toBeNull();
+    });
+    it(`${side} leaves payment unpublished on a target-preparation error`, () => {
+      const f = played(side); const before = stateHash(f.state); let index = 0;
+      expect(() => f.engine.apply(f.state, side, f.action, { answer() { if (index++ === 0) return [f.payer]; throw new Error("synthetic played target failure"); } })).toThrow("synthetic played target failure");
+      expect(stateHash(f.state)).toBe(before);
+    });
+  }
+  it("prepares modified energy X once with its original ability-zero purpose", () => {
+    const f = played("player", { priced: true });
+    f.state.floating.push({ id: `e${f.state.nextEffect++}`, controller: "player", source: f.payer, timestamp: 1, expiry: { at: "endOfTurn" }, change: { kind: "cost", amount: -2, next: false, filter: {}, player: "player" } });
+    f.state.sides.player.currentEnergy = 1;
+    const answers = new Answers([2, [f.payer], [f.selected]]);
+    const result = f.engine.apply(f.state, "player", f.action, answers);
+    expect(answers.prompts.map(p => p.kind)).toEqual(["chooseNumber", "chooseCards", "chooseTargets"]);
+    expect(answers.prompts[0].purpose.ability).toBe(0);
+    expect(answers.prompts[1].purpose.ability).toBe(1);
+    expect(result.state.sides.player.currentEnergy).toBe(0);
+    expect(result.state.instances[f.selected].zone).toBe("void");
+  });
+  for (const priced of [false, true]) it(`preserves Offering ${priced ? "printed X=0" : "independent captured X"}`, () => {
+    const f = played("player", { offering: true, priced, zero: priced });
+    const answers = new Answers([1, [f.payer], [f.selected], [f.ids.player.hand[2]]]);
+    const result = f.engine.apply(f.state, "player", f.action, answers);
+    answers.exhausted();
+    expect(answers.prompts.map(p => p.kind)).toEqual(["chooseMode", "chooseCards", "chooseTargets", "chooseCards"]);
+    expect(result.state.sides.player.currentEnergy).toBe(5);
+    expect(result.state.instances[f.selected].zone).toBe("void");
+    expect(result.state.instances[f.action.card].status.offering).toBe(true);
   });
 });

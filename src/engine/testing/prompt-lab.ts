@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { additionalCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, abandonXCost, all, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
+import { additionalCost, abandonSparkCapture, choiceCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, abandonXCost, all, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
 import { onDusk, triggered, whenDraw } from "../dsl/triggers";
 import { keyword } from "../dsl/builders";
 import type { Engine } from "../engine";
@@ -74,6 +74,16 @@ function labSyntheticEvent(index: number, cost: number, synthetic: SyntheticHook
 
 /** The lab's own cards. */
 export const LAB = {
+  /** Mandatory effective-spark capture prepares exact-X targets before payment. */
+  capturedSparkPlay: {
+    ...SYNTHETIC.event0, id: syntheticId(0x60900), costs: [energy(1)], status: "authored",
+    abilities: () => [additionalCost(abandonSparkCapture()), event(p.dissolve(characterTarget(enemyCharacter({ sparkAtLeast: x(), sparkAtMost: x() }))))],
+  },
+  /** Alternative payments retain their own choice-first protocol and distinct display. */
+  capturedSparkChoice: {
+    ...SYNTHETIC.event0, id: syntheticId(0x60901), status: "authored",
+    abilities: () => [additionalCost(choiceCost([abandonSparkCapture()], [abandonCost()])), event(p.gainPoints(x()))],
+  },
   /** A selective-disabling witness with independently observable ability kinds. */
   disableBearer: {
     id: syntheticId(0x56240), cardType: "character", costs: [energy(0)], spark: 2, subtype: "Warrior", speed: "standard", status: "authored",
@@ -289,6 +299,8 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [LAB.capturedSparkPlay.id]: { name: "Lab Captured Spark", text: "To play this event, abandon a character. Dissolve an enemy with X✦, where X is its spark." },
+  [LAB.capturedSparkChoice.id]: { name: "Lab Spark Choice", text: "To play this event, abandon a character and use its spark as X, or abandon a character. Gain X⍟." },
   [LAB.abandonXOffering.id]: { name: "Lab Count Offering", text: "Offering. To play this event, abandon X figments. Dissolve an enemy with X✦." },
   [LAB.abandonXSelector.id]: { name: "Lab Prospective Count", text: "1●, Abandon X figments with X✦: Dissolve an enemy with X✦." },
   [LAB.disableBearer.id]: { name: "Lab Ability Bearer", text: "Vengeful. 1●: Gain 1⍟. ▸Dusk: Gain 2⍟. This character has +1✦." },
@@ -472,6 +484,13 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "captured-spark-play", description: "A mandatory spark capture precedes exact-X targeting, beside a spark-versus-plain cost choice",
+    setup: { active: "player", phase: "day",
+      player: { hand: [LAB.capturedSparkPlay.id, LAB.capturedSparkChoice.id], back: [SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla2.id], energy: 5, deck: deck(6) },
+      enemy: { back: [SYNTHETIC.vanilla0.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla2.id], deck: deck(6) } },
+    script: [],
+  },
   {
     name: "abandon-x-offering", description: "An Offering prepares a mandatory count before exact-X targeting",
     setup: { active: "player", phase: "day",

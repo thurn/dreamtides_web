@@ -1,0 +1,33 @@
+{
+  "bead": "hv-umm2.609",
+  "phase": 5,
+  "implementMin": 451.57592726666667,
+  "implementWindow": {
+    "start": "2026-10-13T06:00:42.563Z",
+    "end": "2026-10-13T13:32:17.118636+00:00"
+  },
+  "localValidationS": {
+    "review": 57.93563137500314,
+    "knip": 3.1639879159920383,
+    "focused": 17.07553500101494,
+    "browser": 35.89693745900877
+  },
+  "hostLoad": 5.65,
+  "testDelta": {
+    "files": 0,
+    "lines": 112,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "executor-coordination-wait",
+      "minutes": 387.63227395,
+      "note": "Elapsed interval from ready pre-provider checkpoint to first authorized launch includes root model-capacity observation and later user/resume/admission latency. Individual model/CPU/productive attribution is unknown; it is included in the full implementation wall window."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 22.18022085,
+      "note": "Elapsed first-launch-to-final-success window includes two distinct setup diagnoses, cleanup, exact source/script admission, fixture checks and coordination. Explicit probe readiness and a duplicate matching target make the ordinary human workflow observable; all failed raw invocations retained."
+    }
+  ]
+}

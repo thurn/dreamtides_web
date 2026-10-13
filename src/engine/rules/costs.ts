@@ -239,18 +239,18 @@ const CARD_ROLE: Readonly<Record<ChoosingCost["cost"], PromptRole>> = {
   banishFromHand: "offeringCost",
 };
 
-/** An activation's local X binding and mandatory captured-card selections before targeting. */
+/** A play or activation's local X binding and mandatory captured-card selections before targeting. */
 export interface PreparedCostX {
   readonly x: number | null;
   readonly payments: readonly PlannedCost[];
 }
 
 /**
- * Prepares mandatory cost-captured X only when the activation's immediate
+ * Prepares mandatory cost-captured X only when the play or activation's immediate
  * modes or targets read it. Count costs choose a number before targeting;
  * copiable-cost and effective-spark captures choose their actual payment card. These selections
  * are replay-local and planCosts validates them against every other payment
- * and target before the commit point. Targetless activation protocols retain
+ * and target before the commit point. Targetless protocols retain
  * their printed-order card choices. Energy-X and abandon-X preparation use
  * chooseX in either case. Nested choices keep their own planning protocol.
  */
@@ -261,8 +261,9 @@ export function prepareCostX(
   costs: readonly Cost[],
   purpose: (role: PromptRole) => PromptPurpose,
   targetsNeedX: boolean,
+  options: { readonly modifier?: CostModifier; readonly fixedX?: number; readonly excluded?: readonly InstanceId[] } = {},
 ): PreparedCostX {
-  let x = chooseX(ctx, side, costs, purpose("chooseX"));
+  let x = options.fixedX ?? chooseX(ctx, side, costs, purpose("chooseX"), options.modifier);
   const payments: PlannedCost[] = [];
   if (!targetsNeedX) return { x, payments };
   for (const cost of costs) {
@@ -270,7 +271,7 @@ export function prepareCostX(
     const capturesSpark = cost.cost === "abandon" && cost.captureSpark === true;
     if (cost.captureCost !== true && !capturesSpark) continue;
     const candidates = cardCandidates(ctx.state, ctx.catalog, side, source, cost, x ?? undefined)
-      .filter(id => !payments.some(payment => payment.cards.includes(id)));
+      .filter(id => !options.excluded?.includes(id) && !payments.some(payment => payment.cards.includes(id)));
     const selected = ctx.choose<ChooseCardsPrompt>({
       kind: "chooseCards", side, purpose: purpose(CARD_ROLE[cost.cost]), candidates, min: 1, max: 1,
     });
@@ -286,7 +287,7 @@ export function prepareCostX(
   if (x === null && counts.length > 0) {
     const min = Math.max(...counts.map(leastCount));
     const max = Math.min(...counts.map(cost => cardCandidates(ctx.state, ctx.catalog, side, source, cost)
-      .filter(id => !payments.some(payment => payment.cards.includes(id))).length));
+      .filter(id => !options.excluded?.includes(id) && !payments.some(payment => payment.cards.includes(id))).length));
     if (max < min) throw new Infeasible("Too few matching cards for cost-captured X");
     x = ctx.choose<ChooseNumberPrompt>({ kind: "chooseNumber", side, purpose: purpose("chooseX"), min, max });
   }
@@ -317,7 +318,7 @@ export function prepareCostX(
  * `selectorX` supplies prepared X to character-cost selectors during play or
  * activation. Callers with no explicit binding, including manual planning,
  * use the source card's stored X. `preparedPayments` carries mandatory
- * copiable-cost or effective-spark captures selected before activation targeting; these cards
+ * copiable-cost or effective-spark captures selected before immediate targeting; these cards
  * must still be available and distinct from targets and earlier payments.
  */
 export function planCosts(

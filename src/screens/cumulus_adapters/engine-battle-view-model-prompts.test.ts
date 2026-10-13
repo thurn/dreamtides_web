@@ -373,6 +373,8 @@ describe("cost-choice prompt data", () => {
       [{ cost: "discard", count: "x", filter: {}, min: 0 }, { cost: "discard", count: "x", filter: {}, min: 2 }],
       [{ cost: "discard", count: 1, filter: {} }, { cost: "discard", count: 1, filter: {}, captureCost: true }],
       [{ cost: "abandon", count: 1, selector: { controller: "you" } }, { cost: "abandon", count: 1, selector: { kind: "self" } }],
+      [{ cost: "abandon", count: 1, selector: { controller: "you" } }, { cost: "abandon", count: 1, selector: { controller: "you" }, captureSpark: true }],
+      [{ cost: "abandon", count: 1, selector: { controller: "you" }, captureCost: true }, { cost: "abandon", count: 1, selector: { controller: "you" }, captureSpark: true }],
       [{ cost: "banishFromVoid", count: "x", filter: {}, min: 1 }, { cost: "banishFromVoid", count: "x", filter: { cardType: "event" }, min: 2 }],
       [{ cost: "banishFromAnyVoid", count: 1, filter: {}, player: "you" }, { cost: "banishFromAnyVoid", count: 1, filter: {}, player: "opponent" }],
       [{ cost: "reveal", count: 1, filter: {} }, { cost: "reveal", count: 1, filter: { sparkAtLeast: 3 } }],

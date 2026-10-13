@@ -1049,7 +1049,7 @@ character used for another payment still counts in this snapshot. The value
 persists with the stack item, including when the paid character ceases to
 exist or its in-play contributions end. This capture spends no energy beyond
 the separately printed energy costs; any other payment binding X, including
-X● or a payment count, must use the same number. When immediate activation
+X● or a payment count, must use the same number. When immediate card-play or activation
 targets or modes read that X, choose the paid character before those choices,
 reserving it separately from all targets and other payments.
 

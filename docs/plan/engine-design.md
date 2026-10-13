@@ -1366,7 +1366,8 @@ Cost kinds (`dsl/types.ts`, built in `dsl/builders.ts`; paid in
   cost is captured as X; or discard the whole hand (`discardHandCost`,
   `count: "hand"`);
 - abandon, with a fixed count, or one character whose copiable cost is
-  captured as X (`abandonCostCapture`);
+  captured as X (`abandonCostCapture`), or one character whose effective
+  prepayment spark is captured as X (`abandonSparkCapture`);
 - banish matching void cards (`banishFromVoidCost`), with a fixed count, or
   an X count at least the cost's least X (`banishXCost`, 1 by default);
 - reveal from hand;
@@ -1420,6 +1421,16 @@ on a shared binding; a conflicting selection has no feasible continuation.
 `plus` adds a fixed offset to a value such as a captured cost. An abandon
 cost's single-card capture reads the chosen character the same way before
 payment, so a figment that then ceases to exist captures 0● (C13).
+An effective-spark capture instead snapshots the chosen character's spark in
+play before any payment, including gained spark, changes, statics and Support,
+clamped at zero. This X binds no energy beyond independently printed costs.
+When immediate card-play or activation modes or targets need captured X, the
+mandatory payment card or count is prepared before those choices, without
+payment or movement. Selected cards stay reserved separately from targets
+and other costs. Targetless effects and nested alternatives or optional
+costs keep their own printed-order planning protocol. Energy-X uses the
+route's cost modifications; Offering fixes printed energy-X to zero.
+Every payment in the same plan agrees with that binding.
 A variable void banish binds X to the chosen count the same way, but its
 least X defaults to 1 (the energy-X default): a void with fewer matching cards
 raises an empty prompt, so the play is illegal. An X bound earlier below that

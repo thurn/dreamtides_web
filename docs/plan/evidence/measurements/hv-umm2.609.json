@@ -1,0 +1,1402 @@
+{
+  "bead": "hv-umm2.609",
+  "base": "9fdaa25aab8b9a13f5b23c7e23fbb210a4a92eb7",
+  "dispatch": {
+    "actualNativeSpawn": "2026-10-13T06:00:42.563Z",
+    "modelStart": "unknown",
+    "journal": "captured_x_choices_609-actual-dispatch-journal.json"
+  },
+  "endpoint": {
+    "status": "Final precommit evidence stamp immediately before schema/staging/commit; actual Git command interval is in the immutable terminal handoff. This stamp is distinct from the actual Git completion timestamp.",
+    "at": "2026-10-13T13:32:17.118636+00:00"
+  },
+  "predecessorTimingCorrection": {
+    "bead": "hv-adeo",
+    "source": "f54c5221f0ac3437f206bd9ff3650551e73e2f5d",
+    "originalFrozenWindow": {
+      "start": "2026-10-13T05:08:28.385Z",
+      "end": "2026-10-13T05:28:30.384623+00:00"
+    },
+    "originalReportedImplementMin": 20.03332705,
+    "correctedNativeSpawnDispatch": "2026-10-13T05:08:02.935Z",
+    "sameEndpointCorrectedElapsedMin": 20.457493716666665,
+    "deltaMinutes": 0.4241666666666646,
+    "cause": "Earlier native-journal filter matched later exec invocation mentioning agentname. Correct filter requires exact spawn_agent payload and parsed task_name. Originalsource andtimings remainimmutable; actualGitinterval unchanged; modelstart unknown; recordadditivecorrection in nextown609measurement only."
+  },
+  "validationReceipts": {
+    "restored-negative-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "mandatory captured-X played-card choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:17:04.931170+00:00",
+      "end": "2026-10-13T06:17:10.864481+00:00",
+      "exit": 1,
+      "wallSeconds": 5.93302270899585,
+      "pid": 2613,
+      "pgid": 2613,
+      "load": "{ 4.87 5.24 5.99 }",
+      "groupRemainingAtExit": []
+    },
+    "install-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T05:58:13.829886+00:00",
+      "end": "2026-10-13T05:58:16.111735+00:00",
+      "exit": 0,
+      "wallSeconds": 2.281756583004608,
+      "pid": 74079,
+      "pgid": 74079,
+      "load": "{ 5.37 5.42 7.71 }",
+      "groupRemainingAtExit": []
+    },
+    "cachedcheck-stage3-v01.receipt.json": {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T13:27:17.800272+00:00",
+      "end": "2026-10-13T13:27:17.828251+00:00",
+      "exit": 2,
+      "wallSeconds": 0.027743083017412573,
+      "pid": 89855,
+      "pgid": 89855,
+      "load": "{ 2.45 3.26 4.03 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-prelaunch-validation-v02.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker609-20261013/launch-qa-checked.py",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/source-fingerprint-before-qa-v02.json",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/captured-spark-controls-v01.mjs",
+        "--bead",
+        "hv-umm2.609",
+        "--viewports",
+        "desktop,mobile",
+        "--validate-only"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:27:22.651969+00:00",
+      "end": "2026-10-13T06:27:22.701785+00:00",
+      "exit": 0,
+      "wallSeconds": 0.0496395000081975,
+      "pid": 19043,
+      "pgid": 19043,
+      "load": "{ 4.17 4.91 5.44 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:22:24.532544+00:00",
+      "end": "2026-10-13T06:22:29.856143+00:00",
+      "exit": 0,
+      "wallSeconds": 5.323325874996954,
+      "pid": 9621,
+      "pgid": 9621,
+      "load": "{ 6.44 5.31 5.73 }",
+      "groupRemainingAtExit": []
+    },
+    "baseline-public-v01.receipt.json": {
+      "argv": [
+        "node",
+        "node_modules/tsx/dist/cli.mjs",
+        "/tmp/worker609-20261013/before-fix-public.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:06:15.655542+00:00",
+      "end": "2026-10-13T06:06:17.347576+00:00",
+      "exit": 0,
+      "wallSeconds": 1.691948916995898,
+      "pid": 83684,
+      "pgid": 83684,
+      "load": "{ 3.12 4.67 6.46 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-pre-qa-v01.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:26:39.002390+00:00",
+      "end": "2026-10-13T06:26:39.079100+00:00",
+      "exit": 0,
+      "wallSeconds": 0.07643145800102502,
+      "pid": 18327,
+      "pgid": 18327,
+      "load": "{ 4.23 4.97 5.48 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-prelaunch-validation-v04.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker609-20261013/launch-qa-checked.py",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/source-fingerprint-before-qa-v04.json",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/captured-spark-controls-v03.mjs",
+        "--bead",
+        "hv-umm2.609",
+        "--viewports",
+        "desktop,mobile",
+        "--validate-only"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T13:15:16.002370+00:00",
+      "end": "2026-10-13T13:15:16.040729+00:00",
+      "exit": 0,
+      "wallSeconds": 0.03827291601919569,
+      "pid": 73679,
+      "pgid": 73679,
+      "load": "{ 5.17 5.04 4.91 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-prelaunch-validation-v03.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker609-20261013/launch-qa-checked.py",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/source-fingerprint-before-qa-v03.json",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/captured-spark-controls-v02.mjs",
+        "--bead",
+        "hv-umm2.609",
+        "--viewports",
+        "desktop,mobile",
+        "--validate-only"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T12:58:46.602806+00:00",
+      "end": "2026-10-13T12:58:46.639763+00:00",
+      "exit": 0,
+      "wallSeconds": 0.03686808398924768,
+      "pid": 21409,
+      "pgid": 21409,
+      "load": "{ 4.86 5.95 5.55 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-controls-v01.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker609-20261013/launch-qa-checked.py",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/source-fingerprint-before-qa-v02.json",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/captured-spark-controls-v01.mjs",
+        "--bead",
+        "hv-umm2.609",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T12:55:00.638222+00:00",
+      "end": "2026-10-13T12:55:40.908604+00:00",
+      "exit": 1,
+      "wallSeconds": 40.270058166992385,
+      "pid": 16016,
+      "pgid": 16016,
+      "load": "{ 5.28 7.85 5.97 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-stage3-v01.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T13:26:52.925629+00:00",
+      "end": "2026-10-13T13:26:52.987910+00:00",
+      "exit": 0,
+      "wallSeconds": 0.062196790997404605,
+      "pid": 89389,
+      "pgid": 89389,
+      "load": "{ 2.23 3.30 4.06 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:21:00.910395+00:00",
+      "end": "2026-10-13T06:21:54.372532+00:00",
+      "exit": 2,
+      "wallSeconds": 53.46144466700207,
+      "pid": 7208,
+      "pgid": 7208,
+      "load": "{ 3.37 4.42 5.48 }",
+      "groupRemainingAtExit": []
+    },
+    "diffcheck-stage2-v01.receipt.json": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T13:23:55.447501+00:00",
+      "end": "2026-10-13T13:23:55.473101+00:00",
+      "exit": 0,
+      "wallSeconds": 0.02551354098250158,
+      "pid": 85570,
+      "pgid": 85570,
+      "load": "{ 3.26 3.90 4.41 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-fixture-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/testing/tooling.test.ts",
+        "src/runtime/qa-scenes-battle.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "prompt-lab|mandatory captured-X played-card choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T13:13:05.412754+00:00",
+      "end": "2026-10-13T13:13:11.098469+00:00",
+      "exit": 0,
+      "wallSeconds": 5.68559050001204,
+      "pid": 70340,
+      "pgid": 70340,
+      "load": "{ 6.17 4.91 4.85 }",
+      "groupRemainingAtExit": []
+    },
+    "doctor-owned-v01.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T05:58:57.719041+00:00",
+      "end": "2026-10-13T05:58:59.456857+00:00",
+      "exit": 0,
+      "wallSeconds": 1.7377748750004685,
+      "pid": 75077,
+      "pgid": 75077,
+      "load": "{ 5.95 5.53 7.63 }",
+      "groupRemainingAtExit": []
+    },
+    "final-capture-check-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/tooling.test.ts",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:18:39.928636+00:00",
+      "end": "2026-10-13T06:18:47.809022+00:00",
+      "exit": 0,
+      "wallSeconds": 7.880234833995928,
+      "pid": 4709,
+      "pgid": 4709,
+      "load": "{ 3.96 5.15 5.89 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-controls-v02.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker609-20261013/launch-qa-checked.py",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/source-fingerprint-before-qa-v03.json",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/captured-spark-controls-v02.mjs",
+        "--bead",
+        "hv-umm2.609",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T13:00:58.299216+00:00",
+      "end": "2026-10-13T13:02:09.423499+00:00",
+      "exit": 1,
+      "wallSeconds": 71.12409754202235,
+      "pid": 24279,
+      "pgid": 24279,
+      "load": "{ 2.93 4.82 5.15 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v03.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T13:13:35.605808+00:00",
+      "end": "2026-10-13T13:14:33.541602+00:00",
+      "exit": 0,
+      "wallSeconds": 57.93563137500314,
+      "pid": 71102,
+      "pgid": 71102,
+      "load": "{ 5.65 4.92 4.85 }",
+      "groupRemainingAtExit": []
+    },
+    "friction-dispatch-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T05:58:57.451291+00:00",
+      "end": "2026-10-13T05:58:57.607735+00:00",
+      "exit": 0,
+      "wallSeconds": 0.1563652080076281,
+      "pid": 75046,
+      "pgid": 75046,
+      "load": "{ 5.95 5.53 7.63 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-prompts-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:16:24.142949+00:00",
+      "end": "2026-10-13T06:16:27.638213+00:00",
+      "exit": 0,
+      "wallSeconds": 3.4951594169979217,
+      "pid": 293,
+      "pgid": 293,
+      "load": "{ 4.36 5.23 6.02 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:23:02.843952+00:00",
+      "end": "2026-10-13T06:23:57.279951+00:00",
+      "exit": 0,
+      "wallSeconds": 54.43533091699646,
+      "pid": 10349,
+      "pgid": 10349,
+      "load": "{ 4.53 4.96 5.58 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-controls-v03.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker609-20261013/launch-qa-checked.py",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/source-fingerprint-before-qa-v04.json",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/captured-spark-controls-v03.mjs",
+        "--bead",
+        "hv-umm2.609",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T13:16:35.554333+00:00",
+      "end": "2026-10-13T13:17:11.451473+00:00",
+      "exit": 0,
+      "wallSeconds": 35.89693745900877,
+      "pid": 75697,
+      "pgid": 75697,
+      "load": "{ 4.82 4.90 4.86 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-capture-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "captured-X played-card|cost-captured|abandon spark capture|cost composition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:15:56.181605+00:00",
+      "end": "2026-10-13T06:16:02.870152+00:00",
+      "exit": 0,
+      "wallSeconds": 6.688412124989554,
+      "pid": 99630,
+      "pgid": 99630,
+      "load": "{ 3.84 5.22 6.04 }",
+      "groupRemainingAtExit": []
+    },
+    "restored-label-negative-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts",
+        "-t",
+        "derives copy from every qualified payment"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:17:46.354575+00:00",
+      "end": "2026-10-13T06:17:51.337269+00:00",
+      "exit": 1,
+      "wallSeconds": 4.98246595900855,
+      "pid": 3853,
+      "pgid": 3853,
+      "load": "{ 6.82 5.76 6.15 }",
+      "groupRemainingAtExit": []
+    },
+    "release-dispatch-v01.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "release",
+        "status"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T05:57:40.675992+00:00",
+      "end": "2026-10-13T05:57:41.033767+00:00",
+      "exit": 0,
+      "wallSeconds": 0.35755420799250714,
+      "pid": 73287,
+      "pgid": 73287,
+      "load": "{ 5.58 5.46 7.82 }",
+      "groupRemainingAtExit": []
+    },
+    "coverage-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:25:35.407729+00:00",
+      "end": "2026-10-13T06:25:38.917564+00:00",
+      "exit": 0,
+      "wallSeconds": 3.509709667006973,
+      "pid": 16288,
+      "pgid": 16288,
+      "load": "{ 5.90 5.36 5.65 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-prelaunch-validation-v01.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker609-20261013/launch-qa-checked.py",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/source-fingerprint-before-qa-v01.json",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.609/captured-spark-controls-v01.mjs",
+        "--bead",
+        "hv-umm2.609",
+        "--viewports",
+        "desktop,mobile",
+        "--validate-only"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:21:40.915993+00:00",
+      "end": "2026-10-13T06:21:40.958675+00:00",
+      "exit": 0,
+      "wallSeconds": 0.042589624994434416,
+      "pid": 8235,
+      "pgid": 8235,
+      "load": "{ 6.00 5.01 5.65 }",
+      "groupRemainingAtExit": []
+    },
+    "create-v01.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "worktree",
+        "create",
+        "wt/hv-umm2-609-captured-x-choices"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T05:57:57.246267+00:00",
+      "end": "2026-10-13T05:57:57.982096+00:00",
+      "exit": 0,
+      "wallSeconds": 0.7357425420050276,
+      "pid": 73649,
+      "pgid": 73649,
+      "load": "{ 5.32 5.43 7.76 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T06:25:07.580835+00:00",
+      "end": "2026-10-13T06:25:10.745575+00:00",
+      "exit": 0,
+      "wallSeconds": 3.1646390829992015,
+      "pid": 14023,
+      "pgid": 14023,
+      "load": "{ 4.26 5.05 5.56 }",
+      "groupRemainingAtExit": []
+    },
+    "doctor-dispatch-v01.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T05:57:40.675986+00:00",
+      "end": "2026-10-13T05:57:42.679831+00:00",
+      "exit": 0,
+      "wallSeconds": 2.0036285420064814,
+      "pid": 73286,
+      "pgid": 73286,
+      "load": "{ 5.58 5.46 7.82 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-v03.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T13:14:41.960385+00:00",
+      "end": "2026-10-13T13:14:45.124477+00:00",
+      "exit": 0,
+      "wallSeconds": 3.1639879159920383,
+      "pid": 72720,
+      "pgid": 72720,
+      "load": "{ 5.76 5.11 4.93 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-stage2-v02.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-609-captured-x-choices",
+      "start": "2026-10-13T13:23:55.227462+00:00",
+      "end": "2026-10-13T13:23:55.342948+00:00",
+      "exit": 0,
+      "wallSeconds": 0.11540749997948296,
+      "pid": 85551,
+      "pgid": 85551,
+      "load": "{ 3.26 3.90 4.41 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "testDelta": {
+    "netTestFiles": 0,
+    "testModulesExtended": 2,
+    "testEntrypointsAdded": 0,
+    "netTestLines": 112,
+    "jsdomFiles": 0,
+    "contractModuleLines": 441,
+    "actualGitNumstat": [
+      "113\t3\tsrc/engine/effects/primitives/contracts/cost-captured-x-targets.contracts.ts",
+      "2\t0\tsrc/screens/cumulus_adapters/engine-battle-view-model-prompts.test.ts"
+    ],
+    "provisionalCorrection": "Early uncommitted Stage2 records and capacity checkpoint reported116; final Git-derived delta is112. Old checkpoint is preserved as a provisional snapshot."
+  },
+  "failurePaths": {
+    "midStepError": {
+      "file": "src/engine/effects/primitives/contracts/cost-captured-x-targets.contracts.ts",
+      "test": "${side} leaves payment unpublished on a target-preparation error",
+      "coverage": "Both actors throw from the public answer source after capture preparation; original committed state hash remains exact."
+    },
+    "reloadRestart": {
+      "file": "src/engine/effects/primitives/contracts/cost-captured-x-targets.contracts.ts",
+      "test": "${side} reloads/cancels every played prefix, rejects stale or competing actors, and pays once",
+      "coverage": "Both actors restore JSON prefixes with a fresh engine/fold at every prompt, preserve committed state and match direct final state hash."
+    },
+    "partialWrite": {
+      "tests": [
+        {
+          "file": "src/engine/effects/primitives/contracts/cost-captured-x-targets.contracts.ts",
+          "test": "rolls back partial energy and captured-card payment writes when a step errors after commitment"
+        },
+        {
+          "file": "src/engine/effects/primitives/contracts/abandon-spark-cost.contracts.ts",
+          "test": "rolls back a genuine paying-step fault and succeeds with the ordinary restored card"
+        }
+      ],
+      "coverage": "Existing cloned-step rollback and published-prefix write machinery are unchanged; no new persisted state fields or early payment writes. Complete final-capture-check-v01 runs2630 tests across contracts/tooling/VM, including these existing fault contracts."
+    },
+    "invalidStale": {
+      "file": "src/engine/effects/primitives/contracts/cost-captured-x-targets.contracts.ts",
+      "test": "${side} reloads/cancels every played prefix, rejects stale or competing actors, and pays once",
+      "coverage": "Both actors reject illegal empty answers, previous prompt IDs, and cancelled/reopened prompt IDs before commitment."
+    },
+    "concurrentActors": {
+      "file": "src/engine/effects/primitives/contracts/cost-captured-x-targets.contracts.ts",
+      "test": "${side} reloads/cancels every played prefix, rejects stale or competing actors, and pays once",
+      "coverage": "Both actors reject the opposing side answer and a competing action while the current step is in flight."
+    }
+  },
+  "negativeEvidence": {
+    "publicBaseline": "parent baseline-public-v01 two diagnostic states shows falselegal and actual zero-target fizzle; exit0 is diagnostic completion, not validation pass",
+    "restoredPlay": "19 failing public played-choice cases with exact HEAD play body restored temporarily; final play bytes exactly restored from retained scratch snapshot",
+    "restoredDisplay": "semantic qualified-payment distinction fails with exact HEAD formatter; final formatter bytes exactly restored"
+  },
+  "scope": {
+    "newStateFields": 0,
+    "newEvents": 0,
+    "newDSLForms": 0,
+    "productionContentModules": 0,
+    "fullReview": "not run: bounded existing caller adaptation/private scanner extraction; root judged no cross-cutting state architecture",
+    "weightedFuzz": "not run for bounded repair; original172 owns production fourUUID/full300/sweep/D21"
+  },
+  "logs": "Existing prompt/cardPlayed/abandoned/energy/stack events retain source/card UUIDs and selected physical identities. QA observes persisted game logs without adding a log-body API.",
+  "failedValidationDisposition": {
+    "review-v01": "exit2: new played fixture Cost union incorrectly included EnergyX for additionalCost; final fixture type narrowed to AdditionalCost. Final review-v02 passes; no production logic change from type repair.",
+    "cachedcheck-stage3-v01": "Staging exposed one new helper EOF blank line omitted by the unstaged tracked-only diff check. Root authorized exact one-newline removal; final cached check governs the correction. Original failure/manifest/QA retained."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v03 starting one-minute load5.65"
+      },
+      "localValidationS": {
+        "scope": "Final passing related review-v03, Knip-v03, complete contracts/tooling/VM final-capture-check-v01, canonicalcontentcoverage-v01, focused fixture/scene/played checks-v02 and successful native QA-v03. Earlier exploratory, negative and failing checks are preserved separately."
+      }
+    }
+  },
+  "timingQualification": {
+    "wholeWindow": "Original actual spawn06:00:42.563Z through final endpoint includes research, checks, long no-provider checkpoint, root/user resume/admission latency and QA recovery. Model start, CPU and productive time attribution are unknown. Stage3 records the actual commit interval.",
+    "readyToFirstLaunch": {
+      "start": "2026-10-13T06:27:22.701785+00:00",
+      "end": "2026-10-13T12:55:00.638222+00:00",
+      "minutes": 387.63227395,
+      "qualification": "Observed elapsed checkpoint-to-launch, not a measured model-capacity duration."
+    },
+    "qaSetupRecovery": {
+      "start": "2026-10-13T12:55:00.638222+00:00",
+      "end": "2026-10-13T13:17:11.451473+00:00",
+      "minutes": 22.18022085,
+      "qualification": "Includes admissions/checks/coordination; distinct failures, no identical blind retry."
+    }
+  },
+  "qa": {
+    "successfulInvocation": "run-1aq6uf",
+    "rawReport": "invocations/run-1aq6uf/captured-spark-controls-v03.result.json",
+    "audit": "capture-and-state-audit-v01.json",
+    "successfulSixWorkflows": [
+      {
+        "viewport": "desktop",
+        "kind": "mandatory",
+        "mode": null,
+        "source": "i3",
+        "payer": "i1",
+        "selected": "i12",
+        "otherTarget": "i13",
+        "rows": 35,
+        "gameId": "4a4fro",
+        "actions": [
+          {
+            "gameId": "4a4fro",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i3",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "1cbjn4008w1",
+                "value": [
+                  "i1"
+                ]
+              },
+              {
+                "fingerprint": "b6htx3l2at",
+                "value": [
+                  "i12"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-13T13:16:44.344Z",
+            "event": "engine.action",
+            "seq": 30
+          }
+        ],
+        "energy": 4,
+        "score": 0,
+        "geometry": {
+          "payer": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+            "rect": {
+              "x": 254.5,
+              "y": 483.5,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 344,
+              "bottom": 573
+            },
+            "hit": {
+              "x": 299.25,
+              "y": 528.25,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            },
+            "text": "Lab SentrySpark2"
+          },
+          "submit": {
+            "selector": "[data-testid=battle-card-picker-submit]",
+            "rect": {
+              "x": 1151.171875,
+              "y": 597,
+              "width": 89.328125,
+              "height": 42,
+              "right": 1240.5,
+              "bottom": 639
+            },
+            "hit": {
+              "x": 1195.8359375,
+              "y": 618,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            },
+            "text": "Submit"
+          }
+        }
+      },
+      {
+        "viewport": "desktop",
+        "kind": "choice",
+        "mode": 0,
+        "source": "i4",
+        "payer": "i1",
+        "selected": null,
+        "otherTarget": null,
+        "rows": 32,
+        "gameId": "znfc22",
+        "actions": [
+          {
+            "gameId": "znfc22",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i4",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "cost-choice-v1:dhzsjoxkg3",
+                "value": 0
+              },
+              {
+                "fingerprint": "1da61o5hzbt",
+                "value": [
+                  "i1"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-13T13:16:50.037Z",
+            "event": "engine.action",
+            "seq": 29
+          }
+        ],
+        "energy": 5,
+        "score": 2,
+        "geometry": [
+          {
+            "selector": "[data-testid=battle-choice-prompt-option-0]",
+            "rect": {
+              "x": 483.875,
+              "y": 597,
+              "width": 461.40625,
+              "height": 42,
+              "right": 945.28125,
+              "bottom": 639
+            },
+            "hit": {
+              "x": 714.578125,
+              "y": 618,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            },
+            "text": "Abandon 1 character you control and use its spark as X"
+          },
+          {
+            "selector": "[data-testid=battle-choice-prompt-option-1]",
+            "rect": {
+              "x": 953.28125,
+              "y": 597,
+              "width": 287.21875,
+              "height": 42,
+              "right": 1240.5,
+              "bottom": 639
+            },
+            "hit": {
+              "x": 1096.890625,
+              "y": 618,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            },
+            "text": "Abandon 1 character you control"
+          }
+        ]
+      },
+      {
+        "viewport": "desktop",
+        "kind": "choice",
+        "mode": 1,
+        "source": "i4",
+        "payer": "i1",
+        "selected": null,
+        "otherTarget": null,
+        "rows": 32,
+        "gameId": "6gzvpm",
+        "actions": [
+          {
+            "gameId": "6gzvpm",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i4",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "cost-choice-v1:dhzsjoxkg3",
+                "value": 1
+              },
+              {
+                "fingerprint": "1da61o5hzbt",
+                "value": [
+                  "i1"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-13T13:16:55.938Z",
+            "event": "engine.action",
+            "seq": 29
+          }
+        ],
+        "energy": 5,
+        "score": 0,
+        "geometry": [
+          {
+            "selector": "[data-testid=battle-choice-prompt-option-0]",
+            "rect": {
+              "x": 483.875,
+              "y": 597,
+              "width": 461.40625,
+              "height": 42,
+              "right": 945.28125,
+              "bottom": 639
+            },
+            "hit": {
+              "x": 714.578125,
+              "y": 618,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            },
+            "text": "Abandon 1 character you control and use its spark as X"
+          },
+          {
+            "selector": "[data-testid=battle-choice-prompt-option-1]",
+            "rect": {
+              "x": 953.28125,
+              "y": 597,
+              "width": 287.21875,
+              "height": 42,
+              "right": 1240.5,
+              "bottom": 639
+            },
+            "hit": {
+              "x": 1096.890625,
+              "y": 618,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            },
+            "text": "Abandon 1 character you control"
+          }
+        ]
+      },
+      {
+        "viewport": "mobile",
+        "kind": "mandatory",
+        "mode": null,
+        "source": "i3",
+        "payer": "i1",
+        "selected": "i12",
+        "otherTarget": "i13",
+        "rows": 34,
+        "gameId": "hed89q",
+        "actions": [
+          {
+            "gameId": "hed89q",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i3",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "1cbjn4008w1",
+                "value": [
+                  "i1"
+                ]
+              },
+              {
+                "fingerprint": "b6htx3l2at",
+                "value": [
+                  "i12"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-13T13:17:02.269Z",
+            "event": "engine.action",
+            "seq": 30
+          }
+        ],
+        "energy": 4,
+        "score": 0,
+        "geometry": {
+          "payer": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i1\"]",
+            "rect": {
+              "x": 23.40625,
+              "y": 415.890625,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 77.265625,
+              "bottom": 469.75
+            },
+            "hit": {
+              "x": 50.3359375,
+              "y": 442.8203125,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            },
+            "text": "Lab SentrySpark2"
+          },
+          "submit": {
+            "selector": "[data-testid=battle-card-picker-submit]",
+            "rect": {
+              "x": 292.671875,
+              "y": 522.828125,
+              "width": 89.328125,
+              "height": 42,
+              "right": 382,
+              "bottom": 564.828125
+            },
+            "hit": {
+              "x": 337.3359375,
+              "y": 543.828125,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            },
+            "text": "Submit"
+          }
+        }
+      },
+      {
+        "viewport": "mobile",
+        "kind": "choice",
+        "mode": 0,
+        "source": "i4",
+        "payer": "i1",
+        "selected": null,
+        "otherTarget": null,
+        "rows": 32,
+        "gameId": "uzdqrg",
+        "actions": [
+          {
+            "gameId": "uzdqrg",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i4",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "cost-choice-v1:dhzsjoxkg3",
+                "value": 0
+              },
+              {
+                "fingerprint": "1da61o5hzbt",
+                "value": [
+                  "i1"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-13T13:17:05.624Z",
+            "event": "engine.action",
+            "seq": 29
+          }
+        ],
+        "energy": 5,
+        "score": 2,
+        "geometry": [
+          {
+            "selector": "[data-testid=battle-choice-prompt-option-0]",
+            "rect": {
+              "x": 70,
+              "y": 522.828125,
+              "width": 312,
+              "height": 50,
+              "right": 382,
+              "bottom": 572.828125
+            },
+            "hit": {
+              "x": 226,
+              "y": 547.828125,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            },
+            "text": "Abandon 1 character you control and use its spark as X"
+          },
+          {
+            "selector": "[data-testid=battle-choice-prompt-option-1]",
+            "rect": {
+              "x": 94.78125,
+              "y": 580.828125,
+              "width": 287.21875,
+              "height": 42,
+              "right": 382,
+              "bottom": 622.828125
+            },
+            "hit": {
+              "x": 238.390625,
+              "y": 601.828125,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            },
+            "text": "Abandon 1 character you control"
+          }
+        ]
+      },
+      {
+        "viewport": "mobile",
+        "kind": "choice",
+        "mode": 1,
+        "source": "i4",
+        "payer": "i1",
+        "selected": null,
+        "otherTarget": null,
+        "rows": 32,
+        "gameId": "vx52f5",
+        "actions": [
+          {
+            "gameId": "vx52f5",
+            "version": 0,
+            "side": "player",
+            "action": {
+              "kind": "play",
+              "card": "i4",
+              "from": "hand"
+            },
+            "answers": [
+              {
+                "fingerprint": "cost-choice-v1:dhzsjoxkg3",
+                "value": 1
+              },
+              {
+                "fingerprint": "1da61o5hzbt",
+                "value": [
+                  "i1"
+                ]
+              }
+            ],
+            "timestamp": "2026-10-13T13:17:09.207Z",
+            "event": "engine.action",
+            "seq": 29
+          }
+        ],
+        "energy": 5,
+        "score": 0,
+        "geometry": [
+          {
+            "selector": "[data-testid=battle-choice-prompt-option-0]",
+            "rect": {
+              "x": 70,
+              "y": 522.828125,
+              "width": 312,
+              "height": 50,
+              "right": 382,
+              "bottom": 572.828125
+            },
+            "hit": {
+              "x": 226,
+              "y": 547.828125,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            },
+            "text": "Abandon 1 character you control and use its spark as X"
+          },
+          {
+            "selector": "[data-testid=battle-choice-prompt-option-1]",
+            "rect": {
+              "x": 94.78125,
+              "y": 580.828125,
+              "width": 287.21875,
+              "height": 42,
+              "right": 382,
+              "bottom": 622.828125
+            },
+            "hit": {
+              "x": 238.390625,
+              "y": 601.828125,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            },
+            "text": "Abandon 1 character you control"
+          }
+        ]
+      }
+    ],
+    "images": [
+      {
+        "filename": "invocations/run-1aq6uf/capture-payment-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "83afc1956ca973209fc1c6bb94436ad1b25a70337a7b4784006ef649d98241c4"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/capture-target-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "14e2b810b6d7b916f9fc327d617101c2f6c51ecaee87e0aee7a433d42fe33a0d"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/capture-resolved-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "ccfd8f312195730b6cbb9b2b795e93d9fdb27cc9e0d8bc896c6b445a02360789"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/spark-choice-0-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "d7d0eec45213361e2449f1b27609da16640210774e2a52502257925254f8df97"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/choice-resolved-0-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "a1ae8af9549c110abe49d3ad8e6a896818c711ba068c332a7c8c8cdbf7685a63"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/spark-choice-1-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "7e7889ba1d1883ffbfb10a14ba8e03321051e89cab816e00adb1864b448651e0"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/choice-resolved-1-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "d650c2287f8ef25c8bb241cfa7a2dc7ca6df5cb1592ce5e7a9df8ccd557c3787"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/capture-payment-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "f9bcf00baf3e137f3d0b58033eda93a5126ff11dcbb41d22b5c96a9565467fc4"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/capture-target-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "e74ba12518a003d9dac942104c79a3af374ac7015a1e3d97447a7aa419f529fe"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/capture-resolved-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "ed5edebfdba4424d327cdcc7d337b7f8f40c1e1815672700185532a49b28b48f"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/spark-choice-0-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "f688eccd6cbbf468b22719fe7c770669449072aa4cc99d8fce90ab7432d79139"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/choice-resolved-0-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "349d5dfa5fcaaf88374951245eb885d1783498325b70ca851fa1def73e5773b9"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/spark-choice-1-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "f5ce7ad6ba5176212c5d6d602634ac8acb7d0935dc0f5048ee73974865f31da1"
+      },
+      {
+        "filename": "invocations/run-1aq6uf/choice-resolved-1-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "d5f00a3c8688e903c3c2cfdc1e00594501b318afc1d440f2493f44fba708cff3"
+      }
+    ],
+    "caps": [],
+    "sourceFingerprint": "source-fingerprint-before-qa-v04.json",
+    "all15FrozenSourceAndScriptHashesUnchangedAfterQA": true,
+    "failures": [
+      {
+        "bead": "hv-umm2.609",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000060900",
+        "side": "player",
+        "variant": "base",
+        "viewport": "desktop",
+        "verdict": "fail",
+        "failureKind": "setup",
+        "invocation": "run-tY1owa",
+        "evidenceDir": "invocations/run-tY1owa",
+        "rawReport": "invocations/run-tY1owa/captured-spark-controls-v01.result.json",
+        "capsEmpty": true,
+        "notes": "Script omitted explicit lazy probe readiness; first read failed before any control intent/capture. A readiness race is consistent with observations; no provider defect proven.",
+        "causeProven": false,
+        "disposition": "retained separately; bounded setup repair, subsequent v03 actual human workflows pass"
+      },
+      {
+        "bead": "hv-umm2.609",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000060900",
+        "side": "player",
+        "variant": "base",
+        "viewport": "desktop",
+        "verdict": "fail",
+        "failureKind": "setup",
+        "invocation": "run-6iei3T",
+        "evidenceDir": "invocations/run-6iei3T",
+        "rawReport": "invocations/run-6iei3T/captured-spark-controls-v02.result.json",
+        "capsEmpty": true,
+        "notes": "Normal singleton chooseTargets automatically answered after genuine payer submission (engine.action auto:true and autoAnswered notice); script expected a human target prompt. Same fixture gained one duplicate matching physical target to exercise human selection.",
+        "causeProven": true,
+        "disposition": "retained separately; bounded setup repair, subsequent v03 actual human workflows pass"
+      }
+    ],
+    "runtime": {
+      "ownGroups": {
+        "75697": [],
+        "75782": []
+      },
+      "closureQualification": "Own run completed13:17:11.451473UTC; runner confirms port-free cleanup and own groups absent. A fresh peer267 acquired the released slot13:17:19.186UTC, so current shared-slot/port existence is foreign ownership, not609 debt. No foreign resources modified.",
+      "postRunAuditCorrection": "An initial audit incorrectly required global slot/port absence after our successful teardown. It safely failed because peer267 reused the released slot after our completion. Own identity/PGs and exact completion govern609; foreign resources were untouched."
+    },
+    "visualInspection": "Implementer viewed desktop targeting and mobile choices; parent independently viewed desktop/mobile targeting and mobile choices. Readable distinct changed options and physical legal targets, no actionable introduced defect. These are contextual visual inspections, not the independent cold code review.",
+    "finalFormattingQualification": {
+      "proof": {
+        "at": "2026-10-13T13:32:17.050888+00:00",
+        "path": "src/engine/steps/immediate-x.ts",
+        "beforeSHA256": "46177881d63203be0d374a7211940b493e28e1a2fbcef9f4413d2f6a84260de5",
+        "afterSHA256": "fb03f078880075b79275d1b2dfe0d0543b3043b467000313811a810fd53b3c1d",
+        "beforeBytes": 1490,
+        "afterBytes": 1489,
+        "exactAfterEqualsBeforeMinusOneNewline": true,
+        "semantics": "All body/API bytes preserved; only one final newline byte removed."
+      },
+      "scope": "Native QA and complete checks used the original helper bytes. Fifteen hashes matched immediately after QA. Final helper differs by one trailing newline only; fourteen other runtime/test files and the QA script are unchanged. No semantics changed and no rerun was required by the parent."
+    }
+  },
+  "fixtures": {
+    "LAB": [
+      "5e5e5e5e-0000-4000-8000-000000060900",
+      "5e5e5e5e-0000-4000-8000-000000060901"
+    ],
+    "contract": [
+      "5e5e5e5e-0000-4000-8000-000000060902"
+    ],
+    "scope": "Two LAB definitions and one reachable fixture; one additional duplicate matching enemy in that same fixture exposes a non-forced target prompt. No production entity authored."
+  },
+  "preservedProofManifest": "preserved-validation-proof-v01.json",
+  "preExisting": "docs/plan/evidence/pre-existing/hv-umm2.609.md",
+  "testCounts": {
+    "final-capture-check-v01": {
+      "passed": 2630,
+      "files": 3,
+      "scope": "complete public contracts plus tooling and VM prompts"
+    },
+    "review-v03": {
+      "passed": 5622,
+      "files": 287
+    },
+    "coverage-v01": {
+      "passed": 20,
+      "files": 1
+    },
+    "focused-fixture-v02": {
+      "passed": 20,
+      "skipped": 2615,
+      "passingFiles": 2,
+      "skippedFiles": 1,
+      "scope": "narrow prompt-lab/mandatory played-choice name filter; not a whole-contract-suite result"
+    }
+  }
+}

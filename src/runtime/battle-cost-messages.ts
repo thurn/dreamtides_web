@@ -125,7 +125,8 @@ function filteredCards(count: number | "x", filter: CardFilter): string {
 
 /** Cost-choice copy keeps its authored restrictions; stated Reclaim copy uses `costPhrase`. */
 function choiceCostPhrase(cost: PaymentCost): string {
-  const capture = "captureCost" in cost && cost.captureCost === true ? " and use its energy cost as X" : "";
+  const capture = "captureSpark" in cost && cost.captureSpark === true ? " and use its spark as X" :
+    "captureCost" in cost && cost.captureCost === true ? " and use its energy cost as X" : "";
   switch (cost.cost) {
     case "energy":
       return `pay ${costPhrase(cost)}`;

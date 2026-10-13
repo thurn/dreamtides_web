@@ -2,7 +2,7 @@ import { instanceCard, printedCardId } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
 import { choosePlayTime, purposeOf } from "../../effects/interpreter";
 import { playPermission } from "../../continuous/permissions";
-import { chooseX, payCosts, planCosts, type CostPlan } from "../../rules/costs";
+import { prepareCostX, payCosts, planCosts, type CostPlan, type PlannedCost } from "../../rules/costs";
 import { xCost } from "../../dsl/energy";
 import { endFloating } from "../../rules/floating";
 import { instanceOrigin } from "../../rules/activation";
@@ -15,12 +15,13 @@ import type { InstanceId, Slot } from "../../state/ids";
 import type { EffectChoices } from "../../state/types";
 import { opponent } from "../../state/ids";
 import type { StepContext, StepDefinition } from "../types";
+import { targetsNeedX } from "../immediate-x";
 
 /**
  * Plays a card from the hand of the side holding it, or from its owner's
  * void by a play permission or Reclaim: play-time choices (Offering or the
  * card's costs, when it has Offering; a permission or Reclaim, when both
- * cover a void card; X, then each event ability's modes, then its targets,
+ * cover a void card; X and mandatory captures needed by immediate choices, then each event ability's modes, then its targets,
  * then the additional costs' alternatives, optional costs, and cards), then
  * the commit point, then the costs (the energy and X together after cost
  * modifications, then the additional costs in printed order) and the end of
@@ -67,6 +68,8 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
   }
   const costs = routeCosts(state, catalog, card, route);
   const modifier = routeCostModifier(state, catalog, side, card, route);
+  const costAbility = Math.max(0, definition.abilities(instance.variant).findIndex((ability) => ability.kind === "additionalCost"));
+  let preparedPayments: readonly PlannedCost[] = [];
   let x: number | null;
   let choices: readonly EffectChoices[];
   if (definition.synthetic?.play !== undefined) {
@@ -75,12 +78,16 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
     choices = [{ modes: chosen.modes ?? [], targets: chosen.targets ?? [] }];
   } else {
     // Offering fixes printed energy-X at zero; a separate count-only X is prepared normally.
-    x = route === "offering" && xCost(definition.costs) !== null ? 0 : chooseX(ctx, side, costs, purpose(0, "chooseX"), modifier);
-    choices = choosePlayTime(ctx, eventAbilities(definition, instance.variant), side, card, purpose, x ?? 0);
+    const abilities = eventAbilities(definition, instance.variant);
+    const prepared = prepareCostX(ctx, side, card, costs, (role) => purpose(role === "chooseX" ? 0 : costAbility, role),
+      abilities.some(({ effect }) => targetsNeedX(effect)), { modifier, excluded: [card],
+        ...(route === "offering" && xCost(definition.costs) !== null ? { fixedX: 0 } : {}) });
+    x = prepared.x;
+    preparedPayments = prepared.payments;
+    choices = choosePlayTime(ctx, abilities, side, card, purpose, x ?? 0);
   }
   const targets = choices.flatMap((choice) => choice.targets.flat());
-  const costAbility = Math.max(0, definition.abilities(instance.variant).findIndex((ability) => ability.kind === "additionalCost"));
-  const plan = planCosts(ctx, side, card, costs, x, (role) => purpose(costAbility, role), [card, ...targets], modifier, { endsPlayTime: true, selectorX: x ?? 0 });
+  const plan = planCosts(ctx, side, card, costs, x, (role) => purpose(costAbility, role), [card, ...targets], modifier, { endsPlayTime: true, selectorX: x ?? 0, preparedPayments });
   return { route, plan, choices, modifier };
 }
 
