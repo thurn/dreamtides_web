@@ -1,0 +1,2763 @@
+{
+  "bead": "hv-umm2.604",
+  "sourceBase": "03efe7bf5495a7600910aae76b8cd463b2b232b4",
+  "scope": {
+    "uuidCount": 483,
+    "explorationUUIDs": 440,
+    "dreamsignUUIDs": 34,
+    "transfigurationUUIDs": 9,
+    "nativeRows": 26,
+    "explorationKinds": 65,
+    "catalogActions": 1042,
+    "nativeActionKinds": 12,
+    "nativeMembership": {
+      "hv-umm2.286": [
+        "82510dd1-0824-447d-a780-c8fb37bd5864",
+        "267846c9-c8d3-4c57-9f29-f0ce9f30653d",
+        "18069673-2c22-4f94-88ca-b71ac87612bb",
+        "22c53836-f2e3-478c-be8c-e88a4ca95ebb",
+        "f2a61678-17b0-4d50-b75c-f1de61fa0d5c",
+        "1dcc31bc-9b61-42f5-944e-bfdb7d3e52fd",
+        "d00054fa-6184-4cc2-bdc4-36d9bdd4bcaa",
+        "9f3a1823-df4f-457f-80f6-a8745ec38334",
+        "8e628041-47ac-4a18-b62b-79672762b53a",
+        "61f8ab2d-c18a-4213-a853-407ff9564af2",
+        "e892a1ed-f70e-46d8-afd0-53882ef5d741",
+        "7556e80f-6234-4d38-a1be-d3a9e7df8d6b",
+        "d364351c-0313-4c21-8248-e6ae4ab3d6da",
+        "31edb3d9-9dbc-4424-86f8-72471a3de0a8",
+        "448f22fb-04d2-417d-ab29-0ed9fc2bea8a",
+        "fb0813b8-bfb8-4844-9915-ba04bb3476c8",
+        "d34c602c-c0b4-4298-97a3-af067500f1ef",
+        "d9919f67-027e-4a53-bb72-395e11573c89",
+        "d8ac6a21-d668-4f81-95d9-ffb238c09b24",
+        "4f5a4e00-bb9d-437b-9afd-9792af6caec9",
+        "2ca7d5ee-101e-429f-99ce-fbccc069edfa",
+        "969ce2f6-6e1f-4e5f-9710-5683ff3dc498",
+        "d49df15d-c49a-4822-84e6-bb1600b617d1",
+        "7bdb9e6e-6eb6-40f0-b9bb-f07e9c10393a",
+        "89bfc76a-2ab6-435b-9ab6-7b11faad6fbd",
+        "4cfe1c71-e9fc-4e35-8d73-44021ca161b4",
+        "60ffaf18-ff58-4c6d-b86a-09f10b0db8e0",
+        "f1ca6a23-c366-4515-91ee-0ee5cc0a0f3a",
+        "67b15aa1-5b28-4da5-9830-86617b90a934",
+        "404f43fa-2119-48d2-bfc0-879f6972a7f7",
+        "660f7fb5-240c-4c8c-9853-cc93851d938d",
+        "ce3b0d6d-27c2-4b57-ab97-1e81a968b0de",
+        "e3375d56-4eaa-408b-b471-e0df76239715",
+        "b1184d31-cc69-4f4f-a145-640b2b2b20bb",
+        "53e95bb4-6743-41d8-80db-9daed79a4123",
+        "319999a1-16dc-4064-86ed-1b46947315da",
+        "7069b48b-aacb-4604-9202-120cff1567c8",
+        "815b977d-dbef-47d6-9fa9-f4e0e8e4f597",
+        "fdac337f-2d71-4e91-9a10-7b7bac538fdc",
+        "67d04a76-98ab-4a50-b863-9547b92d738e",
+        "d83ed895-db5f-4851-8cc7-cd9a194f5e85",
+        "2b68abf4-20a2-4002-9eee-7007ac874b40",
+        "1663a82a-e0f6-4979-b90f-39f46037eb2d",
+        "2f58737a-51b7-45b7-aaf6-875680d96c1b",
+        "796f52f1-14cc-414c-85c7-9b8a2694e6bb",
+        "a9ca68b4-f32c-44c7-99f4-921431f6771b",
+        "839b2fd1-4bb6-4b61-a378-eb25863fbc2f",
+        "423e54a7-d0ea-4ac6-8115-dd7be68a5f41",
+        "af23b52e-0222-4fe3-a66a-a9bbaf135a38",
+        "48671e80-d720-432d-83dd-f3d9a613736f",
+        "9780b16c-75ed-4ad0-9efb-43e087fe5dc1",
+        "57e55570-d3c1-4aef-aa23-9a0d12bf13aa",
+        "e34914e1-adf5-4a41-abc6-9e629446cbe7",
+        "a69f3ea4-0568-40dd-af62-b1c35cd0a32b",
+        "56604a49-0920-4242-bc4c-233859bb882f",
+        "0fca674c-72cd-4774-b6d4-587edff1f57a",
+        "fca79f5e-194d-4468-9c0d-3b0f103bdf8e",
+        "abc400a3-066d-47c4-8466-6c7a021d94ff",
+        "a9ce3029-2c87-41c3-b1fa-ce803135d1f1",
+        "8d77cfda-9be0-4e3a-abfc-9814fb14d0b1",
+        "022723f4-d18e-4d2e-9600-c44303ff3d36",
+        "ab98f7d2-176c-4a2f-867c-944821be5c2e",
+        "5221f0ab-7a1d-411d-8e7b-fa0d8c128658",
+        "f19f245d-ba05-462b-8db4-853833ba4bb9",
+        "7213ad24-4cff-466c-9288-f2f8d610b000",
+        "e77e78d4-7b74-478f-9d27-2ca6709712ce",
+        "2ee82d80-05c4-49f5-a1b7-9386314bac2f"
+      ],
+      "hv-umm2.287": [
+        "581e129b-3b9b-4a7b-9dbd-b358f9fa5d8b",
+        "945dcf24-a548-4391-9cbf-785a584c76d8",
+        "009e949f-2c69-4d72-b444-efb972ffb37f",
+        "42607972-b7e0-47bf-ac8b-338f6f6f0325",
+        "a56f8765-f859-445a-896f-e9377526ab03",
+        "86f613c2-6f0e-43cb-a4ad-7385158656ba",
+        "20cfd197-f247-431b-8335-9c7d401806da",
+        "57e56e5c-48c3-4b17-9ee2-80651d7ed7fb",
+        "665a94ac-2e17-4450-9ae3-3a7549bffe1c",
+        "50d54415-8488-43a2-9b64-caea9c0825dc",
+        "8271a330-b4f0-4931-ba41-08b268d6edd1",
+        "6954d3b6-64d5-4a8a-8828-fcfe269d9037",
+        "97759157-5ba7-4e8c-8923-53bc06ead192",
+        "87efe01b-525e-41b4-80d4-db4c4bf3e656",
+        "21023675-4a7e-4f5e-afed-56f70c0d68cd",
+        "6252f2e0-f865-4468-bf91-64d94646c851",
+        "17a96db4-e97d-4a7d-9118-81fef35832c6",
+        "5169756d-be6e-4b9b-8f95-d914714108a6",
+        "430fd519-1c75-4657-8b8a-2ff5e4e5633f",
+        "c6279afc-2819-4141-a1cb-20917bb00e2f",
+        "842a4c2f-49ab-4f74-809e-a3bb4380f7c4",
+        "91bdca62-29cd-4bb4-adcf-4209a86833e9",
+        "072ff391-7b19-4b7f-83d7-11f71646df3e",
+        "5db20830-6098-4243-9b8b-d476c2d206f0",
+        "ae385aff-6eb4-4035-8875-0edb357c3205",
+        "7c543c64-35fb-481d-b1d3-af9a6caf99c4",
+        "1f8131d0-730f-45a8-a074-6a2eff77584c",
+        "e162a1b7-4056-4896-b8a6-e0c0d8389216",
+        "d00b1861-631c-4990-8a64-0fd1f0aacf2b",
+        "cd713f4b-bbb7-4761-a75f-579222eef578",
+        "c6f9e2d6-306e-4db7-9961-d8154f5132e6",
+        "ea92b9ab-1dde-4903-90b7-30a52491b7ae",
+        "4971417d-2b6a-4f5d-b47f-03555d2051f0",
+        "2d29f3a3-353b-45e1-a499-978337af2dd5",
+        "d6e5dbe1-22a4-4f1e-a224-97c81e0138d2",
+        "736cbb15-73c5-4efb-b550-0641ea58a24d",
+        "1adca56f-6e11-4772-b8c1-8712df94c1a8",
+        "63586673-781f-4281-bc1d-e4f8b11ead28",
+        "56500107-6da7-47af-9807-83e4a6ed8e38",
+        "50684e69-b2c6-4e55-a8f1-6e92298fdefd",
+        "09fd2af7-8067-4616-b361-c5958d670f2f",
+        "085c6812-0210-481f-85fe-3ee0054cd43e",
+        "9a760ddb-ee2b-4f29-b2a9-c32973428346",
+        "efef24e0-3342-4c55-9823-5491e293d1e7",
+        "d7d0168a-6fc5-43d8-a0ff-5d79bbcfa8d7",
+        "07f25e60-96ac-4776-85db-2652342b78c3",
+        "66233bad-6370-48ea-a3dc-4148e7de5de2",
+        "ff1f7348-a85e-406f-b6a0-0727f9194c72",
+        "d0827a70-ec6d-48c8-8406-4840c1793070",
+        "865623c9-731a-4001-b9b5-c6c4d924da42",
+        "69bab67f-b41c-4f6c-a4d4-961be805121e",
+        "2e5b0300-5ef0-406c-a891-69578ec86175",
+        "be64aeeb-da6f-4b6e-af0b-4c47fda4f2cd",
+        "034d737d-db81-404b-88e0-28b2b83fbd06",
+        "b456a39f-2b40-4ebf-a4fa-66add8e6125a",
+        "52b0afe8-8f54-49f3-9f71-d0493220060c",
+        "fcea4f01-7d04-41c2-a139-a7cdfc9ae480",
+        "12f4e09f-07e3-4db6-9db7-72d42b4a064e",
+        "c44535c8-4490-4893-8037-fb40db5fb7c8",
+        "fd89e187-5fbe-4096-8e30-c2705957a135",
+        "82bc3723-34ab-4743-b12f-75589225ce80",
+        "7f0d6a6a-fb11-4314-841a-532724aa3e9c",
+        "730a3c57-a309-45a6-acd4-aea3b99664b2",
+        "905cf858-d8b3-4884-af24-1c953c00b0cf",
+        "f4a4ee8d-9610-4841-8e24-20a51f6868ba",
+        "a99a5ce8-d73b-42b4-88ef-f71ea3e0491f"
+      ],
+      "hv-umm2.288": [
+        "a5042cfa-d3dd-4a62-b4e2-5d86d3cc2874",
+        "49273949-f29c-440f-b843-5a9d0640c236",
+        "c0d41e23-2f38-4d17-a1a3-32285b7e4da6",
+        "92feb9c6-efb6-48da-ba52-936841f17de8",
+        "4ebf0221-0b1b-4a47-9d68-0138cdba2cfb",
+        "c7c50596-f234-4f4e-823d-88700dc1ab99",
+        "a6d3bfe2-72d9-42d7-8380-fe97fff4de47",
+        "38549dea-c5b6-49df-bda9-d621a7e0ca6f",
+        "8b3c547f-3043-4d29-b40c-3629a38f848f",
+        "472e903b-f832-4cd9-90ab-82dee9f8177c",
+        "1bf1f186-404a-44f2-a705-6474fca1ddf6",
+        "3d435a07-0fae-46cb-b589-03bb93b15c55",
+        "7bcb0ab4-5d61-41ca-8f88-c9d9502ef82b",
+        "09917d76-41ef-4117-a0e6-84f716663df2",
+        "285662bc-bb49-489f-9ae2-c957e218aeba",
+        "3994f237-6cdc-4047-b98d-97e7f31fcfb0",
+        "fb695274-f200-4f17-8dc5-7745ae63a2f9",
+        "514d3ba6-e57a-438e-8dfd-28cf7db97e5d",
+        "e9875a87-289d-40b1-a19e-2e566c3b332d",
+        "8c2fbeca-9f8e-4156-9437-ae3405daff0e",
+        "144f5e25-c537-4d71-8dab-7de719eb93a5",
+        "c890dbf0-4d74-4a0e-8ffc-2e5aef3cb38f",
+        "ee5061c9-ec09-4b86-b5aa-8cef605a1796",
+        "eb514a7e-b571-45c5-b672-488df11e1fa4",
+        "af570fe6-7543-4c9a-9b1e-a103cd739945",
+        "8e112255-2140-4e46-bb60-d30d286fc8ac",
+        "f6bf3f1f-ef1d-4f94-8a85-b8620c7bfc6a",
+        "2ff475a8-37b2-4cd2-ad8b-648968b27ec3",
+        "07145c6c-20f3-4a2d-9058-d8dba4fc23e0"
+      ],
+      "hv-umm2.282": [
+        "cb4a0eae-a464-4888-a2e4-390c3e986899",
+        "83a3d2b7-0ca2-40f4-89fa-726f6efb732b",
+        "ff2a2adc-9678-4e91-8c29-853a045270e5",
+        "75a6bd0b-714b-46ed-b5c4-9485f8319959",
+        "a63c84e0-5d10-4155-8fcc-f6c967330014",
+        "ed726ca9-6e65-4680-8596-444d872c28db",
+        "66957744-1b9e-486c-a015-ece9cc8ded3e",
+        "902931da-6ab3-4987-b345-3317b4ade36a",
+        "8fd01df5-2022-4ed9-8a80-b24b41cdcfd5",
+        "c7e23aa9-7ff6-4d41-b0bc-0993d9bb0b6c",
+        "d70a2fb9-6b0f-4c6d-87f8-b39beeef5bc8",
+        "f1a48400-d96b-4aa2-8b3f-cb9a93dc8ad9",
+        "d451ccef-f4be-407e-800b-55c04608896b",
+        "fcce63dc-f8c5-4183-be2a-9de4929ca8c2",
+        "7f5989f5-dcea-452b-a678-4febe5f6baba",
+        "2dbedc84-1c2f-459e-9e6e-acafa1cd93ee",
+        "485a331a-b263-4921-a342-81453dfd1dbf",
+        "305154b4-f3c1-44f7-804a-70a7c01f7c7f",
+        "52949805-3fb2-40fd-b72d-4448a49b2722",
+        "9f73489e-d41f-4883-b2cb-d571ef95fd2d",
+        "66a93ab4-c049-46eb-a176-d4b63e69c840",
+        "2719cc15-94db-4fea-b061-e92a78371fb5",
+        "eb808cb8-fdf4-4ad2-ae06-60103b5321ed",
+        "5ce24a74-9a00-40ec-92ec-8caba0836f98",
+        "363b6fc0-cc56-459f-8940-18c0a0b3717a",
+        "4790344c-2167-4bf9-bef0-5d33787d7f68",
+        "c9b12011-3160-443e-ae04-ff36762059a4",
+        "8e010cae-a23c-441c-b807-ac4186f49c55",
+        "bac27741-0ac8-448b-a838-0e624b5b5846",
+        "d449caaa-9d41-4d63-af5c-23b6aa9d6ce5",
+        "90d2a24d-5eb8-44bb-85dc-97cc700497e3",
+        "08b717a3-c3fa-4f94-8758-f6449d528c52",
+        "34f9fc83-52e4-4709-9361-6cc10129354d",
+        "30a4aa09-ccb4-453d-8e92-ce059736c678"
+      ],
+      "hv-umm2.283": [
+        "2df93add-1e2a-4b89-b543-4bbf9df54aa1",
+        "336c6140-542b-4d42-b19b-5736d864669f",
+        "be14d140-b1b2-4372-b0a6-c4228d463627",
+        "c9a6b1a0-6340-48cb-b30c-a0917271546a",
+        "496eb06b-c9a2-44bd-8e3e-a047b2043af2",
+        "ab93596a-375d-4a22-946e-75423ac3c0ec",
+        "2542e069-c6c6-4d76-b4b1-c71138371931",
+        "9d85ef97-4f53-4633-bbb1-699cc25e6944",
+        "0b596a61-2355-4932-b6d7-e174a38bf85a",
+        "7fe9453a-3e29-443f-bf5d-72c779b4def3",
+        "42ec0173-42f1-433d-8366-0f3aadb47d7a",
+        "f863131d-c742-4d99-90ea-088701382e53",
+        "29905ca2-3a18-4024-a443-d8cb28c91446",
+        "35d2eb8c-44d9-48b6-8bc6-be9436e3370d",
+        "1dfb9178-2259-4bd4-a269-d8b91b8d7ca6",
+        "f372f27e-3d53-4bb4-8c20-e695c7cd0895",
+        "9e861f68-e885-411d-97d8-6ccdcab6c80e",
+        "2ce3f099-f892-4753-a540-c939beb664d5",
+        "4bf1fa01-1890-45b5-80a7-6b6163e8cf25",
+        "a9e2feac-1f32-4a95-9555-810ea083cbd4",
+        "b1c14803-7be3-4ca1-82f6-dbea16be7c7b",
+        "4eb72353-e83a-4548-8099-19e9ab34f657",
+        "64f25dd3-dac8-4694-b4f3-24176287fcc2",
+        "abc6d977-d2cc-4828-b725-ee4a0d5765fa",
+        "831d6520-da93-4290-b33a-9ba4554cf675",
+        "3e78f870-b864-4704-8c4b-cdcb59e76cc7",
+        "a9fd3639-8d1c-4456-930f-13f4589db33c",
+        "2de081c2-6567-4e13-99e5-a0bbf16923b3",
+        "242770a4-8c81-4b66-8abb-6e8a9c5cb53d",
+        "e441b406-a8d6-47dd-bd44-9ac9a0fca791",
+        "d5131386-f24a-4070-bc85-bb87da15f384",
+        "f5f7b66b-1dbd-43cf-89b0-590f2dcca456",
+        "c139e3d4-6751-4b4f-9349-9cc38238e26e",
+        "42b861a7-ad92-47ff-9ead-3e2933a0352c",
+        "cc08e452-0c6b-4968-b92d-2e5903c93fdd",
+        "c183f486-9701-456c-ab94-cb53c9c4269a",
+        "4a886ca5-dac7-4b24-af91-8134f1a6e3b8",
+        "9c4b8c33-8b94-4a38-9e7b-80602cc8cbee",
+        "05c51da2-77d3-44e2-8ade-a5865c94854c",
+        "7c9f191a-dee9-44d3-b8af-b35209ebb22b",
+        "d3bacfb6-7cf3-42ca-93f4-4189cf3632c6",
+        "2da3c9e3-9b89-4df5-ae5c-11448f92bc5e",
+        "316e3f24-aa54-4da3-863d-d05985ba0dc4",
+        "b9287b66-b27a-4b72-88b9-a46d925ef226",
+        "3da6819e-c190-4156-9b36-956bcf0d9be2",
+        "664c9209-ac07-4381-9a60-8344ac189192",
+        "e27832de-1271-4fb5-948e-543dc377c28a",
+        "5b64dd00-27d1-4ba2-a383-afef20a30f64",
+        "e793121c-e0e3-4f9f-8738-ff4d1c4f95df",
+        "3e737b61-414c-4f8f-8ab2-d3f5e5e581b9",
+        "becc81bd-e2d4-4f50-a334-9b673dba825c",
+        "f757e8c1-b6e0-44d5-abc1-00305cd3387c",
+        "6a76e445-0f00-42cb-b311-10dfe06ee0c6",
+        "cc177a0b-1939-4e16-a21b-33660d97666f",
+        "3471e8f7-69db-46ae-9bbd-180c8b02f426",
+        "d43566ce-c720-428e-92f1-62651c78d092",
+        "6589c495-c09e-4eed-a502-1db46ee6b263",
+        "b312af6f-756d-4c19-bb2a-ac62908bbecd"
+      ],
+      "hv-umm2.284": [
+        "4ec18326-6968-40ee-91b0-de6c00440ddc",
+        "252c81f8-0a07-4899-8ab2-a2e19bf89de6",
+        "1856ae77-4bf6-4d99-88ae-aee46b2f647b",
+        "975398f9-e1f0-4a77-ad46-c989b0df2c2e",
+        "effc05ad-ee43-4fc2-83c1-f25bd6bf1754",
+        "cc63a163-3e80-4f63-a252-2d89a4c7270f",
+        "b4c9022f-0397-4d02-b058-f43f9c444139",
+        "0dc54870-c1be-4900-9d2f-6f5adb53e8a1",
+        "780b903b-235a-4c7a-9030-435671d88afc",
+        "622b741a-3ba2-4626-936f-2e442cbc9abc",
+        "fbd06d78-d18a-4248-9f31-61db84d2c1ce",
+        "be58a8a4-c10f-4cdd-9278-e27a3a4605ae",
+        "c19aed98-18f8-4fb6-a7fa-9b84f210c218",
+        "5bf49a6e-ada6-4e3e-b381-f333178599c8",
+        "75469517-395e-4612-aba2-242850b93483",
+        "d963a026-84f2-4599-8bd8-cb19f4132163",
+        "b00478b9-2366-491a-98ce-3f8c37364063",
+        "2a59080c-2ddb-4f58-909c-580884fdc0ba",
+        "47171f27-08de-4baf-a409-4e1ddacd96ff",
+        "e3c70736-fe3b-47e2-9aba-019beb235974",
+        "e299eea4-62d6-4817-b2ce-4ef28a68e14b",
+        "5954ad36-d709-4fd0-b024-11420bdf6bc9",
+        "a4efcf82-5a4e-4116-bbfe-5d3ea87ca882",
+        "599e17cc-10c3-4ece-a0d5-2b8d17d98041",
+        "65ddbb3a-bcba-41c1-a81e-128a8e412dc8",
+        "285fb938-05ce-461e-90f9-5e014925908a",
+        "918a26e9-e0a3-4e85-8fad-5504f8cbe02a",
+        "1e27d150-b8e4-45be-a90d-117adef035fa",
+        "487aaad7-7fc3-419e-b139-98dfdcba5747",
+        "132b7409-efb0-4622-b312-5c29fc2432e9",
+        "df14d3e7-b6ad-4414-afb2-e19721b8aaa4",
+        "afd46c27-23bd-4e51-957a-5b0aa5a4cab6"
+      ],
+      "hv-umm2.285": [
+        "b59b7e6a-aa32-428a-9397-06766ebe9b7d"
+      ],
+      "hv-umm2.277": [
+        "f40df441-0e44-4122-b4d4-cdc4085a9ffb"
+      ],
+      "hv-umm2.278": [],
+      "hv-umm2.279": [],
+      "hv-umm2.280": [
+        "fbd22f73-9eb7-458a-bd2c-6a65ac5cdd6d",
+        "c6be47aa-68dc-4d5e-aeff-ac85de91f368",
+        "571d4537-5ff6-47df-bdc0-77be447f411c",
+        "65bcfadc-5775-4dd5-9147-4e82fa75e2ad",
+        "72ab2b5b-cf89-4981-8398-acccbe026886",
+        "8f3c1320-83e9-4198-9927-00d9345cdcad",
+        "867723b0-3489-412a-813a-1c0ef8098be2",
+        "41c670d1-c12c-4152-a184-05a4cbed2be9",
+        "bb8d9d56-cb78-44a9-8bef-6b4c87c20ec8",
+        "1ebb9a53-fb79-4cf2-a9a7-2a00a6fb4b8c",
+        "091b66c8-316c-4ef5-9bbb-26db6c8d45d3",
+        "d1233e3f-06e7-4a78-9192-4ca49cb0728c",
+        "910acca3-f35d-4fe7-9a5d-b7d91fdc2818",
+        "bbf77c1f-5f24-4e37-8062-ca2b30dc65d8",
+        "739338ed-18ee-405f-ac7f-d61b172ef040",
+        "003415d5-e8d0-446e-8f2c-70da5c55d79a",
+        "bf8e314f-074a-422a-beb4-d55092114bb4",
+        "8dfae3bb-c49b-49bf-ac27-c7293d293dc1",
+        "61faffda-a3cd-4b60-b033-bd6bc412207c",
+        "19e2443d-3b39-43e8-a1c6-afac64aeab2c",
+        "cbe7a8e8-0275-4f1d-9be5-077f004aa4d4",
+        "59d712a3-f2d7-460a-937c-3c0808e4874d",
+        "1b8b8de3-a11b-4280-aa12-939aa0dd0489",
+        "d8efb5f7-1149-475f-b109-999f89f9a97c",
+        "e4d90d10-b9ad-464d-a7ab-e7a261fdcb59",
+        "80701c20-b897-4307-9222-1d56aa1b446f",
+        "63fb1aa5-e761-47f4-9c94-e407967cb6dd",
+        "ec53cc34-edb3-4264-9998-457672f91662",
+        "750bc96a-ac8d-499d-9618-1f27e5e6dea0",
+        "15a3b944-2a40-4c5c-917e-bf708fd13ea6",
+        "7ce8a057-9d68-41b1-94d0-c2c05ec827ef",
+        "d4cb0655-c311-4497-b06a-548a1549ccd4",
+        "bbaf2e35-d7fd-4d0c-a0f9-6d67af20f6ce",
+        "2532f464-2151-49c2-a130-2e94b89ca8e8",
+        "10325095-5749-422a-9398-68fc12eb3830",
+        "f13f121e-f02d-4bff-adb6-d42276e218f9",
+        "daf9c800-5a82-4af4-8ecc-ca97fe78ba77",
+        "0a6038e3-2a98-4a27-b03a-707355b4fee2",
+        "3fd7101f-f88b-4025-a708-291934eeea31",
+        "e78e529b-a267-46cc-846c-46d6d5b6c7f7",
+        "d7e68bf2-a5b8-4d37-90c5-0a0e81e61add",
+        "fccc9055-cae3-427e-8055-4951d19accf6",
+        "06726bb6-4ec0-433d-b88a-87f752f7dbc2",
+        "302b8c4c-ab36-4730-8ac1-f3fdcf192f10",
+        "255a201d-6779-4805-ae59-857756c7a8df",
+        "08d29b7e-55bf-4b88-b61a-88c2e7f56a88",
+        "ffd8190c-a34d-40d4-8e9b-65142eff53e8",
+        "ded01c5a-c919-4f61-bb4f-31f7bb64680c",
+        "c007cf3f-7779-4081-bcae-b1726dc816c2",
+        "75579971-169c-42bb-a622-684d551de035",
+        "5b4149c5-5097-48be-ae56-c6609fa42175",
+        "e4c739a2-ff7f-4b8f-9f48-4dcd4fcd19be",
+        "90036feb-0132-4ba8-8415-0f11a17c898d",
+        "63648d40-a6ec-442f-aa36-24aafcb01ddc",
+        "cb27950c-7df6-4a8e-a540-0a9ae04cae1c",
+        "e9d14079-adda-42b1-a0e1-8fe8fa8113a7",
+        "6b56baff-fe52-4b32-9e52-534d34863444",
+        "a6c5d591-c423-4700-9a69-7ea25fc80236",
+        "b718d1a0-af08-4d66-977f-5a8fa2a08ee6",
+        "b6e5c3c3-cff9-404f-9521-b890c1c5139c",
+        "aea75970-6235-40ac-b422-c6327f0a9c8f",
+        "50c0f784-ad01-4fde-9cff-27a0fedbe1d6",
+        "d244c4b0-3a78-4961-a975-ebadcae7df6f",
+        "51f5fe3f-8c57-4366-94db-d270fa71ea04",
+        "124bc32b-bb3e-4f6e-bddf-2bf6545c0e07",
+        "8f7e4825-8e28-4a4b-97c3-289dde13c3b1",
+        "42531eee-ce02-47e4-92bb-4d80217bef9e",
+        "ced812d9-7943-4625-aead-10e08af7d0ea",
+        "eeefd61b-d20e-439c-966b-c6ce07870182",
+        "ffa72a9e-4858-4a3d-8ba2-5b3f9ae86256",
+        "d33d4cc1-d5dc-4ff5-ac11-195a72be9a5e",
+        "2fe0502f-ba70-4c91-8af0-37f907731203",
+        "b7321ee5-b0a5-48b8-b320-4ae9fbc8aa76",
+        "525c322c-6a70-4874-bfcf-27eca02508cc",
+        "c577d037-bd4f-432e-b0af-09e77e7ba94d",
+        "8c75f115-e1a1-473f-83bf-c8369b8d0a31",
+        "e8b93126-2317-469b-b1b8-8427e8b92322",
+        "581f1236-2c9a-4f47-b4e8-f980581baec6",
+        "5ab02a06-fdb4-4a8a-a377-70c4f0148323",
+        "b1b1d7c9-f765-413b-aaa6-a1ad41eaf413",
+        "d9a98018-25d4-4def-aa1d-ae1c71a4a8fb",
+        "e9d4f9de-8795-4c88-9f88-f125b6dd621b",
+        "542ca815-ab73-4251-8de4-ea8e932135ac",
+        "ac2d6b33-402a-469f-a032-e41903b7811a",
+        "f3beb8c5-cb4e-408d-bdb2-b0d2249712f5",
+        "71311891-4fab-4956-a346-959b2dc7e031",
+        "ade4e283-b41c-4291-b7f2-c8016e6bfb0b",
+        "875aa793-b67b-401d-b957-510315aa0922",
+        "7382f0c8-6815-496f-a49a-16a982db9448",
+        "345db217-c611-4c41-b844-1232492b9a92",
+        "88f91d60-01ef-48ee-a2aa-49bdba4f3d86",
+        "82892492-1abf-411f-b26a-bda5cadeb706",
+        "46e7de23-2c95-4611-aa5c-ba39b9507229",
+        "653fffee-ea77-4cd3-b1ec-b3409ba82760",
+        "b284f3ab-e20b-411b-9f81-1ea25f8470d0",
+        "9e777f6d-6c26-4dc3-b049-a5bb8767c249",
+        "c799b0b3-dde2-40db-a569-a76fe90185de",
+        "fb9586f5-4a9e-41c7-a711-9e808662ddeb",
+        "26a4b37c-865c-4cb8-9105-879709f23ae5",
+        "438b139d-835e-4eba-93e0-34d152681365",
+        "0d57b28b-3f03-46ed-9bfe-5ea8f4b80cdf",
+        "5dae9bee-5718-42ce-a4dc-55b5f7973af8",
+        "a9f63ed8-65e6-412a-b515-af6c12ee531d",
+        "4a59f8a7-6704-4aa3-a7b3-00683145565c",
+        "6265b65f-5d85-4cfc-b1a3-5d2ac17f1184",
+        "f08b8e9c-69cf-4de9-b93c-e35859a2df98",
+        "008c0224-5be4-4b37-b0b6-c05213a3af0b",
+        "a5fe7663-d7a0-46b2-99ec-f9fc1cff2be2",
+        "34b990e1-387f-4d61-a7f7-2bff50fd4c2f",
+        "0728a8ae-a839-4851-abe0-2df32da02553",
+        "72785214-e131-4966-8d37-93abb25ffc69"
+      ],
+      "hv-umm2.281": [
+        "b8e30996-eb1b-48b6-95b7-484a2be31d64",
+        "d134b0e1-68d5-4edb-925c-e24f77ec4b74",
+        "e9d289fd-26bf-4e5f-a02a-807f1f4c3464",
+        "41d2f0f1-09c2-4fa8-8d14-1c2f3c070ddd",
+        "8fbc7243-142a-4724-b683-161b463e8a66",
+        "ebe3c30f-702b-4679-8b69-6ea288dab2a4",
+        "a7469f8f-b4ff-44c7-b9de-679249a826d4",
+        "c69786b7-190b-41f1-9798-5dbc26953eb4",
+        "7f2cf279-7d99-43ea-b17a-a9a4b379dc7a",
+        "ff89acc5-e4a2-4be8-9975-ba6e3e2be325",
+        "b0788f98-475c-495e-88b1-10cda2e72702",
+        "ef6f3edd-fa06-4711-b772-22dc5a36ef3a",
+        "2efe46a7-9203-4366-98c3-e59253ca7b2c",
+        "823736ec-b4ed-4c34-a863-cbfadcedb8c0",
+        "d53b7ccc-dd63-4927-a711-02810c66a739",
+        "cbf843b9-5924-4a54-a8f5-2cdf7a177289",
+        "3512bf48-b98f-42ed-9fd2-841e1177646c",
+        "8e31bd08-b5d9-48c6-9772-4a1aa7c26281",
+        "506f34cf-e826-4d7a-a0a6-a3a456c9019d",
+        "2a87956b-3dfd-4bf7-a83a-5f7bc7c017dd",
+        "69770100-9d41-4daf-9edf-527488df4fd4",
+        "214467f4-5cb2-49f3-b734-040890792a4a",
+        "07a0dba2-5ac1-47a6-ae23-6b8c98ee2a2f",
+        "871d3b6f-2fe3-47d2-afca-72d52a0e5e80",
+        "2269992d-019c-45c2-b171-14c4814053a6",
+        "b6bcb0bc-0c40-4f60-bf1e-30e7c3ab26a7",
+        "d78945e5-7d47-47fd-a14a-18737a3ca1a3",
+        "bbdcaf49-b077-417d-8f7a-18c6c355478b",
+        "bfdd2306-a1e3-4aab-ac1c-87474b1d562d",
+        "6fe876b1-ed04-4227-91a2-6af5780d9a69",
+        "27077f5a-473e-4973-ae36-91ae63d42f0b",
+        "3ef10694-2df5-4cea-917a-65007ac58d16",
+        "da72a623-3e95-480c-a53f-a76c5b8a10a5",
+        "f30ff862-8146-453f-b518-72fbeb2de224",
+        "20e033a7-dffc-4cae-a89d-9fe674c28a9d",
+        "37f1b36b-9179-4e38-a937-a856d30e56cd",
+        "7433289d-5cc3-4023-852a-2ae9635ab213",
+        "48294bf5-bf99-47c8-8e12-f8e1e4d8c63d",
+        "e69d6716-d497-48ac-a334-a23fe747360a",
+        "9163853b-42a6-4465-8e7a-11c60d92959b",
+        "6d43d558-7a09-4d22-8d14-9aa503f78156",
+        "fc40fd6a-43b4-4074-a5f1-ad3d3247b9e5"
+      ],
+      "hv-umm2.272": [
+        "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+        "eb55b141-82f8-4ba4-b319-420f762e9ee4",
+        "1328e611-fa2f-426f-87e2-97f26c061866",
+        "e7d23bf7-4d60-4b43-94c4-14a06c0f9116"
+      ],
+      "hv-umm2.273": [
+        "71f77dd5-3bb5-4987-80f4-13dc69f74e6b",
+        "883f88fb-ac50-419a-8382-c22edee29755",
+        "cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f",
+        "34ce9428-dda9-4efa-bacd-5ec2698561c1"
+      ],
+      "hv-umm2.274": [
+        "6b95d6bd-c970-4465-9536-4f21e7630d0a",
+        "1cd25b9a-b176-4c51-8349-bb4df35cbf05"
+      ],
+      "hv-umm2.276": [
+        "19f6c2c9-dd6b-4d65-9f95-f6a3486772cc",
+        "a2c070ca-eacd-4cca-b69d-3d48f0787a16",
+        "a66c513e-500b-4891-8c09-9641ae300ba4",
+        "c3fa83af-ee3b-47cd-8112-5e5cc38821de",
+        "eb4cfc5f-237a-47cd-9215-7cce3f15583f",
+        "f0ff63b4-424b-4ae9-81d5-a4f6546afa3f"
+      ],
+      "hv-umm2.267": [
+        "2dcf92bf-93b3-400c-ab97-69d3098f8868",
+        "cd81a49d-df58-4e0e-b1b2-33a82b386052",
+        "1c505034-e405-495d-8418-6e3c06d974f0"
+      ],
+      "hv-umm2.268": [
+        "025ce7f1-066b-480a-8a2f-364379890abd",
+        "1cf06f9b-d698-434b-8e36-8a47206f4c0c",
+        "da7e4b45-9106-4116-bc1c-3aec8885396b"
+      ],
+      "hv-umm2.269": [
+        "069c6e8f-4f41-4f13-9ec9-2009b4186e3b"
+      ],
+      "hv-umm2.271": [
+        "e377c3ed-16f5-4424-a9f1-73f9750ace9f",
+        "8e2d26a8-ff39-48a4-a30e-434479c4675f",
+        "8b69de8a-835d-4f0c-ac25-dc0e700e2983",
+        "4f21a4ab-e4aa-4718-8563-9afb72d140c0"
+      ],
+      "hv-umm2.263": [
+        "7e8c86cc-788f-4648-be84-e0935c40c31e",
+        "ab1da9d3-376a-460a-a9dc-4737e59e558b",
+        "0df9d72c-58ea-42a0-a72a-cbc540a1836a"
+      ],
+      "hv-umm2.264": [
+        "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+        "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+        "c2af5460-e61f-409b-9b86-6ac7db34d748"
+      ],
+      "hv-umm2.266": [
+        "8a2c7b32-26ea-40e2-845a-689da5673b4d",
+        "8408b8c2-5a3f-40dd-bac4-98f2736c4176",
+        "10bd78de-87ec-44e4-9b16-e755da2a9717"
+      ],
+      "hv-umm2.261": [
+        "0c52e8c3-a792-4eea-955f-a0c61463c066",
+        "d9f0f7ff-63c0-4247-8831-054d7fed931d",
+        "452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19"
+      ],
+      "hv-umm2.270": [
+        "3d86f8ce-42ac-43dc-96d5-121e6d1a6167"
+      ],
+      "hv-umm2.275": [
+        "22adf539-d2c9-4f33-9416-159d03a220ad",
+        "980d283a-9558-4b66-84a0-fcb91fdf4ceb"
+      ]
+    },
+    "kindCohorts": [
+      {
+        "kind": "purge-and-copy",
+        "total": 37,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3709
+        ]
+      },
+      {
+        "kind": "purge-one-transfigure-and-copy-others",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": []
+      },
+      {
+        "kind": "gain-dreamsign",
+        "total": 18,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3258,
+          3265,
+          3770
+        ]
+      },
+      {
+        "kind": "gain-nightmare-and-dreamsign",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3239,
+          3333
+        ]
+      },
+      {
+        "kind": "gain-nightmare-and-offered-dreamsign",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3242,
+          3321
+        ]
+      },
+      {
+        "kind": "gain-card",
+        "total": 4,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3811
+        ]
+      },
+      {
+        "kind": "transfigure-selected",
+        "total": 30,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          2822,
+          2860,
+          3833
+        ]
+      },
+      {
+        "kind": "transfigure-random-cards",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": []
+      },
+      {
+        "kind": "transfigure-fixed-random-cards",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": []
+      },
+      {
+        "kind": "purge-selected",
+        "total": 17,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3873
+        ]
+      },
+      {
+        "kind": "purge-starter-card",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3097,
+          3102,
+          3107
+        ]
+      },
+      {
+        "kind": "purge-random-starter-card",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3098,
+          3103
+        ]
+      },
+      {
+        "kind": "purge-random-starter-and-gain-card",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3156
+        ]
+      },
+      {
+        "kind": "replace-all-starter-cards",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3157
+        ]
+      },
+      {
+        "kind": "transfigure-random-starter-cards",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": []
+      },
+      {
+        "kind": "transfigure-all-starter-cards",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": []
+      },
+      {
+        "kind": "transfigure-all-cards",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": []
+      },
+      {
+        "kind": "choose-pack",
+        "total": 25,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3924
+        ]
+      },
+      {
+        "kind": "draft-card",
+        "total": 120,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3932
+        ]
+      },
+      {
+        "kind": "purge-for-essence",
+        "total": 56,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4176
+        ]
+      },
+      {
+        "kind": "change-subtype-selected",
+        "total": 18,
+        "pending": 18,
+        "beads": [
+          "hv-umm2.284"
+        ],
+        "ids": [
+          "4ec18326-6968-40ee-91b0-de6c00440ddc",
+          "252c81f8-0a07-4899-8ab2-a2e19bf89de6",
+          "1856ae77-4bf6-4d99-88ae-aee46b2f647b",
+          "975398f9-e1f0-4a77-ad46-c989b0df2c2e",
+          "cc63a163-3e80-4f63-a252-2d89a4c7270f",
+          "b4c9022f-0397-4d02-b058-f43f9c444139",
+          "622b741a-3ba2-4626-936f-2e442cbc9abc",
+          "c19aed98-18f8-4fb6-a7fa-9b84f210c218",
+          "d963a026-84f2-4599-8bd8-cb19f4132163",
+          "b00478b9-2366-491a-98ce-3f8c37364063",
+          "2a59080c-2ddb-4f58-909c-580884fdc0ba",
+          "47171f27-08de-4baf-a409-4e1ddacd96ff",
+          "e3c70736-fe3b-47e2-9aba-019beb235974",
+          "e299eea4-62d6-4817-b2ce-4ef28a68e14b",
+          "a4efcf82-5a4e-4116-bbfe-5d3ea87ca882",
+          "65ddbb3a-bcba-41c1-a81e-128a8e412dc8",
+          "487aaad7-7fc3-419e-b139-98dfdcba5747",
+          "132b7409-efb0-4622-b312-5c29fc2432e9"
+        ],
+        "resolverLines": [
+          4207
+        ]
+      },
+      {
+        "kind": "change-card-type-selected",
+        "total": 1,
+        "pending": 1,
+        "beads": [
+          "hv-umm2.285"
+        ],
+        "ids": [
+          "b59b7e6a-aa32-428a-9397-06766ebe9b7d"
+        ],
+        "resolverLines": [
+          2500,
+          4247
+        ]
+      },
+      {
+        "kind": "change-subtype-all",
+        "total": 14,
+        "pending": 14,
+        "beads": [
+          "hv-umm2.284"
+        ],
+        "ids": [
+          "effc05ad-ee43-4fc2-83c1-f25bd6bf1754",
+          "0dc54870-c1be-4900-9d2f-6f5adb53e8a1",
+          "780b903b-235a-4c7a-9030-435671d88afc",
+          "fbd06d78-d18a-4248-9f31-61db84d2c1ce",
+          "be58a8a4-c10f-4cdd-9278-e27a3a4605ae",
+          "5bf49a6e-ada6-4e3e-b381-f333178599c8",
+          "75469517-395e-4612-aba2-242850b93483",
+          "5954ad36-d709-4fd0-b024-11420bdf6bc9",
+          "599e17cc-10c3-4ece-a0d5-2b8d17d98041",
+          "285fb938-05ce-461e-90f9-5e014925908a",
+          "918a26e9-e0a3-4e85-8fad-5504f8cbe02a",
+          "1e27d150-b8e4-45be-a90d-117adef035fa",
+          "df14d3e7-b6ad-4414-afb2-e19721b8aaa4",
+          "afd46c27-23bd-4e51-957a-5b0aa5a4cab6"
+        ],
+        "resolverLines": [
+          4298
+        ]
+      },
+      {
+        "kind": "take-cards",
+        "total": 30,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4326
+        ]
+      },
+      {
+        "kind": "take-transfigured-cards-and-gain-nightmares",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": []
+      },
+      {
+        "kind": "replace-selected-with-card",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4339
+        ]
+      },
+      {
+        "kind": "replace-random-with-card",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          2706
+        ]
+      },
+      {
+        "kind": "replace-selected",
+        "total": 19,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4388
+        ]
+      },
+      {
+        "kind": "gain-nightmare-and-card",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4414
+        ]
+      },
+      {
+        "kind": "gain-random-cards",
+        "total": 12,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4423
+        ]
+      },
+      {
+        "kind": "transfigure-fixed-selected",
+        "total": 5,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          2823,
+          2891,
+          4442
+        ]
+      },
+      {
+        "kind": "gain-offered-card",
+        "total": 3,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3816
+        ]
+      },
+      {
+        "kind": "transfigure-all-for-essence",
+        "total": 10,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3446
+        ]
+      },
+      {
+        "kind": "purge-disclosed-and-transfigure-same-type",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": []
+      },
+      {
+        "kind": "transfigure-next-draft-or-shop",
+        "total": 12,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4486,
+          4488
+        ]
+      },
+      {
+        "kind": "gain-essence-per-card",
+        "total": 20,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4562
+        ]
+      },
+      {
+        "kind": "increase-spark-all",
+        "total": 62,
+        "pending": 62,
+        "beads": [
+          "hv-umm2.280"
+        ],
+        "ids": [
+          "fbd22f73-9eb7-458a-bd2c-6a65ac5cdd6d",
+          "c6be47aa-68dc-4d5e-aeff-ac85de91f368",
+          "571d4537-5ff6-47df-bdc0-77be447f411c",
+          "867723b0-3489-412a-813a-1c0ef8098be2",
+          "41c670d1-c12c-4152-a184-05a4cbed2be9",
+          "d1233e3f-06e7-4a78-9192-4ca49cb0728c",
+          "19e2443d-3b39-43e8-a1c6-afac64aeab2c",
+          "cbe7a8e8-0275-4f1d-9be5-077f004aa4d4",
+          "59d712a3-f2d7-460a-937c-3c0808e4874d",
+          "1b8b8de3-a11b-4280-aa12-939aa0dd0489",
+          "e4d90d10-b9ad-464d-a7ab-e7a261fdcb59",
+          "80701c20-b897-4307-9222-1d56aa1b446f",
+          "63fb1aa5-e761-47f4-9c94-e407967cb6dd",
+          "15a3b944-2a40-4c5c-917e-bf708fd13ea6",
+          "7ce8a057-9d68-41b1-94d0-c2c05ec827ef",
+          "d4cb0655-c311-4497-b06a-548a1549ccd4",
+          "bbaf2e35-d7fd-4d0c-a0f9-6d67af20f6ce",
+          "2532f464-2151-49c2-a130-2e94b89ca8e8",
+          "f13f121e-f02d-4bff-adb6-d42276e218f9",
+          "0a6038e3-2a98-4a27-b03a-707355b4fee2",
+          "3fd7101f-f88b-4025-a708-291934eeea31",
+          "e78e529b-a267-46cc-846c-46d6d5b6c7f7",
+          "d7e68bf2-a5b8-4d37-90c5-0a0e81e61add",
+          "fccc9055-cae3-427e-8055-4951d19accf6",
+          "ffd8190c-a34d-40d4-8e9b-65142eff53e8",
+          "75579971-169c-42bb-a622-684d551de035",
+          "5b4149c5-5097-48be-ae56-c6609fa42175",
+          "e4c739a2-ff7f-4b8f-9f48-4dcd4fcd19be",
+          "63648d40-a6ec-442f-aa36-24aafcb01ddc",
+          "6b56baff-fe52-4b32-9e52-534d34863444",
+          "a6c5d591-c423-4700-9a69-7ea25fc80236",
+          "b6e5c3c3-cff9-404f-9521-b890c1c5139c",
+          "50c0f784-ad01-4fde-9cff-27a0fedbe1d6",
+          "d244c4b0-3a78-4961-a975-ebadcae7df6f",
+          "124bc32b-bb3e-4f6e-bddf-2bf6545c0e07",
+          "8f7e4825-8e28-4a4b-97c3-289dde13c3b1",
+          "ffa72a9e-4858-4a3d-8ba2-5b3f9ae86256",
+          "525c322c-6a70-4874-bfcf-27eca02508cc",
+          "c577d037-bd4f-432e-b0af-09e77e7ba94d",
+          "8c75f115-e1a1-473f-83bf-c8369b8d0a31",
+          "e8b93126-2317-469b-b1b8-8427e8b92322",
+          "581f1236-2c9a-4f47-b4e8-f980581baec6",
+          "5ab02a06-fdb4-4a8a-a377-70c4f0148323",
+          "d9a98018-25d4-4def-aa1d-ae1c71a4a8fb",
+          "e9d4f9de-8795-4c88-9f88-f125b6dd621b",
+          "542ca815-ab73-4251-8de4-ea8e932135ac",
+          "f3beb8c5-cb4e-408d-bdb2-b0d2249712f5",
+          "ade4e283-b41c-4291-b7f2-c8016e6bfb0b",
+          "7382f0c8-6815-496f-a49a-16a982db9448",
+          "345db217-c611-4c41-b844-1232492b9a92",
+          "82892492-1abf-411f-b26a-bda5cadeb706",
+          "46e7de23-2c95-4611-aa5c-ba39b9507229",
+          "c799b0b3-dde2-40db-a569-a76fe90185de",
+          "26a4b37c-865c-4cb8-9105-879709f23ae5",
+          "438b139d-835e-4eba-93e0-34d152681365",
+          "0d57b28b-3f03-46ed-9bfe-5ea8f4b80cdf",
+          "4a59f8a7-6704-4aa3-a7b3-00683145565c",
+          "f08b8e9c-69cf-4de9-b93c-e35859a2df98",
+          "a5fe7663-d7a0-46b2-99ec-f9fc1cff2be2",
+          "34b990e1-387f-4d61-a7f7-2bff50fd4c2f",
+          "0728a8ae-a839-4851-abe0-2df32da02553",
+          "72785214-e131-4966-8d37-93abb25ffc69"
+        ],
+        "resolverLines": [
+          4586
+        ]
+      },
+      {
+        "kind": "gain-essence",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3363
+        ]
+      },
+      {
+        "kind": "gain-random-essence",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3390
+        ]
+      },
+      {
+        "kind": "double-essence",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3422
+        ]
+      },
+      {
+        "kind": "purge-random-subtype-and-increase-spark",
+        "total": 49,
+        "pending": 49,
+        "beads": [
+          "hv-umm2.280"
+        ],
+        "ids": [
+          "65bcfadc-5775-4dd5-9147-4e82fa75e2ad",
+          "72ab2b5b-cf89-4981-8398-acccbe026886",
+          "8f3c1320-83e9-4198-9927-00d9345cdcad",
+          "bb8d9d56-cb78-44a9-8bef-6b4c87c20ec8",
+          "1ebb9a53-fb79-4cf2-a9a7-2a00a6fb4b8c",
+          "091b66c8-316c-4ef5-9bbb-26db6c8d45d3",
+          "910acca3-f35d-4fe7-9a5d-b7d91fdc2818",
+          "bbf77c1f-5f24-4e37-8062-ca2b30dc65d8",
+          "739338ed-18ee-405f-ac7f-d61b172ef040",
+          "003415d5-e8d0-446e-8f2c-70da5c55d79a",
+          "bf8e314f-074a-422a-beb4-d55092114bb4",
+          "8dfae3bb-c49b-49bf-ac27-c7293d293dc1",
+          "61faffda-a3cd-4b60-b033-bd6bc412207c",
+          "d8efb5f7-1149-475f-b109-999f89f9a97c",
+          "ec53cc34-edb3-4264-9998-457672f91662",
+          "750bc96a-ac8d-499d-9618-1f27e5e6dea0",
+          "10325095-5749-422a-9398-68fc12eb3830",
+          "daf9c800-5a82-4af4-8ecc-ca97fe78ba77",
+          "06726bb6-4ec0-433d-b88a-87f752f7dbc2",
+          "302b8c4c-ab36-4730-8ac1-f3fdcf192f10",
+          "255a201d-6779-4805-ae59-857756c7a8df",
+          "08d29b7e-55bf-4b88-b61a-88c2e7f56a88",
+          "ded01c5a-c919-4f61-bb4f-31f7bb64680c",
+          "c007cf3f-7779-4081-bcae-b1726dc816c2",
+          "90036feb-0132-4ba8-8415-0f11a17c898d",
+          "cb27950c-7df6-4a8e-a540-0a9ae04cae1c",
+          "e9d14079-adda-42b1-a0e1-8fe8fa8113a7",
+          "b718d1a0-af08-4d66-977f-5a8fa2a08ee6",
+          "aea75970-6235-40ac-b422-c6327f0a9c8f",
+          "51f5fe3f-8c57-4366-94db-d270fa71ea04",
+          "42531eee-ce02-47e4-92bb-4d80217bef9e",
+          "ced812d9-7943-4625-aead-10e08af7d0ea",
+          "eeefd61b-d20e-439c-966b-c6ce07870182",
+          "d33d4cc1-d5dc-4ff5-ac11-195a72be9a5e",
+          "2fe0502f-ba70-4c91-8af0-37f907731203",
+          "b7321ee5-b0a5-48b8-b320-4ae9fbc8aa76",
+          "b1b1d7c9-f765-413b-aaa6-a1ad41eaf413",
+          "ac2d6b33-402a-469f-a032-e41903b7811a",
+          "71311891-4fab-4956-a346-959b2dc7e031",
+          "875aa793-b67b-401d-b957-510315aa0922",
+          "88f91d60-01ef-48ee-a2aa-49bdba4f3d86",
+          "653fffee-ea77-4cd3-b1ec-b3409ba82760",
+          "b284f3ab-e20b-411b-9f81-1ea25f8470d0",
+          "9e777f6d-6c26-4dc3-b049-a5bb8767c249",
+          "fb9586f5-4a9e-41c7-a711-9e808662ddeb",
+          "5dae9bee-5718-42ce-a4dc-55b5f7973af8",
+          "a9f63ed8-65e6-412a-b515-af6c12ee531d",
+          "6265b65f-5d85-4cfc-b1a3-5d2ac17f1184",
+          "008c0224-5be4-4b37-b0b6-c05213a3af0b"
+        ],
+        "resolverLines": [
+          4611
+        ]
+      },
+      {
+        "kind": "gain-random-dreamsign",
+        "total": 10,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3790
+        ]
+      },
+      {
+        "kind": "purge-dreamsign-for-essence",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4147
+        ]
+      },
+      {
+        "kind": "gain-offered-dreamsign",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3241,
+          3320
+        ]
+      },
+      {
+        "kind": "replace-selected-dreamsign-with-offered",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3243,
+          3322
+        ]
+      },
+      {
+        "kind": "replace-all-dreamsigns-random",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": []
+      },
+      {
+        "kind": "purge-selected-dreamsign-and-gain-random",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3340
+        ]
+      },
+      {
+        "kind": "make-fast-all",
+        "total": 33,
+        "pending": 33,
+        "beads": [
+          "hv-umm2.282"
+        ],
+        "ids": [
+          "cb4a0eae-a464-4888-a2e4-390c3e986899",
+          "83a3d2b7-0ca2-40f4-89fa-726f6efb732b",
+          "ff2a2adc-9678-4e91-8c29-853a045270e5",
+          "75a6bd0b-714b-46ed-b5c4-9485f8319959",
+          "a63c84e0-5d10-4155-8fcc-f6c967330014",
+          "ed726ca9-6e65-4680-8596-444d872c28db",
+          "66957744-1b9e-486c-a015-ece9cc8ded3e",
+          "902931da-6ab3-4987-b345-3317b4ade36a",
+          "8fd01df5-2022-4ed9-8a80-b24b41cdcfd5",
+          "c7e23aa9-7ff6-4d41-b0bc-0993d9bb0b6c",
+          "d70a2fb9-6b0f-4c6d-87f8-b39beeef5bc8",
+          "f1a48400-d96b-4aa2-8b3f-cb9a93dc8ad9",
+          "d451ccef-f4be-407e-800b-55c04608896b",
+          "7f5989f5-dcea-452b-a678-4febe5f6baba",
+          "2dbedc84-1c2f-459e-9e6e-acafa1cd93ee",
+          "485a331a-b263-4921-a342-81453dfd1dbf",
+          "305154b4-f3c1-44f7-804a-70a7c01f7c7f",
+          "52949805-3fb2-40fd-b72d-4448a49b2722",
+          "9f73489e-d41f-4883-b2cb-d571ef95fd2d",
+          "66a93ab4-c049-46eb-a176-d4b63e69c840",
+          "2719cc15-94db-4fea-b061-e92a78371fb5",
+          "eb808cb8-fdf4-4ad2-ae06-60103b5321ed",
+          "5ce24a74-9a00-40ec-92ec-8caba0836f98",
+          "363b6fc0-cc56-459f-8940-18c0a0b3717a",
+          "4790344c-2167-4bf9-bef0-5d33787d7f68",
+          "c9b12011-3160-443e-ae04-ff36762059a4",
+          "8e010cae-a23c-441c-b807-ac4186f49c55",
+          "bac27741-0ac8-448b-a838-0e624b5b5846",
+          "d449caaa-9d41-4d63-af5c-23b6aa9d6ce5",
+          "90d2a24d-5eb8-44bb-85dc-97cc700497e3",
+          "08b717a3-c3fa-4f94-8758-f6449d528c52",
+          "34f9fc83-52e4-4709-9361-6cc10129354d",
+          "30a4aa09-ccb4-453d-8e92-ce059736c678"
+        ],
+        "resolverLines": [
+          4683
+        ]
+      },
+      {
+        "kind": "make-predicate-fast-and-gain-nightmares",
+        "total": 1,
+        "pending": 1,
+        "beads": [
+          "hv-umm2.282"
+        ],
+        "ids": [
+          "fcce63dc-f8c5-4183-be2a-9de4929ca8c2"
+        ],
+        "resolverLines": []
+      },
+      {
+        "kind": "reduce-cost-all-and-gain-nightmares",
+        "total": 42,
+        "pending": 42,
+        "beads": [
+          "hv-umm2.281"
+        ],
+        "ids": [
+          "b8e30996-eb1b-48b6-95b7-484a2be31d64",
+          "d134b0e1-68d5-4edb-925c-e24f77ec4b74",
+          "e9d289fd-26bf-4e5f-a02a-807f1f4c3464",
+          "41d2f0f1-09c2-4fa8-8d14-1c2f3c070ddd",
+          "8fbc7243-142a-4724-b683-161b463e8a66",
+          "ebe3c30f-702b-4679-8b69-6ea288dab2a4",
+          "a7469f8f-b4ff-44c7-b9de-679249a826d4",
+          "c69786b7-190b-41f1-9798-5dbc26953eb4",
+          "7f2cf279-7d99-43ea-b17a-a9a4b379dc7a",
+          "ff89acc5-e4a2-4be8-9975-ba6e3e2be325",
+          "b0788f98-475c-495e-88b1-10cda2e72702",
+          "ef6f3edd-fa06-4711-b772-22dc5a36ef3a",
+          "2efe46a7-9203-4366-98c3-e59253ca7b2c",
+          "823736ec-b4ed-4c34-a863-cbfadcedb8c0",
+          "d53b7ccc-dd63-4927-a711-02810c66a739",
+          "cbf843b9-5924-4a54-a8f5-2cdf7a177289",
+          "3512bf48-b98f-42ed-9fd2-841e1177646c",
+          "8e31bd08-b5d9-48c6-9772-4a1aa7c26281",
+          "506f34cf-e826-4d7a-a0a6-a3a456c9019d",
+          "2a87956b-3dfd-4bf7-a83a-5f7bc7c017dd",
+          "69770100-9d41-4daf-9edf-527488df4fd4",
+          "214467f4-5cb2-49f3-b734-040890792a4a",
+          "07a0dba2-5ac1-47a6-ae23-6b8c98ee2a2f",
+          "871d3b6f-2fe3-47d2-afca-72d52a0e5e80",
+          "2269992d-019c-45c2-b171-14c4814053a6",
+          "b6bcb0bc-0c40-4f60-bf1e-30e7c3ab26a7",
+          "d78945e5-7d47-47fd-a14a-18737a3ca1a3",
+          "bbdcaf49-b077-417d-8f7a-18c6c355478b",
+          "bfdd2306-a1e3-4aab-ac1c-87474b1d562d",
+          "6fe876b1-ed04-4227-91a2-6af5780d9a69",
+          "27077f5a-473e-4973-ae36-91ae63d42f0b",
+          "3ef10694-2df5-4cea-917a-65007ac58d16",
+          "da72a623-3e95-480c-a53f-a76c5b8a10a5",
+          "f30ff862-8146-453f-b518-72fbeb2de224",
+          "20e033a7-dffc-4cae-a89d-9fe674c28a9d",
+          "37f1b36b-9179-4e38-a937-a856d30e56cd",
+          "7433289d-5cc3-4023-852a-2ae9635ab213",
+          "48294bf5-bf99-47c8-8e12-f8e1e4d8c63d",
+          "e69d6716-d497-48ac-a334-a23fe747360a",
+          "9163853b-42a6-4465-8e7a-11c60d92959b",
+          "6d43d558-7a09-4d22-8d14-9aa503f78156",
+          "fc40fd6a-43b4-4074-a5f1-ad3d3247b9e5"
+        ],
+        "resolverLines": [
+          4704
+        ]
+      },
+      {
+        "kind": "copy-selected-card",
+        "total": 7,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3499
+        ]
+      },
+      {
+        "kind": "copy-selected-cards",
+        "total": 5,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3522
+        ]
+      },
+      {
+        "kind": "copy-random-cards",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          2610,
+          2674
+        ]
+      },
+      {
+        "kind": "copy-offered-deck-card",
+        "total": 46,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3539
+        ]
+      },
+      {
+        "kind": "next-battle-opening-hand",
+        "total": 67,
+        "pending": 67,
+        "beads": [
+          "hv-umm2.286"
+        ],
+        "ids": [
+          "82510dd1-0824-447d-a780-c8fb37bd5864",
+          "267846c9-c8d3-4c57-9f29-f0ce9f30653d",
+          "18069673-2c22-4f94-88ca-b71ac87612bb",
+          "22c53836-f2e3-478c-be8c-e88a4ca95ebb",
+          "f2a61678-17b0-4d50-b75c-f1de61fa0d5c",
+          "1dcc31bc-9b61-42f5-944e-bfdb7d3e52fd",
+          "d00054fa-6184-4cc2-bdc4-36d9bdd4bcaa",
+          "9f3a1823-df4f-457f-80f6-a8745ec38334",
+          "8e628041-47ac-4a18-b62b-79672762b53a",
+          "61f8ab2d-c18a-4213-a853-407ff9564af2",
+          "e892a1ed-f70e-46d8-afd0-53882ef5d741",
+          "7556e80f-6234-4d38-a1be-d3a9e7df8d6b",
+          "d364351c-0313-4c21-8248-e6ae4ab3d6da",
+          "31edb3d9-9dbc-4424-86f8-72471a3de0a8",
+          "448f22fb-04d2-417d-ab29-0ed9fc2bea8a",
+          "fb0813b8-bfb8-4844-9915-ba04bb3476c8",
+          "d34c602c-c0b4-4298-97a3-af067500f1ef",
+          "d9919f67-027e-4a53-bb72-395e11573c89",
+          "d8ac6a21-d668-4f81-95d9-ffb238c09b24",
+          "4f5a4e00-bb9d-437b-9afd-9792af6caec9",
+          "2ca7d5ee-101e-429f-99ce-fbccc069edfa",
+          "969ce2f6-6e1f-4e5f-9710-5683ff3dc498",
+          "d49df15d-c49a-4822-84e6-bb1600b617d1",
+          "7bdb9e6e-6eb6-40f0-b9bb-f07e9c10393a",
+          "89bfc76a-2ab6-435b-9ab6-7b11faad6fbd",
+          "4cfe1c71-e9fc-4e35-8d73-44021ca161b4",
+          "60ffaf18-ff58-4c6d-b86a-09f10b0db8e0",
+          "f1ca6a23-c366-4515-91ee-0ee5cc0a0f3a",
+          "67b15aa1-5b28-4da5-9830-86617b90a934",
+          "404f43fa-2119-48d2-bfc0-879f6972a7f7",
+          "660f7fb5-240c-4c8c-9853-cc93851d938d",
+          "ce3b0d6d-27c2-4b57-ab97-1e81a968b0de",
+          "e3375d56-4eaa-408b-b471-e0df76239715",
+          "b1184d31-cc69-4f4f-a145-640b2b2b20bb",
+          "53e95bb4-6743-41d8-80db-9daed79a4123",
+          "319999a1-16dc-4064-86ed-1b46947315da",
+          "7069b48b-aacb-4604-9202-120cff1567c8",
+          "815b977d-dbef-47d6-9fa9-f4e0e8e4f597",
+          "fdac337f-2d71-4e91-9a10-7b7bac538fdc",
+          "67d04a76-98ab-4a50-b863-9547b92d738e",
+          "d83ed895-db5f-4851-8cc7-cd9a194f5e85",
+          "2b68abf4-20a2-4002-9eee-7007ac874b40",
+          "1663a82a-e0f6-4979-b90f-39f46037eb2d",
+          "2f58737a-51b7-45b7-aaf6-875680d96c1b",
+          "796f52f1-14cc-414c-85c7-9b8a2694e6bb",
+          "a9ca68b4-f32c-44c7-99f4-921431f6771b",
+          "839b2fd1-4bb6-4b61-a378-eb25863fbc2f",
+          "423e54a7-d0ea-4ac6-8115-dd7be68a5f41",
+          "af23b52e-0222-4fe3-a66a-a9bbaf135a38",
+          "48671e80-d720-432d-83dd-f3d9a613736f",
+          "9780b16c-75ed-4ad0-9efb-43e087fe5dc1",
+          "57e55570-d3c1-4aef-aa23-9a0d12bf13aa",
+          "e34914e1-adf5-4a41-abc6-9e629446cbe7",
+          "a69f3ea4-0568-40dd-af62-b1c35cd0a32b",
+          "56604a49-0920-4242-bc4c-233859bb882f",
+          "0fca674c-72cd-4774-b6d4-587edff1f57a",
+          "fca79f5e-194d-4468-9c0d-3b0f103bdf8e",
+          "abc400a3-066d-47c4-8466-6c7a021d94ff",
+          "a9ce3029-2c87-41c3-b1fa-ce803135d1f1",
+          "8d77cfda-9be0-4e3a-abfc-9814fb14d0b1",
+          "022723f4-d18e-4d2e-9600-c44303ff3d36",
+          "ab98f7d2-176c-4a2f-867c-944821be5c2e",
+          "5221f0ab-7a1d-411d-8e7b-fa0d8c128658",
+          "f19f245d-ba05-462b-8db4-853833ba4bb9",
+          "7213ad24-4cff-466c-9288-f2f8d610b000",
+          "e77e78d4-7b74-478f-9d27-2ca6709712ce",
+          "2ee82d80-05c4-49f5-a1b7-9386314bac2f"
+        ],
+        "resolverLines": [
+          3554
+        ]
+      },
+      {
+        "kind": "next-battle-starting-energy",
+        "total": 66,
+        "pending": 66,
+        "beads": [
+          "hv-umm2.287"
+        ],
+        "ids": [
+          "581e129b-3b9b-4a7b-9dbd-b358f9fa5d8b",
+          "945dcf24-a548-4391-9cbf-785a584c76d8",
+          "009e949f-2c69-4d72-b444-efb972ffb37f",
+          "42607972-b7e0-47bf-ac8b-338f6f6f0325",
+          "a56f8765-f859-445a-896f-e9377526ab03",
+          "86f613c2-6f0e-43cb-a4ad-7385158656ba",
+          "20cfd197-f247-431b-8335-9c7d401806da",
+          "57e56e5c-48c3-4b17-9ee2-80651d7ed7fb",
+          "665a94ac-2e17-4450-9ae3-3a7549bffe1c",
+          "50d54415-8488-43a2-9b64-caea9c0825dc",
+          "8271a330-b4f0-4931-ba41-08b268d6edd1",
+          "6954d3b6-64d5-4a8a-8828-fcfe269d9037",
+          "97759157-5ba7-4e8c-8923-53bc06ead192",
+          "87efe01b-525e-41b4-80d4-db4c4bf3e656",
+          "21023675-4a7e-4f5e-afed-56f70c0d68cd",
+          "6252f2e0-f865-4468-bf91-64d94646c851",
+          "17a96db4-e97d-4a7d-9118-81fef35832c6",
+          "5169756d-be6e-4b9b-8f95-d914714108a6",
+          "430fd519-1c75-4657-8b8a-2ff5e4e5633f",
+          "c6279afc-2819-4141-a1cb-20917bb00e2f",
+          "842a4c2f-49ab-4f74-809e-a3bb4380f7c4",
+          "91bdca62-29cd-4bb4-adcf-4209a86833e9",
+          "072ff391-7b19-4b7f-83d7-11f71646df3e",
+          "5db20830-6098-4243-9b8b-d476c2d206f0",
+          "ae385aff-6eb4-4035-8875-0edb357c3205",
+          "7c543c64-35fb-481d-b1d3-af9a6caf99c4",
+          "1f8131d0-730f-45a8-a074-6a2eff77584c",
+          "e162a1b7-4056-4896-b8a6-e0c0d8389216",
+          "d00b1861-631c-4990-8a64-0fd1f0aacf2b",
+          "cd713f4b-bbb7-4761-a75f-579222eef578",
+          "c6f9e2d6-306e-4db7-9961-d8154f5132e6",
+          "ea92b9ab-1dde-4903-90b7-30a52491b7ae",
+          "4971417d-2b6a-4f5d-b47f-03555d2051f0",
+          "2d29f3a3-353b-45e1-a499-978337af2dd5",
+          "d6e5dbe1-22a4-4f1e-a224-97c81e0138d2",
+          "736cbb15-73c5-4efb-b550-0641ea58a24d",
+          "1adca56f-6e11-4772-b8c1-8712df94c1a8",
+          "63586673-781f-4281-bc1d-e4f8b11ead28",
+          "56500107-6da7-47af-9807-83e4a6ed8e38",
+          "50684e69-b2c6-4e55-a8f1-6e92298fdefd",
+          "09fd2af7-8067-4616-b361-c5958d670f2f",
+          "085c6812-0210-481f-85fe-3ee0054cd43e",
+          "9a760ddb-ee2b-4f29-b2a9-c32973428346",
+          "efef24e0-3342-4c55-9823-5491e293d1e7",
+          "d7d0168a-6fc5-43d8-a0ff-5d79bbcfa8d7",
+          "07f25e60-96ac-4776-85db-2652342b78c3",
+          "66233bad-6370-48ea-a3dc-4148e7de5de2",
+          "ff1f7348-a85e-406f-b6a0-0727f9194c72",
+          "d0827a70-ec6d-48c8-8406-4840c1793070",
+          "865623c9-731a-4001-b9b5-c6c4d924da42",
+          "69bab67f-b41c-4f6c-a4d4-961be805121e",
+          "2e5b0300-5ef0-406c-a891-69578ec86175",
+          "be64aeeb-da6f-4b6e-af0b-4c47fda4f2cd",
+          "034d737d-db81-404b-88e0-28b2b83fbd06",
+          "b456a39f-2b40-4ebf-a4fa-66add8e6125a",
+          "52b0afe8-8f54-49f3-9f71-d0493220060c",
+          "fcea4f01-7d04-41c2-a139-a7cdfc9ae480",
+          "12f4e09f-07e3-4db6-9db7-72d42b4a064e",
+          "c44535c8-4490-4893-8037-fb40db5fb7c8",
+          "fd89e187-5fbe-4096-8e30-c2705957a135",
+          "82bc3723-34ab-4743-b12f-75589225ce80",
+          "7f0d6a6a-fb11-4314-841a-532724aa3e9c",
+          "730a3c57-a309-45a6-acd4-aea3b99664b2",
+          "905cf858-d8b3-4884-af24-1c953c00b0cf",
+          "f4a4ee8d-9610-4841-8e24-20a51f6868ba",
+          "a99a5ce8-d73b-42b4-88ef-f71ea3e0491f"
+        ],
+        "resolverLines": [
+          3579
+        ]
+      },
+      {
+        "kind": "next-battle-smaller-hand-and-cost-discount",
+        "total": 29,
+        "pending": 29,
+        "beads": [
+          "hv-umm2.288"
+        ],
+        "ids": [
+          "a5042cfa-d3dd-4a62-b4e2-5d86d3cc2874",
+          "49273949-f29c-440f-b843-5a9d0640c236",
+          "c0d41e23-2f38-4d17-a1a3-32285b7e4da6",
+          "92feb9c6-efb6-48da-ba52-936841f17de8",
+          "4ebf0221-0b1b-4a47-9d68-0138cdba2cfb",
+          "c7c50596-f234-4f4e-823d-88700dc1ab99",
+          "a6d3bfe2-72d9-42d7-8380-fe97fff4de47",
+          "38549dea-c5b6-49df-bda9-d621a7e0ca6f",
+          "8b3c547f-3043-4d29-b40c-3629a38f848f",
+          "472e903b-f832-4cd9-90ab-82dee9f8177c",
+          "1bf1f186-404a-44f2-a705-6474fca1ddf6",
+          "3d435a07-0fae-46cb-b589-03bb93b15c55",
+          "7bcb0ab4-5d61-41ca-8f88-c9d9502ef82b",
+          "09917d76-41ef-4117-a0e6-84f716663df2",
+          "285662bc-bb49-489f-9ae2-c957e218aeba",
+          "3994f237-6cdc-4047-b98d-97e7f31fcfb0",
+          "fb695274-f200-4f17-8dc5-7745ae63a2f9",
+          "514d3ba6-e57a-438e-8dfd-28cf7db97e5d",
+          "e9875a87-289d-40b1-a19e-2e566c3b332d",
+          "8c2fbeca-9f8e-4156-9437-ae3405daff0e",
+          "144f5e25-c537-4d71-8dab-7de719eb93a5",
+          "c890dbf0-4d74-4a0e-8ffc-2e5aef3cb38f",
+          "ee5061c9-ec09-4b86-b5aa-8cef605a1796",
+          "eb514a7e-b571-45c5-b672-488df11e1fa4",
+          "af570fe6-7543-4c9a-9b1e-a103cd739945",
+          "8e112255-2140-4e46-bb60-d30d286fc8ac",
+          "f6bf3f1f-ef1d-4f94-8a85-b8620c7bfc6a",
+          "2ff475a8-37b2-4cd2-ad8b-648968b27ec3",
+          "07145c6c-20f3-4a2d-9058-d8dba4fc23e0"
+        ],
+        "resolverLines": [
+          3601
+        ]
+      },
+      {
+        "kind": "choose-avatar",
+        "total": 4,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3623
+        ]
+      },
+      {
+        "kind": "purge-duplicates-and-grant-reclaim",
+        "total": 58,
+        "pending": 58,
+        "beads": [
+          "hv-umm2.283"
+        ],
+        "ids": [
+          "2df93add-1e2a-4b89-b543-4bbf9df54aa1",
+          "336c6140-542b-4d42-b19b-5736d864669f",
+          "be14d140-b1b2-4372-b0a6-c4228d463627",
+          "c9a6b1a0-6340-48cb-b30c-a0917271546a",
+          "496eb06b-c9a2-44bd-8e3e-a047b2043af2",
+          "ab93596a-375d-4a22-946e-75423ac3c0ec",
+          "2542e069-c6c6-4d76-b4b1-c71138371931",
+          "9d85ef97-4f53-4633-bbb1-699cc25e6944",
+          "0b596a61-2355-4932-b6d7-e174a38bf85a",
+          "7fe9453a-3e29-443f-bf5d-72c779b4def3",
+          "42ec0173-42f1-433d-8366-0f3aadb47d7a",
+          "f863131d-c742-4d99-90ea-088701382e53",
+          "29905ca2-3a18-4024-a443-d8cb28c91446",
+          "35d2eb8c-44d9-48b6-8bc6-be9436e3370d",
+          "1dfb9178-2259-4bd4-a269-d8b91b8d7ca6",
+          "f372f27e-3d53-4bb4-8c20-e695c7cd0895",
+          "9e861f68-e885-411d-97d8-6ccdcab6c80e",
+          "2ce3f099-f892-4753-a540-c939beb664d5",
+          "4bf1fa01-1890-45b5-80a7-6b6163e8cf25",
+          "a9e2feac-1f32-4a95-9555-810ea083cbd4",
+          "b1c14803-7be3-4ca1-82f6-dbea16be7c7b",
+          "4eb72353-e83a-4548-8099-19e9ab34f657",
+          "64f25dd3-dac8-4694-b4f3-24176287fcc2",
+          "abc6d977-d2cc-4828-b725-ee4a0d5765fa",
+          "831d6520-da93-4290-b33a-9ba4554cf675",
+          "3e78f870-b864-4704-8c4b-cdcb59e76cc7",
+          "a9fd3639-8d1c-4456-930f-13f4589db33c",
+          "2de081c2-6567-4e13-99e5-a0bbf16923b3",
+          "242770a4-8c81-4b66-8abb-6e8a9c5cb53d",
+          "e441b406-a8d6-47dd-bd44-9ac9a0fca791",
+          "d5131386-f24a-4070-bc85-bb87da15f384",
+          "f5f7b66b-1dbd-43cf-89b0-590f2dcca456",
+          "c139e3d4-6751-4b4f-9349-9cc38238e26e",
+          "42b861a7-ad92-47ff-9ead-3e2933a0352c",
+          "cc08e452-0c6b-4968-b92d-2e5903c93fdd",
+          "c183f486-9701-456c-ab94-cb53c9c4269a",
+          "4a886ca5-dac7-4b24-af91-8134f1a6e3b8",
+          "9c4b8c33-8b94-4a38-9e7b-80602cc8cbee",
+          "05c51da2-77d3-44e2-8ade-a5865c94854c",
+          "7c9f191a-dee9-44d3-b8af-b35209ebb22b",
+          "d3bacfb6-7cf3-42ca-93f4-4189cf3632c6",
+          "2da3c9e3-9b89-4df5-ae5c-11448f92bc5e",
+          "316e3f24-aa54-4da3-863d-d05985ba0dc4",
+          "b9287b66-b27a-4b72-88b9-a46d925ef226",
+          "3da6819e-c190-4156-9b36-956bcf0d9be2",
+          "664c9209-ac07-4381-9a60-8344ac189192",
+          "e27832de-1271-4fb5-948e-543dc377c28a",
+          "5b64dd00-27d1-4ba2-a383-afef20a30f64",
+          "e793121c-e0e3-4f9f-8738-ff4d1c4f95df",
+          "3e737b61-414c-4f8f-8ab2-d3f5e5e581b9",
+          "becc81bd-e2d4-4f50-a334-9b673dba825c",
+          "f757e8c1-b6e0-44d5-abc1-00305cd3387c",
+          "6a76e445-0f00-42cb-b311-10dfe06ee0c6",
+          "cc177a0b-1939-4e16-a21b-33660d97666f",
+          "3471e8f7-69db-46ae-9bbd-180c8b02f426",
+          "d43566ce-c720-428e-92f1-62651c78d092",
+          "6589c495-c09e-4eed-a502-1db46ee6b263",
+          "b312af6f-756d-4c19-bb2a-ac62908bbecd"
+        ],
+        "resolverLines": [
+          3647
+        ]
+      },
+      {
+        "kind": "transfigured-card-draft",
+        "total": 45,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3948
+        ]
+      },
+      {
+        "kind": "add-fixed-site",
+        "total": 5,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3990
+        ]
+      },
+      {
+        "kind": "choose-site-type",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4055
+        ]
+      },
+      {
+        "kind": "add-site",
+        "total": 33,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          3983,
+          3996,
+          4063,
+          4079
+        ]
+      },
+      {
+        "kind": "free-next-shop",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4499,
+          4507
+        ]
+      },
+      {
+        "kind": "lose-half-essence-and-free-purchases",
+        "total": 1,
+        "pending": 0,
+        "beads": [],
+        "ids": [],
+        "resolverLines": [
+          4524
+        ]
+      }
+    ]
+  },
+  "sourceHashes": {
+    "src/rules/journey/modifier-registry.ts": "804d1ff9c93d7cdcd1d31973ecd87cc0a803b07798a15f2cb4fbbf7069500dfa",
+    "src/rules/journey/journey-purge.ts": "1862bb949971dff7786d14d0b85f5063cb177e421e15966e98b75e6105d999c9",
+    "src/rules/journey/journey-essence.ts": "8290056ceddad23fc61698b5bb3505a5f60517b19c1a249d73532f81e1d4768a",
+    "src/rules/journey/journey-sites.ts": "d79936089a261017c9fffd5fa617e7b26837a561097d23ad6fe9a0215bcfe9d9",
+    "src/rules/journey/sites.ts": "3f0fdbdb09c3d74d9a6df9e8c7767118a31c85fe09fa1cbc90051b787dbaad08",
+    "src/rules/journey/deck.ts": "8d40465c92e75397e1791af9bd94f9fb2c489d4f22de425362e5882a44045a74",
+    "src/rules/journey/shop.ts": "e9cbc6129534e06a5a72cbfdd85a87cd4840e040566180f15e54a642846878fa",
+    "src/rules/journey/draft.ts": "077b95d5a338ae63e2d4743ec001f610bbcfaa3393039b32c20212c8a3a36f5e",
+    "src/rules/journey/lifecycle.ts": "399728d2117da6d757bf11b8a39242ea4b088ae567aa4379edf740fe42dcfb4b",
+    "src/rules/journey/reward-effects.ts": "567d747df5377b70babaaa243399d60288fb8d08bae54280487d479abe5f2ce8",
+    "src/rules/reducer.ts": "94097935a36240314aa4a0ba82049e33a269a97a59023cef019005907d112b6a",
+    "src/rules/events.ts": "5e3628401124e3e3bfd5f9f01dc186774084323e3ab5b2947dac92a10fc6f8d4",
+    "src/session/actions.ts": "b4281775c0148a4445435c0fb0c9da8af0b6485884f1bff2dcd7459d655d147d",
+    "src/session/providers/site-provider.ts": "a8d9cf7f22a7e328c43af1f83407a3b9b44c26c494df8f6f37ec5f640d9833d4",
+    "src/session/providers/exploration-provider.ts": "34b67bae01ef8282cb34d6c5464b57396e388d8e1935d74a381294bd805d279c",
+    "src/session/providers/journey-purge-receipts.ts": "57f0cb844ff4e5d8e8284d9faaf01d56f766ae8b042352349a46535bbc14bb70",
+    "src/session/providers/register-game-providers.ts": "8725a7ea700761f9f47358dbe3d1d42c27ff2b840156ce4ef8f34a61bf34fd39",
+    "src/session/providers/battle-init-provider.ts": "8413386f5e2508fbec32796c127f1ad6a295aaf5cf5eee74fd9fd7513a62dba9",
+    "src/battle/integration/engine-battle-init.ts": "dbf41e75eee8b8a26535f5f76b27e90dfeef85fc427540103d83befa23396bbb",
+    "src/engine/catalog.ts": "cf0b03f472be9e75af4316d83da6a39fa36359207527ae709604499e14e5e63e",
+    "src/engine/content-catalog.ts": "e1717a3c4e277ebe83746120f7169ba36f1816037945378d454a9aae758fb345",
+    "src/engine/dsl/types.ts": "4c684552bfe2a57275535520c90dc6fdb16adf0205e6722d22949317df3a61ae",
+    "src/engine/state/types.ts": "df4344a3e21a4c31e85c12405a7b16cdef470d9bfe826c8d52f99afa93cbdea2",
+    "src/engine/state/create.ts": "b5f6ede8d70c91dc166cdf6a000e91e2e0b3d9f79d3121f7c5f0fd372fa381d3",
+    "src/engine/steps/kinds/begin-battle.ts": "fc8d6e5e63b2bfdb14016c94217fcdd6a7d48afb7145ec2bb31cf2793b7f0b4f",
+    "src/transfiguration/transfiguration-logic.ts": "541e3e112b1002bd745d7f16d603beb0d5a1d531995944f0e64ddedc54723855",
+    "src/types/journey.ts": "7795356966b5c66f0f1f4dffb352fba0c00db0083dc11c2910aec932e61e3f0d",
+    "src/content/exploration.ts": "a67492d561a8d06062faecb767b7eab02e8db36f59d495998dc2b88b9bc43ec7",
+    "src/content/transfiguration.ts": "e02553c10c5565b7bc594591488e8e26e894533500da7f56c83c1435278f1a40",
+    "src/data/exploration-effect-kinds.ts": "4b68e3dda07fc223645ca49f9445868ffa08c6e712109db6326616d66599a4c0",
+    "docs/design.md": "80109934f002f89710a8c959fab65e7b62fdbb96f699ba8ddc6b7eef1e7ae258",
+    "docs/rules.md": "1a22aa91154d674cb41a300b843c639538dda9cfe78a9f88ae47d45a659b0f06",
+    "docs/plan/phase-5-content.md": "c77163c272737f8f2992bf3b92e2fb801e3a133e000f6ef72092b02b7c55a0d5",
+    "docs/plan/decisions.md": "171b27b1cf63e98ca7fbc3d010d352ba1c265e68a89ac7ab349b3974fd68478b",
+    "docs/plan/workflow.md": "222688c9cd09a00e059c200193068dcafea7bb58e0cb9801bc96e7e604fbfcf2",
+    "src/content/dreamsigns/spell-tome-0c52e8c3.ts": "4fce2b6d7620fefa125a9a0aef85d324ae61194348a5bb89fb05b3343902fc99",
+    "src/content/dreamsigns/leaf-ledger-d9f0f7ff.ts": "c44dd1cc85fdcd5c941a420f05e526c6fba0591e77d85606e67abf92b78f8432",
+    "src/content/dreamsigns/green-slime-452b7cd6.ts": "079a3f41f31b4d3dc72060fda962401c17d05589341f1f70546f6f7a24240ce3",
+    "src/content/dreamsigns/red-cheese-7e8c86cc.ts": "01c4a276722caa85d46341343ddb5748eb8f4eb85e9f1a4f5f394ec68fede228",
+    "src/content/dreamsigns/white-rat-ab1da9d3.ts": "6b5a6d3f4638800733e8101100b5e521c36d4bd74b1effd5af3e7d2f366514d1",
+    "src/content/dreamsigns/voodoo-doll-0df9d72c.ts": "6e893adb3be02abb27fbb91511eea128f9b26cacc6566f6e16a3aef3f8b28e73",
+    "src/content/dreamsigns/raven-skull-31df4c62.ts": "009321d7934a7cd27d3b5f8e017aaa07689f4cf2598a6169492bbdf7b48298d0",
+    "src/content/dreamsigns/brown-acorn-9f34b5f6.ts": "694b393f334e8a8147834fe1145bcba4e6227fac105b92c346ba2047b321d286",
+    "src/content/dreamsigns/blue-crystal-c2af5460.ts": "6b2861444f9b32adb755d3c2bbab001a6723ed4b0ce1ae3799d8fbde96e8ca3b",
+    "src/content/dreamsigns/witch-coin-8a2c7b32.ts": "9c1e22d9b8f7f7afe2e22041c2adad7fa1a56c3630f8d2c067430ab87706dd8b",
+    "src/content/dreamsigns/cracked-orb-8408b8c2.ts": "27cdbed6c4fe700189d1a0e0c93436536959c57da1359dd0ed2c72a961b7c882",
+    "src/content/dreamsigns/red-shard-10bd78de.ts": "92377016611156dc2bb46391ff2d038a2074e687e157532b9e300f54d50ebbde",
+    "src/content/dreamsigns/clam-shell-2dcf92bf.ts": "1e8c88131b1e02e608ae1bc3125e28ba1ff6a44be99f9534d64fb803a4816719",
+    "src/content/dreamsigns/rosemary-cd81a49d.ts": "cf8b376731c7f6480a83e71ecd3cda3f2d36e0d15ff0c9158b6fe270fde1a46b",
+    "src/content/dreamsigns/sea-urchin-1c505034.ts": "d276fb3499d7eb5ab6aad7cd4e7ef30be7ee9152f01ad24ac215f22f5ab6444a",
+    "src/content/dreamsigns/spider-025ce7f1.ts": "6095833aa795bc9a13e55f25f6777572f30a87605029014a534a80dac72350e8",
+    "src/content/dreamsigns/cracked-mirror-1cf06f9b.ts": "a026cd79adfda3f3e4e27e5c585884d848c687f7597ff5b2d8ec13fee776a5c5",
+    "src/content/dreamsigns/spiral-shell-da7e4b45.ts": "8e3f0394b284caf1a3b8a3a27f936ea167014f07007f9c816d533bf55adc6faa",
+    "src/content/dreamsigns/spotted-mug-069c6e8f.ts": "eee66e99c33999e58af8bdc5df7ca0f234a418ed7c2bf7a250347497ea9df494",
+    "src/content/dreamsigns/theater-mask-3d86f8ce.ts": "53f86c1bf8b212b45f9dbef1b7014b7c1ce6cd5b9dfdb0fb3e84cd827ff3d7c4",
+    "src/content/dreamsigns/tortoise-shell-e377c3ed.ts": "4a9fe8712d3e3e6f55b99027b037670a912300e4723f9d5d9c66908f4d8843b7",
+    "src/content/dreamsigns/toad-8e2d26a8.ts": "557d867f54b2e6f0c19170d2e845b91755289b70f32e5d962df87f071644032a",
+    "src/content/dreamsigns/glowing-crystal-8b69de8a.ts": "fc2b9b7b0fe13456cdc960b4063eddd114b6f2479465d39ae6cb8f622eb8d8be",
+    "src/content/dreamsigns/star-anise-4f21a4ab.ts": "9b7776a555b4ba4b5ce8f80833db123014961fe0a3801bf9fd53339550bd7ed9",
+    "src/content/dreamsigns/carved-bone-427c71e3.ts": "9aa7df37d22750e8f1b620fd3d26baaf401fd554fa5fb872a67913fc550f2690",
+    "src/content/dreamsigns/mortal-skull-eb55b141.ts": "a8a55f39c6571c4840b86a36bc2cb7f819a7b6ac54dcceb60f825dcb82e173cd",
+    "src/content/dreamsigns/paired-teeth-1328e611.ts": "a38f478403579d5067a424a98498ec0d103563bb7bbc36dfd7fb5fffa88ad7b9",
+    "src/content/dreamsigns/rainbow-jellyfish-e7d23bf7.ts": "3c903c617d1fff4c11cca148c14199b44595c8ad35531d6e7b996edf6ea7b8fb",
+    "src/content/dreamsigns/scorpion-71f77dd5.ts": "dc3e53b310fed1f6362a14fe955499850fd06a450158c56041195540f2dc4d60",
+    "src/content/dreamsigns/charm-staff-883f88fb.ts": "e0c97450d7d0104753528a96c7000772f2f3ec19dbc81fbe662d8d9976867e71",
+    "src/content/dreamsigns/purple-crystal-cd4bb1f4.ts": "6dd42fd69b7280cc99cce8956e92c3299d059946385142abfc5dba8f9e756f09",
+    "src/content/dreamsigns/glow-pouch-34ce9428.ts": "874aeceb4bab33db16c340ca87d6412c6c1029876ee373db9d1b19eb5afac01a",
+    "src/content/dreamsigns/mushroom-caps-6b95d6bd.ts": "374efe23d142dd35200bf4db5468091cb9c6b632b2c70663f24db34ca74290c6",
+    "src/content/dreamsigns/twisted-herbs-1cd25b9a.ts": "5a73e30e0146157fa1b85bd5d7e7b1eff4092e90c7908947fe04033b2703de37"
+  },
+  "frozenInputHashes": {
+    "hv-umm2.260-scope.json": "05f407997ef0b5ee5f298b407440869e5963df892340798a66d155c1a9ccb14c",
+    "entry-native-comment.json": "7b02180b9f1d6cac77154f72fd722215717818b9107e5593b8195ddec7a23acd",
+    "own-doctor.json": "8a13a2c3f410c67cdffdd0e571e4227d3e21755f8cd8eeb81cf9423c2a40e0ff",
+    "install-finish.json": "c1ec69e702e159cf9f07d0fdbee2717f7ab68315baf42fe0a05ce712b1597704",
+    "hv-umm2.601-scope.json": "34004eb23a63fd91adfb28711807cb9fc17c87374c630afd98bc03e1303c3995",
+    "hv-umm2.265-scope.json": "58c59e8e7195599c8cd1d1ea1d346a5d3f2b5ec3ec38e55bdc89230f11f53050",
+    "hv-umm2.262-scope.json": "0491aa45ea14a439bda0548d307fc77a12d8149eec1233184b4238349d9cb136",
+    "own-status.json": "8e56b8a4e3291161cb5744197db5b51bc7f9640d5bc0d94b099d3b1c7324d970",
+    "install-start.json": "43daca6523b0e4eb93fac67e6994720e0be9f32871b2f435a3f37eed5990f12c",
+    "hive_project-unfinished.json": "c61c1a94e5d8ed503f49d7a3e0dbdf180f785a0d993f2b254ab4bcf5d361fe73",
+    "scope-freeze-provenance.json": "0b78d4f82617ffd4f3f53d0c2718b3a0f26cf7f5873ec66247b8e59b2087e95e",
+    "hv-umm2.598-scope.json": "686d1336029c964bb55555cfea79c0270a0caaeef111e7991a9dda76ae333251",
+    "hv-umm2.600-scope.json": "bafe0d3812fc1b764109bba79b3eca6b5bd7b3cd6f9b51d0d76188225d18559d",
+    "hv-umm2.278-scope.json": "4609c17409c07bcf0710b091b62a3a2fd41afef22ef1c8d6ba70edd6b7f94523",
+    "claim.json": "46b29b51ee9d9f21e00652fac450acfe327df956a24fdadc239e999d413fce4a",
+    "precreate-status.json": "0d5c9fc2d82e2bd0fc6bb485ff1ead2f5c6a9de641b3440a76c9288d9671a33f",
+    "hv-umm2.270-scope.json": "39dfcf9ff39e4b93e6d68b38a2917d9a84a6bf1c77d17f3e97b062953708fdcb",
+    "hv-umm2.453-scope.json": "7a823d5ff96f441af137bb491f377cb7a21bde609369f1dfec43dd265e00b802",
+    "supplied-journey-candidate-scope.json": "0ece0ddf7984e76d20110a23e6552638d7ab01fdeac89a42ed822c63617b7412",
+    "hv-umm2.277-scope.json": "f82ff5178d156b6245cded50c45f7ef194f4c14492981c6e74288c9e3532b0d7",
+    "precreate-doctor.json": "dafae3324f8763dab3e377c2f1b8136343b65ef23c4f704b5ac7a40fc7d903aa",
+    "worktree-create.json": "2d85fa6ce29fb7fe9d6992fc3c442b9af1a5316eba4333d4239ea8ec8a07435b",
+    "intended_project-unfinished.json": "1a23bf97f12e4fd2763065bc94e864c7fc92d44eba6fd21e11ebc84e26b1797f",
+    "dispatch-friction-receipt.json": "cc4b0674529ff39e96a72f47827c45885510e4a65bb292457e7725a59642646d",
+    "hv-umm2.259-scope.json": "e4c42db3d8144f38b4a9f61f5c80874da76335875d841e3830b30f6d3dddbf6a",
+    "journey-native-scopes.json": "e5267e183705567a8ce33eb399d3ff0d2d3c21c289411e2c293800598ed12c4b",
+    "hv-umm2.275-fresh.json": "64eac9e609d1a7d59c1e98c316e35a660bf9feeea3b5f62509bca915bb677fe1",
+    "intended_project-prefiling-fresh.json": "363c1d6b7eca2a430f1e990ed931b44fb1a9f977c6925d1ee7c7f05fbc191004",
+    "hv-umm2.241-fresh.json": "0f39e6d9149d893a60ecf09ecda09768d2fd0108c1993cab3d0c8591258eb0f0",
+    "hv-umm2.246-fresh.json": "6383fb0a0f7a0e13f618ae859b25bf4c67ed9288ca7bbf3176919430382d3108",
+    "hv-umm2.274-fresh.json": "6a919e0c0e7cc6e82a264dba286960a966c99e79155e42bbd0e6d78ed4cdc20d",
+    "hive_project-prefiling-fresh.json": "1d20be5f331d4fdd51c3ad77329546051d8c892d03880cc82fbec0dea5141d85",
+    "prefiling-fresh-clock.json": "c7f54b2ba15c789d747d53aa0c4221eb8cdc5530ac9a4fa61fcab537f9fe6227",
+    "stage1-writeack-native.json": "40c9b5c86b11bb24028755b09ead38194a8429fbaaffbeadbe5d19d0af4773e1",
+    "stage1-writeack.json": "f4340f8fdc563d13817e589ceb0b89efd49cdff9018c61253d2960cff84cfa94",
+    "completeness-count-correction-native.json": "5ef7bdea5884114e7fa1dbb7f6c181157e827aca2591be798be72549e67b4994",
+    "final-endpoint-ack.json": "2132bf1387b9918980b483275fa9693535321d11dc2d768071e8450f7c56f6dc",
+    "final-endpoint-ack-native.json": "2cf991428f1daa4d56fab8d935eeaf74ba35d799ff6e2df6d4a2b1cda1f9801f"
+  },
+  "freshPrefilingProof": {
+    "freshAdmittedRows": 132,
+    "freshIntendedRows": 21,
+    "freshDedupRows": 132,
+    "changedExactNativeUUIDCohorts": [],
+    "scopeCount": 483,
+    "canonicalScopeStatus": {
+      "hv-umm2.286": {
+        "status": "open",
+        "assignee": null,
+        "count": 67,
+        "phase5_key": "next-battle-opening-hand",
+        "descriptionSha256": "1247c58f26c65401f631e9248bc9f2b065e1a122ca11a6b0be60ec65efa50c47",
+        "acceptanceSha256": "89d2f544ba1a4c7b184a53f4fd39bd77830d0a4d524804a16d5bfdd7ed0f6b33"
+      },
+      "hv-umm2.287": {
+        "status": "open",
+        "assignee": null,
+        "count": 66,
+        "phase5_key": "next-battle-starting-energy",
+        "descriptionSha256": "2322feefcb9ffef79b18bac3b712de335e38ff4c4b60843dfd76dd2626ef37dc",
+        "acceptanceSha256": "89d2f544ba1a4c7b184a53f4fd39bd77830d0a4d524804a16d5bfdd7ed0f6b33"
+      },
+      "hv-umm2.288": {
+        "status": "open",
+        "assignee": null,
+        "count": 29,
+        "phase5_key": "next-battle-smaller-hand",
+        "descriptionSha256": "1aa196beebdca38911f2ad906b72e94574dba94da095a4734d364079abaa8f2b",
+        "acceptanceSha256": "89d2f544ba1a4c7b184a53f4fd39bd77830d0a4d524804a16d5bfdd7ed0f6b33"
+      },
+      "hv-umm2.282": {
+        "status": "open",
+        "assignee": null,
+        "count": 34,
+        "phase5_key": "deck-mods-fast",
+        "descriptionSha256": "a9dc3ab2bbdced3d1a2debf95473b67745dcb31d75b1bd8633d0ec6f3dc745ba",
+        "acceptanceSha256": "8a881517b2611327d157cc3fda471529aa811d282205b77764412dacee51c8d8"
+      },
+      "hv-umm2.283": {
+        "status": "open",
+        "assignee": null,
+        "count": 58,
+        "phase5_key": "deck-mods-reclaim",
+        "descriptionSha256": "0105d37aec8fef3dae7af25294e5ee407097e3ceac67ecb57fb4efae5a4cc3fc",
+        "acceptanceSha256": "8a881517b2611327d157cc3fda471529aa811d282205b77764412dacee51c8d8"
+      },
+      "hv-umm2.284": {
+        "status": "open",
+        "assignee": null,
+        "count": 32,
+        "phase5_key": "deck-mods-subtype-change",
+        "descriptionSha256": "c8a5f032239ae3f21a7e37e6fd4abc0f9cd0ca43188df5d0e836b185ed49ca4b",
+        "acceptanceSha256": "8a881517b2611327d157cc3fda471529aa811d282205b77764412dacee51c8d8"
+      },
+      "hv-umm2.285": {
+        "status": "open",
+        "assignee": null,
+        "count": 1,
+        "phase5_key": "deck-mods-card-type-change",
+        "descriptionSha256": "b9f2daf6d100b0fadca7b74cf548aff95530353a76b4ddfc43465ada9f6fe152",
+        "acceptanceSha256": "8a881517b2611327d157cc3fda471529aa811d282205b77764412dacee51c8d8"
+      },
+      "hv-umm2.277": {
+        "status": "open",
+        "assignee": null,
+        "count": 1,
+        "phase5_key": "transfigurations-02",
+        "descriptionSha256": "99c91162e8230c0b6e20f001add4ea259f7fb3e628494d63c21d10e90c065d45",
+        "acceptanceSha256": "d824acb4646fa453c98fcb6e73cf82221609686a9c55830d334ee823a4c8d911"
+      },
+      "hv-umm2.278": {
+        "status": "open",
+        "assignee": null,
+        "count": 0,
+        "phase5_key": "transfiguration-sweep",
+        "descriptionSha256": "a641ec2e8af0fa6be4a81a25775eb0eb7ab5edef14c5152ac2588e68e7371ff6",
+        "acceptanceSha256": "65c03161af33b836915d05584006a816bd9a76571a396ebe96a6f06cfccf66ff"
+      },
+      "hv-umm2.279": {
+        "status": "open",
+        "assignee": null,
+        "count": 0,
+        "phase5_key": "deck-mods-foundation",
+        "descriptionSha256": "1e723c7214e66d5c903c43294bc212a5435fefa6251a05b60ac636f84f1dd068",
+        "acceptanceSha256": "c374ee51a95fd77d9f640bfe6ef28addf789bf5b739f73c899937ec2ac328e3c"
+      },
+      "hv-umm2.280": {
+        "status": "open",
+        "assignee": null,
+        "count": 111,
+        "phase5_key": "deck-mods-spark-bonus",
+        "descriptionSha256": "34d83501fa3d14a23407c3677421b92202f8aebde33939efbd7458ec27a254a2",
+        "acceptanceSha256": "8a881517b2611327d157cc3fda471529aa811d282205b77764412dacee51c8d8"
+      },
+      "hv-umm2.281": {
+        "status": "open",
+        "assignee": null,
+        "count": 42,
+        "phase5_key": "deck-mods-cost-reduction",
+        "descriptionSha256": "88d88534f8118340d9cc950b0bdd8edc62cec3e94e299a3b36759666f15ae178",
+        "acceptanceSha256": "8a881517b2611327d157cc3fda471529aa811d282205b77764412dacee51c8d8"
+      },
+      "hv-umm2.272": {
+        "status": "open",
+        "assignee": null,
+        "count": 4,
+        "phase5_key": "dreamsigns-journey-02",
+        "descriptionSha256": "a4db5e1437d47ff6fdb16db90b22e07c024a358d056ce2713b1f45eebc5d04d7",
+        "acceptanceSha256": "9c99a931e4c8fe63377885509c5554655c80cd8e7dc7b370e2fb0ab8a081d0e6"
+      },
+      "hv-umm2.273": {
+        "status": "open",
+        "assignee": null,
+        "count": 4,
+        "phase5_key": "dreamsigns-journey-03",
+        "descriptionSha256": "229b9cfcb9834bb78f59810a4f7d3effe38d475d866eaf6322e7f8eb26bdf11d",
+        "acceptanceSha256": "9c99a931e4c8fe63377885509c5554655c80cd8e7dc7b370e2fb0ab8a081d0e6"
+      },
+      "hv-umm2.274": {
+        "status": "open",
+        "assignee": null,
+        "count": 2,
+        "phase5_key": "dreamsigns-journey-04",
+        "descriptionSha256": "a5753af4f9b8bd02b5d0dc432b7313786f856ed412273cb7394b904230535af3",
+        "acceptanceSha256": "9c99a931e4c8fe63377885509c5554655c80cd8e7dc7b370e2fb0ab8a081d0e6"
+      },
+      "hv-umm2.276": {
+        "status": "open",
+        "assignee": null,
+        "count": 6,
+        "phase5_key": "transfigurations-01",
+        "descriptionSha256": "1a6048cc4dd5a4e9d673d85d172faa1e7d4173a78ddff555892299dd38617b7d",
+        "acceptanceSha256": "fd6f7a8c8a9099cfeb1b84f1413c27d988cd704e2421c9dc24829eb767a6ae48"
+      },
+      "hv-umm2.267": {
+        "status": "open",
+        "assignee": null,
+        "count": 3,
+        "phase5_key": "prim-journey-draft",
+        "descriptionSha256": "c544a040db30da94046aa3763dd06a307458544574976450060b195839599ddc",
+        "acceptanceSha256": "bb6a110ce8df59a6e96cf42020ebed1c5ba4715846fae22b392cb2c043d878c8"
+      },
+      "hv-umm2.268": {
+        "status": "open",
+        "assignee": null,
+        "count": 3,
+        "phase5_key": "prim-journey-duplication",
+        "descriptionSha256": "31a0fe04f62901e11f77b4219f9eb44fd88fb745e8c6066fc07268cce69a17bb",
+        "acceptanceSha256": "2e3634e07facf40352a924cf95f62f12da16b57e8f176257e1a0754c15941974"
+      },
+      "hv-umm2.269": {
+        "status": "open",
+        "assignee": null,
+        "count": 1,
+        "phase5_key": "prim-journey-battle-init",
+        "descriptionSha256": "04818e9fc22ac15d069c3860f27dec7f12979421078f8adfa19709cdba4c0fe2",
+        "acceptanceSha256": "9c13788605964faf4bf2896664949112bed2668c51b38ac76e5bc454ae28824f"
+      },
+      "hv-umm2.271": {
+        "status": "open",
+        "assignee": null,
+        "count": 4,
+        "phase5_key": "dreamsigns-journey-01",
+        "descriptionSha256": "7483b474987f7262c31673d8b474609b1b196934ed4910f78c3dde82e34e454a",
+        "acceptanceSha256": "9c99a931e4c8fe63377885509c5554655c80cd8e7dc7b370e2fb0ab8a081d0e6"
+      },
+      "hv-umm2.263": {
+        "status": "open",
+        "assignee": null,
+        "count": 3,
+        "phase5_key": "prim-journey-on-gain",
+        "descriptionSha256": "ed96fb26b94a16579533fc71f5ecd79035fed416afcc24708c760ad4ce3794aa",
+        "acceptanceSha256": "718d7e00ce77724ef34ff31b15d3a8e48d2ea9993afc14c45ba4b67b6efa1b5d"
+      },
+      "hv-umm2.264": {
+        "status": "open",
+        "assignee": null,
+        "count": 3,
+        "phase5_key": "prim-journey-deck-entry",
+        "descriptionSha256": "b05f3c5d54064a4b03f925e479a8bc8c1182354668a7ea6e0cc563c247589cdc",
+        "acceptanceSha256": "c6fb7fdeb74be69879dd1acccbe9a27ab29068fcdd3092762c93a8f77f31de53"
+      },
+      "hv-umm2.266": {
+        "status": "open",
+        "assignee": null,
+        "count": 3,
+        "phase5_key": "prim-journey-shop",
+        "descriptionSha256": "38f7fb22b1b6fa73384d996d0f69b61efb75fa99593418805be8576f23cb9df5",
+        "acceptanceSha256": "823de835d714e07f275a1c4ebe820675a7967f66cf7940ba016e421b12371489"
+      },
+      "hv-umm2.261": {
+        "status": "open",
+        "assignee": null,
+        "count": 3,
+        "phase5_key": "prim-journey-transfiguration",
+        "descriptionSha256": "f51da5eea289805c67296835a4e612c439f9c7f0285ae391625ef2308fe402c0",
+        "acceptanceSha256": "b13310ce1db9109046bd91af6e39e592c632c4095686a36758f2d6d468e961f5"
+      },
+      "hv-umm2.270": {
+        "status": "open",
+        "assignee": null,
+        "count": 1,
+        "phase5_key": "prim-type-remap",
+        "descriptionSha256": "7c5e8a591f232e39e99552517a73408b12d3ec7752ac5b5bdc43f1077f640a4b",
+        "acceptanceSha256": "ce4f1eb1e14bbe57d6bb3eda3b1e7e483ef5e6f096eedcb8e48c053b652423ec"
+      },
+      "hv-umm2.275": {
+        "status": "open",
+        "assignee": null,
+        "count": 2,
+        "phase5_key": "prim-cost-modifier-activated",
+        "descriptionSha256": "bcfe6d185e3203bd8bc2f9bc213b346dd90a4fc20f571df8ebf0d9c8b2206d10",
+        "acceptanceSha256": "39b6a2f0dcc7a6b29b6181f5bcd332278dada510b36f3afb5e20af2c6bc69701"
+      }
+    },
+    "distinctMissingCauses": [],
+    "decision": "No new filing. Current native planned capability ownership and assigned acceptance cover identified current gaps. Preserve active453/598/601 and journey-first274->241/246 ordering. Read-only audit creates no runtime prerequisite."
+  },
+  "nativeDisposition": {
+    "writeackComment": "01a1338d-1b58-7b2b-acf8-b886b4fbca2f",
+    "acknowledgedAt": "2026-10-13T04:37:28.063786Z",
+    "newBeads": [],
+    "newEdges": [],
+    "activeScopesPreserved": [
+      "hv-umm2.453",
+      "hv-umm2.598",
+      "hv-umm2.601"
+    ],
+    "hybridDirection": [
+      "hv-umm2.241 depends hv-umm2.274",
+      "hv-umm2.246 depends hv-umm2.274"
+    ],
+    "futureSeams": "Contingent exact future proposals under canonical scopes for606; this audit admits no new production API.",
+    "kindCountCorrectionComment": "01a13390-399d-727c-9b31-2095caf0b9d0"
+  },
+  "implementWindowProvenance": {
+    "start": "Parent clock sampled 2026-10-13T04:23:33 UTC before helper tool dispatch; pre-dispatch proxy. Actual internal/model start unknown. Includes research/coordination/validation, not productive-time/CPU or isolated queue claim.",
+    "end": "Actual UTC endpoint sampled immediately before final schema/staging/Git sequence; bounded precommit proxy. Exact Git invocation and endpoint delta are retained in external committed handoff, with no forced clock or amendment.",
+    "install": "Parent setup npm install passed in 2.746346 seconds before dispatch; not helper CPU or own validation.",
+    "parentClaimSetup": "Frozen native claim stores started_at2026-10-13T04:06:12Z, not a helper or independently sampled actual parent claim time. Parent worktree/install/Doctor/setup occurred before helper dispatch; parent reported install2.746346s and healthy Doctor. These separate parent intervals are not included as helper CPU or isolated queue timings."
+  },
+  "researchCorrections": [
+    {
+      "supersededReportSha256": "34f04f60f51d9b564754d1db555e5c7afe803221d587c2f85b4de0c0f52c1edd",
+      "correctedReportSha256": "b3fa1a91ca4a33f293279df14c9d3aa05c3fb09cdb873416659941e4e3633187",
+      "disposition": "Withdraw reverse shared-leaf ordering proposal after parent fresh native notes prove current journey274 before battle241/246. Both reverse edges would cycle; no repository/native mutation occurred. D36 rejects partial battle abilities on pending leaves.",
+      "nativeInputs": [
+        "hv-umm2.241-fresh.json",
+        "hv-umm2.246-fresh.json",
+        "hv-umm2.274-fresh.json",
+        "hv-umm2.275-fresh.json"
+      ]
+    },
+    {
+      "kind": "scope-reconstruction",
+      "intermediateUUIDs": 480,
+      "currentUUIDs": 483,
+      "intermediateProjectionSha256": "372e18f6093d96d1013ecac93595424123a7affaeef7eb3d2eed756d965a4723",
+      "meaning": "Initial narrow input omitted original270/275. Complete reconstruction uses full original native clauses; retained intermediate does not govern execution."
+    },
+    {
+      "kind": "source-pointers",
+      "meaning": "Numeric helper/function references checked against actual own base; corrected before evidence authoring."
+    },
+    {
+      "kind": "parent-research-paths",
+      "exitCode": 2,
+      "effects": 0,
+      "pid": "unknown",
+      "clock": "unknown",
+      "meaning": "Three guessed nonexistent paths, then rg--files actual inventory corrected. No validation receipt fabricated."
+    },
+    {
+      "kind": "native-kind-count",
+      "originalClaim": 11,
+      "currentCount": 12,
+      "meaning": "Completeness check caught an arithmetic prose error. Actual grouped native440 UUIDs span12 kinds; cohort rows/UUID membership remain unchanged. Original failed command retained."
+    },
+    {
+      "kind": "parent-completeness-observer",
+      "originalArtifact": "parent-independent-completeness.json",
+      "correctedArtifact": "parent-independent-completeness-corrected.json",
+      "effects": 0,
+      "pid": "unknown",
+      "clock": "unknown",
+      "meaning": "Initial parent observer naive heading split selected an empty UUID section; corrected anchored regex proved483. Failed observer is retained, no source or authority effect."
+    },
+    {
+      "kind": "prose-token-format",
+      "meaning": "Bounded readability normalization inserted spaces into two Markdown ISO timestamps. Parent caught it; exact timestamps restored, inline code/source-pointer/UUID/hash tokens preserved, and completeness adds a timestamp token guard."
+    }
+  ],
+  "commandReceipts": [
+    {
+      "label": "completeness",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/604-helper/check-completeness.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 22175,
+      "pgid": 22175,
+      "start": "2026-10-13T04:39:37.265198+00:00",
+      "end": "2026-10-13T04:39:37.587726+00:00",
+      "wallSeconds": 0.32250208299956284,
+      "cpuSeconds": {
+        "user": 0.359575,
+        "system": 0.04522
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 13.30 8.50 7.43 }",
+          "oneMinute": 13.3,
+          "observedAt": "2026-10-13T04:39:37.264993+00:00"
+        },
+        "end": {
+          "raw": "{ 13.30 8.50 7.43 }",
+          "oneMinute": 13.3,
+          "observedAt": "2026-10-13T04:39:37.590560+00:00"
+        }
+      },
+      "exitCode": 1,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/completeness.log"
+    },
+    {
+      "label": "completeness-final",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/604-helper/check-completeness.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 76568,
+      "pgid": 76568,
+      "start": "2026-10-13T04:40:32.335143+00:00",
+      "end": "2026-10-13T04:40:32.613110+00:00",
+      "wallSeconds": 0.2779530419938965,
+      "cpuSeconds": {
+        "user": 0.34839699999999996,
+        "system": 0.030610999999999996
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 14.77 9.73 7.95 }",
+          "oneMinute": 14.77,
+          "observedAt": "2026-10-13T04:40:32.334983+00:00"
+        },
+        "end": {
+          "raw": "{ 14.77 9.73 7.95 }",
+          "oneMinute": 14.77,
+          "observedAt": "2026-10-13T04:40:32.616017+00:00"
+        }
+      },
+      "exitCode": 0,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/completeness-final.log"
+    },
+    {
+      "label": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 77532,
+      "pgid": 77532,
+      "start": "2026-10-13T04:40:47.227475+00:00",
+      "end": "2026-10-13T04:40:47.340337+00:00",
+      "wallSeconds": 0.11284991599677596,
+      "cpuSeconds": {
+        "user": 0.057557,
+        "system": 0.024797
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 13.72 9.74 7.99 }",
+          "oneMinute": 13.72,
+          "observedAt": "2026-10-13T04:40:47.227288+00:00"
+        },
+        "end": {
+          "raw": "{ 13.72 9.74 7.99 }",
+          "oneMinute": 13.72,
+          "observedAt": "2026-10-13T04:40:47.342779+00:00"
+        }
+      },
+      "exitCode": 0,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/schema.log"
+    },
+    {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 77560,
+      "pgid": 77560,
+      "start": "2026-10-13T04:40:47.395960+00:00",
+      "end": "2026-10-13T04:40:47.664319+00:00",
+      "wallSeconds": 0.26834183299797587,
+      "cpuSeconds": {
+        "user": 0.214975,
+        "system": 0.080098
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 13.72 9.74 7.99 }",
+          "oneMinute": 13.72,
+          "observedAt": "2026-10-13T04:40:47.395728+00:00"
+        },
+        "end": {
+          "raw": "{ 13.72 9.74 7.99 }",
+          "oneMinute": 13.72,
+          "observedAt": "2026-10-13T04:40:47.667849+00:00"
+        }
+      },
+      "exitCode": 0,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/review.log"
+    },
+    {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 78387,
+      "pgid": 78387,
+      "start": "2026-10-13T04:40:56.723810+00:00",
+      "end": "2026-10-13T04:41:04.594852+00:00",
+      "wallSeconds": 7.870932333011297,
+      "cpuSeconds": {
+        "user": 5.472814,
+        "system": 2.511025
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 12.44 9.60 7.96 }",
+          "oneMinute": 12.44,
+          "observedAt": "2026-10-13T04:40:56.723583+00:00"
+        },
+        "end": {
+          "raw": "{ 20.56 11.47 8.64 }",
+          "oneMinute": 20.56,
+          "observedAt": "2026-10-13T04:41:04.609154+00:00"
+        }
+      },
+      "exitCode": 0,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/knip.log"
+    },
+    {
+      "label": "completeness-record-final",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/604-helper/check-completeness.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 90901,
+      "pgid": 90901,
+      "start": "2026-10-13T04:42:55.490110+00:00",
+      "end": "2026-10-13T04:42:55.868986+00:00",
+      "wallSeconds": 0.3788555420032935,
+      "cpuSeconds": {
+        "user": 0.418554,
+        "system": 0.050027
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 16.28 13.22 9.71 }",
+          "oneMinute": 16.28,
+          "observedAt": "2026-10-13T04:42:55.489860+00:00"
+        },
+        "end": {
+          "raw": "{ 16.28 13.22 9.71 }",
+          "oneMinute": 16.28,
+          "observedAt": "2026-10-13T04:42:55.872697+00:00"
+        }
+      },
+      "exitCode": 0,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/completeness-record-final.log"
+    },
+    {
+      "label": "schema-record-final",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 90931,
+      "pgid": 90931,
+      "start": "2026-10-13T04:42:55.909420+00:00",
+      "end": "2026-10-13T04:42:56.068181+00:00",
+      "wallSeconds": 0.15874441599589773,
+      "cpuSeconds": {
+        "user": 0.07439399999999999,
+        "system": 0.042586
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 16.28 13.22 9.71 }",
+          "oneMinute": 16.28,
+          "observedAt": "2026-10-13T04:42:55.909202+00:00"
+        },
+        "end": {
+          "raw": "{ 16.28 13.22 9.71 }",
+          "oneMinute": 16.28,
+          "observedAt": "2026-10-13T04:42:56.073556+00:00"
+        }
+      },
+      "exitCode": 0,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/schema-record-final.log"
+    },
+    {
+      "label": "diff-paths-final",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/604-helper/check-paths.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 90956,
+      "pgid": 90956,
+      "start": "2026-10-13T04:42:56.113939+00:00",
+      "end": "2026-10-13T04:42:56.214008+00:00",
+      "wallSeconds": 0.10005149999051355,
+      "cpuSeconds": {
+        "user": 0.044514,
+        "system": 0.12352699999999998
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 16.28 13.22 9.71 }",
+          "oneMinute": 16.28,
+          "observedAt": "2026-10-13T04:42:56.113639+00:00"
+        },
+        "end": {
+          "raw": "{ 16.28 13.22 9.71 }",
+          "oneMinute": 16.28,
+          "observedAt": "2026-10-13T04:42:56.217414+00:00"
+        }
+      },
+      "exitCode": 0,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/diff-paths-final.log"
+    },
+    {
+      "label": "schema-ready",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 95469,
+      "pgid": 95469,
+      "start": "2026-10-13T04:43:44.014548+00:00",
+      "end": "2026-10-13T04:43:44.081699+00:00",
+      "wallSeconds": 0.06713816699630115,
+      "cpuSeconds": {
+        "user": 0.054229,
+        "system": 0.017172
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 10.59 12.17 9.52 }",
+          "oneMinute": 10.59,
+          "observedAt": "2026-10-13T04:43:44.014417+00:00"
+        },
+        "end": {
+          "raw": "{ 10.59 12.17 9.52 }",
+          "oneMinute": 10.59,
+          "observedAt": "2026-10-13T04:43:44.084115+00:00"
+        }
+      },
+      "exitCode": 0,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/schema-ready.log"
+    },
+    {
+      "label": "completeness-ready-final",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/604-helper/check-completeness.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 98259,
+      "pgid": 98259,
+      "start": "2026-10-13T04:44:20.131530+00:00",
+      "end": "2026-10-13T04:44:20.420471+00:00",
+      "wallSeconds": 0.2889259579969803,
+      "cpuSeconds": {
+        "user": 0.351024,
+        "system": 0.035083
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 16.84 13.28 10.02 }",
+          "oneMinute": 16.84,
+          "observedAt": "2026-10-13T04:44:20.131323+00:00"
+        },
+        "end": {
+          "raw": "{ 16.84 13.28 10.02 }",
+          "oneMinute": 16.84,
+          "observedAt": "2026-10-13T04:44:20.423209+00:00"
+        }
+      },
+      "exitCode": 0,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/completeness-ready-final.log"
+    },
+    {
+      "label": "schema-ready-final",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 98287,
+      "pgid": 98287,
+      "start": "2026-10-13T04:44:20.454641+00:00",
+      "end": "2026-10-13T04:44:20.528859+00:00",
+      "wallSeconds": 0.07420537500001956,
+      "cpuSeconds": {
+        "user": 0.059165999999999996,
+        "system": 0.020399
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 16.84 13.28 10.02 }",
+          "oneMinute": 16.84,
+          "observedAt": "2026-10-13T04:44:20.454464+00:00"
+        },
+        "end": {
+          "raw": "{ 16.84 13.28 10.02 }",
+          "oneMinute": 16.84,
+          "observedAt": "2026-10-13T04:44:20.531610+00:00"
+        }
+      },
+      "exitCode": 0,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/schema-ready-final.log"
+    },
+    {
+      "label": "diff-ready-final",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a1304d/604-helper/check-paths.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/journey-capabilities604",
+      "pid": 98299,
+      "pgid": 98299,
+      "start": "2026-10-13T04:44:20.561182+00:00",
+      "end": "2026-10-13T04:44:20.628972+00:00",
+      "wallSeconds": 0.06777604200760834,
+      "cpuSeconds": {
+        "user": 0.035146,
+        "system": 0.057631999999999996
+      },
+      "hostLoad": {
+        "start": {
+          "raw": "{ 16.84 13.28 10.02 }",
+          "oneMinute": 16.84,
+          "observedAt": "2026-10-13T04:44:20.560958+00:00"
+        },
+        "end": {
+          "raw": "{ 16.84 13.28 10.02 }",
+          "oneMinute": 16.84,
+          "observedAt": "2026-10-13T04:44:20.632057+00:00"
+        }
+      },
+      "exitCode": 0,
+      "terminal": true,
+      "logFile": "/tmp/dreamtides-executor-01a1304d/604-helper/diff-ready-final.log"
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "step": "completeness",
+      "start": {
+        "raw": "{ 13.30 8.50 7.43 }",
+        "oneMinute": 13.3,
+        "observedAt": "2026-10-13T04:39:37.264993+00:00"
+      },
+      "end": {
+        "raw": "{ 13.30 8.50 7.43 }",
+        "oneMinute": 13.3,
+        "observedAt": "2026-10-13T04:39:37.590560+00:00"
+      }
+    },
+    {
+      "step": "completeness-final",
+      "start": {
+        "raw": "{ 14.77 9.73 7.95 }",
+        "oneMinute": 14.77,
+        "observedAt": "2026-10-13T04:40:32.334983+00:00"
+      },
+      "end": {
+        "raw": "{ 14.77 9.73 7.95 }",
+        "oneMinute": 14.77,
+        "observedAt": "2026-10-13T04:40:32.616017+00:00"
+      }
+    },
+    {
+      "step": "schema",
+      "start": {
+        "raw": "{ 13.72 9.74 7.99 }",
+        "oneMinute": 13.72,
+        "observedAt": "2026-10-13T04:40:47.227288+00:00"
+      },
+      "end": {
+        "raw": "{ 13.72 9.74 7.99 }",
+        "oneMinute": 13.72,
+        "observedAt": "2026-10-13T04:40:47.342779+00:00"
+      }
+    },
+    {
+      "step": "review",
+      "start": {
+        "raw": "{ 13.72 9.74 7.99 }",
+        "oneMinute": 13.72,
+        "observedAt": "2026-10-13T04:40:47.395728+00:00"
+      },
+      "end": {
+        "raw": "{ 13.72 9.74 7.99 }",
+        "oneMinute": 13.72,
+        "observedAt": "2026-10-13T04:40:47.667849+00:00"
+      }
+    },
+    {
+      "step": "knip",
+      "start": {
+        "raw": "{ 12.44 9.60 7.96 }",
+        "oneMinute": 12.44,
+        "observedAt": "2026-10-13T04:40:56.723583+00:00"
+      },
+      "end": {
+        "raw": "{ 20.56 11.47 8.64 }",
+        "oneMinute": 20.56,
+        "observedAt": "2026-10-13T04:41:04.609154+00:00"
+      }
+    },
+    {
+      "step": "completeness-record-final",
+      "start": {
+        "raw": "{ 16.28 13.22 9.71 }",
+        "oneMinute": 16.28,
+        "observedAt": "2026-10-13T04:42:55.489860+00:00"
+      },
+      "end": {
+        "raw": "{ 16.28 13.22 9.71 }",
+        "oneMinute": 16.28,
+        "observedAt": "2026-10-13T04:42:55.872697+00:00"
+      }
+    },
+    {
+      "step": "schema-record-final",
+      "start": {
+        "raw": "{ 16.28 13.22 9.71 }",
+        "oneMinute": 16.28,
+        "observedAt": "2026-10-13T04:42:55.909202+00:00"
+      },
+      "end": {
+        "raw": "{ 16.28 13.22 9.71 }",
+        "oneMinute": 16.28,
+        "observedAt": "2026-10-13T04:42:56.073556+00:00"
+      }
+    },
+    {
+      "step": "diff-paths-final",
+      "start": {
+        "raw": "{ 16.28 13.22 9.71 }",
+        "oneMinute": 16.28,
+        "observedAt": "2026-10-13T04:42:56.113639+00:00"
+      },
+      "end": {
+        "raw": "{ 16.28 13.22 9.71 }",
+        "oneMinute": 16.28,
+        "observedAt": "2026-10-13T04:42:56.217414+00:00"
+      }
+    },
+    {
+      "step": "schema-ready",
+      "start": {
+        "raw": "{ 10.59 12.17 9.52 }",
+        "oneMinute": 10.59,
+        "observedAt": "2026-10-13T04:43:44.014417+00:00"
+      },
+      "end": {
+        "raw": "{ 10.59 12.17 9.52 }",
+        "oneMinute": 10.59,
+        "observedAt": "2026-10-13T04:43:44.084115+00:00"
+      }
+    },
+    {
+      "step": "completeness-ready-final",
+      "start": {
+        "raw": "{ 16.84 13.28 10.02 }",
+        "oneMinute": 16.84,
+        "observedAt": "2026-10-13T04:44:20.131323+00:00"
+      },
+      "end": {
+        "raw": "{ 16.84 13.28 10.02 }",
+        "oneMinute": 16.84,
+        "observedAt": "2026-10-13T04:44:20.423209+00:00"
+      }
+    },
+    {
+      "step": "schema-ready-final",
+      "start": {
+        "raw": "{ 16.84 13.28 10.02 }",
+        "oneMinute": 16.84,
+        "observedAt": "2026-10-13T04:44:20.454464+00:00"
+      },
+      "end": {
+        "raw": "{ 16.84 13.28 10.02 }",
+        "oneMinute": 16.84,
+        "observedAt": "2026-10-13T04:44:20.531610+00:00"
+      }
+    },
+    {
+      "step": "diff-ready-final",
+      "start": {
+        "raw": "{ 16.84 13.28 10.02 }",
+        "oneMinute": 16.84,
+        "observedAt": "2026-10-13T04:44:20.560958+00:00"
+      },
+      "end": {
+        "raw": "{ 16.84 13.28 10.02 }",
+        "oneMinute": 16.84,
+        "observedAt": "2026-10-13T04:44:20.632057+00:00"
+      }
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Actual review outer-command starting sysctl one-minute observation2026-10-13T04:40:47.395728+00:00; raw13.72. Review inner friction-record step independently logged13.72265625 at04:40:47.586Z. No controlled-load or performance claim."
+      }
+    }
+  },
+  "sourceChanges": 0,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "verificationLimit": "Read-only source/contract/native evidence audit. No fresh browser/full/fuzz/sweep/tournament; source presence and type storage alone do not verify pending behavior.",
+  "resourceOwnership": {
+    "servers": [],
+    "browserContexts": [],
+    "qaTokens": [],
+    "providers": [],
+    "commandGroups": [
+      {
+        "pid": 22175,
+        "pgid": 22175,
+        "label": "completeness",
+        "terminal": true,
+        "exitCode": 1
+      },
+      {
+        "pid": 76568,
+        "pgid": 76568,
+        "label": "completeness-final",
+        "terminal": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 77532,
+        "pgid": 77532,
+        "label": "schema",
+        "terminal": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 77560,
+        "pgid": 77560,
+        "label": "review",
+        "terminal": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 78387,
+        "pgid": 78387,
+        "label": "knip",
+        "terminal": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 90901,
+        "pgid": 90901,
+        "label": "completeness-record-final",
+        "terminal": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 90931,
+        "pgid": 90931,
+        "label": "schema-record-final",
+        "terminal": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 90956,
+        "pgid": 90956,
+        "label": "diff-paths-final",
+        "terminal": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 95469,
+        "pgid": 95469,
+        "label": "schema-ready",
+        "terminal": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 98259,
+        "pgid": 98259,
+        "label": "completeness-ready-final",
+        "terminal": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 98287,
+        "pgid": 98287,
+        "label": "schema-ready-final",
+        "terminal": true,
+        "exitCode": 0
+      },
+      {
+        "pid": 98299,
+        "pgid": 98299,
+        "label": "diff-ready-final",
+        "terminal": true,
+        "exitCode": 0
+      }
+    ]
+  },
+  "commit": "Parent fresh endpoint ACK granted; exactly one local Conventional Commit follows final schema/staged diff checks. Actual SHA/command receipts and clean handoff retained externally; no amendment.",
+  "supportingArtifactHashes": {
+    "cohort-counts-narrow480.json": "372e18f6093d96d1013ecac93595424123a7affaeef7eb3d2eed756d965a4723",
+    "cohort-counts.json": "030011bc3b6482dc32a148a521da1d73286c34c62688a317503b107d3afbbf8b",
+    "fresh-prefiling-proof.json": "6f9b70879222e21101aadddc1b2d4a733f0dff5f600c16e803dce6aba3e94dff",
+    "stage1-native-correction.json": "98635077812d350a22d947318abbffa14a9a246c258dd3f031071d3cbe6281ab",
+    "parent-independent-completeness.json": "9ae0dbeaae4c202eefc46321b0c2b737816a459df534c535b5de0e1b183dea13",
+    "parent-independent-completeness-corrected.json": "ed5dd46d679586ab61336f1189f4afee45fda42306d1b47d6f8918cdb46395b2",
+    "parent-resource-check.json": "1459da5b3d2731953b315ac935ae0489c34bf902b810df2b093c7f15ec41391c"
+  },
+  "validationScope": {
+    "review": "Three evidence files changed; quick review ran friction-record schema only,698records/41historical unknowns. No source/related tests/typecheck selected or runtime behavior verification claimed.",
+    "knip": "Required whole-project unused-code check passed. Preparation uses its local isolated asset snapshot and normal restore; missing-art warnings during preparation were followed by564/564cardimages and full catalog art restore. These are disposable normal workspace materializations; no tracked generated/source change.",
+    "schema": "Direct698-record schema passes with41historical unknowns. Final own record schema checked after receipts update.",
+    "completeness": "483unique native UUIDs/26original current scopes/440of1042actions/65kinds/12pendingkinds/53contextkinds/69sourcehashes and frozen input hashes; initial11-kind arithmetic failure retained."
+  },
+  "finalCommitProvenance": {
+    "endpointObservedAt": "2026-10-13T04:46:35.638428+00:00",
+    "finalEndpointAckComment": "01a13394-a21f-78e9-8d7a-c89ceaac48e2",
+    "parentAckObservedAt": "2026-10-13T04:45:41.318045+00:00",
+    "maximumActualGitDeltaSeconds": 60,
+    "sourceBase": "03efe7bf5495a7600910aae76b8cd463b2b232b4",
+    "reportImmutableSha256": "4463efe5683ce20b42c65d3dafae1ec4b7e7214b673819d9037432e4c6e303ed",
+    "actualGitReceipt": "/tmp/dreamtides-executor-01a1304d/604-helper/git-commit.receipt.json",
+    "commitHandoff": "/tmp/dreamtides-executor-01a1304d/604-helper/committed-handoff.json"
+  }
+}
