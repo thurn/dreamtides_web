@@ -244,6 +244,11 @@ export function noCardsIn<Z extends CountedZone>(zone: Z, player: PlayerRef = "y
   return { cond: "cardsIn", player, zone, atMost: 0 };
 }
 
+/** "If the top card of your deck is …": a resolving read that reveals nothing and is false for an empty deck. */
+export function topCardMatches(filter: CardFilter = {}, player: PlayerRef = "you"): Extract<Condition, { readonly cond: "topOfDeck" }> {
+  return { cond: "topOfDeck", player, filter };
+}
+
 /** "If there are N or more <cards> in your <zone>", counted when the condition is checked. */
 export function conditionCardCounts<Z extends CountedZone>(
   zone: Z,

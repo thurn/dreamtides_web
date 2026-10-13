@@ -281,6 +281,12 @@ type changed matches by its new type:
   [Costs, Requirements, and X](#costs-requirements-and-x)). Choosing them does
   not shuffle the deck.
 
+When an effect checks whether the top card of a deck matches a condition, it reads
+only that card's current characteristics when the condition is checked. The
+condition is false for an empty deck, and checking it reveals nothing and
+emits no event. "Otherwise, draw that card" draws the top card only when one
+exists; with an empty deck it draws nothing and causes no Fatigue.
+
 Naming a card reveals nothing: only what the effect then does with a hidden
 card, such as putting a copy of it into a hand, can show it to a player. When
 random cards leave a deck, as in "Materialize two random characters from your

@@ -43,6 +43,10 @@ export function conditionHoldsWith(
       const instance = sourceInstance(scope.source);
       return instance === null ? condition.zone === "play" : state.instances[instance]?.zone === condition.zone;
     }
+    case "topOfDeck": {
+      const top = state.sides[resolvePlayer(scope.controller, condition.player)].deck[0];
+      return top !== undefined && matchesFilter(filterSubjectOf(state, catalog, top, read(top)), condition.filter);
+    }
     case "cardsIn": {
       const filter = condition.filter;
       const count = condition.zone === "void"

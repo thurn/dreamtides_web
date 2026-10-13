@@ -1,0 +1,576 @@
+{
+  "bead": "hv-umm2.514",
+  "base": "9258bdb90f8c61d6d1004b2e398ff3b76f02b279",
+  "dispatch": {
+    "timestamp": "2026-10-13T23:11:15.316Z",
+    "actualToolCall": "call_80b8ae8b8d984e8a9ebe4f0537d57e9b",
+    "modelStart": "UNKNOWN"
+  },
+  "endpoint": "2026-10-13T23:30:17.640175+00:00",
+  "elapsedQualification": "Final prospective precommit evidence clock, not the actual Git commit timestamp. Gross actual dispatch-to-this-clock window includes read-only proposal, parent admission/audit/waits, iteration and validation; model CPU/start are UNKNOWN. Staging/cached whitespace/schema checks and actual Git start/end/gap are retained externally in commit-terminal-proof-v01.json. This committed record is not rewritten after Git.",
+  "validationReceipts": {
+    "content-gates-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:26:26.117972+00:00",
+      "end": "2026-10-13T23:26:30.295140+00:00",
+      "exit": 0,
+      "wallSeconds": 4.177090417011641,
+      "pid": 44404,
+      "pgid": 44404,
+      "load": "{ 10.50 15.02 10.75 }",
+      "groupRemainingAtExit": []
+    },
+    "counterfactuals-v01": {
+      "argv": [
+        "python3",
+        "/tmp/worker514-20261013/counterfactuals.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:21:42.031417+00:00",
+      "end": "2026-10-13T23:22:04.311580+00:00",
+      "exit": 0,
+      "wallSeconds": 22.28020637499867,
+      "pid": 9505,
+      "pgid": 9505,
+      "load": "{ 25.38 11.16 7.47 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "top-of-deck condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:17:41.161271+00:00",
+      "end": "2026-10-13T23:17:48.670319+00:00",
+      "exit": 1,
+      "wallSeconds": 7.508906375005608,
+      "pid": 75985,
+      "pgid": 75985,
+      "load": "{ 4.16 6.31 5.56 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-v02": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "top-of-deck condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:18:32.573617+00:00",
+      "end": "2026-10-13T23:18:38.759659+00:00",
+      "exit": 1,
+      "wallSeconds": 6.185927124985028,
+      "pid": 76833,
+      "pgid": 76833,
+      "load": "{ 4.11 5.98 5.48 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-v03": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "top-of-deck condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:19:07.626939+00:00",
+      "end": "2026-10-13T23:19:12.189292+00:00",
+      "exit": 0,
+      "wallSeconds": 4.56563808399369,
+      "pid": 77587,
+      "pgid": 77587,
+      "load": "{ 4.19 5.80 5.44 }",
+      "groupRemainingAtExit": []
+    },
+    "fuzz100-v01": {
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/worker514-20261013/targeted-fuzz100.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:20:34.039980+00:00",
+      "end": "2026-10-13T23:21:23.332284+00:00",
+      "exit": 0,
+      "wallSeconds": 49.29243958299048,
+      "pid": 79473,
+      "pgid": 79473,
+      "load": "{ 5.82 5.59 5.37 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:25:53.387757+00:00",
+      "end": "2026-10-13T23:25:58.021285+00:00",
+      "exit": 0,
+      "wallSeconds": 4.633364957990125,
+      "pid": 30709,
+      "pgid": 30709,
+      "load": "{ 13.30 15.98 10.89 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-ignore-filter-v01": {
+      "argv": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "top-of-deck condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:21:49.296757+00:00",
+      "end": "2026-10-13T23:21:54.015299+00:00",
+      "exit": 1,
+      "wallSeconds": 4.718457458977355,
+      "pid": 9867,
+      "pgid": 9867,
+      "load": "{ 25.11 11.58 7.66 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-no-op-v01": {
+      "argv": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "top-of-deck condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:21:54.092642+00:00",
+      "end": "2026-10-13T23:21:57.528688+00:00",
+      "exit": 1,
+      "wallSeconds": 3.435957541980315,
+      "pid": 10319,
+      "pgid": 10319,
+      "load": "{ 25.74 11.94 7.81 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-unsafe-empty-draw-v01": {
+      "argv": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "top-of-deck condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:21:57.641515+00:00",
+      "end": "2026-10-13T23:22:04.235611+00:00",
+      "exit": 1,
+      "wallSeconds": 6.594038291979814,
+      "pid": 10860,
+      "pgid": 10860,
+      "load": "{ 25.74 11.94 7.81 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-wrong-side-v01": {
+      "argv": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "top-of-deck condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:21:42.076383+00:00",
+      "end": "2026-10-13T23:21:45.309267+00:00",
+      "exit": 1,
+      "wallSeconds": 3.23282662499696,
+      "pid": 9508,
+      "pgid": 9508,
+      "load": "{ 25.38 11.16 7.47 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-wrong-top-v01": {
+      "argv": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "top-of-deck condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:21:45.380020+00:00",
+      "end": "2026-10-13T23:21:49.162766+00:00",
+      "exit": 1,
+      "wallSeconds": 3.7826904579997063,
+      "pid": 9548,
+      "pgid": 9548,
+      "load": "{ 25.99 11.52 7.62 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:23:05.065654+00:00",
+      "end": "2026-10-13T23:24:27.661560+00:00",
+      "exit": 2,
+      "wallSeconds": 82.59610245801741,
+      "pid": 14601,
+      "pgid": 14601,
+      "load": "{ 25.31 15.11 9.36 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v02": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:24:40.953765+00:00",
+      "end": "2026-10-13T23:25:47.854024+00:00",
+      "exit": 0,
+      "wallSeconds": 66.90039154101396,
+      "pid": 26242,
+      "pgid": 26242,
+      "load": "{ 22.54 17.61 10.97 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-v01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+      "start": "2026-10-13T23:27:34.856613+00:00",
+      "end": "2026-10-13T23:27:35.061031+00:00",
+      "exit": 0,
+      "wallSeconds": 0.20430116599891335,
+      "pid": 65093,
+      "pgid": 65093,
+      "load": "{ 20.33 16.14 11.45 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "focused": {
+    "cases": 20,
+    "entryPointsAdded": 0,
+    "plainContractModulesAdded": 1,
+    "jsdomFilesAdded": 0,
+    "moduleLines": 255,
+    "finalCurrentReport": "review-v02.stdout",
+    "finalReview": "299 related files / 6321 tests passed, own20 included; type/lint/cycles/friction schema0"
+  },
+  "sourceSHA256": {
+    "src/engine/dsl/types.ts": "194c78f4e51c89c9dee39b378a4c7251880eae839f63124e3fa2c538aecf4634",
+    "src/engine/dsl/builders.ts": "ab8a5ffaa8ff30eb4707f7bf6b97dcd133759245cfa4ef6043c0f37f40725594",
+    "src/engine/dsl/conditions.ts": "5397dbc8f8d1ac327d2413921ade4e7e140816a9de57c8673282cc9e23cc7027",
+    "src/engine/effects/primitives/contracts/top-of-deck-condition.contracts.ts": "4c0c20154a0a1d3377db3ce26fda33677a2aaa30cf714de56f732e4991edf66c"
+  },
+  "counterfactuals": {
+    "negative-ignore-filter-v01": {
+      "receipt": {
+        "argv": [
+          "./node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "top-of-deck condition"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+        "start": "2026-10-13T23:21:49.296757+00:00",
+        "end": "2026-10-13T23:21:54.015299+00:00",
+        "exit": 1,
+        "wallSeconds": 4.718457458977355,
+        "pid": 9867,
+        "pgid": 9867,
+        "load": "{ 25.11 11.58 7.66 }",
+        "groupRemainingAtExit": []
+      },
+      "tests": "10 failed | 10 passed | 2915 skipped (2935)",
+      "restored": {
+        "src/engine/dsl/conditions.ts": "5397dbc8f8d1ac327d2413921ade4e7e140816a9de57c8673282cc9e23cc7027",
+        "src/engine/effects/primitives/contracts/top-of-deck-condition.contracts.ts": "092226fef0170c798b50bd45b749e4b8d8c783bb5ce2a8df71f0a30d7f162632"
+      }
+    },
+    "negative-no-op-v01": {
+      "receipt": {
+        "argv": [
+          "./node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "top-of-deck condition"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+        "start": "2026-10-13T23:21:54.092642+00:00",
+        "end": "2026-10-13T23:21:57.528688+00:00",
+        "exit": 1,
+        "wallSeconds": 3.435957541980315,
+        "pid": 10319,
+        "pgid": 10319,
+        "load": "{ 25.74 11.94 7.81 }",
+        "groupRemainingAtExit": []
+      },
+      "tests": "18 failed | 2 passed | 2915 skipped (2935)",
+      "restored": {
+        "src/engine/dsl/conditions.ts": "5397dbc8f8d1ac327d2413921ade4e7e140816a9de57c8673282cc9e23cc7027",
+        "src/engine/effects/primitives/contracts/top-of-deck-condition.contracts.ts": "092226fef0170c798b50bd45b749e4b8d8c783bb5ce2a8df71f0a30d7f162632"
+      }
+    },
+    "negative-unsafe-empty-draw-v01": {
+      "receipt": {
+        "argv": [
+          "./node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "top-of-deck condition"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+        "start": "2026-10-13T23:21:57.641515+00:00",
+        "end": "2026-10-13T23:22:04.235611+00:00",
+        "exit": 1,
+        "wallSeconds": 6.594038291979814,
+        "pid": 10860,
+        "pgid": 10860,
+        "load": "{ 25.74 11.94 7.81 }",
+        "groupRemainingAtExit": []
+      },
+      "tests": "2 failed | 18 passed | 2915 skipped (2935)",
+      "restored": {
+        "src/engine/dsl/conditions.ts": "5397dbc8f8d1ac327d2413921ade4e7e140816a9de57c8673282cc9e23cc7027",
+        "src/engine/effects/primitives/contracts/top-of-deck-condition.contracts.ts": "092226fef0170c798b50bd45b749e4b8d8c783bb5ce2a8df71f0a30d7f162632"
+      }
+    },
+    "negative-wrong-side-v01": {
+      "receipt": {
+        "argv": [
+          "./node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "top-of-deck condition"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+        "start": "2026-10-13T23:21:42.076383+00:00",
+        "end": "2026-10-13T23:21:45.309267+00:00",
+        "exit": 1,
+        "wallSeconds": 3.23282662499696,
+        "pid": 9508,
+        "pgid": 9508,
+        "load": "{ 25.38 11.16 7.47 }",
+        "groupRemainingAtExit": []
+      },
+      "tests": "16 failed | 4 passed | 2915 skipped (2935)",
+      "restored": {
+        "src/engine/dsl/conditions.ts": "5397dbc8f8d1ac327d2413921ade4e7e140816a9de57c8673282cc9e23cc7027",
+        "src/engine/effects/primitives/contracts/top-of-deck-condition.contracts.ts": "092226fef0170c798b50bd45b749e4b8d8c783bb5ce2a8df71f0a30d7f162632"
+      }
+    },
+    "negative-wrong-top-v01": {
+      "receipt": {
+        "argv": [
+          "./node_modules/.bin/vitest",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "top-of-deck condition"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-514-top-deck",
+        "start": "2026-10-13T23:21:45.380020+00:00",
+        "end": "2026-10-13T23:21:49.162766+00:00",
+        "exit": 1,
+        "wallSeconds": 3.7826904579997063,
+        "pid": 9548,
+        "pgid": 9548,
+        "load": "{ 25.99 11.52 7.62 }",
+        "groupRemainingAtExit": []
+      },
+      "tests": "12 failed | 8 passed | 2915 skipped (2935)",
+      "restored": {
+        "src/engine/dsl/conditions.ts": "5397dbc8f8d1ac327d2413921ade4e7e140816a9de57c8673282cc9e23cc7027",
+        "src/engine/effects/primitives/contracts/top-of-deck-condition.contracts.ts": "092226fef0170c798b50bd45b749e4b8d8c783bb5ce2a8df71f0a30d7f162632"
+      }
+    }
+  },
+  "fuzz": {
+    "totals": {
+      "games": 100,
+      "steps": 48272,
+      "prompts": 985,
+      "reruns": 90,
+      "included": 1354,
+      "exercised": 772
+    },
+    "actualResolutionStats": {
+      "5e5e5e5e-0000-4000-8000-000000051400|player": {
+        "resolutions": 93,
+        "onePoints": 31,
+        "twoPoints": 62,
+        "draws": 0,
+        "materialized": 0,
+        "silent": 0,
+        "fatigue": 0
+      },
+      "5e5e5e5e-0000-4000-8000-000000051403|player": {
+        "resolutions": 92,
+        "onePoints": 0,
+        "twoPoints": 0,
+        "draws": 63,
+        "materialized": 27,
+        "silent": 2,
+        "fatigue": 0
+      },
+      "5e5e5e5e-0000-4000-8000-000000051400|enemy": {
+        "resolutions": 79,
+        "onePoints": 30,
+        "twoPoints": 49,
+        "draws": 0,
+        "materialized": 0,
+        "silent": 0,
+        "fatigue": 0
+      },
+      "5e5e5e5e-0000-4000-8000-000000051401|player": {
+        "resolutions": 111,
+        "onePoints": 35,
+        "twoPoints": 76,
+        "draws": 0,
+        "materialized": 0,
+        "silent": 0,
+        "fatigue": 0
+      },
+      "5e5e5e5e-0000-4000-8000-000000051402|player": {
+        "resolutions": 84,
+        "onePoints": 0,
+        "twoPoints": 0,
+        "draws": 53,
+        "materialized": 26,
+        "silent": 5,
+        "fatigue": 0
+      },
+      "5e5e5e5e-0000-4000-8000-000000051402|enemy": {
+        "resolutions": 80,
+        "onePoints": 0,
+        "twoPoints": 0,
+        "draws": 48,
+        "materialized": 30,
+        "silent": 2,
+        "fatigue": 0
+      },
+      "5e5e5e5e-0000-4000-8000-000000051401|enemy": {
+        "resolutions": 80,
+        "onePoints": 25,
+        "twoPoints": 55,
+        "draws": 0,
+        "materialized": 0,
+        "silent": 0,
+        "fatigue": 0
+      },
+      "5e5e5e5e-0000-4000-8000-000000051403|enemy": {
+        "resolutions": 89,
+        "onePoints": 0,
+        "twoPoints": 0,
+        "draws": 55,
+        "materialized": 32,
+        "silent": 2,
+        "fatigue": 0
+      }
+    },
+    "qualified": "Observed real resolved own UUID events in primary playFuzzGame step observers, not inferred inclusion. Generic point/draw/materialized events in a resolving step may also include resulting triggers; no branch-frequency or coverage threshold assertion."
+  },
+  "failurePaths": {
+    "midStepError": "Both actor rollback cases resolve actual conditional score then throw in synthetic hook. Fold keeps preceding committed play/stack, score0, unchanged deck, no resolved/points publication.",
+    "reload": "Both actor real opposing response and stack-boundary serializeState reload; public fold modal in-flight JSON reload yields identical stateHash/events.",
+    "partialWrite": "Pure condition has no write; actual following gainPoints rollback on failing step preserves committed prior play. No asynchronous or persisted condition truth exists.",
+    "invalidStaleInput": "Both actors modal public fold rejects illegal answer, foreign actor, concurrent intent; cancel keeps original committed state and restart rejects stale prompt before current valid answer.",
+    "concurrentActors": "Both actors public fold stepInFlight/notYourPrompt rejection; no independent condition writer exists."
+  },
+  "hiddenInformation": "Both side views before/after pure read; two hidden top orders same views/legals. Two fixed sample random inputs for each viewer, conditions checked against their own sampled printing and real public pass result; no requirement to reproduce secret real truth. Known top after actual Foresee preserved in sample.",
+  "uuidAllocation": {
+    "reserved": [
+      "5e5e5e5e-0000-4000-8000-000000051400",
+      "5e5e5e5e-0000-4000-8000-000000051401",
+      "5e5e5e5e-0000-4000-8000-000000051402",
+      "5e5e5e5e-0000-4000-8000-000000051403",
+      "5e5e5e5e-0000-4000-8000-000000051404",
+      "5e5e5e5e-0000-4000-8000-000000051405",
+      "5e5e5e5e-0000-4000-8000-000000051406",
+      "5e5e5e5e-0000-4000-8000-000000051407",
+      "5e5e5e5e-0000-4000-8000-000000051408",
+      "5e5e5e5e-0000-4000-8000-000000051409",
+      "5e5e5e5e-0000-4000-8000-00000005140a",
+      "5e5e5e5e-0000-4000-8000-00000005140b",
+      "5e5e5e5e-0000-4000-8000-00000005140c",
+      "5e5e5e5e-0000-4000-8000-00000005140d",
+      "5e5e5e5e-0000-4000-8000-00000005140e",
+      "5e5e5e5e-0000-4000-8000-00000005140f"
+    ],
+    "actual": [
+      "5e5e5e5e-0000-4000-8000-000000051400",
+      "5e5e5e5e-0000-4000-8000-000000051401",
+      "5e5e5e5e-0000-4000-8000-000000051402",
+      "5e5e5e5e-0000-4000-8000-000000051403",
+      "5e5e5e5e-0000-4000-8000-000000051404",
+      "5e5e5e5e-0000-4000-8000-000000051405",
+      "5e5e5e5e-0000-4000-8000-000000051406",
+      "5e5e5e5e-0000-4000-8000-000000051407",
+      "5e5e5e5e-0000-4000-8000-000000051408",
+      "5e5e5e5e-0000-4000-8000-000000051409",
+      "5e5e5e5e-0000-4000-8000-00000005140a",
+      "5e5e5e5e-0000-4000-8000-00000005140b",
+      "5e5e5e5e-0000-4000-8000-00000005140c",
+      "5e5e5e5e-0000-4000-8000-00000005140d"
+    ],
+    "readOnlyLexicalCollisionScan": "src and docs/plan exact0x51400..f, UUIDs, builder and contract path empty before writes; parent native all-status admitted/intended union964 soleown514 hit before reservation.",
+    "catalogHasNames": false
+  },
+  "validationScope": "Pure additive Condition arm/builder/member and typedStaticCondition exclusion; no runner/view/state/fold/fuzzer/test infra cross-cutting rewrite; full review not required. Existing eager runner supplies20cases. No inventory pending capability or production entity authored, coverage gating treated unchanged content-to-engine regression.",
+  "browserQA": "N/A under exact parent write admission: no registered UI entity/prompt/event/status/presentation surface; public fold/view/reload/rollback headless QA is actual. Original150 retains production leaf browser/full content recipe. No browser/server/provider resources started.",
+  "findingQualification": "Initial focusedv01four fixture errors andv02two errors fixed. v01 sampled hidden opponent source legitimately differs, KnownCardView.id actual API; v02 passUntil pending-decision requirement replaced by public apply pass from existing sampled priority. No source widening/engine defect. One scratch fuzz summary used guessed points instead of actual PointsScoredEvent.amount and failed before evidence write; corrected actual exported schema. Reviewv01 aggregate299/6321passed but3fixture readonlyvariant errors; replaced whole initial instance withsamevariant beforecalls, final reviewv02 covers exactbytes. No production code changed. Earlier focused logs missing local-art warnings arose in disposable prepare/restore phases; no source defect asserted.",
+  "resources": "All implementation validator PGs terminal and freshgone; no devserver/browser/provider/reviewer/resources started by helper. Parent required CLI core review/native delivery remain separate.",
+  "validationChronology": {
+    "earlyContractSHA256": "092226fef0170c798b50bd45b749e4b8d8c783bb5ce2a8df71f0a30d7f162632",
+    "focusedMutantsAndFuzz": "Focusedv03/counterfactuals/fuzz100 predates only three readonly fixture setup hygiene changes: replace complete initial CardInstance rather than assigning readonly variant, same data before engine calls. Production3files unchanged throughout. Exact finally restoration proves the earlier mutated baseline, not final later-hygiene contract bytes.",
+    "finalReviewContractSHA256": "4c0c20154a0a1d3377db3ce26fda33677a2aaa30cf714de56f732e4991edf66c",
+    "finalReview": "review-v02 executed current frozen final4source hashes; aggregate299/6321 allpass, typings catchStaticCondition exclusion via ts-expect-error.",
+    "fuzzSelections": "100 original playFuzzGame games; separate replayFinalHash all100; replayInteractively ordinals0,10,...90 (10games),90reruns total; trackingfalse duringreplays means708actualResolutionrows count onlyoriginal games. Silent resolution rows may reflect emptydeck/capacity; no branch-frequency attribution is asserted."
+  },
+  "freshGroupsCheck": {
+    "at": "2026-10-13T23:27:34.815617+00:00",
+    "groups": [
+      "10319",
+      "10860",
+      "14601",
+      "26242",
+      "30709",
+      "44404",
+      "75985",
+      "76833",
+      "77587",
+      "79473",
+      "9505",
+      "9508",
+      "9548",
+      "9867"
+    ],
+    "remaining": []
+  },
+  "hostLoadQualification": "Friction hostLoad22.54 is actual review-v02 command-start sysctl1minute observation {22.54 17.61 10.97}; review step-start logs record22.5361328125. Whole-window trace/mean and low-load suite certification unknown; no performance budget or speed claim."
+}

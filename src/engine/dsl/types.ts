@@ -383,6 +383,8 @@ export type Condition =
   | { readonly cond: "sourceWasReclaimed" }
   /** "If this card is in your void": the source instance is in `zone`. An emblem is always in play. */
   | { readonly cond: "sourceIn"; readonly zone: Zone }
+  /** The non-empty deck's top card matches the filter when the condition is checked, without revealing it. */
+  | { readonly cond: "topOfDeck"; readonly player: PlayerRef; readonly filter: CardFilter }
   /** Count the player's cards in `zone` matching `filter`, within the inclusive bounds. */
   | { readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: CountedZone; readonly filter?: CardFilter; readonly atLeast: number; readonly atMost?: number }
   | { readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: CountedZone; readonly filter?: CardFilter; readonly atLeast?: number; readonly atMost: number };
@@ -409,7 +411,7 @@ type StaticCountBounds =
 
 /** A live static condition uses public inputs; optional payments and hidden-card filters require a resolving effect. */
 export type StaticCondition =
-  | Exclude<Condition, { readonly cond: "controls" | "costPaid" | "cardsIn" }>
+  | Exclude<Condition, { readonly cond: "controls" | "costPaid" | "cardsIn" | "topOfDeck" }>
   | { readonly cond: "controls"; readonly selector: StaticCharacterSelector; readonly atLeast: number; readonly atMost?: number }
   | ({ readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: "void"; readonly filter?: CardFilter } & StaticCountBounds)
   | ({ readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: "hand" | "deck"; readonly filter?: never } & StaticCountBounds);
