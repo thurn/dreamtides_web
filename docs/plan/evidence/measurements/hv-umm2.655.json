@@ -1,0 +1,226 @@
+{
+  "bead": "hv-umm2.655",
+  "base": "eb51fb2abab449e4e1850f18b682ef1f5fd689af",
+  "implementationStart": {
+    "start": "2026-10-13T23:36:29.260139+00:00",
+    "scope": "root parent implements exact documentation-only follow-up; actual post-claim admission/setup/research/check interval, no child dispatch",
+    "modelStart": "unknown"
+  },
+  "endpoint": "2026-10-13T23:41:04.324182+00:00",
+  "clockQualification": "Actual root self-implementation post-claim start through immediately-pre-Git evidence clock, including setup/admission/research/checks; actual Git interval and conservative gap retained outside immutable commit in source-terminal proof. Model sampling remains unknown.",
+  "finding": {
+    "sourceBead": "hv-umm2.514",
+    "reviewModel": "gpt-5.6-sol",
+    "routing": "temporary human policy",
+    "source": "dcc7e8f960adfa8973acec2ef462dfff1079f04c",
+    "tested": "eb51fb2abab449e4e1850f18b682ef1f5fd689af",
+    "priority": "P2",
+    "disposition": "accepted",
+    "location": "docs/plan/engine-design.md:1702",
+    "repair": "exact registered Conditions entry and bounded existing-composition explanation"
+  },
+  "sourceReadFirst": [
+    "src/engine/dsl/types.ts Condition/StaticCondition",
+    "src/engine/dsl/builders.ts topCardMatches/topOfDeck",
+    "src/engine/dsl/conditions.ts topOfDeck case",
+    "docs/rules.md zone references",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.514-1.md"
+  ],
+  "ownedDocSHA256": "144f7bcac4301cf04bf07349b4e771a6387f64a2165bce4bad4e7efaf650ec58",
+  "validationReceipts": {
+    "install-v01": {
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-655-top-card-catalog",
+      "start": "2026-10-13T23:36:42.315526+00:00",
+      "end": "2026-10-13T23:36:45.171744+00:00",
+      "exit": 0,
+      "wallSeconds": 2.8561124169791583,
+      "pid": 53458,
+      "pgid": 53458,
+      "load": "{ 8.37 13.15 12.36 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-v02": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "scripts/friction-triggers.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-655-top-card-catalog",
+      "start": "2026-10-13T23:38:56.836946+00:00",
+      "end": "2026-10-13T23:39:05.007153+00:00",
+      "exit": 0,
+      "wallSeconds": 8.170151291007642,
+      "pid": 58680,
+      "pgid": 58680,
+      "load": "{ 4.47 10.13 11.27 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-655-top-card-catalog",
+      "start": "2026-10-13T23:39:39.671304+00:00",
+      "end": "2026-10-13T23:39:43.383422+00:00",
+      "exit": 0,
+      "wallSeconds": 3.712035999982618,
+      "pid": 59681,
+      "pgid": 59681,
+      "load": "{ 3.57 9.11 10.83 }",
+      "groupRemainingAtExit": []
+    },
+    "dispatch-release-v01": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "release",
+        "status"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T23:37:41.943427+00:00",
+      "end": "2026-10-13T23:37:42.180826+00:00",
+      "exit": 0,
+      "wallSeconds": 0.2372905840165913,
+      "pid": 56945,
+      "pgid": 56945,
+      "load": "{ 7.00 11.93 11.95 }",
+      "groupRemainingAtExit": []
+    },
+    "worktree-create-v01": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "worktree",
+        "create",
+        "wt/hv-umm2-655-top-card-catalog",
+        "--json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T23:36:29.386210+00:00",
+      "end": "2026-10-13T23:36:30.356513+00:00",
+      "exit": 0,
+      "wallSeconds": 0.9701713329995982,
+      "pid": 52628,
+      "pgid": 52628,
+      "load": "{ 8.51 13.34 12.41 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-655-top-card-catalog",
+      "start": "2026-10-13T23:39:35.266954+00:00",
+      "end": "2026-10-13T23:39:35.499224+00:00",
+      "exit": 0,
+      "wallSeconds": 0.23218970801099204,
+      "pid": 59433,
+      "pgid": 59433,
+      "load": "{ 3.71 9.23 10.89 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-v01": {
+      "argv": [
+        "node",
+        "--test",
+        "scripts/friction-triggers.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-655-top-card-catalog",
+      "start": "2026-10-13T23:38:24.858891+00:00",
+      "end": "2026-10-13T23:38:25.002755+00:00",
+      "exit": 1,
+      "wallSeconds": 0.1437825419998262,
+      "pid": 58001,
+      "pgid": 58001,
+      "load": "{ 5.70 10.93 11.58 }",
+      "groupRemainingAtExit": []
+    },
+    "dispatch-friction-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-655-top-card-catalog",
+      "start": "2026-10-13T23:37:42.269893+00:00",
+      "end": "2026-10-13T23:37:42.501525+00:00",
+      "exit": 0,
+      "wallSeconds": 0.23155408300226554,
+      "pid": 56972,
+      "pgid": 56972,
+      "load": "{ 7.00 11.93 11.95 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-precommit-v01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-655-top-card-catalog",
+      "start": "2026-10-13T23:40:12.437732+00:00",
+      "end": "2026-10-13T23:40:12.503854+00:00",
+      "exit": 0,
+      "wallSeconds": 0.06603320798603818,
+      "pid": 60542,
+      "pgid": 60542,
+      "load": "{ 3.30 8.52 10.56 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0
+  },
+  "scope": "Documentation only; no runtime/content/test/inventory/configuration/UI change. Existing focused friction/schema, review and Knip; no new test/full/heavy/browser/code-review required. Original150 full production recipe retained.",
+  "failurePaths": "N/A for runtime recovery: no runtime/action/persisted schema changes; source preservation, clean staged diff, numeric schema and native exact candidate identity are checked. Prior514 public recovery contracts remain intact.",
+  "nativeAdmission": "/tmp/root655-20261013/write-admission-v01.json; actual native guard before all setup, union141/4608 tracked baseline; no active same-row owner.",
+  "resources": "Every completed recorded command process group absent; no helper/reviewer/server/browser/provider or heavyweight command started.",
+  "findingQualification": "Initial focused-v01 used node --test on a Vitest module; exited1 before executing cases. Correct runner is configured npm test. No implementation or test changes for this caller error.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "final npm run review command-start sysctl one-minute load",
+        "observation": "{ 3.71 9.23 10.89 }",
+        "at": "2026-10-13T23:39:35.266954+00:00",
+        "reviewInnerStepLoad": 3.70556640625
+      }
+    }
+  },
+  "validationScope": {
+    "focused": "existing friction-triggers Vitest fixture checks through configured npm test; no new tests",
+    "review": "Documentation-only npm run review executes changed friction-record validation,756records41historicalunknowns; no runtime/type/lint/test coverage claimed from this quick command",
+    "knip": "required existing unused-code check, documentation source remains unchanged",
+    "browserFullReview": "N/A: no runtime/presentation/code/test/configuration change"
+  },
+  "preservation": {
+    "trackedCount": 4608,
+    "unexpectedChanges": [],
+    "exactPaths": [
+      "docs/plan/engine-design.md",
+      "docs/plan/evidence/friction/hv-umm2.655.json",
+      "docs/plan/evidence/measurements/hv-umm2.655.json",
+      "docs/plan/evidence/pre-existing/hv-umm2.655.md"
+    ],
+    "unrelatedArchitectureTextPreserved": true,
+    "codeTestDelta": 0,
+    "documentSHA256": "144f7bcac4301cf04bf07349b4e771a6387f64a2165bce4bad4e7efaf650ec58"
+  },
+  "focusedCases": 109,
+  "finalClock": {
+    "at": "2026-10-13T23:41:04.324182+00:00",
+    "kind": "actual pre-Git evidence clock; not a claimed Git timestamp"
+  }
+}
