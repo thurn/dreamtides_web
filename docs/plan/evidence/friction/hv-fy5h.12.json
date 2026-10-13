@@ -1,0 +1,21 @@
+{
+  "bead": "hv-fy5h.12",
+  "phase": 7,
+  "implementMin": 16.136768383333333,
+  "implementWindow": {
+    "start": "2026-10-13T04:26:01.035028+00:00",
+    "end": "2026-10-13T04:42:09.241131+00:00"
+  },
+  "localValidationS": {
+    "review": 0.34627062499930616,
+    "knip": 5.169819667004049,
+    "schema": 0.10009270800219383
+  },
+  "hostLoad": 6.1,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

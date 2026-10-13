@@ -1,0 +1,403 @@
+{
+  "bead": "hv-fy5h.12",
+  "scope": "Evidence-only read-only AI capability and scheduling audit",
+  "stage": "Required evidence-only audit checks complete; practical near-commit freeze; actual Git process endpoint retained separately",
+  "base": "03efe7bf5495a7600910aae76b8cd463b2b232b4",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/hv-fy5h-12-ai-lanes-audit",
+  "nativeClaim": "2026-10-13T04:21:21Z",
+  "dispatch": "2026-10-13T04:26:01.035028+00:00",
+  "modelStart": null,
+  "evidenceWriteAck": {
+    "at": "2026-10-13T04:36:53.998964+00:00",
+    "draftSHA256": "6bd175aefb08c781f011f4a39b89be365312e374e35418c8a9f9437ccc264d95",
+    "authority": "Stage2 evidenceONLY: uniqueparallelism/hv-fy5h.12.md +friction/hv-fy5h.12.json +measurements/hv-fy5h.12.json; no pre-existingfile absentactualoutofscopeissue. PreserveStage1draft/rawsource/nativeproofs underignoredownartifactshashes. Add explicitconditionfortype-only E/S-CONTRACT viablemeaningfulcompile-timepublicconsumer/sanctionedexistingentry, otherwisefoldseaminto firstfunctionalchild; no artificial tests/consumer/configwaiver. Allruntime/graph/page/source/test/catalog/worker/tournament/configunchanged.",
+    "checks": "Requirednpm run review +npm run knip andevidence schema, no new tests/browser/tourney/heavy/full. Root/branchdispatcher+uniquerawrecorders exactargv/cwd/time/pid/load; testdelta0. FreezeStage2NOcommit thenSTOP.",
+    "acceptedBoundaries": "Nooriginaledgesremoved/acceptanceweakened, everydescendantinheritsPhase5gate46, independentM/Pbuild onlycompleted3/4, C-PREPbeforeoriginalcalibrated5/6reports, sequential5\u21926\u21927/8championiterations retained; data/registration/workeroneowner, immutablepolicyclosure+weights notmutableimports; no new provenmissinggap/filing. All adoptionfuture606afterfiveaudits+requiredfreshcoldreview/freshnativeactivebodyaudit."
+  },
+  "provisionalEndpoint": "2026-10-13T04:42:09.241131+00:00",
+  "implementWindowQualification": "Post-claim dispatch to practical evidence freeze immediately before schema, staging and normal-dated Git commit; includes research, coordination and verification, not CPU/productive/provider-start time. Actual Git process start/end/wall and cutoff gap are retained in ignored own terminal delivery proof.",
+  "parentClaimToDispatchSeconds": 280.035028,
+  "rawProofs": {
+    "ignoredOwnArtifact": "artifacts/qa/hv-fy5h.12/ai-lanes-audit",
+    "manifest": {
+      "native/active-before-claim.json": {
+        "sha256": "770b87875fdd55421bd289e1c7f79f006b484c5ccbe9f337495905905c28899f",
+        "bytes": 140318
+      },
+      "native/claim.json": {
+        "sha256": "9d18eaaf561aded5d6884fe9dc963682d15b138e3db4f1f325b3a62acc226994",
+        "bytes": 5016
+      },
+      "native/dispatch-before.json": {
+        "sha256": "62c805c63c842ab3a86948f632cc5a015be4112a22728ca915bf6ee7af61ce3c",
+        "bytes": 144
+      },
+      "native/evidence-write-ack-v01.json": {
+        "sha256": "383d33408e43b95653e103ae3749dae411348abd1c1496071654f21ee9bcfecd",
+        "bytes": 1336
+      },
+      "native/implementation-brief.md": {
+        "sha256": "a4def0c121f9a0828b41a431995b9bcc960093f22781e46c4c77807cf9c18e43",
+        "bytes": 9004
+      },
+      "native/integration-native.json": {
+        "sha256": "1c23f57ee4dc70dd5d7cbfa94968b8a1bae405b582b29380169fd6ab862b64a0",
+        "bytes": 155521
+      },
+      "native/intended-open-native.json": {
+        "sha256": "7a8a4ff4c8137b55cc39bfc3e8fcc2122dfab4f2c03d66bf637a3fe5c516fe95",
+        "bytes": 288791
+      },
+      "native/native-hv-fy5h.1.json": {
+        "sha256": "94e15d7033495bf7514100eb9bae50a6e2a5cf3fb9d31e7c00376e6be0d708af",
+        "bytes": 62468
+      },
+      "native/native-hv-fy5h.10.json": {
+        "sha256": "24fe51a29c3f623d6d1dd0c8603d379b71a96beec09a2dbaa870a88123484e9c",
+        "bytes": 25486
+      },
+      "native/native-hv-fy5h.11.json": {
+        "sha256": "13093e9eab9e6e31aa0710ae6895f8efd8d221824a4882c899b93df0ffeb3034",
+        "bytes": 17578
+      },
+      "native/native-hv-fy5h.2.json": {
+        "sha256": "a553d2a4064403d7baea2cfc7631db09ec9d7414670c5ca4da3b2b772c5bc675",
+        "bytes": 14850
+      },
+      "native/native-hv-fy5h.3.json": {
+        "sha256": "62a913683caea5caab65b0207e91ccaf2f1086b6afcef4f762497223dd48758d",
+        "bytes": 81289
+      },
+      "native/native-hv-fy5h.4.json": {
+        "sha256": "1c296e55d54f293f73a2be43591199617774e011754664b6a6b18f6aada8cac6",
+        "bytes": 5527
+      },
+      "native/native-hv-fy5h.5.json": {
+        "sha256": "9aa8a062a8aa98e07c2c0f5cdd2ab63823642b5fd720bb1a0b60cfd996e605cc",
+        "bytes": 4553
+      },
+      "native/native-hv-fy5h.6.json": {
+        "sha256": "f5ed7b2dd0cf3c2d7ebacc6c4b8e5de588dfd63b18a68141963b735c3820d1e3",
+        "bytes": 6217
+      },
+      "native/native-hv-fy5h.7.json": {
+        "sha256": "72722a47198424ed1acdfc3d87c0a6ab3b70e9d4eb5cbb2c230bb96312a4c020",
+        "bytes": 52342
+      },
+      "native/native-hv-fy5h.8.json": {
+        "sha256": "d6f3fc29cea16677e7bf80e7da68c8cd36a125481788ca53df88f038c63f1915",
+        "bytes": 6150
+      },
+      "native/native-hv-fy5h.9.json": {
+        "sha256": "c5bbf6db9eddcddac0650c1d7ee682905d1af4f46ec23aa7cd7b03785d70ba4b",
+        "bytes": 5490
+      },
+      "native/phase7-children-native.json": {
+        "sha256": "3fbc68b9cd686d998f1842b9b03698796a8fe55d5a2c57ab974dba1b478be501",
+        "bytes": 43875
+      },
+      "native/project-open-native.json": {
+        "sha256": "777fdb45131c251ab2661fdf2b87202a34087d7d54df05fa054bf3017ea5ec58",
+        "bytes": 1290647
+      },
+      "native-ai-scope-ledger.json": {
+        "sha256": "92f5382b2c4587f795a4ec408627f79a89673fa41b38b0fd9e46e0ae6ca8b45c",
+        "bytes": 19400
+      },
+      "source-native-proof.json": {
+        "sha256": "da565c04f01b69d1bd88f2f16bb363242314acbdbe9ae72bbc7517227ec23733",
+        "bytes": 33377
+      },
+      "stage1-matrix.md": {
+        "sha256": "6bd175aefb08c781f011f4a39b89be365312e374e35418c8a9f9437ccc264d95",
+        "bytes": 29220
+      }
+    }
+  },
+  "checks": {
+    "review": {
+      "argv": [
+        "python3",
+        "/tmp/rootfy5h12-20261013/in-owned-worktree.py",
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-fy5h-12-ai-lanes-audit",
+      "start": "2026-10-13T04:38:11.168454+00:00",
+      "end": "2026-10-13T04:38:11.514816+00:00",
+      "exit": 0,
+      "wallSeconds": 0.34627062499930616,
+      "pid": 15889,
+      "pgid": 15889,
+      "load": "{ 6.10 7.27 6.98 }",
+      "groupRemainingAtExit": []
+    },
+    "knip": {
+      "argv": [
+        "python3",
+        "/tmp/rootfy5h12-20261013/in-owned-worktree.py",
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-fy5h-12-ai-lanes-audit",
+      "start": "2026-10-13T04:38:16.468029+00:00",
+      "end": "2026-10-13T04:38:21.638000+00:00",
+      "exit": 0,
+      "wallSeconds": 5.169819667004049,
+      "pid": 16341,
+      "pgid": 16341,
+      "load": "{ 5.93 7.21 6.96 }",
+      "groupRemainingAtExit": []
+    },
+    "schema": {
+      "argv": [
+        "python3",
+        "/tmp/rootfy5h12-20261013/in-owned-worktree.py",
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-fy5h-12-ai-lanes-audit",
+      "start": "2026-10-13T04:38:49.044725+00:00",
+      "end": "2026-10-13T04:38:49.144898+00:00",
+      "exit": 0,
+      "wallSeconds": 0.10009270800219383,
+      "pid": 18708,
+      "pgid": 18708,
+      "load": "{ 5.10 6.87 6.84 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "runtimeActions": {
+    "testsAdded": 0,
+    "testsRequested": 0,
+    "browser": 0,
+    "tournaments": 0,
+    "fuzz": 0,
+    "heavy": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Required npm run review wrapper starting one-minute load; not attributed to earlier research or later checks",
+        "timestamp": "2026-10-13T04:38:11.168454+00:00",
+        "raw": "{ 6.10 7.27 6.98 }"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "scope": "Stage2 evidence write",
+      "timestamp": "2026-10-13T04:38:07.134348+00:00",
+      "raw": "{ 6.37 7.34 7.00 }",
+      "oneMinute": 6.37
+    },
+    {
+      "scope": "review wrapper start",
+      "timestamp": "2026-10-13T04:38:11.168454+00:00",
+      "raw": "{ 6.10 7.27 6.98 }",
+      "oneMinute": 6.1
+    },
+    {
+      "scope": "knip wrapper start",
+      "timestamp": "2026-10-13T04:38:16.468029+00:00",
+      "raw": "{ 5.93 7.21 6.96 }",
+      "oneMinute": 5.93
+    },
+    {
+      "scope": "schema wrapper start",
+      "timestamp": "2026-10-13T04:38:49.044725+00:00",
+      "raw": "{ 5.10 6.87 6.84 }",
+      "oneMinute": 5.1
+    }
+  ],
+  "friction": [],
+  "uncertainties": [
+    "Provider/model start unknown",
+    "Active peer and advancing staging differences not inspected through peer worktrees",
+    "Type-only seam certification must be honestly viable or folded into first functional child",
+    "Calibrated per-policy budget representation remains future source-first decision"
+  ],
+  "mutations": "Only own three tracked evidence files and ignored own raw proof archive; no native/graph/page/source/test/catalog/config changes",
+  "futureReviews": "606 schedule review before mutation; Planner core-review and Phase7 gate review preserved; current temporary Sol routing expires2026-10-14T01:00:00Z",
+  "sourceProofRechecked": {
+    "at": "2026-10-13T04:38:46.324698+00:00",
+    "files": 46,
+    "allMatchCertifiedBase": true
+  },
+  "rawProcessReceipts": [
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/npm-install-01.started.json",
+      "sha256": "88b3467316b8d04e46180dbc7cd72c40d36b5d4e8117a5be1080cd73efe2052b",
+      "bytes": 236
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/npm-install-01.receipt.json",
+      "sha256": "d99a8f6eec792bba2d0dfa551496819e14ee85118c363db032575dfac19d5f05",
+      "bytes": 361
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/npm-install-01.stdout",
+      "sha256": "bf784d72861f4448349e5a503908a7b6e599f51236bf2a996b35ad4940cfd92c",
+      "bytes": 326
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/npm-install-01.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/worktree-create-01.started.json",
+      "sha256": "147aad49319eb14714ecf8b84ca58e4d7757f513d124ccf0150cdcc289bdf619",
+      "bytes": 278
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/worktree-create-01.receipt.json",
+      "sha256": "e05b663fcd9c1f0a80e54182ddcee2450db88f3905bd177ae61db0ae6b444856",
+      "bytes": 403
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/worktree-create-01.stdout",
+      "sha256": "d4267c259b5792d23b869eb8f5c72d467eb07fa9e7d507226b1364a97ed9bd32",
+      "bytes": 337
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/worktree-create-01.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/dispatch-friction-01.started.json",
+      "sha256": "cd3bb031b6cf876d3fbcc370aed650a0fc54b6c722c13d2464c6555c533031e7",
+      "bytes": 257
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/dispatch-friction-01.receipt.json",
+      "sha256": "632bd46fd3f175ea5e5db0fdaa235b2561381d5e46390e30ce7fb648c6e4cb88",
+      "bytes": 383
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/dispatch-friction-01.stdout",
+      "sha256": "62e315e0908b504f84a54fae4ba1f9b5bc3a95a8e1c85cb345b7df15f9cf6ace",
+      "bytes": 18786
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/dispatch-friction-01.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-evidence-write-v01.started.json",
+      "sha256": "9c18793715294bc005dcb0d2882bdd61e6dfe1cea0192042e4740b8ef8f159d3",
+      "bytes": 342
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-evidence-write-v01.receipt.json",
+      "sha256": "287ceb5ba7ec8773a1ba2e771023eb4138a4438d4931fa445f8fb253bc296b92",
+      "bytes": 468
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-evidence-write-v01.stdout",
+      "sha256": "50e755403ab4c87ef6b848765903ea47ca1826656e6576d331f05b675da871c9",
+      "bytes": 680
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-evidence-write-v01.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-review-v01.started.json",
+      "sha256": "d72cb3ff26b58d12b6e03a29e689ed01e1319bfae59318786e242ee8a2b7dda4",
+      "bytes": 313
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-review-v01.receipt.json",
+      "sha256": "b5f4d2a6b03ba80121cf0912414011b0edae3aad6aa981ef250edd66c1af21db",
+      "bytes": 439
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-review-v01.stdout",
+      "sha256": "d1b4f475d2572b1954cb60a8a08a97d44154c29392c846a4535d4843e3c9a8c6",
+      "bytes": 343
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-review-v01.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-knip-v01.started.json",
+      "sha256": "c1d574571375a130a382e8978e34f27710fcfae6415313be668df8e3a7e521e1",
+      "bytes": 311
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-knip-v01.receipt.json",
+      "sha256": "ca31cb9c9b7fd695fb42bae161b8ced700f8e6c59e382ec7a31cee1c81c6c0b1",
+      "bytes": 435
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-knip-v01.stdout",
+      "sha256": "2ffb4f18c70ff6aad470a2594136383539128f84facfa87382d85927c7d75cbd",
+      "bytes": 1129
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-knip-v01.stderr",
+      "sha256": "0350fd18411e3aa9bb6f4efeaa46677509c3724505719ea4488248d661abbf36",
+      "bytes": 48133
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-evidence-finalize-v01.started.json",
+      "sha256": "37e8a433ca9c74e20a664fb2df8e1382a654e988a6890b81746f1aa221ffb56b",
+      "bytes": 345
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-evidence-finalize-v01.receipt.json",
+      "sha256": "671633b1551cc4eb2a7c9907fd19e7fda12de524c11cb725fe7ea44fc53057bf",
+      "bytes": 471
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-evidence-finalize-v01.stdout",
+      "sha256": "697d7c291ce84deb63f0ea8b2662a63ffc2b581e81926476ee3911bb82561a58",
+      "bytes": 255
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-evidence-finalize-v01.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-schema-v01.started.json",
+      "sha256": "64c14d8d543173aa6839502917388caa563ccfabf6f94e686a906427a5d3ed32",
+      "bytes": 352
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-schema-v01.receipt.json",
+      "sha256": "fc32fd8885b7fa0a6e908fc4cfb440645040b7bc1c1fc7fe6c11054d807a2a7b",
+      "bytes": 478
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-schema-v01.stdout",
+      "sha256": "ff4183c3335b19fb5174165bb368ca182a75523cfddbad2abb179c5d7f135e0d",
+      "bytes": 73
+    },
+    {
+      "file": "artifacts/qa/hv-fy5h.12/ai-lanes-audit/receipts/stage2-schema-v01.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "precommitCutoff": "2026-10-13T04:42:09.241131+00:00",
+  "implementMin": 16.136768383333333,
+  "stage3Ack": {
+    "at": "2026-10-13T04:41:08.747966+00:00",
+    "receiptSHA256": "b27c9cb9829f7f8401aa2ad2cc1414042809a7352b7e3f81d16ee146dfc041d6"
+  }
+}
