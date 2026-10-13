@@ -1,0 +1,302 @@
+{
+  "bead": "hv-umm2.583",
+  "base": "871c15a5e4ef4c9f4556f9acb834912d9dab9a0d",
+  "dispatch": {
+    "actualHostDispatch": "2026-10-13T23:15:11.435Z",
+    "call": "call_e51db8d3aa774e048e433985665c18fc",
+    "ordinal": 21637,
+    "modelStart": null,
+    "qualification": "First dispatch receipt; includes Stage 1 and parent admission. Model start is unknown."
+  },
+  "precommitCheckpoint": "2026-10-13T23:36:52.964202+00:00",
+  "actualGitEndpoint": "UNKNOWN until external Git receipt",
+  "sourceSHA256": {
+    "src/engine/dsl/types.ts": "98a6d4059db0135b8b57045273a049bfd6de6053057c55ad1704e4f72e550805",
+    "src/engine/dsl/builders.ts": "58231b54e8ef68de3d0f8b6fa657240334a0c1f9ea48e438710cc41a82114308",
+    "src/engine/effects/interpreter.ts": "ebfe920996ca3891ba315e5fcc208fa38d7704123c952558d35326ca86ecbb2a",
+    "src/engine/continuous/layers.ts": "f3310b93b3edf7b3553cccf4133ac3b0178e62d76856c23541bdf402a0de3bc5",
+    "src/content/dreamsigns/crow-396da354.ts": "e61038883e9ec32d9aeba1e2d33be27e73615ecc997f6156e0e2b143a7b83b34",
+    "src/engine/effects/primitives/contracts/random-character-reference.contracts.ts": "d9d784a7dc53c65556edc4662195b2fe3817ba5f1e6aa032c180cac1580621db",
+    "docs/rules.md": "274db611407a0d8819d5a457237135614e6ad23077de53761b6f339a8a97bf29"
+  },
+  "scope": {
+    "changed": "One RandomCharacterSpec/public builder; named resolving helper and new switch case; new static-case rejection; Crow leaf; one eagerly discovered synthetic contract; normative rule/RD.",
+    "falloutReadOnly": [
+      "effects/types.ts",
+      "effects/primitives/gain-spark.ts",
+      "continuous/resolve.ts",
+      "CardRef",
+      "all existing CharacterRef primitive consumers",
+      "state/save/view schemas",
+      "registration hubs",
+      "UI",
+      "catalogs",
+      "QA infrastructure"
+    ],
+    "D20": "Crow composes existing trigger/gain/duration with the new reference; no production scenario spec required.",
+    "primitiveFamiliesReadOnly": [
+      "awaken",
+      "banish",
+      "banishUntil",
+      "disableTriggers",
+      "dissolve",
+      "exhaust",
+      "gainControl",
+      "gainSpark/gainAdditionalSpark",
+      "giveAllTypes",
+      "grant/loseKeyword",
+      "loseAllAbilities",
+      "move",
+      "rematerialize",
+      "returnToHand",
+      "setBaseSpark",
+      "sparkModifier",
+      "triggerAbility"
+    ],
+    "auditQualification": "Exact source search finds 17 primitive source modules (gainSpark/gainAdditionalSpark and grant/loseKeyword each share a module), all using resolveCharacters/characterTarget or StaticEnv.characters. No source changes outside the exact admitted bodies."
+  },
+  "validation": {
+    "focused": {
+      "attempt1": {
+        "exit": 1,
+        "tests": {
+          "pass": 8,
+          "fail": 8
+        },
+        "testStageSeconds": 4.5,
+        "fullWall": "UNKNOWN",
+        "CPU": "UNKNOWN",
+        "rawQualification": "Original direct tool receipt was truncated; full original output was not retained. Never reenacted as an original run."
+      },
+      "attempt2": {
+        "exit": 1,
+        "pass": 14,
+        "fail": 2,
+        "testStageSeconds": 4.3,
+        "fullWall": "UNKNOWN",
+        "raw": "focused-2.log"
+      },
+      "attempt3": {
+        "exit": 0,
+        "pass": 16,
+        "testStageSeconds": 8.1,
+        "fullWall": "UNKNOWN",
+        "raw": "focused-3.log"
+      },
+      "qualification": "Final order-independent bucket contract refinement was validated by the subsequent full run."
+    },
+    "typecheckFirst": {
+      "exit": 2,
+      "cause": "Own nonexistent promptOpened EngineEvent assertion; corrected without production changes.",
+      "raw": "typecheck.log"
+    },
+    "review": {
+      "exit": 0,
+      "files": 299,
+      "tests": 6317,
+      "wall": 69.98,
+      "userCPU": 171.4,
+      "systemCPU": 21.37,
+      "raw": "review.log"
+    },
+    "knip": {
+      "exit": 0,
+      "wall": 4.42,
+      "userCPU": 3.84,
+      "systemCPU": 1.14,
+      "raw": "knip.log"
+    },
+    "full": {
+      "exit": 0,
+      "files": 380,
+      "tests": 7318,
+      "bundle": "pass",
+      "wall": 123.44,
+      "userCPU": 264.14,
+      "systemCPU": 39.24,
+      "heavyLockWait": "UNKNOWN; included in outer wall",
+      "workers": 2,
+      "raw": "full.log",
+      "qualification": "Expected injected synthetic-provider cleanup faults are infrastructure test fixtures; all tests passed and owned fixture groups settled."
+    },
+    "mutations": {
+      "raw": "mutations.json",
+      "rows": [
+        {
+          "name": "noop",
+          "exit": 1,
+          "wallSeconds": 5.077930874977028
+        },
+        {
+          "name": "wrong-side",
+          "exit": 1,
+          "wallSeconds": 4.249634457984939
+        },
+        {
+          "name": "target-filter",
+          "exit": 1,
+          "wallSeconds": 4.095425333012827
+        }
+      ],
+      "restoredInterpreterSHA256": "ebfe920996ca3891ba315e5fcc208fa38d7704123c952558d35326ca86ecbb2a",
+      "qualification": "No-op removes gain; own-side-only removes eligible opponent IDs; target filtering removes protected IDs. Final contracts compare full sampled eligible membership, not candidate order or default seeded mapping."
+    },
+    "weighted300": {
+      "exit": 0,
+      "games": 300,
+      "steps": 124764,
+      "prompts": 8136,
+      "interactiveReruns": 771,
+      "wall": 266.79,
+      "engineWall": 264.8,
+      "engineCPU": 284.9,
+      "userCPU": 283.55,
+      "systemCPU": 3.05,
+      "heavyLockWait": "UNKNOWN; included in outer wall",
+      "target": {
+        "uuid": "396da354-9f4d-4ae7-a9dc-02d1330a2678",
+        "included": 600,
+        "exercised": 3890
+      },
+      "failures": 0,
+      "raw": "fuzz300.log"
+    },
+    "preflight": {
+      "exit": 0,
+      "variants": "all",
+      "seats": "both",
+      "pass": 2,
+      "skip": 18,
+      "skipReason": "ineligibleVariant",
+      "fail": 0,
+      "wall": 1.95,
+      "raw": "preflight.log",
+      "qualification": "Initial progression, separate from ability exercise."
+    },
+    "sweep": {
+      "exit": 0,
+      "variants": "all",
+      "seats": "both",
+      "pass": 2,
+      "skip": 18,
+      "skipReason": "the card cannot take this variant",
+      "outerWall": 29.77,
+      "browserLeaseWaitMs": 7,
+      "executionMs": 29554.639833,
+      "invocation": "sweep-vOipVI",
+      "raw": "sweep.log",
+      "qualification": "Initial progression, separate from ability exercise."
+    }
+  },
+  "QA": {
+    "first": {
+      "exit": 1,
+      "invocation": "run-zoaODM",
+      "qualification": "FAIL/incomplete desktop after gain capture, before expiry/mobile: fixture demanded nonexistent engine.battleStarted. Actual 37 persisted rows contained Crow UUID, play, resolved trigger and RNG.",
+      "wall": 29.79,
+      "raw": "judged-1.log"
+    },
+    "final": {
+      "exit": 0,
+      "invocation": "run-QrgTPd",
+      "viewports": [
+        "1440x900",
+        "390x844"
+      ],
+      "captures": [
+        "crow-gain-desktop.png",
+        "crow-gain-mobile.png"
+      ],
+      "dimensions": [
+        "2880x1800",
+        "780x1688"
+      ],
+      "visuallyInspected": true,
+      "wall": 38.01,
+      "browserLeaseWaitMs": 5,
+      "scenarioMs": 35304,
+      "raw": "judged-2.log",
+      "result": "One gain on physical i51 from i51/i52; played event i53. Persisted full Crow UUID/debug source, action, trigger and random:selection draw. DOM Spark2 plus duration indicator; effect absent/RNG1 at next enemy Day; answers0; Caps[]; positive in-viewport card/control geometry and phase button hit.",
+      "qualification": "Live normal player event workflow on both viewports. Both-controller mechanics are synthetic contracts; both-seat production initialization is preflight/sweep."
+    }
+  },
+  "runtime": {
+    "allSettled": true,
+    "sweep": {
+      "runnerPID": 89364,
+      "runnerPG": 89355,
+      "serverPG": 89403,
+      "port": 5274,
+      "slot": 1,
+      "MCPsession": "10afa755-408d-420e-8885-782e89d48ce2"
+    },
+    "judgedFirst": {
+      "runnerPID": 25138,
+      "runnerPG": 25129,
+      "serverPG": 25324,
+      "port": 5274,
+      "MCPsession": "b379fb39-ea39-4ded-837d-068f3f467fa7"
+    },
+    "judgedFinal": {
+      "runnerPID": 45837,
+      "runnerPG": 45826,
+      "serverPG": 45873,
+      "port": 5274,
+      "MCPsession": "10987738-f5c1-41d7-9232-aba908753f07"
+    },
+    "cleanup": "Each runner returned terminal; known-normal provider close/RPC/transport settled; exact own provider/server records absent, owned server groups gone and port 5274 free after each. No service reset or foreign record deletion."
+  },
+  "rawEvidence": "External scratch randomCharacter583; QA invocation artifacts remain ignored. No image committed.",
+  "sourceFreeProbes": {
+    "existingAll": {
+      "exit": 0,
+      "toolWall": 1.185699,
+      "CPU": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "result": "Both seats produce exactly two gains on distinct same-printing physical instances, zero random:selection draws; valid control passes and random-single requirement fails.",
+      "raw": "before.ts plus original tool receipt"
+    },
+    "malformedFigmentProbe": {
+      "exit": 0,
+      "toolWall": 1.409075916,
+      "CPU": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "qualification": "Post-admission existing-all scratch probe reproduced the test mismatch but used the same invalid figmentCopy missing required spark:null. It establishes no production defect and is excluded from passing evidence.",
+      "raw": "figment-baseline.ts plus original tool receipt"
+    }
+  },
+  "implementationWindowQualification": "Inclusive measured host-dispatch-to-near-Git window. Git author/committer dates and command receipt are retained externally; committed future actual Git endpoint is UNKNOWN.",
+  "localCorrectionWindows": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 2.001916666666667,
+      "note": "Measured wall window from first focused prepare start 23:22:12.979Z to first review typecheck start 23:24:13.094Z. Includes correction of own invalid copy step, manually queued runner expectations, publication-prefix accounting, malformed figmentCopy fixture, nonexistent prompt event assertion, and intentional mutation probes; not a production defect or CPU attribution."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 0.8366,
+      "note": "Measured first-provider start 23:33:56.968Z to corrected-provider start 23:34:47.164Z, including failed log-predicate attempt, cleanup, persisted-log diagnosis, ignored driver correction and next startup. The normal Dreamsign lab emits debug_card_lab_loaded, not engine.battleStarted."
+    }
+  ],
+  "testDelta": {
+    "files": 1,
+    "lines": 208,
+    "tests": 16,
+    "jsdomFiles": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "value": 8.072265625,
+        "measuredFor": "Precommit evidence creation, not review-start load",
+        "method": "os.getloadavg()[0] sampled by the evidence-writing Python process",
+        "sampledAt": "2026-10-13T23:36:52.964202+00:00"
+      }
+    }
+  },
+  "nearGitCutoff": {
+    "at": "2026-10-13T23:46:43.199628+00:00",
+    "inclusiveHostDispatchToCutoffSeconds": 1891.764628,
+    "qualification": "Actual UTC sample immediately before schema validation, staging and normal Git commit; includes source-free work, parent coordination/admission, checks, QA and handoff waits. Actual Git endpoint remains UNKNOWN in committed evidence and is recorded externally after Git returns. This is elapsed wall time, not CPU."
+  }
+}

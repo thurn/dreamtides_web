@@ -30,6 +30,7 @@ import type {
   PaymentCost,
   PlayerRef,
   ReclaimAbility,
+  RandomCharacterSpec,
   SelfSpec,
   Speed,
   StackItemSelector,
@@ -312,6 +313,11 @@ export function upTo(selector: CharacterSelector, count: number): TargetSpec {
 
 export function all(selector: CharacterSelector): AllSpec {
   return { kind: "all", selector };
+}
+
+/** A uniformly random matching character in play, chosen at resolution without targeting. */
+export function randomCharacter(selector: CharacterSelector = anyCharacter()): RandomCharacterSpec {
+  return { kind: "randomCharacter", selector };
 }
 
 export function self(): SelfSpec {

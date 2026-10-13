@@ -1161,6 +1161,14 @@ figment copy, has X = 0, and a character's X returns to 0 when it leaves play.
 
 ## Targeting
 
+**Random characters.** "A random character" names one physical character in
+play, chosen uniformly among all matching characters as that instruction
+resolves. It includes characters either player controls and figments unless
+the effect restricts them. Nobody chooses it, and it is not a target, so a
+character that cannot be targeted still qualifies. With no matching character,
+that instruction does nothing and consumes no random draw; other instructions
+still happen. Each instruction reads the battlefield when it resolves.
+
 Effects choose targets using ownership and type predicates. Ownership predicates
 include characters you control, enemies (characters the opponent controls), any
 card, or another card (not the source). Type predicates include

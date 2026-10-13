@@ -1,3 +1,7 @@
+import { randomCharacter } from "../../engine/dsl/builders";
+import { triggered, untilEndOfTurn, whenYouPlay } from "../../engine/dsl/triggers";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
+import { gainSpark } from "../../engine/effects/primitives/gain-spark";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +18,6 @@ export default dreamsign({
     "1a075e25-0344-4103-997c-dd8f8a57c84e",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenYouPlay({ cardType: "event" }), gainSpark(randomCharacter(), 1, untilEndOfTurn()))],
+  verifiedText: expectedVerifiedText("When you play an event, a random character gains +1✦ until end of turn."),
 });

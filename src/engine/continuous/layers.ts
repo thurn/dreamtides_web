@@ -398,6 +398,8 @@ export class Layers {
     const self = sourceInstance(entry.source);
     const characters = (ref: CharacterRef): InstanceId[] => {
       switch (ref.kind) {
+        case "randomCharacter":
+          throw new Error("A static ability cannot select a random character");
         case "self":
           return self !== null && state.instances[self]?.zone === "play" ? [self] : [];
         case "all":

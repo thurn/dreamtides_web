@@ -197,8 +197,14 @@ export interface SupportedSpec {
   readonly selector: Omit<CharacterSelector, "controller">;
 }
 
+/** One matching physical character in play, picked without targeting as the effect resolves. */
+export interface RandomCharacterSpec {
+  readonly kind: "randomCharacter";
+  readonly selector: CharacterSelector;
+}
+
 /** The characters a character effect applies to. */
-export type CharacterRef = TargetSpec | AllSpec | SelfSpec | SubjectSpec | SupportedSpec;
+export type CharacterRef = TargetSpec | AllSpec | SelfSpec | SubjectSpec | SupportedSpec | RandomCharacterSpec;
 
 /**
  * Cards in one of a player's decks, hands, or voids that an effect names

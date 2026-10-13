@@ -17,7 +17,7 @@ import { evaluateValue } from "../dsl/values";
 import { conditionHoldsWith, type ConditionScope } from "../dsl/conditions";
 import { cardMatchesFilter, characteristics, characteristicsOf, copiableCostOf } from "../continuous/characteristics";
 import { supportedBy } from "../continuous/support";
-import type { CharacterRef, Condition, PlayTimeTarget, StackTargetSpec, TargetSpec, ValueExpr, ZoneCardSpec, ZoneTargetSpec } from "../dsl/types";
+import type { CharacterRef, Condition, PlayTimeTarget, RandomCharacterSpec, StackTargetSpec, TargetSpec, ValueExpr, ZoneCardSpec, ZoneTargetSpec } from "../dsl/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
 import type { AbilityOrigin, BattleState, EffectChoices, SparkGain } from "../state/types";
@@ -648,6 +648,12 @@ function namesCharacter(ctx: StepContext, id: InstanceId, env: EffectEnv): boole
   return zone === "stack" && env.subject === id && sourceInstance(env.source) === id && characteristicsOf(ctx.state, ctx.catalog, id).cardType === "character";
 }
 
+/** Picks once from the live matching battlefield pool; an empty pool consumes no draw. */
+function resolveRandomCharacters(ctx: StepContext, ref: RandomCharacterSpec, env: EffectEnv): InstanceId[] {
+  const pool = matchingCharacters(ctx.state, ctx.catalog, ref.selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env));
+  return pool.length === 0 ? [] : [pool[Math.floor(ctx.random(RANDOM_SELECTION_STREAM) * pool.length)]];
+}
+
 /**
  * The characters a character effect applies to now. A chosen target that is
  * no longer legal (it no longer matches, or cannot be targeted now) is
@@ -656,6 +662,8 @@ function namesCharacter(ctx: StepContext, id: InstanceId, env: EffectEnv): boole
  */
 export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: EffectEnv): InstanceId[] {
   switch (ref.kind) {
+    case "randomCharacter":
+      return resolveRandomCharacters(ctx, ref, env);
     case "self": {
       // An emblem is never a character (P4).
       const self = sourceInstance(env.source);
