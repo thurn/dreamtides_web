@@ -1,0 +1,479 @@
+{
+  "bead": "hv-umm2.600",
+  "base": "958b39cff833b2d6d5fda4a5aaa7767002fc8763",
+  "implementWindow": {
+    "start": "2026-10-13T03:32:08.036000+00:00",
+    "end": "2026-10-13T03:41:53.353800+00:00"
+  },
+  "implementMin": 9.755296666666668,
+  "windowQualification": "Elapsed wall time from actual post-claim dispatch, including source-free inspection, native WRITE ACK wait, diagnostic repair, ordinary checks and evidence. Recorded end is a precommit cutoff; actual fractional command end and Git whole-second timestamp are supplied in terminal scratch handoff.",
+  "scope": {
+    "source": "src/session/providers/journey-purge-receipts.ts",
+    "sourceAdditions": 68,
+    "sourceDeletions": 7,
+    "nonTestSourceGross": 75,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "productionBody": "Private 65-key explicit boolean classification and one membership lookup; 10 existing true kinds and55 explicit false. Paired-array guard/map and Augury reader unchanged.",
+    "API": "Both exported signatures unchanged",
+    "importers": [
+      "src/session/providers/site-provider.ts",
+      "src/session/providers/journey-purge-receipts.test.ts"
+    ],
+    "fallout": []
+  },
+  "validation": {
+    "receipts": {
+      "type-old": {
+        "command": [
+          "node",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/purge600-type-proof.mjs",
+          "old"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/purge-classification-600-sol",
+        "start": "2026-10-13T03:37:58.140813+00:00",
+        "hostLoadStart": [
+          6.72,
+          9.9,
+          10.15
+        ],
+        "pid": 23033,
+        "processGroup": 23033,
+        "exit": 1,
+        "end": "2026-10-13T03:37:58.315151+00:00",
+        "elapsedS": 0.17089108400978148,
+        "hostLoadEnd": [
+          6.72,
+          9.9,
+          10.15
+        ]
+      },
+      "type-old-corrected": {
+        "command": [
+          "node",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/purge600-type-proof.mjs",
+          "old"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/purge-classification-600-sol",
+        "start": "2026-10-13T03:38:16.297522+00:00",
+        "hostLoadStart": [
+          5.86,
+          9.5,
+          10.0
+        ],
+        "pid": 23364,
+        "processGroup": 23364,
+        "exit": 0,
+        "end": "2026-10-13T03:38:17.355135+00:00",
+        "elapsedS": 1.0551295839977683,
+        "hostLoadEnd": [
+          5.86,
+          9.5,
+          10.0
+        ]
+      },
+      "type-final": {
+        "command": [
+          "node",
+          "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/purge600-type-proof.mjs",
+          "final"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/purge-classification-600-sol",
+        "start": "2026-10-13T03:38:37.596674+00:00",
+        "hostLoadStart": [
+          4.92,
+          9.05,
+          9.82
+        ],
+        "pid": 23840,
+        "processGroup": 23840,
+        "exit": 0,
+        "end": "2026-10-13T03:38:38.458044+00:00",
+        "elapsedS": 0.8590616250003222,
+        "hostLoadEnd": [
+          4.92,
+          9.05,
+          9.82
+        ]
+      },
+      "focused": {
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/session/providers/journey-purge-receipts.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/purge-classification-600-sol",
+        "start": "2026-10-13T03:38:52.725812+00:00",
+        "hostLoadStart": [
+          4.58,
+          8.77,
+          9.71
+        ],
+        "pid": 24356,
+        "processGroup": 24356,
+        "exit": 0,
+        "end": "2026-10-13T03:38:58.656676+00:00",
+        "elapsedS": 5.926826207985869,
+        "hostLoadEnd": [
+          4.69,
+          8.72,
+          9.69
+        ]
+      },
+      "knip": {
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/purge-classification-600-sol",
+        "start": "2026-10-13T03:38:52.725810+00:00",
+        "hostLoadStart": [
+          4.58,
+          8.77,
+          9.71
+        ],
+        "pid": 24357,
+        "processGroup": 24357,
+        "exit": 0,
+        "end": "2026-10-13T03:38:57.994890+00:00",
+        "elapsedS": 5.264977375001763,
+        "hostLoadEnd": [
+          4.69,
+          8.72,
+          9.69
+        ]
+      },
+      "review": {
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/purge-classification-600-sol",
+        "start": "2026-10-13T03:39:00.087466+00:00",
+        "hostLoadStart": [
+          4.69,
+          8.72,
+          9.69
+        ],
+        "pid": 24701,
+        "processGroup": 24701,
+        "exit": 0,
+        "end": "2026-10-13T03:39:13.275762+00:00",
+        "elapsedS": 13.1856799590023,
+        "hostLoadEnd": [
+          4.67,
+          8.52,
+          9.6
+        ]
+      },
+      "schema": {
+        "command": [
+          "node",
+          "scripts/friction-triggers.mjs",
+          "--validate-records"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/purge-classification-600-sol",
+        "start": "2026-10-13T03:40:54.118625+00:00",
+        "hostLoadStart": [
+          5.67,
+          7.8,
+          9.2
+        ],
+        "pid": 52134,
+        "processGroup": 52134,
+        "exit": 0,
+        "end": "2026-10-13T03:40:54.227709+00:00",
+        "elapsedS": 0.10558062500786036,
+        "hostLoadEnd": [
+          5.67,
+          7.8,
+          9.2
+        ]
+      },
+      "friction": {
+        "command": [
+          "npm",
+          "run",
+          "friction:triggers"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/purge-classification-600-sol",
+        "start": "2026-10-13T03:41:08.698144+00:00",
+        "hostLoadStart": [
+          5.9,
+          7.75,
+          9.15
+        ],
+        "pid": 56170,
+        "processGroup": 56170,
+        "exit": 0,
+        "end": "2026-10-13T03:41:08.899721+00:00",
+        "elapsedS": 0.19822591700358316,
+        "hostLoadEnd": [
+          5.9,
+          7.75,
+          9.15
+        ]
+      }
+    },
+    "focused": {
+      "files": 1,
+      "tests": 23,
+      "failures": 0
+    },
+    "review": {
+      "relatedFiles": 11,
+      "relatedTests": 69,
+      "failures": 0,
+      "typechecks": "browser and node checks exit0"
+    },
+    "full": "N/A local same-behavior classifier; no cross-cutting architecture/config/test infrastructure",
+    "browser": "N/A no workflow/UI/prompt/state change",
+    "fuzz": "N/A no content/engine recipe change",
+    "D21": "N/A no entity implementation",
+    "schema": "exit0; retained actual receipt",
+    "friction": "exit0; retained actual receipt"
+  },
+  "compilerCounterfactual": {
+    "scope": "Isolated actual AST declaration and actual closed tuple/type alias; no runtime, full-repository typecheck or table mirror assertion",
+    "typescriptVersion": "5.8.3",
+    "oldResult": "purge600-type-proof-old-result.json",
+    "finalResult": "purge600-type-proof-final-result.json",
+    "oldCases": [
+      {
+        "label": "old-actual-baseline",
+        "passed": true,
+        "diagnosticCount": 0
+      },
+      {
+        "label": "old-unclassified-future-accepted",
+        "passed": true,
+        "diagnosticCount": 0
+      }
+    ],
+    "finalCases": [
+      {
+        "label": "final-actual-baseline",
+        "passed": true,
+        "diagnostics": []
+      },
+      {
+        "label": "final-unclassified-future-rejected",
+        "passed": false,
+        "diagnostics": [
+          {
+            "code": 1360,
+            "category": "Error",
+            "file": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/purge600-virtual-classification.ts",
+            "position": 4567,
+            "message": "Type '{ \"purge-and-copy\": true; \"purge-one-transfigure-and-copy-others\": true; \"gain-dreamsign\": false; \"gain-nightmare-and-dreamsign\": false; \"gain-nightmare-and-offered-dreamsign\": false; \"gain-card\": false; ... 58 more ...; \"lose-half-essence-and-free-purchases\": false; }' does not satisfy the expected type 'Readonly<Record<\"purge-and-copy\" | \"purge-one-transfigure-and-copy-others\" | \"gain-dreamsign\" | \"gain-nightmare-and-dreamsign\" | \"gain-nightmare-and-offered-dreamsign\" | \"gain-card\" | ... 59 more ... | \"__purge600_synthetic_future_effect__\", boolean>>'.\n  Property '__purge600_synthetic_future_effect__' is missing in type '{ \"purge-and-copy\": true; \"purge-one-transfigure-and-copy-others\": true; \"gain-dreamsign\": false; \"gain-nightmare-and-dreamsign\": false; \"gain-nightmare-and-offered-dreamsign\": false; \"gain-card\": false; ... 58 more ...; \"lose-half-essence-and-free-purchases\": false; }' but required in type 'Readonly<Record<\"purge-and-copy\" | \"purge-one-transfigure-and-copy-others\" | \"gain-dreamsign\" | \"gain-nightmare-and-dreamsign\" | \"gain-nightmare-and-offered-dreamsign\" | \"gain-card\" | ... 59 more ... | \"__purge600_synthetic_future_effect__\", boolean>>'."
+          }
+        ]
+      },
+      {
+        "label": "final-explicit-false-future-accepted",
+        "passed": true,
+        "diagnostics": []
+      }
+    ],
+    "syntheticFuture": "__purge600_synthetic_future_effect__",
+    "compilerWrites": 0,
+    "checkoutUnchangedBothProofs": true,
+    "fingerprintQualification": "Tracked regular-file contents; symlink link text; tracked directories/gitlinks recorded by Git index entries without traversal; git status and HEAD. No generated ignored assets or nested repository contents claimed.",
+    "finalProofFingerprintBefore": {
+      "trackedContentsSha256": "262473e14e7a45eaa85dcb2ff81a7dd7f029f339d27a87a497ed6a939dd0d0d5",
+      "status": " M docs/plan/evidence/friction/hv-umm2.239.json\n M docs/plan/evidence/measurements/hv-umm2.239.json\n M src/session/providers/journey-purge-receipts.ts\n",
+      "head": "958b39cff833b2d6d5fda4a5aaa7767002fc8763"
+    },
+    "finalProofFingerprintAfter": {
+      "trackedContentsSha256": "262473e14e7a45eaa85dcb2ff81a7dd7f029f339d27a87a497ed6a939dd0d0d5",
+      "status": " M docs/plan/evidence/friction/hv-umm2.239.json\n M docs/plan/evidence/measurements/hv-umm2.239.json\n M src/session/providers/journey-purge-receipts.ts\n",
+      "head": "958b39cff833b2d6d5fda4a5aaa7767002fc8763"
+    },
+    "helperSha256": "57f0cb844ff4e5d8e8284d9faaf01d56f766ae8b042352349a46535bbc14bb70"
+  },
+  "failureContracts": {
+    "midStep": "No new transition/steps. Existing synchronous paired-array mismatch throws before returning invented/dropped identity; owning contract passes.",
+    "reload": "No new stored or serialized state. Existing deterministic provider/reducer paths unchanged; new browser reload test N/A.",
+    "partialWrite": "Pure reader has no write or I/O boundary. Existing original paired-identity/input-array controls and mismatch rejection pass; compiler host forbids writes.",
+    "stale": "Existing actual Augury stale-signature and repeated Augury/Exploration reducer deliveries preserve input state and one semantic gain; owning contracts pass.",
+    "concurrent": "No mutable request state/cache/async work. Duplicate delivery contracts pass; source ownership/body serialization is parent-native authority."
+  },
+  "hostLoadSamples": [
+    {
+      "value": 4.69,
+      "measuredFor": "review wrapper command start; sysctl formatted one-minute sample",
+      "observedAt": "2026-10-13T03:39:00.087466+00:00",
+      "source": "validation.receipts.review.hostLoadStart[0]"
+    },
+    {
+      "value": 4.6943359375,
+      "measuredFor": "npm run review initial prepare step start",
+      "observedAt": "2026-10-13T03:39:00.298Z",
+      "source": "purge600-review.log"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "normalizedValue": 4.6943359375,
+        "measuredFor": "npm run review initial prepare step start",
+        "observedAt": "2026-10-13T03:39:00.298Z",
+        "source": "purge600-review.log; full precision per-step sample alongside wrapper formatted sample"
+      }
+    }
+  },
+  "historicalCorrection": {
+    "bead": "hv-umm2.239",
+    "source": "ac34c876e6ae3bb0a92d4e8724c690129cf6a309",
+    "oldValue": 17.63232421875,
+    "oldObservationOriginTimeScope": "UNKNOWN",
+    "newValue": 8.62841796875,
+    "measuredFor": "actual retained npm run review start",
+    "observedAt": "2026-10-13T01:16:34.435085+00:00",
+    "allOtherExistingFieldsPreserved": true,
+    "authority": "Same-session next implemented bead, workflow Friction ledger; no standalone bead/reopening"
+  },
+  "retainedAuthorErrors": [
+    {
+      "receipt": "purge600-type-old-receipt.json",
+      "log": "purge600-type-old.log",
+      "exit": 1,
+      "cause": "Diagnostic fingerprint attempted to read a tracked directory as regular file; EISDIR before compilation. Corrected directory/gitlink and symlink handling. No app/type failure and no repository mutation."
+    }
+  ],
+  "processLedger": [
+    {
+      "label": "type-old",
+      "pid": 23033,
+      "processGroup": 23033,
+      "start": "2026-10-13T03:37:58.140813+00:00",
+      "end": "2026-10-13T03:37:58.315151+00:00",
+      "exit": 1,
+      "state": "terminal"
+    },
+    {
+      "label": "type-old-corrected",
+      "pid": 23364,
+      "processGroup": 23364,
+      "start": "2026-10-13T03:38:16.297522+00:00",
+      "end": "2026-10-13T03:38:17.355135+00:00",
+      "exit": 0,
+      "state": "terminal"
+    },
+    {
+      "label": "type-final",
+      "pid": 23840,
+      "processGroup": 23840,
+      "start": "2026-10-13T03:38:37.596674+00:00",
+      "end": "2026-10-13T03:38:38.458044+00:00",
+      "exit": 0,
+      "state": "terminal"
+    },
+    {
+      "label": "focused",
+      "pid": 24356,
+      "processGroup": 24356,
+      "start": "2026-10-13T03:38:52.725812+00:00",
+      "end": "2026-10-13T03:38:58.656676+00:00",
+      "exit": 0,
+      "state": "terminal"
+    },
+    {
+      "label": "knip",
+      "pid": 24357,
+      "processGroup": 24357,
+      "start": "2026-10-13T03:38:52.725810+00:00",
+      "end": "2026-10-13T03:38:57.994890+00:00",
+      "exit": 0,
+      "state": "terminal"
+    },
+    {
+      "label": "review",
+      "pid": 24701,
+      "processGroup": 24701,
+      "start": "2026-10-13T03:39:00.087466+00:00",
+      "end": "2026-10-13T03:39:13.275762+00:00",
+      "exit": 0,
+      "state": "terminal"
+    },
+    {
+      "label": "schema",
+      "pid": 52134,
+      "processGroup": 52134,
+      "start": "2026-10-13T03:40:54.118625+00:00",
+      "end": "2026-10-13T03:40:54.227709+00:00",
+      "exit": 0,
+      "state": "terminal"
+    },
+    {
+      "label": "friction",
+      "pid": 56170,
+      "processGroup": 56170,
+      "start": "2026-10-13T03:41:08.698144+00:00",
+      "end": "2026-10-13T03:41:08.899721+00:00",
+      "exit": 0,
+      "state": "terminal"
+    }
+  ],
+  "resourceQualification": "No browser/server/provider/heavy lease launched. Ordinary command processes terminal; parent cold review begins after helper terminal.",
+  "reviewPolicy": {
+    "required": "core-review label",
+    "routing": "Fresh read-only gpt-5.6-sol Codex CLI under temporary user override through2026-10-14T01:00Z",
+    "owner": "parent after helper terminal",
+    "coldResult": "Not claimed in author evidence"
+  },
+  "finalIntegrity": {
+    "sourceSha256": "57f0cb844ff4e5d8e8284d9faaf01d56f766ae8b042352349a46535bbc14bb70",
+    "unchangedSinceFinalCompilerProof": true,
+    "historicalOtherFieldsPreserved": true,
+    "processGroups": [
+      {
+        "receipt": "purge600-focused-receipt.json",
+        "processGroup": 24356,
+        "remainingProcesses": []
+      },
+      {
+        "receipt": "purge600-knip-receipt.json",
+        "processGroup": 24357,
+        "remainingProcesses": []
+      },
+      {
+        "receipt": "purge600-review-receipt.json",
+        "processGroup": 24701,
+        "remainingProcesses": []
+      },
+      {
+        "receipt": "purge600-schema-receipt.json",
+        "processGroup": 52134,
+        "remainingProcesses": []
+      },
+      {
+        "receipt": "purge600-type-final-receipt.json",
+        "processGroup": 23840,
+        "remainingProcesses": []
+      },
+      {
+        "receipt": "purge600-type-old-corrected-receipt.json",
+        "processGroup": 23364,
+        "remainingProcesses": []
+      },
+      {
+        "receipt": "purge600-type-old-receipt.json",
+        "processGroup": 23033,
+        "remainingProcesses": []
+      }
+    ],
+    "resources": "No browser/server/provider/heavy lease launched; all observed ordinary command groups terminal."
+  },
+  "commitTimingQualification": {
+    "recordedEnd": "Immediate precommit cutoff before final schema check and commit; whole fractional actual command end/tail recorded in purge600-terminal-handoff.json",
+    "gitTimestampPrecision": "whole seconds",
+    "cutoff": "2026-10-13T03:41:53.353800+00:00"
+  }
+}

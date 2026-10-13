@@ -3228,5 +3228,42 @@
     "exactFinalCommitEnd": "Recorded in parent finalhandoff after immediate amend; notknowable inside its owncommit.",
     "retainedHelperHandoff": "dreamsign239-handoff.json",
     "qualifications": "Originalearliestwindow includesreleasedprerequisite/otherauthorizedbead/recovery intervals, elapsedwall notexclusiveactiveauthorship; originalallrawvalidation/failures/QA preserved."
-  }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "originalValue": 17.63232421875,
+        "normalizedValue": 8.62841796875,
+        "measuredFor": "npm run review start; actual retained validation receipt",
+        "observedAt": "2026-10-13T01:16:34.435085+00:00",
+        "sourceReceipt": "validation.receipts.review",
+        "originalLandedSource": "ac34c876e6ae3bb0a92d4e8724c690129cf6a309",
+        "correctionRecordObservedAt": "2026-10-13T02:24:57.052922+00:00",
+        "originalObservation": {
+          "value": 17.63232421875,
+          "time": null,
+          "origin": null,
+          "scope": null,
+          "qualification": "Original aggregate retained; observation time, origin and measured scope are unknown."
+        }
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "value": 17.63232421875,
+      "measuredFor": null,
+      "observedAt": null,
+      "origin": null,
+      "source": "friction/hv-umm2.239.json at ac34c876e6ae3bb0a92d4e8724c690129cf6a309",
+      "qualification": "Unattributed original aggregate; correction-record observation time is not this sample time."
+    },
+    {
+      "value": 8.62841796875,
+      "measuredFor": "npm run review start",
+      "observedAt": "2026-10-13T01:16:34.435085+00:00",
+      "source": "validation.receipts.review.hostLoadStart[0]",
+      "pid": 41631
+    }
+  ]
 }
