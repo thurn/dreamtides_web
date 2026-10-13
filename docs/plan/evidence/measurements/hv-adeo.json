@@ -1,0 +1,533 @@
+{
+  "bead": "hv-adeo",
+  "implementerModelStart": "unknown",
+  "dispatchStart": "2026-10-13T05:08:28.385Z",
+  "implementWindowProvisionalUntilFinalClock": false,
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-v02 start (whole npm run review process)"
+      }
+    }
+  },
+  "testDeltaQualification": "One new plain discovered contract test module: actual test file delta +1, line delta +217. Vitest .test entrypoint delta 0; jsdom file delta 0.",
+  "validation": [
+    {
+      "name": "base-negative-v01",
+      "argv": [
+        "npx",
+        "tsx",
+        "/tmp/workeradeo-20261013/base-negative.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:12:00.706902+00:00",
+      "end": "2026-10-13T05:12:02.701412+00:00",
+      "exit": 1,
+      "wallSeconds": 1.9944203339982778,
+      "pid": 46401,
+      "pgid": 46401,
+      "load": "{ 11.02 11.06 10.06 }",
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "focused-v01",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "filtered count of one discard instruction|instruction count transaction recovery"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:15:04.257897+00:00",
+      "end": "2026-10-13T05:15:07.643351+00:00",
+      "exit": 1,
+      "wallSeconds": 3.3853329999983544,
+      "pid": 54204,
+      "pgid": 54204,
+      "load": "{ 5.00 8.42 9.16 }",
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "focused-v02",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "filtered count of one discard instruction|instruction count transaction recovery"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:15:24.814252+00:00",
+      "end": "2026-10-13T05:15:27.683359+00:00",
+      "exit": 0,
+      "wallSeconds": 2.868986582994694,
+      "pid": 54875,
+      "pgid": 54875,
+      "load": "{ 5.03 8.18 9.05 }",
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "focused-v03",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "filtered count of one discard instruction|instruction count transaction recovery"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:16:04.265853+00:00",
+      "end": "2026-10-13T05:16:07.002836+00:00",
+      "exit": 0,
+      "wallSeconds": 2.736883707999368,
+      "pid": 56039,
+      "pgid": 56039,
+      "load": "{ 4.28 7.65 8.82 }",
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "capture-disabled-negative-v01",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "counts actual event discards with 1 requested"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:16:56.484108+00:00",
+      "end": "2026-10-13T05:16:59.968693+00:00",
+      "exit": 1,
+      "wallSeconds": 3.4843902090069605,
+      "pid": 57270,
+      "pgid": 57270,
+      "load": "{ 3.55 6.86 8.45 }",
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "focused-v04",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "filtered count of one discard instruction|instruction count transaction recovery"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:17:53.823825+00:00",
+      "end": "2026-10-13T05:17:57.257594+00:00",
+      "exit": 0,
+      "wallSeconds": 3.4336363330075983,
+      "pid": 58828,
+      "pgid": 58828,
+      "load": "{ 4.35 6.52 8.22 }",
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "review-v01",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:18:03.818926+00:00",
+      "end": "2026-10-13T05:19:03.363868+00:00",
+      "exit": 2,
+      "wallSeconds": 59.544191207998665,
+      "pid": 59056,
+      "pgid": 59056,
+      "load": "{ 4.69 6.52 8.20 }",
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "review-v02",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:19:10.596126+00:00",
+      "end": "2026-10-13T05:20:08.232486+00:00",
+      "exit": 0,
+      "wallSeconds": 57.63561545799894,
+      "pid": 60710,
+      "pgid": 60710,
+      "load": "{ 5.48 6.42 8.03 }",
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "knip-v01",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:20:12.725487+00:00",
+      "end": "2026-10-13T05:20:16.416291+00:00",
+      "exit": 0,
+      "wallSeconds": 3.690684249988408,
+      "pid": 62207,
+      "pgid": 62207,
+      "load": "{ 6.16 6.53 7.97 }",
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "full-v01",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:20:27.527154+00:00",
+      "end": "2026-10-13T05:22:32.644908+00:00",
+      "exit": 0,
+      "wallSeconds": 125.11632575000112,
+      "pid": 62725,
+      "pgid": 62725,
+      "load": "{ 5.45 6.36 7.88 }",
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "weighted-fuzz-v01",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npx",
+        "tsx",
+        "/tmp/workeradeo-20261013/weighted-fuzz.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:22:55.123986+00:00",
+      "end": "2026-10-13T05:25:41.624941+00:00",
+      "exit": 0,
+      "wallSeconds": 166.4990594999981,
+      "pid": 67498,
+      "pgid": 67498,
+      "load": "{ 16.80 10.48 9.32 }",
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "schema-stage2-v01",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-adeo-filtered-discard",
+      "start": "2026-10-13T05:26:34.493278+00:00",
+      "end": "2026-10-13T05:26:34.572074+00:00",
+      "exit": 0,
+      "wallSeconds": 0.07869712500541937,
+      "pid": 33855,
+      "pgid": 33855,
+      "load": "{ 13.79 11.73 10.03 }",
+      "groupRemainingAtExit": []
+    }
+  ],
+  "negative": {
+    "base": "base-negative-v01: actual selected event moved and untouched character stayed; unsupported new value produced NaN score versus expected1",
+    "captureDisabled": "capture-disabled-negative-v01: selected event count public score0 versus expected1",
+    "restoration": "capture-negative-restoration-v01.json: exact bytes/hash restored"
+  },
+  "failuresDisposition": [
+    {
+      "run": "focused-v01",
+      "cause": "own copy fixture passed a selector rather than stackTarget spec",
+      "resolution": "corrected to established public stackTarget protocol; focused-v03 passes17"
+    }
+  ],
+  "browserQA": "Not applicable: existing discard prompt/points event surfaces, no new UI, presentation, role, badge, player workflow or production entity.",
+  "failurePaths": {
+    "midStepAndPartialWrite": "rolls back an error after capture and recovers using a fresh independent resolution",
+    "reloadRestart": "replays a capture after reload and rejects invalid/stale/competing answers, both sides",
+    "invalidStaleInput": "same both-side recovery contract",
+    "concurrentActors": "wrong-side and repeated stale answers in same both-side recovery contract"
+  },
+  "qaScreens": [],
+  "hostLoadSamples": [
+    {
+      "name": "base-negative-v01",
+      "start": "2026-10-13T05:12:00.706902+00:00",
+      "load": "{ 11.02 11.06 10.06 }",
+      "wallSeconds": 1.9944203339982778
+    },
+    {
+      "name": "focused-v01",
+      "start": "2026-10-13T05:15:04.257897+00:00",
+      "load": "{ 5.00 8.42 9.16 }",
+      "wallSeconds": 3.3853329999983544
+    },
+    {
+      "name": "focused-v02",
+      "start": "2026-10-13T05:15:24.814252+00:00",
+      "load": "{ 5.03 8.18 9.05 }",
+      "wallSeconds": 2.868986582994694
+    },
+    {
+      "name": "focused-v03",
+      "start": "2026-10-13T05:16:04.265853+00:00",
+      "load": "{ 4.28 7.65 8.82 }",
+      "wallSeconds": 2.736883707999368
+    },
+    {
+      "name": "capture-disabled-negative-v01",
+      "start": "2026-10-13T05:16:56.484108+00:00",
+      "load": "{ 3.55 6.86 8.45 }",
+      "wallSeconds": 3.4843902090069605
+    },
+    {
+      "name": "focused-v04",
+      "start": "2026-10-13T05:17:53.823825+00:00",
+      "load": "{ 4.35 6.52 8.22 }",
+      "wallSeconds": 3.4336363330075983
+    },
+    {
+      "name": "review-v01",
+      "start": "2026-10-13T05:18:03.818926+00:00",
+      "load": "{ 4.69 6.52 8.20 }",
+      "wallSeconds": 59.544191207998665
+    },
+    {
+      "name": "review-v02",
+      "start": "2026-10-13T05:19:10.596126+00:00",
+      "load": "{ 5.48 6.42 8.03 }",
+      "wallSeconds": 57.63561545799894
+    },
+    {
+      "name": "knip-v01",
+      "start": "2026-10-13T05:20:12.725487+00:00",
+      "load": "{ 6.16 6.53 7.97 }",
+      "wallSeconds": 3.690684249988408
+    },
+    {
+      "name": "full-v01",
+      "start": "2026-10-13T05:20:27.527154+00:00",
+      "load": "{ 5.45 6.36 7.88 }",
+      "wallSeconds": 125.11632575000112
+    },
+    {
+      "name": "weighted-fuzz-v01",
+      "start": "2026-10-13T05:22:55.123986+00:00",
+      "load": "{ 16.80 10.48 9.32 }",
+      "wallSeconds": 166.4990594999981
+    }
+  ],
+  "checks": {
+    "focused": {
+      "cases": 17,
+      "entrypoints": 1,
+      "moduleLines": 217
+    },
+    "review": {
+      "cases": 5553,
+      "files": 287
+    },
+    "full": {
+      "cases": 6554,
+      "files": 368,
+      "testWindowSeconds": 90.8,
+      "testStartLoad": 12.49560546875,
+      "qualification": "Measured on a shared loaded host; no timing assertion, attribution, or performance claim."
+    },
+    "weightedFuzz": {
+      "games": 300,
+      "seedPrefix": "hv-adeo-filtered-discard",
+      "target": "5e5e5e5e-0000-4000-8000-000000ade000",
+      "failures": 0,
+      "coverage": {
+        "included": 1139,
+        "played": 604,
+        "resolutions": 564,
+        "zero": 191,
+        "positive": 373,
+        "actualDiscarded": 1040,
+        "matchingEvents": 468,
+        "steps": 148777,
+        "prompts": 2768,
+        "interactiveReruns": 275
+      },
+      "wallSeconds": 164.899128375
+    }
+  },
+  "failureDispositions": [
+    {
+      "name": "base-negative-v01",
+      "exit": 1,
+      "cause": "Unsupported new public DSL form on untouched base: selected event void/unselected character hand checks passed, score NaN instead of1. Deliberate witness."
+    },
+    {
+      "name": "focused-v01",
+      "exit": 1,
+      "cause": "Own copy fixture passed stack selector rather than required stackTarget reference. Fixed fixture only;16 cases then passed."
+    },
+    {
+      "name": "review-v01",
+      "exit": 2,
+      "cause": "Own local DeckEntry subtype widened to string and unused nonexistent chooseModes branch. Fixed annotations and removed branch; review-v02 passes all checks."
+    },
+    {
+      "name": "capture-disabled-negative-v01",
+      "exit": 1,
+      "cause": "Deliberately restore direct discardCards without capture wrapper. One focused public score assertion0 versus1 fails. Byte-exact restore verified."
+    }
+  ],
+  "restoration": {
+    "exactBytesRestored": true,
+    "sha256": "12e8cb484178acdd0e0837485f2b43449f1f0ddf73b8367758041b9c0a9ba815",
+    "path": "src/engine/effects/primitives/discard.ts"
+  },
+  "fuzzDriver": {
+    "driver": "/tmp/workeradeo-20261013/weighted-fuzz.ts",
+    "sha256": "0ab6108b603ccb7b6bb68744432516b03318f5bc987cfa3643ac7c6dddebb1fd",
+    "argv": [
+      "lockf",
+      "-k",
+      "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "npx",
+      "tsx",
+      "/tmp/workeradeo-20261013/weighted-fuzz.ts"
+    ],
+    "games": 300,
+    "seedPrefix": "hv-adeo-filtered-discard",
+    "target": "5e5e5e5e-0000-4000-8000-000000ade000",
+    "publicAPIs": [
+      "fuzzEngineCatalog",
+      "withFuzzCardWeights",
+      "playFuzzGame",
+      "replayFinalHash",
+      "replayInteractively",
+      "Engine.apply StepObserver"
+    ],
+    "trackedSourceFrozenDuringRun": true,
+    "terminalSHA256": "0ab6108b603ccb7b6bb68744432516b03318f5bc987cfa3643ac7c6dddebb1fd"
+  },
+  "captureSemantics": {
+    "kind": "One transient map per resolution; exact DiscardNode object key; readonly selected branded InstanceId/effective type snapshot captured before movement and published only after canonical discard success.",
+    "beforeFirstResolution": 0,
+    "rerunIncludingZero": "The last actual resolution replaces its capture, including empty instructions.",
+    "optionalQualification": "Skipping an optional wrapper does not execute its child instruction; a read names the exact node's most recent actual resolution, as for existing costOf. The typed builder rejects wrappers as its input.",
+    "types": "Effective hand type, including deck-entry typeChange, governs matching rather than printing.",
+    "copiesReplay": "Per-ability exact tree bindings rebuild independently through effect resolution/replay."
+  },
+  "logging": {
+    "directEventMapping": "eventLogRecord intentionally leaves discarded/discardBatch/pointsScored to replay (default null); no dedicated JSONL mapping is claimed.",
+    "reconstruction": "engine.battleStarted retains init seed and deck UUIDs/variants; engine.action retains physical source and prompt answers; engine.promptOpened/Answered identify prompt protocol and choices; engine.rng retains stream draw counts, including random:discard. Trigger records retain UUID/origin bindings. Replay reconstructs canonical individual/batch discard events and effect points from the actual selected cohort with this transient count value. The engine stays pure and the host persists the existing records.",
+    "newPersistentFieldsOrLogKinds": 0
+  },
+  "runtimeLedger": [
+    {
+      "name": "base-negative-v01",
+      "pid": 46401,
+      "pgid": 46401,
+      "exit": 1,
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "focused-v01",
+      "pid": 54204,
+      "pgid": 54204,
+      "exit": 1,
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "focused-v02",
+      "pid": 54875,
+      "pgid": 54875,
+      "exit": 0,
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "focused-v03",
+      "pid": 56039,
+      "pgid": 56039,
+      "exit": 0,
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "capture-disabled-negative-v01",
+      "pid": 57270,
+      "pgid": 57270,
+      "exit": 1,
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "focused-v04",
+      "pid": 58828,
+      "pgid": 58828,
+      "exit": 0,
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "review-v01",
+      "pid": 59056,
+      "pgid": 59056,
+      "exit": 2,
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "review-v02",
+      "pid": 60710,
+      "pgid": 60710,
+      "exit": 0,
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "knip-v01",
+      "pid": 62207,
+      "pgid": 62207,
+      "exit": 0,
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "full-v01",
+      "pid": 62725,
+      "pgid": 62725,
+      "exit": 0,
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "weighted-fuzz-v01",
+      "pid": 67498,
+      "pgid": 67498,
+      "exit": 0,
+      "groupRemainingAtExit": []
+    },
+    {
+      "name": "schema-stage2-v01",
+      "pid": 33855,
+      "pgid": 33855,
+      "exit": 0,
+      "groupRemainingAtExit": []
+    }
+  ],
+  "sourceBodyChangesOutsideAdmittedScope": [],
+  "mechanicalFallout": [],
+  "preExistingIssues": [],
+  "evidenceClock": {
+    "dispatch": "2026-10-13T05:08:28.385Z",
+    "modelStart": "unknown",
+    "stage2End": "2026-10-13T05:26:29.339794+00:00",
+    "qualification": "Whole dispatch-to-final-precommit window includes research, coordination, waits and verification; model start remains unknown. Actual Git subprocess interval is retained separately in git-commit-v01.receipt.json.",
+    "finalPrecommit": "2026-10-13T05:28:30.384623+00:00"
+  },
+  "testModuleDelta": {
+    "files": 1,
+    "lines": 217,
+    "vitestEntrypoints": 0,
+    "jsdomFiles": 0
+  }
+}

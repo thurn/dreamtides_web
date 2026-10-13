@@ -1,0 +1,23 @@
+{
+  "bead": "hv-adeo",
+  "phase": 5,
+  "implementMin": 20.03332705,
+  "implementWindow": {
+    "start": "2026-10-13T05:08:28.385Z",
+    "end": "2026-10-13T05:28:30.384623+00:00"
+  },
+  "localValidationS": {
+    "focused": 3.4336363330075983,
+    "review": 57.63561545799894,
+    "knip": 3.690684249988408,
+    "full": 125.11632575000112,
+    "fuzz": 166.4990594999981
+  },
+  "hostLoad": 5.48,
+  "testDelta": {
+    "files": 1,
+    "lines": 217,
+    "jsdomFiles": 0
+  },
+  "friction": []
+}

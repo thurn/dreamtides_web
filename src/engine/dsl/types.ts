@@ -9,6 +9,7 @@ import type { CardSubtype } from "../../types/card-identity";
 import type { TransfigurationType } from "../../types/journey";
 import type { Effect } from "../effects/registry";
 import type { EffectNode } from "../effects/types";
+import type { DiscardNode } from "../effects/primitives/discard";
 import type { Zone } from "../state/ids";
 
 /**
@@ -310,6 +311,13 @@ export interface MovedCardRef {
   readonly node: EffectNode;
 }
 
+/** Actual discards of one earlier instruction, matched by effective type before departure. */
+export interface DiscardCountValue {
+  readonly value: "discardCount";
+  readonly of: MovedCardRef & { readonly node: DiscardNode };
+  readonly cardType: "character" | "event";
+}
+
 /** A number an effect reads when it resolves. */
 export type ValueExpr =
   | number
@@ -319,6 +327,7 @@ export type ValueExpr =
   /** The positive discard occasion captured by this trigger; 0 outside a batch trigger. */
   | { readonly value: "discardedCount" }
   | TriggerSubjectCostValue
+  | DiscardCountValue
   /**
    * "That card's cost": the copiable cost of the cards `of` names, captured
    * just before they moved, so a card that then ceased to exist still has

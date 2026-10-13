@@ -4,7 +4,7 @@ import type { AbilitySource, Side } from "../state/ids";
 import { sourceInstance } from "../state/ids";
 import type { BattleState } from "../state/types";
 import { resolvePlayer, type SourceSparkReader } from "./selectors";
-import type { CardCountValue, CharacterSelector, MovedCardRef, SourceSparkValue, ValueExpr } from "./types";
+import type { CardCountValue, CharacterSelector, DiscardCountValue, MovedCardRef, SourceSparkValue, ValueExpr } from "./types";
 
 /**
  * What a value reads besides the state: its controller, its source, X, how to
@@ -26,6 +26,8 @@ export interface ValueScope {
   count(selector: CharacterSelector): number;
   countCards(count: CardCountValue): number;
   movedCosts?(ref: MovedCardRef): readonly number[];
+  /** Instruction-local discard snapshot; absent outside a resolving effect. */
+  discardCount?(value: DiscardCountValue): number;
   /** "This character's ✦" (`SourceSparkReader`); absent outside a resolving effect. */
   readonly sourceSpark?: SourceSparkReader;
 }
@@ -51,6 +53,8 @@ export function evaluateValue(state: BattleState, value: ValueExpr, scope: Value
       return scope.discardedCount ?? 0;
     case "x":
       return scope.x ?? 0;
+    case "discardCount":
+      return scope.discardCount?.(value) ?? 0;
     case "costOf":
       return (scope.movedCosts?.(value.of) ?? []).reduce((total, cost) => total + cost, 0);
     case "plus":

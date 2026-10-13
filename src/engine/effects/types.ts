@@ -1,3 +1,4 @@
+import type { DiscardNode } from "./primitives/discard";
 import type { EngineCatalog } from "../catalog";
 import type { PromptPurpose, PromptRole } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
@@ -70,6 +71,10 @@ export interface MovedCards {
   track(node: EffectNode, resolve: () => void): void;
   /** The copiable costs, read just before it resolved, of the cards `node` moved the last time it resolved; none before that. */
   costs(node: EffectNode): readonly number[];
+  /** Snapshots selected physical cards before their successful canonical discard occasion. */
+  discard(node: DiscardNode, cards: readonly InstanceId[], resolve: () => void): void;
+  /** Matching actual discards from the last resolution of this exact instruction. */
+  discardedCount(node: DiscardNode, cardType: "character" | "event"): number;
 }
 
 /** Object bindings remembered by conditional siblings in one transient lexical resolution. */

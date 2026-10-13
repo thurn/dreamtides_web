@@ -1709,6 +1709,18 @@ replay rebuilds it from the step's answers. Static abilities read no moved
 card. The content gate requires the named node to resolve earlier in the same
 resolution than the value that reads it (see Content gates).
 
+`countDiscardedBy(discardNode, "event" | "character")` uses the same typed
+moved-node reference and authoring gate. The discard primitive wraps its
+canonical `discardCards` occasion with `MovedCards.discard`: it snapshots the
+selected physical instance IDs and their effective hand types before any
+move, then publishes that cohort after the occasion succeeds. The value
+counts that snapshot by type, including a created card that ceased to exist.
+The exact instruction has an empty capture before it resolves and replaces
+its capture each time it resolves, including an instruction that discards
+zero cards. Each effect resolution, copied effect, and replay owns a fresh
+record; other instructions, payments, and turn history contribute nothing.
+The capture is transient and needs no saved-state field or new engine event.
+
 **"Them" after a materialize** (rules § Keywords and Effects → Materialize,
 RD-hv-umm2.392-1) is `withMaterialized(materialize(from), effect)` with
 `capturedCards()` inside `effect`. The node resolves its materialize, then

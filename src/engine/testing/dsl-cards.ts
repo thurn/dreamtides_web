@@ -10,6 +10,7 @@ import {
   anyCharacter,
   characterYouControl,
   controls,
+  countDiscardedBy,
   count,
   enemyCharacter,
   energy,
@@ -58,6 +59,11 @@ const events = (...list: Ability[]) => () => list;
 
 /** DSL fixtures by role. */
 export const DSL = {
+  /** Count actual discarded events from this instruction, including created-card replacement. */
+  filteredDiscardCount: authored(0xade000 - 200, "event", 0, () => {
+    const instruction = p.discardRandom(2);
+    return [event(p.sequence(instruction, p.gainPoints(countDiscardedBy(instruction, "event"))))];
+  }),
   /** Captured abandon cost plus one, as an exact resolving deck bound. */
   exactCostGenesis: authored(0x57600 - 200, "event", 0, events(
     additionalCost(abandonCostCapture()),

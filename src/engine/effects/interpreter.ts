@@ -589,6 +589,7 @@ export function evaluate(ctx: StepContext, value: ValueExpr, env: EffectEnv): nu
     count: (selector) => matchingCharacters(ctx.state, ctx.catalog, selector, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env)).length,
     countCards: (count) => zoneCount(ctx.state, ctx.catalog, count, env.controller),
     movedCosts: (ref) => env.moved.costs(ref.node),
+    discardCount: (value) => env.moved.discardedCount(value.of.node, value.cardType),
     sourceSpark: resolvingSourceSpark(ctx, env),
   });
 }
@@ -822,12 +823,14 @@ function movedCardNodes(effect: EffectNode): Set<EffectNode> {
 function movedCardRecord(ctx: StepContext, root: EffectNode): MovedCards {
   const read = movedCardNodes(root);
   const recorded = new Map<EffectNode, readonly number[]>();
+  const discarded = new Map<EffectNode, readonly { readonly instance: InstanceId; readonly cardType: "character" | "event" }[]>();
   return {
     track(node, resolve) {
       if (!read.has(node)) {
         resolve();
         return;
       }
+      discarded.set(node, []);
       const { state, catalog } = ctx;
       const before = Object.values(state.instances).map(({ id }) => ({ id, cost: copiableCostOf(state, catalog, id) }));
       const since = state.clock;
@@ -839,6 +842,16 @@ function movedCardRecord(ctx: StepContext, root: EffectNode): MovedCards {
     },
     costs(node) {
       return recorded.get(node) ?? [];
+    },
+    discard(node, cards, resolve) {
+      if (!read.has(node)) { resolve(); return; }
+      const layers = characteristics(ctx.state, ctx.catalog);
+      const before = cards.map((instance) => ({ instance, cardType: layers.of(instance).cardType }));
+      resolve();
+      discarded.set(node, before);
+    },
+    discardedCount(node, cardType) {
+      return (discarded.get(node) ?? []).filter((card) => card.cardType === cardType).length;
     },
   };
 }

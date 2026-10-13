@@ -2,6 +2,7 @@
 import type { CardSubtype } from "../../types/card-identity";
 import type { Effect } from "../effects/registry";
 import type { EffectNode } from "../effects/types";
+import type { DiscardNode } from "../effects/primitives/discard";
 import type {
   Ability,
   AbandonXCost,
@@ -13,6 +14,7 @@ import type {
   BoundValue,
   TriggerSubjectCostValue,
   CardCountValue,
+  DiscardCountValue,
   CardFilter,
   CharacterSelector,
   ChoiceCost,
@@ -440,6 +442,11 @@ export function triggerSubjectCost(): TriggerSubjectCostValue { return { value: 
  */
 export function cardsMovedBy(node: EffectNode): MovedCardRef {
   return { kind: "movedCards", node };
+}
+
+/** Actual cards of this type discarded by one earlier instruction in this resolution. */
+export function countDiscardedBy(node: DiscardNode, cardType: "character" | "event"): DiscardCountValue {
+  return { value: "discardCount", of: { kind: "movedCards", node }, cardType };
 }
 
 /** "That card's cost": the copiable cost of the cards a node moved, read just before they moved. */

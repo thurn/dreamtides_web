@@ -2263,6 +2263,13 @@ just before the move: its copiable cost (see [Cost
 changes](#costs-requirements-and-x)). A card that ceased to exist instead of
 moving, such as a created card discarded from a hand, still has that cost.
 
+When an effect counts events or characters discarded by one of its own
+instructions, it counts only the cards actually discarded by that instruction,
+matching their type immediately before they leave the hand. A card whose type
+changed matches by its new type. Created cards that cease to exist and cards
+banished by a replacement count too. Separate instructions and payments stay
+separate; later draws or moves do not change the captured count.
+
 ## Created Cards
 
 A **created card** is produced by an effect rather than drawn from a deck — for

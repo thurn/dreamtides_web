@@ -43,7 +43,7 @@ export const discardPrimitive = definePrimitive<DiscardNode>({
       }));
       chosen = hand.filter(card => selected.has(card));
     }
-    discardCards(ctx, side, chosen);
+    env.moved.discard(node, chosen, () => { discardCards(ctx, side, chosen); });
   },
 });
 
