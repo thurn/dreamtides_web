@@ -1,3 +1,6 @@
+import { conditionCardCounts, event, fromVoid, thisCardIn } from "../../engine/dsl/builders";
+import { atStartOfTurn, sourceIn, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,16 @@ export default card({
   cardNumber: 283,
   art: { x: 0.168, y: 0, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(p.grantReclaim(fromVoid({ cardType: "event" }))),
+    triggered(
+      atStartOfTurn(),
+      p.ifThen(
+        conditionCardCounts("deck", 3),
+        p.optional(p.sequence(p.erode(3), p.putInDeck([thisCardIn("void")], "top"))),
+      ),
+      { zone: "void", condition: sourceIn("void") },
+    ),
+  ],
+  verifiedText: "1xfkxdzlmay",
 });

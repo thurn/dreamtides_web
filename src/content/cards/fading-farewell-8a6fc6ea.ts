@@ -1,3 +1,6 @@
+import { characterYouControl, event } from "../../engine/dsl/builders";
+import { triggeringCard, untilEndOfTurn, whenDissolved } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,6 @@ export default card({
   artOwned: false,
   cardNumber: 14,
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.floating(whenDissolved(characterYouControl()), p.returnFromVoid(triggeringCard(), { toYourHand: true }), untilEndOfTurn()))],
+  verifiedText: "1053djjog2b",
 });

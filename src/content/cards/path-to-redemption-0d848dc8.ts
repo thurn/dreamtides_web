@@ -1,3 +1,6 @@
+import { event, everyIn } from "../../engine/dsl/builders";
+import { untilEndOfTurn } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -17,5 +20,6 @@ export default card({
   artOwned: false,
   cardNumber: 493,
   isStarter: false,
-  pending: true,
+  abilities: () => [event(p.grantReclaim(everyIn("void"), { duration: untilEndOfTurn() }))],
+  verifiedText: "q3jy66frmm",
 });

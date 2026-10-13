@@ -1,0 +1,3220 @@
+{
+  "observedUtc": "2026-10-13T06:08:35.355317+00:00",
+  "base": "9fdaa25aab8b9a13f5b23c7e23fbb210a4a92eb7",
+  "manifest": {
+    "src/content/cards/key-to-the-moment-f7ffe999.ts": "7e52046d3a4a946703e28fe554c3513c1800702b8ace5c4b471ba6cac5761064",
+    "src/content/cards/fading-farewell-8a6fc6ea.ts": "968d320af39ec0c7970672856d8e0b1a5373c8e1df7060ac8f885fc24fd9ef46",
+    "src/content/cards/path-to-redemption-0d848dc8.ts": "6fca5286fa58a8b9f8f6d0658b2ca8e88e6127c107f7369cf6bcb6a69dfe8afa",
+    "src/content/cards/whisper-of-the-past-5931e388.ts": "bb29c51866fcced151d9c46a680a8b0d68ebf2b5a8d31c5e5688b3952ef3e84f",
+    "src/content/specs/cards-44.scenarios.ts": "0dfc8a1e032e74500e2412d0a5590b2bc0bdedd137d8e2d9c6f9c52867786255"
+  },
+  "productionChurn": 33,
+  "scenarioLines": 104,
+  "reviewRequired": false,
+  "scope": "Four leaf compositions and one D20 plain scenario; no core label, API/schema/UI/body fallout. Separate review not required under actual33non-test churn.",
+  "decisions": {
+    "D10": "Current rules901-905 full resolving payment; RD-hv-7x4l.17-3 beforeDreamwell timing; existing498/499recipient/count rulings; no newruling needed.",
+    "D20": "Eight Whisper cases bothcontrollers couple permanentgrant+normalreclaim and pay/decline/deck2 fullpayment-beforeDreamwell with sameUUID physicalcopy. Otherthree inheritedclosedprimitive contracts.",
+    "D21": "Path SHAbyte6 mandatorydesktop/mobile; Key241/Fading162/Whisper169 unsampled, no newprompt/status/visual. Runtime algorithmsallfour still required."
+  },
+  "finiteReceipt": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/finite-result.json",
+  "negativeCorrections": "Two scenario illegal redundantpass and soleforced-answer unusedscript errors, no productioncorrection; firstfailedstart06:00:40.403108 through fullaffectedgreen06:02:39.849282. Rawretained.",
+  "bead": "hv-umm2.156",
+  "status": "All source, finite, weighted300, sweep, actual algorithm and visual acceptance terminal; parent evidence schema/endpoints complete; exact commit tail follows in native receipt.",
+  "currentClaim": {
+    "name": "156-claim",
+    "command": [
+      "env",
+      "BEADS_DIR=/Users/dthurn/brain/.beads",
+      "BEADS_DOLT_AUTO_START=0",
+      "BD_NON_INTERACTIVE=1",
+      "BD_NO_HOOKS=true",
+      "bd",
+      "--sandbox",
+      "--dolt-auto-commit",
+      "off",
+      "--actor",
+      "01a12e91-c2c5-7321-b306-fdf0cc7b4ac9",
+      "update",
+      "hv-umm2.156",
+      "--claim",
+      "--json"
+    ],
+    "observerPid": 51180,
+    "pid": 51187,
+    "cwd": "/Users/dthurn/dreamtides_web",
+    "startUtc": "2026-10-13T05:39:31.908807+00:00",
+    "endUtc": "2026-10-13T05:39:32.018385+00:00",
+    "wallS": 0.10962762500275858,
+    "exit": 0,
+    "terminal": true,
+    "log": "/tmp/dreamtides-executor-01a12e91/156-claim.log"
+  },
+  "dispatch": {
+    "parentPre": "2026-10-13T05:47:32Z",
+    "parentPost": "2026-10-13T05:49:00.016579+00:00",
+    "actualDispatch": "UNKNOWN;bracketonly",
+    "helper": "/root/recursion_cards_156",
+    "claimActualReceiptStart": "2026-10-13T05:39:31.908807+00:00",
+    "semantics": "Rootsetup8minsource/API/rules/brief/scope prep is includedwholeclaim, nothelperCPU/model sampling"
+  },
+  "runtimeACK": {
+    "observedUtc": "2026-10-13T06:07:30.518605+00:00",
+    "helper": "/root/recursion_cards_156",
+    "productionChurn": 33,
+    "coldCodeReviewRequired": false,
+    "ack": "Weighted300 exact4 locked; same4 preflight+sweep allvariants both; actual interaction witnesses, Path mandatory judgeddesktop/mobile; public managed runtime only; parent evidence/commit",
+    "finiteReceipt": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/finite-result.json"
+  },
+  "commands": [
+    {
+      "label": "affected-1",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/content/specs/specs.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 76819,
+      "processGroup": 76819,
+      "startUtc": "2026-10-13T06:00:40.403108+00:00",
+      "startLoadAverage": [
+        7.1142578125,
+        5.98681640625,
+        7.56787109375
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/affected-1.log",
+      "endUtc": "2026-10-13T06:00:49.384372+00:00",
+      "wallSeconds": 8.981102541001746,
+      "exitCode": 1,
+      "endLoadAverage": [
+        6.62890625,
+        5.9208984375,
+        7.52587890625
+      ],
+      "terminated": true
+    },
+    {
+      "label": "affected-2",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/content/specs/specs.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 77877,
+      "processGroup": 77877,
+      "startUtc": "2026-10-13T06:01:14.485506+00:00",
+      "startLoadAverage": [
+        5.32568359375,
+        5.66943359375,
+        7.3876953125
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/affected-2.log",
+      "endUtc": "2026-10-13T06:01:22.902154+00:00",
+      "wallSeconds": 8.416470083000604,
+      "exitCode": 1,
+      "endLoadAverage": [
+        5.40966796875,
+        5.67919921875,
+        7.37109375
+      ],
+      "terminated": true
+    },
+    {
+      "label": "whisper-focused-1",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-44"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 78764,
+      "processGroup": 78764,
+      "startUtc": "2026-10-13T06:01:54.489645+00:00",
+      "startLoadAverage": [
+        4.6357421875,
+        5.46875,
+        7.2353515625
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/whisper-focused-1.log",
+      "endUtc": "2026-10-13T06:01:59.674796+00:00",
+      "wallSeconds": 5.185051374995965,
+      "exitCode": 0,
+      "endLoadAverage": [
+        5.46533203125,
+        5.626953125,
+        7.28076171875
+      ],
+      "terminated": true
+    },
+    {
+      "label": "affected-3",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/triggers/triggers-dissolved.test.ts",
+        "src/content/specs/specs.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 79373,
+      "processGroup": 79373,
+      "startUtc": "2026-10-13T06:02:29.246569+00:00",
+      "startLoadAverage": [
+        4.484375,
+        5.37451171875,
+        7.130859375
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/affected-3.log",
+      "endUtc": "2026-10-13T06:02:39.849282+00:00",
+      "wallSeconds": 10.602431834005984,
+      "exitCode": 0,
+      "endLoadAverage": [
+        4.7294921875,
+        5.3955078125,
+        7.1171875
+      ],
+      "terminated": true
+    },
+    {
+      "label": "review-1",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 79897,
+      "processGroup": 79897,
+      "startUtc": "2026-10-13T06:02:52.446343+00:00",
+      "startLoadAverage": [
+        4.72705078125,
+        5.35986328125,
+        7.07373046875
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/review-1.log",
+      "endUtc": "2026-10-13T06:03:39.592614+00:00",
+      "wallSeconds": 47.14555904199369,
+      "exitCode": 0,
+      "endLoadAverage": [
+        6.05615234375,
+        5.693359375,
+        7.11083984375
+      ],
+      "terminated": true
+    },
+    {
+      "label": "knip-1",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 81137,
+      "processGroup": 81137,
+      "startUtc": "2026-10-13T06:03:56.854894+00:00",
+      "startLoadAverage": [
+        5.38671875,
+        5.56591796875,
+        7.03173828125
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/knip-1.log",
+      "endUtc": "2026-10-13T06:04:00.379266+00:00",
+      "wallSeconds": 3.5242468749929685,
+      "exitCode": 0,
+      "endLoadAverage": [
+        5.38671875,
+        5.56591796875,
+        7.03173828125
+      ],
+      "terminated": true
+    },
+    {
+      "label": "coverage-1",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 82017,
+      "processGroup": 82017,
+      "startUtc": "2026-10-13T06:04:47.841332+00:00",
+      "startLoadAverage": [
+        4.1455078125,
+        5.1982421875,
+        6.81103515625
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/coverage-1.log",
+      "endUtc": "2026-10-13T06:04:51.201999+00:00",
+      "wallSeconds": 3.3605619999871124,
+      "exitCode": 0,
+      "endLoadAverage": [
+        4.1455078125,
+        5.1982421875,
+        6.81103515625
+      ],
+      "terminated": true
+    },
+    {
+      "label": "weighted300-lock",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/finite-check.py",
+        "weighted300",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "f7ffe999-685d-4ea2-85de-2e567eb2a042,8a6fc6ea-9a88-441e-bdc2-d40dfec37481,0d848dc8-a1a2-410b-b19a-b5f65375e141,5931e388-1856-4e5a-85f8-a5aa34f867b1"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 84991,
+      "processGroup": 84991,
+      "startUtc": "2026-10-13T06:07:17.843413+00:00",
+      "startLoadAverage": [
+        3.93115234375,
+        4.52734375,
+        6.26611328125
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/weighted300-lock.log",
+      "endUtc": "2026-10-13T06:10:14.071154+00:00",
+      "wallSeconds": 176.22597966699686,
+      "exitCode": 0,
+      "endLoadAverage": [
+        7.77734375,
+        6.03662109375,
+        6.5595703125
+      ],
+      "terminated": true
+    },
+    {
+      "label": "weighted300",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "f7ffe999-685d-4ea2-85de-2e567eb2a042,8a6fc6ea-9a88-441e-bdc2-d40dfec37481,0d848dc8-a1a2-410b-b19a-b5f65375e141,5931e388-1856-4e5a-85f8-a5aa34f867b1"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 84994,
+      "processGroup": 84994,
+      "startUtc": "2026-10-13T06:07:17.866046+00:00",
+      "startLoadAverage": [
+        3.93115234375,
+        4.52734375,
+        6.26611328125
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/weighted300.log",
+      "endUtc": "2026-10-13T06:10:14.067683+00:00",
+      "wallSeconds": 176.19987987499917,
+      "exitCode": 0,
+      "endLoadAverage": [
+        7.77734375,
+        6.03662109375,
+        6.5595703125
+      ],
+      "terminated": true
+    },
+    {
+      "label": "preflight-1",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "f7ffe999-685d-4ea2-85de-2e567eb2a042,8a6fc6ea-9a88-441e-bdc2-d40dfec37481,0d848dc8-a1a2-410b-b19a-b5f65375e141,5931e388-1856-4e5a-85f8-a5aa34f867b1",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 84992,
+      "processGroup": 84992,
+      "startUtc": "2026-10-13T06:07:17.843407+00:00",
+      "startLoadAverage": [
+        3.93115234375,
+        4.52734375,
+        6.26611328125
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/preflight-1.log",
+      "endUtc": "2026-10-13T06:07:19.594213+00:00",
+      "wallSeconds": 1.7506740420067217,
+      "exitCode": 0,
+      "endLoadAverage": [
+        3.93115234375,
+        4.52734375,
+        6.26611328125
+      ],
+      "terminated": true
+    },
+    {
+      "label": "sweep-1",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.156",
+        "--cards",
+        "f7ffe999-685d-4ea2-85de-2e567eb2a042,8a6fc6ea-9a88-441e-bdc2-d40dfec37481,0d848dc8-a1a2-410b-b19a-b5f65375e141,5931e388-1856-4e5a-85f8-a5aa34f867b1",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 86135,
+      "processGroup": 86135,
+      "startUtc": "2026-10-13T06:07:49.050384+00:00",
+      "startLoadAverage": [
+        4.64697265625,
+        4.64990234375,
+        6.24853515625
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/sweep-1.log",
+      "endUtc": "2026-10-13T06:14:21.143303+00:00",
+      "wallSeconds": 392.08533895800065,
+      "exitCode": 0,
+      "endLoadAverage": [
+        5.89306640625,
+        5.939453125,
+        6.373046875
+      ],
+      "terminated": true
+    },
+    {
+      "label": "judged-1",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged.mjs",
+        "--bead",
+        "hv-umm2.156",
+        "--timeout",
+        "900",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 91969,
+      "processGroup": 91969,
+      "startUtc": "2026-10-13T06:12:04.246611+00:00",
+      "startLoadAverage": [
+        5.35302734375,
+        5.6787109375,
+        6.349609375
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-1.log",
+      "endUtc": "2026-10-13T06:12:14.646354+00:00",
+      "wallSeconds": 10.399569500004873,
+      "exitCode": 1,
+      "endLoadAverage": [
+        7.8291015625,
+        6.185546875,
+        6.5205078125
+      ],
+      "terminated": true
+    },
+    {
+      "label": "judged-2",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged.mjs",
+        "--bead",
+        "hv-umm2.156",
+        "--timeout",
+        "900",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 93040,
+      "processGroup": 93040,
+      "startUtc": "2026-10-13T06:13:10.515487+00:00",
+      "startLoadAverage": [
+        6.23828125,
+        6.08740234375,
+        6.46630859375
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-2.log",
+      "endUtc": "2026-10-13T06:13:46.095098+00:00",
+      "wallSeconds": 35.578802707997966,
+      "exitCode": 1,
+      "endLoadAverage": [
+        5.6455078125,
+        5.8994140625,
+        6.37841796875
+      ],
+      "terminated": true
+    },
+    {
+      "label": "judged-3",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged.mjs",
+        "--bead",
+        "hv-umm2.156",
+        "--timeout",
+        "900",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 99961,
+      "processGroup": 99961,
+      "startUtc": "2026-10-13T06:16:10.133074+00:00",
+      "startLoadAverage": [
+        4.16162109375,
+        5.22412109375,
+        6.03125
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-3.log",
+      "endUtc": "2026-10-13T06:16:57.542452+00:00",
+      "wallSeconds": 47.40878337499453,
+      "exitCode": 1,
+      "endLoadAverage": [
+        4.8359375,
+        5.25244140625,
+        5.99853515625
+      ],
+      "terminated": true
+    },
+    {
+      "label": "judged-4",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged.mjs",
+        "--bead",
+        "hv-umm2.156",
+        "--timeout",
+        "900",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 6803,
+      "processGroup": 6803,
+      "startUtc": "2026-10-13T06:20:43.757747+00:00",
+      "startLoadAverage": [
+        2.7392578125,
+        4.3583984375,
+        5.47802734375
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-4.log",
+      "endUtc": "2026-10-13T06:23:08.652292+00:00",
+      "wallSeconds": 144.89286279201042,
+      "exitCode": 1,
+      "endLoadAverage": [
+        5.24755859375,
+        5.09033203125,
+        5.62255859375
+      ],
+      "terminated": true
+    },
+    {
+      "label": "judged-mobile-5",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged.mjs",
+        "--bead",
+        "hv-umm2.156",
+        "--timeout",
+        "900",
+        "--viewports",
+        "mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 14188,
+      "processGroup": 14188,
+      "startUtc": "2026-10-13T06:25:07.958482+00:00",
+      "startLoadAverage": [
+        4.2646484375,
+        5.04931640625,
+        5.5556640625
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-mobile-5.log",
+      "endUtc": "2026-10-13T06:26:45.234716+00:00",
+      "wallSeconds": 97.27494375000242,
+      "exitCode": 1,
+      "endLoadAverage": [
+        5.248046875,
+        5.17333984375,
+        5.548828125
+      ],
+      "terminated": true
+    },
+    {
+      "label": "judged-enemy-desktop-5",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-enemy-focused.mjs",
+        "--bead",
+        "hv-umm2.156",
+        "--timeout",
+        "180",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "mode=pathEnemy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 14187,
+      "processGroup": 14187,
+      "startUtc": "2026-10-13T06:25:07.958363+00:00",
+      "startLoadAverage": [
+        4.2646484375,
+        5.04931640625,
+        5.5556640625
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-enemy-desktop-5.log",
+      "endUtc": "2026-10-13T06:25:16.856082+00:00",
+      "wallSeconds": 8.89752470800886,
+      "exitCode": 1,
+      "endLoadAverage": [
+        4.13671875,
+        4.99755859375,
+        5.53125
+      ],
+      "terminated": true
+    },
+    {
+      "label": "judged-enemy-desktop-6",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-enemy-focused.mjs",
+        "--bead",
+        "hv-umm2.156",
+        "--timeout",
+        "180",
+        "--viewports",
+        "desktop",
+        "--arg",
+        "mode=pathEnemy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 19094,
+      "processGroup": 19094,
+      "startUtc": "2026-10-13T06:27:25.540982+00:00",
+      "startLoadAverage": [
+        4.07763671875,
+        4.88232421875,
+        5.423828125
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-enemy-desktop-6.log",
+      "endUtc": "2026-10-13T06:28:27.960656+00:00",
+      "wallSeconds": 62.41882008301036,
+      "exitCode": 1,
+      "endLoadAverage": [
+        3.1103515625,
+        4.48388671875,
+        5.2373046875
+      ],
+      "terminated": true
+    },
+    {
+      "label": "judged-enemy-both-7",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-enemy-focused.mjs",
+        "--bead",
+        "hv-umm2.156",
+        "--timeout",
+        "240",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "mode=pathEnemy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "pid": 22851,
+      "processGroup": 22851,
+      "startUtc": "2026-10-13T06:30:31.020884+00:00",
+      "startLoadAverage": [
+        3.8056640625,
+        4.515625,
+        5.1630859375
+      ],
+      "inheritedLimits": {
+        "RLIMIT_NOFILE": [
+          1048575,
+          9223372036854775807
+        ],
+        "RLIMIT_NPROC": [
+          10666,
+          16000
+        ],
+        "RLIMIT_AS": [
+          9223372036854775807,
+          9223372036854775807
+        ],
+        "RLIMIT_CPU": [
+          9223372036854775807,
+          9223372036854775807
+        ]
+      },
+      "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+      "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-enemy-both-7.log",
+      "endUtc": "2026-10-13T06:30:49.946434+00:00",
+      "wallSeconds": 18.9252492920059,
+      "exitCode": 0,
+      "endLoadAverage": [
+        4.04541015625,
+        4.52880859375,
+        5.15283203125
+      ],
+      "terminated": true
+    }
+  ],
+  "weightedFuzz": {
+    "games": 300,
+    "steps": 123583,
+    "prompts": 8311,
+    "interactiveReruns": 861,
+    "failures": 0,
+    "targets": [
+      {
+        "uuid": "f7ffe999-685d-4ea2-85de-2e567eb2a042",
+        "included": 613,
+        "exercised": 369
+      },
+      {
+        "uuid": "8a6fc6ea-9a88-441e-bdc2-d40dfec37481",
+        "included": 618,
+        "exercised": 130
+      },
+      {
+        "uuid": "0d848dc8-a1a2-410b-b19a-b5f65375e141",
+        "included": 618,
+        "exercised": 129
+      },
+      {
+        "uuid": "5931e388-1856-4e5a-85f8-a5aa34f867b1",
+        "included": 615,
+        "exercised": 263
+      }
+    ],
+    "lockWait": "Outerstart06:07:17.843413 to innerafter-lock06:07:17.866046 interval0.022633s upperbound includeslauncher/observer overhead; exactlockacquisitioninstantunknown.",
+    "runtimeWorkers": "JOURNEY_TEST_WORKERS=2 requested; actual fuzzerparallelism perrawrunnerreport, no additional guessedworkers",
+    "runnerReportedWallS": 174.6,
+    "runnerReportedCPUS": 189.3,
+    "CPUQualification": "Fuzzer aggregate supplied by runner, distinct from parent/model/check elapsed; not whole-beadCPU."
+  },
+  "preflight": {
+    "pass": 46,
+    "skip": 34,
+    "fail": 0,
+    "scope": "all10variants bothsides exactfour; skipsineligibleVariant. Genericsettlement only, actualalgorithmwitnesses separate."
+  },
+  "correctionWindows": [
+    {
+      "cause": "D20 scriptedpass+forcedanswer sequencing",
+      "start": "2026-10-13T06:00:40.403108Z",
+      "green": "2026-10-13T06:02:39.849282Z",
+      "wallSeconds": 119.446174,
+      "qualification": "Full firstfailedcheck to correctedfullaffectedterminal interval includesanalysis/edits/rechecks/coordination; notCPU. No productioncorrection."
+    },
+    {
+      "cause": "QA observer readiness, full-handframe assumption, selector, enemy action declaration, departed-member observation",
+      "start": "2026-10-13T06:12:04.246611Z",
+      "green": "2026-10-13T06:30:49.946434Z",
+      "wallSeconds": 1125.699823,
+      "basis": "Complete first failed judge to final corrected enemy green, including parent/helper reads, edits, retries and waits; not CPU. Disjoint from D20 correction. Timing hypothesis withdrawn by actual enemy Reclaim log."
+    }
+  ],
+  "hostLoadSamples": [
+    {
+      "label": "affected-1",
+      "startUtc": "2026-10-13T06:00:40.403108+00:00",
+      "startLoadAverage": [
+        7.1142578125,
+        5.98681640625,
+        7.56787109375
+      ],
+      "endUtc": "2026-10-13T06:00:49.384372+00:00",
+      "endLoadAverage": [
+        6.62890625,
+        5.9208984375,
+        7.52587890625
+      ]
+    },
+    {
+      "label": "affected-2",
+      "startUtc": "2026-10-13T06:01:14.485506+00:00",
+      "startLoadAverage": [
+        5.32568359375,
+        5.66943359375,
+        7.3876953125
+      ],
+      "endUtc": "2026-10-13T06:01:22.902154+00:00",
+      "endLoadAverage": [
+        5.40966796875,
+        5.67919921875,
+        7.37109375
+      ]
+    },
+    {
+      "label": "whisper-focused-1",
+      "startUtc": "2026-10-13T06:01:54.489645+00:00",
+      "startLoadAverage": [
+        4.6357421875,
+        5.46875,
+        7.2353515625
+      ],
+      "endUtc": "2026-10-13T06:01:59.674796+00:00",
+      "endLoadAverage": [
+        5.46533203125,
+        5.626953125,
+        7.28076171875
+      ]
+    },
+    {
+      "label": "affected-3",
+      "startUtc": "2026-10-13T06:02:29.246569+00:00",
+      "startLoadAverage": [
+        4.484375,
+        5.37451171875,
+        7.130859375
+      ],
+      "endUtc": "2026-10-13T06:02:39.849282+00:00",
+      "endLoadAverage": [
+        4.7294921875,
+        5.3955078125,
+        7.1171875
+      ]
+    },
+    {
+      "label": "review-1",
+      "startUtc": "2026-10-13T06:02:52.446343+00:00",
+      "startLoadAverage": [
+        4.72705078125,
+        5.35986328125,
+        7.07373046875
+      ],
+      "endUtc": "2026-10-13T06:03:39.592614+00:00",
+      "endLoadAverage": [
+        6.05615234375,
+        5.693359375,
+        7.11083984375
+      ]
+    },
+    {
+      "label": "knip-1",
+      "startUtc": "2026-10-13T06:03:56.854894+00:00",
+      "startLoadAverage": [
+        5.38671875,
+        5.56591796875,
+        7.03173828125
+      ],
+      "endUtc": "2026-10-13T06:04:00.379266+00:00",
+      "endLoadAverage": [
+        5.38671875,
+        5.56591796875,
+        7.03173828125
+      ]
+    },
+    {
+      "label": "coverage-1",
+      "startUtc": "2026-10-13T06:04:47.841332+00:00",
+      "startLoadAverage": [
+        4.1455078125,
+        5.1982421875,
+        6.81103515625
+      ],
+      "endUtc": "2026-10-13T06:04:51.201999+00:00",
+      "endLoadAverage": [
+        4.1455078125,
+        5.1982421875,
+        6.81103515625
+      ]
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-1 starting1minute load at06:02:52.446343Z",
+        "value": 4.72705078125
+      }
+    }
+  },
+  "footprint": {
+    "productionAdditions": 29,
+    "productionDeletions": 4,
+    "productionChurn": 33,
+    "plainScenarioLines": 104,
+    "scenarioCases": 8,
+    "newTestEntrypoints": 0,
+    "jsdomFiles": 0
+  },
+  "reviewRouting": "No required cold code review: pureleafcomposition33non-testchurn, no core label. Temporary requiredcode reviews gpt-5.6-sol per useroverride through2026-10-14T01:00Z; noneinvoked for thisbead.",
+  "implementationWindow": {
+    "start": "2026-10-13T05:39:31.908807+00:00",
+    "end": "2026-10-13T06:44:54.300715+00:00",
+    "minutes": 65.37319846666666,
+    "basis": "Conservative current root claim-call-to-evidence endpoint elapsed proxy including all parent setup, source reads, admission, helper research, corrections, checks, waits, QA and evidence; not CPU. Exact dispatch/model execution unknown. Final endpoint follows validation; commit tail recorded natively. Endpoint is before authorized commit; actual endpoint-to-commit tail is retained separately in native handoff, not omitted from whole ownership cost.",
+    "oldOwnerStartedAt": "Excluded: native persisted started_at belongs to previous ownership.",
+    "helperFirstActualUtc": "2026-10-13T05:47:57Z",
+    "endpointReceipt": "/tmp/dreamtides-executor-01a12e91/156-endpoint-ack.json"
+  },
+  "runtime": {
+    "observedUtc": "2026-10-13T06:34:03.120849+00:00",
+    "parentClaimStartUtc": "2026-10-13T05:39:31.908807Z",
+    "helperFirstActualUtc": "2026-10-13T05:47:57Z",
+    "runtimeAckObservedUtc": "2026-10-13T06:06:52Z",
+    "modelStartAndHelperCpu": "unknown",
+    "commands": [
+      {
+        "label": "affected-1",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/triggers/triggers-patterns.test.ts",
+          "src/engine/triggers/triggers-dissolved.test.ts",
+          "src/content/specs/specs.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 76819,
+        "processGroup": 76819,
+        "startUtc": "2026-10-13T06:00:40.403108+00:00",
+        "startLoadAverage": [
+          7.1142578125,
+          5.98681640625,
+          7.56787109375
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/affected-1.log",
+        "endUtc": "2026-10-13T06:00:49.384372+00:00",
+        "wallSeconds": 8.981102541001746,
+        "exitCode": 1,
+        "endLoadAverage": [
+          6.62890625,
+          5.9208984375,
+          7.52587890625
+        ],
+        "terminated": true
+      },
+      {
+        "label": "affected-2",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/triggers/triggers-patterns.test.ts",
+          "src/engine/triggers/triggers-dissolved.test.ts",
+          "src/content/specs/specs.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 77877,
+        "processGroup": 77877,
+        "startUtc": "2026-10-13T06:01:14.485506+00:00",
+        "startLoadAverage": [
+          5.32568359375,
+          5.66943359375,
+          7.3876953125
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/affected-2.log",
+        "endUtc": "2026-10-13T06:01:22.902154+00:00",
+        "wallSeconds": 8.416470083000604,
+        "exitCode": 1,
+        "endLoadAverage": [
+          5.40966796875,
+          5.67919921875,
+          7.37109375
+        ],
+        "terminated": true
+      },
+      {
+        "label": "whisper-focused-1",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/content/specs/specs.test.ts",
+          "-t",
+          "cards-44"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 78764,
+        "processGroup": 78764,
+        "startUtc": "2026-10-13T06:01:54.489645+00:00",
+        "startLoadAverage": [
+          4.6357421875,
+          5.46875,
+          7.2353515625
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/whisper-focused-1.log",
+        "endUtc": "2026-10-13T06:01:59.674796+00:00",
+        "wallSeconds": 5.185051374995965,
+        "exitCode": 0,
+        "endLoadAverage": [
+          5.46533203125,
+          5.626953125,
+          7.28076171875
+        ],
+        "terminated": true
+      },
+      {
+        "label": "affected-3",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "src/engine/triggers/triggers-patterns.test.ts",
+          "src/engine/triggers/triggers-dissolved.test.ts",
+          "src/content/specs/specs.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 79373,
+        "processGroup": 79373,
+        "startUtc": "2026-10-13T06:02:29.246569+00:00",
+        "startLoadAverage": [
+          4.484375,
+          5.37451171875,
+          7.130859375
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/affected-3.log",
+        "endUtc": "2026-10-13T06:02:39.849282+00:00",
+        "wallSeconds": 10.602431834005984,
+        "exitCode": 0,
+        "endLoadAverage": [
+          4.7294921875,
+          5.3955078125,
+          7.1171875
+        ],
+        "terminated": true
+      },
+      {
+        "label": "review-1",
+        "command": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 79897,
+        "processGroup": 79897,
+        "startUtc": "2026-10-13T06:02:52.446343+00:00",
+        "startLoadAverage": [
+          4.72705078125,
+          5.35986328125,
+          7.07373046875
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/review-1.log",
+        "endUtc": "2026-10-13T06:03:39.592614+00:00",
+        "wallSeconds": 47.14555904199369,
+        "exitCode": 0,
+        "endLoadAverage": [
+          6.05615234375,
+          5.693359375,
+          7.11083984375
+        ],
+        "terminated": true
+      },
+      {
+        "label": "knip-1",
+        "command": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 81137,
+        "processGroup": 81137,
+        "startUtc": "2026-10-13T06:03:56.854894+00:00",
+        "startLoadAverage": [
+          5.38671875,
+          5.56591796875,
+          7.03173828125
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/knip-1.log",
+        "endUtc": "2026-10-13T06:04:00.379266+00:00",
+        "wallSeconds": 3.5242468749929685,
+        "exitCode": 0,
+        "endLoadAverage": [
+          5.38671875,
+          5.56591796875,
+          7.03173828125
+        ],
+        "terminated": true
+      },
+      {
+        "label": "coverage-1",
+        "command": [
+          "npm",
+          "test",
+          "--",
+          "src/engine/content-gates.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 82017,
+        "processGroup": 82017,
+        "startUtc": "2026-10-13T06:04:47.841332+00:00",
+        "startLoadAverage": [
+          4.1455078125,
+          5.1982421875,
+          6.81103515625
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/coverage-1.log",
+        "endUtc": "2026-10-13T06:04:51.201999+00:00",
+        "wallSeconds": 3.3605619999871124,
+        "exitCode": 0,
+        "endLoadAverage": [
+          4.1455078125,
+          5.1982421875,
+          6.81103515625
+        ],
+        "terminated": true
+      },
+      {
+        "label": "weighted300-lock",
+        "command": [
+          "lockf",
+          "-k",
+          "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+          "python3",
+          "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/finite-check.py",
+          "weighted300",
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "f7ffe999-685d-4ea2-85de-2e567eb2a042,8a6fc6ea-9a88-441e-bdc2-d40dfec37481,0d848dc8-a1a2-410b-b19a-b5f65375e141,5931e388-1856-4e5a-85f8-a5aa34f867b1"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 84991,
+        "processGroup": 84991,
+        "startUtc": "2026-10-13T06:07:17.843413+00:00",
+        "startLoadAverage": [
+          3.93115234375,
+          4.52734375,
+          6.26611328125
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/weighted300-lock.log",
+        "endUtc": "2026-10-13T06:10:14.071154+00:00",
+        "wallSeconds": 176.22597966699686,
+        "exitCode": 0,
+        "endLoadAverage": [
+          7.77734375,
+          6.03662109375,
+          6.5595703125
+        ],
+        "terminated": true
+      },
+      {
+        "label": "weighted300",
+        "command": [
+          "env",
+          "JOURNEY_TEST_WORKERS=2",
+          "npm",
+          "run",
+          "fuzz:engine",
+          "--",
+          "--games",
+          "300",
+          "--weight-uuids",
+          "f7ffe999-685d-4ea2-85de-2e567eb2a042,8a6fc6ea-9a88-441e-bdc2-d40dfec37481,0d848dc8-a1a2-410b-b19a-b5f65375e141,5931e388-1856-4e5a-85f8-a5aa34f867b1"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 84994,
+        "processGroup": 84994,
+        "startUtc": "2026-10-13T06:07:17.866046+00:00",
+        "startLoadAverage": [
+          3.93115234375,
+          4.52734375,
+          6.26611328125
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/weighted300.log",
+        "endUtc": "2026-10-13T06:10:14.067683+00:00",
+        "wallSeconds": 176.19987987499917,
+        "exitCode": 0,
+        "endLoadAverage": [
+          7.77734375,
+          6.03662109375,
+          6.5595703125
+        ],
+        "terminated": true
+      },
+      {
+        "label": "preflight-1",
+        "command": [
+          "npm",
+          "run",
+          "lab:preflight",
+          "--",
+          "--cards",
+          "f7ffe999-685d-4ea2-85de-2e567eb2a042,8a6fc6ea-9a88-441e-bdc2-d40dfec37481,0d848dc8-a1a2-410b-b19a-b5f65375e141,5931e388-1856-4e5a-85f8-a5aa34f867b1",
+          "--variants",
+          "all",
+          "--as",
+          "both"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 84992,
+        "processGroup": 84992,
+        "startUtc": "2026-10-13T06:07:17.843407+00:00",
+        "startLoadAverage": [
+          3.93115234375,
+          4.52734375,
+          6.26611328125
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/preflight-1.log",
+        "endUtc": "2026-10-13T06:07:19.594213+00:00",
+        "wallSeconds": 1.7506740420067217,
+        "exitCode": 0,
+        "endLoadAverage": [
+          3.93115234375,
+          4.52734375,
+          6.26611328125
+        ],
+        "terminated": true
+      },
+      {
+        "label": "sweep-1",
+        "command": [
+          "node",
+          "scripts/qa/card-sweep.mjs",
+          "--bead",
+          "hv-umm2.156",
+          "--cards",
+          "f7ffe999-685d-4ea2-85de-2e567eb2a042,8a6fc6ea-9a88-441e-bdc2-d40dfec37481,0d848dc8-a1a2-410b-b19a-b5f65375e141,5931e388-1856-4e5a-85f8-a5aa34f867b1",
+          "--variants",
+          "all",
+          "--as",
+          "both",
+          "--capture"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 86135,
+        "processGroup": 86135,
+        "startUtc": "2026-10-13T06:07:49.050384+00:00",
+        "startLoadAverage": [
+          4.64697265625,
+          4.64990234375,
+          6.24853515625
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/sweep-1.log",
+        "endUtc": "2026-10-13T06:14:21.143303+00:00",
+        "wallSeconds": 392.08533895800065,
+        "exitCode": 0,
+        "endLoadAverage": [
+          5.89306640625,
+          5.939453125,
+          6.373046875
+        ],
+        "terminated": true
+      },
+      {
+        "label": "judged-1",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged.mjs",
+          "--bead",
+          "hv-umm2.156",
+          "--timeout",
+          "900",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 91969,
+        "processGroup": 91969,
+        "startUtc": "2026-10-13T06:12:04.246611+00:00",
+        "startLoadAverage": [
+          5.35302734375,
+          5.6787109375,
+          6.349609375
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-1.log",
+        "endUtc": "2026-10-13T06:12:14.646354+00:00",
+        "wallSeconds": 10.399569500004873,
+        "exitCode": 1,
+        "endLoadAverage": [
+          7.8291015625,
+          6.185546875,
+          6.5205078125
+        ],
+        "terminated": true
+      },
+      {
+        "label": "judged-2",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged.mjs",
+          "--bead",
+          "hv-umm2.156",
+          "--timeout",
+          "900",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 93040,
+        "processGroup": 93040,
+        "startUtc": "2026-10-13T06:13:10.515487+00:00",
+        "startLoadAverage": [
+          6.23828125,
+          6.08740234375,
+          6.46630859375
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-2.log",
+        "endUtc": "2026-10-13T06:13:46.095098+00:00",
+        "wallSeconds": 35.578802707997966,
+        "exitCode": 1,
+        "endLoadAverage": [
+          5.6455078125,
+          5.8994140625,
+          6.37841796875
+        ],
+        "terminated": true
+      },
+      {
+        "label": "judged-3",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged.mjs",
+          "--bead",
+          "hv-umm2.156",
+          "--timeout",
+          "900",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 99961,
+        "processGroup": 99961,
+        "startUtc": "2026-10-13T06:16:10.133074+00:00",
+        "startLoadAverage": [
+          4.16162109375,
+          5.22412109375,
+          6.03125
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-3.log",
+        "endUtc": "2026-10-13T06:16:57.542452+00:00",
+        "wallSeconds": 47.40878337499453,
+        "exitCode": 1,
+        "endLoadAverage": [
+          4.8359375,
+          5.25244140625,
+          5.99853515625
+        ],
+        "terminated": true
+      },
+      {
+        "label": "judged-4",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged.mjs",
+          "--bead",
+          "hv-umm2.156",
+          "--timeout",
+          "900",
+          "--viewports",
+          "desktop,mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 6803,
+        "processGroup": 6803,
+        "startUtc": "2026-10-13T06:20:43.757747+00:00",
+        "startLoadAverage": [
+          2.7392578125,
+          4.3583984375,
+          5.47802734375
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-4.log",
+        "endUtc": "2026-10-13T06:23:08.652292+00:00",
+        "wallSeconds": 144.89286279201042,
+        "exitCode": 1,
+        "endLoadAverage": [
+          5.24755859375,
+          5.09033203125,
+          5.62255859375
+        ],
+        "terminated": true
+      },
+      {
+        "label": "judged-mobile-5",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged.mjs",
+          "--bead",
+          "hv-umm2.156",
+          "--timeout",
+          "900",
+          "--viewports",
+          "mobile"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 14188,
+        "processGroup": 14188,
+        "startUtc": "2026-10-13T06:25:07.958482+00:00",
+        "startLoadAverage": [
+          4.2646484375,
+          5.04931640625,
+          5.5556640625
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-mobile-5.log",
+        "endUtc": "2026-10-13T06:26:45.234716+00:00",
+        "wallSeconds": 97.27494375000242,
+        "exitCode": 1,
+        "endLoadAverage": [
+          5.248046875,
+          5.17333984375,
+          5.548828125
+        ],
+        "terminated": true
+      },
+      {
+        "label": "judged-enemy-desktop-5",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-enemy-focused.mjs",
+          "--bead",
+          "hv-umm2.156",
+          "--timeout",
+          "180",
+          "--viewports",
+          "desktop",
+          "--arg",
+          "mode=pathEnemy"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 14187,
+        "processGroup": 14187,
+        "startUtc": "2026-10-13T06:25:07.958363+00:00",
+        "startLoadAverage": [
+          4.2646484375,
+          5.04931640625,
+          5.5556640625
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-enemy-desktop-5.log",
+        "endUtc": "2026-10-13T06:25:16.856082+00:00",
+        "wallSeconds": 8.89752470800886,
+        "exitCode": 1,
+        "endLoadAverage": [
+          4.13671875,
+          4.99755859375,
+          5.53125
+        ],
+        "terminated": true
+      },
+      {
+        "label": "judged-enemy-desktop-6",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-enemy-focused.mjs",
+          "--bead",
+          "hv-umm2.156",
+          "--timeout",
+          "180",
+          "--viewports",
+          "desktop",
+          "--arg",
+          "mode=pathEnemy"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 19094,
+        "processGroup": 19094,
+        "startUtc": "2026-10-13T06:27:25.540982+00:00",
+        "startLoadAverage": [
+          4.07763671875,
+          4.88232421875,
+          5.423828125
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-enemy-desktop-6.log",
+        "endUtc": "2026-10-13T06:28:27.960656+00:00",
+        "wallSeconds": 62.41882008301036,
+        "exitCode": 1,
+        "endLoadAverage": [
+          3.1103515625,
+          4.48388671875,
+          5.2373046875
+        ],
+        "terminated": true
+      },
+      {
+        "label": "judged-enemy-both-7",
+        "command": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-enemy-focused.mjs",
+          "--bead",
+          "hv-umm2.156",
+          "--timeout",
+          "240",
+          "--viewports",
+          "desktop,mobile",
+          "--arg",
+          "mode=pathEnemy"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+        "pid": 22851,
+        "processGroup": 22851,
+        "startUtc": "2026-10-13T06:30:31.020884+00:00",
+        "startLoadAverage": [
+          3.8056640625,
+          4.515625,
+          5.1630859375
+        ],
+        "inheritedLimits": {
+          "RLIMIT_NOFILE": [
+            1048575,
+            9223372036854775807
+          ],
+          "RLIMIT_NPROC": [
+            10666,
+            16000
+          ],
+          "RLIMIT_AS": [
+            9223372036854775807,
+            9223372036854775807
+          ],
+          "RLIMIT_CPU": [
+            9223372036854775807,
+            9223372036854775807
+          ]
+        },
+        "workerPolicy": "Repository configured 2 workers; effective worker count must be read from raw output",
+        "rawLog": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-enemy-both-7.log",
+        "endUtc": "2026-10-13T06:30:49.946434+00:00",
+        "wallSeconds": 18.9252492920059,
+        "exitCode": 0,
+        "endLoadAverage": [
+          4.04541015625,
+          4.52880859375,
+          5.15283203125
+        ],
+        "terminated": true
+      }
+    ],
+    "qaReports": [
+      {
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-4kTvCm/hv-umm2-156-enemy-focused.result.json",
+        "scenario": "hv-umm2-156-enemy-focused",
+        "invocation": "run-4kTvCm",
+        "ok": true,
+        "error": null,
+        "slot": 1,
+        "port": 5274,
+        "serverProcessGroup": 22879,
+        "hostLoad": 3.8056640625,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 2570,
+          "scenario": 15518,
+          "total": 18146
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 9100
+          },
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 6416
+          }
+        ],
+        "captures": [
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-4kTvCm/156-pathEnemy-desktop-enemy-visible-grant.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-4kTvCm/156-pathEnemy-mobile-enemy-visible-grant.png"
+        ],
+        "caps": [],
+        "witnessModes": [
+          {
+            "mode": "pathEnemy",
+            "at": "desktop#0",
+            "fullResultPayloadRetained": true
+          },
+          {
+            "mode": "pathEnemy",
+            "at": "mobile#0",
+            "fullResultPayloadRetained": true
+          }
+        ]
+      },
+      {
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/hv-umm2-156-judged.result.json",
+        "scenario": "hv-umm2-156-judged",
+        "invocation": "run-DX5rkI",
+        "ok": false,
+        "error": "desktop#4: Error: qa.battle enemy Path actual resolution: stalled: no progress for 45000 ms; last action none; {\"at\":\"far:dusk\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":2}}; history far:day > far:dusk\n    at fail (evalmachine.<anonymous>:1346:7)\n    at Object.playUntil (evalmachine.<anonymous>:1373:54)\n    at async judged (evalmachine.<anonymous>:1678:169)\n    at async evalmachine.<anonymous>:1690:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "slot": 1,
+        "port": 5274,
+        "serverProcessGroup": 6833,
+        "hostLoad": 2.7392578125,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1668,
+          "scenario": 142448,
+          "total": 144180
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 14981
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 10389
+          },
+          {
+            "viewport": "desktop",
+            "step": 2,
+            "ms": 33791
+          },
+          {
+            "viewport": "desktop",
+            "step": 3,
+            "ms": 34541
+          },
+          {
+            "viewport": "desktop",
+            "step": 4,
+            "ms": 48746
+          }
+        ],
+        "captures": [
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-key-desktop-keep-offered.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-key-desktop-returned.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-fading-desktop-earned-return.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-path-desktop-void-reclaim-offered.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-path-desktop-active-duration-badge.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-path-desktop-normal-reclaim-banish.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-path-desktop-expired-void-unavailable.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-whisper-desktop-void-start-payment.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-whisper-desktop-source-drawn.png"
+        ],
+        "caps": [],
+        "witnessModes": [
+          {
+            "mode": "key",
+            "at": "desktop#0",
+            "fullResultPayloadRetained": false
+          },
+          {
+            "mode": "fading",
+            "at": "desktop#1",
+            "fullResultPayloadRetained": false
+          },
+          {
+            "mode": "path",
+            "at": "desktop#2",
+            "fullResultPayloadRetained": false
+          },
+          {
+            "mode": "whisper",
+            "at": "desktop#3",
+            "fullResultPayloadRetained": false
+          }
+        ]
+      },
+      {
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-JNmRUQ/hv-umm2-156-judged.result.json",
+        "scenario": "hv-umm2-156-judged",
+        "invocation": "run-JNmRUQ",
+        "ok": false,
+        "error": "desktop#1: Error: fading: rendered interaction geometry invalid\n    at check (evalmachine.<anonymous>:1656:43)\n    at judged (evalmachine.<anonymous>:1681:3)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async evalmachine.<anonymous>:1688:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "slot": 1,
+        "port": 5274,
+        "serverProcessGroup": 93068,
+        "hostLoad": 6.23828125,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 2586,
+          "scenario": 32252,
+          "total": 34916
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 19998
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 12254
+          }
+        ],
+        "captures": [
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-JNmRUQ/156-key-desktop-keep-offered.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-JNmRUQ/156-key-desktop-returned.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-JNmRUQ/156-fading-desktop-earned-return.png"
+        ],
+        "caps": [],
+        "witnessModes": [
+          {
+            "mode": "key",
+            "at": "desktop#0",
+            "fullResultPayloadRetained": false
+          }
+        ]
+      },
+      {
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-QmcmOO/hv-umm2-156-judged.result.json",
+        "scenario": "hv-umm2-156-judged",
+        "invocation": "run-QmcmOO",
+        "ok": false,
+        "error": "desktop#0: Error: page.evaluate: TypeError: Cannot read properties of undefined (reading 'battleId')\n    at eval (eval at evaluate (:311:30), <anonymous>:1:54)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+        "slot": 1,
+        "port": 5274,
+        "serverProcessGroup": 91997,
+        "hostLoad": 5.35302734375,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 2876,
+          "scenario": 6726,
+          "total": 9670
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 6726
+          }
+        ],
+        "captures": [],
+        "caps": [],
+        "witnessModes": []
+      },
+      {
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-QwMFUA/hv-umm2-156-enemy-focused.result.json",
+        "scenario": "hv-umm2-156-enemy-focused",
+        "invocation": "run-QwMFUA",
+        "ok": false,
+        "error": "Error: pathEnemy: enemy void gained Reclaim status not visible\n    at check (evalmachine.<anonymous>:1656:43)\n    at judged (evalmachine.<anonymous>:1678:1120)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async evalmachine.<anonymous>:1690:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "slot": 0,
+        "port": 5174,
+        "serverProcessGroup": 14239,
+        "hostLoad": 4.2646484375,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1958,
+          "scenario": 6204,
+          "total": 8232
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 6204
+          }
+        ],
+        "captures": [],
+        "caps": [],
+        "witnessModes": []
+      },
+      {
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-SF2jId/hv-umm2-156-enemy-focused.result.json",
+        "scenario": "hv-umm2-156-enemy-focused",
+        "invocation": "run-SF2jId",
+        "ok": false,
+        "error": "Error: enemy physical granted badge presented: TimeoutError: page.waitForFunction: Timeout 14998ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async judged (evalmachine.<anonymous>:1678:882)\n    at async evalmachine.<anonymous>:1690:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)",
+        "slot": 1,
+        "port": 5274,
+        "serverProcessGroup": 19122,
+        "hostLoad": 4.07763671875,
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 2887,
+          "scenario": 58408,
+          "total": 61358
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 58408
+          }
+        ],
+        "captures": [],
+        "caps": [],
+        "witnessModes": []
+      },
+      {
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/hv-umm2-156-judged.result.json",
+        "scenario": "hv-umm2-156-judged",
+        "invocation": "run-lx6nCD",
+        "ok": false,
+        "error": "mobile#4: Error: pathEnemy: enemy void gained Reclaim status not visible\n    at check (evalmachine.<anonymous>:1656:43)\n    at judged (evalmachine.<anonymous>:1678:1120)\n    at async evalmachine.<anonymous>:1690:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "slot": 0,
+        "port": 5174,
+        "serverProcessGroup": 15659,
+        "hostLoad": 4.2646484375,
+        "wallMs": {
+          "browserLeaseWait": 8725,
+          "serve": 1349,
+          "scenario": 86367,
+          "total": 96495
+        },
+        "calls": [
+          {
+            "viewport": "mobile",
+            "step": 0,
+            "ms": 13230
+          },
+          {
+            "viewport": "mobile",
+            "step": 1,
+            "ms": 9561
+          },
+          {
+            "viewport": "mobile",
+            "step": 2,
+            "ms": 30748
+          },
+          {
+            "viewport": "mobile",
+            "step": 3,
+            "ms": 29863
+          },
+          {
+            "viewport": "mobile",
+            "step": 4,
+            "ms": 2963
+          }
+        ],
+        "captures": [
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-key-mobile-keep-offered.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-key-mobile-returned.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-fading-mobile-earned-return.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-path-mobile-void-reclaim-offered.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-path-mobile-active-duration-badge.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-path-mobile-normal-reclaim-banish.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-path-mobile-expired-void-unavailable.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-whisper-mobile-void-start-payment.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-whisper-mobile-source-drawn.png"
+        ],
+        "caps": [],
+        "witnessModes": [
+          {
+            "mode": "key",
+            "at": "mobile#0",
+            "fullResultPayloadRetained": true
+          },
+          {
+            "mode": "fading",
+            "at": "mobile#1",
+            "fullResultPayloadRetained": true
+          },
+          {
+            "mode": "path",
+            "at": "mobile#2",
+            "fullResultPayloadRetained": true
+          },
+          {
+            "mode": "whisper",
+            "at": "mobile#3",
+            "fullResultPayloadRetained": true
+          }
+        ]
+      },
+      {
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-y8ilGO/hv-umm2-156-judged.result.json",
+        "scenario": "hv-umm2-156-judged",
+        "invocation": "run-y8ilGO",
+        "ok": false,
+        "error": "desktop#2: Error: click [data-testid=\"viewer-battle-void\"]: timed out after 15000 ms; last probe: no rendered element\n    at Object.click (evalmachine.<anonymous>:748:15)\n    at async judged (evalmachine.<anonymous>:1675:720)\n    at async evalmachine.<anonymous>:1688:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "slot": 1,
+        "port": 5274,
+        "serverProcessGroup": 99989,
+        "hostLoad": 4.16162109375,
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1354,
+          "scenario": 45409,
+          "total": 46819
+        },
+        "calls": [
+          {
+            "viewport": "desktop",
+            "step": 0,
+            "ms": 14598
+          },
+          {
+            "viewport": "desktop",
+            "step": 1,
+            "ms": 10399
+          },
+          {
+            "viewport": "desktop",
+            "step": 2,
+            "ms": 20411
+          }
+        ],
+        "captures": [
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-y8ilGO/156-key-desktop-keep-offered.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-y8ilGO/156-key-desktop-returned.png",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-y8ilGO/156-fading-desktop-earned-return.png"
+        ],
+        "caps": [],
+        "witnessModes": [
+          {
+            "mode": "key",
+            "at": "desktop#0",
+            "fullResultPayloadRetained": false
+          },
+          {
+            "mode": "fading",
+            "at": "desktop#1",
+            "fullResultPayloadRetained": false
+          }
+        ]
+      }
+    ],
+    "sweepSummary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-2kYJ2K",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K",
+      "counts": {
+        "pass": 46,
+        "skip": 34
+      },
+      "attemptCounts": {
+        "pass": 46,
+        "skip": 34
+      },
+      "hostLoad": 4.64697265625,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 2884,
+        "scenario": 388411.756083,
+        "cleanup": 520.0695000000414,
+        "execution": 391884.91654199996,
+        "total": 391890.91654199996
+      }
+    },
+    "allSweepRawReports": [
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-base-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-base-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-empowered-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-empowered-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-enduring-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-enduring-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-hastened-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-hastened-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-inspired-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-inspired-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-perfected-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-0d848dc8-a1a2-410b-b19a-b5f65375e141-perfected-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-base-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-base-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-empowered-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-empowered-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-enduring-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-enduring-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-hastened-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-hastened-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-inspired-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-inspired-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-perfected-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-5931e388-1856-4e5a-85f8-a5aa34f867b1-perfected-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-base-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-base-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-empowered-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-empowered-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-enduring-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-enduring-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-hastened-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-hastened-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-inspired-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-inspired-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-perfected-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-8a6fc6ea-9a88-441e-bdc2-d40dfec37481-perfected-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-f7ffe999-685d-4ea2-85de-2e567eb2a042-base-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-f7ffe999-685d-4ea2-85de-2e567eb2a042-base-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-f7ffe999-685d-4ea2-85de-2e567eb2a042-empowered-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-f7ffe999-685d-4ea2-85de-2e567eb2a042-empowered-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-f7ffe999-685d-4ea2-85de-2e567eb2a042-enduring-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-f7ffe999-685d-4ea2-85de-2e567eb2a042-enduring-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-f7ffe999-685d-4ea2-85de-2e567eb2a042-inspired-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-f7ffe999-685d-4ea2-85de-2e567eb2a042-inspired-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-f7ffe999-685d-4ea2-85de-2e567eb2a042-perfected-enemy-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/run-dtR0Lk/sweep-f7ffe999-685d-4ea2-85de-2e567eb2a042-perfected-player-attempt-1.result.json",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/sweep-2kYJ2K/summary.json"
+    ],
+    "witnessManifest": [
+      {
+        "viewport": "desktop",
+        "mode": "pathEnemy",
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/witness-desktop-pathEnemy.json",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-4kTvCm/hv-umm2-156-enemy-focused.result.json",
+        "fullResultPayloadRetained": true
+      },
+      {
+        "viewport": "mobile",
+        "mode": "pathEnemy",
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/witness-mobile-pathEnemy.json",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-4kTvCm/hv-umm2-156-enemy-focused.result.json",
+        "fullResultPayloadRetained": true
+      },
+      {
+        "viewport": "desktop",
+        "mode": "key",
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/witness-desktop-key.json",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/hv-umm2-156-judged.result.json",
+        "fullResultPayloadRetained": false
+      },
+      {
+        "viewport": "desktop",
+        "mode": "fading",
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/witness-desktop-fading.json",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/hv-umm2-156-judged.result.json",
+        "fullResultPayloadRetained": false
+      },
+      {
+        "viewport": "desktop",
+        "mode": "path",
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/witness-desktop-path.json",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/hv-umm2-156-judged.result.json",
+        "fullResultPayloadRetained": false
+      },
+      {
+        "viewport": "desktop",
+        "mode": "whisper",
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/witness-desktop-whisper.json",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/hv-umm2-156-judged.result.json",
+        "fullResultPayloadRetained": false
+      },
+      {
+        "viewport": "mobile",
+        "mode": "key",
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/witness-mobile-key.json",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/hv-umm2-156-judged.result.json",
+        "fullResultPayloadRetained": true
+      },
+      {
+        "viewport": "mobile",
+        "mode": "fading",
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/witness-mobile-fading.json",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/hv-umm2-156-judged.result.json",
+        "fullResultPayloadRetained": true
+      },
+      {
+        "viewport": "mobile",
+        "mode": "path",
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/witness-mobile-path.json",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/hv-umm2-156-judged.result.json",
+        "fullResultPayloadRetained": true
+      },
+      {
+        "viewport": "mobile",
+        "mode": "whisper",
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/witness-mobile-whisper.json",
+        "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/hv-umm2-156-judged.result.json",
+        "fullResultPayloadRetained": true
+      }
+    ],
+    "captures": [
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-4kTvCm/156-pathEnemy-desktop-enemy-visible-grant.png",
+        "filename": "156-pathEnemy-desktop-enemy-visible-grant.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2487773,
+        "sha256": "53c53d2f7df52d7fa81f3559294aa47bafd4840eff44194bc6bcb5e6e559d558"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-4kTvCm/156-pathEnemy-mobile-enemy-visible-grant.png",
+        "filename": "156-pathEnemy-mobile-enemy-visible-grant.png",
+        "width": 780,
+        "height": 1688,
+        "bytes": 510498,
+        "sha256": "74a7d7c7219bc68b92b54fa4b492a474866ad4138d8bc7854c92b738e268ee99"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-fading-desktop-earned-return.png",
+        "filename": "156-fading-desktop-earned-return.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2857892,
+        "sha256": "58fffa14c9ecc4612dd673acc4984c4a1531b9eaeff841af48e550554debd4e4"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-key-desktop-keep-offered.png",
+        "filename": "156-key-desktop-keep-offered.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2867657,
+        "sha256": "970148b78024e297e85945a2331e562de0f44368750fd3ec6f84b91dfc1819f7"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-key-desktop-returned.png",
+        "filename": "156-key-desktop-returned.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2830806,
+        "sha256": "3aa780d663c09c774017c686658b249ed1309f0d6ba312e1e1f4c90d5fe86365"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-path-desktop-active-duration-badge.png",
+        "filename": "156-path-desktop-active-duration-badge.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2440467,
+        "sha256": "70f7fa5176ae722a931a346ecebb58a8cf236968b06ad5ed35692bb3149fd7c8"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-path-desktop-expired-void-unavailable.png",
+        "filename": "156-path-desktop-expired-void-unavailable.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2533670,
+        "sha256": "3ad22fce47b8c504731e16d5fca1b36dd67f8f038faee54de394752c3f6be4e2"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-path-desktop-normal-reclaim-banish.png",
+        "filename": "156-path-desktop-normal-reclaim-banish.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2854079,
+        "sha256": "bf4c4d8579d60d7a0c53247ca9d9007066f751b7e993e87955e56acdf86db39d"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-path-desktop-void-reclaim-offered.png",
+        "filename": "156-path-desktop-void-reclaim-offered.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2810497,
+        "sha256": "15aa4fca3ab777fe3e8dfe299dc4e4773f40433402a71ac11d3bbacb1c4ef8a1"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-whisper-desktop-source-drawn.png",
+        "filename": "156-whisper-desktop-source-drawn.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 3045383,
+        "sha256": "cb944fe2eb4dce88e253fb053d251e0f32019e06ac1b9983b0a65f11b6f5bcaa"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-DX5rkI/156-whisper-desktop-void-start-payment.png",
+        "filename": "156-whisper-desktop-void-start-payment.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 3107183,
+        "sha256": "c371ee27149b9be1186cbac61de5799eab754e78842ce710d2f8a7ac36665401"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-JNmRUQ/156-fading-desktop-earned-return.png",
+        "filename": "156-fading-desktop-earned-return.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2857892,
+        "sha256": "58fffa14c9ecc4612dd673acc4984c4a1531b9eaeff841af48e550554debd4e4"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-JNmRUQ/156-key-desktop-keep-offered.png",
+        "filename": "156-key-desktop-keep-offered.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2867657,
+        "sha256": "970148b78024e297e85945a2331e562de0f44368750fd3ec6f84b91dfc1819f7"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-JNmRUQ/156-key-desktop-returned.png",
+        "filename": "156-key-desktop-returned.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2830806,
+        "sha256": "3aa780d663c09c774017c686658b249ed1309f0d6ba312e1e1f4c90d5fe86365"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-fading-mobile-earned-return.png",
+        "filename": "156-fading-mobile-earned-return.png",
+        "width": 780,
+        "height": 1688,
+        "bytes": 1047456,
+        "sha256": "186f90dc47e2eaecb602b7df8d06dd75448ea0fa64decdfb31ba73f052d614fe"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-key-mobile-keep-offered.png",
+        "filename": "156-key-mobile-keep-offered.png",
+        "width": 780,
+        "height": 1688,
+        "bytes": 1074193,
+        "sha256": "9a0b041805436d191302542f7c69dbcb81ab86dd7909c7e043839def5fcbd333"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-key-mobile-returned.png",
+        "filename": "156-key-mobile-returned.png",
+        "width": 780,
+        "height": 1688,
+        "bytes": 1011919,
+        "sha256": "da994bca9885345ffcdbc535365805574af6d879690c45c9f8695bb78764497b"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-path-mobile-active-duration-badge.png",
+        "filename": "156-path-mobile-active-duration-badge.png",
+        "width": 780,
+        "height": 1688,
+        "bytes": 537095,
+        "sha256": "77460e06759d43a7c63aaf13983421ca5e1fecc7040dbe636ac4e32a3e4b4a22"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-path-mobile-expired-void-unavailable.png",
+        "filename": "156-path-mobile-expired-void-unavailable.png",
+        "width": 780,
+        "height": 1688,
+        "bytes": 554413,
+        "sha256": "6a817c67bf0728e935821314f9c36eebb14471133288f1ad0c3518e60b219422"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-path-mobile-normal-reclaim-banish.png",
+        "filename": "156-path-mobile-normal-reclaim-banish.png",
+        "width": 780,
+        "height": 1688,
+        "bytes": 1086640,
+        "sha256": "325a9f3fef61e18a3713371ded913b9a2d4ee977dfea19d83fcccd006318c7a7"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-path-mobile-void-reclaim-offered.png",
+        "filename": "156-path-mobile-void-reclaim-offered.png",
+        "width": 780,
+        "height": 1688,
+        "bytes": 1000107,
+        "sha256": "3b7d1ab2ab7b693515896152a7298a2a9e9f77859b2369d0c731ece9a9f5a022"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-whisper-mobile-source-drawn.png",
+        "filename": "156-whisper-mobile-source-drawn.png",
+        "width": 780,
+        "height": 1688,
+        "bytes": 1200747,
+        "sha256": "968dce0e2dc38be4c69bb39cd0c6d80dce6aea48546097c8fe2d4199459d7da4"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-lx6nCD/156-whisper-mobile-void-start-payment.png",
+        "filename": "156-whisper-mobile-void-start-payment.png",
+        "width": 780,
+        "height": 1688,
+        "bytes": 1189201,
+        "sha256": "e8e7fe157de187e13a900efa4b342b4a2353bfdbeab8efd4fda06e8a2027ce7c"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-y8ilGO/156-fading-desktop-earned-return.png",
+        "filename": "156-fading-desktop-earned-return.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2857892,
+        "sha256": "58fffa14c9ecc4612dd673acc4984c4a1531b9eaeff841af48e550554debd4e4"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-y8ilGO/156-key-desktop-keep-offered.png",
+        "filename": "156-key-desktop-keep-offered.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2867052,
+        "sha256": "78e5cd36875d9f0c560b09b139b5ed487731d80c69fd4f8a205abe88a3c01127"
+      },
+      {
+        "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.156/invocations/run-y8ilGO/156-key-desktop-returned.png",
+        "filename": "156-key-desktop-returned.png",
+        "width": 2880,
+        "height": 1800,
+        "bytes": 2830806,
+        "sha256": "3aa780d663c09c774017c686658b249ed1309f0d6ba312e1e1f4c90d5fe86365"
+      }
+    ],
+    "recipeSnapshots": [
+      {
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-enemy-focused-attempt5.mjs",
+        "sha256": "02b85c293eeedcacd33dbe100b8265323b37c5ea31855c7201df5cde93ba638c"
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-enemy-focused-attempt6.mjs",
+        "sha256": "da003bbadaf17f34af06ad4ece61f87a6a24059ac1ee4691f606e1af9407e4f1"
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-enemy-focused.mjs",
+        "sha256": "cdd40cda0ff24b91898823be71fed85af4bedf0a4ba5249a085064dbd9aa1986"
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged-attempt1.mjs",
+        "sha256": "88b09035c69124f3e316f6d2575c5e5910937d94e82b76d2c4630d22c94672f2"
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged-attempt2.mjs",
+        "sha256": "663ada963d6c716467501b2975c8b9dd81774de7b833b6906289ce903b0b8f7d"
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged-attempt3.mjs",
+        "sha256": "75afc08cf8b987f1a709081ee231312796f855faf7b31a3b17995a5442d64aff"
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged-attempt4.mjs",
+        "sha256": "3f6ecf2dcfb1cc172600b49c35e29391cafc198ee898ebb4649c4aa9f3aeecfd"
+      },
+      {
+        "path": "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/hv-umm2-156-judged.mjs",
+        "sha256": "86518855222beec696461e1e33680ee341279156efe7207c8dc81134a46bdd92"
+      }
+    ],
+    "ownedProcessGroups": [
+      6803,
+      6833,
+      14187,
+      14188,
+      14239,
+      15659,
+      19094,
+      19122,
+      22851,
+      22879,
+      76819,
+      77877,
+      78764,
+      79373,
+      79897,
+      81137,
+      82017,
+      84991,
+      84992,
+      84994,
+      86135,
+      86186,
+      91969,
+      91997,
+      93040,
+      93068,
+      99961,
+      99989
+    ],
+    "remainingOwnedProcesses": [],
+    "currentSlotOwnerOrServerRecords": [],
+    "portsNow": [
+      {
+        "port": 5174,
+        "listeningNow": false,
+        "connectResult": 61
+      },
+      {
+        "port": 5274,
+        "listeningNow": false,
+        "connectResult": 61
+      }
+    ],
+    "sourceChangedSinceFiniteChecks": false,
+    "commitCreated": false,
+    "beadsOrTollgateMutations": false,
+    "sharedPlaywrightServiceStopped": false,
+    "fullDesktopPayloadQualification": "Desktop steps0-3 in run-DX5rkI retain successful asserted call completion, source/physical IDs, geometry and screenshots in algorithm-witness notes; full result payloads from those early steps are not retained. Mobile steps0-3 in run-lx6nCD and final enemy desktop/mobile in run-4kTvCm retain full physical state/events/gameLog payloads in per-step notes.",
+    "finalEffectiveAlgorithmWitnesses": "All four player algorithms passed on desktop and mobile; Path enemy visible grant/log workflow passed on desktop and mobile. Failed whole attempts retain their original failures; later failures do not turn preceding asserted steps into failures.",
+    "observerCorrections": [
+      "judged1: wait for transient public probe instead of dereferencing absence",
+      "judged2: qualify unsampled Fading intentionally partial hand-face geometry; no full rules visibility claim",
+      "judged3: use owning player-battle-void selector",
+      "judged4: use documented enemyScript instead of expecting default policy to choose Path",
+      "enemy5/mobile5/enemy6: target current remaining granted event i18 at human Dusk, rather than departed i19 reclaimed by enemy; presentation-race hypothesis withdrawn after actual log diagnosis"
+    ],
+    "localCorrectionWindowStartUtc": "2026-10-13T06:12:04.246611Z",
+    "localCorrectionWindowFinalGreenUtc": "2026-10-13T06:30:49.946434Z",
+    "observedProviderOwnerImages": [
+      "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/judged-4-owner.json",
+      "/tmp/dreamtides-executor-01a12e91/156-audit/stage1/active-owner-mobile5.json"
+    ],
+    "providerSessionIdentityQualification": "Exact admitted transport IDs were observed in retained owner images for judged4 and mobile5. Other completed runs were identified by exact runner/server/slot/report identities; their transport IDs were not separately observed and are not guessed. Managed runners confirmed cleanup before their own provider records disappeared; final resource audit has no bead-owned provider/server record, no owned process group, and both owned ports free.",
+    "repoInventoryQualification": "The parent owns the pre-existing evidence file visible in final status; the sweep generated the QA ledger. This helper wrote only four leaves and the one scenario module in the repository. No repository/evidence writer remains."
+  },
+  "parentVisual": {
+    "observedUtc": "2026-10-13T06:19:17.578388+00:00",
+    "views": [
+      {
+        "file": "invocations/run-y8ilGO/156-key-desktop-keep-offered.png",
+        "judgment": "Keep prompt names subject and required single choice; three controlled selectable physical cards and submission control visible without overlap. Actualphysical workflow separately recorded; this early desktopimage is notfinalmobile/Pathacceptance."
+      },
+      {
+        "file": "invocations/run-y8ilGO/156-fading-desktop-earned-return.png",
+        "judgment": "Returned hand card visible atloweredge with nextphasecontrol unobscured; lowerface/rules extendbelowviewport, fullcardvisibility notclaimed. Existinghandpresentation; earnedreturn fromprobe/log, no inferrednewlayoutdefect."
+      },
+      {
+        "file": "invocations/run-DX5rkI/156-path-desktop-void-reclaim-offered.png",
+        "judgment": "Voidplay choices and cancel are fullyvisible andseparated; plainnormal-cost grant actualstate/log separate."
+      },
+      {
+        "file": "invocations/run-DX5rkI/156-path-desktop-active-duration-badge.png",
+        "judgment": "Two snapshotmembers showgreenplayability andpositiveeffectbadge; resolvingPathsource lacksring/badge. Voidbrowsercards/closecontrol fit desktopmodal."
+      },
+      {
+        "file": "invocations/run-DX5rkI/156-path-desktop-normal-reclaim-banish.png",
+        "judgment": "Postreclaim energy6 visibleafter Pathcost3 andeventcost1, banishedpile indicatorvisible; exactnormalcost/physicalbanishment fromstate/log ratherimageinference."
+      },
+      {
+        "file": "invocations/run-DX5rkI/156-path-desktop-expired-void-unavailable.png",
+        "judgment": "Remainingvoidmember andfuturearrival shownwithoutplayabilityring/effectbadge; modal andclose fullyvisible. Expiry/futuremembership actualstate assertions separate."
+      },
+      {
+        "file": "invocations/run-lx6nCD/156-path-mobile-void-reclaim-offered.png",
+        "judgment": "Existing bottomchooser title, two legalplaychoices, viewvoid andcancel fit mobilewidth andheight withoutoverlap; normalcost physicalstate separate."
+      },
+      {
+        "file": "invocations/run-lx6nCD/156-path-mobile-active-duration-badge.png",
+        "judgment": "Snapshotevent/character greenrings andpositivekeyword badges present, resolvingPathsource unmarked; fullvoidfaces andclosecontrol visible withinmobilewidth."
+      },
+      {
+        "file": "invocations/run-lx6nCD/156-path-mobile-expired-void-unavailable.png",
+        "judgment": "Remainingmember/futurearrival lackplayabilityrings andkeywordbadges; voidheader/close visible. YourTurn presentation behindmodal doesnotcovervoidcontrols. Exactexpiry DOM/probe assertion recordedseparately."
+      },
+      {
+        "file": "invocations/run-4kTvCm/156-pathEnemy-desktop-enemy-visible-grant.png",
+        "judgment": "Remainingenemygranted event positivekeywordbadge visible; opponentcards correctlyunringed; publicvoidfaces andclose fitviewport, reveal travelsbehindmodal withoutcoveringcontrols. Exactearnedgrant/reclaimeddepartedmember/persistedplay/reveal fromreport/log."
+      },
+      {
+        "file": "invocations/run-4kTvCm/156-pathEnemy-mobile-enemy-visible-grant.png",
+        "judgment": "Remainingenemygranted event positivekeywordbadge visible; opponentcards correctlyunringed; publicvoidfaces andclose fitviewport, reveal travelsbehindmodal withoutcoveringcontrols. Exactearnedgrant/reclaimeddepartedmember/persistedplay/reveal fromreport/log."
+      }
+    ],
+    "mandatoryPathFinalViews": "Complete: playerdesktop/mobile chooser/active/expiry, enemydesktop/mobile visiblegrantedmember judged; sourcehashunchanged, no fullreturnedhandrulesvisibility claim.",
+    "desktopPathObservationUtc": "2026-10-13T06:23:16.269477+00:00",
+    "mobilePathObservationUtc": "2026-10-13T06:30:14.346651+00:00",
+    "finalParentVisualUtc": "2026-10-13T06:32:28.596659+00:00"
+  },
+  "qaLedgerCounts": {
+    "sweepPass": 46,
+    "sweepSkip": 34,
+    "rawJudgedFail": 7,
+    "effectiveAlgorithmPass": 10,
+    "unresolvedEffectiveFail": 0
+  },
+  "helperQualificationCorrection": "Mobile per-step state/events/recovery retained. Key/Fading/Path outer gameLog values were not included in notes and were lost from viewport result on a later failed step. Reads executed but complete player JSONL is not archived. Whisper retains parsed actions; final enemy cases retain full gameLog. Desktop early-step payload limitation explicit.",
+  "correctionUnionMinutes": 20.752433283333332,
+  "resources": {
+    "observedUtc": "2026-10-13T06:34:03.120849+00:00",
+    "ownedProcesses": [],
+    "ownedProviderOrServerRecords": [],
+    "ports": [
+      {
+        "port": 5174,
+        "listeningNow": false,
+        "connectResult": 61
+      },
+      {
+        "port": 5274,
+        "listeningNow": false,
+        "connectResult": 61
+      }
+    ],
+    "providerQualification": "Exact admitted transport IDs were observed in retained owner images for judged4 and mobile5. Other completed runs were identified by exact runner/server/slot/report identities; their transport IDs were not separately observed and are not guessed. Managed runners confirmed cleanup before their own provider records disappeared; final resource audit has no bead-owned provider/server record, no owned process group, and both owned ports free.",
+    "shared8931LeftRunning": true
+  },
+  "fiveFailurePaths": {
+    "midStepError": "Inherited atomic grant/return contracts ran; no new transition/catch or injected failure.",
+    "partialWrite": "Inherited grant rollback and ordered sequence; full deck count avoids partial Erode.",
+    "reloadRestart": "Actual Key keep, Path committed grant and Whisper resolving confirm reload; existing fold contracts.",
+    "invalidStale": "Inherited return/grant/trigger contracts cover wrong actor, duplicate/stale/foreign answers and intervening source zone; eight coupled scenarios.",
+    "concurrentActors": "No new actor/schema state; existing prompt ownership, both-controller contracts and normal enemy scripted host."
+  },
+  "parentFinalChecks": [
+    {
+      "name": "156-parent-final-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "observerPid": 49032,
+      "pid": 49052,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "startUtc": "2026-10-13T06:42:04.641202+00:00",
+      "endUtc": "2026-10-13T06:42:55.188840+00:00",
+      "wallS": 50.54711295799643,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/156-parent-final-review.log"
+    },
+    {
+      "name": "156-parent-final-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "observerPid": 49031,
+      "pid": 49051,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "startUtc": "2026-10-13T06:42:04.641194+00:00",
+      "endUtc": "2026-10-13T06:42:09.723413+00:00",
+      "wallS": 5.082201790995896,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/156-parent-final-knip.log"
+    },
+    {
+      "name": "156-parent-guard",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a12e91/156-guard.py"
+      ],
+      "observerPid": 50241,
+      "pid": 50249,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "startUtc": "2026-10-13T06:43:10.803294+00:00",
+      "endUtc": "2026-10-13T06:43:10.844015+00:00",
+      "wallS": 0.040750166997895576,
+      "exit": 1,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/156-parent-guard.log"
+    },
+    {
+      "name": "156-parent-guard2",
+      "command": [
+        "python3",
+        "/tmp/dreamtides-executor-01a12e91/156-guard.py"
+      ],
+      "observerPid": 50686,
+      "pid": 50694,
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/materialize-recursion-156",
+      "startUtc": "2026-10-13T06:43:41.688848+00:00",
+      "endUtc": "2026-10-13T06:43:41.798326+00:00",
+      "wallS": 0.1095231670042267,
+      "exit": 0,
+      "terminal": true,
+      "log": "/tmp/dreamtides-executor-01a12e91/156-parent-guard2.log"
+    }
+  ],
+  "parentFinalCheckCorrection": "Guard1 assumed skipped ineligible sweep cells have rawReport; they have no browser run. Corrected guard2 permits that documented skip shape and passes; no source change.",
+  "parentFinalCheckLoad": "UNKNOWN: final root review/Knip start load not separately sampled; friction hostLoad explicitly corresponds to original review-1 start, not these command clocks.",
+  "sourceManifestQualification": "Five source hashes frozen after finite checks; all final witnesses and source/metadata guards use those same blobs. Generated outputs, renderer, API, schema, catalog indices and runner unchanged."
+}

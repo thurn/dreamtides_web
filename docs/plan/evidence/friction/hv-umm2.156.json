@@ -1,0 +1,35 @@
+{
+  "bead": "hv-umm2.156",
+  "phase": 5,
+  "implementMin": 65.37319846666666,
+  "implementWindow": {
+    "start": "2026-10-13T05:39:31.908807+00:00",
+    "end": "2026-10-13T06:44:54.300715+00:00"
+  },
+  "localValidationS": {
+    "focused": 10.602431834005984,
+    "review": 47.14555904199369,
+    "knip": 3.5242468749929685,
+    "coverage": 3.3605619999871124,
+    "fuzz": 176.19987987499917,
+    "fuzzOuter": 176.22597966699686,
+    "preflight": 1.7506740420067217,
+    "sweep": 392.08533895800065,
+    "judgedFinalEnemy": 18.9252492920059,
+    "finalEvidenceReview": 50.54711295799643,
+    "finalEvidenceKnip": 5.082201790995896
+  },
+  "hostLoad": 4.72705078125,
+  "testDelta": {
+    "files": 0,
+    "lines": 104,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 20.752433283333332,
+      "note": "Disjoint D20 sequencing correction and complete QA observer correction windows, including reads/waits/edits/checks. No production repair. Enemy Reclaim explained departed gallery member; timing hypothesis withdrawn. Exact failures and payload limits in measurements; not CPU."
+    }
+  ]
+}

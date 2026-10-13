@@ -1,0 +1,15 @@
+# hv-umm2.156 observations
+
+The four definitions compose existing authored engine primitives. Existing return-all-but-one and return-from-void contracts define successful hand-return counts, retained departure controllers, named receiving hands and ordinary created/Reclaim replacement behavior. Existing grant-Reclaim contracts define physical void snapshots, normal inherited costs and end-turn expiry. Current rules require payment in full as a resolving effect; RD-hv-7x4l.17-3 governs start-turn ordering before Dreamwell. These are source and contract observations, separate from actual card-specific runtime evidence.
+
+Two initial Whisper scenario runs failed in the new scenario module: a redundant response pass was illegal after an uncontested event settled, and a scripted target answer remained unused because the sole eligible event was chosen automatically. Correcting only the scenario sequencing and answer list produced eight passing coupled scenarios on both controllers. Raw failed checks and the complete correction interval remain in the measurement record. These diagnostic failures do not establish a production engine defect.
+
+A parent read attempted an absent former scratch recipe, and a later source search named an absent reclaim filename. The searches had no source effect; subsequent file discovery and scoped searches found the actual recipe and grant-reclaim module. Exact process identities and UTC boundaries for these short observer reads were not sampled.
+
+No confirmed out-of-scope product issue has been established at this source checkpoint. Runtime sweep and judged observations are recorded independently in the QA ledger and measurement record.
+
+Seven failed whole judged attempts are retained: public probe readiness, a full-hand-face geometry assumption, an incorrect void selector, an unstaged default-bot play assumption, and observing a physical member after the enemy reclaimed it. The actual enemy log proves the latter departure. The timing hypothesis is unconfirmed and withdrawn. Corrected workflows passed on both viewports without a production or shared UI change. Desktop early-step return payloads retain asserted completion, IDs, geometry and captures; mobile notes retain state/events/recovery but complete player game JSONL is not archived. Final enemy cases retain their complete game logs.
+
+Parent compact-report and evidence observers had a Python syntax error and an assumption that every report error carries a viewport prefix. Corrected observers had no source effect; the prefix rejection preceded every evidence write. Some parent reads guessed absent screen/adapter paths before file discovery found the actual paths. Short observer PID/UTC boundaries were not sampled.
+
+The final parent artifact guard initially required a raw browser report on an ineligible skipped cell. Such cells have no browser run. The corrected guard validates actual skipped-cell shape and all eligible reports; its failed and passing receipts remain in measurements. No source correction was involved.
