@@ -1,3 +1,5 @@
+import { triggered, whenOpponentPlays } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,6 @@ export default card({
   cardNumber: 317,
   art: { x: -0.198, y: -0.71, scale: 2.27 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenOpponentPlays({ cardType: "event" }), draw(1), { oncePerTurn: true })],
+  verifiedText: "fut7wfj01l",
 });

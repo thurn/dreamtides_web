@@ -1,3 +1,6 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenYouChallengeWith } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +21,7 @@ export default card({
   artOwned: false,
   cardNumber: 406,
   isStarter: false,
-  pending: true,
+  // C10 and RD-hv-7x4l.1-15: count designated Warriors once, at the end of Day.
+  abilities: (variant) => [triggered(whenYouChallengeWith(2, characterYouControl({ subtype: "Warrior" })), draw(variant.amplified ? 2 : 1))],
+  verifiedText: "2gjbremzmbn",
 });

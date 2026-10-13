@@ -1,0 +1,1451 @@
+{
+  "bead": "hv-umm2.126",
+  "base": "245dae134c46a2d0980b68a4cce00eb3b08c1ddb",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+  "provenance": {
+    "exactDispatch": "UNKNOWN",
+    "internalModel": "UNKNOWN",
+    "modelSamplingStart": "UNKNOWN",
+    "firstToolProxy": "functions.exec -> exec_command; exact wallclock not retained",
+    "dispatchAfter": "2026-10-13T14:23:09.153504Z",
+    "dispatchBefore": "2026-10-13T14:24:13.965630Z",
+    "implementationStartProxy": "2026-10-13T14:24:13.965630+00:00",
+    "omittedResearchUpperBoundS": 64.812126,
+    "endpoint": {
+      "kind": "Actual pre-Git endpoint observation under final parent COMMITACK",
+      "utc": "2026-10-13T15:05:51.492838+00:00",
+      "actualGitReceipt": "/tmp/dreamtides-executor-01a1304d/126-helper/final-commit-receipt.json",
+      "constraint": "Git runs within60s; no forced commit timestamps; actual time comparison retained outside committed source to avoid self-reference"
+    }
+  },
+  "parentInstall": {
+    "exit": 0,
+    "elapsed": 2.5656000419985503,
+    "pid": 58472,
+    "start": "2026-10-13T14:23:06.587861+00:00"
+  },
+  "parentInstallCloseout": {
+    "observed": "2026-10-13T14:25:39.143654+00:00",
+    "pid": 58472,
+    "absent": true,
+    "ps": ""
+  },
+  "sourceSHA256": {
+    "src/content/cards/bloom-guard-64ce3ebc.ts": "76f55a865c570a179445e83213b7f2fc3d78f9451d63a50ef466ea1198a7ed96",
+    "src/content/cards/firebrand-saboteur-382dafa1.ts": "9d36a8e9cee5f7f294b66850777b43afc844918f105b20b62be9b1e09e75d44b",
+    "src/content/cards/harbor-warden-1b4d2adc.ts": "05b26d46f1dd9673bc0ef3cc67d494f6af89aaf28e40d5daed651657b0d7ccdc",
+    "src/content/cards/melodist-of-the-finale-f07dfe42.ts": "5ef6105effd92c47600a03254ca7ed6b46d95b44d8151d0e6061c72387d52588",
+    "src/content/cards/silent-observer-b1bea643.ts": "5ed2eddbaa98b1f22734d7a84433911a94b0317fe4dafa62513a8de4703a266a",
+    "src/content/specs/cards-14.scenarios.ts": "a526ef930314d507aaa533068925060d358cf8fa4c76a911c7cf7fe4a57562d8"
+  },
+  "sourceOnlyStage1SHA256": {
+    "src/content/cards/bloom-guard-64ce3ebc.ts": "605145357b8a2cdf4c23de3cb3329861845304bb3432485f339677c890a56f2c",
+    "src/content/cards/firebrand-saboteur-382dafa1.ts": "5813c2829a4a6b3ea78529c2654e1c568fb7c9e8000785312d327dcdbe0e00b5",
+    "src/content/cards/harbor-warden-1b4d2adc.ts": "f5af61683ed3f4a46eca80958318d58551925c0f7536d742ab6fdc88fe38624e",
+    "src/content/cards/melodist-of-the-finale-f07dfe42.ts": "69d015cf0e7c02f3fb72e89e2ffad4ba217e2416f51dbf982ebf794278414453",
+    "src/content/cards/silent-observer-b1bea643.ts": "150fb63e36a70ebad71eff73bd9ab99e947a0697bf26e28252a91d2ba873884c",
+    "src/engine/dsl/triggers.ts": "6198aeb4088f1283ef9b452a4a616f0983a886ea4131a22fb45cfdd21f6bb5bc",
+    "src/engine/dsl/builders.ts": "e870582c013b357cd3784e1b568ce398bbb51cbffdb298f8039d10e5c25d9c78",
+    "src/engine/dsl/conditions.ts": "0f94ef7b9893cc84c777bd07c023cdd664c0d8b0705a5a162b50487b46bcc39e",
+    "src/engine/triggers/matcher.ts": "5de0120d595144d23fa9bbf72dd5e6aedaf1a9a727c62790b5067ef667eb2c31",
+    "src/engine/steps/kinds/play.ts": "e2b122ae29d3e7a93c0a8f974e2a3320757637f733e068bb24b4c4d84b902b0e",
+    "src/engine/effects/primitives/if-then.ts": "cc0a55d3a5ac513c667597544ab350af7aec84a495fe32ebb8ce30e37157f4ae",
+    "src/engine/effects/primitives/discard.ts": "12e8cb484178acdd0e0837485f2b43449f1f0ddf73b8367758041b9c0a9ba815",
+    "src/engine/effects/primitives/draw.ts": "cdda8f9c15f9eae4bc6d209d03c0cb4971613a9b6eb39e9cb6b0018d35eef61f",
+    "src/engine/rules/challenge.ts": "86a4bf1ca7a03c9affb18a50ff4c326ae4a06067dc41568b1a86e39a0855e273",
+    "src/engine/rules/turn.ts": "0dace19629f801f02cdb107a2111658232ead6a4389b8d4f4cfba5d30433f1d6",
+    "src/engine/rules/zones.ts": "1da0713ec28cab60bfa1a3609e368fdb50b82e41c08d858d601895badc73c2a5",
+    "src/engine/effects/interpreter.ts": "47d4217ae39f1ecb4d492e865667497462656cb2505a86d9f3a94917ff1b70be",
+    "src/rules/battle/fold.ts": "09118784fd6d002cb26c952a32dcfa0316724affde306c4414323256423c56e8",
+    "src/engine/log.ts": "530a15b563632a8f16e75b77855a3f49ecf97e88b8ceb2bf3a4350dd27de0d3d",
+    "src/content/specs/index.ts": "ab5efcc38d72018c30b4f1e6b75a80d2ed044c0bb2c2d20e4765843d75aac287"
+  },
+  "sourceMatrix": [
+    {
+      "uuid": "b1bea643-1a7b-4e5e-b072-7174d3405421",
+      "dsl": "triggered(whenOpponentPlays({cardType:\"event\"}),draw(1),{oncePerTurn:true})",
+      "clauses": "Opponent actual play event captured as played; own events and opposing characters excluded; allowance consumed when queued and renewed each turn."
+    },
+    {
+      "uuid": "f07dfe42-566c-4e91-a250-9e2781e9d06f",
+      "dsl": "triggered(whenYouChallengeWith(2,characterYouControl({subtype:\"Warrior\"})),draw(variant.amplified?2:1))",
+      "clauses": "C10: 2 or more matching designated challengers at end of Day, one draw or amplified two. Back-rank, exhausted and non-Warrior characters excluded; Night does not refire."
+    },
+    {
+      "uuid": "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c",
+      "dsl": "triggered(either(onMaterialized(),onDissolved()),draw(1))",
+      "clauses": "Own materialization and own dissolve draw one; named dissolve uses last in-play controller (RD-hv-umm2.342-1)."
+    },
+    {
+      "uuid": "1b4d2adc-64ab-4020-bae6-b35321898bf0",
+      "dsl": "triggered(onMaterialized(),draw(2))",
+      "clauses": "Own materialization draws two."
+    },
+    {
+      "uuid": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+      "dsl": "triggered(onMaterialized(),ifThen(conditionCardCounts(\"hand\",1,{player:\"opponent\"}),discard(1,\"opponent\"),draw(variant.amplified?2:1)))",
+      "clauses": "Check opponent hand before discard at resolution. Opponent chooses one; empty hand draws one or amplified two for source controller; last-card discard receives no fallback draw."
+    }
+  ],
+  "sourceFallout": {
+    "pathsReadonly": [
+      "src/engine/dsl/triggers.ts",
+      "src/engine/dsl/builders.ts",
+      "src/engine/dsl/conditions.ts",
+      "src/engine/triggers/matcher.ts",
+      "src/engine/steps/kinds/play.ts",
+      "src/engine/effects/primitives/if-then.ts",
+      "src/engine/effects/primitives/discard.ts",
+      "src/engine/effects/primitives/draw.ts",
+      "src/engine/rules/challenge.ts",
+      "src/engine/rules/turn.ts",
+      "src/engine/rules/zones.ts",
+      "src/engine/effects/interpreter.ts",
+      "src/rules/battle/fold.ts",
+      "src/engine/log.ts",
+      "src/content/specs/index.ts"
+    ],
+    "catalogImportsAlreadyPresent": true,
+    "specDiscovery": "Existing eager import.meta.glob; shared index unchanged",
+    "newPrimitives": [],
+    "newPromptStatusVisualKinds": [],
+    "registrationSavedViewLogEditsRequired": false,
+    "logs": "Existing source-qualified trigger events and UUID/physical-ID action records; native persisted runtime proof pending QA."
+  },
+  "rulesDecisions": {
+    "existing": [
+      "C10",
+      "RD-hv-7x4l.1-15",
+      "RD-hv-umm2.342-1"
+    ],
+    "new": [],
+    "ladder": "Existing normative rules settle clauses; new ladder decision not invoked"
+  },
+  "d20": {
+    "module": "src/content/specs/cards-14.scenarios.ts",
+    "scenarios": 14,
+    "fixtures": "Only subject cards are production definitions; other cards and decks synthetic. No printed/UI string assertions.",
+    "behaviors": [
+      "Both controllers: opposing event once allowance, own-event/opposing-character exclusions, renewal at turn boundaries",
+      "Both controllers/base+amplified: empty/one-card/two-card hands; accepted physical discard answer; no fallback after last discard"
+    ],
+    "testDeltaMethod": "Friction counts .test files; separate plain scenario module 65 lines/14 contracts."
+  },
+  "d21": {
+    "sha256FirstBytes": {
+      "b1bea643-1a7b-4e5e-b072-7174d3405421": 11,
+      "f07dfe42-566c-4e91-a250-9e2781e9d06f": 151,
+      "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c": 222,
+      "1b4d2adc-64ab-4020-bae6-b35321898bf0": 121,
+      "382dafa1-f8ff-47b4-9151-15b84067a5b2": 127
+    },
+    "sampled": [
+      "b1bea643-1a7b-4e5e-b072-7174d3405421"
+    ],
+    "newKinds": [],
+    "plannedJudged": "Both source actors desktop/mobile: actual two opposing event plays, same-turn cap, source/controller/subject UUID+physical identities, persisted logs, hand state, geometry, empty caps. Turn reset covered by synthetic contracts only.",
+    "qaSource": "/tmp/dreamtides-executor-01a1304d/126-helper/silent-observer-qa.mjs",
+    "qaSourceSHA256": "a633fe0e0c43982d793f252ca055e074612ccb1de9969f6dbb4a0357beb871d9",
+    "qaStatus": "PASS: four native cases, both actors and desktop/mobile; own four captures viewed, parent independently viewed three.",
+    "screens": [
+      "silent-observer-player-desktop.png",
+      "silent-observer-enemy-desktop.png",
+      "silent-observer-player-mobile.png",
+      "silent-observer-enemy-mobile.png"
+    ],
+    "pixels": {
+      "desktop": [
+        2880,
+        1800
+      ],
+      "mobile": [
+        780,
+        1688
+      ],
+      "deviceScaleFactor": 2
+    },
+    "judgedLogicalScope": "Actual two opponent play intents per case, exact event printing and physical IDs; one attributed queue/resolve/draw; draw before second play; draw retained in controller hand; source/control visible hit geometry; empty caps; persisted action/trigger predicate passed. Turn renewal covered by synthetic contracts only.",
+    "visualScope": "Helper viewed all four captures: source tile and phase button clear and within viewport; standard hand cropping and inactive controls observed. Parent viewed player desktop, player mobile and enemy mobile. No changed UI geometry defect inferred.",
+    "nativeReport": "invocations/run-8DeBM6/silent-observer-qa.result.json",
+    "persistedLogRetention": "Runtime persisted-log predicates passed in each of four cases; runner exports the final (enemy-source) game per viewport, 46 rows each. First-step player-source full returned records are not in final viewport result; case notes, physical-ID/count/geometry assertions and screenshots are retained. Existing producer keeps per-game IndexedDB logs."
+  },
+  "runtimeProof": {
+    "compositionWitnessCases": 34,
+    "scope": "Both actors/base+amplified Melodist threshold/designation; Bloom entry+dissolve and foreign-dissolve exclusion; Harbor draw two. Scratch engine execution, not browser proof.",
+    "preflight": {
+      "pass": 50,
+      "skipIneligible": 50,
+      "pending": 0,
+      "fail": 0,
+      "requestedCells": 100,
+      "variants": "all",
+      "actors": "both",
+      "scope": "Five UUIDs, Node staging/resolution only; browser sweep pending"
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 122090,
+      "prompts": 7923,
+      "failures": 0,
+      "engineWallS": 203.9,
+      "engineCpuS": 219.7,
+      "feasibilityBounded": {
+        "legality": 0,
+        "prompts": 4
+      },
+      "targets": [
+        {
+          "uuid": "b1bea643-1a7b-4e5e-b072-7174d3405421",
+          "included": 618,
+          "exercised": 256
+        },
+        {
+          "uuid": "f07dfe42-566c-4e91-a250-9e2781e9d06f",
+          "included": 615,
+          "exercised": 123
+        },
+        {
+          "uuid": "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c",
+          "included": 612,
+          "exercised": 180
+        },
+        {
+          "uuid": "1b4d2adc-64ab-4020-bae6-b35321898bf0",
+          "included": 615,
+          "exercised": 97
+        },
+        {
+          "uuid": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+          "included": 615,
+          "exercised": 147
+        }
+      ]
+    },
+    "sweep": {
+      "initialExit": 1,
+      "initialEffective": {
+        "pass": 49,
+        "skipIneligible": 50,
+        "fail": 1
+      },
+      "initialRawAttempts": {
+        "pass": 49,
+        "skipIneligible": 50,
+        "fail": 2
+      },
+      "initialInvocation": "invocations/sweep-VYiexi",
+      "nativeTimeoutRetry": "Firebrand perfected player first timeout-only report failed, existing runner eligible fresh attempt passed; both preserved.",
+      "explicitTargetedResweep": {
+        "uuid": "f07dfe42-566c-4e91-a250-9e2781e9d06f",
+        "variant": "base",
+        "side": "enemy",
+        "invocation": "invocations/sweep-NNhPst",
+        "exit": 0,
+        "pass": 1,
+        "hypothesis": "Transport-before-workflow interruption in first goto; origin UNKNOWN; exactly one unchanged fresh context/server run."
+      },
+      "effectiveCoverage": {
+        "eligiblePass": 50,
+        "ineligibleSkip": 50,
+        "unfixedEligibleFail": 0
+      },
+      "rawLedger": {
+        "pass": 54,
+        "fail": 2,
+        "skip": 50,
+        "total": 106,
+        "passComposition": "49 initial sweep + 1 targeted sweep + 4 judged cases"
+      },
+      "qualification": "Initial full sweep is non-green; effective coverage combines initial49 plus one explicit targeted pass. Two raw failure records remain immutable."
+    }
+  },
+  "checks": {
+    "knip": {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:36:53.914771+00:00",
+      "pid": 74618,
+      "pgid": 74618,
+      "hostLoadStart": [
+        3.96923828125,
+        4.1923828125,
+        4.6318359375
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/knip.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 3.54428645799635,
+      "finishedAt": "2026-10-13T14:36:57.459178+00:00",
+      "hostLoadEnd": [
+        3.8916015625,
+        4.17236328125,
+        4.6220703125
+      ],
+      "cpuUserS": 3.055893,
+      "cpuSystemS": 0.8850669999999999
+    },
+    "fault-once-cap": {
+      "name": "fault-once-cap",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-14"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:32:15.136172+00:00",
+      "pid": 69027,
+      "pgid": 69027,
+      "hostLoadStart": [
+        3.17578125,
+        3.90234375,
+        4.720703125
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/fault-once-cap.log",
+      "state": "finished",
+      "exitCode": 1,
+      "wallS": 5.148114459007047,
+      "finishedAt": "2026-10-13T14:32:20.284596+00:00",
+      "hostLoadEnd": [
+        3.08154296875,
+        3.87060546875,
+        4.70458984375
+      ]
+    },
+    "judged": {
+      "name": "judged",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/126-helper/silent-observer-qa.mjs",
+        "--bead",
+        "hv-umm2.126",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:51:24.633401+00:00",
+      "pid": 81903,
+      "pgid": 81903,
+      "hostLoadStart": [
+        15.6328125,
+        15.25244140625,
+        11.32373046875
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/judged.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 68.92432608298259,
+      "finishedAt": "2026-10-13T14:52:33.558367+00:00",
+      "hostLoadEnd": [
+        18.841796875,
+        15.84619140625,
+        11.8291015625
+      ],
+      "cpuUserS": 5.388071,
+      "cpuSystemS": 2.573273
+    },
+    "focused": {
+      "name": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:30:36.179262+00:00",
+      "pid": 67195,
+      "pgid": 67195,
+      "hostLoadStart": [
+        2.970703125,
+        4.10107421875,
+        4.88037109375
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/focused.log",
+      "state": "finished",
+      "exitCode": 1,
+      "wallS": 9.268135207996238,
+      "finishedAt": "2026-10-13T14:30:45.447549+00:00",
+      "hostLoadEnd": [
+        2.97265625,
+        4.08251953125,
+        4.869140625
+      ]
+    },
+    "review": {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:35:12.385978+00:00",
+      "pid": 72767,
+      "pgid": 72767,
+      "hostLoadStart": [
+        4.20166015625,
+        4.177734375,
+        4.67626953125
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/review.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 45.77879712500726,
+      "finishedAt": "2026-10-13T14:35:58.165083+00:00",
+      "hostLoadEnd": [
+        5.06103515625,
+        4.41259765625,
+        4.736328125
+      ]
+    },
+    "preflight": {
+      "name": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "b1bea643-1a7b-4e5e-b072-7174d3405421,f07dfe42-566c-4e91-a250-9e2781e9d06f,64ce3ebc-c0ac-4dd3-95ca-eeb67530187c,1b4d2adc-64ab-4020-bae6-b35321898bf0,382dafa1-f8ff-47b4-9151-15b84067a5b2",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:34:52.514393+00:00",
+      "pid": 72392,
+      "pgid": 72392,
+      "hostLoadStart": [
+        4.98828125,
+        4.3125,
+        4.73486328125
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/preflight.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 1.2981420420110226,
+      "finishedAt": "2026-10-13T14:34:53.812642+00:00",
+      "hostLoadEnd": [
+        4.98828125,
+        4.3125,
+        4.73486328125
+      ]
+    },
+    "schema": {
+      "name": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:39:03.418889+00:00",
+      "pid": 32830,
+      "pgid": 32830,
+      "hostLoadStart": [
+        9.36572265625,
+        7.04638671875,
+        5.76171875
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/schema.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 0.12483099999371916,
+      "finishedAt": "2026-10-13T14:39:03.543890+00:00",
+      "hostLoadEnd": [
+        9.36572265625,
+        7.04638671875,
+        5.76171875
+      ],
+      "cpuUserS": 0.058946,
+      "cpuSystemS": 0.032882999999999996
+    },
+    "focused-corrected": {
+      "name": "focused-corrected",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:31:31.597622+00:00",
+      "pid": 68255,
+      "pgid": 68255,
+      "hostLoadStart": [
+        3.4287109375,
+        4.03662109375,
+        4.80517578125
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/focused-corrected.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 8.937171291996492,
+      "finishedAt": "2026-10-13T14:31:40.534954+00:00",
+      "hostLoadEnd": [
+        3.71435546875,
+        4.08544921875,
+        4.81787109375
+      ]
+    },
+    "fault-last-card": {
+      "name": "fault-last-card",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-14"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:32:20.309395+00:00",
+      "pid": 69151,
+      "pgid": 69151,
+      "hostLoadStart": [
+        3.08154296875,
+        3.87060546875,
+        4.70458984375
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/fault-last-card.log",
+      "state": "finished",
+      "exitCode": 1,
+      "wallS": 3.7016799580014776,
+      "finishedAt": "2026-10-13T14:32:24.011230+00:00",
+      "hostLoadEnd": [
+        3.31494140625,
+        3.90576171875,
+        4.7119140625
+      ]
+    },
+    "fuzz": {
+      "name": "fuzz",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "b1bea643-1a7b-4e5e-b072-7174d3405421,f07dfe42-566c-4e91-a250-9e2781e9d06f,64ce3ebc-c0ac-4dd3-95ca-eeb67530187c,1b4d2adc-64ab-4020-bae6-b35321898bf0,382dafa1-f8ff-47b4-9151-15b84067a5b2"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:33:26.144964+00:00",
+      "pid": 70420,
+      "pgid": 70420,
+      "hostLoadStart": [
+        2.869140625,
+        3.73583984375,
+        4.59130859375
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/fuzz.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 206.0606445829908,
+      "finishedAt": "2026-10-13T14:36:52.206588+00:00",
+      "hostLoadEnd": [
+        3.96923828125,
+        4.1923828125,
+        4.6318359375
+      ]
+    },
+    "sweep-targeted": {
+      "name": "sweep-targeted",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.126",
+        "--cards",
+        "f07dfe42-566c-4e91-a250-9e2781e9d06f",
+        "--variants",
+        "base",
+        "--as",
+        "enemy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:58:00.668950+00:00",
+      "pid": 2239,
+      "pgid": 2239,
+      "hostLoadStart": [
+        7.27392578125,
+        10.34716796875,
+        10.49755859375
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/sweep-targeted.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 22.09098408301361,
+      "finishedAt": "2026-10-13T14:58:22.760249+00:00",
+      "hostLoadEnd": [
+        8.52685546875,
+        10.38525390625,
+        10.505859375
+      ],
+      "cpuUserS": 4.89073,
+      "cpuSystemS": 2.452699
+    },
+    "composition-witness": {
+      "name": "composition-witness",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/126-helper/composition-witness.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:33:26.144971+00:00",
+      "pid": 70421,
+      "pgid": 70421,
+      "hostLoadStart": [
+        2.869140625,
+        3.73583984375,
+        4.59130859375
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/composition-witness.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 3.002763333002804,
+      "finishedAt": "2026-10-13T14:33:29.147880+00:00",
+      "hostLoadEnd": [
+        2.869140625,
+        3.73583984375,
+        4.59130859375
+      ]
+    },
+    "sweep": {
+      "name": "sweep",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.126",
+        "--cards",
+        "b1bea643-1a7b-4e5e-b072-7174d3405421,f07dfe42-566c-4e91-a250-9e2781e9d06f,64ce3ebc-c0ac-4dd3-95ca-eeb67530187c,1b4d2adc-64ab-4020-bae6-b35321898bf0,382dafa1-f8ff-47b4-9151-15b84067a5b2",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:41:59.379514+00:00",
+      "pid": 95244,
+      "pgid": 95244,
+      "hostLoadStart": [
+        14.33837890625,
+        11.02294921875,
+        7.7236328125
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/sweep.log",
+      "state": "finished",
+      "exitCode": 1,
+      "wallS": 516.0686410829949,
+      "finishedAt": "2026-10-13T14:50:35.458550+00:00",
+      "hostLoadEnd": [
+        22.65673828125,
+        16.17236328125,
+        11.39453125
+      ],
+      "cpuUserS": 16.958142,
+      "cpuSystemS": 9.526752
+    },
+    "qa-source-syntax": {
+      "name": "qa-source-syntax",
+      "argv": [
+        "node",
+        "--check",
+        "/tmp/dreamtides-executor-01a1304d/126-helper/silent-observer-qa.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:40:40.045398+00:00",
+      "pid": 88892,
+      "pgid": 88892,
+      "hostLoadStart": [
+        11.2109375,
+        9.2099609375,
+        6.79833984375
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/qa-source-syntax.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 0.04210712501662783,
+      "finishedAt": "2026-10-13T14:40:40.087671+00:00",
+      "hostLoadEnd": [
+        11.2109375,
+        9.2099609375,
+        6.79833984375
+      ],
+      "cpuUserS": 0.034827,
+      "cpuSystemS": 0.007477999999999999
+    },
+    "schema-own": {
+      "name": "schema-own",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T14:40:09.804338+00:00",
+      "pid": 86447,
+      "pgid": 86447,
+      "hostLoadStart": [
+        14.8203125,
+        9.58544921875,
+        6.83984375
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/schema-own.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 0.07082787499530241,
+      "finishedAt": "2026-10-13T14:40:09.875304+00:00",
+      "hostLoadEnd": [
+        14.8203125,
+        9.58544921875,
+        6.83984375
+      ],
+      "cpuUserS": 0.056676,
+      "cpuSystemS": 0.018914
+    },
+    "schema-final": {
+      "name": "schema-final",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+      "startedAt": "2026-10-13T15:02:35.973482+00:00",
+      "pid": 42506,
+      "pgid": 42506,
+      "hostLoadStart": [
+        6.34716796875,
+        8.37841796875,
+        9.595703125
+      ],
+      "log": "/tmp/dreamtides-executor-01a1304d/126-helper/schema-final.log",
+      "state": "finished",
+      "exitCode": 0,
+      "wallS": 0.11430920899147168,
+      "finishedAt": "2026-10-13T15:02:36.087893+00:00",
+      "hostLoadEnd": [
+        6.34716796875,
+        8.37841796875,
+        9.595703125
+      ],
+      "cpuUserS": 0.052322,
+      "cpuSystemS": 0.025027999999999998
+    }
+  },
+  "coverageGate": "content-gates.test.ts passed in focused-corrected four-file/2915-test check: registered primitives and literal verifiedText. review 241 files/5012 tests passed.",
+  "failures": [
+    {
+      "kind": "author fixture assertion",
+      "run": "focused",
+      "exit": 1,
+      "detail": "Four cases expected nonexistent RecordedAnswer.prompt; corrected to public answer.value; substantive state/effect assertions passed, corrected check passed."
+    },
+    {
+      "kind": "expected counterfactual",
+      "run": "fault-once-cap",
+      "exit": 1,
+      "detail": "Remove once cap: both actor contracts fail (2); production source restored exact SHA."
+    },
+    {
+      "kind": "expected counterfactual",
+      "run": "fault-last-card",
+      "exit": 1,
+      "detail": "Require at least two opponent cards: four last-card rows fail; production source restored exact SHA."
+    },
+    {
+      "kind": "author evidence assembly",
+      "run": "inline Python before evidence files existed",
+      "exit": 1,
+      "detail": "Syntax error prevented all evidence writes; following schema run only checked previous records. Reassembled evidence with saved script; own record must pass a fresh schema check."
+    },
+    {
+      "kind": "raw browser navigation interruption",
+      "run": "sweep",
+      "detail": "Melodist base enemy goto net::ERR_ABORTED after 388ms; URL stayed at previous perfected player document, no frame or navigation-commit record, no observations dropped or erroneous; old caps empty. Gameplay assertions for this cell did not run; abort origin UNKNOWN. One explicit unchanged fresh-context resweep passed; raw fail preserved."
+    },
+    {
+      "kind": "native timeout-only retry",
+      "run": "sweep",
+      "detail": "Firebrand perfected player lab-report wait timeout58961ms, native eligible fresh attempt passed; both raw lines/reports retained."
+    }
+  ],
+  "faultProof": [
+    {
+      "fault": "once-cap",
+      "path": "src/content/cards/silent-observer-b1bea643.ts",
+      "expectedExitNonzero": true,
+      "actualExit": 1,
+      "restoredSHA256": "5ed2eddbaa98b1f22734d7a84433911a94b0317fe4dafa62513a8de4703a266a"
+    },
+    {
+      "fault": "last-card",
+      "path": "src/content/cards/firebrand-saboteur-382dafa1.ts",
+      "expectedExitNonzero": true,
+      "actualExit": 1,
+      "restoredSHA256": "9d36a8e9cee5f7f294b66850777b43afc844918f105b20b62be9b1e09e75d44b"
+    }
+  ],
+  "hostLoadSamples": {
+    "knip": {
+      "start": [
+        3.96923828125,
+        4.1923828125,
+        4.6318359375
+      ],
+      "end": [
+        3.8916015625,
+        4.17236328125,
+        4.6220703125
+      ],
+      "scope": [
+        "npm",
+        "run",
+        "knip"
+      ]
+    },
+    "fault-once-cap": {
+      "start": [
+        3.17578125,
+        3.90234375,
+        4.720703125
+      ],
+      "end": [
+        3.08154296875,
+        3.87060546875,
+        4.70458984375
+      ],
+      "scope": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-14"
+      ]
+    },
+    "judged": {
+      "start": [
+        15.6328125,
+        15.25244140625,
+        11.32373046875
+      ],
+      "end": [
+        18.841796875,
+        15.84619140625,
+        11.8291015625
+      ],
+      "scope": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/dreamtides-executor-01a1304d/126-helper/silent-observer-qa.mjs",
+        "--bead",
+        "hv-umm2.126",
+        "--viewports",
+        "desktop,mobile"
+      ]
+    },
+    "focused": {
+      "start": [
+        2.970703125,
+        4.10107421875,
+        4.88037109375
+      ],
+      "end": [
+        2.97265625,
+        4.08251953125,
+        4.869140625
+      ],
+      "scope": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts"
+      ]
+    },
+    "review": {
+      "start": [
+        4.20166015625,
+        4.177734375,
+        4.67626953125
+      ],
+      "end": [
+        5.06103515625,
+        4.41259765625,
+        4.736328125
+      ],
+      "scope": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    "preflight": {
+      "start": [
+        4.98828125,
+        4.3125,
+        4.73486328125
+      ],
+      "end": [
+        4.98828125,
+        4.3125,
+        4.73486328125
+      ],
+      "scope": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "b1bea643-1a7b-4e5e-b072-7174d3405421,f07dfe42-566c-4e91-a250-9e2781e9d06f,64ce3ebc-c0ac-4dd3-95ca-eeb67530187c,1b4d2adc-64ab-4020-bae6-b35321898bf0,382dafa1-f8ff-47b4-9151-15b84067a5b2",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ]
+    },
+    "schema": {
+      "start": [
+        9.36572265625,
+        7.04638671875,
+        5.76171875
+      ],
+      "end": [
+        9.36572265625,
+        7.04638671875,
+        5.76171875
+      ],
+      "scope": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ]
+    },
+    "focused-corrected": {
+      "start": [
+        3.4287109375,
+        4.03662109375,
+        4.80517578125
+      ],
+      "end": [
+        3.71435546875,
+        4.08544921875,
+        4.81787109375
+      ],
+      "scope": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts"
+      ]
+    },
+    "fault-last-card": {
+      "start": [
+        3.08154296875,
+        3.87060546875,
+        4.70458984375
+      ],
+      "end": [
+        3.31494140625,
+        3.90576171875,
+        4.7119140625
+      ],
+      "scope": [
+        "npm",
+        "test",
+        "--",
+        "src/content/specs/specs.test.ts",
+        "-t",
+        "cards-14"
+      ]
+    },
+    "fuzz": {
+      "start": [
+        2.869140625,
+        3.73583984375,
+        4.59130859375
+      ],
+      "end": [
+        3.96923828125,
+        4.1923828125,
+        4.6318359375
+      ],
+      "scope": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "b1bea643-1a7b-4e5e-b072-7174d3405421,f07dfe42-566c-4e91-a250-9e2781e9d06f,64ce3ebc-c0ac-4dd3-95ca-eeb67530187c,1b4d2adc-64ab-4020-bae6-b35321898bf0,382dafa1-f8ff-47b4-9151-15b84067a5b2"
+      ]
+    },
+    "sweep-targeted": {
+      "start": [
+        7.27392578125,
+        10.34716796875,
+        10.49755859375
+      ],
+      "end": [
+        8.52685546875,
+        10.38525390625,
+        10.505859375
+      ],
+      "scope": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.126",
+        "--cards",
+        "f07dfe42-566c-4e91-a250-9e2781e9d06f",
+        "--variants",
+        "base",
+        "--as",
+        "enemy"
+      ]
+    },
+    "composition-witness": {
+      "start": [
+        2.869140625,
+        3.73583984375,
+        4.59130859375
+      ],
+      "end": [
+        2.869140625,
+        3.73583984375,
+        4.59130859375
+      ],
+      "scope": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a1304d/126-helper/composition-witness.ts"
+      ]
+    },
+    "sweep": {
+      "start": [
+        14.33837890625,
+        11.02294921875,
+        7.7236328125
+      ],
+      "end": [
+        22.65673828125,
+        16.17236328125,
+        11.39453125
+      ],
+      "scope": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.126",
+        "--cards",
+        "b1bea643-1a7b-4e5e-b072-7174d3405421,f07dfe42-566c-4e91-a250-9e2781e9d06f,64ce3ebc-c0ac-4dd3-95ca-eeb67530187c,1b4d2adc-64ab-4020-bae6-b35321898bf0,382dafa1-f8ff-47b4-9151-15b84067a5b2",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ]
+    },
+    "qa-source-syntax": {
+      "start": [
+        11.2109375,
+        9.2099609375,
+        6.79833984375
+      ],
+      "end": [
+        11.2109375,
+        9.2099609375,
+        6.79833984375
+      ],
+      "scope": [
+        "node",
+        "--check",
+        "/tmp/dreamtides-executor-01a1304d/126-helper/silent-observer-qa.mjs"
+      ]
+    },
+    "schema-own": {
+      "start": [
+        14.8203125,
+        9.58544921875,
+        6.83984375
+      ],
+      "end": [
+        14.8203125,
+        9.58544921875,
+        6.83984375
+      ],
+      "scope": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ]
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow.start": {
+        "measuredFor": "Post-dispatch parent observation proxy; exact dispatch bounded, internal model start UNKNOWN"
+      },
+      "implementWindow.end": {
+        "measuredFor": "Actual pre-Git endpoint observation, compared with actual Git timestamp and completion in external final receipt; within60s, no forced timestamp"
+      },
+      "hostLoad": {
+        "measuredFor": "review wrapper actual start 1-minute load"
+      }
+    }
+  },
+  "frictionTriggers": "Parent current 21 of 502 since g3gu, all fired tags disposed; no new undisposed trigger asserted.",
+  "preExistingIssues": [
+    "docs/plan/evidence/pre-existing/hv-umm2.126.md: observed out-of-content browser navigation interruption; root cause and pre-change reproducibility UNKNOWN."
+  ],
+  "resources": {
+    "checks": [
+      {
+        "name": "knip",
+        "pid": 74618,
+        "pgid": 74618,
+        "state": "finished",
+        "exitCode": 0,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/knip.log"
+      },
+      {
+        "name": "fault-once-cap",
+        "pid": 69027,
+        "pgid": 69027,
+        "state": "finished",
+        "exitCode": 1,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/fault-once-cap.log"
+      },
+      {
+        "name": "judged",
+        "pid": 81903,
+        "pgid": 81903,
+        "state": "finished",
+        "exitCode": 0,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/judged.log"
+      },
+      {
+        "name": "focused",
+        "pid": 67195,
+        "pgid": 67195,
+        "state": "finished",
+        "exitCode": 1,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/focused.log"
+      },
+      {
+        "name": "review",
+        "pid": 72767,
+        "pgid": 72767,
+        "state": "finished",
+        "exitCode": 0,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/review.log"
+      },
+      {
+        "name": "preflight",
+        "pid": 72392,
+        "pgid": 72392,
+        "state": "finished",
+        "exitCode": 0,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/preflight.log"
+      },
+      {
+        "name": "schema",
+        "pid": 32830,
+        "pgid": 32830,
+        "state": "finished",
+        "exitCode": 0,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/schema.log"
+      },
+      {
+        "name": "focused-corrected",
+        "pid": 68255,
+        "pgid": 68255,
+        "state": "finished",
+        "exitCode": 0,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/focused-corrected.log"
+      },
+      {
+        "name": "fault-last-card",
+        "pid": 69151,
+        "pgid": 69151,
+        "state": "finished",
+        "exitCode": 1,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/fault-last-card.log"
+      },
+      {
+        "name": "fuzz",
+        "pid": 70420,
+        "pgid": 70420,
+        "state": "finished",
+        "exitCode": 0,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/fuzz.log"
+      },
+      {
+        "name": "sweep-targeted",
+        "pid": 2239,
+        "pgid": 2239,
+        "state": "finished",
+        "exitCode": 0,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/sweep-targeted.log"
+      },
+      {
+        "name": "composition-witness",
+        "pid": 70421,
+        "pgid": 70421,
+        "state": "finished",
+        "exitCode": 0,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/composition-witness.log"
+      },
+      {
+        "name": "sweep",
+        "pid": 95244,
+        "pgid": 95244,
+        "state": "finished",
+        "exitCode": 1,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/sweep.log"
+      },
+      {
+        "name": "qa-source-syntax",
+        "pid": 88892,
+        "pgid": 88892,
+        "state": "finished",
+        "exitCode": 0,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/qa-source-syntax.log"
+      },
+      {
+        "name": "schema-own",
+        "pid": 86447,
+        "pgid": 86447,
+        "state": "finished",
+        "exitCode": 0,
+        "log": "/tmp/dreamtides-executor-01a1304d/126-helper/schema-own.log"
+      }
+    ],
+    "longLivedRuntimes": [],
+    "heavyLock": "Native lockf; weighted fuzz completed, no owned active heavy runner",
+    "qa": "Not started; native runner allocates lease and strict port and closes context/server/process group.",
+    "qaCloseouts": {
+      "sweep": {
+        "observedAt": "2026-10-13T14:51:24.607703+00:00",
+        "ownedProcessGroups": [
+          95282,
+          95244
+        ],
+        "numericMatches": [],
+        "records": {
+          "owner": {
+            "exists": false,
+            "sameToken": false,
+            "currentBead": null
+          },
+          "server": {
+            "exists": false,
+            "sameToken": false,
+            "currentBead": null
+          }
+        },
+        "runnerLog": "runtime server process group95282 cleanup attempted; port free",
+        "providerCloseProof": "Active native provider owner token removed after runner terminal; existing runner clear requires confirmed browser_close and all active calls settled; no retained uncertain owner",
+        "receipt": {
+          "name": "sweep",
+          "argv": [
+            "node",
+            "scripts/qa/card-sweep.mjs",
+            "--bead",
+            "hv-umm2.126",
+            "--cards",
+            "b1bea643-1a7b-4e5e-b072-7174d3405421,f07dfe42-566c-4e91-a250-9e2781e9d06f,64ce3ebc-c0ac-4dd3-95ca-eeb67530187c,1b4d2adc-64ab-4020-bae6-b35321898bf0,382dafa1-f8ff-47b4-9151-15b84067a5b2",
+            "--variants",
+            "all",
+            "--as",
+            "both"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+          "startedAt": "2026-10-13T14:41:59.379514+00:00",
+          "pid": 95244,
+          "pgid": 95244,
+          "hostLoadStart": [
+            14.33837890625,
+            11.02294921875,
+            7.7236328125
+          ],
+          "log": "/tmp/dreamtides-executor-01a1304d/126-helper/sweep.log",
+          "state": "finished",
+          "exitCode": 1,
+          "wallS": 516.0686410829949,
+          "finishedAt": "2026-10-13T14:50:35.458550+00:00",
+          "hostLoadEnd": [
+            22.65673828125,
+            16.17236328125,
+            11.39453125
+          ],
+          "cpuUserS": 16.958142,
+          "cpuSystemS": 9.526752
+        }
+      },
+      "judged": {
+        "observedAt": "2026-10-13T14:53:50.704123+00:00",
+        "ownedProcessGroups": [
+          81958,
+          81903
+        ],
+        "numericMatches": [],
+        "records": {
+          "owner": {
+            "exists": false,
+            "sameToken": false,
+            "currentBead": null
+          },
+          "server": {
+            "exists": false,
+            "sameToken": false,
+            "currentBead": null
+          }
+        },
+        "providerCloseProof": "Previously active native provider exact owner token removed after terminal runner; canonical cleanup waits for all active calls and confirmed browser_close",
+        "portDiagnostic": "Native runner reports ownedserver81958 port5274 free",
+        "receipt": {
+          "name": "judged",
+          "argv": [
+            "node",
+            "scripts/qa/run-scenario.mjs",
+            "/tmp/dreamtides-executor-01a1304d/126-helper/silent-observer-qa.mjs",
+            "--bead",
+            "hv-umm2.126",
+            "--viewports",
+            "desktop,mobile"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+          "startedAt": "2026-10-13T14:51:24.633401+00:00",
+          "pid": 81903,
+          "pgid": 81903,
+          "hostLoadStart": [
+            15.6328125,
+            15.25244140625,
+            11.32373046875
+          ],
+          "log": "/tmp/dreamtides-executor-01a1304d/126-helper/judged.log",
+          "state": "finished",
+          "exitCode": 0,
+          "wallS": 68.92432608298259,
+          "finishedAt": "2026-10-13T14:52:33.558367+00:00",
+          "hostLoadEnd": [
+            18.841796875,
+            15.84619140625,
+            11.8291015625
+          ],
+          "cpuUserS": 5.388071,
+          "cpuSystemS": 2.573273
+        }
+      },
+      "sweep-targeted": {
+        "observedAt": "2026-10-13T14:59:17.344776+00:00",
+        "receipt": {
+          "name": "sweep-targeted",
+          "argv": [
+            "node",
+            "scripts/qa/card-sweep.mjs",
+            "--bead",
+            "hv-umm2.126",
+            "--cards",
+            "f07dfe42-566c-4e91-a250-9e2781e9d06f",
+            "--variants",
+            "base",
+            "--as",
+            "enemy"
+          ],
+          "cwd": "/Users/dthurn/dreamtides_web/.worktrees/cards-flow126",
+          "startedAt": "2026-10-13T14:58:00.668950+00:00",
+          "pid": 2239,
+          "pgid": 2239,
+          "hostLoadStart": [
+            7.27392578125,
+            10.34716796875,
+            10.49755859375
+          ],
+          "log": "/tmp/dreamtides-executor-01a1304d/126-helper/sweep-targeted.log",
+          "state": "finished",
+          "exitCode": 0,
+          "wallS": 22.09098408301361,
+          "finishedAt": "2026-10-13T14:58:22.760249+00:00",
+          "hostLoadEnd": [
+            8.52685546875,
+            10.38525390625,
+            10.505859375
+          ],
+          "cpuUserS": 4.89073,
+          "cpuSystemS": 2.452699
+        },
+        "groupsNumericAbsence": {
+          "2239runner": true,
+          "4192server": true
+        },
+        "records": {
+          "owner": {
+            "exists": true,
+            "matchesRunner": false,
+            "currentBead": "hv-umm2.128"
+          },
+          "server": {
+            "exists": true,
+            "matchesRunner": false,
+            "currentBead": null
+          }
+        },
+        "portDiagnostic": "Native run reports ownedserver4192 on5174 cleanup; portfree",
+        "providerProof": "Native producer completed normal cleanup with no retained owner matching actualrunner2239; existing producerclear follows confirmedbrowser_close; liveMCPsession/ownertoken not captured",
+        "liveRecordLimit": "First snapshot preceded provider publication after11.7s slotwait; second snapshot after terminal. Actualslot0 native lockPath artifacts/browser-qa.lock; serverbirth/ownertokens/MCPsession UNKNOWN, not reconstructed. No process signalled.",
+        "frozenPathsUnchanged": {
+          "src/content/cards/bloom-guard-64ce3ebc.ts": true,
+          "src/content/cards/firebrand-saboteur-382dafa1.ts": true,
+          "src/content/cards/harbor-warden-1b4d2adc.ts": true,
+          "src/content/cards/melodist-of-the-finale-f07dfe42.ts": true,
+          "src/content/cards/silent-observer-b1bea643.ts": true,
+          "src/content/specs/cards-14.scenarios.ts": true,
+          "docs/plan/evidence/friction/hv-umm2.126.json": true,
+          "docs/plan/evidence/measurements/hv-umm2.126.json": true
+        },
+        "externalQaUnchanged": true,
+        "targetedDisposition": "Exactlyone unchanged freshnativecontext/server resweep passed; firstERR_ABORTED originalrawFAILretained; interruptionoriginUNKNOWN; no pre-change causation or persistentdefect inferred."
+      }
+    },
+    "producerClosureContract": "Native run-scenario581-605 clears owner only after confirmed browser_close, joined active calls and no uncertain RPC; otherwise it retains reconciliation owner. Normal terminal producers, absent exact runner/server groups and removed/replaced owner records establish no owned unresolved provider.",
+    "cpuObservationLimit": "resource-observation.json was a later substring query matching only the observation shell after fuzz finished, not activity proof. Prior direct tool output showed worker70438 at101.5% before termination, exact sample clock not retained. Fuzz own final report supplies219.7s CPU and203.9s engine wall."
+  },
+  "finalReadiness": {
+    "schemaExit": 0,
+    "schemaWallS": 0.11430920899147168,
+    "functionalDiffPolicy": "32 gross leaf lines +65 plain scenario lines =97; composition not core-review; no new primitive/prompt/status/visual kind; no required cold review at >100 threshold. Parent independently verified.",
+    "endpoint": "2026-10-13T15:05:51.492838+00:00"
+  }
+}

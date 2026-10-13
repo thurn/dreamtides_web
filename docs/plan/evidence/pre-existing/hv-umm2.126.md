@@ -1,0 +1,7 @@
+# hv-umm2.126: Observed browser navigation interruption
+
+- Location: native card sweep `qa.navigation`, initial Melodist base enemy cell, `sweep-f07dfe42-566c-4e91-a250-9e2781e9d06f-base-enemy-attempt-1.result.json` in `invocations/sweep-VYiexi/run-CNxnSF/`.
+- Observation: the initial `page.goto` failed with `net::ERR_ABORTED` after 388 ms. The observed URL stayed on the preceding perfected player document. The trace contains no frame or navigation-commit record, no dropped or erroneous observations, and empty departing-document caps. The requested cell's gameplay assertions did not begin.
+- Attribution: the interruption occurred at browser navigation outside the five content definitions. Its abort origin, reproducibility before this change, and production impact are UNKNOWN. This observation establishes no persistent engine, UI, or QA-tool defect.
+- Disposition: the original raw fail report and ledger line remain retained. After the full sweep and judged sample closed their owned resources, one parent-authorized unchanged native rerun used a fresh context and server for this exact UUID, base variant and enemy actor. It passed in `invocations/sweep-NNhPst/run-HpPngb/`. Effective eligible coverage combines 49 initial passes and this one targeted pass; the initial sweep remains non-green.
+- Other raw attempt: Firebrand perfected player had a timeout-only lab-report wait. The native runner's eligible fresh timeout retry passed, retaining both attempts.

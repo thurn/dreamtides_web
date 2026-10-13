@@ -1,3 +1,6 @@
+import { conditionCardCounts } from "../../engine/dsl/builders";
+import { onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { discard, draw, ifThen } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 352,
   art: { x: 0, y: -0.352, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    // Choose the branch before discarding, including when the opponent has exactly one card.
+    triggered(onMaterialized(), ifThen(conditionCardCounts("hand", 1, { player: "opponent" }), discard(1, "opponent"), draw(variant.amplified ? 2 : 1))),
+  ],
+  verifiedText: "1kxobe7xe5u",
 });

@@ -1,3 +1,5 @@
+import { either, onDissolved, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,7 @@ export default card({
   cardNumber: 129,
   art: { x: 0, y: -0.485, scale: 1.97 },
   isStarter: false,
-  pending: true,
+  // RD-hv-umm2.342-1: its own Dissolved ability belongs to its last in-play controller.
+  abilities: () => [triggered(either(onMaterialized(), onDissolved()), draw(1))],
+  verifiedText: "1rth7whxy3",
 });
