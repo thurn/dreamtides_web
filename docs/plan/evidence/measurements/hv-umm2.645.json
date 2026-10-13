@@ -1,0 +1,806 @@
+{
+  "bead": "hv-umm2.645",
+  "baseOid": "29ba3c5bda2ad6049e866a3a7a1814f8f735f20e",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-retro645",
+  "implementation": {
+    "helper": "/root/phase5_retrospective645",
+    "dispatchRequestAt": "2026-10-13T15:31:34.643Z",
+    "dispatchCallId": "call_bb85fc2d3f5349bdb39a4c497c306544",
+    "briefSha256": "88ce7e1099c55d2be00c955be88f20e3db8742216000524d8715494a9442a42f",
+    "childSamplingStart": "UNKNOWN",
+    "forkTurns": "none",
+    "nativeClaimAt": "2026-10-13T15:23:27Z",
+    "window": "Actual fresh read-only Sage tool-entry request through precommit cutoff. Claim timestamp and source/raw freezes are separate recorded preparation observations; model sampling/productive editing time is UNKNOWN.",
+    "precommitCutoff": "2026-10-13T16:00:58.942870+00:00",
+    "precommitTailEvidence": "audit/precommit-return-receipt.json",
+    "sourceLines": 0,
+    "testFiles": 0,
+    "testLines": 0,
+    "newJsdom": 0,
+    "runtimeLaunches": 0,
+    "coldCodeReview": {
+      "required": false,
+      "reason": "Evidence-only retrospective, no core-review label, phase exit gate or source/test/API/renderer changes. Fresh independent read-only Sage completed; no code/visual/runtime review claimed.",
+      "temporaryRouting": "Required code review before2026-10-14T01:00Z uses fresh read-only Codex CLI gpt-5.6-sol; normal routing after expiry.",
+      "sageReportSha256": "9b983ef4bcbf78f0475ab37e1c8aedc291f57ab037100eb5dbc79c3fc63acd1c"
+    }
+  },
+  "audit": {
+    "previous": "hv-g3gu",
+    "coverage": [
+      "hv-adeo",
+      "hv-cw62",
+      "hv-g3gu",
+      "hv-k58b",
+      "hv-umm2.124",
+      "hv-umm2.125",
+      "hv-umm2.126",
+      "hv-umm2.156",
+      "hv-umm2.162",
+      "hv-umm2.172",
+      "hv-umm2.226",
+      "hv-umm2.267",
+      "hv-umm2.453",
+      "hv-umm2.471",
+      "hv-umm2.543",
+      "hv-umm2.580",
+      "hv-umm2.598",
+      "hv-umm2.600",
+      "hv-umm2.601",
+      "hv-umm2.602",
+      "hv-umm2.603",
+      "hv-umm2.604",
+      "hv-umm2.605",
+      "hv-umm2.606",
+      "hv-umm2.607",
+      "hv-umm2.608",
+      "hv-umm2.609"
+    ],
+    "count": 27,
+    "phaseFrictionFiles": 508,
+    "sourceFreezeAt": "2026-10-13T15:29:22.286847+00:00",
+    "rawFreezeAt": "2026-10-13T15:30:50.778517+00:00",
+    "inputHashCount": 2350,
+    "rawEvidenceFileCount": 2213,
+    "sourcePreservation": "All original2350inputs match before authoring. Existing introspection bytes are an unchanged prefix with one authorized27coverage suffix; all other protected bytes stay unchanged.",
+    "freezeVersions": [
+      "audit/audit-freeze.json",
+      "audit/audit-freeze-v2.json",
+      "audit/audit-freeze-v3.json",
+      "audit/audit-freeze-v4.json"
+    ],
+    "metricQualification": {
+      "path": "/Users/dthurn/dreamtides_web/.worktrees/codex-retro645/docs/plan/evidence/metrics.md",
+      "addedAt": "2026-10-13T15:34:18.467683+00:00",
+      "source": "Exact bytes compared with original frozen base29ba; original v1 omitted correct path because parent named docs/plan/metrics.md. v1 preserved; this v2 adds base-bound metrics without changing source or coverage."
+    },
+    "lateContextBindings": {
+      "capturedAt": "2026-10-13T15:35:13.441311+00:00",
+      "qualification": "Read-only native comments requested by Sage and exact parent tool-entry provenance. Original base/cutoff27 unchanged; these bind observations without rewriting initial freeze or initial source records.",
+      "latestReadOnlyCaptureAt": "2026-10-13T15:40:06.876268+00:00"
+    },
+    "exactNativeCandidates": [
+      {
+        "bead": "hv-adeo",
+        "candidate": "01a133bc-9e8d-7120-b4d1-fae3660a3683",
+        "source": "f54c5221f0ac3437f206bd9ff3650551e73e2f5d",
+        "tested": "13ff767467096f4b845bb0c6d59a56927abb151e",
+        "generation": "01a133bd-bd75-77b2-a802-f597e26eb5f2",
+        "certificate": "01a133bf-654d-7e72-872f-ea4b8a9d29fc",
+        "testedTree": "b45521cc5cb3b7eee475dbaa2602f6ed72203949",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-cw62",
+        "candidate": "01a133c3-c4cc-79d2-8c4a-d637e80b8e2d",
+        "source": "5c4246f2fc7dedce3802b55849bba7314b7e0e43",
+        "tested": "9fdaa25aab8b9a13f5b23c7e23fbb210a4a92eb7",
+        "generation": "01a133c3-ca13-7770-99c6-d343b95dde4e",
+        "certificate": "01a133c5-6bb5-7451-a152-3697f42ba286",
+        "testedTree": "34eeadc4a6cc0e366d751a88bce5ff12eef35f29",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-g3gu",
+        "candidate": "01a1335f-1191-7e91-ba5c-04a94ff7af3d",
+        "source": "4f880f302ebc3d21686dc032725628396a8cf9ef",
+        "tested": "677d00a827104cc6a0e821f05f9d2ab72cd0a3e0",
+        "generation": "01a1335f-1666-7582-99c9-d9e0aa8e34f1",
+        "certificate": "01a1335f-6336-7de0-b6a8-0d5897e2da2d",
+        "testedTree": "c9c697cca802173164a2c4a217a80eb2b77c811c",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-k58b",
+        "candidate": "01a13351-49bc-77f1-81ce-0c7fab9b3fa0",
+        "source": "87be98dfd47693be2ed5279addbd0d2c635af25d",
+        "tested": "0c9453bde8feadf96ecfd4ca5088e65524319a87",
+        "generation": "01a13351-4f0d-7390-a59e-8f3a2936b73a",
+        "certificate": "01a13352-b358-7a41-b6dd-447ca1b10f84",
+        "testedTree": "677d5f6e71e4d189ef343ef176c514b083fa208b",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.124",
+        "candidate": "01a135d8-0935-7ac0-a093-ff6c061cfe93",
+        "source": "e52269b517fb97b9a976dadbb2cbbcd717864b62",
+        "tested": "29ba3c5bda2ad6049e866a3a7a1814f8f735f20e",
+        "generation": "01a135d8-0d7f-70a2-a631-7e08cf065549",
+        "certificate": "01a135d9-7924-7353-8fff-5815ef653f73",
+        "testedTree": "6c9bcd236480a46cdb85151faacffd5a7e0bffdd",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.125",
+        "candidate": "01a133b4-89e5-7be1-878f-d7dc2ca5fc3e",
+        "source": "45a662d92b977003cfc1ffc09a8f4a226158a68f",
+        "tested": "382af72d594f0e320f8dd24734fd93a1d78a5daf",
+        "generation": "01a133b4-8ec7-7ce1-838e-0bd16e213e76",
+        "certificate": "01a133b6-323e-7301-b81f-f0f439d5bf69",
+        "testedTree": "46d7755ab9a4d2b31b89db142bbec0c8c1373875",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.126",
+        "candidate": "01a135cd-6b57-7ac3-a2bf-bcab9b3c4414",
+        "source": "a8a013a919588f06d7207382924fb54d0666e8cf",
+        "tested": "8905245777d0eadd6ba3eb78949b06ed28e5b984",
+        "generation": "01a135cd-6fba-7c23-b04a-f1e9ca63d2e9",
+        "certificate": "01a135ce-efde-7ee2-bad4-d068255b313a",
+        "testedTree": "561119fed07f823d2a1f652ea71d359b4ca60034",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.156",
+        "candidate": "01a1354e-90f3-7b43-b8b3-030282294dac",
+        "source": "c0134588da90993bd0226a485bdbcbefbbcd3393",
+        "tested": "7f06d35cbda6559d1e5f792243b7ee9dd7423648",
+        "generation": "01a1354e-9667-76a3-b542-2dca1cbd37b4",
+        "certificate": "01a13550-4133-7a43-98cc-0ab71191e2c0",
+        "testedTree": "d803c4986b257359a5526bb4a5b6af25fccd84be",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.162",
+        "candidate": "01a133f9-d9a4-7032-a202-282b237f6e18",
+        "source": "fa05a1bc3c0c5c5dfdcfe5ab9d432eaf7c1fb7fe",
+        "tested": "fa05a1bc3c0c5c5dfdcfe5ab9d432eaf7c1fb7fe",
+        "generation": "01a133f9-dfd3-73f2-b2cf-103f51092665",
+        "certificate": "01a133fb-5593-7f12-98aa-d2f6ad112249",
+        "testedTree": "2edb5d2d3348f05b444ce5239192d0129b9b6ccf",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.172",
+        "candidate": "01a135b2-3603-7010-9036-dd8421060d08",
+        "source": "51a20f12d1adbb884d43cf989fce74b753303d50",
+        "tested": "b96690c83e1d5207a96f283cd140805b8d1ee954",
+        "generation": "01a135b2-3f8d-7af3-819f-6ef85ee5118d",
+        "certificate": "01a135b3-b714-7002-8242-20d380464385",
+        "testedTree": "f189a979273a7e71ab22d28079d1a400229ec6cb",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.226",
+        "candidate": "01a13404-3597-7cb0-9b29-4ac7dcc56835",
+        "source": "e32baf8d9f532d075e5714a814aa929bd764c1b5",
+        "tested": "3b0fb5dfbb8d6f4791f7968c868d6769ea29e019",
+        "generation": "01a13404-462a-7930-8459-063d1a7f4d9e",
+        "certificate": "01a13405-c019-7d52-877a-dc45ef0eb5ee",
+        "testedTree": "151f233f992b5f095160f809603f8acff11337a0",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.267",
+        "candidate": "01a135cd-7947-7913-b8ea-810bd8c24bc4",
+        "source": "fb0e7927b0f68b13f4ad5c91d5885a6a63cb6109",
+        "tested": "d9b44a5543b598ae1215b2d75e675ad6592d22f0",
+        "generation": "01a135cd-828a-7730-a487-f9df0c93d2e9",
+        "certificate": "01a135d0-cc82-7b83-b757-1f5c1f74d7ed",
+        "testedTree": "b0cb2d4672fa98bafeca69783358b23cda0c672e",
+        "sourceVectorIndex": 1,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.453",
+        "candidate": "01a13390-93e7-7f00-a350-004af8363b56",
+        "source": "431bdfdfa704d6ad0eb3ca82d677b6c254f1eb42",
+        "tested": "b09a996da97ccc6f9bab5ad4ddab34d7a718e9ed",
+        "generation": "01a13390-9e15-7d51-bf86-18d45d4a4ef4",
+        "certificate": "01a13392-69c4-7e10-8935-5bc877e51906",
+        "testedTree": "8fee15f53f34a0cdcb9b3945c347a2c07330f2f4",
+        "sourceVectorIndex": 1,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.471",
+        "candidate": "01a135bb-d2cc-7ad1-a9e2-4c44236e57f3",
+        "source": "d8b6853db185e4b59234231040fdc5709300cc72",
+        "tested": "efb28a66c3bce24d3b13bf9f7fab93b0ebbed623",
+        "generation": "01a135bb-e168-7c00-8e7c-7e8d7c9f4100",
+        "certificate": "01a135bd-67ce-7ad0-850e-894acfc33a60",
+        "testedTree": "8028e563441ca4ebf18ed6cf12e4cb7b24521d4f",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.543",
+        "candidate": "01a133bc-3544-7cc0-a626-dd66b55bff4a",
+        "source": "116aec01b6403d977a14cc7889a407be41f8090d",
+        "tested": "0b027852e9ac354f46bc39d909702d4566231b47",
+        "generation": "01a133bd-bd7e-7760-aca1-d7283aa1ba24",
+        "certificate": "01a133c0-efea-72a2-bc9f-6671e0586f36",
+        "testedTree": "21998995d56e5113f324b262537d3984fcbd505b",
+        "sourceVectorIndex": 1,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.580",
+        "candidate": "01a13587-2b39-73a3-bf80-a362d54487f7",
+        "source": "d2509066ec09dcf5e6b0b43512ff34ba4d842d77",
+        "tested": "245dae134c46a2d0980b68a4cce00eb3b08c1ddb",
+        "generation": "01a13587-2fa0-7703-9db4-4d22bbb77ffe",
+        "certificate": "01a13588-a4fb-72e0-98d8-a769578f8df9",
+        "testedTree": "de857a4c4fc317c38f2eba9ac1d7c5f2ebe92f97",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.598",
+        "candidate": "01a1338e-c2dc-7ae3-a662-49c6eab5a349",
+        "source": "160df4d0680a9e91e51145e06bd8289a9bf66d67",
+        "tested": "b4b5a24f4d15653c8c7c6b7cbc30478ab543f6d5",
+        "generation": "01a1338e-c86a-7912-841c-3032c9b4d301",
+        "certificate": "01a13390-3301-7691-a172-98db3380dc72",
+        "testedTree": "5ac12d24085748e0b3954347dc166eb13d7979d3",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.600",
+        "candidate": "01a1335b-9bbf-75a3-a611-99cb894de806",
+        "source": "92bfe6d83edb280a4835efa64d75b62977ad9798",
+        "tested": "2c0ef75f1c4f510ec1b8c407df9a1b82a54766f4",
+        "generation": "01a1335b-9fe8-7e20-bf9f-aa16a412880c",
+        "certificate": "01a1335b-eb4e-7c30-9c48-abae2eced0fe",
+        "testedTree": "94e25491c7921befc984815edd40acc8191c8c2f",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.601",
+        "candidate": "01a1338a-e09d-71a1-bebe-fd624e4ff855",
+        "source": "5662bdb005f67039dc1a0f577290198b88840a7d",
+        "tested": "4519c970eb600f701741bd1a118ce0bfb8cd5143",
+        "generation": "01a1338a-e545-7b23-b49e-8fdb374141ea",
+        "certificate": "01a1338b-283e-7131-b3e4-37c11dc65a58",
+        "testedTree": "1c542fd05b3a242b5e4d52e60e743c81961e5d34",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.602",
+        "candidate": "01a1337f-0713-7d93-ac84-1fae691e15e4",
+        "source": "64f19f4599860fef8fa8048cba3a4db6616e1bd7",
+        "tested": "d55cda3f0d40c09d7ebcd5322217c6c52ae07228",
+        "generation": "01a1337f-0b6b-7303-bb8c-e42b54e6a2f2",
+        "certificate": "01a1337f-5367-7813-9db7-1ce5d78dd1d1",
+        "testedTree": "a55420cfdbc634a4b6c699b4023f1d73a594ad16",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.603",
+        "candidate": "01a133a9-adb8-7b90-9e4d-3f646d0e2dad",
+        "source": "1ea3165ff3ebdc104c9e7a2526850de7b0031267",
+        "tested": "10928d6c2b113d102e0ce78f4e36e91b769209bf",
+        "generation": "01a133a9-b345-7f71-b422-7d8860f8f6ea",
+        "certificate": "01a133a9-fc57-7533-b791-0057e6c80975",
+        "testedTree": "a9a3e9793ab5147098ae560add9666e72b18fa90",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.604",
+        "candidate": "01a13395-fb5f-78f2-8348-854ec1de2568",
+        "source": "fa1339737591aa1ae0822b04ed55156f60540f25",
+        "tested": "acc1e1579ef953decc15125a7fbf6651b5b1ebb2",
+        "generation": "01a13396-0109-7cd3-96ba-772484503797",
+        "certificate": "01a13396-51db-7e13-a51c-19e5607e4796",
+        "testedTree": "144edd97334fbe784d5f76563d7a10d291c943d9",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "not-eligible"
+      },
+      {
+        "bead": "hv-umm2.605",
+        "candidate": "01a1338f-aee2-7431-a375-bcf6d41a97db",
+        "source": "7b20102a319c40287a0a1251d9cecdc60d5f6fd9",
+        "tested": "284d7f69300cc783526ad5d985923db5b721048a",
+        "generation": "01a1338f-b441-7c93-9afc-83959b44a4d0",
+        "certificate": "01a13390-a585-7d40-b1ab-60af52b0fde2",
+        "testedTree": "862a64c5d2d1e0cd49bda9387ed0d2db82862b60",
+        "sourceVectorIndex": 1,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "not-eligible"
+      },
+      {
+        "bead": "hv-umm2.606",
+        "candidate": "01a135b5-8e8e-7ae2-abd3-3354f7c169db",
+        "source": "3d607b5f6e590bae05a34034b2899e918596bae3",
+        "tested": "6d69c65acedd2dbaa8858e54d57afd2851eb8dd5",
+        "generation": "01a135b5-9658-7cc1-8e24-917fdb171703",
+        "certificate": "01a135b5-debe-7df1-b5e5-61f15a64176f",
+        "testedTree": "f2fc4b3edb45b86ea495f615e4470fc5f6c9d34a",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.607",
+        "candidate": "01a1339c-f83d-77e0-9d1d-ed781bd3076e",
+        "source": "753e075f2bdbcd83ba5dd3d904c3a9b13d572297",
+        "tested": "fd4ca1e47ea791a08803b1ac319b9acf69ab8fa3",
+        "generation": "01a1339c-fe36-7a10-9fa7-1312471d9eaa",
+        "certificate": "01a1339e-66c5-7711-91ac-1e955a65c71d",
+        "testedTree": "921800be8a27a646043e34b2469820342e2efc0d",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.608",
+        "candidate": "01a133ba-99f3-7730-9760-578affa359fe",
+        "source": "301cc755460ae893e4312bb42f6cc0d2e1c639f9",
+        "tested": "597298da84b2aba4368460da6bb6d9738d446a81",
+        "generation": "01a133ba-a079-7972-937b-3dd50a722bd4",
+        "certificate": "01a133ba-fa0c-73b0-a76e-96364ddcafab",
+        "testedTree": "b8adccadc8c94ce934f93c1af0944e07ac04ad99",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      },
+      {
+        "bead": "hv-umm2.609",
+        "candidate": "01a13579-eb13-7b80-bb3a-6c26d7b6c1cb",
+        "source": "1cfab17f1b83283785b5fb4a1d3f4d5e9573fa0f",
+        "tested": "f003abaa164cc42ab2121775a96df54e96d9a01b",
+        "generation": "01a13579-efb2-7493-ad01-52bc217fb8f9",
+        "certificate": "01a1357b-8d83-7fb2-92c0-90d3cfecc1dc",
+        "testedTree": "06c0689e97d7600d3fbf5c099de735533d5eb5bd",
+        "sourceVectorIndex": 0,
+        "sourceOrderVerified": true,
+        "certificateBindingsVerified": true,
+        "testedAncestorOfAuditSource": true,
+        "nativeCleanup": "completed"
+      }
+    ],
+    "automaticCleanup": 25,
+    "supportedManualCleanup": [
+      "hv-umm2.604",
+      "hv-umm2.605"
+    ],
+    "historyScope": {
+      "retainedEvents": 500,
+      "firstSequence": 24514,
+      "lastSequence": 25013,
+      "retainedHistoryItems": 24,
+      "completeSincePreviousRetrospective": false,
+      "qualification": "Exact individual candidate statuses fill all27 vector/timing bindings; event/load/queue/red-release history remains partial. Later peer128/57a6 context is outside source coverage."
+    },
+    "cohortStatistics": {
+      "gateAll": {
+        "n": 27,
+        "median": 92.456,
+        "min": 16.845,
+        "max": 115.264,
+        "over60": 18,
+        "over90": 18
+      },
+      "gateCode": {
+        "n": 20,
+        "median": 95.91300000000001,
+        "min": 18.974,
+        "max": 115.264,
+        "over60": 18,
+        "over90": 18
+      },
+      "gateDocs": {
+        "n": 7,
+        "median": 18.291,
+        "min": 16.845,
+        "max": 25.518,
+        "over60": 0,
+        "over90": 0
+      },
+      "localDocsReview": {
+        "n": 7,
+        "median": 0.2900464999838732,
+        "min": 0.24163033399963751,
+        "max": 0.3624353329942096,
+        "over60": 0,
+        "over90": 0
+      },
+      "localContentReview": {
+        "n": 7,
+        "median": 47.14555904199369,
+        "min": 45.77879712500726,
+        "max": 54.322313500000746,
+        "over60": 0,
+        "over90": 0
+      },
+      "focusedNamedOrCorrected": {
+        "n": 20,
+        "median": 8.729607291490538,
+        "min": 3.4336363330075983,
+        "max": 17.07553500101494,
+        "over60": 0,
+        "over90": 0
+      },
+      "releaseTotal": {
+        "n": 22,
+        "median": 255.3505,
+        "min": 226.08,
+        "max": 295.518,
+        "over60": 22,
+        "over90": 22
+      },
+      "releaseFuzz200": {
+        "n": 22,
+        "median": 131.35399999999998,
+        "min": 115.814,
+        "max": 175.263,
+        "over60": 22,
+        "over90": 22
+      },
+      "releaseFull": {
+        "n": 22,
+        "median": 115.574,
+        "min": 103.551,
+        "max": 137.908,
+        "over60": 22,
+        "over90": 22
+      }
+    },
+    "staticConfiguredInventory": {
+      "entrypoints": 369,
+      "jsdomPragmas": 82,
+      "entrypointLines": 80913,
+      "plainContracts": 163,
+      "plainContractLines": 36437,
+      "configuration": "Actual vitest.config.ts includes/exclusions, zero excluded matches. This tracked filename inventory is distinct from actual runtime test enumeration and has no file-count budget.",
+      "receipt": "audit/configured-entrypoints.json"
+    },
+    "reviewFollowups": {
+      "activeCanonical": [
+        "hv-9vy4",
+        "hv-r3hy",
+        "hv-o73j"
+      ],
+      "completedCanonical": [
+        "hv-cw62",
+        "hv-umm2.607",
+        "hv-umm2.609"
+      ],
+      "qualification": "Originating bead closure does not prove later repair/runtime/review acceptance; exact dispositions and source/resource qualifications remain with their native owners."
+    },
+    "newImprovementBeads": [],
+    "newDispositionLines": [],
+    "budgetChanges": [],
+    "metricScopes": [
+      "Native gate/release numbers are recorded step sums, not admission or promotion wall.",
+      "Local content/evidence review and focused selections are differing outer invocations; no causal matched-load comparison inferred.",
+      "Release default200fuzz differs from production-weighted300 and synthetic drivers.",
+      "D19 actual full-test stage over60s and oneover90 remain positive over-budget observations; existing526/gate46 controlled low-load obligation remains.",
+      "267 failed battle300 before any game; corrected300journey folds/4650events/300replays are qualified journey evidence, not300battle games.",
+      "Unknown sampling/provider IDs/ACKs/CPU/load/idle gaps remain unknown; guarded closure inference is not direct ACK."
+    ],
+    "parentAudit": "audit/parent-native-audit.json",
+    "sageCalculations": [
+      "audit/certified-gates.json",
+      "audit/native-vector-checks.json",
+      "audit/cohort-statistics.json",
+      "audit/release-calculations.json",
+      "audit/raw-index.json",
+      "audit/preservation-observation.json",
+      "audit/audit-linkage-corrections.json"
+    ],
+    "ownParentCorrections": [
+      "Initial incorrect metrics path omitted required file; v2 adds exact base-bound correct path while v1 remains intact.",
+      "Parent rejected pairing124final-review53.259s with initial-review15.093load; Sage corrected exact initial55.033/load15.093 and final53.259/load12.536 provenance. Historical records unchanged.",
+      "Static inventory explicitly applies actual Vitest includes/exclusions and separates filename candidates, configured matches, plain contracts and runtime test enumeration."
+    ],
+    "parentPreservationAfterAuthoring": {
+      "at": "2026-10-13T15:56:42.488598+00:00",
+      "protectedInputs": 2350,
+      "unchanged": 2349,
+      "authorizedAppendOnly": "/Users/dthurn/dreamtides_web/.worktrees/codex-retro645/docs/plan/evidence/introspection.jsonl",
+      "prefixVerified": true,
+      "changedUnexpected": []
+    },
+    "independentCorrections": {
+      "reportBeforeSHA256": "c93f62ef9695a2b7a5c86c12b47cce464142cd958e02dbce01374f980c4f9594",
+      "originalInvalidPair": {
+        "seconds": 53.258968457987066,
+        "load": 15.09326171875
+      },
+      "correct124Invocations": [
+        {
+          "name": "review",
+          "start": "2026-10-13T14:43:42.970881+00:00",
+          "seconds": 55.0328401250008,
+          "load": 15.09326171875
+        },
+        {
+          "name": "final-review",
+          "start": "2026-10-13T15:15:25.583427+00:00",
+          "seconds": 53.258968457987066,
+          "load": 12.53564453125
+        }
+      ],
+      "source": "Frozen own-WT docs/plan/evidence/measurements/hv-umm2.124.json commands; original friction fields preserved. Audit report corrected its own erroneous cross-invocation pairing. Time-cohort medians unchanged; no matched-load inference.",
+      "staticInventory": "Initial532 matching filenames now qualified separately. Actual config include/exclusions admit369 tracked entries, excluded matching paths0; no Vitest runtime enumeration or tests executed."
+    },
+    "introspectionAfterAppend": {
+      "phaseFrictionFiles": 509,
+      "uncovered": [
+        "hv-umm2.645"
+      ],
+      "due": false,
+      "lastRetrospective": "hv-umm2.645",
+      "source": "Actual parser report on own base+five evidence files; later staging records are outside this source."
+    }
+  },
+  "validation": {
+    "focused": {
+      "exitCode": 0,
+      "wallSeconds": 9.892150416009827,
+      "startLoad": 15.78955078125,
+      "receipt": "audit/focused.stdout",
+      "files": 1,
+      "cases": 109
+    },
+    "schema": {
+      "exitCode": 0,
+      "wallSeconds": 0.1112325830035843,
+      "startLoad": 15.22900390625,
+      "receipt": "audit/schema.stdout",
+      "records": 723,
+      "historicalUnknowns": 41
+    },
+    "review": {
+      "exitCode": 0,
+      "wallSeconds": 0.2786644590087235,
+      "startLoad": 16.11328125,
+      "receipt": "audit/review.stdout",
+      "scope": "Documentation-only diff-aware review: five changed evidence paths, friction/schema validation. No typecheck/lint/runtime suite execution implied."
+    },
+    "knip": {
+      "exitCode": 0,
+      "wallSeconds": 4.914598292001756,
+      "startLoad": 11.1767578125,
+      "receipt": "audit/knip.stdout"
+    },
+    "finalSchema": {
+      "exitCode": 0,
+      "wallSeconds": 0.11506608399213292,
+      "startLoad": 9.580078125,
+      "records": 723,
+      "historicalUnknowns": 41
+    }
+  },
+  "resources": {
+    "sageTerminal": true,
+    "sageRepositoryMutation": false,
+    "sageProvidersBrowsersServersLaunched": 0,
+    "parentProvidersBrowsersServersLaunched": 0,
+    "nativeReads": "All comments/candidate/history/scope snapshots are read-only, with actual retained/late-context boundaries. No foreign ownership or active prerequisite changed."
+  },
+  "preExisting": "docs/plan/evidence/pre-existing/hv-umm2.645.md",
+  "commands": [
+    {
+      "name": "focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "scripts/friction-triggers.test.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-retro645",
+      "pid": 42243,
+      "pgid": 42243,
+      "identity": "42243 42243 Tue Oct 13 08:53:58 2026     node /opt/homebrew/bin/npm test -- scripts/friction-triggers.test.mjs",
+      "startedAt": "2026-10-13T15:53:58.056360+00:00",
+      "load": [
+        15.78955078125,
+        10.98828125,
+        9.20556640625
+      ],
+      "stdout": "/tmp/codex-645/focused.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 9.892150416009827,
+      "endedAt": "2026-10-13T15:54:07.959146+00:00"
+    },
+    {
+      "name": "schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-retro645",
+      "pid": 98154,
+      "pgid": 98154,
+      "identity": "98154 98154 Tue Oct 13 08:55:04 2026     node scripts/friction-triggers.mjs --validate-records",
+      "startedAt": "2026-10-13T15:55:04.338245+00:00",
+      "load": [
+        15.22900390625,
+        12.1787109375,
+        9.81689453125
+      ],
+      "stdout": "/tmp/codex-645/schema.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 0.1112325830035843,
+      "endedAt": "2026-10-13T15:55:04.449643+00:00"
+    },
+    {
+      "name": "review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-retro645",
+      "pid": 49230,
+      "pgid": 49230,
+      "identity": "49230 49230 Tue Oct 13 08:56:41 2026     node /opt/homebrew/bin/npm run review",
+      "startedAt": "2026-10-13T15:56:41.663141+00:00",
+      "load": [
+        16.11328125,
+        13.2490234375,
+        10.46435546875
+      ],
+      "stdout": "/tmp/codex-645/review.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 0.2786644590087235,
+      "endedAt": "2026-10-13T15:56:41.941948+00:00"
+    },
+    {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-retro645",
+      "pid": 60236,
+      "pgid": 60236,
+      "identity": "60236 60236 Tue Oct 13 08:57:45 2026     node /opt/homebrew/bin/npm run knip",
+      "startedAt": "2026-10-13T15:57:45.346325+00:00",
+      "load": [
+        11.1767578125,
+        12.43115234375,
+        10.36572265625
+      ],
+      "stdout": "/tmp/codex-645/knip.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 4.914598292001756,
+      "endedAt": "2026-10-13T15:57:50.261255+00:00"
+    },
+    {
+      "name": "final-schema",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-retro645",
+      "pid": 64555,
+      "pgid": 64555,
+      "identity": "64555 64555 Tue Oct 13 08:58:58 2026     node scripts/friction-triggers.mjs --validate-records",
+      "startedAt": "2026-10-13T15:58:58.603803+00:00",
+      "load": [
+        9.580078125,
+        11.837890625,
+        10.310546875
+      ],
+      "stdout": "/tmp/codex-645/final-schema.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 0.11506608399213292,
+      "endedAt": "2026-10-13T15:58:58.719211+00:00"
+    }
+  ],
+  "frictionHostLoadProvenance": {
+    "sampledAt": "2026-10-13T15:53:58.024636+00:00",
+    "scope": "Parent authored draft records; distinct from every actual check launch load in commands. Not historical cohort load or declared review-start load."
+  }
+}
