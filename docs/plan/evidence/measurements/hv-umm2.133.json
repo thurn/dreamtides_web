@@ -1,0 +1,849 @@
+{
+  "bead": "hv-umm2.133",
+  "sourceBase": "88d0317a1c95c9dbaf83be2d8e13512407553e14",
+  "dispatch": {
+    "start": "2026-10-13T16:23:43.222Z",
+    "callId": "call_ceedc2eba473475f89d1702e53956c90",
+    "hostOrdinal": 18157,
+    "source": "root host dispatch receipt; historical native started_at is not this dispatch",
+    "modelSamplingCpu": "UNKNOWN"
+  },
+  "sourceAudit": {
+    "sourcePaths": [
+      "src/content/cards/rebirth-50267984.ts",
+      "src/content/cards/emerald-guardian-46783333.ts",
+      "src/content/cards/ossuary-offering-f8678d24.ts",
+      "src/content/cards/the-calling-night-f1452b45.ts"
+    ],
+    "sourceSha256": {
+      "src/content/cards/rebirth-50267984.ts": "e74609b3a8f447945cdedba5c18becd359adfabdd7d6f2fe78025259069e1f14",
+      "src/content/cards/emerald-guardian-46783333.ts": "6447ff15b6a1fdbcd1e509684ee085e0780d6e8e19d4d60a3d184ddd01789268",
+      "src/content/cards/ossuary-offering-f8678d24.ts": "e776c313f2d536f880cab265c3679dc46e04d0756ec916b50066015b9640fe71",
+      "src/content/cards/the-calling-night-f1452b45.ts": "532b23996a08c1a822d32ffd73f793351b468812290f202de14c1e24f1cedde2"
+    },
+    "grossNonTestTsLines": 20,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "newPrimitives": 0,
+    "signatureOrImporterFallout": 0,
+    "printedCatalogFields": "unchanged",
+    "abilities": "all four UUIDs whole base and amplified clauses authored",
+    "D10": {
+      "newRulesDecisions": 0,
+      "newCardIssues": 0,
+      "anchors": [
+        "RD-hv-umm2.59-2",
+        "RD-hv-umm2.64-1",
+        "docs/rules.md Shuffle into a deck",
+        "docs/rules.md source event remains on stack while resolving",
+        "docs/rules.md controller Dawn"
+      ]
+    },
+    "D20": {
+      "newScenarios": 0,
+      "reason": "Independent existing shuffle/draw/energy/points/trigger compositions; existing synthetic contracts cover composition surfaces."
+    }
+  },
+  "commandReceipts": {
+    "install": {
+      "start": "2026-10-13T16:22:11.324980+00:00",
+      "end": "2026-10-13T16:22:13.819145+00:00",
+      "wallSeconds": 2.494173499988392,
+      "exit": 0,
+      "stdout": "\nadded 388 packages, and audited 390 packages in 2s\n\n107 packages are looking for funding\n  run `npm fund` for details\n\n17 vulnerabilities (9 moderate, 7 high, 1 critical)\n\nTo address issues that do not require attention, run:\n  npm audit fix\n\nTo address all issues, run:\n  npm audit fix --force\n\nRun `npm audit` for details.\n",
+      "stderr": ""
+    },
+    "witness": {
+      "label": "witness",
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards21-witness.ts"
+      ],
+      "start": "2026-10-13T16:27:08.215354+00:00",
+      "end": "2026-10-13T16:27:10.519497+00:00",
+      "elapsed_seconds": 2.304142713546753,
+      "host_load_start": "{ 6.90 8.03 10.27 }",
+      "exit": 1,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards21-witness.log"
+    },
+    "witness-corrected": {
+      "label": "witness-corrected",
+      "command": [
+        "./node_modules/.bin/tsx",
+        "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards21-witness.ts"
+      ],
+      "start": "2026-10-13T16:27:28.790832+00:00",
+      "end": "2026-10-13T16:27:31.188969+00:00",
+      "elapsed_seconds": 2.398136854171753,
+      "host_load_start": "{ 8.03 8.24 10.30 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards21-witness-corrected.log"
+    },
+    "focused": {
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/content/specs/specs.test.ts",
+        "src/content/coverage.test.ts",
+        "src/content/cards.test.ts"
+      ],
+      "start": "2026-10-13T16:27:35.056063+00:00",
+      "end": "2026-10-13T16:27:46.411045+00:00",
+      "elapsed_seconds": 11.354982137680054,
+      "host_load_start": "{ 7.86 8.20 10.27 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards21-focused.log"
+    },
+    "preflight": {
+      "label": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "50267984-eaa3-415e-a23f-581c54b0ad2d,46783333-78f9-4146-a8ec-0d1b81e1bf2f,f8678d24-f18b-4c94-a6c2-50efb8193b7f,f1452b45-51dc-453a-916e-88bd9d29e36e"
+      ],
+      "start": "2026-10-13T16:27:53.350150+00:00",
+      "end": "2026-10-13T16:27:55.624408+00:00",
+      "elapsed_seconds": 2.2742581367492676,
+      "host_load_start": "{ 7.73 8.14 10.20 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards21-preflight.log"
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T16:28:03.948658+00:00",
+      "end": "2026-10-13T16:28:59.991219+00:00",
+      "elapsed_seconds": 56.042561054229736,
+      "host_load_start": "{ 7.39 8.05 10.14 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards21-review.log"
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T16:29:08.471301+00:00",
+      "end": "2026-10-13T16:29:12.979769+00:00",
+      "elapsed_seconds": 4.50846791267395,
+      "host_load_start": "{ 16.24 9.96 10.67 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards21-knip.log"
+    },
+    "fuzz": {
+      "label": "fuzz",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "50267984-eaa3-415e-a23f-581c54b0ad2d,46783333-78f9-4146-a8ec-0d1b81e1bf2f,f8678d24-f18b-4c94-a6c2-50efb8193b7f,f1452b45-51dc-453a-916e-88bd9d29e36e"
+      ],
+      "start": "2026-10-13T16:29:09.628029+00:00",
+      "end": "2026-10-13T16:34:51.860272+00:00",
+      "elapsed_seconds": 342.23224329948425,
+      "host_load_start": "{ 16.24 9.96 10.67 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards21-fuzz.log"
+    },
+    "sweep": {
+      "label": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.133",
+        "--cards",
+        "50267984-eaa3-415e-a23f-581c54b0ad2d,46783333-78f9-4146-a8ec-0d1b81e1bf2f,f8678d24-f18b-4c94-a6c2-50efb8193b7f,f1452b45-51dc-453a-916e-88bd9d29e36e"
+      ],
+      "start": "2026-10-13T16:35:25.408795+00:00",
+      "end": "2026-10-13T16:46:21.286353+00:00",
+      "elapsed_seconds": 655.8775579929352,
+      "host_load_start": "{ 10.95 17.26 14.58 }",
+      "exit": 0,
+      "output": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/cards21-sweep.log"
+    }
+  },
+  "syntheticWitness": {
+    "fixture": "scratch-only synthetic catalog and public engine API, both controllers/base and amplified",
+    "positiveCases": 4,
+    "omittedVoidNegativeControlsRejected": 4,
+    "observations": [
+      "one complete hand-plus-void shuffle",
+      "5 or 6 draws after shuffle",
+      "5 current energy after draws without max energy change",
+      "public committed play step shows source on stack",
+      "source excluded from moved cohort and finishes in void",
+      "opponent deck and current energy unchanged"
+    ],
+    "initialFailure": "Scratch authoring expected engine.apply final state on stack; engine.apply automatically resolved. Preserved initial failed witness and log; corrected to public step observer. No source/product defect."
+  },
+  "validation": {
+    "focused": {
+      "files": 3,
+      "cases": 3088,
+      "requestedMissingPaths": [
+        "src/content/coverage.test.ts",
+        "src/content/cards.test.ts"
+      ],
+      "qualification": "These two nonexistent exploratory paths were ignored by the runner and are not claimed as executed. Actual current content gates run in final review."
+    },
+    "review": {
+      "files": 242,
+      "cases": 5233,
+      "exit": 0
+    },
+    "fuzz": {
+      "games": 300,
+      "steps": 123352,
+      "failures": 0,
+      "engineWallS": 252.1,
+      "engineCpuS": 274.4,
+      "inclusiveWrapperS": 342.23224329948425,
+      "heavyLockAcquisitionAt": "UNKNOWN",
+      "queueStartupAndOverheadSplit": "UNKNOWN",
+      "workers": 2,
+      "targetsExercised": {
+        "50267984-eaa3-415e-a23f-581c54b0ad2d": 64,
+        "46783333-78f9-4146-a8ec-0d1b81e1bf2f": 145,
+        "f8678d24-f18b-4c94-a6c2-50efb8193b7f": 171,
+        "f1452b45-51dc-453a-916e-88bd9d29e36e": 115
+      }
+    },
+    "preflight": {
+      "cells": 80,
+      "pass": 52,
+      "skip": 28,
+      "fail": 0,
+      "variants": "all defaults",
+      "controllers": [
+        "player",
+        "enemy"
+      ]
+    }
+  },
+  "browserQa": {
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-0BgRhF",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.133/invocations/sweep-0BgRhF",
+      "counts": {
+        "pass": 52,
+        "skip": 28
+      },
+      "attemptCounts": {
+        "pass": 52,
+        "skip": 28
+      },
+      "hostLoad": 10.87255859375,
+      "sessions": 2,
+      "leaseYields": 1,
+      "wallMs": {
+        "browserLeaseWait": 47934,
+        "serve": 4223,
+        "scenario": 602315.802209,
+        "cleanup": 1072.4898759999196,
+        "execution": 607732.259292,
+        "total": 655666.259292
+      }
+    },
+    "ledgerRows": 80,
+    "counts": {
+      "pass": 52,
+      "skip": 28
+    },
+    "allRawReports": [
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "base",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-base-player-attempt-1.result.json",
+        "sha256": "47b396184e6b8242df873e25905178b9b30ba102541bfda688f38910f97b1ed4",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "amplified",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-amplified-player-attempt-1.result.json",
+        "sha256": "85d57b39aa9a9e34b5d3044b53250c8be7c7186d98356a25bb4f13f832be6bc0",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "empowered",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-empowered-player-attempt-1.result.json",
+        "sha256": "2120b3703b49bd4d979e3db373b84e460d61da3ef8c877bf1a121d673695fcad",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "inspired",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-inspired-player-attempt-1.result.json",
+        "sha256": "e2796558eafa75c1652cc5c67a5f274a14a0d7075cadf089cf415a01d710561b",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "enduring",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-enduring-player-attempt-1.result.json",
+        "sha256": "3f59d620ae4b54ed057f5628bdd371737b179afeca1a94d24e6a2af976e459b9",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "hastened",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-hastened-player-attempt-1.result.json",
+        "sha256": "19e555afd780e8a8b11147046bfd7a09d5a45cfc831bb853614911c3beddd564",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "perfected",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-perfected-player-attempt-1.result.json",
+        "sha256": "378ab4d5d76cdba65cdde42085586544449e5c7a86d488deb2370a84e76730be",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "base",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-base-enemy-attempt-1.result.json",
+        "sha256": "05dbe690503985ea1879b685e49b1b9b8f249bc4bc01ba1a099d3559ebff13ec",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "amplified",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-amplified-enemy-attempt-1.result.json",
+        "sha256": "4debb5dfbecc8701494b0f777eeb2a9b96d1b9d2b89d43a4858d97a31fe4dc4d",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "empowered",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-empowered-enemy-attempt-1.result.json",
+        "sha256": "a9ac63e659bc3eb38127b18902c29f3b761aefdb063c89d6ee700bfbd85ef911",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "inspired",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-inspired-enemy-attempt-1.result.json",
+        "sha256": "29b436da74ebf0dda7e9da853ba3cc68007513f9a0c162cddc956399f397c476",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "enduring",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-enduring-enemy-attempt-1.result.json",
+        "sha256": "6f5b6fce51a9db6ecf000742c7cde2112e64054ab7fdb6f789d133397685ae7e",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "hastened",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-hastened-enemy-attempt-1.result.json",
+        "sha256": "a5b00a3ca90468b46c5b1049d6c1ae5f335fd7db472fd0570e58f460def161f2",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+        "variant": "perfected",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-50267984-eaa3-415e-a23f-581c54b0ad2d-perfected-enemy-attempt-1.result.json",
+        "sha256": "5780b22beb41c7ece839a9029ee5650423f3c503b88dd5aef06a08c224ec7adb",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "base",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-base-player-attempt-1.result.json",
+        "sha256": "75889902f04551def2226aa1f755061defd3a6a5bdc44e08e6209d057d05c422",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "amplified",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-amplified-player-attempt-1.result.json",
+        "sha256": "d93c62dd2cb695e69427773f49a04e02b90bbdb1e443e57f0eea26e25b3312df",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "empowered",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-empowered-player-attempt-1.result.json",
+        "sha256": "8eaff5d8a6296f95ac840661c400a4eaa1b52823ae04099aa4967a3eeaaf0869",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "kindled",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-kindled-player-attempt-1.result.json",
+        "sha256": "5f562d454426e062b733a306e6add15da581598591e4187f22121ea73273e728",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "resonant",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-resonant-player-attempt-1.result.json",
+        "sha256": "6f84611c00f31cd0dc0f5321dc9a85fa4c096ae75bc9936c970d33cc9383a8a3",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "perfected",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-perfected-player-attempt-1.result.json",
+        "sha256": "af651d5c13a0a8f6289e369a4b11bfb724079bedb77e78e9a70cac2021c7cdef",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "base",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-base-enemy-attempt-1.result.json",
+        "sha256": "36a18b917da0c6bf022c042aed5d7d35b2d9966a58dda29bc3ab9ad88a5f306a",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "amplified",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-amplified-enemy-attempt-1.result.json",
+        "sha256": "1d60a445b4e2528a5614dac63591da2494bb7970e2475aafee930669131cb223",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "empowered",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-empowered-enemy-attempt-1.result.json",
+        "sha256": "365b867121cc96b1ee01abea51867b609beb181b965f871835d90fe7a324ccde",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "kindled",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-kindled-enemy-attempt-1.result.json",
+        "sha256": "79155776d447d96f9e5d7354adea692baa3bd75115c91304270e80fdf1234f05",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "resonant",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-resonant-enemy-attempt-1.result.json",
+        "sha256": "0f342f2412e8fcaf32cc9a4dc01067e3d36843d6c70f70b9569a1de5ab4c0a8e",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+        "variant": "perfected",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-vT3Hv2/sweep-46783333-78f9-4146-a8ec-0d1b81e1bf2f-perfected-enemy-attempt-1.result.json",
+        "sha256": "2b88c5527f026638220f8600d266f0b2236974fd41362b507f80adba38b57654",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "base",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-base-player-attempt-1.result.json",
+        "sha256": "f1d34219dd168b3f39af18db03c5eb2b81900a36b2544c50bd61d6f543cb108a",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "amplified",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-amplified-player-attempt-1.result.json",
+        "sha256": "85dfe6b441c0c4af7474da9165b7b0510500593bfe28e8d03961ec29e15279d7",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "empowered",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-empowered-player-attempt-1.result.json",
+        "sha256": "e6f176a21effac4e297f5dec3a82b797e0befdce67076b49ff21ede6a7328f6f",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "inspired",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-inspired-player-attempt-1.result.json",
+        "sha256": "379ce5f4d698cad723276d2ecff246f83c374714ff93238a302b292c291423d7",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "enduring",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-enduring-player-attempt-1.result.json",
+        "sha256": "337ac9b6f308d2d01b75443b67a1440834d89a4bfcd93f1c6b84e793ad9284a0",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "hastened",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-hastened-player-attempt-1.result.json",
+        "sha256": "a936a23c49ce90c3729e3643ef849a1ade7e0d5a62b65ac254a1a3d9cc32270b",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "perfected",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-perfected-player-attempt-1.result.json",
+        "sha256": "c2d3764e807498355e695d4423d50340cf33a0a1bd32231cafb505a3179a3d45",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "base",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-base-enemy-attempt-1.result.json",
+        "sha256": "8415294417c34f323ae2e5eb97b2fdab4c036e5afd4ba984fc5405ad02b8e832",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "amplified",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-amplified-enemy-attempt-1.result.json",
+        "sha256": "45f7c79066b147690220db8da7123fbbe6c7d6d167822a3883258178e21afe7f",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "empowered",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-empowered-enemy-attempt-1.result.json",
+        "sha256": "3d95f5e250b262e98796a36c312cae8d06541df939f98278af891d13c73a3f9c",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "inspired",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-inspired-enemy-attempt-1.result.json",
+        "sha256": "ea3fdc58576a762c17b4ecd65821cbb6ad8eb9df0e769f96a7b8b17a7f40573f",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "enduring",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-enduring-enemy-attempt-1.result.json",
+        "sha256": "2412ccccc048cd8b40e7b9446c84589637a07e3bb25dc68f3a79b2162325f271",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "hastened",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-hastened-enemy-attempt-1.result.json",
+        "sha256": "a5b3e7af19643a7c4320418956f0c04983b91c1494a28ba31a803e8631ae0846",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "variant": "perfected",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f8678d24-f18b-4c94-a6c2-50efb8193b7f-perfected-enemy-attempt-1.result.json",
+        "sha256": "97f8a8c448a9b403ac93c2764e362b15eacf5497be704369947dcd113b9fa78b",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "base",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-base-player-attempt-1.result.json",
+        "sha256": "c7e4d395d8c64a2247a13b0d485393f3df7b0d2386bc2ccab87acf1c73ca8713",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "amplified",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-amplified-player-attempt-1.result.json",
+        "sha256": "7ab559e2c8c9889343d942ba42735c950f26ddfc0275379179abedc077a03386",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "empowered",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-empowered-player-attempt-1.result.json",
+        "sha256": "7253ddd0018f07df6e81d1e4b4e9b2950fcead73b2b781d996db56173376a423",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "kindled",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-kindled-player-attempt-1.result.json",
+        "sha256": "c22465f9a0396f72a7ca5e564956e3f53dd326f88179c0c629b2838529a6b802",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "resonant",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-resonant-player-attempt-1.result.json",
+        "sha256": "b8bf9dee08b4466cbea6f0ff8f8bc2e3e4eedb3c55aae1d0649d27e301904263",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "perfected",
+        "controller": "player",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-perfected-player-attempt-1.result.json",
+        "sha256": "03c7331a675ba5b59e62504cf6df744b625747b5fa9069c8ef665e5dc0855950",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "base",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-base-enemy-attempt-1.result.json",
+        "sha256": "415667a2ae2798b3cc3308d69a6dace9c25ea1f35fadb3fc367ede837e17518e",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "amplified",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-amplified-enemy-attempt-1.result.json",
+        "sha256": "4b58a1a2a2d61c895b3b891b3684ea1915ec83ee048774f7f8878edbdc4e1ad9",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "empowered",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-empowered-enemy-attempt-1.result.json",
+        "sha256": "727b415975f00a8b01d13643c7bb747780ea9cab031ec7ff13034d61df533f7c",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "kindled",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-kindled-enemy-attempt-1.result.json",
+        "sha256": "938a32bc87e4aedcbfab20788232ad7d5808337616cefa398e1f8579e6bfa85f",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "resonant",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-resonant-enemy-attempt-1.result.json",
+        "sha256": "c8a24e1200d6e6a3a38c5269f5ceaa05c844d7f3f4ebbd2ebf64dd00b23a71cd",
+        "caps": 0,
+        "error": null
+      },
+      {
+        "uuid": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+        "variant": "perfected",
+        "controller": "enemy",
+        "rawReport": "invocations/sweep-0BgRhF/run-jVuUyY/sweep-f1452b45-51dc-453a-916e-88bd9d29e36e-perfected-enemy-attempt-1.result.json",
+        "sha256": "a3d7594d69593b6f5178350106df7be19b8660b75dea98b2b3621519ae794d1b",
+        "caps": 0,
+        "error": null
+      }
+    ],
+    "ownedResourcesCleanup": {
+      "at": "2026-10-13T16:47:21.202234+00:00",
+      "nativeSweepExit": 0,
+      "nativeCloseAcknowledged": true,
+      "resources": [
+        {
+          "sessionId": "2776c564-47ce-4662-bb1a-dbac9d25f2c9",
+          "providerProbe": {
+            "status": 404,
+            "body": "Session not found"
+          },
+          "ownedProcessProbes": {
+            "39939": {
+              "exit": 1,
+              "output": ""
+            },
+            "39996": {
+              "exit": 1,
+              "output": ""
+            }
+          },
+          "port": 5174,
+          "portProbeExit": 1,
+          "portProbeOutput": "",
+          "currentOwnerMatchesOwnToken": false,
+          "currentRecordAbsent": false,
+          "serverRecordOwnTokenStillPresent": false
+        },
+        {
+          "sessionId": "8cc05f11-bd38-404b-968f-b482e745411b",
+          "providerProbe": {
+            "status": 404,
+            "body": "Session not found"
+          },
+          "ownedProcessProbes": {
+            "39939": {
+              "exit": 1,
+              "output": ""
+            },
+            "74310": {
+              "exit": 1,
+              "output": ""
+            }
+          },
+          "port": 5274,
+          "portProbeExit": 1,
+          "portProbeOutput": "",
+          "currentOwnerMatchesOwnToken": false,
+          "currentRecordAbsent": true,
+          "serverRecordOwnTokenStillPresent": false
+        }
+      ],
+      "allOwnResourcesSettled": true,
+      "ownServerProcessGroupsEmpty": true,
+      "processGroupProbeAt": "2026-10-13T16:47:45.095530+00:00"
+    },
+    "freeze": "All ordinary checkout/source/Git/tests/evidence work frozen from sweep dispatch until exact owned native cleanup and provider absence. Native sweep output/ledger and external resources retained during freeze.",
+    "resourceObserverCorrection": "Initial observer watched slot1 only; first exact slot0 snapshot captured then corrected external observer watched both exact paths and retained two contexts.",
+    "D21": {
+      "sha256FirstByte": {
+        "50267984-eaa3-415e-a23f-581c54b0ad2d": 113,
+        "46783333-78f9-4146-a8ec-0d1b81e1bf2f": 218,
+        "f8678d24-f18b-4c94-a6c2-50efb8193b7f": 79,
+        "f1452b45-51dc-453a-916e-88bd9d29e36e": 188
+      },
+      "sampled": 0,
+      "newPresentation": 0,
+      "requiredJudged": 0,
+      "actualJudged": 0
+    },
+    "routineCostDisposition": "Full default80-cell required matrix passed without retry or failure;607.732s execution and655.666s total are retained with52eligible runs,2sessions,1yield and observedload10.87255859375. No independently established slow-check fault or added QA work exceeded10minutes; routine acceptance cost stays in measurements."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review wrapper start; actual review start load7.38916015625 also retained in command log"
+      },
+      "implementWindow": {
+        "end": "Fresh immediately-precommit cutoff. Exact actual Git completion is future UNKNOWN in committed evidence and is recorded in the external post-commit receipt. Cutoff-to-Git verified <=60 seconds."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "witness": "{ 6.90 8.03 10.27 }",
+    "witness-corrected": "{ 8.03 8.24 10.30 }",
+    "focused": "{ 7.86 8.20 10.27 }",
+    "preflight": "{ 7.73 8.14 10.20 }",
+    "review": "{ 7.39 8.05 10.14 }",
+    "knip": "{ 16.24 9.96 10.67 }",
+    "fuzz": "{ 16.24 9.96 10.67 }",
+    "sweep": "{ 10.95 17.26 14.58 }"
+  },
+  "diagnosticSearchFailures": [
+    "Exploratory nonexistent source path and unexpanded zsh glob diagnostics corrected by rg --files/actual paths; no checkout effects."
+  ],
+  "reviewRouting": {
+    "mandatoryColdReview": false,
+    "reason": "20 gross non-test TS lines, source-only independent compositions, no core-review label or new API/UI/type/infrastructure. Parent ACK."
+  },
+  "actualGitCommitAt": "UNKNOWN at precommit cutoff; see external cards21-final-commit-receipt.json for actual endpoint",
+  "frictionOverTenMinutes": [],
+  "precommitEvidenceCutoff": "2026-10-13T16:52:21.165771+00:00"
+}

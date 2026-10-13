@@ -1,3 +1,5 @@
+import { onDawn, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import * as p from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +21,6 @@ export default card({
   cardNumber: 383,
   art: { x: -0.294, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: (v) => [triggered(onMaterialized(), p.draw(1)), triggered(onDawn(), p.gainEnergy(v.amplified ? 2 : 1))],
+  verifiedText: "1xm1lj79mb4",
 });
