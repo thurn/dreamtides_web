@@ -1,13 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { foldEvents } from "../eventlog/fold";
-import { asTutorialResult } from "../battle/test-support";
 import { genesisFoldState } from "./fold-state";
 import { GAME_ENGINE_CONFIG } from "./replay/replay";
 import { registerJourneyLifecycleContentProvider } from "./journey/lifecycle";
 import { testJourneyLifecycleContentProvider } from "./journey/test-content-providers";
-import { reduceGameEvent } from "./reducer";
 import { testAvatarId } from "../types/test-identities";
-import { GENESIS, ctx, event, stateWithPoisonedPrompt } from "./reducer-fixtures";
+import { GENESIS, event } from "./reducer-fixtures";
 
 
 
@@ -58,41 +56,5 @@ describe("reducer containment at the foldEvents layer", () => {
     } finally {
       registerJourneyLifecycleContentProvider(null);
     }
-  });
-});
-
-
-describe("RESOLVE_PROMPT throw containment", () => {
-  it("a throw while resolving the open prompt clears the prompt instead of wedging", () => {
-    const state = stateWithPoisonedPrompt(1);
-    const result = reduceGameEvent(
-      state,
-      event("RESOLVE_PROMPT", { promptId: 1, resolution: { kind: "foresee" } }),
-      ctx(),
-    );
-    // The resolve applied its containment fallback: the prompt is cleared and
-    // the queued automation dropped, so the game is never wedged open.
-    expect(result.outcome).toBe("applied");
-    expect(asTutorialResult(result).state.battle?.pendingPrompt).toBeNull();
-    expect(asTutorialResult(result).state.battle?.effectQueue).toEqual([]);
-  });
-
-  it("does not swallow an invariant violation after domain-error recovery", () => {
-    const state = stateWithPoisonedPrompt(1);
-    const invalid = {
-      ...state,
-      journey: { ...state.journey, essence: -1 },
-    };
-
-    expect(() =>
-      reduceGameEvent(
-        invalid,
-        event("RESOLVE_PROMPT", {
-          promptId: 1,
-          resolution: { kind: "foresee" },
-        }),
-        ctx(),
-      ),
-    ).toThrow("essence_out_of_bounds");
   });
 });

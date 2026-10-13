@@ -1,282 +1,43 @@
-// tutorial-only until Phase 6
-
-import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
-import type { TutorialBattleControllerPlan } from "../../battle/tutorial-battle-controller";
-import type {
-  TutorialBattleFoldState,
-  TutorialBattlePresentation,
-} from "../../rules/battle/fold";
+import type { Engine } from "../../engine";
+import type { BattleState } from "../../engine";
+import type { TutorialBattleFoldState } from "../../rules/battle/fold";
+import { foldAdapterFor } from "../../rules/battle/engine-battle";
 import type { TutorialBattleView } from "../../cumulus/screens/TutorialBattleScreen";
-import type { MobileBattleSideView } from "../../cumulus/screens/MobileBattleScreen";
-import {
-  buildMobileBattleCardView,
-  buildMobileBattleView,
-} from "./mobile-battle-view-model";
-import { rankSlotIds } from "../../battle/types";
-
+import { buildEngineBattleScreenModel, enginePrintedKeywords, type EngineBattleScreenModel } from "./engine-battle-view-model";
+import type { EngineCardModels } from "../../battle/ui/engine-card-model";
+import { buildBattleAvatarStatus } from "../../battle/ui/battle-avatar-status";
+import { dreamwellCardModel } from "../../battle/ui/dreamwell-card-model";
+import { parseBattleCardId } from "../../types/identifiers";
 const INACTIVE_TUTORIAL_AVATAR_ABILITY = "Avatar ability is not active";
-
-function withInactiveTutorialAvatarAbility(
-  side: MobileBattleSideView,
-): MobileBattleSideView {
-  const profile = side.status.avatarProfile;
-  if (profile === undefined) return side;
-  return {
-    ...side,
-    status: {
-      ...side.status,
-      avatarProfile: {
-        ...profile,
-        ability: INACTIVE_TUTORIAL_AVATAR_ABILITY,
-        unavailable: true,
-      },
-    },
-  };
+export interface TutorialBattleModel {
+    readonly view: TutorialBattleView;
+    readonly model: EngineBattleScreenModel;
 }
-
-/**
- * Project a fold presentation onto the board presentation the screen renders.
- *
- * The screen reports a rendered presentation visible by id, and the shared
- * controller waits for that id before completing the presentation and
- * resuming the parked battle work. A kind that reaches the screen as `null`
- * therefore parks the tutorial permanently, so this switch is exhaustive over
- * the fold union: a new kind is a compile error here, not a silent stall.
- */
-function tutorialPresentationView(
-  presentation: TutorialBattlePresentation | null,
-  battle: TutorialBattleFoldState,
-): TutorialBattleView["presentation"] {
-  if (presentation === null) return null;
-  switch (presentation.kind) {
-    case "opponent-play": {
-      const card = battle.board.cardInstances[presentation.battleCardId];
-      return card === undefined ||
-        card.definition.cardId !== presentation.cardId
-        ? null
-        : {
-            kind: presentation.kind,
-            presentationId: presentation.id,
-            cardId: presentation.cardId,
-            battleCardId: presentation.battleCardId,
-            cardKind: presentation.cardKind,
-            card: buildMobileBattleCardView(card),
-          };
-    }
-    case "dreamwell-reveal": {
-      const definition = battle.init.dreamwellDeck.find(
-        (candidate) => candidate.id === presentation.cardId,
-      );
-      return definition === undefined
-        ? null
-        : {
-            kind: presentation.kind,
-            presentationId: presentation.id,
-            cardId: presentation.cardId,
-            side: presentation.side,
-          };
-    }
-    case "opponent-block":
-      return {
-        kind: presentation.kind,
-        presentationId: presentation.id,
-      };
-    case "challenge-resolved":
-      return {
-        kind: presentation.kind,
-        presentationId: presentation.id,
-        paired: presentation.blockerBattleCardId !== null,
-        dissolved: presentation.dissolved.map((entry) => ({ ...entry })),
-        scored: presentation.scored,
-      };
-    case "tutorial-guidance":
-      // Guidance dwell is released by useBattleTutorialGuidance, and the
-      // controller skips the visible-id gate for it, so guidance has no board
-      // presentation of its own.
-      return null;
-    default: {
-      const unhandled: never = presentation;
-      return unhandled;
-    }
-  }
-}
-
-export function buildTutorialBattleView(
-  battle: TutorialBattleFoldState,
-  controller: TutorialBattleControllerPlan,
-  confirmedPromptId: number | null,
-  previewVictory = false,
-): TutorialBattleView {
-  const presentation = battle.tutorialPresentation ?? null;
-  const enemyAvatar = {
-    id: battle.init.enemyDescriptor.id,
-    imageNumber: battle.init.enemyDescriptor.imageNumber ?? "001",
-    name: battle.init.enemyDescriptor.name,
-    renderedText: battle.init.enemyDescriptor.abilityText,
-    title: battle.init.enemyDescriptor.subtitle,
-  };
-  const mobileOptions = {
-    isOpponentHandRevealed: false,
-    isPlayerHandHidden: false,
-    pendingPrompt: battle.pendingPrompt,
-    confirmedPromptId,
-  } as const;
-  const buildBattleView = (
-    board: TutorialBattleFoldState["board"],
-  ): TutorialBattleView["battle"] => {
-    const projected = buildMobileBattleView(
-      battle.init,
-      board,
-      enemyAvatar,
-      mobileOptions,
-    );
-    const player = withInactiveTutorialAvatarAbility(projected.player);
-    const enemy = withInactiveTutorialAvatarAbility(projected.enemy);
-    return {
-      ...projected,
-      player,
-      enemy,
-      near: projected.perspective === "player" ? player : enemy,
-      far: projected.perspective === "player" ? enemy : player,
-      result: null,
+/** The tutorial uses the same engine projection, prompts and legal affordances as journey battles. */
+export function buildTutorialBattleView(battle: TutorialBattleFoldState, engine: Engine, cards: EngineCardModels, previewVictory = false): TutorialBattleModel {
+    const checkpoint = battle.checkpoints[0];
+    const presentation = battle.tutorialPresentation;
+    const pending = foldAdapterFor(engine).pending(battle.engine.slice);
+    const display = checkpoint?.state ?? pending?.display ?? battle.engine.slice.committed;
+    const reveal = presentation?.kind === "opponent-play";
+    const render = (state: BattleState): EngineBattleScreenModel => {
+        const view = engine.view(state, "player");
+        const decision = battle.engine.slice.inFlight === null ? engine.decision(battle.engine.slice.committed) : null;
+        const result = buildEngineBattleScreenModel({ battleId: battle.init.battleId, human: "player", view, legal: checkpoint === undefined && decision?.side === "player" ? engine.legalActions(battle.engine.slice.committed, "player") : [], prompt: pending?.prompt ?? null, drawnForDiscard: pending?.drawnForDiscard, playing: battle.engine.slice.inFlight?.step.kind === "play" ? battle.engine.slice.inFlight.step.card : null, decision, presented: checkpoint === undefined, notice: null, cards, catalog: engine.catalog, printedKeywords: enginePrintedKeywords(engine.catalog), avatars: { player: buildBattleAvatarStatus(battle.init.avatarSummary, true), enemy: buildBattleAvatarStatus({ id: battle.init.enemyDescriptor.avatarId ?? battle.init.enemyDescriptor.id, name: battle.init.enemyDescriptor.name, title: battle.init.enemyDescriptor.subtitle, renderedText: battle.init.enemyDescriptor.abilityText, imageNumber: battle.init.enemyDescriptor.imageNumber ?? "001" }, true) }, opponentName: battle.init.enemyDescriptor.name, essenceReward: 0, resultDismissed: true, dreamwellCard: id => { const definition = battle.init.dreamwellDeck.find(card => card.id === id); return definition === undefined ? null : dreamwellCardModel(definition); }, ...(presentation?.kind === "dreamwell-reveal" ? { visual: { key: presentation.id, visual: { kind: "dreamwell", card: presentation.cardId, side: presentation.side } } as const } : {}) });
+        const inactive = (side: typeof result.view.near) => side.status.avatarProfile === undefined ? side : { ...side, status: { ...side.status, avatarProfile: { ...side.status.avatarProfile, ability: INACTIVE_TUTORIAL_AVATAR_ABILITY, unavailable: true } } };
+        return { ...result, view: { ...result.view, near: inactive(result.view.near), far: inactive(result.view.far), turn: String(state.turn.round), result: null } };
     };
-  };
-  const mobile = buildBattleView(
-    boardBeforeOpponentPlayPresentation(battle, presentation),
-  );
-  const challengeOriginBoard = boardBeforeChallengeResolutionPresentation(
-    battle,
-    presentation,
-  );
-  const prompt = battle.pendingPrompt;
-  const confirmedHumanPrompt =
-    controller.status === "driver" &&
-    controller.requiresHumanDecision &&
-    prompt !== null &&
-    confirmedPromptId === prompt.promptId;
-  return {
-    battle: mobile,
-    challengeOriginBattle:
-      challengeOriginBoard === null
-        ? null
-        : buildBattleView(challengeOriginBoard),
-    ownership:
-      controller.status === "not-tutorial" ? "observer" : controller.status,
-    driverClientId: controller.driverClientId,
-    manualControls:
-      controller.status === "driver" && controller.requiresHumanDecision,
-    foresee:
-      confirmedHumanPrompt && prompt.options.kind === "foresee"
-        ? {
-            initialCount: prompt.options.count,
-            allowedCounts: Array.from(
-              { length: prompt.options.cardIds.length },
-              (_, index) => index + 1,
-            ),
-            cards: prompt.options.cardIds.flatMap((battleCardId) => {
-              const card = battle.board.cardInstances[battleCardId];
-              return card === undefined
-                ? []
-                : [
-                    {
-                      battleCardId: battleCardId,
-                      card: battleGameCardModel(card),
-                    },
-                  ];
-            }),
-          }
-        : null,
-    presentationId:
-      presentation === null || presentation.kind === "tutorial-guidance"
-        ? null
-        : presentation.id,
-    presentation: tutorialPresentationView(presentation, battle),
-    victoryVisible: previewVictory || battle.board.result === "victory",
-  };
-}
-
-/**
- * Reconstruct the last painted Challenge lane from persisted UUIDs. The
- * authoritative board already contains the void moves; this local projection
- * supplies a source frame even when the screen mounts after those moves were
- * folded from the game log.
- */
-function boardBeforeChallengeResolutionPresentation(
-  battle: TutorialBattleFoldState,
-  presentation: TutorialBattlePresentation | null,
-): TutorialBattleFoldState["board"] | null {
-  if (
-    presentation?.kind !== "challenge-resolved" ||
-    presentation.dissolved.length === 0
-  ) {
-    return null;
-  }
-  const sides = {
-    player: { ...battle.board.sides.player },
-    enemy: { ...battle.board.sides.enemy },
-  };
-  for (const entry of presentation.dissolved) {
-    const side = sides[entry.side];
-    const backRank = { ...side.backRank };
-    const frontRank = { ...side.frontRank };
-    for (const slotId of rankSlotIds(backRank)) {
-      if (backRank[slotId] === entry.battleCardId) backRank[slotId] = null;
+    const cardGuidance = presentation?.kind === "tutorial-guidance" && presentation.source.kind === "card" && !presentation.id.endsWith(":refusal") ? presentation.source : null;
+    const cinematic = cardGuidance === null || checkpoint === undefined ? null : checkpoint.before;
+    let model = render(cinematic ?? (reveal ? checkpoint.before : display));
+    if (cinematic !== null && cardGuidance !== null) {
+        const outlined = new Set(engine.legalActions(cinematic, "player").flatMap(action => action.kind === "play" && action.from === "hand" ? [parseBattleCardId(action.card)] : []));
+        const held = cardGuidance.side === "player" ? cardGuidance.battleCardId : null;
+        model = { ...model, view: { ...model.view, inspector: render(display).view.inspector, nearHand: { ...model.view.nearHand, cardIds: model.view.nearHand.cardIds.filter(id => id !== held), cards: model.view.nearHand.cards.filter(card => card.id !== held).map(card => ({ ...card, showPlayableOutline: outlined.has(card.id) })) } } };
     }
-    for (const slotId of rankSlotIds(frontRank)) {
-      if (frontRank[slotId] === entry.battleCardId) frontRank[slotId] = null;
-    }
-    sides[entry.side] = {
-      ...side,
-      deck: side.deck.filter((candidate) => candidate !== entry.battleCardId),
-      hand: side.hand.filter((candidate) => candidate !== entry.battleCardId),
-      void: side.void.filter((candidate) => candidate !== entry.battleCardId),
-      banished: side.banished.filter(
-        (candidate) => candidate !== entry.battleCardId,
-      ),
-      backRank,
-      frontRank: {
-        ...frontRank,
-        [presentation.slotId]: entry.battleCardId,
-      },
-    };
-  }
-  return {
-    ...battle.board,
-    sides,
-  };
-}
-
-/**
- * The play is already committed in the game fold, but the tutorial presents
- * the physical card before revealing its destination. This projection removes
- * only that card from visible enemy zones until the persisted checkpoint
- * clears; card identity and rule state remain authoritative in the fold.
- */
-function boardBeforeOpponentPlayPresentation(
-  battle: TutorialBattleFoldState,
-  presentation: TutorialBattlePresentation | null,
-): TutorialBattleFoldState["board"] {
-  if (presentation?.kind !== "opponent-play") return battle.board;
-  const battleCardId = presentation.battleCardId;
-  const enemy = battle.board.sides.enemy;
-  const backRank = { ...enemy.backRank };
-  const frontRank = { ...enemy.frontRank };
-  for (const slotId of rankSlotIds(backRank)) {
-    if (backRank[slotId] === battleCardId) backRank[slotId] = null;
-  }
-  for (const slotId of rankSlotIds(frontRank)) {
-    if (frontRank[slotId] === battleCardId) frontRank[slotId] = null;
-  }
-  return {
-    ...battle.board,
-    sides: {
-      ...battle.board.sides,
-      enemy: {
-        ...enemy,
-        backRank,
-        frontRank,
-        void: enemy.void.filter((candidate) => candidate !== battleCardId),
-      },
-    },
-  };
+    const shown = presentation === null || presentation.kind === "tutorial-guidance" ? null : presentation.kind === "opponent-play" ? (() => {
+        const after = render(checkpoint.state), card = after.instances.get(presentation.battleCardId);
+        return card === undefined ? null : { kind: "opponent-play" as const, presentationId: presentation.id, cardId: presentation.cardId, battleCardId: presentation.battleCardId, cardKind: presentation.cardKind, card: { id: parseBattleCardId(card.id), model: cards(card), exhausted: card.status.exhausted, figment: card.printing.kind !== "card", storedTime: card.status.counters, showPlayableOutline: false } };
+    })() : presentation.kind === "dreamwell-reveal" ? { kind: "dreamwell-reveal" as const, presentationId: presentation.id, cardId: presentation.cardId, side: presentation.side } : presentation.kind === "opponent-block" ? { kind: "opponent-block" as const, presentationId: presentation.id } : { kind: "challenge-resolved" as const, presentationId: presentation.id, paired: presentation.blockerBattleCardId !== null, dissolved: presentation.dissolved, scored: presentation.scored };
+    return { model, view: { battle: model.view, challengeOriginBattle: presentation?.kind === "challenge-resolved" && checkpoint !== undefined ? render(checkpoint.before).view : null, manualControls: checkpoint === undefined && model.affordances.canAct, presentationId: presentation === null || presentation.kind === "tutorial-guidance" ? null : presentation.id, presentation: shown, victoryVisible: previewVictory || checkpoint === undefined && battle.engine.slice.committed.result?.kind === "victory" && battle.engine.slice.committed.result.winner === "player" } };
 }

@@ -12,7 +12,7 @@ import type { PolicyId } from "../../engine/policy/types";
 import { aiEventActor } from "../../eventlog/types";
 import { logEvent } from "../../logging";
 import { getBattleInitProvider } from "../../rules/battle/journey-battle";
-import { journeyBattleOf } from "../../rules/battle/fold";
+import { engineBattleOf } from "../../rules/battle/fold";
 import { useActions, useClientId, useGameState } from "../../session/hooks";
 import { actionsSubmitter, EngineAiDriver } from "./engine-ai-driver";
 
@@ -22,19 +22,19 @@ function browserPolicyWorker(): PolicyWorker {
   return new Worker(new URL("./policy.worker.ts", import.meta.url), { type: "module" }) as unknown as PolicyWorker;
 }
 
-export function useEngineAi(policy: PolicyId): void {
+export function useEngineAi(policy: PolicyId, enabled = true): void {
   const state = useGameState();
   const actions = useActions();
   const clientId = useClientId();
   const engine = getBattleInitProvider()?.engine ?? null;
-  const battle = journeyBattleOf(state.battle);
+  const battle = engineBattleOf(state.battle);
   const engineInit = battle?.engine.init ?? null;
   const battleId = battle?.init.battleId ?? null;
   const actor = useMemo(() => aiEventActor(clientId), [clientId]);
   const [driver, setDriver] = useState<EngineAiDriver | null>(null);
 
   useEffect(() => {
-    if (engine === null || engineInit === null || battleId === null) return undefined;
+    if (!enabled || engine === null || engineInit === null || battleId === null) return undefined;
     const created = new EngineAiDriver({
       side: "enemy",
       policy,
@@ -62,7 +62,7 @@ export function useEngineAi(policy: PolicyId): void {
     return () => {
       created.dispose();
     };
-  }, [actions, actor, battleId, engine, engineInit, policy]);
+  }, [actions, actor, battleId, engine, engineInit, policy, enabled]);
 
   useEffect(() => {
     driver?.update(state);

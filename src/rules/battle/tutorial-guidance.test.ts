@@ -1,12 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { AVATARS } from "../../content/avatars";
-import { CARDS } from "../../content/cards";
-import { DREAMWELL_CARDS } from "../../content/dreamwell";
-import { FIGMENTS } from "../../content/figments";
-import { TUTORIAL } from "../../content/tutorial";
-import { isHighlightedRulesTextTerm } from "../../cumulus/components/card/RulesText";
-import { GLOSSARY_IDS, lookupGlossaryTerm } from "../../data/glossary";
-import { parseTutorialTriggers } from "../../data/tutorial-actions";
+import { GLOSSARY_IDS } from "../../data/glossary";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
 import { matchTutorialGuidance } from "./tutorial-guidance";
 import type { TutorialTriggerId } from "../../types/identifiers";
@@ -157,31 +150,5 @@ describe("matchTutorialGuidance", () => {
     expect(matches.map((match) => match.id)).toEqual([
       testTutorialTriggerId("flashpoint-no-valid-targets"),
     ]);
-  });
-});
-
-describe("tutorial trigger coverage", () => {
-  it("covers every yellow term currently used by battle entities", () => {
-    const texts = [...CARDS, ...DREAMWELL_CARDS, ...AVATARS, ...FIGMENTS].map(
-      (entity) => entity.renderedText,
-    );
-    const highlightedGlossaryIds = new Set<string>();
-    for (const text of texts) {
-      for (const word of text.match(/[A-Za-z]+/gu) ?? []) {
-        if (!isHighlightedRulesTextTerm(word)) continue;
-        const glossary = lookupGlossaryTerm(word);
-        if (glossary !== undefined) highlightedGlossaryIds.add(glossary.id);
-      }
-    }
-    const triggerGlossaryIds = new Set(
-      parseTutorialTriggers(TUTORIAL.triggers).flatMap((trigger) =>
-        trigger.match.kind === "glossary" ? [trigger.match.id] : [],
-      ),
-    );
-    expect([...highlightedGlossaryIds].sort()).toEqual(
-      [...triggerGlossaryIds]
-        .filter((id) => id !== GLOSSARY_IDS.dissolvedTrigger)
-        .sort(),
-    );
   });
 });

@@ -26,6 +26,7 @@ export function useTutorialPresentationLogging(
 
   useEffect(() => {
     if (
+      view.currentAction === null ||
       view.battle.activeSide !== "player" ||
       view.playbackRunId === null ||
       loggedPlayerTurnRunId.current === view.playbackRunId
@@ -33,19 +34,19 @@ export function useTutorialPresentationLogging(
       return;
     }
     loggedPlayerTurnRunId.current = view.playbackRunId;
-    const drawnCard = view.battle.playerHand[0];
+    const drawnCard = view.battle.nearHand.cards[0];
     logEvent("tutorial_player_turn_presented", {
       runId: view.playbackRunId,
       battleId: view.battle.battleId,
       activeSide: view.battle.activeSide,
-      currentEnergy: view.battle.player.status.currentEnergy,
-      maxEnergy: view.battle.player.status.maxEnergy,
+      currentEnergy: view.battle.near.status.currentEnergy,
+      maxEnergy: view.battle.near.status.maxEnergy,
       cardId: drawnCard?.model.cardId ?? null,
       cardInstanceId: drawnCard?.id ?? null,
       sourceZone: "player-deck",
       destinationZone: "player-hand",
-      playerDeckCount: view.battle.player.deckCardIds.length,
-      playerHandCount: view.battle.playerHand.length,
+      playerDeckCount: view.battle.near.deckCardIds.length,
+      playerHandCount: view.battle.nearHand.cards.length,
       tutorialPlaybackSpeed: playbackSpeed,
     });
   }, [playbackSpeed, view]);
@@ -58,7 +59,7 @@ export function useTutorialPresentationLogging(
     loggedActionKey.current = key;
     logEvent("tutorial_action_presented", {
       runId: view.playbackRunId,
-      ...tutorialActionLogDetails(current, featuredDreamwellCardId),
+      ...tutorialActionLogDetails(current),
       ...(current.action === "resolve-challenge" &&
       view.challenge !== null &&
       view.challenge !== undefined

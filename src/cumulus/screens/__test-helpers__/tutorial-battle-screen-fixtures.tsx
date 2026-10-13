@@ -15,7 +15,6 @@ import { parseCardName } from "../../../types/card-identity";
 import {
   parseBattleCardId,
   parseBattleId,
-  parseClientId,
   parsePresentationId,
 } from "../../../types/identifiers";
 import { testCardId } from "../../../types/test-identities";
@@ -47,14 +46,12 @@ export function view(
   const result: TutorialBattleView = {
     battle: {
       battleId: parseBattleId("tutorial-battle"),
+      turn:"2",
       inspector: { turn: "2" },
       activeSide: "player",
     } as TutorialBattleView["battle"],
     challengeOriginBattle: null,
-    ownership: "driver",
-    driverClientId: parseClientId("driver-client"),
     manualControls: false,
-    foresee: null,
     presentationId: null,
     presentation: null,
     victoryVisible: false,
@@ -117,7 +114,6 @@ export function tutorialBattleScreen(
       interactions={interactions}
       movementStatusMessage={null}
       onMovementStatusDismiss={vi.fn()}
-      onForeseeConfirm={() => {}}
       onNewJourney={vi.fn()}
       guidance={null}
       onGuidanceContinue={() => {}}

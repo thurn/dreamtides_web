@@ -35,7 +35,6 @@ import { parseSiteId } from "../types/identifiers";
 import { parseAtlasNodeId } from "../types/identifiers";
 import { parseDeckEntryId } from "../types/identifiers";
 import { parseShuffleCommitment } from "../types/identifiers";
-import { parseBattleCardId } from "../types/identifiers";
 import { parsePromptId } from "../types/identifiers";
 import { parseJourneyId } from "../types/identifiers";
 import { parseTutorialRunId } from "../types/identifiers";
@@ -251,21 +250,12 @@ function captureAllDrafts(): EventDraft[] {
   void actions.setCardSourceDebug(null);
   void actions.endBattle();
   void actions.beginBattle(parseSiteId("site-1"));
-  void actions.battleCommand({});
-  void actions.battleRepositionCharacter(parseBattleCardId("battle-card-1"), {
-    side: "player",
-    zone: "backRank",
-    slotId: "B0",
-  });
-  void actions.battlePlayCard(parseBattleCardId("battle-card-1"), []);
-  void actions.battleGesture([{}, {}]);
-  void actions.battleAiBlock("enemy", testEventActor("ai:test"));
   void actions.completeTutorialBattlePresentation(
     parsePresentationId("opponent-play:card-1"),
     parseIntentKey("battle:presentation:opponent-play:card-1"),
     testEventActor("tutorial-ai:client-a"),
   );
-  void actions.resolvePrompt(1, {});
+  void actions.tutorialCardAttempt(parseBattleId("tutorial-battle"), "i1");
   void actions.battleAction("player", { kind: "pass" });
   void actions.answerPrompt("player", parsePromptId("1:1:0"), 1);
   void actions.cancelPrompt("player", parsePromptId("1:1:0"));

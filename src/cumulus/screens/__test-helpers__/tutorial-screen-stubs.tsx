@@ -202,25 +202,25 @@ export function MobileBattleScreenStub(props: MobileBattleScreenProps) {
           data-battle-card-zone="far-hand"
         />
       ))}
-      <Rank rank="enemy-back" slots={view.enemy?.backRank} outlines={false} />
+      <Rank rank="enemy-back" slots={view.far?.backRank} outlines={false} />
       <Rank
         rank="enemy-front"
-        slots={view.enemy?.frontRank}
+        slots={view.far?.frontRank}
         outlines={outlines}
       />
       <Rank
         rank="player-front"
-        slots={view.player?.frontRank}
+        slots={view.near?.frontRank}
         outlines={outlines}
       />
-      <Rank rank="player-back" slots={view.player?.backRank} outlines={false} />
+      <Rank rank="player-back" slots={view.near?.backRank} outlines={false} />
       <div data-battle-zone="enemy-void">
         <div data-battle-pile-frame="" />
       </div>
       <div data-battle-zone="player-void">
         <div data-battle-pile-frame="" />
       </div>
-      <StatusAvatar side="enemy" status={view.enemy?.status} />
+      <StatusAvatar side="enemy" status={view.far?.status} />
       <div data-battle-mobile-row="enemy-zones">
         {view.dreamwell === null || view.dreamwell === undefined ? null : (
           <div
@@ -231,7 +231,7 @@ export function MobileBattleScreenStub(props: MobileBattleScreenProps) {
           </div>
         )}
       </div>
-      <StatusAvatar side="player" status={view.player?.status} />
+      <StatusAvatar side="player" status={view.near?.status} />
     </div>
   );
 }

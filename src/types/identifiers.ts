@@ -87,12 +87,7 @@ export type AuguryArchetypeId =
 export type AuguryCardViewId = DomainIdentity<"AuguryCardViewId">;
 export type ApollyonIncarnationId = DomainIdentity<"ApollyonIncarnationId">;
 export type AffiliationId = DomainIdentity<"AffiliationId">;
-export type AiDifficultyPresetId = DomainIdentity<"AiDifficultyPresetId">;
-export type AiActionKey = DomainIdentity<"AiActionKey">;
 export type BattleCardId = DomainIdentity<"BattleCardId">;
-export type BattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
-export type BattleAttemptId = DomainIdentity<"BattleAttemptId">;
-export type BattleEffectScriptId = DomainIdentity<"BattleEffectScriptId">;
 export type BattleEntryKey = DomainIdentity<"BattleEntryKey">;
 export type BattleId = DomainIdentity<"BattleId">;
 export type BattleSlotViewId = DomainIdentity<"BattleSlotViewId">;
@@ -110,8 +105,6 @@ export type DreamsignId = DomainIdentity<"DreamsignId">;
 export type DreamwellCardId = DomainIdentity<"DreamwellCardId">;
 /** A pending battle prompt: `<committed version>:<answers recorded>`. */
 export type PromptId = DomainIdentity<"PromptId">;
-export type DreamwellChoiceKey = DomainIdentity<"DreamwellChoiceKey">;
-export type DreamwellPromptKey = DomainIdentity<"DreamwellPromptKey">;
 export type ExplorationActionId = DomainIdentity<"ExplorationActionId">;
 export type FrontRankSlotId = `F${number}`;
 export type FrontDoorActionId = DomainIdentity<"FrontDoorActionId">;
@@ -125,7 +118,6 @@ export type JourneyId = DomainIdentity<"JourneyId">;
 export type IntentKey = DomainIdentity<"IntentKey">;
 export type AuguryCategoryId = DomainIdentity<"AuguryCategoryId">;
 export type AuguryTargetKey = DomainIdentity<"AuguryTargetKey">;
-export type NoteId = DomainIdentity<"NoteId">;
 export type OfferId = DomainIdentity<"OfferId">;
 export type OfferTileId = DomainIdentity<"OfferTileId">;
 export type OpponentId = DomainIdentity<"OpponentId">;
@@ -158,13 +150,7 @@ const brandAuguryCardViewId = identityConstructor<AuguryCardViewId>();
 const brandApollyonIncarnationId =
   identityConstructor<ApollyonIncarnationId>();
 const brandAffiliationId = identityConstructor<AffiliationId>();
-const brandAiDifficultyPresetId =
-  identityConstructor<AiDifficultyPresetId>();
-const brandAiActionKey = identityConstructor<AiActionKey>();
 const brandBattleCardId = identityConstructor<BattleCardId>();
-const brandBattleAttemptId = identityConstructor<BattleAttemptId>();
-const brandBattleEffectScriptId =
-  identityConstructor<BattleEffectScriptId>();
 const brandBattleEntryKey = identityConstructor<BattleEntryKey>();
 const brandBattleId = identityConstructor<BattleId>();
 const brandBattleSlotViewId = identityConstructor<BattleSlotViewId>();
@@ -181,8 +167,6 @@ const brandDreamscapeArtKey = identityConstructor<DreamscapeArtKey>();
 const brandDreamsignId = identityConstructor<DreamsignId>();
 const brandDreamwellCardId = identityConstructor<DreamwellCardId>();
 const brandPromptId = identityConstructor<PromptId>();
-const brandDreamwellChoiceKey = identityConstructor<DreamwellChoiceKey>();
-const brandDreamwellPromptKey = identityConstructor<DreamwellPromptKey>();
 const brandExplorationActionId = identityConstructor<ExplorationActionId>();
 const brandFrontDoorActionId = identityConstructor<FrontDoorActionId>();
 const brandFigmentCatalogKey = identityConstructor<FigmentCatalogKey>();
@@ -194,7 +178,6 @@ const brandJourneyId = identityConstructor<JourneyId>();
 const brandIntentKey = identityConstructor<IntentKey>();
 const brandAuguryCategoryId = identityConstructor<AuguryCategoryId>();
 const brandAuguryTargetKey = identityConstructor<AuguryTargetKey>();
-const brandNoteId = identityConstructor<NoteId>();
 const brandOfferId = identityConstructor<OfferId>();
 const brandOfferTileId = identityConstructor<OfferTileId>();
 const brandOpponentId = identityConstructor<OpponentId>();
@@ -272,22 +255,9 @@ export const parseAffiliationId = identityParser(
   (value) => UUID_PATTERN.test(value),
   (value) => value.toLowerCase(),
 );
-export const parseAiDifficultyPresetId = identityParser(
-  "AI difficulty preset id",
-  brandAiDifficultyPresetId,
-);
-export const parseAiActionKey = identityParser("AI action key", brandAiActionKey);
 export const parseBattleCardId = identityParser(
   "Battle card id",
   brandBattleCardId,
-);
-export const parseBattleAttemptId = identityParser(
-  "Battle attempt id",
-  brandBattleAttemptId,
-);
-export const parseBattleEffectScriptId = identityParser(
-  "Battle effect script id",
-  brandBattleEffectScriptId,
 );
 export const parseBattleEntryKey = identityParser(
   "Battle entry key",
@@ -344,14 +314,6 @@ export const parsePromptId = identityParser(
   brandPromptId,
   (value) => /^\d+:\d+:\d+$/u.test(value),
 );
-export const parseDreamwellChoiceKey = identityParser(
-  "Dreamwell choice key",
-  brandDreamwellChoiceKey,
-);
-export const parseDreamwellPromptKey = identityParser(
-  "Dreamwell prompt key",
-  brandDreamwellPromptKey,
-);
 export const parseExplorationActionId = identityParser(
   "Exploration action id",
   brandExplorationActionId,
@@ -397,7 +359,6 @@ export const parseAuguryTargetKey = identityParser(
   "Augury target key",
   brandAuguryTargetKey,
 );
-export const parseNoteId = identityParser("Note id", brandNoteId);
 export const parseOfferId = identityParser("Offer id", brandOfferId);
 export const parseOfferTileId = identityParser(
   "Offer tile id",
@@ -484,10 +445,6 @@ export const deckEntryIdFromUnknown = identityDecoder(parseDeckEntryId);
 export const dreamscapeIdFromUnknown = identityDecoder(parseDreamscapeId);
 export const dreamsignIdFromUnknown = identityDecoder(parseDreamsignId);
 export const dreamwellCardIdFromUnknown = identityDecoder(parseDreamwellCardId);
-export const dreamwellChoiceKeyFromUnknown =
-  identityDecoder(parseDreamwellChoiceKey);
-export const dreamwellPromptKeyFromUnknown =
-  identityDecoder(parseDreamwellPromptKey);
 export const explorationActionIdFromUnknown = identityDecoder(
   parseExplorationActionId,
 );
@@ -497,7 +454,6 @@ export const glossaryEntryIdFromUnknown = identityDecoder(parseGlossaryEntryId);
 export const guideIdFromUnknown = identityDecoder(parseGuideId);
 export const guideArtKeyFromUnknown = identityDecoder(parseGuideArtKey);
 export const intentKeyFromUnknown = identityDecoder(parseIntentKey);
-export const noteIdFromUnknown = identityDecoder(parseNoteId);
 export const offerIdFromUnknown = identityDecoder(parseOfferId);
 export const gameIdFromUnknown = identityDecoder(parseGameId);
 export const shuffleCommitmentFromUnknown =

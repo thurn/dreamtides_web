@@ -23,7 +23,6 @@ import { makeActions, type AppendFn, type GameActions } from "./actions";
 import type { CommittedEvent, EventDraft } from "../eventlog/local-log";
 import type { EventOutcome, GameEvent } from "../eventlog/types";
 import type { FoldState } from "../rules/fold-state";
-import { tutorialBattleOf } from "../rules/battle/fold";
 import type { ClientId } from "../types/identifiers";
 import {
   LocalGameControlsContext,
@@ -199,6 +198,3 @@ export function useEventOutcomes(listener: OutcomeListener): void {
 }
 
 /** The tutorial battle's open prompt id, or null when no prompt is open. */
-export function useConfirmedPromptId(): number | null {
-  return tutorialBattleOf(useGameState().battle)?.pendingPrompt?.promptId ?? null;
-}

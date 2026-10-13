@@ -54,10 +54,10 @@ describe("void activations on the battle screen", () => {
     expect([...model.affordances.activations.keys()]).toEqual([id(revenant)]);
     expect(voidCardActions(model.affordances, id(revenant))).toEqual([activate(revenant)]);
     expect(voidCardActions(model.affordances, id(reaper))).toEqual([]);
-    const ringed = (side: "player" | "enemy") => model.view[side].voidCards.filter((card) => card.showPlayableOutline).map((card) => card.id);
+    const ringed = (side: "player" | "enemy") => (side === model.view.near.owner ? model.view.near : model.view.far).voidCards.filter((card) => card.showPlayableOutline).map((card) => card.id);
     expect(ringed("player")).toEqual([id(revenant)]);
     expect(ringed("enemy")).toEqual([]);
-    const tiles = voidBrowserCards(model.view.player).map((card) => [card.entryId, card.selection ?? null, card.pressable ?? true]);
+    const tiles = voidBrowserCards(model.view.near).map((card) => [card.entryId, card.selection ?? null, card.pressable ?? true]);
     expect(tiles).toEqual([[id(vanilla), null, false], [id(revenant), "playable", true], [id(reaper), null, false]]);
   });
 

@@ -120,7 +120,7 @@ describe("buildEngineBattleScreenModel", () => {
     });
     const model = screenOf(state);
     const kinds = (id: InstanceId) =>
-      [...model.view.playerHand, ...model.view.player.frontRank.map((slot) => slot.card), ...model.view.player.backRank.map((slot) => slot.card)]
+      [...model.view.nearHand.cards, ...model.view.near.frontRank.map((slot) => slot.card), ...model.view.near.backRank.map((slot) => slot.card)]
         .find((card) => card?.id === parseBattleCardId(id))
         ?.statuses?.map((badge) => badge.kind) ?? [];
 
@@ -129,10 +129,10 @@ describe("buildEngineBattleScreenModel", () => {
     expect(kinds(floating)).toEqual(["keyword"]);
     expect(kinds(nomad)).toEqual([]);
     expect(kinds(offered)).toEqual(["duration"]);
-    expect([...model.view.playerHand, ...model.view.player.backRank.flatMap((slot) => (slot.card === null ? [] : [slot.card]))]
+    expect([...model.view.nearHand.cards, ...model.view.near.backRank.flatMap((slot) => (slot.card === null ? [] : [slot.card]))]
       .flatMap((card) => card.statuses ?? [])
       .every((badge) => badge.label.length > 0)).toBe(true);
-    expect(model.view.enemyHand).toEqual([]);
+    expect(model.view.farHand.cards).toEqual([]);
 
     const printedKeywords = enginePrintedKeywords(engine.catalog);
     const seenByPlayer = engineStatuses(engine.view(state, "player"), "player", printedKeywords).cards;
@@ -167,9 +167,9 @@ describe("buildEngineBattleScreenModel", () => {
     });
     state.floating.push(trigger(first, "player", "e901"), trigger(second, "player", "e902"), trigger(enemy, "enemy", "e903"), trigger(hidden, "enemy", "e904"));
     const model = screenOf(state);
-    expect(model.view.player.status.statuses?.filter((badge) => badge.kind === "delayedTrigger").map((badge) => badge.source))
+    expect(model.view.near.status.statuses?.filter((badge) => badge.kind === "delayedTrigger").map((badge) => badge.source))
       .toEqual([parseBattleCardId(first), parseBattleCardId(second)]);
-    expect(model.view.enemy.status.statuses?.filter((badge) => badge.kind === "delayedTrigger").map((badge) => badge.source)).toEqual([parseBattleCardId(enemy)]);
+    expect(model.view.far.status.statuses?.filter((badge) => badge.kind === "delayedTrigger").map((badge) => badge.source)).toEqual([parseBattleCardId(enemy)]);
     const view = engine.view(state, "player");
     const missing = { ...view, instances: { ...view.instances }, floating: view.floating.map((effect) => effect.controller === "enemy" ? { ...effect, source: null } : effect) };
     delete missing.instances[first];

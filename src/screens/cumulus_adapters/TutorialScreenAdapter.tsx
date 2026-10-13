@@ -18,6 +18,7 @@ import type { TutorialAvatarOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
 import { useJourney } from "../../state/journey-context";
 import type { AvatarId, IntentKey } from "../../types/identifiers";
+import { getBattleInitProvider } from "../../rules/battle/journey-battle";
 import { parseIntentKey } from "../../types/identifiers";
 export function TutorialScreenAdapter({
   avatars,
@@ -60,6 +61,7 @@ export function TutorialScreenAdapter({
         state.tutorial,
         tutorialCards.cards,
         tutorialCards.dreamwell,
+        getBattleInitProvider()?.engine ?? null,
       ),
     [battleConfiguration, avatars, state.tutorial, tutorialCards],
   );

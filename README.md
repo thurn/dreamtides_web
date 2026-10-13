@@ -1018,12 +1018,14 @@ its result is additional evidence, and the original attempt remains retained.
   highlights, drop targets, and controls from `legalActions`, and writes the
   player's `BATTLE_ACTION`, `BATTLE_ANSWER`, and `BATTLE_CANCEL` intents; the
   view model is `src/screens/cumulus_adapters/engine-battle-view-model.ts`
-  and its prompt mapping `engine-battle-prompt-view-model.ts`. The enemy is
+  and its prompt mapping `prompt-host-view-model.ts`. The enemy is
   the AI host in a Web Worker (`src/battle/engine-ai/`). The standalone
-  tutorial battle (fold mode `tutorial`) plays a sandbox board with its own
-  scripted automation and planner in `src/battle/` and `src/rules/battle/`;
-  each module only it uses starts with a `// tutorial-only until Phase 6`
-  header.
+  tutorial battle (fold mode `tutorial`) consumes the same engine, prompt host,
+  legal affordances, and policy host. Its authored prefix applies ordinary engine
+  actions; a separate declared live setup preserves the authored handoff.
+  Tutorial guidance and presentation checkpoints are plain fold data under
+  `src/rules/battle/tutorial-*.ts`, including source UUIDs, first-occurrence
+  history, and committed override metadata.
 - **UI.** Screens are built from the Cumulus design system (`src/cumulus/`):
   a view-model builder and adapter in `src/screens/cumulus_adapters/` turn
   journey state into a screen's props, and `src/components/` routes screens

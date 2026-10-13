@@ -1,0 +1,45 @@
+{
+  "bead": "hv-33id.2",
+  "phase": 6,
+  "implementMin": 299.44117195,
+  "implementWindow": {
+    "start": "2026-10-12T19:28:10.643000+00:00",
+    "end": "2026-10-13T00:27:37.113317+00:00"
+  },
+  "localValidationS": {
+    "review": 56.881088540991186,
+    "focused": 4.1572083750070306,
+    "knip": 2.8555211659986526,
+    "reviewFullProductRuntime": 113.51722100000188,
+    "browserFinal": 423.0866275839944,
+    "browserSupplemental": 18.0461821249919
+  },
+  "hostLoad": 8.89,
+  "testDelta": {
+    "files": 0,
+    "lines": -7180,
+    "jsdomFiles": -2
+  },
+  "friction": [
+    {
+      "tag": "generic-setup-prerequisite",
+      "minutes": 113.15146666666666,
+      "note": "Measured original dispatch19:28:10.643Z to fresh dispatch21:21:19.731Z parking/prerequisite/coordination window. Includes parent-owned generic7/8/9 work and research/queue, not helper productiveCPU."
+    },
+    {
+      "tag": "tutorial-producer-visibility",
+      "minutes": 10.8959391,
+      "note": "Measured failed normal-speed draw-boundary run terminal to corrected current-runtime Full02 terminal. Includes producer-frame repair, focused/review/Knip, owned accelerated diagnostic and fullvalidation; not isolated debugCPU."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 11.162880783333332,
+      "note": "Measured historical literal11 harness failure terminal to corrected matrix launch. Includes public replay reconstruction, parent authority audit/ACK and immutable script adaptation; no gameplaychange."
+    },
+    {
+      "tag": "integration-conflict",
+      "minutes": 12.9462018,
+      "note": "Gross first candidate merge-conflict terminal through repaired integration endpoint. Includes native rollback/checkpoint/update, evidence qualification and checks; not productive CPU."
+    }
+  ]
+}

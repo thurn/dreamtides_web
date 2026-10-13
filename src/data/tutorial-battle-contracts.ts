@@ -88,6 +88,7 @@ export function assertTutorialBattleConfigurationContracts(
       "Tutorial loading-screen and handoff enemy characters must use different card UUIDs.",
     );
   }
+  if (!Number.isSafeInteger(battle.forcedEnemyErosionPrefixCount) || battle.forcedEnemyErosionPrefixCount < 0) throw makeError("Tutorial erosion prefix count must be a nonnegative integer.");
   const starterIds = new Set(battle.starterDeck.map((entry) => entry.cardId));
   for (const placement of battle.handoff.placements) {
     if (placement.source !== "deck") continue;
@@ -211,9 +212,9 @@ export function assertTutorialDeckSufficiency(
     (total, count) => total + count,
     0,
   );
-  if (enemyCardsRemaining < 3) {
+  if (enemyCardsRemaining < battle.forcedEnemyErosionPrefixCount) {
     throw makeError(
-      "Tutorial battle starterDeck must leave three enemy cards available for the authored Erode state.",
+      "Tutorial battle starterDeck must leave enough enemy cards available for the authored Erode state.",
     );
   }
 }

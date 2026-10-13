@@ -47,7 +47,7 @@ import {
   engineBattleLog,
   warmEngineBattleLog,
 } from "../../screens/cumulus_adapters/engine-battle-log-view-model";
-import { buildBattleAvatarStatus } from "../../screens/cumulus_adapters/mobile-battle-view-model";
+import { buildBattleAvatarStatus } from "../ui/battle-avatar-status";
 import {
   buildEngineBattleScreenModel,
   enginePrintedKeywords,
@@ -595,7 +595,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     onZoneDrop: () => setDrag(null),
     onZoneOpen: ({ owner, zone }) => {
       if (owner === HUMAN && zone === "deck") {
-        const top = model.view[HUMAN].knownDeckTop;
+        const top = model.view.near.knownDeckTop;
         const action = top == null ? undefined : affordances.deckPlays.get(top.id);
         if (action !== undefined) submitAction(action, "deck-top");
       } else if (owner === HUMAN && zone === "void" && affordances.voidPlays.size > 0) setAbilityChooser({ kind: "void" });
@@ -708,7 +708,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
     browsed === null
       ? []
       : browsed.zone === "void"
-        ? voidBrowserCards(model.view[browsed.side])
+        ? voidBrowserCards(browsed.side === model.view.near.owner ? model.view.near : model.view.far)
         : model.engine.sides[browsed.side].banished.flatMap((id: InstanceId) => {
             const instance = model.engine.instances[id];
             return instance === undefined ? [] : [{ entryId: parseBattleCardId(id), model: cards(instance) }];
@@ -749,7 +749,7 @@ export function EngineBattleScreen({ engine }: { readonly engine: Engine }) {
             engine={engine}
             battle={battle}
             battleId={battleId}
-            openerVisible={model.view.cardPicker?.presentation !== "gallery"}
+            openerVisible={!(model.view.prompt.surface.kind === "picker" && model.view.prompt.surface.picker.presentation === "gallery")}
             events={probeHistory?.events ?? []}
           />
         </Suspense>

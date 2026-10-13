@@ -60,7 +60,7 @@ export interface AtlasView {
   nodes: AtlasNodePlacementView[];
   /** Forward connectors between nodes. */
   edges: AtlasEdgeView[];
-  /** Mira's delayed tutorial-only explanation of the Atlas. */
+  /** Mira's delayed tutorial explanation of the Atlas. */
   guideDialogue?: TutorialSpeechBubbleView;
 }
 

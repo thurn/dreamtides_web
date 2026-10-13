@@ -1,3 +1,4 @@
+import { tutorialBattleId } from "../../battle/integration/tutorial-setup";
 // The engine battle of a journey battle in the fold (engine-design § Fold
 // integration). `BEGIN_BATTLE` starts it from the engine init the battle-init
 // provider builds; `BATTLE_ACTION`, `BATTLE_ANSWER`, and `BATTLE_CANCEL` fold
@@ -19,6 +20,8 @@
 // the adapter's memoized runs, so it runs no step again, and it takes the
 // batch's states, observed ones included, with `batchStates`.
 
+import { acceptedTutorialOverride, tutorialEngineTransition } from "./tutorial-presentation";
+import { BATTLE } from "../../content/battle";
 import { eventLogRecords } from "../../engine/log";
 import type { Engine, EngineEvent, EngineLogRecord } from "../../engine";
 import type { BattleInit as EngineBattleInit } from "../../engine";
@@ -40,7 +43,7 @@ import type { FoldState } from "../fold-state";
 import {
   actionFromUnknown,
   answerFromUnknown,
-  journeyBattleOf,
+  engineBattleOf,
   promptIdFromUnknown,
   sideFromUnknown,
   type BattleFoldState,
@@ -97,9 +100,9 @@ function keepLog(seq: number, records: readonly EngineLogRecord[]): void {
  *   and the in-flight record, so every caller gets the run it would compute
  *   itself, and the states the reducer's folds observed at the events of
  *   those runs, which no run reads;
- * - its log records are kept only inside `collectLog`, which the reducer's
- *   fold runs synchronously and which nothing re-enters, so the records of a
- *   replay or a presentation fold, which run outside every fold, are dropped.
+ * - its log records are kept only inside `collectEngineWork`, which the reducer's
+ *   fold runs synchronously; nested work shares the outer event collector.
+ *   Replay and presentation work outside a collector drops its records.
  */
 export function foldAdapterFor(engine: Engine): FoldAdapter {
   let adapter = adapters.get(engine);
@@ -141,7 +144,8 @@ export function batchStates(
 }
 
 /** Runs `fold` while collecting its engine log records for the event at `seq`. */
-function collectLog<T>(seq: number, fold: () => T): T {
+export function collectEngineWork<T>(seq: number, fold: () => T): T {
+  if (collecting !== null) return fold();
   collecting = [];
   try {
     return fold();
@@ -176,22 +180,27 @@ export function takeEngineLogRecords(seq: number): readonly EngineLogRecord[] {
  * reports an error, which bounces the `BEGIN_BATTLE`.
  */
 export function startEngineBattle(init: EngineBattleInit, engine: Engine, seq: number): EngineBattleFold | null {
-  const outcome = collectLog(seq, () => foldAdapterFor(engine).start(init));
+  const outcome = collectEngineWork(seq, () => foldAdapterFor(engine).start(init));
   if (outcome.kind !== "applied" || outcome.error !== null) return null;
   return { init, slice: outcome.slice };
 }
 
+/** Apply one ordinary intent while retaining its real engine log records. */
+export function applyEngineBattleIntent(engine: Engine, fold: EngineBattleFold, intent: BattleIntent, seq: number, observation?: FoldObservation) {
+  return collectEngineWork(seq, () => foldAdapterFor(engine).reduce(fold.slice, intent, observation));
+}
+
 /**
- * The prompt a journey battle's in-flight engine step is suspended on, with
+ * The prompt an engine battle host's in-flight engine step is suspended on, with
  * its id and intermediate state; `null` when nothing is in flight, the
- * battle is not a journey battle, or the record no longer replays to a
+ * battle has no engine host, or the record no longer replays to a
  * prompt (the next intent then clears it).
  */
 export function pendingEnginePrompt(
   battle: BattleFoldState | null,
   engine: Engine | null,
 ): PendingPrompt | null {
-  const fold = journeyBattleOf(battle)?.engine;
+  const fold = engineBattleOf(battle)?.engine;
   if (fold === undefined || fold.slice.inFlight === null || engine === null) return null;
   return foldAdapterFor(engine).pending(fold.slice);
 }
@@ -241,14 +250,14 @@ export function foldEngineIntent(
 
 /**
  * Folds one engine intent over the battle's engine slice. `null` bounces:
- * no journey engine battle, a malformed payload, or an intent the adapter
+ * no engine battle host, a malformed payload, or an intent the adapter
  * refuses (the battle is over, a step is in flight, not that side's
  * decision or prompt, an illegal action or answer, a stale prompt id, or a
  * prompt that cannot be cancelled). An engine error applies: the slice
  * keeps its committed state and drops the in-flight step.
  *
  * A throw from the engine outside the adapter's own error boundary is
- * contained here, like a matching `RESOLVE_PROMPT` in the reducer: an
+ * contained here: an
  * in-flight step stuck at a prompt that every answer re-throws would keep
  * the prompt gate closed forever. The in-flight step is dropped and the
  * committed state kept, as for any engine error; with nothing in flight the
@@ -264,11 +273,14 @@ export function reduceEngineIntent(
   ctx: EventContext,
   engine: Engine | null,
 ): FoldState | null {
-  const battle = journeyBattleOf(state.battle);
+  const battle = engineBattleOf(state.battle);
   if (battle === null || engine === null) return null;
   const fold = battle.engine;
-  const observation = observations.get(engine)?.[0];
-  const folded = collectLog(ctx.seq, () => foldEngineIntent(foldAdapterFor(engine), fold.slice, type, payload, observation));
+  const tutorial = battle.mode.kind === "tutorial" ? battle as import("./fold").TutorialBattleFoldState : null;
+  const selected = payload.override === undefined ? null : tutorial === null ? null : acceptedTutorialOverride(tutorial,engine,payload.override);
+  if (payload.override !== undefined && (selected === null || type !== "BATTLE_ACTION" || !isRecord(payload.action) || payload.action.kind !== "play" || payload.action.card !== selected.instance)) return null;
+  const observation = tutorial === null ? observations.get(engine)?.[0] : {presented:()=>true,limit:BATTLE.presentation.maxObservedEventStates};
+  const folded = collectEngineWork(ctx.seq, () => foldEngineIntent(foldAdapterFor(engine), fold.slice, type, payload, observation));
   if (folded.kind === "bounced") return null;
   if (folded.kind === "threw" && fold.slice.inFlight !== null) {
     keepLog(ctx.seq, [
@@ -280,7 +292,8 @@ export function reduceEngineIntent(
       },
     ]);
   }
-  return { ...state, battle: { ...battle, engine: { ...fold, slice: folded.slice } } };
+  return tutorial === null ? { ...state, battle: { ...battle, engine: { ...fold, slice: folded.slice } } }
+    : tutorialEngineTransition(state,tutorial,engine,folded.slice,folded.kind === "applied" ? folded.published : [],ctx.seq,selected ?? tutorial.pendingOverride,type === "BATTLE_CANCEL");
 }
 
 /**
@@ -317,7 +330,7 @@ export interface EngineIntentBatch {
 }
 
 /**
- * A journey battle's intents folded again from the event log, and what
+ * An engine battle host's intents folded again from the event log, and what
  * `derive` made of each applied intent's batch. A debug undo drops the items
  * of the history entries it undoes, so `items` always describe the path to
  * `slice`.
@@ -325,7 +338,7 @@ export interface EngineIntentBatch {
 export interface EngineBattleReplay<T> {
   /** The event list replayed; a replay continues only over the same list. */
   readonly events: readonly CommittedEvent[];
-  /** Index into `events` of the event the battle started from: its `BEGIN_BATTLE`, or the `LOAD_STATE` that loaded it. */
+  /** Index into `events` of the event the battle started from: its matching journey/tutorial start or the `LOAD_STATE` that loaded it. */
   readonly start: number;
   /** Index into `events` of the next event to fold. */
   readonly next: number;
@@ -357,16 +370,21 @@ function isRecord(value: unknown): value is Record<string, unknown> {
  * loads the slice it carries for a battle at its site. Whether the event
  * applied is not known here; the replay's final check decides.
  */
-function startSlice(engine: Engine, battle: JourneyBattleFoldState, event: CommittedEvent["event"]): BattleSlice | null {
+function startSlice(engine: Engine, battle: BattleFoldState, event: CommittedEvent["event"]): BattleSlice | null {
   const { payload } = event;
-  if (event.type === "BEGIN_BATTLE") {
-    if (payload.siteId !== battle.init.siteId) return null;
+  const tutorial=battle.mode.kind === "tutorial" ? battle.mode : null;
+  const startsTutorial=tutorial !== null && (
+    event.type === "BEGIN_TUTORIAL_BATTLE" && tutorial.restartNumber === 0 && payload.tutorialRunId === tutorial.tutorialRunId ||
+    event.type === "RESTART_TUTORIAL_BATTLE" && tutorial.restartNumber > 0 && payload.battleId === tutorialBattleId(tutorial.tutorialRunId,tutorial.restartNumber-1)
+  );
+  if (startsTutorial || event.type === "BEGIN_BATTLE" && battle.mode.kind === "journey") {
+    if (!startsTutorial && payload.siteId !== battle.init.siteId) return null;
     const outcome = foldAdapterFor(engine).start(battle.engine.init);
     return outcome.kind === "applied" && outcome.error === null ? outcome.slice : null;
   }
   if (event.type === "LOAD_STATE") {
     const loaded = payload.battle;
-    if (!isRecord(loaded) || !isRecord(loaded.init) || loaded.init.siteId !== battle.init.siteId) return null;
+    if (!isRecord(loaded) || !isRecord(loaded.init) || loaded.init.siteId !== battle.init.siteId || tutorial !== null && loaded.init.battleId !== battle.init.battleId) return null;
     const fold = loaded.engine;
     return isRecord(fold) && isRecord(fold.slice) ? (fold.slice as unknown as BattleSlice) : null;
   }
@@ -385,7 +403,7 @@ function alignMarks(marks: readonly number[] | null, slice: BattleSlice, before:
 /** A replay of `battle` from the newest start before index `before` of `events`, with nothing folded after it. */
 function startBefore<T>(
   engine: Engine,
-  battle: JourneyBattleFoldState,
+  battle: BattleFoldState,
   events: readonly CommittedEvent[],
   before: number,
 ): EngineBattleReplay<T> | null {
@@ -484,7 +502,7 @@ function foldRest<T>(
  */
 export function replayEngineBattle<T>(
   engine: Engine,
-  battle: JourneyBattleFoldState,
+  battle: BattleFoldState,
   events: readonly CommittedEvent[],
   derive: (batch: EngineIntentBatch) => readonly T[],
   previous: EngineBattleReplay<T> | null = null,

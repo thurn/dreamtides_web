@@ -61,12 +61,12 @@ describe("play permissions on the battle screen", () => {
     const [character, spell] = ids.player.void;
     const model = screenOf(state);
     expect([...model.affordances.voidPlays.keys()]).toEqual([id(character)]);
-    const ringed = (side: "player" | "enemy") => model.view[side].voidCards.filter((card) => card.showPlayableOutline).map((card) => card.id);
+    const ringed = (side: "player" | "enemy") => (side === model.view.near.owner ? model.view.near : model.view.far).voidCards.filter((card) => card.showPlayableOutline).map((card) => card.id);
     expect(ringed("player")).toEqual([id(character)]);
     expect(ringed("enemy")).toEqual([]);
     expect(ringed("player")).not.toContain(id(spell));
-    expect(model.view.player.status.statuses).toHaveLength(1);
-    expect(model.view.enemy.status.statuses).toBeUndefined();
+    expect(model.view.near.status.statuses).toHaveLength(1);
+    expect(model.view.far.status.statuses).toBeUndefined();
 
     const options = surfaceChoices(withChooser(model, { kind: "void" }, cards, () => null, engine.catalog).prompt.surface)?.options ?? [];
     const instance = engine.view(state, "player").instances[character];
@@ -196,11 +196,11 @@ describe("play permissions on the battle screen", () => {
     const model = screenOf(state);
     const namedStatus: EngineStatusCopy = { kind: "playFrom", named: true, filter: {}, next: false, expiry: turn.expiry };
     const sideStatus: EngineStatusCopy = { kind: "playFrom", named: false, filter: { cardType: "event" }, next: true, expiry: once.expiry };
-    expect(model.view.player.voidCards.find((card) => card.id === id(named))?.statuses).toEqual([
+    expect(model.view.near.voidCards.find((card) => card.id === id(named))?.statuses).toEqual([
       { kind: "duration", label: engineStatusLabel(namedStatus, "player") },
     ]);
-    expect(model.view.player.status.statuses).toEqual([{ kind: "duration", label: engineStatusLabel(sideStatus, "player") }]);
-    expect(model.view.enemy.status.statuses).toBeUndefined();
+    expect(model.view.near.status.statuses).toEqual([{ kind: "duration", label: engineStatusLabel(sideStatus, "player") }]);
+    expect(model.view.far.status.statuses).toBeUndefined();
     expect(engineStatusLabel(namedStatus, "player")).not.toBe(engineStatusLabel(sideStatus, "player"));
     const log = (effect: FloatingEffect, human: "player" | "enemy") =>
       engineBattleLogText(

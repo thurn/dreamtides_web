@@ -1,4 +1,3 @@
-import type { ClientId } from "../../types/identifiers";
 import {
   useCallback,
   useEffect,
@@ -11,7 +10,6 @@ import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { GameCard } from "../components/card/CardView";
 import { battleCardLayoutId } from "../components/battle/battle-card-layout";
 import { GlassButton } from "../components/controls/GlassButton";
-import { GlassPanel } from "../components/overlay/GlassPanel";
 import { Motes } from "../components/hud/Motes";
 import {
   RADIAL_ANNOUNCEMENT_VICTORY_ACTION_DELAY,
@@ -21,10 +19,7 @@ import { TransientStatusToast } from "../components/status/TransientStatusToast"
 import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import { motionTimeSeconds } from "../primitives/motion-time";
-import {
-  BattleForeseeEditor,
-  type BattleForeseeEditorModel,
-} from "../components/battle/BattleForeseeEditor";
+
 import {
   MobileBattleScreen,
   type MobileBattleCardView,
@@ -42,8 +37,6 @@ import type {
 } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 
-export type TutorialBattleOwnership =
-  "driver" | "observer" | "paused-driver-absent" | "terminal";
 export type TutorialBattleMovementStatus =
   "send-failed" | "exhausted-front-rank" | "no-legal-cell";
 export const TUTORIAL_CHALLENGE_TRAVEL_SECONDS =
@@ -56,10 +49,7 @@ export interface TutorialBattleView {
    * dissolved Challenge cards travel to their authoritative void positions.
    */
   readonly challengeOriginBattle: MobileBattleView | null;
-  readonly ownership: TutorialBattleOwnership;
-  readonly driverClientId: ClientId | null;
   readonly manualControls: boolean;
-  readonly foresee: BattleForeseeEditorModel | null;
   /**
    * Event-log presentation checkpoint released by this screen. It remains
    * available when optional display data cannot be projected.
@@ -113,11 +103,6 @@ export interface TutorialBattleScreenProps {
   readonly interactions: MobileBattleInteractions;
   readonly movementStatusMessage: TutorialBattleMovementStatus | null;
   readonly onMovementStatusDismiss: () => void;
-  readonly onForeseeConfirm: (resolution: {
-    readonly viewedCardIds: readonly BattleCardId[];
-    readonly orderedCardIds: readonly BattleCardId[];
-    readonly voidCardIds: readonly BattleCardId[];
-  }) => void;
   readonly onNewJourney: () => void;
   readonly guidance: BattleTutorialGuidanceView | null;
   readonly onGuidanceContinue: () => void;
@@ -131,7 +116,6 @@ export function TutorialBattleScreen({
   interactions,
   movementStatusMessage,
   onMovementStatusDismiss,
-  onForeseeConfirm,
   onNewJourney,
   guidance,
   onGuidanceContinue,
@@ -139,16 +123,16 @@ export function TutorialBattleScreen({
   onPresentationVisible,
 }: TutorialBattleScreenProps): ReactElement {
   const reduceMotion = useReducedMotion();
-  const turnAnnouncementKey = `${view.battle.battleId}:${view.battle.inspector.turn}:${view.battle.activeSide}`;
+  const turnAnnouncementKey = `${view.battle.battleId}:${view.battle.turn}:${view.battle.activeSide}`;
   const [completedTurnAnnouncementKey, setCompletedTurnAnnouncementKey] =
     useState<string | null>(null);
   const completeTurnAnnouncement = useCallback(
     (side: "player" | "enemy"): void => {
       setCompletedTurnAnnouncementKey(
-        `${view.battle.battleId}:${view.battle.inspector.turn}:${side}`,
+        `${view.battle.battleId}:${view.battle.turn}:${side}`,
       );
     },
-    [view.battle.battleId, view.battle.inspector.turn],
+    [view.battle.battleId, view.battle.turn],
   );
   const visibleGuidance =
     guidance?.source.kind !== "dreamwell" ||
@@ -326,7 +310,7 @@ export function TutorialBattleScreen({
       ref={screenRef}
       className="cumulus"
       data-tutorial-live-battle=""
-      data-tutorial-battle-ownership={view.ownership}
+      data-tutorial-battle-state={view.victoryVisible ? "terminal" : "active"}
       style={{
         position: "fixed",
         inset: 0,
@@ -366,40 +350,6 @@ export function TutorialBattleScreen({
           }
         />
       ) : null}
-      {view.manualControls && interactions.targetSelectionPrompt !== null ? (
-        <div
-          data-tutorial-target-selection=""
-          role="status"
-          aria-live="polite"
-          style={{
-            position: "fixed",
-            left: "50%",
-            top: `calc(var(--safe-area-inset-top) + ${token("--space-6xl")})`,
-            width: "90vw",
-            maxWidth: 416,
-            transform: "translateX(-50%)",
-            zIndex: token("--layer-app-battle-overlay"),
-          }}
-        >
-          <GlassPanel
-            title={"Choose a Target"}
-            subtitle={"Select a highlighted legal target."}
-            headerSpacing="compact"
-            headerDivider={false}
-            radius="control"
-            rightAccessory={{
-              kind: "glassButton",
-              button: {
-                label: "Cancel",
-                testId: "tutorial-target-cancel",
-                onPress: () => interactions.onTargetSelectionCancel?.(),
-              },
-            }}
-          >
-            <span />
-          </GlassPanel>
-        </div>
-      ) : null}
       {movementStatusMessage !== null ? (
         <TransientStatusToast
           copy={{
@@ -411,12 +361,6 @@ export function TutorialBattleScreen({
                   : "No legal battlefield cell is available for this movement.",
           }}
           onDismiss={onMovementStatusDismiss}
-        />
-      ) : null}
-      {view.manualControls && view.foresee !== null ? (
-        <BattleForeseeEditor
-          model={view.foresee}
-          onConfirm={onForeseeConfirm}
         />
       ) : null}
       {view.victoryVisible ? (

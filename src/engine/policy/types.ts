@@ -85,6 +85,7 @@ export interface Policy {
 }
 
 export interface PolicyResult {
+  readonly override?: import("./overrides").PolicyOverrideOutcome;
   readonly choice: PolicyChoice;
   readonly trace: PolicyTrace;
 }

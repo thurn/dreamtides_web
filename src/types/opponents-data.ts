@@ -1,40 +1,4 @@
-import type { AiDifficultyPresetId, IdentityRecord } from "./identifiers";
-
-export type OpponentMode = "expectiminimax" | "worstCase";
-
-export interface AiEvaluationWeights {
-  scoreDifference: number;
-  frontRankSpark: number;
-  backRankSpark: number;
-  handCard: number;
-  valueHint: number;
-  energyWaste: number;
-  expectedPoints: number;
-}
-
-export interface AiOpponentModelTuning {
-  removalPrior: number;
-  responseArchetypePriors: {
-    noBlocks: number;
-    blockBiggest: number;
-    tradeEvenly: number;
-  };
-  sampleSafetyCap: number;
-}
-
-export interface AiDifficultyPreset {
-  id: AiDifficultyPresetId;
-  beamWidth: number;
-  opponentMode: OpponentMode;
-  sampleCount: number;
-  searchDepth: number;
-  tutorialExpansionBudget: number;
-}
-
-export interface ResolvedBattleAiConfiguration extends AiDifficultyPreset {
-  evaluation: AiEvaluationWeights;
-  opponentModel: AiOpponentModelTuning;
-}
+import type { ContentHash, FoldHash } from "./content-hash";
 
 export interface OpponentsData {
   schemaVersion: 1;
@@ -69,25 +33,4 @@ export interface OpponentsData {
     legendariesFromLayer: number;
     starterDilution: number[];
   };
-  ai: {
-    tutorialDefaultPreset: AiDifficultyPresetId;
-    evaluation: AiEvaluationWeights;
-    opponentModel: AiOpponentModelTuning;
-    presets: IdentityRecord<AiDifficultyPresetId, AiDifficultyPreset>;
-  };
 }
-
-/** The tutorial battle's planner configuration: its preset plus shared tuning. */
-export function resolveTutorialAiConfiguration(
-  data: OpponentsData,
-): ResolvedBattleAiConfiguration {
-  const id = data.ai.tutorialDefaultPreset;
-  const preset = data.ai.presets[id];
-  if (preset === undefined) throw new Error(`Missing compiled AI preset ${id}`);
-  return {
-    ...preset,
-    evaluation: data.ai.evaluation,
-    opponentModel: data.ai.opponentModel,
-  };
-}
-import type { ContentHash, FoldHash } from "./content-hash";

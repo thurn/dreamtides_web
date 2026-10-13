@@ -1,3 +1,4 @@
+import { assertTutorialDeckSufficiency } from "./tutorial-battle-contracts";
 import { describe, expect, it } from "vitest";
 import {
   parseTutorialConfiguration,
@@ -233,6 +234,13 @@ describe("tutorial-actions", () => {
   });
 
   describe("parseTutorialBattleConfiguration", () => {
+    it("validates the declared erosion count and remaining supply",()=>{
+      const configuration=makeTutorialBattleConfiguration({forcedEnemyErosionPrefixCount:0});
+      expect(parseTutorialBattleConfiguration(configuration).forcedEnemyErosionPrefixCount).toBe(0);
+      for(const count of [-1,0.5,NaN,Infinity]) expect(()=>parseTutorialBattleConfiguration({...configuration,forcedEnemyErosionPrefixCount:count})).toThrow();
+      expect(()=>assertTutorialDeckSufficiency({...configuration,forcedEnemyErosionPrefixCount:configuration.starterDeck.reduce((sum,entry)=>sum+entry.copies,0)+1},[])).toThrow();
+    });
+
     it("preserves UUID-authored draw order and rejects invalid entries", () => {
       const battle = makeTutorialBattleConfiguration({
         tutorialCardConstants: {

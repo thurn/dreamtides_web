@@ -40,11 +40,8 @@ function presentation(
     },
     messages: durations.map(message),
     messageIndex,
-    continuation: {
-      kind: "play-card",
-      payload: {},
-      automatic,
-    },
+    automatic,
+
   };
 }
 

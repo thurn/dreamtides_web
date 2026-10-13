@@ -1,40 +1,6 @@
-// Automated-opponent configuration: the tutorial battle's planner and the
-// engine battle's policies.
+// Automated-opponent policies and host budgets.
 
 export const AI = {
-  // The tutorial battle's planner (src/battle/tutorial-battle-controller.ts).
-  ai: {
-    tutorialDefaultPreset: "standard",
-    evaluation: {
-      scoreDifference: 10,
-      frontRankSpark: 1,
-      backRankSpark: 0.5,
-      handCard: 1.5,
-      valueHint: 1,
-      energyWaste: 0.25,
-      expectedPoints: 1,
-    },
-    opponentModel: {
-      removalPrior: 0.1,
-      responseArchetypePriors: {
-        noBlocks: 1,
-        blockBiggest: 2,
-        tradeEvenly: 3,
-      },
-      sampleSafetyCap: 16,
-    },
-    presets: {
-      standard: {
-        id: "standard",
-        beamWidth: 12,
-        opponentMode: "expectiminimax",
-        sampleCount: 8,
-        searchDepth: 16,
-        // Tutorial planning uses a fixed expansion count so replays agree.
-        tutorialExpansionBudget: 256,
-      },
-    },
-  },
   // The engine battle's policies (src/engine/policy/): the AI host runs one
   // for the enemy of every journey battle.
   enginePolicy: {

@@ -285,6 +285,7 @@ export function parseTutorialBattleConfiguration(
       record.forcedPlayerDraws,
       "forcedPlayerDraws",
     ).map(parseCardId),
+    forcedEnemyErosionPrefixCount: parseInteger(record.forcedEnemyErosionPrefixCount, "forcedEnemyErosionPrefixCount"),
     forcedEnemyDraws: parseCardDrawList(
       record.forcedEnemyDraws,
       "forcedEnemyDraws",

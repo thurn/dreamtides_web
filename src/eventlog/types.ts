@@ -40,10 +40,6 @@ export function aiEventActor(clientId: ClientId): EventActor {
   return parseEventActor(`ai:${clientId}`);
 }
 
-export function tutorialAiEventActor(clientId: ClientId): EventActor {
-  return parseEventActor(`tutorial-ai:${clientId}`);
-}
-
 export function parseEventType(value: unknown): EventType {
   if (
     typeof value !== "string" ||

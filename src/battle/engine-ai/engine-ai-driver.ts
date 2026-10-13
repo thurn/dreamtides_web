@@ -33,7 +33,7 @@ import type { Side } from "../../engine/state/ids";
 import type { EventActor } from "../../eventlog/types";
 import type { FoldState } from "../../rules/fold-state";
 import type { GameActions } from "../../session/actions";
-import { journeyBattleOf } from "../../rules/battle/fold";
+import { engineBattleOf, tutorialBattleOf } from "../../rules/battle/fold";
 import { pendingEnginePrompt } from "../../rules/battle/engine-battle";
 import { parseIntentKey, type BattleId, type IntentKey, type PromptId } from "../../types/identifiers";
 
@@ -56,7 +56,7 @@ export function engineIntentKey(
 
 /** An AI intent for the session's action facade. */
 export type EngineAiIntent =
-  | { readonly kind: "action"; readonly side: Side; readonly choice: Extract<PolicyChoice, { kind: "action" }>; readonly intentKey: IntentKey }
+  | { readonly kind: "action"; readonly side: Side; readonly choice: Extract<PolicyChoice, { kind: "action" }>; readonly override?: import("../../engine/policy/overrides").PolicyOverrideSelection; readonly intentKey: IntentKey }
   | {
       readonly kind: "answer";
       readonly side: Side;
@@ -69,7 +69,7 @@ export type EngineAiIntent =
 export function actionsSubmitter(actions: GameActions, actor?: EventActor): (intent: EngineAiIntent) => void {
   return (intent) => {
     if (intent.kind === "action") {
-      void actions.battleAction(intent.side, intent.choice.action, actor, intent.intentKey);
+      void actions.battleAction(intent.side, intent.choice.action, actor, intent.intentKey, intent.override);
     } else {
       void actions.answerPrompt(intent.side, intent.promptId, intent.choice.value, actor, intent.intentKey);
     }
@@ -103,6 +103,7 @@ interface Work {
   readonly decision: AiDecision;
   /** The answer, once the policy has given it. */
   choice: PolicyChoice | null;
+  override: import("../../engine/policy/overrides").PolicyOverrideSelection | null;
   /** The fold the intent was last submitted against. */
   submittedAt: FoldState | null;
 }
@@ -141,8 +142,10 @@ export class EngineAiDriver {
   }
 
   private decisionIn(state: FoldState): { battleId: BattleId; decision: AiDecision } | null {
-    const battle = journeyBattleOf(state.battle);
+    const battle = engineBattleOf(state.battle);
     if (battle === null) return null;
+    const tutorial = tutorialBattleOf(battle);
+    if (tutorial?.tutorialPresentation != null) return null;
     const fold = battle.engine;
     const pending = pendingEnginePrompt(battle, this.options.engine);
     const decision = aiDecision({
@@ -152,6 +155,7 @@ export class EngineAiDriver {
       pending,
       side: this.options.side,
       policy: this.options.policy,
+      ...(tutorial === null ? {} : {overrides:tutorial.overrides}),
       ...(this.options.budgets === undefined ? {} : { budgets: this.options.budgets }),
     });
     return decision === null ? null : { battleId: battle.init.battleId, decision };
@@ -169,6 +173,7 @@ export class EngineAiDriver {
       key: decision.request.key,
       decision,
       choice: null,
+      override: null,
       submittedAt: null,
     };
     this.work = work;
@@ -230,6 +235,7 @@ export class EngineAiDriver {
       determinizations: trace?.determinizations ?? 0,
       candidates: trace?.candidates ?? [],
       chosen: choice,
+      ...(result?.override === undefined ? {} : {override:result.override}),
       ...(trace?.declined === undefined ? {} : { declined: trace.declined }),
       ...(trace?.loopSimulation === undefined ? {} : { loopSimulation: trace.loopSimulation }),
     });
@@ -238,6 +244,7 @@ export class EngineAiDriver {
       return;
     }
     work.choice = choice;
+    work.override = result?.override?.kind === "selected" ? result.override.selection : null;
     if (this.latest !== null) this.submit(this.latest);
   }
 
@@ -256,7 +263,7 @@ export class EngineAiDriver {
     const { side } = decision.request;
     let intent: EngineAiIntent;
     if (choice.kind === "action") {
-      intent = { kind: "action", side, choice, intentKey };
+      intent = { kind: "action", side, choice, intentKey, ...(work.override === null ? {} : {override:work.override}) };
     } else if (decision.kind === "prompt") {
       intent = { kind: "answer", side, promptId: decision.promptId, choice, intentKey };
     } else {

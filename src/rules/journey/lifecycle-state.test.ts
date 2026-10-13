@@ -1,3 +1,4 @@
+import { host } from "../battle/tutorial-contracts-fixture";
 import { testJourneySeed } from "../../types/test-identities";
 import { testPresentationId, testTutorialTriggerId } from "../../types/test-identities";
 import { parseCardTutorialScreenKey } from "../../types/identifiers";
@@ -102,20 +103,7 @@ describe("RESET_JOURNEY initial state", () => {
 
 
 describe("LOAD_STATE", () => {
-  /** A structurally-valid tutorial battle slice with nothing parked (no scriptRefs). */
-  const emptyBattle = {
-    mode: {
-      kind: "tutorial",
-      tutorialRunId: "tutorial-run",
-      restartNumber: 0,
-      resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
-    },
-    init: {},
-    board: {},
-    effectQueue: [],
-    pendingPrompt: null,
-    dawnFired: {},
-  };
+  const emptyBattle=host().battle;
 
   it("replaces journey state with a valid snapshot and sets a well-formed battle", () => {
     const start = genesis();
@@ -134,10 +122,7 @@ describe("LOAD_STATE", () => {
       snapshot,
       battle: emptyBattle,
     });
-    expect(withBattle.battle).toEqual({
-      ...emptyBattle,
-      challengeCursor: null,
-    });
+    expect(withBattle.battle).toEqual(emptyBattle);
   });
 
   it("loads a legacy snapshot without a run id and mints one from the event", () => {

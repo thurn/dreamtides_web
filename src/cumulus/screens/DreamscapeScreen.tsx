@@ -60,7 +60,7 @@ export interface DreamscapeView {
     DreamsignReplacementModel,
     "dismissLabel" | "closeLabel"
   > | null;
-  /** Mira's delayed tutorial-only explanation of Dream Sites. */
+  /** Mira's delayed tutorial explanation of Dream Sites. */
   guideDialogue?: DreamscapeGuideDialogueView;
 }
 
@@ -97,7 +97,7 @@ export function DreamscapeScreen({
   onDeclineReward,
   onGuideDialogueShown,
 }: DreamscapeScreenProps) {
-  
+
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const [collectingSiteId, setCollectingSiteId] = useState<string | null>(null);
   const guideDialogueVisible = useDelayedTutorialSpeechBubbleVisibility(

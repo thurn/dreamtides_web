@@ -62,7 +62,7 @@ export const TUTORIAL_AVATARS: TutorialView["avatars"] = {
   },
 };
 
-export const TUTORIAL_OPPONENT_CARD: MobileBattleView["enemyHand"][number] = {
+export const TUTORIAL_OPPONENT_CARD: MobileBattleView["farHand"]["cards"][number] = {
   id: parseBattleCardId("tutorial-enemy-deck-1"),
   model: {
     cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
@@ -87,7 +87,7 @@ export const TUTORIAL_OPPONENT_CARD: MobileBattleView["enemyHand"][number] = {
   showPlayableOutline: false,
 };
 
-export const TUTORIAL_PLAYER_CARD: MobileBattleView["playerHand"][number] = {
+export const TUTORIAL_PLAYER_CARD: MobileBattleView["nearHand"]["cards"][number] = {
   ...TUTORIAL_OPPONENT_CARD,
   id: parseBattleCardId("tutorial-player-deck-1"),
   model: {
@@ -152,6 +152,11 @@ export function speechAction(
 export function battle(fields: Record<string, unknown> = {}): MobileBattleView {
   return {
     battleId: parseBattleId("tutorial-battle"),
+    near:emptySide("player"),far:emptySide("enemy"),
+    nearHand:{owner:"player",position:"near",cardIds:[],cards:[]},
+    farHand:{owner:"enemy",position:"far",cardIds:[],cards:[]},
+    inspector:{sides:{player:{zones:{hand:0,deck:0,void:0,banished:0,backRank:0,frontRank:0}},enemy:{zones:{hand:0,deck:0,void:0,banished:0,backRank:0,frontRank:0}}}},
+    turn:"1",prompt:{host:null,surface:{kind:"none"}},
     ...fields,
   } as unknown as MobileBattleView;
 }

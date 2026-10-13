@@ -1,6 +1,10 @@
 import type { EventContext } from "../eventlog/types";
 import { parseTutorialActions } from "../data/tutorial-actions";
-import { TUTORIAL_PLAYER_CARD_INSTANCE_ID } from "../data/tutorial-cards";
+import { collectEngineWork } from "./battle/engine-battle";
+import { getTutorialBattleInitProvider } from "./battle/tutorial-lifecycle";
+import { startTutorialPrefix, enterPrefixAction, completePrefixAction, playPrefixPlayer, prefixPlayerInstance } from "./battle/tutorial-prefix";
+import type { JourneyState } from "../types/journey";
+import { parseBattleCardId } from "../types/identifiers";
 import type { FrontDoorState } from "./fold-state";
 import {
   frontDoorActionIdFromUnknown,
@@ -82,18 +86,25 @@ export function frontDoorAction(
     const targetSlotId = play.targetSlotId;
     if (
       play.runId !== tutorial.runId ||
-      play.cardInstanceId !== TUTORIAL_PLAYER_CARD_INSTANCE_ID ||
+      tutorial.prefix === undefined ||
+      play.cardInstanceId !== prefixPlayerInstance(tutorial.prefix, configuredPlayerCardId) ||
       play.cardId !== configuredPlayerCardId ||
       (targetSlotId !== null && !isTutorialPlayerBackSlotId(targetSlotId))
     ) {
       return null;
     }
+    const provider = getTutorialBattleInitProvider();
+    const instance = tutorial.prefix === undefined ? null : prefixPlayerInstance(tutorial.prefix, configuredPlayerCardId);
+    if (provider === null || tutorial.prefix === undefined || instance === null) return null;
+    const prefix = playPrefixPlayer(provider.engine, tutorial.prefix, instance, ctx.seq, tutorial.actions);
+    if (prefix === null) return null;
     return {
       ...state,
       tutorial: {
         ...tutorial,
+        prefix,
         playerCardPlay: {
-          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardInstanceId: parseBattleCardId(instance),
           cardId: configuredPlayerCardId,
           targetSlotId,
         },
@@ -135,7 +146,11 @@ export function beginTutorial(
   state: FrontDoorState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  journey: JourneyState,
 ): FrontDoorState | null {
+  return collectEngineWork(ctx.seq,()=>beginTutorialPlayback(state,payload,ctx,journey));
+}
+function beginTutorialPlayback(state: FrontDoorState,payload: Record<string,unknown>,ctx: EventContext,journey:JourneyState):FrontDoorState|null {
   const configuredPlayerCardId = tutorialContentProvider?.playerCardId;
   if (state.phase !== "tutorial" || configuredPlayerCardId === undefined) {
     return null;
@@ -168,19 +183,32 @@ export function beginTutorial(
   if (startActionIndex === -1) return null;
   const completedActionCount =
     startAtEnd === true ? actions.length : (startActionIndex ?? 0);
-  const playerCardPlay = actions
-    .slice(0, completedActionCount)
-    .some((action) => action.action === "end-turn")
-    ? {
-        cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
-        cardId: configuredPlayerCardId,
-        targetSlotId: null,
-      }
-    : null;
+  const provider = getTutorialBattleInitProvider();
+  if (provider === null) return null;
+  const runId = parseTutorialRunId(`event:${String(ctx.seq)}`);
+  const setup = provider.beginTutorialPrefix({journey,actions,tutorialRunId:runId,restartNumber:0});
+  if (setup === null) return null;
+  let prefix = startTutorialPrefix(provider.engine,setup,actions,ctx.seq);
+  if (prefix === null) return null;
+  let playerCardPlay: import("../types/tutorial").TutorialPlayerCardPlay | null = null;
+  for (const action of actions.slice(0,completedActionCount)) {
+    if (action.action === "end-turn") {
+      const card = prefixPlayerInstance(prefix,configuredPlayerCardId);
+      if (card === null) return null;
+      prefix = playPrefixPlayer(provider.engine,prefix,card,ctx.seq,actions);
+      if (prefix === null) return null;
+      playerCardPlay = {cardInstanceId:parseBattleCardId(card),cardId:configuredPlayerCardId,targetSlotId:null};
+    }
+    prefix = completePrefixAction(provider.engine,prefix,action,actions,ctx.seq);
+    if (prefix === null) return null;
+  }
+  prefix = enterPrefixAction(provider.engine,prefix,startActionIndex === null ? undefined : actions[startActionIndex],actions,ctx.seq);
+  if (prefix === null) return null;
   return {
     ...state,
     tutorial: {
-      runId: parseTutorialRunId(`event:${String(ctx.seq)}`),
+      runId,
+      prefix,
       actions,
       currentActionIndex: startActionIndex,
       playerCardPlay: playerCardPlay,
@@ -192,7 +220,11 @@ export function beginTutorial(
 export function completeTutorialAction(
   state: FrontDoorState,
   payload: Record<string, unknown>,
+  ctx: EventContext,
 ): FrontDoorState | null {
+  return collectEngineWork(ctx.seq,()=>completeTutorialPlaybackAction(state,payload,ctx));
+}
+function completeTutorialPlaybackAction(state:FrontDoorState,payload:Record<string,unknown>,ctx:EventContext):FrontDoorState|null {
   const tutorial = state.tutorial;
   if (
     state.phase !== "tutorial" ||
@@ -207,11 +239,18 @@ export function completeTutorialAction(
   if (current.action === "end-turn" && tutorial.playerCardPlay == null) {
     return null;
   }
+  const provider = getTutorialBattleInitProvider();
+  if (provider === null || tutorial.prefix === undefined) return null;
+  let prefix = completePrefixAction(provider.engine,tutorial.prefix,current,tutorial.actions,ctx.seq);
+  if (prefix === null) return null;
   const nextIndex = tutorial.currentActionIndex + 1;
+  prefix = enterPrefixAction(provider.engine,prefix,tutorial.actions[nextIndex],tutorial.actions,ctx.seq);
+  if (prefix === null) return null;
   return {
     ...state,
     tutorial: {
       ...tutorial,
+      prefix,
       currentActionIndex:
         nextIndex < tutorial.actions.length ? nextIndex : null,
     },

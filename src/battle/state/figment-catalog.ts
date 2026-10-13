@@ -26,7 +26,6 @@ import { semanticEntityId } from "../../types/semantic-identity";
 import {
   parseFigmentCatalogKey,
   type FigmentCatalogKey,
-  type IdentityRecord,
 } from "../../types/identifiers";
 
 /**
@@ -136,25 +135,6 @@ export const FIGMENT_CATALOG_ENTRIES: readonly FigmentCatalogEntry[] = [
   entry("Legion", 1),
 ];
 
-/**
- * The catalog keyed by normalized subtype. Use `lookupFigmentCatalogEntry` for
- * tolerant (non-normalized) lookups.
- */
-export const FIGMENT_CATALOG: Readonly<
-  IdentityRecord<FigmentCatalogKey, FigmentCatalogEntry>
-> =
-  Object.fromEntries(FIGMENT_CATALOG_ENTRIES.map((item) => [item.key, item]));
-
-/**
- * The catalog hydrated from the figment catalog, or `null` before the figment
- * database has loaded (the default in tests and on first paint). When present it
- * takes precedence over the built-in defaults, so a figment renders with the
- * name, character type, spark, rules text, and art the figment editor saved.
- */
-let hydratedCatalog: Readonly<
-  IdentityRecord<FigmentCatalogKey, FigmentCatalogEntry>
-> | null =
-  null;
 let hydratedEntries: readonly FigmentCatalogEntry[] | null = null;
 
 /**
@@ -186,7 +166,6 @@ export function hydrateFigmentCatalog(
     } satisfies FigmentCatalogEntry;
   });
   hydratedEntries = entries;
-  hydratedCatalog = Object.fromEntries(entries.map((item) => [item.key, item]));
 }
 
 /**
@@ -202,21 +181,4 @@ export function lookupFigmentCatalogEntryById(
   id: CardId,
 ): FigmentCatalogEntry | undefined {
   return figmentCatalogEntries().find((entry) => entry.id === id);
-}
-
-/**
- * Looks up the catalog entry for a (possibly non-normalized) subtype. Returns
- * `undefined` when the subtype is not one of the figment types. Reads the
- * hydrated catalog when loaded, falling back to the built-in defaults.
- */
-export function lookupFigmentCatalogEntry(
-  // eslint-disable-next-line dreamtides/no-raw-string-identity -- accepts untrusted, non-normalized card subtype text
-  subtype: string,
-): FigmentCatalogEntry | undefined {
-  if (subtype.trim() === "") return undefined;
-  const key = normalizeFigmentCatalogKey(subtype);
-  if (hydratedCatalog !== null) {
-    return hydratedCatalog[key] ?? FIGMENT_CATALOG[key];
-  }
-  return FIGMENT_CATALOG[key];
 }

@@ -1,7 +1,7 @@
 import { testEventActor } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
-import { isCasExempt, isInterveningWindowClear, isMatchingResolve, reduceGameEvent } from "./reducer";
-import { foldStateWithEssence, ctx, event, adjustEssence, stateWithPendingPrompt } from "./reducer-fixtures";
+import { isCasExempt, isInterveningWindowClear, reduceGameEvent } from "./reducer";
+import { foldStateWithEssence, ctx, adjustEssence } from "./reducer-fixtures";
 
 
 
@@ -99,58 +99,7 @@ describe("isCasExempt (rule 1)", () => {
 
   it("does not exempt ordinary intents", () => {
     expect(isCasExempt("ADJUST_ESSENCE")).toBe(false);
-    expect(isCasExempt("RESOLVE_PROMPT")).toBe(false);
     expect(isCasExempt("NOT_A_REAL_TYPE")).toBe(false);
-  });
-});
-
-
-describe("isMatchingResolve (rule 2)", () => {
-  it("matches a RESOLVE_PROMPT whose numeric promptId equals the open prompt seq", () => {
-    const state = stateWithPendingPrompt(7);
-    expect(
-      isMatchingResolve(
-        state,
-        event("RESOLVE_PROMPT", { promptId: 7, resolution: {} }),
-      ),
-    ).toBe(true);
-  });
-
-  it("does not match a different promptId", () => {
-    const state = stateWithPendingPrompt(7);
-    expect(
-      isMatchingResolve(
-        state,
-        event("RESOLVE_PROMPT", { promptId: 8, resolution: {} }),
-      ),
-    ).toBe(false);
-  });
-
-  it("does not match when there is no open prompt", () => {
-    const state = foldStateWithEssence(100);
-    expect(
-      isMatchingResolve(
-        state,
-        event("RESOLVE_PROMPT", { promptId: 7, resolution: {} }),
-      ),
-    ).toBe(false);
-  });
-
-  it("does not match a non-RESOLVE_PROMPT event", () => {
-    const state = stateWithPendingPrompt(7);
-    expect(isMatchingResolve(state, adjustEssence(10))).toBe(false);
-  });
-
-  it("does not match (and does not throw) on a missing or non-number promptId", () => {
-    const state = stateWithPendingPrompt(7);
-    for (const bad of [undefined, null, "7", NaN, {}] as unknown[]) {
-      const ev = event("RESOLVE_PROMPT", {
-        promptId: bad,
-        resolution: {},
-      });
-      expect(() => isMatchingResolve(state, ev)).not.toThrow();
-      expect(isMatchingResolve(state, ev)).toBe(false);
-    }
   });
 });
 

@@ -40,25 +40,25 @@ afterEach(() => {
 describe("MobileBattleScreen", () => {
   it("renders only the identified top face, reuses the pile play ring, and clears it for a stale snapshot", () => {
     const view = makeView();
-    const top = { ...makeCard(31, view.player.deckCardIds[0]), showPlayableOutline: true };
-    const player = { ...view.player, knownDeckTop: top };
+    const top = { ...makeCard(31, view.near.deckCardIds[0]), showPlayableOutline: true };
+    const player = { ...view.near, knownDeckTop: top };
     const onZoneOpen = vi.fn();
-    const container = mount({ ...view, player, near: player }, { onZoneOpen });
+    const container = mount({ ...view,  near: player }, { onZoneOpen });
     const pile = query(container, '[data-testid="player-battle-deck"]');
     expect(pile.dataset.pileSelection).toBe("playable");
     expect([...pile.querySelectorAll('[data-card-pile-layer]')].map((layer) => layer.getAttribute("data-card-face"))).toEqual(["up", "down"]);
     act(() => pile.click());
     expect(onZoneOpen).toHaveBeenCalledWith({ owner: "player", zone: "deck" });
     const stale = { ...player, deckCardIds: [...player.deckCardIds].reverse() };
-    rerender(container, { ...view, player: stale, near: stale });
+    rerender(container, { ...view,  near: stale });
     expect(query(container, '[data-testid="player-battle-deck"]').dataset.pileSelection).toBeUndefined();
   });
   it("renders both battlefields, hands, and piles, outlining only the playable cards", () => {
     const view = makeView();
-    const playable = view.playerHand[1];
+    const playable = view.nearHand.cards[1];
     const container = mount({
       ...view,
-      playerHand: view.playerHand.map((card) => (card === playable ? { ...card, showPlayableOutline: true } : card)),
+      nearHand: { ...view.nearHand, cards: view.nearHand.cards.map((card) => (card === playable ? { ...card, showPlayableOutline: true } : card)), cardIds: (view.nearHand.cards.map((card) => (card === playable ? { ...card, showPlayableOutline: true } : card))).map(card => card.id) },
     });
 
     for (const rank of ["enemy-back", "enemy-front", "player-front", "player-back"]) query(container, `[data-battle-rank="${rank}"]`);
@@ -73,29 +73,29 @@ describe("MobileBattleScreen", () => {
   it("rings a void pile while any card in it is playable", () => {
     const view = makeView();
     const playable = { ...makeCard(30, cardId("player-void-under")), showPlayableOutline: true };
-    const player = { ...view.player, voidCards: [...view.player.voidCards, playable] };
+    const player = { ...view.near, voidCards: [...view.near.voidCards, playable] };
     const ringed = (container: HTMLElement) =>
       (["player", "enemy"] as const).map(
         (owner) => query(container, `[data-testid="${owner}-battle-void"]`).dataset.pileSelection ?? null,
       );
 
     expect(ringed(mount(view))).toEqual([null, null]);
-    expect(ringed(mount({ ...view, player, near: player }))).toEqual(["playable", null]);
+    expect(ringed(mount({ ...view,  near: player }))).toEqual(["playable", null]);
   });
 
   it("presents the opponent's play at reading size and badges lasting statuses, marking the actionable ones", () => {
     const view = makeView();
-    const [empty, filled, secondEmpty] = view.player.backRank;
+    const [empty, filled, secondEmpty] = view.near.backRank;
     if (empty === undefined || filled?.card == null || secondEmpty === undefined) throw new Error("fixture has no back rank");
     const statuses = [{ kind: "duration", label: "a" }, { kind: "payable", label: "c", actionable: true }] as const;
     const badged = { ...filled, card: { ...filled.card, statuses } };
     const player = {
-      ...view.player,
+      ...view.near,
       backRank: [empty, badged, secondEmpty],
-      status: { ...view.player.status, statuses: [{ kind: "costModifier", label: "b" }] },
+      status: { ...view.near.status, statuses: [{ kind: "costModifier", label: "b" }] },
     } satisfies MobileBattleSideView;
     const played = makeCard(90, cardId("enemy-played"));
-    const container = mount({ ...view, player, near: player, playReveal: { card: played, from: "hand" } });
+    const container = mount({ ...view,  near: player, playReveal: { card: played, from: "hand" } });
 
     expect(query(container, "[data-battle-play-reveal]").querySelector(`[data-battle-card-id="${played.id}"]`)).not.toBeNull();
     expect(
@@ -119,9 +119,9 @@ describe("MobileBattleScreen", () => {
         id: parseBattleSlotViewId(`${rank}${String(index)}`),
         card: filled.includes(index) ? makeCard(70 + index, cardId(`player-${rank}${String(index)}`)) : null,
       }));
-    const player = { ...view.player, backRank: canonical("B", 10, [0, 4, 6]), frontRank: canonical("F", 9, []) };
-    const enemy = { ...view.enemy, backRank: canonical("B", 10, []), frontRank: canonical("F", 9, []) };
-    const container = mount({ ...view, player, near: player, enemy, far: enemy });
+    const player = { ...view.near, backRank: canonical("B", 10, [0, 4, 6]), frontRank: canonical("F", 9, []) };
+    const enemy = { ...view.far, backRank: canonical("B", 10, []), frontRank: canonical("F", 9, []) };
+    const container = mount({ ...view,  near: player,  far: enemy });
     const shown = (rank: string) =>
       [...query(container, `[data-battle-rank="${rank}"]`).querySelectorAll("[data-battle-slot-id]")].map((slot) =>
         slot.getAttribute("data-battle-slot-id"),
@@ -139,7 +139,7 @@ describe("MobileBattleScreen", () => {
       );
       const container = mount({
         ...view,
-        playerHand: cards,
+
         nearHand: { ...view.nearHand, cardIds: cards.map((card) => card.id), cards },
       });
       const fan = [
@@ -160,7 +160,7 @@ describe("MobileBattleScreen", () => {
 
   it("rings the stack's chosen targets until they leave the stack, yielding to a legal-target choice", () => {
     const view = makeView();
-    const [target, other] = [view.enemy.backRank[1]?.card, view.player.frontRank[0]?.card];
+    const [target, other] = [view.far.backRank[1]?.card, view.near.frontRank[0]?.card];
     if (target == null || other == null) throw new Error("fixture has no battlefield cards");
     const ring = (container: HTMLElement, id: BattleCardId) =>
       [...query(container, `[data-battle-card-id="${id}"]`).querySelectorAll<HTMLElement>("*")]

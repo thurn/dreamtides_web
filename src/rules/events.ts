@@ -1,7 +1,6 @@
 import type {
   AtlasNodeId,
   AuguryArchetypeId,
-  BattleCardId,
   BattleId,
   CardTutorialScreenKey,
   ChoiceId,
@@ -17,7 +16,6 @@ import type {
   ShuffleCommitment,
   SiteId,
   TutorialActionId,
-  TutorialAiActionOverrideId,
   TutorialRunId,
 } from "../types/identifiers";
 import { identityKeys } from "../types/identifiers";
@@ -295,34 +293,15 @@ export interface EventPayloads {
 
   // --- battle events ---
   BEGIN_BATTLE: { siteId: SiteId; seedOverride?: number };
-  BATTLE_COMMAND: { command: unknown };
-  BATTLE_REPOSITION_CHARACTER: {
-    battleCardId: BattleCardId;
-    destination: unknown;
-  };
-  BATTLE_PLAY_CARD: {
-    battleCardId: BattleCardId;
-    targetBattleCardIds: BattleCardId[];
-    aiChoices?: unknown;
-    characterDestination?: unknown;
-    tutorialAiActionOverrideId?: TutorialAiActionOverrideId;
-  };
-  // A single player gesture that the automation planner expanded into an ordered
-  // list of battle commands (e.g. a play that also spends energy, or a turn
-  // handoff that resolves the Challenge, ramps energy, and draws). Each element
-  // is a `BattleCommand`, validated in the domain case; the whole list applies
-  // all-or-nothing so no half-applied gesture can exist in the log.
-  BATTLE_GESTURE: { commands: unknown[] };
-  BATTLE_AI_BLOCK: { aiSide: BattleSide };
   COMPLETE_TUTORIAL_BATTLE_PRESENTATION: {
     presentationId: PresentationId;
     messageIndex?: number;
   };
-  RESOLVE_PROMPT: { promptId: number; resolution: unknown };
   // Engine intents of a journey battle (engine-design § Fold integration).
   // Each names its side; `action` is an engine `Action` and `value` an engine
   // `Answer`, validated by the domain case and the engine fold adapter.
-  BATTLE_ACTION: { side: BattleSide; action: unknown };
+  BATTLE_ACTION: { side: BattleSide; action: unknown; override?: import("../engine/policy/overrides").PolicyOverrideSelection };
+  TUTORIAL_CARD_ATTEMPT: { battleId: BattleId; instance: import("../engine").InstanceId };
   BATTLE_ANSWER: { side: BattleSide; promptId: PromptId; value: unknown };
   BATTLE_CANCEL: { side: BattleSide; promptId: PromptId };
   // An engine debug action (D4) of a journey battle, development builds
@@ -349,6 +328,7 @@ export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
   "ADVANCE_FRONT_DOOR",
   "BEGIN_TUTORIAL",
   "COMPLETE_TUTORIAL_ACTION",
+  "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
   "OPEN_CARD_TUTORIAL_GUIDANCE",
   "COMPLETE_CARD_TUTORIAL_GUIDANCE",
   "SET_CARD_SOURCE_DEBUG",
@@ -368,6 +348,7 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<GameEventType> =
     "ADVANCE_FRONT_DOOR",
     "BEGIN_TUTORIAL",
     "COMPLETE_TUTORIAL_ACTION",
+  "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
       "OPEN_CARD_TUTORIAL_GUIDANCE",
     "COMPLETE_CARD_TUTORIAL_GUIDANCE",
       "SET_CARD_SOURCE_DEBUG",
@@ -481,13 +462,8 @@ const EVENT_INTENT_CLASSES = {
   SET_CARD_SOURCE_DEBUG: "administrative", // card-source diagnostics
   END_BATTLE: "gameplay",
   BEGIN_BATTLE: "gameplay",
-  BATTLE_COMMAND: "gameplay",
-  BATTLE_REPOSITION_CHARACTER: "gameplay",
-  BATTLE_PLAY_CARD: "gameplay",
-  BATTLE_GESTURE: "gameplay",
-  BATTLE_AI_BLOCK: "gameplay",
   COMPLETE_TUTORIAL_BATTLE_PRESENTATION: "gameplay",
-  RESOLVE_PROMPT: "gameplay",
+  TUTORIAL_CARD_ATTEMPT: "gameplay",
   BATTLE_ACTION: "gameplay",
   BATTLE_ANSWER: "gameplay",
   BATTLE_CANCEL: "gameplay",
@@ -618,13 +594,8 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   SET_CARD_SOURCE_DEBUG: true,
   END_BATTLE: true,
   BEGIN_BATTLE: true,
-  BATTLE_COMMAND: true,
-  BATTLE_REPOSITION_CHARACTER: true,
-  BATTLE_PLAY_CARD: true,
-  BATTLE_GESTURE: true,
-  BATTLE_AI_BLOCK: true,
   COMPLETE_TUTORIAL_BATTLE_PRESENTATION: true,
-  RESOLVE_PROMPT: true,
+  TUTORIAL_CARD_ATTEMPT: true,
   BATTLE_ACTION: true,
   BATTLE_ANSWER: true,
   BATTLE_CANCEL: true,

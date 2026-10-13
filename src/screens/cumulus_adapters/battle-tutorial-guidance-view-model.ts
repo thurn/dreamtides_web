@@ -1,8 +1,8 @@
-// tutorial-only until Phase 6
-
 import type { BattleTutorialGuidanceView } from "../../cumulus/screens/BattleTutorialGuidance";
 import type { TutorialBattleFoldState } from "../../rules/battle/fold";
-import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
+import type { Engine } from "../../engine";
+import type { EngineCardModels } from "../../battle/ui/engine-card-model";
+import { parseBattleCardId } from "../../types/identifiers";
 import { dreamwellCardModel } from "../../battle/ui/dreamwell-card-model";
 import type { TutorialGuidanceMessage } from "../../rules/battle/fold";
 import { tutorialGuidanceMessageDurationSeconds } from "../../battle/tutorial-presentation-timing";
@@ -48,6 +48,8 @@ function guidanceDialogue(
 /** Resolve one persisted guidance checkpoint into UUID-backed Cumulus models. */
 export function buildBattleTutorialGuidanceView(
   battle: TutorialBattleFoldState,
+  engine: Engine,
+  cards: EngineCardModels,
 ): BattleTutorialGuidanceView | null {
   const presentation = battle.tutorialPresentation;
   if (presentation?.kind !== "tutorial-guidance") return null;
@@ -95,7 +97,9 @@ export function buildBattleTutorialGuidanceView(
       },
     };
   }
-  const instance = battle.board.cardInstances[presentation.source.battleCardId];
+  const sourceId = presentation.source.battleCardId;
+  const frame = battle.checkpoints[0]?.state ?? battle.engine.slice.committed;
+  const instance = Object.values(engine.view(frame,"player").instances).find(card=>parseBattleCardId(card.id) === sourceId);
   if (instance === undefined) return null;
   return {
     presentationId: presentation.id,
@@ -110,7 +114,7 @@ export function buildBattleTutorialGuidanceView(
     bubbleWidth: message.bubbleWidth ?? 700,
     source: {
       kind: "card",
-      model: battleGameCardModel(instance),
+      model: cards(instance),
       figment: presentation.source.kind === "figment",
       battleCardId: presentation.source.battleCardId,
     },

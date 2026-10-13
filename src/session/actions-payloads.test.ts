@@ -90,10 +90,6 @@ describe("game actions facade", () => {
       parseShuffleCommitment("commitment-3"),
       parseJourneyId("journey:12"),
     );
-    void actions.battleCommand(
-      { id: "DEBUG_EDIT" },
-      parseIntentKey("battle:b-1:dreamwell:player:2"),
-    );
     void actions.beginTutorialBattle(parseTutorialRunId("event:9"));
     void actions.restartTutorialBattle(parseBattleId("tutorial-battle:event:9:0"));
     void actions.exitTutorialBattle(
@@ -112,7 +108,6 @@ describe("game actions facade", () => {
       "play-again-starway-stairs:journey:12:site-7:commitment-2",
       "settle-blackjack:journey:12:site-7:commitment-3",
       "play-again-blackjack:journey:12:site-7:commitment-3",
-      "battle:b-1:dreamwell:player:2",
       "tutorial-battle:event:9:begin",
       "tutorial-battle:tutorial-battle:event:9:0:restart",
       "tutorial-battle:tutorial-battle:event:9:1:client-b:exit",

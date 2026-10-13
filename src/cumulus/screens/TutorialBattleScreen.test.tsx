@@ -5,7 +5,6 @@ import { describe, expect, it, vi } from "vitest";
 import {
   completeTurnAnnouncement,
   installTutorialBattleHarness,
-  interactions,
   lastBattleProps,
   mountTutorialBattle,
   opponentPlayView,
@@ -81,24 +80,6 @@ describe("TutorialBattleScreen", () => {
     expect(onNewJourney).toHaveBeenCalledOnce();
   });
 
-  it.each(["driver", "observer"] as const)(
-    "keeps normal %s play free of persistent tutorial-state chrome",
-    (ownership) => {
-      const { container } = mountTutorialBattle(view({ ownership }));
-
-      expect(
-        container.querySelector("[data-tutorial-battle-ownership-panel]"),
-      ).toBeNull();
-    },
-  );
-
-  it("keeps the battle visible while an absent driver is being replaced", () => {
-    const { container } = mountTutorialBattle(view({ ownership: "paused-driver-absent" }));
-
-    expect(container.querySelector("[data-test-mobile-battle]")).not.toBeNull();
-    expect(container.querySelector('[role="dialog"]')).toBeNull();
-  });
-
   it("shows a dismissible Cumulus warning when movement cannot resolve", () => {
     const onMovementStatusDismiss = vi.fn();
     const { container } = mountTutorialBattle(view(), {
@@ -112,30 +93,6 @@ describe("TutorialBattleScreen", () => {
     expect(toast?.textContent?.trim()).not.toBe("");
     act(() => toast?.click());
     expect(onMovementStatusDismiss).toHaveBeenCalledOnce();
-  });
-
-  it("keeps target selection in a compact top-edge banner", () => {
-    const cancel = vi.fn();
-    const { container } = mountTutorialBattle(view({ manualControls: true }), {
-      interactions: {
-        ...interactions,
-        targetSelectionPrompt: "legal-target",
-        onTargetSelectionCancel: cancel,
-      },
-    });
-    const prompt = container.querySelector<HTMLElement>(
-      "[data-tutorial-target-selection]",
-    );
-    const header = prompt?.querySelector("[data-glass-panel-header]");
-    const cancelButton = prompt?.querySelector<HTMLButtonElement>(
-      '[data-testid="tutorial-target-cancel"]',
-    );
-
-    expect(prompt?.querySelector("h2")?.textContent?.trim()).not.toBe("");
-    expect(header?.contains(cancelButton ?? null)).toBe(true);
-    expect(prompt?.querySelector("[data-glass-panel-footer]")).toBeNull();
-    act(() => cancelButton?.click());
-    expect(cancel).toHaveBeenCalledOnce();
   });
 
   it("animates an opponent card at full reveal size before starting its dwell", () => {

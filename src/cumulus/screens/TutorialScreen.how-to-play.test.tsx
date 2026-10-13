@@ -44,8 +44,8 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
 installTutorialScreenHarness();
 
 const emptyRanks = {
-  enemy: { backRank: [], frontRank: [], deckCardIds: [] },
-  player: { backRank: [], frontRank: [] },
+  far: { backRank: [], frontRank: [], deckCardIds: [] },
+  near: { backRank: [], frontRank: [] },
 };
 
 /** A How to Play action with its matching view, optionally paired with a Dreamwell card. */

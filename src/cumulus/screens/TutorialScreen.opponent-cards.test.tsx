@@ -47,8 +47,8 @@ function revealBattle() {
       cardIds: [TUTORIAL_OPPONENT_CARD.id],
       cards: [],
     },
-    enemy: emptySide("enemy"),
-    player: emptySide("player"),
+    far: emptySide("enemy"),
+    near: emptySide("player"),
     inspector: {
       sides: {
         enemy: { zones: { hand: 1, backRank: 0 } },
@@ -81,7 +81,7 @@ describe("TutorialScreen opponent cards", () => {
           enemyHandCardIds: [],
           enemyHand: [],
           farHand: { owner: "enemy", position: "far", cardIds: [], cards: [] },
-          enemy: {
+          far: {
             deckCardIds: ["tutorial-enemy-deck-1", "tutorial-enemy-deck-2"],
           },
           inspector: {
@@ -95,20 +95,20 @@ describe("TutorialScreen opponent cards", () => {
       { onActionComplete },
     );
 
-    expect(screenMocks.props?.view.enemy.deckCardIds).toEqual([
+    expect(screenMocks.props?.view.far.deckCardIds).toEqual([
       "tutorial-enemy-deck-1",
       "tutorial-enemy-deck-2",
     ]);
-    expect(screenMocks.props?.view.enemyHandCardIds).toEqual([]);
+    expect(screenMocks.props?.view.farHand.cardIds).toEqual([]);
     expect(screenMocks.props?.view.farHand.cardIds).toEqual([]);
 
     act(() => screenMocks.sceneAnimationComplete?.());
 
     const view = screenMocks.props?.view;
-    expect(view?.enemy.deckCardIds).toEqual(["tutorial-enemy-deck-2"]);
-    expect(view?.enemyHandCardIds).toEqual(["tutorial-enemy-deck-1"]);
+    expect(view?.far.deckCardIds).toEqual(["tutorial-enemy-deck-2"]);
     expect(view?.farHand.cardIds).toEqual(["tutorial-enemy-deck-1"]);
-    expect(view?.enemyHand).toEqual([]);
+    expect(view?.farHand.cardIds).toEqual(["tutorial-enemy-deck-1"]);
+    expect(view?.farHand.cards).toEqual([]);
     expect(view?.inspector.sides.enemy.zones).toMatchObject({
       deck: 1,
       hand: 1,
@@ -259,12 +259,12 @@ describe("TutorialScreen opponent cards", () => {
     });
 
     const view = screenMocks.props?.view;
-    expect(view?.enemyHandCardIds).toEqual([]);
+    expect(view?.farHand.cardIds).toEqual([]);
     expect(view?.farHand).toMatchObject({ cardIds: [], cards: [] });
-    expect(view?.enemy.backRank[4]?.card?.model.cardId).toBe(
+    expect(view?.far.backRank[4]?.card?.model.cardId).toBe(
       "229ab3a1-3720-41a2-924c-8fe112188f8e",
     );
-    expect(view?.enemy.backRank[5]?.card).toBeNull();
+    expect(view?.far.backRank[5]?.card).toBeNull();
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:play",
       testTutorialActionId("vrakmoth-reveal-and-play"),
@@ -289,7 +289,7 @@ describe("TutorialScreen opponent cards", () => {
     act(() => screenMocks.sceneAnimationComplete?.());
     act(() => screenMocks.cardAnimationComplete?.());
 
-    const backRank = screenMocks.props?.view.enemy.backRank;
+    const backRank = screenMocks.props?.view.far.backRank;
     expect(backRank).toHaveLength(6);
     expect(backRank?.[0]?.card).toBeNull();
     expect(backRank?.[1]?.card).toBeNull();
@@ -325,7 +325,7 @@ describe("TutorialScreen opponent cards", () => {
           wait: 0,
         },
         battle: battle({
-          enemy: {
+          far: {
             backRank: Array.from({ length: 3 }, (_, index) => ({
               id: `enemy-back-${String(index)}`,
               card: index === 1 ? championCard : null,
@@ -339,7 +339,7 @@ describe("TutorialScreen opponent cards", () => {
             })),
             deckCardIds: [],
           },
-          player: { backRank: [], frontRank: [], deckCardIds: [] },
+          near: { backRank: [], frontRank: [], deckCardIds: [] },
         }),
       }),
       { onActionComplete },
@@ -368,18 +368,18 @@ describe("TutorialScreen opponent cards", () => {
 
     act(() => screenMocks.sceneAnimationComplete?.());
     const view = screenMocks.props?.view;
-    expect(view?.enemy.backRank).toHaveLength(10);
-    expect(view?.enemy.backRank[4]?.card).toBeNull();
-    expect(view?.enemy.backRank[5]?.card).toMatchObject({
+    expect(view?.far.backRank).toHaveLength(10);
+    expect(view?.far.backRank[4]?.card).toBeNull();
+    expect(view?.far.backRank[5]?.card).toMatchObject({
       id: "tutorial-enemy-deck-2",
       model: { cardId: testCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0") },
     });
-    expect(view?.enemy.frontRank).toHaveLength(9);
-    expect(view?.enemy.frontRank[4]?.card).toMatchObject({
+    expect(view?.far.frontRank).toHaveLength(9);
+    expect(view?.far.frontRank[4]?.card).toMatchObject({
       id: TUTORIAL_OPPONENT_CARD.id,
       layoutMotion: "snap",
     });
-    expect(view?.enemy.frontRank[3]?.card).toBeNull();
+    expect(view?.far.frontRank[3]?.card).toBeNull();
     expect(animateReposition).toHaveBeenCalledWith(
       [
         { transform: "translate3d(-160px, -180px, 0)" },

@@ -26,7 +26,7 @@ const BATTLEFIELD_FULL_WIDTH_PERCENT =
 export const DESKTOP_PLAY_AREA_HEIGHT_PERCENT = 23;
 
 export function desktopBattlefieldLayoutBackSlotCount(view: MobileBattleView): number {
-  const sides = [view.enemy, view.player] as const;
+  const sides = [view.far, view.near] as const;
   return Math.max(
     DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS,
     ...sides.map((side) => side.backRank.length),
@@ -39,7 +39,7 @@ export function mobileBattlefieldWindow(view: MobileBattleView): {
   readonly frontSlotCount: number;
   readonly startIndex: number;
 } {
-  const sides = [view.enemy, view.player] as const;
+  const sides = [view.far, view.near] as const;
   const backOccupancies = sides.map((side) =>
     rankOccupancy(side.backRank, "back"),
   );
@@ -136,7 +136,7 @@ function rankOccupancy(
 }
 
 export function battlefieldDensityBackSlotCount(view: MobileBattleView): number {
-  const sides = [view.enemy, view.player] as const;
+  const sides = [view.far, view.near] as const;
   const occupiedCount = (slots: readonly MobileBattleSlotView[]) =>
     slots.filter((slot) => slot.card !== null).length;
   return Math.max(
@@ -239,7 +239,7 @@ function canonicalRankIndex(
 /**
  * Selects a centered window from the canonical battle formation on mobile.
  * Occupied edge cells pull the window just far enough to remain visible, while
- * compact tutorial-only formations keep their authored local slot identities.
+ * compact scripted formations keep their authored local slot identities.
  */
 export function visibleMobileRankSlots(
   slots: readonly MobileBattleSlotView[],
@@ -287,20 +287,20 @@ export function findBattleCardView(
   battleCardId: BattleCardId,
 ): MobileBattleCardView | null {
   const cards = [
-    ...view.player.backRank.flatMap((slot) =>
+    ...view.near.backRank.flatMap((slot) =>
       slot.card === null ? [] : [slot.card],
     ),
-    ...view.player.frontRank.flatMap((slot) =>
+    ...view.near.frontRank.flatMap((slot) =>
       slot.card === null ? [] : [slot.card],
     ),
-    ...view.enemy.backRank.flatMap((slot) =>
+    ...view.far.backRank.flatMap((slot) =>
       slot.card === null ? [] : [slot.card],
     ),
-    ...view.enemy.frontRank.flatMap((slot) =>
+    ...view.far.frontRank.flatMap((slot) =>
       slot.card === null ? [] : [slot.card],
     ),
-    ...view.playerHand,
-    ...view.enemyHand,
+    ...view.nearHand.cards,
+    ...view.farHand.cards,
   ];
   return cards.find((card) => card.id === battleCardId) ?? null;
 }

@@ -37,8 +37,6 @@ import type { JourneyMutationSource } from "../types/journey-source";
 import type { DeckEntryId } from "../types/identifiers";
 import type { DreamsignId } from "../types/identifiers";
 import type { ShuffleCommitment } from "../types/identifiers";
-import type { BattleCardId } from "../types/identifiers";
-import type { TutorialAiActionOverrideId } from "../types/identifiers";
 import type {
   AuguryArchetypeId,
   CardTutorialScreenKey,
@@ -49,7 +47,7 @@ import type {
   TutorialActionId,
   TutorialRunId,
 } from "../types/identifiers";
-import type { BattleSide, BattlefieldSlotId } from "../battle/types";
+import type { BattleSide } from "../battle/types";
 import type { Action as EngineAction, Answer as EngineAnswer } from "../engine";
 import type { DebugOp as EngineDebugOp } from "../engine/debug/debug-actions";
 import type { PromptId } from "../types/identifiers";
@@ -347,56 +345,13 @@ export interface GameActions {
     siteId: SiteId,
     seedOverride?: number | null,
   ) => Promise<number>;
-  // --- the standalone tutorial battle (tutorial-only until Phase 6) ---
-  battleCommand: (
-    command: unknown,
-    intentKey?: IntentKey,
-    actor?: EventActor,
-  ) => Promise<number>;
-  battleRepositionCharacter: (
-    battleCardId: BattleCardId,
-    destination: {
-      readonly side: "player";
-      readonly zone: "backRank" | "frontRank";
-      readonly slotId: BattlefieldSlotId;
-    },
-  ) => Promise<number>;
-  battlePlayCard: (
-    battleCardId: BattleCardId,
-    targetBattleCardIds: readonly BattleCardId[],
-    intentKey?: IntentKey,
-    actor?: EventActor,
-    aiChoices?: unknown,
-    characterDestination?: {
-      readonly side: "player" | "enemy";
-      readonly zone: "backRank";
-      readonly slotId: BattlefieldSlotId;
-    },
-    tutorialAiActionOverrideId?: TutorialAiActionOverrideId,
-  ) => Promise<number>;
-  /** Submit an ordered list of battle commands as one all-or-nothing event. */
-  battleGesture: (
-    commands: readonly unknown[],
-    intentKey?: IntentKey,
-    actor?: EventActor,
-  ) => Promise<number>;
-  battleAiBlock: (
-    aiSide: BattleSide,
-    actor: EventActor,
-    intentKey?: IntentKey,
-  ) => Promise<number>;
   completeTutorialBattlePresentation: (
     presentationId: PresentationId,
     intentKey: IntentKey,
     actor: EventActor,
     messageIndex?: number,
   ) => Promise<number>;
-  resolvePrompt: (
-    promptId: number,
-    resolution: unknown,
-    intentKey?: IntentKey,
-    actor?: EventActor,
-  ) => Promise<number>;
+  tutorialCardAttempt: (battleId: BattleId, instance: import("../engine").InstanceId) => Promise<number>;
 
   // --- engine intents of a journey battle ---
   /**
@@ -408,6 +363,7 @@ export interface GameActions {
     action: EngineAction,
     actor?: EventActor,
     intentKey?: IntentKey,
+    override?: import("../engine/policy/overrides").PolicyOverrideSelection,
   ) => Promise<number>;
   /** Answer the engine prompt `promptId` for `side`. */
   answerPrompt: (
@@ -817,43 +773,6 @@ export function makeActions(append: AppendFn): GameActions {
           ? {}
           : { seedOverride }),
       }),
-    // --- the standalone tutorial battle (tutorial-only until Phase 6) ---
-    battleCommand: (command, intentKey, actor) =>
-      emit("BATTLE_COMMAND", { command }, intentKey, actor),
-    battleRepositionCharacter: (battleCardId, destination) =>
-      emit("BATTLE_REPOSITION_CHARACTER", {
-        battleCardId,
-        destination,
-      }),
-    battlePlayCard: (
-      battleCardId,
-      targetBattleCardIds,
-      intentKey,
-      actor,
-      aiChoices,
-      characterDestination,
-      tutorialAiActionOverrideId,
-    ) =>
-      emit(
-        "BATTLE_PLAY_CARD",
-        {
-          battleCardId,
-          targetBattleCardIds: [...targetBattleCardIds],
-          ...(aiChoices === undefined ? {} : { aiChoices }),
-          ...(characterDestination === undefined
-            ? {}
-            : { characterDestination }),
-          ...(tutorialAiActionOverrideId === undefined
-            ? {}
-            : { tutorialAiActionOverrideId }),
-        },
-        intentKey,
-        actor,
-      ),
-    battleGesture: (commands, intentKey, actor) =>
-      emit("BATTLE_GESTURE", { commands: [...commands] }, intentKey, actor),
-    battleAiBlock: (aiSide, actor, intentKey) =>
-      emit("BATTLE_AI_BLOCK", { aiSide }, intentKey, actor),
     completeTutorialBattlePresentation: (
       presentationId,
       intentKey,
@@ -869,12 +788,11 @@ export function makeActions(append: AppendFn): GameActions {
         intentKey,
         actor,
       ),
-    resolvePrompt: (promptId, resolution, intentKey, actor) =>
-      emit("RESOLVE_PROMPT", { promptId, resolution }, intentKey, actor),
+    tutorialCardAttempt: (battleId, instance) => emit("TUTORIAL_CARD_ATTEMPT", {battleId,instance}),
 
     // --- engine intents of a journey battle ---
-    battleAction: (side, action, actor, intentKey) =>
-      emit("BATTLE_ACTION", { side, action }, intentKey, actor),
+    battleAction: (side, action, actor, intentKey, override) =>
+      emit("BATTLE_ACTION", { side, action, ...(override === undefined ? {} : {override}) }, intentKey, actor),
     answerPrompt: (side, promptId, value, actor, intentKey) =>
       emit("BATTLE_ANSWER", { side, promptId, value }, intentKey, actor),
     cancelPrompt: (side, promptId, actor) =>

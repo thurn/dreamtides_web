@@ -829,6 +829,7 @@ export const TUTORIAL = {
       "944e15d2-d680-4ebe-8d18-36826f4b1535",
       "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
     ],
+    forcedEnemyErosionPrefixCount: 3,
     forcedEnemyDraws: [
       "944e15d2-d680-4ebe-8d18-36826f4b1535",
       "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",

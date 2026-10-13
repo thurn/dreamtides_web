@@ -3,56 +3,11 @@ import { describe, expect, it } from "vitest";
 import type { GameEvent, Genesis } from "../eventlog/types";
 import { foldEvents } from "../eventlog/fold";
 import { hashState } from "../eventlog/hash";
-import { asTutorialResult } from "../battle/test-support";
 import { genesisFoldState } from "./fold-state";
 import { GAME_ENGINE_CONFIG } from "./replay/replay";
 import { reduceGameEvent } from "./reducer";
 import { testFoldHash } from "../types/test-identities";
-import { GENESIS, foldStateWithEssence, ctx, event, adjustEssence, stateWithPendingPrompt } from "./reducer-fixtures";
-
-
-
-describe("rule 4 — prompt gate", () => {
-  it("bounces a non-RESOLVE intent while a prompt is pending", () => {
-    const state = stateWithPendingPrompt(1);
-    const result = reduceGameEvent(state, adjustEssence(10), ctx());
-    expect(result.outcome).toBe("bounced");
-    expect(result.bounceReason).toBe("prompt_pending");
-    expect(result.state.journey.essence).toBe(100);
-  });
-
-  it("applies a matching-promptId RESOLVE_PROMPT past the CAS gate (rule 2 fast path)", () => {
-    const state = stateWithPendingPrompt(1);
-    const result = reduceGameEvent(
-      state,
-      event("RESOLVE_PROMPT", { promptId: 1, resolution: { kind: "foresee" } }),
-      ctx({
-        // A partner-intervening event that WOULD bounce at rule 3 — the fast
-        // path (rule 2) skips rules 3–4, so the matching resolve still applies.
-        intervening: [{ seq: 5, actor: testEventActor("bob"), type: "ADJUST_ESSENCE" }],
-      }),
-    );
-    // The domain case resolves the open prompt and clears it.
-    expect(result.outcome).toBe("applied");
-    expect(asTutorialResult(result).state.battle?.pendingPrompt).toBeNull();
-  });
-
-  it("bounces a RESOLVE_PROMPT whose promptId does not match, leaving the prompt open", () => {
-    const state = stateWithPendingPrompt(1);
-    const result = reduceGameEvent(
-      state,
-      event("RESOLVE_PROMPT", {
-        promptId: 999,
-        resolution: { kind: "foresee" },
-      }),
-      ctx(),
-    );
-    // A stale/mismatched promptId is gated by rule 4 (a pending prompt bounces
-    // any non-matching intent) and never reaches the domain case.
-    expect(result.outcome).toBe("bounced");
-    expect(asTutorialResult(result).state.battle?.pendingPrompt?.promptId).toBe(1);
-  });
-});
+import { GENESIS, foldStateWithEssence, ctx, event, adjustEssence } from "./reducer-fixtures";
 
 
 // ---------------------------------------------------------------------------

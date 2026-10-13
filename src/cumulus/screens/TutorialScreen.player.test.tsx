@@ -57,9 +57,9 @@ function endTurnView(
       ready,
     },
     battle: battle({
-      playerHand: [],
-      enemy: { backRank: [], frontRank: [], deckCardIds: [] },
-      player: { backRank: [], frontRank: [] },
+      nearHand: { owner:"player",position:"near", cards: [], cardIds: [] },
+      far: { backRank: [], frontRank: [], deckCardIds: [] },
+      near: { backRank: [], frontRank: [] },
       ...battleFields,
     }),
   });
@@ -76,7 +76,7 @@ describe("TutorialScreen player actions", () => {
     const onPlayerCardPlay = vi.fn();
     renderTutorialScreen(
       endTurnView(parseTutorialRunId("event:player-turn"), false, {
-        playerHand: [TUTORIAL_PLAYER_CARD],
+        nearHand: { owner:"player",position:"near", cards: [TUTORIAL_PLAYER_CARD], cardIds: ([TUTORIAL_PLAYER_CARD]).map(card => card.id) },
       }),
       { onPlayerCardPlay },
     );
@@ -118,7 +118,7 @@ describe("TutorialScreen player actions", () => {
     setDesktopViewport(true);
     renderTutorialScreen(
       endTurnView(parseTutorialRunId("event:player-card-position"), true, {
-        player: {
+        near: {
           backRank: [
             { id: "player-back-0", card: TUTORIAL_PLAYER_CARD },
             { id: "player-back-1", card: null },
@@ -129,7 +129,7 @@ describe("TutorialScreen player actions", () => {
       }),
     );
 
-    const backRank = screenMocks.props?.view.player.backRank;
+    const backRank = screenMocks.props?.view.near.backRank;
     expect(backRank).toHaveLength(10);
     expect(backRank?.[4]?.card?.model.cardId).toBe(
       TUTORIAL_PLAYER_CARD.model.cardId,
@@ -155,13 +155,13 @@ describe("TutorialScreen player actions", () => {
           opposingCardId: TUTORIAL_OPPONENT_CARD.model.cardId,
         },
         battle: battle({
-          playerHand: [],
-          enemy: {
+          nearHand: { owner:"player",position:"near", cards: [], cardIds: [] },
+          far: {
             backRank: [],
             frontRank: [{ id: "enemy-front-0", card: TUTORIAL_OPPONENT_CARD }],
             deckCardIds: [],
           },
-          player: {
+          near: {
             backRank: [{ id: "player-back-0", card: TUTORIAL_PLAYER_CARD }],
             frontRank: [
               { id: "player-front-0", card: null },
@@ -238,13 +238,13 @@ describe("TutorialScreen player actions", () => {
         },
         battle: battle({
           phase: "challenge",
-          playerHand: [],
-          enemy: {
+          nearHand: { owner:"player",position:"near", cards: [], cardIds: [] },
+          far: {
             backRank: [],
             frontRank: [{ id: "enemy-front-0", card: TUTORIAL_OPPONENT_CARD }],
             deckCardIds: [],
           },
-          player: {
+          near: {
             backRank: [],
             frontRank: [{ id: "player-front-0", card: TUTORIAL_PLAYER_CARD }],
           },

@@ -1,4 +1,3 @@
-// tutorial-only until Phase 6
 
 import { extractGlossaryTerms } from "../../data/glossary-terms";
 import type {

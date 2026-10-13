@@ -1,3 +1,4 @@
+import "./overrides.contracts";
 // The placeholder policies, their requests, the optional-chain bound, and
 // aiDecision, on synthetic cards.
 import { describe, expect, it } from "vitest";

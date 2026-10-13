@@ -219,6 +219,8 @@ export interface TutorialBattleConfiguration {
   readonly handoff: TutorialBattleHandoffConfiguration;
   readonly forcedPlayerDraws: readonly CardId[];
   readonly forcedEnemyDraws: readonly CardId[];
+  /** Initial enemy deck entries reserved for the authored erosion effect. */
+  readonly forcedEnemyErosionPrefixCount: number;
   /** Complete shared deck prefix, including authored pre-handoff draws. */
   readonly dreamwellDraws: readonly DreamwellCardId[];
   /** One-shot, state-matched actions which take priority over heuristic AI. */
@@ -399,6 +401,7 @@ export interface TutorialPlayerCardPlay {
 
 /** Event-log-owned progress for one shared tutorial playback. */
 export interface TutorialPlaybackState {
+  readonly prefix?: import("../rules/battle/tutorial-prefix").TutorialPrefixState;
   readonly runId: TutorialRunId;
   readonly actions: readonly TutorialAction[];
   /** Null after the last action completes. */

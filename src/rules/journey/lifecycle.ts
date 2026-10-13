@@ -13,29 +13,19 @@ import { validJourneySiteCounters } from "./journey-sites";
 
 import { initialFoldState } from "../fold-state";
 import type { BattleFoldState, FoldState } from "../fold-state";
-import { parseJourneyBattleFoldState, resolveScript } from "../battle/fold";
-import type { TutorialBattleFoldState } from "../battle/fold";
+import { parseJourneyBattleFoldState } from "../battle/fold";
+import { parseTutorialBattleFoldState } from "../battle/tutorial-load";
 import { toJourneyAvatar } from "../../data/avatar-selection";
 import type { ResolvedAvatarPackage } from "../../types/content";
 import type { JourneyState, SiteType } from "../../types/journey";
-import type { EffectStep } from "../battle/effect-step";
-import type { EffectRun, ScriptRef } from "../battle/fold";
-import type { ChallengeCursor } from "../battle/fold";
 import type { EventContext } from "../../eventlog/types";
-import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
-import { FRONT_RANK_SLOTS } from "../../battle/types";
-import { isTutorialBattleAiActionOverrides } from "../../types/tutorial-ai-action-overrides";
 import { canVisitSite, clampEssence, getSiteContentProvider } from "./sites";
 import {
   isRandomSiteMetadata,
   materializeRandomSite,
 } from "../../random-site/random-site";
 import { SITE_TYPES } from "../../types/site-type";
-import {
-  isBuiltInBattlePromptRef,
-  isDreamwellPromptRef,
-  type BattlePromptText,
-} from "../../data/dreamwell-prompts";
+
 import type { AvatarId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
@@ -599,274 +589,11 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
 
 /**
  * Validates a raw battle payload into a {@link BattleFoldState}, or `null` when
- * it is malformed, names no known battle mode, or references a script the live
- * tables cannot resolve. A journey battle keeps only its init and engine
- * battle.
+ * it is malformed or names no known battle mode. Battle hosts keep their
+ * display metadata, engine slice and durable tutorial checkpoints.
  */
 function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   if (!isRecord(value) || !isRecord(value.mode)) return null;
   if (value.mode.kind === "journey") return parseJourneyBattleFoldState(value);
-  return value.mode.kind === "tutorial" ? asValidTutorialBattle(value) : null;
-}
-
-// tutorial-only until Phase 6
-/**
- * The board / init shapes of a tutorial battle are checked structurally; the
- * fold-critical invariant is that every parked run's `scriptRef` resolves and
- * its `cursor` addresses a real step, so the driver never drives a cursor off
- * the end of an unknown script.
- */
-function asValidTutorialBattle(
-  value: Record<string, unknown>,
-): TutorialBattleFoldState | null {
-  if (!isRecord(value.init) || !isRecord(value.board)) return null;
-  if (!isRecord(value.dawnFired)) return null;
-  if (
-    value.triggerDawnFired !== undefined &&
-    !isDawnMarker(value.triggerDawnFired)
-  ) {
-    return null;
-  }
-  if (
-    value.basicAutomationEnabled !== undefined &&
-    typeof value.basicAutomationEnabled !== "boolean"
-  )
-    return null;
-  if (value.aiBlockingTurn !== undefined) {
-    if (!isRecord(value.aiBlockingTurn)) return null;
-    if (
-      value.aiBlockingTurn.activeSide !== "player" &&
-      value.aiBlockingTurn.activeSide !== "enemy"
-    )
-      return null;
-    if (
-      typeof value.aiBlockingTurn.turnNumber !== "number" ||
-      !Number.isInteger(value.aiBlockingTurn.turnNumber)
-    )
-      return null;
-  }
-  if (
-    value.tutorialAiActionOverrides !== undefined &&
-    !isTutorialBattleAiActionOverrides(value.tutorialAiActionOverrides)
-  ) {
-    return null;
-  }
-  if (
-    value.consumedTutorialAiActionOverrideIds !== undefined &&
-    (!Array.isArray(value.consumedTutorialAiActionOverrideIds) ||
-      !value.consumedTutorialAiActionOverrideIds.every(
-        (id) => typeof id === "string",
-      ) ||
-      new Set(value.consumedTutorialAiActionOverrideIds).size !==
-        value.consumedTutorialAiActionOverrideIds.length)
-  ) {
-    return null;
-  }
-  if (
-    value.challengeCursor !== undefined &&
-    value.challengeCursor !== null &&
-    !isChallengeCursor(value.challengeCursor)
-  ) {
-    return null;
-  }
-  if (!Array.isArray(value.effectQueue)) return null;
-  for (const run of value.effectQueue) {
-    if (!isResolvableRun(run)) return null;
-  }
-  const pendingPrompt = value.pendingPrompt;
-  if (pendingPrompt !== null) {
-    if (!isValidPendingPrompt(pendingPrompt)) return null;
-  }
-  const loaded = value as unknown as TutorialBattleFoldState;
-  const board = loaded.board as unknown as Record<string, unknown>;
-  const canNormalizeCards =
-    isRecord(board.cardInstances) && isRecord(board.sides);
-  return {
-    ...loaded,
-    challengeCursor: loaded.challengeCursor ?? null,
-    board: canNormalizeCards
-      ? cloneBattleMutableState(loaded.board)
-      : loaded.board,
-  };
-}
-
-function isPromptText(value: unknown): value is BattlePromptText {
-  return (
-    isBuiltInBattlePromptRef(value) || isDreamwellPromptRef(value)
-  );
-}
-
-function isChallengeCursor(value: unknown): value is ChallengeCursor {
-  if (!isRecord(value)) return false;
-  if (value.activeSide !== "player" && value.activeSide !== "enemy")
-    return false;
-  if (
-    typeof value.nextLane !== "number" ||
-    !Number.isInteger(value.nextLane) ||
-    value.nextLane < 0 ||
-    value.nextLane > FRONT_RANK_SLOTS
-  ) {
-    return false;
-  }
-  if (value.handoff === null) return true;
-  if (!isRecord(value.handoff)) return false;
-  return (
-    (value.handoff.activeSide === "player" ||
-      value.handoff.activeSide === "enemy") &&
-    (value.handoff.phase === "dreamwell" ||
-      value.handoff.phase === "draw" ||
-      value.handoff.phase === "dawn" ||
-      value.handoff.phase === "day" ||
-      value.handoff.phase === "dusk" ||
-      value.handoff.phase === "night" ||
-      value.handoff.phase === "challenge" ||
-      value.handoff.phase === "ending") &&
-    typeof value.handoff.turnNumber === "number" &&
-    Number.isInteger(value.handoff.turnNumber)
-  );
-}
-
-function isValidPendingPrompt(value: unknown): boolean {
-  if (!isRecord(value)) return false;
-  if (typeof value.promptId !== "number" || !Number.isFinite(value.promptId)) {
-    return false;
-  }
-  if (
-    value.kind !== "pick-cards" &&
-    value.kind !== "choice" &&
-    value.kind !== "confirm" &&
-    value.kind !== "foresee"
-  ) {
-    return false;
-  }
-  if (!isResolvableRun(value.run)) return false;
-  return isActivePromptShape(value.options, value.kind);
-}
-
-function isActivePromptShape(
-  value: unknown,
-  pendingKind: "pick-cards" | "choice" | "confirm" | "foresee",
-): boolean {
-  if (!isRecord(value)) return false;
-  if (pendingKind === "confirm") {
-    if (value.kind !== "choice") return false;
-  } else if (value.kind !== pendingKind) {
-    return false;
-  }
-  if (value.kind !== "foresee" && !isPromptText(value.label)) {
-    return false;
-  }
-  switch (value.kind) {
-    case "pick-cards":
-      return (
-        Array.isArray(value.candidateIds) &&
-        value.candidateIds.every((id) => typeof id === "string") &&
-        (value.subtitle === undefined || isPromptText(value.subtitle)) &&
-        typeof value.count === "number" &&
-        Number.isInteger(value.count) &&
-        typeof value.optional === "boolean" &&
-        Array.isArray(value.highlightCardIds) &&
-        value.highlightCardIds.every((id) => typeof id === "string")
-      );
-    case "choice":
-      return (
-        Array.isArray(value.options) &&
-        value.options.every(
-          (option) => isRecord(option) && isPromptText(option.label),
-        )
-      );
-    case "foresee":
-      return typeof value.count === "number" && Number.isInteger(value.count);
-    default:
-      return false;
-  }
-}
-
-/** A parked run whose `scriptRef` resolves and whose `cursor` is in range. */
-function isResolvableRun(value: unknown): value is EffectRun {
-  if (!isRecord(value)) return false;
-  const ref = value.scriptRef;
-  if (!isScriptRef(ref)) return false;
-  const cursor = value.cursor;
-  if (!Array.isArray(cursor) || !cursor.every((n) => Number.isInteger(n)))
-    return false;
-  if (
-    value.sourceInstanceId !== undefined &&
-    typeof value.sourceInstanceId !== "string"
-  ) {
-    return false;
-  }
-  if (value.bindings !== undefined && !isEffectBindings(value.bindings))
-    return false;
-  const steps = resolveScript(ref);
-  if (steps.length === 0) return false;
-  return cursorInRange(steps, cursor as number[]);
-}
-
-function isDawnMarker(value: unknown): boolean {
-  return (
-    isRecord(value) &&
-    (value.player === null ||
-      (typeof value.player === "number" && Number.isInteger(value.player))) &&
-    (value.enemy === null ||
-      (typeof value.enemy === "number" && Number.isInteger(value.enemy)))
-  );
-}
-
-function isEffectBindings(value: unknown): boolean {
-  if (!isRecord(value)) return false;
-  const trigger = value.trigger;
-  if (
-    trigger !== undefined &&
-    (typeof trigger !== "string" ||
-      ![
-        "played",
-        "materialized",
-        "rematerialized",
-        "dawn",
-        "dissolved",
-        "abandoned",
-      ].includes(trigger))
-  )
-    return false;
-  if (
-    value.sourceCardId !== undefined &&
-    typeof value.sourceCardId !== "string"
-  )
-    return false;
-  if (
-    value.sourceController !== undefined &&
-    value.sourceController !== "player" &&
-    value.sourceController !== "enemy"
-  )
-    return false;
-  return value.sourceZone === undefined || typeof value.sourceZone === "string";
-}
-
-function isScriptRef(value: unknown): value is ScriptRef {
-  return (
-    isRecord(value) &&
-    (value.table === "battle" || value.table === "dreamwell") &&
-    typeof value.id === "string"
-  );
-}
-
-/**
- * A non-throwing counterpart to the driver's cursor navigation: `cursor`
- * addresses a real position when each non-terminal index selects a `confirm`
- * prompt (whose `onYes` the next index descends into) and the terminal index is
- * a valid slot in its branch. An empty cursor never addresses a step.
- */
-function cursorInRange(steps: EffectStep[], cursor: number[]): boolean {
-  if (cursor.length === 0) return false;
-  let list = steps;
-  for (let depth = 0; depth < cursor.length; depth += 1) {
-    const index = cursor[depth];
-    if (index < 0 || index >= list.length) return false;
-    if (depth === cursor.length - 1) return true;
-    const step = list[index];
-    if (step.kind !== "prompt" || step.prompt.kind !== "confirm") return false;
-    list = step.prompt.onYes;
-  }
-  return true;
+  return value.mode.kind === "tutorial" ? parseTutorialBattleFoldState(value) : null;
 }

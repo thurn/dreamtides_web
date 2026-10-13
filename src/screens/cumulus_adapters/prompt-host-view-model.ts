@@ -163,26 +163,10 @@ export function surfaceChoices(surface: PromptSurface): PromptChoices | null {
 }
 
 /** The battle screen's prompt fields for a prompt host model. */
-export function promptViewFields(
-  model: PromptHostModel,
-): Pick<MobileBattleView, "promptNotice" | "cardPicker" | "choicePrompt" | "promptHost"> {
-  const { surface } = model;
+export function promptViewFields(model: PromptHostModel): MobileBattleView["prompt"] {
+  const {surface} = model;
   const choices = surfaceChoices(surface);
-  return {
-    promptNotice: surface.kind === "waiting" ? surface.notice : null,
-    cardPicker: surface.kind === "picker" ? surface.picker : null,
-    choicePrompt:
-      choices === null
-        ? null
-        : {
-            key: choices.key,
-            label: choices.label,
-            options: choices.options.map((option) => ({ label: option.label })),
-            canResolve: true,
-            ...(choices.presentation === undefined ? {} : { presentation: choices.presentation }),
-          },
-    promptHost: model.host,
-  };
+  return {host:model.host,surface:surface.kind === "waiting" ? {kind:"waiting",notice:surface.notice} : surface.kind === "picker" ? {kind:"picker",picker:surface.picker} : choices !== null ? {kind:"choice",choice:{key:choices.key,label:choices.label,options:choices.options.map(option=>({label:option.label})),canResolve:true,...(choices.presentation === undefined ? {} : {presentation:choices.presentation})}} : {kind:"none"}};
 }
 
 const EMPTY_HOST: BattlePromptHostView = {
@@ -367,9 +351,7 @@ export function buildPromptHost(input: PromptHostInput): PromptHostModel {
             candidateOwner: pickerCandidates[0]?.owner ?? null,
             candidates: pickerCandidates,
             candidateIds: pickerCandidates.map((candidate) => candidate.instanceId),
-            count: max,
-            minCount: min,
-            optional: min === 0,
+            selection: {min,max},
             canResolve: true,
             presentation: onBoard ? "board" : "gallery",
             // A current draw has selective emphasis; otherwise every legal candidate is ringed.

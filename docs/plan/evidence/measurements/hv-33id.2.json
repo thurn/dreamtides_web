@@ -1,0 +1,992 @@
+{
+  "bead": "hv-33id.2",
+  "base": "7230493fc2c37ad8289284cdd3e3cbb1aaede897",
+  "scope": {
+    "originalGrossWindow": "post-claim original dispatch through implementer commit; research, parking, prerequisite coordination, queue and verification included",
+    "freshHelperDispatchUTC": "2026-10-12T21:21:19.731Z",
+    "productRuntimeManifestSHA256": "fca874142aee9ccda4df8c7ac9bd8b04060725debb35428a4d1413b1398d7a42",
+    "finalTestSelectionManifestSHA256": "093198d1e47bd817959c86655bb7cbfcad8c70e9f939242a181c534c9346f095",
+    "testDeltaDefinition": "test modules include .test.ts/.test.tsx and .contracts.ts; fixtures/helpers excluded from module/line count. Three discoveryfilesdeleted and three contractmodulesadded; discoverydelta-3; netmodulefiles0. Two deleted hook suites had explicit jsdom pragma; newcontractsplainNode.",
+    "testAddedLines": 676,
+    "testDeletedLines": 7856,
+    "discoveryEntriesDelta": -3,
+    "newContractModules": 3,
+    "newTestDiscoveryEntries": 0,
+    "sourceNewModules": 12,
+    "sourceNewModuleMaxLines": 246,
+    "fullReviewQualification": "Full02 passes5985/352 on sameproductruntime with larger pre-prune testselection; finalreview Quick12 passes5173/298 after test-only pruning and equivalentEOFcleanup; no product/QArerun"
+  },
+  "clockProvenance": {
+    "originalDispatch": "2026-10-12T19:28:10.643Z from parent native dispatch record",
+    "freshHelperDispatch": "2026-10-12T21:21:19.731Z",
+    "endpointStatus": "Final integration endpoint refreshed immediately before schema validation and final single-commit amendment; actual Git receipt retained separately.",
+    "productiveCpuQuota": "unknown; gross wall is not CPU/productive/quota",
+    "frictionIntervals": [
+      {
+        "tag": "generic-setup-prerequisite",
+        "minutes": 113.15146666666666,
+        "note": "Measured original dispatch19:28:10.643Z to fresh dispatch21:21:19.731Z parking/prerequisite/coordination window. Includes parent-owned generic7/8/9 work and research/queue, not helper productiveCPU."
+      },
+      {
+        "tag": "tutorial-producer-visibility",
+        "minutes": 10.8959391,
+        "note": "Measured failed normal-speed draw-boundary run terminal to corrected current-runtime Full02 terminal. Includes producer-frame repair, focused/review/Knip, owned accelerated diagnostic and fullvalidation; not isolated debugCPU."
+      },
+      {
+        "tag": "browser-qa-scripting",
+        "minutes": 11.162880783333332,
+        "note": "Measured historical literal11 harness failure terminal to corrected matrix launch. Includes public replay reconstruction, parent authority audit/ACK and immutable script adaptation; no gameplaychange."
+      }
+    ],
+    "nearCommitEndpointUTC": "2026-10-13T00:27:37.113317+00:00",
+    "finalRuntimeQualification": {
+      "path": "src/screens/cumulus_adapters/tutorial-action-log.ts",
+      "change": "EOF whitespace only after staged guard; exact emitted-JavaScript equivalence proven in action-log-eof-equivalence-v01.json",
+      "acceptedQARuntimeBytes": "fca manifest preserved; final source differs by this whitespace-only helper and endpoint docs; runtime behavior remains qualified by emit-equivalence"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "integration-review-01 wrapper start 2026-10-13T00:21:32.360268Z; sysctl vm.loadavg reported one-minute value 8.89 rounded by Darwin output",
+        "units": "one-minute load average; not current unrelated system load"
+      },
+      "localValidationS": {
+        "measuredFor": "isolated wrapper wall duration with exact argv,cwd,pid,processGroup and terminalexit in receipts; includes prepare/restore/lock waits; stage wall/CPU not inferred"
+      },
+      "implementWindow": {
+        "measuredFor": "original dispatch through actualnearcommitclock endpoint; separate freshhelperwindow retained"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "name": "local-review-cinematic-focused-01",
+      "startedUtc": "2026-10-12T23:00:27.988264+00:00",
+      "endedUtc": "2026-10-12T23:00:31.805949+00:00",
+      "oneMinuteBefore": 8.1640625,
+      "oneMinuteAfter": 8.63134765625,
+      "pid": 17968,
+      "processGroup": 17968,
+      "exit": 1,
+      "wallSeconds": 3.81768545799423
+    },
+    {
+      "name": "local-review-cinematic-focused-02",
+      "startedUtc": "2026-10-12T23:00:48.857802+00:00",
+      "endedUtc": "2026-10-12T23:00:52.425870+00:00",
+      "oneMinuteBefore": 7.36474609375,
+      "oneMinuteAfter": 7.17529296875,
+      "pid": 18398,
+      "processGroup": 18398,
+      "exit": 0,
+      "wallSeconds": 3.5680591669952264
+    },
+    {
+      "name": "local-review-cinematic-typecheck-01",
+      "startedUtc": "2026-10-12T22:59:32.837443+00:00",
+      "endedUtc": "2026-10-12T22:59:43.061005+00:00",
+      "oneMinuteBefore": 10.04052734375,
+      "oneMinuteAfter": 10.04052734375,
+      "pid": 16474,
+      "processGroup": 16474,
+      "exit": 0,
+      "wallSeconds": 10.223519459003
+    },
+    {
+      "name": "local-review-draw-projection-focused-01",
+      "startedUtc": "2026-10-12T23:18:02.334982+00:00",
+      "endedUtc": "2026-10-12T23:18:06.977892+00:00",
+      "oneMinuteBefore": 15.46484375,
+      "oneMinuteAfter": 14.62646484375,
+      "pid": 2796,
+      "processGroup": 2796,
+      "exit": 0,
+      "wallSeconds": 4.642903875006596
+    },
+    {
+      "name": "local-review-focused-migration-01",
+      "startedUtc": "2026-10-12T22:17:51.078589+00:00",
+      "endedUtc": "2026-10-12T22:18:03.272769+00:00",
+      "oneMinuteBefore": 19.3603515625,
+      "oneMinuteAfter": 19.4990234375,
+      "pid": 76213,
+      "processGroup": 76213,
+      "exit": 1,
+      "wallSeconds": 12.194076708998182
+    },
+    {
+      "name": "local-review-focused-migration-02",
+      "startedUtc": "2026-10-12T22:18:43.537071+00:00",
+      "endedUtc": "2026-10-12T22:18:50.814279+00:00",
+      "oneMinuteBefore": 14.048828125,
+      "oneMinuteAfter": 13.32373046875,
+      "pid": 11056,
+      "processGroup": 11056,
+      "exit": 1,
+      "wallSeconds": 7.277155291987583
+    },
+    {
+      "name": "local-review-focused-migration-03",
+      "startedUtc": "2026-10-12T22:20:13.156593+00:00",
+      "endedUtc": "2026-10-12T22:20:19.246948+00:00",
+      "oneMinuteBefore": 7.06298828125,
+      "oneMinuteAfter": 6.8173828125,
+      "pid": 17678,
+      "processGroup": 17678,
+      "exit": 0,
+      "wallSeconds": 6.090307958002086
+    },
+    {
+      "name": "local-review-format-check-01",
+      "startedUtc": "2026-10-12T23:10:26.238439+00:00",
+      "endedUtc": "2026-10-12T23:10:29.836521+00:00",
+      "oneMinuteBefore": 13.5888671875,
+      "oneMinuteAfter": 13.5888671875,
+      "pid": 84192,
+      "processGroup": 84192,
+      "exit": 0,
+      "wallSeconds": 3.5980797090014676
+    },
+    {
+      "name": "local-review-format-check-02",
+      "startedUtc": "2026-10-12T23:11:01.522138+00:00",
+      "endedUtc": "2026-10-12T23:11:05.803496+00:00",
+      "oneMinuteBefore": 9.326171875,
+      "oneMinuteAfter": 9.0595703125,
+      "pid": 86544,
+      "processGroup": 86544,
+      "exit": 0,
+      "wallSeconds": 4.281350208009826
+    },
+    {
+      "name": "local-review-full-01",
+      "startedUtc": "2026-10-12T23:07:08.651345+00:00",
+      "endedUtc": "2026-10-12T23:09:26.220447+00:00",
+      "oneMinuteBefore": 13.76904296875,
+      "oneMinuteAfter": 25.84423828125,
+      "pid": 35447,
+      "processGroup": 35447,
+      "exit": 0,
+      "wallSeconds": 137.5683189590054
+    },
+    {
+      "name": "local-review-full-02",
+      "startedUtc": "2026-10-12T23:23:41.681210+00:00",
+      "endedUtc": "2026-10-12T23:25:35.199049+00:00",
+      "oneMinuteBefore": 9.55419921875,
+      "oneMinuteAfter": 15.85302734375,
+      "pid": 36372,
+      "processGroup": 36372,
+      "exit": 0,
+      "wallSeconds": 113.51722100000188
+    },
+    {
+      "name": "local-review-host-06",
+      "startedUtc": "2026-10-12T22:47:47.942980+00:00",
+      "endedUtc": "2026-10-12T22:47:51.890453+00:00",
+      "oneMinuteBefore": 5.2646484375,
+      "oneMinuteAfter": 5.4833984375,
+      "pid": 41650,
+      "processGroup": 41650,
+      "exit": 0,
+      "wallSeconds": 3.9474566249991767
+    },
+    {
+      "name": "local-review-knip-01",
+      "startedUtc": "2026-10-12T22:35:07.277472+00:00",
+      "endedUtc": "2026-10-12T22:35:11.008747+00:00",
+      "oneMinuteBefore": 14.2158203125,
+      "oneMinuteAfter": 13.3974609375,
+      "pid": 89418,
+      "processGroup": 89418,
+      "exit": 1,
+      "wallSeconds": 3.7312603750033304
+    },
+    {
+      "name": "local-review-knip-02",
+      "startedUtc": "2026-10-12T22:50:43.756317+00:00",
+      "endedUtc": "2026-10-12T22:50:48.431483+00:00",
+      "oneMinuteBefore": 7.34033203125,
+      "oneMinuteAfter": 9.31494140625,
+      "pid": 46623,
+      "processGroup": 46623,
+      "exit": 1,
+      "wallSeconds": 4.675182292005047
+    },
+    {
+      "name": "local-review-knip-03",
+      "startedUtc": "2026-10-12T22:53:11.792102+00:00",
+      "endedUtc": "2026-10-12T22:53:15.655807+00:00",
+      "oneMinuteBefore": 9.65283203125,
+      "oneMinuteAfter": 9.35986328125,
+      "pid": 79981,
+      "processGroup": 79981,
+      "exit": 0,
+      "wallSeconds": 3.86369379099051
+    },
+    {
+      "name": "local-review-knip-04",
+      "startedUtc": "2026-10-12T23:03:36.320845+00:00",
+      "endedUtc": "2026-10-12T23:03:40.680802+00:00",
+      "oneMinuteBefore": 19.79296875,
+      "oneMinuteAfter": 19.32861328125,
+      "pid": 9509,
+      "processGroup": 9509,
+      "exit": 0,
+      "wallSeconds": 4.3599565839977
+    },
+    {
+      "name": "local-review-knip-05",
+      "startedUtc": "2026-10-12T23:20:46.743489+00:00",
+      "endedUtc": "2026-10-12T23:20:50.737766+00:00",
+      "oneMinuteBefore": 9.59326171875,
+      "oneMinuteAfter": 9.70556640625,
+      "pid": 29498,
+      "processGroup": 29498,
+      "exit": 0,
+      "wallSeconds": 3.994274625001708
+    },
+    {
+      "name": "local-review-knip-06",
+      "startedUtc": "2026-10-12T23:57:55.200285+00:00",
+      "endedUtc": "2026-10-12T23:57:59.393760+00:00",
+      "oneMinuteBefore": 20.98876953125,
+      "oneMinuteAfter": 21.9501953125,
+      "pid": 29071,
+      "processGroup": 29071,
+      "exit": 0,
+      "wallSeconds": 4.193447083001956
+    },
+    {
+      "name": "local-review-lint-fix-01",
+      "startedUtc": "2026-10-12T22:25:44.646752+00:00",
+      "endedUtc": "2026-10-12T22:25:47.826879+00:00",
+      "oneMinuteBefore": 10.85400390625,
+      "oneMinuteAfter": 10.85400390625,
+      "pid": 37991,
+      "processGroup": 37991,
+      "exit": 1,
+      "wallSeconds": 3.180113499998697
+    },
+    {
+      "name": "local-review-matcher-prune-focused-01",
+      "startedUtc": "2026-10-12T23:56:27.769711+00:00",
+      "endedUtc": "2026-10-12T23:56:31.218354+00:00",
+      "oneMinuteBefore": 16.5322265625,
+      "oneMinuteAfter": 16.5322265625,
+      "pid": 8744,
+      "processGroup": 8744,
+      "exit": 0,
+      "wallSeconds": 3.4486409590026597
+    },
+    {
+      "name": "local-review-policy-overrides-01",
+      "startedUtc": "2026-10-12T21:56:04.777871+00:00",
+      "endedUtc": "2026-10-12T21:56:11.288307+00:00",
+      "oneMinuteBefore": 21.86279296875,
+      "oneMinuteAfter": 24.03564453125,
+      "pid": 85249,
+      "processGroup": 85249,
+      "exit": 1,
+      "wallSeconds": 6.510383707995061
+    },
+    {
+      "name": "local-review-policy-overrides-02",
+      "startedUtc": "2026-10-12T21:57:00.458561+00:00",
+      "endedUtc": "2026-10-12T21:57:06.515008+00:00",
+      "oneMinuteBefore": 20.40869140625,
+      "oneMinuteAfter": 19.41455078125,
+      "pid": 36216,
+      "processGroup": 36216,
+      "exit": 0,
+      "wallSeconds": 6.056398667002213
+    },
+    {
+      "name": "local-review-qa-acceptance-01",
+      "startedUtc": "2026-10-12T23:12:21.174719+00:00",
+      "endedUtc": "2026-10-12T23:14:41.442703+00:00",
+      "oneMinuteBefore": 14.5791015625,
+      "oneMinuteAfter": 6.39599609375,
+      "pid": 96187,
+      "processGroup": 96187,
+      "exit": 1,
+      "wallSeconds": 140.26727545900212
+    },
+    {
+      "name": "local-review-qa-acceptance-02",
+      "startedUtc": "2026-10-12T23:26:30.687090+00:00",
+      "endedUtc": "2026-10-12T23:30:57.739391+00:00",
+      "oneMinuteBefore": 12.80322265625,
+      "oneMinuteAfter": 10.2265625,
+      "pid": 29069,
+      "processGroup": 29069,
+      "exit": 1,
+      "wallSeconds": 267.04941475001397
+    },
+    {
+      "name": "local-review-qa-acceptance-03",
+      "startedUtc": "2026-10-12T23:42:07.512238+00:00",
+      "endedUtc": "2026-10-12T23:49:10.602727+00:00",
+      "oneMinuteBefore": 3.701171875,
+      "oneMinuteAfter": 17.1064453125,
+      "pid": 90191,
+      "processGroup": 90191,
+      "exit": 0,
+      "wallSeconds": 423.0866275839944
+    },
+    {
+      "name": "local-review-qa-diagnostic-01",
+      "startedUtc": "2026-10-12T22:53:35.850383+00:00",
+      "endedUtc": "2026-10-12T22:55:24.693148+00:00",
+      "oneMinuteBefore": 7.56982421875,
+      "oneMinuteAfter": 5.80078125,
+      "pid": 81809,
+      "processGroup": 81809,
+      "exit": 1,
+      "wallSeconds": 108.84215016699454
+    },
+    {
+      "name": "local-review-qa-diagnostic-02",
+      "startedUtc": "2026-10-12T22:56:22.203356+00:00",
+      "endedUtc": "2026-10-12T22:56:40.974278+00:00",
+      "oneMinuteBefore": 9.1279296875,
+      "oneMinuteAfter": 8.5791015625,
+      "pid": 4020,
+      "processGroup": 4020,
+      "exit": 1,
+      "wallSeconds": 18.77082462499675
+    },
+    {
+      "name": "local-review-qa-diagnostic-03",
+      "startedUtc": "2026-10-12T22:57:17.816648+00:00",
+      "endedUtc": "2026-10-12T22:58:01.161698+00:00",
+      "oneMinuteBefore": 9.138671875,
+      "oneMinuteAfter": 6.7802734375,
+      "pid": 11603,
+      "processGroup": 11603,
+      "exit": 0,
+      "wallSeconds": 43.34481466699799
+    },
+    {
+      "name": "local-review-qa-diagnostic-04",
+      "startedUtc": "2026-10-12T23:03:57.903472+00:00",
+      "endedUtc": "2026-10-12T23:04:48.639231+00:00",
+      "oneMinuteBefore": 26.22509765625,
+      "oneMinuteAfter": 21.71728515625,
+      "pid": 19476,
+      "processGroup": 19476,
+      "exit": 0,
+      "wallSeconds": 50.73548491700785
+    },
+    {
+      "name": "local-review-qa-diagnostic-05",
+      "startedUtc": "2026-10-12T23:06:00.303899+00:00",
+      "endedUtc": "2026-10-12T23:06:17.000189+00:00",
+      "oneMinuteBefore": 23.04052734375,
+      "oneMinuteAfter": 20.1884765625,
+      "pid": 28831,
+      "processGroup": 28831,
+      "exit": 0,
+      "wallSeconds": 16.69622366699332
+    },
+    {
+      "name": "local-review-qa-draw-boundary-01",
+      "startedUtc": "2026-10-12T23:21:38.286659+00:00",
+      "endedUtc": "2026-10-12T23:22:18.115562+00:00",
+      "oneMinuteBefore": 7.3408203125,
+      "oneMinuteAfter": 5.79443359375,
+      "pid": 32374,
+      "processGroup": 32374,
+      "exit": 0,
+      "wallSeconds": 39.82869291699899
+    },
+    {
+      "name": "local-review-qa-supplemental-01",
+      "startedUtc": "2026-10-12T23:49:49.770371+00:00",
+      "endedUtc": "2026-10-12T23:50:13.574359+00:00",
+      "oneMinuteBefore": 18.19140625,
+      "oneMinuteAfter": 19.66015625,
+      "pid": 61313,
+      "processGroup": 61313,
+      "exit": 1,
+      "wallSeconds": 23.80379620900203
+    },
+    {
+      "name": "local-review-qa-supplemental-02",
+      "startedUtc": "2026-10-12T23:51:14.165918+00:00",
+      "endedUtc": "2026-10-12T23:51:32.212233+00:00",
+      "oneMinuteBefore": 11.0771484375,
+      "oneMinuteAfter": 9.16943359375,
+      "pid": 42613,
+      "processGroup": 42613,
+      "exit": 0,
+      "wallSeconds": 18.0461821249919
+    },
+    {
+      "name": "local-review-quick-01",
+      "startedUtc": "2026-10-12T22:23:27.146380+00:00",
+      "endedUtc": "2026-10-12T22:24:18.179845+00:00",
+      "oneMinuteBefore": 13.8828125,
+      "oneMinuteAfter": 14.39892578125,
+      "pid": 77967,
+      "processGroup": 77967,
+      "exit": 1,
+      "wallSeconds": 51.03295941599936
+    },
+    {
+      "name": "local-review-quick-02",
+      "startedUtc": "2026-10-12T22:27:12.784113+00:00",
+      "endedUtc": "2026-10-12T22:28:01.847280+00:00",
+      "oneMinuteBefore": 7.08740234375,
+      "oneMinuteAfter": 6.56005859375,
+      "pid": 42152,
+      "processGroup": 42152,
+      "exit": 2,
+      "wallSeconds": 49.06269437499577
+    },
+    {
+      "name": "local-review-quick-03",
+      "startedUtc": "2026-10-12T22:28:30.729791+00:00",
+      "endedUtc": "2026-10-12T22:29:16.602239+00:00",
+      "oneMinuteBefore": 5.7568359375,
+      "oneMinuteAfter": 7.251953125,
+      "pid": 43733,
+      "processGroup": 43733,
+      "exit": 2,
+      "wallSeconds": 45.87200341599237
+    },
+    {
+      "name": "local-review-quick-04",
+      "startedUtc": "2026-10-12T22:30:20.829052+00:00",
+      "endedUtc": "2026-10-12T22:31:09.751392+00:00",
+      "oneMinuteBefore": 4.34716796875,
+      "oneMinuteAfter": 6.88232421875,
+      "pid": 45757,
+      "processGroup": 45757,
+      "exit": 2,
+      "wallSeconds": 48.92186345800292
+    },
+    {
+      "name": "local-review-quick-05",
+      "startedUtc": "2026-10-12T22:33:56.848970+00:00",
+      "endedUtc": "2026-10-12T22:34:49.880986+00:00",
+      "oneMinuteBefore": 15.09912109375,
+      "oneMinuteAfter": 15.9951171875,
+      "pid": 34603,
+      "processGroup": 34603,
+      "exit": 0,
+      "wallSeconds": 53.03150500000629
+    },
+    {
+      "name": "local-review-quick-06",
+      "startedUtc": "2026-10-12T22:48:05.878824+00:00",
+      "endedUtc": "2026-10-12T22:48:53.472842+00:00",
+      "oneMinuteBefore": 4.7724609375,
+      "oneMinuteAfter": 6.99072265625,
+      "pid": 42166,
+      "processGroup": 42166,
+      "exit": 2,
+      "wallSeconds": 47.59977325001091
+    },
+    {
+      "name": "local-review-quick-07",
+      "startedUtc": "2026-10-12T22:49:34.725185+00:00",
+      "endedUtc": "2026-10-12T22:50:22.277411+00:00",
+      "oneMinuteBefore": 6.50390625,
+      "oneMinuteAfter": 5.9375,
+      "pid": 44439,
+      "processGroup": 44439,
+      "exit": 0,
+      "wallSeconds": 47.55224779198761
+    },
+    {
+      "name": "local-review-quick-08",
+      "startedUtc": "2026-10-12T22:52:02.226220+00:00",
+      "endedUtc": "2026-10-12T22:52:55.773288+00:00",
+      "oneMinuteBefore": 10.09375,
+      "oneMinuteAfter": 11.12841796875,
+      "pid": 78046,
+      "processGroup": 78046,
+      "exit": 0,
+      "wallSeconds": 53.54679816700809
+    },
+    {
+      "name": "local-review-quick-09",
+      "startedUtc": "2026-10-12T23:01:08.185715+00:00",
+      "endedUtc": "2026-10-12T23:02:03.707238+00:00",
+      "oneMinuteBefore": 6.07763671875,
+      "oneMinuteAfter": 18.134765625,
+      "pid": 18814,
+      "processGroup": 18814,
+      "exit": 0,
+      "wallSeconds": 55.521218624999165
+    },
+    {
+      "name": "local-review-quick-10",
+      "startedUtc": "2026-10-12T23:02:23.954187+00:00",
+      "endedUtc": "2026-10-12T23:03:26.554755+00:00",
+      "oneMinuteBefore": 19.36572265625,
+      "oneMinuteAfter": 19.60791015625,
+      "pid": 89858,
+      "processGroup": 89858,
+      "exit": 0,
+      "wallSeconds": 62.60022820800077
+    },
+    {
+      "name": "local-review-quick-11",
+      "startedUtc": "2026-10-12T23:19:33.660379+00:00",
+      "endedUtc": "2026-10-12T23:20:31.141349+00:00",
+      "oneMinuteBefore": 9.6181640625,
+      "oneMinuteAfter": 9.64794921875,
+      "pid": 24085,
+      "processGroup": 24085,
+      "exit": 0,
+      "wallSeconds": 57.48065687500639
+    },
+    {
+      "name": "local-review-quick-12",
+      "startedUtc": "2026-10-12T23:56:38.070451+00:00",
+      "endedUtc": "2026-10-12T23:57:50.026658+00:00",
+      "oneMinuteBefore": 18.7685546875,
+      "oneMinuteAfter": 21.59716796875,
+      "pid": 10227,
+      "processGroup": 10227,
+      "exit": 0,
+      "wallSeconds": 71.95556304199272
+    },
+    {
+      "name": "local-review-tutorial-host-01",
+      "startedUtc": "2026-10-12T22:10:15.527889+00:00",
+      "endedUtc": "2026-10-12T22:10:19.857783+00:00",
+      "oneMinuteBefore": 18.25537109375,
+      "oneMinuteAfter": 18.31494140625,
+      "pid": 64987,
+      "processGroup": 64987,
+      "exit": 1,
+      "wallSeconds": 4.329865166990203
+    },
+    {
+      "name": "local-review-tutorial-host-02",
+      "startedUtc": "2026-10-12T22:10:47.715573+00:00",
+      "endedUtc": "2026-10-12T22:10:52.972994+00:00",
+      "oneMinuteBefore": 15.16357421875,
+      "oneMinuteAfter": 14.75,
+      "pid": 83219,
+      "processGroup": 83219,
+      "exit": 1,
+      "wallSeconds": 5.257390375001705
+    },
+    {
+      "name": "local-review-tutorial-host-03",
+      "startedUtc": "2026-10-12T22:12:59.758938+00:00",
+      "endedUtc": "2026-10-12T22:13:04.531996+00:00",
+      "oneMinuteBefore": 7.74365234375,
+      "oneMinuteAfter": 7.60400390625,
+      "pid": 92718,
+      "processGroup": 92718,
+      "exit": 1,
+      "wallSeconds": 4.77302929200232
+    },
+    {
+      "name": "local-review-tutorial-host-04",
+      "startedUtc": "2026-10-12T22:13:26.838016+00:00",
+      "endedUtc": "2026-10-12T22:13:30.326533+00:00",
+      "oneMinuteBefore": 6.71533203125,
+      "oneMinuteAfter": 6.97802734375,
+      "pid": 93583,
+      "processGroup": 93583,
+      "exit": 0,
+      "wallSeconds": 3.488495125013287
+    },
+    {
+      "name": "local-review-tutorial-host-05",
+      "startedUtc": "2026-10-12T22:21:12.123111+00:00",
+      "endedUtc": "2026-10-12T22:21:16.315424+00:00",
+      "oneMinuteBefore": 14.08544921875,
+      "oneMinuteAfter": 14.078125,
+      "pid": 43830,
+      "processGroup": 43830,
+      "exit": 0,
+      "wallSeconds": 4.1922876669996185
+    },
+    {
+      "name": "local-review-typecheck-migration-02",
+      "startedUtc": "2026-10-12T22:04:09.371071+00:00",
+      "endedUtc": "2026-10-12T22:04:17.873305+00:00",
+      "oneMinuteBefore": 4.49072265625,
+      "oneMinuteAfter": 5.083984375,
+      "pid": 18400,
+      "processGroup": 18400,
+      "exit": 2,
+      "wallSeconds": 8.502157499999157
+    },
+    {
+      "name": "local-review-typecheck-migration-03",
+      "startedUtc": "2026-10-12T22:14:53.558874+00:00",
+      "endedUtc": "2026-10-12T22:15:01.202790+00:00",
+      "oneMinuteBefore": 4.6064453125,
+      "oneMinuteAfter": 4.4775390625,
+      "pid": 95577,
+      "processGroup": 95577,
+      "exit": 2,
+      "wallSeconds": 7.643860083000618
+    },
+    {
+      "name": "local-review-typecheck-migration-04",
+      "startedUtc": "2026-10-12T22:16:13.213178+00:00",
+      "endedUtc": "2026-10-12T22:16:21.857769+00:00",
+      "oneMinuteBefore": 9.92529296875,
+      "oneMinuteAfter": 9.85107421875,
+      "pid": 32806,
+      "processGroup": 32806,
+      "exit": 2,
+      "wallSeconds": 8.644522125003277
+    },
+    {
+      "name": "local-review-typecheck-migration-05",
+      "startedUtc": "2026-10-12T22:16:46.190141+00:00",
+      "endedUtc": "2026-10-12T22:16:55.390719+00:00",
+      "oneMinuteBefore": 10.9638671875,
+      "oneMinuteAfter": 10.35400390625,
+      "pid": 52287,
+      "processGroup": 52287,
+      "exit": 2,
+      "wallSeconds": 9.200499582992052
+    },
+    {
+      "name": "local-review-typecheck-migration-06",
+      "startedUtc": "2026-10-12T22:22:16.313655+00:00",
+      "endedUtc": "2026-10-12T22:22:24.432740+00:00",
+      "oneMinuteBefore": 10.97998046875,
+      "oneMinuteAfter": 9.9931640625,
+      "pid": 75427,
+      "processGroup": 75427,
+      "exit": 2,
+      "wallSeconds": 8.1190203330043
+    },
+    {
+      "name": "local-review-typecheck-migration-07",
+      "startedUtc": "2026-10-12T22:32:16.731864+00:00",
+      "endedUtc": "2026-10-12T22:32:26.524367+00:00",
+      "oneMinuteBefore": 11.8427734375,
+      "oneMinuteAfter": 15.5498046875,
+      "pid": 77362,
+      "processGroup": 77362,
+      "exit": 0,
+      "wallSeconds": 9.792421332997037
+    },
+    {
+      "name": "local-review-typecheck-migration-08",
+      "startedUtc": "2026-10-12T22:39:56.805780+00:00",
+      "endedUtc": "2026-10-12T22:40:04.605467+00:00",
+      "oneMinuteBefore": 3.19921875,
+      "oneMinuteAfter": 3.67724609375,
+      "pid": 1553,
+      "processGroup": 1553,
+      "exit": 2,
+      "wallSeconds": 7.799620999998297
+    },
+    {
+      "name": "local-review-typecheck-migration-09",
+      "startedUtc": "2026-10-12T22:43:42.060053+00:00",
+      "endedUtc": "2026-10-12T22:43:49.951423+00:00",
+      "oneMinuteBefore": 3.64306640625,
+      "oneMinuteAfter": 3.697265625,
+      "pid": 7211,
+      "processGroup": 7211,
+      "exit": 2,
+      "wallSeconds": 7.891302625008393
+    },
+    {
+      "name": "local-review-typecheck-migration-10",
+      "startedUtc": "2026-10-12T22:49:17.809023+00:00",
+      "endedUtc": "2026-10-12T22:49:27.532025+00:00",
+      "oneMinuteBefore": 5.9462890625,
+      "oneMinuteAfter": 6.85693359375,
+      "pid": 44121,
+      "processGroup": 44121,
+      "exit": 0,
+      "wallSeconds": 9.723375834000763
+    }
+  ],
+  "checks": {
+    "local-review-full-02": {
+      "name": "local-review-full-02",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-2-tutorial-battle",
+      "runnerPid": 36363,
+      "startedUtc": "2026-10-12T23:23:41.681210+00:00",
+      "loadBefore": [
+        9.55419921875,
+        9.443359375,
+        11.14453125
+      ],
+      "pid": 36372,
+      "processGroup": 36372,
+      "exit": 0,
+      "wallSeconds": 113.51722100000188,
+      "endedUtc": "2026-10-12T23:25:35.199049+00:00",
+      "loadAfter": [
+        15.85302734375,
+        13.27294921875,
+        12.54736328125
+      ]
+    },
+    "local-review-quick-12": {
+      "name": "local-review-quick-12",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-2-tutorial-battle",
+      "runnerPid": 10217,
+      "startedUtc": "2026-10-12T23:56:38.070451+00:00",
+      "loadBefore": [
+        18.7685546875,
+        11.0478515625,
+        10.328125
+      ],
+      "pid": 10227,
+      "processGroup": 10227,
+      "exit": 0,
+      "wallSeconds": 71.95556304199272,
+      "endedUtc": "2026-10-12T23:57:50.026658+00:00",
+      "loadAfter": [
+        21.59716796875,
+        13.00146484375,
+        11.08935546875
+      ]
+    },
+    "local-review-knip-06": {
+      "name": "local-review-knip-06",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-2-tutorial-battle",
+      "runnerPid": 28887,
+      "startedUtc": "2026-10-12T23:57:55.200285+00:00",
+      "loadBefore": [
+        20.98876953125,
+        13.017578125,
+        11.10595703125
+      ],
+      "pid": 29071,
+      "processGroup": 29071,
+      "exit": 0,
+      "wallSeconds": 4.193447083001956,
+      "endedUtc": "2026-10-12T23:57:59.393760+00:00",
+      "loadAfter": [
+        21.9501953125,
+        13.34912109375,
+        11.23388671875
+      ]
+    },
+    "local-review-qa-acceptance-03": {
+      "name": "local-review-qa-acceptance-03",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.2/acceptance-tutorial-engine-v02.mjs",
+        "--bead",
+        "hv-33id.2",
+        "--timeout",
+        "900"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-2-tutorial-battle",
+      "runnerPid": 90183,
+      "startedUtc": "2026-10-12T23:42:07.512238+00:00",
+      "loadBefore": [
+        3.701171875,
+        8.15869140625,
+        10.921875
+      ],
+      "pid": 90191,
+      "processGroup": 90191,
+      "exit": 0,
+      "wallSeconds": 423.0866275839944,
+      "endedUtc": "2026-10-12T23:49:10.602727+00:00",
+      "loadAfter": [
+        17.1064453125,
+        10.38427734375,
+        10.32763671875
+      ]
+    },
+    "local-review-qa-supplemental-02": {
+      "name": "local-review-qa-supplemental-02",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.2/pointer-scroll-reload-probe-v03.mjs",
+        "--bead",
+        "hv-33id.2",
+        "--timeout",
+        "180"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-2-tutorial-battle",
+      "runnerPid": 42599,
+      "startedUtc": "2026-10-12T23:51:14.165918+00:00",
+      "loadBefore": [
+        11.0771484375,
+        11.05322265625,
+        10.64306640625
+      ],
+      "pid": 42613,
+      "processGroup": 42613,
+      "exit": 0,
+      "wallSeconds": 18.0461821249919,
+      "endedUtc": "2026-10-12T23:51:32.212233+00:00",
+      "loadAfter": [
+        9.16943359375,
+        10.62548828125,
+        10.4990234375
+      ]
+    },
+    "integration-focused-01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+        "src/engine/policy/policy.test.ts",
+        "src/rules/reducer.test.ts",
+        "src/rules/reducer-routing.test.ts",
+        "src/rules/reducer-containment.test.ts",
+        "src/rules/battle/engine-battle-replay.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-2-tutorial-battle",
+      "start": "2026-10-13T00:20:17.003936+00:00",
+      "end": "2026-10-13T00:20:21.161272+00:00",
+      "exit": 0,
+      "wallSeconds": 4.1572083750070306,
+      "pid": 32542,
+      "pgid": 32542,
+      "load": "{ 2.93 4.10 6.38 }",
+      "groupRemainingAtExit": []
+    },
+    "integration-review-01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-2-tutorial-battle",
+      "start": "2026-10-13T00:21:32.360268+00:00",
+      "end": "2026-10-13T00:22:29.241966+00:00",
+      "exit": 0,
+      "wallSeconds": 56.881088540991186,
+      "pid": 36230,
+      "pgid": 36230,
+      "load": "{ 8.89 5.60 6.75 }",
+      "groupRemainingAtExit": []
+    },
+    "integration-knip-01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-2-tutorial-battle",
+      "start": "2026-10-13T00:23:04.356645+00:00",
+      "end": "2026-10-13T00:23:07.212266+00:00",
+      "exit": 0,
+      "wallSeconds": 2.8555211659986526,
+      "pid": 38681,
+      "pgid": 38681,
+      "load": "{ 5.67 5.72 6.69 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "rawEvidenceManifestSHA256": "e16a59c4076bab1312b84a845fd76af075dde672777bb1d9987c09ac4fd02b94",
+  "endpointSupplements": "final docs/schema/source/clock/gitreceipt get new endpoint versions; the one frozen378-file rawmanifest is preserved",
+  "unknowns": [
+    "earlier initialprepare check PID/wall not captured",
+    "productiveCPU/quota durations",
+    "individual lock/queuewait split",
+    "independentreview/delivery timestamps parent-owned"
+  ],
+  "integrationEndpoint": {
+    "originalSource": "1d80c444a4bfafd06887f792ae32ec91f5f1268b",
+    "originalBase": "7230493fc2c37ad8289284cdd3e3cbb1aaede897",
+    "failedCandidate": "01a1329c-7862-7db1-a575-cf106184d44e",
+    "failure": "merge-conflict in src/rules/reducer.ts; no tested OID, validation generation, certificate or promotion authority",
+    "submissionContextCorrection": "Original submission was mistakenly from primary; its metadata therefore says master/primary. Primary source was not edited. Replacement is submitted from the owned source worktree.",
+    "recovery": "Native update01 failed and rolled back clean source. Full delta and both reducer versions preserved; conflicting reducer parked at captured base and amended to unvalidated a227309e2ed4487819d088efe2cfc1c5a54a3d68; native update02 succeeded. Checkpoint was never submitted or approved. Final resolution keeps normal routeDomain modifiers argument and owned removal of obsolete matchingResolve path.",
+    "finalBase": "80b47fa74c23daf006d4afcdf21424b48d6b57c8",
+    "checks": {
+      "integration-focused-01": {
+        "argv": [
+          "npm",
+          "test",
+          "--",
+          "src/rules/battle/tutorial-battle-lifecycle.test.ts",
+          "src/engine/policy/policy.test.ts",
+          "src/rules/reducer.test.ts",
+          "src/rules/reducer-routing.test.ts",
+          "src/rules/reducer-containment.test.ts",
+          "src/rules/battle/engine-battle-replay.test.ts"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-2-tutorial-battle",
+        "start": "2026-10-13T00:20:17.003936+00:00",
+        "end": "2026-10-13T00:20:21.161272+00:00",
+        "exit": 0,
+        "wallSeconds": 4.1572083750070306,
+        "pid": 32542,
+        "pgid": 32542,
+        "load": "{ 2.93 4.10 6.38 }",
+        "groupRemainingAtExit": []
+      },
+      "integration-review-01": {
+        "argv": [
+          "npm",
+          "run",
+          "review"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-2-tutorial-battle",
+        "start": "2026-10-13T00:21:32.360268+00:00",
+        "end": "2026-10-13T00:22:29.241966+00:00",
+        "exit": 0,
+        "wallSeconds": 56.881088540991186,
+        "pid": 36230,
+        "pgid": 36230,
+        "load": "{ 8.89 5.60 6.75 }",
+        "groupRemainingAtExit": []
+      },
+      "integration-knip-01": {
+        "argv": [
+          "npm",
+          "run",
+          "knip"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-2-tutorial-battle",
+        "start": "2026-10-13T00:23:04.356645+00:00",
+        "end": "2026-10-13T00:23:07.212266+00:00",
+        "exit": 0,
+        "wallSeconds": 2.8555211659986526,
+        "pid": 38681,
+        "pgid": 38681,
+        "load": "{ 5.67 5.72 6.69 }",
+        "groupRemainingAtExit": []
+      }
+    },
+    "focusedTests": 82,
+    "focusedFiles": 6,
+    "reviewTests": 5426,
+    "reviewFiles": 306,
+    "priorQualification": "Original full-suite and 62 browser captures remain tied to original product runtime/source; integration is a mechanical merge preserving both admitted deltas, so focused checks and full npm run review/Knip qualify this endpoint. No new browser or architecture-run claim.",
+    "retainedArtifact": "integration-endpoint-v01/manifest.json",
+    "sourceWriters": "Implementation helper terminal; root sole integration writer; all three check process groups settled"
+  }
+}

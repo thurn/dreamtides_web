@@ -7,9 +7,8 @@
 // case. It BOUNCES on any invalid event content — malformed, stale, or unknown
 // intents leave state untouched — but a *throw* from a domain case is a
 // programmer error and PROPAGATES to the engine's fold containment
-// (`fold.ts`: dev rethrow, prod `FoldError` → `fold_error`). The single
-// exception is a matching `RESOLVE_PROMPT`, whose domain throw is contained here
-// (see `reduceGameEvent`) because rule 4 would otherwise wedge the game.
+// (`fold.ts`: dev rethrow, prod `FoldError` → `fold_error`). Engine prompt
+// errors are contained by the shared engine adapter.
 //
 // `routeDomain` holds one case per event type. The journey cases live in
 // `./journey/` as pure `(journey, payload[, ctx])` functions; `routeDomain`
@@ -33,7 +32,7 @@ import {
 import type { FoldState } from "./fold-state";
 import type { JourneyState } from "../types/journey";
 import * as frontDoor from "./front-door";
-import * as battleEvents from "./battle/battle-events";
+import * as battleEvents from "./battle/tutorial-lifecycle";
 import * as journeyBattle from "./battle/journey-battle";
 import {
   applyEngineDebug,
@@ -73,17 +72,15 @@ export type ReduceResult =
  * Rules 1–6:
  *   1. CAS-exempt types (`SET_CARD_SOURCE_DEBUG`, `OPEN_SITE`, `ENTER_DRAFT_SITE`)
  *      skip rules 2–4.
- *   2. A RESOLVE_PROMPT matching the open prompt, or a BATTLE_ANSWER or
- *      BATTLE_CANCEL matching the open engine prompt, skips rules 3–4.
+ *   2. BATTLE_ANSWER or BATTLE_CANCEL matching the engine prompt skips rules 3–4.
  *   3. An unknown intervening window, or one holding an applied partner event
  *      that is not decision-neutral, bounces.
- *   4. A pending prompt (prototype or engine) bounces any other intent.
+ *   4. A pending engine prompt bounces any other intent.
  *   5. Route to the domain case; invalid-in-state or unimplemented → bounce.
  *   6. Return the new state (applied) or the untouched state (bounced).
  *
  * Bounces on any invalid event content; a throw from a domain case is a
- * programmer error and propagates to the engine's containment. The one
- * sanctioned catch (a matching `RESOLVE_PROMPT`) is documented at its site.
+ * programmer error and propagates to the engine's containment.
  */
 export function reduceGameEvent(
   state: FoldState,
@@ -92,10 +89,9 @@ export function reduceGameEvent(
   modifiers: JourneyModifierRegistry = journeyModifierRegistry,
 ): ReduceResult {
   const exempt = isCasExempt(event.type); // rule 1
-  const matchingResolve = isMatchingResolve(state, event); // rule 2
   const matchingEngineAnswer = isMatchingEngineAnswer(state, event); // rule 2
 
-  if (!exempt && !matchingResolve && !matchingEngineAnswer) {
+  if (!exempt && !matchingEngineAnswer) {
     // rule 3 — compare-and-swap with the self-chain / decision-neutral carve-out
     if (ctx.intervening === "unknown") {
       return bounce(state, "unknown_conflict");
@@ -105,44 +101,12 @@ export function reduceGameEvent(
     }
     // rule 4 — prompt gate
     if (
-      tutorialBattleOf(state.battle)?.pendingPrompt != null ||
       pendingEnginePrompt(state.battle, battleEngine()) !== null
     ) {
       return bounce(state, "prompt_pending");
     }
   }
 
-  // rule 5 — domain routing.
-  if (matchingResolve) {
-    // THE SINGLE SANCTIONED CATCH IN THE RULES LAYER. A matching RESOLVE_PROMPT
-    // (rule 2 passed, so `state.battle.pendingPrompt` is non-null) must never
-    // leave the prompt open on a throw: rule 4 makes a stuck-open prompt
-    // PERMANENT — every retry re-throws and every other event bounces, wedging
-    // the game forever. So a throwing resolve deterministically clears the
-    // prompt and drops queued automation, keeping the board at its last good
-    // value. The result is identical on every replay, so the fold stays
-    // deterministic. Every OTHER domain throw propagates to `fold.ts`
-    // containment.
-    let result: ReduceResult;
-    try {
-      result = routeDomain(state, event, ctx, modifiers);
-    } catch {
-      result = {
-        state: {
-          ...state,
-          battle: {
-            ...tutorialBattleOf(state.battle)!,
-            pendingPrompt: null,
-            effectQueue: [],
-          },
-        },
-        outcome: "applied",
-      };
-    }
-    // Invariant checks stay outside the sanctioned domain-error catch. A
-    // semantic programmer error must reach fold containment and diagnostics.
-    return finishTransition(state, event, result, modifiers);
-  }
   return finishTransition(state, event, routeDomain(state, event, ctx, modifiers), modifiers);
 }
 
@@ -207,30 +171,6 @@ function enforceInvariants(
  */
 export function isCasExempt(type: EventType): boolean {
   return isKnownEventType(type) && CAS_EXEMPT_EVENT_TYPES.has(type);
-}
-
-/**
- * Rule 2 predicate: true when `event` is a RESOLVE_PROMPT whose `promptId`
- * matches the currently open prompt. Such an event skips rules 3–4 (the
- * prompt's options were fixed when it opened, so nothing intervening can change
- * what the resolution means). `promptId` is a `number` (the seq of the opening
- * event); a missing or non-number payload value never matches and never throws.
- * Exported for direct unit testing independent of the RESOLVE_PROMPT domain case.
- */
-export function isMatchingResolve(state: FoldState, event: GameEvent): boolean {
-  if (event.type !== "RESOLVE_PROMPT") {
-    return false;
-  }
-  const pending = tutorialBattleOf(state.battle)?.pendingPrompt;
-  if (pending == null) {
-    return false;
-  }
-  const promptId = event.payload?.promptId;
-  return (
-    typeof promptId === "number" &&
-    Number.isFinite(promptId) &&
-    promptId === pending.promptId
-  );
 }
 
 /**
@@ -330,13 +270,7 @@ export function routeDomain(
   if (
     tutorialBattleOf(state.battle)?.tutorialPresentation != null &&
     type !== "COMPLETE_TUTORIAL_BATTLE_PRESENTATION" &&
-    (type === "END_BATTLE" ||
-      type === "BATTLE_COMMAND" ||
-      type === "BATTLE_REPOSITION_CHARACTER" ||
-      type === "BATTLE_PLAY_CARD" ||
-      type === "BATTLE_GESTURE" ||
-      type === "BATTLE_AI_BLOCK" ||
-      type === "RESOLVE_PROMPT")
+    (type === "END_BATTLE" || type === "BATTLE_ACTION" || type === "BATTLE_ANSWER" || type === "BATTLE_CANCEL" || type === "TUTORIAL_CARD_ATTEMPT")
   ) {
     return bounce(state);
   }
@@ -355,27 +289,27 @@ export function routeDomain(
     case "BEGIN_TUTORIAL":
       return frontDoorCase(
         state,
-        frontDoor.beginTutorial(state.frontDoor, payload, ctx),
+        frontDoor.beginTutorial(state.frontDoor, payload, ctx, state.journey),
       );
     case "COMPLETE_TUTORIAL_ACTION":
       return frontDoorCase(
         state,
-        frontDoor.completeTutorialAction(state.frontDoor, payload),
+        frontDoor.completeTutorialAction(state.frontDoor, payload, ctx),
       );
     case "BEGIN_TUTORIAL_BATTLE":
       return foldCase(
         state,
-        battleEvents.beginTutorialBattle(state, payload, ctx, event.actor),
+        battleEvents.beginTutorialBattle(state, payload, ctx),
       );
     case "RESTART_TUTORIAL_BATTLE":
       return foldCase(
         state,
-        battleEvents.restartTutorialBattle(state, payload, ctx, event.actor),
+        battleEvents.restartTutorialBattle(state, payload, ctx),
       );
     case "EXIT_TUTORIAL_BATTLE":
       return foldCase(
         state,
-        battleEvents.exitTutorialBattle(state, payload, ctx, event.actor),
+        battleEvents.exitTutorialBattle(state, payload, ctx),
       );
     case "OPEN_CARD_TUTORIAL_GUIDANCE":
       return foldCase(
@@ -610,62 +544,21 @@ export function routeDomain(
       return foldCase(state, journeyBattle.beginBattle(state, payload, ctx));
     case "END_BATTLE":
       return foldCase(state, journeyBattle.endBattle(state, payload, ctx));
-    case "BATTLE_COMMAND":
-      return foldCase(
-        state,
-        battleEvents.battleCommand(state, payload, ctx, event.actor),
-      );
-    case "BATTLE_REPOSITION_CHARACTER":
-      return foldCase(
-        state,
-        battleEvents.battleRepositionCharacter(
-          state,
-          payload,
-          ctx,
-          event.actor,
-        ),
-      );
-    case "BATTLE_PLAY_CARD":
-      return foldCase(
-        state,
-        battleEvents.battlePlayCard(state, payload, ctx, event.actor),
-      );
-    case "BATTLE_GESTURE":
-      return foldCase(
-        state,
-        battleEvents.battleGesture(state, payload, ctx, event.actor),
-      );
-    case "BATTLE_AI_BLOCK":
-      return foldCase(
-        state,
-        battleEvents.battleAiBlock(state, payload, ctx, event.actor),
-      );
     case "COMPLETE_TUTORIAL_BATTLE_PRESENTATION":
-      return foldCase(
-        state,
-        battleEvents.completeTutorialBattlePresentation(
-          state,
-          payload,
-          ctx,
-          event.actor,
-        ),
-      );
-
-    // --- tutorial battle prompt resolution (touches the battle slice) ---
-    case "RESOLVE_PROMPT":
-      return foldCase(
-        state,
-        battleEvents.resolvePrompt(state, payload, ctx, event.actor),
-      );
+      return foldCase(state,battleEvents.completeTutorialBattlePresentation(state,payload));
+    case "TUTORIAL_CARD_ATTEMPT":
+      return foldCase(state,battleEvents.tutorialCardAttempt(state,payload,ctx));
 
     // --- engine intents of a journey battle ---
     case "BATTLE_ACTION":
     case "BATTLE_ANSWER":
-    case "BATTLE_CANCEL":
-      return foldCase(
-        state,
-        reduceEngineIntent(state, type, payload, ctx, battleEngine()),
-      );
+    case "BATTLE_CANCEL": {
+      const next = reduceEngineIntent(state,type,payload,ctx,battleEngine());
+      const result = foldCase(state,next);
+      const before = tutorialBattleOf(state.battle), after = tutorialBattleOf(next?.battle ?? null);
+      const committed = after !== null ? after.overrideCommits.slice(before?.overrideCommits.length ?? 0) : [];
+      return result.outcome !== "applied" || committed.length === 0 ? result : {...result,logRecords:committed.map(override=>({event:"tutorial_ai_override_committed",fields:{battleId:after!.init.battleId,...override}}))};
+    }
 
     case "BATTLE_DEBUG":
       return foldCase(state, reduceEngineDebug(state, payload, ctx));

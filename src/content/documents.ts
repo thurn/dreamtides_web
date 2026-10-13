@@ -16,7 +16,6 @@ import {
   type FoldHash,
 } from "../types/content-hash";
 import { AFFILIATIONS } from "./affiliations";
-import { AI } from "./ai";
 import { APOLLYON_INCARNATIONS } from "./apollyon";
 import { ATLAS } from "./atlas";
 import { AUGURY } from "./augury";
@@ -134,7 +133,6 @@ export const opponentsDocument = lazy(() =>
     battle: BATTLE,
     dreamwell: DREAMWELL_RULES,
     progression: OPPONENTS.progression,
-    ai: AI.ai,
   }),
 );
 

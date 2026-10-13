@@ -1,5 +1,3 @@
-// tutorial-only until Phase 6
-
 import { BATTLE } from "../content/battle";
 import type { TutorialGuidancePresentation } from "../rules/battle/fold";
 
@@ -9,12 +7,6 @@ import type { TutorialGuidancePresentation } from "../rules/battle/fold";
  */
 export const TUTORIAL_OPPONENT_PLAY_REVEAL_DWELL_MS = BATTLE.presentation.opponentPlayRevealDwellMs;
 
-/**
- * Complete duration of one tutorial Challenge result animation. This matches
- * four `--dur-slow` motion steps on the Cumulus presentation.
- */
-export const TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS = 1_680;
-
 /** Whether this guidance already presents an automated opponent card at reveal size. */
 export function isAutomaticOpponentPlayGuidance(
   presentation: TutorialGuidancePresentation,
@@ -22,8 +14,7 @@ export function isAutomaticOpponentPlayGuidance(
   return (
     presentation.source.kind === "card" &&
     presentation.source.side === "enemy" &&
-    presentation.continuation.kind === "play-card" &&
-    presentation.continuation.automatic
+    presentation.automatic
   );
 }
 

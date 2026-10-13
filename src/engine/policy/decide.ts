@@ -15,6 +15,7 @@ import { dealtDeck } from "../state/create";
 import type { BattleInit } from "../state/types";
 import type { Decklists } from "../view/determinize";
 import { promptView, type BattleView } from "../view/view";
+import { policyOverride } from "./overrides";
 import { GREEDY_POLICY } from "./greedy";
 import { PolicyRandom, RANDOM_POLICY } from "./random";
 import type { Policy, PolicyBudget, PolicyChoice, PolicyDecision, PolicyId, PolicyResult } from "./types";
@@ -28,6 +29,7 @@ export const POLICIES: Readonly<Record<PolicyId, Policy>> = { random: RANDOM_POL
 export type BudgetKind = keyof typeof AI.enginePolicy.budgets;
 
 export interface PolicyRequest {
+  readonly overrides?: import("./overrides").PolicyOverrideContext;
   readonly policy: PolicyId;
   readonly side: Side;
   readonly key: DecisionKey;
@@ -54,6 +56,7 @@ export type AiDecision =
   | { readonly kind: "prompt"; readonly promptId: PromptId; readonly request: PolicyRequest; readonly forced: null };
 
 export interface AiDecisionInput {
+  readonly overrides?: import("./overrides").PolicyOverrideContext;
   readonly engine: Engine;
   readonly init: BattleInit;
   readonly slice: BattleSlice;
@@ -80,7 +83,7 @@ export function aiDecision(input: AiDecisionInput): AiDecision | null {
   const { committed } = slice;
   if (committed.result !== null) return null;
   const budgets = input.budgets ?? AI.enginePolicy.budgets;
-  const base = { policy: input.policy, side, decklists: battleDecklists(input.init) };
+  const base = { policy: input.policy, side, decklists: battleDecklists(input.init), ...(input.overrides === undefined ? {} : { overrides: input.overrides }) };
   const seedOf = (key: DecisionKey): BattleSeed => battleSeed(`${input.init.seed}|ai|${side}|${key}`);
   const owed = sidePending(engine, slice, pending, side);
   switch (owed.kind) {
@@ -116,7 +119,7 @@ export function aiDecision(input: AiDecisionInput): AiDecision | null {
           seed: seedOf(key),
           budget: planning ? budgets.turnPlanning : budgets.response,
         },
-        forced: scripted !== null ? { kind: "action", action: scripted } : only === undefined ? null : { kind: "action", action: only },
+        forced: input.overrides !== undefined ? null : scripted !== null ? { kind: "action", action: scripted } : only === undefined ? null : { kind: "action", action: only },
       };
     }
     case "none":
@@ -128,7 +131,9 @@ export function aiDecision(input: AiDecisionInput): AiDecision | null {
 
 /** Runs the request's policy on `engine`. Pure apart from the clock. */
 export function runPolicy(engine: Engine, request: PolicyRequest, now: () => number = () => 0): PolicyResult {
-  return POLICIES[request.policy].decide(request.view, request.decision, {
+  const override = policyOverride(request.view, request.decision, request.overrides);
+  if (override?.kind === "selected") return { choice: override.choice, override, trace: { policy: request.policy, budget: request.budget, used: { iterations: 0, ms: 0 }, determinizations: 0, candidates: [], chosen: override.choice } };
+  const result = POLICIES[request.policy].decide(request.view, request.decision, {
     engine,
     side: request.side,
     random: new PolicyRandom(request.seed),
@@ -136,4 +141,5 @@ export function runPolicy(engine: Engine, request: PolicyRequest, now: () => num
     decklists: request.decklists,
     now,
   });
+  return override === null ? result : { ...result, override };
 }

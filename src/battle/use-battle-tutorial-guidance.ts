@@ -1,5 +1,3 @@
-// tutorial-only until Phase 6
-
 import { useCallback, useEffect } from "react";
 import { useActions, useClientId, useConfirmedGameState } from "../session/hooks";
 import { logEvent } from "../logging";
@@ -30,7 +28,7 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
       const message = guidance.messages[guidance.messageIndex];
       if (message === undefined) return;
       logEvent("battle_tutorial_guidance_advance_requested", {
-        battleId: battle.board.battleId,
+        battleId: battle.init.battleId,
         presentationId: guidance.id,
         triggerId: message.triggerId,
         messageIndex: guidance.messageIndex,
@@ -54,7 +52,7 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
   useEffect(() => {
     if (guidance === null || battle === null) return;
     logEvent("battle_tutorial_guidance_presented", {
-      battleId: battle.board.battleId,
+      battleId: battle.init.battleId,
       presentationId: guidance.id,
       source: guidance.source,
       triggerIds: guidance.messages.map((message) => message.triggerId),

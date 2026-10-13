@@ -14,10 +14,9 @@ import type { JourneySeed } from "../types/journey-seed";
 import type { TutorialPlaybackState } from "../types/tutorial";
 import type { CardTutorialGuidancePresentation } from "./card-tutorial-guidance";
 
-// The authoritative battle fold shape lives in `battle/fold.ts`,
-// which owns the cursor model that keeps the state closure-free. `FoldState`
-// re-exports it so the root reducer / CAS policy keep depending on
-// `state.battle.pendingPrompt.promptId` (a number = the opening event's seq).
+// The authoritative engine battle host shape lives in `battle/fold.ts`.
+// Its plain engine slice carries committed state and any suspended prompt;
+// tutorial hosts also carry their durable presentation checkpoints.
 export type { BattleFoldState } from "./battle/fold";
 import type { BattleFoldState } from "./battle/fold";
 import { parseJourneyId } from "../types/identifiers";

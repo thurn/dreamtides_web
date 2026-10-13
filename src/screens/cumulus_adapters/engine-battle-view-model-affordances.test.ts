@@ -27,7 +27,7 @@ import { engineBattleLogText, engineStatusLabel, type EngineStatusCopy } from ".
 import { board, cards, engine, id, labScreen, labSlice, screenOf, selections } from "./engine-battle-view-model.fixtures";
 
 const outlined = (model: EngineBattleScreenModel) =>
-  model.view.playerHand.filter((card) => card.showPlayableOutline).map((card) => card.id);
+  model.view.nearHand.cards.filter((card) => card.showPlayableOutline).map((card) => card.id);
 
 const slot = (rank: "back" | "front", position: string) =>
   ({ owner: "player", rank, slotId: parseBattleSlotViewId(position) }) as const;
@@ -55,7 +55,7 @@ describe("buildEngineBattleScreenModel", () => {
     expect(model.affordances.pass).toBeNull();
     expect(outlined(model)).toEqual([]);
     expect(model.view.rankShortcuts).toBeNull();
-    expect(model.view.promptNotice).toEqual({ promptSide: "enemy", reason: "opponent-acting" });
+    expect(noticeView(model.view)).toEqual({ promptSide: "enemy", reason: "opponent-acting" });
   });
 
   it("names the open back-rank position a dropped character enters", () => {
@@ -128,7 +128,7 @@ describe("buildEngineBattleScreenModel", () => {
       const { state, ids } = boardState(on.catalog, { active: "player", phase: "day", player: { back: [authored.id], hand: [SYNTHETIC.vanilla1.id], energy }, enemy: {} });
       const model = screenOf(state, null, state, true, on);
       const chosen = withChooser(model, { kind: "card", id: id(ids.player.back[0]) }, cardModels, () => null, on.catalog);
-      expect(chosen.view.choicePrompt?.presentation).toBe("chooser");
+      expect(choiceView(chosen.view)?.presentation).toBe("chooser");
       return surfaceChoices(chosen.prompt.surface)?.options.filter((option) => option.select.kind === "action") ?? [];
     };
     const both = options(5);
@@ -186,19 +186,19 @@ describe("buildEngineBattleScreenModel", () => {
       cards.filter((card) => card.showPlayableOutline).map((card) => card.id).sort();
     const gain: EngineStatusCopy = { kind: "keyword", keyword: "reclaim", gains: true, expiry: effect.expiry };
     const costed = engineStatusLabel({ ...gain, reclaimCosts: free }, "player");
-    const browsed = voidBrowserCards(model.view.player);
+    const browsed = voidBrowserCards(model.view.near);
 
     expect([...model.affordances.voidPlays.keys()].sort()).toEqual([id(printed), id(granted)].sort());
-    expect(ringed(model.view.player.voidCards)).toEqual([id(printed), id(granted)].sort());
-    expect(ringed(model.view.enemy.voidCards)).toEqual([]);
-    expect(model.view.player.voidCards.find((card) => card.id === id(granted))?.statuses).toEqual([{ kind: "keyword", label: costed }]);
+    expect(ringed(model.view.near.voidCards)).toEqual([id(printed), id(granted)].sort());
+    expect(ringed(model.view.far.voidCards)).toEqual([]);
+    expect(model.view.near.voidCards.find((card) => card.id === id(granted))?.statuses).toEqual([{ kind: "keyword", label: costed }]);
     expect(costed).not.toBe(engineStatusLabel(gain, "player"));
     expect(browsed.map((card) => [card.entryId, card.selection ?? null, card.statuses?.map((badge) => badge.label) ?? []])).toEqual([
       [id(printed), "playable", []],
       [id(granted), "playable", [costed]],
       [id(plain), null, []],
     ]);
-    expect(voidBrowserCards(model.view.enemy).map((card) => card.selection ?? null)).toEqual([null]);
+    expect(voidBrowserCards(model.view.far).map((card) => card.selection ?? null)).toEqual([null]);
     expect(engineBattleLogText({ kind: "effectStarted", effect: effect.id, controller: "player", source: printed, expiry: effect.expiry, change: effect.change }, {
       human: "player",
       card: () => null,
@@ -244,6 +244,9 @@ describe("buildEngineBattleScreenModel", () => {
     const model = screenOf(once);
 
     expect(model.affordances.loop?.loop).toBe(once.loops.candidate?.id);
-    expect(model.view.promptHost?.loopOffer).toEqual({ maxCount: once.config.loopIterationCap });
+    expect(model.view.prompt.host?.loopOffer).toEqual({ maxCount: once.config.loopIterationCap });
   });
 });
+
+function noticeView(view: import("../../cumulus/screens/MobileBattleScreen").MobileBattleView) { return view.prompt.surface.kind === "waiting" ? view.prompt.surface.notice : null; }
+function choiceView(view: import("../../cumulus/screens/MobileBattleScreen").MobileBattleView) { return view.prompt.surface.kind === "choice" ? view.prompt.surface.choice : null; }

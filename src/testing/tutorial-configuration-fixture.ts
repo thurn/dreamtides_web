@@ -100,6 +100,7 @@ export function makeTutorialBattleConfiguration(
       ],
     },
     forcedPlayerDraws: [],
+    forcedEnemyErosionPrefixCount: 3,
     forcedEnemyDraws: [],
     dreamwellDraws: [
       TEST_TUTORIAL_CARD_CONSTANTS.tutorialDreamwellCardId,

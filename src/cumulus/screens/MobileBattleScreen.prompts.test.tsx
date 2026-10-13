@@ -54,8 +54,7 @@ function cardPicker(
     side: "player",
     candidates: entries.map(([card, zone]) => ({ instanceId: card.id, cardUuid: card.model.cardId, owner: "player", zone, card, highlighted: false })),
     candidateIds: entries.map(([card]) => card.id),
-    ...bounds,
-    optional: false,
+    selection: { min:bounds.minCount ?? bounds.count,max:bounds.count },
     canResolve: true,
     presentation: "board",
   };
@@ -68,7 +67,7 @@ describe("MobileBattleScreen", () => {
       mount(
         {
           ...makeView(),
-          promptHost: { ...HOST, key: parsePromptId("1:0:0"), heading: { title: "Choose", detail: null }, cancellable },
+          prompt: { host: { ...HOST, key: parsePromptId("1:0:0"), heading: { title: "Choose", detail: null }, cancellable }, surface: { kind: "none" as const } },
         },
         { canInteract: false, canPrompt: true, onPromptCancel },
       );
@@ -80,7 +79,7 @@ describe("MobileBattleScreen", () => {
 
   it("repeats the loop on offer a chosen number of times or until victory", () => {
     const onRepeatLoop = vi.fn();
-    mount({ ...makeView(), promptHost: { ...HOST, loopOffer: { maxCount: 3 } } }, { onRepeatLoop });
+    mount({ ...makeView(), prompt: { host: { ...HOST, loopOffer: { maxCount: 3 } }, surface: { kind: "none" as const } }, }, { onRepeatLoop });
     const dialog = () => {
       click(query(document.body, '[data-testid="battle-loop-open"]'));
       return query(document.body, "[data-battle-loop-dialog]");
@@ -98,7 +97,7 @@ describe("MobileBattleScreen", () => {
     const onPromptNumberSubmit = vi.fn();
     const view = (key: string) => ({
       ...makeView(),
-      promptHost: { ...HOST, key: parsePromptId(key), heading: { title: "X", detail: null }, number: { label: "X", values: [1, 3, 4] } },
+      prompt: { host: { ...HOST, key: parsePromptId(key), heading: { title: "X", detail: null }, number: { label: "X", values: [1, 3, 4] } }, surface: { kind: "none" as const } },
     });
     const container = mount(view("1:0:0"), { canInteract: false, canPrompt: true, onPromptNumberSubmit });
     const picker = () => query(container, "[data-battle-number-picker]");
@@ -121,12 +120,12 @@ describe("MobileBattleScreen", () => {
 
   it("selects card-picker candidates from the hand and submits between the fewest and most cards", () => {
     const view = makeView();
-    const candidates = view.playerHand.slice(0, 3);
+    const candidates = view.nearHand.cards.slice(0, 3);
     const candidateIds = candidates.map((card) => card.id);
     const [onCardPickerSelectionChange, onCardPickerSubmit, onHandCardActivate] = [vi.fn(), vi.fn(), vi.fn()];
     const picker = cardPicker(candidates.map((card) => [card, "hand"] as const), { count: 3, minCount: 2 });
     const container = mount(
-      { ...view, cardPicker: picker },
+      { ...view, prompt: { host: null, surface: { kind: "picker", picker: picker } }, },
       { canInteract: false, onHandCardActivate, onCardPickerSelectionChange, onCardPickerSubmit },
     );
     const handCards = container.querySelectorAll<HTMLElement>('[data-battle-card-zone="near-hand"] > [data-battlefield-card]');
@@ -149,8 +148,8 @@ describe("MobileBattleScreen", () => {
 
   it("rings every board-picker candidate as a legal target before selection and as selected after, leaving others unringed", () => {
     const view = makeView();
-    const [backCard, frontCard] = [view.player.backRank[1]?.card, view.player.frontRank[0]?.card];
-    const [handCard, otherHandCard] = view.playerHand;
+    const [backCard, frontCard] = [view.near.backRank[1]?.card, view.near.frontRank[0]?.card];
+    const [handCard, otherHandCard] = view.nearHand.cards;
     if (backCard == null || frontCard == null || handCard === undefined || otherHandCard === undefined) {
       throw new Error("fixture has no cards");
     }
@@ -162,7 +161,7 @@ describe("MobileBattleScreen", () => {
     const plain = mount(view, { canInteract: false });
     const targetable = mount(view, { canInteract: false, targetableCardIds: [backCard.id] });
     const picker = { ...cardPicker([[backCard, "backRank"], [handCard, "hand"]], { count: 2, minCount: 1 }), ringCandidates: true };
-    const container = mount({ ...view, cardPicker: picker }, { canInteract: false, onCardPickerSelectionChange: vi.fn() });
+    const container = mount({ ...view, prompt: { host: null, surface: { kind: "picker", picker: picker } }, }, { canInteract: false, onCardPickerSelectionChange: vi.fn() });
     const unselectedHand = ring(container, otherHandCard.id);
 
     expect(ring(container, backCard.id)).toBe(ring(targetable, backCard.id));
@@ -185,8 +184,8 @@ describe("MobileBattleScreen", () => {
 
   it("steps the prompt's source card aside while a choice on the battlefield is open", () => {
     const view = { ...makeView(), revealedHandCard: makeCard(91, cardId("asking-card")) };
-    const backCard = view.player.backRank[1]?.card;
-    const handCard = view.playerHand[0];
+    const backCard = view.near.backRank[1]?.card;
+    const handCard = view.nearHand.cards[0];
     if (backCard == null || handCard === undefined) throw new Error("fixture has no cards");
     const picker = (card: MobileBattleCardView, zone: "hand" | "backRank") => cardPicker([[card, zone]], { count: 1 });
     const placement = (container: HTMLElement) =>
@@ -194,14 +193,14 @@ describe("MobileBattleScreen", () => {
 
     expect(placement(mount(view))).toBe("reading");
     expect(placement(mount(view, { targetableCardIds: [backCard.id] }))).toBe("aside");
-    expect(placement(mount({ ...view, cardPicker: picker(backCard, "backRank") }))).toBe("aside");
-    expect(placement(mount({ ...view, cardPicker: picker(handCard, "hand") }))).toBe("reading");
+    expect(placement(mount({ ...view, prompt: { host: null, surface: { kind: "picker", picker: picker(backCard, "backRank") } }, }))).toBe("aside");
+    expect(placement(mount({ ...view, prompt: { host: null, surface: { kind: "picker", picker: picker(handCard, "hand") } }, }))).toBe("reading");
   });
 
   it("replaces the phase advance with choice-prompt options", () => {
     const [onChoicePromptChoose, onNextPhase] = [vi.fn(), vi.fn()];
     const choicePrompt = { key: 42, label: "Choose", options: [{ label: "First" }, { label: "Second" }], canResolve: true };
-    const container = mount({ ...makeView(), choicePrompt }, { canInteract: false, onChoicePromptChoose, onNextPhase });
+    const container = mount({ ...makeView(), prompt: { host: null, surface: { kind: "choice", choice: choicePrompt } }, }, { canInteract: false, onChoicePromptChoose, onNextPhase });
     const options = query(container, "[data-battle-choice-prompt-controls]").querySelectorAll<HTMLButtonElement>("button");
 
     expect(options).toHaveLength(2);
@@ -213,7 +212,7 @@ describe("MobileBattleScreen", () => {
   it("groups a local chooser heading with even a short option list and its actions", () => {
     const onChoicePromptChoose = vi.fn();
     const choicePrompt = { key: 44, label: "Fixture action choice", presentation: "chooser" as const, options: [{ label: "Fixture payment and effect" }, { label: "Fixture other payment and effect" }, { label: "Fixture dismissal" }], canResolve: true };
-    const container = mount({ ...makeView(), choicePrompt }, { canInteract: true, onChoicePromptChoose });
+    const container = mount({ ...makeView(), prompt: { host: null, surface: { kind: "choice", choice: choicePrompt } }, }, { canInteract: true, onChoicePromptChoose });
     const group = query(container, "[data-battle-ability-chooser]");
     const heading = group.querySelector("h2");
     const options = group.querySelectorAll<HTMLButtonElement>("button");
@@ -236,12 +235,12 @@ describe("MobileBattleScreen", () => {
       options: Array.from({ length: count }, (_, index) => ({ label: `Option ${String(index)}` })),
       canResolve: true,
     });
-    const short = mount({ ...makeView(), choicePrompt: choice(4) }, { canInteract: true, onChoicePromptChoose: vi.fn() });
+    const short = mount({ ...makeView(), prompt: { host: null, surface: { kind: "choice", choice: choice(4) } }, }, { canInteract: true, onChoicePromptChoose: vi.fn() });
     expect(short.querySelector("[data-battle-choice-chooser]")).toBeNull();
     expect(query(short, "[data-battle-phase-next][data-battle-choice-prompt-controls]").querySelectorAll("button")).toHaveLength(4);
 
     const onChoicePromptChoose = vi.fn();
-    const long = mount({ ...makeView(), choicePrompt: choice(34) }, { canInteract: true, onChoicePromptChoose });
+    const long = mount({ ...makeView(), prompt: { host: null, surface: { kind: "choice", choice: choice(34) } }, }, { canInteract: true, onChoicePromptChoose });
     const list = query(long, "[data-battle-choice-chooser] [data-battle-choice-prompt-controls]");
     const options = list.querySelectorAll<HTMLButtonElement>("button");
 

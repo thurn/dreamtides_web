@@ -25,7 +25,7 @@ import {
   registerBattleCompletionProvider,
   registerBattleInitProvider,
 } from "../../rules/battle/journey-battle";
-import { registerTutorialBattleInitProvider } from "../../rules/battle/battle-events";
+import { registerTutorialBattleInitProvider } from "../../rules/battle/tutorial-lifecycle";
 import { registerDeckContentProvider } from "../../rules/journey/deck";
 import { registerDraftContentProvider } from "../../rules/journey/draft";
 import { registerJourneyLifecycleContentProvider } from "../../rules/journey/lifecycle";

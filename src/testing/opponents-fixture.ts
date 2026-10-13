@@ -1,17 +1,8 @@
 import type { OpponentsData } from "../types/opponents-data";
-import { parseAiDifficultyPresetId } from "../types/identifiers";
 import { testContentHash, testFoldHash } from "../types/test-identities";
 
 /** Stable synthetic opponent input for tests which are not testing compilation. */
 export function opponentsFixture(): OpponentsData {
-  const standard = {
-    id: parseAiDifficultyPresetId("standard"),
-    beamWidth: 12,
-    opponentMode: "expectiminimax" as const,
-    sampleCount: 8,
-    searchDepth: 16,
-    tutorialExpansionBudget: 256,
-  };
   return {
     schemaVersion: 1,
     contentHash: testContentHash("b"),
@@ -44,28 +35,6 @@ export function opponentsFixture(): OpponentsData {
       dreamsignsFromLayer: 3,
       legendariesFromLayer: 5,
       starterDilution: [10, 5],
-    },
-    ai: {
-      tutorialDefaultPreset: parseAiDifficultyPresetId("standard"),
-      evaluation: {
-        scoreDifference: 10,
-        frontRankSpark: 1,
-        backRankSpark: 0.5,
-        handCard: 1.5,
-        valueHint: 1,
-        energyWaste: 0.25,
-        expectedPoints: 1,
-      },
-      opponentModel: {
-        removalPrior: 0.1,
-        responseArchetypePriors: {
-          noBlocks: 1,
-          blockBiggest: 2,
-          tradeEvenly: 3,
-        },
-        sampleSafetyCap: 16,
-      },
-      presets: { [standard.id]: standard },
     },
   };
 }

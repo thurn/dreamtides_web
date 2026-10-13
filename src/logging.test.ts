@@ -1,28 +1,15 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
-  createBattleLogBaseFields,
-  createBattleProtoCardCreatedLogEvent,
-  createBattleProtoDeckReorderedLogEvent,
-  createBattleProtoMarkerSetLogEvent,
-  createBattleProtoNoteAddedLogEvent,
-  createBattleProtoNoteClearedLogEvent,
-  createBattleProtoNoteDismissedLogEvent,
   clearLogContext,
   createJourneyLogMirror,
   getLogEntries,
   logEvent,
   logEventOnce,
-  parseBattleDestinationLogLabel,
   resetLog,
   setLogContext,
   setLogSink,
 } from "./logging";
 import type { LogEntry } from "./logging";
-import type { BattleMutableState } from "./battle/types";
-import { parseBattleCardId } from "./types/identifiers";
-import { parseBattleId } from "./types/identifiers";
-import { parseNoteId } from "./types/identifiers";
-import { testCardName, testCardSubtype } from "./types/test-identities";
 
 beforeEach(() => {
   resetLog();
@@ -248,149 +235,3 @@ describe("logEventOnce", () => {
     expect(second).not.toBeNull();
   });
 });
-
-describe("createBattleLogBaseFields", () => {
-  it("includes every L-3 common field", () => {
-    const fields = createBattleLogBaseFields(makeBattleStateFixture(), {
-      sourceSurface: "action-bar",
-      selectedCardId: parseBattleCardId("card-42"),
-    });
-
-    expect(fields.battleId).toBe("battle-fixture");
-    expect(fields.turnNumber).toBe(3);
-    expect(fields.phase).toBe("day");
-    expect(fields.activeSide).toBe("enemy");
-    expect(fields.sourceSurface).toBe("action-bar");
-    expect(fields.selectedCardId).toBe("card-42");
-  });
-});
-
-describe("battle_proto_* helper suite (L-3 coverage)", () => {
-  const state = makeBattleStateFixture();
-  const context = {
-    sourceSurface: "inspector" as const,
-    selectedCardId: null,
-  };
-
-  const helpers: Array<{
-    name: string;
-    event: string;
-    build: () => { event: string; fields: Record<string, unknown> };
-  }> = [
-    {
-      name: "createBattleProtoNoteAddedLogEvent",
-      event: "battle_proto_note_added",
-      build: () =>
-        createBattleProtoNoteAddedLogEvent(
-          state,
-          {
-            battleCardId: parseBattleCardId("card-1"),
-            noteId: parseNoteId("note-1"),
-            text: "note",
-            expiry: { kind: "manual" },
-            createdAtTurnNumber: 1,
-            createdAtSide: "player",
-          },
-          context,
-        ),
-    },
-    {
-      name: "createBattleProtoNoteDismissedLogEvent",
-      event: "battle_proto_note_dismissed",
-      build: () =>
-        createBattleProtoNoteDismissedLogEvent(
-          state,
-          {
-            battleCardId: parseBattleCardId("card-1"),
-            noteId: parseNoteId("note-1"),
-          },
-          context,
-        ),
-    },
-    {
-      name: "createBattleProtoNoteClearedLogEvent",
-      event: "battle_proto_note_cleared",
-      build: () =>
-        createBattleProtoNoteClearedLogEvent(
-          state,
-          {
-            battleCardId: parseBattleCardId("card-1"),
-            noteCount: 2,
-          },
-          context,
-        ),
-    },
-    {
-      name: "createBattleProtoCardCreatedLogEvent",
-      event: "battle_proto_card_created",
-      build: () =>
-        createBattleProtoCardCreatedLogEvent(
-          state,
-          {
-            battleCardId: parseBattleCardId("card-1"),
-            provenanceKind: "generated-copy",
-            sourceBattleCardId: parseBattleCardId("card-0"),
-            name: testCardName("Copy"),
-            subtype: testCardSubtype("x"),
-            printedSpark: 1,
-            ownerSide: "player",
-            destinationZone: parseBattleDestinationLogLabel("player:hand"),
-          },
-          context,
-        ),
-    },
-    {
-      name: "createBattleProtoDeckReorderedLogEvent",
-      event: "battle_proto_deck_reordered",
-      build: () =>
-        createBattleProtoDeckReorderedLogEvent(
-          state,
-          {
-            side: "player",
-            orderBefore: [parseBattleCardId("a"), parseBattleCardId("b")],
-            orderAfter: [parseBattleCardId("b"), parseBattleCardId("a")],
-          },
-          context,
-        ),
-    },
-    {
-      name: "createBattleProtoMarkerSetLogEvent",
-      event: "battle_proto_marker_set",
-      build: () =>
-        createBattleProtoMarkerSetLogEvent(
-          state,
-          {
-            battleCardId: parseBattleCardId("card-1"),
-            markers: { isPrevented: true, isCopied: false },
-            diff: { prevented: "set", copied: "unchanged" },
-          },
-          context,
-        ),
-    },
-  ];
-
-  for (const helper of helpers) {
-    it(`${helper.name} returns the correct event name and L-3 fields`, () => {
-      const payload = helper.build();
-      expect(payload.event).toBe(helper.event);
-      expect(payload.fields.battleId).toBe("battle-fixture");
-      expect(payload.fields.turnNumber).toBe(3);
-      expect(payload.fields.phase).toBe("day");
-      expect(payload.fields.activeSide).toBe("enemy");
-      expect(payload.fields.sourceSurface).toBe("inspector");
-      expect(payload.fields.selectedCardId).toBeNull();
-    });
-  }
-});
-
-function makeBattleStateFixture(): Pick<
-  BattleMutableState,
-  "battleId" | "turnNumber" | "phase" | "activeSide"
-> {
-  return {
-    battleId: parseBattleId("battle-fixture"),
-    turnNumber: 3,
-    phase: "day",
-    activeSide: "enemy",
-  };
-}

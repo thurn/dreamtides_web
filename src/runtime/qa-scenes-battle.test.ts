@@ -10,7 +10,7 @@ import { gainPoints } from "../engine/effects/primitives/gain-points";
 import { avatarLabBattle } from "../engine/testing/avatar-lab";
 import { EngineProbeHistory } from "../battle/components/engine-probe-events";
 import type { CommittedEvent } from "../eventlog/local-log";
-import { buildBattleAvatarStatus } from "../screens/cumulus_adapters/mobile-battle-view-model";
+import { buildBattleAvatarStatus } from "../battle/ui/battle-avatar-status";
 import { resolveEnemyAvatarSummary } from "../battle/components/enemy-avatar-summary";
 import { parseQaSceneId } from "../types/identifiers";
 import { layerOrdinal } from "../types/layer-name";

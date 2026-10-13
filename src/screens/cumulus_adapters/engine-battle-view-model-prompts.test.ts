@@ -64,15 +64,15 @@ describe("buildEngineBattleScreenModel", () => {
     const upToOne = labPlay("up-to-one-target");
 
     expect(targets.ids).toEqual(ids.enemy.back.map(id));
-    expect(model.view.promptHost).toMatchObject({ key: prompt.id, cancellable: true });
-    expect(model.view.cardPicker).toBeNull();
-    expect(model.view.choicePrompt).toBeNull();
+    expect(model.view.prompt.host).toMatchObject({ key: prompt.id, cancellable: true });
+    expect(pickerView(model.view)).toBeNull();
+    expect(choiceView(model.view)).toBeNull();
     expect(targets.skip).toBeNull();
     expect(model.affordances.canAct).toBe(false);
     expect(targets.answer(id(ids.player.back[0]))).toBeNull();
     expect(targets.answer(id(ids.enemy.back[0]))).toEqual([ids.enemy.back[0]]);
     expect(upToOne.prompt).toMatchObject({ kind: "chooseTargets", min: 0, max: 1 });
-    expect(upToOne.model.view.choicePrompt).toMatchObject({ key: upToOne.prompt.id, canResolve: true });
+    expect(choiceView(upToOne.model.view)).toMatchObject({ key: upToOne.prompt.id, canResolve: true });
     expect(choiceAnswers(upToOne.model)).toEqual([[]]);
   });
 
@@ -82,16 +82,16 @@ describe("buildEngineBattleScreenModel", () => {
     if (own.prompt?.kind !== "chooseSlot" || transferred.prompt?.kind !== "chooseSlot") throw new Error("Expected movement prompts");
     expect(own.prompt).toMatchObject({ side: "player", fieldSide: "player" });
     expect(transferred.prompt).toMatchObject({ side: "player", fieldSide: "enemy" });
-    expect(own.model.view.promptHost?.heading?.detail).not.toEqual(transferred.model.view.promptHost?.heading?.detail);
-    expect(own.model.view.promptHost?.heading?.title).toEqual(transferred.model.view.promptHost?.heading?.title);
+    expect(own.model.view.prompt.host?.heading?.detail).not.toEqual(transferred.model.view.prompt.host?.heading?.detail);
+    expect(own.model.view.prompt.host?.heading?.title).toEqual(transferred.model.view.prompt.host?.heading?.title);
     expect(choiceAnswers(own.model)).toEqual([...Array(18).keys()]);
     expect(choiceAnswers(transferred.model)).toEqual([...Array(18).keys()]);
-    expect(own.model.view.choicePrompt?.options.map((option) => option.label)).toEqual(transferred.model.view.choicePrompt?.options.map((option) => option.label));
+    expect(choiceView(own.model.view)?.options.map((option) => option.label)).toEqual(choiceView(transferred.model.view)?.options.map((option) => option.label));
   });
 
   it("arranges among the top, the bottom, and the hand, cancellable while the play is", () => {
     const { model, prompt } = labPlay("arrange");
-    const arrange = model.view.promptHost?.arrange;
+    const arrange = model.view.prompt.host?.arrange;
     if (prompt.kind !== "arrange" || arrange?.surface !== "arrangement") throw new Error("not the arrangement editor");
     const [first, second] = prompt.cards.map(id);
     const { lanes } = arrange.model;
@@ -99,7 +99,7 @@ describe("buildEngineBattleScreenModel", () => {
     const viewedCardIds = [first, second];
     const split = answer({ viewedCardIds, orderedCardIds: [], bottomCardIds: [first], voidCardIds: [], handCardIds: [second] });
 
-    expect(model.view.promptHost).toMatchObject({ key: prompt.id, cancellable: true, heading: null });
+    expect(model.view.prompt.host).toMatchObject({ key: prompt.id, cancellable: true, heading: null });
     expect(lanes.map((lane) => [lane.destination, lane.min, lane.max, lane.ordered])).toEqual([
       ["top", 0, 1, true],
       ["bottom", 0, 1, true],
@@ -119,23 +119,23 @@ describe("buildEngineBattleScreenModel", () => {
     const waiting = screenAtPrompt(state, play, false);
     const ready = screenAtPrompt(state, play, true);
 
-    expect(waiting.model.view.cardPicker).toBeNull();
-    expect(waiting.model.view.promptHost?.heading ?? null).toBeNull();
-    expect(ready.model.view.cardPicker?.key).toBe(ready.prompt.id);
-    expect(ready.model.view.promptHost?.heading).not.toBeNull();
+    expect(pickerView(waiting.model.view)).toBeNull();
+    expect(waiting.model.view.prompt.host?.heading ?? null).toBeNull();
+    expect(pickerView(ready.model.view)?.key).toBe(ready.prompt.id);
+    expect(ready.model.view.prompt.host?.heading).not.toBeNull();
   });
 
   it("shows the opponent's prompts only as a waiting notice: acting, or choosing when private", () => {
     const discard = labScreen("ai-discard");
     const foresee = labScreen("ai-foresee");
 
-    expect(discard.model.view.promptNotice).toEqual({ promptSide: "enemy", reason: "opponent-acting" });
-    expect(foresee.model.view.promptNotice).toEqual({ promptSide: "enemy", reason: "opponent-choosing" });
+    expect(noticeView(discard.model.view)).toEqual({ promptSide: "enemy", reason: "opponent-acting" });
+    expect(noticeView(foresee.model.view)).toEqual({ promptSide: "enemy", reason: "opponent-choosing" });
     expect(labScreen("ai-discard", false).model.view.revealedHandCard).toBeNull();
     for (const { model } of [discard, foresee]) {
-      expect(model.view.promptHost?.heading ?? null).toBeNull();
-      expect(model.view.cardPicker).toBeNull();
-      expect(model.view.promptHost?.arrange ?? null).toBeNull();
+      expect(model.view.prompt.host?.heading ?? null).toBeNull();
+      expect(pickerView(model.view)).toBeNull();
+      expect(model.view.prompt.host?.arrange ?? null).toBeNull();
     }
     const foreseen = foresee.prompt?.kind === "arrange" ? foresee.prompt.cards : [];
     expect(foreseen.filter((card) => card in foresee.model.engine.instances)).toEqual([]);
@@ -151,10 +151,10 @@ describe("buildEngineBattleScreenModel", () => {
     const prevent = labScreen("prevent").model;
 
     expect(choiceAnswers(modes)).toEqual([0, 1]);
-    expect(modes.view.choicePrompt?.options).toHaveLength(2);
+    expect(choiceView(modes.view)?.options).toHaveLength(2);
     expect(choiceAnswers(confirm)).toEqual([true, false]);
     expect(choiceAnswers(prevent)).toEqual([true, false]);
-    expect(number.model.view.promptHost?.number?.values).toEqual([1, 2, 3]);
+    expect(number.model.view.prompt.host?.number?.values).toEqual([1, 2, 3]);
     expect(surfaceOf(number.model, "number").answer(2)).toBe(2);
     expect(surfaceOf(number.model, "number").answer(4)).toBeNull();
   });
@@ -169,14 +169,14 @@ describe("buildEngineBattleScreenModel", () => {
     const editor = screenAtPrompt(state, foresee);
     const [first, second] = ids.player.back.map(id);
 
-    expect(picker.model.view.cardPicker).toMatchObject({ count: 2, minCount: 0, optional: true, presentation: "board", ringCandidates: true });
+    expect(pickerView(picker.model.view)).toMatchObject({ selection:{min:0,max:2}, presentation: "board", ringCandidates: true });
     const pick = surfaceOf(picker.model, "picker").answer;
     expect(pick([first, second])).toEqual(ids.player.back);
     expect(pick([first])).toEqual([ids.player.back[0]]);
     expect(pick([first, first])).toBeNull();
-    const surface = editor.model.view.promptHost?.arrange;
+    const surface = editor.model.view.prompt.host?.arrange;
     expect(surface?.surface).toBe("foresee");
-    expect(editor.model.view.promptHost?.cancellable).toBe(false);
+    expect(editor.model.view.prompt.host?.cancellable).toBe(false);
     const looked = surface?.surface === "foresee" ? surface.model.cards : [];
     expect(looked).toHaveLength(2);
     const [top, bottom] = looked.map((card) => card.battleCardId);
@@ -235,7 +235,7 @@ describe("buildEngineBattleScreenModel", () => {
     expect(picker.answer([id(candidates[1])])).toEqual([candidates[1]]);
     expect(picker.answer([id(candidates[0]), id(candidates[0])])).toBeNull();
     if (presentation === "gallery") {
-      expect(model.view.promptHost).toBeNull();
+      expect(model.view.prompt.host).toBeNull();
       expect(picker.picker.cancellable).toBe(false);
     }
   });
@@ -272,15 +272,15 @@ describe("buildEngineBattleScreenModel", () => {
     const played = engine.apply(state, "player", { kind: "play", card: ids.player.hand[0], from: "hand" }, NO_PROMPTS).state;
     const theirs = screenOf(played);
 
-    expect(respond.view.promptHost).toMatchObject({ cancellable: false });
-    expect(respond.view.promptHost?.heading).not.toBeNull();
+    expect(respond.view.prompt.host).toMatchObject({ cancellable: false });
+    expect(respond.view.prompt.host?.heading).not.toBeNull();
     expect(respond.view.revealedHandCard?.id).toBe(id(stacked?.kind === "card" ? stacked.instance : null));
     expect(respond.affordances.pass).toEqual({ kind: "pass" });
-    expect(unpresented.view.promptHost?.heading ?? null).toBeNull();
+    expect(unpresented.view.prompt.host?.heading ?? null).toBeNull();
     expect(unpresented.view.revealedHandCard).toBeNull();
     expect(engine.decision(played)).toEqual({ kind: "respond", side: "enemy" });
     expect(theirs.view.revealedHandCard).toBeNull();
-    expect(theirs.view.promptNotice).toEqual({ promptSide: "enemy", reason: "opponent-acting" });
+    expect(noticeView(theirs.view)).toEqual({ promptSide: "enemy", reason: "opponent-acting" });
   });
 });
 
@@ -422,30 +422,34 @@ describe("drawn discard picker emphasis", () => {
   it("selectively rings drawn physical candidates while all old and drawn cards remain selectable", () => {
     const { pending, ids } = drawnDiscard();
     const model = discardScreen(pending);
-    const picker = model.view.cardPicker;
+    const picker = pickerView(model.view);
     expect(picker?.ringCandidates).toBe(false);
     expect(picker?.candidates.filter(c => c.highlighted).map(c => c.instanceId)).toEqual(ids.player.deck.map(id));
     expect(picker?.candidateIds).toEqual([id(ids.player.hand[1]), ...ids.player.deck.map(id)]);
     expect(new Set(picker?.candidates.map(c => c.cardUuid)).size).toBe(2);
     const surface = surfaceOf(model, "picker");
     for (const candidate of [ids.player.hand[1], ...ids.player.deck]) expect(surface.answer([id(candidate)])).toEqual([candidate]);
-    expect(discardScreen(pending, pending.drawnForDiscard, false).view.cardPicker).toBeNull();
-    expect(discardScreen(pending, pending.drawnForDiscard, true, "enemy").view.cardPicker).toBeNull();
+    expect(pickerView(discardScreen(pending, pending.drawnForDiscard, false).view)).toBeNull();
+    expect(pickerView(discardScreen(pending, pending.drawnForDiscard, true, "enemy").view)).toBeNull();
   });
 
   it("retains ordinary and other-role rings, and ignores foreign or invisible hint IDs", () => {
     const { pending, ids } = drawnDiscard();
     for (const hint of [[], ids.enemy.deck]) {
-      const picker = discardScreen(pending, hint).view.cardPicker;
+      const picker = pickerView(discardScreen(pending, hint).view);
       expect(picker?.ringCandidates).toBe(true);
       expect(picker?.candidates.every(c => !c.highlighted)).toBe(true);
     }
     const ordinary = { ...pending, drawnForDiscard: undefined };
-    expect(discardScreen(ordinary).view.cardPicker?.ringCandidates).toBe(true);
+    expect(pickerView(discardScreen(ordinary).view)?.ringCandidates).toBe(true);
     const restricted = { ...pending, prompt: { ...pending.prompt, allowed: [[ids.player.hand[1]]] } };
-    expect(discardScreen(restricted).view.cardPicker?.candidates.every(c => !c.highlighted)).toBe(true);
+    expect(pickerView(discardScreen(restricted).view)?.candidates.every(c => !c.highlighted)).toBe(true);
     const other = { ...pending, prompt: { ...pending.prompt, purpose: { ...pending.prompt.purpose, role: "discardCost" as const } } };
-    expect(discardScreen(other).view.cardPicker?.ringCandidates).toBe(true);
-    expect(discardScreen(other).view.cardPicker?.candidates.every(c => !c.highlighted)).toBe(true);
+    expect(pickerView(discardScreen(other).view)?.ringCandidates).toBe(true);
+    expect(pickerView(discardScreen(other).view)?.candidates.every(c => !c.highlighted)).toBe(true);
   });
 });
+
+function pickerView(view: import("../../cumulus/screens/MobileBattleScreen").MobileBattleView) { return view.prompt.surface.kind === "picker" ? view.prompt.surface.picker : null; }
+function choiceView(view: import("../../cumulus/screens/MobileBattleScreen").MobileBattleView) { return view.prompt.surface.kind === "choice" ? view.prompt.surface.choice : null; }
+function noticeView(view: import("../../cumulus/screens/MobileBattleScreen").MobileBattleView) { return view.prompt.surface.kind === "waiting" ? view.prompt.surface.notice : null; }

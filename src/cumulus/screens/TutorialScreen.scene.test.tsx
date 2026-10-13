@@ -37,8 +37,8 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
 installTutorialScreenHarness();
 
 const emptyRanks = {
-  enemy: { backRank: [], frontRank: [] },
-  player: { backRank: [], frontRank: [] },
+  far: { backRank: [], frontRank: [] },
+  near: { backRank: [], frontRank: [] },
 };
 const emptyStatus = { avatar: null, currentEnergy: 0, maxEnergy: 0, points: 0 };
 
@@ -380,7 +380,7 @@ describe("TutorialScreen scene entry, dialogue, and avatar arrival", () => {
       TUTORIAL_AVATARS.player.profile.id,
       "player",
     );
-    expect(screenMocks.props?.view.player.status).toMatchObject({
+    expect(screenMocks.props?.view.near.status).toMatchObject({
       avatar: TUTORIAL_AVATARS.player.visual,
       avatarProfile: TUTORIAL_AVATARS.player.profile,
     });
@@ -463,7 +463,7 @@ describe("TutorialScreen scene entry, dialogue, and avatar arrival", () => {
       TUTORIAL_AVATARS.enemy.profile.id,
       "enemy",
     );
-    expect(screenMocks.props?.view.enemy.status).toMatchObject({
+    expect(screenMocks.props?.view.far.status).toMatchObject({
       avatar: TUTORIAL_AVATARS.enemy.visual,
       avatarProfile: TUTORIAL_AVATARS.enemy.profile,
     });

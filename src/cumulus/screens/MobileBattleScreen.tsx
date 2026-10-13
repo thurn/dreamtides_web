@@ -217,18 +217,13 @@ export interface MobileBattleView {
   readonly far: MobileBattleSideView;
   readonly nearHand: MobileBattleHandView;
   readonly farHand: MobileBattleHandView;
-  readonly promptNotice: MobileBattlePromptNoticeView | null;
-  readonly cardPicker: MobileBattleCardPickerView | null;
-  readonly choicePrompt: MobileBattleChoicePromptView | null;
+  readonly prompt: MobileBattlePromptView;
+  /** Authoritative turn identity used by announcements, independent of inspector text. */
+  readonly turn: string;
   readonly dreamwell: MobileBattleDreamwellView | null;
   readonly activeSide: MobileBattleOwner;
   readonly isOpeningTurn: boolean;
   readonly phase: MobileBattlePhase;
-  readonly enemyHandCardIds: readonly BattleCardId[];
-  readonly enemyHand: readonly MobileBattleCardView[];
-  readonly enemy: MobileBattleSideView;
-  readonly player: MobileBattleSideView;
-  readonly playerHand: readonly MobileBattleCardView[];
   readonly inspector: MobileBattleInspectorView;
   readonly result: MobileBattleResultView | null;
   /** One shared hand card presented over the battlefield at reading size. */
@@ -239,10 +234,18 @@ export interface MobileBattleView {
    * board shows it.
    */
   readonly playReveal?: MobileBattlePlayRevealView | null;
-  /** The prompt host's heading, number picker, arrangement, loop offer, and notices. */
-  readonly promptHost?: BattlePromptHostView | null;
   /** All Forward and All Back, when the near side may reposition. */
   readonly rankShortcuts?: MobileBattleRankShortcutsView | null;
+}
+
+/** One prompt projection owns the board surface and its host. */
+export interface MobileBattlePromptView {
+  readonly host: BattlePromptHostView | null;
+  readonly surface:
+    | { readonly kind: "none" }
+    | { readonly kind: "waiting"; readonly notice: MobileBattlePromptNoticeView }
+    | { readonly kind: "picker"; readonly picker: MobileBattleCardPickerView }
+    | { readonly kind: "choice"; readonly choice: MobileBattleChoicePromptView };
 }
 
 /** A played card presented at reading size before it travels to its destination. */
@@ -265,14 +268,8 @@ export interface MobileBattleCardPickerView {
   readonly candidateOwner?: MobileBattleOwner | null;
   readonly candidates: readonly MobileBattleCardPickerCandidateView[];
   readonly candidateIds: readonly BattleCardId[];
-  /** The most cards a submission holds. */
-  readonly count: number;
-  /**
-   * The fewest cards a submission holds, at least one: an empty answer is
-   * the Skip control of an `optional` picker. Defaults to `count`.
-   */
-  readonly minCount?: number;
-  readonly optional: boolean;
+  /** Exact legal range; zero admits the separate Skip control. */
+  readonly selection: { readonly min: number; readonly max: number };
   readonly canResolve: boolean;
   readonly presentation: "board" | "gallery";
   /**
@@ -288,16 +285,10 @@ export interface MobileBattleCardPickerView {
   readonly cancellable?: boolean;
 }
 
-/** How many cards a picker submission may hold: `max` is capped by its candidates. */
-function cardPickerBounds(cardPicker: MobileBattleCardPickerView): { readonly min: number; readonly max: number } {
-  const max = Math.min(cardPicker.count, cardPicker.candidateIds.length);
-  return { min: Math.min(Math.max(cardPicker.minCount ?? max, 1), max), max };
-}
-
 /** Whether `selected` cards make a submittable picker answer. */
 function canSubmitCardPicker(cardPicker: MobileBattleCardPickerView, selected: number): boolean {
-  const { min, max } = cardPickerBounds(cardPicker);
-  return cardPicker.canResolve && selected >= min && selected <= max;
+  const { min, max } = cardPicker.selection;
+  return cardPicker.canResolve && selected >= Math.max(1,min) && selected <= max;
 }
 
 /** One UUID-backed physical candidate in an authoritative card prompt. */
@@ -934,7 +925,7 @@ function FigmentMergeAnimation({
 }: {
   readonly animation: FigmentMergeAnimationState;
 }) {
-  
+
   const reduceMotion = useReducedMotion();
   const deltaX = animation.targetRect.left - animation.sourceRect.left;
   const deltaY = animation.targetRect.top - animation.sourceRect.top;
@@ -1680,7 +1671,7 @@ const Rank = memo(function Rank({
   readonly cardOverlay?: MobileBattleCardOverlayView | null;
   readonly interactions?: MobileBattleInteractions;
 }) {
-  
+
   const canDropOnOwner =
     interactions?.canInteract === true &&
     interactions.pendingCardId !== null &&
@@ -2356,7 +2347,7 @@ function TargetingCardStage({
   readonly card: MobileBattleCardView;
   readonly isDesktop: boolean;
 }) {
-  
+
   return (
     <div
       data-battle-targeting-card-stage=""
@@ -2592,8 +2583,8 @@ function CardPickerGallery({
   readonly interactions?: MobileBattleInteractions;
   readonly perspective: BattlePerspectiveSide;
 }) {
-  
-  const requiredCount = cardPickerBounds(cardPicker).max;
+
+  const requiredCount = cardPicker.selection.max;
   const promptSubtitle: MobileBattlePromptCopy =
     cardPicker.subtitle === undefined
       ? `${formatNumber(selectedPickerCardIds.length)}/${formatNumber(requiredCount)} selected`
@@ -2619,7 +2610,7 @@ function CardPickerGallery({
     onPress: () => interactions?.onCardPickerSkip?.(),
   };
   const optionalWithCandidates =
-    cardPicker.optional && cardPicker.candidates.length > 0;
+    (cardPicker.selection.min === 0) && cardPicker.candidates.length > 0;
   const onCancel = interactions?.onPromptCancel;
   const cancelAction =
     cardPicker.cancellable === true && onCancel !== undefined
@@ -2681,8 +2672,8 @@ function CardPickerGallery({
             optionalWithCandidates
               ? [skipAction, submitAction]
               : cancelAction === null
-                ? [cardPicker.optional ? skipAction : submitAction]
-                : [cancelAction, cardPicker.optional ? skipAction : submitAction]
+                ? [cardPicker.selection.min === 0 ? skipAction : submitAction]
+                : [cancelAction, cardPicker.selection.min === 0 ? skipAction : submitAction]
           }
           onCardPress={onPickerCardToggle}
         />
@@ -2720,13 +2711,13 @@ function ControlRow({
   readonly rankShortcuts: MobileBattleRankShortcutsView | null;
   readonly tutorialNextAction: "endTurn" | "startChallenge";
 }) {
-  
+
   const disabled = interactions?.canInteract !== true;
   const numberPicker = promptHost?.key != null ? promptHost.number : null;
   const hasAlternateNextControls = choicePrompt !== null || numberPicker !== null;
   const reserveTargetingCard = !isDesktop && hasTargetingCard && choicePrompt !== null;
   const requiredPickerCount =
-    cardPicker === null ? 0 : cardPickerBounds(cardPicker).max;
+    cardPicker === null ? 0 : cardPicker.selection.max;
   const canSubmitPicker =
     cardPicker !== null &&
     canSubmitCardPicker(cardPicker, selectedPickerCardIds.length);
@@ -2815,7 +2806,7 @@ function ControlRow({
                   : `from the opponent hand · ${formatNumber(selectedPickerCardIds.length)}/${formatNumber(requiredPickerCount)}`}
             </span>
           </span>
-          {cardPicker.optional ? (
+          {cardPicker.selection.min === 0 ? (
             <GlassButton
               label={"Skip"}
               disabled={!cardPicker.canResolve}
@@ -3086,7 +3077,7 @@ function BattleControlMessage({
   readonly choicePrompt: MobileBattleChoicePromptView | null;
   readonly promptNotice: MobileBattlePromptNoticeView | null;
 }) {
-  
+
   const message: MobileBattlePromptCopy | null =
     promptNotice !== null
       ? promptNotice.reason === "opponent-choosing"
@@ -3123,7 +3114,7 @@ function BattleControlMessage({
   );
 }
 
-// tutorial-only until Phase 6: the debug menu and the Battle Inspector rail
+// The debug menu and Battle Inspector rail
 // below render only where `inspectorVisibility` is "available", which only
 // the scripted tutorial stage (`TutorialScreen`) leaves on.
 function BattleDebugMenu({
@@ -3212,7 +3203,7 @@ function InspectorValue({
   readonly label: string;
   readonly value: string;
 }) {
-  
+
   return (
     <div
       style={{
@@ -3901,7 +3892,7 @@ export function MobileBattleScreen({
     readonly side: MobileBattleOwner;
   }>(() => ({
     battleId: view.battleId,
-    turn: view.inspector.turn,
+    turn: view.turn,
     side: view.activeSide,
   }));
   const inspectorTriggerRef = useRef<HTMLElement | null>(null);
@@ -3909,22 +3900,25 @@ export function MobileBattleScreen({
   const previousPerspective = useRef(view.perspective);
   const openedLogKey = useRef<string | null>(null);
   const snapLayoutOriginView = useRef<MobileBattleView | null>(null);
-  const near = view.perspective === "player" ? view.player : view.enemy;
-  const far = view.perspective === "player" ? view.enemy : view.player;
+  const promptSurface = view.prompt.surface;
+  const cardPicker = promptSurface.kind === "picker" ? promptSurface.picker : null;
+  const choicePrompt = promptSurface.kind === "choice" ? promptSurface.choice : null;
+  const promptNotice = promptSurface.kind === "waiting" ? promptSurface.notice : null;
+  const promptHost = view.prompt.host;
+  const near = view.near;
+  const far = view.far;
   const banishedCardCount = near.banishedCardCount + far.banishedCardCount;
   const initialBanishedOwner =
     near.banishedCardCount > 0 ? near.owner : far.owner;
   const nearHandNeededByPrompt =
-    view.cardPicker?.candidates.some(
+    cardPicker?.candidates.some(
       (candidate) =>
         candidate.owner === near.owner && candidate.zone === "hand",
     ) === true;
   const nearHandCards =
     view.inspector.isNearHandHidden && !nearHandNeededByPrompt
       ? NO_CARDS
-      : view.perspective === "player"
-        ? view.playerHand
-        : view.nearHand.cards;
+      : view.nearHand.cards;
   const targetingCard =
     interactions?.targetSelectionCardId === null ||
     interactions?.targetSelectionCardId === undefined
@@ -3936,11 +3930,7 @@ export function MobileBattleScreen({
     targetingCard === null
       ? nearHandCards
       : nearHandCards.filter((card) => card.id !== targetingCard.id);
-  const farHandCards = view.inspector.isFarHandRevealed
-    ? far.owner === "enemy"
-      ? view.enemyHand
-      : view.playerHand
-    : view.farHand.cards;
+  const farHandCards = view.farHand.cards;
   const mobileWindow = mobileBattlefieldWindow(view);
   const layoutBackSlotCount = isDesktop
     ? desktopBattlefieldLayoutBackSlotCount(view)
@@ -3959,11 +3949,11 @@ export function MobileBattleScreen({
       near.backRank.length >= DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS) &&
     (far.backRank.length !== near.backRank.length ||
       far.frontRank.length !== near.frontRank.length);
-  const cardPickerKey = view.cardPicker?.key ?? null;
+  const cardPickerKey = cardPicker?.key ?? null;
   const boardCardPicker =
-    view.cardPicker?.presentation === "board" ? view.cardPicker : null;
+    cardPicker?.presentation === "board" ? cardPicker : null;
   const galleryCardPicker =
-    view.cardPicker?.presentation === "gallery" ? view.cardPicker : null;
+    cardPicker?.presentation === "gallery" ? cardPicker : null;
   // While a choice on the battlefield is open, the shared card steps aside
   // to the targeting stage, as a card being played does, so it covers no
   // candidate of a full rank.
@@ -3983,7 +3973,7 @@ export function MobileBattleScreen({
   const turnAnnouncementComplete =
     view.isOpeningTurn ||
     (completedTurnAnnouncement?.battleId === view.battleId &&
-      completedTurnAnnouncement.turn === view.inspector.turn &&
+      completedTurnAnnouncement.turn === view.turn &&
       completedTurnAnnouncement.side === view.activeSide);
   const visibleDreamwell = turnAnnouncementComplete ? view.dreamwell : null;
   const activeSideHasChallengers =
@@ -3994,12 +3984,12 @@ export function MobileBattleScreen({
     (side: MobileBattleOwner): void => {
       setCompletedTurnAnnouncement({
         battleId: view.battleId,
-        turn: view.inspector.turn,
+        turn: view.turn,
         side,
       });
       onTurnAnnouncementComplete?.(side);
     },
-    [onTurnAnnouncementComplete, view.battleId, view.inspector.turn],
+    [onTurnAnnouncementComplete, view.battleId, view.turn],
   );
 
   const beginFigmentMerge = useCallback(
@@ -4161,16 +4151,16 @@ export function MobileBattleScreen({
 
   const handlePickerCardToggle = useCallback(
     (cardId: BattleCardId): void => {
-      if (view.cardPicker === null) return;
+      if (cardPicker === null) return;
       const nextIds = toggleCardPickerSelection(
         selectedPickerCardIds,
         cardId,
-        view.cardPicker.count,
+        cardPicker.selection.max,
       );
-      setCardPickerSelection({ pickerKey: view.cardPicker.key, ids: nextIds });
+      setCardPickerSelection({ pickerKey: cardPicker.key, ids: nextIds });
       interactions?.onCardPickerSelectionChange?.(nextIds);
     },
-    [interactions, selectedPickerCardIds, view.cardPicker],
+    [interactions, selectedPickerCardIds, cardPicker],
   );
 
   useEffect(() => {
@@ -4405,8 +4395,8 @@ export function MobileBattleScreen({
         />
         <ControlRow
           cardPicker={boardCardPicker}
-          choicePrompt={view.choicePrompt}
-          promptHost={view.promptHost ?? null}
+          choicePrompt={choicePrompt}
+          promptHost={promptHost ?? null}
           selectedPickerCardIds={selectedPickerCardIds}
           isDesktop={isDesktop}
           hasTargetingCard={targetingCard !== null}
@@ -4539,9 +4529,9 @@ export function MobileBattleScreen({
         ) : null}
         <BattleControlMessage
           choicePrompt={
-            (view.promptHost?.heading ?? null) === null && view.choicePrompt?.presentation !== "chooser" ? view.choicePrompt : null
+            (promptHost?.heading ?? null) === null && choicePrompt?.presentation !== "chooser" ? choicePrompt : null
           }
-          promptNotice={view.promptNotice}
+          promptNotice={promptNotice}
         />
       </div>
       {inspectorVisibility === "available" ? (
@@ -4593,9 +4583,9 @@ export function MobileBattleScreen({
           </div>
         </div>
       ) : null}
-      {view.promptHost === null || view.promptHost === undefined ? null : (
+      {promptHost === null || promptHost === undefined ? null : (
         <BattlePromptHost
-          view={view.promptHost}
+          view={promptHost}
           canAct={interactions?.canInteract === true}
           onCancel={interactions?.onPromptCancel}
           onArrangeSubmit={interactions?.onPromptArrangeSubmit}

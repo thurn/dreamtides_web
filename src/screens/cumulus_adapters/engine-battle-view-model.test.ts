@@ -115,10 +115,10 @@ describe("Dreamwell modal source copy", () => {
     }
     const held = buildEngineBattleScreenModel({ ...input, presented: false, dreamwellCard: () => source() });
     expect(held.prompt.surface.kind).toBe("held");
-    expect(held.view.choicePrompt).toBeNull();
+    expect(choiceView(held.view)).toBeNull();
     const waiting = buildEngineBattleScreenModel({ ...input, human: "enemy", view: engine.view(pending.display, "enemy"), dreamwellCard: () => source() });
     expect(waiting.prompt.surface.kind).toBe("waiting");
-    expect(waiting.view.choicePrompt).toBeNull();
+    expect(choiceView(waiting.view)).toBeNull();
   });
 
   it("keeps instance-backed chooseOne copy independent of the Dreamwell resolver", () => {
@@ -142,7 +142,7 @@ describe("deck-top battle affordances", () => {
     const fixture = PROMPT_LAB_FIXTURES.find((row) => row.name === "deck-top-play")!;
     const { slice } = promptLabBattle(labEngine, fixture);
     const model = screenOf(slice.committed, null, slice.committed, true, labEngine);
-    const top = model.view.player.knownDeckTop!;
+    const top = model.view.near.knownDeckTop!;
     expect(top).not.toBeNull();
     expect(top.showPlayableOutline).toBe(true);
     expect(model.affordances.deckPlays.get(top.id)).toMatchObject({ kind: "play", from: "deck" });
@@ -151,7 +151,7 @@ describe("deck-top battle affordances", () => {
     expect(model.affordances.deckPlays.size).toBe(1);
     const hidden = promptLabBattle(labEngine, PROMPT_LAB_FIXTURES.find((row) => row.name === "deck-top-hidden")!).slice;
     const masked = screenOf(hidden.committed, null, hidden.committed, true, labEngine);
-    expect(masked.view.player.knownDeckTop).toBeNull();
+    expect(masked.view.near.knownDeckTop).toBeNull();
     expect(masked.affordances.deckPlays.size).toBe(0);
   });
 });
@@ -170,7 +170,8 @@ describe("prompt surfaces over the prompt lab", () => {
       case "targets":
         return surface.ids.map((target) => surface.answer(target)).find((answer) => answer !== null) ?? null;
       case "picker": {
-        const { candidateIds, count } = surface.picker;
+        const { candidateIds, selection } = surface.picker;
+        const count=selection.max;
         const sizes = Array.from({ length: count + 1 }, (_unused, size) => size);
         return sizes.map((size) => surface.answer(candidateIds.slice(0, size))).find((answer) => answer !== null) ?? null;
       }
@@ -193,7 +194,7 @@ describe("prompt surfaces over the prompt lab", () => {
     }
   };
   const emptyAnswerControl = (surface: PromptSurface): boolean =>
-    surface.kind === "targets" ? surface.skip !== null : surface.kind === "picker" ? surface.picker.optional : false;
+    surface.kind === "targets" ? surface.skip !== null : surface.kind === "picker" ? surface.picker.selection.min === 0 : false;
   const offered = (affordances: EngineBattleAffordances): Action[] => [
     ...(affordances.pass === null ? [] : [affordances.pass]),
     ...affordances.plays.values(),
@@ -300,3 +301,5 @@ describe("prompt surfaces over the prompt lab", () => {
     }
   });
 });
+
+function choiceView(view: import("../../cumulus/screens/MobileBattleScreen").MobileBattleView) { return view.prompt.surface.kind === "choice" ? view.prompt.surface.choice : null; }

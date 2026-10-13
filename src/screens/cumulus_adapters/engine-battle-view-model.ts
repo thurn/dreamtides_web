@@ -742,18 +742,14 @@ export function buildEngineBattleScreenModel(input: EngineBattleViewInput): Engi
       far: sides[far],
       nearHand: { owner: human, position: "near", cardIds: nearHandIds, cards: nearHand },
       farHand: { owner: far, position: "far", cardIds: farHandIds, cards: farHand },
-      ...promptViewFields(prompt),
+      prompt: promptViewFields(prompt),
       dreamwell: visual?.kind === "dreamwell" && dreamwell !== null ? { side: visual.side, model: dreamwell } : null,
       playReveal:
         visual?.kind === "reveal" && revealed !== undefined ? { card: cardView(revealed), from: visual.from } : null,
       activeSide: view.turn.active,
       isOpeningTurn: view.turn.turnNumber === 1,
       phase: mobilePhase(view),
-      enemyHandCardIds: human === "enemy" ? nearHandIds : farHandIds,
-      enemyHand: human === "enemy" ? nearHand : farHand,
-      enemy: sides.enemy,
-      player: sides.player,
-      playerHand: human === "player" ? nearHand : farHand,
+      turn: String(view.turn.turnNumber),
       inspector: {
         opponentName: input.opponentName,
         perspective: human,
@@ -927,7 +923,7 @@ export function withChooser(
     ...model.prompt,
     surface: { kind: "choice", key: CHOOSER_KEY, label: ENGINE_ABILITY_CHOOSER_TITLE, options, presentation: "chooser" },
   };
-  return { ...model, prompt, view: { ...model.view, ...promptViewFields(prompt) } };
+  return { ...model, prompt, view: { ...model.view, prompt: promptViewFields(prompt) } };
 }
 
 /** The options of the chooser the human opened, each with what it does; empty when none is open or it offers nothing. */

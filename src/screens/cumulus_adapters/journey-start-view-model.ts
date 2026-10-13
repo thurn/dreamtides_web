@@ -52,7 +52,7 @@ export function resolveAvatarOffer(
   );
 }
 
-/** Build Mira's fixed guidance for the tutorial-only Avatar offer. */
+/** Build Mira's fixed guidance for the tutorial Avatar offer. */
 export function buildJourneyStartGuideDialogue(
   tutorialAvatarId?: AvatarId,
   speechBubble?: TutorialJourneyStartConfiguration["speechBubble"],

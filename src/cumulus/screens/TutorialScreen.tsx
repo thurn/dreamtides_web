@@ -374,7 +374,7 @@ function TutorialHowToPlayDialog({
   readonly staged: boolean;
   readonly onClose: () => void;
 }): ReactElement {
-  
+
   const desktop = useIsDesktop();
   const paragraphStyle = {
     margin: 0,
@@ -598,12 +598,12 @@ function withOpponentCardPlayed(
   card: MobileBattleCardView,
 ): MobileBattleView {
   const backRankStart = tutorialOpponentBackRankIndex(
-    battle.enemy.backRank.length,
+    battle.far.backRank.length,
   );
-  const destinationIndex = battle.enemy.backRank.findIndex(
+  const destinationIndex = battle.far.backRank.findIndex(
     (slot, index) => index >= backRankStart && slot.card === null,
   );
-  const backRank = battle.enemy.backRank.map((slot, index, slots) => ({
+  const backRank = battle.far.backRank.map((slot, index, slots) => ({
     ...slot,
     card:
       index ===
@@ -615,8 +615,8 @@ function withOpponentCardPlayed(
   }));
   return {
     ...battle,
-    enemyHandCardIds: battle.enemyHandCardIds.filter((id) => id !== card.id),
-    enemyHand: battle.enemyHand.filter((candidate) => candidate.id !== card.id),
+
+
     farHand: {
       ...battle.farHand,
       cardIds: battle.farHand.cardIds.filter((id) => id !== card.id),
@@ -624,7 +624,7 @@ function withOpponentCardPlayed(
         (candidate) => candidate.id !== card.id,
       ),
     },
-    enemy: { ...battle.enemy, backRank },
+    far: { ...battle.far, backRank },
     inspector: {
       ...battle.inspector,
       sides: {
@@ -1286,7 +1286,7 @@ function TutorialChallengeAnimation({
   readonly playbackSpeed: number;
   readonly onComplete: () => void;
 }): ReactElement | null {
-  
+
   const [started, setStarted] = useState(false);
   const [geometry, setGeometry] = useState<TutorialChallengeGeometry | null>(
     null,
@@ -1658,7 +1658,7 @@ export function TutorialScreen({
   onEndTurn,
   onPlayerCharacterReposition,
 }: TutorialScreenProps): ReactElement {
-  
+
   const desktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const screenRef = useRef<HTMLElement | null>(null);
@@ -1701,7 +1701,7 @@ export function TutorialScreen({
   const lastDialogue = useRef<TutorialDialogueView | null>(view.dialogue);
   if (view.dialogue !== null) lastDialogue.current = view.dialogue;
   const renderedDialogue = view.dialogue ?? lastDialogue.current;
-  const opponentDeckCardIds = view.battle.enemy?.deckCardIds ?? [];
+  const opponentDeckCardIds = view.battle.far?.deckCardIds ?? [];
   const avatarArrival = useMemo(
     () =>
       view.playbackRunId !== null &&
@@ -1873,21 +1873,21 @@ export function TutorialScreen({
       ? DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS - 1
       : MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS;
     const hasCompleteRanks =
-      Array.isArray(view.battle.enemy?.backRank) &&
-      Array.isArray(view.battle.enemy.frontRank) &&
-      Array.isArray(view.battle.player?.backRank) &&
-      Array.isArray(view.battle.player.frontRank);
+      Array.isArray(view.battle.far?.backRank) &&
+      Array.isArray(view.battle.far.frontRank) &&
+      Array.isArray(view.battle.near?.backRank) &&
+      Array.isArray(view.battle.near.frontRank);
     const sourceBattle = hasCompleteRanks
       ? {
           ...view.battle,
-          enemy: expandedTutorialSide(
-            view.battle.enemy,
+          far: expandedTutorialSide(
+            view.battle.far,
             "enemy",
             backRankCount,
             frontRankCount,
           ),
-          player: expandedTutorialSide(
-            view.battle.player,
+          near: expandedTutorialSide(
+            view.battle.near,
             "player",
             backRankCount,
             frontRankCount,
@@ -1916,10 +1916,10 @@ export function TutorialScreen({
       ...sourceBattle,
       ...(playerSettled
         ? {
-            player: {
-              ...sourceBattle.player,
+            near: {
+              ...sourceBattle.near,
               status: {
-                ...sourceBattle.player.status,
+                ...sourceBattle.near.status,
                 avatar: view.avatars.player.visual,
                 avatarProfile: view.avatars.player.profile,
               },
@@ -1928,10 +1928,10 @@ export function TutorialScreen({
         : {}),
       ...(enemySettled
         ? {
-            enemy: {
-              ...sourceBattle.enemy,
+            far: {
+              ...sourceBattle.far,
               status: {
-                ...sourceBattle.enemy.status,
+                ...sourceBattle.far.status,
                 avatar: view.avatars.enemy.visual,
                 avatarProfile: view.avatars.enemy.profile,
               },
@@ -1945,23 +1945,23 @@ export function TutorialScreen({
       ...(drawnCardId === null
         ? {}
         : {
-            enemyHandCardIds: [...sourceBattle.enemyHandCardIds, drawnCardId],
+
             farHand: {
               ...sourceBattle.farHand,
               cardIds: [...sourceBattle.farHand.cardIds, drawnCardId],
             },
-            enemy: {
-              ...sourceBattle.enemy,
+            far: {
+              ...sourceBattle.far,
               ...(enemySettled
                 ? {
                     status: {
-                      ...sourceBattle.enemy.status,
+                      ...sourceBattle.far.status,
                       avatar: view.avatars.enemy.visual,
                       avatarProfile: view.avatars.enemy.profile,
                     },
                   }
                 : {}),
-              deckCardIds: sourceBattle.enemy.deckCardIds.filter(
+              deckCardIds: sourceBattle.far.deckCardIds.filter(
                 (cardId) => cardId !== drawnCardId,
               ),
             },
@@ -1978,8 +1978,8 @@ export function TutorialScreen({
                   ...sourceBattle.inspector.sides.enemy,
                   zones: {
                     ...sourceBattle.inspector.sides.enemy.zones,
-                    hand: sourceBattle.enemyHandCardIds.length + 1,
-                    deck: sourceBattle.enemy.deckCardIds.length - 1,
+                    hand: sourceBattle.farHand.cardIds.length + 1,
+                    deck: sourceBattle.far.deckCardIds.length - 1,
                   },
                 },
               },
@@ -1992,10 +1992,7 @@ export function TutorialScreen({
         : drawnScriptedCard.owner === "enemy"
           ? {
               ...updatedBattle,
-              enemyHandCardIds: [
-                ...updatedBattle.enemyHandCardIds,
-                drawnScriptedCard.card.id,
-              ],
+
               farHand: {
                 ...updatedBattle.farHand,
                 cardIds: [
@@ -2003,9 +2000,9 @@ export function TutorialScreen({
                   drawnScriptedCard.card.id,
                 ],
               },
-              enemy: {
-                ...updatedBattle.enemy,
-                deckCardIds: updatedBattle.enemy.deckCardIds.filter(
+              far: {
+                ...updatedBattle.far,
+                deckCardIds: updatedBattle.far.deckCardIds.filter(
                   (cardId) => cardId !== drawnScriptedCard.card.id,
                 ),
               },
@@ -2026,7 +2023,7 @@ export function TutorialScreen({
             }
           : {
               ...updatedBattle,
-              playerHand: [...updatedBattle.playerHand, drawnScriptedCard.card],
+
               nearHand: {
                 ...updatedBattle.nearHand,
                 cardIds: [
@@ -2038,9 +2035,9 @@ export function TutorialScreen({
                   drawnScriptedCard.card,
                 ],
               },
-              player: {
-                ...updatedBattle.player,
-                deckCardIds: updatedBattle.player.deckCardIds.filter(
+              near: {
+                ...updatedBattle.near,
+                deckCardIds: updatedBattle.near.deckCardIds.filter(
                   (cardId) => cardId !== drawnScriptedCard.card.id,
                 ),
               },
@@ -2394,7 +2391,7 @@ export function TutorialScreen({
   // the authoritative playable marker from the tutorial view model.
   const tutorialPlayableCard =
     view.currentAction?.action === "end-turn" && view.endTurn?.ready !== true
-      ? ((view.battle.playerHand ?? []).find(
+      ? ((view.battle.nearHand.cards ?? []).find(
           (card) => card.showPlayableOutline,
         ) ?? null)
       : null;
@@ -2844,7 +2841,7 @@ export function TutorialScreen({
   const opponentRepositionCard =
     opponentRepositionCardId === null
       ? null
-      : (battleView.enemy.frontRank.find(
+      : (battleView.far.frontRank.find(
           (slot) => slot.card?.model.cardId === opponentRepositionCardId,
         )?.card ?? null);
   const displayedBattleView =
@@ -2852,9 +2849,9 @@ export function TutorialScreen({
       ? baseDisplayedBattleView
       : {
           ...baseDisplayedBattleView,
-          enemy: {
-            ...baseDisplayedBattleView.enemy,
-            frontRank: baseDisplayedBattleView.enemy.frontRank.map((slot) =>
+          far: {
+            ...baseDisplayedBattleView.far,
+            frontRank: baseDisplayedBattleView.far.frontRank.map((slot) =>
               slot.card?.id === opponentRepositionCard.id
                 ? {
                     ...slot,
@@ -2867,13 +2864,13 @@ export function TutorialScreen({
   const repositionSourceCard =
     playerReposition === null
       ? null
-      : (battleView.player.backRank.find(
+      : (battleView.near.backRank.find(
           (slot) => slot.card?.id === playerReposition.cardInstanceId,
         )?.card ?? null);
   const repositionOpposingCard =
     playerReposition === null
       ? null
-      : (battleView.enemy.frontRank.find(
+      : (battleView.far.frontRank.find(
           (slot) => slot.card?.model.cardId === playerReposition.opposingCardId,
         )?.card ?? null);
 

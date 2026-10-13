@@ -72,18 +72,19 @@ export function makeView(): MobileBattleView {
     far: enemy,
     nearHand,
     farHand: { owner: "enemy", position: "far", cardIds: enemyHandCardIds, cards: [] },
-    promptNotice: null,
-    cardPicker: null,
-    choicePrompt: null,
+
+    prompt: { host: null, surface: { kind: "none" } },
+
+    turn: "3",
     dreamwell: null,
     activeSide: "player",
     isOpeningTurn: false,
     phase: "day",
-    enemyHandCardIds,
-    enemyHand,
-    enemy,
-    player,
-    playerHand,
+
+
+
+
+
     result: null,
     inspector: {
       opponentName: "enemy", perspective: "player", turn: "3", phase: "Day", activeSide: "Player", result: "In progress",

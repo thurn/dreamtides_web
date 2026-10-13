@@ -1,7 +1,4 @@
 import { testJourneySeed } from "../types/test-identities";
-import type { FoldState } from "../rules/fold-state";
-import type { TutorialBattleFoldState } from "../rules/battle/fold";
-import { parseCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type {
   AvatarContent,
@@ -15,44 +12,18 @@ import type {
   SiteState,
 } from "../types/journey";
 import { LayerName } from "../types/layer-name";
-import {
-  backRankSlotIds,
-  createEmptySlotRecord,
-  frontRankSlotIds,
-} from "./types";
-import type { BackRankSlotId, FrontRankSlotId } from "./types";
 import { parseSiteId } from "../types/identifiers";
 import { parseAtlasNodeId } from "../types/identifiers";
 import type { DeckEntryId } from "../types/identifiers";
 import { parseDeckEntryId } from "../types/identifiers";
 import {
+  testCardName,
   testCardId,
   testCardSubtype,
   testAvatarId,
   testDreamscapeId,
   testDreamsignId,
 } from "../types/test-identities";
-
-/** A generous materialized window for test ranks. The play area grows without
- *  bound at runtime; tests build an explicit window and override slots by id. */
-const TEST_FRONT_RANK_WINDOW = 12;
-const TEST_BACK_RANK_WINDOW = TEST_FRONT_RANK_WINDOW + 1;
-
-/**
- * Front-rank slot record with every slot `null` across the test window, for
- * building battle test states. The `Record<…, null>` return is assignable to both
- * the `string | null` (BattleMutableState) and `AiCard | null` (forward model)
- * slot shapes; override individual slots by spreading, e.g.
- * `{ ...emptyFrontRankSlots(), F0: card }`.
- */
-export function emptyFrontRankSlots(): Record<FrontRankSlotId, null> {
-  return createEmptySlotRecord(frontRankSlotIds(TEST_FRONT_RANK_WINDOW));
-}
-
-/** Back-rank slot record with every slot `null`; see {@link emptyFrontRankSlots}. */
-export function emptyBackRankSlots(): Record<BackRankSlotId, null> {
-  return createEmptySlotRecord(backRankSlotIds(TEST_BACK_RANK_WINDOW));
-}
 
 export function makeBattleTestSite(): SiteState {
   return {
@@ -259,7 +230,7 @@ function makeCard(
   spark: number | null,
 ): CardData {
   return {
-    name: parseCardName(name),
+    name: testCardName(name),
     id: testCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType,
@@ -283,24 +254,4 @@ function makeDeckEntry(entryId: DeckEntryId, cardNumber: number): DeckEntry {
   };
 }
 
-// tutorial-only until Phase 6
 /** A fold whose battle, when present, is the standalone tutorial battle. */
-export type TutorialFoldState = Omit<FoldState, "battle"> & {
-  readonly battle: TutorialBattleFoldState | null;
-};
-
-/** `state`, typed as a tutorial fold; throws when it holds a journey battle. */
-export function asTutorialFold(state: FoldState): TutorialFoldState {
-  if (state.battle !== null && state.battle.mode.kind !== "tutorial") {
-    throw new Error("Expected the standalone tutorial battle.");
-  }
-  return state as TutorialFoldState;
-}
-
-/** A reduce result whose fold is typed as a tutorial fold. */
-export function asTutorialResult<Result extends { readonly state: FoldState }>(
-  result: Result,
-): Result & { readonly state: TutorialFoldState } {
-  asTutorialFold(result.state);
-  return result as Result & { readonly state: TutorialFoldState };
-}
