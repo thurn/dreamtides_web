@@ -1,0 +1,303 @@
+{
+  "bead": "hv-umm2.206",
+  "base": "0ba193a825ef13e5c2faa1d9d3002b8cdceec580",
+  "status": "all final ordinary checks and runtime acceptance complete; endpoint authorized; final schema/commit receipts follow this metadata",
+  "implementationWindow": {
+    "start": "2026-10-13T00:29:23Z",
+    "end": "2026-10-13T01:25:00.861621Z",
+    "minutes": 55.6310270167,
+    "basis": "Conservative current resume-claim-to-parent-endpoint elapsed proxy including all current parent setup/reads/design/analysis/admission/coordination delays, negatives, fixture/product repairs, checks/fuzz/QA/waits and evidence. Not coding CPU.",
+    "firstHelper": "2026-10-13T00:32:27Z",
+    "dispatchPre": "2026-10-13T00:31:42.374249Z",
+    "dispatchPost": "2026-10-13T00:32:29.658931Z",
+    "dispatch": "Exact dispatch unknown; actual observed bracket retained.",
+    "writeACK": "2026-10-13T00:36:36.770600Z",
+    "repairACK": "2026-10-13T01:02:22.348424Z",
+    "endpointReceipt": "/tmp/dreamtides-executor-01a12e91/206-resume-endpoint-ack.json",
+    "tail": "Actual endpoint-to-commit tail is separate in206-resume-commit.json/final handoff."
+  },
+  "ownershipSegments": {
+    "original": {
+      "start": "2026-10-12T16:43:58Z",
+      "end": "2026-10-12T17:04:56Z",
+      "minutes": 20.9666666667,
+      "basis": "Conservative original source-free ownership timestamp proxy, not CPU."
+    },
+    "current": {
+      "start": "2026-10-13T00:29:23Z",
+      "end": "2026-10-13T01:25:00.861621Z",
+      "minutes": 55.6310270167
+    },
+    "totalOwnedMinutes": 76.5976936834,
+    "excludedReleasedGap": {
+      "start": "2026-10-12T17:04:56Z",
+      "end": "2026-10-13T00:29:23Z",
+      "qualification": "Excluded from206 ownership; includes other prerequisites560/592/597 work."
+    },
+    "originalProvenance": {
+      "helperFirst": "2026-10-12T16:52:41Z",
+      "dispatchPre": "2026-10-12T16:51:57.584261Z",
+      "dispatchPost": "2026-10-12T16:52:34.670934Z",
+      "dispatch": "Unknown exact dispatch; helper observation is later than parent post sample.",
+      "installPid": 50935,
+      "installObserver": 48644,
+      "installExit": 0,
+      "installSeconds": 2.52751,
+      "installStart": "2026-10-12T16:44:17.912974Z",
+      "installEnd": "2026-10-12T16:44:20.440460Z",
+      "capabilityPid": 54255,
+      "capabilityObserver": 54240,
+      "capabilityExit": 0,
+      "capabilitySeconds": 1.250418,
+      "capabilityClock": "Original exact start/end not recovered here; retained old206cost receipt, no stale imports executed.",
+      "removedWorktreeReceipt": "/tmp/dreamtides-executor-01a12e91/206-unused-worktree-removal.json",
+      "missingPrimitive": "Original source-free strict departed-subject-cost capability gap dispositioned by560, with592/597 compatible concealed sampling. Released prerequisite work is not charged to206."
+    }
+  },
+  "sourceManifest": {
+    "src/content/cards/burning-revenant-426825c7.ts": "f503132429bada90db4173d63befe64e4611cd78cff32958099a0ede5b470a73",
+    "src/content/cards/cinderblade-legionnaire-4b2f044c.ts": "f27221b10c13d09e9961ce6338e83e93a04fca31c6b02e2efc55aa9055b0baf9",
+    "src/content/cards/infernal-cavalier-b64f0beb.ts": "20a2c6e0294d269444afd03d1bd97ce0aff9ac0c1b61c064ce284d6a786e844b",
+    "src/content/cards/pathfinder-b5a5c1ba.ts": "f64d98588bca361a169cda96905773e935c2fe54390fbddeaeb974ab21fd6c59",
+    "src/content/specs/cards-94.scenarios.ts": "eb194a8f2856e2f3bc5b2301eb994c34c6699721886d0aac646f433063b23949",
+    "docs/plan/evidence/pre-existing/hv-umm2.206.md": "f2c756695e8c79c1423d0d498120f3998f37fd13eca935937ac37d97bdc88295",
+    "docs/plan/evidence/qa-ledger/hv-umm2.206.jsonl": "7a648c6922d5faf056d0461dff33f6cbe91d6ed7b3feac23e7d77b65381135bb"
+  },
+  "footprint": {
+    "productionChurn": 24,
+    "testNetLines": 109,
+    "moduleLines": 109,
+    "cases": 6,
+    "newTestEntrypoints": 0,
+    "jsdomFiles": 0
+  },
+  "apiFallout": "No exported API, engine, schema, UI, fixture, catalog or runner body change. Four own declarative leaves consume existing keyword/onDissolved/whenDissolved/returnFromVoid/fromVoid/triggerSubjectCost.",
+  "decisions": {
+    "D10": "Current rules settle former controller, self look-back, copied/ceased cost and physical another; no ruling needed.",
+    "D20": "Four strict subject/departure rows plus two public typed-event target-domain rows, six total.",
+    "D21": "Only sampled Cinderblade; final desktop/mobile actual offered/returned captures. Existing target picker and Vengeful representation, no new kind/status/visual.",
+    "scope": "No new exported API, engine/schema/UI/shared fixture/catalog/runner/config or rules body. Pure composition below100 non-test churn; no full or separate cold review required."
+  },
+  "fiveFailurePaths": {
+    "midStepError": "No new engine transition or catch path. Existing trigger-subject-cost error containment contracts ran in affected2.",
+    "partialWrite": "Declarative target filtering; existing public fold/cost/return atomic commit paths exercised by owning hub, no new writer or payment.",
+    "reloadRestart": "Existing saved subject-cost/queued resolving tests ran; final QA uses ordinary persisted intents/events and game log, no new reload schema.",
+    "invalidStale": "Actual public target-domain tests reject modified events; existing illegal/stale answer and wrong-actor owning contracts pass, no prompt/fingerprint change.",
+    "concurrentActors": "No new shared actor/resource state. Existing controller/prompt ownership arbitration unchanged; both-controller cases pass."
+  },
+  "commands": {
+    "stage1": "/tmp/dreamtides-executor-01a12e91/206-resume-stage1.json",
+    "author": "/tmp/dreamtides-executor-01a12e91/206-resume-author.json",
+    "focus": "/tmp/dreamtides-executor-01a12e91/206-resume-focus.json",
+    "affected": "/tmp/dreamtides-executor-01a12e91/206-resume-affected.json",
+    "review": "/tmp/dreamtides-executor-01a12e91/206-resume-review.json",
+    "preflight": "/tmp/dreamtides-executor-01a12e91/206-resume-preflight.json",
+    "fuzz-outer": "/tmp/dreamtides-executor-01a12e91/206-resume-fuzz-outer.json",
+    "fuzz-inner": "/tmp/dreamtides-executor-01a12e91/206-resume-fuzz-inner.json",
+    "knip": "/tmp/dreamtides-executor-01a12e91/206-resume-knip.json",
+    "sweep": "/tmp/dreamtides-executor-01a12e91/206-resume-sweep.json",
+    "judged": "/tmp/dreamtides-executor-01a12e91/206-resume-judged.json",
+    "judged2": "/tmp/dreamtides-executor-01a12e91/206-resume-judged2.json",
+    "event-warrior": "/tmp/dreamtides-executor-01a12e91/206-resume-event-warrior.json",
+    "event-warrior2": "/tmp/dreamtides-executor-01a12e91/206-resume-event-warrior2.json",
+    "type-focus": "/tmp/dreamtides-executor-01a12e91/206-resume-type-focus.json",
+    "type-counterfactual": "/tmp/dreamtides-executor-01a12e91/206-resume-type-counterfactual.json",
+    "type-negative": "/tmp/dreamtides-executor-01a12e91/206-resume-type-negative.json",
+    "affected2": "/tmp/dreamtides-executor-01a12e91/206-resume-affected2.json",
+    "review2": "/tmp/dreamtides-executor-01a12e91/206-resume-review2.json",
+    "preflight2": "/tmp/dreamtides-executor-01a12e91/206-resume-preflight2.json",
+    "fuzz2-outer": "/tmp/dreamtides-executor-01a12e91/206-resume-fuzz2-outer.json",
+    "fuzz2-inner": "/tmp/dreamtides-executor-01a12e91/206-resume-fuzz2-inner.json",
+    "knip2": "/tmp/dreamtides-executor-01a12e91/206-resume-knip2.json",
+    "sweep2": "/tmp/dreamtides-executor-01a12e91/206-resume-sweep2.json",
+    "judged3": "/tmp/dreamtides-executor-01a12e91/206-resume-judged3.json"
+  },
+  "commandAccounting": "Each instrumented finite command receipt retains PID/observer/cmd/UTC start/end/wall/exit. Short read/edit tool commands have no sampled subprocess identity/UTC boundaries; unknowns are retained without guessed values.",
+  "classification": {
+    "Stage1": "Four intended pending-clause negatives plus four existing typed capability controls; no fixture errors, no production edits in Stage1.",
+    "preCharacterGuard": "Original focus/affected/review/Knip/fuzz/preflight/sweep/judged2 and first parent proof are prior-source validation only.",
+    "typedEvent": "Eight actual event/Warrior returns after public discard; first diagnostic sequencing error kept separate. Final domains exclude the event and allow genuine Warriors on both controllers.",
+    "counterfactual": "Two intended owning case failures with only character guards temporarily omitted; outer expectation passes and all four source SHA restored in finally.",
+    "finalFocused": "3files2643tests; own module6cases; existing subject cost/replay/return and coverage gates included.",
+    "finalReview": "234files4613tests, types/lint/cycles green.",
+    "finalFuzz": "300games139250steps7230prompts734interactive reruns0failures; four entities exercised193/183/225/196.",
+    "finalQA": "Latest80sweep cells32pass48skip0unfixedfail; two superseded automatic report-timeout attempts. Both final judged viewports pass actual source exclusion/same-printing physical return, Caps/geometry and DPR2 captures. Returned card lower rules extend below viewport; full returned face/rules visibility is not claimed."
+  },
+  "correctionWindows": {
+    "product": {
+      "start": "2026-10-13T00:57:22.785524+00:00",
+      "finalGreen": "2026-10-13T01:18:27.315626+00:00",
+      "seconds": 1264.530102
+    },
+    "initialPublicProbeFixture": {
+      "start": "2026-10-13T00:57:02.337970+00:00",
+      "green": "2026-10-13T00:57:23.595350+00:00",
+      "seconds": 21.25738
+    },
+    "rootFinalProbeFixture": {
+      "start": "2026-10-13T01:21:38.984138+00:00",
+      "green": "2026-10-13T01:22:21.419626+00:00",
+      "seconds": 42.435488
+    },
+    "judgedScriptFixture": {
+      "start": "2026-10-13T00:50:16.533114+00:00",
+      "green": "2026-10-13T00:54:34.596313+00:00",
+      "seconds": 258.063199
+    },
+    "initialFixtureProductOverlapSeconds": 0.809826,
+    "fullLocalCorrectionUnionSeconds": 1585.476343,
+    "basis": "Complete failure/finding start through actual green end including parent/queue/QA waits. Browser timeout retry windows are nested within product window and not added twice. Final parent-probe fixture uses wrong suspended discriminant; no source change."
+  },
+  "correctionUnionMinutes": 26.4246057167,
+  "automaticTimeouts": [
+    {
+      "cell": [
+        "4b2f044c-0afe-432a-a121-2ea785bb1182",
+        "perfected",
+        "enemy"
+      ],
+      "rawReport": "invocations/sweep-AH07LX/run-bjQ5h7/sweep-4b2f044c-0afe-432a-a121-2ea785bb1182-perfected-enemy-attempt-1.result.json",
+      "caps": [],
+      "reportError": null,
+      "failureKinds": [
+        "timeout"
+      ],
+      "notes": "the card-lab report: TimeoutError: page.waitForFunction: Timeout 58558ms exceeded.",
+      "start": "2026-10-13T01:12:37.821000+00:00",
+      "retryReportPublished": "2026-10-13T01:13:45.107544+00:00",
+      "conservativeCorrectionSeconds": 67.28654384613037,
+      "timingBasis": "Navigation wall-clock started event to retained successful retry report filesystem publication; not isolated request time or CPU.",
+      "cause": "Lab report did not become available within bounded request. Successful automatic retry; no specific underlying product/host/provider cause established."
+    },
+    {
+      "cell": [
+        "426825c7-7259-41af-ac1c-c042b878d69b",
+        "empowered",
+        "enemy"
+      ],
+      "rawReport": "invocations/sweep-AH07LX/run-bjQ5h7/sweep-426825c7-7259-41af-ac1c-c042b878d69b-empowered-enemy-attempt-1.result.json",
+      "caps": [],
+      "reportError": null,
+      "failureKinds": [
+        "timeout"
+      ],
+      "notes": "the card-lab report: TimeoutError: page.waitForFunction: Timeout 59263ms exceeded.",
+      "start": "2026-10-13T01:14:17.054000+00:00",
+      "retryReportPublished": "2026-10-13T01:15:23.818344+00:00",
+      "conservativeCorrectionSeconds": 66.76434397697449,
+      "timingBasis": "Navigation wall-clock started event to retained successful retry report filesystem publication; not isolated request time or CPU.",
+      "cause": "Lab report did not become available within bounded request. Successful automatic retry; no specific underlying product/host/provider cause established."
+    }
+  ],
+  "heavy": {
+    "initial": {
+      "outer": "/tmp/dreamtides-executor-01a12e91/206-resume-fuzz-outer.json",
+      "inner": "/tmp/dreamtides-executor-01a12e91/206-resume-fuzz-inner.json",
+      "launchToInsideSeconds": 0.024469,
+      "qualification": "Pre-character guard source only."
+    },
+    "final": {
+      "outer": "/tmp/dreamtides-executor-01a12e91/206-resume-fuzz2-outer.json",
+      "inner": "/tmp/dreamtides-executor-01a12e91/206-resume-fuzz2-inner.json",
+      "launchToInsideSeconds": 0.032623,
+      "outerMinusInnerSeconds": 0.03684945899,
+      "qualification": "Canonical lockf heavy slot; first inside observer clock separates acquisition/launch from inner finite execution. Fuzzer single loop; standard validations use configured two-worker cap. Not an inferred compute-only duration."
+    }
+  },
+  "qa": {
+    "ledger": "docs/plan/evidence/qa-ledger/hv-umm2.206.jsonl",
+    "ledgerRows": 167,
+    "audit": "/tmp/dreamtides-executor-01a12e91/206-resume-qa-audit.json",
+    "sweepFinalInvocation": "invocations/sweep-AH07LX",
+    "judgedFinalInvocation": "invocations/run-m8OhkN",
+    "priorInvocations": [
+      "invocations/sweep-RJd7bk",
+      "invocations/run-G7SR1B",
+      "invocations/run-wYeEak"
+    ],
+    "dirtyQA": "Runner commit field is base0ba193a825ef13e5c2faa1d9d3002b8cdceec580 of dirty authored working tree, not an already committed source. Prior/final SHA manifests bind actual code/test bytes.",
+    "captures": [
+      "cinderblade-desktop-offered.png",
+      "cinderblade-desktop-returned.png",
+      "cinderblade-mobile-offered.png",
+      "cinderblade-mobile-returned.png"
+    ],
+    "dimensions": {
+      "desktop": [
+        2880,
+        1800
+      ],
+      "mobile": [
+        780,
+        1688
+      ]
+    },
+    "parentVisual": "/tmp/dreamtides-executor-01a12e91/206-parent-final-visual-judgment.json",
+    "logs": "Each native invocation retains exported desktop/mobile UUID intents/events/game logs; raw reports have empty Caps and null report errors.",
+    "resourceClosure": "Each owned provider transport/client/context/record/server group/lease completed ordinary cleanup before any subsequent source/check commands. Short final session tokens were not separately sampled; terminal success and own-record/PG absence are retained, not invented transport IDs."
+  },
+  "parentProofs": [
+    "/tmp/dreamtides-executor-01a12e91/206-parent-final2-probe.json",
+    "/tmp/dreamtides-executor-01a12e91/206-parent-type-final3-probe.json",
+    "/tmp/dreamtides-executor-01a12e91/206-parent-final-visual-judgment.json"
+  ],
+  "parentFixture": {
+    "failed": [
+      {
+        "pid": 48213,
+        "observer": 48197,
+        "start": "2026-10-13T01:21:38.984138Z",
+        "end": "2026-10-13T01:21:39.871241Z",
+        "seconds": 0.887128,
+        "exit": 1
+      },
+      {
+        "pid": 49334,
+        "observer": 49325,
+        "start": "2026-10-13T01:22:06.869814Z",
+        "end": "2026-10-13T01:22:08.154455Z",
+        "seconds": 1.284668,
+        "exit": 1
+      }
+    ],
+    "corrected": {
+      "pid": 58223,
+      "observer": 58143,
+      "start": "2026-10-13T01:22:20.623278Z",
+      "end": "2026-10-13T01:22:21.419626Z",
+      "seconds": 0.796373,
+      "exit": 0
+    },
+    "cause": "Parent scripts asserted pending rather than actual suspended discriminant; domains already correct. No repository source change."
+  },
+  "resources": "/tmp/dreamtides-executor-01a12e91/206-resume-resources.json",
+  "setup": {
+    "currentClaimPid": 19601,
+    "observer": 19599,
+    "seconds": 0.10246,
+    "start": "2026-10-13T00:29:23.290208Z",
+    "end": "2026-10-13T00:29:23.392633Z",
+    "installPid": 21646,
+    "installObserver": 21636,
+    "installExit": 0,
+    "installSeconds": 2.545375,
+    "installStart": "2026-10-13T00:29:45.896157Z",
+    "installEnd": "2026-10-13T00:29:48.441509Z",
+    "entryFrictionPid": 22514,
+    "entryObserver": 22491,
+    "entryExit": 0,
+    "entrySeconds": 0.217797,
+    "entitiesPid": 22549,
+    "entitiesObserver": 22539,
+    "entitiesSeconds": 0.885421,
+    "setup": "Parent setup not repeated; entry cadence observation8since593, not due."
+  },
+  "readObservations": "Unmatched shell globs and guessed paths corrected read-only; exact PIDs/clocks unknown. No source effect. Array.at convenience changed to indexed access before type validation, with no failed typecheck.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final npm run review validation start01:07:08.929Z"
+      }
+    }
+  }
+}

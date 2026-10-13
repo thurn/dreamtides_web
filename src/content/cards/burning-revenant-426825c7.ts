@@ -1,3 +1,6 @@
+import { characterYouControl, fromVoid, triggerSubjectCost } from "../../engine/dsl/builders";
+import { triggered, whenDissolved } from "../../engine/dsl/triggers";
+import { returnFromVoid } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 489,
   art: { x: 0.714, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(whenDissolved(characterYouControl({ subtype: "Warrior" })), returnFromVoid(fromVoid({ cardType: "character", subtype: "Warrior" }, { costLessThan: triggerSubjectCost() })))],
+  verifiedText: "vlg8n7l7ov",
 });

@@ -1,3 +1,6 @@
+import { fromVoid } from "../../engine/dsl/builders";
+import { onDissolved, triggered } from "../../engine/dsl/triggers";
+import { returnFromVoid } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 495,
   art: { x: -0.139, y: -0.394, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: () => [triggered(onDissolved(), returnFromVoid(fromVoid({ cardType: "character", subtype: "Warrior" }, { another: true }), { toYourHand: true }))],
+  verifiedText: "1ogqyxnik64",
 });

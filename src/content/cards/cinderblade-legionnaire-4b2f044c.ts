@@ -1,3 +1,6 @@
+import { fromVoid, keyword } from "../../engine/dsl/builders";
+import { onDissolved, triggered } from "../../engine/dsl/triggers";
+import { returnFromVoid } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 369,
   art: { x: 0, y: 1, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  abilities: () => [keyword("vengeful"), triggered(onDissolved(), returnFromVoid(fromVoid({ cardType: "character", subtype: "Warrior" }, { another: true }), { toYourHand: true }))],
+  verifiedText: "ircvtrjh4w",
 });

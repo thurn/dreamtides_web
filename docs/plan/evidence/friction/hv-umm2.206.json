@@ -1,0 +1,32 @@
+{
+  "bead": "hv-umm2.206",
+  "phase": 5,
+  "implementMin": 55.6310270167,
+  "implementWindow": {
+    "start": "2026-10-13T00:29:23Z",
+    "end": "2026-10-13T01:25:00.861621Z"
+  },
+  "localValidationS": {
+    "focused": 8.377194332992076,
+    "review": 51.2517731669941,
+    "knip": 2.9878616250061896,
+    "fuzz": 193.21117962499557,
+    "fuzzOuter": 193.2480290839885,
+    "preflight": 1.1984107500029495,
+    "sweep": 347.49455658301304,
+    "judged": 20.598314291011775
+  },
+  "hostLoad": 9.17236328125,
+  "testDelta": {
+    "files": 0,
+    "lines": 109,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 26.4246057167,
+      "note": "Complete union of character-filter product repair plus script/public/root fixture corrections, including parent analysis/admission, checks, fuzz/QA and waits. Initial fixture overlaps product by.809826s; two automatic sweep timeout windows are nested, not added twice. Detailed clocks/receipts retained; not CPU."
+    }
+  ]
+}
