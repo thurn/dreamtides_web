@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.640",
+  "phase": 5,
+  "implementMin": 111.1199715,
+  "implementWindow": {
+    "start": "2026-10-13T15:20:55.778000+00:00",
+    "end": "2026-10-13T17:12:02.976290+00:00"
+  },
+  "localValidationS": {
+    "focused": 3.2315889579767827,
+    "review": 9.838273458008189,
+    "knip": 3.220611500000814,
+    "coverage": 4.3466410000110045
+  },
+  "hostLoad": 16.12,
+  "testDelta": {
+    "files": 1,
+    "lines": 251,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "pre-existing-capacity-reservation",
+      "minutes": 74.82986978333334,
+      "note": "Gross frozen prerequisite interval includes parent97uo repair/checks/review/delivery, released assignment, native single-commit checkpoint/update recovery and parent admission. It overlaps repair work; elapsed wall time only. Normative two-controller tests pass unchanged after certified repair."
+    }
+  ]
+}

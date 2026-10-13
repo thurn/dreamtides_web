@@ -1,0 +1,787 @@
+{
+  "bead": "hv-umm2.640",
+  "base": "ed7a661c53c8166ae5fbe303389620f26212a927",
+  "originalBase": "d9b44a5543b598ae1215b2d75e675ad6592d22f0",
+  "dispatch": {
+    "actualNativeSpawn": "2026-10-13T15:20:55.778Z",
+    "modelStart": "unknown",
+    "journal": "aspect_pair_640-actual-dispatch-journal.json"
+  },
+  "endpoint": {
+    "at": "2026-10-13T17:12:02.976290+00:00",
+    "status": "Final precommit evidence stamp immediately before schema, exact eight-path staging/cached check and one amend. Actual Git interval and endpoint gap are retained separately in stage3-terminal-v01.json; elapsed includes admission, research, fixture corrections, prerequisite repair/off-claim interval, native checkpoint/update and parent audit waits. Model start unknown."
+  },
+  "elapsedQualification": "Gross elapsed includes source admission, research, fixture corrections, frozen prerequisite interval, parent repair/delivery, released assignment, native update recovery and parent resume latency. It is not productive editing, CPU time or summed task work.",
+  "prerequisiteInterval": {
+    "start": "2026-10-13T15:40:47.300833+00:00",
+    "end": "2026-10-13T16:55:37.093020+00:00",
+    "minutes": 74.82986978333334,
+    "scope": "Observed helper freeze to parent resume admission, including repair and native update/coordination; overlaps parent hv-97uo work and is not additional work time.",
+    "proofs": [
+      "stage2-capacity-freeze-v01.json",
+      "justiciar-capacity-checkpoint-v01.json",
+      "resume-after-97uo-v04.json",
+      "justiciar-update-checkpoint-resolution-v04.json",
+      "resume-stage2-ack-v06.json"
+    ]
+  },
+  "validationReceipts": {
+    "capacity-public-diagnostic-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts",
+        "-t",
+        "full-capacity"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T15:39:51.667289+00:00",
+      "end": "2026-10-13T15:39:55.550451+00:00",
+      "exit": 1,
+      "wallSeconds": 3.8827683750132564,
+      "pid": 10820,
+      "pgid": 10820,
+      "load": "{ 5.62 6.69 9.50 }",
+      "groupRemainingAtExit": []
+    },
+    "checkpoint-commit-v04.receipt.json": {
+      "argv": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/root640-20261013/checkpoint-message-v04.txt"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T16:43:39.918904+00:00",
+      "end": "2026-10-13T16:43:39.958201+00:00",
+      "exit": 0,
+      "wallSeconds": 0.03915308299474418,
+      "pid": 3757,
+      "pgid": 3757,
+      "load": "{ 22.16 16.20 14.54 }",
+      "groupRemainingAtExit": []
+    },
+    "coverage-pair-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T17:00:01.759457+00:00",
+      "end": "2026-10-13T17:00:06.106218+00:00",
+      "exit": 0,
+      "wallSeconds": 4.3466410000110045,
+      "pid": 12600,
+      "pgid": 12600,
+      "load": "{ 11.78 9.71 11.00 }",
+      "groupRemainingAtExit": []
+    },
+    "create-v01.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "worktree",
+        "create",
+        "wt/hv-umm2-640-aspect-pair290"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T15:16:34.962220+00:00",
+      "end": "2026-10-13T15:16:37.039751+00:00",
+      "exit": 0,
+      "wallSeconds": 2.0774224170017987,
+      "pid": 5132,
+      "pgid": 5132,
+      "load": "{ 9.72 13.40 12.48 }",
+      "groupRemainingAtExit": []
+    },
+    "doctor-after-update-v05.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T16:45:08.042521+00:00",
+      "end": "2026-10-13T16:45:09.706751+00:00",
+      "exit": 0,
+      "wallSeconds": 1.6641307919926476,
+      "pid": 68758,
+      "pgid": 68758,
+      "load": "{ 15.88 16.45 14.85 }",
+      "groupRemainingAtExit": []
+    },
+    "doctor-dispatch-v01.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T15:15:55.079323+00:00",
+      "end": "2026-10-13T15:15:56.492384+00:00",
+      "exit": 0,
+      "wallSeconds": 1.412939333007671,
+      "pid": 2666,
+      "pgid": 2666,
+      "load": "{ 13.33 14.45 12.78 }",
+      "groupRemainingAtExit": []
+    },
+    "doctor-update-refusal-v04.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T16:42:27.281528+00:00",
+      "end": "2026-10-13T16:42:29.908829+00:00",
+      "exit": 0,
+      "wallSeconds": 2.6271438330004457,
+      "pid": 88801,
+      "pgid": 88801,
+      "load": "{ 27.17 16.16 14.43 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-after-repair-v06.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T16:51:58.273411+00:00",
+      "end": "2026-10-13T16:52:01.505116+00:00",
+      "exit": 0,
+      "wallSeconds": 3.2315889579767827,
+      "pid": 83728,
+      "pgid": 83728,
+      "load": "{ 4.25 7.24 10.76 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-pair-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T15:36:22.567488+00:00",
+      "end": "2026-10-13T15:36:27.589345+00:00",
+      "exit": 1,
+      "wallSeconds": 5.0217849999899045,
+      "pid": 1837,
+      "pgid": 1837,
+      "load": "{ 4.17 7.69 10.60 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-pair-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T15:36:55.574519+00:00",
+      "end": "2026-10-13T15:36:59.524532+00:00",
+      "exit": 1,
+      "wallSeconds": 3.947907249996206,
+      "pid": 2677,
+      "pgid": 2677,
+      "load": "{ 3.86 7.22 10.31 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-pair-v03.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T15:38:29.637976+00:00",
+      "end": "2026-10-13T15:38:33.252143+00:00",
+      "exit": 1,
+      "wallSeconds": 3.613883291982347,
+      "pid": 8616,
+      "pgid": 8616,
+      "load": "{ 7.50 7.17 9.94 }",
+      "groupRemainingAtExit": []
+    },
+    "friction-dispatch-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T15:17:31.043820+00:00",
+      "end": "2026-10-13T15:17:31.264406+00:00",
+      "exit": 0,
+      "wallSeconds": 0.2203348329931032,
+      "pid": 8800,
+      "pgid": 8800,
+      "load": "{ 7.44 12.15 12.07 }",
+      "groupRemainingAtExit": []
+    },
+    "install-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T15:16:47.074610+00:00",
+      "end": "2026-10-13T15:16:49.977362+00:00",
+      "exit": 0,
+      "wallSeconds": 2.9025826250144746,
+      "pid": 5954,
+      "pgid": 5954,
+      "load": "{ 8.61 13.04 12.36 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-pair-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T16:59:37.615755+00:00",
+      "end": "2026-10-13T16:59:41.336324+00:00",
+      "exit": 0,
+      "wallSeconds": 3.7204487920098472,
+      "pid": 11208,
+      "pgid": 11208,
+      "load": "{ 5.42 8.56 10.64 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-pair-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T17:00:58.179602+00:00",
+      "end": "2026-10-13T17:01:01.400331+00:00",
+      "exit": 0,
+      "wallSeconds": 3.220611500000814,
+      "pid": 66941,
+      "pgid": 66941,
+      "load": "{ 16.25 11.69 11.67 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-emblems-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T16:57:08.548581+00:00",
+      "end": "2026-10-13T16:57:11.786006+00:00",
+      "exit": 1,
+      "wallSeconds": 3.2373162080184557,
+      "pid": 4669,
+      "pgid": 4669,
+      "load": "{ 7.37 10.84 11.73 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-nth-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T16:57:05.207317+00:00",
+      "end": "2026-10-13T16:57:08.477974+00:00",
+      "exit": 1,
+      "wallSeconds": 3.2705269170110114,
+      "pid": 4397,
+      "pgid": 4397,
+      "load": "{ 7.40 10.91 11.76 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-once-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T16:57:01.679383+00:00",
+      "end": "2026-10-13T16:57:05.135209+00:00",
+      "exit": 1,
+      "wallSeconds": 3.455693166994024,
+      "pid": 4116,
+      "pgid": 4116,
+      "load": "{ 7.40 10.91 11.76 }",
+      "groupRemainingAtExit": []
+    },
+    "release-dispatch-v01.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "release",
+        "status"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T15:15:55.076158+00:00",
+      "end": "2026-10-13T15:15:55.316761+00:00",
+      "exit": 0,
+      "wallSeconds": 0.2404774579918012,
+      "pid": 2663,
+      "pgid": 2663,
+      "load": "{ 13.33 14.45 12.78 }",
+      "groupRemainingAtExit": []
+    },
+    "review-pair-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T16:59:13.447023+00:00",
+      "end": "2026-10-13T16:59:26.658952+00:00",
+      "exit": 0,
+      "wallSeconds": 13.21170595800504,
+      "pid": 10802,
+      "pgid": 10802,
+      "load": "{ 4.72 8.69 10.75 }",
+      "groupRemainingAtExit": []
+    },
+    "review-pair-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T17:00:38.653449+00:00",
+      "end": "2026-10-13T17:00:48.491913+00:00",
+      "exit": 0,
+      "wallSeconds": 9.838273458008189,
+      "pid": 64850,
+      "pgid": 64850,
+      "load": "{ 16.12 11.32 11.54 }",
+      "groupRemainingAtExit": []
+    },
+    "update-after-97uo-v04.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "update"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T16:41:10.739949+00:00",
+      "end": "2026-10-13T16:41:11.127176+00:00",
+      "exit": 5,
+      "wallSeconds": 0.387143041996751,
+      "pid": 25691,
+      "pgid": 25691,
+      "load": "{ 6.04 10.98 12.64 }",
+      "groupRemainingAtExit": []
+    },
+    "update-after-97uo-v05.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "update"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T16:43:40.102905+00:00",
+      "end": "2026-10-13T16:43:49.934211+00:00",
+      "exit": 0,
+      "wallSeconds": 9.831093790999148,
+      "pid": 3802,
+      "pgid": 3802,
+      "load": "{ 22.16 16.20 14.54 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-pair-v01.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T17:01:52.340963+00:00",
+      "end": "2026-10-13T17:01:52.411790+00:00",
+      "exit": 0,
+      "wallSeconds": 0.07073479201062582,
+      "pid": 70218,
+      "pgid": 70218,
+      "load": "{ 17.22 12.37 11.90 }",
+      "groupRemainingAtExit": []
+    },
+    "diffcheck-pair-v01.receipt.json": {
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "ed7a661c53c8166ae5fbe303389620f26212a927"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-640-aspect-pair290",
+      "start": "2026-10-13T17:02:24.500619+00:00",
+      "end": "2026-10-13T17:02:24.530496+00:00",
+      "exit": 0,
+      "wallSeconds": 0.02978329101460986,
+      "pid": 16949,
+      "pgid": 16949,
+      "load": "{ 19.59 13.32 12.26 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "sourceAudit": {
+    "design": "src/content/apollyon/design.ts:16-33 exact direct constructor adoption; no mutable design function reference",
+    "consumers": "New test directly imports both AbilityLists into actual authored synthetic engine avatar emblems. boardState and ordinary engine.apply/fold intents exercise public behavior for both controllers.",
+    "identityAudit": [
+      "parent-admission-v03/all-identity-expressions-v02.json",
+      "parent-admission-v03/actual-native-uuid-audit-v03.json",
+      "resume-source-admission-v06.json"
+    ],
+    "dynamicIdentityScope": "Full src synthetic/reference scan included 682 expression references/128 dynamic expressions, parameter helpers and additive range call sites. Root expanded scan covers 801 identity lines and 954 native all-status records after resume. 0x64000 through 0x6400f has no existing native or source reservation; lower 0x6400 shuffle range is distinct. Fixtures actually allocate 0x64000 through 0x64009. Actual synthetic UUID prefix is 5e5e5e5e.",
+    "exactAdmittedPaths": [
+      "src/content/apollyon/aspects/aspect-1380edc9-09ed-44df-ad09-ab4cbfc081b5.ts",
+      "src/content/apollyon/aspects/aspect-3fe26475-8023-46d3-b13b-86673b92e3d0.ts",
+      "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+    ]
+  },
+  "counterfactuals": {
+    "negative-once-v01": "Own oncePerTurn flag disabled: two failing controller reset/once cases, fourteen pass.",
+    "negative-nth-v01": "Own nth changed from two to one: ten fail, six pass.",
+    "negative-emblems-v01": "Both own AbilityLists empty while genuine consumer remains: fourteen fail, two pass.",
+    "restoration": "Each run restores exact original module bytes in finally; distinct raw receipts and restored hash files retained. No engine body was modified."
+  },
+  "initialFailures": {
+    "focused-pair-v01": "Fixture parseAvatarId import mismatch, zero cases executed; corrected to types/identifiers.",
+    "focused-pair-v02": "Eight fixture assertions/answer-order failures; actual engine source uses side-only emblem reference, its origin carries UUID. Prompt mode answer is numeric and target precedes optional payment. Corrected fixtures, no engine failure inferred.",
+    "focused-pair-v03": "Fourteen pass; two genuine normative capacity failures.",
+    "capacity-public-diagnostic-v01": "Both controllers observe one figment and source void, retained unchanged normative expectation.",
+    "focused-after-repair-v06": "All sixteen pass unchanged on repaired base."
+  },
+  "testDeltaDetail": {
+    "files": 1,
+    "vitestEntrypoints": 1,
+    "lines": 251,
+    "jsdomFiles": 0,
+    "cases": 16,
+    "extraInternalRows": "Optional-payment case covers both paid and declined for each controller."
+  },
+  "fiveFailureMapping": {
+    "ASTWithoutEmblem": "Direct AbilityList consumer plus negative-emblems proves actual permanent emblem effects.",
+    "WrongControllerSourceSubjectNth": "Ordinary opposing Interrupt actions, exact physical subject/source, wrong subtype and effective types, second/third and reset; negative-nth/once discriminate.",
+    "EmptyCeasedCapacityCancel": "No RNG pool is used; capacity tests, copied-card cessation, original cancellation and committed-copy cancellation refusal/replay protections exercise relevant contracts.",
+    "SignatureClaimsFullPool": "No recipe, signature sample, pool generation or boss strength acceptance is claimed; original290/295 retain all joins.",
+    "PrematureProductionAuthoring": "Exact three primary source paths; no status/catalog/map/recipes/Dreamsign/production-incarnation changes. Root native ownership audit and final diff enforce scope."
+  },
+  "failurePaths": {
+    "errorMidStep": "Later synthetic resolution fault retains already committed Aspect copy and rolls back the failing resolution step for both controllers.",
+    "reloadRestart": "Persisted real copy-target prompt roundtrips into fresh fold and produces identical outcome.",
+    "partialWrite": "Fold cancellation preserves committed hash; fault leaves committed state and empty published batch. No new persistent store or partial-write API.",
+    "invalidStale": "Illegal, stale, foreign answers are bounced; replayed consumed prompt is rejected.",
+    "concurrentActors": "Ordinary opposing Interrupt response is real engine play; competing battle action during copy prompt is rejected."
+  },
+  "validationScope": {
+    "browser": "N/A: unregistered source assemblies; no runtime presentation or production workflow changes.",
+    "fullFuzz": "N/A: nineteen non-test lines using delivered forms; no state/privacy/setup/architecture/infrastructure changes. Repair97uo owns its full/200-fuzz/QA validation.",
+    "independentReview": "N/A: no core-review label, no phase gate, nineteen non-test assembly lines; root revisits final scope.",
+    "originalAcceptances": "Original290 twenty Greedy games EACH, original295 fifty EACH and champion rerun/full-pool joins remain."
+  },
+  "runtime": "Owned check processes only, retained per-receipt PID/PG/end status. No QA/browser/server/provider/lease.",
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-pair-v02 receipt start; sysctl -n vm.loadavg one-minute observation16.12. No controlled performance comparison is claimed."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "capacity-public-diagnostic-v01.receipt.json": {
+      "load": "{ 5.62 6.69 9.50 }",
+      "start": "2026-10-13T15:39:51.667289+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts",
+        "-t",
+        "full-capacity"
+      ]
+    },
+    "checkpoint-commit-v04.receipt.json": {
+      "load": "{ 22.16 16.20 14.54 }",
+      "start": "2026-10-13T16:43:39.918904+00:00",
+      "argv": [
+        "git",
+        "commit",
+        "-F",
+        "/tmp/root640-20261013/checkpoint-message-v04.txt"
+      ]
+    },
+    "coverage-pair-v01.receipt.json": {
+      "load": "{ 11.78 9.71 11.00 }",
+      "start": "2026-10-13T17:00:01.759457+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ]
+    },
+    "create-v01.receipt.json": {
+      "load": "{ 9.72 13.40 12.48 }",
+      "start": "2026-10-13T15:16:34.962220+00:00",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "worktree",
+        "create",
+        "wt/hv-umm2-640-aspect-pair290"
+      ]
+    },
+    "doctor-after-update-v05.receipt.json": {
+      "load": "{ 15.88 16.45 14.85 }",
+      "start": "2026-10-13T16:45:08.042521+00:00",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ]
+    },
+    "doctor-dispatch-v01.receipt.json": {
+      "load": "{ 13.33 14.45 12.78 }",
+      "start": "2026-10-13T15:15:55.079323+00:00",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ]
+    },
+    "doctor-update-refusal-v04.receipt.json": {
+      "load": "{ 27.17 16.16 14.43 }",
+      "start": "2026-10-13T16:42:27.281528+00:00",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ]
+    },
+    "focused-after-repair-v06.receipt.json": {
+      "load": "{ 4.25 7.24 10.76 }",
+      "start": "2026-10-13T16:51:58.273411+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ]
+    },
+    "focused-pair-v01.receipt.json": {
+      "load": "{ 4.17 7.69 10.60 }",
+      "start": "2026-10-13T15:36:22.567488+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ]
+    },
+    "focused-pair-v02.receipt.json": {
+      "load": "{ 3.86 7.22 10.31 }",
+      "start": "2026-10-13T15:36:55.574519+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ]
+    },
+    "focused-pair-v03.receipt.json": {
+      "load": "{ 7.50 7.17 9.94 }",
+      "start": "2026-10-13T15:38:29.637976+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ]
+    },
+    "friction-dispatch-v01.receipt.json": {
+      "load": "{ 7.44 12.15 12.07 }",
+      "start": "2026-10-13T15:17:31.043820+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ]
+    },
+    "install-v01.receipt.json": {
+      "load": "{ 8.61 13.04 12.36 }",
+      "start": "2026-10-13T15:16:47.074610+00:00",
+      "argv": [
+        "npm",
+        "install"
+      ]
+    },
+    "knip-pair-v01.receipt.json": {
+      "load": "{ 5.42 8.56 10.64 }",
+      "start": "2026-10-13T16:59:37.615755+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ]
+    },
+    "knip-pair-v02.receipt.json": {
+      "load": "{ 16.25 11.69 11.67 }",
+      "start": "2026-10-13T17:00:58.179602+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ]
+    },
+    "negative-emblems-v01.receipt.json": {
+      "load": "{ 7.37 10.84 11.73 }",
+      "start": "2026-10-13T16:57:08.548581+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ]
+    },
+    "negative-nth-v01.receipt.json": {
+      "load": "{ 7.40 10.91 11.76 }",
+      "start": "2026-10-13T16:57:05.207317+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ]
+    },
+    "negative-once-v01.receipt.json": {
+      "load": "{ 7.40 10.91 11.76 }",
+      "start": "2026-10-13T16:57:01.679383+00:00",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-290.test.ts"
+      ]
+    },
+    "release-dispatch-v01.receipt.json": {
+      "load": "{ 13.33 14.45 12.78 }",
+      "start": "2026-10-13T15:15:55.076158+00:00",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "release",
+        "status"
+      ]
+    },
+    "review-pair-v01.receipt.json": {
+      "load": "{ 4.72 8.69 10.75 }",
+      "start": "2026-10-13T16:59:13.447023+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    "review-pair-v02.receipt.json": {
+      "load": "{ 16.12 11.32 11.54 }",
+      "start": "2026-10-13T17:00:38.653449+00:00",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ]
+    },
+    "update-after-97uo-v04.receipt.json": {
+      "load": "{ 6.04 10.98 12.64 }",
+      "start": "2026-10-13T16:41:10.739949+00:00",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "update"
+      ]
+    },
+    "update-after-97uo-v05.receipt.json": {
+      "load": "{ 22.16 16.20 14.54 }",
+      "start": "2026-10-13T16:43:40.102905+00:00",
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "update"
+      ]
+    },
+    "schema-pair-v01.receipt.json": {
+      "load": "{ 17.22 12.37 11.90 }",
+      "start": "2026-10-13T17:01:52.340963+00:00",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ]
+    },
+    "diffcheck-pair-v01.receipt.json": {
+      "load": "{ 19.59 13.32 12.26 }",
+      "start": "2026-10-13T17:02:24.500619+00:00",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "ed7a661c53c8166ae5fbe303389620f26212a927"
+      ]
+    }
+  },
+  "validationQualifications": {
+    "review-pair-v01": "Passed16 prior to meaningful public trigger-visibility assertion correction.",
+    "review-pair-v02": "Final exact source/test bytes: lint, app/node typing, cycles, evidence schema and all16 related cases pass.",
+    "knip-pair-v02": "Final exact source/test bytes pass unused-code analysis.",
+    "coverage-pair-v01": "Canonical sanctioned content coverage passes before test-only public visibility assertion correction; catalog/modules/engine identical afterward.",
+    "negativeControls": "Performed against repaired base before same-case visibility assertion correction; modules restored byte-for-byte. Raw negative cases are retained, not represented as passing checks.",
+    "publicVisibilityCorrection": "Moved eventSeenBy checks from first-event batch (which contains no Aspect trigger) to the actual second-event trigger batch; both viewer avatar UUIDs and public emblem source/physical subject are observed. Same16 cases, no engine/module changes."
+  },
+  "primarySourceSHA256": {
+    "src/content/apollyon/aspects/aspect-1380edc9-09ed-44df-ad09-ab4cbfc081b5.ts": "305b7418b6d9e18fab0cc5d954bb66dec9ecc44dcb56377216ea34918728263e",
+    "src/content/apollyon/aspects/aspect-3fe26475-8023-46d3-b13b-86673b92e3d0.ts": "0627fecaaf2dde259cd6881f42a0c5afdc03dd78568646392096d42aae9df9df",
+    "src/battle/integration/apollyon-aspects/pair-290.test.ts": "2119095c99d4aea24c9284a0bc147a903c934739cd1a6d73c2072d6b50277265"
+  },
+  "stage2Freeze": "Parent final audit passed all eight source hashes; Stage3 exact ACK authorizes own timing evidence and one validated administrative-checkpoint amend.",
+  "stage3ExternalProofs": {
+    "terminal": "stage3-terminal-v01.json",
+    "schema": "schema-final-v03.receipt.json",
+    "stage": "stage-exact-eight-v03.receipt.json",
+    "cachedCheck": "cached-check-final-v03.receipt.json",
+    "git": "commit-amend-final-v03.receipt.json",
+    "qualification": "These immutable terminal receipts are produced after this precommit source stamp and retained externally; this source file does not imply unobserved results."
+  }
+}
