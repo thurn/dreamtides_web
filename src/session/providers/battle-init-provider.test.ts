@@ -157,6 +157,25 @@ describe("battle init provider", () => {
     expect(getLogEntries()).toHaveLength(count);
   });
 
+  it("carries the fixed draft multiset by UUID independently of spent copies and selected deck", () => {
+    const content = makeContent();
+    const journey = makeJourney({ draftState: {
+      mode: "tides4", currentOffer: [], activeSiteId: null, pickNumber: 4, sitePicksCompleted: 0,
+      draftPoolCopiesByCard: { "101": 2, "102": 1 }, remainingCopiesByCard: { "101": 0, "102": 0 },
+    } });
+    const before: unknown = JSON.parse(JSON.stringify(journey));
+    const { start, slice } = begin(content, journey);
+    const expected = [content.cardDatabase.get(101)!.id, content.cardDatabase.get(101)!.id, content.cardDatabase.get(102)!.id].sort();
+    expect(start.engineInit.draftPools?.player).toEqual(expected);
+    expect(slice.committed.draftPools?.player).toEqual(expected);
+    const serializedPools: unknown = JSON.parse(JSON.stringify(start.engineInit.draftPools));
+    expect(serializedPools).toEqual(start.engineInit.draftPools);
+    expect(journey).toEqual(before);
+    expect(begin(content, makeJourney()).start.engineInit.draftPools?.player).toEqual([]);
+    journey.draftState!.draftPoolCopiesByCard = { "999999": 1 };
+    expect(() => begin(content, journey)).toThrow();
+  });
+
   it("names the opponent Avatar by UUID on the enemy descriptor", () => {
     const content = makeContent();
     const { start } = begin(content, makeJourney());

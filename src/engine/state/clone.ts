@@ -180,6 +180,7 @@ export function cloneState(state: BattleState): BattleState {
     version: state.version,
     seed: state.seed,
     rng: copyJson(state.rng),
+    ...(state.draftPools === undefined ? {} : { draftPools: copyJson(state.draftPools) }),
     nextInstance: state.nextInstance,
     clock: state.clock,
     config: copyJson(state.config),

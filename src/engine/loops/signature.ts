@@ -50,6 +50,7 @@ const STATE_FIELDS = {
   nextInstance: "resource",
   clock: "bookkeeping",
   config: "bookkeeping",
+  draftPools: "bookkeeping",
   turn: "position",
   sides: "position",
   /** Projected: deck and void instances are dropped, and counters and gained spark zeroed. */

@@ -1,0 +1,5 @@
+# Current-source sampler observation
+
+On base `9fdaa25aab8b9a13f5b23c7e23fbb210a4a92eb7`, genuine public fixed-card creation in a prepared Dawn battle with empty original decks succeeds. The holder can sample its view, while the opposite viewer throws because the hidden created hand slot has no decklist candidate. A separate typed remembered observation derived from that genuine created card, whose printing is outside the original decklists, throws at anonymous descriptor assignment. The observation is a declared synthetic public-state fact, not a claimed interactive player workflow.
+
+The corrected finite witness `/tmp/580-sampler-baseline-corrected.mts` records both actors, twelve cases and four expected gaps with no fixture error. The first external declaration failed setup validation before any case and is retained separately. The admitted C11 repair covers declared-pool created slots and their constrained observations; ordinary legacy created slots without a declared source retain their existing behavior. No general catalog fallback or unrelated sampling repair is included.

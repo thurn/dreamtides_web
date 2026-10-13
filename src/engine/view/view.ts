@@ -284,6 +284,8 @@ export interface TurnLogView {
  * Every deck and the opponent's hand appear as counts plus the known cards.
  */
 export interface BattleView {
+  /** Public non-zone source multisets, without any link to hidden physical cards. */
+  readonly draftPools?: BattleState["draftPools"];
   readonly linkedBanished?: readonly LinkedBanishedCards[];
   readonly viewer: Side;
   /** The state version this view was built from. */
@@ -524,6 +526,7 @@ export function view(state: BattleState, viewer: Side, catalog: EngineCatalog): 
     viewer,
     version: state.version,
     config: copy(state.config),
+    ...(state.draftPools === undefined ? {} : { draftPools: copy(state.draftPools) }),
     turn: copy(state.turn),
     sides: { player: side("player"), enemy: side("enemy") },
     instances,

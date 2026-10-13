@@ -81,7 +81,7 @@ export interface CreateBattleInitInput {
     | "avatar"
     | "dreamsigns"
     | "seed"
-  >;
+  > & Partial<Pick<JourneyState, "draftState">>;
   cardDatabase: ReadonlyMap<number, CardData>;
   avatars: readonly AvatarContent[];
   /** The run's boss catalog and the explicit compatibility default. */
@@ -441,6 +441,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleStart {
     journey: state,
     enemy: {
       deck: enemyDeckDefinition.map((definition) => definition.cardId),
+      draftPool: tideBuild?.draftPool ?? [],
       avatar: boss !== null ? boss.incarnation.aspect.id : opponentAbilityActive
         ? (enemyDescriptor.avatarId ?? null)
         : null,

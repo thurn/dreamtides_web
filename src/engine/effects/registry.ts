@@ -29,6 +29,7 @@ import {
   costModifierPrimitive,
   selfCostReductionPrimitive,
   createCardPrimitive,
+  createRandomFromPoolPrimitive,
   createCopyInHandPrimitive,
   disableTriggersPrimitive,
   redrawHandPrimitive,
@@ -151,6 +152,9 @@ const DEFINITIONS = {
   },
   get createCard() {
     return createCardPrimitive;
+  },
+  get createRandomFromPool() {
+    return createRandomFromPoolPrimitive;
   },
   get createCopyInHand() {
     return createCopyInHandPrimitive;

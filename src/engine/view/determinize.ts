@@ -308,8 +308,10 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     };
     return id;
   };
-  const anyEntry = (side: Side): DeckEntry => {
-    const entries = decklists[side];
+  const anyEntry = (side: Side, created = false): DeckEntry => {
+    const entries = created
+      ? [...decklists[side], ...(view.draftPools?.[side] ?? []).map((cardId) => ({ cardId }))]
+      : decklists[side];
     const entry = entries[Math.floor(random() * entries.length)];
     if (entry === undefined) throw new Error(`Cannot determinize: the ${side} decklist is empty`);
     return entry;
@@ -322,7 +324,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
       if (zone === "hand") {
         const other = pools[opponent(side)].pop();
         if (other !== undefined) return mint(opponent(side), side, zone, other, false);
-        return mint(side, side, zone, anyEntry(side), true);
+        return mint(side, side, zone, anyEntry(side, true), true);
       }
       return mint(side, side, zone, anyEntry(side), false);
     });
@@ -359,9 +361,12 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
   const assigned = new Map<number, InstanceId>();
   const hidden = SIDES.flatMap((holder) => [...sides[holder].deck, ...sides[holder].hand]).filter((id) => !(id in view.instances));
   for (const descriptor of descriptors) {
-    const pool = hidden.filter((id) => ![...assigned.values()].includes(id) && instances[id].owner === descriptor.owner &&
+    const fromPool = descriptor.status.created && descriptor.printing.kind === "card" && view.draftPools?.[descriptor.owner].includes(descriptor.printing.cardId) === true;
+    const available = hidden.filter((id) => ![...assigned.values()].includes(id) && instances[id].owner === descriptor.owner);
+    const exact = available.filter((id) => (!fromPool || instances[id].status.created) &&
       canonicalHash(instances[id].printing) === canonicalHash(descriptor.printing) &&
       canonicalHash(instances[id].variant) === canonicalHash(descriptor.variant));
+    const pool = fromPool && exact.length === 0 ? available.filter((id) => instances[id].status.created) : exact;
     const id = pool[Math.floor(random() * pool.length)];
     if (id === undefined) throw new Error(`Cannot determinize anonymous member ${String(descriptor.member)}: no matching decklist card`);
     instances[id] = { ...instances[id], printing: copy(descriptor.printing), variant: copy(descriptor.variant), status: copy(descriptor.status) };
@@ -478,6 +483,7 @@ function deal(view: BattleView, decklists: Decklists, random: () => number, cata
     version: view.version,
     seed,
     rng: {},
+    ...(view.draftPools === undefined ? {} : { draftPools: copy(view.draftPools) }),
     nextInstance: next,
     clock,
     config: copy(view.config),

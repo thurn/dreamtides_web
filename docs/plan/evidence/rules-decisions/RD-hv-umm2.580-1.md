@@ -1,0 +1,7 @@
+# RD-hv-umm2.580-1: Uniform creation from the fixed draft-pool multiset
+
+- Ladder: 1 (C11 fixes the run/opponent pool, `random:dreamsign`, and created status); 5 for the remaining multiset-copy weighting and public non-zone metadata reading. Prototype and read-only Rust searches found no corresponding implemented pool-creation rule. Magic supplies no direct Dreamtides draft-pool weighting or visibility mandate.
+- rules.md: § Created Cards → Creating from the card pool; § Costs, Requirements, and X → Cost changes already settles copiable cost with X counting as 0.
+- Affects: 1a524712-ef7e-43d9-bd79-5dea5250bf08 (Rainbow Horn).
+- Why: The run's canonical `draftState.draftPoolCopiesByCard` is a fixed multiset, distinct from spent remaining offer copies and the journey deck. The opponent generator's `generated.counts` is its full multiset, distinct from its selected deck. Uniform selection gives each eligible copy one equal chance, leaves the source fixed, and mints a private base created card. Public UUID/copy metadata permits truthful sampling without identifying the selected physical hand card. Legacy absence is an unavailable source, with no catalog substitute.
+- Official-source check: [Wizards Comprehensive Rules effective September 25, 2026](https://media.wizards.com/2026/downloads/MagicCompRules%2020260925.txt), reached through the current official rules page. CR107.3g is consistent with the existing local X-zero condition; it does not settle Dreamtides pool weighting or publicity.

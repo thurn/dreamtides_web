@@ -24,6 +24,7 @@ import { createFoldAdapter } from "../../engine/fold/slice";
 import { parseJourneyBattleFoldState } from "../../rules/battle/fold";
 import { catalogManifest, manifestCatalog } from "../../engine/policy/catalog-manifest";
 import { getLogEntries, resetLog } from "../../logging";
+import { generatePoolFromData } from "../../draft/pool/generate";
 import { resolveEnemyAvatarSummary } from "../components/enemy-avatar-summary";
 
 /** The inputs here are plain persisted init/manifest fixtures, with their type retained after serialization. */
@@ -109,6 +110,21 @@ describe("run-scoped Apollyon battle construction", () => {
     expect(new Set(start.engineInit.decks.enemy.map((card) => card.cardId)).size).toBe(start.engineInit.decks.enemy.length);
     expect(resolveEnemyAvatarSummary(start.init.enemyDescriptor, { avatars: [...input.avatars] }).id).toBe(incarnation.aspect.id);
     expect(start.init.opponentAbilityActive).toBe(false);
+  });
+
+  it("preserves the actual generated opponent multiset through init, reconstruction logs and strict reload", () => {
+    const { input, incarnation } = fixture();
+    const start = createBattleInit(input);
+    const log = getLogEntries().find((entry) => entry.event === "tide_opponent_deck_constructed");
+    if (log === undefined || typeof log.poolSeed !== "number") throw new Error("generated pool log missing");
+    const generated = generatePoolFromData({ tides4Decks: input.tides4Decks!, cardNameById: new Map([...input.cardDatabase.values()].map((card) => [card.id, card.name])) }, log.poolSeed, incarnation.deckRecipe.poolAvatarId, input.tides4Tuning);
+    const expected = [...generated.counts].flatMap(([id, copies]) => Array.from({ length: copies }, () => id)).sort();
+    expect(start.engineInit.draftPools?.enemy).toEqual(expected);
+    expect(log.draftPoolCardIds).toEqual(expected);
+    const outcome = createFoldAdapter(engineFor(input, incarnation)).start(start.engineInit);
+    if (outcome.kind !== "applied" || outcome.error !== null) throw new Error("synthetic pool init failed");
+    const stored = jsonClone({ mode: { kind: "journey" }, init: start.init, engine: { init: start.engineInit, slice: outcome.slice } });
+    expect(parseJourneyBattleFoldState(stored)?.engine.slice.committed.draftPools?.enemy).toEqual(expected);
   });
 
   it("preserves pinned signatures under maximal starter dilution", () => {

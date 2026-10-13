@@ -26,7 +26,7 @@ export interface EngineBattleInitInput {
   readonly seed: number;
   readonly scoreToWin: number;
   readonly startingSide: NonNullable<EngineBattleInit["startingSide"]>;
-  readonly journey: Pick<JourneyState, "deck" | "avatar" | "dreamsigns" | "battleModifiers">;
+  readonly journey: Pick<JourneyState, "deck" | "avatar" | "dreamsigns" | "battleModifiers"> & Partial<Pick<JourneyState, "draftState">>;
   /** The opponent `createBattleInit` built for this battle. */
   readonly enemy: EngineBattleOpponent;
   readonly cardDatabase: ReadonlyMap<number, CardData>;
@@ -44,6 +44,8 @@ export interface EngineBattleOpponent {
   /** The opponent's Avatar while its ability is active at this layer, else `null`. */
   readonly avatar: AvatarId | null;
   readonly dreamsigns: readonly DreamsignId[];
+  /** The full generated fixed pool, independent of the selected opponent deck. */
+  readonly draftPool?: readonly CardId[];
 }
 
 /**
@@ -72,6 +74,7 @@ export function createEngineBattleInit(input: EngineBattleInitInput): EngineBatt
       player: playerDeck,
       enemy: enemy.deck.map((cardId) => ({ cardId })),
     },
+    draftPools: { player: fixedDraftPool(input), enemy: [...(enemy.draftPool ?? [])] },
     dreamwell: [...input.dreamwell],
     avatars: {
       ...(journey.avatar === null ? {} : { player: journey.avatar.id }),
@@ -112,6 +115,17 @@ function cardOf(cardDatabase: ReadonlyMap<number, CardData>, cardNumber: number)
     throw new Error(`Missing card data for journey deck entry #${String(cardNumber)}`);
   }
   return card;
+}
+
+/** Canonical fixed run copies, resolved by UUID; spent offer stock and journey deck variants are unrelated. */
+function fixedDraftPool(input: EngineBattleInitInput): CardId[] {
+  return Object.entries(input.journey.draftState?.draftPoolCopiesByCard ?? {}).flatMap(([key, copies]) => {
+    const cardNumber = Number(key);
+    if (!Number.isSafeInteger(cardNumber) || String(cardNumber) !== key || !Number.isSafeInteger(copies) || copies < 0) throw new Error("Invalid fixed draft-pool copies");
+    const card = input.cardDatabase.get(cardNumber);
+    if (card === undefined) throw new Error(`Unknown draft-pool card number ${key}`);
+    return Array.from({ length: copies }, () => card.id);
+  }).sort();
 }
 
 /** A journey deck entry as the engine receives it: its card UUID and full variant (D39). */

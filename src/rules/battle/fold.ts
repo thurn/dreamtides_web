@@ -104,10 +104,22 @@ export function battleModeOf(battle: BattleFoldState): BattleMode { return battl
 
 export type TutorialBattlePresentation = OpponentPlayPresentation | DreamwellRevealPresentation | OpponentBlockPresentation | ChallengeResolvedPresentation | TutorialGuidancePresentation;
 
-/** Reuses the common saved engine guards without changing their accepted shapes. */
+/** Validates engine snapshots and their immutable declared source pools. */
 export function parseEngineBattleFold(value: unknown): EngineBattleFold | null {
-  return isPlainRecord(value) && isEngineBattleInit(value.init) && isBattleSlice(value.slice, true)
-    ? value as unknown as EngineBattleFold : null;
+  if (!isPlainRecord(value) || !isEngineBattleInit(value.init) || !isBattleSlice(value.slice, true)) return null;
+  const fold = value as unknown as EngineBattleFold;
+  return hasConsistentDraftPools(fold) ? fold : null;
+}
+
+function hasConsistentDraftPools(fold: EngineBattleFold): boolean {
+  const expected = fold.init.draftPools;
+  const states = [fold.slice.committed, ...(fold.slice.history === undefined ? [] : [fold.slice.history.base.committed])];
+  return states.every((state) => {
+    const actual = state.draftPools;
+    if (expected === undefined || actual === undefined) return expected === actual;
+    return SIDES.every((side) => expected[side].length === actual[side].length &&
+      expected[side].every((cardId, index) => cardId === actual[side][index]));
+  });
 }
 
 export function parseJourneyBattleFoldState(value: Record<string, unknown>): JourneyBattleFoldState | null {
@@ -411,6 +423,7 @@ function isEngineBattleInit(value: unknown): boolean {
     isIndex(value.scoreToWin) &&
     optional(isSide)(value.startingSide) &&
     sideRecord(arrayOf(isEngineDeckEntry))(value.decks) &&
+    optional(sideRecord(arrayOf(parses(parseCardId))))(value.draftPools) &&
     isArrayOf(value.dreamwell, parses(parseDreamwellCardId)) &&
     optional(sideRecord(parses(parseAvatarId), true))(value.avatars) &&
     optional(sideRecord(arrayOf(parses(parseDreamsignId)), true))(
@@ -692,6 +705,7 @@ function isBattleState(value: unknown): boolean {
     isString(value.seed) &&
     isPlainRecord(value.rng) &&
     Object.values(value.rng).every(isIndex) &&
+    optional(sideRecord(arrayOf(parses(parseCardId))))(value.draftPools) &&
     isIndex(value.nextInstance) &&
     isIndex(value.clock) &&
     isBattleConfig(value.config) &&

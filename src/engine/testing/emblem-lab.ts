@@ -29,6 +29,7 @@ export function emblemLabBattle(
     seed: battleSeed(`${request.kind}-lab:${request.id}:${request.side}`),
     scoreToWin: BATTLE.scoreTargets[0], startingSide: request.side,
     decks: { player: deck, enemy: deck }, dreamwell: [],
+    draftPools: { player: [SYNTHETIC.event0.id, SYNTHETIC.event1.id], enemy: [SYNTHETIC.event0.id, SYNTHETIC.event1.id] },
     ...(request.kind === "avatar" ? { avatars: { [request.side]: request.id } } : { dreamsigns: { [request.side]: [request.id] } }),
     nextBattle: { player: energy, enemy: energy },
   };

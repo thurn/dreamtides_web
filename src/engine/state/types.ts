@@ -146,6 +146,8 @@ export interface BattleInit {
   readonly scoreToWin: number;
   readonly startingSide?: Side;
   readonly decks: Readonly<Record<Side, readonly DeckEntry[]>>;
+  /** Public fixed source multisets; repeated UUIDs retain copies. Absent for legacy battles without a declared pool. */
+  readonly draftPools?: Readonly<Record<Side, readonly CardId[]>>;
   /** The Dreamwell catalog cards the shared Dreamwell deck is built from. */
   readonly dreamwell: readonly DreamwellCardId[];
   /** Each side's avatar, in play from the start of the battle (P4). */
@@ -774,6 +776,8 @@ export interface BattleState {
   readonly seed: BattleSeed;
   /** Draws consumed so far from each named random stream. */
   rng: Record<string, number>;
+  /** Immutable non-zone pool snapshots; creation does not spend their entries (C11). */
+  readonly draftPools?: Readonly<Record<Side, readonly CardId[]>>;
   /** Next instance number to mint. */
   nextInstance: number;
   /** Zone-entry clock for `enteredZoneAt`. */

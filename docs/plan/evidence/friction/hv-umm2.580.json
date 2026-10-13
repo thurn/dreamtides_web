@@ -1,0 +1,44 @@
+{
+  "bead": "hv-umm2.580",
+  "phase": 5,
+  "implementMin": 483.10090543333337,
+  "implementWindow": {
+    "start": "2026-10-13T05:44:29.573545Z",
+    "end": "2026-10-13T13:47:35.627871+00:00"
+  },
+  "localValidationS": {
+    "focused": 8.780590749986004,
+    "review": 53.18715583300218,
+    "knip": 4.025080666004214,
+    "full": 105.92481125000631,
+    "weighted300": 240.90400999999838,
+    "same-seed-observer": 219.95817920801346,
+    "preflight": 1.3591944159998093,
+    "sweep": 15.82307020801818,
+    "player-workflow": 88.6786349999893,
+    "enemy-workflow": 107.29045920801582
+  },
+  "hostLoad": 2.90576171875,
+  "testDelta": {
+    "files": 1,
+    "lines": 250,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "unobserved-wall-gap",
+      "minutes": 398.5370087,
+      "note": "Observed baseline-terminal to WRITEACK wall gap; cause, active CPU/model timing and interruption intervals unknown. Included in gross ownership window; not labeled approval waiting."
+    },
+    {
+      "tag": "qa-driver-setup",
+      "minutes": 1.6151210305499262,
+      "note": "Actual failed runner outer wall only: preconstructed lab emits labload/later-Dawn logs rather than invented init/two-resolution expectation; URL global unavailable in MCP isolate. Ignored driver corrected; no product failure/source mutation. Full repair intervals not separately observed."
+    },
+    {
+      "tag": "fixture-setup",
+      "minutes": 0.018892838883281606,
+      "note": "Actual baseline sampler attempt1 outer wall; invalid prepared-turn parity, zero behavioral cases. Corrected public witness recorded independently."
+    }
+  ]
+}

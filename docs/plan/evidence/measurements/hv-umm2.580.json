@@ -1,0 +1,1336 @@
+{
+  "bead": "hv-umm2.580",
+  "phase": 5,
+  "base": "9fdaa25aab8b9a13f5b23c7e23fbb210a4a92eb7",
+  "branch": "wt/create-draft-pool580-sol",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+  "currentGrossWindow": {
+    "start": "2026-10-13T05:44:29.573545Z",
+    "end": "2026-10-13T13:47:35.627871+00:00",
+    "endpointStatus": "Actual final endpoint immediately before final schema/index validation and one commit; external terminal handoff records actual commit bracket/OID/timestamp, no amendment.",
+    "scope": "Conservative parent claim acknowledgement through all owned preparation/audit/waits/implementation/validation/QA/packaging without reset. Prior453/cw62 segments excluded."
+  },
+  "claimObservations": {
+    "acknowledgementObservedAt": "2026-10-13T05:44:29.573545Z",
+    "nativeStartedAtSecondPrecision": "2026-10-13T05:44:30Z",
+    "qualification": "Second precision differs by0.426455s; exact model dispatch instant not observed."
+  },
+  "observedWallGap": {
+    "at": "2026-10-13T12:52:47.556936+00:00",
+    "claimAckObservedAt": "2026-10-13T05:44:29.573545Z",
+    "lastBaselineTerminal": "2026-10-13T06:12:20.190146Z",
+    "parentWriteAck": "2026-10-13T12:50:52.410668Z",
+    "qualification": "Gross ownership window retains original start and observed long wall gap. The cause, active CPU/model execution and exact interruption intervals are not observed; do not attribute this to user approval or claim continuous execution. User continue renewed native executor opt-in. All4371 hashes remained unchanged before WRITEACK.",
+    "wallSeconds": 23912.220522
+  },
+  "sourceAdmission": {
+    "initialAck": "2026-10-13T12:50:52.410668Z",
+    "receipt": "/tmp/580-parent-write-ack.txt",
+    "proposalSha256": "6c89752f6914bb90703b6da65675484f10eabb937b85136a73ff0faa3d0b6205",
+    "signatureFalloutAck": "/tmp/580-signature-write-ack.txt",
+    "scope": "Exact22 admitted code/doc/evidence paths; one additive immutable-field bookkeeping table entry after actualTS1360; no loop algorithm or policy/hash/UI/provider/QA infrastructure edit.",
+    "unfinishedUnionAtInitialWriteAck": 121,
+    "laterSignatureAuditUnion": 120,
+    "edges": "Parent verified future ordering/cycles[] and no active owner conflict; no helper native effects."
+  },
+  "schemaNormalization": {
+    "hostLoad": "Final passing review supervisor start one-minute load average; later host loads recorded independently in actual receipts.",
+    "localValidationS": "Final passing enclosing command launch/source-manifest/execution/cleanup wall; Vitest/enclosing stages/full outer kept distinct. Shared lock waits, if any, are inside outer; no separately measured wait invented."
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 250,
+    "jsdomFiles": 0
+  },
+  "testFiles": {
+    "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts": {
+      "beforeLines": 0,
+      "afterLines": 214,
+      "addedLines": 214,
+      "deletedLines": 0,
+      "new": true,
+      "jsdom": false,
+      "classification": "plain synthetic contract"
+    },
+    "src/session/providers/battle-init-provider.test.ts": {
+      "beforeLines": 416,
+      "afterLines": 435,
+      "addedLines": 19,
+      "deletedLines": 0,
+      "new": false,
+      "jsdom": false,
+      "classification": "existing plain integration test"
+    },
+    "src/battle/integration/apollyon-init.test.ts": {
+      "beforeLines": 204,
+      "afterLines": 220,
+      "addedLines": 16,
+      "deletedLines": 0,
+      "new": false,
+      "jsdom": false,
+      "classification": "existing plain integration test"
+    },
+    "src/engine/testing/emblem-lab.ts": {
+      "beforeLines": 113,
+      "afterLines": 114,
+      "addedLines": 1,
+      "deletedLines": 0,
+      "new": false,
+      "jsdom": false,
+      "classification": "existing engine test/lab fixture producer"
+    },
+    "src/engine/testing/fuzz.ts": {
+      "beforeLines": 726,
+      "afterLines": 726,
+      "addedLines": 1,
+      "deletedLines": 1,
+      "new": false,
+      "jsdom": false,
+      "classification": "existing engine test/lab fixture producer"
+    }
+  },
+  "grossTestChurn": {
+    "touchedFiles": 5,
+    "addedLines": 251,
+    "deletedLines": 1,
+    "classification": "Three direct test modules plus two existing engine testing fixture producers; direct test modules alone are net1newfile/249lines; no new entrypoint/jsdom or configured runner."
+  },
+  "failureMap": {
+    "error": {
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "sourceTestName": "rolls back creation and RNG on a mid-step error without partial publication",
+      "scope": "Both actor cases where parametrized; public engine/fold/load behavior, no private formula oracle."
+    },
+    "partial": {
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "sourceTestName": "replays a paused creation with the same RNG prefix and rejects stale or concurrent answers",
+      "scope": "Both actor cases where parametrized; public engine/fold/load behavior, no private formula oracle."
+    },
+    "reload": {
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "sourceTestName": "preserves fixed pools through clone, JSON save, strict reload and sampled future creation for %s",
+      "scope": "Both actor cases where parametrized; public engine/fold/load behavior, no private formula oracle."
+    },
+    "invalid": {
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "sourceTestName": "rejects malformed, partial and inconsistent saved pool fields without mutation",
+      "scope": "Both actor cases where parametrized; public engine/fold/load behavior, no private formula oracle."
+    },
+    "concurrent": {
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "sourceTestName": "replays a paused creation with the same RNG prefix and rejects stale or concurrent answers",
+      "scope": "Both actor cases where parametrized; public engine/fold/load behavior, no private formula oracle."
+    },
+    "empty": {
+      "module": "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+      "sourceTestName": "does nothing for missing, empty or unmatched pools without a catalog fallback or RNG draw",
+      "scope": "Both actor cases where parametrized; public engine/fold/load behavior, no private formula oracle."
+    }
+  },
+  "validationReceipts": {
+    "baseline-sampler": {
+      "label": "baseline-sampler",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/580-sampler-baseline.mts"
+      ],
+      "pid": 89778,
+      "observerPid": 89768,
+      "processGroup": 89778,
+      "start": "2026-10-13T06:10:32.705187+00:00",
+      "end": "2026-10-13T06:10:33.838836+00:00",
+      "wallS": 1.1335703329968965,
+      "exit": 1,
+      "loadBefore": [
+        6.697265625,
+        5.890625,
+        6.49365234375
+      ],
+      "loadAfter": [
+        6.697265625,
+        5.890625,
+        6.49365234375
+      ],
+      "childCpuS": 0.6799999999999999,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-baseline-sampler.before.json",
+      "afterManifest": "/tmp/580-check-baseline-sampler.after.json",
+      "beforePaths": 4371,
+      "afterPaths": 4371,
+      "changedPaths": []
+    },
+    "focused2": {
+      "label": "focused2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/integration/apollyon-init.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/determinize-loops.test.ts",
+        "src/rules/battle/engine-battle-intents.test.ts",
+        "src/rules/battle/engine-battle-replay.test.ts"
+      ],
+      "pid": 31812,
+      "observerPid": 31791,
+      "processGroup": 31812,
+      "start": "2026-10-13T13:06:15.723447+00:00",
+      "end": "2026-10-13T13:06:24.504125+00:00",
+      "wallS": 8.780590749986004,
+      "exit": 0,
+      "loadBefore": [
+        3.30810546875,
+        4.26220703125,
+        4.845703125
+      ],
+      "loadAfter": [
+        3.25390625,
+        4.22021484375,
+        4.8232421875
+      ],
+      "childCpuS": 15.16,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-focused2.before.json",
+      "afterManifest": "/tmp/580-check-focused2.after.json",
+      "beforePaths": 4375,
+      "afterPaths": 4375,
+      "changedPaths": []
+    },
+    "knip1": {
+      "label": "knip1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 38574,
+      "observerPid": 38564,
+      "processGroup": 38574,
+      "start": "2026-10-13T13:11:05.457759+00:00",
+      "end": "2026-10-13T13:11:09.482932+00:00",
+      "wallS": 4.025080666004214,
+      "exit": 0,
+      "loadBefore": [
+        4.9931640625,
+        4.37939453125,
+        4.69287109375
+      ],
+      "loadAfter": [
+        4.83349609375,
+        4.3564453125,
+        4.6826171875
+      ],
+      "childCpuS": 4.26,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-knip1.before.json",
+      "afterManifest": "/tmp/580-check-knip1.after.json",
+      "beforePaths": 4375,
+      "afterPaths": 4375,
+      "changedPaths": []
+    },
+    "review2": {
+      "label": "review2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 37206,
+      "observerPid": 37195,
+      "processGroup": 37206,
+      "start": "2026-10-13T13:10:04.643932+00:00",
+      "end": "2026-10-13T13:10:57.831225+00:00",
+      "wallS": 53.18715583300218,
+      "exit": 0,
+      "loadBefore": [
+        2.90576171875,
+        3.80859375,
+        4.521484375
+      ],
+      "loadAfter": [
+        5.25390625,
+        4.419921875,
+        4.708984375
+      ],
+      "childCpuS": 158.58,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-review2.before.json",
+      "afterManifest": "/tmp/580-check-review2.after.json",
+      "beforePaths": 4375,
+      "afterPaths": 4375,
+      "changedPaths": []
+    },
+    "observer1": {
+      "label": "observer1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "node_modules/.bin/tsx",
+        "/tmp/580-production-observer.mts"
+      ],
+      "pid": 79395,
+      "observerPid": 79385,
+      "processGroup": 79395,
+      "start": "2026-10-13T13:18:59.510273+00:00",
+      "end": "2026-10-13T13:22:39.468810+00:00",
+      "wallS": 219.95817920801346,
+      "exit": 0,
+      "loadBefore": [
+        3.94482421875,
+        4.82568359375,
+        4.8525390625
+      ],
+      "loadAfter": [
+        3.84619140625,
+        4.1640625,
+        4.54150390625
+      ],
+      "childCpuS": 236.66,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-observer1.before.json",
+      "afterManifest": "/tmp/580-check-observer1.after.json",
+      "beforePaths": 4375,
+      "afterPaths": 4375,
+      "changedPaths": []
+    },
+    "judged-player2": {
+      "label": "judged-player2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/pool-creation.mjs",
+        "--bead",
+        "hv-umm2.580",
+        "--arg",
+        "as=player",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "pid": 95091,
+      "observerPid": 95078,
+      "processGroup": 95091,
+      "start": "2026-10-13T13:30:58.761089+00:00",
+      "end": "2026-10-13T13:31:39.835213+00:00",
+      "wallS": 41.07384079199983,
+      "exit": 1,
+      "loadBefore": [
+        3.31982421875,
+        3.42919921875,
+        3.9462890625
+      ],
+      "loadAfter": [
+        4.0048828125,
+        3.5927734375,
+        3.9814453125
+      ],
+      "childCpuS": 6.890000000000001,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-judged-player2.before.json",
+      "afterManifest": "/tmp/580-check-judged-player2.after.json",
+      "beforePaths": 4376,
+      "afterPaths": 4376,
+      "changedPaths": []
+    },
+    "baseline-sampler2": {
+      "label": "baseline-sampler2",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/580-sampler-baseline-corrected.mts"
+      ],
+      "pid": 92276,
+      "observerPid": 92266,
+      "processGroup": 92276,
+      "start": "2026-10-13T06:12:17.962641+00:00",
+      "end": "2026-10-13T06:12:20.190146+00:00",
+      "wallS": 2.2273277920030523,
+      "exit": 1,
+      "loadBefore": [
+        7.4423828125,
+        6.13232421875,
+        6.49951171875
+      ],
+      "loadAfter": [
+        7.4423828125,
+        6.13232421875,
+        6.49951171875
+      ],
+      "childCpuS": 0.89,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-baseline-sampler2.before.json",
+      "afterManifest": "/tmp/580-check-baseline-sampler2.after.json",
+      "beforePaths": 4371,
+      "afterPaths": 4371,
+      "changedPaths": []
+    },
+    "qa-driver-syntax": {
+      "label": "qa-driver-syntax",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "node",
+        "--check",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/pool-creation.mjs"
+      ],
+      "pid": 84761,
+      "observerPid": 84751,
+      "processGroup": 84761,
+      "start": "2026-10-13T13:23:18.394454+00:00",
+      "end": "2026-10-13T13:23:18.636663+00:00",
+      "wallS": 0.24214283400215209,
+      "exit": 0,
+      "loadBefore": [
+        3.423828125,
+        4.01611328125,
+        4.46875
+      ],
+      "loadAfter": [
+        3.423828125,
+        4.01611328125,
+        4.46875
+      ],
+      "childCpuS": 0.05,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-qa-driver-syntax.before.json",
+      "afterManifest": "/tmp/580-check-qa-driver-syntax.after.json",
+      "beforePaths": 4375,
+      "afterPaths": 4375,
+      "changedPaths": []
+    },
+    "judged-player3": {
+      "label": "judged-player3",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/pool-creation.mjs",
+        "--bead",
+        "hv-umm2.580",
+        "--arg",
+        "as=player",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "pid": 96947,
+      "observerPid": 96934,
+      "processGroup": 96947,
+      "start": "2026-10-13T13:32:19.665020+00:00",
+      "end": "2026-10-13T13:33:48.344174+00:00",
+      "wallS": 88.6786349999893,
+      "exit": 0,
+      "loadBefore": [
+        3.37744140625,
+        3.49755859375,
+        3.92822265625
+      ],
+      "loadAfter": [
+        3.0244140625,
+        3.42724609375,
+        3.86083984375
+      ],
+      "childCpuS": 8.42,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-judged-player3.before.json",
+      "afterManifest": "/tmp/580-check-judged-player3.after.json",
+      "beforePaths": 4376,
+      "afterPaths": 4376,
+      "changedPaths": []
+    },
+    "sweep1": {
+      "label": "sweep1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.580",
+        "--dreamsigns",
+        "1a524712-ef7e-43d9-bd79-5dea5250bf08",
+        "--variants",
+        "base",
+        "--as",
+        "both",
+        "--capture"
+      ],
+      "pid": 90244,
+      "observerPid": 90222,
+      "processGroup": 90244,
+      "start": "2026-10-13T13:27:35.363203+00:00",
+      "end": "2026-10-13T13:27:51.186371+00:00",
+      "wallS": 15.82307020801818,
+      "exit": 0,
+      "loadBefore": [
+        3.134765625,
+        3.375,
+        4.0546875
+      ],
+      "loadAfter": [
+        4.193359375,
+        3.5869140625,
+        4.11767578125
+      ],
+      "childCpuS": 7.87,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-sweep1.before.json",
+      "afterManifest": "/tmp/580-check-sweep1.after.json",
+      "beforePaths": 4375,
+      "afterPaths": 4376,
+      "changedPaths": [
+        "docs/plan/evidence/qa-ledger/hv-umm2.580.jsonl"
+      ]
+    },
+    "fuzz1": {
+      "label": "fuzz1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--seed",
+        "hv-umm2.580",
+        "--first",
+        "0",
+        "--weight-uuids",
+        "1a524712-ef7e-43d9-bd79-5dea5250bf08"
+      ],
+      "pid": 71263,
+      "observerPid": 71224,
+      "processGroup": 71263,
+      "start": "2026-10-13T13:13:36.595315+00:00",
+      "end": "2026-10-13T13:17:37.499697+00:00",
+      "wallS": 240.90400999999838,
+      "exit": 0,
+      "loadBefore": [
+        5.64990234375,
+        4.91552734375,
+        4.85205078125
+      ],
+      "loadAfter": [
+        5.43408203125,
+        5.07666015625,
+        4.9287109375
+      ],
+      "childCpuS": 258.66,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-fuzz1.before.json",
+      "afterManifest": "/tmp/580-check-fuzz1.after.json",
+      "beforePaths": 4375,
+      "afterPaths": 4375,
+      "changedPaths": []
+    },
+    "preflight1": {
+      "label": "preflight1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "1a524712-ef7e-43d9-bd79-5dea5250bf08",
+        "--as",
+        "both",
+        "--variants",
+        "base"
+      ],
+      "pid": 78661,
+      "observerPid": 78639,
+      "processGroup": 78661,
+      "start": "2026-10-13T13:18:32.428687+00:00",
+      "end": "2026-10-13T13:18:33.787956+00:00",
+      "wallS": 1.3591944159998093,
+      "exit": 0,
+      "loadBefore": [
+        4.83837890625,
+        5.04150390625,
+        4.927734375
+      ],
+      "loadAfter": [
+        4.83837890625,
+        5.04150390625,
+        4.927734375
+      ],
+      "childCpuS": 1.29,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-preflight1.before.json",
+      "afterManifest": "/tmp/580-check-preflight1.after.json",
+      "beforePaths": 4375,
+      "afterPaths": 4375,
+      "changedPaths": []
+    },
+    "judged-player1": {
+      "label": "judged-player1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/pool-creation.mjs",
+        "--bead",
+        "hv-umm2.580",
+        "--arg",
+        "as=player",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "pid": 91332,
+      "observerPid": 91322,
+      "processGroup": 91332,
+      "start": "2026-10-13T13:28:11.806810+00:00",
+      "end": "2026-10-13T13:29:07.645492+00:00",
+      "wallS": 55.833421040995745,
+      "exit": 1,
+      "loadBefore": [
+        4.3916015625,
+        3.67626953125,
+        4.13720703125
+      ],
+      "loadAfter": [
+        3.81298828125,
+        3.671875,
+        4.10888671875
+      ],
+      "childCpuS": 6.859999999999999,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-judged-player1.before.json",
+      "afterManifest": "/tmp/580-check-judged-player1.after.json",
+      "beforePaths": 4376,
+      "afterPaths": 4376,
+      "changedPaths": []
+    },
+    "prepare": {
+      "label": "prepare",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "node",
+        "scripts/prepare-workspace.mjs"
+      ],
+      "pid": 77970,
+      "observerPid": 77899,
+      "processGroup": 77970,
+      "start": "2026-10-13T06:01:14.643969+00:00",
+      "end": "2026-10-13T06:01:16.853442+00:00",
+      "wallS": 2.2093821660091635,
+      "exit": 0,
+      "loadBefore": [
+        5.32568359375,
+        5.66943359375,
+        7.3876953125
+      ],
+      "loadAfter": [
+        5.61962890625,
+        5.724609375,
+        7.39697265625
+      ],
+      "childCpuS": 2.56,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-prepare.before.json",
+      "afterManifest": "/tmp/580-check-prepare.after.json",
+      "beforePaths": 4370,
+      "afterPaths": 4371,
+      "changedPaths": [
+        "src/cumulus/primitives/tokens.ts"
+      ]
+    },
+    "text-hash": {
+      "label": "text-hash",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "-e",
+        "import horn from \"./src/content/dreamsigns/rainbow-horn-1a524712.ts\"; import { expectedVerifiedText } from \"./src/engine/dsl/verified-text.ts\"; console.log(expectedVerifiedText(horn.effectDescription));"
+      ],
+      "pid": 17388,
+      "observerPid": 17378,
+      "processGroup": 17388,
+      "start": "2026-10-13T12:55:43.243838+00:00",
+      "end": "2026-10-13T12:55:45.585656+00:00",
+      "wallS": 2.3415248749952298,
+      "exit": 0,
+      "loadBefore": [
+        4.32763671875,
+        7.22216796875,
+        5.83544921875
+      ],
+      "loadAfter": [
+        4.32763671875,
+        7.22216796875,
+        5.83544921875
+      ],
+      "childCpuS": 1.35,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-text-hash.before.json",
+      "afterManifest": "/tmp/580-check-text-hash.after.json",
+      "beforePaths": 4374,
+      "afterPaths": 4374,
+      "changedPaths": []
+    },
+    "baseline1": {
+      "label": "baseline1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "./node_modules/.bin/tsx",
+        "/tmp/580-public-baseline.mts"
+      ],
+      "pid": 82222,
+      "observerPid": 82204,
+      "processGroup": 82222,
+      "start": "2026-10-13T06:04:53.583769+00:00",
+      "end": "2026-10-13T06:04:54.807578+00:00",
+      "wallS": 1.2237454999994952,
+      "exit": 1,
+      "loadBefore": [
+        3.9736328125,
+        5.14501953125,
+        6.78271484375
+      ],
+      "loadAfter": [
+        3.9736328125,
+        5.14501953125,
+        6.78271484375
+      ],
+      "childCpuS": 0.81,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-baseline1.before.json",
+      "afterManifest": "/tmp/580-check-baseline1.after.json",
+      "beforePaths": 4371,
+      "afterPaths": 4371,
+      "changedPaths": []
+    },
+    "full1": {
+      "label": "full1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "pid": 39324,
+      "observerPid": 39312,
+      "processGroup": 39324,
+      "start": "2026-10-13T13:11:36.664766+00:00",
+      "end": "2026-10-13T13:13:22.589779+00:00",
+      "wallS": 105.92481125000631,
+      "exit": 0,
+      "loadBefore": [
+        4.61181640625,
+        4.34228515625,
+        4.6669921875
+      ],
+      "loadAfter": [
+        5.93505859375,
+        4.94677734375,
+        4.86279296875
+      ],
+      "childCpuS": 263.43,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-full1.before.json",
+      "afterManifest": "/tmp/580-check-full1.after.json",
+      "beforePaths": 4375,
+      "afterPaths": 4375,
+      "changedPaths": []
+    },
+    "review1": {
+      "label": "review1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 32440,
+      "observerPid": 32430,
+      "processGroup": 32440,
+      "start": "2026-10-13T13:06:41.475336+00:00",
+      "end": "2026-10-13T13:07:39.138809+00:00",
+      "wallS": 57.66331299999729,
+      "exit": 2,
+      "loadBefore": [
+        3.17822265625,
+        4.15869140625,
+        4.791015625
+      ],
+      "loadAfter": [
+        4.31591796875,
+        4.3330078125,
+        4.8125
+      ],
+      "childCpuS": 179.53,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-review1.before.json",
+      "afterManifest": "/tmp/580-check-review1.after.json",
+      "beforePaths": 4375,
+      "afterPaths": 4375,
+      "changedPaths": []
+    },
+    "focused1": {
+      "label": "focused1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/session/providers/battle-init-provider.test.ts",
+        "src/battle/integration/apollyon-init.test.ts",
+        "src/engine/view/determinize.test.ts",
+        "src/engine/view/determinize-loops.test.ts",
+        "src/rules/battle/fold-saved.test.ts"
+      ],
+      "pid": 31000,
+      "observerPid": 30976,
+      "processGroup": 31000,
+      "start": "2026-10-13T13:05:42.638361+00:00",
+      "end": "2026-10-13T13:05:52.521591+00:00",
+      "wallS": 9.88315112501732,
+      "exit": 1,
+      "loadBefore": [
+        3.5185546875,
+        4.3974609375,
+        4.9130859375
+      ],
+      "loadAfter": [
+        3.431640625,
+        4.3505859375,
+        4.890625
+      ],
+      "childCpuS": 15.22,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-focused1.before.json",
+      "afterManifest": "/tmp/580-check-focused1.after.json",
+      "beforePaths": 4375,
+      "afterPaths": 4375,
+      "changedPaths": []
+    },
+    "judged-enemy1": {
+      "label": "judged-enemy1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/pool-creation.mjs",
+        "--bead",
+        "hv-umm2.580",
+        "--arg",
+        "as=enemy",
+        "--viewports",
+        "desktop,mobile",
+        "--timeout",
+        "240"
+      ],
+      "pid": 249,
+      "observerPid": 239,
+      "processGroup": 249,
+      "start": "2026-10-13T13:34:42.360992+00:00",
+      "end": "2026-10-13T13:36:29.652079+00:00",
+      "wallS": 107.29045920801582,
+      "exit": 0,
+      "loadBefore": [
+        2.42236328125,
+        3.205078125,
+        3.75244140625
+      ],
+      "loadAfter": [
+        18.9814453125,
+        7.34716796875,
+        5.20654296875
+      ],
+      "childCpuS": 7.91,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-judged-enemy1.before.json",
+      "afterManifest": "/tmp/580-check-judged-enemy1.after.json",
+      "beforePaths": 4376,
+      "afterPaths": 4376,
+      "changedPaths": []
+    },
+    "evidence-schema1": {
+      "label": "evidence-schema1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "docs/plan/evidence",
+        "--validate-records"
+      ],
+      "pid": 31776,
+      "observerPid": 31732,
+      "processGroup": 31776,
+      "start": "2026-10-13T13:44:24.086822+00:00",
+      "end": "2026-10-13T13:44:24.661967+00:00",
+      "wallS": 0.5750859999970999,
+      "exit": 0,
+      "loadBefore": [
+        4.15771484375,
+        6.431640625,
+        5.93505859375
+      ],
+      "loadAfter": [
+        4.15771484375,
+        6.431640625,
+        5.93505859375
+      ],
+      "childCpuS": 0.09,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-evidence-schema1.before.json",
+      "afterManifest": "/tmp/580-check-evidence-schema1.after.json",
+      "beforePaths": 4378,
+      "afterPaths": 4378,
+      "changedPaths": []
+    },
+    "staged-schema1": {
+      "label": "staged-schema1",
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/create-draft-pool580-sol",
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "docs/plan/evidence",
+        "--validate-records"
+      ],
+      "pid": 33632,
+      "observerPid": 33629,
+      "processGroup": 33632,
+      "start": "2026-10-13T13:45:32.884416+00:00",
+      "end": "2026-10-13T13:45:33.174260+00:00",
+      "wallS": 0.2897138330154121,
+      "exit": 0,
+      "loadBefore": [
+        3.8896484375,
+        5.87158203125,
+        5.7568359375
+      ],
+      "loadAfter": [
+        3.8896484375,
+        5.87158203125,
+        5.7568359375
+      ],
+      "childCpuS": 0.08,
+      "scope": "actual outer launch/source-manifest/execution/drain/source-manifest scope; nested command stages distinct",
+      "terminal": true,
+      "beforeManifest": "/tmp/580-check-staged-schema1.before.json",
+      "afterManifest": "/tmp/580-check-staged-schema1.after.json",
+      "beforePaths": 4378,
+      "afterPaths": 4378,
+      "changedPaths": []
+    }
+  },
+  "stage1": {
+    "results": "/tmp/580-stage1-results.json",
+    "census": "/tmp/580-reader-census.json",
+    "proposal": "/tmp/580-stage1-proposal.md",
+    "baseline1": "33cases/25expected missing-capability results/0fixtureerrors; registry observation diagnostic only, never CIgate.",
+    "baselineSampler1": "Fixture parity setupfailure;0behavioralcases.",
+    "baselineSampler2": "12cases/4actual fixed-created sampler gaps/0fixtureerrors; genuine created cards, declared anonymous observation qualified.",
+    "readers": "2331 modules/30targets SHA/direct+routed census; statetypes270direct/create12/clone32/hash149/view56/determinize15/fold74; engine-init5/createinit4/tide2/fuzz13/emblemlab2;7publicbinding readers. Conservative2088cyclic closure is not a write grant. Signature six direct readers separately admitted."
+  },
+  "checkOutcomes": {
+    "focused2": "2718tests/7modules pass;Vitest6.24s/test6.7s/outer8.7806s",
+    "review2": "5618tests/287modules pluslint,both typechecks,cycles green;Vitest44.30s/test-related51.0s/outer53.1872s",
+    "knip1": "terminal0/outer4.0251s",
+    "full1": "6619tests/368modules;Vitest77.65s/enclosing test78.2s/outer105.9248s;locked2workers. Intentional synthetic ownership failure-test stderr is not real QA defect.",
+    "failedFocused1": "2own expected ceasedToExist events omitted public side/from fields; actual lifecycle succeeded. Retained2687pass/2fail. Requested nonexistent fold-saved.test.ts contributedzero cases, correctedactual loader readers in focused2.",
+    "failedReview1": "5618related tests pass;3own fixture lint issues+TS1360 exhaustive table fallout; corrections/admission before finalreview.",
+    "noRepeatedGreenChecks": "No full/fuzz repetition after finalsource green."
+  },
+  "productionFuzz": {
+    "target": "1a524712-ef7e-43d9-bd79-5dea5250bf08",
+    "seedPrefix": "hv-umm2.580",
+    "ordinals": [
+      0,
+      299
+    ],
+    "games": 300,
+    "steps": 123595,
+    "prompts": 9066,
+    "failures": 0,
+    "included": 600,
+    "exerciseObservations": 4010,
+    "bounded": {
+      "legality": 0,
+      "prompts": 5
+    },
+    "interactiveReruns": 924,
+    "cliWallS": 239.0,
+    "cliCpuS": 257.2,
+    "qualification": "CLI exercise counts are not alone created-card proof; same300 public replay observer independently validates actual events and final hashes."
+  },
+  "productionObserver": {
+    "source": "/tmp/580-production-observer.mts",
+    "raw": "/tmp/580-check-observer1.stdout.txt",
+    "results": "/tmp/580-production-observer.results.json",
+    "totals": {
+      "games": 300,
+      "included": 600,
+      "queued": 4034,
+      "resolved": 4010,
+      "applied": 4010,
+      "skipped": 0,
+      "created": 4010,
+      "noEligible": 0,
+      "queuedAtEnd": 24
+    },
+    "qualification": "4034queued,4010applied/resolved/actual holder-pool private cardCreated,24stillqueued at battleend; zero skipped/noeligible in observed production cohort. Final hash matches each same-seed/pool/ordinal actualgame. No queued-at-end credit as creation."
+  },
+  "qa": {
+    "judged-player1": {
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/invocations/run-EYii8C/pool-creation.result.json",
+      "error": "desktop#0: QaTimeoutError: persisted actual Horn init and resolution: the persisted log of game 48swp4 (71 lines) did not satisfy the predicate within 15000 ms\n    at timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.waitFor (evalmachine.<anonymous>:695:17)\n    at async poolCreation (evalmachine.<anonymous>:1702:16)\n    at async evalmachine.<anonymous>:1723:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+      "caps": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 53554
+        }
+      ],
+      "captures": [
+        "pool-first-player-desktop.png",
+        "pool-changed-player-desktop.png",
+        "pool-log-player-desktop.png"
+      ],
+      "rawPersistedLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/invocations/run-EYii8C/pool-creation-desktop.jsonl",
+          "gameId": "48swp4",
+          "selectedBy": "url",
+          "rows": 71,
+          "reason": null
+        }
+      ],
+      "scope": "Existing declared synthetic emblem-lab; actual normal turns, private creation, public UI play where human-owned, pool/hand/turn/RNG cold reload. Initial preconstructed slice observations distinct from journey log. No production pool claim for lab."
+    },
+    "judged-player2": {
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/invocations/run-Bu5II9/pool-creation.result.json",
+      "error": "desktop#0: ReferenceError: URL is not defined\n    at poolCreation (evalmachine.<anonymous>:1711:12)\n    at async evalmachine.<anonymous>:1724:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "caps": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 38754
+        }
+      ],
+      "captures": [
+        "pool-first-player-desktop.png",
+        "pool-changed-player-desktop.png",
+        "pool-log-player-desktop.png"
+      ],
+      "rawPersistedLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/invocations/run-Bu5II9/pool-creation-desktop.jsonl",
+          "gameId": "g7gq4x",
+          "selectedBy": "url",
+          "rows": 69,
+          "reason": null
+        }
+      ],
+      "scope": "Existing declared synthetic emblem-lab; actual normal turns, private creation, public UI play where human-owned, pool/hand/turn/RNG cold reload. Initial preconstructed slice observations distinct from journey log. No production pool claim for lab."
+    },
+    "judged-player3": {
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/invocations/run-em6CAm/pool-creation.result.json",
+      "error": null,
+      "caps": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 46141
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 38027
+        }
+      ],
+      "captures": [
+        "pool-first-player-desktop.png",
+        "pool-changed-player-desktop.png",
+        "pool-log-player-desktop.png",
+        "pool-reload-player-desktop.png",
+        "pool-first-player-mobile.png",
+        "pool-changed-player-mobile.png",
+        "pool-log-player-mobile.png",
+        "pool-reload-player-mobile.png"
+      ],
+      "rawPersistedLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/invocations/run-em6CAm/pool-creation-desktop.jsonl",
+          "gameId": "c83ytm",
+          "selectedBy": "url",
+          "rows": 76,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/invocations/run-em6CAm/pool-creation-mobile.jsonl",
+          "gameId": "ah9u55",
+          "selectedBy": "url",
+          "rows": 80,
+          "reason": null
+        }
+      ],
+      "scope": "Existing declared synthetic emblem-lab; actual normal turns, private creation, public UI play where human-owned, pool/hand/turn/RNG cold reload. Initial preconstructed slice observations distinct from journey log. No production pool claim for lab."
+    },
+    "judged-enemy1": {
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/invocations/run-AONhdD/pool-creation.result.json",
+      "error": null,
+      "caps": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 47073
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 56039
+        }
+      ],
+      "captures": [
+        "pool-first-enemy-desktop.png",
+        "pool-changed-enemy-desktop.png",
+        "pool-log-enemy-desktop.png",
+        "pool-reload-enemy-desktop.png",
+        "pool-first-enemy-mobile.png",
+        "pool-changed-enemy-mobile.png",
+        "pool-log-enemy-mobile.png",
+        "pool-reload-enemy-mobile.png"
+      ],
+      "rawPersistedLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/invocations/run-AONhdD/pool-creation-desktop.jsonl",
+          "gameId": "uuvdz2",
+          "selectedBy": "url",
+          "rows": 77,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.580/invocations/run-AONhdD/pool-creation-mobile.jsonl",
+          "gameId": "x59cvb",
+          "selectedBy": "url",
+          "rows": 77,
+          "reason": null
+        }
+      ],
+      "scope": "Existing declared synthetic emblem-lab; actual normal turns, private creation, public UI play where human-owned, pool/hand/turn/RNG cold reload. Initial preconstructed slice observations distinct from journey log. No production pool claim for lab."
+    },
+    "parentVisualAssessment": {
+      "observedAt": "2026-10-13T13:38:22.706582+00:00",
+      "bead": "hv-umm2.580",
+      "scope": "Manual capture inspection only; production source freeze held",
+      "captures": [
+        "sweep-1a524712-base-player-attempt-1.png",
+        "sweep-1a524712-base-enemy-attempt-1.png",
+        "pool-changed-player-desktop.png",
+        "pool-first-player-mobile.png",
+        "pool-changed-player-mobile.png",
+        "pool-reload-player-mobile.png",
+        "pool-log-player-mobile.png",
+        "pool-log-player-desktop.png",
+        "pool-first-enemy-desktop.png",
+        "pool-changed-enemy-desktop.png",
+        "pool-changed-enemy-mobile.png",
+        "pool-log-enemy-mobile.png"
+      ],
+      "assessment": "Desktop and mobile phase controls are legible; created player card and intended hand fan are visible. Changed state and reload retain a visible created card. Rendered player log names own created Card and public plays; no hidden opponent card name appears in inspected lines. Whole hand-fan clipping is intentional layout and not asserted as a defect. No new visual defect found. Enemy judged captures pending. Enemy desktop first and later-Dawn captures keep far-hand cards as card backs; public recruits remain visible. No new visual defect seen in these captures. Enemy mobile changed capture keeps far-hand cards masked. Inspected rendered enemy log includes public recruit plays and generic Dreamsign resolution without naming the hidden created Card. No new visual defect found.",
+      "limits": "Screenshots alone do not verify complete event privacy, exact persisted state or native resource cleanup; those depend on actual runtime receipts. No product source edited."
+    }
+  },
+  "qaProtocol": {
+    "freezeAck": "/tmp/580-parent-runtime-ack.txt",
+    "sourceFreezeManifest": "/tmp/580-runtime-freeze-manifest.json",
+    "drainProof": {
+      "at": "2026-10-13T13:38:10.045378+00:00",
+      "terminalReceipts": [
+        "sweep1",
+        "judged-player1",
+        "judged-player2",
+        "judged-player3",
+        "judged-enemy1"
+      ],
+      "runtimeGroups": [
+        249,
+        277,
+        90244,
+        90284,
+        91332,
+        91360,
+        95091,
+        95119,
+        96947,
+        96975
+      ],
+      "remainingGroupMembers": [],
+      "ownerAndLauncherRecordExists": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+      },
+      "port5274LsofExit": 1,
+      "knownOwnClosedSessionGETs": [
+        {
+          "session": "ba3c3c1a-5ee5-40b8-83fc-040d60fb4d3c",
+          "status": 404,
+          "body": "Session not found"
+        },
+        {
+          "session": "0f833f18-b555-42ad-8efb-a3acb0d0e8c1",
+          "status": 404,
+          "body": "Session not found"
+        },
+        {
+          "session": "2d9b6a7d-32de-4d86-9277-dfc54e6284f3",
+          "status": 404,
+          "body": "Session not found"
+        },
+        {
+          "session": "4f5e2bed-9795-42a5-86ac-ddeecc0a22f4",
+          "status": 404,
+          "body": "Session not found"
+        }
+      ],
+      "sourceFrozenCount": 4375,
+      "finalCount": 4376,
+      "unchangedAllFrozen": true,
+      "soleExtra": [
+        "docs/plan/evidence/qa-ledger/hv-umm2.580.jsonl"
+      ],
+      "finalManifest": "/tmp/580-runtime-final-manifest.json",
+      "qualifications": [
+        "Source comparison performed only after all runtime commands/finally cleanup returned terminal; no functional source operation resumes without parent ACK.",
+        "Known own session IDs observed in owner record/tool output; sweep opaque MCP/context ID was not exposed before its completed cleanup. No foreign session or shared service touched.",
+        "Scenario call counts/report navigation/context listener cleanup and normal awaitable runner cleanup retained; no pending provider/call reported."
+      ],
+      "kernelSlotProbe": {
+        "at": "2026-10-13T13:38:50.883334+00:00",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "qualification": "Nonwaiting lock acquisition/release probe after own cleanup; no owner mutation or foreign cleanup."
+      }
+    },
+    "sourceResumeAckObservedAt": "2026-10-13T13:40:08.151210Z",
+    "parentIndependentResumeProof": "/tmp/580-parent-runtime-resume-proof.json",
+    "resourceObservations": [
+      "/tmp/580-judged-player1-resource-observation.json",
+      "/tmp/580-judged-player3-resource-observation.json",
+      "/tmp/580-judged-enemy1-resource-observation.json"
+    ],
+    "unknowns": "Opaque browser-context ID and sweep MCPsession ID not exposed; normal awaited runner cleanup and all known own sessions404/resources/lease proof retained honestly. No foreign contexts/service killed.",
+    "privateCharacteristics": "Both actor public redaction contracts; real enemy DOM anonymous far-hand IDs/masked printed UUIDs with nonempty opportunities and parent visual log assessment. UUID absence alone does not prove all rendered copy privacy."
+  },
+  "rulesDecision": "RD-hv-umm2.580-1;C11binding/Step5multiset/publicnonzone metadata;existingX0 alreadynormative;current officialCR107.3g source consistent but does not mandate weighting or metadata.",
+  "D21": {
+    "firstByte": 41,
+    "sampled": false,
+    "newPrompts": false,
+    "entityAudit": "/tmp/580-entity-audit.txt",
+    "qualification": "Existing plannernew[] false-negative recorded; nativecapability governs. Browser/core validation independently required; no inventory/classifier changes."
+  },
+  "dispatchDuty": {
+    "phase5": {
+      "uncovered": 16,
+      "total": 497,
+      "cadence": 25
+    },
+    "phase6": {
+      "uncovered": 9,
+      "total": 10,
+      "cadence": 10
+    },
+    "g3gu": "Closed, no due duplicate retrospective at dispatch; parent owns freshnative duties.",
+    "raw": "/tmp/580-dispatch-friction.txt"
+  },
+  "stagedPathsPlanned": [
+    "docs/plan/evidence/friction/hv-umm2.580.json",
+    "docs/plan/evidence/measurements/hv-umm2.580.json",
+    "docs/plan/evidence/pre-existing/hv-umm2.580.md",
+    "docs/plan/evidence/qa-ledger/hv-umm2.580.jsonl",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.580-1.md",
+    "docs/rules.md",
+    "src/battle/integration/apollyon-init.test.ts",
+    "src/battle/integration/create-battle-init.ts",
+    "src/battle/integration/engine-battle-init.ts",
+    "src/battle/integration/tide-opponent-deck.ts",
+    "src/content/dreamsigns/rainbow-horn-1a524712.ts",
+    "src/engine/effects/primitives/contracts/create-random-from-pool.contracts.ts",
+    "src/engine/effects/primitives/create-random-from-pool.ts",
+    "src/engine/effects/primitives/index.ts",
+    "src/engine/effects/registry.ts",
+    "src/engine/loops/signature.ts",
+    "src/engine/state/clone.ts",
+    "src/engine/state/create.ts",
+    "src/engine/state/types.ts",
+    "src/engine/testing/emblem-lab.ts",
+    "src/engine/testing/fuzz.ts",
+    "src/engine/view/determinize.ts",
+    "src/engine/view/view.ts",
+    "src/rules/battle/fold.ts",
+    "src/session/providers/battle-init-provider.test.ts"
+  ],
+  "packaging": {
+    "oneDetailedConventionalCommit": true,
+    "beadTrailer": "hv-umm2.580",
+    "stagedParentAckRequired": true,
+    "noAmend": true,
+    "finalEndpoint": "2026-10-13T13:47:35.627871+00:00",
+    "stagedParentAck": "2026-10-13T13:46:34.501026Z",
+    "stagedParentProof": "/tmp/580-parent-staged-proof.json",
+    "finalSchemaReceipt": "/tmp/580-check-final-schema.receipt.json"
+  },
+  "evidenceValidation": {
+    "records": 712,
+    "historicalUnknownMeasurements": 41,
+    "exit": 0,
+    "receipt": "/tmp/580-check-evidence-schema1.receipt.json"
+  }
+}

@@ -351,7 +351,7 @@ export function fuzzInit(seed: BattleSeed, pool: FuzzPool, ordinal = 0): BattleI
   }
   const chosenDreamsigns = { player: someDreamsigns(), enemy: someDreamsigns() };
   chosenDreamsigns[startingSide].push(...support);
-  return { seed, scoreToWin: 25, startingSide, decks, dreamwell, avatars: chosenAvatars, dreamsigns: chosenDreamsigns };
+  return { seed, scoreToWin: 25, startingSide, decks, draftPools: { player: pool.cards.map((card) => card.id), enemy: pool.cards.map((card) => card.id) }, dreamwell, avatars: chosenAvatars, dreamsigns: chosenDreamsigns };
 }
 
 function eventsDigest(events: readonly EngineEvent[]): number {

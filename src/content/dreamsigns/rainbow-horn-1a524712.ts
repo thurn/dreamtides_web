@@ -1,4 +1,6 @@
 import { dreamsign } from "../define";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { createRandomFromPool } from "../../engine/effects/primitives/create-random-from-pool";
 
 export default dreamsign({
   id: "1a524712-ef7e-43d9-bd79-5dea5250bf08",
@@ -15,5 +17,6 @@ export default dreamsign({
     "cf1f7e7c-f9e9-4f83-9ff5-6edc8a916277",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(onDawn(), createRandomFromPool({ cardType: "event", costAtMost: 2 }))],
+  verifiedText: "d4aebmw0w8",
 });

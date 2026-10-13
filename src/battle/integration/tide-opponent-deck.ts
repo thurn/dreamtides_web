@@ -24,6 +24,7 @@ import {
   selectionBandSize,
 } from "../../selection/tide-affinity";
 import type { BattleEntryKey, TideId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
 import type { TideVector } from "../../selection/tide-affinity";
 
 interface RankedCard {
@@ -41,6 +42,8 @@ interface RankedDreamsign {
 }
 
 export interface TideOpponentDeckBuild {
+  /** The full fixed generated multiset, before choosing or modifying a deck. */
+  readonly draftPool: readonly CardId[];
   baseCards: CardData[];
   finalCards: CardData[];
   joinedTideIds: TideId[];
@@ -259,6 +262,7 @@ export function buildTideOpponentDeck(args: {
     ...startersAdded,
   ];
   const build: TideOpponentDeckBuild = {
+    draftPool: [...generated.counts].flatMap(([cardId, copies]) => Array.from({ length: copies }, () => cardId)).sort(),
     baseCards,
     finalCards,
     joinedTideIds,
@@ -285,6 +289,7 @@ export function buildTideOpponentDeck(args: {
       bandFraction: args.tides4Decks.selection.bandFraction,
       bandMinimum: args.tides4Decks.selection.bandMinimum,
       baseCardIds: baseCards.map((card) => card.id),
+      draftPoolCardIds: [...build.draftPool],
       finalCardIds: finalCards.map((card) => card.id),
       starterCardIds: startersAdded.map((card) => card.id),
       cutCardIds: cardsCut.map((card) => card.id),

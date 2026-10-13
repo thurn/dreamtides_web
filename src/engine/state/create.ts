@@ -242,6 +242,12 @@ function prepareSetup(state: BattleState, init: BattleInit): void {
   state.dreamwell = { deck: [...setup.dreamwell.deck], next: setup.dreamwell.next, catalog: [...init.dreamwell] };
 }
 
+function validateDraftPools(pools: BattleInit["draftPools"], catalog: EngineCatalog): void {
+  if (pools === undefined) return;
+  if (!fields(pools, SIDES) || !SIDES.every((side) => Array.isArray(pools[side]))) throw new Error("Invalid declared draft pools");
+  for (const side of SIDES) for (const cardId of pools[side]) catalog.card(cardId);
+}
+
 /**
  * The state before the battle begins: both decks as instances in deck
  * order, or the declared setup's zones. The `beginBattle` step enters its
@@ -249,11 +255,13 @@ function prepareSetup(state: BattleState, init: BattleInit): void {
  */
 export function initialState(init: BattleInit, catalog: EngineCatalog): BattleState {
   const config = battleConfig(init);
+  validateDraftPools(init.draftPools, catalog);
   validateSetup(init, catalog, config);
   const state: BattleState = {
     version: 0,
     seed: init.seed,
     rng: {},
+    ...(init.draftPools === undefined ? {} : { draftPools: { player: [...init.draftPools.player], enemy: [...init.draftPools.enemy] } }),
     nextInstance: 1,
     clock: 0,
     config,

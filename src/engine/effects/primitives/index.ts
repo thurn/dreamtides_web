@@ -13,6 +13,7 @@ export * from "./choose-subtype";
 export * from "./copy-card";
 export * from "./cost-modifier";
 export * from "./create-card";
+export * from "./create-random-from-pool";
 export * from "./create-copy-in-hand";
 export * from "./disable-triggers";
 export * from "./discard";

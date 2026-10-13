@@ -2301,6 +2301,15 @@ that created it, but no card in that hand is revealed to them.
 
 **Figments** are a character-typed subset of created cards.
 
+**Creating from the card pool:** "Add a random card from the card pool to your
+hand" creates one matching card from your fixed run draft pool. An opponent
+uses their generated fixed pool. Each eligible copy in that multiset is
+equally likely, and creation does not spend it. A missing, empty, or unmatched
+pool adds nothing. The created card has its printed base characteristics;
+cost conditions count X as 0. Both players may know the non-zone pool's UUIDs
+and copy counts, but the created card's physical identity in a hand remains
+private to its holder.
+
 ## Figments
 
 Figments are independent characters created by card effects rather than played
