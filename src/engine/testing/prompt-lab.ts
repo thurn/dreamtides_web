@@ -299,6 +299,8 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [DSL.optionalEnergyTarget.id]: { name: "Lab Optional Energy", text: "Fast. You may pay an additional 3●. Dissolve a ≤2✦ enemy, or any enemy if paid." },
+  [DSL.optionalDiscardTarget.id]: { name: "Lab Optional Discard", text: "Interrupt. You may discard a card as an additional cost. Dissolve a ≤2● cost enemy, or any enemy if paid." },
   [LAB.capturedSparkPlay.id]: { name: "Lab Captured Spark", text: "To play this event, abandon a character. Dissolve an enemy with X✦, where X is its spark." },
   [LAB.capturedSparkChoice.id]: { name: "Lab Spark Choice", text: "To play this event, abandon a character and use its spark as X, or abandon a character. Gain X⍟." },
   [LAB.abandonXOffering.id]: { name: "Lab Count Offering", text: "Offering. To play this event, abandon X figments. Dissolve an enemy with X✦." },
@@ -484,6 +486,13 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "optional-cost-targets", description: "Optional energy or discard decisions bind one enemy target before payment",
+    setup: { active: "player", phase: "day",
+      player: { hand: [DSL.optionalEnergyTarget.id, DSL.optionalDiscardTarget.id, SYNTHETIC.event0.id], energy: 6, deck: deck(6) },
+      enemy: { back: [SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id, SYNTHETIC.vanilla5.id], deck: deck(6) } },
+    script: [],
+  },
   {
     name: "captured-spark-play", description: "A mandatory spark capture precedes exact-X targeting, beside a spark-versus-plain cost choice",
     setup: { active: "player", phase: "day",

@@ -1553,9 +1553,13 @@ legality checks; an invalid target reports `noLegalTarget` for its effect
 part, and trailing effects continue.
 
 `targetWhen(condition, thenSelector, otherwiseSelector)` describes one
-character target whose normal-condition restriction is read live when offered
-and again when its chosen UUID is checked. Its condition excludes optional
-payments. Ordinary play-time and copy choices walk the full selected-mode
+character target whose restriction is read when offered and again when its
+chosen UUID is checked. Normal conditions read the current board. A `costPaid`
+condition reads the item's exact retained optional-payment decision. Immediate
+payment-dependent targeting prepares the existing cost plan before modes and
+targets, reserving its physical payment cards; all payment follows target
+selection and commitment. Copies carry the original's payment decisions into
+their choices without paying again. Ordinary play-time and copy choices walk the full selected-mode
 tree. Resolution preparation reaches conditional children when their
 instruction selects a branch, after preceding effects. Transient lexical
 maps retain conditional siblings' shared node/spec bindings, with original

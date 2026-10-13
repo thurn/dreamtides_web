@@ -482,15 +482,18 @@ export function labBoard(
         stageVoid(spec, null);
         continue;
       }
-      const targetSide = spec.selector.controller === "you" ? side : opponent(side);
-      const selector = sourceSparkAs(spec.selector, sourceSpark);
-      for (let index = 0; index < (spec.count ?? 1); index++) {
-        const character = characterFor(engine, selector, pool, xRange ?? countRange, staged === undefined);
-        back[targetSide].push(character.card);
-        for (const { count, cards } of countNeeds(engine, character.predicates, character.card)) {
-          const countSide = count.player === "you" ? side : opponent(side);
-          for (let card = 0; card < cards; card++) {
-            zones[count.zone][countSide].push(count.zone === "void" ? cardFor(engine, count.filter, pool) : SYNTHETIC.vanilla1.id);
+      const selectors = spec.when?.condition.cond === "costPaid" ? [spec.selector, spec.when.otherwise] : [spec.selector];
+      for (const predicate of selectors) {
+        const targetSide = predicate.controller === "you" ? side : opponent(side);
+        const selector = sourceSparkAs(predicate, sourceSpark);
+        for (let index = 0; index < (spec.count ?? 1); index++) {
+          const character = characterFor(engine, selector, pool, xRange ?? countRange, staged === undefined);
+          back[targetSide].push(character.card);
+          for (const { count, cards } of countNeeds(engine, character.predicates, character.card)) {
+            const countSide = count.player === "you" ? side : opponent(side);
+            for (let card = 0; card < cards; card++) {
+              zones[count.zone][countSide].push(count.zone === "void" ? cardFor(engine, count.filter, pool) : SYNTHETIC.vanilla1.id);
+            }
           }
         }
       }

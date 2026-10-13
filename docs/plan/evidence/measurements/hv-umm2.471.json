@@ -1,0 +1,1769 @@
+{
+  "bead": "hv-umm2.471",
+  "base": "f003abaa164cc42ab2121775a96df54e96d9a01b",
+  "dispatch": {
+    "actualNativeSpawn": "2026-10-13T13:44:19.203Z",
+    "modelStart": "unknown",
+    "journal": "optional_targets_471-actual-dispatch-journal.json"
+  },
+  "endpoint": {
+    "status": "Final precommit evidence stamp immediately before schema/staging/cached check/one commit. Actual Git command interval is retained separately in the immutable terminal handoff. Whole elapsed dispatch window includes admission, checks, browser work, evidence and parent audit waits.",
+    "at": "2026-10-13T14:40:37.916528+00:00"
+  },
+  "validationReceipts": {
+    "baseline-public-v01.receipt.json": {
+      "argv": [
+        "node_modules/.bin/tsx",
+        "/tmp/worker471-20261013/before-fix-public-v01.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T13:53:49.031756+00:00",
+      "end": "2026-10-13T13:53:51.034195+00:00",
+      "exit": 0,
+      "wallSeconds": 2.002358500001719,
+      "pid": 58228,
+      "pgid": 58228,
+      "load": "{ 10.10 9.41 7.33 }",
+      "groupRemainingAtExit": []
+    },
+    "coverage-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:20:03.579578+00:00",
+      "end": "2026-10-13T14:20:07.123883+00:00",
+      "exit": 0,
+      "wallSeconds": 3.5442182080005296,
+      "pid": 25171,
+      "pgid": 25171,
+      "load": "{ 5.84 5.83 5.44 }",
+      "groupRemainingAtExit": []
+    },
+    "create-v01.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "worktree",
+        "create",
+        "wt/hv-umm2-471-optional-cost-targets"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T13:43:04.556215+00:00",
+      "end": "2026-10-13T13:43:05.141175+00:00",
+      "exit": 0,
+      "wallSeconds": 0.5848817499936558,
+      "pid": 29681,
+      "pgid": 29681,
+      "load": "{ 4.67 7.17 6.13 }",
+      "groupRemainingAtExit": []
+    },
+    "diffcheck-stage2-v01.receipt.json": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:35:52.621015+00:00",
+      "end": "2026-10-13T14:35:52.658489+00:00",
+      "exit": 0,
+      "wallSeconds": 0.03735212501487695,
+      "pid": 73575,
+      "pgid": 73575,
+      "load": "{ 4.89 4.37 4.72 }",
+      "groupRemainingAtExit": []
+    },
+    "doctor-dispatch-v01.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "doctor"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T13:42:49.951008+00:00",
+      "end": "2026-10-13T13:42:51.936860+00:00",
+      "exit": 0,
+      "wallSeconds": 1.9858182499883696,
+      "pid": 29160,
+      "pgid": 29160,
+      "load": "{ 5.25 7.40 6.19 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-optional-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/lab-cost-staging.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:07:46.377613+00:00",
+      "end": "2026-10-13T14:07:56.852464+00:00",
+      "exit": 1,
+      "wallSeconds": 10.474639332998777,
+      "pid": 86680,
+      "pgid": 86680,
+      "load": "{ 3.56 3.86 5.00 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-optional-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/lab-cost-staging.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:09:26.856267+00:00",
+      "end": "2026-10-13T14:09:36.220045+00:00",
+      "exit": 0,
+      "wallSeconds": 9.363662208023015,
+      "pid": 88902,
+      "pgid": 88902,
+      "load": "{ 2.87 3.60 4.78 }",
+      "groupRemainingAtExit": []
+    },
+    "friction-dispatch-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T13:43:29.418038+00:00",
+      "end": "2026-10-13T13:43:29.572678+00:00",
+      "exit": 0,
+      "wallSeconds": 0.15454866699292324,
+      "pid": 30307,
+      "pgid": 30307,
+      "load": "{ 4.83 7.00 6.09 }",
+      "groupRemainingAtExit": []
+    },
+    "full-v01.receipt.json": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:20:20.514330+00:00",
+      "end": "2026-10-13T14:22:00.548618+00:00",
+      "exit": 0,
+      "wallSeconds": 100.03380775000551,
+      "pid": 25770,
+      "pgid": 25770,
+      "load": "{ 6.47 5.98 5.50 }",
+      "groupRemainingAtExit": []
+    },
+    "fuzz200-v01.receipt.json": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "200",
+        "--seed",
+        "hv-umm2.471"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:22:06.845862+00:00",
+      "end": "2026-10-13T14:24:00.883715+00:00",
+      "exit": 0,
+      "wallSeconds": 114.0370610410173,
+      "pid": 57176,
+      "pgid": 57176,
+      "load": "{ 6.88 6.34 5.70 }",
+      "groupRemainingAtExit": []
+    },
+    "install-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T13:43:12.876571+00:00",
+      "end": "2026-10-13T13:43:15.309339+00:00",
+      "exit": 0,
+      "wallSeconds": 2.4327033330046106,
+      "pid": 30015,
+      "pgid": 30015,
+      "load": "{ 4.45 7.08 6.10 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:19:38.720900+00:00",
+      "end": "2026-10-13T14:19:43.374744+00:00",
+      "exit": 0,
+      "wallSeconds": 4.653745707997587,
+      "pid": 22951,
+      "pgid": 22951,
+      "load": "{ 5.55 5.75 5.40 }",
+      "groupRemainingAtExit": []
+    },
+    "lint-contract-v01.receipt.json": {
+      "argv": [
+        "node_modules/.bin/eslint",
+        "src/engine/effects/primitives/contracts/optional-cost-targets.contracts.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:16:37.855503+00:00",
+      "end": "2026-10-13T14:16:40.249894+00:00",
+      "exit": 0,
+      "wallSeconds": 2.394316499994602,
+      "pid": 13845,
+      "pgid": 13845,
+      "load": "{ 7.30 5.77 5.32 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-controls-v01.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker471-20261013/launch-qa-checked.py",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.471/source-fingerprint-before-qa-v01.json",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.471/optional-cost-targets-controls-v01.mjs",
+        "--bead",
+        "hv-umm2.471",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:29:00.306896+00:00",
+      "end": "2026-10-13T14:29:41.919342+00:00",
+      "exit": 0,
+      "wallSeconds": 41.612204124976415,
+      "pid": 65150,
+      "pgid": 65150,
+      "load": "{ 2.72 4.37 5.06 }",
+      "groupRemainingAtExit": []
+    },
+    "qa-prelaunch-validation-v01.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker471-20261013/launch-qa-checked.py",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.471/source-fingerprint-before-qa-v01.json",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.471/optional-cost-targets-controls-v01.mjs",
+        "--bead",
+        "hv-umm2.471",
+        "--viewports",
+        "desktop,mobile",
+        "--validate-only"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:25:13.479325+00:00",
+      "end": "2026-10-13T14:25:13.510617+00:00",
+      "exit": 0,
+      "wallSeconds": 0.031226292019709945,
+      "pid": 61494,
+      "pgid": 61494,
+      "load": "{ 4.33 5.81 5.63 }",
+      "groupRemainingAtExit": []
+    },
+    "release-dispatch-v01.receipt.json": {
+      "argv": [
+        "tg",
+        "--no-launch",
+        "--json",
+        "release",
+        "status"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web",
+      "start": "2026-10-13T13:42:49.951105+00:00",
+      "end": "2026-10-13T13:42:50.147029+00:00",
+      "exit": 0,
+      "wallSeconds": 0.19576624999172054,
+      "pid": 29161,
+      "pgid": 29161,
+      "load": "{ 5.25 7.40 6.19 }",
+      "groupRemainingAtExit": []
+    },
+    "restored-copy-negative-v01.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker471-20261013/restored-negative.py",
+        "copy"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:12:33.225837+00:00",
+      "end": "2026-10-13T14:12:39.531359+00:00",
+      "exit": 1,
+      "wallSeconds": 6.305354750016704,
+      "pid": 96874,
+      "pgid": 96874,
+      "load": "{ 5.25 4.07 4.72 }",
+      "groupRemainingAtExit": []
+    },
+    "restored-play-negative-v01.receipt.json": {
+      "argv": [
+        "python3",
+        "/tmp/worker471-20261013/restored-negative.py",
+        "play"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:12:12.259716+00:00",
+      "end": "2026-10-13T14:12:20.239184+00:00",
+      "exit": 1,
+      "wallSeconds": 7.9792422500031535,
+      "pid": 95403,
+      "pgid": 95403,
+      "load": "{ 5.02 3.96 4.70 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v01.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:13:17.617646+00:00",
+      "end": "2026-10-13T14:14:18.030613+00:00",
+      "exit": 2,
+      "wallSeconds": 60.412652083003195,
+      "pid": 194,
+      "pgid": 194,
+      "load": "{ 6.07 4.50 4.85 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v02.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:14:55.436145+00:00",
+      "end": "2026-10-13T14:15:51.926776+00:00",
+      "exit": 1,
+      "wallSeconds": 56.49030620799749,
+      "pid": 8322,
+      "pgid": 8322,
+      "load": "{ 6.33 5.17 5.08 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v03.receipt.json": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:17:24.807853+00:00",
+      "end": "2026-10-13T14:18:21.976305+00:00",
+      "exit": 0,
+      "wallSeconds": 57.16813504201127,
+      "pid": 15199,
+      "pgid": 15199,
+      "load": "{ 7.04 5.89 5.38 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-pre-qa-v01.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:25:13.257886+00:00",
+      "end": "2026-10-13T14:25:13.369063+00:00",
+      "exit": 0,
+      "wallSeconds": 0.11109000002034009,
+      "pid": 61449,
+      "pgid": 61449,
+      "load": "{ 4.33 5.81 5.63 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-stage2-v01.receipt.json": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-471-optional-cost-targets",
+      "start": "2026-10-13T14:35:52.354866+00:00",
+      "end": "2026-10-13T14:35:52.484284+00:00",
+      "exit": 0,
+      "wallSeconds": 0.1292936250101775,
+      "pid": 73539,
+      "pgid": 73539,
+      "load": "{ 4.89 4.37 4.72 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "validationQualification": {
+    "baseline": "Observed negative current-public ifThen diagnostic, not acceptance pass; optionalPaid absent in auto-resolved returned state and not claimed.",
+    "focused-optional-v02": "Passing prior to additional copy fallback/controller and lab assertion changes. Final related and required full suite cover those additions.",
+    "review-v02": "Types/cycles and5732 related tests passed; aggregate failed own unnecessary assertion lint. No aggregate success claimed.",
+    "final": "review-v03, sequential Knip, content gate, required native-heavy full and canonical seeded200 passed after final source/test edits. QA remains pending exact runtime admission; no body changes after successful checks."
+  },
+  "testDelta": {
+    "newPlainContractModules": 1,
+    "newTestEntrypoints": 0,
+    "newJsdomFiles": 0,
+    "contractLines": 349,
+    "existingLabTestNetLines": 36,
+    "netTestLines": 385
+  },
+  "failurePaths": {
+    "wholeOptionalCostUnavailable": {
+      "test": "declines an unaffordable whole optional cost and excludes the wide target",
+      "proof": "Both actors x energy/discard public contracts: whole aggregate cost checked; only restricted candidates/false bit, restricted-empty legalActions rejection/inputsourcehand."
+    },
+    "reservedPhysicalPayer": {
+      "test": "reserves an optional abandon payer before its own target",
+      "proof": "Both actors: payer absent from actual target candidates, different physical target selected; canonical abandoned and dissolved payment facts plus target dissolved; scarce resource action unavailable."
+    },
+    "cancelStaleForeignCompetingReload": {
+      "tests": [
+        "reloads every paid=... prefix and rejects cancellation/stale/foreign/competing input without payment",
+        "rejects a target fingerprint from the opposite payment branch"
+      ],
+      "proof": "Both actors x both costs x true/false every prefix; committed6energy/source-payer zones unchanged; cold adapter JSON reload/fingerprints, cancellation/reopen stale old IDs, opposite actor/invalid answer/competing action, inline finalhash equality; ReplayDivergence rolls back."
+    },
+    "precommitException": {
+      "test": "keeps payment unpublished when target preparation throws",
+      "proof": "Both actors x energy/discard: throw after opt-in/payer preparation and before target answer, original stateHash unchanged."
+    },
+    "partialCommittedWrites": {
+      "test": "rolls back partial payment writes after a prepared optional decision commits and then throws",
+      "proof": "Public canonical synthetic step commits/planned payment then throws; fold error contains original committed state and excludes energy/discard publications."
+    }
+  },
+  "browser": {
+    "status": "Passed exact single native invocation; all owned runtime resources settled before manual work resumed",
+    "invocation": "run-u47cDj",
+    "sourceFingerprint": "source-fingerprint-before-qa-v01.json",
+    "all24SourceHashesMatch": true,
+    "images": [
+      {
+        "filename": "invocations/run-u47cDj/discard-payment-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "cac3665fcf2b6314c1ae09505b2427e0223a20ed50c9bb3d990575486ba97117"
+      },
+      {
+        "filename": "invocations/run-u47cDj/discard-resolved-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "0f5acdefb65c8dbd980a7b9ba19f2c6fa8cd603e78e4912c585da38c5bbc5e93"
+      },
+      {
+        "filename": "invocations/run-u47cDj/energy-decision-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "27b3d952417714fb5131b54baf1a2cb337bbdc0a11f30d3341c2fee78da6dec8"
+      },
+      {
+        "filename": "invocations/run-u47cDj/energy-resolved-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "cff96332acacb813e76648e9db6d665f7b2d939080d22418736c6716668cfc56"
+      },
+      {
+        "filename": "invocations/run-u47cDj/expanded-target-desktop.png",
+        "width": 2880,
+        "height": 1800,
+        "sha256": "951faafc2e1688ce815147c6092caec7575f621e4c04b94369e337f76d3b48ac"
+      },
+      {
+        "filename": "invocations/run-u47cDj/restricted-target-mobile.png",
+        "width": 780,
+        "height": 1688,
+        "sha256": "9230a0fada6772fe1e2872235b07b2c5a94d285f78ce0b1f79569a898b17ceee"
+      }
+    ],
+    "workflows": [
+      {
+        "viewport": "desktop",
+        "form": "energy",
+        "pays": true,
+        "source": "i1",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000047100",
+        "payer": "i3",
+        "selected": "i12",
+        "candidates": [
+          "i10",
+          "i11",
+          "i12"
+        ],
+        "energy": 2,
+        "payerZone": "hand",
+        "geometry": {
+          "hand": {
+            "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i1\"]",
+            "rect": {
+              "x": 560.146240234375,
+              "y": 731.552978515625,
+              "width": 141.18115234375,
+              "height": 189.02117919921875,
+              "right": 701.327392578125,
+              "bottom": 920.5741577148438
+            },
+            "hit": {
+              "x": 630.73681640625,
+              "y": 826.0635681152344,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            }
+          },
+          "choiceButtons": [
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-0]",
+              "rect": {
+                "x": 1114.046875,
+                "y": 597,
+                "width": 62.4375,
+                "height": 42,
+                "right": 1176.484375,
+                "bottom": 639
+              },
+              "hit": {
+                "x": 1145.265625,
+                "y": 618,
+                "covered": null
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-1]",
+              "rect": {
+                "x": 1184.484375,
+                "y": 597,
+                "width": 56.015625,
+                "height": 42,
+                "right": 1240.5,
+                "bottom": 639
+              },
+              "hit": {
+                "x": 1212.4921875,
+                "y": 618,
+                "covered": null
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            }
+          ],
+          "payment": null,
+          "target": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i12\"]",
+            "rect": {
+              "x": 441.5,
+              "y": 183,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 531,
+              "bottom": 272.5
+            },
+            "hit": {
+              "x": 486.25,
+              "y": 227.75,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            }
+          }
+        },
+        "logs": {
+          "filename": "invocations/run-u47cDj/workflow-energy-paid-desktop.jsonl",
+          "sha256": "102c409d1ed207235a129711132eec97fbe488919df5f0bce1a7ee3d2f095e9e",
+          "rows": 36,
+          "gameId": "abrzen",
+          "actions": [
+            {
+              "gameId": "abrzen",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i1",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "367fw9bf55",
+                  "value": true
+                },
+                {
+                  "fingerprint": "74kmwmdtxh",
+                  "value": [
+                    "i12"
+                  ]
+                }
+              ],
+              "timestamp": "2026-10-13T14:29:11.398Z",
+              "event": "engine.action",
+              "seq": 31
+            }
+          ]
+        }
+      },
+      {
+        "viewport": "desktop",
+        "form": "energy",
+        "pays": false,
+        "source": "i1",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000047100",
+        "payer": "i3",
+        "selected": "i10",
+        "candidates": [
+          "i10",
+          "i11"
+        ],
+        "energy": 5,
+        "payerZone": "hand",
+        "geometry": {
+          "hand": {
+            "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i1\"]",
+            "rect": {
+              "x": 560.146240234375,
+              "y": 731.552978515625,
+              "width": 141.18115234375,
+              "height": 189.02117919921875,
+              "right": 701.327392578125,
+              "bottom": 920.5741577148438
+            },
+            "hit": {
+              "x": 630.73681640625,
+              "y": 826.0635681152344,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            }
+          },
+          "choiceButtons": [
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-0]",
+              "rect": {
+                "x": 1114.046875,
+                "y": 597,
+                "width": 62.4375,
+                "height": 42,
+                "right": 1176.484375,
+                "bottom": 639
+              },
+              "hit": {
+                "x": 1145.265625,
+                "y": 618,
+                "covered": null
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-1]",
+              "rect": {
+                "x": 1184.484375,
+                "y": 597,
+                "width": 56.015625,
+                "height": 42,
+                "right": 1240.5,
+                "bottom": 639
+              },
+              "hit": {
+                "x": 1212.4921875,
+                "y": 618,
+                "covered": null
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            }
+          ],
+          "payment": null,
+          "target": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i10\"]",
+            "rect": {
+              "x": 254.5,
+              "y": 183,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 344,
+              "bottom": 272.5
+            },
+            "hit": {
+              "x": 299.25,
+              "y": 227.75,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            }
+          }
+        },
+        "logs": {
+          "filename": "invocations/run-u47cDj/workflow-energy-unpaid-desktop.jsonl",
+          "sha256": "e7ab54c2f7b84c9cb1bb95a81d68a10e1364dcd145aad0219f597962e2388019",
+          "rows": 36,
+          "gameId": "zpdsfe",
+          "actions": [
+            {
+              "gameId": "zpdsfe",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i1",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "367fw9bf55",
+                  "value": false
+                },
+                {
+                  "fingerprint": "6fttcuz7rh",
+                  "value": [
+                    "i10"
+                  ]
+                }
+              ],
+              "timestamp": "2026-10-13T14:29:16.536Z",
+              "event": "engine.action",
+              "seq": 31
+            }
+          ]
+        }
+      },
+      {
+        "viewport": "desktop",
+        "form": "discard",
+        "pays": true,
+        "source": "i2",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000047101",
+        "payer": "i3",
+        "selected": "i12",
+        "candidates": [
+          "i10",
+          "i11",
+          "i12"
+        ],
+        "energy": 5,
+        "payerZone": "void",
+        "geometry": {
+          "hand": {
+            "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i2\"]",
+            "rect": {
+              "x": 705.484375,
+              "y": 732,
+              "width": 128.90625,
+              "height": 180.46875,
+              "right": 834.390625,
+              "bottom": 912.46875
+            },
+            "hit": {
+              "x": 769.9375,
+              "y": 822.234375,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            }
+          },
+          "choiceButtons": [
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-0]",
+              "rect": {
+                "x": 1114.046875,
+                "y": 597,
+                "width": 62.4375,
+                "height": 42,
+                "right": 1176.484375,
+                "bottom": 639
+              },
+              "hit": {
+                "x": 1145.265625,
+                "y": 618,
+                "covered": null
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-1]",
+              "rect": {
+                "x": 1184.484375,
+                "y": 597,
+                "width": 56.015625,
+                "height": 42,
+                "right": 1240.5,
+                "bottom": 639
+              },
+              "hit": {
+                "x": 1212.4921875,
+                "y": 618,
+                "covered": null
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            }
+          ],
+          "payment": {
+            "payerGeometry": {
+              "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i3\"]",
+              "rect": {
+                "x": 772.094482421875,
+                "y": 731.552978515625,
+                "width": 141.18115234375,
+                "height": 189.02117919921875,
+                "right": 913.275634765625,
+                "bottom": 920.5741577148438
+              },
+              "hit": {
+                "x": 842.68505859375,
+                "y": 826.0635681152344,
+                "covered": null
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            },
+            "submit": {
+              "selector": "[data-testid=battle-card-picker-submit]",
+              "rect": {
+                "x": 1151.171875,
+                "y": 597,
+                "width": 89.328125,
+                "height": 42,
+                "right": 1240.5,
+                "bottom": 639
+              },
+              "hit": {
+                "x": 1195.8359375,
+                "y": 618,
+                "covered": null
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            }
+          },
+          "target": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i12\"]",
+            "rect": {
+              "x": 441.5,
+              "y": 183,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 531,
+              "bottom": 272.5
+            },
+            "hit": {
+              "x": 486.25,
+              "y": 227.75,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            }
+          }
+        },
+        "logs": {
+          "filename": "invocations/run-u47cDj/workflow-discard-paid-desktop.jsonl",
+          "sha256": "d819495555f2df15996606417c2bcdad46a986f40ca765025299737d7a0bdd1d",
+          "rows": 40,
+          "gameId": "cminfm",
+          "actions": [
+            {
+              "gameId": "cminfm",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i2",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "1vmf9x0t92q",
+                  "value": true
+                },
+                {
+                  "fingerprint": "rnbf33ohwj",
+                  "value": [
+                    "i3"
+                  ]
+                },
+                {
+                  "fingerprint": "2ga32fmhfdy",
+                  "value": [
+                    "i12"
+                  ]
+                }
+              ],
+              "timestamp": "2026-10-13T14:29:19.895Z",
+              "event": "engine.action",
+              "seq": 35
+            }
+          ]
+        }
+      },
+      {
+        "viewport": "desktop",
+        "form": "discard",
+        "pays": false,
+        "source": "i2",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000047101",
+        "payer": "i3",
+        "selected": "i10",
+        "candidates": [
+          "i10",
+          "i11"
+        ],
+        "energy": 5,
+        "payerZone": "hand",
+        "geometry": {
+          "hand": {
+            "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i2\"]",
+            "rect": {
+              "x": 705.484375,
+              "y": 732,
+              "width": 128.90625,
+              "height": 180.46875,
+              "right": 834.390625,
+              "bottom": 912.46875
+            },
+            "hit": {
+              "x": 769.9375,
+              "y": 822.234375,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            }
+          },
+          "choiceButtons": [
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-0]",
+              "rect": {
+                "x": 1114.046875,
+                "y": 597,
+                "width": 62.4375,
+                "height": 42,
+                "right": 1176.484375,
+                "bottom": 639
+              },
+              "hit": {
+                "x": 1145.265625,
+                "y": 618,
+                "covered": null
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-1]",
+              "rect": {
+                "x": 1184.484375,
+                "y": 597,
+                "width": 56.015625,
+                "height": 42,
+                "right": 1240.5,
+                "bottom": 639
+              },
+              "hit": {
+                "x": 1212.4921875,
+                "y": 618,
+                "covered": null
+              },
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "dpr": 2
+              }
+            }
+          ],
+          "payment": null,
+          "target": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i10\"]",
+            "rect": {
+              "x": 254.5,
+              "y": 183,
+              "width": 89.5,
+              "height": 89.5,
+              "right": 344,
+              "bottom": 272.5
+            },
+            "hit": {
+              "x": 299.25,
+              "y": 227.75,
+              "covered": null
+            },
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "dpr": 2
+            }
+          }
+        },
+        "logs": {
+          "filename": "invocations/run-u47cDj/workflow-discard-unpaid-desktop.jsonl",
+          "sha256": "2e424a391d2cc1e82f86926085a9364b2950ca9383d6192099a9db76b6c99cc2",
+          "rows": 36,
+          "gameId": "67yn8j",
+          "actions": [
+            {
+              "gameId": "67yn8j",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i2",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "1vmf9x0t92q",
+                  "value": false
+                },
+                {
+                  "fingerprint": "20leoioyaq1",
+                  "value": [
+                    "i10"
+                  ]
+                }
+              ],
+              "timestamp": "2026-10-13T14:29:23.123Z",
+              "event": "engine.action",
+              "seq": 31
+            }
+          ]
+        }
+      },
+      {
+        "viewport": "mobile",
+        "form": "energy",
+        "pays": true,
+        "source": "i1",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000047100",
+        "payer": "i3",
+        "selected": "i12",
+        "candidates": [
+          "i10",
+          "i11",
+          "i12"
+        ],
+        "energy": 2,
+        "payerZone": "hand",
+        "geometry": {
+          "hand": {
+            "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i1\"]",
+            "rect": {
+              "x": 28.42640495300293,
+              "y": 666.8659057617188,
+              "width": 170.82589721679688,
+              "height": 224.12811279296875,
+              "right": 199.2523021697998,
+              "bottom": 890.9940185546875
+            },
+            "hit": {
+              "x": 113.83935356140137,
+              "y": 778.9299621582031,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            }
+          },
+          "choiceButtons": [
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-0]",
+              "rect": {
+                "x": 255.546875,
+                "y": 522.828125,
+                "width": 62.4375,
+                "height": 42,
+                "right": 317.984375,
+                "bottom": 564.828125
+              },
+              "hit": {
+                "x": 286.765625,
+                "y": 543.828125,
+                "covered": null
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-1]",
+              "rect": {
+                "x": 325.984375,
+                "y": 522.828125,
+                "width": 56.015625,
+                "height": 42,
+                "right": 382,
+                "bottom": 564.828125
+              },
+              "hit": {
+                "x": 353.9921875,
+                "y": 543.828125,
+                "covered": null
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            }
+          ],
+          "payment": null,
+          "target": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i12\"]",
+            "rect": {
+              "x": 139.125,
+              "y": 222.3125,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 192.984375,
+              "bottom": 276.171875
+            },
+            "hit": {
+              "x": 166.0546875,
+              "y": 249.2421875,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            }
+          }
+        },
+        "logs": {
+          "filename": "invocations/run-u47cDj/workflow-energy-paid-mobile.jsonl",
+          "sha256": "c7dcc2efb6c159edb8a62f109b3cac42564d640d59a680ebd3f657cc231bb380",
+          "rows": 36,
+          "gameId": "2t9kv4",
+          "actions": [
+            {
+              "gameId": "2t9kv4",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i1",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "367fw9bf55",
+                  "value": true
+                },
+                {
+                  "fingerprint": "74kmwmdtxh",
+                  "value": [
+                    "i12"
+                  ]
+                }
+              ],
+              "timestamp": "2026-10-13T14:29:27.357Z",
+              "event": "engine.action",
+              "seq": 31
+            }
+          ]
+        }
+      },
+      {
+        "viewport": "mobile",
+        "form": "energy",
+        "pays": false,
+        "source": "i1",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000047100",
+        "payer": "i3",
+        "selected": "i10",
+        "candidates": [
+          "i10",
+          "i11"
+        ],
+        "energy": 5,
+        "payerZone": "hand",
+        "geometry": {
+          "hand": {
+            "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i1\"]",
+            "rect": {
+              "x": 28.42640495300293,
+              "y": 666.8659057617188,
+              "width": 170.82589721679688,
+              "height": 224.12811279296875,
+              "right": 199.2523021697998,
+              "bottom": 890.9940185546875
+            },
+            "hit": {
+              "x": 113.83935356140137,
+              "y": 778.9299621582031,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            }
+          },
+          "choiceButtons": [
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-0]",
+              "rect": {
+                "x": 255.546875,
+                "y": 522.828125,
+                "width": 62.4375,
+                "height": 42,
+                "right": 317.984375,
+                "bottom": 564.828125
+              },
+              "hit": {
+                "x": 286.765625,
+                "y": 543.828125,
+                "covered": null
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-1]",
+              "rect": {
+                "x": 325.984375,
+                "y": 522.828125,
+                "width": 56.015625,
+                "height": 42,
+                "right": 382,
+                "bottom": 564.828125
+              },
+              "hit": {
+                "x": 353.9921875,
+                "y": 543.828125,
+                "covered": null
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            }
+          ],
+          "payment": null,
+          "target": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i10\"]",
+            "rect": {
+              "x": 23.40625,
+              "y": 222.3125,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 77.265625,
+              "bottom": 276.171875
+            },
+            "hit": {
+              "x": 50.3359375,
+              "y": 249.2421875,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            }
+          }
+        },
+        "logs": {
+          "filename": "invocations/run-u47cDj/workflow-energy-unpaid-mobile.jsonl",
+          "sha256": "e111f51c892474629736beb07d78688b4021db5e30452cfa661c70d28300eacd",
+          "rows": 36,
+          "gameId": "xmmiyc",
+          "actions": [
+            {
+              "gameId": "xmmiyc",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i1",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "367fw9bf55",
+                  "value": false
+                },
+                {
+                  "fingerprint": "6fttcuz7rh",
+                  "value": [
+                    "i10"
+                  ]
+                }
+              ],
+              "timestamp": "2026-10-13T14:29:31.587Z",
+              "event": "engine.action",
+              "seq": 31
+            }
+          ]
+        }
+      },
+      {
+        "viewport": "mobile",
+        "form": "discard",
+        "pays": true,
+        "source": "i2",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000047101",
+        "payer": "i3",
+        "selected": "i12",
+        "candidates": [
+          "i10",
+          "i11",
+          "i12"
+        ],
+        "energy": 5,
+        "payerZone": "void",
+        "geometry": {
+          "hand": {
+            "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i2\"]",
+            "rect": {
+              "x": 120.1328125,
+              "y": 664.109375,
+              "width": 149.734375,
+              "height": 209.625,
+              "right": 269.8671875,
+              "bottom": 873.734375
+            },
+            "hit": {
+              "x": 195,
+              "y": 768.921875,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            }
+          },
+          "choiceButtons": [
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-0]",
+              "rect": {
+                "x": 255.546875,
+                "y": 522.828125,
+                "width": 62.4375,
+                "height": 42,
+                "right": 317.984375,
+                "bottom": 564.828125
+              },
+              "hit": {
+                "x": 286.765625,
+                "y": 543.828125,
+                "covered": null
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-1]",
+              "rect": {
+                "x": 325.984375,
+                "y": 522.828125,
+                "width": 56.015625,
+                "height": 42,
+                "right": 382,
+                "bottom": 564.828125
+              },
+              "hit": {
+                "x": 353.9921875,
+                "y": 543.828125,
+                "covered": null
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            }
+          ],
+          "payment": {
+            "payerGeometry": {
+              "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i3\"]",
+              "rect": {
+                "x": 155.63832092285156,
+                "y": 636.8659057617188,
+                "width": 170.82591247558594,
+                "height": 224.12811279296875,
+                "right": 326.4642333984375,
+                "bottom": 860.9940185546875
+              },
+              "hit": {
+                "x": 241.05127716064453,
+                "y": 748.9299621582031,
+                "covered": null
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            },
+            "submit": {
+              "selector": "[data-testid=battle-card-picker-submit]",
+              "rect": {
+                "x": 292.671875,
+                "y": 522.828125,
+                "width": 89.328125,
+                "height": 42,
+                "right": 382,
+                "bottom": 564.828125
+              },
+              "hit": {
+                "x": 337.3359375,
+                "y": 543.828125,
+                "covered": null
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            }
+          },
+          "target": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i12\"]",
+            "rect": {
+              "x": 139.125,
+              "y": 222.3125,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 192.984375,
+              "bottom": 276.171875
+            },
+            "hit": {
+              "x": 166.0546875,
+              "y": 249.2421875,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            }
+          }
+        },
+        "logs": {
+          "filename": "invocations/run-u47cDj/workflow-discard-paid-mobile.jsonl",
+          "sha256": "8648bf80ce1724b11719b3c70396a8fb87fcbd639c087e960d6f78a800d06721",
+          "rows": 43,
+          "gameId": "s6e8ta",
+          "actions": [
+            {
+              "gameId": "s6e8ta",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i2",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "1vmf9x0t92q",
+                  "value": true
+                },
+                {
+                  "fingerprint": "rnbf33ohwj",
+                  "value": [
+                    "i3"
+                  ]
+                },
+                {
+                  "fingerprint": "2ga32fmhfdy",
+                  "value": [
+                    "i12"
+                  ]
+                }
+              ],
+              "timestamp": "2026-10-13T14:29:36.328Z",
+              "event": "engine.action",
+              "seq": 37
+            }
+          ]
+        }
+      },
+      {
+        "viewport": "mobile",
+        "form": "discard",
+        "pays": false,
+        "source": "i2",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000047101",
+        "payer": "i3",
+        "selected": "i10",
+        "candidates": [
+          "i10",
+          "i11"
+        ],
+        "energy": 5,
+        "payerZone": "hand",
+        "geometry": {
+          "hand": {
+            "selector": "[data-battle-mobile-row=\"near-hand\"] [data-battle-card-id=\"i2\"]",
+            "rect": {
+              "x": 120.1328125,
+              "y": 664.109375,
+              "width": 149.734375,
+              "height": 209.625,
+              "right": 269.8671875,
+              "bottom": 873.734375
+            },
+            "hit": {
+              "x": 195,
+              "y": 768.921875,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            }
+          },
+          "choiceButtons": [
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-0]",
+              "rect": {
+                "x": 255.546875,
+                "y": 522.828125,
+                "width": 62.4375,
+                "height": 42,
+                "right": 317.984375,
+                "bottom": 564.828125
+              },
+              "hit": {
+                "x": 286.765625,
+                "y": 543.828125,
+                "covered": null
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            },
+            {
+              "selector": "[data-testid=battle-choice-prompt-option-1]",
+              "rect": {
+                "x": 325.984375,
+                "y": 522.828125,
+                "width": 56.015625,
+                "height": 42,
+                "right": 382,
+                "bottom": 564.828125
+              },
+              "hit": {
+                "x": 353.9921875,
+                "y": 543.828125,
+                "covered": null
+              },
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "dpr": 2
+              }
+            }
+          ],
+          "payment": null,
+          "target": {
+            "selector": "[data-battlefield-card][data-battle-card-id=\"i10\"]",
+            "rect": {
+              "x": 23.40625,
+              "y": 222.3125,
+              "width": 53.859375,
+              "height": 53.859375,
+              "right": 77.265625,
+              "bottom": 276.171875
+            },
+            "hit": {
+              "x": 50.3359375,
+              "y": 249.2421875,
+              "covered": null
+            },
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "dpr": 2
+            }
+          }
+        },
+        "logs": {
+          "filename": "invocations/run-u47cDj/workflow-discard-unpaid-mobile.jsonl",
+          "sha256": "4b79b001b7483daff1c8a92c95d0e3d32f4a41da120b41ef9dfde16607f20410",
+          "rows": 36,
+          "gameId": "sdd9ai",
+          "actions": [
+            {
+              "gameId": "sdd9ai",
+              "version": 0,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i2",
+                "from": "hand"
+              },
+              "answers": [
+                {
+                  "fingerprint": "1vmf9x0t92q",
+                  "value": false
+                },
+                {
+                  "fingerprint": "20leoioyaq1",
+                  "value": [
+                    "i10"
+                  ]
+                }
+              ],
+              "timestamp": "2026-10-13T14:29:40.524Z",
+              "event": "engine.action",
+              "seq": 31
+            }
+          ]
+        }
+      }
+    ],
+    "caps": [],
+    "runtime": {
+      "at": "2026-10-13T14:31:13.066144+00:00",
+      "invocation": "run-u47cDj",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.471/invocations/run-u47cDj/optional-cost-targets-controls-v01.result.json",
+      "ownGroups": {
+        "65150": [],
+        "65179": []
+      },
+      "nativeCleanup": "terminal PASS; stderr reports owned65179 server cleanup and portfree",
+      "sharedRecordObservations": [],
+      "foreignOwnership": "Any later foreign slot reuse is untouched; own identities determine settlement.",
+      "actualProviderRecord": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+      "actualProviderRecordExists": false,
+      "portListenerObservation": "lsof -nP -iTCP:5274 -sTCP:LISTEN empty after native cleanup",
+      "nativeClientClosure": "Successful terminal native runner; active provider ownership record absent. Archived unrelated incident records are preserved and do not belong to this invocation."
+    },
+    "postRunAuditQualification": "Initial postrun assertion expected viewport-return qa.caps() to be a flat array; actual documented grouped error/rejection/console-error arrays are all empty. Native runner flat caps are empty. Corrected only audit interpretation, no source/runtime change or rerun.",
+    "visualInspection": "Implementer viewed expanded target desktop, restricted target mobile and discard payer mobile. Parent independently viewed energy decision desktop and both mobile changed states. Correct readable eligibility/payer controls, no actionable introduced visual defect. These are contextual inspections, not independent cold visual review; inherited layout observations are in own pre-existing file."
+  },
+  "rulesDecision": "RD-hv-umm2.471-1: Ladder not invoked; normative optional-cost, targeting and copy anchors",
+  "contentScope": "Two additive synthetic DSL fixtures; original139 production entities and content300/sweep/D20/D21 remain their own acceptance",
+  "performance": "No throughput/performance claim; raw command wall/load and unknown model/CPU timing retained",
+  "testCounts": {
+    "review-v03": {
+      "files": 287,
+      "passed": 5732
+    },
+    "full-v01": {
+      "files": 368,
+      "passed": 6733
+    },
+    "coverage-v01": {
+      "files": 1,
+      "passed": 20
+    }
+  },
+  "fuzz": {
+    "argv": [
+      "lockf",
+      "-k",
+      "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "npm",
+      "run",
+      "fuzz:engine",
+      "--",
+      "--games",
+      "200",
+      "--seed",
+      "hv-umm2.471"
+    ],
+    "games": 200,
+    "seedPrefix": "hv-umm2.471",
+    "steps": 81381,
+    "prompts": 5214,
+    "interactiveReruns": 490,
+    "failures": 0,
+    "bounded": {
+      "legality": 0,
+      "prompts": 1
+    },
+    "executionWallS": 112.1,
+    "reportedCpuS": 121.8,
+    "qualification": "Canonical mixed-production/synthetic run includes DSL fixtures; no synthetic UUID inclusion or exercise counts were measured or claimed. Stable public contracts and genuine browser workflows prove the new form; one bounded prompt is an observed budget outcome, not a failed invariant."
+  },
+  "preservedProofManifest": "preserved-validation-proof-v01.json",
+  "preExisting": "docs/plan/evidence/pre-existing/hv-umm2.471.md",
+  "logging": "Existing engine.action logs retain exact optional boolean, physical payer and single target answer plus source card UUID from initialized fixture. The eight per-workflow JSONL exports reproduce actual choices; cost-paid decisions remain on stack/copy storage. No names serve as identity and no new log event/schema required.",
+  "stage3": {
+    "parentAudit": "parent-stage2-audit-v01.json",
+    "authority": "Parent Stage3 exact18file/source/evidence audit passed; source/test/QA bodies frozen. Only final evidence stamp/schema/stagingcheck/one local commit admitted. Independent cold review, native promotion and closure remain root-owned.",
+    "actualGitInterval": "Recorded separately after this stamp; unknown until Git completes.",
+    "modelStart": "unknown"
+  }
+}

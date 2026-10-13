@@ -296,8 +296,8 @@ export function target(selector: CharacterSelector, count = 1): TargetSpec {
   return { kind: "target", selector, count };
 }
 
-/** One physical target whose restriction follows a live normal condition. */
-export function targetWhen(condition: Exclude<Condition, { readonly cond: "costPaid" }>, then: CharacterSelector, otherwise: CharacterSelector, count = 1): TargetSpec {
+/** One physical target whose restriction follows a live condition or retained optional payment. */
+export function targetWhen(condition: Condition, then: CharacterSelector, otherwise: CharacterSelector, count = 1): TargetSpec {
   return { kind: "target", selector: then, count, when: { condition, otherwise } };
 }
 

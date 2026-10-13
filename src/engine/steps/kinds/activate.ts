@@ -1,7 +1,7 @@
-import { choosePlayTime, purposeOf } from "../../effects/interpreter";
+import { choosePlayTime, purposeOf, targetsNeedOptionalCost } from "../../effects/interpreter";
 import { abilityOrigin, activatedAbilityAt, canActivate, oncePerTurnKey, sourceController } from "../../rules/activation";
 import type { PromptRole } from "../../prompts/types";
-import { prepareCostX, payCosts, planCosts } from "../../rules/costs";
+import { prepareCostX, payCosts, planCosts, type CostPlan } from "../../rules/costs";
 import { slotOf } from "../../rules/zones";
 import type { AbilitySource } from "../../state/ids";
 import { opponent, sourceInstance } from "../../state/ids";
@@ -13,7 +13,7 @@ import { targetsNeedX } from "../immediate-x";
  * whose ability works there, or of an emblem: play-time choices
  * (X and any mandatory card-cost capture needed by targeting, then modes,
  * then targets, then the costs' alternatives, optional
- * costs, and cards), then the commit point,
+ * costs, and cards; payment-dependent targets prepare these decisions before modes and targets), then the commit point,
  * then the costs, then the ability goes on the stack and the opponent
  * receives priority (D13). The stack item keeps the source's ability
  * origin as activated, so it resolves as activated even after its card has
@@ -41,9 +41,16 @@ export const activate: StepDefinition<ActivateStep> = {
     const purpose = (role: PromptRole) => purposeOf(step.source, origin, step.ability, role);
     const prepared = prepareCostX(ctx, side, step.source, ability.costs, purpose, targetsNeedX(ability.effect));
     const { x } = prepared;
-    const [choices] = choosePlayTime(ctx, [{ ability: step.ability, effect: ability.effect }], side, step.source, (_, role) => purpose(role), x ?? undefined);
+    const paymentDependent = targetsNeedOptionalCost(ability.effect);
+    let plan: CostPlan | null = paymentDependent
+      ? planCosts(ctx, side, step.source, ability.costs, x, purpose, [], undefined,
+        { preparedPayments: prepared.payments, ...(x === null ? {} : { selectorX: x }) }) : null;
+    const [choices] = choosePlayTime(ctx, [{ ability: step.ability, effect: ability.effect }], side, step.source, (_, role) => purpose(role),
+      paymentDependent ? (plan?.x ?? undefined) : (x ?? undefined), plan === null ? {} :
+        { optionalPaid: plan.optionalPaid, excluded: plan.payments.flatMap(payment => payment.cards) });
     if (choices === undefined) throw new Error("choosePlayTime returns one entry per ability");
-    const plan = planCosts(ctx, side, step.source, ability.costs, x, purpose, choices.targets.flat(), undefined, { endsPlayTime: true, preparedPayments: prepared.payments, ...(x === null ? {} : { selectorX: x }) });
+    plan ??= planCosts(ctx, side, step.source, ability.costs, x, purpose, choices.targets.flat(), undefined,
+      { endsPlayTime: true, preparedPayments: prepared.payments, ...(x === null ? {} : { selectorX: x }) });
     const abandoned = plan.payments.find(({ cost }) => cost.cost === "abandon")?.cards[0];
     const position = abandoned === undefined ? null : slotOf(state, abandoned);
     const captured = position === null ? choices : { ...choices, abandonedPosition: { side, slot: { ...position } } };

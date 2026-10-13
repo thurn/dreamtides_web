@@ -108,6 +108,21 @@ export function collectTargets(effect: EffectNode, chosen: ChosenModes, deferCon
   return specs;
 }
 
+/** Immediate targets whose restriction needs the prepared optional-cost decision, including every modal branch. */
+export function targetsNeedOptionalCost(effect: EffectNode, seen = new Set<EffectNode>()): boolean {
+  if (seen.has(effect)) return false;
+  seen.add(effect);
+  const definition = primitiveDefinition(effect.op);
+  return (definition.targets?.(effect) ?? []).some(spec => spec.kind === "target" && spec.when?.condition.cond === "costPaid") ||
+    (definition.children?.(effect) ?? []).some(child => targetsNeedOptionalCost(child, seen));
+}
+
+/** Prepared payment decisions and physical cards reserved before targets are chosen. */
+interface TargetChoiceContext {
+  readonly optionalPaid?: readonly boolean[];
+  readonly excluded?: readonly InstanceId[];
+}
+
 /** Every target spec of an effect in any of its modes, for setup tooling. */
 export function everyTarget(effect: EffectNode): PlayTimeTarget[] {
   const specs: PlayTimeTarget[] = [];
@@ -242,22 +257,24 @@ export function targetCandidates(
   selectorX?: number,
   sourceSpark?: SourceSparkReader,
   subjectCost: number | null = null,
+  choices: TargetChoiceContext = {},
 ): InstanceId[] {
+  const available = (ids: InstanceId[]) => targetable(state, catalog, ids).filter(id => !choices.excluded?.includes(id));
   switch (spec.kind) {
     case "stackTarget":
-      return targetable(state, catalog, matchingStackItems(state, catalog, spec.selector, controller, source));
+      return available(matchingStackItems(state, catalog, spec.selector, controller, source));
     case "inZone":
-      return targetable(state, catalog, matchingVoidCards(state, catalog, spec, controller, source, selectorX, sourceSpark, subjectCost));
+      return available(matchingVoidCards(state, catalog, spec, controller, source, selectorX, sourceSpark, subjectCost));
     case "target":
-      return targetable(state, catalog, matchingCharacters(state, catalog, targetSelector(state, catalog, spec, controller, source, selectorX, sourceSpark), controller, source, selectorX, sourceSpark));
+      return available(matchingCharacters(state, catalog, targetSelector(state, catalog, spec, controller, source, selectorX, sourceSpark, choices), controller, source, selectorX, sourceSpark));
   }
 }
 
-/** A target's live predicate; payment-dependent targeting has a separate choice protocol. */
-function targetSelector(state: BattleState, catalog: EngineCatalog, spec: TargetSpec, controller: Side, source: AbilitySource, x?: number, sourceSpark?: SourceSparkReader) {
+/** A target’s live predicate, with payment conditions bound to the item’s exact optional-cost decisions. */
+function targetSelector(state: BattleState, catalog: EngineCatalog, spec: TargetSpec, controller: Side, source: AbilitySource, x?: number, sourceSpark?: SourceSparkReader, choices: TargetChoiceContext = {}) {
   const alternate = spec.when;
   return alternate === undefined || conditionHoldsWith(state, catalog, (id) => characteristics(state, catalog).of(id), alternate.condition,
-    { controller, source, optionalPaid: [], ...(x === undefined ? {} : { x }), ...(sourceSpark === undefined ? {} : { sourceSpark }) })
+    { controller, source, optionalPaid: choices.optionalPaid ?? [], ...(x === undefined ? {} : { x }), ...(sourceSpark === undefined ? {} : { sourceSpark }) })
     ? spec.selector : alternate.otherwise;
 }
 
@@ -307,25 +324,26 @@ function modeLegal(
   inherited?: ChoiceBindings,
   deferConditionals = false,
   subjectCost: number | null = null,
+  choices: TargetChoiceContext = {},
 ): boolean {
   const definition = primitiveDefinition(node.op);
   const targetsAvailable = (definition.targets?.(node) ?? []).every(
     (spec) => {
       const bound = inherited?.targetsOf(spec) ?? null;
       return bound !== null ||
-        targetCandidates(state, catalog, spec, controller, source, selectorX, sourceSpark, subjectCost).length >= targetBounds(spec).min;
+        targetCandidates(state, catalog, spec, controller, source, selectorX, sourceSpark, subjectCost, choices).length >= targetBounds(spec).min;
     },
   );
   if (!targetsAvailable) return false;
   if (deferConditionals && definition.deferConditionalChoices === true) return true;
   const modes = definition.modes?.(node);
   if (modes === undefined) {
-    return (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost));
+    return (definition.children?.(node) ?? []).every((child) => modeLegal(state, catalog, child, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost, choices));
   }
   const bound = inherited?.modeOf(node) ?? null;
-  if (bound === null) return modes.some((mode) => modeLegal(state, catalog, mode, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost));
+  if (bound === null) return modes.some((mode) => modeLegal(state, catalog, mode, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost, choices));
   const chosen = modes[bound];
-  return chosen !== undefined && modeLegal(state, catalog, chosen, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost);
+  return chosen !== undefined && modeLegal(state, catalog, chosen, controller, source, selectorX, sourceSpark, inherited, deferConditionals, subjectCost, choices);
 }
 
 /**
@@ -342,6 +360,7 @@ export function chooseModes(
   source: AbilitySource,
   purpose: PromptPurpose,
   selectorX?: number,
+  choices: TargetChoiceContext = {},
 ): number[] {
   const sourceSpark = sourceSparkReader(ctx, source);
   const modes: number[] = [];
@@ -354,7 +373,7 @@ export function chooseModes(
         purpose,
         options: options.map((option, index) => ({
           mode: index,
-          legal: modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark),
+          legal: modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark, undefined, false, null, choices),
         })),
       });
       modes.push(mode);
@@ -377,6 +396,7 @@ export function chooseTargets(
   source: AbilitySource,
   purpose: PromptPurpose,
   selectorX?: number,
+  choices: TargetChoiceContext = {},
 ): InstanceId[][] {
   const sourceSpark = sourceSparkReader(ctx, source);
   return specs.map((spec) => {
@@ -384,7 +404,7 @@ export function chooseTargets(
       kind: "chooseTargets",
       side: controller,
       purpose,
-      candidates: targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark),
+      candidates: targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark, null, choices),
       ...targetBounds(spec),
     });
     return [...chosen];
@@ -411,12 +431,13 @@ export function choosePlayTime(
   source: AbilitySource,
   purpose: (ability: number, role: PromptRole) => PromptPurpose,
   selectorX?: number,
+  choices: TargetChoiceContext = {},
 ): EffectChoices[] {
-  const modes = abilities.map((ability) => chooseModes(ctx, ability.effect, controller, source, purpose(ability.ability, "chooseOne"), selectorX));
+  const modes = abilities.map((ability) => chooseModes(ctx, ability.effect, controller, source, purpose(ability.ability, "chooseOne"), selectorX, choices));
   return abilities.map((ability, index) => {
     const chosen = modes[index] ?? [];
     const specs = collectTargets(ability.effect, chosenModes(ability.effect, chosen));
-    return { modes: chosen, targets: chooseTargets(ctx, specs, controller, source, purpose(ability.ability, "target"), selectorX) };
+    return { modes: chosen, targets: chooseTargets(ctx, specs, controller, source, purpose(ability.ability, "target"), selectorX, choices) };
   });
 }
 
@@ -478,6 +499,7 @@ export function chooseOnResolution(
   inherited?: ChoiceBindings,
   selectorX?: number,
   subjectCost: number | null = null,
+  choices: TargetChoiceContext = {},
 ): EffectChoices | null {
   const sourceSpark = sourceSparkReader(ctx, source, lastKnownSourceSpark ?? null);
   const modes: number[] = [];
@@ -490,7 +512,7 @@ export function chooseOnResolution(
         modes.push(bound);
         return bound;
       }
-      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark, inherited, true, subjectCost));
+      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark, inherited, true, subjectCost, choices));
       if (blocked || !legal.includes(true)) {
         blocked = true;
         return 0;
@@ -509,7 +531,7 @@ export function chooseOnResolution(
   const targets = collectTargets(effect, chosenModes(effect, modes, true), true).map((spec) => {
     const bound = inherited?.targetsOf(spec) ?? null;
     if (bound !== null) return [...bound];
-    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark, subjectCost);
+    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark, subjectCost, choices);
     const bounds = targetBounds(spec);
     if (candidates.length < bounds.min) {
       ctx.emit({ kind: "noLegalTarget", source });
@@ -544,6 +566,7 @@ export function chooseForCopy(
   purpose: (role: PromptRole) => PromptPurpose,
   original: EffectChoices,
   selectorX?: number,
+  choices: TargetChoiceContext = {},
 ): EffectChoices {
   const sourceSpark = sourceSparkReader(ctx, source);
   let originalModes: ChosenModes | null = null;
@@ -552,7 +575,7 @@ export function chooseForCopy(
   walkPlayTime(
     effect,
     (node, options) => {
-      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark));
+      const legal = options.map((option) => modeLegal(ctx.state, ctx.catalog, option, controller, source, selectorX, sourceSpark, undefined, false, null, choices));
       const kept = legal.includes(true) ? null : originalModesNow().get(node);
       if (kept === undefined) throw new Error(`The original made no choice for a ${node.op} node its copy keeps`);
       const mode = kept ?? promptMode(ctx, legal, controller, purpose("chooseOne"));
@@ -563,7 +586,7 @@ export function chooseForCopy(
   );
   let originalSpecs: PlayTimeTarget[] | null = null;
   const targets = collectTargets(effect, chosenModes(effect, modes)).map((spec) => {
-    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark);
+    const candidates = targetCandidates(ctx.state, ctx.catalog, spec, controller, source, selectorX, sourceSpark, null, choices);
     const bounds = targetBounds(spec);
     if (candidates.length >= bounds.min) return promptTargets(ctx, candidates, bounds, controller, purpose("target"));
     originalSpecs ??= collectTargets(effect, originalModesNow());
@@ -656,7 +679,7 @@ export function resolveCharacters(ctx: StepContext, ref: CharacterRef, env: Effe
       const legal = targetable(
         ctx.state,
         ctx.catalog,
-        chosen.filter((id) => matchesCharacter(ctx.state, ctx.catalog, targetSelector(ctx.state, ctx.catalog, ref, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env)), id, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env))),
+        chosen.filter((id) => matchesCharacter(ctx.state, ctx.catalog, targetSelector(ctx.state, ctx.catalog, ref, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env), { optionalPaid: env.optionalPaid }), id, env.controller, env.source, env.x ?? undefined, resolvingSourceSpark(ctx, env))),
       );
       if (legal.length === 0 && chosen.length > 0) {
         ctx.emit({ kind: "noLegalTarget", source: env.source });
@@ -1026,7 +1049,7 @@ export function resolveEffect(ctx: StepContext, effect: EffectNode, options: Res
  * nearest enclosing choices.
  */
 export function resolveChosenEffect(ctx: StepContext, effect: EffectNode, env: EffectEnv, retainConditionalBindings = false): void {
-  const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env.lastKnownSourceSpark, env, env.x ?? undefined, env.lastKnownSubjectCost);
+  const choices = chooseOnResolution(ctx, effect, env.controller, env.source, (role) => env.purpose(role), env.lastKnownSourceSpark, env, env.x ?? undefined, env.lastKnownSubjectCost, { optionalPaid: env.optionalPaid });
   if (choices === null) return;
   const chosen = chosenModes(effect, choices.modes, true);
   const specs = collectTargets(effect, chosen, true);

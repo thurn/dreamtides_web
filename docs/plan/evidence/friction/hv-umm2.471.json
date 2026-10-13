@@ -1,0 +1,36 @@
+{
+  "bead": "hv-umm2.471",
+  "phase": 5,
+  "implementMin": 56.31189213333334,
+  "implementWindow": {
+    "start": "2026-10-13T13:44:19.203000+00:00",
+    "end": "2026-10-13T14:40:37.916528+00:00"
+  },
+  "localValidationS": {
+    "focused": 9.363662208023015,
+    "review": 57.16813504201127,
+    "knip": 4.653745707997587,
+    "coverage": 3.5442182080005296,
+    "full": 100.03380775000551,
+    "fuzz": 114.0370610410173,
+    "browser": 41.612204124976415
+  },
+  "hostLoad": 7.44,
+  "testDelta": {
+    "files": 1,
+    "lines": 385,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "test-fixture-setup",
+      "minutes": 1.8307072,
+      "note": "Own initial fixture assumptions about default lab printing, canonical abandon facts and Standard copy timing failed; actual public triggered copy workflow and observable lab assertions repaired in admitted test files. Source semantics unchanged."
+    },
+    {
+      "tag": "test-typecheck-repair",
+      "minutes": 5.072644316666667,
+      "note": "Own test imports, configured-library indexing and structural immutable fixture construction repaired. An unnecessary assertion was isolated and fixed after review-v02; focused lint and review-v03 passed. Raw failures retained."
+    }
+  ]
+}

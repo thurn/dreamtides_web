@@ -8,6 +8,8 @@ import { dissolve, gainPoints, sequence } from "../effects/primitives";
 import type { InstanceId } from "../state/ids";
 import { invariantViolations } from "./invariants";
 import { cardLabBattle } from "./card-lab";
+import { DSL } from "./dsl-cards";
+import { cloneState } from "../state/clone";
 import { boardState } from "./board";
 import { labBoard } from "./lab-solver";
 import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
@@ -28,6 +30,40 @@ function source(index: number, costs: readonly AdditionalCost[], targeting = fal
 
 for (const side of ["player", "enemy"] as const) {
   describe(`additional-cost lab staging as ${side}`, () => {
+    for (const card of [DSL.optionalEnergyTarget, DSL.optionalDiscardTarget]) it(`stages both payment-dependent target restrictions for ${card.id}`, () => {
+      const engine = createEngine(testCatalog([card]));
+      const candidates = [SYNTHETIC.vanilla5, SYNTHETIC.vanilla1, SYNTHETIC.event0];
+      const solved = labBoard(engine, card.id, candidates, side);
+      const rebuilt = boardState(engine.catalog, solved.setup).state;
+      const other = side === "player" ? "enemy" : "player";
+      const foes = rebuilt.sides[other].backRank.filter((id): id is InstanceId => id !== null);
+      expect(foes).toHaveLength(2);
+      expect(cardLabBattle(engine, { entry: { cardId: card.id }, side, variant: "base" }, candidates).slice.committed.instances[foes[0]]).toBeDefined();
+      for (const pays of [true, false]) {
+        const cloned = cloneState(rebuilt); const state = { ...cloned, config: { ...cloned.config, autoAnswerForcedPrompts: false } };
+        let chosen: InstanceId | null = null; let targetsAsked = 0; let paid: readonly boolean[] | null = null;
+        const source = state.sides[side].hand[0];
+        const played = engine.apply(state, side, { kind: "play", card: source, from: "hand" }, { answer(prompt) {
+          if (prompt.kind === "confirm") return pays;
+          if (prompt.kind === "chooseCards") return prompt.candidates.slice(0, prompt.min);
+          if (prompt.kind === "chooseTargets") {
+            targetsAsked++;
+            chosen = prompt.candidates[0];
+            return [chosen];
+          }
+          throw new Error(`Unexpected ${prompt.kind}`);
+        } }, (next, step) => {
+          if (step.kind === "play") paid = next.stack[0]?.optionalPaid ?? null;
+        });
+        if (chosen === null) throw new Error("Missing physical target");
+        expect(targetsAsked).toBe(1);
+        expect(paid).toEqual([pays]);
+        expect(foes).toContain(chosen);
+        expect(played.state.instances[chosen].zone).toBe("void");
+        expect(foes.filter(id => id !== chosen).map(id => played.state.instances[id].zone)).toEqual(["play"]);
+        expect(invariantViolations(played.state, engine.catalog)).toEqual([]);
+      }
+    });
     it("preserves controlled figment cost resources across setup reconstruction and card-lab creation", () => {
       const card: EngineCardDefinition = { ...mage, id: syntheticId(0x51210), abilities: () => [activated([energy(1), abandonXCost({ selector: { figment: true }, min: 1 })], dissolve(target(enemyCharacter({ sparkAtLeast: x(), sparkAtMost: x() }))))] };
       const engine = createEngine(testCatalog([mage, card]));

@@ -1,6 +1,6 @@
 import { instanceCard, printedCardId } from "../../catalog";
 import { eventAbilities } from "../../effects/abilities";
-import { choosePlayTime, purposeOf } from "../../effects/interpreter";
+import { choosePlayTime, purposeOf, targetsNeedOptionalCost } from "../../effects/interpreter";
 import { playPermission } from "../../continuous/permissions";
 import { prepareCostX, payCosts, planCosts, type CostPlan, type PlannedCost } from "../../rules/costs";
 import { xCost } from "../../dsl/energy";
@@ -22,7 +22,7 @@ import { targetsNeedX } from "../immediate-x";
  * void by a play permission or Reclaim: play-time choices (Offering or the
  * card's costs, when it has Offering; a permission or Reclaim, when both
  * cover a void card; X and mandatory captures needed by immediate choices, then each event ability's modes, then its targets,
- * then the additional costs' alternatives, optional costs, and cards), then
+ * then the additional costs' alternatives, optional costs, and cards; a payment-dependent target prepares these decisions before modes and targets), then
  * the commit point, then the costs (the energy and X together after cost
  * modifications, then the additional costs in printed order) and the end of
  * the "next card" cost modifiers and play permission the play used, then the
@@ -84,6 +84,14 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
         ...(route === "offering" && xCost(definition.costs) !== null ? { fixedX: 0 } : {}) });
     x = prepared.x;
     preparedPayments = prepared.payments;
+    if (abilities.some(({ effect }) => targetsNeedOptionalCost(effect))) {
+      // Payment choices bind the restriction; every debit and move still follows target selection and commitment.
+      const plan = planCosts(ctx, side, card, costs, x, (role) => purpose(costAbility, role), [card], modifier,
+        { selectorX: x ?? 0, preparedPayments });
+      choices = choosePlayTime(ctx, abilities, side, card, purpose, plan.x ?? 0,
+        { optionalPaid: plan.optionalPaid, excluded: plan.payments.flatMap(payment => payment.cards) });
+      return { route, plan, choices, modifier };
+    }
     choices = choosePlayTime(ctx, abilities, side, card, purpose, x ?? 0);
   }
   const targets = choices.flatMap((choice) => choice.targets.flat());

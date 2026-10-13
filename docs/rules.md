@@ -1158,6 +1158,14 @@ the void lost cards or the enemy gained ✦, is no longer a legal target. A
 bound by [this character's ✦](#spark) is read the same way, from the spark
 that value names when it is checked.
 
+**Payment-dependent restrictions.** When an optional additional cost changes
+one target's restriction, choose whether to pay before choosing that physical
+target. Choose a payable cost and a target under the corresponding restriction;
+a card reserved for payment cannot be that target. Costs are paid after targets
+are chosen. The restriction reads the actual payment decision again as the
+effect resolves. A copy keeps that decision while choosing its own target,
+without paying the cost again.
+
 **Conditional restrictions.** When mutually exclusive normal conditions
 change the restriction on one target, choose one physical card using the
 restriction that holds before costs are paid. Check the condition and its
