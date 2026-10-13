@@ -1,0 +1,562 @@
+{
+  "bead": "hv-umm2.608",
+  "phase": 5,
+  "source": {
+    "base": "acc1e1579ef953decc15125a7fbf6651b5b1ebb2",
+    "ruleChange": "Classify static ordinal costs in effect clauses; next-card consumption uses existing costModifier",
+    "sourceCodeGrossLines": 2,
+    "testDelta": {
+      "files": 0,
+      "lines": 18,
+      "jsdomFiles": 0
+    },
+    "publicApiUnchanged": true,
+    "unchangedDirectImporters": [
+      "scripts/content-inventory.test.ts",
+      "scripts/content-inventory-variants.test.ts"
+    ],
+    "engineAndCatalogChanges": 0,
+    "freeze": {
+      "/Users/dthurn/dreamtides_web/.worktrees/codex-inventory-next608/scripts/content-inventory.ts": "17780f3cee41cf1ae6f6f73ecdd404d6cab829035ef84b8b4cd53ba97f7d2ca9",
+      "/Users/dthurn/dreamtides_web/.worktrees/codex-inventory-next608/scripts/content-inventory.test.ts": "b0b90b46732196280475c9680173c677caa50d4ad28f46c51c4d44e080e35153"
+    }
+  },
+  "implementationWindowProvenance": {
+    "start": "2026-10-13T04:55:23.353629+00:00",
+    "startScope": "First observed post-claim direct justiciar worktree/implementation tool request",
+    "end": "2026-10-13T05:27:09.008549+00:00",
+    "endScope": "Observed precommit cutoff; actual normal commit-return time/tail external",
+    "samplingStart": "UNKNOWN"
+  },
+  "validation": {
+    "focused": {
+      "args": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts",
+        "scripts/content-inventory-variants.test.ts",
+        "scripts/content-inventory-journey.test.ts"
+      ],
+      "startUtc": "2026-10-13T05:01:09.994098+00:00",
+      "endUtc": "2026-10-13T05:01:17.664132+00:00",
+      "wallSeconds": 7.669999125006143,
+      "exitCode": 0,
+      "workers": 2
+    },
+    "counterfactual": {
+      "args": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "test",
+        "--",
+        "scripts/content-inventory.test.ts",
+        "-t",
+        "inventory cost modifier classification"
+      ],
+      "startUtc": "2026-10-13T04:56:40.343723+00:00",
+      "endUtc": "2026-10-13T04:56:50.394991+00:00",
+      "exitCode": 1,
+      "expected": "Old next matcher fails two synthetic one-shot cases; static three cases pass"
+    },
+    "counterfactualObserved": "Old source:2 next cases fail,3 static cases pass. Final fixtures add one independent ordinal trigger-condition case; finalfocused132pass.",
+    "review": {
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "startUtc": "2026-10-13T05:09:37.262023+00:00",
+      "endUtc": "2026-10-13T05:09:52.569110+00:00",
+      "wallSeconds": 15.306775292003294,
+      "exitCode": 0,
+      "pid": 85665,
+      "processGroup": 85665,
+      "wrapperPid": 85660,
+      "wrapperGroup": 78839,
+      "startLoadRaw": "{ 22.34 10.57 9.65 }",
+      "startLoad": 22.34,
+      "measuredFor": "review command start after outer heavy-slot admission",
+      "workers": 2
+    },
+    "knip": {
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "startUtc": "2026-10-13T05:13:23.653073+00:00",
+      "endUtc": "2026-10-13T05:13:28.091054+00:00",
+      "wallSeconds": 4.437815083001624,
+      "exitCode": 0,
+      "pid": 51520,
+      "processGroup": 51520,
+      "wrapperPid": 51510,
+      "wrapperGroup": 51510,
+      "startLoadRaw": "{ 7.26 9.96 9.73 }",
+      "startLoad": 7.26,
+      "measuredFor": "knip command start, direct lightweight invocation",
+      "workers": 2
+    },
+    "generatedCheck": {
+      "args": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts",
+        "--check"
+      ],
+      "startUtc": "2026-10-13T05:17:06.151226+00:00",
+      "endUtc": "2026-10-13T05:17:09.446719+00:00",
+      "wallSeconds": 3.295353375011473,
+      "exitCode": 0,
+      "pid": 57691,
+      "processGroup": 57691,
+      "wrapperPid": 57676,
+      "wrapperGroup": 57676,
+      "startLoadRaw": "{ 3.60 6.77 8.40 }",
+      "startLoad": 3.6,
+      "measuredFor": "generated command start, direct lightweight invocation",
+      "workers": 2
+    },
+    "scope": "Focused132 tests/3files, required review repeats those132 with types/lint/import cycles/record validation, unused-code and generated --check green. No full/game/fuzz/browser applies to this source-only planning matcher.",
+    "schema": {
+      "args": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "startUtc": "2026-10-13T05:20:11.800332+00:00",
+      "endUtc": "2026-10-13T05:20:11.916569+00:00",
+      "wallSeconds": 0.11611874999653082,
+      "exitCode": 0,
+      "pid": 62164,
+      "processGroup": 62164,
+      "wrapperPid": 62154,
+      "wrapperGroup": 62154,
+      "startLoadRaw": "{ 6.16 6.53 7.97 }",
+      "startLoad": 6.16,
+      "measuredFor": "schema command start, direct lightweight invocation",
+      "workers": 2
+    },
+    "allRequiredPassed": true,
+    "finalRecordSchemaReceipt": "schema-final-receipt.json"
+  },
+  "generatedProjection": {
+    "actualSemanticChangedIds": [
+      "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+      "16b579fe-c15b-4df6-8262-d45ce44732ae",
+      "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+      "c706d0ba-2f41-4b14-95d8-db168ac6246c"
+    ],
+    "actualSemanticDeltaFields": {
+      "16b579fe-c15b-4df6-8262-d45ce44732ae": [
+        "tags",
+        "requiredPrimitives"
+      ],
+      "12ec9625-cbfb-4056-9c3e-98ed8c8bea70": [
+        "tags",
+        "requiredPrimitives"
+      ],
+      "6e20e6c7-295a-48b1-b252-b8b00d6902c9": [
+        "tags",
+        "requiredPrimitives"
+      ],
+      "c706d0ba-2f41-4b14-95d8-db168ac6246c": [
+        "tags",
+        "requiredPrimitives"
+      ]
+    },
+    "preservedStaticNthIds": [
+      "044f856b-c08b-4b82-81e3-5417962bf868",
+      "1dfa4d90-8270-4b7c-87be-d95ab6201e00",
+      "278ec1ab-f532-4862-84ae-63df5e49548c",
+      "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+      "3ebaba62-9000-429d-b203-2a5a9724389a",
+      "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4",
+      "5190a8b8-25a0-4c60-a4de-2e2c5a73af77",
+      "553d2317-32f9-47bc-bae0-5018ca26d56a",
+      "9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1",
+      "a42c99b2-f480-4f63-91a0-bd556120427d",
+      "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+      "d95533f4-7809-44a8-a882-7675c61cee1c",
+      "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7"
+    ],
+    "staticCount": 13,
+    "preExistingStaleEntityCount": 20,
+    "preExistingStaleEntities": [
+      {
+        "id": "c86c1364-6ac4-4c90-8053-4e49441a2c83",
+        "fields": [
+          "status",
+          "rulesDecisions"
+        ]
+      },
+      {
+        "id": "0df9d72c-58ea-42a0-a72a-cbc540a1836a",
+        "fields": [
+          "routing"
+        ]
+      },
+      {
+        "id": "108841ce-4feb-4c73-972e-0277c727c63e",
+        "fields": [
+          "status",
+          "requiredPrimitives",
+          "routing"
+        ]
+      },
+      {
+        "id": "1328e611-fa2f-426f-87e2-97f26c061866",
+        "fields": [
+          "requiredPrimitives",
+          "routing"
+        ]
+      },
+      {
+        "id": "34ce9428-dda9-4efa-bacd-5ec2698561c1",
+        "fields": [
+          "routing"
+        ]
+      },
+      {
+        "id": "39260dd5-cb43-47d5-a007-effbe13d6417",
+        "fields": []
+      },
+      {
+        "id": "488bf436-c6d5-4e38-8a19-e50041f53766",
+        "fields": [
+          "status",
+          "requiredPrimitives",
+          "routing"
+        ]
+      },
+      {
+        "id": "4bb408a8-7941-42dc-9ff6-dbc1400c99ed",
+        "fields": [
+          "status"
+        ]
+      },
+      {
+        "id": "5a22f358-bc84-44b1-a201-5f9f57940c51",
+        "fields": [
+          "status"
+        ]
+      },
+      {
+        "id": "6b95d6bd-c970-4465-9536-4f21e7630d0a",
+        "fields": [
+          "routing"
+        ]
+      },
+      {
+        "id": "71f77dd5-3bb5-4987-80f4-13dc69f74e6b",
+        "fields": [
+          "requiredPrimitives",
+          "routing"
+        ]
+      },
+      {
+        "id": "883f88fb-ac50-419a-8382-c22edee29755",
+        "fields": [
+          "routing"
+        ]
+      },
+      {
+        "id": "a98f468b-5e76-4041-83ee-69c0871a6bf0",
+        "fields": [
+          "status"
+        ]
+      },
+      {
+        "id": "af92858a-0c50-4abf-a622-04c024ca32b3",
+        "fields": [
+          "routing"
+        ]
+      },
+      {
+        "id": "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+        "fields": [
+          "routing"
+        ]
+      },
+      {
+        "id": "bfec4f5d-9b0d-4ed2-b470-db73d852448f",
+        "fields": [
+          "status"
+        ]
+      },
+      {
+        "id": "cd81a49d-df58-4e0e-b1b2-33a82b386052",
+        "fields": []
+      },
+      {
+        "id": "e377c3ed-16f5-4424-a9f1-73f9750ace9f",
+        "fields": [
+          "requiredPrimitives"
+        ]
+      },
+      {
+        "id": "f4df5a74-7822-4552-a3ab-f50b00758593",
+        "fields": [
+          "status",
+          "requiredPrimitives",
+          "routing"
+        ]
+      },
+      {
+        "id": "ff8d8d4a-fe7b-4511-8192-e6e2e7712daf",
+        "fields": [
+          "status"
+        ]
+      }
+    ],
+    "generatedProjectionRoutingChanges": [
+      {
+        "id": "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-13"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-15"
+        ]
+      },
+      {
+        "id": "15fd5a22-a786-48e3-99b0-919e810b3eba",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-21"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-22"
+        ]
+      },
+      {
+        "id": "268341c7-bb5b-49fb-ad8d-a792b7d631a0",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-15"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-16"
+        ]
+      },
+      {
+        "id": "2cbcbebb-fb79-4833-a770-2216873147c4",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-17"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-18"
+        ]
+      },
+      {
+        "id": "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-14"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-13"
+        ]
+      },
+      {
+        "id": "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-14"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-13"
+        ]
+      },
+      {
+        "id": "4f5bdcac-64cb-4a45-8121-e37f5e4d3074",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-19"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-20"
+        ]
+      },
+      {
+        "id": "6103508c-4991-4b80-9dc1-f30122957296",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-19"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-20"
+        ]
+      },
+      {
+        "id": "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-13"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-14"
+        ]
+      },
+      {
+        "id": "7a37386d-6e7c-4f08-b07f-e92a1fd69893",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-18"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-19"
+        ]
+      },
+      {
+        "id": "a42c99b2-f480-4f63-91a0-bd556120427d",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-14"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-13"
+        ]
+      },
+      {
+        "id": "c706d0ba-2f41-4b14-95d8-db168ac6246c",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-12"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-14"
+        ]
+      },
+      {
+        "id": "d76684c3-797e-44ae-a2ba-333e77d46a4d",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-16"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-17"
+        ]
+      },
+      {
+        "id": "ef25fba0-58a0-4b69-be06-3668679fcdc7",
+        "before": [
+          "5.5",
+          "dreamsigns-battle-20"
+        ],
+        "after": [
+          "5.5",
+          "dreamsigns-battle-21"
+        ]
+      }
+    ],
+    "generatedTopLevelDelta": [
+      "beads",
+      "primitives",
+      "entities"
+    ],
+    "nativeScope": "No native filed UUID/Areas/graph reassignment; generated routing/grouping is a projection",
+    "oldFreshSourceEqualsOriginal": true,
+    "authorProbeCorrections": [
+      "Initial generated delta compared stale committed snapshot rather than freshly generated original source; preserved old/fixed outputs and corrected baseline",
+      "Second delta assertion counted derived routing/grouping changes as semantic classifier changes; corrected field-level audit preserves all routed changes"
+    ]
+  },
+  "failurePaths": {
+    "newRuntimeTransitions": 0,
+    "errorMidStep": "N/A no new game/write operation; generated --check and old/fixed counterfactual cover this tooling output",
+    "reload": "N/A runtime; regeneration determinism checked",
+    "partialWrite": "N/A transaction/schema changes; CLI writer existing",
+    "invalidInput": "Synthetic next versus first/second/third and nth trigger condition on public classifier",
+    "concurrentActors": "No source overlap/canonical fix found in admitted+intended128 audit; owned226 remains checkpointed; no peer native assignments edited"
+  },
+  "applicability": {
+    "full": "N/A one planning RULES entry and owning additive cases, no test infrastructure/config/architecture change",
+    "browser": "N/A metadata classifier/catalog source unchanged;226 retains required native acceptance",
+    "weightedBattle": "N/A no battle primitive/content authored;226 weighted300 remains owed",
+    "coldCodeReview": "N/A2non-test source lines/no core-review label; ordinary required validation preserved",
+    "rulesDecisions": [],
+    "cardIssues": []
+  },
+  "recovery": {
+    "role": "justiciar direct repair; no implementation delegation",
+    "foundBy": "hv-umm2.226",
+    "nativeCheckpoint": "One active608 plus owned226 clean checkpoint perD43; ordinary608 dependency; no deferral/acceptance waiver",
+    "scopeAuditContext": "/tmp/codex-226",
+    "scopeAuditMatch": "Pending589/590 disjoint capability registrations, no active matcher owner"
+  },
+  "authorProbeCorrections": [
+    "Initial generated delta compared stale committed snapshot rather than freshly generated original source; preserved old/fixed outputs and corrected baseline",
+    "Second delta assertion counted derived routing/grouping changes as semantic classifier changes; corrected field-level audit preserves all routed changes",
+    "First counterfactual tool composition discarded its yielded session ID; terminal wrapper receipt recovered without rerunning effect; exact PID UNKNOWN. Local subprocess writer settled at captured endUtc.",
+    "Final recursive record scan found generatedCheck draft status beside actual generated receipt; corrected before promotion. Original candidate unapproved, retired; amended same local commit/source and revalidated only records."
+  ],
+  "hostLoadSamples": [
+    {
+      "atUtc": "2026-10-13T05:09:37.522Z",
+      "value": 22.34326171875,
+      "measuredFor": "npm review prepare step start; same precise value at typecheck/lint/test dispatch"
+    },
+    {
+      "atUtc": "2026-10-13T05:09:37.262023+00:00",
+      "value": 22.34,
+      "raw": "{ 22.34 10.57 9.65 }",
+      "measuredFor": "review command start after outer heavy-slot admission"
+    },
+    {
+      "atUtc": "2026-10-13T05:13:23.653073+00:00",
+      "value": 7.26,
+      "measuredFor": "knip command start, direct lightweight invocation"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm review prepare step start at 2026-10-13T05:09:37.522Z"
+      },
+      "implementMin": {
+        "measuredFor": "Observed direct implementation dispatch to precommit cutoff; actual commit tail external"
+      }
+    }
+  },
+  "frictionApplicability": "The inventory mismatch is this repair\u2019s subject; short author probe corrections are retained below with exact duration UNKNOWN, outside compact threshold entries. No invented new-record numeric timings or historical exemptions.",
+  "artifactContext": "artifacts/qa/hv-umm2.608/audit",
+  "resourceClosure": {
+    "browserAndServerCount": 0,
+    "validation": "Local subprocess receipts acknowledge completion; exact PID/group retained for final check commands, early counterfactual/focused identity UNKNOWN rather than invented",
+    "knownFinalCommandPids": [
+      85665,
+      51520,
+      57691
+    ],
+    "writerStatus": "All check commands returned; no browser/server/provider launched"
+  },
+  "coldReviewQualification": "2 gross non-test source lines, owning additive synthetic tests and generated planning data; no core-review label or phase-gate change, so cold code review is not required.",
+  "recordCorrectionCandidate": {
+    "retired": "01a133b8-bae1-78c1-9484-5bc40b57f6b3",
+    "source": "324261f323601a8f753db014128f3c517c46f230",
+    "reason": "Unapproved source carried generatedCheck draft placeholder despite green actual receipt; no code or validation change",
+    "scope": "Same worktree, amended single local commit"
+  }
+}

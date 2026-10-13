@@ -6,6 +6,24 @@ const requirements = (text: string) => {
   return { ...classified, needs: [...classified.requiredPrimitives.existing, ...classified.requiredPrimitives.new] };
 };
 
+describe("inventory cost modifier classification", () => {
+  it.each([
+    "When you abandon a character, the next character you play this turn costs 2● less.",
+    "When you discard a card, your next card this turn costs 1● less.",
+    "When you play your second card in a turn, your next character this turn costs 1● less.",
+  ])("uses the one-shot modifier for a next-card discount: %s", (text) => {
+    const result = requirements(text);
+    expect(result.needs).toContain("costModifier");
+    expect(result.needs).not.toContain("costModifierNth");
+  });
+
+  it.each(["first", "second", "third"])("retains the static %s-in-turn cost requirement", (ordinal) => {
+    const result = requirements(`The ${ordinal} character you play in a turn costs 2● less.`);
+    expect(result.needs).toContain("costModifier");
+    expect(result.needs).toContain("costModifierNth");
+  });
+});
+
 describe("inventory discard cost classification", () => {
   it.each([
     "Discard your hand: Gain 1●.",

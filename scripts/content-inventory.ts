@@ -649,7 +649,7 @@ const RULES: readonly Rule[] = [
 
   // Cost modifiers and nth-in-turn (family 14).
   { tag: "cost-modifier", family: 14, part: "all", re: /costs? (you )?\d+● (less|more)|cost (you )?\d+●\.|costs? (you )?0●|reduce (its|the) cost|cost is reduced|play ❖ and ❖❖ events for 1●|cost characters cost you/i, needs: ["costModifier"] },
-  { tag: "cost-modifier-nth", family: 14, part: "all", re: /(first|second|third|next) [^.]*(each turn|in a turn|this turn)[^.]* costs?|(first|second) [^.]* cost/i, needs: ["costModifierNth"] },
+  { tag: "cost-modifier-nth", family: 14, part: "effect", re: /(first|second|third) [^.]*(each turn|in a turn|this turn)[^.]* costs?|(first|second) [^.]* cost/i, needs: ["costModifierNth"] },
   { tag: "self-cost", family: 14, part: "all", re: /This (character|event) costs|this card costs|Reduce the cost of this card|this character costs/i, needs: ["staticZones", "costModifier"] },
   { tag: "card-cost", family: 14, re: /\b(It|They|That event) (costs?|is reduced)|reduce its cost|Its cost is reduced|It costs \d● more/i, needs: ["modifyCardCost"] },
   { tag: "reclaim-cost-modifier", family: 14, part: "all", re: /Reclaim abilities cost/i, needs: ["costModifierReclaim"] },
