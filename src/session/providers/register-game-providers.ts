@@ -20,6 +20,8 @@
 // content and calls `registerGameProviders(content)` before opening the local
 // game and folding its log.
 
+import { registerJourneyTransfigurationProvider } from "../../rules/journey/journey-transfiguration";
+import { createJourneyTransfigurationProvider } from "./journey-transfiguration-provider";
 import type { JourneyContent } from "../../data/journey-content";
 import {
   registerBattleCompletionProvider,
@@ -61,6 +63,7 @@ export function registerGameProviders(content: JourneyContent): void {
   registerDeckContentProvider(createDeckContentProvider(content));
   registerDraftContentProvider(createDraftContentProvider(content));
   registerSiteContentProvider(createSiteContentProvider(content));
+  registerJourneyTransfigurationProvider(createJourneyTransfigurationProvider(content));
   registerBattleInitProvider(createBattleInitProvider(content));
   registerBattleCompletionProvider(createBattleCompletionProvider(content));
   registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content));
@@ -80,6 +83,7 @@ export function clearGameProviders(): void {
   registerDeckContentProvider(null);
   registerDraftContentProvider(null);
   registerSiteContentProvider(null);
+  registerJourneyTransfigurationProvider(null);
   registerBattleInitProvider(null);
   registerBattleCompletionProvider(null);
   registerTutorialBattleInitProvider(null);

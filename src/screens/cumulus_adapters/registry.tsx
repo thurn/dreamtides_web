@@ -5,6 +5,7 @@
 import type { ReactNode } from "react";
 import type { Screen, SiteState } from "../../types/journey";
 import type { GambleGameId } from "../../types/gamble";
+import { JourneyTransfigurationScreenAdapter } from "./JourneyTransfigurationScreenAdapter";
 import { JourneyPurgeScreenAdapter } from "./JourneyPurgeScreenAdapter";
 import { JourneyStartScreenAdapter } from "./JourneyStartScreenAdapter";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
@@ -33,6 +34,8 @@ export type SiteDisposition =
 /** Resolves every top-level, non-site gameplay screen to its Cumulus adapter. */
 export function screenFor(screen: NonSiteScreen): ReactNode {
   switch (screen.type) {
+    case "journeyTransfiguration":
+      return <JourneyTransfigurationScreenAdapter />;
     case "journeyPurge":
       return <JourneyPurgeScreenAdapter />;
     case "journeyStart":

@@ -228,6 +228,21 @@ and each has a color and an emblem shown on the card.
 | Attuned | Reduces an activated ability's energy cost by 1. | Cards with energy-cost activated abilities |
 | Perfected | Applies every other transfiguration the card is eligible for. | Cards eligible for 2 or more |
 
+### Journey Transfiguration Modifiers
+
+A held Leaf Ledger prepares a two-card allowance with a Transfiguration site's
+initial quote; each choice retains the same offers and prices until the allowance
+is used or the visit is finished. A held Spell Tome copies each concrete Event
+transfigured by a journey operation, including its form and permanent entry
+modifications, with a fresh deck-entry identity. Gaining an already-transfigured
+card is a separate operation.
+
+Green Slime earns an optional choice after every battle: select up to its printed
+maximum of eligible deck entries and apply one random applicable form to each for
+free. Its earned copies and Slug's earned purge copies appear in held order and
+persist through source loss and reload. Their final continuation preserves the
+battle's reward and exact Atlas, completed, or failed route.
+
 ## Apollyon
 
 Apollyon is the final boss, appearing in one of ten **incarnations** selected

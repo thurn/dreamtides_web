@@ -1,3 +1,4 @@
+import { appendAfterBattleSource, advanceAfterBattle, validAfterBattleChoice } from "./journey-after-battle";
 import type { DreamsignId } from "../../types/identifiers";
 import { deckEntryIdFromUnknown, dreamsignIdFromUnknown, siteIdFromUnknown } from "../../types/identifiers";
 import type { AfterBattlePurgeSource, JourneyPurgeChoice, JourneyPurgeEffect, JourneyPurgeTransition, JourneyState } from "../../types/journey";
@@ -13,8 +14,9 @@ const record = (value: unknown): value is Record<string, unknown> =>
 
 /** The current earned permission, identified by its source and original held slot. */
 export function currentPurgeSource(choice: JourneyPurgeChoice): AfterBattlePurgeSource | undefined {
-  return choice.kind === "afterBattle" ? choice.sources[choice.index] :
+  const source = choice.kind === "afterBattle" ? choice.sources[choice.index] :
     { dreamsignId: choice.dreamsignId, heldIndex: choice.heldIndex, maxCount: choice.count };
+  return source?.kind === "transfiguration" ? undefined : source;
 }
 
 /** Strict purpose shape and saved continuation checks, independent of catalog defaults. */
@@ -36,31 +38,8 @@ export function validJourneyPurgeScreen(screen: unknown, journey: JourneyState, 
       journey.currentDreamscape !== null && journey.atlas.nodes[journey.currentDreamscape]?.sites.some((item) => item.id === site.id) === true &&
       runtime?.kind === "essence" && runtime.accepted === false && Number.isFinite(runtime.amount) && runtime.amount >= 0;
   }
-  if (choice.kind !== "afterBattle" || site?.type !== "Battle" || !Array.isArray(choice.sources) ||
-    choice.sources.length === 0 || !indexInteger(choice.index) || choice.index >= choice.sources.length ||
-    !choice.sources.every((source) => record(source) && dreamsignIdFromUnknown(source.dreamsignId) !== null &&
-      indexInteger(source.heldIndex) && positiveInteger(source.maxCount))) return false;
-  if (choice.sources.some((source: Record<string, unknown>) => {
-    const id = dreamsignIdFromUnknown(source.dreamsignId);
-    const effect = id === null ? undefined : registry.lookup(id)?.journeyPurge;
-    return effect?.kind !== "afterBattlePurge" || effect.maxCount !== source.maxCount;
-  })) return false;
-  const slots = choice.sources.map((source: Record<string, unknown>) => source.heldIndex);
-  if (new Set(slots).size !== slots.length || slots.some((slot, index) => index > 0 && Number(slot) <= Number(slots[index - 1]))) return false;
-  if (choice.returnTo === "journeyFailed") {
-    const summary: unknown = journey.failureSummary;
-    return record(summary) && summary.siteId === choice.siteId &&
-      (summary.result === "defeat" || summary.result === "draw") &&
-      typeof summary.turnNumber === "number" && Number.isSafeInteger(summary.turnNumber) && summary.turnNumber >= 0 &&
-      typeof summary.playerScore === "number" && Number.isFinite(summary.playerScore) &&
-      typeof summary.enemyScore === "number" && Number.isFinite(summary.enemyScore) &&
-      (summary.reason === "score_target_reached" || summary.reason === "win_condition_met" ||
-        summary.reason === "turn_limit_reached" || summary.reason === "unbreakable_loop") &&
-      summary.nodeIdOrNone === journey.currentDreamscape;
-  }
-  if (journey.currentDreamscape !== null || !site.isVisited) return false;
-  return choice.returnTo === "atlas" ? journey.completionLevel < journey.atlas.layers.length :
-    choice.returnTo === "journeyComplete" && journey.completionLevel === journey.atlas.layers.length;
+  return validAfterBattleChoice(choice, journey, registry) &&
+    currentPurgeSource(choice as unknown as JourneyPurgeChoice) !== undefined;
 }
 
 /** Register only the two printed purge windows. Earned Slug copies retain their terminal route. */
@@ -76,14 +55,12 @@ export function journeyPurge(dreamsignId: DreamsignId, descriptor: JourneyPurgeE
       if (effect.kind === "afterBattlePurge") {
         if (eventType !== "END_BATTLE" || before.screen.type !== "site" ||
           before.screen.siteId !== siteId || findSite(before, siteId)?.type !== "Battle") return null;
-        const screen = journey.screen;
-        const previous = screen.type === "journeyPurge" && screen.choice.kind === "afterBattle" ? screen.choice : null;
-        if (previous === null && screen.type !== "atlas" && screen.type !== "journeyComplete" && screen.type !== "journeyFailed") return null;
-        const returnTo = previous?.returnTo ?? (screen.type as "atlas" | "journeyComplete" | "journeyFailed");
-        const sources = [...(previous?.sources ?? []), { dreamsignId, heldIndex, maxCount: effect.maxCount }];
-        const choice: JourneyPurgeChoice = { kind: "afterBattle", siteId, sources, index: 0, returnTo };
-        return { journey: { ...journey, screen: { type: "journeyPurge", choice } },
-          before: { permissions: sources.length - 1 }, after: { permissions: sources.length, maxCount: effect.maxCount },
+        const next = appendAfterBattleSource(journey, siteId, { dreamsignId, heldIndex, maxCount: effect.maxCount });
+        if (next === null) return null;
+        const screen = next.screen;
+        if (screen.type !== "journeyPurge" && screen.type !== "journeyTransfiguration") return null;
+        const count = screen.choice.kind === "afterBattle" ? screen.choice.sources.length : 0;
+        return { journey: next, before: { permissions: count - 1 }, after: { permissions: count, maxCount: effect.maxCount },
           target: { siteIds: [siteId] } };
       }
       const runtime = journey.siteRuntime[siteId];
@@ -119,9 +96,7 @@ export function resolveJourneyPurge(journey: JourneyState, payload: Record<strin
     next = completeAndReturn({ ...next, siteRuntime: { ...next.siteRuntime,
       [choice.siteId]: { ...runtime, accepted: true } } }, choice.siteId);
   } else {
-    next = { ...next, screen: choice.index + 1 < choice.sources.length
-      ? { type: "journeyPurge", choice: { ...choice, index: choice.index + 1 } }
-      : { type: choice.returnTo } };
+    next = advanceAfterBattle(next, choice);
   }
   return { journey: next, purges: removed.map(({ entryId }) => ({ entryId })) };
 }

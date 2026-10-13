@@ -2529,6 +2529,40 @@ automatic game actions starts again after it. A choice with only one option
 does not. Repetitions of an optional loop are the player's own actions, so
 they never make a mandatory loop either.
 
+## Journey Transfiguration Effects
+
+A journey transfiguration applies one applicable form to a concrete deck entry
+that has no form. A transfiguration occurrence belongs to that original entry,
+identified independently of other entries with the same card identity. Gaining
+an already-transfigured card or copying one is a gain or copy, respectively.
+Developer edits and loading a saved journey provide no occurrence.
+
+A copy granted when an Event is transfigured is added after the successful
+operation, once for each source copy held after that operation. The original
+card's current type, including its permanent type change, determines whether it
+is an Event. The copy has a fresh deck-entry identity and carries the original's
+form and permanent entry modifications. Copies granted by this operation do not
+provide further transfiguration occurrences.
+
+A replacement of a Transfiguration site's allowance with two cards is prepared
+with the site's initial offers and prices. Multiple copies set the same two-card
+allowance. Each accepted choice uses a distinct offered entry and its quoted
+price. The prepared allowance survives source loss and reload; gaining a source
+after preparation does not change it. The player may finish the visit before
+using the whole allowance.
+
+An optional random transfiguration after each battle is earned for each held
+source copy in held order, including victory, final victory, defeat, and draw.
+Each copy permits zero through its printed maximum of distinct current entries
+with an applicable form, without an Essence cost. The player chooses the entries;
+one random applicable form is applied to each when the choice succeeds. Choosing
+zero entries consumes no random draw. The earned permission survives source loss
+and reload; a source gained afterward grants no additional permission. Earned
+purge and transfiguration windows share their original held order. Finishing them
+restores the battle's exact Atlas, completed, or failed route, preserving its
+committed reward and failure summary. Rejected choices change neither cards,
+Essence, the earned cursor, nor modifier rewards.
+
 ## Journey Purge Effects
 
 A journey card purge is an authored purge operation on a concrete deck entry.

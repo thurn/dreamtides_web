@@ -1,4 +1,5 @@
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "./modifier-registry";
+import { validJourneyTransfigurationScreen } from "./journey-transfiguration";
 import { validJourneyPurgeScreen } from "./journey-purge";
 import { validJourneySiteCounters } from "./journey-sites";
 // Pure journey-lifecycle, essence, and navigation reducer cases.
@@ -461,7 +462,7 @@ export function validateLoadedState(
     return null;
   if (before.draftState != null && snapshot.draftState == null) return null;
 
-  if (snapshot.screen.type === "journeyPurge" && payload.battle != null) return null;
+  if ((snapshot.screen.type === "journeyPurge" || snapshot.screen.type === "journeyTransfiguration") && payload.battle != null) return null;
   let battle: BattleFoldState | null = null;
   if ("battle" in payload && payload.battle != null) {
     battle = asValidBattleFoldState(payload.battle);
@@ -594,6 +595,17 @@ function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry):
   ) {
     return false;
   }
+  for (const runtime of Object.values(value.siteRuntime)) {
+    if (!isRecord(runtime) || runtime.kind !== "cardChoice" || runtime.choiceKind !== "transfiguration" || runtime.journeyTransfigurationCount === undefined) continue;
+    const permission = runtime.journeyTransfigurationCount;
+    if (!isRecord(permission)) return false;
+    const id = dreamsignIdFromUnknown(permission.dreamsignId);
+    const effect = id === null ? undefined : registry.lookup(id)?.journeySites;
+    if (effect?.kind !== "transfigurationCount" || effect.count !== permission.count ||
+      typeof permission.heldIndex !== "number" || !Number.isSafeInteger(permission.heldIndex) || permission.heldIndex < 0 ||
+      !Array.isArray(runtime.acceptedEntryIds) || runtime.acceptedEntryIds.length > effect.count || new Set(runtime.acceptedEntryIds).size !== runtime.acceptedEntryIds.length) return false;
+  }
+  if (value.screen.type === "journeyTransfiguration" && !validJourneyTransfigurationScreen(value.screen, value as unknown as JourneyState, registry)) return false;
   if (value.screen.type === "journeyPurge" && !validJourneyPurgeScreen(value.screen, value as unknown as JourneyState, registry)) return false;
   return true;
 }

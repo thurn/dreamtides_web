@@ -196,16 +196,41 @@ export interface JourneyPurgeTransition {
   readonly purges: readonly JourneyPurgeOccurrence[];
 }
 
+export type JourneyTransfigurationEffect =
+  | { readonly kind: "copyTransfiguredEvent" }
+  | { readonly kind: "afterBattleTransfiguration"; readonly maxCount: number };
+
+export interface JourneyTransfigurationOccurrence {
+  readonly entry: Readonly<DeckEntry>;
+  readonly cardId: CardId;
+  readonly cardType: CardType;
+}
+
+export interface AfterBattleTransfigurationSource {
+  readonly kind: "transfiguration";
+  readonly dreamsignId: DreamsignId;
+  readonly heldIndex: number;
+  readonly maxCount: number;
+}
+
+export interface AfterBattleJourneyChoice {
+  readonly kind: "afterBattle";
+  readonly siteId: SiteId;
+  readonly sources: readonly (AfterBattlePurgeSource | AfterBattleTransfigurationSource)[];
+  readonly index: number;
+  readonly returnTo: "atlas" | "journeyComplete" | "journeyFailed";
+}
+
 export interface AfterBattlePurgeSource {
+  /** Omitted on the original persisted purge permission. */
+  readonly kind?: "purge";
   readonly dreamsignId: DreamsignId;
   readonly heldIndex: number;
   readonly maxCount: number;
 }
 
 export type JourneyPurgeChoice =
-  | { readonly kind: "afterBattle"; readonly siteId: SiteId;
-      readonly sources: readonly AfterBattlePurgeSource[]; readonly index: number;
-      readonly returnTo: "atlas" | "journeyComplete" | "journeyFailed" }
+  | AfterBattleJourneyChoice
   | { readonly kind: "essenceSite"; readonly siteId: SiteId;
       readonly dreamsignId: DreamsignId; readonly heldIndex: number; readonly count: number };
 
@@ -218,6 +243,7 @@ export interface JourneyDraftEffect {
 
 /** Typed catalog clauses implemented by the journeySites primitive. */
 export type JourneySitesEffect =
+  | { readonly kind: "transfigurationCount"; readonly count: number }
   | { readonly kind: "additionalEnhancedSite"; readonly count: number }
   | { readonly kind: "rerollExploration"; readonly rerollsPerSite: number }
   | { readonly kind: "enhanceSiteTypes"; readonly siteTypes: readonly ("Reward" | "DreamsignRevelation")[] };
@@ -521,6 +547,8 @@ export type CardChoiceSiteRuntime = {
 } & (
   | {
       choiceKind: "transfiguration";
+      /** Replacement allowance captured with the initial offer. */
+      journeyTransfigurationCount?: { readonly dreamsignId: DreamsignId; readonly heldIndex: number; readonly count: number };
       transfigurationOffers: CardChoiceTransfigurationOffer[];
     }
   | {
@@ -1211,6 +1239,7 @@ export type Screen =
       tutorialAvatarId?: AvatarId;
     }
   | { type: "journeyPurge"; readonly choice: JourneyPurgeChoice }
+  | { type: "journeyTransfiguration"; readonly choice: AfterBattleJourneyChoice }
   | { type: "atlas" }
   | { type: "dreamscape" }
   | { type: "site"; siteId: SiteId }

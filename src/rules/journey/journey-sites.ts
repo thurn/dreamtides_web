@@ -50,10 +50,19 @@ export function projectJourneySite(
 
 /** One catalog clause registered as a pure, post-event journey modifier. */
 export function journeySites(dreamsignId: DreamsignId, effect: JourneySitesEffect): JourneyModifierDefinition {
+  if (effect.kind === "transfigurationCount" && (!Number.isSafeInteger(effect.count) || effect.count < 1)) throw new RangeError("Invalid site transfiguration count.");
   return {
     dreamsignId,
     journeySites: effect,
     afterJourneyEvent({ before, journey, eventType, heldIndex, siteId, lookup }): ReturnType<JourneyModifierDefinition["afterJourneyEvent"]> {
+      if (effect.kind === "transfigurationCount") {
+        if (eventType !== "OPEN_SITE" || siteId === null || before.siteRuntime[siteId] !== undefined || findSite(journey, siteId)?.type !== "Transfiguration") return null;
+        const runtime = journey.siteRuntime[siteId];
+        if (runtime?.kind !== "cardChoice" || runtime.choiceKind !== "transfiguration" || runtime.journeyTransfigurationCount !== undefined) return null;
+        return { journey: { ...journey, siteRuntime: { ...journey.siteRuntime, [siteId]: { ...runtime,
+          journeyTransfigurationCount: { dreamsignId, heldIndex, count: effect.count } } } },
+          before: { count: 1 }, after: { count: effect.count }, target: { siteIds: [siteId] } };
+      }
       if (effect.kind === "enhanceSiteTypes") {
         if (eventType !== "OPEN_SITE" || siteId === null || before.siteRuntime[siteId] !== undefined ||
           journey.siteRuntime[siteId] === undefined) return null;

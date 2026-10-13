@@ -56,6 +56,7 @@ export function TransfigurationSiteScreenAdapter({
   if (site === null || view === null) return null;
   return (
     <TransfigurationSiteScreen
+      key={`${siteId}:${String(runtime?.acceptedEntryIds.length ?? 0)}`}
       view={view}
       onClose={actions.close}
       onTransfigure={actions.transfigure}

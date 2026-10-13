@@ -1,0 +1,51 @@
+{
+  "bead": "hv-umm2.261",
+  "phase": 5,
+  "implementMin": 97.82125395,
+  "implementWindow": {
+    "start": "2026-10-13T17:45:48.490000+00:00",
+    "end": "2026-10-13T19:23:37.765237+00:00"
+  },
+  "localValidationS": {
+    "focused": 7.491428082983475,
+    "review": 46.580662458000006,
+    "knip": 2.8871310420217924,
+    "full": 103.81335874999058,
+    "fuzz": 0.8786583339970093,
+    "preflight": 2.353940708009759,
+    "sweep": 68.32473783299793
+  },
+  "hostLoad": 4.4658203125,
+  "testDelta": {
+    "files": 5,
+    "lines": 384,
+    "jsdomFiles": 1
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 7.902383400000001,
+      "note": "Actual 2026-10-13T18:01:52.076783+00:00 to 2026-10-13T18:09:46.219787+00:00. Initial type/fixture/API assumptions corrected; all failed attempts retained. Elapsed incident/validation window, including useful work and waits; not isolated CPU time."
+    },
+    {
+      "tag": "plan-brief-mismatch",
+      "minutes": 5.19858825,
+      "note": "Actual 2026-10-13T18:13:59.687923+00:00 to 2026-10-13T18:19:11.603218+00:00. Parent direct inventory dependency repair and native journey-only P8 applicability disposition; original weighted 300 request completed zero games. Windows overlap other useful work. Elapsed incident/validation window, including useful work and waits; not isolated CPU time."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 3.710336116666667,
+      "note": "Actual 2026-10-13T18:32:11.113284+00:00 to 2026-10-13T18:35:53.733451+00:00. UUID add identity retained; held-row readiness selector repaired externally. Elapsed incident/validation window, including useful work and waits; not isolated CPU time."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 11.185047216666668,
+      "note": "Actual 2026-10-13T18:58:39.864455+00:00 to 2026-10-13T19:09:50.967288+00:00. Two public file chooser protocol attempts failed; parent direct same-task justiciar owned upload adapter repaired boundary. Independent empty and sweep work continued within this interval. Elapsed incident/validation window, including useful work and waits; not isolated CPU time."
+    },
+    {
+      "tag": "local-edit-correction",
+      "minutes": 4.159687966666667,
+      "note": "Actual 2026-10-13T19:10:15.676337+00:00 to 2026-10-13T19:14:25.257615+00:00. Parent early visual count-one grammar finding repaired, final checks and both desktop/mobile site modes repeated. Elapsed incident/validation window, including useful work and waits; not isolated CPU time."
+    }
+  ]
+}

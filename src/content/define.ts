@@ -85,6 +85,7 @@ interface DreamsignFields {
   readonly journeyDraft?: JourneyDraftEffect;
   readonly journeyEssence?: JourneyEssenceEffect;
   readonly journeyPurge?: JourneyPurgeEffect;
+  readonly journeyTransfiguration?: import("../types/journey").JourneyTransfigurationEffect;
   readonly id: Uuid;
   readonly name: string;
   readonly imageName: string;

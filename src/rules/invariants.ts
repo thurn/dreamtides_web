@@ -1,3 +1,4 @@
+import { validJourneyTransfigurationScreen } from "./journey/journey-transfiguration";
 import { validJourneyPurgeScreen } from "./journey/journey-purge";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "./journey/modifier-registry";
 import { layerOrdinal } from "../types/layer-name";
@@ -34,11 +35,11 @@ export function foldInvariantViolations(
   state: FoldState,
   registry: JourneyModifierRegistry = journeyModifierRegistry,
 ): FoldInvariantViolation[] {
-  const pending = state.journey.screen.type === "journeyPurge" ? state.journey.screen : null;
+  const pending = state.journey.screen.type === "journeyPurge" || state.journey.screen.type === "journeyTransfiguration" ? state.journey.screen : null;
   const journey = pending?.choice.kind === "afterBattle"
     ? { ...state.journey, screen: { type: pending.choice.returnTo } } : state.journey;
   const violations: FoldInvariantViolation[] = [];
-  if (pending !== null && (state.battle !== null || !validJourneyPurgeScreen(pending, state.journey, registry))) {
+  if (pending !== null && (state.battle !== null || !(pending.type === "journeyPurge" ? validJourneyPurgeScreen(pending, state.journey, registry) : validJourneyTransfigurationScreen(pending, state.journey, registry)))) {
     violations.push({ code: "journey_purge_choice_inconsistent", detail: pending.choice.siteId });
   }
   if (journey.essence < 0) {

@@ -871,7 +871,7 @@ export function rejectDreamsignOffer(
  * `ACCEPT_TRANSFIGURATION_CHOICE { siteId, entryId, type? }` stamps the chosen
  * transfiguration onto the deck entry, charges the offer's quoted essence cost
  * (authoritative from the stored runtime, never the client), records the
- * accepted entry, and completes the site. When more than one form is offered
+ * accepted entry, and completes the prepared allowance. When more than one form is offered
  * for an entry, an optional `type` selects which; otherwise the first offered
  * form for the entry is used. Bounces on a missing runtime, a wrong
  * kind/choiceKind, an already-accepted site, an entry not offered, an entry
@@ -890,7 +890,9 @@ export function acceptTransfigurationChoice(
     runtime === undefined ||
     runtime.kind !== "cardChoice" ||
     runtime.choiceKind !== "transfiguration" ||
-    runtime.acceptedEntryIds.length > 0 ||
+    (runtime.journeyTransfigurationCount !== undefined && (journey.screen.type !== "site" || journey.screen.siteId !== siteId)) ||
+    runtime.acceptedEntryIds.length >= (runtime.journeyTransfigurationCount?.count ?? 1) ||
+    runtime.acceptedEntryIds.includes(entryId) ||
     !runtime.entryIds.includes(entryId)
   ) {
     return null;
@@ -925,10 +927,10 @@ export function acceptTransfigurationChoice(
         : candidate,
     ),
   };
-  return completeAndReturn(
-    withRuntime(next, siteId, { ...runtime, acceptedEntryIds: [entryId] }),
-    siteId,
-  );
+  const acceptedEntryIds = [...runtime.acceptedEntryIds, entryId];
+  const prepared = withRuntime(next, siteId, { ...runtime, acceptedEntryIds });
+  return acceptedEntryIds.length >= (runtime.journeyTransfigurationCount?.count ?? 1)
+    ? completeAndReturn(prepared, siteId) : prepared;
 }
 
 /**

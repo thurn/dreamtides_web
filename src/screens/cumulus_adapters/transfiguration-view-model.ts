@@ -22,6 +22,7 @@ import type {
 import { projectGuideView } from "./guide-view-model";
 import { transfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
 import type { GuideId } from "../../types/identifiers";
+import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
 const STANDARD_CANDIDATE_COUNT = 3;
 
 /** Resolve Durgan, the resident guide for Transfiguration. */
@@ -154,7 +155,8 @@ export function buildTransfigurationSiteView(params: {
   return {
     siteId: params.site.id,
     scene,
-    guide: buildTransfigurationGuideView(params.guide, params.guideLine),
+    guide: buildTransfigurationGuideView(params.guide, params.runtime?.choiceKind === "transfiguration" && params.runtime.journeyTransfigurationCount !== undefined
+      ? JOURNEY_SITE_MESSAGES.remainingTransfigurations(params.runtime.journeyTransfigurationCount.count - params.runtime.acceptedEntryIds.length) : params.guideLine),
     ready: params.runtime !== null,
     isEnhanced: params.site.isEnhanced,
     candidates: buildTransfigurationCandidates(

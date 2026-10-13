@@ -18,6 +18,10 @@ import clamShell, { journeyDraftEffect as clamEffect } from "../../content/dream
 import seaUrchin, { journeyDraftEffect as urchinEffect } from "../../content/dreamsigns/sea-urchin-1c505034";
 import rosemary, { journeySitesEffect as rosemaryEffect } from "../../content/dreamsigns/rosemary-cd81a49d";
 import { journeyDraft } from "./journey-draft";
+import tome, { journeyTransfigurationEffect as tomeEffect } from "../../content/dreamsigns/spell-tome-0c52e8c3";
+import slime, { journeyTransfigurationEffect as slimeEffect } from "../../content/dreamsigns/green-slime-452b7cd6";
+import ledger, { journeySitesEffect as ledgerEffect } from "../../content/dreamsigns/leaf-ledger-d9f0f7ff";
+import { journeyTransfiguration } from "./journey-transfiguration";
 import type { GameplayEventType } from "../events";
 
 /**
@@ -30,6 +34,7 @@ export interface JourneyModifierDefinition {
   readonly journeyDraft?: JourneyDraftEffect;
   readonly journeyEssence?: JourneyEssenceEffect;
   readonly journeyPurge?: JourneyPurgeEffect;
+  readonly journeyTransfiguration?: import("../../types/journey").JourneyTransfigurationEffect;
   /**
    * Return null when this transition does not apply the effect. Hooks must be
    * deterministic, must not mutate either input, and must not perform IO.
@@ -42,6 +47,8 @@ export interface JourneyModifierDefinition {
     readonly journey: Readonly<JourneyState>;
     readonly eventType: GameplayEventType;
     readonly heldIndex: number;
+    readonly seq: number;
+    readonly transfigurations: readonly import("../../types/journey").JourneyTransfigurationOccurrence[];
     readonly siteId: SiteId | null;
     readonly purges?: readonly JourneyPurgeOccurrence[];
   }) => {
@@ -56,6 +63,8 @@ export interface JourneyModifierDefinition {
       readonly afterCardId?: CardId;
       readonly incomingDreamsignId?: DreamsignId;
       readonly purges?: readonly JourneyPurgeOccurrence[];
+      readonly transfigurations?: readonly { readonly entryId: import("../../types/identifiers").DeckEntryId; readonly cardId: CardId; readonly type: import("../../types/journey").TransfigurationType }[];
+      readonly copies?: readonly { readonly fromEntryId: import("../../types/identifiers").DeckEntryId; readonly entryId: import("../../types/identifiers").DeckEntryId; readonly cardId: CardId }[];
     };
   } | null;
 }
@@ -66,6 +75,8 @@ export interface JourneyModifierRegistry {
     before: JourneyState;
     journey: JourneyState;
     eventType: GameplayEventType;
+    seq: number;
+    transfigurations: readonly import("../../types/journey").JourneyTransfigurationOccurrence[];
     siteId: SiteId | null;
     purges?: readonly JourneyPurgeOccurrence[];
   }): { journey: JourneyState; logRecords: readonly ReducerLogRecord[] };
@@ -96,7 +107,7 @@ export function createJourneyModifierRegistry(
   const lookup = (dreamsignId: DreamsignId) => byId.get(dreamsignId);
   return Object.freeze({
     lookup,
-    apply({ before, journey, eventType, siteId, purges }) {
+    apply({ before, journey, eventType, seq, transfigurations, siteId, purges }) {
       const logRecords: ReducerLogRecord[] = [];
       let next = journey;
       // Snapshot the post-domain holdings: hooks run in held order, once per
@@ -106,7 +117,7 @@ export function createJourneyModifierRegistry(
       // iteration.
       for (const [heldIndex, { id }] of journey.dreamsigns.entries()) {
         const definition = byId.get(id);
-        const applied = definition?.afterJourneyEvent({ lookup, before, journey: next, eventType, heldIndex, siteId, ...(purges === undefined ? {} : { purges }) });
+        const applied = definition?.afterJourneyEvent({ lookup, before, journey: next, eventType, heldIndex, seq, transfigurations, siteId, ...(purges === undefined ? {} : { purges }) });
         if (applied == null) continue;
         logRecords.push({
           event: "journey_modifier_applied",
@@ -141,4 +152,7 @@ export const journeyModifierRegistry = createJourneyModifierRegistry([
   journeyDraft(parseDreamsignId(clamShell.id), clamEffect),
   journeyDraft(parseDreamsignId(seaUrchin.id), urchinEffect),
   journeySites(parseDreamsignId(rosemary.id), rosemaryEffect),
+  journeyTransfiguration(parseDreamsignId(tome.id), tomeEffect),
+  journeyTransfiguration(parseDreamsignId(slime.id), slimeEffect),
+  journeySites(parseDreamsignId(ledger.id), ledgerEffect),
 ]);

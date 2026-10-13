@@ -37,6 +37,8 @@ export function screenToJourneyPath(
   switch (screen.type) {
     case "journeyStart":
       return "/";
+    case "journeyTransfiguration":
+      return `/transfiguration/${screen.choice.siteId}`;
     case "journeyPurge":
       return `/purge/${screen.choice.siteId}`;
     case "atlas":

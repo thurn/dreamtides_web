@@ -48,6 +48,7 @@ import * as lifecycle from "./journey/lifecycle";
 import * as gamble from "./journey/gamble";
 import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
+import { journeyTransfigurationCard, journeyTransfigurationOccurrences, resolveJourneyTransfiguration } from "./journey/journey-transfiguration";
 import { resolveJourneyPurge } from "./journey/journey-purge";
 import * as journeySites from "./journey/journey-sites";
 import * as cardTutorial from "./card-tutorial-guidance";
@@ -109,7 +110,7 @@ export function reduceGameEvent(
     }
   }
 
-  return finishTransition(state, event, routeDomain(state, event, ctx, modifiers), modifiers);
+  return finishTransition(state, event, routeDomain(state, event, ctx, modifiers), modifiers, ctx.seq);
 }
 
 /**
@@ -123,6 +124,7 @@ function finishTransition(
   event: GameEvent,
   result: ReduceResult,
   modifiers: JourneyModifierRegistry,
+  seq: number,
 ): ReduceResult {
   if (
     result.outcome === "applied" &&
@@ -132,10 +134,38 @@ function finishTransition(
   ) {
     const siteId = siteIdFromUnknown(event.payload?.siteId) ??
       (before.journey.screen.type === "site" ? before.journey.screen.siteId : null);
+    // Domain occurrences are frozen once; modifier-produced copies are not inputs.
+    const transfigurations = event.type !== "TRANSFIGURE_CARD" && result.state.journey.dreamsigns.some((sign) => modifiers.lookup(sign.id)?.journeyTransfiguration?.kind === "copyTransfiguredEvent")
+      ? journeyTransfigurationOccurrences(before.journey, result.state.journey) : [];
+    const domain = result.state.journey;
+    const records: ReducerLogRecord[] = [];
+    if (event.type === "ACCEPT_TRANSFIGURATION_CHOICE" || event.type === "RESOLVE_JOURNEY_TRANSFIGURATION") {
+      const changed = domain.deck.filter((entry) => before.journey.deck.some((old) => old.entryId === entry.entryId && old.transfiguration === null) && entry.transfiguration !== null);
+      records.push({ event: "journey_transfiguration_resolved", fields: { eventType: event.type, siteId,
+        ...(event.type === "RESOLVE_JOURNEY_TRANSFIGURATION" ? { dreamsignId: event.payload.dreamsignId, heldIndex: event.payload.heldIndex, choiceIndex: event.payload.choiceIndex } : {}),
+        selectedEntryIds: event.type === "RESOLVE_JOURNEY_TRANSFIGURATION" ? event.payload.entryIds : [event.payload.entryId],
+        transformations: changed.map((entry) => {
+          const old = before.journey.deck.find((candidate) => candidate.entryId === entry.entryId)!;
+          const runtime = siteId === null ? undefined : before.journey.siteRuntime[siteId];
+          const offers = runtime?.kind === "cardChoice" && runtime.choiceKind === "transfiguration"
+            ? runtime.transfigurationOffers.filter((offer) => offer.entryId === entry.entryId) : [];
+          const quote = offers.find((offer) => offer.type === entry.transfiguration);
+          const details = event.type === "RESOLVE_JOURNEY_TRANSFIGURATION" ? journeyTransfigurationCard(old) : null;
+          return { entryId: entry.entryId, cardId: quote?.previewCard.id ?? details?.cardId ?? null, type: entry.transfiguration,
+            applicableForms: details?.forms ?? offers.map((offer) => offer.type), essenceCost: quote?.essenceCost ?? 0,
+            ...(quote === undefined ? {} : { effectDetails: quote.effectDetails }) };
+        }),
+        essenceBefore: before.journey.essence, essenceAfter: domain.essence } });
+    }
+    if (siteId !== null && sites.findSite(before.journey, siteId)?.type === "Transfiguration" &&
+      !sites.findSite(before.journey, siteId)?.isVisited && sites.findSite(domain, siteId)?.isVisited) {
+      records.push({ event: "site_completed", fields: { siteId, siteType: "Transfiguration", eventType: event.type } });
+    }
     const applied = modifiers.apply({
       before: before.journey,
       journey: result.state.journey,
       eventType: event.type,
+      seq, transfigurations,
       siteId,
       ...(result.purges === undefined ? {} : { purges: result.purges }),
     });
@@ -144,9 +174,9 @@ function finishTransition(
       state: applied.journey === result.state.journey
         ? result.state
         : { ...result.state, journey: applied.journey },
-      ...(applied.logRecords.length === 0
+      ...([...records, ...applied.logRecords].length === 0
         ? {}
-        : { logRecords: [...(result.logRecords ?? []), ...applied.logRecords] }),
+        : { logRecords: [...(result.logRecords ?? []), ...records, ...applied.logRecords] }),
     };
   }
   return enforceInvariants(event, result, modifiers);
@@ -371,6 +401,8 @@ export function routeDomain(
       return journeyCase(state, deck.addCard(journey, payload, ctx));
     case "REMOVE_DECK_ENTRY":
       return journeyCase(state, deck.removeDeckEntry(journey, payload));
+    case "RESOLVE_JOURNEY_TRANSFIGURATION":
+      return journeyCase(state, resolveJourneyTransfiguration(journey, payload, ctx, modifiers));
     case "RESOLVE_JOURNEY_PURGE": {
       const result = journeyPurgeCase(state, resolveJourneyPurge(journey, payload, modifiers));
       return result.outcome === "bounced" ? result : { ...result, logRecords: [{ event: "journey_purge_resolved",

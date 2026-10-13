@@ -1587,7 +1587,7 @@ function planBeads(records: readonly EntityRecord[]): Planner {
     name: "Transfiguration transforms",
     members: routed("5.7a"),
     needsOf: (record) => record.requiredPrimitives.new,
-    extraDependsOn: [planner.introducedBy.get("journeyTransfiguration") ?? "5.6"],
+    extraDependsOn: [planner.introducedBy.get("journeyTransfiguration") ?? "journey-registry"],
     externalDependsOn: ["the Phase 3 gate"],
   });
   const transfigurationKeys = planner.keysOf("5.7a");

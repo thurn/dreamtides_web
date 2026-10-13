@@ -130,6 +130,7 @@ export interface EventPayloads {
     source?: unknown;
   };
   REMOVE_DECK_ENTRY: { entryId: DeckEntryId };
+  RESOLVE_JOURNEY_TRANSFIGURATION: { siteId: SiteId; dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; entryIds: DeckEntryId[] };
   RESOLVE_JOURNEY_PURGE: { siteId: SiteId; dreamsignId: DreamsignId; heldIndex: number; choiceIndex: number; entryIds: DeckEntryId[] };
   PURGE_DECK_CARDS: { siteId: SiteId; entryIds: DeckEntryId[] };
   DUPLICATE_DECK_ENTRY: { entryId: DeckEntryId };
@@ -399,6 +400,7 @@ const EVENT_INTENT_CLASSES = {
   DISMISS_STARTING_DECK_POPUP: "gameplay",
   ADD_CARD: "gameplay",
   REMOVE_DECK_ENTRY: "gameplay",
+  RESOLVE_JOURNEY_TRANSFIGURATION: "gameplay",
   RESOLVE_JOURNEY_PURGE: "gameplay",
   PURGE_DECK_CARDS: "gameplay",
   DUPLICATE_DECK_ENTRY: "gameplay",
@@ -532,6 +534,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   DISMISS_STARTING_DECK_POPUP: true,
   ADD_CARD: true,
   REMOVE_DECK_ENTRY: true,
+  RESOLVE_JOURNEY_TRANSFIGURATION: true,
   RESOLVE_JOURNEY_PURGE: true,
   PURGE_DECK_CARDS: true,
   DUPLICATE_DECK_ENTRY: true,

@@ -1,0 +1,2496 @@
+{
+  "bead": "hv-umm2.261",
+  "status": "all implementation, required local validation and managed affected workflows complete; parent handoff audit/COMMIT ACK and asynchronous cold code review/delivery pending",
+  "dispatch": {
+    "at": "2026-10-13T17:45:48.490Z",
+    "callId": "call_faf80c06c8eb43cc9094edc6c69316f9",
+    "samplingStart": "UNKNOWN"
+  },
+  "base": "04620bd69e8ecec9f80d7a3059add40dab0d63bf",
+  "testDelta": {
+    "files": 5,
+    "lines": 384,
+    "jsdomFiles": 1
+  },
+  "newTestEntrypoints": 4,
+  "plainSyntheticFixtureModules": 1,
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review (review-v7), PID 45450; actual duration 46.580662458000006 s; starting one-minute load 4.4658203125"
+      }
+    }
+  },
+  "commandsExternal": "/tmp/codex-261/commands.jsonl",
+  "parentInventoryRepair": {
+    "scopeACK": "justiciar-scope-ack.json",
+    "proof": "parent-inventory-repair-proof.json",
+    "directWriter": "parent session"
+  },
+  "fuzzApplicability": {
+    "actualCommandGamesRequested": 300,
+    "actualGames": 0,
+    "exitCode": 1,
+    "reason": "journey-only targets have no authored battle abilities",
+    "disposition": "parent native same-task justiciar; actual journey contracts and managed QA retained"
+  },
+  "preflight": {
+    "initialWrongDomain": {
+      "flag": "--cards",
+      "unknownCard": 60,
+      "exitCode": 1
+    },
+    "corrected": {
+      "flag": "--dreamsigns",
+      "pass": 6,
+      "skip": 54,
+      "fail": 0,
+      "qualification": "inert battle-emblem presence, no journey clause exercise"
+    }
+  },
+  "controls": {
+    "assertionFailures": 11,
+    "publicFoldInvariantErrorFailures": 1,
+    "syntaxTypeImportSetupFailuresCounted": 0,
+    "sourceRestored": true,
+    "relaxation": "parent same-task justiciar relaxed self-imposed assertion-only filter"
+  },
+  "stage1Correction": "TRANSFIGURE_CARD is gameplay in the existing table; sole UI caller JourneyDebugEditor. New Tome collector explicitly excludes the setter; old classification and other hooks preserved.",
+  "validation": {
+    "review": {
+      "command": "npm run review (review-v7)",
+      "pid": 45450,
+      "exitCode": 0,
+      "wallSeconds": 46.580662458000006,
+      "hostLoad": 4.4658203125,
+      "tests": 5361,
+      "files": 248
+    },
+    "reviewFull": {
+      "exitCode": 0,
+      "wallSeconds": 103.81335874999058,
+      "hostLoad": 12.833984375,
+      "tests": 7122,
+      "files": 377,
+      "testStepSeconds": 76.3,
+      "testStepHostLoad": 11.04052734375,
+      "heavyAcquisitionTime": "UNKNOWN"
+    },
+    "knip": {
+      "command": "npm run knip (knip-v7)",
+      "pid": 46766,
+      "exitCode": 0,
+      "wallSeconds": 2.8871310420217924,
+      "hostLoad": 3.50634765625
+    }
+  },
+  "sweep": {
+    "invocation": "invocations/sweep-efyCES/run-hvjF8j",
+    "domain": "dreamsigns",
+    "scope": "all three UUIDs, all variants, both actors",
+    "pass": 6,
+    "skip": 54,
+    "fail": 0,
+    "exercised": false,
+    "qualification": "inert battle-emblem presence and settled first turn; no journey clause exercise",
+    "wallSeconds": 68.32473783299793
+  },
+  "browserQA": {
+    "green-v3-preliminary": {
+      "pid": 43576,
+      "exitCode": 0,
+      "wallSeconds": 77.1554311660002,
+      "sourceVersion": "v3",
+      "closure": "normal managed guards, PIDs and owner records absent, port-free receipt; direct close ACK not separately captured"
+    },
+    "green-v3-full": {
+      "pid": 3578,
+      "exitCode": 0,
+      "wallSeconds": 67.67027833298198,
+      "sourceVersion": "v3",
+      "closure": "normal managed guards, PIDs and owner records absent, port-free receipt; direct close ACK not separately captured"
+    },
+    "green-v3-slug-defeat": {
+      "pid": 59720,
+      "exitCode": 0,
+      "wallSeconds": 40.99355616699904,
+      "sourceVersion": "v3",
+      "closure": "normal managed guards, PIDs and owner records absent, port-free receipt; direct close ACK not separately captured"
+    },
+    "green-empty-v5": {
+      "pid": 72456,
+      "exitCode": 0,
+      "wallSeconds": 67.65210354200099,
+      "sourceVersion": "v5",
+      "closure": "normal managed guards, PIDs and owner records absent, port-free receipt; direct close ACK not separately captured"
+    },
+    "leaf-upload-standard-v7": {
+      "exitCode": 0,
+      "wallSeconds": 45.44177766601206,
+      "invocation": "run-2MIIbW",
+      "closeConfirmed": true
+    },
+    "leaf-upload-enhanced-v7": {
+      "exitCode": 0,
+      "wallSeconds": 50.664265416999115,
+      "invocation": "run-6xzfZb",
+      "closeConfirmed": true
+    }
+  },
+  "browserFailures": [
+    {
+      "name": "leaf-tome-standard-v4",
+      "exitCode": 2,
+      "wallSeconds": 9.706213083001785,
+      "qualification": "public file chooser interrupted MCP result; subsequent log export rejected for modal; no acceptance outcome claimed; normal managed close/owner-clear guards settled"
+    },
+    {
+      "name": "leaf-tome-standard-v5",
+      "exitCode": 2,
+      "wallSeconds": 8.363426416006405,
+      "qualification": "public file chooser interrupted MCP result; subsequent log export rejected for modal; no acceptance outcome claimed; normal managed close/owner-clear guards settled"
+    }
+  ],
+  "productDiff": {
+    "method": "git diff --numstat base plus full line counts for new untracked src files; exclude .test. files and plain transfiguration-fixtures.ts; include scripts/content-inventory.ts",
+    "paths": [
+      {
+        "path": "scripts/content-inventory.ts",
+        "added": 1,
+        "deleted": 1
+      },
+      {
+        "path": "src/content/define.ts",
+        "added": 1,
+        "deleted": 0
+      },
+      {
+        "path": "src/content/dreamsigns/green-slime-452b7cd6.ts",
+        "added": 7,
+        "deleted": 1
+      },
+      {
+        "path": "src/content/dreamsigns/leaf-ledger-d9f0f7ff.ts",
+        "added": 7,
+        "deleted": 1
+      },
+      {
+        "path": "src/content/dreamsigns/spell-tome-0c52e8c3.ts",
+        "added": 7,
+        "deleted": 1
+      },
+      {
+        "path": "src/rules/events.ts",
+        "added": 3,
+        "deleted": 0
+      },
+      {
+        "path": "src/rules/invariants.ts",
+        "added": 3,
+        "deleted": 2
+      },
+      {
+        "path": "src/rules/journey/journey-purge.ts",
+        "added": 12,
+        "deleted": 37
+      },
+      {
+        "path": "src/rules/journey/journey-sites.ts",
+        "added": 9,
+        "deleted": 0
+      },
+      {
+        "path": "src/rules/journey/lifecycle.ts",
+        "added": 13,
+        "deleted": 1
+      },
+      {
+        "path": "src/rules/journey/modifier-registry.ts",
+        "added": 16,
+        "deleted": 2
+      },
+      {
+        "path": "src/rules/journey/sites.ts",
+        "added": 8,
+        "deleted": 6
+      },
+      {
+        "path": "src/rules/reducer.ts",
+        "added": 35,
+        "deleted": 3
+      },
+      {
+        "path": "src/runtime/journey-site-messages.ts",
+        "added": 5,
+        "deleted": 0
+      },
+      {
+        "path": "src/runtime/screen-url.ts",
+        "added": 2,
+        "deleted": 0
+      },
+      {
+        "path": "src/screens/cumulus_adapters/TransfigurationSiteScreenAdapter.tsx",
+        "added": 1,
+        "deleted": 0
+      },
+      {
+        "path": "src/screens/cumulus_adapters/registry.tsx",
+        "added": 3,
+        "deleted": 0
+      },
+      {
+        "path": "src/screens/cumulus_adapters/transfiguration-view-model.ts",
+        "added": 3,
+        "deleted": 1
+      },
+      {
+        "path": "src/session/actions.ts",
+        "added": 3,
+        "deleted": 0
+      },
+      {
+        "path": "src/session/providers/register-game-providers.ts",
+        "added": 4,
+        "deleted": 0
+      },
+      {
+        "path": "src/state/game-journey-context.tsx",
+        "added": 2,
+        "deleted": 0
+      },
+      {
+        "path": "src/state/journey-context.tsx",
+        "added": 1,
+        "deleted": 0
+      },
+      {
+        "path": "src/state/journey-save-files.ts",
+        "added": 1,
+        "deleted": 0
+      },
+      {
+        "path": "src/state/transfiguration-site-actions.ts",
+        "added": 2,
+        "deleted": 31
+      },
+      {
+        "path": "src/types/journey.ts",
+        "added": 32,
+        "deleted": 3
+      },
+      {
+        "path": "src/cumulus/screens/JourneyTransfigurationScreen.tsx",
+        "added": 46,
+        "deleted": 0
+      },
+      {
+        "path": "src/rules/journey/journey-after-battle.ts",
+        "added": 68,
+        "deleted": 0
+      },
+      {
+        "path": "src/rules/journey/journey-transfiguration.ts",
+        "added": 80,
+        "deleted": 0
+      },
+      {
+        "path": "src/screens/cumulus_adapters/JourneyTransfigurationScreenAdapter.tsx",
+        "added": 12,
+        "deleted": 0
+      },
+      {
+        "path": "src/screens/cumulus_adapters/journey-transfiguration-view-model.ts",
+        "added": 26,
+        "deleted": 0
+      },
+      {
+        "path": "src/session/providers/journey-transfiguration-provider.ts",
+        "added": 15,
+        "deleted": 0
+      }
+    ],
+    "additions": 428,
+    "deletions": 90,
+    "grossChangedLines": 518
+  },
+  "testModules": {
+    "paths": [
+      {
+        "path": "src/screens/cumulus_adapters/registry.test.tsx",
+        "added": 1,
+        "deleted": 0
+      },
+      {
+        "path": "src/session/actions.test.ts",
+        "added": 1,
+        "deleted": 0
+      },
+      {
+        "path": "src/cumulus/screens/JourneyTransfigurationScreen.test.tsx",
+        "added": 28,
+        "deleted": 0
+      },
+      {
+        "path": "src/rules/journey/journey-after-battle.test.ts",
+        "added": 152,
+        "deleted": 0
+      },
+      {
+        "path": "src/rules/journey/journey-transfiguration.test.ts",
+        "added": 121,
+        "deleted": 0
+      },
+      {
+        "path": "src/rules/journey/transfiguration-fixtures.ts",
+        "added": 59,
+        "deleted": 0
+      },
+      {
+        "path": "src/screens/cumulus_adapters/journey-transfiguration-view-model.test.ts",
+        "added": 22,
+        "deleted": 0
+      }
+    ],
+    "newFiles": 5,
+    "newEntrypoints": 4,
+    "newPlainFixtureModules": 1,
+    "changedExistingEntrypoints": 2,
+    "addedLines": 384,
+    "deletedLines": 0,
+    "newFileLines": 382,
+    "existingAddedLines": 2
+  },
+  "fullValidationQualification": "review:full remains applicable to unchanged state, schema and routing after the local portrait-presence and copy repairs; parent explicitly authorized no repeat for these presentation-only changes",
+  "allCommandReceipts": [
+    {
+      "name": "install",
+      "argv": [
+        "npm",
+        "install"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 77382,
+      "pgid": 77382,
+      "identity": "77382 77382 Tue Oct 13 10:44:12 2026     node /opt/homebrew/bin/npm install",
+      "startedAt": "2026-10-13T17:44:12.980920+00:00",
+      "load": [
+        8.46435546875,
+        11.3828125,
+        11.6103515625
+      ],
+      "stdout": "/tmp/codex-261/install.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 2.6439449170138687,
+      "endedAt": "2026-10-13T17:44:15.625013+00:00"
+    },
+    {
+      "name": "initial-typecheck",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 56681,
+      "pgid": 56681,
+      "identity": "56681 56681 Tue Oct 13 11:01:52 2026     /usr/bin/env node /opt/homebrew/bin/npm run typecheck",
+      "startedAt": "2026-10-13T18:01:52.076783+00:00",
+      "load": [
+        2.92236328125,
+        4.71728515625,
+        7.8369140625
+      ],
+      "stdout": "/tmp/codex-261/initial-typecheck.stdout",
+      "state": "terminal",
+      "exitCode": 2,
+      "wallSeconds": 12.143874792003771,
+      "endedAt": "2026-10-13T18:02:04.220886+00:00"
+    },
+    {
+      "name": "first-focused",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/rules/journey/journey-purge.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 19420,
+      "pgid": 19420,
+      "identity": "19420 19420 Tue Oct 13 11:06:04 2026     node /opt/homebrew/bin/npm test -- src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts src/rules/journey/journey-purge.test.ts",
+      "startedAt": "2026-10-13T18:06:04.697655+00:00",
+      "load": [
+        7.27685546875,
+        8.091796875,
+        8.728515625
+      ],
+      "stdout": "/tmp/codex-261/first-focused.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 4.976878874993417,
+      "endedAt": "2026-10-13T18:06:09.674713+00:00"
+    },
+    {
+      "name": "focused-v2",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/rules/journey/journey-purge.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 22138,
+      "pgid": 22138,
+      "identity": "22138 22138 Tue Oct 13 11:06:59 2026     node /opt/homebrew/bin/npm test -- src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts src/rules/journey/journey-purge.test.ts",
+      "startedAt": "2026-10-13T18:06:59.240822+00:00",
+      "load": [
+        5.50634765625,
+        7.42236328125,
+        8.4365234375
+      ],
+      "stdout": "/tmp/codex-261/focused-v2.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 4.573881416989025,
+      "endedAt": "2026-10-13T18:07:03.814866+00:00"
+    },
+    {
+      "name": "type-and-focused",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 24494,
+      "pgid": 24494,
+      "identity": "24494 24494 Tue Oct 13 11:07:54 2026     /usr/bin/env node /opt/homebrew/bin/npm run typecheck",
+      "startedAt": "2026-10-13T18:07:54.833430+00:00",
+      "load": [
+        5.3466796875,
+        7.0810546875,
+        8.24609375
+      ],
+      "stdout": "/tmp/codex-261/type-and-focused.stdout",
+      "state": "terminal",
+      "exitCode": 2,
+      "wallSeconds": 13.365145084011601,
+      "endedAt": "2026-10-13T18:08:08.198926+00:00"
+    },
+    {
+      "name": "focused-v3",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/rules/journey/journey-purge.test.ts",
+        "src/cumulus/screens/JourneyTransfigurationScreen.test.tsx",
+        "src/screens/cumulus_adapters/transfiguration-view-model.test.ts",
+        "src/session/actions.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 26491,
+      "pgid": 26491,
+      "identity": "26491 26491 Tue Oct 13 11:08:43 2026     node /opt/homebrew/bin/npm test -- src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts src/rules/journey/journey-purge.test.ts src/cumulus/screens/JourneyTransfigurationScreen.test.tsx src/screens/cumulus_adapters/transfiguration-view-model.test.ts src/session/actions.test.ts",
+      "startedAt": "2026-10-13T18:08:43.086776+00:00",
+      "load": [
+        10.6611328125,
+        7.95751953125,
+        8.48486328125
+      ],
+      "stdout": "/tmp/codex-261/focused-v3.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 6.6589399999938905,
+      "endedAt": "2026-10-13T18:08:49.745898+00:00"
+    },
+    {
+      "name": "own-related-v4",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/rules/journey/journey-purge.test.ts",
+        "src/cumulus/screens/JourneyTransfigurationScreen.test.tsx",
+        "src/screens/cumulus_adapters/journey-transfiguration-view-model.test.ts",
+        "src/screens/cumulus_adapters/transfiguration-view-model.test.ts",
+        "src/session/actions.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 33635,
+      "pgid": 33635,
+      "identity": "33635 33635 Tue Oct 13 11:09:38 2026     node /opt/homebrew/bin/npm test -- src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts src/rules/journey/journey-purge.test.ts src/cumulus/screens/JourneyTransfigurationScreen.test.tsx src/screens/cumulus_adapters/journey-transfiguration-view-model.test.ts src/screens/cumulus_adapters/transfiguration-view-model.test.ts src/session/actions.test.ts",
+      "startedAt": "2026-10-13T18:09:38.728169+00:00",
+      "load": [
+        8.27490234375,
+        7.81787109375,
+        8.4033203125
+      ],
+      "stdout": "/tmp/codex-261/own-related-v4.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 7.491428082983475,
+      "endedAt": "2026-10-13T18:09:46.219787+00:00"
+    },
+    {
+      "name": "initial-review",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 44796,
+      "pgid": 44796,
+      "identity": "44796 44796 Tue Oct 13 11:12:07 2026     /usr/bin/env node /opt/homebrew/bin/npm run review",
+      "startedAt": "2026-10-13T18:12:07.919974+00:00",
+      "load": [
+        4.56201171875,
+        6.744140625,
+        7.89404296875
+      ],
+      "stdout": "/tmp/codex-261/initial-review.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 51.75410250001005,
+      "endedAt": "2026-10-13T18:12:59.674704+00:00"
+    },
+    {
+      "name": "inventory",
+      "argv": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 46799,
+      "pgid": 46799,
+      "identity": "46799 46799 Tue Oct 13 11:13:59 2026     /usr/bin/env node /opt/homebrew/bin/npx tsx scripts/content-inventory.ts",
+      "startedAt": "2026-10-13T18:13:59.687923+00:00",
+      "load": [
+        3.787109375,
+        5.9951171875,
+        7.470703125
+      ],
+      "stdout": "/tmp/codex-261/inventory.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 3.348278166988166,
+      "endedAt": "2026-10-13T18:14:03.036332+00:00"
+    },
+    {
+      "name": "weighted-fuzz-applicability",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 47832,
+      "pgid": 47832,
+      "identity": "47832 47832 Tue Oct 13 11:14:57 2026     lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19",
+      "startedAt": "2026-10-13T18:14:57.663172+00:00",
+      "load": [
+        3.03173828125,
+        5.39599609375,
+        7.1455078125
+      ],
+      "stdout": "/tmp/codex-261/weighted-fuzz-applicability.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 0.8786583339970093,
+      "endedAt": "2026-10-13T18:14:58.541947+00:00"
+    },
+    {
+      "name": "negative-controls",
+      "argv": [
+        "python3",
+        "/tmp/codex-261/helper/negative-controls.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 48739,
+      "pgid": 48739,
+      "identity": "48739 48739 Tue Oct 13 11:15:51 2026     python3 /tmp/codex-261/helper/negative-controls.py",
+      "startedAt": "2026-10-13T18:15:51.010356+00:00",
+      "load": [
+        2.974609375,
+        5.01123046875,
+        6.90087890625
+      ],
+      "stdout": "/tmp/codex-261/negative-controls.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 17.735414333990775,
+      "endedAt": "2026-10-13T18:16:08.746075+00:00"
+    },
+    {
+      "name": "parent-inventory-repair",
+      "argv": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 51727,
+      "pgid": 51727,
+      "identity": "51727 51727 Tue Oct 13 11:18:19 2026     /usr/bin/env node /opt/homebrew/bin/npx tsx scripts/content-inventory.ts",
+      "startedAt": "2026-10-13T18:18:19.157428+00:00",
+      "load": [
+        2.9892578125,
+        4.193359375,
+        6.2578125
+      ],
+      "stdout": "/tmp/codex-261/parent-inventory-repair.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 3.3648312499863096,
+      "endedAt": "2026-10-13T18:18:22.522571+00:00"
+    },
+    {
+      "name": "parent-inventory-contracts",
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "scripts/content-inventory.test.ts",
+        "scripts/content-inventory-journey.test.ts",
+        "scripts/content-inventory-variants.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 52245,
+      "pgid": 52245,
+      "identity": "52245 52245 Tue Oct 13 11:18:48 2026     node /opt/homebrew/bin/npx vitest run scripts/content-inventory.test.ts scripts/content-inventory-journey.test.ts scripts/content-inventory-variants.test.ts",
+      "startedAt": "2026-10-13T18:18:48.736578+00:00",
+      "load": [
+        3.1298828125,
+        4.09765625,
+        6.1494140625
+      ],
+      "stdout": "/tmp/codex-261/parent-inventory-contracts.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 5.428015125013189,
+      "endedAt": "2026-10-13T18:18:54.164776+00:00"
+    },
+    {
+      "name": "parent-inventory-check",
+      "argv": [
+        "npx",
+        "tsx",
+        "scripts/content-inventory.ts",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 52674,
+      "pgid": 52674,
+      "identity": "52674 52674 Tue Oct 13 11:19:09 2026     node /opt/homebrew/bin/npx tsx scripts/content-inventory.ts --check",
+      "startedAt": "2026-10-13T18:19:09.854344+00:00",
+      "load": [
+        3.26171875,
+        4.072265625,
+        6.0927734375
+      ],
+      "stdout": "/tmp/codex-261/parent-inventory-check.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 1.7487418329983484,
+      "endedAt": "2026-10-13T18:19:11.603218+00:00"
+    },
+    {
+      "name": "negative-controls-v2",
+      "argv": [
+        "python3",
+        "/tmp/codex-261/helper/negative-controls-v2.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 53971,
+      "pgid": 53971,
+      "identity": "53971 53971 Tue Oct 13 11:20:19 2026     python3 /tmp/codex-261/helper/negative-controls-v2.py",
+      "startedAt": "2026-10-13T18:20:19.268359+00:00",
+      "load": [
+        4.09716796875,
+        4.1591796875,
+        5.96337890625
+      ],
+      "stdout": "/tmp/codex-261/negative-controls-v2.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 8.58439395899768,
+      "endedAt": "2026-10-13T18:20:27.852945+00:00"
+    },
+    {
+      "name": "preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 71890,
+      "pgid": 71890,
+      "identity": "71890 71890 Tue Oct 13 11:21:28 2026     node /opt/homebrew/bin/npm run lab:preflight -- --cards 0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19",
+      "startedAt": "2026-10-13T18:21:28.132389+00:00",
+      "load": [
+        4.25,
+        4.18310546875,
+        5.8271484375
+      ],
+      "stdout": "/tmp/codex-261/preflight.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 1.146027624985436,
+      "endedAt": "2026-10-13T18:21:29.278550+00:00"
+    },
+    {
+      "name": "dreamsign-preflight",
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 85032,
+      "pgid": 85032,
+      "identity": "85032 85032 Tue Oct 13 11:22:25 2026     /usr/bin/env node /opt/homebrew/bin/npm run lab:preflight -- --dreamsigns 0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19",
+      "startedAt": "2026-10-13T18:22:25.415308+00:00",
+      "load": [
+        4.396484375,
+        4.21533203125,
+        5.73388671875
+      ],
+      "stdout": "/tmp/codex-261/dreamsign-preflight.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 2.353940708009759,
+      "endedAt": "2026-10-13T18:22:27.769492+00:00"
+    },
+    {
+      "name": "review-v2",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 87042,
+      "pgid": 87042,
+      "identity": "87042 87042 Tue Oct 13 11:24:33 2026     /usr/bin/env node /opt/homebrew/bin/npm run review",
+      "startedAt": "2026-10-13T18:24:33.722269+00:00",
+      "load": [
+        3.06640625,
+        3.7802734375,
+        5.3447265625
+      ],
+      "stdout": "/tmp/codex-261/review-v2.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 53.97553024999797,
+      "endedAt": "2026-10-13T18:25:27.698006+00:00"
+    },
+    {
+      "name": "knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 41875,
+      "pgid": 41875,
+      "identity": "41875 41875 Tue Oct 13 11:25:43 2026     node /opt/homebrew/bin/npm run knip",
+      "startedAt": "2026-10-13T18:25:43.586579+00:00",
+      "load": [
+        20.10546875,
+        8.9326171875,
+        7.1728515625
+      ],
+      "stdout": "/tmp/codex-261/knip.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 4.466921500017634,
+      "endedAt": "2026-10-13T18:25:48.053640+00:00"
+    },
+    {
+      "name": "review-full",
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 45021,
+      "pgid": 45021,
+      "identity": "45021 45021 Tue Oct 13 11:26:29 2026     lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run review:full",
+      "startedAt": "2026-10-13T18:26:29.464946+00:00",
+      "load": [
+        12.833984375,
+        8.59228515625,
+        7.13671875
+      ],
+      "stdout": "/tmp/codex-261/review-full.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 103.81335874999058,
+      "endedAt": "2026-10-13T18:28:13.278885+00:00"
+    },
+    {
+      "name": "green-preliminary",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v1.mjs",
+        "--bead",
+        "hv-umm2.261",
+        "--port",
+        "5174",
+        "--timeout",
+        "180",
+        "--viewports",
+        "desktop"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 37476,
+      "pgid": 37476,
+      "identity": "37476 37476 Tue Oct 13 11:32:11 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v1.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop",
+      "startedAt": "2026-10-13T18:32:11.113284+00:00",
+      "load": [
+        7.5224609375,
+        8.0693359375,
+        7.275390625
+      ],
+      "stdout": "/tmp/codex-261/green-preliminary.stdout",
+      "state": "terminal",
+      "exitCode": 1,
+      "wallSeconds": 14.243194665992633,
+      "endedAt": "2026-10-13T18:32:25.356645+00:00"
+    },
+    {
+      "name": "green-preliminary-v2",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v2.mjs",
+        "--bead",
+        "hv-umm2.261",
+        "--port",
+        "5174",
+        "--timeout",
+        "180",
+        "--viewports",
+        "desktop"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 1583,
+      "pgid": 1583,
+      "identity": "1583  1583 Tue Oct 13 11:35:33 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v2.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop",
+      "startedAt": "2026-10-13T18:35:33.653387+00:00",
+      "load": [
+        8.69482421875,
+        10.017578125,
+        8.3515625
+      ],
+      "stdout": "/tmp/codex-261/green-preliminary-v2.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 20.079874166985974,
+      "endedAt": "2026-10-13T18:35:53.733451+00:00"
+    },
+    {
+      "name": "portrait-screen-check",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/JourneyTransfigurationScreen.test.tsx",
+        "src/cumulus/components/layout/SiteLayout.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 63171,
+      "pgid": 63171,
+      "identity": "63171 63171 Tue Oct 13 11:39:47 2026     node /opt/homebrew/bin/npm test -- src/cumulus/screens/JourneyTransfigurationScreen.test.tsx src/cumulus/components/layout/SiteLayout.test.tsx",
+      "startedAt": "2026-10-13T18:39:47.768640+00:00",
+      "load": [
+        6.71875,
+        8.18603515625,
+        7.92138671875
+      ],
+      "stdout": "/tmp/codex-261/portrait-screen-check.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 5.204036958020879,
+      "endedAt": "2026-10-13T18:39:52.972802+00:00"
+    },
+    {
+      "name": "review-v3",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 72448,
+      "pgid": 72448,
+      "identity": "72448 72448 Tue Oct 13 11:42:05 2026     node /opt/homebrew/bin/npm run review",
+      "startedAt": "2026-10-13T18:42:05.596791+00:00",
+      "load": [
+        4.37841796875,
+        6.9267578125,
+        7.46630859375
+      ],
+      "stdout": "/tmp/codex-261/review-v3.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 60.418835791992024,
+      "endedAt": "2026-10-13T18:43:06.016009+00:00"
+    },
+    {
+      "name": "final-knip",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 76204,
+      "pgid": 76204,
+      "identity": "76204 76204 Tue Oct 13 11:45:14 2026     node /opt/homebrew/bin/npm run knip",
+      "startedAt": "2026-10-13T18:45:14.429442+00:00",
+      "load": [
+        4.99560546875,
+        6.5537109375,
+        7.240234375
+      ],
+      "stdout": "/tmp/codex-261/final-knip.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 3.3932865419774316,
+      "endedAt": "2026-10-13T18:45:17.822855+00:00"
+    },
+    {
+      "name": "green-v3-preliminary",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v3.mjs",
+        "--bead",
+        "hv-umm2.261",
+        "--port",
+        "5174",
+        "--timeout",
+        "180",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 43576,
+      "pgid": 43576,
+      "identity": "43576 43576 Tue Oct 13 11:53:41 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v3.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile",
+      "startedAt": "2026-10-13T18:53:41.566066+00:00",
+      "load": [
+        3.0537109375,
+        4.80419921875,
+        6.060546875
+      ],
+      "stdout": "/tmp/codex-261/green-v3-preliminary.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 77.1554311660002,
+      "endedAt": "2026-10-13T18:54:58.721943+00:00"
+    },
+    {
+      "name": "green-v3-full",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v3.mjs",
+        "--bead",
+        "hv-umm2.261",
+        "--port",
+        "5174",
+        "--timeout",
+        "180",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "preliminary=false"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 3578,
+      "pgid": 3578,
+      "identity": "3578  3578 Tue Oct 13 11:55:51 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v3.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile --arg preliminary=false",
+      "startedAt": "2026-10-13T18:55:51.566195+00:00",
+      "load": [
+        14.681640625,
+        9.80615234375,
+        7.97998046875
+      ],
+      "stdout": "/tmp/codex-261/green-v3-full.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 67.67027833298198,
+      "endedAt": "2026-10-13T18:56:59.236958+00:00"
+    },
+    {
+      "name": "green-v3-slug-defeat",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v3.mjs",
+        "--bead",
+        "hv-umm2.261",
+        "--port",
+        "5174",
+        "--timeout",
+        "180",
+        "--viewports",
+        "desktop,mobile",
+        "--arg",
+        "preliminary=false",
+        "--arg",
+        "order=slug-first",
+        "--arg",
+        "outcome=defeat"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 59720,
+      "pgid": 59720,
+      "identity": "59720 59720 Tue Oct 13 11:57:15 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v3.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile --arg preliminary=false --arg order=slug-first --arg outcome=defeat",
+      "startedAt": "2026-10-13T18:57:15.399958+00:00",
+      "load": [
+        10.52392578125,
+        9.98388671875,
+        8.24365234375
+      ],
+      "stdout": "/tmp/codex-261/green-v3-slug-defeat.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 40.99355616699904,
+      "endedAt": "2026-10-13T18:57:56.393830+00:00"
+    },
+    {
+      "name": "leaf-tome-standard-v4",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-v1.mjs",
+        "--bead",
+        "hv-umm2.261",
+        "--port",
+        "5174",
+        "--timeout",
+        "180",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 64709,
+      "pgid": 64709,
+      "identity": "64709 64709 Tue Oct 13 11:58:39 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-v1.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile",
+      "startedAt": "2026-10-13T18:58:39.864455+00:00",
+      "load": [
+        7.048828125,
+        9.0830078125,
+        8.068359375
+      ],
+      "stdout": "/tmp/codex-261/leaf-tome-standard-v4.stdout",
+      "state": "terminal",
+      "exitCode": 2,
+      "wallSeconds": 9.706213083001785,
+      "endedAt": "2026-10-13T18:58:49.570820+00:00"
+    },
+    {
+      "name": "leaf-tome-standard-v5",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-v2.mjs",
+        "--bead",
+        "hv-umm2.261",
+        "--port",
+        "5174",
+        "--timeout",
+        "180",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 70257,
+      "pgid": 70257,
+      "identity": "70257 70257 Tue Oct 13 12:00:23 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-v2.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile",
+      "startedAt": "2026-10-13T19:00:23.463464+00:00",
+      "load": [
+        4.16162109375,
+        7.61279296875,
+        7.61474609375
+      ],
+      "stdout": "/tmp/codex-261/leaf-tome-standard-v5.stdout",
+      "state": "terminal",
+      "exitCode": 2,
+      "wallSeconds": 8.363426416006405,
+      "endedAt": "2026-10-13T19:00:31.828227+00:00"
+    },
+    {
+      "name": "green-empty-v5",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-empty-v1.mjs",
+        "--bead",
+        "hv-umm2.261",
+        "--port",
+        "5174",
+        "--timeout",
+        "180",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 72456,
+      "pgid": 72456,
+      "identity": "72456 72456 Tue Oct 13 12:02:13 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-empty-v1.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile",
+      "startedAt": "2026-10-13T19:02:13.975400+00:00",
+      "load": [
+        3.6171875,
+        6.27783203125,
+        7.0810546875
+      ],
+      "stdout": "/tmp/codex-261/green-empty-v5.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 67.65210354200099,
+      "endedAt": "2026-10-13T19:03:21.628316+00:00"
+    },
+    {
+      "name": "dreamsign-sweep-v5",
+      "argv": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.261",
+        "--dreamsigns",
+        "0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19",
+        "--variants",
+        "all",
+        "--as",
+        "both",
+        "--timeout",
+        "60",
+        "--port",
+        "5174",
+        "--capture"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 75679,
+      "pgid": 75679,
+      "identity": "75679 75679 Tue Oct 13 12:04:06 2026     node scripts/qa/card-sweep.mjs --bead hv-umm2.261 --dreamsigns 0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19 --variants all --as both --timeout 60 --port 5174 --capture",
+      "startedAt": "2026-10-13T19:04:06.078939+00:00",
+      "load": [
+        15.30712890625,
+        8.76123046875,
+        7.8974609375
+      ],
+      "stdout": "/tmp/codex-261/dreamsign-sweep-v5.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 68.32473783299793,
+      "endedAt": "2026-10-13T19:05:14.404469+00:00"
+    },
+    {
+      "name": "leaf-upload-standard-v6",
+      "argv": [
+        "node",
+        "/tmp/codex-261/leaf-upload-runner.mjs",
+        "standard"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 39793,
+      "pgid": 39793,
+      "identity": "39793 39793 Tue Oct 13 12:07:30 2026     node /tmp/codex-261/leaf-upload-runner.mjs standard",
+      "startedAt": "2026-10-13T19:07:30.359783+00:00",
+      "load": [
+        7.39892578125,
+        9.33056640625,
+        8.4912109375
+      ],
+      "stdout": "/tmp/codex-261/leaf-upload-standard-v6.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 46.56140541701461,
+      "endedAt": "2026-10-13T19:08:16.922324+00:00"
+    },
+    {
+      "name": "leaf-upload-enhanced-v6",
+      "argv": [
+        "node",
+        "/tmp/codex-261/leaf-upload-runner.mjs",
+        "enhanced"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 43942,
+      "pgid": 43942,
+      "identity": "43942 43942 Tue Oct 13 12:08:59 2026     node /tmp/codex-261/leaf-upload-runner.mjs enhanced",
+      "startedAt": "2026-10-13T19:08:59.363670+00:00",
+      "load": [
+        5.5224609375,
+        8.48486328125,
+        8.26513671875
+      ],
+      "stdout": "/tmp/codex-261/leaf-upload-enhanced-v6.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 51.60300570799154,
+      "endedAt": "2026-10-13T19:09:50.967288+00:00"
+    },
+    {
+      "name": "review-v7",
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 45450,
+      "pgid": 45450,
+      "identity": "45450 45450 Tue Oct 13 12:10:15 2026     node /opt/homebrew/bin/npm run review",
+      "startedAt": "2026-10-13T19:10:15.676337+00:00",
+      "load": [
+        4.4658203125,
+        7.51220703125,
+        7.91259765625
+      ],
+      "stdout": "/tmp/codex-261/review-v7.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 46.580662458000006,
+      "endedAt": "2026-10-13T19:11:02.257564+00:00"
+    },
+    {
+      "name": "knip-v7",
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 46766,
+      "pgid": 46766,
+      "identity": "46766 46766 Tue Oct 13 12:11:29 2026     node /opt/homebrew/bin/npm run knip",
+      "startedAt": "2026-10-13T19:11:29.660642+00:00",
+      "load": [
+        3.50634765625,
+        6.62939453125,
+        7.54833984375
+      ],
+      "stdout": "/tmp/codex-261/knip-v7.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 2.8871310420217924,
+      "endedAt": "2026-10-13T19:11:32.547948+00:00"
+    },
+    {
+      "name": "leaf-upload-standard-v7",
+      "argv": [
+        "node",
+        "/tmp/codex-261/leaf-upload-runner.mjs",
+        "standard"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 73852,
+      "pgid": 73852,
+      "identity": "73852 73852 Tue Oct 13 12:12:25 2026     node /tmp/codex-261/leaf-upload-runner.mjs standard",
+      "startedAt": "2026-10-13T19:12:25.659546+00:00",
+      "load": [
+        4.1748046875,
+        6.3408203125,
+        7.38427734375
+      ],
+      "stdout": "/tmp/codex-261/leaf-upload-standard-v7.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 45.44177766601206,
+      "endedAt": "2026-10-13T19:13:11.101889+00:00"
+    },
+    {
+      "name": "leaf-upload-enhanced-v7",
+      "argv": [
+        "node",
+        "/tmp/codex-261/leaf-upload-runner.mjs",
+        "enhanced"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 77942,
+      "pgid": 77942,
+      "identity": "77942 77942 Tue Oct 13 12:13:34 2026     node /tmp/codex-261/leaf-upload-runner.mjs enhanced",
+      "startedAt": "2026-10-13T19:13:34.592710+00:00",
+      "load": [
+        5.5234375,
+        6.3798828125,
+        7.31982421875
+      ],
+      "stdout": "/tmp/codex-261/leaf-upload-enhanced-v7.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 50.664265416999115,
+      "endedAt": "2026-10-13T19:14:25.257615+00:00"
+    },
+    {
+      "name": "evidence-schema",
+      "argv": [
+        "node",
+        "--input-type=module",
+        "-e",
+        "import { readFrictionRecords } from \"./scripts/friction-triggers.mjs\"; import { readFileSync } from \"node:fs\"; const records = readFrictionRecords(\"docs/plan/evidence\"); const measurement = JSON.parse(readFileSync(\"docs/plan/evidence/measurements/hv-umm2.261.json\", \"utf8\")); const rows = readFileSync(\"docs/plan/evidence/qa-ledger/hv-umm2.261.jsonl\", \"utf8\").trim().split(\"\\n\").map(JSON.parse); if (rows.filter(r => r.mode === \"judged\" && r.verdict === \"pass\").length !== 3) throw new Error(\"Missing judged acceptance\"); console.log(JSON.stringify({ frictionSchema: \"passed\", ledgerRows: rows.length, judged: 3, productGross: measurement.productDiff.grossChangedLines, testAdded: measurement.testModules.addedLines }));"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 82196,
+      "pgid": 82196,
+      "identity": "82196 82196 Tue Oct 13 12:17:40 2026     node --input-type=module -e import { readFrictionRecords } from \"./scripts/friction-triggers.mjs\"; import { readFileSync } from \"node:fs\"; const records = readFrictionRecords(\"docs/plan/evidence\"); const measurement = JSON.parse(readFileSync(\"docs/plan/evidence/measurements/hv-umm2.261.json\", \"utf8\")); const rows = readFileSync(\"docs/plan/evidence/qa-ledger/hv-umm2.261.jsonl\", \"utf8\").trim().split(\"\\n\").map(JSON.parse); if (rows.filter(r => r.mode === \"judged\" && r.verdict === \"pass\").length !== 3) throw new Error(\"Missing judged acceptance\"); console.log(JSON.stringify({ frictionSchema: \"passed\", ledgerRows: rows.length, judged: 3, productGross: measurement.productDiff.grossChangedLines, testAdded: measurement.testModules.addedLines }));",
+      "startedAt": "2026-10-13T19:17:40.313768+00:00",
+      "load": [
+        3.6396484375,
+        4.8740234375,
+        6.421875
+      ],
+      "stdout": "/tmp/codex-261/evidence-schema.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 0.11396395799238235,
+      "endedAt": "2026-10-13T19:17:40.428014+00:00"
+    }
+  ],
+  "negativeControlReceipts": [
+    {
+      "name": "event-filter",
+      "path": "src/rules/journey/journey-transfiguration.ts",
+      "pattern": "copies the exact",
+      "startedAt": "2026-10-13T18:15:51.032559+00:00",
+      "endedAt": "2026-10-13T18:15:53.576217+00:00",
+      "wallSeconds": 2.5435567919921596,
+      "pid": 48741,
+      "pgid": 48741,
+      "identity": "48741 48741 Tue Oct 13 11:15:51 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t copies the exact",
+      "exitCode": 1,
+      "semanticAssertionFailure": true,
+      "restoredSHA256": "7b036cad0a372231e61ec02e50a2d752b9544a1047cac0b199fcc5b33f3ac6ae",
+      "stdout": "/tmp/codex-261/helper/controls/event-filter.stdout"
+    },
+    {
+      "name": "copy-form",
+      "path": "src/rules/journey/journey-transfiguration.ts",
+      "pattern": "copies the exact",
+      "startedAt": "2026-10-13T18:15:53.576467+00:00",
+      "endedAt": "2026-10-13T18:15:55.735603+00:00",
+      "wallSeconds": 2.1591345419874415,
+      "pid": 48815,
+      "pgid": 48815,
+      "identity": "48815 48815 Tue Oct 13 11:15:53 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t copies the exact",
+      "exitCode": 1,
+      "semanticAssertionFailure": true,
+      "restoredSHA256": "7b036cad0a372231e61ec02e50a2d752b9544a1047cac0b199fcc5b33f3ac6ae",
+      "stdout": "/tmp/codex-261/helper/controls/copy-form.stdout"
+    },
+    {
+      "name": "copy-modifiers",
+      "path": "src/rules/journey/journey-transfiguration.ts",
+      "pattern": "copies the exact",
+      "startedAt": "2026-10-13T18:15:55.735814+00:00",
+      "endedAt": "2026-10-13T18:15:57.853889+00:00",
+      "wallSeconds": 2.118070833996171,
+      "pid": 48863,
+      "pgid": 48863,
+      "identity": "48863 48863 Tue Oct 13 11:15:55 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t copies the exact",
+      "exitCode": 1,
+      "semanticAssertionFailure": true,
+      "restoredSHA256": "7b036cad0a372231e61ec02e50a2d752b9544a1047cac0b199fcc5b33f3ac6ae",
+      "stdout": "/tmp/codex-261/helper/controls/copy-modifiers.stdout"
+    },
+    {
+      "name": "original-occurrences",
+      "path": "src/rules/journey/journey-transfiguration.ts",
+      "pattern": "copies the exact",
+      "startedAt": "2026-10-13T18:15:57.854091+00:00",
+      "endedAt": "2026-10-13T18:15:59.982420+00:00",
+      "wallSeconds": 2.1283263329823967,
+      "pid": 48903,
+      "pgid": 48903,
+      "identity": "48903 48903 Tue Oct 13 11:15:57 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t copies the exact",
+      "exitCode": 1,
+      "semanticAssertionFailure": true,
+      "restoredSHA256": "7b036cad0a372231e61ec02e50a2d752b9544a1047cac0b199fcc5b33f3ac6ae",
+      "stdout": "/tmp/codex-261/helper/controls/original-occurrences.stdout"
+    },
+    {
+      "name": "leaf-first-completes",
+      "path": "src/rules/journey/sites.ts",
+      "pattern": "retains the same prepared",
+      "startedAt": "2026-10-13T18:15:59.982650+00:00",
+      "endedAt": "2026-10-13T18:16:02.200754+00:00",
+      "wallSeconds": 2.2180984999868087,
+      "pid": 48964,
+      "pgid": 48964,
+      "identity": "48964 48964 Tue Oct 13 11:15:59 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t retains the same prepared",
+      "exitCode": 1,
+      "semanticAssertionFailure": true,
+      "restoredSHA256": "888af4d3eb5aae1bb4fe69d136dbbd0cce6f21ff0d5fc7b1f52d5dc397698633",
+      "stdout": "/tmp/codex-261/helper/controls/leaf-first-completes.stdout"
+    },
+    {
+      "name": "leaf-live-source",
+      "path": "src/rules/journey/sites.ts",
+      "pattern": "keeps the prepared replacement",
+      "startedAt": "2026-10-13T18:16:02.200982+00:00",
+      "endedAt": "2026-10-13T18:16:04.326477+00:00",
+      "wallSeconds": 2.125492082996061,
+      "pid": 49097,
+      "pgid": 49097,
+      "identity": "49097 49097 Tue Oct 13 11:16:02 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t keeps the prepared replacement",
+      "exitCode": 1,
+      "semanticAssertionFailure": true,
+      "restoredSHA256": "888af4d3eb5aae1bb4fe69d136dbbd0cce6f21ff0d5fc7b1f52d5dc397698633",
+      "stdout": "/tmp/codex-261/helper/controls/leaf-live-source.stdout"
+    },
+    {
+      "name": "mixed-drop",
+      "path": "src/rules/journey/journey-after-battle.ts",
+      "pattern": "preserves every earned source",
+      "startedAt": "2026-10-13T18:16:04.326745+00:00",
+      "endedAt": "2026-10-13T18:16:06.550858+00:00",
+      "wallSeconds": 2.2241091659816448,
+      "pid": 49137,
+      "pgid": 49137,
+      "identity": "49137 49137 Tue Oct 13 11:16:04 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t preserves every earned source",
+      "exitCode": 1,
+      "semanticAssertionFailure": true,
+      "restoredSHA256": "602b8f87e43fa55f89b984cc23948a77009bba4e0f8756df04cb0bb53697a348",
+      "stdout": "/tmp/codex-261/helper/controls/mixed-drop.stdout"
+    },
+    {
+      "name": "failure-summary",
+      "path": "src/rules/journey/journey-after-battle.ts",
+      "pattern": "preserves every earned source",
+      "startedAt": "2026-10-13T18:16:06.551078+00:00",
+      "endedAt": "2026-10-13T18:16:08.742930+00:00",
+      "wallSeconds": 2.191845833003754,
+      "pid": 49213,
+      "pgid": 49213,
+      "identity": "49213 49213 Tue Oct 13 11:16:06 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t preserves every earned source",
+      "exitCode": 1,
+      "semanticAssertionFailure": false,
+      "restoredSHA256": "602b8f87e43fa55f89b984cc23948a77009bba4e0f8756df04cb0bb53697a348",
+      "stdout": "/tmp/codex-261/helper/controls/failure-summary.stdout"
+    },
+    {
+      "name": "over-limit",
+      "path": "src/rules/journey/journey-transfiguration.ts",
+      "pattern": "rejects stale/duplicate/excess",
+      "startedAt": "2026-10-13T18:20:19.289339+00:00",
+      "endedAt": "2026-10-13T18:20:21.428585+00:00",
+      "wallSeconds": 2.1391546670056414,
+      "pid": 53973,
+      "pgid": 53973,
+      "identity": "53973 53973 Tue Oct 13 11:20:19 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t rejects stale/duplicate/excess",
+      "exitCode": 1,
+      "semanticAssertionFailure": true,
+      "restoredSHA256": "7b036cad0a372231e61ec02e50a2d752b9544a1047cac0b199fcc5b33f3ac6ae",
+      "stdout": "/tmp/codex-261/helper/controls-v2/over-limit.stdout"
+    },
+    {
+      "name": "wrong-source",
+      "path": "src/rules/journey/journey-transfiguration.ts",
+      "pattern": "rejects stale/duplicate/excess",
+      "startedAt": "2026-10-13T18:20:21.428829+00:00",
+      "endedAt": "2026-10-13T18:20:23.594385+00:00",
+      "wallSeconds": 2.1655543340020813,
+      "pid": 54009,
+      "pgid": 54009,
+      "identity": "54009 54009 Tue Oct 13 11:20:21 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t rejects stale/duplicate/excess",
+      "exitCode": 1,
+      "semanticAssertionFailure": true,
+      "restoredSHA256": "7b036cad0a372231e61ec02e50a2d752b9544a1047cac0b199fcc5b33f3ac6ae",
+      "stdout": "/tmp/codex-261/helper/controls-v2/wrong-source.stdout"
+    },
+    {
+      "name": "only-first-card",
+      "path": "src/rules/journey/journey-transfiguration.ts",
+      "pattern": "transfigures all",
+      "startedAt": "2026-10-13T18:20:23.594598+00:00",
+      "endedAt": "2026-10-13T18:20:25.736064+00:00",
+      "wallSeconds": 2.141463500011014,
+      "pid": 54054,
+      "pgid": 54054,
+      "identity": "54054 54054 Tue Oct 13 11:20:23 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t transfigures all",
+      "exitCode": 1,
+      "semanticAssertionFailure": true,
+      "restoredSHA256": "7b036cad0a372231e61ec02e50a2d752b9544a1047cac0b199fcc5b33f3ac6ae",
+      "stdout": "/tmp/codex-261/helper/controls-v2/only-first-card.stdout"
+    },
+    {
+      "name": "zero-random",
+      "path": "src/rules/journey/journey-transfiguration.ts",
+      "pattern": "declines with zero",
+      "startedAt": "2026-10-13T18:20:25.736254+00:00",
+      "endedAt": "2026-10-13T18:20:27.849836+00:00",
+      "wallSeconds": 2.113578916003462,
+      "pid": 54094,
+      "pgid": 54094,
+      "identity": "54094 54094 Tue Oct 13 11:20:25 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t declines with zero",
+      "exitCode": 1,
+      "semanticAssertionFailure": true,
+      "restoredSHA256": "7b036cad0a372231e61ec02e50a2d752b9544a1047cac0b199fcc5b33f3ac6ae",
+      "stdout": "/tmp/codex-261/helper/controls-v2/zero-random.stdout"
+    }
+  ],
+  "finalFreeze": {
+    "at": "2026-10-13T19:12:25.551781+00:00",
+    "version": "v7",
+    "base": "04620bd69e8ecec9f80d7a3059add40dab0d63bf",
+    "sourceHashes": {
+      "scripts/content-inventory.ts": "6d6eaea95a9c074ee10df7aa4d0c0031eb4578a812c821056bb1c32b70799e6d",
+      "src/content/define.ts": "419ebf3a6fb46be044e074e1cc689b0bf680246651c1575ed17be861f7ada63f",
+      "src/content/dreamsigns/green-slime-452b7cd6.ts": "6a882727f322e9352463dbee7fc166ec7cc19e1911ce74f176bceefc3e3134cd",
+      "src/content/dreamsigns/leaf-ledger-d9f0f7ff.ts": "b2fe9e4481f4881738be7f482420a8672d713c1e7c1d3df37e273eb7c0507c63",
+      "src/content/dreamsigns/spell-tome-0c52e8c3.ts": "3b5a0409d186d82ad6a2dda52efb2ac1e3d95a380a4250aa422390521bee7472",
+      "src/rules/events.ts": "8522f00c10eea1e59443170db2edc9fec8c10380ce550e24c3b9f61c510b1368",
+      "src/rules/invariants.ts": "586587ab17577295d33c2cd6e59c9b3b76bd81ac6b63efbeeff024449f07a9e0",
+      "src/rules/journey/journey-purge.ts": "11503c5ecd9a57abc121d2a030040678b65bcd017c833a4248975b40a004a151",
+      "src/rules/journey/journey-sites.ts": "72f3d4356b4118e3e7b0b84e091b60d956d3ed6217f8aeeee38bc49ae74782df",
+      "src/rules/journey/lifecycle.ts": "90541b9dd9dca8c98243e558dd78ae88dc42ae5ba6f11029adc27cfc4dfb1387",
+      "src/rules/journey/modifier-registry.ts": "0b0f7a961df7119061578bace4bab90d0ed38f1529733d8af9115a81898dd8cf",
+      "src/rules/journey/sites.ts": "888af4d3eb5aae1bb4fe69d136dbbd0cce6f21ff0d5fc7b1f52d5dc397698633",
+      "src/rules/reducer.ts": "d42306176b1e6029907fee0f17c679d818cd4364b4c3b7d33a90f8515d6abf13",
+      "src/runtime/journey-site-messages.ts": "6bf2142de9b9e1ad4c327f80533099ca164141eeb3f6463c2c813d8fa8c12335",
+      "src/runtime/screen-url.ts": "0833843891e40569622a6d680cfb44453015cbf7ecfaa1955eb8469acf57cb7a",
+      "src/screens/cumulus_adapters/TransfigurationSiteScreenAdapter.tsx": "b79cbb0ca7a0e26d53a6a09bf32a97709d9932a070270b6e1035e2e7f4d938f6",
+      "src/screens/cumulus_adapters/registry.test.tsx": "77c26aa9392d5c5da24148a64b5cee888d1ccac1ab2166d26bf6882299ecceec",
+      "src/screens/cumulus_adapters/registry.tsx": "0858b7aee2d34d22fb5d2c6d7ffd1f4d172c5ef5162375c6b0b027de130c016a",
+      "src/screens/cumulus_adapters/transfiguration-view-model.ts": "2f60faf7ea447a6a139f16a44e02149cb171ca86d9b129b9c6a0df750e9a8f2c",
+      "src/session/actions.test.ts": "d311e1fcf98657c712464f4ec258412a7b6d23ff08da09b2026fe9b6365025ae",
+      "src/session/actions.ts": "7e7ff154872b064f8fc61eff2c8df4ed5ab9279f1bd8cd7ef49306752aecb6ea",
+      "src/session/providers/register-game-providers.ts": "d6f0b0efee52dddc8cee86c870256f416eb8b3b4f968a312103ed877f5ebfe23",
+      "src/state/game-journey-context.tsx": "00237195cba111758dc2c24fb2653f8cd854b8cd0c1e0be7e4b65aa1ce402a51",
+      "src/state/journey-context.tsx": "63bedefac84798691a7dcc7d6bc725e3e5ce282a02f68b0ac35759e6ca40ae7c",
+      "src/state/journey-save-files.ts": "43197659523dcf4e1bfb47b287b242b37117d446fcaed57860d23c874585e8e6",
+      "src/state/transfiguration-site-actions.ts": "29b889b89d702085e24f08f8501692d8b53454b546a82e3b29bd6b0deab09027",
+      "src/types/journey.ts": "7dae2cd4ccdfdd14bab5280dd3a31998cfca88ede9c31b5b4728e11e12087bb8",
+      "src/cumulus/screens/JourneyTransfigurationScreen.test.tsx": "6251c50353069beee4086af27f2c2c96c71eadc902be079bd8635828cf78179a",
+      "src/cumulus/screens/JourneyTransfigurationScreen.tsx": "b27c472f7e27c4b62fe3f8e52457b1b3737a00afb17e50b3225d584287ed4b4b",
+      "src/rules/journey/journey-after-battle.test.ts": "d808c20b403715d4114bfcbabb42baf9dd7e48b1c2ea4815af9eab3fe97337d0",
+      "src/rules/journey/journey-after-battle.ts": "602b8f87e43fa55f89b984cc23948a77009bba4e0f8756df04cb0bb53697a348",
+      "src/rules/journey/journey-transfiguration.test.ts": "c78856d75ed1b0b73852c28bfc4fa18141addfb05031448245bedecc2a9b9b69",
+      "src/rules/journey/journey-transfiguration.ts": "7b036cad0a372231e61ec02e50a2d752b9544a1047cac0b199fcc5b33f3ac6ae",
+      "src/rules/journey/transfiguration-fixtures.ts": "05e908f5287dd985e5db9a82a926bad931541e033b21058671473d2e08da7ab0",
+      "src/screens/cumulus_adapters/JourneyTransfigurationScreenAdapter.tsx": "8b33f7afa07c0beacddbd769ba58d97d16141640389a57e8d7b26142cedc8152",
+      "src/screens/cumulus_adapters/journey-transfiguration-view-model.test.ts": "aef031d5123ae6505ade86c49a4e4325bdcb2c5e43fb3fb373ff76f66de36908",
+      "src/screens/cumulus_adapters/journey-transfiguration-view-model.ts": "c00f5f44eb3ef19d843bff0a217ca17ea36f9158a165cbf212cd24b378ec8279",
+      "src/session/providers/journey-transfiguration-provider.ts": "63124a96eb49ded18cf58d2182feb87ff7a7c586ac43eefb5847f2f3d566e359"
+    },
+    "support": {
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v3.mjs": "f4238ec348fa22c614016c4d3b929df881ed8db14a202ab78cf8dc3f59c4901c",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-v1.mjs": "841dcdcc488c2a78430e82704ca3e8eb484af201fd59a2342b22b1812ef92e31",
+      "/tmp/codex-261/helper/qa-observer.py": "bf2d207837b40e2458005c179d214c0f817d071d50c8b40f32dee670f5d2a7bb",
+      "/tmp/codex-261/run.py": "ab9fa79b0713d067e821dbc6a575b0e076284f322cb03e688ad74329120800c1",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-empty-v1.mjs": "00a727bfdbf6beac063d6c2ab9578fbc3989f06e9b8769d8e25a894f3c42510a",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-v2.mjs": "b94d2264ee96b3703b600249302b2c364e6b799130f4015deab91454e2eb4174",
+      "/tmp/codex-261/managed-upload-session.mjs": "666e8bb4d72ff23719a620c11765da19e5c8ca182c9f0af61c265a42f6f7cbb2",
+      "/tmp/codex-261/leaf-upload-runner.mjs": "62bafaf994a651e6d56266264ce24229820318e111148de0fee31b8ad9104356",
+      "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-split-v3.mjs": "a388f005998d6bfd79b696c41ff6b5a64647c757fc2f4216775e5a371ee4c36f",
+      "/tmp/codex-261/helper/qa-observer-v7.py": "4d24375593e6e6182cbe2fa4bc46b140c571ff9ef4652e6672290c4dfcc396d6"
+    },
+    "nativeSweepInputs": {
+      "scripts/qa/browser-lease-fixture.mjs": "24382df2df6524aa1577ce6bde6e785115a7e150eaa7a1d8a9cb3842f8d38988",
+      "scripts/qa/browser-lease-order.test.mjs": "0bc440e1f930f45c64a222d414f794ee786c84e116e43644234af6969581c262",
+      "scripts/qa/browser-lease-slots.test.mjs": "7f8ae66fbb0f51729d1e5f9ede1fc21273960651848d4095e2e78c29e4a8a0fd",
+      "scripts/qa/browser-lease.mjs": "42053560896a6f3a614a9c9a9d019293b5b83f1de2650083d88c9f497a7cbf03",
+      "scripts/qa/browser-lease.test.mjs": "cb8334218c73b5929a2bc8c115baf00c2d92f8fcdd2b2c1c15b1cd18bfce1bcb",
+      "scripts/qa/browser-owner-record.mjs": "9261762e7b28204630cd9fdf004b557df3b9a992b51260d54de1341133cfcede",
+      "scripts/qa/browser-owner-record.test.mjs": "16f5dae16dc2817ee66e831543a3f21a10b719c14e13482273a569de12fa29f7",
+      "scripts/qa/browser-qa-capacity.mjs": "03bd65b8bd55266a4b3737acc60b0a8a667210a488800b80b1a6c17ece4e8e58",
+      "scripts/qa/card-sweep.mjs": "83f2d5e65a8e45dcbae1016531fc4e048d93c2749459410f710b13213b904e00",
+      "scripts/qa/card-sweep.test.mjs": "38f95d13be1b9d37162df25f9e384d933940b5aea93e17c5481fa9a8027e8ace",
+      "scripts/qa/check-production-bundle.mjs": "0d70db05da0ed03a6a5fad5217ca72e7ce540b6dc6eedfa1d2aa5f8b15a8de63",
+      "scripts/qa/prelude-auto-answer.test.mjs": "b44cbd0bff4f324609db8775357d387f3d098005a5f28ce2710449e5e3d85cdf",
+      "scripts/qa/prelude-game-log.test.mjs": "f0f938cb9db3e0b7a570ccdfddd36828726ae69296163b3c7053f0dc58965e3b",
+      "scripts/qa/prelude-inline-targets.test.mjs": "921b931622b66a6816015d874a54e20674cb36e51d7d6df3599b1ab9022f65a9",
+      "scripts/qa/prelude-lab-stage.test.mjs": "58e544946e9e6cc05d6c47947f7c2294f8a51f52f04e5e74f2d1044d8b7a5076",
+      "scripts/qa/prelude-navigation.test.mjs": "6f66389ce80304d6b01360c1a31f4a45ce744878a6ecaf9405a0a03c39e1015e",
+      "scripts/qa/prelude.mjs": "ae3db578ffd776906f63f9409a951a40633f80f2918e08fa7178af0d8222ba31",
+      "scripts/qa/prelude.test.mjs": "45032f475503f04d5c81767082a78925ce0009fdd8600abf5c313af2b08a3836",
+      "scripts/qa/provider-identity.mjs": "e93e7b1608af202363a7c4deaa6eab173ced4a0abf9da7a4484ce5903c65d52e",
+      "scripts/qa/provider-ownership.mjs": "d25d666043d8797814bd5f66333934065188f27a8ab774e3e49b82597c5b7d33",
+      "scripts/qa/provider-ownership.test.mjs": "0912c158795f8690c3877ff76c35b45a3308e39a4606e527205df71d7fababa0",
+      "scripts/qa/qa-session-fixture.mjs": "45f0b5a5e24e210caf6ba6c330fcce051f0e5ff682e55450b7969830f037bb39",
+      "scripts/qa/qa-session-mocks.mjs": "4e9faba35e02d401acff2bcc57b4a82c5fa8574caf9097cca631588d2319b66d",
+      "scripts/qa/qa-signal-fixture.mjs": "d9457714d7847ce7032e7c694a965c5a5d9290e1aeee596b238266c3d700c1ad",
+      "scripts/qa/run-scenario-boundaries.test.mjs": "231198f3f325aa8a11647b8f7522e835a83d56dd4398a26d9e086b0dc46c5947",
+      "scripts/qa/run-scenario-ownership.test.mjs": "3c17966e59b26b3ab8d4c728c08315a661f4a98b82cc2930d3f2ab73c9a722d2",
+      "scripts/qa/run-scenario-slots.test.mjs": "797dc838d1a1e717afceaf92dca804edceebb16ae773e0324e71c7565a4c2720",
+      "scripts/qa/run-scenario.mjs": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+      "scripts/qa/server-launcher.mjs": "aa4e713abc8882fc69d3138f09cbf621cd83ffb55aa76f1e0fdf31a929f354d8",
+      "scripts/qa/server-ownership.mjs": "bd7fd841f0563484bbfec03d37b256412bb766d2f60c74eb86a11f6d8c53c703",
+      "scripts/qa/server-ownership.test.mjs": "1c8b13442504973fb40ed9d7b03fa1bb14cb9adbc25619f2b00092754411ff74",
+      "scripts/screenshot-runtime.mjs": "470c3523fc75961e345acc9de38ad9143bee55d8055b154a533bd66672769df8"
+    },
+    "scope": "all three UUIDs / all variants / both actors / exact Dreamsign domain; inert battle-emblem presence qualification",
+    "parentDirectUploadAdapterProvenance": "justiciar-upload-derivation.json",
+    "allConsumersTerminal": true,
+    "consumerBarrier": "review-v7 and knip-v7 terminal; every browser/provider owner from v6 terminal"
+  },
+  "retainedVisualFindings": [
+    {
+      "finding": "new random picker clipped speaking dialogue",
+      "before": "run-AuJmIS",
+      "repair": "SiteLayout portrait-only presence",
+      "after": "run-JMY24Z",
+      "parentEarlyVisualDisposition": "confirmed resolved"
+    },
+    {
+      "finding": "count-one remaining-card copy used plural",
+      "before": [
+        "run-fepO3f",
+        "run-XYpgm9"
+      ],
+      "repair": "singular card for count 1 in UI copy only",
+      "after": [
+        "run-2MIIbW",
+        "run-6xzfZb"
+      ],
+      "parentEarlyVisualDisposition": "confirmed resolved"
+    }
+  ],
+  "publicUploadRecovery": {
+    "directWriter": "parent same-task justiciar",
+    "derivation": {
+      "at": "2026-10-13T19:06:05.978684+00:00",
+      "source": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration/scripts/qa/run-scenario.mjs",
+      "sourceSHA256": "2b55c69aaa260c823cd577dd982c1ec5b415f8a7ec8e83f39d13909a1b2c68e9",
+      "derivedManagedModule": "/tmp/codex-261/managed-upload-session.mjs",
+      "derivation": "Absolute imports and repoRoot retain own checkout. Adds only bead-local uploadTool sharing managed activeCalls and uncertainCall completion guards, restricted to unsafe public UI click and supported upload. Actual SDK close callback receipt retained. Shared tracked module unchanged.",
+      "splitScenario": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-split-v3.mjs",
+      "splitFrom": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-v1.mjs",
+      "consumerBarrier": "Empty and sweep settled, helper has acknowledged all consumers held, source unchanged.",
+      "supportHashes": {
+        "/tmp/codex-261/managed-upload-session.mjs": "666e8bb4d72ff23719a620c11765da19e5c8ca182c9f0af61c265a42f6f7cbb2",
+        "/tmp/codex-261/leaf-upload-runner.mjs": "62bafaf994a651e6d56266264ce24229820318e111148de0fee31b8ad9104356",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-split-v3.mjs": "a388f005998d6bfd79b696c41ff6b5a64647c757fc2f4216775e5a371ee4c36f"
+      },
+      "validation": "All three node syntax checks exit0; managed module import and exact two self-contained public scenario steps verified exit0. All product38 and shared run-scenario source remain unchanged; runtime acceptance remains owed."
+    },
+    "qualification": "exact owned isolated SDK client, supported browser_file_upload between managed public scenario calls; no private state writes or shared/production changes"
+  },
+  "runtimeSettlement": [
+    {
+      "proof": "dreamsign-sweep-v5-settled.json",
+      "value": {
+        "at": "2026-10-13T19:05:30.187837+00:00",
+        "sourceMismatches": [],
+        "sweepInputMismatches": [],
+        "pids": {
+          "75679": "absent",
+          "75716": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "closureQualification": "normal managed guards, RPC returned and port-free receipt; direct browser_close ACK not separately captured"
+      }
+    },
+    {
+      "proof": "green-empty-v5-settled.json",
+      "value": {
+        "at": "2026-10-13T19:04:05.959710+00:00",
+        "sourceMismatches": [],
+        "pids": {
+          "72456": "absent",
+          "72487": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "closureQualification": "normal managed guards, returned RPC and port free; direct browser_close ACK not separately captured"
+      }
+    },
+    {
+      "proof": "green-preliminary-v2-settled.json",
+      "value": {
+        "at": "2026-10-13T18:38:18.478747+00:00",
+        "version": "v2",
+        "sourcesUnchanged": true,
+        "processes": {
+          "1583": "absent",
+          "1616": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "capturedIdentity": {
+          "token": "d6cd56ec-0d02-4081-9129-3642d8d5c932",
+          "pid": 1583,
+          "bead": "hv-umm2.261",
+          "label": "green-window-v2",
+          "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+          "slot": 1,
+          "port": 5274,
+          "startedAt": "2026-10-13T18:35:36.732Z",
+          "providerState": "active",
+          "mcpSessionId": "a2147c66-6b7c-4dda-90b4-06052accfda7",
+          "mcpUrl": "http://localhost:8931/mcp",
+          "mcpProtocolVersion": "2025-11-25"
+        },
+        "rpcResult": "actual scenario returned PASS",
+        "closureQualification": "normal managed-runner closure guards observed; browser_close direct ACK not separately captured"
+      }
+    },
+    {
+      "proof": "green-v3-full-settled.json",
+      "value": {
+        "at": "2026-10-13T18:57:15.281915+00:00",
+        "sourceMismatches": [],
+        "pids": {
+          "3578": "absent",
+          "3617": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "closureQualification": "normal managed guards, RPC returned and port free; direct browser_close ACK not separately captured"
+      }
+    },
+    {
+      "proof": "green-v3-preliminary-settled.json",
+      "value": {
+        "at": "2026-10-13T18:55:37.807133+00:00",
+        "sourceMismatches": [],
+        "pids": {
+          "43576": "absent",
+          "43605": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "closureQualification": "returned managed scenario result, normal closure guards and port-free receipt; direct browser_close ACK not separately captured"
+      }
+    },
+    {
+      "proof": "green-v3-slug-defeat-settled.json",
+      "value": {
+        "at": "2026-10-13T18:58:39.760995+00:00",
+        "sourceMismatches": [],
+        "pids": {
+          "59720": "absent",
+          "59761": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "closureQualification": "normal managed guards, RPC returned and port free; direct browser_close ACK not separately captured"
+      }
+    },
+    {
+      "proof": "leaf-tome-standard-v4-settled.json",
+      "value": {
+        "at": "2026-10-13T19:00:23.368658+00:00",
+        "sourceMismatches": [],
+        "pids": {
+          "64709": "absent",
+          "64748": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "providerResult": "MCP response lacks result block; later game-log read rejected for open file chooser. No acceptance outcome or game log claimed. Normal managed close/owner-clear guards settled, direct ACK not separately captured."
+      }
+    },
+    {
+      "proof": "leaf-tome-standard-v5-settled.json",
+      "value": {
+        "at": "2026-10-13T19:02:13.866201+00:00",
+        "sourceMismatches": [],
+        "pids": {
+          "70257": "absent",
+          "70292": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "providerResult": "MCP result missing at public file chooser; separate log export rejected by modal. No acceptance outcome claimed. Normal closure guards settled; direct close ACK not separately captured"
+      }
+    },
+    {
+      "proof": "leaf-upload-enhanced-v6-settled.json",
+      "value": {
+        "at": "2026-10-13T19:10:15.598715+00:00",
+        "sourceMismatches": [],
+        "supportMismatches": [],
+        "pids": {
+          "43942": "absent",
+          "43976": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "closeReceipt": {
+          "at": "2026-10-13T19:09:50.478Z",
+          "browserCloseConfirmed": true,
+          "owner": {
+            "token": "16831633-300d-4f44-9031-02e18c5ddb11",
+            "pid": 43942,
+            "bead": "hv-umm2.261",
+            "label": "leaf-tome-upload-enhanced",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-13T19:09:01.195Z",
+            "providerState": "active",
+            "mcpSessionId": "8654e3e3-033b-42de-abde-7627130d04f3",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "uncertainCall": false
+        }
+      }
+    },
+    {
+      "proof": "leaf-upload-enhanced-v7-settled.json",
+      "value": {
+        "at": "2026-10-13T19:14:47.601387+00:00",
+        "sourceMismatches": [],
+        "supportMismatches": [],
+        "pids": {
+          "77942": "absent",
+          "77971": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "closeReceipt": {
+          "at": "2026-10-13T19:14:24.797Z",
+          "browserCloseConfirmed": true,
+          "owner": {
+            "token": "891b340e-219d-4330-b8fa-2705694923d5",
+            "pid": 77942,
+            "bead": "hv-umm2.261",
+            "label": "leaf-tome-upload-enhanced",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-13T19:13:36.766Z",
+            "providerState": "active",
+            "mcpSessionId": "c10facac-2c7e-4825-a479-b158d58eb706",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "uncertainCall": false
+        },
+        "actualServerOSIdentity": {
+          "77971": {
+            "observedAt": "2026-10-13T19:13:36.835425+00:00",
+            "osIdentity": "77971 77971 Tue Oct 13 12:13:34 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 2708534d-85bb-4b42-b428-9031156d74ae /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "timezone": "America/Los_Angeles",
+            "source": "exact server PID in this owned run stdout"
+          }
+        }
+      }
+    },
+    {
+      "proof": "leaf-upload-standard-v6-settled.json",
+      "value": {
+        "at": "2026-10-13T19:08:59.260177+00:00",
+        "sourceMismatches": [],
+        "supportMismatches": [],
+        "pids": {
+          "39793": "absent",
+          "39829": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "closeReceipts": {
+          "upload-close-response.json": {
+            "at": "2026-10-13T19:08:16.426Z",
+            "browserCloseConfirmed": true,
+            "owner": {
+              "token": "c65e513f-31d5-46d1-8c72-0a2e0064ec3a",
+              "pid": 39793,
+              "bead": "hv-umm2.261",
+              "label": "leaf-tome-upload-standard",
+              "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+              "slot": 1,
+              "port": 5274,
+              "startedAt": "2026-10-13T19:07:33.204Z",
+              "providerState": "active",
+              "mcpSessionId": "0a119c88-7279-4493-8b11-f3e624fb5fcf",
+              "mcpUrl": "http://localhost:8931/mcp",
+              "mcpProtocolVersion": "2025-11-25"
+            },
+            "uncertainCall": false
+          }
+        }
+      }
+    },
+    {
+      "proof": "leaf-upload-standard-v7-settled.json",
+      "value": {
+        "at": "2026-10-13T19:13:34.481284+00:00",
+        "sourceMismatches": [],
+        "supportMismatches": [],
+        "pids": {
+          "73852": "absent",
+          "74304": "absent"
+        },
+        "ownerRecords": {
+          "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json": "absent",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": "absent"
+        },
+        "closeReceipt": {
+          "at": "2026-10-13T19:13:10.637Z",
+          "browserCloseConfirmed": true,
+          "owner": {
+            "token": "cfa00447-53fd-46a6-a807-094d22a8c12d",
+            "pid": 73852,
+            "bead": "hv-umm2.261",
+            "label": "leaf-tome-upload-standard",
+            "checkout": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+            "slot": 1,
+            "port": 5274,
+            "startedAt": "2026-10-13T19:12:28.727Z",
+            "providerState": "active",
+            "mcpSessionId": "d567cc22-19e8-4318-bbbb-291e2b4beefa",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          },
+          "uncertainCall": false
+        },
+        "actualServerOSIdentity": {
+          "74304": {
+            "observedAt": "2026-10-13T19:12:28.759004+00:00",
+            "osIdentity": "74304 74304 Tue Oct 13 12:12:25 2026     /opt/homebrew/Cellar/node@24/24.16.0/bin/node /Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration/scripts/qa/server-launcher.mjs /Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json 1609a2d3-917a-4bbc-8625-e4303203bd90 /opt/homebrew/Cellar/node@24/24.16.0/bin/node scripts/dev.mjs --port 5274 --strictPort",
+            "timezone": "America/Los_Angeles",
+            "source": "exact server PID in this owned run stdout"
+          }
+        }
+      }
+    }
+  ],
+  "ownedCheckGroups": [
+    {
+      "name": "install",
+      "pid": 77382,
+      "pgid": 77382,
+      "launchIdentity": "77382 77382 Tue Oct 13 10:44:12 2026     node /opt/homebrew/bin/npm install",
+      "endedAt": "2026-10-13T17:44:15.625013+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "initial-typecheck",
+      "pid": 56681,
+      "pgid": 56681,
+      "launchIdentity": "56681 56681 Tue Oct 13 11:01:52 2026     /usr/bin/env node /opt/homebrew/bin/npm run typecheck",
+      "endedAt": "2026-10-13T18:02:04.220886+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "first-focused",
+      "pid": 19420,
+      "pgid": 19420,
+      "launchIdentity": "19420 19420 Tue Oct 13 11:06:04 2026     node /opt/homebrew/bin/npm test -- src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts src/rules/journey/journey-purge.test.ts",
+      "endedAt": "2026-10-13T18:06:09.674713+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "focused-v2",
+      "pid": 22138,
+      "pgid": 22138,
+      "launchIdentity": "22138 22138 Tue Oct 13 11:06:59 2026     node /opt/homebrew/bin/npm test -- src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts src/rules/journey/journey-purge.test.ts",
+      "endedAt": "2026-10-13T18:07:03.814866+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "type-and-focused",
+      "pid": 24494,
+      "pgid": 24494,
+      "launchIdentity": "24494 24494 Tue Oct 13 11:07:54 2026     /usr/bin/env node /opt/homebrew/bin/npm run typecheck",
+      "endedAt": "2026-10-13T18:08:08.198926+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "focused-v3",
+      "pid": 26491,
+      "pgid": 26491,
+      "launchIdentity": "26491 26491 Tue Oct 13 11:08:43 2026     node /opt/homebrew/bin/npm test -- src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts src/rules/journey/journey-purge.test.ts src/cumulus/screens/JourneyTransfigurationScreen.test.tsx src/screens/cumulus_adapters/transfiguration-view-model.test.ts src/session/actions.test.ts",
+      "endedAt": "2026-10-13T18:08:49.745898+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "own-related-v4",
+      "pid": 33635,
+      "pgid": 33635,
+      "launchIdentity": "33635 33635 Tue Oct 13 11:09:38 2026     node /opt/homebrew/bin/npm test -- src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts src/rules/journey/journey-purge.test.ts src/cumulus/screens/JourneyTransfigurationScreen.test.tsx src/screens/cumulus_adapters/journey-transfiguration-view-model.test.ts src/screens/cumulus_adapters/transfiguration-view-model.test.ts src/session/actions.test.ts",
+      "endedAt": "2026-10-13T18:09:46.219787+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "initial-review",
+      "pid": 44796,
+      "pgid": 44796,
+      "launchIdentity": "44796 44796 Tue Oct 13 11:12:07 2026     /usr/bin/env node /opt/homebrew/bin/npm run review",
+      "endedAt": "2026-10-13T18:12:59.674704+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "inventory",
+      "pid": 46799,
+      "pgid": 46799,
+      "launchIdentity": "46799 46799 Tue Oct 13 11:13:59 2026     /usr/bin/env node /opt/homebrew/bin/npx tsx scripts/content-inventory.ts",
+      "endedAt": "2026-10-13T18:14:03.036332+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "weighted-fuzz-applicability",
+      "pid": 47832,
+      "pgid": 47832,
+      "launchIdentity": "47832 47832 Tue Oct 13 11:14:57 2026     lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run fuzz:engine -- --games 300 --weight-uuids 0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19",
+      "endedAt": "2026-10-13T18:14:58.541947+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "negative-controls",
+      "pid": 48739,
+      "pgid": 48739,
+      "launchIdentity": "48739 48739 Tue Oct 13 11:15:51 2026     python3 /tmp/codex-261/helper/negative-controls.py",
+      "endedAt": "2026-10-13T18:16:08.746075+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "parent-inventory-repair",
+      "pid": 51727,
+      "pgid": 51727,
+      "launchIdentity": "51727 51727 Tue Oct 13 11:18:19 2026     /usr/bin/env node /opt/homebrew/bin/npx tsx scripts/content-inventory.ts",
+      "endedAt": "2026-10-13T18:18:22.522571+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "parent-inventory-contracts",
+      "pid": 52245,
+      "pgid": 52245,
+      "launchIdentity": "52245 52245 Tue Oct 13 11:18:48 2026     node /opt/homebrew/bin/npx vitest run scripts/content-inventory.test.ts scripts/content-inventory-journey.test.ts scripts/content-inventory-variants.test.ts",
+      "endedAt": "2026-10-13T18:18:54.164776+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "parent-inventory-check",
+      "pid": 52674,
+      "pgid": 52674,
+      "launchIdentity": "52674 52674 Tue Oct 13 11:19:09 2026     node /opt/homebrew/bin/npx tsx scripts/content-inventory.ts --check",
+      "endedAt": "2026-10-13T18:19:11.603218+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "negative-controls-v2",
+      "pid": 53971,
+      "pgid": 53971,
+      "launchIdentity": "53971 53971 Tue Oct 13 11:20:19 2026     python3 /tmp/codex-261/helper/negative-controls-v2.py",
+      "endedAt": "2026-10-13T18:20:27.852945+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "preflight",
+      "pid": 71890,
+      "pgid": 71890,
+      "launchIdentity": "71890 71890 Tue Oct 13 11:21:28 2026     node /opt/homebrew/bin/npm run lab:preflight -- --cards 0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19",
+      "endedAt": "2026-10-13T18:21:29.278550+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "dreamsign-preflight",
+      "pid": 85032,
+      "pgid": 85032,
+      "launchIdentity": "85032 85032 Tue Oct 13 11:22:25 2026     /usr/bin/env node /opt/homebrew/bin/npm run lab:preflight -- --dreamsigns 0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19",
+      "endedAt": "2026-10-13T18:22:27.769492+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "review-v2",
+      "pid": 87042,
+      "pgid": 87042,
+      "launchIdentity": "87042 87042 Tue Oct 13 11:24:33 2026     /usr/bin/env node /opt/homebrew/bin/npm run review",
+      "endedAt": "2026-10-13T18:25:27.698006+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "knip",
+      "pid": 41875,
+      "pgid": 41875,
+      "launchIdentity": "41875 41875 Tue Oct 13 11:25:43 2026     node /opt/homebrew/bin/npm run knip",
+      "endedAt": "2026-10-13T18:25:48.053640+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "review-full",
+      "pid": 45021,
+      "pgid": 45021,
+      "launchIdentity": "45021 45021 Tue Oct 13 11:26:29 2026     lockf -k /Users/dthurn/dreamtides_web/artifacts/heavy.lock npm run review:full",
+      "endedAt": "2026-10-13T18:28:13.278885+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "green-preliminary",
+      "pid": 37476,
+      "pgid": 37476,
+      "launchIdentity": "37476 37476 Tue Oct 13 11:32:11 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v1.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop",
+      "endedAt": "2026-10-13T18:32:25.356645+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "green-preliminary-v2",
+      "pid": 1583,
+      "pgid": 1583,
+      "launchIdentity": "1583  1583 Tue Oct 13 11:35:33 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v2.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop",
+      "endedAt": "2026-10-13T18:35:53.733451+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "portrait-screen-check",
+      "pid": 63171,
+      "pgid": 63171,
+      "launchIdentity": "63171 63171 Tue Oct 13 11:39:47 2026     node /opt/homebrew/bin/npm test -- src/cumulus/screens/JourneyTransfigurationScreen.test.tsx src/cumulus/components/layout/SiteLayout.test.tsx",
+      "endedAt": "2026-10-13T18:39:52.972802+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "review-v3",
+      "pid": 72448,
+      "pgid": 72448,
+      "launchIdentity": "72448 72448 Tue Oct 13 11:42:05 2026     node /opt/homebrew/bin/npm run review",
+      "endedAt": "2026-10-13T18:43:06.016009+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "final-knip",
+      "pid": 76204,
+      "pgid": 76204,
+      "launchIdentity": "76204 76204 Tue Oct 13 11:45:14 2026     node /opt/homebrew/bin/npm run knip",
+      "endedAt": "2026-10-13T18:45:17.822855+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "green-v3-preliminary",
+      "pid": 43576,
+      "pgid": 43576,
+      "launchIdentity": "43576 43576 Tue Oct 13 11:53:41 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v3.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile",
+      "endedAt": "2026-10-13T18:54:58.721943+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "green-v3-full",
+      "pid": 3578,
+      "pgid": 3578,
+      "launchIdentity": "3578  3578 Tue Oct 13 11:55:51 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v3.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile --arg preliminary=false",
+      "endedAt": "2026-10-13T18:56:59.236958+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "green-v3-slug-defeat",
+      "pid": 59720,
+      "pgid": 59720,
+      "launchIdentity": "59720 59720 Tue Oct 13 11:57:15 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-window-v3.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile --arg preliminary=false --arg order=slug-first --arg outcome=defeat",
+      "endedAt": "2026-10-13T18:57:56.393830+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "leaf-tome-standard-v4",
+      "pid": 64709,
+      "pgid": 64709,
+      "launchIdentity": "64709 64709 Tue Oct 13 11:58:39 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-v1.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile",
+      "endedAt": "2026-10-13T18:58:49.570820+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "leaf-tome-standard-v5",
+      "pid": 70257,
+      "pgid": 70257,
+      "launchIdentity": "70257 70257 Tue Oct 13 12:00:23 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/leaf-tome-v2.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile",
+      "endedAt": "2026-10-13T19:00:31.828227+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "green-empty-v5",
+      "pid": 72456,
+      "pgid": 72456,
+      "launchIdentity": "72456 72456 Tue Oct 13 12:02:13 2026     node scripts/qa/run-scenario.mjs /Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.261/green-empty-v1.mjs --bead hv-umm2.261 --port 5174 --timeout 180 --viewports desktop,mobile",
+      "endedAt": "2026-10-13T19:03:21.628316+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "dreamsign-sweep-v5",
+      "pid": 75679,
+      "pgid": 75679,
+      "launchIdentity": "75679 75679 Tue Oct 13 12:04:06 2026     node scripts/qa/card-sweep.mjs --bead hv-umm2.261 --dreamsigns 0c52e8c3-a792-4eea-955f-a0c61463c066,d9f0f7ff-63c0-4247-8831-054d7fed931d,452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19 --variants all --as both --timeout 60 --port 5174 --capture",
+      "endedAt": "2026-10-13T19:05:14.404469+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "leaf-upload-standard-v6",
+      "pid": 39793,
+      "pgid": 39793,
+      "launchIdentity": "39793 39793 Tue Oct 13 12:07:30 2026     node /tmp/codex-261/leaf-upload-runner.mjs standard",
+      "endedAt": "2026-10-13T19:08:16.922324+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "leaf-upload-enhanced-v6",
+      "pid": 43942,
+      "pgid": 43942,
+      "launchIdentity": "43942 43942 Tue Oct 13 12:08:59 2026     node /tmp/codex-261/leaf-upload-runner.mjs enhanced",
+      "endedAt": "2026-10-13T19:09:50.967288+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "review-v7",
+      "pid": 45450,
+      "pgid": 45450,
+      "launchIdentity": "45450 45450 Tue Oct 13 12:10:15 2026     node /opt/homebrew/bin/npm run review",
+      "endedAt": "2026-10-13T19:11:02.257564+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "knip-v7",
+      "pid": 46766,
+      "pgid": 46766,
+      "launchIdentity": "46766 46766 Tue Oct 13 12:11:29 2026     node /opt/homebrew/bin/npm run knip",
+      "endedAt": "2026-10-13T19:11:32.547948+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "leaf-upload-standard-v7",
+      "pid": 73852,
+      "pgid": 73852,
+      "launchIdentity": "73852 73852 Tue Oct 13 12:12:25 2026     node /tmp/codex-261/leaf-upload-runner.mjs standard",
+      "endedAt": "2026-10-13T19:13:11.101889+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "leaf-upload-enhanced-v7",
+      "pid": 77942,
+      "pgid": 77942,
+      "launchIdentity": "77942 77942 Tue Oct 13 12:13:34 2026     node /tmp/codex-261/leaf-upload-runner.mjs enhanced",
+      "endedAt": "2026-10-13T19:14:25.257615+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "event-filter",
+      "pid": 48741,
+      "pgid": 48741,
+      "launchIdentity": "48741 48741 Tue Oct 13 11:15:51 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t copies the exact",
+      "endedAt": "2026-10-13T18:15:53.576217+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "copy-form",
+      "pid": 48815,
+      "pgid": 48815,
+      "launchIdentity": "48815 48815 Tue Oct 13 11:15:53 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t copies the exact",
+      "endedAt": "2026-10-13T18:15:55.735603+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "copy-modifiers",
+      "pid": 48863,
+      "pgid": 48863,
+      "launchIdentity": "48863 48863 Tue Oct 13 11:15:55 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t copies the exact",
+      "endedAt": "2026-10-13T18:15:57.853889+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "original-occurrences",
+      "pid": 48903,
+      "pgid": 48903,
+      "launchIdentity": "48903 48903 Tue Oct 13 11:15:57 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t copies the exact",
+      "endedAt": "2026-10-13T18:15:59.982420+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "leaf-first-completes",
+      "pid": 48964,
+      "pgid": 48964,
+      "launchIdentity": "48964 48964 Tue Oct 13 11:15:59 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t retains the same prepared",
+      "endedAt": "2026-10-13T18:16:02.200754+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "leaf-live-source",
+      "pid": 49097,
+      "pgid": 49097,
+      "launchIdentity": "49097 49097 Tue Oct 13 11:16:02 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t keeps the prepared replacement",
+      "endedAt": "2026-10-13T18:16:04.326477+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "mixed-drop",
+      "pid": 49137,
+      "pgid": 49137,
+      "launchIdentity": "49137 49137 Tue Oct 13 11:16:04 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t preserves every earned source",
+      "endedAt": "2026-10-13T18:16:06.550858+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "failure-summary",
+      "pid": 49213,
+      "pgid": 49213,
+      "launchIdentity": "49213 49213 Tue Oct 13 11:16:06 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t preserves every earned source",
+      "endedAt": "2026-10-13T18:16:08.742930+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "over-limit",
+      "pid": 53973,
+      "pgid": 53973,
+      "launchIdentity": "53973 53973 Tue Oct 13 11:20:19 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t rejects stale/duplicate/excess",
+      "endedAt": "2026-10-13T18:20:21.428585+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "wrong-source",
+      "pid": 54009,
+      "pgid": 54009,
+      "launchIdentity": "54009 54009 Tue Oct 13 11:20:21 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t rejects stale/duplicate/excess",
+      "endedAt": "2026-10-13T18:20:23.594385+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "only-first-card",
+      "pid": 54054,
+      "pgid": 54054,
+      "launchIdentity": "54054 54054 Tue Oct 13 11:20:23 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t transfigures all",
+      "endedAt": "2026-10-13T18:20:25.736064+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "zero-random",
+      "pid": 54094,
+      "pgid": 54094,
+      "launchIdentity": "54094 54094 Tue Oct 13 11:20:25 2026     node /opt/homebrew/bin/npx vitest run src/rules/journey/journey-transfiguration.test.ts src/rules/journey/journey-after-battle.test.ts -t declines with zero",
+      "endedAt": "2026-10-13T18:20:27.849836+00:00",
+      "currentGroupMembers": []
+    },
+    {
+      "name": "evidence-schema",
+      "pid": 82196,
+      "pgid": 82196,
+      "launchIdentity": "82196 82196 Tue Oct 13 12:17:40 2026     node --input-type=module -e import { readFrictionRecords } from \"./scripts/friction-triggers.mjs\"; import { readFileSync } from \"node:fs\"; const records = readFrictionRecords(\"docs/plan/evidence\"); const measurement = JSON.parse(readFileSync(\"docs/plan/evidence/measurements/hv-umm2.261.json\", \"utf8\")); const rows = readFileSync(\"docs/plan/evidence/qa-ledger/hv-umm2.261.jsonl\", \"utf8\").trim().split(\"\\n\").map(JSON.parse); if (rows.filter(r => r.mode === \"judged\" && r.verdict === \"pass\").length !== 3) throw new Error(\"Missing judged acceptance\"); console.log(JSON.stringify({ frictionSchema: \"passed\", ledgerRows: rows.length, judged: 3, productGross: measurement.productDiff.grossChangedLines, testAdded: measurement.testModules.addedLines }));",
+      "endedAt": "2026-10-13T19:17:40.428014+00:00",
+      "currentGroupMembers": []
+    }
+  ],
+  "evidenceSchemaValidation": {
+    "name": "evidence-schema",
+    "argv": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "import { readFrictionRecords } from \"./scripts/friction-triggers.mjs\"; import { readFileSync } from \"node:fs\"; const records = readFrictionRecords(\"docs/plan/evidence\"); const measurement = JSON.parse(readFileSync(\"docs/plan/evidence/measurements/hv-umm2.261.json\", \"utf8\")); const rows = readFileSync(\"docs/plan/evidence/qa-ledger/hv-umm2.261.jsonl\", \"utf8\").trim().split(\"\\n\").map(JSON.parse); if (rows.filter(r => r.mode === \"judged\" && r.verdict === \"pass\").length !== 3) throw new Error(\"Missing judged acceptance\"); console.log(JSON.stringify({ frictionSchema: \"passed\", ledgerRows: rows.length, judged: 3, productGross: measurement.productDiff.grossChangedLines, testAdded: measurement.testModules.addedLines }));"
+    ],
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+    "pid": 82196,
+    "pgid": 82196,
+    "identity": "82196 82196 Tue Oct 13 12:17:40 2026     node --input-type=module -e import { readFrictionRecords } from \"./scripts/friction-triggers.mjs\"; import { readFileSync } from \"node:fs\"; const records = readFrictionRecords(\"docs/plan/evidence\"); const measurement = JSON.parse(readFileSync(\"docs/plan/evidence/measurements/hv-umm2.261.json\", \"utf8\")); const rows = readFileSync(\"docs/plan/evidence/qa-ledger/hv-umm2.261.jsonl\", \"utf8\").trim().split(\"\\n\").map(JSON.parse); if (rows.filter(r => r.mode === \"judged\" && r.verdict === \"pass\").length !== 3) throw new Error(\"Missing judged acceptance\"); console.log(JSON.stringify({ frictionSchema: \"passed\", ledgerRows: rows.length, judged: 3, productGross: measurement.productDiff.grossChangedLines, testAdded: measurement.testModules.addedLines }));",
+    "startedAt": "2026-10-13T19:17:40.313768+00:00",
+    "load": [
+      3.6396484375,
+      4.8740234375,
+      6.421875
+    ],
+    "stdout": "/tmp/codex-261/evidence-schema.stdout",
+    "state": "terminal",
+    "exitCode": 0,
+    "wallSeconds": 0.11396395799238235,
+    "endedAt": "2026-10-13T19:17:40.428014+00:00"
+  },
+  "requiredColdReview": "fresh read-only Sol code/visual review after exact commit; not run yet",
+  "runtimeFreezeApplicability": {
+    "v3": {
+      "changedSourcePathsToV7": [
+        "src/runtime/journey-site-messages.ts"
+      ],
+      "qualification": "only Leaf remaining-count UI copy changed; Green workflows do not consume that function, final Leaf modes directly rerun on v7"
+    },
+    "v5": {
+      "changedSourcePathsToV7": [
+        "src/runtime/journey-site-messages.ts"
+      ],
+      "qualification": "only Leaf remaining-count UI copy changed; Green workflows do not consume that function, final Leaf modes directly rerun on v7"
+    }
+  },
+  "standingFrictionDuty": {
+    "directWriter": "parent",
+    "receipt": {
+      "name": "parent-friction",
+      "argv": [
+        "npm",
+        "run",
+        "friction:triggers"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-journey261-transfiguration",
+      "pid": 85814,
+      "pgid": 85814,
+      "identity": "85814 85814 Tue Oct 13 12:21:26 2026     /usr/bin/env node /opt/homebrew/bin/npm run friction:triggers",
+      "startedAt": "2026-10-13T19:21:26.534980+00:00",
+      "load": [
+        2.58935546875,
+        3.8984375,
+        5.650390625
+      ],
+      "stdout": "/tmp/codex-261/parent-friction.stdout",
+      "state": "terminal",
+      "exitCode": 0,
+      "wallSeconds": 0.2590585839934647,
+      "endedAt": "2026-10-13T19:21:26.794145+00:00"
+    },
+    "phase5Since645": 19,
+    "cadence": 25,
+    "due": false
+  },
+  "freshPrecommitCutoff": {
+    "at": "2026-10-13T19:23:37.765237+00:00",
+    "actualDispatch": "2026-10-13T17:45:48.490Z",
+    "includes": "all implementation/source audit, parent waits, justiciar, validation, QA and final handoff audit; normal Git dates and bounded commit tail follow",
+    "commitACK": "parent exact audited manifest, natively recorded commit-ack-native.json"
+  }
+}
