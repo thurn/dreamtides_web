@@ -182,15 +182,20 @@ Sites can be visited in any order except Battle, and each is visited once.
 
 ## Sites
 
-Battle, Draft, Essence, and Dreamsign Reward have no guide and are never
-enhanced. Every other site belongs to a guide and has a home specialty.
+Battle, Draft, Essence, and Dreamsign Reward have no guide. Guide home
+specialties and additional random enhancements apply to the other site types.
+A targeted Dreamsign Reward enhancement offers up to three distinct free
+alternatives, including its standard prepared reward. Its persisted choice
+spends the shown UUIDs on reveal and survives holdings, essence, and reload
+changes; accept one, replace a held Dreamsign at the current cap, or decline.
+Every guided site belongs to a guide and has a home specialty.
 
 | Site | Standard | Home specialty |
 | --- | --- | --- |
 | **Battle** | A match against an AI Avatar whose deck is built by simulating a journey with that Avatar's tides to the same point, biased toward the affiliation. The opponent's Avatar ability is dormant in the opening battle, and opponents bring one Dreamsign from layer 3 on. The opponent's Avatar and Dreamsigns are previewed before the match. | — |
 | **Draft** | 5 picks from the shared pool, 4 cards per pick. | — |
 | **Essence** | Grants essence from a band (200–300). | — |
-| **Dreamsign Reward** | Grants the node's known Dreamsign. | — |
+| **Dreamsign Reward** | Grants one prepared Dreamsign. | — |
 | **Card Shop** | 5 cards for essence (about 100 each) with random discounts of 30–90% on one or two, plus one restock for 50. Stock is spent from the draft pool. | Discounted strong cards drawn from the Avatar's signature tide. |
 | **Dreamsign Bazaar** | 3 Dreamsigns for essence plus one restock for 50. | The restock is free. |
 | **Dreamsign Revelation** | A choice of 3 Dreamsigns. | A choice of 4. |

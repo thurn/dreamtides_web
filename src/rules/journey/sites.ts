@@ -31,6 +31,9 @@ import {
   type SelectionRulesVersion,
 } from "../../reward-selection/types";
 import type {
+  Dreamsign,
+  RewardSiteRuntime,
+  EnhancedDreamsignRewardOffer,
   JourneyPurgeTransition,
   DeckEntry,
   ExplorationSiteRuntime,
@@ -230,6 +233,59 @@ function integer(value: unknown): number | null {
   return typeof value === "number" && Number.isInteger(value) ? value : null;
 }
 
+/** Strict public boundary for the optional persisted enhanced Reward quote. */
+export function isEnhancedDreamsignReward(value: unknown): value is RewardSiteRuntime & {
+  enhancedDreamsignOffer: EnhancedDreamsignRewardOffer;
+} {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const runtime = value as Partial<RewardSiteRuntime>;
+  const quote = runtime.enhancedDreamsignOffer;
+  if (runtime.kind !== "reward" || typeof runtime.accepted !== "boolean" ||
+    runtime.journeyEssenceSource !== undefined || runtime.reward?.rewardType !== "dreamsign" ||
+    quote === undefined || quote === null || typeof quote !== "object" ||
+    !Number.isSafeInteger(quote.requestedCount) || quote.requestedCount < 1 ||
+    typeof quote.selectionRulesVersion !== "string" || quote.selectionRulesVersion.length === 0 ||
+    dreamsignIdFromUnknown(quote.standardDreamsignId) === null ||
+    quote.standardDreamsignId !== runtime.reward.dreamsign?.id ||
+    !Array.isArray(quote.offeredDreamsigns) || quote.offeredDreamsigns.length === 0 ||
+    quote.offeredDreamsigns.length > quote.requestedCount ||
+    !Array.isArray(runtime.remainingDreamsignPoolIds)) return false;
+  const alternatives: readonly unknown[] = quote.offeredDreamsigns;
+  for (const value of [runtime.reward.dreamsign, ...alternatives]) {
+    if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+    const sign = value as Partial<Dreamsign>;
+    if (dreamsignIdFromUnknown(sign.id) === null || typeof sign.name !== "string" ||
+      typeof sign.effectDescription !== "string" ||
+      (sign.imageName !== undefined && typeof sign.imageName !== "string") ||
+      (sign.imageAlt !== undefined && typeof sign.imageAlt !== "string")) return false;
+  }
+  const offeredIds = new Set<DreamsignId>();
+  for (const value of alternatives) {
+    const id = dreamsignIdFromUnknown((value as Dreamsign).id);
+    if (id === null || offeredIds.has(id)) return false;
+    offeredIds.add(id);
+  }
+  if (!offeredIds.has(quote.standardDreamsignId)) return false;
+  const remaining = new Set<DreamsignId>();
+  for (const id of runtime.remainingDreamsignPoolIds) {
+    if (dreamsignIdFromUnknown(id) === null || offeredIds.has(id) || remaining.has(id)) return false;
+    remaining.add(id);
+  }
+  return true;
+}
+
+/** Enhanced Reward decisions resolve only a pending quote at the current site. */
+function pendingEnhancedReward(journey: JourneyState, siteId: SiteId) {
+  const runtime = journey.siteRuntime[siteId];
+  if (!isEnhancedDreamsignReward(runtime) || runtime.accepted ||
+    findSite(journey, siteId)?.type !== "Reward" || !canVisitSite(journey, siteId) ||
+    journey.currentDreamscape === null ||
+    !journey.atlas.nodes[journey.currentDreamscape]?.sites.some((site) => site.id === siteId) ||
+    (journey.screen.type !== "dreamscape" &&
+      (journey.screen.type !== "site" || journey.screen.siteId !== siteId))) return null;
+  return runtime;
+}
+
 /** Clamp an essence amount to zero or greater. */
 export function clampEssence(value: number): number {
   return Math.max(0, value);
@@ -418,6 +474,9 @@ export function openSite(
     return null;
   }
 
+  if (site.type === "Reward" && site.isEnhanced &&
+    (selectionRulesVersion !== SELECTION_RULES_VERSION || !canVisitSite(journey, siteId))) return null;
+
   switch (site.type) {
     case "RandomSite": {
       const choiceCount = contentProvider?.sitesData.randomSite.homeChoiceCount;
@@ -496,6 +555,19 @@ export function openSite(
           : { gambleGameId: rawGambleGameId }),
       });
       if (result === null) return null;
+      if (site.type === "Reward") {
+        const hasChoice = "enhancedDreamsignOffer" in result.runtime;
+        if (hasChoice) {
+          const runtime = result.runtime;
+          if (!site.isEnhanced || !isEnhancedDreamsignReward(runtime) || runtime.accepted ||
+            runtime.enhancedDreamsignOffer.selectionRulesVersion !== selectionRulesVersion) return null;
+          const remaining = runtime.remainingDreamsignPoolIds;
+          if (result.remainingDreamsignPool === undefined || result.remainingDreamsignPool.length !== remaining.length ||
+            result.remainingDreamsignPool.some((id, index) => id !== remaining[index])) return null;
+        }
+        if (site.isEnhanced && (result.runtime.kind !== "reward" || result.runtime.accepted ||
+          (result.runtime.reward.rewardType === "dreamsign" && !hasChoice))) return null;
+      }
       const next = withRuntime(journey, siteId, result.runtime);
       return {
         ...next,
@@ -611,6 +683,7 @@ export function acceptReward(
     payload.purgeIndex === undefined ? undefined : integer(payload.purgeIndex);
   if (payload.purgeIndex !== undefined && purgeIndex === null) return null;
 
+  if ("enhancedDreamsignOffer" in runtime) return null;
   const reward = runtime.reward;
   let next = journey;
   if (reward.rewardType === "dreamsign") {
@@ -714,14 +787,12 @@ export function acceptDreamsignOffer(
   if (siteId === null || dreamsignId === null) return null;
   if (isSiteVisited(journey, siteId)) return null;
   const runtime = journey.siteRuntime[siteId];
-  if (
-    runtime === undefined ||
-    runtime.kind !== "dreamsignOffer" ||
-    runtime.accepted
-  ) {
-    return null;
-  }
-  const dreamsign = runtime.offeredDreamsigns.find(
+  const enhanced = pendingEnhancedReward(journey, siteId);
+  if (runtime === undefined || (runtime.kind !== "dreamsignOffer" && runtime.kind !== "reward") ||
+    runtime.accepted || (runtime.kind !== "dreamsignOffer" && enhanced === null)) return null;
+  const offeredDreamsigns = runtime.kind === "dreamsignOffer"
+    ? runtime.offeredDreamsigns : enhanced!.enhancedDreamsignOffer.offeredDreamsigns;
+  const dreamsign = offeredDreamsigns.find(
     (offered) => offered.id === dreamsignId,
   );
   if (dreamsign === undefined) return null;
@@ -773,7 +844,8 @@ export function rejectDreamsignOffer(
   const runtime = journey.siteRuntime[siteId];
   if (
     runtime === undefined ||
-    runtime.kind !== "dreamsignOffer" ||
+    (runtime.kind !== "dreamsignOffer" && runtime.kind !== "reward") ||
+    (runtime.kind === "reward" && pendingEnhancedReward(journey, siteId) === null) ||
     runtime.accepted
   ) {
     return null;
@@ -1010,6 +1082,7 @@ export function completeSite(
   const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   const runtime = journey.siteRuntime[siteId];
+  if (runtime?.kind === "reward" && "enhancedDreamsignOffer" in runtime) return null;
   const inlinePearl = journey.screen.type === "dreamscape" &&
     journey.currentDreamscape !== null &&
     journey.atlas.nodes[journey.currentDreamscape]?.sites.some((site) =>

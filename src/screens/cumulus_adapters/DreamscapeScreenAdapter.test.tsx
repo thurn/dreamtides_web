@@ -1,3 +1,4 @@
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 // @vitest-environment jsdom
 import { act } from "react";
 import { createRoot } from "react-dom/client";
@@ -305,4 +306,36 @@ describe("DreamscapeScreenAdapter", () => {
       act(() => root.unmount());
     });
   });
+  it("dispatches nonfirst enhanced UUID choice, live cap replacement and decline through existing intents", () => {
+    const first = { id: testDreamsignId("adapter-first"), name: "Same name", effectDescription: "" };
+    const second = { ...first, id: testDreamsignId("adapter-second") };
+    const held = { ...first, id: testDreamsignId("adapter-held") };
+    const state = makeState({ maxDreamsigns: 1, dreamsigns: [] });
+    state.siteRuntime[parseSiteId("s-reward")] = { kind: "reward", reward: { rewardType: "dreamsign", dreamsign: first },
+      accepted: false, remainingDreamsignPoolIds: [], enhancedDreamsignOffer: { standardDreamsignId: first.id,
+        offeredDreamsigns: [first, second], requestedCount: 3, selectionRulesVersion: SELECTION_RULES_VERSION } };
+    const mutations = { acceptRewardSite: vi.fn(), acceptDreamsignOffer: vi.fn(), rejectDreamsignOffer: vi.fn() } as unknown as JourneyMutations;
+    setJourneyContext(mutations, state);
+    const root = createRoot(document.createElement("div"));
+    act(() => root.render(<DreamscapeScreenAdapter />));
+    act(() => lastScreenProps().onInlineRewardAnimationComplete(parseSiteId("s-reward")));
+    expect(mutations.acceptRewardSite).not.toHaveBeenCalled();
+    act(() => lastScreenProps().onRewardChoice?.(second.id));
+    expect(mutations.acceptDreamsignOffer).toHaveBeenCalledWith("s-reward", second, undefined);
+    vi.mocked(mutations.acceptDreamsignOffer).mockClear();
+    state.dreamsigns = [held]; setJourneyContext(mutations, state);
+    act(() => root.render(<DreamscapeScreenAdapter />));
+    act(() => lastScreenProps().onRewardChoice?.(second.id));
+    expect(mutations.acceptDreamsignOffer).not.toHaveBeenCalled();
+    expect(lastScreenProps().view.rewardChoice?.replacement?.incoming.id).toBe(second.id);
+    act(() => lastScreenProps().onCancelRewardReplacement?.());
+    expect(lastScreenProps().view.rewardChoice?.replacement).toBeNull();
+    act(() => lastScreenProps().onRewardChoice?.(second.id));
+    act(() => lastScreenProps().onRewardChoice?.(second.id, held.id));
+    expect(mutations.acceptDreamsignOffer).toHaveBeenCalledWith("s-reward", second, 0);
+    act(() => lastScreenProps().onDeclineRewardChoice?.());
+    expect(mutations.rejectDreamsignOffer).toHaveBeenCalledWith("s-reward");
+    act(() => root.unmount());
+  });
+
 });

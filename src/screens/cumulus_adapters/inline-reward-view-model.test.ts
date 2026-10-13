@@ -1,3 +1,4 @@
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import { describe, expect, it } from "vitest";
 import type {
   SiteState,
@@ -10,7 +11,7 @@ import { parseAtlasNodeId } from "../../types/identifiers";
 import { testDreamsignId } from "../../types/test-identities";
 import { createJourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { journeyEssence } from "../../rules/journey/journey-essence";
-import { buildInlineRewardCompletionLog, resolveInlineReward, resolveRewardReplacement, resolveRewardDecline } from "./inline-reward-view-model";
+import { buildInlineRewardCompletionLog, resolveInlineReward, resolveRewardReplacement, resolveRewardDecline, resolveEnhancedRewardChoice } from "./inline-reward-view-model";
 
 describe("inline-reward-view-model", () => {
   const STATE = { essence: 90, dreamsigns: [] };
@@ -71,4 +72,30 @@ it("projects live Essence holdings and reuses single Reward collection/cap choic
   expect(resolveRewardReplacement(node, state, site.id, source)).toMatchObject({ purgeIndex: 0, fields: { siteType: "Essence", dreamsignId: incoming, replacedDreamsignId: source } });
   expect(resolveRewardDecline(node, state, site.id)).toMatchObject({ fields: { dreamsignId: incoming } });
   expect(buildInlineRewardCompletionLog(site, { ...runtime, journeyEssenceSource: undefined }, state)).toBeNull();
+});
+
+
+it("keeps quote choices explicit and resolves live incoming/held UUIDs for cap replacement", () => {
+  const site: SiteState = { id: parseSiteId("enhanced-inline"), type: "Reward", isVisited: false, isEnhanced: true };
+  const first = { id: testDreamsignId("inline-first"), name: "Same name", effectDescription: "" };
+  const second = { ...first, id: testDreamsignId("inline-second") };
+  const held = { ...first, id: testDreamsignId("inline-held") };
+  const node = makeTestAtlasNode(parseAtlasNodeId("enhanced-inline-node"), [site]);
+  const state = { ...testJourneyState(), currentDreamscape: node.id, dreamsigns: [held], maxDreamsigns: 1 };
+  const runtime: RewardSiteRuntime = { kind: "reward", reward: { rewardType: "dreamsign", dreamsign: first }, accepted: false,
+    remainingDreamsignPoolIds: [], enhancedDreamsignOffer: { standardDreamsignId: first.id, offeredDreamsigns: [first, second],
+      requestedCount: 3, selectionRulesVersion: SELECTION_RULES_VERSION } };
+  state.siteRuntime[site.id] = runtime;
+  expect(resolveInlineReward(site, runtime, state)).toBeNull();
+  expect(buildInlineRewardCompletionLog(site, runtime, state)).toBeNull();
+  expect(resolveEnhancedRewardChoice(node, state, site.id, second.id)).toMatchObject({ kind: "replacement", dreamsign: second });
+  expect(resolveEnhancedRewardChoice(node, state, site.id, second.id, held.id)).toMatchObject({ kind: "accept", dreamsign: second, purgeIndex: 0 });
+  state.dreamsigns = [first, held]; state.maxDreamsigns = 2;
+  expect(resolveEnhancedRewardChoice(node, state, site.id, second.id, held.id)?.purgeIndex).toBe(1);
+  state.dreamsigns = [];
+  expect(resolveEnhancedRewardChoice(node, state, site.id, second.id, held.id)).toBeNull();
+  expect(resolveEnhancedRewardChoice(node, state, site.id, second.id)).toMatchObject({ kind: "accept", dreamsign: second });
+  expect(resolveEnhancedRewardChoice(node, state, site.id, held.id)).toBeNull();
+  runtime.accepted = true;
+  expect(resolveEnhancedRewardChoice(node, state, site.id, second.id)).toBeNull();
 });

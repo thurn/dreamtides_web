@@ -15,6 +15,8 @@ import {
   SiteNode,
   type DreamscapeSiteModel,
 } from "../components/dreamscape/SiteNode";
+import { GlassDialog } from "../components/overlay/GlassDialog";
+import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
@@ -54,6 +56,12 @@ export interface DreamscapeView {
   sites: DreamscapeSiteModel[];
   /** Generated Essence and Reward results, keyed by the site's stable id. */
   inlineRewards: Readonly<Record<string, InlineRewardView>>;
+  /** Pending enhanced Reward alternatives, derived from the persisted quote. */
+  rewardChoice?: {
+    readonly siteId: SiteId;
+    readonly options: readonly DreamsignView[];
+    readonly replacement: Omit<DreamsignReplacementModel, "dismissLabel" | "closeLabel"> | null;
+  };
   /** Replacement choice shown after an at-cap Reward animation. */
   replacement: Omit<
     DreamsignReplacementModel,
@@ -72,6 +80,12 @@ export interface DreamscapeScreenProps {
   onInlineRewardAnimationComplete: (siteId: SiteId) => void;
   /** Replace one held Dreamsign by UUID. */
   onReplaceDreamsign: (dreamsignId: DreamsignId) => void;
+  /** Select a stored enhanced Reward UUID and optionally a live held UUID. */
+  onRewardChoice?: (dreamsignId: DreamsignId, heldId?: DreamsignId) => void;
+  /** Decline the pending enhanced Reward quote. */
+  onDeclineRewardChoice?: () => void;
+  /** Return from replacement presentation to the stored alternatives. */
+  onCancelRewardReplacement?: () => void;
   /** Decline the pending Dreamsign Reward. */
   onDeclineReward: () => void;
   /** Report when delayed tutorial guidance becomes visible. */
@@ -91,6 +105,9 @@ const REWARD_DREAMSIGN_SIZE_PX = 112;
 export function DreamscapeScreen({
   view,
   onSelectSite,
+  onRewardChoice,
+  onDeclineRewardChoice,
+  onCancelRewardReplacement,
   onInlineRewardAnimationComplete,
   onReplaceDreamsign,
   onDeclineReward,
@@ -141,7 +158,7 @@ export function DreamscapeScreen({
 
   const handleSelectSite = useCallback(
     (siteId: SiteId) => {
-      if (activeCollectionSiteId !== null || view.replacement !== null) return;
+      if (activeCollectionSiteId !== null || view.replacement !== null || view.rewardChoice !== undefined) return;
       const model = view.sites.find(
         (candidate) => candidate.id === siteId,
       );
@@ -156,7 +173,7 @@ export function DreamscapeScreen({
       }
       onSelectSite(siteId);
     },
-    [activeCollectionSiteId, onSelectSite, view.inlineRewards, view.replacement, view.sites],
+    [activeCollectionSiteId, onSelectSite, view.inlineRewards, view.replacement, view.rewardChoice, view.sites],
   );
 
   useEffect(() => {
@@ -187,7 +204,7 @@ export function DreamscapeScreen({
         position: "fixed",
         inset: 0,
         zIndex:
-          view.replacement === null
+          view.replacement === null && view.rewardChoice === undefined
             ? undefined
             : token("--layer-app-screen-modal"),
         overflow: "hidden",
@@ -437,6 +454,34 @@ export function DreamscapeScreen({
           )}
         </div>
       )}
+      {view.rewardChoice !== undefined && (view.rewardChoice.replacement === null ? (
+        <GlassDialog title="Choose a Dreamsign Reward" onClose={onDeclineRewardChoice}
+          closeLabel="Decline Dreamsign Reward">
+          <div data-enhanced-reward-site-id={view.rewardChoice.siteId} style={{
+            display: "flex", flexWrap: "wrap", justifyContent: "center", gap: token("--space-l"),
+          }}>
+            {view.rewardChoice.options.map((dreamsign) => (
+              <div key={dreamsign.id} data-reward-option-id={dreamsign.id} style={{
+                display: "grid", justifyItems: "center", gap: token("--space-s"),
+              }}>
+                <div style={{ width: REWARD_DREAMSIGN_SIZE_PX, height: REWARD_DREAMSIGN_SIZE_PX }}>
+                  <Dreamsign dreamsign={dreamsign} variant="hud" />
+                </div>
+                <GlassButton label="Choose" variant="accent" placement="onGlass"
+                  onPress={() => onRewardChoice?.(dreamsign.id)} />
+              </div>
+            ))}
+          </div>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: token("--space-l") }}>
+            <GlassButton label="Decline Reward" placement="onGlass" onPress={() => onDeclineRewardChoice?.()} />
+          </div>
+        </GlassDialog>
+      ) : (
+        <DreamsignReplacementDialog model={{ ...view.rewardChoice.replacement,
+          dismissLabel: "Back to Reward Choices", closeLabel: "Back to Reward Choices" }}
+          onDreamsignPress={(heldId) => onRewardChoice?.(view.rewardChoice!.replacement!.incoming.id, heldId)}
+          onDismiss={() => onCancelRewardReplacement?.()} />
+      ))}
       {view.replacement !== null && (
         <DreamsignReplacementDialog
           model={{

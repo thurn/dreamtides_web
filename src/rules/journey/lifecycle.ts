@@ -21,7 +21,7 @@ import { toJourneyAvatar } from "../../data/avatar-selection";
 import type { ResolvedAvatarPackage } from "../../types/content";
 import type { JourneyState, SiteType } from "../../types/journey";
 import type { EventContext } from "../../eventlog/types";
-import { canVisitSite, clampEssence, getSiteContentProvider } from "./sites";
+import { canVisitSite, clampEssence, getSiteContentProvider, isEnhancedDreamsignReward } from "./sites";
 import {
   isRandomSiteMetadata,
   materializeRandomSite,
@@ -553,7 +553,9 @@ function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry):
   if (!isRecord(value.atlas) || !hasValidAtlasSites(value.atlas)) return false;
   if (!isRecord(value.screen)) return false;
   if (!isRecord(value.siteRuntime)) return false;
-  for (const runtime of Object.values(value.siteRuntime)) {
+  for (const [rawSiteId, runtime] of Object.entries(value.siteRuntime)) {
+    if (isRecord(runtime) && "enhancedDreamsignOffer" in runtime &&
+      (siteIdFromUnknown(rawSiteId) === null || !isEnhancedDreamsignReward(runtime))) return false;
     if (isRecord(runtime) && runtime.journeyEssenceSource !== undefined &&
       (runtime.kind !== "reward" || !isRecord(runtime.reward) || runtime.reward.rewardType !== "dreamsign" ||
         dreamsignIdFromUnknown(runtime.journeyEssenceSource) === null)) return false;

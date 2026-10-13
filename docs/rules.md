@@ -146,6 +146,18 @@ enhancements persist through loss, reacquisition, and reordering of Dreamsigns,
 and the same entitlement is consumed once. Existing enhanced sites use no
 additional Dreamsign entitlement.
 
+A targeted enhancement of a free Dreamsign Reward prepares a choice of up to
+three distinct Dreamsigns, including the standard prepared reward. All shown
+UUIDs are spent from the shared Dreamsign pool when the Reward opens. You may
+accept one shown Dreamsign for free or decline the Reward. At your current
+Dreamsign limit, accepting one replaces a held Dreamsign you choose. Either
+choice completes the site once. A Reward with one available alternative still
+requires your choice. The stored alternatives, count, selection protocol, and
+remaining pool stay fixed through Dreamsign gains or losses, essence changes,
+and reload. A site has one enhanced mode; duplicate enhancement sources do not
+multiply its alternatives. An unopened site uses its enhancement when it opens.
+The empty-pool Essence fallback retains its ordinary collection behavior.
+
 A permission to reroll dream journey sites applies to unresolved Exploration
 sites, including an Exploration reached through a Random Site. Each held copy
 permits its printed number of rerolls per site. Consumed uses persist for that

@@ -1,3 +1,4 @@
+import { registerEnhancedRewardContracts } from "./enhanced-reward.contracts";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Dreamsign, JourneyState } from "../../types/journey";
 import { type FoldState } from "../fold-state";
@@ -169,3 +170,5 @@ describe("dreamsign offer accept / reject", () => {
     ).toBe(true);
   });
 });
+
+registerEnhancedRewardContracts();

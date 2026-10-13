@@ -23,6 +23,7 @@ export const SITES = {
       },
     },
     reward: {
+      enhancedOfferCount: 3,
       fallbackEssence: {
         min: 150,
         max: 350,

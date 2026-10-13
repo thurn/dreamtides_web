@@ -449,12 +449,18 @@ export interface ShopSiteRuntime {
   };
 }
 
-/**
- * Runtime state for a Dreamsign Reward site. The reward is always a known
- * Dreamsign; the `essence` variant is a defensive fallback for the impossible
- * case of an empty Dreamsign pool.
- */
+/** Alternatives quoted once when a targeted enhanced Reward opens. */
+export interface EnhancedDreamsignRewardOffer {
+  readonly standardDreamsignId: DreamsignId;
+  readonly offeredDreamsigns: readonly Dreamsign[];
+  readonly requestedCount: number;
+  readonly selectionRulesVersion: SelectionRulesVersion;
+}
+
+/** Prepared Dreamsign Reward, or its empty-pool Essence fallback. */
 export interface RewardSiteRuntime {
+  /** Present only when this stored free Reward requires an explicit UUID choice. */
+  enhancedDreamsignOffer?: EnhancedDreamsignRewardOffer;
   /** UUID provenance of an Essence site replacement, absent for ordinary rewards. */
   journeyEssenceSource?: DreamsignId;
   kind: "reward";

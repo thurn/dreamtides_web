@@ -139,7 +139,7 @@ export const MINIMAL_SITES_DATA: SitesData = {
       standard: { min: 200, max: 300 },
       enhanced: { min: 400, max: 600 },
     },
-    reward: { fallbackEssence: { min: 150, max: 350 } },
+    reward: { fallbackEssence: { min: 150, max: 350 }, enhancedOfferCount: 3 },
     dreamsignRevelation: { standardOfferCount: 3, enhancedOfferCount: 4 },
   },
   purge: {

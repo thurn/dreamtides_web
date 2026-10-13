@@ -707,11 +707,41 @@ export function createSiteContentProvider(
             regenerationPoolIds: dreamsignRegenerationPoolIds(journey),
             rng: stream,
           });
+          const count = content.sitesData.rewards.reward.enhancedOfferCount;
+          if (site.isEnhanced && (!Number.isSafeInteger(count) || count < 1 ||
+            selectionRulesVersion !== SELECTION_RULES_VERSION)) return null;
+          const standard = generated.reward.rewardType === "dreamsign"
+            ? generated.reward.dreamsign : null;
+          const extra = site.isEnhanced && standard !== null
+            ? drawDreamsignOptions(
+                generated.remainingDreamsignPoolIds.filter((id) => id !== standard.id),
+                content.dreamsignTemplates, count - 1,
+                dreamsignRegenerationPoolIds(journey).filter((id) => id !== standard.id),
+                stream,
+              )
+            : null;
+          const remainingDreamsignPoolIds = extra === null
+            ? generated.remainingDreamsignPoolIds.map(parseDreamsignId)
+            : extra.remainingDreamsignPool.map(parseDreamsignId);
+          const offeredDreamsigns = extra === null || standard === null ? null : [standard, ...extra.offeredDreamsigns]
+            .map((sign) => ({ id: sign.id, name: sign.name, effectDescription: sign.effectDescription,
+              ...(sign.imageName === undefined ? {} : { imageName: sign.imageName }),
+              ...(sign.imageAlt === undefined ? {} : { imageAlt: sign.imageAlt }),
+            }));
           const runtime: RewardSiteRuntime = {
             kind: "reward",
-            reward: generated.reward,
-            remainingDreamsignPoolIds:
-              generated.remainingDreamsignPoolIds.map(parseDreamsignId),
+            ...(extra === null || standard === null ? {} : {
+              enhancedDreamsignOffer: {
+                standardDreamsignId: standard.id,
+                offeredDreamsigns: offeredDreamsigns!,
+                requestedCount: count,
+                selectionRulesVersion,
+              },
+            }),
+            reward: offeredDreamsigns === null ? generated.reward : {
+              rewardType: "dreamsign", dreamsign: offeredDreamsigns[0],
+            },
+            remainingDreamsignPoolIds,
             accepted: false,
           };
           // Keep the run pool unchanged when the essence fallback spent nothing;
@@ -721,8 +751,7 @@ export function createSiteContentProvider(
           }
           return {
             runtime,
-            remainingDreamsignPool:
-              generated.remainingDreamsignPoolIds.map(parseDreamsignId),
+            remainingDreamsignPool: remainingDreamsignPoolIds,
           };
         }
         case "DreamsignRevelation": {

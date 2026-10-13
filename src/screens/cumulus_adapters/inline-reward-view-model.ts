@@ -1,3 +1,4 @@
+import { isEnhancedDreamsignReward } from "../../rules/journey/sites";
 import { essenceSiteGain } from "../../rules/journey/journey-essence";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import type {
@@ -33,6 +34,7 @@ export function resolveInlineReward(
   runtime: SiteRuntimeState | undefined,
   state: Pick<JourneyState, "essence" | "dreamsigns" | "maxDreamsigns">,
 ): InlineRewardResolution | null {
+  if (runtime?.kind === "reward" && "enhancedDreamsignOffer" in runtime) return null;
   const completion = buildInlineRewardCompletionLog(site, runtime, state);
   if (completion === null) return null;
   if (
@@ -132,6 +134,7 @@ export function buildInlineRewardCompletionLog(
   ) {
     return null;
   }
+  if ("enhancedDreamsignOffer" in runtime) return null;
   const reward = runtime.reward;
   return {
     kind: "reward",
@@ -150,4 +153,26 @@ export function buildInlineRewardCompletionLog(
       isEnhanced: site.isEnhanced,
     },
   };
+}
+
+/** Resolve incoming and held UUIDs against the live stored quote before an intent. */
+export function resolveEnhancedRewardChoice(
+  node: DreamscapeNode,
+  state: JourneyState,
+  siteId: SiteId,
+  incomingId: DreamsignId,
+  heldId?: DreamsignId,
+) {
+  const site = node.sites.find((candidate) => candidate.id === siteId);
+  const runtime = state.siteRuntime[siteId];
+  if (state.currentDreamscape !== node.id || site?.type !== "Reward" || site.isVisited ||
+    !isEnhancedDreamsignReward(runtime) || runtime.accepted) return null;
+  const dreamsign = runtime.enhancedDreamsignOffer.offeredDreamsigns.find((sign) => sign.id === incomingId);
+  if (dreamsign === undefined) return null;
+  if (heldId === undefined && state.dreamsigns.length >= state.maxDreamsigns) {
+    return { kind: "replacement" as const, siteId, dreamsign };
+  }
+  const purgeIndex = heldId === undefined ? undefined : state.dreamsigns.findIndex((sign) => sign.id === heldId);
+  if (purgeIndex !== undefined && purgeIndex < 0) return null;
+  return { kind: "accept" as const, siteId, dreamsign, purgeIndex };
 }

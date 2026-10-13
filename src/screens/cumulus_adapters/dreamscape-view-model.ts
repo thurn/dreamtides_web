@@ -1,3 +1,4 @@
+import { isEnhancedDreamsignReward } from "../../rules/journey/sites";
 import { essenceSiteGain } from "../../rules/journey/journey-essence";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { JOURNEY_SITE_MESSAGES } from "../../runtime/journey-site-messages";
@@ -277,6 +278,7 @@ export function buildDreamscapeView(
   replacementSiteId: SiteId | null = null,
   tutorialConfiguration?: TutorialDreamscapeConfiguration,
   modifiers: JourneyModifierRegistry = journeyModifierRegistry,
+  selectedRewardChoice: { siteId: SiteId; dreamsignId: Dreamsign["id"] } | null = null,
 ): DreamscapeView {
   const inlineRewards: Record<string, InlineRewardView> = {};
   node.sites.forEach((site) => {
@@ -289,6 +291,7 @@ export function buildDreamscapeView(
       !(site.type === "Essence" && runtime.journeyEssenceSource !== undefined))) {
       return;
     }
+    if ("enhancedDreamsignOffer" in runtime) return;
     if (runtime.reward.rewardType === "dreamsign") {
       inlineRewards[site.id] = {
         kind: "dreamsign",
@@ -302,7 +305,25 @@ export function buildDreamscapeView(
       amount: runtime.reward.essenceAmount,
     };
   });
+  const choiceSite = node.sites.find((site) => {
+    const runtime = state.siteRuntime?.[site.id];
+    return site.type === "Reward" && !site.isVisited && isEnhancedDreamsignReward(runtime) && !runtime.accepted;
+  });
+  const choiceRuntime = choiceSite === undefined ? undefined : state.siteRuntime[choiceSite.id];
+  const quote = isEnhancedDreamsignReward(choiceRuntime) ? choiceRuntime.enhancedDreamsignOffer : null;
+  const incoming = choiceSite?.id === selectedRewardChoice?.siteId
+    ? quote?.offeredDreamsigns.find((sign) => sign.id === selectedRewardChoice?.dreamsignId)
+    : undefined;
   return {
+    ...(choiceSite === undefined || quote === null ? {} : { rewardChoice: {
+      siteId: choiceSite.id,
+      options: quote.offeredDreamsigns.map(toDreamsignView),
+      replacement: incoming === undefined || state.dreamsigns.length < state.maxDreamsigns ? null : {
+        incoming: toDreamsignView(incoming),
+        held: state.dreamsigns.map(toDreamsignView),
+        capacity: state.maxDreamsigns,
+      },
+    } }),
     scene,
     title,
     sites: buildSiteModels(

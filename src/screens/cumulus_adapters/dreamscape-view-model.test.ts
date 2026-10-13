@@ -1,3 +1,4 @@
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import { makeTestAtlasNode } from "../../testing/atlas-fixtures";
 import { createJourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { journeyEssence } from "../../rules/journey/journey-essence";
@@ -361,4 +362,30 @@ it("uses live Essence multipliers and a persisted Pearl reward in the existing i
   expect(view().inlineRewards[essenceSite.id]).toMatchObject({ kind: "dreamsign", dreamsign: { id: incoming }, requiresReplacement: true });
   state.dreamsigns = [];
   expect(view().inlineRewards[essenceSite.id]).toMatchObject({ kind: "dreamsign", dreamsign: { id: incoming }, requiresReplacement: false });
+});
+
+
+it("projects a durable enhanced offer after reload without the first reward animation", () => {
+  const site: SiteState = { id: parseSiteId("enhanced-quote"), type: "Reward", isVisited: false, isEnhanced: false };
+  const first = { id: testDreamsignId("quote-first"), name: "Same name", effectDescription: "" };
+  const second = { ...first, id: testDreamsignId("quote-second") };
+  const node = makeTestAtlasNode(parseAtlasNodeId("enhanced-quote-node"), [site]);
+  const state = { ...testJourneyState(), currentDreamscape: node.id, maxDreamsigns: 1, dreamsigns: [first] };
+  state.siteRuntime[site.id] = { kind: "reward", reward: { rewardType: "dreamsign", dreamsign: first }, accepted: false,
+    remainingDreamsignPoolIds: [], enhancedDreamsignOffer: { standardDreamsignId: first.id, offeredDreamsigns: [first, second],
+      requestedCount: 3, selectionRulesVersion: SELECTION_RULES_VERSION } };
+  const view = (selected: typeof first.id | null = null) => buildDreamscapeViewImpl(node, "Synthetic", null,
+    JSON.parse(JSON.stringify(state)) as typeof state, MINIMAL_SITES_DATA, 2, null, undefined, undefined,
+    selected === null ? null : { siteId: site.id, dreamsignId: selected });
+  expect(view().rewardChoice?.options.map((option) => option.id)).toEqual([first.id, second.id]);
+  expect(view().inlineRewards[site.id]).toBeUndefined();
+  expect(view(second.id).rewardChoice?.replacement).toMatchObject({ incoming: { id: second.id }, held: [{ id: first.id }] });
+  expect(view(testDreamsignId("absent-option")).rewardChoice?.replacement).toBeNull();
+  const foreign = buildDreamscapeViewImpl(node, "Synthetic", null, state, MINIMAL_SITES_DATA, 2,
+    null, undefined, undefined, { siteId: parseSiteId("prior-reward-site"), dreamsignId: second.id });
+  expect(foreign.rewardChoice?.replacement).toBeNull();
+  const runtime = state.siteRuntime[site.id];
+  if (runtime?.kind !== "reward") throw new Error("expected Reward");
+  runtime.accepted = true;
+  expect(view().rewardChoice).toBeUndefined();
 });

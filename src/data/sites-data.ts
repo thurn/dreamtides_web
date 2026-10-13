@@ -77,8 +77,9 @@ function isRewards(value: unknown): boolean {
     isRange(value.essence.standard) &&
     isRange(value.essence.enhanced) &&
     isRecord(value.reward) &&
-    hasExactKeys(value.reward, ["fallbackEssence"]) &&
+    hasExactKeys(value.reward, ["fallbackEssence", "enhancedOfferCount"]) &&
     isRange(value.reward.fallbackEssence) &&
+    isInteger(value.reward.enhancedOfferCount, { min: 1 }) &&
     isRecord(value.dreamsignRevelation) &&
     hasExactKeys(value.dreamsignRevelation, [
       "standardOfferCount",

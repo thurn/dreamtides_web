@@ -53,7 +53,7 @@ export interface SitesData {
       standard: { min: number; max: number };
       enhanced: { min: number; max: number };
     };
-    reward: { fallbackEssence: { min: number; max: number } };
+    reward: { fallbackEssence: { min: number; max: number }; enhancedOfferCount: number };
     dreamsignRevelation: {
       standardOfferCount: number;
       enhancedOfferCount: number;

@@ -412,8 +412,20 @@ export function routeDomain(
       );
 
     // --- sites ---
-    case "OPEN_SITE":
-      return journeyCase(state, sites.openSite(journey, payload, ctx, modifiers));
+    case "OPEN_SITE": {
+      const result = journeyCase(state, sites.openSite(journey, payload, ctx, modifiers));
+      const siteId = siteIdFromUnknown(payload.siteId);
+      const runtime = siteId === null ? undefined : result.state.journey.siteRuntime[siteId];
+      if (result.outcome !== "applied" || !sites.isEnhancedDreamsignReward(runtime)) return result;
+      const quote = runtime.enhancedDreamsignOffer;
+      return { ...result, logRecords: [{ event: "enhanced_reward_prepared", fields: {
+        siteId, standardDreamsignId: quote.standardDreamsignId,
+        offeredDreamsignIds: quote.offeredDreamsigns.map((sign) => sign.id),
+        requestedCount: quote.requestedCount, offeredCount: quote.offeredDreamsigns.length,
+        selectionRulesVersion: quote.selectionRulesVersion,
+        remainingDreamsignPoolIds: runtime.remainingDreamsignPoolIds,
+      } }] };
+    }
     case "CHOOSE_RANDOM_SITE":
       return journeyCase(state, sites.chooseRandomSite(journey, payload));
     case "REROLL_EXPLORATION":
@@ -427,10 +439,28 @@ export function routeDomain(
       return journeyCase(state, sites.completeAugury(journey, payload));
     case "ACCEPT_REWARD":
       return journeyCase(state, sites.acceptReward(journey, payload));
-    case "ACCEPT_DREAMSIGN_OFFER":
-      return journeyCase(state, sites.acceptDreamsignOffer(journey, payload));
-    case "REJECT_DREAMSIGN_OFFER":
-      return journeyCase(state, sites.rejectDreamsignOffer(journey, payload));
+    case "ACCEPT_DREAMSIGN_OFFER": {
+      const result = journeyCase(state, sites.acceptDreamsignOffer(journey, payload));
+      const siteId = siteIdFromUnknown(payload.siteId);
+      const runtime = siteId === null ? undefined : journey.siteRuntime[siteId];
+      if (result.outcome !== "applied" || !sites.isEnhancedDreamsignReward(runtime)) return result;
+      const purged = typeof payload.purgeIndex === "number" ? journey.dreamsigns[payload.purgeIndex] : undefined;
+      return { ...result, logRecords: [{ event: "enhanced_reward_accepted", fields: {
+        siteId, dreamsignId: payload.dreamsignId,
+        ...(purged === undefined ? {} : { replacedDreamsignId: purged.id }),
+        selectionRulesVersion: runtime.enhancedDreamsignOffer.selectionRulesVersion,
+      } }] };
+    }
+    case "REJECT_DREAMSIGN_OFFER": {
+      const result = journeyCase(state, sites.rejectDreamsignOffer(journey, payload));
+      const siteId = siteIdFromUnknown(payload.siteId);
+      const runtime = siteId === null ? undefined : journey.siteRuntime[siteId];
+      if (result.outcome !== "applied" || !sites.isEnhancedDreamsignReward(runtime)) return result;
+      return { ...result, logRecords: [{ event: "enhanced_reward_declined", fields: {
+        siteId, offeredDreamsignIds: runtime.enhancedDreamsignOffer.offeredDreamsigns.map((sign) => sign.id),
+        selectionRulesVersion: runtime.enhancedDreamsignOffer.selectionRulesVersion,
+      } }] };
+    }
     case "ACCEPT_ESSENCE":
       return journeyCase(state, sites.acceptEssence(journey, payload, ctx, modifiers));
     case "REROLL_AUGURY":

@@ -399,4 +399,34 @@ describe("SiteNode", () => {
     act(() => source.click());
     expect(onSelect).not.toHaveBeenCalled();
   });
+  it("renders persisted reward choices, dispatches a nonfirst UUID and retains explicit replacement controls", () => {
+    vi.useFakeTimers();
+    const first = dreamsignViewFixture({ idSeed: "enhanced-first", name: "Same name" });
+    const second = dreamsignViewFixture({ idSeed: "enhanced-second", name: "Same name" });
+    const held = dreamsignViewFixture({ idSeed: "enhanced-held", name: "Same name" });
+    const view: DreamscapeView = { scene: null, title: "Synthetic", sites: [], inlineRewards: {}, replacement: null, rewardChoice: { siteId: parseSiteId("enhanced-reward"),
+      options: [first, second], replacement: null } };
+    const onChoice = vi.fn(), onDecline = vi.fn(), onCancel = vi.fn(), onAnimation = vi.fn();
+    const props = { onSelectSite: vi.fn(), onReplaceDreamsign: vi.fn(), onDeclineReward: vi.fn(),
+      onInlineRewardAnimationComplete: onAnimation, onRewardChoice: onChoice,
+      onDeclineRewardChoice: onDecline, onCancelRewardReplacement: onCancel };
+    const { container, rerender } = renderInCumulus(<DreamscapeScreen view={view} {...props} />);
+    expect(container.querySelectorAll("[data-reward-option-id]")).toHaveLength(2);
+    act(() => container.querySelector<HTMLButtonElement>(`[data-reward-option-id="${second.id}"] button`)?.click());
+    expect(onChoice).toHaveBeenCalledWith(second.id);
+    act(() => { vi.runAllTimers(); }); expect(onAnimation).not.toHaveBeenCalled();
+    rerender(<DreamscapeScreen view={{ ...view, rewardChoice: { ...view.rewardChoice!,
+      replacement: { incoming: second, held: [held], capacity: 1 } } }} {...props} />);
+    expect(container.querySelector("[data-incoming-dreamsign-id]")?.getAttribute("data-incoming-dreamsign-id")).toBe(second.id);
+    act(() => container.querySelector<HTMLButtonElement>(`[data-replace-dreamsign-id="${held.id}"] button`)?.click());
+    expect(onChoice).toHaveBeenCalledWith(second.id, held.id);
+    const dialogButtons = container.querySelectorAll<HTMLButtonElement>('[role="dialog"] button');
+    act(() => dialogButtons[dialogButtons.length - 1]?.click());
+    expect(onCancel).toHaveBeenCalled();
+    rerender(<DreamscapeScreen view={view} {...props} />);
+    const buttons = container.querySelectorAll<HTMLButtonElement>('[role="dialog"] button');
+    act(() => buttons[buttons.length - 1]?.click());
+    expect(onDecline).toHaveBeenCalled();
+  });
+
 });

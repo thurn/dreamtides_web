@@ -12,6 +12,7 @@ import {
 } from "./dreamscape-view-model";
 import {
   resolveInlineReward,
+  resolveEnhancedRewardChoice,
   resolveRewardDecline,
   resolveRewardReplacement,
 } from "./inline-reward-view-model";
@@ -28,6 +29,9 @@ export function DreamscapeScreenAdapter() {
   const [replacementSiteId, setReplacementSiteId] = useState<SiteId | null>(
     null,
   );
+  const [selectedRewardChoice, setSelectedRewardChoice] = useState<{
+    siteId: SiteId; dreamsignId: DreamsignId;
+  } | null>(null);
   const view = useMemo(
     () =>
       node === undefined
@@ -41,6 +45,8 @@ export function DreamscapeScreenAdapter() {
             journeyContent.draftData.offers.picksPerSite,
             replacementSiteId,
             journeyContent.tutorial.dreamscape,
+            undefined,
+            selectedRewardChoice,
           ),
     [
       journeyContent.sitesData,
@@ -49,6 +55,7 @@ export function DreamscapeScreenAdapter() {
       journeyContent.draftData.offers.picksPerSite,
       node,
       replacementSiteId,
+      selectedRewardChoice,
       state,
     ],
   );
@@ -140,6 +147,24 @@ export function DreamscapeScreenAdapter() {
     setReplacementSiteId(null);
   }, [mutations, node, replacementSiteId, state]);
 
+  const handleRewardChoice = useCallback((dreamsignId: DreamsignId, heldId?: DreamsignId) => {
+    if (node === undefined || view?.rewardChoice === undefined) return;
+    const resolution = resolveEnhancedRewardChoice(node, state, view.rewardChoice.siteId, dreamsignId, heldId);
+    if (resolution === null) return;
+    if (resolution.kind === "replacement") {
+      setSelectedRewardChoice({ siteId: resolution.siteId, dreamsignId });
+      return;
+    }
+    mutations.acceptDreamsignOffer(resolution.siteId, resolution.dreamsign, resolution.purgeIndex);
+    setSelectedRewardChoice(null);
+  }, [mutations, node, state, view?.rewardChoice]);
+
+  const handleDeclineRewardChoice = useCallback(() => {
+    if (view?.rewardChoice === undefined) return;
+    mutations.rejectDreamsignOffer(view.rewardChoice.siteId);
+    setSelectedRewardChoice(null);
+  }, [mutations, view?.rewardChoice]);
+
   const handleGuideDialogueShown = useCallback(() => {
     if (node === undefined || view?.guideDialogue === undefined) return;
     const entry = buildDreamscapeGuidanceLog(
@@ -155,6 +180,9 @@ export function DreamscapeScreenAdapter() {
     <DreamscapeScreen
       view={view}
       onSelectSite={handleSelectSite}
+      onRewardChoice={handleRewardChoice}
+      onDeclineRewardChoice={handleDeclineRewardChoice}
+      onCancelRewardReplacement={() => setSelectedRewardChoice(null)}
       onInlineRewardAnimationComplete={handleInlineRewardAnimationComplete}
       onReplaceDreamsign={handleReplaceDreamsign}
       onDeclineReward={handleDeclineReward}
