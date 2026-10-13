@@ -4,7 +4,19 @@
 // forged plan, forged intent, or stale journey bounces without mutating the
 // journey. Plan selection rules live in the src/exploration/*-plan tests.
 
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+import { makeAuguryTestCard, makeAuguryTestContent } from "../../journey_v2/testing/fixtures";
+import { testCardId } from "../../types/test-identities";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { makeSite, stateWithSites, SITE_ID } from "../../rules/journey/sites-fixtures";
+import { ctx, event } from "../../rules/journey/lifecycle-fixtures";
+import { reduceGameEvent } from "../../rules/reducer";
+import { registerDeckContentProvider } from "../../rules/journey/deck";
+import { registerSiteContentProvider } from "../../rules/journey/sites";
+import { clearGameProviders } from "./register-game-providers";
+import { buildExplorationRuntime } from "./exploration-provider";
+import { createSiteContentProvider } from "./site-provider";
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import { makeTestAtlasNode } from "../../testing/atlas-fixtures";
 import { parseSiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
@@ -142,6 +154,44 @@ const CASES: Case[] = [
 ];
 
 describe("Exploration provider", () => {
+  afterEach(clearGameProviders);
+  it("records the fresh physical entry for a single replacement and refuses replay", () => {
+    const old = makeAuguryTestCard({ id: testCardId("single-old"), cardNumber: 1, cardType: "Character", subtype: "Warrior", energyCost: 1 });
+    const replacement = makeAuguryTestCard({ id: testCardId("single-replacement"), cardNumber: 2, cardType: "Character", subtype: "Warrior", energyCost: 3 });
+    const primary = action("single-physical-replacement", { effectKind: "replace-selected", predicate: "character", count: 1,
+      canonicalMechanicId: "replace-deck-entry", selectionPolicyId: "card-fit-quality" });
+    const base = makeAuguryTestContent({ cards: [old, replacement] });
+    const content = { ...base, exploration: { ...base.exploration, encounters: [{ cardId: old.id, prose: "Fixture", actions: [primary] }] } };
+    let before = stateWithSites([makeSite("Exploration")], { essence: 100, deck: [
+      { entryId: parseDeckEntryId("selected"), cardNumber: 1, transfiguration: null, isBane: false },
+      { entryId: parseDeckEntryId("retained"), cardNumber: 1, transfiguration: null, isBane: false },
+    ] });
+    const runtime = req(buildExplorationRuntime(before.journey, makeSite("Exploration"), content, () => 0, old.id) ?? undefined);
+    before.journey.siteRuntime[SITE_ID] = runtime;
+    const selected = parseDeckEntryId(req(Object.keys(runtime.actionOffers[0].replacementCardIdByEntryId)[0]));
+    const preparedId = req(runtime.actionOffers[0]?.replacementCardIdByEntryId[selected]);
+    registerSiteContentProvider(createSiteContentProvider(content));
+    registerDeckContentProvider({ resolveCardNumber: (id) => [...content.cardDatabase.values()].find((card) => card.id === id)?.cardNumber ?? null, resolveDreamsign: () => null });
+    const added = reduceGameEvent(before, event("ADD_CARD", { cardId: preparedId }), ctx());
+    expect(added.outcome).toBe("applied"); before = added.state;
+
+    const intent = event("RESOLVE_EXPLORATION_CHOICE", { siteId: SITE_ID, actionId: primary.id,
+      selectionRulesVersion: SELECTION_RULES_VERSION, selection: { entryIds: [selected] } });
+    const result = reduceGameEvent(before, intent, ctx());
+    expect(result.outcome).toBe("applied");
+    const fresh = result.state.journey.deck.filter((entry) => !before.journey.deck.some((old) => old.entryId === entry.entryId));
+    expect(fresh).toHaveLength(1);
+    expect(before.journey.deck.filter((entry) => entry.cardNumber === fresh[0].cardNumber && entry.entryId !== selected)).not.toHaveLength(0);
+    expect(result.state.journey.deck.some((entry) => entry.entryId === selected)).toBe(false);
+    expect(result.state.journey.deck.some((entry) => entry.entryId !== selected && before.journey.deck.some((old) => old.entryId === entry.entryId))).toBe(true);
+    const resolved = result.state.journey.siteRuntime[SITE_ID];
+    if (resolved.kind !== "exploration") throw new Error("Missing Exploration runtime");
+    expect(resolved.resolution?.gainedCardIds).toEqual([preparedId]);
+    expect(resolved.resolution?.gainedEntryIds).toEqual(fresh.map((entry) => entry.entryId));
+    expect(content.cardDatabase.get(fresh[0].cardNumber)?.id).toBe(preparedId);
+    expect(reduceGameEvent(result.state, intent, ctx()).outcome).toBe("bounced");
+    expect(reduceGameEvent(before, intent, ctx()).state).toEqual(result.state);
+  });
   it.each(CASES)(
     "prepares $name from the seed, folds it once, and bounces forgeries",
     expectProviderCase,

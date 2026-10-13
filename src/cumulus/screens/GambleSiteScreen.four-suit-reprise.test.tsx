@@ -55,6 +55,7 @@ function spadesResult(
       resultSettled: false,
       essenceGained: 0,
       target,
+      copy: null,
       transfigurationCandidate: {
         entryId: target.entryId,
         model: target.model,
@@ -88,6 +89,18 @@ afterEach(() => {
 });
 
 describe("GambleSiteScreen — Four-Suit Reprise", () => {
+  it("renders the supplied modified physical copy separately from the original target", () => {
+    vi.useFakeTimers();
+    const original = FOUR_SUIT.cards[0];
+    const copy = { ...original, entryId: parseDeckEntryId("new-physical-copy"),
+      model: { ...original.model, displaySnapshot: { ...original.model.displaySnapshot, spark: 9, energyCost: 0 } } };
+    const view = spadesResult({ outcome: "duplication", resultRevealed: true, resultSettled: true, copy });
+    const screen = renderGamble(view);
+    advance(2_000);
+    expect(screen.query('[data-four-suit-duplicate-card="original"] [data-card-stat="spark"] [data-card-stat-value]')?.textContent).toBe("1");
+    expect(screen.query('[data-four-suit-duplicate-card="copy"] [data-card-stat="spark"] [data-card-stat-value]')?.textContent).toBe("9");
+  });
+
   it("selects, reselects, and draws against a card by entry id", () => {
     const onDrawFourSuit = vi.fn();
     const screen = renderGamble(FOUR_SUIT, { onDrawFourSuit });

@@ -3,7 +3,7 @@ import { cardIdFromUnknown, parseCardSubtype } from "../../types/card-identity";
 import { deckEntryIdFromUnknown, dreamsignIdFromUnknown, type DeckEntryId, type DreamsignId } from "../../types/identifiers";
 import type { JourneyDeckEntryEffect, JourneyDeckEntryGain, JourneyState, PreventedNightmareGain } from "../../types/journey";
 import { journeyTransfigurationCard } from "./journey-transfiguration";
-import type { JourneyModifierDefinition } from "./modifier-registry";
+import type { JourneyModifierDefinition, JourneyModifierRegistry } from "./modifier-registry";
 
 /** Snapshot only physical entries introduced by this operation, in deck order. */
 export function journeyDeckEntryGains(before: JourneyState, journey: JourneyState): readonly JourneyDeckEntryGain[] {
@@ -19,21 +19,34 @@ const record = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 /** Optional saved receipts have their own bounded structural and identity contract. */
-export function validPreventedNightmareGains(value: unknown, deck: readonly unknown[], resolution: Record<string, unknown>): boolean {
+export function validPreventedNightmareGains(value: unknown, deck: readonly unknown[], resolution: Record<string, unknown>, lookup: JourneyModifierRegistry["lookup"]): boolean {
   if (value === undefined) return true;
   if (!Array.isArray(value)) return false;
   const ids = new Set<DeckEntryId>();
   for (const item of value) {
     if (!record(item)) return false;
     const id = deckEntryIdFromUnknown(item.entryId);
+    const sourceDreamsignId = dreamsignIdFromUnknown(item.dreamsignId);
     if (id === null || ids.has(id) || cardIdFromUnknown(item.cardId) !== NIGHTMARE_CARD_ID ||
-      dreamsignIdFromUnknown(item.dreamsignId) === null || typeof item.heldIndex !== "number" ||
+      sourceDreamsignId === null || lookup(sourceDreamsignId)?.journeyDeckEntry?.kind !== "preventNightmare" || typeof item.heldIndex !== "number" ||
       !Number.isSafeInteger(item.heldIndex) || item.heldIndex < 0 ||
       deck.some((entry) => record(entry) && entry.entryId === id) ||
       (Array.isArray(resolution.gainedEntryIds) && resolution.gainedEntryIds.includes(id)) ||
       (Array.isArray(resolution.nightmareGains) && resolution.nightmareGains.some((gain) => record(gain) && gain.entryId === id))) return false;
     if ((item.sourceEntryId !== undefined || item.sourceCardId !== undefined) &&
       (deckEntryIdFromUnknown(item.sourceEntryId) === null || item.sourceEntryId === id || cardIdFromUnknown(item.sourceCardId) !== NIGHTMARE_CARD_ID)) return false;
+    if (item.sourceEntryId !== undefined) {
+      const selection = record(resolution.selection) ? resolution.selection : undefined;
+      const related = selection?.copyEntryId !== undefined
+        ? selection.copyEntryId === item.sourceEntryId
+        : Array.isArray(selection?.entryIds)
+          ? selection.entryIds.includes(item.sourceEntryId)
+          : Array.isArray(resolution.cardCopies) && (
+            resolution.cardCopies.some((copy) => record(copy) && copy.mintedEntryId === id &&
+              copy.sourceEntryId === item.sourceEntryId && copy.sourceCardId === item.sourceCardId) ||
+            (Array.isArray(resolution.affectedEntryIds) && resolution.affectedEntryIds.includes(item.sourceEntryId)));
+      if (!related) return false;
+    }
     ids.add(id);
   }
   return true;

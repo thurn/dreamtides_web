@@ -4396,6 +4396,7 @@ export function resolveExplorationChoice(input: {
         replacementId === undefined
           ? null
           : addCardEffect(content, replacementId);
+      const beforeEntryIds = new Set(next.deck.map((entry) => entry.entryId));
       if (
         replacementId === undefined ||
         purgedCardId === null ||
@@ -4409,6 +4410,9 @@ export function resolveExplorationChoice(input: {
         return null;
       result.purgedCardIds.push(parseCardId(purgedCardId));
       result.gainedCardIds.push(replacementId);
+      result.gainedEntryIds?.push(
+        ...next.deck.filter((entry) => !beforeEntryIds.has(entry.entryId)).map((entry) => entry.entryId),
+      );
       break;
     }
     case "gain-nightmare-and-card": {

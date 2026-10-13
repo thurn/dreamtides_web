@@ -226,6 +226,8 @@ export interface FourSuitRepriseResultView {
   resultSettled: boolean;
   essenceGained: number;
   target: FourSuitRepriseCardView;
+  /** Current minted physical copy; null when a committed copy cannot resolve. */
+  copy: FourSuitRepriseCardView | null;
   transfigurationCandidate: TransfigurationCandidateView;
   chosenTransfiguration: TransfigurationType | null;
 }
@@ -599,7 +601,7 @@ function FourSuitOutcomeCard({
           transition={exitTransition}
           style={{ ...cardStyle, zIndex: 1 }}
         >
-          <GameCard model={result.target.model} selection="copied" />
+          {result.copy !== null && <GameCard model={result.copy.model} selection="copied" />}
         </motion.div>
       </div>
     );

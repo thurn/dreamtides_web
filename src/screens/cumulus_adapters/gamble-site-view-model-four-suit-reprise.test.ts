@@ -5,6 +5,7 @@ import { testGambleSelectionTrace } from "../../testing/gamble-fixture";
 import type {
   FourSuitRepriseSiteRuntime,
   FourSuitRepriseTarget,
+  DeckEntry,
 } from "../../types/journey";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
@@ -56,7 +57,55 @@ function fourSuitTarget(
   };
 }
 
+function copiedScenario() {
+  const base = fourSuitCard(1), target = fourSuitTarget(1);
+  target.cardSnapshot = { ...base, spark: 40, energyCost: 9 };
+  const copy: DeckEntry = { entryId: parseDeckEntryId("minted-copy"), cardNumber: 1, transfiguration: "Kindled", isBane: false,
+    sparkBonus: 1, keywordModification: { fast: true, energyCostReduction: 1 }, statOverride: { energyCost: 0 } };
+  const runtime: FourSuitRepriseSiteRuntime = {
+    kind: "gamble", gameId: "four-suit-reprise", selectionTrace: testGambleSelectionTrace("four-suit-reprise"),
+    isFarpoint: false, drawCost: 25, shuffleCommitments: [parseShuffleCommitment("copy-round")],
+    committedCards: [{ rank: "4", suit: "hearts" }], targets: [target], phase: "result",
+    rounds: [{ roundNumber: 1, shuffleCommitment: parseShuffleCommitment("copy-round"), card: { rank: "4", suit: "hearts" },
+      targetEntryId: target.entryId, targetCardId: target.cardId, costPaid: 25, outcome: "duplication",
+      resultRevealed: true, resultSettled: true, essenceGained: 0, duplicatedEntryId: copy.entryId }],
+  };
+  const state = { ...testJourneyState(), deck: [
+    { entryId: target.entryId, cardNumber: 1, transfiguration: null, isBane: false, sparkBonus: 38 },
+    { entryId: parseDeckEntryId("old-same-printing"), cardNumber: 1, transfiguration: null, isBane: false, sparkBonus: 17 }, copy,
+  ], siteRuntime: { [GAMBLE_SITE.id]: runtime } };
+  const params = Object.assign({ state, scene: null, site: GAMBLE_SITE, guide: GUIDE, guideLine: GUIDE_LINE }, { cardDatabase: new Map([[1, base], [2, fourSuitCard(2)]]) });
+  return { params, state, target, copy, runtime };
+}
+
 describe("gamble-site-view-model — Four-Suit Reprise", () => {
+  it("projects only the exact minted copy from canonical data and survives a saved round-trip", () => {
+    const { params, target, copy } = copiedScenario();
+    const view = buildGambleSiteView(params);
+    expect(view?.gameId).toBe("four-suit-reprise");
+    if (view?.gameId !== "four-suit-reprise") throw new Error("Missing Four-Suit view");
+    expect(view.result).toMatchObject({ copy: { entryId: copy.entryId, cardId: target.cardId,
+      model: { cardId: target.cardId, displaySnapshot: { spark: 5, energyCost: 0, isFast: true }, transfiguration: { type: "Kindled" } } } });
+    expect(view.result?.target.model.displaySnapshot).toEqual(target.cardSnapshot);
+    expect(buildGambleSiteView({ ...params, state: JSON.parse(JSON.stringify(params.state)) as typeof params.state })).toEqual(view);
+    const purged = { ...params, state: { ...params.state, deck: params.state.deck.filter((e) => e.entryId !== copy.entryId) } };
+    const purgedView = buildGambleSiteView(purged);
+    if (purgedView?.gameId !== "four-suit-reprise") throw new Error("Missing purged Four-Suit view");
+    expect(purgedView.result).toMatchObject({ copy: null });
+  });
+  it.each(["omitted", "missing", "wrong-card", "same-entry", "wrong-uuid", "missing-lookup"])("keeps the original result without a phantom copy for %s receipt", (kind) => {
+    const { params, state, runtime, target, copy } = copiedScenario();
+    const latest = runtime.rounds[0];
+    const next = { ...state, deck: state.deck.map((e) => e.entryId === copy.entryId && kind === "wrong-card" ? { ...e, cardNumber: 2 } : e),
+      siteRuntime: { [GAMBLE_SITE.id]: { ...runtime, rounds: [{ ...latest,
+        duplicatedEntryId: kind === "omitted" ? undefined : kind === "missing" ? parseDeckEntryId("gone") : kind === "same-entry" ? target.entryId : copy.entryId }] } } };
+    const cardDatabase = kind === "missing-lookup" ? undefined : kind === "wrong-uuid"
+      ? new Map([[1, { ...fourSuitCard(1), id: fourSuitCard(2).id }]]) : params.cardDatabase;
+    const view = buildGambleSiteView({ ...params, state: next, cardDatabase });
+    if (view?.gameId !== "four-suit-reprise") throw new Error("Missing guarded Four-Suit view");
+    expect(view.result).toMatchObject({ copy: null, outcome: "duplication", resultSettled: true });
+  });
+
   it("maps unpriced forms and removes every used card UUID from later rounds", () => {
     const target = fourSuitTarget(1);
     const sameCardCopy = {

@@ -1,3 +1,5 @@
+import { resolveDeckEntryCard } from "../../card-type-change";
+import type { CardData } from "../../types/cards";
 import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   GambleGateView,
@@ -520,6 +522,7 @@ function buildFourSuitRepriseSiteView(params: {
   game: FourSuitRepriseGame;
   runtime: FourSuitRepriseSiteRuntime;
   transfigurationData: TransfigurationData;
+  cardDatabase?: ReadonlyMap<number, CardData>;
 }): FourSuitRepriseSiteView {
   const { runtime } = params;
   const latestRound = runtime.rounds[runtime.rounds.length - 1] ?? null;
@@ -556,6 +559,16 @@ function buildFourSuitRepriseSiteView(params: {
                   transfiguration: chosenPreview.display,
                 },
         };
+  const minted = latestRound?.outcome === "duplication" && latestRound.resultSettled
+    ? params.state.deck.find((entry) => entry.entryId === latestRound.duplicatedEntryId)
+    : undefined;
+  const base = minted === undefined ? undefined : params.cardDatabase?.get(minted.cardNumber);
+  const copy: FourSuitRepriseCardView | null = minted === undefined || base === undefined ||
+    target === null || minted.entryId === target.entryId || minted.cardNumber !== target.cardNumber || base.id !== latestRound?.targetCardId
+    ? null : { entryId: minted.entryId, cardId: base.id, model: {
+      cardId: base.id, displaySnapshot: resolveDeckEntryCard(params.transfigurationData, base, minted),
+      ...(minted.transfiguration === null ? {} : { transfiguration: buildTransfigurationDisplay(params.transfigurationData, base, minted.transfiguration).display }),
+    } };
   const cards = availableTargets.map(fourSuitCardView);
   const roundNumber = (
     runtime.phase === "choose"
@@ -600,6 +613,7 @@ function buildFourSuitRepriseSiteView(params: {
             resultSettled: latestRound.resultSettled,
             essenceGained: latestRound.essenceGained,
             target: resultTarget,
+            copy,
             transfigurationCandidate: buildFourSuitTransfigurationCandidate(
               params.transfigurationData,
               target,
@@ -624,6 +638,7 @@ export function buildGambleSiteView(params: {
   guideLine: string;
   gambleData: GambleData;
   transfigurationData: TransfigurationData;
+  cardDatabase?: ReadonlyMap<number, CardData>;
 }): GambleSiteView | null {
   const runtimeCandidate = params.state.siteRuntime[params.site.id];
   const runtime: GambleSiteRuntime | null =

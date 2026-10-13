@@ -175,6 +175,21 @@ describe("journeyDeckEntry public gain contracts", () => {
 });
 
 describe("Nightmare prevention saved transaction contracts", () => {
+  it.each(["unregistered", "nonprevent", "unrelated-copy-source"])("rejects an incoherent prevention source on public LOAD_STATE: %s", (kind) => {
+    const before = compound(initial([RAVEN]), [entry("blocked", 3, { isBane: true })]).state;
+    const snapshot = clone(before.journey);
+    const resolution = (snapshot.siteRuntime[SITE_ID] as ExplorationSiteRuntime).resolution!;
+    const receipt = resolution.preventedNightmareGains![0];
+    resolution.preventedNightmareGains = [{ ...receipt,
+      ...(kind === "unregistered" ? { dreamsignId: testDreamsignId("unknown-preventer") } : {}),
+      ...(kind === "nonprevent" ? { dreamsignId: ACORN } : {}),
+      ...(kind === "unrelated-copy-source" ? { sourceEntryId: parseDeckEntryId("unrelated-source"), sourceCardId: NIGHTMARE_CARD_ID } : {}),
+    }];
+    const loaded = apply(before, "LOAD_STATE", { snapshot });
+    expect(loaded.outcome).toBe("bounced");
+    expect(loaded.state).toBe(before);
+    expect(loaded.logRecords).toBeUndefined();
+  });
   it.each(["alice", "bob"])("keeps old Nightmares and blocks fresh UUID attempts including legacy isBane payload, actor=%s", (actor) => {
     const before = initial([RAVEN, RAVEN]); before.journey.deck.push(entry("old-bane", 3, { isBane: true }));
     const out = apply(before, "ADD_CARD", { cardId: WARRIOR, isBane: true }, {}, actor);
@@ -231,6 +246,41 @@ describe("Nightmare prevention saved transaction contracts", () => {
 
 
 describe("actual prepared Exploration additions and public reward models", () => {
+  it.each([{ held: [], sparks: { [WARRIOR]: 2, [OTHER]: 4 }, form: null }, { held: [ACORN, CRYSTAL], sparks: { [WARRIOR]: 5, [OTHER]: 9 }, form: "Kindled" }])("presents the effective fresh single replacement for held sources $held", ({ held, sparks, form }) => {
+    const old = makeAuguryTestCard({ id: WARRIOR, cardNumber: 1, cardType: "Character", subtype: "Warrior", energyCost: 1, spark: 2 });
+    const replacement = makeAuguryTestCard({ id: OTHER, cardNumber: 2, cardType: "Character", subtype: "Warrior", energyCost: 3, spark: 4 });
+    const blank = makeAuguryTestCard({ id: BLANK, cardNumber: 4, cardType: "Event", subtype: "" });
+    const action = { id: testExplorationActionId("effective-single-replacement"), label: "Synthetic", effectKind: "replace-selected" as const,
+      predicate: "character" as const, count: 1, canonicalMechanicId: "replace-deck-entry" as const, selectionPolicyId: "card-fit-quality" as const };
+    const base = makeAuguryTestContent({ cards: [old, replacement, blank] });
+    const content = { ...base, exploration: { ...base.exploration, encounters: [{ cardId: BLANK, prose: "Synthetic", actions: [action] }] } };
+    let before = initial(held, 30); before.journey.deck.push(entry("selected", 1), entry("retained", 1));
+    const prepared = buildExplorationRuntime(before.journey, makeSite("Exploration"), content, () => 0, BLANK)!;
+    const selected = parseDeckEntryId(Object.keys(prepared.actionOffers[0].replacementCardIdByEntryId)[0]);
+    before.journey.siteRuntime[SITE_ID] = prepared;
+    registerSiteContentProvider(createSiteContentProvider(content));
+    registerJourneyTransfigurationProvider({ resolve: (e) => {
+      const card = content.cardDatabase.get(e.cardNumber)!;
+      return { cardId: card.id, cardType: card.cardType, subtype: card.subtype, forms: e.transfiguration === null && card.cardType === "Character" ? ["Kindled"] : [] };
+    } });
+    before = accepted(before, "ADD_CARD", { cardId: OTHER });
+    const existingReplacement = last(before.journey.deck).entryId;
+    before = accepted(before, "SET_DECK_ENTRY_STAT_OVERRIDE", { entryId: existingReplacement, override: { spark: 77 } });
+    const out = apply(before, "RESOLVE_EXPLORATION_CHOICE", { siteId: SITE_ID, actionId: action.id, selectionRulesVersion: SELECTION_RULES_VERSION, selection: { entryIds: [selected] } });
+    expect(out.outcome).toBe("applied");
+    const fresh = out.state.journey.deck.filter((e) => !before.journey.deck.some((old) => old.entryId === e.entryId));
+    expect(fresh).toHaveLength(1);
+    const resolved = out.state.journey.siteRuntime[SITE_ID] as ExplorationSiteRuntime;
+    expect(resolved.resolution?.gainedEntryIds).toEqual(fresh.map((e) => e.entryId));
+    const card = content.cardDatabase.get(fresh[0].cardNumber)!;
+    expect(before.journey.deck.filter((e) => e.cardNumber === fresh[0].cardNumber && e.entryId !== selected)).not.toHaveLength(0);
+    const model = rewardForResolution(resolved, SITE_ID, out.state.journey, content, null, [action], [], (id) => registry.lookup(id));
+    expect(model).toMatchObject({ objects: { cards: [{ cardId: card.id, displaySnapshot: { spark: sparks[card.id] } }] } });
+    expect(out.state.journey.deck.filter((e) => before.journey.deck.some((old) => old.entryId === e.entryId))).toEqual(before.journey.deck.filter((e) => e.entryId !== selected));
+    if (form !== null) expect(model).toMatchObject({ objects: { cards: [{ transfiguration: { type: form } }] } });
+    else expect(fresh[0].transfiguration).toBeNull();
+  });
+
   it.each(["copy-selected-card", "copy-selected-cards", "copy-random-cards", "purge-and-copy"] as const)("presents actual surviving copies after %s Nightmare attempts", (kind) => {
     const warrior = makeAuguryTestCard({ id: WARRIOR, cardNumber: 1, cardType: kind === "copy-random-cards" ? "Event" : "Character", subtype: kind === "copy-random-cards" ? "" : "Warrior" });
     const bane = makeAuguryTestCard({ id: NIGHTMARE_CARD_ID, cardNumber: 3, cardType: "Event", subtype: "", renderedText: "Bane." });
@@ -250,12 +300,22 @@ describe("actual prepared Exploration additions and public reward models", () =>
     expect(out.outcome).toBe("applied");
     const resolved = out.state.journey.siteRuntime[SITE_ID] as ExplorationSiteRuntime;
     expect(resolved.resolution?.preventedNightmareGains).toMatchObject([{ sourceEntryId: "old-bane", sourceCardId: NIGHTMARE_CARD_ID }]);
-    const model = rewardForResolution(resolved, SITE_ID, out.state.journey, content, null, [action], []);
+    const model = rewardForResolution(resolved, SITE_ID, out.state.journey, content, null, [action], [], (id) => registry.lookup(id));
     expect(model).not.toBeNull();
     expect(model).toMatchObject({ count: kind === "copy-selected-cards" || kind === "copy-random-cards" ? 1 : 0 });
     const forged = structuredClone(resolved); forged.resolution!.preventedNightmareGains = [{ ...forged.resolution!.preventedNightmareGains![0], sourceCardId: WARRIOR }];
-    expect(rewardForResolution(forged, SITE_ID, out.state.journey, content, null, [action], [])).toBeNull();
+    expect(rewardForResolution(forged, SITE_ID, out.state.journey, content, null, [action], [], (id) => registry.lookup(id))).toBeNull();
     expect(apply(out.state, "LOAD_STATE", { snapshot: clone(out.state.journey) }).outcome).toBe("applied");
+    if (kind === "purge-and-copy") {
+      const victim = clone(out.state.journey), receipt = (victim.siteRuntime[SITE_ID] as ExplorationSiteRuntime).resolution!;
+      receipt.selection = { ...receipt.selection, entryIds: ["warrior"] };
+      receipt.preventedNightmareGains = [{ ...receipt.preventedNightmareGains![0], sourceEntryId: parseDeckEntryId("warrior") }];
+      expect(apply(out.state, "LOAD_STATE", { snapshot: victim }).state).toBe(out.state);
+      expect(rewardForResolution(victim.siteRuntime[SITE_ID] as ExplorationSiteRuntime, SITE_ID, victim, content, null, [action], [], (id) => registry.lookup(id))).toBeNull();
+    }
+    const sourceLost = accepted(out.state, "REMOVE_DREAMSIGN", { dreamsignId: RAVEN });
+    const sourcePurged = accepted(sourceLost, "REMOVE_DECK_ENTRY", { entryId: "old-bane" });
+    expect(apply(sourcePurged, "LOAD_STATE", { snapshot: clone(sourcePurged.journey) }).outcome).toBe("applied");
   });
   it("keeps a real prepared compound benefit and zero actual Nightmare cards in its reward model", () => {
     const warrior = makeAuguryTestCard({ id: WARRIOR, cardNumber: 1, cardType: "Character", subtype: "Warrior" });
@@ -270,7 +330,7 @@ describe("actual prepared Exploration additions and public reward models", () =>
     const out = apply(before, "RESOLVE_EXPLORATION_CHOICE", { siteId: SITE_ID, actionId, selectionRulesVersion: SELECTION_RULES_VERSION, selection: {} });
     expect(out.outcome).toBe("applied"); expect(out.state.journey.deck).toHaveLength(1); expect(out.state.journey.deck[0].keywordModification?.fast).toBe(true);
     const resolved = out.state.journey.siteRuntime[SITE_ID] as ExplorationSiteRuntime;
-    expect(rewardForResolution(resolved, SITE_ID, out.state.journey, content, null, [action], [])).toMatchObject({ kind: "compound-card-mutation", nightmares: [], keywordChanges: [{ entryId: "warrior" }] });
+    expect(rewardForResolution(resolved, SITE_ID, out.state.journey, content, null, [action], [], (id) => registry.lookup(id))).toMatchObject({ kind: "compound-card-mutation", nightmares: [], keywordChanges: [{ entryId: "warrior" }] });
     expect(resolved.resolution?.preventedNightmareGains).toHaveLength(2);
   });
   it.each(["missing-source", "wrong-source-card", "same-entry"])("rejects malformed saved copy provenance %s", (kind) => {
@@ -292,14 +352,14 @@ describe("actual prepared Exploration additions and public reward models", () =>
     const out = apply(before, "RESOLVE_EXPLORATION_CHOICE", { siteId: SITE_ID, actionId, selectionRulesVersion: SELECTION_RULES_VERSION, selection: {} });
     expect(out.outcome).toBe("applied");
     const resolved = out.state.journey.siteRuntime[SITE_ID] as ExplorationSiteRuntime;
-    const model = rewardForResolution(resolved, SITE_ID, out.state.journey, content, null, [action], []);
+    const model = rewardForResolution(resolved, SITE_ID, out.state.journey, content, null, [action], [], (id) => registry.lookup(id));
     expect(model).toMatchObject({ objects: { cards: [{ cardId: WARRIOR, displaySnapshot: { spark: (held.includes(CRYSTAL) ? 4 : 2) + (held.includes(ACORN) ? 1 : 0) } }] } });
     if (held.includes(CRYSTAL)) expect(model).toMatchObject({ objects: { cards: [{ transfiguration: { type: "Kindled" } }] } });
     else expect(last(out.state.journey.deck)?.transfiguration).toBeNull();
     // Legacy metadata retains its catalog display, and mismatched UUIDs cannot select another held object.
     for (const gainedEntryIds of [undefined, [parseDeckEntryId("missing")], [parseDeckEntryId("old-0")]]) {
       const legacy = { ...resolved, resolution: { ...resolved.resolution!, gainedEntryIds } };
-      expect(rewardForResolution(legacy, SITE_ID, out.state.journey, content, null, [action], [])).toMatchObject({ objects: { cards: [{ cardId: WARRIOR, displaySnapshot: { spark: 2 } }] } });
+      expect(rewardForResolution(legacy, SITE_ID, out.state.journey, content, null, [action], [], (id) => registry.lookup(id))).toMatchObject({ objects: { cards: [{ cardId: WARRIOR, displaySnapshot: { spark: 2 } }] } });
     }
   });
 

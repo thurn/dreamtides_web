@@ -1,0 +1,751 @@
+{
+  "bead": "hv-umm2.652",
+  "phase": 5,
+  "implementationProvenance": {
+    "base": "9258bdb90f8c61d6d1004b2e398ff3b76f02b279",
+    "dispatchUTC": "2026-10-13T21:43:32.474Z",
+    "dispatchScope": "Canonical parent rollout records original followup_task target/time; payload encrypted, model/CPU/productive time unobserved. Start never reset after delta.",
+    "claimUTC": "2026-10-13T21:40:40.849550Z",
+    "claimACKUTC": "2026-10-13T21:40:40.945060Z",
+    "claimToDispatchMin": 2.8604075,
+    "modelStart": "unobserved",
+    "status": "acceptance-complete; final source commit prepared, parent-owned fresh cold review/candidate/delivery pending",
+    "endpointUTC": "2026-10-13T23:18:07.389392+00:00",
+    "implementMin": 94.58192319999999,
+    "claimGrossMin": 97.4423307,
+    "endpointScope": "Observed UTC immediately before final two timing records/light schema/index/one commit. Original actual dispatch window includes all research, coordination, QA, readmission, checks and metadata waits. Actual commit invocation UTC bracket and Git second-precision timestamp are preserved outside WT in652-final-commit-receipt.json; no postcommit refinement/amendment."
+  },
+  "sourceScope": [
+    "src/cumulus/screens/GambleSiteScreen.four-suit-reprise.test.tsx",
+    "src/cumulus/screens/GambleSiteScreen.tsx",
+    "src/rules/journey/journey-deck-entry.test.ts",
+    "src/rules/journey/journey-deck-entry.ts",
+    "src/rules/journey/lifecycle.ts",
+    "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx",
+    "src/screens/cumulus_adapters/exploration-resolution-view-model.ts",
+    "src/screens/cumulus_adapters/gamble-site-view-model-four-suit-reprise.test.ts",
+    "src/screens/cumulus_adapters/gamble-site-view-model.ts",
+    "src/session/providers/exploration-provider-selections.test.ts",
+    "src/session/providers/exploration-provider.ts"
+  ],
+  "sourceDiff": {
+    "files": 11,
+    "added": 233,
+    "deleted": 19,
+    "net": 214,
+    "includesEvidence": false,
+    "earlier147AddedClaimCorrection": "Actual original six-file numstat151added18deleted, not147; source-only current11-file total measured separately."
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 172,
+    "jsdomFiles": 0
+  },
+  "testSupportScope": {
+    "touchedExistingFiles": 4,
+    "addedLines": 178,
+    "deletedLines": 6,
+    "netLines": 172,
+    "existingJsdomFilesTouched": 1,
+    "entrypointLines": [
+      366,
+      199,
+      213,
+      157
+    ],
+    "definition": "All test support added-minus-deleted by git numstat; no new test/jsdom entrypoint, each under500; no mutable content/UIstrings/defaultpolicy/performance gates."
+  },
+  "wallPhases": [
+    {
+      "name": "claim-to-dispatch",
+      "start": "2026-10-13T21:40:40.849550Z",
+      "end": "2026-10-13T21:43:32.474Z",
+      "minutes": 2.8604075,
+      "scope": "Observed ownership prefix, excluded from friction implementWindow."
+    },
+    {
+      "name": "source-first/admission",
+      "start": "2026-10-13T21:43:32.474Z",
+      "end": "2026-10-13T21:53:01.921281Z",
+      "minutes": 9.490788016666666,
+      "scope": "Source research/public diagnostic/proposal/parent scope coordination, elapsed not CPU."
+    },
+    {
+      "name": "first-authoring/checks/recipe",
+      "start": "2026-10-13T21:53:01.921281Z",
+      "end": "2026-10-13T22:23:24.778028Z",
+      "minutes": 30.380945783333335,
+      "scope": "Includes owning test corrections, review/Knip/coverage/schema and complete generated/link manifest/driver preparation."
+    },
+    {
+      "name": "frozen-QA1",
+      "start": "2026-10-13T22:23:24.778028Z",
+      "end": "2026-10-13T22:41:01.000083Z",
+      "minutes": 17.603700916666664,
+      "scope": "Nine actual attempts, locator/role recovery, ordinary controls, two actual Augury Caps defects and FourSuit projection defect, settlement/hash/parent resume; compound wall, not isolated overhead."
+    },
+    {
+      "name": "source-cause/delta-admission",
+      "start": "2026-10-13T22:41:01.000083Z",
+      "end": "2026-10-13T22:48:35.148176Z",
+      "minutes": 7.569134883333334,
+      "scope": "Readonly cause/census/proposal/native overlap admission."
+    },
+    {
+      "name": "delta-authoring/finalchecks/freezereadiness",
+      "start": "2026-10-13T22:48:35.148176Z",
+      "end": "2026-10-13T22:58:51.924117Z",
+      "minutes": 10.279599016666667,
+      "scope": "Meaningful old failures, bounded canonical-copy fix, synthetic mismatch corrections/final checks and freeze preparation."
+    },
+    {
+      "name": "frozen-QA2",
+      "start": "2026-10-13T22:58:51.924117Z",
+      "end": "2026-10-13T23:09:41.950854Z",
+      "minutes": 10.833778950000001,
+      "scope": "Corrected FourSuit pass, partial Augury mobile hitcheck then normal-scroll both viewport pass, full resource/hash proof and parent visual/resume."
+    },
+    {
+      "name": "evidence/staging/parent-endpoint-coordination",
+      "start": "2026-10-13T23:09:41.950854Z",
+      "end": "2026-10-13T23:18:07.389392+00:00",
+      "minutes": 8.423975633333333,
+      "scope": "Compact owning evidence/raw archiving, staged readiness/schema/parent inspection and coordinated endpoint; elapsed wall, not CPU or productive edits."
+    }
+  ],
+  "validationSummary": {
+    "focused": {
+      "cases": 67,
+      "files": 4,
+      "receipt": "652-delta-focused-final-receipt.json"
+    },
+    "review": {
+      "cases": 927,
+      "files": 87,
+      "receipt": "652-delta-review-final-receipt.json",
+      "typeLintCycles": "passed"
+    },
+    "knip": "652-delta-knip-final-receipt.json:0",
+    "coverage": "652-coverage-receipt.json:20cases/1file0; content unchanged after delta",
+    "schema": "Precommit schema0:751records/41 frozen historicalUnknowns; final schema including new16th own friction record executed immediately before commit and preserved in outside receipt.",
+    "full": "Not invoked for bounded provider receipt/lookup and pure canonical projection/binding; no architecture/config/testinfra change. Original264 full is unchanged-core/source-qualified evidence, not a current-source full claim.",
+    "battleFuzzAndLab": "No generic weighted300, card-lab or sweep substituted for these journey-only contracts/native site workflows; original264 applicability disposition retained, no invented battle abilities."
+  },
+  "checks": [
+    {
+      "receipt": "652-coverage-receipt.json",
+      "startUTC": "2026-10-13T22:04:47.651759+00:00",
+      "endUTC": "2026-10-13T22:04:51.412498+00:00",
+      "wallSeconds": 3.7605875830049627,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 4.234375
+    },
+    {
+      "receipt": "652-delta-focused-final-receipt.json",
+      "startUTC": "2026-10-13T22:54:19.847305+00:00",
+      "endUTC": "2026-10-13T22:54:27.389818+00:00",
+      "wallSeconds": 7.542371332994662,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 3.453125
+    },
+    {
+      "receipt": "652-delta-focused-receipt.json",
+      "startUTC": "2026-10-13T22:52:00.459912+00:00",
+      "endUTC": "2026-10-13T22:52:06.517188+00:00",
+      "wallSeconds": 6.0571593749918975,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 5.3056640625
+    },
+    {
+      "receipt": "652-delta-knip-final-receipt.json",
+      "startUTC": "2026-10-13T22:56:29.849455+00:00",
+      "endUTC": "2026-10-13T22:56:32.783495+00:00",
+      "wallSeconds": 2.9339338339923415,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 3.7138671875
+    },
+    {
+      "receipt": "652-delta-old-behavior-receipt.json",
+      "startUTC": "2026-10-13T22:51:05.706267+00:00",
+      "endUTC": "2026-10-13T22:51:10.573058+00:00",
+      "wallSeconds": 4.866693334013689,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 4.23779296875
+    },
+    {
+      "receipt": "652-delta-review-final-receipt.json",
+      "startUTC": "2026-10-13T22:55:21.495728+00:00",
+      "endUTC": "2026-10-13T22:55:40.388064+00:00",
+      "wallSeconds": 18.89209954199032,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 3.34716796875
+    },
+    {
+      "receipt": "652-delta-review-receipt.json",
+      "startUTC": "2026-10-13T22:52:28.744498+00:00",
+      "endUTC": "2026-10-13T22:52:51.752300+00:00",
+      "wallSeconds": 23.00752574999933,
+      "exitCode": 2,
+      "load1AtWrapperCompletion": 4.74951171875
+    },
+    {
+      "receipt": "652-delta-schema-receipt.json",
+      "startUTC": "2026-10-13T22:57:12.953883+00:00",
+      "endUTC": "2026-10-13T22:57:13.062098+00:00",
+      "wallSeconds": 0.10813008301192895,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 3.001953125
+    },
+    {
+      "receipt": "652-focused-complete-receipt.json",
+      "startUTC": "2026-10-13T22:01:48.357937+00:00",
+      "endUTC": "2026-10-13T22:01:52.520803+00:00",
+      "wallSeconds": 4.162751124997158,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 4.42138671875
+    },
+    {
+      "receipt": "652-focused-final-receipt.json",
+      "startUTC": "2026-10-13T22:01:01.687842+00:00",
+      "endUTC": "2026-10-13T22:01:05.674185+00:00",
+      "wallSeconds": 3.986250124988146,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 5.50244140625
+    },
+    {
+      "receipt": "652-focused-first-receipt.json",
+      "startUTC": "2026-10-13T21:59:07.674391+00:00",
+      "endUTC": "2026-10-13T21:59:11.632509+00:00",
+      "wallSeconds": 3.9580225000099745,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 4.46826171875
+    },
+    {
+      "receipt": "652-focused-ready-receipt.json",
+      "startUTC": "2026-10-13T22:02:23.797970+00:00",
+      "endUTC": "2026-10-13T22:02:29.632306+00:00",
+      "wallSeconds": 5.834041875001276,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 4.47216796875
+    },
+    {
+      "receipt": "652-focused-second-receipt.json",
+      "startUTC": "2026-10-13T21:59:55.909409+00:00",
+      "endUTC": "2026-10-13T22:00:00.382631+00:00",
+      "wallSeconds": 4.473121207993245,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 4.90087890625
+    },
+    {
+      "receipt": "652-knip-final-receipt.json",
+      "startUTC": "2026-10-13T22:04:46.497152+00:00",
+      "endUTC": "2026-10-13T22:04:49.605123+00:00",
+      "wallSeconds": 3.107835124974372,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 4.234375
+    },
+    {
+      "receipt": "652-knip-receipt.json",
+      "startUTC": "2026-10-13T22:03:37.768365+00:00",
+      "endUTC": "2026-10-13T22:03:41.616159+00:00",
+      "wallSeconds": 3.8476694579876494,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 4.52783203125
+    },
+    {
+      "receipt": "652-knip-settled-receipt.json",
+      "startUTC": "2026-10-13T22:10:40.541656+00:00",
+      "endUTC": "2026-10-13T22:10:43.527877+00:00",
+      "wallSeconds": 2.9861210829985794,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 3.20361328125
+    },
+    {
+      "receipt": "652-old-behavior-receipt.json",
+      "startUTC": "2026-10-13T21:58:18.671518+00:00",
+      "endUTC": "2026-10-13T21:58:24.187205+00:00",
+      "wallSeconds": 5.515488000004552,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 2.83642578125
+    },
+    {
+      "receipt": "652-old-failures-receipt.json",
+      "startUTC": "2026-10-13T21:55:09.336974+00:00",
+      "endUTC": "2026-10-13T21:55:14.888910+00:00",
+      "wallSeconds": 5.551753375009866,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 2.51171875
+    },
+    {
+      "receipt": "652-public-baseline-receipt.json",
+      "startUTC": "2026-10-13T21:47:59.233637+00:00",
+      "endUTC": "2026-10-13T21:48:03.061635+00:00",
+      "wallSeconds": 3.827763874985976,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": null
+    },
+    {
+      "receipt": "652-review-final-receipt.json",
+      "startUTC": "2026-10-13T22:04:09.476775+00:00",
+      "endUTC": "2026-10-13T22:04:28.197191+00:00",
+      "wallSeconds": 18.71928974997718,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 4.3984375
+    },
+    {
+      "receipt": "652-review-receipt.json",
+      "startUTC": "2026-10-13T22:03:05.842268+00:00",
+      "endUTC": "2026-10-13T22:03:26.835131+00:00",
+      "wallSeconds": 20.9925512909831,
+      "exitCode": 2,
+      "load1AtWrapperCompletion": 4.9638671875
+    },
+    {
+      "receipt": "652-review-settled-receipt.json",
+      "startUTC": "2026-10-13T22:09:41.426758+00:00",
+      "endUTC": "2026-10-13T22:10:00.464986+00:00",
+      "wallSeconds": 19.03799416599213,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 4.1962890625
+    },
+    {
+      "receipt": "652-review-strengthened-receipt.json",
+      "startUTC": "2026-10-13T22:07:56.153195+00:00",
+      "endUTC": "2026-10-13T22:08:18.388654+00:00",
+      "wallSeconds": 22.23505462499452,
+      "exitCode": 1,
+      "load1AtWrapperCompletion": 3.43017578125
+    },
+    {
+      "receipt": "652-schema-receipt.json",
+      "startUTC": "2026-10-13T22:13:15.205751+00:00",
+      "endUTC": "2026-10-13T22:13:15.312640+00:00",
+      "wallSeconds": 0.1065780830103904,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 2.77294921875
+    },
+    {
+      "receipt": "652-strengthened-focus-receipt.json",
+      "startUTC": "2026-10-13T22:07:16.901656+00:00",
+      "endUTC": "2026-10-13T22:07:22.786941+00:00",
+      "wallSeconds": 5.885183958016569,
+      "exitCode": 0,
+      "load1AtWrapperCompletion": 4.2802734375
+    }
+  ],
+  "behaviorNegatives": {
+    "oldOriginal": "652-old-behavior-receipt.json:4 actual failures/50 controls pass; malformed source LOAD accepted and fresh single receipt empty. Initial old-failures includes synthetic provider setup failure, not all mechanic proof.",
+    "oldDelta": "652-delta-old-behavior-receipt.json:6 actual public model/widget behavior failures/3 controls pass; no copy projection/original numeric binding.",
+    "authoringFailures": "Partial forwarding failures, owned chooser null/default-form fixture errors, readonly-receipt/unbound-method lint/type errors, later public-union/JSONboundary errors retained in raw receipts; not behavior negatives. Earlier review925/87 tests passed with type/lint failure; final927/87/type/lint pass."
+  },
+  "failureApplicability": {
+    "errorMidStep": "Existing public provider throw/null containment/idempotent retry control in journey-deck-entry test165 plus local-log throw handling; unchanged upstream failure semantics, no new I/O repair claimed.",
+    "reloadRestart": "Public LOAD_STATE valid/legacy/source-loss deterministic replay test214; actual source-later-purge receipt load in copy family; pure copy JSON round-trip and all three native physical-entry reload workflows.",
+    "partialWrite": "Malformed/contradictory/unregistered/nonprevent/unrelated LOAD returns same prior state; single replacement owning public transaction creates exact new receipt then replay bounces. UI pure projections create no persistent write.",
+    "invalidStaleIntent": "Existing stale gameplay test237 rejects without modifier logs or RNG; new registry/source relationship failures return unchanged fold; pure copy absent/wrong-number/wrongUUID/samephysicalentry fail closed with original target intact.",
+    "concurrentActors": "Existing reducer/event CAS is unchanged and not newly arbitrated. Owning same intent replay bounces and deterministic event replay produces same state; public state identity/absent log/RNG controls bound this correction. No live multi-client test claim."
+  },
+  "nativeQA": {
+    "attempts": [
+      {
+        "label": "replacement-1",
+        "invocation": "run-wrtgnF",
+        "verdict": "fail",
+        "qualification": "QA inspector descendant locator timeout after actual gain; Caps[].",
+        "startUTC": "2026-10-13T22:23:46.531945+00:00",
+        "endUTC": "2026-10-13T22:24:24.098902+00:00",
+        "wrapperSeconds": 37.566556957986904,
+        "exitCode": 1,
+        "runnerPID": 13048,
+        "serverPGID": 13076,
+        "port": 5274,
+        "receipt": "652-qa-replacement-1-receipt.json",
+        "raw": "652-qa-replacement-1.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 0,
+        "mcp": [
+          {
+            "at": "2026-10-13T22:23:48.859280+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "runnerPID": 13048,
+            "slot": 1,
+            "port": 5274,
+            "mcpSessionId": "8ccf079e-7a9c-447b-b833-302fdfca8ff1",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      },
+      {
+        "label": "replacement-2",
+        "invocation": "run-JU2qEB",
+        "verdict": "fail",
+        "qualification": "QA form dropdown locator timeout; Caps[].",
+        "startUTC": "2026-10-13T22:25:57.354508+00:00",
+        "endUTC": "2026-10-13T22:26:34.353996+00:00",
+        "wrapperSeconds": 36.99907441699179,
+        "exitCode": 1,
+        "runnerPID": 15557,
+        "serverPGID": 15585,
+        "port": 5274,
+        "receipt": "652-qa-replacement-2-receipt.json",
+        "raw": "652-qa-replacement-2.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 0,
+        "mcp": [
+          {
+            "at": "2026-10-13T22:25:59.417572+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "runnerPID": 15557,
+            "slot": 1,
+            "port": 5274,
+            "mcpSessionId": "6b34985d-870d-42a6-b06b-ba431d5f9453",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      },
+      {
+        "label": "replacement-3",
+        "invocation": "run-EuVkN2",
+        "verdict": "fail",
+        "qualification": "QA reward selected first card including removed source; mismatched snapshot retained; Caps[].",
+        "startUTC": "2026-10-13T22:27:34.774556+00:00",
+        "endUTC": "2026-10-13T22:27:58.398819+00:00",
+        "wrapperSeconds": 23.623984791978728,
+        "exitCode": 1,
+        "runnerPID": 46072,
+        "serverPGID": 46100,
+        "port": 5274,
+        "receipt": "652-qa-replacement-3-receipt.json",
+        "raw": "652-qa-replacement-3.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 0,
+        "mcp": [
+          {
+            "at": "2026-10-13T22:27:37.096285+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "runnerPID": 46072,
+            "slot": 1,
+            "port": 5274,
+            "mcpSessionId": "99356516-cb78-41db-8bf0-efb696e82993",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      },
+      {
+        "label": "replacement-4-diagnostic",
+        "invocation": "run-YkfDRm",
+        "verdict": "fail",
+        "qualification": "Paired diagnostic proves QA selected purged old a28\u2026 Spark3/energy5 rather than minted deck-15-0 867\u2026 Spark4/energy4; not a product projection verdict.",
+        "startUTC": "2026-10-13T22:29:09.289464+00:00",
+        "endUTC": "2026-10-13T22:29:35.146946+00:00",
+        "wrapperSeconds": 25.857160166982794,
+        "exitCode": 1,
+        "runnerPID": 47826,
+        "serverPGID": 47854,
+        "port": 5274,
+        "receipt": "652-qa-replacement-4-diagnostic-receipt.json",
+        "raw": "652-qa-replacement-4-diagnostic.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 0,
+        "mcp": [
+          {
+            "at": "2026-10-13T22:29:11.616628+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "runnerPID": 47826,
+            "slot": 1,
+            "port": 5274,
+            "mcpSessionId": "27821096-8767-4bd5-815a-1d8caf6cd049",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      },
+      {
+        "label": "replacement-5",
+        "invocation": "run-1ZXlFK",
+        "verdict": "pass",
+        "qualification": "Exact single-replacement minted deck-15-0 /867b98cf-171b-497b-9252-9af5dcf70726, Acorn+1/Crystal Attuned, Spark4/energy4 reward equals current physical inspector and reload; both viewport geometry/actions/Caps[]. Six owning bodies unchanged after delta; earlier-source pass remains qualified.",
+        "startUTC": "2026-10-13T22:31:27.746825+00:00",
+        "endUTC": "2026-10-13T22:32:20.446821+00:00",
+        "wrapperSeconds": 52.69946587498998,
+        "exitCode": 0,
+        "runnerPID": 50145,
+        "serverPGID": 50173,
+        "port": 5274,
+        "receipt": "652-qa-replacement-5-receipt.json",
+        "raw": "652-qa-replacement-5.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 0,
+        "mcp": [
+          {
+            "at": "2026-10-13T22:31:29.309051+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "runnerPID": 50145,
+            "slot": 1,
+            "port": 5274,
+            "mcpSessionId": "5cb24893-9092-4e88-822f-629e7c690a3b",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      },
+      {
+        "label": "augury-1",
+        "invocation": "run-3MvAOn",
+        "verdict": "fail",
+        "qualification": "Actual repeated-printing React duplicate-key Caps after second sameUUID debug grant; separate hv-umm2.653, not waived.",
+        "startUTC": "2026-10-13T22:32:31.016417+00:00",
+        "endUTC": "2026-10-13T22:32:41.568416+00:00",
+        "wrapperSeconds": 10.551811917015584,
+        "exitCode": 1,
+        "runnerPID": 51355,
+        "serverPGID": 51385,
+        "port": 5274,
+        "receipt": "652-qa-augury-1-receipt.json",
+        "raw": "652-qa-augury-1.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 1,
+        "mcp": [
+          {
+            "at": "2026-10-13T22:32:34.108255+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "runnerPID": 51355,
+            "slot": 1,
+            "port": 5274,
+            "mcpSessionId": "72a96f70-929d-4290-8615-f837e72f0e77",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      },
+      {
+        "label": "four-suit-1",
+        "invocation": "run-Gigrjk",
+        "verdict": "fail",
+        "qualification": "Seed1 natural purge consumed only initially prepared Warrior target; next-round setup unavailable, Caps[]; no duplication acceptance claim.",
+        "startUTC": "2026-10-13T22:34:30.158485+00:00",
+        "endUTC": "2026-10-13T22:35:07.954606+00:00",
+        "wrapperSeconds": 37.795713875006186,
+        "exitCode": 1,
+        "runnerPID": 53494,
+        "serverPGID": 53533,
+        "port": 5274,
+        "receipt": "652-qa-four-suit-1-receipt.json",
+        "raw": "652-qa-four-suit-1.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 0,
+        "mcp": [
+          {
+            "at": "2026-10-13T22:34:33.263018+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "runnerPID": 53494,
+            "slot": 1,
+            "port": 5274,
+            "mcpSessionId": "cec17c2f-edef-4643-9861-14509840e069",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      },
+      {
+        "label": "augury-2-distinct",
+        "invocation": "run-8WdqjZ",
+        "verdict": "fail",
+        "qualification": "Distinct canonical padding clean; real duplicate-offer acceptance then duplicate-key Caps for1ce0f\u2026; actual product issue hv-umm2.653, not waived.",
+        "startUTC": "2026-10-13T22:36:12.554633+00:00",
+        "endUTC": "2026-10-13T22:36:37.001859+00:00",
+        "wrapperSeconds": 24.446934000006877,
+        "exitCode": 1,
+        "runnerPID": 55371,
+        "serverPGID": 55399,
+        "port": 5274,
+        "receipt": "652-qa-augury-2-distinct-receipt.json",
+        "raw": "652-qa-augury-2-distinct.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 1,
+        "mcp": [
+          {
+            "at": "2026-10-13T22:36:14.092328+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "runnerPID": 55371,
+            "slot": 1,
+            "port": 5274,
+            "mcpSessionId": "f9b6e4ff-e724-4d05-8ede-4a93f25e1143",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      },
+      {
+        "label": "four-suit-2",
+        "invocation": "run-1kWiDc",
+        "verdict": "fail",
+        "qualification": "Actual minted deck-30-0 Acorn+1/Crystal Resonant inspectorSpark4 versus permanently source-bound copy widgetSpark3; repaired by admitted canonical minted projection in652.",
+        "startUTC": "2026-10-13T22:37:56.115936+00:00",
+        "endUTC": "2026-10-13T22:38:23.680019+00:00",
+        "wrapperSeconds": 27.56374300000607,
+        "exitCode": 1,
+        "runnerPID": 57218,
+        "serverPGID": 57249,
+        "port": 5274,
+        "receipt": "652-qa-four-suit-2-receipt.json",
+        "raw": "652-qa-four-suit-2.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 0,
+        "mcp": [
+          {
+            "at": "2026-10-13T22:37:59.223612+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "runnerPID": 57218,
+            "slot": 1,
+            "port": 5274,
+            "mcpSessionId": "d4b05e4e-c203-44b3-a540-9c1345e845a6",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      },
+      {
+        "label": "four-suit-3-fixed",
+        "invocation": "run-uV9ma4",
+        "verdict": "pass",
+        "qualification": "Actual minted deck-30-0 /a28ad36d-fa74-4190-a463-7efd3a6233d0 has Acorn+1/Crystal Resonant Spark4/energy5; copy widget/current physical inspector/reload match, originaltargetSpark3 retained; desktop/mobile geometry/hitchecked actions/Caps[].",
+        "startUTC": "2026-10-13T22:59:26.637922+00:00",
+        "endUTC": "2026-10-13T23:00:20.865001+00:00",
+        "wrapperSeconds": 54.226545249985065,
+        "exitCode": 0,
+        "runnerPID": 85491,
+        "serverPGID": 85536,
+        "port": 5174,
+        "receipt": "652-qa-four-suit-3-fixed-receipt.json",
+        "raw": "652-qa-four-suit-3-fixed.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 0,
+        "mcp": [
+          {
+            "at": "2026-10-13T22:59:29.495377+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "runnerPID": 85491,
+            "slot": 0,
+            "port": 5174,
+            "mcpSessionId": "fa7d7a25-f4ff-46b4-921c-e39d00d160b5",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      },
+      {
+        "label": "augury-3-unowned",
+        "invocation": "run-K8NSER",
+        "verdict": "fail",
+        "qualification": "Desktop unowned-add modifier/state/reload completed; mobile selected choice center hit footer choose-again; Caps[]. Retained incomplete acceptance, driver v9 ordinary center scroll before protected native click.",
+        "startUTC": "2026-10-13T23:03:13.667490+00:00",
+        "endUTC": "2026-10-13T23:04:37.639798+00:00",
+        "wrapperSeconds": 83.97148533299332,
+        "exitCode": 1,
+        "runnerPID": 91145,
+        "serverPGID": 91180,
+        "port": 5174,
+        "receipt": "652-qa-augury-3-unowned-receipt.json",
+        "raw": "652-qa-augury-3-unowned.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 0,
+        "mcp": [
+          {
+            "at": "2026-10-13T23:03:15.962329+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/browser-qa.lock.owner.json",
+            "runnerPID": 91145,
+            "slot": 0,
+            "port": 5174,
+            "mcpSessionId": "1b4daee2-d939-4ad0-a729-6788264cd2bc",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      },
+      {
+        "label": "augury-4-centered",
+        "invocation": "run-pSpIEh",
+        "verdict": "pass",
+        "qualification": "Real unowned card-draft choice minted deck-31-0 /1b4d2adc-64ab-4020-bae6-b35321898bf0 with Acorn+1/Crystal Kindled, Spark11/energy5 inspector/reload; both desktop/mobile protected action hitcheck/geometry/Caps[]. Duplicate branch remains separate653 failure.",
+        "startUTC": "2026-10-13T23:05:30.679506+00:00",
+        "endUTC": "2026-10-13T23:06:37.464692+00:00",
+        "wrapperSeconds": 66.78454254101962,
+        "exitCode": 0,
+        "runnerPID": 93926,
+        "serverPGID": 93954,
+        "port": 5274,
+        "receipt": "652-qa-augury-4-centered-receipt.json",
+        "raw": "652-qa-augury-4-centered.txt",
+        "report": "gain-sites.result.json",
+        "capsCount": 0,
+        "mcp": [
+          {
+            "at": "2026-10-13T23:05:32.235212+00:00",
+            "ownerPath": "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json",
+            "runnerPID": 93926,
+            "slot": 1,
+            "port": 5274,
+            "mcpSessionId": "588fce15-fe93-45c5-a712-020d760ae925",
+            "mcpUrl": "http://localhost:8931/mcp",
+            "mcpProtocolVersion": "2025-11-25"
+          }
+        ],
+        "awaitedRunnerFinally": true
+      }
+    ],
+    "totalAttempts": 12,
+    "golden": {
+      "singleReplacement": "run-1ZXlFK:earlier-source six bodies unchanged",
+      "fourSuit": "run-uV9ma4:current copy projection",
+      "Augury": "run-pSpIEh:real unowned-add, duplicate branch remains653"
+    },
+    "sourceFreeze": {
+      "first": "652-qa-freeze-v2.json",
+      "final": "652-qa-freeze-2.json",
+      "regularFiles": 2445,
+      "symlinkBindingsAndTargets": 1572,
+      "fileTreeSHA": "902d2be8e5015f08c8d108d68e0ab876847795948fb09522a13b3de09f86986e",
+      "linkTreeSHA": "043ece3bd90e5715259436d53aab72e3f7384ee3ac2f16b03928334e327940fd",
+      "qaScenesSHA": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+      "noTemporaryScenes": true,
+      "v1Qualification": "Initial2443 tracked proof omitted ignored generated tokens; v2/final complete source scanner includes all regular src/public/generated bytes and1572 bindings/resolved targets. Initial empty untracked split corrected to[]. Original proof retained."
+    },
+    "driverVersions": "gain-sites-v1.mjs throughv9 retained; v8 freeze exact e5399570\u2026; v9 only ordinary DOM center-scroll before native protected Augury click, admitted after failed mobile hitcheck. CanonicalWarrior map derives immutable prefreeze652-qa-printed-data files, provenance652-v7-map-provenance.json; no source reads while live.",
+    "settlement": "652-qa-settled-1.json and652-qa-settled-2.json; all12 awaited native finally drains browser/context/RPC/client/SDK/server-group/lease/owner/log resources, exact PID/PGID/port/owner checks supplement (not replace) it. Parent RESUMEACK2 independently verified2445/1572/head/cache/diff and ports5174/5274free. All hashes match, no image/QA source committed.",
+    "sourceSnapshotQualification": "QA ledger commit is BASE9258 per workflow; invocation/report/log/driver/freeze linkage distinguishes pre-delta/current source.",
+    "parentJudgement": "Parent independently judged FourSuit desktop/mobile original3\u2192copy4 and Augury final desktop/mobile/state/reload in652-parent-source-resume-ack-2.json."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "Final review wrapper completion 1-minute load3.34716796875; not start or causal/controlled performance measure."
+      },
+      "localValidationS": {
+        "measuredFor": "Final affected-focus/review/Knip wrapper elapsed seconds including preparation; raw receipts keep all attempts."
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "primary": 3.34716796875,
+    "receipt": "652-delta-review-final-receipt.json",
+    "scope": "All per-attempt samples are wrapper completion, no causal host-load assertion."
+  },
+  "frictionScope": "Empty list proposed: observed compound17.60min QA1 includes ordinary controls and actual required fault discovery, not17.60min isolated scripting overhead; initial replacement locator/role interval8.565min, postfreeze cause/admission7.57min. Entire intervals remain gross wall evidence.",
+  "originalReviewDisposition": "All3 original264 findings mapped in reviews/hv-umm2.652.md. Original264 OPEN/unassigned with immutable landed9258 source; final acceptance join652/653 remains parent-owned. New653 repeated-printing Augury failure is explicit separate unresolved product issue.",
+  "reviewRouting": "Parent owns fresh read-only cold core review/exact candidate/delivery. User temporary Codex CLI gpt-5.6-sol route until2026-10-14T01Z, then normal project routing; no helper review invoked."
+}

@@ -563,7 +563,7 @@ function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry):
         dreamsignIdFromUnknown(runtime.journeyEssenceSource) === null)) return false;
     if (isRecord(runtime) && runtime.kind === "exploration" &&
       (!validJourneySiteCounters(runtime.journeySiteRerolls) ||
-        (isRecord(runtime.resolution) && !validPreventedNightmareGains(runtime.resolution.preventedNightmareGains, value.deck as unknown[], runtime.resolution)))) return false;
+        (isRecord(runtime.resolution) && !validPreventedNightmareGains(runtime.resolution.preventedNightmareGains, value.deck as unknown[], runtime.resolution, (id) => registry.lookup(id))))) return false;
     if (
       isRecord(runtime) &&
       runtime.kind === "shop" &&
