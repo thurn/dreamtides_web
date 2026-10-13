@@ -1,3 +1,6 @@
+import { self } from "../../engine/dsl/builders";
+import { triggered, whenDiscard } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,6 @@ export default card({
   cardNumber: 31,
   art: { x: 0, y: -0.236, scale: 1.87 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(whenDiscard(), gainSpark(self(), variant.amplified ? 2 : 1))],
+  verifiedText: "1tpn44kath8",
 });

@@ -1,3 +1,6 @@
+import { characterYouControl, target } from "../../engine/dsl/builders";
+import { either, onDawn, onMaterialized, triggered } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,8 @@ export default card({
   cardNumber: 264,
   art: { x: -0.21, y: 0, scale: 1.57 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(either(onMaterialized(), onDawn()), gainSpark(target(characterYouControl()), variant.amplified ? 2 : 1)),
+  ],
+  verifiedText: "zwh8ho0dzf",
 });

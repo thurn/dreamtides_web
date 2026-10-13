@@ -1,3 +1,6 @@
+import { all, anyCharacter } from "../../engine/dsl/builders";
+import { onChallenge, triggered } from "../../engine/dsl/triggers";
+import { gainSpark } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -19,5 +22,8 @@ export default card({
   cardNumber: 443,
   art: { x: -0.689, y: 1, scale: 1.37 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [
+    triggered(onChallenge(), gainSpark(all(anyCharacter({ challenging: true, another: true })), variant.amplified ? 2 : 1)),
+  ],
+  verifiedText: "p58ij5c7h",
 });

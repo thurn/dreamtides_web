@@ -1,0 +1,28 @@
+{
+  "bead": "hv-umm2.179",
+  "phase": 5,
+  "implementMin": 50.35054815,
+  "implementWindow": {
+    "start": "2026-10-13T16:14:37.096Z",
+    "end": "2026-10-13T17:04:58.128889+00:00"
+  },
+  "localValidationS": {
+    "focused": 8.831230750016402,
+    "review": 48.291105415992206,
+    "knip": 3.6347078339895234,
+    "fuzz": 236.3
+  },
+  "hostLoad": 5.3173828125,
+  "testDelta": {
+    "files": 1,
+    "lines": 90,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 15.0788,
+      "note": "Measured incident/coordination window16:33:22.361\u201316:48:27.089 includes two lost provider sessions, guarded parent reconciliations and the optional Oath observation correction. Required native cells completed after scoped recovery; original RPC/ACK outcomes remain UNKNOWN. This is an elapsed friction window, not CPU work."
+    }
+  ]
+}
