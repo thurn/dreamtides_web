@@ -1,0 +1,300 @@
+{
+  "bead": "hv-umm2.596",
+  "phase": 5,
+  "base": "80b47fa74c23daf006d4afcdf21424b48d6b57c8",
+  "scope": "Only the existing administrative control in journey-essence.test.ts; production behavior unchanged.",
+  "implementationWindow": {
+    "start": "2026-10-13T00:13:40.409Z",
+    "dispatchCallId": "call_091fca42954442f38ae902d125430150",
+    "endpoint": "2026-10-13T00:20:30.362035+00:00",
+    "endpointStatus": "FINAL PROSPECTIVE cutoff immediately before serial schema, whitespace check, staging and automatic-date commit; actual commit process bracket and whole-second Git committer are captured read-only in ignored QA after commit. Recorded minutes retain qualified prospective endpoint; no tracked postcommit edits.",
+    "grossMinAtCutoff": 6.832550583333333,
+    "includes": "Research, coordination, parent write-ACK wait and all verification; exact model start unknown."
+  },
+  "parentSetup": {
+    "install": {
+      "pid": 16460,
+      "exit": 0,
+      "elapsedS": 2.218149,
+      "end": "2026-10-13T00:11:04.729037Z",
+      "scope": "Parent-provided actual terminal fresh installation, before helper dispatch; excluded from implementation window."
+    }
+  },
+  "sourceManifest": {
+    "path": "src/rules/journey/journey-essence.test.ts",
+    "sha256": "7b24eb31fd207fe7767a7b8a01651703d3eec644d12e18888c192f77423a517e"
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 22,
+    "jsdomFiles": 0,
+    "additions": 23,
+    "deletions": 1,
+    "touchedExistingTestFiles": 1,
+    "newCases": 0
+  },
+  "stage1": {
+    "receipt": {
+      "name": "stage1-public-reducer-witness",
+      "command": [
+        "node",
+        "--import",
+        "/Users/dthurn/dreamtides_web/.worktrees/admin-essence596-root/node_modules/tsx/dist/loader.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.596/stage1-witness.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/admin-essence596-root",
+      "pid": 22566,
+      "pgid": 22566,
+      "start": "2026-10-13T00:14:22.314051+00:00",
+      "end": "2026-10-13T00:14:24.139596+00:00",
+      "elapsedS": 1.825457709011971,
+      "hostLoad": [
+        4.85888671875,
+        5.67822265625,
+        7.83056640625
+      ],
+      "exit": 0,
+      "log": "stage1-witness.log"
+    },
+    "results": [
+      "Valid value19: applied, Essence19, state changed, no diagnostics.",
+      "Malformed essence19: bounced invalid_action, original Essence105 and exact state identity, no diagnostics.",
+      "Public synthetic hook administrative control: applied19, no diagnostics. Direct gameplay hook application produced114 after public ADJUST_ESSENCE; intermediate113 was initially inferred and then explicitly confirmed by focused test."
+    ]
+  },
+  "commands": [
+    {
+      "name": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-essence.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/admin-essence596-root",
+      "pid": 27089,
+      "pgid": 27089,
+      "start": "2026-10-13T00:16:56.101241+00:00",
+      "end": "2026-10-13T00:17:02.301712+00:00",
+      "elapsedS": 6.200165500005824,
+      "hostLoad": [
+        4.5126953125,
+        5.24365234375,
+        7.29833984375
+      ],
+      "exit": 0,
+      "log": "focused.log"
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/admin-essence596-root",
+      "pid": 27500,
+      "pgid": 27500,
+      "start": "2026-10-13T00:17:09.602331+00:00",
+      "end": "2026-10-13T00:17:21.642842+00:00",
+      "elapsedS": 12.040257792003104,
+      "hostLoad": [
+        4.52783203125,
+        5.2138671875,
+        7.25146484375
+      ],
+      "exit": 0,
+      "log": "review.log"
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/admin-essence596-root",
+      "pid": 27946,
+      "pgid": 27946,
+      "start": "2026-10-13T00:17:24.064471+00:00",
+      "end": "2026-10-13T00:17:27.624820+00:00",
+      "elapsedS": 3.560228834001464,
+      "hostLoad": [
+        4.79296875,
+        5.2490234375,
+        7.22802734375
+      ],
+      "exit": 0,
+      "log": "knip.log"
+    },
+    {
+      "name": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/admin-essence596-root",
+      "pid": 29016,
+      "pgid": 29016,
+      "start": "2026-10-13T00:17:59.903529+00:00",
+      "end": "2026-10-13T00:18:00.009515+00:00",
+      "elapsedS": 0.10591937499702908,
+      "hostLoad": [
+        3.79931640625,
+        4.96337890625,
+        7.04345703125
+      ],
+      "exit": 0,
+      "log": "schema.log"
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/admin-essence596-root",
+      "pid": 29191,
+      "pgid": 29191,
+      "start": "2026-10-13T00:18:07.403524+00:00",
+      "end": "2026-10-13T00:18:07.411954+00:00",
+      "elapsedS": 0.008344749992829747,
+      "hostLoad": [
+        3.65478515625,
+        4.9140625,
+        7.013671875
+      ],
+      "exit": 0,
+      "log": "diff-check.log"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review starting 2026-10-13T00:17:09.602331Z; one-minute os.getloadavg host sample equivalent to system vm.loadavg."
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "focused",
+      "at": "2026-10-13T00:16:56.101241+00:00",
+      "oneMinuteLoad": 4.5126953125
+    },
+    {
+      "step": "review",
+      "at": "2026-10-13T00:17:09.602331+00:00",
+      "oneMinuteLoad": 4.52783203125
+    },
+    {
+      "step": "knip",
+      "at": "2026-10-13T00:17:24.064471+00:00",
+      "oneMinuteLoad": 4.79296875
+    }
+  ],
+  "outcomes": {
+    "focused": "14 cases passed; public valid admin19, malformed same-state bounce and synthetic gameplay113 all explicitly confirmed.",
+    "review": "Actual terminal exit0; 14 related cases passed, typechecks, lint and import-cycle checks passed.",
+    "knip": "Actual terminal exit0.",
+    "failedChecks": [],
+    "correctionRuns": [],
+    "schema": "Actual terminal exit0; 671 valid records, 41 preserved historical unknown measurements."
+  },
+  "regressionSensitivity": {
+    "publicBarrier": "A deterministic synthetic +1 hook changes Essence and emits a modifier diagnostic for gameplay. Administrative SET_ESSENCE is applied but yields19/no diagnostics. If administrative exclusion is disabled, that hook yields20/a diagnostic and these public outcome assertions fail.",
+    "mutationStatus": "No production mutation performed; sensitivity follows the injected public registry contract and the passing positive gameplay control."
+  },
+  "fiveFailurePaths": [
+    {
+      "path": "error mid-step",
+      "reason": "No new state transition; test-only setter assertion repair, deterministic pure synthetic hook."
+    },
+    {
+      "path": "reload or restart mid-operation",
+      "reason": "No new operation or persistence behavior; existing JSON replay tests remain unchanged."
+    },
+    {
+      "path": "partial write",
+      "reason": "No new write path; public malformed payload assertion checks exact same state."
+    },
+    {
+      "path": "invalid or stale input",
+      "test": "uses live gain/loss at acceptance and leaves opening/admin/unrelated gains unmultiplied",
+      "coverage": "Malformed SET_ESSENCE remains a distinct bounced/same-state denial; valid control must apply19."
+    },
+    {
+      "path": "concurrent actors",
+      "reason": "No new concurrent transition; existing competing/repeated collection and partner_conflict tests remain unchanged."
+    }
+  ],
+  "qa": {
+    "browser": "Not required for this test-only contract correction.",
+    "artifacts": [
+      "stage1-witness.ts",
+      "stage1-witness.log",
+      "stage1-witness-receipt.json",
+      "focused.log",
+      "focused-receipt.json",
+      "review.log",
+      "review-receipt.json",
+      "knip.log",
+      "knip-receipt.json",
+      "schema.log",
+      "schema-receipt.json",
+      "diff-check.log",
+      "diff-check-receipt.json",
+      "final-schema.log",
+      "final-schema-receipt.json",
+      "final-diff.log",
+      "final-diff-receipt.json",
+      "commit-process.log",
+      "commit-process-receipt.json",
+      "actual-git-clock.json"
+    ]
+  },
+  "resources": {
+    "processes": [
+      {
+        "pid": 27089,
+        "pgid": 27089,
+        "kind": "focused",
+        "terminal": true,
+        "exit": 0
+      },
+      {
+        "pid": 27500,
+        "pgid": 27500,
+        "kind": "review",
+        "terminal": true,
+        "exit": 0
+      },
+      {
+        "pid": 27946,
+        "pgid": 27946,
+        "kind": "knip",
+        "terminal": true,
+        "exit": 0
+      }
+    ],
+    "witnessTerminal": true,
+    "runtimesStarted": 0,
+    "browsersStarted": 0,
+    "providersStarted": 0,
+    "remainingOwnedProcesses": []
+  },
+  "fallout": [],
+  "preExistingIssues": [],
+  "coldReview": {
+    "required": true,
+    "owner": "Parent",
+    "routing": "Fresh read-only Codex CLI gpt-5.6-sol under temporary user override until2026-10-14T01:00:00Z; not yet run."
+  },
+  "finalFreeze": {
+    "authorization": "Parent fresh native FINAL CLOCK/COMMIT ACK exit0",
+    "sourceFrozen": true,
+    "commitClock": "Automatic Git date; no forced dates.",
+    "resources": "Parent independently observed all five known child PIDs absent; no owned runtime remains."
+  }
+}

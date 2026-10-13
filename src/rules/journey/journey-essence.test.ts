@@ -90,7 +90,29 @@ describe("journeyEssence public hooks", () => {
     const lost = apply(quoted([STAR]), "REMOVE_DREAMSIGN", { dreamsignId: STAR }).state;
     expect(apply(lost, "ACCEPT_ESSENCE", { siteId: SITE }).state.journey.essence).toBe(122);
     expect(apply(state([STAR]), "ADJUST_ESSENCE", { delta: 7 }).state.journey.essence).toBe(112);
-    expect(apply(state([STAR, WORM]), "SET_ESSENCE", { essence: 19 }).logRecords).toBeUndefined();
+    const administrative = apply(state([STAR, WORM]), "SET_ESSENCE", { value: 19 });
+    expect(administrative.outcome).toBe("applied");
+    expect(administrative.state.journey.essence).toBe(19);
+    expect(administrative.logRecords).toBeUndefined();
+    const deniedBefore = state([STAR, WORM]);
+    const malformed = apply(deniedBefore, "SET_ESSENCE", { essence: 19 });
+    expect(malformed.outcome).toBe("bounced");
+    expect(malformed.state).toBe(deniedBefore);
+    const sentinel = createJourneyModifierRegistry([{
+      dreamsignId: STAR,
+      afterJourneyEvent: ({ journey }) => ({
+        journey: { ...journey, essence: journey.essence + 1 },
+        before: { essence: journey.essence }, after: { essence: journey.essence + 1 },
+      }),
+    }]);
+    const excluded = reduceGameEvent(state([STAR, WORM]), event("SET_ESSENCE", { value: 19 }), context, sentinel);
+    expect(excluded.outcome).toBe("applied");
+    expect(excluded.state.journey.essence).toBe(19);
+    expect(excluded.logRecords).toBeUndefined();
+    const gameplay = reduceGameEvent(state([STAR, WORM]), event("ADJUST_ESSENCE", { delta: 7 }), context, sentinel);
+    expect(gameplay.outcome).toBe("applied");
+    expect(gameplay.state.journey.essence).toBe(113);
+    expect(gameplay.logRecords).toHaveLength(1);
     const legacy = apply(state([STAR]), "ACCEPT_ESSENCE", { siteId: SITE });
     const runtime = legacy.state.journey.siteRuntime[SITE];
     if (runtime?.kind !== "essence") throw new Error("expected base quote");
