@@ -1,3 +1,8 @@
+import raven, { journeyDeckEntryEffect as ravenEffect } from "../../content/dreamsigns/raven-skull-31df4c62";
+import acorn, { journeyDeckEntryEffect as acornEffect } from "../../content/dreamsigns/brown-acorn-9f34b5f6";
+import crystal, { journeyDeckEntryEffect as crystalEffect } from "../../content/dreamsigns/blue-crystal-c2af5460";
+import { journeyDeckEntry, journeyDeckEntryGains } from "./journey-deck-entry";
+import { journeyTransfigurationOccurrences } from "./journey-transfiguration";
 import starBadge, { journeyEssenceEffect as starEffect } from "../../content/dreamsigns/star-badge-af92858a";
 import pearlShell, { journeyEssenceEffect as pearlEffect } from "../../content/dreamsigns/pearl-shell-be59c0ba";
 import bandedWorm, { journeyEssenceEffect as wormEffect } from "../../content/dreamsigns/banded-worm-95a162c1";
@@ -30,6 +35,7 @@ import type { GameplayEventType } from "../events";
  */
 export interface JourneyModifierDefinition {
   readonly dreamsignId: DreamsignId;
+  readonly journeyDeckEntry?: import("../../types/journey").JourneyDeckEntryEffect;
   readonly journeySites?: JourneySitesEffect;
   readonly journeyDraft?: JourneyDraftEffect;
   readonly journeyEssence?: JourneyEssenceEffect;
@@ -43,6 +49,8 @@ export interface JourneyModifierDefinition {
   readonly afterJourneyEvent: (input: {
     /** The same fixed UUID registry supplied to this transition, with lookup only. */
     readonly lookup: JourneyModifierRegistry["lookup"];
+    readonly gains: readonly import("../../types/journey").JourneyDeckEntryGain[];
+    readonly random: () => { readonly value: number; readonly drawIndex: number };
     readonly before: Readonly<JourneyState>;
     readonly journey: Readonly<JourneyState>;
     readonly eventType: GameplayEventType;
@@ -58,6 +66,8 @@ export interface JourneyModifierDefinition {
     readonly after: Readonly<Record<string, number>>;
     readonly target?: {
       readonly siteIds: readonly SiteId[];
+      readonly prevented?: readonly import("../../types/journey").PreventedNightmareGain[];
+      readonly sparkChanges?: readonly { readonly entryId: import("../../types/identifiers").DeckEntryId; readonly cardId: CardId; readonly before: number; readonly after: number }[];
       readonly nodeId?: AtlasNodeId;
       readonly beforeCardId?: CardId;
       readonly afterCardId?: CardId;
@@ -76,6 +86,7 @@ export interface JourneyModifierRegistry {
     journey: JourneyState;
     eventType: GameplayEventType;
     seq: number;
+    random: () => { readonly value: number; readonly drawIndex: number };
     transfigurations: readonly import("../../types/journey").JourneyTransfigurationOccurrence[];
     siteId: SiteId | null;
     purges?: readonly JourneyPurgeOccurrence[];
@@ -107,33 +118,63 @@ export function createJourneyModifierRegistry(
   const lookup = (dreamsignId: DreamsignId) => byId.get(dreamsignId);
   return Object.freeze({
     lookup,
-    apply({ before, journey, eventType, seq, transfigurations, siteId, purges }) {
+    apply({ before, journey, eventType, seq, random, transfigurations, siteId, purges }) {
       const logRecords: ReducerLogRecord[] = [];
       let next = journey;
-      // Snapshot the post-domain holdings: hooks run in held order, once per
-      // copy held after the event, so a Dreamsign the event gains applies to
-      // it and one the event removes does not (docs/design.md § Dreamsign
-      // journey effects). A hook changing the holdings does not alter this
-      // iteration.
-      for (const [heldIndex, { id }] of journey.dreamsigns.entries()) {
-        const definition = byId.get(id);
-        const applied = definition?.afterJourneyEvent({ lookup, before, journey: next, eventType, heldIndex, seq, transfigurations, siteId, ...(purges === undefined ? {} : { purges }) });
-        if (applied == null) continue;
-        logRecords.push({
-          event: "journey_modifier_applied",
-          fields: {
-            dreamsignId: id,
-            hook: "after_journey_event",
-            eventType,
-            siteId,
-            heldIndex,
-            before: snapshot(applied.before),
-            after: snapshot(applied.after),
-            ...(applied.target === undefined ? {} : { target: applied.target }),
-          },
-        });
+      // Fixed post-domain holdings; local physical occurrence cursors preserve
+      // once-per-copy reactions without reconsidering an older failed threshold.
+      const held = journey.dreamsigns.map(({ id }, heldIndex) => ({ id, heldIndex, definition: byId.get(id) }));
+      const entrySources = held.filter((source) => source.definition?.journeyDeckEntry !== undefined);
+      const transformed = [...transfigurations];
+      const consumed = new Map<number, Set<import("../../types/identifiers").DeckEntryId>>();
+      const invoke = (source: typeof held[number], gains: readonly import("../../types/journey").JourneyDeckEntryGain[], occurrences = transfigurations) => {
+        const applied = source.definition?.afterJourneyEvent({ lookup, before, journey: next, eventType,
+          heldIndex: source.heldIndex, seq, random, gains, transfigurations: occurrences, siteId, ...(purges === undefined ? {} : { purges }) });
+        if (applied == null) return false;
+        logRecords.push({ event: "journey_modifier_applied", fields: {
+          dreamsignId: source.id, hook: "after_journey_event", eventType, siteId, heldIndex: source.heldIndex,
+          before: snapshot(applied.before), after: snapshot(applied.after),
+          ...(applied.target === undefined ? {} : { target: applied.target }),
+        } });
         next = applied.journey;
+        return true;
+      };
+      const gainWave = (previous: JourneyState) => {
+        if (entrySources.length === 0 || eventType === "START_JOURNEY") return;
+        const gains = journeyDeckEntryGains(previous, next);
+        if (gains.length === 0) return;
+        for (const source of entrySources.filter((item) => item.definition!.journeyDeckEntry!.kind === "preventNightmare")) invoke(source, gains);
+        for (const source of entrySources.filter((item) => item.definition!.journeyDeckEntry!.kind !== "preventNightmare")) {
+          const prior = next;
+          if (invoke(source, gains) && source.definition!.journeyDeckEntry!.kind === "randomTransfiguration") transformed.push(...journeyTransfigurationOccurrences(prior, next));
+        }
+      };
+      const reactCopy = (source: typeof held[number]) => {
+        const seen = consumed.get(source.heldIndex) ?? new Set<import("../../types/identifiers").DeckEntryId>();
+        consumed.set(source.heldIndex, seen);
+        const fresh = transformed.filter((item) => !seen.has(item.entry.entryId));
+        for (const item of fresh) seen.add(item.entry.entryId);
+        if (fresh.length === 0) return false;
+        const previous = next;
+        const changed = invoke(source, [], fresh);
+        if (changed) gainWave(previous);
+        return changed;
+      };
+      gainWave(before);
+      for (const source of held) {
+        if (source.definition?.journeyDeckEntry !== undefined) continue;
+        if (source.definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent") { reactCopy(source); continue; }
+        const previous = next;
+        if (invoke(source, [])) gainWave(previous);
       }
+      // A Crystal form can appear after an earlier held Tome. Each concrete
+      // transformation is consumed once by each Tome; preformed copies supply
+      // no further transformation occurrence, so this finite drain terminates.
+      let copied: boolean;
+      do {
+        copied = false;
+        for (const source of held.filter((item) => item.definition?.journeyTransfiguration?.kind === "copyTransfiguredEvent")) copied = reactCopy(source) || copied;
+      } while (copied);
       return { journey: next, logRecords };
     },
   } satisfies JourneyModifierRegistry);
@@ -141,6 +182,9 @@ export function createJourneyModifierRegistry(
 
 /** The production registry's fixed catalog registrations. */
 export const journeyModifierRegistry = createJourneyModifierRegistry([
+  journeyDeckEntry(parseDreamsignId(raven.id), ravenEffect),
+  journeyDeckEntry(parseDreamsignId(acorn.id), acornEffect),
+  journeyDeckEntry(parseDreamsignId(crystal.id), crystalEffect),
   journeyEssence(parseDreamsignId(starBadge.id), starEffect),
   journeyEssence(parseDreamsignId(pearlShell.id), pearlEffect),
   journeyEssence(parseDreamsignId(bandedWorm.id), wormEffect),

@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.264",
+  "phase": 5,
+  "implementMin": 89.83668886666666,
+  "implementWindow": {
+    "start": "2026-10-13T19:58:47.405Z",
+    "end": "2026-10-13T21:28:37.606332+00:00"
+  },
+  "localValidationS": {
+    "focused": 4.2923202909878455,
+    "review": 50.91892991599161,
+    "knip": 4.024873249989469,
+    "full": 103.38025954199838,
+    "weightedFuzzApplicability": 560.049094166985,
+    "labDreamsignPreflight": 2.5689347500156146
+  },
+  "hostLoad": 2.92236328125,
+  "testDelta": {
+    "files": 1,
+    "lines": 308,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "bead-areas-incomplete",
+      "minutes": 17.37092015,
+      "note": "Actual post-claim dispatch to first exact source-write admission includes overlapping source-free API/rules research, precise persisted-receipt/copy/body scope discovery and native peer serialization coordination. Gross admission interval is not pure waiting, productive editing, CPU, model usage or product/tool performance; parent records the delayed admission."
+    }
+  ]
+}

@@ -2627,3 +2627,34 @@ current balance at each held copy's turn, including prior copies' gains. Currenc
 supports fractional values; the percentage is the printed numerator divided by
 its denominator, without rounding. Same-node reentry, navigation, rerolls, replay,
 and administrative state loading do not independently award an entry gain.
+
+## Journey Deck Entry Effects
+
+Starting-deck assembly constructs the initial deck. Subsequent validated gameplay
+gains and copies add concrete entries, each identified independently of other
+entries with the same card identity. Administrative loads and exact state edits
+provide no added-card occurrence.
+
+A prohibition on adding Nightmare prevents each new Nightmare entry, including a
+copy of an existing Nightmare. Existing entries remain. The validated transaction
+preserves its paid Essence, other rewards, permanent modifications, and site
+continuation. Its saved result distinguishes actual gains from prevented
+attempts. Sources held after the domain change apply, so protection gained or
+lost by that same compound reward uses those final holdings.
+
+Each addition wave excludes prohibited additions before checking a deck-size
+requirement. The printed minimum is inclusive: an addition bringing the deck
+from twenty-nine to thirty qualifies. Entries gained together use the same
+resulting count. A later modifier-produced addition is a fresh wave; earlier
+gains retain their result. Each held copy grants its printed bonus to each
+qualifying new physical entry once. Current type and subtype, including permanent
+entry changes, determine whether that entry is a warrior. A copy retains its
+inherited modifications and receives its own added-card bonuses.
+
+An eligible unformed entry gains one uniformly chosen applicable transfiguration.
+An entry carrying a form retains it and consumes no draw. Multiple sources cannot
+replace that form. Applying a new random form is a transfiguration operation and
+can trigger an Event copy once per held source. Receiving a copy or reward that
+already carries a form provides no further transfiguration occurrence. Domain
+random draws keep their indices; modifier draws continue after the last index the
+domain consumed.

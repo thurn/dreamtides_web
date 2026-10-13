@@ -196,6 +196,30 @@ export interface JourneyPurgeTransition {
   readonly purges: readonly JourneyPurgeOccurrence[];
 }
 
+/** Printed clauses applied to newly gained physical journey entries. */
+export type JourneyDeckEntryEffect =
+  | { readonly kind: "preventNightmare" }
+  | { readonly kind: "warriorSpark"; readonly amount: number }
+  | { readonly kind: "randomTransfiguration"; readonly minimumDeckSize: number };
+
+export interface JourneyDeckEntryGain {
+  readonly entry: Readonly<DeckEntry>;
+  readonly cardId: CardId;
+  readonly cardType: CardType;
+  readonly subtype: import("./card-identity").CardSubtype;
+}
+
+/** A validated attempted gain prevented before the final deck is committed. */
+export interface PreventedNightmareGain {
+  /** Paired provenance only when the prevented gain was an actual copy. */
+  readonly sourceEntryId?: DeckEntryId;
+  readonly sourceCardId?: CardId;
+  readonly entryId: DeckEntryId;
+  readonly cardId: CardId;
+  readonly dreamsignId: DreamsignId;
+  readonly heldIndex: number;
+}
+
 export type JourneyTransfigurationEffect =
   | { readonly kind: "copyTransfiguredEvent" }
   | { readonly kind: "afterBattleTransfiguration"; readonly maxCount: number };
@@ -1002,6 +1026,8 @@ export interface ExplorationResolution {
   cardKeywordChanges?: readonly ExplorationCardKeywordChange[];
   /** Exact ordered Nightmare entries minted by a compound action. */
   nightmareGains?: readonly ExplorationNightmareGain[];
+  /** Fresh attempted Nightmare additions prevented by a held journey source. */
+  preventedNightmareGains?: readonly PreventedNightmareGain[];
   affectedEntryIds: DeckEntryId[];
   /** Exact resolved spark values before and after a persisted deck mutation. */
   sparkBeforeByEntryId?: IdentityRecord<DeckEntryId, number>;

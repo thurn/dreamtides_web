@@ -1,3 +1,4 @@
+import { EVENT_CARD_SUBTYPE } from "../../types/card-identity";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { parseDeckEntryId, parseCardTypeChangePredicateId } from "../../types/identifiers";
 import { cardSubtypeFromUnknown } from "../../types/card-identity";
@@ -94,7 +95,7 @@ describe("journeyTransfiguration public folded contracts", () => {
   it("contains a needed provider failure after domain mutation with no partial copy/cost, then retries and replays once", () => {
     const initial = accepted(siteState([TOME, LEAF]), "OPEN_SITE", open);
     let fail = true;
-    registerJourneyTransfigurationProvider({ resolve: () => { if (fail) throw new Error("synthetic type lookup failure"); return { cardId: card.id, cardType: "Event", forms: [] }; } });
+    registerJourneyTransfigurationProvider({ resolve: () => { if (fail) throw new Error("synthetic type lookup failure"); return { cardId: card.id, cardType: "Event", subtype: EVENT_CARD_SUBTYPE, forms: [] }; } });
     const config: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => initial, reducer: (s, e, c) => reduceGameEvent(s, e, c, registry) };
     const log = createLocalLog({ config, genesis: GENESIS, localActor: event("END_BATTLE", {}).actor, now: () => ctx().timestamp, devMode: false });
     log.append({ type: "ACCEPT_TRANSFIGURATION_CHOICE", payload: select("entry-1") }); expect(log.state()).toEqual(initial);

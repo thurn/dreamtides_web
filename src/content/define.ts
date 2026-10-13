@@ -80,6 +80,7 @@ interface CardFields {
 export type CardDefinition = CardFields & ContentStatus;
 
 interface DreamsignFields {
+  readonly journeyDeckEntry?: import("../types/journey").JourneyDeckEntryEffect;
   /** Journey-only declarative clause consumed by the UUID modifier registry. */
   readonly journeySites?: JourneySitesEffect;
   readonly journeyDraft?: JourneyDraftEffect;

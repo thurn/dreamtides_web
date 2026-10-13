@@ -1,3 +1,4 @@
+import { EVENT_CARD_SUBTYPE } from "../../types/card-identity";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createEngine } from "../../engine";
 import { energy, event as eventAbility } from "../../engine/dsl/builders";
@@ -112,7 +113,7 @@ describe("earned two-kind battle permissions through public engine/fold", () => 
       const out = apply(s, "RESOLVE_JOURNEY_TRANSFIGURATION", { ...payload, ...patch }, ctx({ rng }));
       expect(out.state).toBe(s); expect(out.logRecords).toBeUndefined();
     }
-    registerJourneyTransfigurationProvider({ resolve: (entry) => ({ cardId: syntheticId(0x4262), cardType: "Event", forms: entry.entryId === "entry-2" ? [] : ["Inspired"] }) });
+    registerJourneyTransfigurationProvider({ resolve: (entry) => ({ cardId: syntheticId(0x4262), cardType: "Event", subtype: EVENT_CARD_SUBTYPE, forms: entry.entryId === "entry-2" ? [] : ["Inspired"] }) });
     expect(apply(s, "RESOLVE_JOURNEY_TRANSFIGURATION", { ...payload, entryIds: ["entry-1", "entry-2"] }, ctx({ rng })).state).toBe(s);
     expect(rng).not.toHaveBeenCalled();
   });
@@ -121,7 +122,7 @@ describe("earned two-kind battle permissions through public engine/fold", () => 
     let fail = true;
     registerJourneyTransfigurationProvider({ resolve: (entry) => {
       if (fail && entry.entryId === "entry-2") throw new Error("synthetic second-target failure");
-      return { cardId: syntheticId(0x4263), cardType: "Event", forms: ["Inspired"] };
+      return { cardId: syntheticId(0x4263), cardType: "Event", subtype: EVENT_CARD_SUBTYPE, forms: ["Inspired"] };
     } });
     const config: EngineConfig<FoldState> = { ...GAME_ENGINE_CONFIG, genesisState: () => initial,
       reducer: (s, e, c) => reduceGameEvent(s, e, { ...c, rng }, registry) };

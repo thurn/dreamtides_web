@@ -1,4 +1,8 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
+import type { JourneyDeckEntryEffect } from "../../types/journey";
+
+export const journeyDeckEntryEffect: JourneyDeckEntryEffect = { kind: "randomTransfiguration", minimumDeckSize: 30 };
 
 export default dreamsign({
   id: "c2af5460-e61f-409b-9b86-6ac7db34d748",
@@ -10,5 +14,7 @@ export default dreamsign({
   rarity: "Common",
   tideIds: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
   tags: ["J15", "Tag OK"],
-  pending: true,
+  journeyDeckEntry: journeyDeckEntryEffect,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("If your deck has 30 or more cards, cards you add to it gain a random transfiguration."),
 });

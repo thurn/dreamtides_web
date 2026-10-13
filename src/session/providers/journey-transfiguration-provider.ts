@@ -9,7 +9,7 @@ export function createJourneyTransfigurationProvider(content: JourneyContent): J
     const base = content.cardDatabase.get(entry.cardNumber);
     if (base === undefined) return null;
     const card = resolveDeckEntryCard(content.transfigurationData, base, entry);
-    return { cardId: base.id, cardType: card.cardType,
+    return { cardId: base.id, cardType: card.cardType, subtype: card.subtype,
       forms: entry.transfiguration === null ? offeredTransfigurationForms(content.transfigurationData, card, null).map((offer) => offer.type) : [] };
   } };
 }

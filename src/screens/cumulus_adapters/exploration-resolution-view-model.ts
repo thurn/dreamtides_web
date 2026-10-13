@@ -1,3 +1,4 @@
+import { validPreventedNightmareGains } from "../../rules/journey/journey-deck-entry";
 // Pure view-model construction for a resolved Exploration action: the reward
 // and deck-modification presentation shown after the player resolves an offer.
 
@@ -141,6 +142,14 @@ function resolvedTransfigurationViews(
   return views.length === mappings.length ? views : null;
 }
 
+/** Saved blocked copies validate attempted counts without presenting phantom cards. */
+function preventedCopyMappings(resolution: import("../../types/journey").ExplorationResolution, state: JourneyState): readonly import("../../types/journey").ExplorationCardCopy[] | null {
+  if (!validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>)) return null;
+  return (resolution.preventedNightmareGains ?? []).flatMap((gain) => gain.sourceEntryId === undefined || gain.sourceCardId === undefined ? [] : [{
+    sourceEntryId: gain.sourceEntryId, sourceCardId: gain.sourceCardId, mintedEntryId: gain.entryId, mintedCardId: gain.cardId,
+  }]);
+}
+
 function compoundActionRewardForResolution(
   action: ExplorationActionContent,
   runtime: ExplorationSiteRuntime,
@@ -268,6 +277,8 @@ function compoundActionRewardForResolution(
   }
 
   const copyMappings = resolution.cardCopies ?? [];
+  const blockedCopies = preventedCopyMappings(resolution, state);
+  if (blockedCopies === null) return null;
   const copies = copyMappings.flatMap((mapping) => {
     const sourceEntry = state.deck.find(
       (entry) => entry.entryId === mapping.sourceEntryId,
@@ -400,7 +411,7 @@ function compoundActionRewardForResolution(
           resolution.affectedEntryIds,
           preparation.targets.map((target) => target.entryId),
         ) &&
-        nightmares.length === preparation.nightmareCount &&
+        nightmares.length + (validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>) ? (resolution.preventedNightmareGains?.length ?? 0) : -1) === preparation.nightmareCount &&
         matchesNightmareGains() &&
         copies.length === 0
         ? {
@@ -445,7 +456,7 @@ function compoundActionRewardForResolution(
         ) &&
         purged.length === 0 &&
         keywordChanges.length === 0 &&
-        nightmares.length === preparation.nightmareCount &&
+        nightmares.length + (validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>) ? (resolution.preventedNightmareGains?.length ?? 0) : -1) === preparation.nightmareCount &&
         sameOrderedIds(resolution.gainedEntryIds ?? [], [
           ...transfigurations.map((mapping) => mapping.entryId),
           ...nightmares.map((card) => card.entryId),
@@ -475,6 +486,8 @@ function compoundActionRewardForResolution(
               (target) => target.entryId !== selectedId,
             )
           : [];
+      const attempts = [...copyMappings, ...blockedCopies].sort((left, right) => companionTargets.findIndex((target) => target.entryId === left.sourceEntryId) - companionTargets.findIndex((target) => target.entryId === right.sourceEntryId));
+      const blockedIds = new Set(blockedCopies.map((copy) => copy.sourceEntryId));
       return preparation.kind === "purge-transfigure-copy" &&
         hasExactSelectionKeys(["entryIds"]) &&
         selectedIds?.length === 1 &&
@@ -491,8 +504,8 @@ function compoundActionRewardForResolution(
         ]) &&
         keywordChanges.length === 0 &&
         nightmares.length === 0 &&
-        copies.length === 3 &&
-        copyMappings.every((mapping, index) => {
+        copies.length + blockedCopies.length === 3 &&
+        attempts.every((mapping, index) => {
           const target = companionTargets[index];
           return (
             target !== undefined &&
@@ -507,7 +520,7 @@ function compoundActionRewardForResolution(
         ) &&
         sameOrderedIds(
           resolution.gainedCardIds,
-          companionTargets.map((target) => target.cardId),
+          companionTargets.filter((target) => !blockedIds.has(target.entryId)).map((target) => target.cardId),
         )
         ? {
             kind: "compound-card-mutation",
@@ -733,17 +746,20 @@ function randomCardCopiesRewardForResolution(
   }
   const preparation = explorationOfferPlan(offer, "random-deck-target");
   const mappings = resolution.cardCopies ?? [];
+  const blocked = preventedCopyMappings(resolution, state);
+  if (blocked === null) return null;
+  const attempts = [...mappings, ...blocked].sort((left, right) => (preparation?.targets.findIndex((target) => target.entryId === left.sourceEntryId) ?? -1) - (preparation?.targets.findIndex((target) => target.entryId === right.sourceEntryId) ?? -1));
   if (
     preparation === undefined ||
-    mappings.length !== action.count ||
-    new Set(mappings.map((mapping) => mapping.mintedEntryId)).size !==
-      mappings.length ||
+    attempts.length !== action.count ||
+    new Set(attempts.map((mapping) => mapping.mintedEntryId)).size !==
+      attempts.length ||
     !sameOrderedIds(
-      mappings.map((mapping) => mapping.sourceEntryId),
+      attempts.map((mapping) => mapping.sourceEntryId),
       preparation.targets.map((target) => target.entryId),
     ) ||
     !sameOrderedIds(
-      mappings.map((mapping) => mapping.sourceEntryId),
+      attempts.map((mapping) => mapping.sourceEntryId),
       resolution.affectedEntryIds,
     ) ||
     !sameOrderedIds(
@@ -757,8 +773,13 @@ function randomCardCopiesRewardForResolution(
   ) {
     return null;
   }
-  const pairs = mappings.flatMap((mapping, index) => {
-    const target = preparation.targets[index];
+  if (blocked.some((mapping) => {
+    const target = preparation.targets.find((item) => item.entryId === mapping.sourceEntryId);
+    const source = state.deck.find((item) => item.entryId === mapping.sourceEntryId);
+    return target?.cardId !== mapping.sourceCardId || source === undefined || deckCardChoice(source, content)?.model.cardId !== mapping.sourceCardId;
+  })) return null;
+  const pairs = mappings.flatMap((mapping) => {
+    const target = preparation.targets.find((target) => target.entryId === mapping.sourceEntryId);
     const sourceEntry = state.deck.find(
       (entry) => entry.entryId === mapping.sourceEntryId,
     );
@@ -1475,7 +1496,7 @@ export function rewardForResolution(
       ).length;
       if (
         nightmares.length === persistedNightmareCount &&
-        nightmares.length === resolvedAction.nightmareCount
+        nightmares.length + (validPreventedNightmareGains(resolution.preventedNightmareGains, state.deck, resolution as unknown as Record<string, unknown>) ? (resolution.preventedNightmareGains?.length ?? 0) : -1) === resolvedAction.nightmareCount
       ) {
         return {
           kind: "nightmare-dreamsign-bundle",
@@ -1514,6 +1535,8 @@ export function rewardForResolution(
           }),
     };
   }
+  const blockedCopiesForAction = preventedCopyMappings(resolution, state);
+  if (blockedCopiesForAction === null) return null;
   if (resolvedAction?.effectKind === "purge-and-copy") {
     const purgedEntry = resolution.purgedEntrySnapshots?.[0];
     const purgedCard =
@@ -1536,7 +1559,7 @@ export function rewardForResolution(
       purgedCard !== null &&
       sourceEntryId !== undefined &&
       source !== null &&
-      cards.length > 0
+      ((blockedCopiesForAction.length === 0 && cards.length > 0) || (cards.length + blockedCopiesForAction.length === 1 && blockedCopiesForAction.length === 1 && blockedCopiesForAction[0].sourceEntryId === sourceEntryId && blockedCopiesForAction[0].sourceCardId === source.model.cardId))
     ) {
       return {
         kind: "purge-and-copy",
@@ -1565,10 +1588,13 @@ export function rewardForResolution(
       const copy = deckCardChoice(entry, content);
       return copy === null ? [] : [copy];
     });
-    if (sources.length > 0 && sources.length === copies.length) {
+    const blockedSources = new Set(blockedCopiesForAction.map((copy) => copy.sourceEntryId));
+    const actualSources = sources.filter((source) => !blockedSources.has(source.entryId));
+    if (sources.length > 0 && sources.length === copies.length + blockedCopiesForAction.length &&
+      blockedCopiesForAction.every((copy) => sources.some((source) => source.entryId === copy.sourceEntryId && source.model.cardId === copy.sourceCardId)) && actualSources.length === copies.length) {
       return {
         kind: "card-copies-multiple",
-        pairs: sources.map((source, index) => ({
+        pairs: actualSources.map((source, index) => ({
           source,
           copy: copies[index],
         })),
@@ -1594,7 +1620,8 @@ export function rewardForResolution(
       const card = deckCardChoice(entry, content);
       return card === null ? [] : [card];
     });
-    if (sourceEntryId !== undefined && source !== null && cards.length > 0) {
+    if (sourceEntryId !== undefined && source !== null && ((blockedCopiesForAction.length === 0 && cards.length > 0) ||
+      (cards.length + blockedCopiesForAction.length === (resolvedAction.count ?? 1) && blockedCopiesForAction.length > 0 && blockedCopiesForAction.every((copy) => copy.sourceEntryId === sourceEntryId && copy.sourceCardId === source.model.cardId)))) {
       return {
         kind: "card-copies",
         sourceEntryId,
@@ -1857,7 +1884,11 @@ export function rewardForResolution(
         return null;
     }
   })();
-  const cards = resolution.gainedCardIds.flatMap((cardId) => {
+  const cards = resolution.gainedCardIds.flatMap((cardId, index) => {
+    const entryId = resolution.gainedEntryIds?.[index];
+    const entry = state.deck.find((candidate) => candidate.entryId === entryId);
+    const choice = entry === undefined ? null : deckCardChoice(entry, content);
+    if (choice?.model.cardId === cardId) return [choice.model];
     const card = cardById(content, cardId);
     return card === null ? [] : [modelForCard(card)];
   });

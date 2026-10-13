@@ -1,4 +1,8 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
+import type { JourneyDeckEntryEffect } from "../../types/journey";
+
+export const journeyDeckEntryEffect: JourneyDeckEntryEffect = { kind: "warriorSpark", amount: 1 };
 
 export default dreamsign({
   id: "9f34b5f6-4766-4a7e-a841-d7b945cad504",
@@ -14,5 +18,7 @@ export default dreamsign({
     "833ba3dd-498a-42ce-9a03-32f6636acea1",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  journeyDeckEntry: journeyDeckEntryEffect,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("When you add a warrior card to your deck, that card gains +1✦."),
 });

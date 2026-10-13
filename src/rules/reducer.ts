@@ -110,7 +110,16 @@ export function reduceGameEvent(
     }
   }
 
-  return finishTransition(state, event, routeDomain(state, event, ctx, modifiers), modifiers, ctx.seq);
+  let nextRandomIndex = 0;
+  const domainContext: EventContext = { ...ctx, rng(index) {
+    nextRandomIndex = Math.max(nextRandomIndex, index + 1);
+    return ctx.rng(index);
+  } };
+  const result = routeDomain(state, event, domainContext, modifiers);
+  return finishTransition(state, event, result, modifiers, ctx.seq, () => {
+    const drawIndex = nextRandomIndex++;
+    return { value: ctx.rng(drawIndex), drawIndex };
+  });
 }
 
 /**
@@ -125,6 +134,7 @@ function finishTransition(
   result: ReduceResult,
   modifiers: JourneyModifierRegistry,
   seq: number,
+  random: () => { readonly value: number; readonly drawIndex: number },
 ): ReduceResult {
   if (
     result.outcome === "applied" &&
@@ -165,7 +175,7 @@ function finishTransition(
       before: before.journey,
       journey: result.state.journey,
       eventType: event.type,
-      seq, transfigurations,
+      seq, random, transfigurations,
       siteId,
       ...(result.purges === undefined ? {} : { purges: result.purges }),
     });

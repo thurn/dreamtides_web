@@ -33,7 +33,7 @@ export const runtime = (): CardChoiceSiteRuntime => ({ kind: "cardChoice", choic
   transfigurationOffers: entries().map((entry) => ({ entryId: entry.entryId, type: entry.cardNumber === 1 ? "Inspired" : "Kindled", effectDetails: {}, previewCard: card, essenceCost: 7 })) });
 export function installProviders() {
   registerJourneyTransfigurationProvider({ resolve: (entry) => ({ cardId: entry.cardNumber === 1 ? card.id : testCardId("transfiguration-character"),
-    cardType: entry.typeChange?.cardType ?? (entry.cardNumber === 1 ? "Event" : "Character"), forms: entry.cardNumber === 1 ? ["Inspired", "Enduring"] : ["Kindled"] }) });
+    cardType: entry.typeChange?.cardType ?? (entry.cardNumber === 1 ? "Event" : "Character"), subtype: entry.typeChange?.subtype ?? card.subtype, forms: entry.cardNumber === 1 ? ["Inspired", "Enduring"] : ["Kindled"] }) });
   registerSiteContentProvider(testSiteContentProvider({ openSite: () => ({ runtime: runtime() }) }));
   registerDeckContentProvider({ resolveCardNumber: () => 1, resolveDreamsign: sign });
 }

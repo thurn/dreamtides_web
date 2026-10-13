@@ -1,3 +1,4 @@
+import { validPreventedNightmareGains } from "./journey-deck-entry";
 import { journeyModifierRegistry, type JourneyModifierRegistry } from "./modifier-registry";
 import { validJourneyTransfigurationScreen } from "./journey-transfiguration";
 import { validJourneyPurgeScreen } from "./journey-purge";
@@ -560,7 +561,9 @@ function isJourneyStateShape(value: unknown, registry: JourneyModifierRegistry):
     if (isRecord(runtime) && runtime.journeyEssenceSource !== undefined &&
       (runtime.kind !== "reward" || !isRecord(runtime.reward) || runtime.reward.rewardType !== "dreamsign" ||
         dreamsignIdFromUnknown(runtime.journeyEssenceSource) === null)) return false;
-    if (isRecord(runtime) && runtime.kind === "exploration" && !validJourneySiteCounters(runtime.journeySiteRerolls)) return false;
+    if (isRecord(runtime) && runtime.kind === "exploration" &&
+      (!validJourneySiteCounters(runtime.journeySiteRerolls) ||
+        (isRecord(runtime.resolution) && !validPreventedNightmareGains(runtime.resolution.preventedNightmareGains, value.deck as unknown[], runtime.resolution)))) return false;
     if (
       isRecord(runtime) &&
       runtime.kind === "shop" &&

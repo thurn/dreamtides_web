@@ -1,4 +1,8 @@
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
+import type { JourneyDeckEntryEffect } from "../../types/journey";
+
+export const journeyDeckEntryEffect: JourneyDeckEntryEffect = { kind: "preventNightmare" };
 
 export default dreamsign({
   id: "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
@@ -10,5 +14,7 @@ export default dreamsign({
   rarity: "Common",
   tideIds: ["51903b9a-825b-4d9a-8a6d-071670c3caaa"],
   tags: ["J16", "Tag OK"],
-  pending: true,
+  journeyDeckEntry: journeyDeckEntryEffect,
+  abilities: () => [],
+  verifiedText: expectedVerifiedText("Nightmare cards cannot be added to your deck."),
 });

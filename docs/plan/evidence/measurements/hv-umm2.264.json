@@ -1,0 +1,2397 @@
+{
+  "bead": "hv-umm2.264",
+  "status": "implementation and required local validation/site QA complete; parent COMMIT ACK/core review/certified delivery pending",
+  "base": "be9a6549b47ef37a1213d4bca0591af768607340",
+  "dispatch": {
+    "at": "2026-10-13T19:58:47.405Z",
+    "callId": "call_695ed2d719be4e20b23f878fa0c71834",
+    "ordinal": 20004,
+    "samplingStart": "UNKNOWN"
+  },
+  "implementWindow": {
+    "start": "2026-10-13T19:58:47.405Z",
+    "end": "2026-10-13T21:28:37.606332+00:00"
+  },
+  "windowEndpoint": {
+    "currentScope": "Actual immediate pre-Git cutoff; exact external Git endpoint and bounded tail recorded after commit",
+    "actualGitEndpoint": "UNKNOWN until Git executes; exact external receipt is collected after commit",
+    "includes": "research, native scope admissions, coordination, queue waits, all failures/checks and managed QA",
+    "modelCpu": "UNKNOWN",
+    "modelQueue": "UNKNOWN"
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 308,
+    "jsdomFiles": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review review-v3 prepare/check starting one-minute load2.92236328125; inclusive scope50.91892991599161s"
+      }
+    }
+  },
+  "commands": {
+    "focused-v2": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-deck-entry.test.ts"
+      ],
+      "start": "2026-10-13T20:22:28.915086+00:00",
+      "end": "2026-10-13T20:22:35.173480+00:00",
+      "wallSeconds": 6.258232790976763,
+      "exitCode": 1,
+      "childCpuSeconds": 6.9233139999999995,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/focused-v2.stdout"
+    },
+    "qa-acorn": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.264/gain-sites.mjs",
+        "--bead",
+        "hv-umm2.264",
+        "--arg",
+        "case=acorn",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-13T20:56:13.014247+00:00",
+      "end": "2026-10-13T20:56:28.232933+00:00",
+      "wallSeconds": 15.218426332983654,
+      "exitCode": 1,
+      "childCpuSeconds": 6.988479,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/qa-acorn.stdout"
+    },
+    "typecheck-v5": {
+      "argv": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "start": "2026-10-13T20:29:28.881318+00:00",
+      "end": "2026-10-13T20:29:38.229469+00:00",
+      "wallSeconds": 9.347962166008074,
+      "exitCode": 0,
+      "childCpuSeconds": 14.103852,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/typecheck-v5.stdout"
+    },
+    "review-v3": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T21:11:28.808498+00:00",
+      "end": "2026-10-13T21:12:19.728112+00:00",
+      "wallSeconds": 50.91892991599161,
+      "exitCode": 0,
+      "childCpuSeconds": 141.65092,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/review-v3.stdout"
+    },
+    "knip-v2": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T21:11:28.808656+00:00",
+      "end": "2026-10-13T21:11:32.833737+00:00",
+      "wallSeconds": 4.024873249989469,
+      "exitCode": 0,
+      "childCpuSeconds": 5.292992,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/knip-v2.stdout"
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T20:37:55.625817+00:00",
+      "end": "2026-10-13T20:38:01.513280+00:00",
+      "wallSeconds": 5.887046874995576,
+      "exitCode": 0,
+      "childCpuSeconds": 4.937807,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/knip.stdout"
+    },
+    "review-v2": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T20:36:43.964357+00:00",
+      "end": "2026-10-13T20:37:35.816288+00:00",
+      "wallSeconds": 51.85125716699986,
+      "exitCode": 0,
+      "childCpuSeconds": 141.658978,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/review-v2.stdout"
+    },
+    "typecheck-v4": {
+      "argv": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "start": "2026-10-13T20:26:38.211826+00:00",
+      "end": "2026-10-13T20:26:47.250588+00:00",
+      "wallSeconds": 9.038592541997787,
+      "exitCode": 0,
+      "childCpuSeconds": 14.042446,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/typecheck-v4.stdout"
+    },
+    "qa-duplication": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.264/gain-sites.mjs",
+        "--bead",
+        "hv-umm2.264",
+        "--arg",
+        "case=duplication",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-13T20:55:20.582820+00:00",
+      "end": "2026-10-13T20:56:05.692470+00:00",
+      "wallSeconds": 45.10902904201066,
+      "exitCode": 0,
+      "childCpuSeconds": 7.84994,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/qa-duplication.stdout"
+    },
+    "qa-shop": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.264/gain-sites.mjs",
+        "--bead",
+        "hv-umm2.264",
+        "--arg",
+        "case=shop",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-13T20:54:14.063255+00:00",
+      "end": "2026-10-13T20:54:54.443974+00:00",
+      "wallSeconds": 40.380179875006434,
+      "exitCode": 0,
+      "childCpuSeconds": 7.207979,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/qa-shop.stdout"
+    },
+    "focused-v3": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-deck-entry.test.ts"
+      ],
+      "start": "2026-10-13T20:23:52.482747+00:00",
+      "end": "2026-10-13T20:23:58.611189+00:00",
+      "wallSeconds": 6.128281582990894,
+      "exitCode": 1,
+      "childCpuSeconds": 6.682848,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/focused-v3.stdout"
+    },
+    "focused-v8": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/rules/journey/modifier-registry.test.ts"
+      ],
+      "start": "2026-10-13T20:32:30.726547+00:00",
+      "end": "2026-10-13T20:32:36.595300+00:00",
+      "wallSeconds": 5.868479750002734,
+      "exitCode": 0,
+      "childCpuSeconds": 7.223659,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/focused-v8.stdout"
+    },
+    "qa-acorn-model-v3": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.264/gain-sites.mjs",
+        "--bead",
+        "hv-umm2.264",
+        "--arg",
+        "case=acorn-model",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-13T21:20:04.203639+00:00",
+      "end": "2026-10-13T21:21:00.892728+00:00",
+      "wallSeconds": 56.688336333987536,
+      "exitCode": 0,
+      "childCpuSeconds": 7.663079,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/qa-acorn-model-v3.stdout"
+    },
+    "qa-raven": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.264/gain-sites.mjs",
+        "--bead",
+        "hv-umm2.264",
+        "--arg",
+        "case=raven",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-13T21:03:53.352388+00:00",
+      "end": "2026-10-13T21:04:38.374268+00:00",
+      "wallSeconds": 45.021275167004205,
+      "exitCode": 0,
+      "childCpuSeconds": 7.2996,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/qa-raven.stdout"
+    },
+    "focused-v4": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/rules/journey/modifier-registry.test.ts"
+      ],
+      "start": "2026-10-13T20:25:14.843019+00:00",
+      "end": "2026-10-13T20:25:19.214242+00:00",
+      "wallSeconds": 4.371099957992556,
+      "exitCode": 1,
+      "childCpuSeconds": 6.89822,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/focused-v4.stdout"
+    },
+    "typecheck-v3": {
+      "argv": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "start": "2026-10-13T20:22:59.277164+00:00",
+      "end": "2026-10-13T20:23:09.432916+00:00",
+      "wallSeconds": 10.155532540986314,
+      "exitCode": 2,
+      "childCpuSeconds": 15.405009,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/typecheck-v3.stdout"
+    },
+    "typecheck-v2": {
+      "argv": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "start": "2026-10-13T20:21:58.400408+00:00",
+      "end": "2026-10-13T20:21:59.548450+00:00",
+      "wallSeconds": 1.1479357499920297,
+      "exitCode": 2,
+      "childCpuSeconds": 2.236554,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/typecheck-v2.stdout"
+    },
+    "qa-raven-copy": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.264/gain-sites.mjs",
+        "--bead",
+        "hv-umm2.264",
+        "--arg",
+        "case=raven-copy",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-13T21:21:20.557552+00:00",
+      "end": "2026-10-13T21:22:08.476540+00:00",
+      "wallSeconds": 47.918352083011996,
+      "exitCode": 0,
+      "childCpuSeconds": 7.513007,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/qa-raven-copy.stdout"
+    },
+    "focused-v5": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/rules/journey/modifier-registry.test.ts"
+      ],
+      "start": "2026-10-13T20:25:41.528780+00:00",
+      "end": "2026-10-13T20:25:45.758759+00:00",
+      "wallSeconds": 4.229849791008746,
+      "exitCode": 0,
+      "childCpuSeconds": 6.693741,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/focused-v5.stdout"
+    },
+    "lab-preflight": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b,9f34b5f6-4766-4a7e-a841-d7b945cad504,c2af5460-e61f-409b-9b86-6ac7db34d748"
+      ],
+      "start": "2026-10-13T20:36:45.123770+00:00",
+      "end": "2026-10-13T20:36:46.567145+00:00",
+      "wallSeconds": 1.4432549590128474,
+      "exitCode": 1,
+      "childCpuSeconds": 1.754475,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/lab-preflight.stdout"
+    },
+    "qa-acorn-v2": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.264/gain-sites.mjs",
+        "--bead",
+        "hv-umm2.264",
+        "--arg",
+        "case=acorn",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-13T20:59:47.131045+00:00",
+      "end": "2026-10-13T21:00:32.211101+00:00",
+      "wallSeconds": 45.07944258398493,
+      "exitCode": 0,
+      "childCpuSeconds": 7.803023,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/qa-acorn-v2.stdout"
+    },
+    "lab-dreamsign-preflight": {
+      "argv": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b,9f34b5f6-4766-4a7e-a841-d7b945cad504,c2af5460-e61f-409b-9b86-6ac7db34d748"
+      ],
+      "start": "2026-10-13T20:37:55.625817+00:00",
+      "end": "2026-10-13T20:37:58.195155+00:00",
+      "wallSeconds": 2.5689347500156146,
+      "exitCode": 0,
+      "childCpuSeconds": 1.538984,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/lab-dreamsign-preflight.stdout"
+    },
+    "qa-draft": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.264/gain-sites.mjs",
+        "--bead",
+        "hv-umm2.264",
+        "--arg",
+        "case=draft",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-13T20:48:45.247869+00:00",
+      "end": "2026-10-13T20:49:29.678298+00:00",
+      "wallSeconds": 44.42895925001358,
+      "exitCode": 0,
+      "childCpuSeconds": 8.332564999999999,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/qa-draft.stdout"
+    },
+    "qa-acorn-model-v2": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.264/gain-sites.mjs",
+        "--bead",
+        "hv-umm2.264",
+        "--arg",
+        "case=acorn-model",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-13T21:16:51.960434+00:00",
+      "end": "2026-10-13T21:17:51.147955+00:00",
+      "wallSeconds": 59.18674329202622,
+      "exitCode": 1,
+      "childCpuSeconds": 6.972053000000001,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/qa-acorn-model-v2.stdout"
+    },
+    "focused-v9": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/rules/journey/modifier-registry.test.ts"
+      ],
+      "start": "2026-10-13T20:33:00.080720+00:00",
+      "end": "2026-10-13T20:33:05.983624+00:00",
+      "wallSeconds": 5.902668583003106,
+      "exitCode": 0,
+      "childCpuSeconds": 7.350939,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/focused-v9.stdout"
+    },
+    "full": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "start": "2026-10-13T20:45:42.810547+00:00",
+      "end": "2026-10-13T20:47:26.192068+00:00",
+      "wallSeconds": 103.38025954199838,
+      "exitCode": 0,
+      "childCpuSeconds": 259.872866,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/full.stdout"
+    },
+    "lint-v2": {
+      "argv": [
+        "npx",
+        "eslint",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/rules/journey/journey-deck-entry.ts",
+        "src/rules/journey/modifier-registry.ts",
+        "src/screens/cumulus_adapters/exploration-resolution-view-model.ts"
+      ],
+      "start": "2026-10-13T20:35:39.065121+00:00",
+      "end": "2026-10-13T20:35:41.694809+00:00",
+      "wallSeconds": 2.629578499996569,
+      "exitCode": 0,
+      "childCpuSeconds": 4.627946,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/lint-v2.stdout"
+    },
+    "focused-v6": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/rules/journey/modifier-registry.test.ts"
+      ],
+      "start": "2026-10-13T20:30:28.800572+00:00",
+      "end": "2026-10-13T20:30:34.354485+00:00",
+      "wallSeconds": 5.553780124988407,
+      "exitCode": 1,
+      "childCpuSeconds": 7.031065,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/focused-v6.stdout"
+    },
+    "focused-v7": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-deck-entry.test.ts"
+      ],
+      "start": "2026-10-13T20:31:36.038013+00:00",
+      "end": "2026-10-13T20:31:40.295449+00:00",
+      "wallSeconds": 4.257285416009836,
+      "exitCode": 1,
+      "childCpuSeconds": 5.865737,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/focused-v7.stdout"
+    },
+    "qa-acorn-model": {
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "artifacts/qa/hv-umm2.264/gain-sites.mjs",
+        "--bead",
+        "hv-umm2.264",
+        "--arg",
+        "case=acorn-model",
+        "--timeout",
+        "240"
+      ],
+      "start": "2026-10-13T21:13:40.527383+00:00",
+      "end": "2026-10-13T21:14:03.977949+00:00",
+      "wallSeconds": 23.45020516598015,
+      "exitCode": 1,
+      "childCpuSeconds": 6.994009999999999,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/qa-acorn-model.stdout"
+    },
+    "review-v1": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T20:33:27.693092+00:00",
+      "end": "2026-10-13T20:34:15.815717+00:00",
+      "wallSeconds": 48.121843667002395,
+      "exitCode": 1,
+      "childCpuSeconds": 159.588146,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/review-v1.stdout"
+    },
+    "weighted-fuzz-applicability": {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b,9f34b5f6-4766-4a7e-a841-d7b945cad504,c2af5460-e61f-409b-9b86-6ac7db34d748"
+      ],
+      "start": "2026-10-13T20:35:40.207521+00:00",
+      "end": "2026-10-13T20:45:00.263074+00:00",
+      "wallSeconds": 560.049094166985,
+      "exitCode": 1,
+      "childCpuSeconds": 1.226797,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/weighted-fuzz-applicability.stdout"
+    },
+    "focused-v11": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/screens/cumulus_adapters/exploration-view-model.test.ts"
+      ],
+      "start": "2026-10-13T21:09:25.806827+00:00",
+      "end": "2026-10-13T21:09:30.099283+00:00",
+      "wallSeconds": 4.2923202909878455,
+      "exitCode": 0,
+      "childCpuSeconds": 6.772508,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/focused-v11.stdout"
+    },
+    "focused-v10": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-deck-entry.test.ts",
+        "src/rules/journey/journey-transfiguration.test.ts",
+        "src/rules/journey/journey-after-battle.test.ts",
+        "src/screens/cumulus_adapters/exploration-view-model.test.ts"
+      ],
+      "start": "2026-10-13T21:08:43.996672+00:00",
+      "end": "2026-10-13T21:08:49.784159+00:00",
+      "wallSeconds": 5.78709450000315,
+      "exitCode": 1,
+      "childCpuSeconds": 7.030926,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/focused-v10.stdout"
+    },
+    "typecheck-v6": {
+      "argv": [
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "start": "2026-10-13T20:30:52.311778+00:00",
+      "end": "2026-10-13T20:31:01.021876+00:00",
+      "wallSeconds": 8.709918084001401,
+      "exitCode": 0,
+      "childCpuSeconds": 13.930875,
+      "queueWait": "UNKNOWN",
+      "stdout": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/journeyEntry264/typecheck-v6.stdout"
+    }
+  },
+  "commandTimingQualification": "Per-command child CPU is actual RUSAGE_CHILDREN delta, not model CPU. Wall time includes queues; QA separately reports measured browser lease wait. Weighted-fuzzer kernel heavy-lock acquisition versus execution split is UNKNOWN. Unobserved gaps are orchestration/sampling/collection with exact cause and CPU UNKNOWN. No gross window is productive editing or quota usage.",
+  "sourceAdmission": {
+    "firstSourceACK": "2026-10-13T20:16:09.660209Z",
+    "grossResearchCoordinationMinutes": 17.37092015,
+    "receipts": [
+      "journeyEntry264-sourcewriteack-native.json",
+      "journeyEntry264-subtype-fixture-ack-native.json",
+      "journeyEntry264-copy-fallout-ack-native.json",
+      "journeyEntry264-reward-fallout-ack-native.json"
+    ]
+  },
+  "fuzzApplicability": {
+    "requestedGames": 300,
+    "actualGames": 0,
+    "actualJourneyMechanics": 0,
+    "exitCode": 1,
+    "qualification": "Exact weighted300 invocation rejects first Raven target because all three scoped journey-only leaves have empty authored battle abilities; first-target diagnostic does not constitute three target executions. Parent native applicability ACK journeyEntry264-applicability-native.json at20:49:23Z; original scope/acceptance retained. Actual journey synthetic contracts and site workflows supply mechanics coverage."
+  },
+  "preflight": {
+    "wrongFlag": {
+      "flag": "--cards",
+      "unknownCardRows": 60,
+      "exitCode": 1,
+      "qualification": "operator selected the wrong entity domain; corrected using actual supported --dreamsigns"
+    },
+    "corrected": {
+      "flag": "--dreamsigns",
+      "pass": 6,
+      "skip": 54,
+      "fail": 0,
+      "exercised": false,
+      "qualification": "Battle-emblem presence only, zero journey clause exercise; native journey-only applicability disposition retained"
+    }
+  },
+  "beforeEvidence": {
+    "external": "before.ts",
+    "qualification": "At immutable base public valid ADD_CARD and production modifier registry are inert for these UUIDs; positive existing additive Spark primitive3+1\u21924. Actual pre-fix Acorn reward screenshot shows printedSpark2 while persisted fresh entries have sparkBonus1."
+  },
+  "localCorrections": [
+    "Own early fixtures had invalid provider result shape, row spreading, START_JOURNEY preconditions, replay failed-first-event assumptions and temporary syntax/type errors. Full raw receipts retained; these are fixture authoring corrections, not product/provider failures.",
+    "Review-v1 lint rejects raw identity boundary/unsafe fixture JSON mutations; corrected typed fixtures and parser seed naming; final review-v3 passes.",
+    "Focused-v10 assumed fixture Kindled preservedSpark; immutable synthetic fixture doublesSpark. Corrected exact4/5 expectations; final public contracts pass.",
+    "Helper incorrectly said deckCardChoice omittedSpark; actual resolveDeckEntryCard applies Spark/stat overrides. Corrected source-first proposal reuses existing helper without changing its body.",
+    "Acorn original affinity-prepared reward refusal, broad transfiguration suffix selector and desktop mobile-only selector failures retained in raw QA reports; final bounded public workflows pass."
+  ],
+  "qa": {
+    "qa-draft": {
+      "invocation": "run-8RefTo",
+      "rawReport": "invocations/run-8RefTo/gain-sites.result.json",
+      "ok": true,
+      "error": null,
+      "hostLoad": 2.81005859375,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 2919,
+        "scenario": 40646,
+        "total": 43626
+      },
+      "result": {
+        "desktop": {
+          "mode": "draft",
+          "sourceUUID": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+          "beforeCount": 29,
+          "afterCount": 30,
+          "gained": [
+            {
+              "entryId": "deck-23-0",
+              "cardNumber": 336,
+              "transfiguration": "Empowered",
+              "isBane": false
+            }
+          ],
+          "geometry": {
+            "x": 102,
+            "y": 204.65625,
+            "width": 300,
+            "height": 420
+          },
+          "applications": [
+            {
+              "dreamsignId": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+              "hook": "after_journey_event",
+              "eventType": "PICK_DRAFT_CARD",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "transformed": 0,
+                "deckSize": 30
+              },
+              "after": {
+                "transformed": 1,
+                "deckSize": 30
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "transfigurations": [
+                  {
+                    "entryId": "deck-23-0",
+                    "cardId": "f79c63f6-7cf1-4030-be39-217fd3c2fb7f",
+                    "type": "Empowered",
+                    "applicableForms": [
+                      "Empowered",
+                      "Amplified",
+                      "Inspired",
+                      "Enduring"
+                    ],
+                    "drawIndex": 4
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T20:49:05.805Z",
+              "gameId": "hznxzm",
+              "seq": 23
+            }
+          ],
+          "reloaded": true
+        },
+        "mobile": {
+          "mode": "draft",
+          "sourceUUID": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+          "beforeCount": 29,
+          "afterCount": 30,
+          "gained": [
+            {
+              "entryId": "deck-23-0",
+              "cardNumber": 336,
+              "transfiguration": "Empowered",
+              "isBane": false
+            }
+          ],
+          "geometry": {
+            "x": 4,
+            "y": 82,
+            "width": 189,
+            "height": 264.59375
+          },
+          "applications": [
+            {
+              "dreamsignId": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+              "hook": "after_journey_event",
+              "eventType": "PICK_DRAFT_CARD",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "transformed": 0,
+                "deckSize": 30
+              },
+              "after": {
+                "transformed": 1,
+                "deckSize": 30
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "transfigurations": [
+                  {
+                    "entryId": "deck-23-0",
+                    "cardId": "f79c63f6-7cf1-4030-be39-217fd3c2fb7f",
+                    "type": "Empowered",
+                    "applicableForms": [
+                      "Empowered",
+                      "Amplified",
+                      "Inspired",
+                      "Enduring"
+                    ],
+                    "drawIndex": 4
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T20:49:23.682Z",
+              "gameId": "g42bfy",
+              "seq": 23
+            }
+          ],
+          "reloaded": true
+        }
+      },
+      "caps": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-8RefTo/gain-sites-desktop.jsonl",
+          "gameId": "hznxzm",
+          "selectedBy": "url",
+          "rows": 60,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-8RefTo/gain-sites-mobile.jsonl",
+          "gameId": "g42bfy",
+          "selectedBy": "url",
+          "rows": 62,
+          "reason": null
+        }
+      ]
+    },
+    "qa-shop": {
+      "invocation": "run-YLsa6C",
+      "rawReport": "invocations/run-YLsa6C/gain-sites.result.json",
+      "ok": true,
+      "error": null,
+      "hostLoad": 3.09619140625,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1663,
+        "scenario": 37945,
+        "total": 39669
+      },
+      "result": {
+        "desktop": {
+          "mode": "shop",
+          "sourceUUID": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+          "beforeCount": 29,
+          "afterCount": 30,
+          "gained": [
+            {
+              "entryId": "deck-23-0",
+              "cardNumber": 215,
+              "transfiguration": "Empowered",
+              "isBane": false
+            }
+          ],
+          "geometry": {
+            "x": 686.390625,
+            "y": 264.40625,
+            "width": 134,
+            "height": 187.59375
+          },
+          "applications": [
+            {
+              "dreamsignId": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+              "hook": "after_journey_event",
+              "eventType": "BUY_SHOP_SLOT",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "transformed": 0,
+                "deckSize": 30
+              },
+              "after": {
+                "transformed": 1,
+                "deckSize": 30
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "transfigurations": [
+                  {
+                    "entryId": "deck-23-0",
+                    "cardId": "25173cac-333f-4efc-9a03-b532d5783419",
+                    "type": "Empowered",
+                    "applicableForms": [
+                      "Empowered",
+                      "Amplified",
+                      "Inspired",
+                      "Enduring"
+                    ],
+                    "drawIndex": 0
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T20:54:31.811Z",
+              "gameId": "gobydk",
+              "seq": 23
+            }
+          ],
+          "reloaded": true
+        },
+        "mobile": {
+          "mode": "shop",
+          "sourceUUID": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+          "beforeCount": 29,
+          "afterCount": 30,
+          "gained": [
+            {
+              "entryId": "deck-23-0",
+              "cardNumber": 215,
+              "transfiguration": "Empowered",
+              "isBane": false
+            }
+          ],
+          "geometry": {
+            "x": 16,
+            "y": 427.953125,
+            "width": 86,
+            "height": 120.390625
+          },
+          "applications": [
+            {
+              "dreamsignId": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+              "hook": "after_journey_event",
+              "eventType": "BUY_SHOP_SLOT",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "transformed": 0,
+                "deckSize": 30
+              },
+              "after": {
+                "transformed": 1,
+                "deckSize": 30
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "transfigurations": [
+                  {
+                    "entryId": "deck-23-0",
+                    "cardId": "25173cac-333f-4efc-9a03-b532d5783419",
+                    "type": "Empowered",
+                    "applicableForms": [
+                      "Empowered",
+                      "Amplified",
+                      "Inspired",
+                      "Enduring"
+                    ],
+                    "drawIndex": 0
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T20:54:48.253Z",
+              "gameId": "f69zwp",
+              "seq": 23
+            }
+          ],
+          "reloaded": true
+        }
+      },
+      "caps": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-YLsa6C/gain-sites-desktop.jsonl",
+          "gameId": "gobydk",
+          "selectedBy": "url",
+          "rows": 56,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-YLsa6C/gain-sites-mobile.jsonl",
+          "gameId": "f69zwp",
+          "selectedBy": "url",
+          "rows": 56,
+          "reason": null
+        }
+      ]
+    },
+    "qa-duplication": {
+      "invocation": "run-VB5mmr",
+      "rawReport": "invocations/run-VB5mmr/gain-sites.result.json",
+      "ok": true,
+      "error": null,
+      "hostLoad": 4.87255859375,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1670,
+        "scenario": 42622,
+        "total": 44351
+      },
+      "result": {
+        "desktop": {
+          "mode": "duplication",
+          "sourceUUID": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+          "beforeCount": 29,
+          "afterCount": 30,
+          "gained": [
+            {
+              "entryId": "deck-23-0",
+              "cardNumber": 510,
+              "transfiguration": "Empowered",
+              "isBane": false
+            }
+          ],
+          "geometry": {
+            "x": 592,
+            "y": 122.25,
+            "width": 824,
+            "height": 614.5
+          },
+          "applications": [
+            {
+              "dreamsignId": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_DUPLICATION_CHOICE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "transformed": 0,
+                "deckSize": 30
+              },
+              "after": {
+                "transformed": 1,
+                "deckSize": 30
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "transfigurations": [
+                  {
+                    "entryId": "deck-23-0",
+                    "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+                    "type": "Empowered",
+                    "applicableForms": [
+                      "Empowered",
+                      "Kindled"
+                    ],
+                    "drawIndex": 0
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T20:55:42.794Z",
+              "gameId": "rsbqfz",
+              "seq": 23
+            }
+          ],
+          "reloaded": true
+        },
+        "mobile": {
+          "mode": "duplication",
+          "sourceUUID": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+          "beforeCount": 29,
+          "afterCount": 30,
+          "gained": [
+            {
+              "entryId": "deck-23-0",
+              "cardNumber": 510,
+              "transfiguration": "Empowered",
+              "isBane": false
+            }
+          ],
+          "geometry": {
+            "x": 8,
+            "y": 345.953125,
+            "width": 334,
+            "height": 316.5
+          },
+          "applications": [
+            {
+              "dreamsignId": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+              "hook": "after_journey_event",
+              "eventType": "ACCEPT_DUPLICATION_CHOICE",
+              "siteId": "site-1",
+              "heldIndex": 0,
+              "before": {
+                "transformed": 0,
+                "deckSize": 30
+              },
+              "after": {
+                "transformed": 1,
+                "deckSize": 30
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "transfigurations": [
+                  {
+                    "entryId": "deck-23-0",
+                    "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+                    "type": "Empowered",
+                    "applicableForms": [
+                      "Empowered",
+                      "Kindled"
+                    ],
+                    "drawIndex": 0
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T20:55:59.713Z",
+              "gameId": "h8qbuy",
+              "seq": 23
+            }
+          ],
+          "reloaded": true
+        }
+      },
+      "caps": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-VB5mmr/gain-sites-desktop.jsonl",
+          "gameId": "rsbqfz",
+          "selectedBy": "url",
+          "rows": 57,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-VB5mmr/gain-sites-mobile.jsonl",
+          "gameId": "h8qbuy",
+          "selectedBy": "url",
+          "rows": 57,
+          "reason": null
+        }
+      ]
+    },
+    "qa-acorn": {
+      "invocation": "run-s6GCGX",
+      "rawReport": "invocations/run-s6GCGX/gain-sites.result.json",
+      "ok": false,
+      "error": "desktop#0: Error: Actual gameplay emitted no UUID modifier application\n    at gainSite (evalmachine.<anonymous>:1732:40)\n    at async evalmachine.<anonymous>:1769:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "hostLoad": 5.02001953125,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 1356,
+        "scenario": 13133,
+        "total": 14544
+      },
+      "result": {
+        "desktop": null
+      },
+      "caps": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-s6GCGX/gain-sites-desktop.jsonl",
+          "gameId": "hf7qf4",
+          "selectedBy": "url",
+          "rows": 34,
+          "reason": null
+        }
+      ]
+    },
+    "qa-acorn-v2": {
+      "invocation": "run-YqszyO",
+      "rawReport": "invocations/run-YqszyO/gain-sites.result.json",
+      "ok": true,
+      "error": null,
+      "hostLoad": 3.7783203125,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 2042,
+        "scenario": 42204,
+        "total": 44316
+      },
+      "result": {
+        "desktop": {
+          "mode": "acorn",
+          "sourceUUID": "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+          "beforeCount": 23,
+          "afterCount": 25,
+          "gained": [
+            {
+              "entryId": "deck-3-0",
+              "cardNumber": 240,
+              "transfiguration": null,
+              "isBane": false,
+              "sparkBonus": 1
+            },
+            {
+              "entryId": "deck-3-1",
+              "cardNumber": 240,
+              "transfiguration": null,
+              "isBane": false,
+              "sparkBonus": 1
+            }
+          ],
+          "geometry": {
+            "x": 29,
+            "y": 618.25,
+            "width": 366,
+            "height": 68.375
+          },
+          "applications": [
+            {
+              "dreamsignId": "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+              "hook": "after_journey_event",
+              "eventType": "RESOLVE_EXPLORATION_CHOICE",
+              "siteId": "site-1",
+              "heldIndex": 1,
+              "before": {
+                "changed": 0
+              },
+              "after": {
+                "changed": 2,
+                "amount": 1
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "sparkChanges": [
+                  {
+                    "entryId": "deck-3-0",
+                    "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                    "before": 0,
+                    "after": 1
+                  },
+                  {
+                    "entryId": "deck-3-1",
+                    "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                    "before": 0,
+                    "after": 1
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T21:00:05.920Z",
+              "gameId": "v5cq2p",
+              "seq": 3
+            }
+          ],
+          "outcomeObservation": null,
+          "reloaded": true
+        },
+        "mobile": {
+          "mode": "acorn",
+          "sourceUUID": "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+          "beforeCount": 23,
+          "afterCount": 25,
+          "gained": [
+            {
+              "entryId": "deck-3-0",
+              "cardNumber": 240,
+              "transfiguration": null,
+              "isBane": false,
+              "sparkBonus": 1
+            },
+            {
+              "entryId": "deck-3-1",
+              "cardNumber": 240,
+              "transfiguration": null,
+              "isBane": false,
+              "sparkBonus": 1
+            }
+          ],
+          "geometry": {
+            "x": 29,
+            "y": 594.25,
+            "width": 332,
+            "height": 68.375
+          },
+          "applications": [
+            {
+              "dreamsignId": "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+              "hook": "after_journey_event",
+              "eventType": "RESOLVE_EXPLORATION_CHOICE",
+              "siteId": "site-1",
+              "heldIndex": 1,
+              "before": {
+                "changed": 0
+              },
+              "after": {
+                "changed": 2,
+                "amount": 1
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "sparkChanges": [
+                  {
+                    "entryId": "deck-3-0",
+                    "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                    "before": 0,
+                    "after": 1
+                  },
+                  {
+                    "entryId": "deck-3-1",
+                    "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                    "before": 0,
+                    "after": 1
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T21:00:25.268Z",
+              "gameId": "8mda7k",
+              "seq": 3
+            }
+          ],
+          "outcomeObservation": null,
+          "reloaded": true
+        }
+      },
+      "caps": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-YqszyO/gain-sites-desktop.jsonl",
+          "gameId": "v5cq2p",
+          "selectedBy": "url",
+          "rows": 44,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-YqszyO/gain-sites-mobile.jsonl",
+          "gameId": "8mda7k",
+          "selectedBy": "url",
+          "rows": 43,
+          "reason": null
+        }
+      ]
+    },
+    "qa-raven": {
+      "invocation": "run-3j6f3o",
+      "rawReport": "invocations/run-3j6f3o/gain-sites.result.json",
+      "ok": true,
+      "error": null,
+      "hostLoad": 2.8466796875,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 2891,
+        "scenario": 41328,
+        "total": 44278
+      },
+      "result": {
+        "desktop": {
+          "mode": "raven",
+          "sourceUUID": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+          "beforeCount": 23,
+          "afterCount": 23,
+          "gained": [],
+          "geometry": {
+            "x": 29,
+            "y": 690.625,
+            "width": 366,
+            "height": 68.375
+          },
+          "applications": [
+            {
+              "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+              "hook": "after_journey_event",
+              "eventType": "RESOLVE_EXPLORATION_CHOICE",
+              "siteId": "site-1",
+              "heldIndex": 1,
+              "before": {
+                "deckSize": 25,
+                "attempted": 2
+              },
+              "after": {
+                "deckSize": 23,
+                "gained": 0,
+                "prevented": 2
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "prevented": [
+                  {
+                    "entryId": "deck-4-0",
+                    "cardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+                    "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+                    "heldIndex": 1
+                  },
+                  {
+                    "entryId": "deck-4-1",
+                    "cardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+                    "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+                    "heldIndex": 1
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T21:04:08.685Z",
+              "gameId": "j7eaov",
+              "seq": 4
+            }
+          ],
+          "outcomeObservation": {
+            "count": null,
+            "geometry": {
+              "x": 16,
+              "y": 32,
+              "width": 1408,
+              "height": 776
+            }
+          },
+          "reloaded": true
+        },
+        "mobile": {
+          "mode": "raven",
+          "sourceUUID": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+          "beforeCount": 23,
+          "afterCount": 23,
+          "gained": [],
+          "geometry": {
+            "x": 26.999984741210938,
+            "y": 666.2130737304688,
+            "width": 336.00001525878906,
+            "height": 69.19879150390625
+          },
+          "applications": [
+            {
+              "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+              "hook": "after_journey_event",
+              "eventType": "RESOLVE_EXPLORATION_CHOICE",
+              "siteId": "site-1",
+              "heldIndex": 1,
+              "before": {
+                "deckSize": 25,
+                "attempted": 2
+              },
+              "after": {
+                "deckSize": 23,
+                "gained": 0,
+                "prevented": 2
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "prevented": [
+                  {
+                    "entryId": "deck-4-0",
+                    "cardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+                    "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+                    "heldIndex": 1
+                  },
+                  {
+                    "entryId": "deck-4-1",
+                    "cardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+                    "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+                    "heldIndex": 1
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T21:04:30.287Z",
+              "gameId": "dmiepe",
+              "seq": 4
+            }
+          ],
+          "outcomeObservation": {
+            "count": null,
+            "geometry": {
+              "x": 16,
+              "y": 32,
+              "width": 358,
+              "height": 720
+            }
+          },
+          "reloaded": true
+        }
+      },
+      "caps": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-3j6f3o/gain-sites-desktop.jsonl",
+          "gameId": "j7eaov",
+          "selectedBy": "url",
+          "rows": 42,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-3j6f3o/gain-sites-mobile.jsonl",
+          "gameId": "dmiepe",
+          "selectedBy": "url",
+          "rows": 48,
+          "reason": null
+        }
+      ]
+    },
+    "qa-acorn-model": {
+      "invocation": "run-jxyfEU",
+      "rawReport": "invocations/run-jxyfEU/gain-sites.result.json",
+      "ok": false,
+      "error": "desktop#0: Error: Actual acquired card display omitted persistent Spark or Crystal forms\n    at gainSite (evalmachine.<anonymous>:1756:96)\n    at async evalmachine.<anonymous>:1817:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "hostLoad": 3.71533203125,
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 2889,
+        "scenario": 19789,
+        "total": 22734
+      },
+      "result": {
+        "desktop": null
+      },
+      "caps": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-jxyfEU/gain-sites-desktop.jsonl",
+          "gameId": "sbu9ke",
+          "selectedBy": "url",
+          "rows": 42,
+          "reason": null
+        }
+      ]
+    },
+    "qa-acorn-model-v2": {
+      "invocation": "run-wDLwSu",
+      "rawReport": "invocations/run-wDLwSu/gain-sites.result.json",
+      "ok": false,
+      "error": "desktop#0: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-deck-entry-id=\"deck-10-0\"]')\n",
+      "hostLoad": 3.208984375,
+      "wallMs": {
+        "browserLeaseWait": 4,
+        "serve": 1358,
+        "scenario": 57039,
+        "total": 58450
+      },
+      "result": {
+        "desktop": null
+      },
+      "caps": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-wDLwSu/gain-sites-desktop.jsonl",
+          "gameId": "fcbwyq",
+          "selectedBy": "url",
+          "rows": 49,
+          "reason": null
+        }
+      ]
+    },
+    "qa-acorn-model-v3": {
+      "invocation": "run-PZ2XnZ",
+      "rawReport": "invocations/run-PZ2XnZ/gain-sites.result.json",
+      "ok": true,
+      "error": null,
+      "hostLoad": 3.52001953125,
+      "wallMs": {
+        "browserLeaseWait": 5,
+        "serve": 2883,
+        "scenario": 52966,
+        "total": 55912
+      },
+      "result": {
+        "desktop": {
+          "mode": "acorn-model",
+          "sourceUUID": "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+          "beforeCount": 29,
+          "afterCount": 31,
+          "gained": [
+            {
+              "entryId": "deck-10-0",
+              "cardNumber": 240,
+              "transfiguration": "Kindled",
+              "isBane": false,
+              "sparkBonus": 1
+            },
+            {
+              "entryId": "deck-10-1",
+              "cardNumber": 240,
+              "transfiguration": "Amplified",
+              "isBane": false,
+              "sparkBonus": 1
+            }
+          ],
+          "geometry": {
+            "x": 29,
+            "y": 618.25,
+            "width": 366,
+            "height": 68.375
+          },
+          "applications": [
+            {
+              "dreamsignId": "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+              "hook": "after_journey_event",
+              "eventType": "RESOLVE_EXPLORATION_CHOICE",
+              "siteId": "site-1",
+              "heldIndex": 1,
+              "before": {
+                "changed": 0
+              },
+              "after": {
+                "changed": 2,
+                "amount": 1
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "sparkChanges": [
+                  {
+                    "entryId": "deck-10-0",
+                    "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                    "before": 0,
+                    "after": 1
+                  },
+                  {
+                    "entryId": "deck-10-1",
+                    "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                    "before": 0,
+                    "after": 1
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T21:20:26.136Z",
+              "gameId": "dpzecb",
+              "seq": 10
+            }
+          ],
+          "outcomeObservation": {
+            "count": null,
+            "geometry": {
+              "x": 16,
+              "y": 32,
+              "width": 1408,
+              "height": 776
+            },
+            "spark": [
+              "5",
+              "3"
+            ],
+            "printedBaseSpark": 2,
+            "formLabels": [
+              "Kindled Transfiguration",
+              "Amplified Transfiguration"
+            ],
+            "formEmblems": 2,
+            "broadFormLabels": [
+              "Kindled Transfiguration",
+              "Rules text changed by Amplified Transfiguration",
+              "Amplified Transfiguration"
+            ],
+            "crystalApplications": [
+              {
+                "dreamsignId": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+                "hook": "after_journey_event",
+                "eventType": "RESOLVE_EXPLORATION_CHOICE",
+                "siteId": "site-1",
+                "heldIndex": 2,
+                "before": {
+                  "transformed": 0,
+                  "deckSize": 31
+                },
+                "after": {
+                  "transformed": 2,
+                  "deckSize": 31
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "transfigurations": [
+                    {
+                      "entryId": "deck-10-0",
+                      "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                      "type": "Kindled",
+                      "applicableForms": [
+                        "Empowered",
+                        "Amplified",
+                        "Kindled"
+                      ],
+                      "drawIndex": 0
+                    },
+                    {
+                      "entryId": "deck-10-1",
+                      "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                      "type": "Amplified",
+                      "applicableForms": [
+                        "Empowered",
+                        "Amplified",
+                        "Kindled"
+                      ],
+                      "drawIndex": 1
+                    }
+                  ]
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-13T21:20:26.136Z",
+                "gameId": "dpzecb",
+                "seq": 10
+              }
+            ],
+            "expectedSpark": [
+              "5",
+              "3"
+            ]
+          },
+          "reloaded": true
+        },
+        "mobile": {
+          "mode": "acorn-model",
+          "sourceUUID": "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+          "beforeCount": 29,
+          "afterCount": 31,
+          "gained": [
+            {
+              "entryId": "deck-10-0",
+              "cardNumber": 240,
+              "transfiguration": "Kindled",
+              "isBane": false,
+              "sparkBonus": 1
+            },
+            {
+              "entryId": "deck-10-1",
+              "cardNumber": 240,
+              "transfiguration": "Amplified",
+              "isBane": false,
+              "sparkBonus": 1
+            }
+          ],
+          "geometry": {
+            "x": 29,
+            "y": 594.25,
+            "width": 332,
+            "height": 68.375
+          },
+          "applications": [
+            {
+              "dreamsignId": "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+              "hook": "after_journey_event",
+              "eventType": "RESOLVE_EXPLORATION_CHOICE",
+              "siteId": "site-1",
+              "heldIndex": 1,
+              "before": {
+                "changed": 0
+              },
+              "after": {
+                "changed": 2,
+                "amount": 1
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "sparkChanges": [
+                  {
+                    "entryId": "deck-10-0",
+                    "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                    "before": 0,
+                    "after": 1
+                  },
+                  {
+                    "entryId": "deck-10-1",
+                    "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                    "before": 0,
+                    "after": 1
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T21:20:51.863Z",
+              "gameId": "vp688e",
+              "seq": 10
+            }
+          ],
+          "outcomeObservation": {
+            "count": null,
+            "geometry": {
+              "x": 16,
+              "y": 32,
+              "width": 358,
+              "height": 720
+            },
+            "spark": [
+              "5",
+              "3"
+            ],
+            "printedBaseSpark": 2,
+            "formLabels": [
+              "Kindled Transfiguration",
+              "Amplified Transfiguration"
+            ],
+            "formEmblems": 2,
+            "broadFormLabels": [
+              "Kindled Transfiguration",
+              "Rules text changed by Amplified Transfiguration",
+              "Amplified Transfiguration"
+            ],
+            "crystalApplications": [
+              {
+                "dreamsignId": "c2af5460-e61f-409b-9b86-6ac7db34d748",
+                "hook": "after_journey_event",
+                "eventType": "RESOLVE_EXPLORATION_CHOICE",
+                "siteId": "site-1",
+                "heldIndex": 2,
+                "before": {
+                  "transformed": 0,
+                  "deckSize": 31
+                },
+                "after": {
+                  "transformed": 2,
+                  "deckSize": 31
+                },
+                "target": {
+                  "siteIds": [
+                    "site-1"
+                  ],
+                  "transfigurations": [
+                    {
+                      "entryId": "deck-10-0",
+                      "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                      "type": "Kindled",
+                      "applicableForms": [
+                        "Empowered",
+                        "Amplified",
+                        "Kindled"
+                      ],
+                      "drawIndex": 0
+                    },
+                    {
+                      "entryId": "deck-10-1",
+                      "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+                      "type": "Amplified",
+                      "applicableForms": [
+                        "Empowered",
+                        "Amplified",
+                        "Kindled"
+                      ],
+                      "drawIndex": 1
+                    }
+                  ]
+                },
+                "event": "journey_modifier_applied",
+                "timestamp": "2026-10-13T21:20:51.863Z",
+                "gameId": "vp688e",
+                "seq": 10
+              }
+            ],
+            "expectedSpark": [
+              "5",
+              "3"
+            ]
+          },
+          "reloaded": true
+        }
+      },
+      "caps": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-PZ2XnZ/gain-sites-desktop.jsonl",
+          "gameId": "dpzecb",
+          "selectedBy": "url",
+          "rows": 52,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-PZ2XnZ/gain-sites-mobile.jsonl",
+          "gameId": "vp688e",
+          "selectedBy": "url",
+          "rows": 54,
+          "reason": null
+        }
+      ]
+    },
+    "qa-raven-copy": {
+      "invocation": "run-7LST0I",
+      "rawReport": "invocations/run-7LST0I/gain-sites.result.json",
+      "ok": true,
+      "error": null,
+      "hostLoad": 3.1357421875,
+      "wallMs": {
+        "browserLeaseWait": 4,
+        "serve": 1422,
+        "scenario": 45740,
+        "total": 47237
+      },
+      "result": {
+        "desktop": {
+          "mode": "raven-copy",
+          "sourceUUID": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+          "beforeCount": 24,
+          "afterCount": 24,
+          "gained": [],
+          "geometry": {
+            "x": 29,
+            "y": 706.8125,
+            "width": 366,
+            "height": 52.1875
+          },
+          "applications": [
+            {
+              "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+              "hook": "after_journey_event",
+              "eventType": "RESOLVE_EXPLORATION_CHOICE",
+              "siteId": "site-1",
+              "heldIndex": 1,
+              "before": {
+                "deckSize": 26,
+                "attempted": 2
+              },
+              "after": {
+                "deckSize": 24,
+                "gained": 0,
+                "prevented": 2
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "prevented": [
+                  {
+                    "entryId": "deck-4-0",
+                    "cardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+                    "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+                    "heldIndex": 1
+                  },
+                  {
+                    "entryId": "deck-4-1",
+                    "cardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+                    "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+                    "heldIndex": 1
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T21:21:38.211Z",
+              "gameId": "84gt9d",
+              "seq": 4
+            }
+          ],
+          "outcomeObservation": {
+            "count": "0",
+            "geometry": {
+              "x": 12,
+              "y": 20,
+              "width": 1416,
+              "height": 788
+            }
+          },
+          "reloaded": true
+        },
+        "mobile": {
+          "mode": "raven-copy",
+          "sourceUUID": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+          "beforeCount": 24,
+          "afterCount": 24,
+          "gained": [],
+          "geometry": {
+            "x": 29,
+            "y": 682.8125,
+            "width": 332,
+            "height": 52.1875
+          },
+          "applications": [
+            {
+              "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+              "hook": "after_journey_event",
+              "eventType": "RESOLVE_EXPLORATION_CHOICE",
+              "siteId": "site-1",
+              "heldIndex": 1,
+              "before": {
+                "deckSize": 26,
+                "attempted": 2
+              },
+              "after": {
+                "deckSize": 24,
+                "gained": 0,
+                "prevented": 2
+              },
+              "target": {
+                "siteIds": [
+                  "site-1"
+                ],
+                "prevented": [
+                  {
+                    "entryId": "deck-4-0",
+                    "cardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+                    "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+                    "heldIndex": 1
+                  },
+                  {
+                    "entryId": "deck-4-1",
+                    "cardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+                    "dreamsignId": "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+                    "heldIndex": 1
+                  }
+                ]
+              },
+              "event": "journey_modifier_applied",
+              "timestamp": "2026-10-13T21:22:00.390Z",
+              "gameId": "or47br",
+              "seq": 4
+            }
+          ],
+          "outcomeObservation": {
+            "count": "0",
+            "geometry": {
+              "x": 12,
+              "y": 20,
+              "width": 366,
+              "height": 732
+            }
+          },
+          "reloaded": true
+        }
+      },
+      "caps": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-7LST0I/gain-sites-desktop.jsonl",
+          "gameId": "84gt9d",
+          "selectedBy": "url",
+          "rows": 45,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-7LST0I/gain-sites-mobile.jsonl",
+          "gameId": "or47br",
+          "selectedBy": "url",
+          "rows": 47,
+          "reason": null
+        }
+      ]
+    }
+  },
+  "qaSettlement": {
+    "qa-draft": {
+      "proof": "parent journeyEntry264-justiciar-draft-native.json and settlement receipt; normal close ACK/runtime/server/lease verified",
+      "exactSID": "UNKNOWN"
+    },
+    "qa-shop": {
+      "at": "2026-10-13T20:55:20.537149+00:00",
+      "label": "qa-shop",
+      "invocation": "run-YLsa6C",
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-YLsa6C/gain-sites.result.json",
+      "exitCode": 0,
+      "ok": true,
+      "error": null,
+      "ownedIdentity": {
+        "token": "41c3ba90-e964-4647-aa24-e06bc538d5a5",
+        "pid": 38217,
+        "bead": "hv-umm2.264",
+        "label": "gain-sites",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-entry-264-sol",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-13T20:54:15.914Z",
+        "providerState": "active",
+        "mcpSessionId": "0f52c633-6fa5-4874-8723-47fe1297ebfc",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "serverPG": 38248,
+      "ownedProcesses": [],
+      "portConnect": 61,
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+      },
+      "normalCloseProof": "terminal0 requires browser_close non-error ACK, settledRPC/transport, durable ownerclear and lease release per actual runtime; postclose tools/list not required under parentjusticiar successful-normal path ruling",
+      "exactSIDPostclose": "NOT REQUESTED"
+    },
+    "qa-duplication": {
+      "at": "2026-10-13T20:56:12.969752+00:00",
+      "label": "qa-duplication",
+      "invocation": "run-VB5mmr",
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-VB5mmr/gain-sites.result.json",
+      "exitCode": 0,
+      "ok": true,
+      "error": null,
+      "ownedIdentity": {
+        "token": "a18284c7-0d51-46ad-90b4-8697ad45336e",
+        "pid": 39608,
+        "bead": "hv-umm2.264",
+        "label": "gain-sites",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-entry-264-sol",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-13T20:55:22.392Z",
+        "providerState": "active",
+        "mcpSessionId": "d8183119-d3de-44ac-8a50-321528c43704",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "serverPG": 39638,
+      "ownedProcesses": [],
+      "portConnect": 61,
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+      },
+      "normalCloseProof": "terminal0 requires browser_close non-error ACK, settledRPC/transport, durable ownerclear and lease release per actual runtime; postclose tools/list not required under parentjusticiar successful-normal path ruling",
+      "exactSIDPostclose": "NOT REQUESTED"
+    },
+    "qa-acorn": {
+      "at": "2026-10-13T20:59:46.999856+00:00",
+      "label": "qa-acorn",
+      "invocation": "run-s6GCGX",
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-s6GCGX/gain-sites.result.json",
+      "exitCode": 1,
+      "ok": false,
+      "error": "desktop#0: Error: Actual gameplay emitted no UUID modifier application\n    at gainSite (evalmachine.<anonymous>:1732:40)\n    at async evalmachine.<anonymous>:1769:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "ownedIdentity": {
+        "token": "3ee72a24-2480-492f-836d-871e08bfbfcd",
+        "pid": 40789,
+        "bead": "hv-umm2.264",
+        "label": "gain-sites",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-entry-264-sol",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-13T20:56:14.503Z",
+        "providerState": "active",
+        "mcpSessionId": "81d6ac2a-e703-4ba5-956f-e664ff519c62",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "serverPG": 40817,
+      "ownedProcesses": [],
+      "portConnect": 61,
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+      },
+      "normalCloseProof": "terminal0 requires browser_close non-error ACK, settledRPC/transport, durable ownerclear and lease release per actual runtime; postclose tools/list not required under parentjusticiar successful-normal path ruling",
+      "exactSIDPostclose": "NOT REQUESTED"
+    },
+    "qa-acorn-v2": {
+      "at": "2026-10-13T21:03:53.305593+00:00",
+      "label": "qa-acorn-v2",
+      "invocation": "run-YqszyO",
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-YqszyO/gain-sites.result.json",
+      "exitCode": 0,
+      "ok": true,
+      "error": null,
+      "ownedIdentity": {
+        "token": "c014aac3-095d-415f-b343-91411e025c8c",
+        "pid": 73833,
+        "bead": "hv-umm2.264",
+        "label": "gain-sites",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-entry-264-sol",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-13T20:59:49.377Z",
+        "providerState": "active",
+        "mcpSessionId": "304e5414-9924-495f-b848-ba94cca54ca3",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "serverPG": 73869,
+      "ownedProcesses": [],
+      "portConnect": 61,
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+      },
+      "normalCloseProof": "terminal0 requires browser_close non-error ACK, settledRPC/transport, durable ownerclear and lease release per actual runtime; postclose tools/list not required under parentjusticiar successful-normal path ruling",
+      "exactSIDPostclose": "NOT REQUESTED"
+    },
+    "qa-raven": {
+      "at": "2026-10-13T21:05:12.525870+00:00",
+      "label": "qa-raven",
+      "invocation": "run-3j6f3o",
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-3j6f3o/gain-sites.result.json",
+      "exitCode": 0,
+      "ok": true,
+      "error": null,
+      "ownedIdentity": {
+        "token": "74343aae-0ef3-4c42-8726-34e9f03fe0e1",
+        "pid": 78023,
+        "bead": "hv-umm2.264",
+        "label": "gain-sites",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-entry-264-sol",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-13T21:03:56.442Z",
+        "providerState": "active",
+        "mcpSessionId": "28429042-cb23-476e-9e10-6ca7386735d2",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "serverPG": 78052,
+      "ownedProcesses": [],
+      "portConnect": 61,
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+      },
+      "normalCloseProof": "terminal0 requires browser_close non-error ACK, settledRPC/transport, durable ownerclear and lease release per actual runtime; postclose tools/list not required under parentjusticiar successful-normal path ruling",
+      "exactSIDPostclose": "NOT REQUESTED"
+    },
+    "qa-acorn-model": {
+      "at": "2026-10-13T21:16:51.846430+00:00",
+      "label": "qa-acorn-model",
+      "invocation": "run-jxyfEU",
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-jxyfEU/gain-sites.result.json",
+      "exitCode": 1,
+      "ok": false,
+      "error": "desktop#0: Error: Actual acquired card display omitted persistent Spark or Crystal forms\n    at gainSite (evalmachine.<anonymous>:1756:96)\n    at async evalmachine.<anonymous>:1817:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "ownedIdentity": {
+        "token": "d1f7ca68-b706-445b-8275-6e4695dfc2fd",
+        "pid": 88452,
+        "bead": "hv-umm2.264",
+        "label": "gain-sites",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-entry-264-sol",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-13T21:13:43.611Z",
+        "providerState": "active",
+        "mcpSessionId": "1c1a3d95-890a-4cf6-b843-42c926f09c4a",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "serverPG": 88487,
+      "ownedProcesses": [],
+      "portConnect": 61,
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+      },
+      "normalCloseProof": "acknowledged terminal scenario outcome plus normal close requires browser_close non-error ACK, settledRPC/transport, durable ownerclear and lease release per actual runtime; postclose tools/list not required under parentjusticiar successful-normal path ruling",
+      "exactSIDPostclose": "NOT REQUESTED"
+    },
+    "qa-acorn-model-v2": {
+      "at": "2026-10-13T21:20:04.085492+00:00",
+      "label": "qa-acorn-model-v2",
+      "invocation": "run-wDLwSu",
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-wDLwSu/gain-sites.result.json",
+      "exitCode": 1,
+      "ok": false,
+      "error": "desktop#0: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-deck-entry-id=\"deck-10-0\"]')\n",
+      "ownedIdentity": {
+        "token": "0493bc7b-53e0-46eb-b58e-ed26f8d96323",
+        "pid": 91880,
+        "bead": "hv-umm2.264",
+        "label": "gain-sites",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-entry-264-sol",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-13T21:16:53.443Z",
+        "providerState": "active",
+        "mcpSessionId": "f00286ed-b11f-41b9-97e4-b0aaf735ac51",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "serverPG": 91908,
+      "ownedProcesses": [],
+      "portConnect": 61,
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+      },
+      "normalCloseProof": "acknowledged terminal scenario outcome plus normal close requires browser_close non-error ACK, settledRPC/transport, durable ownerclear and lease release per actual runtime; postclose tools/list not required under parentjusticiar successful-normal path ruling",
+      "exactSIDPostclose": "NOT REQUESTED"
+    },
+    "qa-acorn-model-v3": {
+      "at": "2026-10-13T21:21:20.519807+00:00",
+      "label": "qa-acorn-model-v3",
+      "invocation": "run-PZ2XnZ",
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-PZ2XnZ/gain-sites.result.json",
+      "exitCode": 0,
+      "ok": true,
+      "error": null,
+      "ownedIdentity": {
+        "token": "41921592-c19e-4af7-9fb9-6a0cff258e91",
+        "pid": 95526,
+        "bead": "hv-umm2.264",
+        "label": "gain-sites",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-entry-264-sol",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-13T21:20:07.277Z",
+        "providerState": "active",
+        "mcpSessionId": "6eed7405-1f3d-4c86-ba64-02cd82099aac",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "serverPG": 95555,
+      "ownedProcesses": [],
+      "portConnect": 61,
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+      },
+      "normalCloseProof": "acknowledged terminal scenario outcome plus normal close requires browser_close non-error ACK, settledRPC/transport, durable ownerclear and lease release per actual runtime; postclose tools/list not required under parentjusticiar successful-normal path ruling",
+      "exactSIDPostclose": "NOT REQUESTED"
+    },
+    "qa-raven-copy": {
+      "at": "2026-10-13T21:22:26.110696+00:00",
+      "label": "qa-raven-copy",
+      "invocation": "run-7LST0I",
+      "report": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.264/invocations/run-7LST0I/gain-sites.result.json",
+      "exitCode": 0,
+      "ok": true,
+      "error": null,
+      "ownedIdentity": {
+        "token": "dc90f18f-3558-497a-86a6-e35ef87855ac",
+        "pid": 96838,
+        "bead": "hv-umm2.264",
+        "label": "gain-sites",
+        "checkout": "/Users/dthurn/dreamtides_web/.worktrees/journey-deck-entry-264-sol",
+        "slot": 1,
+        "port": 5274,
+        "startedAt": "2026-10-13T21:21:22.101Z",
+        "providerState": "active",
+        "mcpSessionId": "dc819415-2808-4cff-a3bc-b895aad1ba89",
+        "mcpUrl": "http://localhost:8931/mcp",
+        "mcpProtocolVersion": "2025-11-25"
+      },
+      "serverPG": 96877,
+      "ownedProcesses": [],
+      "portConnect": 61,
+      "records": {
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.owner.json": false,
+        "/Users/dthurn/dreamtides_web/artifacts/qa/.browser-qa.slot-1.lock.server.json": false
+      },
+      "normalCloseProof": "acknowledged terminal scenario outcome plus normal close requires browser_close non-error ACK, settledRPC/transport, durable ownerclear and lease release per actual runtime; postclose tools/list not required under parentjusticiar successful-normal path ruling",
+      "exactSIDPostclose": "NOT REQUESTED"
+    }
+  },
+  "qaTotals": {
+    "uniqueEntityUUIDs": 3,
+    "goldenInvocations": 6,
+    "goldenViewportWorkflows": 12,
+    "goldenEntityJudgements": 14,
+    "retainedDiagnosticFailedViewportWorkflows": 3,
+    "battleJourneyExercises": 0,
+    "supersededStateOnlyAcornViewportJudgements": 2
+  },
+  "qaProof": "All owned runner/provider/server/lease outcomes settled before evidence/Git writes. Successful normal-close path acknowledges browser_close, drains RPC, closes transport, durably clears only own records and releases lease. Parent same-task justiciar relaxed unobserved postclose404 for known normal successful cleanup only; uncertainty/abort reconciliation requirement remains. No foreign records deleted or shared service restarted.",
+  "qaFailures": [
+    "qa-acorn: actual invalid_action due public held-affinity change after prepared random offer",
+    "qa-acorn-model: broad selector includes changed-rule badges",
+    "qa-acorn-model-v2: mobile-only physical-entry selector used in desktop deck view; preceding captured actual reward5/3/forms correct"
+  ],
+  "frozenSource": {
+    "time": "2026-10-13T21:20:04.162177+00:00",
+    "sourceBase": "be9a6549b47ef37a1213d4bca0591af768607340",
+    "sha256": {
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.264-1.md": "f1ffe1bc563bfc561c73793ac85dbe2358989312cd48ea76c877d394f1cd98ad",
+      "docs/rules.md": "94e31d822de39e8f14736d1dbfc69962ed277273a0963e2ae5fe42c81e09567e",
+      "src/content/define.ts": "2c0ae25b9216fece76a643ea46b8d7dd50e65e18e597cbd75881d3fb97a711d0",
+      "src/content/dreamsigns/blue-crystal-c2af5460.ts": "225a4942db0191a0749fa113f3e6425a42232602f5f2fc15dba25e9f6378a391",
+      "src/content/dreamsigns/brown-acorn-9f34b5f6.ts": "e09b147d748964bb0bcdfdb826f2003665da27fab7209e9522818b698bb6005f",
+      "src/content/dreamsigns/raven-skull-31df4c62.ts": "46cbda2336f8b3898342ddd47578b9b3357bb26fd8c046ec8b40b20a3da6d628",
+      "src/rules/journey/journey-after-battle.test.ts": "27e1925c3127f37bc905c2c6b0782119e91c3917ed00c1fdd75642618868139f",
+      "src/rules/journey/journey-deck-entry.test.ts": "e20bb5899bdde199e843501314ff3f0e075aa2f38211a29ba4e97c4c8a9adbd7",
+      "src/rules/journey/journey-deck-entry.ts": "92a47daa7c6c0148e0970d5c70a8eca6cffc6b8a23f1201ffa884b9bb1388442",
+      "src/rules/journey/journey-transfiguration.test.ts": "912e8945091cd17729da95789b92ea7ec24aff827f6753d5edb134c4e7302cf3",
+      "src/rules/journey/journey-transfiguration.ts": "cbab1c58486e412649076a1cbc7bbcfff46902b1f3260cb1c0766168e10e77e2",
+      "src/rules/journey/lifecycle.ts": "4a4d280a78abd1dd261ffa18d58a51924c236a98b0b20193477306c1b503dad0",
+      "src/rules/journey/modifier-registry.ts": "252154824d0a4b24206881f3dd6cc71eac68db44d0680ca5e5e916cf4aea7dfd",
+      "src/rules/journey/transfiguration-fixtures.ts": "8e36be5e39ff4056f70cf1825d0558670ded311526185c84295bb7b3aab0fc50",
+      "src/rules/reducer.ts": "41246090690c32509d462109d64d16d6d0be3339cc12dd69b419ba3934cc2391",
+      "src/screens/cumulus_adapters/exploration-resolution-view-model.ts": "68eb3b07a9fd3997a15ac04cb8fe405114aff1a2c5b01518a211715997018fa8",
+      "src/session/providers/journey-transfiguration-provider.ts": "e4d764ac8ac6a8c543bb368473c4d32b8dadcb9a78ee543e1db76098acb52012",
+      "src/types/journey.ts": "a2086aaa363812a08b4c6dd55ea7c58f7c55cb28b65e3e8a356a51b14bbb910b"
+    },
+    "qaModuleSHA256": "e6fb58b51175da177e09fd52a3121d5cf0395eabf3d27a6ce0f96b70e4827008",
+    "ownedQAResourcesBeforeStart": [],
+    "validation": "review-v2 + knip + full green; tracked source frozen through every owned QA resource settlement",
+    "qaModuleSha256": "acac91333f324f7e1ec727e2cc1d4c2d2d9cd1861dd4151eb9b8277a968d25f6",
+    "priorDraftSettlement": "parent journeyEntry264-justiciar-draft-native.json exactSID UNKNOWN normalclose ACKpath proved",
+    "newBodyACK": "journeyEntry264-reward-fallout-ack-native.json21:07:29Z"
+  },
+  "coreReview": "Parent-owned fresh read-only gpt-5.6-sol CLI under user temporary routing through2026-10-14T01:00:00Z; not yet invoked by this helper. No helper review or delivery CLI.",
+  "parentIndependentQAProof": "journeyEntry264-parent-qa-verification.json: six golden reports,38PNG actual2x hashes,12 native game logs636rows; actual3modifierUUIDs and Caps/error checks, parentmobilecombinedvisual judgment",
+  "freshInstall": {
+    "parentCollectedHandle": 7556,
+    "reportedDependencyVulnerabilities": 17,
+    "disposition": "pre-existing observation; no audit/fix/package change"
+  }
+}
