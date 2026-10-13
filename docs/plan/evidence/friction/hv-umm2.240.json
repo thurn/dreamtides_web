@@ -1,0 +1,39 @@
+{
+  "bead": "hv-umm2.240",
+  "phase": 5,
+  "implementMin": 28.461037816666664,
+  "implementWindow": {
+    "start": "2026-10-13T02:35:35.123Z",
+    "end": "2026-10-13T03:04:02.785269Z"
+  },
+  "localValidationS": {
+    "dead-rat-readonly-witness": 0.6805005000060191,
+    "dead-rat-dawn-witness": 0.8307948330038926,
+    "focused": 9.43067970800621,
+    "review": 51.02790412500326,
+    "knip": 4.264464000007138,
+    "fuzz-outer": 169.6281975830061,
+    "fuzz": 169.59906583299744,
+    "preflight": 1.106984250000096,
+    "sweep": 28.07399608299602,
+    "amber": 8.431313250010135,
+    "amber-measured": 32.25881025000126,
+    "amber-mobile": 28.60060095800145,
+    "evidence-schema": 0.13670070900116116,
+    "friction-final": 0.22749383399786893,
+    "endpoint-schema": 0.11480700000538491
+  },
+  "hostLoad": 4.4326171875,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 7.588362316666666,
+      "note": "Retained first whole-card-bounds observer failure, later mobile center-only hit failure, then measured exposed-point mobile pass. Interval includes inspection/parent coordination/native queue, not isolated editing. Existing clipped/fanned UI and fixed source; no product repair or causal claim for unrecorded original numerical bounds."
+    }
+  ]
+}

@@ -1,3 +1,7 @@
+import { characterYouControl, controls } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { abandon, draw, ifThen, optional, sequence } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -13,5 +17,6 @@ export default dreamsign({
     "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(onDawn(), optional(ifThen(controls(characterYouControl(), 1), sequence(abandon(), draw(1)))))],
+  verifiedText: expectedVerifiedText("▸Dawn: You may abandon a character to draw a card."),
 });

@@ -1,3 +1,7 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenScores } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -11,5 +15,6 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["0b873395-ad12-4a9f-ab50-5820fc92dd19"],
   tags: ["J15", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [triggered(whenScores(characterYouControl()), draw(1))],
+  verifiedText: expectedVerifiedText("When one or more characters you control score ⍟, draw a card."),
 });

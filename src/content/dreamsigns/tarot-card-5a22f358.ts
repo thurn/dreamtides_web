@@ -1,3 +1,7 @@
+import { characterYouControl } from "../../engine/dsl/builders";
+import { triggered, whenYouChallengeWith } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +18,6 @@ export default dreamsign({
     "833ba3dd-498a-42ce-9a03-32f6636acea1",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenYouChallengeWith(2, characterYouControl()), draw(1))],
+  verifiedText: expectedVerifiedText("When you challenge with 2 or more characters, draw a card."),
 });

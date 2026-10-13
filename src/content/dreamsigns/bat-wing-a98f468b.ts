@@ -1,3 +1,6 @@
+import { triggered, whenRemovesEnemy } from "../../engine/dsl/triggers";
+import { draw } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +18,6 @@ export default dreamsign({
     "1a075e25-0344-4103-997c-dd8f8a57c84e",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [triggered(whenRemovesEnemy(), draw(1), { oncePerTurn: true })],
+  verifiedText: expectedVerifiedText("Once per turn, when you dissolve or banish an enemy, draw a card."),
 });
