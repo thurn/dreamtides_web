@@ -1,3 +1,5 @@
+import { additionalCost, costPaid, discardCost, enemyCharacter, event, optionalCost, targetWhen } from "../../engine/dsl/builders";
+import { dissolve } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,10 @@ export default card({
   cardNumber: 137,
   art: { x: 0.126, y: 0, scale: 1.17 },
   isStarter: false,
-  pending: true,
+  // RD-hv-umm2.471-1: the retained optional discard selects one enemy's restriction.
+  abilities: (variant) => [
+    additionalCost(optionalCost(discardCost(1))),
+    event(dissolve(targetWhen(costPaid(), enemyCharacter(), enemyCharacter({ costAtMost: variant.amplified ? 3 : 2 })))),
+  ],
+  verifiedText: "swxktjbfrw",
 });

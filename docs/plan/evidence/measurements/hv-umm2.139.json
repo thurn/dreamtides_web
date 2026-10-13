@@ -1,0 +1,562 @@
+{
+  "bead": "hv-umm2.139",
+  "base": "d9ed987e2bf68a4ec7da47cdbd2126140aedc55c",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/removal-cards139",
+  "provenance": {
+    "currentNativeClaim": "2026-10-13T15:54:41Z",
+    "historicalBeadsStartedAt": "2026-10-12T02:14:06Z",
+    "historicalStartedAtMeaning": "Prior released claim; not the current claim start",
+    "dispatchProxy": "2026-10-13T15:56:22+00:00",
+    "actualDispatchInternalModelStart": null,
+    "firstHelperToolUtc": null,
+    "unknownReason": "Only parent pre-dispatch clock proxy was observed; internal model start and first helper tool timestamps are unobserved",
+    "install": {
+      "owner": "parent",
+      "start": "2026-10-13T15:56:05.979420Z",
+      "end": "2026-10-13T15:56:08.653577Z",
+      "wallS": 2.673961,
+      "exitCode": 0
+    },
+    "windowEndpoint": "Actual fresh precommit observation; actual Git invocation and completion receipts are retained externally. It precedes commit completion, with measured delta reported in terminal handoff."
+  },
+  "entities": [
+    "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6",
+    "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a",
+    "f4c570d4-c500-4b66-ad97-e8ccbef19392"
+  ],
+  "sourceSemantics": {
+    "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6": {
+      "speed": "fast",
+      "energy": 1,
+      "optionalEnergy": 3,
+      "unpaidSparkAtMost": {
+        "base": 2,
+        "amplified": 3
+      }
+    },
+    "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a": {
+      "speed": "interrupt",
+      "energy": 1,
+      "optionalDiscard": 1,
+      "unpaidCopiableCostAtMost": {
+        "base": 2,
+        "amplified": 3
+      }
+    },
+    "f4c570d4-c500-4b66-ad97-e8ccbef19392": {
+      "speed": "interrupt",
+      "energy": 1,
+      "mandatoryPoints": 2,
+      "amplifiedText": false
+    },
+    "paidBranch": "One physical enemy target, with unrestricted numeric bounds; current controller and targetability still apply",
+    "optionalPromptAudit": "Existing confirm:optionalCost and chooseCards:discardCost; inventory confirm:youMay prediction is a regex false positive for a play-time cost",
+    "immutableCatalog": "Only imports, abilities, verifiedText and pending completion were changed; every printed/art/catalog field is retained"
+  },
+  "rules": {
+    "reused": [
+      "RD-hv-umm2.471-1",
+      "RD-hv-umm2.73-1",
+      "C14"
+    ],
+    "new": [],
+    "cardIssues": [],
+    "ladder": "Not invoked: normative payment-dependent targeting and points cost rules settle the whole text"
+  },
+  "D20": {
+    "privateScenarioModules": 0,
+    "newTestEntrypoints": 0,
+    "reason": "The three leaf abilities compose existing forms. Landed optional-cost-targets and points-cost synthetic contracts discriminate the payment, target and lifecycle semantics; no behavior beyond primitive composition needs a production-card scenario."
+  },
+  "D21": {
+    "selection": [
+      {
+        "uuid": "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6",
+        "sha256FirstByte": 99,
+        "sampled": false,
+        "introducesNewPromptStatusOrVisualKind": false
+      },
+      {
+        "uuid": "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a",
+        "sha256FirstByte": 191,
+        "sampled": false,
+        "introducesNewPromptStatusOrVisualKind": false
+      },
+      {
+        "uuid": "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+        "sha256FirstByte": 114,
+        "sampled": false,
+        "introducesNewPromptStatusOrVisualKind": false
+      }
+    ],
+    "judgedCases": 0,
+    "reason": "All SHA-256 first bytes are at least 26 and all prompt roles, statuses and dissolve/points presentation are existing kinds; no judged pass is claimed."
+  },
+  "validation": {
+    "hash": {
+      "args": [
+        "npx",
+        "tsx",
+        "/tmp/dreamtides-executor-01a1304d/139-helper/hash.ts"
+      ],
+      "start": "2026-10-13T16:06:56.695843+00:00",
+      "end": "2026-10-13T16:06:58.729224+00:00",
+      "wallS": 2.0332669999916106,
+      "exitCode": 0,
+      "pid": 73047,
+      "pgid": 73047,
+      "wrapperPid": 72934,
+      "hostLoad": "{ 20.85 18.57 14.01 }"
+    },
+    "focused": {
+      "args": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/content/content-index.test.ts"
+      ],
+      "start": "2026-10-13T16:07:20.028844+00:00",
+      "end": "2026-10-13T16:07:33.377076+00:00",
+      "wallS": 13.347813125001267,
+      "exitCode": 0,
+      "pid": 97159,
+      "pgid": 97159,
+      "wrapperPid": 97146,
+      "hostLoad": "{ 19.76 18.47 14.10 }"
+    },
+    "preflight": {
+      "args": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,8a971ba7-9dfb-45be-bfbb-bf5e4f11974a,f4c570d4-c500-4b66-ad97-e8ccbef19392",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "start": "2026-10-13T16:07:33.511375+00:00",
+      "end": "2026-10-13T16:07:35.180363+00:00",
+      "wallS": 1.668856832984602,
+      "exitCode": 0,
+      "pid": 98096,
+      "pgid": 98096,
+      "wrapperPid": 98080,
+      "hostLoad": "{ 20.30 18.64 14.21 }"
+    },
+    "review": {
+      "args": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "start": "2026-10-13T16:07:44.418837+00:00",
+      "end": "2026-10-13T16:08:44.747823+00:00",
+      "wallS": 60.327971082995646,
+      "exitCode": 0,
+      "pid": 98806,
+      "pgid": 98806,
+      "wrapperPid": 98795,
+      "hostLoad": "{ 17.69 18.15 14.11 }"
+    },
+    "knip": {
+      "args": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "start": "2026-10-13T16:07:45.573642+00:00",
+      "end": "2026-10-13T16:07:51.338522+00:00",
+      "wallS": 5.764716374978889,
+      "exitCode": 0,
+      "pid": 98950,
+      "pgid": 98950,
+      "wrapperPid": 98939,
+      "hostLoad": "{ 17.69 18.15 14.11 }"
+    },
+    "fuzz": {
+      "args": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,8a971ba7-9dfb-45be-bfbb-bf5e4f11974a,f4c570d4-c500-4b66-ad97-e8ccbef19392"
+      ],
+      "start": "2026-10-13T16:07:32.360667+00:00",
+      "end": "2026-10-13T16:12:31.048348+00:00",
+      "wallS": 298.68350824998925,
+      "exitCode": 0,
+      "pid": 98002,
+      "pgid": 98002,
+      "wrapperPid": 97986,
+      "hostLoad": "{ 20.30 18.64 14.21 }"
+    },
+    "schema": {
+      "args": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-cards139",
+      "start": "2026-10-13T16:12:39.494893+00:00",
+      "pid": 12898,
+      "pgid": 12898,
+      "wrapperPid": 12895,
+      "hostLoad": "{ 5.10 10.38 11.72 }",
+      "status": "terminal",
+      "end": "2026-10-13T16:12:39.613407+00:00",
+      "wallS": 0.11844129199744202,
+      "exitCode": 0
+    },
+    "sweep": {
+      "label": "sweep",
+      "args": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.139",
+        "--cards",
+        "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,8a971ba7-9dfb-45be-bfbb-bf5e4f11974a,f4c570d4-c500-4b66-ad97-e8ccbef19392",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-cards139",
+      "start": "2026-10-13T16:14:21.735121+00:00",
+      "pid": 14960,
+      "pgid": 14960,
+      "wrapperPid": 14950,
+      "hostLoad": "{ 4.42 8.51 10.83 }",
+      "status": "terminal",
+      "end": "2026-10-13T16:22:14.218746+00:00",
+      "wallS": 472.47730820902507,
+      "exitCode": 0
+    },
+    "schemaFinal": {
+      "label": "schema-final",
+      "args": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-cards139",
+      "start": "2026-10-13T16:25:07.214990+00:00",
+      "pid": 56025,
+      "pgid": 56025,
+      "wrapperPid": 56023,
+      "hostLoad": "{ 5.18 8.58 10.79 }",
+      "status": "terminal",
+      "end": "2026-10-13T16:25:07.337865+00:00",
+      "wallS": 0.12277912499848753,
+      "exitCode": 0
+    }
+  },
+  "focused": {
+    "files": 3,
+    "cases": 2764,
+    "contracts": "Existing src/engine/effects/primitives/contracts.test.ts discovers optional-cost-targets.contracts.ts and points-cost.contracts.ts; public synthetic cases cover both actors, true/false optional payment, affordability, one target, prepayment ordering, current bounds, copies, cancellation, reload, stale/foreign/competing input and failure containment. Content gates validate real authored definitions, both printed variants and literal verifiedText."
+  },
+  "review": {
+    "files": 242,
+    "cases": 5186
+  },
+  "preflight": {
+    "event": "labPreflightSummary",
+    "cards": [
+      "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6",
+      "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a",
+      "f4c570d4-c500-4b66-ad97-e8ccbef19392"
+    ],
+    "avatars": [],
+    "dreamsigns": [],
+    "variants": [
+      "base",
+      "amplified",
+      "empowered",
+      "kindled",
+      "resonant",
+      "inspired",
+      "enduring",
+      "hastened",
+      "attuned",
+      "perfected"
+    ],
+    "sides": [
+      "player",
+      "enemy"
+    ],
+    "counts": {
+      "pass": 34,
+      "pending": 0,
+      "skip": 26,
+      "fail": 0
+    },
+    "elapsedMs": 56.991457999999966,
+    "hostLoad": 19.71826171875,
+    "enemyMode": "scripted-lab-play-first-legal-prompts"
+  },
+  "fuzz": {
+    "games": 300,
+    "steps": 123180,
+    "innerWallS": 225.2,
+    "innerCpuS": 244.4,
+    "failures": 0,
+    "outerWallS": 298.68350824998925,
+    "admissionAndStartupGapS": 73.48350824998926,
+    "gapQualification": "Outer minus rounded engine wall includes lock admission, process startup and exit overhead; exact lock acquisition and pure contention were not observed",
+    "targetCoverage": [
+      {
+        "kind": "card",
+        "uuid": "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6",
+        "included": 615,
+        "exercised": 397
+      },
+      {
+        "kind": "card",
+        "uuid": "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a",
+        "included": 615,
+        "exercised": 495
+      },
+      {
+        "kind": "card",
+        "uuid": "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+        "included": 616,
+        "exercised": 350
+      }
+    ]
+  },
+  "browserQA": {
+    "state": "terminal",
+    "summary": {
+      "event": "cardSweepSummary",
+      "invocation": "invocations/sweep-aZJUqN",
+      "evidenceDir": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.139/invocations/sweep-aZJUqN",
+      "counts": {
+        "pass": 34,
+        "skip": 26
+      },
+      "attemptCounts": {
+        "pass": 34,
+        "skip": 26
+      },
+      "hostLoad": 4.41552734375,
+      "sessions": 1,
+      "leaseYields": 0,
+      "wallMs": {
+        "browserLeaseWait": 84310,
+        "serve": 2287,
+        "scenario": 385057.056333,
+        "cleanup": 579.765000000014,
+        "execution": 387985.52712499996,
+        "total": 472295.52712499996
+      }
+    },
+    "wrapperReceipt": {
+      "label": "sweep",
+      "args": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.139",
+        "--cards",
+        "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6,8a971ba7-9dfb-45be-bfbb-bf5e4f11974a,f4c570d4-c500-4b66-ad97-e8ccbef19392",
+        "--variants",
+        "all",
+        "--as",
+        "both"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/removal-cards139",
+      "start": "2026-10-13T16:14:21.735121+00:00",
+      "pid": 14960,
+      "pgid": 14960,
+      "wrapperPid": 14950,
+      "hostLoad": "{ 4.42 8.51 10.83 }",
+      "status": "terminal",
+      "end": "2026-10-13T16:22:14.218746+00:00",
+      "wallS": 472.47730820902507,
+      "exitCode": 0
+    },
+    "rawReportCount": 34,
+    "capsEmptyReports": 34,
+    "nullErrorReports": 34,
+    "resolvedEventReports": 34,
+    "distinctEligibleCells": 34,
+    "ledgerRows": 60,
+    "ledgerCounts": {
+      "pass": 34,
+      "skip": 26
+    },
+    "rawAttemptCounts": {
+      "pass": 34,
+      "skip": 26
+    },
+    "retries": 0,
+    "judgedCases": 0,
+    "captureFiles": [],
+    "coverageQualification": "Real desktop card-lab UI plays for every eligible variant and both actors. Scripted enemy fixture play is measured; policy-selected AI play and every optional-payment branch are not claimed. Existing synthetic contracts discriminate the paid/unpaid and mandatory-points semantics. Each eligible result has a physical source-scoped resolution checked by the native scenario. Ineligible rows are skips, not passes.",
+    "actorAttributionQualification": "Native ledger has no direct as field; each eligible raw report lab.side and navigation cell.controller identifies its actor. Ineligible rows omit actor; exact native --as both invocation and logged ordered side-specific skips retain their enumeration.",
+    "rawAuditManifest": "/tmp/dreamtides-executor-01a1304d/139-helper/raw-qa-report-manifest.json"
+  },
+  "schemaNormalization": {
+    "fields": {
+      "implementWindow.start": {
+        "observedProxy": "2026-10-13T15:56:22+00:00",
+        "qualification": "Parent pre-dispatch clock proxy; exact dispatch/model/first-tool endpoints unknown"
+      },
+      "implementWindow.end": {
+        "observedEndpoint": "2026-10-13T16:28:34.942349+00:00",
+        "qualification": "Fresh UTC precommit boundary; actual Git start/end measured separately without forced dates"
+      },
+      "hostLoad": {
+        "measuredFor": "review wrapper start",
+        "source": "sysctl -n vm.loadavg one-minute value"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "step": "hash",
+      "at": "2026-10-13T16:06:56.695843+00:00",
+      "sysctl": "{ 20.85 18.57 14.01 }"
+    },
+    {
+      "step": "focused",
+      "at": "2026-10-13T16:07:20.028844+00:00",
+      "sysctl": "{ 19.76 18.47 14.10 }"
+    },
+    {
+      "step": "preflight",
+      "at": "2026-10-13T16:07:33.511375+00:00",
+      "sysctl": "{ 20.30 18.64 14.21 }"
+    },
+    {
+      "step": "review",
+      "at": "2026-10-13T16:07:44.418837+00:00",
+      "sysctl": "{ 17.69 18.15 14.11 }"
+    },
+    {
+      "step": "knip",
+      "at": "2026-10-13T16:07:45.573642+00:00",
+      "sysctl": "{ 17.69 18.15 14.11 }"
+    },
+    {
+      "step": "fuzz",
+      "at": "2026-10-13T16:07:32.360667+00:00",
+      "sysctl": "{ 20.30 18.64 14.21 }"
+    }
+  ],
+  "resourceLedger": {
+    "externalReceipts": "/tmp/dreamtides-executor-01a1304d/139-helper",
+    "commands": [
+      {
+        "label": "hash",
+        "pid": 73047,
+        "pgid": 73047,
+        "wrapperPid": 72934,
+        "status": "terminal"
+      },
+      {
+        "label": "focused",
+        "pid": 97159,
+        "pgid": 97159,
+        "wrapperPid": 97146,
+        "status": "terminal"
+      },
+      {
+        "label": "preflight",
+        "pid": 98096,
+        "pgid": 98096,
+        "wrapperPid": 98080,
+        "status": "terminal"
+      },
+      {
+        "label": "review",
+        "pid": 98806,
+        "pgid": 98806,
+        "wrapperPid": 98795,
+        "status": "terminal"
+      },
+      {
+        "label": "knip",
+        "pid": 98950,
+        "pgid": 98950,
+        "wrapperPid": 98939,
+        "status": "terminal"
+      },
+      {
+        "label": "fuzz",
+        "pid": 98002,
+        "pgid": 98002,
+        "wrapperPid": 97986,
+        "status": "terminal"
+      }
+    ],
+    "browserServerProvider": "None started before QA ACK",
+    "unobservedTransientDescendants": "Unknown; only recorded identities may be claimed settled",
+    "postQaSettlement": {
+      "at": "2026-10-13T16:22:52.671274+00:00",
+      "scope": "every recorded own QA PID/group and own known slot token/session",
+      "recordedPids": [
+        14950,
+        14960,
+        14984,
+        14985,
+        79176,
+        79177,
+        79185,
+        79204,
+        79329,
+        79461
+      ],
+      "recordedGroups": [
+        14960,
+        14984,
+        79176,
+        79185
+      ],
+      "liveRows": [],
+      "ownedCoordination": [],
+      "sweepStatus": "terminal"
+    },
+    "nativeLease": {
+      "slot": 0,
+      "port": 5174,
+      "ownerToken": "9196e5c1-540e-4fec-b234-59934bcda709",
+      "serverToken": "dd5ee1fb-6536-465d-ae9b-206f40769ba5",
+      "mcpSessionId": "8f8a673f-f6b6-4abc-a12f-683d916f8a51",
+      "providerClose": "Normal awaited browser_close and MCP transport cleanup completed before runner exit; own native records cleared and all recorded identities are absent",
+      "exactCloseRpcTimestamp": null,
+      "qualification": "Precise close RPC completion timestamp was not observed"
+    },
+    "finalReadyReceipt": "/tmp/dreamtides-executor-01a1304d/139-helper/final-ready.json",
+    "finalReadyResources": "All 14 observed groups and 33 recorded process IDs were absent at final readiness; final Git/schema/staging process lifetimes are recorded in terminal handoff."
+  },
+  "observations": [
+    "Focused/review/Knip prepare commands use temporary local asset materializations and emitted missing-art warnings before restoring live assets; each restore completed successfully. No task source defect was indicated.",
+    "Initial Stage1 exploratory rg/glob searches had no-match/nonexistent-path exits; these were read-only searches, not failed validations.",
+    "Review and Knip ran with an overlapping temporary asset preparation interval; both returned zero and restored workspace assets. No runtime QA overlapped preparation.",
+    "Post-QA inspection tried to sort missing native ledger as values and raised a TypeError. The corrected audit used actual raw lab.side and recorded the ledger shape; no validation, runtime, source or raw report changed. Failure receipt retained externally."
+  ],
+  "sourceFreeze": {
+    "files": 4445,
+    "manifestSha256": "402b004ab7f8b830b6fbeea6db84d3b29b470fbd030ffd03c550ce1389144b58",
+    "beforeAccounting": {
+      "mode": "check",
+      "at": "2026-10-13T16:23:07.847090+00:00",
+      "files": 4445,
+      "changed": []
+    },
+    "scope": "All tracked repository files plus own untracked pre-QA accounting and external fixed support. QA ledger excluded. No source/support/accounting reads or writes occurred during live QA; only native runtime, raw receipts, captures and ledger observations."
+  }
+}

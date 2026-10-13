@@ -1,3 +1,5 @@
+import { additionalCost, enemyCharacter, event, pointsCost, target } from "../../engine/dsl/builders";
+import { dissolve } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -18,5 +20,7 @@ export default card({
   cardNumber: 357,
   art: { x: -0.046, y: 1, scale: 1.16 },
   isStarter: false,
-  pending: true,
+  // RD-hv-umm2.73-1: the payer must have the full additional victory-point cost.
+  abilities: () => [additionalCost(pointsCost(2)), event(dissolve(target(enemyCharacter())))],
+  verifiedText: "2cqvdvr85v6",
 });

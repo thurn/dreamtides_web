@@ -1,3 +1,5 @@
+import { additionalCost, costPaid, enemyCharacter, energy, event, optionalCost, targetWhen } from "../../engine/dsl/builders";
+import { dissolve } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -20,5 +22,10 @@ export default card({
   artOwned: true,
   cardNumber: 275,
   isStarter: false,
-  pending: true,
+  // RD-hv-umm2.471-1: the retained optional payment selects one enemy's restriction.
+  abilities: (variant) => [
+    additionalCost(optionalCost(energy(3))),
+    event(dissolve(targetWhen(costPaid(), enemyCharacter(), enemyCharacter({ sparkAtMost: variant.amplified ? 3 : 2 })))),
+  ],
+  verifiedText: "2e5bknnrn5z",
 });
