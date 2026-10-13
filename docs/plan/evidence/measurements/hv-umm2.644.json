@@ -1,0 +1,498 @@
+{
+  "bead": "hv-umm2.644",
+  "base": "34dfc2499e43dc252e00e50e465d27f5f40ac952",
+  "dispatch": {
+    "actualUTC": "2026-10-13T18:43:39.345Z",
+    "call": "call_63fc9d3628f74340ab5bde2fbf0170c9",
+    "modelStart": "unknown"
+  },
+  "stage2Endpoint": "2026-10-13T18:57:43.671625+00:00",
+  "elapsedQualification": "Gross elapsed wall includes research, source admission, parent coordination, validation and waits; not CPU or productive editing time. Final commit endpoint awaits Stage3 ACK.",
+  "sourceAudit": {
+    "admission": "/tmp/root644-20261013/source-native-ack-v02.stdout",
+    "freshAudit": "/tmp/root644-20261013/source-admission-v02.json",
+    "constructors": [
+      "builders.ts activated/energy/exhaustSelf/target/enemyCharacter",
+      "triggers.ts triggered/whenReclaim/triggeringCard",
+      "gain-triggering-card-spark.ts gainTriggeringCardSpark/physical permanent status/observer-captured sparkGained",
+      "dissolve.ts character target and real zones dissolve"
+    ],
+    "consumers": [
+      "catalog EngineAvatarDefinition through testCatalog avatars",
+      "boardState side.avatar real initialization",
+      "activation originAbilities catalog.avatar / abilitySources / canActivate",
+      "costs costsPayable, canPayExhaust, exhaustForCost and payCosts",
+      "matcher real permanent avatar listener and announced Reclaim card filter"
+    ],
+    "readonlyOriginals": [
+      "design.ts",
+      "apollyon.ts",
+      "types.ts",
+      "create-battle-init.ts",
+      "tide-opponent-deck.ts",
+      "engine",
+      "catalog",
+      "production incarnation modules",
+      "recipes",
+      "Dreamsigns",
+      "UI",
+      "configuration"
+    ],
+    "actualIndexRoles": {
+      "0x64400": "printed3/Reclaim2 physical character",
+      "0x64401": "Interrupt/Reclaim1 physical character, spark2 (spread of subject)",
+      "0x64402": "plain Reclaim event and effective-type variant",
+      "0x64403": "Veil boundary character",
+      "0x64404": "enemy dissolve event for Reclaim banishment",
+      "0x64405": "later failing Reclaim character resolver partial mutation",
+      "0x64406": "Reclaim energy1 plus discard cost",
+      "0x64407": "Reclaim character with real optional materialization trigger"
+    },
+    "identityExpression": "syntheticId(0x64400..0x64407), actual UUID prefix 5e5e5e5e-0000-4000-8000-00000006440; no additional identities. Runtime instances board-minted; stale prompt parsePromptId numeric triple.",
+    "namedExportsOnly": true
+  },
+  "primarySourceSHA256": {
+    "src/content/apollyon/aspects/aspect-ccc0385e-ff00-4be3-a807-99e4def47d2d.ts": "5464f97c1bc4b341882b3f15f16dbad108d195b74d1ac2fd0d15ec876f0117ed",
+    "src/content/apollyon/aspects/aspect-e70d2d02-9ba6-434b-94d3-73ad29d3e9f4.ts": "a5d83748693e5430b86d440a920062cad1202deef065160c09a953f529ad9db2",
+    "src/battle/integration/apollyon-aspects/pair-294.test.ts": "38e507057a116da1783205d330cab39ef80a518dead4b4575a2accea47a15f82"
+  },
+  "validationReceipts": {
+    "focused-pair-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-294.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:52:38.247843+00:00",
+      "end": "2026-10-13T18:52:44.830205+00:00",
+      "exit": 1,
+      "wallSeconds": 6.582093875011196,
+      "pid": 41870,
+      "pgid": 41870,
+      "load": "{ 5.01 5.38 6.34 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-pair-v02": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-294.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:53:08.248672+00:00",
+      "end": "2026-10-13T18:53:12.700495+00:00",
+      "exit": 0,
+      "wallSeconds": 4.451480791991344,
+      "pid": 42910,
+      "pgid": 42910,
+      "load": "{ 4.46 5.21 6.24 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-empty-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-294.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:54:11.098139+00:00",
+      "end": "2026-10-13T18:54:14.475412+00:00",
+      "exit": 1,
+      "wallSeconds": 3.377125375001924,
+      "pid": 59081,
+      "pgid": 59081,
+      "load": "{ 17.99 8.20 7.24 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-energy-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-294.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:53:52.168796+00:00",
+      "end": "2026-10-13T18:53:56.432276+00:00",
+      "exit": 1,
+      "wallSeconds": 4.263393166998867,
+      "pid": 44382,
+      "pgid": 44382,
+      "load": "{ 7.12 5.59 6.32 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-exhaust-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-294.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:53:56.515019+00:00",
+      "end": "2026-10-13T18:54:00.105688+00:00",
+      "exit": 1,
+      "wallSeconds": 3.590521957987221,
+      "pid": 44692,
+      "pgid": 44692,
+      "load": "{ 11.60 6.54 6.66 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-old-gain-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-294.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:54:07.605054+00:00",
+      "end": "2026-10-13T18:54:11.023618+00:00",
+      "exit": 1,
+      "wallSeconds": 3.418416792002972,
+      "pid": 53128,
+      "pgid": 53128,
+      "load": "{ 15.81 7.61 7.03 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-once-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-294.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:54:03.831873+00:00",
+      "end": "2026-10-13T18:54:07.527650+00:00",
+      "exit": 1,
+      "wallSeconds": 3.69568312499905,
+      "pid": 46768,
+      "pgid": 46768,
+      "load": "{ 15.81 7.61 7.03 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-target-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-294.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:54:00.183228+00:00",
+      "end": "2026-10-13T18:54:03.753033+00:00",
+      "exit": 1,
+      "wallSeconds": 3.569688000017777,
+      "pid": 44982,
+      "pgid": 44982,
+      "load": "{ 13.79 7.08 6.84 }",
+      "groupRemainingAtExit": []
+    },
+    "coverage-pair-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:57:01.850402+00:00",
+      "end": "2026-10-13T18:57:06.948741+00:00",
+      "exit": 0,
+      "wallSeconds": 5.098215749982046,
+      "pid": 58272,
+      "pgid": 58272,
+      "load": "{ 11.51 10.14 8.27 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-pair-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:56:39.363704+00:00",
+      "end": "2026-10-13T18:56:43.569699+00:00",
+      "exit": 0,
+      "wallSeconds": 4.205863874987699,
+      "pid": 56566,
+      "pgid": 56566,
+      "load": "{ 13.20 10.34 8.29 }",
+      "groupRemainingAtExit": []
+    },
+    "review-pair-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:55:41.880787+00:00",
+      "end": "2026-10-13T18:55:58.342626+00:00",
+      "exit": 1,
+      "wallSeconds": 16.461679458006984,
+      "pid": 2996,
+      "pgid": 2996,
+      "load": "{ 14.82 9.66 7.91 }",
+      "groupRemainingAtExit": []
+    },
+    "review-pair-v02": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:56:13.704539+00:00",
+      "end": "2026-10-13T18:56:23.715371+00:00",
+      "exit": 0,
+      "wallSeconds": 10.010686875000829,
+      "pid": 29983,
+      "pgid": 29983,
+      "load": "{ 15.75 10.51 8.29 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-pair-v01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:57:43.733562+00:00",
+      "end": "2026-10-13T18:57:43.866484+00:00",
+      "exit": 0,
+      "wallSeconds": 0.13283416698686779,
+      "pid": 61387,
+      "pgid": 61387,
+      "load": "{ 9.52 9.79 8.23 }",
+      "groupRemainingAtExit": []
+    },
+    "diffcheck-pair-v01": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-644-aspect-pair294",
+      "start": "2026-10-13T18:57:43.966180+00:00",
+      "end": "2026-10-13T18:57:43.991317+00:00",
+      "exit": 0,
+      "wallSeconds": 0.02504016598686576,
+      "pid": 61406,
+      "pgid": 61406,
+      "load": "{ 9.52 9.79 8.23 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "initialFailures": [
+    {
+      "receipt": "focused-pair-v01",
+      "passed": 18,
+      "failed": 6,
+      "reason": "Four unused answers for sole auto-selected target; two invalid attempted passes from deliberately faulty resolver boundary. Fixtures corrected; no engine edit."
+    },
+    {
+      "receipt": "review-pair-v01",
+      "exit": 1,
+      "reason": "One unnecessary non-null assertion in new test; typechecks/cycles/schema/all24 tests passed. Assertion and detached unused sole-target ScriptedSource corrected before final review."
+    }
+  ],
+  "counterfactuals": {
+    "results": [
+      {
+        "name": "negative-energy-v01",
+        "exit": 1,
+        "restoredSHA256": "5464f97c1bc4b341882b3f15f16dbad108d195b74d1ac2fd0d15ec876f0117ed"
+      },
+      {
+        "name": "negative-exhaust-v01",
+        "exit": 1,
+        "restoredSHA256": "5464f97c1bc4b341882b3f15f16dbad108d195b74d1ac2fd0d15ec876f0117ed"
+      },
+      {
+        "name": "negative-target-v01",
+        "exit": 1,
+        "restoredSHA256": "5464f97c1bc4b341882b3f15f16dbad108d195b74d1ac2fd0d15ec876f0117ed"
+      },
+      {
+        "name": "negative-once-v01",
+        "exit": 1,
+        "restoredSHA256": "a5d83748693e5430b86d440a920062cad1202deef065160c09a953f529ad9db2"
+      },
+      {
+        "name": "negative-old-gain-v01",
+        "exit": 1,
+        "restoredSHA256": "a5d83748693e5430b86d440a920062cad1202deef065160c09a953f529ad9db2"
+      },
+      {
+        "name": "negative-empty-v01",
+        "exit": 1
+      }
+    ],
+    "finalRestore": {
+      "src/content/apollyon/aspects/aspect-ccc0385e-ff00-4be3-a807-99e4def47d2d.ts": "5464f97c1bc4b341882b3f15f16dbad108d195b74d1ac2fd0d15ec876f0117ed",
+      "src/content/apollyon/aspects/aspect-e70d2d02-9ba6-434b-94d3-73ad29d3e9f4.ts": "a5d83748693e5430b86d440a920062cad1202deef065160c09a953f529ad9db2"
+    },
+    "caseCounts": {
+      "negative-energy-v01": {
+        "failed": 4,
+        "passed": 20
+      },
+      "negative-exhaust-v01": {
+        "failed": 2,
+        "passed": 22
+      },
+      "negative-target-v01": {
+        "failed": 2,
+        "passed": 22
+      },
+      "negative-once-v01": {
+        "failed": 2,
+        "passed": 22
+      },
+      "negative-old-gain-v01": {
+        "failed": 14,
+        "passed": 10
+      },
+      "negative-empty-v01": {
+        "failed": 20,
+        "passed": 4
+      }
+    }
+  },
+  "fiveFailureMapping": {
+    "1": "Both genuine permanent engine emblem consumers; empty assemblies fail20 cases.",
+    "2": "Both controllers, real source/subject, first qualifying Reclaim and reset; once mutant fails2; actual opposing Interrupt Reclaim uses opposing emblem.",
+    "3": "Costs/cancel/refusal/Veil/full capacity/partial fault retained; energy mutant4fail/exhaust2fail/target2fail/old physical reference14fail. Random selection and ceased pre-trigger subject are unreachable in these assemblies.",
+    "4": "Unregistered modules plus synthetic fixtures only; no random-fill/full-pool/readiness assertion.",
+    "5": "Only own eight paths; production pending/design/map/recipes/Dreamsign read-only. Original294 and295 complete joins retained."
+  },
+  "failurePaths": {
+    "midStepError": "Actual Reclaim commits gain before later synthetic resolve adds99 and throws; failed step publishes no resolved event and preserves physical gain1 on stack.",
+    "reloadRestart": "JSON BattleSlice / fresh fold replay for real activation, discard-cost Reclaim and committed materialization optional prompt; stateHash/public views preserved.",
+    "partialWrite": "Synthetic later +99 mutation rolls back; committed prior gain1 and once-use retained.",
+    "invalidStale": "Real activation target prompt rejects foreign, stale, own-character invalid answer and consumed prompt.",
+    "concurrentActors": "Real competing opposing action while prompt pending rejected; actual opposing Interrupt Reclaim independently triggers opposing permanent emblem.",
+    "recoveryBoundary": "Faulty resolver has no legal continuation; deterministic replay from saved healthy action boundary reproduces same rollback result. No forced fake stack/priority.",
+    "cancellation": "Pre-payment target/cost prompt restores exact original committed hash; post-materialization prompt refuses cancellation and preserves prior gain.",
+    "ceasedSubject": "Reclaim trigger resolves before priority while physical card remains on stack; no legal pre-trigger ceased subject in this assembly. Primitive611 owns generic ceased-subject contracts.",
+    "emptyPoolRNG": "No random selector. Capacity action leaves RNG unchanged; unavailable targets reject activation.",
+    "newPersistentStore": "None."
+  },
+  "validationScope": {
+    "reviewFull": "Not applicable:16 assembly lines, one unregistered content pair, no engine/infrastructure/cross-cutting change.",
+    "fuzz": "No new generic form or catalog adoption; original294/295 full-pool and tournament acceptance retained.",
+    "browser": "Not applicable: no new production UI workflow/presentation/registration; headless actual prompt-fold interaction contracts only.",
+    "independentReview": "Not core-review and16 non-test lines; final parent policy audit pending."
+  },
+  "hostLoadSamples": [
+    {
+      "command": "focused-pair-v01",
+      "raw": "{ 5.01 5.38 6.34 }",
+      "start": "2026-10-13T18:52:38.247843+00:00"
+    },
+    {
+      "command": "focused-pair-v02",
+      "raw": "{ 4.46 5.21 6.24 }",
+      "start": "2026-10-13T18:53:08.248672+00:00"
+    },
+    {
+      "command": "negative-empty-v01",
+      "raw": "{ 17.99 8.20 7.24 }",
+      "start": "2026-10-13T18:54:11.098139+00:00"
+    },
+    {
+      "command": "negative-energy-v01",
+      "raw": "{ 7.12 5.59 6.32 }",
+      "start": "2026-10-13T18:53:52.168796+00:00"
+    },
+    {
+      "command": "negative-exhaust-v01",
+      "raw": "{ 11.60 6.54 6.66 }",
+      "start": "2026-10-13T18:53:56.515019+00:00"
+    },
+    {
+      "command": "negative-old-gain-v01",
+      "raw": "{ 15.81 7.61 7.03 }",
+      "start": "2026-10-13T18:54:07.605054+00:00"
+    },
+    {
+      "command": "negative-once-v01",
+      "raw": "{ 15.81 7.61 7.03 }",
+      "start": "2026-10-13T18:54:03.831873+00:00"
+    },
+    {
+      "command": "negative-target-v01",
+      "raw": "{ 13.79 7.08 6.84 }",
+      "start": "2026-10-13T18:54:00.183228+00:00"
+    },
+    {
+      "command": "coverage-pair-v01",
+      "raw": "{ 11.51 10.14 8.27 }",
+      "start": "2026-10-13T18:57:01.850402+00:00"
+    },
+    {
+      "command": "knip-pair-v01",
+      "raw": "{ 13.20 10.34 8.29 }",
+      "start": "2026-10-13T18:56:39.363704+00:00"
+    },
+    {
+      "command": "review-pair-v01",
+      "raw": "{ 14.82 9.66 7.91 }",
+      "start": "2026-10-13T18:55:41.880787+00:00"
+    },
+    {
+      "command": "review-pair-v02",
+      "raw": "{ 15.75 10.51 8.29 }",
+      "start": "2026-10-13T18:56:13.704539+00:00"
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-pair-v02 process start 2026-10-13T18:56:13.704539+00:00"
+      }
+    }
+  },
+  "runtime": {
+    "qa": null,
+    "server": null,
+    "browser": null,
+    "provider": null,
+    "reviewer": null,
+    "ownedProcesses": "All recorded command process groups must be terminal at Stage2 freeze."
+  },
+  "validationQualifications": {
+    "focusedAndMutants": "Focused v02 and mutants predate two test-hygiene edits only: unnecessary non-null assertion removed and sole auto-selected target call uses NO_PROMPTS. Final review v02 validates corrected exact bytes/all24 cases; no behavior/module change or missing mutant predicate.",
+    "assemblyRestoration": "Both original eight-line modules restored after each mutant and in finally.",
+    "contentCoverage": "Existing production gate20 tests passed; independent of synthetic adoption, no pending status cleared.",
+    "evidenceEdits": "Final record refresh and light schema/diff checks follow source validation; no source edits.",
+    "preStagingDiffCheck": "Stage2 git diff --check covered empty tracked diff; Stage2 manifest verified all8 untracked whitespace/newlines. Stage3 actual cached diff receipt covers the exact staged source and evidence."
+  },
+  "testDeltaDetail": {
+    "files": 1,
+    "lines": 302,
+    "jsdomFiles": 0,
+    "actualCases": 24,
+    "assemblyNonTestLines": 16
+  },
+  "stage2Freeze": {
+    "commit": "Stage3 exact ACK granted; one final validated commit follows this marker, actual OID retained externally.",
+    "sourceFrozen": true,
+    "writers": "this sole helper terminal after freeze",
+    "runtime": "No browser/server/provider/reviewer ever launched; check receipt PGs at final freeze."
+  },
+  "finalPrecommitMarker": "2026-10-13T19:02:35.688733+00:00",
+  "stage3": {
+    "nativeACK": "/tmp/root644-20261013/stage3-native-ack-v05.stdout",
+    "action": "Final own clock/schema/exact staged eight paths/cached diff/one validated Conventional Commit; actual Git endpoint retained externally.",
+    "commitClockQualification": "The implementWindow endpoint is the immediate precommit marker; actual Git end and gap retained in terminal helper proof. Gross wall includes parent coordination and waits; model start unknown."
+  }
+}

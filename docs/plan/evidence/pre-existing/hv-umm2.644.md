@@ -1,0 +1,3 @@
+# hv-umm2.644 source observations
+
+The pending provisional design entry for incarnation `e70d2d02-9ba6-434b-94d3-73ad29d3e9f4` in `src/content/apollyon/design.ts` uses `gainSpark(triggeringCard(), 1, "permanent")`. This preparation's explicit acceptance requires the delivered `gainTriggeringCardSpark` physical-card form from completed `hv-umm2.611`, with completed observer repair `hv-umm2.646`. The separate original `hv-umm2.294` owns adoption of these named assemblies and the production mapping, incarnation status, recipe, Dreamsign and full acceptance. This preparation keeps that pending design entry read-only.
