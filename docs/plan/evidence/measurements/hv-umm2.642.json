@@ -1,0 +1,442 @@
+{
+  "bead": "hv-umm2.642",
+  "base": "138ccc567d3b99b2b55c3977d6e0af71d006b11e",
+  "dispatch": {
+    "actualToolCall": "call_24306b18132a4d61be66d4b665f2b335",
+    "timestamp": "2026-10-13T17:34:10.281000+00:00",
+    "modelStart": "unknown; only actual dispatch is observed"
+  },
+  "endpoint": "2026-10-13T17:47:55.679238+00:00",
+  "elapsedQualification": "Gross elapsed actual dispatch-to-final precommit clock; includes read-only proposal, parent admission, local iteration, validation and parent final audit/waits, not model CPU time. Actual Git clock/gap is retained externally in the Stage3 terminal manifest.",
+  "validationReceipts": {
+    "focused-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-292.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:40:48.104005+00:00",
+      "end": "2026-10-13T17:40:52.904975+00:00",
+      "exit": 1,
+      "wallSeconds": 4.800859834009316,
+      "pid": 12700,
+      "pgid": 12700,
+      "load": "{ 19.13 12.37 11.81 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-v02": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-292.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:41:11.919034+00:00",
+      "end": "2026-10-13T17:41:15.166147+00:00",
+      "exit": 1,
+      "wallSeconds": 3.2469819580146577,
+      "pid": 53365,
+      "pgid": 53365,
+      "load": "{ 17.38 12.50 11.87 }",
+      "groupRemainingAtExit": []
+    },
+    "focused-v03": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-292.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:41:32.733382+00:00",
+      "end": "2026-10-13T17:41:36.158007+00:00",
+      "exit": 0,
+      "wallSeconds": 3.424506042007124,
+      "pid": 65743,
+      "pgid": 65743,
+      "load": "{ 17.44 12.81 12.00 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-resolution-only-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-292.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:42:03.301617+00:00",
+      "end": "2026-10-13T17:42:06.847379+00:00",
+      "exit": 1,
+      "wallSeconds": 3.5455929590098094,
+      "pid": 68495,
+      "pgid": 68495,
+      "load": "{ 18.65 13.61 12.32 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-nth-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-292.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:42:06.966485+00:00",
+      "end": "2026-10-13T17:42:10.490915+00:00",
+      "exit": 1,
+      "wallSeconds": 3.524270833004266,
+      "pid": 68824,
+      "pgid": 68824,
+      "load": "{ 17.72 13.50 12.29 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-controller-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-292.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:42:10.601320+00:00",
+      "end": "2026-10-13T17:42:13.855691+00:00",
+      "exit": 1,
+      "wallSeconds": 3.254228542005876,
+      "pid": 69174,
+      "pgid": 69174,
+      "load": "{ 18.30 13.69 12.36 }",
+      "groupRemainingAtExit": []
+    },
+    "negative-empty-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/battle/integration/apollyon-aspects/pair-292.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:42:13.963914+00:00",
+      "end": "2026-10-13T17:42:17.310962+00:00",
+      "exit": 1,
+      "wallSeconds": 3.346902500023134,
+      "pid": 69517,
+      "pgid": 69517,
+      "load": "{ 17.31 13.56 12.32 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:42:49.172297+00:00",
+      "end": "2026-10-13T17:43:04.709355+00:00",
+      "exit": 2,
+      "wallSeconds": 15.536672332993476,
+      "pid": 71634,
+      "pgid": 71634,
+      "load": "{ 11.58 12.55 12.00 }",
+      "groupRemainingAtExit": []
+    },
+    "review-v02": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:43:16.439858+00:00",
+      "end": "2026-10-13T17:43:27.103997+00:00",
+      "exit": 0,
+      "wallSeconds": 10.663950291986112,
+      "pid": 73502,
+      "pgid": 73502,
+      "load": "{ 10.10 12.14 11.87 }",
+      "groupRemainingAtExit": []
+    },
+    "knip-v01": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:43:49.083929+00:00",
+      "end": "2026-10-13T17:43:52.978654+00:00",
+      "exit": 0,
+      "wallSeconds": 3.894604207976954,
+      "pid": 75696,
+      "pgid": 75696,
+      "load": "{ 9.18 11.72 11.73 }",
+      "groupRemainingAtExit": []
+    },
+    "coverage-v01": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/content-gates.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:44:03.958915+00:00",
+      "end": "2026-10-13T17:44:07.854492+00:00",
+      "exit": 0,
+      "wallSeconds": 3.895449625008041,
+      "pid": 76690,
+      "pgid": 76690,
+      "load": "{ 8.24 11.39 11.61 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-v01": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:45:34.138773+00:00",
+      "end": "2026-10-13T17:45:34.251472+00:00",
+      "exit": 0,
+      "wallSeconds": 0.11257837500306778,
+      "pid": 15780,
+      "pgid": 15780,
+      "load": "{ 16.00 12.87 12.13 }",
+      "groupRemainingAtExit": []
+    },
+    "diffcheck-v01": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:45:57.243283+00:00",
+      "end": "2026-10-13T17:45:57.253843+00:00",
+      "exit": 0,
+      "wallSeconds": 0.010462000005645677,
+      "pid": 34784,
+      "pgid": 34784,
+      "load": "{ 13.73 12.56 12.04 }",
+      "groupRemainingAtExit": []
+    },
+    "schema-v02": {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-umm2-642-aspect-pair292",
+      "start": "2026-10-13T17:47:55.728302+00:00",
+      "end": "2026-10-13T17:47:55.842404+00:00",
+      "exit": 0,
+      "wallSeconds": 0.11403516700374894,
+      "pid": 43212,
+      "pgid": 43212,
+      "load": "{ 6.17 10.08 11.12 }",
+      "groupRemainingAtExit": []
+    }
+  },
+  "initialFailures": [
+    {
+      "receipt": "focused-v01",
+      "exit": 1,
+      "cases": "18 failed before semantics",
+      "cause": "Own fixture imported triggeringCard from builders instead of triggers; corrected import."
+    },
+    {
+      "receipt": "focused-v02",
+      "exit": 1,
+      "cases": "2 failed,16 passed",
+      "cause": "Own ordinary target fixture had one eligible target, legitimately auto-selected. Two genuine eligible targets now expose the cancellable ordinary prompt."
+    },
+    {
+      "receipt": "review-v01",
+      "exit": 2,
+      "cases": "18 passed; typecheck/lint failed",
+      "cause": "Own nested filter results lacked explicit discriminant narrowing. Added effectStarted type predicate and exhaustion-event flatMap, with identical observable assertions."
+    }
+  ],
+  "counterfactuals": {
+    "controls": [
+      {
+        "name": "negative-resolution-only-v01",
+        "exit": 1,
+        "mutatedSHA256": {
+          "src/content/apollyon/aspects/aspect-8890b892-0634-4b8a-bfc0-018adfa979a7.ts": "8acac254ea85312123a147b196f65f8bc0c6ebe854f63a0fb91d1b6a1e70dbc8",
+          "src/content/apollyon/aspects/aspect-9a1bf275-2763-4db9-ad10-86d8f7e7efdf.ts": "c3c7a41d275431a8a4cb61e2bf0123f588b20478902e003eb99deaf914fd2766"
+        },
+        "caseResult": "Tests  4 failed | 14 passed (18)"
+      },
+      {
+        "name": "negative-nth-v01",
+        "exit": 1,
+        "mutatedSHA256": {
+          "src/content/apollyon/aspects/aspect-8890b892-0634-4b8a-bfc0-018adfa979a7.ts": "86aa0b5a68ab3e2eeb9149dfdb51254c990ba381e11f905804dfb4ddbad91736",
+          "src/content/apollyon/aspects/aspect-9a1bf275-2763-4db9-ad10-86d8f7e7efdf.ts": "00e3f9f645a9291a25908ea443dd16dff061852ab8ab829c5c142041fd8838f7"
+        },
+        "caseResult": "Tests  8 failed | 10 passed (18)"
+      },
+      {
+        "name": "negative-controller-v01",
+        "exit": 1,
+        "mutatedSHA256": {
+          "src/content/apollyon/aspects/aspect-8890b892-0634-4b8a-bfc0-018adfa979a7.ts": "86aa0b5a68ab3e2eeb9149dfdb51254c990ba381e11f905804dfb4ddbad91736",
+          "src/content/apollyon/aspects/aspect-9a1bf275-2763-4db9-ad10-86d8f7e7efdf.ts": "b704ad4c1b48da34ee785495b1088b7b7ded34968bffa139a5d72ee8a67721a3"
+        },
+        "caseResult": "Tests  8 failed | 10 passed (18)"
+      },
+      {
+        "name": "negative-empty-v01",
+        "exit": 1,
+        "mutatedSHA256": {
+          "src/content/apollyon/aspects/aspect-8890b892-0634-4b8a-bfc0-018adfa979a7.ts": "81de3ae1f98edbf6e5a346f242001fa1262c0146c97c231d905e3723eaf6c6a5",
+          "src/content/apollyon/aspects/aspect-9a1bf275-2763-4db9-ad10-86d8f7e7efdf.ts": "f45443a2caf634b21a87a6d18b6c62682a6e63ca8e32c7c0cd1438094fe7636e"
+        },
+        "caseResult": "Tests  18 failed (18)"
+      }
+    ],
+    "restoredSHA256": {
+      "src/content/apollyon/aspects/aspect-8890b892-0634-4b8a-bfc0-018adfa979a7.ts": "86aa0b5a68ab3e2eeb9149dfdb51254c990ba381e11f905804dfb4ddbad91736",
+      "src/content/apollyon/aspects/aspect-9a1bf275-2763-4db9-ad10-86d8f7e7efdf.ts": "c3c7a41d275431a8a4cb61e2bf0123f588b20478902e003eb99deaf914fd2766"
+    }
+  },
+  "negativeQualification": "All negative controls ran after focused-v03, against the same observable assertions as final review-v02. Subsequent source changes are only explicit TypeScript narrowing annotations/flatMap extraction in the test. Both AbilityList modules are exactly restored. No engine, catalog or registration mutation.",
+  "sourceAudit": {
+    "readOnlySHA256": {
+      "src/content/apollyon/design.ts": "234d4063445c9ca0202a5691597c21df4d47b0426d0b88dc1ebcb5f01b1ff6df",
+      "src/engine/dsl/builders.ts": "874b29e63ee9727063e23f5ee7892b763bd564d8f966e65039ef4cb7da84efbb",
+      "src/engine/dsl/triggers.ts": "6198aeb4088f1283ef9b452a4a616f0983a886ea4131a22fb45cfdd21f6bb5bc",
+      "src/engine/dsl/conditions.ts": "0f94ef7b9893cc84c777bd07c023cdd664c0d8b0705a5a162b50487b46bcc39e",
+      "src/engine/effects/interpreter.ts": "f95b4d89ec51aa1adb533dc9de75b901458f736ab575064b70acd785577fe5ba",
+      "src/engine/effects/primitives/grant-reclaim.ts": "ae08bc31160173e9db2460a2cc7138ee13f6ebd54f48bf485ceb5c8310b5ff05",
+      "src/engine/effects/primitives/awaken.ts": "5a17d6df8f26f201fabff7f65a840aa602b9b9d80678641add17b34210bca13b",
+      "src/engine/triggers/matcher.ts": "5de0120d595144d23fa9bbf72dd5e6aedaf1a9a727c62790b5067ef667eb2c31",
+      "src/engine/triggers/body.ts": "c1bc8f6eaa18230b67c6d4fce643567b0a93e2fe77c962ffd7f1d0ecfd62d5e5",
+      "src/engine/triggers/resolve.ts": "695a528795ef26fadd25ca59327688e41f0251e4067c1f622ad689b1e81b8a07",
+      "src/engine/rules/timing.ts": "75ff15be8c099fda8ae42dae149940f95b9290fae69da429a3872f48fe3910c9",
+      "src/engine/testing/board.ts": "8ab478503d468dfe510138fd7dc86c497f779042fc00eed241b4d59ae46ac246",
+      "src/engine/testing/synthetic-cards.ts": "45e5009ad88c05ccba2308a1de2c2837b356a31ac973c61caf9aa016eac07d1f",
+      "docs/rules.md": "82ba4ba2c020ccd5a4ca5933f2b3f7aea7dc54ad049d3a1f7d83636c80898864"
+    },
+    "callableBodies": "Existing exported conditionCardCounts/randomIn/onDawn/triggered/whenYouPlay/all/characterYouControl/grantReclaim/awaken are directly consumed. conditionCardCounts includes all current own void cards; randomIn uses current effective-character matches and advances random:selection only for a nonempty pool. grantReclaim creates a permanent physical keyword change without moving the void card; plain Reclaim uses the current normal cost. awaken reads current matching characters/controller; whenYouPlay matches actual effective played filters and nth count, excluding copies.",
+    "normativeCorrection": "The pending design has resolution-only ifThen. Current rules Intervening conditions require both checks; existing triggered options.condition is admitted by the parent under existing authority. matcher gates queueing, triggerBody retains condition, resolveQueuedTrigger checks before applied. design.ts remains read-only.",
+    "temporalN_A": "The isolated own Dawn emblem is avatar-first with one prompt-free ability and resolves before any response. No actual earlier sibling can lower the void count; resolution recheck is covered by current API/body proof, not a fabricated queue or priority window.",
+    "identityAllocation": {
+      "expression": "syntheticId(0x64200 + index)",
+      "reservedRange": "0x64200..0x6420f",
+      "usedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles": [
+        "Warrior cost2",
+        "Mage cost3",
+        "plain event",
+        "Interrupt event",
+        "exhaust-all event",
+        "dissolve-own-target event",
+        "all-types-own-target event",
+        "targeted gain-spark event",
+        "Mage event-copy trigger",
+        "later-fault event"
+      ],
+      "uuidPattern": "5e5e5e5e-0000-4000-8000-00000006420[0-9a-f]",
+      "physicalIds": "Generated by boardState and engine; no manually built physical UUIDs",
+      "promptId": "parsePromptId(642000:0:0), absent-prompt refusal only"
+    },
+    "parentAdmission": "source-native-ack-v03.stdout and source-admission-v03.json; all-status admitted/intended954, parent lexical1078 brand expressions/313 dynamic calls; no foreign exact range or unfinished three-primary-path writer."
+  },
+  "primarySourceSHA256": {
+    "src/content/apollyon/aspects/aspect-8890b892-0634-4b8a-bfc0-018adfa979a7.ts": "86aa0b5a68ab3e2eeb9149dfdb51254c990ba381e11f905804dfb4ddbad91736",
+    "src/content/apollyon/aspects/aspect-9a1bf275-2763-4db9-ad10-86d8f7e7efdf.ts": "c3c7a41d275431a8a4cb61e2bf0123f588b20478902e003eb99deaf914fd2766",
+    "src/battle/integration/apollyon-aspects/pair-292.test.ts": "12be41e6f894920c2a4e603fdcd262df5d66fc6314d62d1ee889a7bd4a69af99"
+  },
+  "testDeltaDetail": {
+    "entrypoints": 1,
+    "jsdomEntryPoints": 0,
+    "lines": 297,
+    "cases": 18,
+    "controllers": [
+      "player",
+      "enemy"
+    ],
+    "nonTestSourceLines": 18
+  },
+  "fiveFailureMapping": {
+    "1 permanent emblem": "Both exact EngineAvatarDefinition IDs inhabit actual avatar slots; empty AbilityLists fail all18 cases. Actual engine.apply/fold consumers, not AST inspection.",
+    "2 controller/source/subject/nth": "Own Dawn gate/subject null/public physical Reclaim target; opposing Dawn no action; second exact played event avatar source/subject; opposing Interrupt excluded; nth1 and opposing Warrior selectors each fail8.",
+    "3 empty/ceased/capacity/cancel": "Empty eligible pool no RNG/grant; full board receives permanent Reclaim but actual void play is refused atomically; copies cease and do not inflate nth count; actual ordinary target cancellation/stale/foreign/illegal/competing intents and replay; later failure preserves committed grant/RNG.",
+    "4 no signature-only readiness": "Only unregistered source assemblies and synthetic public engine contracts. Canonical coverage20 is a separate existing sanctioned gate, no pool readiness or strength result.",
+    "5 original joins retained": "No production incarnation/status/design/map/catalog/deckRecipe/Dreamsign write. Original292 retains UUID authorship/provisional design/D20/twenty clean Greedy EACH/all current prereqs. Original295 retains fifty EACH/frozen pool/champion rerun."
+  },
+  "failurePaths": {
+    "error": "Both actors later actual played synthetic resolution faults after a score mutation. Failed resolution rolls back score/effect publication; previously committed permanent Dawn Reclaim/RNG persist, no in-flight step.",
+    "reloadReplay": "Serialized actual Dawn RNG state and outcomes reproduce identically; real ordinary targeted play prompt/answers replay after persisted slice reload with event-prefix checks.",
+    "partial": "Grant is already committed in a previous intent; later failed step preserves it. No new persistence or cross-store operation.",
+    "stale": "Actual cancel/restart creates fresh prompt; old prompt answer refused, consumed answer refused. No manufactured Aspect prompt.",
+    "concurrent": "Opposing real Interrupt play excluded from own nth count; competing action while ordinary prompt pending rejected.",
+    "cancel": "Ordinary play target prompt cancellation preserves committed hash/emblem; absence of an Aspect prompt refused for both actors."
+  },
+  "validationScope": {
+    "required": "focused18, review(typecheck/lint/cycles/related18), Knip, canonical content coverage20, friction schema",
+    "full": "N/A: two unregistered AbilityList assemblies; no cross-cutting architecture/infrastructure/configuration changes",
+    "fuzz": "N/A: no new primitive or production pool activation",
+    "browser": "N/A: no production workflow/presentation change",
+    "independentReview": "N/A: this preparation is not labeled core-review, source code18lines and no new API/prompt kind",
+    "acceptanceBoundary": "Original292 and295 complete acceptance remains mandatory."
+  },
+  "runtime": {
+    "servers": [],
+    "browserLeases": [],
+    "reviewProviders": [],
+    "helperProcesses": "All recorder groups terminal; fresh PS proof in Stage2 freeze manifest."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "value": 10.1,
+        "measuredFor": "final npm run review start",
+        "raw": "{ 10.10 12.14 11.87 }"
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "focused-v01": "{ 19.13 12.37 11.81 }",
+    "focused-v02": "{ 17.38 12.50 11.87 }",
+    "focused-v03": "{ 17.44 12.81 12.00 }",
+    "negative-resolution-only-v01": "{ 18.65 13.61 12.32 }",
+    "negative-nth-v01": "{ 17.72 13.50 12.29 }",
+    "negative-controller-v01": "{ 18.30 13.69 12.36 }",
+    "negative-empty-v01": "{ 17.31 13.56 12.32 }",
+    "review-v01": "{ 11.58 12.55 12.00 }",
+    "review-v02": "{ 10.10 12.14 11.87 }",
+    "knip-v01": "{ 9.18 11.72 11.73 }",
+    "coverage-v01": "{ 8.24 11.39 11.61 }"
+  },
+  "stage2Freeze": {
+    "committedAtStage2": false,
+    "sourceChangesFrozen": true,
+    "finalParentAudit": "All eight manifest paths/hashes and base/branch/all PGs accepted; Stage3 native ACK stage3-native-ack-v04.stdout. Only own friction/measurement clock and evidence receipts updated thereafter."
+  },
+  "finalEvidenceQualification": {
+    "schema": "Stage3 schema-v02 revalidates the final friction clock; its actual receipt is added below. Measurements are descriptive and not parsed by friction schema.",
+    "diff": "Stage2 diffcheck-v01 validates the empty tracked diff; all eight untracked files received explicit whitespace/newline audit. Stage3 cachedcheck-v01 validates the actual eight staged paths, its raw receipt is retained externally.",
+    "checks": "No source changes after final review-v02, Knip-v01 and coverage-v01. Six module/test/RD/pre-existing/QA file hashes match the parent-audited Stage2 freeze.",
+    "implementMin": 13.7566373,
+    "clock": "2026-10-13T17:47:55.679238+00:00"
+  }
+}
