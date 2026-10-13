@@ -203,6 +203,45 @@ describe("DraftScreen", () => {
     expect(onPick).toHaveBeenCalledWith(102);
   });
 
+  it.each(["resolve", "reject"] as const)("releases only the settled pick latch after %s and permits a same-offer retry", async (outcome) => {
+    let finish: () => void = () => undefined;
+    const settlement = new Promise<void>((resolve, reject) => {
+      finish = outcome === "resolve" ? resolve : () => reject(new Error("Synthetic append rejection"));
+    });
+    const onPick = vi.fn(() => settlement);
+    const { container } = renderInCumulus(<DraftScreen view={view()} onPick={onPick} />);
+    press(offerCard(container, 101));
+    press(offerCard(container, 102));
+    expect(onPick).toHaveBeenCalledTimes(1);
+    await act(async () => {
+      finish();
+      await settlement.catch(() => undefined);
+    });
+    await act(async () => { press(offerCard(container, 102)); await Promise.resolve(); });
+    expect(onPick).toHaveBeenCalledTimes(2);
+    expect(onPick).toHaveBeenLastCalledWith(102);
+  });
+
+  it("keeps a newer visual request latched when an old settlement arrives after its offer key is reused", async () => {
+    let finishOld: () => void = () => undefined, finishNew: () => void = () => undefined;
+    const oldSettlement = new Promise<void>((resolve) => { finishOld = resolve; });
+    const newSettlement = new Promise<void>((resolve) => { finishNew = resolve; });
+    const onPick = vi.fn<() => Promise<void>>()
+      .mockReturnValueOnce(oldSettlement).mockReturnValueOnce(newSettlement).mockResolvedValue(undefined);
+    const { container, rerender } = renderInCumulus(<DraftScreen view={view()} onPick={onPick} />);
+    press(offerCard(container, 101));
+    rerender(<DraftScreen view={view([201, 202, 203, 204])} onPick={onPick} />);
+    rerender(<DraftScreen view={view()} onPick={onPick} />);
+    press(offerCard(container, 101));
+    expect(onPick).toHaveBeenCalledTimes(2);
+    await act(async () => { finishOld(); await oldSettlement; });
+    press(offerCard(container, 102));
+    expect(onPick).toHaveBeenCalledTimes(2);
+    await act(async () => { finishNew(); await newSettlement; });
+    await act(async () => { press(offerCard(container, 102)); await Promise.resolve(); });
+    expect(onPick).toHaveBeenCalledTimes(3);
+  });
+
   it("dispatches the reroll control", () => {
     const onReroll = vi.fn();
     const { container } = renderInCumulus(

@@ -193,7 +193,7 @@ export function pickDraftCard(
   if (config.packSize < 1) return null;
   nextDraftState.currentOfferCount = config.packSize;
   const stream = rngStream(ctx);
-  processPlayerPickWithoutLogging(
+  const completed = processPlayerPickWithoutLogging(
     cardNumber,
     nextDraftState,
     provider.cardDatabase(),
@@ -201,6 +201,9 @@ export function pickDraftCard(
     stream,
     deckCardNumbers,
   );
+  // The engine reports both a final pick and a failed next offer as complete.
+  // Commit only the configured final pick; failed preparation discards the clone.
+  if (completed && nextDraftState.sitePicksCompleted < config.sitePickCount) return null;
   if (nextDraftState.transfiguredOfferSource !== undefined) {
     nextDraftState.currentOfferTransfigurations = rollOfferTransfigurations(
       nextDraftState,
@@ -263,6 +266,7 @@ export function enterDraftSite(
     config,
     stream,
   );
+  if (nextDraftState.currentOffer.length !== config.packSize) return null;
   const modifierIndex = journey.siteOfferModifiers.findIndex(
     (modifier) => modifier.kind === "transfigure-next-draft-or-shop",
   );

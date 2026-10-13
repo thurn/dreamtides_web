@@ -1,0 +1,30 @@
+{
+  "bead": "hv-o73j",
+  "phase": 5,
+  "implementMin": 125.88184536666667,
+  "implementWindow": {
+    "start": "2026-10-13T15:28:40.033Z",
+    "end": "2026-10-13T17:34:32.943722+00:00"
+  },
+  "localValidationS": {
+    "focused": 9.483068999979878,
+    "review": 21.491818292008247,
+    "knip": 4.695639249985106,
+    "fullPreEntryExpansion": 116.23417991702445,
+    "full": 99.2658308329992,
+    "schema": 0.1195313329808414
+  },
+  "hostLoad": 7.2587890625,
+  "testDelta": {
+    "files": 0,
+    "lines": 275,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 32.376277699999996,
+      "note": "Three actual failure-to-next-retry intervals total32.376min including diagnosis, support-only corrections, native coordination/admission and one failed diagnostic retry. StrictMode duplicate setup, automatic ordinary Reward acceptance, unsupported qa.log, and inactive transition HUD assumptions. Individual raw attempts and boundaries retained in measurements; not pure editing-time attribution."
+    }
+  ]
+}

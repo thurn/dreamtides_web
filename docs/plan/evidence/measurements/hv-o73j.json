@@ -1,0 +1,1981 @@
+{
+  "bead": "hv-o73j",
+  "phase": 5,
+  "base": "57a6d26ddb1d86630822bcf2194ef6c65c05dec9",
+  "branch": "wt/draft-preparation-logs-o73j-root",
+  "implementationWindowStatus": "Final prospective automatic-Git endpoint recorded immediately before schema/stage/commit; parent external actual commit receipt verifies within1minute. Inclusive actual dispatch start15:28:40.033Z; model start unknown. No date override/amend/postcommit tracked edits.",
+  "dispatch": {
+    "actual": "2026-10-13T15:28:40.033Z",
+    "receipt": "/tmp/root-o73j/dispatch-native.json",
+    "callId": "call_XjLFmriPpeEvq7ZJxonRq4cX",
+    "earlierParentProxy": "2026-10-13T15:27:27.891450Z",
+    "modelStart": null
+  },
+  "setup": {
+    "base": "57a6d26ddb1d86630822bcf2194ef6c65c05dec9",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+    "branch": "wt/draft-preparation-logs-o73j-root",
+    "nativeDoctorHealthy": true,
+    "freshNpmInstall": {
+      "exitCode": 0,
+      "reportedSeconds": 3,
+      "terminalSessionId": 72551,
+      "separatelyClockedStart": null,
+      "scope": "Parent setup before helper dispatch; command output reports3s, no invented precise timestamps"
+    },
+    "friction": {
+      "start": "2026-10-13T15:27:27.612772+00:00",
+      "end": "2026-10-13T15:27:27.891320+00:00",
+      "elapsedS": 0.2784686670056544,
+      "exitCode": 0
+    },
+    "previousSource": "fb0e7927b0f68b13f4ad5c91d5885a6a63cb6109",
+    "previousLanded": "d9b44a5543b598ae1215b2d75e675ad6592d22f0"
+  },
+  "sourceHashes": {
+    "src/cumulus/screens/DraftScreen.tsx": "b378e1522d111b5fe1c4b3e083149210155b1c1986f2e189323adfe974336bba",
+    "src/cumulus/screens/offer-screens.test.tsx": "f22745c1a3368e1172907e4f2b21a594b5dabd5ab18cd87bdfe8fe1217b5d4dd",
+    "src/rules/journey/draft.ts": "0d8682dafc1ba384885836836cf9aa83f68bb911b2a770b9cbdaf4e71a66b73c",
+    "src/rules/journey/journey-draft.test.ts": "dcbe7d008a8e7c0da3d8a30e61da1e79838e3d98a22a56e43b60e8ade8865ecc",
+    "src/screens/cumulus_adapters/DraftSiteScreenAdapter.tsx": "b2c215c305262143c4330123b1c2a721609400a8568257762b5c126319a693ec",
+    "src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx": "554613c2fd80f48623e16c6e8b896f98829b311e0980994b040a984090cf54c1",
+    "src/screens/cumulus_adapters/DreamscapeScreenAdapter.tsx": "2b5400da6de79d93b475f743bced607e0db0704446e7c701c998bca2bac345a7",
+    "src/screens/cumulus_adapters/dreamscape-view-model.test.ts": "3fed491a2737828d3931019d17b463df6a70b9560ef48ad5c31c116f9c1df798",
+    "src/screens/cumulus_adapters/dreamscape-view-model.ts": "95a9a3457a866972f7d41a91a1f3d2fe310d9c08f02e2d1c183a38a0c2f4e367",
+    "src/state/game-journey-context.tsx": "429743dc9302fb371a1e14455eae5089025776946de4a5d38b2d29a9c8af9caa",
+    "src/state/journey-context.tsx": "8ac5b8e9214efed15ccc1dc0c6c1d8351733c3137f0b521b10178de372652fbd"
+  },
+  "functionalManifest": {
+    "files": 2375,
+    "aggregateSha256": "5cc8ee67f9e5346f7987c01ae2149b7165e100ad7bdf60bcb81d1fd8839552e3",
+    "finalVsTestedDelta": 0
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-entry-recovery-repaired start; sysctl vm.loadavg 1minute"
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "label": "entry-effects-before",
+      "start": "2026-10-13T16:15:49.402477+00:00",
+      "values": [
+        26.4892578125,
+        14.4736328125,
+        12.86767578125
+      ]
+    },
+    {
+      "label": "entry-proof-observer-repaired",
+      "start": "2026-10-13T16:13:56.516180+00:00",
+      "values": [
+        3.5791015625,
+        8.70361328125,
+        10.96337890625
+      ]
+    },
+    {
+      "label": "entry-proof",
+      "start": "2026-10-13T16:13:09.881765+00:00",
+      "values": [
+        4.046875,
+        9.62841796875,
+        11.3974609375
+      ]
+    },
+    {
+      "label": "focused-after",
+      "start": "2026-10-13T15:39:15.616174+00:00",
+      "values": [
+        6.626953125,
+        6.95166015625,
+        9.7080078125
+      ]
+    },
+    {
+      "label": "focused-entry-recovery-repaired",
+      "start": "2026-10-13T16:17:36.281313+00:00",
+      "values": [
+        21.04638671875,
+        15.85693359375,
+        13.57080078125
+      ]
+    },
+    {
+      "label": "focused-entry-recovery",
+      "start": "2026-10-13T16:16:31.506041+00:00",
+      "values": [
+        16.7119140625,
+        13.64013671875,
+        12.646484375
+      ]
+    },
+    {
+      "label": "focused-settlement",
+      "start": "2026-10-13T16:00:54.096424+00:00",
+      "values": [
+        4.5654296875,
+        9.287109375,
+        9.50244140625
+      ]
+    },
+    {
+      "label": "full-entry-recovery",
+      "start": "2026-10-13T16:25:02.141575+00:00",
+      "values": [
+        5.11328125,
+        8.6240234375,
+        10.8212890625
+      ]
+    },
+    {
+      "label": "full",
+      "start": "2026-10-13T16:04:04.731672+00:00",
+      "values": [
+        34.533203125,
+        17.6650390625,
+        12.67919921875
+      ]
+    },
+    {
+      "label": "knip-entry-recovery",
+      "start": "2026-10-13T16:23:05.139765+00:00",
+      "values": [
+        8.95849609375,
+        10.841796875,
+        11.8349609375
+      ]
+    },
+    {
+      "label": "knip-settlement",
+      "start": "2026-10-13T16:03:19.647807+00:00",
+      "values": [
+        21.6953125,
+        13.1865234375,
+        10.92236328125
+      ]
+    },
+    {
+      "label": "knip",
+      "start": "2026-10-13T15:41:08.226916+00:00",
+      "values": [
+        5.8583984375,
+        6.42138671875,
+        9.13818359375
+      ]
+    },
+    {
+      "label": "latch-chain-proof",
+      "start": "2026-10-13T15:54:51.564194+00:00",
+      "values": [
+        17.08984375,
+        12.3603515625,
+        9.837890625
+      ]
+    },
+    {
+      "label": "latch-proof-fs-repaired",
+      "start": "2026-10-13T15:49:34.630282+00:00",
+      "values": [
+        10.14111328125,
+        5.49365234375,
+        7.11767578125
+      ]
+    },
+    {
+      "label": "latch-proof-mts-repaired",
+      "start": "2026-10-13T15:49:24.646829+00:00",
+      "values": [
+        6.04541015625,
+        4.6005859375,
+        6.82861328125
+      ]
+    },
+    {
+      "label": "latch-proof-path-repaired",
+      "start": "2026-10-13T15:49:08.114614+00:00",
+      "values": [
+        5.30517578125,
+        4.36767578125,
+        6.80126953125
+      ]
+    },
+    {
+      "label": "latch-proof",
+      "start": "2026-10-13T15:48:52.149286+00:00",
+      "values": [
+        5.35302734375,
+        4.3349609375,
+        6.833984375
+      ]
+    },
+    {
+      "label": "qa-scenes-lint",
+      "start": "2026-10-13T16:33:56.651695+00:00",
+      "values": [
+        24.76708984375,
+        20.67431640625,
+        15.38671875
+      ]
+    },
+    {
+      "label": "qa-scenes-typecheck",
+      "start": "2026-10-13T16:33:16.841950+00:00",
+      "values": [
+        32.08544921875,
+        21.13330078125,
+        15.28369140625
+      ]
+    },
+    {
+      "label": "review-entry-recovery-repaired",
+      "start": "2026-10-13T16:20:40.135640+00:00",
+      "values": [
+        7.2587890625,
+        11.6923828125,
+        12.27392578125
+      ]
+    },
+    {
+      "label": "review-entry-recovery",
+      "start": "2026-10-13T16:18:08.688058+00:00",
+      "values": [
+        16.9384765625,
+        15.37060546875,
+        13.47412109375
+      ]
+    },
+    {
+      "label": "review-repaired",
+      "start": "2026-10-13T15:40:44.686318+00:00",
+      "values": [
+        4.3330078125,
+        6.17236328125,
+        9.1328125
+      ]
+    },
+    {
+      "label": "review-settlement-repaired",
+      "start": "2026-10-13T16:02:35.051309+00:00",
+      "values": [
+        14.943359375,
+        10.6171875,
+        9.93115234375
+      ]
+    },
+    {
+      "label": "review-settlement",
+      "start": "2026-10-13T16:01:18.434712+00:00",
+      "values": [
+        4.3115234375,
+        8.9267578125,
+        9.36767578125
+      ]
+    },
+    {
+      "label": "review",
+      "start": "2026-10-13T15:40:01.754069+00:00",
+      "values": [
+        5.38623046875,
+        6.60546875,
+        9.43896484375
+      ]
+    },
+    {
+      "label": "schema",
+      "start": "2026-10-13T17:27:34.759546+00:00",
+      "values": [
+        10.89013671875,
+        10.00537109375,
+        9.90771484375
+      ]
+    }
+  ],
+  "testDelta": {
+    "files": 0,
+    "lines": 275,
+    "jsdomFiles": 0,
+    "configuredEntryPointsAdded": 0,
+    "configuredEntryPointsRemoved": 0,
+    "plainModulesAdded": 0,
+    "plainModulesRemoved": 0,
+    "existingAffectedFiles": {
+      "src/rules/journey/journey-draft.test.ts": {
+        "before": 209,
+        "after": 292
+      },
+      "src/screens/cumulus_adapters/dreamscape-view-model.test.ts": {
+        "before": 412,
+        "after": 449
+      },
+      "src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx": {
+        "before": 341,
+        "after": 457
+      },
+      "src/cumulus/screens/offer-screens.test.tsx": {
+        "before": 353,
+        "after": 392
+      }
+    },
+    "finalFocused": "72 tests/4 existing files; synthetic fixtures, no copy/default/private/timing/statistical gates"
+  },
+  "validationAttempts": [
+    {
+      "label": "entry-effects-before",
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:15:49.402477+00:00",
+      "end": "2026-10-13T16:15:55.243293+00:00",
+      "elapsedS": 5.840623416006565,
+      "exitCode": 1,
+      "hostLoadAtStart": [
+        26.4892578125,
+        14.4736328125,
+        12.86767578125
+      ],
+      "receiptSha256": "0c019852005c25004d321a4fa7b0958543c0e0938b97df10bae82c4ea934c917",
+      "rawOutput": "/tmp/root-o73j/helper/entry-effects-before.txt",
+      "qualification": "Three intended causal failures for same-mounted holding/essence/pool correction on original dependencies."
+    },
+    {
+      "label": "entry-proof-observer-repaired",
+      "cmd": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/tmp/root-o73j/helper/entry.config.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:13:56.516180+00:00",
+      "end": "2026-10-13T16:13:59.457109+00:00",
+      "elapsedS": 2.9408064580056816,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        3.5791015625,
+        8.70361328125,
+        10.96337890625
+      ],
+      "receiptSha256": "e55d18483973e6c76959b82ce43cf2761da6dd2d195570ad32ac52a78f6efc08",
+      "rawOutput": "/tmp/root-o73j/helper/entry-proof-observer-repaired.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "entry-proof",
+      "cmd": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/tmp/root-o73j/helper/entry.config.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:13:09.881765+00:00",
+      "end": "2026-10-13T16:13:12.959095+00:00",
+      "elapsedS": 3.0772096250148024,
+      "exitCode": 1,
+      "hostLoadAtStart": [
+        4.046875,
+        9.62841796875,
+        11.3974609375
+      ],
+      "receiptSha256": "13d964b077b3d4ccb6bee0ef77ddf12d23757d31d1bfc73c377a388b5c3cd31f",
+      "rawOutput": "/tmp/root-o73j/helper/entry-proof.txt",
+      "qualification": "External diagnostic setup lacked ResizeObserver; not application failure."
+    },
+    {
+      "label": "focused-after",
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T15:39:15.616174+00:00",
+      "end": "2026-10-13T15:39:21.291493+00:00",
+      "elapsedS": 5.675058416993124,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        6.626953125,
+        6.95166015625,
+        9.7080078125
+      ],
+      "receiptSha256": "f9144d72dda77c22ec5a15af76326039c515dd39cb51c2f5bf8a3a50848e144a",
+      "rawOutput": "/tmp/root-o73j/helper/focused-after.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "focused-entry-recovery-repaired",
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx",
+        "src/cumulus/screens/offer-screens.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:17:36.281313+00:00",
+      "end": "2026-10-13T16:17:45.764587+00:00",
+      "elapsedS": 9.483068999979878,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        21.04638671875,
+        15.85693359375,
+        13.57080078125
+      ],
+      "receiptSha256": "e19488627ab51fc3d20731d5068e99d64a61637a1f1f867e148072bbbaef2163",
+      "rawOutput": "/tmp/root-o73j/helper/focused-entry-recovery-repaired.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "focused-entry-recovery",
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx",
+        "src/cumulus/screens/offer-screens.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:16:31.506041+00:00",
+      "end": "2026-10-13T16:16:41.005893+00:00",
+      "elapsedS": 9.499621374998242,
+      "exitCode": 1,
+      "hostLoadAtStart": [
+        16.7119140625,
+        13.64013671875,
+        12.646484375
+      ],
+      "receiptSha256": "3e48412f9f11fbbc8460975064b4ff484cfa6d93995b4c70c83e98aefc85b21f",
+      "rawOutput": "/tmp/root-o73j/helper/focused-entry-recovery.txt",
+      "qualification": "Public entry retries succeeded; immediate DOM card-count assertions observed the outgoing Framer grid. Replaced timing-sensitive DOM assertion with prepared public offer-state assertion; no animation threshold."
+    },
+    {
+      "label": "focused-settlement",
+      "cmd": [
+        "npm",
+        "test",
+        "--",
+        "src/rules/journey/journey-draft.test.ts",
+        "src/screens/cumulus_adapters/dreamscape-view-model.test.ts",
+        "src/screens/cumulus_adapters/DreamscapeScreenAdapter.test.tsx",
+        "src/cumulus/screens/offer-screens.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:00:54.096424+00:00",
+      "end": "2026-10-13T16:01:00.723571+00:00",
+      "elapsedS": 6.626980208995519,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        4.5654296875,
+        9.287109375,
+        9.50244140625
+      ],
+      "receiptSha256": "2af78459144cee8275dfea2468eed7de8c5cb917d72681fc73a382f2067a6df0",
+      "rawOutput": "/tmp/root-o73j/helper/focused-settlement.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "full-entry-recovery",
+      "cmd": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:25:02.141575+00:00",
+      "end": "2026-10-13T16:26:41.408806+00:00",
+      "elapsedS": 99.2658308329992,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        5.11328125,
+        8.6240234375,
+        10.8212890625
+      ],
+      "receiptSha256": "8de80865c6194f05a7a91cfa0f7ef7b56ac07dd8b41e171f23a9012859ad3e9c",
+      "rawOutput": "/tmp/root-o73j/helper/full-entry-recovery.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "full",
+      "cmd": [
+        "/usr/bin/lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "review:full"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:04:04.731672+00:00",
+      "end": "2026-10-13T16:06:00.967475+00:00",
+      "elapsedS": 116.23417991702445,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        34.533203125,
+        17.6650390625,
+        12.67919921875
+      ],
+      "receiptSha256": "e47f4cc89e6d8a3be279e2382a442b1e7bda1525f5841c2881cab43689e7f029",
+      "rawOutput": "/tmp/root-o73j/helper/full.txt",
+      "qualification": "Passing pre-entry-effect-expansion snapshot; superseded for final behavior by full-entry-recovery, preserved distinctly."
+    },
+    {
+      "label": "knip-entry-recovery",
+      "cmd": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:23:05.139765+00:00",
+      "end": "2026-10-13T16:23:09.835528+00:00",
+      "elapsedS": 4.695639249985106,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        8.95849609375,
+        10.841796875,
+        11.8349609375
+      ],
+      "receiptSha256": "2587a65039d387bd7c849d0db332999624385392398c424988e3352cf0722528",
+      "rawOutput": "/tmp/root-o73j/helper/knip-entry-recovery.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "knip-settlement",
+      "cmd": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:03:19.647807+00:00",
+      "end": "2026-10-13T16:03:24.308663+00:00",
+      "elapsedS": 4.660697542014532,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        21.6953125,
+        13.1865234375,
+        10.92236328125
+      ],
+      "receiptSha256": "a5e3ccff6a0e8307ad0199d8f598b10cf18c04e9deb7af3cc5024471cd38aa64",
+      "rawOutput": "/tmp/root-o73j/helper/knip-settlement.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "knip",
+      "cmd": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T15:41:08.226916+00:00",
+      "end": "2026-10-13T15:41:12.332262+00:00",
+      "elapsedS": 4.104866208013846,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        5.8583984375,
+        6.42138671875,
+        9.13818359375
+      ],
+      "receiptSha256": "638e8259cf858b48a68561ab1af0f7334e54a81548060fc06a0f4ea3010aa1c9",
+      "rawOutput": "/tmp/root-o73j/helper/knip.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "latch-chain-proof",
+      "cmd": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/tmp/root-o73j/helper/latch.config.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T15:54:51.564194+00:00",
+      "end": "2026-10-13T15:54:55.872603+00:00",
+      "elapsedS": 4.3080670409835875,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        17.08984375,
+        12.3603515625,
+        9.837890625
+      ],
+      "receiptSha256": "d6d20c2674176d6fdd347ea4e7358e4b2cac5e4a72863abacad57ae65061d2ea",
+      "rawOutput": "/tmp/root-o73j/helper/latch-chain-proof.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "latch-proof-fs-repaired",
+      "cmd": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/tmp/root-o73j/helper/latch.config.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T15:49:34.630282+00:00",
+      "end": "2026-10-13T15:49:38.356589+00:00",
+      "elapsedS": 3.7261972920096014,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        10.14111328125,
+        5.49365234375,
+        7.11767578125
+      ],
+      "receiptSha256": "74b6a009bdec01fab78541e1162b17a6d409dbedb4803873e1e6e52bbe509d3e",
+      "rawOutput": "/tmp/root-o73j/helper/latch-proof-fs-repaired.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "latch-proof-mts-repaired",
+      "cmd": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/tmp/root-o73j/helper/latch.config.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T15:49:24.646829+00:00",
+      "end": "2026-10-13T15:49:25.239156+00:00",
+      "elapsedS": 0.5922367919993121,
+      "exitCode": 1,
+      "hostLoadAtStart": [
+        6.04541015625,
+        4.6005859375,
+        6.82861328125
+      ],
+      "receiptSha256": "addf119bb2314242e791d38d7ef48ab5acec6f91eadbebd79a03d59ac6f78d97",
+      "rawOutput": "/tmp/root-o73j/helper/latch-proof-mts-repaired.txt",
+      "qualification": "External scratch filesystem reader path setup failure before assertions."
+    },
+    {
+      "label": "latch-proof-path-repaired",
+      "cmd": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/tmp/root-o73j/helper/latch.config.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T15:49:08.114614+00:00",
+      "end": "2026-10-13T15:49:08.724561+00:00",
+      "elapsedS": 0.609805125015555,
+      "exitCode": 1,
+      "hostLoadAtStart": [
+        5.30517578125,
+        4.36767578125,
+        6.80126953125
+      ],
+      "receiptSha256": "bfc40c3c0c54b3425cabe4168c014097725025450101f68a614f8bdfc1b49099",
+      "rawOutput": "/tmp/root-o73j/helper/latch-proof-path-repaired.txt",
+      "qualification": "External scratch path setup failure before assertions."
+    },
+    {
+      "label": "latch-proof",
+      "cmd": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "/tmp/root-o73j/helper/latch.config.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T15:48:52.149286+00:00",
+      "end": "2026-10-13T15:48:53.072338+00:00",
+      "elapsedS": 0.9228963339992333,
+      "exitCode": 1,
+      "hostLoadAtStart": [
+        5.35302734375,
+        4.3349609375,
+        6.833984375
+      ],
+      "receiptSha256": "4b85e0c0a4a9178f6d5434c3d54a5141298406f60e2e3d3b1d67ca26e8640fbf",
+      "rawOutput": "/tmp/root-o73j/helper/latch-proof.txt",
+      "qualification": "External scratch setup failure before assertions."
+    },
+    {
+      "label": "qa-scenes-lint",
+      "cmd": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "src/runtime/qa-scenes.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:33:56.651695+00:00",
+      "end": "2026-10-13T16:33:59.628254+00:00",
+      "elapsedS": 2.9764222909871023,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        24.76708984375,
+        20.67431640625,
+        15.38671875
+      ],
+      "receiptSha256": "b9ceb6b568ed5929c2da64d8d32cbac7e187ab11582f5fd5cbb5638185925b3d",
+      "rawOutput": "/tmp/root-o73j/helper/qa-scenes-lint.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "qa-scenes-typecheck",
+      "cmd": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:33:16.841950+00:00",
+      "end": "2026-10-13T16:33:22.670807+00:00",
+      "elapsedS": 5.82848120800918,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        32.08544921875,
+        21.13330078125,
+        15.28369140625
+      ],
+      "receiptSha256": "c900ac5f4dba067b827173eac72760732c2d577588aca4a24bb93f53cf25bb7e",
+      "rawOutput": "/tmp/root-o73j/helper/qa-scenes-typecheck.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "review-entry-recovery-repaired",
+      "cmd": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:20:40.135640+00:00",
+      "end": "2026-10-13T16:21:01.627825+00:00",
+      "elapsedS": 21.491818292008247,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        7.2587890625,
+        11.6923828125,
+        12.27392578125
+      ],
+      "receiptSha256": "7e90663443fdd3c77a254b8cfc64e686794e4bcbae71cf1a1e487db83d58774c",
+      "rawOutput": "/tmp/root-o73j/helper/review-entry-recovery-repaired.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "review-entry-recovery",
+      "cmd": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:18:08.688058+00:00",
+      "end": "2026-10-13T16:18:34.769194+00:00",
+      "elapsedS": 26.080693291994976,
+      "exitCode": 2,
+      "hostLoadAtStart": [
+        16.9384765625,
+        15.37060546875,
+        13.47412109375
+      ],
+      "receiptSha256": "04878e2f8d80b7cc3924a99dda9ddcdb00efb29b500591a1441c0fb069598950",
+      "rawOutput": "/tmp/root-o73j/helper/review-entry-recovery.txt",
+      "qualification": "Own JourneyContent cast omitted required fields; related622 tests passed; reused existing Partial fixture helper."
+    },
+    {
+      "label": "review-repaired",
+      "cmd": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T15:40:44.686318+00:00",
+      "end": "2026-10-13T15:41:02.597555+00:00",
+      "elapsedS": 17.91112679199432,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        4.3330078125,
+        6.17236328125,
+        9.1328125
+      ],
+      "receiptSha256": "9ed2a37abc1d2563a46f6af12e7947981b0f0f3e2bfa62d2b6a2358d36d5a250",
+      "rawOutput": "/tmp/root-o73j/helper/review-repaired.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "review-settlement-repaired",
+      "cmd": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:02:35.051309+00:00",
+      "end": "2026-10-13T16:03:04.772752+00:00",
+      "elapsedS": 29.72092583301128,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        14.943359375,
+        10.6171875,
+        9.93115234375
+      ],
+      "receiptSha256": "c2e97889b11ecae262fbfee249f5fbcb5c7d9cf35159bc7588184a4c8f9a444e",
+      "rawOutput": "/tmp/root-o73j/helper/review-settlement-repaired.txt",
+      "qualification": "Terminal result applies to the exact command/source stage recorded; successful earlier stages are not claimed to cover later changes."
+    },
+    {
+      "label": "review-settlement",
+      "cmd": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T16:01:18.434712+00:00",
+      "end": "2026-10-13T16:01:37.431465+00:00",
+      "elapsedS": 18.996444124990376,
+      "exitCode": 1,
+      "hostLoadAtStart": [
+        4.3115234375,
+        8.9267578125,
+        9.36767578125
+      ],
+      "receiptSha256": "15e4730d6f11db7410c3973eb6398c22b540694ac024d9aea9045433d1b74391",
+      "rawOutput": "/tmp/root-o73j/helper/review-settlement.txt",
+      "qualification": "Own async act callback had no await (2 lint errors); related619 tests passed; fixed test callback."
+    },
+    {
+      "label": "review",
+      "cmd": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T15:40:01.754069+00:00",
+      "end": "2026-10-13T15:40:20.015215+00:00",
+      "elapsedS": 18.26104804201168,
+      "exitCode": 2,
+      "hostLoadAtStart": [
+        5.38623046875,
+        6.60546875,
+        9.43896484375
+      ],
+      "receiptSha256": "6c0542073c33a400b67b56d1de8730e24a18c6f4add05f29fa8783322d433428",
+      "rawOutput": "/tmp/root-o73j/helper/review.txt",
+      "qualification": "Own test Array.at unsupported and unbound-method lint; repaired indices and hoisted function. Related tests executed; this attempt is not passing validation."
+    },
+    {
+      "label": "schema",
+      "cmd": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+      "start": "2026-10-13T17:27:34.759546+00:00",
+      "end": "2026-10-13T17:27:34.879167+00:00",
+      "elapsedS": 0.1195313329808414,
+      "exitCode": 0,
+      "hostLoadAtStart": [
+        10.89013671875,
+        10.00537109375,
+        9.90771484375
+      ],
+      "receiptSha256": "8c588509697595e64dfc78614fccfb0b2e83b298f73fbcb0d56c5d4aa232f4e0",
+      "qualification": "Explicit evidence-only schema validation after original QA fixture restoration; functional source is identical to final full-tested snapshot."
+    }
+  ],
+  "unclockedEarlyAttempts": {
+    "beforeVitest": "Scratch public engine/reducer/view diagnostics: baseline succeeds, expanded empty/partial initial and empty next fail atomically, both target log flags disagree with view. Original failures reproduced before tracked source writes; /tmp/root-o73j/helper/before.json and before-vitest.txt. No invented exact outer timestamps.",
+    "setupFailures": "Two initial plain tsx attempts failed before diagnostic execution (CJS top-level await and PNG import); early focused-before8 failures48pass56 (4expectedDraft+2expectedVM+2frozenregistryspysetup); corrected adapter-before2expectedflagsfailures5pass. Logs retained scratch; no separate receipt windows were captured."
+  },
+  "fullRunScopes": [
+    {
+      "label": "full",
+      "workers": 2,
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "firstCanonicalStage": "2026-10-13T16:04:04.981Z",
+      "combinedLockAndLaunchS": 0.249328,
+      "lockWaitAlone": "unknown",
+      "verdict": "pass pre-entry-effect behavior;369files6820tests"
+    },
+    {
+      "label": "full-entry-recovery",
+      "workers": 2,
+      "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+      "firstCanonicalStage": "2026-10-13T16:25:02.333Z",
+      "combinedLockAndLaunchS": 0.191425,
+      "lockWaitAlone": "unknown",
+      "verdict": "pass finalsource;369files6823tests"
+    }
+  ],
+  "nativeQaAttempts": [
+    {
+      "label": "draft-entry",
+      "start": "2026-10-13T16:37:26.571132+00:00",
+      "end": "2026-10-13T16:38:18.060018+00:00",
+      "elapsedS": 51.53475837499718,
+      "exitCode": 1,
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/draft-entry.receipt.json",
+      "receiptSha256": "6334848e29dcb7993f6c0907d9bd1f9cde3083e5bb1a68bde56d80853c92bfcd",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-s91DqE/qa-entry.result.json",
+      "resultSha256": "e165c1574db3a6794c928a9f305f9c06784f4249678c734b0d5dc4e283076969",
+      "invocation": "run-s91DqE",
+      "hostLoad": 17.3046875,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 5959
+        }
+      ],
+      "error": "desktop#0: Error: committed denied-entry: Error: page.waitForFunction: Error: Unrelated or failed bounced event in public replay\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:16:215)\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at async observe (evalmachine.<anonymous>:1660:15)\n    at async deniedEntry (evalmachine.<anonymous>:1698:43)\n    at async evalmachine.<anonymous>:1715:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+      "captures": [],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-s91DqE/qa-entry-desktop.jsonl",
+          "gameId": "2jnsbu",
+          "selectedBy": "url",
+          "rows": 43,
+          "reason": null
+        }
+      ],
+      "remainingOwnedGroups": [],
+      "resourceReceipt": "whole-matrix-resource-ledger.json",
+      "qualification": "Desktop step0 public observer expected one denial; root-router renderStrict causes exactly two same-key ENTER_DRAFT_SITE bounces. Product state atomic; mobile unexecuted."
+    },
+    {
+      "label": "draft-entry-retry",
+      "start": "2026-10-13T16:50:46.954038+00:00",
+      "end": "2026-10-13T16:51:10.702888+00:00",
+      "elapsedS": 23.795385749981506,
+      "exitCode": 0,
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/draft-entry-retry.receipt.json",
+      "receiptSha256": "5084935247e2601d7e7fa9832109d5e505f12ebef193f613862d33d3a0c3cb37",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-jMyZEF/qa-entry.result.json",
+      "resultSha256": "84f0ac5379e49f470da04eb8291407317acc4b968d423f72bdea8c318b07a4d5",
+      "invocation": "run-jMyZEF",
+      "hostLoad": 3.9775390625,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 7696
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 5125
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 4994
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 3443
+        }
+      ],
+      "error": null,
+      "captures": [
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/draft?goto=o73j-draft-entry-denial&seed=3&debug=1&game=anmgai",
+          "width": 1440,
+          "height": 900,
+          "filename": "entry-denied-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/draft?goto=o73j-draft-entry-denial&seed=3&debug=1&game=anmgai",
+          "width": 1440,
+          "height": 900,
+          "filename": "entry-recovered-same-mount-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/draft?goto=o73j-draft-entry-denial&seed=3&debug=1&game=ufq7bp",
+          "width": 390,
+          "height": 844,
+          "filename": "entry-denied-mobile.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/draft?goto=o73j-draft-entry-denial&seed=3&debug=1&game=ufq7bp",
+          "width": 390,
+          "height": 844,
+          "filename": "entry-recovered-same-mount-mobile.png"
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-jMyZEF/qa-entry-desktop.jsonl",
+          "gameId": "anmgai",
+          "selectedBy": "url",
+          "rows": 60,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-jMyZEF/qa-entry-mobile.jsonl",
+          "gameId": "ufq7bp",
+          "selectedBy": "url",
+          "rows": 60,
+          "reason": null
+        }
+      ],
+      "remainingOwnedGroups": [],
+      "resourceReceipt": "whole-matrix-resource-ledger.json",
+      "qualification": "Both desktop/mobile workflow cells passed all executed state/log/replay/geometry/qa.assertCaps checks. Top-level caps[] alone is not evidence of buffer values; successful executed qa.assertCaps calls are the Caps evidence."
+    },
+    {
+      "label": "draft-denial",
+      "start": "2026-10-13T16:51:20.407624+00:00",
+      "end": "2026-10-13T16:51:47.513356+00:00",
+      "elapsedS": 27.153192166006193,
+      "exitCode": 0,
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/draft-denial.receipt.json",
+      "receiptSha256": "28be07138338f534e5d1fc5248bfbd84bc872bae864a98c3e7cbb176632df7f0",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-6BVeJ2/qa-denial.result.json",
+      "resultSha256": "0a2be752465cc50e79881ff2b8e675669d49b381dbf4ec86c8fbc12e2910e1f3",
+      "invocation": "run-6BVeJ2",
+      "hostLoad": 3.6298828125,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 9775
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 5455
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 6276
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 3399
+        }
+      ],
+      "error": null,
+      "captures": [
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=o73j-draft-denial&seed=3&debug=1&game=qdh3s9",
+          "width": 1440,
+          "height": 900,
+          "filename": "draft-denied-restored-desktop.png"
+        },
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=o73j-draft-denial&seed=3&debug=1&game=qdh3s9",
+          "width": 1440,
+          "height": 900,
+          "filename": "draft-recovered-same-mount-desktop.png"
+        },
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=o73j-draft-denial&seed=3&debug=1&game=tiok5q",
+          "width": 390,
+          "height": 844,
+          "filename": "draft-denied-restored-mobile.png"
+        },
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=o73j-draft-denial&seed=3&debug=1&game=tiok5q",
+          "width": 390,
+          "height": 844,
+          "filename": "draft-recovered-same-mount-mobile.png"
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-6BVeJ2/qa-denial-desktop.jsonl",
+          "gameId": "qdh3s9",
+          "selectedBy": "url",
+          "rows": 43,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-6BVeJ2/qa-denial-mobile.jsonl",
+          "gameId": "tiok5q",
+          "selectedBy": "url",
+          "rows": 43,
+          "reason": null
+        }
+      ],
+      "remainingOwnedGroups": [],
+      "resourceReceipt": "whole-matrix-resource-ledger.json",
+      "qualification": "Both desktop/mobile workflow cells passed all executed state/log/replay/geometry/qa.assertCaps checks. Top-level caps[] alone is not evidence of buffer values; successful executed qa.assertCaps calls are the Caps evidence."
+    },
+    {
+      "label": "draft-clam",
+      "start": "2026-10-13T16:52:03.737422+00:00",
+      "end": "2026-10-13T16:53:21.418226+00:00",
+      "elapsedS": 77.730326082994,
+      "exitCode": 0,
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/draft-clam.receipt.json",
+      "receiptSha256": "095199cee08a079652372fc2b55e610827552148fbc5d24b7ed99b0468f2e387",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-9cbSqa/qa-draft.result.json",
+      "resultSha256": "cec4178422c41cb00aa6a06db2d8acab78b2a718d747c2dd2eb72562894428c7",
+      "invocation": "run-9cbSqa",
+      "hostLoad": 4.38671875,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 6912
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 648
+        },
+        {
+          "viewport": "desktop",
+          "step": 2,
+          "ms": 579
+        },
+        {
+          "viewport": "desktop",
+          "step": 3,
+          "ms": 541
+        },
+        {
+          "viewport": "desktop",
+          "step": 4,
+          "ms": 568
+        },
+        {
+          "viewport": "desktop",
+          "step": 5,
+          "ms": 6133
+        },
+        {
+          "viewport": "desktop",
+          "step": 6,
+          "ms": 3612
+        },
+        {
+          "viewport": "desktop",
+          "step": 7,
+          "ms": 5841
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 4269
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 577
+        },
+        {
+          "viewport": "mobile",
+          "step": 2,
+          "ms": 552
+        },
+        {
+          "viewport": "mobile",
+          "step": 3,
+          "ms": 582
+        },
+        {
+          "viewport": "mobile",
+          "step": 4,
+          "ms": 533
+        },
+        {
+          "viewport": "mobile",
+          "step": 5,
+          "ms": 33903
+        },
+        {
+          "viewport": "mobile",
+          "step": 6,
+          "ms": 4167
+        },
+        {
+          "viewport": "mobile",
+          "step": 7,
+          "ms": 5718
+        }
+      ],
+      "error": null,
+      "captures": [
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=3&debug=1&game=k9hod9",
+          "width": 1440,
+          "height": 900,
+          "filename": "draft-initial4-desktop.png"
+        },
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=3&debug=1&game=k9hod9",
+          "width": 1440,
+          "height": 900,
+          "filename": "draft-extra-picked-desktop.png"
+        },
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=3&debug=1&game=k9hod9",
+          "width": 1440,
+          "height": 900,
+          "filename": "draft-next-without-modifiers4-desktop.png"
+        },
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=3&debug=1&game=pc865x",
+          "width": 390,
+          "height": 844,
+          "filename": "draft-initial4-mobile.png"
+        },
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=3&debug=1&game=pc865x",
+          "width": 390,
+          "height": 844,
+          "filename": "draft-extra-picked-mobile.png"
+        },
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow/draft?goto=draft&seed=3&debug=1&game=pc865x",
+          "width": 390,
+          "height": 844,
+          "filename": "draft-next-without-modifiers4-mobile.png"
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-9cbSqa/qa-draft-desktop.jsonl",
+          "gameId": "k9hod9",
+          "selectedBy": "url",
+          "rows": 69,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-9cbSqa/qa-draft-mobile.jsonl",
+          "gameId": "pc865x",
+          "selectedBy": "url",
+          "rows": 69,
+          "reason": null
+        }
+      ],
+      "remainingOwnedGroups": [],
+      "resourceReceipt": "whole-matrix-resource-ledger.json",
+      "qualification": "Both desktop/mobile workflow cells passed all executed state/log/replay/geometry/qa.assertCaps checks. Top-level caps[] alone is not evidence of buffer values; successful executed qa.assertCaps calls are the Caps evidence."
+    },
+    {
+      "label": "reward-held",
+      "start": "2026-10-13T16:53:41.086285+00:00",
+      "end": "2026-10-13T16:54:10.411363+00:00",
+      "elapsedS": 29.37060495899641,
+      "exitCode": 0,
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/reward-held.receipt.json",
+      "receiptSha256": "00f400ac6573ddd5cba0569747d842c35ec42a72ea451d6ed48c1c69ecf91495",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-eVPIZb/qa-sites.result.json",
+      "resultSha256": "bbd4689798c05a123f489f187564a5111e090a78bcc9075d3b3da2b50784c197",
+      "invocation": "run-eVPIZb",
+      "hostLoad": 19.5966796875,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 9611
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 5741
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 6111
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 4077
+        }
+      ],
+      "error": null,
+      "captures": [
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=skgehg",
+          "width": 1440,
+          "height": 900,
+          "filename": "held-overview-desktop.png"
+        },
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=skgehg",
+          "width": 1440,
+          "height": 900,
+          "filename": "prepared-enhanced-desktop.png"
+        },
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=owoxco",
+          "width": 390,
+          "height": 844,
+          "filename": "held-overview-mobile.png"
+        },
+        {
+          "href": "http://localhost:5174/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=owoxco",
+          "width": 390,
+          "height": 844,
+          "filename": "prepared-enhanced-mobile.png"
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-eVPIZb/qa-sites-desktop.jsonl",
+          "gameId": "skgehg",
+          "selectedBy": "url",
+          "rows": 32,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-eVPIZb/qa-sites-mobile.jsonl",
+          "gameId": "owoxco",
+          "selectedBy": "url",
+          "rows": 32,
+          "reason": null
+        }
+      ],
+      "remainingOwnedGroups": [],
+      "resourceReceipt": "whole-matrix-resource-ledger.json",
+      "qualification": "Both desktop/mobile workflow cells passed all executed state/log/replay/geometry/qa.assertCaps checks. Top-level caps[] alone is not evidence of buffer values; successful executed qa.assertCaps calls are the Caps evidence."
+    },
+    {
+      "label": "reward-lost",
+      "start": "2026-10-13T16:54:25.806195+00:00",
+      "end": "2026-10-13T16:55:10.911922+00:00",
+      "elapsedS": 45.158477916993434,
+      "exitCode": 1,
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/reward-lost.receipt.json",
+      "receiptSha256": "38525caf04720f6a48843640e98d8a3357ce81222f711747a33bdfe6aa8f7489",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-B9V0jD/qa-sites.result.json",
+      "resultSha256": "eb094d6de1b3d2228d7e42c01284469d0726eebc79f3851892f65c4cc88a5815",
+      "invocation": "run-B9V0jD",
+      "hostLoad": 13.25146484375,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 34252
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 8200
+        }
+      ],
+      "error": "desktop#1: Error: Prepared quote changed on reload\n    at assert (evalmachine.<anonymous>:1654:39)\n    at sitePreparation (evalmachine.<anonymous>:1701:50)\n    at async evalmachine.<anonymous>:1710:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+      "captures": [
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=qz8txj",
+          "width": 1440,
+          "height": 900,
+          "filename": "held-overview-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=qz8txj",
+          "width": 1440,
+          "height": 900,
+          "filename": "prepared-ordinary-desktop.png"
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-B9V0jD/qa-sites-desktop.jsonl",
+          "gameId": "qz8txj",
+          "selectedBy": "url",
+          "rows": 33,
+          "reason": null
+        }
+      ],
+      "remainingOwnedGroups": [],
+      "resourceReceipt": "whole-matrix-resource-ledger.json",
+      "qualification": "Desktop step1 compared pending runtime with collected runtime; real automatic ACCEPT_REWARD seq5 legitimately advanced accepted progress. Mobile unexecuted."
+    },
+    {
+      "label": "reward-lost-retry",
+      "start": "2026-10-13T17:04:04.643325+00:00",
+      "end": "2026-10-13T17:04:21.185295+00:00",
+      "elapsedS": 16.591081708000274,
+      "exitCode": 1,
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/reward-lost-retry.receipt.json",
+      "receiptSha256": "91c6fa235ad75ad89c5a59645a255ce75fed5afb6653544a8f4e877b0ac39873",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-KFy23X/qa-sites.result.json",
+      "resultSha256": "2a1a6049209b606e0e5c5477079d8a4f2454c2a5cf9e1813c9ee6ca8c41b2c5e",
+      "invocation": "run-KFy23X",
+      "hostLoad": 8.03564453125,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 8959
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 4621
+        }
+      ],
+      "error": "desktop#1: TypeError: qa.log is not a function\n    at sitePreparation (evalmachine.<anonymous>:1701:5)\n    at async evalmachine.<anonymous>:1728:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+      "captures": [
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=orkdrj",
+          "width": 1440,
+          "height": 900,
+          "filename": "held-overview-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=orkdrj",
+          "width": 1440,
+          "height": 900,
+          "filename": "prepared-ordinary-desktop.png"
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-KFy23X/qa-sites-desktop.jsonl",
+          "gameId": "orkdrj",
+          "selectedBy": "url",
+          "rows": 30,
+          "reason": null
+        }
+      ],
+      "remainingOwnedGroups": [],
+      "resourceReceipt": "whole-matrix-resource-ledger.json",
+      "qualification": "Desktop step1 support TypeError qa.log is not a function. Unsupported diagnostic call was my mistake; collection assertions/mobile unexecuted."
+    },
+    {
+      "label": "reward-lost-retry2",
+      "start": "2026-10-13T17:08:23.858683+00:00",
+      "end": "2026-10-13T17:09:05.191914+00:00",
+      "elapsedS": 41.38250420798431,
+      "exitCode": 0,
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/reward-lost-retry2.receipt.json",
+      "receiptSha256": "2a5e5b808b369c521148b5ef7842ae93a7e42916d01d6246788cb9185a4171f6",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-DlHTM3/qa-sites.result.json",
+      "resultSha256": "ab93859185e9f0501a14fc1f36198d998c80aa5867f34b824cb3970d3427367e",
+      "invocation": "run-DlHTM3",
+      "hostLoad": 17.35791015625,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 16811
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 7437
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 7354
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 5525
+        }
+      ],
+      "error": null,
+      "captures": [
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=mjp3ty",
+          "width": 1440,
+          "height": 900,
+          "filename": "held-overview-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=mjp3ty",
+          "width": 1440,
+          "height": 900,
+          "filename": "prepared-ordinary-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=4hx8vs",
+          "width": 390,
+          "height": 844,
+          "filename": "held-overview-mobile.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=reward&seed=3&debug=1&game=4hx8vs",
+          "width": 390,
+          "height": 844,
+          "filename": "prepared-ordinary-mobile.png"
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-DlHTM3/qa-sites-desktop.jsonl",
+          "gameId": "mjp3ty",
+          "selectedBy": "url",
+          "rows": 33,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-DlHTM3/qa-sites-mobile.jsonl",
+          "gameId": "4hx8vs",
+          "selectedBy": "url",
+          "rows": 33,
+          "reason": null
+        }
+      ],
+      "remainingOwnedGroups": [],
+      "resourceReceipt": "whole-matrix-resource-ledger.json",
+      "qualification": "Both desktop/mobile workflow cells passed all executed state/log/replay/geometry/qa.assertCaps checks. Top-level caps[] alone is not evidence of buffer values; successful executed qa.assertCaps calls are the Caps evidence."
+    },
+    {
+      "label": "dreamsignrevelation-held",
+      "start": "2026-10-13T17:09:30.912487+00:00",
+      "end": "2026-10-13T17:09:55.603931+00:00",
+      "elapsedS": 24.738155291997828,
+      "exitCode": 1,
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/dreamsignrevelation-held.receipt.json",
+      "receiptSha256": "0b10d0c30db44ed7a7816b63f44e3f365f403ea9c4225c31498c71fc65ac42b6",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-ojTrEf/qa-sites.result.json",
+      "resultSha256": "0b5654b1098ee7aacb4259bb8fdbbb349dd9778612b391204ef07f720774add3",
+      "invocation": "run-ojTrEf",
+      "hostLoad": 14.7705078125,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 8225
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 5441
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 5965
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 1766
+        }
+      ],
+      "error": "mobile#1: Error: Actual HUD geometry failed\n    at assert (evalmachine.<anonymous>:1654:39)\n    at geometry (evalmachine.<anonymous>:1685:3)\n    at async sitePreparation (evalmachine.<anonymous>:1699:2)\n    at async evalmachine.<anonymous>:1725:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+      "captures": [
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=o73j-revelation-unopened&seed=3&debug=1&game=fmftq9",
+          "width": 1440,
+          "height": 900,
+          "filename": "held-overview-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/dreamsign-revelation?goto=o73j-revelation-unopened&seed=3&debug=1&game=fmftq9",
+          "width": 1440,
+          "height": 900,
+          "filename": "prepared-enhanced-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=o73j-revelation-unopened&seed=3&debug=1&game=jdjhey",
+          "width": 390,
+          "height": 844,
+          "filename": "held-overview-mobile.png"
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-ojTrEf/qa-sites-desktop.jsonl",
+          "gameId": "fmftq9",
+          "selectedBy": "url",
+          "rows": 38,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-ojTrEf/qa-sites-mobile.jsonl",
+          "gameId": "jdjhey",
+          "selectedBy": "url",
+          "rows": 33,
+          "reason": null
+        }
+      ],
+      "remainingOwnedGroups": [],
+      "resourceReceipt": "whole-matrix-resource-ledger.json",
+      "qualification": "Desktop full workflow passed; mobile step1 global HUD count failed. Original measured g unavailable. Source-identical retry directly captures inert exiting overview+present site, allHud2/activeHud1. Scope corrected to active public presence; historical numeric cause remains qualified."
+    },
+    {
+      "label": "dreamsignrevelation-held-retry",
+      "start": "2026-10-13T17:16:36.339812+00:00",
+      "end": "2026-10-13T17:17:04.390841+00:00",
+      "elapsedS": 28.099111041025026,
+      "exitCode": 0,
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/dreamsignrevelation-held-retry.receipt.json",
+      "receiptSha256": "3f6333715b616fde97eb1e1e2f318f6ff9fe21938df4bb8322877f39d934dc7f",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-kWkJSj/qa-sites.result.json",
+      "resultSha256": "e2c3c6c089d15d9fb6061a9e395e03de82a0abe26216674172cc3f29bb55c5ca",
+      "invocation": "run-kWkJSj",
+      "hostLoad": 6.455078125,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 9118
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 5642
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 6202
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 4355
+        }
+      ],
+      "error": null,
+      "captures": [
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=o73j-revelation-unopened&seed=3&debug=1&game=8bpicu",
+          "width": 1440,
+          "height": 900,
+          "filename": "held-overview-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/dreamsign-revelation?goto=o73j-revelation-unopened&seed=3&debug=1&game=8bpicu",
+          "width": 1440,
+          "height": 900,
+          "filename": "prepared-enhanced-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=o73j-revelation-unopened&seed=3&debug=1&game=8jye2y",
+          "width": 390,
+          "height": 844,
+          "filename": "held-overview-mobile.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/dreamsign-revelation?goto=o73j-revelation-unopened&seed=3&debug=1&game=8jye2y",
+          "width": 390,
+          "height": 844,
+          "filename": "prepared-enhanced-mobile.png"
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-kWkJSj/qa-sites-desktop.jsonl",
+          "gameId": "8bpicu",
+          "selectedBy": "url",
+          "rows": 38,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-kWkJSj/qa-sites-mobile.jsonl",
+          "gameId": "8jye2y",
+          "selectedBy": "url",
+          "rows": 38,
+          "reason": null
+        }
+      ],
+      "remainingOwnedGroups": [],
+      "resourceReceipt": "whole-matrix-resource-ledger.json",
+      "qualification": "Both desktop/mobile workflow cells passed all executed state/log/replay/geometry/qa.assertCaps checks. Top-level caps[] alone is not evidence of buffer values; successful executed qa.assertCaps calls are the Caps evidence."
+    },
+    {
+      "label": "dreamsignrevelation-lost",
+      "start": "2026-10-13T17:17:38.002819+00:00",
+      "end": "2026-10-13T17:18:08.962732+00:00",
+      "elapsedS": 31.006895541999256,
+      "exitCode": 0,
+      "receipt": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/dreamsignrevelation-lost.receipt.json",
+      "receiptSha256": "c0c8ba1511e8b5f7516b5af2316cc4270a9e9d831c455ab122f15cb4bade9f41",
+      "result": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-twJciZ/qa-sites.result.json",
+      "resultSha256": "30762b77e39513fc84f2a14442908f0316b16ed20cee7555846652817cd8dbe8",
+      "invocation": "run-twJciZ",
+      "hostLoad": 7.49755859375,
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 8776
+        },
+        {
+          "viewport": "desktop",
+          "step": 1,
+          "ms": 7290
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 6371
+        },
+        {
+          "viewport": "mobile",
+          "step": 1,
+          "ms": 4655
+        }
+      ],
+      "error": null,
+      "captures": [
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=o73j-revelation-unopened&seed=3&debug=1&game=mhq7ke",
+          "width": 1440,
+          "height": 900,
+          "filename": "held-overview-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/dreamsign-revelation?goto=o73j-revelation-unopened&seed=3&debug=1&game=mhq7ke",
+          "width": 1440,
+          "height": 900,
+          "filename": "prepared-ordinary-desktop.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow?goto=o73j-revelation-unopened&seed=3&debug=1&game=iwh9bz",
+          "width": 390,
+          "height": 844,
+          "filename": "held-overview-mobile.png"
+        },
+        {
+          "href": "http://localhost:5274/dreamscape/0-firstlight-meadow/dreamsign-revelation?goto=o73j-revelation-unopened&seed=3&debug=1&game=iwh9bz",
+          "width": 390,
+          "height": 844,
+          "filename": "prepared-ordinary-mobile.png"
+        }
+      ],
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-twJciZ/qa-sites-desktop.jsonl",
+          "gameId": "mhq7ke",
+          "selectedBy": "url",
+          "rows": 38,
+          "reason": null
+        },
+        {
+          "viewport": "mobile",
+          "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/invocations/run-twJciZ/qa-sites-mobile.jsonl",
+          "gameId": "iwh9bz",
+          "selectedBy": "url",
+          "rows": 38,
+          "reason": null
+        }
+      ],
+      "remainingOwnedGroups": [],
+      "resourceReceipt": "whole-matrix-resource-ledger.json",
+      "qualification": "Both desktop/mobile workflow cells passed all executed state/log/replay/geometry/qa.assertCaps checks. Top-level caps[] alone is not evidence of buffer values; successful executed qa.assertCaps calls are the Caps evidence."
+    }
+  ],
+  "nativeResourceLedger": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-o73j/whole-matrix-resource-ledger.json",
+    "sha256": "6da996ce64c903ee63a0fdd538743578f2d6a8fdc4197e0fe0dc367978db3b97",
+    "attemptsTerminal": 11,
+    "successfulWorkflowCells": 7,
+    "viewportsPerSuccessfulCell": [
+      "desktop1440x900",
+      "mobile390x844"
+    ],
+    "ownedRemainingGroups": [],
+    "browserContextIds": null,
+    "closure": "Normal native browser_close/client disconnect/owner removal confirmed by runner cleanup contract, no opaque context ID exposed; shared MCP and foreign resources untouched."
+  },
+  "nativeObservationalScope": "Only public browser repository, identifier parser, wire decoder, fold and replay modules. devModefalse and coherent head reread. Denial prior-head encoded observation replay hash agrees with current canonical checkpoint replay. All gameplay writes through ordinary controls/production provider; temporary declarative scene bootstrap uses supported public intent.",
+  "temporaryQaScene": {
+    "preparedSha256": "961de0bc7067ffb9e2118c6e44b4e608ccbe31c0161df20a5874cc56ba0d79ec",
+    "originalAndRestoredSha256": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b",
+    "originalBytes": 67509,
+    "restoredAt": "2026-10-13T17:21:25.149966Z",
+    "functionalBytesRestored": true,
+    "committed": false
+  },
+  "finalSupportHashes": {
+    "qa-sites.mjs": "055e7956374eaf175611e5174c2fdfa0f41ea5d9cfbff0b49710d3bb1da0e65d",
+    "qa-draft.mjs": "4ac987ca81139a148074f8af4ef13aad7ad70e64cd5a339ea4bdee1171a44335",
+    "qa-denial.mjs": "5b98a13fb765e9d5e855a3de9b01806c85e8bdc5bf8427454506cf0e760934ab",
+    "qa-entry.mjs": "b6a064ea3ea7a330fe17e0ae74ef5260f886064fcc90c4c628d1719ce53cfce4",
+    "native-run.py": "6e4728f5d3af898e15cc9b11f4ecdaae417bdd22d4f8bc6e7810b80233b13d6b",
+    "temporary-scene-proposal.txt": "5e9aac6790b3cbe39634d2f43ff8f0d49fafa569c32b13384662dff316db861b",
+    "qa-scenes.original.ts": "519a826c50d1f0adb8b87c32812e73582dd277ff07735808fb3c06d2983bac7b"
+  },
+  "runtimeSourceFreeze": "Source/support/evidence/Git/check/prep stayed frozen through every own live resource. Only primary ignored native receipts/images and coordination allowed; support changes occurred only after full drain and separate native ACK; scene restored only on separate ACK then ordinary source resumed.",
+  "failurePaths": [
+    {
+      "path": "error",
+      "tests": [
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "contains mid-preparation failure atomically in the public log and replay"
+        },
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "contains an aggregate count overflow before any offer or pool write"
+        },
+        {
+          "file": "src/cumulus/screens/offer-screens.test.tsx",
+          "name": "releases only the settled pick latch after reject and permits a same-offer retry"
+        }
+      ],
+      "limit": "Provider pick append rejection catch/console.error once inspected. No browser storage failure injection; pure screen safely handles either settlement outcome without an unhandled finally chain."
+    },
+    {
+      "path": "reload",
+      "tests": [
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "replays and reloads exact choices, requested counts and pool after administrative edits"
+        },
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "bounces an incomplete expanded entry and retries the same intent after source loss (%j)"
+        },
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "bounces incomplete next preparation without a pick, then recovers and completes the final pick (%j)"
+        }
+      ],
+      "native": "draft-clam, all4 site-mode cases; prepared quotes survive public replay/reload. Entry/PICK recovery uses same mounted page; reload is not required for correction."
+    },
+    {
+      "path": "partial",
+      "tests": [
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "bounces an incomplete expanded entry and retries the same intent after source loss (%j)"
+        },
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "bounces incomplete next preparation without a pick, then recovers and completes the final pick (%j)"
+        }
+      ],
+      "native": "draft-entry-retry and draft-denial prove empty shortages; synthetic positive-count/zero-weight pools separately prove nonempty partial shortages. No claim every shortage is empty."
+    },
+    {
+      "path": "invalid-or-stale",
+      "tests": [
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "rejects invalid/stale entry or pick and concurrent unknown windows without spending the pool"
+        },
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "grants an additional offered card by UUID exactly once and excludes all shown cards on the next offer"
+        }
+      ],
+      "projection": "Both target types held/lost/natural/prepared modes read existing projectJourneySite; no new persistent action or catalogue identity introduced."
+    },
+    {
+      "path": "concurrent",
+      "tests": [
+        {
+          "file": "src/rules/journey/journey-draft.test.ts",
+          "name": "rejects invalid/stale entry or pick and concurrent unknown windows without spending the pool"
+        },
+        {
+          "file": "src/cumulus/screens/offer-screens.test.tsx",
+          "name": "keeps a newer visual request latched when an old settlement arrives after its offer key is reused"
+        },
+        {
+          "file": "src/cumulus/screens/offer-screens.test.tsx",
+          "name": "releases only the settled pick latch after resolve and permits a same-offer retry"
+        }
+      ],
+      "limit": "CAS/unknown-window and duplicate pending clicks/stale settlement observable tests; browser uses one owned client per viewport, no new multi-client concurrency run."
+    }
+  ],
+  "visualQualifications": [
+    "Entry recovered mobile normal tutorial bubble overlaps first-row card titles and transient standard bounce toast overlaysHUD; both existing unchanged bodies. Captures entry-recovered-same-mount-mobile.png (run-jMyZEF) and draft-denied-restored-mobile.png (run-6BVeJ2). No new visual layout defect claimed; no repeat merely to erase transient UI.",
+    "Revelationheldretry mobile captured exiting inert overview and present site, allHud2 (old hitfalse/new hittrue), activeHud1 x0y774w390h70bottom844, all4 option120x120 centers hittrue. Raw original failureg missing; retry directly demonstrates mechanism, not invented original numeric values."
+  ],
+  "capsQualification": "Each successful workflow executes qa.assertCaps; native top-level caps[] is an observation array and is not itself proof of buffer values. No opaque browser/private state access.",
+  "reviewRouting": "Parent owns cold exact-source core review via fresh read-only Codex CLI gpt-5.6-sol under user temporary routing until2026-10-14T01Z. Helper performs no core review; final review receipt belongs to parent.",
+  "standingRetrospective": "Parent reused existing in-progress hv-umm2.645 exact phase5/sincehv-g3gu duty; helper files no duplicate.",
+  "frictionWindows": [
+    {
+      "start": "2026-10-13T16:38:18.060018+00:00",
+      "end": "2026-10-13T16:50:46.954038+00:00",
+      "scope": "Failure terminal to next admitted native retry start; includes coordination/diagnosis/support work, not pure editing attribution."
+    },
+    {
+      "start": "2026-10-13T16:55:10.911922+00:00",
+      "end": "2026-10-13T17:08:23.858683+00:00",
+      "scope": "Failure terminal to next admitted native retry start; includes coordination/diagnosis/support work, not pure editing attribution."
+    },
+    {
+      "start": "2026-10-13T17:09:55.603931+00:00",
+      "end": "2026-10-13T17:16:36.339812+00:00",
+      "scope": "Failure terminal to next admitted native retry start; includes coordination/diagnosis/support work, not pure editing attribution."
+    }
+  ],
+  "nativeQaTiming": {
+    "actual11OuterAttemptsS": 396.5604930409754,
+    "actual11OuterAttemptsMin": 6.609341550682924,
+    "grossFirstLaunchThroughFinalDrain": {
+      "start": "2026-10-13T16:37:26.571132+00:00",
+      "end": "2026-10-13T17:18:08.962732+00:00",
+      "minutes": 40.70652666666667
+    },
+    "qualification": "Gross interval includes parent/helper checkpoint diagnosis/admission waits and support recovery; the396.560493041s actual native outer sum is not the gross elapsed interval."
+  },
+  "effectiveModeLogScope": "Fresh held overview logs enhanced=true. After loss, existing once-per-node guard emits no additional overview in that mounted node; fresh selection logsfalse and OPEN storesordinary mode. Pure synthetic builders exercise both holding states, natural and prepared modes. No claim of overview emission on every loss.",
+  "precommitSchema": {
+    "label": "schema",
+    "cmd": [
+      "node",
+      "scripts/friction-triggers.mjs",
+      "--validate-records"
+    ],
+    "cwd": "/Users/dthurn/dreamtides_web/.worktrees/draft-preparation-logs-o73j-root",
+    "start": "2026-10-13T17:27:34.759546+00:00",
+    "end": "2026-10-13T17:27:34.879167+00:00",
+    "elapsedS": 0.1195313329808414,
+    "exitCode": 0,
+    "hostLoadAtStart": [
+      10.89013671875,
+      10.00537109375,
+      9.90771484375
+    ],
+    "receiptSha256": "8c588509697595e64dfc78614fccfb0b2e83b298f73fbcb0d56c5d4aa232f4e0",
+    "qualification": "Explicit evidence-only schema validation after original QA fixture restoration; functional source is identical to final full-tested snapshot."
+  },
+  "finalImplementationWindow": {
+    "start": "2026-10-13T15:28:40.033000+00:00",
+    "prospectiveAutomaticGitEnd": "2026-10-13T17:34:32.943722+00:00",
+    "minutes": 125.88184536666667,
+    "externalActualCommitReceipt": "Parent captures actual automatic Git timestamp/OID; committed record uses truthful prospective endpoint within1minute."
+  }
+}

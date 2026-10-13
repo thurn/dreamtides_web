@@ -4,8 +4,8 @@ import { foldEvents } from "../../eventlog/fold";
 import type { EngineConfig, GameEvent, Genesis } from "../../eventlog/types";
 import { makeAuguryTestCard } from "../../journey_v2/testing/fixtures";
 import { TEST_CONTENT_CONFIG } from "../../testing/journey-genesis";
-import { parseJourneyId, parseSiteId } from "../../types/identifiers";
-import { testCardId, testDreamsignId, testEventActor } from "../../types/test-identities";
+import { parseIntentKey, parseJourneyId, parseSiteId } from "../../types/identifiers";
+import { testCardId, testDreamsignId, testEventActor, testExplorationActionId } from "../../types/test-identities";
 import type { DraftConfig } from "../../types/draft";
 import type { JourneyState } from "../../types/journey";
 import type { FoldState } from "../fold-state";
@@ -171,6 +171,89 @@ describe("journeyDraft public offer preparation", () => {
     const result = reduceGameEvent(entered, event("PICK_DRAFT_CARD", { packIndex: 0, cardId: pickedCard.id }), ctx({ intervening: "unknown" }), registry);
     expect(result.outcome).toBe("bounced");
     expect(before).toEqual(source);
+  });
+
+  it.each([
+    { size: 4, zeroWeight: null },
+    { size: 5, zeroWeight: 5 },
+  ])("bounces an incomplete expanded entry and retries the same intent after source loss (%j)", ({ size, zeroWeight }) => {
+    const smallCopies = Object.fromEntries(cards.slice(0, size).map((card) => [String(card.cardNumber), 1]));
+    const small = (ids: typeof ALWAYS[]) => fixture(ids, 0, {
+      draftState: poolDraftState({ activeSiteId: null, currentOffer: [], siteShownCardNumbers: [],
+        draftPoolCopiesByCard: smallCopies, remainingCopiesByCard: smallCopies }),
+      siteOfferModifiers: [{ kind: "transfigure-next-draft-or-shop", sourceSiteId: parseSiteId("source-site"),
+        sourceActionId: testExplorationActionId("pending-draft-transfiguration") }],
+    });
+    registerDraftContentProvider({ ...provider(), draftConfigFor: () => ({ ...config,
+      ...(zeroWeight === null ? {} : { affiliationWeights: new Map([[zeroWeight, 0]]) }) }) });
+    expect(enter(small([])).state.journey.draftState?.currentOffer).toHaveLength(config.packSize);
+    const before = small([ALWAYS]), saved = structuredClone(before), engine = logConfig(before), g = genesis(before);
+    const log = createLocalLog({ config: engine, genesis: g, localActor: ACTOR, now: () => ctx().timestamp, devMode: false });
+    const records: LocalLogRecord<FoldState>[] = []; log.subscribe((record) => records.push(record));
+    const intent = { type: "ENTER_DRAFT_SITE" as const, payload: { siteId: SITE }, intentKey: parseIntentKey("atomic-entry") };
+    log.append(intent);
+    expect(records[0].outcome).toBe("bounced");
+    expect(records[0].logRecords).toBeUndefined();
+    expect(log.state()).toBe(before);
+    expect(before).toEqual(saved);
+    expect(foldEvents(engine, g, { seq: 0, state: before }, [...log.events()], { devMode: false }).state).toEqual(before);
+    const loaded = apply(before, "LOAD_STATE", { snapshot: structuredClone(log.state().journey) });
+    expect(loaded.outcome).toBe("applied");
+    expect(loaded.state.journey.draftState).toEqual(before.journey.draftState);
+    expect(loaded.state.journey.siteOfferModifiers).toEqual(before.journey.siteOfferModifiers);
+    log.append({ type: "REMOVE_DREAMSIGN", payload: { dreamsignId: ALWAYS } });
+    log.append(intent);
+    expect(records[records.length - 1]?.outcome).toBe("applied");
+    expect(log.state().journey.draftState?.currentOffer).toHaveLength(config.packSize);
+    expect(log.state().journey.siteOfferModifiers).toEqual([]);
+    expect(apply(log.state(), "REROLL_DRAFT_OFFER", { siteId: SITE }).state).toBe(log.state());
+    expect(foldEvents(engine, g, { seq: 0, state: before }, [...log.events()], { devMode: false }).state).toEqual(log.state());
+  });
+
+  it.each([
+    { size: 7, zeroWeight: null },
+    { size: 8, zeroWeight: 8 },
+  ])("bounces incomplete next preparation without a pick, then recovers and completes the final pick (%j)", ({ size, zeroWeight }) => {
+    const smallCopies = Object.fromEntries(cards.slice(0, size).map((card) => [String(card.cardNumber), 1]));
+    registerDraftContentProvider({ ...provider(), draftConfigFor: () => ({ ...config, sitePickCount: 2,
+      ...(zeroWeight === null ? {} : { affiliationWeights: new Map([[zeroWeight, 0]]) }) }) });
+    const before = enter(fixture([], 0, { draftState: poolDraftState({ activeSiteId: null, currentOffer: [],
+      siteShownCardNumbers: [], draftPoolCopiesByCard: smallCopies, remainingCopiesByCard: smallCopies }) })).state;
+    expect(pick(before).state.journey.draftState?.currentOffer).toHaveLength(config.packSize);
+    const engine = logConfig(before), g = genesis(before);
+    const log = createLocalLog({ config: engine, genesis: g, localActor: ACTOR, now: () => ctx().timestamp, devMode: false });
+    const records: LocalLogRecord<FoldState>[] = []; log.subscribe((record) => records.push(record));
+    log.append({ type: "ADD_DREAMSIGN", payload: { dreamsignId: ALWAYS } });
+    const beforePick = log.state(), saved = structuredClone(beforePick);
+    const chosen = database.get(beforePick.journey.draftState!.currentOffer[0])!;
+    const intent = { type: "PICK_DRAFT_CARD" as const, payload: { packIndex: 0, cardId: chosen.id } };
+    log.append(intent);
+    expect(records[records.length - 1]?.outcome).toBe("bounced");
+    expect(records[records.length - 1]?.logRecords).toBeUndefined();
+    expect(log.state()).toBe(beforePick);
+    expect(beforePick).toEqual(saved);
+    expect(foldEvents(engine, g, { seq: 0, state: before }, [...log.events()], { devMode: false }).state).toEqual(beforePick);
+    const loaded = apply(beforePick, "LOAD_STATE", { snapshot: structuredClone(beforePick.journey) });
+    expect(loaded.outcome).toBe("applied");
+    expect(loaded.state.journey.draftState).toEqual(beforePick.journey.draftState);
+    expect(loaded.state.journey.deck).toEqual(beforePick.journey.deck);
+    const rerolled = apply(beforePick, "REROLL_DRAFT_OFFER", { siteId: SITE });
+    expect(rerolled.outcome).toBe("applied");
+    expect(rerolled.state.journey.draftState?.currentOffer).toHaveLength(config.packSize);
+    log.append({ type: "REMOVE_DREAMSIGN", payload: { dreamsignId: ALWAYS } });
+    log.append(intent);
+    expect(records[records.length - 1]?.outcome).toBe("applied");
+    expect(log.state().journey.deck[log.state().journey.deck.length - 1]?.cardNumber).toBe(chosen.cardNumber);
+    expect(log.state().journey.draftState?.sitePicksCompleted).toBe(1);
+    expect(log.state().journey.draftState?.currentOffer).toHaveLength(config.packSize);
+    const finalCard = database.get(log.state().journey.draftState!.currentOffer[0])!;
+    log.append({ type: "PICK_DRAFT_CARD", payload: { packIndex: 0, cardId: finalCard.id } });
+    expect(records[records.length - 1]?.outcome).toBe("applied");
+    expect(records[records.length - 1]?.logRecords).toBeUndefined();
+    expect(log.state().journey.draftState?.sitePicksCompleted).toBe(2);
+    expect(log.state().journey.draftState?.currentOffer).toEqual([]);
+    expect(log.state().journey.deck).toHaveLength(before.journey.deck.length + 2);
+    expect(foldEvents(engine, g, { seq: 0, state: before }, [...log.events()], { devMode: false }).state).toEqual(log.state());
   });
 
   it("contains mid-preparation failure atomically in the public log and replay", () => {

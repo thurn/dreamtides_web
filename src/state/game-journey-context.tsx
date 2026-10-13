@@ -240,14 +240,18 @@ export function GameJourneyProvider({
       // ---- draft ----
       setDraftState: (draftState) =>
         dispatch(actions.setDraftState(draftState)),
-      pickDraftCard: (_siteId, cardNumber) => {
+      pickDraftCard: async (_siteId, cardNumber) => {
         const draftState = stateRef.current.draftState;
         if (draftState === null) return;
         const packIndex = draftState.currentOffer.indexOf(cardNumber);
         if (packIndex < 0) return;
         const cardId = cardIdFor(cardNumber);
         if (cardId === null) return;
-        dispatch(actions.pickDraftCard(packIndex, parseCardId(cardId)));
+        try {
+          await actions.pickDraftCard(packIndex, parseCardId(cardId));
+        } catch (error: unknown) {
+          console.error("Journey action failed", error);
+        }
       },
       rerollDraftOffer: (siteId) => dispatch(actions.rerollDraftOffer(siteId)),
       enterDraftSite: (siteId) =>

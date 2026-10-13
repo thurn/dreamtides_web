@@ -32,7 +32,7 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   useEffect(() => {
     if (state.draftState?.activeSiteId === siteId) return;
     mutations.enterDraftSite(siteId);
-  }, [siteId, state.draftState?.activeSiteId, mutations]);
+  }, [siteId, state.draftState, state.dreamsigns, state.essence, mutations]);
 
   const progress = readDraftSiteProgress(state.draftState, siteId);
   const node =
@@ -101,8 +101,8 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   }, [siteId, state.draftState?.transfiguredOfferSource, view]);
 
   const handlePick = useCallback(
-    (cardNumber: number) => {
-      mutations.pickDraftCard(siteId, cardNumber);
+    (cardNumber: number): Promise<void> => {
+      return mutations.pickDraftCard(siteId, cardNumber);
     },
     [mutations, siteId],
   );

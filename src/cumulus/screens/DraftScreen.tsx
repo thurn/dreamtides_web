@@ -16,7 +16,7 @@
 // view types, and holds only the local pick latch that plays the pick-out
 // animation.
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { CARD_ASPECT_H, CARD_ASPECT_W } from "../components/card/card-aspect";
@@ -58,7 +58,7 @@ export interface DraftScreenProps {
   /** The view-model to render. */
   view: DraftView;
   /** Pick a card from the current pack; carries the card's draft number. */
-  onPick: (cardNumber: number) => void;
+  onPick: (cardNumber: number) => void | Promise<void>;
   /** Requests a shared debug reroll of the current draft offer. */
   onReroll?: () => void;
   /** Reports when delayed first-visit guidance becomes visible. */
@@ -142,10 +142,14 @@ export function DraftScreen({
   });
 
   // The card being picked, latched so the pick-out animation plays and a second
-  // tap can't fire while the pack is resolving. Cleared when a new pack arrives.
+  // tap can't fire while the pack is resolving. A settled live intent or a new
+  // pack releases the visual latch; rule state belongs to the shared event log.
   const [pendingPick, setPendingPick] = useState<number | null>(null);
+  const pendingRequest = useRef<object | null>(null);
   useEffect(() => {
+    pendingRequest.current = null;
     setPendingPick(null);
+    return () => { pendingRequest.current = null; };
   }, [view.offerKey]);
   const availableTutorial = pendingPick === null ? view.tutorial : undefined;
   const tutorialVisible = useDelayedTutorialSpeechBubbleVisibility(
@@ -162,8 +166,21 @@ export function DraftScreen({
 
   function handlePick(cardNumber: number): void {
     if (pendingPick !== null) return;
+    const request = {};
+    pendingRequest.current = request;
     setPendingPick(cardNumber);
-    onPick(cardNumber);
+    const clear = (): void => {
+      if (pendingRequest.current !== request) return;
+      pendingRequest.current = null;
+      setPendingPick(null);
+    };
+    try {
+      const settlement = onPick(cardNumber);
+      if (settlement !== undefined) void settlement.then(clear, clear);
+    } catch (error) {
+      clear();
+      throw error;
+    }
   }
 
   return (

@@ -1,3 +1,14 @@
+import { registerDraftContentProvider } from "../../rules/journey/draft";
+import { testDraftContentProvider } from "../../rules/journey/test-content-providers";
+import { ctx, poolDraftState, stateWithDraftSites } from "../../rules/journey/draft-fixtures";
+import { reduceGameEvent } from "../../rules/reducer";
+import { journeyDraft } from "../../rules/journey/journey-draft";
+import { makeAuguryTestCard } from "../../journey_v2/testing/fixtures";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+import { renderInCumulus } from "../../cumulus/testing/render";
+import { DraftSiteScreenAdapter } from "./DraftSiteScreenAdapter";
+import { journeySites } from "../../rules/journey/journey-sites";
+import { createJourneyModifierRegistry, type JourneyModifierRegistry } from "../../rules/journey/modifier-registry";
 import { SELECTION_RULES_VERSION } from "../../reward-selection";
 // @vitest-environment jsdom
 import { act } from "react";
@@ -27,13 +38,24 @@ import {
   parseJourneyId,
 } from "../../types/identifiers";
 import {
+  testCardId,
+  testEventActor,
   testDreamscapeId,
   testDreamsignId,
 } from "../../types/test-identities";
 
+const modifierLookupMock = vi.hoisted(() => vi.fn<JourneyModifierRegistry["lookup"]>());
+
 const screenMock = vi.hoisted(() =>
   vi.fn<(props: DreamscapeScreenProps) => void>(),
 );
+
+vi.mock("../../rules/journey/modifier-registry", async (importOriginal) => {
+  const original = await importOriginal<typeof import("../../rules/journey/modifier-registry")>();
+  modifierLookupMock.mockImplementation((id) => original.journeyModifierRegistry.lookup(id));
+  return { ...original, journeyModifierRegistry: { ...original.journeyModifierRegistry,
+    lookup: modifierLookupMock } };
+});
 
 vi.mock("../../state/journey-context", () => ({
   useJourney: vi.fn(),
@@ -125,10 +147,12 @@ describe("DreamscapeScreenAdapter", () => {
     mutations: JourneyMutations,
     state: JourneyState = makeState(),
     journeyContent: Partial<JourneyContent> = {},
+    cardDatabase: JourneyContent["cardDatabase"] = new Map(),
   ): void {
     vi.mocked(useJourney).mockReturnValue({
       state,
       mutations,
+      cardDatabase,
       journeyContent: {
         atlasData: MINIMAL_ATLAS_DATA,
         dreamscapes: MINIMAL_DREAMSCAPES,
@@ -336,6 +360,98 @@ describe("DreamscapeScreenAdapter", () => {
     act(() => lastScreenProps().onDeclineRewardChoice?.());
     expect(mutations.rejectDreamsignOffer).toHaveBeenCalledWith("s-reward");
     act(() => root.unmount());
+  });
+
+  it.each(["Reward", "DreamsignRevelation"] as const)("logs the projected %s overview once and resolves clicks from current holdings", (type) => {
+    const source = testDreamsignId("adapter-targeted"), siteId = parseSiteId("adapter-targeted-site");
+    const registry = createJourneyModifierRegistry([journeySites(source, {
+      kind: "enhanceSiteTypes", siteTypes: ["Reward", "DreamsignRevelation"],
+    })]);
+    const lookup = modifierLookupMock;
+    const previousLookup = lookup.getMockImplementation()!;
+    lookup.mockImplementation((id) => registry.lookup(id));
+    const state = makeState({ dreamsigns: [{ id: source, name: "Synthetic", effectDescription: "" }], siteRuntime: {} });
+    const nodeId = state.currentDreamscape!;
+    const node = state.atlas.nodes[nodeId];
+    state.atlas = { ...state.atlas, nodes: { ...state.atlas.nodes, [nodeId]: { ...node,
+      sites: [{ id: siteId, type, isEnhanced: false, isVisited: false }] } } };
+    const mutations = { ensureRewardSiteRuntime: vi.fn(), enterSite: vi.fn() } as unknown as JourneyMutations;
+    const root = createRoot(document.createElement("div"));
+    try {
+      setJourneyContext(mutations, state);
+      act(() => root.render(<DreamscapeScreenAdapter />));
+      const overview = vi.mocked(logEvent).mock.calls.filter(([name]) => name === "dreamscape_overview_presented");
+      expect(overview).toHaveLength(1);
+      expect(overview[0][1]).toMatchObject({ sites: [{ siteId, isEnhanced: true }] });
+      act(() => lastScreenProps().onSelectSite(siteId));
+      expect(logEvent).toHaveBeenCalledWith("site_entered", expect.objectContaining({ siteId, isEnhanced: true }));
+      const lost = { ...state, dreamsigns: [] };
+      setJourneyContext(mutations, lost);
+      act(() => root.render(<DreamscapeScreenAdapter />));
+      expect(vi.mocked(logEvent).mock.calls.filter(([name]) => name === "dreamscape_overview_presented")).toHaveLength(1);
+      vi.mocked(logEvent).mockClear();
+      act(() => lastScreenProps().onSelectSite(siteId));
+      expect(logEvent).toHaveBeenCalledWith("site_entered", expect.objectContaining({ siteId, isEnhanced: false }));
+      if (type === "Reward") expect(mutations.ensureRewardSiteRuntime).toHaveBeenCalledWith(siteId);
+      else expect(mutations.enterSite).toHaveBeenCalledWith(siteId);
+      expect(state.atlas.nodes[nodeId].sites[0].isEnhanced).toBe(false);
+    } finally {
+      act(() => root.unmount());
+      lookup.mockImplementation(previousLookup);
+    }
+  });
+
+  it.each(["holding", "essence", "pool"] as const)("retries failed Draft entry after %s correction without looping or replacing a prepared offer", (correction) => {
+    vi.stubGlobal("ResizeObserver", class { observe(): void {} unobserve(): void {} disconnect(): void {} });
+    const source = testDreamsignId("adapter-entry-source"), siteId = parseSiteId("site-a");
+    const actor = testEventActor("adapter-entry-owner"), sign = { id: source, name: "Synthetic", effectDescription: "" };
+    const registry = createJourneyModifierRegistry([journeyDraft(source, {
+      kind: "additionalDraftChoices", additionalCards: 2, minimumEssence: 11,
+    })]);
+    const cards = Array.from({ length: 5 }, (_, index) => makeAuguryTestCard({ id: testCardId(`adapter-entry-${index}`), cardNumber: index + 1 }));
+    const database = new Map(cards.map((card) => [card.cardNumber, card]));
+    const copies = Object.fromEntries(cards.slice(0, 4).map((card) => [String(card.cardNumber), 1]));
+    registerDraftContentProvider(testDraftContentProvider({ cardDatabase: () => database,
+      draftConfigFor: () => ({ packSize: 3, sitePickCount: 2, rarityCaps: [] }) }));
+    let state = stateWithDraftSites(poolDraftState({ activeSiteId: null, currentOffer: [], siteShownCardNumbers: [],
+      draftPoolCopiesByCard: copies, remainingCopiesByCard: copies }), { dreamsigns: [sign], essence: 11,
+      screen: { type: "site", siteId } });
+    const outcomes: string[] = [];
+    const mutations = { enterDraftSite: (id: typeof siteId) => {
+      const result = reduceGameEvent(state, { type: "ENTER_DRAFT_SITE", payload: { siteId: id }, actor,
+        basedOnSeq: 0, clientTimestamp: ctx().timestamp }, ctx(), registry);
+      state = result.state; outcomes.push(result.outcome);
+    } } as unknown as JourneyMutations;
+    const content: Partial<JourneyContent> = { atlasData: MINIMAL_ATLAS_DATA, dreamscapes: MINIMAL_DREAMSCAPES, sitesData: MINIMAL_SITES_DATA,
+      tutorial: makeTutorialConfiguration(), draftData: draftDataFixture({ offers: { cardsPerOffer: 3, picksPerSite: 2 } }),
+      transfigurationData: transfigurationFixture() };
+    const show = () => { setJourneyContext(mutations, state.journey, content, database); };
+    show();
+    const mounted = renderInCumulus(<DraftSiteScreenAdapter siteId={siteId} />);
+    try {
+      expect(outcomes).toEqual(["bounced"]);
+      show(); mounted.rerender(<DraftSiteScreenAdapter siteId={siteId} />);
+      expect(outcomes).toHaveLength(1);
+      const type = correction === "holding" ? "REMOVE_DREAMSIGN" : correction === "essence" ? "SET_ESSENCE" : "SET_DRAFT_STATE";
+      const expandedCopies = Object.fromEntries(cards.map((card) => [String(card.cardNumber), 1]));
+      const payload = correction === "holding" ? { dreamsignId: source } : correction === "essence" ? { value: 0 }
+        : { draftState: { ...state.journey.draftState!, draftPoolCopiesByCard: expandedCopies, remainingCopiesByCard: expandedCopies } };
+      state = reduceGameEvent(state, { type, payload, actor, basedOnSeq: 0, clientTimestamp: ctx().timestamp }, ctx(), registry).state;
+      show(); mounted.rerender(<DraftSiteScreenAdapter siteId={siteId} />);
+      expect(outcomes).toEqual(["bounced", "applied"]);
+      const prepared = structuredClone(state.journey.draftState);
+      show(); mounted.rerender(<DraftSiteScreenAdapter siteId={siteId} />);
+      expect(state.journey.draftState?.currentOffer).toHaveLength(correction === "pool" ? 5 : 3);
+      state = reduceGameEvent(state, { type: "SET_ESSENCE", payload: { value: 12 }, actor,
+        basedOnSeq: 0, clientTimestamp: ctx().timestamp }, ctx(), registry).state;
+      state = { ...state, journey: { ...state.journey, dreamsigns: [...state.journey.dreamsigns],
+        draftState: structuredClone(state.journey.draftState) } };
+      show(); mounted.rerender(<DraftSiteScreenAdapter siteId={siteId} />);
+      expect(outcomes).toHaveLength(2);
+      expect(state.journey.draftState).toEqual(prepared);
+    } finally {
+      mounted.unmount(); registerDraftContentProvider(null); vi.unstubAllGlobals();
+    }
   });
 
 });

@@ -71,9 +71,9 @@ export function DreamscapeScreenAdapter() {
     loggedNodeRef.current = node.id;
     logEvent(
       "dreamscape_overview_presented",
-      buildDreamscapeOverviewLog(node, view, state.completionLevel),
+      buildDreamscapeOverviewLog(node, view, state),
     );
-  }, [node, state.completionLevel, view]);
+  }, [node, state, view]);
 
   const handleSelectSite = useCallback(
     (siteId: SiteId) => {
@@ -81,7 +81,7 @@ export function DreamscapeScreenAdapter() {
       const selection = resolveDreamscapeSiteSelection(
         node,
         siteId,
-        state.essence,
+        state,
       );
       if (selection === null) return;
       logEvent("site_entered", selection.fields);
@@ -97,7 +97,7 @@ export function DreamscapeScreenAdapter() {
         mutations.enterSite(siteId);
       }
     },
-    [mutations, node, state.essence, state.siteRuntime],
+    [mutations, node, state],
   );
 
   const handleInlineRewardAnimationComplete = useCallback(

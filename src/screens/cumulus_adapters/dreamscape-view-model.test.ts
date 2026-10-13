@@ -13,6 +13,8 @@ import type {
 import { testJourneyState } from "../../testing/journey-genesis";
 import { MINIMAL_SITES_DATA } from "../../testing/atlas-fixtures";
 import {
+  buildDreamscapeOverviewLog,
+  resolveDreamscapeSiteSelection,
   buildDreamscapeHudView,
   buildDreamscapeGuideDialogue,
   buildDreamscapeView as buildDreamscapeViewImpl,
@@ -409,4 +411,39 @@ it("presents a held targeted enhancement like a natural mode while keeping prepa
   const prepared = { ...state, siteRuntime: { [siteId]: { kind: "dreamsignOffer" as const,
     offeredDreamsigns: [], remainingDreamsignPool: [], accepted: false } } };
   expect(view(node, prepared).sites).toEqual(view(node, lost).sites);
+});
+
+
+it.each(["Reward", "DreamsignRevelation"] as const)("logs the observed targeted %s mode for held, lost, natural and prepared sites", (type) => {
+  const source = testDreamsignId("logged-targeted"), siteId = parseSiteId("logged-targeted-site");
+  const registry = createJourneyModifierRegistry([journeySites(source, {
+    kind: "enhanceSiteTypes", siteTypes: ["Reward", "DreamsignRevelation"],
+  })]);
+  const node = makeTestAtlasNode(parseAtlasNodeId("logged-targeted-node"), [{ id: siteId,
+    type, isVisited: false, isEnhanced: false }]);
+  const held = { ...testJourneyState(), dreamsigns: [{ id: source, name: "Synthetic", effectDescription: "" }] };
+  const lost = { ...held, dreamsigns: [] };
+  const runtime = type === "Reward"
+    ? { kind: "reward" as const, reward: { rewardType: "essence" as const, essenceAmount: 1 },
+        remainingDreamsignPoolIds: [], accepted: false }
+    : { kind: "dreamsignOffer" as const, offeredDreamsigns: [], remainingDreamsignPool: [], accepted: false };
+  const natural = { ...node, sites: node.sites.map((site) => ({ ...site, isEnhanced: true })) };
+  const saved = structuredClone({ node, held });
+  for (const [observedNode, state, enhanced] of [
+    [node, held, true], [node, lost, false], [natural, lost, true],
+    [node, { ...held, siteRuntime: { [siteId]: runtime } }, false],
+    [natural, { ...lost, siteRuntime: { [siteId]: runtime } }, true],
+  ] as const) {
+    const view = buildDreamscapeViewImpl(observedNode, "Synthetic", null, state, MINIMAL_SITES_DATA, 2,
+      null, undefined, registry);
+    const expectedNode = { ...observedNode, sites: observedNode.sites.map((site) => ({ ...site, isEnhanced: enhanced })) };
+    expect(view.sites).toEqual(buildSiteModelsImpl(expectedNode, state.completionLevel, MINIMAL_SITES_DATA, 2));
+    expect(buildDreamscapeOverviewLog(observedNode, view, state, registry)).toMatchObject({
+      sites: [{ siteId, isEnhanced: enhanced }],
+    });
+    expect(resolveDreamscapeSiteSelection(observedNode, siteId, state, registry)).toMatchObject({
+      site: { id: siteId, isEnhanced: enhanced }, fields: { siteId, isEnhanced: enhanced, essenceBefore: state.essence },
+    });
+  }
+  expect({ node, held }).toEqual(saved);
 });

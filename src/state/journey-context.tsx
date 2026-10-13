@@ -230,7 +230,8 @@ export interface JourneyMutations {
     siteId: SiteId,
     archetypeId: AuguryArchetypeId | null,
   ) => void;
-  pickDraftCard: (siteId: SiteId, cardNumber: number) => void;
+  /** Resolves after the shared pick intent settles, including a bounce. */
+  pickDraftCard: (siteId: SiteId, cardNumber: number) => Promise<void>;
   /** Requests a shared debug reroll of the displayed offer at an active draft site. */
   rerollDraftOffer?: (siteId: SiteId) => void;
   /**

@@ -77,19 +77,20 @@ export function dreamscapeLayoutSeed(node: DreamscapeNode): number {
 export function buildDreamscapeOverviewLog(
   node: DreamscapeNode,
   view: DreamscapeView,
-  completionLevel: number,
+  state: JourneyState,
+  modifiers: JourneyModifierRegistry = journeyModifierRegistry,
 ): Record<string, unknown> {
   return {
     nodeId: node.id,
     dreamscapeId: node.dreamscapeId,
-    completionLevel,
+    completionLevel: state.completionLevel,
     layoutSeed: dreamscapeLayoutSeed(node),
     sites: view.sites.map((model) => {
       const site = node.sites.find((candidate) => candidate.id === model.id);
       return {
         siteId: model.id,
         type: model.type,
-        isEnhanced: site?.isEnhanced ?? false,
+        isEnhanced: site === undefined ? false : projectJourneySite(state, site, modifiers).isEnhanced,
         isVisited: model.isVisited,
         isLocked: model.isLocked,
         pos: model.pos,
@@ -102,10 +103,12 @@ export function buildDreamscapeOverviewLog(
 export function resolveDreamscapeSiteSelection(
   node: DreamscapeNode,
   siteId: SiteId,
-  essence: number,
+  state: JourneyState,
+  modifiers: JourneyModifierRegistry = journeyModifierRegistry,
 ) {
-  const site = node.sites.find((candidate) => candidate.id === siteId);
-  if (site === undefined) return null;
+  const storedSite = node.sites.find((candidate) => candidate.id === siteId);
+  if (storedSite === undefined) return null;
+  const site = projectJourneySite(state, storedSite, modifiers);
   return {
     site,
     fields: {
@@ -113,7 +116,7 @@ export function resolveDreamscapeSiteSelection(
       dreamscapeId: node.id,
       siteId: site.id,
       isEnhanced: site.isEnhanced,
-      essenceBefore: essence,
+      essenceBefore: state.essence,
     },
   };
 }
