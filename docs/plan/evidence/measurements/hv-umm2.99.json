@@ -1,0 +1,1024 @@
+{
+  "bead": "hv-umm2.99",
+  "base": "57a6d26ddb1d86630822bcf2194ef6c65c05dec9",
+  "dispatch": {
+    "at": "2026-10-13T15:30:37.079000+00:00",
+    "callId": "call_a5d004e8b1bd4b0c86a6a6a65e112a4b",
+    "ordinal": 17267,
+    "modelQueue": "UNKNOWN"
+  },
+  "scope": {
+    "production": [
+      "src/content/cards/cosmonaut-of-tides-c7c95f67.ts",
+      "src/content/cards/entropy-cascade-fb967cc1.ts",
+      "src/engine/effects/primitives/copy-card.ts",
+      "src/engine/effects/registry.ts"
+    ],
+    "contract": "src/engine/effects/primitives/contracts/copy-card-times.contracts.ts",
+    "fallout": []
+  },
+  "form": "copyCardTimes(card,times): fixed nonnegative safe-integer count; existing copyOnStack owns physical creation, independent choices and captured X/optionalPaid. Source references resolved once before copying. No changed prior public signatures or new persistence/prompt/UI protocol.",
+  "rules": [
+    "D15",
+    "C6",
+    "RD-hv-7x4l.1-3",
+    "RD-hv-7x4l.6-5",
+    "RD-hv-7x4l.8-4",
+    "RD-hv-7x4l.6-1"
+  ],
+  "d10": "not invoked: existing Copies rules and rulings settle the behavior; repeated direct-above-original placement resolves first-created copy first.",
+  "d20": "No card scenario: whole materialized/delayed/filter/reclaim abilities compose existing forms and counted primitive. Public synthetic contract covers delayed composition.",
+  "d21": {
+    "requiredJudged": 0,
+    "entities": [
+      {
+        "uuid": "fb967cc1-4199-4a08-8070-724e07cebea5",
+        "firstByte": 110,
+        "sampled": false
+      },
+      {
+        "uuid": "c7c95f67-a838-4e39-879c-cfbf0591540c",
+        "firstByte": 50,
+        "sampled": false
+      }
+    ],
+    "newPromptStatusVisualForm": false
+  },
+  "inventory": "copyCardTimes is extension probe /times/, not a pending capability descriptor. New field plus runtime registry supplies it; no source marker retirement required.",
+  "validation": {
+    "focused": {
+      "label": "focused",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "counted copies|counted-copy suspended fold|copy count validation"
+      ],
+      "pid": 18388,
+      "pgid": 18388,
+      "start": "2026-10-13T15:45:56.778513+00:00",
+      "load": 2.89892578125,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/focused.log",
+      "exitCode": 1,
+      "end": "2026-10-13T15:45:59.930577+00:00",
+      "wallSeconds": 3.1519918339909054
+    },
+    "focused-corrected": {
+      "label": "focused-corrected",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "counted copies|counted-copy suspended fold|copy count validation"
+      ],
+      "pid": 18759,
+      "pgid": 18759,
+      "start": "2026-10-13T15:46:28.401044+00:00",
+      "load": 2.3173828125,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/focused-corrected.log",
+      "exitCode": 1,
+      "end": "2026-10-13T15:46:30.959556+00:00",
+      "wallSeconds": 2.558435167011339
+    },
+    "focused-final": {
+      "label": "focused-final",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "counted copies|counted-copy suspended fold|copy count validation"
+      ],
+      "pid": 19601,
+      "pgid": 19601,
+      "start": "2026-10-13T15:47:00.623320+00:00",
+      "load": 2.64697265625,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/focused-final.log",
+      "exitCode": 0,
+      "end": "2026-10-13T15:47:03.307051+00:00",
+      "wallSeconds": 2.6836354160041083
+    },
+    "affected": {
+      "label": "affected",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/rules/copies.test.ts",
+        "src/engine/triggers/triggers.test.ts",
+        "src/engine/content-gates.test.ts"
+      ],
+      "pid": 19793,
+      "pgid": 19793,
+      "start": "2026-10-13T15:47:11.260454+00:00",
+      "load": 3.10107421875,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/affected.log",
+      "exitCode": 0,
+      "end": "2026-10-13T15:47:18.070320+00:00",
+      "wallSeconds": 6.809787915990455
+    },
+    "typecheck": {
+      "label": "typecheck",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--pretty",
+        "false",
+        "-p",
+        "tsconfig.json"
+      ],
+      "pid": 20219,
+      "pgid": 20219,
+      "start": "2026-10-13T15:47:42.141320+00:00",
+      "load": 3.05078125,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/typecheck.log",
+      "exitCode": 2,
+      "end": "2026-10-13T15:47:51.044060+00:00",
+      "wallSeconds": 8.902652458986267
+    },
+    "prepared": {
+      "label": "prepared",
+      "command": [
+        "npm",
+        "run",
+        "prepare-workspace"
+      ],
+      "pid": 20796,
+      "pgid": 20796,
+      "start": "2026-10-13T15:48:19.316237+00:00",
+      "load": 2.7666015625,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/prepared.log",
+      "exitCode": 0,
+      "end": "2026-10-13T15:48:22.094620+00:00",
+      "wallSeconds": 2.7783040830108803
+    },
+    "focus-and-types": {
+      "label": "focus-and-types",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 20945,
+      "pgid": 20945,
+      "start": "2026-10-13T15:48:30.010341+00:00",
+      "load": 2.728515625,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/focus-and-types.log",
+      "exitCode": 1,
+      "end": "2026-10-13T15:49:25.541092+00:00",
+      "wallSeconds": 55.53060566697968
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "pid": 37865,
+      "pgid": 37865,
+      "start": "2026-10-13T15:49:55.384690+00:00",
+      "load": 16.62890625,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/knip.log",
+      "exitCode": 0,
+      "end": "2026-10-13T15:49:59.875165+00:00",
+      "wallSeconds": 4.490325874998234
+    },
+    "counterfactual": {
+      "label": "counterfactual",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "counted copies|counted-copy suspended fold"
+      ],
+      "pid": 75992,
+      "pgid": 75992,
+      "start": "2026-10-13T15:50:25.252924+00:00",
+      "load": 14.83447265625,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/counterfactual.log",
+      "exitCode": 1,
+      "end": "2026-10-13T15:50:28.563572+00:00",
+      "wallSeconds": 3.3105644999886863
+    },
+    "weighted300": {
+      "label": "weighted300",
+      "command": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "fb967cc1-4199-4a08-8070-724e07cebea5,c7c95f67-a838-4e39-879c-cfbf0591540c"
+      ],
+      "pid": 78291,
+      "pgid": 78291,
+      "start": "2026-10-13T15:50:51.722595+00:00",
+      "load": 12.13037109375,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/weighted300.log",
+      "exitCode": 0,
+      "end": "2026-10-13T15:54:47.449391+00:00",
+      "wallSeconds": 235.68420954199973
+    },
+    "preflight": {
+      "label": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--cards",
+        "fb967cc1-4199-4a08-8070-724e07cebea5,c7c95f67-a838-4e39-879c-cfbf0591540c"
+      ],
+      "pid": 22018,
+      "pgid": 22018,
+      "start": "2026-10-13T15:49:13.182269+00:00",
+      "load": 5.6005859375,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/preflight.log",
+      "exitCode": 0,
+      "end": "2026-10-13T15:49:14.342098+00:00",
+      "wallSeconds": 1.1597272499930114
+    },
+    "review-final": {
+      "label": "review-final",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "pid": 31793,
+      "pgid": 31793,
+      "start": "2026-10-13T15:52:11.446886+00:00",
+      "load": 17.267578125,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/review-final.log",
+      "exitCode": 0,
+      "end": "2026-10-13T15:53:19.959988+00:00",
+      "wallSeconds": 68.51296250001178
+    },
+    "sweep": {
+      "label": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.99",
+        "--cards",
+        "fb967cc1-4199-4a08-8070-724e07cebea5,c7c95f67-a838-4e39-879c-cfbf0591540c"
+      ],
+      "pid": 1795,
+      "pgid": 1795,
+      "start": "2026-10-13T15:55:43.180221+00:00",
+      "load": 10.7548828125,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/sweep.log",
+      "exitCode": 0,
+      "end": "2026-10-13T15:58:44.471918+00:00",
+      "wallSeconds": 181.28920679198927
+    },
+    "native-counted": {
+      "label": "native-counted",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.99/counted-copy-99-sol.mjs",
+        "--bead",
+        "hv-umm2.99",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 65261,
+      "pgid": 65261,
+      "start": "2026-10-13T15:59:10.930862+00:00",
+      "load": 8.19580078125,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/native-counted.log",
+      "exitCode": 1,
+      "end": "2026-10-13T15:59:14.074469+00:00",
+      "wallSeconds": 3.1434914999990724
+    },
+    "native-corrected": {
+      "label": "native-corrected",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.99/counted-copy-99-sol.mjs",
+        "--bead",
+        "hv-umm2.99",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 69580,
+      "pgid": 69580,
+      "start": "2026-10-13T16:01:06.324343+00:00",
+      "load": 4.55810546875,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/native-corrected.log",
+      "exitCode": 1,
+      "end": "2026-10-13T16:01:20.682376+00:00",
+      "wallSeconds": 14.357768749992829
+    },
+    "native-final": {
+      "label": "native-final",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.99/counted-copy-99-sol.mjs",
+        "--bead",
+        "hv-umm2.99",
+        "--viewports",
+        "desktop,mobile"
+      ],
+      "pid": 55597,
+      "pgid": 55597,
+      "start": "2026-10-13T16:03:32.452268+00:00",
+      "load": 23.32373046875,
+      "log": "/tmp/dreamtides-executor-01a13046-4c66-7813-9606-9913f0743415/copy99/native-final.log",
+      "exitCode": 0,
+      "end": "2026-10-13T16:07:27.065515+00:00",
+      "wallSeconds": 234.61002491699765
+    }
+  },
+  "counterfactual": {
+    "broken": "first-copy-only count resolver",
+    "failed": 22,
+    "passed": 12,
+    "restored": {
+      "at": "2026-10-13T15:50:28.567901+00:00",
+      "sha256": "434da1bfc5bf672e490b648e0e5ee8fa496a7cb7185d5c40d4e2656ca001d588",
+      "restored": true
+    }
+  },
+  "failurePaths": {
+    "errorMidStep": "rolls back a partial copy after a malformed later count throws, then supports clean recovery: public runStep plus contained fold rollback; fresh repaired synthetic catalog resumes public trigger once",
+    "restart": "reloads after the first provisional copy and commits each copy once with a stable event prefix: fresh cold fold JSON slice",
+    "partialWrite": "same rollback and second-copy suspension cases retain committed original with no committed provisional copies",
+    "invalidStaleConcurrent": "rejects invalid, stale, foreign and concurrent answers and refuses cancellation of an automatic trigger; cancelled original play changes attempt and rejects old prompt",
+    "cancelRefusal": "automatic trigger cancel bounces notCancellable; original play cancellation preserves delayed allowance before commitment"
+  },
+  "localFull": "Not warranted: bounded added primitive plus two catalog bodies/additive getter, unchanged runner/config/persisted schemas/prompt protocol; release full validation remains authoritative.",
+  "qa": {
+    "status": "pass",
+    "sweep": {
+      "rawSummary": "invocations/sweep-Qtorcx/summary.json",
+      "counts": {
+        "pass": 26,
+        "skip": 14,
+        "fail": 0
+      },
+      "attempts": 40,
+      "sessions": 1,
+      "retry": 0,
+      "leaseYield": 0
+    },
+    "native": {
+      "rawReport": "invocations/run-fSeuZA/counted-copy-99-sol.result.json",
+      "cases": {
+        "desktop": [
+          {
+            "uuid": "fb967cc1-4199-4a08-8070-724e07cebea5",
+            "as": "player",
+            "variant": "base",
+            "type": "score",
+            "verdict": "pass",
+            "physicalSource": "i1",
+            "original": "i2",
+            "copyIds": [
+              "i21",
+              "i22"
+            ],
+            "score": 9,
+            "energy": 6,
+            "actualReload": false,
+            "targetIds": null,
+            "finalTargetZones": null,
+            "acceptedAnswers": 0,
+            "geometry": null,
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "c7c95f67-a838-4e39-879c-cfbf0591540c",
+            "as": "enemy",
+            "variant": "amplified",
+            "type": "score",
+            "verdict": "pass",
+            "physicalSource": "i9",
+            "original": "i10",
+            "copyIds": [
+              "i21",
+              "i22"
+            ],
+            "score": 9,
+            "energy": 5,
+            "actualReload": false,
+            "targetIds": null,
+            "finalTargetZones": null,
+            "acceptedAnswers": 0,
+            "geometry": null,
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "fb967cc1-4199-4a08-8070-724e07cebea5",
+            "as": "player",
+            "variant": "amplified",
+            "type": "targets",
+            "verdict": "pass",
+            "physicalSource": "i1",
+            "original": "i2",
+            "copyIds": [
+              "i24",
+              "i25"
+            ],
+            "score": null,
+            "energy": null,
+            "actualReload": true,
+            "targetIds": [
+              "i13",
+              "i14",
+              "i15"
+            ],
+            "finalTargetZones": [
+              "void",
+              "void",
+              "void"
+            ],
+            "acceptedAnswers": 3,
+            "geometry": [
+              {
+                "id": "i13",
+                "width": 89.5,
+                "height": 89.5,
+                "hit": true,
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                }
+              },
+              {
+                "id": "i14",
+                "width": 89.5,
+                "height": 89.5,
+                "hit": true,
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                }
+              },
+              {
+                "id": "i15",
+                "width": 89.5,
+                "height": 89.5,
+                "hit": true,
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                }
+              }
+            ],
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "c7c95f67-a838-4e39-879c-cfbf0591540c",
+            "as": "player",
+            "variant": "base",
+            "type": "targets",
+            "verdict": "pass",
+            "physicalSource": "i1",
+            "original": "i2",
+            "copyIds": [
+              "i24",
+              "i25"
+            ],
+            "score": null,
+            "energy": null,
+            "actualReload": true,
+            "targetIds": [
+              "i13",
+              "i14",
+              "i15"
+            ],
+            "finalTargetZones": [
+              "void",
+              "void",
+              "void"
+            ],
+            "acceptedAnswers": 3,
+            "geometry": [
+              {
+                "id": "i13",
+                "width": 89.5,
+                "height": 89.5,
+                "hit": true,
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                }
+              },
+              {
+                "id": "i14",
+                "width": 89.5,
+                "height": 89.5,
+                "hit": true,
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                }
+              },
+              {
+                "id": "i15",
+                "width": 89.5,
+                "height": 89.5,
+                "hit": true,
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                }
+              }
+            ],
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "fb967cc1-4199-4a08-8070-724e07cebea5",
+            "as": "enemy",
+            "variant": "base",
+            "type": "targets",
+            "verdict": "pass",
+            "physicalSource": "i12",
+            "original": "i13",
+            "copyIds": [
+              "i24",
+              "i25"
+            ],
+            "score": null,
+            "energy": null,
+            "actualReload": false,
+            "targetIds": [
+              "i1",
+              "i2",
+              "i3"
+            ],
+            "finalTargetZones": [
+              "void",
+              "play",
+              "play"
+            ],
+            "acceptedAnswers": 3,
+            "geometry": [],
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "c7c95f67-a838-4e39-879c-cfbf0591540c",
+            "as": "enemy",
+            "variant": "amplified",
+            "type": "targets",
+            "verdict": "pass",
+            "physicalSource": "i12",
+            "original": "i13",
+            "copyIds": [
+              "i24",
+              "i25"
+            ],
+            "score": null,
+            "energy": null,
+            "actualReload": false,
+            "targetIds": [
+              "i1",
+              "i2",
+              "i3"
+            ],
+            "finalTargetZones": [
+              "void",
+              "play",
+              "play"
+            ],
+            "acceptedAnswers": 3,
+            "geometry": [],
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "fb967cc1-4199-4a08-8070-724e07cebea5",
+            "as": "player",
+            "variant": "base",
+            "type": "expiry",
+            "verdict": "pass",
+            "physicalSource": null,
+            "original": null,
+            "copyIds": [],
+            "score": null,
+            "energy": null,
+            "actualReload": false,
+            "targetIds": null,
+            "finalTargetZones": null,
+            "acceptedAnswers": 0,
+            "geometry": null,
+            "expiryEnds": 1
+          },
+          {
+            "uuid": "c7c95f67-a838-4e39-879c-cfbf0591540c",
+            "as": "enemy",
+            "variant": "amplified",
+            "type": "expiry",
+            "verdict": "pass",
+            "physicalSource": null,
+            "original": null,
+            "copyIds": [],
+            "score": null,
+            "energy": null,
+            "actualReload": false,
+            "targetIds": null,
+            "finalTargetZones": null,
+            "acceptedAnswers": 0,
+            "geometry": null,
+            "expiryEnds": 1
+          }
+        ],
+        "mobile": [
+          {
+            "uuid": "fb967cc1-4199-4a08-8070-724e07cebea5",
+            "as": "player",
+            "variant": "base",
+            "type": "score",
+            "verdict": "pass",
+            "physicalSource": "i1",
+            "original": "i2",
+            "copyIds": [
+              "i21",
+              "i22"
+            ],
+            "score": 9,
+            "energy": 6,
+            "actualReload": false,
+            "targetIds": null,
+            "finalTargetZones": null,
+            "acceptedAnswers": 0,
+            "geometry": null,
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "c7c95f67-a838-4e39-879c-cfbf0591540c",
+            "as": "enemy",
+            "variant": "amplified",
+            "type": "score",
+            "verdict": "pass",
+            "physicalSource": "i9",
+            "original": "i10",
+            "copyIds": [
+              "i21",
+              "i22"
+            ],
+            "score": 9,
+            "energy": 5,
+            "actualReload": false,
+            "targetIds": null,
+            "finalTargetZones": null,
+            "acceptedAnswers": 0,
+            "geometry": null,
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "fb967cc1-4199-4a08-8070-724e07cebea5",
+            "as": "player",
+            "variant": "amplified",
+            "type": "targets",
+            "verdict": "pass",
+            "physicalSource": "i1",
+            "original": "i2",
+            "copyIds": [
+              "i24",
+              "i25"
+            ],
+            "score": null,
+            "energy": null,
+            "actualReload": true,
+            "targetIds": [
+              "i13",
+              "i14",
+              "i15"
+            ],
+            "finalTargetZones": [
+              "void",
+              "void",
+              "void"
+            ],
+            "acceptedAnswers": 3,
+            "geometry": [
+              {
+                "id": "i13",
+                "width": 53.859375,
+                "height": 53.859375,
+                "hit": true,
+                "viewport": {
+                  "width": 390,
+                  "height": 844
+                }
+              },
+              {
+                "id": "i14",
+                "width": 53.859375,
+                "height": 53.859375,
+                "hit": true,
+                "viewport": {
+                  "width": 390,
+                  "height": 844
+                }
+              },
+              {
+                "id": "i15",
+                "width": 53.859375,
+                "height": 53.859375,
+                "hit": true,
+                "viewport": {
+                  "width": 390,
+                  "height": 844
+                }
+              }
+            ],
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "c7c95f67-a838-4e39-879c-cfbf0591540c",
+            "as": "player",
+            "variant": "base",
+            "type": "targets",
+            "verdict": "pass",
+            "physicalSource": "i1",
+            "original": "i2",
+            "copyIds": [
+              "i24",
+              "i25"
+            ],
+            "score": null,
+            "energy": null,
+            "actualReload": true,
+            "targetIds": [
+              "i13",
+              "i14",
+              "i15"
+            ],
+            "finalTargetZones": [
+              "void",
+              "void",
+              "void"
+            ],
+            "acceptedAnswers": 3,
+            "geometry": [
+              {
+                "id": "i13",
+                "width": 53.859375,
+                "height": 53.859375,
+                "hit": true,
+                "viewport": {
+                  "width": 390,
+                  "height": 844
+                }
+              },
+              {
+                "id": "i14",
+                "width": 53.859375,
+                "height": 53.859375,
+                "hit": true,
+                "viewport": {
+                  "width": 390,
+                  "height": 844
+                }
+              },
+              {
+                "id": "i15",
+                "width": 53.859375,
+                "height": 53.859375,
+                "hit": true,
+                "viewport": {
+                  "width": 390,
+                  "height": 844
+                }
+              }
+            ],
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "fb967cc1-4199-4a08-8070-724e07cebea5",
+            "as": "enemy",
+            "variant": "base",
+            "type": "targets",
+            "verdict": "pass",
+            "physicalSource": "i12",
+            "original": "i13",
+            "copyIds": [
+              "i24",
+              "i25"
+            ],
+            "score": null,
+            "energy": null,
+            "actualReload": false,
+            "targetIds": [
+              "i1",
+              "i2",
+              "i3"
+            ],
+            "finalTargetZones": [
+              "void",
+              "play",
+              "play"
+            ],
+            "acceptedAnswers": 3,
+            "geometry": [],
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "c7c95f67-a838-4e39-879c-cfbf0591540c",
+            "as": "enemy",
+            "variant": "amplified",
+            "type": "targets",
+            "verdict": "pass",
+            "physicalSource": "i12",
+            "original": "i13",
+            "copyIds": [
+              "i24",
+              "i25"
+            ],
+            "score": null,
+            "energy": null,
+            "actualReload": false,
+            "targetIds": [
+              "i1",
+              "i2",
+              "i3"
+            ],
+            "finalTargetZones": [
+              "void",
+              "play",
+              "play"
+            ],
+            "acceptedAnswers": 3,
+            "geometry": [],
+            "expiryEnds": 0
+          },
+          {
+            "uuid": "fb967cc1-4199-4a08-8070-724e07cebea5",
+            "as": "player",
+            "variant": "base",
+            "type": "expiry",
+            "verdict": "pass",
+            "physicalSource": null,
+            "original": null,
+            "copyIds": [],
+            "score": null,
+            "energy": null,
+            "actualReload": false,
+            "targetIds": null,
+            "finalTargetZones": null,
+            "acceptedAnswers": 0,
+            "geometry": null,
+            "expiryEnds": 1
+          },
+          {
+            "uuid": "c7c95f67-a838-4e39-879c-cfbf0591540c",
+            "as": "enemy",
+            "variant": "amplified",
+            "type": "expiry",
+            "verdict": "pass",
+            "physicalSource": null,
+            "original": null,
+            "copyIds": [],
+            "score": null,
+            "energy": null,
+            "actualReload": false,
+            "targetIds": null,
+            "finalTargetZones": null,
+            "acceptedAnswers": 0,
+            "geometry": null,
+            "expiryEnds": 1
+          }
+        ]
+      },
+      "caps": [],
+      "calls": [
+        {
+          "viewport": "desktop",
+          "step": 0,
+          "ms": 113717
+        },
+        {
+          "viewport": "mobile",
+          "step": 0,
+          "ms": 117586
+        }
+      ],
+      "screens": [
+        "counted-copy-second-prompt-fb967cc1-desktop.png",
+        "counted-copy-targets-fb967cc1-player-desktop.png",
+        "counted-copy-second-prompt-fb967cc1-mobile.png",
+        "counted-copy-targets-fb967cc1-player-mobile.png"
+      ],
+      "visual": "Prompt screenshots show three legal physical cards without clipping on desktop/mobile. Post-answer target PNGs capture transient presentation: two moving cards remain visible while all three physical target zones are void in the committed state. They are interaction evidence, not settled-empty-DOM proof.",
+      "dimensions": {
+        "desktop": [
+          2880,
+          1800
+        ],
+        "mobile": [
+          780,
+          1688
+        ]
+      },
+      "logging": "cardCopied is a public engine event, not a direct JSONL category. Persisted engine.action, triggerQueued/triggerResolved and UUID promptOpened/promptAnswered records reconstruct the operation. Target cases retain original plus distinct copy prompt sources. The runner downloaded only the final expiry game per viewport (41 rows each); per-case action/trigger/prompt records are retained in raw results, not claimed as eight full game exports.",
+      "limits": "Enemy prompts are AI-owned: no native enemy mid-second-prompt reload claim; both-controller fresh cold fold JSON contracts cover it."
+    },
+    "failedRuns": [
+      {
+        "rawReport": "invocations/run-XY6XHG/counted-copy-99-sol.result.json",
+        "exitCode": 1,
+        "cause": "Scratch exported-array closure serialization raised ReferenceError score before navigation; no workflow exercised. Corrected self-contained function.",
+        "caps": []
+      },
+      {
+        "rawReport": "invocations/run-UVg9UU/counted-copy-99-sol.result.json",
+        "exitCode": 1,
+        "cause": "Scratch checker compared full ten-slot rank including nulls against three occupied target candidates; two score-nine predicates completed and navigation diagnostics succeeded. Corrected null filtering and retained per-case notes.",
+        "caps": []
+      }
+    ],
+    "cleanup": {
+      "sweep-cleanup": {
+        "at": "2026-10-13T15:59:00.524822+00:00",
+        "owned": {
+          "1795": "ABSENT",
+          "1845": "ABSENT"
+        },
+        ".browser-qa.slot-1.lock.owner.json": "ABSENT",
+        ".browser-qa.slot-1.lock.server.json": "ABSENT",
+        "listener5274": "NONE"
+      },
+      "native-first-cleanup": {
+        "at": "2026-10-13T16:00:03.727665+00:00",
+        "owned": {
+          "65261": "ABSENT",
+          "65303": "ABSENT"
+        },
+        ".browser-qa.slot-1.lock.owner.json": "ABSENT",
+        ".browser-qa.slot-1.lock.server.json": "ABSENT",
+        "listener5274": "NONE"
+      },
+      "native-corrected-cleanup": {
+        "at": "2026-10-13T16:01:51.761793+00:00",
+        "owned": {
+          "69580": "ABSENT",
+          "69608": "ABSENT"
+        },
+        ".browser-qa.slot-1.lock.owner.json": "ABSENT",
+        ".browser-qa.slot-1.lock.server.json": "ABSENT",
+        "listener5274": "NONE"
+      },
+      "native-final-cleanup": {
+        "at": "2026-10-13T16:07:36.905783+00:00",
+        "owned": {
+          "55597": "ABSENT",
+          "55643": "ABSENT"
+        },
+        ".browser-qa.slot-1.lock.owner.json": "ABSENT",
+        ".browser-qa.slot-1.lock.server.json": "ABSENT",
+        "listener5274": "NONE"
+      }
+    }
+  },
+  "preExisting": [
+    "npm install reports 17 dependency vulnerabilities: 9 moderate, 7 high, 1 critical; package attribution uninspected.",
+    "Review preparation reports missing mirrored art in its hermetic local-assets cache; completion restores workspace materializations."
+  ],
+  "runtimeBeforeQa": "Every install/check/fuzz process terminal; no provider/server/lease started.",
+  "install": {
+    "exitCode": 0,
+    "wallSeconds": 2.484,
+    "provenance": "Terminal shell time npm install stdout; exec session 69694. PID and exact start/end were not separately recorded.",
+    "vulnerabilities": {
+      "total": 17,
+      "moderate": 9,
+      "high": 7,
+      "critical": 1
+    }
+  },
+  "sourceHashes": {
+    "src/content/cards/cosmonaut-of-tides-c7c95f67.ts": "6a1d855ce8f3c482167c292f8c70ed7fcc9221e793b55e6c4209b3e5b43ef1ad",
+    "src/content/cards/entropy-cascade-fb967cc1.ts": "49b4efadf69ed4f7f3b0fd67be1c67976e914b5e5123e98793d815a00aecc949",
+    "src/engine/effects/primitives/copy-card.ts": "434da1bfc5bf672e490b648e0e5ee8fa496a7cb7185d5c40d4e2656ca001d588",
+    "src/engine/effects/registry.ts": "897cefb6a9bb37e4c76320a3bade5dd857a7d2c2e85a14c64c45df851a8811e6",
+    "src/engine/effects/primitives/contracts/copy-card-times.contracts.ts": "42bcd0deeef0d000249a59d2b0663b2cac36a33317924395464a191acb74c837"
+  },
+  "commitEndpoint": {
+    "status": "UNKNOWN until Git completes; actual endpoint retained in ignored terminal receipt",
+    "prospectiveCutoff": "2026-10-13T16:13:56.126173+00:00",
+    "dispatch": "2026-10-13T15:30:37.079000+00:00",
+    "grossMinutesAtCutoff": 43.31745288333333,
+    "includes": "All research, coordination, scope/ACK waits, validation, known failed/corrected QA, visual inspection and final evidence. Git uses automatic timestamps; no author/committer date override."
+  }
+}

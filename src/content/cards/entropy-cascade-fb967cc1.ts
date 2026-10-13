@@ -1,3 +1,6 @@
+import { energy, event, reclaim } from "../../engine/dsl/builders";
+import { triggeringCard, whenYouPlay } from "../../engine/dsl/triggers";
+import { copyCardTimes, delayed } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +24,9 @@ export default card({
   cardNumber: 393,
   art: { x: -0.126, y: 0.897, scale: 1.07 },
   isStarter: false,
-  pending: true,
+  abilities: () => [
+    event(delayed(whenYouPlay({ cardType: "event" }), copyCardTimes(triggeringCard(), 2), "untilEndOfTurn")),
+    reclaim(energy(5)),
+  ],
+  verifiedText: "8eq3yijblt",
 });

@@ -1,3 +1,5 @@
+import { onMaterialized, triggered, triggeringCard, whenYouPlay } from "../../engine/dsl/triggers";
+import { copyCardTimes, delayed } from "../../engine/effects/primitives";
 import { card } from "../define";
 
 export default card({
@@ -21,5 +23,10 @@ export default card({
   cardNumber: 74,
   art: { x: 0, y: 0, scale: 1.47 },
   isStarter: false,
-  pending: true,
+  abilities: (variant) => [triggered(onMaterialized(), delayed(
+    whenYouPlay({ cardType: "event", costAtMost: variant.amplified ? 3 : 2 }),
+    copyCardTimes(triggeringCard(), 2),
+    "untilEndOfTurn",
+  ))],
+  verifiedText: "ae5sfxg06v",
 });

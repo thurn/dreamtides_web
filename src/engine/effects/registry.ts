@@ -26,6 +26,7 @@ import {
   choosePlayerPrimitive,
   chooseSubtypePrimitive,
   copyCardPrimitive,
+  copyCardTimesPrimitive,
   costModifierPrimitive,
   selfCostReductionPrimitive,
   createCardPrimitive,
@@ -143,6 +144,9 @@ const DEFINITIONS = {
   },
   get copyCard() {
     return copyCardPrimitive;
+  },
+  get copyCardTimes() {
+    return copyCardTimesPrimitive;
   },
   get selfCostReduction() {
     return selfCostReductionPrimitive;
