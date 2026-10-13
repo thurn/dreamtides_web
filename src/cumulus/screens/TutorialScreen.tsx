@@ -47,7 +47,6 @@ import {
   type MobileBattleView,
 } from "./MobileBattleScreen";
 import { mobileBattlefieldWindow } from "./battle-board/layout";
-import { logEvent } from "../../logging";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import {
   DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS,
@@ -164,6 +163,16 @@ export interface TutorialView {
   readonly challenge?: TutorialChallengeView | null;
 }
 
+/** UUID-backed observation emitted after a tutorial hand gesture is cleared. */
+export interface TutorialCardDropRejection {
+  readonly runId: TutorialRunId;
+  readonly battleId: MobileBattleView["battleId"];
+  readonly cardInstanceId: BattleCardId;
+  readonly cardId: CardId;
+  readonly target: MobileBattleSlotTarget | null;
+  readonly reason: "invalid-target" | "unresolved-drop";
+}
+
 export interface TutorialScreenProps {
   readonly view: TutorialView;
   /** Multiplier applied to every timed part of the tutorial sequence. */
@@ -192,6 +201,7 @@ export interface TutorialScreenProps {
     cardId: CardId,
     targetSlotId: BattleSlotViewId | null,
   ) => void;
+  readonly onPlayerCardDropRejected?: (detail: TutorialCardDropRejection) => void;
   readonly onEndTurn?: (
     runId: TutorialRunId,
     actionId: TutorialActionId,
@@ -1645,6 +1655,7 @@ export function TutorialScreen({
   onHowToPlayPresented,
   onHowToPlayDismissed,
   onPlayerCardPlay,
+  onPlayerCardDropRejected,
   onEndTurn,
   onPlayerCharacterReposition,
 }: TutorialScreenProps): ReactElement {
@@ -2453,20 +2464,19 @@ export function TutorialScreen({
   [view.battle.near.backRank]);
   const rejectTutorialCardDrop = useCallback((target: MobileBattleSlotTarget | undefined, reason: "invalid-target" | "unresolved-drop"): void => {
     const instance = pendingTutorialCardIdRef.current;
-    if (instance !== null && tutorialPlayableCard !== null && view.playbackRunId !== null) {
-      logEvent("tutorial_player_card_drop_rejected", {
-        runId: view.playbackRunId,
-        battleId: view.battle.battleId,
-        cardInstanceId: instance,
-        cardId: tutorialPlayableCard.model.cardId,
-        target: target ?? null,
-        reason,
-      });
-    }
+    const detail: TutorialCardDropRejection | null = instance !== null && tutorialPlayableCard !== null && view.playbackRunId !== null ? {
+      runId: view.playbackRunId,
+      battleId: view.battle.battleId,
+      cardInstanceId: instance,
+      cardId: tutorialPlayableCard.model.cardId,
+      target: target ?? null,
+      reason,
+    } : null;
     tutorialCardDropHandledRef.current = true;
     pendingTutorialCardIdRef.current = null;
     setPendingTutorialCardId(null);
-  }, [tutorialPlayableCard, view.battle.battleId, view.playbackRunId]);
+    if (detail !== null) onPlayerCardDropRejected?.(detail);
+  }, [onPlayerCardDropRejected, tutorialPlayableCard, view.battle.battleId, view.playbackRunId]);
 
   const tutorialInteractions = useMemo<MobileBattleInteractions | undefined>(
     () =>
@@ -2495,6 +2505,8 @@ export function TutorialScreen({
               tutorialCardDropHandledRef.current = false;
               playTutorialCard(null);
             },
+            handDropPolicy: "exact-cell",
+            onHandCardDropRejected: (target) => rejectTutorialCardDrop(target ?? undefined, "invalid-target"),
             onHandCardDrop: (target) => {
               if (!canPlayTutorialCard) return;
               if (target === undefined || !isTutorialPlayTarget(target)) {

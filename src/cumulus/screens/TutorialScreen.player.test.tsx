@@ -364,17 +364,31 @@ describe("tutorial centred slot identity and gesture boundaries", () => {
     expect(predicate?.({ owner: "player", rank: "back", slotId: parseBattleSlotViewId("B0") })).toBe(true);
   });
   it.each(["padding", "missing", "unhandled"] as const)("a %s drag cannot silently auto-play, and a fresh real B1 drag still commits once", kind => {
-    const onPlayerCardPlay = vi.fn();
-    renderTutorialScreen(realCellView(), { onPlayerCardPlay });
+    const onPlayerCardPlay = vi.fn(), onPlayerCardDropRejected = vi.fn();
+    renderTutorialScreen(realCellView(), { onPlayerCardPlay, onPlayerCardDropRejected });
+    expect(screenMocks.props?.interactions?.handDropPolicy).toBe("exact-cell");
     const padding = screenMocks.props!.view.near.backRank.find(slot => !["B0", "B1", "B2"].includes(slot.id))!;
     startCardDrag();
     if (kind !== "unhandled") act(() => screenMocks.props?.interactions?.onHandCardDrop?.(kind === "missing" ? undefined : { owner: "player", rank: "back", slotId: padding.id }));
     act(() => screenMocks.props?.interactions?.onCardDragEnd());
     expect(onPlayerCardPlay).not.toHaveBeenCalled();
+    expect(onPlayerCardDropRejected).toHaveBeenCalledExactlyOnceWith({ runId: parseTutorialRunId("real-slot-contract"), battleId: screenMocks.props!.view.battleId, cardInstanceId: TUTORIAL_PLAYER_CARD.id, cardId: TUTORIAL_PLAYER_CARD.model.cardId, target: kind === "padding" ? { owner: "player", rank: "back", slotId: padding.id } : null, reason: kind === "unhandled" ? "unresolved-drop" : "invalid-target" });
     expect(screenMocks.props?.interactions).toMatchObject(clearedPending);
     startCardDrag();
     act(() => screenMocks.props?.interactions?.onHandCardDrop?.({ owner: "player", rank: "back", slotId: parseBattleSlotViewId("B1") }));
     act(() => screenMocks.props?.interactions?.onCardDragEnd());
+    expect(onPlayerCardPlay).toHaveBeenCalledExactlyOnceWith("real-slot-contract", TUTORIAL_PLAYER_CARD.id, TUTORIAL_PLAYER_CARD.model.cardId, "B1");
+  });
+  it("clears a denied gesture before an observation error and permits a fresh legal drag", () => {
+    const onPlayerCardPlay = vi.fn(), onPlayerCardDropRejected = vi.fn(() => { throw new Error("synthetic observer failure"); });
+    renderTutorialScreen(realCellView(), { onPlayerCardPlay, onPlayerCardDropRejected });
+    startCardDrag();
+    expect(() => act(() => screenMocks.props?.interactions?.onHandCardDropRejected?.(null))).toThrow("synthetic observer failure");
+    act(() => screenMocks.props?.interactions?.onCardDragEnd());
+    expect(onPlayerCardDropRejected).toHaveBeenCalledTimes(1);
+    expect(onPlayerCardPlay).not.toHaveBeenCalled();
+    startCardDrag();
+    act(() => screenMocks.props?.interactions?.onHandCardDrop?.({ owner: "player", rank: "back", slotId: parseBattleSlotViewId("B1") }));
     expect(onPlayerCardPlay).toHaveBeenCalledExactlyOnceWith("real-slot-contract", TUTORIAL_PLAYER_CARD.id, TUTORIAL_PLAYER_CARD.model.cardId, "B1");
   });
   it("explicit activation preserves null automatic placement", () => {

@@ -7,10 +7,10 @@ import { TutorialScreenAdapter } from "./TutorialScreenAdapter";
 import type { TutorialScreenProps } from "../../cumulus/screens/TutorialScreen";
 import type { TutorialPlaybackState } from "../../types/tutorial";
 import { makeTutorialConfiguration } from "../../testing/tutorial-configuration-fixture";
-import { prefixSetup, prefixActions, engine } from "../../rules/battle/tutorial-contracts-fixture";
+import { prefixSetup, prefixActions, engine, CARDS } from "../../rules/battle/tutorial-contracts-fixture";
 import { startTutorialPrefix } from "../../rules/battle/tutorial-prefix";
 import { registerBattleInitProvider } from "../../rules/battle/journey-battle";
-import { parseTutorialRunId } from "../../types/identifiers";
+import { parseTutorialRunId, parseBattleCardId, parseBattleSlotViewId } from "../../types/identifiers";
 import { getLogEntries, resetLog } from "../../logging";
 const captured=vi.hoisted(()=>({props:null as TutorialScreenProps|null}));
 const mutations=vi.hoisted(()=>({action:vi.fn(()=>Promise.resolve(1)),beginTutorial:vi.fn(()=>Promise.resolve(1)),beginTutorialBattle:vi.fn(()=>Promise.resolve(1)),completeTutorialAction:vi.fn(()=>Promise.resolve(1))}));
@@ -31,6 +31,13 @@ beforeEach(()=>{
 afterEach(()=>{act(()=>mounted?.unmount());mounted=null;registerBattleInitProvider(null);vi.restoreAllMocks();document.body.innerHTML="";});
 async function mount(){const element=document.createElement("div");document.body.append(element);mounted=createRoot(element);await act(async()=>{mounted!.render(<CumulusRoot><TutorialScreenAdapter avatars={avatars} playbackSpeed={4}/></CumulusRoot>);await Promise.resolve();});return element;}
 describe("TutorialScreenAdapter",()=>{
+ it("records a typed rejected drop without submitting a gameplay intent",async()=>{
+  await mount();
+  const detail={runId:tutorial.runId,battleId:captured.props!.view.battle.battleId,cardInstanceId:parseBattleCardId("synthetic-hand-instance"),cardId:CARDS.strong,target:{owner:"enemy" as const,rank:"back" as const,slotId:parseBattleSlotViewId("B1")},reason:"invalid-target" as const};
+  act(()=>captured.props?.onPlayerCardDropRejected?.(detail));
+  expect(mutations.action).not.toHaveBeenCalled();
+  expect(getLogEntries()).toEqual(expect.arrayContaining([expect.objectContaining({event:"tutorial_player_card_drop_rejected",...detail})]));
+ });
  it("projects a real prefix and sends authored completion identity through the facade",async()=>{
   const element=await mount();expect(element.querySelector("[data-tutorial-screen]")).not.toBeNull();
   expect(captured.props?.playbackSpeed).toBe(4);expect(captured.props?.view.battle.far.deckCardIds[0]).toBe(tutorial.prefix?.draws[0]?.instance);

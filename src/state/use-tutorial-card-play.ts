@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import type { TutorialCardDropRejection } from "../cumulus/screens/TutorialScreen";
 import { logEvent } from "../logging";
 import type { FrontDoorMutations } from "./front-door-context";
 import type {
@@ -49,4 +50,11 @@ export function useTutorialCardPlay(
     },
     [action, battleId],
   );
+}
+
+/** Record an observation after the presentation clears its rejected gesture. */
+export function useTutorialCardDropRejection() {
+  return useCallback((detail: TutorialCardDropRejection): void => {
+    logEvent("tutorial_player_card_drop_rejected", { ...detail });
+  }, []);
 }

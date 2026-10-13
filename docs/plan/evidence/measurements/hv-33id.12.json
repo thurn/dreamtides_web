@@ -1,0 +1,2785 @@
+{
+  "bead": "hv-33id.12",
+  "base": "290333343b9fbb3ecde0283ede305527c9602ca4",
+  "stage": "Final precommit clock; actual Git start/end and stamp gap in additive ignored receipt",
+  "recordedAt": "2026-10-13T03:20:15.928621+00:00",
+  "implementationClock": {
+    "selectedDispatchStart": "2026-10-13T02:33:34.538728+00:00",
+    "dispatchBracketEnd": "2026-10-13T02:34:25.238740+00:00",
+    "exactProviderStart": "unknown",
+    "bracketSeconds": 50.700012,
+    "nativeClaim": "2026-10-13T02:29:48+00:00",
+    "rootGrossClaimMinutesAtStage2": 50.46547701666667,
+    "scope": "Gross elapsed includes research, scope coordination, mutation witnesses, validation, browser scenarios, incident recovery and evidence. No productive editing, CPU or quota estimate.",
+    "rootGrossClaimMinutesAtPrecommit": 55.82037343333333
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "worker-local-review-02 command starting one-minute load"
+      },
+      "implementWindow": {
+        "measuredFor": "Conservative before-dispatch marker within the recorded 50.700012-second provider dispatch bracket; exact provider start unknown. Root claim clock is separate."
+      }
+    }
+  },
+  "sourceHashes": {
+    "src/cumulus/screens/MobileBattleScreen.controls.test.tsx": "150663c87c017931f4754ff71b65ff03d0978415a144df3b39e7bfcd066d1779",
+    "src/cumulus/screens/MobileBattleScreen.tsx": "f05b1ceb4610f50186da2b07b5795bfb023c99944414630a9c108a19441ff2f9",
+    "src/cumulus/screens/TutorialScreen.player.test.tsx": "fb478f166c469c44cbf6a0412e9ed059befa6ec7085efa2684eab6bc8f2586b6",
+    "src/cumulus/screens/TutorialScreen.tsx": "4cb6a5644e1e1b1720020ada808afccbbf6a47b639eb90472ba4ca9fd829c686",
+    "src/cumulus/screens/battle-board/drop-resolution.ts": "b783a0ba57550afefa5e1a27031823c42f9bc4623b50837b5a093f3662498d62",
+    "src/screens/cumulus_adapters/TutorialScreenAdapter.test.tsx": "e5acb099d354bbac6015d73eb7f8493daa7308c681b17cd3b7e054eed55da159",
+    "src/screens/cumulus_adapters/TutorialScreenAdapter.tsx": "7da88c58e06274ac4fa4969d3dd463de99207e1a52dd37012c95258204043a8d",
+    "src/state/use-tutorial-card-play.ts": "868ac8f61d878f3a583ee58bed0ae4ab7d5891336fac0b8083bb746c8f753d10"
+  },
+  "testDelta": {
+    "discoveryFiles": 0,
+    "netLines": 160,
+    "netJsdomFiles": 0,
+    "changedExistingJsdomModules": 3,
+    "modules": {
+      "src/cumulus/screens/MobileBattleScreen.controls.test.tsx": {
+        "lines": 279
+      },
+      "src/cumulus/screens/TutorialScreen.player.test.tsx": {
+        "lines": 400
+      },
+      "src/screens/cumulus_adapters/TutorialScreenAdapter.test.tsx": {
+        "lines": 51
+      }
+    }
+  },
+  "adapterLines": 115,
+  "validation": {
+    "focused": {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/cumulus/screens/MobileBattleScreen.controls.test.tsx",
+        "src/cumulus/screens/TutorialScreen.player.test.tsx",
+        "src/screens/cumulus_adapters/TutorialScreenAdapter.test.tsx"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-12-exact-tutorial-drops",
+      "start": "2026-10-13T02:52:04.166592+00:00",
+      "end": "2026-10-13T02:52:12.152945+00:00",
+      "exit": 0,
+      "wallSeconds": 7.986097375003737,
+      "pid": 95869,
+      "pgid": 95869,
+      "load": "{ 5.39 5.77 6.85 }",
+      "groupRemainingAtExit": []
+    },
+    "review": {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-12-exact-tutorial-drops",
+      "start": "2026-10-13T02:54:11.778836+00:00",
+      "end": "2026-10-13T02:54:27.976154+00:00",
+      "exit": 0,
+      "wallSeconds": 16.19712866700138,
+      "pid": 1221,
+      "pgid": 1221,
+      "load": "{ 4.01 4.97 6.36 }",
+      "groupRemainingAtExit": []
+    },
+    "knip": {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-12-exact-tutorial-drops",
+      "start": "2026-10-13T02:54:34.320503+00:00",
+      "end": "2026-10-13T02:54:37.857480+00:00",
+      "exit": 0,
+      "wallSeconds": 3.536878250000882,
+      "pid": 2345,
+      "pgid": 2345,
+      "load": "{ 5.39 5.23 6.42 }",
+      "groupRemainingAtExit": []
+    },
+    "focusedResult": "34 tests in3 existing modules",
+    "relatedResult": "112 tests in14 modules plus TypeScript/lint/cycles",
+    "beforeFix": "before-fix02 seven behavioral failures/23passes; before-fix01 includes one invalid adapter fixture TypeError and is qualified",
+    "restoredControls": {
+      "pointer": {
+        "failed": 3,
+        "passed": 29
+      },
+      "native": {
+        "failed": 1,
+        "passed": 31
+      },
+      "screenPolicy": {
+        "failed": 3,
+        "passed": 29
+      },
+      "hitDerivedRoot": {
+        "failed": 2,
+        "passed": 32
+      },
+      "missingActualSourceRef": {
+        "failed": 1,
+        "passed": 33
+      }
+    },
+    "crossBoardBeforeFix": "one actual source-card pointer-route behavioral failure/32passes on v01 production",
+    "review01Qualification": "112related tests passed; lint unbound spy-expression failed and was corrected before review02"
+  },
+  "qa": {
+    "normal": {
+      "invocation": "run-6246dk",
+      "report": "normal-release-v01.result.json",
+      "wrapperReceipt": {
+        "argv": [
+          "node",
+          "scripts/qa/run-scenario.mjs",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.12/normal-release-v01.mjs",
+          "--bead",
+          "hv-33id.12",
+          "--port",
+          "5174",
+          "--timeout",
+          "900"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-12-exact-tutorial-drops",
+        "start": "2026-10-13T02:54:47.833612+00:00",
+        "end": "2026-10-13T03:01:36.612590+00:00",
+        "exit": 0,
+        "wallSeconds": 408.7756777500035,
+        "pid": 3027,
+        "pgid": 3027,
+        "load": "{ 6.68 5.55 6.52 }",
+        "groupRemainingAtExit": []
+      },
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 1398,
+        "scenario": 406476,
+        "total": 407943
+      },
+      "port": 5174,
+      "serverPid": 3119,
+      "slot": 0,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "filename": "normal-release-v01-desktop.jsonl",
+          "gameId": "qssdip",
+          "rows": 231,
+          "sha256": "da9f99a8e18b09bc24d5ffe5ed4f7ee70ff905c983d5f5dadabc55d393f54101"
+        },
+        {
+          "viewport": "mobile",
+          "filename": "normal-release-v01-mobile.jsonl",
+          "gameId": "z2rbi4",
+          "rows": 227,
+          "sha256": "38757a70c2e68791427af6d168ea3012bdba6cd642f2721b228bd35ecb46d5de"
+        }
+      ],
+      "placementObservations": [
+        {
+          "label": "verified exact physical placement",
+          "data": {
+            "geometry": {
+              "href": "http://localhost:5174/tutorial?seed=1&game=qssdip",
+              "card": "i1",
+              "chosen": "B1",
+              "physical": {
+                "x": 722,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "allMatchingCards": [
+                {
+                  "zone": null,
+                  "slot": "B1",
+                  "x": 722,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ],
+              "ranks": [
+                {
+                  "id": "tutorial-padding:player:back:0",
+                  "filled": "false",
+                  "x": 254.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:1",
+                  "filled": "false",
+                  "x": 348,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:2",
+                  "filled": "false",
+                  "x": 441.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:3",
+                  "filled": "false",
+                  "x": 535,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B0",
+                  "filled": "false",
+                  "x": 628.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B1",
+                  "filled": "true",
+                  "x": 722,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B2",
+                  "filled": "false",
+                  "x": 815.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:7",
+                  "filled": "false",
+                  "x": 909,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:8",
+                  "filled": "false",
+                  "x": 1002.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:9",
+                  "filled": "false",
+                  "x": 1096,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ]
+            },
+            "request": {
+              "gameId": "qssdip",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "sourceZone": "player-hand",
+              "destinationZone": "player-back-rank",
+              "targetSlotId": "B1",
+              "timestamp": "2026-10-13T02:55:42.576Z",
+              "event": "tutorial_player_card_play_requested",
+              "seq": 48
+            },
+            "committed": {
+              "gameId": "qssdip",
+              "version": 20,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i1",
+                "from": "hand",
+                "slot": {
+                  "rank": "back",
+                  "index": 1
+                }
+              },
+              "answers": [],
+              "timestamp": "2026-10-13T02:55:42.586Z",
+              "event": "engine.action",
+              "seq": 49
+            }
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "verified exact physical placement",
+          "data": {
+            "geometry": {
+              "href": "http://localhost:5174/tutorial?seed=1&game=z2rbi4",
+              "card": "i1",
+              "chosen": "B1",
+              "physical": {
+                "x": 196.984375,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "allMatchingCards": [
+                {
+                  "zone": null,
+                  "slot": "B1",
+                  "x": 196.984375,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ],
+              "ranks": [
+                {
+                  "id": "tutorial-padding:player:back:0",
+                  "filled": "false",
+                  "x": 23.40625,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:1",
+                  "filled": "false",
+                  "x": 81.265625,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B0",
+                  "filled": "false",
+                  "x": 139.125,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B1",
+                  "filled": "true",
+                  "x": 196.984375,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B2",
+                  "filled": "false",
+                  "x": 254.84375,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:5",
+                  "filled": "false",
+                  "x": 312.703125,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ]
+            },
+            "request": {
+              "gameId": "z2rbi4",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "sourceZone": "player-hand",
+              "destinationZone": "player-back-rank",
+              "targetSlotId": "B1",
+              "timestamp": "2026-10-13T02:59:09.083Z",
+              "event": "tutorial_player_card_play_requested",
+              "seq": 48
+            },
+            "committed": {
+              "gameId": "z2rbi4",
+              "version": 20,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i1",
+                "from": "hand",
+                "slot": {
+                  "rank": "back",
+                  "index": 1
+                }
+              },
+              "answers": [],
+              "timestamp": "2026-10-13T02:59:09.092Z",
+              "event": "engine.action",
+              "seq": 49
+            }
+          },
+          "at": "mobile#0"
+        }
+      ],
+      "denialObservations": [
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "occupied-enemy",
+            "target": {
+              "kind": "occupied-enemy",
+              "point": {
+                "x": 673.25,
+                "y": 227.75
+              },
+              "slotId": "B0",
+              "owner": "enemy",
+              "rank": "back",
+              "filled": "true",
+              "physical": "i31",
+              "rect": {
+                "x": 628.5,
+                "y": 183,
+                "width": 89.5,
+                "height": 89.5
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 673.25,
+                "y": 227.75
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "IMG",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": {
+                "owner": "enemy",
+                "rank": "back",
+                "slotId": "B0"
+              },
+              "filled": "true",
+              "cell": {
+                "x": 628.5,
+                "y": 183,
+                "width": 89.5,
+                "height": 89.5,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "hitCard": "i31",
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i31",
+                  "slot": "B0"
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "qssdip",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": {
+                "owner": "enemy",
+                "rank": "back",
+                "slotId": "B0"
+              },
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T02:55:26.046Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 39
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "background",
+            "target": {
+              "kind": "background",
+              "point": {
+                "x": 144,
+                "y": 450
+              },
+              "slotId": null,
+              "owner": null,
+              "rank": null,
+              "filled": null,
+              "physical": null,
+              "rect": {
+                "x": 0,
+                "y": 378,
+                "width": 1440,
+                "height": 207
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 144,
+                "y": 450
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "DIV",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": null,
+              "filled": null,
+              "cell": null,
+              "hitCard": null,
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": null,
+                  "slot": null
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "qssdip",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": null,
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T02:55:32.607Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 42
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "padding",
+            "target": {
+              "kind": "padding",
+              "point": {
+                "x": 299.25,
+                "y": 528.25
+              },
+              "slotId": "tutorial-padding:player:back:0",
+              "owner": "player",
+              "rank": "back",
+              "filled": "false",
+              "physical": null,
+              "rect": {
+                "x": 254.5,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 299.25,
+                "y": 528.25
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "DIV",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": {
+                "owner": "player",
+                "rank": "back",
+                "slotId": "tutorial-padding:player:back:0"
+              },
+              "filled": "false",
+              "cell": {
+                "x": 254.5,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "hitCard": null,
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": null,
+                  "slot": "tutorial-padding:player:back:0"
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "qssdip",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": {
+                "owner": "player",
+                "rank": "back",
+                "slotId": "tutorial-padding:player:back:0"
+              },
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T02:55:38.270Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 45
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "occupied-enemy",
+            "target": {
+              "kind": "occupied-enemy",
+              "point": {
+                "x": 166.0546875,
+                "y": 249.2421875
+              },
+              "slotId": "B0",
+              "owner": "enemy",
+              "rank": "back",
+              "filled": "true",
+              "physical": "i31",
+              "rect": {
+                "x": 139.125,
+                "y": 222.3125,
+                "width": 53.859375,
+                "height": 53.859375
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 166.0546875,
+                "y": 249.2421875
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "IMG",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": {
+                "owner": "enemy",
+                "rank": "back",
+                "slotId": "B0"
+              },
+              "filled": "true",
+              "cell": {
+                "x": 139.125,
+                "y": 222.3125,
+                "width": 53.859375,
+                "height": 53.859375,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "hitCard": "i31",
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i31",
+                  "slot": "B0"
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "z2rbi4",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": {
+                "owner": "enemy",
+                "rank": "back",
+                "slotId": "B0"
+              },
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T02:59:00.851Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 39
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "mobile#0"
+        },
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "background",
+            "target": {
+              "kind": "background",
+              "point": {
+                "x": 195,
+                "y": 422
+              },
+              "slotId": null,
+              "owner": null,
+              "rank": null,
+              "filled": null,
+              "physical": null,
+              "rect": {
+                "x": 23.40625,
+                "y": 415.890625,
+                "width": 343.1875,
+                "height": 53.859375
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 195,
+                "y": 422
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "DIV",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": null,
+              "filled": null,
+              "cell": null,
+              "hitCard": null,
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": null,
+                  "slot": null
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "z2rbi4",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": null,
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T02:59:03.668Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 42
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "mobile#0"
+        },
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "padding",
+            "target": {
+              "kind": "padding",
+              "point": {
+                "x": 50.3359375,
+                "y": 442.8203125
+              },
+              "slotId": "tutorial-padding:player:back:0",
+              "owner": "player",
+              "rank": "back",
+              "filled": "false",
+              "physical": null,
+              "rect": {
+                "x": 23.40625,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 50.3359375,
+                "y": 442.8203125
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "DIV",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": {
+                "owner": "player",
+                "rank": "back",
+                "slotId": "tutorial-padding:player:back:0"
+              },
+              "filled": "false",
+              "cell": {
+                "x": 23.40625,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "hitCard": null,
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": null,
+                  "slot": "tutorial-padding:player:back:0"
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "z2rbi4",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": {
+                "owner": "player",
+                "rank": "back",
+                "slotId": "tutorial-padding:player:back:0"
+              },
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T02:59:06.349Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 45
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "mobile#0"
+        }
+      ],
+      "victoryObservations": [
+        {
+          "label": "committed Victory board score before surface",
+          "data": {
+            "player": "10",
+            "enemy": "3",
+            "threshold": "10",
+            "phase": "challenge",
+            "result": {
+              "kind": "victory",
+              "winner": "player",
+              "reason": "score"
+            }
+          },
+          "at": "desktop#3"
+        },
+        {
+          "label": "committed Victory board score before surface",
+          "data": {
+            "player": "10",
+            "enemy": "3",
+            "threshold": "10",
+            "phase": "challenge",
+            "result": {
+              "kind": "victory",
+              "winner": "player",
+              "reason": "score"
+            }
+          },
+          "at": "mobile#3"
+        }
+      ]
+    },
+    "settled": {
+      "invocation": "run-bAGW9Y",
+      "report": "settled-release-v02.result.json",
+      "wrapperReceipt": {
+        "argv": [
+          "python3",
+          "/tmp/root33id12-20261013/in-owned-worktree.py",
+          "python3",
+          "/tmp/root33id12-20261013/launch-qa-checked.py",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.12/runtime-source-script-manifest-v03-settled.json",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.12/settled-release-v02.mjs",
+          "--bead",
+          "hv-33id.12",
+          "--port",
+          "5174",
+          "--timeout",
+          "400",
+          "--arg",
+          "settledDenialControl=1"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-12-exact-tutorial-drops",
+        "start": "2026-10-13T03:11:38.001365+00:00",
+        "end": "2026-10-13T03:13:51.658724+00:00",
+        "exit": 0,
+        "wallSeconds": 133.6552888330043,
+        "pid": 21353,
+        "pgid": 21353,
+        "load": "{ 23.68 17.56 11.49 }",
+        "groupRemainingAtExit": []
+      },
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 2395,
+        "scenario": 127958,
+        "total": 130431
+      },
+      "port": 5274,
+      "serverPid": 21445,
+      "slot": 1,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "filename": "settled-release-v02-desktop.jsonl",
+          "gameId": "uzbfdz",
+          "rows": 60,
+          "sha256": "d58770b7f4161ae0c5964c27ec0c8136778131469caee9ca5691fe420abacc1a"
+        },
+        {
+          "viewport": "mobile",
+          "filename": "settled-release-v02-mobile.jsonl",
+          "gameId": "7wk4jk",
+          "rows": 60,
+          "sha256": "0ce8b73089545e5ad400c1154ec7a0813ddfe54fa130da8c80cea704b7ef7e75"
+        }
+      ],
+      "placementObservations": [
+        {
+          "label": "verified exact physical placement",
+          "data": {
+            "geometry": {
+              "href": "http://localhost:5274/tutorial?seed=1&game=uzbfdz",
+              "card": "i1",
+              "chosen": "B1",
+              "physical": {
+                "x": 722,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "allMatchingCards": [
+                {
+                  "zone": null,
+                  "slot": "B1",
+                  "x": 722,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ],
+              "ranks": [
+                {
+                  "id": "tutorial-padding:player:back:0",
+                  "filled": "false",
+                  "x": 254.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:1",
+                  "filled": "false",
+                  "x": 348,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:2",
+                  "filled": "false",
+                  "x": 441.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:3",
+                  "filled": "false",
+                  "x": 535,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B0",
+                  "filled": "false",
+                  "x": 628.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B1",
+                  "filled": "true",
+                  "x": 722,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B2",
+                  "filled": "false",
+                  "x": 815.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:7",
+                  "filled": "false",
+                  "x": 909,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:8",
+                  "filled": "false",
+                  "x": 1002.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:9",
+                  "filled": "false",
+                  "x": 1096,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ]
+            },
+            "request": {
+              "gameId": "uzbfdz",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "sourceZone": "player-hand",
+              "destinationZone": "player-back-rank",
+              "targetSlotId": "B1",
+              "timestamp": "2026-10-13T03:12:48.335Z",
+              "event": "tutorial_player_card_play_requested",
+              "seq": 48
+            },
+            "committed": {
+              "gameId": "uzbfdz",
+              "version": 20,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i1",
+                "from": "hand",
+                "slot": {
+                  "rank": "back",
+                  "index": 1
+                }
+              },
+              "answers": [],
+              "timestamp": "2026-10-13T03:12:48.341Z",
+              "event": "engine.action",
+              "seq": 49
+            }
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "verified exact physical placement",
+          "data": {
+            "geometry": {
+              "href": "http://localhost:5274/tutorial?seed=1&game=7wk4jk",
+              "card": "i1",
+              "chosen": "B1",
+              "physical": {
+                "x": 196.984375,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "allMatchingCards": [
+                {
+                  "zone": null,
+                  "slot": "B1",
+                  "x": 196.984375,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ],
+              "ranks": [
+                {
+                  "id": "tutorial-padding:player:back:0",
+                  "filled": "false",
+                  "x": 23.40625,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:1",
+                  "filled": "false",
+                  "x": 81.265625,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B0",
+                  "filled": "false",
+                  "x": 139.125,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B1",
+                  "filled": "true",
+                  "x": 196.984375,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B2",
+                  "filled": "false",
+                  "x": 254.84375,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:5",
+                  "filled": "false",
+                  "x": 312.703125,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ]
+            },
+            "request": {
+              "gameId": "7wk4jk",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "sourceZone": "player-hand",
+              "destinationZone": "player-back-rank",
+              "targetSlotId": "B1",
+              "timestamp": "2026-10-13T03:13:45.663Z",
+              "event": "tutorial_player_card_play_requested",
+              "seq": 48
+            },
+            "committed": {
+              "gameId": "7wk4jk",
+              "version": 20,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i1",
+                "from": "hand",
+                "slot": {
+                  "rank": "back",
+                  "index": 1
+                }
+              },
+              "answers": [],
+              "timestamp": "2026-10-13T03:13:45.674Z",
+              "event": "engine.action",
+              "seq": 49
+            }
+          },
+          "at": "mobile#0"
+        }
+      ],
+      "denialObservations": [
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "occupied-enemy",
+            "target": {
+              "kind": "occupied-enemy",
+              "point": {
+                "x": 673.25,
+                "y": 227.75
+              },
+              "slotId": "B0",
+              "owner": "enemy",
+              "rank": "back",
+              "filled": "true",
+              "physical": "i31",
+              "rect": {
+                "x": 628.5,
+                "y": 183,
+                "width": 89.5,
+                "height": 89.5
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 673.25,
+                "y": 227.75
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "IMG",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": {
+                "owner": "enemy",
+                "rank": "back",
+                "slotId": "B0"
+              },
+              "filled": "true",
+              "cell": {
+                "x": 628.5,
+                "y": 183,
+                "width": 89.5,
+                "height": 89.5,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "hitCard": "i31",
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i31",
+                  "slot": "B0"
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "uzbfdz",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": {
+                "owner": "enemy",
+                "rank": "back",
+                "slotId": "B0"
+              },
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T03:12:35.872Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 39
+            },
+            "settledHand": {
+              "physical": "i1",
+              "zone": "near-hand",
+              "slot": null,
+              "returnMarker": null,
+              "rect": {
+                "x": 655.546875,
+                "y": 732,
+                "width": 128.90625,
+                "height": 180.46875
+              },
+              "viewportIntersection": {
+                "left": 655.546875,
+                "right": 784.453125,
+                "top": 732,
+                "bottom": 900
+              },
+              "opacity": 1,
+              "visibility": "visible",
+              "hitPoint": {
+                "x": 687.7734375,
+                "y": 774
+              },
+              "hitPhysical": "i1"
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "background",
+            "target": {
+              "kind": "background",
+              "point": {
+                "x": 144,
+                "y": 450
+              },
+              "slotId": null,
+              "owner": null,
+              "rank": null,
+              "filled": null,
+              "physical": null,
+              "rect": {
+                "x": 0,
+                "y": 378,
+                "width": 1440,
+                "height": 207
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 144,
+                "y": 450
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "DIV",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": null,
+              "filled": null,
+              "cell": null,
+              "hitCard": null,
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": null,
+                  "slot": null
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "uzbfdz",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": null,
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T03:12:39.802Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 42
+            },
+            "settledHand": {
+              "physical": "i1",
+              "zone": "near-hand",
+              "slot": null,
+              "returnMarker": null,
+              "rect": {
+                "x": 655.546875,
+                "y": 732,
+                "width": 128.90625,
+                "height": 180.46875
+              },
+              "viewportIntersection": {
+                "left": 655.546875,
+                "right": 784.453125,
+                "top": 732,
+                "bottom": 900
+              },
+              "opacity": 1,
+              "visibility": "visible",
+              "hitPoint": {
+                "x": 687.7734375,
+                "y": 774
+              },
+              "hitPhysical": "i1"
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "padding",
+            "target": {
+              "kind": "padding",
+              "point": {
+                "x": 299.25,
+                "y": 528.25
+              },
+              "slotId": "tutorial-padding:player:back:0",
+              "owner": "player",
+              "rank": "back",
+              "filled": "false",
+              "physical": null,
+              "rect": {
+                "x": 254.5,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 299.25,
+                "y": 528.25
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "DIV",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": {
+                "owner": "player",
+                "rank": "back",
+                "slotId": "tutorial-padding:player:back:0"
+              },
+              "filled": "false",
+              "cell": {
+                "x": 254.5,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "hitCard": null,
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": null,
+                  "slot": "tutorial-padding:player:back:0"
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "uzbfdz",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": {
+                "owner": "player",
+                "rank": "back",
+                "slotId": "tutorial-padding:player:back:0"
+              },
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T03:12:43.869Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 45
+            },
+            "settledHand": {
+              "physical": "i1",
+              "zone": "near-hand",
+              "slot": null,
+              "returnMarker": null,
+              "rect": {
+                "x": 655.546875,
+                "y": 732,
+                "width": 128.90625,
+                "height": 180.46875
+              },
+              "viewportIntersection": {
+                "left": 655.546875,
+                "right": 784.453125,
+                "top": 732,
+                "bottom": 900
+              },
+              "opacity": 1,
+              "visibility": "visible",
+              "hitPoint": {
+                "x": 687.7734375,
+                "y": 774
+              },
+              "hitPhysical": "i1"
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "occupied-enemy",
+            "target": {
+              "kind": "occupied-enemy",
+              "point": {
+                "x": 166.0546875,
+                "y": 249.2421875
+              },
+              "slotId": "B0",
+              "owner": "enemy",
+              "rank": "back",
+              "filled": "true",
+              "physical": "i31",
+              "rect": {
+                "x": 139.125,
+                "y": 222.3125,
+                "width": 53.859375,
+                "height": 53.859375
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 166.0546875,
+                "y": 249.2421875
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "IMG",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": {
+                "owner": "enemy",
+                "rank": "back",
+                "slotId": "B0"
+              },
+              "filled": "true",
+              "cell": {
+                "x": 139.125,
+                "y": 222.3125,
+                "width": 53.859375,
+                "height": 53.859375,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "hitCard": "i31",
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i31",
+                  "slot": "B0"
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "7wk4jk",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": {
+                "owner": "enemy",
+                "rank": "back",
+                "slotId": "B0"
+              },
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T03:13:24.228Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 39
+            },
+            "settledHand": {
+              "physical": "i1",
+              "zone": "near-hand",
+              "slot": null,
+              "returnMarker": null,
+              "rect": {
+                "x": 120.1328125,
+                "y": 664.109375,
+                "width": 149.734375,
+                "height": 209.625
+              },
+              "viewportIntersection": {
+                "left": 120.1328125,
+                "right": 269.8671875,
+                "top": 664.109375,
+                "bottom": 844
+              },
+              "opacity": 1,
+              "visibility": "visible",
+              "hitPoint": {
+                "x": 157.56640625,
+                "y": 709.08203125
+              },
+              "hitPhysical": "i1"
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "mobile#0"
+        },
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "background",
+            "target": {
+              "kind": "background",
+              "point": {
+                "x": 195,
+                "y": 422
+              },
+              "slotId": null,
+              "owner": null,
+              "rank": null,
+              "filled": null,
+              "physical": null,
+              "rect": {
+                "x": 23.40625,
+                "y": 415.890625,
+                "width": 343.1875,
+                "height": 53.859375
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 195,
+                "y": 422
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "DIV",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": null,
+              "filled": null,
+              "cell": null,
+              "hitCard": null,
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": null,
+                  "slot": null
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "7wk4jk",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": null,
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T03:13:29.632Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 42
+            },
+            "settledHand": {
+              "physical": "i1",
+              "zone": "near-hand",
+              "slot": null,
+              "returnMarker": null,
+              "rect": {
+                "x": 120.1328125,
+                "y": 664.109375,
+                "width": 149.734375,
+                "height": 209.625
+              },
+              "viewportIntersection": {
+                "left": 120.1328125,
+                "right": 269.8671875,
+                "top": 664.109375,
+                "bottom": 844
+              },
+              "opacity": 1,
+              "visibility": "visible",
+              "hitPoint": {
+                "x": 157.56640625,
+                "y": 709.08203125
+              },
+              "hitPhysical": "i1"
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "mobile#0"
+        },
+        {
+          "label": "actual denied release and retained physical hand",
+          "data": {
+            "kind": "padding",
+            "target": {
+              "kind": "padding",
+              "point": {
+                "x": 50.3359375,
+                "y": 442.8203125
+              },
+              "slotId": "tutorial-padding:player:back:0",
+              "owner": "player",
+              "rank": "back",
+              "filled": "false",
+              "physical": null,
+              "rect": {
+                "x": 23.40625,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375
+              },
+              "opacity": 1,
+              "dropTarget": null
+            },
+            "release": {
+              "point": {
+                "x": 50.3359375,
+                "y": 442.8203125
+              },
+              "observedBeforePointerUp": true,
+              "selection": "first elementsFromPoint item outside the dragging physical card; resolver hides that card during pointer-up",
+              "topHit": "DIV",
+              "hit": "DIV",
+              "battleRoot": "tutorial-battle:event:4:0:prefix",
+              "target": {
+                "owner": "player",
+                "rank": "back",
+                "slotId": "tutorial-padding:player:back:0"
+              },
+              "filled": "false",
+              "cell": {
+                "x": 23.40625,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "hitCard": null,
+              "stack": [
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "IMG",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": "i1",
+                  "slot": null
+                },
+                {
+                  "tag": "DIV",
+                  "physical": null,
+                  "slot": "tutorial-padding:player:back:0"
+                }
+              ]
+            },
+            "denied": {
+              "gameId": "7wk4jk",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "target": {
+                "owner": "player",
+                "rank": "back",
+                "slotId": "tutorial-padding:player:back:0"
+              },
+              "reason": "invalid-target",
+              "timestamp": "2026-10-13T03:13:34.465Z",
+              "event": "tutorial_player_card_drop_rejected",
+              "seq": 45
+            },
+            "settledHand": {
+              "physical": "i1",
+              "zone": "near-hand",
+              "slot": null,
+              "returnMarker": null,
+              "rect": {
+                "x": 120.1328125,
+                "y": 664.109375,
+                "width": 149.734375,
+                "height": 209.625
+              },
+              "viewportIntersection": {
+                "left": 120.1328125,
+                "right": 269.8671875,
+                "top": 664.109375,
+                "bottom": 844
+              },
+              "opacity": 1,
+              "visibility": "visible",
+              "hitPoint": {
+                "x": 157.56640625,
+                "y": 709.08203125
+              },
+              "hitPhysical": "i1"
+            },
+            "requestsBefore": 0,
+            "actionsBefore": 1,
+            "playsBefore": 0,
+            "requestCountAfter": 0,
+            "actionCountAfter": 1,
+            "playCountAfter": 0,
+            "physical": "i1"
+          },
+          "at": "mobile#0"
+        }
+      ],
+      "victoryObservations": []
+    },
+    "default": {
+      "invocation": "run-WRb9GO",
+      "report": "default-release-v01.result.json",
+      "wrapperReceipt": {
+        "argv": [
+          "python3",
+          "/tmp/root33id12-20261013/in-owned-worktree.py",
+          "python3",
+          "/tmp/root33id12-20261013/launch-qa-checked.py",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.12/runtime-source-script-manifest-v03-settled.json",
+          "/Users/dthurn/dreamtides_web/artifacts/qa/hv-33id.12/default-release-v01.mjs",
+          "--bead",
+          "hv-33id.12",
+          "--port",
+          "5174",
+          "--timeout",
+          "400",
+          "--arg",
+          "defaultControl=1"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hv-33id-12-exact-tutorial-drops",
+        "start": "2026-10-13T03:14:38.180502+00:00",
+        "end": "2026-10-13T03:15:45.835586+00:00",
+        "exit": 0,
+        "wallSeconds": 67.65398758399533,
+        "pid": 84104,
+        "pgid": 84104,
+        "load": "{ 15.52 16.02 11.94 }",
+        "groupRemainingAtExit": []
+      },
+      "wallMs": {
+        "browserLeaseWait": 6,
+        "serve": 2003,
+        "scenario": 64788,
+        "total": 66860
+      },
+      "port": 5274,
+      "serverPid": 84189,
+      "slot": 1,
+      "gameLogs": [
+        {
+          "viewport": "desktop",
+          "filename": "default-release-v01-desktop.jsonl",
+          "gameId": "6epfan",
+          "rows": 51,
+          "sha256": "63d3508bf90ce018af62ee1093846fdddce74cf7ca21dc67689562a1bb650c4b"
+        },
+        {
+          "viewport": "mobile",
+          "filename": "default-release-v01-mobile.jsonl",
+          "gameId": "yqd3c2",
+          "rows": 51,
+          "sha256": "0441c8b2c3de40fe5d0f5069ee8e6c586994fd3e00a2a7631b6f6bf32d191ba7"
+        }
+      ],
+      "placementObservations": [
+        {
+          "label": "verified exact physical placement",
+          "data": {
+            "geometry": {
+              "href": "http://localhost:5274/tutorial?seed=1&game=6epfan",
+              "card": "i1",
+              "chosen": "B0",
+              "physical": {
+                "x": 628.5,
+                "y": 483.5,
+                "width": 89.5,
+                "height": 89.5,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "allMatchingCards": [
+                {
+                  "zone": null,
+                  "slot": "B0",
+                  "x": 628.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ],
+              "ranks": [
+                {
+                  "id": "tutorial-padding:player:back:0",
+                  "filled": "false",
+                  "x": 254.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:1",
+                  "filled": "false",
+                  "x": 348,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:2",
+                  "filled": "false",
+                  "x": 441.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:3",
+                  "filled": "false",
+                  "x": 535,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B0",
+                  "filled": "true",
+                  "x": 628.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B1",
+                  "filled": "false",
+                  "x": 722,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B2",
+                  "filled": "false",
+                  "x": 815.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:7",
+                  "filled": "false",
+                  "x": 909,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:8",
+                  "filled": "false",
+                  "x": 1002.5,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:9",
+                  "filled": "false",
+                  "x": 1096,
+                  "y": 483.5,
+                  "width": 89.5,
+                  "height": 89.5,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ]
+            },
+            "request": {
+              "gameId": "6epfan",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "sourceZone": "player-hand",
+              "destinationZone": "player-back-rank",
+              "targetSlotId": null,
+              "timestamp": "2026-10-13T03:15:10.641Z",
+              "event": "tutorial_player_card_play_requested",
+              "seq": 39
+            },
+            "committed": {
+              "gameId": "6epfan",
+              "version": 20,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i1",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-13T03:15:10.647Z",
+              "event": "engine.action",
+              "seq": 40
+            }
+          },
+          "at": "desktop#0"
+        },
+        {
+          "label": "verified exact physical placement",
+          "data": {
+            "geometry": {
+              "href": "http://localhost:5274/tutorial?seed=1&game=yqd3c2",
+              "card": "i1",
+              "chosen": "B0",
+              "physical": {
+                "x": 139.125,
+                "y": 415.890625,
+                "width": 53.859375,
+                "height": 53.859375,
+                "opacity": 1,
+                "visibility": "visible"
+              },
+              "allMatchingCards": [
+                {
+                  "zone": null,
+                  "slot": "B0",
+                  "x": 139.125,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ],
+              "ranks": [
+                {
+                  "id": "tutorial-padding:player:back:0",
+                  "filled": "false",
+                  "x": 23.40625,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:1",
+                  "filled": "false",
+                  "x": 81.265625,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B0",
+                  "filled": "true",
+                  "x": 139.125,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B1",
+                  "filled": "false",
+                  "x": 196.984375,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "B2",
+                  "filled": "false",
+                  "x": 254.84375,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                },
+                {
+                  "id": "tutorial-padding:player:back:5",
+                  "filled": "false",
+                  "x": 312.703125,
+                  "y": 415.890625,
+                  "width": 53.859375,
+                  "height": 53.859375,
+                  "opacity": 1,
+                  "visibility": "visible"
+                }
+              ]
+            },
+            "request": {
+              "gameId": "yqd3c2",
+              "runId": "event:4",
+              "battleId": "tutorial-battle:event:4:0:prefix",
+              "cardInstanceId": "i1",
+              "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              "sourceZone": "player-hand",
+              "destinationZone": "player-back-rank",
+              "targetSlotId": null,
+              "timestamp": "2026-10-13T03:15:43.174Z",
+              "event": "tutorial_player_card_play_requested",
+              "seq": 39
+            },
+            "committed": {
+              "gameId": "yqd3c2",
+              "version": 20,
+              "side": "player",
+              "action": {
+                "kind": "play",
+                "card": "i1",
+                "from": "hand"
+              },
+              "answers": [],
+              "timestamp": "2026-10-13T03:15:43.180Z",
+              "event": "engine.action",
+              "seq": 40
+            }
+          },
+          "at": "mobile#0"
+        }
+      ],
+      "denialObservations": [],
+      "victoryObservations": []
+    }
+  },
+  "runtimeSettlement": {
+    "observedAt": "2026-10-13T03:20:15.928621+00:00",
+    "ownGroups": [
+      "21353",
+      "21445",
+      "3027",
+      "3119",
+      "84104",
+      "84189"
+    ],
+    "survivors": [],
+    "ports": {
+      "5174": {
+        "exit": 1,
+        "listeners": ""
+      },
+      "5274": {
+        "exit": 1,
+        "listeners": ""
+      }
+    },
+    "note": "Every own runner reports its context/server cleanup and free port. Ports may subsequently be reused by peer leases; no peer is killed."
+  },
+  "qaProvenance": {
+    "normal01": "Accepted functional/fullVictory run with postlaunch manifest limitation, not cryptographic startup attestation. Parent independent audit checks5 current production+4scenario hashes/mtimes and3 prelaunch source snapshots; hook/adapter priorread/mtime/solewriter corroboration. Original preparation start/end/PID not recorded. Original scripts/report/manifestv01 retained immutable.",
+    "incidentRecord": "qa-preparation-failure-v01.json is explicitly a transcription of original tool output, not original saved raw stdout or a rerun. Parent same-task justiciar structural launcher now verifies exact8source/test hashes+alllisted scenario hashes and writes preflight receipt before provider launch. Negative/positive no-provider controls are in justiciar-recovery-v01.",
+    "settled01": "Prelaunch extended manifest and passing preflight; final denial geometry includes cleared existing committing marker, usable viewport intersection/opacity and actualphysical-card hit. Normal01 mobile denial images remain transitional, never finalgeometry.",
+    "default01": "Prelaunch extended manifest/passing guard; fresh explicit tap/null/omitted engine slot with realB0 geometry."
+  },
+  "rulesReuse": {
+    "src/rules/front-door.ts": {
+      "oldSource": "17c4b6cead306143d26be15dce5c1079326e1406",
+      "oldSHA256": "adb007333767098e7151cecf912c11c4da599e9c200df031ca7ffb0dfd5054c5",
+      "currentSHA256": "adb007333767098e7151cecf912c11c4da599e9c200df031ca7ffb0dfd5054c5",
+      "byteIdentical": true
+    },
+    "src/rules/battle/tutorial-prefix.ts": {
+      "oldSource": "17c4b6cead306143d26be15dce5c1079326e1406",
+      "oldSHA256": "cd206c636ecb9914c91158989a51c9023347891e1d51905a439fdf37d8cf1916",
+      "currentSHA256": "cd206c636ecb9914c91158989a51c9023347891e1d51905a439fdf37d8cf1916",
+      "byteIdentical": true
+    },
+    "src/rules/battle/tutorial-lifecycle.ts": {
+      "oldSource": "17c4b6cead306143d26be15dce5c1079326e1406",
+      "oldSHA256": "c19536f008cd5919c4299f4f9813a01d027c8db7faa62e94bfa65408ed49ce9e",
+      "currentSHA256": "c19536f008cd5919c4299f4f9813a01d027c8db7faa62e94bfa65408ed49ce9e",
+      "byteIdentical": true
+    },
+    "src/rules/battle/tutorial-prefix.contracts.ts": {
+      "oldSource": "17c4b6cead306143d26be15dce5c1079326e1406",
+      "oldSHA256": "d8c129c8a3645b498e870662828fe1b1ec7552c00d03bcd894c13f72969d446a",
+      "currentSHA256": "d8c129c8a3645b498e870662828fe1b1ec7552c00d03bcd894c13f72969d446a",
+      "byteIdentical": true
+    },
+    "src/rules/battle/tutorial-host.contracts.ts": {
+      "oldSource": "17c4b6cead306143d26be15dce5c1079326e1406",
+      "oldSHA256": "5b796d002bb10e653e3e29a17477ef27511efd5ff8354a7f2b290f556b721d12",
+      "currentSHA256": "5b796d002bb10e653e3e29a17477ef27511efd5ff8354a7f2b290f556b721d12",
+      "byteIdentical": true
+    }
+  },
+  "parentDuties": "Fresh cold read-only gpt-5.6-sol code/visual review under temporary authorized route, dispositions, exactcandidate submission/promotion/cleanup and native acceptance closure remain parent-owned.",
+  "finalPrecommitClock": "2026-10-13T03:25:37.222406+00:00",
+  "stage3Acknowledgement": "2026-10-13T03:23:07.611469+00:00",
+  "preservedProvisionalEvidence": {
+    "docs/plan/evidence/friction/hv-33id.12.json": {
+      "relativeFilename": "stage3-provisional-evidence-v01/docs/plan/evidence/friction/hv-33id.12.json",
+      "sha256": "ae024cd2199109282c41a2b78457d8aff29c01aebe404d3754336a4c07df8591"
+    },
+    "docs/plan/evidence/measurements/hv-33id.12.json": {
+      "relativeFilename": "stage3-provisional-evidence-v01/docs/plan/evidence/measurements/hv-33id.12.json",
+      "sha256": "28223d2b77be4a8da8a2f67d6d4302ceab447c7066fd7dfe4a0ea4475ec268aa"
+    },
+    "docs/plan/evidence/measurements/hv-33id.12.md": {
+      "relativeFilename": "stage3-provisional-evidence-v01/docs/plan/evidence/measurements/hv-33id.12.md",
+      "sha256": "572650a8c894bd13e211b734f5bbb1daa9f8cf399044cc50f9e3fc8d3308d125"
+    }
+  },
+  "clockRefreshQualification": "The first Stage3 stamp aged while exact-stage/Git receipt scripts were prepared, before any commit attempt. Its three evidence bytes and original clock receipt remain immutable; final schema/staging/check follow this refreshed stamp."
+}

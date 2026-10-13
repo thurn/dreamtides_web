@@ -86,7 +86,7 @@ import {
   visibleRankSlots,
 } from "./battle-board/layout";
 import {
-  closestOpenBackRankSlot,
+  dropHandCardAtPoint,
   dropMobileCardAtPoint,
   findSlotElement,
   sameSlotTarget,
@@ -598,6 +598,10 @@ export interface MobileBattleInteractions {
   readonly onBattlefieldCardActivate?: (battleCardId: BattleCardId) => void;
   readonly onTargetSelectionCancel?: () => void;
   readonly onHandCardDrop?: (target?: MobileBattleSlotTarget) => void;
+  /** Hand releases default to the nearest open back cell; exact-cell uses only the actual hit. */
+  readonly handDropPolicy?: "nearest-open-back" | "exact-cell";
+  /** An exact-cell hand release rejected before producing a play intent. Null means no slot was hit. */
+  readonly onHandCardDropRejected?: (target: MobileBattleSlotTarget | null) => void;
   readonly onCardDebugActivate?: (
     battleCardId: BattleCardId,
     source: MobileBattleCardSource,
@@ -2120,6 +2124,7 @@ const NearHand = memo(function NearHand({
   readonly onCardDragChange: (dragging: boolean, cardId?: BattleCardId) => void;
   readonly interactions?: MobileBattleInteractions;
 }) {
+  const handRef = useRef<HTMLDivElement | null>(null);
   const pickerCandidateIds = new Set(cardPicker?.candidateIds ?? []);
   const canDrop =
     cardPicker === null &&
@@ -2128,6 +2133,7 @@ const NearHand = memo(function NearHand({
     interactions.pendingCardSource !== "near-hand";
   return (
     <div
+      ref={handRef}
       data-battle-mobile-row="near-hand"
       data-battle-hand-owner={owner}
       data-battle-hand-count={totalCount}
@@ -2248,6 +2254,7 @@ const NearHand = memo(function NearHand({
                           clientY,
                           placementClientX,
                           placementClientY,
+                          handRef.current?.closest<HTMLElement>("[data-battle-mobile]") ?? null,
                         ),
                     }
             }
@@ -4277,13 +4284,13 @@ export function MobileBattleScreen({
       onDrop={(event) => {
         if (interactions?.pendingCardSource !== "near-hand") return;
         event.preventDefault();
-        interactions.onHandCardDrop?.(
-          closestOpenBackRankSlot(
-            event.currentTarget,
-            near.owner,
-            event.clientX,
-            event.clientY,
-          ),
+        dropHandCardAtPoint(
+          interactions,
+          event.currentTarget,
+          event.target instanceof Element ? event.target : null,
+          near.owner,
+          event.clientX,
+          event.clientY,
         );
       }}
       style={{

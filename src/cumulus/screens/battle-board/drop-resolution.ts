@@ -77,27 +77,65 @@ export function slotTargetIsEligible(
   );
 }
 
+/** Resolve a hand release using the controller's policy and the entrypoint's owner. */
+export function dropHandCardAtPoint(
+  interactions: MobileBattleInteractions,
+  battleScreen: HTMLElement | null,
+  hitTarget: Element | null,
+  owner: MobileBattleOwner,
+  clientX: number,
+  clientY: number,
+): void {
+  if (interactions.handDropPolicy !== "exact-cell") {
+    interactions.onHandCardDrop?.(
+      battleScreen === null
+        ? undefined
+        : closestOpenBackRankSlot(battleScreen, owner, clientX, clientY),
+    );
+    return;
+  }
+  const target = slotTargetFromElement(hitTarget);
+  const slot = hitTarget?.closest<HTMLElement>('[data-battle-mobile-drop-kind="slot"]');
+  const bounds = slot?.getBoundingClientRect();
+  if (
+    !Number.isFinite(clientX) || !Number.isFinite(clientY) ||
+    battleScreen === null ||
+    hitTarget?.closest("[data-battle-mobile]") !== battleScreen ||
+    target === null || target.owner !== owner || target.rank !== "back" ||
+    slot?.dataset.battleSlotFilled !== "false" || bounds === undefined ||
+    !(bounds.width > 0 && bounds.height > 0) ||
+    clientX < bounds.left || clientX > bounds.right ||
+    clientY < bounds.top || clientY > bounds.bottom ||
+    !slotTargetIsEligible(interactions, target)
+  ) {
+    interactions.onHandCardDropRejected?.(target);
+    return;
+  }
+  interactions.onHandCardDrop?.(target);
+}
+
 export function dropMobileCardAtPoint(
   interactions: MobileBattleInteractions,
   clientX: number,
   clientY: number,
   placementClientX: number,
   placementClientY: number,
+  sourceBattleScreen?: HTMLElement | null,
 ): void {
-  const hitTarget = document.elementFromPoint(clientX, clientY);
+  const invalidExactHandPoint = interactions.pendingCardSource === "near-hand" &&
+    interactions.handDropPolicy === "exact-cell" &&
+    (!Number.isFinite(clientX) || !Number.isFinite(clientY));
+  const hitTarget = invalidExactHandPoint ? null : document.elementFromPoint(clientX, clientY);
   if (interactions.pendingCardSource === "near-hand") {
-    const battleScreen = hitTarget?.closest<HTMLElement>(
-      "[data-battle-mobile]",
-    );
-    interactions.onHandCardDrop?.(
-      battleScreen === undefined || battleScreen === null
-        ? undefined
-        : closestOpenBackRankSlot(
-            battleScreen,
-            interactions.nearSide ?? interactions.pendingCardOwner ?? "player",
-            clientX,
-            clientY,
-          ),
+    dropHandCardAtPoint(
+      interactions,
+      interactions.handDropPolicy === "exact-cell"
+        ? sourceBattleScreen ?? null
+        : hitTarget?.closest<HTMLElement>("[data-battle-mobile]") ?? null,
+      hitTarget,
+      interactions.nearSide ?? interactions.pendingCardOwner ?? "player",
+      clientX,
+      clientY,
     );
     return;
   }
@@ -315,7 +353,7 @@ function resolveBattlefieldSlot(
   };
 }
 
-export function closestOpenBackRankSlot(
+function closestOpenBackRankSlot(
   battleScreen: HTMLElement,
   owner: MobileBattleOwner,
   clientX: number,

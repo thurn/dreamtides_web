@@ -4,7 +4,7 @@ import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import { useTutorialActions } from "../../state/use-tutorial-actions";
 import { useTutorialActionComplete } from "../../state/use-tutorial-action-complete";
-import { useTutorialCardPlay } from "../../state/use-tutorial-card-play";
+import { useTutorialCardPlay, useTutorialCardDropRejection } from "../../state/use-tutorial-card-play";
 import { useTutorialEndTurn } from "../../state/use-tutorial-end-turn";
 import { useTutorialPlayerReposition } from "../../state/use-tutorial-player-reposition";
 import { useTutorialCards } from "../../state/use-tutorial-cards";
@@ -86,6 +86,7 @@ export function TutorialScreenAdapter({
     },
     [view.battle.battleId, view.currentAction?.id],
   );
+  const handlePlayerCardDropRejected = useTutorialCardDropRejection();
   const handlePlayerCardPlay = useTutorialCardPlay(
     mutations.action,
     view.battle.battleId,
@@ -106,6 +107,7 @@ export function TutorialScreenAdapter({
       onAvatarArrivalComplete={handleAvatarArrivalComplete}
       {...howToPlayLogging}
       onPlayerCardPlay={handlePlayerCardPlay}
+      onPlayerCardDropRejected={handlePlayerCardDropRejected}
       onEndTurn={handleEndTurn}
       onPlayerCharacterReposition={handlePlayerCharacterReposition}
     />
