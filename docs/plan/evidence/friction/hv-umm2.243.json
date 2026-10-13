@@ -1,0 +1,30 @@
+{
+  "bead": "hv-umm2.243",
+  "phase": 5,
+  "implementMin": 29.2461664,
+  "implementWindow": {
+    "start": "2026-10-13T00:01:06.318309+00:00",
+    "end": "2026-10-13T00:30:21.088293+00:00"
+  },
+  "localValidationS": {
+    "focusedContractsCoverageSpecs": 8.833613958006026,
+    "review": 47.52449887500552,
+    "knip": 4.64266083399707,
+    "fuzzOuter": 211.6303583330009,
+    "fuzzReportedInner": 209.4,
+    "preflight": 1.2606329580012243,
+    "browserSweep": 22.960489790988504,
+    "liveHerb": 28.903866542008473,
+    "liveMandrakeCorrected": 27.216716958995676,
+    "liveRelic": 68.02383241600182,
+    "liveBellCorrected": 21.98527333298989
+  },
+  "hostLoad": 2.931640625,
+  "testDelta": {
+    "files": 0,
+    "lines": 0,
+    "jsdomFiles": 0
+  },
+  "friction": [],
+  "implementWindowObservation": "Conservative parent before-dispatch proxy. Actual dispatch lies between 00:01:06.318309Z and 00:02:08.695143Z (62.376834 seconds uncertainty); exact tool/model start unknown. End is sampled before final schemas and normal Git commit; actual committer timestamp is retained separately."
+}

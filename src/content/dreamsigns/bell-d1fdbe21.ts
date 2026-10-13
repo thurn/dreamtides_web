@@ -1,3 +1,6 @@
+import { triggered, triggeringCard, whenPlayFromVoid } from "../../engine/dsl/triggers";
+import { rematerialize } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -14,5 +17,10 @@ export default dreamsign({
     "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
   ],
   tags: ["Tag OK"],
-  pending: true,
+  abilities: () => [
+    triggered(whenPlayFromVoid("you", { cardType: "character" }), rematerialize(triggeringCard())),
+  ],
+  verifiedText: expectedVerifiedText(
+    "When you play a character from your void, rematerialize it.",
+  ),
 });

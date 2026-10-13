@@ -1,0 +1,1214 @@
+{
+  "bead": "hv-umm2.243",
+  "base": "c7682c2d4e0597881624ba03c367af088900698f",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+  "dispatchObservation": {
+    "before": "2026-10-13T00:01:06.318309+00:00",
+    "after": "2026-10-13T00:02:08.695143+00:00",
+    "uncertaintySeconds": 62.376834,
+    "usedStartProxy": "before",
+    "actualDispatch": "within parent before/after bounds; exact tool/model start unavailable",
+    "modelStart": null,
+    "firstHelperInstallationStart": "2026-10-13T00:02:06.086653+00:00",
+    "qualification": "Conservative before-dispatch proxy includes the observed dispatch uncertainty; installation observation is separate and is not substituted for exact dispatch."
+  },
+  "implementWindowObservation": {
+    "start": "2026-10-13T00:01:06.318309+00:00",
+    "stage2PracticalEndpoint": "2026-10-13T00:22:36.040742+00:00",
+    "end": "2026-10-13T00:30:21.088293+00:00",
+    "endQualification": "UTC sample immediately before final evidence schema/triggers and one normal Git commit; actual whole-second committer timestamp is authoritative and is retained separately in helper commit receipt. No Git dates are forced."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review prepare group starting at 2026-10-13T00:09:31.756Z",
+        "source": "review.stdout native review load=2.931640625; wrapper os.getloadavg one-minute sample agrees",
+        "qualification": "Actual loaded-host observation, not a low-load budget benchmark."
+      }
+    }
+  },
+  "sourceSHA256": {
+    "src/content/dreamsigns/mandrake-root-293a610d.ts": "85f2fba0719045baa6fcdc0602b54eb199cdc243eb9c0410116ba1a486cf44e2",
+    "src/content/dreamsigns/herb-mortar-4a9f95d5.ts": "92fc78e9003cb8f9feb3419d8dc69b00b31869323624d004ae4230709d8f37e7",
+    "src/content/dreamsigns/carved-relic-064cfb53.ts": "42a7c8a44f161f035b6f7bf3a69b2743edce27950bee3474cc4f9fc85200e0ea",
+    "src/content/dreamsigns/bell-d1fdbe21.ts": "6399e709af80aa9b95fda619aea6a8f7db1ae1fe8ecc1cb9a6e6f2df51e7613c",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.243-1.md": "2007a88a93325aec66b5f48f38f8b7276397398b4af8d97b371bfba56b741975",
+    "docs/plan/evidence/card-issues/d1fdbe21-56f6-43c0-aaac-1e4683964da5--hv-umm2.243.md": "da34fc07580a1fd6a414dfbee2fbc8b3e810dc1aca44a57b4ac58c508164a539"
+  },
+  "sourceScope": {
+    "productionLeaves": 4,
+    "nonTestSourceChangedLines": 61,
+    "sourceSnapshot": "working tree after frozen six source/RD/card-issue files, against base",
+    "engineUIFixturesCatalogInventoryRunnerIndexEdits": 0,
+    "testDelta": {
+      "files": 0,
+      "lines": 0,
+      "jsdomFiles": 0
+    },
+    "D20": "Pure primitive compositions need no own scenario module. Bell early off-play rematerialization follows already contracted play-from-void timing and in-play Rematerialize; the typed public scratch probe provides eight normative and six positive controls. No mutable unrelated production fixture is added to CI.",
+    "reviewFull": "Not required for leaf-only composition; no cross-cutting architecture, test infrastructure or repository configuration change.",
+    "coldReview": "Native bead has no core-review label and complete non-test source diff is 61 lines, below default >100 threshold. No independent code review dispatched for this composition; phase-gate review obligation remains."
+  },
+  "commandReceipts": {
+    "weighted300": {
+      "label": "weighted300",
+      "command": [
+        "env",
+        "JOURNEY_TEST_WORKERS=2",
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "npm",
+        "run",
+        "fuzz:engine",
+        "--",
+        "--games",
+        "300",
+        "--weight-uuids",
+        "4a9f95d5-b72d-4ee8-8d29-b05646edc23d,293a610d-ea75-4974-88da-13e4c86f248f,064cfb53-fcb4-4471-80de-27eccd23d3c0,d1fdbe21-56f6-43c0-aaac-1e4683964da5"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:09:14.491180+00:00",
+      "pid": 12650,
+      "pgid": 12650,
+      "end": "2026-10-13T00:12:46.123576+00:00",
+      "exit": 0,
+      "loadStart": [
+        2.38427734375,
+        5.7412109375,
+        8.66259765625
+      ],
+      "elapsedSeconds": 211.6303583330009,
+      "loadEnd": [
+        4.7783203125,
+        6.02099609375,
+        8.19970703125
+      ]
+    },
+    "three-runtime": {
+      "label": "three-runtime",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/codex-01a130c8-dreamsign243/helper/production-three-probe.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:10:46.105056+00:00",
+      "pid": 15834,
+      "pgid": 15834,
+      "end": "2026-10-13T00:10:46.688793+00:00",
+      "exit": 1,
+      "loadStart": [
+        7.630859375,
+        6.60107421875,
+        8.6982421875
+      ],
+      "elapsedSeconds": 0.5836372089979704,
+      "loadEnd": [
+        7.630859375,
+        6.60107421875,
+        8.6982421875
+      ]
+    },
+    "knip": {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:09:31.558536+00:00",
+      "pid": 13350,
+      "pgid": 13350,
+      "end": "2026-10-13T00:09:36.201327+00:00",
+      "exit": 0,
+      "loadStart": [
+        2.931640625,
+        5.70263671875,
+        8.59814453125
+      ],
+      "elapsedSeconds": 4.64266083399707,
+      "loadEnd": [
+        3.81787109375,
+        5.84033203125,
+        8.62939453125
+      ]
+    },
+    "live-bell-corrected": {
+      "label": "live-bell-corrected",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/codex-01a130c8-dreamsign243/helper/dreamsign-live.mjs",
+        "--bead",
+        "hv-umm2.243",
+        "--arg",
+        "index=3",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:20:02.344193+00:00",
+      "pid": 32141,
+      "pgid": 32141,
+      "end": "2026-10-13T00:20:24.092312+00:00",
+      "exit": 1,
+      "loadStart": [
+        2.9130859375,
+        4.162109375,
+        6.4423828125
+      ],
+      "elapsedSeconds": 21.74793499999214,
+      "loadEnd": [
+        3.08935546875,
+        4.10009765625,
+        6.35302734375
+      ]
+    },
+    "three-typecheck-final": {
+      "label": "three-typecheck-final",
+      "command": [
+        "node_modules/.bin/tsc",
+        "--noEmit",
+        "-p",
+        "/tmp/codex-01a130c8-dreamsign243/helper/tsconfig-three.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:15:49.531561+00:00",
+      "pid": 25098,
+      "pgid": 25098,
+      "end": "2026-10-13T00:15:51.520714+00:00",
+      "exit": 0,
+      "loadStart": [
+        4.7197265625,
+        5.50048828125,
+        7.5498046875
+      ],
+      "elapsedSeconds": 1.9890545829985058,
+      "loadEnd": [
+        4.7197265625,
+        5.50048828125,
+        7.5498046875
+      ]
+    },
+    "focused": {
+      "label": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/content-gates.test.ts",
+        "src/content/specs/specs.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:09:15.650325+00:00",
+      "pid": 12699,
+      "pgid": 12699,
+      "end": "2026-10-13T00:09:24.484090+00:00",
+      "exit": 0,
+      "loadStart": [
+        2.38427734375,
+        5.7412109375,
+        8.66259765625
+      ],
+      "elapsedSeconds": 8.833613958006026,
+      "loadEnd": [
+        3.01318359375,
+        5.765625,
+        8.63720703125
+      ]
+    },
+    "review": {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:09:31.558602+00:00",
+      "pid": 13352,
+      "pgid": 13352,
+      "end": "2026-10-13T00:10:19.083712+00:00",
+      "exit": 0,
+      "loadStart": [
+        2.931640625,
+        5.70263671875,
+        8.59814453125
+      ],
+      "elapsedSeconds": 47.52449887500552,
+      "loadEnd": [
+        6.67236328125,
+        6.38427734375,
+        8.68994140625
+      ]
+    },
+    "bell-probe": {
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/codex-01a130c8-dreamsign243/helper/bell-probe.mts"
+      ],
+      "pid": 1358,
+      "pgid": 1358,
+      "start": "2026-10-13T00:04:36.428575+00:00",
+      "end": "2026-10-13T00:04:37.510121+00:00",
+      "durationSeconds": 1.0815667089918861,
+      "exitCode": 0,
+      "loadStart": [
+        6.201171875,
+        10.47021484375,
+        10.9482421875
+      ],
+      "loadEnd": [
+        6.201171875,
+        10.47021484375,
+        10.9482421875
+      ]
+    },
+    "phase-counts": {
+      "label": "phase-counts",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/codex-01a130c8-dreamsign243/helper/phase-counts.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:22:35.060188+00:00",
+      "pid": 38094,
+      "pgid": 38094,
+      "end": "2026-10-13T00:22:35.988471+00:00",
+      "exit": 0,
+      "loadStart": [
+        7.5087890625,
+        6.021484375,
+        6.8330078125
+      ],
+      "elapsedSeconds": 0.928195542001049,
+      "loadEnd": [
+        7.5087890625,
+        6.021484375,
+        6.8330078125
+      ]
+    },
+    "preflight": {
+      "label": "preflight",
+      "command": [
+        "npm",
+        "run",
+        "lab:preflight",
+        "--",
+        "--dreamsigns",
+        "4a9f95d5-b72d-4ee8-8d29-b05646edc23d,293a610d-ea75-4974-88da-13e4c86f248f,064cfb53-fcb4-4471-80de-27eccd23d3c0,d1fdbe21-56f6-43c0-aaac-1e4683964da5"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:09:31.558597+00:00",
+      "pid": 13351,
+      "pgid": 13351,
+      "end": "2026-10-13T00:09:32.819299+00:00",
+      "exit": 0,
+      "loadStart": [
+        2.931640625,
+        5.70263671875,
+        8.59814453125
+      ],
+      "elapsedSeconds": 1.2606329580012243,
+      "loadEnd": [
+        2.931640625,
+        5.70263671875,
+        8.59814453125
+      ]
+    },
+    "live-mortar": {
+      "label": "live-mortar",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/codex-01a130c8-dreamsign243/helper/dreamsign-live.mjs",
+        "--bead",
+        "hv-umm2.243",
+        "--arg",
+        "index=0",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:12:56.382765+00:00",
+      "pid": 20135,
+      "pgid": 20135,
+      "end": "2026-10-13T00:13:25.286995+00:00",
+      "exit": 0,
+      "loadStart": [
+        4.677734375,
+        5.955078125,
+        8.150390625
+      ],
+      "elapsedSeconds": 28.903866542008473,
+      "loadEnd": [
+        4.41650390625,
+        5.767578125,
+        8.00537109375
+      ]
+    },
+    "three-typecheck-corrected": {
+      "label": "three-typecheck-corrected",
+      "command": [
+        "node_modules/.bin/tsc",
+        "--noEmit",
+        "-p",
+        "/tmp/codex-01a130c8-dreamsign243/helper/tsconfig-three.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:10:34.416584+00:00",
+      "pid": 15376,
+      "pgid": 15376,
+      "end": "2026-10-13T00:10:36.469111+00:00",
+      "exit": 0,
+      "loadStart": [
+        6.1416015625,
+        6.28271484375,
+        8.61279296875
+      ],
+      "elapsedSeconds": 2.052421125001274,
+      "loadEnd": [
+        6.1416015625,
+        6.28271484375,
+        8.61279296875
+      ]
+    },
+    "npm-install": {
+      "command": [
+        "npm",
+        "install"
+      ],
+      "pid": 39769,
+      "pgid": 39769,
+      "start": "2026-10-13T00:02:06.086653+00:00",
+      "end": "2026-10-13T00:02:06.832627+00:00",
+      "durationSeconds": 0.7460092090041144,
+      "exitCode": 0,
+      "loadStart": [
+        7.59814453125,
+        12.0908203125,
+        11.44580078125
+      ],
+      "loadEnd": [
+        7.59814453125,
+        12.0908203125,
+        11.44580078125
+      ]
+    },
+    "live-bell": {
+      "label": "live-bell",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/codex-01a130c8-dreamsign243/helper/dreamsign-live.mjs",
+        "--bead",
+        "hv-umm2.243",
+        "--arg",
+        "index=3",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:17:51.366414+00:00",
+      "pid": 28747,
+      "pgid": 28747,
+      "end": "2026-10-13T00:18:13.781584+00:00",
+      "exit": 1,
+      "loadStart": [
+        4.05517578125,
+        5.04833984375,
+        7.09814453125
+      ],
+      "elapsedSeconds": 22.414881416989374,
+      "loadEnd": [
+        3.3935546875,
+        4.8173828125,
+        6.95458984375
+      ]
+    },
+    "live-bell-chooser": {
+      "label": "live-bell-chooser",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/codex-01a130c8-dreamsign243/helper/dreamsign-live.mjs",
+        "--bead",
+        "hv-umm2.243",
+        "--arg",
+        "index=3",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:21:10.954502+00:00",
+      "pid": 35166,
+      "pgid": 35166,
+      "end": "2026-10-13T00:21:32.940073+00:00",
+      "exit": 0,
+      "loadStart": [
+        8.47412109375,
+        5.3017578125,
+        6.67333984375
+      ],
+      "elapsedSeconds": 21.98527333298989,
+      "loadEnd": [
+        8.888671875,
+        5.60400390625,
+        6.7490234375
+      ]
+    },
+    "three-runtime-corrected": {
+      "label": "three-runtime-corrected",
+      "command": [
+        "node_modules/.bin/tsx",
+        "/tmp/codex-01a130c8-dreamsign243/helper/production-three-probe.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:10:58.537848+00:00",
+      "pid": 16364,
+      "pgid": 16364,
+      "end": "2026-10-13T00:10:59.128688+00:00",
+      "exit": 0,
+      "loadStart": [
+        7.4052734375,
+        6.6162109375,
+        8.66748046875
+      ],
+      "elapsedSeconds": 0.5907454580010381,
+      "loadEnd": [
+        7.4052734375,
+        6.6162109375,
+        8.66748046875
+      ]
+    },
+    "sweep": {
+      "label": "sweep",
+      "command": [
+        "node",
+        "scripts/qa/card-sweep.mjs",
+        "--bead",
+        "hv-umm2.243",
+        "--dreamsigns",
+        "4a9f95d5-b72d-4ee8-8d29-b05646edc23d,293a610d-ea75-4974-88da-13e4c86f248f,064cfb53-fcb4-4471-80de-27eccd23d3c0,d1fdbe21-56f6-43c0-aaac-1e4683964da5"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:10:35.557185+00:00",
+      "pid": 15407,
+      "pgid": 15407,
+      "end": "2026-10-13T00:10:58.517989+00:00",
+      "exit": 0,
+      "loadStart": [
+        6.1416015625,
+        6.28271484375,
+        8.61279296875
+      ],
+      "elapsedSeconds": 22.960489790988504,
+      "loadEnd": [
+        7.4052734375,
+        6.6162109375,
+        8.66748046875
+      ]
+    },
+    "three-typecheck": {
+      "label": "three-typecheck",
+      "command": [
+        "node_modules/.bin/tsc",
+        "--noEmit",
+        "-p",
+        "/tmp/codex-01a130c8-dreamsign243/helper/tsconfig-three.json"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:10:04.789086+00:00",
+      "pid": 14556,
+      "pgid": 14556,
+      "end": "2026-10-13T00:10:07.135734+00:00",
+      "exit": 2,
+      "loadStart": [
+        6.47802734375,
+        6.3359375,
+        8.71484375
+      ],
+      "elapsedSeconds": 2.346532124996884,
+      "loadEnd": [
+        6.47802734375,
+        6.3359375,
+        8.71484375
+      ]
+    },
+    "live-root-corrected": {
+      "label": "live-root-corrected",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/codex-01a130c8-dreamsign243/helper/dreamsign-live.mjs",
+        "--bead",
+        "hv-umm2.243",
+        "--arg",
+        "index=1",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:15:35.020787+00:00",
+      "pid": 24558,
+      "pgid": 24558,
+      "end": "2026-10-13T00:16:02.237887+00:00",
+      "exit": 0,
+      "loadStart": [
+        4.482421875,
+        5.49365234375,
+        7.58447265625
+      ],
+      "elapsedSeconds": 27.216716958995676,
+      "loadEnd": [
+        4.6884765625,
+        5.466796875,
+        7.513671875
+      ]
+    },
+    "live-root": {
+      "label": "live-root",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/codex-01a130c8-dreamsign243/helper/dreamsign-live.mjs",
+        "--bead",
+        "hv-umm2.243",
+        "--arg",
+        "index=1",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:13:41.115193+00:00",
+      "pid": 21514,
+      "pgid": 21514,
+      "end": "2026-10-13T00:14:54.879630+00:00",
+      "exit": 1,
+      "loadStart": [
+        4.53857421875,
+        5.72900390625,
+        7.9521484375
+      ],
+      "elapsedSeconds": 73.76363016699906,
+      "loadEnd": [
+        6.29833984375,
+        5.9228515625,
+        7.8310546875
+      ]
+    },
+    "bell-typecheck": {
+      "command": [
+        "node_modules/.bin/tsc",
+        "--noEmit",
+        "-p",
+        "/tmp/codex-01a130c8-dreamsign243/helper/tsconfig-probe.json"
+      ],
+      "pid": 1102,
+      "pgid": 1102,
+      "start": "2026-10-13T00:04:34.278189+00:00",
+      "end": "2026-10-13T00:04:36.428207+00:00",
+      "durationSeconds": 2.150028582997038,
+      "exitCode": 0,
+      "loadStart": [
+        6.201171875,
+        10.47021484375,
+        10.9482421875
+      ],
+      "loadEnd": [
+        6.201171875,
+        10.47021484375,
+        10.9482421875
+      ]
+    },
+    "live-relic": {
+      "label": "live-relic",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/tmp/codex-01a130c8-dreamsign243/helper/dreamsign-live.mjs",
+        "--bead",
+        "hv-umm2.243",
+        "--arg",
+        "index=2",
+        "--timeout",
+        "300"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/dreamsign-recursion243-sol",
+      "start": "2026-10-13T00:16:27.469711+00:00",
+      "pid": 26229,
+      "pgid": 26229,
+      "end": "2026-10-13T00:17:35.494286+00:00",
+      "exit": 0,
+      "loadStart": [
+        3.96484375,
+        5.2353515625,
+        7.3701171875
+      ],
+      "elapsedSeconds": 68.02383241600182,
+      "loadEnd": [
+        4.6640625,
+        5.20703125,
+        7.18994140625
+      ]
+    }
+  },
+  "failedAttempts": [
+    {
+      "receipt": "three-typecheck.receipt.json",
+      "cause": "Scratch tsconfig omitted Vite env ambient after content import; corrected include only in scratch."
+    },
+    {
+      "receipt": "three-runtime.receipt.json",
+      "cause": "Scratch ScriptedSource supplied a second forced target answer; fixture autoAnswerForcedPrompts disabled before public actions; no engine failure."
+    },
+    {
+      "record": "attempt1-note.json",
+      "cause": "Stage1 scratch API/ref/type lookup caller mistakes."
+    },
+    {
+      "record": "formatter-unavailable.json",
+      "cause": "Repository does not provide Prettier; no package/config changes, manual scoped formatting before freeze."
+    },
+    {
+      "receipt": "live-root.receipt.json",
+      "cause": "Scratch expected target prompt although sole second target autoanswered; persisted exact i57/[i52] play/dissolve and one total emblem queue established engine success. Changed waiter validates exact subject/source completion or target prompt; corrected desktop/mobile pass."
+    },
+    {
+      "receipt": "live-bell.receipt.json",
+      "cause": "Scratch assumed gallery after playable void pile; existing UI opens a void action chooser. No play occurred; caps empty."
+    },
+    {
+      "receipt": "live-bell-corrected.receipt.json",
+      "cause": "Changed scratch isolated absent gallery root; precise source trace confirmed existing void chooser; no play occurred, caps empty. Concrete repair invokes actual chooser option for unique staged legal card; desktop/mobile passed."
+    }
+  ],
+  "BellProbe": {
+    "typecheck": "bell-typecheck.receipt.json",
+    "runtime": "bell-probe.receipt.json",
+    "source": "bell-probe.mts",
+    "output": "bell-probe.stdout",
+    "normativeCases": 8,
+    "positiveInPlayControls": 6,
+    "hypotheticalDelayedBenefitFailures": 4,
+    "qualification": "Failures of a hypothetical delayed-benefit assertion reject that inferred exception; they are not engine defects or mutation tests. Both seats \u00d7 Reclaim, distinct permission, hand and event exclusions, played-state serialization, then ordinary entry."
+  },
+  "productionProbe": {
+    "passed": 12,
+    "source": "/tmp/codex-01a130c8-dreamsign243/helper/production-three-probe.mts",
+    "typecheckFinalReceipt": "three-typecheck-final.receipt.json",
+    "runtimeReceipt": "three-runtime-corrected.receipt.json",
+    "rowsFile": "three-runtime-corrected.stdout",
+    "scope": "Both seats: each lower-cost emblem with subject cost0/3 + first use excludes equal/event + second dissolution suppressed including first empty pool; Dawn event/character/no-event selection."
+  },
+  "weightedProduction300": {
+    "outerSeconds": 211.6303583330009,
+    "reportedInnerWallSeconds": 209.4,
+    "reportedInnerCPUSeconds": 225.5,
+    "steps": 140544,
+    "prompts": 7718,
+    "hashReplays": 300,
+    "interactiveGames": 30,
+    "interactiveReruns": 850,
+    "failures": 0,
+    "feasibilityBounded": {
+      "legality": 0,
+      "prompts": 5
+    },
+    "results": {
+      "player": 149,
+      "enemy": 151,
+      "draw": 0
+    },
+    "targets": [
+      {
+        "uuid": "4a9f95d5-b72d-4ee8-8d29-b05646edc23d",
+        "included": 600,
+        "exercised": 1117
+      },
+      {
+        "uuid": "293a610d-ea75-4974-88da-13e4c86f248f",
+        "included": 600,
+        "exercised": 1117
+      },
+      {
+        "uuid": "064cfb53-fcb4-4471-80de-27eccd23d3c0",
+        "included": 600,
+        "exercised": 4621
+      },
+      {
+        "uuid": "d1fdbe21-56f6-43c0-aaac-1e4683964da5",
+        "included": 600,
+        "exercised": 352
+      }
+    ],
+    "qualification": "Exercise counts report observed ability resolution, including Bell early no-op. They are not Bell benefit counts. Driver source verifies hash replay per game and interactive replay every tenth. Exact inner start/PID not sampled by helper; pure lock wait unknown; outer includes queue and bootstrap."
+  },
+  "preflightSweep": {
+    "pass": 8,
+    "skip": 72,
+    "fail": 0,
+    "sides": [
+      "player",
+      "enemy"
+    ],
+    "variants": "All eligible variants, plus explicit ineligible skips",
+    "preflightExercise": {
+      "4a9f95d5-b72d-4ee8-8d29-b05646edc23d": false,
+      "293a610d-ea75-4974-88da-13e4c86f248f": false,
+      "064cfb53-fcb4-4471-80de-27eccd23d3c0": true,
+      "d1fdbe21-56f6-43c0-aaac-1e4683964da5": false
+    },
+    "qualification": "Initial first-turn initialization is distinct from genuine movement. Relic initial Dawn triggers with an empty void; supplemental workflows verify actual effects."
+  },
+  "liveQA": {
+    "passWorkflows": 8,
+    "side": "player",
+    "viewports": [
+      "desktop",
+      "mobile"
+    ],
+    "rawNativeRows": 80,
+    "rawNativeRowsSHA256": "4ab06e1080541f51714987af58e45a4b6d9c1a7075a7e146d9cbbe1f3fee0caf",
+    "rawNativeRowsPreservedByteForByte": true,
+    "supplementalPassRows": 8,
+    "historicalResolvedCallerFailures": 3,
+    "reports": [
+      {
+        "live-mortar": {
+          "invocation": "run-lMa7S9",
+          "evidenceDir": "invocations/run-lMa7S9",
+          "result": {
+            "desktop": {
+              "subject": "i51",
+              "second": "i52",
+              "low": "i53",
+              "equal": "i54",
+              "excluded": "i55",
+              "spells": [
+                "i56",
+                "i57"
+              ],
+              "firstMove": "play",
+              "oncePerTurnVerified": true,
+              "triggerCount": 1
+            },
+            "mobile": {
+              "subject": "i51",
+              "second": "i52",
+              "low": "i53",
+              "equal": "i54",
+              "excluded": "i55",
+              "spells": [
+                "i56",
+                "i57"
+              ],
+              "firstMove": "play",
+              "oncePerTurnVerified": true,
+              "triggerCount": 1
+            }
+          },
+          "caps": [],
+          "screens": [
+            "dreamsign-0-first-desktop.png",
+            "dreamsign-0-first-mobile.png"
+          ],
+          "capturedAt2x": true,
+          "fileDimensions": {
+            "desktop": "2880x1800",
+            "mobile": "780x1688"
+          },
+          "visuallyInspected": true
+        }
+      },
+      {
+        "live-root-corrected": {
+          "invocation": "run-ANcMvC",
+          "evidenceDir": "invocations/run-ANcMvC",
+          "result": {
+            "desktop": {
+              "subject": "i51",
+              "second": "i52",
+              "low": "i53",
+              "equal": "i54",
+              "excluded": "i55",
+              "spells": [
+                "i56",
+                "i57"
+              ],
+              "firstMove": "hand",
+              "oncePerTurnVerified": true,
+              "triggerCount": 1
+            },
+            "mobile": {
+              "subject": "i51",
+              "second": "i52",
+              "low": "i53",
+              "equal": "i54",
+              "excluded": "i55",
+              "spells": [
+                "i56",
+                "i57"
+              ],
+              "firstMove": "hand",
+              "oncePerTurnVerified": true,
+              "triggerCount": 1
+            }
+          },
+          "caps": [],
+          "screens": [
+            "dreamsign-1-first-desktop.png",
+            "dreamsign-1-first-mobile.png"
+          ],
+          "capturedAt2x": true,
+          "fileDimensions": {
+            "desktop": "2880x1800",
+            "mobile": "780x1688"
+          },
+          "visuallyInspected": true
+        }
+      },
+      {
+        "live-relic": {
+          "invocation": "run-r4UZGk",
+          "evidenceDir": "invocations/run-r4UZGk",
+          "result": {
+            "desktop": {
+              "event": "i51",
+              "excludedCharacter": "i52",
+              "fromTurn": 1,
+              "toTurn": 3,
+              "ownDawnVerified": true
+            },
+            "mobile": {
+              "event": "i51",
+              "excludedCharacter": "i52",
+              "fromTurn": 1,
+              "toTurn": 3,
+              "ownDawnVerified": true
+            }
+          },
+          "caps": [],
+          "screens": [
+            "dreamsign-2-dawn-desktop.png",
+            "dreamsign-2-dawn-mobile.png"
+          ],
+          "capturedAt2x": true,
+          "fileDimensions": {
+            "desktop": "2880x1800",
+            "mobile": "780x1688"
+          },
+          "visuallyInspected": true
+        }
+      },
+      {
+        "live-bell-chooser": {
+          "invocation": "run-zk6sox",
+          "evidenceDir": "invocations/run-zk6sox",
+          "result": {
+            "desktop": {
+              "subject": "i51",
+              "played": 1,
+              "queued": 2,
+              "triggered": 3,
+              "entry": 5,
+              "ordinaryMaterializations": 1,
+              "rematerializations": 0,
+              "sourcePrinting": "d30bd488-f921-49cb-a44f-353c54cb6548"
+            },
+            "mobile": {
+              "subject": "i51",
+              "played": 1,
+              "queued": 2,
+              "triggered": 3,
+              "entry": 5,
+              "ordinaryMaterializations": 1,
+              "rematerializations": 0,
+              "sourcePrinting": "d30bd488-f921-49cb-a44f-353c54cb6548"
+            }
+          },
+          "caps": [],
+          "screens": [
+            "dreamsign-3-reclaim-desktop.png",
+            "dreamsign-3-reclaim-mobile.png"
+          ],
+          "capturedAt2x": true,
+          "fileDimensions": {
+            "desktop": "2880x1800",
+            "mobile": "780x1688"
+          },
+          "visuallyInspected": true
+        }
+      }
+    ],
+    "runtimeRecipe": "Existing debug UI stages explicit UUID/physical instances; runtime actions use normal hand, target, phase or void-play chooser surfaces. Probe state is observed, never mutated. Persisted engine event logs carry physical identities and UUIDs.",
+    "Bell": "Actual void chooser applies one legal Reclaim play. Both viewports observe played index1, queued2, resolved3, ordinary entry5, one normal materialization, zero rematerializations.",
+    "D21": {
+      "firstBytes": [
+        247,
+        75,
+        194,
+        225
+      ],
+      "sampledEntities": 0,
+      "newPromptKinds": 0,
+      "newStatusIndicators": 0,
+      "newVisualEffects": 0,
+      "requiredJudgedCases": 0,
+      "qualification": "Eight supplemental live workflows provide proportional runtime QA; they are not eight required D21 sampled/new-surface cases."
+    }
+  },
+  "failurePathMap": {
+    "errorMidStep": "Existing random-less-cost contains actual primitive error after selection, restoring RNG/movement/knowledge; rematerialize rolls back emitted materialization and queued triggers. Focused eager suite passed. No new error handling state introduced.",
+    "reload": "Existing random-less-cost paid-X and deferred retained subject reload; when-play-from-void keeps queue/stack record and fold replay; Bell scratch probe serializes played state before normal entry.",
+    "partialWrite": "Existing pure steps/fold commit atomically; above actual error tests cover rollback. Content wiring adds no persistence/write pathway.",
+    "invalidOrStaleInput": "Existing random-less-cost reloads deferred subject selection and rejects stale/competing answers, including wrong side/illegal/stale/action in flight. No new prompt surface here.",
+    "concurrentActors": "Same existing fold contracts reject other-side/competing/repeated answers; content wiring has no extra actor protocol."
+  },
+  "phaseCounts": {
+    "scoped": {
+      "dreamsigns": 4,
+      "authored": 4,
+      "pending": 0,
+      "amplified": 0,
+      "journey": 0
+    },
+    "catalogAtOwnFrozenWorkingTree": {
+      "cards": {
+        "total": 522,
+        "authored": 395,
+        "pending": 122,
+        "vanilla": 5
+      },
+      "dreamsigns": {
+        "total": 153,
+        "authored": 20,
+        "pending": 132,
+        "vanilla": 1
+      },
+      "avatars": {
+        "total": 42,
+        "authored": 19,
+        "pending": 23,
+        "vanilla": 0
+      },
+      "dreamwell": {
+        "total": 33,
+        "authored": 33,
+        "pending": 0,
+        "vanilla": 0
+      },
+      "figments": {
+        "total": 10,
+        "authored": 3,
+        "pending": 0,
+        "vanilla": 7
+      }
+    }
+  },
+  "rulesDecisions": [
+    "RD-hv-umm2.243-1"
+  ],
+  "cardIssues": [
+    "d1fdbe21-56f6-43c0-aaac-1e4683964da5--hv-umm2.243.md"
+  ],
+  "resources": [
+    {
+      "label": "live-mortar",
+      "serverPidPG": 20163,
+      "port": 5274,
+      "groupPresent": false,
+      "nativeClean": true
+    },
+    {
+      "label": "live-root-corrected",
+      "serverPidPG": 24599,
+      "port": 5274,
+      "groupPresent": false,
+      "nativeClean": true
+    },
+    {
+      "label": "live-relic",
+      "serverPidPG": 26257,
+      "port": 5274,
+      "groupPresent": false,
+      "nativeClean": true
+    },
+    {
+      "label": "live-bell-chooser",
+      "serverPidPG": 35194,
+      "port": 5274,
+      "groupPresent": false,
+      "nativeClean": true
+    },
+    {
+      "label": "live-root",
+      "serverPidPG": 21542,
+      "port": 5274,
+      "groupPresent": false,
+      "nativeClean": true
+    },
+    {
+      "label": "live-bell",
+      "serverPidPG": 28787,
+      "port": 5274,
+      "groupPresent": false,
+      "nativeClean": true
+    },
+    {
+      "label": "live-bell-corrected",
+      "serverPidPG": 32169,
+      "port": 5274,
+      "groupPresent": false,
+      "nativeClean": true
+    },
+    {
+      "label": "sweep",
+      "serverPidPG": 15438,
+      "port": 5274,
+      "groupPresent": false,
+      "nativeClean": true
+    },
+    {
+      "label": "weighted300",
+      "processGroup": 12650,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "three-runtime",
+      "processGroup": 15834,
+      "present": false,
+      "exit": 1
+    },
+    {
+      "label": "knip",
+      "processGroup": 13350,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "live-bell-corrected",
+      "processGroup": 32141,
+      "present": false,
+      "exit": 1
+    },
+    {
+      "label": "three-typecheck-final",
+      "processGroup": 25098,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "focused",
+      "processGroup": 12699,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "review",
+      "processGroup": 13352,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "bell-probe",
+      "processGroup": 1358,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "phase-counts",
+      "processGroup": 38094,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "preflight",
+      "processGroup": 13351,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "live-mortar",
+      "processGroup": 20135,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "three-typecheck-corrected",
+      "processGroup": 15376,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "npm-install",
+      "processGroup": 39769,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "live-bell",
+      "processGroup": 28747,
+      "present": false,
+      "exit": 1
+    },
+    {
+      "label": "live-bell-chooser",
+      "processGroup": 35166,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "three-runtime-corrected",
+      "processGroup": 16364,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "sweep",
+      "processGroup": 15407,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "three-typecheck",
+      "processGroup": 14556,
+      "present": false,
+      "exit": 2
+    },
+    {
+      "label": "live-root-corrected",
+      "processGroup": 24558,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "live-root",
+      "processGroup": 21514,
+      "present": false,
+      "exit": 1
+    },
+    {
+      "label": "bell-typecheck",
+      "processGroup": 1102,
+      "present": false,
+      "exit": 0
+    },
+    {
+      "label": "live-relic",
+      "processGroup": 26229,
+      "present": false,
+      "exit": 0
+    }
+  ],
+  "resourceQualification": "All recorded command and server process groups are absent at Stage2 endpoint. Successful native runner cleanup confirms isolated browser context closure, owned server stop and browser-slot release, including failed scratch attempts. Shared Playwright service is retained. Parent independently checked 29 known groups and no own-worktree open cwd. Initial direct typecheck PID/PG was not recorded; its tool session completed exit2.",
+  "finalEvidenceValidationReceipts": [
+    "schema-final-qualified.receipt.json",
+    "triggers-final-qualified.receipt.json"
+  ],
+  "retainedScratchRoot": "/tmp/codex-01a130c8-dreamsign243/helper",
+  "commitReceipt": "commit.receipt.json (normal Git timestamps and actual command call interval recorded after commit, outside this immutable source artifact)"
+}

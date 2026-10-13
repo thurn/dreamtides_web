@@ -1,3 +1,7 @@
+import { randomIn } from "../../engine/dsl/builders";
+import { onDawn, triggered } from "../../engine/dsl/triggers";
+import { returnFromVoid } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -15,5 +19,10 @@ export default dreamsign({
     "e6863f55-50e7-4c7b-b118-609b5fc5c005",
   ],
   tags: ["J10", "Tag OK"],
-  pending: true,
+  abilities: () => [
+    triggered(onDawn(), returnFromVoid(randomIn("void", 1, { cardType: "event" }), { toYourHand: true })),
+  ],
+  verifiedText: expectedVerifiedText(
+    "▸Dawn: Return a random event from your void to your hand.",
+  ),
 });

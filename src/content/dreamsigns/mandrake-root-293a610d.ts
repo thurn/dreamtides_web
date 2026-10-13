@@ -1,3 +1,11 @@
+import {
+  characterYouControl,
+  randomIn,
+  triggerSubjectCost,
+} from "../../engine/dsl/builders";
+import { triggered, whenDissolved } from "../../engine/dsl/triggers";
+import { returnFromVoid } from "../../engine/effects/primitives";
+import { expectedVerifiedText } from "../../engine/dsl/verified-text";
 import { dreamsign } from "../define";
 
 export default dreamsign({
@@ -11,5 +19,17 @@ export default dreamsign({
   rarity: "Uncommon",
   tideIds: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
   tags: ["J12", "Tag OK", "Ally Audit"],
-  pending: true,
+  abilities: () => [
+    triggered(
+      whenDissolved(characterYouControl()),
+      returnFromVoid(
+        randomIn("void", 1, { cardType: "character" }, { costLessThan: triggerSubjectCost() }),
+        { toYourHand: true },
+      ),
+      { oncePerTurn: true },
+    ),
+  ],
+  verifiedText: expectedVerifiedText(
+    "Once per turn, when a character you control is dissolved, return a random character with lower cost from your void to hand.",
+  ),
 });
