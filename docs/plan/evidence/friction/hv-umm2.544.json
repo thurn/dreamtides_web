@@ -1,0 +1,58 @@
+{
+  "bead": "hv-umm2.544",
+  "phase": 5,
+  "implementMin": 48.959510300000005,
+  "implementWindow": {
+    "start": "2026-10-13T00:56:48.630Z",
+    "end": "2026-10-13T01:45:46.200618+00:00"
+  },
+  "localValidationS": {
+    "browser-first": 40.169284874995355,
+    "browser-readiness": 41.61559570899408,
+    "browser": 32.77834595799504,
+    "browser-settled": 25.03502679200028,
+    "focused-first": 8.178423874996952,
+    "focused": 8.97964179200062,
+    "knip": 3.6456765420007287,
+    "qa-readiness-syntax": 0.040092041992465965,
+    "qa-script-corrected-syntax": 0.035729374998481944,
+    "qa-script-syntax": 0.040870582990464754,
+    "qa-settlement-syntax": 0.041552416994818486,
+    "review-first": 59.749280042000464,
+    "review": 53.68302166699141,
+    "schema": 0.11136412499763537,
+    "stage1-witness": 2.164653542000451,
+    "comment-lint": 2.943332416994963,
+    "final-schema": 0.12266500000259839,
+    "final-whitespace": 0.023642374988412485,
+    "interior-gap-focused": 5.659115707996534,
+    "final-review": 55.78557300000102,
+    "final-knip": 3.037982958005159,
+    "corrected-metadata-schema": 0.06413812498794869,
+    "corrected-metadata-whitespace": 0.010128000008990057,
+    "comment-final-schema": 0.12293283300823532,
+    "comment-final-whitespace": 0.010202584002399817,
+    "coverage-final-schema": 0.0965684999973746,
+    "coverage-final-whitespace": 0.009428334000403993,
+    "frozen-schema": 0.05778420799470041,
+    "frozen-whitespace": 0.010078833001898602
+  },
+  "hostLoad": 14.462890625,
+  "testDelta": {
+    "files": 1,
+    "lines": 208,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "local-edit-correction",
+      "minutes": 2.5344608500000003,
+      "note": "Duplicate lab keyword import introduced locally; full failed aggregate through corrected-review dispatch bracket, including correction/coordination. Other checks on failed aggregate passed; actual corrected review passed. Also includes disjoint bounded parent interior-gap contract refinement through final focused/review/Knip; exact two windows retained in measurements."
+    },
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 8.060252066666667,
+      "note": "Measured two disjoint observer/capture correction windows. Forced single-answer target expectations, finite fixture readiness and rendered presentation settlement corrected only in ignored QA script; all raw failures and transient qualifications retained."
+    }
+  ]
+}

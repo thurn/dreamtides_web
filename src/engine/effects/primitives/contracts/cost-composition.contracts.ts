@@ -22,12 +22,13 @@
 import { revealToBoth } from "../../../view/knowledge";
 import { describe, expect, it } from "vitest";
 import { draw } from "../draw";
+import { dissolve } from "../dissolve";
 import { selfCostReduction } from "../self-cost-reduction";
 import { staticAbility } from "../../../dsl/builders";
 import { payTo } from "../pay-to";
 import { ScriptedSource } from "../../../steps/sources";
 import type { EngineCardDefinition } from "../../../catalog";
-import { abandonXCost, additionalCost, choiceCost, energy, energyX, event, discardCostFilter, x, keyword, optionalCost, pointsCost, reclaim } from "../../../dsl/builders";
+import { abandonXCost, enemyCharacter, target, additionalCost, choiceCost, energy, energyX, event, discardCostFilter, x, keyword, optionalCost, pointsCost, reclaim } from "../../../dsl/builders";
 import type { Ability, CardCost } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
 import type { Answer, Prompt } from "../../../prompts/types";
@@ -178,7 +179,7 @@ interface ExtraSetup {
   readonly accept?: boolean;
 }
 const EXTRAS: { readonly [E in Extra]: ExtraSetup } = {
-  abandonCount: { abilities: [additionalCost(abandonXCost({ min: 1, selector: { figment: true } }))], paid: 0, least: 0 },
+  abandonCount: { abilities: [additionalCost(abandonXCost({ min: 1, selector: { figment: true } })), event(dissolve(target(enemyCharacter({ sparkAtLeast: x(), sparkAtMost: x() }))))], paid: 0, least: 0 },
   none: { abilities: [], paid: 0, least: 0 },
   /** "To play this card, pay 1●." */
   mandatory: { abilities: [additionalCost(energy(1))], paid: 1, least: 1 },
@@ -217,11 +218,14 @@ const deck = Array.from({ length: 4 }, () => v.vanilla1.id);
 
 /** Answers each play prompt by its role from the row; any other prompt fails the row. */
 class RowAnswers implements AnswerSource {
+  readonly prompts: Prompt[] = [];
   constructor(private readonly route: RouteVariant, private readonly extra: ExtraSetup) {}
   answer(prompt: Prompt): Answer {
+    this.prompts.push(prompt);
     const { role } = prompt.purpose;
     if ((role === "playRoute" || role === "voidRoute") && this.route.choose !== null) return this.route.choose;
     if (role === "chooseX") return X;
+    if (role === "target" && prompt.kind === "chooseTargets") return [prompt.candidates[0]];
     if (role === "chooseCost") return 1;
     if (role === "optionalCost" && this.extra.accept !== undefined) return this.extra.accept;
     if (role === "abandonCost" && prompt.kind === "chooseCards") return prompt.candidates.slice(0, X);
@@ -245,7 +249,7 @@ function arranged(route: RouteVariant, extra: Extra, steps: readonly Step[], ava
   const { state, ids } = boardState(engine.catalog, {
     active: PLAYER, phase: "day",
     [PLAYER]: { hand: route.from === "hand" ? [card.id, ...hand] : hand, void: route.from === "void" ? [card.id] : [], back: [v.vanilla1.id], energy: available, score: SCORE, deck: route.from === "deck" ? [card.id, ...deck] : deck },
-    [opponent(PLAYER)]: { back: [v.vanilla1.id], score: SCORE, deck },
+    [opponent(PLAYER)]: { back: extra === "abandonCount" ? [v.vanilla1.id, v.vanilla2.id] : [v.vanilla1.id], score: SCORE, deck },
   });
   if (extra === "abandonCount") for (const index of [0, 1]) placeFigment(state, PLAYER, { rank: "front", index }, { kind: "figmentCopy", cardId: v.vanilla1.id, spark: null });
   const id = route.from === "hand" ? ids[PLAYER].hand[0] : route.from === "deck" ? ids[PLAYER].deck[0] : ids[PLAYER].void[0];
@@ -268,7 +272,7 @@ function arranged(route: RouteVariant, extra: Extra, steps: readonly Step[], ava
     id: `e${state.nextEffect + index}`, controller: side(by), source: sources[by], timestamp: index + 1, expiry: { at: "endOfTurn" }, change,
   }));
   const nextIds = floating.slice(floating.length - steps.length).filter((_, index) => NEXT_MODES.includes(steps[index].mode) && steps[index].who === "self").map((effect) => effect.id);
-  const prepared: BattleState = { ...state, floating: [...state.floating, ...floating], nextEffect: state.nextEffect + floating.length };
+  const prepared: BattleState = { ...state, ...(extra === "abandonCount" ? { config: { ...state.config, autoAnswerForcedPrompts: false } } : {}), floating: [...state.floating, ...floating], nextEffect: state.nextEffect + floating.length };
   return { state: prepared, id, nextIds };
 }
 
@@ -297,9 +301,18 @@ interface Outcome {
 
 function observed(route: RouteVariant, extra: Extra, steps: readonly Step[]): Outcome {
   const { state, id, nextIds } = arranged(route, extra, steps);
-  const result = engine.apply(state, PLAYER, { kind: "play", card: id, from: route.from }, new RowAnswers(route, EXTRAS[extra]));
+  const answers = new RowAnswers(route, EXTRAS[extra]);
+  const result = engine.apply(state, PLAYER, { kind: "play", card: id, from: route.from }, answers);
   expect(invariantViolations(result.state, engine.catalog)).toEqual([]);
-  if (extra === "abandonCount") expect(result.events.filter((event) => event.kind === "abandoned")).toHaveLength(X);
+  if (extra === "abandonCount") {
+    expect(answers.prompts.filter(prompt => ["chooseX", "target", "abandonCost"].includes(prompt.purpose.role)).map(prompt => prompt.purpose.role)).toEqual(["chooseX", "target", "abandonCost"]);
+    const targetPrompt = answers.prompts.find(prompt => prompt.kind === "chooseTargets");
+    if (targetPrompt?.kind !== "chooseTargets") throw new Error("No prepared count-X target");
+    expect(targetPrompt.candidates).toHaveLength(1);
+    expect(result.state.instances[targetPrompt.candidates[0]].zone).toBe("void");
+    expect(result.events.filter(event => event.kind === "abandoned")).toHaveLength(X);
+    expect(result.events.some(event => event.kind === "noLegalTarget")).toBe(false);
+  }
   if (extra === "discardMin") {
     const discarded = result.events.flatMap((event) => event.kind === "discarded" ? [event.instance] : []);
     expect([...discarded].sort()).toEqual(state.sides[PLAYER].hand.filter((card) => card !== id).sort());

@@ -74,8 +74,8 @@ export function planCardPlay(ctx: StepContext, card: InstanceId, routes: readonl
     x = chosen.x ?? null;
     choices = [{ modes: chosen.modes ?? [], targets: chosen.targets ?? [] }];
   } else {
-    // Offering plays the card for 0●: if its cost includes X, X is 0.
-    x = route === "offering" ? (xCost(definition.costs) === null ? null : 0) : chooseX(ctx, side, costs, purpose(0, "chooseX"), modifier);
+    // Offering fixes printed energy-X at zero; a separate count-only X is prepared normally.
+    x = route === "offering" && xCost(definition.costs) !== null ? 0 : chooseX(ctx, side, costs, purpose(0, "chooseX"), modifier);
     choices = choosePlayTime(ctx, eventAbilities(definition, instance.variant), side, card, purpose, x ?? 0);
   }
   const targets = choices.flatMap((choice) => choice.targets.flat());

@@ -1020,6 +1020,14 @@ X figments: Dissolve an enemy with X✦" may choose 0 when a legal 0✦ enemy
 exists: pay 1●, abandon nothing, and dissolve that enemy. Cancellation or an
 invalid answer before commitment pays nothing.
 
+The engine's `abandonXCost` form is a mandatory top-level cost of a card or
+activated ability. Alternative and optional payment lists accept fixed
+abandon costs. A count-X payment selector can compare spark or cost with X;
+its eligible characters are evaluated using each prospective count, before
+targeting and payment. Direct catalog definitions with count-X abandonment
+inside an alternative or optional payment list are unplayable and raise no
+player choices.
+
 **Discard X cards:** X is the number of cards chosen to pay this cost. Zero
 is a legal X only when it has a meaningful effect under the contextual X
 rule, such as drawing a fixed number of cards; otherwise X is at least 1, and
@@ -1404,6 +1412,10 @@ includes X, X is 0. The player chooses between Offering and the card's own costs
 as they play it, from the ways they can pay; cost changes apply to the 0● cost
 as to any play. Offering replaces the normal base, including any "It costs
 N●" setter; increases, reductions and additional costs still apply.
+Offering sets a printed energy-X binding to 0. A mandatory abandon-X cost
+without printed energy-X chooses its count before targets and pays no energy
+for that count. Its additional costs and Offering's hand banish still apply.
+
 A card that has Offering from another ability, as with "Cards in your hand
 have Offering," can be played this way while it has the keyword in hand. A
 card played from the void is never played by Offering (see [Playing from the

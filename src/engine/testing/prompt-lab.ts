@@ -20,7 +20,7 @@
 import { BATTLE } from "../../content/battle";
 import { printedCardId, type EngineCardDefinition, type SyntheticHooks } from "../catalog";
 import type { LabDefinitions } from "../development";
-import { additionalCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, all, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
+import { additionalCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, abandonXCost, all, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
 import { onDusk, triggered, whenDraw } from "../dsl/triggers";
 import { keyword } from "../dsl/builders";
 import type { Engine } from "../engine";
@@ -91,6 +91,18 @@ export const LAB = {
       p.disableTriggers(all(enemyCharacter()), "untilEndOfTurn", null, "triggeredAndActivated"),
       p.putInDeck([thisCardIn("hand")], "bottom"),
     ), { zone: "hand" })],
+  },
+  /** Count-only X is prepared before Offering targets. */
+  abandonXOffering: {
+    ...SYNTHETIC.event1, id: syntheticId(0x54700), costs: [energy(3)], status: "authored",
+    abilities: () => [keyword("offering"), additionalCost(abandonXCost({ min: 1, selector: { figment: true } })),
+      event(p.dissolve(characterTarget(enemyCharacter({ sparkAtLeast: x(), sparkAtMost: x() }))))],
+  },
+  /** Payment eligibility uses prospective X rather than the source's stored X. */
+  abandonXSelector: {
+    ...SYNTHETIC.vanilla2, id: syntheticId(0x54701), status: "authored",
+    abilities: () => [activated([energy(1), abandonXCost({ min: 1, selector: { figment: true, sparkAtLeast: x(), sparkAtMost: x() } })],
+      p.dissolve(characterTarget(enemyCharacter({ sparkAtLeast: x(), sparkAtMost: x() }))))],
   },
   /** A complete optional resolving energy and discard payment before drawing. */
   resolvingPayment: labEvent(0x43800, 0, p.payTo({ energy: 2, discard: 1 }, p.draw(2))),
@@ -275,6 +287,8 @@ export const PROMPT_LAB_DEFINITIONS: LabDefinitions = {
 
 /** Display data for the lab cards a fixture places: QA labels, not player copy. */
 export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: string; readonly text: string }>> = {
+  [LAB.abandonXOffering.id]: { name: "Lab Count Offering", text: "Offering. To play this event, abandon X figments. Dissolve an enemy with X✦." },
+  [LAB.abandonXSelector.id]: { name: "Lab Prospective Count", text: "1●, Abandon X figments with X✦: Dissolve an enemy with X✦." },
   [LAB.disableBearer.id]: { name: "Lab Ability Bearer", text: "Vengeful. 1●: Gain 1⍟. ▸Dusk: Gain 2⍟. This character has +1✦." },
   [LAB.disableAbilities.id]: { name: "Lab Combined Silence", text: "Disable an enemy’s triggered and activated abilities this turn." },
   [LAB.hiddenDisable.id]: { name: "Lab Hidden Silence", text: "Disable a character you control’s triggered and activated abilities this turn." },
@@ -455,6 +469,22 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  {
+    name: "abandon-x-offering", description: "An Offering prepares a mandatory count before exact-X targeting",
+    setup: { active: "player", phase: "day",
+      player: { hand: [LAB.abandonXOffering.id, SYNTHETIC.event0.id], energy: 5, deck: deck(6),
+        figments: [0, 1].map(index => ({ slot: { rank: "front" as const, index }, printing: { kind: "figmentCopy" as const, cardId: SYNTHETIC.vanilla1.id, spark: null } })) },
+      enemy: { back: [SYNTHETIC.vanilla0.id, SYNTHETIC.vanilla1.id, SYNTHETIC.vanilla2.id], deck: deck(6) } },
+    script: [],
+  },
+  {
+    name: "abandon-x-selector", description: "A count-X payment selector offers X=2 with a source whose stored X is zero",
+    setup: { active: "player", phase: "day",
+      player: { back: [LAB.abandonXSelector.id], energy: 5, deck: deck(6),
+        figments: [0, 1].map(index => ({ slot: { rank: "front" as const, index }, printing: { kind: "figmentCopy" as const, cardId: SYNTHETIC.vanilla2.id, spark: null } })) },
+      enemy: { back: [SYNTHETIC.vanilla2.id], deck: deck(6) } },
+    script: [],
+  },
   {
     name: "exact-cost-player", description: "A captured abandon cost plus one selects an exact-cost deck character",
     setup: { active: "player", phase: "day",

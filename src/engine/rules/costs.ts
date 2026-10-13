@@ -10,7 +10,7 @@ import { cardMatchesFilter, copiableCostOf } from "../continuous/characteristics
 import { adjustedEnergy, NO_COST_MODIFIER, type CostModifier } from "../continuous/costs";
 import { matchingCharacters, resolvePlayer } from "../dsl/selectors";
 import { fixedEnergy, minimumEnergy, xCost } from "../dsl/energy";
-import type { AdditionalCost, Cost, PaymentCost, Variant } from "../dsl/types";
+import type { AbandonXCost, AdditionalCost, Cost, PaymentCost, Variant } from "../dsl/types";
 import type {
   ChooseCardsPrompt,
   ChooseModePrompt,
@@ -23,12 +23,12 @@ import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
 import { discardCard, gainPoints, spendEnergy } from "./resources";
-import { banish, dissolve, instanceOf, returnToHand, slotOf } from "./zones";
+import { banish, charactersInPlay, dissolve, instanceOf, returnToHand, slotOf } from "./zones";
 import { revealToBoth } from "../view/knowledge";
 import { Infeasible } from "../steps/errors";
 
 /** A payment cost other than energy, which a plan pays as one total. */
-export type NonEnergyCost = Exclude<PaymentCost, { readonly cost: "energy" }>;
+export type NonEnergyCost = Exclude<PaymentCost | AbandonXCost, { readonly cost: "energy" }>;
 
 /** One cost to pay after the commit point, with the cards chosen for it. */
 export interface PlannedCost {
@@ -69,6 +69,16 @@ export function additionalCosts(definition: PrintedCard, variant: Variant): Addi
   return definition.abilities(variant).flatMap((ability) => (ability.kind === "additionalCost" ? ability.costs : []));
 }
 
+/** The count-X form is mandatory and top-level, including directly authored catalog data. */
+function isAbandonX(cost: Cost): cost is AbandonXCost {
+  return cost.cost === "abandon" && cost.count === "x";
+}
+
+function hasNestedAbandonX(costs: readonly Cost[]): boolean {
+  return costs.some(cost => cost.cost === "choice" ? cost.options.some(option => option.some(isAbandonX)) :
+    cost.cost === "optional" && cost.costs.some(isAbandonX));
+}
+
 /**
  * Chooses X before targets for an energy-X or abandon-X cost. Energy-X is
  * bounded by payable energy after fixed costs and modifications; abandon-X
@@ -83,16 +93,25 @@ export function chooseX(
   purpose: PromptPurpose,
   modifier: CostModifier = NO_COST_MODIFIER,
 ): number | null {
+  if (hasNestedAbandonX(costs)) throw new Infeasible("Abandon X must be a top-level mandatory cost");
   const variable = xCost(costs);
-  const counts = costs.filter((cost): cost is Extract<PaymentCost, { cost: "abandon"; count: "x" }> => cost.cost === "abandon" && cost.count === "x");
+  const counts = costs.filter(isAbandonX);
   if (variable === null && counts.length === 0) return null;
   const energyMax = variable === null ? Infinity : ctx.state.sides[side].currentEnergy - fixedEnergy(costs) - modifier.increase + modifier.reduction;
   const source = purpose.source;
   if (counts.length > 0 && source === null) throw new Error("An abandon-X choice requires its source");
-  const countMax = counts.map((cost) => source === null ? 0 : cardCandidates(ctx.state, ctx.catalog, side, source, cost).length);
   const min = Math.max(variable?.min ?? 0, ...counts.map((cost) => cost.min));
-  const max = Math.min(energyMax, ...countMax);
-  if (counts.length > 0 && max < min) throw new Infeasible("Too few matching characters for abandon X");
+  let max = energyMax;
+  if (counts.length > 0) {
+    const ceiling = Math.min(energyMax, charactersInPlay(ctx.state, side).length);
+    max = -1;
+    // Eligibility may vary with X, including holes: the feasibility guard
+    // proves each offered number against targets and every payment.
+    for (let prospective = min; prospective <= ceiling; prospective += 1) {
+      if (counts.every(cost => source !== null && cardCandidates(ctx.state, ctx.catalog, side, source, cost, prospective).length >= prospective)) max = prospective;
+    }
+    if (max < min) throw new Infeasible("Too few matching characters for abandon X");
+  }
   return ctx.choose<ChooseNumberPrompt>({
     kind: "chooseNumber",
     side,
@@ -145,6 +164,7 @@ export function costsPayable(
   costs: readonly Cost[],
   modifier: CostModifier = NO_COST_MODIFIER,
 ): boolean {
+  if (hasNestedAbandonX(costs)) return false;
   if (adjustedEnergy(minimumEnergy(costs), modifier) > state.sides[side].currentEnergy) return false;
   if (spent(costs, "counters") > storedCounters(state, source)) return false;
   if (spent(costs, "points") > state.sides[side].score) return false;
@@ -152,14 +172,14 @@ export function costsPayable(
 }
 
 /** A cost paid with chosen cards. */
-type ChoosingCost = Extract<PaymentCost, { readonly count: number | "x" }>;
+type ChoosingCost = Extract<PaymentCost | AbandonXCost, { readonly count: number | "x" }>;
 
-function choosesCards(cost: PaymentCost): cost is ChoosingCost {
+function choosesCards(cost: PaymentCost | AbandonXCost): cost is ChoosingCost {
   return "count" in cost && cost.count !== "hand";
 }
 
 /** "Discard your hand": paid with every eligible hand card, which nobody chooses. */
-function discardsHand(cost: PaymentCost): boolean {
+function discardsHand(cost: PaymentCost | AbandonXCost): boolean {
   return cost.cost === "discard" && cost.count === "hand";
 }
 
@@ -309,6 +329,7 @@ export function planCosts(
   modifier: CostModifier = NO_COST_MODIFIER,
   options: { readonly endsPlayTime?: true; readonly selectorX?: number; readonly preparedPayments?: readonly PlannedCost[] } = {},
 ): CostPlan {
+  if (hasNestedAbandonX(costs)) throw new Infeasible("Abandon X must be a top-level mandatory cost");
   const { state, catalog } = ctx;
   const used = [...excluded];
   const available = state.sides[side].currentEnergy;
@@ -328,8 +349,8 @@ export function planCosts(
   let capturedX = x;
   let sourceDeparted = false;
   // Returning or abandoning leaves play and clears counters; zero payments need no source.
-  const leavesPlay = (cost: PaymentCost): boolean => cost.cost === "return" || cost.cost === "abandon";
-  const cannotFollowDeparture = (cost: PaymentCost): boolean => cost.cost === "exhaustSelf" ||
+  const leavesPlay = (cost: PaymentCost | AbandonXCost): boolean => cost.cost === "return" || cost.cost === "abandon";
+  const cannotFollowDeparture = (cost: PaymentCost | AbandonXCost): boolean => cost.cost === "exhaustSelf" ||
     (cost.cost === "counters" && cost.amount > 0);
 
   /**
@@ -362,7 +383,7 @@ export function planCosts(
   };
 
   /** Plans one payment cost; `nested` costs are budgeted here, top-level parts were budgeted up front. */
-  const plan = (cost: PaymentCost, nested: boolean, isLast = false): void => {
+  const plan = (cost: PaymentCost | AbandonXCost, nested: boolean, isLast = false): void => {
     if (sourceDeparted && cannotFollowDeparture(cost)) throw new Infeasible("A departed source cannot pay a later source cost");
     if (cost.cost === "energy") {
       if (nested) baseEnergy += cost.amount;

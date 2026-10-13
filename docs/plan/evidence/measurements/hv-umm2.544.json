@@ -1,0 +1,1191 @@
+{
+  "bead": "hv-umm2.544",
+  "phase": 5,
+  "base": "a59425584229158adec9828c6424abc51d8b725f",
+  "implementationWindow": {
+    "start": "2026-10-13T00:56:48.630Z",
+    "dispatchCallId": "call_0d01779791654b22bafab36de7be6327",
+    "endpoint": "2026-10-13T01:45:46.200618+00:00",
+    "endpointStatus": "FINAL QUALIFIED PROSPECTIVE cutoff immediately before serial schema/whitespace/source hash guard/staging and one automatic-date commit; actual Git process and whole-second committer clock are captured read-only in ignored QA. Includes all research/ACK/audit/refinement/QA/check waits; no forced dates or tracked postcommit edits.",
+    "grossMinAtCutoff": 48.959510300000005,
+    "includes": "Source-first research, explicit parent ACK waits, witness, implementation, checks, QA scripting and coordination; parent installation excluded."
+  },
+  "parentSetup": {
+    "installS": 3.0219575,
+    "installStarted": "2026-10-13T00:56:14.160061Z",
+    "scope": "Parent-provided actualterminal fresh installation start/end, before helper dispatch; original installStarted value was the end timestamp and is corrected here. Gross dispatch start unchanged.",
+    "installEnded": "2026-10-13T00:56:17.182172Z",
+    "installPid": 55045
+  },
+  "sourceManifest": {
+    "src/engine/dsl/types.ts": "3121640b690eb629ae7b6ad3a18d172d5c4ac4d5288f42fb3bf3ada1e849de26",
+    "src/engine/dsl/builders.ts": "d98711e0493311c21039060ac67f3bddf7eaba14df0b875778e9fd5b079bd2d9",
+    "src/engine/rules/costs.ts": "3845d9e9732f3835d25089027fd5d725caa97a36dbd9f75a91b06904e2efcf99",
+    "src/engine/steps/kinds/play.ts": "f8d2cdcd4dca518ea5db1c725d939bd47f1b1143bd027e106129b9c7edbe5600",
+    "src/engine/testing/prompt-lab.ts": "2428cc551f02f183bd9734cf9c205374ce97798014e6a6516f91e6bee4329b03",
+    "src/engine/effects/primitives/contracts/cost-composition.contracts.ts": "f8ac67a792c1b2ab0bd9486e9a5f02803e7a46b601a3c7aa179ce56db8829538",
+    "src/engine/effects/primitives/contracts/abandon-x-preparation-targets.contracts.ts": "9b24ff3c2518a759b068c39e5d3a08244f805f87a402853f14c99bc39e9ada3b",
+    "docs/rules.md": "ff8ab50d4f86631ce1d6356c1be626e40005a7e32ed22d706f0fd222a6ab55a3"
+  },
+  "testDelta": {
+    "files": 1,
+    "lines": 208,
+    "jsdomFiles": 0,
+    "configuredEntrypoints": 0,
+    "plainContractModules": 1,
+    "newContractLines": 195,
+    "existingCompositionDelta": 13,
+    "environment": "node"
+  },
+  "stage1": {
+    "receipt": {
+      "command": [
+        "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root/node_modules/.bin/tsx",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/stage1-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "start": "2026-10-13T01:03:02.768859+00:00",
+      "pid": 61006,
+      "pgid": 61006,
+      "wrapperPid": 60992,
+      "scope": "Public both-controller baseline witness only; no tracked writes or local validator.",
+      "end": "2026-10-13T01:03:04.933699+00:00",
+      "wallSeconds": 2.164653542000451,
+      "exitCode": 0
+    },
+    "resultsFile": "stage1-witness-results.json",
+    "rows": 10,
+    "outcome": "All original assertions passed, reproducing three source defects for both controllers with ordinary route controls."
+  },
+  "commands": [
+    {
+      "name": "browser-first",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/abandon-x-qa.mjs",
+        "--bead",
+        "hv-umm2.544",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 45550,
+      "pgid": 45550,
+      "wrapperPid": 45542,
+      "start": "2026-10-13T01:19:05.773635+00:00",
+      "hostLoad": [
+        4.1484375,
+        10.1142578125,
+        14.47021484375
+      ],
+      "end": "2026-10-13T01:19:45.942995+00:00",
+      "elapsedS": 40.169284874995355,
+      "exit": 1
+    },
+    {
+      "name": "browser-readiness",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/abandon-x-qa.mjs",
+        "--bead",
+        "hv-umm2.544",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 6605,
+      "pgid": 6605,
+      "wrapperPid": 6593,
+      "start": "2026-10-13T01:23:42.866173+00:00",
+      "hostLoad": [
+        17.908203125,
+        11.82958984375,
+        13.6943359375
+      ],
+      "end": "2026-10-13T01:24:24.482197+00:00",
+      "elapsedS": 41.61559570899408,
+      "exit": 0
+    },
+    {
+      "name": "browser",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/abandon-x-qa.mjs",
+        "--bead",
+        "hv-umm2.544",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 48690,
+      "pgid": 48690,
+      "wrapperPid": 48671,
+      "start": "2026-10-13T01:21:58.631566+00:00",
+      "hostLoad": [
+        3.32080078125,
+        6.99267578125,
+        12.36328125
+      ],
+      "end": "2026-10-13T01:22:31.410252+00:00",
+      "elapsedS": 32.77834595799504,
+      "exit": 1
+    },
+    {
+      "name": "browser-settled",
+      "command": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/abandon-x-qa.mjs",
+        "--bead",
+        "hv-umm2.544",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "240"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 73762,
+      "pgid": 73762,
+      "wrapperPid": 73752,
+      "start": "2026-10-13T01:27:51.004783+00:00",
+      "hostLoad": [
+        12.673828125,
+        13.23876953125,
+        13.92578125
+      ],
+      "end": "2026-10-13T01:28:16.040108+00:00",
+      "elapsedS": 25.03502679200028,
+      "exit": 0
+    },
+    {
+      "name": "comment-final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 56586,
+      "pgid": 56586,
+      "wrapperPid": 56441,
+      "start": "2026-10-13T01:34:08.682350+00:00",
+      "hostLoad": [
+        16.33984375,
+        14.76904296875,
+        14.27685546875
+      ],
+      "end": "2026-10-13T01:34:08.805378+00:00",
+      "elapsedS": 0.12293283300823532,
+      "exit": 0
+    },
+    {
+      "name": "comment-final-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 56779,
+      "pgid": 56779,
+      "wrapperPid": 56743,
+      "start": "2026-10-13T01:34:08.862698+00:00",
+      "hostLoad": [
+        16.33984375,
+        14.76904296875,
+        14.27685546875
+      ],
+      "end": "2026-10-13T01:34:08.872991+00:00",
+      "elapsedS": 0.010202584002399817,
+      "exit": 0
+    },
+    {
+      "name": "comment-lint",
+      "command": [
+        "node_modules/.bin/eslint",
+        "src/engine/dsl/types.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 8636,
+      "pgid": 8636,
+      "wrapperPid": 8627,
+      "start": "2026-10-13T01:33:22.579570+00:00",
+      "hostLoad": [
+        15.2197265625,
+        14.31201171875,
+        14.0966796875
+      ],
+      "end": "2026-10-13T01:33:25.522974+00:00",
+      "elapsedS": 2.943332416994963,
+      "exit": 0
+    },
+    {
+      "name": "corrected-metadata-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 62561,
+      "pgid": 62561,
+      "wrapperPid": 62551,
+      "start": "2026-10-13T01:34:28.931277+00:00",
+      "hostLoad": [
+        13.5126953125,
+        14.23046875,
+        14.0947265625
+      ],
+      "end": "2026-10-13T01:34:28.995502+00:00",
+      "elapsedS": 0.06413812498794869,
+      "exit": 0
+    },
+    {
+      "name": "corrected-metadata-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 62575,
+      "pgid": 62575,
+      "wrapperPid": 62565,
+      "start": "2026-10-13T01:34:29.063668+00:00",
+      "hostLoad": [
+        13.5126953125,
+        14.23046875,
+        14.0947265625
+      ],
+      "end": "2026-10-13T01:34:29.073888+00:00",
+      "elapsedS": 0.010128000008990057,
+      "exit": 0
+    },
+    {
+      "name": "coverage-final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 75858,
+      "pgid": 75858,
+      "wrapperPid": 75850,
+      "start": "2026-10-13T01:38:59.700575+00:00",
+      "hostLoad": [
+        4.1826171875,
+        8.5185546875,
+        11.53857421875
+      ],
+      "end": "2026-10-13T01:38:59.797214+00:00",
+      "elapsedS": 0.0965684999973746,
+      "exit": 0
+    },
+    {
+      "name": "coverage-final-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 75867,
+      "pgid": 75867,
+      "wrapperPid": 75859,
+      "start": "2026-10-13T01:38:59.861898+00:00",
+      "hostLoad": [
+        4.1826171875,
+        8.5185546875,
+        11.53857421875
+      ],
+      "end": "2026-10-13T01:38:59.871404+00:00",
+      "elapsedS": 0.009428334000403993,
+      "exit": 0
+    },
+    {
+      "name": "final-knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 74543,
+      "pgid": 74543,
+      "wrapperPid": 74531,
+      "start": "2026-10-13T01:37:55.255883+00:00",
+      "hostLoad": [
+        5.22607421875,
+        9.6513671875,
+        12.14697265625
+      ],
+      "end": "2026-10-13T01:37:58.293965+00:00",
+      "elapsedS": 3.037982958005159,
+      "exit": 0
+    },
+    {
+      "name": "final-review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 72607,
+      "pgid": 72607,
+      "wrapperPid": 72597,
+      "start": "2026-10-13T01:36:55.955844+00:00",
+      "hostLoad": [
+        5.49267578125,
+        10.59765625,
+        12.63818359375
+      ],
+      "end": "2026-10-13T01:37:51.741960+00:00",
+      "elapsedS": 55.78557300000102,
+      "exit": 0
+    },
+    {
+      "name": "final-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 82581,
+      "pgid": 82581,
+      "wrapperPid": 82571,
+      "start": "2026-10-13T01:29:51.457541+00:00",
+      "hostLoad": [
+        9.59228515625,
+        11.375,
+        13.06982421875
+      ],
+      "end": "2026-10-13T01:29:51.580273+00:00",
+      "elapsedS": 0.12266500000259839,
+      "exit": 0
+    },
+    {
+      "name": "final-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 94295,
+      "pgid": 94295,
+      "wrapperPid": 94283,
+      "start": "2026-10-13T01:30:27.824750+00:00",
+      "hostLoad": [
+        18.6376953125,
+        13.484375,
+        13.7724609375
+      ],
+      "end": "2026-10-13T01:30:27.848528+00:00",
+      "elapsedS": 0.023642374988412485,
+      "exit": 0
+    },
+    {
+      "name": "focused-first",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "abandon-X preparation|abandon-X typed|cost composition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 76484,
+      "pgid": 76484,
+      "wrapperPid": 76473,
+      "start": "2026-10-13T01:12:43.913157+00:00",
+      "hostLoad": [
+        18.38818359375,
+        16.4580078125,
+        17.658203125
+      ],
+      "end": "2026-10-13T01:12:52.091831+00:00",
+      "elapsedS": 8.178423874996952,
+      "exit": 0
+    },
+    {
+      "name": "focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "src/engine/testing/tooling-card-lab.test.ts",
+        "src/engine/testing/lab-cost-staging.test.ts",
+        "src/engine/testing/lab-preflight.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 77810,
+      "pgid": 77810,
+      "wrapperPid": 77801,
+      "start": "2026-10-13T01:13:02.495716+00:00",
+      "hostLoad": [
+        21.6572265625,
+        17.3203125,
+        17.93896484375
+      ],
+      "end": "2026-10-13T01:13:11.475534+00:00",
+      "elapsedS": 8.97964179200062,
+      "exit": 0
+    },
+    {
+      "name": "frozen-schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 77562,
+      "pgid": 77562,
+      "wrapperPid": 77554,
+      "start": "2026-10-13T01:40:22.528743+00:00",
+      "hostLoad": [
+        4.8388671875,
+        7.59716796875,
+        10.89208984375
+      ],
+      "end": "2026-10-13T01:40:22.586600+00:00",
+      "elapsedS": 0.05778420799470041,
+      "exit": 0
+    },
+    {
+      "name": "frozen-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 77571,
+      "pgid": 77571,
+      "wrapperPid": 77563,
+      "start": "2026-10-13T01:40:22.650903+00:00",
+      "hostLoad": [
+        4.8388671875,
+        7.59716796875,
+        10.89208984375
+      ],
+      "end": "2026-10-13T01:40:22.661058+00:00",
+      "elapsedS": 0.010078833001898602,
+      "exit": 0
+    },
+    {
+      "name": "interior-gap-focused",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "abandon-X preparation|abandon-X typed"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 71716,
+      "pgid": 71716,
+      "wrapperPid": 71706,
+      "start": "2026-10-13T01:36:44.813862+00:00",
+      "hostLoad": [
+        5.2041015625,
+        10.72021484375,
+        12.705078125
+      ],
+      "end": "2026-10-13T01:36:50.473073+00:00",
+      "elapsedS": 5.659115707996534,
+      "exit": 0
+    },
+    {
+      "name": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 38148,
+      "pgid": 38148,
+      "wrapperPid": 38138,
+      "start": "2026-10-13T01:15:36.526838+00:00",
+      "hostLoad": [
+        11.56689453125,
+        15.28564453125,
+        17.0576171875
+      ],
+      "end": "2026-10-13T01:15:40.172647+00:00",
+      "elapsedS": 3.6456765420007287,
+      "exit": 0
+    },
+    {
+      "name": "qa-readiness-syntax",
+      "command": [
+        "node",
+        "--check",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/abandon-x-qa.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 5748,
+      "pgid": 5748,
+      "wrapperPid": 5736,
+      "start": "2026-10-13T01:23:31.588345+00:00",
+      "hostLoad": [
+        16.0712890625,
+        11.29296875,
+        13.53125
+      ],
+      "end": "2026-10-13T01:23:31.628518+00:00",
+      "elapsedS": 0.040092041992465965,
+      "exit": 0
+    },
+    {
+      "name": "qa-script-corrected-syntax",
+      "command": [
+        "node",
+        "--check",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/abandon-x-qa.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 48404,
+      "pgid": 48404,
+      "wrapperPid": 48396,
+      "start": "2026-10-13T01:21:45.649193+00:00",
+      "hostLoad": [
+        2.75048828125,
+        7.07861328125,
+        12.48876953125
+      ],
+      "end": "2026-10-13T01:21:45.685001+00:00",
+      "elapsedS": 0.035729374998481944,
+      "exit": 0
+    },
+    {
+      "name": "qa-script-syntax",
+      "command": [
+        "node",
+        "--check",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/abandon-x-qa.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 45222,
+      "pgid": 45222,
+      "wrapperPid": 45209,
+      "start": "2026-10-13T01:18:47.284189+00:00",
+      "hostLoad": [
+        4.8095703125,
+        10.642578125,
+        14.75634765625
+      ],
+      "end": "2026-10-13T01:18:47.325145+00:00",
+      "elapsedS": 0.040870582990464754,
+      "exit": 0
+    },
+    {
+      "name": "qa-settlement-syntax",
+      "command": [
+        "node",
+        "--check",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/abandon-x-qa.mjs"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 72635,
+      "pgid": 72635,
+      "wrapperPid": 72605,
+      "start": "2026-10-13T01:27:33.313479+00:00",
+      "hostLoad": [
+        15.525390625,
+        13.7763671875,
+        14.12744140625
+      ],
+      "end": "2026-10-13T01:27:33.355255+00:00",
+      "elapsedS": 0.041552416994818486,
+      "exit": 0
+    },
+    {
+      "name": "review-first",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 94163,
+      "pgid": 94163,
+      "wrapperPid": 94103,
+      "start": "2026-10-13T01:13:20.705434+00:00",
+      "hostLoad": [
+        23.00634765625,
+        17.92578125,
+        18.14208984375
+      ],
+      "end": "2026-10-13T01:14:20.455440+00:00",
+      "elapsedS": 59.749280042000464,
+      "exit": 2
+    },
+    {
+      "name": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 34869,
+      "pgid": 34869,
+      "wrapperPid": 34859,
+      "start": "2026-10-13T01:14:39.292982+00:00",
+      "hostLoad": [
+        14.462890625,
+        16.52734375,
+        17.59912109375
+      ],
+      "end": "2026-10-13T01:15:32.976733+00:00",
+      "elapsedS": 53.68302166699141,
+      "exit": 0
+    },
+    {
+      "name": "schema",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "pid": 43734,
+      "pgid": 43734,
+      "wrapperPid": 43724,
+      "start": "2026-10-13T01:17:36.529495+00:00",
+      "hostLoad": [
+        7.05322265625,
+        12.45458984375,
+        15.69970703125
+      ],
+      "end": "2026-10-13T01:17:36.640934+00:00",
+      "elapsedS": 0.11136412499763537,
+      "exit": 0
+    },
+    {
+      "command": [
+        "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root/node_modules/.bin/tsx",
+        "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/stage1-witness.mts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/abandon-x544-root",
+      "start": "2026-10-13T01:03:02.768859+00:00",
+      "pid": 61006,
+      "pgid": 61006,
+      "wrapperPid": 60992,
+      "scope": "Public both-controller baseline witness only; no tracked writes or local validator.",
+      "end": "2026-10-13T01:03:04.933699+00:00",
+      "wallSeconds": 2.164653542000451,
+      "exitCode": 0
+    }
+  ],
+  "validationDisposition": "Focused2505 and corrected aggregate5312 pass. First aggregate exit2 because helper added duplicate keyword import; related5312 passed on that failed aggregate. Duplicate removed within admitted prompt-lab import seam, corrected review0 and Knip0. Isolated preparation missing-art warnings restored564card/32avatar/153dreamsign assets on every wrapper; no asset mutation committed. After corrected review and Knip, parent final diff identified a PaymentCost JSDoc placement correction in types.ts. The comment moved, so that file byte hash changed; semantic code/type bodies and UI are identical. Own-file lint passed; original and final comment hashes are explicitly preserved. No other product/docs source changes occurred. Ignored QA script/capture corrections did not repeat green validators. Final schema covers the own evidence and QA ledger before commit. Parent final audit then requested meaningful-zero/interior-gap selector assertions; final test-only refinement passed20 focused cases, final aggregate5312 across281files, and finalKnip. Runtime/QA fixtures are identical to accepted native settled captures; no browser repeat required.",
+  "typedBoundary": "AbandonXCost is mandatory top-level; alternative/optional PaymentCost lists exclude it. Older nested costs retain their union and planning protocols. Public canPlay/canActivate costsPayable rejects malformed placement before choices; chooseX/planCosts reject manual bypass before prompts.",
+  "prospectiveX": "Highest possible count bounded by actual controlled board population and energy limit. Each candidate X uses existing matcher with explicit prospective binding; feasibility excludes numeric gaps, joint reservations and target conflict. No persisted or prompt signature changed.",
+  "fallout": {
+    "mechanicalWithinAreas": [
+      "NonEnergyCost and local ChoosingCost/planning payment unions include AbandonXCost"
+    ],
+    "outsideAreas": [],
+    "readOnlyCallers": [
+      "activate.ts",
+      "timing.ts",
+      "pay-to.ts",
+      "cost-captured-x-targets.contracts.ts",
+      "runtime/battle-cost-messages.ts",
+      "prompts/types.ts"
+    ],
+    "fullReview": "Not required: four bounded cost-form/API bodies, unchanged serialized step/prompt/state architecture; no test infrastructure/config/fuzzer/runner edits. Native release runs full suite/fuzz."
+  },
+  "failurePaths": {
+    "midStepError": "rolls back partial energy and abandonment writes after an error following prospective-X payment",
+    "reloadRestart": "reloads each Offering choice, rejects invalid/stale/concurrent answers and cancels without payment",
+    "partialWrite": "The rollback contract actually spends energy and moves both figments before throwing; fold publishes neither debit nor departures.",
+    "invalidStale": "Offering reload contract rejects out-of-range X, foreign controller/candidate and stale route prompt IDs.",
+    "concurrentActors": "Offering reload contract bounces second action stepInFlight and foreign notYourPrompt; committed state is identical until final payment."
+  },
+  "qa": {
+    "status": "complete with preserved partial failures and transient-capture qualification",
+    "viewport": "desktop",
+    "acceptedInvocation": "run-a9lUea",
+    "acceptedWorkflows": [
+      {
+        "scene": "abandon-x-offering",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000054700",
+        "source": "i3",
+        "target": "i13",
+        "figments": [
+          "i1",
+          "i2"
+        ],
+        "preparedX": 2,
+        "preparedAnswers": [
+          1,
+          2,
+          [
+            "i13"
+          ],
+          [
+            "i4"
+          ],
+          [
+            "i1",
+            "i2"
+          ]
+        ],
+        "forcedTarget": true,
+        "targetGeometry": {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i13\"]",
+          "x": 441.5,
+          "y": 183,
+          "width": 89.5,
+          "height": 89.5,
+          "hit": true,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "beforeEnergy": 5,
+        "afterEnergy": 5,
+        "debit": 0,
+        "settledDom": {
+          "removedPhysicalIds": [
+            "i13",
+            "i1",
+            "i2"
+          ],
+          "remaining": [],
+          "shownEnergy": 5,
+          "shownMax": 5,
+          "nextEnabled": true,
+          "nextGeometry": {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true
+          }
+        },
+        "caps": [],
+        "verdict": "pass"
+      },
+      {
+        "scene": "abandon-x-selector",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000054701",
+        "source": "i1",
+        "target": "i10",
+        "figments": [
+          "i2",
+          "i3"
+        ],
+        "preparedX": 2,
+        "preparedAnswers": [
+          2,
+          [
+            "i10"
+          ],
+          [
+            "i2",
+            "i3"
+          ]
+        ],
+        "forcedTarget": true,
+        "targetGeometry": {
+          "selector": "[data-battlefield-card][data-battle-card-id=\"i10\"]",
+          "x": 254.5,
+          "y": 183,
+          "width": 89.5,
+          "height": 89.5,
+          "hit": true,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "beforeEnergy": 5,
+        "afterEnergy": 4,
+        "debit": 1,
+        "settledDom": {
+          "removedPhysicalIds": [
+            "i10",
+            "i2",
+            "i3"
+          ],
+          "remaining": [],
+          "shownEnergy": 4,
+          "shownMax": 5,
+          "nextEnabled": true,
+          "nextGeometry": {
+            "x": 1117.8125,
+            "y": 597,
+            "width": 122.6875,
+            "height": 42,
+            "hit": true
+          }
+        },
+        "caps": [],
+        "verdict": "pass"
+      }
+    ],
+    "attempts": [
+      {
+        "invocation": "run-a9lUea",
+        "ok": true,
+        "error": null,
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 1982,
+          "scenario": 22293,
+          "total": 24338
+        },
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/invocations/run-a9lUea/abandon-x-qa-desktop.jsonl",
+            "gameId": "hgqiqh",
+            "selectedBy": "url",
+            "rows": 23,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "offering-x-before-target-desktop.png",
+          "abandon-x-offering-settled-desktop.png",
+          "abandon-x-selector-settled-desktop.png"
+        ]
+      },
+      {
+        "invocation": "run-VlRu13",
+        "ok": true,
+        "error": null,
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1979,
+          "scenario": 38840,
+          "total": 40891
+        },
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/invocations/run-VlRu13/abandon-x-qa-desktop.jsonl",
+            "gameId": "rfouuf",
+            "selectedBy": "url",
+            "rows": 23,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "offering-x-before-target-desktop.png",
+          "abandon-x-offering-resolved-desktop.png",
+          "abandon-x-selector-resolved-desktop.png"
+        ]
+      },
+      {
+        "invocation": "run-FQ8th9",
+        "ok": false,
+        "error": "Error: native count fixture: TimeoutError: page.waitForFunction: Timeout 14410ms exceeded.\n    at Object.waitFor (evalmachine.<anonymous>:785:17)\n    at async abandonX (evalmachine.<anonymous>:1666:5)\n    at async evalmachine.<anonymous>:1742:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)",
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 6,
+          "serve": 3197,
+          "scenario": 28684,
+          "total": 32006
+        },
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": null,
+            "gameId": null,
+            "selectedBy": null,
+            "rows": 0,
+            "reason": "no local games database"
+          }
+        ],
+        "captures": []
+      },
+      {
+        "invocation": "run-U5KoBo",
+        "ok": false,
+        "error": "QaTimeoutError: qa.battle abandon-x-offering prepares exact target: timed out after 30000 ms; last action none; {\"at\":\"near:day\",\"prompt\":null,\"window\":\"main\",\"canPass\":true,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":18}}; history near:day\n    at Object.timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.playUntil (evalmachine.<anonymous>:1372:52)\n    at async abandonX (evalmachine.<anonymous>:1696:5)\n    at async evalmachine.<anonymous>:1726:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "caps": [],
+        "wallMs": {
+          "browserLeaseWait": 5,
+          "serve": 1964,
+          "scenario": 37405,
+          "total": 39447
+        },
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.544/invocations/run-U5KoBo/abandon-x-qa-desktop.jsonl",
+            "gameId": "v35vwz",
+            "selectedBy": "url",
+            "rows": 34,
+            "reason": null
+          }
+        ],
+        "captures": [
+          "offering-x-before-target-desktop.png"
+        ]
+      }
+    ],
+    "qualifications": {
+      "run-U5KoBo": "Observer timeout after actual route1/X2/forced target+hand banish+two figments completed. Persisted34rows and first X capture retained; not full workflow acceptance.",
+      "run-FQ8th9": "Default15s fixture startup observation timed out before a game DB existed; no gameplay proof or false passing Caps claim. Finite readiness increased60s in ignored script.",
+      "run-VlRu13": "Logical normal-action/probe/history/debit outcomes pass both flows. First resolved captures show transient notice/presentation, so they are not settled rendering evidence.",
+      "run-a9lUea": "Both flows pass actual settled DOM absence/HUD/current-control geometry and Caps. Target/payment single legal answers are real promptAutoAnswered events, not manual click claims.",
+      "stackX": "No direct native stackX observation: forced continuation resolves before observer can sample stack. Public synthetic contracts hold an Interrupt-capable response and assert stackX2; native prepared answers and exact-X target resolution establish correct shared count indirectly."
+    },
+    "screens": [
+      "offering-x-before-target-desktop.png",
+      "abandon-x-offering-settled-desktop.png",
+      "abandon-x-selector-settled-desktop.png"
+    ],
+    "persistedLogs": "First workflow33rows retained in result.records and engine.action; second23rows also exported by runner. Every action carries UUID/physicalIDs and prepared answer sequence.",
+    "parentVisualReview": {
+      "record": "parent-settled-visual-review.json",
+      "actualViewedResolution": "Both desktop captures2880x1800; Offering target/figments absent, sourcevoid, HUD5/5/controlenabled/toastgone; selector sourcepersists, target/figmentsabsent, voidpile/HUD4/5/controlenabled.",
+      "scope": "Parent actual visual confirmation after native DOM/HUD/control acceptance; first transient screenshots remain qualified."
+    }
+  },
+  "rulesDecision": "No new ambiguity/ruling: current X-before-targets, Offering printed-energyXzero and acceptance-authorized supported authoring boundary documented additively.",
+  "preExistingIssues": [
+    {
+      "path": "docs/plan/evidence/pre-existing/hv-umm2.544.md",
+      "proof": "pre-existing-copy-proof.json",
+      "scope": "Baseline/current singular abandon auto-answer notice describes a forced two-character payment; no UI/event changes."
+    }
+  ],
+  "resources": {
+    "verifiedAt": "2026-10-13T01:29:51.384529+00:00",
+    "knownPids": [
+      5736,
+      5748,
+      6593,
+      6605,
+      6644,
+      8627,
+      8636,
+      34859,
+      34869,
+      38138,
+      38148,
+      43724,
+      43734,
+      45209,
+      45222,
+      45542,
+      45550,
+      45578,
+      48396,
+      48404,
+      48671,
+      48690,
+      48730,
+      56441,
+      56586,
+      56743,
+      56779,
+      60992,
+      61006,
+      62551,
+      62561,
+      62565,
+      62575,
+      71706,
+      71716,
+      72597,
+      72605,
+      72607,
+      72635,
+      73752,
+      73762,
+      73799,
+      74531,
+      74543,
+      76473,
+      76484,
+      77801,
+      77810,
+      82571,
+      82581,
+      94103,
+      94163,
+      94283,
+      94295
+    ],
+    "liveOwnedProcesses": [],
+    "browserInvocations": [
+      {
+        "invocation": "run-a9lUea",
+        "serverPid": 73799,
+        "port": 5274,
+        "slot": 1,
+        "wrapperActualTerminal": true,
+        "runtimePortFree": true
+      },
+      {
+        "invocation": "run-VlRu13",
+        "serverPid": 6644,
+        "port": 5274,
+        "slot": 1,
+        "wrapperActualTerminal": true,
+        "runtimePortFree": true
+      },
+      {
+        "invocation": "run-FQ8th9",
+        "serverPid": 48730,
+        "port": 5274,
+        "slot": 1,
+        "wrapperActualTerminal": true,
+        "runtimePortFree": true
+      },
+      {
+        "invocation": "run-U5KoBo",
+        "serverPid": 45578,
+        "port": 5274,
+        "slot": 1,
+        "wrapperActualTerminal": true,
+        "runtimePortFree": true
+      }
+    ],
+    "checkoutSourceManifestUnchanged": "Six original source/docs byte hashes unchanged. types.ts has documented comment placement only; new contract has documented min0/interior-gap assertions. All runtime/product/QA fixture semantics validated unchanged by native UI; latest review validates final comments/tests.",
+    "finalCoverageAudit": {
+      "at": "2026-10-13T01:39:36.730847+00:00",
+      "knownPids": [
+        5736,
+        5748,
+        6593,
+        6605,
+        6644,
+        8627,
+        8636,
+        34859,
+        34869,
+        38138,
+        38148,
+        43724,
+        43734,
+        45209,
+        45222,
+        45542,
+        45550,
+        45578,
+        48396,
+        48404,
+        48671,
+        48690,
+        48730,
+        56441,
+        56586,
+        56743,
+        56779,
+        60992,
+        61006,
+        62551,
+        62561,
+        62565,
+        62575,
+        71706,
+        71716,
+        72597,
+        72605,
+        72607,
+        72635,
+        73752,
+        73762,
+        73799,
+        74531,
+        74543,
+        75850,
+        75858,
+        75859,
+        75867,
+        76473,
+        76484,
+        77801,
+        77810,
+        82571,
+        82581,
+        94103,
+        94163,
+        94283,
+        94295
+      ],
+      "count": 58,
+      "live": [],
+      "port5274Free": false,
+      "slot1OwnerExists": true,
+      "allFiniteWrappersActualTerminal": true,
+      "ownLeaseReleased": true,
+      "currentOwnerIsOwn": false,
+      "laterSharedPortReuseQualification": "Own each invocation terminal cleanup observed slot owner absent and port5274free. A later peer now owns slot1/port5274; own58PIDPGIDset remains absent. Peer resources are not touched."
+    },
+    "finalCoverageAuditRecord": "final-coverage-resource-check.json"
+  },
+  "frictionWindows": {
+    "localEditCorrection": {
+      "start": "2026-10-13T01:13:20.705434+00:00",
+      "end": "2026-10-13T01:14:39.292982+00:00",
+      "minutes": 1.3097924666666667
+    },
+    "qaScripting": [
+      {
+        "start": "2026-10-13T01:19:05.773635+00:00",
+        "end": "2026-10-13T01:23:42.866173+00:00",
+        "minutes": 4.618208966666667,
+        "scope": "Two failed observers plus diagnosis/drain/script-only correction; excludes the later logical PASS wrapper."
+      },
+      {
+        "start": "2026-10-13T01:24:24.482197+00:00",
+        "end": "2026-10-13T01:27:51.004783+00:00",
+        "minutes": 3.4420431,
+        "scope": "Parent actual visual review exposed transient captures; source-based existing copy issue and script-only presentation settlement correction; excludes settled PASS wrapper."
+      }
+    ],
+    "localEditCorrectionCoverage": {
+      "start": "2026-10-13T01:36:44.813862+00:00",
+      "end": "2026-10-13T01:37:58.293965+00:00",
+      "minutes": 1.2246683833333334,
+      "scope": "Bounded parent final acceptance-coverage refinement and sequential focused/review/Knip; excludes preceding parent audit wait, which gross implementation includes."
+    }
+  },
+  "postValidationCommentCorrection": {
+    "path": "src/engine/dsl/types.ts",
+    "validatedQaSha256": "a9503cd7d0e2d56361ae05a1686c22d20db87c72af8da4046fa702b1a87ae870",
+    "finalSha256": "3121640b690eb629ae7b6ad3a18d172d5c4ac4d5288f42fb3bf3ada1e849de26",
+    "change": "Move unchanged PaymentCost JSDoc from immediately before AbandonXCost documentation to immediately before its PaymentCost export; comments only, no type/body/API behavior change. Parent final diff identified placement.",
+    "validation": "Own-file ESLint actualterminal0/2.943332s; no repeat of green semantic checks/browser because their code is identical.",
+    "originalQaSourceManifest": "pre-qa-source-manifest.json"
+  },
+  "postValidationCoverageRefinement": {
+    "path": "src/engine/effects/primitives/contracts/abandon-x-preparation-targets.contracts.ts",
+    "previousSha256": "3eb82aff33418eb0933942b0215b3605275fa318c563a13493e0a66b04ab0ad2",
+    "finalSha256": "9b24ff3c2518a759b068c39e5d3a08244f805f87a402853f14c99bc39e9ada3b",
+    "change": "Prospective selector cases use meaningful min0 and assert legal0 / illegal1 / legal2; chosen2 still pays/resolves under spark/cost/anyOf selectors for stored0/2/9 and both controllers. This distinguishes a real interior numeric gap rather than lower-bound exclusion.",
+    "validation": "Own20case focused0, finalreview5312/281files0 and finalKnip0, all serialactualterminal. Parent final contract audit requested this acceptance-coverage refinement; no product or QA fixture change, so native UI evidence remains applicable.",
+    "window": {
+      "start": "2026-10-13T01:36:44.813862+00:00",
+      "end": "2026-10-13T01:37:58.293965+00:00"
+    }
+  }
+}

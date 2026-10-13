@@ -4,6 +4,7 @@ import type { Effect } from "../effects/registry";
 import type { EffectNode } from "../effects/types";
 import type {
   Ability,
+  AbandonXCost,
   ActivatedAbility,
   ActivationZone,
   AdditionalCost,
@@ -97,8 +98,8 @@ export function abandonCost(extra: Omit<CharacterSelector, "controller"> = {}, c
   return { cost: "abandon", selector: { controller: "you", ...extra }, count };
 }
 
-/** "Abandon X characters" matching the selector, choosing X before targets. */
-export function abandonXCost(options: { readonly min?: number; readonly selector?: Omit<CharacterSelector, "controller"> } = {}): PaymentCost {
+/** Mandatory top-level "Abandon X characters", choosing X before targets; selector bounds read that prospective X. */
+export function abandonXCost(options: { readonly min?: number; readonly selector?: Omit<CharacterSelector, "controller"> } = {}): AbandonXCost {
   const min = options.min ?? 0;
   if (!Number.isSafeInteger(min) || min < 0) throw new Error("abandonXCost min must be a non-negative safe integer");
   return { cost: "abandon", selector: { ...options.selector, controller: "you" }, count: "x", min };

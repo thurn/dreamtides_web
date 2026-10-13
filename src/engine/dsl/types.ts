@@ -457,6 +457,16 @@ export interface CardFilter {
   readonly sparkAtLeast?: number;
 }
 
+
+/** A mandatory top-level abandon count, prepared before targets; alternative and optional payments use PaymentCost. */
+export interface AbandonXCost {
+  readonly cost: "abandon";
+  readonly selector: CharacterSelector;
+  readonly count: "x";
+  readonly min: number;
+  readonly captureCost?: never;
+}
+
 /** One payment, including a discard or banish count determined by X, with no choice between costs. */
 export type PaymentCost =
   | EnergyCost
@@ -465,8 +475,6 @@ export type PaymentCost =
   /** Abandon characters you control that match the selector; captureCost captures one character’s copiable cost as X. */
   | { readonly cost: "abandon"; readonly selector: CharacterSelector | SelfSpec; readonly count: number; readonly captureCost?: never }
   | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: 1; readonly captureCost: true }
-  /** Abandon X matching controlled characters; choose X before targets, at least min. */
-  | { readonly cost: "abandon"; readonly selector: CharacterSelector; readonly count: "x"; readonly min: number; readonly captureCost?: never }
   /** Return matching characters you control to hand, applying ordinary zone replacements. */
   | { readonly cost: "return"; readonly selector: CharacterSelector; readonly count: number }
   /** Discard a fixed number of matching hand cards. */
@@ -524,7 +532,7 @@ export interface OptionalCost {
 }
 
 /** A card's additional cost ("To play this card, …"): any payment except an X energy cost. */
-export type AdditionalCost = PaymentCost | ChoiceCost | OptionalCost;
+export type AdditionalCost = PaymentCost | AbandonXCost | ChoiceCost | OptionalCost;
 
 /**
  * One cost of an activated ability or a card (engine-design § Costs). An X
