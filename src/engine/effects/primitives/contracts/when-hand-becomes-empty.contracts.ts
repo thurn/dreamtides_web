@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import type { EngineCardDefinition } from "../../../catalog";
 import { activated, conditionCardCounts, energy, everyIn, staticAbility } from "../../../dsl/builders";
-import { triggered, whenHandBecomesEmpty, whenYouPlay } from "../../../dsl/triggers";
+import { triggered, whenDiscard, whenDiscardBatch, whenHandBecomesEmpty, whenYouPlay } from "../../../dsl/triggers";
 import type { PlayerRef } from "../../../dsl/types";
 import { createEngine } from "../../../engine";
 import { eventSeenBy, type EngineEvent } from "../../../events";
@@ -54,6 +54,8 @@ const H = {
   floating: card(23, () => [activated([], p.sequence(p.floating(whenHandBecomesEmpty(), p.gainEnergy(1)), p.discard(9)))]),
   capacity: card(25, () => [], false, { resolve(ctx, item) { enterCharacter(ctx, ctx.state.sides[item.controller].hand[0], item.controller); } }),
   hidden: card(26, () => [triggered(whenHandBecomesEmpty(), p.gainPoints(1), { zone: "any" })]),
+  discardWatch: card(27, () => [triggered(whenDiscard(), p.gainPoints(1))]),
+  batchWatch: card(28, () => [triggered(whenDiscardBatch(), p.gainEnergy(1))]),
   invalid: card(24, () => [], false, { resolve(ctx, item) { const hand = ctx.state.sides[item.controller].hand; discardCards(ctx, item.controller, [hand[0], hand[0]]); } }),
 };
 const E = createEngine(testCatalog(Object.values(H)));
@@ -258,6 +260,39 @@ describe("whenHandBecomesEmpty", () => {
     const callback = runStep(sample, { kind: "resolveTrigger" }, NO_PROMPTS, E.catalog);
     if (callback.kind !== "done") throw new Error("Unexpected prompt");
     expect(callback.state.sides.player.score).toBe(1);
+  });
+});
+
+describe.each(SIDES)("whenHandBecomesEmpty discard sequencing for %s", (side) => {
+  it.each([
+    { label: "ordinary last card", count: 1, createdLast: false, order: ["empty", "discard", "batch"], events: ["handEmptied", "enteredVoid", "discarded", "discardBatch"] },
+    { label: "created last card", count: 1, createdLast: true, order: ["discard", "empty", "batch"], events: ["discarded", "handEmptied", "ceasedToExist", "discardBatch"] },
+    { label: "two ordinary cards", count: 2, createdLast: false, order: ["discard", "empty", "discard", "batch"], events: ["enteredVoid", "discarded", "handEmptied", "enteredVoid", "discarded", "discardBatch"] },
+    { label: "ordinary then created last card", count: 2, createdLast: true, order: ["discard", "discard", "empty", "batch"], events: ["enteredVoid", "discarded", "discarded", "handEmptied", "ceasedToExist", "discardBatch"] },
+  ] as const)("preserves completed moves and FIFO for $label", ({ count, createdLast, order, events }) => {
+    const b = board(side, { back: [H.watch.id, H.discardWatch.id, H.batchWatch.id, H.discard.id],
+      hand: count === 1 ? [v.vanilla1.id] : [v.vanilla1.id, v.vanilla2.id] });
+    const hand = b.ids[side].hand, last = hand[hand.length - 1];
+    if (createdLast) b.state.instances[last].status.created = true;
+    const done = run(b.state, side, b.ids[side].back[3]!);
+    const sources = { empty: b.ids[side].back[0], discard: b.ids[side].back[1], batch: b.ids[side].back[2] };
+    const callbacks = queued(done.events);
+    expect(callbacks.map(e => e.source)).toEqual(order.map(role => sources[role]));
+    expect(callbacks.filter(e => e.source === sources.empty || e.source === sources.batch).map(e => e.subject)).toEqual([null, null]);
+    expect(callbacks.filter(e => e.source === sources.discard).map(e => e.subject)).toEqual(hand);
+    expect(callbacks[callbacks.length - 1]).toMatchObject({ source: sources.batch, subject: null, discardedCount: count });
+    expect(done.events.filter(e => e.kind === "triggerResolved").map(e => ({ source: e.source, applied: e.applied })))
+      .toEqual(order.map(role => ({ source: sources[role], applied: true })));
+    expect(done.events.filter(e => e.kind === "handEmptied" || e.kind === "enteredVoid" || e.kind === "discarded" || e.kind === "ceasedToExist" || e.kind === "discardBatch").map(e => e.kind)).toEqual(events);
+    expect(done.events.filter(e => e.kind === "discarded").map(e => e.instance)).toEqual(hand);
+    expect(empty(done.events)).toEqual([{ kind: "handEmptied", side }]);
+    expect(done.events.filter(e => e.kind === "discardBatch")).toEqual([{ kind: "discardBatch", side, count }]);
+    expect(done.events.findIndex(e => e.kind === "discardBatch")).toBeLessThan(done.events.findIndex(e => e.kind === "triggerResolved"));
+    expect(done.state.sides[side].hand).toEqual([]);
+    expect(done.state.sides[side].score).toBe(1 + count);
+    expect(done.state.sides[side].currentEnergy).toBe(b.state.sides[side].currentEnergy + 1);
+    expect(new Set(done.state.sides[side].void)).toEqual(new Set(createdLast ? hand.slice(0, -1) : hand));
+    if (createdLast) expect(done.state.instances[last]).toBeUndefined();
   });
 });
 

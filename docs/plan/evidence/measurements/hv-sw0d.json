@@ -1,0 +1,266 @@
+{
+  "bead": "hv-sw0d",
+  "base": "b01fb5a8efe8dbaeff9c1a2c7da7dc751a763f81",
+  "dispatch": {
+    "timestamp": "2026-10-14T10:01:45.375Z",
+    "call_id": "call_a74930cf7da1406ebcdf341b65a132b9",
+    "agent": "/root/hand_empty_discard_sw0d"
+  },
+  "boundary": {
+    "precommitBoundaryEnd": "2026-10-14T10:08:01.021081+00:00",
+    "precommitInclusiveMinutes": 6.260768016666666,
+    "commitEnd": "Parent final freeze audit ACK received; automatic Git dates and the externally observed commit start/end are retained in scratch and by parent. This precommit boundary precedes final schema/whitespace and commit by the recorded external delta.",
+    "cpuTime": "UNKNOWN",
+    "modelSamplingTime": "UNKNOWN",
+    "productiveEditingTime": "UNKNOWN",
+    "queueIdleAttribution": "UNKNOWN"
+  },
+  "provenance": {
+    "proposalSHA256": "190847bb4c4ffbf4bf611ca7d7b29905d3602cec806989d8272754c787c87ffb",
+    "collectorSHA256": "502d245e78f09e929c2e6bc65a54c013fb27261e0c7f5f36f8b94ed0a538a948",
+    "prewriteManifestSHA256": "a2833673dd8d11ae9f578764764626f60e20b61123c2767c44e9121f9db1e089",
+    "receiptDirectory": "/tmp/root-sw0d/helper",
+    "sourceEpochs": "Every receipt names its before/after manifest hashes; no edits occurred during a guarded check. Evidence is refreshed after checks without changing the tested doc/contract bodies.",
+    "currentBodySHA256": {
+      "docs/rules.md": "8730189609ff5659b51ec52468fe330e94a398c7e13571a3c43be3a4c3e66123",
+      "src/engine/effects/primitives/contracts/when-hand-becomes-empty.contracts.ts": "a64fc72ff904723938e8e519af4d14b587202d9008988afc875ffc4c36082c71",
+      "docs/plan/evidence/rules-decisions/RD-hv-sw0d-1.md": "80dd707ac3422523e9272336235657550df2240319707da1072d7971a1654cba"
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review-1 command launch (immediately before guarded collector)",
+        "value": 2.58
+      }
+    }
+  },
+  "hostLoadSamples": [
+    {
+      "at": "2026-10-14T10:05:07.192535+00:00",
+      "load1": 2.58,
+      "measuredFor": "review-1 command launch (immediately before guarded collector)"
+    }
+  ],
+  "receipts": [
+    {
+      "label": "focused-1",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenHandBecomesEmpty"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-empty-discard-order-sw0d",
+      "started": "2026-10-14T10:03:27.282605+00:00",
+      "ended": "2026-10-14T10:03:31.405973+00:00",
+      "elapsed_seconds": 4.1232127499824855,
+      "pid": 5596,
+      "pgid": 5596,
+      "exit_code": 1,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "502d245e78f09e929c2e6bc65a54c013fb27261e0c7f5f36f8b94ed0a538a948",
+      "manifest_files": 4813,
+      "head": "b01fb5a8efe8dbaeff9c1a2c7da7dc751a763f81",
+      "status": " M docs/rules.md\n M src/engine/effects/primitives/contracts/when-hand-becomes-empty.contracts.ts\n",
+      "before_sha256": "cae8230795ec78307408b425ff7658e5996bf4e5aa01632a5fb915b5062241f4",
+      "after_sha256": "cae8230795ec78307408b425ff7658e5996bf4e5aa01632a5fb915b5062241f4",
+      "receiptSHA256": "20e6ea314e4dcb7b05dad0bc94d82ba87328d9acc9a2c6d44812c05cec867647",
+      "stdoutSHA256": "e9ff56469c7a922467d72f401f9d4281bf02962a211b1580eec2334e991175fa",
+      "stderrSHA256": "9082831c1e5b58d9d71458ba76927aa6c1aef40d0f9554f178359a52b96f18fe"
+    },
+    {
+      "label": "focused-2",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "whenHandBecomesEmpty"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-empty-discard-order-sw0d",
+      "started": "2026-10-14T10:03:49.421495+00:00",
+      "ended": "2026-10-14T10:03:52.431854+00:00",
+      "elapsed_seconds": 3.0102156669890974,
+      "pid": 5947,
+      "pgid": 5947,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "502d245e78f09e929c2e6bc65a54c013fb27261e0c7f5f36f8b94ed0a538a948",
+      "manifest_files": 4813,
+      "head": "b01fb5a8efe8dbaeff9c1a2c7da7dc751a763f81",
+      "status": " M docs/rules.md\n M src/engine/effects/primitives/contracts/when-hand-becomes-empty.contracts.ts\n",
+      "before_sha256": "43ce2bb15055f16ff742d61766437d92266862c585840059ad366f36217aa982",
+      "after_sha256": "43ce2bb15055f16ff742d61766437d92266862c585840059ad366f36217aa982",
+      "receiptSHA256": "f7f80165e6d5bb70fb34caa0f2eef8b47767c4549bc56fcc5ad0c4b3f98e7e06",
+      "stdoutSHA256": "ed4e3ea06fea4420df232a996e7390cd2e0111ab664ad2e6e2db8542819e5013",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "knip-1",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-empty-discard-order-sw0d",
+      "started": "2026-10-14T10:05:13.888814+00:00",
+      "ended": "2026-10-14T10:05:18.128714+00:00",
+      "elapsed_seconds": 4.239742291014409,
+      "pid": 7142,
+      "pgid": 7142,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "502d245e78f09e929c2e6bc65a54c013fb27261e0c7f5f36f8b94ed0a538a948",
+      "manifest_files": 4817,
+      "head": "b01fb5a8efe8dbaeff9c1a2c7da7dc751a763f81",
+      "status": " M docs/rules.md\n M src/engine/effects/primitives/contracts/when-hand-becomes-empty.contracts.ts\n?? docs/plan/evidence/friction/hv-sw0d.json\n?? docs/plan/evidence/measurements/hv-sw0d.json\n?? docs/plan/evidence/measurements/hv-sw0d.md\n?? docs/plan/evidence/rules-decisions/RD-hv-sw0d-1.md\n",
+      "before_sha256": "ccd95a6329683d6608809f4bc0a70eef150368e8b57ce41cf5b874ba93392e33",
+      "after_sha256": "ccd95a6329683d6608809f4bc0a70eef150368e8b57ce41cf5b874ba93392e33",
+      "receiptSHA256": "9f4db15afef6328b0cdb0402c0f0d234a68eacb0ae64252804db6e9a87b2e25e",
+      "stdoutSHA256": "ac49ff221bceab82d11517e5509fb430c7449b408ff4b3734f7a356bd4edefe2",
+      "stderrSHA256": "0b772c6ecc94b0672dab055a222f5a067488894e7a5e8123756f947eda9ea288"
+    },
+    {
+      "label": "review-1",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-empty-discard-order-sw0d",
+      "started": "2026-10-14T10:05:07.384644+00:00",
+      "ended": "2026-10-14T10:05:25.695017+00:00",
+      "elapsed_seconds": 18.31023908298812,
+      "pid": 6985,
+      "pgid": 6985,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "502d245e78f09e929c2e6bc65a54c013fb27261e0c7f5f36f8b94ed0a538a948",
+      "manifest_files": 4817,
+      "head": "b01fb5a8efe8dbaeff9c1a2c7da7dc751a763f81",
+      "status": " M docs/rules.md\n M src/engine/effects/primitives/contracts/when-hand-becomes-empty.contracts.ts\n?? docs/plan/evidence/friction/hv-sw0d.json\n?? docs/plan/evidence/measurements/hv-sw0d.json\n?? docs/plan/evidence/measurements/hv-sw0d.md\n?? docs/plan/evidence/rules-decisions/RD-hv-sw0d-1.md\n",
+      "before_sha256": "ccd95a6329683d6608809f4bc0a70eef150368e8b57ce41cf5b874ba93392e33",
+      "after_sha256": "ccd95a6329683d6608809f4bc0a70eef150368e8b57ce41cf5b874ba93392e33",
+      "receiptSHA256": "e22829355dd42b81dff6a750f387839b25f1de0f5adf4179dea9f0a874bacaec",
+      "stdoutSHA256": "ba034dfaab347ba3ee4e243a5b216202a4e7a1335ba7e23cd16b1c480a84dd8a",
+      "stderrSHA256": "0b772c6ecc94b0672dab055a222f5a067488894e7a5e8123756f947eda9ea288"
+    },
+    {
+      "label": "schema-1",
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-empty-discard-order-sw0d",
+      "started": "2026-10-14T10:05:39.288175+00:00",
+      "ended": "2026-10-14T10:05:39.345511+00:00",
+      "elapsed_seconds": 0.057189624989405274,
+      "pid": 7556,
+      "pgid": 7556,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "502d245e78f09e929c2e6bc65a54c013fb27261e0c7f5f36f8b94ed0a538a948",
+      "manifest_files": 4817,
+      "head": "b01fb5a8efe8dbaeff9c1a2c7da7dc751a763f81",
+      "status": " M docs/rules.md\n M src/engine/effects/primitives/contracts/when-hand-becomes-empty.contracts.ts\n?? docs/plan/evidence/friction/hv-sw0d.json\n?? docs/plan/evidence/measurements/hv-sw0d.json\n?? docs/plan/evidence/measurements/hv-sw0d.md\n?? docs/plan/evidence/rules-decisions/RD-hv-sw0d-1.md\n",
+      "before_sha256": "470d6a691a663868de386081dea80190d62f420f29c893e51a5af43ee2a4d7eb",
+      "after_sha256": "470d6a691a663868de386081dea80190d62f420f29c893e51a5af43ee2a4d7eb",
+      "receiptSHA256": "ab36bff9a914915407b800b16032a89e0576fdde1a98c7e5b1b56f3928f8a554",
+      "stdoutSHA256": "1a54a951ce3ff2b72cd9201f08b961132d62f40db250b69ec64767a62bb611cf",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "whitespace-1",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/hand-empty-discard-order-sw0d",
+      "started": "2026-10-14T10:06:00.545405+00:00",
+      "ended": "2026-10-14T10:06:00.555151+00:00",
+      "elapsed_seconds": 0.009615416987799108,
+      "pid": 7885,
+      "pgid": 7885,
+      "exit_code": 0,
+      "child_reaped": true,
+      "changed_paths": [],
+      "remaining_group_before_cleanup": false,
+      "cleanup_signals": [],
+      "remaining_group_after_cleanup": false,
+      "collector_sha256": "502d245e78f09e929c2e6bc65a54c013fb27261e0c7f5f36f8b94ed0a538a948",
+      "manifest_files": 4817,
+      "head": "b01fb5a8efe8dbaeff9c1a2c7da7dc751a763f81",
+      "status": " M docs/rules.md\n M src/engine/effects/primitives/contracts/when-hand-becomes-empty.contracts.ts\n?? docs/plan/evidence/friction/hv-sw0d.json\n?? docs/plan/evidence/measurements/hv-sw0d.json\n?? docs/plan/evidence/measurements/hv-sw0d.md\n?? docs/plan/evidence/rules-decisions/RD-hv-sw0d-1.md\n",
+      "before_sha256": "abee98c24b415d55089d8b278f70b83dcb47efdf147cf41dbfdc87f480332abc",
+      "after_sha256": "abee98c24b415d55089d8b278f70b83dcb47efdf147cf41dbfdc87f480332abc",
+      "receiptSHA256": "dff764aceb335562f0dc80b6295755d66539d13c64a14194e89347b829249db8",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "failures": {
+    "focused-1": "27 passed/2 failed. My ancillary void membership assertion incorrectly assumed hand order, while ordinary void insertions reverse it. FIFO/event-order/subject/callback assertions passed. Corrected only the new assertion to unordered UUID membership; focused-2 passed all29."
+  },
+  "postReviewEdits": [
+    "Rules paragraph qualifies ordinary/created as last card to avoid applying the ordering to earlier cards; contract bytes unchanged after passing review.",
+    "Own evidence refreshed with actual receipts and precommit boundary."
+  ],
+  "reviewAggregate": {
+    "files": 1,
+    "tests": 3485,
+    "scope": "Entire existing primitives contract runner"
+  },
+  "validationTotals": {
+    "existingHandEmptyCases": 21,
+    "addedHandEmptyCases": 8,
+    "finalFocused": 29,
+    "scenarioCells": 8,
+    "contractModuleLines": 375,
+    "testDelta": {
+      "files": 0,
+      "lines": 35,
+      "jsdomFiles": 0
+    }
+  },
+  "fallout": [],
+  "qa": {
+    "browserRequired": false,
+    "basis": "Docs and synthetic public contracts only; all production bytes remain unchanged. No rendering, new production content, or player workflow changes. No browser or runtime presentation success inferred.",
+    "screenshots": [],
+    "originalAcceptance": "hv-umm2.237 retains both filed production UUIDs, full authoring/recipe, weighted fuzz300, preflight, both-controller sweep and sampled desktop/mobile judgments."
+  },
+  "resources": {
+    "persistentOwnedProcesses": [],
+    "browserContexts": [],
+    "ports": [],
+    "heavyCommands": [],
+    "reviewProvider": "Helper launched none; parent retains completed normal cross-family Claude Opus5.5 review of previous6yev. This bounded documentation/coverage followup adds no production transition and is not core-review."
+  },
+  "preExistingIssues": []
+}

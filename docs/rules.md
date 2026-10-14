@@ -1930,7 +1930,15 @@ is already empty does not trigger it. The move or removal finishes before
 abilities check whether they work in their current zones. Drawing later in
 the same effect does not cancel the occasion. The occasion is public and
 names no card. Its abilities wait for the whole effect or action to finish,
-then resolve in the usual trigger order.
+then resolve in the usual trigger order. The occasion follows the completed
+move of the last card and precedes that move's own announcement. An ordinary
+last card's discard is announced after it enters the void, so its "When you
+discard" abilities follow the hand-empty abilities. A created last card's discard is
+announced while it still exists, before it ceases to exist, so its "When you
+discard" abilities precede the hand-empty abilities. When several cards are
+discarded together, earlier cards' discard abilities precede the hand-empty
+abilities, and abilities for the completed discard of one or more cards follow
+all of them.
 
 **Counting ▸Dawn abilities:** "If 3 or more ▸Dawn abilities trigger during
 your Dawn phase, draw a card" counts actual successful admissions during
