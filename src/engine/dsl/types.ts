@@ -394,6 +394,8 @@ export type Condition =
    */
   | { readonly cond: "controls"; readonly selector: CharacterSelector; readonly atLeast: number; readonly atMost?: number }
   | { readonly cond: "energyAtLeast"; readonly amount: number }
+  /** The named controller-relative player's turn is active, including extra turns. */
+  | { readonly cond: "turnOf"; readonly player: PlayerRef }
   /**
    * "If the additional cost was paid": whether the item's optional cost at
    * index `optional` (in printed order) was paid when it was played. A copy

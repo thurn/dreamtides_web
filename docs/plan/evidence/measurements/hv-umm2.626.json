@@ -1,0 +1,1057 @@
+{
+  "bead": "hv-umm2.626",
+  "base": "d9a38ff6e8120e4662beb8ddf2ddcf852bb0dc14",
+  "implementationEnvelope": {
+    "start": "2026-10-14T13:40:23.961001+00:00",
+    "precommitEndpoint": "2026-10-14T14:08:16.217887+00:00",
+    "exactSamplingStart": "unknown",
+    "productiveTime": "unknown",
+    "scope": "Conservative parent pre-spawn bound includes source research, admission waits, implementation, checks, evidence and Git. Finalizer refreshes this precommit endpoint immediately before the automatic commit; actual Git receipt is retained by the parent."
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "review start"
+      }
+    }
+  },
+  "commands": [
+    {
+      "id": "cf1-v01",
+      "scope": "Only new turnOf case, fixed player side instead of relative controller",
+      "path": "src/engine/dsl/conditions.ts",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "active-turn condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "JOURNEY_TEST_WORKERS": "2",
+      "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "originalSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+      "mutatedSHA256": "1f3edb6179f3dd0612a4ac7f4b47b3791c3234301a16b4fa0c28b81d71bd316e",
+      "runnerSHA256": "075e660a190d6c2cbf1a30d7a61c1d3b33dc60f9aa83a1fa20b68474701ebe56",
+      "planSHA256": "3d813ac7daa28191b3ebe9ba79e496a55389b24233bc6d0129bd0147d8a26833",
+      "started": "2026-10-14T13:59:44.699797+00:00",
+      "hostLoad": [
+        9.0927734375,
+        8.724609375,
+        8.01904296875
+      ],
+      "pid": 26518,
+      "pgid": 26518,
+      "exitCode": 1,
+      "sourceBeforeRestoreUnchanged": true,
+      "semanticWitness": {
+        "AssertionError": true,
+        "FAIL": true,
+        "enemy resolves relative players and agrees with pure static inspection on either active side": true
+      },
+      "childReaped": true,
+      "remainingGroup": false,
+      "ended": "2026-10-14T13:59:49.056158+00:00",
+      "elapsedSeconds": 4.356173249980202,
+      "cleanup": [],
+      "restoredSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+      "fullManifestRestored": true,
+      "failure": null,
+      "stdoutSHA256": "6cbe7af3b5d2aef3cbe266ea443fa275bad05e9ef28dce3cd233e95a4220a28a",
+      "stderrSHA256": "610d48301bbc21c64682c41d7bea4e665c01a660b28eec7f7e00156038bf8e5f",
+      "restoredManifestSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "epoch": "cf1-v01"
+    },
+    {
+      "id": "cf2-v01",
+      "scope": "Only new turnOf case, false on extra turns",
+      "path": "src/engine/dsl/conditions.ts",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "active-turn condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "JOURNEY_TEST_WORKERS": "2",
+      "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "originalSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+      "mutatedSHA256": "d097b91af2e052cf9d9a5dc1913ce32415ce442dcd486e8b657e35773e2483aa",
+      "runnerSHA256": "075e660a190d6c2cbf1a30d7a61c1d3b33dc60f9aa83a1fa20b68474701ebe56",
+      "planSHA256": "3d813ac7daa28191b3ebe9ba79e496a55389b24233bc6d0129bd0147d8a26833",
+      "started": "2026-10-14T13:59:49.210264+00:00",
+      "hostLoad": [
+        9.1650390625,
+        8.74560546875,
+        8.0302734375
+      ],
+      "pid": 26825,
+      "pgid": 26825,
+      "exitCode": 1,
+      "sourceBeforeRestoreUnchanged": true,
+      "semanticWitness": {
+        "AssertionError": true,
+        "FAIL": true,
+        "reads an actual extra turn and the resumed normal turn": true
+      },
+      "childReaped": true,
+      "remainingGroup": false,
+      "ended": "2026-10-14T13:59:53.509909+00:00",
+      "elapsedSeconds": 4.299584666994633,
+      "cleanup": [],
+      "restoredSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+      "fullManifestRestored": true,
+      "failure": null,
+      "stdoutSHA256": "e43fbbe5d908728fae154438cf0f797415562d9d8c022c000c0f923c692023b9",
+      "stderrSHA256": "f0cfeab3737bc93577ab4d70038cfc3ea85839b165eca5b285457547996d6cc8",
+      "restoredManifestSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "epoch": "cf2-v01"
+    },
+    {
+      "id": "cf3-v01",
+      "scope": "ONLY exact applied guard; preserve resolveEffect env binding, all other resolveBody and existing tests",
+      "path": "src/engine/triggers/resolve.ts",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "-t",
+        "checks an intervening 'if' when the ability triggers and again as it resolves"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "JOURNEY_TEST_WORKERS": "2",
+      "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "originalSHA256": "428b9e4a678d99c85a14d7298f4a4bb4b7eb49906faa414b100d848778f3aeff",
+      "mutatedSHA256": "fb1cc22ef7d3e12dfbba72e4baf02acfcf348550ac1f96d49d9e951243aa80b8",
+      "runnerSHA256": "075e660a190d6c2cbf1a30d7a61c1d3b33dc60f9aa83a1fa20b68474701ebe56",
+      "planSHA256": "3d813ac7daa28191b3ebe9ba79e496a55389b24233bc6d0129bd0147d8a26833",
+      "started": "2026-10-14T13:59:53.663304+00:00",
+      "hostLoad": [
+        9.3115234375,
+        8.78271484375,
+        8.04736328125
+      ],
+      "pid": 27223,
+      "pgid": 27223,
+      "exitCode": 1,
+      "sourceBeforeRestoreUnchanged": true,
+      "semanticWitness": {
+        "AssertionError": true,
+        "FAIL": true,
+        "checks an intervening 'if' when the ability triggers and again as it resolves": true
+      },
+      "childReaped": true,
+      "remainingGroup": false,
+      "ended": "2026-10-14T13:59:55.230722+00:00",
+      "elapsedSeconds": 1.5674040419980884,
+      "cleanup": [],
+      "restoredSHA256": "428b9e4a678d99c85a14d7298f4a4bb4b7eb49906faa414b100d848778f3aeff",
+      "fullManifestRestored": true,
+      "failure": null,
+      "stdoutSHA256": "59695511956b9a66d4a42d07db7398722f53acfdf638600d85052d52855662cd",
+      "stderrSHA256": "cfa376be4f0b4e6ae67dcbf1888d9172a47b98048395faf6e54f4822dc5203b0",
+      "restoredManifestSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "epoch": "cf3-v01"
+    },
+    {
+      "id": "cf4-v01",
+      "scope": "Only new turnOf case, mutate turnNumber during pure inspection",
+      "path": "src/engine/dsl/conditions.ts",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "active-turn condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "JOURNEY_TEST_WORKERS": "2",
+      "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "originalSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+      "mutatedSHA256": "59506289b1f5f2d2f9600773c3c7c19676471fc6949dc3e08ba98357c016160e",
+      "runnerSHA256": "075e660a190d6c2cbf1a30d7a61c1d3b33dc60f9aa83a1fa20b68474701ebe56",
+      "planSHA256": "3d813ac7daa28191b3ebe9ba79e496a55389b24233bc6d0129bd0147d8a26833",
+      "started": "2026-10-14T13:59:55.373622+00:00",
+      "hostLoad": [
+        9.3115234375,
+        8.78271484375,
+        8.04736328125
+      ],
+      "pid": 27307,
+      "pgid": 27307,
+      "exitCode": 1,
+      "sourceBeforeRestoreUnchanged": true,
+      "semanticWitness": {
+        "AssertionError": true,
+        "FAIL": true,
+        "resolves relative players and agrees with pure static inspection on either active side": true
+      },
+      "childReaped": true,
+      "remainingGroup": false,
+      "ended": "2026-10-14T13:59:59.543176+00:00",
+      "elapsedSeconds": 4.169494999980088,
+      "cleanup": [],
+      "restoredSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+      "fullManifestRestored": true,
+      "failure": null,
+      "stdoutSHA256": "35b2fb50a6f7c3f9145dada548faaf8dac0432cdcf0c8db999061a29f5778dd5",
+      "stderrSHA256": "290b21c4d32ed305fef7032d46ee1dc5a1b2daf3f7381847adcaac8a507e1406",
+      "restoredManifestSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "epoch": "cf4-v01"
+    },
+    {
+      "id": "cf5-v01",
+      "scope": "Only new turnOf case, substitute original source controller for inner calling controller (not owner)",
+      "path": "src/engine/dsl/conditions.ts",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "active-turn condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "JOURNEY_TEST_WORKERS": "2",
+      "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "originalSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+      "mutatedSHA256": "139250da31b2a772df37d8d02c3fa6af5ddf3f1923138c7c16d9858e76a61626",
+      "runnerSHA256": "075e660a190d6c2cbf1a30d7a61c1d3b33dc60f9aa83a1fa20b68474701ebe56",
+      "planSHA256": "3d813ac7daa28191b3ebe9ba79e496a55389b24233bc6d0129bd0147d8a26833",
+      "started": "2026-10-14T13:59:59.677273+00:00",
+      "hostLoad": [
+        9.2060546875,
+        8.76953125,
+        8.046875
+      ],
+      "pid": 27550,
+      "pgid": 27550,
+      "exitCode": 1,
+      "sourceBeforeRestoreUnchanged": true,
+      "semanticWitness": {
+        "AssertionError": true,
+        "FAIL": true,
+        "uses the calling controller when eachPlayer retains the original physical source": true
+      },
+      "childReaped": true,
+      "remainingGroup": false,
+      "ended": "2026-10-14T14:00:03.465504+00:00",
+      "elapsedSeconds": 3.788182832999155,
+      "cleanup": [],
+      "restoredSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+      "fullManifestRestored": true,
+      "failure": null,
+      "stdoutSHA256": "301240f8a9fe20bf996b66ca7458b1a14d9e04f91789f6f975e7e7e25489f6d7",
+      "stderrSHA256": "f078adae1f735a30fb9be88d5d666d4aa21efaf44030324ce6561088c2c2aeee",
+      "restoredManifestSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "epoch": "cf5-v01"
+    },
+    {
+      "started": "2026-10-14T13:52:07.372763+00:00",
+      "pid": 43953,
+      "pgid": 43953,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "active-turn condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        4.79541015625,
+        5.47265625,
+        7.28369140625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T13:52:13.885966+00:00",
+      "elapsedSeconds": 6.513009167014388,
+      "exitCode": 1,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4861,
+      "beforeSHA256": "821e5631df19a770a30be37a606520d9871e2a18f4707fd8acd31a4384d56dbd",
+      "afterSHA256": "821e5631df19a770a30be37a606520d9871e2a18f4707fd8acd31a4384d56dbd",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "155b9b944b5b4b30967214b7c1f16752e08c42299fad7c0ff87cd82bb0a91b12",
+      "stderrSHA256": "d522a06ba0d7bfba1082a7f44f6f28e74ed1736c235a0f9079a0d307afdbf0d4",
+      "epoch": "focused-v01"
+    },
+    {
+      "started": "2026-10-14T13:52:38.031856+00:00",
+      "pid": 45790,
+      "pgid": 45790,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "active-turn condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        4.81787109375,
+        5.42333984375,
+        7.2021484375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T13:52:46.878206+00:00",
+      "elapsedSeconds": 8.846005916013382,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4861,
+      "beforeSHA256": "a2f1f954c489ecc38e2570a711558b0f4bfe5ba3a759f6153323a04dc43fb374",
+      "afterSHA256": "a2f1f954c489ecc38e2570a711558b0f4bfe5ba3a759f6153323a04dc43fb374",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "a64a0fa552cad08c48fe8820ebe9bfdded67744488ff674a5ffb6b00295436a5",
+      "stderrSHA256": "46e2ab5d065d929aa3963700255ad74e31cf827e1582b872979b4e99f2815bee",
+      "epoch": "focused-v02"
+    },
+    {
+      "started": "2026-10-14T13:53:20.593624+00:00",
+      "pid": 49363,
+      "pgid": 49363,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "active-turn condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        4.1552734375,
+        5.19140625,
+        7.03515625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T13:53:26.149227+00:00",
+      "elapsedSeconds": 5.555372458009515,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4861,
+      "beforeSHA256": "7098cfe1b5d996892732168cffead18eebd864327256313c62ee4218864b8db5",
+      "afterSHA256": "7098cfe1b5d996892732168cffead18eebd864327256313c62ee4218864b8db5",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "765b68684cce37c9c25413bf97ec4ce66bd2b85b2d41d843a5b5f7ff463a3813",
+      "stderrSHA256": "46e2ab5d065d929aa3963700255ad74e31cf827e1582b872979b4e99f2815bee",
+      "epoch": "focused-v03"
+    },
+    {
+      "started": "2026-10-14T13:56:18.638821+00:00",
+      "pid": 56132,
+      "pgid": 56132,
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        4.134765625,
+        5.02490234375,
+        6.63330078125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T13:56:22.788617+00:00",
+      "elapsedSeconds": 4.149614334019134,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4864,
+      "beforeSHA256": "c0e9d9484c0ff1c6fe922de703491053a3f2d66a48f2c6b27aeeed03fc835c9b",
+      "afterSHA256": "c0e9d9484c0ff1c6fe922de703491053a3f2d66a48f2c6b27aeeed03fc835c9b",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "67ea8489d1e767177f2e1f395006643b65dfa707bd44146fca440ef56037794d",
+      "stderrSHA256": "46e2ab5d065d929aa3963700255ad74e31cf827e1582b872979b4e99f2815bee",
+      "epoch": "knip-v01"
+    },
+    {
+      "started": "2026-10-14T14:00:14.366657+00:00",
+      "pid": 28432,
+      "pgid": 28432,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "active-turn condition"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        8.6181640625,
+        8.66455078125,
+        8.02197265625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:00:17.669691+00:00",
+      "elapsedSeconds": 3.3028484170208685,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4864,
+      "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "afterSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "15bda58d42386db6208056874edc834129aaad49882ef0e8bd6404439978221e",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "epoch": "restored-focused-v01"
+    },
+    {
+      "started": "2026-10-14T14:00:32.823555+00:00",
+      "pid": 29575,
+      "pgid": 29575,
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "-t",
+        "checks an intervening 'if' when the ability triggers and again as it resolves"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        7.80029296875,
+        8.474609375,
+        7.96826171875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:00:33.802367+00:00",
+      "elapsedSeconds": 0.9786716669914313,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4864,
+      "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "afterSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "7f999f23b38d4f2ae201b007a6ce7ff6ab5f516fdb8c92997d25bc72b9107bf0",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "epoch": "restored-second-check-v01"
+    },
+    {
+      "started": "2026-10-14T13:54:24.533390+00:00",
+      "pid": 53555,
+      "pgid": 53555,
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        5.09375,
+        5.29638671875,
+        6.9384765625
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T13:55:15.313721+00:00",
+      "elapsedSeconds": 50.77950341699761,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4864,
+      "beforeSHA256": "c0e9d9484c0ff1c6fe922de703491053a3f2d66a48f2c6b27aeeed03fc835c9b",
+      "afterSHA256": "c0e9d9484c0ff1c6fe922de703491053a3f2d66a48f2c6b27aeeed03fc835c9b",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "cf23f8689fe4172f9f44d4352381477dfe6aee852b8cc3e01dd6487d3fc5b879",
+      "stderrSHA256": "46e2ab5d065d929aa3963700255ad74e31cf827e1582b872979b4e99f2815bee",
+      "epoch": "review-v01"
+    },
+    {
+      "started": "2026-10-14T13:56:43.732233+00:00",
+      "pid": 57756,
+      "pgid": 57756,
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        9.82373046875,
+        6.25244140625,
+        7.0263671875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T13:56:43.859767+00:00",
+      "elapsedSeconds": 0.12739449998480268,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4864,
+      "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "afterSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "3f056667a2594e8007e2d29c57d44b063b1d6a175e6b60709854fa709a2fc0eb",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "epoch": "schema-v01"
+    },
+    {
+      "started": "2026-10-14T14:01:23.745838+00:00",
+      "pid": 33098,
+      "pgid": 33098,
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        6.5283203125,
+        8.02685546875,
+        7.830078125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:01:23.822635+00:00",
+      "elapsedSeconds": 0.07667170799686573,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4864,
+      "beforeSHA256": "3400b36b1b2613e18b58091d2bd01680bdefe5ae1953ddabd598c60f1c5bb350",
+      "afterSHA256": "3400b36b1b2613e18b58091d2bd01680bdefe5ae1953ddabd598c60f1c5bb350",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "3f056667a2594e8007e2d29c57d44b063b1d6a175e6b60709854fa709a2fc0eb",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "epoch": "schema-v02"
+    },
+    {
+      "started": "2026-10-14T14:02:52.196429+00:00",
+      "pid": 37575,
+      "pgid": 37575,
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        5.15087890625,
+        7.2001953125,
+        7.529296875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:02:52.274772+00:00",
+      "elapsedSeconds": 0.07822850000229664,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4864,
+      "beforeSHA256": "8b828c64bf739b190878494b7e47ff41f1e1451591754567b05b136ce5ce1549",
+      "afterSHA256": "8b828c64bf739b190878494b7e47ff41f1e1451591754567b05b136ce5ce1549",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "3f056667a2594e8007e2d29c57d44b063b1d6a175e6b60709854fa709a2fc0eb",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "epoch": "schema-v03"
+    },
+    {
+      "started": "2026-10-14T13:52:51.329622+00:00",
+      "pid": 46229,
+      "pgid": 46229,
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/triggers/triggers-patterns.test.ts",
+        "-t",
+        "checks an intervening 'if' when the ability triggers and again as it resolves"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        5.07275390625,
+        5.4580078125,
+        7.193359375
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T13:52:56.149085+00:00",
+      "elapsedSeconds": 4.819266875012545,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4861,
+      "beforeSHA256": "a2f1f954c489ecc38e2570a711558b0f4bfe5ba3a759f6153323a04dc43fb374",
+      "afterSHA256": "a2f1f954c489ecc38e2570a711558b0f4bfe5ba3a759f6153323a04dc43fb374",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "3a4107e2ae359519ed92dc1cc51b6e6fcaecd49684f0e81a92781434cbf64edd",
+      "stderrSHA256": "46e2ab5d065d929aa3963700255ad74e31cf827e1582b872979b4e99f2815bee",
+      "epoch": "second-check-v01"
+    },
+    {
+      "started": "2026-10-14T13:56:44.184010+00:00",
+      "pid": 57776,
+      "pgid": 57776,
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        9.82373046875,
+        6.25244140625,
+        7.0263671875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T13:56:44.204953+00:00",
+      "elapsedSeconds": 0.020839333010371774,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4864,
+      "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "afterSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "epoch": "whitespace-v01"
+    },
+    {
+      "started": "2026-10-14T14:01:24.196154+00:00",
+      "pid": 33120,
+      "pgid": 33120,
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        6.5283203125,
+        8.02685546875,
+        7.830078125
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:01:24.217138+00:00",
+      "elapsedSeconds": 0.020821542013436556,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4864,
+      "beforeSHA256": "3400b36b1b2613e18b58091d2bd01680bdefe5ae1953ddabd598c60f1c5bb350",
+      "afterSHA256": "3400b36b1b2613e18b58091d2bd01680bdefe5ae1953ddabd598c60f1c5bb350",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "epoch": "whitespace-v02"
+    },
+    {
+      "started": "2026-10-14T14:02:52.557995+00:00",
+      "pid": 37598,
+      "pgid": 37598,
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+      "hostLoad": [
+        5.15087890625,
+        7.2001953125,
+        7.529296875
+      ],
+      "JOURNEY_TEST_WORKERS": "2",
+      "ended": "2026-10-14T14:02:52.578441+00:00",
+      "elapsedSeconds": 0.020320915995398536,
+      "exitCode": 0,
+      "timedOut": false,
+      "cleanup": [],
+      "childReaped": true,
+      "remainingGroup": false,
+      "sourceChanged": [],
+      "manifestFiles": 4864,
+      "beforeSHA256": "8b828c64bf739b190878494b7e47ff41f1e1451591754567b05b136ce5ce1549",
+      "afterSHA256": "8b828c64bf739b190878494b7e47ff41f1e1451591754567b05b136ce5ce1549",
+      "collectorBeforeSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "collectorAfterSHA256": "a3ed8ed4f88c63a24631fd83e0f8215e69c07fb11303a7d1bd379866643ab227",
+      "stdoutSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "epoch": "whitespace-v03"
+    }
+  ],
+  "testDelta": {
+    "files": 1,
+    "lines": 241,
+    "jsdomFiles": 0
+  },
+  "coreReview": {
+    "required": true,
+    "owner": "parent",
+    "routing": "normal fresh read-only claude-opus-5-5 CLI after immutable commit; temporary Sol policy expired2026-10-14T01:00Z"
+  },
+  "counterfactuals": {
+    "status": "five discriminating semantic failures verified and restored after separate native ACK",
+    "finalProductionSourceMutated": false,
+    "cases": [
+      {
+        "id": "cf1-v01",
+        "scope": "Only new turnOf case, fixed player side instead of relative controller",
+        "path": "src/engine/dsl/conditions.ts",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "active-turn condition"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+        "JOURNEY_TEST_WORKERS": "2",
+        "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+        "originalSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+        "mutatedSHA256": "1f3edb6179f3dd0612a4ac7f4b47b3791c3234301a16b4fa0c28b81d71bd316e",
+        "runnerSHA256": "075e660a190d6c2cbf1a30d7a61c1d3b33dc60f9aa83a1fa20b68474701ebe56",
+        "planSHA256": "3d813ac7daa28191b3ebe9ba79e496a55389b24233bc6d0129bd0147d8a26833",
+        "started": "2026-10-14T13:59:44.699797+00:00",
+        "hostLoad": [
+          9.0927734375,
+          8.724609375,
+          8.01904296875
+        ],
+        "pid": 26518,
+        "pgid": 26518,
+        "exitCode": 1,
+        "sourceBeforeRestoreUnchanged": true,
+        "semanticWitness": {
+          "AssertionError": true,
+          "FAIL": true,
+          "enemy resolves relative players and agrees with pure static inspection on either active side": true
+        },
+        "childReaped": true,
+        "remainingGroup": false,
+        "ended": "2026-10-14T13:59:49.056158+00:00",
+        "elapsedSeconds": 4.356173249980202,
+        "cleanup": [],
+        "restoredSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+        "fullManifestRestored": true,
+        "failure": null,
+        "stdoutSHA256": "6cbe7af3b5d2aef3cbe266ea443fa275bad05e9ef28dce3cd233e95a4220a28a",
+        "stderrSHA256": "610d48301bbc21c64682c41d7bea4e665c01a660b28eec7f7e00156038bf8e5f",
+        "restoredManifestSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+        "epoch": "cf1-v01"
+      },
+      {
+        "id": "cf2-v01",
+        "scope": "Only new turnOf case, false on extra turns",
+        "path": "src/engine/dsl/conditions.ts",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "active-turn condition"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+        "JOURNEY_TEST_WORKERS": "2",
+        "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+        "originalSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+        "mutatedSHA256": "d097b91af2e052cf9d9a5dc1913ce32415ce442dcd486e8b657e35773e2483aa",
+        "runnerSHA256": "075e660a190d6c2cbf1a30d7a61c1d3b33dc60f9aa83a1fa20b68474701ebe56",
+        "planSHA256": "3d813ac7daa28191b3ebe9ba79e496a55389b24233bc6d0129bd0147d8a26833",
+        "started": "2026-10-14T13:59:49.210264+00:00",
+        "hostLoad": [
+          9.1650390625,
+          8.74560546875,
+          8.0302734375
+        ],
+        "pid": 26825,
+        "pgid": 26825,
+        "exitCode": 1,
+        "sourceBeforeRestoreUnchanged": true,
+        "semanticWitness": {
+          "AssertionError": true,
+          "FAIL": true,
+          "reads an actual extra turn and the resumed normal turn": true
+        },
+        "childReaped": true,
+        "remainingGroup": false,
+        "ended": "2026-10-14T13:59:53.509909+00:00",
+        "elapsedSeconds": 4.299584666994633,
+        "cleanup": [],
+        "restoredSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+        "fullManifestRestored": true,
+        "failure": null,
+        "stdoutSHA256": "e43fbbe5d908728fae154438cf0f797415562d9d8c022c000c0f923c692023b9",
+        "stderrSHA256": "f0cfeab3737bc93577ab4d70038cfc3ea85839b165eca5b285457547996d6cc8",
+        "restoredManifestSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+        "epoch": "cf2-v01"
+      },
+      {
+        "id": "cf3-v01",
+        "scope": "ONLY exact applied guard; preserve resolveEffect env binding, all other resolveBody and existing tests",
+        "path": "src/engine/triggers/resolve.ts",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/triggers/triggers-patterns.test.ts",
+          "-t",
+          "checks an intervening 'if' when the ability triggers and again as it resolves"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+        "JOURNEY_TEST_WORKERS": "2",
+        "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+        "originalSHA256": "428b9e4a678d99c85a14d7298f4a4bb4b7eb49906faa414b100d848778f3aeff",
+        "mutatedSHA256": "fb1cc22ef7d3e12dfbba72e4baf02acfcf348550ac1f96d49d9e951243aa80b8",
+        "runnerSHA256": "075e660a190d6c2cbf1a30d7a61c1d3b33dc60f9aa83a1fa20b68474701ebe56",
+        "planSHA256": "3d813ac7daa28191b3ebe9ba79e496a55389b24233bc6d0129bd0147d8a26833",
+        "started": "2026-10-14T13:59:53.663304+00:00",
+        "hostLoad": [
+          9.3115234375,
+          8.78271484375,
+          8.04736328125
+        ],
+        "pid": 27223,
+        "pgid": 27223,
+        "exitCode": 1,
+        "sourceBeforeRestoreUnchanged": true,
+        "semanticWitness": {
+          "AssertionError": true,
+          "FAIL": true,
+          "checks an intervening 'if' when the ability triggers and again as it resolves": true
+        },
+        "childReaped": true,
+        "remainingGroup": false,
+        "ended": "2026-10-14T13:59:55.230722+00:00",
+        "elapsedSeconds": 1.5674040419980884,
+        "cleanup": [],
+        "restoredSHA256": "428b9e4a678d99c85a14d7298f4a4bb4b7eb49906faa414b100d848778f3aeff",
+        "fullManifestRestored": true,
+        "failure": null,
+        "stdoutSHA256": "59695511956b9a66d4a42d07db7398722f53acfdf638600d85052d52855662cd",
+        "stderrSHA256": "cfa376be4f0b4e6ae67dcbf1888d9172a47b98048395faf6e54f4822dc5203b0",
+        "restoredManifestSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+        "epoch": "cf3-v01"
+      },
+      {
+        "id": "cf4-v01",
+        "scope": "Only new turnOf case, mutate turnNumber during pure inspection",
+        "path": "src/engine/dsl/conditions.ts",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "active-turn condition"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+        "JOURNEY_TEST_WORKERS": "2",
+        "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+        "originalSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+        "mutatedSHA256": "59506289b1f5f2d2f9600773c3c7c19676471fc6949dc3e08ba98357c016160e",
+        "runnerSHA256": "075e660a190d6c2cbf1a30d7a61c1d3b33dc60f9aa83a1fa20b68474701ebe56",
+        "planSHA256": "3d813ac7daa28191b3ebe9ba79e496a55389b24233bc6d0129bd0147d8a26833",
+        "started": "2026-10-14T13:59:55.373622+00:00",
+        "hostLoad": [
+          9.3115234375,
+          8.78271484375,
+          8.04736328125
+        ],
+        "pid": 27307,
+        "pgid": 27307,
+        "exitCode": 1,
+        "sourceBeforeRestoreUnchanged": true,
+        "semanticWitness": {
+          "AssertionError": true,
+          "FAIL": true,
+          "resolves relative players and agrees with pure static inspection on either active side": true
+        },
+        "childReaped": true,
+        "remainingGroup": false,
+        "ended": "2026-10-14T13:59:59.543176+00:00",
+        "elapsedSeconds": 4.169494999980088,
+        "cleanup": [],
+        "restoredSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+        "fullManifestRestored": true,
+        "failure": null,
+        "stdoutSHA256": "35b2fb50a6f7c3f9145dada548faaf8dac0432cdcf0c8db999061a29f5778dd5",
+        "stderrSHA256": "290b21c4d32ed305fef7032d46ee1dc5a1b2daf3f7381847adcaac8a507e1406",
+        "restoredManifestSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+        "epoch": "cf4-v01"
+      },
+      {
+        "id": "cf5-v01",
+        "scope": "Only new turnOf case, substitute original source controller for inner calling controller (not owner)",
+        "path": "src/engine/dsl/conditions.ts",
+        "command": [
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/engine/effects/primitives/contracts.test.ts",
+          "-t",
+          "active-turn condition"
+        ],
+        "cwd": "/Users/dthurn/dreamtides_web/.worktrees/active-turn-condition-626",
+        "JOURNEY_TEST_WORKERS": "2",
+        "beforeSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+        "originalSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+        "mutatedSHA256": "139250da31b2a772df37d8d02c3fa6af5ddf3f1923138c7c16d9858e76a61626",
+        "runnerSHA256": "075e660a190d6c2cbf1a30d7a61c1d3b33dc60f9aa83a1fa20b68474701ebe56",
+        "planSHA256": "3d813ac7daa28191b3ebe9ba79e496a55389b24233bc6d0129bd0147d8a26833",
+        "started": "2026-10-14T13:59:59.677273+00:00",
+        "hostLoad": [
+          9.2060546875,
+          8.76953125,
+          8.046875
+        ],
+        "pid": 27550,
+        "pgid": 27550,
+        "exitCode": 1,
+        "sourceBeforeRestoreUnchanged": true,
+        "semanticWitness": {
+          "AssertionError": true,
+          "FAIL": true,
+          "uses the calling controller when eachPlayer retains the original physical source": true
+        },
+        "childReaped": true,
+        "remainingGroup": false,
+        "ended": "2026-10-14T14:00:03.465504+00:00",
+        "elapsedSeconds": 3.788182832999155,
+        "cleanup": [],
+        "restoredSHA256": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+        "fullManifestRestored": true,
+        "failure": null,
+        "stdoutSHA256": "301240f8a9fe20bf996b66ca7458b1a14d9e04f91789f6f975e7e7e25489f6d7",
+        "stderrSHA256": "f078adae1f735a30fb9be88d5d666d4aa21efaf44030324ce6561088c2c2aeee",
+        "restoredManifestSHA256": "fae3bb66dc2e84dcb629e7857f46e12fd3fdf5c7ee52cb0bf6391ab20baf5149",
+        "epoch": "cf5-v01"
+      }
+    ],
+    "scope": "CF3 temporarily changed only the existing exact applied guard; four other mutants changed only the admitted new case. Each full frozen4864-path manifest restored before next; existing trigger env binding and tests stayed frozen."
+  },
+  "validationScope": {
+    "full": false,
+    "fuzz": false,
+    "browser": false,
+    "reason": "Pure isolated condition; no infrastructure, repository configuration, fuzzer, step runner, UI or production content UUID change. Gate/release own aggregate full-suite budget measurement."
+  },
+  "consumersRetained": [
+    {
+      "bead": "hv-umm2.255",
+      "uuid": "1dfa4d90-8270-4b7c-87be-d95ab6201e00",
+      "ownership": "full original acceptance, ANY-draw then Warrior filter remains235"
+    },
+    {
+      "bead": "hv-umm2.249",
+      "uuid": "553d2317-32f9-47bc-bae0-5018ca26d56a",
+      "ownership": "full original acceptance, first Fast committed play remains104"
+    }
+  ],
+  "outcomes": {
+    "newContracts": 14,
+    "existingSecondCheck": 1,
+    "relatedReview": {
+      "tests": 7082,
+      "files": 299,
+      "wallSeconds": 50.77950341699761
+    },
+    "unintendedFailedEpochs": [
+      "focused-v01"
+    ],
+    "expectedWrongBehaviorFailures": [
+      "cf1-v01",
+      "cf2-v01",
+      "cf3-v01",
+      "cf4-v01",
+      "cf5-v01"
+    ],
+    "counterfactualCounts": {
+      "cf1-v01": {
+        "failed": 8,
+        "passed": 6
+      },
+      "cf2-v01": {
+        "failed": 2,
+        "passed": 12
+      },
+      "cf3-v01": {
+        "failed": 1,
+        "skipped": 18
+      },
+      "cf4-v01": {
+        "failed": 8,
+        "passed": 6
+      },
+      "cf5-v01": {
+        "failed": 2,
+        "passed": 12
+      }
+    },
+    "restoredControls": [
+      "restored-focused-v01",
+      "restored-second-check-v01"
+    ]
+  },
+  "sourceFreeze": {
+    "src/engine/dsl/types.ts": "a6114ca38cc5c4fb56134fb16c83891e624b12226e554f167658522711e4b6e9",
+    "src/engine/dsl/builders.ts": "4e321134525c40a29573d2de34b95dad1dea16f55187d04d695015e47f3a70ea",
+    "src/engine/dsl/conditions.ts": "0e74ee7a01fa3e8d3cc7d0d0ac081f98bbece2f74474278acac123ea207f744f",
+    "src/engine/effects/primitives/contracts/active-turn-condition.contracts.ts": "8d76fa1bc1c5952b22848f75bef375a9a1d5c319ec4baa65dd60884d3e50dc16",
+    "docs/plan/engine-design.md": "6b0bd7bda3bf9d11bdfe1432a4fb1adb12d83e3982c1058cbded626f7639e109"
+  }
+}

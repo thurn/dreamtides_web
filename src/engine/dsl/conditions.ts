@@ -33,6 +33,8 @@ export function conditionHoldsWith(
     }
     case "energyAtLeast":
       return state.sides[scope.controller].currentEnergy >= condition.amount;
+    case "turnOf":
+      return state.turn.active === resolvePlayer(scope.controller, condition.player);
     case "costPaid":
       return scope.optionalPaid[condition.optional] === true;
     case "sourceWasReclaimed": {

@@ -228,6 +228,11 @@ export function costPaid(optional = 0): Extract<Condition, { readonly cond: "cos
   return { cond: "costPaid", optional };
 }
 
+/** "During your turn" or "during the opponent's turn", including extra turns. */
+export function turnOf(player: PlayerRef): Extract<Condition, { readonly cond: "turnOf" }> {
+  return { cond: "turnOf", player };
+}
+
 /** "If this card was reclaimed": its latest actual committed play used Reclaim, independent of its replacement status. */
 export function sourceWasReclaimed(): Extract<Condition, { readonly cond: "sourceWasReclaimed" }> {
   return { cond: "sourceWasReclaimed" };
