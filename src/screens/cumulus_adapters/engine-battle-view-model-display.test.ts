@@ -7,10 +7,11 @@ import { SYNTHETIC, syntheticId, testCatalog } from "../../engine/testing/synthe
 import { ZONE } from "../../engine/testing/zone-cards";
 import { act, engine as reclaimEngine, fromVoid, KEEP, placed, playOn, reclaim } from "../../engine/effects/primitives/contracts/reclaim-not-banished-support";
 import { parseBattleCardId } from "../../types/identifiers";
-import { engineBattleLogText } from "../../runtime/battle-prompt-messages";
+import { engineBattleLogText, enginePromptOptionLabel } from "../../runtime/battle-prompt-messages";
 import { CHOSEN_HAND_BANISH_CARDS, HAND_BANISH } from "../../engine/testing/chosen-hand-banish-cards";
 import { boardState } from "../../engine/testing/board";
 import { SIDES } from "../../engine/state/ids";
+import type { CharacterSelector } from "../../engine/dsl/types";
 import type { EngineCardDefinition } from "../../engine/catalog";
 import { banish, moveToHand } from "../../engine/rules/zones";
 import {
@@ -20,6 +21,37 @@ import {
 import { board, cards, deck, engine, screenOf } from "./engine-battle-view-model.fixtures";
 
 describe("buildEngineBattleScreenModel", () => {
+  it.each([1, 2])("binds controller to characters before their named ability in cost options (%s)", (count) => {
+    const label = (selector: CharacterSelector, cost: "abandon" | "return" = "abandon") =>
+      enginePromptOptionLabel({ kind: "cost", index: 0, costs: [{ cost, count, selector }] });
+    const unrestricted = label({ controller: "any" });
+    const ability = label({ controller: "any", hasAbility: "dawn" }).slice(unrestricted.length);
+    for (const controller of ["you", "opponent"] as const) {
+      const controlled = label({ controller });
+      const qualified = label({ controller, hasAbility: "dawn" });
+      expect(qualified).toBe(controlled + ability);
+      expect(label({ controller, hasAbility: "dawn" }, "return")).toContain(qualified.slice(qualified.indexOf(" ") + 1));
+      const restricted: CharacterSelector = { controller, hasAbility: "dawn", another: true,
+        exhausted: false, rank: "back", figment: false, challenging: true, blocking: false,
+        sparkAtMost: 3, sparkAtLeast: 1, costAtMost: 4, costAtLeast: 2 };
+      const complete = label(restricted);
+      for (const field of ["hasAbility", "another", "exhausted", "rank", "figment", "challenging",
+        "blocking", "sparkAtMost", "sparkAtLeast", "costAtMost", "costAtLeast"] as const) {
+        const reduced = { ...restricted };
+        delete reduced[field];
+        expect(complete).not.toBe(label(reduced));
+      }
+      const union = label({ controller, hasAbility: "dawn", anyOf: [{ hasAbility: "night" }, { challenging: true }] });
+      expect(union.startsWith(qualified)).toBe(true);
+      for (const branch of [{ hasAbility: "night" as const }, { challenging: true }]) {
+        const branchLabel = enginePromptOptionLabel({ kind: "cost", index: 0, costs: [{ cost: "abandon", count: 1, selector: { controller: "any", ...branch } }] });
+        expect(union).toContain(branchLabel.slice(branchLabel.indexOf(" ", branchLabel.indexOf(" ") + 1) + 1));
+      }
+      expect(label({ controller, anyOf: [] }).startsWith(controlled)).toBe(true);
+    }
+    expect(label({ controller: "any", hasAbility: "dawn" }).startsWith(unrestricted)).toBe(true);
+  });
+
   it.each([false, true])("preserves complete cost predicates in public status and log copy (next=%s)", (next) => {
     const { state, ids } = boardState(engine.catalog, { active: "player", phase: "day", player: { back: [SYNTHETIC.vanilla1.id] } });
     const filters = [

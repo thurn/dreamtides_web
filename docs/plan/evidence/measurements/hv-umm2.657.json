@@ -1,0 +1,218 @@
+{
+  "bead": "hv-umm2.657",
+  "base": "e75c54a03294e47b5380a39f014c0e7629aa95d3",
+  "dispatch": {
+    "at": "2026-10-14T03:26:10.850Z",
+    "callId": "call_7083ccf20a1945c6b4ef20549c9e6185",
+    "name": "spawn_agent",
+    "agent": "/root/cost_copy657",
+    "samplingStart": "UNKNOWN",
+    "worktree": "/Users/dthurn/dreamtides_web/.worktrees/codex-character-cost657",
+    "base": "e75c54a03294e47b5380a39f014c0e7629aa95d3",
+    "provenance": "own native rollout function_call dispatch envelope; sampling start not observed"
+  },
+  "scope": {
+    "runtimeGrossLines": 2,
+    "testGrossLines": 34,
+    "testNetLines": 32,
+    "newTestEntrypoints": 0,
+    "newJsdomEntrypoints": 0,
+    "testsAdded": 2,
+    "coreReview": false,
+    "areas": "Existing formatter restriction order, existing display test, four own evidence paths; no fallout."
+  },
+  "publicContract": "Controller-derived no-ability label prefixes ability-qualified label for both controllers/counts; public return label includes same qualified body. Every optional restriction affects output, outer anyOf controller/ability and leaf qualifiers retained; unrestricted/empty unions remain described. No product string asserted.",
+  "sourceFreeze": {
+    "src/runtime/battle-cost-messages.ts": "03a55134159b63a42edc423b165f3ec0e2297b9568b2a975707b310ca5181285",
+    "src/screens/cumulus_adapters/engine-battle-view-model-display.test.ts": "8a3ebfebe605324dc12bba5597b6072597e83bcca9d401e895fc8412f02e2618"
+  },
+  "driverFreeze": {
+    "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.657/character-cost-diagnostic.mjs",
+    "sha256": "26a954053a84810c0c8954896c39d02a1c468abc24570f07570df9af7d949045"
+  },
+  "validation": {
+    "negative": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-display.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-character-cost657",
+      "start": "2026-10-14T03:27:30.712469+00:00",
+      "load": "{ 4.72 7.61 9.62 }",
+      "pid": 9306,
+      "pgid": 9306,
+      "end": "2026-10-14T03:27:38.455308+00:00",
+      "seconds": 7.742534916003933,
+      "exitCode": 1
+    },
+    "focused": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-display.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-character-cost657",
+      "start": "2026-10-14T03:27:48.360450+00:00",
+      "load": "{ 4.75 7.48 9.54 }",
+      "pid": 9991,
+      "pgid": 9991,
+      "end": "2026-10-14T03:27:54.169051+00:00",
+      "seconds": 5.808452083991142,
+      "exitCode": 1
+    },
+    "focused-final": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/screens/cumulus_adapters/engine-battle-view-model-display.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-character-cost657",
+      "start": "2026-10-14T03:28:18.253710+00:00",
+      "load": "{ 5.21 7.35 9.42 }",
+      "pid": 10853,
+      "pgid": 10853,
+      "end": "2026-10-14T03:28:22.614798+00:00",
+      "seconds": 4.360968167020474,
+      "exitCode": 0
+    },
+    "review": {
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-character-cost657",
+      "start": "2026-10-14T03:28:47.381904+00:00",
+      "load": "{ 4.63 7.01 9.22 }",
+      "pid": 11662,
+      "pgid": 11662,
+      "end": "2026-10-14T03:29:15.924967+00:00",
+      "seconds": 28.542652333999285,
+      "exitCode": 0
+    },
+    "knip": {
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-character-cost657",
+      "start": "2026-10-14T03:29:26.520395+00:00",
+      "load": "{ 6.73 7.27 9.22 }",
+      "pid": 12979,
+      "pgid": 12979,
+      "end": "2026-10-14T03:29:30.626700+00:00",
+      "seconds": 4.1061811659892555,
+      "exitCode": 0
+    },
+    "schema": {
+      "command": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-character-cost657",
+      "start": "2026-10-14T03:30:28.898179+00:00",
+      "load": "{ 6.80 7.21 9.06 }",
+      "pid": 15014,
+      "pgid": 15014,
+      "end": "2026-10-14T03:30:29.014833+00:00",
+      "seconds": 0.11656366701936349,
+      "exitCode": 0
+    }
+  },
+  "browser": {
+    "receipt": {
+      "name": "browser",
+      "argv": [
+        "node",
+        "scripts/qa/run-scenario.mjs",
+        "character-cost-diagnostic",
+        "--bead",
+        "hv-umm2.657",
+        "--viewports",
+        "desktop",
+        "--timeout",
+        "120"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/codex-character-cost657",
+      "pid": 12851,
+      "pgid": 12851,
+      "start": "2026-10-14T03:29:25.377549+00:00",
+      "startingLoad": [
+        6.10009765625,
+        7.154296875,
+        9.18994140625
+      ],
+      "stdout": "/tmp/codex-657/browser.stdout",
+      "exit": 0,
+      "end": "2026-10-14T03:29:31.799582+00:00",
+      "wallSeconds": 6.421836375026032,
+      "ownershipRecords": 1
+    },
+    "invocation": "run-VIgNgZ",
+    "rawReport": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.657/invocations/run-VIgNgZ/character-cost-diagnostic.result.json",
+    "scope": "browser public formatter diagnostic with synthetic cost inputs; no authored payment or rendered-gameflow claim",
+    "cases": 4,
+    "rawCaps": {
+      "errors": [],
+      "rejections": [],
+      "consoleErrors": []
+    },
+    "gameflowClaim": false,
+    "screens": [],
+    "persistedGameLog": "No local game exists; runner reported zero rows, not gameflow proof.",
+    "reachability": "Current authored content selectorHasAbility only SeaTome static ability, not character-payment option. Browser imports actual public formatter via served runtime module and supplies synthetic cost options; no catalog, DOM or store writes.",
+    "resources": {
+      "at": "2026-10-14T03:30:28.875186+00:00",
+      "groups": {
+        "97594": [],
+        "9306": [],
+        "9991": [],
+        "10853": [],
+        "11662": [],
+        "12979": [],
+        "12851": [],
+        "12934": []
+      },
+      "ownOwnerAbsent": true,
+      "rawCaps": {
+        "errors": [],
+        "rejections": [],
+        "consoleErrors": []
+      },
+      "sourceHashesStable": true,
+      "driverHashStable": true,
+      "nativeGuard": "normal session.close terminal exit0, exact owner cleared; SDK and browser closure supported by existing native close guard, no uncertain RPC observed",
+      "globalPortFreedomClaim": false
+    }
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "first actual npm run review prepare step at 2026-10-14T03:28:47.564Z",
+        "value": 4.62548828125
+      }
+    }
+  },
+  "hostLoadSamples": {
+    "negative": "{ 4.72 7.61 9.62 }",
+    "focused": "{ 4.75 7.48 9.54 }",
+    "focused-final": "{ 5.21 7.35 9.42 }",
+    "review": "{ 4.63 7.01 9.22 }",
+    "knip": "{ 6.73 7.27 9.22 }"
+  },
+  "failureQualification": {
+    "negative": "Original runtime ordering, final relational regression initialform: exactly two assertion failures, twelve existing pass.",
+    "firstPositive": "Test-only anyOf plural premise failed one assertion; actual anyOf leaves are singular. Corrected derived public branch formatter count1, no runtime expansion.",
+    "restoredPositive": "Final source/test hashes retained; fourteen tests pass. Negative original source qualification retained."
+  },
+  "validationProportionality": "Pure deterministic formatting order, no state transition, flow, persistence, async write, rendering geometry or new API. Full suite, engine fuzz, content recipe and new visual captures inapplicable; ordinary review/Knip/focused/native browser module diagnostic apply.",
+  "friction": [],
+  "cutoff": "2026-10-14T03:33:08.058489+00:00",
+  "tailSeconds": "Actual cutoff-to-commit measured in retained final-commit-receipt.json; no postcommit evidence write."
+}

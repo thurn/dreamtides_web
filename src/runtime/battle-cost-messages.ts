@@ -103,8 +103,8 @@ function characterLeafPhrase(count: number | "x", selector: Omit<CharacterSelect
     selector.notSubtype === undefined ? "" : `non-${selector.notSubtype}`,
   ].filter(Boolean);
   const restrictions = [
-    namedAbilityPhrase(selector.hasAbility),
     selector.controller === "any" ? "" : selector.controller === "you" ? "you control" : "your opponent controls",
+    namedAbilityPhrase(selector.hasAbility),
     selector.challenging === undefined ? "" : selector.challenging ? `that ${count === 1 ? "is" : "are"} challenging` : `that ${count === 1 ? "is" : "are"} not challenging`,
     selector.blocking === undefined ? "" : selector.blocking ? `that ${count === 1 ? "is" : "are"} blocking` : `that ${count === 1 ? "is" : "are"} not blocking`,
     ...(["sparkAtMost", "sparkAtLeast", "costAtMost", "costAtLeast"] as const).flatMap((key) => {
