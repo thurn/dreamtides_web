@@ -1999,6 +1999,20 @@ character or event type at play time. A copied stack card and a cancelled play
 do not count as played. Later type changes, control changes or cessation do
 not change that play's count.
 
+"You played another event this turn" checks as that instruction resolves.
+It requires an event the effect's controller actually played during the current
+turn whose physical card differs from the effect's source. The source's
+current play and every earlier play of that same physical card, including
+Reclaim, are excluded; a distinct card with the same printed UUID qualifies.
+Use the event's effective type and the player who played it at play time,
+even after it changes type or controller, moves, or ceases to exist. A
+Prevented committed play counts; declarations, failed plays and cancelled
+plays do not. A stack copy adds no play. As a copy resolves, the original
+is a different physical card and qualifies if that copy's controller played
+it this turn. An emblem or other source without a physical card excludes
+none of its controller's event plays. Ordinary and extra turns each start
+with fresh history.
+
 Each actual discarded card counts for the player whose hand it left, including
 payments, the hand-limit discard and created cards that cease to exist. A
 completed discard occasion adds its actual count; separate occasions add

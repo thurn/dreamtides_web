@@ -257,6 +257,11 @@ export function sourceWasReclaimed(): Extract<Condition, { readonly cond: "sourc
   return { cond: "sourceWasReclaimed" };
 }
 
+/** Another physical event played by this effect's controller during the current turn, read at resolution. */
+export function playedAnotherEventThisTurn(): Extract<Condition, { readonly cond: "playedAnotherEventThisTurn" }> {
+  return { cond: "playedAnotherEventThisTurn" };
+}
+
 /**
  * "If you control a challenger": at least `atLeast` characters in play match
  * the selector, whose controller is relative to the effect's controller.

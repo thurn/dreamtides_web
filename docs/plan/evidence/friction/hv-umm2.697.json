@@ -1,0 +1,29 @@
+{
+  "bead": "hv-umm2.697",
+  "phase": 5,
+  "implementMin": 53.07415,
+  "implementWindow": {
+    "start": "2026-10-14T22:07:54.551Z",
+    "end": "2026-10-14T23:00:59Z"
+  },
+  "localValidationS": {
+    "focused": 14.993166959000519,
+    "fuzz": 435.2908300840354,
+    "review": 84.28217391599901,
+    "knip": 5.59376316604903,
+    "schema": 0.1667559170164168
+  },
+  "hostLoad": 17.54,
+  "testDelta": {
+    "files": 0,
+    "lines": 300,
+    "jsdomFiles": 0
+  },
+  "friction": [
+    {
+      "tag": "browser-qa-scripting",
+      "minutes": 17.984516,
+      "note": "Ignored caller corrections from first failed runtime terminal22:32:23.013Z through final qualified caller dispatch22:50:22.084Z: production-only card-lab request for LAB, unsupported unused helper, actual inline picker/render/probe readiness, debug rail dismissal and an agent-imposed AI card-play gate. Seven partial failed invocations retained, no product defect or source edit; observed normal AI forced passes are qualified."
+    }
+  ]
+}

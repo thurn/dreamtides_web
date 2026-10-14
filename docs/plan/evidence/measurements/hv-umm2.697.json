@@ -1,0 +1,1141 @@
+{
+  "bead": "hv-umm2.697",
+  "phase": 5,
+  "base": "adaed972a185ddca15556496bae6fcf8463de2a4",
+  "dispatch": {
+    "timestamp": "2026-10-14T22:07:54.551Z",
+    "ordinal": 34651,
+    "callId": "call_27e6dc4c25ea487590b2f70c9453c751",
+    "name": "spawn_agent",
+    "taskName": "another_event697",
+    "journal": "/Users/dthurn/.codex/sessions/2026/10/12/rollout-2026-10-12T06-53-29-01a13063-cf1f-7e21-8cfa-6027541a59e2.jsonl"
+  },
+  "implementationClock": {
+    "start": "2026-10-14T22:07:54.551Z",
+    "end": "2026-10-14T23:00:59Z",
+    "endpoint": "Actual normal automatic Git committer second; externally bracketed, no date override."
+  },
+  "checks": [
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "played another event this turn"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/another-event-697-root",
+      "workers": 2,
+      "start": "2026-10-14T22:17:16.869765+00:00",
+      "end": "2026-10-14T22:17:24.232234+00:00",
+      "wallS": 7.362296042003436,
+      "pid": 63621,
+      "pgid": 63621,
+      "exitCode": 1,
+      "hostLoad": "{ 5.14 8.36 8.74 }",
+      "sourceSHA256": {
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536",
+        "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+        "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+        "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+        "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+        "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "e1d20b121debd4db58a4e66487fe1aa6d93489b88d75f744223945f4a2944ea3",
+        "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63"
+      },
+      "label": "focused-01",
+      "rawReceipt": "checks/focused-01.json",
+      "stdout": "checks/focused-01.stdout",
+      "stderr": "checks/focused-01.stderr"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "played another event this turn"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/another-event-697-root",
+      "workers": 2,
+      "start": "2026-10-14T22:18:02.946087+00:00",
+      "end": "2026-10-14T22:18:11.099064+00:00",
+      "wallS": 8.152798625000287,
+      "pid": 64661,
+      "pgid": 64661,
+      "exitCode": 1,
+      "hostLoad": "{ 4.60 7.77 8.50 }",
+      "sourceSHA256": {
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536",
+        "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+        "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+        "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+        "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+        "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "408b7e5ffcb31e56c6937b156864f2fc51a3f5e30b369445a44cb3e4ac754198",
+        "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63"
+      },
+      "label": "focused-02",
+      "rawReceipt": "checks/focused-02.json",
+      "stdout": "checks/focused-02.stdout",
+      "stderr": "checks/focused-02.stderr"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "played another event this turn"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/another-event-697-root",
+      "workers": 2,
+      "start": "2026-10-14T22:18:59.589666+00:00",
+      "end": "2026-10-14T22:19:07.413809+00:00",
+      "wallS": 7.82395762501983,
+      "pid": 65802,
+      "pgid": 65802,
+      "exitCode": 0,
+      "hostLoad": "{ 3.54 6.90 8.13 }",
+      "sourceSHA256": {
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536",
+        "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+        "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+        "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+        "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+        "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "49b86d6ee22f0e278d840b4167679979174ee2ea71d03e9b9b729cead519a6ed",
+        "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63"
+      },
+      "label": "focused-03",
+      "rawReceipt": "checks/focused-03.json",
+      "stdout": "checks/focused-03.stdout",
+      "stderr": "checks/focused-03.stderr"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/another-event-697-root",
+      "workers": 2,
+      "start": "2026-10-14T22:21:55.270266+00:00",
+      "end": "2026-10-14T22:22:10.263697+00:00",
+      "wallS": 14.993166959000519,
+      "pid": 69842,
+      "pgid": 69842,
+      "exitCode": 0,
+      "hostLoad": "{ 3.86 5.69 7.40 }",
+      "sourceSHA256": {
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536",
+        "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+        "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+        "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+        "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+        "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "eb0952ea5759a445e9acf21c68ad918f5ce6c491a6d395ef602b1b34395b09b3",
+        "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63"
+      },
+      "label": "focused-final-02",
+      "rawReceipt": "checks/focused-final-02.json",
+      "stdout": "checks/focused-final-02.stdout",
+      "stderr": "checks/focused-final-02.stderr"
+    },
+    {
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/another-event-697-root",
+      "workers": 2,
+      "start": "2026-10-14T22:19:18.698989+00:00",
+      "end": "2026-10-14T22:19:33.386522+00:00",
+      "wallS": 14.687277000019094,
+      "pid": 66177,
+      "pgid": 66177,
+      "exitCode": 0,
+      "hostLoad": "{ 4.16 6.87 8.09 }",
+      "sourceSHA256": {
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536",
+        "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+        "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+        "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+        "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+        "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "a3866432f55b77e87cb7af9aab81be2bb2f7589e0e2ef0558de2bb55c0a02979",
+        "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63"
+      },
+      "label": "focused-final",
+      "rawReceipt": "checks/focused-final.json",
+      "stdout": "checks/focused-final.stdout",
+      "stderr": "checks/focused-final.stderr"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/another-event-697-root",
+      "workers": 2,
+      "start": "2026-10-14T22:55:58.583560+00:00",
+      "end": "2026-10-14T22:56:04.177484+00:00",
+      "wallS": 5.59376316604903,
+      "pid": 1873,
+      "pgid": 1873,
+      "exitCode": 0,
+      "hostLoad": "{ 32.23 21.83 15.82 }",
+      "sourceSHA256": {
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536",
+        "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+        "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+        "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+        "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+        "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "eb0952ea5759a445e9acf21c68ad918f5ce6c491a6d395ef602b1b34395b09b3",
+        "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63"
+      },
+      "label": "knip-final",
+      "rawReceipt": "checks/knip-final.json",
+      "stdout": "checks/knip-final.stdout",
+      "stderr": "checks/knip-final.stderr"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/another-event-697-root",
+      "workers": 2,
+      "start": "2026-10-14T22:53:57.531758+00:00",
+      "end": "2026-10-14T22:55:21.815961+00:00",
+      "wallS": 84.28217391599901,
+      "pid": 79977,
+      "pgid": 79977,
+      "exitCode": 0,
+      "hostLoad": "{ 17.54 13.67 12.34 }",
+      "sourceSHA256": {
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536",
+        "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+        "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+        "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+        "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+        "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "eb0952ea5759a445e9acf21c68ad918f5ce6c491a6d395ef602b1b34395b09b3",
+        "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63"
+      },
+      "label": "review-final",
+      "rawReceipt": "checks/review-final.json",
+      "stdout": "checks/review-final.stdout",
+      "stderr": "checks/review-final.stderr"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/another-event-697-root",
+      "workers": 2,
+      "start": "2026-10-14T22:19:44.612888+00:00",
+      "end": "2026-10-14T22:19:57.502681+00:00",
+      "wallS": 12.889556542009814,
+      "pid": 66743,
+      "pgid": 66743,
+      "exitCode": 2,
+      "hostLoad": "{ 4.16 6.61 7.96 }",
+      "sourceSHA256": {
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536",
+        "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+        "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+        "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+        "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+        "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "a3866432f55b77e87cb7af9aab81be2bb2f7589e0e2ef0558de2bb55c0a02979",
+        "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63"
+      },
+      "label": "typecheck-01",
+      "rawReceipt": "checks/typecheck-01.json",
+      "stdout": "checks/typecheck-01.stdout",
+      "stderr": "checks/typecheck-01.stderr"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/another-event-697-root",
+      "workers": 2,
+      "start": "2026-10-14T22:20:27.972650+00:00",
+      "end": "2026-10-14T22:20:32.151249+00:00",
+      "wallS": 4.178460958006326,
+      "pid": 67634,
+      "pgid": 67634,
+      "exitCode": 0,
+      "hostLoad": "{ 3.78 6.25 7.77 }",
+      "sourceSHA256": {
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536",
+        "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+        "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+        "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+        "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+        "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "eb0952ea5759a445e9acf21c68ad918f5ce6c491a6d395ef602b1b34395b09b3",
+        "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63"
+      },
+      "label": "typecheck-final",
+      "rawReceipt": "checks/typecheck-final.json",
+      "stdout": "checks/typecheck-final.stdout",
+      "stderr": "checks/typecheck-final.stderr"
+    },
+    {
+      "argv": [
+        "lockf",
+        "-k",
+        "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+        "python3",
+        "/tmp/697-weighted-two-workers.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/another-event-697-root",
+      "workers": 2,
+      "start": "2026-10-14T22:22:39.875371+00:00",
+      "end": "2026-10-14T22:29:55.171382+00:00",
+      "wallS": 435.2908300840354,
+      "pid": 70816,
+      "pgid": 70816,
+      "exitCode": 0,
+      "hostLoad": "{ 4.46 5.63 7.29 }",
+      "sourceSHA256": {
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536",
+        "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+        "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+        "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+        "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+        "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "eb0952ea5759a445e9acf21c68ad918f5ce6c491a6d395ef602b1b34395b09b3",
+        "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63"
+      },
+      "label": "weighted-300",
+      "rawReceipt": "checks/weighted-300.json",
+      "stdout": "checks/weighted-300.stdout",
+      "stderr": "checks/weighted-300.stderr"
+    },
+    {
+      "argv": [
+        "node",
+        "scripts/friction-triggers.mjs",
+        "--validate-records"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/another-event-697-root",
+      "workers": 2,
+      "start": "2026-10-14T22:57:15.641978+00:00",
+      "end": "2026-10-14T22:57:15.808818+00:00",
+      "wallS": 0.1667559170164168,
+      "pid": 12644,
+      "pgid": 12644,
+      "exitCode": 0,
+      "hostLoad": "{ 20.80 20.75 15.93 }",
+      "sourceSHA256": {
+        "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536",
+        "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+        "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+        "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+        "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+        "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "eb0952ea5759a445e9acf21c68ad918f5ce6c491a6d395ef602b1b34395b09b3",
+        "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63"
+      },
+      "label": "schema-final",
+      "rawReceipt": "checks/schema-final.json",
+      "stdout": "checks/schema-final.stdout",
+      "stderr": "checks/schema-final.stderr"
+    }
+  ],
+  "functionalSourceSHA256": {
+    "src/engine/dsl/types.ts": "d0190d9e970cf840a8db1fefc1d7b164ac32fca72a3b1eabd6746f473dc6b625",
+    "src/engine/dsl/builders.ts": "c51d5560f1f10a254c96b68c789a4c958fe66f79b7804ce9caa25f8acd30e60b",
+    "src/engine/dsl/conditions.ts": "abde5c7ddb8996d838f3f143f79aebbd65700baec0efa0df7f7d723adc13e0c4",
+    "src/engine/testing/prompt-lab.ts": "ddc24993abc4ff95326e6fa7187b30807672849eec1ad4fd78347f7f31600f63",
+    "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts": "eb0952ea5759a445e9acf21c68ad918f5ce6c491a6d395ef602b1b34395b09b3",
+    "docs/rules.md": "57c951b3c2db44d864a7a3ad95d36c7d6b4cad4ed05da2d13f4e92c49839bc29",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md": "85a849bde990e7f6b825c7e05679aa732a4538b5d8fba8bc8d7b279a1a276536"
+  },
+  "scopeClosure": {
+    "functionalFiles": [
+      "src/engine/dsl/types.ts",
+      "src/engine/dsl/builders.ts",
+      "src/engine/dsl/conditions.ts",
+      "src/engine/testing/prompt-lab.ts",
+      "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts",
+      "docs/rules.md",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md"
+    ],
+    "forcedFallout": [],
+    "existingConditionCasesAndHistory": "read-only",
+    "foldValidator": "No new discriminant validator; existing while shape is plain record.",
+    "labSolver": "Existing freely playable composition requires no staging behavior.",
+    "testRunner": "Existing contracts glob; one new300-line module, zero entrypoints, zero jsdom changes.",
+    "localFull": "Not applicable: bounded condition/LAB/contracts, no config, infrastructure, state fields or cross-cutting architecture change.",
+    "productionConsumer": "Shared Revelation3fdf265c authoring and complete original192/684/46 joins remain with their owners."
+  },
+  "fuzz": {
+    "games": 300,
+    "failures": 0,
+    "workers": 2,
+    "target": "5e5e5e5e-0000-4000-8000-000000069a00",
+    "included": 614,
+    "exercised": 141,
+    "interactiveGames": 30,
+    "outerWallS": 435.2908300840354,
+    "capacityWaitAndLaunchS": 252.147344,
+    "heldOrchestrationS": 183.143723,
+    "workerReceipts": [
+      "fuzz-worker-0.json",
+      "fuzz-worker-150.json"
+    ],
+    "aggregateReceipt": "fuzz-two-workers.json",
+    "qualification": "Observed target plays and replay/invariants; not a branch-coverage or performance comparison."
+  },
+  "browser": {
+    "acceptedGames": [
+      {
+        "bead": "hv-umm2.697",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000069a00",
+        "kind": "synthetic-primitive",
+        "side": "player",
+        "variant": "base",
+        "viewport": "desktop",
+        "verdict": "pass",
+        "met": false,
+        "gameId": "xigm2t",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "version": 2,
+        "historyEntries": 2,
+        "draws": [
+          "i3",
+          "i4"
+        ],
+        "discarded": "i2",
+        "uuidMap": {
+          "i1": "5e5e5e5e-0000-4000-8000-000000069a00",
+          "i2": "5e5e5e5e-0000-4000-8000-00000000000b",
+          "i3": "5e5e5e5e-0000-4000-8000-000000000002",
+          "i4": "5e5e5e5e-0000-4000-8000-000000000002"
+        },
+        "domCounts": {
+          "hand": 2,
+          "renderedHand": 2,
+          "void": 2
+        },
+        "exactSettledReload": true,
+        "caps": [],
+        "invocation": "invocations/run-iNN56V",
+        "evidenceDir": "invocations/run-iNN56V",
+        "rawReport": "invocations/run-iNN56V/played-another-event.result.json",
+        "callerSHA256": "49b1df6eb0a6dbdf91f39e364ad97f3213c3dae284e10ac10cf91270df56eab9",
+        "fullGameLog": "invocations/run-iNN56V/played-another-event-desktop.jsonl",
+        "gameLogRows": 39,
+        "captures": [
+          "another-event-desktop-discard-prompt.png",
+          "another-event-desktop-discard-selection.png",
+          "another-event-desktop-discard-settled.png"
+        ],
+        "ai": null
+      },
+      {
+        "bead": "hv-umm2.697",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000069a00",
+        "kind": "synthetic-primitive",
+        "side": "player",
+        "variant": "base",
+        "viewport": "mobile",
+        "verdict": "pass",
+        "met": false,
+        "gameId": "tbsvze",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "version": 2,
+        "historyEntries": 2,
+        "draws": [
+          "i3",
+          "i4"
+        ],
+        "discarded": "i2",
+        "uuidMap": {
+          "i1": "5e5e5e5e-0000-4000-8000-000000069a00",
+          "i2": "5e5e5e5e-0000-4000-8000-00000000000b",
+          "i3": "5e5e5e5e-0000-4000-8000-000000000002",
+          "i4": "5e5e5e5e-0000-4000-8000-000000000002"
+        },
+        "domCounts": {
+          "hand": 2,
+          "renderedHand": 2,
+          "void": 2
+        },
+        "exactSettledReload": true,
+        "caps": [],
+        "invocation": "invocations/run-iNN56V",
+        "evidenceDir": "invocations/run-iNN56V",
+        "rawReport": "invocations/run-iNN56V/played-another-event.result.json",
+        "callerSHA256": "49b1df6eb0a6dbdf91f39e364ad97f3213c3dae284e10ac10cf91270df56eab9",
+        "fullGameLog": "invocations/run-iNN56V/played-another-event-mobile.jsonl",
+        "gameLogRows": 39,
+        "captures": [
+          "another-event-mobile-discard-prompt.png",
+          "another-event-mobile-discard-selection.png",
+          "another-event-mobile-discard-settled.png"
+        ],
+        "ai": null
+      },
+      {
+        "bead": "hv-umm2.697",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000069a00",
+        "kind": "synthetic-primitive",
+        "side": "player",
+        "variant": "base",
+        "viewport": "desktop",
+        "verdict": "pass",
+        "met": true,
+        "gameId": "9jvafu",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "version": 5,
+        "historyEntries": 3,
+        "draws": [
+          "i3",
+          "i4"
+        ],
+        "discarded": null,
+        "uuidMap": {
+          "i1": "5e5e5e5e-0000-4000-8000-000000069a00",
+          "i3": "5e5e5e5e-0000-4000-8000-000000000002",
+          "i4": "5e5e5e5e-0000-4000-8000-000000000002"
+        },
+        "domCounts": {
+          "hand": 2,
+          "renderedHand": 2,
+          "void": 2
+        },
+        "exactSettledReload": true,
+        "caps": [],
+        "invocation": "invocations/run-P2Z29b",
+        "evidenceDir": "invocations/run-P2Z29b",
+        "rawReport": "invocations/run-P2Z29b/played-another-event.result.json",
+        "callerSHA256": "6aeb52b09962fd84590128632b2bdd676a62e0968e9cae57cdc61f319fbd0451",
+        "fullGameLog": "invocations/run-P2Z29b/played-another-event-desktop.jsonl",
+        "gameLogRows": 62,
+        "captures": [
+          "another-event-desktop-no-discard.png"
+        ],
+        "ai": {
+          "qualification": "normal host forced legal passes; no policy-search or own-condition exercise claim",
+          "decisions": {
+            "chosen": [
+              {
+                "gameId": "9jvafu",
+                "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+                "side": "enemy",
+                "key": "6:5:decision",
+                "decision": "main",
+                "policy": "greedy",
+                "source": "forced",
+                "budget": {
+                  "wallClockMs": 500,
+                  "iterations": 64
+                },
+                "used": {
+                  "iterations": 0,
+                  "ms": 0
+                },
+                "roundTripMs": 0,
+                "determinizations": 0,
+                "candidates": [],
+                "chosen": {
+                  "kind": "action",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                "timestamp": "2026-10-14T22:50:34.422Z",
+                "event": "ai.decision",
+                "seq": 9
+              },
+              {
+                "gameId": "9jvafu",
+                "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+                "side": "enemy",
+                "key": "22:21:decision",
+                "decision": "main",
+                "policy": "greedy",
+                "source": "forced",
+                "budget": {
+                  "wallClockMs": 1500,
+                  "iterations": 256
+                },
+                "used": {
+                  "iterations": 0,
+                  "ms": 0
+                },
+                "roundTripMs": 0,
+                "determinizations": 0,
+                "candidates": [],
+                "chosen": {
+                  "kind": "action",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                "timestamp": "2026-10-14T22:50:44.559Z",
+                "event": "ai.decision",
+                "seq": 16
+              },
+              {
+                "gameId": "9jvafu",
+                "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+                "side": "enemy",
+                "key": "24:23:decision",
+                "decision": "main",
+                "policy": "greedy",
+                "source": "forced",
+                "budget": {
+                  "wallClockMs": 500,
+                  "iterations": 64
+                },
+                "used": {
+                  "iterations": 0,
+                  "ms": 0
+                },
+                "roundTripMs": 0,
+                "determinizations": 0,
+                "candidates": [],
+                "chosen": {
+                  "kind": "action",
+                  "action": {
+                    "kind": "pass"
+                  }
+                },
+                "timestamp": "2026-10-14T22:50:47.225Z",
+                "event": "ai.decision",
+                "seq": 20
+              }
+            ],
+            "actions": [
+              {
+                "gameId": "9jvafu",
+                "version": 6,
+                "side": "enemy",
+                "action": {
+                  "kind": "pass"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T22:50:34.432Z",
+                "event": "engine.action",
+                "seq": 10
+              },
+              {
+                "gameId": "9jvafu",
+                "version": 22,
+                "side": "enemy",
+                "action": {
+                  "kind": "pass"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T22:50:44.566Z",
+                "event": "engine.action",
+                "seq": 17
+              },
+              {
+                "gameId": "9jvafu",
+                "version": 24,
+                "side": "enemy",
+                "action": {
+                  "kind": "pass"
+                },
+                "answers": [],
+                "timestamp": "2026-10-14T22:50:47.237Z",
+                "event": "engine.action",
+                "seq": 22
+              }
+            ]
+          },
+          "ownConsumerEvents": []
+        }
+      },
+      {
+        "bead": "hv-umm2.697",
+        "uuid": "5e5e5e5e-0000-4000-8000-000000069a00",
+        "kind": "synthetic-primitive",
+        "side": "player",
+        "variant": "base",
+        "viewport": "mobile",
+        "verdict": "pass",
+        "met": true,
+        "gameId": "pbnb4r",
+        "battleId": "battle:unscoped:site-5::0::dreamscape-1",
+        "version": 4,
+        "historyEntries": 2,
+        "draws": [
+          "i3",
+          "i4"
+        ],
+        "discarded": null,
+        "uuidMap": {
+          "i1": "5e5e5e5e-0000-4000-8000-000000069a00",
+          "i3": "5e5e5e5e-0000-4000-8000-000000000002",
+          "i4": "5e5e5e5e-0000-4000-8000-000000000002"
+        },
+        "domCounts": {
+          "hand": 2,
+          "renderedHand": 2,
+          "void": 2
+        },
+        "exactSettledReload": true,
+        "caps": [],
+        "invocation": "invocations/run-P2Z29b",
+        "evidenceDir": "invocations/run-P2Z29b",
+        "rawReport": "invocations/run-P2Z29b/played-another-event.result.json",
+        "callerSHA256": "6aeb52b09962fd84590128632b2bdd676a62e0968e9cae57cdc61f319fbd0451",
+        "fullGameLog": "invocations/run-P2Z29b/played-another-event-mobile.jsonl",
+        "gameLogRows": 38,
+        "captures": [
+          "another-event-mobile-no-discard.png"
+        ],
+        "ai": null
+      }
+    ],
+    "invocations": [
+      {
+        "collector": "collector-2026-10-14T22-32-06.309Z-55610",
+        "callerSHA256": "9a28bb6dab9146312833d8df47a9db40859b022204d1c6413191523f032bc3d9",
+        "start": "2026-10-14T22:32:06.310Z",
+        "end": "2026-10-14T22:32:23.013Z",
+        "code": 1,
+        "runnerPid": 55780,
+        "serverPG": [
+          "56576"
+        ],
+        "portFree": true,
+        "observationError": null,
+        "ownershipImages": 4,
+        "recordsAbsent": true,
+        "evidenceDir": "invocations/run-5WQDkl",
+        "error": "desktop#0: Error: declared lab report: __caps [{\"href\":\"http://localhost:5274/?goto=card-lab&card=5e5e5e5e-0000-4000-8000-000000069a00&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000069a00%22%2C%225e5e5e5e-0000-4000-8000-00000000000b%22%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000069a00%22%5D%2C%22energy%22%3A10%7D%7D&game=kc5mzt\",\"caps\":{\"errors\":[],\"rejections\":[],\"consoleErrors\":[\"card-lab: unknownCard for {\\\"card\\\":\\\"5e5e5e5e-0000-4000-8000-000000069a00\\\",\\\"variant\\\":\\\"base\\\",\\\"side\\\":\\\"player\\\",\\\"stage\\\":\\\"{\\\\\\\"player\\\\\\\":{\\\\\\\"hand\\\\\\\":[\\\\\\\"5e5e5e5e-0000-4000-8000-000000069a00\\\\\\\",\\\\\\\"5e5e5e5e-0000-4000-8000-00000000000b\\\\\\\"],\\\\\\\"energy\\\\\\\":10},\\\\\\\"enemy\\\\\\\":{\\\\\\\"hand\\\\\\\":[\\\\\\\"5e5e5e5e-0000-4000-8000-000000069a00\\\\\\\"],\\\\\\\"energy\\\\\\\":10}}\\\"}\"]}}]\n    at assertObserved (evalmachine.<anonymous>:190:34)\n    at Object.waitFor (evalmachine.<anonymous>:779:29)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n    at async Object.labStage (evalmachine.<anonymous>:801:22)\n    at async playedAnotherEvent (evalmachine.<anonymous>:1655:15)\n    at async evalmachine.<anonymous>:1792:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)",
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.697/invocations/run-5WQDkl/played-another-event-desktop.jsonl",
+            "gameId": "kc5mzt",
+            "selectedBy": "url",
+            "rows": 1,
+            "reason": null
+          }
+        ],
+        "caps": [
+          {
+            "href": "http://localhost:5274/?goto=card-lab&card=5e5e5e5e-0000-4000-8000-000000069a00&variant=base&as=player&seed=1&debug=1&labStage=%7B%22player%22%3A%7B%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000069a00%22%2C%225e5e5e5e-0000-4000-8000-00000000000b%22%5D%2C%22energy%22%3A10%7D%2C%22enemy%22%3A%7B%22hand%22%3A%5B%225e5e5e5e-0000-4000-8000-000000069a00%22%5D%2C%22energy%22%3A10%7D%7D&game=kc5mzt",
+            "caps": {
+              "errors": [],
+              "rejections": [],
+              "consoleErrors": [
+                "card-lab: unknownCard for {\"card\":\"5e5e5e5e-0000-4000-8000-000000069a00\",\"variant\":\"base\",\"side\":\"player\",\"stage\":\"{\\\"player\\\":{\\\"hand\\\":[\\\"5e5e5e5e-0000-4000-8000-000000069a00\\\",\\\"5e5e5e5e-0000-4000-8000-00000000000b\\\"],\\\"energy\\\":10},\\\"enemy\\\":{\\\"hand\\\":[\\\"5e5e5e5e-0000-4000-8000-000000069a00\\\"],\\\"energy\\\":10}}\"}"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "collector": "collector-2026-10-14T22-34-07.704Z-52332",
+        "callerSHA256": "7c38166c0f8a6a99509f73e127dc8231ff2287905d1c66516eb9dee17e311363",
+        "start": "2026-10-14T22:34:07.705Z",
+        "end": "2026-10-14T22:34:18.436Z",
+        "code": 1,
+        "runnerPid": 52349,
+        "serverPG": [
+          "52541"
+        ],
+        "portFree": true,
+        "observationError": null,
+        "ownershipImages": 4,
+        "recordsAbsent": true,
+        "evidenceDir": "invocations/run-H4SaJW",
+        "error": "desktop#0: TypeError: qa.battle.read is not a function\n    at playedAnotherEvent (evalmachine.<anonymous>:1687:35)\n    at async evalmachine.<anonymous>:1797:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.697/invocations/run-H4SaJW/played-another-event-desktop.jsonl",
+            "gameId": "qwtpm9",
+            "selectedBy": "url",
+            "rows": 27,
+            "reason": null
+          }
+        ],
+        "caps": []
+      },
+      {
+        "collector": "collector-2026-10-14T22-34-52.396Z-74262",
+        "callerSHA256": "0a048f983c4a80f3964f92ad3c69d0934490f100c42be1cb9bd80e62c33ddbca",
+        "start": "2026-10-14T22:34:52.397Z",
+        "end": "2026-10-14T22:35:29.628Z",
+        "code": 1,
+        "runnerPid": 74275,
+        "serverPG": [
+          "74334"
+        ],
+        "portFree": true,
+        "observationError": null,
+        "ownershipImages": 3,
+        "recordsAbsent": true,
+        "evidenceDir": "invocations/run-ex24aL",
+        "error": "desktop#0: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-battle-card-picker-gallery]').first()\n",
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.697/invocations/run-ex24aL/played-another-event-desktop.jsonl",
+            "gameId": "82ajzu",
+            "selectedBy": "url",
+            "rows": 29,
+            "reason": null
+          }
+        ],
+        "caps": []
+      },
+      {
+        "collector": "collector-2026-10-14T22-37-23.539Z-44669",
+        "callerSHA256": "d5374207199e2139d28d52fa0817b38c92302e252604b7f8582ae8bf44b2d706",
+        "start": "2026-10-14T22:37:23.540Z",
+        "end": "2026-10-14T22:37:32.972Z",
+        "code": 1,
+        "runnerPid": 44690,
+        "serverPG": [
+          "44818"
+        ],
+        "portFree": true,
+        "observationError": null,
+        "ownershipImages": 3,
+        "recordsAbsent": true,
+        "evidenceDir": "invocations/run-Z3EiJA",
+        "error": "desktop#0: Error: Unexpected actual discard choice surface\n    at playedAnotherEvent (evalmachine.<anonymous>:1717:107)\n    at async evalmachine.<anonymous>:1806:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.697/invocations/run-Z3EiJA/played-another-event-desktop.jsonl",
+            "gameId": "q556yh",
+            "selectedBy": "url",
+            "rows": 28,
+            "reason": null
+          }
+        ],
+        "caps": []
+      },
+      {
+        "collector": "collector-2026-10-14T22-38-22.034Z-48900",
+        "callerSHA256": "7c38eb55af1ef7f4b0700140a659deb762577f5e58172725d38a9373bd4c972e",
+        "start": "2026-10-14T22:38:22.035Z",
+        "end": "2026-10-14T22:38:42.310Z",
+        "code": 1,
+        "runnerPid": 48913,
+        "serverPG": [
+          "48950"
+        ],
+        "portFree": true,
+        "observationError": null,
+        "ownershipImages": 3,
+        "recordsAbsent": true,
+        "evidenceDir": "invocations/run-meCrAl",
+        "error": "desktop#0: Error: page.evaluate: Error: Missing engine probe\n    at eval (eval at evaluate (:311:30), <anonymous>:3:36)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.697/invocations/run-meCrAl/played-another-event-desktop.jsonl",
+            "gameId": "jjzn9m",
+            "selectedBy": "url",
+            "rows": 35,
+            "reason": null
+          }
+        ],
+        "caps": []
+      },
+      {
+        "collector": "collector-2026-10-14T22-40-21.388Z-53849",
+        "callerSHA256": "49b1df6eb0a6dbdf91f39e364ad97f3213c3dae284e10ac10cf91270df56eab9",
+        "start": "2026-10-14T22:40:21.388Z",
+        "end": "2026-10-14T22:40:53.448Z",
+        "code": 0,
+        "runnerPid": 53874,
+        "serverPG": [
+          "53909"
+        ],
+        "portFree": true,
+        "observationError": null,
+        "ownershipImages": 3,
+        "recordsAbsent": true,
+        "evidenceDir": "invocations/run-iNN56V",
+        "error": null,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.697/invocations/run-iNN56V/played-another-event-desktop.jsonl",
+            "gameId": "xigm2t",
+            "selectedBy": "url",
+            "rows": 39,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.697/invocations/run-iNN56V/played-another-event-mobile.jsonl",
+            "gameId": "tbsvze",
+            "selectedBy": "url",
+            "rows": 39,
+            "reason": null
+          }
+        ],
+        "caps": []
+      },
+      {
+        "collector": "collector-2026-10-14T22-41-57.209Z-56454",
+        "callerSHA256": "49b1df6eb0a6dbdf91f39e364ad97f3213c3dae284e10ac10cf91270df56eab9",
+        "start": "2026-10-14T22:41:57.210Z",
+        "end": "2026-10-14T22:43:04.529Z",
+        "code": 1,
+        "runnerPid": 56465,
+        "serverPG": [
+          "56502"
+        ],
+        "portFree": true,
+        "observationError": null,
+        "ownershipImages": 3,
+        "recordsAbsent": true,
+        "evidenceDir": "invocations/run-eyNRvS",
+        "error": "desktop#0: QaTimeoutError: qa.battle human main phase: timed out after 60000 ms; {\"at\":\"near:day\",\"prompt\":null,\"window\":\"main\",\"canPass\":false,\"waiting\":null,\"result\":null,\"probe\":{\"decision\":{\"kind\":\"main\",\"side\":\"player\"},\"pending\":null,\"stack\":0,\"inFlight\":false,\"ended\":false,\"scoreToWin\":25,\"events\":0}}\n    at Object.timeoutError (evalmachine.<anonymous>:5:19)\n    at Object.waitFor (evalmachine.<anonymous>:1410:43)\n    at async playedAnotherEvent (evalmachine.<anonymous>:1669:3)\n    at async evalmachine.<anonymous>:1808:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)",
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.697/invocations/run-eyNRvS/played-another-event-desktop.jsonl",
+            "gameId": "ii87nt",
+            "selectedBy": "url",
+            "rows": 25,
+            "reason": null
+          }
+        ],
+        "caps": []
+      },
+      {
+        "collector": "collector-2026-10-14T22-45-10.633Z-21934",
+        "callerSHA256": "d424b673312514cc723d1ee83f145fab672c1ae7f2fb224f2204163417061e6d",
+        "start": "2026-10-14T22:45:10.634Z",
+        "end": "2026-10-14T22:46:02.518Z",
+        "code": 1,
+        "runnerPid": 21946,
+        "serverPG": [
+          "21991"
+        ],
+        "portFree": true,
+        "observationError": null,
+        "ownershipImages": 3,
+        "recordsAbsent": true,
+        "evidenceDir": "invocations/run-d2Y5J4",
+        "error": "desktop#0: Error: No actual normal AI card play observed\n    at playedAnotherEvent (evalmachine.<anonymous>:1800:102)\n    at async evalmachine.<anonymous>:1812:15\n    at async evalmachine.<anonymous>:3:20\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67058:13\n    at async waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:63766:15)\n    at async _Tab._raceAgainstModalStates (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64632:16)\n    at async _Tab.waitForCompletion (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:64642:9)\n    at async Object.handle (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:67054:11)\n    at async BrowserBackend.callTool (/Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:65552:11)\n    at async /Users/dthurn/.local/share/codex-playwright-mcp/node_modules/playwright-core/lib/coreBundle.js:71481:26",
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.697/invocations/run-d2Y5J4/played-another-event-desktop.jsonl",
+            "gameId": "mbgs4g",
+            "selectedBy": "url",
+            "rows": 61,
+            "reason": null
+          }
+        ],
+        "caps": []
+      },
+      {
+        "collector": "collector-2026-10-14T22-50-22.084Z-6409",
+        "callerSHA256": "6aeb52b09962fd84590128632b2bdd676a62e0968e9cae57cdc61f319fbd0451",
+        "start": "2026-10-14T22:50:22.084Z",
+        "end": "2026-10-14T22:50:58.872Z",
+        "code": 0,
+        "runnerPid": 6422,
+        "serverPG": [
+          "6458"
+        ],
+        "portFree": true,
+        "observationError": null,
+        "ownershipImages": 4,
+        "recordsAbsent": true,
+        "evidenceDir": "invocations/run-P2Z29b",
+        "error": null,
+        "gameLogs": [
+          {
+            "viewport": "desktop",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.697/invocations/run-P2Z29b/played-another-event-desktop.jsonl",
+            "gameId": "9jvafu",
+            "selectedBy": "url",
+            "rows": 62,
+            "reason": null
+          },
+          {
+            "viewport": "mobile",
+            "path": "/Users/dthurn/dreamtides_web/artifacts/qa/hv-umm2.697/invocations/run-P2Z29b/played-another-event-mobile.jsonl",
+            "gameId": "pbnb4r",
+            "selectedBy": "url",
+            "rows": 38,
+            "reason": null
+          }
+        ],
+        "caps": []
+      }
+    ],
+    "failedPartialInvocations": 7,
+    "sourceEpoch": "All functional code matches focused-final-02/typecheck-final/weighted300 source, unchanged during every server lease.",
+    "normalAI": "Three normal greedy-host forced legal passes observed on accepted desktop true game; own LAB event/policy search not exercised there.",
+    "visualInspection": "Desktop selected-discard, mobile discard-prompt and mobile no-prompt captures inspected; source attribution, exposed candidate and submit control visible. Fanned cards may extend below viewport; actual exposed hitpoints are verified, not full-card containment. Synthetic cards use lab presentation."
+  },
+  "repairs": {
+    "focused01": "Six own fixture failures: deliberately throwing card reached feasibility enumeration, forced singleton cost consumed no scripted answer, automatic resolution had already suspended.",
+    "focused02": "Two own fixture failures: stale prompt ID needed the documented typed ID format.",
+    "typecheck01": "Two own fixture type errors: prevent receives StackItemSelector; readonly printing requires replacement of the same typed instance value.",
+    "outOfScopeProductFindings": [],
+    "syntheticTypeChange": "Only private contract resolve hook replaces current printing of its same typed physical instance. No turn-log/controller injection and no production/browser type-remap claim."
+  },
+  "resourcePolicy": {
+    "workers": 2,
+    "heavyLock": "/Users/dthurn/dreamtides_web/artifacts/heavy.lock",
+    "heavyAndBrowserOverlap": false,
+    "browserCollectors": "Existing343 read-only byte observer adapted to own bead/cwd/caller and exact met argument; same raw image parsed/hashed/retained.",
+    "allBrowserCollectorsTerminal": true,
+    "signalsOrForeignCleanup": false
+  },
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "ordinary review wrapper starting sysctl 1-minute value"
+      }
+    }
+  },
+  "parentOwnedSetupQualification": "Parent provided precreation healthy Doctor/setup receipts; own-worktree status/Doctor check occurred later during source review. No claim it preceded encoding. Parent owns native admission, review, certification and cleanup; helper performed no native/Tollgate/rebase/push calls.",
+  "review": "Mandatory fresh normal read-only Claude Opus5.5 core review is parent-owned after this immutable helper commit; not yet claimed complete.",
+  "hostLoadSamples": [
+    {
+      "label": "focused-01",
+      "at": "2026-10-14T22:17:16.869765+00:00",
+      "raw": "{ 5.14 8.36 8.74 }"
+    },
+    {
+      "label": "focused-02",
+      "at": "2026-10-14T22:18:02.946087+00:00",
+      "raw": "{ 4.60 7.77 8.50 }"
+    },
+    {
+      "label": "focused-03",
+      "at": "2026-10-14T22:18:59.589666+00:00",
+      "raw": "{ 3.54 6.90 8.13 }"
+    },
+    {
+      "label": "focused-final-02",
+      "at": "2026-10-14T22:21:55.270266+00:00",
+      "raw": "{ 3.86 5.69 7.40 }"
+    },
+    {
+      "label": "focused-final",
+      "at": "2026-10-14T22:19:18.698989+00:00",
+      "raw": "{ 4.16 6.87 8.09 }"
+    },
+    {
+      "label": "knip-final",
+      "at": "2026-10-14T22:55:58.583560+00:00",
+      "raw": "{ 32.23 21.83 15.82 }"
+    },
+    {
+      "label": "review-final",
+      "at": "2026-10-14T22:53:57.531758+00:00",
+      "raw": "{ 17.54 13.67 12.34 }"
+    },
+    {
+      "label": "typecheck-01",
+      "at": "2026-10-14T22:19:44.612888+00:00",
+      "raw": "{ 4.16 6.61 7.96 }"
+    },
+    {
+      "label": "typecheck-final",
+      "at": "2026-10-14T22:20:27.972650+00:00",
+      "raw": "{ 3.78 6.25 7.77 }"
+    },
+    {
+      "label": "weighted-300",
+      "at": "2026-10-14T22:22:39.875371+00:00",
+      "raw": "{ 4.46 5.63 7.29 }"
+    }
+  ],
+  "ordinaryReview": {
+    "files": 306,
+    "tests": 7966,
+    "wallS": 84.28217391599901,
+    "qualification": "Diff-aware related check at recorded start load, not controlled low-load performance."
+  },
+  "parentIndependentProofs": {
+    "697-parent-browser-proof.json": {
+      "path": "receipts/parent/697-parent-browser-proof.json",
+      "sha256": "078b3068c8f83f37fcec0d6a4b640dd171881bb9f89faa60574ffb2feba49661"
+    },
+    "697-concrete-browser-admission-native.json": {
+      "path": "receipts/parent/697-concrete-browser-admission-native.json",
+      "sha256": "42035a516bfdcbdcd7bec2c1e143b3408908c151a12a61cdc7a2f3ff9184bffb"
+    },
+    "697-parent-weighted-proof.json": {
+      "path": "receipts/parent/697-parent-weighted-proof.json",
+      "sha256": "8e1c6c5172e14a3311e55006c9c6c101f169b7e44395c16b9950b177e8a528fc"
+    },
+    "697-concrete-browser-admission.json": {
+      "path": "receipts/parent/697-concrete-browser-admission.json",
+      "sha256": "77679a5704645c957c0bbe749dbfb310d51e66f9e7415e653601fc8988a4e3a4"
+    },
+    "697-browser-accepted-invocations.json": {
+      "path": "receipts/parent/697-browser-accepted-invocations.json",
+      "sha256": "cf77edf73f0e2d9b657b0dcaf5918751d189ed2e72807a02202c239759a53620"
+    },
+    "697-worktree-status.json": {
+      "path": "receipts/parent/697-worktree-status.json",
+      "sha256": "1a2aad1c9bf3d297b7ce5f0b5a10ee1633c7c9d8d4fa022458cf43abe758dde9"
+    },
+    "697-worktree-doctor.json": {
+      "path": "receipts/parent/697-worktree-doctor.json",
+      "sha256": "39a53a650f76d645c1698a34db890a8bb9f080e6c51abb22dc26150544b23c15"
+    },
+    "697-qa-gate-correction-native.json": {
+      "path": "receipts/parent/697-qa-gate-correction-native.json",
+      "sha256": "c01b5efaf54fd0dee1aa3e539d6e7ec91b0e73de9caf3e41ed4f0de8c3fd4266"
+    },
+    "697-parent-resource-proof.json": {
+      "path": "receipts/parent/697-parent-resource-proof.json",
+      "sha256": "6b96a4a4ea9026ad264d3df355775ee46aed62f02083d8c4a0ffba61916d11de"
+    },
+    "697-finite-admission-native.json": {
+      "path": "receipts/parent/697-finite-admission-native.json",
+      "sha256": "41eab94be94aab71ad15b83dc443eba32fe2fbe99fd0b4316917ee0ce9248831"
+    }
+  },
+  "testDeltaAccounting": {
+    "entrypoints": 0,
+    "plainContractModules": 1,
+    "contractLines": 300,
+    "jsdomFiles": 0,
+    "existingBodiesChanged": 0
+  },
+  "finalValidationClosure": {
+    "focusedContracts": 4244,
+    "relatedTests": 7966,
+    "relatedFiles": 306,
+    "knip": 0,
+    "schema": 0,
+    "whitespace": 0,
+    "functionalSourceUnchanged": true,
+    "allowedPaths": [
+      "docs/plan/evidence/friction/hv-umm2.697.json",
+      "docs/plan/evidence/measurements/hv-umm2.697.json",
+      "docs/plan/evidence/measurements/hv-umm2.697.md",
+      "docs/plan/evidence/qa-ledger/hv-umm2.697.jsonl",
+      "docs/plan/evidence/rules-decisions/RD-hv-umm2.697-1.md",
+      "docs/rules.md",
+      "src/engine/dsl/builders.ts",
+      "src/engine/dsl/conditions.ts",
+      "src/engine/dsl/types.ts",
+      "src/engine/effects/primitives/contracts/played-another-event-this-turn.contracts.ts",
+      "src/engine/testing/prompt-lab.ts"
+    ]
+  }
+}

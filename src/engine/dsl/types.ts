@@ -404,6 +404,8 @@ export type Duration =
 /** A condition an effect checks when it resolves. */
 export type Condition =
   | { readonly cond: "thisTurn"; readonly count: CurrentTurnCountValue; readonly atLeast: number; readonly atMost?: number }
+  /** A committed event this turn from a physical card other than the resolving source. */
+  | { readonly cond: "playedAnotherEventThisTurn" }
   /**
    * Characters in play matching the selector number at least `atLeast` and,
    * with `atMost`, at most that: "If you control no shadow figments" is
@@ -452,7 +454,7 @@ type StaticCountBounds =
 
 /** A live static condition uses public inputs; optional payments and hidden-card filters require a resolving effect. */
 export type StaticCondition =
-  | Exclude<Condition, { readonly cond: "controls" | "costPaid" | "cardsIn" | "topOfDeck" }>
+  | Exclude<Condition, { readonly cond: "controls" | "costPaid" | "cardsIn" | "topOfDeck" | "playedAnotherEventThisTurn" }>
   | { readonly cond: "controls"; readonly selector: StaticCharacterSelector; readonly atLeast: number; readonly atMost?: number }
   | ({ readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: "void"; readonly filter?: CardFilter } & StaticCountBounds)
   | ({ readonly cond: "cardsIn"; readonly player: PlayerRef; readonly zone: "hand" | "deck"; readonly filter?: never } & StaticCountBounds);

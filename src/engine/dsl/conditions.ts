@@ -34,6 +34,10 @@ export function conditionHoldsWith(
       const count = evaluateValue(state, condition.count, { controller: scope.controller, source: scope.source, x: null, count: () => 0, countCards: () => 0 });
       return count >= condition.atLeast && (condition.atMost === undefined || count <= condition.atMost);
     }
+    case "playedAnotherEventThisTurn": {
+      const source = sourceInstance(scope.source);
+      return state.turnLog.played[scope.controller].some(card => card.cardType === "event" && card.instance !== source);
+    }
     case "controls": {
       const count = matchingCharactersWith(state, catalog, read, condition.selector, scope.controller, scope.source, scope.x ?? undefined, scope.sourceSpark, scope.sourceCounters).length;
       return count >= condition.atLeast && (condition.atMost === undefined || count <= condition.atMost);

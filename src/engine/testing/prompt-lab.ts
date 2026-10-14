@@ -23,6 +23,7 @@ import type { LabDefinitions } from "../development";
 import { additionalCost, abandonSparkCapture, choiceCost, discardCostFilter, optionalCost, reclaim, activated, abandonCost, abandonXCost, all, banishFromAnyVoidCost, banishFromVoidCost, returnCost, characterYouControl, enemyCharacter, energy, energyX, event, everyIn, fromVoid, self, staticAbility, target as characterTarget, thisCardIn, upTo, x } from "../dsl/builders";
 import { onDusk, triggered, whenDraw } from "../dsl/triggers";
 import { keyword } from "../dsl/builders";
+import { playedAnotherEventThisTurn } from "../dsl/builders";
 import type { Engine } from "../engine";
 import * as p from "../effects/primitives";
 import { createFoldAdapter, type BattleIntent, type BattleSlice } from "../fold/slice";
@@ -209,6 +210,9 @@ export const LAB = {
   optionalReturn: labEvent(0x70, 0, p.returnFromVoid(everyIn("void"), { pay: 1 })),
   /** "Draw 2 cards, then discard a card." */
   drawTwoThenDiscard: labEvent(1, 1, p.sequence(p.draw(2), p.discard(1))),
+  /** The current committed history decides the discard only after both draws. */
+  playedAnotherEventDraw: labEvent(0x69700, 2, p.sequence(p.draw(2),
+    p.ifThen(playedAnotherEventThisTurn(), p.sequence(), p.discard(1)))),
   /** "Discard two cards": one public count after the individual travels. */
   discardPair: labEvent(0x45300, 0, p.discard(2)),
   /** The holder chooses any hand subset during resolution. */
@@ -421,6 +425,7 @@ export const PROMPT_LAB_CARD_TEXT: Readonly<Record<CardId, { readonly name: stri
   [LAB.transferMover.id]: { name: "Lab Transfer", text: "Interrupt. Gain control of an enemy." },
   [LAB.mover.id]: { name: "Lab Mover", text: "❖ – 1●: Move this character to an unoccupied position." },
   [LAB.drawTwoThenDiscard.id]: { name: "Lab Sifting", text: "Draw 2 cards, then discard a card." },
+  [LAB.playedAnotherEventDraw.id]: { name: "Lab Event Study", text: "Draw two cards, then discard a card unless you played another event this turn." },
   [LAB.discardPair.id]: { name: "Lab Discard", text: "Discard two cards." },
   [LAB.partialRedraw.id]: { name: "Lab Partial Redraw", text: "Discard any number of cards from your hand, then draw that many cards." },
   [LAB.partialRedrawOpponent.id]: { name: "Lab Opponent Redraw", text: "The opponent discards any number of cards from their hand, then draws that many cards." },
@@ -517,6 +522,14 @@ const playHand = (index: number): LabStep => play("player", (ids) => at(ids.play
 const target = (choose: (ids: LabIds) => InstanceId): LabStep => ({ side: "player", answer: (ids) => [choose(ids)] });
 
 export const PROMPT_LAB_FIXTURES: readonly PromptLabFixture[] = [
+  ...[false, true].map((prior): PromptLabFixture => ({
+    name: `played-another-event-${prior ? "met" : "unmet"}`,
+    description: "Two draws precede a discard only without another committed event this turn",
+    setup: { active: "player", phase: "day", player: {
+      hand: [LAB.playedAnotherEventDraw.id, SYNTHETIC.event0.id], energy: 5, deck: deck(8),
+    }, enemy: { deck: deck(8) } },
+    script: prior ? [playHand(1)] : [],
+  })),
   {
     name: "optional-cost-targets", description: "Optional energy or discard decisions bind one enemy target before payment",
     setup: { active: "player", phase: "day",
