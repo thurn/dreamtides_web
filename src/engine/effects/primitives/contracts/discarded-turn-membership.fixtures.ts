@@ -34,6 +34,7 @@ export const D = {
   mayPay: make(14, () => [event(p.payTo({ discard: 1 }, p.materialize(discardedIn("void", { cardType: "character" }))))]),
   zero: make(15, () => [event(p.discard(0))]),
   extra: make(16, () => [event(p.takeExtraTurn())]),
+  erodeTwo: make(19, () => [event(p.erode(2))]),
   mid: { ...make(18, () => []), synthetic: { resolve(ctx, item) {
     const cohort = [...ctx.state.sides[item.controller].hand];
     const failing = Object.create(ctx) as typeof ctx;

@@ -1973,9 +1973,13 @@ Repeated discards of one physical card do not duplicate the current member.
 Distinct physical copies of the same printing remain distinct members.
 
 The same current-zone restriction applies when an instruction names discarded
-cards now in a hand or deck. A card that ceased to exist, moved elsewhere, or
-was banished instead of entering the void is not a current void member. A card
-put into the void without being discarded is not a discarded member. Missing
+cards now in a hand or deck. A card that ceased to exist or is currently
+elsewhere, including the Banished zone, is not a current void member. A card
+put into the void that has never belonged to a completed discard occasion
+during the active turn is not a discarded member. A discarded physical card
+keeps its membership through later zone moves during that turn, including
+leaving and re-entering the void; it is selected only while currently in the
+named zone. Missing
 legacy discarded-card history names no physical cards while its saved discard
 count retains its value. Each ordinary or extra turn starts with empty
 physical discard membership.

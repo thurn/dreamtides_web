@@ -29,6 +29,40 @@ const decks = (state: BattleState) => {
 const entered = (out: ReturnType<typeof run>) => out.events.flatMap(e => e.kind === "materialized" ? [e.instance] : []);
 
 describe("current-zone discarded physical membership", () => {
+  it.each(SIDES)("retains discarded %s physical membership after leaving and re-entering the void by erosion", side => {
+    const b = boardState(engine.catalog, { active: side, phase: "day", scoreToWin: 100,
+      [side]: { hand: [D.one.id, v.vanilla0.id, D.hide.id, D.wake.id, D.erodeTwo.id, D.wake.id, D.wake.id], deck: [v.vanilla0.id], energy: 20 },
+      [opponent(side)]: { hand: [v.interruptEvent.id], deck, energy: 20 } });
+    const victim = b.ids[side].hand[1], unrelated = b.ids[side].deck[0];
+    expect(victim).not.toBe(unrelated);
+    const initial = { ...b.state, config: { ...b.state.config, handLimit: 10, turnLimit: null } };
+    const discarded = play(initial, side, b.ids[side].hand[0]);
+    expect(discarded.events.flatMap(e => e.kind === "discarded" ? [e.instance] : [])).toEqual([victim]);
+    expect(discarded.state.sides[side].void).toContain(victim);
+    const shuffled = play(discarded.state, side, b.ids[side].hand[2]);
+    expect(new Set(shuffled.state.sides[side].deck)).toEqual(new Set([victim, unrelated]));
+    expect(shuffled.state.sides[side].void).not.toContain(victim);
+    const absent = play(shuffled.state, side, b.ids[side].hand[3]);
+    expect(entered(absent)).toEqual([]);
+    expect(absent.state.instances[victim].zone).toBe("deck");
+    // Eroding the complete declared deck puts both physical copies in the void,
+    // independently of the shuffle order; only one was discarded this turn.
+    const eroded = play(absent.state, side, b.ids[side].hand[4]);
+    expect(new Set(eroded.events.flatMap(e => e.kind === "eroded" ? [e.instance] : []))).toEqual(new Set([victim, unrelated]));
+    expect(eroded.state.sides[side].deck).toEqual([]);
+    expect(eroded.state.sides[side].void).toEqual(expect.arrayContaining([victim, unrelated]));
+    expect(eroded.events.some(e => e.kind === "discarded" || e.kind === "discardBatch" || e.kind === "fatigue")).toBe(false);
+    const out = play(eroded.state, side, b.ids[side].hand[5]);
+    expect(entered(out)).toEqual([victim]);
+    expect(out.state.instances[victim]).toMatchObject({ owner: side, controller: side, zone: "play" });
+    expect(out.state.sides[side].void).toContain(unrelated);
+    const again = play(out.state, side, b.ids[side].hand[6]);
+    expect(entered(again)).toEqual([]);
+    expect(again.state.sides[side].void).toContain(unrelated);
+    expect(again.state.turn.turnNumber).toBe(initial.turn.turnNumber);
+    expect(invariantViolations(again.state, engine.catalog)).toEqual([]);
+  });
+
   it.each(SIDES)("materializes only actual discarded %s physical cards, preserving zone order and distinct copies", side => {
     const b = setup(side, [D.two.id, v.vanilla0.id, v.vanilla0.id, D.wake.id], [v.vanilla0.id]);
     const discarded = play(b.state, side, b.ids[side].hand[0]);

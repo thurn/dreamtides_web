@@ -1,0 +1,284 @@
+{
+  "bead": "hv-umm2.694",
+  "sourceBase": "8775edcaa23ee93b330d71577bc47d4b89db6cfb",
+  "worktree": "/Users/dthurn/dreamtides_web/.worktrees/discard-reentry-694-root",
+  "branch": "wt/discard-reentry-694-root",
+  "dispatch": {
+    "timestamp": "2026-10-14T19:05:09.463Z",
+    "nativeJournalOrdinal": 31548,
+    "nativeCallId": "call_2240d76a42644b90827a9d2320614b3c"
+  },
+  "implementWindow": {
+    "start": "2026-10-14T19:05:09.463Z",
+    "end": "2026-10-14T19:14:54.142450+00:00"
+  },
+  "windowMeaning": "Inclusive original audit dispatch through final packaging immediately before Git; parent retains actual commit bracket. CPU, model sampling and subphase attribution are unobserved.",
+  "validation": [
+    {
+      "label": "focused-new",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "retains discarded .* physical membership after leaving and re-entering the void by erosion"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-reentry-694-root",
+      "start": "2026-10-14T19:10:06.214911+00:00",
+      "hostLoadRaw": "{ 4.15 6.78 8.85 }",
+      "sourceBase": "8775edcaa23ee93b330d71577bc47d4b89db6cfb",
+      "sourceSHA256": {
+        "docs/rules.md": "763d27268b56ed3a1e256053921f166aea32dd857a49509c9c4e87129d518643",
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "7dd7b04e653dfe1229f8ef31433a5529abcb84089dc485a5e2448499d3c6ba9e",
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.fixtures.ts": "ae47558971d52e8f706eacd5ebb649d6631ac51cac8ae564f86f78b6a4554874"
+      },
+      "workers": 2,
+      "pid": 46438,
+      "processGroup": 46438,
+      "end": "2026-10-14T19:10:12.966826+00:00",
+      "wallS": 6.74714666698128,
+      "exitCode": 0,
+      "logPath": "/tmp/694-focused-new.log",
+      "logSHA256": "9f10fc5655806abed428c4527a1fb984f92f315e15b346740791b6cc719b3fd1",
+      "groupAbsent": true,
+      "remainingGroupPids": ""
+    },
+    {
+      "label": "focused-own",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "src/engine/effects/primitives/contracts.test.ts",
+        "-t",
+        "current-zone discarded physical membership|discarded membership transaction and recovery"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-reentry-694-root",
+      "start": "2026-10-14T19:10:23.896650+00:00",
+      "hostLoadRaw": "{ 3.66 6.54 8.73 }",
+      "sourceBase": "8775edcaa23ee93b330d71577bc47d4b89db6cfb",
+      "sourceSHA256": {
+        "docs/rules.md": "763d27268b56ed3a1e256053921f166aea32dd857a49509c9c4e87129d518643",
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "7dd7b04e653dfe1229f8ef31433a5529abcb84089dc485a5e2448499d3c6ba9e",
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.fixtures.ts": "ae47558971d52e8f706eacd5ebb649d6631ac51cac8ae564f86f78b6a4554874"
+      },
+      "workers": 2,
+      "pid": 46733,
+      "processGroup": 46733,
+      "end": "2026-10-14T19:10:29.412438+00:00",
+      "wallS": 5.510974542004988,
+      "exitCode": 0,
+      "logPath": "/tmp/694-focused-own.log",
+      "logSHA256": "739ebe91b8425bd5b067b9008e590bd308fc1752d8a33991897fd83929b1612d",
+      "groupAbsent": true,
+      "remainingGroupPids": ""
+    },
+    {
+      "label": "review",
+      "command": [
+        "npm",
+        "run",
+        "review"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-reentry-694-root",
+      "start": "2026-10-14T19:12:25.381026+00:00",
+      "hostLoadRaw": "{ 2.52 5.16 7.89 }",
+      "sourceBase": "8775edcaa23ee93b330d71577bc47d4b89db6cfb",
+      "sourceSHA256": {
+        "docs/rules.md": "763d27268b56ed3a1e256053921f166aea32dd857a49509c9c4e87129d518643",
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "a70b83c5b02eb7774ab36336130b9d509a8c89178f41f5ed84a5b643593eb9a7",
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.fixtures.ts": "ae47558971d52e8f706eacd5ebb649d6631ac51cac8ae564f86f78b6a4554874"
+      },
+      "workers": 2,
+      "pid": 48858,
+      "processGroup": 48858,
+      "end": "2026-10-14T19:12:48.773349+00:00",
+      "wallS": 23.385373458004324,
+      "exitCode": 0,
+      "logPath": "/tmp/694-review.log",
+      "logSHA256": "46b61a10273bc0be30a011609aaa64bc1ab99152a816484b6ed30581ae7b9bd1",
+      "groupAbsent": true,
+      "remainingGroupPids": ""
+    },
+    {
+      "label": "knip",
+      "command": [
+        "npm",
+        "run",
+        "knip"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-reentry-694-root",
+      "start": "2026-10-14T19:12:25.381150+00:00",
+      "hostLoadRaw": "{ 2.52 5.16 7.89 }",
+      "sourceBase": "8775edcaa23ee93b330d71577bc47d4b89db6cfb",
+      "sourceSHA256": {
+        "docs/rules.md": "763d27268b56ed3a1e256053921f166aea32dd857a49509c9c4e87129d518643",
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "a70b83c5b02eb7774ab36336130b9d509a8c89178f41f5ed84a5b643593eb9a7",
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.fixtures.ts": "ae47558971d52e8f706eacd5ebb649d6631ac51cac8ae564f86f78b6a4554874"
+      },
+      "workers": 2,
+      "pid": 48857,
+      "processGroup": 48857,
+      "end": "2026-10-14T19:12:32.217412+00:00",
+      "wallS": 6.829754416976357,
+      "exitCode": 0,
+      "logPath": "/tmp/694-knip.log",
+      "logSHA256": "16e70c701f1483e7ed8c318c0c6a4550508af92cd7afa578d6dca2dd70bb01a4",
+      "groupAbsent": true,
+      "remainingGroupPids": ""
+    },
+    {
+      "label": "final-guards",
+      "command": [
+        "python3",
+        "/tmp/694-final-guards.py"
+      ],
+      "cwd": "/Users/dthurn/dreamtides_web/.worktrees/discard-reentry-694-root",
+      "start": "2026-10-14T19:14:04.208062+00:00",
+      "hostLoadRaw": "{ 2.86 4.80 7.47 }",
+      "sourceBase": "8775edcaa23ee93b330d71577bc47d4b89db6cfb",
+      "sourceSHA256": {
+        "docs/rules.md": "763d27268b56ed3a1e256053921f166aea32dd857a49509c9c4e87129d518643",
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "a70b83c5b02eb7774ab36336130b9d509a8c89178f41f5ed84a5b643593eb9a7",
+        "src/engine/effects/primitives/contracts/discarded-turn-membership.fixtures.ts": "ae47558971d52e8f706eacd5ebb649d6631ac51cac8ae564f86f78b6a4554874"
+      },
+      "workers": 2,
+      "pid": 50685,
+      "processGroup": 50685,
+      "end": "2026-10-14T19:14:04.430586+00:00",
+      "wallS": 0.2180712920089718,
+      "exitCode": 0,
+      "logPath": "/tmp/694-final-guards.log",
+      "logSHA256": "42c858435de382bf9be094a31972683c7a6cac534d68a7ab405037d8113f2ce2",
+      "groupAbsent": true,
+      "remainingGroupPids": ""
+    }
+  ],
+  "schemaNormalization": {
+    "fields": {
+      "hostLoad": {
+        "measuredFor": "npm run review command start, sysctl vm.loadavg one-minute value"
+      }
+    }
+  },
+  "readOnlySourceSHA256": {
+    "src/engine/effects/primitives/erode.ts": "ec0ef7a01bea5efeddde960709058d57e031615af20faa6fd66679bc94838c2c",
+    "src/engine/effects/primitives/discard.ts": "12e8cb484178acdd0e0837485f2b43449f1f0ddf73b8367758041b9c0a9ba815",
+    "src/engine/effects/primitives/shuffle-into.ts": "5a2b2502f6919a30fd83630b4b3a6e75782a0f2cc271cb306483078f2dff24b0",
+    "src/engine/effects/primitives/materialize.ts": "740f34038d7d453cef95088756194a72740b2dfd372dd6eedf1829d2078b3075",
+    "src/engine/effects/interpreter.ts": "a85d84f915bae49eeb599d286ebdaeb937c1c6390c986d94648888fab5caeb24",
+    "src/engine/dsl/builders.ts": "905e118f6c10609d6a937ced97fe44b0c439cb1cbbb3e335348881406e096d40",
+    "src/engine/dsl/selectors.ts": "16d0e832f7a20f5cb3c5c0262c8d63114936bfaa3143f8ead443152c8abc9a6c",
+    "src/engine/rules/resources.ts": "f768867611b289b2f7e4c0ac00dd89ee5e73abe16e605f5cbe1d1e0b06b9d7c3",
+    "src/engine/rules/turn-log.ts": "cedce2c8190f3023726a394fbac1068d2579b6e8625b99f87e5240903f61a08e",
+    "src/engine/rules/zones.ts": "c666f51b57cdb70a45afe0f0b72a7a4891dde94ef34a397eb321bc6f9f0c8134",
+    "src/content/cards/first-encounter-70306382.ts": "99b08ffa89d5bc2b1ac2d433abbded76cc11d233eab520a5d717d99b3d36ee57",
+    "docs/plan/evidence/rules-decisions/RD-hv-umm2.691-1.md": "c580d03d5e7278926de6400b65c47bd726faaa37731581a252540cebb298cb16"
+  },
+  "sourceAudit": {
+    "publicWitness": [
+      "D.one: event(discard(1)) via engine.apply hand play",
+      "D.hide: event(shuffleInto([discardedIn(void)])) via engine.apply hand play",
+      "D.erodeTwo: event(erode(2)) via engine.apply hand play",
+      "D.wake: event(materialize(discardedIn(void,{cardType:character}))) via engine.apply hand play"
+    ],
+    "api": "erode(count:ValueExpr, player:PlayerRef=you) -> erodeCard -> moveInstance(void); erosion records no discard occasion",
+    "membership": "resolveZoneCards every filters current zone and matchesCurrentTurnMembership compares retained physical IDs from both actors; completed discard collector writes only after entire validated cohort",
+    "fixtureImporters": [
+      "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts"
+    ],
+    "contractDiscovery": "src/engine/effects/primitives/contracts.test.ts eagerly discovers plain contracts through import.meta.glob",
+    "D10": "not invoked anew: current normative first paragraph and Current-turn occurrences and physical membership plus RD-hv-umm2.691-1 settle membership across movement; clarification follows those existing anchors",
+    "writerScope": "Own admitted adjacent occupancy/negative/re-entry sentences; one additive case and one consumed fixture member; own evidence only",
+    "readOnlyConsumers": "All runtime/collector/selector/DSL/state/save/view/loop/policy/catalog/UI/sharedQA/config/generator bodies and old contracts/assertions",
+    "peerScope": "Parent fresh native audit: odqg separate InfiniteLoops/header;693 counter bounds/transport;684/589/484 distinct leaves/additive sections; n913 retrospective;658 graph/docs. No incompatible same-body edit.",
+    "originalAcceptance": "hv-umm2.193 retains70306382-ac0d-4b08-843a-23efb3835c94 full printed clauses, authoring, weighted300/preflight/sweep/D21/coverage; gate46 joins694 repair.",
+    "mechanicalFallout": []
+  },
+  "testDelta": {
+    "files": 0,
+    "lines": 35,
+    "jsdomFiles": 0
+  },
+  "contractLines": 302,
+  "fixtureLines": 71,
+  "newCaseCount": 2,
+  "testDesign": "Declared victim hand copy and unrelated deck copy share printing UUID but distinct board-supplied physical IDs; whole two-card erosion and Set cohort comparison avoid shuffle-order/default RNG assumptions; fixed handLimit10/turnLimitnull. No private history or queue injection.",
+  "recoveryPaths": {
+    "errorMidStep": "Existing rolls back post-discard failure and rejects invalid cohorts before movement; aborts a mid-cohort error without publishing a completed physical cohort. Both run in focused-own.",
+    "reloadRestart": "Existing retains a completed work-prefix once after cold reload and rejects stale, invalid or concurrent actors; retains same-physical membership in another current zone and through save. Both run in focused-own.",
+    "partialWrite": "Existing mid-cohort error and completed work-prefix cases prove unpublished physical cohort and transactional prefix. No new transition or persistence field is introduced.",
+    "invalidStaleInput": "Existing completed work-prefix rejects stale prompt, invalid value and wrong actor; LOAD case rejects malformed optional IDs. Both run in focused-own.",
+    "concurrentActors": "Existing completed work-prefix rejects battleAction while step is in flight and wrong-side answer. No new concurrency or owned runtime resource is introduced."
+  },
+  "qa": {
+    "browser": "not applicable; docs/test-only pin of existing runtime",
+    "fullFuzzPerformance": "not run; no test infrastructure/config/architecture or production authoring changes",
+    "serverPortPlanned": 5174,
+    "startedServers": [],
+    "captures": []
+  },
+  "runtimeLedger": [
+    {
+      "label": "focused-new",
+      "pid": 46438,
+      "processGroup": 46438,
+      "exitCode": 0,
+      "groupAbsent": true,
+      "port": null
+    },
+    {
+      "label": "focused-own",
+      "pid": 46733,
+      "processGroup": 46733,
+      "exitCode": 0,
+      "groupAbsent": true,
+      "port": null
+    },
+    {
+      "label": "review",
+      "pid": 48858,
+      "processGroup": 48858,
+      "exitCode": 0,
+      "groupAbsent": true,
+      "port": null
+    },
+    {
+      "label": "knip",
+      "pid": 48857,
+      "processGroup": 48857,
+      "exitCode": 0,
+      "groupAbsent": true,
+      "port": null
+    },
+    {
+      "label": "final-guards",
+      "pid": 50685,
+      "processGroup": 50685,
+      "exitCode": 0,
+      "groupAbsent": true,
+      "port": null
+    }
+  ],
+  "preExistingIssues": [],
+  "newRDs": [],
+  "newCardIssues": [],
+  "pendingParentWork": [
+    "fresh normal other-family core review",
+    "exact Tollgate candidate/certification/promotion/cleanup"
+  ],
+  "validationScheduling": "Review and Knip were launched concurrently; their own workspace-prepare phases overlapped in this worktree despite README guidance to serialize preparation. Both terminal0, restored local assets, and produced no tracked generated change. Final exact-source/scope/schema/whitespace guards are sequential. No failure or retry is inferred.",
+  "sourceFinalSHA256": {
+    "docs/rules.md": "763d27268b56ed3a1e256053921f166aea32dd857a49509c9c4e87129d518643",
+    "src/engine/effects/primitives/contracts/discarded-turn-membership.contracts.ts": "a70b83c5b02eb7774ab36336130b9d509a8c89178f41f5ed84a5b643593eb9a7",
+    "src/engine/effects/primitives/contracts/discarded-turn-membership.fixtures.ts": "ae47558971d52e8f706eacd5ebb649d6631ac51cac8ae564f86f78b6a4554874"
+  },
+  "finalChecks": {
+    "review": "terminal0;4014 primitive contracts passed; typecheck/lint/import-cycles/friction schema passed",
+    "knip": "terminal0; unused-code check passed",
+    "focused": "new2 and own26 passed; no failed test attempt",
+    "schemaScopeWhitespace": "terminal0; exact six staged paths, base runtime/catalog/RD691 hashes, reviewed source hashes, unchanged old case/member bodies, D19 lines, friction schema and staged whitespace"
+  },
+  "sourcePackagingBoundary": "2026-10-14T19:14:54.142450+00:00"
+}
